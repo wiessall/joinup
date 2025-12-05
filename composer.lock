@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "552787925d91a2fe452eae0b91fc5eaa",
+    "content-hash": "b27019b7eb99e2d5d7a8e30c14dcb436",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -8528,17 +8528,17 @@
         },
         {
             "name": "drupal/rdf_sync",
-            "version": "1.0.0-alpha17",
+            "version": "1.0.0-beta1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/rdf_sync.git",
-                "reference": "1.0.0-alpha17"
+                "reference": "1.0.0-beta1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/rdf_sync-1.0.0-alpha17.zip",
-                "reference": "1.0.0-alpha17",
-                "shasum": "c9086e9ba6532075152143ba5d800ea5aa12ef0d"
+                "url": "https://ftp.drupal.org/files/projects/rdf_sync-1.0.0-beta1.zip",
+                "reference": "1.0.0-beta1",
+                "shasum": "c8ce1992d8ded080f1c2a665ec41542b1fa14242"
             },
             "require": {
                 "cweagans/composer-patches": "^1.7",
@@ -8554,11 +8554,11 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.0-alpha17",
-                    "datestamp": "1736334703",
+                    "version": "1.0.0-beta1",
+                    "datestamp": "1764344997",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 },
                 "drupal-scaffold": {
@@ -8596,12 +8596,20 @@
                     "homepage": "https://www.drupal.org/u/idimopoulos-0"
                 },
                 {
+                    "name": "claudiu.cristea",
+                    "homepage": "https://www.drupal.org/user/56348"
+                },
+                {
+                    "name": "dimilias",
+                    "homepage": "https://www.drupal.org/user/2578708"
+                },
+                {
                     "name": "huzooka",
                     "homepage": "https://www.drupal.org/user/281301"
                 },
                 {
-                    "name": "idimopoulos",
-                    "homepage": "https://www.drupal.org/user/2578708"
+                    "name": "saidatom",
+                    "homepage": "https://www.drupal.org/user/1846674"
                 }
             ],
             "description": "Synchronize entities as triples to an RDF backend",

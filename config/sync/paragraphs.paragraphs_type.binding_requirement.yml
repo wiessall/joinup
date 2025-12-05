@@ -4,6 +4,10 @@ status: true
 dependencies:
   module:
     - layout_paragraphs
+third_party_settings:
+  rdf_sync:
+    type: 'http://data.europa.eu/2qy/iopa#BindingRequirement'
+    uri_plugin: null
 id: binding_requirement
 label: 'Binding requirement'
 icon_uuid: null

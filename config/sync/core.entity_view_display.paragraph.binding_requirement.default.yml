@@ -4,12 +4,11 @@ status: true
 dependencies:
   config:
     - field.field.paragraph.binding_requirement.affected_party
+    - field.field.paragraph.binding_requirement.affects
     - field.field.paragraph.binding_requirement.asset
     - field.field.paragraph.binding_requirement.description
     - field.field.paragraph.binding_requirement.documented_in
     - field.field.paragraph.binding_requirement.expression
-    - field.field.paragraph.binding_requirement.has_related_service
-    - field.field.paragraph.binding_requirement.requirement_documents
     - paragraphs.paragraphs_type.binding_requirement
   module:
     - file
@@ -27,6 +26,14 @@ content:
       link: true
     third_party_settings: {  }
     weight: 1
+    region: content
+  affects:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 2
     region: content
   asset:
     type: entity_reference_label
@@ -77,14 +84,6 @@ content:
         template_suggestion: ''
     weight: 0
     region: content
-  has_related_service:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 2
-    region: content
   requirement_documents:
     type: file_default
     label: above
@@ -95,3 +94,4 @@ content:
     region: content
 hidden:
   search_api_excerpt: true
+  uri: true
