@@ -20,14 +20,6 @@ targetEntityType: paragraph
 bundle: binding_requirement
 mode: default
 content:
-  has_participation:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 1
-    region: content
   affects:
     type: entity_reference_label
     label: above
@@ -84,6 +76,14 @@ content:
       template_suggestion:
         template_suggestion: ''
     weight: 0
+    region: content
+  has_participation:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
     region: content
   requirement_documents:
     type: file_default
