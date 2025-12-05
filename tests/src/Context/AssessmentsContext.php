@@ -10,6 +10,8 @@ use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup\Traits\EntityTrait;
+use Drupal\joinup\Traits\FileTrait;
+use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\user\UserInterface;
 
 /**
@@ -18,6 +20,8 @@ use Drupal\user\UserInterface;
 class AssessmentsContext extends RawDrupalContext {
 
   use EntityTrait;
+  use FileTrait;
+  use UtilityTrait;
 
   /**
    * Programmatically creates assessment contents.
@@ -70,6 +74,17 @@ class AssessmentsContext extends RawDrupalContext {
         unset($assessment['results_in']);
       }
 
+      if (!empty($assessment['document'])) {
+        $fileValues = [];
+        foreach ($this->explodeDelimitedSeparatedStepArgument($assessment['document']) as $filename) {
+          $file = $this->createFile($filename);
+          $fileValues[] = [
+            'target_id' => $file->id(),
+          ];
+        }
+        $assessment['document'] = $fileValues;
+      }
+
       $assessment = (object) $assessment;
 
       $assessment->type = $type;
@@ -109,6 +124,17 @@ class AssessmentsContext extends RawDrupalContext {
       assert(in_array($values['statement_type'], ['legal', 'technical', 'other'], TRUE), 'Invalid assessment statement type provided.');
       $values['type'] = $values['statement_type'];
       $values = (object) $values;
+
+      if (!empty($values->landing_page)) {
+        $fileValues = [];
+        foreach ($this->explodeDelimitedSeparatedStepArgument($values->landing_page) as $filename) {
+          $file = $this->createFile($filename);
+          $fileValues[] = [
+            'target_id' => $file->id(),
+          ];
+        }
+        $values->landing_page = $fileValues;
+      }
 
       $this->parseEntityFields('assessment_statement', $values);
       $this->getDriver()->createEntity('assessment_statement', $values);
