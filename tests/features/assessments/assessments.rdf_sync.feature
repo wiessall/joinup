@@ -104,3 +104,42 @@ Feature: RDF Sync integration for assessments.
       | skos:prefLabel "Legal"@en ;                                                                                                                                                                                      |
       | skos:altLabel "legal"^^xsd:string ;                                                                                                                                                                              |
       | a skos:Concept .                                                                                                                                                                                                 |
+
+    # Verify the data of the exported entities is correct.
+    Then the following "http://data" graph triples exist in the RDF backend:
+      | subject                                                                                   | predicate                                       | object                                                                                             |
+      | https://joinup.ddev.local/assessment-statement/legal/e35d0e39-31c5-4090-b16d-c35d79695361 | http://data.europa.eu/2sa/cav#judgement         | Compliant                                                                                          |
+      | https://joinup.ddev.local/assessment-statement/legal/e35d0e39-31c5-4090-b16d-c35d79695361 | http://data.europa.eu/2sa/cav#type              | https://joinup.ddev.local/taxonomy-term/assess-statement-type/219d8117-fd8e-4455-830d-9a0c6e81ab47 |
+      | https://joinup.ddev.local/assessment-statement/legal/e35d0e39-31c5-4090-b16d-c35d79695361 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://data.europa.eu/2sa/cav#Statement                                                            |
+
+    Then the following "http://data" graph triples exist in the RDF backend:
+      | subject                                                                              | predicate                                       | object                                     |
+      | https://joinup.ddev.local/assessment/expression/048caacf-52d6-4215-a867-a485ff4baf47 | http://data.europa.eu/2sa/cav#documentedIn      | https://example.com                        |
+      | https://joinup.ddev.local/assessment/expression/048caacf-52d6-4215-a867-a485ff4baf47 | http://purl.org/dc/terms/description            | Description 1                              |
+      | https://joinup.ddev.local/assessment/expression/048caacf-52d6-4215-a867-a485ff4baf47 | http://purl.org/dc/terms/title                  | Expression 1                               |
+      | https://joinup.ddev.local/assessment/expression/048caacf-52d6-4215-a867-a485ff4baf47 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://purl.org/vocab/frbr/core#Expression |
+
+    Then the following "http://data" graph triples exist in the RDF backend:
+      | subject                                                                                 | predicate                                       | object                                                                                               |
+      | https://joinup.ddev.local/assessment/participation/f5379633-58af-49bd-ab71-22d8ab77d59a | http://purl.org/dc/terms/type                   | https://joinup.ddev.local/taxonomy-term/assess-participant-type/b8c59bef-e579-440a-91f0-8c7983524336 |
+      | https://joinup.ddev.local/assessment/participation/f5379633-58af-49bd-ab71-22d8ab77d59a | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://data.europa.eu/m8g/Participation                                                              |
+
+    Then the following "http://data" graph triples exist in the RDF backend:
+      | subject                                                                                       | predicate                                       | object                                                                                            |
+      | https://joinup.ddev.local/assessment/public-organisation/542770eb-a1e8-44fe-be6d-d48c33837018 | http://purl.org/dc/terms/spatial                | https://joinup.ddev.local/taxonomy-term/spatial/dfa6aecc-1a7d-4bee-83b7-363b0db1ba66              |
+      | https://joinup.ddev.local/assessment/public-organisation/542770eb-a1e8-44fe-be6d-d48c33837018 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://data.europa.eu/m8g/PublicOrganisation                                                      |
+      | https://joinup.ddev.local/assessment/public-organisation/542770eb-a1e8-44fe-be6d-d48c33837018 | http://www.w3.org/2004/02/skos/core#prefLabel   | Public Organisation 1                                                                             |
+      | https://joinup.ddev.local/assessment/public-organisation/542770eb-a1e8-44fe-be6d-d48c33837018 | http://www.w3.org/ns/org#classification         | https://joinup.ddev.local/taxonomy-term/assess-provider-type/5870cf04-2d28-472d-9486-39b1e4670b25 |
+
+    Then the following "http://data" graph triples exist in the RDF backend:
+      | subject                                                                                  | predicate                                       | object                                                                                                  |
+      | https://joinup.ddev.local/assessment/public-service/d4a2ecb3-c0c8-4a13-9dd0-8dddb23c40af | http://data.europa.eu/m8g/thematicArea          | https://joinup.ddev.local/taxonomy-term/assess-public-service-area/34229fe8-14ac-40f8-9434-765e441eae3b |
+      | https://joinup.ddev.local/assessment/public-service/d4a2ecb3-c0c8-4a13-9dd0-8dddb23c40af | http://purl.org/dc/terms/title                  | Public Service 1                                                                                        |
+      | https://joinup.ddev.local/assessment/public-service/d4a2ecb3-c0c8-4a13-9dd0-8dddb23c40af | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://purl.org/vocab/cpsv#PublicService                                                                |
+
+    Then the following "http://data" graph triples exist in the RDF backend:
+      | subject                                                                          | predicate                                       | object                                                                                        |
+      | https://joinup.ddev.local/assessment/report/8a7b9a07-5408-4cec-9e3b-dc9df4e783ae | http://data.europa.eu/2sa/cav#assesses          | https://joinup.ddev.local/paragraph/binding-requirement/a478fe88-c240-4769-8952-7d129f4ef449  |
+      | https://joinup.ddev.local/assessment/report/8a7b9a07-5408-4cec-9e3b-dc9df4e783ae | http://data.europa.eu/2sa/cav#resultsIn         | https://joinup.ddev.local/assessment-statement/legal/e35d0e39-31c5-4090-b16d-c35d79695361     |
+      | https://joinup.ddev.local/assessment/report/8a7b9a07-5408-4cec-9e3b-dc9df4e783ae | http://data.europa.eu/m8g/isProvidedBy          | https://joinup.ddev.local/assessment/public-organisation/542770eb-a1e8-44fe-be6d-d48c33837018 |
+      | https://joinup.ddev.local/assessment/report/8a7b9a07-5408-4cec-9e3b-dc9df4e783ae | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://data.europa.eu/2sa/cav#Assessment                                                      |
