@@ -144,19 +144,6 @@ targetEntityType: paragraph
 bundle: binding_requirement
 mode: default
 content:
-  has_participation:
-    type: inline_entity_form_simple
-    weight: 5
-    region: content
-    settings:
-      form_mode: default
-      override_labels: true
-      label_singular: 'Has participation'
-      label_plural: 'Has participations'
-      collapsible: false
-      collapsed: false
-      revision: false
-    third_party_settings: {  }
   affects:
     type: inline_entity_form_simple
     weight: 4
@@ -231,6 +218,19 @@ content:
       override_labels: true
       label_singular: Expression
       label_plural: Expressions
+      collapsible: false
+      collapsed: false
+      revision: false
+    third_party_settings: {  }
+  has_participation:
+    type: inline_entity_form_simple
+    weight: 5
+    region: content
+    settings:
+      form_mode: default
+      override_labels: true
+      label_singular: 'Has participation'
+      label_plural: 'Has participations'
       collapsible: false
       collapsed: false
       revision: false
