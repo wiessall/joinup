@@ -77,8 +77,8 @@ Feature: RDF Sync integration for assessments.
       | a cav:Statement ;                                                                                                                                                                                                |
       | cav:judgement "Compliant" ;                                                                                                                                                                                      |
       | cav:type <https://joinup.ddev.local/taxonomy-term/assess-statement-type/219d8117-fd8e-4455-830d-9a0c6e81ab47> ;                                                                                                  |
-      | foaf:page <https://joinup.ddev.local/sites/default/files/text.pdf> .                                                                                                                                             |
-      | <https://joinup.ddev.local/sites/default/files/text.pdf> a foaf:Document                                                                                                                                         |
+      | foaf:page <__base_url__/sites/default/files/text.pdf> .                                                                                                                                                          |
+      | <__base_url__/sites/default/files/text.pdf> a foaf:Document                                                                                                                                                      |
       # Terms are exported alongside the main entities.
       | <https://joinup.ddev.local/taxonomy-term/spatial/dfa6aecc-1a7d-4bee-83b7-363b0db1ba66>                                                                                                                           |
       | skos:inScheme <http://publications.europa.eu/resource/authority/country>, <http://publications.europa.eu/resource/authority/country/0001>, <http://publications.europa.eu/resource/authority/country/0005> ;     |
@@ -113,11 +113,11 @@ Feature: RDF Sync integration for assessments.
       | https://joinup.ddev.local/assessment-statement/legal/e35d0e39-31c5-4090-b16d-c35d79695361 | http://data.europa.eu/2sa/cav#judgement         | Compliant                                                                                          |
       | https://joinup.ddev.local/assessment-statement/legal/e35d0e39-31c5-4090-b16d-c35d79695361 | http://data.europa.eu/2sa/cav#type              | https://joinup.ddev.local/taxonomy-term/assess-statement-type/219d8117-fd8e-4455-830d-9a0c6e81ab47 |
       | https://joinup.ddev.local/assessment-statement/legal/e35d0e39-31c5-4090-b16d-c35d79695361 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://data.europa.eu/2sa/cav#Statement                                                            |
-      | https://joinup.ddev.local/assessment-statement/legal/e35d0e39-31c5-4090-b16d-c35d79695361 | http://xmlns.com/foaf/0.1/document              | https://joinup.ddev.local/sites/default/files/text.pdf                                             |
+      | https://joinup.ddev.local/assessment-statement/legal/e35d0e39-31c5-4090-b16d-c35d79695361 | http://xmlns.com/foaf/0.1/document              | __base_url__/sites/default/files/text.pdf                                             |
 
     And the following "http://data" graph triples exist in the RDF backend:
-      | subject                                                | predicate                                       | object                             |
-      | https://joinup.ddev.local/sites/default/files/text.pdf | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://xmlns.com/foaf/0.1/Document |
+      | subject                                   | predicate                                       | object                             |
+      | __base_url__/sites/default/files/text.pdf | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://xmlns.com/foaf/0.1/Document |
 
     And the following "http://data" graph triples exist in the RDF backend:
       | subject                                                                              | predicate                                       | object                                     |

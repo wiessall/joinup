@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\rdf_sync\Model\SyncMethod;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -16,6 +17,8 @@ use function PHPUnit\Framework\assertSame;
  * Behat step definitions to test ADMS-AP validation.
  */
 class RdfContext extends RawDrupalContext {
+
+  use UtilityTrait;
 
   /**
    * Asserts that a list of triples exists in a certain graph.
@@ -54,6 +57,8 @@ class RdfContext extends RawDrupalContext {
         $date = preg_replace('/[+\-]00(:?)00$/', 'Z', $date);
         $triple['object'] = $date;
       }
+      $triple['subject'] = $this->escapeStringWithVariables($triple['subject'], FALSE);
+      $triple['object'] = $this->escapeStringWithVariables($triple['object'], FALSE);
       $subjects[$triple['subject']][] = $rows[implode(' ', $triple)] = $triple;
     }
 

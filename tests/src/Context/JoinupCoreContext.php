@@ -491,11 +491,12 @@ class JoinupCoreContext extends RawDrupalContext {
    */
   public function assertResponseBodyEquals(TableNode $table): void {
     $response = $this->getSession()->getDriver()->getContent();
-    foreach ($table->getColumn(0) as $expected_line) {
+    foreach ($table->getColumn(0) as $expectedLine) {
+      $expectedLine = $this->escapeStringWithVariables($expectedLine, FALSE);
       Assert::assertStringContainsString(
-        $expected_line,
+        $expectedLine,
         $response,
-        "The expected line '$expected_line' was not found in the response body.",
+        "The expected line '$expectedLine' was not found in the response body.",
       );
     }
   }
