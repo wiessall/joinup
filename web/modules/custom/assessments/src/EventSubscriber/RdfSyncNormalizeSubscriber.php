@@ -12,6 +12,7 @@ use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\AssessmentStatement;
 use Drupal\file\FileInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\rdf_sync\Encoder\RdfSyncEncoder;
 use Drupal\rdf_sync\Event\RdfSyncNormalizeEvent;
@@ -182,7 +183,7 @@ class RdfSyncNormalizeSubscriber implements EventSubscriberInterface {
    * @return array<int|string, \Drupal\taxonomy\TermInterface>
    *   List of term entities keyed by the term ID.
    */
-  protected function getEntityTerms(AssessmentInterface|AssessmentStatement $entity): array {
+  protected function getEntityTerms(AssessmentInterface|AssessmentStatement|SolutionInterface $entity): array {
     $terms = [];
 
     foreach ($entity as $field) {
