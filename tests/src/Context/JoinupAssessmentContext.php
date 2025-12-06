@@ -6,7 +6,6 @@ namespace Drupal\joinup\Context;
 
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\assessments\AssessmentInterface;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -229,20 +228,6 @@ class JoinupAssessmentContext extends RawDrupalContext {
     catch (\RuntimeException) {
       // Expected: entity not found. This is what we want.
     }
-  }
-
-  /**
-   * Adds the assessments-created solution's collector.
-   *
-   * @BeforeScenario @assessments&&@api
-   */
-  public function beforeAssessmentsScenario(): void {
-    \Drupal::entityTypeManager()->getStorage('node')->create([
-      'type' => 'collection',
-      'title' => 'Solutions mentioned in an assessment',
-      'uuid' => AssessmentInterface::SOLUTION_COLLECTOR,
-      'field_state' => 'published',
-    ])->save();
   }
 
 }

@@ -1,8 +1,11 @@
-@api
+@api @assessments
 Feature: RDF Sync integration for assessments.
 
   Scenario: Test that an entire chain of entities is exported properly.
-    Given "participation" assessment:
+    Given solution content:
+      | title           | uri                                        |
+      | Citizen's Forum | http://example.com/solution/citizens-forum |
+    And "participation" assessment:
       | uri                                                                              | name          | stakeholder_country | participant_type         |
       | http://example.com/assessment/participation/f5379633-58af-49bd-ab71-22d8ab77d59a | Stakeholder 1 | Belgium             | local_public_sector_body |
     And "public_service" assessment:
@@ -15,12 +18,13 @@ Feature: RDF Sync integration for assessments.
       | uri                                                                           | name         | description   | documented_in       |
       | http://example.com/assessment/expression/048caacf-52d6-4215-a867-a485ff4baf47 | Expression 1 | Description 1 | https://example.com |
     And the following "binding_requirement" paragraph:
-      | uri            | http://example.com/paragraph/binding-requirement/a478fe88-c240-4769-8952-7d129f4ef449 |
-      | id             | 999                                                                                   |
-      | description    | BR Description 1                                                                      |
-      | expression     | Expression 1                                                                          |
-      | affects        | Public Service 1                                                                      |
-      | affected_party | Stakeholder 1                                                                         |
+      | uri               | http://example.com/paragraph/binding-requirement/a478fe88-c240-4769-8952-7d129f4ef449 |
+      | id                | 999                                                                                   |
+      | description       | BR Description 1                                                                      |
+      | expression        | Expression 1                                                                          |
+      | affects           | Public Service 1                                                                      |
+      | has_participation | Stakeholder 1                                                                         |
+      | asset             | Citizen's Forum                                                                       |
     And the following assessment statements:
       | uri                                                                                | id  | statement_type | interpretation | judgement | landing_page |
       | http://example.com/assessment-statement/legal/e35d0e39-31c5-4090-b16d-c35d79695361 | 999 | legal          | positive       | Compliant | text.pdf     |
@@ -38,6 +42,7 @@ Feature: RDF Sync integration for assessments.
       | @prefix dc: <http://purl.org/dc/terms/> .                                                                                                                                                                        |
       | @prefix org: <http://www.w3.org/ns/org#> .                                                                                                                                                                       |
       | @prefix iopa: <http://data.europa.eu/2qy/iopa#> .                                                                                                                                                                |
+      | @prefix dcat: <http://www.w3.org/ns/dcat#> .                                                                                                                                                                     |
       | @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .                                                                                                                                                               |
       # Assessment Report is exported.
       | <http://example.com/assessment/report/8a7b9a07-5408-4cec-9e3b-dc9df4e783ae>                                                                                                                                      |
@@ -54,10 +59,11 @@ Feature: RDF Sync integration for assessments.
       # Binding Requirements are exported.
       | <http://example.com/paragraph/binding-requirement/a478fe88-c240-4769-8952-7d129f4ef449>                                                                                                                          |
       | a iopa:BindingRequirement ;                                                                                                                                                                                      |
-      | cv:hasParticipation <http://example.com/assessment/participation/f5379633-58af-49bd-ab71-22d8ab77d59a> ;                                                                                                         |
       | iopa:affects <http://example.com/assessment/public-service/d4a2ecb3-c0c8-4a13-9dd0-8dddb23c40af> ;                                                                                                               |
+      | dc:relation <http://example.com/solution/citizens-forum> ;                                                                                                                                                       |
       | cav:valueDescription "BR Description 1"@en ;                                                                                                                                                                     |
-      | dc:isPartOf <http://example.com/assessment/expression/048caacf-52d6-4215-a867-a485ff4baf47> .                                                                                                                    |
+      | dc:isPartOf <http://example.com/assessment/expression/048caacf-52d6-4215-a867-a485ff4baf47> ;                                                                                                                    |
+      | cv:hasParticipation <http://example.com/assessment/participation/f5379633-58af-49bd-ab71-22d8ab77d59a> .                                                                                                         |
       # Initiatives (Expressions) are exported.
       | <http://example.com/assessment/expression/048caacf-52d6-4215-a867-a485ff4baf47>                                                                                                                                  |
       | a <http://purl.org/vocab/frbr/core#Expression> ;                                                                                                                                                                 |
@@ -79,6 +85,10 @@ Feature: RDF Sync integration for assessments.
       | cav:type <http://example.com/taxonomy-term/assess-statement-type/219d8117-fd8e-4455-830d-9a0c6e81ab47> ;                                                                                                         |
       | foaf:page <__base_url__/sites/default/files/text.pdf> .                                                                                                                                                          |
       | <__base_url__/sites/default/files/text.pdf> a foaf:Document                                                                                                                                                      |
+      # Asset is exported.
+      | <http://example.com/solution/citizens-forum>                                                                                                                                                                     |
+      | a dcat:Dataset ;                                                                                                                                                                                                 |
+      | dc:title "Citizen's Forum"@en ;                                                                                                                                                                                  |
       # Terms are exported alongside the main entities.
       | <http://example.com/taxonomy-term/spatial/dfa6aecc-1a7d-4bee-83b7-363b0db1ba66>                                                                                                                                  |
       | skos:inScheme <http://publications.europa.eu/resource/authority/country>, <http://publications.europa.eu/resource/authority/country/0001>, <http://publications.europa.eu/resource/authority/country/0005> ;     |

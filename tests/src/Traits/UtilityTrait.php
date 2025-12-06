@@ -43,9 +43,9 @@ trait UtilityTrait {
    *   The converted string.
    */
   protected function escapeStringWithVariables(string $string, bool $quoteString = TRUE): string {
-    // The URL structure is very important in the some contexts as a wrong URL
-    // or an internal path could cause search engines to be misled. Thus,
-    // the full URL must be always asserted.
+    // The URL structure is very important in some contexts as a wrong URL or an
+    // internal path could cause search engines to be misled. Thus, the full URL
+    // must be always asserted.
     $baseUrl = $this->getMinkParameter('base_url');
 
     if ($quoteString) {
