@@ -32,6 +32,36 @@ trait UtilityTrait {
   }
 
   /**
+   * Escapes available variables from string and prepares it for a regex match.
+   *
+   * @param string $string
+   *   The string to convert.
+   * @param bool $quoteString
+   *   Whether to quote the string. Defaults to TRUE.
+   *
+   * @return string
+   *   The converted string.
+   */
+  protected function escapeStringWithVariables(string $string, bool $quoteString = TRUE): string {
+    // The URL structure is very important in the some contexts as a wrong URL
+    // or an internal path could cause search engines to be misled. Thus,
+    // the full URL must be always asserted.
+    $baseUrl = $this->getMinkParameter('base_url');
+
+    if ($quoteString) {
+      // Escape only special regex characters, not the whole string.
+      $string = preg_replace('/([.\\+*?[^\\]$(){}=!<>|:-])/', '\\\\$1', $string);
+    }
+
+    $replacements = [
+      '__base_url__' => $quoteString ? preg_quote($baseUrl) : $baseUrl,
+      '__random_text__' => '([^/]*)?',
+      '__timezone__' => '\d{2}',
+    ];
+    return strtr($string, $replacements);
+  }
+
+  /**
    * Checks if an element is visible for human eyes.
    *
    * To enable certain elements to be visible for screen readers but not for
