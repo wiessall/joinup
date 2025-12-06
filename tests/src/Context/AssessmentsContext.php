@@ -167,4 +167,18 @@ class AssessmentsContext extends RawDrupalContext {
     Assert::assertEquals($expected, $actual);
   }
 
+  /**
+   * Adds the assessments-created solution's collector.
+   *
+   * @BeforeScenario @assessments&&@api
+   */
+  public function beforeAssessmentsScenario(): void {
+    \Drupal::entityTypeManager()->getStorage('node')->create([
+      'type' => 'collection',
+      'title' => 'Solutions mentioned in an assessment',
+      'uuid' => AssessmentInterface::SOLUTION_COLLECTOR,
+      'field_state' => 'published',
+    ])->save();
+  }
+
 }
