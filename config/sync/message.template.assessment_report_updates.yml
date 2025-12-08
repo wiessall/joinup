@@ -1,0 +1,22 @@
+uuid: e10999eb-52ae-41f7-9dcc-215dc5003af6
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.full_html
+template: assessment_report_updates
+label: 'Assessment Reports: require updates'
+description: 'The assessment report requires updates from the submitter'
+text:
+  -
+    value: 'Your assessment report needs updates'
+    format: full_html
+  -
+    value: "<p>Your submitted assessment report has been reviewed but the moderator has requested some changes.</p>\r\n<p>Moderator feedback:</p>\r\n<p><em>@assessment:require_update_reason</em></p>\r\n<p>Please <a href=\"@assessment:edit_url\">edit</a> your report and address the issues mentioned above. Submit the report again once everything is resolved.</p>\r\n"
+    format: full_html
+settings:
+  'token options':
+    clear: false
+    'token replace': false
+  purge_override: false
+  purge_methods: {  }
