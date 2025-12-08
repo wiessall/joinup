@@ -84,19 +84,10 @@ function joinup_test_install($is_syncing): void {
 
   // Create the Joinup collection on clean installation.
   $nodeStorage = $entityTypeManager->getStorage('node');
-  $contact = $nodeStorage->create([
-    'type' => 'contact_information',
-    'uuid' => JoinupCollectionHelper::JOINUP_CONTACT_UUID,
-    'title' => 'Contact name',
-    'email' => 'contact.email@example.com',
-  ]);
-  $contact->save();
-  $owner = $nodeStorage->create([
-    'type' => 'owner',
-    'uuid' => JoinupCollectionHelper::JOINUP_OWNER_UUID,
-    'title' => 'ISA²',
-  ]);
-  $owner->save();
+
+  $defaultContentHelper = \Drupal::getContainer()->get(DefaultContentHelper::class);
+  $contact = $defaultContentHelper->getDefaultContact();
+  $owner = $defaultContentHelper->getDefaultOwner();
 
   $fileSystem = \Drupal::service('file_system');
   assert($fileSystem instanceof FileSystemInterface);
