@@ -100,11 +100,12 @@ final class DefaultContentHelper {
         ],
         'path' => [
           'alias' => '/collection/assessments',
+          'pathauto' => PathautoState::SKIP,
         ],
       ],
       // The solution collector for the created assets through assessments.
       AssessmentInterface::SOLUTION_COLLECTOR => [
-        'title' => 'Assessment reports',
+        'title' => 'Solutions mentioned in an assessment',
         'uri' => 'http://data.europa.eu/w21/e0f3b87b-9de3-48d5-8fff-5ec88ccd1a71',
         'short_id' => 'assessment-reports',
         'field_state' => 'published',
@@ -117,7 +118,7 @@ final class DefaultContentHelper {
           'format' => 'content_editor',
         ],
         'path' => [
-          'alias' => '/collection/assessment-reports',
+          'alias' => '/collection/solutions-mentioned-assessment',
           'pathauto' => PathautoState::SKIP,
         ],
       ],

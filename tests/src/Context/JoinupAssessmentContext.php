@@ -102,7 +102,7 @@ class JoinupAssessmentContext extends RawDrupalContext {
     $this->nodeCreate((object) [
       'type' => 'custom_page',
       'title' => 'Assessment reports',
-      'og_audience' => $collection->title,
+      'og_audience' => $collection->label(),
       'field_state' => 'published',
       'uuid' => LegacyAssessmentInterface::ASSESSMENT_REPORTS_UUID,
       'field_paragraphs_body:target_id' => $paragraph->id(),

@@ -33,7 +33,7 @@ Feature: Collections Overview
       # Created 2015-01-01 08:00-01-02am.
       | Portal support                     |
       | Interoperability assessments space |
-      | Assessment reports                 |
+      | Asset collector                 |
 
     When I am an anonymous user
     And I visit the collection overview page
