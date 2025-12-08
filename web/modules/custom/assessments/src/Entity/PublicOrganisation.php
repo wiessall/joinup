@@ -10,6 +10,29 @@ namespace Drupal\assessments\Entity;
 final class PublicOrganisation extends Assessment {
 
   /**
+   * Gets a published report that references this organisation.
+   *
+   * @return \Drupal\assessments\Entity\Assessment|null
+   *   A published report entity that references this organisation, or NULL.
+   */
+  public function getPublishedReport(): ?Assessment {
+    $ids = $this->entityTypeManager()->getStorage('assessment')->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', 'report')
+      ->condition('provider', $this->id())
+      ->condition('state', 'published')
+      ->range(0, 1)
+      ->execute();
+
+    if (empty($ids)) {
+      return NULL;
+    }
+
+    $id = reset($ids);
+    return $this->entityTypeManager()->getStorage('assessment')->load($id);
+  }
+
+  /**
    * Returns an array of institution options.
    *
    * @return array{string, \Stringable}
