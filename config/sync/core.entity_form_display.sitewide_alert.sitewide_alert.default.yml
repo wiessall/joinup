@@ -43,3 +43,4 @@ content:
     third_party_settings: {  }
 hidden:
   user_id: true
+  uuid: true

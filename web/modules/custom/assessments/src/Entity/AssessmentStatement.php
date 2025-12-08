@@ -41,6 +41,7 @@ use Drupal\assessments\Entity\Trait\AssessmentResourceTrait;
  *   data_table = "assessment_statement_field_data",
  *   entity_keys = {
  *     "id" = "id",
+ *     "label" = "id",
  *     "uuid" = "uuid",
  *     "bundle" = "type"
  *   },
@@ -60,7 +61,7 @@ final class AssessmentStatement extends ContentEntityBase implements AssessmentR
     $fields = parent::baseFieldDefinitions($entity_type);
     $fields['judgement'] = BaseFieldDefinition::create('string_long')
       ->setLabel(t('Judgement'))
-      ->setDescription(t('The judgement statement.'))
+      ->setDescription(t('Provide a justification'))
       ->setTranslatable(TRUE)
       ->setDisplayOptions('form', [
         'type' => 'string_textarea',

@@ -49,3 +49,4 @@ hidden:
   status: true
   uid: true
   uri: true
+  uuid: true

@@ -16,3 +16,4 @@ content: {  }
 hidden:
   field_message_pm_thread: true
   field_message_private_message: true
+  uuid: true

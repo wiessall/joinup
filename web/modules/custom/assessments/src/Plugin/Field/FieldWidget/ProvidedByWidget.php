@@ -108,14 +108,27 @@ class ProvidedByWidget extends WidgetBase {
   /**
    * {@inheritdoc}
    */
+  public function form(FieldItemListInterface $items, array &$form, FormStateInterface $form_state, $get_delta = NULL): array {
+    $renderable = parent::form($items, $form, $form_state, $get_delta);
+    $renderable['#theme_wrappers']['details'] = [
+      '#title' => $this->fieldDefinition->getLabel(),
+      '#summary_attributes' => [],
+      '#attributes' => ['open' => TRUE],
+    ];
+    return $renderable;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state): array {
     $fieldName = $this->fieldDefinition->getName();
     $parents = $element['#field_parents'];
     $widgetState = static::getWidgetState($parents, $fieldName, $form_state);
     $triggeringElement = $form_state->getTriggeringElement();
 
-    $element['#type'] = 'fieldset';
-    $element['#title'] = $this->fieldDefinition->getLabel();
+    $element['#type'] = 'container';
+    $element['#attributes']['id'] = 'provided-by-content-' . $delta;
     $element['#attributes']['class'][] = 'provided-by-widget';
     $element['#attributes']['data-delta'] = $delta;
 
@@ -148,7 +161,12 @@ class ProvidedByWidget extends WidgetBase {
         $currentCountry = NULL;
       }
     }
-    $element['organisation_type'] = [
+    $element['org_type_wrapper'] = [
+      '#type' => 'container',
+      '#attributes' => ['class' => ['assessments-inline']],
+      '#attached' => ['library' => ['assessments/inline-items']],
+    ];
+    $element['org_type_wrapper']['organisation_type'] = [
       '#type' => 'select',
       '#title' => $this->t('Type of public sector body'),
       '#options' => $this->getOrganisationTypeOptions(),
@@ -159,6 +177,7 @@ class ProvidedByWidget extends WidgetBase {
         'class' => ['organisation-type-select'],
         'data-delta' => $delta,
       ],
+      '#wrapper_attributes' => ['class' => ['assessments-inline__item']],
       '#ajax' => [
         'callback' => [static::class, 'ajaxRefresh'],
         'wrapper' => 'provided-by-content-' . $delta,
@@ -172,7 +191,9 @@ class ProvidedByWidget extends WidgetBase {
     $isCountryAjax = $operation === self::OP_COUNTRY_SELECT;
 
     if ($operation === self::OP_TYPE_SELECT) {
-      $selectedType = $form_state->getValue(array_merge($parents, [$fieldName, $delta, 'organisation_type']));
+      $selectedType = $form_state->getValue(
+        array_merge($parents, [$fieldName, $delta, 'org_type_wrapper', 'organisation_type'])
+      );
 
       $typeChanged = !isset($widgetState['selected_type']) ||
                       $widgetState['selected_type'] !== $selectedType;
@@ -204,9 +225,12 @@ class ProvidedByWidget extends WidgetBase {
     $element['content'] = [
       '#type' => 'container',
       '#attributes' => [
-        'class' => ['provided-by-content'],
-        'id' => 'provided-by-content-' . $delta,
+        'class' => [
+          'provided-by-content',
+          'assessments-inline',
+        ],
       ],
+      '#attached' => ['library' => ['assessments/inline-items']],
     ];
 
     if ($selectedType) {
@@ -259,7 +283,7 @@ class ProvidedByWidget extends WidgetBase {
         $countryOptions = $this->getCountryOptions();
         $defaultCountryValue = $selectedCountry ?? $currentCountry;
 
-        $element['content']['country'] = [
+        $element['org_type_wrapper']['country'] = [
           '#type' => 'select',
           '#title' => $this->t('Country'),
           '#options' => $countryOptions,
@@ -269,6 +293,11 @@ class ProvidedByWidget extends WidgetBase {
           '#attributes' => [
             'class' => ['country-select'],
             'data-delta' => $delta,
+          ],
+          '#wrapper_attributes' => [
+            'class' => [
+              'assessments-inline__item',
+            ],
           ],
           '#ajax' => [
             'callback' => [static::class, 'ajaxRefresh'],
@@ -390,14 +419,24 @@ class ProvidedByWidget extends WidgetBase {
             'class' => ['organisation-select'],
             'data-delta' => $delta,
           ],
+          '#wrapper_attributes' => [
+            'class' => [
+              'assessments-inline__item',
+            ],
+          ],
         ] + ($countryJustChanged ? ['#value' => '_none'] : ['#default_value' => $defaultValue]);
 
         $element['content']['add_new_button'] = [
           '#type' => 'button',
-          '#value' => $this->t('Add new organisation'),
+          '#value' => $this->t('…or add new'),
           '#name' => $this->buildButtonName($parents, $fieldName, $delta, 'add_new_button'),
           '#attributes' => [
-            'class' => ['button', 'button--small', 'add-new-organisation-button'],
+            'class' => [
+              'button',
+              'button--small',
+              'add-new-organisation-button',
+              'assessments-inline__item--compact',
+            ],
           ],
           '#ajax' => [
             'callback' => [static::class, 'ajaxRefresh'],
@@ -411,12 +450,17 @@ class ProvidedByWidget extends WidgetBase {
       else {
         $element['content']['name'] = [
           '#type' => 'textfield',
-          '#title' => $this->t('Organisation name'),
+          '#title' => $this->t('New organisation name'),
           '#required' => TRUE,
           '#maxlength' => 255,
           '#default_value' => '',
           '#attributes' => [
             'class' => ['organisation-name-field'],
+          ],
+          '#wrapper_attributes' => [
+            'class' => [
+              'assessments-inline__item',
+            ],
           ],
         ];
 
@@ -445,10 +489,15 @@ class ProvidedByWidget extends WidgetBase {
         if ($existingCount > 0) {
           $element['content']['select_existing_button'] = [
             '#type' => 'button',
-            '#value' => $this->t('Select existing organisation'),
+            '#value' => $this->t('…or select existing'),
             '#name' => $this->buildButtonName($parents, $fieldName, $delta, 'select_existing_button'),
             '#attributes' => [
-              'class' => ['button', 'button--small', 'select-existing-button'],
+              'class' => [
+                'button',
+                'button--small',
+                'select-existing-button',
+                'assessments-inline__item--compact',
+              ],
             ],
             '#ajax' => [
               'callback' => [static::class, 'ajaxRefresh'],
@@ -510,7 +559,7 @@ class ProvidedByWidget extends WidgetBase {
       return $currentCountry;
     }
     $userInput = $form_state->getUserInput();
-    $inputPath = array_merge($parents, [$fieldName, $delta, 'content', 'country']);
+    $inputPath = array_merge($parents, [$fieldName, $delta, 'org_type_wrapper', 'country']);
 
     $tempInput = $userInput;
     foreach ($inputPath as $key) {
@@ -847,18 +896,12 @@ class ProvidedByWidget extends WidgetBase {
       return ['#type' => 'container'];
     }
 
-    // Navigate to the content wrapper.
+    // Navigate to the current field item delta wrapper.
     $elementParents = $triggeringElement['#array_parents'];
-
-    // Remove the last element (the triggering element itself).
-    array_pop($elementParents);
-
-    // If the last element is not 'content', we need to add it.
-    // This handles the case where organisation_type triggers AJAX.
-    // When country or buttons trigger AJAX, 'content' is already in the path.
-    if (end($elementParents) !== 'content') {
-      $elementParents[] = 'content';
-    }
+    do {
+      array_pop($elementParents);
+      $currentLast = end($elementParents);
+    } while (count($elementParents) > 1 && !is_numeric($currentLast));
 
     // Navigate to the element.
     $element = $form;
