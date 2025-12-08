@@ -232,7 +232,7 @@ content:
       revision: false
     third_party_settings: {  }
   state:
-    type: options_buttons
+    type: state_machine_buttons
     weight: 7
     region: content
     settings: {  }
