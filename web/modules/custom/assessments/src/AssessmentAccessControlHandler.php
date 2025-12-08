@@ -9,6 +9,8 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityAccessControlHandler;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\assessments\Entity\AssessmentReport;
+use Drupal\assessments\Entity\PublicOrganisation;
 
 /**
  * Defines the access control handler for the assessment entity type.
@@ -31,6 +33,13 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
       return $admin_result;
     }
 
+    // For public organisations, only allow view operation.
+    if ($entity instanceof PublicOrganisation) {
+      return $operation === 'view'
+        ? $this->checkPublicOrganisationViewAccess($entity, $account)
+        : AccessResult::forbidden()->cachePerPermissions()->addCacheableDependency($entity);
+    }
+
     // Delegate to operation-specific methods.
     // Only report bundles have a state field.
     $state = $entity->hasField('state') ? ($entity->get('state')->value ?? 'draft') : 'draft';
@@ -43,6 +52,31 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
         ->cachePerPermissions()
         ->addCacheableDependency($entity),
     };
+  }
+
+  /**
+   * Checks view access for public organisations.
+   *
+   * @param \Drupal\assessments\Entity\PublicOrganisation $entity
+   *   The public organisation entity.
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The user account to check access for.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result.
+   */
+  protected function checkPublicOrganisationViewAccess(PublicOrganisation $entity, AccountInterface $account): AccessResultInterface {
+    $published_report = $entity->getPublishedReport();
+    $result = AccessResult::allowedIfHasPermission($account, 'access content')
+      ->allowedIf($published_report instanceof AssessmentReport)
+      ->cachePerPermissions()
+      ->addCacheableDependency($entity);
+
+    $published_report !== NULL
+      ? $result->addCacheableDependency($published_report)
+      : $result->addCacheTags(['assessment_list:report']);
+
+    return $result;
   }
 
   /**
