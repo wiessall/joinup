@@ -6,6 +6,8 @@ services:
 
   Drupal\assessments\AssessmentVocabularyHelper: {}
 
+  Drupal\assessments\EventSubscriber\RdfSyncNormalizeSubscriber: {}
+
   Drupal\assessments\AssessmentReportNotificationInterface:
     class: Drupal\assessments\AssessmentReportNotification
 

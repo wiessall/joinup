@@ -16,14 +16,14 @@ trait EntityTrait {
   use NameMappingsTrait;
 
   /**
-   * Finds and entity by label with given type and bundle.
+   * Finds an entity by label with the given type and bundle.
    */
   protected static function getEntityByLabel(string $entity_type_id, string $label, ?string $bundle = NULL): EntityInterface {
     return static::getEntityByKey('label', $entity_type_id, $label, $bundle);
   }
 
   /**
-   * Finds and entity by ID with given type and bundle.
+   * Finds an entity by ID with the given type and bundle.
    */
   protected static function getEntityById(string $entity_type_id, string $label, ?string $bundle = NULL): EntityInterface {
     return static::getEntityByKey('id', $entity_type_id, $label, $bundle);

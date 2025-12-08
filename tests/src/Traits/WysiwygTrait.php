@@ -175,7 +175,7 @@ trait WysiwygTrait {
       $region = $this->getSession()->getPage();
     }
 
-    $label_elements = $region->findAll('xpath', '//label[text()="' . $label . '"]');
+    $label_elements = $region->findAll('named', ['field', $label]);
     if (empty($label_elements)) {
       throw new WysiwygEditorNotFoundException("Could not find the '$label' field label.");
     }

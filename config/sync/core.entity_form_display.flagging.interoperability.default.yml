@@ -9,4 +9,5 @@ targetEntityType: flagging
 bundle: interoperability
 mode: default
 content: {  }
-hidden: {  }
+hidden:
+  uuid: true

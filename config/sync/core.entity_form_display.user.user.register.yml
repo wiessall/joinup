@@ -74,3 +74,4 @@ hidden:
   language: true
   private_messages: true
   timezone: true
+  uuid: true

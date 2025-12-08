@@ -9,6 +9,10 @@ dependencies:
   module:
     - tmgmt_content
 third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://purl.org/dc/terms/isPartOf'
+      type: resource
   tmgmt_content:
     excluded: false
 id: paragraph.binding_requirement.expression

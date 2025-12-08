@@ -12,4 +12,4 @@ dependencies:
   - joinup:joinup_notification
   - joinup:joinup_rdf
   - openapi_ui_swagger:openapi_ui_swagger
-  - rdf_sync:rdf_sync
+  - paragraphs:paragraphs
