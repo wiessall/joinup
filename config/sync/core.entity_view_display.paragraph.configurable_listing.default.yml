@@ -46,3 +46,4 @@ content:
 hidden:
   list_style: true
   search_api_excerpt: true
+  uuid: true

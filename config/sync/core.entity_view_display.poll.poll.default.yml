@@ -19,3 +19,4 @@ content:
 hidden:
   search_api_excerpt: true
   show_number_of_results: true
+  uuid: true

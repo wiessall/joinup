@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b27019b7eb99e2d5d7a8e30c14dcb436",
+    "content-hash": "23bc33557281eb994190c42e00a6e0ea",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -10756,6 +10756,58 @@
             "homepage": "https://www.drupal.org/project/ui_patterns_settings",
             "support": {
                 "source": "https://git.drupalcode.org/project/ui_patterns_settings"
+            }
+        },
+        {
+            "name": "drupal/uuid_extra",
+            "version": "2.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/uuid_extra.git",
+                "reference": "2.0.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/uuid_extra-2.0.2.zip",
+                "reference": "2.0.2",
+                "shasum": "3b4a2bd9926814bf02211521e98110b8dde75361"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9 || ^10 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.2",
+                    "datestamp": "1729060717",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "colan",
+                    "homepage": "https://www.drupal.org/user/58704"
+                },
+                {
+                    "name": "dawehner",
+                    "homepage": "https://www.drupal.org/user/99340"
+                },
+                {
+                    "name": "jsacksick",
+                    "homepage": "https://www.drupal.org/user/972218"
+                }
+            ],
+            "description": "Enables field widgets and formatters",
+            "homepage": "https://www.drupal.org/project/uuid_extra",
+            "support": {
+                "source": "https://git.drupalcode.org/project/uuid_extra"
             }
         },
         {
