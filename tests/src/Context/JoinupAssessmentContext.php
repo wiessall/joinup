@@ -9,7 +9,7 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
-use Drupal\joinup_assessment\AssessmentInterface;
+use Drupal\joinup_assessment\AssessmentInterface as LegacyAssessmentInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
@@ -84,7 +84,7 @@ class JoinupAssessmentContext extends RawDrupalContext {
   public function beforeAssessmentsDemo(): void {
     $collection = $this->nodeCreate((object) [
       'type' => 'collection',
-      'uuid' => AssessmentInterface::GROUP_UUID,
+      'uuid' => LegacyAssessmentInterface::GROUP_UUID,
       'title' => 'Interoperability assessments space',
       'short_id' => 'assessments',
       'field_state' => 'published',
@@ -111,7 +111,7 @@ class JoinupAssessmentContext extends RawDrupalContext {
       'title' => 'Assessment reports',
       'og_audience' => $collection->title,
       'field_state' => 'published',
-      'uuid' => AssessmentInterface::ASSESSMENT_REPORTS_UUID,
+      'uuid' => LegacyAssessmentInterface::ASSESSMENT_REPORTS_UUID,
       'field_paragraphs_body:target_id' => $paragraph->id(),
       'field_paragraphs_body:target_revision_id' => $paragraph->getRevisionId(),
     ]);
@@ -127,7 +127,7 @@ class JoinupAssessmentContext extends RawDrupalContext {
     $storage = \Drupal::entityTypeManager()->getStorage('webform_submission');
     $sids = $storage->getQuery()
       ->accessCheck(FALSE)
-      ->condition('webform_id', AssessmentInterface::WEBFORM_ID)
+      ->condition('webform_id', LegacyAssessmentInterface::WEBFORM_ID)
       ->sort('sid', 'DESC')
       ->range(0, 1)
       ->execute();
@@ -193,7 +193,7 @@ class JoinupAssessmentContext extends RawDrupalContext {
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function createSubmissionForAssessmentReport(string $assessment_report_title): WebformSubmissionInterface {
-    $webform = Webform::load(AssessmentInterface::WEBFORM_ID);
+    $webform = Webform::load(LegacyAssessmentInterface::WEBFORM_ID);
     $submission = WebformSubmission::create([
       'webform_id' => $webform->id(),
       'uid' => \Drupal::currentUser()->id(),

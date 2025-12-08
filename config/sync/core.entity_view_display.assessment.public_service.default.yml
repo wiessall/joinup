@@ -4,16 +4,7 @@ status: true
 dependencies:
   config:
     - assessments.type.public_service
-    - field.field.assessment.public_service.identifier
-    - field.field.assessment.public_service.spatial
     - field.field.assessment.public_service.thematic_area
-  module:
-    - entity_form_field_label
-    - field_delimiter
-    - field_formatter_range
-    - joinup_slick
-    - options
-    - template_suggestion
 id: assessment.public_service.default
 targetEntityType: assessment
 bundle: public_service
@@ -37,10 +28,9 @@ content:
     region: content
 hidden:
   created: true
-  identifier: true
   langcode: true
   search_api_excerpt: true
-  spatial: true
   status: true
   uid: true
   uri: true
+  uuid: true

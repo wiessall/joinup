@@ -62,3 +62,4 @@ hidden:
   report: true
   report_timestamp: true
   search_api_excerpt: true
+  uuid: true

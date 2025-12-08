@@ -1,4 +1,4 @@
-@api @group-e
+@api @group-e @assessments
 Feature: Assessment Report Entity Management
   In order to manage assessment reports directly
   As a user with appropriate permissions
@@ -16,7 +16,7 @@ Feature: Assessment Report Entity Management
     When I fill in "Name" with "Test Assessment Report 2025"
     And I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
-    And I fill in "Organisation name" with "Austrian Ministry of Digital Affairs"
+    And I fill in "New organisation name" with "Austrian Ministry of Digital Affairs"
     And I select the radio button "Yes"
     And I fill in "Relevant assessment report" with "https://interoperable-europe.ec.europa.eu/report"
 
@@ -24,7 +24,7 @@ Feature: Assessment Report Entity Management
     When I click "New binding requirement"
     And a modal should open
     And I press "Save" in the "Modal buttons" region
-    And I should see the text "4 errors have been found: NameNameDescriptionDescription" in the "Modal content" region
+    And I should see the text "4 errors have been found: NameName of the initiativeDescriptionDescription" in the "Modal content" region
 
     Then I should see the following lines of text in the correct order in "Modal content":
       | Initiatives                            |
@@ -44,20 +44,29 @@ Feature: Assessment Report Entity Management
     And I fill in "documented_in[0][uri]" with "https://interoperable-europe.ec.europa.eu/general" in the "Modal content" region
 
     When I click "Trans-European digital public services" in the "Modal content" region
-    And I fill in "has_related_service[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
-    And I select "Core governance and administration" from "has_related_service[0][inline_entity_form][thematic_area]" in the "Modal content" region
+    And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
+    And I select "Core governance and administration" from "affects[0][inline_entity_form][thematic_area]" in the "Modal content" region
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
 
     When I click "Affected stakeholders" in the "Modal content" region
-    And I select "Local public sector body" from "affected_party[0][inline_entity_form][participant_type][]" in the "Modal content" region
-    And I select "Belgium" from "affected_party[0][inline_entity_form][stakeholder_country][]" in the "Modal content" region
+    And I select "Local public sector body" from "has_participation[0][inline_entity_form][participant_type][]" in the "Modal content" region
+    And I select "Belgium" from "has_participation[0][inline_entity_form][stakeholder_country][]" in the "Modal content" region
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
 
     When I click "Interoperability solutions" in the "Modal content" region
-    And I press "Add new relevant asset" in the "Modal content" region
-    And I fill in "asset[form][0][name][0][value]" with "European Interoperability Framework (EIF)" in the "Modal content" region
-    And I fill in "asset[form][0][landing_page][0][uri]" with "https://interoperable-europe.ec.europa.eu/collection/eif" in the "Modal content" region
-    Then I press "Create relevant asset" in the "Modal content" region
+    And I press "Add new relevant solution" in the "Modal content" region
+    And I fill in "asset[form][0][title][0][value]" with "European Interoperability Framework (EIF)" in the "Modal content" region
+    And I enter "Description of European Interoperability Framework (EIF)" in the "asset[form][0][description][0][value]" wysiwyg editor
+    And I fill in "Relevant website" with "https://interoperable-europe.ec.europa.eu/collection/eif" in the "Modal content" region
+    Then I press "Create relevant solution" in the "Modal content" region
+
+    When I click "Trans-European digital public services" in the "Modal content" region
+    And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
+    And I select "Core governance and administration" from "affects[0][inline_entity_form][thematic_area]" in the "Modal content" region
+
+    When I click "Affected stakeholders" in the "Modal content" region
+    And I select "Local public sector body" from "has_participation[0][inline_entity_form][participant_type][]" in the "Modal content" region
+    And I select "Belgium" from "has_participation[0][inline_entity_form][stakeholder_country][]" in the "Modal content" region
 
     When I click "Documents" in the "Modal content" region
     And I attach the file "text.pdf" to "Add a new file"
@@ -120,7 +129,7 @@ Feature: Assessment Report Entity Management
     And I wait for AJAX to finish
     And I select "Greece" from "Country"
     And I wait for AJAX to finish
-    And I fill in "Organisation name" with "GR1"
+    And I fill in "New organisation name" with "GR1"
     And I select the radio button "No"
 
     # Binding requirements
@@ -135,7 +144,7 @@ Feature: Assessment Report Entity Management
     And I fill in "description[0][value]" with "This is the general binding requirement description" in the "Modal content" region
 
     When I click "Trans-European digital public services" in the "Modal content" region
-    And I fill in "has_related_service[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
+    And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
 
     Then I press "Save" in the "Modal buttons" region
     # Save Assessment Report.
@@ -148,7 +157,7 @@ Feature: Assessment Report Entity Management
     And I click "Edit" in the "Entity actions" region
     And I select "Belgium" from "Country"
     And I wait for AJAX to finish
-    And the following field should be present "Organisation name"
+    And the following field should be present "New organisation name"
     And I select "Greece" from "Country"
     And I wait for AJAX to finish
     And the following field should be present "Select organisation"
@@ -156,15 +165,15 @@ Feature: Assessment Report Entity Management
     Then I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
     And the following field should not be present "Select organisation"
-    And I fill in "Organisation name" with "Portugal Ministry of Digital Affairs"
+    And I fill in "New organisation name" with "Portugal Ministry of Digital Affairs"
     Then I press "Save"
 
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    Then I press "Add new organisation"
+    Then I press "…or add new"
     And I wait for AJAX to finish
-    And I fill in "Organisation name" with "Spain Ministry of Digital Affairs"
-    Then I press "Select existing organisation"
+    And I fill in "New organisation name" with "Spain Ministry of Digital Affairs"
+    Then I press "…or select existing"
     And I wait for AJAX to finish
     And the option with text "Portugal Ministry of Digital Affairs" from select "Select organisation" is selected
 
@@ -173,7 +182,7 @@ Feature: Assessment Report Entity Management
     And I wait for AJAX to finish
     And I select "Belgium" from "Country"
     And I wait for AJAX to finish
-    And the following field should be present "Organisation name"
+    And the following field should be present "New organisation name"
     And I select "Greece" from "Country"
     And I wait for AJAX to finish
     And the following field should be present "Select organisation"
@@ -189,16 +198,16 @@ Feature: Assessment Report Entity Management
     And I select "Greece" from "Country"
     And I wait for AJAX to finish
     And the following field should be present "Select organisation"
-    Then I press "Add new organisation"
+    Then I press "…or add new"
     And I wait for AJAX to finish
-    And I fill in "Organisation name" with "Organisation Should Not Be Created"
-    Then I press "Select existing organisation"
+    And I fill in "New organisation name" with "Organisation Should Not Be Created"
+    Then I press "…or select existing"
     And I wait for AJAX to finish
 
-    # Check if organisation is createad.
+    # Check if organisation is created.
     Then the public_organisation assessment "Organisation Should Not Be Created" should not exist
     And the following field should be present "Select organisation"
-    And the following field should not be present "Organisation name"
+    And the following field should not be present "New organisation name"
     And I select "GR1" from "Select organisation"
     Then I press "Save"
     Then I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
@@ -209,9 +218,9 @@ Feature: Assessment Report Entity Management
     # Regression test for case-insensitive name matching.
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    Then I press "Add new organisation"
+    Then I press "…or add new"
     And I wait for AJAX to finish
-    And I fill in "Organisation name" with "gr1"
+    And I fill in "New organisation name" with "gr1"
     Then I press "Save"
     Then I should see the warning message containing "You tried to create a new organisation but one with the same type, country and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
@@ -221,9 +230,9 @@ Feature: Assessment Report Entity Management
     And I click "Edit" in the "Entity actions" region
     Then I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
-    Then I press "Add new organisation"
+    Then I press "…or add new"
     And I wait for AJAX to finish
-    And I fill in "Organisation name" with "portugal ministry of digital affairs"
+    And I fill in "New organisation name" with "portugal ministry of digital affairs"
     Then I press "Save"
     Then I should see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
@@ -236,7 +245,7 @@ Feature: Assessment Report Entity Management
     And I wait for AJAX to finish
     And I select "Belgium" from "Country"
     And I wait for AJAX to finish
-    And I fill in "Organisation name" with "Brand New Belgian Organisation 2025"
+    And I fill in "New organisation name" with "Brand New Belgian Organisation 2025"
     Then I press "Save"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type, country and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
@@ -244,9 +253,9 @@ Feature: Assessment Report Entity Management
     # Test that a second NEW organization with different name is also created without warnings.
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    Then I press "Add new organisation"
+    Then I press "…or add new"
     And I wait for AJAX to finish
-    And I fill in "Organisation name" with "Another New Belgian Organisation 2025"
+    And I fill in "New organisation name" with "Another New Belgian Organisation 2025"
     Then I press "Save"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type, country and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
@@ -264,9 +273,9 @@ Feature: Assessment Report Entity Management
     And I click "Edit" in the "Entity actions" region
     Then I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
-    Then I press "Add new organisation"
+    Then I press "…or add new"
     And I wait for AJAX to finish
-    And I fill in "Organisation name" with "New EU Institution 2025"
+    And I fill in "New organisation name" with "New EU Institution 2025"
     Then I press "Save"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 - Updated has been updated."
@@ -282,10 +291,10 @@ Feature: Assessment Report Entity Management
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I fill in "Name" with "Test Provided by in Assessment Report 2025 - Re-updated"
-    Then I press "Add new organisation"
+    Then I press "…or add new"
     And I wait for AJAX to finish
-    And I fill in "Organisation name" with "New EU Institution 2025"
-    Then I press "Select existing organisation"
+    And I fill in "New organisation name" with "New EU Institution 2025"
+    Then I press "…or select existing"
     And I wait for AJAX to finish
     Then I press "Save"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
@@ -305,7 +314,7 @@ Feature: Assessment Report Entity Management
     When I fill in "Name" with "Test permissions in Assessment Report 2025"
     And I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
-    And I fill in "Organisation name" with "CTT PT"
+    And I fill in "New organisation name" with "CTT PT"
     And I select the radio button "No"
 
     # Binding requirements
@@ -320,7 +329,7 @@ Feature: Assessment Report Entity Management
     And I fill in "description[0][value]" with "This is the general binding requirement description" in the "Modal content" region
 
     When I click "Trans-European digital public services" in the "Modal content" region
-    And I fill in "has_related_service[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
+    And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
 
     Then I press "Save" in the "Modal buttons" region
     Then I press "Save as In Review"

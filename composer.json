@@ -128,6 +128,7 @@
         "drupal/token": "~1.7",
         "drupal/tour": "^1.0",
         "drupal/twig_field_value": "^2.0",
+        "drupal/uuid_extra": "^2.0",
         "drupal/view_unpublished": "^1.0",
         "drupal/views_autosubmit": "^1.7",
         "drupal/views_block_area": "^2.0",
@@ -334,6 +335,9 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "drupal/babel": {
+                "TypeError in BabelTranslateForm::ajaxUpdateTranslation see @see https://www.drupal.org/i/3561002": "resources/patch/php/drupal/babel/3561002.diff"
+            },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff"
             },
@@ -442,7 +446,7 @@
             "drupal/inline_entity_form": {
                 "Autocomplete field doesn't allow to reference entities with long titles @see https://www.drupal.org/node/2895663": "resources/patch/php/drupal/inline_entity_form/2895663.patch",
                 "Undefined array key \"delete\". @see https://www.drupal.org/i/3416328": "resources/patch/php/drupal/inline_entity_form/3416328.patch",
-                "Required fields make an optional IEF (erroneously) required @see https://www.drupal.org/i/3099844": "resources/patch/php/drupal/inline_entity_form/3099844.diff",
+                "Combined: @see https://www.drupal.org/i/3099844 and https://www.drupal.org/project/i/3043511": "resources/patch/php/drupal/inline_entity_form/combined-3099844-3043511.15.diff",
                 "Foreach expects array|object, null given @see https://www.drupal.org/i/3516478": "resources/patch/php/drupal/inline_entity_form/3516478.diff"
             },
             "drupal/l10n_pconfig": {
@@ -496,11 +500,8 @@
                 "Missing langcode in purge_users.settings and config/install missing @see https://www.drupal.org/i/3542620": "resources/patch/php/drupal/purge_users/3542620.diff"
             },
             "drupal/rdf_sync": {
-                "Allow to update the URI @see https://www.drupal.org/i/3507137": "resources/patch/php/drupal/rdf_sync/3507137.diff",
-                "Add attributes alternative for RdfUriGenerator @see https://www.drupal.org/i/3510908": "resources/patch/php/drupal/rdf_sync/3510908.diff",
-                "Warning on bundle entity form @see https://drupal.org/i/3518353": "resources/patch/php/drupal/rdf_sync/3518353-mr37-hash-6aab66c4.diff",
-                "Forms using entity builders of RDF Sync cannot be serialized @see https://drupal.org/i/3527977": "resources/patch/php/drupal/rdf_sync/3527977-mr38-hash-8dc503eb.diff",
-                "Allow $bundle to be nullable @see https://www.drupal.org/i/3529979": "resources/patch/php/drupal/rdf_sync/3529979.diff"
+                "Pass the context to the normalize subscribers @see https://www.drupal.org/i/3560752": "resources/patch/php/drupal/rdf_sync/3560752.mr43-note632794.diff",
+                "Configure namaspaces @see https://www.drupal.org/i/3560781": "resources/patch/php/drupal/rdf_sync/3560781.mr44-note633150.diff"
             },
             "drupal/search_api": {
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199.patch",

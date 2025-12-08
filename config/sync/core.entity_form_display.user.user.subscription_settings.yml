@@ -51,3 +51,4 @@ hidden:
   path: true
   private_messages: true
   timezone: true
+  uuid: true
