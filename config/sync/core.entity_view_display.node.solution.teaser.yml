@@ -123,3 +123,4 @@ hidden:
   solution_type: true
   translation: true
   uri: true
+  uuid: true

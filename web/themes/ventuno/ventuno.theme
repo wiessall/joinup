@@ -13,14 +13,6 @@ foreach (glob(__DIR__ . '/includes/*.inc') as $filename) {
 }
 
 /**
- * Implements hook_theme_registry_alter().
- */
-function ventuno_theme_registry_alter(&$theme_registry): void {
-  // Add header_attributes variable to table.
-  $theme_registry['table']['variables']['header_attributes'] = [];
-}
-
-/**
  * Implements hook_theme().
  */
 function ventuno_theme(array $existing, string $type, string $theme, string $path): array {
@@ -53,8 +45,8 @@ function ventuno_preprocess(array &$variables): void {
 function ventuno_preprocess_paragraph__binding_requirement(array &$variables): void {
   $details_text = [];
   foreach ([
-    'affected_party' => ['prefix' => 'affecting', 'suffix' => 'stakeholders'],
-    'has_related_service' => ['prefix' => 'related to', 'suffix' => 'service(s)'],
+    'affects' => ['prefix' => 'related to', 'suffix' => 'service(s)'],
+    'has_participation' => ['prefix' => 'affecting', 'suffix' => 'stakeholders'],
     'asset' => ['prefix' => 'related to', 'suffix' => 'assets'],
     'requirement_documents' => ['prefix' => 'supported by', 'suffix' => 'documents'],
   ] as $field => $data) {

@@ -1,0 +1,13 @@
+uuid: d509d8a3-1cd8-47e2-bf33-ae318fcf1f28
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.assessment_report_updates
+id: message.assessment_report_updates.default
+targetEntityType: message
+bundle: assessment_report_updates
+mode: default
+content: {  }
+hidden:
+  uuid: true

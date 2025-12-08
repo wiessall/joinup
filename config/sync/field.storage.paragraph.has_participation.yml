@@ -1,0 +1,20 @@
+uuid: 5e86057b-3087-4664-b239-21de98631a87
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+    - paragraphs
+id: paragraph.has_participation
+field_name: has_participation
+entity_type: paragraph
+type: entity_reference
+settings:
+  target_type: assessment
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

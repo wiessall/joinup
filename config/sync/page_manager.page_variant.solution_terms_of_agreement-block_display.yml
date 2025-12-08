@@ -12,7 +12,7 @@ weight: 0
 variant: block_display
 variant_settings:
   id: block_display
-  label: null
+  label: 'Solution agreement'
   weight: 0
   uuid: 0a890079-6caa-419c-947e-76d26bec5cc4
   blocks:

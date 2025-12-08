@@ -388,7 +388,7 @@
                         type: internal
                       platforms:
                         - web
-                      releaseDate: '2022-12-16'
+                      releaseDate: 2022-12-16
                       softwareType: standalone/desktop
                       softwareVersion: 1.0.0
                       usedBy:

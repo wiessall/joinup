@@ -10,6 +10,10 @@ dependencies:
     - text
     - tmgmt_content
 third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://data.europa.eu/2sa/cav#valueDescription'
+      type: null
   tmgmt_content:
     excluded: false
 id: paragraph.binding_requirement.description
@@ -19,7 +23,7 @@ bundle: binding_requirement
 label: Description
 description: 'Provide a short description or a title for the binding requirements for the purpose of referring back to the specific requirement in the assessment process'
 required: true
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:

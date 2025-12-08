@@ -9,16 +9,20 @@ dependencies:
     - link
     - tmgmt_content
 third_party_settings:
+  rdf_sync:
+    uri:
+      predicate: 'http://data.europa.eu/2sa/cav#documentedIn'
+      type: 'xsd:anyURI'
   tmgmt_content:
     excluded: false
 id: paragraph.binding_requirement.documented_in
 field_name: documented_in
 entity_type: paragraph
 bundle: binding_requirement
-label: Link
+label: 'Documented in'
 description: 'Provide a legal reference for the binding requirement, if available'
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:

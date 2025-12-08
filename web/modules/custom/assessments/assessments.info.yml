@@ -9,6 +9,7 @@ dependencies:
   - drupal:rest
   - inline_entity_form:inline_entity_form
   - joinup:joinup_api
+  - joinup:joinup_notification
   - joinup:joinup_rdf
   - openapi_ui_swagger:openapi_ui_swagger
-  - rdf_sync:rdf_sync
+  - paragraphs:paragraphs

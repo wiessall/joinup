@@ -20,3 +20,4 @@ hidden:
   field_invitation: true
   partial_1: true
   search_api_excerpt: true
+  uuid: true

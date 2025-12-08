@@ -53,3 +53,4 @@ hidden:
   langcode: true
   path: true
   uid: true
+  uuid: true

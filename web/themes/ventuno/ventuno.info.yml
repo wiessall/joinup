@@ -28,6 +28,8 @@ libraries-extend:
     - ventuno/alert
   sitewide_alert/init:
     - ventuno/alert
+  assessments/inline-items:
+    - ventuno/inline-items
 
 libraries-override:
   calendar_view/calendar:

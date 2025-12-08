@@ -44,4 +44,5 @@ content:
       size: 40
       placeholder: ''
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  uuid: true

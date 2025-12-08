@@ -115,3 +115,4 @@ content:
     third_party_settings: {  }
 hidden:
   current_workflow_state: true
+  uuid: true

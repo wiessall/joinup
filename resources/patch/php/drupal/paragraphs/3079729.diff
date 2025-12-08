@@ -1,0 +1,208 @@
+diff --git a/paragraphs.services.yml b/paragraphs.services.yml
+index e61f035980c7f6c4b6af4a549b3bcb09e7f28d5f..f2f428d579769b1e4d4ca400bb6ee23d1d9983c3 100644
+--- a/paragraphs.services.yml
++++ b/paragraphs.services.yml
+@@ -13,3 +13,6 @@ services:
+     parent: default_plugin_manager
+     arguments: ['@entity_type.manager']
+ 
++  Drupal\paragraphs\Hook\EntityHooks:
++    class: Drupal\paragraphs\Hook\EntityHooks
++    autowire: true
+diff --git a/src/Entity/Paragraph.php b/src/Entity/Paragraph.php
+index 55e65e4fb5d3126eb0deb2b566029ce810f18868..14a110e5e893b09a3c968d54ce8250ed5768a0c9 100644
+--- a/src/Entity/Paragraph.php
++++ b/src/Entity/Paragraph.php
+@@ -23,6 +23,7 @@ use Drupal\Core\TypedData\TranslatableInterface;
+ use Drupal\field\Entity\FieldStorageConfig;
+ use Drupal\entity_reference_revisions\EntityNeedsSaveTrait;
+ use Drupal\field\FieldConfigInterface;
++use Drupal\paragraphs\Hook\EntityHooks;
+ use Drupal\paragraphs\ParagraphAccessControlHandler;
+ use Drupal\paragraphs\ParagraphInterface;
+ use Drupal\paragraphs\ParagraphStorageSchema;
+@@ -501,18 +502,15 @@ class Paragraph extends ContentEntityBase implements ParagraphInterface {
+   */
+  public function createDuplicate() {
+    $duplicate = parent::createDuplicate();
+-   // Loop over entity fields and duplicate nested paragraphs.
+-   foreach ($duplicate->getFields() as $fieldItemList) {
+-     if ($fieldItemList instanceof EntityReferenceFieldItemListInterface && $fieldItemList->getSetting('target_type') === $this->getEntityTypeId()) {
+-       foreach ($fieldItemList as $delta => $item) {
+-         // Duplicate child paragraphs, remove when requiring 10.2+.
+-         // @see \Drupal\paragraphs\Hook\EntityHooks::duplicate()
+-         if ($item->entity && !$item->entity->isNew()) {
+-           $fieldItemList[$delta] = $item->entity->createDuplicate();
+-         }
+-       }
+-     }
++
++   // @todo Remove this once paragraphs requires Drupal 11.2.
++   if (version_compare(\Drupal::VERSION, '11.1.99', '<=')) {
++     // Remove when requiring 10.2+.
++     /** @var \Drupal\paragraphs\Hook\EntityHooks $service */
++     $service = \Drupal::service(EntityHooks::class);
++     $service->duplicate($duplicate, $this);
+    }
++
+    return $duplicate;
+  }
+ 
+diff --git a/src/Hook/EntityHooks.php b/src/Hook/EntityHooks.php
+index 17c909fc894de778756ac9a1f21f8cd755682687..36ec496a63ae0d98bead476cb13f6f83e429a974 100644
+--- a/src/Hook/EntityHooks.php
++++ b/src/Hook/EntityHooks.php
+@@ -4,7 +4,10 @@ namespace Drupal\paragraphs\Hook;
+ 
+ use Drupal\Core\Entity\ContentEntityInterface;
+ use Drupal\Core\Entity\EntityInterface;
++use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
+ use Drupal\Core\Hook\Attribute\Hook;
++use Drupal\file\FileRepositoryInterface;
++use Drupal\file\Plugin\Field\FieldType\FileFieldItemList;
+ use Drupal\paragraphs\ParagraphInterface;
+ 
+ /**
+@@ -12,6 +15,11 @@ use Drupal\paragraphs\ParagraphInterface;
+  */
+ class EntityHooks {
+ 
++  public function __construct(
++    private readonly FileRepositoryInterface $fileRepository,
++  ) {
++  }
++
+   /**
+    * Implements hook_entity_duplicate()
+    */
+@@ -20,9 +28,29 @@ class EntityHooks {
+     if (!$duplicate instanceof ContentEntityInterface) {
+       return;
+     }
+-    foreach ($duplicate->getFields() as $field) {
+-      if ($field->getFieldDefinition()->getType() === 'entity_reference_revisions' && $field->getItemDefinition()->getSetting('target_type') == 'paragraph') {
+-        foreach ($field as $field_item) {
++
++    // Duplicate file entities inside paragraphs.
++    if ($duplicate instanceof ParagraphInterface) {
++      foreach ($duplicate->getFields() as $item_list) {
++        if ($item_list instanceof FileFieldItemList) {
++          foreach ($item_list as $file_item) {
++            $file_entity = $file_item->entity;
++            if (!$file_entity) {
++              continue;
++            }
++
++            $destination_dir = $file_item->getUploadLocation();
++            $copied_entity = $this->fileRepository->copy($file_entity, $destination_dir);
++            $file_item->entity = $copied_entity;
++          }
++        }
++      }
++    }
++
++    // Duplicate nested sub-paragraphs.
++    foreach ($duplicate->getFields() as $item_list) {
++      if ($item_list->getFieldDefinition()->getType() === 'entity_reference_revisions' && $item_list->getItemDefinition()->getSetting('target_type') == 'paragraph') {
++        foreach ($item_list as $field_item) {
+           if ($field_item->entity instanceof ParagraphInterface) {
+             $paragraph = clone $field_item->entity;
+             $original_langcodes = array_keys($paragraph->getTranslationLanguages());
+@@ -38,7 +66,6 @@ class EntityHooks {
+           }
+         }
+       }
+-
+     }
+   }
+ 
+diff --git a/tests/src/Kernel/ParagraphsAccessTest.php b/tests/src/Kernel/ParagraphsAccessTest.php
+index 6e9633b3ae2e95c7a346e0c10983120c34837cbc..2d8840cab97448c2c7aa48de2ade5e6e484af51a 100644
+--- a/tests/src/Kernel/ParagraphsAccessTest.php
++++ b/tests/src/Kernel/ParagraphsAccessTest.php
+@@ -21,6 +21,7 @@ class ParagraphsAccessTest extends KernelTestBase {
+    */
+   protected static $modules = [
+     'paragraphs',
++    'file',
+   ];
+ 
+   /**
+diff --git a/tests/src/Kernel/migrate/FieldCollectionItemRevisionSourceTest.php b/tests/src/Kernel/migrate/FieldCollectionItemRevisionSourceTest.php
+index 0a75c1909089fd04d862d9f4c66b0b770ed80586..71de4baf27a5a9ac7b3d39d47c7077390d1a2340 100644
+--- a/tests/src/Kernel/migrate/FieldCollectionItemRevisionSourceTest.php
++++ b/tests/src/Kernel/migrate/FieldCollectionItemRevisionSourceTest.php
+@@ -17,7 +17,7 @@ class FieldCollectionItemRevisionSourceTest extends MigrateSqlSourceTestBase {
+   /**
+    * {@inheritdoc}
+    */
+-  protected static $modules = ['migrate_drupal', 'paragraphs'];
++  protected static $modules = ['migrate_drupal', 'paragraphs', 'file'];
+ 
+   /**
+    * {@inheritdoc}
+diff --git a/tests/src/Kernel/migrate/FieldCollectionItemSourceTest.php b/tests/src/Kernel/migrate/FieldCollectionItemSourceTest.php
+index 0075401e90554272b107902d04bf02833917e1c0..cb6a921e82ec6c0c10ff16f3743f8fd0e4ffd0d1 100644
+--- a/tests/src/Kernel/migrate/FieldCollectionItemSourceTest.php
++++ b/tests/src/Kernel/migrate/FieldCollectionItemSourceTest.php
+@@ -17,7 +17,7 @@ class FieldCollectionItemSourceTest extends MigrateSqlSourceTestBase {
+   /**
+    * {@inheritdoc}
+    */
+-  protected static $modules = ['migrate_drupal', 'paragraphs'];
++  protected static $modules = ['migrate_drupal', 'paragraphs', 'file'];
+ 
+   /**
+    * {@inheritdoc}
+diff --git a/tests/src/Kernel/migrate/FieldCollectionTypeSourceTest.php b/tests/src/Kernel/migrate/FieldCollectionTypeSourceTest.php
+index 1fe9c7c326276f6e15e81512af17dfbbee526097..733dbe4a1c3937b0791f2c0b8e236572c894372e 100644
+--- a/tests/src/Kernel/migrate/FieldCollectionTypeSourceTest.php
++++ b/tests/src/Kernel/migrate/FieldCollectionTypeSourceTest.php
+@@ -17,7 +17,7 @@ class FieldCollectionTypeSourceTest extends MigrateSqlSourceTestBase {
+   /**
+    * {@inheritdoc}
+    */
+-  protected static $modules = ['migrate_drupal', 'paragraphs'];
++  protected static $modules = ['migrate_drupal', 'paragraphs', 'file'];
+ 
+   /**
+    * {@inheritdoc}
+diff --git a/tests/src/Kernel/migrate/ParagraphsItemRevisionSourceTest.php b/tests/src/Kernel/migrate/ParagraphsItemRevisionSourceTest.php
+index 0227bb717e05a33162abe30876e4738259938bd4..b1320ff10fb6823f93b57f8b354d09080b89548d 100644
+--- a/tests/src/Kernel/migrate/ParagraphsItemRevisionSourceTest.php
++++ b/tests/src/Kernel/migrate/ParagraphsItemRevisionSourceTest.php
+@@ -17,7 +17,7 @@ class ParagraphsItemRevisionSourceTest extends MigrateSqlSourceTestBase {
+   /**
+    * {@inheritdoc}
+    */
+-  protected static $modules = ['migrate_drupal', 'paragraphs'];
++  protected static $modules = ['migrate_drupal', 'paragraphs', 'file'];
+ 
+   /**
+    * {@inheritdoc}
+diff --git a/tests/src/Kernel/migrate/ParagraphsItemSourceTest.php b/tests/src/Kernel/migrate/ParagraphsItemSourceTest.php
+index 485025e9c40d82e6accdcc40f9d651e78031a74a..0e68c91c40a55ffd8b2b0aa068dda117b67cd203 100644
+--- a/tests/src/Kernel/migrate/ParagraphsItemSourceTest.php
++++ b/tests/src/Kernel/migrate/ParagraphsItemSourceTest.php
+@@ -17,7 +17,7 @@ class ParagraphsItemSourceTest extends MigrateSqlSourceTestBase {
+   /**
+    * {@inheritdoc}
+    */
+-  protected static $modules = ['migrate_drupal', 'paragraphs'];
++  protected static $modules = ['migrate_drupal', 'paragraphs', 'file'];
+ 
+   /**
+    * {@inheritdoc}
+diff --git a/tests/src/Kernel/migrate/ParagraphsTypeSourceTest.php b/tests/src/Kernel/migrate/ParagraphsTypeSourceTest.php
+index fc930ff5e1c8b08504b562f74cad7be013e4c7ef..5d23b10675a271cc709ac4d9ff29429056c694a2 100644
+--- a/tests/src/Kernel/migrate/ParagraphsTypeSourceTest.php
++++ b/tests/src/Kernel/migrate/ParagraphsTypeSourceTest.php
+@@ -17,7 +17,7 @@ class ParagraphsTypeSourceTest extends MigrateSqlSourceTestBase {
+   /**
+    * {@inheritdoc}
+    */
+-  protected static $modules = ['migrate_drupal', 'paragraphs'];
++  protected static $modules = ['migrate_drupal', 'paragraphs', 'file'];
+ 
+   /**
+    * {@inheritdoc}

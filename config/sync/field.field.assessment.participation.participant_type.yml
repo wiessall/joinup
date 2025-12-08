@@ -9,6 +9,10 @@ dependencies:
   module:
     - tmgmt_content
 third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://purl.org/dc/terms/type'
+      type: resource
   tmgmt_content:
     excluded: false
 id: assessment.participation.participant_type
