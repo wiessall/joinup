@@ -29,6 +29,7 @@ use Drupal\assessments\AssessmentVocabularyHelper;
  *     plural = "@count assessment statements",
  *   ),
  *   handlers = {
+ *     "access" = "Drupal\assessments\AssessmentStatementAccessControlHandler",
  *     "list_builder" = "Drupal\assessments\AssessmentStatementListBuilder",
  *     "route_provider" = {
  *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
@@ -39,6 +40,7 @@ use Drupal\assessments\AssessmentVocabularyHelper;
  *   data_table = "assessment_statement_field_data",
  *   entity_keys = {
  *     "id" = "id",
+ *     "label" = "id",
  *     "uuid" = "uuid",
  *     "bundle" = "type"
  *   },
@@ -56,7 +58,7 @@ final class AssessmentStatement extends ContentEntityBase {
     $fields = parent::baseFieldDefinitions($entity_type);
     $fields['judgement'] = BaseFieldDefinition::create('string_long')
       ->setLabel(t('Judgement'))
-      ->setDescription(t('The judgement statement.'))
+      ->setDescription(t('Provide a justification'))
       ->setTranslatable(TRUE)
       ->setDisplayOptions('form', [
         'type' => 'string_textarea',

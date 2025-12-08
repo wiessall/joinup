@@ -6,7 +6,6 @@ dependencies:
     - assessments.type.expression
     - field.field.assessment.expression.description
     - field.field.assessment.expression.documented_in
-    - field.field.assessment.expression.expression_type
   module:
     - link
     - text
@@ -44,9 +43,9 @@ content:
     region: content
 hidden:
   created: true
-  expression_type: true
   langcode: true
   search_api_excerpt: true
   status: true
   uid: true
   uri: true
+  uuid: true

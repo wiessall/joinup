@@ -4,64 +4,25 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
-use Behat\Gherkin\Node\TableNode;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
-use Drupal\joinup_assessment\AssessmentInterface;
+use Drupal\joinup_assessment\AssessmentInterface as LegacyAssessmentInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
- * Step definitions for assessments checks.
+ * Step definitions for joinup_assessment checks.
  */
-class AssessmentContext extends RawDrupalContext {
+class JoinupAssessmentContext extends RawDrupalContext {
 
   use EntityTrait;
   use TestingEntitiesTrait;
   use UtilityTrait;
-
-  /**
-   * Programmatically creates assessment contents.
-   *
-   * Table format:
-   * | name   | <field n>       |
-   * | <name> | <field n value> |
-   *
-   * @param string $type
-   *   The bundle machine name.
-   * @param \Behat\Gherkin\Node\TableNode $assessmentsTable
-   *   The table with the data for the fields of the assessment.
-   *
-   * @Given :type assessments:
-   */
-  public function createAssessments(string $type, TableNode $assessmentsTable): void {
-    foreach ($assessmentsTable->getHash() as $assessment) {
-      $vocabHelper = \Drupal::service(AssessmentVocabularyHelper::class);
-
-      $fieldVocabMap = [
-        'public_organisation' => ['organisation_type' => 'assess_provider_type'],
-        'participation' => ['participant_type' => 'assess_participant_type'],
-        'public_service' => ['thematic_area' => 'assess_public_service_area'],
-      ];
-
-      foreach ($fieldVocabMap[$type] ?? [] as $fieldName => $vid) {
-        if (isset($assessment[$fieldName])) {
-          $assessment[$fieldName] = $vocabHelper->getTermFromIdentifier($vid, $assessment[$fieldName])->label();
-        }
-      }
-      $assessment = (object) $assessment;
-
-      $assessment->type = $type;
-      $this->parseEntityFields('assessment', $assessment);
-      $this->getDriver()->createEntity('assessment', $assessment);
-    }
-  }
 
   /**
    * Navigates to the latest assessment webform submission.
@@ -123,7 +84,7 @@ class AssessmentContext extends RawDrupalContext {
   public function beforeAssessmentsDemo(): void {
     $collection = $this->nodeCreate((object) [
       'type' => 'collection',
-      'uuid' => AssessmentInterface::GROUP_UUID,
+      'uuid' => LegacyAssessmentInterface::GROUP_UUID,
       'title' => 'Interoperability assessments space',
       'short_id' => 'assessments',
       'field_state' => 'published',
@@ -150,7 +111,7 @@ class AssessmentContext extends RawDrupalContext {
       'title' => 'Assessment reports',
       'og_audience' => $collection->title,
       'field_state' => 'published',
-      'uuid' => AssessmentInterface::ASSESSMENT_REPORTS_UUID,
+      'uuid' => LegacyAssessmentInterface::ASSESSMENT_REPORTS_UUID,
       'field_paragraphs_body:target_id' => $paragraph->id(),
       'field_paragraphs_body:target_revision_id' => $paragraph->getRevisionId(),
     ]);
@@ -166,7 +127,7 @@ class AssessmentContext extends RawDrupalContext {
     $storage = \Drupal::entityTypeManager()->getStorage('webform_submission');
     $sids = $storage->getQuery()
       ->accessCheck(FALSE)
-      ->condition('webform_id', AssessmentInterface::WEBFORM_ID)
+      ->condition('webform_id', LegacyAssessmentInterface::WEBFORM_ID)
       ->sort('sid', 'DESC')
       ->range(0, 1)
       ->execute();
@@ -232,7 +193,7 @@ class AssessmentContext extends RawDrupalContext {
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function createSubmissionForAssessmentReport(string $assessment_report_title): WebformSubmissionInterface {
-    $webform = Webform::load(AssessmentInterface::WEBFORM_ID);
+    $webform = Webform::load(LegacyAssessmentInterface::WEBFORM_ID);
     $submission = WebformSubmission::create([
       'webform_id' => $webform->id(),
       'uid' => \Drupal::currentUser()->id(),
@@ -243,6 +204,30 @@ class AssessmentContext extends RawDrupalContext {
     $assessment_report->set('submission', $submission);
     $assessment_report->save();
     return $submission;
+  }
+
+  /**
+   * Asserts that an assessment with the given name and type does not exist.
+   *
+   * @param string $type
+   *   The type of the assessment.
+   * @param string $name
+   *   The name of the assessment.
+   *
+   * @throws \Exception
+   *   When an assessment with the given name and type exists.
+   *
+   * @Then the :type assessment :name should not exist
+   */
+  public function assertAssessmentNotExists(string $type, string $name): void {
+    try {
+      $this->getEntityByLabel('assessment', $name, $type);
+      // If we reach here, the entity exists, so throw an exception.
+      throw new \Exception(sprintf('A %s assessment with name "%s" exists but should not.', $type, $name));
+    }
+    catch (\RuntimeException) {
+      // Expected: entity not found. This is what we want.
+    }
   }
 
 }

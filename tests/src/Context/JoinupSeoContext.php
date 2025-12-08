@@ -8,6 +8,7 @@ use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\JsonLdObjectInspector;
 use Drupal\joinup\Traits\EntityTrait;
+use Drupal\joinup\Traits\UtilityTrait;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -16,6 +17,7 @@ use PHPUnit\Framework\Assert;
 class JoinupSeoContext extends RawDrupalContext {
 
   use EntityTrait;
+  use UtilityTrait;
 
   /**
    * Asserts that a list of meta tags are presented in the page.
@@ -253,31 +255,6 @@ class JoinupSeoContext extends RawDrupalContext {
    */
   protected function getValueRegExp(string $value): string {
     return '#^' . $this->escapeStringWithVariables($value) . '$#';
-  }
-
-  /**
-   * Escapes available variables from string and prepares it for a regex match.
-   *
-   * @param string $string
-   *   The string to convert.
-   *
-   * @return string
-   *   The converted string.
-   */
-  protected function escapeStringWithVariables(string $string): string {
-    // The URL structure is very important in the SEO metatags as a wrong URL
-    // or an internal path could cause search engines to be misled. Thus,
-    // the full URL must be always asserted.
-    $base_url = $this->getMinkParameter('base_url');
-
-    $string = preg_quote($string, '#');
-    $replacements = [
-      '__base_url__' => preg_quote($base_url),
-      '__random_text__' => '([^/]*)?',
-      '__timezone__' => '\d{2}',
-    ];
-
-    return strtr($string, $replacements);
   }
 
   /**
