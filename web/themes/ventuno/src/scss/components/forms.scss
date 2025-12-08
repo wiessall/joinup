@@ -91,19 +91,22 @@
   .horizontal-tabs {
     border: 0;
     .horizontal-tabs-list {
-      margin-bottom: -8px;
+      margin-bottom: -1px;
+      display: flex;
+      flex-flow: wrap;
       border-left: 1px solid $gray-300;
       background: none;
     }
     .horizontal-tab-button {
-      margin-top: 0 !important;
       margin-bottom: -1px !important;
       border-top: 1px solid $gray-300;
       border-right: 1px solid $gray-300;
+      border-bottom: 1px solid $gray-300;
       background: $gray-200;
       font-size: 1.2em;
       &.selected {
         background-color: #fff;
+        border-bottom: 1px solid #fff;
         a {
           color: $gray-900;
         }
@@ -118,12 +121,14 @@
     }
     .horizontal-tabs-panes {
       border: 1px solid $gray-300;
+      border-top: none;
       .horizontal-tabs-pane {
         padding: 0 1.2em;
       }
     }
     .details-wrapper {
-      padding: 0 !important;
+      padding: 1em 0 0 !important;
+      margin-top: 0 !important;
       .form-label:not(.form-radios .form-label) {
         color: $gray-900;
         font-size: 1.25rem;
