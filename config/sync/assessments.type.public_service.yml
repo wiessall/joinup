@@ -7,11 +7,14 @@ dependencies:
 third_party_settings:
   rdf_sync:
     type: 'http://purl.org/vocab/cpsv#PublicService'
-    uri_plugin: null
-    fields: {  }
+    fields:
+      name:
+        value:
+          predicate: 'http://purl.org/dc/terms/title'
+          type: null
 label_singular: 'public service'
 label_plural: 'public services'
 label_count:
-  - "@count public service\03@count public services"
+  no_count_capitalize: !!binary UHVibGljIHNlcnZpY2UDUHVibGljIHNlcnZpY2Vz
 id: public_service
 label: 'Public service'

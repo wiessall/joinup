@@ -118,3 +118,4 @@ hidden:
   uid: true
   uri: true
   url_redirects: true
+  uuid: true

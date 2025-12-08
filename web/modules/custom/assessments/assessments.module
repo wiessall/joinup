@@ -7,13 +7,20 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\PublicOrganisation;
-use Drupal\taxonomy\Entity\Term;
+use Drupal\assessments\Event\AssessmentReportEvent;
+use Drupal\assessments\NotificationEvents;
+use Drupal\collection\Entity\CollectionInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\user\UserInterface;
-use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_theme().
@@ -57,6 +64,8 @@ function assessments_form_alter(array &$form, FormStateInterface $formState, str
     '#tag' => 'h3',
     '#value' => t('Identified effects on cross-border interoperability'),
   ];
+  $form['#attached']['library'][] = 'assessments/radios_inline';
+  $form['state']['#attributes']['class'][] = 'radios-inline';
 }
 
 /**
@@ -67,6 +76,7 @@ function assessments_form_layout_paragraphs_component_form_alter(array &$form, F
   if ($paragraph->bundle() === 'binding_requirement') {
     // We use layout paragraphs, but we use everytime the 1 column layout.
     $form['layout_paragraphs']['#access'] = FALSE;
+    $form['asset']['widget']['#title_display'] = 'invisible';
   }
 }
 
@@ -205,23 +215,16 @@ function assessments_user_predelete(UserInterface $account): void {
  */
 function assessments_entity_bundle_info(): array {
   return [
-    'assessment_statement' => [
-      'legal' => [
-        'label' => t('Legal interoperability'),
+    'assessment_statement' => array_map(
+      fn (TranslatableMarkup $label): array => ['label' => $label],
+      [
+        'legal' => t('Legal interoperability'),
+        'organisational'  => t('Organisational interoperability'),
+        'semantic' => t('Semantic interoperability'),
+        'technical' => t('Technical interoperability'),
+        'other' => t('Other interoperability'),
       ],
-      'organisational' => [
-        'label' => t('Organisational interoperability'),
-      ],
-      'semantic' => [
-        'label' => t('Semantic interoperability'),
-      ],
-      'technical' => [
-        'label' => t('Technical interoperability'),
-      ],
-      'other' => [
-        'label' => t('Other interoperability'),
-      ],
-    ],
+    ),
   ];
 }
 
@@ -235,39 +238,166 @@ function assessments_entity_bundle_info_alter(array &$bundles): void {
   if (isset($bundles['assessment']['public_organisation'])) {
     $bundles['assessment']['public_organisation']['class'] = PublicOrganisation::class;
   }
+
+  $rdfSync = [
+    'type' => 'http://data.europa.eu/2sa/cav#Statement',
+    'uri_plugin' => 'default',
+    'fields' => [
+      'interpretation' => [
+        'target_id' => [
+          'predicate' => 'http://data.europa.eu/2sa/cav#interpretation',
+          'type' => 'resource',
+        ],
+      ],
+      'judgement' => [
+        'value' => [
+          'predicate' => 'http://data.europa.eu/2sa/cav#judgement',
+          'type' => NULL,
+        ],
+      ],
+      'statement_type' => [
+        'target_id' => [
+          'predicate' => 'http://data.europa.eu/2sa/cav#type',
+          'type' => 'resource',
+        ],
+      ],
+    ],
+  ];
+
+  array_walk($bundles['assessment_statement'], function (array &$info) use ($rdfSync): void {
+    $info['rdf_sync'] = $rdfSync;
+  });
 }
 
 /**
- * Implements hook_views_pre_render().
+ * Enable options_buttons widget for state.
  */
-function assessments_views_pre_render(ViewExecutable $view): void {
-  if ($view->id() == 'assessments_rest') {
-    $results = $view->result;
-    if ($view->current_display === 'public_organisation') {
-      foreach ($results as $result) {
-        // Instead of false we want to show an empty string.
-        // @see \Drupal\views\Plugin\views\field\EntityField::getValue().
-        if (empty($result->_entity->get('country')->getValue())) {
-          $result->_entity->get('country')->setValue(['']);
-        }
-        // Instead of country term ID we want to send the two letters
-        // of the country.
-        else {
-          $term_id = $result->_entity->get('country')->getValue()[0]['target_id'];
-          $term = Term::load($term_id);
-          $code = $term?->get('code')->value ?? '';
-          $result->_entity->get('country')->setValue([$code]);
-        }
-      }
-    }
-    elseif ($view->current_display === 'asset') {
-      foreach ($results as $result) {
-        // Instead of false we want to show an empty string.
-        // @see \Drupal\views\Plugin\views\field\EntityField::getValue().
-        if (empty($result->_entity->get('landing_page')->getValue())) {
-          $result->_entity->get('landing_page')->setValue(['']);
-        }
-      }
-    }
+function assessments_field_widget_info_alter(array &$info): void {
+  $info['options_buttons']['field_types'][] = 'state';
+}
+
+/**
+ * Implements hook_views_data().
+ */
+function assessments_views_data(): array {
+  $data['views']['assessments_reports_links'] = [
+    'title' => t('Assessment reports links'),
+    'area' => [
+      'id' => 'assessments_reports_links',
+    ],
+  ];
+  return $data;
+}
+
+/**
+ * Implements hook_inline_entity_form_entity_form_alter().
+ */
+function assessments_inline_entity_form_entity_form_alter(array &$entity_form, FormStateInterface &$formState): void {
+  $solution = $entity_form['#entity'];
+
+  if ($entity_form['#ief_id'] === 'asset-form' && $solution instanceof SolutionInterface) {
+    $collection = \Drupal::service('entity.repository')->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR);
+    assert($collection instanceof CollectionInterface);
+
+    $solution
+      // All solutions created via assessments form are belonging to a
+      // 'collector' collection.
+      ->setGroup($collection)
+      // And are published by default.
+      ->set('field_state', 'published');
+
+    // In this context the landing page is mandatory.
+    $entity_form['landing_page']['widget']['uri']['#required'] = TRUE;
+  }
+}
+
+/**
+ * Implements hook_inline_entity_form_table_fields_alter().
+ */
+function assessments_inline_entity_form_table_fields_alter(array &$fields, array $context): void {
+  if (
+    $context['parent_entity_type'] === 'paragraph' &&
+    $context['parent_bundle'] === 'binding_requirement' &&
+    $context['field_name'] === 'asset'
+  ) {
+    unset($fields['status']);
+
+    $fields['landing_page'] = [
+      'type' => 'field',
+      'label' => t('Relevant website'),
+      'weight' => 10,
+    ];
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function assessments_module_implements_alter(array &$implementations, $hook): void {
+  if ($hook === 'node_create_access') {
+    // The state_machine_permissions_node_create_access() implementation,
+    // forbids access to a solution which is not in the context of a group. But
+    // in the context of assessments, we allow a user to create solutions via
+    // the assessment report form, and immediately, we set the group to a
+    // collection acting as a collector for such solutions. We add our own
+    // implementation that allows this exception.
+    // @see state_machine_permissions_node_create_access()
+    // @see assessments_node_create_access()
+    unset($implementations['state_machine_permissions']);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_create_access().
+ */
+function assessments_node_create_access(AccountInterface $account, array $context, string $entity_bundle): AccessResultInterface {
+  // Detect if the access is checked as part of the inline entity form widget,
+  // specifically, the one that allow adding new solutions.
+  $isAssetInlineEntityFormWidget = isset($context['parent_entity_type']) &&
+    $context['parent_entity_type'] === 'paragraph' &&
+    isset($context['parent_bundle']) &&
+    $context['parent_bundle'] === 'binding_requirement' &&
+    isset($context['field_name']) &&
+    $context['field_name'] === 'asset';
+
+  if ($isAssetInlineEntityFormWidget) {
+    return AccessResult::allowed();
+  }
+
+  return state_machine_permissions_node_create_access($account, $context, $entity_bundle);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for assessment entities.
+ */
+function assessments_assessment_insert(AssessmentInterface $entity): void {
+  _assessments_handle_report_state_notification($entity);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update() for assessment entities.
+ */
+function assessments_assessment_update(AssessmentInterface $entity): void {
+  _assessments_handle_report_state_notification($entity);
+}
+
+/**
+ * Handles notification dispatching for assessment report state changes.
+ *
+ * @param \Drupal\assessments\AssessmentInterface $entity
+ *   The assessment entity.
+ */
+function _assessments_handle_report_state_notification(AssessmentInterface $entity): void {
+  if ($entity->bundle() !== 'report' || !$entity->hasField('state')) {
+    return;
+  }
+
+  $original_state = $entity->original?->get('state')?->getString();
+  $current_state = $entity->get('state')?->getString();
+
+  if ($current_state === 'review' && $original_state !== 'review') {
+    $event = new AssessmentReportEvent($entity);
+    \Drupal::service('event_dispatcher')
+      ->dispatch($event, NotificationEvents::ASSESSMENT_REPORT_SUBMITTED_FOR_REVIEW);
   }
 }

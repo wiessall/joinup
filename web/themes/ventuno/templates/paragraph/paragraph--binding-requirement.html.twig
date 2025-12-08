@@ -59,21 +59,21 @@
 
         <div class="card-body">
           <div class="row row-cols-1 row-cols-md-2 g-3">
-            {% if not (paragraph.affected_party.isEmpty == true) and content.affected_party is defined %}
+            {% if not (paragraph.has_participation.isEmpty == true) and content.has_participation is defined %}
               <div class="col">
                 <div class="border rounded p-2 h-100">
-                  <div class="fw-bold mb-1">{{ 'Affected party'|t }}</div>
+                  <div class="fw-bold mb-1">{{ 'Has participation'|t }}</div>
                   <div
-                    class="small text-muted">{{ content.affected_party }}</div>
+                    class="small text-muted">{{ content.has_participation }}</div>
                 </div>
               </div>
             {% endif %}
-            {% if not (paragraph.has_related_service.isEmpty == true) and content.has_related_service is defined %}
+            {% if not (paragraph.affects.isEmpty == true) and content.affects is defined %}
               <div class="col">
                 <div class="border rounded p-2 h-100">
                   <div class="fw-bold mb-1">{{ 'Related service'|t }}</div>
                   <div
-                    class="small text-muted">{{ content.has_related_service }}</div>
+                    class="small text-muted">{{ content.affects }}</div>
                 </div>
               </div>
             {% endif %}

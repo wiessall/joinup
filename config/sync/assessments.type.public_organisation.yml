@@ -8,10 +8,14 @@ third_party_settings:
   rdf_sync:
     type: 'http://data.europa.eu/m8g/PublicOrganisation'
     uri_plugin: null
-    fields: {  }
+    fields:
+      name:
+        value:
+          predicate: 'http://www.w3.org/2004/02/skos/core#prefLabel'
+          type: null
 label_singular: 'public organisation'
 label_plural: 'public organisations'
 label_count:
-  - "@count public organisation\03@count public organisations"
+  no_count_capitalize: !!binary UHVibGljIG9yZ2FuaXNhdGlvbgNQdWJsaWMgb3JnYW5pc2F0aW9ucw==
 id: public_organisation
 label: 'Public organisation'

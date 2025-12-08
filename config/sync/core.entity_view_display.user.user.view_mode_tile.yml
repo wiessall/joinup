@@ -107,3 +107,4 @@ hidden:
   private_message_link: true
   search_api_excerpt: true
   user_user_field_user_content_top: true
+  uuid: true

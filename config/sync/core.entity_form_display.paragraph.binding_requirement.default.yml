@@ -3,12 +3,13 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.paragraph.binding_requirement.affected_party
+    - core.entity_form_mode.node.assessment
+    - field.field.paragraph.binding_requirement.has_participation
+    - field.field.paragraph.binding_requirement.affects
     - field.field.paragraph.binding_requirement.asset
     - field.field.paragraph.binding_requirement.description
     - field.field.paragraph.binding_requirement.documented_in
     - field.field.paragraph.binding_requirement.expression
-    - field.field.paragraph.binding_requirement.has_related_service
     - field.field.paragraph.binding_requirement.requirement_documents
     - paragraphs.paragraphs_type.binding_requirement
   module:
@@ -23,11 +24,11 @@ third_party_settings:
   field_group:
     group_tabs:
       children:
-        - group_general
         - group_initiatives
-        - group_assets
+        - group_general
         - group_related_services
         - group_affected_parties
+        - group_assets
         - group_documents
       label: Tabs
       region: content
@@ -48,7 +49,7 @@ third_party_settings:
       label: General
       region: content
       parent_name: group_tabs
-      weight: 10
+      weight: 20
       format_type: tab
       format_settings:
         classes: ''
@@ -64,7 +65,7 @@ third_party_settings:
       label: 'Interoperability solutions'
       region: content
       parent_name: group_tabs
-      weight: 20
+      weight: 50
       format_type: tab
       format_settings:
         classes: ''
@@ -76,11 +77,11 @@ third_party_settings:
         required_fields: true
     group_related_services:
       children:
-        - has_related_service
+        - affects
       label: 'Trans-European digital public services'
       region: content
       parent_name: group_tabs
-      weight: 20
+      weight: 30
       format_type: tab
       format_settings:
         classes: ''
@@ -92,11 +93,11 @@ third_party_settings:
         required_fields: true
     group_affected_parties:
       children:
-        - affected_party
+        - has_participation
       label: 'Affected stakeholders'
       region: content
       parent_name: group_tabs
-      weight: 20
+      weight: 40
       format_type: tab
       format_settings:
         classes: ''
@@ -112,7 +113,7 @@ third_party_settings:
       label: Initiatives
       region: content
       parent_name: group_tabs
-      weight: 0
+      weight: 10
       format_type: tab
       format_settings:
         classes: ''
@@ -128,7 +129,7 @@ third_party_settings:
       label: Documents
       region: content
       parent_name: group_tabs
-      weight: 40
+      weight: 60
       format_type: tab
       format_settings:
         classes: ''
@@ -143,15 +144,15 @@ targetEntityType: paragraph
 bundle: binding_requirement
 mode: default
 content:
-  affected_party:
+  affects:
     type: inline_entity_form_simple
-    weight: 5
+    weight: 4
     region: content
     settings:
       form_mode: default
       override_labels: true
-      label_singular: 'Affected party'
-      label_plural: 'Affected parties'
+      label_singular: 'Affected service'
+      label_plural: 'Affected services'
       collapsible: false
       collapsed: false
       revision: false
@@ -161,10 +162,10 @@ content:
     weight: 3
     region: content
     settings:
-      form_mode: default
+      form_mode: assessment
       override_labels: true
-      label_singular: 'relevant asset'
-      label_plural: 'relevant assets'
+      label_singular: 'relevant solution'
+      label_plural: 'relevant solutions'
       allow_new: true
       allow_existing: true
       match_operator: CONTAINS
@@ -173,7 +174,12 @@ content:
       collapsed: false
       revision: false
       removed_reference: keep
-    third_party_settings: {  }
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+        new_description: ''
+        rewrite_description: 0
   description:
     type: text_textarea
     weight: 41
@@ -216,15 +222,15 @@ content:
       collapsed: false
       revision: false
     third_party_settings: {  }
-  has_related_service:
+  has_participation:
     type: inline_entity_form_simple
-    weight: 4
+    weight: 5
     region: content
     settings:
       form_mode: default
       override_labels: true
-      label_singular: 'Affected service'
-      label_plural: 'Affected services'
+      label_singular: 'Has participation'
+      label_plural: 'Has participations'
       collapsible: false
       collapsed: false
       revision: false
@@ -244,3 +250,5 @@ content:
 hidden:
   created: true
   status: true
+  uri: true
+  uuid: true

@@ -25,6 +25,7 @@ dependencies:
     - taxonomy.vocabulary.legal_type
     - taxonomy.vocabulary.tags
   module:
+    - assessments
     - collection
     - comment
     - contact_form
@@ -114,6 +115,7 @@ permissions:
   - 'administer webform via ui'
   - 'assign licence_manager role'
   - 'assign translator role'
+  - 'bypass assessment report moderation'
   - 'bypass code of conduct'
   - 'bypass entity legal acceptance'
   - 'bypass node creation limit'
@@ -222,6 +224,7 @@ permissions:
   - 'manage newsroom newsletter subscriptions'
   - 'manage oauth clients'
   - 'manage solutions'
+  - 'moderate assessment report'
   - 'perform announcement workflow approve transition on any entity'
   - 'perform announcement workflow reject transition on any entity'
   - 'perform announcement workflow send transition on any entity'

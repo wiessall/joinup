@@ -11,12 +11,12 @@ dependencies:
     - rdf_sync
     - tmgmt_content
 third_party_settings:
-  tmgmt_content:
-    excluded: false
   rdf_sync:
     target_id:
       predicate: 'http://purl.org/dc/terms/spatial'
       type: resource
+  tmgmt_content:
+    excluded: false
 id: assessment.public_organisation.country
 field_name: country
 entity_type: assessment

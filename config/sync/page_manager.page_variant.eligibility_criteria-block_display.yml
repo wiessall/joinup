@@ -12,7 +12,7 @@ weight: 0
 variant: block_display
 variant_settings:
   id: block_display
-  label: null
+  label: 'Eligibility criteria'
   weight: 0
   uuid: 80eafb0c-0fb5-4477-8c2a-f7d513f121d3
   blocks:

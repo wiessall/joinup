@@ -313,6 +313,10 @@ module.exports = {
           dest: "image-gallery.min.css",
         },
         {
+          entry: "components/inline-items.scss",
+          dest: "inline-items.min.css",
+        },
+        {
           entry: "components/oss-solution-indicator.scss",
           dest: "oss-solution-indicator.min.css",
         },

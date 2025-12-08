@@ -145,6 +145,16 @@
     > tbody > tr:nth-of-type(#{$table-striped-order}) > * {
       --#{$prefix}table-accent-bg: $white;
     }
+
+    &.thead-visually-hidden {
+      > thead {
+        @include visually-hidden;
+      }
+
+      > tbody > tr:first-child {
+        border: none;
+      }
+    }
   }
 
   // Override fieldset elements on confirmation page.
@@ -204,6 +214,7 @@
   }
 }
 
+[data-drupal-selector="assessment-report-add-form"],
 [data-drupal-selector="assessment-report-edit-form"] {
   #edit-legal .form-check,
   #edit-organisational .form-check,

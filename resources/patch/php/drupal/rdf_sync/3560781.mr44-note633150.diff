@@ -1,0 +1,599 @@
+diff --git a/README.md b/README.md
+index 1dba1169dea0a5e1dee1c4bb7277b72582f7f0a0..1463edb614ec65185fc93441faa9ff55c9c06644 100644
+--- a/README.md
++++ b/README.md
+@@ -194,6 +194,12 @@ function my_module_entity_bundle_info_alter(array &$bundles): void {
+           ],
+         ],
+       ],
++      'namespaces' => [
++        // The serialized entity will be more readable. For instance, the
++        // 'http://example.com/article/content' predicate will be exported as
++        // article:content and the namespace will be defined in the header.
++        'article' => 'http://example.com/article/',
++      ],
+     ];
+   }
+ }
+diff --git a/config/schema/rdf_sync.schema.yml b/config/schema/rdf_sync.schema.yml
+index af7133010a28410cb34354fc6b8cdec001d24965..f4f1728c178d99f04c69f54400aacf620833df24 100644
+--- a/config/schema/rdf_sync.schema.yml
++++ b/config/schema/rdf_sync.schema.yml
+@@ -91,6 +91,12 @@ rdf_sync.bundle_mapping:
+       label: Fields
+       sequence:
+         type: rdf_sync.field_mapping
++    namespaces:
++      type: sequence
++      label: Namespaces
++      sequence:
++        type: uri
++        label: URI
+ 
+ # Describes a single field mappings.
+ rdf_sync.field_mapping:
+diff --git a/modules/rdf_sync_published/tests/Kernel/RdfSyncPublishedTest.php b/modules/rdf_sync_published/tests/Kernel/RdfSyncPublishedTest.php
+index ddc5b911fd9e44fb7b63400eca8133e44177d36b..e02e687eaa87a6af445f1904395b7ddc90723549 100644
+--- a/modules/rdf_sync_published/tests/Kernel/RdfSyncPublishedTest.php
++++ b/modules/rdf_sync_published/tests/Kernel/RdfSyncPublishedTest.php
+@@ -80,16 +80,32 @@ class RdfSyncPublishedTest extends KernelTestBase {
+     $synchronizer = $this->container->get('rdf_sync.synchronizer');
+     $synchronizer->synchronize(SyncMethod::INSERT, [$node], TRUE);
+     $this->assertNoTriples('http://data', [
+-      ['http://example.com/page/id/1', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'http://example.com/page'],
+-      ['http://example.com/page/id/1', 'http://example.com/page/title', '"Some title"@en'],
++      [
++        'http://example.com/page/id/1',
++        'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
++        'http://example.com/node/page',
++      ],
++      [
++        'http://example.com/page/id/1',
++        'http://example.com/node/page/title',
++        '"Some title"@en',
++      ],
+     ]);
+ 
+     // Publish the entity and synchronize again.
+     $node->setPublished()->save();
+     $synchronizer->synchronize(SyncMethod::INSERT, [$node], TRUE);
+     $this->assertTriples('http://data', [
+-      ['http://example.com/page/id/1', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'http://example.com/page'],
+-      ['http://example.com/page/id/1', 'http://example.com/page/title', '"Some title"@en'],
++      [
++        'http://example.com/page/id/1',
++        'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
++        'http://example.com/node/page',
++      ],
++      [
++        'http://example.com/page/id/1',
++        'http://example.com/node/page/title',
++        '"Some title"@en',
++      ],
+     ]);
+   }
+ 
+diff --git a/src/Form/Alter/BundleEntityFormAlter.php b/src/Form/Alter/BundleEntityFormAlter.php
+index fb94a4074f5ab6248f0e00c1e7f616074269b2e4..21a1b24ec9adeefa3684a931be4b4814cd05ec19 100644
+--- a/src/Form/Alter/BundleEntityFormAlter.php
++++ b/src/Form/Alter/BundleEntityFormAlter.php
+@@ -142,6 +142,23 @@ class BundleEntityFormAlter extends AbstractFormAlter implements ContainerInject
+       }
+     }
+ 
++    $form['rdf_sync']['namespaces'] = [
++      '#type' => 'textarea',
++      '#title' => $this->t('Namespaces'),
++      '#description' => [
++        [
++          '#markup' => $this->t("Add one namespace per line with the prefix and its URI separated by a pipe (|). For instance:"),
++        ],
++        [
++          '#markup' => "my-ns|http://example.com/my-namespace#\nother|http://example.com/other/",
++          '#prefix' => '<pre><code>',
++          '#suffix' => '</code></pre>',
++        ],
++      ],
++      '#default_value' => $this->packNamespaces($settings['namespaces'] ?? []),
++      '#states' => $hideStates,
++    ];
++
+     // Since this entityFormEntityBuild and also the helper methods it uses are
+     // heavily building on services, it seems it isn't a very bad idea to add
+     // it as an non-static callable. But we use DependencySerializationTrait
+@@ -212,6 +229,7 @@ class BundleEntityFormAlter extends AbstractFormAlter implements ContainerInject
+     $fieldConfig->unsetThirdPartySetting('rdf_sync', 'uri_field_name');
+     $fieldConfig->unsetThirdPartySetting('rdf_sync', 'uri_plugin');
+     $fieldConfig->unsetThirdPartySetting('rdf_sync', 'fields');
++    $fieldConfig->unsetThirdPartySetting('rdf_sync', 'namespaces');
+     // Disabled so nothing to set.
+     if (!$enabled) {
+       return;
+@@ -249,6 +267,59 @@ class BundleEntityFormAlter extends AbstractFormAlter implements ContainerInject
+     }
+ 
+     $fieldConfig->setThirdPartySetting('rdf_sync', 'fields', $fields);
++
++    $namespaces = $this->unpackNamespaces($formState->getValue(['rdf_sync', 'namespaces']));
++    if ($namespaces) {
++      $fieldConfig->setThirdPartySetting('rdf_sync', 'namespaces', $namespaces);
++    }
++  }
++
++  /**
++   * Packs the namespaces array as a blob.
++   *
++   * @param array<string, string> $namespaces
++   *   Associative array of namespace URIs, keyed by namespace prefix.
++   *
++   * @return string
++   *   Namespaces packed as blob.
++   */
++  protected function packNamespaces(array $namespaces): string {
++    return implode("\n", array_map(
++      function ($prefix) use ($namespaces): string {
++        return "$prefix|$namespaces[$prefix]";
++      },
++      array_keys($namespaces)
++    ));
++  }
++
++  /**
++   * Unpacks the namespaces blob as array.
++   *
++   * @param string $namespaces
++   *   Namespaces packed as blob.
++   *
++   * @return array<string, string>
++   *   Associative array of namespace URIs, keyed by namespace prefix.
++   */
++  protected function unpackNamespaces(string $namespaces): array {
++    // Replace Windows or legacy Apple line endings.
++    $namespaces = str_replace("\r", "\n", $namespaces);
++    // Explode and remove white spaces.
++    $namespaces = array_map('trim', explode("\n", $namespaces));
++    // Remove empty lines.
++    $namespaces = array_filter($namespaces);
++
++    $ns = [];
++    foreach ($namespaces as $namespace) {
++      if (!str_contains($namespace, '|')) {
++        // Ignore malformed.
++        continue;
++      }
++      [$prefix, $uri] = explode('|', $namespace, 2);
++      $ns[$prefix] = $uri;
++    }
++
++    return $ns;
+   }
+ 
+ }
+diff --git a/src/Normalizer/RdfSyncNormalizer.php b/src/Normalizer/RdfSyncNormalizer.php
+index fd579d0e35299580b9c878ad58e150c305051621..2ff80e340f98e7eb9b7c881e66ec645412477cc8 100644
+--- a/src/Normalizer/RdfSyncNormalizer.php
++++ b/src/Normalizer/RdfSyncNormalizer.php
+@@ -15,6 +15,7 @@ use Drupal\rdf_sync\Event\RdfSyncNormalizeEvent;
+ use Drupal\rdf_sync\RdfSyncMapperInterface;
+ use Drupal\serialization\Normalizer\EntityNormalizer;
+ use EasyRdf\Literal;
++use EasyRdf\RdfNamespace;
+ use EasyRdf\Resource;
+ use Psr\EventDispatcher\EventDispatcherInterface;
+ use Symfony\Component\Serializer\Exception\NotEncodableValueException;
+@@ -53,6 +54,10 @@ class RdfSyncNormalizer extends EntityNormalizer {
+     $mappings = $this->mapper->getMappings(entity: $object);
+     $rdfType = $this->mapper->getBundleRdfType(entity: $object);
+ 
++    foreach ($this->mapper->getNamespaces(entity: $object) as $prefix => $namespace) {
++      RdfNamespace::set($prefix, $namespace);
++    }
++
+     $rdf = [];
+     if (!$hasBundleMapping = $this->mapper->hasBundleMapping($object)) {
+       $rdf[$id->getUri()]['http://www.w3.org/1999/02/22-rdf-syntax-ns#type'][] = (new Resource($rdfType))->toRdfPhp();
+diff --git a/src/RdfSyncMapper.php b/src/RdfSyncMapper.php
+index 7899d3b269f2ea3b6da206f1d28e1725ab69f497..72f5838177a2380b5d36e6e80fc380ae4dc68859 100644
+--- a/src/RdfSyncMapper.php
++++ b/src/RdfSyncMapper.php
+@@ -87,6 +87,14 @@ class RdfSyncMapper implements RdfSyncMapperInterface {
+     return $this->getBundleMapping($entityTypeId, $bundle)['uri_plugin'] ?? NULL;
+   }
+ 
++  /**
++   * {@inheritdoc}
++   */
++  public function getNamespaces(?string $entityTypeId = NULL, ?string $bundle = NULL, ?ContentEntityInterface $entity = NULL): array {
++    $this->resolveEntityTypeAndBundle($entityTypeId, $bundle, $entity);
++    return $this->getBundleMapping($entityTypeId, $bundle)['namespaces'] ?? [];
++  }
++
+   /**
+    * {@inheritdoc}
+    */
+@@ -181,6 +189,7 @@ class RdfSyncMapper implements RdfSyncMapperInterface {
+       'uri_field_name' => 'uri',
+       'uri_plugin' => NULL,
+       'fields' => [],
++      'namespaces' => [],
+     ];
+   }
+ 
+diff --git a/src/RdfSyncMapperInterface.php b/src/RdfSyncMapperInterface.php
+index f50c9da70abc139d7ef03c373f2e427ee163cc7a..ddddef87117997a738c3f550127e65cd647b3bbc 100644
+--- a/src/RdfSyncMapperInterface.php
++++ b/src/RdfSyncMapperInterface.php
+@@ -108,6 +108,24 @@ interface RdfSyncMapperInterface {
+    */
+   public function getRdfUriPluginId(string $entityTypeId, string $bundle): ?string;
+ 
++  /**
++   * Returns custom namespaces associated with this bundle.
++   *
++   * The caller should pass either $entityTypeId and $bundle or the $entity.
++   *
++   * @param string|null $entityTypeId
++   *   The bundle's entity type ID.
++   * @param string|null $bundle
++   *   The bundle.
++   * @param \Drupal\Core\Entity\ContentEntityInterface|null $entity
++   *   The entity.
++   *
++   * @return array<string, string>
++   *   Associative array keyed by namespace prefixes and having the namespace
++   *   URIs as values.
++   */
++  public function getNamespaces(?string $entityTypeId = NULL, ?string $bundle = NULL, ?ContentEntityInterface $entity = NULL): array;
++
+   /**
+    * Checks whether an entity did map the bundle.
+    *
+diff --git a/tests/fixtures/serialization.yml b/tests/fixtures/serialization.yml
+index f00beb9c4e1c425a3f353b76e5ce6e9c4f98dabf..668b76fc0ec0df7b876d214c6f45b6f67e0cec4e 100644
+--- a/tests/fixtures/serialization.yml
++++ b/tests/fixtures/serialization.yml
+@@ -1,39 +1,41 @@
+ jsonld:
+   taxonomy_term: |-
+-    [{"@id":"http://example.com/category"},{"@id":"http://example.com/category/id/1","http://www.w3.org/2004/02/skos/core#inScheme":[{"@id":"http://example.com/category"}],"http://www.w3.org/2004/02/skos/core#prefLabel":[{"@value":"Series","@language":"en"}],"http://www.w3.org/2004/02/skos/core#definition":[{"@value":"7 seasons","@language":"en"}],"http://www.w3.org/2004/02/skos/core#broaderTransitive":[{"@id":"http://example.com/category/parent/1"},{"@id":"http://example.com/category/parent/2"}],"@type":["http://www.w3.org/2004/02/skos/core#Concept"]},{"@id":"http://example.com/category/parent/1"},{"@id":"http://example.com/category/parent/2"},{"@id":"http://www.w3.org/2004/02/skos/core#Concept"}]
++    [{"@id":"http://example.com/category/id/1","http://www.w3.org/2004/02/skos/core#inScheme":[{"@id":"http://example.com/vocab/category"}],"http://www.w3.org/2004/02/skos/core#prefLabel":[{"@value":"Series","@language":"en"}],"http://www.w3.org/2004/02/skos/core#definition":[{"@value":"7 seasons","@language":"en"}],"http://www.w3.org/2004/02/skos/core#broaderTransitive":[{"@id":"http://example.com/category/parent/1"},{"@id":"http://example.com/category/parent/2"}],"@type":["http://www.w3.org/2004/02/skos/core#Concept"]},{"@id":"http://example.com/category/parent/1"},{"@id":"http://example.com/category/parent/2"},{"@id":"http://example.com/vocab/category"},{"@id":"http://www.w3.org/2004/02/skos/core#Concept"}]
+   node: |-
+-    [{"@id":"http://example.com/category/id/1"},{"@id":"http://example.com/page"},{"@id":"http://example.com/page/id/1","@type":["http://example.com/page"],"http://example.com/page/title":[{"@value":"Mad Men","@language":"en"}],"http://example.com/page/category":[{"@id":"http://example.com/category/id/1"}],"http://example.com/page/body":[{"@value":"Strong is stripped while <em>Emphasis</em> is kept","@language":"en"}]}]
++    [{"@id":"http://example.com/category/id/1"},{"@id":"http://example.com/node/page"},{"@id":"http://example.com/node/page/id/1","@type":["http://example.com/node/page"],"http://example.com/node/page/title":[{"@value":"Mad Men","@language":"en"}],"http://example.com/node/page/category":[{"@id":"http://example.com/category/id/1"}],"http://example.com/node/page/body":[{"@value":"Strong is stripped while <em>Emphasis</em> is kept","@language":"en"}]}]
+ n3:
+   taxonomy_term: |-
+     @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
++    @prefix cat: <http://example.com/vocab/> .
+ 
+     <http://example.com/category/id/1>
+-      skos:inScheme <http://example.com/category> ;
++      skos:inScheme cat:category ;
+       skos:prefLabel "Series"@en ;
+       skos:definition "7 seasons"@en ;
+       skos:broaderTransitive <http://example.com/category/parent/1>, <http://example.com/category/parent/2> ;
+       a skos:Concept .
+   node: |-
+-    @prefix ns0: <http://example.com/page/> .
++    @prefix node: <http://example.com/node/> .
++    @prefix node-page: <http://example.com/node/page/> .
+ 
+-    <http://example.com/page/id/1>
+-      a <http://example.com/page> ;
+-      ns0:title "Mad Men"@en ;
+-      ns0:category <http://example.com/category/id/1> ;
+-      ns0:body "Strong is stripped while <em>Emphasis</em> is kept"@en .
++    <http://example.com/node/page/id/1>
++      a node:page ;
++      node-page:title "Mad Men"@en ;
++      node-page:category <http://example.com/category/id/1> ;
++      node-page:body "Strong is stripped while <em>Emphasis</em> is kept"@en .
+ ntriples:
+   taxonomy_term: |-
+-    <http://example.com/category/id/1> <http://www.w3.org/2004/02/skos/core#inScheme> <http://example.com/category> .
++    <http://example.com/category/id/1> <http://www.w3.org/2004/02/skos/core#inScheme> <http://example.com/vocab/category> .
+     <http://example.com/category/id/1> <http://www.w3.org/2004/02/skos/core#prefLabel> "Series"@en .
+     <http://example.com/category/id/1> <http://www.w3.org/2004/02/skos/core#definition> "7 seasons"@en .
+     <http://example.com/category/id/1> <http://www.w3.org/2004/02/skos/core#broaderTransitive> <http://example.com/category/parent/1> .
+     <http://example.com/category/id/1> <http://www.w3.org/2004/02/skos/core#broaderTransitive> <http://example.com/category/parent/2> .
+     <http://example.com/category/id/1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+   node: |-
+-    <http://example.com/page/id/1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/page> .
+-    <http://example.com/page/id/1> <http://example.com/page/title> "Mad Men"@en .
+-    <http://example.com/page/id/1> <http://example.com/page/category> <http://example.com/category/id/1> .
+-    <http://example.com/page/id/1> <http://example.com/page/body> "Strong is stripped while <em>Emphasis</em> is kept"@en .
++    <http://example.com/node/page/id/1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/node/page> .
++    <http://example.com/node/page/id/1> <http://example.com/node/page/title> "Mad Men"@en .
++    <http://example.com/node/page/id/1> <http://example.com/node/page/category> <http://example.com/category/id/1> .
++    <http://example.com/node/page/id/1> <http://example.com/node/page/body> "Strong is stripped while <em>Emphasis</em> is kept"@en .
+ rdfxml:
+   taxonomy_term: |-
+     <?xml version="1.0" encoding="utf-8" ?>
+@@ -41,7 +43,7 @@ rdfxml:
+              xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+ 
+       <skos:Concept rdf:about="http://example.com/category/id/1">
+-        <skos:inScheme rdf:resource="http://example.com/category"/>
++        <skos:inScheme rdf:resource="http://example.com/vocab/category"/>
+         <skos:prefLabel xml:lang="en">Series</skos:prefLabel>
+         <skos:definition xml:lang="en">7 seasons</skos:definition>
+         <skos:broaderTransitive rdf:resource="http://example.com/category/parent/1"/>
+@@ -52,31 +54,33 @@ rdfxml:
+   node: |-
+     <?xml version="1.0" encoding="utf-8" ?>
+     <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+-             xmlns:ns0="http://example.com/page/">
++             xmlns:node="http://example.com/node/"
++             xmlns:node-page="http://example.com/node/page/">
+ 
+-      <rdf:Description rdf:about="http://example.com/page/id/1">
+-        <rdf:type rdf:resource="http://example.com/page"/>
+-        <ns0:title xml:lang="en">Mad Men</ns0:title>
+-        <ns0:category rdf:resource="http://example.com/category/id/1"/>
+-        <ns0:body xml:lang="en">Strong is stripped while &lt;em&gt;Emphasis&lt;/em&gt; is kept</ns0:body>
+-      </rdf:Description>
++      <node:page rdf:about="http://example.com/node/page/id/1">
++        <node-page:title xml:lang="en">Mad Men</node-page:title>
++        <node-page:category rdf:resource="http://example.com/category/id/1"/>
++        <node-page:body xml:lang="en">Strong is stripped while &lt;em&gt;Emphasis&lt;/em&gt; is kept</node-page:body>
++      </node:page>
+ 
+     </rdf:RDF>
+ turtle:
+   taxonomy_term: |-
+     @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
++    @prefix cat: <http://example.com/vocab/> .
+ 
+     <http://example.com/category/id/1>
+-      skos:inScheme <http://example.com/category> ;
++      skos:inScheme cat:category ;
+       skos:prefLabel "Series"@en ;
+       skos:definition "7 seasons"@en ;
+       skos:broaderTransitive <http://example.com/category/parent/1>, <http://example.com/category/parent/2> ;
+       a skos:Concept .
+   node: |-
+-    @prefix ns0: <http://example.com/page/> .
++    @prefix node: <http://example.com/node/> .
++    @prefix node-page: <http://example.com/node/page/> .
+ 
+-    <http://example.com/page/id/1>
+-      a <http://example.com/page> ;
+-      ns0:title "Mad Men"@en ;
+-      ns0:category <http://example.com/category/id/1> ;
+-      ns0:body "Strong is stripped while <em>Emphasis</em> is kept"@en .
++    <http://example.com/node/page/id/1>
++      a node:page ;
++      node-page:title "Mad Men"@en ;
++      node-page:category <http://example.com/category/id/1> ;
++      node-page:body "Strong is stripped while <em>Emphasis</em> is kept"@en .
+diff --git a/tests/modules/rdf_sync_test/config/install/node.type.page.yml b/tests/modules/rdf_sync_test/config/install/node.type.page.yml
+index 25a0e13b81dfc74218741dc580348444a114b2af..2c6db7497d7a42189ade460513ef52adf8c40162 100644
+--- a/tests/modules/rdf_sync_test/config/install/node.type.page.yml
++++ b/tests/modules/rdf_sync_test/config/install/node.type.page.yml
+@@ -2,9 +2,12 @@ name: Page
+ type: page
+ third_party_settings:
+   rdf_sync:
+-    type: http://example.com/page
++    type: http://example.com/node/page
+     fields:
+       title:
+         value:
+-          predicate: http://example.com/page/title
++          predicate: http://example.com/node/page/title
+           type: null
++    namespaces:
++      node: http://example.com/node/
++      node-page: http://example.com/node/page/
+diff --git a/tests/modules/rdf_sync_test/config/install/taxonomy.vocabulary.category.yml b/tests/modules/rdf_sync_test/config/install/taxonomy.vocabulary.category.yml
+index 4ac85c31401af683f2d29a636b8cbb0302d81f71..c5d387186f5ac433ace2c19bd7cd114ce4c63479 100644
+--- a/tests/modules/rdf_sync_test/config/install/taxonomy.vocabulary.category.yml
++++ b/tests/modules/rdf_sync_test/config/install/taxonomy.vocabulary.category.yml
+@@ -1,6 +1,6 @@
+ third_party_settings:
+   rdf_sync:
+-    type: 'http://example.com/category'
++    type: 'http://example.com/vocab/category'
+     uri_plugin: null
+     fields:
+       vid:
+@@ -19,5 +19,7 @@ third_party_settings:
+         target_id:
+           predicate: 'http://www.w3.org/2004/02/skos/core#broaderTransitive'
+           type: resource
++    namespaces:
++      cat: http://example.com/vocab/
+ name: Category
+ vid: category
+diff --git a/tests/src/Functional/RdfEntityConfigFormTest.php b/tests/src/Functional/RdfEntityConfigFormTest.php
+index 265548a456b03ae3da059fa56a23c0e1e5d25f5c..1d1ebf7543ce98592f5df579e8e173ac4e99c15c 100644
+--- a/tests/src/Functional/RdfEntityConfigFormTest.php
++++ b/tests/src/Functional/RdfEntityConfigFormTest.php
+@@ -60,6 +60,7 @@ class RdfEntityConfigFormTest extends BrowserTestBase {
+       'rdf_sync[base_fields_mapping][title][value][type]' => 'xsd:string',
+       'rdf_sync[base_fields_mapping][created][value][predicate]' => 'https://data.org/created',
+       'rdf_sync[base_fields_mapping][created][value][type]' => 'xsd:dateTime',
++      'rdf_sync[namespaces]' => "my-ns|http://example.com/my-namespace#\nother|http://example.com/other/\r\nfoobar",
+     ];
+     $this->submitForm($data, 'Save');
+ 
+@@ -67,6 +68,10 @@ class RdfEntityConfigFormTest extends BrowserTestBase {
+     $this->drupalGet('/admin/structure/types/manage/page');
+     $session = $this->assertSession();
+     foreach ($data as $field => $value) {
++      // Namespaces are processed on submit.
++      if ($field === 'rdf_sync[namespaces]') {
++        $value = "my-ns|http://example.com/my-namespace#\nother|http://example.com/other/";
++      }
+       $session->fieldValueEquals($field, $value);
+     }
+   }
+diff --git a/tests/src/Functional/RdfSyncDrushTest.php b/tests/src/Functional/RdfSyncDrushTest.php
+index b602e23bde67a3e0a4e3931523cafc7f7849671f..69d55bd9acac37dbc144cd60bf4711628c46419d 100644
+--- a/tests/src/Functional/RdfSyncDrushTest.php
++++ b/tests/src/Functional/RdfSyncDrushTest.php
+@@ -70,7 +70,7 @@ class RdfSyncDrushTest extends BrowserTestBase {
+       [
+         'http://example.com/category/id/1',
+         'http://www.w3.org/2004/02/skos/core#inScheme',
+-        'http://example.com/category',
++        'http://example.com/vocab/category',
+       ],
+       [
+         'http://example.com/category/id/1',
+@@ -101,23 +101,23 @@ class RdfSyncDrushTest extends BrowserTestBase {
+     $this->drush('rdf_sync:synchronize', ['node']);
+     $this->assertTriples('http://data', [
+       [
+-        'http://example.com/page/id/1',
++        'http://example.com/node/page/id/1',
+         'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+-        'http://example.com/page',
++        'http://example.com/node/page',
+       ],
+       [
+-        'http://example.com/page/id/1',
+-        'http://example.com/page/title',
++        'http://example.com/node/page/id/1',
++        'http://example.com/node/page/title',
+         '"Mad Men"@en',
+       ],
+       [
+-        'http://example.com/page/id/1',
+-        'http://example.com/page/category',
++        'http://example.com/node/page/id/1',
++        'http://example.com/node/page/category',
+         'http://example.com/category/id/1',
+       ],
+       [
+-        'http://example.com/page/id/1',
+-        'http://example.com/page/body',
++        'http://example.com/node/page/id/1',
++        'http://example.com/node/page/body',
+         '"Strong is stripped while <em>Emphasis</em> is kept"@en',
+       ],
+     ]);
+@@ -158,23 +158,23 @@ class RdfSyncDrushTest extends BrowserTestBase {
+         'http://example.com/category/parent/2',
+       ],
+       [
+-        'http://example.com/page/id/1',
++        'http://example.com/node/page/id/1',
+         'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+         'http://example.com/page',
+       ],
+       [
+-        'http://example.com/page/id/1',
+-        'http://example.com/page/title',
++        'http://example.com/node/page/id/1',
++        'http://example.com/node/page/title',
+         '"Mad Men"@en',
+       ],
+       [
+-        'http://example.com/page/id/1',
+-        'http://example.com/page/category',
++        'http://example.com/node/page/id/1',
++        'http://example.com/node/page/category',
+         'http://example.com/category/id/1',
+       ],
+       [
+-        'http://example.com/page/id/1',
+-        'http://example.com/page/body',
++        'http://example.com/node/page/id/1',
++        'http://example.com/node/page/body',
+         '"Strong is stripped while <em>Emphasis</em> is kept"@en',
+       ],
+     ]);
+diff --git a/tests/src/Kernel/RdfSyncSynchronizationTest.php b/tests/src/Kernel/RdfSyncSynchronizationTest.php
+index 7185d52c1baa911e8ad854dada182bc007fc3c28..38389bccbccfc7008573160aabcc11439a27453b 100644
+--- a/tests/src/Kernel/RdfSyncSynchronizationTest.php
++++ b/tests/src/Kernel/RdfSyncSynchronizationTest.php
+@@ -69,7 +69,7 @@ class RdfSyncSynchronizationTest extends KernelTestBase {
+       [
+         'http://example.com/category/id/1',
+         'http://www.w3.org/2004/02/skos/core#inScheme',
+-        'http://example.com/category',
++        'http://example.com/vocab/category',
+       ],
+       [
+         'http://example.com/category/id/1',
+@@ -97,23 +97,23 @@ class RdfSyncSynchronizationTest extends KernelTestBase {
+         'http://example.com/category/parent/2',
+       ],
+       [
+-        'http://example.com/page/id/1',
++        'http://example.com/node/page/id/1',
+         'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+-        'http://example.com/page',
++        'http://example.com/node/page',
+       ],
+       [
+-        'http://example.com/page/id/1',
+-        'http://example.com/page/title',
++        'http://example.com/node/page/id/1',
++        'http://example.com/node/page/title',
+         '"Mad Men"@en',
+       ],
+       [
+-        'http://example.com/page/id/1',
+-        'http://example.com/page/category',
++        'http://example.com/node/page/id/1',
++        'http://example.com/node/page/category',
+         'http://example.com/category/id/1',
+       ],
+       [
+-        'http://example.com/page/id/1',
+-        'http://example.com/page/body',
++        'http://example.com/node/page/id/1',
++        'http://example.com/node/page/body',
+         '"Strong is stripped while <em>Emphasis</em> is kept"@en',
+       ],
+     ];
+diff --git a/tests/src/Traits/RdfSyncTestTrait.php b/tests/src/Traits/RdfSyncTestTrait.php
+index 45dcefe64a8f913bfa47fb6441c0495dc079d2d8..f206d2d0d9f059cd23e326cf8298353df56ed76f 100644
+--- a/tests/src/Traits/RdfSyncTestTrait.php
++++ b/tests/src/Traits/RdfSyncTestTrait.php
+@@ -66,12 +66,12 @@ trait RdfSyncTestTrait {
+         $triple[2] = ['value' => $matches[1], 'type' => 'literal', 'lang' => $matches[2]];
+       }
+ 
+-      $graph = (new Graph());
++      $graph = new Graph();
+       $graph->add(...$triple);
+       $tripleSerialized = trim($graph->serialise('ntriples'), ".\n ");
+       $tripleExists = $connection->query("ASK WHERE { GRAPH <$graphUri> { $tripleSerialized } }")->getBoolean();
+       if ($checkExistence xor $tripleExists) {
+-        $failures[] = $triple;
++        $failures[] = print_r($triple, TRUE);
+       }
+     }
+     $verb = $checkExistence ? 'missing from' : 'present in';
+diff --git a/tests/src/Traits/RdfSyncTestingDataTrait.php b/tests/src/Traits/RdfSyncTestingDataTrait.php
+index ed4a68d94b041f68001282a09222b794391a2237..ee051a5aea5aceb75b1d2333cf84a18997ff2cc3 100644
+--- a/tests/src/Traits/RdfSyncTestingDataTrait.php
++++ b/tests/src/Traits/RdfSyncTestingDataTrait.php
+@@ -39,14 +39,14 @@ trait RdfSyncTestingDataTrait {
+       // Using the computed 'processed' column instead of 'value' to get the
+       // text format applied.
+       ->setThirdPartySetting('rdf_sync', 'processed', [
+-        'predicate' => 'http://example.com/page/body',
++        'predicate' => 'http://example.com/node/page/body',
+         'type' => NULL,
+       ])->save();
+ 
+     $this->createEntityReferenceField('node', 'page', 'category', $this->randomString(), 'taxonomy_term', 'default', ['target_bundles' => ['category']]);
+     FieldConfig::loadByName('node', 'page', 'category')
+       ->setThirdPartySetting('rdf_sync', 'target_id', [
+-        'predicate' => 'http://example.com/page/category',
++        'predicate' => 'http://example.com/node/page/category',
+         'type' => 'resource',
+       ])->save();
+ 
+@@ -87,7 +87,7 @@ trait RdfSyncTestingDataTrait {
+     $node = Node::create([
+       'type' => 'page',
+       'title' => 'Mad Men',
+-      'uri' => 'http://example.com/page/id/1',
++      'uri' => 'http://example.com/node/page/id/1',
+       'body' => [
+         'value' => '<strong>Strong</strong> is stripped while <em>Emphasis</em> is kept',
+         'format' => 'html',

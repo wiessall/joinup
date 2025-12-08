@@ -23,12 +23,11 @@ paths:
         description: Assessments API endpoint
     get:
       summary: Get an Assessment by ID
-      description: Returns an Assessment. The shape matches the POST response, with UUID `id` fields on the root and on each nested entity schema.
+      description: Returns an assessment report object
       operationId: getAssessment
       tags:
         - Assessments
-      security:
-        - oauth2: [ ]
+      security: [ ]
       parameters:
         - in: path
           name: id
@@ -37,37 +36,61 @@ paths:
           schema:
             type: string
             format: uuid
-        - in: header
-          name: Authorization
-          description: "Bearer access token. Format: 'Bearer <access_token>'."
-          required: true
-          schema:
-            type: string
-          example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
       responses:
         '200':
-          description: Assessment fetched
+          description: The fetched assessment report
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                  status:
-                    type: string
-                    example: ok
-                  assessment:
-                    $ref: '#/components/schemas/Assessment'
+                $ref: '#/components/schemas/Assessment'
               examples:
                 fetched:
                   value:
                     id: "9f9d7a69-0a6b-4a7c-9c02-5a8834c9a123"
-                    status: ok
-                    assessment:
-                      id: "9f9d7a69-0a6b-4a7c-9c02-5a8834c9a123"
-                      name: Quarterly review
+                    name: Quarterly review
+                    provider:
+                      id: "b2c63c0d-3f57-4db6-8e92-6a8f3f50e1a1"
+                      name: City of Brussels
+                      description: Local authority
+                      organisation_type: local_public_sector_body
+                      country: BE
+                    binding_requirement:
+                      - documented_in: "https://example.com/law/123"
+                        name: Article 5
+                        expression:
+                          - name: Legal Act 2024
+                            description: Reference to an EU legal expression
+                            document_in: "https://example.com/eli/act"
+                            expression_type: "http://data.europa.eu/eli/ontology#LegalExpression"
+                        affects:
+                          - description: Online permit application
+                            spatial: BE
+                            identifier: ps-123
+                            name: Permit Application Service
+                            thematic_area: digital_and_innovation_services
+                          - description:
+                            spatial: BE
+                            identifier: ps-123
+                            name: Permit Application Service
+                            thematic_area: digital_and_innovation_services
+                        has_participation:
+                          - country: BE
+                            participant_type: national_public_sector_body
+                            agent:
+                              name: Federal Agency of X
+                              agent_type: organisation
+                        asset:
+                          - name: Portal EU
+                            description: An EU portal interoperable solution
+                            landing_page: "https://portal.example.eu"
+                        documents:
+                          - file_uri: "https://files.example.com/documents/req-1.pdf"
+                    results_in:
+                      - interpretation: Compliant with conditions
+                        judgement: positive
+                        type: organisational
+                        documents:
+                          - file_uri: "https://files.example.com/documents/statement-1.pdf"
         '404':
           description: Assessment not found
           content:
@@ -146,6 +169,7 @@ paths:
                             agent_type: organisation
                       asset:
                         - name: Portal EU
+                          description: An EU portal interoperable solution
                           landing_page: "https://portal.example.eu"
                       documents:
                         - file_uri: "https://files.example.com/documents/req-1.pdf"
@@ -183,6 +207,12 @@ paths:
                           identifier: ps-123
                           name: Permit Application Service
                           thematic_area: digital_and_innovation_services
+                      asset:
+                        - "ce4f73f3-014c-41df-951f-457490ac1a23"
+                        - name: Portal EU
+                          description: The EU portal interoperable solution
+                          landing_page: "https://portal.example.eu"
+                        - "7c6b7eb4-c32c-41bb-892e-2bae6268ba53"
                   provider: "b2c63c0d-3f57-4db6-8e92-6a8f3f50e1a1"
                   results_in:
                     - interpretation: Compliant with conditions
@@ -198,16 +228,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                  status:
-                    type: string
-                    example: created
-                  assessment:
-                    $ref: '#/components/schemas/Assessment'
+                $ref: '#/components/schemas/Assessment'
               examples:
                 created:
                   value:
@@ -230,39 +251,32 @@ paths:
       - url: /api/assessments/v1
         description: Assessments API endpoint
     get:
-      summary: Get all Assessments of type Asset
-      description: Returns all Assets. The shape matches the POST response, with UUID `id` fields on the root.
+      summary: Get all assets
+      description: Returns all assets (also known as interoperable solutions)
       operationId: getAssets
       tags:
         - Assessments
         - Assets
-      security:
-        - oauth2: [ ]
+        - 'interoperable solutions'
+      security: [ ]
       responses:
         '200':
           description: Assets fetched
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                  status:
-                    type: string
-                    example: ok
-                  assessment:
-                    $ref: '#/components/schemas/Assessment'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Asset'
               examples:
                 fetched:
                   value:
                     - id: "43a50ef2-7d90-4562-ab81-59af10f2e081"
-                      name: "Asset 1"
-                      landing_page: "https://example.com/asset1"
+                      title: "Waste Management"
+                      url: "https://interoperable-europe.ec.europa.eu/collection/environment/solution/waste-managemet"
                     - id: "7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7b"
-                      name: "Asset 2"
-                      landing_page: "https://example.com/asset2"
+                      name: "Citizen's Forum"
+                      url: "https://interoperable-europe.ec.europa.eu/collection/participation/solution/forum"
 
   /public-organisation:
     servers:
@@ -275,37 +289,27 @@ paths:
       tags:
         - Assessments
         - Public Organisations
-      security:
-        - oauth2: [ ]
+      security: [ ]
       responses:
         '200':
-          description: Public Organisations fetched
+          description: The fetched public organisations
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                  status:
-                    type: string
-                    example: ok
-                  assessment:
-                    $ref: '#/components/schemas/Assessment'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Organisation'
               examples:
                 fetched:
                   value:
                     - id: "43a50ef2-7d90-4562-ab81-59af10f2e081"
                       name: "Public Organisation 1"
-                      description": "Description 2"
                       "organisation_type": "local_public_sector_body"
                       country: "PT"
                     - id: "7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7b"
                       name: "Public Organisation 2"
-                      description": ""
                       "organisation_type": "national_public_sector_body"
-                      country: ""
+                      country: null
 components:
   securitySchemes:
     oauth2:
@@ -315,24 +319,6 @@ components:
           tokenUrl: /oauth/token
           scopes: { }
   schemas:
-    # Generic reusable types
-    ID:
-      type: string
-      format: uuid
-      description: An ID reference to an existing entity.
-
-    Iso3166Alpha2:
-      type: string
-      description: ISO-3166 alpha-2 country code
-      minLength: 2
-      maxLength: 2
-      pattern: '^[A-Z]{2}$'
-      example: BE
-
-    Uri:
-      type: string
-      format: uri
-
     # Entities and their reference-or-object wrappers
 
     Assessment:
@@ -479,39 +465,21 @@ components:
             - european_union_agency
             - european_union_body
             - private_businesses
-        agent:
-          description: Reference to an Agent.
-          oneOf:
-            - $ref: '#/components/schemas/ID'
-            - $ref: '#/components/schemas/Agent'
-
-    Agent:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        name:
-          type: string
-        agent_type:
-          type: string
-          enum:
-            - person
-            - organisation
-            - system
 
     Asset:
       type: object
+      description: An interoperability solution
       properties:
         id:
           type: string
           format: uuid
           readOnly: true
-        name:
+        title:
           type: string
-        landing_page:
-          $ref: '#/components/schemas/Uri'
+        url:
+          type: string
+          format: uri
+          description: The asset landing page on Interoperable Europe website
 
     File:
       type: object
@@ -531,8 +499,6 @@ components:
           format: uuid
           readOnly: true
         name:
-          type: string
-        description:
           type: string
         organisation_type:
           type: string
@@ -578,3 +544,23 @@ components:
             oneOf:
               - $ref: '#/components/schemas/ID'
               - $ref: '#/components/schemas/File'
+
+    # Generic reusable types
+
+    ID:
+      type: string
+      format: uuid
+      description: An ID reference to an existing entity.
+
+    Iso3166Alpha2:
+      type: string
+      nullable: true
+      description: ISO-3166 alpha-2 country code
+      minLength: 2
+      maxLength: 2
+      pattern: '^[A-Z]{2}$'
+      example: BE
+
+    Uri:
+      type: string
+      format: uri
