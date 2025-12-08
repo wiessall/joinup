@@ -16,6 +16,8 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\PublicOrganisation;
+use Drupal\assessments\Event\AssessmentReportEvent;
+use Drupal\assessments\NotificationEvents;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\user\UserInterface;
@@ -363,4 +365,39 @@ function assessments_node_create_access(AccountInterface $account, array $contex
   }
 
   return state_machine_permissions_node_create_access($account, $context, $entity_bundle);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for assessment entities.
+ */
+function assessments_assessment_insert(AssessmentInterface $entity): void {
+  _assessments_handle_report_state_notification($entity);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update() for assessment entities.
+ */
+function assessments_assessment_update(AssessmentInterface $entity): void {
+  _assessments_handle_report_state_notification($entity);
+}
+
+/**
+ * Handles notification dispatching for assessment report state changes.
+ *
+ * @param \Drupal\assessments\AssessmentInterface $entity
+ *   The assessment entity.
+ */
+function _assessments_handle_report_state_notification(AssessmentInterface $entity): void {
+  if ($entity->bundle() !== 'report' || !$entity->hasField('state')) {
+    return;
+  }
+
+  $original_state = $entity->original?->get('state')?->getString();
+  $current_state = $entity->get('state')?->getString();
+
+  if ($current_state === 'review' && $original_state !== 'review') {
+    $event = new AssessmentReportEvent($entity);
+    \Drupal::service('event_dispatcher')
+      ->dispatch($event, NotificationEvents::ASSESSMENT_REPORT_SUBMITTED_FOR_REVIEW);
+  }
 }
