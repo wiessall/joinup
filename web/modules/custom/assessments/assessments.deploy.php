@@ -7,7 +7,10 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Utility\UpdateException;
 use Drupal\assessments\AssessmentVocabularyHelper;
+use Drupal\custom_page\Entity\CustomPageInterface;
+use Drupal\joinup_assessment\AssessmentInterface;
 
 /**
  * Create 'Code'-type vocabularies terms.
@@ -151,5 +154,33 @@ function assessments_deploy_200801(): void {
         ]);
       }
     }
+  }
+}
+
+/**
+ * Unpublish assessments repository page and update OG menu link.
+ */
+function assessments_deploy_200802(): void {
+  /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
+  $entity_repository = \Drupal::service('entity.repository');
+
+  // Load the node at /collection/assessments/assessments-repository.
+  $node = $entity_repository->loadEntityByUuid('node', AssessmentInterface::ASSESSMENT_REPORTS_UUID);
+  if (!$node instanceof CustomPageInterface) {
+    throw new UpdateException("Deploy hook failed: could not load custom page node by UUID, see " . __FUNCTION__);
+  }
+
+  // Unpublish it and update links pointing to it.
+  $node->setNewRevision();
+  $node->setRevisionLogMessage('Unpublished programmatically via update hook.');
+  $node->setWorkflowState('unpublished');
+  $node->skip_notification = TRUE;
+  $node->save();
+
+  /** @var \Drupal\menu_link_content\Entity\MenuLinkContent[] $links */
+  $links = \Drupal::entityTypeManager()->getStorage('menu_link_content')->loadByProperties(['link.uri' => "entity:node/{$node->id()}"]);
+  foreach ($links as $link) {
+    $link->set('link', [['uri' => 'internal:/collection/assessments/report/repository']]);
+    $link->save();
   }
 }

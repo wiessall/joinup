@@ -58,3 +58,5 @@ hidden:
   status: true
   technical: true
   uid: true
+  uri: true
+  uuid: true
