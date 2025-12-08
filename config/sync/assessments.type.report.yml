@@ -7,9 +7,9 @@ third_party_settings:
     type: 'http://data.europa.eu/2sa/cav#Assessment'
     uri_plugin: null
     namespaces:
-      cav: http://data.europa.eu/2sa/cav#
-      cv: http://data.europa.eu/m8g/
-      iopa: http://data.europa.eu/2qy/iopa#
+      cav: 'http://data.europa.eu/2sa/cav#'
+      cv: 'http://data.europa.eu/m8g/'
+      iopa: 'http://data.europa.eu/2qy/iopa#'
 label_singular: 'assessment report'
 label_plural: 'assessment reports'
 label_count:

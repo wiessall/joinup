@@ -12,10 +12,13 @@ use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\AssessmentStatement;
 use Drupal\file\FileInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\rdf_sync\Encoder\RdfSyncEncoder;
 use Drupal\rdf_sync\Event\RdfSyncNormalizeEvent;
 use Drupal\rdf_sync\Normalizer\RdfSyncNormalizer;
+use Drupal\rdf_sync\RdfSyncMapperInterface;
+use Drupal\taxonomy\TermInterface;
 use EasyRdf\Resource;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -29,6 +32,7 @@ class RdfSyncNormalizeSubscriber implements EventSubscriberInterface {
   public function __construct(
     #[Autowire(service: 'rdf_sync.normalizer')]
     protected readonly RdfSyncNormalizer $normalizer,
+    protected readonly RdfSyncMapperInterface $mapper,
   ) {}
 
   /**
@@ -123,7 +127,7 @@ class RdfSyncNormalizeSubscriber implements EventSubscriberInterface {
     }
 
     // Add binding requirement triples.
-    $fields = ['expression', 'affects', 'affected_party', 'asset'];
+    $fields = ['expression', 'affects', 'has_participation', 'asset'];
     foreach ($report->get('binding_requirement') as $bindingRequirementField) {
       $bindingRequirement = $bindingRequirementField->entity;
       $normalized += $this->normalizer->normalize($bindingRequirement);
@@ -182,7 +186,7 @@ class RdfSyncNormalizeSubscriber implements EventSubscriberInterface {
    * @return array<int|string, \Drupal\taxonomy\TermInterface>
    *   List of term entities keyed by the term ID.
    */
-  protected function getEntityTerms(AssessmentInterface|AssessmentStatement $entity): array {
+  protected function getEntityTerms(AssessmentInterface|AssessmentStatement|SolutionInterface $entity): array {
     $terms = [];
 
     foreach ($entity as $field) {
@@ -195,7 +199,10 @@ class RdfSyncNormalizeSubscriber implements EventSubscriberInterface {
         $targetType === 'taxonomy_term'
       ) {
         foreach ($field->referencedEntities() as $term) {
-          $terms[$term->id()] = $term;
+          assert($term instanceof TermInterface);
+          if ($this->mapper->isMappedBundle('taxonomy_term', $term->bundle())) {
+            $terms[$term->id()] = $term;
+          }
         }
       }
     }

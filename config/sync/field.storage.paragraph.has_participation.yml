@@ -5,8 +5,8 @@ dependencies:
   module:
     - assessments
     - paragraphs
-id: paragraph.affected_party
-field_name: affected_party
+id: paragraph.has_participation
+field_name: has_participation
 entity_type: paragraph
 type: entity_reference
 settings:

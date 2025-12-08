@@ -283,6 +283,7 @@ module:
   ui_patterns_library: 0
   ui_patterns_settings: 0
   user: 0
+  uuid_extra: 0
   ventuno_helper: 0
   view_unpublished: 0
   views_block_area: 0
