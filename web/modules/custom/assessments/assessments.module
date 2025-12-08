@@ -16,10 +16,10 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\PublicOrganisation;
-use Drupal\collection\Entity\CollectionInterface;
-use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\assessments\Event\AssessmentReportEvent;
 use Drupal\assessments\NotificationEvents;
+use Drupal\collection\Entity\CollectionInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\user\UserInterface;
 
 /**
