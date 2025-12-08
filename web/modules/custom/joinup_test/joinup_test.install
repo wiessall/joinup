@@ -13,7 +13,7 @@ use Drupal\Core\File\FileSystemInterface;
 use Drupal\file\Entity\File as FileEntity;
 use Drupal\file\FileInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
-use Drupal\pathauto\PathautoState;
+use Drupal\joinup_test\DefaultContentHelper;
 use Drupal\taxonomy\TermInterface;
 use Drupal\text\Plugin\Field\FieldType\TextItemBase;
 
@@ -84,53 +84,61 @@ function joinup_test_install($is_syncing): void {
 
   // Create the Joinup collection on clean installation.
   $nodeStorage = $entityTypeManager->getStorage('node');
+  $contact = $nodeStorage->create([
+    'type' => 'contact_information',
+    'uuid' => JoinupCollectionHelper::JOINUP_CONTACT_UUID,
+    'title' => 'Contact name',
+    'email' => 'contact.email@example.com',
+  ]);
+  $contact->save();
+  $owner = $nodeStorage->create([
+    'type' => 'owner',
+    'uuid' => JoinupCollectionHelper::JOINUP_OWNER_UUID,
+    'title' => 'ISA²',
+  ]);
+  $owner->save();
+
+  $fileSystem = \Drupal::service('file_system');
+  assert($fileSystem instanceof FileSystemInterface);
+  $logoSourcePath = \Drupal::service('extension.list.module')->getPath('joinup_group') . '/fixtures/images/logo/default_logo_3.png';
+  $logoSourceRealPath = $fileSystem->realpath($logoSourcePath);
+  $logo = FileEntity::create([
+    'uri' => $fileSystem->copy($logoSourceRealPath, 'public://'),
+    'status' => FileInterface::STATUS_PERMANENT,
+  ]);
+  $logo->save();
+
+  $created = [];
   $mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
-  if (!$mapper->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_URI)) {
-    $fileSystem = \Drupal::service('file_system');
-    assert($fileSystem instanceof FileSystemInterface);
-    $logoSourcePath = \Drupal::service('extension.list.module')->getPath('joinup_group') . '/fixtures/images/logo/default_logo_3.png';
-    $logoSourceRealPath = $fileSystem->realpath($logoSourcePath);
-
-    $collection = $nodeStorage->create([
-      'type' => 'collection',
-      'uuid' => JoinupCollectionHelper::JOINUP_COLLECTION_UUID,
-      'uri' => JoinupCollectionHelper::JOINUP_COLLECTION_URI,
-      'title' => 'Portal support',
-      'field_state' => 'published',
-      'field_topic' => \Drupal::getContainer()->get('topic')->getTopicByName('demography'),
-      'created' => strtotime('2015-01-01 08:00'),
-      'changed' => strtotime('2015-01-01 08:00'),
-      'published_at' => strtotime('2015-01-01 08:00'),
-      'abstract' => 'Portal support is a collaborative platform created by the European Commission and funded by the European Union via the ISA² Programme.',
-      'description' => [
-        'value' => 'Portal support is a collaborative platform created by the European Commission and funded by the European Union via the ISA² Programme. It offers several services that aim to help e-Government professionals share their experience with each other. The platform is also a repository of e-Government solutions, case studies, reusable software and components, and best practices. Portal support is a key initiative of the European Commission’s ISA² Programme, which is part of the EU’s policy to create a Digital Single Market.',
-        'format' => 'content_editor',
-      ],
-      'contact' => $nodeStorage->create([
-        'type' => 'contact_information',
-        'uuid' => JoinupCollectionHelper::JOINUP_CONTACT_UUID,
-        'title' => 'Contact name',
-        'email' => 'contact.email@example.com',
-      ]),
-      'owner' => $nodeStorage->create([
-        'type' => 'owner',
-        'uuid' => JoinupCollectionHelper::JOINUP_OWNER_UUID,
-        'title' => 'ISA²',
-      ]),
-      'logo' => FileEntity::create([
-        'uri' => $fileSystem->copy($logoSourceRealPath, 'public://'),
-        'status' => FileInterface::STATUS_PERMANENT,
-      ]),
-      'path' => [
-        'alias' => '/collection/portal-support',
-        'pathauto' => PathautoState::SKIP,
-      ],
-    ]);
-    $collection->save();
-
-    \Drupal::getContainer()->get('search_api.post_request_indexing')->destruct();
-    \Drupal::state()->set('joinup_test.joinup_collection.created', TRUE);
+  foreach (DefaultContentHelper::getDefaultCollections() as $uuid => $data) {
+    if (!$mapper->getEntityByUri($data['uri'])) {
+      $collection_values = [
+        'type' => 'collection',
+        'uuid' => $uuid,
+        'title' => $data['title'],
+        'field_state' => $data['field_state'],
+        'created' => $data['created'],
+        'changed' => $data['changed'],
+        'published_at' => $data['published_at'],
+        'abstract' => $data['abstract'],
+        'description' => $data['description'],
+        'path' => $data['path'],
+      ];
+      if (isset($data['field_topic'])) {
+        $collection_values['field_topic'] = $data['field_topic'];
+      }
+      $collection_values['contact'] = $contact;
+      $collection_values['owner'] = $owner;
+      $collection_values['logo'] = $logo;
+      $collection = $nodeStorage->create($collection_values);
+      $collection->save();
+      $collection->skip_notification = TRUE;
+      $created[$uuid] = $uuid;
+    }
   }
+
+  \Drupal::state()->set('joinup_test.collections.created', $created);
+  \Drupal::getContainer()->get('search_api.post_request_indexing')->destruct();
 }
 
 /**
