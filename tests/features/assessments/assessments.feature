@@ -309,7 +309,7 @@ Feature: Assessment Report Entity Management
       | E-mail      | pol.gomez@example.pt |
 
     And I am logged in as pol2025
-    And I go to "/assessments/add/report"
+    And I go to "/collection/assessments/report/create"
 
     When I fill in "Name" with "Test permissions in Assessment Report 2025"
     And I select "European Union institution" from "Type of public sector body"
