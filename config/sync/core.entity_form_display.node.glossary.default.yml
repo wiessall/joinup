@@ -67,3 +67,4 @@ hidden:
   sticky: true
   uid: true
   url_redirects: true
+  uuid: true

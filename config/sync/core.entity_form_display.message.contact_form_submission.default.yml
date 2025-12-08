@@ -106,3 +106,4 @@ content:
 hidden:
   created: true
   uid: true
+  uuid: true
