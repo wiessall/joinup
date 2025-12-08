@@ -1,4 +1,4 @@
-@api @assessments
+@api
 Feature: RDF Sync integration for assessments.
 
   Scenario: Test that an entire chain of entities is exported properly.
