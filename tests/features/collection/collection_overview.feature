@@ -25,15 +25,15 @@ Feature: Collections Overview
     And I visit the collection overview page
     Then I should see the following tiles in the correct order:
       # Created in 8:33am.
-      | Open Data                          |
+      | Open Data                            |
       # Created in 8:32am.
-      | Connecting Europe                  |
+      | Connecting Europe                    |
       # Created in 8:31am.
-      | E-health                           |
+      | E-health                             |
       # Created 2015-01-01 08:00-01-02am.
-      | Portal support                     |
-      | Interoperability assessments space |
-      | Asset collector                 |
+      | Solutions mentioned in an assessment |
+      | Interoperability assessments space   |
+      | Portal support                       |
 
     When I am an anonymous user
     And I visit the collection overview page
