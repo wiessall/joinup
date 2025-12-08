@@ -1266,6 +1266,12 @@ class JoinupContext extends RawDrupalContext {
   public function assertOrderedTilesPresent(TableNode $titles_table, ?string $list_title = NULL): void {
     $headings = array_keys($this->getTiles(listTitle: $list_title));
     $headings_expected = array_filter($titles_table->getColumn(0));
+    // Allow splitting individual lines by comma.
+    $headings_expected = array_map(function ($heading) {
+      $split = explode(',', $heading);
+      return array_map('trim', $split);
+    }, $headings_expected);
+    $headings_expected = array_merge(...$headings_expected);
     Assert::assertEquals($headings_expected, $headings, 'The expected tiles were not found or were not in the proper order.');
   }
 

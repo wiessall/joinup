@@ -82,14 +82,7 @@ class JoinupAssessmentContext extends RawDrupalContext {
    * @BeforeScenario @demoAssessment
    */
   public function beforeAssessmentsDemo(): void {
-    $collection = $this->nodeCreate((object) [
-      'type' => 'collection',
-      'uuid' => LegacyAssessmentInterface::GROUP_UUID,
-      'title' => 'Interoperability assessments space',
-      'short_id' => 'assessments',
-      'field_state' => 'published',
-    ]);
-
+    $collection = \Drupal::service('entity.repository')->loadEntityByUuid('node', LegacyAssessmentInterface::GROUP_UUID);
     $paragraph = Paragraph::create([
       'type' => 'block',
       'paragraph_block' => [

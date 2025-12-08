@@ -1,5 +1,6 @@
 @api @group-a
 Feature: Collections Overview
+
   Scenario: View collection overview as an anonymous user
     Given users:
       | Username      | E-mail                       |
@@ -24,13 +25,15 @@ Feature: Collections Overview
     And I visit the collection overview page
     Then I should see the following tiles in the correct order:
       # Created in 8:33am.
-      | Open Data         |
+      | Open Data                          |
       # Created in 8:32am.
-      | Connecting Europe |
+      | Connecting Europe                  |
       # Created in 8:31am.
-      | E-health          |
-      # Created 2015-01-01 08:00am.
-      | Portal support       |
+      | E-health                           |
+      # Created 2015-01-01 08:00-01-02am.
+      | Portal support                     |
+      | Interoperability assessments space |
+      | Assessment reports                 |
 
     When I am an anonymous user
     And I visit the collection overview page
