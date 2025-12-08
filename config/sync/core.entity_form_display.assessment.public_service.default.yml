@@ -4,8 +4,6 @@ status: true
 dependencies:
   config:
     - assessments.type.public_service
-    - field.field.assessment.public_service.identifier
-    - field.field.assessment.public_service.spatial
     - field.field.assessment.public_service.thematic_area
   module:
     - entity_form_field_label
@@ -39,9 +37,8 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
-  identifier: true
   langcode: true
-  spatial: true
   status: true
   uid: true
   uri: true
+  uuid: true

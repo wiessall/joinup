@@ -5,8 +5,8 @@ dependencies:
   module:
     - assessments
     - paragraphs
-id: paragraph.has_related_service
-field_name: has_related_service
+id: paragraph.affects
+field_name: affects
 entity_type: paragraph
 type: entity_reference
 settings:

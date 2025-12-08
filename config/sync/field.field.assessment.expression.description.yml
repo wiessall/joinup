@@ -14,7 +14,7 @@ third_party_settings:
   rdf_sync:
     value:
       predicate: 'http://purl.org/dc/terms/description'
-      type: 'xsd:string'
+      type: null
   tmgmt_content:
     excluded: false
 id: assessment.expression.description

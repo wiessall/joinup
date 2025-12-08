@@ -137,3 +137,4 @@ hidden:
   matomo: true
   private_messages: true
   timezone: true
+  uuid: true

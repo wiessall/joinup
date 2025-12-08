@@ -54,3 +54,4 @@ hidden:
   metadata_banner_disabled: true
   search_api_excerpt: true
   target: true
+  uuid: true

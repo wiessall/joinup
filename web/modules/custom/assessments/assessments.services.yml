@@ -5,3 +5,5 @@ services:
     autowire: true
 
   Drupal\assessments\AssessmentVocabularyHelper: {}
+
+  Drupal\assessments\EventSubscriber\RdfSyncNormalizeSubscriber: {}

@@ -71,8 +71,8 @@ is final.
 The current structure of fields in the assessment type is as follows:
 
 Assessment (assessment):
-* Affected party (affected_party). Entity reference to `participation`.
-* Affected service (has_related_service). Entity reference to `public_service`.
+* Affected service (affects). Entity reference to `public_service`.
+* Has participation (has_participation). Entity reference to `participation`.
 * Asset (asset). Entity reference to `asset`.
 * Binding requirement (binding_requirement). Entity reference to
 `binding_requirement`.

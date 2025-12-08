@@ -350,6 +350,7 @@ trait NameMappingsTrait {
       'oss_solution' => 'node',
       'owner' => 'node',
       'release' => 'node',
+      'report' => 'assessment',
       'solution' => 'node',
       'spdx licence' => 'taxonomy_term',
       'topic' => 'taxonomy_term',

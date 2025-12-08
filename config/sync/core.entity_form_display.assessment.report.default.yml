@@ -19,7 +19,6 @@ dependencies:
     - field_group
     - file
     - inline_entity_form
-    - joinup_workflow
     - layout_paragraphs
 third_party_settings:
   field_group:
@@ -146,7 +145,7 @@ content:
     third_party_settings: {  }
   documents:
     type: file_generic
-    weight: 8
+    weight: 6
     region: content
     settings:
       progress_indicator: throbber
@@ -214,6 +213,8 @@ content:
     weight: 2
     region: content
     settings:
+      placeholder_url: ''
+      placeholder_title: ''
       condition: 'Can this assessment be linked to previous assessments or related assessments at EU or national level?'
       default_option: 'no'
     third_party_settings: {  }
@@ -231,11 +232,10 @@ content:
       revision: false
     third_party_settings: {  }
   state:
-    type: state_machine_buttons
-    weight: 6
+    type: options_buttons
+    weight: 7
     region: content
-    settings:
-      use_transition_label: 0
+    settings: {  }
     third_party_settings: {  }
   technical:
     type: inline_entity_form_simple
@@ -256,3 +256,4 @@ hidden:
   status: true
   uid: true
   uri: true
+  uuid: true

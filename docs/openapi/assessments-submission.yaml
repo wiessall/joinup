@@ -86,7 +86,7 @@ components:
           description: Participant(s) involved in the requirement. Each can include nested agents.
           items:
             $ref: '#/components/schemas/Participant'
-        affected_party:
+        has_participation:
           type: array
           description: Affected service(s) for this requirement.
           items:

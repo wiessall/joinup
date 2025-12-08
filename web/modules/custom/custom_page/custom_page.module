@@ -198,7 +198,7 @@ function custom_page_menu_link_content_update(MenuLinkContentInterface $menu_lin
 
   // Ignore external links.
   $url_object = $menu_link->getUrlObject();
-  if ($url_object->isExternal()) {
+  if ($url_object->isExternal() || !$url_object->isRouted()) {
     return;
   }
 
