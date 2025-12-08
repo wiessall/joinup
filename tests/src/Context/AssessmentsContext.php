@@ -8,12 +8,14 @@ use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Serialization\Yaml;
+use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
+use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\user\UserInterface;
 use PHPUnit\Framework\Assert;
@@ -26,6 +28,7 @@ class AssessmentsContext extends RawDrupalContext {
   use EntityTrait;
   use FileTrait;
   use UtilityTrait;
+  use TestingEntitiesTrait;
 
   /**
    * Programmatically creates assessment contents.
@@ -89,12 +92,72 @@ class AssessmentsContext extends RawDrupalContext {
         $assessment['document'] = $fileValues;
       }
 
+      // Resolve provider by name if provided (skip for report type).
+      if ($type !== 'report' && isset($assessment['provider']) && !is_numeric($assessment['provider'])) {
+        $provider = $this->getEntityByLabel('assessment', $assessment['provider'], 'public_organisation');
+        $assessment['provider'] = $provider->id();
+      }
+
       $assessment = (object) $assessment;
 
       $assessment->type = $type;
       $this->parseEntityFields('assessment', $assessment);
       $this->getDriver()->createEntity('assessment', $assessment);
     }
+  }
+
+  /**
+   * Adds a binding requirement paragraph to a report assessment.
+   *
+   * Table format (vertical):
+   * | report      | Report Name     |
+   * | expression  | Expression Name |
+   * | service     | Service Name    |
+   * | description | Description     |
+   *
+   * @param \Behat\Gherkin\Node\TableNode $bindingTable
+   *   The table with binding requirement data.
+   *
+   * @Given the following report has binding requirement:
+   */
+  public function addBindingRequirementToReport(TableNode $bindingTable): void {
+    $binding = $bindingTable->getRowsHash();
+
+    $report = $this->getEntityByLabel('assessment', $binding['report'], 'report');
+
+    $expression_id = NULL;
+    $service_id = NULL;
+
+    if (!empty($binding['expression'])) {
+      $expression = $this->getEntityByLabel('assessment', $binding['expression'], 'expression');
+      $expression_id = $expression->id();
+    }
+
+    if (!empty($binding['service'])) {
+      $service = $this->getEntityByLabel('assessment', $binding['service'], 'public_service');
+      $service_id = $service->id();
+    }
+
+    $description = $binding['description'] ?? 'Test requirement description';
+    $paragraph = \Drupal::entityTypeManager()
+      ->getStorage('paragraph')
+      ->create([
+        'type' => 'binding_requirement',
+        'description' => ['value' => $description, 'format' => 'plain_text'],
+        'expression' => $expression_id ? [$expression_id] : [],
+        'has_related_service' => $service_id ? [$service_id] : [],
+      ]);
+    $paragraph->save();
+
+    $this->entities['paragraph'][$paragraph->id()] = $paragraph;
+
+    $report->set('binding_requirement', [
+      [
+        'target_id' => $paragraph->id(),
+        'target_revision_id' => $paragraph->getRevisionId(),
+      ],
+    ]);
+    $report->save();
   }
 
   /**
@@ -179,6 +242,22 @@ class AssessmentsContext extends RawDrupalContext {
       'uuid' => AssessmentInterface::SOLUTION_COLLECTOR,
       'field_state' => 'published',
     ])->save();
+  }
+
+  /**
+   * Navigates to the moderate form of a specific assessment report.
+   *
+   * @param string $title
+   *   The title of the assessment report.
+   *
+   * @When I go to the moderate form of the :title assessment report
+   */
+  public function visitAssessmentReportModerateForm(string $title): void {
+    $entity = $this->getEntityByLabel('assessment', $title, 'report');
+    $url = Url::fromRoute('entity.assessment.moderate_form', [
+      'assessment' => $entity->id(),
+    ]);
+    $this->visitPath($url->toString());
   }
 
 }

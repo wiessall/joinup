@@ -9,3 +9,8 @@ services:
   Drupal\assessments\EventSubscriber\RdfSyncNormalizeSubscriber: {}
 
   Drupal\assessments\ResourceParser: {}
+
+  Drupal\assessments\AssessmentReportNotificationInterface:
+    class: Drupal\assessments\AssessmentReportNotification
+
+  Drupal\assessments\EventSubscriber\AssessmentReportNotificationSubscriber: { }

@@ -19,10 +19,8 @@ label: State
 description: ''
 required: true
 translatable: false
-default_value:
-  -
-    value: draft
-default_value_callback: ''
+default_value: {  }
+default_value_callback: 'Drupal\assessments\Entity\AssessmentReport::getDefaultStateValue'
 settings:
   workflow: default
   workflow_callback: ''
