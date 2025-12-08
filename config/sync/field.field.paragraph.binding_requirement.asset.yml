@@ -3,18 +3,19 @@ langcode: en
 status: true
 dependencies:
   config:
-    - assessments.type.asset
     - field.storage.paragraph.asset
+    - node.type.solution
     - paragraphs.paragraphs_type.binding_requirement
   module:
+    - rdf_sync
     - tmgmt_content
 third_party_settings:
+  tmgmt_content:
+    excluded: false
   rdf_sync:
     target_id:
       predicate: 'http://purl.org/dc/terms/relation'
       type: resource
-  tmgmt_content:
-    excluded: false
 id: paragraph.binding_requirement.asset
 field_name: asset
 entity_type: paragraph
@@ -26,12 +27,12 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:assessment'
+  handler: 'default:node'
   handler_settings:
     target_bundles:
-      asset: asset
+      solution: solution
     sort:
-      field: _none
+      field: title
       direction: ASC
     auto_create: false
     auto_create_bundle: ''

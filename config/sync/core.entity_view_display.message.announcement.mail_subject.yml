@@ -36,3 +36,4 @@ hidden:
   professional_domain: true
   search_api_excerpt: true
   state: true
+  uuid: true

@@ -505,3 +505,4 @@ content:
 hidden:
   current_workflow_state: true
   oss_vitality_index_range: true
+  uuid: true

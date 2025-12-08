@@ -68,13 +68,17 @@ language:
   - name: English
 spatial:
   - name: Belgium
+    code: BE
     eu_member: true
     uri: 'http://example.com/taxonomy-term/spatial/dfa6aecc-1a7d-4bee-83b7-363b0db1ba66'
   - name: Switzerland
+    code: CH
   - name: 'European Union'
   - name: Luxembourg
+    code: LU
     eu_member: true
   - name: Greece
+    code: GR
     eu_member: true
 file_type:
   - name: 'ZIP'

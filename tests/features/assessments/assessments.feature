@@ -1,4 +1,4 @@
-@api @group-e
+@api @group-e @assessments
 Feature: Assessment Report Entity Management
   In order to manage assessment reports directly
   As a user with appropriate permissions
@@ -49,15 +49,24 @@ Feature: Assessment Report Entity Management
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
 
     When I click "Affected stakeholders" in the "Modal content" region
-    And I select "Local public sector body" from "affected_party[0][inline_entity_form][participant_type][]" in the "Modal content" region
-    And I select "Belgium" from "affected_party[0][inline_entity_form][stakeholder_country][]" in the "Modal content" region
+    And I select "Local public sector body" from "has_participation[0][inline_entity_form][participant_type][]" in the "Modal content" region
+    And I select "Belgium" from "has_participation[0][inline_entity_form][stakeholder_country][]" in the "Modal content" region
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
 
     When I click "Interoperability solutions" in the "Modal content" region
-    And I press "Add new relevant asset" in the "Modal content" region
-    And I fill in "asset[form][0][name][0][value]" with "European Interoperability Framework (EIF)" in the "Modal content" region
-    And I fill in "asset[form][0][landing_page][0][uri]" with "https://interoperable-europe.ec.europa.eu/collection/eif" in the "Modal content" region
-    Then I press "Create relevant asset" in the "Modal content" region
+    And I press "Add new relevant solution" in the "Modal content" region
+    And I fill in "asset[form][0][title][0][value]" with "European Interoperability Framework (EIF)" in the "Modal content" region
+    And I enter "Description of European Interoperability Framework (EIF)" in the "asset[form][0][description][0][value]" wysiwyg editor
+    And I fill in "Relevant website" with "https://interoperable-europe.ec.europa.eu/collection/eif" in the "Modal content" region
+    Then I press "Create relevant solution" in the "Modal content" region
+
+    When I click "Trans-European digital public services" in the "Modal content" region
+    And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
+    And I select "Core governance and administration" from "affects[0][inline_entity_form][thematic_area]" in the "Modal content" region
+
+    When I click "Affected stakeholders" in the "Modal content" region
+    And I select "Local public sector body" from "has_participation[0][inline_entity_form][participant_type][]" in the "Modal content" region
+    And I select "Belgium" from "has_participation[0][inline_entity_form][stakeholder_country][]" in the "Modal content" region
 
     When I click "Documents" in the "Modal content" region
     And I attach the file "text.pdf" to "Add a new file"
