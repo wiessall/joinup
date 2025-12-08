@@ -100,7 +100,7 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
 
     // Avoid using this widget in places other than the entity edit forms.
     $base_form_id = $form_state->getFormObject()->getBaseFormId();
-    if ($base_form_id !== 'node_form') {
+    if (!in_array($base_form_id, ['node_form', 'assessment_form'], TRUE)) {
       return $element;
     }
 
