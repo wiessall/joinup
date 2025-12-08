@@ -9,4 +9,5 @@ targetEntityType: message
 bundle: assessment_report_published
 mode: default
 content: {  }
-hidden: {  }
+hidden:
+  uuid: true
