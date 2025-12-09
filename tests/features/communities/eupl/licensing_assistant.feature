@@ -113,8 +113,7 @@ Feature:
     Then I should see the heading "Edit term"
     And the following fields should be disabled "Name"
 
-  # Validate the need for the "@restart-session" tag in ISAICP-9742.
-  @javascript @restart-session
+  @javascript
   Scenario: Test the licence comparer trigger.
     Given SPDX licences:
       | uri                              | title      | ID         |
@@ -403,8 +402,7 @@ Feature:
       | OSI approved      |          |            |  |  |  |
       | FSF Free/Libre    |          |            |  |  |  |
 
-  # Validate the need for the "@restart-session" tag in ISAICP-9742.
-  @javascript @restart-session
+  @javascript
   Scenario: The reset button should change everything to the default state.
     Given SPDX licences:
       | uri                              | title      | ID         |
