@@ -74,6 +74,7 @@ function custom_page_entity_bundle_field_info_alter(&$fields, EntityTypeInterfac
 function custom_page_preprocess_page_title__node__custom_page(&$variables): void {
   /** @var \Drupal\custom_page\Entity\CustomPageInterface $customPage */
   $customPage = $variables['entity'];
+  $variables['additional_content']['parent_page_title'] = ($customPage->hasGroup()) ? $customPage->getGroup()->getTitle() : '';
   $variables['additional_content']['hide_title'] = $customPage->isHiddenTitleEnabled();
 }
 
