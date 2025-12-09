@@ -16,6 +16,7 @@ use Drupal\assessments\Entity\Assessment\PublicService;
 use Drupal\assessments\Entity\Assessment\Report;
 use Drupal\assessments\Entity\AssessmentStatement;
 use Drupal\assessments\Entity\Paragraph\BindingRequirement;
+use Drupal\joinup_solution\Entity\Solution;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
@@ -193,7 +194,7 @@ final class ResourceParser implements ResourceParserInterface {
       'assessment' => Report::class,
       'statement' => AssessmentStatement::class,
       'results_in' => AssessmentStatement::class,
-      'asset' => Asset::class,
+      'asset' => Solution::class,
       'documents' => Asset::class,
       'expression' => Expression::class,
       'participation' => Participation::class,
