@@ -140,8 +140,6 @@ default:
               args:
                 # Window size (sync with docker selenium).
                 - '--window-size=1600,1200'
-                # Ignore cert. errors with HTTPS.
-                - '--ignore-certificate-errors'
                 # Additional test-related params.
                 - '--no-sandbox'
                 - '--disable-setuid-sandbox'
@@ -159,8 +157,6 @@ default:
                 - '--incognito'
                 - '--no-first-run'
                 - '--disable-popup-blocking'
-                - '--allowed-ips=*'
-                - '--whitelisted-ips=*'
                 - '--test-type'
     LoversOfBehat\TableExtension:
       table_map:
