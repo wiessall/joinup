@@ -33,4 +33,4 @@ visibility:
     id: request_path
     negate: true
     context_mapping: {  }
-    pages: "<front>\r\n/eu-oss-catalogue\r\n/eu-oss-catalogue/solutions/*"
+    pages: "<front>\r\n/eu-oss-catalogue/solutions/*"
