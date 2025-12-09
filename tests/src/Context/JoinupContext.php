@@ -2928,20 +2928,6 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Insulates a scenario by stopping all sessions before and/or after it.
-   *
-   * Similar to "insulated" tag but also allows stopping the session after.
-   * Useful to reset the initial state before and/or after the scenario.
-   * e.g: scenarios resizing the browser window, etc.
-   *
-   * @BeforeScenario @stopSession:before
-   * @AfterScenario @stopSession:after
-   */
-  public function insulateScenario(): void {
-    $this->getMink()->stopSessions();
-  }
-
-  /**
    * Stores most recent IDs of entity types that should be cleaned up.
    *
    * @param \Behat\Behat\Hook\Scope\BeforeScenarioScope $scope
