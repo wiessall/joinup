@@ -180,4 +180,11 @@ class Assessment extends ContentEntityBase implements AssessmentInterface {
     ])->render();
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getRelatedReport(): ?AssessmentReport {
+    return NULL;
+  }
+
 }
