@@ -12,7 +12,7 @@
 {{ title_prefix }}
 {% if title %}
 <div class="page-title">
-  <h1{{ title_attributes.addClass('page-title__title', 'mt-3', (hidden_title_collection_settings or hidden_title_solution_settings) ? 'visually-hidden' : '') }}>
+  <h1{{ title_attributes.addClass('page-title__title', (hidden_title_collection_settings or hidden_title_solution_settings) ? 'visually-hidden' : '', 'mt-3') }}>
     {{ title }}
     {% block badges %}{% endblock %}
     {% if permalink %}
