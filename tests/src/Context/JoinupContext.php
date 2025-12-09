@@ -3074,4 +3074,28 @@ class JoinupContext extends RawDrupalContext {
     }
   }
 
+  /**
+   * Finds h1 with a span and some text.
+   *
+   * @param string $title
+   *   Title of header link.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   *
+   * @Then I see h1 span element with title :title
+   */
+  public function iSeeH1SpanElement(string $title): void {
+    $page = $this->getSession()->getPage();
+    $link = $page->find('xpath', '//h1//span[not(ancestor::a)]');
+
+    if (!$link || strpos($link->getText(), $title) === FALSE) {
+      throw new ElementNotFoundException(
+        $this->getSession(),
+        'link',
+        'css',
+        'h1 span'
+      );
+    }
+  }
+
 }
