@@ -16,9 +16,11 @@ dependencies:
     - field.field.assessment.report.technical
   module:
     - assessments
+    - entity_form_field_label
     - field_group
     - file
     - inline_entity_form
+    - joinup_workflow
     - layout_paragraphs
 third_party_settings:
   field_group:
@@ -215,9 +217,14 @@ content:
     settings:
       placeholder_url: ''
       placeholder_title: ''
-      condition: 'Can this assessment be linked to previous assessments or related assessments at EU or national level?'
+      condition: 'Check if assessment is linked to previous assessments or related assessments at EU or national level.'
       default_option: 'no'
-    third_party_settings: {  }
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+        new_description: ''
+        rewrite_description: 0
   semantic:
     type: inline_entity_form_simple
     weight: 10
@@ -235,7 +242,8 @@ content:
     type: state_machine_buttons
     weight: 7
     region: content
-    settings: {  }
+    settings:
+      use_transition_label: 0
     third_party_settings: {  }
   technical:
     type: inline_entity_form_simple
