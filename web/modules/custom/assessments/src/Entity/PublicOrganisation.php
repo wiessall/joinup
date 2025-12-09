@@ -17,7 +17,6 @@ final class PublicOrganisation extends Assessment {
       ->accessCheck(FALSE)
       ->condition('type', 'report')
       ->condition('provider', $this->id())
-      ->condition('state', 'published')
       ->range(0, 1)
       ->execute();
 
