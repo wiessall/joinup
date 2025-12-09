@@ -18,12 +18,10 @@ class JavascriptContext extends RawDrupalContext {
    * Restart browser session.
    *
    * Isolates all @javascript scenarios to prevent unwanted browser cache
-   * interactions between scenarios (see ISAICP-9742) and restores the initial
-   * window size if the previous scenario changed it.
+   * interactions between scenarios and restores the initial window size if the
+   * previous scenario changed it.
    * To bypass the browser cache within a single scenario, use the below step
    * definition or \Behat\MinkExtension\Context\MinkContext::reload.
-   *
-   * @todo ISAICP-9742: Make browser cache consistent between CI and ddev.
    *
    * @Given I have a new browser session
    *
