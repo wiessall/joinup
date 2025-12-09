@@ -39,7 +39,7 @@ Feature:
     And I fill in "News" with "Rare Nintendo64 disk drive discovered"
     And I press "Save" in the "Modal buttons" region
     And I press "Save as draft"
-    Then I should see the heading "Chosen content"
+    And I see h1 span element with title "Chosen content"
     And I should see the following tiles in the correct order:
       | What's your favourite N64 game?       |
       | Rare Nintendo64 disk drive discovered |
