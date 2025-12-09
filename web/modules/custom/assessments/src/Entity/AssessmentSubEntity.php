@@ -44,8 +44,9 @@ class AssessmentSubEntity extends Assessment {
     $paragraph_id = reset($paragraph_ids);
     $paragraph = $paragraph_storage->load($paragraph_id);
 
-    if (!$paragraph || !$paragraph->hasField('parent_id') || $paragraph->get('parent_id')
-        ->isEmpty()) {
+    if (!$paragraph ||
+      !$paragraph->hasField('parent_id') ||
+      $paragraph->get('parent_id')->isEmpty()) {
       return NULL;
     }
 
