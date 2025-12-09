@@ -8,6 +8,7 @@ use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\assessments\AssessmentVocabularyHelper;
 
 /**
@@ -103,6 +104,28 @@ final class AssessmentStatement extends ContentEntityBase {
       ->setSetting('handler_settings', [
         'target_bundles' => [
           'assess_statement_type' => 'assess_statement_type',
+        ],
+      ])
+      ->setDisplayConfigurable('form', FALSE)
+      ->setDisplayConfigurable('view', FALSE);
+
+    $fields['landing_page'] = BaseFieldDefinition::create('file')
+      ->setLabel(t('Statement supporting document'))
+      ->setSetting('file_extensions', 'txt doc docx pdf ppt pptx xls xlsx')
+      ->setSetting('file_directory', 'assessment-statements')
+      ->setSetting('uri_scheme', 'public')
+      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+      ->setDisplayOptions('view', [
+        'label' => 'hidden',
+        'type' => 'uri_link',
+        'weight' => 2,
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'file_generic',
+        'weight' => 2,
+        'settings' => [
+          'progress_indicator' => 'throbber',
+          'display_field' => FALSE,
         ],
       ])
       ->setDisplayConfigurable('form', FALSE)
