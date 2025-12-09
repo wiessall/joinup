@@ -437,7 +437,8 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
     $published_report->set('provider', $organisation->id());
     $published_report->save();
 
-    // Test that getRelatedReport returns the published report (not unpublished).
+    // Test that getRelatedReport returns
+    // the published report (not unpublished).
     $related_report = $organisation->getRelatedReport();
     $this->assertNotNull($related_report, 'getRelatedReport() should return a report.');
     $this->assertEquals(
