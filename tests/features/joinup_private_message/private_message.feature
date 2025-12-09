@@ -152,7 +152,7 @@ Feature: Private messages
     And I should see 0 private message
     And I should see the text "You do not have any messages"
 
-  @javascript @stopSession:after
+  @javascript
   Scenario: Check a the collapse of Inbox in different resolutions.
     Given the following private messages:
       | owner      | recipient | message                  |
