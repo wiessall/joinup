@@ -19,8 +19,8 @@
 {{ attach_library('ventuno/page-title') }}
 {{ title_prefix }}
 {% if title %}
-  <div class="page-title d-flex align-items-start justify-content-between mt-4 mb-3">
-    <h1{{ title_attributes.addClass('page-title__title', (hidden_title_collection_settings or hidden_title_solution_settings) ? 'visually-hidden' : '') }}>
+  <div class="page-title d-flex align-items-start justify-content-between">
+    <h1{{ title_attributes.addClass('page-title__title', 'mt-4', 'mb-3', (hidden_title_collection_settings or hidden_title_solution_settings) ? 'visually-hidden' : '') }}>
       {% block title %}
         {{ title }}
       {% endblock %}
