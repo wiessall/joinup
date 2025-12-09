@@ -102,88 +102,67 @@ class AssessmentsHtmlRouteProvider extends DefaultHtmlRouteProvider {
    * {@inheritdoc}
    */
   protected function getCanonicalRoute(EntityTypeInterface $entity_type): ?Route {
-    if ($entity_type->hasLinkTemplate('canonical')) {
-      $entity_type_id = $entity_type->id();
-      $route = new Route($entity_type->getLinkTemplate('canonical'));
-      $route
-        ->addDefaults([
-          '_entity_view' => "{$entity_type_id}.full",
-          '_title_callback' => '\Drupal\Core\Entity\Controller\EntityController::title',
-          'assessment_type' => NULL,
-        ])
-        ->setRequirement('_entity_access', "{$entity_type_id}.view")
-        ->setOption('parameters', [
-          $entity_type_id => [
-            'type' => 'entity:' . $entity_type_id,
-          ],
-          'assessment_type' => [
-            'type' => 'entity:assessment_type',
-            'with_config_overrides' => TRUE,
-          ],
-        ]);
-
+    $route = parent::getCanonicalRoute($entity_type);
+    $entity_type_id = $entity_type->id();
+    if (!$route instanceof Route) {
       return $route;
     }
+    $route->setOption('parameters', [
+      $entity_type_id => [
+        'type' => 'entity:' . $entity_type_id,
+      ],
+      'assessment_type' => [
+        'type' => 'entity:assessment_type',
+        'with_config_overrides' => TRUE,
+      ],
+    ]);
 
-    return NULL;
+    return $route;
   }
 
   /**
    * {@inheritdoc}
    */
   protected function getEditFormRoute(EntityTypeInterface $entity_type): ?Route {
-    if ($entity_type->hasLinkTemplate('edit-form')) {
-      $entity_type_id = $entity_type->id();
-      $route = new Route($entity_type->getLinkTemplate('edit-form'));
-      $route
-        ->setDefaults([
-          '_entity_form' => "{$entity_type_id}.edit",
-          '_title_callback' => '\Drupal\Core\Entity\Controller\EntityController::editTitle',
-        ])
-        ->setRequirement('_entity_access', "{$entity_type_id}.update")
-        ->setOption('parameters', [
-          $entity_type_id => [
-            'type' => 'entity:' . $entity_type_id,
-          ],
-          'assessment_type' => [
-            'type' => 'entity:assessment_type',
-            'with_config_overrides' => TRUE,
-          ],
-        ]);
-
+    $route = parent::getEditFormRoute($entity_type);
+    $entity_type_id = $entity_type->id();
+    if (!$route instanceof Route) {
       return $route;
     }
+    $route->setOption('parameters', [
+      $entity_type_id => [
+        'type' => 'entity:' . $entity_type_id,
+      ],
+      'assessment_type' => [
+        'type' => 'entity:assessment_type',
+        'with_config_overrides' => TRUE,
+      ],
+    ]);
 
-    return NULL;
+    return $route;
+
   }
 
   /**
    * {@inheritdoc}
    */
   protected function getDeleteFormRoute(EntityTypeInterface $entity_type): ?Route {
-    if ($entity_type->hasLinkTemplate('delete-form')) {
-      $entity_type_id = $entity_type->id();
-      $route = new Route($entity_type->getLinkTemplate('delete-form'));
-      $route
-        ->setDefaults([
-          '_entity_form' => "{$entity_type_id}.delete",
-          '_title_callback' => '\Drupal\Core\Entity\Controller\EntityController::deleteTitle',
-        ])
-        ->setRequirement('_entity_access', "{$entity_type_id}.delete")
-        ->setOption('parameters', [
-          $entity_type_id => [
-            'type' => 'entity:' . $entity_type_id,
-          ],
-          'assessment_type' => [
-            'type' => 'entity:assessment_type',
-            'with_config_overrides' => TRUE,
-          ],
-        ]);
-
+    $route = parent::getDeleteFormRoute($entity_type);
+    $entity_type_id = $entity_type->id();
+    if (!$route instanceof Route) {
       return $route;
     }
+    $route->setOption('parameters', [
+      $entity_type_id => [
+        'type' => 'entity:' . $entity_type_id,
+      ],
+      'assessment_type' => [
+        'type' => 'entity:assessment_type',
+        'with_config_overrides' => TRUE,
+      ],
+    ]);
 
-    return NULL;
+    return $route;
   }
 
 }
