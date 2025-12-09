@@ -97,8 +97,12 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
     }
 
     $related_report = $entity->getRelatedReport();
+
+    // Check if the related report exists and is published (status field).
+    $is_published = $related_report instanceof AssessmentReport && $related_report->isPublished();
+
     $result = AccessResult::allowedIfHasPermission($account, 'access content')
-      ->allowedIf($related_report instanceof AssessmentReport)
+      ->allowedIf($is_published)
       ->cachePerPermissions()
       ->addCacheableDependency($entity);
 
