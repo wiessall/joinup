@@ -12,11 +12,12 @@
 
 {% set classes = [
   'page-title__title',
-  additional_content.hide_title ? 'visually-hidden'
+  additional_content.hide_title ? 'visually-hidden',
+  'mt-4'
 ] %}
 
 {% if title %}
-  <div class="page-title page__title-wrapper my-4">
+  <div class="page-title page__title-wrapper">
     <h1{{ h1_attributes.addClass(classes) }}>
       <span>
         {{ title|striptags }}
@@ -31,7 +32,7 @@
       </span>
     </h1>
 
-    <div class="page-title__details mb-4">
+    <div class="page-title__details">
       {% if additional_content.is_archived %}
         {{ include('@ventuno/parts/page-title-detail-archive.html.twig') }}
       {% endif %}
