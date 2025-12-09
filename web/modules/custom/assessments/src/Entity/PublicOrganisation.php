@@ -17,6 +17,8 @@ final class PublicOrganisation extends Assessment {
       ->accessCheck(FALSE)
       ->condition('type', 'report')
       ->condition('provider', $this->id())
+      // Sort by status DESC so published (status=1) come before unpublished (status=0).
+      ->sort('status', 'DESC')
       ->range(0, 1)
       ->execute();
 
