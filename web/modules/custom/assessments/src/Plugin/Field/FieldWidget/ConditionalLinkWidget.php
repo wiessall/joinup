@@ -26,7 +26,7 @@ final class ConditionalLinkWidget extends LinkWidget {
   public static function defaultSettings(): array {
     return [
       'condition' => 'Add some links...',
-      'default_option' => 'no',
+      'default_option' => '0',
     ] + parent::defaultSettings();
   }
 
@@ -45,10 +45,9 @@ final class ConditionalLinkWidget extends LinkWidget {
     ];
 
     $elements['default_option'] = [
-      '#type' => 'radios',
+      '#type' => 'checkbox',
       '#title' => $this->t('Default option'),
-      '#description' => $this->t('Default option for the radio button list. Note, that if there are already values in the field, the default value will be the one to reveal the options.'),
-      '#options' => ['no' => $this->t('No'), 'yes' => $this->t('Yes')],
+      '#description' => $this->t('Default option for this setting.'),
       '#default_value' => $this->getSetting('default_option'),
     ];
 
@@ -88,14 +87,10 @@ final class ConditionalLinkWidget extends LinkWidget {
 
     $condition = $this->getSetting('condition');
     $element['add_link'] = [
-      '#type' => 'radios',
+      '#type' => 'checkbox',
       '#title' => $condition,
-      '#options' => [
-        'yes' => $this->t('Yes'),
-        'no' => $this->t('No'),
-      ],
       '#required' => TRUE,
-      '#default_value' => $hasAnyValue ? 'yes' : $this->getSetting('default_option'),
+      '#default_value' => $hasAnyValue ? '1' : $this->getSetting('default_option'),
       '#weight' => -10,
       '#attributes' => ['class' => ['link-with-condition-toggle']],
     ];
@@ -106,7 +101,7 @@ final class ConditionalLinkWidget extends LinkWidget {
       if (!isset($element['widget']['#states'])) {
         $element['widget']['#states'] = [];
       }
-      $element['widget']['#states']['visible'][':input.link-with-condition-toggle'] = ['value' => 'yes'];
+      $element['widget']['#states']['visible'][':input.link-with-condition-toggle'] = ['checked' => TRUE];
     }
 
     $element['widget'][0]['uri']['#title_display'] = 'invisible';
@@ -127,7 +122,7 @@ final class ConditionalLinkWidget extends LinkWidget {
     // Retrieve the "add_link" checkbox from the full form state.
     $fieldInput = $form_state->getUserInput();
     // $fieldInput is expected to contain 'add_link' and 'widget'.
-    $allowLinks = $fieldInput['add_link'] === 'yes';
+    $allowLinks = $fieldInput['add_link'] === '1';
     if (!$allowLinks) {
       foreach ($values as &$value) {
         $value['uri'] = NULL;
