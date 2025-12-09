@@ -40,17 +40,15 @@ class AssessmentSubEntity extends Assessment {
       return NULL;
     }
 
-    // Load the paragraph and get its parent report.
     $paragraph_id = reset($paragraph_ids);
+    /** @var \Drupal\paragraphs\ParagraphInterface|null $paragraph */
     $paragraph = $paragraph_storage->load($paragraph_id);
 
-    if (!$paragraph ||
-      !$paragraph->hasField('parent_id') ||
-      $paragraph->get('parent_id')->isEmpty()) {
+    if (!$paragraph) {
       return NULL;
     }
 
-    $parent = $paragraph->get('parent_id')->entity;
+    $parent = $paragraph->getParentEntity();
     return $parent instanceof AssessmentReport ? $parent : NULL;
   }
 
