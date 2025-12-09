@@ -104,6 +104,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
         'type' => 'report',
         'name' => ucfirst($state) . ' Assessment Report',
         'state' => $state,
+        'status' => $state === 'published',
         'uid' => $this->ownerUser->id(),
       ]);
       $this->testAssessments[$state]->save();
@@ -365,6 +366,151 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
     $user->save();
 
     return $user;
+  }
+
+  /**
+   * Tests getRelatedReport for report entities returns NULL.
+   *
+   * @covers \Drupal\assessments\Entity\Assessment::getRelatedReport
+   */
+  public function testGetRelatedReportForReportReturnsNull(): void {
+    $report = $this->testAssessments['published'];
+    $this->assertNull(
+      $report->getRelatedReport(),
+      'getRelatedReport() should return NULL for report entities.'
+    );
+  }
+
+  /**
+   * Tests getRelatedReport for PublicOrganisation with published report.
+   *
+   * @covers \Drupal\assessments\Entity\PublicOrganisation::getRelatedReport
+   */
+  public function testGetRelatedReportForPublicOrganisationWithPublishedReport(): void {
+    // Create a public organisation.
+    $organisation = Assessment::create([
+      'type' => 'public_organisation',
+      'name' => 'Test Organisation',
+      'status' => TRUE,
+    ]);
+    $organisation->save();
+
+    // Use existing published report and link it to the organisation.
+    $published_report = $this->testAssessments['published'];
+    $published_report->set('provider', $organisation->id());
+    $published_report->save();
+
+    // Test that getRelatedReport returns the published report.
+    $related_report = $organisation->getRelatedReport();
+    $this->assertNotNull($related_report, 'getRelatedReport() should return a report.');
+    $this->assertEquals(
+      $published_report->id(),
+      $related_report->id(),
+      'getRelatedReport() should return the published report.'
+    );
+
+    // Cleanup.
+    $organisation->delete();
+  }
+
+  /**
+   * Tests getRelatedReport prioritizes published over unpublished reports.
+   *
+   * @covers \Drupal\assessments\Entity\PublicOrganisation::getRelatedReport
+   */
+  public function testGetRelatedReportPrioritizesPublishedReports(): void {
+    // Create a public organisation.
+    $organisation = Assessment::create([
+      'type' => 'public_organisation',
+      'name' => 'Test Organisation',
+      'status' => TRUE,
+    ]);
+    $organisation->save();
+
+    // Use existing unpublished report and link it to the organisation.
+    $unpublished_report = $this->testAssessments['draft'];
+    $unpublished_report->set('provider', $organisation->id());
+    $unpublished_report->save();
+
+    // Use existing published report and link it to the organisation.
+    $published_report = $this->testAssessments['published'];
+    $published_report->set('provider', $organisation->id());
+    $published_report->save();
+
+    // Test that getRelatedReport returns the published report (not unpublished).
+    $related_report = $organisation->getRelatedReport();
+    $this->assertNotNull($related_report, 'getRelatedReport() should return a report.');
+    $this->assertEquals(
+      $published_report->id(),
+      $related_report->id(),
+      'getRelatedReport() should prioritize published reports over unpublished ones.'
+    );
+    $this->assertTrue(
+      $related_report->isPublished(),
+      'The related report should be published.'
+    );
+
+    // Cleanup.
+    $organisation->delete();
+  }
+
+  /**
+   * Tests getRelatedReport for sub-entities with paragraph references.
+   *
+   * @covers \Drupal\assessments\Entity\AssessmentSubEntity::getRelatedReport
+   * @dataProvider subEntityTypesProvider
+   */
+  public function testGetRelatedReportForSubEntities(string $bundle, string $paragraph_field): void {
+    // Use existing published report.
+    $report = $this->testAssessments['published'];
+
+    // Create a sub-entity.
+    $sub_entity = Assessment::create([
+      'type' => $bundle,
+      'name' => 'Test ' . ucfirst($bundle),
+      'status' => TRUE,
+    ]);
+    $sub_entity->save();
+
+    // Create a paragraph that references the sub-entity.
+    $paragraph = \Drupal::entityTypeManager()->getStorage('paragraph')->create([
+      'type' => 'binding_requirement',
+      $paragraph_field => $sub_entity->id(),
+      'parent_id' => $report->id(),
+      'parent_type' => 'assessment',
+      'parent_field_name' => 'binding_requirement',
+    ]);
+    $paragraph->save();
+
+    // Test that getRelatedReport returns the parent report.
+    $related_report = $sub_entity->getRelatedReport();
+    $this->assertNotNull(
+      $related_report,
+      sprintf('getRelatedReport() should return a report for %s entities.', $bundle)
+    );
+    $this->assertEquals(
+      $report->id(),
+      $related_report->id(),
+      sprintf('getRelatedReport() should return the correct parent report for %s.', $bundle)
+    );
+
+    // Cleanup.
+    $paragraph->delete();
+    $sub_entity->delete();
+  }
+
+  /**
+   * Data provider for sub-entity types and their paragraph fields.
+   *
+   * @return array
+   *   Test cases with bundle names and paragraph field names.
+   */
+  public function subEntityTypesProvider(): array {
+    return [
+      'expression' => ['expression', 'expression'],
+      'participation' => ['participation', 'has_participation'],
+      'public_service' => ['public_service', 'affects'],
+    ];
   }
 
 }
