@@ -41,12 +41,12 @@ final class BindingRequirement extends Paragraph implements AssessmentResourceIn
         'is_reference' => TRUE,
       ],
       'affects' => [
-        'field_name' => 'has_related_service',
+        'field_name' => 'affects',
         'is_required' => TRUE,
         'is_reference' => TRUE,
       ],
       'has_participation' => [
-        'field_name' => 'affected_party',
+        'field_name' => 'has_participation',
         'is_required' => FALSE,
         'is_reference' => TRUE,
       ],

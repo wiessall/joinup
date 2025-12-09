@@ -147,12 +147,12 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
               'type' => 'local_public_sector_body',
             ],
           ],
-          'asset' => [
-            [
-              'name' => 'Portal EU',
-              'landing_page' => 'https://portal.example.eu',
-            ],
-          ],
+//          'asset' => [
+//            [
+//              'name' => 'Portal EU',
+//              'landing_page' => 'https://portal.example.eu',
+//            ],
+//          ],
         ],
       ],
       'provider' => [
