@@ -57,8 +57,7 @@ final class AssessmentStatement extends ContentEntityBase {
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type): array {
     $fields = parent::baseFieldDefinitions($entity_type);
     $fields['judgement'] = BaseFieldDefinition::create('string_long')
-      ->setLabel(t('Judgement'))
-      ->setDescription(t('Provide a justification'))
+      ->setLabel(t('Provide a justification'))
       ->setTranslatable(TRUE)
       ->setDisplayOptions('form', [
         'type' => 'string_textarea',
@@ -77,8 +76,7 @@ final class AssessmentStatement extends ContentEntityBase {
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['interpretation'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Interpretation'))
-      ->setDescription(t('The interpretation of the statement.'))
+      ->setLabel(t('Tick the most appropriate'))
       ->setTranslatable(FALSE)
       ->setSetting('target_type', 'taxonomy_term')
       ->setSetting('handler_settings', [
@@ -106,29 +104,6 @@ final class AssessmentStatement extends ContentEntityBase {
       ->setSetting('handler_settings', [
         'target_bundles' => [
           'assess_statement_type' => 'assess_statement_type',
-        ],
-      ])
-      ->setDisplayConfigurable('form', FALSE)
-      ->setDisplayConfigurable('view', FALSE);
-
-    $fields['landing_page'] = BaseFieldDefinition::create('file')
-      ->setLabel(t('Statement supporting document'))
-      ->setDescription(t('The supporting document for the assessment statement.'))
-      ->setSetting('file_extensions', 'txt doc docx pdf ppt pptx xls xlsx')
-      ->setSetting('file_directory', 'assessment-statements')
-      ->setSetting('uri_scheme', 'public')
-      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
-      ->setDisplayOptions('view', [
-        'label' => 'hidden',
-        'type' => 'uri_link',
-        'weight' => 2,
-      ])
-      ->setDisplayOptions('form', [
-        'type' => 'file_generic',
-        'weight' => 2,
-        'settings' => [
-          'progress_indicator' => 'throbber',
-          'display_field' => FALSE,
         ],
       ])
       ->setDisplayConfigurable('form', FALSE)

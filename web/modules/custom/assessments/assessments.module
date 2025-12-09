@@ -66,6 +66,11 @@ function assessments_form_alter(array &$form, FormStateInterface $formState, str
   ];
   $form['#attached']['library'][] = 'assessments/radios_inline';
   $form['state']['#attributes']['class'][] = 'radios-inline';
+  $form['legal']['widget'][0]['#title_display'] = 'invisible';
+  $form['organisational']['widget'][0]['#title_display'] = 'invisible';
+  $form['semantic']['widget'][0]['#title_display'] = 'invisible';
+  $form['technical']['widget'][0]['#title_display'] = 'invisible';
+  $form['other']['widget'][0]['#title_display'] = 'invisible';
 }
 
 /**
