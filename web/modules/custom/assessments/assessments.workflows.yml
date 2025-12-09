@@ -13,10 +13,6 @@ default:
       label: Published
       published: true
   transitions:
-    save_draft:
-      label: Save as Draft
-      from: [draft]
-      to: draft
     submit_for_review:
       label: Submit for Review
       from: [draft]

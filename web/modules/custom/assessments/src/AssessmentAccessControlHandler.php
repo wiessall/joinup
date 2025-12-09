@@ -68,6 +68,7 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
       'view' => $this->checkViewAccess($entity, $state, $account),
       'update' => $this->checkUpdateAccess($entity, $state, $account),
       'delete' => $this->checkDeleteAccess($entity, $account),
+      'moderate' => $this->checkModerateAccess($entity, $state, $account),
       default => AccessResult::neutral()
         ->cachePerPermissions()
         ->addCacheableDependency($entity),
@@ -248,6 +249,33 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
       'bypass assessment report moderation',
       'moderate assessment report',
     ], 'OR')
+      ->cachePerPermissions()
+      ->addCacheableDependency($entity);
+  }
+
+  /**
+   * Checks moderate access for assessment reports.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The assessment entity.
+   * @param string $state
+   *   The workflow state of the assessment.
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The user account to check access for.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result.
+   */
+  protected function checkModerateAccess(EntityInterface $entity, string $state, AccountInterface $account): AccessResultInterface {
+    // Only report bundles can be moderated.
+    if ($entity->bundle() !== 'report') {
+      return AccessResult::forbidden('Only report assessments can be moderated.')
+        ->addCacheableDependency($entity);
+    }
+
+    // Only reports in review state can be moderated by users with permission.
+    return AccessResult::allowedIf($state === 'review')
+      ->andIf(AccessResult::allowedIfHasPermission($account, 'moderate assessment report'))
       ->cachePerPermissions()
       ->addCacheableDependency($entity);
   }
