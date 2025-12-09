@@ -84,11 +84,11 @@ Feature:
     # official data portal: "http://data.europa.eu/w21/{uuid}". The data portal
     # links back to the Interoperable Europe Portal servers.
     Given I am on "data/w21/ffb0ffc9-7704-45d3-95b3-42706b6320e5"
-    Then I should see the heading "Persistent solution"
+    Then I should see "Persistent solution"
     And I should see "Persistent solution description"
 
     Given I am on "data/w21/37b8103e-26e5-4c81-8ce5-43ced02ff7d0"
-    Then I should see the heading "Persistent collection"
+    Then I should see "Persistent collection"
 
     Given I am on "data/w21/98004ec9-62f3-4734-a1b6-af7e4838b09c"
     Then I should see the text "Persistent release 23" in the "Page title" region
@@ -98,9 +98,8 @@ Feature:
 
     Given I am on "data/w21/4205229d-92b6-4cac-80af-d8c2296d923c"
     Then I should see the heading "Persistent licence"
-
     Given I am on "data/dr8/Dream/Domain"
-    Then I should see the heading "Dream Domain"
+    Then I should see "Dream Domain"
     And I should see "You're safe from pain in the dream domain."
     And the url should match "/taxonomy/term/\d+"
 
