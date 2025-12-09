@@ -81,7 +81,7 @@ class JoinupGroupPageDisplayVariant extends BlockPageVariant {
    */
   public function setTitle($title): PageVariantInterface {
     if ($landing_page = $this->getCustomLandingPage()) {
-      $title = $landing_page->isHiddenTitleEnabled() ? '' : $landing_page->label();
+      $title = $landing_page->label();
     }
     $this->title = $title;
     return $this;
