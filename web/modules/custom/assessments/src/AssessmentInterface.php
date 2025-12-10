@@ -6,6 +6,7 @@ namespace Drupal\assessments;
 
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityChangedInterface;
+use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\user\EntityOwnerInterface;
 
@@ -23,6 +24,14 @@ interface AssessmentInterface extends ContentEntityInterface, EntityOwnerInterfa
    * The UUID of the assessment created solutions collector.
    */
   public const string SOLUTION_COLLECTOR = 'e0f3b87b-9de3-48d5-8fff-5ec88ccd1a71';
+
+  /**
+   * Gets the related report entity for this assessment entity.
+   *
+   * @return \Drupal\assessments\Entity\AssessmentReport|null
+   *   The related report entity or NULL if not found.
+   */
+  public function getRelatedReport(): ?AssessmentReport;
 
   /**
    * Returns whether the entity is published.

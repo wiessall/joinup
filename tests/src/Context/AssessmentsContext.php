@@ -238,20 +238,6 @@ class AssessmentsContext extends RawDrupalContext {
   }
 
   /**
-   * Adds the assessments-created solution's collector.
-   *
-   * @BeforeScenario @assessments&&@api
-   */
-  public function beforeAssessmentsScenario(): void {
-    \Drupal::entityTypeManager()->getStorage('node')->create([
-      'type' => 'collection',
-      'title' => 'Solutions mentioned in an assessment',
-      'uuid' => AssessmentInterface::SOLUTION_COLLECTOR,
-      'field_state' => 'published',
-    ])->save();
-  }
-
-  /**
    * Navigates to the moderate form of a specific assessment report.
    *
    * @param string $title
