@@ -374,7 +374,7 @@ Feature: Assessment Report Entity Management
     Then I should see the message "The user has been notified that their account has been updated."
 
     And I am logged in as pol2025
-    And I go to "/assessments/add/report"
+    And I go to "/collection/assessments/report/create"
     Then I should see the button "Save as Published"
 
   Scenario: Test assessment reports views
