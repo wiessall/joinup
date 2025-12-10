@@ -367,6 +367,18 @@ Feature: Assessment Report Entity Management
     Then I go to the "Test permissions in Assessment Report 2025" report
     And I should see the heading "Test permissions in Assessment Report 2025"
 
+    # Verify permissions after assigning the new role.
+    Given I am logged in as a "moderator"
+    And I click "People" in the "Administration toolbar" region
+    And I click "Edit" in the "Pol Gomez" row
+    And I check the box "Assessment reporter"
+    And I press "Save"
+    Then I should see the message "The user has been notified that their account has been updated."
+
+    And I am logged in as pol2025
+    And I go to "/assessments/add/report"
+    Then I should see the button "Save as Published"
+
   Scenario: Test assessment reports views
     Given the assessments collection exists
 
