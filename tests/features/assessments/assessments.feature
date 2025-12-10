@@ -1,4 +1,4 @@
-@api @group-e @assessments
+@api @group-e
 Feature: Assessment Report Entity Management
   In order to manage assessment reports directly
   As a user with appropriate permissions
@@ -17,7 +17,7 @@ Feature: Assessment Report Entity Management
     And I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "Austrian Ministry of Digital Affairs"
-    And I select the radio button "Yes"
+    And I check "Check if assessment is linked to previous assessments or related assessments at EU or national level."
     And I fill in "Relevant assessment report" with "https://interoperable-europe.ec.europa.eu/report"
 
     # Binding requirements
@@ -130,7 +130,6 @@ Feature: Assessment Report Entity Management
     And I select "Greece" from "Country"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "GR1"
-    And I select the radio button "No"
 
     # Binding requirements
     When I click "New binding requirement"
@@ -315,7 +314,6 @@ Feature: Assessment Report Entity Management
     And I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "CTT PT"
-    And I select the radio button "No"
 
     # Binding requirements
     When I click "New binding requirement"
@@ -366,6 +364,18 @@ Feature: Assessment Report Entity Management
     Given I am logged in as a "assessment_reporter"
     Then I go to the "Test permissions in Assessment Report 2025" report
     And I should see the heading "Test permissions in Assessment Report 2025"
+
+    # Verify permissions after assigning the new role.
+    Given I am logged in as a "moderator"
+    And I click "People" in the "Administration toolbar" region
+    And I click "Edit" in the "Pol Gomez" row
+    And I check the box "Assessment reporter"
+    And I press "Save"
+    Then I should see the message "The user has been notified that their account has been updated."
+
+    And I am logged in as pol2025
+    And I go to "/assessments/add/report"
+    Then I should see the button "Save as Published"
 
   Scenario: Test assessment reports views
     Given the assessments collection exists
