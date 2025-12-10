@@ -234,7 +234,7 @@ display:
           plugin_id: text
           empty: true
           content:
-            value: '<a href="/collection/assessments/assessment-reports/questionnaire" class="btn btn-primary">New assessment</a>'
+            value: '<a href="/collection/assessments/assessment-reports/questionnaire" class="btn btn-primary me-2">New assessment</a>'
             format: full_html
           tokenize: false
       footer: {  }
