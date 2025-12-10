@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\assessments\ResourceParser;
+use Drupal\assessments\ResourceParserInterface;
 use Drupal\rest\Attribute\RestResource;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
@@ -46,6 +47,7 @@ class AssessmentReportResource extends ResourceBase {
     LoggerInterface $logger,
     protected AccountProxyInterface $currentUser,
     protected EntityTypeManagerInterface $entityTypeManager,
+    protected ResourceParser $resourceParser,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
   }
@@ -62,6 +64,7 @@ class AssessmentReportResource extends ResourceBase {
       $container->get('logger.factory')->get('assessments'),
       $container->get('current_user'),
       $container->get('entity_type.manager'),
+      $container->get(ResourceParserInterface::class)
     );
   }
 
@@ -82,8 +85,7 @@ class AssessmentReportResource extends ResourceBase {
       return new ResourceResponse(['error' => 'Payload must be a single JSON object.'], 400);
     }
 
-    $processor = \Drupal::getContainer()->get(ResourceParser::class);
-    $parsed = $processor->parseInbound($data);
+    $parsed = $this->resourceParser->parseInbound($data);
     if (!empty($parsed['errors'])) {
       // Return an unprocessable entity response with the errors.
       return new ResourceResponse(['errors' => $parsed['errors']], 422);
