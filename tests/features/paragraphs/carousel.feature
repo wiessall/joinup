@@ -91,8 +91,6 @@ Feature:
       | title       | headline    | collection | body          | state     |
       | News page 4 | Some page 1 | Sparta     | Some content. | published |
       | News page 5 | Some page 2 | Sparta     | Some content. | published |
-    # In ISAICP-9742, check if this step is needed or if it can be changed back
-    # to a page visit step.
     And I reload the page
     When the "Previous item" button in the Content region should be visible
     And the "Next item" button in the Content region should be visible
