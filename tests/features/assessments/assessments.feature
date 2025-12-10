@@ -1,4 +1,4 @@
-@api @group-e @assessments
+@api @group-e
 Feature: Assessment Report Entity Management
   In order to manage assessment reports directly
   As a user with appropriate permissions
