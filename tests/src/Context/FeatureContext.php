@@ -1522,17 +1522,6 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Restart sessions.
-   *
-   * @Given I have a new browser session
-   *
-   * @BeforeScenario @restart-session
-   */
-  public function restartSessions(): void {
-    $this->getMink()->restartSessions();
-  }
-
-  /**
    * Performs the RDF synchronization after each behat step.
    *
    * When a request terminates, all services implementing DestructableInterface

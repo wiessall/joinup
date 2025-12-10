@@ -14,13 +14,13 @@
     <div class="w-100 d-flex flex-column flex-lg-row flex-wrap">
       <div class="group-banner__title text-center text-lg-start my-2 my-lg-0">
         {{ title_prefix }}
-        {% if is_canonical %}
+        {% if has_no_landing_page %}
           <h1 class="mb-0">
         {% endif %}
-        <a class="h1 fw-bold mb-0" href="{{ path('entity.node.canonical', {node: node.id()}) }}">
-          {{ label }}
-        </a>
-        {% if is_canonical %}
+          <a class="h1 fw-bold mb-0" href="{{ path('entity.node.canonical', {node: node.id()}) }}">
+            {{ label }}
+          </a>
+        {% if has_no_landing_page %}
           </h1>
         {% endif %}
         {{ title_suffix }}
