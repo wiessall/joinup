@@ -428,13 +428,22 @@ Feature: Assessment Report Entity Management
 
   @javascript
   Scenario: Advanced search
-    Given report assessments:
-      | name         | state     | created              |
-      | Assessment 1 | published | 2020-01-01T00:00:00Z |
-      | Assessment 2 | published | 2020-01-02T00:00:00Z |
-      | Assessment 3 | review    | 2020-01-03T00:00:00Z |
-      | Assessment 4 | draft     | 2020-01-04T00:00:00Z |
+    Given public_organisation assessments:
+      | name                  | organisation_type          |
+      | Bluewave Technologies | european_union_institution |
+    And report assessments:
+      | name                 | provider              | state     | created              |
+      | Initial Overview     | Bluewave Technologies | published | 2020-01-01T00:00:00Z |
+      | Transmission Summary |                       | published | 2020-01-02T00:00:00Z |
+      | Acme Report          |                       | published | 2020-01-03T00:00:00Z |
+      | Risk Evaluation      |                       | review    | 2020-01-04T00:00:00Z |
+      | Draft Observation    |                       | draft     | 2020-01-05T00:00:00Z |
     And I am an anonymous user
     When I visit the advanced search page
-    And I check the "Assessment reports (2)" checkbox from the "Content types" facet
-    Then the page should show only the tiles "Assessment 1, Assessment 2"
+    And I check the "Assessment reports (3)" checkbox from the "Content types" facet
+    Then the page should show only the tiles "Initial Overview, Transmission Summary, Acme Report"
+
+    When I enter "Transmission" in the search bar and press enter
+    Then the page should show only the tiles "Transmission Summary"
+    When I enter "Bluewave" in the search bar and press enter
+    Then the page should show only the tiles "Initial Overview"
