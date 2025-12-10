@@ -143,6 +143,15 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.abstract
+  assessment_name:
+    label: Name
+    datasource_id: 'entity:assessment'
+    property_path: name
+    type: text
+    boost: 5.0
+    dependencies:
+      module:
+        - assessments
   body:
     label: 'Body » Processed text'
     datasource_id: 'entity:node'
@@ -896,6 +905,7 @@ processor_settings:
       - description_processed_spellcheck
       - field_event_agenda
       - field_event_agenda_spellcheck
+      - rendered_assessment
     title: true
     alt: true
     tags:
