@@ -6,11 +6,11 @@ dependencies:
     - assessments.type.report
     - core.entity_view_mode.assessment.view_mode_tile_horizontal
     - field.field.assessment.report.binding_requirement
-    - field.field.assessment.report.comment
     - field.field.assessment.report.documents
     - field.field.assessment.report.legal
     - field.field.assessment.report.organisational
     - field.field.assessment.report.other
+    - field.field.assessment.report.other_comment
     - field.field.assessment.report.provider
     - field.field.assessment.report.relevant_report
     - field.field.assessment.report.semantic
@@ -46,13 +46,13 @@ content:
     region: content
 hidden:
   binding_requirement: true
-  comment: true
   created: true
   documents: true
   langcode: true
   legal: true
   organisational: true
   other: true
+  other_comment: true
   relevant_report: true
   search_api_excerpt: true
   semantic: true

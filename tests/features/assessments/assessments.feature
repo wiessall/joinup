@@ -104,12 +104,11 @@ Feature: Assessment Report Entity Management
     Then I should see the success message containing "New assessment Test Assessment Report 2025 has been created."
     And I should see the heading "Test Assessment Report 2025"
     And I should see the following lines of text:
-      | Austrian Ministry of Digital Affairs, a European Union institution from  |
-      | The report has been connected to the following previous/relevant reports |
-      | https://interoperable-europe.ec.europa.eu/report                         |
-      | documented in https://interoperable-europe.ec.europa.eu/general          |
-    # Comment field should not be visible on public report page
-    And I should not see the text "This assessment was conducted in collaboration with multiple stakeholders across EU member states."
+      | Austrian Ministry of Digital Affairs, a European Union institution from                            |
+      | The report has been connected to the following previous/relevant reports                           |
+      | https://interoperable-europe.ec.europa.eu/report                                                   |
+      | documented in https://interoperable-europe.ec.europa.eu/general                                    |
+      | This assessment was conducted in collaboration with multiple stakeholders across EU member states. |
 
     # Edit test.
     When I go to the edit form of the "Test Assessment Report 2025" assessment
