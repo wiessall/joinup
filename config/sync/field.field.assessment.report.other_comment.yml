@@ -1,20 +1,20 @@
-uuid: 9a75c331-2073-4e1a-ac65-2865975b58ee
+uuid: e019c65c-c352-4f87-ae90-ea81aeee8184
 langcode: en
 status: true
 dependencies:
   config:
     - assessments.type.report
-    - field.storage.assessment.comment
+    - field.storage.assessment.other_comment
   module:
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: assessment.report.comment
-field_name: comment
+id: assessment.report.other_comment
+field_name: other_comment
 entity_type: assessment
 bundle: report
-label: Comment
+label: 'Other comment'
 description: ''
 required: false
 translatable: false

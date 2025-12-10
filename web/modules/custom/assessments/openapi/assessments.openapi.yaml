@@ -48,7 +48,7 @@ paths:
                   value:
                     id: "9f9d7a69-0a6b-4a7c-9c02-5a8834c9a123"
                     name: Quarterly review
-                    comment: This assessment covers the Q4 2024 compliance review period.
+                    other_comment: This assessment covers the Q4 2024 compliance review period.
                     provider:
                       id: "b2c63c0d-3f57-4db6-8e92-6a8f3f50e1a1"
                       name: City of Brussels
@@ -135,7 +135,7 @@ paths:
                 summary: Submit using ID references
                 value:
                   name: Quarterly review
-                  comment: This report includes all necessary compliance documentation.
+                  other_comment: This report includes all necessary compliance documentation.
                   binding_requirement:
                     - "4f2f7c40-2e8b-4a7a-9f04-4a37bb7a0e9e"
                   provider: "b2c63c0d-3f57-4db6-8e92-6a8f3f50e1a1"
@@ -149,7 +149,7 @@ paths:
                 summary: Submit with structured nested entities
                 value:
                   name: Quarterly review
-                  comment: Assessment conducted with full stakeholder consultation.
+                  other_comment: Assessment conducted with full stakeholder consultation.
                   binding_requirement:
                     - documented_in: "https://example.com/law/123"
                       name: Article 5
@@ -194,7 +194,7 @@ paths:
                 summary: Submit with a mix of references and structured entities
                 value:
                   name: Quarterly review
-                  comment: Mixed approach combining existing and new entities.
+                  other_comment: Mixed approach combining existing and new entities.
                   binding_requirement:
                     - "4f2f7c40-2e8b-4a7a-9f04-4a37bb7a0e9e"
                     - documented_in: "https://example.com/law/123"
@@ -335,7 +335,7 @@ components:
           readOnly: true
         name:
           type: string
-        comment:
+        other_comment:
           type: string
           description: Any additional comments or notes about the assessment.
         binding_requirement:

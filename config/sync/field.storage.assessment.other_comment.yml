@@ -1,11 +1,11 @@
-uuid: 54e13bea-df73-4106-9649-532336a4cdce
+uuid: a1ec250d-4b8e-4350-bfc1-80bcda45f683
 langcode: en
 status: true
 dependencies:
   module:
     - assessments
-id: assessment.comment
-field_name: comment
+id: assessment.other_comment
+field_name: other_comment
 entity_type: assessment
 type: string_long
 settings:
