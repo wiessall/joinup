@@ -25,6 +25,7 @@ Feature: User authentication
       | admin/config                                        |
       | admin/config/search/redirect                        |
       | admin/content                                       |
+      | admin/content/assessment                            |
       | admin/content/files                                 |
       | admin/content/media                                 |
       | admin/custom-landing-pages                          |
@@ -80,6 +81,7 @@ Feature: User authentication
       | admin                                               |
       | admin/config                                        |
       | admin/content                                       |
+      | admin/content/assessment                            |
       | admin/content/files                                 |
       | admin/content/media                                 |
       | admin/content/messages                              |
