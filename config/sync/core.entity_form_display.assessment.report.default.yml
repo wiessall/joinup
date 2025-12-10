@@ -218,7 +218,7 @@ content:
       placeholder_url: ''
       placeholder_title: ''
       condition: 'Check if assessment is linked to previous assessments or related assessments at EU or national level.'
-      default_option: 'no'
+      default_option: '0'
     third_party_settings:
       entity_form_field_label:
         new_label: ''
