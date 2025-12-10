@@ -107,14 +107,14 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
    */
   public function testAssetCanBeReused(): void {
     // Create an asset entity that we will reference twice in the payload.
-    $existingAssetUri = $this->createAsset('Reusable portal', 'https://reusable.example.eu');
+    $existingAssetUuid = $this->createAsset('Reusable portal', 'https://reusable.example.eu');
     $beforeCount = $this->countAssessmentBundle('asset');
 
     $payload = $this->baseValidPayload();
     // Replace assets with two references to the same existing id.
     $payload['binding_requirement'][0]['asset'] = [
-      ['id' => $existingAssetUri],
-      ['id' => $existingAssetUri],
+      ['id' => $existingAssetUuid],
+      ['id' => $existingAssetUuid],
     ];
 
     $response = $this->invokeResourcePost($payload);
@@ -126,8 +126,8 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
     $data = $response->getResponseData();
     $assets = $data['binding_requirement'][0]['asset'] ?? [];
     $this->assertCount(2, $assets);
-    $this->assertSame($existingAssetUri, $assets[0]['id'] ?? NULL);
-    $this->assertSame($existingAssetUri, $assets[1]['id'] ?? NULL);
+    $this->assertSame($existingAssetUuid, $assets[0]['id'] ?? NULL);
+    $this->assertSame($existingAssetUuid, $assets[1]['id'] ?? NULL);
   }
 
   /**
@@ -207,7 +207,7 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
     ]);
     $asset->resourceEntityPresave();
     $asset->save();
-    return $asset->getUri();
+    return $asset->uuid();
   }
 
   /**
