@@ -876,7 +876,6 @@ processor_settings:
   aggregated_topic_hierarchy:
     weights:
       preprocess_index: -50
-  assessment_status: {  }
   auto_aggregated_fulltext_field: {  }
   custom_value: {  }
   entity_type: {  }

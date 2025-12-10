@@ -135,6 +135,9 @@ class JoinupEntityStatus extends ProcessorPluginBase implements PluginFormInterf
       elseif ($object instanceof GroupInterface) {
         $enabled = $object->isPublished();
       }
+      elseif ($object instanceof EntityPublishedInterface) {
+        $enabled = $object->isPublished();
+      }
 
       $enabled = $inverse ? !$enabled : $enabled;
       if (!$enabled) {
