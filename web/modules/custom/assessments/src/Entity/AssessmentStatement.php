@@ -57,7 +57,6 @@ final class AssessmentStatement extends ContentEntityBase {
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type): array {
     $fields = parent::baseFieldDefinitions($entity_type);
     $fields['judgement'] = BaseFieldDefinition::create('string_long')
-      ->setLabel(t('Provide a justification'))
       ->setTranslatable(TRUE)
       ->setDisplayOptions('form', [
         'type' => 'string_textarea',
@@ -65,6 +64,12 @@ final class AssessmentStatement extends ContentEntityBase {
         'settings' => [
           'rows' => 3,
           'placeholder' => '',
+        ],
+        'third_party_settings' => [
+          'entity_form_field_label' => [
+            'new_label' => 'Provide a justification',
+            'rewrite_label' => 1,
+          ],
         ],
       ])
       ->setDisplayOptions('view', [
