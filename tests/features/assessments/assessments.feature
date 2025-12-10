@@ -7,7 +7,7 @@ Feature: Assessment Report Entity Management
   @javascript
   Scenario: Create a new assessment report with required fields
     Given I am logged in as an "authenticated user"
-    And I go to "/assessments/add/report"
+    And I go to "/collection/assessments/report/create"
     Then I should see the heading "Create assessment report"
 
     When I press "Save"
@@ -122,7 +122,7 @@ Feature: Assessment Report Entity Management
   @javascript
   Scenario: All possible tests for 'Provided by' plugin in assessment report
     Given I am logged in as an "authenticated user"
-    And I go to "/assessments/add/report"
+    And I go to "/collection/assessments/report/create"
 
     When I fill in "Name" with "Test Provided by in Assessment Report 2025"
     And I select "Local public sector body" from "Type of public sector body"
@@ -316,7 +316,7 @@ Feature: Assessment Report Entity Management
       | E-mail      | pol.gomez@example.pt |
 
     And I am logged in as pol2025
-    And I go to "/assessments/add/report"
+    And I go to "/collection/assessments/report/create"
 
     When I fill in "Name" with "Test permissions in Assessment Report 2025"
     And I select "European Union institution" from "Type of public sector body"
@@ -382,7 +382,7 @@ Feature: Assessment Report Entity Management
     Then I should see the message "The user has been notified that their account has been updated."
 
     And I am logged in as pol2025
-    And I go to "/assessments/add/report"
+    And I go to "/collection/assessments/report/create"
     Then I should see the button "Save as Published"
 
   Scenario: Test assessment reports views
