@@ -19,7 +19,6 @@ use Drupal\assessments\Entity\Assessment\Participation;
 use Drupal\assessments\Entity\Assessment\PublicOrganisation;
 use Drupal\assessments\Entity\Assessment\PublicService;
 use Drupal\assessments\Entity\Assessment\Report;
-use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\Paragraph\BindingRequirement;
 use Drupal\assessments\Event\AssessmentReportEvent;
 use Drupal\assessments\NotificationEvents;
@@ -94,7 +93,7 @@ function assessments_preprocess_layout_paragraphs_insert_component_btn(&$variabl
     ->getWithStorageKey($url->getRouteParameters()['layout_paragraphs_layout']);
 
   $entity = $layoutParagraphsLayout?->getEntity();
-  if ($entity instanceof AssessmentReport) {
+  if ($entity instanceof Report) {
     $fieldName = $layoutParagraphsLayout?->getFieldName();
     if ($fieldName === 'binding_requirement') {
       $variables['title'] = t('New binding requirement');

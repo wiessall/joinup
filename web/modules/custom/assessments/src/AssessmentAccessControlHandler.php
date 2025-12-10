@@ -9,6 +9,8 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityAccessControlHandler;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\assessments\Entity\Assessment\PublicOrganisation;
+use Drupal\assessments\Entity\Assessment\Report;
 
 /**
  * Defines the access control handler for the assessment entity type.
@@ -23,6 +25,8 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
    * {@inheritdoc}
    */
   protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account): AccessResultInterface {
+    assert($entity instanceof AssessmentInterface);
+
     // Admin permission grants full access.
     $admin_result = AccessResult::allowedIfHasPermission($account, $this->entityType->getAdminPermission())
       ->addCacheableDependency($entity);
@@ -31,6 +35,31 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
       return $admin_result;
     }
 
+    return match ($entity->bundle()) {
+      'report' => $this->checkAccessForReport($entity, $operation, $account),
+      'public_organisation' => $this->checkAccessForPublicOrganisation($entity, $operation, $account),
+      'expression', 'participation', 'public_service' => $this->checkAccessForSubEntity($entity, $operation, $account),
+
+      default => AccessResult::neutral()
+        ->cachePerPermissions()
+        ->addCacheableDependency($entity),
+    };
+  }
+
+  /**
+   * Performs access checks for report.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity for which to check access.
+   * @param string $operation
+   *   The entity operation.
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The user for which to check access.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result.
+   */
+  protected function checkAccessForReport(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
     // Delegate to operation-specific methods.
     // Only report bundles have a state field.
     $state = $entity->hasField('state') ? ($entity->get('state')->value ?? 'draft') : 'draft';
@@ -44,6 +73,69 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
         ->cachePerPermissions()
         ->addCacheableDependency($entity),
     };
+  }
+
+  /**
+   * Performs access checks for public organisation.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity for which to check access.
+   * @param string $operation
+   *   The entity operation.
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The user for which to check access.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result.
+   */
+  protected function checkAccessForPublicOrganisation(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
+    assert($entity instanceof PublicOrganisation);
+
+    if ($operation !== 'view') {
+      return AccessResult::forbidden()
+        ->cachePerPermissions()
+        ->addCacheableDependency($entity);
+    }
+
+    $related_report = $entity->getRelatedReport();
+
+    // Check if the related report exists and is published (status field).
+    $is_published = $related_report instanceof Report && $related_report->isPublished();
+
+    $result = AccessResult::allowedIfHasPermission($account, 'access content')
+      ->allowedIf($is_published)
+      ->cachePerPermissions()
+      ->addCacheableDependency($entity);
+
+    $related_report !== NULL
+      ? $result->addCacheableDependency($related_report)
+      : $result->addCacheTags(['assessment_list:report']);
+
+    return $result;
+  }
+
+  /**
+   * Performs access checks for sub entity.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity for which to check access.
+   * @param string $operation
+   *   The entity operation.
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The user for which to check access.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result.
+   */
+  protected function checkAccessForSubEntity(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
+    $related_report = $entity->getRelatedReport();
+
+    return $related_report instanceof Report
+      ? $this->checkAccess($related_report, $operation, $account)
+        ->addCacheableDependency($entity)
+      : AccessResult::forbidden()
+        ->cachePerPermissions()
+        ->addCacheableDependency($entity);
   }
 
   /**

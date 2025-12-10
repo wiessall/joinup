@@ -140,7 +140,9 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
 
       // Keep only countries, remove territories.
       $countryConcept = new Resource('http://publications.europa.eu/resource/authority/country/0001');
-      if (!$resource->hasProperty('skos:inScheme', $countryConcept)) {
+      $isCountryOrEu = $resource->hasProperty('skos:inScheme', $countryConcept) ||
+        $resource->getUri() === 'http://publications.europa.eu/resource/authority/country/EUR';
+      if (!$isCountryOrEu) {
         $graph->deleteEntireResource($resource);
         continue;
       }

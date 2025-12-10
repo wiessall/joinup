@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity\Assessment;
 
-use Drupal\assessments\Entity\Assessment;
 use Drupal\assessments\Entity\AssessmentResourceInterface;
+use Drupal\assessments\Entity\AssessmentSubEntity;
 use Drupal\assessments\Entity\Trait\AssessmentResourceTrait;
 
 /**
  * A bundle class for assessment entities.
  */
-final class PublicService extends Assessment implements AssessmentResourceInterface {
+final class PublicService extends AssessmentSubEntity implements AssessmentResourceInterface {
 
   use AssessmentResourceTrait;
 
