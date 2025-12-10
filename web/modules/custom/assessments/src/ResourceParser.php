@@ -8,7 +8,7 @@ use Drupal\Component\Uuid\Php;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\assessments\Entity\Assessment\Asset;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\assessments\Entity\Assessment\Expression;
 use Drupal\assessments\Entity\Assessment\Participation;
 use Drupal\assessments\Entity\Assessment\PublicOrganisation;
@@ -87,6 +87,7 @@ final class ResourceParser implements ResourceParserInterface {
     protected Php $uuid,
     protected Connection $database,
     protected RdfSyncMapperInterface $mapper,
+    protected LoggerChannelFactoryInterface $loggerFactory,
   ) {}
 
   /**
@@ -167,6 +168,8 @@ final class ResourceParser implements ResourceParserInterface {
     }
     catch (\Throwable $e) {
       $transaction->rollBack();
+      $this->addError('', 'assessment', 'An unexpected error occurred');
+      $this->loggerFactory->get('api')->error('Persistence failed: @message', ['@message' => $e->getMessage()]);
     }
 
     return ['data' => $data, 'errors' => $this->errors];
@@ -190,6 +193,7 @@ final class ResourceParser implements ResourceParserInterface {
     // Some entities use a different bundle name than the reference key.
     $bundle = match ($key) {
       'assessment' => 'report',
+      'asset' => 'solution',
       default => $key,
     };
     return $class::create(['type' => $bundle]);
@@ -366,17 +370,19 @@ final class ResourceParser implements ResourceParserInterface {
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   protected function persistSubEntry(array &$data, string $key, string $basePath = ''): string|int {
-    $entity = $this->initializeObject($key);
     $mappings = $this->getMappingsForKey($key);
+    if (isset($mappings['id']) && !empty($data['id'])) {
+      return $this->resolveExistingReferenceId($key, $data['id'], $basePath, $key);
+    }
+    unset($mappings['id']);
 
+    $entity = $this->initializeObject($key);
     // Handle scalar (non-reference) properties using field mappings.
     foreach ($mappings as $property => $definition) {
       if (!empty($definition['is_reference'])) {
         continue;
       }
-      if ($property === 'id') {
-        break;
-      }
+
       $fieldName = $definition['field_name'] ?? $property;
       if (!$entity->hasField($fieldName)) {
         $this->errors[] = sprintf('%s: Unknown property mapping: %s > %s', $basePath . $key, $property, $fieldName);
@@ -432,6 +438,7 @@ final class ResourceParser implements ResourceParserInterface {
       }
     }
 
+    $entity->resourceEntityPresave();
     $entity->save();
     $data['id'] = $entity->getUri();
     return $entity->id();

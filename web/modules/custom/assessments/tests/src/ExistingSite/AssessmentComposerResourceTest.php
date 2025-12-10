@@ -4,12 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\Kernel;
 
-use Drupal\assessments\AssessmentInterface;
-use Drupal\collection\Entity\Collection;
-use Drupal\joinup_solution\Entity\Solution;
-use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\assessments\Entity\Assessment\Asset;
+use Drupal\joinup_solution\Entity\Solution;
 use Drupal\rest\ResourceResponse;
 
 /**
@@ -42,6 +38,8 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
     $this->assertNotFalse(filter_var($data['results_in'][0]['id'], FILTER_VALIDATE_URL));
     $this->assertArrayHasKey('id', $data['binding_requirement'][0]['affects'][0], 'Affected service ID is present in the response.');
     $this->assertNotFalse(filter_var($data['binding_requirement'][0]['affects'][0]['id'], FILTER_VALIDATE_URL));
+    $this->assertArrayHasKey('id', $data['binding_requirement'][0]['asset'][0], 'Asset ID is present in the response.');
+    $this->assertNotFalse(filter_var($data['binding_requirement'][0]['asset'][0]['id'], FILTER_VALIDATE_URL));
     $this->assertArrayHasKey('id', $data['binding_requirement'][0]['expression'][0], 'Expression ID is present in the response.');
     $this->assertNotFalse(filter_var($data['binding_requirement'][0]['expression'][0]['id'], FILTER_VALIDATE_URL));
     $this->assertArrayHasKey('id', $data['binding_requirement'][0]['has_participation'][0], 'Participation ID is present in the response.');
@@ -144,7 +142,6 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
           'description' => 'This is some description.',
           'affects' => [
             [
-              'identifier' => 'ps-123',
               'name' => 'Permit Application Service',
               'thematic_area' => 'core_governance_and_administration',
             ],
@@ -154,7 +151,6 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
               'name' => 'Legal Act 2024',
               'description' => 'Reference to an EU legal expression',
               'documented_in' => 'https://example.com/eli/act',
-              'expression_type' => 'http://data.europa.eu/eli/ontology#LegalExpression',
             ],
           ],
           'has_participation' => [
@@ -165,12 +161,12 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
               'type' => 'local_public_sector_body',
             ],
           ],
-//          'asset' => [
-//            [
-//              'name' => 'Portal EU',
-//              'landing_page' => 'https://portal.example.eu',
-//            ],
-//          ],
+          'asset' => [
+            [
+              'name' => 'Portal EU',
+              'landing_page' => 'https://portal.example.eu',
+            ],
+          ],
         ],
       ],
       'provider' => [
@@ -204,16 +200,12 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
    * Create an Asset entity and return its numeric id.
    */
   protected function createAsset(string $name, string $landingPage): string {
-    $group = \Drupal::service('entity.repository')->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR);
     $asset = Solution::create([
       'type' => 'asset',
       'title' => $name,
       'landing_page' => $landingPage,
-      OgGroupAudienceHelperInterface::DEFAULT_FIELD => [
-        ['target_id' => $group->id()],
-      ],
-      'field_state' => 'published',
     ]);
+    $asset->resourceEntityPresave();
     $asset->save();
     return $asset->getUri();
   }

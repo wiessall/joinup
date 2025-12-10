@@ -48,4 +48,11 @@ trait AssessmentResourceTrait {
     return $values;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function resourceEntityPresave(): void {
+    // Default no-op. Classes may override to implement custom logic.
+  }
+
 }
