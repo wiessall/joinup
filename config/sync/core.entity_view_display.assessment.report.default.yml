@@ -9,6 +9,7 @@ dependencies:
     - field.field.assessment.report.legal
     - field.field.assessment.report.organisational
     - field.field.assessment.report.other
+    - field.field.assessment.report.other_comment
     - field.field.assessment.report.provider
     - field.field.assessment.report.relevant_report
     - field.field.assessment.report.semantic
@@ -109,6 +110,13 @@ content:
       link: true
     third_party_settings: {  }
     weight: 11
+    region: content
+  other_comment:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 13
     region: content
   provider:
     type: entity_reference_entity_view

@@ -97,14 +97,18 @@ Feature: Assessment Report Entity Management
     # Assessment supporting documents
     And I attach the file "text.pdf" to "Add a new file"
 
+    # Add comment
+    And I fill in "Please add any other comment you would like to share." with "This assessment was conducted in collaboration with multiple stakeholders across EU member states."
+
     When I press "Save"
     Then I should see the success message containing "New assessment Test Assessment Report 2025 has been created."
     And I should see the heading "Test Assessment Report 2025"
     And I should see the following lines of text:
-      | Austrian Ministry of Digital Affairs, a European Union institution from  |
-      | The report has been connected to the following previous/relevant reports |
-      | https://interoperable-europe.ec.europa.eu/report                         |
-      | documented in https://interoperable-europe.ec.europa.eu/general          |
+      | Austrian Ministry of Digital Affairs, a European Union institution from                            |
+      | The report has been connected to the following previous/relevant reports                           |
+      | https://interoperable-europe.ec.europa.eu/report                                                   |
+      | documented in https://interoperable-europe.ec.europa.eu/general                                    |
+      | This assessment was conducted in collaboration with multiple stakeholders across EU member states. |
 
     # Edit test.
     When I go to the edit form of the "Test Assessment Report 2025" assessment
