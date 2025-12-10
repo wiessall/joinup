@@ -6,6 +6,7 @@ namespace Drupal\assessments\Entity;
 
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
+use Drupal\Core\Entity\EntityPublishedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
@@ -56,6 +57,7 @@ use Drupal\user\EntityOwnerTrait;
  *     "label" = "name",
  *     "uuid" = "uuid",
  *     "owner" = "uid",
+ *     "published" = "status",
  *   },
  *   links = {
  *     "collection" = "/admin/content/assessment",
@@ -76,6 +78,7 @@ class Assessment extends ContentEntityBase implements AssessmentInterface {
   use EntityChangedTrait;
   use EntityCreationTrait;
   use EntityOwnerTrait;
+  use EntityPublishedTrait;
   use RdfSyncEntityTrait;
   use StringTranslationTrait;
 
@@ -192,6 +195,13 @@ class Assessment extends ContentEntityBase implements AssessmentInterface {
       $url->setRouteParameter('assessment_type', $this->bundle());
     }
     return $url;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getRelatedReport(): ?AssessmentReport {
+    return NULL;
   }
 
 }
