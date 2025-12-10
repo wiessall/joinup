@@ -352,6 +352,34 @@ function assessments_inline_entity_form_table_fields_alter(array &$fields, array
 }
 
 /**
+ * Implements hook_field_widget_complete_form_alter().
+ */
+function assessments_field_widget_complete_form_alter(array &$element, FormStateInterface $form_state, array $context): void {
+  // Target only the asset field on binding_requirement paragraphs.
+  if (isset($context['items']) && $context['items']->getFieldDefinition()->getName() === 'asset') {
+    $parent = $context['items']->getEntity();
+    if ($parent && $parent->getEntityTypeId() === 'paragraph' && $parent->bundle() === 'binding_requirement') {
+      if (isset($element['widget']['actions'])) {
+        if (isset($element['widget']['actions']['ief_add_existing'])) {
+          /** @var \Drupal\Core\StringTranslation\TranslatableMarkup $markup */
+          $markup = $element['widget']['actions']['ief_add_existing']['#value'];
+          $arguments = $markup->getArguments();
+          $element['widget']['actions']['ief_add_existing']['#value'] = new TranslatableMarkup('Select an @type_singular', $arguments);
+          $element['widget']['actions']['ief_add_existing']['#weight'] = 0;
+        }
+        if (isset($element['widget']['actions']['ief_add'])) {
+          /** @var \Drupal\Core\StringTranslation\TranslatableMarkup $markup */
+          $markup = $element['widget']['actions']['ief_add']['#value'];
+          $arguments = $markup->getArguments();
+          $element['widget']['actions']['ief_add']['#value'] = new TranslatableMarkup('Add a new @type_singular', $arguments);
+          $element['widget']['actions']['ief_add']['#weight'] = 10;
+        }
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_module_implements_alter().
  */
 function assessments_module_implements_alter(array &$implementations, $hook): void {
