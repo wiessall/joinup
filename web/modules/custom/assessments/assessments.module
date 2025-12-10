@@ -15,6 +15,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\Entity\AssessmentReport;
+use Drupal\assessments\Entity\AssessmentSubEntity;
 use Drupal\assessments\Entity\PublicOrganisation;
 use Drupal\assessments\Event\AssessmentReportEvent;
 use Drupal\assessments\NotificationEvents;
@@ -237,6 +238,15 @@ function assessments_entity_bundle_info_alter(array &$bundles): void {
   }
   if (isset($bundles['assessment']['public_organisation'])) {
     $bundles['assessment']['public_organisation']['class'] = PublicOrganisation::class;
+  }
+  if (isset($bundles['assessment']['expression'])) {
+    $bundles['assessment']['expression']['class'] = AssessmentSubEntity::class;
+  }
+  if (isset($bundles['assessment']['participation'])) {
+    $bundles['assessment']['participation']['class'] = AssessmentSubEntity::class;
+  }
+  if (isset($bundles['assessment']['public_service'])) {
+    $bundles['assessment']['public_service']['class'] = AssessmentSubEntity::class;
   }
 
   $rdfSync = [
