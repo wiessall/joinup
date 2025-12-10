@@ -123,6 +123,7 @@ final class AssessmentStatement extends ContentEntityBase {
       ->setDisplayOptions('form', [
         'type' => 'file_generic',
         'weight' => 2,
+        'region' => 'hidden',
         'settings' => [
           'progress_indicator' => 'throbber',
           'display_field' => FALSE,
