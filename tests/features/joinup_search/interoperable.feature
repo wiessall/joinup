@@ -28,7 +28,7 @@ Feature: Global Interoperable search
     Then the page should show the tiles "eGovernment"
 
     When I visit the advanced search page
-    # Portal support in installed by default.
+    # 3 demo collections are installed by default.
     # @see joinup_test.install
-    And I check the "Collections (2)" checkbox from the "Content types" facet
+    And I check the "Collections (4)" checkbox from the "Content types" facet
     Then I should not see the text "Show only Interoperable Solutions"

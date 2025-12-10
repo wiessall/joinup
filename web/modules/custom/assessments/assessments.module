@@ -15,6 +15,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\Entity\AssessmentReport;
+use Drupal\assessments\Entity\AssessmentSubEntity;
 use Drupal\assessments\Entity\PublicOrganisation;
 use Drupal\assessments\Event\AssessmentReportEvent;
 use Drupal\assessments\NotificationEvents;
@@ -66,6 +67,17 @@ function assessments_form_alter(array &$form, FormStateInterface $formState, str
   ];
   $form['#attached']['library'][] = 'assessments/radios_inline';
   $form['state']['#attributes']['class'][] = 'radios-inline';
+
+  // Register submit handler to create organizations after validation.
+  $handler = [
+    'Drupal\assessments\Plugin\Field\FieldWidget\ProvidedByWidget',
+    'submitCreateOrganisations',
+  ];
+  $existingHandlers = $form['actions']['submit']['#submit'] ?? [];
+  if (!in_array($handler, $existingHandlers, TRUE)) {
+    // Execute before entity builder to set org IDs before entity save.
+    array_unshift($form['actions']['submit']['#submit'], $handler);
+  }
 }
 
 /**
@@ -237,6 +249,15 @@ function assessments_entity_bundle_info_alter(array &$bundles): void {
   }
   if (isset($bundles['assessment']['public_organisation'])) {
     $bundles['assessment']['public_organisation']['class'] = PublicOrganisation::class;
+  }
+  if (isset($bundles['assessment']['expression'])) {
+    $bundles['assessment']['expression']['class'] = AssessmentSubEntity::class;
+  }
+  if (isset($bundles['assessment']['participation'])) {
+    $bundles['assessment']['participation']['class'] = AssessmentSubEntity::class;
+  }
+  if (isset($bundles['assessment']['public_service'])) {
+    $bundles['assessment']['public_service']['class'] = AssessmentSubEntity::class;
   }
 
   $rdfSync = [
