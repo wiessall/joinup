@@ -47,7 +47,7 @@ Feature: User authentication
       | admin/tmgmt/settings                                |
       | announcements                                       |
       | api/assessments/v1                                  |
-      | assessments/add/report                              |
+      | collection/assessments/report/create                |
       | collection/portal-support/revisions                 |
       | dashboard                                           |
       | dashboard/private-message-report                    |
