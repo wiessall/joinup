@@ -66,20 +66,11 @@ class AccessibilityContext extends RawDrupalContext {
    */
   private int $line;
 
-  /**
-   * Rules to exclude from axe run.
-   *
-   * @var string[]
-   */
-  protected array $excludeRules;
-
   public function __construct(
     protected readonly array $standardTags,
     protected readonly array $excludeElements,
-    array $exclude = [],
-  ) {
-    $this->excludeRules = $exclude;
-  }
+    protected readonly array $excludeRules = [],
+  ) {}
 
   /**
    * Asserts that the current page meets accessibility standards.
