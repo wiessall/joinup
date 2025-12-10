@@ -92,11 +92,11 @@ Feature: Featuring content site-wide
     When I am an anonymous user
     And I visit the <content type> overview page
     Then I should see the following tiles in the correct order:
-      | <featured>     |
-      | <unfeatured>   |
-      # Portal support collection in installed by default.
+      | <featured>       |
+      | <unfeatured>     |
+      # Extra entities created by the joinup_test module.
       # @see \joinup_test_install()
-      | <extra entity> |
+      | <extra entities> |
     And I should not see the contextual link "Feature" in the "<featured>" tile
     And I should not see the contextual link "Remove from featured" in the "<unfeatured>" tile
 
@@ -136,6 +136,6 @@ Feature: Featuring content site-wide
     Then I should see the success message "<label> <unfeatured> has been set as featured content."
 
     Examples:
-      | featured                      | unfeatured                  | extra entity | label      | content type |
-      | Tidy Neutron                  | Reborn Eternal Gamma        | Portal support  | Collection | collection   |
-      | Opensource neutron generators | Gamma-sensible spectroscopy |              | Solution   | solution     |
+      | featured                      | unfeatured                  | extra entities                                                                           | label      | content type |
+      | Tidy Neutron                  | Reborn Eternal Gamma        | Solutions mentioned in an assessment, Interoperability assessments space, Portal support | Collection | collection   |
+      | Opensource neutron generators | Gamma-sensible spectroscopy |                                                                                          | Solution   | solution     |
