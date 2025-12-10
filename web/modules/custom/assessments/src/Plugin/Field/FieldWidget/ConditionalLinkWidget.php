@@ -89,7 +89,6 @@ final class ConditionalLinkWidget extends LinkWidget {
     $element['add_link'] = [
       '#type' => 'checkbox',
       '#title' => $condition,
-      '#required' => TRUE,
       '#default_value' => $hasAnyValue ? '1' : $this->getSetting('default_option'),
       '#weight' => -10,
       '#attributes' => ['class' => ['link-with-condition-toggle']],

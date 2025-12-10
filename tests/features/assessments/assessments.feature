@@ -17,7 +17,7 @@ Feature: Assessment Report Entity Management
     And I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "Austrian Ministry of Digital Affairs"
-    And I select the radio button "Yes"
+    And I check "Check if assessment is linked to previous assessments or related assessments at EU or national level."
     And I fill in "Relevant assessment report" with "https://interoperable-europe.ec.europa.eu/report"
 
     # Binding requirements
@@ -130,7 +130,6 @@ Feature: Assessment Report Entity Management
     And I select "Greece" from "Country"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "GR1"
-    And I select the radio button "No"
 
     # Binding requirements
     When I click "New binding requirement"
@@ -315,7 +314,6 @@ Feature: Assessment Report Entity Management
     And I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "CTT PT"
-    And I select the radio button "No"
 
     # Binding requirements
     When I click "New binding requirement"
