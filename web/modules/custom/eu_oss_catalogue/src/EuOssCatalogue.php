@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\eu_oss_catalogue;
 
 use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Queue\QueueFactory;
@@ -186,16 +187,21 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     }
     catch (\Exception $exception) {
       // The solution could not be parsed, created or saved.
-      Error::logException(
-        $this->logger,
-        $exception,
-        "OSS solution of project @project-name (@project-url) fetched from @provider cannot be parsed, created or saved.",
-        [
-          '@project-name' => $project->name,
-          '@project-url' => $project->url,
-          '@provider' => $provider->getPluginDefinition()['label'],
-        ],
-      );
+      $logMessage = 'OSS solution of project @project-name (@project-url) fetched from @provider cannot be parsed, created or saved.';
+      $logContext = [
+        '@project-name' => $project->name,
+        '@project-url' => $project->url,
+        '@provider' => $provider->getPluginDefinition()['label'],
+      ];
+      // Entity storage exceptions are already logged at this phase, so we just
+      // log a simple error with some data about the project in addition.
+      if ($exception instanceof EntityStorageException) {
+        $this->logger->error($logMessage, $logContext);
+      }
+      // Otherwise, log error by also including the exception.
+      else {
+        Error::logException($this->logger, $exception, $logMessage, $logContext);
+      }
       return;
     }
 

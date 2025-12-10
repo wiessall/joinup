@@ -29,7 +29,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
    * @covers
    */
   public function testDevelopersItalia(): void {
-    $this->fetchSolutions('developers_italia', 5);
+    $this->fetchSolutions('developers_italia', 7);
 
     $this->assertOssSolution('GitHub solution 1', 'en');
     $this->assertOssContractor('ACME Ltd');
@@ -67,8 +67,13 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
       'Creation log entry for Project 1'
     );
 
+    $this->assertCount(
+      2,
+      $this->getLogEntries('OSS solution of project @project-name (@project-url) fetched from @provider cannot be parsed, created or saved.'),
+    );
+
     // Re-run the process and update one solution from a new source-provider.
-    $this->fetchSolutions('testing_provider', 5);
+    $this->fetchSolutions('testing_provider', 7);
 
     $this->assertFalse($this->getNodeByTitle('GitHub solution 1'));
     $updatedSolution = $this->getNodeByTitle('GitHub solution 1 (updated)', TRUE);
