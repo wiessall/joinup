@@ -113,6 +113,7 @@ permissions:
   - 'administer solution ownership'
   - 'administer users'
   - 'administer webform via ui'
+  - 'assign assessment_reporter role'
   - 'assign licence_manager role'
   - 'assign translator role'
   - 'bypass assessment report moderation'
