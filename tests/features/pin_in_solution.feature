@@ -99,8 +99,7 @@ Feature: Pinning content entities inside solutions
       | document     | Document |
       | news         | News     |
 
-  # Validate the need for the "@restart-session" tag in ISAICP-9742.
-  @javascript @restart-session
+  @javascript
   Scenario Outline: Pinned content tiles should show a visual cue only in their solution homepage.
     Given <content type> content:
       | title       | headline    | solution    | pinned |

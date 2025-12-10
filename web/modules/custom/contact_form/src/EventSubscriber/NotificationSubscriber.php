@@ -72,7 +72,8 @@ class NotificationSubscriber extends NotificationSubscriberBase {
     }
 
     $route_parameters = $url->getRouteParameters();
-    if (!$nid ??= $route_parameters['node']) {
+    $nid = $route_parameters['node'] ?? NULL;
+    if (!is_numeric($nid)) {
       return NULL;
     }
 
