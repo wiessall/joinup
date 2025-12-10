@@ -40,11 +40,6 @@ final class Expression extends Assessment implements AssessmentResourceInterface
         'is_required' => FALSE,
         'is_reference' => FALSE,
       ],
-      'expression_type' => [
-        'field_name' => 'expression_type',
-        'is_required' => FALSE,
-        'is_reference' => FALSE,
-      ],
     ];
   }
 

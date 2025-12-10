@@ -67,4 +67,9 @@ interface AssessmentResourceInterface extends RdfSyncEntityInterface {
    */
   public function translateResourceValue(string $fieldName, mixed $values): mixed;
 
+  /**
+   * Method to be invoked before saving the entity to perform any adjustments.
+   */
+  public function resourceEntityPresave(): void;
+
 }

@@ -14,7 +14,6 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\assessments\AssessmentInterface;
-use Drupal\assessments\Entity\Assessment\Asset;
 use Drupal\assessments\Entity\Assessment\Expression;
 use Drupal\assessments\Entity\Assessment\Participation;
 use Drupal\assessments\Entity\Assessment\PublicOrganisation;
@@ -238,9 +237,6 @@ function assessments_entity_bundle_info(): array {
  * Implements hook_entity_bundle_info_alter().
  */
 function assessments_entity_bundle_info_alter(array &$bundles): void {
-  if (isset($bundles['assessment']['asset'])) {
-    $bundles['assessment']['asset']['class'] = Asset::class;
-  }
   if (isset($bundles['assessment']['report'])) {
     $bundles['assessment']['report']['class'] = Report::class;
   }
