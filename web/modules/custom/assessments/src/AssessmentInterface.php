@@ -6,6 +6,7 @@ namespace Drupal\assessments;
 
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityChangedInterface;
+use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\user\EntityOwnerInterface;
@@ -13,7 +14,7 @@ use Drupal\user\EntityOwnerInterface;
 /**
  * Provides an interface defining an assessment entity type.
  */
-interface AssessmentInterface extends ContentEntityInterface, EntityOwnerInterface, EntityChangedInterface, RdfSyncEntityInterface {
+interface AssessmentInterface extends ContentEntityInterface, EntityOwnerInterface, EntityChangedInterface, RdfSyncEntityInterface, EntityPublishedInterface {
 
   /**
    * The UUID of the assessment collection.
@@ -32,13 +33,5 @@ interface AssessmentInterface extends ContentEntityInterface, EntityOwnerInterfa
    *   The related report entity or NULL if not found.
    */
   public function getRelatedReport(): ?AssessmentReport;
-
-  /**
-   * Returns whether the entity is published.
-   *
-   * @return bool
-   *   TRUE if the entity is published, FALSE otherwise.
-   */
-  public function isPublished(): bool;
 
 }
