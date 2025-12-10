@@ -73,7 +73,7 @@ Feature: Assessments
 
     When I select the radio button "Publish report"
     And I press "Submit"
-    Then I should see the heading "Assessment reports"
+    And I see h1 span element with title "Assessment reports"
     And I should see the success message containing "The assessment submission report has been created: Assessment report #"
     And the following email should have been sent:
       | recipient | Regular                                                                               |
@@ -405,7 +405,7 @@ Feature: Assessments
   Scenario: Assessment reports are listed in a distinct page and in search.
     Given I am an anonymous user
     When I go to "/collection/assessments/assessment-reports"
-    Then I should see the heading "Assessment reports"
+    And I see h1 span element with title "Assessment reports"
     And I should see the link "New assessment"
     And I should not see the link "My assessments"
     And I should see the text "There are no published assessment reports yet. You can add one by filling this questionnaire"
@@ -425,7 +425,7 @@ Feature: Assessments
       | Assessment 12 | published | 2020-01-12T00:00:00Z | default organization | Interoperability assessments space |
 
     When I go to the "Assessment reports" custom_page
-    Then I should see the heading "Assessment reports"
+    And I see h1 span element with title "Assessment reports"
     And I should see the link "New assessment"
     And I should not see the link "My assessments"
     And I should not see the text "There are no published assessment reports yet. You can add one by filling this questionnaire"
@@ -450,7 +450,7 @@ Feature: Assessments
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Custom assessments" title:
       | content_listing:value | a:7:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:-1;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:33:"organization\|default organization";s:13:"show_archived";s:10:"unarchived";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:0;} |
     When I go to the "Custom assessments" custom_page
-    Then I should see the heading "Custom assessments"
+    And I see h1 span element with title "Custom assessments"
     And I should see the following tiles in the correct order:
       | Assessment 12 |
       | Assessment 11 |
@@ -483,7 +483,7 @@ Feature: Assessments
 
     When I am logged in as a moderator
     When I go to "/collection/assessments/assessment-reports"
-    Then I should see the heading "Assessment reports"
+    And I see h1 span element with title "Assessment reports"
     And I should see the link "New assessment"
     And I should see the link "My assessments"
     And I should not see the text "There are no published assessment reports yet. You can add one by filling this questionnaire"
