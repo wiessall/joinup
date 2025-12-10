@@ -5,6 +5,7 @@ dependencies:
   config:
     - assessments.type.report
     - field.field.assessment.report.binding_requirement
+    - field.field.assessment.report.comment
     - field.field.assessment.report.documents
     - field.field.assessment.report.legal
     - field.field.assessment.report.organisational
@@ -179,6 +180,7 @@ content:
     weight: 1
     region: content
 hidden:
+  comment: true
   langcode: true
   search_api_excerpt: true
   status: true
