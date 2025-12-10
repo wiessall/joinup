@@ -7,6 +7,7 @@ namespace Drupal\assessments;
 use Drupal\Component\Uuid\Php;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\assessments\Entity\Assessment\Expression;
@@ -17,7 +18,6 @@ use Drupal\assessments\Entity\Assessment\Report;
 use Drupal\assessments\Entity\AssessmentStatement;
 use Drupal\assessments\Entity\Paragraph\BindingRequirement;
 use Drupal\joinup_solution\Entity\Solution;
-use Drupal\rdf_sync\RdfSyncMapperInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
@@ -61,13 +61,6 @@ final class ResourceParser implements ResourceParserInterface {
   protected array $mappingsCache = [];
 
   /**
-   * Cached short class names for reflection messages.
-   *
-   * @var array<string, string>
-   */
-  protected array $classShortNameCache = [];
-
-  /**
    * An array of errors.
    *
    * @var array
@@ -86,7 +79,7 @@ final class ResourceParser implements ResourceParserInterface {
     #[Autowire(service: 'uuid')]
     protected Php $uuid,
     protected Connection $database,
-    protected RdfSyncMapperInterface $mapper,
+    protected EntityRepositoryInterface $entityRepository,
     protected LoggerChannelFactoryInterface $loggerFactory,
   ) {}
 
@@ -205,10 +198,8 @@ final class ResourceParser implements ResourceParserInterface {
   protected function resolveClassFromKey(string $key): ?string {
     $mapping = [
       'assessment' => Report::class,
-      'statement' => AssessmentStatement::class,
       'results_in' => AssessmentStatement::class,
       'asset' => Solution::class,
-      'documents' => Asset::class,
       'expression' => Expression::class,
       'participation' => Participation::class,
       'has_participation' => Participation::class,
@@ -267,12 +258,22 @@ final class ResourceParser implements ResourceParserInterface {
    * Validates/loads an existing reference id, returns the numeric id or null.
    */
   protected function resolveExistingReferenceId(string $propertyKey, mixed $id, string $basePath, string $key): ?int {
-    if (filter_var($id, FILTER_VALIDATE_URL)) {
-      $entity = $this->mapper->getEntityByUri($id);
-      if ($entity instanceof ContentEntityInterface) {
-        return (int) $entity->id();
-      }
+    // Validate id as a UUID (RFC 4122).
+    if (!is_string($id) || !preg_match('/^[0-9a-f]{8}\-[0-9a-f]{4}\-[1-5][0-9a-f]{3}\-[89ab][0-9a-f]{3}\-[0-9a-f]{12}$/i', $id)) {
+      $this->addError($basePath, $key, sprintf('Provided id %s is not a valid UUID', (string) $id), $propertyKey);
+      return NULL;
     }
+
+    $entityTypeId = match($propertyKey) {
+      'asset' => 'node',
+      default => 'assessment',
+    };
+
+    $entity = $this->entityRepository->loadEntityByUuid($entityTypeId, $id);
+    if ($entity instanceof ContentEntityInterface) {
+      return (int) $entity->id();
+    }
+
     $this->addError($basePath, $key, sprintf('Provided id %s does not reference a valid entity', $id), $propertyKey);
     return NULL;
   }
