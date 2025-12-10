@@ -17,6 +17,7 @@ use Drupal\assessments\Entity\Assessment\Report;
 use Drupal\assessments\Entity\AssessmentStatement;
 use Drupal\assessments\Entity\Paragraph\BindingRequirement;
 use Drupal\joinup_solution\Entity\Solution;
+use Drupal\rdf_sync\RdfSyncMapperInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
@@ -85,6 +86,7 @@ final class ResourceParser implements ResourceParserInterface {
     #[Autowire(service: 'uuid')]
     protected Php $uuid,
     protected Connection $database,
+    protected RdfSyncMapperInterface $mapper,
   ) {}
 
   /**
@@ -122,7 +124,7 @@ final class ResourceParser implements ResourceParserInterface {
       if (isset($data['results_in'])) {
         // Ensure the 'results_in' statements are linked back to this report.
         $statementIds = [];
-        foreach ($data['results_in'] as $statementData) {
+        foreach ($data['results_in'] as &$statementData) {
           $statement = AssessmentStatement::create([
             'type' => $statementData['type'],
             'judgement' => $statementData['judgement'],
@@ -130,11 +132,18 @@ final class ResourceParser implements ResourceParserInterface {
           $statement->set('interpretation', $statement->translateResourceValue('interpretation', $statementData['interpretation']));
           $violations = $statement->validate();
           foreach ($violations as $violation) {
+            // Skip violation for empty URI as it will be automatically
+            // generated on save.
+            if ($violation->getPropertyPath() === 'uri') {
+              continue;
+            }
+
             $this->errors[] = sprintf('assessment > results_in > %s: %s', $violation->getPropertyPath(), $violation->getMessage());
           }
           if (empty($this->errors)) {
             $statement->save();
             $statementIds[$statementData['type']][] = $statement->id();
+            $statementData['id'] = $statement->getUri();
           }
         }
 
@@ -254,13 +263,11 @@ final class ResourceParser implements ResourceParserInterface {
    * Validates/loads an existing reference id, returns the numeric id or null.
    */
   protected function resolveExistingReferenceId(string $propertyKey, mixed $id, string $basePath, string $key): ?int {
-    $expectedClass = $this->resolveClassFromKey($propertyKey);
-    if (!$expectedClass) {
-      return NULL;
-    }
-    $loaded = $expectedClass::load($id);
-    if ($loaded instanceof $expectedClass) {
-      return (int) $loaded->id();
+    if (filter_var($id, FILTER_VALIDATE_URL)) {
+      $entity = $this->mapper->getEntityByUri($id);
+      if ($entity instanceof ContentEntityInterface) {
+        return (int) $entity->id();
+      }
     }
     $this->addError($basePath, $key, sprintf('Provided id %s does not reference a valid entity', $id), $propertyKey);
     return NULL;
@@ -282,29 +289,6 @@ final class ResourceParser implements ResourceParserInterface {
       return [];
     }
     return $children;
-  }
-
-  /**
-   * Parses a sub-entry and returns its ID.
-   *
-   * @param array $data
-   *   The data to parse.
-   * @param string $key
-   *   The reference key.
-   * @param string $basePath
-   *   The base path for error reporting. Default is empty as the key will be
-   *   appended.
-   *
-   * @return string|int
-   *   The ID of the created or existing entity.
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   */
-  protected function parseSubEntry(array &$data, string $key, string $basePath = ''): string|int {
-    // Backwards-compatible wrapper. The actual implementation now lives in
-    // persistSubEntry() as part of the two-phase processing (validate +
-    // persist).
-    return $this->persistSubEntry($data, $key, $basePath);
   }
 
   /**
@@ -428,7 +412,7 @@ final class ResourceParser implements ResourceParserInterface {
       }
       $values = [];
       $children = $this->normalizeChildren($data[$property] ?? [], $basePath, $key, $property);
-      foreach ($children as &$subentry) {
+      foreach ($children as $index => &$subentry) {
         if (is_array($subentry) && !empty($subentry['id'])) {
           $resolvedId = $this->resolveExistingReferenceId($property, $subentry['id'], $basePath, $key);
           if ($resolvedId !== NULL) {
@@ -437,6 +421,7 @@ final class ResourceParser implements ResourceParserInterface {
           continue;
         }
         $values[] = $this->persistSubEntry($subentry, $property, $basePath . $key . ' > ');
+        $data[$property][$index] = $subentry;
       }
       unset($subentry);
       $translated = $entity->translateResourceValue($fieldName, $values);
@@ -448,7 +433,7 @@ final class ResourceParser implements ResourceParserInterface {
     }
 
     $entity->save();
-    $data['id'] = $entity->id();
+    $data['id'] = $entity->getUri();
     return $entity->id();
   }
 

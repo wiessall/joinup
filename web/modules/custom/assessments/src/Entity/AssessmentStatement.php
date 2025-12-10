@@ -11,6 +11,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\assessments\Entity\Trait\AssessmentResourceTrait;
+use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 
 /**
  * Defines the Assessment statement entity.
@@ -53,6 +54,7 @@ use Drupal\assessments\Entity\Trait\AssessmentResourceTrait;
 final class AssessmentStatement extends ContentEntityBase implements AssessmentResourceInterface {
 
   use AssessmentResourceTrait;
+  use RdfSyncEntityTrait;
 
   /**
    * {@inheritdoc}

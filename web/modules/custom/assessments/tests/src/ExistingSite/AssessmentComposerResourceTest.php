@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\Kernel;
 
+use Drupal\assessments\AssessmentInterface;
+use Drupal\collection\Entity\Collection;
+use Drupal\joinup_solution\Entity\Solution;
+use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\assessments\Entity\Assessment\Asset;
 use Drupal\rest\ResourceResponse;
@@ -23,12 +27,26 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
   public function testPostStructuredPayload(): void {
     $payload = $this->baseValidPayload();
 
-    /** @var \Drupal\rest\ResourceResponse $response */
     $response = $this->invokeResourcePost($payload);
-    $this->assertInstanceOf(ResourceResponse::class, $response);
-    $this->assertSame(201, $response->getStatusCode());
     $data = $response->getResponseData();
-    $this->assertIsArray($data);
+    // The IDs have been returned along with the original array. The URIs also
+    // validate creation of their respective entities as they are created on
+    // save.
+    $this->assertArrayHasKey('id', $data, 'Assessment ID is present in the response.');
+    $this->assertNotFalse(filter_var($data['id'], FILTER_VALIDATE_URL));
+    $this->assertArrayHasKey('id', $data['binding_requirement'][0], 'Binding requirement ID is present in the response.');
+    $this->assertNotFalse(filter_var($data['binding_requirement'][0]['id'], FILTER_VALIDATE_URL));
+    $this->assertArrayHasKey('id', $data['provider'][0], 'Provider ID is present in the response.');
+    $this->assertNotFalse(filter_var($data['provider'][0]['id'], FILTER_VALIDATE_URL));
+    $this->assertArrayHasKey('id', $data['results_in'][0], 'Results in ID is present in the response.');
+    $this->assertNotFalse(filter_var($data['results_in'][0]['id'], FILTER_VALIDATE_URL));
+    $this->assertArrayHasKey('id', $data['binding_requirement'][0]['affects'][0], 'Affected service ID is present in the response.');
+    $this->assertNotFalse(filter_var($data['binding_requirement'][0]['affects'][0]['id'], FILTER_VALIDATE_URL));
+    $this->assertArrayHasKey('id', $data['binding_requirement'][0]['expression'][0], 'Expression ID is present in the response.');
+    $this->assertNotFalse(filter_var($data['binding_requirement'][0]['expression'][0]['id'], FILTER_VALIDATE_URL));
+    $this->assertArrayHasKey('id', $data['binding_requirement'][0]['has_participation'][0], 'Participation ID is present in the response.');
+    $this->assertNotFalse(filter_var($data['binding_requirement'][0]['has_participation'][0]['id'], FILTER_VALIDATE_URL));
+    $this->assertSame(201, $response->getStatusCode());
   }
 
   /**
@@ -91,14 +109,14 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
    */
   public function testAssetCanBeReused(): void {
     // Create an asset entity that we will reference twice in the payload.
-    $existingAssetId = $this->createAsset('Reusable portal', 'https://reusable.example.eu');
+    $existingAssetUri = $this->createAsset('Reusable portal', 'https://reusable.example.eu');
     $beforeCount = $this->countAssessmentBundle('asset');
 
     $payload = $this->baseValidPayload();
     // Replace assets with two references to the same existing id.
     $payload['binding_requirement'][0]['asset'] = [
-      ['id' => $existingAssetId],
-      ['id' => $existingAssetId],
+      ['id' => $existingAssetUri],
+      ['id' => $existingAssetUri],
     ];
 
     $response = $this->invokeResourcePost($payload);
@@ -110,8 +128,8 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
     $data = $response->getResponseData();
     $assets = $data['binding_requirement'][0]['asset'] ?? [];
     $this->assertCount(2, $assets);
-    $this->assertSame($existingAssetId, $assets[0]['id'] ?? NULL);
-    $this->assertSame($existingAssetId, $assets[1]['id'] ?? NULL);
+    $this->assertSame($existingAssetUri, $assets[0]['id'] ?? NULL);
+    $this->assertSame($existingAssetUri, $assets[1]['id'] ?? NULL);
   }
 
   /**
@@ -185,14 +203,19 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
   /**
    * Create an Asset entity and return its numeric id.
    */
-  protected function createAsset(string $name, string $landingPage): int {
-    $asset = Asset::create([
+  protected function createAsset(string $name, string $landingPage): string {
+    $group = \Drupal::service('entity.repository')->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR);
+    $asset = Solution::create([
       'type' => 'asset',
-      'name' => $name,
+      'title' => $name,
       'landing_page' => $landingPage,
+      OgGroupAudienceHelperInterface::DEFAULT_FIELD => [
+        ['target_id' => $group->id()],
+      ],
+      'field_state' => 'published',
     ]);
     $asset->save();
-    return (int) $asset->id();
+    return $asset->getUri();
   }
 
   /**
