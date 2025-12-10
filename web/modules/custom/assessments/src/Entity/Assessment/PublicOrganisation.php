@@ -4,16 +4,39 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity\Assessment;
 
-use Drupal\assessments\Entity\Assessment;
 use Drupal\assessments\Entity\AssessmentResourceInterface;
+use Drupal\assessments\Entity\AssessmentSubEntity;
 use Drupal\assessments\Entity\Trait\AssessmentResourceTrait;
 
 /**
  * Defines the public organization entity class.
  */
-final class PublicOrganisation extends Assessment implements AssessmentResourceInterface {
+final class PublicOrganisation extends AssessmentSubEntity implements AssessmentResourceInterface {
 
   use AssessmentResourceTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getRelatedReport(): ?Report {
+    $ids = $this->entityTypeManager()->getStorage('assessment')->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', 'report')
+      ->condition('provider', $this->id())
+      // Sort by status DESC so published (status=1)
+      // come before unpublished (status=0).
+      ->sort('status', 'DESC')
+      ->range(0, 1)
+      ->execute();
+
+    if (empty($ids)) {
+      return NULL;
+    }
+
+    $id = reset($ids);
+    $report = $this->entityTypeManager()->getStorage('assessment')->load($id);
+    return $report instanceof Report ? $report : NULL;
+  }
 
   /**
    * Returns an array of institution options.

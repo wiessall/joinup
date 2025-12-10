@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity\Assessment;
 
-use Drupal\assessments\Entity\Assessment;
+use Drupal\assessments\Entity\AssessmentResourceInterface;
+use Drupal\assessments\Entity\AssessmentSubEntity;
 use Drupal\assessments\Entity\Trait\AssessmentResourceTrait;
 
 /**
  * A bundle class for assessment entities.
  */
-final class Participation extends Assessment {
+final class Participation extends AssessmentSubEntity implements AssessmentResourceInterface {
 
   use AssessmentResourceTrait;
 

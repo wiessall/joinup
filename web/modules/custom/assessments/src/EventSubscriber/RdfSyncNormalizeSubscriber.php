@@ -9,7 +9,7 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItemInterface;
 use Drupal\Core\Url;
 use Drupal\assessments\AssessmentInterface;
-use Drupal\assessments\Entity\AssessmentReport;
+use Drupal\assessments\Entity\Assessment\Report;
 use Drupal\assessments\Entity\AssessmentStatement;
 use Drupal\file\FileInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
@@ -112,7 +112,7 @@ class RdfSyncNormalizeSubscriber implements EventSubscriberInterface {
     }
 
     $report = $event->getEntity();
-    assert($report instanceof AssessmentReport);
+    assert($report instanceof Report);
 
     $normalized = $event->getNormalizedArray();
 
@@ -172,7 +172,7 @@ class RdfSyncNormalizeSubscriber implements EventSubscriberInterface {
   protected function expandReportAllowed(RdfSyncNormalizeEvent $event): bool {
     $request = $event->getContext()['request'] ?? NULL;
     return $request instanceof Request &&
-      $event->getEntity() instanceof AssessmentReport &&
+      $event->getEntity() instanceof Report &&
       $request->query->has('_format') &&
       isset(RdfSyncEncoder::getSupportedFormats()[$request->query->get('_format')]);
   }

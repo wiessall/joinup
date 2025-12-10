@@ -75,7 +75,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I fill in "Query presets" with "entity_bundle|news"
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
-    Then I should see the heading "Some page"
+    And I see h1 span element with title "Some page"
     # By default, 'Show content' is set to 'unarchived'.
     And I should see the "Published news" tile
     But I should not see the "Archived news" tile
@@ -85,7 +85,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I select "Archived" from "Show content" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
-    Then I should see the heading "Some page"
+    And I see h1 span element with title "Some page"
     And I should see the "Archived news" tile
     But I should not see the "Published news" tile
 
@@ -94,7 +94,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I select "All" from "Show content" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
-    Then I should see the heading "Some page"
+    And I see h1 span element with title "Some page"
     And I should see the "Archived news" tile
     And I should see the "Published news" tile
 
@@ -103,7 +103,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I select "Unarchived" from "Show content" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
-    Then I should see the heading "Some page"
+    And I see h1 span element with title "Some page"
     And I should not see the "Archived news" tile
     And I should see the "Published news" tile
 
@@ -131,7 +131,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I fill in "Query presets" with "entity_bundle|news" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
-    Then I should see the heading "IOP page"
+    And I see h1 span element with title "IOP page"
     # By default, 'Show content' is set to 'unarchived'.
     And I should see the "IOP published news" tile
     But I should not see the "IOP archived news" tile
@@ -141,7 +141,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I select "Archived" from "Show content" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
-    Then I should see the heading "IOP page"
+    And I see h1 span element with title "IOP page"
     And I should see the "IOP archived news" tile
     But I should not see the "IOP published news" tile
 
@@ -150,7 +150,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I select "All" from "Show content" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
-    Then I should see the heading "IOP page"
+    And I see h1 span element with title "IOP page"
     And I should see the "IOP archived news" tile
     And I should see the "IOP published news" tile
 
@@ -162,7 +162,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     When I am logged in as a moderator
     And I go to the edit form of the "Archived news" news
     And I press "Unarchive"
-    Then I should see the heading "Archived news"
+    And I should see the heading "Archived news"
 
     And I go to the "Some collection" collection
     # @todo Fix this in ISAICP-7756.
