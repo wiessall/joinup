@@ -192,11 +192,4 @@ class Assessment extends ContentEntityBase implements AssessmentInterface {
     return NULL;
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function isPublished(): bool {
-    return !$this->hasField('state') || $this->get('state')->value === 'published';
-  }
-
 }
