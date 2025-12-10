@@ -131,6 +131,14 @@ Feature: Assessment Report Entity Management
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "GR1"
 
+    # Verify organization is NOT created when form has validation errors.
+    # Regression test - organizations should only be created on successful save.
+    Then I press "Save"
+    # Should see validation error
+    Then I should see the error message "1 error has been found: Binding requirements"
+    # Organization should NOT have been created
+    Then the public_organisation assessment "GR1" should not exist
+
     # Binding requirements
     When I click "New binding requirement"
     And a modal should open
