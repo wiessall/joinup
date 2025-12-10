@@ -30,6 +30,26 @@ data:
     createdAt: '2023-06-15T18:04:37.975817Z'
     updatedAt: '2023-07-20T22:09:23.352593Z'
 
+  - id: 000000we-cant-save-this-000000000000
+    url: https://limited.self-hosted.gitlab.example.com/group1/long-used-by.git
+    aliases:
+      - https://limited.self-hosted.gitlab.example.com/group1/long-used-by.git
+    publiccodeYml: |
+      url: https://limited.self-hosted.gitlab.example.com/group1/long-used-by.git
+    active: true
+    createdAt: '2025-12-09T08:00:00.000000Z'
+    updatedAt: '2025-12-10T18:00:00.000000Z'
+
+  - id: 00neither-cant-save-this-000000000000
+    url: https://limited.self-hosted.gitlab.example.com/group1/long-feature.git
+    aliases:
+      - https://limited.self-hosted.gitlab.example.com/group1/long-feature.git
+    publiccodeYml: |
+      url: https://limited.self-hosted.gitlab.example.com/group1/long-feature.git
+    active: true
+    createdAt: '2025-12-09T08:00:00.000000Z'
+    updatedAt: '2025-12-10T18:00:00.000000Z'
+
   - id: 00valid4-0000-0000-0000-000000000000
     url: https://example.de/arbitrary/project-4
     publiccodeYml: |
