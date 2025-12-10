@@ -185,8 +185,17 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
       $this->eventDispatcher->dispatch(new EuOssSolutionPostSaveEvent($solution, $project));
     }
     catch (\Exception $exception) {
-      // The solution could not be saved.
-      Error::logException($this->logger, $exception);
+      // The solution could not be parsed, created or saved.
+      Error::logException(
+        $this->logger,
+        $exception,
+        "OSS solution of project @project-name (@project-url) fetched from @provider cannot be parsed, created or saved.",
+        [
+          '@project-name' => $project->name,
+          '@project-url' => $project->url,
+          '@provider' => $provider->getPluginDefinition()['label'],
+        ],
+      );
       return;
     }
 
