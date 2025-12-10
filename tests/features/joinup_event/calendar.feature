@@ -13,8 +13,6 @@ Feature:
       | Future Horizons Expo          | 2019-12-15 12:00:00 | 2019-12-15 13:00:00 |
       | Innovate & Elevate Conference | 2020-02-15 12:00:00 | 2020-02-15 13:00:00 |
 
-  # Validate the need for the "@restart-session" tag in ISAICP-9742.
-  @restart-session
   Scenario Outline: User can navigate through events
     Given custom_page content:
       | title           | collection | abstract        |
