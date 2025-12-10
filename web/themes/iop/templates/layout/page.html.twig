@@ -71,9 +71,9 @@
   {% if page_header %}
     {{ attach_library('iop/page-header') }}
     <div class="page-header py-5 text-center">
-      <{{ page_header.has_heading ? 'h1' : 'span' }} class="page-header__title">
+      <span class="page-header__title">
         {{ page_header.title }}
-      </{{ page_header.has_heading ? 'h1' : 'span' }}>
+      </span>
     </div>
   {% endif %}
 

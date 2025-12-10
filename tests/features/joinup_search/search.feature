@@ -354,8 +354,7 @@ Feature: Global search
     When I visit "/search?keys=1%00%C0%A7%C0%A2%252527%252522&page=18&sort_by=relevance"
     Then I should get a 200 HTTP response
 
-  # Validate the need for the "@restart-session" tag in ISAICP-9742.
-  @javascript @restart-session
+  @javascript
   Scenario: Search page - Show the abstract or description in the search results.
     Given collection content:
       | title       | description                  | abstract                      | state     |
@@ -382,8 +381,7 @@ Feature: Global search
     And I should see the "Roll alpha" tile
     And I should see the text "The collection roll abstract." in the "Roll alpha" card
 
-  # Validate the need for the "@restart-session" tag in ISAICP-9742.
-  @javascript @restart-session
+  @javascript
   Scenario: Check topics filter for users.
     Given users:
       | Username | E-mail             | First name | Family name | Professional domain |
