@@ -22,7 +22,7 @@
         EN-301-549: Rule required under EN 301 549
         best-practice: Common accessibility best practices
       # Exclude specific rules globally
-      exclude:
+      excludeRules:
         - heading-order
       excludeElements:
         # Drupal toolbal.
