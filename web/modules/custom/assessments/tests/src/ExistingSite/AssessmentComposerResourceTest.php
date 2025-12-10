@@ -29,21 +29,13 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
     // validate creation of their respective entities as they are created on
     // save.
     $this->assertArrayHasKey('id', $data, 'Assessment ID is present in the response.');
-    $this->assertNotFalse(filter_var($data['id'], FILTER_VALIDATE_URL));
     $this->assertArrayHasKey('id', $data['binding_requirement'][0], 'Binding requirement ID is present in the response.');
-    $this->assertNotFalse(filter_var($data['binding_requirement'][0]['id'], FILTER_VALIDATE_URL));
     $this->assertArrayHasKey('id', $data['provider'][0], 'Provider ID is present in the response.');
-    $this->assertNotFalse(filter_var($data['provider'][0]['id'], FILTER_VALIDATE_URL));
     $this->assertArrayHasKey('id', $data['results_in'][0], 'Results in ID is present in the response.');
-    $this->assertNotFalse(filter_var($data['results_in'][0]['id'], FILTER_VALIDATE_URL));
     $this->assertArrayHasKey('id', $data['binding_requirement'][0]['affects'][0], 'Affected service ID is present in the response.');
-    $this->assertNotFalse(filter_var($data['binding_requirement'][0]['affects'][0]['id'], FILTER_VALIDATE_URL));
     $this->assertArrayHasKey('id', $data['binding_requirement'][0]['asset'][0], 'Asset ID is present in the response.');
-    $this->assertNotFalse(filter_var($data['binding_requirement'][0]['asset'][0]['id'], FILTER_VALIDATE_URL));
     $this->assertArrayHasKey('id', $data['binding_requirement'][0]['expression'][0], 'Expression ID is present in the response.');
-    $this->assertNotFalse(filter_var($data['binding_requirement'][0]['expression'][0]['id'], FILTER_VALIDATE_URL));
     $this->assertArrayHasKey('id', $data['binding_requirement'][0]['has_participation'][0], 'Participation ID is present in the response.');
-    $this->assertNotFalse(filter_var($data['binding_requirement'][0]['has_participation'][0]['id'], FILTER_VALIDATE_URL));
     $this->assertSame(201, $response->getStatusCode());
   }
 
@@ -89,8 +81,8 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
   public function testInvalidReferenceIdsReturnErrors(): void {
     $payload = $this->baseValidPayload();
     // Provide non-existent ids for `provider` and `affects` references.
-    $payload['provider'] = [['id' => 99999999]];
-    $payload['binding_requirement'][0]['affects'] = [['id' => 88888888]];
+    $payload['provider'] = [['id' => '8f1c2f7d-4e8a-4b8a-9c2c-3c4b2e9d912a']];
+    $payload['binding_requirement'][0]['affects'] = [['id' => 'f3b7a0e2-1c44-4bb0-94f7-0a6d8c1e58b3']];
 
     $response = $this->invokeResourcePost($payload);
     $this->assertSame(422, $response->getStatusCode());
@@ -98,8 +90,8 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
     $messages = implode("\n", $data['errors'] ?? []);
     // Class short names appear in the message per
     // ResourceParser::getClassShortName().
-    $this->assertStringContainsString('assessment > provider: Provided id 99999999 does not reference a valid entity', $messages);
-    $this->assertStringContainsString('assessment > binding_requirement > affects: Provided id 88888888 does not reference a valid entity', $messages);
+    $this->assertStringContainsString('assessment > provider: Provided id 8f1c2f7d-4e8a-4b8a-9c2c-3c4b2e9d912a does not reference a valid entity', $messages);
+    $this->assertStringContainsString('assessment > binding_requirement > affects: Provided id f3b7a0e2-1c44-4bb0-94f7-0a6d8c1e58b3 does not reference a valid entity', $messages);
   }
 
   /**

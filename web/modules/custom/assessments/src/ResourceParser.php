@@ -441,7 +441,7 @@ final class ResourceParser implements ResourceParserInterface {
 
     $entity->resourceEntityPresave();
     $entity->save();
-    $data['id'] = $entity->getUri();
+    $data['id'] = $entity->uuid();
     return $entity->id();
   }
 
