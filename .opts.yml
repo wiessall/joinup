@@ -5,6 +5,7 @@
 # See \EcEuropa\Toolkit\TaskRunner\Commands\CloneCommands::runDeploy().
 upgrade_commands:
   default:
+    - scripts/generate_oauth_keys.php
     - vendor/bin/drush deploy --yes
     - vendor/bin/drush search-api:reset-tracker --yes
     - vendor/bin/drush joinup:node-access-rebuild
