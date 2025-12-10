@@ -6,6 +6,7 @@ dependencies:
     - assessments.type.report
     - core.entity_view_mode.assessment.view_mode_tile_horizontal
     - field.field.assessment.report.binding_requirement
+    - field.field.assessment.report.comment
     - field.field.assessment.report.documents
     - field.field.assessment.report.legal
     - field.field.assessment.report.organisational
@@ -45,6 +46,7 @@ content:
     region: content
 hidden:
   binding_requirement: true
+  comment: true
   created: true
   documents: true
   langcode: true
