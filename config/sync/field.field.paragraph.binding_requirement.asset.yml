@@ -21,7 +21,7 @@ field_name: asset
 entity_type: paragraph
 bundle: binding_requirement
 label: Asset
-description: ''
+description: 'Identify the interoperability solutions mandatory to use for the implementation of the assessed binding requirement'
 required: false
 translatable: false
 default_value: {  }
