@@ -6,6 +6,7 @@ namespace Drupal\assessments\Entity\Paragraph;
 
 use Drupal\assessments\Entity\AssessmentResourceInterface;
 use Drupal\assessments\Entity\Trait\AssessmentResourceTrait;
+use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 use Drupal\paragraphs\Entity\Paragraph;
 
 /**
@@ -14,6 +15,7 @@ use Drupal\paragraphs\Entity\Paragraph;
 final class BindingRequirement extends Paragraph implements AssessmentResourceInterface {
 
   use AssessmentResourceTrait;
+  use RdfSyncEntityTrait;
 
   /**
    * {@inheritdoc}

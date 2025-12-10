@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity;
 
+use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
+
 /**
  * Defines the assessment model interface.
  */
-interface AssessmentResourceInterface {
+interface AssessmentResourceInterface extends RdfSyncEntityInterface {
 
   /**
    * Returns the resource property mappings used by the parser.
