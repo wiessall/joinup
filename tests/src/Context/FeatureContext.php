@@ -37,9 +37,6 @@ use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_core\JoinupVersionInterface;
 use Drupal\media\Entity\Media;
 use Drush\TestTraits\DrushTestTrait;
-use Joinup\TaskRunner\Traits\TaskRunnerTrait;
-use Joinup\TestMode;
-use Joinup\TestModeManager;
 use LoversOfBehat\TableExtension\Hook\Scope\AfterTableFetchScope;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -58,7 +55,6 @@ class FeatureContext extends RawDrupalContext {
   use PageCacheTrait;
   use SearchTrait;
   use TagTrait;
-  use TaskRunnerTrait;
   use TraversingTrait;
   use UserTrait;
   use UtilityTrait;
@@ -1802,26 +1798,6 @@ class FeatureContext extends RawDrupalContext {
    */
   public function cleanUpEmailCollector(): void {
     \Drupal::state()->delete('system.test_mail_collector');
-  }
-
-  /**
-   * Switch to Behat specific Drupal settings during the test suite.
-   *
-   * @BeforeSuite
-   */
-  public static function addBehatSpecificDrupalSettings(): void {
-    static::runCommand('drupal:settings behat --root=' . static::getPath('web') . ' --sites-subdir=default');
-    TestModeManager::set(TestMode::Behat);
-  }
-
-  /**
-   * Restore the original Drupal settings.
-   *
-   * @AfterSuite
-   */
-  public static function restoreDrupalSettings(): void {
-    static::runCommand('drupal:settings site-clean --root=' . static::getPath('web') . ' --sites-subdir=default');
-    TestModeManager::clear();
   }
 
   /**
