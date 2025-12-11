@@ -236,6 +236,54 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
   }
 
   /**
+   * Tests view access for public_organisation assessments.
+   *
+   * @covers ::checkAccessForPublicOrganisation
+   */
+  public function testPublicOrganisationAccess(): void {
+    $access_handler = \Drupal::entityTypeManager()->getAccessControlHandler('assessment');
+    $organisation = Assessment::create([
+      'type' => 'public_organisation',
+      'name' => 'Test Organisation',
+      'status' => TRUE,
+      'uid' => $this->ownerUser->id(),
+    ]);
+    $organisation->save();
+
+    // Test access without related report.
+    $access_handler->resetCache();
+    $this->assertFalse($organisation->access('view', $this->ownerUser));
+    $this->assertFalse($organisation->access('view', $this->moderatorUser));
+    $this->assertFalse($organisation->access('view', $this->authenticatedUser));
+    $this->assertFalse($organisation->access('view', User::getAnonymousUser()));
+
+    /** @var \Drupal\assessments\Entity\AssessmentReport $report */
+    $report = Assessment::create([
+      'type' => 'report',
+      'name' => 'Test Assessment Report',
+      'state' => 'draft',
+      'uid' => $this->ownerUser->id(),
+      'provider' => $organisation->id(),
+    ]);
+    $report->save();
+
+    // Test access with related report as draft.
+    $access_handler->resetCache();
+    $this->assertTrue($organisation->access('view', $this->ownerUser));
+    $this->assertTrue($organisation->access('view', $this->moderatorUser));
+    $this->assertFalse($organisation->access('view', $this->authenticatedUser));
+    $this->assertFalse($organisation->access('view', User::getAnonymousUser()));
+
+    // Test access with related report as published.
+    $report->setWorkflowState('published')->save();
+    $access_handler->resetCache();
+    $this->assertTrue($organisation->access('view', $this->ownerUser));
+    $this->assertTrue($organisation->access('view', $this->moderatorUser));
+    $this->assertTrue($organisation->access('view', $this->authenticatedUser));
+    $this->assertTrue($organisation->access('view', User::getAnonymousUser()));
+  }
+
+  /**
    * Data provider for non-published assessment states.
    *
    * @return array

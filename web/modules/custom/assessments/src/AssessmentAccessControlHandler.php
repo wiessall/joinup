@@ -94,21 +94,20 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
         ->addCacheableDependency($entity);
     }
 
+    // First check user permission.
+    $access = AccessResult::allowedIfHasPermission($account, 'access content')->addCacheableDependency($entity);
+    if (!$access->isAllowed()) {
+      return $access;
+    }
+
+    // Ensure a related report exists and is accessible.
     $related_report = $entity->getRelatedReport();
+    $access->addCacheTags(['assessment_list:report']);
+    if (!$related_report instanceof AssessmentReport) {
+      return AccessResult::neutral()->addCacheableDependency($access);
+    }
 
-    // Check if the related report exists and is published (status field).
-    $is_published = $related_report instanceof AssessmentReport && $related_report->isPublished();
-
-    $result = AccessResult::allowedIfHasPermission($account, 'access content')
-      ->allowedIf($is_published)
-      ->cachePerPermissions()
-      ->addCacheableDependency($entity);
-
-    $related_report !== NULL
-      ? $result->addCacheableDependency($related_report)
-      : $result->addCacheTags(['assessment_list:report']);
-
-    return $result;
+    return $access->andIf($related_report->access($operation, $account, TRUE));
   }
 
   /**
