@@ -7,7 +7,7 @@ Feature: Assessment Report Entity Management
   @javascript
   Scenario: Create a new assessment report with required fields
     Given I am logged in as an "authenticated user"
-    And I go to "/assessments/add/report"
+    And I go to "/collection/assessments/report/create"
     Then I should see the heading "Create assessment report"
 
     When I press "Save"
@@ -97,14 +97,18 @@ Feature: Assessment Report Entity Management
     # Assessment supporting documents
     And I attach the file "text.pdf" to "Add a new file"
 
+    # Add comment
+    And I fill in "Please add any other comment you would like to share." with "This assessment was conducted in collaboration with multiple stakeholders across EU member states."
+
     When I press "Save"
     Then I should see the success message containing "New assessment Test Assessment Report 2025 has been created."
     And I should see the heading "Test Assessment Report 2025"
     And I should see the following lines of text:
-      | Austrian Ministry of Digital Affairs, a European Union institution from  |
-      | The report has been connected to the following previous/relevant reports |
-      | https://interoperable-europe.ec.europa.eu/report                         |
-      | documented in https://interoperable-europe.ec.europa.eu/general          |
+      | Austrian Ministry of Digital Affairs, a European Union institution from                            |
+      | The report has been connected to the following previous/relevant reports                           |
+      | https://interoperable-europe.ec.europa.eu/report                                                   |
+      | documented in https://interoperable-europe.ec.europa.eu/general                                    |
+      | This assessment was conducted in collaboration with multiple stakeholders across EU member states. |
 
     # Edit test.
     When I go to the edit form of the "Test Assessment Report 2025" assessment
@@ -122,7 +126,7 @@ Feature: Assessment Report Entity Management
   @javascript
   Scenario: All possible tests for 'Provided by' plugin in assessment report
     Given I am logged in as an "authenticated user"
-    And I go to "/assessments/add/report"
+    And I go to "/collection/assessments/report/create"
 
     When I fill in "Name" with "Test Provided by in Assessment Report 2025"
     And I select "Local public sector body" from "Type of public sector body"
@@ -130,6 +134,14 @@ Feature: Assessment Report Entity Management
     And I select "Greece" from "Country"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "GR1"
+
+    # Verify organization is NOT created when form has validation errors.
+    # Regression test - organizations should only be created on successful save.
+    Then I press "Save"
+    # Should see validation error
+    Then I should see the error message "1 error has been found: Binding requirements"
+    # Organization should NOT have been created
+    Then the public_organisation assessment "GR1" should not exist
 
     # Binding requirements
     When I click "New binding requirement"
@@ -308,7 +320,7 @@ Feature: Assessment Report Entity Management
       | E-mail      | pol.gomez@example.pt |
 
     And I am logged in as pol2025
-    And I go to "/assessments/add/report"
+    And I go to "/collection/assessments/report/create"
 
     When I fill in "Name" with "Test permissions in Assessment Report 2025"
     And I select "European Union institution" from "Type of public sector body"
@@ -374,7 +386,7 @@ Feature: Assessment Report Entity Management
     Then I should see the message "The user has been notified that their account has been updated."
 
     And I am logged in as pol2025
-    And I go to "/assessments/add/report"
+    And I go to "/collection/assessments/report/create"
     Then I should see the button "Save as Published"
 
   Scenario: Test assessment reports views

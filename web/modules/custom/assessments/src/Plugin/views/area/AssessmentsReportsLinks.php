@@ -54,7 +54,7 @@ class AssessmentsReportsLinks extends AreaPluginBase {
 
     $build = [
       '#type' => 'container',
-      '#attributes' => ['class' => ['assessments-report-links']],
+      '#attributes' => ['class' => ['assessments-report-links', 'mt-5', 'pb-3']],
     ];
 
     foreach ($links as $link) {
@@ -62,6 +62,13 @@ class AssessmentsReportsLinks extends AreaPluginBase {
         '#type' => 'link',
         '#url' => $link['url'],
         '#title' => $link['title'],
+        '#attributes' => [
+          'class' => [
+            'btn',
+            'btn-primary',
+            'me-2',
+          ],
+        ],
       ];
     }
 
