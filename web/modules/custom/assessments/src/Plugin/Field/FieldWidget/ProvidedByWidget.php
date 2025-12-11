@@ -107,12 +107,10 @@ class ProvidedByWidget extends WidgetBase {
    * {@inheritdoc}
    */
   public function form(FieldItemListInterface $items, array &$form, FormStateInterface $form_state, $get_delta = NULL): array {
-    $renderable = parent::form($items, $form, $form_state, $get_delta);
-    $renderable['#theme_wrappers']['fieldset'] = [
-      '#title' => $this->fieldDefinition->getLabel(),
-    ];
+    $element = parent::form($items, $form, $form_state, $get_delta);
+    $element['#type'] = 'fieldset';
 
-    return $renderable;
+    return $element;
   }
 
   /**
