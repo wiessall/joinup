@@ -150,7 +150,6 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
     // permission.
     if ($entity->isPublished()) {
       return AccessResult::allowedIfHasPermission($account, 'access content')
-        ->cachePerPermissions()
         ->addCacheableDependency($entity);
     }
 
@@ -229,7 +228,6 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
       'bypass assessment report moderation',
       'moderate assessment report',
     ], 'OR')
-      ->cachePerPermissions()
       ->addCacheableDependency($entity);
   }
 
@@ -254,7 +252,6 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
     // Moderation is allowed only when the assessment is in review.
     return AccessResult::allowedIf($entity->getWorkflowState() === 'review')
       ->andIf(AccessResult::allowedIfHasPermission($account, 'moderate assessment report'))
-      ->cachePerPermissions()
       ->addCacheableDependency($entity);
   }
 
