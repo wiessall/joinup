@@ -108,10 +108,8 @@ class ProvidedByWidget extends WidgetBase {
    */
   public function form(FieldItemListInterface $items, array &$form, FormStateInterface $form_state, $get_delta = NULL): array {
     $renderable = parent::form($items, $form, $form_state, $get_delta);
-    $renderable['#theme_wrappers']['details'] = [
+    $renderable['#theme_wrappers']['fieldset'] = [
       '#title' => $this->fieldDefinition->getLabel(),
-      '#summary_attributes' => [],
-      '#attributes' => ['open' => TRUE],
     ];
 
     return $renderable;
