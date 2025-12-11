@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\ExistingSite;
 
-use Drupal\Core\Session\AccountInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\assessments\Entity\Assessment;
 use Drupal\user\Entity\User;
@@ -132,10 +131,10 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
   public function testViewPublishedAssessment(): void {
     $assessment = $this->testAssessments['published'];
 
-    $this->assertAccessAllowed($assessment, 'view', $this->ownerUser);
-    $this->assertAccessAllowed($assessment, 'view', $this->moderatorUser);
-    $this->assertAccessAllowed($assessment, 'view', $this->authenticatedUser);
-    $this->assertAccessAllowed($assessment, 'view', User::getAnonymousUser());
+    $this->assertTrue($assessment->access('view', $this->ownerUser));
+    $this->assertTrue($assessment->access('view', $this->moderatorUser));
+    $this->assertTrue($assessment->access('view', $this->authenticatedUser));
+    $this->assertTrue($assessment->access('view', User::getAnonymousUser()));
   }
 
   /**
@@ -148,12 +147,12 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
   public function testViewNonPublishedAssessment(string $state): void {
     $assessment = $this->testAssessments[$state];
 
-    $this->assertAccessAllowed($assessment, 'view', $this->ownerUser);
-    $this->assertAccessAllowed($assessment, 'view', $this->moderatorUser);
-    $this->assertAccessAllowed($assessment, 'view', $this->assessmentReporterUser);
+    $this->assertTrue($assessment->access('view', $this->ownerUser));
+    $this->assertTrue($assessment->access('view', $this->moderatorUser));
+    $this->assertTrue($assessment->access('view', $this->assessmentReporterUser));
 
-    $this->assertAccessDenied($assessment, 'view', $this->nonOwnerUser);
-    $this->assertAccessDenied($assessment, 'view', $this->authenticatedUser);
+    $this->assertFalse($assessment->access('view', $this->nonOwnerUser));
+    $this->assertFalse($assessment->access('view', $this->authenticatedUser));
   }
 
   /**
@@ -162,12 +161,12 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
    * @covers ::checkCreateAccess
    */
   public function testCreateDraftAssessment(): void {
-    $this->assertCreateAccessAllowed($this->ownerUser, 'draft');
-    $this->assertCreateAccessAllowed($this->assessmentReporterUser, 'draft');
-    $this->assertCreateAccessAllowed($this->moderatorUser, 'draft');
-    $this->assertCreateAccessAllowed($this->authenticatedUser, 'draft');
+    $this->assertTrue($this->accessHandler->createAccess('report', $this->ownerUser, ['state' => 'draft']));
+    $this->assertTrue($this->accessHandler->createAccess('report', $this->assessmentReporterUser, ['state' => 'draft']));
+    $this->assertTrue($this->accessHandler->createAccess('report', $this->moderatorUser, ['state' => 'draft']));
+    $this->assertTrue($this->accessHandler->createAccess('report', $this->authenticatedUser, ['state' => 'draft']));
 
-    $this->assertCreateAccessDenied(User::getAnonymousUser(), 'draft');
+    $this->assertFalse($this->accessHandler->createAccess('report', User::getAnonymousUser(), ['state' => 'draft']));
   }
 
   /**
@@ -176,11 +175,11 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
    * @covers ::checkCreateAccess
    */
   public function testCreatePublishedAssessment(): void {
-    $this->assertCreateAccessAllowed($this->assessmentReporterUser, 'published');
-    $this->assertCreateAccessAllowed($this->moderatorUser, 'published');
+    $this->assertTrue($this->accessHandler->createAccess('report', $this->assessmentReporterUser, ['state' => 'published']));
+    $this->assertTrue($this->accessHandler->createAccess('report', $this->moderatorUser, ['state' => 'published']));
 
-    $this->assertCreateAccessDenied($this->ownerUser, 'published');
-    $this->assertCreateAccessDenied($this->authenticatedUser, 'published');
+    $this->assertFalse($this->accessHandler->createAccess('report', $this->ownerUser, ['state' => 'published']));
+    $this->assertFalse($this->accessHandler->createAccess('report', $this->authenticatedUser, ['state' => 'published']));
   }
 
   /**
@@ -192,12 +191,12 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
   public function testUpdateDraftAssessment(): void {
     $assessment = $this->testAssessments['draft'];
 
-    $this->assertAccessAllowed($assessment, 'update', $this->ownerUser);
-    $this->assertAccessAllowed($assessment, 'update', $this->moderatorUser);
-    $this->assertAccessAllowed($assessment, 'update', $this->assessmentReporterUser);
+    $this->assertTrue($assessment->access('update', $this->ownerUser));
+    $this->assertTrue($assessment->access('update', $this->moderatorUser));
+    $this->assertTrue($assessment->access('update', $this->assessmentReporterUser));
 
-    $this->assertAccessDenied($assessment, 'update', $this->nonOwnerUser);
-    $this->assertAccessDenied($assessment, 'update', $this->authenticatedUser);
+    $this->assertFalse($assessment->access('update', $this->nonOwnerUser));
+    $this->assertFalse($assessment->access('update', $this->authenticatedUser));
   }
 
   /**
@@ -209,12 +208,12 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
   public function testUpdateReviewAssessment(): void {
     $assessment = $this->testAssessments['review'];
 
-    $this->assertAccessAllowed($assessment, 'update', $this->ownerUser);
-    $this->assertAccessAllowed($assessment, 'update', $this->moderatorUser);
-    $this->assertAccessAllowed($assessment, 'update', $this->assessmentReporterUser);
+    $this->assertTrue($assessment->access('update', $this->ownerUser));
+    $this->assertTrue($assessment->access('update', $this->moderatorUser));
+    $this->assertTrue($assessment->access('update', $this->assessmentReporterUser));
 
-    $this->assertAccessDenied($assessment, 'update', $this->nonOwnerUser);
-    $this->assertAccessDenied($assessment, 'update', $this->authenticatedUser);
+    $this->assertFalse($assessment->access('update', $this->nonOwnerUser));
+    $this->assertFalse($assessment->access('update', $this->authenticatedUser));
   }
 
   /**
@@ -227,12 +226,12 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
   public function testDeleteAssessment(string $state): void {
     $assessment = $this->testAssessments[$state];
 
-    $this->assertAccessAllowed($assessment, 'delete', $this->moderatorUser);
-    $this->assertAccessAllowed($assessment, 'delete', $this->assessmentReporterUser);
+    $this->assertTrue($assessment->access('delete', $this->moderatorUser));
+    $this->assertTrue($assessment->access('delete', $this->assessmentReporterUser));
 
-    $this->assertAccessDenied($assessment, 'delete', $this->ownerUser);
-    $this->assertAccessDenied($assessment, 'delete', $this->nonOwnerUser);
-    $this->assertAccessDenied($assessment, 'delete', $this->authenticatedUser);
+    $this->assertFalse($assessment->access('delete', $this->ownerUser));
+    $this->assertFalse($assessment->access('delete', $this->nonOwnerUser));
+    $this->assertFalse($assessment->access('delete', $this->authenticatedUser));
   }
 
   /**
@@ -310,92 +309,6 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
       'published' => ['published'],
       'require_updates' => ['require_updates'],
     ];
-  }
-
-  /**
-   * Asserts that access is allowed.
-   *
-   * @param \Drupal\assessments\Entity\Assessment $assessment
-   *   The assessment entity.
-   * @param string $operation
-   *   The operation (view, update, delete).
-   * @param \Drupal\Core\Session\AccountInterface $account
-   *   The user account to check.
-   */
-  protected function assertAccessAllowed(Assessment $assessment, string $operation, AccountInterface $account): void {
-    $this->assertTrue(
-      $assessment->access($operation, $account),
-      sprintf(
-        'User %s (%s) should have %s access to %s assessment',
-        $account->getAccountName(),
-        implode(', ', $account->getRoles()),
-        $operation,
-        $assessment->get('state')->value
-      )
-    );
-  }
-
-  /**
-   * Asserts that access is denied.
-   *
-   * @param \Drupal\assessments\Entity\Assessment $assessment
-   *   The assessment entity.
-   * @param string $operation
-   *   The operation (view, update, delete).
-   * @param \Drupal\Core\Session\AccountInterface $account
-   *   The user account to check.
-   */
-  protected function assertAccessDenied(Assessment $assessment, string $operation, AccountInterface $account): void {
-    $this->assertFalse(
-      $assessment->access($operation, $account),
-      sprintf(
-        'User %s (%s) should not have %s access to %s assessment',
-        $account->getAccountName(),
-        implode(', ', $account->getRoles()),
-        $operation,
-        $assessment->get('state')->value
-      )
-    );
-  }
-
-  /**
-   * Asserts that create access is allowed.
-   *
-   * @param \Drupal\Core\Session\AccountInterface $account
-   *   The user account to check.
-   * @param string $state
-   *   The target state for the new assessment.
-   */
-  protected function assertCreateAccessAllowed(AccountInterface $account, string $state): void {
-    $this->assertTrue(
-      $this->accessHandler->createAccess('report', $account, ['state' => $state]),
-      sprintf(
-        'User %s (%s) should have create access for %s assessment',
-        $account->getAccountName(),
-        implode(', ', $account->getRoles()),
-        $state
-      )
-    );
-  }
-
-  /**
-   * Asserts that create access is denied.
-   *
-   * @param \Drupal\Core\Session\AccountInterface $account
-   *   The user account to check.
-   * @param string $state
-   *   The target state for the new assessment.
-   */
-  protected function assertCreateAccessDenied(AccountInterface $account, string $state): void {
-    $this->assertFalse(
-      $this->accessHandler->createAccess('report', $account, ['state' => $state]),
-      sprintf(
-        'User %s (%s) should not have create access for %s assessment',
-        $account->getAccountName(),
-        implode(', ', $account->getRoles()),
-        $state
-      )
-    );
   }
 
   /**
