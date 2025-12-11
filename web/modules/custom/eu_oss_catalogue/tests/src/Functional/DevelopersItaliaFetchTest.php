@@ -132,7 +132,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $this->assertSame($timeInPast, $archivedNode->getRevisionCreationTime());
 
     // Perform sync.
-    $this->fetchSolutions('developers_italia', 5);
+    $this->fetchSolutions('developers_italia', 7);
 
     // Check if the node was unarchived.
     $updatedSolution = $this->getNodeByTitle('GitHub solution 1', TRUE);
@@ -159,7 +159,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
 
     // Import the solutions from developers_italia plugin so that
     // the "Project 1.1" has 2 sources.
-    $this->fetchSolutions('developers_italia', 5);
+    $this->fetchSolutions('developers_italia', 7);
 
     $solution2 = $this->getNodeByTitle('Project 1.1', TRUE);
     $this->assertSame(2, $solution2->get('oss_source')->count());
@@ -181,7 +181,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
   public function testMarkDownResolver(): void {
     $entity_view_builder = $this->container->get('entity_type.manager')->getViewBuilder('node');
     $renderer = $this->container->get('renderer');
-    $this->fetchSolutions('developers_italia', 5);
+    $this->fetchSolutions('developers_italia', 7);
 
     // The fact that the solution is found means that the title was cleaned of
     // extra spaces.
