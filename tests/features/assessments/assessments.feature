@@ -92,9 +92,8 @@ Feature: Assessment Report Entity Management
     And I select the radio button "Beneficial" with the name "technical[0][inline_entity_form][interpretation]"
     And I fill in "technical[0][inline_entity_form][judgement][0][value]" with "Implements REST APIs and OpenAPI specs"
 
-    When I click "Other" in the "Content" region
-    And I select the radio button "Risky" with the name "other[0][inline_entity_form][interpretation]"
-    And I fill in "other[0][inline_entity_form][judgement][0][value]" with "Language barriers may present challenges"
+    When I click "Remaining barriers" in the "Content" region
+    And I fill in "Have you discovered any remaining barriers to cross-border interoperability?" with "No significant barriers identified."
 
     # Assessment supporting documents
     And I attach the file "text.pdf" to "Add a new file"
