@@ -11,6 +11,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\PublicOrganisation;
+use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 
 /**
  * Defines the access control handler for the assessment entity type.
@@ -49,8 +50,8 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
   /**
    * Performs access checks for report.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   The entity for which to check access.
+   * @param \Drupal\assessments\AssessmentInterface $entity
+   *   The assessment entity.
    * @param string $operation
    *   The entity operation.
    * @param \Drupal\Core\Session\AccountInterface $account
@@ -59,16 +60,12 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  protected function checkAccessForReport(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
-    // Delegate to operation-specific methods.
-    // Only report bundles have a state field.
-    $state = $entity->hasField('state') ? ($entity->get('state')->value ?? 'draft') : 'draft';
-
+  protected function checkAccessForReport(AssessmentInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
     return match ($operation) {
-      'view' => $this->checkViewAccess($entity, $state, $account),
-      'update' => $this->checkUpdateAccess($entity, $state, $account),
+      'view' => $this->checkViewAccess($entity, $account),
+      'update' => $this->checkUpdateAccess($entity, $account),
       'delete' => $this->checkDeleteAccess($entity, $account),
-      'moderate' => $this->checkModerateAccess($entity, $state, $account),
+      'moderate' => $this->checkModerateAccess($entity, $account),
       default => AccessResult::neutral()
         ->cachePerPermissions()
         ->addCacheableDependency($entity),
@@ -78,8 +75,8 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
   /**
    * Performs access checks for public organisation.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   The entity for which to check access.
+   * @param \Drupal\assessments\AssessmentInterface $entity
+   *   The assessment entity.
    * @param string $operation
    *   The entity operation.
    * @param \Drupal\Core\Session\AccountInterface $account
@@ -88,7 +85,7 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  protected function checkAccessForPublicOrganisation(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
+  protected function checkAccessForPublicOrganisation(AssessmentInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
     assert($entity instanceof PublicOrganisation);
 
     if ($operation !== 'view') {
@@ -117,7 +114,7 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
   /**
    * Performs access checks for sub entity.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
+   * @param \Drupal\assessments\AssessmentInterface $entity
    *   The entity for which to check access.
    * @param string $operation
    *   The entity operation.
@@ -127,7 +124,7 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  protected function checkAccessForSubEntity(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
+  protected function checkAccessForSubEntity(AssessmentInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
     $related_report = $entity->getRelatedReport();
 
     return $related_report instanceof AssessmentReport
@@ -141,22 +138,18 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
   /**
    * Checks view access for assessment reports.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
+   * @param \Drupal\assessments\AssessmentInterface $entity
    *   The assessment entity.
-   * @param string $state
-   *   The workflow state of the assessment.
    * @param \Drupal\Core\Session\AccountInterface $account
    *   The user account to check access for.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  protected function checkViewAccess(EntityInterface $entity, string $state, AccountInterface $account): AccessResultInterface {
-    $is_owner = $entity->getOwnerId() == $account->id();
-
+  protected function checkViewAccess(AssessmentInterface $entity, AccountInterface $account): AccessResultInterface {
     // Published assessments: viewable by everyone with 'access content'
     // permission.
-    if ($state === 'published') {
+    if ($entity->isPublished()) {
       return AccessResult::allowedIfHasPermission($account, 'access content')
         ->cachePerPermissions()
         ->addCacheableDependency($entity);
@@ -164,50 +157,42 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
 
     // Non-published assessments (draft, review, require_updates): restricted
     // to owner, assessment reporters and moderators.
-    if (in_array($state, ['draft', 'review', 'require_updates'], TRUE)) {
-      // Owner can view their own non-published assessment with view permission.
-      if ($is_owner && $account->hasPermission('view own unpublished assessment report')) {
-        return AccessResult::allowed()
-          ->cachePerPermissions()
-          ->cachePerUser()
-          ->addCacheableDependency($entity);
-      }
-
-      // Assessment reporters and moderators can view any non-published
-      // assessment.
-      if ($account->hasPermission('bypass assessment report moderation') || $account->hasPermission('moderate assessment report')) {
-        return AccessResult::allowed()
-          ->cachePerPermissions()
-          ->addCacheableDependency($entity);
-      }
-
-      // Deny access with forbidden to show access denied page.
-      return AccessResult::forbidden('Non-published assessments are only viewable by the owner, assessment reporters, and moderators.')
+    // Owner can view their own non-published assessment with view permission.
+    $is_owner = $entity->getOwnerId() == $account->id();
+    if ($is_owner && $account->hasPermission('view own unpublished assessment report')) {
+      return AccessResult::allowed()
         ->cachePerPermissions()
         ->cachePerUser()
         ->addCacheableDependency($entity);
     }
 
-    // Other states (if any): deny access by default.
-    return AccessResult::neutral()
+    // Assessment reporters and moderators can view any non-published
+    // assessment.
+    if ($account->hasPermission('bypass assessment report moderation') || $account->hasPermission('moderate assessment report')) {
+      return AccessResult::allowed()
+        ->cachePerPermissions()
+        ->addCacheableDependency($entity);
+    }
+
+    // Deny access with forbidden to show access denied page.
+    return AccessResult::forbidden('Non-published assessments are only viewable by the owner, assessment reporters, and moderators.')
       ->cachePerPermissions()
+      ->cachePerUser()
       ->addCacheableDependency($entity);
   }
 
   /**
    * Checks update access for assessment reports.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
+   * @param \Drupal\assessments\AssessmentInterface $entity
    *   The assessment entity.
-   * @param string $state
-   *   The workflow state of the assessment.
    * @param \Drupal\Core\Session\AccountInterface $account
    *   The user account to check access for.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  protected function checkUpdateAccess(EntityInterface $entity, string $state, AccountInterface $account): AccessResultInterface {
+  protected function checkUpdateAccess(AssessmentInterface $entity, AccountInterface $account): AccessResultInterface {
     // Assessment reporters and moderators can update in any state.
     if ($account->hasPermission('bypass assessment report moderation') || $account->hasPermission('moderate assessment report')) {
       return AccessResult::allowed()
@@ -215,8 +200,8 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
         ->addCacheableDependency($entity);
     }
 
-    // Owners can update only in non-published states with edit permission.
-    if (in_array($state, ['draft', 'review', 'require_updates'], TRUE) && $entity->getOwnerId() == $account->id()) {
+    // Owners can update only in non-published state with edit permission.
+    if (!$entity->isPublished() && $entity->getOwnerId() == $account->id()) {
       return AccessResult::allowedIfHasPermission($account, 'edit own assessment report')
         ->cachePerUser()
         ->addCacheableDependency($entity);
@@ -231,7 +216,7 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
   /**
    * Checks delete access for assessment reports.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
+   * @param \Drupal\assessments\AssessmentInterface $entity
    *   The assessment entity.
    * @param \Drupal\Core\Session\AccountInterface $account
    *   The user account to check access for.
@@ -239,7 +224,7 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  protected function checkDeleteAccess(EntityInterface $entity, AccountInterface $account): AccessResultInterface {
+  protected function checkDeleteAccess(AssessmentInterface $entity, AccountInterface $account): AccessResultInterface {
     // Assessment reporters and moderators can delete in any state.
     return AccessResult::allowedIfHasPermissions($account, [
       'bypass assessment report moderation',
@@ -252,25 +237,23 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
   /**
    * Checks moderate access for assessment reports.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
+   * @param \Drupal\assessments\AssessmentInterface $entity
    *   The assessment entity.
-   * @param string $state
-   *   The workflow state of the assessment.
    * @param \Drupal\Core\Session\AccountInterface $account
    *   The user account to check access for.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  protected function checkModerateAccess(EntityInterface $entity, string $state, AccountInterface $account): AccessResultInterface {
-    // Only report bundles can be moderated.
-    if ($entity->bundle() !== 'report') {
-      return AccessResult::forbidden('Only report assessments can be moderated.')
+  protected function checkModerateAccess(AssessmentInterface $entity, AccountInterface $account): AccessResultInterface {
+    // Only available for workflow-enabled bundles (i.e.: report).
+    if (!$entity instanceof EntityWorkflowStateInterface) {
+      return AccessResult::forbidden('This assessment bundle does not support moderation.')
         ->addCacheableDependency($entity);
     }
 
-    // Only reports in review state can be moderated by users with permission.
-    return AccessResult::allowedIf($state === 'review')
+    // Moderation is allowed only when the assessment is in review.
+    return AccessResult::allowedIf($entity->getWorkflowState() === 'review')
       ->andIf(AccessResult::allowedIfHasPermission($account, 'moderate assessment report'))
       ->cachePerPermissions()
       ->addCacheableDependency($entity);

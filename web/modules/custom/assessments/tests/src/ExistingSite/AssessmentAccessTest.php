@@ -104,7 +104,6 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
         'type' => 'report',
         'name' => ucfirst($state) . ' Assessment Report',
         'state' => $state,
-        'status' => $state === 'published',
         'uid' => $this->ownerUser->id(),
       ]);
       $this->testAssessments[$state]->save();

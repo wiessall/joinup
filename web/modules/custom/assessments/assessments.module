@@ -409,12 +409,12 @@ function assessments_assessment_update(AssessmentInterface $entity): void {
  *   The assessment entity.
  */
 function _assessments_handle_report_state_notification(AssessmentInterface $entity): void {
-  if ($entity->bundle() !== 'report' || !$entity->hasField('state')) {
+  if (!$entity instanceof AssessmentReport) {
     return;
   }
 
-  $original_state = $entity->original?->get('state')?->getString();
-  $current_state = $entity->get('state')?->getString();
+  $original_state = $entity->original instanceof AssessmentReport ? $entity->original->getWorkflowState() : NULL;
+  $current_state = $entity->getWorkflowState();
 
   if ($current_state === 'review' && $original_state !== 'review') {
     $event = new AssessmentReportEvent($entity);
