@@ -28,6 +28,7 @@
 @import "@openeuropa/bcl-bootstrap/scss/maps";
 
 // Bootstrap mixins
+@import "@openeuropa/bcl-theme-default/src/scss/base/mixins";
 @import "@openeuropa/bcl-bootstrap/scss/mixins";
 
 @import "mixins/bootstrap-icons";
