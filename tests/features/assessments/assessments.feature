@@ -49,7 +49,9 @@ Feature: Assessment Report Entity Management
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
 
     When I click "Affected stakeholders" in the "Modal content" region
-    And I select "Local public sector body" from "has_participation[0][inline_entity_form][participant_type][]" in the "Modal content" region
+    Then I should see the text "Public and/or private stakeholders affected" in the "Modal content" region
+    And the page should contain the html text 'aria-placeholder="Select or start typing..."'
+    When I select "Local public sector body" from "has_participation[0][inline_entity_form][participant_type][]" in the "Modal content" region
     And I select "Belgium" from "has_participation[0][inline_entity_form][stakeholder_country][]" in the "Modal content" region
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
 
@@ -90,9 +92,8 @@ Feature: Assessment Report Entity Management
     And I select the radio button "Beneficial" with the name "technical[0][inline_entity_form][interpretation]"
     And I fill in "technical[0][inline_entity_form][judgement][0][value]" with "Implements REST APIs and OpenAPI specs"
 
-    When I click "Other" in the "Content" region
-    And I select the radio button "Risky" with the name "other[0][inline_entity_form][interpretation]"
-    And I fill in "other[0][inline_entity_form][judgement][0][value]" with "Language barriers may present challenges"
+    When I click "Remaining barriers" in the "Content" region
+    And I fill in "Have you discovered any remaining barriers to cross-border interoperability?" with "No significant barriers identified."
 
     # Assessment supporting documents
     And I attach the file "text.pdf" to "Add a new file"
