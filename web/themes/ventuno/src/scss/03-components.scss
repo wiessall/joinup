@@ -6,7 +6,14 @@
  * Components that are needed across all pages.
  */
 
-@import "partials/core"; // Functions, variables, utilities and mixins required
+// Functions, variables, utilities and mixins required.
+@import "partials/core";
+
+// Ensure Bootstrap utility classes (e.g. .rounded-2) exist before extending in
+// header.
+@import "@openeuropa/bcl-bootstrap/scss/utilities";
+@import "@openeuropa/bcl-theme-default/src/scss/base/utilities";
+@import "@openeuropa/bcl-bootstrap/scss/utilities/api";
 @import "@openeuropa/bcl-bootstrap/scss/dropdown";
 @import "@openeuropa/bcl-bootstrap/scss/nav";
 @import "@openeuropa/bcl-bootstrap/scss/navbar";
