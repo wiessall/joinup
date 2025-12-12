@@ -10,7 +10,7 @@ Feature: Assessment Report Entity Management
     And I go to "/collection/assessments/report/create"
     Then I should see the heading "Create assessment report"
 
-    When I press "Save"
+    When I press "Save as Draft"
     Then I should see the error message "3 errors have been found: NameType of public sector bodyBinding requirements"
 
     When I fill in "Name" with "Test Assessment Report 2025"
@@ -103,10 +103,11 @@ Feature: Assessment Report Entity Management
     # Add comment
     And I fill in "Please add any other comment you would like to share." with "This assessment was conducted in collaboration with multiple stakeholders across EU member states."
 
-    When I press "Save"
+    When I press "Save as Draft"
     Then I should see the success message containing "New assessment Test Assessment Report 2025 has been created."
     And I should see the heading "Test Assessment Report 2025"
     And I should see the following lines of text:
+      | Status: Draft                                                                                      |
       | Austrian Ministry of Digital Affairs, a European Union institution from                            |
       | The report has been connected to the following previous/relevant reports                           |
       | https://interoperable-europe.ec.europa.eu/report                                                   |
@@ -116,8 +117,9 @@ Feature: Assessment Report Entity Management
     # Edit test.
     When I go to the edit form of the "Test Assessment Report 2025" assessment
     And I fill in "Name" with "Test Assessment Report 2025 v2"
-    And I press "Save"
+    And I press "Save as In Review"
     Then I should see the heading "Test Assessment Report 2025 v2"
+    And I should see the text "Status: In Review"
 
     # Delete test.
     Given I am logged in as a "assessment_reporter"
@@ -125,6 +127,19 @@ Feature: Assessment Report Entity Management
     Then I should see the heading "Are you sure you want to delete the assessment Test Assessment Report 2025 v2?"
     When I press "Delete"
     Then I should see the success message containing "The assessment Test Assessment Report 2025 v2 has been deleted."
+
+  @javascript
+  Scenario Outline: Logged-in users with different permission must access draft creation
+    Given I am logged in as a "<user>"
+    When I go to "/collection/assessments/report/create"
+    Then I should see the button "Save as Draft"
+    And I should see the button "Save as In Review"
+    And I <should or should not see> the button "Save as Published"
+
+    Examples:
+      | user                | should or should not see |
+      | authenticated user  | should not see        |
+      | assessment_reporter | should see            |
 
   @javascript
   Scenario: All possible tests for 'Provided by' plugin in assessment report
