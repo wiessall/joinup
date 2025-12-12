@@ -214,7 +214,7 @@ Feature: Assessment Report Entity Management
     And I select "Greece" from "Country"
     And I wait for AJAX to finish
     And the following field should be present "Select organisation"
-    And the option with text "- Select -" from select "Select organisation" is selected
+    And no option from select "Select organisation" is selected
     Then I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
     And the following field should be present "Select organisation"
