@@ -166,7 +166,7 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
     // to owner, assessment reporters and moderators.
     if (in_array($state, ['draft', 'review', 'require_updates'], TRUE)) {
       // Owner can view their own non-published assessment with view permission.
-      if ($is_owner && $account->hasPermission('view own assessment report')) {
+      if ($is_owner && $account->hasPermission('view own unpublished assessment report')) {
         return AccessResult::allowed()
           ->cachePerPermissions()
           ->cachePerUser()
