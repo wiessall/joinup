@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   id: "assessment_report",
   label: new TranslatableMarkup("Assessment report"),
   uri_paths: [
-    "create" => "/api/assessments/v1/assessment/create",
+    "create" => "/api/assessments/v1/assessment",
   ],
 )]
 class AssessmentReportResource extends ResourceBase {
