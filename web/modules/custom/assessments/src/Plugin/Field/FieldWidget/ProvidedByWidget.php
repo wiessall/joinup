@@ -107,14 +107,21 @@ class ProvidedByWidget extends WidgetBase {
    * {@inheritdoc}
    */
   public function form(FieldItemListInterface $items, array &$form, FormStateInterface $form_state, $get_delta = NULL): array {
-    $renderable = parent::form($items, $form, $form_state, $get_delta);
-    $renderable['#theme_wrappers']['details'] = [
-      '#title' => $this->fieldDefinition->getLabel(),
-      '#summary_attributes' => [],
-      '#attributes' => ['open' => TRUE],
-    ];
+    $element = parent::form($items, $form, $form_state, $get_delta);
 
-    return $renderable;
+    if (!empty($element['#title'])) {
+      $element['field_title'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'div',
+        '#value' => $element['#title'],
+        '#attributes' => [
+          'class' => ['form-label', 'h4'],
+        ],
+        '#weight' => -100,
+      ];
+    }
+
+    return $element;
   }
 
   /**
