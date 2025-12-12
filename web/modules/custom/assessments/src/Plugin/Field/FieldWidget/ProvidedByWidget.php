@@ -108,7 +108,14 @@ class ProvidedByWidget extends WidgetBase {
    */
   public function form(FieldItemListInterface $items, array &$form, FormStateInterface $form_state, $get_delta = NULL): array {
     $element = parent::form($items, $form, $form_state, $get_delta);
-    $element['#type'] = 'fieldset';
+
+    if (!empty($element['#title'])) {
+      $element['field_title'] = [
+        '#type' => 'label',
+        '#title' => $element['#title'],
+        '#weight' => -100,
+      ];
+    }
 
     return $element;
   }
