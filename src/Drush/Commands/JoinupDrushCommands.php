@@ -71,7 +71,6 @@ class JoinupDrushCommands extends DrushCommands {
   #[CLI\Bootstrap(level: DrupalBootLevels::FULL)]
   public function acceptanceTasks(): void {
     $this->moduleInstaller->install(['joinup_acceptance']);
-    $this->generateOauthKeys();
   }
 
   /**
