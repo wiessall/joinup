@@ -29,7 +29,7 @@
         - '.toolbar'
         # Third-party code injected in page with Javascript.
         - '.wt-globan--container'
-  - Drupal\joinup\Context\AssessmentContext
+  - Drupal\joinup\Context\AssessmentsContext
   - Drupal\joinup\Context\BootstrapContext
   - Drupal\joinup\Context\PrivateMessageContext
   - Drupal\joinup\Context\CalendarContext
