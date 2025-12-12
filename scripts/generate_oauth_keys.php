@@ -24,48 +24,15 @@ function is_gitlab_ci(): bool {
 }
 
 /**
- * Generate OAuth keys using Drush eval.
+ * Generate OAuth keys using Drush command.
  */
 function generate_oauth_keys(): void {
   $drush = __DIR__ . '/../vendor/bin/drush';
-
-  // Create a temporary PHP file with the code to execute.
-  $temp_file = tempnam(sys_get_temp_dir(), 'oauth_keys_');
-  $php_code = <<<'PHP'
-<?php
-$fileSystem = \Drupal::service("file_system");
-$directory = "private://simple_oauth";
-$privateKeyPath = $fileSystem->realpath("private://simple_oauth/private.key");
-
-if (!$privateKeyPath || !file_exists($privateKeyPath)) {
-  $fileSystem->prepareDirectory(
-    $directory,
-    \Drupal\Core\File\FileSystemInterface::CREATE_DIRECTORY |
-    \Drupal\Core\File\FileSystemInterface::MODIFY_PERMISSIONS
-  );
-
-  $keygen = \Drupal::service("simple_oauth.key.generator");
-  $keygen->generateKeys($fileSystem->realpath($directory));
-
-  echo "OAUTH_SUCCESS: OAuth keys generated in GitLab CI.\n";
-} else {
-  echo "OAUTH_SUCCESS: OAuth keys already exist — skipping.\n";
-}
-PHP;
-
-  file_put_contents($temp_file, $php_code);
-
-  $drush_command = sprintf('%s php:script %s 2>&1', escapeshellarg($drush), escapeshellarg($temp_file));
+  $drush_command = sprintf('%s joinup:generate-oauth-keys 2>&1', escapeshellarg($drush));
   $output = shell_exec($drush_command);
 
-  // Clean up temp file.
-  unlink($temp_file);
-
   if ($output !== null) {
-    // Extract only the success messages.
-    if (preg_match('/OAUTH_SUCCESS: (.+)/', $output, $matches)) {
-      echo $matches[1] . "\n";
-    }
+    echo $output;
   }
 }
 

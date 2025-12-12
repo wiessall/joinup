@@ -77,7 +77,9 @@ class JoinupDrushCommands extends DrushCommands {
   /**
    * Generates OAuth2 keys if they don't already exist.
    */
-  protected function generateOauthKeys(): void {
+  #[CLI\Command(name: 'joinup:generate-oauth-keys')]
+  #[CLI\Bootstrap(level: DrupalBootLevels::FULL)]
+  public function generateOauthKeys(): void {
     $directory = 'private://simple_oauth';
     $realPath = $this->fileSystem->realpath($directory);
 
