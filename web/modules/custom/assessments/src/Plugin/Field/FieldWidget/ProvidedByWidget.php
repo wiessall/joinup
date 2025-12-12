@@ -11,8 +11,6 @@ use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\views\Views;
@@ -21,22 +19,22 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Widget for "Provided by" field with progressive disclosure.
  *
- * This widget provides a custom interface for selecting or creating public
- * organisations with the following workflow:
+ * Provides a custom interface for selecting or creating public organisations
+ * with the following workflow:
  *
- *  - Initially displays only the Type field
- *  - When type is selected:
- *    - For Local/Regional/National: Shows Country (mandatory)
- *      and organisation listing
- *    - For EU institutions: Shows organisation listing only
- *  - User can select existing or add new organisation
- *  - When "add new" is chosen: Hides listing, shows only
- *    Organisation Name field
+ * - Initially displays only the organisation type field
+ * - When type is selected:
+ *   - For Local/Regional/National: Shows country (mandatory) and organisation
+ *     listing
+ *   - For EU institutions: Shows organisation listing only
+ * - User can select existing or add new organisation
+ * - When "add new" is chosen: Hides listing, shows organisation name field
  *
  * Implementation notes:
- *  - Uses a custom #op property on form elements to identify operations.
- *    This simplifies operation detection compared to parsing #name values,
- *    improving code maintainability and reducing complexity.
+ * - Defers organisation creation until after validation passes to prevent
+ *   creation when form submission fails
+ * - Uses case-insensitive name matching to prevent duplicate organisations
+ * - Uses custom #op property on form elements to identify operations
  */
 #[FieldWidget(
   id: 'provided_by_widget',
@@ -68,11 +66,14 @@ class ProvidedByWidget extends WidgetBase {
   protected const string OP_SELECT_EXISTING = 'assessment_org_select_existing';
 
   /**
-   * The logger channel.
+   * Placeholder target_id value for pending organisations.
    *
-   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   * Used during validation to satisfy required field constraints while
+   * deferring actual organization creation until after validation passes.
+   * Value 0 is treated as a valid empty reference by Drupal core's
+   * ValidReference constraint.
    */
-  protected LoggerChannelInterface $logger;
+  protected const int PENDING_ORG_PLACEHOLDER = 0;
 
   /**
    * {@inheritdoc}
@@ -84,10 +85,8 @@ class ProvidedByWidget extends WidgetBase {
     array $settings,
     array $third_party_settings,
     protected EntityTypeManagerInterface $entityTypeManager,
-    protected LoggerChannelFactoryInterface $loggerFactory,
   ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings);
-    $this->logger = $loggerFactory->get('assessments');
   }
 
   /**
@@ -101,7 +100,6 @@ class ProvidedByWidget extends WidgetBase {
       $configuration['settings'],
       $configuration['third_party_settings'],
       $container->get('entity_type.manager'),
-      $container->get('logger.factory'),
     );
   }
 
@@ -115,6 +113,7 @@ class ProvidedByWidget extends WidgetBase {
       '#summary_attributes' => [],
       '#attributes' => ['open' => TRUE],
     ];
+
     return $renderable;
   }
 
@@ -125,20 +124,35 @@ class ProvidedByWidget extends WidgetBase {
     $fieldName = $this->fieldDefinition->getName();
     $parents = $element['#field_parents'];
     $widgetState = static::getWidgetState($parents, $fieldName, $form_state);
+
     $triggeringElement = $form_state->getTriggeringElement();
 
     $element['#type'] = 'container';
     $element['#attributes']['id'] = 'provided-by-content-' . $delta;
     $element['#attributes']['class'][] = 'provided-by-widget';
     $element['#attributes']['data-delta'] = $delta;
+    $element['#field_name'] = $fieldName;
+    $element['#delta'] = $delta;
+    $element['#required'] = FALSE;
+    $element['#element_validate'][] = [static::class, 'validatePendingOrganisation'];
 
     $currentEntity = $items[$delta]->entity ?? NULL;
     $currentType = NULL;
     $currentCountry = NULL;
 
+    // If entity didn't load but we have a valid target_id, load it manually.
+    if (!$currentEntity && !empty($items[$delta]->target_id) && $items[$delta]->target_id > 0) {
+      try {
+        $currentEntity = $this->entityTypeManager
+          ->getStorage('assessment')
+          ->load($items[$delta]->target_id);
+      }
+      catch (\Exception) {
+        // Entity failed to load - continue without it.
+      }
+    }
+
     // Reset current entity during country AJAX to prevent stale selection.
-    // The 'country_just_changed' flag persists across multiple formElement()
-    // calls during the AJAX rebuild process.
     if (!empty($widgetState['country_just_changed'])) {
       $currentEntity = NULL;
     }
@@ -250,8 +264,7 @@ class ProvidedByWidget extends WidgetBase {
         );
 
         if ($selectedCountry) {
-          // Avoid updating widget state during country AJAX to prevent
-          // inconsistency across multiple formElement() invocations.
+          // Update widget state only during non-AJAX requests.
           if (!$isCountryAjax) {
             $countryChanged = !isset($widgetState['selected_country'])
               || $widgetState['selected_country'] !== $selectedCountry;
@@ -602,9 +615,6 @@ class ProvidedByWidget extends WidgetBase {
   /**
    * Clear target_id from user input to reset organization selection.
    *
-   * This is necessary to reset the organization selection when
-   * country or type changes.
-   *
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state.
    * @param array $parents
@@ -626,12 +636,7 @@ class ProvidedByWidget extends WidgetBase {
   }
 
   /**
-   * Clear all "add new" fields from user input when switching to select mode.
-   *
-   * This ensures that the 'Organisation name', 'create_new', 'new_org_type',
-   * and 'new_org_country' field values are removed when switching from
-   * "add new" to "select existing" mode. This prevents unwanted organisation
-   * creation when the form is submitted.
+   * Clear "add new" fields when switching to "select existing" mode.
    *
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state.
@@ -643,25 +648,31 @@ class ProvidedByWidget extends WidgetBase {
    *   The field delta.
    */
   private function clearAddNewFieldsFromUserInput(FormStateInterface $form_state, array $parents, string $fieldName, int $delta): void {
-    // List of fields to clear from "add new" mode.
     $fieldsToRemove = ['name', 'create_new', 'new_org_type', 'new_org_country'];
 
     foreach ($fieldsToRemove as $field) {
       $path = array_merge($parents, [$fieldName, $delta, 'content', $field]);
       $this->clearFieldFromFormState($form_state, $path);
     }
+
+    // Clear pending organization data.
+    $pendingOrgs = $form_state->get('pending_organisations') ?? [];
+    if (isset($pendingOrgs[$fieldName][$delta])) {
+      unset($pendingOrgs[$fieldName][$delta]);
+      if (empty($pendingOrgs[$fieldName])) {
+        unset($pendingOrgs[$fieldName]);
+      }
+      $form_state->set('pending_organisations', empty($pendingOrgs) ? NULL : $pendingOrgs);
+    }
   }
 
   /**
-   * Clear a field from both user input and form state values.
-   *
-   * This helper method removes a field value from both the user input array
-   * and form state values to ensure complete cleanup.
+   * Clear a field from user input and form state values.
    *
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state.
    * @param array $path
-   *   The array path to the field (e.g., ['field_name', 0, 'content', 'name']).
+   *   The array path to the field.
    */
   private function clearFieldFromFormState(FormStateInterface $form_state, array $path): void {
     $userInput = $form_state->getUserInput();
@@ -707,10 +718,8 @@ class ProvidedByWidget extends WidgetBase {
         $options = $this->getTermOptionsFromHandlerSettings($handlerSettings);
       }
     }
-    catch (\Exception $e) {
-      $this->logger->error('Failed to load organisation type options: @message', [
-        '@message' => $e->getMessage(),
-      ]);
+    catch (\Exception) {
+      // Return empty options if field configuration unavailable.
     }
 
     return $options;
@@ -728,7 +737,6 @@ class ProvidedByWidget extends WidgetBase {
     $options = [];
 
     try {
-      // Load the field definition from public_organisation entity type.
       $fieldDefinitions = $this->entityTypeManager
         ->getStorage('field_config')
         ->loadByProperties([
@@ -749,11 +757,8 @@ class ProvidedByWidget extends WidgetBase {
         }
       }
     }
-    catch (\Exception $e) {
-      // Fallback: Return empty options if field not available.
-      $this->logger->error('Failed to load country options: @message', [
-        '@message' => $e->getMessage(),
-      ]);
+    catch (\Exception) {
+      // Return empty options if field configuration unavailable.
     }
 
     return $options;
@@ -832,10 +837,8 @@ class ProvidedByWidget extends WidgetBase {
         }
       }
     }
-    catch (\Exception $e) {
-      $this->logger->error('Failed to load options from Views handler: @message', [
-        '@message' => $e->getMessage(),
-      ]);
+    catch (\Exception) {
+      // Return empty options if view unavailable.
     }
 
     return $options;
@@ -923,142 +926,59 @@ class ProvidedByWidget extends WidgetBase {
   /**
    * {@inheritdoc}
    */
-  public function massageFormValues(
-    array $values,
-    array $form,
-    FormStateInterface $form_state,
-  ): array {
+  public function massageFormValues(array $values, array $form, FormStateInterface $form_state): array {
     $newValues = [];
-
-    // Only create organisations during actual form submission, not during AJAX
-    // rebuilds. This prevents premature creation when users switch modes or
-    // change selections via AJAX.
-    $isActualSubmission = $form_state->isSubmitted() && !$form_state->isRebuilding();
-
-    // Get widget state to check if "Add New" was just clicked.
     $fieldName = $this->fieldDefinition->getName();
-    $parents = $form['#parents'] ?? [];
-    $widgetState = static::getWidgetState($parents, $fieldName, $form_state);
-    $addNewJustClicked = $widgetState['add_new_just_clicked'] ?? FALSE;
+
+    // Detect form submission vs AJAX rebuild.
+    $triggeringElement = $form_state->getTriggeringElement();
+    $isAjaxButton = !empty($triggeringElement['#ajax']);
+    $isFormSubmit = !$isAjaxButton;
 
     foreach ($values as $delta => $value) {
       if (empty($value)) {
         continue;
       }
 
-      if (isset($value['target_id']) && !empty($value['target_id'])) {
-        $newValues[$delta] = [
-          'target_id' => $value['target_id'],
-        ];
-        continue;
-      }
-
-      if (isset($value['content']['target_id'])
-        && !empty($value['content']['target_id'])
-        && $value['content']['target_id'] !== '_none') {
+      // User selected existing organisation from dropdown.
+      if (!empty($value['content']['target_id'])
+        && $value['content']['target_id'] !== '_none'
+        && $value['content']['target_id'] !== '0'
+        && $value['content']['target_id'] !== 0) {
         $newValues[$delta] = [
           'target_id' => $value['content']['target_id'],
         ];
         continue;
       }
 
-      if ($isActualSubmission
-        && isset($value['content']['create_new'])
-        && $value['content']['create_new'] === TRUE
-        && !empty($value['content']['name'])) {
-
-        $organisationName = trim($value['content']['name']);
-        $isEuType = !empty($value['content']['new_org_type']) &&
-          $this->isEuOrganisationType($value['content']['new_org_type']);
-
-        // Build query to find potential matches.
-        $query = $this->entityTypeManager
-          ->getStorage('assessment')
-          ->getQuery()
-          ->condition('type', 'public_organisation')
-          ->condition('name', $organisationName)
-          ->accessCheck()
-          ->range(0, 1);
-
-        if (!empty($value['content']['new_org_type'])) {
-          $query->condition('organisation_type', $value['content']['new_org_type']);
-        }
-
-        if (!empty($value['content']['new_org_country'])) {
-          $query->condition('country', $value['content']['new_org_country']);
-        }
-
-        $existingIds = $query->execute();
-
-        // Reuse existing organisation if found.
-        if (!empty($existingIds)) {
-          $existingId = reset($existingIds);
-          $newValues[$delta] = [
-            'target_id' => $existingId,
-          ];
-
-          // Display warning message only when user just clicked "Add New".
-          // This prevents showing the warning on simple edits like changing
-          // the report title.
-          if ($addNewJustClicked) {
-            if ($isEuType) {
-              $this->messenger()->addWarning($this->t(
-                "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
-              ));
-            }
-            else {
-              $this->messenger()->addWarning($this->t(
-                "You tried to create a new organisation but one with the same type, country and name already exists. We've linked the existing one to your report."
-              ));
-            }
-          }
-        }
-
-        if (!isset($newValues[$delta])) {
-          $organisationValues = [
-            'type' => 'public_organisation',
-            'name' => $organisationName,
-            'status' => TRUE,
-          ];
-
-          if (!empty($value['content']['new_org_type'])) {
-            $organisationValues['organisation_type'] = $value['content']['new_org_type'];
-          }
-
-          if (!empty($value['content']['new_org_country'])) {
-            $organisationValues['country'] = $value['content']['new_org_country'];
-          }
-
-          try {
-            $organisation = $this->entityTypeManager
-              ->getStorage('assessment')
-              ->create($organisationValues);
-            $organisation->save();
-
-            $newValues[$delta] = [
-              'target_id' => $organisation->id(),
-            ];
-
-            $this->logger->info('Created new organisation: @name (ID: @id)', [
-              '@name' => $organisationName,
-              '@id' => $organisation->id(),
-            ]);
-          }
-          catch (\Exception $e) {
-            $this->logger->error('Failed to create organisation "@name": @message', [
-              '@name' => $organisationName,
-              '@message' => $e->getMessage(),
-            ]);
-          }
-        }
+      // Direct target_id (edit mode or programmatic).
+      if (!empty($value['target_id']) && $value['target_id'] > 0) {
+        $newValues[$delta] = [
+          'target_id' => $value['target_id'],
+        ];
         continue;
       }
-    }
 
-    // Clear the "add_new_just_clicked" flag after processing.
-    if ($addNewJustClicked && $isActualSubmission) {
-      unset($widgetState['add_new_just_clicked']);
-      static::setWidgetState($parents, $fieldName, $form_state, $widgetState);
+      // User is creating new organisation - defer creation until after
+      // validation by storing data and using placeholder.
+      if ($isFormSubmit
+        && !empty($value['content']['create_new'])
+        && !empty($value['content']['name'])
+        && (empty($value['content']['target_id'])
+            || $value['content']['target_id'] === '_none'
+            || $value['content']['target_id'] === '0'
+            || $value['content']['target_id'] === 0)) {
+        $pendingOrgs = $form_state->get('pending_organisations') ?? [];
+        $pendingOrgs[$fieldName][$delta] = [
+          'name' => trim($value['content']['name']),
+          'type' => $value['content']['new_org_type'] ?? NULL,
+          'country' => $value['content']['new_org_country'] ?? NULL,
+        ];
+        $form_state->set('pending_organisations', $pendingOrgs);
+
+        $newValues[$delta] = ['target_id' => self::PENDING_ORG_PLACEHOLDER];
+        continue;
+      }
     }
 
     return $newValues;
@@ -1124,12 +1044,9 @@ class ProvidedByWidget extends WidgetBase {
   protected function countMatchingOrganisations(mixed $type, mixed $country = NULL): int {
     try {
       $query = $this->buildOrganisationQuery($type, $country);
-      $count = (int) $query->count()->execute();
-
-      return $count;
+      return (int) $query->count()->execute();
     }
-    catch (\Exception $e) {
-      $this->logger->error('Failed to count organisations: @message', ['@message' => $e->getMessage()]);
+    catch (\Exception) {
       return 0;
     }
   }
@@ -1152,9 +1069,244 @@ class ProvidedByWidget extends WidgetBase {
       $entityIds = $query->execute();
       return $this->entityTypeManager->getStorage('assessment')->loadMultiple($entityIds);
     }
-    catch (\Exception $e) {
-      $this->logger->error('Failed to load organisations: @message', ['@message' => $e->getMessage()]);
+    catch (\Exception) {
       return [];
+    }
+  }
+
+  /**
+   * Validates pending organisation data.
+   *
+   * @param array $element
+   *   The form element.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   * @param array $form
+   *   The complete form array.
+   */
+  public static function validatePendingOrganisation(array &$element, FormStateInterface $form_state, array &$form): void {
+    $fieldName = $element['#field_name'] ?? NULL;
+    $delta = $element['#delta'] ?? NULL;
+    $parents = $element['#parents'] ?? [];
+
+    if ($fieldName && $delta !== NULL && !empty($parents)) {
+      $value = $form_state->getValue(array_merge($parents, [$fieldName, $delta])) ?? [];
+    }
+    else {
+      $value = $element['#value'] ?? [];
+    }
+
+    if (static::hasTargetId($value)) {
+      return;
+    }
+
+    if (static::hasNewOrganisationData($value)) {
+      static::storePendingOrganisation($element, $value, $form_state);
+    }
+  }
+
+  /**
+   * Checks if the value has a target_id.
+   *
+   * @param array $value
+   *   The field value.
+   *
+   * @return bool
+   *   TRUE if a target_id exists.
+   */
+  protected static function hasTargetId(array $value): bool {
+    return !empty($value['target_id']) || !empty($value['content']['target_id']);
+  }
+
+  /**
+   * Checks if the value has new organisation data.
+   *
+   * @param array $value
+   *   The field value.
+   *
+   * @return bool
+   *   TRUE if new organisation data is present.
+   */
+  protected static function hasNewOrganisationData(array $value): bool {
+    return !empty($value['content']['create_new'])
+      && !empty($value['content']['name']);
+  }
+
+  /**
+   * Stores pending organisation data in form state.
+   *
+   * @param array $element
+   *   The form element.
+   * @param array $value
+   *   The field value.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   */
+  protected static function storePendingOrganisation(array $element, array $value, FormStateInterface $form_state): void {
+    $fieldName = $element['#field_name'] ?? NULL;
+    $delta = $element['#delta'] ?? NULL;
+
+    if ($fieldName === NULL || $delta === NULL) {
+      return;
+    }
+
+    $pendingOrgs = $form_state->get('pending_organisations') ?? [];
+    $pendingOrgs[$fieldName][$delta] = [
+      'name' => trim($value['content']['name']),
+      'type' => $value['content']['new_org_type'] ?? NULL,
+      'country' => $value['content']['new_org_country'] ?? NULL,
+    ];
+    $form_state->set('pending_organisations', $pendingOrgs);
+  }
+
+  /**
+   * Creates pending organisations after validation passes.
+   *
+   * @param array $form
+   *   The form array.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   */
+  public static function submitCreateOrganisations(array &$form, FormStateInterface $form_state): void {
+    $pendingOrgs = $form_state->get('pending_organisations');
+    if (empty($pendingOrgs)) {
+      return;
+    }
+
+    // Get the entity being edited/created.
+    $formObject = $form_state->getFormObject();
+    if (!method_exists($formObject, 'getEntity')) {
+      return;
+    }
+    $entity = $formObject->getEntity();
+
+    foreach ($pendingOrgs as $fieldName => $deltas) {
+      foreach ($deltas as $delta => $orgData) {
+        $orgType = $orgData['type'] ? (int) $orgData['type'] : NULL;
+        $orgCountry = $orgData['country'] ? (int) $orgData['country'] : NULL;
+
+        $result = static::findOrCreateOrganisation(
+          $orgData['name'],
+          $orgType,
+          $orgCountry
+        );
+
+        $orgId = $result['id'] ?? NULL;
+
+        if ($orgId) {
+          // If an existing org was found (case-insensitive match), notify user.
+          if (!empty($result['found'])) {
+            if ($orgCountry) {
+              \Drupal::messenger()->addWarning(t(
+                "You tried to create a new organisation but one with the same type, country and name already exists. We've linked the existing one to your report."
+              ));
+            }
+            else {
+              \Drupal::messenger()->addWarning(t(
+                "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
+              ));
+            }
+          }
+
+          // Set the organization ID directly on the entity field.
+          if ($entity->hasField($fieldName)) {
+            $entity->get($fieldName)->set($delta, ['target_id' => $orgId]);
+          }
+
+          // Update form_state for consistency.
+          $fieldValue = $form_state->getValue($fieldName);
+          $fieldValue[$delta]['target_id'] = $orgId;
+          $form_state->setValue($fieldName, $fieldValue);
+        }
+      }
+    }
+
+    // Clear pending organizations.
+    $form_state->set('pending_organisations', NULL);
+  }
+
+  /**
+   * Finds or creates an organisation with the given data.
+   *
+   * Performs case-insensitive name matching to prevent duplicate organisations
+   * that differ only in letter casing. If a matching organisation is found,
+   * returns its ID. Otherwise, creates a new organisation.
+   *
+   * @param string $name
+   *   The organisation name.
+   * @param int|null $type
+   *   The organisation type term ID.
+   * @param int|null $country
+   *   The country term ID.
+   *
+   * @return array
+   *   An array containing:
+   *   - 'id' (int|null): The organisation ID, or NULL if creation failed.
+   *   - 'found' (bool): TRUE if existing org was found, FALSE if created new.
+   *   - 'name' (string): The actual organisation name (may differ in case).
+   */
+  protected static function findOrCreateOrganisation(string $name, ?int $type, ?int $country): array {
+    $entityTypeManager = \Drupal::entityTypeManager();
+    $storage = $entityTypeManager->getStorage('assessment');
+
+    // Build query for organisations matching type and country criteria.
+    $query = $storage->getQuery()
+      ->condition('type', 'public_organisation')
+      ->accessCheck();
+
+    if ($type) {
+      $query->condition('organisation_type', $type);
+    }
+    if ($country) {
+      $query->condition('country', $country);
+    }
+
+    $candidateIds = $query->execute();
+
+    // Perform case-insensitive name comparison on matching organisations.
+    if (!empty($candidateIds)) {
+      $candidates = $storage->loadMultiple($candidateIds);
+      foreach ($candidates as $candidate) {
+        if (strcasecmp($candidate->label(), $name) === 0) {
+          return [
+            'id' => (int) $candidate->id(),
+            'found' => TRUE,
+            'name' => $candidate->label(),
+          ];
+        }
+      }
+    }
+
+    // Create new organisation.
+    $values = [
+      'type' => 'public_organisation',
+      'name' => $name,
+      'status' => TRUE,
+    ];
+
+    if ($type) {
+      $values['organisation_type'] = $type;
+    }
+    if ($country) {
+      $values['country'] = $country;
+    }
+
+    try {
+      $organisation = $storage->create($values);
+      $organisation->save();
+
+      return [
+        'id' => (int) $organisation->id(),
+        'found' => FALSE,
+        'name' => $name,
+      ];
+    }
+    catch (\Exception) {
+      return [
+        'id' => NULL,
+        'found' => FALSE,
+        'name' => $name,
+      ];
     }
   }
 

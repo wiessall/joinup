@@ -2,7 +2,7 @@ _core:
   default_config_hash: RaRd9EIcwA4u3qCSRLL8EnCicbda1kV__ASmVbyehvQ
 display_extenders:
   metatag_display_extender: metatag_display_extender
-sql_signature: false
+sql_signature: true
 ui:
   show:
     additional_queries: false
@@ -11,7 +11,7 @@ ui:
     performance_statistics: false
     preview_information: true
     sql_query:
-      enabled: false
+      enabled: true
       where: above
     display_embed: false
   always_live_preview: true
