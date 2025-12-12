@@ -160,19 +160,3 @@ function ventuno_preprocess_field_group_accordion_item(array &$variables): void 
   // Provide unique ID for the accordion item.
   $variables['accordion_item_id'] = Html::getUniqueId($id);
 }
-
-/**
- * Implements hook_theme_suggestions_HOOK_alter() for fieldset.
- */
-function ventuno_theme_suggestions_fieldset_alter(array &$suggestions, array $variables): void {
-  if (isset($variables['element']['#field_name'])) {
-    $sanitized_suggestion = strtr($variables['element']['#field_name'], [
-      '.' => '_',
-      '-' => '_',
-      '[' => '_',
-      ']' => '_',
-    ]);
-
-    $suggestions[] = 'fieldset__' . $sanitized_suggestion;
-  }
-}
