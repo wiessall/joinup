@@ -9,10 +9,10 @@ dependencies:
     - field.field.assessment.report.documents
     - field.field.assessment.report.legal
     - field.field.assessment.report.organisational
-    - field.field.assessment.report.other
     - field.field.assessment.report.other_comment
     - field.field.assessment.report.provider
     - field.field.assessment.report.relevant_report
+    - field.field.assessment.report.remaining_barriers
     - field.field.assessment.report.semantic
     - field.field.assessment.report.state
     - field.field.assessment.report.technical
@@ -51,9 +51,9 @@ hidden:
   langcode: true
   legal: true
   organisational: true
-  other: true
   other_comment: true
   relevant_report: true
+  remaining_barriers: true
   search_api_excerpt: true
   semantic: true
   state: true

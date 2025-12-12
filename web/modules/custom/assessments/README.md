@@ -146,4 +146,3 @@ Statement (statement):
   * organisational
   * semantic
   * technical
-  * other
