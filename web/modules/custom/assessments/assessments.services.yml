@@ -12,3 +12,7 @@ services:
     class: Drupal\assessments\AssessmentReportNotification
 
   Drupal\assessments\EventSubscriber\AssessmentReportNotificationSubscriber: { }
+
+  Drupal\assessments\Guard\AssessmentReportTransitionGuard:
+    tags:
+      - { name: state_machine.guard, group: assessments, priority: 5}
