@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_api;
 
-use cebe\openapi\Reader;
-use JsonSchema\Constraints\Constraint;
-use JsonSchema\SchemaStorage;
 use JsonSchema\Validator;
+use cebe\openapi\Reader;
 
 /**
  * Validates a scheme against an OpenAPI specification.
@@ -15,6 +13,8 @@ use JsonSchema\Validator;
 class OpenApiSchemaValidator {
 
   /**
+   * Validates a structured array against a schema defined in an OpenAPI YAML.
+   *
    * @param array $data
    *   Data to be validated.
    * @param string $openApiFile
