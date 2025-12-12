@@ -20,7 +20,7 @@ field_name: thematic_area
 entity_type: assessment
 bundle: public_service
 label: Functions
-description: 'Specify the concerned function of trans-European digital public service(s)'
+description: 'Specify the concerned function(s) of trans-European digital public service(s)'
 required: false
 translatable: false
 default_value: {  }
