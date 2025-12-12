@@ -111,8 +111,12 @@ class ProvidedByWidget extends WidgetBase {
 
     if (!empty($element['#title'])) {
       $element['field_title'] = [
-        '#type' => 'label',
-        '#title' => $element['#title'],
+        '#type' => 'html_tag',
+        '#tag' => 'div',
+        '#value' => $element['#title'],
+        '#attributes' => [
+          'class' => ['form-label', 'h4'],
+        ],
         '#weight' => -100,
       ];
     }
