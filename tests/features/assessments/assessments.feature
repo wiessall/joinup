@@ -72,7 +72,7 @@ Feature: Assessment Report Entity Management
 
     When I click "Documents" in the "Modal content" region
     And I attach the file "text.pdf" to "Add a new file"
-
+    And I should see "Maximum 5 files. 10 MB limit. Allowed types: txt doc docx pdf ppt pptx zip rar xls xlsx." in the "Modal content" region
     Then I press "Save" in the "Modal buttons" region
 
     # Identified effects on cross-border interoperability
@@ -98,6 +98,7 @@ Feature: Assessment Report Entity Management
 
     # Assessment supporting documents
     And I attach the file "text.pdf" to "Add a new file"
+    And I should see "Maximum 5 files. 10 MB limit. Allowed types: txt doc docx pdf ppt pptx zip rar xls xlsx."
 
     # Add comment
     And I fill in "Please add any other comment you would like to share." with "This assessment was conducted in collaboration with multiple stakeholders across EU member states."
