@@ -106,20 +106,8 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
         'uid' => $this->ownerUser->id(),
       ]);
       $this->testAssessments[$state]->save();
+      $this->markEntityForCleanup($this->testAssessments[$state]);
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function tearDown(): void {
-    foreach ($this->testAssessments as $assessment) {
-      if ($assessment && !$assessment->isNew()) {
-        $assessment->delete();
-      }
-    }
-
-    parent::tearDown();
   }
 
   /**
@@ -235,6 +223,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
       'uid' => $this->ownerUser->id(),
     ]);
     $organisation->save();
+    $this->markEntityForCleanup($organisation);
 
     // Test access without related report.
     $access_handler->resetCache();
@@ -252,6 +241,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
       'provider' => $organisation->id(),
     ]);
     $report->save();
+    $this->markEntityForCleanup($report);
 
     // Test access with related report as draft.
     $access_handler->resetCache();
@@ -341,6 +331,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
       'status' => TRUE,
     ]);
     $organisation->save();
+    $this->markEntityForCleanup($organisation);
 
     // Use existing published report and link it to the organisation.
     $published_report = $this->testAssessments['published'];
@@ -355,9 +346,6 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
       $related_report->id(),
       'getRelatedReport() should return the published report.'
     );
-
-    // Cleanup.
-    $organisation->delete();
   }
 
   /**
@@ -373,6 +361,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
       'status' => TRUE,
     ]);
     $organisation->save();
+    $this->markEntityForCleanup($organisation);
 
     // Use existing unpublished report and link it to the organisation.
     $unpublished_report = $this->testAssessments['draft'];
@@ -397,9 +386,6 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
       $related_report->isPublished(),
       'The related report should be published.'
     );
-
-    // Cleanup.
-    $organisation->delete();
   }
 
   /**
@@ -419,6 +405,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
       'status' => TRUE,
     ]);
     $sub_entity->save();
+    $this->markEntityForCleanup($sub_entity);
 
     // Create a paragraph that references the sub-entity.
     $paragraph = \Drupal::entityTypeManager()->getStorage('paragraph')->create([
@@ -429,6 +416,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
       'parent_field_name' => 'binding_requirement',
     ]);
     $paragraph->save();
+    $this->markEntityForCleanup($paragraph);
 
     // Test that getRelatedReport returns the parent report.
     $related_report = $sub_entity->getRelatedReport();
@@ -441,10 +429,6 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
       $related_report->id(),
       sprintf('getRelatedReport() should return the correct parent report for %s.', $bundle)
     );
-
-    // Cleanup.
-    $paragraph->delete();
-    $sub_entity->delete();
   }
 
   /**
