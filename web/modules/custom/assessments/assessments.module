@@ -56,7 +56,10 @@ function assessments_entity_extra_field_info(): array {
  * Implements hook_form_FORM_ID_alter().
  */
 function assessments_form_alter(array &$form, FormStateInterface $formState, string $formId): void {
-  if (!in_array($formId, ['assessment_report_add_form', 'assessment_report_edit_form'], TRUE)) {
+  if (!in_array($formId, [
+    'assessment_report_add_form',
+    'assessment_report_edit_form',
+  ], TRUE)) {
     return;
   }
 
@@ -113,10 +116,10 @@ function assessments_preprocess_layout_paragraphs_insert_component_btn(&$variabl
       // (has parent_uuid AND region parameters). Keep the root-level
       // "Add section" buttons visible.
       if (
-          isset($routeParams['layout_paragraphs_layout']) &&
-          $url->getRouteName() === 'layout_paragraphs.builder.choose_component' &&
-          isset($queryParams['parent_uuid']) &&
-          isset($queryParams['region'])
+        isset($routeParams['layout_paragraphs_layout']) &&
+        $url->getRouteName() === 'layout_paragraphs.builder.choose_component' &&
+        isset($queryParams['parent_uuid']) &&
+        isset($queryParams['region'])
       ) {
         $variables['attributes']['class'][] = 'visually-hidden';
       }
@@ -228,10 +231,10 @@ function assessments_user_predelete(UserInterface $account): void {
 function assessments_entity_bundle_info(): array {
   return [
     'assessment_statement' => array_map(
-      fn (TranslatableMarkup $label): array => ['label' => $label],
+      fn(TranslatableMarkup $label): array => ['label' => $label],
       [
         'legal' => t('Legal interoperability'),
-        'organisational'  => t('Organisational interoperability'),
+        'organisational' => t('Organisational interoperability'),
         'semantic' => t('Semantic interoperability'),
         'technical' => t('Technical interoperability'),
         'other' => t('Other interoperability'),
@@ -317,7 +320,8 @@ function assessments_inline_entity_form_entity_form_alter(array &$entity_form, F
   $solution = $entity_form['#entity'];
 
   if ($entity_form['#ief_id'] === 'asset-form' && $solution instanceof SolutionInterface) {
-    $collection = \Drupal::service('entity.repository')->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR);
+    $collection = \Drupal::service('entity.repository')
+      ->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR);
     assert($collection instanceof CollectionInterface);
 
     $solution
@@ -421,4 +425,18 @@ function _assessments_handle_report_state_notification(AssessmentInterface $enti
     \Drupal::service('event_dispatcher')
       ->dispatch($event, NotificationEvents::ASSESSMENT_REPORT_SUBMITTED_FOR_REVIEW);
   }
+}
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function assessments_views_data_alter(array &$data): void {
+  $data['assessment_field_data']['country'] = [
+    'title' => t('Country code'),
+    'help' => t('Country code filter'),
+    'filter' => [
+      'id' => 'country_code_filter',
+      'allow empty' => TRUE,
+    ],
+  ];
 }
