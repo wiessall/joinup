@@ -6,10 +6,12 @@ namespace Drupal\assessments\Entity;
 
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
+use Drupal\Core\Entity\EntityPublishedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Url;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\ctools\Testing\EntityCreationTrait;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
@@ -55,14 +57,15 @@ use Drupal\user\EntityOwnerTrait;
  *     "label" = "name",
  *     "uuid" = "uuid",
  *     "owner" = "uid",
+ *     "published" = "status",
  *   },
  *   links = {
  *     "collection" = "/admin/content/assessment",
- *     "add-form" = "/assessments/add/{assessment_type}",
- *     "add-page" = "/assessments/add",
- *     "canonical" = "/assessments/{assessment}",
- *     "edit-form" = "/assessments/{assessment}/edit",
- *     "delete-form" = "/assessments/{assessment}/delete",
+ *     "add-form" = "/collection/assessments/{assessment_type}/create",
+ *     "add-page" = "/collection/assessments/add",
+ *     "canonical" = "/collection/assessments/{assessment_type}/{assessment}",
+ *     "edit-form" = "/collection/assessments/{assessment_type}/{assessment}/edit",
+ *     "delete-form" = "/collection/assessments/{assessment_type}/{assessment}/delete",
  *     "delete-multiple-form" = "/admin/content/assessment/delete-multiple",
  *     "moderate-form" = "/assessments/{assessment}/moderate",
  *   },
@@ -75,6 +78,7 @@ class Assessment extends ContentEntityBase implements AssessmentInterface {
   use EntityChangedTrait;
   use EntityCreationTrait;
   use EntityOwnerTrait;
+  use EntityPublishedTrait;
   use RdfSyncEntityTrait;
   use StringTranslationTrait;
 
@@ -93,7 +97,6 @@ class Assessment extends ContentEntityBase implements AssessmentInterface {
    * {@inheritdoc}
    */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type): array {
-
     $fields = parent::baseFieldDefinitions($entity_type);
 
     $fields['name'] = BaseFieldDefinition::create('string')
@@ -180,6 +183,25 @@ class Assessment extends ContentEntityBase implements AssessmentInterface {
       '@bundle' => $this->type->entity->label(),
       '@id' => $this->id(),
     ])->render();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function toUrl($rel = 'canonical', array $options = []): Url {
+    $url = parent::toUrl($rel, $options);
+    $route_parameters = $url->getRouteParameters();
+    if (!isset($route_parameters['assessment_type'])) {
+      $url->setRouteParameter('assessment_type', $this->bundle());
+    }
+    return $url;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getRelatedReport(): ?AssessmentReport {
+    return NULL;
   }
 
 }

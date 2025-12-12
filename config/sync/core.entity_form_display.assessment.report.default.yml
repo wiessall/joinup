@@ -9,6 +9,7 @@ dependencies:
     - field.field.assessment.report.legal
     - field.field.assessment.report.organisational
     - field.field.assessment.report.other
+    - field.field.assessment.report.other_comment
     - field.field.assessment.report.provider
     - field.field.assessment.report.relevant_report
     - field.field.assessment.report.semantic
@@ -16,9 +17,11 @@ dependencies:
     - field.field.assessment.report.technical
   module:
     - assessments
+    - entity_form_field_label
     - field_group
     - file
     - inline_entity_form
+    - joinup_workflow
     - layout_paragraphs
 third_party_settings:
   field_group:
@@ -202,6 +205,19 @@ content:
         rewrite_label: 0
         new_description: ''
         rewrite_description: 0
+  other_comment:
+    type: string_textarea
+    weight: 52
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings:
+      entity_form_field_label:
+        new_label: 'Please add any other comment you would like to share.'
+        rewrite_label: 1
+        new_description: ''
+        rewrite_description: 0
   provider:
     type: provided_by_widget
     weight: 1
@@ -215,9 +231,14 @@ content:
     settings:
       placeholder_url: ''
       placeholder_title: ''
-      condition: 'Can this assessment be linked to previous assessments or related assessments at EU or national level?'
-      default_option: 'no'
-    third_party_settings: {  }
+      condition: 'Check if assessment is linked to previous assessments or related assessments at EU or national level.'
+      default_option: '0'
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+        new_description: ''
+        rewrite_description: 0
   semantic:
     type: inline_entity_form_simple
     weight: 10
@@ -235,7 +256,8 @@ content:
     type: state_machine_buttons
     weight: 7
     region: content
-    settings: {  }
+    settings:
+      use_transition_label: 0
     third_party_settings: {  }
   technical:
     type: inline_entity_form_simple

@@ -1,4 +1,4 @@
-@api @group-e @assessments
+@api @group-e
 Feature: Assessment Report Entity Management
   In order to manage assessment reports directly
   As a user with appropriate permissions
@@ -7,7 +7,7 @@ Feature: Assessment Report Entity Management
   @javascript
   Scenario: Create a new assessment report with required fields
     Given I am logged in as an "authenticated user"
-    And I go to "/assessments/add/report"
+    And I go to "/collection/assessments/report/create"
     Then I should see the heading "Create assessment report"
 
     When I press "Save"
@@ -17,7 +17,7 @@ Feature: Assessment Report Entity Management
     And I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "Austrian Ministry of Digital Affairs"
-    And I select the radio button "Yes"
+    And I check "Check if assessment is linked to previous assessments or related assessments at EU or national level."
     And I fill in "Relevant assessment report" with "https://interoperable-europe.ec.europa.eu/report"
 
     # Binding requirements
@@ -44,12 +44,16 @@ Feature: Assessment Report Entity Management
     And I fill in "documented_in[0][uri]" with "https://interoperable-europe.ec.europa.eu/general" in the "Modal content" region
 
     When I click "Trans-European digital public services" in the "Modal content" region
+    And I should see the text "Specify the trans-European digital public service(s) concerned" in the "Modal content" region
+    And I should see the text "Specify the concerned function(s) of trans-European digital public service(s)" in the "Modal content" region
     And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
     And I select "Core governance and administration" from "affects[0][inline_entity_form][thematic_area]" in the "Modal content" region
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
 
     When I click "Affected stakeholders" in the "Modal content" region
-    And I select "Local public sector body" from "has_participation[0][inline_entity_form][participant_type][]" in the "Modal content" region
+    Then I should see the text "Public and/or private stakeholders affected" in the "Modal content" region
+    And the page should contain the html text 'aria-placeholder="Select or start typing..."'
+    When I select "Local public sector body" from "has_participation[0][inline_entity_form][participant_type][]" in the "Modal content" region
     And I select "Belgium" from "has_participation[0][inline_entity_form][stakeholder_country][]" in the "Modal content" region
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
 
@@ -70,7 +74,7 @@ Feature: Assessment Report Entity Management
 
     When I click "Documents" in the "Modal content" region
     And I attach the file "text.pdf" to "Add a new file"
-
+    And I should see "Maximum 5 files. 10 MB limit. Allowed types: txt doc docx pdf ppt pptx zip rar xls xlsx." in the "Modal content" region
     Then I press "Save" in the "Modal buttons" region
 
     # Identified effects on cross-border interoperability
@@ -106,15 +110,20 @@ Feature: Assessment Report Entity Management
 
     # Assessment supporting documents
     And I attach the file "text.pdf" to "Add a new file"
+    And I should see "Maximum 5 files. 10 MB limit. Allowed types: txt doc docx pdf ppt pptx zip rar xls xlsx."
+
+    # Add comment
+    And I fill in "Please add any other comment you would like to share." with "This assessment was conducted in collaboration with multiple stakeholders across EU member states."
 
     When I press "Save"
     Then I should see the success message containing "New assessment Test Assessment Report 2025 has been created."
     And I should see the heading "Test Assessment Report 2025"
     And I should see the following lines of text:
-      | Austrian Ministry of Digital Affairs, a European Union institution from  |
-      | The report has been connected to the following previous/relevant reports |
-      | https://interoperable-europe.ec.europa.eu/report                         |
-      | documented in https://interoperable-europe.ec.europa.eu/general          |
+      | Austrian Ministry of Digital Affairs, a European Union institution from                            |
+      | The report has been connected to the following previous/relevant reports                           |
+      | https://interoperable-europe.ec.europa.eu/report                                                   |
+      | documented in https://interoperable-europe.ec.europa.eu/general                                    |
+      | This assessment was conducted in collaboration with multiple stakeholders across EU member states. |
 
     # Edit test.
     When I go to the edit form of the "Test Assessment Report 2025" assessment
@@ -132,7 +141,7 @@ Feature: Assessment Report Entity Management
   @javascript
   Scenario: All possible tests for 'Provided by' plugin in assessment report
     Given I am logged in as an "authenticated user"
-    And I go to "/assessments/add/report"
+    And I go to "/collection/assessments/report/create"
 
     When I fill in "Name" with "Test Provided by in Assessment Report 2025"
     And I select "Local public sector body" from "Type of public sector body"
@@ -140,7 +149,14 @@ Feature: Assessment Report Entity Management
     And I select "Greece" from "Country"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "GR1"
-    And I select the radio button "No"
+
+    # Verify organization is NOT created when form has validation errors.
+    # Regression test - organizations should only be created on successful save.
+    Then I press "Save"
+    # Should see validation error
+    Then I should see the error message "1 error has been found: Binding requirements"
+    # Organization should NOT have been created
+    Then the public_organisation assessment "GR1" should not exist
 
     # Binding requirements
     When I click "New binding requirement"
@@ -319,13 +335,12 @@ Feature: Assessment Report Entity Management
       | E-mail      | pol.gomez@example.pt |
 
     And I am logged in as pol2025
-    And I go to "/assessments/add/report"
+    And I go to "/collection/assessments/report/create"
 
     When I fill in "Name" with "Test permissions in Assessment Report 2025"
     And I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "CTT PT"
-    And I select the radio button "No"
 
     # Binding requirements
     When I click "New binding requirement"
@@ -376,6 +391,18 @@ Feature: Assessment Report Entity Management
     Given I am logged in as a "assessment_reporter"
     Then I go to the "Test permissions in Assessment Report 2025" report
     And I should see the heading "Test permissions in Assessment Report 2025"
+
+    # Verify permissions after assigning the new role.
+    Given I am logged in as a "moderator"
+    And I click "People" in the "Administration toolbar" region
+    And I click "Edit" in the "Pol Gomez" row
+    And I check the box "Assessment reporter"
+    And I press "Save"
+    Then I should see the message "The user has been notified that their account has been updated."
+
+    And I am logged in as pol2025
+    And I go to "/collection/assessments/report/create"
+    Then I should see the button "Save as Published"
 
   Scenario: Test assessment reports views
     Given the assessments collection exists
