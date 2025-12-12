@@ -146,7 +146,6 @@ Statement (statement):
   * organisational
   * semantic
   * technical
-  * other
 
 ## Process of saving data from API
 
