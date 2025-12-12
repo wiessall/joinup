@@ -15,10 +15,6 @@ use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 
 /**
  * Defines the access control handler for the assessment entity type.
- *
- * phpcs:disable Drupal.Arrays.Array.LongLineDeclaration
- *
- * @see https://www.drupal.org/project/coder/issues/3185082
  */
 final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
 
@@ -265,18 +261,8 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
       return AccessResult::allowed()->cachePerPermissions();
     }
 
-    $target_state = $context['state'] ?? 'draft';
-
-    // Published state requires bypass moderation permission.
-    if ($target_state === 'published') {
-      return AccessResult::allowedIfHasPermission($account, 'bypass assessment report moderation');
-    }
-
-    // Draft state requires create or moderate permission.
-    return AccessResult::allowedIfHasPermissions($account, [
-      'create assessment report',
-      'moderate assessment report',
-    ], 'OR');
+    // Otherwise check create permission.
+    return AccessResult::allowedIfHasPermission($account, 'create assessment report');
   }
 
 }

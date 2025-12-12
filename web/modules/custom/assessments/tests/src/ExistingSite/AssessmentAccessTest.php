@@ -156,30 +156,17 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
   }
 
   /**
-   * Tests create access for draft assessment reports.
+   * Tests create access for assessment reports.
    *
    * @covers ::checkCreateAccess
    */
-  public function testCreateDraftAssessment(): void {
-    $this->assertTrue($this->accessHandler->createAccess('report', $this->ownerUser, ['state' => 'draft']));
-    $this->assertTrue($this->accessHandler->createAccess('report', $this->assessmentReporterUser, ['state' => 'draft']));
-    $this->assertTrue($this->accessHandler->createAccess('report', $this->moderatorUser, ['state' => 'draft']));
-    $this->assertTrue($this->accessHandler->createAccess('report', $this->authenticatedUser, ['state' => 'draft']));
+  public function testCreateAssessment(): void {
+    $this->assertTrue($this->accessHandler->createAccess('report', $this->ownerUser));
+    $this->assertTrue($this->accessHandler->createAccess('report', $this->assessmentReporterUser));
+    $this->assertTrue($this->accessHandler->createAccess('report', $this->moderatorUser));
+    $this->assertTrue($this->accessHandler->createAccess('report', $this->authenticatedUser));
 
-    $this->assertFalse($this->accessHandler->createAccess('report', User::getAnonymousUser(), ['state' => 'draft']));
-  }
-
-  /**
-   * Tests create access for published assessment reports.
-   *
-   * @covers ::checkCreateAccess
-   */
-  public function testCreatePublishedAssessment(): void {
-    $this->assertTrue($this->accessHandler->createAccess('report', $this->assessmentReporterUser, ['state' => 'published']));
-    $this->assertTrue($this->accessHandler->createAccess('report', $this->moderatorUser, ['state' => 'published']));
-
-    $this->assertFalse($this->accessHandler->createAccess('report', $this->ownerUser, ['state' => 'published']));
-    $this->assertFalse($this->accessHandler->createAccess('report', $this->authenticatedUser, ['state' => 'published']));
+    $this->assertFalse($this->accessHandler->createAccess('report', User::getAnonymousUser()));
   }
 
   /**
