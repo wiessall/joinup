@@ -234,7 +234,6 @@ function assessments_entity_bundle_info(): array {
         'organisational'  => t('Organisational interoperability'),
         'semantic' => t('Semantic interoperability'),
         'technical' => t('Technical interoperability'),
-        'other' => t('Other interoperability'),
       ],
     ),
   ];
