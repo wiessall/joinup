@@ -101,7 +101,7 @@ paths:
                 properties:
                   error:
                     type: string
-  /assessment/create:
+  /assessment:
     servers:
       - url: /api/assessments/v1
         description: Assessments API endpoint
@@ -327,7 +327,10 @@ components:
 
     Assessment:
       type: object
-      required: [ name ]
+      required:
+        - name
+        - binding_requirement
+        - provider
       properties:
         id:
           type: string
@@ -342,9 +345,7 @@ components:
           description: References to BindingRequirements; allow multiple. Each item may be an ID or a structured object.
           type: array
           items:
-            oneOf:
-              - $ref: '#/components/schemas/ID'
-              - $ref: '#/components/schemas/BindingRequirement'
+            $ref: '#/components/schemas/BindingRequirement'
         provider:
           description: Reference to an Organisation, either an ID or a structured object.
           oneOf:
@@ -359,6 +360,9 @@ components:
 
     BindingRequirement:
       type: object
+      required:
+        - expression
+        - description
       properties:
         id:
           type: string
@@ -406,6 +410,9 @@ components:
 
     Expression:
       type: object
+      required:
+        - name
+        - description
       properties:
         id:
           type: string
