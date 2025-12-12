@@ -24,20 +24,4 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
     return 'state';
   }
 
-  /**
-   * Returns the default state value based on user permissions.
-   *
-   * @return array
-   *   The default value array.
-   */
-  public static function getDefaultStateValue(): array {
-    // @todo ISAICP-10620: Remove/clarify this.
-    $current_user = \Drupal::currentUser();
-    $state = $current_user->hasPermission('bypass assessment report moderation')
-      ? 'published'
-      : 'draft';
-
-    return [['value' => $state]];
-  }
-
 }
