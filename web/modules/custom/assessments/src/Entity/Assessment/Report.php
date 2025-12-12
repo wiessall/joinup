@@ -31,6 +31,11 @@ final class Report extends Assessment implements AssessmentResourceInterface {
         'is_required' => FALSE,
         'is_reference' => FALSE,
       ],
+      'remaining_barriers' => [
+        'field_name' => 'remaining_barriers',
+        'is_required' => FALSE,
+        'is_reference' => FALSE,
+      ],
       'binding_requirement' => [
         'field_name' => 'binding_requirement',
         'is_required' => TRUE,
