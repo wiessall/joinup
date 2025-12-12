@@ -31,6 +31,7 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
    *   The default value array.
    */
   public static function getDefaultStateValue(): array {
+    // @todo ISAICP-10620: Remove/clarify this.
     $current_user = \Drupal::currentUser();
     $state = $current_user->hasPermission('bypass assessment report moderation')
       ? 'published'
