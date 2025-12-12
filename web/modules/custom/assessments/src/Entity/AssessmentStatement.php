@@ -57,6 +57,7 @@ final class AssessmentStatement extends ContentEntityBase {
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type): array {
     $fields = parent::baseFieldDefinitions($entity_type);
     $fields['judgement'] = BaseFieldDefinition::create('string_long')
+      ->setLabel(t('Judgement'))
       ->setTranslatable(TRUE)
       ->setDisplayOptions('form', [
         'type' => 'string_textarea',
@@ -81,7 +82,7 @@ final class AssessmentStatement extends ContentEntityBase {
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['interpretation'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Tick the most appropriate'))
+      ->setLabel(t('Interpretation'))
       ->setTranslatable(FALSE)
       ->setSetting('target_type', 'taxonomy_term')
       ->setSetting('handler_settings', [
@@ -92,6 +93,12 @@ final class AssessmentStatement extends ContentEntityBase {
       ->setDisplayOptions('form', [
         'type' => 'options_buttons',
         'weight' => 0,
+        'third_party_settings' => [
+          'entity_form_field_label' => [
+            'new_label' => 'Tick the most appropriate',
+            'rewrite_label' => 1,
+          ],
+        ],
       ])
       ->setDisplayOptions('view', [
         'label' => 'hidden',
