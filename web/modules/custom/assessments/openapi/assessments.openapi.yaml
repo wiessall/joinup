@@ -314,6 +314,43 @@ paths:
                       name: "Public Organisation 2"
                       "organisation_type": "national_public_sector_body"
                       country: null
+  /assessment:
+    servers:
+      - url: /api/assessments/v1
+        description: Assessments API endpoint
+    get:
+      summary: Get all Assessments of type reports
+      description: Returns all assessment reports dependently on country code of referenced provider
+      operationId: getReport
+      tags:
+        - Assessments
+        - Assessment report
+      security: [ ]
+      parameters:
+        - in: path
+          name: country
+          required: false
+          description: Country code
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The fetched reports
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Assessment'
+              examples:
+                fetched:
+                  value:
+                    - id: "43a50ef2-7d90-4562-ab81-59af10f2e081"
+                      name: "Assessment report 1"
+                      country: "PT"
+                    - id: "7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7b"
+                      name: "Assessment report 2"
+                      country: "BE"
 components:
   securitySchemes:
     oauth2:
