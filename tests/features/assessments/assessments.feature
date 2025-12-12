@@ -67,7 +67,7 @@ Feature: Assessment Report Entity Management
     And I fill in "asset[form][0][title][0][value]" with "European Interoperability Framework (EIF)" in the "Modal content" region
     And I enter "Description of European Interoperability Framework (EIF)" in the "asset[form][0][description][0][value]" wysiwyg editor
     And I fill in "Relevant website" with "https://interoperable-europe.ec.europa.eu/collection/eif" in the "Modal content" region
-    Then I press "Create Interoperability solution" in the "Modal content" region
+    Then I press "Add Interoperability solution" in the "Modal content" region
 
     When I click "Trans-European digital public services" in the "Modal content" region
     And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
