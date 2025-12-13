@@ -10,3 +10,4 @@ weight: 0
 is_admin: false
 permissions:
   - 'bypass assessment report moderation'
+  - 'restful post assessment_report'
