@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity;
 
-use Drupal\assessments\Entity\Assessment\Report;
-
 /**
  * Bundle class for assessment sub-entities.
  *
@@ -17,7 +15,7 @@ class AssessmentSubEntity extends Assessment {
   /**
    * {@inheritdoc}
    */
-  public function getRelatedReport(): ?Report {
+  public function getRelatedReport(): ?AssessmentReport {
     // Map entity bundles to paragraph field names.
     $field_map = [
       'public_service' => 'affects',
@@ -51,7 +49,7 @@ class AssessmentSubEntity extends Assessment {
     }
 
     $parent = $paragraph->getParentEntity();
-    return $parent instanceof Report ? $parent : NULL;
+    return $parent instanceof AssessmentReport ? $parent : NULL;
   }
 
 }

@@ -2,19 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Drupal\assessments\Entity\Assessment;
-
-use Drupal\assessments\Entity\AssessmentSubEntity;
+namespace Drupal\assessments\Entity;
 
 /**
- * Defines the public organization entity class.
+ * Defines the publicorganization entity class.
  */
-final class PublicOrganisation extends AssessmentSubEntity {
+final class PublicOrganisation extends Assessment {
 
   /**
    * {@inheritdoc}
    */
-  public function getRelatedReport(): ?Report {
+  public function getRelatedReport(): ?AssessmentReport {
     $ids = $this->entityTypeManager()->getStorage('assessment')->getQuery()
       ->accessCheck(FALSE)
       ->condition('type', 'report')
@@ -31,7 +29,7 @@ final class PublicOrganisation extends AssessmentSubEntity {
 
     $id = reset($ids);
     $report = $this->entityTypeManager()->getStorage('assessment')->load($id);
-    return $report instanceof Report ? $report : NULL;
+    return $report instanceof AssessmentReport ? $report : NULL;
   }
 
   /**

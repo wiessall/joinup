@@ -13,7 +13,6 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\assessments\AssessmentInterface;
-use Drupal\assessments\Entity\Assessment\Report;
 use Drupal\ctools\Testing\EntityCreationTrait;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 use Drupal\user\EntityOwnerTrait;
@@ -201,7 +200,7 @@ class Assessment extends ContentEntityBase implements AssessmentInterface {
   /**
    * {@inheritdoc}
    */
-  public function getRelatedReport(): ?Report {
+  public function getRelatedReport(): ?AssessmentReport {
     return NULL;
   }
 

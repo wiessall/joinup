@@ -13,12 +13,9 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItemInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\assessments\AssessmentInterface;
-use Drupal\assessments\Entity\Assessment\Expression;
-use Drupal\assessments\Entity\Assessment\Participation;
-use Drupal\assessments\Entity\Assessment\PublicOrganisation;
-use Drupal\assessments\Entity\Assessment\PublicService;
-use Drupal\assessments\Entity\Assessment\Report;
+use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\AssessmentStatement;
+use Drupal\assessments\Entity\PublicOrganisation;
 use Drupal\joinup_api\OpenApiSchemaValidator;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\paragraphs\ParagraphInterface;
@@ -99,7 +96,7 @@ class AssessmentReportResource extends ResourceBase {
   public function get(string $uuid): ResourceResponse {
     $report = $this->entityRepository->loadEntityByUuid('assessment', $uuid);
 
-    if ($report instanceof Report) {
+    if ($report instanceof AssessmentReport) {
       return (new ResourceResponse($this->reportToArray($report), 200))
         ->addCacheableDependency($report);
     }
@@ -138,12 +135,12 @@ class AssessmentReportResource extends ResourceBase {
   /**
    * Returns the OpenAPI representation of an assessment report entity.
    *
-   * @param \Drupal\assessments\Entity\Assessment\Report $report
+   * @param \Drupal\assessments\Entity\AssessmentReport $report
    *   The assessments report entiy.
    * @param string|null $langcode
    *   (optional) If passed, loads a specific language version of the report.
    */
-  protected function reportToArray(Report $report, ?string $langcode = NULL): array {
+  protected function reportToArray(AssessmentReport $report, ?string $langcode = NULL): array {
     if ($langcode) {
       $report = $report->getTranslation($langcode);
     }
@@ -157,7 +154,7 @@ class AssessmentReportResource extends ResourceBase {
 
       $expressions = [];
       foreach ($requirement->get('expression')->referencedEntities() as $item) {
-        assert($item instanceof Expression);
+        assert($item instanceof AssessmentInterface);
         $expressions[] = [
           'name' => $item->label(),
           'description' => $item->get('description')?->value,
@@ -167,7 +164,7 @@ class AssessmentReportResource extends ResourceBase {
 
       $affects = [];
       foreach ($requirement->get('affects')->referencedEntities() as $item) {
-        assert($item instanceof PublicService);
+        assert($item instanceof AssessmentInterface);
         $affects[] = [
           'name' => $item->label(),
           'thematic_area' => $this->itemListToValue($item->get('thematic_area'), 'id'),
@@ -176,7 +173,7 @@ class AssessmentReportResource extends ResourceBase {
 
       $hasParticipation = [];
       foreach ($requirement->get('has_participation')->referencedEntities() as $item) {
-        assert($item instanceof Participation);
+        assert($item instanceof AssessmentInterface);
         $hasParticipation[] = [
           'participant_type' => $this->itemListToValue($item->get('participant_type'), 'id'),
           'country' => $this->itemListToValue($item->get('stakeholder_country'), 'code'),
@@ -252,10 +249,10 @@ class AssessmentReportResource extends ResourceBase {
    * @param array $data
    *   Data structured array.
    *
-   * @returns \Drupal\assessments\Entity\Assessment\Report
+   * @returns \Drupal\assessments\Entity\AssessmentReport
    *   The assessment report.
    */
-  protected function createReport(array $data): Report {
+  protected function createReport(array $data): AssessmentReport {
     // Make sure we start on clean if the plugin is reused in the same request.
     $this->errors = [];
     $this->langcode = $data['language'] ?? 'en';
@@ -293,7 +290,7 @@ class AssessmentReportResource extends ResourceBase {
    * @param array|string $provider
    *   Either the public organisation data, or an existing entity UUID.
    *
-   * @returns \Drupal\assessments\Entity\Assessment\PublicOrganisation
+   * @returns \Drupal\assessments\Entity\PublicOrganisation
    *   The public organisation.
    */
   protected function getPublicOrganisation(array|string $provider): PublicOrganisation|string|int|null {
@@ -348,11 +345,11 @@ class AssessmentReportResource extends ResourceBase {
    * @param array $expressions
    *   List of expresion definitions.
    *
-   * @return list<\Drupal\assessments\Entity\Assessment\Expression>
+   * @return list<\Drupal\assessments\AssessmentInterface>
    *   A list of expression entities.
    */
   protected function createExpressions(array $expressions): array {
-    return array_map(function ($expression): Expression {
+    return array_map(function ($expression): AssessmentInterface {
       return $this->getAssessmentStorage()->create([
         'type' => 'expression',
         'langcode' => $this->langcode,
@@ -369,11 +366,11 @@ class AssessmentReportResource extends ResourceBase {
    * @param array $affects
    *   List of public service definitions.
    *
-   * @return list<\Drupal\assessments\Entity\Assessment\PublicService>
+   * @return list<\Drupal\assessments\AssessmentInterface>
    *   A list of public service entities.
    */
   protected function createPublicServices(array $affects): array {
-    return array_map(function ($item): PublicService {
+    return array_map(function ($item): AssessmentInterface {
       return $this->getAssessmentStorage()->create([
         'type' => 'public_service',
         'langcode' => $this->langcode,
@@ -389,11 +386,11 @@ class AssessmentReportResource extends ResourceBase {
    * @param array $hasParticipation
    *   List of participation definitions.
    *
-   * @return list<\Drupal\assessments\Entity\Assessment\Participation>
+   * @return list<\Drupal\assessments\AssessmentInterface>
    *   A list of participation entities.
    */
   protected function createParticipation(array $hasParticipation): array {
-    return array_map(function ($item): Participation {
+    return array_map(function ($item): AssessmentInterface {
       return $this->getAssessmentStorage()->create([
         'type' => 'participation',
         'langcode' => $this->langcode,

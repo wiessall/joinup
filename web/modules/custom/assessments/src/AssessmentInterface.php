@@ -6,7 +6,7 @@ namespace Drupal\assessments;
 
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityChangedInterface;
-use Drupal\assessments\Entity\Assessment\Report;
+use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\user\EntityOwnerInterface;
 
@@ -28,9 +28,9 @@ interface AssessmentInterface extends ContentEntityInterface, EntityOwnerInterfa
   /**
    * Gets the related report entity for this assessment entity.
    *
-   * @return \Drupal\assessments\Entity\Assessment\Report|null
+   * @return \Drupal\assessments\Entity\AssessmentReport|null
    *   The related report entity or NULL if not found.
    */
-  public function getRelatedReport(): ?Report;
+  public function getRelatedReport(): ?AssessmentReport;
 
 }

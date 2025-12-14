@@ -9,8 +9,8 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityAccessControlHandler;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\assessments\Entity\Assessment\PublicOrganisation;
-use Drupal\assessments\Entity\Assessment\Report;
+use Drupal\assessments\Entity\AssessmentReport;
+use Drupal\assessments\Entity\PublicOrganisation;
 
 /**
  * Defines the access control handler for the assessment entity type.
@@ -100,7 +100,7 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
     $related_report = $entity->getRelatedReport();
 
     // Check if the related report exists and is published (status field).
-    $is_published = $related_report instanceof Report && $related_report->isPublished();
+    $is_published = $related_report instanceof AssessmentReport && $related_report->isPublished();
 
     $result = AccessResult::allowedIfHasPermission($account, 'access content')
       ->allowedIf($is_published)
@@ -130,7 +130,7 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
   protected function checkAccessForSubEntity(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
     $related_report = $entity->getRelatedReport();
 
-    return $related_report instanceof Report
+    return $related_report instanceof AssessmentReport
       ? $this->checkAccess($related_report, $operation, $account)
         ->addCacheableDependency($entity)
       : AccessResult::forbidden()
