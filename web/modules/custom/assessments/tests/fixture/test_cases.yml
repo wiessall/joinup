@@ -1,0 +1,216 @@
+invalid_schema:
+  payload:
+    # This property is not accepted.
+    foo: bar
+    name: "Legislation waste management"
+    # Provider is missing the name
+    provider:
+      # The organisation type identifier is invalid.
+      organisation_type: "inexistent"
+      # Country code invalid.
+      country: "XX"
+    # Expects an array of URLs
+    relevant_report: "https://example.com/last-year-report"
+    binding_requirement:
+      # Binding requirement is missing the description
+      - expression:
+          # Expression is missing the description
+          - name: "Legal Act 2024"
+            documented_in: "https://example.com/eli/act"
+        documents:
+          - "https://example.com/law/123"
+          - "https://example.com/regulation/eu-1655467-s"
+        affects: []
+        has_participation:
+          - country:
+              - "BE"
+              - "NL"
+              - "LU"
+            participant_type:
+              - "national_public_sector_body"
+          - country:
+              - "IT"
+            participant_type:
+              - "national_public_sector_body"
+              - "private_businesses"
+        asset:
+          - title: "Portal EU"
+            description: "An EU portal interoperable solution"
+            landing_page: "https://portal.example.eu"
+          # Not a valid UUID.
+          - "i'm a joke"
+    results_in:
+      organisational:
+        interpretation: "NOT EXISTS"
+        judgement: "Compliant with conditions"
+      technical:
+        # Should be a string.
+        interpretation: ["neutral"]
+        judgement: "Requires follow-up"
+    remaining_barriers: "The city has not yet implemented the new regulations."
+    documents:
+      - "https://files.example.com/documents/req-1.pdf"
+      - "https://files.example.com/documents/regulation.2025.pdf"
+    # Should be a string.
+    other_comment: 255
+  expect:
+    errors:
+      /:
+        - The property foo is not defined and the definition does not allow additional properties
+      /binding_requirement/0/affects:
+        - There must be a minimum of 1 items in the array, 0 found
+      /binding_requirement/0/asset/1:
+        - Does not match the regex pattern ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+        - An object or a string is required. String value found, but is invalid
+      /binding_requirement/0/description:
+        - The property description is required
+      /binding_requirement/0/expression/0/description:
+        - The property description is required
+      /other_comment:
+        - Integer value found, but a string is required
+      /provider:
+        - An object or a string is required. Object value found, but is invalid
+      /provider/country:
+        - Does not have a value in the enumeration ["AT","BE","BG","HR","CY","CZ","DK","EE","FI","FR","DE","GR","HU","IE","IT","LV","LT","LU","MT","NL","PL","PT","RO","SK","SI","ES","SE"]
+      /provider/name:
+        - The property name is required
+      /provider/organisation_type:
+        - Does not have a value in the enumeration ["european_union_agency","european_union_body","european_union_institution","local_public_sector_body","national_public_sector_body","regional_public_sector_body"]
+      /relevant_report:
+        - String value found, but an array is required
+      /results_in/organisational/interpretation:
+        - Does not have a value in the enumeration ["negative","neutral","positive"]
+      /results_in/technical/interpretation:
+        - Array value found, but a string is required
+        - Does not have a value in the enumeration ["negative","neutral","positive"]
+invalid_references:
+  payload:
+    name: "Legislation waste management"
+    provider: 'f2f6bdae-7767-4230-9570-309b42392d1b'
+    binding_requirement:
+      - expression:
+          - name: "Legal Act 2024"
+            description: "Reference to an EU legal expression"
+            documented_in: "https://example.com/eli/act"
+        description: "Article 5"
+        affects:
+          - name: "Digital Monitoring Unit"
+            thematic_area: "digital_and_innovation_services"
+        asset:
+          - "3b1548db-0f29-42f4-a23c-2ee43ed20ba9"
+  expect:
+    errors:
+      - A public organisation with ID 'f2f6bdae-7767-4230-9570-309b42392d1b' does not exist
+      - An asset (interoperability solution) with ID '3b1548db-0f29-42f4-a23c-2ee43ed20ba9' does not exist
+valid:
+  payload:
+    name: "Legislation waste management"
+    provider:
+      name: "City of Brussels"
+      organisation_type: "local_public_sector_body"
+      country: "BE"
+    relevant_report:
+      - "https://example.com/last-year-report"
+      - "https://example.com/middle-east"
+    binding_requirement:
+      - expression:
+          - name: "Legal Act 2024"
+            description: "Reference to an EU legal expression"
+            documented_in: "https://example.com/eli/act"
+        description: "Article 5"
+#        documents:
+#          - "https://example.com/law/123"
+#          - "https://example.com/regulation/eu-1655467-s"
+        affects:
+          - name: "Digital Monitoring Unit"
+            thematic_area: "digital_and_innovation_services"
+          - name: "Training Centre"
+            thematic_area: "education_and_research"
+        has_participation:
+          - participant_type:
+              - "national_public_sector_body"
+            country:
+              - "BE"
+              - "NL"
+              - "LU"
+          - participant_type:
+              - "national_public_sector_body"
+              - "private_businesses"
+            country:
+              - "IT"
+        asset:
+          - title: "Portal EU"
+            description: "An EU portal interoperable solution"
+            landing_page: "https://portal.example.eu"
+          - "ad882176-8b1d-4506-9e90-886c5802f1c7"
+    results_in:
+      organisational:
+        interpretation: "positive"
+        judgement: "Compliant with conditions"
+      technical:
+        interpretation: "neutral"
+        judgement: "Requires follow-up"
+    remaining_barriers: "The city has not yet implemented the new regulations."
+#    documents:
+#      - "https://files.example.com/documents/req-1.pdf"
+#      - "https://files.example.com/documents/regulation.2025.pdf"
+    other_comment: "Still work to be done. Waiting for a new iteration."
+  expect:
+    language: en
+    name: "Legislation waste management"
+    provider:
+      name: "City of Brussels"
+      organisation_type: "local_public_sector_body"
+      country: "BE"
+    relevant_report:
+      - "https://example.com/last-year-report"
+      - "https://example.com/middle-east"
+    binding_requirement:
+      - expression:
+          - name: "Legal Act 2024"
+            description: "Reference to an EU legal expression"
+            documented_in: "https://example.com/eli/act"
+        description: "Article 5"
+        documents: []
+#        documents:
+#          - "https://example.com/law/123"
+#          - "https://example.com/regulation/eu-1655467-s"
+        affects:
+          - name: "Digital Monitoring Unit"
+            thematic_area:
+              - digital_and_innovation_services
+          - name: "Training Centre"
+            thematic_area:
+              - education_and_research
+        has_participation:
+          - participant_type:
+              - "national_public_sector_body"
+            country:
+              - "BE"
+              - "NL"
+              - "LU"
+          - participant_type:
+              - "national_public_sector_body"
+              - "private_businesses"
+            country:
+              - "IT"
+        asset:
+          - title: 'Portal EU'
+            description: 'An EU portal interoperable solution'
+            landing_page: 'https://portal.example.eu'
+          - id: 'ad882176-8b1d-4506-9e90-886c5802f1c7'
+            title: 'Used in assessments'
+            description: 'just this'
+            landing_page: 'https://example.com/the-solution'
+    results_in:
+      organisational:
+        interpretation: "positive"
+        judgement: "Compliant with conditions"
+      technical:
+        interpretation: "neutral"
+        judgement: "Requires follow-up"
+    remaining_barriers: "The city has not yet implemented the new regulations."
+    documents: []
+#      - "https://files.example.com/documents/req-1.pdf"
+#      - "https://files.example.com/documents/regulation.2025.pdf"
+    other_comment: 'Still work to be done. Waiting for a new iteration.'

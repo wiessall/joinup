@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\Kernel;
 
+use Drupal\Component\Serialization\Json;
+use Drupal\Core\Serialization\Yaml;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
+use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_solution\Entity\Solution;
 use Drupal\rest\ResourceResponse;
 
@@ -18,189 +21,81 @@ use Drupal\rest\ResourceResponse;
 class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
 
   /**
+   * Tests validation errors.
+   *
+   * @covers \Drupal\joinup_api\OpenApiSchemaValidator::validate
+   * @covers \Drupal\assessments\Plugin\rest\resource\AssessmentReportResource
+   */
+  public function testValidation(): void {
+    ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('invalid_schema');
+    $response = $this->invokeResourcePost($payload);
+    $data = $response->getResponseData();
+    $this->assertSame(422, $response->getStatusCode());
+    $this->assertSame($expect, $data);
+
+    ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('invalid_references');
+    $response = $this->invokeResourcePost($payload);
+    $data = $response->getResponseData();
+    $this->assertSame(422, $response->getStatusCode());
+    $this->assertSame($expect, $data);
+  }
+
+  /**
    * Tests posting a structured payload returns 201 and echoes the data.
    */
-  public function testPostStructuredPayload(): void {
-    $payload = $this->baseValidPayload();
-
-    $response = $this->invokeResourcePost($payload);
-    $data = $response->getResponseData();
-    // The IDs have been returned along with the original array. The URIs also
-    // validate creation of their respective entities as they are created on
-    // save.
-    $this->assertArrayHasKey('id', $data, 'Assessment ID is present in the response.');
-    $this->assertArrayHasKey('id', $data['binding_requirement'][0], 'Binding requirement ID is present in the response.');
-    $this->assertArrayHasKey('id', $data['provider'][0], 'Provider ID is present in the response.');
-    $this->assertArrayHasKey('id', $data['results_in'][0], 'Results in ID is present in the response.');
-    $this->assertArrayHasKey('id', $data['binding_requirement'][0]['affects'][0], 'Affected service ID is present in the response.');
-    $this->assertArrayHasKey('id', $data['binding_requirement'][0]['asset'][0], 'Asset ID is present in the response.');
-    $this->assertArrayHasKey('id', $data['binding_requirement'][0]['expression'][0], 'Expression ID is present in the response.');
-    $this->assertArrayHasKey('id', $data['binding_requirement'][0]['has_participation'][0], 'Participation ID is present in the response.');
-    $this->assertSame(201, $response->getStatusCode());
-  }
-
-  /**
-   * Tests that errors are returned for unknown properties.
-   */
-  public function testUnexpectedPropertiesReturnErrors(): void {
-    $payload = $this->baseValidPayload();
-    // Add unexpected root property.
-    $payload['foo'] = 'bar';
-    // Add unexpected nested property under affects.
-    $payload['binding_requirement'][0]['affects'][0]['unexpected'] = TRUE;
-
-    $response = $this->invokeResourcePost($payload);
-    $this->assertSame(422, $response->getStatusCode());
-    $data = $response->getResponseData();
-    $this->assertIsArray($data['errors'] ?? NULL);
-    $messages = implode("\n", $data['errors']);
-    $this->assertStringContainsString('assessment: Unexpected property: foo', $messages);
-    $this->assertStringContainsString('assessment > binding_requirement > affects: Unexpected property: unexpected', $messages);
-  }
-
-  /**
-   * Tests that errors are returned for missing required properties.
-   */
-  public function testMissingRequiredPropertiesReturnErrors(): void {
-    $payload = $this->baseValidPayload();
-    // Remove required properties, both text and reference.
-    unset($payload['name']);
-    unset($payload['binding_requirement']);
-
-    $response = $this->invokeResourcePost($payload);
-    $this->assertSame(422, $response->getStatusCode());
-    $data = $response->getResponseData();
-    $messages = implode("\n", $data['errors'] ?? []);
-    $this->assertStringContainsString('assessment: Missing required property: name', $messages);
-    $this->assertStringContainsString('assessment: Missing required property: binding_requirement', $messages);
-  }
-
-  /**
-   * Invalid values are passed as some of the referenced types (invalid ids).
-   */
-  public function testInvalidReferenceIdsReturnErrors(): void {
-    $payload = $this->baseValidPayload();
-    // Provide non-existent ids for `provider` and `affects` references.
-    $payload['provider'] = [['id' => '8f1c2f7d-4e8a-4b8a-9c2c-3c4b2e9d912a']];
-    $payload['binding_requirement'][0]['affects'] = [['id' => 'f3b7a0e2-1c44-4bb0-94f7-0a6d8c1e58b3']];
-
-    $response = $this->invokeResourcePost($payload);
-    $this->assertSame(422, $response->getStatusCode());
-    $data = $response->getResponseData();
-    $messages = implode("\n", $data['errors'] ?? []);
-    // Class short names appear in the message per
-    // ResourceParser::getClassShortName().
-    $this->assertStringContainsString('assessment > provider: Provided id 8f1c2f7d-4e8a-4b8a-9c2c-3c4b2e9d912a does not reference a valid entity', $messages);
-    $this->assertStringContainsString('assessment > binding_requirement > affects: Provided id f3b7a0e2-1c44-4bb0-94f7-0a6d8c1e58b3 does not reference a valid entity', $messages);
-  }
-
-  /**
-   * Tests that an asset can be reused.
-   */
-  public function testAssetCanBeReused(): void {
-    // Create an asset entity that we will reference twice in the payload.
-    $solution = $this->createAsset('Reusable portal', 'https://reusable.example.eu');
-    $beforeCount = $this->countAssessmentBundle('asset');
-
-    $payload = $this->baseValidPayload();
-    // Replace assets with two references to the same existing id.
-    $payload['binding_requirement'][0]['asset'] = [
-      ['id' => $solution->uuid()],
-      ['id' => $solution->uuid()],
-    ];
-
-    $response = $this->invokeResourcePost($payload);
-    $this->assertSame(201, $response->getStatusCode(), 'Existing asset ids should be accepted without creating new assets.');
-
-    $afterCount = $this->countAssessmentBundle('asset');
-    $this->assertSame($beforeCount, $afterCount, 'No new asset entities should be created.');
-
-    $data = $response->getResponseData();
-    $assets = $data['binding_requirement'][0]['asset'] ?? [];
-    $this->assertCount(2, $assets);
-    $this->assertSame($solution->uuid(), $assets[0]['id'] ?? NULL);
-    $this->assertSame($solution->uuid(), $assets[1]['id'] ?? NULL);
-  }
-
-  /**
-   * Build a base valid payload for reuse across tests.
-   */
-  protected function baseValidPayload(): array {
-    return [
-      'name' => 'Quarterly review',
-      'binding_requirement' => [
-        [
-          'documented_in' => 'https://example.com/law/123',
-          'description' => 'This is some description.',
-          'affects' => [
-            [
-              'name' => 'Permit Application Service',
-              'thematic_area' => 'core_governance_and_administration',
-            ],
-          ],
-          'expression' => [
-            [
-              'name' => 'Legal Act 2024',
-              'description' => 'Reference to an EU legal expression',
-              'documented_in' => 'https://example.com/eli/act',
-            ],
-          ],
-          'has_participation' => [
-            [
-              // Required by participation mapping.
-              'name' => 'BE participant',
-              'country' => 'BE',
-              'type' => 'local_public_sector_body',
-            ],
-          ],
-          'asset' => [
-            [
-              'name' => 'Portal EU',
-              'landing_page' => 'https://portal.example.eu',
-            ],
-          ],
-        ],
-      ],
-      'provider' => [
-        [
-          'name' => 'City of Brussels',
-          'type' => 'local_public_sector_body',
-          'country' => 'BE',
-        ],
-      ],
-      'results_in' => [
-        [
-          'interpretation' => 'Compliant with conditions',
-          'judgement' => 'positive',
-          'type' => 'legal',
-        ],
-      ],
-    ];
-  }
-
-  /**
-   * Count assessment entities for a specific bundle.
-   */
-  protected function countAssessmentBundle(string $bundle): int {
-    $query = \Drupal::entityTypeManager()->getStorage('assessment')->getQuery();
-    $query->condition('type', $bundle);
-    $query->accessCheck(FALSE);
-    return (int) $query->count()->execute();
-  }
-
-  /**
-   * Create an Asset entity and return its numeric id.
-   */
-  protected function createAsset(string $name, string $landingPage): Solution {
-    $asset = Solution::create([
-      'type' => 'asset',
-      'title' => $name,
-      'landing_page' => $landingPage,
+  public function testValidPost(): void {
+    // Create a solution to be referred in report.
+    $solution = Solution::create([
+      'type' => 'solution',
+      'title' => 'Used in assessments',
+      'description' => ['value' => 'just this', 'format' => 'content_editor'],
+      'og_audience' => \Drupal::service('entity.repository')->loadEntityByUuid('node', JoinupCollectionHelper::JOINUP_COLLECTION_UUID),
+      'uuid' => 'ad882176-8b1d-4506-9e90-886c5802f1c7',
+      'landing_page' => 'https://example.com/the-solution',
+      'path' => '/the-solution',
     ]);
-    $asset->resourceEntityPresave();
-    $asset->save();
-    $this->cleanupEntities[] = $asset;
-    return $asset;
+    $solution->save();
+    $this->markEntityForCleanup($solution);
+
+    ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('valid');
+
+    $response = $this->invokeResourcePost($payload);
+    $data = $response->getResponseData();
+
+    // Update the expectation with generated UUIDs.
+    $uuid = $data['id'];
+    $expect = ['id' => $uuid] + $expect;
+    $uuid = $data['provider']['id'];
+    $provider = ['id' => $uuid] + $expect['provider'];
+    $expect['provider'] = $provider;
+    $uuid = $data['binding_requirement'][0]['asset'][0]['id'];
+    $asset = ['id' => $uuid] + $expect['binding_requirement'][0]['asset'][0];
+    $expect['binding_requirement'][0]['asset'][0] = $asset;
+    // Asset URL is not testable because depends on th environment.
+    unset($data['binding_requirement'][0]['asset'][0]['url']);
+    unset($data['binding_requirement'][0]['asset'][1]['url']);
+
+    $this->assertSame($expect, $data);
+
+    // Test the GET resource.
+    $this->drupalGet('/api/assessments/v1/assessment/' . $data['id']);
+    $actual = Json::decode($this->getSession()->getPage()->getContent());
+    // Asset URL is not testable because depends on th environment.
+    unset($actual['binding_requirement'][0]['asset'][0]['url']);
+    unset($actual['binding_requirement'][0]['asset'][1]['url']);
+
+    $assert = $this->assertSession();
+    $assert->statusCodeEquals(200);
+    // The page is cacheable but this is the first hit.
+    $assert->responseHeaderEquals('X-Drupal-Cache', 'MISS');
+    $this->assertSame($expect, $actual);
+
+    // Test that the response is cached.
+    $this->drupalGet('/api/assessments/v1/assessment/' . $data['id']);
+    $assert->statusCodeEquals(200);
+    // The response is retrieved from cache.
+    $assert->responseHeaderEquals('X-Drupal-Cache', 'HIT');
+    $this->assertSame($expect, $actual);
   }
 
   /**
@@ -219,6 +114,20 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
     $this->assertInstanceOf(ResourceResponse::class, $response);
 
     return $response;
+  }
+
+  /**
+   * Provides a test case given its identifier.
+   *
+   * @param string $id
+   *   The test case given its identifier.
+   *
+   * @return array{payload: array, expect: array}
+   *   The test case.
+   */
+  protected function getTestCase(string $id): array {
+    $data = Yaml::decode(file_get_contents(__DIR__ . '/../../fixture/test_cases.yml'));
+    return $data[$id];
   }
 
 }
