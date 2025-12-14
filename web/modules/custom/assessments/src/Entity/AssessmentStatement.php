@@ -10,7 +10,6 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\assessments\AssessmentVocabularyHelper;
-use Drupal\assessments\Entity\Trait\AssessmentResourceTrait;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 
 /**
@@ -51,9 +50,8 @@ use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
  *    },
  * )
  */
-final class AssessmentStatement extends ContentEntityBase implements AssessmentResourceInterface {
+final class AssessmentStatement extends ContentEntityBase {
 
-  use AssessmentResourceTrait;
   use RdfSyncEntityTrait;
 
   /**
@@ -160,48 +158,6 @@ final class AssessmentStatement extends ContentEntityBase implements AssessmentR
     $tid = \Drupal::service(AssessmentVocabularyHelper::class)
       ->getTermIdFromIdentifier('assess_statement_type', $this->bundle());
     $this->set('statement_type', $tid);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getResourcePropertyMappings(): array {
-    return [
-      'interpretation' => [
-        'field_name' => 'interpretation',
-        'is_required' => TRUE,
-        'is_reference' => FALSE,
-      ],
-      'judgement' => [
-        'field_name' => 'judgement',
-        'is_required' => TRUE,
-        'is_reference' => FALSE,
-      ],
-      'type' => [
-        'field_name' => 'statement_type',
-        'is_required' => TRUE,
-        'is_reference' => FALSE,
-      ],
-    ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function translateResourceValue(string $fieldName, mixed $values): mixed {
-    if ($fieldName === 'interpretation') {
-      $terms = \Drupal::entityTypeManager()
-        ->getStorage('taxonomy_term')
-        ->loadByProperties([
-          'vid' => 'assess_statement_interpretation',
-          'id' => $values,
-        ]);
-
-      $term = reset($terms);
-      return $term ? $term->id() : NULL;
-    }
-
-    return $values;
   }
 
 }

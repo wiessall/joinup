@@ -8,8 +8,6 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\assessments\AssessmentInterface;
-use Drupal\assessments\Entity\Trait\AssessmentResourceTrait;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\contact_information\Traits\ContactInformationTrait;
 use Drupal\joinup_bundle_class\AbstractTrait;
@@ -42,7 +40,6 @@ use Drupal\topic\Entity\TopicReferencingEntityTrait;
  */
 class Solution extends Node implements SolutionInterface {
 
-  use AssessmentResourceTrait;
   use AbstractTrait;
   use ArchivableEntityTrait;
   use ContactInformationTrait;
@@ -228,47 +225,6 @@ class Solution extends Node implements SolutionInterface {
    */
   public function getWebsiteLinkFieldName(): string {
     return 'landing_page';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getResourcePropertyMappings(): array {
-    return [
-      'id' => [
-        'field_name' => 'id',
-        'is_required' => FALSE,
-        'is_reference' => FALSE,
-      ],
-      'name' => [
-        'field_name' => 'title',
-        'is_required' => TRUE,
-        'is_reference' => FALSE,
-      ],
-      'landing_page' => [
-        'field_name' => 'landing_page',
-        'is_required' => FALSE,
-        'is_reference' => FALSE,
-      ],
-    ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function resourceEntityPresave(): void {
-    // This method is called when a solution is created as part of the
-    // assessments REST resource. We need to set the solution state to
-    // published and link it to the assessments group.
-    $this->set('field_state', 'published');
-    $assessment_group = $this->entityTypeManager()
-      ->getStorage('node')
-      ->loadByProperties(['uuid' => AssessmentInterface::SOLUTION_COLLECTOR]);
-
-    $group = reset($assessment_group);
-    if ($group) {
-      $this->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, ['target_id' => $group->id()]);
-    }
   }
 
 }
