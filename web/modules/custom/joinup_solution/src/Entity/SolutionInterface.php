@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_solution\Entity;
 
-use Drupal\assessments\Entity\AssessmentResourceInterface;
 use Drupal\collection\Entity\CollectionContentInterface;
 use Drupal\joinup_distribution\Entity\DistributionsParentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -16,7 +15,7 @@ use Drupal\joinup_release\Entity\ReleaseInterface;
 /**
  * Interface for solution entities in Joinup.
  */
-interface SolutionInterface extends GroupInterface, CollectionContentInterface, PinnableGroupContentInterface, DistributionsParentInterface, ShareableContentInterface, ParagraphResourcesInterface, AssessmentResourceInterface {
+interface SolutionInterface extends GroupInterface, CollectionContentInterface, PinnableGroupContentInterface, DistributionsParentInterface, ShareableContentInterface, ParagraphResourcesInterface {
 
   /**
    * Returns the child releases.

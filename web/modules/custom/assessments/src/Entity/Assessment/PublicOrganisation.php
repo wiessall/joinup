@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity\Assessment;
 
-use Drupal\assessments\Entity\AssessmentResourceInterface;
 use Drupal\assessments\Entity\AssessmentSubEntity;
-use Drupal\assessments\Entity\Trait\AssessmentResourceTrait;
 
 /**
  * Defines the public organization entity class.
  */
-final class PublicOrganisation extends AssessmentSubEntity implements AssessmentResourceInterface {
-
-  use AssessmentResourceTrait;
+final class PublicOrganisation extends AssessmentSubEntity {
 
   /**
    * {@inheritdoc}
@@ -120,55 +116,6 @@ final class PublicOrganisation extends AssessmentSubEntity implements Assessment
       'Single Resolution Board' => t('Single Resolution Board'),
       'Translation Centre for the Bodies of the European Union' => t('Translation Centre for the Bodies of the European Union'),
     ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getResourcePropertyMappings(): array {
-    return [
-      'id' => [
-        'field_name' => 'id',
-        'is_required' => FALSE,
-        'is_reference' => FALSE,
-      ],
-      'name' => [
-        'field_name' => 'name',
-        'is_required' => FALSE,
-        'is_reference' => FALSE,
-      ],
-      'type' => [
-        'field_name' => 'organisation_type',
-        'is_required' => FALSE,
-        'is_reference' => FALSE,
-      ],
-      'country' => [
-        'field_name' => 'country',
-        'is_required' => FALSE,
-        'is_reference' => FALSE,
-      ],
-    ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function translateResourceValue(string $fieldName, mixed $values): mixed {
-    if ($fieldName === 'organisation_type') {
-      $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties([
-        'id' => $values,
-        'vid' => 'assess_provider_type',
-      ]);
-      return empty($terms) ? NULL : (reset($terms))->id();
-    }
-    elseif ($fieldName === 'country') {
-      $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties([
-        'code' => $values,
-        'vid' => 'spatial',
-      ]);
-      return empty($terms) ? NULL : (reset($terms))->id();
-    }
-    return $values;
   }
 
 }

@@ -19,7 +19,6 @@ use Drupal\assessments\Entity\Assessment\Participation;
 use Drupal\assessments\Entity\Assessment\PublicOrganisation;
 use Drupal\assessments\Entity\Assessment\PublicService;
 use Drupal\assessments\Entity\Assessment\Report;
-use Drupal\assessments\Entity\Paragraph\BindingRequirement;
 use Drupal\assessments\Event\AssessmentReportEvent;
 use Drupal\assessments\NotificationEvents;
 use Drupal\collection\Entity\CollectionInterface;
@@ -260,9 +259,6 @@ function assessments_entity_bundle_info_alter(array &$bundles): void {
   }
   if (isset($bundles['assessment']['public_service'])) {
     $bundles['assessment']['public_service']['class'] = PublicService::class;
-  }
-  if (isset($bundles['paragraph']['binding_requirement'])) {
-    $bundles['paragraph']['binding_requirement']['class'] = BindingRequirement::class;
   }
 
   $rdfSync = [
