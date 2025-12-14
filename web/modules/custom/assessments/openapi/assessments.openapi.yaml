@@ -67,11 +67,15 @@ paths:
                   find out which are all existing organisations, use the
                   `/organisation` GET resource,  documented below.
                 value:
+                  language: it
                   name: Legislation waste management
                   provider:
                     name: City of Brussels
                     organisation_type: local_public_sector_body
                     country: BE
+                  relevant_report:
+                    - https://example.com/last-year-report
+                    - https://example.com/middle-east
                   binding_requirement:
                     expression:
                       - name: Legal Act 2024
@@ -87,10 +91,17 @@ paths:
                       - name: Training Centre
                         thematic_area: education_and_research
                     has_participation:
-                      - country: BE,
-                        participant_type: national_public_sector_body
-                      - country: IT
-                        participant_type: private_businesses
+                      - participant_type:
+                          - national_public_sector_body
+                        country:
+                          - BE
+                          - NL
+                          - LU
+                      - participant_type:
+                          - private_businesses
+                        country:
+                          - IT
+
                     asset:
                       - name: Portal EU
                         description: An EU portal interoperable solution
@@ -145,8 +156,7 @@ paths:
           required: true
           description: The assessment report ID
           schema:
-            type: string
-            format: uuid
+            $ref: '#/components/schemas/UUID'
       responses:
         '200':
           description: The fetched assessment report
@@ -244,15 +254,44 @@ components:
         - name
         - binding_requirement
         - provider
+      additionalProperties: false
       properties:
         id:
-          type: string
-          format: uuid
+          schema:
+            $ref: '#/components/schemas/UUID'
           readOnly: true
           description: The universally unique ID of the assessment report
+        language:
+          type: string
+          enum:
+            - bg  # Bulgarian
+            - cs  # Czech
+            - da  # Danish
+            - de  # German
+            - el  # Greek
+            - en  # English
+            - es  # Spanish
+            - et  # Estonian
+            - fi  # Finnish
+            - fr  # French
+            - ga  # Irish
+            - hr  # Croatian
+            - hu  # Hungarian
+            - it  # Italian
+            - lt  # Lithuanian
+            - lv  # Latvian
+            - mt  # Maltese
+            - nl  # Dutch
+            - pl  # Polish
+            - pt  # Portuguese
+            - ro  # Romanian
+            - sk  # Slovak
+            - sl  # Slovenian
+            - sv  # Swedish
+          description: The report's language. If omitted, defaults to English.
         name:
           type: string
-          description: A short name assigned for easy identification
+          description: A short name assigned for easy identification.
           maxLength: 255
         provider:
           description: |
@@ -262,13 +301,19 @@ components:
             `/organisation` GET resource, documented in this page.
           oneOf:
             - $ref: '#/components/schemas/Organisation'
-            - type: string
-              format: uuid
+            - $ref: '#/components/schemas/UUID'
+        relevant_report:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: Relevant assessment reports
         binding_requirement:
           description: |
             One ore multiple objects can be submitted, each following the
             BindingRequirement schema.
           type: array
+          minItems: 1
           items:
             $ref: '#/components/schemas/BindingRequirement'
         results_in:
@@ -288,6 +333,13 @@ components:
         remaining_barriers:
           type: string
           description: Describe possible remaining barriers to interoperability.
+        documents:
+          type: array
+          description: |
+            List of URLs of documents supporting this assessment report.
+          items:
+            type: string
+            format: uri
         other_comment:
           type: string
           description: Any additional comments or notes about the assessment.
@@ -297,10 +349,11 @@ components:
       required:
         - name
         - organisation_type
+      additionalProperties: false
       properties:
         id:
-          type: string
-          format: uuid
+          schema:
+            $ref: '#/components/schemas/UUID'
           readOnly: true
           description: The universally unique ID of the public organisation.
         name:
@@ -329,14 +382,11 @@ components:
         - expression
         - description
         - affects
+      additionalProperties: false
       properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-          description: The universally unique ID of the binding requirement.
         expression:
           type: array
+          minItems: 1
           description: |
             One ore multiple objects can be submitted, each following the
             `Expression` schema.
@@ -357,6 +407,7 @@ components:
           description: |
             One ore multiple objects can be submitted, each following the
             `PublicService` schema.
+          minItems: 1
           items:
             $ref: '#/components/schemas/PublicService'
         has_participation:
@@ -377,25 +428,8 @@ components:
               `/asset` GET resource, documented in this page.
           items:
             oneOf:
-              - type: object
-                required:
-                  - title
-                  - description
-                  - landing_page
-                properties:
-                  title:
-                    type: string
-                    description: The interoperability solution title.
-                    maxLength: 255
-                  description:
-                    type: string
-                    description: The interoperability solution description.
-                  landing_page:
-                    type: string
-                    description: The interoperability solution relevant website.
-                    format: uri
-              - type: string
-                format: uuid
+              - $ref: '#/components/schemas/Asset'
+              - $ref: '#/components/schemas/UUID'
           example:
             asset:
               - b40f14cf-7383-40d6-aa07-16be9b3ff930
@@ -408,12 +442,8 @@ components:
       required:
         - name
         - description
+      additionalProperties: false
       properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-          description: The universally unique ID of the initiative.
         name:
           type: string
           description: The name of the initiative.
@@ -430,12 +460,8 @@ components:
       type: object
       required:
         - name
+      additionalProperties: false
       properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-          description: The universally unique ID of the public service.
         name:
           type: string
           description: The name  unique ID of the public service.
@@ -459,57 +485,63 @@ components:
       type: object
       required:
         - participant_type
+      additionalProperties: false
       properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-          description: The universally unique ID of the affected stakeholder.
         participant_type:
-          type: string
-          description: The type of the affected stakeholder.
-          enum:
-            - european_union_agency
-            - european_union_body
-            - european_union_institution
-            - local_public_sector_body
-            - national_public_sector_body
-            - private_businesses
-            - regional_public_sector_body
-        country:
-          $ref: '#/components/schemas/EuropeanUnionCountry'
+          type: array
+          items:
+            type: string
+            description: The type of the affected stakeholder.
+            enum:
+              - european_union_agency
+              - european_union_body
+              - european_union_institution
+              - local_public_sector_body
+              - national_public_sector_body
+              - private_businesses
+              - regional_public_sector_body
           description: The participation type.
+        country:
+          type: array
+          items:
+            $ref: '#/components/schemas/EuropeanUnionCountry'
+          description: Stakeholder's countries. Each as 2-letter country code.
 
     Asset:
       type: object
       required:
         - title
-        - url
+        - description
+        - landing_page
       description: An asset as interoperability solution.
       properties:
         id:
-          type: string
-          format: uuid
+          schema:
+            $ref: '#/components/schemas/UUID'
           readOnly: true
           description: The universally unique ID of the solution.
         title:
           type: string
           description: The title of the interoperability solution.
+          maxLength: 255
+        description:
+          type: string
+          description: The interoperability solution description.
+        landing_page:
+          type: string
+          description: The interoperability solution relevant website.
+          format: uri
         url:
           type: string
-          format: uri
           description: The solution page on the Interoperable Europe Portal.
+          format: uri
 
     Statement:
       type: object
       required:
         - interpretation
+      additionalProperties: false
       properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-          description: The universally unique ID of the solution.
         interpretation:
           type: string
           description: The interpretation of the statement.
@@ -555,3 +587,7 @@ components:
         - SI  # Slovenia
         - ES  # Spain
         - SE  # Sweden
+
+    UUID:
+      type: string
+      pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
