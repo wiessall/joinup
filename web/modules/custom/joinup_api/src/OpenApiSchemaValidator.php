@@ -49,11 +49,80 @@ class OpenApiSchemaValidator {
 
     $errors = [];
     foreach ($validator->getErrors() as $error) {
-      $errors[$error['pointer']][] = $error['message'];
+      $path = $error['pointer'] ?: '/';
+      $errors[$path][] = $error['message'];
     }
-    ksort($errors);
+
+    $this->enhance($errors);
 
     return $errors;
   }
+
+  /**
+   * Enhances the error messages.
+   *
+   * @param array<string, list<string>> $errors
+   *   List of errors grouped by property path, passed by reference.
+   */
+  protected function enhance(array &$errors): void {
+    ksort($errors);
+
+    // In Joinup we often assign two alternative schemas to a property by using
+    // the oneOf operator. The practical case is when we need EITHER to create
+    // an object, OR refer it by its ID. When we pass an object which doesn't
+    // validate, the following sequence or error messages is generated:
+    // - Object value found, but a string is required
+    // - Failed to match exactly one schema
+    // The same happens when the string is found but is invalid. But this looks
+    // quite misleading for the consumer. We enhance by replacing both messages
+    // with one more meaningful.
+    array_walk($errors, function (array &$error): void {
+      $oneOfMessageDelta = array_search(self::ONE_OF_MESSAGE, $error, TRUE);
+      if ($oneOfMessageDelta === FALSE) {
+        return;
+      }
+
+      $objectFoundStringRequiredMessageDelta = array_search(self::OBJECT_FOUND_STRING_REQUIRED_MESSAGE, $error, TRUE);
+      unset($error[$oneOfMessageDelta]);
+      if ($objectFoundStringRequiredMessageDelta !== FALSE) {
+        unset($error[$objectFoundStringRequiredMessageDelta]);
+        $error[] = self::OBJECT_FOUND_STRING_REQUIRED_MESSAGE_ALT;
+      }
+
+      $stringFoundObjectRequiredMessageDelta = array_search(self::STRING_FOUND_OBJECT_REQUIRED_MESSAGE, $error, TRUE);
+      unset($error[$oneOfMessageDelta]);
+      if ($stringFoundObjectRequiredMessageDelta !== FALSE) {
+        unset($error[$stringFoundObjectRequiredMessageDelta]);
+        $error[] = self::STRING_FOUND_OBJECT_REQUIRED_MESSAGE_ALT;
+      }
+
+      $error = array_values($error);
+    });
+  }
+
+  /**
+   * Message created by when none of oneOf schemas is validated.
+   */
+  private const string ONE_OF_MESSAGE = 'Failed to match exactly one schema';
+
+  /**
+   * Message when the property defined with oneOf contains an invalid object.
+   */
+  private const string OBJECT_FOUND_STRING_REQUIRED_MESSAGE = 'Object value found, but a string is required';
+
+  /**
+   * Replacement message when object is invalid.
+   */
+  private const string OBJECT_FOUND_STRING_REQUIRED_MESSAGE_ALT = 'An object or a string is required. Object value found, but is invalid';
+
+  /**
+   * Message when the property defined with oneOf contains an invalid string.
+   */
+  private const string STRING_FOUND_OBJECT_REQUIRED_MESSAGE = 'String value found, but an object is required';
+
+  /**
+   * Replacement message when string is invalid.
+   */
+  private const string STRING_FOUND_OBJECT_REQUIRED_MESSAGE_ALT = 'An object or a string is required. String value found, but is invalid';
 
 }
