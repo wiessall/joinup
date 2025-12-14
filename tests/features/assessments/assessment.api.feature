@@ -11,6 +11,10 @@ Feature: Assessments API
       title: Citizen's Forum
       url: __base_url__/collection/portal-support/solution/citizens-forum
     """
+    And the page should be cacheable
+    But the page should not be cached
+    When I go to "/api/assessments/v1/asset"
+    Then the page should be cached
 
     Given public_organisation assessments:
       | name        | organisation_type          | uuid                                 | country    |
@@ -27,3 +31,7 @@ Feature: Assessments API
       organisation_type: local_public_sector_body
       country: LU
     """
+    And the page should be cacheable
+    But the page should not be cached
+    When I go to "/api/assessments/v1/organisation"
+    Then the page should be cached
