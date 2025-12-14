@@ -14,11 +14,9 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\assessments\AssessmentInterface;
-use Drupal\assessments\Entity\Assessment\Expression;
-use Drupal\assessments\Entity\Assessment\Participation;
-use Drupal\assessments\Entity\Assessment\PublicOrganisation;
-use Drupal\assessments\Entity\Assessment\PublicService;
-use Drupal\assessments\Entity\Assessment\Report;
+use Drupal\assessments\Entity\AssessmentReport;
+use Drupal\assessments\Entity\AssessmentSubEntity;
+use Drupal\assessments\Entity\PublicOrganisation;
 use Drupal\assessments\Event\AssessmentReportEvent;
 use Drupal\assessments\NotificationEvents;
 use Drupal\collection\Entity\CollectionInterface;
@@ -103,7 +101,7 @@ function assessments_preprocess_layout_paragraphs_insert_component_btn(&$variabl
     ->getWithStorageKey($url->getRouteParameters()['layout_paragraphs_layout']);
 
   $entity = $layoutParagraphsLayout?->getEntity();
-  if ($entity instanceof Report) {
+  if ($entity instanceof AssessmentReport) {
     $fieldName = $layoutParagraphsLayout?->getFieldName();
     if ($fieldName === 'binding_requirement') {
       $variables['title'] = t('New binding requirement');
@@ -246,19 +244,19 @@ function assessments_entity_bundle_info(): array {
  */
 function assessments_entity_bundle_info_alter(array &$bundles): void {
   if (isset($bundles['assessment']['report'])) {
-    $bundles['assessment']['report']['class'] = Report::class;
-  }
-  if (isset($bundles['assessment']['expression'])) {
-    $bundles['assessment']['expression']['class'] = Expression::class;
-  }
-  if (isset($bundles['assessment']['participation'])) {
-    $bundles['assessment']['participation']['class'] = Participation::class;
+    $bundles['assessment']['report']['class'] = AssessmentReport::class;
   }
   if (isset($bundles['assessment']['public_organisation'])) {
     $bundles['assessment']['public_organisation']['class'] = PublicOrganisation::class;
   }
+  if (isset($bundles['assessment']['expression'])) {
+    $bundles['assessment']['expression']['class'] = AssessmentSubEntity::class;
+  }
+  if (isset($bundles['assessment']['participation'])) {
+    $bundles['assessment']['participation']['class'] = AssessmentSubEntity::class;
+  }
   if (isset($bundles['assessment']['public_service'])) {
-    $bundles['assessment']['public_service']['class'] = PublicService::class;
+    $bundles['assessment']['public_service']['class'] = AssessmentSubEntity::class;
   }
 
   $rdfSync = [

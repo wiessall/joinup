@@ -20,7 +20,7 @@ description: ''
 required: true
 translatable: false
 default_value: {  }
-default_value_callback: 'Drupal\assessments\Entity\Assessment\Report::getDefaultStateValue'
+default_value_callback: 'Drupal\assessments\Entity\AssessmentReport::getDefaultStateValue'
 settings:
   workflow: default
   workflow_callback: ''
