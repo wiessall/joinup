@@ -11,14 +11,17 @@ Feature: Assessment Report Entity Management
     Then I should see the heading "Create assessment report"
 
     When I press "Save"
-    Then I should see the error message "3 errors have been found: NameType of public sector bodyBinding requirements"
+    Then I should see the error message "3 errors have been found: Short titleType of public sector bodyBinding requirements"
 
-    When I fill in "Name" with "Test Assessment Report 2025"
+    When I fill in "Short title" with "Test Assessment Report 2025"
+    And I should see "This will be used as the title of the published report. Maximum 255 characters."
+
+    And I should see "Union entity or public sector body which is providing the report"
     And I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "Austrian Ministry of Digital Affairs"
-    And I check "Check if assessment is linked to previous assessments or related assessments at EU or national level."
-    And I fill in "Relevant assessment report" with "https://interoperable-europe.ec.europa.eu/report"
+    And I check "Check this box if assessment is linked to previous assessments or related assessments at EU or national level."
+    And I fill in "Reference of the linked assessment" with "https://interoperable-europe.ec.europa.eu/report"
 
     # Binding requirements
     When I click "New binding requirement"
@@ -44,6 +47,8 @@ Feature: Assessment Report Entity Management
     And I fill in "documented_in[0][uri]" with "https://interoperable-europe.ec.europa.eu/general" in the "Modal content" region
 
     When I click "Trans-European digital public services" in the "Modal content" region
+    And I should see the text "Specify the trans-European digital public service(s) concerned" in the "Modal content" region
+    And I should see the text "Specify the concerned function(s) of trans-European digital public service(s)" in the "Modal content" region
     And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
     And I select "Core governance and administration" from "affects[0][inline_entity_form][thematic_area]" in the "Modal content" region
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
@@ -72,7 +77,7 @@ Feature: Assessment Report Entity Management
 
     When I click "Documents" in the "Modal content" region
     And I attach the file "text.pdf" to "Add a new file"
-
+    And I should see "Maximum 5 files. 10 MB limit. Allowed types: txt doc docx pdf ppt pptx zip rar xls xlsx." in the "Modal content" region
     Then I press "Save" in the "Modal buttons" region
 
     # Identified effects on cross-border interoperability
@@ -97,6 +102,7 @@ Feature: Assessment Report Entity Management
 
     # Assessment supporting documents
     And I attach the file "text.pdf" to "Add a new file"
+    And I should see "Maximum 5 files. 10 MB limit. Allowed types: txt doc docx pdf ppt pptx zip rar xls xlsx."
 
     # Add comment
     And I fill in "Please add any other comment you would like to share." with "This assessment was conducted in collaboration with multiple stakeholders across EU member states."
@@ -113,7 +119,7 @@ Feature: Assessment Report Entity Management
 
     # Edit test.
     When I go to the edit form of the "Test Assessment Report 2025" assessment
-    And I fill in "Name" with "Test Assessment Report 2025 v2"
+    And I fill in "Short title" with "Test Assessment Report 2025 v2"
     And I press "Save"
     Then I should see the heading "Test Assessment Report 2025 v2"
 
@@ -129,7 +135,7 @@ Feature: Assessment Report Entity Management
     Given I am logged in as an "authenticated user"
     And I go to "/collection/assessments/report/create"
 
-    When I fill in "Name" with "Test Provided by in Assessment Report 2025"
+    When I fill in "Short title" with "Test Provided by in Assessment Report 2025"
     And I select "Local public sector body" from "Type of public sector body"
     And I wait for AJAX to finish
     And I select "Greece" from "Country"
@@ -275,7 +281,7 @@ Feature: Assessment Report Entity Management
     # Test that editing and saving without changing local organization shows no warning.
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I fill in "Name" with "Test Provided by in Assessment Report 2025 - Updated"
+    And I fill in "Short title" with "Test Provided by in Assessment Report 2025 - Updated"
     Then I press "Save"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 - Updated has been updated."
@@ -295,14 +301,14 @@ Feature: Assessment Report Entity Management
     # Test that editing and saving without changing EU organization shows no warning.
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I fill in "Name" with "Test Provided by in Assessment Report 2025 - Re-updated"
+    And I fill in "Short title" with "Test Provided by in Assessment Report 2025 - Re-updated"
     Then I press "Save"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 - Re-updated has been updated."
 
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I fill in "Name" with "Test Provided by in Assessment Report 2025 - Re-updated"
+    And I fill in "Short title" with "Test Provided by in Assessment Report 2025 - Re-updated"
     Then I press "…or add new"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "New EU Institution 2025"
@@ -323,7 +329,7 @@ Feature: Assessment Report Entity Management
     And I am logged in as pol2025
     And I go to "/collection/assessments/report/create"
 
-    When I fill in "Name" with "Test permissions in Assessment Report 2025"
+    When I fill in "Short title" with "Test permissions in Assessment Report 2025"
     And I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "CTT PT"

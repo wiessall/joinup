@@ -210,7 +210,7 @@ permissions:
   - 'view eif_perspective meta-entity'
   - 'view interoperability'
   - 'view media'
-  - 'view own assessment report'
+  - 'view own unpublished assessment report'
   - 'view own unpublished content'
   - 'view paragraph content accordion'
   - 'view paragraph content accordion_item'
