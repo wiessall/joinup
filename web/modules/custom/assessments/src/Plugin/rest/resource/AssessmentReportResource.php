@@ -35,6 +35,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   id: "assessment_report",
   label: new TranslatableMarkup("Assessment report"),
   uri_paths: [
+    "canonical" => "/api/assessments/v1/assessment/{uuid}",
     "create" => "/api/assessments/v1/assessment",
   ],
 )]
@@ -87,11 +88,27 @@ class AssessmentReportResource extends ResourceBase {
   }
 
   /**
-   * Responds to POST requests.
+   * Responds to GET request.
    *
-   * Accepts a single JSON object representing the Assessment and related
-   * entities. Currently, this is a pass-through that echoes the received data
-   * with a 201 status.
+   * @param string $uuid
+   *   The UUID of the assessment report.
+   *
+   * @return \Drupal\rest\ResourceResponse
+   *   The assessment report structured according to the OpenAPI schema.
+   */
+  public function get(string $uuid): ResourceResponse {
+    $report = $this->entityRepository->loadEntityByUuid('assessment', $uuid);
+
+    if ($report instanceof Report) {
+      return (new ResourceResponse($this->reportToArray($report), 200))
+        ->addCacheableDependency($report);
+    }
+
+    return new ResourceResponse(['errors' => ['Not found']], 404);
+  }
+
+  /**
+   * Responds to POST requests.
    *
    * @param array $data
    *   The JSON payload. See assessments.openapi.yaml for the JSON schema.
