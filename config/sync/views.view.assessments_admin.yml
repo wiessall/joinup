@@ -2,8 +2,12 @@ uuid: 4567d2d6-43fb-44b6-8e4c-fe89c6752224
 langcode: en
 status: true
 dependencies:
+  config:
+    - field.storage.assessment.state
   module:
     - assessments
+    - options
+    - state_machine
     - user
     - views_bulk_operations
 id: assessments_admin
@@ -98,7 +102,7 @@ display:
           entity_type: assessment
           entity_field: id
           plugin_id: field
-          label: ''
+          label: ID
           exclude: false
           alter:
             alter_text: false
@@ -154,17 +158,15 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        status:
-          id: status
-          table: assessment_field_data
-          field: status
+        state:
+          id: state
+          table: assessment__state
+          field: state
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: assessment
-          entity_field: status
           plugin_id: field
-          label: Status
+          label: State
           exclude: false
           alter:
             alter_text: false
@@ -206,11 +208,8 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: value
-          type: boolean
-          settings:
-            format: default
-            format_custom_false: ''
-            format_custom_true: ''
+          type: list_default
+          settings: {  }
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -643,6 +642,53 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+        state_value:
+          id: state_value
+          table: assessment__state
+          field: state_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: state_machine_state
+          operator: in
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: state_value_op
+            label: 'State (state)'
+            description: ''
+            use_operator: false
+            operator: state_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: state_value
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              interoperability_validator: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+              translator: '0'
+              assessment_reporter: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
       style:
         type: table
         options:
@@ -652,7 +698,7 @@ display:
           columns:
             views_bulk_operations_bulk_form: views_bulk_operations_bulk_form
             id: id
-            status: status
+            state: state
             type: type
             uid: uid
             created: created
@@ -666,21 +712,21 @@ display:
               empty_column: false
               responsive: ''
             id:
-              sortable: false
+              sortable: true
               default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
-            status:
-              sortable: false
+            state:
+              sortable: true
               default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
             type:
-              sortable: false
+              sortable: true
               default_sort_order: asc
               align: ''
               separator: ''
@@ -748,7 +794,8 @@ display:
         - url
         - url.query_args
         - user.permissions
-      tags: {  }
+      tags:
+        - 'config:field.storage.assessment.state'
   page_1:
     id: page_1
     display_title: Page
@@ -768,4 +815,5 @@ display:
         - url
         - url.query_args
         - user.permissions
-      tags: {  }
+      tags:
+        - 'config:field.storage.assessment.state'
