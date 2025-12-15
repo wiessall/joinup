@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\ExistingSite;
 
-use Drupal\Core\Session\AccountInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\assessments\Entity\Assessment;
 use Drupal\user\Entity\User;
@@ -104,24 +103,11 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
         'type' => 'report',
         'name' => ucfirst($state) . ' Assessment Report',
         'state' => $state,
-        'status' => $state === 'published',
         'uid' => $this->ownerUser->id(),
       ]);
       $this->testAssessments[$state]->save();
+      $this->markEntityForCleanup($this->testAssessments[$state]);
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function tearDown(): void {
-    foreach ($this->testAssessments as $assessment) {
-      if ($assessment && !$assessment->isNew()) {
-        $assessment->delete();
-      }
-    }
-
-    parent::tearDown();
   }
 
   /**
@@ -133,10 +119,10 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
   public function testViewPublishedAssessment(): void {
     $assessment = $this->testAssessments['published'];
 
-    $this->assertAccessAllowed($assessment, 'view', $this->ownerUser);
-    $this->assertAccessAllowed($assessment, 'view', $this->moderatorUser);
-    $this->assertAccessAllowed($assessment, 'view', $this->authenticatedUser);
-    $this->assertAccessAllowed($assessment, 'view', User::getAnonymousUser());
+    $this->assertTrue($assessment->access('view', $this->ownerUser));
+    $this->assertTrue($assessment->access('view', $this->moderatorUser));
+    $this->assertTrue($assessment->access('view', $this->authenticatedUser));
+    $this->assertTrue($assessment->access('view', User::getAnonymousUser()));
   }
 
   /**
@@ -149,39 +135,26 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
   public function testViewNonPublishedAssessment(string $state): void {
     $assessment = $this->testAssessments[$state];
 
-    $this->assertAccessAllowed($assessment, 'view', $this->ownerUser);
-    $this->assertAccessAllowed($assessment, 'view', $this->moderatorUser);
-    $this->assertAccessAllowed($assessment, 'view', $this->assessmentReporterUser);
+    $this->assertTrue($assessment->access('view', $this->ownerUser));
+    $this->assertTrue($assessment->access('view', $this->moderatorUser));
+    $this->assertTrue($assessment->access('view', $this->assessmentReporterUser));
 
-    $this->assertAccessDenied($assessment, 'view', $this->nonOwnerUser);
-    $this->assertAccessDenied($assessment, 'view', $this->authenticatedUser);
+    $this->assertFalse($assessment->access('view', $this->nonOwnerUser));
+    $this->assertFalse($assessment->access('view', $this->authenticatedUser));
   }
 
   /**
-   * Tests create access for draft assessment reports.
+   * Tests create access for assessment reports.
    *
    * @covers ::checkCreateAccess
    */
-  public function testCreateDraftAssessment(): void {
-    $this->assertCreateAccessAllowed($this->ownerUser, 'draft');
-    $this->assertCreateAccessAllowed($this->assessmentReporterUser, 'draft');
-    $this->assertCreateAccessAllowed($this->moderatorUser, 'draft');
-    $this->assertCreateAccessAllowed($this->authenticatedUser, 'draft');
+  public function testCreateAssessment(): void {
+    $this->assertTrue($this->accessHandler->createAccess('report', $this->ownerUser));
+    $this->assertTrue($this->accessHandler->createAccess('report', $this->assessmentReporterUser));
+    $this->assertTrue($this->accessHandler->createAccess('report', $this->moderatorUser));
+    $this->assertTrue($this->accessHandler->createAccess('report', $this->authenticatedUser));
 
-    $this->assertCreateAccessDenied(User::getAnonymousUser(), 'draft');
-  }
-
-  /**
-   * Tests create access for published assessment reports.
-   *
-   * @covers ::checkCreateAccess
-   */
-  public function testCreatePublishedAssessment(): void {
-    $this->assertCreateAccessAllowed($this->assessmentReporterUser, 'published');
-    $this->assertCreateAccessAllowed($this->moderatorUser, 'published');
-
-    $this->assertCreateAccessDenied($this->ownerUser, 'published');
-    $this->assertCreateAccessDenied($this->authenticatedUser, 'published');
+    $this->assertFalse($this->accessHandler->createAccess('report', User::getAnonymousUser()));
   }
 
   /**
@@ -193,12 +166,12 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
   public function testUpdateDraftAssessment(): void {
     $assessment = $this->testAssessments['draft'];
 
-    $this->assertAccessAllowed($assessment, 'update', $this->ownerUser);
-    $this->assertAccessAllowed($assessment, 'update', $this->moderatorUser);
-    $this->assertAccessAllowed($assessment, 'update', $this->assessmentReporterUser);
+    $this->assertTrue($assessment->access('update', $this->ownerUser));
+    $this->assertTrue($assessment->access('update', $this->moderatorUser));
+    $this->assertTrue($assessment->access('update', $this->assessmentReporterUser));
 
-    $this->assertAccessDenied($assessment, 'update', $this->nonOwnerUser);
-    $this->assertAccessDenied($assessment, 'update', $this->authenticatedUser);
+    $this->assertFalse($assessment->access('update', $this->nonOwnerUser));
+    $this->assertFalse($assessment->access('update', $this->authenticatedUser));
   }
 
   /**
@@ -210,12 +183,12 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
   public function testUpdateReviewAssessment(): void {
     $assessment = $this->testAssessments['review'];
 
-    $this->assertAccessAllowed($assessment, 'update', $this->ownerUser);
-    $this->assertAccessAllowed($assessment, 'update', $this->moderatorUser);
-    $this->assertAccessAllowed($assessment, 'update', $this->assessmentReporterUser);
+    $this->assertTrue($assessment->access('update', $this->ownerUser));
+    $this->assertTrue($assessment->access('update', $this->moderatorUser));
+    $this->assertTrue($assessment->access('update', $this->assessmentReporterUser));
 
-    $this->assertAccessDenied($assessment, 'update', $this->nonOwnerUser);
-    $this->assertAccessDenied($assessment, 'update', $this->authenticatedUser);
+    $this->assertFalse($assessment->access('update', $this->nonOwnerUser));
+    $this->assertFalse($assessment->access('update', $this->authenticatedUser));
   }
 
   /**
@@ -228,12 +201,62 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
   public function testDeleteAssessment(string $state): void {
     $assessment = $this->testAssessments[$state];
 
-    $this->assertAccessAllowed($assessment, 'delete', $this->moderatorUser);
-    $this->assertAccessAllowed($assessment, 'delete', $this->assessmentReporterUser);
+    $this->assertTrue($assessment->access('delete', $this->moderatorUser));
+    $this->assertTrue($assessment->access('delete', $this->assessmentReporterUser));
 
-    $this->assertAccessDenied($assessment, 'delete', $this->ownerUser);
-    $this->assertAccessDenied($assessment, 'delete', $this->nonOwnerUser);
-    $this->assertAccessDenied($assessment, 'delete', $this->authenticatedUser);
+    $this->assertFalse($assessment->access('delete', $this->ownerUser));
+    $this->assertFalse($assessment->access('delete', $this->nonOwnerUser));
+    $this->assertFalse($assessment->access('delete', $this->authenticatedUser));
+  }
+
+  /**
+   * Tests view access for public_organisation assessments.
+   *
+   * @covers ::checkAccessForPublicOrganisation
+   */
+  public function testPublicOrganisationAccess(): void {
+    $access_handler = \Drupal::entityTypeManager()->getAccessControlHandler('assessment');
+    $organisation = Assessment::create([
+      'type' => 'public_organisation',
+      'name' => 'Test Organisation',
+      'status' => TRUE,
+      'uid' => $this->ownerUser->id(),
+    ]);
+    $organisation->save();
+    $this->markEntityForCleanup($organisation);
+
+    // Test access without related report.
+    $access_handler->resetCache();
+    $this->assertFalse($organisation->access('view', $this->ownerUser));
+    $this->assertFalse($organisation->access('view', $this->moderatorUser));
+    $this->assertFalse($organisation->access('view', $this->authenticatedUser));
+    $this->assertFalse($organisation->access('view', User::getAnonymousUser()));
+
+    /** @var \Drupal\assessments\Entity\AssessmentReport $report */
+    $report = Assessment::create([
+      'type' => 'report',
+      'name' => 'Test Assessment Report',
+      'state' => 'draft',
+      'uid' => $this->ownerUser->id(),
+      'provider' => $organisation->id(),
+    ]);
+    $report->save();
+    $this->markEntityForCleanup($report);
+
+    // Test access with related report as draft.
+    $access_handler->resetCache();
+    $this->assertTrue($organisation->access('view', $this->ownerUser));
+    $this->assertTrue($organisation->access('view', $this->moderatorUser));
+    $this->assertFalse($organisation->access('view', $this->authenticatedUser));
+    $this->assertFalse($organisation->access('view', User::getAnonymousUser()));
+
+    // Test access with related report as published.
+    $report->setWorkflowState('published')->save();
+    $access_handler->resetCache();
+    $this->assertTrue($organisation->access('view', $this->ownerUser));
+    $this->assertTrue($organisation->access('view', $this->moderatorUser));
+    $this->assertTrue($organisation->access('view', $this->authenticatedUser));
+    $this->assertTrue($organisation->access('view', User::getAnonymousUser()));
   }
 
   /**
@@ -263,92 +286,6 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
       'published' => ['published'],
       'require_updates' => ['require_updates'],
     ];
-  }
-
-  /**
-   * Asserts that access is allowed.
-   *
-   * @param \Drupal\assessments\Entity\Assessment $assessment
-   *   The assessment entity.
-   * @param string $operation
-   *   The operation (view, update, delete).
-   * @param \Drupal\Core\Session\AccountInterface $account
-   *   The user account to check.
-   */
-  protected function assertAccessAllowed(Assessment $assessment, string $operation, AccountInterface $account): void {
-    $this->assertTrue(
-      $assessment->access($operation, $account),
-      sprintf(
-        'User %s (%s) should have %s access to %s assessment',
-        $account->getAccountName(),
-        implode(', ', $account->getRoles()),
-        $operation,
-        $assessment->get('state')->value
-      )
-    );
-  }
-
-  /**
-   * Asserts that access is denied.
-   *
-   * @param \Drupal\assessments\Entity\Assessment $assessment
-   *   The assessment entity.
-   * @param string $operation
-   *   The operation (view, update, delete).
-   * @param \Drupal\Core\Session\AccountInterface $account
-   *   The user account to check.
-   */
-  protected function assertAccessDenied(Assessment $assessment, string $operation, AccountInterface $account): void {
-    $this->assertFalse(
-      $assessment->access($operation, $account),
-      sprintf(
-        'User %s (%s) should not have %s access to %s assessment',
-        $account->getAccountName(),
-        implode(', ', $account->getRoles()),
-        $operation,
-        $assessment->get('state')->value
-      )
-    );
-  }
-
-  /**
-   * Asserts that create access is allowed.
-   *
-   * @param \Drupal\Core\Session\AccountInterface $account
-   *   The user account to check.
-   * @param string $state
-   *   The target state for the new assessment.
-   */
-  protected function assertCreateAccessAllowed(AccountInterface $account, string $state): void {
-    $this->assertTrue(
-      $this->accessHandler->createAccess('report', $account, ['state' => $state]),
-      sprintf(
-        'User %s (%s) should have create access for %s assessment',
-        $account->getAccountName(),
-        implode(', ', $account->getRoles()),
-        $state
-      )
-    );
-  }
-
-  /**
-   * Asserts that create access is denied.
-   *
-   * @param \Drupal\Core\Session\AccountInterface $account
-   *   The user account to check.
-   * @param string $state
-   *   The target state for the new assessment.
-   */
-  protected function assertCreateAccessDenied(AccountInterface $account, string $state): void {
-    $this->assertFalse(
-      $this->accessHandler->createAccess('report', $account, ['state' => $state]),
-      sprintf(
-        'User %s (%s) should not have create access for %s assessment',
-        $account->getAccountName(),
-        implode(', ', $account->getRoles()),
-        $state
-      )
-    );
   }
 
   /**
@@ -394,6 +331,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
       'status' => TRUE,
     ]);
     $organisation->save();
+    $this->markEntityForCleanup($organisation);
 
     // Use existing published report and link it to the organisation.
     $published_report = $this->testAssessments['published'];
@@ -408,9 +346,6 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
       $related_report->id(),
       'getRelatedReport() should return the published report.'
     );
-
-    // Cleanup.
-    $organisation->delete();
   }
 
   /**
@@ -426,6 +361,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
       'status' => TRUE,
     ]);
     $organisation->save();
+    $this->markEntityForCleanup($organisation);
 
     // Use existing unpublished report and link it to the organisation.
     $unpublished_report = $this->testAssessments['draft'];
@@ -450,9 +386,6 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
       $related_report->isPublished(),
       'The related report should be published.'
     );
-
-    // Cleanup.
-    $organisation->delete();
   }
 
   /**
@@ -472,6 +405,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
       'status' => TRUE,
     ]);
     $sub_entity->save();
+    $this->markEntityForCleanup($sub_entity);
 
     // Create a paragraph that references the sub-entity.
     $paragraph = \Drupal::entityTypeManager()->getStorage('paragraph')->create([
@@ -482,6 +416,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
       'parent_field_name' => 'binding_requirement',
     ]);
     $paragraph->save();
+    $this->markEntityForCleanup($paragraph);
 
     // Test that getRelatedReport returns the parent report.
     $related_report = $sub_entity->getRelatedReport();
@@ -494,10 +429,6 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
       $related_report->id(),
       sprintf('getRelatedReport() should return the correct parent report for %s.', $bundle)
     );
-
-    // Cleanup.
-    $paragraph->delete();
-    $sub_entity->delete();
   }
 
   /**

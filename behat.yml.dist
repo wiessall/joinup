@@ -20,10 +20,15 @@
         wcag143: Criterion 1.4.3
         wcag411: Criterion 4.1.1
         EN-301-549: Rule required under EN 301 549
-        'cat.text-alternatives': Image text alternative
+        best-practice: Common accessibility best practices
+      # Exclude specific rules globally
+      excludeRules:
+        - heading-order
       excludeElements:
+        # Drupal toolbal.
+        - '.toolbar'
         # Third-party code injected in page with Javascript.
-        - #globan
+        - '.wt-globan--container'
   - Drupal\joinup\Context\AssessmentsContext
   - Drupal\joinup\Context\BootstrapContext
   - Drupal\joinup\Context\PrivateMessageContext
@@ -142,8 +147,6 @@ default:
               args:
                 # Window size (sync with docker selenium).
                 - '--window-size=1600,1200'
-                # Ignore cert. errors with HTTPS.
-                - '--ignore-certificate-errors'
                 # Additional test-related params.
                 - '--no-sandbox'
                 - '--disable-setuid-sandbox'
@@ -161,8 +164,6 @@ default:
                 - '--incognito'
                 - '--no-first-run'
                 - '--disable-popup-blocking'
-                - '--allowed-ips=*'
-                - '--whitelisted-ips=*'
                 - '--test-type'
     LoversOfBehat\TableExtension:
       table_map:

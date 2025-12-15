@@ -98,4 +98,71 @@ class AssessmentsHtmlRouteProvider extends DefaultHtmlRouteProvider {
     return t('Create @bundle', ['@bundle' => $bundles[$bundle]['label_singular']]);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function getCanonicalRoute(EntityTypeInterface $entity_type): ?Route {
+    $route = parent::getCanonicalRoute($entity_type);
+    $entity_type_id = $entity_type->id();
+    if (!$route instanceof Route) {
+      return $route;
+    }
+    $route->setOption('parameters', [
+      $entity_type_id => [
+        'type' => 'entity:' . $entity_type_id,
+      ],
+      'assessment_type' => [
+        'type' => 'entity:assessment_type',
+        'with_config_overrides' => TRUE,
+      ],
+    ]);
+
+    return $route;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getEditFormRoute(EntityTypeInterface $entity_type): ?Route {
+    $route = parent::getEditFormRoute($entity_type);
+    $entity_type_id = $entity_type->id();
+    if (!$route instanceof Route) {
+      return $route;
+    }
+    $route->setOption('parameters', [
+      $entity_type_id => [
+        'type' => 'entity:' . $entity_type_id,
+      ],
+      'assessment_type' => [
+        'type' => 'entity:assessment_type',
+        'with_config_overrides' => TRUE,
+      ],
+    ]);
+
+    return $route;
+
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getDeleteFormRoute(EntityTypeInterface $entity_type): ?Route {
+    $route = parent::getDeleteFormRoute($entity_type);
+    $entity_type_id = $entity_type->id();
+    if (!$route instanceof Route) {
+      return $route;
+    }
+    $route->setOption('parameters', [
+      $entity_type_id => [
+        'type' => 'entity:' . $entity_type_id,
+      ],
+      'assessment_type' => [
+        'type' => 'entity:assessment_type',
+        'with_config_overrides' => TRUE,
+      ],
+    ]);
+
+    return $route;
+  }
+
 }

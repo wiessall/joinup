@@ -4,12 +4,12 @@ status: true
 dependencies:
   config:
     - core.entity_form_mode.node.assessment
-    - field.field.paragraph.binding_requirement.has_participation
     - field.field.paragraph.binding_requirement.affects
     - field.field.paragraph.binding_requirement.asset
     - field.field.paragraph.binding_requirement.description
     - field.field.paragraph.binding_requirement.documented_in
     - field.field.paragraph.binding_requirement.expression
+    - field.field.paragraph.binding_requirement.has_participation
     - field.field.paragraph.binding_requirement.requirement_documents
     - paragraphs.paragraphs_type.binding_requirement
   module:
@@ -164,8 +164,8 @@ content:
     settings:
       form_mode: assessment
       override_labels: true
-      label_singular: 'relevant solution'
-      label_plural: 'relevant solutions'
+      label_singular: 'Interoperability solution'
+      label_plural: 'Interoperability solutions'
       allow_new: true
       allow_existing: true
       match_operator: CONTAINS

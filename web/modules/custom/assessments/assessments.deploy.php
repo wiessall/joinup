@@ -27,7 +27,6 @@ function assessments_deploy_200800(): void {
       'organisational' => 'Organisational',
       'semantic' => 'Semantic',
       'technical' => 'Technical',
-      'other' => 'Other',
     ],
     'assess_participant_type' => [
       'local_public_sector_body' => 'Local public sector body',

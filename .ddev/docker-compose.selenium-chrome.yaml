@@ -36,6 +36,16 @@ services:
       com.ddev.approot: $DDEV_APPROOT
     volumes:
       - ".:/mnt/ddev_config"
+      - "ddev-global-cache:/mnt/ddev-global-cache"
+    command:
+      - bash
+      - -c
+      - |
+        # Import mkcert root CA into Chrome NSS DB (to avoid certificate errors).
+        mkdir -p /home/seluser/.pki/nssdb
+        certutil -d sql:/home/seluser/.pki/nssdb -A -t "C,," -n mkcert -i /mnt/ddev-global-cache/mkcert/rootCA.pem || true
+        # Start Selenium normally.
+        exec /opt/bin/entry_point.sh
 
   web:
     links:

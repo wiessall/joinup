@@ -11,16 +11,12 @@ bypass assessment report moderation:
 create assessment report:
   title: 'Create assessment reports'
   description: 'Create new assessment reports.'
-view own assessment report:
-  title: 'View own assessment reports'
+view own unpublished assessment report:
+  title: 'View own unpublished assessment reports'
   description: 'View assessment reports created by the user.'
 edit own assessment report:
   title: 'Edit own assessment reports'
   description: 'Edit assessment reports created by the user.'
-administer assessment statement types:
-  title: 'Administer assessment statement types'
-  description: 'Maintain the types of assessment statement type entity.'
-  restrict access: true
 administer assessment statements:
   title: 'Administer assessment statements'
   description: 'Maintain the types of assessment statement entity.'
