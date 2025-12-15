@@ -1,15 +1,15 @@
-uuid: cebb69da-6587-4947-bcba-980536d93b45
+uuid: a1ec250d-4b8e-4350-bfc1-80bcda45f683
 langcode: en
 status: true
 dependencies:
   module:
     - assessments
-id: assessment.other
-field_name: other
+id: assessment.other_comment
+field_name: other_comment
 entity_type: assessment
-type: entity_reference
+type: string_long
 settings:
-  target_type: assessment_statement
+  case_sensitive: false
 module: core
 locked: false
 cardinality: 1
