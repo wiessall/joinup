@@ -84,18 +84,26 @@ Feature: Assessment Report Entity Management
 
     # Identified effects on cross-border interoperability
     When I click "Legal" in the "Content" region
+    And I should see "Provide a justification"
+    And the response should contain "<span class=\"visually-hidden fieldset-legend fw-bold\">Identified effects on cross-border legal interoperability</span>"
     And I select the radio button "Beneficial" with the name "legal[0][inline_entity_form][interpretation]"
     And I fill in "legal[0][inline_entity_form][judgement][0][value]" with "Complies with GDPR and eIDAS regulations"
 
     When I click "Organisational" in the "Content" region
+    And I should see "Provide a justification"
+    And the response should contain "<span class=\"visually-hidden fieldset-legend fw-bold\">Identified effects on cross-border organisational interoperability</span>"
     And I select the radio button "Negligible" with the name "organisational[0][inline_entity_form][interpretation]"
     And I fill in "organisational[0][inline_entity_form][judgement][0][value]" with "Requires coordination between authorities"
 
     When I click "Semantic" in the "Content" region
+    And I should see "Provide a justification"
+    And the response should contain "<span class=\"visually-hidden fieldset-legend fw-bold\">Identified effects on cross-border semantic interoperability</span>"
     And I select the radio button "Beneficial" with the name "semantic[0][inline_entity_form][interpretation]"
     And I fill in "semantic[0][inline_entity_form][judgement][0][value]" with "Uses standardized Core Vocabularies"
 
     When I click "Technical" in the "Content" region
+    And I should see "Provide a justification"
+    And the response should contain "<span class=\"visually-hidden fieldset-legend fw-bold\">Identified effects on cross-border technical interoperability</span>"
     And I select the radio button "Beneficial" with the name "technical[0][inline_entity_form][interpretation]"
     And I fill in "technical[0][inline_entity_form][judgement][0][value]" with "Implements REST APIs and OpenAPI specs"
 
