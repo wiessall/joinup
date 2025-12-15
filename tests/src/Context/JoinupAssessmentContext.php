@@ -76,21 +76,6 @@ class JoinupAssessmentContext extends RawDrupalContext {
   }
 
   /**
-   * Returns the latest submission entity.
-   *
-   * @return \Drupal\webform\WebformSubmissionInterface
-   *   The webform submission.
-   */
-  protected function getLatestSubmission(): WebformSubmissionInterface {
-    if ($submissionId = $this->getLatestSubmissionId()) {
-      $submission = \Drupal::entityTypeManager()->getStorage('webform_submission')->load($submissionId);
-      assert($submission instanceof WebformSubmissionInterface);
-      return $submission;
-    }
-    throw new \Exception("Cannot find any 'assessment' webform submission.");
-  }
-
-  /**
    * Navigate to the entity print download link of the latest submission.
    *
    * @When I go to the pdf download link of the latest assessment submission
