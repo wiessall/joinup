@@ -73,17 +73,17 @@ function assessments_form_alter(array &$form, FormStateInterface $formState, str
   $form['technical']['widget'][0]['#title_display'] = 'invisible';
   $form['other']['widget'][0]['#title_display'] = 'invisible';
 
-    // Register submit handler to create organizations after validation.
-    $handler = [
-      'Drupal\assessments\Plugin\Field\FieldWidget\ProvidedByWidget',
-      'submitCreateOrganisations',
-    ];
-    $existingHandlers = $form['actions']['submit']['#submit'] ?? [];
-    if (!in_array($handler, $existingHandlers, TRUE)) {
-      // Execute before entity builder to set org IDs before entity save.
-      array_unshift($form['actions']['submit']['#submit'], $handler);
-    }
+  // Register submit handler to create organizations after validation.
+  $handler = [
+    'Drupal\assessments\Plugin\Field\FieldWidget\ProvidedByWidget',
+    'submitCreateOrganisations',
+  ];
+  $existingHandlers = $form['actions']['submit']['#submit'] ?? [];
+  if (!in_array($handler, $existingHandlers, TRUE)) {
+    // Execute before entity builder to set org IDs before entity save.
+    array_unshift($form['actions']['submit']['#submit'], $handler);
   }
+}
 
 /**
  * Implements hook_field_widget_complete_form_alter().
