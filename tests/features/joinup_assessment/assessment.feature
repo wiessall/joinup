@@ -2,7 +2,7 @@
 Feature: Assessments
 
   Scenario: Assessment reports are listed in a distinct page and in search.
-    Given I am logged in as a moderator
+    Given I am an anonymous user
     When I go to "/collection/assessments/assessment-reports"
     And I see h1 span element with title "Assessment reports"
     And I should see the link "New assessment"
