@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - assessments
+    - user
     - views_bulk_operations
 id: assessments_admin
 label: 'Assessments admin'
@@ -19,7 +20,7 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: 'Assessment types'
+      title: 'Assessments admin'
       fields:
         views_bulk_operations_bulk_form:
           id: views_bulk_operations_bulk_form
@@ -583,8 +584,9 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: none
-        options: {  }
+        type: perm
+        options:
+          perm: 'moderate assessment report'
       cache:
         type: tag
         options: {  }
@@ -745,6 +747,7 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
+        - user.permissions
       tags: {  }
   page_1:
     id: page_1
@@ -764,4 +767,5 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
+        - user.permissions
       tags: {  }

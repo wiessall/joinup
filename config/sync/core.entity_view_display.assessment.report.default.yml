@@ -8,9 +8,10 @@ dependencies:
     - field.field.assessment.report.documents
     - field.field.assessment.report.legal
     - field.field.assessment.report.organisational
-    - field.field.assessment.report.other
+    - field.field.assessment.report.other_comment
     - field.field.assessment.report.provider
     - field.field.assessment.report.relevant_report
+    - field.field.assessment.report.remaining_barriers
     - field.field.assessment.report.semantic
     - field.field.assessment.report.state
     - field.field.assessment.report.technical
@@ -25,6 +26,7 @@ dependencies:
     - link
     - options
     - template_suggestion
+    - text
 third_party_settings:
   layout_builder:
     enabled: false
@@ -101,14 +103,12 @@ content:
     third_party_settings: {  }
     weight: 8
     region: content
-  other:
-    type: entity_reference_entity_view
-    label: above
-    settings:
-      view_mode: default
-      link: true
+  other_comment:
+    type: basic_string
+    label: hidden
+    settings: {  }
     third_party_settings: {  }
-    weight: 11
+    weight: 13
     region: content
   provider:
     type: entity_reference_entity_view
@@ -144,6 +144,13 @@ content:
       template_suggestion:
         template_suggestion: ''
     weight: 3
+    region: content
+  remaining_barriers:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 14
     region: content
   semantic:
     type: entity_reference_entity_view

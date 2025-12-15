@@ -45,8 +45,8 @@
 {% block page_header %}
   {{ attach_library('ventuno/header-topic') }}
   {{ attach_library('ventuno/see-more') }}
-  <div class="container region-header">
-    <header class="header-topic">
+  <div class="container region-header" role="complementary" aria-label="{{ 'Header region'|t }}">
+    <div class="header-topic">
       {{ title_prefix }}
       <h1 class="header-topic__title">
         {{ meta_title }}
@@ -77,7 +77,7 @@
           </button>
         </div>
       {% endif %}
-      </header>
+      </div>
     </div>
   {{ page.header }}
 {% endblock %}
