@@ -150,6 +150,7 @@ paths:
                 value:
                   name: Quarterly review
                   other_comment: Assessment conducted with full stakeholder consultation.
+                  remaining_barriers: "The city has not yet implemented the new regulations."
                   binding_requirement:
                     - documented_in: "https://example.com/law/123"
                       name: Article 5
@@ -350,6 +351,9 @@ components:
           oneOf:
             - $ref: '#/components/schemas/ID'
             - $ref: '#/components/schemas/Organisation'
+        remaining_barriers:
+          description: Describes possible remaining barriers to interoperability.
+          type: string
         results_in:
           description: References to Statements; allow multiple. Each item is a
             structured object.
@@ -542,7 +546,6 @@ components:
             - organisational
             - semantic
             - technical
-            - other
         documents:
           description: References to Files; allow multiple. Each item may be an ID or a structured object.
           type: array

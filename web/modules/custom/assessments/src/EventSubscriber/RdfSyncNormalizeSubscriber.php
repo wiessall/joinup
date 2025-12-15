@@ -143,7 +143,7 @@ class RdfSyncNormalizeSubscriber implements EventSubscriberInterface {
     }
 
     // Add assessment statements triples.
-    $fields = ['legal', 'organisational', 'semantic', 'technical', 'other'];
+    $fields = ['legal', 'organisational', 'semantic', 'technical'];
     foreach ($fields as $fieldName) {
       $field = $report->get($fieldName);
       if (!$field->isEmpty()) {
