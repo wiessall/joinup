@@ -61,7 +61,7 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
       'view' => $this->checkViewAccess($entity, $account),
       'update' => $this->checkUpdateAccess($entity, $account),
       'delete' => $this->checkDeleteAccess($entity, $account),
-      // @todo ISAICP-10620: This moderate op is currently unused...
+      // @todo This moderate op is currently unused...
       'moderate' => $this->checkModerateAccess($entity, $account),
       default => AccessResult::neutral()
         ->cachePerPermissions()
