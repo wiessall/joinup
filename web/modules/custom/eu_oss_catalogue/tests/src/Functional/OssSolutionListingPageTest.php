@@ -28,7 +28,7 @@ class OssSolutionListingPageTest extends FetchTestBase {
    */
   public function setUp(): void {
     parent::setUp();
-    $this->fetchSolutions('developers_italia', 5);
+    $this->fetchSolutions('developers_italia', 7);
   }
 
   /**
