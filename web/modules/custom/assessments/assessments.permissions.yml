@@ -17,10 +17,6 @@ view own unpublished assessment report:
 edit own assessment report:
   title: 'Edit own assessment reports'
   description: 'Edit assessment reports created by the user.'
-administer assessment statement types:
-  title: 'Administer assessment statement types'
-  description: 'Maintain the types of assessment statement type entity.'
-  restrict access: true
 administer assessment statements:
   title: 'Administer assessment statements'
   description: 'Maintain the types of assessment statement entity.'

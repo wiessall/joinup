@@ -11,5 +11,6 @@ dependencies:
   - joinup:joinup_api
   - joinup:joinup_notification
   - joinup:joinup_rdf
+  - joinup:joinup_workflow
   - openapi_ui_swagger:openapi_ui_swagger
   - paragraphs:paragraphs
