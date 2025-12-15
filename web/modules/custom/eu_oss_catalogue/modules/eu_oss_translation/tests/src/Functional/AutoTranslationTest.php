@@ -105,7 +105,7 @@ class AutoTranslationTest extends FetchTestBase {
     $tmgProviderWorker = $this->queueWorkerManager->createInstance(TranslationQueueWorker::ID);
     $tmgProviderQueue = $this->queueFactory->get(TranslationQueueWorker::ID);
 
-    $this->fetchSolutions('developers_italia', 5);
+    $this->fetchSolutions('developers_italia', 7);
 
     $this->assertEquals(5, $jobBuilderQueue->numberOfItems());
     $this->processQueue($jobBuilderWorker, $jobBuilderQueue, 5);
