@@ -76,6 +76,7 @@ class JoinupAssessmentGroupResolver extends OgRouteGroupResolverBase {
    */
   protected function isModerationRoute(): bool {
     $moderationRoutes = [
+      'joinup_assessment.edit',
       'collection/assessments/assessment-reports/questionnaire/submissions',
     ];
     if (in_array($this->routeMatch->getRouteName(), $moderationRoutes, TRUE)) {
