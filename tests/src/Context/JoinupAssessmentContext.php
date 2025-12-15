@@ -76,20 +76,6 @@ class JoinupAssessmentContext extends RawDrupalContext {
   }
 
   /**
-   * Navigate to the entity print download link of the latest submission.
-   *
-   * @When I go to the pdf download link of the latest assessment submission
-   */
-  public function visitLatestSubmissionPdfDownloadLink(): void {
-    $url = Url::fromRoute('entity_print.view', [
-      'export_type' => 'pdf',
-      'entity_type' => 'webform_submission',
-      'entity_id' => $this->getLatestSubmissionId(),
-    ]);
-    $this->visitPath($url->toString());
-  }
-
-  /**
    * Creates submission if not exist and updates selected submission data.
    *
    * @param string $fieldName
