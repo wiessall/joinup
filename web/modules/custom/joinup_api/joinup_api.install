@@ -67,10 +67,6 @@ function joinup_api_requirements($phase): array {
   $privateKey = $config->get('private_key');
   $publicKey = $config->get('public_key');
 
-  $fileSystem = \Drupal::service('file_system');
-
-  $privateKeyPath = $fileSystem->realpath($privateKey);
-  $publicKeyPath = $fileSystem->realpath($publicKey);
   $requirements['simple_oauth_keys'] = [
     'title' => t('Simple OAuth keys'),
     'value' => t('OK'),
@@ -78,7 +74,31 @@ function joinup_api_requirements($phase): array {
     'severity' => REQUIREMENT_OK,
   ];
 
-  if (!$privateKeyPath) {
+  if (empty($privateKey)) {
+    $requirements['simple_oauth_keys'] = [
+      'title' => t('Simple OAuth private key'),
+      'value' => t('Not configured'),
+      'description' => t('The private key path is not configured.'),
+      'severity' => REQUIREMENT_ERROR,
+    ];
+    return $requirements;
+  }
+
+  if (empty($publicKey)) {
+    $requirements['simple_oauth_keys'] = [
+      'title' => t('Simple OAuth public key'),
+      'value' => t('Not configured'),
+      'description' => t('The public key path is not configured.'),
+      'severity' => REQUIREMENT_ERROR,
+    ];
+    return $requirements;
+  }
+
+  $fileSystem = \Drupal::service('file_system');
+  $privateKeyPath = $fileSystem->realpath($privateKey);
+  $publicKeyPath = $fileSystem->realpath($publicKey);
+
+  if (!$privateKeyPath || !file_exists($privateKeyPath)) {
     $requirements['simple_oauth_keys'] = [
       'title' => t('Simple OAuth private key'),
       'value' => t('Missing'),
@@ -88,7 +108,7 @@ function joinup_api_requirements($phase): array {
     return $requirements;
   }
 
-  if (!$publicKeyPath) {
+  if (!$publicKeyPath || !file_exists($publicKeyPath)) {
     $requirements['simple_oauth_keys'] = [
       'title' => t('Simple OAuth public key'),
       'value' => t('Missing'),
