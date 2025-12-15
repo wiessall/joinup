@@ -1,0 +1,21 @@
+uuid: 01d495a0-de38-4b4e-b9ff-281b21c85c52
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.message.mail_subject
+    - message.template.assessment_published
+id: message.assessment_published.mail_subject
+targetEntityType: message
+bundle: assessment_published
+mode: mail_subject
+content:
+  partial_0:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  partial_1: true
+  search_api_excerpt: true
+  uuid: true
