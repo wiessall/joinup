@@ -69,6 +69,7 @@ class AccessibilityContext extends RawDrupalContext {
   public function __construct(
     protected readonly array $standardTags,
     protected readonly array $excludeElements,
+    protected readonly array $excludeRules = [],
   ) {}
 
   /**
@@ -187,22 +188,33 @@ class AccessibilityContext extends RawDrupalContext {
    *   The JS script.
    */
   protected function getJsTriggeringScript(string $axeJsSrc, array $limitToTags): string {
-    $options = Json::encode([
+    $options = [
       'runOnly' => [
         'type' => 'tag',
         'values' => $limitToTags,
       ],
-    ]);
-    $context = $this->excludeElements ? Json::encode([
-      'exclude' => implode(',', $this->excludeElements),
-    ]) : 'body';
+    ];
+
+    // Disable excluded rules if configured.
+    if (!empty($this->excludeRules)) {
+      $options['rules'] = [];
+      foreach ($this->excludeRules as $rule) {
+        $options['rules'][$rule] = ['enabled' => FALSE];
+      }
+    }
+
+    $options = Json::encode($options);
+
+    $context = $this->excludeElements
+      ? Json::encode(['exclude' => implode(',', $this->excludeElements)])
+      : 'body';
+
     return <<<JavaScript
       (axeJsSrc => {
         const axeRun = () => {
           let output = { violations: [], exception: null };
           const axeJsElement = document.querySelector('script[data-drupal-selector="axe-js"]');
-          // We'll store the results directly on the HTML tag.
-          axeJsElement.dataset.output = ''
+          axeJsElement.dataset.output = '';
 
           axe.run($context, $options)
             .then(results => {
@@ -213,12 +225,11 @@ class AccessibilityContext extends RawDrupalContext {
               output.exception = exception;
               axeJsElement.dataset.output = JSON.stringify(output);
             });
-        }
+        };
 
         if (document.querySelector('script[data-drupal-selector="axe-js"]')) {
           axeRun();
-        }
-        else {
+        } else {
           const axeJsElement = document.createElement('script');
           axeJsElement.src = axeJsSrc;
           axeJsElement.type = 'text/javascript';
