@@ -14,4 +14,3 @@ Feature: Tests the legacy assessments.
 
     When I go to the pdf download link of the latest assessment submission
     Then the content type of the response should be "application/pdf"
-
