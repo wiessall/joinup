@@ -105,9 +105,6 @@ class AssessmentsContext extends RawDrupalContext {
         }
       }
 
-      // @todo Hack until ISAICP-10611 is solved.
-      $assessment['status'] = !empty($assessment['state']) && $assessment['state'] === 'published';
-
       $assessment = (object) $assessment;
 
       $assessment->type = $type;
