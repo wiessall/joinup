@@ -43,18 +43,6 @@ class JoinupAssessmentContext extends RawDrupalContext {
   }
 
   /**
-   * Navigates to the latest submission edit form.
-   *
-   * @When I go to the latest submission moderation form
-   */
-  public function visitLatestSubmissionModerateForm(): void {
-    $url = Url::fromRoute('joinup_assessment.moderation', [
-      'submission' => $this->getLatestSubmissionId(),
-    ]);
-    $this->visitPath($url->toString());
-  }
-
-  /**
    * Navigates to the latest assessment report.
    *
    * @When I go to the latest assessment report

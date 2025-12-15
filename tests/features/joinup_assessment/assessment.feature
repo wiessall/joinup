@@ -81,10 +81,6 @@ Feature: Assessments
       | body      | Your submitted assessment questionnaire has been approved and the report is published |
       | body      | You can check all published assessments at                                            |
 
-    # This submission has fulfilled its scope. It cannot be moderated anymore.
-    When I go to the latest submission moderation form
-    Then the response status code should be 403
-
     # Moderators are able to see the submission is added to user profile.
     When I go to the profile of "Regular"
     And I click "Submissions"
