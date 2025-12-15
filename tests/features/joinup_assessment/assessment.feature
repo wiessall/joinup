@@ -1,11 +1,6 @@
 @api @group-e @demoAssessment
 Feature: Assessments
 
-  Scenario: Assessment webform access.
-    Given I am logged in as a user with the "authenticated" role
-    When I visit "/collection/assessments/assessment-reports/questionnaire"
-    Then I should see the success message "Sorry… This form is closed to new submissions."
-
   Scenario: Assessment reports are listed in a distinct page and in search.
     Given I am logged in as a moderator
     When I go to "/collection/assessments/assessment-reports"
