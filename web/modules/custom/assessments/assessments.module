@@ -15,6 +15,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\Entity\AssessmentReport;
+use Drupal\assessments\Entity\AssessmentSubEntity;
 use Drupal\assessments\Entity\PublicOrganisation;
 use Drupal\assessments\Event\AssessmentReportEvent;
 use Drupal\assessments\NotificationEvents;
@@ -55,17 +56,72 @@ function assessments_entity_extra_field_info(): array {
  * Implements hook_form_FORM_ID_alter().
  */
 function assessments_form_alter(array &$form, FormStateInterface $formState, string $formId): void {
-  if (!in_array($formId, ['assessment_report_add_form', 'assessment_report_edit_form'], TRUE)) {
+  // Handle assessment_report forms.
+  if (in_array($formId, ['assessment_report_add_form', 'assessment_report_edit_form'], TRUE)) {
+    $form['cross_border'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'h3',
+      '#value' => t('Identified effects on cross-border interoperability'),
+    ];
+    $form['#attached']['library'][] = 'assessments/radios_inline';
+    $form['state']['#attributes']['class'][] = 'radios-inline';
+
+    // Register submit handler to create organizations after validation.
+    $handler = [
+      'Drupal\assessments\Plugin\Field\FieldWidget\ProvidedByWidget',
+      'submitCreateOrganisations',
+    ];
+    $existingHandlers = $form['actions']['submit']['#submit'] ?? [];
+    if (!in_array($handler, $existingHandlers, TRUE)) {
+      // Execute before entity builder to set org IDs before entity save.
+      array_unshift($form['actions']['submit']['#submit'], $handler);
+    }
+  }
+}
+
+/**
+ * Implements hook_field_widget_complete_form_alter().
+ */
+function assessments_field_widget_complete_form_alter(array &$element, FormStateInterface $form_state, array $context): void {
+  // Only for the asset field.
+  if (!isset($context['items']) || $context['items']->getFieldDefinition()->getName() !== 'asset') {
     return;
   }
 
-  $form['cross_border'] = [
-    '#type' => 'html_tag',
-    '#tag' => 'h3',
-    '#value' => t('Identified effects on cross-border interoperability'),
-  ];
-  $form['#attached']['library'][] = 'assessments/radios_inline';
-  $form['state']['#attributes']['class'][] = 'radios-inline';
+  // Check if the parent entity is a paragraph of type binding_requirement.
+  $parent = $context['items']->getEntity();
+  if (!$parent || $parent->getEntityTypeId() !== 'paragraph' || $parent->bundle() !== 'binding_requirement') {
+    return;
+  }
+
+  // The widget element is nested at $element['widget'].
+  if (!isset($element['widget'])) {
+    return;
+  }
+
+  $widget = &$element['widget'];
+
+  // Only modify if both action buttons are present.
+  if (isset($widget['actions']['ief_add_existing']) && isset($widget['actions']['ief_add'])) {
+    // Add description before the buttons.
+    $widget['description'] = [
+      '#markup' => t('Identify the interoperability solutions mandatory to use for the implementation of the assessed binding requirement'),
+    ];
+
+    // Modify the ief_add_existing button.
+    /** @var \Drupal\Core\StringTranslation\TranslatableMarkup $markup */
+    $markup = $widget['actions']['ief_add_existing']['#value'];
+    $arguments = $markup->getArguments();
+    $widget['actions']['ief_add_existing']['#value'] = new TranslatableMarkup('Select an @type_singular', $arguments);
+    $widget['actions']['ief_add_existing']['#weight'] = 0;
+
+    // Modify the ief_add button.
+    /** @var \Drupal\Core\StringTranslation\TranslatableMarkup $markup */
+    $markup = $widget['actions']['ief_add']['#value'];
+    $arguments = $markup->getArguments();
+    $widget['actions']['ief_add']['#value'] = new TranslatableMarkup('Add a new @type_singular', $arguments);
+    $widget['actions']['ief_add']['#weight'] = 10;
+  }
 }
 
 /**
@@ -222,7 +278,6 @@ function assessments_entity_bundle_info(): array {
         'organisational'  => t('Organisational interoperability'),
         'semantic' => t('Semantic interoperability'),
         'technical' => t('Technical interoperability'),
-        'other' => t('Other interoperability'),
       ],
     ),
   ];
@@ -237,6 +292,15 @@ function assessments_entity_bundle_info_alter(array &$bundles): void {
   }
   if (isset($bundles['assessment']['public_organisation'])) {
     $bundles['assessment']['public_organisation']['class'] = PublicOrganisation::class;
+  }
+  if (isset($bundles['assessment']['expression'])) {
+    $bundles['assessment']['expression']['class'] = AssessmentSubEntity::class;
+  }
+  if (isset($bundles['assessment']['participation'])) {
+    $bundles['assessment']['participation']['class'] = AssessmentSubEntity::class;
+  }
+  if (isset($bundles['assessment']['public_service'])) {
+    $bundles['assessment']['public_service']['class'] = AssessmentSubEntity::class;
   }
 
   $rdfSync = [
@@ -290,12 +354,31 @@ function assessments_views_data(): array {
 }
 
 /**
+ * After build callback to change "Create" to "Add" for asset form button.
+ */
+function _assessments_process_asset_form_button(array $element, FormStateInterface $form_state): array {
+  // At this point, buildEntityFormActions has already run and created the
+  // button.
+  if (isset($element['actions']['ief_add_save'])) {
+    /** @var \Drupal\Core\StringTranslation\TranslatableMarkup $markup */
+    $markup = $element['actions']['ief_add_save']['#value'];
+    $arguments = $markup->getArguments();
+    $element['actions']['ief_add_save']['#value'] = new TranslatableMarkup('Add @type_singular', $arguments);
+  }
+  return $element;
+}
+
+/**
  * Implements hook_inline_entity_form_entity_form_alter().
  */
 function assessments_inline_entity_form_entity_form_alter(array &$entity_form, FormStateInterface &$formState): void {
   $solution = $entity_form['#entity'];
 
   if ($entity_form['#ief_id'] === 'asset-form' && $solution instanceof SolutionInterface) {
+    if ($entity_form['#op'] === 'add') {
+      $entity_form['#after_build'][] = '_assessments_process_asset_form_button';
+    }
+
     $collection = \Drupal::service('entity.repository')->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR);
     assert($collection instanceof CollectionInterface);
 

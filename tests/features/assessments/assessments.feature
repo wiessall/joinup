@@ -1,4 +1,4 @@
-@api @group-e @assessments
+@api @group-e
 Feature: Assessment Report Entity Management
   In order to manage assessment reports directly
   As a user with appropriate permissions
@@ -7,18 +7,21 @@ Feature: Assessment Report Entity Management
   @javascript
   Scenario: Create a new assessment report with required fields
     Given I am logged in as an "authenticated user"
-    And I go to "/assessments/add/report"
+    And I go to "/collection/assessments/report/create"
     Then I should see the heading "Create assessment report"
 
     When I press "Save"
-    Then I should see the error message "3 errors have been found: NameType of public sector bodyBinding requirements"
+    Then I should see the error message "3 errors have been found: Short titleType of public sector bodyBinding requirements"
 
-    When I fill in "Name" with "Test Assessment Report 2025"
+    When I fill in "Short title" with "Test Assessment Report 2025"
+    And I should see "This will be used as the title of the published report. Maximum 255 characters."
+
+    And I should see "Union entity or public sector body which is providing the report"
     And I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "Austrian Ministry of Digital Affairs"
-    And I select the radio button "Yes"
-    And I fill in "Relevant assessment report" with "https://interoperable-europe.ec.europa.eu/report"
+    And I check "Check this box if assessment is linked to previous assessments or related assessments at EU or national level."
+    And I fill in "Reference of the linked assessment" with "https://interoperable-europe.ec.europa.eu/report"
 
     # Binding requirements
     When I click "New binding requirement"
@@ -44,21 +47,27 @@ Feature: Assessment Report Entity Management
     And I fill in "documented_in[0][uri]" with "https://interoperable-europe.ec.europa.eu/general" in the "Modal content" region
 
     When I click "Trans-European digital public services" in the "Modal content" region
+    And I should see the text "Specify the trans-European digital public service(s) concerned" in the "Modal content" region
+    And I should see the text "Specify the concerned function(s) of trans-European digital public service(s)" in the "Modal content" region
     And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
     And I select "Core governance and administration" from "affects[0][inline_entity_form][thematic_area]" in the "Modal content" region
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
 
     When I click "Affected stakeholders" in the "Modal content" region
-    And I select "Local public sector body" from "has_participation[0][inline_entity_form][participant_type][]" in the "Modal content" region
+    Then I should see the text "Public and/or private stakeholders affected" in the "Modal content" region
+    And the page should contain the html text 'aria-placeholder="Select or start typing..."'
+    When I select "Local public sector body" from "has_participation[0][inline_entity_form][participant_type][]" in the "Modal content" region
     And I select "Belgium" from "has_participation[0][inline_entity_form][stakeholder_country][]" in the "Modal content" region
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
 
     When I click "Interoperability solutions" in the "Modal content" region
-    And I press "Add new relevant solution" in the "Modal content" region
+    And I should see the text "Identify the interoperability solutions mandatory to use for the implementation of the assessed binding requirement" in the "Modal content" region
+    And I should see the button "Select an Interoperability solution" in the "Modal content" region
+    And I press "Add a new Interoperability solution" in the "Modal content" region
     And I fill in "asset[form][0][title][0][value]" with "European Interoperability Framework (EIF)" in the "Modal content" region
     And I enter "Description of European Interoperability Framework (EIF)" in the "asset[form][0][description][0][value]" wysiwyg editor
     And I fill in "Relevant website" with "https://interoperable-europe.ec.europa.eu/collection/eif" in the "Modal content" region
-    Then I press "Create relevant solution" in the "Modal content" region
+    Then I press "Add Interoperability solution" in the "Modal content" region
 
     When I click "Trans-European digital public services" in the "Modal content" region
     And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
@@ -70,7 +79,7 @@ Feature: Assessment Report Entity Management
 
     When I click "Documents" in the "Modal content" region
     And I attach the file "text.pdf" to "Add a new file"
-
+    And I should see "Maximum 5 files. 10 MB limit. Allowed types: txt doc docx pdf ppt pptx zip rar xls xlsx." in the "Modal content" region
     Then I press "Save" in the "Modal buttons" region
 
     # Identified effects on cross-border interoperability
@@ -90,25 +99,29 @@ Feature: Assessment Report Entity Management
     And I select the radio button "Beneficial" with the name "technical[0][inline_entity_form][interpretation]"
     And I fill in "technical[0][inline_entity_form][judgement][0][value]" with "Implements REST APIs and OpenAPI specs"
 
-    When I click "Other" in the "Content" region
-    And I select the radio button "Risky" with the name "other[0][inline_entity_form][interpretation]"
-    And I fill in "other[0][inline_entity_form][judgement][0][value]" with "Language barriers may present challenges"
+    When I click "Remaining barriers" in the "Content" region
+    And I fill in "Have you discovered any remaining barriers to cross-border interoperability?" with "No significant barriers identified."
 
     # Assessment supporting documents
     And I attach the file "text.pdf" to "Add a new file"
+    And I should see "Maximum 5 files. 10 MB limit. Allowed types: txt doc docx pdf ppt pptx zip rar xls xlsx."
+
+    # Add comment
+    And I fill in "Please add any other comment you would like to share." with "This assessment was conducted in collaboration with multiple stakeholders across EU member states."
 
     When I press "Save"
     Then I should see the success message containing "New assessment Test Assessment Report 2025 has been created."
     And I should see the heading "Test Assessment Report 2025"
     And I should see the following lines of text:
-      | Austrian Ministry of Digital Affairs, a European Union institution from  |
-      | The report has been connected to the following previous/relevant reports |
-      | https://interoperable-europe.ec.europa.eu/report                         |
-      | documented in https://interoperable-europe.ec.europa.eu/general          |
+      | Austrian Ministry of Digital Affairs, a European Union institution from                            |
+      | The report has been connected to the following previous/relevant reports                           |
+      | https://interoperable-europe.ec.europa.eu/report                                                   |
+      | documented in https://interoperable-europe.ec.europa.eu/general                                    |
+      | This assessment was conducted in collaboration with multiple stakeholders across EU member states. |
 
     # Edit test.
     When I go to the edit form of the "Test Assessment Report 2025" assessment
-    And I fill in "Name" with "Test Assessment Report 2025 v2"
+    And I fill in "Short title" with "Test Assessment Report 2025 v2"
     And I press "Save"
     Then I should see the heading "Test Assessment Report 2025 v2"
 
@@ -122,15 +135,22 @@ Feature: Assessment Report Entity Management
   @javascript
   Scenario: All possible tests for 'Provided by' plugin in assessment report
     Given I am logged in as an "authenticated user"
-    And I go to "/assessments/add/report"
+    And I go to "/collection/assessments/report/create"
 
-    When I fill in "Name" with "Test Provided by in Assessment Report 2025"
+    When I fill in "Short title" with "Test Provided by in Assessment Report 2025"
     And I select "Local public sector body" from "Type of public sector body"
     And I wait for AJAX to finish
     And I select "Greece" from "Country"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "GR1"
-    And I select the radio button "No"
+
+    # Verify organization is NOT created when form has validation errors.
+    # Regression test - organizations should only be created on successful save.
+    Then I press "Save"
+    # Should see validation error
+    Then I should see the error message "1 error has been found: Binding requirements"
+    # Organization should NOT have been created
+    Then the public_organisation assessment "GR1" should not exist
 
     # Binding requirements
     When I click "New binding requirement"
@@ -263,7 +283,7 @@ Feature: Assessment Report Entity Management
     # Test that editing and saving without changing local organization shows no warning.
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I fill in "Name" with "Test Provided by in Assessment Report 2025 - Updated"
+    And I fill in "Short title" with "Test Provided by in Assessment Report 2025 - Updated"
     Then I press "Save"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 - Updated has been updated."
@@ -283,14 +303,14 @@ Feature: Assessment Report Entity Management
     # Test that editing and saving without changing EU organization shows no warning.
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I fill in "Name" with "Test Provided by in Assessment Report 2025 - Re-updated"
+    And I fill in "Short title" with "Test Provided by in Assessment Report 2025 - Re-updated"
     Then I press "Save"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 - Re-updated has been updated."
 
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I fill in "Name" with "Test Provided by in Assessment Report 2025 - Re-updated"
+    And I fill in "Short title" with "Test Provided by in Assessment Report 2025 - Re-updated"
     Then I press "…or add new"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "New EU Institution 2025"
@@ -309,13 +329,12 @@ Feature: Assessment Report Entity Management
       | E-mail      | pol.gomez@example.pt |
 
     And I am logged in as pol2025
-    And I go to "/assessments/add/report"
+    And I go to "/collection/assessments/report/create"
 
-    When I fill in "Name" with "Test permissions in Assessment Report 2025"
+    When I fill in "Short title" with "Test permissions in Assessment Report 2025"
     And I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "CTT PT"
-    And I select the radio button "No"
 
     # Binding requirements
     When I click "New binding requirement"
@@ -376,7 +395,7 @@ Feature: Assessment Report Entity Management
     Then I should see the message "The user has been notified that their account has been updated."
 
     And I am logged in as pol2025
-    And I go to "/assessments/add/report"
+    And I go to "/collection/assessments/report/create"
     Then I should see the button "Save as Published"
 
   Scenario: Test assessment reports views

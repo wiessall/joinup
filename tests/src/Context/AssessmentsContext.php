@@ -188,7 +188,7 @@ class AssessmentsContext extends RawDrupalContext {
    */
   public function createAssessmentStatements(TableNode $table): void {
     foreach ($table->getColumnsHash() as $values) {
-      assert(in_array($values['statement_type'], ['legal', 'technical', 'other'], TRUE), 'Invalid assessment statement type provided.');
+      assert(in_array($values['statement_type'], ['legal', 'organisational', 'semantic', 'technical'], TRUE), 'Invalid assessment statement type provided.');
       $values['type'] = $values['statement_type'];
       $values = (object) $values;
 
@@ -228,20 +228,6 @@ class AssessmentsContext extends RawDrupalContext {
     $actual = Json::decode($this->getSession()->getPage()->getContent());
 
     Assert::assertEquals($expected, $actual);
-  }
-
-  /**
-   * Adds the assessments-created solution's collector.
-   *
-   * @BeforeScenario @assessments&&@api
-   */
-  public function beforeAssessmentsScenario(): void {
-    \Drupal::entityTypeManager()->getStorage('node')->create([
-      'type' => 'collection',
-      'title' => 'Solutions mentioned in an assessment',
-      'uuid' => AssessmentInterface::SOLUTION_COLLECTOR,
-      'field_state' => 'published',
-    ])->save();
   }
 
   /**

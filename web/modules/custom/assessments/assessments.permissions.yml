@@ -11,8 +11,8 @@ bypass assessment report moderation:
 create assessment report:
   title: 'Create assessment reports'
   description: 'Create new assessment reports.'
-view own assessment report:
-  title: 'View own assessment reports'
+view own unpublished assessment report:
+  title: 'View own unpublished assessment reports'
   description: 'View assessment reports created by the user.'
 edit own assessment report:
   title: 'Edit own assessment reports'

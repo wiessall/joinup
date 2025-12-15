@@ -10,7 +10,7 @@
 #}
 {{ attach_library('ventuno/group-banner') }}
 {{ attach_library('ventuno/group') }}
-<div{{ attributes.addClass(['group-banner', 'bg-light', 'pt-2', 'py-lg-2']).setAttribute('role', 'complementary').setAttribute('aria-label', 'Solution header'|t) }}>
+<div{{ attributes.addClass(['group-banner', 'bg-light', 'pt-2', 'py-lg-2']).setAttribute('role', 'region').setAttribute('aria-label', 'Solution header'|t) }}>
   <div class="container py-0 py-md-2 d-flex flex-column flex-lg-row">
     <div data-drupal-group-logo class="group-banner__logo me-lg-2 w-100 w-lg-auto text-center">
       {{ content.logo }}
@@ -19,11 +19,11 @@
       <div class="group-banner__title my-2 my-lg-0 text-center text-lg-start d-flex align-items-center justify-content-center justify-content-lg-start">
         {{ title_prefix }}
         {% if has_no_landing_page %}
-          <h1>
+          <h1 class="mb-0">
         {% endif %}
-        <a class="h1 fw-bold mb-0" href="{{ url }}">
-          {{ label }}
-        </a>
+          <a class="h1 fw-bold mb-0" href="{{ url }}">
+            {{ label }}
+          </a>
         {% if has_no_landing_page %}
           </h1>
         {% endif %}
@@ -40,7 +40,7 @@
         </div>
       {% endif %}
       {% if not meta_banner_disabled %}
-        <ul class="group-banner__meta mw-100 align-self-end list-unstyled d-flex flex-column flex-lg-row flex-wrap mt-2 mb-0 group-stats fs-6">
+        <ul class="group-banner__meta mw-100 align-self-start list-unstyled d-flex flex-column flex-lg-row flex-wrap mt-2 mb-0 group-stats fs-6">
           <li class="group-banner__li group-banner__li--collection text-muted">{{ content.collections }}</li>
           <li class="group-banner__li text-muted">
             <a href="{{ path('entity.node.member_overview', {node: node.id()}) }}">

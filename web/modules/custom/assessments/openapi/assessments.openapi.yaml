@@ -48,6 +48,7 @@ paths:
                   value:
                     id: "9f9d7a69-0a6b-4a7c-9c02-5a8834c9a123"
                     name: Quarterly review
+                    other_comment: This assessment covers the Q4 2024 compliance review period.
                     provider:
                       id: "b2c63c0d-3f57-4db6-8e92-6a8f3f50e1a1"
                       name: City of Brussels
@@ -134,6 +135,7 @@ paths:
                 summary: Submit using ID references
                 value:
                   name: Quarterly review
+                  other_comment: This report includes all necessary compliance documentation.
                   binding_requirement:
                     - "4f2f7c40-2e8b-4a7a-9f04-4a37bb7a0e9e"
                   provider: "b2c63c0d-3f57-4db6-8e92-6a8f3f50e1a1"
@@ -147,6 +149,8 @@ paths:
                 summary: Submit with structured nested entities
                 value:
                   name: Quarterly review
+                  other_comment: Assessment conducted with full stakeholder consultation.
+                  remaining_barriers: "The city has not yet implemented the new regulations."
                   binding_requirement:
                     - documented_in: "https://example.com/law/123"
                       name: Article 5
@@ -191,6 +195,7 @@ paths:
                 summary: Submit with a mix of references and structured entities
                 value:
                   name: Quarterly review
+                  other_comment: Mixed approach combining existing and new entities.
                   binding_requirement:
                     - "4f2f7c40-2e8b-4a7a-9f04-4a37bb7a0e9e"
                     - documented_in: "https://example.com/law/123"
@@ -331,6 +336,9 @@ components:
           readOnly: true
         name:
           type: string
+        other_comment:
+          type: string
+          description: Any additional comments or notes about the assessment.
         binding_requirement:
           description: References to BindingRequirements; allow multiple. Each item may be an ID or a structured object.
           type: array
@@ -343,6 +351,9 @@ components:
           oneOf:
             - $ref: '#/components/schemas/ID'
             - $ref: '#/components/schemas/Organisation'
+        remaining_barriers:
+          description: Describes possible remaining barriers to interoperability.
+          type: string
         results_in:
           description: References to Statements; allow multiple. Each item is a
             structured object.
@@ -536,7 +547,6 @@ components:
             - organisational
             - semantic
             - technical
-            - other
         documents:
           description: References to Files; allow multiple. Each item may be an ID or a structured object.
           type: array
