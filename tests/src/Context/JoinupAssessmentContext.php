@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
-use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
