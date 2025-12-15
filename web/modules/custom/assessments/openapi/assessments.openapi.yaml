@@ -328,7 +328,7 @@ paths:
         - Assessment report
       security: [ ]
       parameters:
-        - in: path
+        - in: query
           name: country
           required: false
           description: Country code
