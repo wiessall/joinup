@@ -25,46 +25,6 @@ class JoinupAssessmentContext extends RawDrupalContext {
   use UtilityTrait;
 
   /**
-   * Navigates to the latest assessment webform submission.
-   *
-   * @When I go to the latest assessment submission
-   */
-  public function visitLatestAssessmentCanonicalPath(): void {
-    $this->visitPath($this->getLatestSubmission()->toUrl()->toString());
-  }
-
-  /**
-   * Navigates to the latest submission edit form.
-   *
-   * @When I go to the latest assessment submission edit form
-   */
-  public function visitLatestSubmissionEditForm(): void {
-    $this->visitPath($this->getLatestSubmission()->toUrl('edit-form')->toString());
-  }
-
-  /**
-   * Navigates to the latest assessment report.
-   *
-   * @When I go to the latest assessment report
-   */
-  public function visitLatestAssessmentReport(): void {
-    $nids = \Drupal::entityQuery('node')
-      ->accessCheck(FALSE)
-      ->condition('type', 'assessment_report')
-      ->sort('nid', 'DESC')
-      ->range(0, 1)
-      ->execute();
-
-    if (empty($nids)) {
-      throw new \Exception('The latest assessment was not found.');
-    }
-
-    $node = $this->getEntityById('node', reset($nids));
-
-    $this->visitPath($node->toUrl()->toString());
-  }
-
-  /**
    * Stores the latest submission ID.
    *
    * @BeforeScenario @demoAssessment
