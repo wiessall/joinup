@@ -214,7 +214,7 @@ Feature: Assessment Report Entity Management
     And I select "Greece" from "Country"
     And I wait for AJAX to finish
     And the following field should be present "Select organisation"
-    And the option with text "- Select -" from select "Select organisation" is selected
+    And no option from select "Select organisation" is selected
     Then I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
     And the following field should be present "Select organisation"
@@ -327,6 +327,27 @@ Feature: Assessment Report Entity Management
     Then I press "Save"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 - Re-updated has been updated."
+
+  @javascript
+  Scenario: Form validation should preserve selected organisation field values.
+    Given public_organisation assessments:
+      | name | status    | organisation_type        | country |
+      | Org1 | published | local_public_sector_body | Belgium |
+
+    Given I am logged in as an "authenticated user"
+    And I go to "/collection/assessments/report/create"
+
+    When I fill in "Short title" with "Test Provided by in Assessment Report 2025"
+    And I select "Local public sector body" from "Type of public sector body"
+    And I wait for AJAX to finish
+    And I select "Belgium" from "Country"
+    And I wait for AJAX to finish
+    And I select "Org1" from "Select organisation"
+    And press "Save"
+
+    Then the option with text "Local public sector body" from select "Type of public sector body" is selected
+    And the option with text "Belgium" from select "Country" is selected
+    And the option with text "Org1" from select "Select organisation" is selected
 
   @javascript
   Scenario: Published assessments are viewable by anonymous and authenticated users
@@ -454,3 +475,25 @@ Feature: Assessment Report Entity Management
     When I am not logged in
     And I go to "/collection/portal-support/report/repository"
     Then I should get a 404 HTTP response
+
+  @javascript
+  Scenario: Advanced search
+    Given public_organisation assessments:
+      | name                  | organisation_type          |
+      | Bluewave Technologies | european_union_institution |
+    And report assessments:
+      | name                 | provider              | state     | created              |
+      | Initial Overview     | Bluewave Technologies | published | 2020-01-01T00:00:00Z |
+      | Transmission Summary |                       | published | 2020-01-02T00:00:00Z |
+      | Acme Report          |                       | published | 2020-01-03T00:00:00Z |
+      | Risk Evaluation      |                       | review    | 2020-01-04T00:00:00Z |
+      | Draft Observation    |                       | draft     | 2020-01-05T00:00:00Z |
+    And I am an anonymous user
+    When I visit the advanced search page
+    And I check the "Assessment reports (3)" checkbox from the "Content types" facet
+    Then the page should show only the tiles "Initial Overview, Transmission Summary, Acme Report"
+
+    When I enter "Transmission" in the search bar and press enter
+    Then the page should show only the tiles "Transmission Summary"
+    When I enter "Bluewave" in the search bar and press enter
+    Then the page should show only the tiles "Initial Overview"
