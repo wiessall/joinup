@@ -30,7 +30,7 @@ Feature: Assessment report email notifications
 
     When I am logged in as "Moderator User"
     And I go to the moderate form of the "Moderatable Report 1" assessment report
-    And I press "Save as Published"
+    And I press "Publish"
     Then I should see the success message containing "The assessment report has been published"
 
     And 1 e-mail should have been sent
@@ -74,7 +74,7 @@ Feature: Assessment report email notifications
     When I am logged in as "Moderator User"
     And I go to the moderate form of the "Moderatable Report 3" assessment report
     And I fill in "What updates are needed?" with "Please add more details to the assessment."
-    And I press "Save as Draft"
+    And I press "Require updates"
     Then I should see the success message containing "The submitter has been notified"
 
     And 1 e-mail should have been sent
