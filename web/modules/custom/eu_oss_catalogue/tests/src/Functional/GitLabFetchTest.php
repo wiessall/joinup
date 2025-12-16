@@ -46,7 +46,7 @@ class GitLabFetchTest extends FetchTestBase {
    * instance with limited projects.
    */
   public function testLimitedList(): void {
-    $this->fetchSolutions('hosting_platform:gitlab_self_hosted_limited', 5);
+    $this->fetchSolutions('hosting_platform:gitlab_self_hosted_limited', 7);
     $this->assertOssSolution('Project 1.1', 'it');
     $this->assertOssSolution('Project 1.2', 'de');
     $this->assertOssSolution('Project 1.3', 'de');

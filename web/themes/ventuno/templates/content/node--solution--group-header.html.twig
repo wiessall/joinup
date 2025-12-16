@@ -40,7 +40,7 @@
         </div>
       {% endif %}
       {% if not meta_banner_disabled %}
-        <ul class="group-banner__meta mw-100 align-self-end list-unstyled d-flex flex-column flex-lg-row flex-wrap mt-2 mb-0 group-stats fs-6">
+        <ul class="group-banner__meta mw-100 align-self-start list-unstyled d-flex flex-column flex-lg-row flex-wrap mt-2 mb-0 group-stats fs-6">
           <li class="group-banner__li group-banner__li--collection text-muted">{{ content.collections }}</li>
           <li class="group-banner__li text-muted">
             <a href="{{ path('entity.node.member_overview', {node: node.id()}) }}">
