@@ -24,7 +24,7 @@ bundle: expression
 label: 'Name of the initiative'
 description: 'Provide the name of the initiative, project or action containing the binding requirements to be assessed'
 required: true
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
