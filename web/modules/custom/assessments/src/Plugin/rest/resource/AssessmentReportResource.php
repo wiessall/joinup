@@ -18,11 +18,11 @@ use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Lock\LockAcquiringException;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\Url;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\AssessmentStatement;
 use Drupal\assessments\Entity\PublicOrganisation;
-use Drupal\Core\Url;
 use Drupal\file\FileInterface;
 use Drupal\file\Plugin\Field\FieldType\FileFieldItemList;
 use Drupal\file\Upload\FileUploadHandler;
@@ -90,7 +90,7 @@ class AssessmentReportResource extends ResourceBase {
     protected readonly EntityFieldManagerInterface $fieldManager,
     protected readonly ClientInterface $httpClient,
     protected readonly FileSystemInterface $fileSystem,
-    protected readonly FileUploadHandler $uploadHandler
+    protected readonly FileUploadHandler $uploadHandler,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition, $serializerFormats, $logger);
   }
@@ -425,7 +425,7 @@ class AssessmentReportResource extends ResourceBase {
    * @param array $hasParticipation
    *   List of participation definitions.
    * @param string $path
-   * *   The parent element path.
+   *   The parent element path.
    *
    * @return list<\Drupal\assessments\AssessmentInterface>
    *   A list of participation entities.
@@ -451,7 +451,7 @@ class AssessmentReportResource extends ResourceBase {
    * @param array $assets
    *   List of, either existing solution UUIDs, or solution definitions.
    * @param string $path
-   * *   The parent element path.
+   *   The parent element path.
    *
    * @return list<\Drupal\joinup_solution\Entity\SolutionInterface>
    *   A list of solution entities.
@@ -501,7 +501,7 @@ class AssessmentReportResource extends ResourceBase {
    * @see https://docs.guzzlephp.org/en/stable/quickstart.html#concurrent-requests
    */
   protected function uploadDocuments(AssessmentReport $report, array $data): void {
-    $requests = function(array $data) {
+    $requests = function (array $data) {
       foreach ($data['documents'] ?? [] as $i => $url) {
         $key = "/documents/$i:assessment.report.documents:$url";
         yield $key => fn() => $this->httpClient->getAsync($url);
@@ -519,7 +519,7 @@ class AssessmentReportResource extends ResourceBase {
       'fulfilled' => function (Response $response, string $key) use ($report): void {
         $this->uploadFile($response, $key, $report);
       },
-      'rejected' => function(ClientExceptionInterface $reason, string $key): void {
+      'rejected' => function (ClientExceptionInterface $reason, string $key): void {
         [$path] = explode(':', $key, 2);
         if ($reason instanceof ClientException) {
           // Use a more simple but meaningful message for client exceptions.
@@ -560,7 +560,6 @@ class AssessmentReportResource extends ResourceBase {
       // Use the file upload validators, configured from the field settings.
       $settings = $definition->getSettings();
       $validators = $this->getFileUploadValidators($settings);
-
 
       $filename = basename(parse_url($url, PHP_URL_PATH));
       $tempPath = $this->fileSystem->tempnam('temporary://', 'file');

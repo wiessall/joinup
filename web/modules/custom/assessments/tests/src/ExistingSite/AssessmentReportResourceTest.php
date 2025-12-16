@@ -7,30 +7,43 @@ namespace Drupal\Tests\assessments\Kernel;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Serialization\Yaml;
+use Drupal\Core\Url;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
+use Drupal\consumers\Entity\Consumer;
 use Drupal\joinup_collection\JoinupCollectionHelper;
-use Drupal\rest\ResourceResponse;
+use GuzzleHttp\RequestOptions;
+use Psr\Http\Message\ResponseInterface;
 
 /**
- * Kernel tests for the Assessment Composer REST resource.
- *
- * These tests directly instantiate the REST resource plugin and invoke
- * its post() method with decoded JSON payloads that mirror the examples in
- * idlocal/test.http, avoiding the need to exercise HTTP routing or OAuth.
+ * Tests assessment report POST resource.
  */
-class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
-
-  /**
-   * Location playing the role of remote location.
-   */
-  protected string $testingFileDir = DRUPAL_ROOT . '/sites/default/files/assessment-test';
+class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
 
   /**
    * {@inheritdoc}
    */
   protected function setUp(): void {
     parent::setUp();
-    \Drupal::service('file_system')->prepareDirectory($this->testingFileDir, FileSystemInterface::CREATE_DIRECTORY);
+
+    // Location playing the role of remote location.
+    $dir = 'public://assessment-test';
+    \Drupal::service('file_system')->prepareDirectory($dir, FileSystemInterface::CREATE_DIRECTORY);
+
+    $account = $this->createUser();
+    $client = Consumer::create([
+      'label' => 'Test',
+      'owner_id' => $account->id(),
+      'user_id' => $account->id(),
+      'client_id' => 'client',
+      'secret' => 'secret',
+      'grant_types' => 'client_credentials',
+      'confidential' => TRUE,
+      'scopes' => 'assessments',
+    ]);
+    $client->save();
+    $this->markEntityForCleanup($client);
+
+    $this->drupalLogin($account);
   }
 
   /**
@@ -41,21 +54,19 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
    */
   public function testValidation(): void {
     // Create testing files.
-    file_put_contents("$this->testingFileDir/evil.exe", "qux");
-    file_put_contents("$this->testingFileDir/fat.docx", str_repeat("X",  11000000));
-    file_put_contents("$this->testingFileDir/" . str_repeat('very_', 48) . 'long_name.pdf', 'quxx');
+    file_put_contents("public://assessment-test/evil.exe", "qux");
+    file_put_contents("public://assessment-test/fat.docx", str_repeat("x", 11000000));
+    file_put_contents("public://assessment-test/" . str_repeat('very_', 48) . 'long_name.pdf', 'quxx');
 
     ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('invalid_schema');
-    $response = $this->invokeResourcePost($payload);
-    $data = $response->getResponseData();
+    $response = $this->post($payload);
     $this->assertSame(422, $response->getStatusCode());
-    $this->assertSame($expect, $data);
+    $this->assertSame($expect, Json::decode($response->getBody()->getContents()));
 
     ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('invalid_references');
-    $response = $this->invokeResourcePost($payload);
-    $data = $response->getResponseData();
+    $response = $this->post($payload);
     $this->assertSame(422, $response->getStatusCode());
-    $this->assertSame($expect, $data);
+    $this->assertSame($expect, Json::decode($response->getBody()->getContents()));
   }
 
   /**
@@ -63,9 +74,9 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
    */
   public function testValidPost(): void {
     // Create testing files.
-    file_put_contents("$this->testingFileDir/report.pdf", "foo");
-    file_put_contents("$this->testingFileDir/requirement1.pdf", "bar");
-    file_put_contents("$this->testingFileDir/requirement2.pdf", "baz");
+    file_put_contents("public://assessment-test/report.pdf", "foo");
+    file_put_contents("public://assessment-test/requirement1.pdf", "bar");
+    file_put_contents("public://assessment-test/requirement2.pdf", "baz");
 
     // Create a solution to be referred in report.
     $this->createNode([
@@ -80,8 +91,8 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
 
     ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('valid');
 
-    $response = $this->invokeResourcePost($payload);
-    $data = $response->getResponseData();
+    $response = $this->post($payload);
+    $data = Json::decode($response->getBody()->getContents());
 
     // Update the expectation with generated UUIDs.
     $uuid = $data['id'];
@@ -132,21 +143,23 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
   }
 
   /**
-   * Helper to instantiate the REST resource and call post().
+   * Returns a Guzzle response after posting to /api/assessments/v1/assessment.
+   *
+   * @return \Psr\Http\Message\ResponseInterface
+   *   Guzzle response.
    */
-  protected function invokeResourcePost(array $payload): ResourceResponse {
-    /** @var \Drupal\rest\Plugin\Type\ResourcePluginManager $manager */
-    $manager = \Drupal::service('plugin.manager.rest');
+  protected function post(array $payload): ResponseInterface {
+    $url = Url::fromUri('internal:/api/assessments/v1/assessment')
+      ->setAbsolute()
+      ->toString();
 
-    // Create the plugin instance as the container-aware plugin via manager.
-    $plugin = $manager->createInstance('assessment_report', []);
-
-    // Call the resource's post() method directly with the decoded body.
-    // @phpstan-ignore-next-line Method is defined on the plugin class.
-    $response = $plugin->post($payload);
-    $this->assertInstanceOf(ResourceResponse::class, $response);
-
-    return $response;
+    return \Drupal::httpClient()->post($url, [
+      RequestOptions::HTTP_ERRORS => FALSE,
+      RequestOptions::HEADERS => [
+        'Authorization' => 'Bearer ' . $this->getAccessToken(),
+      ],
+      RequestOptions::JSON => $payload,
+    ]);
   }
 
   /**
@@ -168,10 +181,35 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
   }
 
   /**
+   * Obtains an access token.
+   *
+   * @return string
+   *   The OAuth2 access token.
+   */
+  protected function getAccessToken(): string {
+    $url = Url::fromRoute('oauth2_token.token')->setAbsolute()->toString();
+
+    $options = [
+      RequestOptions::HEADERS => [
+        'Content-Type' => 'application/x-www-form-urlencoded',
+        'Accept' => 'application/json',
+      ],
+      RequestOptions::FORM_PARAMS => [
+        'grant_type' => 'client_credentials',
+        'client_id' => 'client',
+        'client_secret' => 'secret',
+      ],
+      RequestOptions::HTTP_ERRORS => FALSE,
+    ];
+
+    return Json::decode((string) \Drupal::httpClient()->post($url, $options)->getBody())['access_token'];
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function tearDown(): void {
-    \Drupal::service('file_system')->deleteRecursive($this->testingFileDir);
+    \Drupal::service('file_system')->deleteRecursive('public://assessment-test');
     parent::tearDown();
   }
 
