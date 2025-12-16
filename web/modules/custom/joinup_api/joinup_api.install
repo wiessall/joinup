@@ -52,3 +52,71 @@ function joinup_api_update_dependencies(): array {
     ],
   ];
 }
+
+/**
+ * Implements hook_requirements().
+ */
+function joinup_api_requirements($phase): array {
+  $requirements = [];
+
+  if ($phase !== 'runtime') {
+    return $requirements;
+  }
+
+  $config = \Drupal::config('simple_oauth.settings');
+  $privateKey = $config->get('private_key');
+  $publicKey = $config->get('public_key');
+
+  $requirements['simple_oauth_keys'] = [
+    'title' => t('Simple OAuth keys'),
+    'value' => t('OK'),
+    'description' => t('Both private and public keys are present.'),
+    'severity' => REQUIREMENT_OK,
+  ];
+
+  if (empty($privateKey)) {
+    $requirements['simple_oauth_keys'] = [
+      'title' => t('Simple OAuth private key'),
+      'value' => t('Not configured'),
+      'description' => t('The private key path is not configured.'),
+      'severity' => REQUIREMENT_ERROR,
+    ];
+    return $requirements;
+  }
+
+  if (empty($publicKey)) {
+    $requirements['simple_oauth_keys'] = [
+      'title' => t('Simple OAuth public key'),
+      'value' => t('Not configured'),
+      'description' => t('The public key path is not configured.'),
+      'severity' => REQUIREMENT_ERROR,
+    ];
+    return $requirements;
+  }
+
+  $fileSystem = \Drupal::service('file_system');
+  $privateKeyPath = $fileSystem->realpath($privateKey);
+  $publicKeyPath = $fileSystem->realpath($publicKey);
+
+  if (!$privateKeyPath) {
+    $requirements['simple_oauth_keys'] = [
+      'title' => t('Simple OAuth private key'),
+      'value' => t('Missing'),
+      'description' => t('The private key does not exist at @path.', ['@path' => $privateKey]),
+      'severity' => REQUIREMENT_ERROR,
+    ];
+    return $requirements;
+  }
+
+  if (!$publicKeyPath) {
+    $requirements['simple_oauth_keys'] = [
+      'title' => t('Simple OAuth public key'),
+      'value' => t('Missing'),
+      'description' => t('The public key does not exist at @path.', ['@path' => $publicKey]),
+      'severity' => REQUIREMENT_ERROR,
+    ];
+    return $requirements;
+  }
+
+  return $requirements;
+}
