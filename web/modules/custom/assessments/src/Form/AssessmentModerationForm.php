@@ -58,13 +58,11 @@ final class AssessmentModerationForm extends FormBase {
         ->addCacheContexts(['route']);
     }
 
-    // Only available for workflow-enabled bundles (i.e.: report).
     if (!$entity instanceof EntityWorkflowStateInterface) {
       return AccessResult::forbidden('This assessment bundle does not support moderation.')
         ->addCacheableDependency($entity);
     }
 
-    // Moderation is allowed only when the assessment is in review.
     return AccessResult::allowedIf($entity->getWorkflowState() === 'review')
       ->andIf(AccessResult::allowedIfHasPermission($account, 'moderate assessment report'))
       ->addCacheableDependency($entity);
@@ -155,21 +153,25 @@ final class AssessmentModerationForm extends FormBase {
 
     $reason = trim((string) $form_state->getValue('reason', ''));
 
-    if ($new_state === 'published') {
-      $this->messenger()
-        ->addStatus($this->t('The assessment report has been published.'));
-      $event = new AssessmentReportEvent($assessment);
-      $this->eventDispatcher->dispatch($event, NotificationEvents::ASSESSMENT_REPORT_PUBLISHED);
-    }
-    elseif ($new_state === 'draft') {
-      $this->messenger()
-        ->addStatus($this->t('The submitter has been notified that updates are required.'));
-      $event = new AssessmentReportEvent($assessment, $reason);
-      $this->eventDispatcher->dispatch($event, NotificationEvents::ASSESSMENT_REPORT_REQUIRE_UPDATES);
-    }
-    else {
-      $this->messenger()
-        ->addStatus($this->t('The assessment report has been updated.'));
+    switch ($new_state) {
+      case 'published':
+        $this->messenger()
+          ->addStatus($this->t('The assessment report has been published.'));
+        $event = new AssessmentReportEvent($assessment);
+        $this->eventDispatcher->dispatch($event, NotificationEvents::ASSESSMENT_REPORT_PUBLISHED);
+        break;
+
+      case 'draft':
+        $this->messenger()
+          ->addStatus($this->t('The submitter has been notified that updates are required.'));
+        $event = new AssessmentReportEvent($assessment, $reason);
+        $this->eventDispatcher->dispatch($event, NotificationEvents::ASSESSMENT_REPORT_REQUIRE_UPDATES);
+        break;
+
+      default:
+        $this->messenger()
+          ->addStatus($this->t('The assessment report has been updated.'));
+        break;
     }
 
     $form_state->setRedirectUrl($assessment->toUrl());
