@@ -98,6 +98,13 @@ class AssessmentsContext extends RawDrupalContext {
         $assessment['provider'] = $provider->id();
       }
 
+      // Resolve timestamp fields.
+      foreach (['created', 'changed'] as $field) {
+        if (!empty($assessment[$field]) && !is_numeric($assessment[$field])) {
+          $assessment[$field] = strtotime($assessment[$field]);
+        }
+      }
+
       $assessment = (object) $assessment;
 
       $assessment->type = $type;

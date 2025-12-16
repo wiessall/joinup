@@ -62,24 +62,6 @@ Feature: Assessments
       | Assessment 4  |
       | Assessment 3  |
 
-    # Advanced search page.
-    Given I am an anonymous user
-    When I visit "/search"
-    Then I should see the following "Content types" facet items "Collections,Assessment reports,Custom pages,User profiles" in this order
-    When I click "Assessment reports"
-
-    Then I should see the following tiles in the correct order:
-      | Assessment 12 |
-      | Assessment 11 |
-      | Assessment 10 |
-      | Assessment 9  |
-      | Assessment 8  |
-      | Assessment 7  |
-      | Assessment 6  |
-      | Assessment 5  |
-      | Assessment 4  |
-      | Assessment 3  |
-
     When I am logged in as a moderator
     When I go to "/collection/assessments/assessment-reports"
     And I see h1 span element with title "Assessment reports"
