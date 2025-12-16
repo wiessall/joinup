@@ -27,7 +27,7 @@ Feature: Assessment Report Entity Management
     When I click "New binding requirement"
     And a modal should open
     And I press "Save" in the "Modal buttons" region
-    And I should see the text "4 errors have been found: NameName of the initiativeDescriptionDescription" in the "Modal content" region
+    And I should see the text "3 errors have been found: NameName of the initiativeDescription" in the "Modal content" region
 
     Then I should see the following lines of text in the correct order in "Modal content":
       | Initiatives                            |
@@ -38,8 +38,7 @@ Feature: Assessment Report Entity Management
       | Documents                              |
 
     When I click "Initiatives" in the "Modal content" region
-    And I fill in "expression[0][inline_entity_form][name][0][value]" with "Digital Transformation Initiative" in the "Modal content" region
-    And I fill in "expression[0][inline_entity_form][description][0][value]" with "This initiative focuses on digital transformation across public services" in the "Modal content" region
+    And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Digital Transformation Initiative" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][documented_in][0][uri]" with "https://interoperable-europe.ec.europa.eu/initiatives" in the "Modal content" region
 
     When I click "General" in the "Modal content" region
@@ -165,8 +164,7 @@ Feature: Assessment Report Entity Management
     And a modal should open
 
     When I click "Initiatives" in the "Modal content" region
-    And I fill in "expression[0][inline_entity_form][name][0][value]" with "Digital Transformation Initiative" in the "Modal content" region
-    And I fill in "expression[0][inline_entity_form][description][0][value]" with "This initiative focuses on digital transformation across public services" in the "Modal content" region
+    And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Digital Transformation Initiative" in the "Modal content" region
 
     When I click "General" in the "Modal content" region
     And I fill in "description[0][value]" with "This is the general binding requirement description" in the "Modal content" region
@@ -370,8 +368,7 @@ Feature: Assessment Report Entity Management
     And a modal should open
 
     When I click "Initiatives" in the "Modal content" region
-    And I fill in "expression[0][inline_entity_form][name][0][value]" with "Digital Transformation Initiative" in the "Modal content" region
-    And I fill in "expression[0][inline_entity_form][description][0][value]" with "This initiative focuses on digital transformation across public services" in the "Modal content" region
+    And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Digital Transformation Initiative" in the "Modal content" region
 
     When I click "General" in the "Modal content" region
     And I fill in "description[0][value]" with "This is the general binding requirement description" in the "Modal content" region
