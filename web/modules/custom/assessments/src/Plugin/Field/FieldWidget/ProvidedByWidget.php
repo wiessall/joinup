@@ -418,7 +418,7 @@ class ProvidedByWidget extends WidgetBase {
             ? $currentEntity->get('country')->target_id
             : NULL;
 
-          $typeMatches = !$selectedType || $entityType == $selectedType;
+          $typeMatches = $entityType == $selectedType;
           $countryMatches = !$requiresCountry || !$selectedCountry || $entityCountry == $selectedCountry;
 
           if ($typeMatches && $countryMatches) {
@@ -433,7 +433,7 @@ class ProvidedByWidget extends WidgetBase {
           '#empty_option' => $this->t('- Select -'),
           '#empty_value' => '_none',
           '#default_value' => $defaultValue,
-          '#required' => $this->fieldDefinition->isRequired() && !$addNew,
+          '#required' => $this->fieldDefinition->isRequired(),
           '#attributes' => [
             'class' => ['organisation-select'],
             'data-delta' => $delta,
@@ -665,9 +665,6 @@ class ProvidedByWidget extends WidgetBase {
     $pendingOrgs = $form_state->get('pending_organisations') ?? [];
     if (isset($pendingOrgs[$fieldName][$delta])) {
       unset($pendingOrgs[$fieldName][$delta]);
-      if (empty($pendingOrgs[$fieldName])) {
-        unset($pendingOrgs[$fieldName]);
-      }
       $form_state->set('pending_organisations', empty($pendingOrgs) ? NULL : $pendingOrgs);
     }
   }
@@ -969,21 +966,10 @@ class ProvidedByWidget extends WidgetBase {
       // validation by storing data and using placeholder.
       if ($isFormSubmit
         && !empty($value['content']['create_new'])
-        && !empty($value['content']['name'])
-        && (empty($value['content']['target_id'])
-            || $value['content']['target_id'] === '_none'
-            || $value['content']['target_id'] === '0'
-            || $value['content']['target_id'] === 0)) {
-        $pendingOrgs = $form_state->get('pending_organisations') ?? [];
-        $pendingOrgs[$fieldName][$delta] = [
-          'name' => trim($value['content']['name']),
-          'type' => $value['content']['new_org_type'] ?? NULL,
-          'country' => $value['content']['new_org_country'] ?? NULL,
-        ];
-        $form_state->set('pending_organisations', $pendingOrgs);
+        && !empty($value['content']['name'])) {
+        static::getPendingOrganisations($form_state, $value['content'], $fieldName, $delta);
 
         $newValues[$delta] = ['target_id' => self::PENDING_ORG_PLACEHOLDER];
-        continue;
       }
     }
 
@@ -1156,13 +1142,7 @@ class ProvidedByWidget extends WidgetBase {
       return;
     }
 
-    $pendingOrgs = $form_state->get('pending_organisations') ?? [];
-    $pendingOrgs[$fieldName][$delta] = [
-      'name' => trim($value['content']['name']),
-      'type' => $value['content']['new_org_type'] ?? NULL,
-      'country' => $value['content']['new_org_country'] ?? NULL,
-    ];
-    $form_state->set('pending_organisations', $pendingOrgs);
+    static::getPendingOrganisations($form_state, $value['content'], $fieldName, $delta);
   }
 
   /**
@@ -1314,6 +1294,28 @@ class ProvidedByWidget extends WidgetBase {
         'name' => $name,
       ];
     }
+  }
+
+  /**
+   * Stores pending organisation data in form state.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   * @param array $content
+   *   The content array containing organisation details.
+   * @param string $fieldName
+   *   The field name.
+   * @param int $delta
+   *   The field delta.
+   */
+  protected static function getPendingOrganisations(FormStateInterface $form_state, array $content, string $fieldName, int $delta): void {
+    $pendingOrgs = $form_state->get('pending_organisations') ?? [];
+    $pendingOrgs[$fieldName][$delta] = [
+      'name' => trim($content['name']),
+      'type' => $content['new_org_type'] ?? NULL,
+      'country' => $content['new_org_country'] ?? NULL,
+    ];
+    $form_state->set('pending_organisations', $pendingOrgs);
   }
 
 }
