@@ -30,7 +30,12 @@ Feature: Assessment report email notifications
 
     When I am logged in as "Moderator User"
     And I go to the moderate form of the "Moderatable Report 1" assessment report
-    And I press "Publish"
+    Then I see the text "Interoperability assessments space" in the "Header" region
+    And I should see the following lines of text:
+      | Provided by Test Organization, a European Union institution           |
+      | Status: In Review                                                     |
+      | The assessment report was based on the following binding requirements |
+    When I press "Publish"
     Then I should see the success message containing "The assessment report has been published"
 
     And 1 e-mail should have been sent
