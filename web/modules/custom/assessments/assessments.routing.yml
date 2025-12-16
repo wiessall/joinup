@@ -12,11 +12,11 @@ assessments.moderate:
     _form: '\Drupal\assessments\Form\AssessmentModerationForm'
     _title: 'Moderate'
   requirements:
-    _custom_access: '\Drupal\assessments\Access\AssessmentModerationAccessCheck::access'
+    _custom_access: '\Drupal\assessments\Form\AssessmentModerationForm::access'
+    assessment_type: report
   options:
     parameters:
       assessment_type:
         type: 'entity:assessment_type'
-        bundle: 'report'
       assessment:
         type: 'entity:assessment'
