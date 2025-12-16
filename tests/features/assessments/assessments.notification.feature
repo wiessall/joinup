@@ -89,3 +89,16 @@ Feature: Assessment report email notifications
       | recipient | Regular User                               |
       | subject   | Your assessment report needs updates       |
       | body      | Please add more details to the assessment. |
+
+  Scenario: Access to moderate form is restricted by state
+    Given report assessments:
+      | name                | state     | provider          | uid          |
+      | Draft Report        | draft     | Test Organization | Regular User |
+      | Published Report    | published | Test Organization | Regular User |
+
+    When I am logged in as "Moderator User"
+    And I go to the moderate form of the "Draft Report" assessment report
+    Then I should see the heading "Access denied"
+
+    When I go to the moderate form of the "Published Report" assessment report
+    Then I should see the heading "Access denied"
