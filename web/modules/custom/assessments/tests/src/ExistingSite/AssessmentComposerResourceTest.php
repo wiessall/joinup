@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Drupal\Tests\assessments\Kernel;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\joinup_collection\JoinupCollectionHelper;
-use Drupal\joinup_solution\Entity\Solution;
 use Drupal\rest\ResourceResponse;
 
 /**
@@ -21,12 +21,30 @@ use Drupal\rest\ResourceResponse;
 class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
 
   /**
+   * Location playing the role of remote location.
+   */
+  protected string $testingFileDir = DRUPAL_ROOT . '/sites/default/files/assessment-test';
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp(): void {
+    parent::setUp();
+    \Drupal::service('file_system')->prepareDirectory($this->testingFileDir, FileSystemInterface::CREATE_DIRECTORY);
+  }
+
+  /**
    * Tests validation errors.
    *
    * @covers \Drupal\joinup_api\OpenApiSchemaValidator::validate
    * @covers \Drupal\assessments\Plugin\rest\resource\AssessmentReportResource
    */
   public function testValidation(): void {
+    // Create testing files.
+    file_put_contents("$this->testingFileDir/evil.exe", "qux");
+    file_put_contents("$this->testingFileDir/fat.docx", str_repeat("X",  11000000));
+    file_put_contents("$this->testingFileDir/" . str_repeat('very_', 48) . 'long_name.pdf', 'quxx');
+
     ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('invalid_schema');
     $response = $this->invokeResourcePost($payload);
     $data = $response->getResponseData();
@@ -44,8 +62,13 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
    * Tests posting a structured payload returns 201 and echoes the data.
    */
   public function testValidPost(): void {
+    // Create testing files.
+    file_put_contents("$this->testingFileDir/report.pdf", "foo");
+    file_put_contents("$this->testingFileDir/requirement1.pdf", "bar");
+    file_put_contents("$this->testingFileDir/requirement2.pdf", "baz");
+
     // Create a solution to be referred in report.
-    $solution = Solution::create([
+    $this->createNode([
       'type' => 'solution',
       'title' => 'Used in assessments',
       'description' => ['value' => 'just this', 'format' => 'content_editor'],
@@ -54,8 +77,6 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
       'landing_page' => 'https://example.com/the-solution',
       'path' => '/the-solution',
     ]);
-    $solution->save();
-    $this->markEntityForCleanup($solution);
 
     ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('valid');
 
@@ -75,7 +96,7 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
     unset($data['binding_requirement'][0]['asset'][0]['url']);
     unset($data['binding_requirement'][0]['asset'][1]['url']);
 
-    $this->assertSame($expect, $data);
+    $this->assertEqualsCanonicalizing($expect, $data);
 
     // Test the GET resource.
     $this->drupalGet('/api/assessments/v1/assessment/' . $data['id']);
@@ -88,14 +109,26 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
     $assert->statusCodeEquals(200);
     // The page is cacheable but this is the first hit.
     $assert->responseHeaderEquals('X-Drupal-Cache', 'MISS');
-    $this->assertSame($expect, $actual);
+    $this->assertEqualsCanonicalizing($expect, $actual);
 
     // Test that the response is cached.
     $this->drupalGet('/api/assessments/v1/assessment/' . $data['id']);
     $assert->statusCodeEquals(200);
     // The response is retrieved from cache.
     $assert->responseHeaderEquals('X-Drupal-Cache', 'HIT');
-    $this->assertSame($expect, $actual);
+    $this->assertEqualsCanonicalizing($expect, $actual);
+
+    // Cleanup.
+    $report = \Drupal::service('entity.repository')->loadEntityByUuid('assessment', $data['id']);
+    foreach ($report->get('documents') as $item) {
+      $this->markEntityForCleanup($item->entity);
+    }
+    foreach ($report->get('binding_requirement') as $requirement) {
+      foreach ($requirement->entity->get('requirement_documents') as $item) {
+        $this->markEntityForCleanup($item->entity);
+      }
+    }
+    $this->markEntityForCleanup($report);
   }
 
   /**
@@ -126,8 +159,20 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
    *   The test case.
    */
   protected function getTestCase(string $id): array {
-    $data = Yaml::decode(file_get_contents(__DIR__ . '/../../fixture/test_cases.yml'));
+    $yaml = file_get_contents(__DIR__ . '/../../fixture/test_cases.yml');
+    // Replace environment dependent tokens.
+    $yaml = str_replace('__base_url__', $GLOBALS['base_url'], $yaml);
+    $data = Yaml::decode($yaml);
+
     return $data[$id];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function tearDown(): void {
+    \Drupal::service('file_system')->deleteRecursive($this->testingFileDir);
+    parent::tearDown();
   }
 
 }

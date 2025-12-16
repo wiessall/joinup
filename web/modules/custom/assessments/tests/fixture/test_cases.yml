@@ -83,6 +83,7 @@ invalid_schema:
       /results_in/technical/interpretation:
         - Array value found, but a string is required
         - Does not have a value in the enumeration ["negative","neutral","positive"]
+
 invalid_references:
   payload:
     name: "Legislation waste management"
@@ -98,10 +99,34 @@ invalid_references:
             thematic_area: "digital_and_innovation_services"
         asset:
           - "3b1548db-0f29-42f4-a23c-2ee43ed20ba9"
+    documents:
+      # Cannit reach this host.
+      - 'https://files.example.com/documents/req-1.pdf'
+      # Extension not allowed.
+      - '__base_url__/sites/default/files/assessment-test/evil.exe'
+      # Exceeds max file size.
+      - '__base_url__/sites/default/files/assessment-test/fat.docx'
+      # Exceeds max file name length.
+      - '__base_url__/sites/default/files/assessment-test/very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_long_name.pdf'
+      # File doesn't exist.
+      - '__base_url__/sites/default/files/assessment-test/not_found.pdf'
   expect:
     errors:
-      - A public organisation with ID 'f2f6bdae-7767-4230-9570-309b42392d1b' does not exist
-      - An asset (interoperability solution) with ID '3b1548db-0f29-42f4-a23c-2ee43ed20ba9' does not exist
+      /binding_requirements/0/asset/0:
+        - "An asset (interoperability solution) with ID '3b1548db-0f29-42f4-a23c-2ee43ed20ba9' does not exist"
+      /documents/0:
+        - 'Error downloading file: cURL error 6: Could not resolve host: files.example.com (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://files.example.com/documents/req-1.pdf'
+      /documents/1:
+        - 'Error saving file evil.exe: Only files with the following extensions are allowed: txt doc docx pdf ppt pptx zip rar xls xlsx.'
+      /documents/2:
+        - 'Error saving file fat.docx: The file is 10.49 MB exceeding the maximum file size of 10 MB.'
+      /documents/3:
+        - "Error saving file very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_long_name.pdf: The file's name exceeds the 240 characters limit. Rename the file and try again."
+      /documents/4:
+        - 'Error downloading file: 404 Not Found'
+      /provider:
+        - "A public organisation with ID 'f2f6bdae-7767-4230-9570-309b42392d1b' does not exist"
+
 valid:
   payload:
     name: "Legislation waste management"
@@ -118,9 +143,9 @@ valid:
             description: "Reference to an EU legal expression"
             documented_in: "https://example.com/eli/act"
         description: "Article 5"
-#        documents:
-#          - "https://example.com/law/123"
-#          - "https://example.com/regulation/eu-1655467-s"
+        documents:
+          - '__base_url__/sites/default/files/requirement1.pdf'
+          - '__base_url__/sites/default/files/requirement2.pdf'
         affects:
           - name: "Digital Monitoring Unit"
             thematic_area: "digital_and_innovation_services"
@@ -151,9 +176,8 @@ valid:
         interpretation: "neutral"
         judgement: "Requires follow-up"
     remaining_barriers: "The city has not yet implemented the new regulations."
-#    documents:
-#      - "https://files.example.com/documents/req-1.pdf"
-#      - "https://files.example.com/documents/regulation.2025.pdf"
+    documents:
+      - '__base_url__/sites/default/files/report.pdf'
     other_comment: "Still work to be done. Waiting for a new iteration."
   expect:
     language: en
@@ -171,10 +195,9 @@ valid:
             description: "Reference to an EU legal expression"
             documented_in: "https://example.com/eli/act"
         description: "Article 5"
-        documents: []
-#        documents:
-#          - "https://example.com/law/123"
-#          - "https://example.com/regulation/eu-1655467-s"
+        documents:
+          - '__base_url__/sites/default/files/assessments/report/requirement1.pdf'
+          - '__base_url__/sites/default/files/assessments/report/requirement2.pdf'
         affects:
           - name: "Digital Monitoring Unit"
             thematic_area:
@@ -210,7 +233,6 @@ valid:
         interpretation: "neutral"
         judgement: "Requires follow-up"
     remaining_barriers: "The city has not yet implemented the new regulations."
-    documents: []
-#      - "https://files.example.com/documents/req-1.pdf"
-#      - "https://files.example.com/documents/regulation.2025.pdf"
+    documents:
+      - '__base_url__/sites/default/files/assessments/report/report.pdf'
     other_comment: 'Still work to be done. Waiting for a new iteration.'
