@@ -5,3 +5,18 @@ assessments.api_docs:
     _title: 'Assessments API Documentation'
   requirements:
     _user_is_logged_in: 'TRUE'
+
+assessments.moderate:
+  path: '/collection/assessments/{assessment_type}/{assessment}/moderate'
+  defaults:
+    _form: '\Drupal\assessments\Form\AssessmentModerationForm'
+    _title: 'Moderate'
+  requirements:
+    _custom_access: '\Drupal\assessments\Access\AssessmentModerationAccessCheck::access'
+  options:
+    parameters:
+      assessment_type:
+        type: 'entity:assessment_type'
+        bundle: 'report'
+      assessment:
+        type: 'entity:assessment'
