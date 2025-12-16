@@ -457,6 +457,21 @@ function assessments_node_create_access(AccountInterface $account, array $contex
 }
 
 /**
+ * Implements hook_ENTITY_TYPE_presave() for assessment entities.
+ */
+function assessments_assessment_presave(AssessmentInterface $entity): void {
+  // For expression entities, copy initiative_name to name field.
+  if ($entity->bundle() === 'expression' && $entity->hasField('initiative_name')) {
+    $initiative_name = $entity->get('initiative_name')->value;
+    if (!empty($initiative_name)) {
+      // Truncate to 255 characters if necessary.
+      $name = mb_strlen($initiative_name) > 255 ? mb_substr($initiative_name, 0, 255) : $initiative_name;
+      $entity->set('name', $name);
+    }
+  }
+}
+
+/**
  * Implements hook_ENTITY_TYPE_insert() for assessment entities.
  */
 function assessments_assessment_insert(AssessmentInterface $entity): void {

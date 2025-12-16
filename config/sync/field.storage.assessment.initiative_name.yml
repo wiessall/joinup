@@ -1,0 +1,19 @@
+uuid: eeaae368-0589-4b36-9cf2-7e37739fb5c6
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+    - text
+id: assessment.initiative_name
+field_name: initiative_name
+entity_type: assessment
+type: text_long
+settings: {  }
+module: text
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

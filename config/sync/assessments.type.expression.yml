@@ -7,11 +7,7 @@ dependencies:
 third_party_settings:
   rdf_sync:
     type: 'http://purl.org/vocab/frbr/core#Expression'
-    fields:
-      name:
-        value:
-          predicate: 'http://purl.org/dc/terms/title'
-          type: null
+    fields: {  }
 label_singular: expression
 label_plural: expressions
 label_count:
