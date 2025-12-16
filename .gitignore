@@ -8,6 +8,8 @@
 /web/modules/contrib/
 /web/profiles/contrib/
 /web/themes/contrib/
+/.editorconfig
+/.gitattributes
 
 # Ignore dist build location
 /dist/
