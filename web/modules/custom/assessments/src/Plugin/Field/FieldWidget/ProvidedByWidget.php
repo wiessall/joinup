@@ -426,14 +426,13 @@ class ProvidedByWidget extends WidgetBase {
           }
         }
 
-        $countryJustChanged = !empty($widgetState['country_just_changed']);
-
         $element['content']['target_id'] = [
           '#type' => 'select',
           '#title' => $this->t('Select organisation'),
           '#options' => $options,
           '#empty_option' => $this->t('- Select -'),
           '#empty_value' => '_none',
+          '#default_value' => $defaultValue,
           '#required' => $this->fieldDefinition->isRequired() && !$addNew,
           '#attributes' => [
             'class' => ['organisation-select'],
@@ -444,7 +443,7 @@ class ProvidedByWidget extends WidgetBase {
               'assessments-inline__item',
             ],
           ],
-        ] + ($countryJustChanged ? ['#value' => '_none'] : ['#default_value' => $defaultValue]);
+        ];
 
         $element['content']['add_new_button'] = [
           '#type' => 'button',
