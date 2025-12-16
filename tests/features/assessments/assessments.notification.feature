@@ -78,7 +78,9 @@ Feature: Assessment report email notifications
 
     When I am logged in as "Moderator User"
     And I go to the moderate form of the "Moderatable Report 3" assessment report
-    And I fill in "What updates are needed?" with "Please add more details to the assessment."
+    And I press "Require updates"
+    Then I should see the error message "When requesting updates, you must provide a reason."
+    When I fill in "What updates are needed?" with "Please add more details to the assessment."
     And I press "Require updates"
     Then I should see the success message containing "The submitter has been notified"
 
