@@ -40,7 +40,6 @@ use Drupal\user\EntityOwnerTrait;
  *       "edit" = "Drupal\assessments\Form\AssessmentForm",
  *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm",
  *       "delete-multiple-confirm" = "Drupal\Core\Entity\Form\DeleteMultipleForm",
- *       "moderate" = "Drupal\assessments\Form\AssessmentModerationForm",
  *     },
  *     "route_provider" = {
  *       "html" = "Drupal\assessments\Routing\AssessmentsHtmlRouteProvider",
