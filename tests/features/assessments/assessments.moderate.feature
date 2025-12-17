@@ -13,7 +13,7 @@ Feature: Assessment report moderation access control
       | Draft Report        | draft     | Test Organization |
       | Published Report    | published | Test Organization |
 
-    When I am logged in as "Moderator User"
+    Given I am logged in as a moderator
     And I go to the moderate form of the "Draft Report" assessment report
     Then I should see the heading "Access denied"
 
