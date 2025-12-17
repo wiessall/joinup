@@ -8,8 +8,7 @@ use Drupal\rdf_sync\RdfUriGeneratorPluginBase;
 
 /**
  * Generates RDF URIs within the namespace assigned by the publication office.
- */
-/**
+ *
  * @RdfUriGenerator(
  *   id = "joinup_po_namespace",
  *   label = @Translation("Joinup PO namespace"),
