@@ -37,7 +37,6 @@ dependencies:
     - file
     - filter
     - flag
-    - joinup_assessment
     - joinup_community_content
     - joinup_core
     - joinup_distribution
