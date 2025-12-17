@@ -14,3 +14,7 @@ services:
   Drupal\assessments\EventSubscriber\AssessmentReportNotificationSubscriber: { }
 
   Drupal\assessments\DependentEntityManager: { }
+
+  Drupal\assessments\PageCache\AllowPublicResources:
+    tags:
+      - { name: page_cache_request_policy }
