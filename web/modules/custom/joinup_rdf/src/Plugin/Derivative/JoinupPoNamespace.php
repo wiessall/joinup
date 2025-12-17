@@ -24,8 +24,8 @@ class JoinupPoNamespace extends DeriverBase {
 
     foreach ($namespaces as $id => $label) {
       $this->derivatives[$id] = [
-          'label' => new TranslatableMarkup($label),
-        ] + $base_plugin_definition;
+        'label' => new TranslatableMarkup($label),
+      ] + $base_plugin_definition;
     }
 
     return $this->derivatives;
