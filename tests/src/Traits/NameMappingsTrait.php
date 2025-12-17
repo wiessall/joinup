@@ -404,7 +404,7 @@ trait NameMappingsTrait {
       'Collection event date' => 'collection_event_type',
       'Content listing types' => 'content_listing_type',
       'Content types' => 'type',
-      'Solution function' => 'domain',
+      'Solution Domain' => 'domain',
       'EIF recommendations' => 'category',
       'Entity bundle' => 'bookmark_entity_bundle',
       'Event date' => 'event_date',
