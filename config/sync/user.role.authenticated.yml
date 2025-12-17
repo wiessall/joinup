@@ -25,6 +25,7 @@ dependencies:
     - node.type.news
     - node.type.owner
     - oauth_client.type.assessments
+    - rest.resource.assessment_report
     - search_api_autocomplete.search.search
     - search_api_autocomplete.search.search_oss_catalogue
     - taxonomy.vocabulary.tags
@@ -48,6 +49,7 @@ dependencies:
     - paragraphs_type_permissions
     - poll
     - private_message
+    - rest
     - search_api_autocomplete
     - sitewide_alert
     - sparql_endpoint
@@ -165,6 +167,7 @@ permissions:
   - 'post comments'
   - 'propose collection content'
   - 'request assessments oauth2 client'
+  - 'restful get assessment_report'
   - 'revert all revisions'
   - 'skip comment approval'
   - 'sparql endpoint query'
