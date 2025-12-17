@@ -57,7 +57,6 @@ final class AssessmentStatement extends ContentEntityBase {
     $fields = parent::baseFieldDefinitions($entity_type);
     $fields['judgement'] = BaseFieldDefinition::create('string_long')
       ->setLabel(t('Judgement'))
-      ->setDescription(t('Provide a justification'))
       ->setTranslatable(TRUE)
       ->setDisplayOptions('form', [
         'type' => 'string_textarea',
@@ -65,6 +64,12 @@ final class AssessmentStatement extends ContentEntityBase {
         'settings' => [
           'rows' => 3,
           'placeholder' => '',
+        ],
+        'third_party_settings' => [
+          'entity_form_field_label' => [
+            'new_label' => 'Provide a justification',
+            'rewrite_label' => 1,
+          ],
         ],
       ])
       ->setDisplayOptions('view', [
@@ -77,7 +82,6 @@ final class AssessmentStatement extends ContentEntityBase {
 
     $fields['interpretation'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Interpretation'))
-      ->setDescription(t('The interpretation of the statement.'))
       ->setTranslatable(FALSE)
       ->setSetting('target_type', 'taxonomy_term')
       ->setSetting('handler_settings', [
@@ -88,6 +92,12 @@ final class AssessmentStatement extends ContentEntityBase {
       ->setDisplayOptions('form', [
         'type' => 'options_buttons',
         'weight' => 0,
+        'third_party_settings' => [
+          'entity_form_field_label' => [
+            'new_label' => 'Tick the most appropriate',
+            'rewrite_label' => 1,
+          ],
+        ],
       ])
       ->setDisplayOptions('view', [
         'label' => 'hidden',
@@ -125,6 +135,7 @@ final class AssessmentStatement extends ContentEntityBase {
       ->setDisplayOptions('form', [
         'type' => 'file_generic',
         'weight' => 2,
+        'region' => 'hidden',
         'settings' => [
           'progress_indicator' => 'throbber',
           'display_field' => FALSE,
