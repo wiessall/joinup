@@ -2,11 +2,16 @@ uuid: e39993c9-ee98-4168-91ad-4af33d668f81
 langcode: en
 status: true
 dependencies:
+  config:
+    - rest.resource.assessment_report
   module:
     - assessments
+    - rest
 id: assessment_reporter
 label: 'Assessment reporter'
 weight: 0
 is_admin: false
 permissions:
   - 'bypass assessment report moderation'
+  - 'create assessment report'
+  - 'restful post assessment_report'
