@@ -71,7 +71,7 @@ final class AssessmentModerationForm extends FormBase {
     $view_builder = $this->entityTypeManager->getViewBuilder('assessment');
     $form['assessment_display'] = [
       '#type' => 'item',
-      '#title' => $this->t('Assessment Report'),
+      '#title' => $assessment->label(),
       '#markup' => '',
       '#weight' => -100,
     ];
