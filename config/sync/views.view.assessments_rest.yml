@@ -5,7 +5,6 @@ dependencies:
   config:
     - assessments.type.public_organisation
     - assessments.type.report
-    - field.storage.assessment.country
     - field.storage.taxonomy_term.code
     - field.storage.taxonomy_term.id
   module:
@@ -640,11 +639,11 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        country:
-          id: country
-          table: assessment__country
-          field: country
-          relationship: provider
+        code:
+          id: code
+          table: taxonomy_term__code
+          field: code
+          relationship: country
           group_type: group
           admin_label: ''
           plugin_id: field
@@ -689,11 +688,11 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          click_sort_column: target_id
-          type: entity_reference_label
+          click_sort_column: value
+          type: string
           settings:
-            link: false
-          group_column: target_id
+            link_to_entity: false
+          group_column: value
           group_columns: {  }
           group_rows: true
           delta_limit: 0
@@ -865,8 +864,8 @@ display:
             name:
               alias: ''
               raw_output: true
-            provider:
-              alias: provider
+            code:
+              alias: country
               raw_output: true
       defaults:
         cache: false
@@ -910,4 +909,4 @@ display:
         - url
         - user.permissions
       tags:
-        - 'config:field.storage.assessment.country'
+        - 'config:field.storage.taxonomy_term.code'

@@ -36,20 +36,22 @@ Feature: Assessments API
     """
     - id: 5d8be6b1-8038-429e-b84e-6ca8c35fd9b1
       name: Report 1
-      country: ''
+      country: null
     - id: e4893580-f468-4c11-921d-1fe68b8540a2
       name: Report 2
-      country: Luxembourg
+      country: LU
     """
     Then a GET request to "/api/assessments/v1/assessment?country=LU" should return the following JSON:
     """
     - id: e4893580-f468-4c11-921d-1fe68b8540a2
       name: Report 2
-      country: Luxembourg
+      country: LU
     """
     Then a GET request to "/api/assessments/v1/assessment?country=EU" should return the following JSON:
     """
     - id: 5d8be6b1-8038-429e-b84e-6ca8c35fd9b1
       name: Report 1
-      country: ''
+      country: null
     """
+    Then I go to "/api/assessments/v1/assessment?country=FOOBAR"
+    Then the response status code should be 404
