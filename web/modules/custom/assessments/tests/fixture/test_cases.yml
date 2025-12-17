@@ -100,7 +100,7 @@ invalid_references:
         asset:
           - "3b1548db-0f29-42f4-a23c-2ee43ed20ba9"
     documents:
-      # Cannit reach this host.
+      # Cannot reach this host.
       - 'https://files.example.com/documents/req-1.pdf'
       # Extension not allowed.
       - '__base_url__/sites/default/files/assessment-test/evil.exe'
@@ -144,8 +144,8 @@ valid:
             documented_in: "https://example.com/eli/act"
         description: "Article 5"
         documents:
-          - '__base_url__/sites/default/files/requirement1.pdf'
-          - '__base_url__/sites/default/files/requirement2.pdf'
+          - '__base_url__/sites/default/files/assessment-test/requirement1.pdf'
+          - '__base_url__/sites/default/files/assessment-test/requirement2.pdf'
         affects:
           - name: "Digital Monitoring Unit"
             thematic_area: "digital_and_innovation_services"
@@ -177,7 +177,7 @@ valid:
         judgement: "Requires follow-up"
     remaining_barriers: "The city has not yet implemented the new regulations."
     documents:
-      - '__base_url__/sites/default/files/report.pdf'
+      - '__base_url__/sites/default/files/assessment-test/report.pdf'
     other_comment: "Still work to be done. Waiting for a new iteration."
   expect:
     language: en
