@@ -54,12 +54,13 @@ class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
     // Create assessment report with all sub-entities.
     $binding_requirement = $this->createParagraphBindingRequirement();
     $organisation = $this->createAssessmentOrganisation();
+    $document = $this->createFileDocument();
     $report = Assessment::create([
       'type' => 'report',
       'name' => 'Assessment title',
       'state' => 'draft',
       'binding_requirement' => ['entity' => $binding_requirement],
-      'documents' => ['entity' => $this->createFileDocument()],
+      'documents' => ['entity' => $document],
       'legal' => ['entity' => $this->createAssessmentStatement('legal')],
       'organisational' => ['entity' => $this->createAssessmentStatement('organisational')],
       'semantic' => ['entity' => $this->createAssessmentStatement('semantic')],
@@ -71,13 +72,23 @@ class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
     $this->markEntityForCleanup($report);
     $report->save();
 
-    // Replace the binding requirement with a new one.
+    // Replace the binding requirement with a new one, assert deletion.
     $new_binding_requirement = $this->createParagraphBindingRequirement();
     $report->set('binding_requirement', ['entity' => $new_binding_requirement]);
     $report->save();
-
-    // Verify that the old binding requirement was deleted.
     $this->assertEntityNotExists($binding_requirement);
+
+    // Replace the document with a new one, assert deletion.
+    $new_document = $this->createFileDocument();
+    $report->set('documents', ['entity' => $new_document]);
+    $report->save();
+    $this->assertEntityNotExists($document);
+
+    // Replace the organisation with a new one, assert no deletion.
+    $new_organisation = $this->createAssessmentOrganisation();
+    $report->set('provider', ['entity' => $new_organisation]);
+    $report->save();
+    $this->assertEntityExists($organisation);
 
     // Delete the assessment report.
     $report->delete();
@@ -86,13 +97,13 @@ class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
     // were deleted.
     $should_persist = static fn ($entity) => $entity instanceof AssessmentInterface && $entity->bundle() === 'public_organisation';
     $entities = \array_filter($this->cleanupEntities, static fn ($entity) => !$should_persist($entity));
-    $this->assertCount(16, $entities);
+    $this->assertCount(17, $entities);
     foreach ($entities as $entity) {
       $this->assertEntityNotExists($entity);
     }
 
     $entities = \array_filter($this->cleanupEntities, static fn ($entity) => $should_persist($entity));
-    $this->assertCount(1, $entities);
+    $this->assertCount(2, $entities);
     foreach ($entities as $entity) {
       $this->assertEntityExists($entity);
     }
