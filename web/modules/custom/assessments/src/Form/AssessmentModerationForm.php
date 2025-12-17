@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Form;
 
-use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
@@ -15,7 +14,6 @@ use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Event\AssessmentReportEvent;
 use Drupal\assessments\NotificationEvents;
-use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -53,19 +51,7 @@ final class AssessmentModerationForm extends FormBase {
   public static function access(RouteMatchInterface $route_match, AccountInterface $account): AccessResultInterface {
     $entity = $route_match->getParameter('assessment');
 
-    if (!$entity instanceof AssessmentInterface) {
-      return AccessResult::forbidden('Invalid assessment entity.')
-        ->addCacheContexts(['route']);
-    }
-
-    if (!$entity instanceof EntityWorkflowStateInterface) {
-      return AccessResult::forbidden('This assessment bundle does not support moderation.')
-        ->addCacheableDependency($entity);
-    }
-
-    return AccessResult::allowedIf($entity->getWorkflowState() === 'review')
-      ->andIf(AccessResult::allowedIfHasPermission($account, 'moderate assessment report'))
-      ->addCacheableDependency($entity);
+    return _assessments_can_moderate($entity, $account);
   }
 
   /**
