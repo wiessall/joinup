@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.1.1
 info:
   title: Assessment API
   version: 1.0.0
@@ -10,13 +10,135 @@ servers:
   - url: /api/assessments/v1
     description: Assessments API endpoint
 security:
-  # @todo When the assessment client type and scopes are defined in the
-  #   project, set up the security requirements accordingly.
-  # @see https://swagger.io/docs/specification/v3_0/authentication/
   - oauth2: [ ]
 paths:
   /token:
     $ref: "../../joinup_api/openapi/oauth2.openapi.yaml#/paths/~1token"
+  /assessment:
+    servers:
+      - url: /api/assessments/v1
+        description: Assessments API endpoint
+    post:
+      summary: Create an assessment report
+      description: Submit a single Assessment JSON object. Some referred
+        objects (such as provider or asset) can be either reused by passing
+        their ID, or created by passing fully-structured objects, as is defined
+        by their schema.
+      operationId: createAssessment
+      tags:
+        - Assessments
+      security:
+        - oauth2: [ ]
+      parameters:
+        - in: header
+          name: Authorization
+          description: |
+            Bearer access token. Format: 'Bearer <access_token>'. See the
+            "Authentication" on how to obtain an access token.
+          required: true
+          schema:
+            type: string
+            example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+      requestBody:
+        required: true
+        description: POST request body as JSON
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Assessment'
+            examples:
+              createOrReferSubObjects:
+                summary: Post report (see description below)
+                description: |-
+                  If the `provider` and/or the `asset` doesn't exist yet, the
+                  POST request will have to provide the minimal data, according
+                  to their schema. The objects will be created as past of the
+                  request and their IDs will be returned as response.
+
+                  In this example the binding requirement's first asset doesn't
+                  exist, and is created along with the report. But the 2nd the
+                  3rd are existing assets, thus are only referred by their ID.
+                  To find out which are all existing assets, use the `/asset`
+                  GET resource, documented below.
+
+                  The `provider` is also created along with the report. To link
+                  an existing public organisation, provide its ID: `"provider":
+                  "ec2a8c99-40fb-4174-b5e1-02de37b2ab0f"`. To
+                  find out which are all existing organisations, use the
+                  `/organisation` GET resource,  documented below.
+                value:
+                  language: it
+                  name: Legislation waste management
+                  provider:
+                    name: City of Brussels
+                    organisation_type: local_public_sector_body
+                    country: BE
+                  relevant_report:
+                    - https://example.com/last-year-report
+                    - https://example.com/middle-east
+                  binding_requirement:
+                    expression:
+                      - name: Legal Act 2024
+                        description: Reference to an EU legal expression
+                        documented_in: https://example.com/eli/act
+                    description: Article 5
+                    documents:
+                      - https://example.com/law/123
+                      - https://example.com/regulation/eu-1655467-s
+                    affects:
+                      - name: Digital Monitoring Unit
+                        thematic_area: digital_and_innovation_services
+                      - name: Training Centre
+                        thematic_area: education_and_research
+                    has_participation:
+                      - participant_type:
+                          - national_public_sector_body
+                        country:
+                          - BE
+                          - NL
+                          - LU
+                      - participant_type:
+                          - private_businesses
+                        country:
+                          - IT
+
+                    asset:
+                      - name: Portal EU
+                        description: An EU portal interoperable solution
+                        landing_page: "https://portal.example.eu"
+                      - b21e876e-8ad0-4057-ad57-de45c51d374f
+                      - a0e76022-863e-4f8f-8eb0-8227cd080be4
+                  results_in:
+                    organisational:
+                      interpretation: positive
+                      judgement: Compliant with conditions
+                    technical:
+                      judgement: neutral
+                      interpretation: Requires follow-up
+                  remaining_barriers: The city has not yet implemented the new regulations.
+                  documents:
+                    - https://files.example.com/documents/req-1.pdf
+                    - https://files.example.com/documents/regulation.2025.pdf
+                  other_comment: Still work to be done. Waiting for a new iteration.
+      responses:
+        '201':
+          description: |
+            The created assessment report. The response will contain exactly the
+            same structure as the submitted JSON plus the IDs of the created
+            objects.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assessment'
+        '400':
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
   /assessment/{id}:
     servers:
       - url: /api/assessments/v1
@@ -32,10 +154,9 @@ paths:
         - in: path
           name: id
           required: true
-          description: Assessment ID (UUID)
+          description: The assessment report ID
           schema:
-            type: string
-            format: uuid
+            $ref: '#/components/schemas/UUID'
       responses:
         '200':
           description: The fetched assessment report
@@ -43,207 +164,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Assessment'
-              examples:
-                fetched:
-                  value:
-                    id: "9f9d7a69-0a6b-4a7c-9c02-5a8834c9a123"
-                    name: Quarterly review
-                    other_comment: This assessment covers the Q4 2024 compliance review period.
-                    provider:
-                      id: "b2c63c0d-3f57-4db6-8e92-6a8f3f50e1a1"
-                      name: City of Brussels
-                      description: Local authority
-                      organisation_type: local_public_sector_body
-                      country: BE
-                    binding_requirement:
-                      - documented_in: "https://example.com/law/123"
-                        name: Article 5
-                        expression:
-                          - name: Legal Act 2024
-                            description: Reference to an EU legal expression
-                            document_in: "https://example.com/eli/act"
-                            expression_type: "http://data.europa.eu/eli/ontology#LegalExpression"
-                        affects:
-                          - description: Online permit application
-                            spatial: BE
-                            identifier: ps-123
-                            name: Permit Application Service
-                            thematic_area: digital_and_innovation_services
-                          - description:
-                            spatial: BE
-                            identifier: ps-123
-                            name: Permit Application Service
-                            thematic_area: digital_and_innovation_services
-                        has_participation:
-                          - country: BE
-                            participant_type: national_public_sector_body
-                            agent:
-                              name: Federal Agency of X
-                              agent_type: organisation
-                        asset:
-                          - name: Portal EU
-                            description: An EU portal interoperable solution
-                            landing_page: "https://portal.example.eu"
-                        documents:
-                          - file_uri: "https://files.example.com/documents/req-1.pdf"
-                    results_in:
-                      - interpretation: Compliant with conditions
-                        judgement: positive
-                        type: organisational
-                        documents:
-                          - file_uri: "https://files.example.com/documents/statement-1.pdf"
         '404':
           description: Assessment not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-  /assessment/create:
-    servers:
-      - url: /api/assessments/v1
-        description: Assessments API endpoint
-    post:
-      summary: Create an Assessment
-      description: Submit a single Assessment JSON object. Some referred
-        objects (such as provider, binding_requirement, asset) can be either
-        reused by passing their ID, or created by passing a fully-structured
-        object, as defined by oneOf in the schemas.
-      operationId: createAssessment
-      tags:
-        - Assessments
-      security:
-        - oauth2: [ ]
-      parameters:
-        - in: header
-          name: Authorization
-          description: "Bearer access token. Format: 'Bearer <access_token>'."
-          required: true
-          schema:
-            type: string
-          example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Assessment'
-            examples:
-              asReferences:
-                summary: Submit using ID references
-                value:
-                  name: Quarterly review
-                  other_comment: This report includes all necessary compliance documentation.
-                  binding_requirement:
-                    - "4f2f7c40-2e8b-4a7a-9f04-4a37bb7a0e9e"
-                  provider: "b2c63c0d-3f57-4db6-8e92-6a8f3f50e1a1"
-                  results_in:
-                    - interpretation: Compliant with conditions
-                      judgement: positive
-                      type: organisational
-                      documents:
-                        - file_uri: "https://files.example.com/documents/statement-1.pdf"
-              asStructured:
-                summary: Submit with structured nested entities
-                value:
-                  name: Quarterly review
-                  other_comment: Assessment conducted with full stakeholder consultation.
-                  remaining_barriers: "The city has not yet implemented the new regulations."
-                  binding_requirement:
-                    - documented_in: "https://example.com/law/123"
-                      name: Article 5
-                      expression:
-                        - name: Legal Act 2024
-                          description: Reference to an EU legal expression
-                          document_in: "https://example.com/eli/act"
-                          expression_type: "http://data.europa.eu/eli/ontology#LegalExpression"
-                      affects:
-                        - description: Online permit application
-                          spatial: BE
-                          identifier: ps-123
-                          name: Permit Application Service
-                          thematic_area: digital_and_innovation_services
-                      has_participation:
-                        - country: BE
-                          participant_type: national_public_sector_body
-                          agent:
-                            name: Federal Agency of X
-                            agent_type: organisation
-                      asset:
-                        - name: Portal EU
-                          description: An EU portal interoperable solution
-                          landing_page: "https://portal.example.eu"
-                      documents:
-                        - file_uri: "https://files.example.com/documents/req-1.pdf"
-                  provider:
-                    name: City of Brussels
-                    description: Local authority
-                    organisation_type: local_public_sector_body
-                    country: BE
-                  results_in:
-                    - interpretation: Compliant with conditions
-                      judgement: positive
-                      type: organisational
-                      documents:
-                        - file_uri: "https://files.example.com/documents/statement-1.pdf"
-                    - interpretation: Requires follow-up
-                      judgement: conditional
-                      type: technical
-              mixed:
-                summary: Submit with a mix of references and structured entities
-                value:
-                  name: Quarterly review
-                  other_comment: Mixed approach combining existing and new entities.
-                  binding_requirement:
-                    - "4f2f7c40-2e8b-4a7a-9f04-4a37bb7a0e9e"
-                    - documented_in: "https://example.com/law/123"
-                      name: Article 5
-                      expression:
-                        - name: Legal Act 2024
-                          description: Reference to an EU legal expression
-                          document_in: "https://example.com/eli/act"
-                          expression_type: "http://data.europa.eu/eli/ontology#LegalExpression"
-                        - "7c9e1f5a-3d6b-4e8f-9c3a-2b1f4e5d6c7b"
-                      affects:
-                        - description: Online permit application
-                          spatial: BE
-                          identifier: ps-123
-                          name: Permit Application Service
-                          thematic_area: digital_and_innovation_services
-                      asset:
-                        - "ce4f73f3-014c-41df-951f-457490ac1a23"
-                        - name: Portal EU
-                          description: The EU portal interoperable solution
-                          landing_page: "https://portal.example.eu"
-                        - "7c6b7eb4-c32c-41bb-892e-2bae6268ba53"
-                  provider: "b2c63c0d-3f57-4db6-8e92-6a8f3f50e1a1"
-                  results_in:
-                    - interpretation: Compliant with conditions
-                      judgement: positive
-                      type: legal
-                      documents:
-                        - file_uri: "https://files.example.com/documents/statement-1.pdf"
-                    - interpretation: Requires follow-up
-                      judgement: conditional
-      responses:
-        '201':
-          description: Assessment created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Assessment'
-              examples:
-                created:
-                  value:
-                    id: "9f9d7a69-0a6b-4a7c-9c02-5a8834c9a123"
-                    status: created
-                    assessment:
-                      id: "9f9d7a69-0a6b-4a7c-9c02-5a8834c9a123"
-                      name: Quarterly review
-        '400':
-          description: Invalid request
           content:
             application/json:
               schema:
@@ -260,9 +182,7 @@ paths:
       description: Returns all assets (also known as interoperable solutions)
       operationId: getAssets
       tags:
-        - Assessments
-        - Assets
-        - 'interoperable solutions'
+        - Resources
       security: [ ]
       responses:
         '200':
@@ -282,22 +202,20 @@ paths:
                     - id: "7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7b"
                       name: "Citizen's Forum"
                       url: "https://interoperable-europe.ec.europa.eu/collection/participation/solution/forum"
-
-  /public-organisation:
+  /organisation:
     servers:
       - url: /api/assessments/v1
         description: Assessments API endpoint
     get:
-      summary: Get all Assessments of type Public Organisation
-      description: Returns all Public Organisations. The shape matches the POST response, with UUID `id` fields on the root.
+      summary: Get all public organisations
+      description: Returns all Public Organisations.
       operationId: getPublicOrganisation
       tags:
-        - Assessments
-        - Public Organisations
+        - Resources
       security: [ ]
       responses:
         '200':
-          description: The fetched public organisations
+          description: The fetched public organisations.
           content:
             application/json:
               schema:
@@ -353,260 +271,360 @@ paths:
                       name: "Assessment report 2"
                       country: "BE"
 components:
+
   securitySchemes:
+
     oauth2:
       type: oauth2
       flows:
         clientCredentials:
           tokenUrl: /oauth/token
           scopes: { }
+
   schemas:
+
     # Entities and their reference-or-object wrappers
 
     Assessment:
       type: object
-      required: [ name ]
+      required:
+        - name
+        - binding_requirement
+        - provider
+      additionalProperties: false
       properties:
         id:
-          type: string
-          format: uuid
+          schema:
+            $ref: '#/components/schemas/UUID'
           readOnly: true
+          description: The universally unique ID of the assessment report
+        language:
+          type: string
+          enum:
+            - bg  # Bulgarian
+            - cs  # Czech
+            - da  # Danish
+            - de  # German
+            - el  # Greek
+            - en  # English
+            - es  # Spanish
+            - et  # Estonian
+            - fi  # Finnish
+            - fr  # French
+            - ga  # Irish
+            - hr  # Croatian
+            - hu  # Hungarian
+            - it  # Italian
+            - lt  # Lithuanian
+            - lv  # Latvian
+            - mt  # Maltese
+            - nl  # Dutch
+            - pl  # Polish
+            - pt  # Portuguese
+            - ro  # Romanian
+            - sk  # Slovak
+            - sl  # Slovenian
+            - sv  # Swedish
+          description: The report's language. If omitted, defaults to English.
         name:
           type: string
+          description: A short name assigned for easy identification.
+          maxLength: 255
+        provider:
+          description: |
+            A public organisation. Pass an `Organisation` object to create a new
+            organisation or the organisation's ID to refer an existing one. To
+            find out which are all existing organisations, use the
+            `/organisation` GET resource, documented in this page.
+          oneOf:
+            - $ref: '#/components/schemas/Organisation'
+            - $ref: '#/components/schemas/UUID'
+        relevant_report:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: Relevant assessment reports
+        binding_requirement:
+          description: |
+            One ore multiple objects can be submitted, each following the
+            BindingRequirement schema.
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/BindingRequirement'
+        results_in:
+          type: object
+          description: |
+            Identified effects on cross-border interoperability from different
+            perspectives: legal, organisational, semantic, and technical.
+          properties:
+            legal:
+              $ref: '#/components/schemas/Statement'
+            organisational:
+              $ref: '#/components/schemas/Statement'
+            semantic:
+              $ref: '#/components/schemas/Statement'
+            technical:
+              $ref: '#/components/schemas/Statement'
+        remaining_barriers:
+          type: string
+          description: Describe possible remaining barriers to interoperability.
+        documents:
+          type: array
+          description: |
+            List of URLs of documents supporting this assessment report.
+          items:
+            type: string
+            format: uri
         other_comment:
           type: string
           description: Any additional comments or notes about the assessment.
-        binding_requirement:
-          description: References to BindingRequirements; allow multiple. Each item may be an ID or a structured object.
-          type: array
-          items:
-            oneOf:
-              - $ref: '#/components/schemas/ID'
-              - $ref: '#/components/schemas/BindingRequirement'
-        provider:
-          description: Reference to an Organisation, either an ID or a structured object.
-          oneOf:
-            - $ref: '#/components/schemas/ID'
-            - $ref: '#/components/schemas/Organisation'
-        remaining_barriers:
-          description: Describes possible remaining barriers to interoperability.
-          type: string
-        results_in:
-          description: References to Statements; allow multiple. Each item is a
-            structured object.
-          type: array
-          items:
-            $ref: '#/components/schemas/Statement'
-
-    BindingRequirement:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        documented_in:
-          $ref: '#/components/schemas/Uri'
-        name:
-          type: string
-        expression:
-          description: References to Expressions; allow multiple. Each item may be an ID or a structured object.
-          type: array
-          items:
-            oneOf:
-              - $ref: '#/components/schemas/ID'
-              - $ref: '#/components/schemas/Expression'
-        affects:
-          description: References to PublicServices; allow multiple. Each item may be an ID or a structured object.
-          type: array
-          items:
-            oneOf:
-              - $ref: '#/components/schemas/ID'
-              - $ref: '#/components/schemas/PublicService'
-        has_participation:
-          description: References to Participations; allow multiple. Each item may be an ID or a structured object.
-          type: array
-          items:
-            oneOf:
-              - $ref: '#/components/schemas/ID'
-              - $ref: '#/components/schemas/Participation'
-        asset:
-          description: References to Assets; allow multiple. Each item may be an ID or a structured object.
-          type: array
-          items:
-            oneOf:
-              - $ref: '#/components/schemas/ID'
-              - $ref: '#/components/schemas/Asset'
-        documents:
-          description: References to Files; allow multiple. Each item may be an ID or a structured object.
-          type: array
-          items:
-            oneOf:
-              - $ref: '#/components/schemas/ID'
-              - $ref: '#/components/schemas/File'
-
-    Expression:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        name:
-          type: string
-        description:
-          type: string
-        document_in:
-          $ref: '#/components/schemas/Uri'
-        expression_type:
-          type: string
-          description: One of the allowed expression types.
-          enum:
-            - http://data.europa.eu/eli/ontology#LegalExpression
-            - http://purl.org/vocab/frbr/core#Expression
-
-    PublicService:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        description:
-          type: string
-        spatial:
-          $ref: '#/components/schemas/Iso3166Alpha2'
-        identifier:
-          type: string
-        name:
-          type: string
-        thematic_area:
-          type: string
-          enum:
-            - core_governance_and_administration
-            - health_and_wellbeing
-            - education_and_research
-            - environment_and_energy
-            - economy_and_employment
-            - social_and_community_services
-            - security_justice_and_emergency_services
-            - transport_and_infrastructure
-            - digital_and_innovation_services
-            - international_and_regional_cooperation
-
-    Participation:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        country:
-          $ref: '#/components/schemas/Iso3166Alpha2'
-        participant_type:
-          type: string
-          enum:
-            - local_public_sector_body
-            - regional_public_sector_body
-            - national_public_sector_body
-            - european_union_institution
-            - european_union_agency
-            - european_union_body
-            - private_businesses
-
-    Asset:
-      type: object
-      description: An interoperability solution
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        title:
-          type: string
-        url:
-          type: string
-          format: uri
-          description: The asset landing page on Interoperable Europe website
-
-    File:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        file_uri:
-          $ref: '#/components/schemas/Uri'
 
     Organisation:
       type: object
+      required:
+        - name
+        - organisation_type
+      additionalProperties: false
       properties:
         id:
-          type: string
-          format: uuid
+          schema:
+            $ref: '#/components/schemas/UUID'
           readOnly: true
+          description: The universally unique ID of the public organisation.
         name:
           type: string
+          description: The public organisation name.
+          maxLength: 255
         organisation_type:
           type: string
+          description: The public organisation type.
           enum:
-            - local_public_sector_body
-            - regional_public_sector_body
-            - national_public_sector_body
-            - european_union_institution
             - european_union_agency
             - european_union_body
+            - european_union_institution
+            - local_public_sector_body
+            - national_public_sector_body
+            - regional_public_sector_body
         country:
-          $ref: '#/components/schemas/Iso3166Alpha2'
+          $ref: '#/components/schemas/EuropeanUnionCountry'
+          description: |
+            The public organisation type. To be omitted for EU institutions,
+            bodies, agencies.
+
+    BindingRequirement:
+      type: object
+      required:
+        - expression
+        - description
+        - affects
+      additionalProperties: false
+      properties:
+        expression:
+          type: array
+          minItems: 1
+          description: |
+            One ore multiple objects can be submitted, each following the
+            `Expression` schema.
+          items:
+            $ref: '#/components/schemas/Expression'
+        description:
+          type: string
+          description: The binding requirement short description.
+        documents:
+          type: array
+          description: |
+            List of URLs of documents supporting this binding requirement.
+          items:
+            type: string
+            format: uri
+        affects:
+          type: array
+          description: |
+            One ore multiple objects can be submitted, each following the
+            `PublicService` schema.
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/PublicService'
+        has_participation:
+          type: array
+          description: |
+            One ore multiple objects can be submitted, each following the
+            `Participation` schema.
+          items:
+            $ref: '#/components/schemas/Participation'
+        asset:
+          type: array
+          description: |
+            One ore multiple items can be submitted. Each item is:
+            - EITHER an object following the `Asset` schema. In this case a new
+              asset will be created along with the assessment report,
+            - OR, an existing interoperability solution ID. To find out which
+              are all existing interoperability solutions (assets), use the
+              `/asset` GET resource, documented in this page.
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/Asset'
+              - $ref: '#/components/schemas/UUID'
+          example:
+            asset:
+              - b40f14cf-7383-40d6-aa07-16be9b3ff930
+              - title: Agriculture Digital System
+                description: The New Agriculture Revolution.
+                url: http://example.com/digital-revolution
+
+    Expression:
+      type: object
+      required:
+        - name
+        - description
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: The name of the initiative.
+          maxLength: 255
+        description:
+          type: string
+          description: The description of the initiative.
+        documented_in:
+          type: string
+          format: uri
+          description: The webpage describing this initiative.
+
+    PublicService:
+      type: object
+      required:
+        - name
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: The name  unique ID of the public service.
+          maxLength: 255
+        thematic_area:
+          type: string
+          description: The concerned function of trans-European digital public service(s).
+          enum:
+            - core_governance_and_administration
+            - digital_and_innovation_services
+            - economy_and_employment
+            - education_and_research
+            - environment_and_energy
+            - health_and_wellbeing
+            - international_and_regional_cooperation
+            - security_justice_and_emergency_services
+            - social_and_community_services
+            - transport_and_infrastructure
+
+    Participation:
+      type: object
+      required:
+        - participant_type
+      additionalProperties: false
+      properties:
+        participant_type:
+          type: array
+          items:
+            type: string
+            description: The type of the affected stakeholder.
+            enum:
+              - european_union_agency
+              - european_union_body
+              - european_union_institution
+              - local_public_sector_body
+              - national_public_sector_body
+              - private_businesses
+              - regional_public_sector_body
+          description: The participation type.
+        country:
+          type: array
+          items:
+            $ref: '#/components/schemas/EuropeanUnionCountry'
+          description: Stakeholder's countries. Each as 2-letter country code.
+
+    Asset:
+      type: object
+      required:
+        - title
+        - description
+        - landing_page
+      description: An asset as interoperability solution.
+      properties:
+        id:
+          schema:
+            $ref: '#/components/schemas/UUID'
+          readOnly: true
+          description: The universally unique ID of the solution.
+        title:
+          type: string
+          description: The title of the interoperability solution.
+          maxLength: 255
+        description:
+          type: string
+          description: The interoperability solution description.
+        landing_page:
+          type: string
+          description: The interoperability solution relevant website.
+          format: uri
+        url:
+          type: string
+          description: The solution page on the Interoperable Europe Portal.
+          format: uri
 
     Statement:
       type: object
+      required:
+        - interpretation
+      additionalProperties: false
       properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
         interpretation:
           type: string
           description: The interpretation of the statement.
           enum:
-            - positive
-            - neutral
             - negative
+            - neutral
+            - positive
         judgement:
           type: string
-        type:
-          type: string
-          enum:
-            - legal
-            - organisational
-            - semantic
-            - technical
-        documents:
-          description: References to Files; allow multiple. Each item may be an ID or a structured object.
-          type: array
-          items:
-            oneOf:
-              - $ref: '#/components/schemas/ID'
-              - $ref: '#/components/schemas/File'
+          description: The personal opinion on the report.
 
     # Generic reusable types
 
-    ID:
-      type: string
-      format: uuid
-      description: An ID reference to an existing entity.
-
-    Iso3166Alpha2:
+    EuropeanUnionCountry:
       type: string
       nullable: true
       description: ISO-3166 alpha-2 country code
-      minLength: 2
-      maxLength: 2
-      pattern: '^[A-Z]{2}$'
-      example: BE
+      enum:
+        - AT  # Austria
+        - BE  # Belgium
+        - BG  # Bulgaria
+        - HR  # Croatia
+        - CY  # Cyprus
+        - CZ  # Czechia
+        - DK  # Denmark
+        - EE  # Estonia
+        - FI  # Finland
+        - FR  # France
+        - DE  # Germany
+        - GR  # Greece
+        - HU  # Hungary
+        - IE  # Ireland
+        - IT  # Italy
+        - LV  # Latvia
+        - LT  # Lithuania
+        - LU  # Luxembourg
+        - MT  # Malta
+        - NL  # Netherlands
+        - PL  # Poland
+        - PT  # Portugal
+        - RO  # Romania
+        - SK  # Slovakia
+        - SI  # Slovenia
+        - ES  # Spain
+        - SE  # Sweden
 
-    Uri:
+    UUID:
       type: string
-      format: uri
+      pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'

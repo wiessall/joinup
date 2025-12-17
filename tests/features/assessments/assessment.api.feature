@@ -11,6 +11,10 @@ Feature: Assessments API
       title: Citizen's Forum
       url: __base_url__/collection/portal-support/solution/citizens-forum
     """
+    And the page should be cacheable
+    But the page should not be cached
+    When I go to "/api/assessments/v1/asset"
+    Then the page should be cached
 
     Given public_organisation assessments:
       | name        | organisation_type          | uuid                                 | country    |
@@ -21,7 +25,7 @@ Feature: Assessments API
       | Report 1 | ACME        | 5d8be6b1-8038-429e-b84e-6ca8c35fd9b1 | published |
       | Report 2 | Bad Company | e4893580-f468-4c11-921d-1fe68b8540a2 | published |
       | Report 3 | Bad Company | e4893580-f468-4c11-921d-1fe68b8540a3 | draft     |
-    Then a GET request to "/api/assessments/v1/public-organisation" should return the following JSON:
+    Then a GET request to "/api/assessments/v1/organisation" should return the following JSON:
     """
     - id: 5d8be6b1-8038-429e-b84e-6ca8c35fd9b0
       name: ACME
@@ -55,3 +59,7 @@ Feature: Assessments API
     """
     Then I go to "/api/assessments/v1/assessment?country=FOOBAR"
     Then the response status code should be 404
+    And the page should be cacheable
+    But the page should not be cached
+    When I go to "/api/assessments/v1/organisation"
+    Then the page should be cached
