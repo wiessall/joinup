@@ -7,6 +7,9 @@ namespace Drupal\joinup_rdf\Plugin\Derivative;
 use Drupal\Component\Plugin\Derivative\DeriverBase;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 
+/**
+ * Provides derivatives for JoinupRdfUriGenerator.
+ */
 class JoinupPoNamespace extends DeriverBase {
 
   /**
