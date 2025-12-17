@@ -17,6 +17,7 @@
         "composer/installers": "^2",
         "composer/spdx-licenses": "^1.5",
         "cweagans/composer-patches": "^1.7",
+        "devizzent/cebe-php-openapi": "^1.1",
         "drupal/addtocal": "^3.0",
         "drupal/allowed_formats": "^3.0",
         "drupal/antibot": "^2.0",

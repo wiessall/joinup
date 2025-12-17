@@ -7,6 +7,7 @@ dependencies:
     - filter.format.basic_html
     - filter.format.plain_text_glossary
     - filter.format.simple_text
+    - rest.resource.assessment_report
     - search_api_autocomplete.search.search
     - search_api_autocomplete.search.search_oss_catalogue
   module:
@@ -20,6 +21,7 @@ dependencies:
     - meta_entity
     - paragraphs_type_permissions
     - poll
+    - rest
     - search_api_autocomplete
     - sitewide_alert
     - sparql_endpoint
@@ -37,6 +39,7 @@ permissions:
   - 'access tour'
   - 'access user profiles'
   - 'legal view legal_notice'
+  - 'restful get assessment_report'
   - 'sparql endpoint query'
   - 'use search_api_autocomplete for search'
   - 'use search_api_autocomplete for search_oss_catalogue'
