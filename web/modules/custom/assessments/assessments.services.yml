@@ -12,3 +12,5 @@ services:
     class: Drupal\assessments\AssessmentReportNotification
 
   Drupal\assessments\EventSubscriber\AssessmentReportNotificationSubscriber: { }
+
+  Drupal\assessments\DependentEntityManager: { }
