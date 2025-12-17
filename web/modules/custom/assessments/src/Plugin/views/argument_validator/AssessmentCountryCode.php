@@ -51,6 +51,13 @@ final class AssessmentCountryCode extends ArgumentValidatorPluginBase implements
    * {@inheritdoc}
    */
   public function validateArgument($arg): bool {
+    // Should be Iso3166Alpha2.
+    if (!is_string($arg) || strlen($arg) !== 2) {
+      return FALSE;
+    }
+
+    // "EU" is always valid.
+    /* @see \Drupal\assessments\Plugin\views\argument\AssessmentCountryCode */
     if ($arg === 'EU') {
       return TRUE;
     }

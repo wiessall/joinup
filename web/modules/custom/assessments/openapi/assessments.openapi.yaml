@@ -333,7 +333,7 @@ paths:
           required: false
           description: Country code
           schema:
-            type: string
+            $ref: '#/components/schemas/Iso3166Alpha2'
       responses:
         '200':
           description: The fetched reports
