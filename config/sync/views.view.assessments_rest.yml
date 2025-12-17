@@ -12,7 +12,6 @@ dependencies:
     - assessments
     - rest
     - serialization
-    - state_machine
     - taxonomy
     - user
     - uuid_extra
@@ -807,17 +806,18 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        state_value:
-          id: state_value
-          table: assessment__state
-          field: state_value
+        status:
+          id: status
+          table: assessment_field_data
+          field: status
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: state_machine_state
-          operator: in
-          value:
-            published: published
+          entity_type: assessment
+          entity_field: status
+          plugin_id: boolean
+          operator: '='
+          value: '1'
           group: 1
           exposed: false
           expose:
@@ -834,7 +834,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-            reduce: false
           is_grouped: false
           group_info:
             label: ''
