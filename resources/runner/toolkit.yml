@@ -136,6 +136,8 @@ commands:
         uid: 1
     - task: exec
       command: test ! -z "$CI" || vendor/bin/run solr:build-core-config
+    - task: exec
+      command: chmod u=rw,g=r,o= ${joinup.files_private_dir}/simple_oauth/private.key ${joinup.files_private_dir}/simple_oauth/public.key
 
   # Replace toolkit test commands to use GrumPHP.
   toolkit:test-phpcs:
