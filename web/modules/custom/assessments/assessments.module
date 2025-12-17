@@ -489,12 +489,5 @@ function _assessments_handle_report_state_notification(AssessmentInterface $enti
  * Implements hook_views_data_alter().
  */
 function assessments_views_data_alter(array &$data): void {
-  $data['assessment_field_data']['country'] = [
-    'title' => t('Country code'),
-    'help' => t('Country code filter'),
-    'filter' => [
-      'id' => 'country_code_filter',
-      'allow empty' => TRUE,
-    ],
-  ];
+  $data['taxonomy_term__code']['code_value']['argument']['id'] = 'country_code_string';
 }
