@@ -11,7 +11,7 @@ Feature: Assessment Report Entity Management
     Then I should see the heading "Create assessment report"
 
     When I press "Save as Draft"
-    Then I should see the error message "3 errors have been found: NameType of public sector bodyBinding requirements"
+    Then I should see the error message "3 errors have been found: Short titleType of public sector bodyBinding requirements"
 
     When I fill in "Short title" with "Test Assessment Report 2025"
     And I should see "This will be used as the title of the published report. Maximum 255 characters."
@@ -130,7 +130,7 @@ Feature: Assessment Report Entity Management
 
     # Edit test.
     When I go to the edit form of the "Test Assessment Report 2025" assessment
-    And I fill in "Name" with "Test Assessment Report 2025 v2"
+    And I fill in "Short title" with "Test Assessment Report 2025 v2"
     And I press "Save as In Review"
     Then I should see the heading "Test Assessment Report 2025 v2"
     And I should see the text "Status: In Review"
