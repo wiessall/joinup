@@ -14,5 +14,5 @@ is_admin: false
 permissions:
   - 'bypass assessment report moderation'
   - 'create assessment report'
-  - 'restful post assessment_report'
   - 'moderate assessment report'
+  - 'restful post assessment_report'
