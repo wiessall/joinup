@@ -493,7 +493,7 @@ display:
         metatag_display_extender:
           metatags: {  }
           tokenize: false
-      path: api/assessments/v1/public-organisation
+      path: api/assessments/v1/organisation
     cache_metadata:
       max-age: -1
       contexts:
