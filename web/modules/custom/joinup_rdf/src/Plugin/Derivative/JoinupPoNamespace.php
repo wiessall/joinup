@@ -22,9 +22,9 @@ class JoinupPoNamespace extends DeriverBase {
       's2k' => 'Joinup PO namespace (data.europa.eu/s2k)',
     ];
 
-    foreach ($namespaces as $id => $label) {
-      $this->derivatives[$id] = [
-        'label' => new TranslatableMarkup($label),
+    foreach ($namespaces as $namespace) {
+      $this->derivatives[$namespace] = [
+        'label' => new TranslatableMarkup("Joinup PO namespace (data.europa.eu/$namespace)"),
       ] + $base_plugin_definition;
     }
 
