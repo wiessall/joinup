@@ -217,7 +217,6 @@ permissions:
   - 'eu oss catalogue log'
   - 'feature entity'
   - 'flag interoperability'
-  - 'manage assessments'
   - 'manage custom landing pages'
   - 'manage group add members'
   - 'manage group announcements'

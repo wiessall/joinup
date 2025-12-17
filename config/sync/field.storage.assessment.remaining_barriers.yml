@@ -1,16 +1,16 @@
-uuid: cebb69da-6587-4947-bcba-980536d93b45
+uuid: 3fa86142-8a3b-4f60-989a-b038deb7a337
 langcode: en
 status: true
 dependencies:
   module:
     - assessments
-id: assessment.other
-field_name: other
+    - text
+id: assessment.remaining_barriers
+field_name: remaining_barriers
 entity_type: assessment
-type: entity_reference
-settings:
-  target_type: assessment_statement
-module: core
+type: text_long
+settings: {  }
+module: text
 locked: false
 cardinality: 1
 translatable: true

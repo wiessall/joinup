@@ -98,6 +98,13 @@ class AssessmentsContext extends RawDrupalContext {
         $assessment['provider'] = $provider->id();
       }
 
+      // Resolve timestamp fields.
+      foreach (['created', 'changed'] as $field) {
+        if (!empty($assessment[$field]) && !is_numeric($assessment[$field])) {
+          $assessment[$field] = strtotime($assessment[$field]);
+        }
+      }
+
       $assessment = (object) $assessment;
 
       $assessment->type = $type;
@@ -188,7 +195,7 @@ class AssessmentsContext extends RawDrupalContext {
    */
   public function createAssessmentStatements(TableNode $table): void {
     foreach ($table->getColumnsHash() as $values) {
-      assert(in_array($values['statement_type'], ['legal', 'technical', 'other'], TRUE), 'Invalid assessment statement type provided.');
+      assert(in_array($values['statement_type'], ['legal', 'organisational', 'semantic', 'technical'], TRUE), 'Invalid assessment statement type provided.');
       $values['type'] = $values['statement_type'];
       $values = (object) $values;
 
