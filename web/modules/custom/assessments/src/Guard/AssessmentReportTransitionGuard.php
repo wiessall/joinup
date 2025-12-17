@@ -32,18 +32,11 @@ class AssessmentReportTransitionGuard implements GuardInterface {
       return TRUE;
     }
 
-    // Prevent "Publish" to appear except user has the
-    // "moderate assessment report" or the "bypass assessment report moderation"
-    // permissions.
     if ($transition->getToState()->getId() === 'published') {
-      return AccessResult::allowedIfHasPermissions(
+      return AccessResult::allowedIfHasPermission(
         $this->currentUser,
-        [
-          'moderate assessment report',
-          'bypass assessment report moderation',
-        ],
-        'OR'
-      )->isAllowed();
+        'bypass assessment report moderation')
+        ->isAllowed();
     }
 
     return TRUE;

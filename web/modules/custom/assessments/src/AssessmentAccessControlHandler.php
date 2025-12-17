@@ -160,9 +160,8 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
         ->addCacheableDependency($entity);
     }
 
-    // Assessment reporters and moderators can view any non-published
-    // assessment.
-    if ($account->hasPermission('bypass assessment report moderation') || $account->hasPermission('moderate assessment report')) {
+    // User with 'moderate assessment report' can view any non-published assessment.
+    if ($account->hasPermission('moderate assessment report')) {
       return AccessResult::allowed()
         ->cachePerPermissions()
         ->addCacheableDependency($entity);
@@ -188,7 +187,7 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
    */
   protected function checkUpdateAccess(AssessmentInterface $entity, AccountInterface $account): AccessResultInterface {
     // Assessment reporters and moderators can update in any state.
-    if ($account->hasPermission('bypass assessment report moderation') || $account->hasPermission('moderate assessment report')) {
+    if ($account->hasPermission('moderate assessment report')) {
       return AccessResult::allowed()
         ->cachePerPermissions()
         ->addCacheableDependency($entity);
@@ -221,7 +220,6 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
   protected function checkDeleteAccess(AssessmentInterface $entity, AccountInterface $account): AccessResultInterface {
     // Assessment reporters and moderators can delete in any state.
     return AccessResult::allowedIfHasPermissions($account, [
-      'bypass assessment report moderation',
       'moderate assessment report',
     ], 'OR')
       ->addCacheableDependency($entity);
