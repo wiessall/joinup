@@ -9,17 +9,14 @@ use Drupal\views\Attribute\ViewsArgument;
 use Drupal\views\Plugin\views\argument\StringArgument;
 
 /**
- * Argument handler for string.
- *
- * Basic argument handler to implement string arguments that may have length
- * limits.
+ * Argument handler for the assessment country code.
  *
  * @ingroup views_argument_handlers
  */
 #[ViewsArgument(
-  id: 'country_code_string',
+  id: 'assessment_country_code',
 )]
-class CountryCodeString extends StringArgument {
+class AssessmentCountryCode extends StringArgument {
 
   /**
    * {@inheritdoc}

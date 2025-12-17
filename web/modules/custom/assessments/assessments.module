@@ -495,5 +495,9 @@ function _assessments_handle_report_state_notification(AssessmentInterface $enti
  * Implements hook_views_data_alter().
  */
 function assessments_views_data_alter(array &$data): void {
-  $data['taxonomy_term__code']['code_value']['argument']['id'] = 'country_code_string';
+  // Duplicate data to provide custom argument handler for assessment country.
+  $code_value = $data['taxonomy_term__code']['code_value'];
+  $code_value['title'] = $code_value['title short'] = new TranslatableMarkup('Assessment country code');
+  $code_value['argument']['id'] = 'assessment_country_code';
+  $data['taxonomy_term__code']['assessment_country_code'] = $code_value;
 }
