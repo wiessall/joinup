@@ -8,8 +8,8 @@
 declare(strict_types=1);
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Batch\BatchBuilder;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\eu_oss_catalogue\EuOssCatalogueInstallHelper;
 
 /**

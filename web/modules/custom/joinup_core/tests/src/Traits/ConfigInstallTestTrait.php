@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\Traits;
 
+use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Config\Config;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Config\Entity\ConfigEntityStorageInterface;
 use Drupal\Core\Entity\EntityDefinitionUpdateManagerInterface;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\language\Config\LanguageConfigFactoryOverrideInterface;
 use Drupal\language\Config\LanguageConfigOverride;
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\eif\ExistingSite;
 
-use Drupal\Core\Serialization\Yaml;
+use Drupal\Component\Serialization\Yaml;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\meta_entity\Entity\MetaEntity;
