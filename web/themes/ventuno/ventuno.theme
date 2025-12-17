@@ -63,8 +63,8 @@ function ventuno_preprocess_paragraph__binding_requirement(array &$variables): v
     $element[0] = $replacement;
   };
 
-  $buildItemList = static function (string $listType, array $items, array $extra = []): array {
-    return $extra + [
+  $buildItemList = static function (string $listType, array $items): array {
+    return [
       '#theme' => 'item_list',
       '#list_type' => $listType,
       '#items' => $items,
@@ -78,7 +78,6 @@ function ventuno_preprocess_paragraph__binding_requirement(array &$variables): v
 
   // Affected services are displayed as an unordered list, with thematic areas
   // listed after as a combined string of labels.
-  $affectsItems = $collectChildItems($variables['content']['affects']);
   $serviceEntities = $paragraph->get('affects')->referencedEntities();
   $thematicLabelsById = [];
   foreach ($serviceEntities as $serviceEntity) {
@@ -91,10 +90,13 @@ function ventuno_preprocess_paragraph__binding_requirement(array &$variables): v
     ? t('<p class="thematic-areas">Functions: @labels</p>', ['@labels' => implode(', ', $thematicLabelsById)])
     : '';
 
-  $variables['content']['affects'] = $buildItemList('ul', $affectsItems, [
-    '#suffix' => $thematicSuffix,
-    '#weight' => 1,
-  ]);
+  $affectsItems = $collectChildItems($variables['content']['affects']);
+  $affectsList = $buildItemList('ol', $affectsItems);
+  $replaceWithSingleChild($variables['content']['affects'], $affectsList);
+  $variables['content']['affects'][1] = [
+    '#type' => 'markup',
+    '#markup' => $thematicSuffix,
+  ];
 
   // Affected stakeholders are displayed as a combined string of the
   // participant type labels.
