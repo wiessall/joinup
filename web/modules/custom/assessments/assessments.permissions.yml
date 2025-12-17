@@ -7,7 +7,7 @@ moderate assessment report:
   description: 'Moderate assessment reports and perform moderation transitions.'
 bypass assessment report moderation:
   title: 'Bypass assessment report moderation'
-  description: 'Create assessment reports directly in published state and bypass moderation workflow.'
+  description: 'Allows the creation an assessment report directly in a published state and bypasses the moderation workflow.'
 create assessment report:
   title: 'Create assessment reports'
   description: 'Create new assessment reports.'
