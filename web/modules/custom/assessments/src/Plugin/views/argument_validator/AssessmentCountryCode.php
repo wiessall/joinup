@@ -15,11 +15,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Validates country code taxonomy term.
  */
 #[ViewsArgumentValidator(
-  id: "country_code_validator",
-  title: new TranslatableMarkup("Taxonomy country code"),
+  id: "assessment_country_code",
+  title: new TranslatableMarkup("Assessment country code"),
   entity_type: "taxonomy_term",
 )]
-final class CountryCodeValidator extends ArgumentValidatorPluginBase implements ContainerFactoryPluginInterface {
+final class AssessmentCountryCode extends ArgumentValidatorPluginBase implements ContainerFactoryPluginInterface {
 
   public function __construct(
     array $configuration,

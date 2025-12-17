@@ -724,10 +724,10 @@ display:
             field_identifier: ''
           exposed: false
       arguments:
-        code_value:
-          id: code_value
+        assessment_country_code:
+          id: assessment_country_code
           table: taxonomy_term__code
-          field: code_value
+          field: assessment_country_code
           relationship: country
           group_type: group
           admin_label: ''
@@ -755,7 +755,7 @@ display:
             format: default_summary
           specify_validation: true
           validate:
-            type: country_code_validator
+            type: assessment_country_code
             fail: 'not found'
           validate_options: {  }
           glossary: false
