@@ -160,7 +160,8 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
         ->addCacheableDependency($entity);
     }
 
-    // User with 'moderate assessment report' can view any non-published assessment.
+    // User with 'moderate assessment report' can view
+    // any non-published assessment.
     if ($account->hasPermission('moderate assessment report')) {
       return AccessResult::allowed()
         ->cachePerPermissions()
