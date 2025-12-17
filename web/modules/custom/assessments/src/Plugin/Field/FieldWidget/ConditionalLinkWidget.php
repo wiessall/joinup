@@ -103,8 +103,7 @@ final class ConditionalLinkWidget extends LinkWidget {
       $element['widget']['#states']['visible'][':input.link-with-condition-toggle'] = ['checked' => TRUE];
     }
 
-    $element['widget'][0]['uri']['#title_display'] = 'invisible';
-    unset($element['widget'][0]['uri']['#description']);
+    unset($element['widget']['#description']);
     return $element;
   }
 
