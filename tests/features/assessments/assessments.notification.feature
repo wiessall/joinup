@@ -55,7 +55,7 @@ Feature: Assessment report email notifications
     And I press "Save as In Review"
     Then I should see the success message containing "has been updated"
 
-    And 2 e-mail should have been sent
+    And 3 e-mail should have been sent
     And the following email should have been sent:
       | recipient | Moderator User                             |
       | subject   | New assessment report to be reviewed       |
