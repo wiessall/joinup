@@ -52,6 +52,9 @@ class AssessmentsGroupResolver extends OgRouteGroupResolverBase {
 
   /**
    * Resolves the assessments collection for moderation routes.
+   *
+   * @param \Drupal\og\OgResolvedGroupCollectionInterface $collection
+   *   Collection entity.
    */
   private function resolveAssessmentsCollection(OgResolvedGroupCollectionInterface $collection): void {
     $group = $this->entityTypeManager
