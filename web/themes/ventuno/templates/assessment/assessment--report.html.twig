@@ -29,7 +29,9 @@
       {% endif %}
     </div>
     <div class="col text-end">
-      <a href="#" class="btn btn-primary mt-4">{{ 'Export Report'|t }}</a>
+      {% if content.pdf_download %}
+        {{ content.pdf_download }}
+      {% endif %}
     </div>
   </div>
   <hr/>
