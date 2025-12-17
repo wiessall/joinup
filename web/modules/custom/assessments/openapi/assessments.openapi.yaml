@@ -578,7 +578,6 @@ components:
           type: string
         type:
           type: string
-          description: Type of identified effects on cross-border interoperability
           enum:
             - legal
             - organisational

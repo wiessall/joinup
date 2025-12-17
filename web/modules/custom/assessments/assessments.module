@@ -56,26 +56,32 @@ function assessments_entity_extra_field_info(): array {
  * Implements hook_form_FORM_ID_alter().
  */
 function assessments_form_alter(array &$form, FormStateInterface $formState, string $formId): void {
-  // Handle assessment_report forms.
-  if (in_array($formId, ['assessment_report_add_form', 'assessment_report_edit_form'], TRUE)) {
-    $form['cross_border'] = [
-      '#type' => 'html_tag',
-      '#tag' => 'h3',
-      '#value' => t('Identified effects on cross-border interoperability'),
-    ];
-    $form['#attached']['library'][] = 'assessments/radios_inline';
-    $form['state']['#attributes']['class'][] = 'radios-inline';
+  if (!in_array($formId, ['assessment_report_add_form', 'assessment_report_edit_form'], TRUE)) {
+    return;
+  }
 
-    // Register submit handler to create organizations after validation.
-    $handler = [
-      'Drupal\assessments\Plugin\Field\FieldWidget\ProvidedByWidget',
-      'submitCreateOrganisations',
-    ];
-    $existingHandlers = $form['actions']['submit']['#submit'] ?? [];
-    if (!in_array($handler, $existingHandlers, TRUE)) {
-      // Execute before entity builder to set org IDs before entity save.
-      array_unshift($form['actions']['submit']['#submit'], $handler);
-    }
+  $form['cross_border'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'h3',
+    '#value' => t('Identified effects on cross-border interoperability'),
+  ];
+  $form['#attached']['library'][] = 'assessments/radios_inline';
+  $form['state']['#attributes']['class'][] = 'radios-inline';
+  $form['legal']['widget'][0]['#title_display'] = 'invisible';
+  $form['organisational']['widget'][0]['#title_display'] = 'invisible';
+  $form['semantic']['widget'][0]['#title_display'] = 'invisible';
+  $form['technical']['widget'][0]['#title_display'] = 'invisible';
+  $form['other']['widget'][0]['#title_display'] = 'invisible';
+
+  // Register submit handler to create organizations after validation.
+  $handler = [
+    'Drupal\assessments\Plugin\Field\FieldWidget\ProvidedByWidget',
+    'submitCreateOrganisations',
+  ];
+  $existingHandlers = $form['actions']['submit']['#submit'] ?? [];
+  if (!in_array($handler, $existingHandlers, TRUE)) {
+    // Execute before entity builder to set org IDs before entity save.
+    array_unshift($form['actions']['submit']['#submit'], $handler);
   }
 }
 
