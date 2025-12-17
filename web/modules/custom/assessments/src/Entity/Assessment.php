@@ -66,7 +66,6 @@ use Drupal\user\EntityOwnerTrait;
  *     "edit-form" = "/collection/assessments/{assessment_type}/{assessment}/edit",
  *     "delete-form" = "/collection/assessments/{assessment_type}/{assessment}/delete",
  *     "delete-multiple-form" = "/admin/content/assessment/delete-multiple",
- *     "moderate" = "/collection/assessments/{assessment_type}/{assessment}/moderate",
  *   },
  *   bundle_entity_type = "assessment_type",
  *   field_ui_base_route = "entity.assessment_type.edit_form",
