@@ -18,13 +18,13 @@ class JoinupPoNamespace extends DeriverBase {
   public function getDerivativeDefinitions($base_plugin_definition): array {
     $this->derivatives = [];
     $namespaces = [
-      'w21' => 'Joinup PO namespace (data.europa.eu/w21)',
-      's2k' => 'Joinup PO namespace (data.europa.eu/s2k)',
+      'w21',
+      's2k',
     ];
 
     foreach ($namespaces as $namespace) {
       $this->derivatives[$namespace] = [
-        'label' => new TranslatableMarkup("Joinup PO namespace (data.europa.eu/$namespace)"),
+        'label' => new TranslatableMarkup('Joinup PO namespace (data.europa.eu/@namespace)', ['@namespace' => $namespace]),
       ] + $base_plugin_definition;
     }
 
