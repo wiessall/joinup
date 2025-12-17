@@ -507,6 +507,15 @@ elements: |-
       '#multiple__add_more_input': false
       '#title__title': 'Solution Title'
       '#url__title': 'Solution URL'
+      '#format': custom
+      '#format_html': |
+        {% if element.url and element.title %}
+        {{item.value}}
+        {% elseif element.title %}
+        {{element.title}}
+        {% elseif element.url %}
+        {{element.url}}
+        {% endif %}
     remaining_barriers_to_crossborder_interoperability:
       '#type': processed_text
       '#prefix': '<p>&nbsp;</p>'
@@ -783,6 +792,7 @@ handlers:
       attachments: false
       twig: false
       theme_name: ''
+      langcode: ''
       parameters: {  }
       debug: false
   action:

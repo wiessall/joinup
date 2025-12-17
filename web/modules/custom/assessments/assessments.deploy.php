@@ -10,7 +10,9 @@ declare(strict_types=1);
 use Drupal\Core\Utility\UpdateException;
 use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\custom_page\Entity\CustomPageInterface;
-use Drupal\joinup_assessment\AssessmentInterface;
+use Drupal\joinup_assessment\AssessmentInterface as LegacyAssessmentInterface;
+use Drupal\webform\Entity\Webform;
+use Drupal\webform\WebformInterface;
 
 /**
  * Create 'Code'-type vocabularies terms.
@@ -27,7 +29,6 @@ function assessments_deploy_200800(): void {
       'organisational' => 'Organisational',
       'semantic' => 'Semantic',
       'technical' => 'Technical',
-      'other' => 'Other',
     ],
     'assess_participant_type' => [
       'local_public_sector_body' => 'Local public sector body',
@@ -158,14 +159,14 @@ function assessments_deploy_200801(): void {
 }
 
 /**
- * Unpublish assessments repository page and update OG menu link.
+ * Unpublish assessments repository page, menu links, close webform.
  */
 function assessments_deploy_200802(): void {
   /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
   $entity_repository = \Drupal::service('entity.repository');
 
   // Load the node at /collection/assessments/assessments-repository.
-  $node = $entity_repository->loadEntityByUuid('node', AssessmentInterface::ASSESSMENT_REPORTS_UUID);
+  $node = $entity_repository->loadEntityByUuid('node', LegacyAssessmentInterface::ASSESSMENT_REPORTS_UUID);
   if (!$node instanceof CustomPageInterface) {
     throw new UpdateException("Deploy hook failed: could not load custom page node by UUID, see " . __FUNCTION__);
   }
@@ -183,4 +184,10 @@ function assessments_deploy_200802(): void {
     $link->set('link', [['uri' => 'internal:/collection/assessments/report/repository']]);
     $link->save();
   }
+
+  // Close the assessment webform.
+  $webform = Webform::load(LegacyAssessmentInterface::WEBFORM_ID);
+  \assert($webform instanceof WebformInterface);
+  $webform->setStatus(WebformInterface::STATUS_CLOSED);
+  $webform->save();
 }

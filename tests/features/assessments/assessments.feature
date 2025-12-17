@@ -13,12 +13,15 @@ Feature: Assessment Report Entity Management
     When I press "Save as Draft"
     Then I should see the error message "3 errors have been found: NameType of public sector bodyBinding requirements"
 
-    When I fill in "Name" with "Test Assessment Report 2025"
+    When I fill in "Short title" with "Test Assessment Report 2025"
+    And I should see "This will be used as the title of the published report. Maximum 255 characters."
+
+    And I should see "Union entity or public sector body which is providing the report"
     And I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "Austrian Ministry of Digital Affairs"
-    And I check "Check if assessment is linked to previous assessments or related assessments at EU or national level."
-    And I fill in "Relevant assessment report" with "https://interoperable-europe.ec.europa.eu/report"
+    And I check "Check this box if assessment is linked to previous assessments or related assessments at EU or national level."
+    And I fill in "Reference of the linked assessment" with "https://interoperable-europe.ec.europa.eu/report"
 
     # Binding requirements
     When I click "New binding requirement"
@@ -44,6 +47,8 @@ Feature: Assessment Report Entity Management
     And I fill in "documented_in[0][uri]" with "https://interoperable-europe.ec.europa.eu/general" in the "Modal content" region
 
     When I click "Trans-European digital public services" in the "Modal content" region
+    And I should see the text "Specify the trans-European digital public service(s) concerned" in the "Modal content" region
+    And I should see the text "Specify the concerned function(s) of trans-European digital public service(s)" in the "Modal content" region
     And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
     And I select "Core governance and administration" from "affects[0][inline_entity_form][thematic_area]" in the "Modal content" region
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
@@ -56,11 +61,13 @@ Feature: Assessment Report Entity Management
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
 
     When I click "Interoperability solutions" in the "Modal content" region
-    And I press "Add new relevant solution" in the "Modal content" region
+    And I should see the text "Identify the interoperability solutions mandatory to use for the implementation of the assessed binding requirement" in the "Modal content" region
+    And I should see the button "Select an Interoperability solution" in the "Modal content" region
+    And I press "Add a new Interoperability solution" in the "Modal content" region
     And I fill in "asset[form][0][title][0][value]" with "European Interoperability Framework (EIF)" in the "Modal content" region
     And I enter "Description of European Interoperability Framework (EIF)" in the "asset[form][0][description][0][value]" wysiwyg editor
     And I fill in "Relevant website" with "https://interoperable-europe.ec.europa.eu/collection/eif" in the "Modal content" region
-    Then I press "Create relevant solution" in the "Modal content" region
+    Then I press "Add Interoperability solution" in the "Modal content" region
 
     When I click "Trans-European digital public services" in the "Modal content" region
     And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
@@ -77,24 +84,31 @@ Feature: Assessment Report Entity Management
 
     # Identified effects on cross-border interoperability
     When I click "Legal" in the "Content" region
+    And I should see "Provide a justification"
+    And the response should contain "<span class=\"visually-hidden fieldset-legend fw-bold\">Identified effects on cross-border legal interoperability</span>"
     And I select the radio button "Beneficial" with the name "legal[0][inline_entity_form][interpretation]"
     And I fill in "legal[0][inline_entity_form][judgement][0][value]" with "Complies with GDPR and eIDAS regulations"
 
     When I click "Organisational" in the "Content" region
+    And I should see "Provide a justification"
+    And the response should contain "<span class=\"visually-hidden fieldset-legend fw-bold\">Identified effects on cross-border organisational interoperability</span>"
     And I select the radio button "Negligible" with the name "organisational[0][inline_entity_form][interpretation]"
     And I fill in "organisational[0][inline_entity_form][judgement][0][value]" with "Requires coordination between authorities"
 
     When I click "Semantic" in the "Content" region
+    And I should see "Provide a justification"
+    And the response should contain "<span class=\"visually-hidden fieldset-legend fw-bold\">Identified effects on cross-border semantic interoperability</span>"
     And I select the radio button "Beneficial" with the name "semantic[0][inline_entity_form][interpretation]"
     And I fill in "semantic[0][inline_entity_form][judgement][0][value]" with "Uses standardized Core Vocabularies"
 
     When I click "Technical" in the "Content" region
+    And I should see "Provide a justification"
+    And the response should contain "<span class=\"visually-hidden fieldset-legend fw-bold\">Identified effects on cross-border technical interoperability</span>"
     And I select the radio button "Beneficial" with the name "technical[0][inline_entity_form][interpretation]"
     And I fill in "technical[0][inline_entity_form][judgement][0][value]" with "Implements REST APIs and OpenAPI specs"
 
-    When I click "Other" in the "Content" region
-    And I select the radio button "Risky" with the name "other[0][inline_entity_form][interpretation]"
-    And I fill in "other[0][inline_entity_form][judgement][0][value]" with "Language barriers may present challenges"
+    When I click "Remaining barriers" in the "Content" region
+    And I fill in "Have you discovered any remaining barriers to cross-border interoperability?" with "No significant barriers identified."
 
     # Assessment supporting documents
     And I attach the file "text.pdf" to "Add a new file"
@@ -146,7 +160,7 @@ Feature: Assessment Report Entity Management
     Given I am logged in as an "authenticated user"
     And I go to "/collection/assessments/report/create"
 
-    When I fill in "Name" with "Test Provided by in Assessment Report 2025"
+    When I fill in "Short title" with "Test Provided by in Assessment Report 2025"
     And I select "Local public sector body" from "Type of public sector body"
     And I wait for AJAX to finish
     And I select "Greece" from "Country"
@@ -215,7 +229,7 @@ Feature: Assessment Report Entity Management
     And I select "Greece" from "Country"
     And I wait for AJAX to finish
     And the following field should be present "Select organisation"
-    And the option with text "- Select -" from select "Select organisation" is selected
+    And no option from select "Select organisation" is selected
     Then I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
     And the following field should be present "Select organisation"
@@ -292,7 +306,7 @@ Feature: Assessment Report Entity Management
     # Test that editing and saving without changing local organization shows no warning.
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I fill in "Name" with "Test Provided by in Assessment Report 2025 - Updated"
+    And I fill in "Short title" with "Test Provided by in Assessment Report 2025 - Updated"
     Then I press "Save"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 - Updated has been updated."
@@ -312,14 +326,14 @@ Feature: Assessment Report Entity Management
     # Test that editing and saving without changing EU organization shows no warning.
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I fill in "Name" with "Test Provided by in Assessment Report 2025 - Re-updated"
+    And I fill in "Short title" with "Test Provided by in Assessment Report 2025 - Re-updated"
     Then I press "Save"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 - Re-updated has been updated."
 
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I fill in "Name" with "Test Provided by in Assessment Report 2025 - Re-updated"
+    And I fill in "Short title" with "Test Provided by in Assessment Report 2025 - Re-updated"
     Then I press "…or add new"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "New EU Institution 2025"
@@ -328,6 +342,27 @@ Feature: Assessment Report Entity Management
     Then I press "Save"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 - Re-updated has been updated."
+
+  @javascript
+  Scenario: Form validation should preserve selected organisation field values.
+    Given public_organisation assessments:
+      | name | status    | organisation_type        | country |
+      | Org1 | published | local_public_sector_body | Belgium |
+
+    Given I am logged in as an "authenticated user"
+    And I go to "/collection/assessments/report/create"
+
+    When I fill in "Short title" with "Test Provided by in Assessment Report 2025"
+    And I select "Local public sector body" from "Type of public sector body"
+    And I wait for AJAX to finish
+    And I select "Belgium" from "Country"
+    And I wait for AJAX to finish
+    And I select "Org1" from "Select organisation"
+    And press "Save"
+
+    Then the option with text "Local public sector body" from select "Type of public sector body" is selected
+    And the option with text "Belgium" from select "Country" is selected
+    And the option with text "Org1" from select "Select organisation" is selected
 
   @javascript
   Scenario: Published assessments are viewable by anonymous and authenticated users
@@ -340,7 +375,7 @@ Feature: Assessment Report Entity Management
     And I am logged in as pol2025
     And I go to "/collection/assessments/report/create"
 
-    When I fill in "Name" with "Test permissions in Assessment Report 2025"
+    When I fill in "Short title" with "Test permissions in Assessment Report 2025"
     And I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "CTT PT"
@@ -455,3 +490,25 @@ Feature: Assessment Report Entity Management
     When I am not logged in
     And I go to "/collection/portal-support/report/repository"
     Then I should get a 404 HTTP response
+
+  @javascript
+  Scenario: Advanced search
+    Given public_organisation assessments:
+      | name                  | organisation_type          |
+      | Bluewave Technologies | european_union_institution |
+    And report assessments:
+      | name                 | provider              | state     | created              |
+      | Initial Overview     | Bluewave Technologies | published | 2020-01-01T00:00:00Z |
+      | Transmission Summary |                       | published | 2020-01-02T00:00:00Z |
+      | Acme Report          |                       | published | 2020-01-03T00:00:00Z |
+      | Risk Evaluation      |                       | review    | 2020-01-04T00:00:00Z |
+      | Draft Observation    |                       | draft     | 2020-01-05T00:00:00Z |
+    And I am an anonymous user
+    When I visit the advanced search page
+    And I check the "Assessment reports (3)" checkbox from the "Content types" facet
+    Then the page should show only the tiles "Initial Overview, Transmission Summary, Acme Report"
+
+    When I enter "Transmission" in the search bar and press enter
+    Then the page should show only the tiles "Transmission Summary"
+    When I enter "Bluewave" in the search bar and press enter
+    Then the page should show only the tiles "Initial Overview"
