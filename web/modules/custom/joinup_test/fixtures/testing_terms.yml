@@ -74,11 +74,18 @@ spatial:
   - name: Switzerland
     code: CH
   - name: 'European Union'
+    code: EU
   - name: Luxembourg
     code: LU
     eu_member: true
   - name: Greece
     code: GR
+    eu_member: true
+  - name: Netherlands
+    code: NL
+    eu_member: true
+  - name: Italy
+    code: IT
     eu_member: true
 file_type:
   - name: 'ZIP'
@@ -283,10 +290,18 @@ assess_participant_type:
     uri: 'http://example.com/taxonomy-term/assess-participant-type/b8c59bef-e579-440a-91f0-8c7983524336'
   - name: European Union agency
     id: european_union_agency
+  - name: National public sector body
+    id: national_public_sector_body
+  - name: 'Private Businesses'
+    id: private_businesses
 assess_public_service_area:
   - name: Core governance and administration
     id: core_governance_and_administration
     uri: 'http://example.com/taxonomy-term/assess-public-service-area/34229fe8-14ac-40f8-9434-765e441eae3b'
+  - name: Digital and Innovation Services
+    id: digital_and_innovation_services
+  - name: Education and Research
+    id: education_and_research
 assess_statement_interpretation:
   - name: Beneficial
     id: positive
