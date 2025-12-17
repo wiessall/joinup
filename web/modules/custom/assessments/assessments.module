@@ -16,6 +16,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\AssessmentSubEntity;
+use Drupal\assessments\Entity\BindingRequirementParagraph;
 use Drupal\assessments\Entity\PublicOrganisation;
 use Drupal\assessments\Event\AssessmentReportEvent;
 use Drupal\assessments\NotificationEvents;
@@ -337,6 +338,10 @@ function assessments_entity_bundle_info_alter(array &$bundles): void {
   array_walk($bundles['assessment_statement'], function (array &$info) use ($rdfSync): void {
     $info['rdf_sync'] = $rdfSync;
   });
+
+  if (isset($bundles['paragraph']['binding_requirement'])) {
+    $bundles['paragraph']['binding_requirement']['class'] = BindingRequirementParagraph::class;
+  }
 }
 
 /**
