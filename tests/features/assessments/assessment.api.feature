@@ -36,6 +36,10 @@ Feature: Assessments API
       organisation_type: local_public_sector_body
       country: LU
     """
+    And the page should be cacheable
+    But the page should not be cached
+    When I go to "/api/assessments/v1/organisation"
+    Then the page should be cached
     Then a GET request to "/api/assessments/v1/assessment" should return the following JSON:
     """
     - id: 5d8be6b1-8038-429e-b84e-6ca8c35fd9b1
@@ -59,7 +63,3 @@ Feature: Assessments API
     """
     Then I go to "/api/assessments/v1/assessment?country=FOOBAR"
     Then the response status code should be 404
-    And the page should be cacheable
-    But the page should not be cached
-    When I go to "/api/assessments/v1/organisation"
-    Then the page should be cached
