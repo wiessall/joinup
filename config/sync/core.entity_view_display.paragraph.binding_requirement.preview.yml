@@ -1,0 +1,67 @@
+uuid: 426974ed-5772-4ddb-990a-2d6e30994408
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.paragraph.preview
+    - field.field.paragraph.binding_requirement.affects
+    - field.field.paragraph.binding_requirement.asset
+    - field.field.paragraph.binding_requirement.description
+    - field.field.paragraph.binding_requirement.documented_in
+    - field.field.paragraph.binding_requirement.expression
+    - field.field.paragraph.binding_requirement.has_participation
+    - field.field.paragraph.binding_requirement.requirement_documents
+    - paragraphs.paragraphs_type.binding_requirement
+  module:
+    - entity_form_field_label
+    - layout_builder
+    - smart_trim
+    - template_suggestion
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: paragraph.binding_requirement.preview
+targetEntityType: paragraph
+bundle: binding_requirement
+mode: preview
+content:
+  description:
+    type: smart_trim
+    label: visually_hidden
+    settings:
+      trim_length: 300
+      trim_type: chars
+      trim_suffix: ...
+      wrap_output: false
+      wrap_class: trimmed
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
+      summary_handler: full
+      trim_options:
+        text: false
+        trim_zero: false
+        replace_tokens: false
+    third_party_settings:
+      entity_form_field_label:
+        new_label: 'Binding requirement'
+        rewrite_label: 1
+      template_suggestion:
+        template_suggestion: ''
+    weight: 0
+    region: content
+hidden:
+  affects: true
+  asset: true
+  documented_in: true
+  expression: true
+  has_participation: true
+  requirement_documents: true
+  search_api_excerpt: true
+  uri: true
+  uuid: true
