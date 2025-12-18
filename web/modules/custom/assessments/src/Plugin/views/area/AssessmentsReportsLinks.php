@@ -81,7 +81,7 @@ class AssessmentsReportsLinks extends AreaPluginBase {
   protected function getLinks(): array {
     $links = [
       [
-        'url' => Url::fromRoute('entity.assessment.add_page'),
+        'url' => Url::fromRoute('entity.assessment.add_form', ['assessment_type' => 'report']),
         'title' => $this->t('New assessment'),
       ],
       [
