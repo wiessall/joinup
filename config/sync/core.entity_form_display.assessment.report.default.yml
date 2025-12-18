@@ -137,12 +137,17 @@ content:
     region: content
     settings:
       view_mode: default
-      preview_view_mode: default
+      preview_view_mode: preview
       form_display_mode: default
       nesting_depth: 0
       require_layouts: 1
       empty_message: ''
-    third_party_settings: {  }
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+        new_description: ''
+        rewrite_description: 0
   cross_border:
     weight: 4
     region: content

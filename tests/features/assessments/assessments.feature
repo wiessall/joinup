@@ -123,7 +123,6 @@ Feature: Assessment Report Entity Management
       | Austrian Ministry of Digital Affairs, a European Union institution from                            |
       | The report has been connected to the following previous/relevant reports                           |
       | https://interoperable-europe.ec.europa.eu/report                                                   |
-      | documented in https://interoperable-europe.ec.europa.eu/general                                    |
       | This assessment was conducted in collaboration with multiple stakeholders across EU member states. |
 
     # Edit test.
