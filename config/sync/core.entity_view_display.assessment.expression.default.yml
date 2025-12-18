@@ -6,6 +6,7 @@ dependencies:
     - assessments.type.expression
     - field.field.assessment.expression.description
     - field.field.assessment.expression.documented_in
+    - field.field.assessment.expression.initiative_name
   module:
     - link
     - text
@@ -33,7 +34,7 @@ content:
     third_party_settings: {  }
     weight: 2
     region: content
-  name:
+  initiative_name:
     type: string
     label: hidden
     settings:
@@ -44,6 +45,7 @@ content:
 hidden:
   created: true
   langcode: true
+  name: true
   search_api_excerpt: true
   status: true
   uid: true

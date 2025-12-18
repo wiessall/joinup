@@ -15,8 +15,8 @@ Feature: RDF Sync integration for assessments.
       | uri                                                                                    | name                  | organisation_type          | country |
       | http://example.com/assessment/public-organisation/542770eb-a1e8-44fe-be6d-d48c33837018 | Public Organisation 1 | european_union_institution | Belgium |
     And "expression" assessment:
-      | uri                                                                           | name         | description   | documented_in       |
-      | http://example.com/assessment/expression/048caacf-52d6-4215-a867-a485ff4baf47 | Expression 1 | Description 1 | https://example.com |
+      | uri                                                                           | initiative_name | description   | documented_in       |
+      | http://example.com/assessment/expression/048caacf-52d6-4215-a867-a485ff4baf47 | Expression 1    | Description 1 | https://example.com |
     And the following "binding_requirement" paragraph:
       | uri               | http://example.com/paragraph/binding-requirement/a478fe88-c240-4769-8952-7d129f4ef449 |
       | id                | 999                                                                                   |
@@ -67,9 +67,9 @@ Feature: RDF Sync integration for assessments.
       # Initiatives (Expressions) are exported.
       | <http://example.com/assessment/expression/048caacf-52d6-4215-a867-a485ff4baf47>                                                                                                                                  |
       | a <http://purl.org/vocab/frbr/core#Expression> ;                                                                                                                                                                 |
-      | dc:title "Expression 1"@en ;                                                                                                                                                                                     |
       | dc:description "Description 1" ;                                                                                                                                                                                 |
-      | cav:documentedIn <https://example.com> .                                                                                                                                                                         |
+      | cav:documentedIn <https://example.com> ;                                                                                                                                                                         |
+      | dc:title "Expression 1"@en .                                                                                                                                                                                     |
       # Affected services are exported.
       | <http://example.com/assessment/public-service/d4a2ecb3-c0c8-4a13-9dd0-8dddb23c40af>                                                                                                                              |
       | a <http://purl.org/vocab/cpsv#PublicService> ;                                                                                                                                                                   |
