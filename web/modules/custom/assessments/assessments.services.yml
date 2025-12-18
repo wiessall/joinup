@@ -8,8 +8,6 @@ services:
 
   Drupal\assessments\EventSubscriber\RdfSyncNormalizeSubscriber: {}
 
-  Drupal\assessments\EventSubscriber\StateMachineButtonLabelsSubscriber: {}
-
   Drupal\assessments\AssessmentReportNotificationInterface:
     class: Drupal\assessments\AssessmentReportNotification
 
