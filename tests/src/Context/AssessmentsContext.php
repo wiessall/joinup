@@ -255,6 +255,29 @@ class AssessmentsContext extends RawDrupalContext {
   }
 
   /**
+   * Checks if an assessment entity with a specific name exists.
+   *
+   * @param string $type
+   *   The assessment bundle type (e.g., 'expression', 'report').
+   * @param string $name
+   *   The name of the assessment entity.
+   *
+   * @Then the :type assessment with name :name should exist
+   */
+  public function assertAssessmentWithNameExists(string $type, string $name): void {
+    $storage = \Drupal::entityTypeManager()->getStorage('assessment');
+    $entities = $storage->loadByProperties([
+      'type' => $type,
+      'name' => $name,
+    ]);
+    Assert::assertNotEmpty($entities, sprintf(
+      'No assessment of type "%s" with name "%s" found.',
+      $type,
+      $name
+    ));
+  }
+
+  /**
    * Clicks on the ID link for a specific assessment in the admin listing.
    *
    * @param string $name
