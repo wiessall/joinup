@@ -30,7 +30,9 @@
     </div>
     <div class="col text-end">
       {% if content.entity_print_view_pdf %}
-        {{ content.entity_print_view_pdf }}
+        <a class="btn btn-primary" href="{{ content.entity_print_view_pdf['#url'] }}">
+          {{ content.entity_print_view_pdf['#title'] }}
+        </a>
       {% endif %}
     </div>
   </div>
