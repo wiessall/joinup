@@ -6,7 +6,6 @@ id: dompdf
 settings:
   default_paper_size: letter
   default_paper_orientation: portrait
-  dpi: '96'
   username: ''
   password: ''
   enable_html5_parser: true
