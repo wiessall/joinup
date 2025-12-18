@@ -35,9 +35,10 @@ content:
     weight: 2
     region: content
   initiative_name:
-    type: text_default
+    type: string
     label: hidden
-    settings: {  }
+    settings:
+      link_to_entity: false
     third_party_settings: {  }
     weight: 0
     region: content

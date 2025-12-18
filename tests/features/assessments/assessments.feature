@@ -493,3 +493,38 @@ Feature: Assessment Report Entity Management
     Then the page should show only the tiles "Transmission Summary"
     When I enter "Bluewave" in the search bar and press enter
     Then the page should show only the tiles "Initial Overview"
+
+  @javascript
+  Scenario: Initiative name field accepts 256+ characters but expression title is truncated to 255
+    Given I am logged in as an "authenticated user"
+    And I go to "/collection/assessments/report/create"
+    Then I should see the heading "Create assessment report"
+
+    When I fill in "Short title" with "Test Initiative Name Length"
+    And I select "European Union institution" from "Type of public sector body"
+    And I wait for AJAX to finish
+    And I fill in "New organisation name" with "Test Organisation"
+
+    # Binding requirements with a very long initiative name (256+ characters)
+    When I click "New binding requirement"
+    And a modal should open
+
+    When I click "Initiatives" in the "Modal content" region
+    # This is a 323-character string to test that initiative_name accepts more than 255 characters
+    And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Comprehensive Overview and Strategic Analysis of System Architecture, Functional Requirements, Operational Constraints, Governance Models, Security and Compliance Requirements, Performance Optimization, and Long-Term Maintainability Considerations for Scalable Digital Platforms in Enterprise and Public-Sector Environments" in the "Modal content" region
+
+    When I click "General" in the "Modal content" region
+    And I fill in "description[0][value]" with "Test description for initiative name length validation" in the "Modal content" region
+
+    When I click "Trans-European digital public services" in the "Modal content" region
+    And I fill in "affects[0][inline_entity_form][name][0][value]" with "Test Service" in the "Modal content" region
+
+    Then I press "Save" in the "Modal buttons" region
+    Then I press "Save"
+    Then I should see the success message containing "New assessment Test Initiative Name Length has been created."
+    And I should see the heading "Test Initiative Name Length"
+    # Verify the initiative name is displayed (at least partially)
+    And I should see the text "Comprehensive Overview and Strategic Analysis of System Architecture"
+    # Verify that the expression entity title (name field) was truncated to exactly 255 characters
+    # The 323-char initiative_name gets copied to the name field and truncated to 255 chars by the presave hook
+    Then the "expression" assessment with name "Comprehensive Overview and Strategic Analysis of System Architecture, Functional Requirements, Operational Constraints, Governance Models, Security and Compliance Requirements, Performance Optimization, and Long-Term Maintainability Considerations for Sca" should exist
