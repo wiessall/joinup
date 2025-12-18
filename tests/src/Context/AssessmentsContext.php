@@ -253,4 +253,26 @@ class AssessmentsContext extends RawDrupalContext {
     $this->visitPath($url->toString());
   }
 
+  /**
+   * Clicks on the ID link for a specific assessment in the admin listing.
+   *
+   * @param string $name
+   *   The name of the assessment.
+   * @param string $bundle
+   *   The assessment bundle type.
+   *
+   * @When I click the ID link for the :name :bundle assessment
+   * @When I click the ID link for the :name assessment
+   */
+  public function clickAssessmentIdLink(string $name, string $bundle = 'report'): void {
+    $assessment = $this->getEntityByLabel('assessment', $name, $bundle);
+    $id = $assessment->id();
+
+    $page = $this->getSession()->getPage();
+    $link = $page->findLink((string) $id);
+
+    Assert::assertNotEmpty($link, sprintf('Could not find ID link "%s" for assessment "%s"', $id, $name));
+    $link->click();
+  }
+
 }
