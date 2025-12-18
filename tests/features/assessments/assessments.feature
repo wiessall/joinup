@@ -140,7 +140,6 @@ Feature: Assessment Report Entity Management
     When I press "Delete"
     Then I should see the success message containing "The assessment Test Assessment Report 2025 v2 has been deleted."
 
-  @javascript
   Scenario Outline: Logged-in users with different permission must access draft creation
     Given I am logged in as a "<user>"
     When I go to "/collection/assessments/report/create"
@@ -152,6 +151,17 @@ Feature: Assessment Report Entity Management
       | authenticated user  | should see          | should not see       |
       | assessment_reporter | should not see      | should see           |
       | moderator           | should not see      | should see           |
+
+  Scenario: Moderators see correct action buttons on published assessment edit form
+    Given report assessments:
+      | name          | state     |
+      | Review Report | published |
+
+    When I am logged in as a "moderator"
+    When I go to the edit form of the "Review Report" assessment
+    And I should see the button "Update"
+    And I should see the link "Delete"
+    And I should not see the button "Submit"
 
   @javascript
   Scenario: All possible tests for 'Provided by' plugin in assessment report
