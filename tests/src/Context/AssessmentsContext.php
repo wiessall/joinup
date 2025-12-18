@@ -247,7 +247,8 @@ class AssessmentsContext extends RawDrupalContext {
    */
   public function visitAssessmentReportModerateForm(string $title): void {
     $entity = $this->getEntityByLabel('assessment', $title, 'report');
-    $url = Url::fromRoute('entity.assessment.moderate_form', [
+    $url = Url::fromRoute('assessments.moderate', [
+      'assessment_type' => $entity->bundle(),
       'assessment' => $entity->id(),
     ]);
     $this->visitPath($url->toString());
