@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -145,6 +147,40 @@ function joinup_assessment_form_alter(array &$form, FormStateInterface $form_sta
       }
     }
   }
+  elseif ($form_id === 'webform_submission_assessment_add_form' && $form_state->get('current_page') === 'annexes') {
+    $form['actions']['delete_draft'] = [
+      '#type' => 'submit',
+      '#value' => t('Delete draft'),
+      '#limit_validation_errors' => [],
+      '#weight' => 20,
+      '#ajax' => [
+        'callback' => 'joinup_assessment_delete_draft_submit',
+        'event' => 'click',
+      ],
+    ];
+  }
+}
+
+/**
+ * Delete current draft.
+ *
+ * @param array $form
+ *   Form object.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   Form state object.
+ */
+function joinup_assessment_delete_draft_submit(array &$form, FormStateInterface $form_state): AjaxResponse {
+  /** @var \Drupal\webform\WebformSubmissionInterface $submission */
+  $submission = $form_state->getFormObject()->getEntity();
+
+  if ($submission && $submission->isDraft()) {
+    $submission->delete();
+    \Drupal::messenger()->addStatus(t('Draft deleted.'));
+  }
+
+  $response = new AjaxResponse();
+  $response->addCommand(new RedirectCommand('/collection/assessments/assessment-reports/questionnaire'));
+  return $response;
 }
 
 /**
