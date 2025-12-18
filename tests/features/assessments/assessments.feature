@@ -10,7 +10,7 @@ Feature: Assessment Report Entity Management
     And I go to "/collection/assessments/report/create"
     Then I should see the heading "Create assessment report"
 
-    When I press "Save as Draft"
+    When I press "Save as draft"
     Then I should see the error message "3 errors have been found: Short titleType of public sector bodyBinding requirements"
 
     When I fill in "Short title" with "Test Assessment Report 2025"
@@ -117,7 +117,7 @@ Feature: Assessment Report Entity Management
     # Add comment
     And I fill in "Please add any other comment you would like to share." with "This assessment was conducted in collaboration with multiple stakeholders across EU member states."
 
-    When I press "Save as Draft"
+    When I press "Save as draft"
     Then I should see the success message containing "New assessment Test Assessment Report 2025 has been created."
     And I should see the heading "Test Assessment Report 2025"
     And I should see the following lines of text:
@@ -130,7 +130,7 @@ Feature: Assessment Report Entity Management
     # Edit test.
     When I go to the edit form of the "Test Assessment Report 2025" assessment
     And I fill in "Short title" with "Test Assessment Report 2025 v2"
-    And I press "Save as In Review"
+    And I press "Submit"
     Then I should see the heading "Test Assessment Report 2025 v2"
     And I should see the text "Status: In Review"
 
@@ -145,10 +145,9 @@ Feature: Assessment Report Entity Management
   Scenario Outline: Logged-in users with different permission must access draft creation
     Given I am logged in as a "<user>"
     When I go to "/collection/assessments/report/create"
-    Then I should see the button "Save as Draft"
-    And I should see the button "Save as In Review"
-    And I <should or should not see> the button "Save as Published"
-
+    Then I should see the button "Save as draft"
+    And I should see the button "Submit"
+    And I <should or should not see> the button "Publish"
     Examples:
       | user                | should or should not see |
       | authenticated user  | should not see        |
@@ -394,7 +393,7 @@ Feature: Assessment Report Entity Management
     And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
 
     Then I press "Save" in the "Modal buttons" region
-    Then I press "Save as In Review"
+    Then I press "Submit"
     Then I should see the success message containing "New assessment Test permissions in Assessment Report 2025 has been created."
     And I should see the heading "Test permissions in Assessment Report 2025"
 
@@ -413,7 +412,7 @@ Feature: Assessment Report Entity Management
 
     Given I am logged in as a "moderator"
     When I go to the edit form of the "Test permissions in Assessment Report 2025" assessment
-    And I press "Save as Published"
+    And I press "Publish"
     Then I should see the success message containing "The assessment Test permissions in Assessment Report 2025 has been updated."
 
     # Check draft state.
@@ -439,7 +438,7 @@ Feature: Assessment Report Entity Management
 
     And I am logged in as pol2025
     And I go to "/collection/assessments/report/create"
-    Then I should see the button "Save as Published"
+    Then I should see the button "Publish"
 
   Scenario: Test assessment reports views
     Given the assessments collection exists
