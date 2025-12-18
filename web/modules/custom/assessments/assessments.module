@@ -14,7 +14,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\Core\Url;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\AssessmentSubEntity;
@@ -192,25 +191,6 @@ function template_preprocess_assessment(array &$variables): void {
   $variables['view_mode'] = $variables['elements']['#view_mode'];
   foreach (Element::children($variables['elements']) as $key) {
     $variables['content'][$key] = $variables['elements'][$key];
-  }
-
-  // Add PDF download link for report assessments.
-  $assessment = $variables['elements']['#assessment'] ?? NULL;
-  if ($assessment instanceof AssessmentReport) {
-    $current_user = \Drupal::currentUser();
-    // Check if user has permission to download PDFs.
-    if ($current_user->hasPermission('entity print access type assessment')) {
-      $variables['content']['pdf_download'] = [
-        '#type' => 'link',
-        '#title' => t('Download PDF'),
-        '#url' => Url::fromRoute('entity_print.view', [
-          'export_type' => 'pdf',
-          'entity_type' => 'assessment',
-          'entity_id' => $assessment->id(),
-        ]),
-        '#weight' => 100,
-      ];
-    }
   }
 }
 
