@@ -23,5 +23,7 @@ default:
       to: draft
     publish:
       label: Publish report
-      from: [review]
+      from:
+        - draft
+        - review
       to: published
