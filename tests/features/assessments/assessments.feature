@@ -167,7 +167,7 @@ Feature: Assessment Report Entity Management
 
     # Verify organization is NOT created when form has validation errors.
     # Regression test - organizations should only be created on successful save.
-    Then I press "Save"
+    Then I press "Save as draft"
     # Should see validation error
     Then I should see the error message "1 error has been found: Binding requirements"
     # Organization should NOT have been created
@@ -189,7 +189,7 @@ Feature: Assessment Report Entity Management
 
     Then I press "Save" in the "Modal buttons" region
     # Save Assessment Report.
-    Then I press "Save"
+    Then I press "Save as draft"
     Then I should see the success message containing "New assessment Test Provided by in Assessment Report 2025 has been created."
     And I should see the heading "Test Provided by in Assessment Report 2025"
 
@@ -207,7 +207,7 @@ Feature: Assessment Report Entity Management
     And I wait for AJAX to finish
     And the following field should not be present "Select organisation"
     And I fill in "New organisation name" with "Portugal Ministry of Digital Affairs"
-    Then I press "Save"
+    Then I press "Update"
 
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
@@ -250,7 +250,7 @@ Feature: Assessment Report Entity Management
     And the following field should be present "Select organisation"
     And the following field should not be present "New organisation name"
     And I select "GR1" from "Select organisation"
-    Then I press "Save"
+    Then I press "Update"
     Then I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
 
     Then the public_organisation assessment "Organisation Should Not Be Created" should not exist
@@ -262,7 +262,7 @@ Feature: Assessment Report Entity Management
     Then I press "…or add new"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "gr1"
-    Then I press "Save"
+    Then I press "Update"
     Then I should see the warning message containing "You tried to create a new organisation but one with the same type, country and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
 
@@ -274,7 +274,7 @@ Feature: Assessment Report Entity Management
     Then I press "…or add new"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "portugal ministry of digital affairs"
-    Then I press "Save"
+    Then I press "Update"
     Then I should see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
 
@@ -287,7 +287,7 @@ Feature: Assessment Report Entity Management
     And I select "Belgium" from "Country"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "Brand New Belgian Organisation 2025"
-    Then I press "Save"
+    Then I press "Update"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type, country and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
 
@@ -297,7 +297,7 @@ Feature: Assessment Report Entity Management
     Then I press "…or add new"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "Another New Belgian Organisation 2025"
-    Then I press "Save"
+    Then I press "Update"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type, country and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
 
@@ -305,7 +305,7 @@ Feature: Assessment Report Entity Management
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I fill in "Short title" with "Test Provided by in Assessment Report 2025 - Updated"
-    Then I press "Save"
+    Then I press "Update"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 - Updated has been updated."
 
@@ -317,7 +317,7 @@ Feature: Assessment Report Entity Management
     Then I press "…or add new"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "New EU Institution 2025"
-    Then I press "Save"
+    Then I press "Update"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 - Updated has been updated."
 
@@ -325,7 +325,7 @@ Feature: Assessment Report Entity Management
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I fill in "Short title" with "Test Provided by in Assessment Report 2025 - Re-updated"
-    Then I press "Save"
+    Then I press "Update"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 - Re-updated has been updated."
 
@@ -337,7 +337,7 @@ Feature: Assessment Report Entity Management
     And I fill in "New organisation name" with "New EU Institution 2025"
     Then I press "…or select existing"
     And I wait for AJAX to finish
-    Then I press "Save"
+    Then I press "Update"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 - Re-updated has been updated."
 
