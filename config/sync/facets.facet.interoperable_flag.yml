@@ -67,7 +67,7 @@ processor_configs:
     weights:
       post_query: 50
     settings:
-      replacements: '1|Show only Interoperable Solutions'
+      replacements: '1|Interoperable Europe Solutions'
   url_processor_handler:
     processor_id: url_processor_handler
     weights:

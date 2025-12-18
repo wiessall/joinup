@@ -11,7 +11,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\PublicOrganisation;
-use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 
 /**
  * Defines the access control handler for the assessment entity type.
@@ -61,7 +60,6 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
       'view' => $this->checkViewAccess($entity, $account),
       'update' => $this->checkUpdateAccess($entity, $account),
       'delete' => $this->checkDeleteAccess($entity, $account),
-      'moderate' => $this->checkModerateAccess($entity, $account),
       default => AccessResult::neutral()
         ->cachePerPermissions()
         ->addCacheableDependency($entity),
@@ -224,30 +222,6 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
       'bypass assessment report moderation',
       'moderate assessment report',
     ], 'OR')
-      ->addCacheableDependency($entity);
-  }
-
-  /**
-   * Checks moderate access for assessment reports.
-   *
-   * @param \Drupal\assessments\AssessmentInterface $entity
-   *   The assessment entity.
-   * @param \Drupal\Core\Session\AccountInterface $account
-   *   The user account to check access for.
-   *
-   * @return \Drupal\Core\Access\AccessResultInterface
-   *   The access result.
-   */
-  protected function checkModerateAccess(AssessmentInterface $entity, AccountInterface $account): AccessResultInterface {
-    // Only available for workflow-enabled bundles (i.e.: report).
-    if (!$entity instanceof EntityWorkflowStateInterface) {
-      return AccessResult::forbidden('This assessment bundle does not support moderation.')
-        ->addCacheableDependency($entity);
-    }
-
-    // Moderation is allowed only when the assessment is in review.
-    return AccessResult::allowedIf($entity->getWorkflowState() === 'review')
-      ->andIf(AccessResult::allowedIfHasPermission($account, 'moderate assessment report'))
       ->addCacheableDependency($entity);
   }
 

@@ -25,9 +25,11 @@ class AssessmentsGroupResolver extends OgRouteGroupResolverBase {
    * {@inheritdoc}
    */
   public function resolve(OgResolvedGroupCollectionInterface $collection): void {
-    if ($this->routeMatch->getRouteName() === 'view.assessments_reports.reports') {
-      $this->resolveReportsRoute($collection);
-    }
+    match ($this->routeMatch->getRouteName()) {
+      'view.assessments_reports.reports' => $this->resolveReportsRoute($collection),
+      'assessments.moderate' => $this->resolveAssessmentsCollection($collection),
+      default => NULL,
+    };
   }
 
   /**
@@ -41,6 +43,30 @@ class AssessmentsGroupResolver extends OgRouteGroupResolverBase {
 
     $group = $this->entityTypeManager->getStorage('node')->load($nid);
     if (!$group instanceof GroupInterface || $group->uuid() !== AssessmentInterface::GROUP_UUID) {
+      return;
+    }
+
+    $collection->addGroup($group, ['route']);
+    $this->stopPropagation();
+  }
+
+  /**
+   * Resolves the assessments collection for moderation routes.
+   *
+   * @param \Drupal\og\OgResolvedGroupCollectionInterface $collection
+   *   Collection entity.
+   */
+  private function resolveAssessmentsCollection(OgResolvedGroupCollectionInterface $collection): void {
+    $group = $this->entityTypeManager
+      ->getStorage('node')
+      ->loadByProperties(['uuid' => AssessmentInterface::GROUP_UUID]);
+
+    if (empty($group)) {
+      return;
+    }
+
+    $group = reset($group);
+    if (!$group instanceof GroupInterface) {
       return;
     }
 
