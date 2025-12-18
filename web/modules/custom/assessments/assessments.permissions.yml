@@ -4,10 +4,11 @@ administer assessment types:
   restrict access: true
 moderate assessment report:
   title: 'Moderate assessment reports'
-  description: 'Moderate assessment reports and perform moderation transitions.'
+  description: 'View the moderation form and access the assessment reports listing page.'
+  restrict access: true
 bypass assessment report moderation:
   title: 'Bypass assessment report moderation'
-  description: 'Create assessment reports directly in published state and bypass moderation workflow.'
+  description: 'Allows the creation an assessment report directly in a published state and bypasses the moderation workflow.'
 create assessment report:
   title: 'Create assessment reports'
   description: 'Create new assessment reports.'
