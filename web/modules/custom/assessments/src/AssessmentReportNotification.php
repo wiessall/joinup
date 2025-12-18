@@ -6,6 +6,7 @@ namespace Drupal\assessments;
 
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Url;
 use Drupal\assessments\Event\AssessmentReportEvent;
 use Drupal\joinup_notification\JoinupMessageDeliveryInterface;
 
@@ -77,7 +78,10 @@ final readonly class AssessmentReportNotification implements AssessmentReportNot
         ->format($entity->getChangedTime(), 'medium'),
       '@assessment:user' => $entity->getOwner()->getDisplayName(),
       '@assessment:report_url' => $entity->toUrl()->setAbsolute()->toString(),
-      '@assessment:moderate_url' => $entity->toUrl('moderate-form')->setAbsolute()->toString(),
+      '@assessment:moderate_url' => Url::fromRoute('assessments.moderate', [
+        'assessment_type' => $entity->bundle(),
+        'assessment' => $entity->id(),
+      ])->setAbsolute()->toString(),
       '@assessment:edit_url' => $entity->toUrl('edit-form')->setAbsolute()->toString(),
       '@assessment:require_update_reason' => $reason,
     ];
