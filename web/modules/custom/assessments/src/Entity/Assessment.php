@@ -40,7 +40,6 @@ use Drupal\user\EntityOwnerTrait;
  *       "edit" = "Drupal\assessments\Form\AssessmentForm",
  *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm",
  *       "delete-multiple-confirm" = "Drupal\Core\Entity\Form\DeleteMultipleForm",
- *       "moderate" = "Drupal\assessments\Form\AssessmentModerationForm",
  *     },
  *     "route_provider" = {
  *       "html" = "Drupal\assessments\Routing\AssessmentsHtmlRouteProvider",
@@ -67,7 +66,6 @@ use Drupal\user\EntityOwnerTrait;
  *     "edit-form" = "/collection/assessments/{assessment_type}/{assessment}/edit",
  *     "delete-form" = "/collection/assessments/{assessment_type}/{assessment}/delete",
  *     "delete-multiple-form" = "/admin/content/assessment/delete-multiple",
- *     "moderate-form" = "/assessments/{assessment}/moderate",
  *   },
  *   bundle_entity_type = "assessment_type",
  *   field_ui_base_route = "entity.assessment_type.edit_form",
