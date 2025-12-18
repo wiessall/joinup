@@ -146,12 +146,13 @@ Feature: Assessment Report Entity Management
     Given I am logged in as a "<user>"
     When I go to "/collection/assessments/report/create"
     Then I should see the button "Save as draft"
-    And I should see the button "Submit"
-    And I <should or should not see> the button "Publish"
+    And I <submit button state> the button "Submit"
+    And I <publish button state> the button "Publish"
     Examples:
-      | user                | should or should not see |
-      | authenticated user  | should not see        |
-      | assessment_reporter | should see            |
+      | user                | submit button state | publish button state |
+      | authenticated user  | should see          | should not see       |
+      | assessment_reporter | should not see      | should see           |
+      | moderator           | should not see      | should see           |
 
   @javascript
   Scenario: All possible tests for 'Provided by' plugin in assessment report
