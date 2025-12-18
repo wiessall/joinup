@@ -7,7 +7,6 @@
 
 declare(strict_types=1);
 
-// Include all files from the includes directory.
 foreach (glob(__DIR__ . '/includes/*.inc') as $filename) {
   require_once __DIR__ . '/includes/' . basename($filename);
 }
@@ -37,23 +36,4 @@ function ventuno_preprocess(array &$variables): void {
   $ventuno = $themeHandler->getTheme('ventuno')->getPath();
   $variables['bcl_icon_path'] = base_path() . $ventuno . '/assets/icons/icons.svg';
   $variables['#attached']['drupalSettings']['bcl_icon_path'] = base_path() . $ventuno . '/assets/icons/icons.svg';
-}
-
-/**
- * Implements hook_preprocess_paragraph__binding_requirement().
- */
-function ventuno_preprocess_paragraph__binding_requirement(array &$variables): void {
-  $details_text = [];
-  foreach ([
-    'affects' => ['prefix' => 'related to', 'suffix' => 'service(s)'],
-    'has_participation' => ['prefix' => 'affecting', 'suffix' => 'stakeholders'],
-    'asset' => ['prefix' => 'related to', 'suffix' => 'assets'],
-    'requirement_documents' => ['prefix' => 'supported by', 'suffix' => 'documents'],
-  ] as $field => $data) {
-    $count = isset($variables['content'][$field]['#items']) ? $variables['content'][$field]['#items']->count() : 0;
-    if ($count) {
-      $details_text[] = $data['prefix'] . ' ' . $count . ' ' . $data['suffix'];
-    }
-  }
-  $variables['details_text'] = ucfirst(implode(', ', $details_text));
 }
