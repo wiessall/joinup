@@ -61,7 +61,7 @@ class IdRedirect extends ControllerBase {
    *
    * @return string[]|string|null
    *   If $namespace is missed, it returns the whole mapping array. If
-   *   $namespace is passe, returns the mapped entity type or NULL if none.
+   *   $namespace is passed, returns the mapped entity type or NULL if none.
    *
    * @see http://data.europa.eu/URI.html
    */
