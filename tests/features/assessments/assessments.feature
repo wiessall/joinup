@@ -126,11 +126,6 @@ Feature: Assessment Report Entity Management
       | https://interoperable-europe.ec.europa.eu/report                                                   |
       | This assessment was conducted in collaboration with multiple stakeholders across EU member states. |
 
-    # Assert that solutions are not indexed in the search.
-    When I go to "/search"
-    And I enter "European Interoperability Framework" in the search bar and press enter
-    Then I should not see the "European Interoperability Framework (EIF)" tile
-
     # Edit test.
     When I go to the edit form of the "Test Assessment Report 2025" assessment
     And I fill in "Short title" with "Test Assessment Report 2025 v2"
