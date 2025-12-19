@@ -9,10 +9,12 @@ declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\Url;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\AssessmentSubEntity;
@@ -365,6 +367,58 @@ function assessments_views_data(): array {
 }
 
 /**
+ * Checks if an account can moderate an assessment.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   The entity to check.
+ * @param \Drupal\Core\Session\AccountInterface $account
+ *   The user account to check access for.
+ *
+ * @return \Drupal\Core\Access\AccessResultInterface
+ *   The access result with proper caching.
+ */
+function _assessments_can_moderate(EntityInterface $entity, AccountInterface $account): AccessResultInterface {
+  if (!$entity instanceof AssessmentReport) {
+    return AccessResult::forbidden('This assessment bundle does not support moderation.')
+      ->addCacheableDependency($entity);
+  }
+
+  return AccessResult::allowedIf($entity->getWorkflowState() === 'review')
+    ->andIf(AccessResult::allowedIfHasPermission($account, 'moderate assessment report'))
+    ->addCacheableDependency($entity);
+}
+
+/**
+ * Implements hook_entity_operation().
+ */
+function assessments_entity_operation(EntityInterface $entity): array {
+  $operations = [];
+
+  if (!$entity instanceof AssessmentReport) {
+    return $operations;
+  }
+
+  $current_user = \Drupal::service('current_user')->getAccount();
+  $access = _assessments_can_moderate($entity, $current_user);
+
+  // Only add the operation if access is explicitly allowed.
+  if (!$access->isAllowed()) {
+    return $operations;
+  }
+
+  $operations['moderate'] = [
+    'title' => t('Moderate'),
+    'url' => Url::fromRoute('assessments.moderate', [
+      'assessment_type' => $entity->bundle(),
+      'assessment' => $entity->id(),
+    ]),
+    'weight' => 50,
+  ];
+
+  return $operations;
+}
+
+/**
  * After build callback to change "Create" to "Add" for asset form button.
  */
 function _assessments_process_asset_form_button(array $element, FormStateInterface $form_state): array {
@@ -459,6 +513,21 @@ function assessments_node_create_access(AccountInterface $account, array $contex
   }
 
   return state_machine_permissions_node_create_access($account, $context, $entity_bundle);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave() for assessment entities.
+ */
+function assessments_assessment_presave(AssessmentInterface $entity): void {
+  // For expression entities, copy initiative_name to name field.
+  if ($entity->bundle() === 'expression' && $entity->hasField('initiative_name')) {
+    $initiative_name = $entity->get('initiative_name')->value;
+    if (!empty($initiative_name)) {
+      // Truncate to 255 characters if necessary.
+      $name = mb_strlen($initiative_name) > 255 ? mb_substr($initiative_name, 0, 255) : $initiative_name;
+      $entity->set('name', $name);
+    }
+  }
 }
 
 /**
