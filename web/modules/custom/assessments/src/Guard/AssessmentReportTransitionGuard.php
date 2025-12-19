@@ -32,11 +32,19 @@ class AssessmentReportTransitionGuard implements GuardInterface {
       return TRUE;
     }
 
+    $hasBypas = AccessResult::allowedIfHasPermission(
+      $this->currentUser,
+      'bypass assessment report moderation')
+      ->isAllowed();
+
     if ($transition->getToState()->getId() === 'published') {
-      return AccessResult::allowedIfHasPermission(
-        $this->currentUser,
-        'bypass assessment report moderation')
-        ->isAllowed();
+      return $hasBypas;
+    }
+
+    // Do not display “Submit” as “Publish” is already present
+    // and may confuse users.
+    if ($transition->getToState()->getId() === 'review' && $hasBypas) {
+      return FALSE;
     }
 
     return TRUE;
