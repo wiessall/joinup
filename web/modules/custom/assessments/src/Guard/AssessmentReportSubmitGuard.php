@@ -41,8 +41,7 @@ class AssessmentReportSubmitGuard implements GuardInterface {
   }
 
   /**
-   * Checks if the current user has permission to publish assessment report
-   * directly from draft state.
+   * Checks if the current user has permission to publish assessment report.
    *
    * @param \Drupal\state_machine\Plugin\Workflow\WorkflowTransition $transition
    *   The workflow transition being evaluated.
