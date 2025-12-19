@@ -130,7 +130,6 @@ permissions:
   - 'delete paragraph content video'
   - 'edit any polls'
   - 'edit behavior plugin settings'
-  - 'edit own assessment report'
   - 'edit own comments'
   - 'edit own contact_information content'
   - 'edit own custom_page content'

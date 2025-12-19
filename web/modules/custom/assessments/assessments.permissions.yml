@@ -12,9 +12,6 @@ create assessment report:
 view own unpublished assessment report:
   title: 'View own unpublished assessment reports'
   description: 'View assessment reports created by the user.'
-edit own assessment report:
-  title: 'Edit own assessment reports'
-  description: 'Edit assessment reports created by the user.'
 administer assessment statements:
   title: 'Administer assessment statements'
   description: 'Maintain the types of assessment statement entity.'
