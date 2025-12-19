@@ -15,5 +15,5 @@ is_admin: false
 permissions:
   - 'create assessment report'
   - 'moderate assessment report'
-  - 'perform default workflow publish_from_draft transition on own entity'
+  - 'perform assessment_workflow workflow publish_from_draft transition on own entity'
   - 'restful post assessment_report'
