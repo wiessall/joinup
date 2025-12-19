@@ -13,7 +13,7 @@ use Drupal\search_api\Processor\ProcessorPluginBase;
  * Handles solution entities belonging to the assessments collector group.
  *
  * @SearchApiProcessor(
- *   id = "assessment_solutions_processor",
+ *   id = "exclude_assessment_solutions",
  *   label = @Translation("Assessment solutions processor"),
  *   description = @Translation("Denies index to solution of the assessments collector group."),
  *   stages = {
@@ -21,7 +21,7 @@ use Drupal\search_api\Processor\ProcessorPluginBase;
  *   },
  * )
  */
-class AssessmentSolutionsProcessor extends ProcessorPluginBase {
+class ExcludeAssessmentSolutionsProcessor extends ProcessorPluginBase {
 
   /**
    * {@inheritdoc}
