@@ -247,10 +247,56 @@ class AssessmentsContext extends RawDrupalContext {
    */
   public function visitAssessmentReportModerateForm(string $title): void {
     $entity = $this->getEntityByLabel('assessment', $title, 'report');
-    $url = Url::fromRoute('entity.assessment.moderate_form', [
+    $url = Url::fromRoute('assessments.moderate', [
+      'assessment_type' => $entity->bundle(),
       'assessment' => $entity->id(),
     ]);
     $this->visitPath($url->toString());
+  }
+
+  /**
+   * Checks if an assessment entity with a specific name exists.
+   *
+   * @param string $type
+   *   The assessment bundle type (e.g., 'expression', 'report').
+   * @param string $name
+   *   The name of the assessment entity.
+   *
+   * @Then the :type assessment with name :name should exist
+   */
+  public function assertAssessmentWithNameExists(string $type, string $name): void {
+    $storage = \Drupal::entityTypeManager()->getStorage('assessment');
+    $entities = $storage->loadByProperties([
+      'type' => $type,
+      'name' => $name,
+    ]);
+    Assert::assertNotEmpty($entities, sprintf(
+      'No assessment of type "%s" with name "%s" found.',
+      $type,
+      $name
+    ));
+  }
+
+  /**
+   * Clicks on the ID link for a specific assessment in the admin listing.
+   *
+   * @param string $name
+   *   The name of the assessment.
+   * @param string $bundle
+   *   The assessment bundle type.
+   *
+   * @When I click the ID link for the :name :bundle assessment
+   * @When I click the ID link for the :name assessment
+   */
+  public function clickAssessmentIdLink(string $name, string $bundle = 'report'): void {
+    $assessment = $this->getEntityByLabel('assessment', $name, $bundle);
+    $id = $assessment->id();
+
+    $page = $this->getSession()->getPage();
+    $link = $page->findLink((string) $id);
+
+    Assert::assertNotEmpty($link, sprintf('Could not find ID link "%s" for assessment "%s"', $id, $name));
+    $link->click();
   }
 
 }
