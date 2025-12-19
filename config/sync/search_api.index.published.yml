@@ -886,7 +886,7 @@ processor_settings:
     weights:
       preprocess_index: -50
   assessment_processor: {  }
-  assessment_solutions_processor: {  }
+  exclude_assessment_solutions: {  }
   auto_aggregated_fulltext_field: {  }
   custom_value: {  }
   entity_type: {  }
