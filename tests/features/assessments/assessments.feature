@@ -10,7 +10,7 @@ Feature: Assessment Report Entity Management
     And I go to "/collection/assessments/report/create"
     Then I should see the heading "Create assessment report"
 
-    When I press "Save as Draft"
+    When I press "Save as draft"
     Then I should see the error message "3 errors have been found: Short titleType of public sector bodyBinding requirements"
 
     When I fill in "Short title" with "Test Assessment Report 2025"
@@ -116,7 +116,7 @@ Feature: Assessment Report Entity Management
     # Add comment
     And I fill in "Please add any other comment you would like to share." with "This assessment was conducted in collaboration with multiple stakeholders across EU member states."
 
-    When I press "Save as Draft"
+    When I press "Save as draft"
     Then I should see the success message containing "New assessment Test Assessment Report 2025 has been created."
     And I should see the heading "Test Assessment Report 2025"
     And I should see the following lines of text:
@@ -129,7 +129,7 @@ Feature: Assessment Report Entity Management
     # Edit test.
     When I go to the edit form of the "Test Assessment Report 2025" assessment
     And I fill in "Short title" with "Test Assessment Report 2025 v2"
-    And I press "Save as In Review"
+    And I press "Submit"
     Then I should see the heading "Test Assessment Report 2025 v2"
     And I should see the text "Status: In Review"
 
@@ -140,18 +140,28 @@ Feature: Assessment Report Entity Management
     When I press "Delete"
     Then I should see the success message containing "The assessment Test Assessment Report 2025 v2 has been deleted."
 
-  @javascript
   Scenario Outline: Logged-in users with different permission must access draft creation
     Given I am logged in as a "<user>"
     When I go to "/collection/assessments/report/create"
-    Then I should see the button "Save as Draft"
-    And I should see the button "Save as In Review"
-    And I <should or should not see> the button "Save as Published"
-
+    Then I should see the button "Save as draft"
+    And I <submit button state> the button "Submit"
+    And I <publish button state> the button "Publish"
     Examples:
-      | user                | should or should not see |
-      | authenticated user  | should not see        |
-      | assessment_reporter | should see            |
+      | user                | submit button state | publish button state |
+      | authenticated user  | should see          | should not see       |
+      | assessment_reporter | should not see      | should see           |
+      | moderator           | should not see      | should see           |
+
+  Scenario: Moderators see correct action buttons on published assessment edit form
+    Given report assessments:
+      | name          | state     |
+      | Review Report | published |
+
+    When I am logged in as a "moderator"
+    When I go to the edit form of the "Review Report" assessment
+    And I should see the button "Update"
+    And I should see the link "Delete"
+    And I should not see the button "Submit"
 
   @javascript
   Scenario: All possible tests for 'Provided by' plugin in assessment report
@@ -167,7 +177,7 @@ Feature: Assessment Report Entity Management
 
     # Verify organization is NOT created when form has validation errors.
     # Regression test - organizations should only be created on successful save.
-    Then I press "Save"
+    Then I press "Save as draft"
     # Should see validation error
     Then I should see the error message "1 error has been found: Binding requirements"
     # Organization should NOT have been created
@@ -188,7 +198,7 @@ Feature: Assessment Report Entity Management
 
     Then I press "Save" in the "Modal buttons" region
     # Save Assessment Report.
-    Then I press "Save"
+    Then I press "Save as draft"
     Then I should see the success message containing "New assessment Test Provided by in Assessment Report 2025 has been created."
     And I should see the heading "Test Provided by in Assessment Report 2025"
 
@@ -206,7 +216,7 @@ Feature: Assessment Report Entity Management
     And I wait for AJAX to finish
     And the following field should not be present "Select organisation"
     And I fill in "New organisation name" with "Portugal Ministry of Digital Affairs"
-    Then I press "Save"
+    Then I press "Update"
 
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
@@ -249,7 +259,7 @@ Feature: Assessment Report Entity Management
     And the following field should be present "Select organisation"
     And the following field should not be present "New organisation name"
     And I select "GR1" from "Select organisation"
-    Then I press "Save"
+    Then I press "Update"
     Then I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
 
     Then the public_organisation assessment "Organisation Should Not Be Created" should not exist
@@ -261,7 +271,7 @@ Feature: Assessment Report Entity Management
     Then I press "…or add new"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "gr1"
-    Then I press "Save"
+    Then I press "Update"
     Then I should see the warning message containing "You tried to create a new organisation but one with the same type, country and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
 
@@ -273,7 +283,7 @@ Feature: Assessment Report Entity Management
     Then I press "…or add new"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "portugal ministry of digital affairs"
-    Then I press "Save"
+    Then I press "Update"
     Then I should see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
 
@@ -286,7 +296,7 @@ Feature: Assessment Report Entity Management
     And I select "Belgium" from "Country"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "Brand New Belgian Organisation 2025"
-    Then I press "Save"
+    Then I press "Update"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type, country and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
 
@@ -296,7 +306,7 @@ Feature: Assessment Report Entity Management
     Then I press "…or add new"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "Another New Belgian Organisation 2025"
-    Then I press "Save"
+    Then I press "Update"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type, country and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
 
@@ -304,7 +314,7 @@ Feature: Assessment Report Entity Management
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I fill in "Short title" with "Test Provided by in Assessment Report 2025 - Updated"
-    Then I press "Save"
+    Then I press "Update"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 - Updated has been updated."
 
@@ -316,7 +326,7 @@ Feature: Assessment Report Entity Management
     Then I press "…or add new"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "New EU Institution 2025"
-    Then I press "Save"
+    Then I press "Update"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 - Updated has been updated."
 
@@ -324,7 +334,7 @@ Feature: Assessment Report Entity Management
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I fill in "Short title" with "Test Provided by in Assessment Report 2025 - Re-updated"
-    Then I press "Save"
+    Then I press "Update"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 - Re-updated has been updated."
 
@@ -336,7 +346,7 @@ Feature: Assessment Report Entity Management
     And I fill in "New organisation name" with "New EU Institution 2025"
     Then I press "…or select existing"
     And I wait for AJAX to finish
-    Then I press "Save"
+    Then I press "Update"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 - Re-updated has been updated."
 
@@ -391,7 +401,7 @@ Feature: Assessment Report Entity Management
     And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
 
     Then I press "Save" in the "Modal buttons" region
-    Then I press "Save as In Review"
+    Then I press "Submit"
     Then I should see the success message containing "New assessment Test permissions in Assessment Report 2025 has been created."
     And I should see the heading "Test permissions in Assessment Report 2025"
 
@@ -410,7 +420,7 @@ Feature: Assessment Report Entity Management
 
     Given I am logged in as a "moderator"
     When I go to the edit form of the "Test permissions in Assessment Report 2025" assessment
-    And I press "Save as Published"
+    And I press "Publish"
     Then I should see the success message containing "The assessment Test permissions in Assessment Report 2025 has been updated."
 
     # Check draft state.
@@ -436,7 +446,7 @@ Feature: Assessment Report Entity Management
 
     And I am logged in as pol2025
     And I go to "/collection/assessments/report/create"
-    Then I should see the button "Save as Published"
+    Then I should see the button "Publish"
 
   Scenario: Test assessment reports views
     Given the assessments collection exists
@@ -486,6 +496,34 @@ Feature: Assessment Report Entity Management
     When I am not logged in
     And I go to "/collection/portal-support/report/repository"
     Then I should get a 404 HTTP response
+
+  Scenario: Users can download PDF version of their assessments
+    Given users:
+      | Username       |
+      | TestReportUser |
+    And report assessments:
+      | name                    | state     | uid            |
+      | Infrastructure Review   | published | TestReportUser |
+      | Security Assessment     | review    | TestReportUser |
+
+    When I am logged in as "TestReportUser"
+    And I visit "user/assessments"
+    Then I should see the heading "My assessment reports"
+    # PDF download should NOT appear in tiles, only on the full assessment page
+    And I should not see the link "Download PDF"
+
+    # Verify PDF link appears on individual assessment page.
+    When I click "Infrastructure Review"
+    Then I should see the link "Download PDF"
+
+    # Verify PDF link on another assessment page.
+    When I go to the "Security Assessment" report
+    Then I should see the link "Download PDF"
+
+    # Anonymous users should not see PDF download links.
+    When I am an anonymous user
+    And I go to the "Infrastructure Review" report
+    Then I should not see the link "Download PDF"
 
   @javascript
   Scenario: Advanced search
