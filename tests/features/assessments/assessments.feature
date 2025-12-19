@@ -419,9 +419,9 @@ Feature: Assessment Report Entity Management
     And I should see the heading "Test permissions in Assessment Report 2025"
 
     Given I am logged in as a "moderator"
-    When I go to the edit form of the "Test permissions in Assessment Report 2025" assessment
+    When I go to the moderate form of the "Test permissions in Assessment Report 2025" assessment report
     And I press "Publish"
-    Then I should see the success message containing "The assessment Test permissions in Assessment Report 2025 has been updated."
+    Then I should see the success message containing "The assessment report has been published."
 
     # Check draft state.
     Given I am an anonymous user
