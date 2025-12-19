@@ -1,4 +1,4 @@
-default:
+assessment_workflow:
   id: assessment_workflow
   label: 'Assessments'
   group: assessments
