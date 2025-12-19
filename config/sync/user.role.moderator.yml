@@ -115,7 +115,6 @@ permissions:
   - 'assign assessment_reporter role'
   - 'assign licence_manager role'
   - 'assign translator role'
-  - 'bypass assessment report moderation'
   - 'bypass code of conduct'
   - 'bypass entity legal acceptance'
   - 'bypass node creation limit'

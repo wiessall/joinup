@@ -13,7 +13,6 @@ label: 'Assessment reporter'
 weight: 0
 is_admin: false
 permissions:
-  - 'bypass assessment report moderation'
   - 'create assessment report'
   - 'moderate assessment report'
   - 'perform default workflow publish_from_draft transition on own entity'
