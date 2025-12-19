@@ -23,6 +23,6 @@ services:
     tags:
       - { name: state_machine.guard, group: assessments, priority: 1}
 
-  Drupal\assessments\Guard\AssessmentReportTransitionGuard:
+  Drupal\assessments\Guard\AssessmentReportSubmitGuard:
     tags:
       - { name: state_machine.guard, group: assessments, priority: 5}
