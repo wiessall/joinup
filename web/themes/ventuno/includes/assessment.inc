@@ -19,6 +19,15 @@ function ventuno_preprocess_assessment__report__view_mode_tile_horizontal(array 
 }
 
 /**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_assessment__report(array &$variables): void {
+  if (isset($variables['content']['entity_print_view_pdf'])) {
+    $variables['content']['entity_print_view_pdf']['#attributes']['class'][] = 'btn btn-primary';
+  }
+}
+
+/**
  * Prepares some variables for tile view mode.
  */
 function _ventuno_preprocess_assessment_tile(array &$variables): void {
