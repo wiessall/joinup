@@ -30,7 +30,12 @@ Feature: Assessment report email notifications
 
     When I am logged in as "Moderator User"
     And I go to the moderate form of the "Moderatable Report 1" assessment report
-    And I press "Save as Published"
+    Then I see the text "Interoperability assessments space" in the "Header" region
+    And I should see the following lines of text:
+      | Provided by Test Organization, a European Union institution           |
+      | Status: In Review                                                     |
+      | The assessment report was based on the following binding requirements |
+    When I press "Publish"
     Then I should see the success message containing "The assessment report has been published"
 
     And 1 e-mail should have been sent
@@ -55,7 +60,7 @@ Feature: Assessment report email notifications
     And I press "Save as In Review"
     Then I should see the success message containing "has been updated"
 
-    And 2 e-mail should have been sent
+    And 3 e-mail should have been sent
     And the following email should have been sent:
       | recipient | Moderator User                             |
       | subject   | New assessment report to be reviewed       |
@@ -73,8 +78,10 @@ Feature: Assessment report email notifications
 
     When I am logged in as "Moderator User"
     And I go to the moderate form of the "Moderatable Report 3" assessment report
-    And I fill in "What updates are needed?" with "Please add more details to the assessment."
-    And I press "Save as Draft"
+    And I press "Require updates"
+    Then I should see the error message "1 error has been found: What updates are needed?"
+    When I fill in "What updates are needed?" with "Please add more details to the assessment."
+    And I press "Require updates"
     Then I should see the success message containing "The submitter has been notified"
 
     And 1 e-mail should have been sent

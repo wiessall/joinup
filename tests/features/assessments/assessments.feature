@@ -10,7 +10,7 @@ Feature: Assessment Report Entity Management
     And I go to "/collection/assessments/report/create"
     Then I should see the heading "Create assessment report"
 
-    When I press "Save"
+    When I press "Save as Draft"
     Then I should see the error message "3 errors have been found: Short titleType of public sector bodyBinding requirements"
 
     When I fill in "Short title" with "Test Assessment Report 2025"
@@ -27,7 +27,7 @@ Feature: Assessment Report Entity Management
     When I click "New binding requirement"
     And a modal should open
     And I press "Save" in the "Modal buttons" region
-    And I should see the text "4 errors have been found: NameName of the initiativeDescriptionDescription" in the "Modal content" region
+    And I should see the text "3 errors have been found: NameName of the initiativeDescription" in the "Modal content" region
 
     Then I should see the following lines of text in the correct order in "Modal content":
       | Initiatives                            |
@@ -38,8 +38,7 @@ Feature: Assessment Report Entity Management
       | Documents                              |
 
     When I click "Initiatives" in the "Modal content" region
-    And I fill in "expression[0][inline_entity_form][name][0][value]" with "Digital Transformation Initiative" in the "Modal content" region
-    And I fill in "expression[0][inline_entity_form][description][0][value]" with "This initiative focuses on digital transformation across public services" in the "Modal content" region
+    And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Digital Transformation Initiative" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][documented_in][0][uri]" with "https://interoperable-europe.ec.europa.eu/initiatives" in the "Modal content" region
 
     When I click "General" in the "Modal content" region
@@ -117,10 +116,11 @@ Feature: Assessment Report Entity Management
     # Add comment
     And I fill in "Please add any other comment you would like to share." with "This assessment was conducted in collaboration with multiple stakeholders across EU member states."
 
-    When I press "Save"
+    When I press "Save as Draft"
     Then I should see the success message containing "New assessment Test Assessment Report 2025 has been created."
     And I should see the heading "Test Assessment Report 2025"
     And I should see the following lines of text:
+      | Status: Draft                                                                                      |
       | Austrian Ministry of Digital Affairs, a European Union institution from                            |
       | The report has been connected to the following previous/relevant reports                           |
       | https://interoperable-europe.ec.europa.eu/report                                                   |
@@ -134,8 +134,9 @@ Feature: Assessment Report Entity Management
     # Edit test.
     When I go to the edit form of the "Test Assessment Report 2025" assessment
     And I fill in "Short title" with "Test Assessment Report 2025 v2"
-    And I press "Save"
+    And I press "Save as In Review"
     Then I should see the heading "Test Assessment Report 2025 v2"
+    And I should see the text "Status: In Review"
 
     # Delete test.
     Given I am logged in as a "assessment_reporter"
@@ -143,6 +144,19 @@ Feature: Assessment Report Entity Management
     Then I should see the heading "Are you sure you want to delete the assessment Test Assessment Report 2025 v2?"
     When I press "Delete"
     Then I should see the success message containing "The assessment Test Assessment Report 2025 v2 has been deleted."
+
+  @javascript
+  Scenario Outline: Logged-in users with different permission must access draft creation
+    Given I am logged in as a "<user>"
+    When I go to "/collection/assessments/report/create"
+    Then I should see the button "Save as Draft"
+    And I should see the button "Save as In Review"
+    And I <should or should not see> the button "Save as Published"
+
+    Examples:
+      | user                | should or should not see |
+      | authenticated user  | should not see        |
+      | assessment_reporter | should see            |
 
   @javascript
   Scenario: All possible tests for 'Provided by' plugin in assessment report
@@ -169,8 +183,7 @@ Feature: Assessment Report Entity Management
     And a modal should open
 
     When I click "Initiatives" in the "Modal content" region
-    And I fill in "expression[0][inline_entity_form][name][0][value]" with "Digital Transformation Initiative" in the "Modal content" region
-    And I fill in "expression[0][inline_entity_form][description][0][value]" with "This initiative focuses on digital transformation across public services" in the "Modal content" region
+    And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Digital Transformation Initiative" in the "Modal content" region
 
     When I click "General" in the "Modal content" region
     And I fill in "description[0][value]" with "This is the general binding requirement description" in the "Modal content" region
@@ -374,8 +387,7 @@ Feature: Assessment Report Entity Management
     And a modal should open
 
     When I click "Initiatives" in the "Modal content" region
-    And I fill in "expression[0][inline_entity_form][name][0][value]" with "Digital Transformation Initiative" in the "Modal content" region
-    And I fill in "expression[0][inline_entity_form][description][0][value]" with "This initiative focuses on digital transformation across public services" in the "Modal content" region
+    And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Digital Transformation Initiative" in the "Modal content" region
 
     When I click "General" in the "Modal content" region
     And I fill in "description[0][value]" with "This is the general binding requirement description" in the "Modal content" region
@@ -501,3 +513,38 @@ Feature: Assessment Report Entity Management
     Then the page should show only the tiles "Transmission Summary"
     When I enter "Bluewave" in the search bar and press enter
     Then the page should show only the tiles "Initial Overview"
+
+  @javascript
+  Scenario: Initiative name field accepts 256+ characters but expression title is truncated to 255
+    Given I am logged in as an "authenticated user"
+    And I go to "/collection/assessments/report/create"
+    Then I should see the heading "Create assessment report"
+
+    When I fill in "Short title" with "Test Initiative Name Length"
+    And I select "European Union institution" from "Type of public sector body"
+    And I wait for AJAX to finish
+    And I fill in "New organisation name" with "Test Organisation"
+
+    # Binding requirements with a very long initiative name (256+ characters)
+    When I click "New binding requirement"
+    And a modal should open
+
+    When I click "Initiatives" in the "Modal content" region
+    # This is a 323-character string to test that initiative_name accepts more than 255 characters
+    And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Comprehensive Overview and Strategic Analysis of System Architecture, Functional Requirements, Operational Constraints, Governance Models, Security and Compliance Requirements, Performance Optimization, and Long-Term Maintainability Considerations for Scalable Digital Platforms in Enterprise and Public-Sector Environments" in the "Modal content" region
+
+    When I click "General" in the "Modal content" region
+    And I fill in "description[0][value]" with "Test description for initiative name length validation" in the "Modal content" region
+
+    When I click "Trans-European digital public services" in the "Modal content" region
+    And I fill in "affects[0][inline_entity_form][name][0][value]" with "Test Service" in the "Modal content" region
+
+    Then I press "Save" in the "Modal buttons" region
+    Then I press "Save"
+    Then I should see the success message containing "New assessment Test Initiative Name Length has been created."
+    And I should see the heading "Test Initiative Name Length"
+    # Verify the initiative name is displayed (at least partially)
+    And I should see the text "Comprehensive Overview and Strategic Analysis of System Architecture"
+    # Verify that the expression entity title (name field) was truncated to exactly 255 characters
+    # The 323-char initiative_name gets copied to the name field and truncated to 255 chars by the presave hook
+    Then the "expression" assessment with name "Comprehensive Overview and Strategic Analysis of System Architecture, Functional Requirements, Operational Constraints, Governance Models, Security and Compliance Requirements, Performance Optimization, and Long-Term Maintainability Considerations for Sca" should exist
