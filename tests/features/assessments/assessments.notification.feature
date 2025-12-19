@@ -57,7 +57,7 @@ Feature: Assessment report email notifications
     When I am logged in as "Regular User"
     And I visit the "Moderatable Report 2" assessment
     And I click "Edit" in the "Entity actions" region
-    And I press "Save as In Review"
+    And I press "Submit"
     Then I should see the success message containing "has been updated"
 
     And 3 e-mail should have been sent
