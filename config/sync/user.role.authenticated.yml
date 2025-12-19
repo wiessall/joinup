@@ -151,6 +151,8 @@ permissions:
   - 'perform contact_information_workflow workflow propose_changes transition on own entity'
   - 'perform contact_information_workflow workflow request_deletion transition on own entity'
   - 'perform contact_information_workflow workflow validate transition on own entity'
+  - 'perform default workflow save_as_draft transition on own entity'
+  - 'perform default workflow submit_for_review transition on own entity'
   - 'perform node:post_moderated workflow propose_from_reported transition on own entity'
   - 'perform node:post_moderated workflow publish transition on own entity'
   - 'perform node:post_moderated workflow save_as_draft transition on own entity'
