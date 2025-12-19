@@ -363,6 +363,7 @@ function assessments_views_data(): array {
       'id' => 'assessments_reports_links',
     ],
   ];
+
   return $data;
 }
 

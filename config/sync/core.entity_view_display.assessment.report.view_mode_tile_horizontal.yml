@@ -48,6 +48,9 @@ hidden:
   binding_requirement: true
   created: true
   documents: true
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
   langcode: true
   legal: true
   organisational: true
