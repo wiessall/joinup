@@ -207,10 +207,11 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler im
    */
   protected function checkUpdateAccess(AssessmentInterface $entity, AccountInterface $account): AccessResultInterface {
     $allowed_states = $this->workflowHelper->getAvailableTargetStates($entity, $account);
-    if (empty($allowed_states)) {
-      return AccessResult::forbidden('No available workflow transitions.')
-        ->addCacheableDependency($entity)
-        ->cachePerUser();
+    if (!empty($allowed_states)) {
+      return AccessResult::allowed()
+        ->cachePerPermissions()
+        ->cachePerUser()
+        ->addCacheableDependency($entity);
     }
 
     return AccessResult::neutral()
