@@ -17,6 +17,7 @@ dependencies:
     - field.field.assessment.report.technical
   module:
     - entity_form_field_label
+    - entity_print
     - entity_reference_revisions
     - field_delimiter
     - field_formatter_range
@@ -31,6 +32,8 @@ third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
+  entity_print:
+    pdf_label: 'Download PDF'
 id: assessment.report.default
 targetEntityType: assessment
 bundle: report
@@ -77,6 +80,11 @@ content:
     third_party_settings: {  }
     weight: 6
     region: content
+  entity_print_view_pdf:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 14
+    region: content
   legal:
     type: entity_reference_entity_view
     label: above
@@ -108,7 +116,7 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 13
+    weight: 12
     region: content
   provider:
     type: entity_reference_entity_view
@@ -150,7 +158,7 @@ content:
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 14
+    weight: 13
     region: content
   semantic:
     type: entity_reference_entity_view
@@ -166,7 +174,7 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 12
+    weight: 11
     region: content
   technical:
     type: entity_reference_entity_view
@@ -186,6 +194,8 @@ content:
     weight: 1
     region: content
 hidden:
+  entity_print_view_epub: true
+  entity_print_view_word_docx: true
   langcode: true
   search_api_excerpt: true
   status: true
