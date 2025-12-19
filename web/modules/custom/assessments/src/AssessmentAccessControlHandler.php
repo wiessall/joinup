@@ -192,12 +192,6 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
         ->addCacheableDependency($entity);
     }
 
-    // Owners can update only in non-published state with edit permission.
-    if (!$entity->isPublished() && $entity->getOwnerId() == $account->id()) {
-      return AccessResult::allowedIfHasPermission($account, 'edit own assessment report')
-        ->cachePerUser()
-        ->addCacheableDependency($entity);
-    }
 
     return AccessResult::neutral()
       ->cachePerPermissions()
