@@ -185,13 +185,13 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
    *   The access result.
    */
   protected function checkUpdateAccess(AssessmentInterface $entity, AccountInterface $account): AccessResultInterface {
-    // Assessment reporters and moderators can update in any state.
-    if ($account->hasPermission('moderate assessment report')) {
-      return AccessResult::allowed()
-        ->cachePerPermissions()
-        ->addCacheableDependency($entity);
+    $workflow_helper = \Drupal::service('joinup_workflow.workflow_helper');
+    $allowed_states = $workflow_helper->getAvailableTargetStates($entity, $account);
+    if (empty($allowed_states)) {
+      return AccessResult::forbidden('No available workflow transitions.')
+        ->addCacheableDependency($entity)
+        ->cachePerUser();
     }
-
 
     return AccessResult::neutral()
       ->cachePerPermissions()
