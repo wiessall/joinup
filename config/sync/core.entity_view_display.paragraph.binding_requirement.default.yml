@@ -3,17 +3,21 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.paragraph.binding_requirement.has_participation
     - field.field.paragraph.binding_requirement.affects
     - field.field.paragraph.binding_requirement.asset
     - field.field.paragraph.binding_requirement.description
     - field.field.paragraph.binding_requirement.documented_in
     - field.field.paragraph.binding_requirement.expression
+    - field.field.paragraph.binding_requirement.has_participation
     - field.field.paragraph.binding_requirement.requirement_documents
     - paragraphs.paragraphs_type.binding_requirement
   module:
+    - entity_form_field_label
+    - field_delimiter
+    - field_formatter_range
     - file
-    - link
+    - joinup_slick
+    - template_suggestion
     - text
 id: paragraph.binding_requirement.default
 targetEntityType: paragraph
@@ -24,8 +28,22 @@ content:
     type: entity_reference_label
     label: above
     settings:
-      link: true
-    third_party_settings: {  }
+      link: false
+    third_party_settings:
+      entity_form_field_label:
+        new_label: 'Trans-European digital public service(s)'
+        rewrite_label: 1
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+      template_suggestion:
+        template_suggestion: ''
     weight: 2
     region: content
   asset:
@@ -33,37 +51,44 @@ content:
     label: above
     settings:
       link: true
-    third_party_settings: {  }
-    weight: 3
+    third_party_settings:
+      entity_form_field_label:
+        new_label: 'Interoperability solutions'
+        rewrite_label: 1
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+      template_suggestion:
+        template_suggestion: ''
+    weight: 4
     region: content
   description:
     type: text_default
     label: above
     settings: {  }
-    third_party_settings: {  }
-    weight: 7
-    region: content
-  documented_in:
-    type: link
-    label: above
-    settings:
-      trim_length: 80
-      url_only: false
-      url_plain: false
-      rel: ''
-      target: ''
-    third_party_settings: {  }
-    weight: 5
+    third_party_settings:
+      entity_form_field_label:
+        new_label: 'Binding requirement'
+        rewrite_label: 1
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
     region: content
   expression:
     type: entity_reference_label
     label: above
     settings:
-      link: true
+      link: false
     third_party_settings:
       entity_form_field_label:
-        new_label: ''
-        rewrite_label: 0
+        new_label: Initiative(s)
+        rewrite_label: 1
       field_delimiter:
         delimiter: ','
       field_formatter_range:
@@ -81,9 +106,23 @@ content:
     type: entity_reference_label
     label: above
     settings:
-      link: true
-    third_party_settings: {  }
-    weight: 1
+      link: false
+    third_party_settings:
+      entity_form_field_label:
+        new_label: 'Public and/or private stakeholder(s) affected'
+        rewrite_label: 1
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+      template_suggestion:
+        template_suggestion: ''
+    weight: 3
     region: content
   requirement_documents:
     type: file_default
@@ -91,9 +130,10 @@ content:
     settings:
       use_description_as_link_text: true
     third_party_settings: {  }
-    weight: 4
+    weight: 5
     region: content
 hidden:
+  documented_in: true
   search_api_excerpt: true
   uri: true
   uuid: true
