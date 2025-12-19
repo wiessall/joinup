@@ -45,9 +45,15 @@ class IdRedirect extends ControllerBase {
     if (($entity = $this->mapper->getEntityByUri($id))) {
       assert($entity instanceof RdfSyncEntityInterface);
       $entity_type_id = $entity->getEntityTypeId();
-      return $this->redirect("entity.$entity_type_id.canonical", [
+      $route_parameters = [
         $entity_type_id => $entity->id(),
-      ], [], 301);
+      ];
+
+      if ($entity_type_id === 'assessment') {
+        $route_parameters['assessment_type'] = $entity->bundle();
+      }
+
+      return $this->redirect("entity.$entity_type_id.canonical", $route_parameters, [], 301);
     }
 
     return $this->redirect('joinup_core.not_found');
@@ -69,6 +75,7 @@ class IdRedirect extends ControllerBase {
     $namespaces = [
       'w21' => 'node',
       'dr8' => 'taxonomy_term',
+      's2k' => 'assessment',
     ];
 
     if (!$namespace) {
