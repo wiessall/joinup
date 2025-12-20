@@ -119,7 +119,7 @@ Feature: RDF Sync integration for assessments.
 
     # Verify the data of the exported entities is correct.
     And the following "http://data" graph triples exist in the RDF backend:
-| subject                                                              | predicate                                       | object                                                                                      |
+      | subject                                                        | predicate                                       | object                                                                                      |
       | http://data.europa.eu/s2k/e35d0e39-31c5-4090-b16d-c35d79695361 | http://data.europa.eu/2sa/cav#judgement         | Compliant                                                                                   |
       | http://data.europa.eu/s2k/e35d0e39-31c5-4090-b16d-c35d79695361 | http://data.europa.eu/2sa/cav#type              | http://example.com/taxonomy-term/assess-statement-type/219d8117-fd8e-4455-830d-9a0c6e81ab47 |
       | http://data.europa.eu/s2k/e35d0e39-31c5-4090-b16d-c35d79695361 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://data.europa.eu/2sa/cav#Statement                                                     |
@@ -130,14 +130,14 @@ Feature: RDF Sync integration for assessments.
       | __base_url__/sites/default/files/text.pdf | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://xmlns.com/foaf/0.1/Document |
 
     And the following "http://data" graph triples exist in the RDF backend:
-| subject                                                              | predicate                                       | object                                     |
+      | subject                                                        | predicate                                       | object                                     |
       | http://data.europa.eu/s2k/048caacf-52d6-4215-a867-a485ff4baf47 | http://data.europa.eu/2sa/cav#documentedIn      | https://example.com                        |
       | http://data.europa.eu/s2k/048caacf-52d6-4215-a867-a485ff4baf47 | http://purl.org/dc/terms/description            | Description 1                              |
       | http://data.europa.eu/s2k/048caacf-52d6-4215-a867-a485ff4baf47 | http://purl.org/dc/terms/title                  | Expression 1                               |
       | http://data.europa.eu/s2k/048caacf-52d6-4215-a867-a485ff4baf47 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://purl.org/vocab/frbr/core#Expression |
 
     And the following "http://data" graph triples exist in the RDF backend:
-| subject                                                              | predicate                                       | object                                                                                        |
+      | subject                                                        | predicate                                       | object                                                                                        |
       | http://data.europa.eu/s2k/f5379633-58af-49bd-ab71-22d8ab77d59a | http://purl.org/dc/terms/type                   | http://example.com/taxonomy-term/assess-participant-type/b8c59bef-e579-440a-91f0-8c7983524336 |
       | http://data.europa.eu/s2k/f5379633-58af-49bd-ab71-22d8ab77d59a | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://data.europa.eu/m8g/Participation                                                       |
 
