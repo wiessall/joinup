@@ -32,7 +32,7 @@ class IdRedirect extends ControllerBase {
    *   A redirect response object.
    */
   public function redirectToRdfEntity(string $namespace, string $uuid): RedirectResponse {
-    if (!$entity_type_id = static::getEntityTypeFromPersistentUriNamespace($namespace)) {
+    if (!static::getEntityTypeFromPersistentUriNamespace($namespace)) {
       return $this->redirect('joinup_core.not_found');
     }
 
