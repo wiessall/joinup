@@ -97,7 +97,6 @@ final readonly class AssessmentReportNotification implements AssessmentReportNot
     $user_storage = $this->entityTypeManager->getStorage('user');
     $role_storage = $this->entityTypeManager->getStorage('user_role');
 
-    // Get all roles with the 'moderate assessment report' permission.
     $roles = $role_storage->loadMultiple();
     $role_ids = [];
     foreach ($roles as $role) {
