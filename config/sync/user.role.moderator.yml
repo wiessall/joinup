@@ -25,7 +25,6 @@ dependencies:
     - taxonomy.vocabulary.legal_type
     - taxonomy.vocabulary.tags
   module:
-    - assessments
     - collection
     - comment
     - contact_form
@@ -223,7 +222,6 @@ permissions:
   - 'manage newsroom newsletter subscriptions'
   - 'manage oauth clients'
   - 'manage solutions'
-  - 'moderate assessment report'
   - 'perform announcement workflow approve transition on any entity'
   - 'perform announcement workflow reject transition on any entity'
   - 'perform announcement workflow send transition on any entity'
