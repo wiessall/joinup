@@ -4,10 +4,11 @@ Feature: Assessment report email notifications
 
   Background:
     Given users:
-      | Username       | Roles               | E-mail                | First name | Family name |
-      | Regular User   |                     | regular@example.com   | Regular    | User        |
-      | Reporter User  | assessment_reporter | reporter@example.com  | Reporter   | User        |
-      | Moderator User | moderator           | moderator@example.com | Moderator  | User        |
+      | Username             | Roles                | E-mail                  | First name | Family name |
+      | Regular User         |                      | regular@example.com     | Regular    | User        |
+      | Assessment Reporter  | assessment_reporter  | a.reporter@example.com  | Reporter   | User        |
+      | Assessment Moderator | assessment_moderator | a.moderator@example.com | Reporter   | User        |
+      | Moderator User       | moderator            | moderator@example.com   | Moderator  | User        |
     And public_organisation assessments:
       | name              | organisation_type          |
       | Test Organization | european_union_institution |
@@ -28,7 +29,7 @@ Feature: Assessment report email notifications
       | service    | Test Service         |
     And I mark all emails as read
 
-    When I am logged in as "Moderator User"
+    When I am logged in as "Assessment Moderator"
     And I go to the moderate form of the "Moderatable Report 1" assessment report
     Then I see the text "Interoperability assessments space" in the "Header" region
     And I should see the following lines of text:
@@ -60,9 +61,9 @@ Feature: Assessment report email notifications
     And I press "Submit"
     Then I should see the success message containing "has been updated"
 
-    And 3 e-mail should have been sent
+    And 2 e-mail should have been sent
     And the following email should have been sent:
-      | recipient | Moderator User                             |
+      | recipient | Assessment Moderator                       |
       | subject   | New assessment report to be reviewed       |
       | body      | A new assessment report has been submitted |
 
@@ -76,7 +77,7 @@ Feature: Assessment report email notifications
       | service    | Test Service         |
     And I mark all emails as read
 
-    When I am logged in as "Moderator User"
+    When I am logged in as "Assessment Moderator"
     And I go to the moderate form of the "Moderatable Report 3" assessment report
     And I press "Require updates"
     Then I should see the error message "1 error has been found: What updates are needed?"
