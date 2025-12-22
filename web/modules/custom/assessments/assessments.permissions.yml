@@ -15,6 +15,9 @@ delete assessment report:
 view own unpublished assessment report:
   title: 'View own unpublished assessment reports'
   description: 'View assessment reports created by the user.'
+view any unpublished assessment report:
+    title: 'View any unpublished assessment reports'
+    description: 'View any assessment reports created.'
 administer assessment statements:
   title: 'Administer assessment statements'
   description: 'Maintain the types of assessment statement entity.'

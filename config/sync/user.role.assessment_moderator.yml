@@ -10,3 +10,4 @@ weight: 1
 is_admin: null
 permissions:
   - 'moderate assessment report'
+  - 'view any unpublished assessment report'
