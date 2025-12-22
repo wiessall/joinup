@@ -8,4 +8,5 @@ print_engines:
   word_docx_engine: ''
 base_url: ''
 entity_types:
+  - assessment
   - webform_submission
