@@ -6,8 +6,8 @@ Feature: Assessment report email notifications
     Given users:
       | Username             | Roles                | E-mail                  | First name | Family name |
       | Regular User         |                      | regular@example.com     | Regular    | User        |
-      | Assessment Reporter  | assessment_reporter  | a.reporter@example.com  | Reporter   | User        |
-      | Assessment Moderator | assessment_moderator | a.moderator@example.com | Reporter   | User        |
+      | Assessment Reporter  | assessment_reporter  | a.reporter@example.com  | Assessment | Reporter    |
+      | Assessment Moderator | assessment_moderator | a.moderator@example.com | Assessment | Moderator   |
       | Moderator User       | moderator            | moderator@example.com   | Moderator  | User        |
     And public_organisation assessments:
       | name              | organisation_type          |
@@ -77,6 +77,7 @@ Feature: Assessment report email notifications
       | service    | Test Service         |
     And I mark all emails as read
 
+    And I break
     When I am logged in as "Assessment Moderator"
     And I go to the moderate form of the "Moderatable Report 3" assessment report
     And I press "Require updates"
