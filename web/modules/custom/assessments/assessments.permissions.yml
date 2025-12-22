@@ -6,18 +6,12 @@ moderate assessment report:
   title: 'Moderate assessment reports'
   description: 'View the moderation form and access the assessment reports listing page.'
   restrict access: true
-bypass assessment report moderation:
-  title: 'Bypass assessment report moderation'
-  description: 'Allows the creation an assessment report directly in a published state and bypasses the moderation workflow.'
 create assessment report:
   title: 'Create assessment reports'
   description: 'Create new assessment reports.'
 view own unpublished assessment report:
   title: 'View own unpublished assessment reports'
   description: 'View assessment reports created by the user.'
-edit own assessment report:
-  title: 'Edit own assessment reports'
-  description: 'Edit assessment reports created by the user.'
 administer assessment statements:
   title: 'Administer assessment statements'
   description: 'Maintain the types of assessment statement entity.'
