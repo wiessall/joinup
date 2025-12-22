@@ -334,8 +334,8 @@
             },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff",
-                "Fix timezone offset logic. @see https://www.drupal.org/i/3556123": "resources/patch/php/drupal/calendar_view/3556123.diff",
-                "Weekly view doesn't show first week of new year @see https://www.drupal.org/i/3484325": "resources/patch/php/drupal/calendar_view/3484325.patch"
+                "Fix timezone offset logic. @see https://www.drupal.org/i/3556123": "resources/patch/php/drupal/calendar_view/3556123.mr48-commitfd1a467c.diff",
+                "Weekly view doesn't show first week of new year @see https://www.drupal.org/i/3484325": "resources/patch/php/drupal/calendar_view/3484325.comment16152620.patch"
             },
             "drupal/cas": {
                 "Invalid constraint for server.verify in cas.settings @see https://www.drupal.org/i/3542632": "resources/patch/php/drupal/cas/3542632.diff"
