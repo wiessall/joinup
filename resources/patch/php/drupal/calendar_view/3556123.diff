@@ -1,0 +1,21 @@
+diff --git a/src/Plugin/views/style/CalendarViewBase.php b/src/Plugin/views/style/CalendarViewBase.php
+index 0e97076e749631c62ee0c43642ef645122ce7bb0..7f03a1dddec0c8a62d9a6d004ef0684fd68a19b4 100644
+--- a/src/Plugin/views/style/CalendarViewBase.php
++++ b/src/Plugin/views/style/CalendarViewBase.php
+@@ -11,6 +11,7 @@ use Drupal\Core\Link;
+ use Drupal\Core\Render\Element;
+ use Drupal\Core\StringTranslation\StringTranslationTrait;
+ use Drupal\Core\Url;
++use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
+ use Drupal\views\Plugin\views\field\Date as ViewsDateField;
+ use Drupal\views\Plugin\views\field\EntityField;
+ use Drupal\views\Plugin\views\field\FieldPluginBase;
+@@ -704,7 +705,7 @@ abstract class CalendarViewBase extends DefaultStyle implements CalendarViewInte
+ 
+     // Get offset to fix start/end datetime values.
+     $timezone = $this->getTimezone($field);
+-    $offset = $this->getTimezoneOffset('now', $timezone);
++    $offset = $this->getTimezoneOffset(date(DateTimeItemInterface::DATETIME_STORAGE_FORMAT, $values['value']), $timezone);
+     $values['value'] += $offset;
+     $values['end_value'] += $offset;
+ 
