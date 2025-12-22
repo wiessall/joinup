@@ -139,6 +139,7 @@ permissions:
   - 'edit own news content'
   - 'edit own owner content'
   - 'edit own polls'
+  - 'entity print access type assessment'
   - 'entity print access type webform_submission'
   - 'flag bookmark'
   - 'flag like'
