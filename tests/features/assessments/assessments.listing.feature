@@ -13,9 +13,15 @@ Feature: Assessment listing tests.
       | Draft Report     | draft     | Test Organization |
       | Published Report | published | Test Organization |
 
-    Given I am logged in as a moderator
+    Given I am logged in as a user with the "Assessment moderator" role
     When I visit "/admin/content/assessment"
     Then I should see "Moderate" in the "Review Report" row
+    And I should not see "Moderate" in the "Draft Report" row
+    And I should not see "Moderate" in the "Published Report" row
+
+    Given I am logged in as a user with the "Moderator" role
+    When I visit "/admin/content/assessment"
+    Then I should not see "Moderate" in the "Review Report" row
     And I should not see "Moderate" in the "Draft Report" row
     And I should not see "Moderate" in the "Published Report" row
 
@@ -24,7 +30,7 @@ Feature: Assessment listing tests.
       | name                        | state     |
       | Weekly Health Check         | published |
       | Portal Accessibility Review | review    |
-    And I am logged in as a "moderator"
+    Given I am logged in as a user with the "Assessment moderator" role
     When I visit "admin/content/assessment"
     Then I should see the heading "Assessments admin"
     When I click the ID link for the "Weekly Health Check" assessment
