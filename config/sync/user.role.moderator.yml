@@ -326,6 +326,7 @@ permissions:
   - 'vbo joinup change group action'
   - 'vbo joinup unarchive action'
   - 'view all sitewide alert revisions'
+  - 'view any unpublished assessment report'
   - 'view any unpublished content'
   - 'view any webform submission'
   - 'view blocked_reason'
