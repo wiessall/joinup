@@ -641,7 +641,7 @@ display:
       access:
         type: perm
         options:
-          perm: 'moderate assessment report'
+          perm: 'view assessment listing'
       cache:
         type: tag
         options: {  }

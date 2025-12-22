@@ -4,7 +4,7 @@ administer assessment types:
   restrict access: true
 moderate assessment report:
   title: 'Moderate assessment reports'
-  description: 'View the moderation form and access the assessment reports listing page.'
+  description: 'View the moderation form.'
   restrict access: true
 create assessment report:
   title: 'Create assessment reports'
@@ -12,12 +12,18 @@ create assessment report:
 delete assessment report:
   title: 'Delete assessment reports'
   description: 'Delete assessment reports.'
+  restrict access: true
 view own unpublished assessment report:
   title: 'View own unpublished assessment reports'
   description: 'View assessment reports created by the user.'
 view any unpublished assessment report:
     title: 'View any unpublished assessment reports'
     description: 'View any assessment reports created.'
+    restrict access: true
+view assessment listing:
+    title: 'View assessment listing'
+    description: 'Access the assessment listing page.'
+    restrict access: true
 administer assessment statements:
   title: 'Administer assessment statements'
   description: 'Maintain the types of assessment statement entity.'
