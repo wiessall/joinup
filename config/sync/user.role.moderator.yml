@@ -25,6 +25,7 @@ dependencies:
     - taxonomy.vocabulary.legal_type
     - taxonomy.vocabulary.tags
   module:
+    - assessments
     - collection
     - comment
     - contact_form
@@ -169,6 +170,7 @@ permissions:
   - 'delete any private message'
   - 'delete any release content'
   - 'delete any solution_logo media'
+  - 'delete assessment report'
   - 'delete paragraph content block'
   - 'delete paragraph content call_to_action'
   - 'delete paragraph content carousel'

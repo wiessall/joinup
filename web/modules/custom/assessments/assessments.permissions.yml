@@ -9,6 +9,9 @@ moderate assessment report:
 create assessment report:
   title: 'Create assessment reports'
   description: 'Create new assessment reports.'
+delete assessment report:
+  title: 'Delete assessment reports'
+  description: 'Delete assessment reports.'
 view own unpublished assessment report:
   title: 'View own unpublished assessment reports'
   description: 'View assessment reports created by the user.'
