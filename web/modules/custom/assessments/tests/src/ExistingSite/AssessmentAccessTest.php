@@ -431,7 +431,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
   /**
    * Tests getRelatedReport for sub-entities with paragraph references.
    *
-   * @covers       \Drupal\assessments\Entity\AssessmentSubEntity::getRelatedReport
+   * @covers \Drupal\assessments\Entity\AssessmentSubEntity::getRelatedReport
    * @dataProvider subEntityTypesProvider
    */
   public function testGetRelatedReportForSubEntities(string $bundle, string $paragraph_field): void {
