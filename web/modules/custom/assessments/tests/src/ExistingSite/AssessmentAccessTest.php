@@ -167,8 +167,8 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
     $assessment = $this->testAssessments['draft'];
 
     $this->assertTrue($assessment->access('update', $this->ownerUser));
-    $this->assertTrue($assessment->access('update', $this->moderatorUser));
-    $this->assertTrue($assessment->access('update', $this->assessmentReporterUser));
+    $this->assertFalse($assessment->access('update', $this->moderatorUser));
+    $this->assertFalse($assessment->access('update', $this->assessmentReporterUser));
 
     $this->assertFalse($assessment->access('update', $this->nonOwnerUser));
     $this->assertFalse($assessment->access('update', $this->authenticatedUser));
@@ -183,10 +183,26 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
   public function testUpdateReviewAssessment(): void {
     $assessment = $this->testAssessments['review'];
 
-    $this->assertTrue($assessment->access('update', $this->ownerUser));
-    $this->assertTrue($assessment->access('update', $this->moderatorUser));
-    $this->assertTrue($assessment->access('update', $this->assessmentReporterUser));
+    $this->assertFalse($assessment->access('update', $this->ownerUser));
+    $this->assertFalse($assessment->access('update', $this->moderatorUser));
+    $this->assertFalse($assessment->access('update', $this->assessmentReporterUser));
 
+    $this->assertFalse($assessment->access('update', $this->nonOwnerUser));
+    $this->assertFalse($assessment->access('update', $this->authenticatedUser));
+  }
+
+  /**
+   * Tests update access for published state assessment reports.
+   *
+   * @covers ::checkAccess
+   * @covers ::checkUpdateAccess
+   */
+  public function testUpdatePublishedAssessment(): void {
+    $assessment = $this->testAssessments['published'];
+
+    $this->assertFalse($assessment->access('update', $this->ownerUser));
+    $this->assertTrue($assessment->access('update', $this->moderatorUser));
+    $this->assertFalse($assessment->access('update', $this->assessmentReporterUser));
     $this->assertFalse($assessment->access('update', $this->nonOwnerUser));
     $this->assertFalse($assessment->access('update', $this->authenticatedUser));
   }
@@ -312,6 +328,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
    */
   public function testGetRelatedReportForReportReturnsNull(): void {
     $report = $this->testAssessments['published'];
+
     $this->assertNull(
       $report->getRelatedReport(),
       'getRelatedReport() should return NULL for report entities.'
