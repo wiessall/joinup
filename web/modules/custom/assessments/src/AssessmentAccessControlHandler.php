@@ -232,10 +232,7 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler im
    *   The access result.
    */
   protected function checkDeleteAccess(AssessmentInterface $entity, AccountInterface $account): AccessResultInterface {
-    // Assessment reporters and moderators can delete in any state.
-    return AccessResult::allowedIfHasPermissions($account, [
-      'moderate assessment report',
-    ], 'OR')
+    return AccessResult::allowedIfHasPermission($account, 'delete assessment report')
       ->addCacheableDependency($entity);
   }
 
