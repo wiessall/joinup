@@ -1,0 +1,9 @@
+uuid: 32fac596-34e0-4f4c-b934-d7d1691c1041
+langcode: en
+status: true
+dependencies: {  }
+id: assessment_moderator
+label: 'Assessment moderator'
+weight: 1
+is_admin: null
+permissions: {  }
