@@ -67,12 +67,12 @@ Feature: Global search
     And I should see the "Spherification" tile
     And I should see the "Foam" tile
 
-    # Test the "Solution function" facet.
+    # Test the "Solution Domain" facet.
     When I click "Clear filters"
-    Then I should not see the "Solution function" facet
+    Then I should not see the "Solution Domain" facet
     When I check the "Solutions (2)" checkbox from the "Content types" facet
-    And I should see the "Solution function" facet
-    When I check the "Defense (1)" checkbox from the "Solution function" facet
+    And I should see the "Solution Domain" facet
+    When I check the "Defense (1)" checkbox from the "Solution Domain" facet
     Then I should see the "Spherification" tile
     And I should not see the "Foam" tile
 
