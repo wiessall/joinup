@@ -164,8 +164,8 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
    * {@inheritdoc}
    */
   public function fetch(): iterable {
-    if (!isset($this->fetched) && !$this->requestData()) {
-      return [];
+    if (!isset($this->fetched)) {
+      $this->requestData();
     }
 
     $collectedExceptions = [];
@@ -190,9 +190,12 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
         }
       }
       catch (HostingPlatformFetchException $exception) {
-        // Collect provider fetch exceptions, and throw them at the end of the
-        // fetch operation.
-        $collectedExceptions[] = $exception->getMessage();
+        $message = sprintf(
+          'Hosting platform %s failed: %s',
+          $baseUrl,
+          $exception->getMessage()
+        );
+        $collectedExceptions[] = $message;
       }
     }
 
@@ -245,19 +248,18 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
   /**
    * Requests data.
    *
-   * @return bool
-   *   If the process was successful.
-   *
    * @throws \Drupal\eu_oss_catalogue\Exception\ProviderFetchException
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  private function requestData(): bool {
+  private function requestData(): void {
     $this->fetched = [];
 
     foreach ($this->getEndpoints() as $endpointConfig) {
       ['rootKeys' => $rootKeys, 'apiUrl' => $endpointUrl] = $endpointConfig;
       try {
-        $decodedResponse = $this->fetchDataFromSource($endpointUrl);
+        $response = $this->httpClient->get($endpointUrl);
+        $decodedResponse = Json::decode($response->getBody()->getContents());
+
         if (!is_array($decodedResponse)) {
           throw new \Exception('Source returned response is not a valid JSON response.');
         }
@@ -266,61 +268,18 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
           throw new \Exception("The configured root keys don't exist on the decoded response.");
         }
         $this->numberOfItems += count($value);
-        if (!$this->processResponseData($value, $endpointConfig)) {
-          return FALSE;
-        }
+        $this->processResponseData($value, $endpointConfig);
       }
       catch (\Exception $exception) {
-        // Log the exception as error, but let the loop continue.
-        $this->logger->error(
-          "Exception when fetching / processing endpoint '@endpoint' of @catalogue-label: @message",
-          [
-            '@endpoint' => $endpointUrl,
-            '@catalogue-label' => (string) $this->getPluginLabel(),
-            '@message' => $exception->getMessage(),
-          ],
+        $message = sprintf(
+          'Endpoint %s failed for %s catalogue: %s',
+          $endpointUrl,
+          $this->getPluginLabel(),
+          $exception->getMessage()
         );
-
-        return FALSE;
+        throw new ProviderFetchException($message, 0, $exception);
       }
     }
-
-    return TRUE;
-  }
-
-  /**
-   * Fetches data from the given source.
-   *
-   * @param string $source
-   *   The source URL or file path.
-   *
-   * @return array
-   *   The decoded JSON data.
-   *
-   * @throws \Exception
-   *   When the source cannot be fetched or is not valid JSON.
-   */
-  protected function fetchDataFromSource(string $source): array {
-    // Check if source is a file path.
-    if (str_starts_with($source, 'file://') || (!str_contains($source, '://') && file_exists($source))) {
-      $filePath = str_starts_with($source, 'file://') ? substr($source, 7) : $source;
-      $content = file_get_contents($filePath);
-      if ($content === FALSE) {
-        throw new \Exception("Could not read file: $filePath");
-      }
-    }
-    else {
-      // Fetch from HTTP.
-      $response = $this->httpClient->get($source);
-      $content = $response->getBody()->getContents();
-    }
-
-    $decodedResponse = Json::decode($content);
-    if (!is_array($decodedResponse)) {
-      throw new \Exception('Source returned response is not a valid JSON response.');
-    }
-
-    return $decodedResponse;
   }
 
   /**
@@ -330,11 +289,8 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
    *   Response data.
    * @param array{apiUrl: string, rootKeys: array<string>, urlKeys: array<string>} $endpointConfig
    *   The config of the current endpoint.
-   *
-   * @return bool
-   *   If the process was successful.
    */
-  private function processResponseData(array $responseData, array $endpointConfig): bool {
+  private function processResponseData(array $responseData, array $endpointConfig): void {
     foreach ($responseData as $row) {
       if (!is_array($row)) {
         $this->logger->warning('Solution item in API response got from @endpoint-url is not an object or list.');
@@ -350,7 +306,7 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
           'No URL property found at an item in @catalogue-label catalogue provider.',
           $logContext,
         );
-        return FALSE;
+        continue;
       }
 
       if (!is_string($rawUrl)) {
@@ -358,7 +314,7 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
           'Wrong data type at the URL property of an item in @catalogue-label catalogue provider: @url-export',
           $logContext,
         );
-        return FALSE;
+        continue;
       }
 
       $apiGuess = $this->apiGuesser->getHostingPlatformApi($rawUrl);
@@ -367,7 +323,7 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
           'Cannot determine hosting platform for the repository with @solution-repo-url provided by the @catalogue-label catalogue.',
           $logContext,
         );
-        return FALSE;
+        continue;
       }
 
       $gitUri = GitUri::fromUriString($rawUrl);
@@ -382,8 +338,6 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
       $this->fetched[$apiGuess->baseUrl]['projects'][$namespace][] = $name;
       $this->fetchedUrls[] = $gitUri->getUri();
     }
-
-    return TRUE;
   }
 
   /**

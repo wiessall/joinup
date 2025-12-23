@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_user\Plugin\views\field;
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -109,7 +110,7 @@ class JoinupUserBulkForm extends RoleDelegationUserBulkForm {
       foreach ($selected as $bulkFormKey) {
         $entity = $this->loadEntityFromBulkFormKey($bulkFormKey);
         // Skip execution if current entity does not exist.
-        if (empty($entity)) {
+        if (!$entity instanceof EntityInterface) {
           continue;
         }
         // Skip execution if the user did not have access.

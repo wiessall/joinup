@@ -68,7 +68,7 @@ class ReportLinkItem extends LinkItem {
     // overriding the function to match the one from the Map.
     // This is needed because we are extending LinkItem which is a normal non-
     // computed field. If we were a 'real' computed field this is not needed.
-    parent::set($property_name, $value);
+    return parent::set($property_name, $value);
   }
 
   /**

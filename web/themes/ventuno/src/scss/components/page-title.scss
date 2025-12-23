@@ -20,7 +20,7 @@
     }
   }
   &__title {
-    display: inline;
+    padding-right: $spacer * 3;
   }
   &__headline {
     font-size: 1.25rem;

@@ -18,7 +18,6 @@ Feature: Site alerts
 
     # Anonymous users should see the alert.
     Given I am not logged in
-    # Validate the need for this step in ISAICP-9742.
     And I have a new browser session
     And I am on the homepage
     Then I wait until the page contains the text "Between 18:00 and 20:00 the site will be temporarily unavailable due to scheduled maintenance"
@@ -35,7 +34,6 @@ Feature: Site alerts
 
     # The alert should no longer be shown.
     Given I am not logged in
-    # Validate the need for this step in ISAICP-9742.
     And I have a new browser session
     And I am on the homepage
     Then I should not see the text "Between 18:00 and 20:00 the site will be temporarily unavailable due to scheduled maintenance"
@@ -67,7 +65,6 @@ Feature: Site alerts
     Then I should see the message "The Sitewide Alert Site maintenance 18:00-20:00 has been deleted."
 
     Given I am not logged in
-    # Validate the need for this step in ISAICP-9742.
     And I have a new browser session
     And I am on the homepage
     Then I should not see the text "Between 18:00 and 20:00 the site will be temporarily unavailable due to scheduled maintenance"

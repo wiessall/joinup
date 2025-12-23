@@ -85,11 +85,11 @@ class DeveloperOverheid extends EuOssCatalogueProviderPluginBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): self {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
-      $pluginId,
-      $pluginDefinition,
+      $plugin_id,
+      $plugin_definition,
       $container->get('plugin.manager.eu_oss_catalogue.parser'),
       $container->get('logger.channel.eu_oss_catalogue'),
       $container->get('http_client'),
@@ -128,13 +128,14 @@ class DeveloperOverheid extends EuOssCatalogueProviderPluginBase {
 
           // Try to use "publiccode.yaml".
           if (isset($project->files['publiccodeYaml'])) {
+            /** @var array{files: array<string, mixed>} $values */
             $values = $project->toArray();
-            $values['files']['publiccodeYml'] = $values['files']['publiccodeYaml'];
+            $values['files']['publiccodeYml'] = $values['files']['publiccodeYaml'] ?? NULL;
             unset($values['files']['publiccodeYaml']);
+            // @phpstan-ignore-next-line parameter.missing
             yield new Project(...$values);
             continue;
           }
-
           yield $project;
         }
       }
