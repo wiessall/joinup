@@ -1,0 +1,13 @@
+diff --git a/src/Plugin/views/style/CalendarViewWeek.php b/src/Plugin/views/style/CalendarViewWeek.php
+index 523c8fa..39a70a0 100644
+--- a/src/Plugin/views/style/CalendarViewWeek.php
++++ b/src/Plugin/views/style/CalendarViewWeek.php
+@@ -137,7 +137,7 @@ class CalendarViewWeek extends CalendarViewBase {
+    * {@inheritDoc}
+    */
+   public function buildCalendars(int $selected_timestamp): array {
+-    $year = date('Y', $selected_timestamp);
++    $year = date('o', $selected_timestamp);
+     $week = date('W', $selected_timestamp);
+     $calendars[$year . 'W' . $week] = $this->buildTable($year, $week);
+     return $calendars;

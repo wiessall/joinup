@@ -14,3 +14,4 @@ dependencies:
   - joinup:joinup_workflow
   - openapi_ui_swagger:openapi_ui_swagger
   - paragraphs:paragraphs
+  - state_machine_permissions:state_machine_permissions

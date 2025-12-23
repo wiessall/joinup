@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\assessments\Entity;
 
 use Drupal\Core\Entity\EntityStorageInterface;
-use Drupal\assessments\DependentEntityManager;
 use Drupal\paragraphs\Entity\Paragraph;
 
 /**
@@ -13,16 +12,16 @@ use Drupal\paragraphs\Entity\Paragraph;
  */
 class BindingRequirementParagraph extends Paragraph {
 
+  use EntityReferenceFieldsOwnedTrait;
+
   /**
    * {@inheritdoc}
    */
   public function postSave(EntityStorageInterface $storage, $update = TRUE): void {
     parent::postSave($storage, $update);
 
-    if ($update && $this->original instanceof BindingRequirementParagraph) {
-      /** @var \Drupal\assessments\DependentEntityManager $dependent_entity_manager */
-      $dependent_entity_manager = \Drupal::service(DependentEntityManager::class);
-      $dependent_entity_manager->deleteRemovedReferences($this, $this->original, self::getDependentReferenceFields());
+    if ($update) {
+      $this->onUpdateEntityReferenceFieldsOwned();
     }
   }
 
@@ -33,19 +32,15 @@ class BindingRequirementParagraph extends Paragraph {
     parent::postDelete($storage, $entities);
 
     foreach ($entities as $entity) {
-      /** @var \Drupal\assessments\DependentEntityManager $dependent_entity_manager */
-      $dependent_entity_manager = \Drupal::service(DependentEntityManager::class);
-      $dependent_entity_manager->deleteDependentEntities($entity, self::getDependentReferenceFields());
+      \assert($entity instanceof static);
+      $entity->onDeleteEntityReferenceFieldsOwned();
     }
   }
 
   /**
-   * Returns ER fields whose entities are deleted with this entity.
-   *
-   * @return string[]
-   *   Array of field names.
+   * {@inheritdoc}
    */
-  public static function getDependentReferenceFields(): array {
+  protected function getEntityReferenceFieldsOwned(): array {
     return ['expression', 'affects', 'has_participation', 'requirement_documents'];
   }
 
