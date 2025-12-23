@@ -154,7 +154,7 @@ function joinup_assessment_form_alter(array &$form, FormStateInterface $form_sta
       '#limit_validation_errors' => [],
       '#weight' => 20,
       '#ajax' => [
-        'callback' => 'joinup_assessment_delete_draft_submit',
+        'callback' => 'joinup_assessment_delete_draft_op',
         'event' => 'click',
       ],
     ];
@@ -169,7 +169,7 @@ function joinup_assessment_form_alter(array &$form, FormStateInterface $form_sta
  * @param \Drupal\Core\Form\FormStateInterface $form_state
  *   Form state object.
  */
-function joinup_assessment_delete_draft_submit(array &$form, FormStateInterface $form_state): AjaxResponse {
+function joinup_assessment_delete_draft_op(array &$form, FormStateInterface $form_state): AjaxResponse {
   /** @var \Drupal\webform\WebformSubmissionInterface $submission */
   $submission = $form_state->getFormObject()->getEntity();
 
