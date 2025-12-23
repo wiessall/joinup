@@ -94,6 +94,7 @@ permissions:
   - 'access webform help'
   - 'access webform overview'
   - 'add sitewide alert entities'
+  - 'administer assessment types'
   - 'administer collection ownership'
   - 'administer comments'
   - 'administer entity legal document versions'
