@@ -470,20 +470,17 @@ components:
           description: |
             The public organisation type. To be omitted for EU institutions,
             bodies, agencies.
-      allOf:
-      - if:
-          properties:
-            organisation_type:
-              enum:
-                - european_union_agency
-                - european_union_body
-                - european_union_institution
-      then:
-        properties:
-          country: false
-      else:
-        required:
+      dependentRequired:
+        organisation_type:
           - country
+      allOf:
+        - if:
+            properties:
+              organisation_type:
+                const: local_public_sector_body
+          then:
+            required:
+              - country
 
     BindingRequirement:
       type: object
