@@ -58,21 +58,20 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     file_put_contents("public://assessment-test/fat.docx", str_repeat("x", 11000000));
     file_put_contents("public://assessment-test/" . str_repeat('very_', 48) . 'long_name.pdf', 'quxx');
 
-//    ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('invalid_schema');
-//    $response = $this->post($payload);
-//    $this->assertSame(422, $response->getStatusCode());
-//    $this->assertSame($expect, Json::decode($response->getBody()->getContents()));
-//
-//    ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('invalid_references');
-//    $response = $this->post($payload);
-//    $this->assertSame(422, $response->getStatusCode());
-//    $this->assertSame($expect, Json::decode($response->getBody()->getContents()));
+    ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('invalid_schema');
+    $response = $this->post($payload);
+    $this->assertSame(422, $response->getStatusCode());
+    $this->assertSame($expect, Json::decode($response->getBody()->getContents()));
 
-//    ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('invalid_country_for_eu_organisation');
-//    $response = $this->post($payload);
-//    $this->assertSame(422, $response->getStatusCode());
-//    $this->assertSame($expect, Json::decode($response->getBody()->getContents()));
-////
+    ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('invalid_references');
+    $response = $this->post($payload);
+    $this->assertSame(422, $response->getStatusCode());
+    $this->assertSame($expect, Json::decode($response->getBody()->getContents()));
+    ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('invalid_country_for_eu_organisation');
+    $response = $this->post($payload);
+    $this->assertSame(422, $response->getStatusCode());
+    $this->assertSame($expect, Json::decode($response->getBody()->getContents()));
+
     ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('invalid_missing_country_for_non_eu_organisation');
     $response = $this->post($payload);
     $this->assertSame(422, $response->getStatusCode());
