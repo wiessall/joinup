@@ -463,13 +463,12 @@ components:
                 - european_union_agency
                 - european_union_body
                 - european_union_institution
-        then:
-          not:
-            required:
-              - country
-        else:
-          required:
-            - country
+      then:
+        properties:
+          country: false
+      else:
+        required:
+          - country
 
     BindingRequirement:
       type: object

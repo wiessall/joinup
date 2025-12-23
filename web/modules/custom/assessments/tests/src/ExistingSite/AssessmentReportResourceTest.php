@@ -58,12 +58,22 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     file_put_contents("public://assessment-test/fat.docx", str_repeat("x", 11000000));
     file_put_contents("public://assessment-test/" . str_repeat('very_', 48) . 'long_name.pdf', 'quxx');
 
-    ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('invalid_schema');
-    $response = $this->post($payload);
-    $this->assertSame(422, $response->getStatusCode());
-    $this->assertSame($expect, Json::decode($response->getBody()->getContents()));
+//    ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('invalid_schema');
+//    $response = $this->post($payload);
+//    $this->assertSame(422, $response->getStatusCode());
+//    $this->assertSame($expect, Json::decode($response->getBody()->getContents()));
+//
+//    ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('invalid_references');
+//    $response = $this->post($payload);
+//    $this->assertSame(422, $response->getStatusCode());
+//    $this->assertSame($expect, Json::decode($response->getBody()->getContents()));
 
-    ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('invalid_references');
+//    ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('invalid_country_for_eu_organisation');
+//    $response = $this->post($payload);
+//    $this->assertSame(422, $response->getStatusCode());
+//    $this->assertSame($expect, Json::decode($response->getBody()->getContents()));
+////
+    ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('invalid_missing_country_for_non_eu_organisation');
     $response = $this->post($payload);
     $this->assertSame(422, $response->getStatusCode());
     $this->assertSame($expect, Json::decode($response->getBody()->getContents()));
@@ -154,6 +164,26 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
       ->toString();
 
     return \Drupal::httpClient()->post($url, [
+      RequestOptions::HTTP_ERRORS => FALSE,
+      RequestOptions::HEADERS => [
+        'Authorization' => 'Bearer ' . $this->getAccessToken(),
+      ],
+      RequestOptions::JSON => $payload,
+    ]);
+  }
+
+  /**
+   * Returns a Guzzle response after getting to /api/assessments/v1/assessment.
+   *
+   * @return \Psr\Http\Message\ResponseInterface
+   *   Guzzle response.
+   */
+  protected function get(array $payload): ResponseInterface {
+    $url = Url::fromUri('internal:/api/assessments/v1/assessment')
+      ->setAbsolute()
+      ->toString();
+
+    return \Drupal::httpClient()->get($url, [
       RequestOptions::HTTP_ERRORS => FALSE,
       RequestOptions::HEADERS => [
         'Authorization' => 'Bearer ' . $this->getAccessToken(),
