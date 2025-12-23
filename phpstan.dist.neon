@@ -1,4 +1,5 @@
 parameters:
+    level: 1
     customRulesetUsed: true
     reportUnmatchedIgnoredErrors: false
     drupal:
@@ -11,11 +12,16 @@ parameters:
         - '#Class Drupal\\joinup_group\\Form\\UserCancelForm extends @internal class Drupal\\user\\Form\\UserCancelForm.#'
         - '#Class Drupal\\joinup_group\\Form\\UserMultipleCancelConfirm extends @internal class Drupal\\user\\Form\\UserMultipleCancelConfirm.#'
         - '#Class Drupal\\joinup_media\\JoinupMediaLibrary extends @internal class Drupal\\ckeditor5\\Plugin\\CKEditor5Plugin\\MediaLibrary.#'
+        # new static() is a best practice in Drupal, so we cannot fix that.
+        - '#^Unsafe usage of new static#'
     excludePaths:
         - src/CodingStandards/Sniffs/NamingConventions/ValidUpdateNameSniff.php
         - tests/src/*
         - web/modules/custom/joinup_core/src/PathProcessor/ModalRouteProcessor.php
         - web/modules/custom/joinup_test/modules/joinup_test_time/src/Datetime/TestTime.php
         - web/modules/custom/joinup_test/src/Plugin/ServiceMock/GitHubCom.php
+        - web/modules/custom/joinup_stats/src/Event/Subscriber/RefreshCachedFieldsEventSubscriber.php
+        - web/sites/default/default.settings.php
+
     scanFiles:
         - web/modules/contrib/og/src/OgMembershipInterface.php

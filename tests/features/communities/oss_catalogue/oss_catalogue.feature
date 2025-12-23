@@ -248,6 +248,7 @@ Feature:
       | Four  | https://placehold.co/800x400.jpg,https://placehold.co/500x400.png,https://placehold.co/700x400.png,https://placehold.co/600x400.png | stable                 | developers_italia | data-analytics | published | 2014-11-19       |
     When I visit the "Four" "oss_solution"
     Then I should see the text "Gallery"
+    And I wait for slick carousel ".slick--optionset--image-gallery" to be ready
     And I should have the following images on the page in this order
       # Downloaded instance of https://placehold.co/800x400.jpg.
       | aeea83704c583614d4900c69de40802c.jpg |

@@ -9,7 +9,7 @@
 #}
 {{ attach_library('ventuno/group-banner') }}
 {{ attach_library('ventuno/group') }}
-<div{{ attributes.addClass(['group-banner', 'bg-light', 'pt-2', 'py-lg-2']).setAttribute('role', 'complementary').setAttribute('aria-label', 'Collection header'|t) }}>
+<div{{ attributes.addClass(['group-banner', 'bg-light', 'pt-2', 'py-lg-2']).setAttribute('role', 'region').setAttribute('aria-label', 'Collection header'|t) }}>
   <div class="container py-0 py-md-2 d-flex flex-column flex-lg-row">
     <div data-drupal-group-logo class="group-banner__logo me-lg-2 w-100 w-lg-auto text-center">
       {{ content.logo }}
@@ -17,13 +17,13 @@
     <div class="w-100 d-flex flex-column flex-lg-row flex-wrap">
       <div class="group-banner__title my-2 my-lg-0 text-center text-lg-start d-flex align-items-center justify-content-center justify-content-lg-start">
         {{ title_prefix }}
-        {% if is_canonical %}
+        {% if has_no_landing_page %}
           <h1>
         {% endif %}
         <a class="h1 fw-bold mb-0" href="{{ url }}">
           {{ label }}
         </a>
-        {% if is_canonical %}
+        {% if has_no_landing_page %}
           </h1>
         {% endif %}
         {{ title_suffix }}

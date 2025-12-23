@@ -26,7 +26,7 @@ class ReportLinkFieldItemList extends FieldItemList {
    */
   public function getValue($include_computed = FALSE) {
     $this->ensureLoaded();
-    return parent::getValue($include_computed);
+    return parent::getValue();
   }
 
   /**

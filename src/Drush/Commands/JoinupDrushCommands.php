@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Joinup\Drush\Commands;
 
 use Drupal\Core\Extension\ModuleInstallerInterface;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\search_api\Task\TaskManagerInterface;
+use Drupal\simple_oauth\Service\KeyGeneratorService;
 use Drush\Attributes as CLI;
 use Drush\Boot\DrupalBootLevels;
 use Drush\Commands\AutowireTrait;
@@ -23,7 +25,12 @@ class JoinupDrushCommands extends DrushCommands {
     #[Autowire(service: 'search_api.task_manager')]
     protected readonly TaskManagerInterface $taskManager,
     protected readonly ModuleInstallerInterface $moduleInstaller,
-  ) {}
+    protected readonly FileSystemInterface $fileSystem,
+    #[Autowire(service: 'simple_oauth.key.generator')]
+    protected readonly KeyGeneratorService $keyGenerator,
+  ) {
+    parent::__construct();
+  }
 
   /**
    * Rebuilds node access if case.
@@ -64,6 +71,30 @@ class JoinupDrushCommands extends DrushCommands {
   #[CLI\Bootstrap(level: DrupalBootLevels::FULL)]
   public function acceptanceTasks(): void {
     $this->moduleInstaller->install(['joinup_acceptance']);
+  }
+
+  /**
+   * Generates OAuth2 keys if they don't already exist.
+   */
+  #[CLI\Command(name: 'joinup:generate-oauth-keys')]
+  #[CLI\Bootstrap(level: DrupalBootLevels::FULL)]
+  public function generateOauthKeys(): void {
+    $directory = 'private://simple_oauth';
+    $realPath = $this->fileSystem->realpath($directory);
+
+    if ($realPath && file_exists($realPath . '/public.key') && file_exists($realPath . '/private.key')) {
+      $this->logger()->success(dt('OAuth2 keys already exist.'));
+      return;
+    }
+
+    $this->fileSystem->prepareDirectory(
+      $directory,
+      FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS
+    );
+
+    $realPath = $this->fileSystem->realpath($directory);
+    $this->keyGenerator->generateKeys($realPath);
+    $this->logger()->success(dt('OAuth2 keys generated successfully.'));
   }
 
 }

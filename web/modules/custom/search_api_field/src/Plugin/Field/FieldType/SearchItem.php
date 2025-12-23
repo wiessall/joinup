@@ -237,6 +237,7 @@ class SearchItem extends FieldItemBase implements SearchItemInterface {
     else {
       // Check that keys are valid for the field type.
       foreach ($values as $key => $value) {
+        // @phpstan-ignore-next-line
         if ($error = static::validateAllowedValue($key)) {
           $form_state->setError($element, $error);
           break;
@@ -277,6 +278,7 @@ class SearchItem extends FieldItemBase implements SearchItemInterface {
         $explicit_keys = TRUE;
       }
       // Otherwise see if we can use the value as the key.
+      // @phpstan-ignore-next-line
       elseif (!static::validateAllowedValue($text)) {
         $key = $value = $text;
         $explicit_keys = TRUE;
