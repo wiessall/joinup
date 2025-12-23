@@ -205,6 +205,26 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
   }
 
   /**
+   * Tests access to the custom moderator form for assessment reports.
+   */
+  public function testModerationFormAccess(): void {
+    $review_assessment = $this->testAssessments['review'];
+
+    $this->assertTrue(_assessments_can_moderate($review_assessment, $this->assessmentModeratorUser)->isAllowed());
+    $this->assertFalse(_assessments_can_moderate($review_assessment, $this->ownerUser)->isAllowed());
+    $this->assertFalse(_assessments_can_moderate($review_assessment, $this->moderatorUser)->isAllowed());
+    $this->assertFalse(_assessments_can_moderate($review_assessment, $this->assessmentReporterUser)->isAllowed());
+    $this->assertFalse(_assessments_can_moderate($review_assessment, $this->authenticatedUser)->isAllowed());
+
+    foreach (['draft', 'published', 'require_updates'] as $state) {
+      $this->assertFalse(
+        _assessments_can_moderate($this->testAssessments[$state], $this->assessmentModeratorUser)->isAllowed(),
+        sprintf('Assessment moderator should not have access to the moderation form for %s state.', $state)
+      );
+    }
+  }
+
+  /**
    * Tests update access for published state assessment reports.
    *
    * @covers ::checkAccess
