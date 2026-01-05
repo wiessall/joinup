@@ -527,7 +527,7 @@ display:
         options:
           display_reset: false
           use_previous_next: true
-          label_format: '\w\e\e\k W  - F Y'
+          label_format: '\w\e\e\k W  - F o'
           offset: 0
       style:
         type: calendar_week

@@ -77,44 +77,45 @@ paths:
                     - https://example.com/last-year-report
                     - https://example.com/middle-east
                   binding_requirement:
-                    expression:
-                      - name: Legal Act 2024
-                        description: Reference to an EU legal expression
-                        documented_in: https://example.com/eli/act
-                    description: Article 5
-                    documents:
-                      - https://example.com/law/123
-                      - https://example.com/regulation/eu-1655467-s
-                    affects:
-                      - name: Digital Monitoring Unit
-                        thematic_area: digital_and_innovation_services
-                      - name: Training Centre
-                        thematic_area: education_and_research
-                    has_participation:
-                      - participant_type:
-                          - national_public_sector_body
-                        country:
-                          - BE
-                          - NL
-                          - LU
-                      - participant_type:
-                          - private_businesses
-                        country:
-                          - IT
-
-                    asset:
-                      - name: Portal EU
-                        description: An EU portal interoperable solution
-                        landing_page: "https://portal.example.eu"
-                      - b21e876e-8ad0-4057-ad57-de45c51d374f
-                      - a0e76022-863e-4f8f-8eb0-8227cd080be4
+                    -
+                      expression:
+                        - name: Legal Act 2024
+                          description: Reference to an EU legal expression
+                          documented_in: https://example.com/eli/act
+                      description: Article 5
+                      documents:
+                        - https://example.com/law/123
+                        - https://example.com/regulation/eu-1655467-s
+                      affects:
+                        - name: Digital Monitoring Unit
+                          thematic_area: digital_and_innovation_services
+                        - name: Training Centre
+                          thematic_area: education_and_research
+                      has_participation:
+                        - participant_type:
+                            - national_public_sector_body
+                          country:
+                            - BE
+                            - NL
+                            - LU
+                        - participant_type:
+                            - private_businesses
+                          country:
+                            - IT
+                      asset:
+                        -
+                          title: Portal EU
+                          description: An EU portal interoperable solution
+                          landing_page: "https://portal.example.eu"
+                        - b21e876e-8ad0-4057-ad57-de45c51d374f
+                        - a0e76022-863e-4f8f-8eb0-8227cd080be4
                   results_in:
                     organisational:
                       interpretation: positive
                       judgement: Compliant with conditions
                     technical:
-                      judgement: neutral
-                      interpretation: Requires follow-up
+                      interpretation: neutral
+                      judgement: Requires follow-up
                   remaining_barriers: The city has not yet implemented the new regulations.
                   documents:
                     - https://files.example.com/documents/req-1.pdf
@@ -128,6 +129,85 @@ paths:
             objects.
           content:
             application/json:
+              examples:
+                createOrReferSubObjects:
+                  summary: Sample response from the example POST
+                  description: |-
+                    The response contains exactly the same structure as the
+                    submitted JSON plus the IDs of the created objects. In this
+                    example both the `provider` and the first `asset` of the
+                    binding requirement are created along with the report, thus
+                    their IDs are included in the response.
+                  value:
+                    id: "76269914-0d50-46a6-8cd5-19ec67474e99"
+                    language: "it"
+                    name: "Legislation waste management"
+                    provider:
+                      id: "a74fcfc7-290d-4b37-b3a6-13e506a4f010"
+                      name: "City of Brussels"
+                      organisation_type: "local_public_sector_body"
+                      country: "BE"
+                    relevant_report:
+                      - "https://example.com/last-year-report"
+                      - "https://example.com/middle-east"
+                    binding_requirement:
+                      - expression:
+                          - name: "Legal Act 2024"
+                            description: "Reference to an EU legal expression"
+                            documented_in: "https://example.com/eli/act"
+                        description: "Article 5"
+                        documents: [
+                          "https://my.local.domain/documents/fetched-renamed-file-ab.pdf",
+                          "https://my.local.domain/documents/fetched-renamed-file-cd.pdf"
+                        ]
+                        affects:
+                          - name: "Digital Monitoring Unit"
+                            thematic_area:
+                              - "digital_and_innovation_services"
+                          - name: "Training Centre"
+                            thematic_area:
+                              - "education_and_research"
+                        has_participation:
+                          - participant_type:
+                              - "national_public_sector_body"
+                            country:
+                              - "BE"
+                              - "NL"
+                              - "LU"
+                          - participant_type:
+                              - "private_businesses"
+                            country:
+                              - "IT"
+                        asset:
+                          - id: "42097b4d-eb1a-45e8-a9b9-493541c9edab"
+                            title: "Portal EU"
+                            description: "An EU portal interoperable solution"
+                            landing_page: "https://portal.example.eu"
+                            url: "https://joinup.ddev.local/it/node/732257/solution/portal-eu"
+                          - id: "b21e876e-8ad0-4057-ad57-de45c51d374f"
+                            title: "Some 2nd referenced asset"
+                            description: "..."
+                            landing_page: "https://portal.example.eu/1111"
+                            url: "https://joinup.ddev.local/it/node/1111"
+                          - id: "42097b4d-eb1a-45e8-a9b9-493541c9edab"
+                            title: "Some 3rd referenced asset"
+                            description: "..."
+                            landing_page: "https://portal.example.eu/2222"
+                            url: "https://joinup.ddev.local/it/node/2222"
+                    results_in:
+                      organisational:
+                        interpretation: "positive"
+                        judgement: "Compliant with conditions"
+                      technical:
+                        interpretation: "neutral"
+                        judgement: "Requires follow-up"
+                    remaining_barriers: "The city has not yet implemented the new regulations."
+                    documents: [
+                      "https://my.local.domain/documents/fetched-renamed-file-1.pdf",
+                      "https://my.local.domain/documents/regulation.2025.pdf"
+                    ]
+                    other_comment: "Still work to be done. Waiting for a new iteration."
+
               schema:
                 $ref: '#/components/schemas/Assessment'
         '400':
@@ -211,11 +291,26 @@ paths:
         description: Assessments API endpoint
     get:
       summary: Get all assets
-      description: Returns all assets (also known as interoperable solutions)
+      description: |
+        Returns all assets (also known as interoperable solutions). Results are
+        paginated with 200 items per page. Use the `page` parameter to navigate
+        through pages (0-indexed).
       operationId: getAssets
       tags:
         - Resources
       security: [ ]
+      parameters:
+        - in: query
+          name: page
+          description: |
+            Page number for pagination (0-indexed). Each page contains 200 items.
+            Default is 0 (first page).
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          example: 0
       responses:
         '200':
           description: Assets fetched

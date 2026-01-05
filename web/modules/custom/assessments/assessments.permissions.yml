@@ -4,19 +4,26 @@ administer assessment types:
   restrict access: true
 moderate assessment report:
   title: 'Moderate assessment reports'
-  description: 'Moderate assessment reports and perform moderation transitions.'
-bypass assessment report moderation:
-  title: 'Bypass assessment report moderation'
-  description: 'Create assessment reports directly in published state and bypass moderation workflow.'
+  description: 'View the moderation form.'
+  restrict access: true
 create assessment report:
   title: 'Create assessment reports'
   description: 'Create new assessment reports.'
+delete assessment report:
+  title: 'Delete assessment reports'
+  description: 'Delete assessment reports.'
+  restrict access: true
 view own unpublished assessment report:
   title: 'View own unpublished assessment reports'
   description: 'View assessment reports created by the user.'
-edit own assessment report:
-  title: 'Edit own assessment reports'
-  description: 'Edit assessment reports created by the user.'
+view any unpublished assessment report:
+    title: 'View any unpublished assessment reports'
+    description: 'View any assessment reports created.'
+    restrict access: true
+view assessment listing:
+    title: 'View assessment listing'
+    description: 'Access the assessment listing page.'
+    restrict access: true
 administer assessment statements:
   title: 'Administer assessment statements'
   description: 'Maintain the types of assessment statement entity.'

@@ -20,9 +20,9 @@ description: ''
 required: true
 translatable: false
 default_value: {  }
-default_value_callback: 'Drupal\assessments\Entity\AssessmentReport::getDefaultStateValue'
+default_value_callback: ''
 settings:
-  workflow: default
+  workflow: assessment_workflow
   workflow_callback: ''
   always_allow_default: true
   current_state_first: true
