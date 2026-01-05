@@ -219,6 +219,40 @@ paths:
                 properties:
                   error:
                     type: string
+    get:
+      summary: Get all Assessments of type reports
+      description: Returns all assessment reports dependently on country code of referenced public institution
+      operationId: getReport
+      tags:
+        - Assessments
+      security: [ ]
+      parameters:
+        - in: query
+          name: country
+          required: false
+          description: The two-letter ISO-3166 country code to filter reports by their provider's country.
+            Alternatively, use "EU" to fetch reports from EU institutions, bodies, agencies.
+          schema:
+            $ref: '#/components/schemas/EuropeanUnionCountry'
+          example: BE, EU
+      responses:
+        '200':
+          description: The fetched reports.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Assessment'
+              examples:
+                fetched:
+                  value:
+                    - id: "43a50ef2-7d90-4562-ab81-59af10f2e082"
+                      name: "Report 1"
+                      country: "PT"
+                    - id: "7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7c"
+                      name: "Report 2"
+                      country: null
   /assessment/{id}:
     servers:
       - url: /api/assessments/v1
@@ -323,7 +357,7 @@ paths:
                     - id: "43a50ef2-7d90-4562-ab81-59af10f2e081"
                       name: "Public Organisation 1"
                       "organisation_type": "local_public_sector_body"
-                      country: "PT"
+                      country: "bg"
                     - id: "7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7b"
                       name: "Public Organisation 2"
                       "organisation_type": "national_public_sector_body"
