@@ -67,6 +67,7 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     $response = $this->post($payload);
     $this->assertSame(422, $response->getStatusCode());
     $this->assertSame($expect, Json::decode($response->getBody()->getContents()));
+
     ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('invalid_country_for_eu_organisation');
     $response = $this->post($payload);
     $this->assertSame(422, $response->getStatusCode());
