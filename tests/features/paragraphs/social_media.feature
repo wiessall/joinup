@@ -31,8 +31,7 @@ Feature:
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
 
-  # Validate the need for the "@restart-session" tag in ISAICP-9742.
-  @javascript @restart-session
+  @javascript
   Scenario Outline: A paragraph of social media links is available.
     Given custom_page content:
       | title        | collection            |
