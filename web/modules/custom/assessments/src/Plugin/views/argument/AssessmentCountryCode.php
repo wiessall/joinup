@@ -22,7 +22,7 @@ class AssessmentCountryCode extends StringArgument {
    */
   public function query($group_by = FALSE): void {
     // "EU" is always valid and filters reports where country is NULL.
-    if ($this->argument === 'EU') {
+    if (strtoupper($this->argument) === 'EU') {
       $this->ensureMyTable();
       $field = "$this->tableAlias.$this->realField";
       $this->query->addWhere(0, $field, NULL, 'IS NULL');

@@ -230,9 +230,11 @@ paths:
         - in: query
           name: country
           required: false
-          description: Country code
+          description: The two-letter ISO-3166 country code to filter reports by their provider's country.
+            Alternatively, use "EU" to fetch reports from EU institutions, bodies, agencies.
           schema:
             $ref: '#/components/schemas/EuropeanUnionCountry'
+          example: BE, EU
       responses:
         '200':
           description: The fetched reports.
