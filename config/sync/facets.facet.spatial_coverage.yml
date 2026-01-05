@@ -74,8 +74,8 @@ processor_configs:
     weights:
       build: 100
     settings: {  }
-  translate_entity:
-    processor_id: translate_entity
+  translate_entity_aggregated_fields:
+    processor_id: translate_entity_aggregated_fields
     weights:
       build: 5
     settings: {  }
