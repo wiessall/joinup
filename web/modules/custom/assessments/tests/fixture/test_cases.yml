@@ -69,13 +69,15 @@ invalid_schema:
       /other_comment:
         - Integer value found, but a string is required
       /provider:
+        - The property country is not defined and the definition does not allow additional properties
         - An object or a string is required. Object value found, but is invalid
       /provider/country:
         - Does not have a value in the enumeration ["AT","BE","BG","HR","CY","CZ","DK","EE","FI","FR","DE","GR","HU","IE","IT","LV","LT","LU","MT","NL","PL","PT","RO","SK","SI","ES","SE"]
       /provider/name:
         - The property name is required
       /provider/organisation_type:
-        - Does not have a value in the enumeration ["european_union_agency","european_union_body","european_union_institution","local_public_sector_body","national_public_sector_body","regional_public_sector_body"]
+        - Does not have a value in the enumeration ["european_union_agency","european_union_body","european_union_institution"]
+        - Does not have a value in the enumeration ["local_public_sector_body","national_public_sector_body","regional_public_sector_body"]
       /relevant_report:
         - String value found, but an array is required
       /results_in/organisational/interpretation:
@@ -271,8 +273,11 @@ invalid_country_for_eu_organisation:
               - "private_businesses"
   expect:
     errors:
-      /country:
-        - The property country is not allowed for organisation_type european_union_institution
+      /provider:
+        - "The property country is not defined and the definition does not allow additional properties"
+        - "An object or a string is required. Object value found, but is invalid"
+      /provider/organisation_type:
+        - "Does not have a value in the enumeration [\"local_public_sector_body\",\"national_public_sector_body\",\"regional_public_sector_body\"]"
 
 invalid_missing_country_for_non_eu_organisation:
   payload:
@@ -305,6 +310,10 @@ invalid_missing_country_for_non_eu_organisation:
               - "private_businesses"
   expect:
     errors:
-      /country:
-        - The property country is required
+      /provider:
+        - "An object or a string is required. Object value found, but is invalid"
+      /provider/country:
+        - "The property country is required"
+      /provider/organisation_type:
+        - "Does not have a value in the enumeration [\"european_union_agency\",\"european_union_body\",\"european_union_institution\"]"
 
