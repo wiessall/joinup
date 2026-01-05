@@ -94,8 +94,11 @@ function ventuno_preprocess_paragraph__binding_requirement(array &$variables): v
     ];
   };
 
-  // Expression items are displayed as an ordered list, only labels.
-  $expressionItems = $collectChildItems($variables['content']['expression']);
+  // Expression items are displayed as an ordered list, using initiative_name.
+  $expressionItems = array_map(
+    fn($expression) => ['#plain_text' => $expression->get('initiative_name')->value],
+    $paragraph->get('expression')->referencedEntities()
+  );
   $expressionList = $buildItemList('ol', $expressionItems);
   $replaceWithSingleChild($variables['content']['expression'], $expressionList);
 
