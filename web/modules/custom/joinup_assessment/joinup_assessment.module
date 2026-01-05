@@ -168,6 +168,9 @@ function joinup_assessment_form_alter(array &$form, FormStateInterface $form_sta
  *   Form object.
  * @param \Drupal\Core\Form\FormStateInterface $form_state
  *   Form state object.
+ *
+ * @return \Drupal\Core\Ajax\AjaxResponse
+ *   An AJAX response representing the form and its AJAX commands.
  */
 function joinup_assessment_delete_draft_op(array &$form, FormStateInterface $form_state): AjaxResponse {
   /** @var \Drupal\webform\WebformSubmissionInterface $submission */
