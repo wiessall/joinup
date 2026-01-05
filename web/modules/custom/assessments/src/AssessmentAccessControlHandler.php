@@ -7,15 +7,36 @@ namespace Drupal\assessments;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityAccessControlHandler;
+use Drupal\Core\Entity\EntityHandlerInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\PublicOrganisation;
+use Drupal\joinup_workflow\WorkflowHelperInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Defines the access control handler for the assessment entity type.
  */
-final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
+final class AssessmentAccessControlHandler extends EntityAccessControlHandler implements EntityHandlerInterface {
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type): static {
+    return new static(
+      $entity_type,
+      $container->get('joinup_workflow.workflow_helper'),
+    );
+  }
+
+  public function __construct(
+    EntityTypeInterface $entity_type,
+    protected readonly WorkflowHelperInterface $workflowHelper,
+  ) {
+    parent::__construct($entity_type);
+  }
 
   /**
    * {@inheritdoc}
@@ -147,9 +168,6 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
         ->addCacheableDependency($entity);
     }
 
-    // Non-published assessments (draft, review, require_updates): restricted
-    // to owner, assessment reporters and moderators.
-    // Owner can view their own non-published assessment with view permission.
     $is_owner = $entity->getOwnerId() == $account->id();
     if ($is_owner && $account->hasPermission('view own unpublished assessment report')) {
       return AccessResult::allowed()
@@ -158,9 +176,7 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
         ->addCacheableDependency($entity);
     }
 
-    // User with 'moderate assessment report' can view
-    // any non-published assessment.
-    if ($account->hasPermission('moderate assessment report')) {
+    if ($account->hasPermission('view any unpublished assessment report')) {
       return AccessResult::allowed()
         ->cachePerPermissions()
         ->addCacheableDependency($entity);
@@ -185,16 +201,10 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
    *   The access result.
    */
   protected function checkUpdateAccess(AssessmentInterface $entity, AccountInterface $account): AccessResultInterface {
-    // Assessment reporters and moderators can update in any state.
-    if ($account->hasPermission('moderate assessment report')) {
+    $allowed_states = $this->workflowHelper->getAvailableTargetStates($entity, $account);
+    if (!empty($allowed_states)) {
       return AccessResult::allowed()
         ->cachePerPermissions()
-        ->addCacheableDependency($entity);
-    }
-
-    // Owners can update only in non-published state with edit permission.
-    if (!$entity->isPublished() && $entity->getOwnerId() == $account->id()) {
-      return AccessResult::allowedIfHasPermission($account, 'edit own assessment report')
         ->cachePerUser()
         ->addCacheableDependency($entity);
     }
@@ -217,10 +227,7 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
    *   The access result.
    */
   protected function checkDeleteAccess(AssessmentInterface $entity, AccountInterface $account): AccessResultInterface {
-    // Assessment reporters and moderators can delete in any state.
-    return AccessResult::allowedIfHasPermissions($account, [
-      'moderate assessment report',
-    ], 'OR')
+    return AccessResult::allowedIfHasPermission($account, 'delete assessment report')
       ->addCacheableDependency($entity);
   }
 
