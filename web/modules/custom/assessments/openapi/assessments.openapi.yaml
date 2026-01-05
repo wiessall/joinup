@@ -356,6 +356,11 @@ components:
             $ref: '#/components/schemas/UUID'
           readOnly: true
           description: The universally unique ID of the assessment report
+        uri:
+          type: string
+          format: uri
+          readOnly: true
+          description: The canonical URI of the assessment report
         language:
           type: string
           enum:
@@ -451,6 +456,11 @@ components:
             $ref: '#/components/schemas/UUID'
           readOnly: true
           description: The universally unique ID of the public organisation.
+        uri:
+          type: string
+          format: uri
+          readOnly: true
+          description: The canonical URI of the public organisation
         name:
           type: string
           description: The public organisation name.
@@ -615,6 +625,11 @@ components:
             $ref: '#/components/schemas/UUID'
           readOnly: true
           description: The universally unique ID of the solution.
+        uri:
+          type: string
+          format: uri
+          readOnly: true
+          description: The canonical URI of the asset
         title:
           type: string
           description: The title of the interoperability solution.
