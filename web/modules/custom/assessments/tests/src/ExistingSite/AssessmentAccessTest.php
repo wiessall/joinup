@@ -64,6 +64,13 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
   protected UserInterface $assessmentReporterUser;
 
   /**
+   * User with assessment_moderator role.
+   *
+   * @var \Drupal\user\UserInterface
+   */
+  protected UserInterface $assessmentModeratorUser;
+
+  /**
    * Test assessments in various workflow states.
    *
    * @var \Drupal\assessments\Entity\Assessment[]
@@ -92,6 +99,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
     $this->nonOwnerUser = $this->createUser();
     $this->moderatorUser = $this->createUser([], NULL, FALSE, ['roles' => ['moderator']]);
     $this->assessmentReporterUser = $this->createUser([], NULL, FALSE, ['roles' => ['assessment_reporter']]);
+    $this->assessmentModeratorUser = $this->createUser([], NULL, FALSE, ['roles' => ['assessment_moderator']]);
   }
 
   /**
@@ -121,6 +129,8 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
 
     $this->assertTrue($assessment->access('view', $this->ownerUser));
     $this->assertTrue($assessment->access('view', $this->moderatorUser));
+    $this->assertTrue($assessment->access('view', $this->assessmentReporterUser));
+    $this->assertTrue($assessment->access('view', $this->assessmentModeratorUser));
     $this->assertTrue($assessment->access('view', $this->authenticatedUser));
     $this->assertTrue($assessment->access('view', User::getAnonymousUser()));
   }
@@ -137,8 +147,9 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
 
     $this->assertTrue($assessment->access('view', $this->ownerUser));
     $this->assertTrue($assessment->access('view', $this->moderatorUser));
-    $this->assertTrue($assessment->access('view', $this->assessmentReporterUser));
+    $this->assertTrue($assessment->access('view', $this->assessmentModeratorUser));
 
+    $this->assertFalse($assessment->access('view', $this->assessmentReporterUser));
     $this->assertFalse($assessment->access('view', $this->nonOwnerUser));
     $this->assertFalse($assessment->access('view', $this->authenticatedUser));
   }
@@ -151,6 +162,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
   public function testCreateAssessment(): void {
     $this->assertTrue($this->accessHandler->createAccess('report', $this->ownerUser));
     $this->assertTrue($this->accessHandler->createAccess('report', $this->assessmentReporterUser));
+    $this->assertTrue($this->accessHandler->createAccess('report', $this->assessmentModeratorUser));
     $this->assertTrue($this->accessHandler->createAccess('report', $this->moderatorUser));
     $this->assertTrue($this->accessHandler->createAccess('report', $this->authenticatedUser));
 
@@ -167,9 +179,10 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
     $assessment = $this->testAssessments['draft'];
 
     $this->assertTrue($assessment->access('update', $this->ownerUser));
-    $this->assertFalse($assessment->access('update', $this->moderatorUser));
-    $this->assertFalse($assessment->access('update', $this->assessmentReporterUser));
 
+    $this->assertFalse($assessment->access('update', $this->moderatorUser));
+    $this->assertFalse($assessment->access('update', $this->assessmentModeratorUser));
+    $this->assertFalse($assessment->access('update', $this->assessmentReporterUser));
     $this->assertFalse($assessment->access('update', $this->nonOwnerUser));
     $this->assertFalse($assessment->access('update', $this->authenticatedUser));
   }
@@ -186,9 +199,29 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
     $this->assertFalse($assessment->access('update', $this->ownerUser));
     $this->assertFalse($assessment->access('update', $this->moderatorUser));
     $this->assertFalse($assessment->access('update', $this->assessmentReporterUser));
-
+    $this->assertFalse($assessment->access('update', $this->assessmentModeratorUser));
     $this->assertFalse($assessment->access('update', $this->nonOwnerUser));
     $this->assertFalse($assessment->access('update', $this->authenticatedUser));
+  }
+
+  /**
+   * Tests access to the custom moderator form for assessment reports.
+   */
+  public function testModerationFormAccess(): void {
+    $review_assessment = $this->testAssessments['review'];
+
+    $this->assertTrue(_assessments_can_moderate($review_assessment, $this->assessmentModeratorUser)->isAllowed());
+    $this->assertFalse(_assessments_can_moderate($review_assessment, $this->ownerUser)->isAllowed());
+    $this->assertFalse(_assessments_can_moderate($review_assessment, $this->moderatorUser)->isAllowed());
+    $this->assertFalse(_assessments_can_moderate($review_assessment, $this->assessmentReporterUser)->isAllowed());
+    $this->assertFalse(_assessments_can_moderate($review_assessment, $this->authenticatedUser)->isAllowed());
+
+    foreach (['draft', 'published', 'require_updates'] as $state) {
+      $this->assertFalse(
+        _assessments_can_moderate($this->testAssessments[$state], $this->assessmentModeratorUser)->isAllowed(),
+        sprintf('Assessment moderator should not have access to the moderation form for %s state.', $state)
+      );
+    }
   }
 
   /**
@@ -200,9 +233,11 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
   public function testUpdatePublishedAssessment(): void {
     $assessment = $this->testAssessments['published'];
 
-    $this->assertFalse($assessment->access('update', $this->ownerUser));
     $this->assertTrue($assessment->access('update', $this->moderatorUser));
+
+    $this->assertFalse($assessment->access('update', $this->ownerUser));
     $this->assertFalse($assessment->access('update', $this->assessmentReporterUser));
+    $this->assertFalse($assessment->access('update', $this->assessmentModeratorUser));
     $this->assertFalse($assessment->access('update', $this->nonOwnerUser));
     $this->assertFalse($assessment->access('update', $this->authenticatedUser));
   }
@@ -218,8 +253,9 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
     $assessment = $this->testAssessments[$state];
 
     $this->assertTrue($assessment->access('delete', $this->moderatorUser));
-    $this->assertTrue($assessment->access('delete', $this->assessmentReporterUser));
 
+    $this->assertFalse($assessment->access('delete', $this->assessmentReporterUser));
+    $this->assertFalse($assessment->access('delete', $this->assessmentModeratorUser));
     $this->assertFalse($assessment->access('delete', $this->ownerUser));
     $this->assertFalse($assessment->access('delete', $this->nonOwnerUser));
     $this->assertFalse($assessment->access('delete', $this->authenticatedUser));
@@ -231,7 +267,8 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
    * @covers ::checkAccessForPublicOrganisation
    */
   public function testPublicOrganisationAccess(): void {
-    $access_handler = \Drupal::entityTypeManager()->getAccessControlHandler('assessment');
+    $access_handler = \Drupal::entityTypeManager()
+      ->getAccessControlHandler('assessment');
     $organisation = Assessment::create([
       'type' => 'public_organisation',
       'name' => 'Test Organisation',
@@ -245,6 +282,8 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
     $access_handler->resetCache();
     $this->assertFalse($organisation->access('view', $this->ownerUser));
     $this->assertFalse($organisation->access('view', $this->moderatorUser));
+    $this->assertFalse($organisation->access('view', $this->assessmentReporterUser));
+    $this->assertFalse($organisation->access('view', $this->assessmentModeratorUser));
     $this->assertFalse($organisation->access('view', $this->authenticatedUser));
     $this->assertFalse($organisation->access('view', User::getAnonymousUser()));
 
@@ -263,7 +302,9 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
     $access_handler->resetCache();
     $this->assertTrue($organisation->access('view', $this->ownerUser));
     $this->assertTrue($organisation->access('view', $this->moderatorUser));
+    $this->assertTrue($organisation->access('view', $this->assessmentModeratorUser));
     $this->assertFalse($organisation->access('view', $this->authenticatedUser));
+    $this->assertFalse($organisation->access('view', $this->assessmentReporterUser));
     $this->assertFalse($organisation->access('view', User::getAnonymousUser()));
 
     // Test access with related report as published.
@@ -271,6 +312,8 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
     $access_handler->resetCache();
     $this->assertTrue($organisation->access('view', $this->ownerUser));
     $this->assertTrue($organisation->access('view', $this->moderatorUser));
+    $this->assertTrue($organisation->access('view', $this->assessmentReporterUser));
+    $this->assertTrue($organisation->access('view', $this->assessmentModeratorUser));
     $this->assertTrue($organisation->access('view', $this->authenticatedUser));
     $this->assertTrue($organisation->access('view', User::getAnonymousUser()));
   }

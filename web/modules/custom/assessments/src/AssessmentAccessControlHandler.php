@@ -168,9 +168,6 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler im
         ->addCacheableDependency($entity);
     }
 
-    // Non-published assessments (draft, review, require_updates): restricted
-    // to owner, assessment reporters and moderators.
-    // Owner can view their own non-published assessment with view permission.
     $is_owner = $entity->getOwnerId() == $account->id();
     if ($is_owner && $account->hasPermission('view own unpublished assessment report')) {
       return AccessResult::allowed()
@@ -179,9 +176,7 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler im
         ->addCacheableDependency($entity);
     }
 
-    // User with 'moderate assessment report' can view
-    // any non-published assessment.
-    if ($account->hasPermission('moderate assessment report')) {
+    if ($account->hasPermission('view any unpublished assessment report')) {
       return AccessResult::allowed()
         ->cachePerPermissions()
         ->addCacheableDependency($entity);
@@ -232,10 +227,7 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler im
    *   The access result.
    */
   protected function checkDeleteAccess(AssessmentInterface $entity, AccountInterface $account): AccessResultInterface {
-    // Assessment reporters and moderators can delete in any state.
-    return AccessResult::allowedIfHasPermissions($account, [
-      'moderate assessment report',
-    ], 'OR')
+    return AccessResult::allowedIfHasPermission($account, 'delete assessment report')
       ->addCacheableDependency($entity);
   }
 
