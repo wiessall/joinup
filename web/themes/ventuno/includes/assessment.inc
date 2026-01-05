@@ -19,6 +19,15 @@ function ventuno_preprocess_assessment__report__view_mode_tile_horizontal(array 
 }
 
 /**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_assessment__report(array &$variables): void {
+  if (isset($variables['content']['entity_print_view_pdf'])) {
+    $variables['content']['entity_print_view_pdf']['#attributes']['class'][] = 'btn btn-primary';
+  }
+}
+
+/**
  * Prepares some variables for tile view mode.
  */
 function _ventuno_preprocess_assessment_tile(array &$variables): void {
@@ -85,8 +94,11 @@ function ventuno_preprocess_paragraph__binding_requirement(array &$variables): v
     ];
   };
 
-  // Expression items are displayed as an ordered list, only labels.
-  $expressionItems = $collectChildItems($variables['content']['expression']);
+  // Expression items are displayed as an ordered list, using initiative_name.
+  $expressionItems = array_map(
+    fn($expression) => ['#plain_text' => $expression->get('initiative_name')->value],
+    $paragraph->get('expression')->referencedEntities()
+  );
   $expressionList = $buildItemList('ol', $expressionItems);
   $replaceWithSingleChild($variables['content']['expression'], $expressionList);
 

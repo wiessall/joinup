@@ -1,4 +1,4 @@
-default:
+assessment_workflow:
   id: assessment_workflow
   label: 'Assessments'
   group: assessments
@@ -13,15 +13,27 @@ default:
       label: Published
       published: true
   transitions:
+    save_as_draft:
+      label: 'Save as draft'
+      from: [ draft ]
+      to: draft
     submit_for_review:
-      label: Submit for Review
-      from: [draft]
+      label: Submit
+      from: [ draft ]
       to: review
     require_updates:
       label: Require updates
-      from: [review]
+      from: [ review ]
       to: draft
-    publish:
-      label: Publish report
-      from: [review]
+    publish_from_draft:
+      label: Publish
+      from: [ draft ]
+      to: published
+    publish_from_review:
+      label: Publish
+      from: [ review ]
+      to: published
+    update_published:
+      label: Update
+      from: [ published ]
       to: published

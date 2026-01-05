@@ -7,11 +7,12 @@ dependencies:
   module:
     - assessments
     - rest
+    - state_machine_permissions
 id: assessment_reporter
 label: 'Assessment reporter'
 weight: 0
 is_admin: false
 permissions:
-  - 'bypass assessment report moderation'
   - 'create assessment report'
+  - 'perform assessment_workflow workflow publish_from_draft transition on own entity'
   - 'restful post assessment_report'
