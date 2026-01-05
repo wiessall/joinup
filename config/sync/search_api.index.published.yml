@@ -29,7 +29,6 @@ dependencies:
     - field.storage.node.organization
     - field.storage.node.owner
     - field.storage.node.solution_type
-    - field.storage.node.spatial_coverage
     - field.storage.node.spdx_licence
     - field.storage.node.submission
     - field.storage.paragraph.field_body
@@ -751,12 +750,13 @@ field_settings:
         - field.storage.node.solution_type
   spatial_coverage:
     label: 'Geographical coverage'
-    datasource_id: 'entity:node'
-    property_path: spatial_coverage
+    property_path: aggregated_field
     type: string
-    dependencies:
-      config:
-        - field.storage.node.spatial_coverage
+    configuration:
+      type: union
+      fields:
+        - 'entity:node/country'
+        - 'entity:node/spatial_coverage'
   spdx_licence:
     label: 'Corresponding SPDX licence'
     datasource_id: 'entity:node'
@@ -870,6 +870,7 @@ datasource_settings:
         - event
         - licence
         - news
+        - owner
         - release
         - solution
     languages:
