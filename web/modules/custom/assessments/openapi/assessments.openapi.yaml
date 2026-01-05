@@ -429,7 +429,8 @@ components:
             find out which are all existing organisations, use the
             `/organisation` GET resource, documented in this page.
           oneOf:
-            - $ref: '#/components/schemas/Organisation'
+            - $ref: '#/components/schemas/EuropeanProvider'
+            - $ref: '#/components/schemas/CountryProvider'
             - $ref: '#/components/schemas/UUID'
         relevant_report:
           type: array
@@ -496,6 +497,60 @@ components:
             - european_union_agency
             - european_union_body
             - european_union_institution
+            - local_public_sector_body
+            - national_public_sector_body
+            - regional_public_sector_body
+        country:
+          $ref: '#/components/schemas/EuropeanUnionCountry'
+          description: |
+            The public organisation type. To be omitted for EU institutions,
+            bodies, agencies.
+
+    EuropeanProvider:
+      type: object
+      required:
+        - name
+        - organisation_type
+      additionalProperties: false
+      properties:
+        id:
+          schema:
+            $ref: '#/components/schemas/UUID'
+          readOnly: true
+          description: The universally unique ID of the public organisation.
+        name:
+          type: string
+          description: The public organisation name.
+          maxLength: 255
+        organisation_type:
+          type: string
+          description: The public organisation type.
+          enum:
+            - european_union_agency
+            - european_union_body
+            - european_union_institution
+
+    CountryProvider:
+      type: object
+      required:
+        - name
+        - organisation_type
+        - country
+      additionalProperties: false
+      properties:
+        id:
+          schema:
+            $ref: '#/components/schemas/UUID'
+          readOnly: true
+          description: The universally unique ID of the public organisation.
+        name:
+          type: string
+          description: The public organisation name.
+          maxLength: 255
+        organisation_type:
+          type: string
+          description: The public organisation type.
+          enum:
             - local_public_sector_body
             - national_public_sector_body
             - regional_public_sector_body
