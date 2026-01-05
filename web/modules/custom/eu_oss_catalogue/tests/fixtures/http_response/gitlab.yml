@@ -388,7 +388,7 @@
                         type: internal
                       platforms:
                         - web
-                      releaseDate: '2022-12-16'
+                      releaseDate: 2022-12-16
                       softwareType: standalone/desktop
                       softwareVersion: 1.0.0
                       usedBy:
@@ -464,6 +464,42 @@
                   createdAt: '2013-08-19'
             repository:
               rootRef: branch-project-1-4
+
+          # A very minimal project with long used by string.
+          - path: long-used-by
+            id: gid://gitlab/UsedBy/1
+            description: 'Long used by'
+            archived: false
+            repository:
+              rootRef: master
+              blobs:
+                nodes:
+                  - path: publiccode.yml
+                    rawBlob: |-
+                      publiccodeYmlVersion: '0.5'
+                      name: 'Long used by'
+                      url: https://limited.self-hosted.gitlab.example.com/group1/long-used-by.git
+                      usedBy:
+                        - Lorem Ipsum Dolor Sit Amet Consectetur Adipiscing Elit Duis Nec Tortor Odio Morbi Erat Justo Suscipit Ac Aliquet A Pellentesque Id Massa Integer Efficitur Pretium Erat Eget Faucibus Pellentesque Posuere Nunc A Urna Semper Feugiat Suspendisse Cursus Dolor Eget Ex Vulputate Tempus Maecenas Pulvinar Nunc Et Placerat Mollis Risus Est Malesuada Ex Pulvinar Viverra Nibh Diam Ac Nibh Nunc Vitae Metus Vel Leo Convallis Dignissim Aliquam Erat Volutpat In Sapien Tortor Varius Nec Semper Vel Auctor Ac Odio Vivamus Iaculis Consectetur Tristique Maecenas Feugiat Sed Eros Sit Amet Molestie Vestibulum Nec Lectus Dolor Morbi Ut Felis Dapibus Facilisis Mi Ac Congue Elit
+
+          # Another minimal project with a long feature string.
+          - path: long-feature
+            id: gid://gitlab/Feature/1
+            description: 'Long feature'
+            archived: false
+            repository:
+              rootRef: master
+              blobs:
+                nodes:
+                  - path: publiccode.yml
+                    rawBlob: |-
+                      publiccodeYmlVersion: '0.5'
+                      name: 'Long used by'
+                      url: https://limited.self-hosted.gitlab.example.com/group1/long-feature.git
+                      description:
+                        en:
+                          features:
+                            - Lorem Ipsum Dolor Sit Amet Consectetur Adipiscing Elit Duis Nec Tortor Odio Morbi Erat Justo Suscipit Ac Aliquet A Pellentesque Id Massa Integer Efficitur Pretium Erat Eget Faucibus Pellentesque Posuere Nunc A Urna Semper Feugiat Suspendisse Cursus Dolor Eget Ex Vulputate Tempus Maecenas Pulvinar Nunc Et Placerat Mollis Risus Est Malesuada Ex Pulvinar Viverra Nibh Diam Ac Nibh Nunc Vitae Metus Vel Leo Convallis Dignissim Aliquam Erat Volutpat In Sapien Tortor Varius Nec Semper Vel Auctor Ac Odio Vivamus Iaculis Consectetur Tristique Maecenas Feugiat Sed Eros Sit Amet Molestie Vestibulum Nec Lectus Dolor Morbi Ut Felis Dapibus Facilisis Mi Ac Congue Elit
 'limited.self-hosted.gitlab.example.com group2':
   data:
     group:

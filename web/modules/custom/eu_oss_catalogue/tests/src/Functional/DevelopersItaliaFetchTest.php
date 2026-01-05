@@ -29,7 +29,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
    * @covers
    */
   public function testDevelopersItalia(): void {
-    $this->fetchSolutions('developers_italia', 5);
+    $this->fetchSolutions('developers_italia', 7);
 
     $this->assertOssSolution('GitHub solution 1', 'en');
     $this->assertOssContractor('ACME Ltd');
@@ -67,15 +67,20 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
       'Creation log entry for Project 1'
     );
 
+    $this->assertCount(
+      2,
+      $this->getLogEntries('OSS solution of project @project-name (@project-url) fetched from @provider cannot be parsed, created or saved.'),
+    );
+
     // Re-run the process and update one solution from a new source-provider.
-    $this->fetchSolutions('testing_provider', 5);
+    $this->fetchSolutions('testing_provider', 7);
 
     $this->assertFalse($this->getNodeByTitle('GitHub solution 1'));
     $updatedSolution = $this->getNodeByTitle('GitHub solution 1 (updated)', TRUE);
     $this->assertSame('3.0.0', $updatedSolution->get('oss_software_version')->value);
     $this->assertTrue($updatedSolution->get('oss_maintenance_contractors')->isEmpty());
     $this->assertTrue($updatedSolution->get('oss_maintenance_contacts')->isEmpty());
-    $this->assertSame('28OZmw72O4Ze_d4gDdqVyMV3bvNSPwD-y07NKPgvkMg', $updatedSolution->get('oss_source_hash')->value);
+    $this->assertSame('UviES-yJZ_QF-Xp_Ivd4RwxVno_qG_8nutZOqff3Vy0', $updatedSolution->get('oss_source_hash')->value);
     // Assert that the provider has been added to the list of providers.
     $this->assertSame(2, $updatedSolution->get('oss_source')->count());
     $expected_providers = ['developers_italia', 'testing_provider'];
@@ -127,7 +132,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $this->assertSame($timeInPast, $archivedNode->getRevisionCreationTime());
 
     // Perform sync.
-    $this->fetchSolutions('developers_italia', 5);
+    $this->fetchSolutions('developers_italia', 7);
 
     // Check if the node was unarchived.
     $updatedSolution = $this->getNodeByTitle('GitHub solution 1', TRUE);
@@ -154,7 +159,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
 
     // Import the solutions from developers_italia plugin so that
     // the "Project 1.1" has 2 sources.
-    $this->fetchSolutions('developers_italia', 5);
+    $this->fetchSolutions('developers_italia', 7);
 
     $solution2 = $this->getNodeByTitle('Project 1.1', TRUE);
     $this->assertSame(2, $solution2->get('oss_source')->count());
@@ -176,7 +181,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
   public function testMarkDownResolver(): void {
     $entity_view_builder = $this->container->get('entity_type.manager')->getViewBuilder('node');
     $renderer = $this->container->get('renderer');
-    $this->fetchSolutions('developers_italia', 5);
+    $this->fetchSolutions('developers_italia', 7);
 
     // The fact that the solution is found means that the title was cleaned of
     // extra spaces.

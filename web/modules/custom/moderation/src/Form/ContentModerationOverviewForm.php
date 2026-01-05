@@ -307,6 +307,7 @@ class ContentModerationOverviewForm extends FormBase {
         return array_keys($revision_ids)[0];
       }
     }
+    return NULL;
   }
 
   /**
