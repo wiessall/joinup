@@ -17,6 +17,10 @@ services:
     tags:
       - { name: page_cache_request_policy }
 
-  Drupal\assessments\Guard\AssessmentReportTransitionGuard:
+  Drupal\assessments\Guard\AssessmentReportPermissionGuard:
+    tags:
+      - { name: state_machine.guard, group: assessments, priority: 1}
+
+  Drupal\assessments\Guard\AssessmentReportSubmitGuard:
     tags:
       - { name: state_machine.guard, group: assessments, priority: 5}

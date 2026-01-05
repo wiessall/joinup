@@ -1,4 +1,4 @@
-default:
+assessment_workflow:
   id: assessment_workflow
   label: 'Assessments'
   group: assessments
@@ -25,10 +25,15 @@ default:
       label: Require updates
       from: [ review ]
       to: draft
-    publish:
+    publish_from_draft:
       label: Publish
-      from:
-        - draft
-        - review
-        - published
+      from: [ draft ]
+      to: published
+    publish_from_review:
+      label: Publish
+      from: [ review ]
+      to: published
+    update_published:
+      label: Update
+      from: [ published ]
       to: published
