@@ -85,6 +85,9 @@ class SearchApiField extends SearchApiBaseFacetSource implements SearchApiFacetS
     // Check if there are results in the static cache.
     $results = $this->searchApiQueryHelper->getResults($plugin_definition_id);
 
+    // Initialize query variable.
+    $query = NULL;
+
     // If there are no results, execute the search page and check for results
     // again. This happens when a page or block is cached, so Search API has
     // not fired an actual search.
@@ -115,6 +118,10 @@ class SearchApiField extends SearchApiBaseFacetSource implements SearchApiFacetS
       // Execute the query.
       $results = $query->execute();
     }
+    else {
+      // Get the query from the cached results.
+      $query = $results->getQuery();
+    }
 
     // If we got results from the cache, this is the first code executed in this
     // method, so it's good to double check that we can actually work with
@@ -128,7 +135,7 @@ class SearchApiField extends SearchApiBaseFacetSource implements SearchApiFacetS
       foreach ($facets as $facet) {
         if (isset($facet_results[$facet->getFieldIdentifier()])) {
           $configuration = [
-            'query' => NULL,
+            'query' => $query,
             'facet' => $facet,
             'results' => $facet_results[$facet->getFieldIdentifier()],
           ];
