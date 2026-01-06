@@ -889,6 +889,7 @@ processor_settings:
   auto_aggregated_fulltext_field: {  }
   custom_value: {  }
   entity_type: {  }
+  exclude_assessment_solutions: {  }
   hierarchy:
     weights:
       preprocess_index: -45
