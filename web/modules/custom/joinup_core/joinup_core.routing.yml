@@ -12,6 +12,11 @@ joinup_core.id_redirect:
     _controller: '\Drupal\joinup_core\Controller\IdRedirect::redirectToRdfEntity'
   requirements:
     _access: 'TRUE'
+    # Even though we are using a custom processor to alter the UUID value to not
+    # include the /, we need to set the value of UUID to match '.+' because the
+    # Drupal routing system uses by default the '[^/]' for route parameters.
+    # @see \Drupal\Core\Routing\Router::doMatchCollection()
+    uuid: '.+'
 
 joinup_core.outdated_content_threshold:
   path: '/outdated-content-threshold'
