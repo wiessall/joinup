@@ -22,6 +22,7 @@ use Drupal\Core\Config\Entity\EntityBundleWithPluralLabelsTrait;
  *     plural = "@count assessment types",
  *   ),
  *   handlers = {
+ *     "access" = "Drupal\assessments\AssessmentTypeAccessControlHandler",
  *     "form" = {
  *       "add" = "Drupal\assessments\Form\AssessmentTypeForm",
  *       "edit" = "Drupal\assessments\Form\AssessmentTypeForm",
