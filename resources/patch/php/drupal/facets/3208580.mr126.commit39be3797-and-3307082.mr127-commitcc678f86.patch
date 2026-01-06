@@ -1,8 +1,8 @@
 diff --git a/facets.install b/facets.install
-index 5e33f95..e434fca 100644
+index fdc8355..52bab57 100644
 --- a/facets.install
 +++ b/facets.install
-@@ -250,3 +250,18 @@ function facets_update_8012() {
+@@ -249,3 +249,18 @@ function facets_update_8012() {
      ? sprintf('Facet caching was updated for the following views: %s.', implode(', ', $processed_views))
      : 'There are no views with search API cache plugins and facets in the same time, so nothing has been updated.';
  }
@@ -33,9 +33,9 @@ index a203352..4de623b 100644
 +    var zero_based_limit = ((limit < 0) ? limit : (limit - 1));
      var facet_id = facet;
      var facetsList = $('ul[data-drupal-facet-id="' + facet_id + '"]');
-
+ 
 @@ -43,13 +43,17 @@
-
+ 
      // Hide facets over the limit.
      facetsList.each(function () {
 -      var allLiElements = $(this).find('li');
@@ -47,7 +47,7 @@ index a203352..4de623b 100644
 +        $(once('applysoftlimit', $(this).children('li:gt(' + zero_based_limit + ')'))).hide();
 +      }
      });
-
+ 
      // Add "Show more" / "Show less" links.
      $(once('applysoftlimit', facetsList.filter(function () {
 -      return $(this).find('li').length > limit;
@@ -83,33 +83,33 @@ index a203352..4de623b 100644
            }
            return false;
 diff --git a/modules/facets_searchbox_widget/tests/src/Unit/Plugin/widget/SearchboxCheckboxWidgetTest.php b/modules/facets_searchbox_widget/tests/src/Unit/Plugin/widget/SearchboxCheckboxWidgetTest.php
-index b31dd5b..ea38a0a 100644
+index 854f53b..0400cfa 100644
 --- a/modules/facets_searchbox_widget/tests/src/Unit/Plugin/widget/SearchboxCheckboxWidgetTest.php
 +++ b/modules/facets_searchbox_widget/tests/src/Unit/Plugin/widget/SearchboxCheckboxWidgetTest.php
-@@ -64,7 +64,7 @@ class SearchboxCheckboxWidgetTest extends CheckboxWidgetTest {
+@@ -64,7 +64,7 @@ public function testDefaultConfiguration() {
      $this->assertArrayHasKey('show_more_label', $default_config['soft_limit_settings']);
-
+ 
      $this->assertEquals(FALSE, $default_config['show_numbers']);
 -    $this->assertEquals(0, $default_config['soft_limit']);
 +    $this->assertEquals(-1, $default_config['soft_limit']);
      $this->assertEquals(FALSE, $default_config['show_reset_link']);
    }
-
+ 
 diff --git a/modules/facets_searchbox_widget/tests/src/Unit/Plugin/widget/SearchboxLinksWidgetTest.php b/modules/facets_searchbox_widget/tests/src/Unit/Plugin/widget/SearchboxLinksWidgetTest.php
-index 032ad17..f1c1af3 100644
+index bae4219..31bbb29 100644
 --- a/modules/facets_searchbox_widget/tests/src/Unit/Plugin/widget/SearchboxLinksWidgetTest.php
 +++ b/modules/facets_searchbox_widget/tests/src/Unit/Plugin/widget/SearchboxLinksWidgetTest.php
-@@ -237,7 +237,7 @@ class SearchboxLinksWidgetTest extends LinksWidgetTest {
+@@ -238,7 +238,7 @@ public function testDefaultConfiguration() {
      $this->assertArrayHasKey('show_more_label', $default_config['soft_limit_settings']);
-
+ 
      $this->assertEquals(FALSE, $default_config['show_numbers']);
 -    $this->assertEquals(0, $default_config['soft_limit']);
 +    $this->assertEquals(-1, $default_config['soft_limit']);
      $this->assertEquals(FALSE, $default_config['show_reset_link']);
    }
-
+ 
 diff --git a/src/Plugin/facets/widget/LinksWidget.php b/src/Plugin/facets/widget/LinksWidget.php
-index f76ec26..8866b56 100644
+index 89879d8..cf5500e 100644
 --- a/src/Plugin/facets/widget/LinksWidget.php
 +++ b/src/Plugin/facets/widget/LinksWidget.php
 @@ -24,7 +24,7 @@ class LinksWidget extends WidgetPluginBase {
@@ -121,7 +121,7 @@ index f76ec26..8866b56 100644
        'soft_limit_settings' => [
          'show_less_label' => 'Show less',
          'show_more_label' => 'Show more',
-@@ -42,7 +42,7 @@ class LinksWidget extends WidgetPluginBase {
+@@ -42,7 +42,7 @@ public function build(FacetInterface $facet) {
      $build = parent::build($facet);
      $this->appendWidgetLibrary($build);
      $soft_limit = (int) $this->getConfiguration()['soft_limit'];
@@ -130,10 +130,10 @@ index f76ec26..8866b56 100644
        $show_less_label = $this->getConfiguration()['soft_limit_settings']['show_less_label'];
        $show_more_label = $this->getConfiguration()['soft_limit_settings']['show_more_label'];
        $build['#attached']['library'][] = 'facets/soft-limit';
-@@ -144,19 +144,19 @@ class LinksWidget extends WidgetPluginBase {
+@@ -143,19 +143,19 @@ protected function appendWidgetLibrary(array &$build) {
    public function buildConfigurationForm(array $form, FormStateInterface $form_state, FacetInterface $facet) {
      $form = parent::buildConfigurationForm($form, $form_state, $facet);
-
+ 
 -    $options = [50, 40, 30, 20, 15, 10, 5, 3];
 +    $options = [50, 40, 30, 20, 15, 10, 5, 3, 0];
      $form['soft_limit'] = [
@@ -153,7 +153,7 @@ index f76ec26..8866b56 100644
        ],
      ];
      $form['soft_limit_settings']['show_less_label'] = [
-@@ -165,7 +165,7 @@ class LinksWidget extends WidgetPluginBase {
+@@ -164,7 +164,7 @@ public function buildConfigurationForm(array $form, FormStateInterface $form_sta
        '#description' => $this->t('This text will be used for "Show less" link.'),
        '#default_value' => $this->getConfiguration()['soft_limit_settings']['show_less_label'],
        '#states' => [
@@ -162,7 +162,7 @@ index f76ec26..8866b56 100644
        ],
      ];
      $form['soft_limit_settings']['show_more_label'] = [
-@@ -174,7 +174,7 @@ class LinksWidget extends WidgetPluginBase {
+@@ -173,7 +173,7 @@ public function buildConfigurationForm(array $form, FormStateInterface $form_sta
        '#description' => $this->t('This text will be used for "Show more" link.'),
        '#default_value' => $this->getConfiguration()['soft_limit_settings']['show_more_label'],
        '#states' => [
@@ -170,27 +170,14 @@ index f76ec26..8866b56 100644
 +        'optional' => [':input[name="widget_config[soft_limit]"]' => ['value' => -1]],
        ],
      ];
-
-diff --git a/tests/src/FunctionalJavascript/JsBase.php b/tests/src/FunctionalJavascript/JsBase.php
-index 5678839..87db4c1 100644
---- a/tests/src/FunctionalJavascript/JsBase.php
-+++ b/tests/src/FunctionalJavascript/JsBase.php
-@@ -151,7 +151,7 @@ abstract class JsBase extends WebDriverTestBase {
-    */
-   protected function createFacet($id, $field = 'type', $widget_type = 'links', array $widget_settings = [
-     'show_numbers' => TRUE,
--    'soft_limit' => 0,
-+    'soft_limit' => -1,
-   ]) {
-     $facet_storage = \Drupal::entityTypeManager()->getStorage('facets_facet');
-     // Create and save a facet with a checkbox widget.
+ 
 diff --git a/tests/src/Kernel/Entity/FacetTest.php b/tests/src/Kernel/Entity/FacetTest.php
-index 1cad878..4fbcbaa 100644
+index 819ec2c..2464aa1 100644
 --- a/tests/src/Kernel/Entity/FacetTest.php
 +++ b/tests/src/Kernel/Entity/FacetTest.php
-@@ -71,7 +71,7 @@ class FacetTest extends KernelTestBase {
+@@ -70,7 +70,7 @@ public function testWidget() {
      $this->assertInstanceOf(WidgetPluginManager::class, $manager);
-
+ 
      $config = [
 -      'soft_limit' => 0,
 +      'soft_limit' => -1,
@@ -201,38 +188,38 @@ diff --git a/tests/src/Unit/Plugin/widget/CheckboxWidgetTest.php b/tests/src/Uni
 index 157fd19..fc50ec8 100644
 --- a/tests/src/Unit/Plugin/widget/CheckboxWidgetTest.php
 +++ b/tests/src/Unit/Plugin/widget/CheckboxWidgetTest.php
-@@ -63,7 +63,7 @@ class CheckboxWidgetTest extends WidgetTestBase {
+@@ -63,7 +63,7 @@ public function testDefaultConfiguration() {
      $this->assertArrayHasKey('show_more_label', $default_config['soft_limit_settings']);
-
+ 
      $this->assertEquals(FALSE, $default_config['show_numbers']);
 -    $this->assertEquals(0, $default_config['soft_limit']);
 +    $this->assertEquals(-1, $default_config['soft_limit']);
      $this->assertEquals(FALSE, $default_config['show_reset_link']);
    }
-
+ 
 diff --git a/tests/src/Unit/Plugin/widget/LinksWidgetTest.php b/tests/src/Unit/Plugin/widget/LinksWidgetTest.php
 index 30479fc..84df05e 100644
 --- a/tests/src/Unit/Plugin/widget/LinksWidgetTest.php
 +++ b/tests/src/Unit/Plugin/widget/LinksWidgetTest.php
-@@ -237,7 +237,7 @@ class LinksWidgetTest extends WidgetTestBase {
+@@ -237,7 +237,7 @@ public function testDefaultConfiguration() {
      $this->assertArrayHasKey('show_more_label', $default_config['soft_limit_settings']);
-
+ 
      $this->assertEquals(FALSE, $default_config['show_numbers']);
 -    $this->assertEquals(0, $default_config['soft_limit']);
 +    $this->assertEquals(-1, $default_config['soft_limit']);
      $this->assertEquals(FALSE, $default_config['show_reset_link']);
    }
-
+ 
 diff --git a/tests/src/Unit/Plugin/widget/WidgetTestBase.php b/tests/src/Unit/Plugin/widget/WidgetTestBase.php
 index 68cf88b..2af8fbe 100644
 --- a/tests/src/Unit/Plugin/widget/WidgetTestBase.php
 +++ b/tests/src/Unit/Plugin/widget/WidgetTestBase.php
-@@ -87,7 +87,7 @@ abstract class WidgetTestBase extends Drupal10CompatibilityUnitTestCase {
+@@ -87,7 +87,7 @@ protected function setUp(): void {
     */
    public function testDefaultConfiguration() {
      $default_config = $this->widget->defaultConfiguration();
 -    $this->assertEquals(['show_numbers' => FALSE, 'soft_limit' => 0], $default_config);
 +    $this->assertEquals(['show_numbers' => FALSE, 'soft_limit' => -1], $default_config);
    }
-
+ 
    /**
