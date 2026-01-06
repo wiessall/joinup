@@ -108,3 +108,12 @@ Feature: Assessment report permissions and access control
     And I am logged in as pol2025
     And I go to "/collection/assessments/report/create"
     Then I should see the button "Publish"
+
+  Scenario: Assessment add page shows only accessible bundles for authenticated users
+    Given I am logged in as an "authenticated user"
+    When I go to "/collection/assessments/add"
+    Then I should see the link "Assessment report"
+    And I should not see the link "Expression"
+    And I should not see the link "Participation"
+    And I should not see the link "Public organisation"
+    And I should not see the link "Public service"
