@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -29,9 +30,8 @@ class WysiwygContext extends RawDrupalContext {
    *   The text to be entered in the WYSIWYG editor.
    * @param string $label
    *   The label of the field containing the WYSIWYG editor.
-   *
-   * @When I enter :text in the :label wysiwyg editor
    */
+  #[When('I enter :text in the :label wysiwyg editor')]
   public function enterTextInWysiwyg(string $text, string $label): void {
     // If we are running in a JavaScript enabled browser, first click the
     // 'Source' button so we can enter the text as HTML and get the same result

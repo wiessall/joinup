@@ -7,6 +7,7 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\TraversingTrait;
@@ -79,9 +80,8 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    * | columns           | 50%-50%                                            |
    * | behavior settings | background theme: dark - extra classes: test-class |
    * @codingStandardsIgnoreEnd
-   *
-   * @When I add a layout paragraph in the :field_alias form field with the following properties:
    */
+  #[When('I add a layout paragraph in the :field_alias form field with the following properties:')]
   public function addLayoutParagraphInFormFieldOnTopLevel(string $field_alias, TableNode $layout_properties): void {
     $this->assertJavaScriptEnabledBrowser();
 
@@ -152,9 +152,8 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    * | region          | left                                        |
    * | Some text field | type: text - value: This is the field value |
    * @codingStandardsIgnoreEnd
-   *
-   * @When I add a :paragraph_type paragraph in the :field_alias form field:
    */
+  #[When('I add a :paragraph_type paragraph in the :field_alias form field:')]
   public function addParagraphInFormField(string $paragraph_type, string $field_alias, TableNode $layout_properties): void {
     $this->assertJavaScriptEnabledBrowser();
     // Get the layout position and the region, if available.
@@ -225,9 +224,8 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::FIELD_MAP.
    * @param string $position
    *   The position of the layout paragraph to remove.
-   *
-   * @When I :action from the :field_alias form field the layout paragraph in position :position
    */
+  #[When('I :action from the :field_alias form field the layout paragraph in position :position')]
   public function actionOnTopLevelLayoutParagraph(string $action, string $field_alias, string $position): void {
     $this->assertJavaScriptEnabledBrowser();
     // The ".is-layout" class is the difference between the actions for layouts
@@ -249,9 +247,8 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    *   The position of the child paragraph.
    * @param string $lPosition
    *   The position of the layout paragraph.
-   *
-   * @When I :action from the :fieldAlias field the child :pPosition paragraph of :lPosition layout
    */
+  #[When('I :action from the :fieldAlias field the child :pPosition paragraph of :lPosition layout')]
   public function actionOnChildLayoutParagraph(string $action, string $fieldAlias, string $pPosition, string $lPosition): void {
     $this->assertJavaScriptEnabledBrowser();
     $layoutParagraph = $this->getFormFieldLayoutParagraphs($fieldAlias)[$lPosition - 1];
@@ -369,9 +366,8 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    * @codingStandardsIgnoreEnd
    * The first column is the region of the layout paragraph. The second column
    * is the machine name of the paragraph.
-   *
-   * @When the layout in position :position from the :field_alias form field should have the following structure:
    */
+  #[When('the layout in position :position from the :field_alias form field should have the following structure:')]
   public function assertLayoutParagraphStructure(string $position, string $field_alias, TableNode $structure): void {
     $layout_paragraphs = $this->getFormFieldLayoutParagraphs($field_alias);
     $layout_paragraph = $layout_paragraphs[$position - 1];

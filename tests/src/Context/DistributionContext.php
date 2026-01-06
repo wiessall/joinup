@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
+use Behat\Step\When;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
@@ -162,9 +163,8 @@ class DistributionContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the rendered distribution is not found.
-   *
-   * @When I click :link in the :heading distribution
    */
+  #[When('I click :link in the :heading distribution')]
   public function clickLinkInCompactDistribution(string $link, string $heading): void {
     $element = $this->getCompactDistributionByHeading($heading);
 

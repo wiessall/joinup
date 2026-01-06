@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\When;
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\TagTrait;
@@ -407,9 +408,8 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a user is not found.
-   *
-   * @When I click the delete confirmation link for (the user ):user from the last email
    */
+  #[When('I click the delete confirmation link for (the user ):user from the last email')]
   public function clickDeleteConfirmationLink($user): void {
     $user = $this->getUserByName($user);
     if (empty($user)) {
@@ -433,9 +433,8 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a user is not found.
-   *
-   * @When I click the comment link from the last email sent to :user
    */
+  #[When('I click the comment link from the last email sent to :user')]
   public function clickCommentLinkInEmail($user): void {
     $user = $this->getUserByName($user);
     if (empty($user)) {
@@ -464,9 +463,8 @@ class JoinupNotificationContext extends RawDrupalContext {
    * @throws \Exception
    *   If no mail was found linked to the given email or if the link to the file
    *   attachment was not found.
-   *
-   * @When I click the link for the :filename attachment in the contact form email sent to :mail
    */
+  #[When('I click the link for the :filename attachment in the contact form email sent to :mail')]
   public function clickAttachmentInContactFormConfirmationMail(string $filename, string $mail): void {
     // In case multiple files with the same name were uploaded, the File module
     // will append a number to the file. Account for this.
@@ -488,9 +486,8 @@ class JoinupNotificationContext extends RawDrupalContext {
    *   Either the username or an email.
    * @param string $subject
    *   The email subject.
-   *
-   * @When I click the link from email sent to :username_or_email with subject :subject
    */
+  #[When('I click the link from email sent to :username_or_email with subject :subject')]
   public function clickLinkInEmail(string $username_or_email, string $subject): void {
     if ($account = user_load_by_name($username_or_email)) {
       $recipient = $account->getEmail();
@@ -537,9 +534,8 @@ class JoinupNotificationContext extends RawDrupalContext {
    *   The recipient's email.
    * @param string $subject
    *   The email subject.
-   *
-   * @When I click the :link_text link in the email sent to :recipent having the subject :subject
    */
+  #[When('I click the :link_text link in the email sent to :recipent having the subject :subject')]
   public function clickLinkInHtmlMail(string $link_text, string $recipient, string $subject): void {
     $mail = $this->getEmailsBySubjectAndMail($subject, $recipient)[0];
     $body = (string) $mail['body'];

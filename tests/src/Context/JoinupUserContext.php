@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\When;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -41,10 +42,9 @@ class JoinupUserContext extends RawDrupalContext {
    * @param string $user
    *   The user name.
    *
-   * @When I go to the (public )profile of :user
-   *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
+  #[When('I go to the (public )profile of :user')]
   public function visitUserPublicProfile(string $user): void {
     $this->visitPath($this->getUserByName($user)->toUrl()->toString());
   }
@@ -256,9 +256,8 @@ class JoinupUserContext extends RawDrupalContext {
    *   User's name.
    * @param string $field
    *   Field name.
-   *
-   * @When I fill uid of :username in :field
    */
+  #[When('I fill uid of :username in :field')]
   public function fillUidOfUserNameInField(string $username, string $field): void {
     $user = $this->getUserByName($username);
 

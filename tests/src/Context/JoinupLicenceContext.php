@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\EntityTrait;
@@ -25,9 +26,8 @@ class JoinupLicenceContext extends RawDrupalContext {
    *   The RDF serialization format.
    *
    * @throws \Drupal\Core\Entity\EntityMalformedException
-   *
-   * @When I go to (the homepage of )the :licence licence in the :format serialisation
    */
+  #[When('I go to (the homepage of )the :licence licence in the :format serialisation')]
   public function visitLicenceWithFormat(string $licence, string $format): void {
     $entity = $this->getEntityByLabel('node', $licence);
     $this->visitPath($entity->toUrl('canonical', ['query' => ['_format' => $format]])->toString());

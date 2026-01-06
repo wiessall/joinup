@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\When;
 use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\FieldItemListInterface;
@@ -82,9 +83,8 @@ class JoinupCoreContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when either the chip or its remove button are not found.
-   *
-   * @When I press the remove button on the chip :text
    */
+  #[When('I press the remove button on the chip :text')]
   public function clickRemoveChipButton(string $text): void {
     // Find the element that contains the given text.
     $chip = $this->getChipByText($text);

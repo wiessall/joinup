@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\When;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -45,9 +46,8 @@ class CollectionContext extends RawDrupalContext {
 
   /**
    * Navigates to the propose collection form.
-   *
-   * @When I go to the propose collection form
    */
+  #[When('I go to the propose collection form')]
   public function visitProposeCollectionForm(): void {
     $this->visitPath('propose/collection');
   }
@@ -58,10 +58,9 @@ class CollectionContext extends RawDrupalContext {
    * @param string $collection
    *   The title of the collection.
    *
-   * @When I visit the :collection Code of Conduct consent page
-   *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
+  #[When('I visit the :collection Code of Conduct consent page')]
   public function visitCodeOfConductConsentPage(string $collection): void {
     $entity = $this->getEntityByLabel('node', $collection, 'collection');
 
@@ -466,9 +465,8 @@ class CollectionContext extends RawDrupalContext {
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    *   Thrown when the updated collection cannot be saved.
-   *
-   * @When I change the name of the :collection collection to :name
    */
+  #[When('I change the name of the :collection collection to :name')]
   public function updateCollectionName(string $collection, string $name): void {
     $entity = $this->getEntityByLabel('node', $collection);
     $entity->set('title', $name)->save();

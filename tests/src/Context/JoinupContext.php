@@ -9,6 +9,7 @@ use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\When;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -487,9 +488,8 @@ class JoinupContext extends RawDrupalContext {
 
   /**
    * Navigates to the content overview, a.k.a. the "Keep up to date" page.
-   *
-   * @When I visit the content overview page
    */
+  #[When('I visit the content overview page')]
   public function visitContentOverviewPage(): void {
     $this->visitPath('/keep-up-to-date');
   }
@@ -526,9 +526,8 @@ class JoinupContext extends RawDrupalContext {
    * @param string $bundle
    *   An alias of a bundle as defined in the
    *   \Drupal\joinup\Traits\NameMappingsTrait::bundleAliases method.
-   *
-   * @When I go to the :action form of the :title :bundle
    */
+  #[When('I go to the :action form of the :title :bundle')]
   public function goToEntityForm(string $action, string $title, string $bundle): void {
     if (!in_array($action, ['edit', 'delete'])) {
       /** @var \Drupal\node\Entity\Node $node */
@@ -546,10 +545,9 @@ class JoinupContext extends RawDrupalContext {
    * @param string $title
    *   The title of the node.
    *
-   * @When I visit the revisions page for :title
-   *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
+  #[When('I visit the revisions page for :title')]
   public function visitRevisionsForm(string $title): void {
     /** @var \Drupal\node\NodeInterface $node */
     $node = $this->getEntityByLabel('node', $title);
@@ -577,9 +575,8 @@ class JoinupContext extends RawDrupalContext {
 
   /**
    * Navigates to the dashboard page of the user.
-   *
-   * @When I go to my dashboard
    */
+  #[When('I go to my dashboard')]
   public function visitDashboard(): void {
     $this->visitPath('/dashboard');
   }
@@ -857,9 +854,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * Example: When I press "Sign In" at "Fieldset"
    * Example: And I press "Sign In" at "Custom widget".
-   *
-   * @When I press :button at( the) :field( field)
    */
+  #[When('I press :button at( the) :field( field)')]
   public function pressButtonInWidget($button, $field): void {
     // First check if a fieldset exists containing the given field name. This
     // is used for inline entity forms.
@@ -898,9 +894,8 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *    Thrown when more than one elements match the given field in the given
    *    field group.
-   *
-   * @When I fill in :field_group with the :date_component :value
    */
+  #[When('I fill in :field_group with the :date_component :value')]
   public function fillDateField(string $field_group, string $date_component, string $value): void {
     $is_relative_value = $date_component === 'date' ? preg_match('/^\d{2}-\d{2}-\d{4}$/', $value) === 0 : preg_match('/^\d{2}:\d{2}:\d{2}$/', $value) === 0;
 
@@ -932,9 +927,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the date range field is not found.
-   *
-   * @When I fill the :date :component of the :field widget with :value
    */
+  #[When('I fill the :date :component of the :field widget with :value')]
   public function fillDateRangeField($field, $component, $value, $date = NULL): void {
     $element = $this->findDateRangeComponent($field, $component, $date);
     $element->setValue($value);
@@ -954,10 +948,9 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the date range field is not found.
-   *
-   * @When I clear the :date :component of the :field widget
-   * @When I clear the :component of the :field widget
    */
+  #[When('I clear the :date :component of the :field widget')]
+  #[When('I clear the :component of the :field widget')]
   public function clearDateRangeField($field, $component, $date = NULL): void {
     $element = $this->findDateRangeComponent($field, $component, $date);
     $element->setValue('');
@@ -1575,9 +1568,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @param string $link
    *   The link text of the link to click.
-   *
-   * @When I click :link in the plus button menu
    */
+  #[When('I click :link in the plus button menu')]
   public function clickLinkInPlusButtonMenu($link): void {
     // Check if we are running in an environment that supports JavaScript like
     // Selenium or PhantomJS. If this is the case the plus button menu will be
@@ -1588,9 +1580,8 @@ class JoinupContext extends RawDrupalContext {
 
   /**
    * Opens the plus button menu on JS-enabled browsers.
-   *
-   * @When I open the plus button menu
    */
+  #[When('I open the plus button menu')]
   public function openPlusButtonMenu(): void {
     if (!$this->hasJavascriptSupport()) {
       // Do nothing, if it's a non-Javascript browser.
@@ -1603,9 +1594,8 @@ class JoinupContext extends RawDrupalContext {
 
   /**
    * Opens a specific MDL dropdown menu on JS-enabled browsers.
-   *
-   * @When I open the header local tasks menu
    */
+  #[When('I open the header local tasks menu')]
   public function iOpenTheEntityTasksMenu(): void {
     if ($this->hasJavascriptSupport()) {
       $entity_tasks_selector = $this->getRegionSelector('Entity actions');
@@ -1615,9 +1605,8 @@ class JoinupContext extends RawDrupalContext {
 
   /**
    * Opens the account menu on JS-enabled browsers.
-   *
-   * @When I open the account menu
    */
+  #[When('I open the account menu')]
   public function iOpenTheAccountMenu(): void {
     // Non-JS browsers are directly interacting with the HTML, so we consider
     // the account menu to be already open.
@@ -1667,9 +1656,8 @@ class JoinupContext extends RawDrupalContext {
 
   /**
    * Asserts that the plus button menu is empty.
-   *
-   * @When the plus button menu should be empty
    */
+  #[When('the plus button menu should be empty')]
   public function assertEmptyPlusButtonMenu(): void {
     if ($this->hasJavascriptSupport()) {
       if ($this->getSession()->getPage()->findAll('xpath', '//div[contains(concat(" ", normalize-space(@class), " "), " add-content-menu ")]//li[last()]')) {
@@ -2040,10 +2028,9 @@ class JoinupContext extends RawDrupalContext {
    *   Thrown when the field is not found, the field is not an autocomplete
    *   field, when there was a failure retrieving the autocomplete suggestions
    *   or if the wanted suggestion is not found.
-   *
-   * @When I pick :value from the :field autocomplete suggestions
-   * @When I pick :value from the autocomplete suggestions
    */
+  #[When('I pick :value from the :field autocomplete suggestions')]
+  #[When('I pick :value from the autocomplete suggestions')]
   public function fillFieldWithNormalisedEntityReference(string $value, ?string $field = NULL): void {
     if ($this->hasJavascriptSupport()) {
       $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), " ui-autocomplete ")]//a[text() = "' . $value . '"]';
@@ -2278,9 +2265,8 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the browser doesn't support JavaScript or when the field is
    *   not found.
-   *
-   * @When I hit :key( in the keyboard) on the field :field
    */
+  #[When('I hit :key( in the keyboard) on the field :field')]
   public function pressKeyInField(string $key, string $field): void {
     if (!$this->hasJavascriptSupport()) {
       throw new \Exception('This step requires JavaScript to run.');
@@ -2525,9 +2511,8 @@ class JoinupContext extends RawDrupalContext {
    *   Select field.
    * @param string $option
    *   Option name.
-   *
-   * @When I select :option from latest :select
    */
+  #[When('I select :option from latest :select')]
   public function selectOptionForLatestSelect(string $select, string $option): void {
     $page = $this->getSession()->getPage();
 
@@ -2548,9 +2533,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @param string $label
    *   The button label.
-   *
-   * @When I press latest :label
    */
+  #[When('I press latest :label')]
   public function pressLatestButton(string $label): void {
     $page = $this->getSession()->getPage();
     $buttons = $page->findAll('named', ['button', $label]);

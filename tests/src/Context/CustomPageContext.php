@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Step\When;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -222,9 +223,8 @@ class CustomPageContext extends RawDrupalContext {
    *   The group label.
    * @param string $type
    *   The group type, either 'collection' or 'solution'.
-   *
-   * @When I :operation :title in the :menu menu of the :label :type
    */
+  #[When('I :operation :title in the :menu menu of the :label :type')]
   public function switchItemInMenu(string $operation, string $title, string $menu, string $label, string $type): void {
     /** @var \Drupal\Core\Menu\MenuLinkManagerInterface $menu_link_manager_service */
     $menu_link_manager_service = \Drupal::service('plugin.manager.menu.link');

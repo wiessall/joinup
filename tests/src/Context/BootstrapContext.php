@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -61,9 +62,8 @@ class BootstrapContext extends RawDrupalContext {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    *   When there's no accordion section with the given label.
-   *
-   * @When I expand the :section accordion section
    */
+  #[When('I expand the :section accordion section')]
   public function iExpandAccordionSection(string $section): void {
     $this->toggleAccordionSection($section, TRUE);
   }
@@ -76,9 +76,8 @@ class BootstrapContext extends RawDrupalContext {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    *   When there's no accordion section with the given label.
-   *
-   * @When I collapse the :section accordion section
    */
+  #[When('I collapse the :section accordion section')]
   public function iCollapseAccordionSection(string $section): void {
     $this->toggleAccordionSection($section, FALSE);
   }

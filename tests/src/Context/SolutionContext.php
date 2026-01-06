@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\When;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
@@ -52,10 +53,9 @@ class SolutionContext extends RawDrupalContext {
    *
    * @param string $collection
    *   The parent collection.
-   *
-   * @When I go to the add solution form of the :collection collection
-   * @When I visit the add solution form of the :collection collection
    */
+  #[When('I go to the add solution form of the :collection collection')]
+  #[When('I visit the add solution form of the :collection collection')]
   public function visitAddSolutionForm(string $collection): void {
     $collection = $this->getEntityByLabel('node', $collection);
     $solution_url = Url::fromRoute('joinup_solution.collection_solution.add', [
@@ -73,9 +73,8 @@ class SolutionContext extends RawDrupalContext {
    *   Remove this todo when ISAICP-5176 is fixed.
    *
    * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5176
-   *
-   * @When I visit the solution overview page
    */
+  #[When(' I visit the solution overview page')]
   public function visitSolutionOverviewPage(): void {
     $this->visitPath('/solutions');
   }

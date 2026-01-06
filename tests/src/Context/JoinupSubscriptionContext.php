@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
+use Behat\Step\When;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
@@ -60,10 +61,9 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    *
    * @param string|null $username
    *   The name of the user.
-   *
-   * @When I go to the subscription settings of :username
-   * @When I go to my subscriptions
    */
+  #[When('I go to the subscription settings of :username')]
+  #[When('I go to my subscriptions')]
   public function visitMySubscriptions(?string $username = NULL): void {
     if (!empty($username)) {
       $user = $this->getUserByName($username);
@@ -79,9 +79,8 @@ class JoinupSubscriptionContext extends RawDrupalContext {
 
   /**
    * Navigates to the global subscribers report.
-   *
-   * @When I go to the global subscribers report
    */
+  #[When('I go to the global subscribers report')]
   public function visitGlobalSubscribersReport(): void {
     $url = Url::fromRoute('joinup_subscription.subscribers_report');
     $this->visitPath($url->toString());
@@ -92,9 +91,8 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    *
    * @param string $group
    *   The name of the group.
-   *
-   * @When I go to the subscribers report for :group
    */
+  #[When('I go to the subscribers report for :group')]
   public function visitSubscribersReport(string $group): void {
     $group_entity = $this->getEntityByLabel('node', $group);
     $url = Url::fromRoute('joinup_subscription.group_subscribers_report', [
@@ -695,9 +693,8 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    *   The group label.
    * @param string $group_type
    *   The group type (collection/solution).
-   *
-   * @When the :username user subscribes to :group_label :group_type announcements
    */
+  #[When('the :username user subscribes to :group_label :group_type announcements')]
   public function subscribeToGroupAnnouncements(string $username, string $group_label, string $group_type): void {
     assert(isset(JoinupGroupHelper::GROUP_BUNDLES[$group_type]));
     /** @var \Drupal\user\UserInterface $account */
@@ -718,9 +715,8 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    *   The group label.
    * @param string $group_type
    *   The group type (collection/solution).
-   *
-   * @When the :username user unsubscribes from :group_label :group_type announcements
    */
+  #[When('the :username user unsubscribes from :group_label :group_type announcements')]
   public function unsubscribeFromGroupAnnouncements(string $username, string $group_label, string $group_type): void {
     assert(isset(JoinupGroupHelper::GROUP_BUNDLES[$group_type]));
     /** @var \Drupal\user\UserInterface $account */
@@ -750,11 +746,10 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   When a wrong type has been passed in the table.
-   *
-   * @When I visit the unsubscribe from :group_label :group_type form
-   * @When I visit the unsubscribe from :group_label :group_type form by content types:
-   * @When I visit the unsubscribe from :group_label :group_type form with :types route parameter
    */
+  #[When('I visit the unsubscribe from :group_label :group_type form')]
+  #[When('I visit the unsubscribe from :group_label :group_type form by content types:')]
+  #[When('I visit the unsubscribe from :group_label :group_type form with :types route parameter')]
   public function unsubscribeFromGroup(string $group_label, string $group_type, ?string $types = NULL, ?TableNode $table = NULL): void {
     assert(isset(JoinupGroupHelper::GROUP_BUNDLES[$group_type]));
     $group = $this->getEntityByLabel('node', $group_label, $group_type);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
 
@@ -29,10 +30,9 @@ class InputFilterContext extends RawDrupalContext {
    * @param string $type
    *   The bundle of the node.
    *
-   * @When I set long body of :title :type
-   *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
+  #[When('I set long body of :title :type')]
   public function setLongBodyForNewsPage(string $title, string $type): void {
     $file = rtrim(realpath($this->getMinkParameter('files_path')), DIRECTORY_SEPARATOR)
       . DIRECTORY_SEPARATOR . 'filter.url-input-with-long-data-image.txt';

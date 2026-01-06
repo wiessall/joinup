@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Hook\BeforeScenario;
+use Behat\Step\When;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
@@ -26,27 +28,24 @@ class AssessmentContext extends RawDrupalContext {
 
   /**
    * Navigates to the latest assessment webform submission.
-   *
-   * @When I go to the latest assessment submission
    */
+  #[When('I go to the latest assessment submission')]
   public function visitLatestAssessmentCanonicalPath(): void {
     $this->visitPath($this->getLatestSubmission()->toUrl()->toString());
   }
 
   /**
    * Navigates to the latest submission edit form.
-   *
-   * @When I go to the latest assessment submission edit form
    */
+  #[When('I go to the latest assessment submission edit form')]
   public function visitLatestSubmissionEditForm(): void {
     $this->visitPath($this->getLatestSubmission()->toUrl('edit-form')->toString());
   }
 
   /**
    * Navigates to the latest submission edit form.
-   *
-   * @When I go to the latest submission moderation form
    */
+  #[When('I go to the latest submission moderation form')]
   public function visitLatestSubmissionModerateForm(): void {
     $url = Url::fromRoute('joinup_assessment.moderation', [
       'submission' => $this->getLatestSubmissionId(),
@@ -56,9 +55,8 @@ class AssessmentContext extends RawDrupalContext {
 
   /**
    * Navigates to the latest assessment report.
-   *
-   * @When I go to the latest assessment report
    */
+  #[When('I go to the latest assessment report')]
   public function visitLatestAssessmentReport(): void {
     $nids = \Drupal::entityQuery('node')
       ->accessCheck(FALSE)
@@ -79,8 +77,9 @@ class AssessmentContext extends RawDrupalContext {
   /**
    * Stores the latest submission ID.
    *
-   * @BeforeScenario @demoAssessment
+   * @demoAssessment
    */
+  #[BeforeScenario]
   public function beforeAssessmentsDemo(): void {
     $collection = $this->nodeCreate((object) [
       'type' => 'collection',
@@ -151,9 +150,8 @@ class AssessmentContext extends RawDrupalContext {
 
   /**
    * Navigate to the entity print download link of the latest submission.
-   *
-   * @When I go to the pdf download link of the latest assessment submission
    */
+  #[When('I go to the pdf download link of the latest assessment submission')]
   public function visitLatestSubmissionPdfDownloadLink(): void {
     $url = Url::fromRoute('entity_print.view', [
       'export_type' => 'pdf',
@@ -174,9 +172,8 @@ class AssessmentContext extends RawDrupalContext {
    *   Title of assessment_report entity.
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
-   *
-   * @When I set :fieldName as :value for :assessment assessment_report submission
    */
+  #[When('I set :fieldName as :value for :assessment assessment_report submission')]
   public function setFieldValueForAssesmentSubmission(string $fieldName, string $value, string $assessment): void {
     $assessment_report = $this->getEntityByLabel('node', $assessment);
     $submission = $assessment_report->submission->entity ?? $this->createSubmissionForAssessmentReport($assessment);

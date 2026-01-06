@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
+use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\HtmlManipulator;
 use Drupal\joinup\Traits\EntityTrait;
@@ -160,9 +161,8 @@ class EuplContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   When the licence is not found on the page.
-   *
-   * @When I add the :spdx_id licence to the compare list
    */
+  #[When('I add the :spdx_id licence to the compare list')]
   public function selectLicenceForComparison(string $spdx_id): void {
     $this->toggleLicenceForComparison(TRUE, $spdx_id);
   }
@@ -175,9 +175,8 @@ class EuplContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   When the licence is not found on the page.
-   *
-   * @When I remove the :spdx_id licence from the compare list
    */
+  #[When('I remove the :spdx_id licence from the compare list')]
   public function unselectLicenceForComparison(string $spdx_id): void {
     $this->toggleLicenceForComparison(FALSE, $spdx_id);
   }
@@ -213,9 +212,8 @@ class EuplContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the radio button or licence is not found in the page.
-   *
-   * @When I choose :spdx_id as the :label licence
    */
+  #[When(' I choose :spdx_id as the :label licence')]
   public function selectRadioButtonForLicenceCompatibilityCheck(string $spdx_id, string $label): void {
     \assert(in_array($label, ['Inbound', 'Outbound']), 'The purpose should be either "Use" or "Distribute".');
     $radio = $this->findLicenceTile($spdx_id)->findField($label);
@@ -232,9 +230,8 @@ class EuplContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the licence tile or button are not found in the page.
-   *
-   * @When I press :link in the :spdx_id licence tile
    */
+  #[When('I press :link in the :spdx_id licence tile')]
   public function clickLicenceTileLink(string $label, string $spdx_id): void {
     $button = $this->findLicenceTile($spdx_id)->findButton($label);
     $button->press();

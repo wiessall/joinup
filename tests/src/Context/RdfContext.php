@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\rdf_sync\Model\SyncMethod;
 use PHPUnit\Framework\Assert;
@@ -275,9 +276,8 @@ class RdfContext extends RawDrupalContext {
    *    Thrown when a field name is invalid.
    * @throws \InvalidArgumentException
    *   When for the passed URI no entity can be found.
-   *
-   * @When I update the entity having :uri as RDF resource:
    */
+  #[When('I update the entity having :uri as RDF resource:')]
   public function updateEntityByRdfUri(string $uri, TableNode $fieldsTable): void {
     /** @var \Drupal\Core\Entity\ContentEntityInterface|null $entity */
     if (!$entity = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri($uri)) {
