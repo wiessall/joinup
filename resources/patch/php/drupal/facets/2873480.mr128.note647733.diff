@@ -1,18 +1,5 @@
-From 9f7baa5e9cc9ce2d7e9862d5ba88fbc4a2f7d12b Mon Sep 17 00:00:00 2001
-From: Alexandre Dias <alex.jm.dias@gmail.com>
-Date: Fri, 24 Feb 2023 17:25:41 +0000
-Subject: [PATCH] Issue #2873480: Apply patch 95.
-
----
- .../facets/url_processor/QueryString.php      | 36 ++++++++++++++++-
- .../facets/url_processor/DummyQuery.php       |  5 ++-
- tests/src/Functional/FacetsTestBase.php       |  8 ++++
- tests/src/Functional/IntegrationTest.php      |  7 ++++
- .../Plugin/url_processor/QueryStringTest.php  | 39 +++++++++++++------
- 5 files changed, 80 insertions(+), 15 deletions(-)
-
 diff --git a/src/Plugin/facets/url_processor/QueryString.php b/src/Plugin/facets/url_processor/QueryString.php
-index f5b9c9c1..d93a47fa 100644
+index 64c6cad2703244f9a18e5ee32dd8c7fd576e6ea7..d485deed88bc94c686e8900136299192dfed9e6d 100644
 --- a/src/Plugin/facets/url_processor/QueryString.php
 +++ b/src/Plugin/facets/url_processor/QueryString.php
 @@ -9,6 +9,7 @@ use Drupal\facets\Event\ActiveFiltersParsed;
@@ -94,7 +81,7 @@ index f5b9c9c1..d93a47fa 100644
          if ($facet->getUseHierarchy() && !$result->isMissing()) {
            $id = $result->getRawValue();
 diff --git a/tests/facets_query_processor/src/Plugin/facets/url_processor/DummyQuery.php b/tests/facets_query_processor/src/Plugin/facets/url_processor/DummyQuery.php
-index 105f571f..0d670e17 100644
+index 105f571f74006c8c8aa03de5ba564fc3caedd33f..0d670e178dc114634bf2ac575349d0022b64c437 100644
 --- a/tests/facets_query_processor/src/Plugin/facets/url_processor/DummyQuery.php
 +++ b/tests/facets_query_processor/src/Plugin/facets/url_processor/DummyQuery.php
 @@ -5,6 +5,7 @@ namespace Drupal\facets_query_processor\Plugin\facets\url_processor;
@@ -119,7 +106,7 @@ index 105f571f..0d670e17 100644
  
    /**
 diff --git a/tests/src/Functional/FacetsTestBase.php b/tests/src/Functional/FacetsTestBase.php
-index d8887539..586ee316 100644
+index d8887539330d522b83cd26ae4df95c669c991571..586ee3162be0284c100c09e8e2fa5edfafbaed4d 100644
 --- a/tests/src/Functional/FacetsTestBase.php
 +++ b/tests/src/Functional/FacetsTestBase.php
 @@ -51,6 +51,13 @@ abstract class FacetsTestBase extends BrowserTestBase {
@@ -145,7 +132,7 @@ index d8887539..586ee316 100644
  
    /**
 diff --git a/tests/src/Functional/IntegrationTest.php b/tests/src/Functional/IntegrationTest.php
-index a7c3e809..21e997e1 100644
+index df2cb7e73da8508250759023bbc8f67c4f192bad..0981a264d43dba829b9e6034db3e7d80f8731db9 100644
 --- a/tests/src/Functional/IntegrationTest.php
 +++ b/tests/src/Functional/IntegrationTest.php
 @@ -265,6 +265,13 @@ class IntegrationTest extends FacetsTestBase {
@@ -163,7 +150,7 @@ index a7c3e809..21e997e1 100644
      // hidden.
      $this->drupalGet('search-api-test-fulltext');
 diff --git a/tests/src/Unit/Plugin/url_processor/QueryStringTest.php b/tests/src/Unit/Plugin/url_processor/QueryStringTest.php
-index a6fdbe1c..c71734e1 100644
+index 51a7375f0c74f7979c1a2d15b51a8bef6b92e9ef..70eb7493ebf0527156b6ee143fdb6b69ef9b3d33 100644
 --- a/tests/src/Unit/Plugin/url_processor/QueryStringTest.php
 +++ b/tests/src/Unit/Plugin/url_processor/QueryStringTest.php
 @@ -11,6 +11,7 @@ use Drupal\facets\Entity\FacetSource;
@@ -307,6 +294,3 @@ index a6fdbe1c..c71734e1 100644
      $container->set('path.validator', $validator);
      \Drupal::setContainer($container);
    }
--- 
-GitLab
-

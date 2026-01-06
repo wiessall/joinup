@@ -1,3 +1,15 @@
+diff --git a/config/schema/facets.processor.schema.yml b/config/schema/facets.processor.schema.yml
+index e025e96f4845182004f53d07bf500d19bc2192bd..5b1da3dcba437fdc1a1fc08d9be586974ff2b30b 100644
+--- a/config/schema/facets.processor.schema.yml
++++ b/config/schema/facets.processor.schema.yml
+@@ -218,6 +218,7 @@ plugin.plugin_configuration.facets_processor.show_only_deepest_level_items_proce
+ plugin.plugin_configuration.facets_processor.translate_entity_aggregated_fields:
+   type: mapping
+   label: 'Transform entity ID in aggregated field to label'
++  mapping: {}
+ 
+ plugin.plugin_configuration.facets_processor.uid_to_username_callback:
+   type: mapping
 diff --git a/src/Plugin/facets/processor/TranslateEntityProcessor.php b/src/Plugin/facets/processor/TranslateEntityProcessor.php
 index 79c5f337134ee1dbeeb9942718d0cf124e918ccc..5ba6f60ee55c187fdb212082da657a65a3b56843 100644
 --- a/src/Plugin/facets/processor/TranslateEntityProcessor.php
@@ -81,3 +93,23 @@ index 79c5f337134ee1dbeeb9942718d0cf124e918ccc..5ba6f60ee55c187fdb212082da657a65
          return TRUE;
        }
      }
+diff --git a/tests/src/Kernel/FacetManager/DefaultFacetManagerTest.php b/tests/src/Kernel/FacetManager/DefaultFacetManagerTest.php
+index b79c52d39bbe5ad106212cb0c189c3b61b8ff494..8a9af68e6b273e3aaf5e04d35a418944e3accc52 100644
+--- a/tests/src/Kernel/FacetManager/DefaultFacetManagerTest.php
++++ b/tests/src/Kernel/FacetManager/DefaultFacetManagerTest.php
+@@ -23,6 +23,7 @@ class DefaultFacetManagerTest extends EntityKernelTestBase {
+     'search_api',
+     'search_api_db',
+     'search_api_test_db',
++    'search_api_test_example_content',
+     'facets_processors_collection',
+     'facets_search_api_dependency',
+     'facets_query_processor',
+@@ -67,6 +68,7 @@ class DefaultFacetManagerTest extends EntityKernelTestBase {
+       ->save();
+ 
+     $this->installConfig([
++      'search_api_test_example_content',
+       'search_api_test_db',
+       'facets_search_api_dependency',
+     ]);
