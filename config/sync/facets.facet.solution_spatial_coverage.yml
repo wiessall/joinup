@@ -42,6 +42,11 @@ processor_configs:
       sort: 20
     settings:
       sort: DESC
+  aggregated_entity_reference_label:
+    processor_id: aggregated_entity_reference_label
+    weights:
+      build: 5
+    settings: {  }
   count_limit:
     processor_id: count_limit
     weights:
@@ -65,11 +70,6 @@ processor_configs:
     processor_id: hierarchy_processor
     weights:
       build: 10
-    settings: {  }
-  translate_entity:
-    processor_id: translate_entity
-    weights:
-      build: 5
     settings: {  }
   url_processor_handler:
     processor_id: url_processor_handler
