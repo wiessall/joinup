@@ -49,7 +49,7 @@
         "drupal/entity_print": "^2.15",
         "drupal/entityqueue": "^1.2",
         "drupal/error_page": "^2.1@beta",
-        "drupal/facets": "3.0.1",
+        "drupal/facets": "^3.0",
         "drupal/facets_block": "^2.0@beta",
         "drupal/facets_date_range": "^1.0@beta",
         "drupal/field_delimiter": "^2.0",
@@ -418,10 +418,9 @@
                 "Restrict the dynamic fields in bundles @see https://www.drupal.org/i/3468563": "resources/patch/php/drupal/entity_print/3468563.mr66-note523124.diff"
             },
             "drupal/facets": {
-                "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/i/2873480": "resources/patch/php/drupal/facets/2873480.patch",
-                "Add 0 option in 'Soft limit' and apply soft limit to facet root li tags and add. @see https://www.drupal.org/i/3208580 and https://www.drupal.org/i/3307082": "resources/patch/php/drupal/facets/3208580-and-3307082.patch",
-                "Typeerror: Return value must be of type string, none returned in getCount @see https://www.drupal.org/i/3488396": "resources/patch/php/drupal/facets/3488396.diff",
-                "Entity Reference convert Entity ID to Label issue @see https://www.drupal.org/i/3031821": "resources/patch/php/drupal/facets/3031821.comment16400772.diff"
+                "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/i/2873480": "resources/patch/php/drupal/facets/2873480.mr128.note647733.diff",
+                "Add 0 option in 'Soft limit' and apply soft limit to facet root li tags and add. @see https://www.drupal.org/i/3208580 and https://www.drupal.org/i/3307082": "resources/patch/php/drupal/facets/3208580.mr126.commit39be3797-and-3307082.mr127-commitcc678f86.patch",
+                "Entity Reference convert Entity ID to Label issue @see https://www.drupal.org/i/3031821": "resources/patch/php/drupal/facets/3031821.mr357commit4e49bf3c.diff"
             },
             "drupal/field_delimiter": {
                 "Doesn't work in layout builder. @see https://www.drupal.org/i/3099580": "resources/patch/php/drupal/field_delimiter/3099580.patch"
