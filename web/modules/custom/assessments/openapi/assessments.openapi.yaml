@@ -140,6 +140,7 @@ paths:
                     their IDs are included in the response.
                   value:
                     id: "76269914-0d50-46a6-8cd5-19ec67474e99"
+                    uri: "https://joinup.ddev.local/assessment/report/76269914-0d50-46a6-8cd5-19ec67474e99"
                     language: "it"
                     name: "Legislation waste management"
                     provider:
@@ -248,9 +249,11 @@ paths:
                 fetched:
                   value:
                     - id: "43a50ef2-7d90-4562-ab81-59af10f2e082"
+                      uri: "https://interoperable-europe.ec.europa.eu/assessment/report/43a50ef2-7d90-4562-ab81-59af10f2e082"
                       name: "Report 1"
                       country: "PT"
                     - id: "7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7c"
+                      uri: "https://interoperable-europe.ec.europa.eu/assessment/report/7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7c"
                       name: "Report 2"
                       country: null
   /assessment/{id}:
@@ -326,9 +329,11 @@ paths:
                 fetched:
                   value:
                     - id: "43a50ef2-7d90-4562-ab81-59af10f2e081"
+                      uri: "http://data.europa.eu/w21/43a50ef2-7d90-4562-ab81-59af10f2e081"
                       title: "Waste Management"
                       url: "https://interoperable-europe.ec.europa.eu/collection/environment/solution/waste-managemet"
                     - id: "7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7b"
+                      uri: "http://data.europa.eu/w21/7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7b"
                       name: "Citizen's Forum"
                       url: "https://interoperable-europe.ec.europa.eu/collection/participation/solution/forum"
   /organisation:
@@ -355,10 +360,12 @@ paths:
                 fetched:
                   value:
                     - id: "43a50ef2-7d90-4562-ab81-59af10f2e081"
+                      uri: "https://interoperable-europe.ec.europa.eu/assessment/public-organisation/43a50ef2-7d90-4562-ab81-59af10f2e081"
                       name: "Public Organisation 1"
                       "organisation_type": "local_public_sector_body"
                       country: "bg"
                     - id: "7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7b"
+                      uri: "https://interoperable-europe.ec.europa.eu/assessment/public-organisation/7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7b"
                       name: "Public Organisation 2"
                       "organisation_type": "national_public_sector_body"
                       country: null
