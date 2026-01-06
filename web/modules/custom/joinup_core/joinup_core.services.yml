@@ -21,6 +21,11 @@ services:
     tags:
       - { name: access_check, applies_to: _node_creation_route }
 
+  path_processor.joinup_core:
+    class: Drupal\joinup_core\PathProcessor\IdRedirectUuidProcessor
+    tags:
+      - { name: path_processor_inbound, priority: 200 }
+
   path_processor.joinup_core.field_more_in_modal:
     class: Drupal\joinup_core\PathProcessor\ModalRouteProcessor
     calls:
