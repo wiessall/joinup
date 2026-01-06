@@ -420,7 +420,8 @@
             "drupal/facets": {
                 "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/i/2873480": "resources/patch/php/drupal/facets/2873480.patch",
                 "Add 0 option in 'Soft limit' and apply soft limit to facet root li tags and add. @see https://www.drupal.org/i/3208580 and https://www.drupal.org/i/3307082": "resources/patch/php/drupal/facets/3208580-and-3307082.patch",
-                "Typeerror: Return value must be of type string, none returned in getCount #see https://www.drupal.org/i/3488396": "resources/patch/php/drupal/facets/3488396.diff"
+                "Typeerror: Return value must be of type string, none returned in getCount @see https://www.drupal.org/i/3488396": "resources/patch/php/drupal/facets/3488396.diff",
+                "Entity Reference convert Entity ID to Label issue @see https://www.drupal.org/i/3031821": "resources/patch/php/drupal/facets/3031821.comment16400772.diff"
             },
             "drupal/field_delimiter": {
                 "Doesn't work in layout builder. @see https://www.drupal.org/i/3099580": "resources/patch/php/drupal/field_delimiter/3099580.patch"
