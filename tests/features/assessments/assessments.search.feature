@@ -1,14 +1,13 @@
-@api @group-a @javascript
+@api @group-a
 Feature: Assessment report search functionality
   Test search and filtering capabilities for assessment reports
 
-  Background:
+  @javascript
+  Scenario: Advanced search by content type and keyword
     Given public_organisation assessments:
       | name                  | organisation_type          |
       | Bluewave Technologies | european_union_institution |
-
-  Scenario: Advanced search by content type and keyword
-    Given report assessments:
+    And report assessments:
       | name                 | provider              | state     | created              |
       | Initial Overview     | Bluewave Technologies | published | 2020-01-01T00:00:00Z |
       | Transmission Summary |                       | published | 2020-01-02T00:00:00Z |
@@ -24,3 +23,11 @@ Feature: Assessment report search functionality
     Then the page should show only the tiles "Transmission Summary"
     When I enter "Bluewave" in the search bar and press enter
     Then the page should show only the tiles "Initial Overview"
+
+  Scenario: Solutions tied to assessments are not searchable.
+    Given solution content:
+      | title                                   | state     | collection                           |
+      | some random text to search architecture | published | Solutions mentioned in an assessment |
+    When I visit the advanced search page
+    And I enter "architecture" in the search bar and press enter
+    Then I should not see the "some random text to search architecture" tile
