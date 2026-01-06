@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
 
@@ -36,9 +37,8 @@ class JavascriptContext extends RawDrupalContext {
    *
    * @param string $selector
    *   The CSS selector.
-   *
-   * @Then I wait until :selector element exists
    */
+  #[Then('I wait until :selector element exists')]
   public function iWaitForElement(string $selector): void {
     $this->waitForElement('css', $selector);
   }
@@ -48,18 +48,16 @@ class JavascriptContext extends RawDrupalContext {
    *
    * @param string $selector
    *   The CSS selector.
-   *
-   * @Then I wait until no :selector element exists
    */
+  #[Then('I wait until no :selector element exists')]
   public function iWaitForNoElement(string $selector): void {
     $this->waitForNoElement('css', $selector);
   }
 
   /**
    * Waits for CSS animations/transitions to finish.
-   *
-   * @Then I wait for CSS animations to finish
    */
+  #[Then('I wait for CSS animations to finish')]
   public function iWaitForCssAnimations(): void {
     $this->waitForCssAnimations();
   }
@@ -69,9 +67,8 @@ class JavascriptContext extends RawDrupalContext {
    *
    * @param string $selector
    *   The CSS selector for the slick carousel.
-   *
-   * @Then I wait for slick carousel :selector to be ready
    */
+  #[Then('I wait for slick carousel :selector to be ready')]
   public function iWaitForSlickCarousel(string $selector): void {
     $this->waitForElement('css', $selector);
 
@@ -105,9 +102,8 @@ class JavascriptContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the modal doesn't open within 5 seconds.
-   *
-   * @Then a modal should/will open
    */
+  #[Then('a modal should/will open')]
   public function iWaitForDrupalModalToOpen(): void {
     $this->waitForModalToOpen();
   }
@@ -117,9 +113,8 @@ class JavascriptContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the modal doesn't close within 5 seconds.
-   *
-   * @Then the modal should be closed
    */
+  #[Then('the modal should be closed')]
   public function iWaitForDrupalModalToClose(): void {
     $this->waitForModalToClose();
   }

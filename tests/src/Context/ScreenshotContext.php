@@ -10,6 +10,7 @@ use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Exception\DriverException;
 use Behat\Mink\Exception\ExpectationException;
 use Behat\MinkExtension\Context\RawMinkContext;
+use Behat\Step\Then;
 
 /**
  * Provides step definitions for taking screenshots.
@@ -29,10 +30,9 @@ class ScreenshotContext extends RawMinkContext {
    *
    * @param string|null $name
    *   The file name.
-   *
-   * @Then I take a screenshot :name
-   * @Then I take a screenshot
    */
+  #[Then('I take a screenshot :name')]
+  #[Then('I take a screenshot')]
   public function takeScreenshot(?string $name = NULL): void {
     $name ??= 'screenshot-' . \Drupal::service('password_generator')->generate();
     $message = "Screenshot:";

@@ -7,6 +7,7 @@ namespace Drupal\joinup\Context;
 use Behat\Behat\Hook\Scope\BeforeFeatureScope;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Mink\Element\DocumentElement;
+use Behat\Step\Then;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\SortArray;
 use Drupal\Core\Serialization\Yaml;
@@ -79,12 +80,11 @@ class AccessibilityContext extends RawDrupalContext {
    *   The minimum impact to check. Allowed values are keys from self::IMPACT.
    * @param string|null $limitToTags
    *   A comma separated list of accessibility tags to limit on.
-   *
-   * @Then the page meets accessibility standards
-   * @Then the page meets at least :minimumImpact accessibility standards
-   * @Then the page meets :limitToTags accessibility standards
-   * @Then the page meets at least :minimumImpact :limitToTags accessibility standards
    */
+  #[Then('the page meets accessibility standards')]
+  #[Then('the page meets at least :minimumImpact accessibility standards')]
+  #[Then('the page meets :limitToTags accessibility standards')]
+  #[Then('the page meets at least :minimumImpact :limitToTags accessibility standards')]
   public function assertAccessible(string $minimumImpact = 'minor', ?string $limitToTags = NULL): void {
     \assert($this->hasJavascriptSupport());
     \assert(isset(self::IMPACT[$minimumImpact]));

@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -74,7 +75,7 @@ class SolutionContext extends RawDrupalContext {
    *
    * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5176
    */
-  #[When(' I visit the solution overview page')]
+  #[When('I visit the solution overview page')]
   public function visitSolutionOverviewPage(): void {
     $this->visitPath('/solutions');
   }
@@ -253,9 +254,8 @@ class SolutionContext extends RawDrupalContext {
    * @todo Maybe there is a better definition available here like 'The
    * following state buttons should be available for the user on the
    * solution.
-   *
-   * @Then for the following solution, the corresponding user should have the corresponding (available )state buttons:
    */
+  #[Then('for the following solution, the corresponding user should have the corresponding (available )state buttons:')]
   public function verifyWorkflowStates(TableNode $check_table): void {
     foreach ($check_table->getColumnsHash() as $values) {
       $username = $values['user'];
@@ -285,9 +285,8 @@ class SolutionContext extends RawDrupalContext {
    *
    * @throws \Exception
    *    Thrown when the user does not exist.
-   *
-   * @Then the visibility of the delete link should be as follows for these users in these solutions:
    */
+  #[Then('the visibility of the delete link should be as follows for these users in these solutions:')]
   public function verifyDeleteLinkVisibility(TableNode $check_table): void {
     foreach ($check_table->getColumnsHash() as $values) {
       $user = $this->getUserByName($values['user']);
@@ -307,9 +306,8 @@ class SolutionContext extends RawDrupalContext {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    *   Thrown when the tile is not found in the page.
-   *
-   * @Then the :heading tile should show :count downloads
    */
+  #[Then('the :heading tile should show :count downloads')]
   public function assertTileContainsDownloadCount(string $heading, int $count): void {
     $tile = $this->getTileByHeading($heading);
     $elements = $tile->findAll('xpath', "//span[contains(text(), '$count')]");
@@ -324,9 +322,8 @@ class SolutionContext extends RawDrupalContext {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    *   Thrown when the tile is not found in the page.
-   *
-   * @Then the download icon should not be shown in the :heading tile
    */
+  #[Then('the download icon should not be shown in the :heading tile')]
   public function assertTileNotContainsDownloadIcon(string $heading): void {
     $tile = $this->getTileByHeading($heading);
     $elements = $tile->findAll('xpath', '//span[contains(concat(" ", normalize-space(@class), " "), " icon--download ")]');
@@ -345,9 +342,8 @@ class SolutionContext extends RawDrupalContext {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    *   Thrown when the field is not found in the page.
-   *
-   * @Then the :attribute attribute of :field_name should be :expected
    */
+  #[Then('the :attribute attribute of :field_name should be :expected')]
   public function theAttributeOfShouldBe(string $attribute, string $field_name, string $expected): void {
     $field = $this->getSession()->getPage()->findField($field_name);
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Core\Url;
@@ -79,9 +80,8 @@ class CustomPageContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the count is incorrect.
-   *
-   * @Then the :name :type should have :count custom page(s)
    */
+  #[Then('the :name :type should have :count custom page(s)')]
   public function assertContactInformationCount(int $count, string $name, string $type): void {
     $group = $this->getEntityByLabel('node', $name, $type);
     $this->assertGroupContentCount($count, $group, 'node', 'custom_page');
@@ -106,9 +106,8 @@ class CustomPageContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when no OG Menu instance was found that matches the given
    *   arguments.
-   *
-   * @Then I should not have access to the menu link administration pages for the :menu menu of the :title :type
    */
+  #[Then('I should not have access to the menu link administration pages for the :menu menu of the :title :type')]
   public function assertNoAccessToOgMenuAdministration(string $menu, string $title, string $type): void {
     // Retrieve the OG Menu instance for the given menu and group.
     $group = $this->getEntityByLabel('node', $title, $type);
@@ -174,9 +173,8 @@ class CustomPageContext extends RawDrupalContext {
    *   The group type, either 'collection' or 'solution'.
    * @param int $count
    *   The expected number of visible menu items.
-   *
-   * @Then the :menu menu of the :label :type should have :count visible item(s)
    */
+  #[Then('the :menu menu of the :label :type should have :count visible item(s)')]
   public function assertVisibleItemsInMenuCount(string $menu, string $label, string $type, int $count): void {
     /** @var \Drupal\Core\Menu\MenuLinkTreeInterface $link_tree_service */
     $link_tree_service = \Drupal::service('menu.link_tree');
@@ -202,9 +200,8 @@ class CustomPageContext extends RawDrupalContext {
    *   The group type, either 'collection' or 'solution'.
    * @param int $count
    *   The expected number of items in the menu.
-   *
-   * @Then the :menu menu of the :label :type should have :count item(s)
    */
+  #[Then('the :menu menu of the :label :type should have :count item(s)')]
   public function assertItemsInMenuForm(string $menu, string $label, string $type, int $count): void {
     $tree = $this->getOgMenuTreeByNameLabelAndType($menu, $label, $type);
     Assert::assertEquals($count, count($tree));
@@ -296,9 +293,8 @@ class CustomPageContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the logo is not found or not correct.
-   *
-   * @Then the logo should be shown in the :title custom page tile
    */
+  #[Then('the logo should be shown in the :title custom page tile')]
   public function assertCustomPageTileHasLogo(string $title): void {
     // Retrieve the URL of the logo in the tile.
     $tile = $this->getTileByHeading($title);

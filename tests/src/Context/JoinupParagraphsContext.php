@@ -9,6 +9,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\ContentEntityInterface;
@@ -182,10 +183,9 @@ class JoinupParagraphsContext extends RawDrupalContext {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    *   When content listing paragraph is not found in the page.
-   *
-   * @Then the :filter filter of the :paragraph content listing paragraph value is :expected_value
-   * @Then the :filter filter of the :paragraph content listing paragraph is empty
    */
+  #[Then('the :filter filter of the :paragraph content listing paragraph value is :expected_value')]
+  #[Then('the :filter filter of the :paragraph content listing paragraph is empty')]
   public function assertFilterFromParagraphHasValue(string $paragraph, string $filter, ?string $expected_value = NULL): void {
     $paragraph_0_based_delta = $this->convertOrdinalToNumber($paragraph) - 1;
     $field = $this->getParagraphsElement('Custom content listing', $paragraph_0_based_delta);
@@ -214,9 +214,8 @@ class JoinupParagraphsContext extends RawDrupalContext {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    *   When content listing paragraph is not found in the page.
-   *
-   * @Then I click :button at :filter filter of the :paragraph content listing paragraph
    */
+  #[Then('I click :button at :filter filter of the :paragraph content listing paragraph')]
   public function pressRemoveFilterFromParagraph(string $button, string $paragraph, string $filter): void {
     $paragraph_0_based_delta = $this->convertOrdinalToNumber($paragraph) - 1;
     $field = $this->getParagraphsElement('Custom content listing', $paragraph_0_based_delta);
@@ -597,9 +596,8 @@ class JoinupParagraphsContext extends RawDrupalContext {
    *   Paragraphs types.
    *
    * @throws \Exception
-   *
-   * @Then I should see the following paragraph types in the modal in order:
    */
+  #[Then('I should see the following paragraph types in the modal in order:')]
   public function iShouldSeeParagraphTypesInTheModalInOrder(TableNode $table): void {
     // Get expected order from the table.
     $expectedOrder = array_map(function ($row) {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
@@ -22,9 +23,8 @@ class ModerationContext extends RawDrupalContext {
    *   The title of the node of which to check the moderation preview.
    * @param string $text
    *   The text that is expected to be present.
-   *
-   * @Then the moderation preview of :title should contain the text :text
    */
+  #[Then('the moderation preview of :title should contain the text :text')]
   public function assertModerationPreviewContainsText($title, $text): void {
     $node = $this->getEntityByLabel('node', $title);
     $xpath = '//h1/a[@href = "' . $node->toUrl('canonical', [

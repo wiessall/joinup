@@ -173,10 +173,9 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a wanted facet item is not shown in the page.
-   *
-   * @Then I should see the following facet items :labels in this order
-   * @Then I should see the following :facet facet items :labels in this order
    */
+  #[Then('I should see the following facet items :labels in this order')]
+  #[Then('I should see the following :facet facet items :labels in this order')]
   public function assertContentTypeFacetItemsPresent(string $labels, ?string $facet = NULL): void {
     $labels = $this->explodeDelimitedSeparatedStepArgument($labels);
     $xpath = "a[@data-drupal-facet-item-id]//span[contains(concat(' ', normalize-space(@class), ' '), ' tab__text--type ') or contains(concat(' ', normalize-space(@class), ' '), ' facet-item__value ')]";

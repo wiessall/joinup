@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
@@ -98,9 +99,8 @@ class JoinupUserContext extends RawDrupalContext {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    *   Thrown when the image is not present in the page.
-   *
-   * @Then I (should )see the avatar :filename
    */
+  #[Then('I (should )see the avatar :filename')]
   public function assertImagePresent(string $filename): void {
     // Drupal appends an underscore and a number to the filename when duplicate
     // files are uploaded, for example when a test is run more than once.
@@ -129,9 +129,8 @@ class JoinupUserContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a field in the table does not exist.
-   *
-   * @Then the user :username should have the following data in their user profile:
    */
+  #[Then('the user :username should have the following data in their user profile:')]
   public function assertUserFields(TableNode $profile_data_table, string $username): void {
     $user = $this->getUserByName($username);
     $profile_data = $this->translateUserFieldAliases($profile_data_table->getRowsHash());
@@ -199,9 +198,8 @@ class JoinupUserContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   If an invalid status has been passed.
-   *
-   * @Then the :name (user )account is :status
    */
+  #[Then('the :name (user )account is :status')]
   public function assertUserStatus(string $name, string $status): void {
     $allowed_statuses = [
       'active' => 1,
@@ -226,9 +224,8 @@ class JoinupUserContext extends RawDrupalContext {
    *
    * @param string $name
    *   The user name.
-   *
-   * @Then the :name user doesn't exist
    */
+  #[Then("the :name user doesn't exist")]
   public function userNotExists(string $name): void {
     if (\Drupal::entityQuery('user')->accessCheck(FALSE)->condition('name', $name)->execute()) {
       throw new ExpectationFailedException("The user $name exists but it should not.");
@@ -240,9 +237,8 @@ class JoinupUserContext extends RawDrupalContext {
    *
    * @param string $name
    *   The user name.
-   *
-   * @Then the :name user exist
    */
+  #[Then('the :name user exist')]
   public function userExists(string $name): void {
     if (!\Drupal::entityQuery('user')->accessCheck(FALSE)->condition('name', $name)->execute()) {
       throw new ExpectationFailedException("The user $name exists but it should not.");

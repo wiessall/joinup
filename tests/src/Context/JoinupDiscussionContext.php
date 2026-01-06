@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup_discussion\Entity\DiscussionInterface;
@@ -24,9 +25,8 @@ class JoinupDiscussionContext extends RawDrupalContext {
    *   The discussion title.
    * @param int $count
    *   The expected number of subscribers.
-   *
-   * @Then the :title discussion should have :count subscriber(s)
    */
+  #[Then('the :title discussion should have :count subscriber(s)')]
   public function assertSubscribers(string $title, int $count): void {
     $discussion = $this->getEntityByLabel('node', $title, 'discussion');
     $subscribers = $this->getDiscussionSubscriptionService()->getSubscribers($discussion, 'subscribe_discussions');
