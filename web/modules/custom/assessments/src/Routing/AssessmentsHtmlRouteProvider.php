@@ -26,6 +26,7 @@ class AssessmentsHtmlRouteProvider extends DefaultHtmlRouteProvider {
     }
 
     $route->setDefault('_title_callback', [self::class, 'addBundleTitle']);
+    $route->setRequirement('_assessment_add_form_access', 'TRUE');
 
     return $route;
   }
