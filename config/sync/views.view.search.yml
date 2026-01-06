@@ -376,7 +376,7 @@ display:
           value:
             min: ''
             max: ''
-            value: onwer
+            value: owner
           group: 1
           exposed: false
           expose:
