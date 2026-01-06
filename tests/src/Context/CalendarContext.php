@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Behat\Context\Context;
+use Behat\Step\When;
 use DateInterval;
 use DatePeriod;
 use DateTime;
@@ -93,9 +94,8 @@ class CalendarContext extends RawDrupalContext implements Context {
    *   Calendar mode: month or week.
    *
    * @throws \DateMalformedStringException
-   *
-   * @When I navigate the calendar to :date in :mode mode
    */
+  #[When('I navigate the calendar to :date in :mode mode')]
   public function iNavigateTheCalendarTo(string $date, string $mode): void {
     $pagerSelector = $this->getPagerByDate($date);
     $dateTimestamp = strtotime($date);

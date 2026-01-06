@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\When;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
@@ -39,9 +40,8 @@ class JoinupLogContext extends RawDrupalContext {
    *
    * @param string $group
    *   The name of the group.
-   *
-   * @When I go to the actions log report for :group
    */
+  #[When('I go to the actions log report for :group')]
   public function visitActionsLogReport(string $group): void {
     $entityGroup = $this->getEntityByLabel('node', $group);
     $url = Url::fromRoute('view.actions_log.logs', [

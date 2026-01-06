@@ -14,6 +14,7 @@ use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Exception\ExpectationException;
 use Behat\Mink\Exception\ResponseTextException;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
+use Behat\Step\When;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Datetime\DrupalDateTime;
@@ -809,9 +810,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @param string $region
    *   The name of the region where the contextual links button resides.
-   *
-   * @When I click the contextual links button in the :region( region)
    */
+  #[When('I click the contextual links button in the :region( region)')]
   public function clickContextualLinkButton(string $region): void {
     $button = $this->findContextualLinkButton($this->getRegion($region));
     $button->click();
@@ -873,9 +873,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   When the tab is not found on the page.
-   *
-   * @When I click( the) :tab tab
    */
+  #[When('I click( the) :tab tab')]
   public function clickVerticalTabLink(string $tab): void {
     // When this is running in a browser without JavaScript the vertical tabs
     // are rendered as detail elements.
@@ -905,9 +904,8 @@ class FeatureContext extends RawDrupalContext {
    * @throws \Exception
    *   When the field cannot be found or the number of values is different from
    *   the number of elements found.
-   *
-   * @When I fill in :field with values :values
    */
+  #[When('I fill in :field with values :values')]
   public function fillFieldWithValues(string $field, string $values): void {
     $values = $this->explodeDelimitedSeparatedStepArgument($values);
 
@@ -1353,9 +1351,8 @@ class FeatureContext extends RawDrupalContext {
    *   The text to be filled in.
    * @param string $rowText
    *   Text contained in a row. Must be unique.
-   *
-   * @When I fill in the :index occurrence of the :field field with :text in the :rowText row
    */
+  #[When('I fill in the :index occurrence of the :field field with :text in the :rowText row')]
   public function fillFieldInRowByIndex(string $index, string $field, string $text, string $rowText): void {
     $index = $this->convertOrdinalToNumber($index);
     $row = $this->getRowByRowText($rowText);
@@ -1376,10 +1373,9 @@ class FeatureContext extends RawDrupalContext {
    *   Text of row.
    *
    * @throws \Exception
-   *
-   * @When I press the button :button in the :text row
-   * @When I press the :button button in the :text row
    */
+  #[When('I press the button :button in the :text row')]
+  #[When('I press the :button button in the :text row')]
   public function pressButtonsInRow(string $buttonIdentifier, string $rowText): void {
     $row = $this->getRowByRowText($rowText);
 
@@ -1576,9 +1572,8 @@ class FeatureContext extends RawDrupalContext {
    *   The ID, name, label or value of the autocomplete field to fill in.
    * @param string $value
    *   The text to type in the autocomplete field.
-   *
-   * @When I type :value in the :field autocomplete field
    */
+  #[When('I type :value in the :field autocomplete field')]
   public function fillAutoCompleteField(string $field, string $value): void {
     $this->assertJavaScriptEnabledBrowser();
 
@@ -1773,9 +1768,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @param string $version
    *   The Joinup version to set, e.g. 'v1.57.0' or 'v1.57.0-66-g1234abcde'.
-   *
-   * @When the Interoperable Europe Portal version is set to :version
    */
+  #[When('the Interoperable Europe Portal version is set to :version')]
   public function setJoinupVersion(string $version): void {
     // Alert the user that the `@joinupVersion` tag is required.
     Assert::assertTrue($this->hasTag('joinupVersion'), 'The `@joinupVersion` tag is required for scenarios that want to change the Interoperable Europe Portal version.');
@@ -1810,9 +1804,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @throws \InvalidArgumentException
    *   When the offset is invalid or the field doesn't exist.
-   *
-   * @When I select image #:offset as :content_type logo
    */
+  #[When('I select image #:offset as :content_type logo')]
   public function selectImageFromTheFieldImageLibraryBrowser(string $offset, string $content_type): void {
     $this->validateImageLibraryBrowserStepDefinitionParams($content_type, $offset);
     $map = $this->getImageLibraryBrowserMapping($content_type);
@@ -1917,9 +1910,8 @@ class FeatureContext extends RawDrupalContext {
    *   When the field is not found.
    *
    * @todo Extend this step definition to handle also item with delta > 0.
-   *
-   * @When I remove the (first )file from (the ):field( field)
    */
+  #[When('I remove the (first )file from (the ):field( field)')]
   public function removeFirstFileFromField(string $field_name): void {
     $session = $this->getSession();
     $locator = '//label[text()="' . $field_name . '"]';
@@ -2028,9 +2020,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @throws \Exception
    *    Thrown when the input fill failed.
-   *
-   * @When I fill :label with the absolute URL :URL
    */
+  #[When('I fill :label with the absolute URL :URL')]
   public function iFillWithTheCurrentUrlPath(string $label, string $url): void {
     $this->getSession()->getPage()->fillField($label, $this->locatePath($url));
   }
@@ -2089,9 +2080,8 @@ class FeatureContext extends RawDrupalContext {
    *   The entity bundle.
    * @param string $time
    *   The time as string.
-   *
-   * @When I update the :label :bundle at :time
    */
+  #[When('I update the :label :bundle at :time')]
   public function updateEntityAtDateTime(string $label, string $bundle, string $time): void {
     $entity_type_id = static::entityTypeAliases()[$bundle];
     $entity = $this->getEntityByLabel($entity_type_id, $label);
@@ -2143,9 +2133,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @param string $queue_name
    *   The queue name.
-   *
-   * @When I run the :queue_name queue worker
    */
+  #[When('I run the :queue_name queue worker')]
   public function iRunTheQueueWorker(string $queue_name): void {
     // Create a new Process instance to run the Drush command.
     $process = Process::fromShellCommandline(
@@ -2167,9 +2156,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @param string $module
    *   The implementer module of the cron hook.
-   *
-   * @When I run the :module cron
    */
+  #[When('I run the :module cron')]
   public function iRunSpecificCron(string $module): void {
     Assert::assertTrue(function_exists($cronFunction = "{$module}_cron"));
     call_user_func($cronFunction);

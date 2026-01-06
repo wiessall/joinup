@@ -7,6 +7,7 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\BootstrapTrait;
 use Drupal\joinup\Traits\EntityTrait;
@@ -56,8 +57,8 @@ class JoinupSearchContext extends RawDrupalContext {
    * Navigates to the search page.
    *
    * @Given I am on the advanced search page
-   * @When I visit the advanced search page
    */
+  #[When('I visit the advanced search page')]
   public function visitSearchPage(): void {
     $this->visitPath('/search');
   }
@@ -82,9 +83,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the tab is not found in the page.
-   *
-   * @When I click the :type content tab
    */
+  #[When('I click the :type content tab')]
   public function clickContentTypeFacet(string $type): void {
     $this->findContentTab($type)->click();
   }
@@ -205,9 +205,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when an unwanted facet item is shown in the page.
-   *
-   * @When I should not see the following facet items :labels
    */
+  #[When('I should not see the following facet items :labels')]
   public function assertContentTypeFacetItemsNotPresent(string $labels): void {
     $labels = $this->explodeDelimitedSeparatedStepArgument($labels);
 
@@ -238,9 +237,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the facet or the link inside the facet is not found.
-   *
-   * @When I click :link in the :facet inline facet
    */
+  #[When('I click :link in the :facet inline facet')]
   public function iClickAnInlineFacetItemLink(string $link, string $facet): void {
     $this->findFacetByAlias($facet)->clickLink($link);
   }
@@ -597,10 +595,9 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the header search bar is not found.
-   *
-   * @When I enter :keywords in the search bar
-   * @When I enter :keywords in the :input
    */
+  #[When('I enter :keywords in the search bar')]
+  #[When('I enter :keywords in the :input')]
   public function enterSearchKeywords(string $keywords, ?string $input = 'search bar'): void {
     $element = $this->getSearchBarElement($input);
     $element->setValue($keywords);
@@ -614,9 +611,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the header search bar is not found.
-   *
-   * @When I enter :keywords in the search bar and press enter
    */
+  #[When(' I enter :keywords in the search bar and press enter')]
   public function launchSearchFromHeader(string $keywords): void {
     if ($this->hasJavascriptSupport()) {
       $element = $this->getSearchBarElement();
@@ -647,9 +643,8 @@ class JoinupSearchContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the browser doesn't support Javascript or when the search
    *   field is not found.
-   *
-   * @When I submit the search by pressing enter
    */
+  #[When('I submit the search by pressing enter')]
   public function submitSearch(): void {
     $this->assertJavaScriptEnabledBrowser();
     $element = $this->getSearchBarElement();
@@ -664,9 +659,8 @@ class JoinupSearchContext extends RawDrupalContext {
 
   /**
    * Focuses on the search input.
-   *
-   * @When I focus on the search input
    */
+  #[When('I focus on the search input')]
   public function focusOnSearchInput(): void {
     // One can only open the search bar if JavaScript is enabled.
     $this->assertJavaScriptEnabledBrowser();
@@ -700,9 +694,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a wanted facet item is not shown in the page.
-   *
-   * @When I should see the following facet summary :labels
    */
+  #[When('I should see the following facet summary :labels')]
   public function assertFacetSummary(string $labels): void {
     $present_labels = $this->explodeDelimitedSeparatedStepArgument($labels);
     $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' block-facets-summary ')]//li[contains(concat(' ', normalize-space(@class), ' '), ' facet-summary-item--facet ')]";
@@ -727,9 +720,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a wanted facet item is not shown in the page.
-   *
-   * @When I remove the following facet summary :label
    */
+  #[When('I remove the following facet summary :label')]
   public function removeFacetSummary(string $label): void {
     $css = "div.block-facets-summary-blocksearch-facets-summary li.facet-summary-item--facet a:contains('{$label}')";
     $element = $this->getSession()->getPage()->find('css', $css);
@@ -902,9 +894,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *   The group bundle.
    * @param string $option
    *   The option to set.
-   *
-   * @When the :label :bundle is configured to show :option community content( in the overview)
    */
+  #[When('the :label :bundle is configured to show :option community content( in the overview)')]
   public function setGroupContentArchivedOption(string $label, string $bundle, string $option): void {
     $option = strtolower($option);
     $options = ['all', 'archived', 'unarchived'];
@@ -934,9 +925,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *   The facet to set.
    * @param string $region
    *   The facet region.
-   *
-   * @When the :label :bundle is configured to show the :facet facet in the :region region
    */
+  #[When('the :label :bundle is configured to show the :facet facet in the :region region')]
   public function setGroupContentFacet(string $label, string $bundle, string $facet, string $region): void {
     $facet = strtolower($facet);
     $facet = $this->getFacetIdFromAlias($facet);

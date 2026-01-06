@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
+use Behat\Step\When;
 use Drupal;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
@@ -87,9 +88,8 @@ class PrivateMessageContext extends RawDrupalContext {
    *   Owner username.
    * @param string $recipient
    *   Recipient username.
-   *
-   * @When I visit the :owner :recipient thread
    */
+  #[When('I visit the :owner :recipient thread')]
   public function visitThread(string $owner, string $recipient): void {
     $entity = $this->getThread($owner, $recipient);
     $this->visitPath($entity->toUrl()->toString());
@@ -391,9 +391,8 @@ class PrivateMessageContext extends RawDrupalContext {
 
   /**
    * Visit administration page for reported private message.
-   *
-   * @When I go to admin page of reported private message with text :messageText
    */
+  #[When('I go to admin page of reported private message with text :messageText')]
   public function iGoToAdminPageOfReportedPrivateMessageWithText(string $messageText): void {
     $messageId = $this->getPrivateMessageIdByMessageText($messageText);
     $messageUrl = Url::fromRoute('view.private_message_report.single', ['private_message' => $messageId], ['absolute' => TRUE])

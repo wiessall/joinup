@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\When;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
@@ -37,10 +38,9 @@ class JoinupGroupContext extends RawDrupalContext {
    *
    * @param string $label
    *   The name of the group.
-   *
-   * @When I go to the members page of :label
-   * @When I am on the members page of :label
    */
+  #[When('I go to the members page of :label')]
+  #[When('I am on the members page of :label')]
   public function visitMembersPage(string $label): void {
     $group = $this->getEntityByLabel('node', $label);
     $url = Url::fromRoute("entity.{$group->getEntityTypeId()}.member_overview", [
@@ -54,9 +54,8 @@ class JoinupGroupContext extends RawDrupalContext {
    *
    * @param string $label
    *   The name of the group.
-   *
-   * @When I go to the member(ship) permissions table of :label
    */
+  #[When('I go to the member(ship) permissions table of :label')]
   public function visitMembershipPermissionsTable(string $label): void {
     $group = $this->getEntityByLabel('node', $label);
     $url = Url::fromRoute('joinup_group.membership_permissions_info', [
@@ -223,9 +222,8 @@ class JoinupGroupContext extends RawDrupalContext {
    *   The label of the group where the announcement belongs.
    * @param string $group_type
    *   The group bundle.
-   *
-   * @When I go to the announcements page of :group_label :group_type
    */
+  #[When('I go to the announcements page of :group_label :group_type')]
   public function visitGroupAnnouncementsPage(string $group_label, string $group_type): void {
     assert(in_array($group_type, ['collection', 'solution']));
     $group = $this->getEntityByLabel('node', $group_label, $group_type);
@@ -245,9 +243,8 @@ class JoinupGroupContext extends RawDrupalContext {
    *   The label of the group where the announcement belongs.
    * @param string $group_bundle
    *   The group bundle.
-   *
-   * @When I go to the :subject announcement of :group_label :group_type
    */
+  #[When('I go to the :subject announcement of :group_label :group_type')]
   public function visitAnnouncementEditForm(string $subject, string $group_label, string $group_bundle): void {
     assert(in_array($group_bundle, ['collection', 'solution']));
     $announcement = $this->getAnnouncementBySubject($subject);
@@ -545,9 +542,8 @@ class JoinupGroupContext extends RawDrupalContext {
    * @param string $entityTypeAlias
    *   The alias of the entity type (e.g., 'node', 'contact information').
    *   Refer to the `entityTypeAliases()` method for the full mapping.
-   *
-   * @When I delete the :identifier :entityTypeAlias
    */
+  #[When('I delete the :identifier :entityTypeAlias')]
   public function deleteEntity(string $identifier, string $entityTypeAlias): void {
     $entityTypeId = $this->entityTypeAliases()[$entityTypeAlias] ?? NULL;
     if (!$entityTypeId) {

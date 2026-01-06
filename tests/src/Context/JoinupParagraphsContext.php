@@ -9,6 +9,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\When;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Layout\LayoutPluginManagerInterface;
@@ -69,9 +70,8 @@ class JoinupParagraphsContext extends RawDrupalContext {
    *   The label of the field.
    * @param string $field
    *   The field in which to take action.
-   *
-   * @When I fill in the :position :label with :text in the :field field
    */
+  #[When('I fill in the :position :label with :text in the :field field')]
   public function fillInParagraphsFieldInRawOrder(string $position, string $text, string $label, string $field): void {
     $position = $this->convertOrdinalToNumber($position);
     // Convert ordinal to array index.
@@ -102,9 +102,8 @@ class JoinupParagraphsContext extends RawDrupalContext {
    *   The label of the field containing the WYSIWYG editor.
    * @param string $field
    *   The field in which to take action.
-   *
-   * @When I enter :text in the :position :label wysiwyg editor in the :field field
    */
+  #[When('I enter :text in the :position :label wysiwyg editor in the :field field')]
   public function enterWysywigInRawOrder(string $text, string $position, string $label, string $field): void {
     $position = $this->convertOrdinalToNumber($position);
     // Convert ordinal to array index.

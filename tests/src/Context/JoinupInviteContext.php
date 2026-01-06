@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\UserTrait;
@@ -34,9 +35,8 @@ class JoinupInviteContext extends RawDrupalContext {
    *
    * @throws \InvalidArgumentException
    *   Thrown when the action is anything other than 'accept' or 'reject'.
-   *
-   * @When I visit the :action invitation form for the :title :bundle :type
    */
+  #[When('I visit the :action invitation form for the :title :bundle :type')]
   public function visitInvitationForm(string $action, string $title, string $bundle, string $type): void {
     if (!in_array($type, ['group', 'content'])) {
       throw new \InvalidArgumentException("Unknown type '$action'. Valid actions are 'group' and 'content'.");

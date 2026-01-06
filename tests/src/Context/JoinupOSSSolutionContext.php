@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 
 /**
@@ -18,9 +19,8 @@ class JoinupOSSSolutionContext extends RawDrupalContext {
 
   /**
    * Navigates to the OSS search page.
-   *
-   * @When I visit the OSS search page
    */
+  #[When('I visit the OSS search page')]
   public function visitSearchPage(): void {
     $this->visitPath(self::SEARCH_PATH);
   }
