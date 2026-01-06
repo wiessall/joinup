@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Then;
 use Drupal\Component\Utility\Variable;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use PHPUnit\Framework\Assert;
@@ -16,9 +17,8 @@ class JoinupEtransContext extends RawDrupalContext {
 
   /**
    * Verifies that the given text is translatable by eTrans service.
-   *
-   * @Then the eTrans translatable text should contain the following text:
    */
+  #[Then('the eTrans translatable text should contain the following text:')]
   public function eTransTextMatches(TableNode $table): void {
     $expectedLines = $table->getColumn(0);
     $translatableText = $this->getTranslatableText();

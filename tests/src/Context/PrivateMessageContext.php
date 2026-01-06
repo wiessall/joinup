@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
+use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal;
 use Drupal\Core\Session\AccountInterface;
@@ -131,9 +132,8 @@ class PrivateMessageContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the actual count does not match the expected count.
-   *
-   * @Then I should see :expectedCount private message(s)
    */
+  #[Then('I should see :expectedCount private message(s)')]
   public function iShouldSeePrivateMessages(int $expectedCount): void {
     $page = $this->getSession()->getPage();
     $messagesContainer = $page->find('css', '.private-message-thread-messages');
@@ -165,10 +165,9 @@ class PrivateMessageContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the message exists and should not or if
    *   it does not exist and it should.
-   *
-   * @Then a message containing the text :messageText should be present
-   * @Then a message containing the text :messageText should :not be present
    */
+  #[Then('a message containing the text :messageText should be present')]
+  #[Then('a message containing the text :messageText should :not be present')]
   public function aPrivateMessageContainingTextShouldBePresent(string $messageText, ?string $not = NULL): void {
     try {
       $messagesContainer = $this->getMessagesContainer();
@@ -208,9 +207,8 @@ class PrivateMessageContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown if the thread with the specified subject is not found or if there
    *   are no thread messages available.
-   *
-   * @Then I click :subject in thread message card
    */
+  #[Then('I click :subject in thread message card')]
   public function clickPrivateMessageThread(string $subject): void {
     $messagesContainer = $this->getThreadsContainer();
     $xpath = '//div[contains(concat(" ", normalize-space(@class), " "), " private-message-thread-inbox ")]//div[text() = "' . $subject . '"]';
@@ -230,9 +228,8 @@ class PrivateMessageContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the actual count does not match the expected count.
-   *
-   * @Then I should see :expectedCount unread private message(s)
    */
+  #[Then('I should see :expectedCount unread private message(s)')]
   public function iShouldSeeUnreadPrivateMessageThreads(int $expectedCount): void {
     $page = $this->getSession()->getPage();
     $notificationElement = $page->find('css', '.private-message-notification-wrapper .private-message-page-link');
@@ -254,8 +251,8 @@ class PrivateMessageContext extends RawDrupalContext {
    *   The limit. If not passed, the original value is restored.
    *
    * @Given the limit for messages or threads allowed is :limit
-   * @Then I restore the limit for messages or threads allowed
    */
+  #[Then('I restore the limit for messages or threads allowed')]
   public function setPrivateMessageLimit(?int $limit = NULL): void {
     static $original_value;
 

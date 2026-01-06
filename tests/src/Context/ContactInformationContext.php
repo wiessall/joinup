@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\contact_information\ContactInformationEmailConfirmInterface;
 use Drupal\email_confirmer\EmailConfirmationInterface;
@@ -86,9 +87,8 @@ class ContactInformationContext extends RawDrupalContext {
    *   The requested status.
    * @param string $email_confirmation
    *   The email to check.
-   *
-   * @Then :count :status confirmation request(s) for :email_confirmation should exist
    */
+  #[Then(':count :status confirmation request(s) for :email_confirmation should exist')]
   public function assertNumberOfConfirmationRequests(string $count, string $status, string $email_confirmation): void {
     Assert::assertTrue(in_array($count, ['no', 'a', 'an']), "The count '$count' is not supported.");
 

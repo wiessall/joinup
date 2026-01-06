@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -115,10 +116,9 @@ class JoinupGroupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a node with the given title doesn't exist.
-   *
-   * @Then the :group_label :group_type should have a custom page titled :group_title
-   * @Then the :group_label :group_type should have a community content titled :group_title
    */
+  #[Then('the :group_label :group_type should have a custom page titled :group_title')]
+  #[Then('the :group_label :group_type should have a community content titled :group_title')]
   public function assertNodeOgMembership(string $group_label, string $group_type, string $content_title): void {
     $group = $this->getEntityByLabel('node', $group_label, $group_type);
     $node = $this->getEntityByLabel('node', $content_title);
@@ -135,9 +135,8 @@ class JoinupGroupContext extends RawDrupalContext {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    *   The the link is not found in page.
-   *
-   * @Then the link :link_label points outside group
    */
+  #[Then('the link :link_label points outside group')]
   public function assertLinkPointsOutsideGroup(string $link_label): void {
     $session = $this->getSession();
     $page = $session->getPage();
@@ -157,9 +156,8 @@ class JoinupGroupContext extends RawDrupalContext {
    *
    * @param string $label
    *   The label of the group the user wants to join.
-   *
-   * @Then a cookie should be set that allows me to join :label after authenticating
    */
+  #[Then('a cookie should be set that allows me to join :label after authenticating')]
   public function assertAnonGroupJoinTrackingCookiePresent(string $label): void {
     $cookie = $this->getSession()->getCookie('join_group');
     $entity = $this->getEntityByLabel('node', $label);
@@ -168,9 +166,8 @@ class JoinupGroupContext extends RawDrupalContext {
 
   /**
    * Checks that no cookie is set that tracks which group a user wants to join.
-   *
-   * @Then the cookie that tracks which group I want to join should not be set
    */
+  #[Then('the cookie that tracks which group I want to join should not be set')]
   public function assertNoAnonGroupJoinTrackingCookiePresent(): void {
     Assert::assertEmpty($this->getSession()->getCookie('join_group'), 'No cookie should be set that tracks which group an anonymous user wants to join.');
   }
@@ -192,9 +189,8 @@ class JoinupGroupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the number of members does not not match the expectation.
-   *
-   * @Then the :label :type should have :number :membership_state member(s)
    */
+  #[Then('the :label :type should have :number :membership_state member(s)')]
   public function assertMemberCount(string $label, string $type, int $number, string $membership_state): void {
     $states = [
       OgMembershipInterface::STATE_ACTIVE,
@@ -356,9 +352,8 @@ class JoinupGroupContext extends RawDrupalContext {
    *
    * @throws \Drupal\joinup_group\Exception\MissingGroupException
    *   When the announcement is missing the group.
-   *
-   * @Then the :subject announcement should have been delivered for each group member
    */
+  #[Then('the :subject announcement should have been delivered for each group member')]
   public function assertDeliveredAnnouncements(string $subject): void {
     $announcement = $this->getAnnouncementBySubject($subject);
     $body = $announcement->getBody();

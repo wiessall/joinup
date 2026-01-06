@@ -7,6 +7,7 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
@@ -324,10 +325,9 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    *
    * @param int $expected_rows
    *   (optional) The expected number of paragraphs. Defaults to 0.
-   *
-   * @Then there should be :expected_rows paragraph(s) in the page
-   * @Then the page should contain no paragraphs
    */
+  #[Then('there should be :expected_rows paragraph(s) in the page')]
+  #[Then('the page should contain no paragraphs')]
   public function assertParagraphsCountInPage(int $expected_rows = 0): void {
     Assert::assertCount($expected_rows, $this->getSession()->getPage()->findAll('xpath', static::PARAGRAPH_ITEM_XPATH));
   }

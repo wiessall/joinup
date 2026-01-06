@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
@@ -57,9 +58,8 @@ class JoinupLicenceContext extends RawDrupalContext {
    *
    * @param int $number
    *   The expected number of licences.
-   *
-   * @Then I should have :number licence(s)
    */
+  #[Then('I should have :number licence(s)')]
   public function assertLicenceCount(int $number): void {
     Assert::assertEquals($number, \Drupal::entityQuery('node')->accessCheck(FALSE)->count()->condition('type', 'licence')->execute());
   }

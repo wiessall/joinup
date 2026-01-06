@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
@@ -121,9 +122,8 @@ class BootstrapContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   When the accordion section is not found on the page or it's not active.
-   *
-   * @Then the :section accordion section should be active
    */
+  #[Then('the :section accordion section should be active')]
   public function assertAccordionSectionActive(string $section): void {
     if ($this->findAccordionSection($section)->hasClass('collapsed')) {
       throw new \Exception("The accordion section '$section' is not active.");
@@ -163,9 +163,8 @@ class BootstrapContext extends RawDrupalContext {
    *
    * @param string $label
    *   The element label.
-   *
-   * @Then the :label collapse is expanded
    */
+  #[Then('the :label collapse is expanded')]
   public function assertCollapseIsExpanded(string $label): void {
     $this->collapseAssertionHelper($label, TRUE);
   }
@@ -175,9 +174,8 @@ class BootstrapContext extends RawDrupalContext {
    *
    * @param string $label
    *   The element label.
-   *
-   * @Then the :label collapse is collapsed
    */
+  #[Then('the :label collapse is collapsed')]
   public function assertCollapseIsCollapsed(string $label): void {
     $this->collapseAssertionHelper($label, FALSE);
   }

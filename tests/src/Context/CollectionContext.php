@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
@@ -111,9 +112,8 @@ class CollectionContext extends RawDrupalContext {
    *
    * @param string $collection
    *   The title of the collection.
-   *
-   * @Then I should be on (the homepage of )the :collection collection
    */
+  #[Then('I should be on (the homepage of )the :collection collection')]
   public function assertCollectionPath(string $collection): void {
     /** @var \Drupal\node\NodeInterface $entity */
     $entity = $this->getEntityByLabel('node', $collection, 'collection');
@@ -350,9 +350,8 @@ class CollectionContext extends RawDrupalContext {
    * @todo Maybe there is a better definition available here like 'The
    * following state buttons should be available for the user on the
    * collection'.
-   *
-   * @Then for the following collection, the corresponding user should have the corresponding (available )state buttons:
    */
+  #[Then('for the following collection, the corresponding user should have the corresponding (available )state buttons:')]
   public function verifyStateButtons(TableNode $check_table): void {
     foreach ($check_table->getColumnsHash() as $values) {
       $username = $values['user'];
@@ -384,9 +383,8 @@ class CollectionContext extends RawDrupalContext {
    *
    * @throws \Exception
    *    Thrown when the user does not exist.
-   *
-   * @Then the visibility of the delete link should be as follows for these users in these collections:
    */
+  #[Then('the visibility of the delete link should be as follows for these users in these collections:')]
   public function verifyDeleteLinkVisibility(TableNode $check_table): void {
     foreach ($check_table->getColumnsHash() as $values) {
       $user = $this->getUserByName($values['user']);
@@ -424,10 +422,9 @@ class CollectionContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown if a logged in user was not found or it was not passed, or if the
    *   assertion failed.
-   *
-   * @Then I am member of :labels collection(s)
-   * @Then user :user_name is member of :labels collection(s)
    */
+  #[Then('I am member of :labels collection(s)')]
+  #[Then('user :user_name is member of :labels collection(s)')]
   public function assertUserIsMemberOfCollection(string $labels, ?string $user_name = NULL): void {
     /** @var \Drupal\user\UserInterface $account */
     if (!$user_name) {
@@ -480,10 +477,9 @@ class CollectionContext extends RawDrupalContext {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    *   The navigator is missing from the page.
-   *
-   * @Then I should see the glossary navigator :expected_navigator
-   * @Then I should not see the glossary navigator
    */
+  #[Then('I should see the glossary navigator :expected_navigator')]
+  #[Then('I should not see the glossary navigator')]
   public function assertGlossaryNavigator(?string $expected_navigator = NULL): void {
     $page = $this->getSession()->getPage();
     $navigator_node = $page->find('css', '.glossary-navigator');

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 
 /**
@@ -13,9 +14,8 @@ class DebugContext extends RawDrupalContext {
 
   /**
    * Prints system message from the page for debugging.
-   *
-   * @Then /^print messages$/
    */
+  #[Then('/^print messages$/')]
   public function printMessages(): void {
     $selector = $this->getDrupalSelector('message_selector');
     /** @var \Behat\Mink\Element\NodeElement $message */
@@ -26,9 +26,8 @@ class DebugContext extends RawDrupalContext {
 
   /**
    * Asserts that no orphaned content exists in the website.
-   *
-   * @Then /^no orphaned content should exist in the website$/
    */
+  #[Then('/^no orphaned content should exist in the website$/')]
   public function noOprhanedContentShouldExistInTheWebsite(): void {
     $query = <<<SQL
       SELECT n1.nid, n1.type, n1.title, n2.type, n2.title

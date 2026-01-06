@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\MinkExtension\Context\RawMinkContext;
+use Behat\Step\Then;
 use Drupal\Component\Utility\Html;
 use PHPUnit\Framework\Assert;
 
@@ -23,9 +24,8 @@ class RssContext extends RawMinkContext {
 
   /**
    * Asserts that the current page response contains a valid RSS feed.
-   *
-   * @Then I (should )see a valid RSS feed
    */
+  #[Then('I (should )see a valid RSS feed')]
   public function assertRss(): void {
     libxml_use_internal_errors(TRUE);
     libxml_clear_errors();
@@ -57,9 +57,8 @@ class RssContext extends RawMinkContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The channel elements data.
-   *
-   * @Then the RSS feed channel elements should be:
    */
+  #[Then('the RSS feed channel elements should be:')]
   public function assertRssChannelElements(TableNode $table): void {
     $this->assertRssLoaded();
 
@@ -83,9 +82,8 @@ class RssContext extends RawMinkContext {
    *
    * @param int $count
    *   The expected number of items.
-   *
-   * @Then the RSS feed should have :count items
    */
+  #[Then('the RSS feed should have :count items')]
   public function assertRssItemsCount(int $count): void {
     $this->assertRssLoaded();
 
@@ -104,9 +102,8 @@ class RssContext extends RawMinkContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The item data.
-   *
-   * @Then the RSS feed items should be:
    */
+  #[Then('the RSS feed items should be:')]
   public function assertRssItems(TableNode $table): void {
     $this->assertRssLoaded();
     $this->assertRssItemsCount(count($table->getColumnsHash()));
@@ -184,9 +181,8 @@ class RssContext extends RawMinkContext {
    *   The title of the RSS feed link.
    * @param string $href
    *   The relative or absolute url where the RSS feed link points.
-   *
-   * @Then the page( should) contain(s) an RSS( autodiscovery) link with title :title pointing to :href
    */
+  #[Then('the page( should) contain(s) an RSS( autodiscovery) link with title :title pointing to :href')]
   public function assertRssAutodiscoveryLinkPresent(string $stitle, string $href): void {
     $xpath = sprintf(
       '//head/link[@rel="alternate"][@type="application/rss+xml"][@title="%s"][@href="%s" or @href="%s"]',
@@ -204,9 +200,8 @@ class RssContext extends RawMinkContext {
    *
    * @param int $count
    *   The number of RSS autodiscovery links.
-   *
-   * @Then the page should contain :count RSS autodiscovery link(s)
    */
+  #[Then('the page should contain :count RSS autodiscovery link(s)')]
   public function assertRssAutodiscoveryLinkCount(int $count): void {
     $xpath = '//head/link[@rel="alternate"][@type="application/rss+xml"]';
     Assert::assertCount($count, $this->getSession()->getPage()->findAll('xpath', $xpath));

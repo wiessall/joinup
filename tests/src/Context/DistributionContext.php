@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
+use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -72,9 +73,8 @@ class DistributionContext extends RawDrupalContext {
    *   Thrown if the download link cannot be found.
    * @throws \InvalidArgumentException
    *   Thrown if the link type parameter does not receive a valid value.
-   *
-   * @Then I should see the :link_type link in the :distribution distribution
    */
+  #[Then('I should see the :link_type link in the :distribution distribution')]
   public function assertLinkPresentInCompactDistributionTile(string $link_type, string $distribution): void {
     if (!in_array($link_type, ['download', 'external'])) {
       throw new \InvalidArgumentException('Only "download" and "external" values are allowed for $link_type.');
@@ -115,9 +115,8 @@ class DistributionContext extends RawDrupalContext {
    *
    * @throws \Exception
    *    Thrown when the file or the link is not found.
-   *
-   * @Then the :distribution distribution should have the link of the :file_name in the access URL field
    */
+  #[Then('the :distribution distribution should have the link of the :file_name in the access URL field')]
   public function assertLinkSynchronized(string $distribution, string $file_name): void {
     $distribution = $this->getEntityByLabel('node', $distribution);
     if (!$distribution instanceof DistributionInterface) {
@@ -235,9 +234,8 @@ class DistributionContext extends RawDrupalContext {
    *
    * @throws \Behat\Mink\Exception\ElementTextException
    *   Thrown when one or more of the download events was not present.
-   *
-   * @Then I should see the following download entries:
    */
+  #[Then('I should see the following download entries:')]
   public function assertDownloadEventEntries(TableNode $table): void {
     $base_selector = '.distribution-download-table table > tbody > tr';
     $count = 0;

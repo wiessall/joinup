@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\rdf_sync\Model\SyncMethod;
@@ -220,9 +221,8 @@ class RdfContext extends RawDrupalContext {
 
   /**
    * Asserts that entities in the published graph are ADMS-AP compliant.
-   *
-   * @Then the ADMS-AP data of the published entities in Interoperable Europe Portal is valid
    */
+  #[Then('the ADMS-AP data of the published entities in Interoperable Europe Portal is valid')]
   public function assertValidPublishedGraph(): void {
     $config = \Drupal::config('rdf_sync.settings');
     $graphUri = $config->get('graph_uri');
@@ -332,9 +332,8 @@ class RdfContext extends RawDrupalContext {
    *   The URI to check.
    * @param string $graph
    *   The graph to check.
-   *
-   * @Then there should not be any triples with the :property :uri in the :graph graph
    */
+  #[Then('there should not be any triples with the :property :uri in the :graph graph')]
   public function assertNoTriplesOfUri(string $property, string $uri, string $graph): void {
     assert(in_array($property, ['subject', 'object']), 'The property must be either "subject" or "object"');
     $stub = $property === 'subject' ?

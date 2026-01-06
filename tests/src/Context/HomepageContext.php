@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
+use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
 use PHPUnit\Framework\Assert;
@@ -35,9 +36,8 @@ class HomepageContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   A table containing the expected content of the explore section.
-   *
-   * @Then the explore section should contain the following content:
    */
+  #[Then('the explore section should contain the following content:')]
   public function assertExplore(TableNode $table): void {
     $columns = $table->getColumnsHash();
     $articles = $this->getSession()->getPage()->findAll('css', '.block-joinup-front-page-explore-block article');

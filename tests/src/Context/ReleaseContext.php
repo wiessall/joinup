@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
@@ -63,9 +64,8 @@ class ReleaseContext extends RawDrupalContext {
    *
    * @throws \Exception
    *    Thrown if the release is not marked as latest in the page or not found.
-   *
-   * @Then the :release release should be marked as the latest release
    */
+  #[Then('the :release release should be marked as the latest release')]
   public function assertReleaseIsLatest(string $release): void {
     $release = $this->getEntityByLabel('node', $release);
 

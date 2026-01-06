@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -56,9 +57,8 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Throws an exception when a parameter is not the expected one.
-   *
-   * @Then the following email should have been sent:
    */
+  #[Then('the following email should have been sent:')]
   public function assertEmailSent(TableNode $table): void {
     /** @var string $template */
     /** @var string $recipient */
@@ -195,9 +195,8 @@ class JoinupNotificationContext extends RawDrupalContext {
    *   Throws an exception when a parameter is not the expected one.
    *
    * @see self::assertEmailSent()
-   *
-   * @Then the following email should not have been sent:
    */
+  #[Then('the following email should not have been sent:')]
   public function assertEmailNotSent(TableNode $table): void {
     try {
       // Reusing ::assertEmailSent().
@@ -224,9 +223,8 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Throws an exception when a parameter is not the expected one.
-   *
-   * @Then the email sent to :username_or_email with subject :subject contains the( following lines of) text:
    */
+  #[Then('the email sent to :username_or_email with subject :subject contains the( following lines of) text:')]
   public function assertEmailSentAndContainsText(string $username_or_email, string $subject, TableNode $table): void {
     $this->emailSentHelper(TRUE, $username_or_email, $subject, $table);
   }
@@ -299,9 +297,8 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Throws an exception when a parameter is not the expected one.
-   *
-   * @Then the email sent to :username_or_email with subject :subject should not contain the( following lines of) text:
    */
+  #[Then('the email sent to :username_or_email with subject :subject should not contain the( following lines of) text:')]
   public function assertEmailSentNotContainsText(string $username_or_email, string $subject, TableNode $table): void {
     $this->emailSentHelper(FALSE, $username_or_email, $subject, $table);
   }
@@ -377,10 +374,9 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the count doesn't match the actual number.
-   *
-   * @Then :count e-mail(s) should have been sent
-   * @Then :count e-mail(s) should have been sent to recipients :recipients
    */
+  #[Then(':count e-mail(s) should have been sent')]
+  #[Then(':count e-mail(s) should have been sent to recipients :recipients')]
   public function assertNumberOfEmailSent(int $count, ?string $recipients = NULL): void {
     $mails = $this->getMails();
     if (count($mails) != $count) {
@@ -508,9 +504,8 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @param string $username_or_email
    *   A valid user name or a valid email.
-   *
-   * @Then no email has been sent to :username_or_email
    */
+  #[Then('no email has been sent to :username_or_email')]
   public function noEmailSentToRecipient(string $username_or_email): void {
     if ($account = user_load_by_name($username_or_email)) {
       /** @var \Drupal\user\UserInterface $account */

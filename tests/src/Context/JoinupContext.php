@@ -9,6 +9,7 @@ use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Entity\FieldableEntityInterface;
@@ -96,9 +97,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @param string $text
    *   The html that is expected to be found.
-   *
-   * @Then the page should contain the html text :text
    */
+  #[Then('the page should contain the html text :text')]
   public function assertHtmlText($text): void {
     $actual = $this->getSession()->getPage()->getHtml();
     $regex = '/' . preg_quote($text, '/') . '/ui';
@@ -114,9 +114,8 @@ class JoinupContext extends RawDrupalContext {
    *   The text that should have a particular number of appearances.
    * @param int $count
    *   The number of appearances.
-   *
-   * @Then the text :text should appear :count time(s)
    */
+  #[Then('the text :text should appear :count time(s)')]
   public function assertTextCount(string $text, int $count): void {
     $xpath = '//*[contains(text(), "' . $text . '")]';
     $this->assertSession()->elementsCount('xpath', $xpath, $count);
@@ -311,9 +310,8 @@ class JoinupContext extends RawDrupalContext {
    *   The name of the field element.
    * @param string $options
    *   The options to be checked separated by comma. Only labels are accepted.
-   *
-   * @Then (the ):select field should contain the :options option(s)
    */
+  #[Then('(the ):select field should contain the :options option(s)')]
   public function checkSelectContainsOptions($select, $options): void {
     $field = $this->findSelect($select);
     $available_options = array_map(function (array $option): string {
@@ -331,9 +329,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @param string $select
    *   The name of the field element.
-   *
-   * @Then the :select select field options should be sorted alphabetically
    */
+  #[Then('the :select select field options should be sorted alphabetically')]
   public function checkSelectOptionsSortedAlphabetically(string $select): void {
     $field = $this->findSelect($select);
     $available_options = $this->getSelectOptions($field);
@@ -353,9 +350,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *    Throws an exception when a value exists.
-   *
-   * @Then (the ):select field should not contain the :options option(s)
    */
+  #[Then('(the ):select field should not contain the :options option(s)')]
   public function checkSelectDoesNotContainOptions($select, $options): void {
     $field = $this->findSelect($select);
     $available_options = array_map(function (array $option): string {
@@ -381,9 +377,8 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *    Throws an exception when the select is not found or options are not
    *    identical.
-   *
-   * @Then the :select select should contain the following options:
    */
+  #[Then('the :select select should contain the following options:')]
   public function assertSelectOptionsAsList($select, TableNode $table): void {
     $field = $this->findSelect($select);
     $this->assertSelectAvailableOptions($field, $table);
@@ -396,9 +391,8 @@ class JoinupContext extends RawDrupalContext {
    *   The name of the select element.
    * @param string $options
    *   A comma-separated list of options to be present.
-   *
-   * @Then the available options in the :select select should be :options
    */
+  #[Then('the available options in the :select select should be :options')]
   public function assertSelectOptions($select, $options): void {
     $field = $this->findSelect($select);
     $availableOptions = array_map(function (array $option): string {
@@ -421,9 +415,8 @@ class JoinupContext extends RawDrupalContext {
    *   The name of the field element.
    * @param \Behat\Gherkin\Node\TableNode $options
    *   The available list of options.
-   *
-   * @Then the :field checkboxes should contain the following options:
    */
+  #[Then('the :field checkboxes should contain the following options:')]
   public function assertCheckboxesFieldOptions(string $field, TableNode $options): void {
     // We are looking for a field with the class 'field--widget-options-buttons'
     // that contains a fieldset and a legend with the $field as span.
@@ -453,9 +446,8 @@ class JoinupContext extends RawDrupalContext {
    *   The name of the select element.
    * @param string $options
    *   A comma separated list of items to check.
-   *
-   * @Then the available options in the :select select should not include the :options( options)
    */
+  #[Then('the available options in the :select select should not include the :options( options)')]
   public function assertSelectOptionNotAvailable($select, $options): void {
     $field = $this->findSelect($select);
     $availableOptions = array_map(function (array $option): string {
@@ -473,9 +465,8 @@ class JoinupContext extends RawDrupalContext {
    *   The name of the field element.
    * @param string $optgroups
    *   The optgroups to be checked separated by comma.
-   *
-   * @Then (the ):select field should contain the :optgroups option group(s)
    */
+  #[Then('(the ):select field should contain the :optgroups option group(s)')]
   public function assertSelectContainsOptgroups($select, $optgroups): void {
     $field = $this->findSelect($select);
     $availableOptgroups = array_values($this->getSelectOptgroups($field));
@@ -562,10 +553,9 @@ class JoinupContext extends RawDrupalContext {
    * @param string|null $rel
    *   (optional) The link relationship type (edit-form, delete-form,...).
    *   Defaults to NULL (canonical).
-   *
-   * @Then I should be on the :title content page
-   * @Then I should be on the :rel page of the :title content
    */
+  #[Then('I should be on the :title content page')]
+  #[Then('I should be on the :rel page of the :title content')]
   public function assertNodePath(string $title, ?string $rel = NULL): void {
     /** @var \Drupal\node\NodeInterface $node */
     $node = $this->getEntityByLabel('node', $title);
@@ -591,9 +581,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Throws an exception if the content is not published.
-   *
-   * @Then the :title :bundle (content )should be published
    */
+  #[Then('the :title :bundle (content )should be published')]
   public function assertNodePublished($bundle, $title): void {
     /** @var \Drupal\node\NodeInterface $node */
     $node = $this->getEntityByLabel('node', $title, $bundle);
@@ -612,9 +601,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Throws an exception if the content is not published.
-   *
-   * @Then the :title :bundle (content )should not be published
    */
+  #[Then('the :title :bundle (content )should not be published')]
   public function assertNodeNotPublished($bundle, $title): void {
     /** @var \Drupal\node\NodeInterface $node */
     $node = $this->getEntityByLabel('node', $title, $bundle);
@@ -632,9 +620,8 @@ class JoinupContext extends RawDrupalContext {
    *   The node title.
    * @param int $count
    *   The expected number of revisions.
-   *
-   * @Then the :title :bundle (content )should have :count revision(s)
    */
+  #[Then('the :title :bundle (content )should have :count revision(s)')]
   public function assertNodeRevisionCount($bundle, $title, $count): void {
     /** @var \Drupal\node\NodeInterface $node */
     $node = $this->getEntityByLabel('node', $title, $bundle);
@@ -1000,9 +987,8 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when more than one fields were found or when the field does not
    *   contain the required text.
-   *
-   * @Then the :field date field should contain the datetime :value
    */
+  #[Then('the :field date field should contain the datetime :value')]
   public function assertDateFieldContains($field, $value): void {
     $elements = $this->findDateFields($field);
     if (count($elements) > 1) {
@@ -1026,9 +1012,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the node doesn't exist or doesn't have a state field.
-   *
-   * @Then the :title :type content should have the :state state
    */
+  #[Then('the :title :type content should have the :state state')]
   public function assertNodeWorkflowState(string $title, string $type, string $state): void {
     /** @var \Drupal\joinup_workflow\EntityWorkflowStateInterface $node */
     $node = $this->getEntityByLabel('node', $title, $type);
@@ -1106,9 +1091,8 @@ class JoinupContext extends RawDrupalContext {
    *   The bundle of the content.
    * @param string $content
    *   The title of the content.
-   *
-   * @Then the :parent :parent_bundle has a :content_bundle titled :content
    */
+  #[Then('the :parent :parent_bundle has a :content_bundle titled :content')]
   public function assertContentOgMembership($parent, $parent_bundle, $content_bundle, $content): void {
     $this->assertOgMembership($parent, $parent_bundle, $content, $content_bundle);
   }
@@ -1121,9 +1105,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the expected tile is not found.
-   *
-   * @Then I (should )see the :heading tile
    */
+  #[Then('I (should )see the :heading tile')]
   public function assertTilePresent(string $heading): void {
     $results = $this->getAllCardsInPage();
     foreach ($results as $result) {
@@ -1150,9 +1133,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the expected number of tiles is not found.
-   *
-   * @Then I (should )see :number tile(s)
    */
+  #[Then('I (should )see :number tile(s)')]
   public function assertTileCount(int $number): void {
     $results = $this->getAllCardsInPage();
     $nr_found = count($results);
@@ -1169,9 +1151,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a tile with the unwanted heading is found.
-   *
-   * @Then I (should )not see the :heading tile
    */
+  #[Then('I (should )not see the :heading tile')]
   public function assertTileNotPresent(string $heading): void {
     $results = $this->getAllCardsInPage();
     foreach ($results as $result) {
@@ -1187,9 +1168,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @param string $headings
    *   A comma-separated list of tile headings.
-   *
-   * @Then the page should show( only) the tiles :headings
    */
+  #[Then('the page should show( only) the tiles :headings')]
   public function assertUnorderedTilesPresent(string $headings): void {
     $tiles_in_page = array_keys($this->getTiles());
     $headings = $this->explodeDelimitedSeparatedStepArgument($headings);
@@ -1215,9 +1195,8 @@ class JoinupContext extends RawDrupalContext {
    * Table format:
    * | Tile title 1 |
    * | Tile title 2 |
-   *
-   * @Then I( should) see the( following) tiles in the :region region:
    */
+  #[Then('I( should) see the( following) tiles in the :region region:')]
   public function assertTilesInBlock(TableNode $titles_table, $region): void {
     $headings_in_page = array_keys($this->getTiles($region));
     $headings_expected = $titles_table->getColumn(0);
@@ -1226,9 +1205,8 @@ class JoinupContext extends RawDrupalContext {
 
   /**
    * Assert that the text is visible in a given region.
-   *
-   * @Then I see the text :text in the :region region
    */
+  #[Then('I see the text :text in the :region region')]
   public function assertTextVisible($text, $region): void {
     $actual = $this->getRegion($region)->getText();
     $actual = preg_replace('/\s+/u', ' ', $actual);
@@ -1252,10 +1230,9 @@ class JoinupContext extends RawDrupalContext {
    * @param string|null $list_title
    *   The title of the list. The assertion searches for tiles in the parent
    *   element of the list heading if given.
-   *
-   * @Then I( should) see the( following) tiles in the correct order:
-   * @Then in the :list_title list, I should see the following tiles in the correct order:
    */
+  #[Then('I( should) see the( following) tiles in the correct order:')]
+  #[Then('in the :list_title list, I should see the following tiles in the correct order:')]
   public function assertOrderedTilesPresent(TableNode $titles_table, ?string $list_title = NULL): void {
     $headings = array_keys($this->getTiles(listTitle: $list_title));
     $headings_expected = array_filter($titles_table->getColumn(0));
@@ -1271,9 +1248,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The table node containing the text strings.
-   *
-   * @Then I see the texts in the correct order:
    */
+  #[Then('I see the texts in the correct order:')]
   public function assertOrderedTextStringsPresent(TableNode $table): void {
     $lines_of_text = $table->getColumn(0);
     $full_text = $this->getSession()->getPage()->getText();
@@ -1296,9 +1272,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the tile or the link are not found.
-   *
-   * @Then I( should) see the link :text in the :heading tile
    */
+  #[Then('I( should) see the link :text in the :heading tile')]
   public function assertTileContainsLink(string $heading, string $link): void {
     $element = $this->getTileByHeading($heading);
     if (!$element->findLink($link) && !$element->find('xpath', '//a[@aria-label=contains(text(), "' . $link . '")]')) {
@@ -1316,9 +1291,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the expected link is not found in the tile.
-   *
-   * @Then I click the :link in the :heading tile
    */
+  #[Then('I click the :link in the :heading tile')]
   public function iClickLinkInTile(string $link, string $heading): void {
     $element = $this->getTileByHeading($heading);
 
@@ -1341,10 +1315,9 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the tile is not found or the text is not found in the tile.
-   *
-   * @Then I( should) see the text :text in the :heading tile
-   * @Then I( should) see the text :text in the :heading card
    */
+  #[Then('I( should) see the text :text in the :heading tile')]
+  #[Then('I( should) see the text :text in the :heading card')]
   public function assertTileContainsText(string $heading, string $text): void {
     $element = $this->getTileByHeading($heading);
 
@@ -1363,10 +1336,9 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the tile is not found or the text is found in the tile.
-   *
-   * @Then I( should) not see the text :text in the :heading tile
-   * @Then I( should) not see the text :text in the :heading card
    */
+  #[Then('I( should) not see the text :text in the :heading tile')]
+  #[Then('I( should) not see the text :text in the :heading card')]
   public function assertTileDoesNotContainsText(string $heading, string $text): void {
     $element = $this->getTileByHeading($heading);
 
@@ -1385,9 +1357,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the tile is not found or the text is not found in the tile.
-   *
-   * @Then I( should) see the statistics :text in the :heading tile
    */
+  #[Then('I( should) see the statistics :text in the :heading tile')]
   public function assertTileContainsStatistic(string $heading, string $text): void {
     if (!$this->getTileStatisticElement($heading, $text)) {
       throw new \Exception("The statistics '$text' was not found in the tile '$heading'.");
@@ -1424,9 +1395,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the expected contextual links are not found in the tile.
-   *
-   * @Then I (should )see the contextual link(s) :links in the :heading tile
    */
+  #[Then('I (should )see the contextual link(s) :links in the :heading tile')]
   public function assertContextualLinkPresentInTile($links, $heading): void {
     $links = $this->explodeDelimitedSeparatedStepArgument($links);
     $element = $this->getTileByHeading($heading);
@@ -1448,9 +1418,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the expected contextual links are not found in the tile.
-   *
-   * @Then I should not see the contextual link(s) :links in the :heading tile
    */
+  #[Then('I should not see the contextual link(s) :links in the :heading tile')]
   public function assertContextualLinkNotPresentInTile($links, $heading): void {
     $links = $this->explodeDelimitedSeparatedStepArgument($links);
     $element = $this->getTileByHeading($heading);
@@ -1474,9 +1443,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the expected contextual link is not found in the tile.
-   *
-   * @Then I click the contextual link :link in the :heading tile
    */
+  #[Then('I click the contextual link :link in the :heading tile')]
   public function iClickTheContextualLinkInTile($link, $heading): void {
     $element = $this->getTileByHeading($heading);
     $this->clickContextualLink($element, $link);
@@ -1495,10 +1463,9 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when an expected button is not present or when the number of
    *   buttons is wrong.
-   *
-   * @Then (the following )button(s) should be present :buttons
-   * @Then the following :count button(s) should be present :buttons
    */
+  #[Then('(the following )button(s) should be present :buttons')]
+  #[Then('the following :count button(s) should be present :buttons')]
   public function assertFormSubmitButtonsVisible($buttons, $count = NULL): void {
     $buttons = $this->explodeDelimitedSeparatedStepArgument($buttons);
 
@@ -1521,9 +1488,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when an unexpected button is present.
-   *
-   * @Then (the following )buttons should not be present :buttons
    */
+  #[Then('(the following )buttons should not be present :buttons')]
   public function assertButtonsNotVisible($buttons): void {
     $buttons = $this->explodeDelimitedSeparatedStepArgument($buttons);
 
@@ -1542,9 +1508,8 @@ class JoinupContext extends RawDrupalContext {
 
   /**
    * Checks that the plus button menu is shown on the page.
-   *
-   * @Then I should see the plus button menu
    */
+  #[Then('I should see the plus button menu')]
   public function assertPlusButtonMenuPresent(): void {
     $element = $this->getSession()->getPage()->find('css', '#dropdown-add-content');
     Assert::assertNotEmpty($element);
@@ -1552,9 +1517,8 @@ class JoinupContext extends RawDrupalContext {
 
   /**
    * Checks that the plus button menu is not shown on the page.
-   *
-   * @Then I should not see the plus button menu
    */
+  #[Then('I should not see the plus button menu')]
   public function assertPlusButtonMenuNotPresent(): void {
     $element = $this->getSession()->getPage()->find('css', 'div.add-content-menu ul');
     Assert::assertEmpty($element);
@@ -1637,9 +1601,8 @@ class JoinupContext extends RawDrupalContext {
    *   Options: 'be' for strict comparison, 'match' for regexp check.
    * @param string $url
    *   The URL to be checked.
-   *
-   * @Then the( current) relative url should :method :url
    */
+  #[Then('the( current) relative url should :method :url')]
   public function relativeUrlMatches(string $method, string $url): void {
     \assert(in_array($method, ['be', 'match'], TRUE));
 
@@ -1765,9 +1728,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the current workflow state field is not shown on the page.
-   *
-   * @Then the current workflow state should be :state
    */
+  #[Then('the current workflow state should be :state')]
   public function assertCurrentWorkflowState($state): void {
     $element = $this->getSession()->getPage()->find('css', 'div.current-workflow-state');
     if (empty($element)) {
@@ -1781,9 +1743,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @param string $buttons
    *   A comma separated list of workflow button labels.
-   *
-   * @Then I should see the workflow buttons :buttons
    */
+  #[Then('I should see the workflow buttons :buttons')]
   public function assertWorkflowButtons(string $buttons): void {
     $labels = $this->explodeDelimitedSeparatedStepArgument($buttons);
     $this->assertSubmitButtonsVisible($labels);
@@ -1801,9 +1762,8 @@ class JoinupContext extends RawDrupalContext {
    *   Thrown when the field does not have a description.
    * @throws \PHPUnit\Framework\ExpectationFailedException
    *   Thrown when none of the field's descriptions match the given text.
-   *
-   * @Then I should see the description :description for (the ):label( field)
    */
+  #[Then('I should see the description :description for (the ):label( field)')]
   public function assertFieldDescription($label, $description): void {
     $xpath = '//label[text()="' . $label . '"]/ancestor::div[contains(concat(" ", normalize-space(@class), " "), " form-item ")]//div[contains(concat(" ", normalize-space(@class), " "), " description ")] | //label[text()="' . $label . '"]/ancestor::div[contains(concat(" ", normalize-space(@class), " "), " form-item ")]//small[contains(concat(" ", normalize-space(@class), " "), " description ")]';
     $elements = $this->getSession()->getPage()->findAll('xpath', $xpath);
@@ -1825,9 +1785,8 @@ class JoinupContext extends RawDrupalContext {
 
   /**
    * Asserts that a logo exists in the header.
-   *
-   * @Then I should see a logo on the header
    */
+  #[Then('I should see a logo on the header')]
   public function assertExistingLogo(): void {
     $xpath = '//div[@data-drupal-group-logo]//img';
     $this->assertSession()->elementsCount('xpath', $xpath, 1);
@@ -1835,9 +1794,8 @@ class JoinupContext extends RawDrupalContext {
 
   /**
    * Asserts that a featured stats exist in the header.
-   *
-   * @Then I should see a featured stats on the header
    */
+  #[Then('I should see a featured stats on the header')]
   public function assertExistingFeaturedStats(): void {
     $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), "group-stats")]/@class';
     $this->assertSession()->elementsCount('xpath', $xpath, 1);
@@ -1845,9 +1803,8 @@ class JoinupContext extends RawDrupalContext {
 
   /**
    * Asserts that a featured stats not exist in the header.
-   *
-   * @Then I should not see a featured stats on the header
    */
+  #[Then('I should not see a featured stats on the header')]
   public function assertNotExistingFeaturedStats(): void {
     $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), "group-stats")]/@class';
     $this->assertSession()->elementsCount('xpath', $xpath, 0);
@@ -1924,9 +1881,8 @@ class JoinupContext extends RawDrupalContext {
    *   The name of the field.
    * @param string $title
    *   The title of the community content page.
-   *
-   * @Then the :field field should contain the link to the :title page
    */
+  #[Then('the :field field should contain the link to the :title page')]
   public function assertFieldContainsLinkToPage($field, $title): void {
     /** @var \Drupal\node\NodeInterface $node */
     $node = $this->getEntityByLabel('node', $title);
@@ -1944,9 +1900,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the link is not in the page.
-   *
-   * @Then /^the share link "(?P<link>[^"]+)" should point to the "(?P<title>[^"]+)" content(?:| entity)$/
    */
+  #[Then('/^the share link "(?P<link>[^"]+)" should point to the "(?P<title>[^"]+)" content(?:| entity)$/')]
   public function assertLinkContainsEntityUrl(string $link, string $title): void {
     /** @var \Drupal\Core\Entity\EntityInterface $entity */
     $entity = $this->getEntityByLabel('node', $title);
@@ -1975,9 +1930,8 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the link is not in the page or the target href is not exactly
    *   the expected one.
-   *
-   * @Then the :title link should point to :link
    */
+  #[Then('the :title link should point to :link')]
   public function assertLinkPointsToUrl(string $title, string $link): void {
     $link_element = $this->getSession()->getPage()->findLink($title);
     $href = $link_element->getAttribute('href');
@@ -1986,9 +1940,8 @@ class JoinupContext extends RawDrupalContext {
 
   /**
    * Assert that a given attribute is not set for a given element in a region.
-   *
-   * @Then I( should) not see the :tag element with the :attribute attribute set to :value in the :region( region)
    */
+  #[Then('I( should) not see the :tag element with the :attribute attribute set to :value in the :region( region)')]
   public function assertRegionElementAttribute($tag, $attribute, $value, $region): void {
     $regionObj = $this->getRegion($region);
     $elements = $regionObj->findAll('css', $tag);
@@ -2009,9 +1962,8 @@ class JoinupContext extends RawDrupalContext {
 
   /**
    * Assert that the persistent url link follows a given pattern.
-   *
-   * @Then the persistent url should contain :pattern
    */
+  #[Then('the persistent url should contain :pattern')]
   public function thePersistentUrlShouldContain($pattern): void {
     $this->assertSession()->elementAttributeContains('css', '.permalink', 'href', $pattern);
   }
@@ -2093,9 +2045,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the link is not found.
-   *
-   * @Then the link :link in the :region region should point to :href
    */
+  #[Then('the link :link in the :region region should point to :href')]
   public function assertRegionLinkHref($link, $region, $href): void {
     $element = $this->getRegion($region)->findLink($link);
 
@@ -2118,9 +2069,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when multiple or no links at all are found in the region.
-   *
-   * @Then :text should be the active item(s) in the :region region
    */
+  #[Then(':text should be the active item(s) in the :region region')]
   public function assertActiveLinkInRegion($text, $region): void {
     $links = $this->findLinksMarkedAsActive($region);
 
@@ -2146,9 +2096,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the tile is not marked as featured.
-   *
-   * @Then the :tile tile should be marked as featured
    */
+  #[Then('the :tile tile should be marked as featured')]
   public function assertTileMarkedAsFeatured($heading): void {
     $element = $this->getTileByHeading($heading);
 
@@ -2169,8 +2118,6 @@ class JoinupContext extends RawDrupalContext {
    *   If the $type is not solution nor community content or the tile is marked
    *   as featured.
    *
-   * @Then the :tile :type tile should not be marked as featured
-   *
    * @todo Due to the bug described in ISAICP-4352, we have to temporary check
    * if a tile is not featured via backend, rather than checking the DOM.
    * Manually testing or running this Behat step definition Behat in test
@@ -2182,6 +2129,7 @@ class JoinupContext extends RawDrupalContext {
    * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4849
    * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4352
    */
+  #[Then('the :tile :type tile should not be marked as featured')]
   public function assertTileNotMarkedAsFeatured(string $heading, string $type): void {
     assert(in_array($type,
       array_merge(CommunityContentHelper::BUNDLES, [
@@ -2214,9 +2162,8 @@ class JoinupContext extends RawDrupalContext {
    *   region.
    *
    * @see \Drupal\DrupalExtension\Context\MarkupContext::assertNotRegionElementText()
-   *
-   * @Then I( should) see a(n) :tag element with the text :text in the :region( region)
    */
+  #[Then('I( should) see a(n) :tag element with the text :text in the :region( region)')]
   public function assertRegionElementText($tag, $text, $region): void {
     $regionObj = $this->getRegion($region);
     $results = $regionObj->findAll('css', $tag);
@@ -2232,9 +2179,8 @@ class JoinupContext extends RawDrupalContext {
 
   /**
    * Asserts that a tour is available on the current page.
-   *
-   * @Then a tour should be available
    */
+  #[Then('a tour should be available')]
   public function assertTourAvailable(): void {
     if (!$this->getSession()->getPage()->find('css', 'a.js-tour-start-button')) {
       throw new \Exception("No tour is available on the page.");
@@ -2243,9 +2189,8 @@ class JoinupContext extends RawDrupalContext {
 
   /**
    * Asserts that a tour is not available on the current page.
-   *
-   * @Then a tour should not be available
    */
+  #[Then('a tour should not be available')]
   public function assertTourNotAvailable(): void {
     if ($this->getSession()->getPage()->find('css', 'a.js-tour-start-button')) {
       throw new \Exception("Tour is available on the page but should not.");
@@ -2285,9 +2230,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @param string $heading
    *   The heading of the tile.
-   *
-   * @Then the :tile tile should be marked as pinned
    */
+  #[Then('the :tile tile should be marked as pinned')]
   public function assertTileMarkedAsPinned(string $heading): void {
     if (!$this->getTileByHeading($heading)->find('css', 'div.pin')) {
       throw new ExpectationFailedException("The tile '$heading' is not marked as pinned, but it should be.");
@@ -2299,9 +2243,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @param string $heading
    *   The heading of the tile.
-   *
-   * @Then the :tile tile should not be marked as pinned
    */
+  #[Then('the :tile tile should not be marked as pinned')]
   public function assertTileNotMarkedAsPinned(string $heading): void {
     if ($this->getTileByHeading($heading)->find('css', 'div.pin')) {
       throw new ExpectationFailedException("The tile '$heading' is marked as pinned, but it shouldn't be.");
@@ -2313,9 +2256,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @param string $field
    *   The field name.
-   *
-   * @Then I clear (the content of )the field :field
    */
+  #[Then('I clear (the content of )the field :field')]
   public function clearField($field): void {
     $this->getSession()->getPage()->fillField($field, '');
   }
@@ -2332,9 +2274,8 @@ class JoinupContext extends RawDrupalContext {
    *   The group label.
    * @param string $group_bundle
    *   The group bundle.
-   *
-   * @Then the draggable menu table of the :group_label :group_type should be:
    */
+  #[Then('the draggable menu table of the :group_label :group_type should be:')]
   public function assertDraggableMenuTable(TableNode $table, string $group_label, string $group_bundle): void {
     $this->assertJavaScriptEnabledBrowser();
 
@@ -2381,9 +2322,8 @@ class JoinupContext extends RawDrupalContext {
    *   | title  | type                  | weight |
    *   | Type   | Collection content top| 0      |
    *   | Status | Collection content top| 1      |
-   *
-   * @Then the search api widget table should be:
    */
+  #[Then('the search api widget table should be:')]
   public function assertFacetDraggableTable(TableNode $table): void {
     $this->assertJavaScriptEnabledBrowser();
 
@@ -2436,9 +2376,8 @@ class JoinupContext extends RawDrupalContext {
    *   The title of the menu link that belongs to the row.
    * @param string $direction
    *   The direction to move the row to. One of "up", "down", "left", "right".
-   *
-   * @Then I drag the :title table row( to the) :direction
    */
+  #[Then('I drag the :title table row( to the) :direction')]
   public function dragTitledTableRowTowardsDirection($title, $direction): void {
     $this->assertJavaScriptEnabledBrowser();
 
@@ -2463,10 +2402,9 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the table row with the given position cannot be found in the
    *   page.
-   *
-   * @Then I drag the table row at position :position( to the) :direction
-   * @Then I drag the table row in the :region region at position :position( to the) :direction
    */
+  #[Then('I drag the table row at position :position( to the) :direction')]
+  #[Then('I drag the table row in the :region region at position :position( to the) :direction')]
   public function findTableRowByPositionAndDragTowardsDirection(string $position, string $direction, ?string $region = NULL): void {
     $this->assertJavaScriptEnabledBrowser();
 
@@ -2488,9 +2426,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    *   Thrown when no field with the given selector are found.
-   *
-   * @Then I fill in the latest :field field with :value
    */
+  #[Then('I fill in the latest :field field with :value')]
   public function fillLastFieldWithLabel($field, $value): void {
     $page = $this->getSession()->getPage();
     $fields = $page->findAll('named', ['field', $field]);
@@ -2555,9 +2492,8 @@ class JoinupContext extends RawDrupalContext {
    *   The path to the file.
    *
    * @throws \Exception
-   *
-   * @Then the output should match the file contents of :file
    */
+  #[Then('the output should match the file contents of :file')]
   public function theOutputShouldMatchTheFile($file_path): void {
     if ($this->getMinkParameter('files_path')) {
       $fullPath = rtrim(realpath($this->getMinkParameter('files_path')), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $file_path;
@@ -2592,9 +2528,8 @@ class JoinupContext extends RawDrupalContext {
    *   Thrown when the table format is invalid.
    * @throws \Exception
    *   Thrown when one of the input fields is not found.
-   *
-   * @Then I enter the following for the :label link field:
    */
+  #[Then('I enter the following for the :label link field:')]
   public function fillLinkField(TableNode $table, string $label): void {
     $rows = array_map(function (array $row): array {
       return array_change_key_case($row);
@@ -2651,10 +2586,9 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the region or the button are not found or if the expected
    *   status does not match the actual one.
-   *
-   * @Then the :button button on the :region region should be :status
-   * @Then the :button button should be :status
    */
+  #[Then('the :button button on the :region region should be :status')]
+  #[Then('the :button button should be :status')]
   public function assertButtonStatus(string $button, string $status, ?string $region = NULL): void {
     if (!in_array($status, ['enabled', 'disabled'])) {
       throw new \InvalidArgumentException('Allowed values for status variable are "enabled" and "disabled".');
@@ -2675,9 +2609,8 @@ class JoinupContext extends RawDrupalContext {
 
   /**
    * Checks all submission buttons for element.
-   *
-   * @Then all submit buttons inside the :selector element should be :state
    */
+  #[Then('all submit buttons inside the :selector element should be :state')]
   public function allSubmitButtonsInsideSelectorShouldBeInState($selector, $state): void {
     $page = $this->getSession()->getPage();
     $container = $page->find('css', $selector);
@@ -2713,9 +2646,8 @@ class JoinupContext extends RawDrupalContext {
    *   The number of elements that should be present on the page.
    * @param string $element_name
    *   The human readable name of the element to find on the page.
-   *
-   * @Then there should be exactly :count :element_name on the page
    */
+  #[Then('there should be exactly :count :element_name on the page')]
   public function assertElementCount(string $count, string $element_name): void {
     Assert::assertEquals((int) $count, count($this->getElementsMatchingElementAlias($element_name)));
   }
@@ -2725,9 +2657,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @param string $text
    *   The text that should be present in a paragraph.
-   *
-   * @Then I should see a paragraph containing the text :text
    */
+  #[Then('I should see a paragraph containing the text :text')]
   public function assertParagraphText(string $text): void {
     $element = $this->getSession()->getPage()->find('xpath', '//p[contains(text(), "' . $text . '")]');
     Assert::assertNotEmpty($element);
@@ -3051,9 +2982,8 @@ class JoinupContext extends RawDrupalContext {
    *   Title of header link.
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
-   *
-   * @Then I see h1 span element with title :title
    */
+  #[Then('I see h1 span element with title :title')]
   public function iSeeH1SpanElement(string $title): void {
     $page = $this->getSession()->getPage();
     $link = $page->find('xpath', '//h1//span[not(ancestor::a)]');
