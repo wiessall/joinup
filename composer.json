@@ -503,7 +503,8 @@
             },
             "drupal/rdf_sync": {
                 "Pass the context to the normalize subscribers @see https://www.drupal.org/i/3560752": "resources/patch/php/drupal/rdf_sync/3560752.mr43-note632794.diff",
-                "Configure namaspaces @see https://www.drupal.org/i/3560781": "resources/patch/php/drupal/rdf_sync/3560781.mr44-note633150.diff"
+                "Configure namaspaces @see https://www.drupal.org/i/3560781": "resources/patch/php/drupal/rdf_sync/3560781.mr44-note633150.diff",
+                "View support @see https://www.drupal.org/project/i/3473743": "resources/patch/php/drupal/rdf_sync/3560781.mr45-commitf08c1b33.diff"
             },
             "drupal/search_api": {
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199.patch",
