@@ -108,6 +108,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    *   The title of the content.
    * @param string $type
    *   The type of the content.
+   *
    * @throws \InvalidArgumentException
    *   Thrown when the node does not have a publication date field.
    */
