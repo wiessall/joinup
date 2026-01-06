@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\Tests\assessments\Kernel;
+namespace Drupal\Tests\assessments\ExistingSite;
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\File\FileSystemInterface;
@@ -106,7 +106,10 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
 
     // Update the expectation with generated UUIDs.
     $uuid = $data['id'];
-    $expect = ['id' => $uuid] + $expect;
+    $uri = Url::fromUri('internal:/assessment/report/' . $uuid)
+      ->setAbsolute()
+      ->toString();
+    $expect = ['id' => $uuid, 'uri' => $uri] + $expect;
     $uuid = $data['provider']['id'];
     $provider = ['id' => $uuid] + $expect['provider'];
     $expect['provider'] = $provider;

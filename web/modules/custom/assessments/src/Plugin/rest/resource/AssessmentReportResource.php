@@ -248,6 +248,7 @@ class AssessmentReportResource extends ResourceBase {
 
     return [
       'id' => $report->uuid(),
+      'uri' => $report->getUri(),
       'language' => $report->language()->getId(),
       'name' => $report->label(),
       'provider' => [
