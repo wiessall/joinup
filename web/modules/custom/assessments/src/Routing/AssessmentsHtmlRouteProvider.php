@@ -18,6 +18,19 @@ class AssessmentsHtmlRouteProvider extends DefaultHtmlRouteProvider {
   /**
    * {@inheritdoc}
    */
+  protected function getAddPageRoute(EntityTypeInterface $entity_type): Route|null {
+    $route = parent::getAddPageRoute($entity_type);
+    if (!$route instanceof Route) {
+      return $route;
+    }
+
+    $route->setDefault('_controller', '\Drupal\assessments\Controller\AssessmentAddPageController::addPage');
+    return $route;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   protected function getAddFormRoute(EntityTypeInterface $entity_type): Route|null {
     $route = parent::getAddFormRoute($entity_type);
 
