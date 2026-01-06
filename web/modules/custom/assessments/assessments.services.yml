@@ -24,3 +24,7 @@ services:
   Drupal\assessments\Guard\AssessmentReportSubmitGuard:
     tags:
       - { name: state_machine.guard, group: assessments, priority: 5}
+
+  Drupal\assessments\Access\AssessmentAddFormAccessCheck:
+    tags:
+      - { name: access_check, applies_to: _assessment_add_form_access}
