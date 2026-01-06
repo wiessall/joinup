@@ -31,7 +31,7 @@ widget:
   config:
     show_numbers: true
     arbitrary_facet_plugin: _none
-    soft_limit: 0
+    soft_limit: 5
     show_reset_link: false
     reset_text: 'Show all'
     hide_reset_when_no_selection: false
