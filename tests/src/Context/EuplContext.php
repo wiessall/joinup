@@ -212,7 +212,7 @@ class EuplContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the radio button or licence is not found in the page.
    */
-  #[When(' I choose :spdx_id as the :label licence')]
+  #[When('I choose :spdx_id as the :label licence')]
   public function selectRadioButtonForLicenceCompatibilityCheck(string $spdx_id, string $label): void {
     \assert(in_array($label, ['Inbound', 'Outbound']), 'The purpose should be either "Use" or "Distribute".');
     $radio = $this->findLicenceTile($spdx_id)->findField($label);

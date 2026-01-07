@@ -7,6 +7,7 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\BootstrapTrait;
@@ -68,9 +69,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * The search page currently doesn't have a title so our common practice of
    * checking the page title falls short here.
-   *
-   * @Then I should be on the (advanced )search page
    */
+  #[Then('I should be on the (advanced )search page')]
   public function assertSearchPage(): void {
     $this->assertSession()->addressEquals($this->locatePath('/search'));
   }
@@ -146,9 +146,8 @@ class JoinupSearchContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the facet checkbox is not selected or not present in the
    *   page.
-   *
-   * @Then the :bundle content checkbox item should be selected
    */
+  #[Then('the :bundle content checkbox item should be selected')]
   public function assertContentFacetCheckboxSelected(string $bundle): void {
     // The following xpath searches for
     // * Any div
@@ -298,9 +297,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @throws \Exception
    *    Thrown when the suggestions are not present in the page.
-   *
-   * @Then I should see the (following ) :input suggestion(s):
    */
+  #[Then('I should see the (following ) :input suggestion(s):')]
   public function iShouldSeeTheSuggestions(string $input, TableNode $table): void {
     $session = $this->getSession();
     $element = $this->getSearchBarElement($input);
@@ -327,9 +325,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @throws \Exception
    *    Thrown when the suggestions are present in the page.
-   *
-   * @Then I should not see any suggestion at :input
    */
+  #[Then('I should not see any suggestion at :inpu')]
   public function iShouldNotSeeTheSuggestions(string $input): void {
     $session = $this->getSession();
     $element = $this->getSearchBarElement($input);
@@ -373,9 +370,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @param string $facet
    *   The facet name.
-   *
-   * @Then I should see the :facet facet
    */
+  #[Then('I should see the :facet facet')]
   public function iShouldSeeTheFacet(string $facet): void {
     $facet_element = $this->findFacetByAlias($facet);
     Assert::assertNotEmpty($facet_element->getText(), "The facet '{$facet}' was not found in the page.");
@@ -386,9 +382,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @param string $facet
    *   The facet name.
-   *
-   * @Then I should not see the :facet facet
    */
+  #[Then('I should not see the :facet facet')]
   public function iShouldNotSeeTheFacet(string $facet): void {
     $element = $this->findFacetByAlias($facet, NULL, '*', FALSE);
     // The facet might be present but with no options.
@@ -442,9 +437,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *   The index that holds the data.
    * @param \Behat\Gherkin\Node\TableNode $fields
    *   The fields to assert.
-   *
-   * @Then the :label :bundle should have the following fields in the :index index:
    */
+  #[Then('the :label :bundle should have the following fields in the :index index:')]
   public function assertFieldsInIndex(string $label, string $bundle, string $index, TableNode $fields): void {
     /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
     $entity = $this->getEntityByLabel('node', $label, $bundle);
@@ -501,9 +495,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the active items element is not found.
-   *
-   * @Then :text should be selected in the :facet inline facet
    */
+  #[Then(':text should be selected in the :facet inline facet')]
   public function assertInlineFacetActiveText(string $text, string $facet): void {
     $element = $this->findFacetByAlias($facet);
 
@@ -530,9 +523,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the facet is not found in the page.
-   *
-   * @Then the :facet inline facet should allow selecting the following values:
    */
+  #[Then('the :facet inline facet should allow selecting the following values:')]
   public function assertInlineFacetInactiveItems(string $facet, TableNode $values): void {
     $element = $this->findFacetByAlias($facet);
     $found = array_map(function ($item) {
@@ -555,9 +547,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the facet is not found in the page.
-   *
-   * @Then the :facet checkbox facet should allow selecting the following values :values
    */
+  #[Then('the :facet checkbox facet should allow selecting the following values :values')]
   public function assertCheckboxFacetItems(string $facet, string $values): void {
     $element = $this->findFacetByAlias($facet);
 
@@ -741,10 +732,9 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @throws \Exception
    *    Thrown when the region is not found.
-   *
-   * @Then the page should contain :number facet(s) summary/summaries
-   * @Then the page should not contain any facet summary
    */
+  #[Then('the page should contain :number facet(s) summary/summaries')]
+  #[Then('the page should not contain any facet summary')]
   public function assertFacetsSummaryCount(?string $number = NULL): void {
     $number = $number === 'one' ? 1 : (int) $number;
     $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' block-facets-summary-blocksearch-facets-summary ')]//li[contains(concat(' ', normalize-space(@class), ' '), ' facet-summary-item--facet ')]";
@@ -758,9 +748,8 @@ class JoinupSearchContext extends RawDrupalContext {
    * Table format:
    * | Search         |
    * | Search Results |
-   *
-   * @Then I( should) see the( following) search header in the correct order:
    */
+  #[Then('I( should) see the( following) search header in the correct order:')]
   public function assertOrderedTilesPresent(TableNode $titles_table): void {
     $regionObj = $this->getSession()->getPage();
 
@@ -779,9 +768,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when search bar item do not appear in navbar.
-   *
-   * @Then I should see search bar in navbar
    */
+  #[Then('I should see search bar in navbar')]
   public function assertSearchExposedFilterNavbar(): void {
     $getAllInput = $this->findAllSearchBoxes();
     if (count($getAllInput) < 1) {
@@ -794,9 +782,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when search bar icon do not appear in navbar.
-   *
-   * @Then I should see search bar icon in navbar
    */
+  #[Then('I should see search bar icon in navbar')]
   public function assertSearchIconNavbar(): void {
     $getAllInput = $this->getSession()->getPage()->findAll('css', self::SEARCH_BOX_DROPDOWN);
     if (count($getAllInput) < 1) {
@@ -809,9 +796,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when search bar icon appears in navbar.
-   *
-   * @Then I should not see search bar icon in navbar
    */
+  #[Then('I should not see search bar icon in navbar')]
   public function failSearchIconNavbar(): void {
     $getAllInput = $this->getSession()->getPage()->findAll('css', self::SEARCH_BOX_DROPDOWN);
 
@@ -825,9 +811,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when search bar does not appear in homepage's header.
-   *
-   * @Then I should see the search bar in homepage's header
    */
+  #[Then("I should see the search bar in homepage's header")]
   public function assertSearchBarHeader(): void {
     $getAllInput = $this->getSession()->getPage()->findAll('css', '.region-featured .search-bar .search-bar__input');
 
@@ -841,9 +826,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when search bar item do not appear in navbar.
-   *
-   * @Then I should toggle search bar in navbar
    */
+  #[Then('I should toggle search bar in navbar')]
   public function assertSearchToggleIconNavbar(): void {
     // Non-JS browsers are directly interacting with the HTML, so we consider
     // the account menu to be already open.
@@ -959,9 +943,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the facet is not found in the page.
-   *
-   * @Then the :facet tabs facet should allow selecting the following values:
    */
+  #[Then('the :facet tabs facet should allow selecting the following values:')]
   public function assertFacetTabsItems(string $facet, TableNode $values): void {
     $element = $this->findFacetByAlias($facet);
     $found = array_map(function ($item) {
