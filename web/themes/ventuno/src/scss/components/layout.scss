@@ -61,3 +61,8 @@ div[data-drupal-messages] + .region-content-top {
     }
   }
 }
+
+// Don't display empty blocks.
+.block:empty {
+  display: none;
+}
