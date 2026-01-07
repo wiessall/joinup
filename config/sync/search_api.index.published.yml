@@ -561,6 +561,17 @@ field_settings:
       module:
         - meta_entity
         - node
+  organisation_origin:
+    label: 'Organisation origin'
+    datasource_id: 'entity:node'
+    property_path: 'owner:entity:country'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.owner
+        - field.storage.node.country
+      module:
+        - node
   organization:
     label: Organization
     datasource_id: 'entity:node'
@@ -689,13 +700,12 @@ field_settings:
         - field.storage.node.solution_type
   spatial_coverage:
     label: 'Geographical coverage'
-    property_path: aggregated_field
+    datasource_id: 'entity:node'
+    property_path: spatial_coverage
     type: string
-    configuration:
-      type: union
-      fields:
-        - 'entity:node/owner:entity:country'
-        - 'entity:node/spatial_coverage'
+    dependencies:
+      config:
+        - field.storage.node.spatial_coverage
   spdx_licence:
     label: 'Corresponding SPDX licence'
     datasource_id: 'entity:node'
