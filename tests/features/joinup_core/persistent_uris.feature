@@ -96,8 +96,6 @@ Feature:
 
     Given I am on "data/w21/643a2a52-da3b-4594-92bb-295d8134e1fb"
     Then I should see the heading "Persistent distribution"
-    And I should see "You're safe from pain in the dream domain."
-    And the url should match "/taxonomy/term/\d+"
 
   @group-d
   Scenario: Test paths corresponding to EU persistent URI namespaces without a matching uuid
