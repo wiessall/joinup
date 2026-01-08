@@ -45,23 +45,46 @@ The response contains an `access_token`.
 ### 2\. Get Assessments (Public)
 **GET** `/api/assessments/v1/assessment`
 - Authentication: ❌ Not required
-- Purpose: Retrieve existing assessments
-- Optionally filter by country or "EU" for european entities.
+- Purpose: Retrieve a list of existing assessments
+- Query parameters (optional):
+  - `country`: Filter by 2-character country code (e.g., `BE`, `NL`, `IT`)
+  - `country=EU`: Show all assessments provided by European entities
+
+**Examples:**
+- `/api/assessments/v1/assessment` – Get all assessments
+- `/api/assessments/v1/assessment?country=BE` – Get assessments from Belgium
+- `/api/assessments/v1/assessment?country=EU` – Get assessments from European entities
 
 ---
-### 3\. Get Organisations (Public)
+### 3\. Get Single Assessment (Public)
+**GET** `/api/assessments/v1/assessment/{assessment-uuid}`
+- Authentication: ❌ Not required
+- Purpose: Retrieve a specific assessment by its UUID
+- Path parameters:
+  - `assessment-uuid`: The UUID of the assessment to retrieve
+
+**Example:**
+- `/api/assessments/v1/assessment/12345678-1234-1234-1234-123456789abc`
+
+---
+### 4\. Get Organisations (Public)
 **GET** `/api/assessments/v1/organisation`
 - Authentication: ❌ Not required
 - Purpose: Retrieve organisation data
 
 ---
-### 4\. Get Assets (Public)
+### 5\. Get Assets (Public)
 **GET** `/api/assessments/v1/asset`
 - Authentication: ❌ Not required
 - Purpose: Retrieve asset data
+- Query parameters (optional):
+  - `page`: Page number for pagination (e.g., `0`, `1`, `2`)
+
+**Example:**
+- `/api/assessments/v1/asset?page=0` – Get first page of assets
 
 ---
-### 5\. Post Assessment (Authenticated)
+### 6\. Post Assessment (Authenticated)
 **POST** `/api/assessments/v1/assessment`
 - Authentication: ✅ Bearer Token required
 - Purpose: Submit a complete assessment payload
