@@ -19,6 +19,11 @@ Feature: Assessment report permissions and access control
       | assessment_reporter | should not see      | should see           |
       | moderator           | should not see      | should see           |
 
+  Scenario: Users with the "view assessment listing" permissions can see assessment type in assessment listing
+    Given I am logged in as a user with the "view assessment listing" permissions
+    When I go to "/admin/content/assessment"
+    Then I should see "Public organisation"
+
   Scenario: Moderators see correct action buttons on published assessment edit form
     Given report assessments:
       | name          | state     |
