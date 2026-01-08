@@ -63,11 +63,6 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
    * Acts on parent entity update to reflect publication status.
    */
   protected function onUpdateReflectPublicationStatus(): void {
-    // If the entity does not have publication status, do nothing.
-    if (!method_exists($this, 'isPublished') || !method_exists($this, 'setPublished')) {
-      return;
-    }
-
     // If the publication status did not change, do nothing.
     if ($this->isPublished() === $this->original->isPublished()) {
       return;
