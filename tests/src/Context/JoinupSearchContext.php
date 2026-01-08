@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Hook\AfterScenario;
+use Behat\Hook\AfterStep;
+use Behat\Hook\BeforeScenario;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Step\Given;
@@ -48,9 +51,8 @@ class JoinupSearchContext extends RawDrupalContext {
 
   /**
    * Forces the indexing of new or changed content after each step.
-   *
-   * @AfterStep
    */
+  #[AfterStep]
   public function afterStepIndexing(): void {
     \Drupal::service('search_api.post_request_indexing')->destruct();
   }
@@ -393,9 +395,8 @@ class JoinupSearchContext extends RawDrupalContext {
    * the entity, just some basic information like the identifier, the boost
    * etc. To get the property data, we need to set the `retrieve_data` option
    * to TRUE in the server configuration.
-   *
-   * @beforeScenario @solrRetrieveData
    */
+  #[BeforeScenario('@solrRetrieveData')]
   public function setRetrieveDataForServer(): void {
     $server = Server::load('joinup');
     $this->configuration = $server->getBackendConfig();
@@ -407,9 +408,8 @@ class JoinupSearchContext extends RawDrupalContext {
 
   /**
    * Resets the `retrieve_data` configuration to the search API server.
-   *
-   * @afterScenario @solrRetrieveData
    */
+  #[AfterScenario('@solrRetrieveData')]
   public function resetRetrieveDataForServer(): void {
     $server = Server::load('joinup');
     $server->setBackendConfig($this->configuration);

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Hook\BeforeSuite;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
@@ -305,9 +306,8 @@ class JoinupCoreContext extends RawDrupalContext {
    *
    * @param \Behat\Testwork\Hook\Scope\BeforeSuiteScope $before_suite
    *   Contains information about the suite.
-   *
-   * @BeforeSuite
    */
+  #[BeforeSuite]
   public static function setDefaultTimezone(BeforeSuiteScope $before_suite): void {
     date_default_timezone_set('UTC');
   }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Hook\AfterSuite;
+use Behat\Hook\BeforeSuite;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Behat\Testwork\Hook\Scope\AfterSuiteScope;
 use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
@@ -20,9 +22,8 @@ class DigitQaPipelineContext extends RawMinkContext {
    *
    * @param \Behat\Testwork\Hook\Scope\BeforeSuiteScope $event
    *   The before suite scope event.
-   *
-   * @BeforeSuite
    */
+  #[BeforeSuite]
   public static function init(BeforeSuiteScope $event): void {
     if (EnvironmentDetector::isGitlabPipeline()) {
       $fileSystem = new Filesystem();
@@ -40,9 +41,8 @@ class DigitQaPipelineContext extends RawMinkContext {
    *
    * @param \Behat\Testwork\Hook\Scope\AfterSuiteScope $event
    *   The after suite scope event.
-   *
-   * @AfterSuite
    */
+  #[AfterSuite]
   public static function saveLogsAsArtifacts(AfterSuiteScope $event): void {
     if (EnvironmentDetector::isGitlabPipeline() &&
       !$event->getTestResult()->isPassed()) {

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
+use Behat\Hook\AfterScenario;
+use Behat\Hook\BeforeScenario;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Symfony\Component\Yaml\Yaml;
 use WebDriver\Exception\JavaScriptError;
@@ -25,9 +27,8 @@ class JsErrorsContext extends RawDrupalContext {
 
   /**
    * Prepares state.
-   *
-   * @beforeScenario @javascript
    */
+  #[BeforeScenario('@javascript')]
   public function prepare(): void {
     if (!$this->getSession()->isStarted()) {
       return;
@@ -40,10 +41,9 @@ class JsErrorsContext extends RawDrupalContext {
   /**
    * Reports JS warnings/errors, if any.
    *
-   * @AfterScenario ~@js-errors&&@javascript
-   *
    * @throws \WebDriver\Exception\JavaScriptError
    */
+  #[AfterScenario('~@js-errors&&@javascript')]
   public function report(AfterScenarioScope $scope): void {
     if (!$this->getSession()->isStarted()) {
       return;

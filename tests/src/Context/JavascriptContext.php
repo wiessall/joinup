@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Hook\BeforeScenario;
 use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
@@ -25,9 +26,8 @@ class JavascriptContext extends RawDrupalContext {
    * definition or \Behat\MinkExtension\Context\MinkContext::reload.
    *
    * @Given I have a new browser session
-   *
-   * @BeforeScenario @javascript
    */
+  #[BeforeScenario('@javascript')]
   public function restartSession(): void {
     $this->getMink()->stopSessions();
   }

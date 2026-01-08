@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Hook\BeforeScenario;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Core\Url;
@@ -29,9 +30,8 @@ class JoinupLogContext extends RawDrupalContext {
 
   /**
    * Prepare clean-up data.
-   *
-   * @BeforeScenario
    */
+  #[BeforeScenario]
   public function prepareData(): void {
     $this->timestamp = time();
   }

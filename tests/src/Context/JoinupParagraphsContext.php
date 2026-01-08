@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Hook\AfterScenario;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
@@ -299,9 +300,8 @@ class JoinupParagraphsContext extends RawDrupalContext {
    * Cleans up the paragraphs entities created when nodes where created.
    *
    * This uses the orphan paragraphs purger queue worker.
-   *
-   * @AfterScenario
    */
+  #[AfterScenario]
   public function paragraphsCleanup(): void {
     /** @var \Drupal\Core\Queue\QueueWorkerInterface $worker */
     $worker = \Drupal::service('plugin.manager.queue_worker')->createInstance('entity_reference_revisions_orphan_purger');

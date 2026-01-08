@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Behat\Context\Environment\InitializedContextEnvironment;
 use Behat\Behat\Hook\Scope\AfterStepScope;
+use Behat\Hook\AfterStep;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Exception\DriverException;
 use Behat\Mink\Exception\ExpectationException;
@@ -44,9 +45,8 @@ class ScreenshotContext extends RawMinkContext {
    *
    * @param \Behat\Behat\Hook\Scope\AfterStepScope $event
    *   The event.
-   *
-   * @AfterStep
    */
+  #[AfterStep]
   public function screenshotForPhpNotices(AfterStepScope $event): void {
     $environment = $event->getEnvironment();
     // Make sure the environment has the MessageContext.
@@ -73,9 +73,8 @@ class ScreenshotContext extends RawMinkContext {
    *
    * @param \Behat\Behat\Hook\Scope\AfterStepScope $event
    *   The event.
-   *
-   * @AfterStep
    */
+  #[AfterStep]
   public function takeScreenshotAfterFailedStep(AfterStepScope $event): void {
     if (!$event->getTestResult()->isPassed()) {
       $message = "{$this->getStepLine($event)} screenshot(s):";

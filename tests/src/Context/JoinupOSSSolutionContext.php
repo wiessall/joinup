@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Hook\BeforeScenario;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 
@@ -27,9 +28,8 @@ class JoinupOSSSolutionContext extends RawDrupalContext {
 
   /**
    * Ensures that we do not import solutions when the cron job is performed.
-   *
-   * @BeforeScenario @api
    */
+  #[BeforeScenario('@api')]
   public static function disableOssCron(): void {
     $state = \Drupal::state();
     $state->set('eu_oss_catalogue.last_check', strtotime('- 1 hour'));

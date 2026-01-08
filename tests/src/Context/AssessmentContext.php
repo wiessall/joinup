@@ -76,10 +76,8 @@ class AssessmentContext extends RawDrupalContext {
 
   /**
    * Stores the latest submission ID.
-   *
-   * @demoAssessment
-   */
-  #[BeforeScenario]
+ */
+  #[BeforeScenario('@demoAssessment')]
   public function beforeAssessmentsDemo(): void {
     $collection = $this->nodeCreate((object) [
       'type' => 'collection',

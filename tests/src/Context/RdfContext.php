@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Hook\BeforeScenario;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -242,9 +243,8 @@ class RdfContext extends RawDrupalContext {
    * Used in Digit QA pipeline. The terms are installed and synchronized in
    * clean-install job but are not preserved between jobs. Tests requiring RDF
    * synchronized terms, should be tagged with @rdf_sync.
-   *
-   * @BeforeScenario @rdf_sync&&@api
    */
+  #[BeforeScenario('@rdf_sync&&@api')]
   public function reSynchronizeTerms(): void {
     $info = \Drupal::getContainer()->get('entity_type.bundle.info')->getBundleInfo('taxonomy_term');
     $vids = array_filter($info, fn(array $bundle): bool => isset($bundle['rdf_sync']));

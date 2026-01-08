@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Hook\AfterScenario;
+use Behat\Hook\BeforeScenario;
 use Drupal\Component\Utility\Variable;
 use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -176,9 +178,8 @@ class LogRecordsContext extends RawDrupalContext {
 
   /**
    * Ensures that Database Log module is installed.
-   *
-   * @BeforeScenario @loggedErrors
    */
+  #[BeforeScenario('@loggedErrors')]
   public function ensureLogger(): void {
     $this->dblogStatusOriginal = \Drupal::moduleHandler()->moduleExists('dblog');
     $this->timeStamp = time();
@@ -193,9 +194,8 @@ class LogRecordsContext extends RawDrupalContext {
    *
    * If Database Log module was installed by this context, then it will be
    * uninstalled. Otherwise, deletes the log entries recorded during the test.
-   *
-   * @AfterScenario @loggedErrors
    */
+  #[AfterScenario('@loggedErrors')]
   public function cleanupLoggerIfNeeded(): void {
     if ($this->dblogStatusOriginal) {
       \Drupal::database()->delete('watchdog')
