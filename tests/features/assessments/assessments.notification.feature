@@ -62,10 +62,11 @@ Feature: Assessment report email notifications
     Then I should see the success message containing "has been updated"
 
     And 2 e-mail should have been sent
-    And the following email should have been sent:
-      | recipient | Assessment Moderator                       |
-      | subject   | New assessment report to be reviewed       |
-      | body      | A new assessment report has been submitted |
+    And the following assessment report submitted email should have been sent:
+      | assessment | Moderatable Report 2                       |
+      | recipient  | Assessment Moderator                       |
+      | subject    | New assessment report to be reviewed       |
+      | body       | A new assessment report has been submitted |
 
   Scenario: Email notification: Your assessment report needs updates
     Given report assessments:
@@ -77,7 +78,6 @@ Feature: Assessment report email notifications
       | service    | Test Service         |
     And I mark all emails as read
 
-    And I break
     When I am logged in as "Assessment Moderator"
     And I go to the moderate form of the "Moderatable Report 3" assessment report
     And I press "Require updates"
