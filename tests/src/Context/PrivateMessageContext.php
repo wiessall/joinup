@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
+use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal;
@@ -40,9 +41,8 @@ class PrivateMessageContext extends RawDrupalContext {
    *   | owner   | message | recipient | report | report_timestamp |
    *   | alice_m | hello   | bob_rolls |
    * @endcode
-   *
-   * @Given the following private messages:
    */
+  #[Given('the following private messages:')]
   public function createPrivateMessages(TableNode $table): void {
     $storage = \Drupal::entityTypeManager()->getStorage('private_message');
 
@@ -249,9 +249,8 @@ class PrivateMessageContext extends RawDrupalContext {
    *
    * @param int|null $limit
    *   The limit. If not passed, the original value is restored.
-   *
-   * @Given the limit for messages or threads allowed is :limit
    */
+  #[Given('the limit for messages or threads allowed is :limit')]
   #[Then('I restore the limit for messages or threads allowed')]
   public function setPrivateMessageLimit(?int $limit = NULL): void {
     static $original_value;
@@ -317,9 +316,8 @@ class PrivateMessageContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a column name is incorrect.
-   *
-   * @Given the following private message bans:
    */
+  #[Given('the following private message bans:')]
   public function givenPrivateMessageBans(TableNode $table): void {
     foreach ($table->getHash() as $row) {
       $ban = PrivateMessageBan::create([
@@ -404,9 +402,8 @@ class PrivateMessageContext extends RawDrupalContext {
    *   The user who has blocked another user.
    * @param string $blockedUser
    *   The user who has been blocked.
-   *
-   * @Given /^"([^"]*)" has blocked "([^"]*)"$/
    */
+  #[Given('/^"([^"]*)" has blocked "([^"]*)"$/')]
   public function hasBlocked(string $userHasBlocked, string $blockedUser): void {
     $blocking = PrivateMessageBan::create([
       'owner' => $this->getUserByName($userHasBlocked)->id(),

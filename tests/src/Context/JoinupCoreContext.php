@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Hook\BeforeSuite;
+use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
@@ -173,11 +174,10 @@ class JoinupCoreContext extends RawDrupalContext {
    * @param string|null $bundle
    *   (optional) Filter by bundle.
    *
-   * @Given I go to the :name :bundle term page
-   *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    *   Thrown when the taxonomy term does not have a URL to go to.
    */
+  #[Given('I go to the :name :bundle term page')]
   public function visitTaxonomyTermPage(string $name, ?string $bundle = NULL): void {
     /** @var \Drupal\taxonomy\TermInterface $term */
     $term = static::getEntityByLabel('taxonomy_term', $name, $bundle);
@@ -291,9 +291,8 @@ class JoinupCoreContext extends RawDrupalContext {
    *
    * @param string $link
    *   The link locator.
-   *
-   * @Given I click the last :link link
    */
+  #[Given('I click the last :link link')]
   public function assertClickLastLink(string $link): void {
     $locator = ['link', $link];
     $links = $this->getSession()->getPage()->findAll('named', $locator);
@@ -317,9 +316,8 @@ class JoinupCoreContext extends RawDrupalContext {
    *
    * @param string $expected
    *   The expected cache backend service.
-   *
-   * @Given /^the default cache backend is set to "([^"]*)"$/
    */
+  #[Given('/^the default cache backend is set to "([^"]*)"$/')]
   public function theDefaultCacheBackendIsSetTo(string $expected): void {
     $container = \Drupal::getContainer();
     $factory = $container->get($expected);
@@ -335,9 +333,8 @@ class JoinupCoreContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The table node.
-   *
-   * @Given /^I should see the following table rows:$/
    */
+  #[Given('/^I should see the following table rows:$/')]
   public function iShouldSeeTheFollowingTableRows(TableNode $table): void {
     $rows = $table->getRows();
     // Get all table rows/headers in the page regardless of the table.
