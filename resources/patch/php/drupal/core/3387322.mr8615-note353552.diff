@@ -29,7 +29,7 @@ index dd426811d7c..142167ad438 100644
 @@ -5,9 +5,16 @@
  use Composer\Semver\Semver;
  use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
- use Drupal\Component\Serialization\Yaml;
+ use Drupal\Core\Serialization\Yaml;
 +use Drupal\Core\Site\Settings;
  
  /**

@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Drupal\Tests\joinup_oss_catalogue\Functional;
+
 use Drupal\Tests\eu_oss_catalogue\Functional\DevelopersItaliaFetchTest;
 
 /**
@@ -23,7 +25,7 @@ class JoinupOssCatalogueImagecacheWarmerTest extends DevelopersItaliaFetchTest {
    * {@inheritdoc}
    */
   public function setUp(): void {
-    if ($this->getName(FALSE) !== 'testDevelopersItalia') {
+    if ($this->name() !== 'testDevelopersItalia') {
       $this->markTestSkipped();
     }
     parent::setUp();

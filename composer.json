@@ -341,7 +341,8 @@
                 "TypeError in BabelTranslateForm::ajaxUpdateTranslation see @see https://www.drupal.org/i/3561002": "resources/patch/php/drupal/babel/3561002.diff"
             },
             "drupal/calendar_view": {
-                "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff"
+                "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff",
+                "Weekly view doesn't show first week of new year @see https://www.drupal.org/i/3484325": "resources/patch/php/drupal/calendar_view/3484325.comment16152620.patch"
             },
             "drupal/cas": {
                 "Invalid constraint for server.verify in cas.settings @see https://www.drupal.org/i/3542632": "resources/patch/php/drupal/cas/3542632.diff"
@@ -368,7 +369,7 @@
                 "PHP deprecation error in PhpMail::mail @see https://www.drupal.org/project/drupal/issues/3418098": "resources/patch/php/drupal/core/3418098.diff",
                 "Set the toolbar to position fixed on mobile (for group banner positioning and toolbar on mobile) @see https://www.drupal.org/project/drupal/issues/2516938": "resources/patch/php/drupal/core/3809.diff",
                 "Media Library: Argument #1 ($array) must be of type array, null given in array_filter(). @see https://www.drupal.org/i/3340973": "resources/patch/php/drupal/core/3340973.diff",
-                "Allow contrib extensions to be installed by Drupal when core branch is 11.x": "resources/patch/php/drupal/core/3387322.mr8615-note353552.diff",
+                "Allow contrib extensions to be installed by Drupal when core branch is 11.x @see https://www.drupal.org/i/3387322": "resources/patch/php/drupal/core/3387322.mr8615-note353552.diff",
                 "MediaLibraryUiBuilder service does not properly allow additional contextual filter arguments @see https://www.drupal.org/i/3401726": "resources/patch/php/drupal/core/3401726.diff",
                 "JS errors from Drupal.dialog.resetSize when rapidly closing dialogs @see https://www.drupal.org/i/3472624": "resources/patch/php/drupal/core/3472624-4d97ff80.diff",
                 "Can only intentionally re-render an entity with references 20 times @see https://www.drupal.org/i/2940605": "resources/patch/php/drupal/core/2940605.mr4994-note568717.diff",

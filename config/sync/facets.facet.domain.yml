@@ -8,7 +8,7 @@ dependencies:
   module:
     - search_api
 id: domain
-name: 'Solution function'
+name: 'Solution Domain'
 weight: -3
 min_count: 1
 missing: false
