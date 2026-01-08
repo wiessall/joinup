@@ -166,10 +166,10 @@ function assessments_preprocess_layout_paragraphs_insert_component_btn(&$variabl
       // (has parent_uuid AND region parameters). Keep the root-level
       // "Add section" buttons visible.
       if (
-          isset($routeParams['layout_paragraphs_layout']) &&
-          $url->getRouteName() === 'layout_paragraphs.builder.choose_component' &&
-          isset($queryParams['parent_uuid']) &&
-          isset($queryParams['region'])
+        isset($routeParams['layout_paragraphs_layout']) &&
+        $url->getRouteName() === 'layout_paragraphs.builder.choose_component' &&
+        isset($queryParams['parent_uuid']) &&
+        isset($queryParams['region'])
       ) {
         $variables['attributes']['class'][] = 'visually-hidden';
       }
@@ -281,10 +281,10 @@ function assessments_user_predelete(UserInterface $account): void {
 function assessments_entity_bundle_info(): array {
   return [
     'assessment_statement' => array_map(
-      fn (TranslatableMarkup $label): array => ['label' => $label],
+      fn(TranslatableMarkup $label): array => ['label' => $label],
       [
         'legal' => t('Legal interoperability'),
-        'organisational'  => t('Organisational interoperability'),
+        'organisational' => t('Organisational interoperability'),
         'semantic' => t('Semantic interoperability'),
         'technical' => t('Technical interoperability'),
       ],
@@ -564,4 +564,15 @@ function _assessments_handle_report_state_notification(AssessmentInterface $enti
     \Drupal::service('event_dispatcher')
       ->dispatch($event, NotificationEvents::ASSESSMENT_REPORT_SUBMITTED_FOR_REVIEW);
   }
+}
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function assessments_views_data_alter(array &$data): void {
+  // Duplicate data to provide custom argument handler for assessment country.
+  $code_value = $data['taxonomy_term__code']['code_value'];
+  $code_value['title'] = $code_value['title short'] = new TranslatableMarkup('Assessment country code');
+  $code_value['argument']['id'] = 'assessment_country_code';
+  $data['taxonomy_term__code']['assessment_country_code'] = $code_value;
 }

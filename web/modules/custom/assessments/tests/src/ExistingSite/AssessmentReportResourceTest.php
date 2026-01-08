@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\Tests\assessments\Kernel;
+namespace Drupal\Tests\assessments\ExistingSite;
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\File\FileSystemInterface;
@@ -67,6 +67,16 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     $response = $this->post($payload);
     $this->assertSame(422, $response->getStatusCode());
     $this->assertSame($expect, Json::decode($response->getBody()->getContents()));
+
+    ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('invalid_country_for_eu_organisation');
+    $response = $this->post($payload);
+    $this->assertSame(422, $response->getStatusCode());
+    $this->assertSame($expect, Json::decode($response->getBody()->getContents()));
+
+    ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('invalid_missing_country_for_non_eu_organisation');
+    $response = $this->post($payload);
+    $this->assertSame(422, $response->getStatusCode());
+    $this->assertSame($expect, Json::decode($response->getBody()->getContents()));
   }
 
   /**
@@ -96,7 +106,10 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
 
     // Update the expectation with generated UUIDs.
     $uuid = $data['id'];
-    $expect = ['id' => $uuid] + $expect;
+    $uri = Url::fromUri('internal:/assessment/report/' . $uuid)
+      ->setAbsolute()
+      ->toString();
+    $expect = ['id' => $uuid, 'uri' => $uri] + $expect;
     $uuid = $data['provider']['id'];
     $provider = ['id' => $uuid] + $expect['provider'];
     $expect['provider'] = $provider;
@@ -154,6 +167,26 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
       ->toString();
 
     return \Drupal::httpClient()->post($url, [
+      RequestOptions::HTTP_ERRORS => FALSE,
+      RequestOptions::HEADERS => [
+        'Authorization' => 'Bearer ' . $this->getAccessToken(),
+      ],
+      RequestOptions::JSON => $payload,
+    ]);
+  }
+
+  /**
+   * Returns a Guzzle response after getting to /api/assessments/v1/assessment.
+   *
+   * @return \Psr\Http\Message\ResponseInterface
+   *   Guzzle response.
+   */
+  protected function get(array $payload): ResponseInterface {
+    $url = Url::fromUri('internal:/api/assessments/v1/assessment')
+      ->setAbsolute()
+      ->toString();
+
+    return \Drupal::httpClient()->get($url, [
       RequestOptions::HTTP_ERRORS => FALSE,
       RequestOptions::HEADERS => [
         'Authorization' => 'Bearer ' . $this->getAccessToken(),

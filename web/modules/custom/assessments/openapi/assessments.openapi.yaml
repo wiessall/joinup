@@ -140,6 +140,7 @@ paths:
                     their IDs are included in the response.
                   value:
                     id: "76269914-0d50-46a6-8cd5-19ec67474e99"
+                    uri: "https://joinup.ddev.local/assessment/report/76269914-0d50-46a6-8cd5-19ec67474e99"
                     language: "it"
                     name: "Legislation waste management"
                     provider:
@@ -219,6 +220,42 @@ paths:
                 properties:
                   error:
                     type: string
+    get:
+      summary: Get all Assessments of type reports
+      description: Returns all assessment reports dependently on country code of referenced public institution
+      operationId: getReport
+      tags:
+        - Assessments
+      security: [ ]
+      parameters:
+        - in: query
+          name: country
+          required: false
+          description: The two-letter ISO-3166 country code to filter reports by their provider's country.
+            Alternatively, use "EU" to fetch reports from EU institutions, bodies, agencies.
+          schema:
+            $ref: '#/components/schemas/EuropeanUnionCountry'
+          example: BE, EU
+      responses:
+        '200':
+          description: The fetched reports.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Assessment'
+              examples:
+                fetched:
+                  value:
+                    - id: "43a50ef2-7d90-4562-ab81-59af10f2e082"
+                      uri: "https://interoperable-europe.ec.europa.eu/assessment/report/43a50ef2-7d90-4562-ab81-59af10f2e082"
+                      name: "Report 1"
+                      country: "PT"
+                    - id: "7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7c"
+                      uri: "https://interoperable-europe.ec.europa.eu/assessment/report/7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7c"
+                      name: "Report 2"
+                      country: null
   /assessment/{id}:
     servers:
       - url: /api/assessments/v1
@@ -259,11 +296,26 @@ paths:
         description: Assessments API endpoint
     get:
       summary: Get all assets
-      description: Returns all assets (also known as interoperable solutions)
+      description: |
+        Returns all assets (also known as interoperable solutions). Results are
+        paginated with 200 items per page. Use the `page` parameter to navigate
+        through pages (0-indexed).
       operationId: getAssets
       tags:
         - Resources
       security: [ ]
+      parameters:
+        - in: query
+          name: page
+          description: |
+            Page number for pagination (0-indexed). Each page contains 200 items.
+            Default is 0 (first page).
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          example: 0
       responses:
         '200':
           description: Assets fetched
@@ -277,9 +329,11 @@ paths:
                 fetched:
                   value:
                     - id: "43a50ef2-7d90-4562-ab81-59af10f2e081"
+                      uri: "http://data.europa.eu/w21/43a50ef2-7d90-4562-ab81-59af10f2e081"
                       title: "Waste Management"
                       url: "https://interoperable-europe.ec.europa.eu/collection/environment/solution/waste-managemet"
                     - id: "7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7b"
+                      uri: "http://data.europa.eu/w21/7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7b"
                       name: "Citizen's Forum"
                       url: "https://interoperable-europe.ec.europa.eu/collection/participation/solution/forum"
   /organisation:
@@ -306,10 +360,12 @@ paths:
                 fetched:
                   value:
                     - id: "43a50ef2-7d90-4562-ab81-59af10f2e081"
+                      uri: "https://interoperable-europe.ec.europa.eu/assessment/public-organisation/43a50ef2-7d90-4562-ab81-59af10f2e081"
                       name: "Public Organisation 1"
                       "organisation_type": "local_public_sector_body"
-                      country: "PT"
+                      country: "bg"
                     - id: "7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7b"
+                      uri: "https://interoperable-europe.ec.europa.eu/assessment/public-organisation/7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7b"
                       name: "Public Organisation 2"
                       "organisation_type": "national_public_sector_body"
                       country: null
@@ -341,6 +397,11 @@ components:
             $ref: '#/components/schemas/UUID'
           readOnly: true
           description: The universally unique ID of the assessment report
+        uri:
+          type: string
+          format: uri
+          readOnly: true
+          description: The canonical URI of the assessment report
         language:
           type: string
           enum:
@@ -380,7 +441,8 @@ components:
             find out which are all existing organisations, use the
             `/organisation` GET resource, documented in this page.
           oneOf:
-            - $ref: '#/components/schemas/Organisation'
+            - $ref: '#/components/schemas/EuropeanProvider'
+            - $ref: '#/components/schemas/CountryProvider'
             - $ref: '#/components/schemas/UUID'
         relevant_report:
           type: array
@@ -436,6 +498,11 @@ components:
             $ref: '#/components/schemas/UUID'
           readOnly: true
           description: The universally unique ID of the public organisation.
+        uri:
+          type: string
+          format: uri
+          readOnly: true
+          description: The canonical URI of the public organisation
         name:
           type: string
           description: The public organisation name.
@@ -447,6 +514,60 @@ components:
             - european_union_agency
             - european_union_body
             - european_union_institution
+            - local_public_sector_body
+            - national_public_sector_body
+            - regional_public_sector_body
+        country:
+          $ref: '#/components/schemas/EuropeanUnionCountry'
+          description: |
+            The public organisation type. To be omitted for EU institutions,
+            bodies, agencies.
+
+    EuropeanProvider:
+      type: object
+      required:
+        - name
+        - organisation_type
+      additionalProperties: false
+      properties:
+        id:
+          schema:
+            $ref: '#/components/schemas/UUID'
+          readOnly: true
+          description: The universally unique ID of the public organisation.
+        name:
+          type: string
+          description: The public organisation name.
+          maxLength: 255
+        organisation_type:
+          type: string
+          description: The public organisation type.
+          enum:
+            - european_union_agency
+            - european_union_body
+            - european_union_institution
+
+    CountryProvider:
+      type: object
+      required:
+        - name
+        - organisation_type
+        - country
+      additionalProperties: false
+      properties:
+        id:
+          schema:
+            $ref: '#/components/schemas/UUID'
+          readOnly: true
+          description: The universally unique ID of the public organisation.
+        name:
+          type: string
+          description: The public organisation name.
+          maxLength: 255
+        organisation_type:
+          type: string
+          description: The public organisation type.
+          enum:
             - local_public_sector_body
             - national_public_sector_body
             - regional_public_sector_body
@@ -600,6 +721,11 @@ components:
             $ref: '#/components/schemas/UUID'
           readOnly: true
           description: The universally unique ID of the solution.
+        uri:
+          type: string
+          format: uri
+          readOnly: true
+          description: The canonical URI of the asset
         title:
           type: string
           description: The title of the interoperability solution.
