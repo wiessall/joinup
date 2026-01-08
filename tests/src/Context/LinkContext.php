@@ -115,9 +115,8 @@ class LinkContext extends RawDrupalContext {
    *   If the link has no href attribute or the file content cannot be loaded.
    * @throws \GuzzleHttp\Exception\GuzzleException
    *   If the connection to the link fails.
-   *
-   * @Then the content received from clicking the link :link_label does not contain the following strings:
    */
+  #[Then('the content received from clicking the link :link_label does not contain the following strings:')]
   public function assertLinkedContentNotContainsStrings(string $link_label, TableNode $strings_table): void {
     $url = $this->getUrl($link_label);
 

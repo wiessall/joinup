@@ -35,9 +35,8 @@ class RdfContext extends RawDrupalContext {
    *   The graph to be queried.
    * @param \Behat\Gherkin\Node\TableNode $triples
    *   The user data.
-   *
-   * @Then the following :graph graph triples exist in the RDF backend:
    */
+  #[Then('the following :graph graph triples exist in the RDF backend:')]
   public function assertTriples(string $graph, TableNode $triples): void {
     $connection = \Drupal::getContainer()->get('rdf_sync.connection');
     $subjects = $rows = [];

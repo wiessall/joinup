@@ -388,9 +388,8 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    *   The link's text.
    * @param int $comment_number
    *   The '1 based' number of the comment in the page.
-   *
-   * @Then I click :label in comment #:comment_number
    */
+  #[Then('I click :label in comment #:comment_number')]
   public function clickCommentLink(string $label, int $comment_number): void {
     $comment = $this->getNumberedComment($comment_number - 1);
     $comment->clickLink($label);
@@ -433,9 +432,8 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   A table containing the expected content of the in the spotlight section.
-   *
-   * @Then the in the spotlight section should contain the following content:
    */
+  #[Then('the in the spotlight section should contain the following content')]
   public function assertInTheSpotlight(TableNode $table): void {
     $columns = $table->getColumnsHash();
     $articles = $this->getSession()->getPage()->findAll('css', '.view-in-the-spotlight article.tile');

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -55,9 +56,8 @@ class JoinupLogContext extends RawDrupalContext {
    *
    * @param string $message
    *   Message.
-   *
-   * @Then Log entry with the message :message should exist.
    */
+  #[Then('Log entry with the message :message should exist.')]
   public function joinupLogEntryShouldExist(string $message): void {
     $count = \Drupal::entityQuery('joinup_log')
       ->accessCheck(FALSE)
