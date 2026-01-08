@@ -74,6 +74,7 @@ final readonly class AssessmentReportNotification implements AssessmentReportNot
     $reason = $event->getReason() ?? '';
 
     return [
+      '@assessment:id' => $entity->id(),
       '@assessment:changed' => $this->dateFormatter
         ->format($entity->getChangedTime(), 'medium'),
       '@assessment:user' => $entity->getOwner()->getDisplayName(),
