@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Component\Render\MarkupInterface;
@@ -241,9 +242,8 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Throws an exception when a parameter is not the expected one.
-   *
-   * @Given /^the email sent to "([^"]*)" with subject "([^"]*)" contains "([^"]*)" attachment$/
    */
+  #[Given('/^the email sent to "([^"]*)" with subject "([^"]*)" contains "([^"]*)" attachment$/')]
   public function theEmailSentToWithSubjectContainsAttachment(string $email, string $subject, string $file): void {
     $mails = $this->getEmailsBySubjectAndMail($subject, $email);
     foreach ($mails as $mail) {
@@ -271,9 +271,8 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Throws an exception when a parameter is not the expected one.
-   *
-   * @Given /^the email sent to "([^"]*)" with subject "([^"]*)" contains header "([^"]*)" with value "([^"]*)"$/
    */
+  #[Given('^the email sent to "([^"]*)" with subject "([^"]*)" contains header "([^"]*)" with value "([^"]*)"$/')]
   public function theEmailSentToWithSubjectContainsHeaderValue(string $email, string $subject, string $header_name, string $header_value): void {
     $mails = $this->getEmailsBySubjectAndMail($subject, $email);
     foreach ($mails as $mail) {
@@ -356,9 +355,8 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * Use this if you don't want to match on emails that have been sent earlier
    * in the scenario.
-   *
-   * @Given I mark all emails as read
    */
+  #[Given('I mark all emails as read')]
   public function clearMailCollectorCache(): void {
     \Drupal::state()->set('system.test_mail_collector', []);
     \Drupal::state()->resetCache();

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Given;
 use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityReferenceTrait;
@@ -31,9 +32,8 @@ class ReleaseContext extends RawDrupalContext {
    * @throws \Exception
    *    Thrown when a wrong number of releases is found or the releases are not
    *    ordered properly.
-   *
-   * @Given I should see the (following )releases in the exact order:
    */
+  #[Given('I should see the (following )releases in the exact order:')]
   public function assertReleasesAndOrder(TableNode $release_table): void {
     $releases = [];
 

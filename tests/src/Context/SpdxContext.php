@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Given;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
 
@@ -34,9 +35,8 @@ class SpdxContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a column has a title that is not recognized.
-   *
-   * @Given (the following )SPDX licences:
    */
+  #[Given('(the following )SPDX licences:')]
   public function givenSpdxLicences(TableNode $data): void {
     $aliases = $this->getTaxonomyFieldMappings(self::TAXONOMY_NAME);
     foreach ($data->getColumnsHash() as $licence_data) {
@@ -68,10 +68,9 @@ class SpdxContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the licence does not exist, or cannot be loaded.
-   *
-   * @Given I visit the :licence SPDX licence
-   * @Given I go to the( homepage of the) :licence SPDX licence
    */
+  #[Given('I visit the :licence SPDX licence')]
+  #[Given('I go to the( homepage of the) :licence SPDX licence')]
   public function visitSpdxLicence(string $licence): void {
     $term = $this->getEntityByLabel('taxonomy_term', $licence);
     $this->visitPath($term->toUrl()->toString());

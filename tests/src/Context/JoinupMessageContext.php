@@ -7,6 +7,7 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ExpectationException;
+use Behat\Step\Given;
 use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 
@@ -71,9 +72,8 @@ class JoinupMessageContext extends RawDrupalContext {
    *
    * @param string $message
    *   The text to be checked.
-   *
-   * @Given I should not see the inline form error message :message
    */
+  #[Given('I should not see the inline form error message :message')]
   public function assertNotErrorVisible(string $message): void {
     $this->assertNot($message);
   }

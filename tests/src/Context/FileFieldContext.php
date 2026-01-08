@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\Given;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -38,11 +39,10 @@ class FileFieldContext extends RawDrupalContext {
    * @param string $region
    *   The region.
    *
-   * @Given I fill in the :delta :subfield field of the :field file field with :value in the :region( region)
-   *
    * @throws \Exception
    *   If region cannot be found.
    */
+  #[Given('I fill in the :delta :subfield field of the :field file field with :value in the :region( region)')]
   public function fillRegionInSubfieldInFileField(string $field, string $subfield, string $value, string $delta, string $region): void {
     $file_field = $this->findSubFieldOfFileField($field, $region);
     $delta = $this->convertOrdinalToNumber($delta) - 1;
@@ -72,9 +72,8 @@ class FileFieldContext extends RawDrupalContext {
    *   The value to set.
    * @param string $delta
    *   The delta of the field.
-   *
-   * @Given I fill in the :delta :subfield field of the :field file field with :value
    */
+  #[Given('I fill in the :delta :subfield field of the :field file field with :value')]
   public function fillInSubfieldInFileField(string $field, string $subfield, string $value, string $delta): void {
     $file_field = $this->findSubFieldOfFileField($field);
     $delta = $this->convertOrdinalToNumber($delta) - 1;
@@ -104,9 +103,8 @@ class FileFieldContext extends RawDrupalContext {
    *   The subfield name.
    * @param string $delta
    *   The delta of the field.
-   *
-   * @Given I :action the :delta :subfield checkbox of the :field file field
    */
+  #[Given('I :action the :delta :subfield checkbox of the :field file field')]
   public function changeCheckboxOfFileField(string $action, string $field, string $subfield, string $delta): void {
     assert(in_array($action, ['check', 'uncheck']), 'The action should be either "check" or "uncheck".');
     $file_field = $this->findSubFieldOfFileField($field);

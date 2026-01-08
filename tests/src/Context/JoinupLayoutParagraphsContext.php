@@ -7,6 +7,7 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -302,9 +303,8 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::FIELD_MAP.
    * @param \Behat\Gherkin\Node\TableNode $layout_list
    *   The table of layout paragraphs. An example is below.
-   *
-   * @Given the :field_alias form field should have the following layout paragraphs:
    */
+  #[Given('the :field_alias form field should have the following layout paragraphs:')]
   public function theFormFieldShouldHaveTheFollowingLayoutParagraphs(string $field_alias, TableNode $layout_list): void {
     $layout_paragraphs = $this->getFormFieldLayoutParagraphs($field_alias);
     $actual = [];
@@ -337,9 +337,8 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The table of expected paragraph texts.
-   *
-   * @Given I should see the following paragraphs in the given order:
    */
+  #[Given('I should see the following paragraphs in the given order:')]
   public function assertExactParagraphsContentInPage(TableNode $table): void {
     $expected = $table->getColumn(0);
     $paragraphs = $this->getSession()->getPage()->findAll('xpath', static::PARAGRAPH_ITEM_XPATH);

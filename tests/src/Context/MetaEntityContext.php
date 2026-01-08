@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Given;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
@@ -20,9 +21,8 @@ class MetaEntityContext extends RawDrupalContext {
 
   /**
    * Enables the given topic meta entities on the homepage.
-   *
-   * @Given /^the following topics are enabled in the homepage:$/
    */
+  #[Given('/^the following topics are enabled in the homepage:$/')]
   public function theFollowingTopicsAreEnabledInTheHomepage(TableNode $table): void {
     $topics = $table->getColumn(0);
     $repository = \Drupal::getContainer()->get('meta_entity.repository');
@@ -110,9 +110,8 @@ class MetaEntityContext extends RawDrupalContext {
    *   - An invalid $type was specified.
    *   - The entity with $target_entity_label doesn't exist.
    *   - A related meta entity doesn't exist.
-   *
-   * @Given the :type count of :target_entity_label is :count
    */
+  #[Given('the :type count of :target_entity_label is :count')]
   public function setMetaEntityFieldValueForEntity(string $type, string $target_entity_label, string $count): void {
     if (!in_array($type, ['download', 'visit'])) {
       throw new \Exception("Type should be 'download' or 'visit' but '$type' was given.");

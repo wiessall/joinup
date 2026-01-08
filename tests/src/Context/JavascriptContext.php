@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Hook\BeforeScenario;
+use Behat\Step\Given;
 use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
@@ -24,10 +25,9 @@ class JavascriptContext extends RawDrupalContext {
    * previous scenario changed it.
    * To bypass the browser cache within a single scenario, use the below step
    * definition or \Behat\MinkExtension\Context\MinkContext::reload.
-   *
-   * @Given I have a new browser session
    */
   #[BeforeScenario('@javascript')]
+  #[Given('I have a new browser session')]
   public function restartSession(): void {
     $this->getMink()->stopSessions();
   }

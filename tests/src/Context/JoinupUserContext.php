@@ -9,6 +9,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Hook\AfterScenario;
 use Behat\Hook\AfterStep;
 use Behat\Hook\BeforeScenario;
+use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -63,9 +64,8 @@ class JoinupUserContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the user or the link was not found.
-   *
-   * @Given I click the :title link from the email sent to :user
    */
+  #[Given('I click the :title link from the email sent to :user')]
   public function clickNamedLinkInEmail(string $title, string $user): void {
     $mails = $this->getUserMails($this->getUserByName($user));
     $matches = [];
@@ -265,9 +265,8 @@ class JoinupUserContext extends RawDrupalContext {
 
   /**
    * Resets the timestamp to 0 for purge_users_notifications in the database.
-   *
-   * @Given I reset the purge users notifications timestamp
    */
+  #[Given('I reset the purge users notifications timestamp')]
   public function setPurgeUsersNotificationsTimestamp(): void {
     $connection = \Drupal::database();
     $connection->update('purge_users_notifications')

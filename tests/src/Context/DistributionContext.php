@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
+use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Core\Session\AnonymousUserSession;
@@ -189,11 +190,10 @@ class DistributionContext extends RawDrupalContext {
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The entries list.
    *
-   * @Given the following distribution download events:
-   *
    * @throws \Drupal\Core\Entity\EntityStorageException
    *   Thrown when the download event entity could not be saved.
    */
+  #[Given('the following distribution download events:')]
   public function downloadEvents(TableNode $table): void {
     foreach ($table->getColumnsHash() as $row) {
       $distribution = $this->getEntityByLabel('node', $row['distribution'], 'distribution');

@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Hook\BeforeScenario;
+use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Core\Url;
@@ -76,9 +77,8 @@ class JoinupLogContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The joinup log data.
-   *
-   * @Given the following joinup log:
    */
+  #[Given('the following joinup log:')]
   public function createJoinupLog(TableNode $table): void {
     $storage = \Drupal::entityTypeManager()->getStorage('joinup_log');
     foreach ($table->getColumnsHash() as $values) {
