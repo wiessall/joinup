@@ -211,7 +211,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    *
    * @see strtotime()
    */
-  #[Given('he :field_name date of the :title :bundle is :new_date')]
+  #[Given('the :field_name date of the :title :bundle is :new_date')]
   public function updateNodeDateProperty(string $field_name, string $title, string $bundle, string $new_date): void {
     if (!($time = strtotime($new_date))) {
       throw new \Exception("{$new_date} could not be converted to string.");
@@ -433,7 +433,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    * @param \Behat\Gherkin\Node\TableNode $table
    *   A table containing the expected content of the in the spotlight section.
    */
-  #[Then('the in the spotlight section should contain the following content')]
+  #[Then('the in the spotlight section should contain the following content:')]
   public function assertInTheSpotlight(TableNode $table): void {
     $columns = $table->getColumnsHash();
     $articles = $this->getSession()->getPage()->findAll('css', '.view-in-the-spotlight article.tile');
