@@ -7,6 +7,8 @@ namespace Drupal\joinup\Context;
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Hook\AfterScenario;
+use Behat\Hook\BeforeScenario;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Step\Then;
@@ -2815,9 +2817,8 @@ class JoinupContext extends RawDrupalContext {
    * These scenarios are altering the topic term meta entities. We need to reset
    * them after each run. Because we have a mechanism to delete new content, we
    * are simply resetting the values instead.
-   *
-   * @afterScenario @topic&&@api
    */
+  #[AfterScenario('@topic&&@api')]
   public function resetTopicMetaEntity(): void {
     // Remove any entity queue related to homepage topics.
     \Drupal::entityTypeManager()->getStorage('entity_subqueue')
@@ -2847,9 +2848,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @param \Behat\Behat\Hook\Scope\BeforeScenarioScope $scope
    *   The scenario scope.
-   *
-   * @BeforeScenario
    */
+  #[BeforeScenario]
   public function beforeScenarioPrepareEntityCleanup(BeforeScenarioScope $scope): void {
     $behat_cleanup_data = \Drupal::state()->get('behat_cleanup_data', []);
     foreach (\Drupal::entityTypeManager()->getDefinitions() as $entity_type_id => $entity_type) {
@@ -2893,9 +2893,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @param \Behat\Behat\Hook\Scope\AfterScenarioScope $scope
    *   The scenario scope.
-   *
-   * @AfterScenario
    */
+  #[AfterScenario]
   public function afterScenarioCleanupEntities(AfterScenarioScope $scope): void {
     $behat_cleanup_data = \Drupal::state()->get('behat_cleanup_data', []);
     foreach ($behat_cleanup_data as $entity_type => $id) {

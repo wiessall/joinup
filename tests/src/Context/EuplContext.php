@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Hook\AfterScenario;
+use Behat\Hook\BeforeScenario;
 use Behat\Mink\Element\NodeElement;
 use Behat\Step\Then;
 use Behat\Step\When;
@@ -30,9 +32,8 @@ class EuplContext extends RawDrupalContext {
    * @throws \Drupal\Core\Entity\EntityStorageException
    *   Thrown when one of the entities could not be created, for example because
    *   it already exists.
-   *
-   * @BeforeScenario @eupl&&@api
    */
+  #[BeforeScenario('@eupl&&@api')]
   public function setupEuplData(): void {
     $solution = $this->nodeCreate((object) [
       'type' => 'solution',
@@ -398,10 +399,9 @@ class EuplContext extends RawDrupalContext {
   /**
    * Clears the content created for the purpose of this test.
    *
-   * @AfterScenario @eupl&&@api
-   *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
+  #[AfterScenario('@eupl&&@api')]
   public function cleanEuplData(): void {
     $this->cleanCompatibilityDocuments();
   }

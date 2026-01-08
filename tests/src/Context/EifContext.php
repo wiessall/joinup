@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Hook\BeforeScenario;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -33,9 +34,8 @@ class EifContext extends RawDrupalContext {
 
   /**
    * Creates the standard 'EIF' solution and a random parent collection.
-   *
-   * @BeforeScenario @eif_community&&@api
    */
+  #[BeforeScenario('@eif_community&&@api')]
   public function setupEifData(BeforeScenarioScope $scope): void {
     // Create an owner.
     $owner = $this->nodeCreate((object) [

@@ -6,6 +6,9 @@ namespace Drupal\joinup\Context;
 
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Hook\AfterScenario;
+use Behat\Hook\AfterStep;
+use Behat\Hook\BeforeScenario;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -304,9 +307,8 @@ class JoinupUserContext extends RawDrupalContext {
 
   /**
    * Registers the latest deleted user UID for cleaning-up after scenario.
-   *
-   * @BeforeScenario @api
    */
+  #[BeforeScenario('@api')]
   public function registerLatestDeletedUser(): void {
     $this->latestDeletedUserUid = (int) \Drupal::database()
       ->query("SELECT MAX(uid) FROM {" . JoinupUserDeletedInterface::TABLE_USER . "}")
@@ -315,9 +317,8 @@ class JoinupUserContext extends RawDrupalContext {
 
   /**
    * Removes the deleted user entries created during the test.
-   *
-   * @AfterScenario @api
    */
+  #[AfterScenario('@api')]
   public function remmoveDeletedUserEntries(): void {
     \Drupal::database()->delete(JoinupUserDeletedInterface::TABLE_USER_CONTENT)
       ->condition('uid', $this->latestDeletedUserUid, '>')
@@ -335,9 +336,8 @@ class JoinupUserContext extends RawDrupalContext {
    *
    * @param \Behat\Behat\Hook\Scope\AfterStepScope $event
    *   The step.after event.
-   *
-   * @AfterStep
    */
+  #[AfterStep]
   public function runUserDeletedDestruct(AfterStepScope $event): void {
     if (!$this->getScenario()->hasTag('api') && !$event->getFeature()->hasTag('api')) {
       return;

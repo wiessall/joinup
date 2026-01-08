@@ -6,6 +6,9 @@ namespace Drupal\joinup\Context;
 
 use Behat\Behat\Hook\Scope\BeforeFeatureScope;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
+use Behat\Hook\BeforeFeature;
+use Behat\Hook\BeforeScenario;
+use Behat\Hook\BeforeSuite;
 use Behat\Mink\Element\DocumentElement;
 use Behat\Step\Then;
 use Drupal\Component\Serialization\Json;
@@ -328,9 +331,8 @@ class AccessibilityContext extends RawDrupalContext {
    *
    * If ::assertAccessible() is called several times during a suite run, we want
    * to consolidate the reports in a single file.
-   *
-   * @beforeSuite
    */
+  #[BeforeSuite]
   public static function initializeReport(): void {
     file_put_contents(static::getReportPath(), Yaml::encode([]));
   }
@@ -340,9 +342,8 @@ class AccessibilityContext extends RawDrupalContext {
    *
    * @param \Behat\Behat\Hook\Scope\BeforeFeatureScope $scope
    *   The scope object.
-   *
-   * @beforeFeature
    */
+  #[BeforeFeature]
   public static function setFeatureFile(BeforeFeatureScope $scope): void {
     static::$file = substr($scope->getFeature()->getFile(), strlen($scope->getEnvironment()->getSuite()->getSetting('paths')[0]) + 1);
   }
@@ -352,9 +353,8 @@ class AccessibilityContext extends RawDrupalContext {
    *
    * @param \Behat\Behat\Hook\Scope\BeforeScenarioScope $scope
    *   The scope object.
-   *
-   * @beforeScenario @api&&@javascript
    */
+  #[BeforeScenario('@api&&@javascript')]
   public function setScenarioLine(BeforeScenarioScope $scope): void {
     $this->line = $scope->getScenario()->getLine();
   }

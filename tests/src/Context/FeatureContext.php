@@ -8,6 +8,9 @@ use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Hook\AfterScenario;
+use Behat\Hook\AfterStep;
+use Behat\Hook\BeforeScenario;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
@@ -1443,9 +1446,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @see \Drupal\Core\Cache\DatabaseCacheTagsChecksum
    * @see https://github.com/jhedstrom/drupalextension/issues/133
-   *
-   * @AfterStep
    */
+  #[AfterStep]
   public function clearCacheTagsStaticCache(AfterStepScope $event): void {
     if ($this->getScenario()->hasTag('api') || $event->getFeature()->hasTag('api')) {
       // Sample tests needing this:
@@ -1482,10 +1484,9 @@ class FeatureContext extends RawDrupalContext {
    * scenario because entities are cleaned after a scenario and we need to
    * ensure that the RDF data is synchronized after each scenario. If this does
    * not run, the RDF data will be left in the RDF database as stale data.
-   *
-   * @AfterStep
-   * @AfterScenario
    */
+  #[AfterStep]
+  #[AfterScenario]
   public function afterStepRdfSyncDestruct(): void {
     \Drupal::service('rdf_sync.synchronizer')->destruct();
   }
@@ -1538,9 +1539,8 @@ class FeatureContext extends RawDrupalContext {
 
   /**
    * Installs the testing module for scenarios tagged with @errorPage.
-   *
-   * @BeforeScenario @errorPage&&@api
    */
+  #[BeforeScenario('@errorPage&&@api')]
   public function beforeErrorPageTesting(): void {
     static::toggleModule('install', ['error_page_test']);
 
@@ -1553,9 +1553,8 @@ class FeatureContext extends RawDrupalContext {
 
   /**
    * Uninstalls the testing module for scenarios tagged with @errorPage.
-   *
-   * @AfterScenario @errorPage&&@api
    */
+  #[AfterScenario('@errorPage&&@api')]
   public function afterErrorPageTesting(): void {
     static::toggleModule('uninstall', ['error_page_test']);
 
@@ -1634,9 +1633,8 @@ class FeatureContext extends RawDrupalContext {
    * @code
    * @generateMediaTypes:<mediaType1>,<mediaType2>,...
    * @endcode
-   *
-   * @BeforeScenario @generateMedia
    */
+  #[BeforeScenario('@generateMedia')]
   public function generateMedia(BeforeScenarioScope $scope): void {
     $mediaTypes = $this->getTagValues($scope, 'generateMediaTypes');
     if (empty($mediaTypes)) {
@@ -1686,9 +1684,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * Tests that interact with the version file should be tagged with
    * `@joinupVersion`.
-   *
-   * @BeforeScenario @joinupVersion&&@api
    */
+  #[BeforeScenario('@joinupVersion&&@api')]
   public function backupJoinupVersion(): void {
     $filename = JoinupVersionInterface::PATH;
     $this->version = file_exists($filename) ? file_get_contents($filename) : FALSE;
@@ -1696,9 +1693,8 @@ class FeatureContext extends RawDrupalContext {
 
   /**
    * Restores the backup of the Joinup `VERSION` file.
-   *
-   * @AfterScenario @joinupVersion&&@api
    */
+  #[AfterScenario('@joinupVersion&&@api')]
   public function restoreJoinupVersion(): void {
     if ($this->version === FALSE) {
       unlink(JoinupVersionInterface::PATH);
@@ -1737,9 +1733,8 @@ class FeatureContext extends RawDrupalContext {
 
   /**
    * Cleans the mail collector before the scenario starts.
-   *
-   * @BeforeScenario @api
    */
+  #[BeforeScenario('@api')]
   public function cleanUpEmailCollector(): void {
     \Drupal::state()->delete('system.test_mail_collector');
   }
@@ -1946,9 +1941,8 @@ class FeatureContext extends RawDrupalContext {
 
   /**
    * Disable cookie consent for all scenarios unless tagged with @cookieConsent.
-   *
-   * @BeforeScenario ~@cookieConsent&&@api
    */
+  #[BeforeScenario('~@cookieConsent&&@api')]
   public function disableCookieConsent(): void {
     $config_context = $this->getContext(ConfigContext::class);
     $name = 'oe_webtools_cookie_consent.settings';
