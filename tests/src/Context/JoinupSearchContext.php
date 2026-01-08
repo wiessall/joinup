@@ -7,6 +7,7 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -56,9 +57,8 @@ class JoinupSearchContext extends RawDrupalContext {
 
   /**
    * Navigates to the search page.
-   *
-   * @Given I am on the advanced search page
    */
+  #[Given('I am on the advanced search page')]
   #[When('I visit the advanced search page')]
   public function visitSearchPage(): void {
     $this->visitPath('/search');
@@ -97,9 +97,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the tab is not found in the page.
-   *
-   * @Given the :type content tab is not displayed
    */
+  #[Given('the :type content tab is not displayed')]
   public function assertContentTabNotDisplayed(string $type): void {
     if ($this->findContentTab($type)) {
       throw new \Exception("The tab '$type' was found in the page but it should be displayed.");
@@ -114,9 +113,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the tab is not found in the page.
-   *
-   * @Given the :type content tab is displayed
    */
+  #[Given('the :type content tab is displayed')]
   public function assertContentTabDisplayed(string $type): void {
     if (!$this->findContentTab($type)) {
       throw new \Exception("The tab '$type' was not found in the page but it should be displayed.");
@@ -268,9 +266,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the checkbox is not found.
-   *
-   * @Given I (un)check the :option checkbox from the :facet_type facet
    */
+  #[Given('I (un)check the :option checkbox from the :facet_type facet')]
   public function checkCheckboxFacet(string $option, string $facet_type): void {
     $facet = $this->findFacetByAlias($facet_type);
     /** @var \Behat\Mink\Element\NodeElement[] $node_elements */
@@ -350,9 +347,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *   The expected number of topics.
    * @param string $heading
    *   The heading in the card.
-   *
-   * @Given there should be :number topic(s) in the :heading card
    */
+  #[Given('there should be :number topic(s) in the :heading card')]
   public function assertNumberOfTopicsInCards(int $number, string $heading): void {
     $card = $this->getTileByHeading($heading);
     $topics = $card->findAll('css', '.badge');
@@ -855,9 +851,8 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the checkbox is not found.
-   *
-   * @Given I click show more from the :facet_type facet
    */
+  #[Given('I click show more from the :facet_type facet')]
   public function showMoreFacet(string $facet_type): void {
     $facet = $this->findFacetByAlias($facet_type);
     $parent_facet = $facet->getParent();

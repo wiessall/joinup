@@ -14,6 +14,7 @@ use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Exception\ExpectationException;
 use Behat\Mink\Exception\ResponseTextException;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
+use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Component\Serialization\Json;
@@ -1244,9 +1245,8 @@ class FeatureContext extends RawDrupalContext {
    * @throws \Exception
    *   If the page contains no rows, no row contains the text or the row
    *   contains no checkbox or radio button.
-   *
-   * @Given I select/check the :text row
    */
+  #[Given('I select/check the :text row')]
   public function checkTableselectRow(string $text): void {
     $element = $this->getCheckboxOrRadioByRowText($text);
     if ($element->getAttribute('type') === 'checkbox') {
@@ -1268,9 +1268,8 @@ class FeatureContext extends RawDrupalContext {
    *   contains no checkbox or radio button.
    * @throws \InvalidArgumentException
    *   If this step definition was used on a radio button.
-   *
-   * @Given I deselect/uncheck the :text row
    */
+  #[Given('I do something with :argument')]
   public function uncheckTableselectRow(string $text): void {
     $element = $this->getCheckboxOrRadioByRowText($text);
     if ($element->getAttribute('type') === 'radio') {
@@ -1286,9 +1285,8 @@ class FeatureContext extends RawDrupalContext {
    *   The link to search for.
    * @param string $row_text
    *   Text contained in a row. Must be unique.
-   *
-   * @Given I click the :link_text link in the :row_text row
    */
+  #[Given('I click the :link_text link in the :row_text row')]
   public function clickLinkInRow(string $link_text, string $row_text): void {
     $element = $this->getRowByRowText($row_text);
     $link = $element->findLink($link_text);
@@ -1408,9 +1406,8 @@ class FeatureContext extends RawDrupalContext {
 
   /**
    * Runs a batch operations process.
-   *
-   * @Given I wait for the batch process to finish
    */
+  #[Given('I wait for the batch process to finish')]
   public function waitForBatchProcess(): void {
     while ($refresh = $this->getSession()
       ->getPage()
@@ -1498,9 +1495,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @param string $text
    *   The text to search for.
-   *
-   * @Given I wait until the page contains the text :text
    */
+  #[Given('I wait until the page contains the text :text')]
   public function iWaitUntilPageContains(string $text): void {
     $text = addslashes($text);
     $result = $this->getSession()->wait(60000,
@@ -1578,9 +1574,8 @@ class FeatureContext extends RawDrupalContext {
    * @param string|null $error_level
    *   (optional) The error level. If not passed, the original error level is
    *   restored.
-   *
-   * @Given the site error reporting verbosity is( set to) :error_level
    */
+  #[Given('the site error reporting verbosity is( set to) :error_level')]
   public function setSiteErrorLevel(?string $error_level = NULL): void {
     static $original_error_level;
 
@@ -1606,9 +1601,8 @@ class FeatureContext extends RawDrupalContext {
    *   The term name.
    * @param string $format
    *   The RDF serialization format.
-   *
-   * @Given I visit the :vocabulary_name term :term_name page in the :format serialisation
    */
+  #[Given('I visit the :vocabulary_name term :term_name page in the :format serialisation')]
   public function visitTermWithFormat(string $vocabulary_name, string $term_name, string $format): void {
     /** @var \Drupal\taxonomy\Entity\Vocabulary $vocabulary */
     $vocabulary = $this->getEntityByLabel('taxonomy_vocabulary', $vocabulary_name);
@@ -1623,9 +1617,8 @@ class FeatureContext extends RawDrupalContext {
    *   The name of the vocabulary.
    * @param string $term_name
    *   The term name.
-   *
-   * @Given I delete the :vocabulary_name term :term_name
    */
+  #[Given('I delete the :vocabulary_name term :term_name')]
   public function deleteTermByName(string $vocabulary_name, string $term_name): void {
     /** @var \Drupal\taxonomy\Entity\Vocabulary $vocabulary */
     $vocabulary = $this->getEntityByLabel('taxonomy_vocabulary', $vocabulary_name);
@@ -2133,9 +2126,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @param string $queueName
    *   The queue name.
-   *
-   * @Given the :queueName queue is empty
    */
+  #[Given('the :queueName queue is empty')]
   public function emptyQueue(string $queueName): void {
     $queue = \Drupal::queue($queueName);
     $queue->deleteQueue();
