@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Core\Url;
@@ -70,9 +71,8 @@ class JoinupGroupContext extends RawDrupalContext {
    *
    * @param string $label
    *   The label of the group for which to visit the discussion page.
-   *
-   * @Given I go to the discussions page of :label
    */
+  #[Given('I go to the discussions page of :label')]
   public function visitDiscussionPage(string $label): void {
     $group = $this->getEntityByLabel('node', $label);
 
@@ -88,9 +88,8 @@ class JoinupGroupContext extends RawDrupalContext {
    *
    * @param string $label
    *   The label of the group for which to visit the about page.
-   *
-   * @Given I go to the manage content page of :label
    */
+  #[Given('I go to the manage content page of :label')]
   public function visitManageContentPage(string $label): void {
     $group = $this->getEntityByLabel('node', $label);
 
@@ -267,9 +266,8 @@ class JoinupGroupContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The announcement data.
-   *
-   * @Given the following announcements:
    */
+  #[Given('the following announcements:')]
   public function createAnnouncements(TableNode $table): void {
     $columns = [
       'group' => TRUE,
@@ -326,9 +324,8 @@ class JoinupGroupContext extends RawDrupalContext {
    *
    * @param string $subject
    *   The announcement subject.
-   *
-   * @Given the delivery queue of :subject announcement is processed
    */
+  #[Given('the delivery queue of :subject announcement is processed')]
   public function runDeliveryQueueForAnnouncement(string $subject): void {
     $announcement_id = (int) $this->getAnnouncementBySubject($subject)->id();
     /** @var \Drupal\Core\Queue\QueueWorkerManagerInterface $queue_worker_manager */
@@ -409,11 +406,10 @@ class JoinupGroupContext extends RawDrupalContext {
    *   the field is an entity reference field.
    * @param string|null $entityTypeId
    *   The entity type ID (or alias) if the value is an entity reference.
-   *
-   * @Given the :config setting of the :collectionLabel :group is unset
-   * @Given the :config setting of the :collectionLabel :group is set to :value
-   * @Given the :config setting of the :collectionLabel :group is set to :value :entityTypeId
    */
+  #[Given('the :config setting of the :collectionLabel :group is unset')]
+  #[Given('the :config setting of the :collectionLabel :group is set to :value')]
+  #[Given('the :config setting of the :collectionLabel :group is set to :value :entityTypeId')]
   public function givenCollectionSetting(
     string $config,
     string $groupLabel,
@@ -516,9 +512,8 @@ class JoinupGroupContext extends RawDrupalContext {
    *   The state of the new revision. Affects group published state.
    * @param string $membershipModeration
    *   The new membership moderation state. Either 'open' or 'closed'.
-   *
-   * @Given the :groupLabel :groupType has a new :state revision with :membershipModeration membership moderation
    */
+  #[Given('the :groupLabel :groupType has a new :state revision with :membershipModeration membership moderation')]
   public function createGroupRevisionWithMembershipModeration(string $groupLabel, string $groupType, string $state, string $membershipModeration): void {
     \assert(in_array($membershipModeration, ['open', 'closed']));
 

@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
+use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Component\Utility\Html;
@@ -107,9 +108,8 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   A table with the keys 'username' and 'title'.
-   *
-   * @Given (the following )discussion subscriptions:
    */
+  #[Given('(the following )discussion subscriptions:')]
   public function subscribeToDiscussion(TableNode $table): void {
     $subscription_service = $this->getDiscussionSubscriptionService();
     foreach ($table->getColumnsHash() as $values) {
@@ -140,9 +140,8 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown if a membership is not found for a given user in a given
    *   collection.
-   *
-   * @Given (the following ):bundle content subscriptions:
    */
+  #[Given('(the following ):bundle content subscriptions:')]
   public function subscribeToGroupContent(TableNode $subscription_table, string $bundle): void {
     foreach ($subscription_table->getColumnsHash() as $values) {
       $group = $this->getEntityByLabel('node', $values[$bundle], $bundle);
@@ -189,9 +188,8 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the region or the button are not found or if the expected
    *   status does not match the actual one.
-   *
-   * @Given the :button button on the :label subscription card should be :status
    */
+  #[Given('the :button button on the :label subscription card should be :status')]
   public function assertSubscriptionButtonStatus(string $button, string $label, string $status): void {
     if (!in_array($status, ['enabled', 'disabled'])) {
       throw new \InvalidArgumentException('Allowed values for status variable are "enabled" and "disabled".');
@@ -214,9 +212,8 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the card is not found.
-   *
-   * @Given I press :button on the :label subscription card
    */
+  #[Given('I press :button on the :label subscription card')]
   public function pressButtonOnSubscriptionCard(string $button, string $label): void {
     $card = $this->getGroupSubscriptionCardByHeading($label);
     $button = $card->findButton($button);
@@ -233,9 +230,8 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the card or the button is not found.
-   *
-   * @Given I should see the :button button on the :collection subscription card
    */
+  #[Given('I should see the :button button on the :collection subscription card')]
   public function assertButtonExistsOnSubscriptionCard(string $button, string $label): void {
     $card = $this->getGroupSubscriptionCardByHeading($label);
     if (empty($card->findButton($button))) {
@@ -253,9 +249,8 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the card is not found or the button is.
-   *
-   * @Given I should not see the :button button on the :label subscription card
    */
+  #[Given('I should not see the :button button on the :label subscription card')]
   public function assertButtonNotExistsOnSubscriptionCard(string $button, string $label): void {
     $card = $this->getGroupSubscriptionCardByHeading($label);
     if ($card->findButton($button)) {
@@ -273,9 +268,8 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the card is not found or the checkbox is not styled properly.
-   *
-   * @Given I check the :bundle checkbox of the :label subscription
    */
+  #[Given('I check the :bundle checkbox of the :label subscription')]
   public function selectSubscriptionOptionInMySubscriptions(string $label, string $bundle): void {
     $checkbox = $this->getGroupSubscriptionCardByHeading($label)->findField($bundle);
     $checkbox->check();
@@ -291,9 +285,8 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the card is not found or there is an issue with the checkbox.
-   *
-   * @Given I uncheck the :bundle checkbox of the :label subscription
    */
+  #[Given('I uncheck the :bundle checkbox of the :label subscription')]
   public function deselectSubscriptionOptionInMySubscriptions(string $label, string $bundle): void {
     $checkbox = $this->getGroupSubscriptionCardByHeading($label)->findField($bundle);
     $checkbox->uncheck();

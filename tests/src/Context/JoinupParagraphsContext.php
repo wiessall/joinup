@@ -9,6 +9,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Component\Serialization\Json;
@@ -139,10 +140,9 @@ class JoinupParagraphsContext extends RawDrupalContext {
    *   (optional) The position of the item to remove. Starts at 1 for
    *   readability. If left empty, the button will be searched in the entire
    *   field.
-   *
-   * @Given I click :label in the :field field for paragraph :delta
-   * @Given I click :label in the :field paragraphs field
    */
+  #[Given('I click :label in the :field field for paragraph :delta')]
+  #[Given('I click :label in the :field paragraphs field')]
   public function clickLinkInParagraphsField(string $label, string $field, ?int $delta = NULL): void {
     $paragraph_item = ($delta === NULL) ? $this->getParagraphsElement($field) : $this->getParagraphsElementItem($field, --$delta);
     if (!$link = $paragraph_item->findButton($label)) {
@@ -327,10 +327,9 @@ class JoinupParagraphsContext extends RawDrupalContext {
    * @param \Behat\Gherkin\Node\TableNode $table
    *   Paragraph's fields.
    *
-   * @Given I append :paragraph_type to :parent_field field in :parent_type_id entity with following :parent_name title:
-   *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
+  #[Given('I append :paragraph_type to :parent_field field in :parent_type_id entity with following :parent_name title:')]
   public function iAppendParagraphToFieldInEntityWithFollowingTitle(
     string $paragraph_type,
     string $parent_field,
@@ -355,10 +354,9 @@ class JoinupParagraphsContext extends RawDrupalContext {
    * @param string $parent_name
    *   Parent name.
    *
-   * @Given I append poll :poll to :parent_field field in :parent_type_id entity with following :parent_name title
-   *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
+  #[Given('I append poll :poll to :parent_field field in :parent_type_id entity with following :parent_name title')]
   public function iAppendPollToFieldInEntityWithFollowingTitle(
     string $poll,
     string $parent_field,
@@ -387,10 +385,9 @@ class JoinupParagraphsContext extends RawDrupalContext {
    * @param \Behat\Gherkin\Node\PyStringNode $value
    *   Serialized value.
    *
-   * @Given I append content listing to :parent_field field in :parent_type_id entity with following :parent_name title with:
-   *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
+  #[Given('I append content listing to :parent_field field in :parent_type_id entity with following :parent_name title with:')]
   public function iAppendContentListingToFieldInEntityWithFollowingTitleWith(
     string $parent_field,
     string $parent_type_id,
@@ -522,11 +519,10 @@ class JoinupParagraphsContext extends RawDrupalContext {
    * @param string $regionId
    *   The field name in the layout paragraph to add the paragraph into.
    *   Optional, defaults to "content".
-   *
-   * @Given I append :type to :fieldName layout paragraphs field
-   * @Given I append :type to :fieldName layout paragraphs field with :layoutId layout
-   * @Given I append :type to :fieldName layout paragraphs field into :layoutId layout's :regionId region
    */
+  #[Given('I append :type to :fieldName layout paragraphs field')]
+  #[Given('I append :type to :fieldName layout paragraphs field with :layoutId layout')]
+  #[Given("I append :type to :fieldName layout paragraphs field into :layoutId layout's :regionId region")]
   public function appendParagraphToCurrentForm(
     string $type,
     string $fieldName,
