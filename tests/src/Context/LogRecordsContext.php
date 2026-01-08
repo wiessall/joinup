@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Hook\AfterScenario;
 use Behat\Hook\BeforeScenario;
+use Behat\Step\Given;
 use Drupal\Component\Utility\Variable;
 use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -28,19 +29,17 @@ class LogRecordsContext extends RawDrupalContext {
 
   /**
    * Ensures that there are no log entries.
-   *
-   * @Given the site should not have any log records
    */
+  #[Given('the site should not have any log records')]
   public function assertNoLogRecords(): void {
     $this->failIfLogRecords();
   }
 
   /**
    * Checks the number of log records.
-   *
-   * @Given there should be :count log record(s)
-   * @Given there should be :count log record(s) with level :level_exact
    */
+  #[Given('there should be :count log record(s)')]
+  #[Given('there should be :count log record(s) with level :level_exact')]
   public function assertLogRecordCount(int $count, ?string $level_exact = NULL): void {
     $logRecords = $this->getLogRecords($level_exact);
     $messages = array_map(
@@ -57,10 +56,9 @@ class LogRecordsContext extends RawDrupalContext {
 
   /**
    * Ensures there are no logs with level lower than the given severity level.
-   *
-   * @Given the site should not have log records with level lower than :level
-   * @Given the site should not have log records with level lower than :level for :type errors
    */
+  #[Given('the site should not have log records with level lower than :level')]
+  #[Given('the site should not have log records with level lower than :level for :type errors')]
   public function assertNoLogRecordsBelowLevel($level, $type = NULL): void {
     $this->failIfLogRecords($level, $type);
   }
@@ -124,9 +122,8 @@ class LogRecordsContext extends RawDrupalContext {
    *   The severity of the log record.
    * @param string $description
    *   The description of the log record.
-   *
-   * @Given there should be a record of severity :severity in the log with description :description
    */
+  #[Given('there should be a record of severity :severity in the log with description :description')]
   public function assertLogRecordExists(string $severity, string $description): void {
     $logRecords = $this->getLogRecords();
     $severity = mb_convert_case($severity, MB_CASE_TITLE);
@@ -209,9 +206,8 @@ class LogRecordsContext extends RawDrupalContext {
 
   /**
    * Deletes every preexisting log records since the scenario started.
-   *
-   * @Given there are no preexisting log records( on the site)
    */
+  #[Given('there are no preexisting log records( on the site)')]
   public function resetLoggedErrors(): void {
     \Drupal::database()->delete('watchdog')
       ->condition('timestamp', $this->timeStamp, '>=')

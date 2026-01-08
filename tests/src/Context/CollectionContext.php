@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Core\Session\AccountInterface;
@@ -78,9 +79,8 @@ class CollectionContext extends RawDrupalContext {
    *   The title of the collection.
    * @param string $operation
    *   The operation to perform (updated, published, unpublished).
-   *
-   * @Given the Code of Conduct for :title collection is :operation
    */
+  #[Given('the Code of Conduct for :title collection is :operation')]
   public function updateCodeOfConductPage(string $title, string $operation): void {
     if (!in_array($operation, ['updated', 'published', 'unpublished'], TRUE)) {
       throw new \InvalidArgumentException();
@@ -128,9 +128,8 @@ class CollectionContext extends RawDrupalContext {
    *   Remove this todo when ISAICP-5176 is fixed.
    *
    * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5176
-   *
-   * @Given I visit the collection overview page
    */
+  #[Given('I visit the collection overview page')]
   public function visitCollectionOverviewPage(): void {
     $this->visitPath('/collections');
   }
@@ -223,9 +222,8 @@ class CollectionContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a collection is not found.
-   *
-   * @Given (the following )collection user membership(s):
    */
+  #[Given('(the following )collection user membership(s):')]
   public function givenCollectionUserMemberships(TableNode $membership_table): void {
     foreach ($membership_table->getColumnsHash() as $values) {
       $group = $this->getEntityByLabel('node', $values['collection']);
@@ -258,9 +256,8 @@ class CollectionContext extends RawDrupalContext {
    *
    * @throws \Exception
    *    Throws an exception if the parent item is not found.
-   *
-   * @Given (the following )custom page(s) :menu_type menu structure for the :group_label :group_bundle:
    */
+  #[Given('(the following )custom page(s) :menu_type menu structure for the :group_label :group_bundle:')]
   public function givenCollectionMenuStructure(TableNode $menu_table, string $menu_type, string $group_label, string $group_bundle): void {
     $group = $this->getEntityByLabel('node', $group_label, $group_bundle);
     $menu_link_manager = \Drupal::getContainer()->get('plugin.manager.menu.link');
@@ -319,9 +316,8 @@ class CollectionContext extends RawDrupalContext {
    *    Throws an exception when the user is not found.
    *
    * @see assertCollectionOwnership()
-   *
-   * @Given I should own the :entity collection
    */
+  #[Given('I should own the :entity collection')]
   public function assertCollectionOwnershipCurrentUser(string $entity): void {
     if (!$current_user = $this->userManager->getCurrentUser()) {
       throw new \Exception("No current user.");
@@ -399,9 +395,8 @@ class CollectionContext extends RawDrupalContext {
    *
    * @param string $label
    *   The label of the collection group.
-   *
-   * @Given I am about to leave( the) :label( collection)
    */
+  #[Given('I am about to leave( the) :label( collection)')]
   public function visitCollectionLeaveConfirmationPage(string $label): void {
     $collection = $this->getEntityByLabel('node', $label, 'collection');
 

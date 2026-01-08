@@ -11,6 +11,7 @@ use Behat\Hook\AfterScenario;
 use Behat\Hook\BeforeScenario;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Component\Utility\UrlHelper;
@@ -87,9 +88,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a column name is incorrect.
-   *
-   * @Given (the following )user:
    */
+  #[Given('(the following )user:')]
   public function givenUser(TableNode $user_table): void {
     $this->createUser($user_table->getRowsHash());
   }
@@ -138,11 +138,10 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when a collection or solution with the given label doesn't exist.
    *
-   * @Given I am logged in as a user with the :role role(s) of the :group_label :group_bundle
-   * @Given I am logged in as a/an :role of the :group_label :group_bundle
-   *
    * @see \Drupal\DrupalExtension\Context\DrupalContext::assertAuthenticatedByRole()
    */
+  #[Given('I am logged in as a user with the :role role(s) of the :group_label :group_bundle')]
+  #[Given('I am logged in as a/an :role of the :group_label :group_bundle')]
   public function assertAuthenticatedByOgRole(string $roles, string $group_label, string $group_bundle): void {
     $entity = $this->getEntityByLabel('node', $group_label, $group_bundle);
     if (!$entity) {
@@ -186,9 +185,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a collection or solution with the given label doesn't exist.
-   *
-   * @Given my role(s) in the :group_label :group_bundle change(s) to :roles
    */
+  #[Given('my role(s) in the :group_label :group_bundle change(s) to :roles')]
   public function updateGroupRoles(string $group_label, string $group_bundle, string $roles): void {
     $entity = $this->getEntityByLabel('node', $group_label, $group_bundle);
     if (!$entity) {
@@ -217,9 +215,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a collection or solution with the given label doesn't exist.
-   *
-   * @Given my membership state in the :group_label :group_bundle changes to :state
    */
+  #[Given('my membership state in the :group_label :group_bundle changes to :state')]
   public function updateGroupState(string $group_label, string $group_bundle, string $state): void {
     $entity = $this->getEntityByLabel('node', $group_label, $group_bundle);
     if (!$entity) {
@@ -272,9 +269,8 @@ class JoinupContext extends RawDrupalContext {
 
   /**
    * Register a user.
-   *
-   * @Given the following user registration at :location:
    */
+  #[Given('the following user registration at :location:')]
   public function submitRegistrationForm(TableNode $table, $location): void {
     $this->visitPath($location);
 
@@ -496,12 +492,11 @@ class JoinupContext extends RawDrupalContext {
    *   An alias of a bundle as defined in the
    *   \Drupal\joinup\Traits\NameMappingsTrait::bundleAliases method.
    *
-   * @Given I go to (the homepage of )the :title :bundle
-   * @Given I visit (the homepage of )the :title :bundle
-   * @Given I am on (the homepage of )the :title :bundle
-   *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
+  #[Given('I go to (the homepage of )the :title :bundle')]
+  #[Given('I visit (the homepage of )the :title :bundle')]
+  #[Given('I am on (the homepage of )the :title :bundle')]
   public function visitCanonicalPage(string $title, string $bundle): void {
     $entityType = $this->translateEntityTypeAlias($bundle);
     $bundle = $this->translateBundle($bundle);
@@ -1030,9 +1025,8 @@ class JoinupContext extends RawDrupalContext {
    *   The label of the entity.
    * @param string $stateExpected
    *   The expected workflow state's label.
-   *
-   * @Given the workflow state of the :label content should be :stateExpected
    */
+  #[Given('the workflow state of the :label content should be :stateExpected')]
   public function assertEntityWorkflowState(string $label, string $stateExpected): void {
     $entity = $this->getEntityByLabel('node', $label);
     Assert::assertInstanceOf(
@@ -1067,9 +1061,8 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the entity doesn't exist, doesn't have a state field, or
    *   cannot be saved.
-   *
-   * @Given the workflow state of the :title :entity_type is changed to :state
    */
+  #[Given('the workflow state of the :title :entity_type is changed to :state')]
   public function updateWorkflowState(string $title, string $entity_type, string $state): void {
     $entity_type = $this->translateEntityTypeAlias($entity_type);
     /** @var \Drupal\joinup_workflow\EntityWorkflowStateInterface|\Drupal\Core\Entity\EntityInterface $entity */
@@ -1647,9 +1640,8 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the parent node cannot be found, or when the author cannot
    *   be found.
-   *
-   * @Given comments:
    */
+  #[Given('comments:')]
   public function createComments(TableNode $table): void {
     foreach ($table->getColumnsHash() as $comment_values) {
       $query = \Drupal::entityQuery('node')
@@ -1823,9 +1815,8 @@ class JoinupContext extends RawDrupalContext {
    *   The bundle of the node.
    * @param \Behat\Gherkin\Node\TableNode $updates_table
    *   The table with the changes to insert in the revision.
-   *
-   * @Given (the following ):bundle (content )revisions:
    */
+  #[Given('(the following ):bundle (content )revisions:')]
   public function createNodeRevisions($bundle, TableNode $updates_table): void {
     foreach ($updates_table->getColumnsHash() as $data) {
       $node = $this->getEntityByLabel('node', $data['current title'], $bundle);
@@ -2674,9 +2665,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown if any link does not exist in the page.
-   *
-   * @Given I should see the absolute urls of the following content entities:
    */
+  #[Given('I should see the absolute urls of the following content entities:')]
   public function assertContentAbsoluteUrlsAsLinkInPage(TableNode $titles): void {
     foreach ($titles->getRows() as $title) {
       $this->assertEntityUrlInSitemap('node', $title[0]);
@@ -2691,9 +2681,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown if at least a link exists in the page.
-   *
-   * @Given I should not see the absolute urls of the following content entities:
    */
+  #[Given('II should not see the absolute urls of the following content entities:')]
   public function assertNotContentAbsoluteUrlsAsLinkInPage(TableNode $titles): void {
     foreach ($titles->getRows() as $title) {
       $this->assertEntityUrlInSitemap('node', $title[0], FALSE);
@@ -2712,9 +2701,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \InvalidArgumentException
    *   Thrown when one of the parameters is not correct.
-   *
-   * @Given the publication date of the :title :bundle content is changed to :new_value
    */
+  #[Given('the publication date of the :title :bundle content is changed to :new_value')]
   public function givenPublicationDateChanged(string $title, string $bundle, string $new_publication_date): void {
     $entity = $this->getEntityByLabel('node', $title, $bundle);
     $publication_date = is_numeric($new_publication_date) ? ((int) $new_publication_date) : strtotime($new_publication_date);
@@ -2761,9 +2749,8 @@ class JoinupContext extends RawDrupalContext {
    *   The current name of the term.
    * @param string $new_name
    *   The new name for the term.
-   *
-   * @Given the name of the :old_name term is changed to :new_name
    */
+  #[Given('the name of the :old_name term is changed to :new_name')]
   public function givenTermNameChanges(string $old_name, string $new_name): void {
     $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties([
       'name' => $old_name,
@@ -2799,9 +2786,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown if the dialog is not open or the x button is not found.
-   *
-   * @Given I close the modal dialog
    */
+  #[Given('I close the modal dialog')]
   public function closeMediaModalDialog(): void {
     $xpath = '//div[@class and contains(concat(" ", normalize-space(@class), " "), " ui-dialog ")]//button[@class and contains(concat(" ", normalize-space(@class), " "), " ui-dialog-titlebar-close ")]';
     $button = $this->getSession()->getPage()->find('xpath', $xpath);
@@ -2935,9 +2921,8 @@ class JoinupContext extends RawDrupalContext {
    *   The type of the entity (e.g., 'node', 'taxonomy_term').
    * @param string $expectedStatus
    *   The expected publication status of the entity.
-   *
-   * @Given /^the publication state of the "([^"]*)" "([^"]*)" should be "([^"]*)"$/
    */
+  #[Given(' /^the publication state of the "([^"]*)" "([^"]*)" should be "([^"]*)"$/')]
   public function theEntityShouldHavePublishedStatus(string $label, string $entityType, string $expectedStatus): void {
     $entity = $this->getEntityByLabel($entityType, $label);
     \assert(in_array($expectedStatus, ['published', 'unpublished']), 'Expected status must be either "published" or "unpublished".');
@@ -2958,9 +2943,8 @@ class JoinupContext extends RawDrupalContext {
    *   The type of the entity (e.g., 'node', 'taxonomy_term').
    * @param string $name
    *   The name of the entity to check.
-   *
-   * @Given /^there should be (\d+) "([^"]*)" with the name "([^"]*)"$/
    */
+  #[Given('/^there should be (\d+) "([^"]*)" with the name "([^"]*)"$/')]
   public function thereShouldBeWithTheName(int $expected, string $entityType, string $name): void {
     $query = \Drupal::entityQuery($entityType)
       ->accessCheck(FALSE)

@@ -8,6 +8,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Hook\AfterScenario;
 use Behat\Hook\BeforeScenario;
 use Behat\Mink\Element\NodeElement;
+use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -73,9 +74,8 @@ class EuplContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown if the info icon could not be found.
-   *
-   * @Given I click the info icon of the :spdx licence( table cell)
    */
+  #[Given('I click the info icon of the :spdx licence( table cell)')]
   public function clickLicenceInfoIcon(string $spdx): void {
     $xpath = '//td[@class and contains(concat(" ", normalize-space(@class), " "), " licence-comparer__header ")]/button[contains(., "' . $spdx . '")]';
     $page = $this->getSession()->getPage();
@@ -97,9 +97,8 @@ class EuplContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown if the dialog is not open or the x button is not found.
-   *
-   * @Given I close the licence modal dialog
    */
+  #[Given('I close the licence modal dialog')]
   public function closeLicenceModalDialog(): void {
     $xpath = '//div[@class and contains(concat(" ", normalize-space(@class), " "), " modal-dialog ")]//button[@aria-label="Close"]';
     $button = $this->getSession()->getPage()->find('xpath', $xpath);
@@ -364,9 +363,8 @@ class EuplContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   A table with columns 'id' and 'description'.
-   *
-   * @Given compatibility documents:
    */
+  #[Given('compatibility documents:')]
   public function createCompatibilityDocuments(TableNode $table): void {
     $this->cleanCompatibilityDocuments();
     foreach ($table->getColumnsHash() as $document) {
