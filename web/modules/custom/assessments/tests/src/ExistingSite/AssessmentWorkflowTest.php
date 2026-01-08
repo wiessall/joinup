@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\ExistingSite;
 
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\assessments\Entity\Assessment;
-use Drupal\assessments\Entity\AssessmentReport;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\joinup_solution\Entity\Solution;
+use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\ParagraphInterface;
 
@@ -21,14 +22,14 @@ use Drupal\paragraphs\ParagraphInterface;
 class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
 
   /**
-   * The entity type manager.
-   */
-  private EntityTypeManagerInterface $entityTypeManager;
-
-  /**
    * The assessment vocabulary helper.
    */
   private AssessmentVocabularyHelper $assessmentVocabularyHelper;
+
+  /**
+   * The entity repository.
+   */
+  private EntityRepositoryInterface $entityRepository;
 
   /**
    * {@inheritdoc}
@@ -36,8 +37,8 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
   protected function setUp(): void {
     parent::setUp();
 
-    $this->entityTypeManager = $this->container->get(EntityTypeManagerInterface::class);
     $this->assessmentVocabularyHelper = $this->container->get(AssessmentVocabularyHelper::class);
+    $this->entityRepository = $this->container->get('entity.repository');
   }
 
   /**
@@ -56,8 +57,6 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
       'name' => 'Assessment Workflow Test Report',
       'state' => 'review',
       'binding_requirement' => ['entity' => $bindingRequirement],
-      'remaining_barriers' => ['value' => $this->randomString()],
-      'other_comment' => ['value' => $this->randomString()],
       'provider' => ['entity' => $organisation],
       'status' => FALSE,
     ]);
@@ -65,14 +64,13 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
     $report->save();
 
     // Load the binding requirement paragraph to get the sub-entities.
-    $bindingRequirement = $this->entityTypeManager
-      ->getStorage('paragraph')
-      ->loadUnchanged($bindingRequirement->id());
+    $bindingRequirement = $report->get('binding_requirement')->entity;
     \assert($bindingRequirement instanceof ParagraphInterface);
 
     $expression = $bindingRequirement->get('expression')->entity;
     $publicService = $bindingRequirement->get('affects')->entity;
     $participation = $bindingRequirement->get('has_participation')->entity;
+    $asset = $bindingRequirement->get('asset')->entity;
 
     // Assert that the report and all related entities are unpublished.
     $this->assertFalse($report->isPublished(), 'Report should be unpublished initially.');
@@ -80,30 +78,21 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
     $this->assertFalse($publicService->isPublished(), 'Public service should be unpublished initially.');
     $this->assertFalse($participation->isPublished(), 'Participation should be unpublished initially.');
     $this->assertFalse($organisation->isPublished(), 'Organisation should be unpublished initially.');
+    $this->assertFalse($asset->isPublished(), 'Asset should be unpublished initially.');
 
     // Publish the report by setting its state to 'published'.
     $report->setWorkflowState('published');
     $report->set('status', TRUE);
     $report->save();
 
-    // Reload all entities to get fresh state.
-    $report = $this->entityTypeManager
-      ->getStorage('assessment')
-      ->loadUnchanged($report->id());
-    \assert($report instanceof AssessmentReport);
-
-    $bindingRequirement = $this->entityTypeManager
-      ->getStorage('paragraph')
-      ->loadUnchanged($bindingRequirement->id());
+    $bindingRequirement = $report->get('binding_requirement')->entity;
     \assert($bindingRequirement instanceof ParagraphInterface);
 
     $expression = $bindingRequirement->get('expression')->entity;
     $publicService = $bindingRequirement->get('affects')->entity;
     $participation = $bindingRequirement->get('has_participation')->entity;
-
-    $organisation = $this->entityTypeManager
-      ->getStorage('assessment')
-      ->loadUnchanged($organisation->id());
+    $organisation = $report->get('provider')->entity;
+    $asset = $bindingRequirement->get('asset')->entity;
 
     // Assert that the report is published.
     $this->assertTrue($report->isPublished(), 'Report should be published after setting state to published.');
@@ -114,6 +103,40 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
     $this->assertTrue($publicService->isPublished(), 'Public service should be published after report is published.');
     $this->assertTrue($participation->isPublished(), 'Participation should be published after report is published.');
     $this->assertTrue($organisation->isPublished(), 'Organisation should be published after report is published.');
+    $this->assertTrue($asset->isPublished(), 'Asset should be published after report is published.');
+
+    // Create a second report that reuses the provider and expression asset.
+    $bindingRequirement2 = Paragraph::create([
+      'type' => 'binding_requirement',
+      'description' => ['value' => $this->randomString()],
+      'documented_in' => ['uri' => 'https://interoperable-europe.ec.europa.eu/'],
+      'expression' => ['target_id' => $expression->id()],
+      'affects' => ['entity' => $publicService],
+      'has_participation' => ['entity' => $participation],
+    ]);
+    $this->markEntityForCleanup($bindingRequirement2);
+
+    /** @var \Drupal\assessments\Entity\AssessmentReport $report2 */
+    $report2 = Assessment::create([
+      'type' => 'report',
+      'name' => 'Second Assessment Workflow Test Report',
+      'state' => 'review',
+      'binding_requirement' => ['entity' => $bindingRequirement2],
+      'provider' => ['target_id' => $organisation->id()],
+      'status' => FALSE,
+    ]);
+    $this->markEntityForCleanup($report2);
+    $report2->save();
+
+    // Reload organisation and expression to get fresh state.
+    $organisation = $report2->get('provider')->entity;
+    $bindingRequirement2 = $report2->get('binding_requirement')->entity;
+    $expression = $bindingRequirement2->get('expression')->entity;
+
+    // Assert that organisation and expression remain published.
+    $this->assertTrue($organisation->isPublished(), 'Organisation should remain published despite being referenced by unpublished report.');
+    $this->assertTrue($expression->isPublished(), 'Expression should remain published despite being referenced by unpublished report.');
+    $this->assertTrue($asset->isPublished(), 'Asset should remain published despite being referenced by unpublished report.');
   }
 
   /**
@@ -142,6 +165,14 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
     ]);
     $this->markEntityForCleanup($participation);
 
+    $collection = $this->entityRepository->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR);
+    $asset = Solution::create([
+      'type' => 'solution',
+      'title' => 'Test Asset',
+      OgGroupAudienceHelperInterface::DEFAULT_FIELD => ['target_id' => $collection->id()],
+    ]);
+    $this->markEntityForCleanup($asset);
+
     $bindingRequirement = Paragraph::create([
       'type' => 'binding_requirement',
       'description' => ['value' => $this->randomString()],
@@ -149,6 +180,7 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
       'expression' => ['entity' => $expression],
       'affects' => ['entity' => $public_service],
       'has_participation' => ['entity' => $participation],
+      'asset' => ['entity' => $asset],
     ]);
     $this->markEntityForCleanup($bindingRequirement);
 

@@ -7,7 +7,6 @@ namespace Drupal\assessments\Entity;
 use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\assessments\AssessmentInterface;
-use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
@@ -97,11 +96,10 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
         // Only update solutions created through Assessments and only towards
         // the published state because they might later be referred to by other
         // reports.
-        return $entity->getGroupId() === AssessmentInterface::SOLUTION_COLLECTOR
+        return $entity->getGroup()->uuid() === AssessmentInterface::SOLUTION_COLLECTOR
           && $reportIsPublished
           && !$entity->isPublished();
       });
-      $entitiesToUpdate = array_merge($entitiesToUpdate, $assets);
       $publicServices = $bindingRequirementEntity->get('affects')->referencedEntities();
       $entitiesToUpdate = array_merge($entitiesToUpdate, $publicServices);
       $participations = $bindingRequirementEntity->get('has_participation')->referencedEntities();
@@ -117,6 +115,12 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
         };
         $entity->save();
       }
+    }
+
+    foreach ($assets as $asset) {
+      $asset->setWorkflowState('published');
+      $asset->skip_notification = TRUE;
+      $asset->save();
     }
   }
 
