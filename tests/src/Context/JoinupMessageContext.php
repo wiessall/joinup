@@ -7,6 +7,7 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ExpectationException;
+use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 
 /**
@@ -26,9 +27,8 @@ class JoinupMessageContext extends RawDrupalContext {
    *
    * @param string $message
    *   The inline form error message which should be present.
-   *
-   * @Then I should see the inline form error( message) :message
    */
+  #[Then('I should see the inline form error( message) :message')]
   public function assertInlineFormError(string $message): void {
     // There must be also a "regular" error message on the page.
     $errorSelector = $this->getDrupalSelector('error_message_selector');
@@ -84,9 +84,8 @@ class JoinupMessageContext extends RawDrupalContext {
    * @param \Behat\Gherkin\Node\TableNode $messages
    *   The table of texts to be checked. The first row should consist of the
    *   string "Error messages".
-   *
-   * @Then I should see the following inline form error messages:
    */
+  #[Then('I should see the following inline form error messages:')]
   public function assertMultipleErrors(TableNode $messages): void {
     $this->assertValidMessageTable($messages, 'error messages');
     foreach ($messages->getHash() as $value) {

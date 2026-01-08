@@ -228,7 +228,7 @@ class FeatureContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when a fieldset is not found.
    */
-  #[Then('the following )field widgets should be present :fieldsets')]
+  #[Then('(the following )field widgets should be present :fieldsets')]
   #[Then('(the following )fieldsets should be present :fieldsets')]
   public function assertFieldsetsPresent(string $fieldsets): void {
     $fieldsets = $this->explodeDelimitedSeparatedStepArgument($fieldsets);

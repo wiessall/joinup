@@ -602,7 +602,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the header search bar is not found.
    */
-  #[When(' I enter :keywords in the search bar and press enter')]
+  #[When('I enter :keywords in the search bar and press enter')]
   public function launchSearchFromHeader(string $keywords): void {
     if ($this->hasJavascriptSupport()) {
       $element = $this->getSearchBarElement();
