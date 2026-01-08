@@ -38,7 +38,7 @@ class MediaContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when a column name is incorrect.
    */
-  #[Given('Ithe following :media_type_id media:')]
+  #[Given('the following :media_type_id media:')]
   public function createMedia(string $mediaTypeLabel, TableNode $table): void {
     $entityTypeManager = \Drupal::entityTypeManager();
     $mediaTypes = $entityTypeManager->getStorage('media_type')

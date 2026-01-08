@@ -129,7 +129,7 @@ class SolutionContext extends RawDrupalContext {
    * @throws \Exception
    *    Throws an exception when the user is not found.
    */
-  #[Given('I(the user ):username should be the owner of the :solution solution')]
+  #[Given('(the user ):username should be the owner of the :solution solution')]
   public function assertSolutionOwnership(string $username, string $solution): void {
     $user = user_load_by_name($username);
     if (empty($user)) {

@@ -2682,7 +2682,7 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown if at least a link exists in the page.
    */
-  #[Given('II should not see the absolute urls of the following content entities:')]
+  #[Given('I should not see the absolute urls of the following content entities:')]
   public function assertNotContentAbsoluteUrlsAsLinkInPage(TableNode $titles): void {
     foreach ($titles->getRows() as $title) {
       $this->assertEntityUrlInSitemap('node', $title[0], FALSE);
@@ -2922,7 +2922,7 @@ class JoinupContext extends RawDrupalContext {
    * @param string $expectedStatus
    *   The expected publication status of the entity.
    */
-  #[Given(' /^the publication state of the "([^"]*)" "([^"]*)" should be "([^"]*)"$/')]
+  #[Given('/^the publication state of the "([^"]*)" "([^"]*)" should be "([^"]*)"$/')]
   public function theEntityShouldHavePublishedStatus(string $label, string $entityType, string $expectedStatus): void {
     $entity = $this->getEntityByLabel($entityType, $label);
     \assert(in_array($expectedStatus, ['published', 'unpublished']), 'Expected status must be either "published" or "unpublished".');
