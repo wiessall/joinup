@@ -47,7 +47,6 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
    * @covers \Drupal\assessments\Entity\AssessmentReport::postSave
    */
   public function testReportPublishingPublishesRelatedEntities(): void {
-    // Create assessment report with all sub-entities in unpublished state.
     $bindingRequirement = $this->createParagraphBindingRequirement();
     $organisation = $this->createAssessmentOrganisation();
 

@@ -70,31 +70,34 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
 
     // We need to collect the entities that should be updated.
     $entitiesToUpdate = [];
+    $assetsToUpdate = [];
     $reportIsPublished = $this->isPublished();
 
     // Only keep providers that are to be published.
     $providerEntities = array_filter($this->get('provider')->referencedEntities(), function (AssessmentInterface $entity) use ($reportIsPublished): bool {
-      // Only update assessments towards the published state because they
-      // might later be referred to by other reports.
+      // Only update providers towards the published state because they might
+      // later be referred to by other reports, and we don't want them to be
+      // re-unpublished.
       return $reportIsPublished && !$entity->isPublished();
     });
     $entitiesToUpdate = array_merge($entitiesToUpdate, $providerEntities);
 
-    // Binding requirements are paragraphs. There is nothing to publish.
+    // Binding requirements are paragraphs. There is nothing to publish there,
+    // but we need to go through them to get to other entities.
     $bindingRequirementEntities = $this->get('binding_requirement')->referencedEntities();
     foreach ($bindingRequirementEntities as $bindingRequirementEntity) {
-      // Get expressions, assets, public services, and participations.
       $expressions = $bindingRequirementEntity->get('expression')->referencedEntities();
       $entitiesToUpdate = array_merge($entitiesToUpdate, $expressions);
       $assets = $bindingRequirementEntity->get('asset')->referencedEntities();
       $assets = array_filter($assets, function (SolutionInterface $entity) use ($reportIsPublished): bool {
-        // Only update solutions created through Assessments and only towards
-        // the published state because they might later be referred to by other
-        // reports.
+        // Only update solutions towards the published state because they might
+        // later be referred to by other reports, and we don't want them to be
+        // re-unpublished.
         return $entity->getGroup()->uuid() === AssessmentInterface::SOLUTION_COLLECTOR
           && $reportIsPublished
           && !$entity->isPublished();
       });
+      $assetsToUpdate = array_merge($assetsToUpdate, $assets);
       $publicServices = $bindingRequirementEntity->get('affects')->referencedEntities();
       $entitiesToUpdate = array_merge($entitiesToUpdate, $publicServices);
       $participations = $bindingRequirementEntity->get('has_participation')->referencedEntities();
@@ -112,7 +115,7 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
       }
     }
 
-    foreach ($assets as $asset) {
+    foreach ($assetsToUpdate as $asset) {
       $asset->setWorkflowState('published');
       $asset->skip_notification = TRUE;
       $asset->save();
