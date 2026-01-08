@@ -1272,7 +1272,7 @@ class FeatureContext extends RawDrupalContext {
    * @throws \InvalidArgumentException
    *   If this step definition was used on a radio button.
    */
-  #[Given('I do something with :argument')]
+  #[Given('I deselect/uncheck the :text row')]
   public function uncheckTableselectRow(string $text): void {
     $element = $this->getCheckboxOrRadioByRowText($text);
     if ($element->getAttribute('type') === 'radio') {

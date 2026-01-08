@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Hook\BeforeScenario;
+use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -312,9 +313,8 @@ class RdfContext extends RawDrupalContext {
    *
    * @throws \InvalidArgumentException
    *   When for the passed URI no entity can be found.
-   *
-   * @Given I visit the page of the entity having :uri as RDF resource
    */
+  #[Given('I visit the page of the entity having :uri as RDF resource')]
   public function visitEntityCanonicalPagePageByRdfUri(string $uri): void {
     if (!$entity = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri($uri)) {
       throw new \InvalidArgumentException("No entity found for URI $uri");

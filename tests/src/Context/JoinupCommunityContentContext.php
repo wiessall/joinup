@@ -7,6 +7,7 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\Given;
 use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
@@ -209,9 +210,8 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    *   above includes also "+0100" which represents the timezone.
    *
    * @see strtotime()
-   *
-   * @Given the :field_name date of the :title :bundle is :new_date
    */
+  #[Given('he :field_name date of the :title :bundle is :new_date')]
   public function updateNodeDateProperty(string $field_name, string $title, string $bundle, string $new_date): void {
     if (!($time = strtotime($new_date))) {
       throw new \Exception("{$new_date} could not be converted to string.");

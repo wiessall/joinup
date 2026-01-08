@@ -20,6 +20,7 @@ Feature: Publication date works as expected on RDF entities
     Then I should see the heading "Edit <type label> <entity label>"
     When I fill in "<label field>" with "Published at test for <type>"
     And I press "Publish"
+    Then break
     # Posting a release redirects to the solution canonical, so we verify the
     # success of the entity edit by checking whether the new title was saved.
     And I go to the homepage of the "Published at test for <type>" <type>

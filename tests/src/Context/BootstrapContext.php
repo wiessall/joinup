@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -45,9 +46,8 @@ class BootstrapContext extends RawDrupalContext {
    * @param string $size
    *   A human readable version of a Bootstrap breakpoint (e.g. 'extra large'
    *   instead of 'xl').
-   *
-   * @Given I use a device with a(n) :size display
    */
+  #[Given('I use a device with a(n) :size display')]
   public function changeResolution(string $size): void {
     $this->assertJavaScriptEnabledBrowser();
 

@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Core\Url;
@@ -89,9 +90,8 @@ class SolutionContext extends RawDrupalContext {
    *   The label of the solution entity.
    * @param string $fieldValue
    *   The new value of the solution field.
-   *
-   * @Given the :fieldName of :label solution is changed to :fieldValue
    */
+  #[Given('the :fieldName of :label solution is changed to :fieldValue')]
   public function givenSolutionNewValue(string $fieldName, string $label, string $fieldValue): void {
     $fieldName = $this->getNodeFieldNameFromAlias('solution', $fieldName);
     $solution = static::getEntityByLabel('node', $label, 'solution');
@@ -128,9 +128,8 @@ class SolutionContext extends RawDrupalContext {
    *
    * @throws \Exception
    *    Throws an exception when the user is not found.
-   *
-   * @Given (the user ):username should be the owner of the :solution solution
    */
+  #[Given('I(the user ):username should be the owner of the :solution solution')]
   public function assertSolutionOwnership(string $username, string $solution): void {
     $user = user_load_by_name($username);
     if (empty($user)) {
@@ -222,9 +221,8 @@ class SolutionContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a solution is not found.
-   *
-   * @Given (the following )solution user membership(s):
    */
+  #[Given('(the following )solution user membership(s):')]
   public function givenSolutionUserMemberships(TableNode $membership_table): void {
     foreach ($membership_table->getColumnsHash() as $values) {
       $group = $this->getEntityByLabel('node', $values['solution']);

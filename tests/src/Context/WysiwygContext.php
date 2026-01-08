@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -144,9 +145,8 @@ class WysiwygContext extends RawDrupalContext {
    *   The label of the field containing the WYSIWYG editor to inspect.
    * @param string $button
    *   The button label.
-   *
-   * @Given the :button button should be available in the :label wysiwyg editor
    */
+  #[Given('the :button button should be available in the :label wysiwyg editor')]
   public function wysiwygContainsButton(string $label, string $button): void {
     $available_buttons = $this->getWysiwygButtons($label);
     if (!in_array($button, $available_buttons)) {
