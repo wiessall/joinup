@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\assessments\Entity;
 
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 
 /**
