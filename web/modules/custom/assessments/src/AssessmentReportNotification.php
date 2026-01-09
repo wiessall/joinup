@@ -95,8 +95,7 @@ final readonly class AssessmentReportNotification implements AssessmentReportNot
    *   Array of user entities with moderation permissions.
    */
   protected function getModerators(): array {
-    $roleStorage = $this->entityTypeManager->getStorage('user_role');
-    $roles = $roleStorage->loadMultiple();
+    $roles = $this->entityTypeManager->getStorage('user_role')->loadMultiple();
 
     // Filter roles with the permission, excluding admin roles.
     $roleIds = array_keys(array_filter(
