@@ -31,10 +31,11 @@ Feature: User role management
     And I click "People" in the "Administration toolbar" region
     And I click "Edit" in the "Ursus" row
     And the "Roles" checkboxes should contain the following options:
-      | Assessment reporter  |
-      | Assessment moderator |
-      | Licence manager      |
-      | Translator           |
+      | Assessment reporter   |
+      | Assessment moderator  |
+      | Licence manager       |
+      | OSS Catalogue Manager |
+      | Translator            |
 
     Given I am logged in as "Awesome dev"
     And I go to "/admin/people"
