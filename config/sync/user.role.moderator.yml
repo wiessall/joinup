@@ -33,7 +33,6 @@ dependencies:
     - dashboard
     - entity_legal
     - entityqueue
-    - eu_oss_catalogue
     - field_permissions
     - file
     - filter
@@ -48,6 +47,7 @@ dependencies:
     - joinup_licence
     - joinup_log
     - joinup_newsletter
+    - joinup_oss_catalogue
     - joinup_reports
     - joinup_search
     - joinup_security
@@ -116,6 +116,7 @@ permissions:
   - 'assign assessment_moderator role'
   - 'assign assessment_reporter role'
   - 'assign licence_manager role'
+  - 'assign oss_catalogue_manager role'
   - 'assign translator role'
   - 'bypass code of conduct'
   - 'bypass entity legal acceptance'
