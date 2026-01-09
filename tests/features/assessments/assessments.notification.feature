@@ -61,7 +61,7 @@ Feature: Assessment report email notifications
     And I press "Submit"
     Then I should see the success message containing "has been updated"
 
-    And 2 e-mail should have been sent
+    And 1 e-mail should have been sent
     And the following email should have been sent:
       | recipient | Assessment Moderator                       |
       | subject   | New assessment report to be reviewed       |
@@ -77,7 +77,6 @@ Feature: Assessment report email notifications
       | service    | Test Service         |
     And I mark all emails as read
 
-    And I break
     When I am logged in as "Assessment Moderator"
     And I go to the moderate form of the "Moderatable Report 3" assessment report
     And I press "Require updates"

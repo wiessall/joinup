@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Url;
 use Drupal\assessments\Event\AssessmentReportEvent;
 use Drupal\joinup_notification\JoinupMessageDeliveryInterface;
+use Drupal\user\RoleInterface;
 
 /**
  * Service for sending assessment report notifications.
@@ -94,34 +95,33 @@ final readonly class AssessmentReportNotification implements AssessmentReportNot
    *   Array of user entities with moderation permissions.
    */
   protected function getModerators(): array {
-    $user_storage = $this->entityTypeManager->getStorage('user');
-    $role_storage = $this->entityTypeManager->getStorage('user_role');
+    $roles = $this->entityTypeManager->getStorage('user_role')->loadMultiple();
 
-    $roles = $role_storage->loadMultiple();
-    $role_ids = [];
-    foreach ($roles as $role) {
-      if ($role->hasPermission('moderate assessment report')) {
-        $role_ids[] = $role->id();
-      }
-    }
+    // Filter roles with the permission, excluding admin roles.
+    $roleIds = array_keys(array_filter(
+      $roles,
+      fn($role): bool => $role instanceof RoleInterface
+        && !$role->isAdmin()
+        && $role->hasPermission('moderate assessment report')
+    ));
 
-    if (empty($role_ids)) {
+    if (empty($roleIds)) {
       return [];
     }
 
     // Load all active users with these roles.
-    $query = $user_storage->getQuery()
+    $userStorage = $this->entityTypeManager->getStorage('user');
+    $uids = $userStorage->getQuery()
       ->accessCheck(FALSE)
       ->condition('status', 1)
-      ->condition('roles', $role_ids, 'IN');
-
-    $uids = $query->execute();
+      ->condition('roles', $roleIds, 'IN')
+      ->execute();
 
     if (empty($uids)) {
       return [];
     }
 
-    return $user_storage->loadMultiple($uids);
+    return $userStorage->loadMultiple($uids);
   }
 
 }
