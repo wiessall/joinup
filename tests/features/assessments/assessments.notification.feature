@@ -61,7 +61,7 @@ Feature: Assessment report email notifications
     And I press "Submit"
     Then I should see the success message containing "has been updated"
 
-    And 2 e-mail should have been sent
+    And 1 e-mail should have been sent
     And the following assessment report submitted email should have been sent:
       | assessment | Moderatable Report 2                       |
       | recipient  | Assessment Moderator                       |
