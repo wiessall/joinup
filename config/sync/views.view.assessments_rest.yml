@@ -471,9 +471,24 @@ display:
     display_options:
       title: ''
       pager:
-        type: none
+        type: mini
         options:
           offset: 0
+          pagination_heading_level: h4
+          items_per_page: 200
+          total_pages: null
+          id: 0
+          tags:
+            next: ››
+            previous: ‹‹
+          expose:
+            items_per_page: false
+            items_per_page_label: 'Items per page'
+            items_per_page_options: '5, 10, 25, 50'
+            items_per_page_options_all: false
+            items_per_page_options_all_label: '- All -'
+            offset: false
+            offset_label: Offset
       filters:
         type:
           id: type
@@ -560,6 +575,7 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
         - request_format
+        - url.query_args
         - user.permissions
       tags:
         - 'config:field.storage.taxonomy_term.code'
@@ -811,6 +827,25 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
+      pager:
+        type: mini
+        options:
+          offset: 0
+          pagination_heading_level: h4
+          items_per_page: 200
+          total_pages: null
+          id: 0
+          tags:
+            next: ››
+            previous: ‹‹
+          expose:
+            items_per_page: false
+            items_per_page_label: 'Items per page'
+            items_per_page_options: '5, 10, 25, 50'
+            items_per_page_options_all: false
+            items_per_page_options_all_label: '- All -'
+            offset: false
+            offset_label: Offset
       cache:
         type: none
         options: {  }
@@ -1026,6 +1061,7 @@ display:
         - 'languages:language_interface'
         - request_format
         - url
+        - url.query_args
         - user.permissions
       tags:
         - 'config:field.storage.taxonomy_term.code'
