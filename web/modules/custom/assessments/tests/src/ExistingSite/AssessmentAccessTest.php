@@ -180,7 +180,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
 
     $this->assertTrue($assessment->access('update', $this->ownerUser));
 
-    $this->assertTrue($assessment->access('update', $this->moderatorUser));
+    $this->assertFalse($assessment->access('update', $this->moderatorUser));
     $this->assertFalse($assessment->access('update', $this->assessmentModeratorUser));
     $this->assertFalse($assessment->access('update', $this->assessmentReporterUser));
     $this->assertFalse($assessment->access('update', $this->nonOwnerUser));
@@ -197,7 +197,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
     $assessment = $this->testAssessments['review'];
 
     $this->assertFalse($assessment->access('update', $this->ownerUser));
-    $this->assertTrue($assessment->access('update', $this->moderatorUser));
+    $this->assertFalse($assessment->access('update', $this->moderatorUser));
     $this->assertFalse($assessment->access('update', $this->assessmentReporterUser));
     $this->assertFalse($assessment->access('update', $this->assessmentModeratorUser));
     $this->assertFalse($assessment->access('update', $this->nonOwnerUser));
@@ -281,7 +281,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
     // Test access without related report.
     $access_handler->resetCache();
     $this->assertFalse($organisation->access('view', $this->ownerUser));
-    $this->assertTrue($organisation->access('view', $this->moderatorUser));
+    $this->assertFalse($organisation->access('view', $this->moderatorUser));
     $this->assertFalse($organisation->access('view', $this->assessmentReporterUser));
     $this->assertFalse($organisation->access('view', $this->assessmentModeratorUser));
     $this->assertFalse($organisation->access('view', $this->authenticatedUser));

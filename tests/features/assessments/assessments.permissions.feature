@@ -19,6 +19,11 @@ Feature: Assessment report permissions and access control
       | assessment_reporter | should not see      | should see           |
       | moderator           | should not see      | should see           |
 
+  Scenario: Users with the "view assessment listing" permissions can see assessment type in assessment listing
+    Given I am logged in as a user with the "view assessment listing" permissions
+    When I go to "/admin/content/assessment"
+    Then I should see "Public organisation"
+
   Scenario: Moderators see correct action buttons on published assessment edit form
     Given report assessments:
       | name          | state     |
@@ -108,3 +113,12 @@ Feature: Assessment report permissions and access control
     And I am logged in as pol2025
     And I go to "/collection/assessments/report/create"
     Then I should see the button "Publish"
+
+  Scenario: Assessment add page shows only accessible bundles for authenticated users
+    Given I am logged in as an "authenticated user"
+    When I go to "/collection/assessments/add"
+    Then I should see the link "Assessment report"
+    And I should not see the link "Expression"
+    And I should not see the link "Participation"
+    And I should not see the link "Public organisation"
+    And I should not see the link "Public service"
