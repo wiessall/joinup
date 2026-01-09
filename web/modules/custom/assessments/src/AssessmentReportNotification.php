@@ -111,12 +111,11 @@ final readonly class AssessmentReportNotification implements AssessmentReportNot
 
     // Load all active users with these roles.
     $userStorage = $this->entityTypeManager->getStorage('user');
-    $query = $userStorage->getQuery()
+    $uids = $userStorage->getQuery()
       ->accessCheck(FALSE)
       ->condition('status', 1)
-      ->condition('roles', $roleIds, 'IN');
-
-    $uids = $query->execute();
+      ->condition('roles', $roleIds, 'IN')
+      ->execute();
 
     if (empty($uids)) {
       return [];
