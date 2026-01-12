@@ -5,18 +5,20 @@ declare(strict_types=1);
 namespace Drupal\joinup_solution\Plugin\OgGroupResolver;
 
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\flag\FlagInterface;
+use Drupal\og\Attribute\OgGroupResolver;
 use Drupal\og\Plugin\OgGroupResolver\RouteGroupResolver;
 use Symfony\Component\Routing\Route;
 
 /**
  * Resolves the group for the interoperable flag.
- *
- * @OgGroupResolver(
- *   id = "interoperable_flag_routes",
- *   label = "Routes related to interoperable flag",
- * )
  */
+#[OgGroupResolver(
+  id: 'interoperable_flag_routes',
+  label: new TranslatableMarkup('Routes related to interoperable flag'),
+  description: new TranslatableMarkup('Routes related to interoperable flag')
+)]
 class InteroperableFlagRouteGroupResolver extends RouteGroupResolver {
 
   /**

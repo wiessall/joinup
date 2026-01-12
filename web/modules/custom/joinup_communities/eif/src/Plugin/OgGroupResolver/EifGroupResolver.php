@@ -6,9 +6,11 @@ namespace Drupal\eif\Plugin\OgGroupResolver;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eif\EifInterface;
 use Drupal\eif\Entity\EifRecommendationInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
+use Drupal\og\Attribute\OgGroupResolver;
 use Drupal\og\GroupTypeManagerInterface;
 use Drupal\og\OgResolvedGroupCollectionInterface;
 use Drupal\og\Plugin\OgGroupResolver\RouteGroupResolver;
@@ -22,14 +24,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * - Canonical page of the EIF recommendations taxonomy.
  * - Recommendations page.
  * - Solutions page.
- *
- * @OgGroupResolver(
- *   id = "eif_group",
- *   label = "Group entity for the EIF recommendations",
- *   description = @Translation("Sets the EIF Toolbox as a context for the EIF
- *   recommendations' canonical path.")
  * )
  */
+#[OgGroupResolver(
+  id: 'eif_group',
+  label: new TranslatableMarkup('Group entity for the EIF recommendations'),
+  description: new TranslatableMarkup('Sets the EIF Toolbox as a context for the EIF recommendations canonical path.')
+)]
 class EifGroupResolver extends RouteGroupResolver {
 
   public function __construct(
