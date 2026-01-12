@@ -1,0 +1,281 @@
+{
+  "info": {
+    "_postman_id": "d264d107-7522-412a-ae12-c38387b80666",
+    "name": "Assessments API",
+    "description": "# Assessments API – Postman Collection (Local)\n\nThis repository contains a **Postman collection** for interacting with the **Assessments API (local/development environment)**.\n\nThe collection demonstrates the full request flow:\n\n- Obtaining an OAuth2 access token\n    \n- Calling public (unauthenticated) GET endpoints\n    \n- Submitting assessments via authenticated POST requests\n    \n\n---\n\n## What this collection is\n\n- **Environment**: Local / development\n    \n- **Purpose**: Reference and testing of the Assessments API\n    \n- **Audience**: Developers and technical users integrating with the API\n    \n\nThe collection is intended to be imported directly into Postman.\n\n---\n\n## Authentication overview\n\nThe API uses **OAuth 2.0 – Client Credentials flow**.\n\n- **GET requests** are public and do **not** require authentication\n    \n- **POST requests** require a **Bearer token**\n    \n\nBearer tokens are obtained via the `/oauth/token` endpoint and are short‑lived.\n\n---\n\n## How to obtain Client ID & Client Secret\n\nTo access protected endpoints, you must request API credentials.\n\n1. Log in to the **Joinup** website\n    \n2. Request an **API client** for the Assessments API\n    \n3. Once approved:\n    - You will be able to view your **Client ID**\n        \n    - You must set a **Client Secret**\n        \n\nNo additional configuration or documentation is required beyond this process.\n\n---\n\n## Endpoints included\n\n### 1\\. OAuth Token\n\n**POST** `/oauth/token`\n\nUsed to obtain an access token.\n\n- Grant type: `client_credentials`\n    \n- Required fields:\n    - `client_id`\n        \n    - `client_secret`\n        \n    - `scope` (e.g. `assessments`)\n        \n\nThe response contains an `access_token`.\n\n---\n\n### 2\\. Get Assessments (Public)\n\n**GET** `/api/assessments/v1/assessment`\n\n- Authentication: ❌ Not required\n    \n- Purpose: Retrieve a list of existing assessments\n    \n- Query parameters (optional):\n    - `country`: Filter by 2-character country code (e.g., `BE`, `NL`, `IT`)\n        \n    - `country=EU`: Show all assessments provided by European entities\n        \n\n**Examples:**\n\n- `/api/assessments/v1/assessment` – Get all assessments\n    \n- `/api/assessments/v1/assessment?country=BE` – Get assessments from Belgium\n    \n- `/api/assessments/v1/assessment?country=EU` – Get assessments from European entities\n    \n\n---\n\n### 3\\. Get Single Assessment (Public)\n\n**GET** `/api/assessments/v1/assessment/{assessment-uuid}`\n\n- Authentication: ❌ Not required\n    \n- Purpose: Retrieve a specific assessment by its UUID\n    \n- Path parameters:\n    - `assessment-uuid`: The UUID of the assessment to retrieve\n        \n\n**Example:**\n\n- `/api/assessments/v1/assessment/12345678-1234-1234-1234-123456789abc`\n    \n\n---\n\n### 4\\. Get Organisations (Public)\n\n**GET** `/api/assessments/v1/organisation`\n\n- Authentication: ❌ Not required\n    \n- Purpose: Retrieve organisation data\n    \n\n---\n\n### 5\\. Get Assets (Public)\n\n**GET** `/api/assessments/v1/asset`\n\n- Authentication: ❌ Not required\n    \n- Purpose: Retrieve asset data\n    \n- Query parameters (optional):\n    - `page`: Page number for pagination (e.g., `0`, `1`, `2`)\n        \n\n**Example:**\n\n- `/api/assessments/v1/asset?page=0` – Get first page of assets\n    \n\n---\n\n### 6\\. Post Assessment (Authenticated)\n\n**POST** `/api/assessments/v1/assessment`\n\n- Authentication: ✅ Bearer Token required\n    \n- Purpose: Submit a complete assessment payload\n    \n\nThe collection includes two example POST requests:\n\n- `Post-complete`\n    \n- `Post-complete european`\n    \n\nThese demonstrate valid payload structures for different provider types.\n\n---\n\n## How to use the collection\n\n### Step 1: Import the collection\n\nImport the Postman collection JSON file into Postman.\n\n---\n\n### Step 2: Configure the base URL\n\nSet the `baseURL` variable to match your local or target environment.\n\n---\n\n### Step 3: Request an access token\n\n1. Open the **oauth/token** request\n    \n2. Fill in:\n    - `client_id`\n        \n    - `client_secret`\n        \n3. Send the request\n    \n4. Copy the value of `access_token`\n    \n\n---\n\n### Step 4: Use the Bearer token for POST requests\n\n1. Open a POST request\n    \n2. Go to **Authorization → Bearer Token**\n    \n3. Paste the access token\n    \n4. Send the request\n    \n\n⚠️ Tokens expire after a short period and must be re‑requested when invalid.\n\n---\n\n## Payload examples\n\nThe POST requests include complete, working JSON payloads that demonstrate:\n\n- Providers\n    \n- Binding requirements\n    \n- Expressions\n    \n- Participations\n    \n- Assets\n    \n- Results and judgements\n    \n\nThese can be used as:\n\n- Reference implementations\n    \n- Templates for client integrations\n    \n- Validation examples\n    \n\n---\n\n## Notes\n\n- This collection targets a **local development environment**\n    \n- Token handling is manual to keep the authentication flow explicit\n    \n- Client secrets must **never** be committed to version control",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "497995"
+  },
+  "item": [
+    {
+      "name": "oauth/token",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "grant_type",
+              "value": "client_credentials",
+              "type": "text"
+            },
+            {
+              "key": "client_id",
+              "value": "",
+              "type": "text"
+            },
+            {
+              "key": "client_secret",
+              "value": "",
+              "type": "text"
+            },
+            {
+              "key": "scope",
+              "value": "assessments",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseURL}}/oauth/token",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "oauth",
+            "token"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Assessments",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/api/assessments/v1/assessment",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "api",
+            "assessments",
+            "v1",
+            "assessment"
+          ],
+          "query": [
+            {
+              "key": "country",
+              "value": "BE",
+              "description": "Set a 2-character country code to filter by provider origin country.",
+              "disabled": true
+            },
+            {
+              "key": "country",
+              "value": "EU",
+              "description": "Show all assessments provided by a European entity.",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Assessment",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/api/assessments/v1/assessment/{{assessment-uuid}}",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "api",
+            "assessments",
+            "v1",
+            "assessment",
+            "{{assessment-uuid}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Organisations",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/api/assessments/v1/organisation",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "api",
+            "assessments",
+            "v1",
+            "organisation"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Assets",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/api/assessments/v1/asset?page=0",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "api",
+            "assessments",
+            "v1",
+            "asset"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "0"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Post-complete",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"language\": \"it\",\r\n  \"name\": \"Legislation waste management\",\r\n  \"provider\": {\r\n    \"name\": \"City of Brussels\",\r\n    \"organisation_type\": \"local_public_sector_body\",\r\n    \"country\": \"BE\"\r\n  },\r\n  \"relevant_report\": [\r\n    \"https://example.com/last-year-report\",\r\n    \"https://example.com/middle-east\"\r\n  ],\r\n  \"binding_requirement\": [\r\n    {\r\n      \"expression\": [\r\n        {\r\n          \"name\": \"Legal Act 2024\",\r\n          \"description\": \"Reference to an EU legal expression\",\r\n          \"documented_in\": \"https://example.com/eli/act\"\r\n        }\r\n      ],\r\n      \"description\": \"Article 5\",\r\n      \"affects\": [\r\n        {\r\n          \"name\": \"Digital Monitoring Unit\",\r\n          \"thematic_area\": \"digital_and_innovation_services\"\r\n        },\r\n        {\r\n          \"name\": \"Training Centre\",\r\n          \"thematic_area\": \"education_and_research\"\r\n        }\r\n      ],\r\n      \"has_participation\": [\r\n        {\r\n          \"participant_type\": [\r\n            \"national_public_sector_body\"\r\n          ],\r\n          \"country\": [\r\n            \"BE\",\r\n            \"NL\",\r\n            \"LU\"\r\n          ]\r\n        },\r\n        {\r\n          \"participant_type\": [\r\n            \"private_businesses\"\r\n          ],\r\n          \"country\": [\r\n            \"IT\"\r\n          ]\r\n        }\r\n      ],\r\n      \"asset\": [\r\n        {\r\n          \"title\": \"Portal EU\",\r\n          \"description\": \"An EU portal interoperable solution\",\r\n          \"landing_page\": \"https://portal.example.eu\"\r\n        }\r\n      ]\r\n    }\r\n  ],\r\n  \"results_in\": {\r\n    \"organisational\": {\r\n      \"interpretation\": \"positive\",\r\n      \"judgement\": \"Compliant with conditions\"\r\n    },\r\n    \"technical\": {\r\n      \"interpretation\": \"neutral\",\r\n      \"judgement\": \"Requires follow-up\"\r\n    }\r\n  },\r\n  \"remaining_barriers\": \"The city has not yet implemented the new regulations.\",\r\n  \"other_comment\": \"Still work to be done. Waiting for a new iteration.\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseURL}}/api/assessments/v1/assessment",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "api",
+            "assessments",
+            "v1",
+            "assessment"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Post-complete european",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"language\": \"it\",\r\n  \"name\": \"Legislation waste management\",\r\n  \"provider\": {\r\n    \"name\": \"City of Brussels\",\r\n    \"organisation_type\": \"european_union_body\"\r\n  },\r\n  \"relevant_report\": [\r\n    \"https://example.com/last-year-report\",\r\n    \"https://example.com/middle-east\"\r\n  ],\r\n  \"binding_requirement\": [\r\n    {\r\n      \"expression\": [\r\n        {\r\n          \"name\": \"Legal Act 2024\",\r\n          \"description\": \"Reference to an EU legal expression\",\r\n          \"documented_in\": \"https://example.com/eli/act\"\r\n        }\r\n      ],\r\n      \"description\": \"Article 5\",\r\n      \"affects\": [\r\n        {\r\n          \"name\": \"Digital Monitoring Unit\",\r\n          \"thematic_area\": \"digital_and_innovation_services\"\r\n        },\r\n        {\r\n          \"name\": \"Training Centre\",\r\n          \"thematic_area\": \"education_and_research\"\r\n        }\r\n      ],\r\n      \"has_participation\": [\r\n        {\r\n          \"participant_type\": [\r\n            \"national_public_sector_body\"\r\n          ],\r\n          \"country\": [\r\n            \"BE\",\r\n            \"NL\",\r\n            \"LU\"\r\n          ]\r\n        },\r\n        {\r\n          \"participant_type\": [\r\n            \"private_businesses\"\r\n          ],\r\n          \"country\": [\r\n            \"IT\"\r\n          ]\r\n        }\r\n      ],\r\n      \"asset\": [\r\n        {\r\n          \"title\": \"Portal EU\",\r\n          \"description\": \"An EU portal interoperable solution\",\r\n          \"landing_page\": \"https://portal.example.eu\"\r\n        }\r\n      ]\r\n    }\r\n  ],\r\n  \"results_in\": {\r\n    \"organisational\": {\r\n      \"interpretation\": \"positive\",\r\n      \"judgement\": \"Compliant with conditions\"\r\n    },\r\n    \"technical\": {\r\n      \"interpretation\": \"neutral\",\r\n      \"judgement\": \"Requires follow-up\"\r\n    }\r\n  },\r\n  \"remaining_barriers\": \"The city has not yet implemented the new regulations.\",\r\n  \"other_comment\": \"Still work to be done. Waiting for a new iteration.\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseURL}}/api/assessments/v1/assessment",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "api",
+            "assessments",
+            "v1",
+            "assessment"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseURL",
+      "value": ""
+    }
+  ]
+}
