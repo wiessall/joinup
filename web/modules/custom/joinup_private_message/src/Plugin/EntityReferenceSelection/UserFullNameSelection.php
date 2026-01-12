@@ -15,6 +15,7 @@ use Drupal\user\RoleInterface;
  * Provide User selection handler that uses full name.
  *
  * Currently, it is only used for private message logic.
+ *
  * @see \Drupal\user\Plugin\EntityReferenceSelection\UserSelection
  */
 #[EntityReferenceSelection(
