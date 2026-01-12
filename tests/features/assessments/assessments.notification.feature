@@ -62,10 +62,11 @@ Feature: Assessment report email notifications
     Then I should see the success message containing "has been updated"
 
     And 1 e-mail should have been sent
-    And the following email should have been sent:
-      | recipient | Assessment Moderator                       |
-      | subject   | New assessment report to be reviewed       |
-      | body      | A new assessment report has been submitted |
+    And the following assessment report submitted email should have been sent:
+      | assessment | Moderatable Report 2                       |
+      | recipient  | Assessment Moderator                       |
+      | subject    | New assessment report to be reviewed       |
+      | body       | A new assessment report has been submitted |
 
   Scenario: Email notification: Your assessment report needs updates
     Given report assessments:
