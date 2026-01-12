@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
+use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Url;
@@ -297,6 +298,52 @@ class AssessmentsContext extends RawDrupalContext {
 
     Assert::assertNotEmpty($link, sprintf('Could not find ID link "%s" for assessment "%s"', $id, $name));
     $link->click();
+  }
+
+  /**
+   * Asserts "New assessment report to be reviewed" email with ID in subject.
+   *
+   * Table format:
+   * | assessment | Assessment Name |
+   * | recipient  | username        |
+   * | subject    | Subject prefix  |
+   * | body       | Body text       |
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The email data table.
+   *
+   * @Then the following assessment report submitted email should have been sent:
+   */
+  public function assertAssessmentReportSubmittedEmail(TableNode $table): void {
+    $data = $table->getRowsHash();
+    $entity = $this->getEntityByLabel('assessment', $data['assessment'], 'report');
+    $expected_subject = $data['subject'] . ' (' . $entity->id() . ')';
+
+    $user = user_load_by_name($data['recipient']);
+    $recipient_email = $user->getEmail();
+
+    $captured_emails = \Drupal::state()->get('system.test_mail_collector', []);
+
+    foreach ($captured_emails as $mail) {
+      if ($mail['to'] !== $recipient_email || $mail['subject'] !== $expected_subject) {
+        continue;
+      }
+
+      $mail_body = (string) $mail['body'];
+      if ($mail['body'] instanceof MarkupInterface) {
+        $mail_body = strip_tags($mail_body);
+        $mail_body = htmlspecialchars_decode($mail_body, ENT_QUOTES | ENT_SUBSTITUTE);
+      }
+
+      $mail_body = preg_replace("/\s+/", ' ', trim($mail_body));
+      $body = preg_replace("/\s+/", ' ', $data['body']);
+
+      if (str_contains($mail_body, $body)) {
+        return;
+      }
+    }
+
+    throw new \Exception("Email not found to '$recipient_email' with subject '$expected_subject' and body '{$data['body']}'.");
   }
 
 }
