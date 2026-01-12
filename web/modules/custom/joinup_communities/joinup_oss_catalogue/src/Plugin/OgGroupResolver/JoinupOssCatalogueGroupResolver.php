@@ -20,8 +20,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Resolves the group for EU OSS catalogue search route.
  */
 #[OgGroupResolver(
-  id: 'eif_group',
-  label: new TranslatableMarkup('joinup_oss_catalogue_routes'),
+  id: 'joinup_oss_catalogue_routes',
+  label: new TranslatableMarkup('Routes related to EU OSS catalogue'),
   description: new TranslatableMarkup('Routes related to EU OSS catalogue')
 )]
 class JoinupOssCatalogueGroupResolver extends OgRouteGroupResolverBase {
