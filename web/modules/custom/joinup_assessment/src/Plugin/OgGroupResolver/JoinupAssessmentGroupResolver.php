@@ -19,7 +19,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Resolves the group for assessment routes.
  */
-
 #[OgGroupResolver(
   id: 'joinup_assessment_routes',
   label: new TranslatableMarkup('Routes related to assessment'),
