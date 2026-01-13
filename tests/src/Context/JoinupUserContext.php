@@ -6,6 +6,12 @@ namespace Drupal\joinup\Context;
 
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Hook\AfterScenario;
+use Behat\Hook\AfterStep;
+use Behat\Hook\BeforeScenario;
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -41,10 +47,9 @@ class JoinupUserContext extends RawDrupalContext {
    * @param string $user
    *   The user name.
    *
-   * @When I go to the (public )profile of :user
-   *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
+  #[When('I go to the (public )profile of :user')]
   public function visitUserPublicProfile(string $user): void {
     $this->visitPath($this->getUserByName($user)->toUrl()->toString());
   }
@@ -59,9 +64,8 @@ class JoinupUserContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the user or the link was not found.
-   *
-   * @Given I click the :title link from the email sent to :user
    */
+  #[Given('I click the :title link from the email sent to :user')]
   public function clickNamedLinkInEmail(string $title, string $user): void {
     $mails = $this->getUserMails($this->getUserByName($user));
     $matches = [];
@@ -98,9 +102,8 @@ class JoinupUserContext extends RawDrupalContext {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    *   Thrown when the image is not present in the page.
-   *
-   * @Then I (should )see the avatar :filename
    */
+  #[Then('I (should )see the avatar :filename')]
   public function assertImagePresent(string $filename): void {
     // Drupal appends an underscore and a number to the filename when duplicate
     // files are uploaded, for example when a test is run more than once.
@@ -129,9 +132,8 @@ class JoinupUserContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a field in the table does not exist.
-   *
-   * @Then the user :username should have the following data in their user profile:
    */
+  #[Then('the user :username should have the following data in their user profile:')]
   public function assertUserFields(TableNode $profile_data_table, string $username): void {
     $user = $this->getUserByName($username);
     $profile_data = $this->translateUserFieldAliases($profile_data_table->getRowsHash());
@@ -199,9 +201,8 @@ class JoinupUserContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   If an invalid status has been passed.
-   *
-   * @Then the :name (user )account is :status
    */
+  #[Then('the :name (user )account is :status')]
   public function assertUserStatus(string $name, string $status): void {
     $allowed_statuses = [
       'active' => 1,
@@ -226,9 +227,8 @@ class JoinupUserContext extends RawDrupalContext {
    *
    * @param string $name
    *   The user name.
-   *
-   * @Then the :name user doesn't exist
    */
+  #[Then("the :name user doesn't exist")]
   public function userNotExists(string $name): void {
     if (\Drupal::entityQuery('user')->accessCheck(FALSE)->condition('name', $name)->execute()) {
       throw new ExpectationFailedException("The user $name exists but it should not.");
@@ -240,9 +240,8 @@ class JoinupUserContext extends RawDrupalContext {
    *
    * @param string $name
    *   The user name.
-   *
-   * @Then the :name user exist
    */
+  #[Then('the :name user exist')]
   public function userExists(string $name): void {
     if (!\Drupal::entityQuery('user')->accessCheck(FALSE)->condition('name', $name)->execute()) {
       throw new ExpectationFailedException("The user $name exists but it should not.");
@@ -256,9 +255,8 @@ class JoinupUserContext extends RawDrupalContext {
    *   User's name.
    * @param string $field
    *   Field name.
-   *
-   * @When I fill uid of :username in :field
    */
+  #[When('I fill uid of :username in :field')]
   public function fillUidOfUserNameInField(string $username, string $field): void {
     $user = $this->getUserByName($username);
 
@@ -267,9 +265,8 @@ class JoinupUserContext extends RawDrupalContext {
 
   /**
    * Resets the timestamp to 0 for purge_users_notifications in the database.
-   *
-   * @Given I reset the purge users notifications timestamp
    */
+  #[Given('I reset the purge users notifications timestamp')]
   public function setPurgeUsersNotificationsTimestamp(): void {
     $connection = \Drupal::database();
     $connection->update('purge_users_notifications')
@@ -309,9 +306,8 @@ class JoinupUserContext extends RawDrupalContext {
 
   /**
    * Registers the latest deleted user UID for cleaning-up after scenario.
-   *
-   * @BeforeScenario @api
    */
+  #[BeforeScenario('@api')]
   public function registerLatestDeletedUser(): void {
     $this->latestDeletedUserUid = (int) \Drupal::database()
       ->query("SELECT MAX(uid) FROM {" . JoinupUserDeletedInterface::TABLE_USER . "}")
@@ -320,9 +316,8 @@ class JoinupUserContext extends RawDrupalContext {
 
   /**
    * Removes the deleted user entries created during the test.
-   *
-   * @AfterScenario @api
    */
+  #[AfterScenario('@api')]
   public function remmoveDeletedUserEntries(): void {
     \Drupal::database()->delete(JoinupUserDeletedInterface::TABLE_USER_CONTENT)
       ->condition('uid', $this->latestDeletedUserUid, '>')
@@ -340,9 +335,8 @@ class JoinupUserContext extends RawDrupalContext {
    *
    * @param \Behat\Behat\Hook\Scope\AfterStepScope $event
    *   The step.after event.
-   *
-   * @AfterStep
    */
+  #[AfterStep]
   public function runUserDeletedDestruct(AfterStepScope $event): void {
     if (!$this->getScenario()->hasTag('api') && !$event->getFeature()->hasTag('api')) {
       return;
