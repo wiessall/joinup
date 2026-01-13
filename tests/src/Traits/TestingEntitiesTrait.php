@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Traits;
 
+use Behat\Hook\AfterScenario;
+
 /**
  * Common tasks for testing entity creation and cleanup.
  */
@@ -24,11 +26,10 @@ trait TestingEntitiesTrait {
   /**
    * Remove any created test entities.
    *
-   * @AfterScenario
-   *
    * @throws \Drupal\Core\Entity\EntityStorageException
    *   Thrown when any of the test entities could not be deleted.
    */
+  #[AfterScenario]
   public function cleanTestingEntities(): void {
     if (empty($this->entities)) {
       return;
