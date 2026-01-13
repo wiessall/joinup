@@ -171,7 +171,7 @@ function joinup_distribution_preprocess_views_view_field(array &$variables): voi
   $entityId = $downloadEvent->get('parent_entity_id')->value;
 
   try {
-    $storage = $storages[$entityType] ?? \Drupal::entityTypeManager()->getStorage($entityType);
+    $storage = \Drupal::entityTypeManager()->getStorage($entityType);
   }
   catch (\Exception $exception) {
     return;

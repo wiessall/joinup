@@ -22,13 +22,11 @@ Feature: My subscriptions
     When I go to the public profile of "Auric Goldfinger"
     Then I should not see the link "Subscriptions"
 
-    # Authenticated users can not access their own subscription settings through
-    # the entity actions, only through "My subscriptions".
     Given I am logged in as "Auric Goldfinger"
     When I go to the subscription settings of "Auric Goldfinger"
-    Then I should get an access denied error
+    Then I should see the heading "Subscription settings"
     When I go to the public profile of "Auric Goldfinger"
-    Then I should not see the link "Subscriptions" in the "Entity actions" region
+    Then I should see the link "Subscriptions" in the "Entity actions" region
 
     # Moderators can manage subscriptions of any user.
     Given I am logged in as a moderator
@@ -49,7 +47,7 @@ Feature: My subscriptions
   Scenario: Check default subscription frequency for a new user
     When I am logged in as a user with the "authenticated" role
     And I click "My subscriptions"
-    Then I should see the heading "My subscriptions"
+    Then I should see the heading "Subscription settings"
 
     And the option with text "Weekly" from select "Notification frequency" is selected
     And the available options in the "Notification frequency" select should be "Daily, Weekly, Monthly"
@@ -72,11 +70,11 @@ Feature: My subscriptions
     # The "My subscriptions" link is present in the user menu in the top right.
     And I open the account menu
     And I click "My subscriptions"
-    Then I should see the heading "My subscriptions"
+    Then I should see the heading "Subscription settings"
     And I should see the heading "Collection"
-    # The default collection The Portal is there.
+    # The default collection Portal support is there.
     # @see \joinup_test_install().
-    And I should see the text "The Portal" in the "Content" region
+    And I should see the text "Portal support" in the "Content" region
     And I should see the heading "Solutions"
     And I should see the text "No solution memberships yet. Join one or more solutions to subscribe to their content!"
     And I should not see the text "Alpha Centauri"
@@ -205,7 +203,7 @@ Feature: My subscriptions
     When I open the account menu
     And I click "My subscriptions"
 
-    Then I should see the heading "My subscriptions"
+    Then I should see the heading "Subscription settings"
     And the following fields should be present "Notification frequency"
 
     # The "Save changes" button should initially be disabled, but when a change

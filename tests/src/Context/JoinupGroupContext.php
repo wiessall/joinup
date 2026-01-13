@@ -6,6 +6,9 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
@@ -37,10 +40,9 @@ class JoinupGroupContext extends RawDrupalContext {
    *
    * @param string $label
    *   The name of the group.
-   *
-   * @When I go to the members page of :label
-   * @When I am on the members page of :label
    */
+  #[When('I go to the members page of :label')]
+  #[When('I am on the members page of :label')]
   public function visitMembersPage(string $label): void {
     $group = $this->getEntityByLabel('node', $label);
     $url = Url::fromRoute("entity.{$group->getEntityTypeId()}.member_overview", [
@@ -54,9 +56,8 @@ class JoinupGroupContext extends RawDrupalContext {
    *
    * @param string $label
    *   The name of the group.
-   *
-   * @When I go to the member(ship) permissions table of :label
    */
+  #[When('I go to the member(ship) permissions table of :label')]
   public function visitMembershipPermissionsTable(string $label): void {
     $group = $this->getEntityByLabel('node', $label);
     $url = Url::fromRoute('joinup_group.membership_permissions_info', [
@@ -70,9 +71,8 @@ class JoinupGroupContext extends RawDrupalContext {
    *
    * @param string $label
    *   The label of the group for which to visit the discussion page.
-   *
-   * @Given I go to the discussions page of :label
    */
+  #[Given('I go to the discussions page of :label')]
   public function visitDiscussionPage(string $label): void {
     $group = $this->getEntityByLabel('node', $label);
 
@@ -88,9 +88,8 @@ class JoinupGroupContext extends RawDrupalContext {
    *
    * @param string $label
    *   The label of the group for which to visit the about page.
-   *
-   * @Given I go to the manage content page of :label
    */
+  #[Given('I go to the manage content page of :label')]
   public function visitManageContentPage(string $label): void {
     $group = $this->getEntityByLabel('node', $label);
 
@@ -116,10 +115,9 @@ class JoinupGroupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a node with the given title doesn't exist.
-   *
-   * @Then the :group_label :group_type should have a custom page titled :group_title
-   * @Then the :group_label :group_type should have a community content titled :group_title
    */
+  #[Then('the :group_label :group_type should have a custom page titled :group_title')]
+  #[Then('the :group_label :group_type should have a community content titled :group_title')]
   public function assertNodeOgMembership(string $group_label, string $group_type, string $content_title): void {
     $group = $this->getEntityByLabel('node', $group_label, $group_type);
     $node = $this->getEntityByLabel('node', $content_title);
@@ -136,9 +134,8 @@ class JoinupGroupContext extends RawDrupalContext {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    *   The the link is not found in page.
-   *
-   * @Then the link :link_label points outside group
    */
+  #[Then('the link :link_label points outside group')]
   public function assertLinkPointsOutsideGroup(string $link_label): void {
     $session = $this->getSession();
     $page = $session->getPage();
@@ -158,9 +155,8 @@ class JoinupGroupContext extends RawDrupalContext {
    *
    * @param string $label
    *   The label of the group the user wants to join.
-   *
-   * @Then a cookie should be set that allows me to join :label after authenticating
    */
+  #[Then('a cookie should be set that allows me to join :label after authenticating')]
   public function assertAnonGroupJoinTrackingCookiePresent(string $label): void {
     $cookie = $this->getSession()->getCookie('join_group');
     $entity = $this->getEntityByLabel('node', $label);
@@ -169,9 +165,8 @@ class JoinupGroupContext extends RawDrupalContext {
 
   /**
    * Checks that no cookie is set that tracks which group a user wants to join.
-   *
-   * @Then the cookie that tracks which group I want to join should not be set
    */
+  #[Then('the cookie that tracks which group I want to join should not be set')]
   public function assertNoAnonGroupJoinTrackingCookiePresent(): void {
     Assert::assertEmpty($this->getSession()->getCookie('join_group'), 'No cookie should be set that tracks which group an anonymous user wants to join.');
   }
@@ -193,9 +188,8 @@ class JoinupGroupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the number of members does not not match the expectation.
-   *
-   * @Then the :label :type should have :number :membership_state member(s)
    */
+  #[Then('the :label :type should have :number :membership_state member(s)')]
   public function assertMemberCount(string $label, string $type, int $number, string $membership_state): void {
     $states = [
       OgMembershipInterface::STATE_ACTIVE,
@@ -223,9 +217,8 @@ class JoinupGroupContext extends RawDrupalContext {
    *   The label of the group where the announcement belongs.
    * @param string $group_type
    *   The group bundle.
-   *
-   * @When I go to the announcements page of :group_label :group_type
    */
+  #[When('I go to the announcements page of :group_label :group_type')]
   public function visitGroupAnnouncementsPage(string $group_label, string $group_type): void {
     assert(in_array($group_type, ['collection', 'solution']));
     $group = $this->getEntityByLabel('node', $group_label, $group_type);
@@ -245,9 +238,8 @@ class JoinupGroupContext extends RawDrupalContext {
    *   The label of the group where the announcement belongs.
    * @param string $group_bundle
    *   The group bundle.
-   *
-   * @When I go to the :subject announcement of :group_label :group_type
    */
+  #[When('I go to the :subject announcement of :group_label :group_type')]
   public function visitAnnouncementEditForm(string $subject, string $group_label, string $group_bundle): void {
     assert(in_array($group_bundle, ['collection', 'solution']));
     $announcement = $this->getAnnouncementBySubject($subject);
@@ -274,9 +266,8 @@ class JoinupGroupContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The announcement data.
-   *
-   * @Given the following announcements:
    */
+  #[Given('the following announcements:')]
   public function createAnnouncements(TableNode $table): void {
     $columns = [
       'group' => TRUE,
@@ -333,9 +324,8 @@ class JoinupGroupContext extends RawDrupalContext {
    *
    * @param string $subject
    *   The announcement subject.
-   *
-   * @Given the delivery queue of :subject announcement is processed
    */
+  #[Given('the delivery queue of :subject announcement is processed')]
   public function runDeliveryQueueForAnnouncement(string $subject): void {
     $announcement_id = (int) $this->getAnnouncementBySubject($subject)->id();
     /** @var \Drupal\Core\Queue\QueueWorkerManagerInterface $queue_worker_manager */
@@ -359,9 +349,8 @@ class JoinupGroupContext extends RawDrupalContext {
    *
    * @throws \Drupal\joinup_group\Exception\MissingGroupException
    *   When the announcement is missing the group.
-   *
-   * @Then the :subject announcement should have been delivered for each group member
    */
+  #[Then('the :subject announcement should have been delivered for each group member')]
   public function assertDeliveredAnnouncements(string $subject): void {
     $announcement = $this->getAnnouncementBySubject($subject);
     $body = $announcement->getBody();
@@ -417,11 +406,10 @@ class JoinupGroupContext extends RawDrupalContext {
    *   the field is an entity reference field.
    * @param string|null $entityTypeId
    *   The entity type ID (or alias) if the value is an entity reference.
-   *
-   * @Given the :config setting of the :collectionLabel :group is unset
-   * @Given the :config setting of the :collectionLabel :group is set to :value
-   * @Given the :config setting of the :collectionLabel :group is set to :value :entityTypeId
    */
+  #[Given('the :config setting of the :collectionLabel :group is unset')]
+  #[Given('the :config setting of the :collectionLabel :group is set to :value')]
+  #[Given('the :config setting of the :collectionLabel :group is set to :value :entityTypeId')]
   public function givenCollectionSetting(
     string $config,
     string $groupLabel,
@@ -524,9 +512,8 @@ class JoinupGroupContext extends RawDrupalContext {
    *   The state of the new revision. Affects group published state.
    * @param string $membershipModeration
    *   The new membership moderation state. Either 'open' or 'closed'.
-   *
-   * @Given the :groupLabel :groupType has a new :state revision with :membershipModeration membership moderation
    */
+  #[Given('the :groupLabel :groupType has a new :state revision with :membershipModeration membership moderation')]
   public function createGroupRevisionWithMembershipModeration(string $groupLabel, string $groupType, string $state, string $membershipModeration): void {
     \assert(in_array($membershipModeration, ['open', 'closed']));
 
@@ -545,9 +532,8 @@ class JoinupGroupContext extends RawDrupalContext {
    * @param string $entityTypeAlias
    *   The alias of the entity type (e.g., 'node', 'contact information').
    *   Refer to the `entityTypeAliases()` method for the full mapping.
-   *
-   * @When I delete the :identifier :entityTypeAlias
    */
+  #[When('I delete the :identifier :entityTypeAlias')]
   public function deleteEntity(string $identifier, string $entityTypeAlias): void {
     $entityTypeId = $this->entityTypeAliases()[$entityTypeAlias] ?? NULL;
     if (!$entityTypeId) {

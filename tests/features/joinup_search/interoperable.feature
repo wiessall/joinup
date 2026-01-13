@@ -21,14 +21,14 @@ Feature: Global Interoperable search
 
     When I am an anonymous user
     And I visit the advanced search page
-    Then the "Interoperable" checkbox facet should allow selecting the following values "Show only Interoperable Solutions"
+    Then the "Interoperable" checkbox facet should allow selecting the following values "Interoperable Europe Solutions"
 
     When I check the "Solutions (2)" checkbox from the "Content types" facet
-    And I check the "Show only Interoperable Solutions" checkbox from the "Interoperable" facet
+    And I check the "Interoperable Europe Solutions" checkbox from the "Interoperable" facet
     Then the page should show the tiles "eGovernment"
 
     When I visit the advanced search page
-    # The Portal in installed by default.
+    # Portal support in installed by default.
     # @see joinup_test.install
     And I check the "Collections (2)" checkbox from the "Content types" facet
-    Then I should not see the text "Show only Interoperable Solutions"
+    Then I should not see the text "Interoperable Europe Solutions"

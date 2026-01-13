@@ -8,9 +8,9 @@ Feature: Global search
       | title                        | moderation | topic      | spatial coverage | state     |
       | Molecular cooking collection | no         | Demography | Belgium          | published |
     Given solution content:
-      | title          | collection                   | description                                                     | topic      | state     |
-      | Spherification | Molecular cooking collection | Spherification is the culinary process of shaping a liquid      | Demography | published |
-      | Foam           | Molecular cooking collection | The use of foam in cuisine has been used in many forms          | eGov       | published |
+      | title          | collection                   | description                                                     | topic      | domain           | state     |
+      | Spherification | Molecular cooking collection | Spherification is the culinary process of shaping a liquid      | Demography | Defense          | published |
+      | Foam           | Molecular cooking collection | The use of foam in cuisine has been used in many forms          | eGov       | Economic affairs | published |
     And news content:
       | title                | headline              | field_paragraphs_body | collection                   | topic       | spatial coverage | state     |
       | El Tuba de Los Lobos | El Celler de Can Roca | The best in town      | Molecular cooking collection | E-inclusion | Luxembourg       | published |
@@ -66,6 +66,15 @@ Feature: Global search
     And I should see the "El Tuba de Los Lobos" tile
     And I should see the "Spherification" tile
     And I should see the "Foam" tile
+
+    # Test the "Solution Domain" facet.
+    When I click "Clear filters"
+    Then I should not see the "Solution Domain" facet
+    When I check the "Solutions (2)" checkbox from the "Content types" facet
+    And I should see the "Solution Domain" facet
+    When I check the "Defense (1)" checkbox from the "Solution Domain" facet
+    Then I should see the "Spherification" tile
+    And I should not see the "Foam" tile
 
     # Launch a text search.
     When I click "Clear filters"
@@ -345,8 +354,7 @@ Feature: Global search
     When I visit "/search?keys=1%00%C0%A7%C0%A2%252527%252522&page=18&sort_by=relevance"
     Then I should get a 200 HTTP response
 
-  # Validate the need for the "@restart-session" tag in ISAICP-9742.
-  @javascript @restart-session
+  @javascript
   Scenario: Search page - Show the abstract or description in the search results.
     Given collection content:
       | title       | description                  | abstract                      | state     |
@@ -373,8 +381,7 @@ Feature: Global search
     And I should see the "Roll alpha" tile
     And I should see the text "The collection roll abstract." in the "Roll alpha" card
 
-  # Validate the need for the "@restart-session" tag in ISAICP-9742.
-  @javascript @restart-session
+  @javascript
   Scenario: Check topics filter for users.
     Given users:
       | Username | E-mail             | First name | Family name | Professional domain |

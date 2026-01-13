@@ -70,8 +70,8 @@ Feature: CKEditor5
 
     When I attach the file "alan.jpg" to "Add file"
 
-    When I fill in "Name" with "This is Alan we love"
-    And I fill in "Alternative text" with "This is Alan portrait"
+    When I fill in "Name" with "This is Alan we love" in the "Modal content" region
+    And I fill in "Alternative text" with "This is Alan portrait" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
 
     Then I should see "The Image in Shaping of disruption"

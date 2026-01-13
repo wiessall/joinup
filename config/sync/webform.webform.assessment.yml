@@ -484,6 +484,9 @@ elements: |-
       '#type': entity_autocomplete
       '#title': 'Internal Solutions in the Portal  '
       '#multiple': true
+      '#description': '<p class="h4">Internal Solutions in the Portal (<a href="/search?f%5B0%5D=type%3Asolution" target="_blank" rel="noopener noreferrer">Search</a> in the Interoperable Europe Portal)</p>'
+      '#title_display': invisible
+      '#description_display': before
       '#multiple__min_items': 1
       '#multiple__empty_items': 0
       '#multiple__add': false
@@ -504,6 +507,15 @@ elements: |-
       '#multiple__add_more_input': false
       '#title__title': 'Solution Title'
       '#url__title': 'Solution URL'
+      '#format': custom
+      '#format_html': |
+        {% if element.url and element.title %}
+        {{item.value}}
+        {% elseif element.title %}
+        {{element.title}}
+        {% elseif element.url %}
+        {{element.url}}
+        {% endif %}
     remaining_barriers_to_crossborder_interoperability:
       '#type': processed_text
       '#prefix': '<p>&nbsp;</p>'
@@ -780,6 +792,7 @@ handlers:
       attachments: false
       twig: false
       theme_name: ''
+      langcode: ''
       parameters: {  }
       debug: false
   action:

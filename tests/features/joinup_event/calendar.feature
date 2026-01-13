@@ -13,17 +13,15 @@ Feature:
       | Future Horizons Expo          | 2019-12-15 12:00:00 | 2019-12-15 13:00:00 |
       | Innovate & Elevate Conference | 2020-02-15 12:00:00 | 2020-02-15 13:00:00 |
 
-  # Validate the need for the "@restart-session" tag in ISAICP-9742.
-  @restart-session
   Scenario Outline: User can navigate through events
     Given custom_page content:
       | title           | collection | abstract        |
-      | Events calendar | The Portal | events calendar |
+      | Events calendar | Portal support | events calendar |
     And I append "events_calendar" to "field_paragraphs_body" field in "node" entity with following "Events calendar" title:
       | paragraph_block | <calendar type> |
 
     #  Start from Wed Jan 15 2020 11:00:00 GMT+0000
-    When I visit "/collection/portal/events-calendar?calendar_timestamp=1579086000"
+    When I visit "/collection/portal-support/events-calendar?calendar_timestamp=1579086000"
     Then I should see the link "TechWizards Summit"
     And I should not see the link "<previous event>"
     And I should not see the link "<next event>"
@@ -33,7 +31,7 @@ Feature:
     And I should not see the link "<next event>"
 
     #  Start again from Wed Jan 15 2020 11:00:00 GMT+0000
-    When I visit "/collection/portal/events-calendar?calendar_timestamp=1579086000"
+    When I visit "/collection/portal-support/events-calendar?calendar_timestamp=1579086000"
     And I click "Next"
     Then I should see the link "<next event>"
     And I should not see the link "<previous event>"

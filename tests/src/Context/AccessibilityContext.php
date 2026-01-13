@@ -6,7 +6,11 @@ namespace Drupal\joinup\Context;
 
 use Behat\Behat\Hook\Scope\BeforeFeatureScope;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
+use Behat\Hook\BeforeFeature;
+use Behat\Hook\BeforeScenario;
+use Behat\Hook\BeforeSuite;
 use Behat\Mink\Element\DocumentElement;
+use Behat\Step\Then;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\SortArray;
 use Drupal\Core\Serialization\Yaml;
@@ -69,6 +73,7 @@ class AccessibilityContext extends RawDrupalContext {
   public function __construct(
     protected readonly array $standardTags,
     protected readonly array $excludeElements,
+    protected readonly array $excludeRules = [],
   ) {}
 
   /**
@@ -78,12 +83,11 @@ class AccessibilityContext extends RawDrupalContext {
    *   The minimum impact to check. Allowed values are keys from self::IMPACT.
    * @param string|null $limitToTags
    *   A comma separated list of accessibility tags to limit on.
-   *
-   * @Then the page meets accessibility standards
-   * @Then the page meets at least :minimumImpact accessibility standards
-   * @Then the page meets :limitToTags accessibility standards
-   * @Then the page meets at least :minimumImpact :limitToTags accessibility standards
    */
+  #[Then('the page meets accessibility standards')]
+  #[Then('the page meets at least :minimumImpact accessibility standards')]
+  #[Then('the page meets :limitToTags accessibility standards')]
+  #[Then('the page meets at least :minimumImpact :limitToTags accessibility standards')]
   public function assertAccessible(string $minimumImpact = 'minor', ?string $limitToTags = NULL): void {
     \assert($this->hasJavascriptSupport());
     \assert(isset(self::IMPACT[$minimumImpact]));
@@ -187,22 +191,33 @@ class AccessibilityContext extends RawDrupalContext {
    *   The JS script.
    */
   protected function getJsTriggeringScript(string $axeJsSrc, array $limitToTags): string {
-    $options = Json::encode([
+    $options = [
       'runOnly' => [
         'type' => 'tag',
         'values' => $limitToTags,
       ],
-    ]);
-    $context = $this->excludeElements ? Json::encode([
-      'exclude' => implode(',', $this->excludeElements),
-    ]) : 'body';
+    ];
+
+    // Disable excluded rules if configured.
+    if (!empty($this->excludeRules)) {
+      $options['rules'] = [];
+      foreach ($this->excludeRules as $rule) {
+        $options['rules'][$rule] = ['enabled' => FALSE];
+      }
+    }
+
+    $options = Json::encode($options);
+
+    $context = $this->excludeElements
+      ? Json::encode(['exclude' => implode(',', $this->excludeElements)])
+      : 'body';
+
     return <<<JavaScript
       (axeJsSrc => {
         const axeRun = () => {
           let output = { violations: [], exception: null };
           const axeJsElement = document.querySelector('script[data-drupal-selector="axe-js"]');
-          // We'll store the results directly on the HTML tag.
-          axeJsElement.dataset.output = ''
+          axeJsElement.dataset.output = '';
 
           axe.run($context, $options)
             .then(results => {
@@ -213,12 +228,11 @@ class AccessibilityContext extends RawDrupalContext {
               output.exception = exception;
               axeJsElement.dataset.output = JSON.stringify(output);
             });
-        }
+        };
 
         if (document.querySelector('script[data-drupal-selector="axe-js"]')) {
           axeRun();
-        }
-        else {
+        } else {
           const axeJsElement = document.createElement('script');
           axeJsElement.src = axeJsSrc;
           axeJsElement.type = 'text/javascript';
@@ -317,9 +331,8 @@ class AccessibilityContext extends RawDrupalContext {
    *
    * If ::assertAccessible() is called several times during a suite run, we want
    * to consolidate the reports in a single file.
-   *
-   * @beforeSuite
    */
+  #[BeforeSuite]
   public static function initializeReport(): void {
     file_put_contents(static::getReportPath(), Yaml::encode([]));
   }
@@ -329,9 +342,8 @@ class AccessibilityContext extends RawDrupalContext {
    *
    * @param \Behat\Behat\Hook\Scope\BeforeFeatureScope $scope
    *   The scope object.
-   *
-   * @beforeFeature
    */
+  #[BeforeFeature]
   public static function setFeatureFile(BeforeFeatureScope $scope): void {
     static::$file = substr($scope->getFeature()->getFile(), strlen($scope->getEnvironment()->getSuite()->getSetting('paths')[0]) + 1);
   }
@@ -341,9 +353,8 @@ class AccessibilityContext extends RawDrupalContext {
    *
    * @param \Behat\Behat\Hook\Scope\BeforeScenarioScope $scope
    *   The scope object.
-   *
-   * @beforeScenario @api&&@javascript
    */
+  #[BeforeScenario('@api&&@javascript')]
   public function setScenarioLine(BeforeScenarioScope $scope): void {
     $this->line = $scope->getScenario()->getLine();
   }
