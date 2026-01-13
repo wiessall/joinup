@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
+use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use PHPUnit\Framework\Assert;
 
@@ -32,9 +33,8 @@ class HeaderContext extends RawDrupalContext {
 
   /**
    * Checks that the Interoperable Europe logo is present in the navigation bar.
-   *
-   * @Then I should see the Interoperable Europe logo in the navigation bar
    */
+  #[Then('I should see the Interoperable Europe logo in the navigation bar')]
   public function assertLogo(): void {
     $link_element = $this->getSession()->getPage()->find('css', '.joinup-navbar a.navbar-brand');
     Assert::assertInstanceOf(NodeElement::class, $link_element, 'A link for the logo is present in the navbar.');
@@ -51,9 +51,8 @@ class HeaderContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $items
    *   The expected items that are present in the main navigation bar.
-   *
-   * @Then I should see the following items in the main navigation:
    */
+  #[Then('I should see the following items in the main navigation:')]
   public function assertMainNavigationItems(TableNode $items): void {
     // Retrieve the main navigation links on desktop.
     $desktop_items = $this->getSession()->getPage()->findAll('xpath', '//header[contains(concat(" ", normalize-space(@class), " "), " joinup-navbar ")]//ul[contains(concat(" ", normalize-space(@class), " "), " navbar-nav ")]/li/*[self::a or self::button]');
@@ -102,9 +101,8 @@ class HeaderContext extends RawDrupalContext {
    *
    * @param string $icon
    *   The icon that should be visible. Can be either 'profile' or 'hamburger'.
-   *
-   * @Then I should see the :icon icon in the main navigation
    */
+  #[Then('I should see the :icon icon in the main navigation')]
   public function assertHamburgerMenuIconPresent(string $icon): void {
     assert(array_key_exists($icon, self::ICON_ALIASES), 'Unknown icon ' . $icon);
 
