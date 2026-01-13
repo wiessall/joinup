@@ -32,7 +32,7 @@ class IdRedirect extends ControllerBase {
    *   A redirect response object.
    */
   public function redirectToRdfEntity(string $namespace, string $uuid): RedirectResponse {
-    if (!$entity_type_id = static::getEntityTypeFromPersistentUriNamespace($namespace)) {
+    if (!static::getEntityTypeFromPersistentUriNamespace($namespace)) {
       return $this->redirect('joinup_core.not_found');
     }
 
@@ -45,9 +45,15 @@ class IdRedirect extends ControllerBase {
     if (($entity = $this->mapper->getEntityByUri($id))) {
       assert($entity instanceof RdfSyncEntityInterface);
       $entity_type_id = $entity->getEntityTypeId();
-      return $this->redirect("entity.$entity_type_id.canonical", [
+      $route_parameters = [
         $entity_type_id => $entity->id(),
-      ], [], 301);
+      ];
+
+      if ($entity_type_id === 'assessment') {
+        $route_parameters['assessment_type'] = $entity->bundle();
+      }
+
+      return $this->redirect("entity.$entity_type_id.canonical", $route_parameters, [], 301);
     }
 
     return $this->redirect('joinup_core.not_found');
@@ -61,7 +67,7 @@ class IdRedirect extends ControllerBase {
    *
    * @return string[]|string|null
    *   If $namespace is missed, it returns the whole mapping array. If
-   *   $namespace is passe, returns the mapped entity type or NULL if none.
+   *   $namespace is passed, returns the mapped entity type or NULL if none.
    *
    * @see http://data.europa.eu/URI.html
    */
@@ -69,6 +75,7 @@ class IdRedirect extends ControllerBase {
     $namespaces = [
       'w21' => 'node',
       'dr8' => 'taxonomy_term',
+      's2k' => 'assessment',
     ];
 
     if (!$namespace) {
