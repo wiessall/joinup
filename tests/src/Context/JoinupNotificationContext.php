@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\TagTrait;
@@ -55,9 +58,8 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Throws an exception when a parameter is not the expected one.
-   *
-   * @Then the following email should have been sent:
    */
+  #[Then('the following email should have been sent:')]
   public function assertEmailSent(TableNode $table): void {
     /** @var string $template */
     /** @var string $recipient */
@@ -194,9 +196,8 @@ class JoinupNotificationContext extends RawDrupalContext {
    *   Throws an exception when a parameter is not the expected one.
    *
    * @see self::assertEmailSent()
-   *
-   * @Then the following email should not have been sent:
    */
+  #[Then('the following email should not have been sent:')]
   public function assertEmailNotSent(TableNode $table): void {
     try {
       // Reusing ::assertEmailSent().
@@ -223,9 +224,8 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Throws an exception when a parameter is not the expected one.
-   *
-   * @Then the email sent to :username_or_email with subject :subject contains the( following lines of) text:
    */
+  #[Then('the email sent to :username_or_email with subject :subject contains the( following lines of) text:')]
   public function assertEmailSentAndContainsText(string $username_or_email, string $subject, TableNode $table): void {
     $this->emailSentHelper(TRUE, $username_or_email, $subject, $table);
   }
@@ -242,9 +242,8 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Throws an exception when a parameter is not the expected one.
-   *
-   * @Given /^the email sent to "([^"]*)" with subject "([^"]*)" contains "([^"]*)" attachment$/
    */
+  #[Given('/^the email sent to "([^"]*)" with subject "([^"]*)" contains "([^"]*)" attachment$/')]
   public function theEmailSentToWithSubjectContainsAttachment(string $email, string $subject, string $file): void {
     $mails = $this->getEmailsBySubjectAndMail($subject, $email);
     foreach ($mails as $mail) {
@@ -272,9 +271,8 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Throws an exception when a parameter is not the expected one.
-   *
-   * @Given /^the email sent to "([^"]*)" with subject "([^"]*)" contains header "([^"]*)" with value "([^"]*)"$/
    */
+  #[Given('/^the email sent to "([^"]*)" with subject "([^"]*)" contains header "([^"]*)" with value "([^"]*)"$/')]
   public function theEmailSentToWithSubjectContainsHeaderValue(string $email, string $subject, string $header_name, string $header_value): void {
     $mails = $this->getEmailsBySubjectAndMail($subject, $email);
     foreach ($mails as $mail) {
@@ -298,9 +296,8 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Throws an exception when a parameter is not the expected one.
-   *
-   * @Then the email sent to :username_or_email with subject :subject should not contain the( following lines of) text:
    */
+  #[Then('the email sent to :username_or_email with subject :subject should not contain the( following lines of) text:')]
   public function assertEmailSentNotContainsText(string $username_or_email, string $subject, TableNode $table): void {
     $this->emailSentHelper(FALSE, $username_or_email, $subject, $table);
   }
@@ -358,9 +355,8 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * Use this if you don't want to match on emails that have been sent earlier
    * in the scenario.
-   *
-   * @Given I mark all emails as read
    */
+  #[Given('I mark all emails as read')]
   public function clearMailCollectorCache(): void {
     \Drupal::state()->set('system.test_mail_collector', []);
     \Drupal::state()->resetCache();
@@ -376,10 +372,9 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the count doesn't match the actual number.
-   *
-   * @Then :count e-mail(s) should have been sent
-   * @Then :count e-mail(s) should have been sent to recipients :recipients
    */
+  #[Then(':count e-mail(s) should have been sent')]
+  #[Then(':count e-mail(s) should have been sent to recipients :recipients')]
   public function assertNumberOfEmailSent(int $count, ?string $recipients = NULL): void {
     $mails = $this->getMails();
     if (count($mails) != $count) {
@@ -407,9 +402,8 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a user is not found.
-   *
-   * @When I click the delete confirmation link for (the user ):user from the last email
    */
+  #[When('I click the delete confirmation link for (the user ):user from the last email')]
   public function clickDeleteConfirmationLink($user): void {
     $user = $this->getUserByName($user);
     if (empty($user)) {
@@ -433,9 +427,8 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a user is not found.
-   *
-   * @When I click the comment link from the last email sent to :user
    */
+  #[When('I click the comment link from the last email sent to :user')]
   public function clickCommentLinkInEmail($user): void {
     $user = $this->getUserByName($user);
     if (empty($user)) {
@@ -464,9 +457,8 @@ class JoinupNotificationContext extends RawDrupalContext {
    * @throws \Exception
    *   If no mail was found linked to the given email or if the link to the file
    *   attachment was not found.
-   *
-   * @When I click the link for the :filename attachment in the contact form email sent to :mail
    */
+  #[When('I click the link for the :filename attachment in the contact form email sent to :mail')]
   public function clickAttachmentInContactFormConfirmationMail(string $filename, string $mail): void {
     // In case multiple files with the same name were uploaded, the File module
     // will append a number to the file. Account for this.
@@ -488,9 +480,8 @@ class JoinupNotificationContext extends RawDrupalContext {
    *   Either the username or an email.
    * @param string $subject
    *   The email subject.
-   *
-   * @When I click the link from email sent to :username_or_email with subject :subject
    */
+  #[When('I click the link from email sent to :username_or_email with subject :subject')]
   public function clickLinkInEmail(string $username_or_email, string $subject): void {
     if ($account = user_load_by_name($username_or_email)) {
       $recipient = $account->getEmail();
@@ -511,9 +502,8 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @param string $username_or_email
    *   A valid user name or a valid email.
-   *
-   * @Then no email has been sent to :username_or_email
    */
+  #[Then('no email has been sent to :username_or_email')]
   public function noEmailSentToRecipient(string $username_or_email): void {
     if ($account = user_load_by_name($username_or_email)) {
       /** @var \Drupal\user\UserInterface $account */
@@ -537,9 +527,8 @@ class JoinupNotificationContext extends RawDrupalContext {
    *   The recipient's email.
    * @param string $subject
    *   The email subject.
-   *
-   * @When I click the :link_text link in the email sent to :recipent having the subject :subject
    */
+  #[When('I click the :link_text link in the email sent to :recipent having the subject :subject')]
   public function clickLinkInHtmlMail(string $link_text, string $recipient, string $subject): void {
     $mail = $this->getEmailsBySubjectAndMail($subject, $recipient)[0];
     $body = (string) $mail['body'];

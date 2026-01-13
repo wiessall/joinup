@@ -25,20 +25,22 @@
  * @see template_preprocess_block()
  */
 #}
+{% set provider_css_safe = configuration.provider|clean_class %}
 {%
   set classes = [
     'block',
-    'block-' ~ configuration.provider|clean_class,
+    'block-' ~ provider_css_safe,
     'block-' ~ plugin_id|clean_class,
+    provider_css_safe == 'layout-builder' ? 'block--hide-empty'
   ]
 %}
 <div{{ attributes.addClass(classes) }}>
-  {{ title_prefix }}
-  {% if label %}
+  {{- title_prefix }}
+  {%- if label %}
     <h2{{ title_attributes }}>{{ label }}</h2>
-  {% endif %}
+  {% endif -%}
   {{ title_suffix }}
-  {% block content %}
+  {%- block content -%}
     {{ content }}
-  {% endblock %}
+  {%- endblock -%}
 </div>

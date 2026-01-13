@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Mink\Element\NodeElement;
+use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use PHPUnit\Framework\Assert;
 
@@ -15,9 +16,8 @@ class FooterContext extends RawDrupalContext {
 
   /**
    * Checks that the Interoperable Europe logo is present in the footer.
-   *
-   * @Then I should see the Interoperable Europe logo in the footer
    */
+  #[Then('I should see the Interoperable Europe logo in the footer')]
   public function assertLogo(): void {
     $logo_element = $this->getSession()->getPage()->find('css', 'footer .joinup-logo');
     Assert::assertInstanceOf(NodeElement::class, $logo_element, 'A logo is present in the navbar.');
@@ -28,9 +28,8 @@ class FooterContext extends RawDrupalContext {
 
   /**
    * Checks that the version is present in the footer.
-   *
-   * @Then I should see the Interoperable Europe Portal version in the footer
    */
+  #[Then('I should see the Interoperable Europe Portal version in the footer')]
   public function assertVersion(): void {
     $element = $this->getSession()->getPage()->find('css', 'footer .joinup-version a');
     Assert::assertInstanceOf(NodeElement::class, $element, 'The version is shown in the footer.');

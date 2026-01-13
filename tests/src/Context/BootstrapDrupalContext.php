@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Hook\BeforeScenario;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 
 /**
@@ -19,9 +20,8 @@ class BootstrapDrupalContext extends RawDrupalContext {
    * be sure that Drupal is ready to rock.
    *
    * This context file should be placed as the very first in the list.
-   *
-   * @BeforeScenario @api
    */
+  #[BeforeScenario('@api')]
   public function bootstrap(): void {
     $driver = $this->getDriver();
     if (!$driver->isBootstrapped()) {

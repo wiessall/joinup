@@ -6,6 +6,9 @@ namespace Drupal\joinup\Context;
 
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -43,9 +46,8 @@ class BootstrapContext extends RawDrupalContext {
    * @param string $size
    *   A human readable version of a Bootstrap breakpoint (e.g. 'extra large'
    *   instead of 'xl').
-   *
-   * @Given I use a device with a(n) :size display
    */
+  #[Given('I use a device with a(n) :size display')]
   public function changeResolution(string $size): void {
     $this->assertJavaScriptEnabledBrowser();
 
@@ -61,9 +63,8 @@ class BootstrapContext extends RawDrupalContext {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    *   When there's no accordion section with the given label.
-   *
-   * @When I expand the :section accordion section
    */
+  #[When('I expand the :section accordion section')]
   public function iExpandAccordionSection(string $section): void {
     $this->toggleAccordionSection($section, TRUE);
   }
@@ -76,9 +77,8 @@ class BootstrapContext extends RawDrupalContext {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    *   When there's no accordion section with the given label.
-   *
-   * @When I collapse the :section accordion section
    */
+  #[When('I collapse the :section accordion section')]
   public function iCollapseAccordionSection(string $section): void {
     $this->toggleAccordionSection($section, FALSE);
   }
@@ -122,9 +122,8 @@ class BootstrapContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   When the accordion section is not found on the page or it's not active.
-   *
-   * @Then the :section accordion section should be active
    */
+  #[Then('the :section accordion section should be active')]
   public function assertAccordionSectionActive(string $section): void {
     if ($this->findAccordionSection($section)->hasClass('collapsed')) {
       throw new \Exception("The accordion section '$section' is not active.");
@@ -164,9 +163,8 @@ class BootstrapContext extends RawDrupalContext {
    *
    * @param string $label
    *   The element label.
-   *
-   * @Then the :label collapse is expanded
    */
+  #[Then('the :label collapse is expanded')]
   public function assertCollapseIsExpanded(string $label): void {
     $this->collapseAssertionHelper($label, TRUE);
   }
@@ -176,9 +174,8 @@ class BootstrapContext extends RawDrupalContext {
    *
    * @param string $label
    *   The element label.
-   *
-   * @Then the :label collapse is collapsed
    */
+  #[Then('the :label collapse is collapsed')]
   public function assertCollapseIsCollapsed(string $label): void {
     $this->collapseAssertionHelper($label, FALSE);
   }
