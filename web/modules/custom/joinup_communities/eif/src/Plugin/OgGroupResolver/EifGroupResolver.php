@@ -24,7 +24,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * - Canonical page of the EIF recommendations taxonomy.
  * - Recommendations page.
  * - Solutions page.
- * )
  */
 #[OgGroupResolver(
   id: 'eif_group',
