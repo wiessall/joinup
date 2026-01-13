@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Given;
+use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
@@ -21,10 +23,9 @@ class OauthClientContext extends RawDrupalContext {
    * Creates OAuth client requests from table data.
    *
    * @param \Behat\Gherkin\Node\TableNode $requestsTable
-   *   The OAuth client request data table.
-   *
-   * @Given oauth client requests:
+   *   The OAuth client request data table.   *.
    */
+  #[Given('oauth client requests')]
   public function givenOauthClientRequests(TableNode $requestsTable): void {
     $storage = \Drupal::entityTypeManager()->getStorage('oauth_client_request');
     foreach ($requestsTable->getColumnsHash() as $values) {
@@ -48,13 +49,12 @@ class OauthClientContext extends RawDrupalContext {
    * @param string $label
    *   The label of the OAuth client request to delete.
    *
-   * @When I delete the :label oauth client request
-   *
    * @throws \RuntimeException
    *   Thrown when the OAuth client request is not found.
    * @throws \Drupal\Core\Entity\EntityStorageException
    *   Thrown when the entity could not be deleted.
    */
+  #[When('I delete the :label oauth client request')]
   public function deleteOauthClientRequestByLabel(string $label): void {
     $request = $this->getEntityByLabel('oauth_client_request', $label);
     $request->skip_notification = TRUE;
@@ -69,9 +69,6 @@ class OauthClientContext extends RawDrupalContext {
    * @param string $label
    *   The label of the OAuth client request.
    *
-   * @When I visit the :action page of the :label oauth client request
-   * @When I go to the :action page of the :label oauth client request
-   *
    * @throws \InvalidArgumentException
    *   Thrown when an invalid action is passed.
    * @throws \RuntimeException
@@ -79,6 +76,8 @@ class OauthClientContext extends RawDrupalContext {
    * @throws \Drupal\Core\Entity\EntityMalformedException
    *   Thrown when the entity URL cannot be generated.
    */
+  #[When('I visit the :action page of the :label oauth client request')]
+  #[When('I go to the :action page of the :label oauth client request')]
   public function visitOauthClientRequestPage(string $action, string $label): void {
     if (!in_array($action, ['edit', 'delete'])) {
       throw new \InvalidArgumentException('Only "edit" and "delete" actions are allowed.');

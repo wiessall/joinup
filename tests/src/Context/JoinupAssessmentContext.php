@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Hook\BeforeScenario;
+use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
@@ -127,9 +128,8 @@ class JoinupAssessmentContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   When an assessment with the given name and type exists.
-   *
-   * @Then the :type assessment :name should not exist
    */
+  #[Then('the :type assessment :name should not exist')]
   public function assertAssessmentNotExists(string $type, string $name): void {
     try {
       $this->getEntityByLabel('assessment', $name, $type);
