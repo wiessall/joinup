@@ -21,9 +21,9 @@ use Drupal\user\RoleInterface;
 #[EntityReferenceSelection(
   id: "joinup_user_full_name",
   label: new TranslatableMarkup("Full name selection"),
-  entity_types: ["user"],
   group: 'joinup_user_full_name',
-  weight: 1
+  weight: 1,
+  entity_types: ["user"]
 )]
 class UserFullNameSelection extends DefaultSelection {
 
