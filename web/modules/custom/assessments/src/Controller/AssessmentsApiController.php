@@ -19,15 +19,15 @@ class AssessmentsApiController extends ControllerBase {
    *   A render array for the OpenAPI UI.
    */
   public function apiDocs(): array {
-    $openapi_file = __DIR__ . '/../../openapi/assessments.openapi.yaml';
+    $openapiFile = __DIR__ . '/../../openapi/assessments.openapi.yaml';
 
-    if (!file_exists($openapi_file)) {
+    if (!file_exists($openapiFile)) {
       return [
         '#markup' => $this->t('OpenAPI specification file not found.'),
       ];
     }
 
-    $schema = Yaml::decode(file_get_contents($openapi_file));
+    $schema = Yaml::decode(file_get_contents($openapiFile));
 
     if (isset($schema['paths']['/token']['$ref'])) {
       // For some reason, the relative path to oauth2.openapi.yaml is messed up

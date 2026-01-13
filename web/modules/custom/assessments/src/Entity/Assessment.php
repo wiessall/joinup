@@ -167,8 +167,8 @@ class Assessment extends ContentEntityBase implements AssessmentInterface {
    */
   public function toUrl($rel = 'canonical', array $options = []): Url {
     $url = parent::toUrl($rel, $options);
-    $route_parameters = $url->getRouteParameters();
-    if (!isset($route_parameters['assessment_type'])) {
+    $routeParameters = $url->getRouteParameters();
+    if (!isset($routeParameters['assessment_type'])) {
       $url->setRouteParameter('assessment_type', $this->bundle());
     }
     return $url;
