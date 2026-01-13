@@ -10,7 +10,6 @@ use Drupal\Core\Action\Attribute\Action;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -26,21 +25,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 )]
 class ChangeCollectionAction extends ActionBase implements ContainerFactoryPluginInterface {
 
-  /**
-   * The private tempstore.
-   *
-   * @var \Drupal\Core\TempStore\PrivateTempStore
-   */
-  protected PrivateTempStore $tempStore;
-
   public function __construct(
     array $configuration,
     string $plugin_id,
     mixed $plugin_definition,
-    PrivateTempStoreFactory $private_tempstore_factory,
+    protected readonly PrivateTempStoreFactory $tempStoreFactory,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->tempStore = $private_tempstore_factory->get('change_collection');
   }
 
   /**
@@ -73,7 +64,7 @@ class ChangeCollectionAction extends ActionBase implements ContainerFactoryPlugi
       }
       return $solution->id();
     }, $solutions);
-    $this->tempStore->set('solutions', $solution_ids);
+    $this->tempStoreFactory->get('change_collection')->set('solutions', $solution_ids);
   }
 
   /**
