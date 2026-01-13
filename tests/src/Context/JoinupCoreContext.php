@@ -475,9 +475,8 @@ class JoinupCoreContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The table node.
-   *
-   * @Then the response should contain the following lines of text:
    */
+  #[Then('the response should contain the following lines of text:')]
   public function assertResponseBodyEquals(TableNode $table): void {
     $response = $this->getSession()->getDriver()->getContent();
     foreach ($table->getColumn(0) as $expectedLine) {

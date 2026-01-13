@@ -334,9 +334,8 @@ class RdfContext extends RawDrupalContext {
    *   The entity RDF URI.
    * @param string $format
    *   The export format.
-   *
-   * @Given I visit the export page of the entity having :uri as RDF resource in :format format
    */
+  #[Given('I visit the export page of the entity having :uri as RDF resource in :format format')]
   public function visitEntityExportPageByRdfUri(string $uri, string $format): void {
     if (!$entity = \Drupal::getContainer()
       ->get('rdf_sync.mapper')

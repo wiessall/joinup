@@ -476,9 +476,8 @@ class JoinupParagraphsContext extends RawDrupalContext {
    *   The type of the paragraph.
    * @param \Behat\Gherkin\Node\TableNode $values
    *   The data to add in the paragraph.
-   *
-   * @Given the following :type paragraph:
    */
+  #[Given('the following :type paragraph:')]
   public function iCreateParagraphWith(string $type, TableNode $values): void {
     $values = $values->getRowsHash();
     $values['type'] = $type;
