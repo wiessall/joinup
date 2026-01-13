@@ -314,7 +314,7 @@ function assessments_entity_bundle_info_alter(array &$bundles): void {
 
   $rdfSync = [
     'type' => 'http://data.europa.eu/2sa/cav#Statement',
-    'uri_plugin' => 'default',
+    'uri_plugin' => 'joinup_po_namespace:s2k',
     'fields' => [
       'interpretation' => [
         'target_id' => [

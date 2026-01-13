@@ -7,6 +7,7 @@ dependencies:
 third_party_settings:
   rdf_sync:
     type: 'http://purl.org/vocab/frbr/core#Expression'
+    uri_plugin: joinup_po_namespace:s2k
     fields: {  }
 label_singular: expression
 label_plural: expressions

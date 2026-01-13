@@ -236,6 +236,17 @@ paths:
           schema:
             $ref: '#/components/schemas/EuropeanUnionCountry'
           example: BE, EU
+        - in: query
+          name: page
+          description: |
+            Page number for pagination (0-indexed). Each page contains 200 items.
+            Default is 0 (first page).
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          example: 0
       responses:
         '200':
           description: The fetched reports.
@@ -347,6 +358,18 @@ paths:
       tags:
         - Resources
       security: [ ]
+      parameters:
+        - in: query
+          name: page
+          description: |
+            Page number for pagination (0-indexed). Each page contains 200 items.
+            Default is 0 (first page).
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          example: 0
       responses:
         '200':
           description: The fetched public organisations.

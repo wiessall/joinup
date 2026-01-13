@@ -106,9 +106,7 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
 
     // Update the expectation with generated UUIDs.
     $uuid = $data['id'];
-    $uri = Url::fromUri('internal:/assessment/report/' . $uuid)
-      ->setAbsolute()
-      ->toString();
+    $uri = 'http://data.europa.eu/s2k/' . $uuid;
     $expect = ['id' => $uuid, 'uri' => $uri] + $expect;
     $uuid = $data['provider']['id'];
     $provider = ['id' => $uuid] + $expect['provider'];

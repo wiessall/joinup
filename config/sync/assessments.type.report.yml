@@ -5,7 +5,7 @@ dependencies: {  }
 third_party_settings:
   rdf_sync:
     type: 'http://data.europa.eu/2sa/cav#Assessment'
-    uri_plugin: null
+    uri_plugin: joinup_po_namespace:s2k
     namespaces:
       cav: 'http://data.europa.eu/2sa/cav#'
       cv: 'http://data.europa.eu/m8g/'

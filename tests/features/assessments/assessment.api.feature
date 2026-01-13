@@ -32,12 +32,12 @@ Feature: Assessments API
       name: ACME
       organisation_type: european_union_institution
       country: null
-      uri: __base_url__/assessment/public-organisation/5d8be6b1-8038-429e-b84e-6ca8c35fd9b0
+      uri: http://data.europa.eu/s2k/5d8be6b1-8038-429e-b84e-6ca8c35fd9b0
     - id: e4893580-f468-4c11-921d-1fe68b8540ae
       name: Bad Company
       organisation_type: local_public_sector_body
       country: LU
-      uri: __base_url__/assessment/public-organisation/e4893580-f468-4c11-921d-1fe68b8540ae
+      uri: http://data.europa.eu/s2k/e4893580-f468-4c11-921d-1fe68b8540ae
     """
     And the page should be cacheable
     But the page should not be cached
@@ -48,25 +48,25 @@ Feature: Assessments API
     - id: 5d8be6b1-8038-429e-b84e-6ca8c35fd9b1
       name: Report 1
       country: null
-      uri: __base_url__/assessment/report/5d8be6b1-8038-429e-b84e-6ca8c35fd9b1
+      uri: http://data.europa.eu/s2k/5d8be6b1-8038-429e-b84e-6ca8c35fd9b1
     - id: e4893580-f468-4c11-921d-1fe68b8540a2
       name: Report 2
       country: LU
-      uri: __base_url__/assessment/report/e4893580-f468-4c11-921d-1fe68b8540a2
+      uri: http://data.europa.eu/s2k/e4893580-f468-4c11-921d-1fe68b8540a2
     """
     Then a GET request to "/api/assessments/v1/assessment?country=LU" should return the following JSON:
     """
     - id: e4893580-f468-4c11-921d-1fe68b8540a2
       name: Report 2
       country: LU
-      uri: __base_url__/assessment/report/e4893580-f468-4c11-921d-1fe68b8540a2
+      uri: http://data.europa.eu/s2k/e4893580-f468-4c11-921d-1fe68b8540a2
     """
     Then a GET request to "/api/assessments/v1/assessment?country=EU" should return the following JSON:
     """
     - id: 5d8be6b1-8038-429e-b84e-6ca8c35fd9b1
       name: Report 1
       country: null
-      uri: __base_url__/assessment/report/5d8be6b1-8038-429e-b84e-6ca8c35fd9b1
+      uri: http://data.europa.eu/s2k/5d8be6b1-8038-429e-b84e-6ca8c35fd9b1
     """
     Then I go to "/api/assessments/v1/assessment?country=FOOBAR"
     Then the response status code should be 404

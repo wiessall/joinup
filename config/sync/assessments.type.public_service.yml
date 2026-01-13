@@ -7,6 +7,7 @@ dependencies:
 third_party_settings:
   rdf_sync:
     type: 'http://purl.org/vocab/cpsv#PublicService'
+    uri_plugin: joinup_po_namespace:s2k
     fields:
       name:
         value:

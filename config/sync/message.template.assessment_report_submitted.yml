@@ -9,7 +9,7 @@ label: 'Assessment Reports: submitted for review'
 description: 'A new assessment report has been submitted for moderator review'
 text:
   -
-    value: 'New assessment report to be reviewed'
+    value: 'New assessment report to be reviewed (@assessment:id)'
     format: full_html
   -
     value: "<p>A new assessment report has been submitted</p>\r\n<p>Submitted on @assessment:changed, by @assessment:user</p>\r\n<p>Please <a href=\"@assessment:moderate_url\">moderate</a> the submission</p>\r\n"
