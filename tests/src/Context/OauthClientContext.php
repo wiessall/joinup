@@ -25,7 +25,7 @@ class OauthClientContext extends RawDrupalContext {
    * @param \Behat\Gherkin\Node\TableNode $requestsTable
    *   The OAuth client request data table.   *.
    */
-  #[Given('oauth client requests')]
+  #[Given('oauth client requests:')]
   public function givenOauthClientRequests(TableNode $requestsTable): void {
     $storage = \Drupal::entityTypeManager()->getStorage('oauth_client_request');
     foreach ($requestsTable->getColumnsHash() as $values) {
