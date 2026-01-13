@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Hook\BeforeScenario;
+use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
@@ -25,9 +27,8 @@ class JoinupAssessmentContext extends RawDrupalContext {
 
   /**
    * Stores the latest submission ID.
-   *
-   * @BeforeScenario @demoAssessment
-   */
+ */
+  #[BeforeScenario('@demoAssessment')]
   public function beforeAssessmentsDemo(): void {
     $collection = \Drupal::service('entity.repository')->loadEntityByUuid('node', LegacyAssessmentInterface::GROUP_UUID);
     $paragraph = Paragraph::create([
@@ -85,9 +86,8 @@ class JoinupAssessmentContext extends RawDrupalContext {
    *   Title of assessment_report entity.
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
-   *
-   * @When I set :fieldName as :value for :assessment assessment_report submission
    */
+  #[When('I set :fieldName as :value for :assessment assessment_report submission')]
   public function setFieldValueForAssesmentSubmission(string $fieldName, string $value, string $assessment): void {
     $assessment_report = $this->getEntityByLabel('node', $assessment);
     $submission = $assessment_report->submission->entity ?? $this->createSubmissionForAssessmentReport($assessment);

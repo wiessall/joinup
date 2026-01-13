@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Given;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\node\NodeInterface;
@@ -28,9 +29,8 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
    *
    * Use string "~~~" to explicitly set a NULL value (so the value of the
    * default translation won't be copied into the newly added translation).
-   *
-   * @Given :type multilingual content:
    */
+  #[Given(':type multilingual content:')]
   public function createMultilingualContent($type, TableNode $nodesTable): void {
     $lastId = NULL;
     $availableLanguages = \Drupal::languageManager()->getLanguages();

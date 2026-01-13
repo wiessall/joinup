@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Hook\BeforeScenario;
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\rdf_sync\Model\SyncMethod;
@@ -36,9 +40,8 @@ class RdfContext extends RawDrupalContext {
    *   The graph to be queried.
    * @param \Behat\Gherkin\Node\TableNode $triples
    *   The user data.
-   *
-   * @Then the following :graph graph triples exist in the RDF backend:
    */
+  #[Then('the following :graph graph triples exist in the RDF backend:')]
   public function assertTriples(string $graph, TableNode $triples): void {
     $connection = \Drupal::getContainer()->get('rdf_sync.connection');
     $subjects = $rows = [];
@@ -224,9 +227,8 @@ class RdfContext extends RawDrupalContext {
 
   /**
    * Asserts that entities in the published graph are ADMS-AP compliant.
-   *
-   * @Then the ADMS-AP data of the published entities in Interoperable Europe Portal is valid
    */
+  #[Then('the ADMS-AP data of the published entities in Interoperable Europe Portal is valid')]
   public function assertValidPublishedGraph(): void {
     $config = \Drupal::config('rdf_sync.settings');
     $graphUri = $config->get('graph_uri');
@@ -247,9 +249,8 @@ class RdfContext extends RawDrupalContext {
    * Used in Digit QA pipeline. The terms are installed and synchronized in
    * clean-install job but are not preserved between jobs. Tests requiring RDF
    * synchronized terms, should be tagged with @rdf_sync.
-   *
-   * @BeforeScenario @rdf_sync&&@api
    */
+  #[BeforeScenario('@rdf_sync&&@api')]
   public function reSynchronizeTerms(): void {
     $info = \Drupal::getContainer()->get('entity_type.bundle.info')->getBundleInfo('taxonomy_term');
     $vids = array_filter($info, fn(array $bundle): bool => isset($bundle['rdf_sync']));
@@ -280,9 +281,8 @@ class RdfContext extends RawDrupalContext {
    *    Thrown when a field name is invalid.
    * @throws \InvalidArgumentException
    *   When for the passed URI no entity can be found.
-   *
-   * @When I update the entity having :uri as RDF resource:
    */
+  #[When('I update the entity having :uri as RDF resource:')]
   public function updateEntityByRdfUri(string $uri, TableNode $fieldsTable): void {
     /** @var \Drupal\Core\Entity\ContentEntityInterface|null $entity */
     if (!$entity = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri($uri)) {
@@ -318,9 +318,8 @@ class RdfContext extends RawDrupalContext {
    *
    * @throws \InvalidArgumentException
    *   When for the passed URI no entity can be found.
-   *
-   * @Given I visit the page of the entity having :uri as RDF resource
    */
+  #[Given('I visit the page of the entity having :uri as RDF resource')]
   public function visitEntityCanonicalPagePageByRdfUri(string $uri): void {
     if (!$entity = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri($uri)) {
       throw new \InvalidArgumentException("No entity found for URI $uri");
@@ -356,9 +355,8 @@ class RdfContext extends RawDrupalContext {
    *   The URI to check.
    * @param string $graph
    *   The graph to check.
-   *
-   * @Then there should not be any triples with the :property :uri in the :graph graph
    */
+  #[Then('there should not be any triples with the :property :uri in the :graph graph')]
   public function assertNoTriplesOfUri(string $property, string $uri, string $graph): void {
     assert(in_array($property, ['subject', 'object']), 'The property must be either "subject" or "object"');
     $stub = $property === 'subject' ?

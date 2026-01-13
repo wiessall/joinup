@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Mink\Element\NodeElement;
+use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use PHPUnit\Framework\Assert;
 
@@ -28,9 +29,8 @@ class FaviconContext extends RawDrupalContext {
    * that all of them exist as image files.
    *
    * We are assuming that at least one of them will match the user's device.
-   *
-   * @Then I should see a favicon
    */
+  #[Then('I should see a favicon')]
   public function assertFavicons(): void {
     $uris = $this->getFaviconUris();
 

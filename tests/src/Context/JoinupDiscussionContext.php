@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Step\Given;
+use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup_discussion\Entity\DiscussionInterface;
@@ -24,9 +26,8 @@ class JoinupDiscussionContext extends RawDrupalContext {
    *   The discussion title.
    * @param int $count
    *   The expected number of subscribers.
-   *
-   * @Then the :title discussion should have :count subscriber(s)
    */
+  #[Then('the :title discussion should have :count subscriber(s)')]
   public function assertSubscribers(string $title, int $count): void {
     $discussion = $this->getEntityByLabel('node', $title, 'discussion');
     $subscribers = $this->getDiscussionSubscriptionService()->getSubscribers($discussion, 'subscribe_discussions');
@@ -53,9 +54,8 @@ class JoinupDiscussionContext extends RawDrupalContext {
    *   The username of the account to own the new comment.
    * @param string $discussionLabel
    *   The label of the discussion where the comment should be posted.
-   *
-   * @Given the :userName user leaves a comment at the :discussionLabel discussion
    */
+  #[Given('the :userName user leaves a comment at the :discussionLabel discussion')]
   public function leaveCommentAsUser(string $userName, string $discussionLabel): void {
     $session = $this->getSession();
     $userManager = $this->getUserManager();
