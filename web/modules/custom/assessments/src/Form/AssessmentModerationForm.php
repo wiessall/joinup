@@ -68,27 +68,27 @@ final class AssessmentModerationForm extends FormBase {
     assert($assessment instanceof AssessmentReport);
     $form_state->set('assessment', $assessment);
 
-    $view_builder = $this->entityTypeManager->getViewBuilder('assessment');
+    $viewBuilder = $this->entityTypeManager->getViewBuilder('assessment');
     $form['assessment_display'] = [
       '#type' => 'item',
       '#title' => $assessment->label(),
       '#markup' => '',
       '#weight' => -100,
     ];
-    $form['assessment_display']['view'] = $view_builder->view($assessment, 'full');
+    $form['assessment_display']['view'] = $viewBuilder->view($assessment, 'full');
 
-    $actions_weight = 100;
+    $actionsWeight = 100;
 
     $form['reason'] = [
       '#type' => 'textarea',
       '#title' => $this->t('What updates are needed?'),
       '#description' => $this->t('Provide feedback to the submitter about what needs to be updated.'),
-      '#weight' => $actions_weight,
+      '#weight' => $actionsWeight,
     ];
 
     $form['actions'] = [
       '#type' => 'actions',
-      '#weight' => $actions_weight + 1,
+      '#weight' => $actionsWeight + 1,
     ];
 
     $form['actions']['draft'] = [
@@ -110,9 +110,9 @@ final class AssessmentModerationForm extends FormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state): void {
-    $triggering_element = $form_state->getTriggeringElement();
-    $target_state = $triggering_element['#state_id'] ?? NULL;
-    if ($target_state !== 'draft') {
+    $triggeringElement = $form_state->getTriggeringElement();
+    $targetState = $triggeringElement['#state_id'] ?? NULL;
+    if ($targetState !== 'draft') {
       return;
     }
 
@@ -129,17 +129,17 @@ final class AssessmentModerationForm extends FormBase {
     /** @var \Drupal\assessments\AssessmentInterface $assessment */
     $assessment = $form_state->get('assessment');
 
-    $triggering_element = $form_state->getTriggeringElement();
-    $new_state = $triggering_element['#state_id'] ?? NULL;
+    $triggeringElement = $form_state->getTriggeringElement();
+    $newState = $triggeringElement['#state_id'] ?? NULL;
 
-    if ($new_state) {
-      $assessment->set('state', $new_state);
+    if ($newState) {
+      $assessment->set('state', $newState);
       $assessment->save();
     }
 
     $reason = trim((string) $form_state->getValue('reason', ''));
 
-    switch ($new_state) {
+    switch ($newState) {
       case 'published':
         $this->messenger()
           ->addStatus($this->t('The assessment report has been published.'));

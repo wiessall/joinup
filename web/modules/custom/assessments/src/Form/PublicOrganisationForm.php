@@ -38,19 +38,19 @@ final class PublicOrganisationForm {
     ];
 
     // Determine current org type value from form state or defaults.
-    $org_type = NULL;
+    $orgType = NULL;
     if ($form_state->hasValue(['fields', 'organisation_type', 0, 'value'])) {
-      $org_type = $form_state->getValue(['fields', 'organisation_type', 0, 'value']);
+      $orgType = $form_state->getValue(['fields', 'organisation_type', 0, 'value']);
     }
     elseif ($form_state->hasValue(['organisation_type', 0, 'value'])) {
-      $org_type = $form_state->getValue(['organisation_type', 0, 'value']);
+      $orgType = $form_state->getValue(['organisation_type', 0, 'value']);
     }
     elseif (isset($form['organisation_type']['widget'][0]['value']['#default_value'])) {
-      $org_type = $form['organisation_type']['widget'][0]['value']['#default_value'];
+      $orgType = $form['organisation_type']['widget'][0]['value']['#default_value'];
     }
 
     // Show/hide and required rules via server-side render instead of #states.
-    $show_basic = in_array($org_type, [
+    $showBasic = in_array($orgType, [
       'local_public_sector_body',
       'regional_public_sector_body',
       'national_public_sector_body',
@@ -58,14 +58,14 @@ final class PublicOrganisationForm {
 
     if (isset($form['country'])) {
       // Move country into the dynamic wrapper and control visibility.
-      $form['country']['#access'] = $show_basic;
+      $form['country']['#access'] = $showBasic;
       $form['public_org_dynamic_wrapper']['country'] = $form['country'];
       unset($form['country']);
     }
     if (isset($form['name'])) {
       // Move name into the dynamic wrapper, and make it required conditionally.
-      $form['name']['#access'] = $show_basic;
-      $form['name']['#required'] = $show_basic;
+      $form['name']['#access'] = $showBasic;
+      $form['name']['#required'] = $showBasic;
       $form['public_org_dynamic_wrapper']['name'] = $form['name'];
       unset($form['name']);
     }
@@ -76,8 +76,8 @@ final class PublicOrganisationForm {
       '#title' => t('European Union institution'),
       '#options' => PublicOrganisation::getEuropeanInstitutionOptions(),
       '#empty_option' => t('- Select -'),
-      '#access' => $org_type === 'european_union_institution',
-      '#required' => $org_type === 'european_union_institution',
+      '#access' => $orgType === 'european_union_institution',
+      '#required' => $orgType === 'european_union_institution',
     ];
 
     $form['public_org_dynamic_wrapper']['eu_agency_body_institution_body'] = [
@@ -85,8 +85,8 @@ final class PublicOrganisationForm {
       '#title' => t('European Union body'),
       '#options' => PublicOrganisation::getEuropeanBodyOptions(),
       '#empty_option' => t('- Select -'),
-      '#access' => $org_type === 'european_union_body',
-      '#required' => $org_type === 'european_union_body',
+      '#access' => $orgType === 'european_union_body',
+      '#required' => $orgType === 'european_union_body',
     ];
 
     $form['public_org_dynamic_wrapper']['eu_agency_body_institution_agency'] = [
@@ -94,8 +94,8 @@ final class PublicOrganisationForm {
       '#title' => t('European Union agency'),
       '#options' => PublicOrganisation::getEuropeanAgencyOptions(),
       '#empty_option' => t('- Select -'),
-      '#access' => $org_type === 'european_union_agency',
-      '#required' => $org_type === 'european_union_agency',
+      '#access' => $orgType === 'european_union_agency',
+      '#required' => $orgType === 'european_union_agency',
     ];
 
   }

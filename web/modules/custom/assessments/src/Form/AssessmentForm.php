@@ -18,21 +18,21 @@ class AssessmentForm extends ContentEntityForm {
   public function save(array $form, FormStateInterface $form_state): int {
     $result = parent::save($form, $form_state);
 
-    $message_args = ['%label' => $this->entity->toLink()->toString()];
-    $logger_args = [
+    $messageArgs = ['%label' => $this->entity->toLink()->toString()];
+    $loggerArgs = [
       '%label' => $this->entity->label(),
       'link' => $this->entity->toLink($this->t('View'))->toString(),
     ];
 
     switch ($result) {
       case SAVED_NEW:
-        $this->messenger()->addStatus($this->t('New assessment %label has been created.', $message_args));
-        $this->logger('assessments')->notice('New assessment %label has been created.', $logger_args);
+        $this->messenger()->addStatus($this->t('New assessment %label has been created.', $messageArgs));
+        $this->logger('assessments')->notice('New assessment %label has been created.', $loggerArgs);
         break;
 
       case SAVED_UPDATED:
-        $this->messenger()->addStatus($this->t('The assessment %label has been updated.', $message_args));
-        $this->logger('assessments')->notice('The assessment %label has been updated.', $logger_args);
+        $this->messenger()->addStatus($this->t('The assessment %label has been updated.', $messageArgs));
+        $this->logger('assessments')->notice('The assessment %label has been updated.', $loggerArgs);
         break;
 
       default:

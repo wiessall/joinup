@@ -17,32 +17,32 @@ class AssessmentSubEntity extends Assessment {
    */
   public function getRelatedReport(): ?AssessmentReport {
     // Map entity bundles to paragraph field names.
-    $field_map = [
+    $fieldMap = [
       'public_service' => 'affects',
       'expression' => 'expression',
       'participation' => 'has_participation',
     ];
 
-    $field_name = $field_map[$this->bundle()] ?? NULL;
-    if (!$field_name) {
+    $fieldName = $fieldMap[$this->bundle()] ?? NULL;
+    if (!$fieldName) {
       return NULL;
     }
 
     // Query for paragraphs that reference this entity.
-    $paragraph_storage = $this->entityTypeManager()->getStorage('paragraph');
-    $paragraph_ids = $paragraph_storage->getQuery()
+    $paragraphStorage = $this->entityTypeManager()->getStorage('paragraph');
+    $paragraphIds = $paragraphStorage->getQuery()
       ->accessCheck(FALSE)
-      ->condition($field_name, $this->id())
+      ->condition($fieldName, $this->id())
       ->range(0, 1)
       ->execute();
 
-    if (empty($paragraph_ids)) {
+    if (empty($paragraphIds)) {
       return NULL;
     }
 
-    $paragraph_id = reset($paragraph_ids);
+    $paragraphId = reset($paragraphIds);
     /** @var \Drupal\paragraphs\ParagraphInterface|null $paragraph */
-    $paragraph = $paragraph_storage->load($paragraph_id);
+    $paragraph = $paragraphStorage->load($paragraphId);
 
     if (!$paragraph) {
       return NULL;

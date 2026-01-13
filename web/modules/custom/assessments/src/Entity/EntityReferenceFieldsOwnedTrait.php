@@ -30,29 +30,29 @@ trait EntityReferenceFieldsOwnedTrait {
       return;
     }
 
-    $field_names = $this->getEntityReferenceFieldsOwned();
-    foreach ($field_names as $field_name) {
-      if (!$this->hasField($field_name) || !$this->original->hasField($field_name)) {
+    $fieldNames = $this->getEntityReferenceFieldsOwned();
+    foreach ($fieldNames as $fieldName) {
+      if (!$this->hasField($fieldName) || !$this->original->hasField($fieldName)) {
         continue;
       }
 
       // Get current and original entity IDs.
-      $current_ids = $this->getEntityReferenceFieldTargetIds($this, $field_name);
-      $original_ids = $this->getEntityReferenceFieldTargetIds($this->original, $field_name);
+      $currentIds = $this->getEntityReferenceFieldTargetIds($this, $fieldName);
+      $originalIds = $this->getEntityReferenceFieldTargetIds($this->original, $fieldName);
 
       // Find IDs that were removed.
-      $removed_ids = array_diff($original_ids, $current_ids);
+      $removedIds = array_diff($originalIds, $currentIds);
 
-      if (empty($removed_ids)) {
+      if (empty($removedIds)) {
         continue;
       }
 
       // Delete removed entities.
-      $field_definition = $this->getFieldDefinition($field_name);
-      $target_type = $field_definition->getSetting('target_type');
-      $entity_storage = $this->entityTypeManager()->getStorage($target_type);
-      $entities = $entity_storage->loadMultiple($removed_ids);
-      $entity_storage->delete($entities);
+      $fieldDefinition = $this->getFieldDefinition($fieldName);
+      $targetType = $fieldDefinition->getSetting('target_type');
+      $entityStorage = $this->entityTypeManager()->getStorage($targetType);
+      $entities = $entityStorage->loadMultiple($removedIds);
+      $entityStorage->delete($entities);
     }
   }
 
@@ -66,17 +66,17 @@ trait EntityReferenceFieldsOwnedTrait {
       return;
     }
 
-    $field_names = $this->getEntityReferenceFieldsOwned();
-    foreach ($field_names as $field_name) {
-      if (!$this->hasField($field_name)) {
+    $fieldNames = $this->getEntityReferenceFieldsOwned();
+    foreach ($fieldNames as $fieldName) {
+      if (!$this->hasField($fieldName)) {
         continue;
       }
 
-      $item_list = $this->get($field_name);
-      \assert($item_list instanceof EntityReferenceFieldItemListInterface);
+      $itemList = $this->get($fieldName);
+      \assert($itemList instanceof EntityReferenceFieldItemListInterface);
 
-      foreach ($item_list->referencedEntities() as $referenced_entity) {
-        $referenced_entity->delete();
+      foreach ($itemList->referencedEntities() as $referencedEntity) {
+        $referencedEntity->delete();
       }
     }
   }
@@ -86,23 +86,23 @@ trait EntityReferenceFieldsOwnedTrait {
    *
    * @param \Drupal\Core\Entity\ContentEntityInterface $entity
    *   The entity.
-   * @param string $field_name
+   * @param string $fieldName
    *   The field name.
    *
    * @return int[]
    *   Array of entity IDs.
    */
-  protected function getEntityReferenceFieldTargetIds(ContentEntityInterface $entity, string $field_name): array {
+  protected function getEntityReferenceFieldTargetIds(ContentEntityInterface $entity, string $fieldName): array {
     $ids = [];
 
-    if (!$entity->hasField($field_name)) {
+    if (!$entity->hasField($fieldName)) {
       return $ids;
     }
 
-    $item_list = $entity->get($field_name);
-    \assert($item_list instanceof EntityReferenceFieldItemListInterface);
+    $itemList = $entity->get($fieldName);
+    \assert($itemList instanceof EntityReferenceFieldItemListInterface);
 
-    foreach ($item_list as $item) {
+    foreach ($itemList as $item) {
       if (!empty($item->target_id)) {
         $ids[] = $item->target_id;
       }
