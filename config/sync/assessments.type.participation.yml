@@ -7,7 +7,7 @@ dependencies:
 third_party_settings:
   rdf_sync:
     type: 'http://data.europa.eu/m8g/Participation'
-    uri_plugin: joinup_po_namespace:s2k
+    uri_plugin: 'joinup_po_namespace:s2k'
     fields: {  }
 label_singular: participation
 label_plural: participations

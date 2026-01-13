@@ -29,7 +29,7 @@ third_party_settings:
         age: 0
   rdf_sync:
     type: 'http://www.w3.org/ns/dcat#Dataset'
-    uri_plugin: joinup_po_namespace:w21
+    uri_plugin: 'joinup_po_namespace:w21'
     fields:
       title:
         value:
