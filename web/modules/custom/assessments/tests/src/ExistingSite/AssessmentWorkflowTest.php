@@ -77,7 +77,7 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
     $this->assertFalse($publicService->isPublished(), 'Public service should be unpublished initially.');
     $this->assertFalse($participation->isPublished(), 'Participation should be unpublished initially.');
     $this->assertFalse($organisation->isPublished(), 'Organisation should be unpublished initially.');
-    $this->assertFalse($asset->isPublished(), 'Asset should be unpublished initially.');
+    $this->assertTrue($asset->isPublished(), 'Asset should be unpublished initially.');
 
     // Publish the report by setting its state to 'published'.
     $report->setWorkflowState('published');
@@ -146,21 +146,18 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
       'type' => 'expression',
       'description' => ['value' => $this->randomString()],
       'documented_in' => ['uri' => 'https://interoperable-europe.ec.europa.eu/'],
-      'status' => FALSE,
     ]);
     $this->markEntityForCleanup($expression);
 
     $public_service = Assessment::create([
       'type' => 'public_service',
       'thematic_area' => ['entity' => $this->assessmentVocabularyHelper->getTermFromIdentifier('assess_public_service_area', 'core_governance_and_administration')],
-      'status' => FALSE,
     ]);
     $this->markEntityForCleanup($public_service);
 
     $participation = Assessment::create([
       'type' => 'participation',
       'participant_type' => ['entity' => $this->assessmentVocabularyHelper->getTermFromIdentifier('assess_participant_type', 'european_union_agency')],
-      'status' => FALSE,
     ]);
     $this->markEntityForCleanup($participation);
 
@@ -169,6 +166,9 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
       'type' => 'solution',
       'title' => 'Test Asset',
       OgGroupAudienceHelperInterface::DEFAULT_FIELD => ['target_id' => $collection->id()],
+      // Solutions are published by default.
+      // @see \assessments_inline_entity_form_entity_form_alter
+      'field_state' => 'published',
     ]);
     $this->markEntityForCleanup($asset);
 
@@ -193,7 +193,6 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
     $organisation = Assessment::create([
       'type' => 'public_organisation',
       'name' => 'Test Organisation',
-      'status' => FALSE,
     ]);
     $this->markEntityForCleanup($organisation);
     return $organisation;
