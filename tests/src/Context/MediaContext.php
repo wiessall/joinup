@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Given;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\FileTrait;
@@ -36,9 +37,8 @@ class MediaContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a column name is incorrect.
-   *
-   * @Given the following :media_type_id media:
    */
+  #[Given('the following :media_type_id media:')]
   public function createMedia(string $mediaTypeLabel, TableNode $table): void {
     $entityTypeManager = \Drupal::entityTypeManager();
     $mediaTypes = $entityTypeManager->getStorage('media_type')
