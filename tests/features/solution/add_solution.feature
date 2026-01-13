@@ -6,8 +6,8 @@ Feature: Test adding solutions.
 
   @javascript @generateMedia @generateMediaTypes:solution_logo
   Scenario: Required fields should be filled in
-    Given I am logged in as a facilitator of the "The Portal" collection
-    And I go to the homepage of the "The Portal" collection
+    Given I am logged in as a facilitator of the "Portal support" collection
+    And I go to the homepage of the "Portal support" collection
     And I click "Add solution" in the plus button menu
 
     And I press "Confirm"
@@ -24,6 +24,7 @@ Feature: Test adding solutions.
     # Test that the tab doesn't change when an image is uploaded.
     When I click "Additional information"
     And I select image #2 as solution logo
+    And I fill in "Alternative text" with "Alternative logo text"
     Then I should see the text "Logo"
 
     When I click "Solution information"
@@ -200,6 +201,7 @@ Feature: Test adding solutions.
     And I press "Add remote file URL"
     And I fill in "resources[1][subform][remote_file_url][0][uri]" with "http://example.com/guzzle"
     And I attach the file "logo.png" to "Logo"
+    And I fill in "Alternative text" with "Alternative logo text"
     And I press "Confirm"
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
@@ -306,14 +308,15 @@ Feature: Test adding solutions.
     And I click "Additional information"
     Then I remove the first file from "Logo"
     And I select image #2 as solution logo
+    And I fill in "Alternative text" with "Alternative logo text"
     And I press "Confirm"
     And I press "Publish"
     Then the "Cleaning solution" solution logo is image #2
 
   @javascript
   Scenario: User should see all topic categories.
-    Given I am logged in as a facilitator of the "The Portal" collection
-    And I go to the homepage of the "The Portal" collection
+    Given I am logged in as a facilitator of the "Portal support" collection
+    And I go to the homepage of the "Portal support" collection
     And I click "Add solution" in the plus button menu
     When the "Topic" tagify autocomplete should contain the following option groups:
       | Economy and Welfare  |
@@ -326,8 +329,8 @@ Feature: Test adding solutions.
 
   @javascript
   Scenario: Previous and Next buttons should be present and functional.
-    Given I am logged in as a facilitator of the "The Portal" collection
-    And I go to the homepage of the "The Portal" collection
+    Given I am logged in as a facilitator of the "Portal support" collection
+    And I go to the homepage of the "Portal support" collection
     And I open the plus button menu
     And I click "Add solution"
 
@@ -361,9 +364,9 @@ Feature: Test adding solutions.
   Scenario: Custom constraints point to the correct field.
     Given solution content:
       | title | short ID | state     | collection |
-      | Test  | qwerty   | published | The Portal |
+      | Test  | qwerty   | published | Portal support |
     Given I am logged in as a moderator
-    And I go to the "The Portal" collection
+    And I go to the "Portal support" collection
     And I open the plus button menu
     And I click "Add solution"
     When I click "Additional information"

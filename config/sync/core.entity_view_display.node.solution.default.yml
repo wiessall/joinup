@@ -976,52 +976,6 @@ third_party_settings:
                   class: ''
                   style: ''
                   data: ''
-          11816b4b-fea8-433f-99b5-bd0a68a5990c:
-            uuid: 11816b4b-fea8-433f-99b5-bd0a68a5990c
-            region: content
-            configuration:
-              id: 'field_block:node:solution:solution_type'
-              label: 'Solution type'
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: entity_reference_label
-                label: above
-                settings:
-                  link: false
-                third_party_settings:
-                  field_delimiter:
-                    delimiter: ','
-                  field_formatter_range:
-                    order: 0
-                    limit: 0
-                    offset: 0
-                  joinup_slick:
-                    preset: ''
-                    field_label: true
-                  template_suggestion:
-                    template_suggestion: ''
-            weight: 2
-            additional:
-              component_attributes:
-                block_attributes:
-                  id: ''
-                  class: 'pe-5 pb-4'
-                  style: ''
-                  data: ''
-                block_title_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
-                block_content_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
           6eb28d93-8a8a-4ea4-aed5-1df97b7ea060:
             uuid: 6eb28d93-8a8a-4ea4-aed5-1df97b7ea060
             region: content
@@ -1122,6 +1076,52 @@ third_party_settings:
                 settings:
                   view_mode: about
                 third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 10
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: 'pe-5 pb-4'
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+          11816b4b-fea8-433f-99b5-bd0a68a5990c:
+            uuid: 11816b4b-fea8-433f-99b5-bd0a68a5990c
+            region: content
+            configuration:
+              id: 'field_block:node:solution:solution_type'
+              label: 'Solution type'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_label
+                label: above
+                settings:
+                  link: false
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ','
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  joinup_slick:
+                    preset: ''
+                    field_label: true
                   template_suggestion:
                     template_suggestion: ''
             weight: 9

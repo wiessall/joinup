@@ -246,6 +246,6 @@ function iop_preprocess_page_title(array &$variables): void {
         ];
         break;
     }
-    $variables['url_more'] = $link;
+    $variables['url_more'] = $link ?? NULL;
   }
 }

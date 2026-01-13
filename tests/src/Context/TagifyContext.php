@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
+use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\NameMappingsTrait;
@@ -29,9 +30,8 @@ class TagifyContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the tagify field is not found.
-   *
-   * @When I select :tags option(s) from :fieldName
    */
+  #[When('I select :tags option(s) from :fieldName')]
   public function selectTagsFromTagify(string $tags, string $fieldName): void {
     if ($this->hasJavascriptSupport()) {
       $this->selectFromTagifyWithJs($tags, $fieldName);
@@ -154,9 +154,8 @@ class TagifyContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the tagify field is not found.
-   *
-   * @When I remove :tags options from :fieldName
    */
+  #[When('I remove :tags options from :fieldName')]
   public function removeTagsFromTagify(string $tags, string $fieldName): void {
     if (!$this->hasJavascriptSupport()) {
       throw new \Exception('This step requires JavaScript to run.');
@@ -186,9 +185,8 @@ class TagifyContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the tagify option is not found.
-   *
-   * @When the :fieldName tagify autocomplete should contain the following options:
    */
+  #[When('the :fieldName tagify autocomplete should contain the following options:')]
   public function checkTagifyOptions(string $fieldName, TableNode $table): void {
     if (!$this->hasJavascriptSupport()) {
       throw new \Exception('This step requires JavaScript to run.');
@@ -214,9 +212,8 @@ class TagifyContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the tagify option is not found.
-   *
-   * @When the :fieldName tagify should not contain the following option :option
    */
+  #[When('the :fieldName tagify should not contain the following option :option')]
   public function checkTagifyOptionsAreNotPresent(string $fieldName, string $option): void {
     if (!$this->hasJavascriptSupport()) {
       throw new \Exception('This step requires JavaScript to run.');
@@ -239,9 +236,8 @@ class TagifyContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the tagify option group is not found.
-   *
-   * @When the :fieldName tagify autocomplete should contain the following option groups:
    */
+  #[When('the :fieldName tagify autocomplete should contain the following option groups:')]
   public function checkTagifyOptionGroups(string $fieldName, TableNode $table): void {
     if (!$this->hasJavascriptSupport()) {
       throw new \Exception('This step requires JavaScript to run.');

@@ -14,7 +14,7 @@ weight: 0
 variant: layout_builder
 variant_settings:
   id: layout_builder
-  label: null
+  label: Collection agreement
   weight: 0
   uuid: 0462e716-8c92-406c-862e-2f04b252b01d
   sections:

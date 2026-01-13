@@ -19,7 +19,9 @@ abstract class ArbitraryFacetBase extends PluginBase implements ArbitraryFacetIn
   /**
    * {@inheritdoc}
    */
-  public function getFacetDefinition(): array {}
+  public function getFacetDefinition(): array {
+    return [];
+  }
 
   /**
    * {@inheritdoc}
