@@ -12,3 +12,16 @@ grant_type:
     enabled: true
     settings: {  }
 scope: assessments
+notifications:
+  request:
+    enabled: true
+    subject: 'New OAuth client request from [oauth_client_request:owner] on [site:name]'
+    body: "Dear [user:name],\r\n\r\nA new OAuth client request has been submitted by [oauth_client_request:owner] on [site:name] with the following request details:\r\n- [oauth_client_request:label]\r\n- [oauth_client_request:request_reason]\r\n\r\nYou may see the pending requests at [oauth_client:client_requests] or directly take action on the request at [oauth_client_request:request-edit-url]\r\n\r\nBest regards,\r\nThe [site:name] Team\r\n"
+  approve:
+    enabled: true
+    subject: 'Your OAuth client request has been approved'
+    body: "Dear [oauth_client_request:owner],\r\n\r\nWe are pleased to inform you that your OAuth client request, [oauth_client_request:label], has been approved.\r\n\r\nWhat is next?\r\n- Visit the [oauth_client_request:owner:client_requests] to view the available list of your requests.\r\n- Visit the [oauth_client_request:client-edit-url] page to view the client ID and set the client secret.\r\n\r\nIf you have any questions, feel free to contact our support team.\r\n\r\nBest regards,\r\nThe [site:name] Team\r\n"
+  reject:
+    enabled: true
+    subject: 'Your OAuth client request has been rejected'
+    body: "Dear [oauth_client_request:owner],\r\n\r\nWe regret to inform you that your OAuth client request, [oauth_client_request:label], could not be approved at this time.\r\n\r\nThe reason for the rejection is: [oauth_client_request:reject_reason]\r\n\r\nThank you for your understanding.\r\n\r\nBest regards,\r\nThe [site:name] Team\r\n"
