@@ -6,6 +6,9 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Serialization\Yaml;
@@ -42,9 +45,8 @@ class AssessmentsContext extends RawDrupalContext {
    *   The bundle machine name.
    * @param \Behat\Gherkin\Node\TableNode $assessmentsTable
    *   The table with the data for the fields of the assessment.
-   *
-   * @Given :type assessment(s):
    */
+  #[Given(':type assessment(s):')]
   public function createAssessments(string $type, TableNode $assessmentsTable): void {
     foreach ($assessmentsTable->getHash() as $assessment) {
       $vocabHelper = \Drupal::service(AssessmentVocabularyHelper::class);
@@ -125,9 +127,8 @@ class AssessmentsContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $bindingTable
    *   The table with binding requirement data.
-   *
-   * @Given the following report has binding requirement:
    */
+  #[Given('the following report has binding requirement:')]
   public function addBindingRequirementToReport(TableNode $bindingTable): void {
     $binding = $bindingTable->getRowsHash();
 
@@ -170,9 +171,8 @@ class AssessmentsContext extends RawDrupalContext {
 
   /**
    * Creates the assessment collection if it doesn't exist yet.
-   *
-   * @Given the assessments collection exists
    */
+  #[Given('the assessments collection exists')]
   public function createAssessmentsCollection(): void {
     $collection = \Drupal::service('entity.repository')->loadEntityByUuid('node', AssessmentInterface::GROUP_UUID);
     if (!$collection instanceof CollectionInterface) {
@@ -191,9 +191,8 @@ class AssessmentsContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The table with the data for the fields of the assessment statement.
-   *
-   * @Given (the following )assessment statement(s):
    */
+  #[Given('(the following )assessment statement(s):')]
   public function createAssessmentStatements(TableNode $table): void {
     foreach ($table->getColumnsHash() as $values) {
       assert(in_array($values['statement_type'], ['legal', 'organisational', 'semantic', 'technical'], TRUE), 'Invalid assessment statement type provided.');
@@ -224,9 +223,8 @@ class AssessmentsContext extends RawDrupalContext {
    * @param \Behat\Gherkin\Node\PyStringNode $expectedJsonAsYaml
    *   The expected JSON. For convenience, the value should be serialized with
    *   YAML encoding as it offers better developer experience (DX).
-   *
-   * @Then a GET request to :path should return the following JSON:
    */
+  #[Then('a GET request to :path should return the following JSON:')]
   public function assertResponseJson($path, PyStringNode $expectedJsonAsYaml): void {
     $baseUrl = $this->getMinkParameter('base_url');
     $replacements = ['__base_url__' => $baseUrl];
@@ -243,9 +241,8 @@ class AssessmentsContext extends RawDrupalContext {
    *
    * @param string $title
    *   The title of the assessment report.
-   *
-   * @When I go to the moderate form of the :title assessment report
    */
+  #[When('I go to the moderate form of the :title assessment report')]
   public function visitAssessmentReportModerateForm(string $title): void {
     $entity = $this->getEntityByLabel('assessment', $title, 'report');
     $url = Url::fromRoute('assessments.moderate', [
@@ -262,9 +259,8 @@ class AssessmentsContext extends RawDrupalContext {
    *   The assessment bundle type (e.g., 'expression', 'report').
    * @param string $name
    *   The name of the assessment entity.
-   *
-   * @Then the :type assessment with name :name should exist
    */
+  #[Then('the :type assessment with name :name should exist')]
   public function assertAssessmentWithNameExists(string $type, string $name): void {
     $storage = \Drupal::entityTypeManager()->getStorage('assessment');
     $entities = $storage->loadByProperties([
@@ -285,10 +281,9 @@ class AssessmentsContext extends RawDrupalContext {
    *   The name of the assessment.
    * @param string $bundle
    *   The assessment bundle type.
-   *
-   * @When I click the ID link for the :name :bundle assessment
-   * @When I click the ID link for the :name assessment
    */
+  #[When('I click the ID link for the :name :bundle assessment')]
+  #[When('I click the ID link for the :name assessment')]
   public function clickAssessmentIdLink(string $name, string $bundle = 'report'): void {
     $assessment = $this->getEntityByLabel('assessment', $name, $bundle);
     $id = $assessment->id();
@@ -311,9 +306,8 @@ class AssessmentsContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The email data table.
-   *
-   * @Then the following assessment report submitted email should have been sent:
    */
+  #[Then('the following assessment report submitted email should have been sent:')]
   public function assertAssessmentReportSubmittedEmail(TableNode $table): void {
     $data = $table->getRowsHash();
     $entity = $this->getEntityByLabel('assessment', $data['assessment'], 'report');

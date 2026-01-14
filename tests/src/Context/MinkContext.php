@@ -7,6 +7,7 @@ namespace Drupal\joinup\Context;
 use Behat\Mink\Element\ElementInterface;
 use Behat\Mink\Selector\Xpath\Escaper;
 use Behat\Step\Given;
+use Behat\Step\When;
 use Drupal\DrupalExtension\Context\MinkContext as DrupalExtensionMinkContext;
 use Drupal\joinup\Traits\JavascriptTrait;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -84,9 +85,8 @@ class MinkContext extends DrupalExtensionMinkContext {
    *   The label of the radio button.
    * @param string $name
    *   The name attribute of the radio button.
-   *
-   * @When I select the radio button :label with the name :name
    */
+  #[When('I select the radio button :label with the name :name')]
   public function assertSelectRadioByName(string $label, string $name): void {
     $page = $this->getSession()->getPage();
 
