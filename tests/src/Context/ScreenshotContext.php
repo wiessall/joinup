@@ -6,10 +6,12 @@ namespace Drupal\joinup\Context;
 
 use Behat\Behat\Context\Environment\InitializedContextEnvironment;
 use Behat\Behat\Hook\Scope\AfterStepScope;
+use Behat\Hook\AfterStep;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Exception\DriverException;
 use Behat\Mink\Exception\ExpectationException;
 use Behat\MinkExtension\Context\RawMinkContext;
+use Behat\Step\Then;
 
 /**
  * Provides step definitions for taking screenshots.
@@ -29,10 +31,9 @@ class ScreenshotContext extends RawMinkContext {
    *
    * @param string|null $name
    *   The file name.
-   *
-   * @Then I take a screenshot :name
-   * @Then I take a screenshot
    */
+  #[Then('I take a screenshot :name')]
+  #[Then('I take a screenshot')]
   public function takeScreenshot(?string $name = NULL): void {
     $name ??= 'screenshot-' . \Drupal::service('password_generator')->generate();
     $message = "Screenshot:";
@@ -44,9 +45,8 @@ class ScreenshotContext extends RawMinkContext {
    *
    * @param \Behat\Behat\Hook\Scope\AfterStepScope $event
    *   The event.
-   *
-   * @AfterStep
    */
+  #[AfterStep]
   public function screenshotForPhpNotices(AfterStepScope $event): void {
     $environment = $event->getEnvironment();
     // Make sure the environment has the MessageContext.
@@ -73,9 +73,8 @@ class ScreenshotContext extends RawMinkContext {
    *
    * @param \Behat\Behat\Hook\Scope\AfterStepScope $event
    *   The event.
-   *
-   * @AfterStep
    */
+  #[AfterStep]
   public function takeScreenshotAfterFailedStep(AfterStepScope $event): void {
     if (!$event->getTestResult()->isPassed()) {
       $message = "{$this->getStepLine($event)} screenshot(s):";
