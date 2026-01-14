@@ -140,6 +140,9 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
 
   /**
    * Creates a binding requirement paragraph with all dependencies.
+   *
+   * @return \Drupal\paragraphs\ParagraphInterface
+   *   The created binding requirement paragraph.
    */
   private function createParagraphBindingRequirement(): ParagraphInterface {
     $expression = Assessment::create([
@@ -188,6 +191,9 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
 
   /**
    * Creates an assessment organisation.
+   *
+   * @return \Drupal\assessments\AssessmentInterface
+   *   The created assessment organisation.
    */
   private function createAssessmentOrganisation(): AssessmentInterface {
     $organisation = Assessment::create([
