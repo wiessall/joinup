@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e786b1ac73e75c238b78a778443e53ef",
+    "content-hash": "2b4ec91c7506dda3ad13402b52a04e02",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -22594,23 +22594,25 @@
         },
         {
             "name": "drupal/cas_mock_server",
-            "version": "2.0.2",
+            "version": "2.0.4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/cas_mock_server.git",
-                "reference": "2.0.2"
+                "reference": "2.0.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/cas_mock_server-2.0.2.zip",
-                "reference": "2.0.2",
-                "shasum": "7ad9f563d3cddfcd03df3917e914c517d202639d"
+                "url": "https://ftp.drupal.org/files/projects/cas_mock_server-2.0.4.zip",
+                "reference": "2.0.4",
+                "shasum": "2ba33a287c2c087c543e17dc8de698353537e108"
             },
             "require": {
                 "drupal/core": ">=9.3"
             },
             "require-dev": {
-                "drupal/cas": "^2.1"
+                "drupal/cas": "^2.1 || ^3.0",
+                "drupal/drupal-extension": "^5",
+                "drush/drush": "^12.4 || ^13"
             },
             "suggest": {
                 "drupal/config_override_warn": "Shows a warning on the CAS configuration form when the mock server is active."
@@ -22618,8 +22620,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.2",
-                    "datestamp": "1736329039",
+                    "version": "2.0.4",
+                    "datestamp": "1763583295",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"

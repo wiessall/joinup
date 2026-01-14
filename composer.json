@@ -170,7 +170,7 @@
         "ext-libxml": "*",
         "dantleech/gherkin-lint": "^0.2.3",
         "drupal/admin_toolbar": "^3.4",
-        "drupal/cas_mock_server": "2.0.2",
+        "drupal/cas_mock_server": "^2.0",
         "drupal/coder": "^8.3",
         "drupal/composer_deploy": "^1.6",
         "drupal/config_inspector": "^2.1",
@@ -346,6 +346,9 @@
             },
             "drupal/cas": {
                 "Invalid constraint for server.verify in cas.settings @see https://www.drupal.org/i/3542632": "resources/patch/php/drupal/cas/3542632.diff"
+            },
+            "drupal/cas_mock_server": {
+                "Compatibility fixes broke the CasMockServerContext @see https://www.drupal.org/i/3558906": "resources/patch/php/drupal/cas_mock_server/3558906-59b699de.diff"
             },
             "drupal/config_inspector": {
                 "Missing schema on nested elements @see https://www.drupal.org/i/3548299": "resources/patch/php/drupal/config_inspector/3548299.diff"
