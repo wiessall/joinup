@@ -28,20 +28,24 @@ final class NotificationSender extends BaseNotificationSender {
    *   The action triggering the email.
    */
   protected function sendEmailToUsers(OauthClientRequestInterface $entity, array $uids, NotificationType $action): void {
-    $notification = $this->getActionSettings($action);
+    $requestType = $this->getRequestType($entity);
+    if (!$requestType) {
+      return;
+    }
+
+    $subjectTemplate = $requestType->getNotificationSetting($action, 'subject') ?? '';
+    $bodyTemplate = $requestType->getNotificationSetting($action, 'body') ?? '';
     $userStorage = $this->entityTypeManager->getStorage('user');
     $accounts = $userStorage->loadMultiple($uids);
     foreach ($accounts as $account) {
-      $subject = $notification['subject'];
-      $body = $notification['body'];
       $data = [
         'oauth_client_request' => $entity,
         'user' => $account,
         'oauth_client' => NULL,
       ];
 
-      $subject = $this->token->replace($subject, $data, ['clear' => TRUE]);
-      $body = $this->token->replace($body, $data, ['clear' => TRUE]);
+      $subject = $this->token->replace($subjectTemplate, $data, ['clear' => TRUE]);
+      $body = $this->token->replace($bodyTemplate, $data, ['clear' => TRUE]);
       $to = $account->getEmail();
       $langcode = $account->getPreferredLangcode() ?: $this->languageManager->getDefaultLanguage()->getId();
 
