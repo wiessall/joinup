@@ -163,7 +163,7 @@ display:
           exclude: false
           alter:
             alter_text: false
-            text: "<h2>{{ title_1__value }} <a class=\"permalink\" href=\"{{ view_node }}\" title=\"Permalink to {{ title_1__value }}\">\r\n        {{ pattern('icon', {\r\n          name: 'link-45deg',\r\n          size: 'm'\r\n        }) }}\r\n      </a></h2>"
+            text: ''
             make_link: false
             path: ''
             absolute: false
@@ -193,7 +193,7 @@ display:
           element_label_type: ''
           element_label_class: ''
           element_label_colon: false
-          element_wrapper_type: h2
+          element_wrapper_type: ''
           element_wrapper_class: ''
           element_default_classes: true
           empty: ''
@@ -260,7 +260,7 @@ display:
           element_wrapper_class: ''
           element_default_classes: true
           empty: ''
-          hide_empty: true
+          hide_empty: false
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: value

@@ -52,7 +52,7 @@
   {% for row in items %}
     <div{{ row.attributes.removeAttribute('style').addClass('row') }}>
       {% for column in row.content %}
-        <div{{ column.attributes.removeAttribute('style').addClass('col-12 col-md-9 mb-4') }}>
+        <div{{ column.attributes.removeAttribute('style').addClass('col-12 col-md-6 mb-4') }}>
           {{- column.content -}}
         </div>
       {% endfor %}
