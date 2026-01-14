@@ -651,7 +651,6 @@ display:
         - user.permissions
       tags:
         - 'config:search_api.index.published'
-        - 'config:views.view.content_overview'
         - 'search_api_list:published'
   page_1:
     id: page_1
