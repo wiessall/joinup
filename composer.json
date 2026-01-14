@@ -153,10 +153,10 @@
         "openeuropa/oe_bootstrap_theme": "^1.21",
         "openeuropa/oe_dashboard_agent": "^1.0",
         "openeuropa/oe_webtools": "^1.40",
-        "psr/http-factory-implementation": "*",
-        "semiceu/adms-ap_validator": "1.0.0-alpha1",
+        "psr/http-factory-implementation": "^1.0",
+        "semiceu/adms-ap_validator": "^1.0",
         "sweetrdf/easyrdf": "^1.9",
-        "symfony/http-client": "*"
+        "symfony/http-client": "^6.4"
     },
     "require-dev": {
         "ext-fileinfo": "*",
