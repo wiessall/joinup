@@ -23,11 +23,21 @@ function joinup_search_views_data_alter(array &$data): void {
   /** @var \Drupal\Core\Entity\EntityTypeInterface $entity_type */
   $entity_type_manager = \Drupal::service('entity_type.manager');
 
+  /* @see \Drupal\search_api\Hook\SearchApiViewsHooks::findFieldAlias */
+  $find_field_alias = function (string $field_id, array $table): string {
+    $base = $field_alias = preg_replace('/[^a-zA-Z0-9]+/S', '_', $field_id);
+    $i = 0;
+    while (isset($table[$field_alias])) {
+      $field_alias = $base . '_' . ++$i;
+    }
+    return $field_alias;
+  };
+
   foreach (Index::loadMultiple() as $index) {
     /** @var \Drupal\search_api\IndexInterface $index */
     $datasource_tables_prefix = 'search_api_datasource_' . $index->id() . '_';
     foreach ($index->getDatasources() as $datasource_id => $datasource) {
-      $table_key = _search_api_views_find_field_alias($datasource_tables_prefix . $datasource_id, $alias_tracker);
+      $table_key = $find_field_alias($datasource_tables_prefix . $datasource_id, $alias_tracker);
       // Mark the table key alias as used.
       $alias_tracker[$table_key] = TRUE;
 

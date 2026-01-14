@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Behat\Context\Context;
+use Behat\Step\Then;
+use Behat\Step\When;
 use DateInterval;
 use DatePeriod;
 use DateTime;
@@ -21,9 +23,8 @@ class CalendarContext extends RawDrupalContext implements Context {
 
   /**
    * Asserts that the calendar contains every day of the current month.
-   *
-   * @Then I should see the calendar showing all days of current month
    */
+  #[Then('I should see the calendar showing all days of current month')]
   public function iShouldSeeTheCalendarShowingAllDaysOfCurrentMonth(): void {
     $page = $this->getSession()->getPage();
     $currentYear = date('Y');
@@ -44,9 +45,8 @@ class CalendarContext extends RawDrupalContext implements Context {
 
   /**
    * Asserts that the calendar contains every day of the current week.
-   *
-   * @Then I should see the calendar showing all days of current week
    */
+  #[Then('I should see the calendar showing all days of current week')]
   public function theCalendarContainsAllDaysOfCurrentWeek(): void {
     $today = new DateTime();
     $startOfWeek = (clone $today)->modify('this week');
@@ -93,9 +93,8 @@ class CalendarContext extends RawDrupalContext implements Context {
    *   Calendar mode: month or week.
    *
    * @throws \DateMalformedStringException
-   *
-   * @When I navigate the calendar to :date in :mode mode
    */
+  #[When('I navigate the calendar to :date in :mode mode')]
   public function iNavigateTheCalendarTo(string $date, string $mode): void {
     $pagerSelector = $this->getPagerByDate($date);
     $dateTimestamp = strtotime($date);
@@ -231,9 +230,8 @@ class CalendarContext extends RawDrupalContext implements Context {
    *
    * @param string $event
    *   The name of the event.
-   *
-   * @Then I see the :event showing in the Calendar
    */
+  #[Then('I see the :event showing in the Calendar')]
   public function iSeeTheEventShowingInTheCalendar(string $event): void {
     $page = $this->getSession()->getPage();
     $elements = $page->findAll('css', '.calendar-view-day');

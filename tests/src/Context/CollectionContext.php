@@ -6,6 +6,9 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -45,9 +48,8 @@ class CollectionContext extends RawDrupalContext {
 
   /**
    * Navigates to the propose collection form.
-   *
-   * @When I go to the propose collection form
    */
+  #[When('I go to the propose collection form')]
   public function visitProposeCollectionForm(): void {
     $this->visitPath('propose/collection');
   }
@@ -58,10 +60,9 @@ class CollectionContext extends RawDrupalContext {
    * @param string $collection
    *   The title of the collection.
    *
-   * @When I visit the :collection Code of Conduct consent page
-   *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
+  #[When('I visit the :collection Code of Conduct consent page')]
   public function visitCodeOfConductConsentPage(string $collection): void {
     $entity = $this->getEntityByLabel('node', $collection, 'collection');
 
@@ -78,9 +79,8 @@ class CollectionContext extends RawDrupalContext {
    *   The title of the collection.
    * @param string $operation
    *   The operation to perform (updated, published, unpublished).
-   *
-   * @Given the Code of Conduct for :title collection is :operation
    */
+  #[Given('the Code of Conduct for :title collection is :operation')]
   public function updateCodeOfConductPage(string $title, string $operation): void {
     if (!in_array($operation, ['updated', 'published', 'unpublished'], TRUE)) {
       throw new \InvalidArgumentException();
@@ -112,9 +112,8 @@ class CollectionContext extends RawDrupalContext {
    *
    * @param string $collection
    *   The title of the collection.
-   *
-   * @Then I should be on (the homepage of )the :collection collection
    */
+  #[Then('I should be on (the homepage of )the :collection collection')]
   public function assertCollectionPath(string $collection): void {
     /** @var \Drupal\node\NodeInterface $entity */
     $entity = $this->getEntityByLabel('node', $collection, 'collection');
@@ -129,9 +128,8 @@ class CollectionContext extends RawDrupalContext {
    *   Remove this todo when ISAICP-5176 is fixed.
    *
    * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5176
-   *
-   * @Given I visit the collection overview page
    */
+  #[Given('I visit the collection overview page')]
   public function visitCollectionOverviewPage(): void {
     $this->visitPath('/collections');
   }
@@ -224,9 +222,8 @@ class CollectionContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a collection is not found.
-   *
-   * @Given (the following )collection user membership(s):
    */
+  #[Given('(the following )collection user membership(s):')]
   public function givenCollectionUserMemberships(TableNode $membership_table): void {
     foreach ($membership_table->getColumnsHash() as $values) {
       $group = $this->getEntityByLabel('node', $values['collection']);
@@ -259,9 +256,8 @@ class CollectionContext extends RawDrupalContext {
    *
    * @throws \Exception
    *    Throws an exception if the parent item is not found.
-   *
-   * @Given (the following )custom page(s) :menu_type menu structure for the :group_label :group_bundle:
    */
+  #[Given('(the following )custom page(s) :menu_type menu structure for the :group_label :group_bundle:')]
   public function givenCollectionMenuStructure(TableNode $menu_table, string $menu_type, string $group_label, string $group_bundle): void {
     $group = $this->getEntityByLabel('node', $group_label, $group_bundle);
     $menu_link_manager = \Drupal::getContainer()->get('plugin.manager.menu.link');
@@ -320,9 +316,8 @@ class CollectionContext extends RawDrupalContext {
    *    Throws an exception when the user is not found.
    *
    * @see assertCollectionOwnership()
-   *
-   * @Given I should own the :entity collection
    */
+  #[Given('I should own the :entity collection')]
   public function assertCollectionOwnershipCurrentUser(string $entity): void {
     if (!$current_user = $this->userManager->getCurrentUser()) {
       throw new \Exception("No current user.");
@@ -351,9 +346,8 @@ class CollectionContext extends RawDrupalContext {
    * @todo Maybe there is a better definition available here like 'The
    * following state buttons should be available for the user on the
    * collection'.
-   *
-   * @Then for the following collection, the corresponding user should have the corresponding (available )state buttons:
    */
+  #[Then('for the following collection, the corresponding user should have the corresponding (available )state buttons:')]
   public function verifyStateButtons(TableNode $check_table): void {
     foreach ($check_table->getColumnsHash() as $values) {
       $username = $values['user'];
@@ -385,9 +379,8 @@ class CollectionContext extends RawDrupalContext {
    *
    * @throws \Exception
    *    Thrown when the user does not exist.
-   *
-   * @Then the visibility of the delete link should be as follows for these users in these collections:
    */
+  #[Then('the visibility of the delete link should be as follows for these users in these collections:')]
   public function verifyDeleteLinkVisibility(TableNode $check_table): void {
     foreach ($check_table->getColumnsHash() as $values) {
       $user = $this->getUserByName($values['user']);
@@ -402,9 +395,8 @@ class CollectionContext extends RawDrupalContext {
    *
    * @param string $label
    *   The label of the collection group.
-   *
-   * @Given I am about to leave( the) :label( collection)
    */
+  #[Given('I am about to leave( the) :label( collection)')]
   public function visitCollectionLeaveConfirmationPage(string $label): void {
     $collection = $this->getEntityByLabel('node', $label, 'collection');
 
@@ -425,10 +417,9 @@ class CollectionContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown if a logged in user was not found or it was not passed, or if the
    *   assertion failed.
-   *
-   * @Then I am member of :labels collection(s)
-   * @Then user :user_name is member of :labels collection(s)
    */
+  #[Then('I am member of :labels collection(s)')]
+  #[Then('user :user_name is member of :labels collection(s)')]
   public function assertUserIsMemberOfCollection(string $labels, ?string $user_name = NULL): void {
     /** @var \Drupal\user\UserInterface $account */
     if (!$user_name) {
@@ -466,9 +457,8 @@ class CollectionContext extends RawDrupalContext {
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    *   Thrown when the updated collection cannot be saved.
-   *
-   * @When I change the name of the :collection collection to :name
    */
+  #[When('I change the name of the :collection collection to :name')]
   public function updateCollectionName(string $collection, string $name): void {
     $entity = $this->getEntityByLabel('node', $collection);
     $entity->set('title', $name)->save();
@@ -482,10 +472,9 @@ class CollectionContext extends RawDrupalContext {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    *   The navigator is missing from the page.
-   *
-   * @Then I should see the glossary navigator :expected_navigator
-   * @Then I should not see the glossary navigator
    */
+  #[Then('I should see the glossary navigator :expected_navigator')]
+  #[Then('I should not see the glossary navigator')]
   public function assertGlossaryNavigator(?string $expected_navigator = NULL): void {
     $page = $this->getSession()->getPage();
     $navigator_node = $page->find('css', '.glossary-navigator');
