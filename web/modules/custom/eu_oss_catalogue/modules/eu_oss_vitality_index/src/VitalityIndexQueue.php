@@ -7,7 +7,6 @@ namespace Drupal\eu_oss_vitality_index;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Queue\QueueFactory;
-use Drupal\Core\Queue\QueueInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
@@ -20,20 +19,12 @@ readonly class VitalityIndexQueue implements VitalityIndexQueueInterface {
    */
   const QUEUE_NAME = 'eu_oss_vitality_index';
 
-  /**
-   * Vitality index queue.
-   *
-   * @var \Drupal\Core\Queue\QueueInterface
-   */
-  protected QueueInterface $queue;
-
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     #[Autowire(service: 'logger.channel.eu_oss_catalogue')]
     protected LoggerChannelInterface $logger,
-    QueueFactory $queueFactory,
+    protected QueueFactory $queueFactory,
   ) {
-    $this->queue = $queueFactory->get(self::QUEUE_NAME);
   }
 
   /**
@@ -45,8 +36,9 @@ readonly class VitalityIndexQueue implements VitalityIndexQueueInterface {
       return;
     }
 
-    $this->queue->createQueue();
-    $this->queue->createItem($solutionId);
+    $queue = $this->queueFactory->get(self::QUEUE_NAME);
+    $queue->createQueue();
+    $queue->createItem($solutionId);
   }
 
   /**
@@ -64,7 +56,8 @@ readonly class VitalityIndexQueue implements VitalityIndexQueueInterface {
       ->count()
       ->execute();
 
-    return $this->queue->numberOfItems() > $numberOfNodes;
+    $queue = $this->queueFactory->get(self::QUEUE_NAME);
+    return $queue->numberOfItems() > $numberOfNodes;
   }
 
 }
