@@ -8,7 +8,9 @@ use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
+use Drupal\og\Attribute\OgGroupResolver;
 use Drupal\og\GroupTypeManagerInterface;
 use Drupal\og\OgResolvedGroupCollectionInterface;
 use Drupal\og\Plugin\OgGroupResolver\RouteGroupResolver;
@@ -20,14 +22,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * Use this to make the group (collection or solution) available as a route
  * context on paths that are not defined as entity link templates.
- *
- * @OgGroupResolver(
- *   id = "joinup_group_content_management",
- *   label = "Group content management resolver",
- *   description = @Translation("Checks if the current route is an entity path
- *   that belongs to a group entity."),
- * )
  */
+#[OgGroupResolver(
+  id: 'joinup_group_content_management',
+  label: new TranslatableMarkup('Group content management resolver'),
+  description: new TranslatableMarkup('Checks if the current route is an entity path that belongs to a group entity.')
+)]
 class JoinupGroupContentManagementResolver extends RouteGroupResolver {
 
   use ViewsBulkOperationsFormTrait;
