@@ -4,20 +4,21 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_paragraphs\Plugin\OgGroupResolver;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\layout_paragraphs\LayoutParagraphsLayout;
+use Drupal\og\Attribute\OgGroupResolver;
 use Drupal\og\OgResolvedGroupCollectionInterface;
 use Drupal\og\Plugin\OgGroupResolver\RouteGroupResolver;
 
 /**
  * Resolves group from the layout paragraphs.
- *
- * @OgGroupResolver(
- *   id = "group_from_layout_paragraphs",
- *   label = "Group from Layout Paragraphs",
- *   description = @Translation("Resolves group from the layout paragraphs."),
- * )
  */
+#[OgGroupResolver(
+  id: 'group_from_layout_paragraphs',
+  label: new TranslatableMarkup('Group from Layout Paragraphs'),
+  description: new TranslatableMarkup('Resolves group from the layout paragraphs.')
+)]
 class LayoutParagraphsRouteGroupResolver extends RouteGroupResolver {
 
   /**
