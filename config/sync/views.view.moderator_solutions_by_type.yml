@@ -469,7 +469,10 @@ display:
       relationships: {  }
       header: {  }
       footer: {  }
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
     cache_metadata:
       max-age: -1
       contexts:
@@ -481,7 +484,6 @@ display:
       tags:
         - 'config:field.storage.node.solution_type'
         - 'config:search_api.index.published'
-        - 'config:views.view.moderator_solutions_by_type'
         - 'search_api_list:published'
   csv_export:
     id: csv_export
@@ -550,7 +552,6 @@ display:
         - 'config:facets.facet.sbt_csv_solution_type'
         - 'config:field.storage.node.solution_type'
         - 'config:search_api.index.published'
-        - 'config:views.view.moderator_solutions_by_type'
         - 'search_api_list:published'
   page_1:
     id: page_1
@@ -587,11 +588,7 @@ display:
       tags:
         - 'config:facets.facet.aggregated_changed'
         - 'config:facets.facet.authoredon'
-        - 'config:facets.facet.csv_authoredon'
-        - 'config:facets.facet.csv_changed'
-        - 'config:facets.facet.sbt_csv_solution_type'
         - 'config:facets.facet.sbt_solution_type'
         - 'config:field.storage.node.solution_type'
         - 'config:search_api.index.published'
-        - 'config:views.view.moderator_solutions_by_type'
         - 'search_api_list:published'

@@ -7,6 +7,8 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\Given;
+use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\joinup\Traits\EntityTrait;
@@ -41,9 +43,8 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the tile is marked as shared.
-   *
-   * @Then the :heading tile should not be marked as shared
    */
+  #[Then('the :heading tile should not be marked as shared')]
   public function assertTileNotMarkedAsShared(string $heading): void {
     $tile = $this->getTileByHeading($heading);
     if ($tile->find('css', '[data-joinup-card-stats-shared]')) {
@@ -62,9 +63,8 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the tile is not marked as shared, or it's marked as shared
    *   from the wrong collection.
-   *
-   * @Then the :heading tile should be marked as shared from :group_label
    */
+  #[Then('the :heading tile should be marked as shared from :group_label')]
   public function assertTileMarkedAsShared(string $heading, string $group_label): void {
     $tile = $this->getTileByHeading($heading);
 
@@ -88,11 +88,10 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    * @param string $type
    *   The type of the content.
    *
-   * @Then the :title :type should not have a publication date
-   *
    * @throws \InvalidArgumentException
    *   Thrown when the node does not have a publication date field.
    */
+  #[Then('the :title :type should not have a publication date')]
   public function assertDifferentCreatedTimeWithUnpublishedVersion(string $title, string $type): void {
     // The Publication Date module sets a default value to the publication date
     // for nodes that have never been published.
@@ -111,11 +110,10 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    * @param string $type
    *   The type of the content.
    *
-   * @Then the publication date of the :title :type should not be equal to the created date
-   *
    * @throws \InvalidArgumentException
    *   Thrown when the node does not have a publication date field.
    */
+  #[Then('the publication date of the :title :type should not be equal to the created date')]
   public function assertDifferentPublishedCreatedTime(string $title, string $type): void {
     $node = $this->getEntityByLabel('node', $title, $type);
     if (!$node instanceof EntityPublicationTimeInterface) {
@@ -133,11 +131,10 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    * @param string $type
    *   The type of the content.
    *
-   * @Then the publication date of the :title :type should be equal to the created date
-   *
    * @throws \InvalidArgumentException
    *   Thrown when the node does not have a publication date field.
    */
+  #[Then('the publication date of the :title :type should be equal to the created date')]
   public function assertSamePublishedCreatedTime(string $title, string $type): void {
     $node = $this->getEntityByLabel('node', $title, $type);
     if (!$node instanceof EntityPublicationTimeInterface) {
@@ -168,9 +165,8 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    *   if the entity with the given label doesn't have a publication date field.
    * @throws \Exception
    *   Thrown if there was no previous revision found.
-   *
-   * @Then the publication date of the :title :type should be equal to the last :published version's
    */
+  #[Then("the publication date of the :title :type should be equal to the last :published version's")]
   public function assertEqualRevisionsPublicationTime(string $title, string $type, string $published): void {
     if (!in_array($published, ['published', 'unpublished'])) {
       throw new \InvalidArgumentException("Only 'published' and 'unpublished' values are allowed for the 'published' flag.");
@@ -214,9 +210,8 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    *   above includes also "+0100" which represents the timezone.
    *
    * @see strtotime()
-   *
-   * @Given the :field_name date of the :title :bundle is :new_date
    */
+  #[Given('the :field_name date of the :title :bundle is :new_date')]
   public function updateNodeDateProperty(string $field_name, string $title, string $bundle, string $new_date): void {
     if (!($time = strtotime($new_date))) {
       throw new \Exception("{$new_date} could not be converted to string.");
@@ -336,9 +331,8 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    *   The '1 based' number of the comment in the page.
    * @param string $markup
    *   The piece of markup to be checked.
-   *
-   * @Then (the )comment #:comment_number should contain the markup :markup
    */
+  #[Then('(the )comment #:comment_number should contain the markup :markup')]
   public function assertCommentContainsMarkup(string $comment_number, string $markup): void {
     $comment = $this->getNumberedComment($comment_number - 1);
     $regex = '/' . preg_quote($markup, '/') . '/ui';
@@ -356,9 +350,8 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    *   The '1 based' number of the comment in the page.
    * @param int $indent
    *   The '0 based' indentation value.
-   *
-   * @Then (the )comment #:comment_number indent is :indent
    */
+  #[Then('(the )comment #:comment_number indent is :indent')]
   public function assertCommentIndent(int $comment_number, int $indent): void {
     $comment = $this->getNumberedComment($comment_number - 1);
     $nested_comments = $comment->findAll('xpath', '/ancestor::div[contains(concat(" ", @class, " "), " indented ")]');
@@ -376,9 +369,8 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    *   The link's text.
    * @param int $comment_number
    *   The '1 based' number of the comment in the page.
-   *
-   * @Then I should not see the link :label in comment #:comment_number
    */
+  #[Then('I should not see the link :label in comment #:comment_number')]
   public function assertCommentNotContainsLink(string $label, int $comment_number): void {
     if ($this->getNumberedComment($comment_number - 1)->findLink($label)) {
       throw new ExpectationFailedException("Link '{$label}' exists in comment #{$comment_number} but it should not.");
@@ -396,9 +388,8 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    *   The link's text.
    * @param int $comment_number
    *   The '1 based' number of the comment in the page.
-   *
-   * @Then I click :label in comment #:comment_number
    */
+  #[Then('I click :label in comment #:comment_number')]
   public function clickCommentLink(string $label, int $comment_number): void {
     $comment = $this->getNumberedComment($comment_number - 1);
     $comment->clickLink($label);
@@ -441,9 +432,8 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   A table containing the expected content of the in the spotlight section.
-   *
-   * @Then the in the spotlight section should contain the following content:
    */
+  #[Then('the in the spotlight section should contain the following content:')]
   public function assertInTheSpotlight(TableNode $table): void {
     $columns = $table->getColumnsHash();
     $articles = $this->getSession()->getPage()->findAll('css', '.view-in-the-spotlight article.tile');
