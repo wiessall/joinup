@@ -5,7 +5,12 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Hook\AfterScenario;
+use Behat\Hook\BeforeScenario;
 use Behat\Mink\Element\NodeElement;
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\HtmlManipulator;
 use Drupal\joinup\Traits\EntityTrait;
@@ -28,9 +33,8 @@ class EuplContext extends RawDrupalContext {
    * @throws \Drupal\Core\Entity\EntityStorageException
    *   Thrown when one of the entities could not be created, for example because
    *   it already exists.
-   *
-   * @BeforeScenario @eupl&&@api
    */
+  #[BeforeScenario('@eupl&&@api')]
   public function setupEuplData(): void {
     $solution = $this->nodeCreate((object) [
       'type' => 'solution',
@@ -70,9 +74,8 @@ class EuplContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown if the info icon could not be found.
-   *
-   * @Given I click the info icon of the :spdx licence( table cell)
    */
+  #[Given('I click the info icon of the :spdx licence( table cell)')]
   public function clickLicenceInfoIcon(string $spdx): void {
     $xpath = '//td[@class and contains(concat(" ", normalize-space(@class), " "), " licence-comparer__header ")]/button[contains(., "' . $spdx . '")]';
     $page = $this->getSession()->getPage();
@@ -94,9 +97,8 @@ class EuplContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown if the dialog is not open or the x button is not found.
-   *
-   * @Given I close the licence modal dialog
    */
+  #[Given('I close the licence modal dialog')]
   public function closeLicenceModalDialog(): void {
     $xpath = '//div[@class and contains(concat(" ", normalize-space(@class), " "), " modal-dialog ")]//button[@aria-label="Close"]';
     $button = $this->getSession()->getPage()->find('xpath', $xpath);
@@ -113,9 +115,8 @@ class EuplContext extends RawDrupalContext {
    *   The SPDX title ID.
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The table of categories.
-   *
-   * @Then the licence item with the :spdx SPDX tag should include the following legal type categories:
    */
+  #[Then('the licence item with the :spdx SPDX tag should include the following legal type categories:')]
   public function assertLegalTypeTagsCategoriesAndOrder(string $spdx, TableNode $table): void {
     $expected = $table->getColumn(0);
     $xpath = '//article[@data-joinup-spdx="' . $spdx . '"]//span[contains(concat(" ", normalize-space(@class), " "), " licence-tile__label badge ")]';
@@ -127,9 +128,8 @@ class EuplContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The table of categories.
-   *
-   * @Then I should see the (following )filter categories in the correct order:
    */
+  #[Then('I should see the (following )filter categories in the correct order:')]
   public function assertFilterCategoriesAndOrder(TableNode $table): void {
     $expected = $table->getColumn(0);
     $xpath = '//div[contains(concat(" ", normalize-space(@class), " "), " licence-filter ")]//div[contains(concat(" ", normalize-space(@class), " "), " licence-filter__header ")] | //div[contains(concat(" ", normalize-space(@class), " "), " eif-filter ")]//div[contains(concat(" ", normalize-space(@class), " "), " eif-filter__header ")]';
@@ -160,9 +160,8 @@ class EuplContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   When the licence is not found on the page.
-   *
-   * @When I add the :spdx_id licence to the compare list
    */
+  #[When('I add the :spdx_id licence to the compare list')]
   public function selectLicenceForComparison(string $spdx_id): void {
     $this->toggleLicenceForComparison(TRUE, $spdx_id);
   }
@@ -175,9 +174,8 @@ class EuplContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   When the licence is not found on the page.
-   *
-   * @When I remove the :spdx_id licence from the compare list
    */
+  #[When('I remove the :spdx_id licence from the compare list')]
   public function unselectLicenceForComparison(string $spdx_id): void {
     $this->toggleLicenceForComparison(FALSE, $spdx_id);
   }
@@ -213,9 +211,8 @@ class EuplContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the radio button or licence is not found in the page.
-   *
-   * @When I choose :spdx_id as the :label licence
    */
+  #[When('I choose :spdx_id as the :label licence')]
   public function selectRadioButtonForLicenceCompatibilityCheck(string $spdx_id, string $label): void {
     \assert(in_array($label, ['Inbound', 'Outbound']), 'The purpose should be either "Use" or "Distribute".');
     $radio = $this->findLicenceTile($spdx_id)->findField($label);
@@ -232,9 +229,8 @@ class EuplContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the licence tile or button are not found in the page.
-   *
-   * @When I press :link in the :spdx_id licence tile
    */
+  #[When('I press :link in the :spdx_id licence tile')]
   public function clickLicenceTileLink(string $label, string $spdx_id): void {
     $button = $this->findLicenceTile($spdx_id)->findButton($label);
     $button->press();
@@ -252,10 +248,9 @@ class EuplContext extends RawDrupalContext {
    *   When:
    *   - No buttons were found in page.
    *   - The expectancy is not satisfied.
-   *
-   * @Then the :label buttons are :status
-   * @Then the :label buttons should be :status
    */
+  #[Then('the :label buttons are :status')]
+  #[Then('the :label buttons should be :status')]
   public function assertLicenceButtonStatus(string $label, string $status): void {
     \assert(in_array($status, ['enabled', 'disabled']), 'The $status parameter should take one of the values "enabled" or "disabled" but "' . $status . '" was given.');
 
@@ -294,9 +289,8 @@ class EuplContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   When the licence tile is not found on the page.
-   *
-   * @Then the :spdx_id :can be added to the compare list
    */
+  #[Then('the :spdx_id :can be added to the compare list')]
   public function assertLicenceCanBeCompared(string $spdx_id, string $can): void {
     \assert(in_array($can, ['can', 'cannot']), 'The $can parameter should take one of the values "can" or "cannot" but "' . $can . '" was given.');
 
@@ -320,9 +314,8 @@ class EuplContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   When the licence tile is not found on the page.
-   *
-   * @Then the :spdx_id licence should be :checked
    */
+  #[Then('the :spdx_id licence should be :checked')]
   public function assertLicenceChecked(string $spdx_id, string $checked): void {
     \assert(in_array($checked, ['checked', 'unchecked']), 'The $checked parameter should take one of the values "checked" or "unchecked" but "' . $checked . '" was given.');
 
@@ -341,9 +334,8 @@ class EuplContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   A table with columns 'use', 'redistribute as' and 'document ID'.
-   *
-   * @Then the following combination of licences should be described in the compatibility document:
    */
+  #[Then('the following combination of licences should be described in the compatibility document:')]
   public function assertLicenceCompatibility(TableNode $table): void {
     /** @var \Drupal\joinup_licence\JoinupLicenceCompatibilityRulePluginManager $plugin_manager */
     $plugin_manager = \Drupal::service('plugin.manager.joinup_licence_compatibility_rule');
@@ -371,9 +363,8 @@ class EuplContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   A table with columns 'id' and 'description'.
-   *
-   * @Given compatibility documents:
    */
+  #[Given('compatibility documents:')]
   public function createCompatibilityDocuments(TableNode $table): void {
     $this->cleanCompatibilityDocuments();
     foreach ($table->getColumnsHash() as $document) {
@@ -406,19 +397,17 @@ class EuplContext extends RawDrupalContext {
   /**
    * Clears the content created for the purpose of this test.
    *
-   * @AfterScenario @eupl&&@api
-   *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
+  #[AfterScenario('@eupl&&@api')]
   public function cleanEuplData(): void {
     $this->cleanCompatibilityDocuments();
   }
 
   /**
    * Cleans up the compatibility documents.
-   *
-   * @Then all compatibility documents are cleaned up
    */
+  #[Then('all compatibility documents are cleaned up')]
   public function cleanCompatibilityDocuments(): void {
     $compatibility_document_storage = \Drupal::entityTypeManager()->getStorage('compatibility_document');
     $compatibility_document_storage->delete($compatibility_document_storage->loadMultiple());

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Given;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -33,9 +34,8 @@ class WebformContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The webform data.
-   *
-   * @Given the following webforms:
    */
+  #[Given('the following webforms:')]
   public function createWebforms(TableNode $table): void {
     $webformStorage = \Drupal::entityTypeManager()->getStorage('webform');
     foreach ($table->getHash() as $values) {

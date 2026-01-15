@@ -7,8 +7,10 @@ namespace Drupal\joinup_oss_catalogue\Plugin\OgGroupResolver;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
+use Drupal\og\Attribute\OgGroupResolver;
 use Drupal\og\GroupTypeManagerInterface;
 use Drupal\og\OgResolvedGroupCollectionInterface;
 use Drupal\og\OgRouteGroupResolverBase;
@@ -16,12 +18,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Resolves the group for EU OSS catalogue search route.
- *
- * @OgGroupResolver(
- *   id = "joinup_oss_catalogue_routes",
- *   label = "Routes related to EU OSS catalogue",
- * )
  */
+#[OgGroupResolver(
+  id: 'joinup_oss_catalogue_routes',
+  label: new TranslatableMarkup('Routes related to EU OSS catalogue'),
+  description: new TranslatableMarkup('Routes related to EU OSS catalogue')
+)]
 class JoinupOssCatalogueGroupResolver extends OgRouteGroupResolverBase {
 
   public function __construct(
