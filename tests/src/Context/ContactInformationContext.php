@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Given;
+use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\contact_information\ContactInformationEmailConfirmInterface;
 use Drupal\email_confirmer\EmailConfirmationInterface;
@@ -35,9 +37,8 @@ class ContactInformationContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $contact_info_list
    *   A list of contact information labels.
-   *
-   * @Given the following contact information emails are validated:
    */
+  #[Given('the following contact information emails are validated:')]
   public function validateContactInformationEmails(TableNode $contact_info_list): void {
     $email_confirmer = \Drupal::getContainer()->get('email_confirmer');
     foreach ($contact_info_list->getColumn(0) as $label) {
@@ -59,9 +60,8 @@ class ContactInformationContext extends RawDrupalContext {
    *
    * @param string $email
    *   The email to expire.
-   *
-   * @Given that the pending confirmation request for :email has expired
    */
+  #[Given('that the pending confirmation request for :email has expired')]
   public function givenConfirmationRequestExpired(string $email): void {
     $email_confirmer = \Drupal::getContainer()->get('email_confirmer');
     $confirmation = $email_confirmer->getConfirmation($email, 'pending', ContactInformationEmailConfirmInterface::REALM);
@@ -86,9 +86,8 @@ class ContactInformationContext extends RawDrupalContext {
    *   The requested status.
    * @param string $email_confirmation
    *   The email to check.
-   *
-   * @Then :count :status confirmation request(s) for :email_confirmation should exist
    */
+  #[Then(':count :status confirmation request(s) for :email_confirmation should exist')]
   public function assertNumberOfConfirmationRequests(string $count, string $status, string $email_confirmation): void {
     Assert::assertTrue(in_array($count, ['no', 'a', 'an']), "The count '$count' is not supported.");
 
@@ -107,9 +106,8 @@ class ContactInformationContext extends RawDrupalContext {
    *
    * @param string $email
    *   The email to check.
-   *
-   * @Given the confirmation request for :email should be expired
    */
+  #[Given('the confirmation request for :email should be expired')]
   public function givenConfirmationExpired(string $email): void {
     $email_confirmer = \Drupal::getContainer()->get('email_confirmer');
     $confirmation = $email_confirmer->getConfirmation($email, FALSE, ContactInformationEmailConfirmInterface::REALM);
@@ -124,9 +122,8 @@ class ContactInformationContext extends RawDrupalContext {
    *
    * @param string $email
    *   The email to check.
-   *
-   * @Given the confirmation request for :email should not be expired
    */
+  #[Given('the confirmation request for :email should not be expired')]
   public function givenConfirmationNotExpired(string $email): void {
     $confirmation = $this->getEmailConfirmation($email, NULL);
     Assert::assertFalse($confirmation->isExpired(), 'Confirmation request is not expired.');
@@ -137,9 +134,8 @@ class ContactInformationContext extends RawDrupalContext {
    *
    * @param string $email
    *   The email to confirm.
-   *
-   * @Given that the pending confirmation request for :email has been confirmed
    */
+  #[Given('that the pending confirmation request for :email has been confirmed')]
   public function confirmConfirmationRequest(string $email): void {
     $confirmation = $this->getEmailConfirmation($email, 'pending');
     $confirmation->confirm($confirmation->getHash());
@@ -151,9 +147,8 @@ class ContactInformationContext extends RawDrupalContext {
    *
    * @param string $email
    *   The email to confirm.
-   *
-   * @Given that the pending confirmation request for :email has been cancelled
    */
+  #[Given('that the pending confirmation request for :email has been cancelled')]
   public function cancelConfirmationRequest(string $email): void {
     $confirmation = $this->getEmailConfirmation($email, 'pending');
     $confirmation->cancel();
@@ -182,9 +177,8 @@ class ContactInformationContext extends RawDrupalContext {
 
   /**
    * Creates confirmation requests for the given emails.
-   *
-   * @Given the following email confirmation request(s):
    */
+  #[Given('the following email confirmation request(s):')]
   public function theFollowingEmailConfirmationRequest(TableNode $table): void {
     $email_confirmer = \Drupal::getContainer()->get('email_confirmer');
 

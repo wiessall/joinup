@@ -4,20 +4,21 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_invite\Plugin\OgGroupResolver;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_invite\Entity\InvitationInterface;
+use Drupal\og\Attribute\OgGroupResolver;
 use Drupal\og\OgResolvedGroupCollectionInterface;
 use Drupal\og\Plugin\OgGroupResolver\RouteGroupResolver;
 
 /**
  * Resolves a group from the invite route.
- *
- * @OgGroupResolver(
- *   id = "group_from_invite",
- *   label = "Group from Invite",
- *   description = @Translation("Resolves group from the invite."),
- * )
  */
+#[OgGroupResolver(
+  id: 'group_from_invite',
+  label: new TranslatableMarkup('Group from Invite'),
+  description: new TranslatableMarkup('Resolves group from the invite.')
+)]
 class InviteRouteGroupResolver extends RouteGroupResolver {
 
   /**

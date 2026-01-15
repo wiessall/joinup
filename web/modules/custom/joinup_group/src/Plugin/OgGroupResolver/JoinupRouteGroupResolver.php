@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Plugin\OgGroupResolver;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\og\Attribute\OgGroupResolver;
 use Drupal\og\Plugin\OgGroupResolver\RouteGroupResolver;
 
 /**
@@ -13,13 +15,12 @@ use Drupal\og\Plugin\OgGroupResolver\RouteGroupResolver;
  * context on paths that are not defined as entity link templates.
  *
  * This is for example used to display the group_header_block on a route.
- *
- * @OgGroupResolver(
- *   id = "joinup_route_group",
- *   label = "Group entity from current route",
- *   description = @Translation("Checks if the current route is an entity path that belongs to a group entity.")
- * )
  */
+#[OgGroupResolver(
+  id: 'joinup_route_group',
+  label: new TranslatableMarkup('Group entity from current route'),
+  description: new TranslatableMarkup('Checks if the current route is an entity path that belongs to a group entity.')
+)]
 class JoinupRouteGroupResolver extends RouteGroupResolver {
 
   /**
