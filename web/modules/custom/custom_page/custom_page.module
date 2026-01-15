@@ -186,34 +186,10 @@ function custom_page_node_delete(NodeInterface $entity): void {
 
 /**
  * Implements hook_ENTITY_TYPE_update().
- *
- * Whenever a custom page that is linked in the navigation menu of a collection
- * or solution becomes enabled or disabled we need to reindex the group, since
- * the content of the custom menu should now be included or excluded.
  */
 function custom_page_menu_link_content_update(MenuLinkContentInterface $menu_link): void {
-  // Do a quick check to see if the menu link entity's ableness has changed.
-  if ($menu_link->isEnabled() === $menu_link->original->isEnabled()) {
-    return;
-  }
-
-  // Ignore external links.
-  $url_object = $menu_link->getUrlObject();
-  if ($url_object->isExternal() || !$url_object->isRouted()) {
-    return;
-  }
-
-  $route_parameters = $menu_link->getUrlObject()->getRouteParameters();
-  if (isset($route_parameters['node'])) {
-    $custom_page = \Drupal::entityTypeManager()->getStorage('node')->load($route_parameters['node']);
-    if ($custom_page instanceof CustomPageInterface) {
-      if ($custom_page->hasGroup()) {
-        /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $content_tracking_manager */
-        $content_tracking_manager = \Drupal::service('search_api.entity_datasource.tracking_manager');
-        $content_tracking_manager->trackEntityChange($custom_page->getGroup());
-      }
-    }
-  }
+  $og_menu_links_manager = \Drupal::service('custom_page.og_menu_links_manager');
+  $og_menu_links_manager->updateLink($menu_link);
 }
 
 /**
