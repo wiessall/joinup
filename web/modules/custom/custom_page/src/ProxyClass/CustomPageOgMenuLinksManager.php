@@ -70,6 +70,12 @@ namespace Drupal\custom_page\ProxyClass {
             return $this->lazyLoadItself()->moveLinks($customPage, $groupId);
         }
 
+      /**
+       * {@inheritdoc}
+       */
+      public function updateLink(\Drupal\menu_link_content\MenuLinkContentInterface $menu_link) : void
+      {}
+
         /**
          * {@inheritdoc}
          */
