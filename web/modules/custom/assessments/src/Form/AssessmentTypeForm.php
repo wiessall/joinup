@@ -62,11 +62,11 @@ final class AssessmentTypeForm extends BundleEntityFormBase {
   public function save(array $form, FormStateInterface $form_state): int {
     $result = parent::save($form, $form_state);
 
-    $message_args = ['%label' => $this->entity->label()];
+    $messageArgs = ['%label' => $this->entity->label()];
     $this->messenger()->addStatus(
       match($result) {
-        SAVED_NEW => $this->t('The assessment type %label has been added.', $message_args),
-        SAVED_UPDATED => $this->t('The assessment type %label has been updated.', $message_args),
+        SAVED_NEW => $this->t('The assessment type %label has been added.', $messageArgs),
+        SAVED_UPDATED => $this->t('The assessment type %label has been updated.', $messageArgs),
       }
     );
     $form_state->setRedirectUrl($this->entity->toUrl('collection'));

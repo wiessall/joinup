@@ -11,7 +11,7 @@ third_party_settings:
     parent: ''
   rdf_sync:
     type: 'http://xmlns.com/foaf/0.1/Agent'
-    uri_plugin: joinup_po_namespace:w21
+    uri_plugin: 'joinup_po_namespace:w21'
     fields:
       type:
         target_id:

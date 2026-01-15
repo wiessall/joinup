@@ -19,11 +19,11 @@ final class AssessmentStatementAccessControlHandler extends EntityAccessControlH
    */
   protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account): AccessResult {
     // Admin permission grants full access.
-    $admin_result = AccessResult::allowedIfHasPermission($account, $this->entityType->getAdminPermission())
+    $adminResult = AccessResult::allowedIfHasPermission($account, $this->entityType->getAdminPermission())
       ->addCacheableDependency($entity);
 
-    if (!$admin_result->isNeutral()) {
-      return $admin_result;
+    if (!$adminResult->isNeutral()) {
+      return $adminResult;
     }
 
     // Assessment statements are embedded in assessment reports via inline
@@ -46,8 +46,8 @@ final class AssessmentStatementAccessControlHandler extends EntityAccessControlH
    */
   protected function checkCreateAccess(AccountInterface $account, array $context, $entity_bundle = NULL): AccessResult {
     // Admin permission allows creating any assessment statement.
-    $admin_permission = $this->entityType->getAdminPermission();
-    if ($admin_permission && $account->hasPermission($admin_permission)) {
+    $adminPermission = $this->entityType->getAdminPermission();
+    if ($adminPermission && $account->hasPermission($adminPermission)) {
       return AccessResult::allowed()->cachePerPermissions();
     }
 
