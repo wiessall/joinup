@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Mink\Element\NodeElement;
+use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\oe_webtools_analytics\AnalyticsEventInterface;
 use PHPUnit\Framework\Assert;
@@ -20,10 +21,9 @@ class Isa2AnalyticsContext extends RawDrupalContext {
    * @param string|null $section
    *   Optional site section to check. If omitted the site section is expected
    *   to be missing from the analytics data.
-   *
-   * @Then the analytics report should not include a site section
-   * @Then the analytics report should include the site section :section
    */
+  #[Then('the analytics report should not include a site section')]
+  #[Then('the analytics report should include the site section :section')]
   public function assertSiteSection(?string $section = NULL): void {
     if ($section) {
       $this->assertAnalyticsJsonContainsParameter(AnalyticsEventInterface::SITE_SECTION, $section);

@@ -24,23 +24,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 )]
 class JoinupGroupQueueWorker extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
-  /**
-   * The group content queue.
-   *
-   * @var \Drupal\joinup_group\Queue\JoinupGroupQueue
-   */
-  protected $groupContentQueue;
-
   public function __construct(
     array $configuration,
     string $plugin_id,
     mixed $plugin_definition,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly EntityTypeBundleInfoInterface $bundleInfo,
-    QueueFactory $queue_factory,
+    protected readonly QueueFactory $queueFactory,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->groupContentQueue = $queue_factory->get('joinup_group:group_content_update');
   }
 
   /**
@@ -109,8 +101,9 @@ class JoinupGroupQueueWorker extends QueueWorkerBase implements ContainerFactory
    *   A list of entity IDs.
    */
   protected function createQueueItems(string $group_id, string $entity_type_id, array $entity_ids): void {
+    $queue = $this->queueFactory->get('joinup_group:group_content_update');
     foreach ($entity_ids as $entity_id) {
-      $this->groupContentQueue->createItem([
+      $queue->createItem([
         'group_id' => $group_id,
         'entity_type_id' => $entity_type_id,
         'entity_id' => $entity_id,

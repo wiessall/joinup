@@ -6,6 +6,8 @@ namespace Drupal\joinup\Context;
 
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Hook\BeforeScenario;
+use Behat\Step\Given;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -33,9 +35,8 @@ class EifContext extends RawDrupalContext {
 
   /**
    * Creates the standard 'EIF' solution and a random parent collection.
-   *
-   * @BeforeScenario @eif_community&&@api
    */
+  #[BeforeScenario('@eif_community&&@api')]
   public function setupEifData(BeforeScenarioScope $scope): void {
     // Create an owner.
     $owner = $this->nodeCreate((object) [
@@ -109,9 +110,8 @@ class EifContext extends RawDrupalContext {
    *   The table data.
    * @param string $solution
    *   The solution label.
-   *
-   * @Given the following EIF perspective data for the :solution solution:
    */
+  #[Given('the following EIF perspective data for the :solution solution:')]
   public function givenEifPerspectiveOfSolution(TableNode $table_data, string $solution): void {
     $solution = $this->getEntityByLabel('node', $solution, 'solution');
     $fields = [];
@@ -168,9 +168,8 @@ class EifContext extends RawDrupalContext {
    *
    * @param string $solution
    *   The solution label.
-   *
-   * @Given I go to the EIF perspective page of the :solution solution
    */
+  #[Given('I go to the EIF perspective page of the :solution solution')]
   public function goToEifPerspectiveOfSolution(string $solution): void {
     $solution = $this->getEntityByLabel('node', $solution, 'solution');
     $url = Url::fromRoute('entity.node.eif_perspective', [
@@ -184,9 +183,8 @@ class EifContext extends RawDrupalContext {
    *
    * @param string $solution
    *   The solution label.
-   *
-   * @Given there should be an EIF perspective associated with the :solution solution
    */
+  #[Given('there should be an EIF perspective associated with the :solution solution')]
   public function assertSolutionWithPerspective(string $solution): void {
     $solution = $this->getEntityByLabel('node', $solution, 'solution');
     if (empty(\Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($solution, 'eif_perspective'))) {
@@ -199,9 +197,8 @@ class EifContext extends RawDrupalContext {
    *
    * @param string $solution_label
    *   The solution label.
-   *
-   * @Given I delete the EIF perspective of the :solution_label solution
    */
+  #[Given('I delete the EIF perspective of the :solution_label solution')]
   public function deletePerspectiveOfSolution(string $solution_label): void {
     $solution = $this->getEntityByLabel('node', $solution_label, 'solution');
     $eif_perspective = $solution->get('eif_perspective')->entity;

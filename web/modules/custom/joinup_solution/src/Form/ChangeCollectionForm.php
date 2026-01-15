@@ -10,8 +10,6 @@ use Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
@@ -23,28 +21,11 @@ class ChangeCollectionForm extends FormBase {
 
   use AutowireTrait;
 
-  /**
-   * The private tempstore.
-   *
-   * @var \Drupal\Core\TempStore\PrivateTempStore
-   */
-  protected PrivateTempStore $tempStore;
-
-  /**
-   * The Joinup logger channel.
-   *
-   * @var \Drupal\Core\Logger\LoggerChannelInterface
-   */
-  protected $logger;
-
   public function __construct(
-    PrivateTempStoreFactory $temp_store_factory,
+    protected readonly PrivateTempStoreFactory $tempStoreFactory,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly SelectionPluginManagerInterface $selectionPluginManager,
-    LoggerChannelFactoryInterface $loggerFactory,
   ) {
-    $this->tempStore = $temp_store_factory->get('change_collection');
-    $this->logger = $loggerFactory->get('joinup');
   }
 
   /**
@@ -138,11 +119,11 @@ class ChangeCollectionForm extends FormBase {
         $solution->skip_notification = TRUE;
         $solution->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $destination_collection_id)->save();
         $this->messenger()->addStatus($this->t('Solution %solution has been moved to %destination_collection.', $messenger_arguments));
-        $this->logger->info("Solution '@solution' moved from '@source_collection' to '@destination_collection' collection.", $logger_arguments);
+        $this->getLogger('joinup')->info("Solution '@solution' moved from '@source_collection' to '@destination_collection' collection.", $logger_arguments);
       }
       catch (\Exception $e) {
         $this->messenger()->addError($this->t("Error while trying to change the collection for %solution solution.", $messenger_arguments));
-        $this->logger->error("Error while trying to move solution '@solution' from '@source_collection' to '@destination_collection' collection.", $logger_arguments);
+        $this->getLogger('joinup')->error("Error while trying to move solution '@solution' from '@source_collection' to '@destination_collection' collection.", $logger_arguments);
       }
     }
   }
@@ -166,7 +147,7 @@ class ChangeCollectionForm extends FormBase {
    *   Thrown when an entity with a non-existing storage is passed.
    */
   protected function getSolutions(): array {
-    $solution_ids = $this->tempStore->get('solutions');
+    $solution_ids = $this->tempStoreFactory->get('change_collection')->get('solutions');
     return $solution_ids ? $this->getGroupStorage()->loadMultiple($solution_ids) : [];
   }
 
