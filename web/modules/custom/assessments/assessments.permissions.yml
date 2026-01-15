@@ -17,13 +17,13 @@ view own unpublished assessment report:
   title: 'View own unpublished assessment reports'
   description: 'View assessment reports created by the user.'
 view any unpublished assessment report:
-    title: 'View any unpublished assessment reports'
-    description: 'View any assessment reports created.'
-    restrict access: true
+  title: 'View any unpublished assessment reports'
+  description: 'View any assessment reports created.'
+  restrict access: true
 view assessment listing:
-    title: 'View assessment listing'
-    description: 'Access the assessment listing page.'
-    restrict access: true
+  title: 'View assessment listing'
+  description: 'Access the assessment listing page.'
+  restrict access: true
 administer assessment statements:
   title: 'Administer assessment statements'
   description: 'Maintain the types of assessment statement entity.'
