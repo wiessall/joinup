@@ -14,6 +14,7 @@ use Drupal\node\NodeInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og_menu\OgMenuInstanceInterface;
 use Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Manages the OG Menu links of custom pages.
@@ -24,6 +25,7 @@ readonly class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksMana
     protected EntityTypeManagerInterface $entityTypeManager,
     protected MenuLinkManagerInterface $menuLinkManager,
     protected GroupMenuManagerInterface $groupMenuManager,
+    #[Autowire('custom_page.og_menu_links_manager')]
     protected ContentEntityTrackingManager $content_tracking_manager,
   ) {}
 
