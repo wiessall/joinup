@@ -25,8 +25,8 @@ readonly class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksMana
     protected EntityTypeManagerInterface $entityTypeManager,
     protected MenuLinkManagerInterface $menuLinkManager,
     protected GroupMenuManagerInterface $groupMenuManager,
-    #[Autowire('custom_page.og_menu_links_manager')]
-    protected ContentEntityTrackingManager $content_tracking_manager,
+    #[Autowire(service: 'search_api.entity_datasource.tracking_manager')]
+    protected ContentEntityTrackingManager $trackingManager,
   ) {}
 
   /**
@@ -151,7 +151,7 @@ readonly class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksMana
       $customPage = $this->entityTypeManager->getStorage('node')->load($routeParameters['node']);
       if ($customPage instanceof CustomPageInterface) {
         if ($customPage->hasGroup()) {
-          $this->content_tracking_manager->trackEntityChange($customPage->getGroup());
+          $this->trackingManager->trackEntityChange($customPage->getGroup());
         }
       }
     }
