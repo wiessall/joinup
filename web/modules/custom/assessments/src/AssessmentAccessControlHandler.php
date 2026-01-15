@@ -45,11 +45,11 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler im
     assert($entity instanceof AssessmentInterface);
 
     // Admin permission grants full access.
-    $admin_result = AccessResult::allowedIfHasPermission($account, $this->entityType->getAdminPermission())
+    $adminResult = AccessResult::allowedIfHasPermission($account, $this->entityType->getAdminPermission())
       ->addCacheableDependency($entity);
 
-    if (!$admin_result->isNeutral()) {
-      return $admin_result;
+    if (!$adminResult->isNeutral()) {
+      return $adminResult;
     }
 
     return match ($entity->bundle()) {
@@ -116,13 +116,13 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler im
     }
 
     // Ensure a related report exists and is accessible.
-    $related_report = $entity->getRelatedReport();
+    $relatedReport = $entity->getRelatedReport();
     $access->addCacheTags(['assessment_list:report']);
-    if (!$related_report instanceof AssessmentReport) {
+    if (!$relatedReport instanceof AssessmentReport) {
       return AccessResult::neutral()->addCacheableDependency($access);
     }
 
-    return $access->andIf($related_report->access($operation, $account, TRUE));
+    return $access->andIf($relatedReport->access($operation, $account, TRUE));
   }
 
   /**
@@ -139,10 +139,10 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler im
    *   The access result.
    */
   protected function checkAccessForSubEntity(AssessmentInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
-    $related_report = $entity->getRelatedReport();
+    $relatedReport = $entity->getRelatedReport();
 
-    return $related_report instanceof AssessmentReport
-      ? $this->checkAccess($related_report, $operation, $account)
+    return $relatedReport instanceof AssessmentReport
+      ? $this->checkAccess($relatedReport, $operation, $account)
         ->addCacheableDependency($entity)
       : AccessResult::forbidden()
         ->cachePerPermissions()
@@ -168,8 +168,8 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler im
         ->addCacheableDependency($entity);
     }
 
-    $is_owner = $entity->getOwnerId() == $account->id();
-    if ($is_owner && $account->hasPermission('view own unpublished assessment report')) {
+    $isOwner = $entity->getOwnerId() == $account->id();
+    if ($isOwner && $account->hasPermission('view own unpublished assessment report')) {
       return AccessResult::allowed()
         ->cachePerPermissions()
         ->cachePerUser()
@@ -201,8 +201,8 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler im
    *   The access result.
    */
   protected function checkUpdateAccess(AssessmentInterface $entity, AccountInterface $account): AccessResultInterface {
-    $allowed_states = $this->workflowHelper->getAvailableTargetStates($entity, $account);
-    if (!empty($allowed_states)) {
+    $allowedStates = $this->workflowHelper->getAvailableTargetStates($entity, $account);
+    if (!empty($allowedStates)) {
       return AccessResult::allowed()
         ->cachePerPermissions()
         ->cachePerUser()
@@ -236,8 +236,8 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler im
    */
   protected function checkCreateAccess(AccountInterface $account, array $context, $entity_bundle = NULL): AccessResult {
     // Admin permission allows creating any assessment.
-    $admin_permission = $this->entityType->getAdminPermission();
-    if ($admin_permission && $account->hasPermission($admin_permission)) {
+    $adminPermission = $this->entityType->getAdminPermission();
+    if ($adminPermission && $account->hasPermission($adminPermission)) {
       return AccessResult::allowed()->cachePerPermissions();
     }
 
