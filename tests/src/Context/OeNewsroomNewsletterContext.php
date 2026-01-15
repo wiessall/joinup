@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Hook\AfterScenario;
+use Behat\Hook\BeforeScenario;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\TagTrait;
 use Drupal\oe_newsroom_newsletter\NewsletterSubscriber\MockNewsletterSubscriber;
@@ -52,9 +54,8 @@ class OeNewsroomNewsletterContext extends RawDrupalContext {
 
   /**
    * Enables the mock newsletter subscription service.
-   *
-   * @BeforeScenario @newsroom_newsletter&&@api
    */
+  #[BeforeScenario('@newsroom_newsletter&&@api')]
   public function beforeNewsletterScenario(): void {
     // Check if the user is overriding the newsletter subscription service in
     // settings.php, and abort the test if this is the case. We won't be able to
@@ -77,9 +78,8 @@ class OeNewsroomNewsletterContext extends RawDrupalContext {
 
   /**
    * Disables the mock newsletter subscription service.
-   *
-   * @AfterScenario @newsroom_newsletter&&@api
    */
+  #[AfterScenario('@newsroom_newsletter&&@api')]
   public function afterNewsletterScenario(): void {
     $config = \Drupal::configFactory()->get('oe_newsroom_newsletter.subscriber');
     if ($config->get('class') !== $this->originalNewsletterSubscriber) {
