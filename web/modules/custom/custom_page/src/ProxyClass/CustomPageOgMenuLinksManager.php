@@ -74,7 +74,9 @@ namespace Drupal\custom_page\ProxyClass {
        * {@inheritdoc}
        */
       public function updateLink(\Drupal\menu_link_content\MenuLinkContentInterface $menu_link) : void
-      {}
+      {
+        $this->lazyLoadItself()->updateLink($menu_link);
+      }
 
         /**
          * {@inheritdoc}
