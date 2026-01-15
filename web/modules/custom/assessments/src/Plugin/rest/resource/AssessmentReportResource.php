@@ -188,7 +188,7 @@ class AssessmentReportResource extends ResourceBase {
       foreach ($requirement->get('expression')->referencedEntities() as $item) {
         assert($item instanceof AssessmentInterface);
         $expressions[] = [
-          'name' => $item->label(),
+          'name' => $item->get('initiative_name')->value,
           'description' => $item->get('description')?->value,
           'documented_in' => $item->get('documented_in')?->uri,
         ];
