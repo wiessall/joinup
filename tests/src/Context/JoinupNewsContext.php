@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\EntityTrait;
@@ -29,9 +30,8 @@ class JoinupNewsContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   A table containing the expected content of the latest news section.
-   *
-   * @Then the latest news section should contain the following news articles:
    */
+  #[Then('the latest news section should contain the following news articles:')]
   public function assertLatestNews(TableNode $table): void {
     $columns = $table->getColumnsHash();
     $articles = $this->getSession()->getPage()->findAll('css', '.view-latest-news .tile');

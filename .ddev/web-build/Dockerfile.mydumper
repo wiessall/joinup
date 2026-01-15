@@ -1,19 +1,12 @@
-# Use the same version as the backup tool.
-# See https://git.fpfis.tech.ec.europa.eu/fpfis/httpd-php/-/blob/master/install-scripts/full.sh
-ENV MYDUMPER_RELEASE="v0.16.3-2"
-
+# Install mydumper.
+# This is adapted from https://git.fpfis.tech.ec.europa.eu/digit/devsecops/httpd-php/-/blob/master/install-scripts/full.sh
+ARG MYDUMPER_RELEASE="v0.19.3-3"
 COPY ./importdb.sh /scripts/importdb.sh
-RUN sudo apt update -y \
-    && sudo apt install cmake g++ -y \
-    && sudo apt install libglib2.0-dev zlib1g-dev libpcre3-dev libssl-dev libzstd-dev -y \
-    && sudo apt install default-libmysqlclient-dev -y \
-    && wget --no-verbose https://github.com/mydumper/mydumper/archive/refs/tags/${MYDUMPER_RELEASE}.zip \
-    && unzip ${MYDUMPER_RELEASE}.zip \
-    && cd mydumper*/ \
-    && cmake . \
-    && make \
-    && sudo make install \
-    && sudo mv /usr/local/bin/myloader /usr/bin/ \
-    && sudo mv /usr/local/bin/mydumper /usr/bin/ \
-    && rm -rf /mydumper* \
-    && rm /${MYDUMPER_RELEASE}.zip
+RUN apt-get update -y -qq \
+    && apt-get install -y -qq libatomic1 zstd libmysqlclient21 libpcre2-dev \
+    && . /etc/os-release \
+    && ARCH=$(dpkg --print-architecture) \
+    && DEB_FILE="mydumper_${MYDUMPER_RELEASE:1}.${VERSION_CODENAME}_${ARCH}.deb" \
+    && wget --no-verbose https://github.com/mydumper/mydumper/releases/download/${MYDUMPER_RELEASE}/$DEB_FILE \
+    && dpkg -i $DEB_FILE \
+    && rm $DEB_FILE

@@ -516,7 +516,6 @@ display:
         - user.permissions
       tags:
         - 'config:search_api.index.published'
-        - 'config:views.view.collections'
         - 'search_api_list:published'
   page_1:
     id: page_1
@@ -547,5 +546,4 @@ display:
       tags:
         - 'config:facets.facet.collection_my_content'
         - 'config:search_api.index.published'
-        - 'config:views.view.collections'
         - 'search_api_list:published'
