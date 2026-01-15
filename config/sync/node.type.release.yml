@@ -11,7 +11,7 @@ third_party_settings:
     parent: ''
   rdf_sync:
     type: 'http://www.w3.org/ns/dcat#Dataset'
-    uri_plugin: joinup_po_namespace:w21
+    uri_plugin: 'joinup_po_namespace:w21'
     fields:
       title:
         value:

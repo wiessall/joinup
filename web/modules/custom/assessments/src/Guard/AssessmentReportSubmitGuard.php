@@ -54,13 +54,13 @@ class AssessmentReportSubmitGuard implements GuardInterface {
    *   TRUE if user is allowed to use publish_from_draft transition.
    */
   protected function isAllowedToPublish(WorkflowTransition $transition, WorkflowInterface $workflow, EntityInterface $entity): bool {
-    $publish_from_draft = $workflow->getTransition('publish_from_draft');
-    if (!$publish_from_draft) {
+    $publishFromDraft = $workflow->getTransition('publish_from_draft');
+    if (!$publishFromDraft) {
       return FALSE;
     }
 
     return $this->allowedByPermission(
-      $publish_from_draft,
+      $publishFromDraft,
       $workflow,
       $entity,
       TRUE,

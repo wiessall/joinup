@@ -89,6 +89,11 @@ class Assessment extends ContentEntityBase implements AssessmentInterface {
       // If no owner has been set explicitly, make the anonymous user the owner.
       $this->setOwnerId(0);
     }
+
+    // By default, assessments are unpublished.
+    if ($this->bundle() !== 'report' && $this->isNew()) {
+      $this->setUnpublished();
+    }
   }
 
   /**
@@ -167,8 +172,8 @@ class Assessment extends ContentEntityBase implements AssessmentInterface {
    */
   public function toUrl($rel = 'canonical', array $options = []): Url {
     $url = parent::toUrl($rel, $options);
-    $route_parameters = $url->getRouteParameters();
-    if (!isset($route_parameters['assessment_type'])) {
+    $routeParameters = $url->getRouteParameters();
+    if (!isset($routeParameters['assessment_type'])) {
       $url->setRouteParameter('assessment_type', $this->bundle());
     }
     return $url;

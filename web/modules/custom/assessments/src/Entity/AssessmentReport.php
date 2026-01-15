@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity;
 
+use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 
@@ -34,6 +36,7 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
 
     if ($update) {
       $this->onUpdateEntityReferenceFieldsOwned();
+      $this->onUpdateReflectPublicationStatus();
     }
   }
 
@@ -54,6 +57,69 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
    */
   protected function getEntityReferenceFieldsOwned(): array {
     return ['legal', 'organisational', 'semantic', 'technical', 'documents', 'binding_requirement'];
+  }
+
+  /**
+   * Acts on parent entity update to reflect publication status.
+   */
+  protected function onUpdateReflectPublicationStatus(): void {
+    // If the publication status did not change, do nothing.
+    if ($this->isPublished() === $this->original->isPublished()) {
+      return;
+    }
+
+    // We need to collect the entities that should be updated.
+    $entitiesToUpdate = [];
+    $assetsToUpdate = [];
+    $reportIsPublished = $this->isPublished();
+
+    // Only keep providers that are to be published.
+    $providerEntities = array_filter($this->get('provider')->referencedEntities(), function (AssessmentInterface $entity) use ($reportIsPublished): bool {
+      // Only update providers towards the published state because they might
+      // later be referred to by other reports, and we don't want them to be
+      // re-unpublished.
+      return $reportIsPublished && !$entity->isPublished();
+    });
+    $entitiesToUpdate = array_merge($entitiesToUpdate, $providerEntities);
+
+    // Binding requirements are paragraphs. There is nothing to publish there,
+    // but we need to go through them to get to other entities.
+    $bindingRequirementEntities = $this->get('binding_requirement')->referencedEntities();
+    foreach ($bindingRequirementEntities as $bindingRequirementEntity) {
+      $expressions = $bindingRequirementEntity->get('expression')->referencedEntities();
+      $entitiesToUpdate = array_merge($entitiesToUpdate, $expressions);
+      $assets = $bindingRequirementEntity->get('asset')->referencedEntities();
+      $assets = array_filter($assets, function (SolutionInterface $entity) use ($reportIsPublished): bool {
+        // Only update solutions towards the published state because they might
+        // later be referred to by other reports, and we don't want them to be
+        // re-unpublished.
+        return $entity->getGroup()->uuid() === AssessmentInterface::SOLUTION_COLLECTOR
+          && $reportIsPublished
+          && !$entity->isPublished();
+      });
+      $assetsToUpdate = array_merge($assetsToUpdate, $assets);
+      $publicServices = $bindingRequirementEntity->get('affects')->referencedEntities();
+      $entitiesToUpdate = array_merge($entitiesToUpdate, $publicServices);
+      $participations = $bindingRequirementEntity->get('has_participation')->referencedEntities();
+      $entitiesToUpdate = array_merge($entitiesToUpdate, $participations);
+    }
+
+    // Update the publication status of collected entities.
+    foreach ($entitiesToUpdate as $entity) {
+      if ($entity instanceof EntityPublishedInterface && $entity->isPublished() !== $this->isPublished()) {
+        match ($this->isPublished()) {
+          TRUE => $entity->setPublished(),
+          FALSE => $entity->setUnpublished(),
+        };
+        $entity->save();
+      }
+    }
+
+    foreach ($assetsToUpdate as $asset) {
+      $asset->setWorkflowState('published');
+      $asset->skip_notification = TRUE;
+      $asset->save();
+    }
   }
 
 }
