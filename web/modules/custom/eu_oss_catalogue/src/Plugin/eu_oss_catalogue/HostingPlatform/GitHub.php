@@ -216,8 +216,8 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
             }
           }
 
-          $logo = $node['openGraphImageUrl'];
-          if ($logo  && str_starts_with($logo, 'https://opengraph.githubassets.com/')) {
+          $logo = $node['openGraphImageUrl'] ?? NULL;
+          if ($logo && str_starts_with($logo, 'https://opengraph.githubassets.com/')) {
             // If a repository lacks a logo uploaded by the user, GitHub
             // generates one under https://opengraph.githubassets.com. Keep only
             // logos uploaded by the user.
@@ -244,8 +244,8 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
         }
 
         // The GraphQL query is paginated to 100 results.
-        $hasNextPage = $response['data']['search']['pageInfo']['hasNextPage'];
-        $endCursor = $response['data']['search']['pageInfo']['endCursor'];
+        $hasNextPage = $response['data']['search']['pageInfo']['hasNextPage'] ?? NULL;
+        $endCursor = $response['data']['search']['pageInfo']['endCursor'] ?? NULL;
       } while ($hasNextPage);
     }
   }

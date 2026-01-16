@@ -6,6 +6,7 @@
     beStrictAboutOutputDuringTests="true"
     beStrictAboutChangesToGlobalState="true"
     failOnWarning="true"
+    displayDetailsOnTestsThatTriggerWarnings="true"
     processIsolation="true"
     xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
     cacheDirectory=".phpunit.cache"
