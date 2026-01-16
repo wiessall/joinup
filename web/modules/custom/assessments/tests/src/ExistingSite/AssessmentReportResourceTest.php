@@ -154,11 +154,10 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
       }
     }
 
-    // Verify statement entities are published.
+    // Verify statement entities exist. Statement entities don't have
+    // isPublished() - they inherit access from the parent report.
     foreach (['legal', 'organisational', 'semantic', 'technical'] as $statementType) {
       if (!$report->get($statementType)->isEmpty()) {
-        // Statement entities don't have isPublished(), they are always accessible
-        // when parent report is accessible, so we just verify they exist.
         $statement = $report->get($statementType)->entity;
         $this->assertNotNull($statement, "Statement '$statementType' should exist");
       }
