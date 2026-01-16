@@ -270,7 +270,7 @@ valid_optional_fields_omitted:
         # has_participation with country omitted (optional)
         has_participation:
           - participant_type:
-              - "european_union_institution"
+              - "national_public_sector_body"
         # asset is omitted (optional)
         # documents is omitted (optional)
     # results_in is omitted (optional)
@@ -297,7 +297,7 @@ valid_optional_fields_omitted:
             thematic_area: []
         has_participation:
           - participant_type:
-              - "european_union_institution"
+              - "national_public_sector_body"
             country: []
         asset: []
     results_in: {}
