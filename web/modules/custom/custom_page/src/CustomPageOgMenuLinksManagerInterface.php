@@ -66,16 +66,6 @@ interface CustomPageOgMenuLinksManagerInterface {
   public function updateLink(MenuLinkContentInterface $menuLink): void;
 
   /**
-   * Deletes all the corresponding OG menu links pointing to a custom page.
-   *
-   * @param \Drupal\node\NodeInterface $customPage
-   *   The custom page entity.
-   *
-   * @return $this
-   */
-  public function deleteLinks(NodeInterface $customPage): CustomPageOgMenuLinksManagerInterface;
-
-  /**
    * Gets the OG menu instance, given a custom page.
    *
    * @param \Drupal\node\NodeInterface $customPage
