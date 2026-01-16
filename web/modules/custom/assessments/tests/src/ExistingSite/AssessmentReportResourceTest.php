@@ -82,7 +82,7 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
   /**
    * Tests posting a structured payload returns 201 and echoes the data.
    */
-  public function testValidPost(): void {
+  public function testValidPostDataAndStatus(): void {
     // Create testing files.
     file_put_contents("public://assessment-test/report.pdf", "foo");
     file_put_contents("public://assessment-test/requirement1.pdf", "bar");
@@ -119,6 +119,50 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     unset($data['binding_requirement'][0]['asset'][1]['url']);
 
     $this->assertEqualsCanonicalizing($expect, $data);
+
+    // Verify all entities created through the API are published.
+    $entityRepository = \Drupal::service('entity.repository');
+
+    // Load the report and verify it's published.
+    $report = $entityRepository->loadEntityByUuid('assessment', $data['id']);
+    $this->assertTrue($report->isPublished(), 'Assessment report should be published');
+
+    // Verify provider (public organisation) is published.
+    $provider = $report->get('provider')->entity;
+    $this->assertTrue($provider->isPublished(), 'Provider (public organisation) should be published');
+
+    // Verify binding requirement paragraph and its referenced entities.
+    foreach ($report->get('binding_requirement')->referencedEntities() as $requirement) {
+      // Verify expression entities are published.
+      foreach ($requirement->get('expression')->referencedEntities() as $expression) {
+        $this->assertTrue($expression->isPublished(), 'Expression entity should be published');
+      }
+
+      // Verify affects (public service) entities are published.
+      foreach ($requirement->get('affects')->referencedEntities() as $publicService) {
+        $this->assertTrue($publicService->isPublished(), 'Public service (affects) entity should be published');
+      }
+
+      // Verify participation entities are published.
+      foreach ($requirement->get('has_participation')->referencedEntities() as $participation) {
+        $this->assertTrue($participation->isPublished(), 'Participation entity should be published');
+      }
+
+      // Verify newly created assets (solutions) are published.
+      foreach ($requirement->get('asset')->referencedEntities() as $asset) {
+        $this->assertTrue($asset->isPublished(), 'Asset (solution) should be published');
+      }
+    }
+
+    // Verify statement entities are published.
+    foreach (['legal', 'organisational', 'semantic', 'technical'] as $statementType) {
+      if (!$report->get($statementType)->isEmpty()) {
+        // Statement entities don't have isPublished(), they are always accessible
+        // when parent report is accessible, so we just verify they exist.
+        $statement = $report->get($statementType)->entity;
+        $this->assertNotNull($statement, "Statement '$statementType' should exist");
+      }
+    }
 
     // Test the GET resource.
     $this->drupalGet('/api/assessments/v1/assessment/' . $data['id']);
