@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_private_message\Plugin\EntityReferenceSelection;
 
+use Drupal\Core\Entity\Attribute\EntityReferenceSelection;
 use Drupal\Core\Entity\Plugin\EntityReferenceSelection\DefaultSelection;
 use Drupal\Core\Entity\Query\QueryInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
 
@@ -14,15 +16,15 @@ use Drupal\user\RoleInterface;
  *
  * Currently, it is only used for private message logic.
  *
- * @EntityReferenceSelection(
- *   id = "joinup_user_full_name",
- *   label = @Translation("Full name selection"),
- *   group = "joinup_user_full_name",
- *   entity_types = {"user"},
- * )
- *
  * @see \Drupal\user\Plugin\EntityReferenceSelection\UserSelection
  */
+#[EntityReferenceSelection(
+  id: "joinup_user_full_name",
+  label: new TranslatableMarkup("Full name selection"),
+  group: 'joinup_user_full_name',
+  weight: 1,
+  entity_types: ["user"]
+)]
 class UserFullNameSelection extends DefaultSelection {
 
   /**

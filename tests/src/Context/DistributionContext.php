@@ -6,6 +6,9 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
@@ -71,9 +74,8 @@ class DistributionContext extends RawDrupalContext {
    *   Thrown if the download link cannot be found.
    * @throws \InvalidArgumentException
    *   Thrown if the link type parameter does not receive a valid value.
-   *
-   * @Then I should see the :link_type link in the :distribution distribution
    */
+  #[Then('I should see the :link_type link in the :distribution distribution')]
   public function assertLinkPresentInCompactDistributionTile(string $link_type, string $distribution): void {
     if (!in_array($link_type, ['download', 'external'])) {
       throw new \InvalidArgumentException('Only "download" and "external" values are allowed for $link_type.');
@@ -114,9 +116,8 @@ class DistributionContext extends RawDrupalContext {
    *
    * @throws \Exception
    *    Thrown when the file or the link is not found.
-   *
-   * @Then the :distribution distribution should have the link of the :file_name in the access URL field
    */
+  #[Then('the :distribution distribution should have the link of the :file_name in the access URL field')]
   public function assertLinkSynchronized(string $distribution, string $file_name): void {
     $distribution = $this->getEntityByLabel('node', $distribution);
     if (!$distribution instanceof DistributionInterface) {
@@ -162,9 +163,8 @@ class DistributionContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the rendered distribution is not found.
-   *
-   * @When I click :link in the :heading distribution
    */
+  #[When('I click :link in the :heading distribution')]
   public function clickLinkInCompactDistribution(string $link, string $heading): void {
     $element = $this->getCompactDistributionByHeading($heading);
 
@@ -190,11 +190,10 @@ class DistributionContext extends RawDrupalContext {
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The entries list.
    *
-   * @Given the following distribution download events:
-   *
    * @throws \Drupal\Core\Entity\EntityStorageException
    *   Thrown when the download event entity could not be saved.
    */
+  #[Given('the following distribution download events:')]
   public function downloadEvents(TableNode $table): void {
     foreach ($table->getColumnsHash() as $row) {
       $distribution = $this->getEntityByLabel('node', $row['distribution'], 'distribution');
@@ -235,9 +234,8 @@ class DistributionContext extends RawDrupalContext {
    *
    * @throws \Behat\Mink\Exception\ElementTextException
    *   Thrown when one or more of the download events was not present.
-   *
-   * @Then I should see the following download entries:
    */
+  #[Then('I should see the following download entries:')]
   public function assertDownloadEventEntries(TableNode $table): void {
     $base_selector = '.distribution-download-table table > tbody > tr';
     $count = 0;

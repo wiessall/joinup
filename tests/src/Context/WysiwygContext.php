@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -29,9 +32,8 @@ class WysiwygContext extends RawDrupalContext {
    *   The text to be entered in the WYSIWYG editor.
    * @param string $label
    *   The label of the field containing the WYSIWYG editor.
-   *
-   * @When I enter :text in the :label wysiwyg editor
    */
+  #[When('I enter :text in the :label wysiwyg editor')]
   public function enterTextInWysiwyg(string $text, string $label): void {
     // If we are running in a JavaScript enabled browser, first click the
     // 'Source' button so we can enter the text as HTML and get the same result
@@ -55,9 +57,8 @@ class WysiwygContext extends RawDrupalContext {
    *   The label of the button to press.
    * @param string $label
    *   The label of the field containing the WYSIWYG editor.
-   *
-   * @Then I press the button :button in the :label wysiwyg editor
    */
+  #[Then('I press the button :button in the :label wysiwyg editor')]
   public function pressButtonInWysiwyg(string $button, string $label): void {
     $this->assertJavaScriptEnabledBrowser();
     $this->pressWysiwygButton($label, $button);
@@ -68,9 +69,8 @@ class WysiwygContext extends RawDrupalContext {
    *
    * @param string $label
    *   The label of the field containing the WYSIWYG editor.
-   *
-   * @Then I should see the :label wysiwyg editor
    */
+  #[Then('I should see the :label wysiwyg editor')]
   public function assertWysiwyg(string $label): void {
     Assert::assertTrue($this->hasWysiwyg($label));
   }
@@ -89,9 +89,8 @@ class WysiwygContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the formats were found in the format list.
-   *
-   * @Then the paragraph formats in the :field field should not contain the :format_tags format(s)
    */
+  #[Then('the paragraph formats in the :field field should not contain the :format_tags format(s)')]
   public function assertNotFormatInCkeditorExists(string $label, string $format_tags): void {
     if (!$this->hasJavascriptSupport()) {
       throw new \Exception('This step requires javascript to run.');
@@ -131,9 +130,8 @@ class WysiwygContext extends RawDrupalContext {
    * @param string $buttons
    *   A comma-separated list of buttons that should be present, in the correct
    *   order.
-   *
-   * @Then the :label wysiwyg editor should have the buttons :buttons
    */
+  #[Then('the :label wysiwyg editor should have the buttons :buttons')]
   public function assertWysiwygButtons(string $label, string $buttons): void {
     $actual_buttons = $this->getWysiwygButtons($label);
     $expected_buttons = array_map('trim', explode(',', $buttons));
@@ -147,9 +145,8 @@ class WysiwygContext extends RawDrupalContext {
    *   The label of the field containing the WYSIWYG editor to inspect.
    * @param string $button
    *   The button label.
-   *
-   * @Given the :button button should be available in the :label wysiwyg editor
    */
+  #[Given('the :button button should be available in the :label wysiwyg editor')]
   public function wysiwygContainsButton(string $label, string $button): void {
     $available_buttons = $this->getWysiwygButtons($label);
     if (!in_array($button, $available_buttons)) {
@@ -162,9 +159,8 @@ class WysiwygContext extends RawDrupalContext {
    *
    * @param string $label
    *   The label of the field containing the WYSIWYG editor to inspect.
-   *
-   * @Then I check :label wysiwyg height
    */
+  #[Then('I check :label wysiwyg height')]
   public function checkWysiwygHeight(string $label): void {
     $wysiwyg = $this->getWysiwyg($label);
     $ck_content = $wysiwyg->find('css', '.ck-content')->getXpath();
