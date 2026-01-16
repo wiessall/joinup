@@ -171,9 +171,15 @@ valid:
             landing_page: "https://portal.example.eu"
           - "ad882176-8b1d-4506-9e90-886c5802f1c7"
     results_in:
+      legal:
+        interpretation: "positive"
+        judgement: "Legislation is fully aligned with EU directives"
       organisational:
         interpretation: "positive"
         judgement: "Compliant with conditions"
+      semantic:
+        interpretation: "negative"
+        judgement: "Data models require harmonization across systems"
       technical:
         interpretation: "neutral"
         judgement: "Requires follow-up"
@@ -228,9 +234,15 @@ valid:
             description: 'just this'
             landing_page: 'https://example.com/the-solution'
     results_in:
+      legal:
+        interpretation: "positive"
+        judgement: "Legislation is fully aligned with EU directives"
       organisational:
         interpretation: "positive"
         judgement: "Compliant with conditions"
+      semantic:
+        interpretation: "negative"
+        judgement: "Data models require harmonization across systems"
       technical:
         interpretation: "neutral"
         judgement: "Requires follow-up"
@@ -238,6 +250,60 @@ valid:
     documents:
       - '__base_url__/sites/default/files/assessments/report/report.pdf'
     other_comment: 'Still work to be done. Waiting for a new iteration.'
+
+# Test case with optional fields omitted to ensure proper null handling.
+valid_optional_fields_omitted:
+  payload:
+    name: "Minimal report"
+    provider:
+      name: "European Commission"
+      organisation_type: "european_union_institution"
+    binding_requirement:
+      - expression:
+          # documented_in is omitted (optional)
+          - name: "EU Regulation 2024"
+            description: "A regulation without documented_in"
+        description: "Article 1"
+        affects:
+          # thematic_area is omitted (optional)
+          - name: "Basic Service"
+        # has_participation with country omitted (optional)
+        has_participation:
+          - participant_type:
+              - "national_public_sector_body"
+        # asset is omitted (optional)
+        # documents is omitted (optional)
+    # results_in is omitted (optional)
+    # remaining_barriers is omitted (optional)
+    # documents is omitted (optional)
+    # other_comment is omitted (optional)
+  expect:
+    language: en
+    name: "Minimal report"
+    provider:
+      name: "European Commission"
+      organisation_type: "european_union_institution"
+      country: null
+    relevant_report: []
+    binding_requirement:
+      - expression:
+          - name: "EU Regulation 2024"
+            description: "A regulation without documented_in"
+            documented_in: null
+        description: "Article 1"
+        documents: []
+        affects:
+          - name: "Basic Service"
+            thematic_area: []
+        has_participation:
+          - participant_type:
+              - "national_public_sector_body"
+            country: []
+        asset: []
+    results_in: {}
+    remaining_barriers: null
+    documents: []
+    other_comment: null
 
 invalid_country_for_eu_organisation:
   payload:

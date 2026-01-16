@@ -200,7 +200,7 @@ class AssessmentReportResource extends ResourceBase {
       foreach ($requirement->get('expression')->referencedEntities() as $item) {
         assert($item instanceof AssessmentInterface);
         $expressions[] = [
-          'name' => $item->label(),
+          'name' => $item->get('initiative_name')->value,
           'description' => $item->get('description')?->value,
           'documented_in' => $item->get('documented_in')?->uri,
         ];
@@ -229,6 +229,7 @@ class AssessmentReportResource extends ResourceBase {
         assert($item instanceof SolutionInterface);
         $assets[] = [
           'id' => $item->uuid(),
+          'uri' => $item->getUri(),
           'title' => $item->label(),
           'description' => (string) $item->get('description')->processed,
           'landing_page' => $item->get('landing_page')->uri,
@@ -265,6 +266,7 @@ class AssessmentReportResource extends ResourceBase {
       'name' => $report->label(),
       'provider' => [
         'id' => $provider->uuid(),
+        'uri' => $provider->getUri(),
         'name' => $provider->label(),
         'organisation_type' => $provider->get('organisation_type')->entity->get('id')->value,
         'country' => $provider->get('country')->entity?->get('code')->value,
@@ -401,9 +403,9 @@ class AssessmentReportResource extends ResourceBase {
       return $this->getAssessmentStorage()->create([
         'type' => 'expression',
         'langcode' => $this->langcode,
-        'name' => $expression['name'],
+        'initiative_name' => $expression['name'],
         'description' => $this->buildFormattedText($expression, 'description'),
-        'documented_in' => $expression['documented_in'],
+        'documented_in' => $expression['documented_in'] ?? NULL,
         'status' => $this->hasPublishPermission,
       ]);
     }, $expressions);
@@ -428,7 +430,7 @@ class AssessmentReportResource extends ResourceBase {
         'type' => 'public_service',
         'langcode' => $this->langcode,
         'name' => $item['name'],
-        'thematic_area' => $this->getTermIdFromIdentifier('assess_public_service_area', $item['thematic_area'], "$path/affects/$delta/thematic_area"),
+        'thematic_area' => isset($item['thematic_area']) ? $this->getTermIdFromIdentifier('assess_public_service_area', $item['thematic_area'], "$path/affects/$delta/thematic_area") : [],
         'status' => $this->hasPublishPermission,
       ]);
     }
@@ -455,7 +457,7 @@ class AssessmentReportResource extends ResourceBase {
         'type' => 'participation',
         'langcode' => $this->langcode,
         'participant_type' => $this->getTermIdFromIdentifier('assess_participant_type', $item['participant_type'], "$path/has_participation/$delta/participant_type"),
-        'stakeholder_country' => $this->getTermIdFromIdentifier('spatial', $item['country'], "$path/has_participation/$delta/country", 'code'),
+        'stakeholder_country' => isset($item['country']) ? $this->getTermIdFromIdentifier('spatial', $item['country'], "$path/has_participation/$delta/country", 'code') : [],
         'status' => $this->hasPublishPermission,
       ]);
     }
