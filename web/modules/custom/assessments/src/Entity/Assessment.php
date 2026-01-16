@@ -91,7 +91,7 @@ class Assessment extends ContentEntityBase implements AssessmentInterface {
     }
 
     // By default, assessments are unpublished.
-    if ($this->bundle() !== 'report' && $this->isNew()) {
+    if ($this->bundle() !== 'report' && $this->isNew() && $this->get('status')->isEmpty()) {
       $this->setUnpublished();
     }
   }
