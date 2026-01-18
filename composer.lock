@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e3ce3ad855314fdfbeb6d632084785e4",
+    "content-hash": "898e26eee0122382e4c0628a1e7dddc7",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -22594,17 +22594,17 @@
         },
         {
             "name": "drupal/cas_mock_server",
-            "version": "2.0.4",
+            "version": "2.0.5",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/cas_mock_server.git",
-                "reference": "2.0.4"
+                "reference": "2.0.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/cas_mock_server-2.0.4.zip",
-                "reference": "2.0.4",
-                "shasum": "2ba33a287c2c087c543e17dc8de698353537e108"
+                "url": "https://ftp.drupal.org/files/projects/cas_mock_server-2.0.5.zip",
+                "reference": "2.0.5",
+                "shasum": "42570ac8dca4f55b6c9470a655431c850ad65f44"
             },
             "require": {
                 "drupal/core": ">=9.3"
@@ -22620,8 +22620,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.4",
-                    "datestamp": "1763583295",
+                    "version": "2.0.5",
+                    "datestamp": "1768767073",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
