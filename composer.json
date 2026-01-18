@@ -339,9 +339,6 @@
             "drupal/cas": {
                 "Invalid constraint for server.verify in cas.settings @see https://www.drupal.org/i/3542632": "resources/patch/php/drupal/cas/3542632.diff"
             },
-            "drupal/cas_mock_server": {
-                "Compatibility fixes broke the CasMockServerContext @see https://www.drupal.org/i/3558906": "resources/patch/php/drupal/cas_mock_server/3558906-59b699de.diff"
-            },
             "drupal/config_inspector": {
                 "Missing schema on nested elements @see https://www.drupal.org/i/3548299": "resources/patch/php/drupal/config_inspector/3548299.diff"
             },
