@@ -104,17 +104,21 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     $response = $this->post($payload);
     $data = Json::decode($response->getBody()->getContents());
 
-    // Update the expectation with generated UUIDs.
+    // Update the expectation with generated UUIDs and URIs.
     $uuid = $data['id'];
     $uri = 'http://data.europa.eu/s2k/' . $uuid;
     $expect = ['id' => $uuid, 'uri' => $uri] + $expect;
     $uuid = $data['provider']['id'];
-    $provider = ['id' => $uuid] + $expect['provider'];
+    $providerUri = 'http://data.europa.eu/s2k/' . $uuid;
+    $provider = ['id' => $uuid, 'uri' => $providerUri] + $expect['provider'];
     $expect['provider'] = $provider;
     $uuid = $data['binding_requirement'][0]['asset'][0]['id'];
-    $asset = ['id' => $uuid] + $expect['binding_requirement'][0]['asset'][0];
+    $assetUri = 'http://data.europa.eu/w21/' . $uuid;
+    $asset = ['id' => $uuid, 'uri' => $assetUri] + $expect['binding_requirement'][0]['asset'][0];
     $expect['binding_requirement'][0]['asset'][0] = $asset;
-    // Asset URL is not testable because depends on th environment.
+    // Add URI for the referenced existing asset.
+    $expect['binding_requirement'][0]['asset'][1]['uri'] = 'http://data.europa.eu/w21/' . $expect['binding_requirement'][0]['asset'][1]['id'];
+    // Asset URL is not testable because depends on the environment.
     unset($data['binding_requirement'][0]['asset'][0]['url']);
     unset($data['binding_requirement'][0]['asset'][1]['url']);
 
@@ -193,6 +197,32 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
         $this->markEntityForCleanup($item->entity);
       }
     }
+    $this->markEntityForCleanup($report);
+  }
+
+  /**
+   * Tests posting a payload with optional fields omitted.
+   */
+  public function testValidPostWithOptionalFieldsOmitted(): void {
+    ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('valid_optional_fields_omitted');
+
+    $response = $this->post($payload);
+    $this->assertSame(201, $response->getStatusCode());
+    $data = Json::decode($response->getBody()->getContents());
+
+    // Update the expectation with generated UUIDs and URIs.
+    $uuid = $data['id'];
+    $uri = 'http://data.europa.eu/s2k/' . $uuid;
+    $expect = ['id' => $uuid, 'uri' => $uri] + $expect;
+    $uuid = $data['provider']['id'];
+    $providerUri = 'http://data.europa.eu/s2k/' . $uuid;
+    $provider = ['id' => $uuid, 'uri' => $providerUri] + $expect['provider'];
+    $expect['provider'] = $provider;
+
+    $this->assertEqualsCanonicalizing($expect, $data);
+
+    // Cleanup.
+    $report = \Drupal::service('entity.repository')->loadEntityByUuid('assessment', $data['id']);
     $this->markEntityForCleanup($report);
   }
 
