@@ -334,15 +334,20 @@ class ProvidedByWidget extends WidgetBase {
 
       $addNew = $widgetState['add_new'] ?? FALSE;
 
+      // European organization types are pre-populated and cannot be added manually.
+      if ($this->isEuOrganisationType($selectedType)) {
+        $addNew = FALSE;
+      }
+
       // Handle button clicks.
-      if ($operation === self::OP_ADD_NEW) {
+      if ($operation === self::OP_ADD_NEW && !$this->isEuOrganisationType($selectedType)) {
         $addNew = TRUE;
         $widgetState['add_new'] = TRUE;
         $widgetState['add_new_just_clicked'] = TRUE;
         unset($widgetState['country_just_changed']);
         static::setWidgetState($parents, $fieldName, $form_state, $widgetState);
       }
-      elseif ($operation === self::OP_SELECT_EXISTING) {
+      elseif ($operation === self::OP_SELECT_EXISTING || $this->isEuOrganisationType($selectedType)) {
         $addNew = FALSE;
         $widgetState['add_new'] = FALSE;
         unset($widgetState['country_just_changed']);
@@ -364,7 +369,7 @@ class ProvidedByWidget extends WidgetBase {
           $requiresCountry ? $selectedCountry : NULL
         );
 
-        if ($existingCount > 0) {
+        if ($existingCount > 0 || $this->isEuOrganisationType($selectedType)) {
           $addNew = FALSE;
           $widgetState['add_new'] = FALSE;
           $widgetState['country_just_changed'] = TRUE;
@@ -394,7 +399,7 @@ class ProvidedByWidget extends WidgetBase {
           $requiresCountry ? $selectedCountry : NULL
         );
 
-        if ($existingCount === 0) {
+        if ($existingCount === 0 && !$this->isEuOrganisationType($selectedType)) {
           $addNew = TRUE;
           $widgetState['add_new'] = TRUE;
           static::setWidgetState($parents, $fieldName, $form_state, $widgetState);
@@ -445,26 +450,28 @@ class ProvidedByWidget extends WidgetBase {
           ],
         ];
 
-        $element['content']['add_new_button'] = [
-          '#type' => 'button',
-          '#value' => $this->t('…or add new'),
-          '#name' => $this->buildButtonName($parents, $fieldName, $delta, 'add_new_button'),
-          '#attributes' => [
-            'class' => [
-              'button',
-              'button--small',
-              'add-new-organisation-button',
-              'assessments-inline__item--compact',
+        if (!$this->isEuOrganisationType($selectedType)) {
+          $element['content']['add_new_button'] = [
+            '#type' => 'button',
+            '#value' => $this->t('…or add new'),
+            '#name' => $this->buildButtonName($parents, $fieldName, $delta, 'add_new_button'),
+            '#attributes' => [
+              'class' => [
+                'button',
+                'button--small',
+                'add-new-organisation-button',
+                'assessments-inline__item--compact',
+              ],
             ],
-          ],
-          '#ajax' => [
-            'callback' => [static::class, 'ajaxRefresh'],
-            'wrapper' => 'provided-by-content-' . $delta,
-            'effect' => 'fade',
-          ],
-          '#limit_validation_errors' => [],
-          '#op' => self::OP_ADD_NEW,
-        ];
+            '#ajax' => [
+              'callback' => [static::class, 'ajaxRefresh'],
+              'wrapper' => 'provided-by-content-' . $delta,
+              'effect' => 'fade',
+            ],
+            '#limit_validation_errors' => [],
+            '#op' => self::OP_ADD_NEW,
+          ];
+        }
       }
       else {
         $element['content']['name'] = [
