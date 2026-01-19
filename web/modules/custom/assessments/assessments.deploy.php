@@ -72,11 +72,11 @@ function assessments_deploy_200800(): void {
  * Unpublish assessments repository page, menu links, close webform.
  */
 function assessments_deploy_200801(): void {
-  /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository */
-  $entityRepository = \Drupal::service('entity.repository');
+  /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
+  $entity_repository = \Drupal::service('entity.repository');
 
   // Load the node at /collection/assessments/assessments-repository.
-  $node = $entityRepository->loadEntityByUuid('node', LegacyAssessmentInterface::ASSESSMENT_REPORTS_UUID);
+  $node = $entity_repository->loadEntityByUuid('node', LegacyAssessmentInterface::ASSESSMENT_REPORTS_UUID);
   if (!$node instanceof CustomPageInterface) {
     throw new UpdateException("Deploy hook failed: could not load custom page node by UUID, see " . __FUNCTION__);
   }
