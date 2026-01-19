@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9cc87ed8e435d2919c8b83b7be08fd91",
+    "content-hash": "a7c1f526770d14fc3408ac31b7e092b3",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -14308,13 +14308,10 @@
             "name": "npm-asset/jquery-jsonview",
             "version": "1.2.3",
             "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/jquery-jsonview/-/jquery-jsonview-1.2.3.tgz"
+                "type": "zip",
+                "url": "https://github.com/yesmeck/jquery-jsonview/archive/refs/tags/v1.2.3.zip"
             },
-            "type": "npm-asset",
-            "license": [
-                "MIT"
-            ]
+            "type": "drupal-library"
         },
         {
             "name": "npm-asset/js-cookie",
@@ -27913,5 +27910,5 @@
     "platform-overrides": {
         "php": "8.3"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
