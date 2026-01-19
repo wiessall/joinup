@@ -282,6 +282,8 @@ assess_provider_type:
     uri: 'http://example.com/taxonomy-term/assess-provider-type/5870cf04-2d28-472d-9486-39b1e4670b25'
   - name: European Union body
     id: european_union_body
+  - name: European Union agency
+    id: european_union_agency
   - name: Local public sector body
     id: local_public_sector_body
 assess_participant_type:
