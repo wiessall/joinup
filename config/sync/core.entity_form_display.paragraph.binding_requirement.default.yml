@@ -46,7 +46,7 @@ third_party_settings:
       children:
         - description
         - documented_in
-      label: General
+      label: Description
       region: content
       parent_name: group_tabs
       weight: 20
