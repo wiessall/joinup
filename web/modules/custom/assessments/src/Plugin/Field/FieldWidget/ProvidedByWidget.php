@@ -334,7 +334,8 @@ class ProvidedByWidget extends WidgetBase {
 
       $addNew = $widgetState['add_new'] ?? FALSE;
 
-      // European organization types are pre-populated and cannot be added manually.
+      // European organization types are pre-populated and cannot be added
+      // manually.
       if ($this->isEuOrganisationType($selectedType)) {
         $addNew = FALSE;
       }
