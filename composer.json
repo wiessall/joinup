@@ -609,8 +609,8 @@
                 "version": "4.5.1",
                 "type": "npm-asset",
                 "dist": {
-                    "url": "https://github.com/chartjs/Chart.js/archive/refs/tags/v4.5.1.zip",
-                    "type": "zip"
+                    "url": "https://registry.npmjs.org/chart.js/-/chart.js-4.5.1.tgz",
+                    "type": "tar"
                 },
                 "require": {
                     "npm-asset/kurkle--color": ">=0.3.0,<0.4.0"
@@ -624,8 +624,8 @@
                 "version": "0.3.4",
                 "type": "npm-asset",
                 "dist": {
-                    "url": "https://github.com/kurkle/color/archive/refs/tags/v0.3.4.zip",
-                    "type": "zip"
+                    "url": "https://registry.npmjs.org/@kurkle/color/-/color-0.3.4.tgz",
+                    "type": "tar"
                 }
             }
         },
@@ -636,8 +636,8 @@
                 "version": "3.3.0",
                 "type": "npm-asset",
                 "dist": {
-                    "url": "https://github.com/cure53/DOMPurify/archive/refs/tags/3.3.0.zip",
-                    "type": "zip"
+                    "url": "https://registry.npmjs.org/dompurify/-/dompurify-3.3.0.tgz",
+                    "type": "tar"
                 },
                 "require": {
                     "npm-asset/types--trusted-types": ">=2.0.7,<3.0.0"
@@ -663,8 +663,8 @@
                 "version": "1.6.4",
                 "type": "npm-asset",
                 "dist": {
-                    "url": "https://github.com/jackmoore/colorbox/archive/refs/tags/1.6.4.zip",
-                    "type": "zip"
+                    "url": "https://registry.npmjs.org/jquery-colorbox/-/jquery-colorbox-1.6.4.tgz",
+                    "type": "tar"
                 }
             }
         },
@@ -675,8 +675,8 @@
                 "version": "3.0.5",
                 "type": "npm-asset",
                 "dist": {
-                    "url": "https://github.com/js-cookie/js-cookie/archive/refs/tags/v3.0.5.zip",
-                    "type": "zip"
+                    "url": "https://registry.npmjs.org/js-cookie/-/js-cookie-3.0.5.tgz",
+                    "type": "tar"
                 }
             }
         }
