@@ -7,10 +7,14 @@ namespace Drupal\custom_page;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Menu\MenuLinkManagerInterface;
 use Drupal\Core\Url;
+use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_group\GroupMenuManagerInterface;
+use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og_menu\OgMenuInstanceInterface;
+use Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Manages the OG Menu links of custom pages.
@@ -21,6 +25,8 @@ readonly class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksMana
     protected EntityTypeManagerInterface $entityTypeManager,
     protected MenuLinkManagerInterface $menuLinkManager,
     protected GroupMenuManagerInterface $groupMenuManager,
+    #[Autowire(service: 'search_api.entity_datasource.tracking_manager')]
+    protected ContentEntityTrackingManager $trackingManager,
   ) {}
 
   /**
@@ -128,39 +134,27 @@ readonly class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksMana
   /**
    * {@inheritdoc}
    */
-  public function deleteLinks(NodeInterface $customPage): CustomPageOgMenuLinksManagerInterface {
-    $menuLinkContentStorage = $this->entityTypeManager->getStorage('menu_link_content');
-    $this->verifyCustomPage($customPage);
+  public function updateLink(MenuLinkContentInterface $menuLink): void {
+    // Do a quick check to see if the menu link entity's ableness has changed.
+    if ($menuLink->isEnabled() === $menuLink->original->isEnabled()) {
+      return;
+    }
 
-    foreach (['navigation', 'quick_links'] as $ogMenuInstanceId) {
-      if ($ogMenuInstance = $this->getOgMenuInstanceByCustomPage($customPage, $ogMenuInstanceId)) {
-        $menuName = "ogmenu-{$ogMenuInstance->id()}";
-        foreach ($customPage->uriRelationships() as $rel) {
-          $url = $customPage->toUrl($rel);
-          // Delete all MenuLinkContent links that point to this entity route.
-          if ($result = $this->menuLinkManager->loadLinksByRoute($url->getRouteName(), $url->getRouteParameters())) {
-            /** @var \Drupal\menu_link_content\Plugin\Menu\MenuLinkContent $instance */
-            foreach ($result as $id => $instance) {
-              if ($instance->getMenuName() === $menuName && $instance->isDeletable() && str_starts_with($id, 'menu_link_content:')) {
-                $instance->deleteLink();
-                // Search for children of deleted menu link.
-                $mids = $menuLinkContentStorage->getQuery()->accessCheck(FALSE)
-                  ->condition('parent', "menu_link_content:{$instance->getDerivativeId()}")
-                  ->execute();
-                if ($mids) {
-                  // Remove the relationship to the deleted parent menu link.
-                  /** @var \Drupal\menu_link_content\MenuLinkContentInterface $menuLinkContent */
-                  foreach ($menuLinkContentStorage->loadMultiple($mids) as $menuLinkContent) {
-                    $menuLinkContent->set('parent', NULL)->save();
-                  }
-                }
-              }
-            }
-          }
+    // Ignore external links.
+    $urlObject = $menuLink->getUrlObject();
+    if ($urlObject->isExternal()) {
+      return;
+    }
+
+    $routeParameters = $menuLink->getUrlObject()->getRouteParameters();
+    if (isset($routeParameters['node'])) {
+      $customPage = $this->entityTypeManager->getStorage('node')->load($routeParameters['node']);
+      if ($customPage instanceof CustomPageInterface) {
+        if ($customPage->hasGroup()) {
+          $this->trackingManager->trackEntityChange($customPage->getGroup());
         }
       }
     }
-    return $this;
   }
 
   /**
@@ -168,8 +162,8 @@ readonly class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksMana
    */
   public function getOgMenuInstanceByCustomPage(NodeInterface $customPage, string $menuType): ?OgMenuInstanceInterface {
     $this->verifyCustomPage($customPage);
-    if ($group_id = $customPage->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->target_id) {
-      return $this->groupMenuManager->getMenuByGroupId($group_id, $menuType);
+    if ($groupId = $customPage->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->target_id) {
+      return $this->groupMenuManager->getMenuByGroupId($groupId, $menuType);
     }
     return NULL;
   }
