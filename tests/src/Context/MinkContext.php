@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Mink\Element\ElementInterface;
 use Behat\Mink\Selector\Xpath\Escaper;
+use Behat\Step\Given;
 use Drupal\DrupalExtension\Context\MinkContext as DrupalExtensionMinkContext;
 use Drupal\joinup\Traits\JavascriptTrait;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -43,9 +44,8 @@ class MinkContext extends DrupalExtensionMinkContext {
    *
    * @param string $seconds
    *   The seconds to wait.
-   *
-   * @Given I wait for :seconds second(s)
    */
+  #[Given('I wait for :seconds second(s)')]
   public function iWaitForSeconds(string $seconds): void {
     $this->getSession()->wait($seconds * 1000);
   }
@@ -105,11 +105,10 @@ class MinkContext extends DrupalExtensionMinkContext {
   /**
    * Change the option of a select in the specified region.
    *
-   * @Given I select :value from :field in the :region( region)
-   *
    * @throws \Exception
    *   If region cannot be found.
    */
+  #[Given('I select :value from :field in the :region( region)')]
   public function selectRegionFillField(string $field, string $value, string $region): void {
     $select = $this->fixStepArgument($field);
     $option = $this->fixStepArgument($value);
@@ -128,9 +127,8 @@ class MinkContext extends DrupalExtensionMinkContext {
    * Change the attachments file to field in the specified region.
    *
    * Example: And I attach the file "hi.png" to "image" in the "Modal" region.
-   *
-   * @Given /^(?:|I )attach the file "(?P<path>[^"]*)" to "(?P<field>(?:[^"]|\\")*)" in the "(?P<region>[^"]*)" region$/
    */
+  #[Given('/^(?:|I )attach the file "(?P<path>[^"]*)" to "(?P<field>(?:[^"]|\\")*)" in the "(?P<region>[^"]*)" region$/')]
   public function attachRegionFileToField(string $field, string $path, string $region): void {
     $this->attachFile($field, $path, $this->getRegion($region));
   }

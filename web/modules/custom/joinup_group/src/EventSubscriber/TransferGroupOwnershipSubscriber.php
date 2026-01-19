@@ -7,7 +7,6 @@ namespace Drupal\joinup_group\EventSubscriber;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\Core\Url;
 use Drupal\og\Entity\OgMembership;
@@ -25,19 +24,11 @@ use Symfony\Component\HttpKernel\KernelEvents;
  */
 readonly class TransferGroupOwnershipSubscriber implements EventSubscriberInterface {
 
-  /**
-   * The user private temp store.
-   *
-   * @var \Drupal\Core\TempStore\PrivateTempStore
-   */
-  protected PrivateTempStore $tempStore;
-
   public function __construct(
     protected AccountInterface $currentUser,
     protected MessengerInterface $messenger,
-    PrivateTempStoreFactory $tempStoreFactory,
+    protected PrivateTempStoreFactory $tempStoreFactory,
   ) {
-    $this->tempStore = $tempStoreFactory->get('joinup_transfer_group_ownership');
   }
 
   /**
@@ -67,7 +58,8 @@ readonly class TransferGroupOwnershipSubscriber implements EventSubscriberInterf
       return;
     }
 
-    $data = $this->tempStore->get($this->currentUser->id());
+    $tempStore = $this->tempStoreFactory->get('joinup_transfer_group_ownership');
+    $data = $tempStore->get($this->currentUser->id());
     // If warning or error messages were recorded, we alter the redirect to
     // reload the view but we want to show the messages to the user.
     if (!empty($data['messages'])) {
@@ -84,7 +76,7 @@ readonly class TransferGroupOwnershipSubscriber implements EventSubscriberInterf
       $response->setTargetUrl($view_url->toString());
       // We go back to the view, expecting a new user selection, so we clear
       // the old user input.
-      $this->tempStore->delete($this->currentUser->id());
+      $tempStore->delete($this->currentUser->id());
     }
   }
 
