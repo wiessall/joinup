@@ -488,7 +488,7 @@ class AssessmentReportResource extends ResourceBase {
         'title' => $asset['title'],
         'description' => $this->buildFormattedText($asset, 'description', 'content_editor'),
         'landing_page' => $asset['landing_page'],
-        'state' => 'published',
+        'field_state' => 'published',
       ]);
     }
 

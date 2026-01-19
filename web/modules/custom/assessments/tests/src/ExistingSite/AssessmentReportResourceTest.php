@@ -97,6 +97,7 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
       'uuid' => 'ad882176-8b1d-4506-9e90-886c5802f1c7',
       'landing_page' => 'https://example.com/the-solution',
       'path' => '/the-solution',
+      'field_state' => 'published',
     ]);
 
     ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('valid');
