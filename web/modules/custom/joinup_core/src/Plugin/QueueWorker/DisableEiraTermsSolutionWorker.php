@@ -6,19 +6,20 @@ namespace Drupal\joinup_core\Plugin\QueueWorker;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Queue\Attribute\QueueWorker;
 use Drupal\Core\Queue\QueueWorkerBase;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\meta_entity\MetaEntityRepositoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Queue worker to disable EIRA terms for pre-wizard solutions.
- *
- * @QueueWorker(
- *   id = "joinup_core_disable_eira_terms",
- *   title = @Translation("Disable EIRA terms for pre-wizard solutions"),
- *   cron = {"time" = 60}
- * )
  */
+#[QueueWorker(
+  id: 'joinup_core_disable_eira_terms',
+  title: new TranslatableMarkup('Disable EIRA terms for pre-wizard solutions'),
+  cron: ['time' => 60],
+)]
 class DisableEiraTermsSolutionWorker extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
   /**

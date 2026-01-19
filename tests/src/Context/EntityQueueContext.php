@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Given;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\AliasTranslatorTrait;
@@ -39,9 +40,8 @@ class EntityQueueContext extends RawDrupalContext {
    *   The Behat table containing the content to include in the entity queue.
    * @param string $label
    *   The label of the entity queue to update.
-   *
-   * @Given the :label content listing contains:
    */
+  #[Given('the :label content listing contains:')]
   public function setEntityQueueContent(TableNode $table, string $label): void {
     /** @var \Drupal\entityqueue\EntitySubqueueInterface $subqueue */
     $subqueue = $this->getEntityByLabel('entity_subqueue', $label);

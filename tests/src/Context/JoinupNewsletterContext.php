@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\TraversingTrait;
 use PHPUnit\Framework\Assert;
@@ -17,9 +18,8 @@ class JoinupNewsletterContext extends RawDrupalContext {
 
   /**
    * Checks that a newsletter subscription form is not present in the last tile.
-   *
-   * @Then I should not see the newsletter subscription form in the last tile
    */
+  #[Then('I should not see the newsletter subscription form in the last tile')]
   public function assertNoNewsletterSubscriptionFormPresentInFinalTile(): void {
     $tiles = $this->getTiles();
     if (empty($tiles)) {
@@ -32,9 +32,8 @@ class JoinupNewsletterContext extends RawDrupalContext {
 
   /**
    * Checks that a newsletter subscription form is present in the last tile.
-   *
-   * @Then I should see the newsletter subscription form in the last tile
    */
+  #[Then('I should see the newsletter subscription form in the last tile')]
   public function assertNewsletterSubscriptionFormPresentInFinalTile(): void {
     $tiles = $this->getTiles();
     if (empty($tiles)) {
