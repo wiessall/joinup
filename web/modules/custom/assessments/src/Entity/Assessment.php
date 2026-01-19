@@ -89,11 +89,6 @@ class Assessment extends ContentEntityBase implements AssessmentInterface {
       // If no owner has been set explicitly, make the anonymous user the owner.
       $this->setOwnerId(0);
     }
-
-    // By default, assessments are unpublished.
-    if ($this->bundle() !== 'report' && $this->isNew() && $this->get('status')->isEmpty()) {
-      $this->setUnpublished();
-    }
   }
 
   /**
@@ -153,6 +148,9 @@ class Assessment extends ContentEntityBase implements AssessmentInterface {
       ->setLabel(t('Changed'))
       ->setTranslatable(TRUE)
       ->setDescription(t('The time that the assessment was last edited.'));
+
+    // Assessment entities are unpublished by default.
+    $fields['status']->setDefaultValue(FALSE);
 
     return $fields;
   }
