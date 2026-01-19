@@ -153,6 +153,9 @@ valid:
             thematic_area: "digital_and_innovation_services"
           - name: "Training Centre"
             thematic_area: "education_and_research"
+            country:
+              - "BE"
+              - "IT"
         has_participation:
           - participant_type:
               - "national_public_sector_body"
@@ -214,7 +217,9 @@ valid:
           - name: "Training Centre"
             thematic_area:
               - education_and_research
-            country: []
+            country:
+              - "BE"
+              - "IT"
         has_participation:
           - participant_type:
               - "national_public_sector_body"
