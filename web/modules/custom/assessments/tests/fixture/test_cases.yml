@@ -210,9 +210,11 @@ valid:
           - name: "Digital Monitoring Unit"
             thematic_area:
               - digital_and_innovation_services
+            country: []
           - name: "Training Centre"
             thematic_area:
               - education_and_research
+            country: []
         has_participation:
           - participant_type:
               - "national_public_sector_body"
@@ -295,6 +297,7 @@ valid_optional_fields_omitted:
         affects:
           - name: "Basic Service"
             thematic_area: []
+            country: []
         has_participation:
           - participant_type:
               - "national_public_sector_body"
