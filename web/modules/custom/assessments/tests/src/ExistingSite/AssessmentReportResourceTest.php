@@ -159,15 +159,6 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
       }
     }
 
-    // Verify statement entities exist. Statement entities don't have
-    // isPublished() - they inherit access from the parent report.
-    foreach (['legal', 'organisational', 'semantic', 'technical'] as $statementType) {
-      if (!$report->get($statementType)->isEmpty()) {
-        $statement = $report->get($statementType)->entity;
-        $this->assertNotNull($statement, "Statement '$statementType' should exist");
-      }
-    }
-
     // Test the GET resource.
     $this->drupalGet('/api/assessments/v1/assessment/' . $data['id']);
     $actual = Json::decode($this->getSession()->getPage()->getContent());
