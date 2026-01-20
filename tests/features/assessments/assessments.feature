@@ -31,7 +31,7 @@ Feature: Assessment Report Entity Management
 
     Then I should see the following lines of text in the correct order in "Modal content":
       | Initiatives                            |
-      | General                                |
+      | Description                            |
       | Trans-European digital public services |
       | Affected stakeholders                  |
       | Interoperability solutions             |
@@ -41,7 +41,7 @@ Feature: Assessment Report Entity Management
     And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Digital Transformation Initiative" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][documented_in][0][uri]" with "https://interoperable-europe.ec.europa.eu/initiatives" in the "Modal content" region
 
-    When I click "General" in the "Modal content" region
+    When I click "Description" in the "Modal content" region
     And I fill in "description[0][value]" with "This is the general binding requirement description" in the "Modal content" region
     And I fill in "documented_in[0][uri]" with "https://interoperable-europe.ec.europa.eu/general" in the "Modal content" region
 
@@ -159,7 +159,7 @@ Feature: Assessment Report Entity Management
     # This is a 323-character string to test that initiative_name accepts more than 255 characters
     And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Comprehensive Overview and Strategic Analysis of System Architecture, Functional Requirements, Operational Constraints, Governance Models, Security and Compliance Requirements, Performance Optimization, and Long-Term Maintainability Considerations for Scalable Digital Platforms in Enterprise and Public-Sector Environments" in the "Modal content" region
 
-    When I click "General" in the "Modal content" region
+    When I click "Description" in the "Modal content" region
     And I fill in "description[0][value]" with "Test description for initiative name length validation" in the "Modal content" region
 
     When I click "Trans-European digital public services" in the "Modal content" region
