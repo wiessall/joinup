@@ -53,7 +53,8 @@ Feature: Provided by widget functionality
 
     Then I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
-    And the following field should not be present "Select organisation"
+    And the following field should be present "Select organisation"
+    And I select "
     And I fill in "New organisation name" with "Portugal Ministry of Digital Affairs"
     Then I press "Update"
 

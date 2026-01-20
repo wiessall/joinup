@@ -152,7 +152,9 @@ Feature: Assessment Report Entity Management
     Then I should see the heading "Create assessment report"
 
     When I fill in "Short title" with "Test Initiative Name Length"
-    And I select "European Union institution" from "Type of public sector body"
+    And I select "Local public sector body" from "Type of public sector body"
+    And I wait for AJAX to finish
+    And I select "Belgium" from "Country"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "Test Organisation"
 
