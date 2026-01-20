@@ -23,6 +23,8 @@ terms:
   - name: data-analytics
   - name: data-collection
   - name: data-visualization
+  - name: design
+  - name: design-system
   - name: digital-asset-management
   - name: digital-citizenship
   - name: document-management
@@ -51,6 +53,7 @@ terms:
   - name: ide
   - name: identity-management
   - name: instant-messaging
+  - name: integrated-library-system
   - name: inventory-management
   - name: it-asset-management
   - name: it-development
@@ -76,6 +79,7 @@ terms:
   - name: project-management
   - name: property-management
   - name: real-estate-management
+  - name: regulations-and-directives
   - name: remote-support
   - name: resource-management
   - name: sales-management
@@ -100,3 +104,4 @@ terms:
   - name: website-builder
   - name: whistleblowing
   - name: workflow-management
+  - name: other
