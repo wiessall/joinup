@@ -87,11 +87,11 @@ class CollectionSubscriber extends NotificationSubscriberBase {
 
     $this->event = $event;
     $this->workflow = $this->entity->getWorkflow();
-    $this->fromState = isset($this->entity->original) ? $this->entity->original->getWorkflowState() : 'draft';
+    $this->fromState = $this->entity->getOriginal()?->getWorkflowState() ?? 'draft';
     $to_state = $this->entity->getWorkflowState();
     $this->transition = $this->workflow->findTransition($this->fromState, $to_state);
     $this->motivation = empty($this->entity->motivation) ? '' : $this->entity->motivation;
-    $this->hasPublished = $this->hasPublishedVersion($this->entity);
+    $this->hasPublished = $this->entity->had_published_version ?? FALSE;
   }
 
   /**
@@ -297,7 +297,7 @@ class CollectionSubscriber extends NotificationSubscriberBase {
    * modification is approved.
    */
   protected function notificationValidate(): void {
-    $template_id = $this->hasPublished &&  $this->transition->getId() === 'update_published' ? self::TEMPLATE_APPROVE_EDIT : self::TEMPLATE_APPROVE_NEW;
+    $template_id = $this->hasPublished ? self::TEMPLATE_APPROVE_EDIT : self::TEMPLATE_APPROVE_NEW;
     $user_data = [
       'og_roles' => [
         'node-collection-administrator' => [
