@@ -49,9 +49,8 @@ Feature: Assessment report permissions and access control
     When I fill in "Short title" with "Test permissions in Assessment Report 2025"
     And I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
-    Then I press "…or add new"
-    And I wait for AJAX to finish
-    And I fill in "New organisation name" with "CTT PT"
+    Then I should not see the button "…or add new"
+    When I select "Council of the European Union" from "Select organisation"
 
     # Binding requirements
     When I click "New binding requirement"
