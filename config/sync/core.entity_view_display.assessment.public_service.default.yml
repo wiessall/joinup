@@ -4,12 +4,21 @@ status: true
 dependencies:
   config:
     - assessments.type.public_service
+    - field.field.assessment.public_service.countries
     - field.field.assessment.public_service.thematic_area
 id: assessment.public_service.default
 targetEntityType: assessment
 bundle: public_service
 mode: default
 content:
+  countries:
+    type: entity_reference_label
+    label: visually_hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
   name:
     type: string
     label: visually_hidden

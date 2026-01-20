@@ -89,8 +89,13 @@ paths:
                       affects:
                         - name: Digital Monitoring Unit
                           thematic_area: digital_and_innovation_services
+                          country:
+                            - BE
+                            - NL
                         - name: Training Centre
                           thematic_area: education_and_research
+                          country:
+                            - BE
                       has_participation:
                         - participant_type:
                             - national_public_sector_body
@@ -165,9 +170,14 @@ paths:
                           - name: "Digital Monitoring Unit"
                             thematic_area:
                               - "digital_and_innovation_services"
+                            country:
+                              - "BE"
+                              - "NL"
                           - name: "Training Centre"
                             thematic_area:
                               - "education_and_research"
+                            country:
+                              - "BE"
                         has_participation:
                           - participant_type:
                               - "national_public_sector_body"
@@ -688,7 +698,7 @@ components:
       properties:
         name:
           type: string
-          description: The name  unique ID of the public service.
+          description: The name of the public service.
           maxLength: 255
         thematic_area:
           type: string
@@ -704,6 +714,11 @@ components:
             - security_justice_and_emergency_services
             - social_and_community_services
             - transport_and_infrastructure
+        country:
+          type: array
+          description: The concerned country(s) of trans-European digital public service(s).
+          items:
+            $ref: '#/components/schemas/EuropeanUnionCountry'
 
     Participation:
       type: object
