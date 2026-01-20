@@ -529,6 +529,19 @@ function assessments_assessment_presave(AssessmentInterface $entity): void {
       $entity->set('name', $name);
     }
   }
+  elseif ($entity->bundle() === 'participation') {
+    $eu_country = $entity->get('eu_countries')->value;
+    if ($eu_country) {
+      $terms = \Drupal::entityTypeManager()
+        ->getStorage('taxonomy_term')
+        ->loadByProperties([
+          'name' => 'European Union',
+          'vid' => 'spatial',
+        ]);
+      $term = reset($terms);
+      $entity->set('stakeholder_country', $term);
+    }
+  }
 }
 
 /**

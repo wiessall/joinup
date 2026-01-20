@@ -164,7 +164,7 @@ valid:
               - "national_public_sector_body"
               - "private_businesses"
             country:
-              - "IT"
+              - "EU"
         asset:
           - title: "Portal EU"
             description: "An EU portal interoperable solution"
@@ -224,7 +224,7 @@ valid:
               - "national_public_sector_body"
               - "private_businesses"
             country:
-              - "IT"
+              - "EU"
         asset:
           - title: 'Portal EU'
             description: 'An EU portal interoperable solution'
