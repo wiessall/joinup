@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - assessments.type.participation
+    - field.field.assessment.participation.eu_countries
     - field.field.assessment.participation.participant_type
     - field.field.assessment.participation.stakeholder_country
 id: assessment.participation.default
@@ -11,6 +12,16 @@ targetEntityType: assessment
 bundle: participation
 mode: default
 content:
+  eu_countries:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 3
+    region: content
   participant_type:
     type: entity_reference_label
     label: hidden

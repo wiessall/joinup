@@ -728,8 +728,12 @@ components:
         country:
           type: array
           items:
-            $ref: '#/components/schemas/EuropeanUnionCountry'
-          description: Stakeholder's countries. Each as 2-letter country code.
+            oneOf:
+              - $ref: '#/components/schemas/EuropeanUnionCountry'
+              - type: string
+                enum:
+                  - EU
+            description: ISO-3166 alpha-2 country code or "EU" for EU-wide entities
 
     Asset:
       type: object
