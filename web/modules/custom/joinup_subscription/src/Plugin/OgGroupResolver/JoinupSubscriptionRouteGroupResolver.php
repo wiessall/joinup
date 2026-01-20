@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_subscription\Plugin\OgGroupResolver;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\og\Attribute\OgGroupResolver;
 use Drupal\og\Plugin\OgGroupResolver\RouteGroupResolver;
 
 /**
  * Resolves the group for subscription routes.
  *
  * This ensures we can show the group header block on group subscriber reports.
- *
- * @OgGroupResolver(
- *   id = "joinup_subscription_routes",
- *   label = "Routes related to subscriptions",
- * )
  */
+#[OgGroupResolver(
+  id: 'joinup_subscription_routes',
+  label: new TranslatableMarkup('Routes related to subscriptions'),
+  description: new TranslatableMarkup('Routes related to subscriptions')
+)]
 class JoinupSubscriptionRouteGroupResolver extends RouteGroupResolver {
 
   /**

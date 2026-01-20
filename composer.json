@@ -47,7 +47,7 @@
         "drupal/entity_print": "^2.15",
         "drupal/entityqueue": "^1.2",
         "drupal/error_page": "^2.1@beta",
-        "drupal/facets": "3.0.1",
+        "drupal/facets": "^3.0",
         "drupal/facets_block": "^2.0@beta",
         "drupal/facets_date_range": "^1.0@beta",
         "drupal/field_delimiter": "^2.0",
@@ -87,25 +87,25 @@
         "drupal/og": "^2.0",
         "drupal/og_menu": "^2.0",
         "drupal/other_view_filter": "^1.3",
-        "drupal/page_manager": "*",
+        "drupal/page_manager": "^4.0",
         "drupal/paragraphs": "^1.12",
         "drupal/pathauto": "~1.8",
         "drupal/pluginreference": "^3.0",
         "drupal/poll": "^2.0@alpha",
         "drupal/private_message": "^4.0@alpha",
         "drupal/private_message_flood": "^2.0@alpha",
-        "drupal/publication_date": "3.0.0",
+        "drupal/publication_date": "^3.1",
         "drupal/purge_users": "^4.0",
         "drupal/queue_ui": "^3.1",
         "drupal/rdf_sync": "^1.0",
         "drupal/redirect": "^1.6",
         "drupal/replicate_actions": "^1.7",
         "drupal/replicate_ui": "^1.1",
-        "drupal/role_delegation": "^1.2",
+        "drupal/role_delegation": "^1.5",
         "drupal/schema_digital_document": "^1.1",
         "drupal/schema_metatag": "^3.0",
         "drupal/schema_social_media_posting": "^1.0",
-        "drupal/search_api": "1.38.0",
+        "drupal/search_api": "^1.40",
         "drupal/search_api_autocomplete": "^1.10",
         "drupal/search_api_solr": "^4.2.7",
         "drupal/search_api_spellcheck": "^4.0",
@@ -146,18 +146,18 @@
         "npm-asset/jquery-colorbox": "^1.6.4",
         "npm-asset/jquery-jsonview": "^1.2.3",
         "npm-asset/js-cookie": "^3.0.5",
-        "npm-asset/slick-carousel": ">1.8.1 || <1.8.1",
-        "npm-asset/yaireo--tagify": "4.35.4",
+        "npm-asset/slick-carousel": ">1.6.0 <1.8.1",
+        "npm-asset/yaireo--tagify": "^4.35.4",
         "oomphinc/composer-installers-extender": "^2.0",
         "openeuropa/composer-artifacts": "^1.0",
         "openeuropa/oe_authentication": "^1.20",
         "openeuropa/oe_bootstrap_theme": "^1.21",
         "openeuropa/oe_dashboard_agent": "^1.0",
         "openeuropa/oe_webtools": "^1.40",
-        "psr/http-factory-implementation": "*",
-        "semiceu/adms-ap_validator": "1.0.0-alpha1",
+        "psr/http-factory-implementation": "^1.0",
+        "semiceu/adms-ap_validator": "^1.0",
         "sweetrdf/easyrdf": "^1.9",
-        "symfony/http-client": "*"
+        "symfony/http-client": "^6.4"
     },
     "require-dev": {
         "ext-fileinfo": "*",
@@ -408,9 +408,9 @@
                 "Restrict the dynamic fields in bundles @see https://www.drupal.org/i/3468563": "resources/patch/php/drupal/entity_print/3468563.mr66-note523124.diff"
             },
             "drupal/facets": {
-                "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/i/2873480": "resources/patch/php/drupal/facets/2873480.patch",
-                "Add 0 option in 'Soft limit' and apply soft limit to facet root li tags and add. @see https://www.drupal.org/i/3208580 and https://www.drupal.org/i/3307082": "resources/patch/php/drupal/facets/3208580-and-3307082.patch",
-                "Typeerror: Return value must be of type string, none returned in getCount #see https://www.drupal.org/i/3488396": "resources/patch/php/drupal/facets/3488396.diff"
+                "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/i/2873480": "resources/patch/php/drupal/facets/2873480.mr128.note647733.diff",
+                "Add 0 option in 'Soft limit' and apply soft limit to facet root li tags and add. @see https://www.drupal.org/i/3208580 and https://www.drupal.org/i/3307082": "resources/patch/php/drupal/facets/3208580.mr126.commit39be3797-and-3307082.mr127-commitcc678f86.patch",
+                "Entity Reference convert Entity ID to Label issue @see https://www.drupal.org/i/3031821": "resources/patch/php/drupal/facets/3031821.mr357commit4e49bf3c.diff"
             },
             "drupal/field_delimiter": {
                 "Doesn't work in layout builder. @see https://www.drupal.org/i/3099580": "resources/patch/php/drupal/field_delimiter/3099580.patch"
@@ -474,16 +474,12 @@
             "drupal/private_message": {
                 "Missing langcode in private_message.settings @see https://www.drupal.org/project/private_message/issues/3542616": "resources/patch/php/drupal/private_message/3542616.diff"
             },
-            "drupal/publication_date": {
-                "Expand Publication Date to all Entity Types @see https://www.drupal.org/project/publication_date/issues/3219401": "resources/patch/php/drupal/publication_date/3219401-18.patch"
-            },
             "drupal/purge_users": {
                 "Users are deleted without prior notification when \"Notification User Before Deletion\" is enabled @see https://www.drupal.org/i/3521201": "resources/patch/php/drupal/purge_users/3521201.diff",
                 "Missing langcode in purge_users.settings and config/install missing @see https://www.drupal.org/i/3542620": "resources/patch/php/drupal/purge_users/3542620.diff"
             },
             "drupal/search_api": {
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199.patch",
-                "The search_api_list:{index} cache tag is not added to the view display @see https://www.drupal.org/project/search_api/issues/3298295": "resources/patch/php/drupal/search_api/3298295.patch",
                 "View recalculated with wrong data from cache @see https://drupal.org/i/3327645": "resources/patch/php/drupal/search_api/sapi-views_cache_metadata-3327645-9--fix-only.patch"
             },
             "drupal/search_api_spellcheck": {
@@ -582,6 +578,18 @@
                     "url": "git@github.com:SEMICeu/adms-ap_validator.git",
                     "type": "git",
                     "reference": "master"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "npm-asset/jquery-jsonview",
+                "version": "1.2.3",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/yesmeck/jquery-jsonview/archive/refs/tags/v1.2.3.zip",
+                    "type": "zip"
                 }
             }
         }

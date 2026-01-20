@@ -499,7 +499,6 @@ display:
         - user.permissions
       tags:
         - 'config:search_api.index.oss_catalogue'
-        - 'config:views.view.search_oss_catalogue'
         - 'search_api_list:oss_catalogue'
   search:
     id: search

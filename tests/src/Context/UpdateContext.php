@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
+use Behat\Hook\BeforeScenario;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 
 /**
@@ -16,9 +17,8 @@ class UpdateContext extends RawDrupalContext {
 
   /**
    * Ensures that update-related features use proper tags.
-   *
-   * @BeforeScenario
    */
+  #[BeforeScenario]
   public function checkUpdateExists(BeforeScenarioScope $scope): void {
     $feature_path = realpath(DRUPAL_ROOT . '/../' . self::UPDATE_DIR);
     if (!str_starts_with($scope->getFeature()->getFile(), $feature_path)) {

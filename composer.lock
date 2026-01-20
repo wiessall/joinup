@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ec1a0967150f99d07184daf5a39cbdea",
+    "content-hash": "6b7bce0d263c5b49c2a9cdeceb142d25",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4540,17 +4540,17 @@
         },
         {
             "name": "drupal/facets",
-            "version": "3.0.1",
+            "version": "3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/facets.git",
-                "reference": "3.0.1"
+                "reference": "3.0.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/facets-3.0.1.zip",
-                "reference": "3.0.1",
-                "shasum": "50a2fa35b1fa145f3132b8bf7ef5ee3fcc7dfbc1"
+                "url": "https://ftp.drupal.org/files/projects/facets-3.0.2.zip",
+                "reference": "3.0.2",
+                "shasum": "6bcb932da836accf548807a0cdfd2a78831f628d"
             },
             "require": {
                 "drupal/core": "^10.1 || ^11"
@@ -4561,14 +4561,14 @@
             },
             "require-dev": {
                 "drupal/better_exposed_filters": "~7.0",
-                "drupal/default_content": "*",
+                "drupal/default_content": "~2.0@alpha",
                 "drupal/facets_exposed_filters": "*",
                 "drupal/jquery_ui_slider": "~2.1",
                 "drupal/jquery_ui_touch_punch": "~1.1",
                 "drupal/search_api": "1.x-dev",
                 "drupal/search_api_db": "*",
-                "drupal/views_ajax_history": "*",
-                "drupal/views_filters_summary": "*"
+                "drupal/views_ajax_history": "~1.8",
+                "drupal/views_filters_summary": "~3.2"
             },
             "suggest": {
                 "drupal/better_exposed_filters": "Required for AJAX support for facets rendered as views exposed filters",
@@ -4578,8 +4578,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.1",
-                    "datestamp": "1756314575",
+                    "version": "3.0.2",
+                    "datestamp": "1760700679",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8070,17 +8070,17 @@
         },
         {
             "name": "drupal/publication_date",
-            "version": "3.0.0",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/publication_date.git",
-                "reference": "3.0.0"
+                "reference": "3.1.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/publication_date-3.0.0.zip",
-                "reference": "3.0.0",
-                "shasum": "054788a5eb6b5230d6b2d2e58be08f98f44aeb83"
+                "url": "https://ftp.drupal.org/files/projects/publication_date-3.1.0.zip",
+                "reference": "3.1.0",
+                "shasum": "bc01de1c29b5e47c75aef2df314f4fbdb380735d"
             },
             "require": {
                 "drupal/core": "^10.3 || ^11"
@@ -8092,8 +8092,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.0",
-                    "datestamp": "1738251745",
+                    "version": "3.1.0",
+                    "datestamp": "1759422707",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8711,17 +8711,17 @@
         },
         {
             "name": "drupal/role_delegation",
-            "version": "1.4.0",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/role_delegation.git",
-                "reference": "8.x-1.4"
+                "reference": "8.x-1.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/role_delegation-8.x-1.4.zip",
-                "reference": "8.x-1.4",
-                "shasum": "7637fb2506b134bc888c74d3dcfa79c8a0c207aa"
+                "url": "https://ftp.drupal.org/files/projects/role_delegation-8.x-1.5.zip",
+                "reference": "8.x-1.5",
+                "shasum": "cdd9d5646708511b893de98c46c8bbf578109961"
             },
             "require": {
                 "drupal/core": "^10.3 || ^11"
@@ -8729,8 +8729,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.4",
-                    "datestamp": "1751012870",
+                    "version": "8.x-1.5",
+                    "datestamp": "1768413123",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -9001,27 +9001,28 @@
         },
         {
             "name": "drupal/search_api",
-            "version": "1.38.0",
+            "version": "1.40.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search_api.git",
-                "reference": "8.x-1.38"
+                "reference": "8.x-1.40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/search_api-8.x-1.38.zip",
-                "reference": "8.x-1.38",
-                "shasum": "d1c83ba74e553eca07d3ea4b15e5d9c7f009a496"
+                "url": "https://ftp.drupal.org/files/projects/search_api-8.x-1.40.zip",
+                "reference": "8.x-1.40",
+                "shasum": "64ac71887786da63ced27a43e37342ea3b765a88"
             },
             "require": {
-                "drupal/core": "^10.2 || ^11"
+                "drupal/core": "^10.3 || ^11"
             },
             "conflict": {
                 "drupal/search_api_solr": "2.* || 3.0 || 3.1"
             },
             "require-dev": {
-                "drupal/language_fallback_fix": "@dev",
-                "drupal/search_api_autocomplete": "@dev",
+                "drupal/config_readonly": "1.x-dev",
+                "drupal/language_fallback_fix": "1.x-dev",
+                "drupal/search_api_autocomplete": "1.x-dev",
                 "drupal/search_api_db": "*"
             },
             "suggest": {
@@ -9032,12 +9033,15 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.38",
-                    "datestamp": "1740298961",
+                    "version": "8.x-1.40",
+                    "datestamp": "1762031191",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "branch-alias": {
+                    "dev-8.x-1.x": "1.x-dev"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -14438,10 +14442,10 @@
         },
         {
             "name": "npm-asset/yaireo--tagify",
-            "version": "4.35.4",
+            "version": "4.35.6",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/@yaireo/tagify/-/tagify-4.35.4.tgz"
+                "url": "https://registry.npmjs.org/@yaireo/tagify/-/tagify-4.35.6.tgz"
             },
             "type": "npm-asset",
             "license": [
@@ -18168,16 +18172,16 @@
         },
         {
             "name": "symfony/http-client",
-            "version": "v6.4.30",
+            "version": "v6.4.31",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client.git",
-                "reference": "a67de2002d72f76ce7c57f830c4df503febc8d77"
+                "reference": "f166fe476c996237666bcf7ec2cf827cd82ad573"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client/zipball/a67de2002d72f76ce7c57f830c4df503febc8d77",
-                "reference": "a67de2002d72f76ce7c57f830c4df503febc8d77",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/f166fe476c996237666bcf7ec2cf827cd82ad573",
+                "reference": "f166fe476c996237666bcf7ec2cf827cd82ad573",
                 "shasum": ""
             },
             "require": {
@@ -18242,7 +18246,7 @@
                 "http"
             ],
             "support": {
-                "source": "https://github.com/symfony/http-client/tree/v6.4.30"
+                "source": "https://github.com/symfony/http-client/tree/v6.4.31"
             },
             "funding": [
                 {
@@ -18262,7 +18266,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-12-04T16:42:50+00:00"
+            "time": "2025-12-23T14:19:38+00:00"
         },
         {
             "name": "symfony/http-client-contracts",
