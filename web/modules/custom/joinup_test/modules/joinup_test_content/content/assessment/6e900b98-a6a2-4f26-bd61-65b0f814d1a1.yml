@@ -9,7 +9,7 @@ _meta:
 default:
   status:
     -
-      value: false
+      value: true
   name:
     -
       value: 'Authority for European Political Parties and European Political Foundations'

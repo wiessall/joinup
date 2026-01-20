@@ -9,7 +9,7 @@ _meta:
 default:
   status:
     -
-      value: false
+      value: true
   name:
     -
       value: 'European Border and Coast Guard Agency'
