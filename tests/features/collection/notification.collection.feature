@@ -137,8 +137,6 @@ Feature: Notification test for the collection transitions.
     # Test the 'approve proposed' that was proposed through the 'propose edit' operation.
     And I go to the edit form of the "NC to propose edit" collection
     And I press "Publish"
-    And I go to the edit form of the "NC to propose edit proposed" collection
-    And I press "Publish"
     Then the email sent to "NC owner" with subject "Your request to edit collection NC to propose edit proposed has been approved." contains the following lines of text:
       | Your proposal to edit the collection "NC to propose edit proposed" has been accepted. |
       | You can verify the edited version of the collection at                                |
