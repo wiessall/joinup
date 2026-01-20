@@ -1,0 +1,73 @@
+_meta:
+  version: '1.0'
+  entity_type: assessment
+  uuid: 64b7d409-0016-45da-a41b-ec1027a665ef
+  bundle: public_organisation
+  default_langcode: en
+  depends:
+    36f8c33b-e402-478b-aa75-f1acd387a63a: taxonomy_term
+default:
+  status:
+    -
+      value: false
+  name:
+    -
+      value: 'European Fisheries Control Agency'
+  uid:
+    -
+      target_id: 0
+  created:
+    -
+      value: 1768914843
+  metatag:
+    -
+      tag: meta
+      attributes:
+        name: title
+        content: 'Homepage | Interoperable Europe Portal'
+    -
+      tag: link
+      attributes:
+        rel: canonical
+        href: 'https://joinup.ddev.local/home'
+    -
+      tag: meta
+      attributes:
+        property: 'og:site_name'
+        content: 'Interoperable Europe Portal'
+    -
+      tag: meta
+      attributes:
+        property: 'og:type'
+        content: website
+    -
+      tag: meta
+      attributes:
+        property: 'og:url'
+        content: 'https://joinup.ddev.local/home'
+    -
+      tag: meta
+      attributes:
+        property: 'og:title'
+        content: Homepage
+    -
+      tag: meta
+      attributes:
+        property: 'og:image'
+        content: 'https://joinup.ddev.local/themes/ventuno/assets/images/og-image.png'
+    -
+      tag: meta
+      attributes:
+        property: 'og:image:secure_url'
+        content: 'https://joinup.ddev.local/themes/ventuno/assets/images/og-image.png'
+    -
+      tag: meta
+      attributes:
+        property: 'og:image:type'
+        content: image/svg+xml
+  organisation_type:
+    -
+      entity: 36f8c33b-e402-478b-aa75-f1acd387a63a
+  uri:
+    -
+      value: 'http://data.europa.eu/s2k/64b7d409-0016-45da-a41b-ec1027a665ef'

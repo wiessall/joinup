@@ -1,0 +1,73 @@
+_meta:
+  version: '1.0'
+  entity_type: assessment
+  uuid: 1f639a57-0cd4-43ff-907b-79b27c87641e
+  bundle: public_organisation
+  default_langcode: en
+  depends:
+    828392c1-6de1-4ee0-af73-bab457d621eb: taxonomy_term
+default:
+  status:
+    -
+      value: false
+  name:
+    -
+      value: 'European Central Bank'
+  uid:
+    -
+      target_id: 0
+  created:
+    -
+      value: 1768914843
+  metatag:
+    -
+      tag: meta
+      attributes:
+        name: title
+        content: 'Homepage | Interoperable Europe Portal'
+    -
+      tag: link
+      attributes:
+        rel: canonical
+        href: 'https://joinup.ddev.local/home'
+    -
+      tag: meta
+      attributes:
+        property: 'og:site_name'
+        content: 'Interoperable Europe Portal'
+    -
+      tag: meta
+      attributes:
+        property: 'og:type'
+        content: website
+    -
+      tag: meta
+      attributes:
+        property: 'og:url'
+        content: 'https://joinup.ddev.local/home'
+    -
+      tag: meta
+      attributes:
+        property: 'og:title'
+        content: Homepage
+    -
+      tag: meta
+      attributes:
+        property: 'og:image'
+        content: 'https://joinup.ddev.local/themes/ventuno/assets/images/og-image.png'
+    -
+      tag: meta
+      attributes:
+        property: 'og:image:secure_url'
+        content: 'https://joinup.ddev.local/themes/ventuno/assets/images/og-image.png'
+    -
+      tag: meta
+      attributes:
+        property: 'og:image:type'
+        content: image/svg+xml
+  organisation_type:
+    -
+      entity: 828392c1-6de1-4ee0-af73-bab457d621eb
+  uri:
+    -
+      value: 'http://data.europa.eu/s2k/1f639a57-0cd4-43ff-907b-79b27c87641e'
