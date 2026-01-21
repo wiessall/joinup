@@ -7,8 +7,8 @@
 
 declare(strict_types=1);
 
-use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\Core\Utility\UpdateException;
+use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_assessment\AssessmentInterface as LegacyAssessmentInterface;
 use Drupal\webform\Entity\Webform;
