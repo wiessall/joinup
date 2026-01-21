@@ -438,9 +438,9 @@ function _assessments_process_asset_form_button(array $element, FormStateInterfa
  * Implements hook_inline_entity_form_entity_form_alter().
  */
 function assessments_inline_entity_form_entity_form_alter(array &$entity_form, FormStateInterface &$formState): void {
-  $solution = $entity_form['#entity'];
+  $entity = $entity_form['#entity'];
 
-  if ($entity_form['#ief_id'] === 'asset-form' && $solution instanceof SolutionInterface) {
+  if ($entity_form['#ief_id'] === 'asset-form' && $entity instanceof SolutionInterface) {
     if ($entity_form['#op'] === 'add') {
       $entity_form['#after_build'][] = '_assessments_process_asset_form_button';
     }
@@ -448,7 +448,7 @@ function assessments_inline_entity_form_entity_form_alter(array &$entity_form, F
     $collection = \Drupal::service('entity.repository')->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR);
     assert($collection instanceof CollectionInterface);
 
-    $solution
+    $entity
       // All solutions created via assessments form are belonging to a
       // 'collector' collection.
       ->setGroup($collection)
@@ -457,6 +457,13 @@ function assessments_inline_entity_form_entity_form_alter(array &$entity_form, F
 
     // In this context the landing page is mandatory.
     $entity_form['landing_page']['widget']['uri']['#required'] = TRUE;
+  }
+  if ($entity->bundle() === 'participation') {
+    $entity_form['stakeholder_country']['#states'] = [
+      'visible' => [
+        ':input[name="has_participation[0][inline_entity_form][eu_countries][value]"]' => ['checked' => FALSE],
+      ],
+    ];
   }
 }
 
