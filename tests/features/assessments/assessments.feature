@@ -6,6 +6,10 @@ Feature: Assessment Report Entity Management
 
   @javascript
   Scenario: Create a new assessment report with required fields
+    Given solution content:
+      | title         | landing page           |
+      | Test solution | http://www.example.com |
+
     Given I am logged in as an "authenticated user"
     And I go to "/collection/assessments/report/create"
     Then I should see the heading "Create assessment report"
@@ -31,7 +35,7 @@ Feature: Assessment Report Entity Management
 
     Then I should see the following lines of text in the correct order in "Modal content":
       | Initiatives                            |
-      | General                                |
+      | Description                            |
       | Trans-European digital public services |
       | Affected stakeholders                  |
       | Interoperability solutions             |
@@ -41,7 +45,7 @@ Feature: Assessment Report Entity Management
     And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Digital Transformation Initiative" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][documented_in][0][uri]" with "https://interoperable-europe.ec.europa.eu/initiatives" in the "Modal content" region
 
-    When I click "General" in the "Modal content" region
+    When I click "Description" in the "Modal content" region
     And I fill in "description[0][value]" with "This is the general binding requirement description" in the "Modal content" region
     And I fill in "documented_in[0][uri]" with "https://interoperable-europe.ec.europa.eu/general" in the "Modal content" region
 
@@ -50,6 +54,7 @@ Feature: Assessment Report Entity Management
     And I should see the text "Specify the concerned function(s) of trans-European digital public service(s)" in the "Modal content" region
     And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
     And I select "Core governance and administration" from "affects[0][inline_entity_form][thematic_area][]" in the "Modal content" region
+    And I select "Luxembourg" from "affects[0][inline_entity_form][countries][]" in the "Modal content" region
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
 
     When I click "Affected stakeholders" in the "Modal content" region
@@ -60,11 +65,18 @@ Feature: Assessment Report Entity Management
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
 
     When I click "Interoperability solutions" in the "Modal content" region
+    Then I press "Select an Interoperability solution" in the "Modal content" region
+    And I type "Test" in the "asset[form][0][entity_id]" autocomplete field
+    And I pick "Test solution" from the autocomplete suggestions
+    And I press "Add Interoperability solution" in the "Modal content" region
+    And the "IEF table" table should be:
+      | Title         | Relevant website       | Description      | Operations |
+      | Test solution | http://www.example.com | default abstract |            |
     And I should see the text "Identify the interoperability solutions mandatory to use for the implementation of the assessed binding requirement" in the "Modal content" region
     And I should see the button "Select an Interoperability solution" in the "Modal content" region
     And I press "Add a new Interoperability solution" in the "Modal content" region
-    And I fill in "asset[form][0][title][0][value]" with "European Interoperability Framework (EIF)" in the "Modal content" region
-    And I enter "Description of European Interoperability Framework (EIF)" in the "asset[form][0][description][0][value]" wysiwyg editor
+    And I fill in "Title of Solution" with "European Interoperability Framework (EIF)" in the "Modal content" region
+    And I enter "Description of European Interoperability Framework (EIF)" in the "asset[form][1][description][0][value]" wysiwyg editor
     And I fill in "Relevant website" with "https://interoperable-europe.ec.europa.eu/collection/eif" in the "Modal content" region
     Then I press "Add Interoperability solution" in the "Modal content" region
 
@@ -159,7 +171,7 @@ Feature: Assessment Report Entity Management
     # This is a 323-character string to test that initiative_name accepts more than 255 characters
     And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Comprehensive Overview and Strategic Analysis of System Architecture, Functional Requirements, Operational Constraints, Governance Models, Security and Compliance Requirements, Performance Optimization, and Long-Term Maintainability Considerations for Scalable Digital Platforms in Enterprise and Public-Sector Environments" in the "Modal content" region
 
-    When I click "General" in the "Modal content" region
+    When I click "Description" in the "Modal content" region
     And I fill in "description[0][value]" with "Test description for initiative name length validation" in the "Modal content" region
 
     When I click "Trans-European digital public services" in the "Modal content" region
