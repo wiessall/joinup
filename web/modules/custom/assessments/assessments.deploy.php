@@ -104,7 +104,7 @@ function assessments_deploy_200801(): void {
 }
 
 /**
- * Implements hook_deploy_name().
+ * Create EU institutions as public_organisation assessment entities.
  */
 function assessments_deploy_200802(): void {
   $storage = \Drupal::entityTypeManager()->getStorage('assessment');
