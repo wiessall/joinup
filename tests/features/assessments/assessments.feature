@@ -59,6 +59,11 @@ Feature: Assessment Report Entity Management
     When I select "Local public sector body" from "has_participation[0][inline_entity_form][participant_type][]" in the "Modal content" region
     And I select "Belgium" from "has_participation[0][inline_entity_form][stakeholder_country][]" in the "Modal content" region
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
+    And I press "Add another item" in the "Modal content" region
+    And I select "Local public sector body" from "has_participation[1][inline_entity_form][participant_type][]" in the "Modal content" region
+    And I should see "Check this box to select all European Union countries" in the "Modal content" region
+    And I check "Check this box to select all European Union countries"
+    Then I should not see "has_participation[1][inline_entity_form][stakeholder_country][]" in the "Modal content" region
 
     When I click "Interoperability solutions" in the "Modal content" region
     And I should see the text "Identify the interoperability solutions mandatory to use for the implementation of the assessed binding requirement" in the "Modal content" region
