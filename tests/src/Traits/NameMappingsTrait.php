@@ -427,6 +427,7 @@ trait NameMappingsTrait {
       'spatial coverage' => 'spatial_coverage',
       'topic' => 'topic',
       'Type of document' => 'type_of_document',
+      'Organisation origin' => 'organisation_origin',
       'OSS category' => 'oss_category',
       'OSS intended audience' => 'oss_scope',
       'OSS development status' => 'oss_development_status',
