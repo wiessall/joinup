@@ -133,13 +133,13 @@ function assessments_deploy_200801(): void {
   ];
 
   $vocabHelper = \Drupal::service(AssessmentVocabularyHelper::class);
-  foreach ($institutions as $organisationType => $institutionNames) {
-    $tid = $vocabHelper->getTermIdFromIdentifier('assess_provider_type', $organisationType);
+  foreach ($institutions as $organisation_type => $institution_names) {
+    $tid = $vocabHelper->getTermIdFromIdentifier('assess_provider_type', $organisation_type);
 
-    foreach ($institutionNames as $institutionName) {
+    foreach ($institution_names as $institution_name) {
       $entity = $storage->create([
         'type' => 'public_organisation',
-        'name' => $institutionName,
+        'name' => $institution_name,
         'organisation_type' => $tid,
         'status' => TRUE,
         'uid' => 1,
@@ -151,7 +151,7 @@ function assessments_deploy_200801(): void {
       catch (\Exception $e) {
         \Drupal::logger('assessments')
           ->error('Failed to create EU institution @name: @error', [
-            '@name' => $institutionName,
+            '@name' => $institution_name,
             '@error' => $e->getMessage(),
           ]);
       }
