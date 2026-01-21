@@ -229,24 +229,23 @@ class AssessmentsContext extends RawDrupalContext {
     $baseUrl = $this->getMinkParameter('base_url');
     $replacements = ['__base_url__' => $baseUrl];
     $expected = Yaml::decode(strtr($expectedJsonAsYaml->getRaw(), $replacements));
-    ksort($expected);
 
     $this->visitPath($path);
     $actual = Json::decode($this->getSession()->getPage()->getContent());
 
     $notFound = [];
     foreach ($expected as $expectedValue) {
+      ksort($expectedValue);
       foreach ($actual as $actualValue) {
         ksort($actualValue);
         if ($expectedValue === $actualValue) {
-          continue;
+          continue 2;
         }
-        $notFound[] = $expectedValue;
       }
+      $notFound[] = $expectedValue;
     }
 
-    $notFound = json_encode($notFound);
-    Assert::assertEmpty($notFound, sprintf('Expected JSON values not found: %s', $notFound));
+    Assert::assertEmpty($notFound, sprintf('Expected JSON values not found: %s', json_encode($notFound)));
   }
 
   /**
