@@ -1,11 +1,16 @@
- core/lib/Drupal/Core/Entity/ContentEntityStorageBase.php | 1 +
- 1 file changed, 1 insertion(+)
-
 diff --git a/core/lib/Drupal/Core/Entity/ContentEntityStorageBase.php b/core/lib/Drupal/Core/Entity/ContentEntityStorageBase.php
-index 541f6fb..ec1a8ae 100644
+index 403abe1c760..78494892c1d 100644
 --- a/core/lib/Drupal/Core/Entity/ContentEntityStorageBase.php
 +++ b/core/lib/Drupal/Core/Entity/ContentEntityStorageBase.php
-@@ -652,6 +652,7 @@ public function deleteRevision($revision_id) {
+@@ -2,6 +2,7 @@
+ 
+ namespace Drupal\Core\Entity;
+ 
++use Drupal\Core\Cache\Cache;
+ use Drupal\Core\Cache\CacheBackendInterface;
+ use Drupal\Core\Cache\MemoryCache\MemoryCacheInterface;
+ use Drupal\Core\Entity\Exception\AmbiguousBundleClassException;
+@@ -841,6 +842,7 @@ public function deleteRevision($revision_id) {
        $this->invokeFieldMethod('deleteRevision', $revision);
        $this->doDeleteRevisionFieldItems($revision);
        $this->invokeHook('revision_delete', $revision);
