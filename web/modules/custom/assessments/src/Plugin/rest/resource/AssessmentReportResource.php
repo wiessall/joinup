@@ -203,6 +203,7 @@ class AssessmentReportResource extends ResourceBase {
         $affects[] = [
           'name' => $item->label(),
           'thematic_area' => $this->itemListToValue($item->get('thematic_area'), 'id'),
+          'country' => $this->itemListToValue($item->get('countries'), 'code'),
         ];
       }
 
@@ -422,6 +423,7 @@ class AssessmentReportResource extends ResourceBase {
         'langcode' => $this->langcode,
         'name' => $item['name'],
         'thematic_area' => isset($item['thematic_area']) ? $this->getTermIdFromIdentifier('assess_public_service_area', $item['thematic_area'], "$path/affects/$delta/thematic_area") : [],
+        'countries' => isset($item['country']) ? $this->getTermIdFromIdentifier('spatial', $item['country'], "$path/affects/$delta/country", 'code') : [],
         'status' => TRUE,
       ]);
     }
