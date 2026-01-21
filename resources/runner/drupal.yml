@@ -332,10 +332,11 @@ drupal:
           $settings['memcache']['servers'] = array_fill_keys(explode(',', $memcache_hosts), 'default');
         }
       Custom error handler: |
-        # Do not register the error handlers when running tests.
+        # Do not register the error handlers when running PHPUnit tests.
         # @see \Drupal\Core\Test\TestRunnerKernel::boot()
-        # @see \Joinup\PhpUnit\EventHandler\JoinupStartedSubscriber::notify()
-        if (defined('DO_NOT_REGISTER_ERROR_HANDLER')) {
+        # @see ./phpunit.xml
+        $skipErrorHandlerRegistration = array_key_exists('DO_NOT_REGISTER_ERROR_HANDLER', getenv());
+        if (!$skipErrorHandlerRegistration) {
           $settings['error_page']['uuid'] = TRUE;
           $settings['error_page']['template_dir'] = DRUPAL_ROOT . '/../resources/error_page';
           set_error_handler(['Drupal\error_page\ErrorPageErrorHandler', 'handleError']);
