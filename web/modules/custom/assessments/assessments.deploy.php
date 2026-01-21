@@ -70,43 +70,9 @@ function assessments_deploy_200800(): void {
 }
 
 /**
- * Unpublish assessments repository page, menu links, close webform.
- */
-function assessments_deploy_200801(): void {
-  /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
-  $entity_repository = \Drupal::service('entity.repository');
-
-  // Load the node at /collection/assessments/assessments-repository.
-  $node = $entity_repository->loadEntityByUuid('node', LegacyAssessmentInterface::ASSESSMENT_REPORTS_UUID);
-  if (!$node instanceof CustomPageInterface) {
-    throw new UpdateException("Deploy hook failed: could not load custom page node by UUID, see " . __FUNCTION__);
-  }
-
-  // Unpublish it and update links pointing to it.
-  $node->setNewRevision();
-  $node->setRevisionLogMessage('Unpublished programmatically via update hook.');
-  $node->setWorkflowState('unpublished');
-  $node->skip_notification = TRUE;
-  $node->save();
-
-  /** @var \Drupal\menu_link_content\Entity\MenuLinkContent[] $links */
-  $links = \Drupal::entityTypeManager()->getStorage('menu_link_content')->loadByProperties(['link.uri' => "entity:node/{$node->id()}"]);
-  foreach ($links as $link) {
-    $link->set('link', [['uri' => 'internal:/collection/assessments/report/repository']]);
-    $link->save();
-  }
-
-  // Close the assessment webform.
-  $webform = Webform::load(LegacyAssessmentInterface::WEBFORM_ID);
-  \assert($webform instanceof WebformInterface);
-  $webform->setStatus(WebformInterface::STATUS_CLOSED);
-  $webform->save();
-}
-
-/**
  * Create EU institutions as public_organisation assessment entities.
  */
-function assessments_deploy_200802(): void {
+function assessments_deploy_200801(): void {
   $storage = \Drupal::entityTypeManager()->getStorage('assessment');
   $institutions = [
     'european_union_institution' => [
@@ -191,4 +157,38 @@ function assessments_deploy_200802(): void {
       }
     }
   }
+}
+
+/**
+ * Unpublish assessments repository page, menu links, close webform.
+ */
+function assessments_deploy_200802(): void {
+  /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
+  $entity_repository = \Drupal::service('entity.repository');
+
+  // Load the node at /collection/assessments/assessments-repository.
+  $node = $entity_repository->loadEntityByUuid('node', LegacyAssessmentInterface::ASSESSMENT_REPORTS_UUID);
+  if (!$node instanceof CustomPageInterface) {
+    throw new UpdateException("Deploy hook failed: could not load custom page node by UUID, see " . __FUNCTION__);
+  }
+
+  // Unpublish it and update links pointing to it.
+  $node->setNewRevision();
+  $node->setRevisionLogMessage('Unpublished programmatically via update hook.');
+  $node->setWorkflowState('unpublished');
+  $node->skip_notification = TRUE;
+  $node->save();
+
+  /** @var \Drupal\menu_link_content\Entity\MenuLinkContent[] $links */
+  $links = \Drupal::entityTypeManager()->getStorage('menu_link_content')->loadByProperties(['link.uri' => "entity:node/{$node->id()}"]);
+  foreach ($links as $link) {
+    $link->set('link', [['uri' => 'internal:/collection/assessments/report/repository']]);
+    $link->save();
+  }
+
+  // Close the assessment webform.
+  $webform = Webform::load(LegacyAssessmentInterface::WEBFORM_ID);
+  \assert($webform instanceof WebformInterface);
+  $webform->setStatus(WebformInterface::STATUS_CLOSED);
+  $webform->save();
 }
