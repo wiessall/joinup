@@ -89,11 +89,6 @@ class Assessment extends ContentEntityBase implements AssessmentInterface {
       // If no owner has been set explicitly, make the anonymous user the owner.
       $this->setOwnerId(0);
     }
-
-    // By default, assessments are unpublished.
-    if ($this->bundle() !== 'report' && $this->isNew()) {
-      $this->setUnpublished();
-    }
   }
 
   /**
