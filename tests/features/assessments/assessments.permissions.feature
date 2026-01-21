@@ -50,7 +50,7 @@ Feature: Assessment report permissions and access control
     And I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
     Then I should not see the button "…or add new"
-    When I select "European Council" from "Select organisation"
+    When I select "Test Organization" from "Select organisation"
 
     # Binding requirements
     When I click "New binding requirement"
