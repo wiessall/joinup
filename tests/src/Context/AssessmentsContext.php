@@ -233,22 +233,7 @@ class AssessmentsContext extends RawDrupalContext {
     $this->visitPath($path);
     $actual = Json::decode($this->getSession()->getPage()->getContent());
 
-    // Build a hash set of serialized actual values for O(1) lookup.
-    $actualSet = [];
-    foreach ($actual as $actualValue) {
-      ksort($actualValue);
-      $actualSet[json_encode($actualValue)] = TRUE;
-    }
-
-    $notFound = [];
-    foreach ($expected as $expectedValue) {
-      ksort($expectedValue);
-      if (!isset($actualSet[json_encode($expectedValue)])) {
-        $notFound[] = $expectedValue;
-      }
-    }
-
-    Assert::assertEmpty($notFound, sprintf('Expected JSON values not found: %s', json_encode($notFound)));
+    Assert::assertEquals($expected, $actual);
   }
 
   /**
