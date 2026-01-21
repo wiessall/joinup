@@ -75,7 +75,7 @@ Feature: Assessment Report Entity Management
     And I should see the text "Identify the interoperability solutions mandatory to use for the implementation of the assessed binding requirement" in the "Modal content" region
     And I should see the button "Select an Interoperability solution" in the "Modal content" region
     And I press "Add a new Interoperability solution" in the "Modal content" region
-    And I fill in "asset[form][1][title][0][value]" with "European Interoperability Framework (EIF)" in the "Modal content" region
+    And I fill in "Title of Solution" with "European Interoperability Framework (EIF)" in the "Modal content" region
     And I enter "Description of European Interoperability Framework (EIF)" in the "asset[form][1][description][0][value]" wysiwyg editor
     And I fill in "Relevant website" with "https://interoperable-europe.ec.europa.eu/collection/eif" in the "Modal content" region
     Then I press "Add Interoperability solution" in the "Modal content" region
