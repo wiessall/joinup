@@ -41,6 +41,10 @@ function joinup_notification_node_insert(EntityInterface $entity): void {
 function joinup_notification_node_presave(EntityInterface $entity): void {
   if (!$entity->isNew() && $entity instanceof EntityWorkflowStateInterface && $entity->hasWorkflow()) {
     $entity->field_state_initial_value = $entity->get('field_state')->first()->getOriginalId();
+
+    // Track if entity had a published version before this save.
+    $stored = \Drupal::entityTypeManager()->getStorage('node')->load($entity->id());
+    $entity->had_published_version = !empty($stored) && $stored->isPublished();
   }
 }
 

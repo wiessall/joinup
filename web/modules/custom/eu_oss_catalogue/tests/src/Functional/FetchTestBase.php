@@ -202,7 +202,7 @@ abstract class FetchTestBase extends BrowserTestBase {
 
         // Converts from array to scalar when cardinality is 1.
         if ($storageDefinition->getCardinality() == 1) {
-          $values[$fieldName] = $values[$fieldName][0];
+          $values[$fieldName] = $values[$fieldName][0] ?? NULL;
         }
       }
     }
