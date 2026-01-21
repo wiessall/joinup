@@ -1,0 +1,64 @@
+--- a/src/TourHelper.php
++++ b/src/TourHelper.php
+@@ -80,11 +80,30 @@
+    */
+   public function loadTourEntities(): array {
+     $route_match = $this->currentRouteMatch;
+-    $route_name = $this->checkRoute();
++    $actual_route_name = $this->currentRouteMatch->getRouteName();
++    $is_front_page = $this->pathMatcher->isFrontPage();
++    $route_name = $is_front_page ? '<front>' : $actual_route_name;
++
++    // On the front page, also query for the actual route name to support
++    // page manager variants (e.g., different layouts for anonymous vs
++    // authenticated users with different route names).
++    $route_names_to_query = [$route_name];
++    if ($is_front_page && $actual_route_name !== '<front>') {
++      $route_names_to_query[] = $actual_route_name;
++    }
++
+     try {
+-      $results = $this->entityTypeManager->getStorage('tour')
+-        ->getQuery()
+-        ->condition('routes.*.route_name', $route_name)
++      $query = $this->entityTypeManager->getStorage('tour')->getQuery();
++
++      // Use IN condition when querying multiple route names.
++      if (count($route_names_to_query) > 1) {
++        $query->condition('routes.*.route_name', $route_names_to_query, 'IN');
++      }
++      else {
++        $query->condition('routes.*.route_name', $route_name);
++      }
++
++      $results = $query
+         ->condition('status', TRUE)
+         ->accessCheck(FALSE)
+         ->execute();
+@@ -102,8 +121,9 @@
+       foreach ($tours as $tour_id => $tour) {
+         $tour_routes = $tour->getRoutes();
+         foreach ($tour_routes as $tour_route) {
+-          if ($tour_route['route_name'] != $route_name) {
+-            // Ignore tour routes that are not related to this route.
++          // Check if the tour route matches any of the route names we're
++          // looking for (either <front> or the actual route name).
++          if (!in_array($tour_route['route_name'], $route_names_to_query, TRUE)) {
+             continue;
+           }
+ 
+@@ -170,8 +190,12 @@
+           }
+ 
+           // Test if the tour matches the route name and parameters.
+-          if ($tour->hasMatchingRoute($route_name, $params)) {
+-            $matches[$tour_id] = $results[$tour_id];
++          // Check against all route names we're querying for.
++          foreach ($route_names_to_query as $query_route_name) {
++            if ($tour->hasMatchingRoute($query_route_name, $params)) {
++              $matches[$tour_id] = $results[$tour_id];
++              break;
++            }
+           }
+         }
+       }
