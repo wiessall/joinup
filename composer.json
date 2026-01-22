@@ -506,6 +506,9 @@
             "drupal/tmgmt_ec_etranslation": {
                 "Race Condition in Translation Callback": "resources/patch/php/drupal/tmgmt_ec_etranslation/3526972.diff"
             },
+            "drupal/ui_patterns": {
+                "8.x Incompatibility with Drupal 11.3 see https://www.drupal.org/i/3563941": "resources/patch/php/drupal/ui_patterns/3563941-commit9ea4e992.diff"
+            },
             "drupal/video_embed_field": {
                 "Add title attribute to YouTube, Vimeo, and Playlist embeds @see https://www.drupal.org/project/video_embed_field/issues/3200253": "resources/patch/php/drupal/video_embed_field/3200253-26.patch",
                 "Extend support for embed URLs. Option to force privacy @see https://www.drupal.org/project/video_embed_field/issues/3060201 (originally on https://www.drupal.org/node/2899093)": "resources/patch/php/drupal/video_embed_field/3060201.patch",
