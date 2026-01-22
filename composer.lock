@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b21ab183d1e8d9b1333d02fc22fd9448",
+    "content-hash": "f62ca142a2242df2bc643d6cd5bf795d",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -14251,8 +14251,8 @@
             "name": "npm-asset/chart.js",
             "version": "4.5.1",
             "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/chart.js/-/chart.js-4.5.1.tgz"
+                "type": "zip",
+                "url": "https://github.com/chartjs/Chart.js/archive/refs/tags/v4.5.1.zip"
             },
             "require": {
                 "npm-asset/kurkle--color": ">=0.3.0,<0.4.0"
@@ -14263,8 +14263,8 @@
             "name": "npm-asset/dompurify",
             "version": "3.3.0",
             "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/dompurify/-/dompurify-3.3.0.tgz"
+                "type": "zip",
+                "url": "https://github.com/cure53/DOMPurify/archive/refs/tags/3.3.0.zip"
             },
             "require": {
                 "npm-asset/types--trusted-types": ">=2.0.7,<3.0.0"
@@ -14272,11 +14272,23 @@
             "type": "npm-asset"
         },
         {
+            "name": "npm-asset/jquery",
+            "version": "3.7.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/jquery/-/jquery-3.7.1.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
             "name": "npm-asset/jquery-colorbox",
             "version": "1.6.4",
             "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/jquery-colorbox/-/jquery-colorbox-1.6.4.tgz"
+                "type": "zip",
+                "url": "https://github.com/jackmoore/colorbox/archive/refs/tags/1.6.4.zip"
             },
             "type": "npm-asset"
         },
@@ -14293,8 +14305,8 @@
             "name": "npm-asset/js-cookie",
             "version": "3.0.5",
             "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/js-cookie/-/js-cookie-3.0.5.tgz"
+                "type": "zip",
+                "url": "https://github.com/js-cookie/js-cookie/archive/refs/tags/v3.0.5.zip"
             },
             "type": "npm-asset"
         },
@@ -14302,8 +14314,8 @@
             "name": "npm-asset/kurkle--color",
             "version": "0.3.4",
             "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/@kurkle/color/-/color-0.3.4.tgz"
+                "type": "zip",
+                "url": "https://github.com/kurkle/color/archive/refs/tags/v0.3.4.zip"
             },
             "type": "npm-asset"
         },
