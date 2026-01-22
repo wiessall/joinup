@@ -77,7 +77,7 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
     $this->assertFalse($publicService->isPublished(), 'Public service should be unpublished initially.');
     $this->assertFalse($participation->isPublished(), 'Participation should be unpublished initially.');
     $this->assertFalse($organisation->isPublished(), 'Organisation should be unpublished initially.');
-    $this->assertTrue($asset->isPublished(), 'Asset should be unpublished initially.');
+    $this->assertTrue($asset->isPublished(), 'Assets are published by default.');
 
     // Publish the report by setting its state to 'published'.
     $report->setWorkflowState('published');
@@ -152,11 +152,11 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
     ]);
     $this->markEntityForCleanup($expression);
 
-    $public_service = Assessment::create([
+    $publicService = Assessment::create([
       'type' => 'public_service',
       'thematic_area' => ['entity' => $this->assessmentVocabularyHelper->getTermFromIdentifier('assess_public_service_area', 'core_governance_and_administration')],
     ]);
-    $this->markEntityForCleanup($public_service);
+    $this->markEntityForCleanup($publicService);
 
     $participation = Assessment::create([
       'type' => 'participation',
@@ -180,7 +180,7 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
       'description' => ['value' => $this->randomString()],
       'documented_in' => ['uri' => 'https://interoperable-europe.ec.europa.eu/'],
       'expression' => ['entity' => $expression],
-      'affects' => ['entity' => $public_service],
+      'affects' => ['entity' => $publicService],
       'has_participation' => ['entity' => $participation],
       'asset' => ['entity' => $asset],
     ]);
