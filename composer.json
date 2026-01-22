@@ -149,7 +149,7 @@
         "npm-asset/chart.js": "^4.5",
         "npm-asset/dompurify": "^3.0.9",
         "npm-asset/jquery-colorbox": "^1.6.4",
-        "npm-asset/jquery-jsonview": "^1.2.3",
+        "npm-asset/jquery-jsonview": "^1.2",
         "npm-asset/js-cookie": "^3.0.5",
         "npm-asset/slick-carousel": ">1.6.0 <1.8.1",
         "npm-asset/yaireo--tagify": "^4.35.4",
@@ -611,18 +611,6 @@
                     "url": "git@github.com:SEMICeu/adms-ap_validator.git",
                     "type": "git",
                     "reference": "master"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "npm-asset/jquery-jsonview",
-                "version": "1.2.3",
-                "type": "drupal-library",
-                "dist": {
-                    "url": "https://github.com/yesmeck/jquery-jsonview/archive/refs/tags/v1.2.3.zip",
-                    "type": "zip"
                 }
             }
         }
