@@ -279,9 +279,14 @@ tags:
 assess_provider_type:
   - name: European Union institution
     id: european_union_institution
+    uuid: 828392c1-6de1-4ee0-af73-bab457d621eb
     uri: 'http://example.com/taxonomy-term/assess-provider-type/5870cf04-2d28-472d-9486-39b1e4670b25'
   - name: European Union body
     id: european_union_body
+    uuid: 430a3cd6-7cff-4c4e-8d22-84623bd14d44
+  - name: European Union agency
+    id: european_union_agency
+    uuid: 36f8c33b-e402-478b-aa75-f1acd387a63a
   - name: Local public sector body
     id: local_public_sector_body
 assess_participant_type:

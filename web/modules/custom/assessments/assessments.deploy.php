@@ -73,9 +73,7 @@ function assessments_deploy_200800(): void {
  * Create EU institutions as public_organisation assessment entities.
  */
 function assessments_deploy_200801(): void {
-  $entity_type_manager = \Drupal::entityTypeManager();
-  $storage = $entity_type_manager->getStorage('assessment');
-
+  $storage = \Drupal::entityTypeManager()->getStorage('assessment');
   $institutions = [
     'european_union_institution' => [
       'European Parliament',
@@ -143,16 +141,19 @@ function assessments_deploy_200801(): void {
         'type' => 'public_organisation',
         'name' => $institution_name,
         'organisation_type' => $tid,
+        'status' => TRUE,
+        'uid' => 1,
       ]);
 
       try {
         $entity->save();
       }
       catch (\Exception $e) {
-        \Drupal::logger('assessments')->error('Failed to create EU institution @name: @error', [
-          '@name' => $institution_name,
-          '@error' => $e->getMessage(),
-        ]);
+        \Drupal::logger('assessments')
+          ->error('Failed to create EU institution @name: @error', [
+            '@name' => $institution_name,
+            '@error' => $e->getMessage(),
+          ]);
       }
     }
   }
