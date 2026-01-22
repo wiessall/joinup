@@ -357,7 +357,7 @@
                 "Upcast named arguments/named parameters in views @see https://www.drupal.org/i/2528166": "resources/patch/php/drupal/core/2528166-commitb55472cb.diff",
                 "Enlarge file_usage entity ID length. @see https://www.drupal.org/node/2675600": "resources/patch/php/drupal/core/2675600.diff",
                 "Allow plurals on bundle labels @see https://www.drupal.org/i/2765065": "resources/patch/php/drupal/core/2765065.commit6031e764.diff",
-                "Use comment access handler instead of hardcoding permissions @see https://www.drupal.org/i/2879087": "resources/patch/php/drupal/core/2879087.mr23-note588375.patch",
+                "Use comment access handler instead of hardcoding permissions @see https://www.drupal.org/i/2879087": "resources/patch/php/drupal/core/2879087-commit1f11b08b.diff",
                 "Add thread depth configuration to comments @see https://www.drupal.org/i/2786587": "resources/patch/php/drupal/core/2786587.mr11292-note588511.diff",
                 "Set fixed depth for comment threads.": "resources/patch/php/drupal/core/2786587-thread-depth-fixed-limit.patch",
                 "Views with a different query plugin created via the UI do not have the correct query plugin ID in the view config @see https://www.drupal.org/project/drupal/issues/2836237": "resources/patch/php/drupal/core/2836237.patch",
