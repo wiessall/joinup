@@ -267,6 +267,10 @@
         ]
     },
     "extra": {
+        "installer-types": [
+            "bower-asset",
+            "npm-asset"
+        ],
         "installer-paths": {
             "web/libraries/slick": [
                 "npm-asset/slick-carousel"
@@ -288,7 +292,9 @@
             ],
             "web/libraries/{$name}": [
                 "swagger-api/swagger-ui",
-                "type:drupal-library"
+                "type:drupal-library",
+                "type:bower-asset",
+                "type:npm-asset"
             ],
             "web/modules/contrib/{$name}": [
                 "type:drupal-module"
@@ -593,6 +599,10 @@
             "url": "https://packages.drupal.org/8"
         },
         {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        },
+        {
             "type": "package",
             "package": {
                 "name": "semiceu/adms-ap_validator",
@@ -621,7 +631,7 @@
             "package": {
                 "name": "npm-asset/chart.js",
                 "version": "4.5.1",
-                "type": "drupal-library",
+                "type": "npm-asset",
                 "dist": {
                     "url": "https://registry.npmjs.org/chart.js/-/chart.js-4.5.1.tgz",
                     "type": "tar"
@@ -636,7 +646,7 @@
             "package": {
                 "name": "npm-asset/kurkle--color",
                 "version": "0.3.4",
-                "type": "drupal-library",
+                "type": "npm-asset",
                 "dist": {
                     "url": "https://registry.npmjs.org/@kurkle/color/-/color-0.3.4.tgz",
                     "type": "tar"
@@ -648,7 +658,7 @@
             "package": {
                 "name": "npm-asset/dompurify",
                 "version": "3.3.0",
-                "type": "drupal-library",
+                "type": "npm-asset",
                 "dist": {
                     "url": "https://registry.npmjs.org/dompurify/-/dompurify-3.3.0.tgz",
                     "type": "tar"
@@ -663,7 +673,7 @@
             "package": {
                 "name": "npm-asset/types--trusted-types",
                 "version": "2.0.7",
-                "type": "drupal-library",
+                "type": "npm-asset",
                 "dist": {
                     "url": "https://registry.npmjs.org/@types/trusted-types/-/trusted-types-2.0.7.tgz",
                     "type": "tar"
@@ -675,7 +685,7 @@
             "package": {
                 "name": "npm-asset/jquery-colorbox",
                 "version": "1.6.4",
-                "type": "drupal-library",
+                "type": "npm-asset",
                 "dist": {
                     "url": "https://registry.npmjs.org/jquery-colorbox/-/jquery-colorbox-1.6.4.tgz",
                     "type": "tar"
@@ -687,33 +697,9 @@
             "package": {
                 "name": "npm-asset/js-cookie",
                 "version": "3.0.5",
-                "type": "drupal-library",
+                "type": "npm-asset",
                 "dist": {
                     "url": "https://registry.npmjs.org/js-cookie/-/js-cookie-3.0.5.tgz",
-                    "type": "tar"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "npm-asset/slick-carousel",
-                "version": "1.8.0",
-                "type": "drupal-library",
-                "dist": {
-                    "url": "https://registry.npmjs.org/slick-carousel/-/slick-carousel-1.8.0.tgz",
-                    "type": "tar"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "npm-asset/yaireo--tagify",
-                "version": "4.35.6",
-                "type": "drupal-library",
-                "dist": {
-                    "url": "https://registry.npmjs.org/@yaireo/tagify/-/tagify-4.35.6.tgz",
                     "type": "tar"
                 }
             }
