@@ -14251,25 +14251,31 @@
             "name": "npm-asset/chart.js",
             "version": "4.5.1",
             "dist": {
-                "type": "zip",
-                "url": "https://github.com/chartjs/Chart.js/archive/refs/tags/v4.5.1.zip"
+                "type": "tar",
+                "url": "https://registry.npmjs.org/chart.js/-/chart.js-4.5.1.tgz"
             },
             "require": {
                 "npm-asset/kurkle--color": ">=0.3.0,<0.4.0"
             },
-            "type": "npm-asset"
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
         },
         {
             "name": "npm-asset/dompurify",
             "version": "3.3.0",
             "dist": {
-                "type": "zip",
-                "url": "https://github.com/cure53/DOMPurify/archive/refs/tags/3.3.0.zip"
+                "type": "tar",
+                "url": "https://registry.npmjs.org/dompurify/-/dompurify-3.3.0.tgz"
             },
             "require": {
                 "npm-asset/types--trusted-types": ">=2.0.7,<3.0.0"
             },
-            "type": "npm-asset"
+            "type": "npm-asset",
+            "license": [
+                "(MPL-2.0 OR Apache-2.0)"
+            ]
         },
         {
             "name": "npm-asset/jquery",
@@ -14287,40 +14293,52 @@
             "name": "npm-asset/jquery-colorbox",
             "version": "1.6.4",
             "dist": {
-                "type": "zip",
-                "url": "https://github.com/jackmoore/colorbox/archive/refs/tags/1.6.4.zip"
+                "type": "tar",
+                "url": "https://registry.npmjs.org/jquery-colorbox/-/jquery-colorbox-1.6.4.tgz"
             },
             "require": {
                 "npm-asset/jquery": ">=1.3.2"
             },
-            "type": "npm-asset"
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
         },
         {
             "name": "npm-asset/jquery-jsonview",
             "version": "1.2.3",
             "dist": {
-                "type": "zip",
-                "url": "https://github.com/yesmeck/jquery-jsonview/archive/refs/tags/v1.2.3.zip"
+                "type": "tar",
+                "url": "https://registry.npmjs.org/jquery-jsonview/-/jquery-jsonview-1.2.3.tgz"
             },
-            "type": "drupal-library"
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
         },
         {
             "name": "npm-asset/js-cookie",
             "version": "3.0.5",
             "dist": {
-                "type": "zip",
-                "url": "https://github.com/js-cookie/js-cookie/archive/refs/tags/v3.0.5.zip"
+                "type": "tar",
+                "url": "https://registry.npmjs.org/js-cookie/-/js-cookie-3.0.5.tgz"
             },
-            "type": "npm-asset"
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
         },
         {
             "name": "npm-asset/kurkle--color",
             "version": "0.3.4",
             "dist": {
-                "type": "zip",
-                "url": "https://github.com/kurkle/color/archive/refs/tags/v0.3.4.zip"
+                "type": "tar",
+                "url": "https://registry.npmjs.org/@kurkle/color/-/color-0.3.4.tgz"
             },
-            "type": "npm-asset"
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
         },
         {
             "name": "npm-asset/slick-carousel",
@@ -14341,7 +14359,10 @@
                 "type": "tar",
                 "url": "https://registry.npmjs.org/@types/trusted-types/-/trusted-types-2.0.7.tgz"
             },
-            "type": "npm-asset"
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
         },
         {
             "name": "npm-asset/yaireo--tagify",
