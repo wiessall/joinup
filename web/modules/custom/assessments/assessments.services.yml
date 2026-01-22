@@ -8,6 +8,8 @@ services:
 
   Drupal\assessments\EventSubscriber\RdfSyncNormalizeSubscriber: {}
 
+  Drupal\assessments\EventSubscriber\SearchApiSubscriber: { }
+
   Drupal\assessments\AssessmentReportNotificationInterface:
     class: Drupal\assessments\AssessmentReportNotification
 
