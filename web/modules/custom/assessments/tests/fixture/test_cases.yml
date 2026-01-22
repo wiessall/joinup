@@ -30,6 +30,7 @@ invalid_schema:
               - "national_public_sector_body"
           - country:
               - "IT"
+              - "EU"
             participant_type:
               - "national_public_sector_body"
               - "private_businesses"
@@ -66,6 +67,12 @@ invalid_schema:
         - The property description is required
       /binding_requirement/0/expression/0/description:
         - The property description is required
+      /binding_requirement/0/has_participation/1/country:
+        - There must be a maximum of 1 items in the array, 2 found
+      /binding_requirement/0/has_participation/1/country/0:
+        - Does not have a value in the enumeration ["EU"]
+      /binding_requirement/0/has_participation/1/country/1:
+        - Does not have a value in the enumeration ["AT","BE","BG","HR","CY","CZ","DK","EE","FI","FR","DE","GR","HU","IE","IT","LV","LT","LU","MT","NL","PL","PT","RO","SK","SI","ES","SE"]
       /other_comment:
         - Integer value found, but a string is required
       /provider:

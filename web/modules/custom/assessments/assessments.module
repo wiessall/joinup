@@ -16,6 +16,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\assessments\AssessmentInterface;
+use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\AssessmentSubEntity;
 use Drupal\assessments\Entity\BindingRequirementParagraph;
@@ -438,9 +439,9 @@ function _assessments_process_asset_form_button(array $element, FormStateInterfa
  * Implements hook_inline_entity_form_entity_form_alter().
  */
 function assessments_inline_entity_form_entity_form_alter(array &$entity_form, FormStateInterface &$formState): void {
-  $entity = $entity_form['#entity'];
+  $solution = $entity_form['#entity'];
 
-  if ($entity_form['#ief_id'] === 'asset-form' && $entity instanceof SolutionInterface) {
+  if ($entity_form['#ief_id'] === 'asset-form' && $solution instanceof SolutionInterface) {
     if ($entity_form['#op'] === 'add') {
       $entity_form['#after_build'][] = '_assessments_process_asset_form_button';
     }
@@ -448,7 +449,7 @@ function assessments_inline_entity_form_entity_form_alter(array &$entity_form, F
     $collection = \Drupal::service('entity.repository')->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR);
     assert($collection instanceof CollectionInterface);
 
-    $entity
+    $solution
       // All solutions created via assessments form are belonging to a
       // 'collector' collection.
       ->setGroup($collection)
@@ -458,7 +459,7 @@ function assessments_inline_entity_form_entity_form_alter(array &$entity_form, F
     // In this context the landing page is mandatory.
     $entity_form['landing_page']['widget']['uri']['#required'] = TRUE;
   }
-  if ($entity->bundle() === 'participation') {
+  if ($solution->bundle() === 'participation') {
     $entity_form['stakeholder_country']['#states'] = [
       'visible' => [
         ':input[name="has_participation[0][inline_entity_form][eu_countries][value]"]' => ['checked' => FALSE],
@@ -544,15 +545,15 @@ function assessments_assessment_presave(AssessmentInterface $entity): void {
   }
   elseif ($entity->bundle() === 'participation') {
     $eu_country = $entity->get('eu_countries')->value;
+    $vocabHelper = \Drupal::service(AssessmentVocabularyHelper::class);
     if ($eu_country) {
-      $terms = \Drupal::entityTypeManager()
-        ->getStorage('taxonomy_term')
-        ->loadByProperties([
-          'name' => 'European Union',
-          'vid' => 'spatial',
-        ]);
-      $term = reset($terms);
-      $entity->set('stakeholder_country', $term);
+      $term_id = $vocabHelper->getTermIdFromIdentifier('spatial', 'EU');
+      if (!$term_id) {
+        throw new \UnexpectedValueException(
+          'Required EU term not found in the "spatial" vocabulary.'
+        );
+      }
+      $entity->set('stakeholder_country', ['target_id' => $term_id]);
     }
   }
 }
