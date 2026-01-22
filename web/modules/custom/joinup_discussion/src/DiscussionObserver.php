@@ -8,7 +8,6 @@ use Drupal\changed_fields\ObserverInterface;
 use Drupal\joinup_discussion\Entity\DiscussionInterface;
 use Drupal\joinup_discussion\Event\DiscussionEvents;
 use Drupal\joinup_discussion\Event\DiscussionUpdateEvent;
-use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -53,8 +52,7 @@ readonly class DiscussionObserver implements ObserverInterface {
 
     $changed_fields = $subject->getChangedFields();
     $state = $discussion->get('field_state')->getString();
-    $was_archived = isset($discussion->original) && $discussion->original instanceof ArchivableEntityInterface ?
-      $discussion->original->isArchived() : FALSE;
+    $was_archived = $discussion->getOriginal()?->isArchived() ?? FALSE;
 
     // Dispatch the update event only if there are changes of relevant fields
     // and the discussion is in the 'published' state

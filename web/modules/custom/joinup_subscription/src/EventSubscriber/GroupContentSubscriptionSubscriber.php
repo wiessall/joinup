@@ -66,7 +66,7 @@ readonly class GroupContentSubscriptionSubscriber implements EventSubscriberInte
     }
 
     // Only notify if the content is being published for the first time.
-    if (!$entity->isPublished() || empty($entity->original) || $entity->original->isPublished() || !$this->isFirstPublishedRevision($entity)) {
+    if (!$entity->isPublished() || ($entity->getOriginal()?->isPublished() ?? TRUE) || !$this->isFirstPublishedRevision($entity)) {
       return;
     }
 
