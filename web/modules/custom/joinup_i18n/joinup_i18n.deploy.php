@@ -7,18 +7,28 @@
 
 declare(strict_types=1);
 
+use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\tmgmt\JobInterface;
 use Drupal\tmgmt_ec_etranslation\Plugin\tmgmt\Translator\ETranslationTranslator;
 
 /**
- * Creates continuous tasks for Babel strings.
+ * Remove leftover.
  */
 function joinup_i18n_deploy_200800(): void {
+  $link = MenuLinkContent::load(20694);
+  $link->removeTranslation('bg');
+  $link->save();
+}
+
+/**
+ * Creates continuous tasks for Babel strings.
+ */
+function joinup_i18n_deploy_200801(): void {
   foreach (\Drupal::languageManager()->getLanguages() as $langcode => $language) {
     if ($langcode !== 'en') {
       tmgmt_job_create('en', $langcode, 0, [
         'job_type' => JobInterface::TYPE_CONTINUOUS,
-        'label' => "eTranslation: English > {$language->getName()}",
+        'label' => "Babel: en > {$language->getId()}",
         'translator' => ETranslationTranslator::ID,
         'status' => JobInterface::STATE_CONTINUOUS,
       ])->save();
@@ -29,7 +39,7 @@ function joinup_i18n_deploy_200800(): void {
 /**
  * Schedule job items creation.
  */
-function joinup_i18n_deploy_200801(array &$sandbox): string {
+function joinup_i18n_deploy_200802(array &$sandbox): string {
   $queue = \Drupal::queue('babel_tmgmt_continuous_job_item');
   $queue->createQueue();
 
