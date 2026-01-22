@@ -124,7 +124,7 @@
         "drupal/theme_rule": "^1.2",
         "drupal/tmgmt_ec_etranslation": "^1.1",
         "drupal/token": "~1.7",
-        "drupal/tour": "^1.0",
+        "drupal/tour": "^2.0",
         "drupal/twig_field_value": "^2.0",
         "drupal/view_unpublished": "^1.0",
         "drupal/views_autosubmit": "^1.7",
@@ -500,7 +500,8 @@
                 "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.mr20-note535548.diff"
             },
             "drupal/tour": {
-                "Make it easier to trigger a tour @see https://www.drupal.org/project/drupal/issues/3012027": "resources/patch/php/drupal/tour/3012027.patch"
+                "JS Event Timing Bug @see https://www.drupal.org/i/3567257": "resources/patch/php/drupal/tour/3567257.diff",
+                "Support page manager variants on front page @see https://www.drupal.org/i/3568815": "resources/patch/php/drupal/tour/3568815.patch"
             },
             "drupal/tagify": {
                 "Improve hierarchical dropdown with a better appearance. @see https://www.drupal.org/project/tagify/issues/3508891": "resources/patch/php/drupal/tagify/3508891.diff",
