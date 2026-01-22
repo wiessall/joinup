@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dcb458bafac1c0395dc2afdc0d5d3ebe",
+    "content-hash": "b21ab183d1e8d9b1333d02fc22fd9448",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -14257,7 +14257,7 @@
             "require": {
                 "npm-asset/kurkle--color": ">=0.3.0,<0.4.0"
             },
-            "type": "drupal-library"
+            "type": "npm-asset"
         },
         {
             "name": "npm-asset/dompurify",
@@ -14269,7 +14269,7 @@
             "require": {
                 "npm-asset/types--trusted-types": ">=2.0.7,<3.0.0"
             },
-            "type": "drupal-library"
+            "type": "npm-asset"
         },
         {
             "name": "npm-asset/jquery-colorbox",
@@ -14278,7 +14278,7 @@
                 "type": "tar",
                 "url": "https://registry.npmjs.org/jquery-colorbox/-/jquery-colorbox-1.6.4.tgz"
             },
-            "type": "drupal-library"
+            "type": "npm-asset"
         },
         {
             "name": "npm-asset/jquery-jsonview",
@@ -14296,7 +14296,7 @@
                 "type": "tar",
                 "url": "https://registry.npmjs.org/js-cookie/-/js-cookie-3.0.5.tgz"
             },
-            "type": "drupal-library"
+            "type": "npm-asset"
         },
         {
             "name": "npm-asset/kurkle--color",
@@ -14305,7 +14305,7 @@
                 "type": "tar",
                 "url": "https://registry.npmjs.org/@kurkle/color/-/color-0.3.4.tgz"
             },
-            "type": "drupal-library"
+            "type": "npm-asset"
         },
         {
             "name": "npm-asset/slick-carousel",
@@ -14314,7 +14314,10 @@
                 "type": "tar",
                 "url": "https://registry.npmjs.org/slick-carousel/-/slick-carousel-1.8.0.tgz"
             },
-            "type": "drupal-library"
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
         },
         {
             "name": "npm-asset/types--trusted-types",
@@ -14323,7 +14326,7 @@
                 "type": "tar",
                 "url": "https://registry.npmjs.org/@types/trusted-types/-/trusted-types-2.0.7.tgz"
             },
-            "type": "drupal-library"
+            "type": "npm-asset"
         },
         {
             "name": "npm-asset/yaireo--tagify",
@@ -14332,7 +14335,10 @@
                 "type": "tar",
                 "url": "https://registry.npmjs.org/@yaireo/tagify/-/tagify-4.35.6.tgz"
             },
-            "type": "drupal-library"
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
         },
         {
             "name": "oomphinc/composer-installers-extender",
