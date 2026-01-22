@@ -338,6 +338,7 @@
         },
         "patches": {
             "drupal/babel": {
+                "Resolve site install slowness caused by Babel @see https://drupal.org/i/3568967": "resources/patch/php/drupal/babel/3568967-mr73-commit9c03cd4b.diff",
                 "TypeError in BabelTranslateForm::ajaxUpdateTranslation see @see https://www.drupal.org/i/3561002": "resources/patch/php/drupal/babel/3561002.diff"
             },
             "drupal/calendar_view": {
