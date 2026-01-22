@@ -32,7 +32,7 @@ Feature: Provided by widget functionality
     When I click "Initiatives" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Digital Transformation Initiative" in the "Modal content" region
 
-    When I click "General" in the "Modal content" region
+    When I click "Description" in the "Modal content" region
     And I fill in "description[0][value]" with "This is the general binding requirement description" in the "Modal content" region
 
     When I click "Trans-European digital public services" in the "Modal content" region

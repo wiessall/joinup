@@ -476,6 +476,12 @@ function assessments_inline_entity_form_table_fields_alter(array &$fields, array
       'label' => t('Relevant website'),
       'weight' => 10,
     ];
+
+    $fields['abstract'] = [
+      'type' => 'field',
+      'label' => t('Description'),
+      'weight' => 11,
+    ];
   }
 }
 
