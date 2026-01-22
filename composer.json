@@ -362,7 +362,7 @@
                 "Set fixed depth for comment threads.": "resources/patch/php/drupal/core/2786587-thread-depth-fixed-limit.patch",
                 "Views with a different query plugin created via the UI do not have the correct query plugin ID in the view config @see https://www.drupal.org/i/2836237": "resources/patch/php/drupal/core/2836237-commit7e8d2533.diff",
                 "Cache tags are not invalidated on revision delete @see https://www.drupal.org/i/2945928": "resources/patch/php/drupal/core/2945928-commit78bff01c.diff",
-                "Have responsive image module ignore svg @see https://www.drupal.org/project/drupal/issues/2957924": "resources/patch/php/drupal/core/2957924.patch",
+                "Have responsive image module ignore svg @see https://www.drupal.org/i/2957924": "resources/patch/php/drupal/core/2957924-commit6894dae2.diff",
                 "Restrict images to this site\" restricts images that, by definition, *are* on this site @see https://www.drupal.org/i/2998318": "resources/patch/php/drupal/core/2998318.patch",
                 "Layout builder doesn't support bundle computed field @see https://drupal.org/i/3034979": "resources/patch/php/drupal/core/layoutbuilder-bundlecomputedfieldsfix-3034979-21-11.x.patch",
                 "Views Block Display skips preBlockBuild() call on ajax rebuild https://www.drupal.org/i/2605218": "resources/patch/php/drupal/core/2605218.mr4399-note588625.diff",
