@@ -452,6 +452,9 @@
             "drupal/memcache": {
                 "Use Drupal core time service with fallback @see https://drupal.org/i/2999614": "resources/patch/php/drupal/memcache/2999614-mr41-20f8103bd2.diff"
             },
+            "drupal/message": {
+                "Renderer service can only accept array @see https://www.drupal.org/i/3531949": "resources/patch/php/drupal/message/3531949-commit24333e61.diff"
+            },
             "drupal/message_digest": {
                 "Renderer::renderPlain() is deprecated @see https://www.drupal.org/i/3511648": "resources/patch/php/drupal/message_digest/3511648.diff"
             },
