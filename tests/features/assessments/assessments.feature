@@ -23,6 +23,11 @@ Feature: Assessment Report Entity Management
     And I should see "Union entity or public sector body which is providing the report"
     And I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
+    Then I should not see the text "New organisation name"
+    When I select "Local public sector body" from "Type of public sector body"
+    And I wait for AJAX to finish
+    And I select "Belgium" from "Country"
+    And I wait for AJAX to finish
     And I fill in "New organisation name" with "Austrian Ministry of Digital Affairs"
     And I check "Check this box if assessment is linked to previous assessments or related assessments at EU or national level."
     And I fill in "Reference of the linked assessment" with "https://interoperable-europe.ec.europa.eu/report"
@@ -133,7 +138,7 @@ Feature: Assessment Report Entity Management
     And I should see the heading "Test Assessment Report 2025"
     And I should see the following lines of text:
       | Status: Draft                                                                                      |
-      | Austrian Ministry of Digital Affairs, a European Union institution from                            |
+      | Austrian Ministry of Digital Affairs, a Local public sector body from Belgium                      |
       | The report has been connected to the following previous/relevant reports                           |
       | https://interoperable-europe.ec.europa.eu/report                                                   |
       | This assessment was conducted in collaboration with multiple stakeholders across EU member states. |
@@ -159,7 +164,9 @@ Feature: Assessment Report Entity Management
     Then I should see the heading "Create assessment report"
 
     When I fill in "Short title" with "Test Initiative Name Length"
-    And I select "European Union institution" from "Type of public sector body"
+    And I select "Local public sector body" from "Type of public sector body"
+    And I wait for AJAX to finish
+    And I select "Belgium" from "Country"
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "Test Organisation"
 
