@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - assessments.type.public_service
+    - field.field.assessment.public_service.countries
     - field.field.assessment.public_service.thematic_area
   module:
     - entity_form_field_label
@@ -13,6 +14,20 @@ targetEntityType: assessment
 bundle: public_service
 mode: default
 content:
+  countries:
+    type: tagify_select_widget
+    weight: 3
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      placeholder: 'Select or start typing...'
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+        new_description: ''
+        rewrite_description: 0
   name:
     type: string_textfield
     weight: 0

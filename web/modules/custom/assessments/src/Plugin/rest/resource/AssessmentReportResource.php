@@ -79,11 +79,6 @@ class AssessmentReportResource extends ResourceBase {
    */
   protected string $langcode;
 
-  /**
-   * Indicates whether the current user has permission to publish reports.
-   */
-  protected bool $hasPublishPermission;
-
   public function __construct(
     array $configuration,
     $pluginId,
@@ -157,10 +152,6 @@ class AssessmentReportResource extends ResourceBase {
       return new ResourceResponse(['errors' => $errors], 422);
     }
 
-    // Normally, the user that posts through the API always has the permission
-    // to publish the report right away. Still, check for the permission in
-    // case the workflow changes in the future.
-    $this->hasPublishPermission = $this->currentUser->hasPermission('perform assessment_workflow workflow publish_from_draft transition on own entit');
     $report = $this->createReport($data);
 
     if ($this->errors) {
@@ -212,6 +203,7 @@ class AssessmentReportResource extends ResourceBase {
         $affects[] = [
           'name' => $item->label(),
           'thematic_area' => $this->itemListToValue($item->get('thematic_area'), 'id'),
+          'country' => $this->itemListToValue($item->get('countries'), 'code'),
         ];
       }
 
@@ -315,7 +307,7 @@ class AssessmentReportResource extends ResourceBase {
       'binding_requirement' => $this->createBindingRequirements($data['binding_requirement']),
       'remaining_barriers' => $this->buildFormattedText($data, 'remaining_barriers'),
       'other_comment' => $this->buildFormattedText($data, 'other_comment'),
-      'state' => $this->hasPublishPermission ? 'published' : 'review',
+      'state' => 'published',
     ]);
 
     // Add statements.
@@ -357,7 +349,7 @@ class AssessmentReportResource extends ResourceBase {
       'name' => $provider['name'],
       'organisation_type' => $this->getTermIdFromIdentifier('assess_provider_type', $provider['organisation_type'], "/provider/organisation_type"),
       'country' => isset($provider['country']) ? $this->getTermIdFromIdentifier('spatial', $provider['country'], "/provider/country", 'code') : NULL,
-      'status' => $this->hasPublishPermission,
+      'status' => TRUE,
     ]);
   }
 
@@ -406,7 +398,7 @@ class AssessmentReportResource extends ResourceBase {
         'initiative_name' => $expression['name'],
         'description' => $this->buildFormattedText($expression, 'description'),
         'documented_in' => $expression['documented_in'] ?? NULL,
-        'status' => $this->hasPublishPermission,
+        'status' => TRUE,
       ]);
     }, $expressions);
   }
@@ -431,7 +423,8 @@ class AssessmentReportResource extends ResourceBase {
         'langcode' => $this->langcode,
         'name' => $item['name'],
         'thematic_area' => isset($item['thematic_area']) ? $this->getTermIdFromIdentifier('assess_public_service_area', $item['thematic_area'], "$path/affects/$delta/thematic_area") : [],
-        'status' => $this->hasPublishPermission,
+        'countries' => isset($item['country']) ? $this->getTermIdFromIdentifier('spatial', $item['country'], "$path/affects/$delta/country", 'code') : [],
+        'status' => TRUE,
       ]);
     }
 
@@ -458,7 +451,7 @@ class AssessmentReportResource extends ResourceBase {
         'langcode' => $this->langcode,
         'participant_type' => $this->getTermIdFromIdentifier('assess_participant_type', $item['participant_type'], "$path/has_participation/$delta/participant_type"),
         'stakeholder_country' => isset($item['country']) ? $this->getTermIdFromIdentifier('spatial', $item['country'], "$path/has_participation/$delta/country", 'code') : [],
-        'status' => $this->hasPublishPermission,
+        'status' => TRUE,
       ]);
     }
 
@@ -497,7 +490,7 @@ class AssessmentReportResource extends ResourceBase {
         'title' => $asset['title'],
         'description' => $this->buildFormattedText($asset, 'description', 'content_editor'),
         'landing_page' => $asset['landing_page'],
-        'state' => $this->hasPublishPermission ? 'published' : 'draft',
+        'field_state' => 'published',
       ]);
     }
 

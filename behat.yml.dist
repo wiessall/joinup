@@ -183,6 +183,7 @@ default:
         'OSS catalogue list': '.oss-catalogue-list table'
         'Owner IEF': '.field--name-owner .ief-entity-table'
         'Users': 'table'
+        'IEF table': '.ief-entity-table'
     Drupal\DrupalExtension:
       api_driver: 'drupal'
       blackbox: ~
