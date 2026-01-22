@@ -289,6 +289,7 @@ permissions:
   - 'perform solution_workflow workflow unarchive transition on any entity'
   - 'perform solution_workflow workflow update_validated transition on any entity'
   - 'perform solution_workflow workflow validate transition on any entity'
+  - 'rebuild node access permissions'
   - 'replicate entities'
   - 'revert all sitewide alert revisions'
   - 'unarchived community content'
