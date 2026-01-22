@@ -1,25 +1,8 @@
 diff --git a/core/lib/Drupal/Core/Entity/EntityViewBuilder.php b/core/lib/Drupal/Core/Entity/EntityViewBuilder.php
-index a35f9be9ad233b5b92e18167d871a5d920dfcd23..fee3b6a425cd2c6faa70753106ee0d61b3c00426 100644
+index a35f9be9ad233b5b92e18167d871a5d920dfcd23..1bba1a00bd60377d0afeda888dad32a20add34cf 100644
 --- a/core/lib/Drupal/Core/Entity/EntityViewBuilder.php
 +++ b/core/lib/Drupal/Core/Entity/EntityViewBuilder.php
-@@ -9,6 +9,7 @@
- use Drupal\Core\Field\FieldItemInterface;
- use Drupal\Core\Field\FieldItemListInterface;
- use Drupal\Core\Language\LanguageManagerInterface;
-+use Drupal\Core\Logger\LoggerChannelTrait;
- use Drupal\Core\Render\Element;
- use Drupal\Core\Security\TrustedCallbackInterface;
- use Drupal\Core\Theme\Registry;
-@@ -22,6 +23,8 @@
-  */
- class EntityViewBuilder extends EntityHandlerBase implements EntityHandlerInterface, EntityViewBuilderInterface, TrustedCallbackInterface {
- 
-+  use LoggerChannelTrait;
-+
-   /**
-    * The type of entities for which this view builder is instantiated.
-    *
-@@ -80,6 +83,15 @@ class EntityViewBuilder extends EntityHandlerBase implements EntityHandlerInterf
+@@ -80,6 +80,13 @@ class EntityViewBuilder extends EntityHandlerBase implements EntityHandlerInterf
     */
    protected $singleFieldDisplays;
  
@@ -27,32 +10,13 @@ index a35f9be9ad233b5b92e18167d871a5d920dfcd23..fee3b6a425cd2c6faa70753106ee0d61
 +   * A collection of keys.
 +   *
 +   * It identifies rendering in progress, used to prevent recursion.
-+   *
-+   * @var array
 +   */
-+  protected array $recursionKeys = [];
++  protected static array $recursionKeys = [];
 +
    /**
     * Constructs a new EntityViewBuilder.
     *
-@@ -107,13 +119,15 @@ public function __construct(EntityTypeInterface $entity_type, EntityRepositoryIn
-    * {@inheritdoc}
-    */
-   public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type) {
--    return new static(
-+    $instance = new static(
-       $entity_type,
-       $container->get('entity.repository'),
-       $container->get('language_manager'),
-       $container->get('theme.registry'),
-       $container->get('entity_display.repository')
-     );
-+    $instance->setLoggerFactory($container->get('logger.factory'));
-+    return $instance;
-   }
- 
-   /**
-@@ -136,7 +150,12 @@ public function view(EntityInterface $entity, $view_mode = 'full', $langcode = N
+@@ -136,7 +143,12 @@ public function view(EntityInterface $entity, $view_mode = 'full', $langcode = N
     * {@inheritdoc}
     */
    public static function trustedCallbacks() {
@@ -66,7 +30,7 @@ index a35f9be9ad233b5b92e18167d871a5d920dfcd23..fee3b6a425cd2c6faa70753106ee0d61
    }
  
    /**
-@@ -190,6 +209,9 @@ protected function getBuildDefaults(EntityInterface $entity, $view_mode) {
+@@ -190,6 +202,9 @@ protected function getBuildDefaults(EntityInterface $entity, $view_mode) {
          'max-age' => $entity->getCacheMaxAge(),
        ],
      ];
@@ -76,7 +40,7 @@ index a35f9be9ad233b5b92e18167d871a5d920dfcd23..fee3b6a425cd2c6faa70753106ee0d61
  
      // Add the default #theme key if a template exists for it.
      if ($this->themeRegistry->getRuntime()->has($this->entityTypeId)) {
-@@ -537,4 +559,68 @@ protected function getSingleFieldDisplay($entity, $field_name, $display_options)
+@@ -537,4 +552,77 @@ protected function getSingleFieldDisplay($entity, $field_name, $display_options)
      return $display;
    }
  
@@ -88,16 +52,12 @@ index a35f9be9ad233b5b92e18167d871a5d920dfcd23..fee3b6a425cd2c6faa70753106ee0d61
 +    // recursively rendered. If not already being rendered,
 +    // add an entry to track that it is.
 +    $recursion_key = $this->getRenderRecursionKey($build);
-+    if (isset($this->recursionKeys[$recursion_key])) {
-+      $this->getLogger('entity')
-+        ->error('Recursive rendering attempt aborted for %key. In progress: %guards', [
-+          '%key' => $recursion_key,
-+          '%guards' => print_r($this->recursionKeys, TRUE),
-+        ]);
++    if (isset(static::$recursionKeys[$recursion_key])) {
++      trigger_error(sprintf('Recursive rendering attempt aborted for %s. In progress: %s', $recursion_key, print_r(static::$recursionKeys, TRUE)), E_USER_WARNING);
 +      $build['#printed'] = TRUE;
 +    }
 +    else {
-+      $this->recursionKeys[$recursion_key] = $recursion_key;
++      static::$recursionKeys[$recursion_key] = TRUE;
 +    }
 +    return $build;
 +  }
@@ -109,7 +69,7 @@ index a35f9be9ad233b5b92e18167d871a5d920dfcd23..fee3b6a425cd2c6faa70753106ee0d61
 +    // Removes rendered entity matching cache keys from recursive render
 +    // tracking, once the entity has been rendered.
 +    $recursion_key = $this->getRenderRecursionKey($build);
-+    unset($this->recursionKeys[$recursion_key]);
++    unset(static::$recursionKeys[$recursion_key]);
 +
 +    return $renderedEntity;
 +  }
@@ -126,27 +86,40 @@ index a35f9be9ad233b5b92e18167d871a5d920dfcd23..fee3b6a425cd2c6faa70753106ee0d61
 +  protected function getRenderRecursionKey(array $build): string {
 +    /** @var \Drupal\Core\Entity\EntityInterface $entity */
 +    $entity = $build['#' . $this->entityTypeId];
++
++    $recursion_keys = [
++      $entity->getEntityTypeId(),
++    ];
++
 +    // If entity is new and has no ID, generate unique ID from entity object.
 +    // This is to prevent false positives, for example when previewing a new
 +    // node that is referencing a new node without either node yet being saved.
 +    if ($entity->id()) {
-+      $entity_id = $entity->id();
++      $recursion_keys[] = 'entity_id';
++      $recursion_keys[] = $entity->id();
++      if ($entity instanceof RevisionableInterface) {
++        $recursion_keys[] = $entity->getRevisionId();
++      }
 +    }
 +    else {
-+      $entity_id = spl_object_id($entity);
++      $recursion_keys[] = 'object_id';
++      $recursion_keys[] = spl_object_id($entity);
 +    }
++
++    if ($entity instanceof TranslatableDataInterface) {
++      $recursion_keys[] = $entity->language()->getId();
++    }
++
++    $recursion_keys[] = $build['#view_mode'];
++
 +    // It seems very unlikely that the same entity displayed in the same view
-+    // mode would be recursively nested and meant to be displayed differently,
-+    // so a key made up of the entity type ID, entity ID, and view mode should
-+    // suffice for recursion detection
-+    return $entity->getEntityTypeId()
-+      . $entity_id
-+      . $build['#view_mode'];
++    // mode would be recursively nested and meant to be displayed differently.
++    return implode(':', $recursion_keys);
 +  }
 +
  }
 diff --git a/core/lib/Drupal/Core/Field/Plugin/Field/FieldFormatter/EntityReferenceEntityFormatter.php b/core/lib/Drupal/Core/Field/Plugin/Field/FieldFormatter/EntityReferenceEntityFormatter.php
-index b80f036ea38bbbf48c34bc97357d5706c129897d..4e60c5832b6c06330e1aa29cdcb419825001eeac 100644
+index b80f036ea38bbbf48c34bc97357d5706c129897d..6b2da8669ac99dafdee84bcbc74dde63df399fcc 100644
 --- a/core/lib/Drupal/Core/Field/Plugin/Field/FieldFormatter/EntityReferenceEntityFormatter.php
 +++ b/core/lib/Drupal/Core/Field/Plugin/Field/FieldFormatter/EntityReferenceEntityFormatter.php
 @@ -29,6 +29,12 @@ class EntityReferenceEntityFormatter extends EntityReferenceFormatterBase {
@@ -154,7 +127,7 @@ index b80f036ea38bbbf48c34bc97357d5706c129897d..4e60c5832b6c06330e1aa29cdcb41982
     *
     * @var int
 +   *
-+   * @deprecated in drupal:10.5.3 and is removed from drupal:12.0.0.
++   * @deprecated in drupal:11.4.0 and is removed from drupal:13.0.0.
 +   * EntityViewBuilder #pre_render and #post_render callbacks prevent recursion.
 +   *
 +   * @see https://www.drupal.org/node/3316878
@@ -172,7 +145,7 @@ index b80f036ea38bbbf48c34bc97357d5706c129897d..4e60c5832b6c06330e1aa29cdcb41982
     * field and the referenced entity that is being rendered.
     *
 -   * @var array
-+   * @deprecated in drupal:10.5.3 and is removed from drupal:12.0.0.
++   * @deprecated in drupal:11.4.0 and is removed from drupal:13.0.0.
 +   *  EntityViewBuilder #pre_render and #post_render callbacks prevent
 +   *  recursion.
 +   *
@@ -222,33 +195,11 @@ index b80f036ea38bbbf48c34bc97357d5706c129897d..4e60c5832b6c06330e1aa29cdcb41982
        $view_builder = $this->entityTypeManager->getViewBuilder($entity->getEntityTypeId());
        $elements[$delta] = $view_builder->view($entity, $view_mode, $entity->language()->getId());
  
-diff --git a/core/modules/comment/src/CommentViewBuilder.php b/core/modules/comment/src/CommentViewBuilder.php
-index 0e4e024dd574300e854de0bb3303d74f0eff55d8..b0a7af4f800edb22129d3256ae76a1085bd8fb20 100644
---- a/core/modules/comment/src/CommentViewBuilder.php
-+++ b/core/modules/comment/src/CommentViewBuilder.php
-@@ -61,7 +61,7 @@ public function __construct(EntityTypeInterface $entity_type, EntityRepositoryIn
-    * {@inheritdoc}
-    */
-   public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type) {
--    return new static(
-+    $instance = new static(
-       $entity_type,
-       $container->get('entity.repository'),
-       $container->get('language_manager'),
-@@ -70,6 +70,8 @@ public static function createInstance(ContainerInterface $container, EntityTypeI
-       $container->get('entity_display.repository'),
-       $container->get('entity_type.manager')
-     );
-+    $instance->setLoggerFactory($container->get('logger.factory'));
-+    return $instance;
-   }
- 
-   /**
 diff --git a/core/modules/field/tests/src/Functional/EntityReference/EntityReferenceAutoCreateTest.php b/core/modules/field/tests/src/Functional/EntityReference/EntityReferenceAutoCreateTest.php
-index 7a982ed1bf43aa48add9cdbe02aa996cab0fa816..4893ec4b65ec683be5f6272e931539582fa2b26e 100644
+index a90970bc3ae4397e47078cb67d0b8e129e50d089..dc6eeb0e25ccc20e0efa9ae8b9052bf95723e559 100644
 --- a/core/modules/field/tests/src/Functional/EntityReference/EntityReferenceAutoCreateTest.php
 +++ b/core/modules/field/tests/src/Functional/EntityReference/EntityReferenceAutoCreateTest.php
-@@ -304,4 +304,54 @@ public function testNoBundles(): void {
+@@ -306,4 +306,54 @@ public function testNoBundles(): void {
      $this->assertEquals($referenced_id, $referencing_node->$field_name->target_id, 'Newly created node is referenced from the referencing entity.');
    }
  
@@ -269,14 +220,14 @@ index 7a982ed1bf43aa48add9cdbe02aa996cab0fa816..4893ec4b65ec683be5f6272e93153958
 +      ->setComponent('test_field', [
 +        'type' => 'entity_reference_entity_view',
 +        'settings' => [
-+          'view_mode' => 'full',
++          'view_mode' => 'teaser',
 +        ],
 +      ])
 +      ->save();
 +    // Remove the links component from the referenced node's display because
 +    // there would be errors rendering links on the referenced entity without an
 +    // ID.
-+    $display_repository->getViewDisplay('node', $this->referencedType)
++    $display_repository->getViewDisplay('node', $this->referencedType, 'teaser')
 +      ->removeComponent('links')
 +      ->save();
 +
@@ -304,18 +255,33 @@ index 7a982ed1bf43aa48add9cdbe02aa996cab0fa816..4893ec4b65ec683be5f6272e93153958
 +
  }
 diff --git a/core/modules/field/tests/src/Kernel/EntityReference/EntityReferenceFormatterTest.php b/core/modules/field/tests/src/Kernel/EntityReference/EntityReferenceFormatterTest.php
-index 9d4449cc68297e053464cf5a9442db669733ed64..f7719f15cc05b38a2ccefae75924955b48c14034 100644
+index 023cf7e836259d7659f80727e46b0c598b2b0b97..4b12d56c37fed85f5202cc070b38404e8d508303 100644
 --- a/core/modules/field/tests/src/Kernel/EntityReference/EntityReferenceFormatterTest.php
 +++ b/core/modules/field/tests/src/Kernel/EntityReference/EntityReferenceFormatterTest.php
-@@ -7,7 +7,6 @@
+@@ -6,8 +6,9 @@
+ 
  use Drupal\Core\Cache\Cache;
  use Drupal\Core\Cache\CacheableMetadata;
++use Drupal\Core\Entity\Entity\EntityViewDisplay;
++use Drupal\Core\Entity\Entity\EntityViewMode;
  use Drupal\Core\Field\FieldStorageDefinitionInterface;
 -use Drupal\Core\Field\Plugin\Field\FieldFormatter\EntityReferenceEntityFormatter;
  use Drupal\entity_test\Entity\EntityTest;
+ use Drupal\entity_test\Entity\EntityTestLabel;
  use Drupal\field\Entity\FieldConfig;
- use Drupal\field\Entity\FieldStorageConfig;
-@@ -234,6 +233,44 @@ public function testEntityFormatter(): void {
+@@ -50,6 +51,11 @@ class EntityReferenceFormatterTest extends EntityKernelTestBase {
+    */
+   protected $fieldName = 'field_test';
+ 
++  /**
++   * The non cacheable view mode.
++   */
++  protected string $nonCacheableViewMode = 'no_cache';
++
+   /**
+    * The entity to be referenced in this test.
+    *
+@@ -236,21 +242,57 @@ public function testEntityFormatter(): void {
      $this->assertSame('default | ' . $this->unsavedReferencedEntity->label() . $expected_rendered_name_field_2 . $expected_rendered_body_field_2, (string) $build[1]['#markup'], sprintf('The markup returned by the %s formatter is correct for an item with a unsaved entity.', $formatter));
    }
  
@@ -325,17 +291,9 @@ index 9d4449cc68297e053464cf5a9442db669733ed64..f7719f15cc05b38a2ccefae75924955b
 +  public function testEntityFormatterIterativeRendering(): void {
 +    /** @var \Drupal\Core\Render\RendererInterface $renderer */
 +    $renderer = $this->container->get('renderer');
-+    $formatter = 'entity_reference_entity_view';
 +    $view_builder = $this->entityTypeManager->getViewBuilder($this->entityType);
 +
-+    // Set the default view mode to use the 'entity_reference_entity_view'
-+    // formatter.
-+    \Drupal::service('entity_display.repository')
-+      ->getViewDisplay($this->entityType, $this->bundle)
-+      ->setComponent($this->fieldName, [
-+        'type' => $formatter,
-+      ])
-+      ->save();
++    $this->createNonCacheableViewMode();
 +
 +    $storage = \Drupal::entityTypeManager()->getStorage($this->entityType);
 +    $entity = $storage->create(['name' => $this->randomMachineName()]);
@@ -350,39 +308,53 @@ index 9d4449cc68297e053464cf5a9442db669733ed64..f7719f15cc05b38a2ccefae75924955b
 +    $count = 21;
 +    // Render the same entity multiple times to check that iterative rendering
 +    // is allowed as long as the entity is not being recursively rendered.
-+    $build = $view_builder->viewMultiple(array_fill(0, $count, $referencing_entity), 'default');
++    $build = $view_builder->viewMultiple(array_fill(0, $count, $referencing_entity), $this->nonCacheableViewMode);
 +    $output = (string) $renderer->renderRoot($build);
 +    // The title of entity_test entities is printed twice by default, so we have
 +    // to multiply our count by 2.
-+    $this->assertSame($count * 2, substr_count($output, $entity->get('name')->value));
++    $this->assertSame($count * 2, substr_count($output, $entity->label()));
 +  }
 +
    /**
     * Tests the recursive rendering protection of the entity formatter.
     */
-@@ -260,37 +297,63 @@ public function testEntityFormatterRecursiveRendering(): void {
+   public function testEntityFormatterRecursiveRendering(): void {
++    // Intercept our specific warning and suppress it.
++    set_error_handler(function (int $errno, string $errstr): bool {
++      return $errno === E_USER_WARNING && str_starts_with($errstr, 'Recursive rendering attempt aborted');
++    });
++
+     /** @var \Drupal\Core\Render\RendererInterface $renderer */
+     $renderer = $this->container->get('renderer');
+-    $formatter = 'entity_reference_entity_view';
+     $view_builder = $this->entityTypeManager->getViewBuilder($this->entityType);
+ 
++    $this->createNonCacheableViewMode();
++
+     // Set the default view mode to use the 'entity_reference_entity_view'
+     // formatter.
+     \Drupal::service('entity_display.repository')
+       ->getViewDisplay($this->entityType, $this->bundle)
+       ->setComponent($this->fieldName, [
+-        'type' => $formatter,
++        'type' => 'entity_reference_entity_view',
+       ])
+       ->save();
+ 
+@@ -261,60 +303,82 @@ public function testEntityFormatterRecursiveRendering(): void {
+     // Create a self-reference.
      $referencing_entity_1->{$this->fieldName}->entity = $referencing_entity_1;
      $referencing_entity_1->save();
++    $referencing_entity_1_label = $referencing_entity_1->label();
  
 -    // Check that the recursive rendering stops after it reaches the specified
 -    // limit.
+-    $build = $view_builder->view($referencing_entity_1, 'default');
 +    // Using a different view mode is not recursion.
 +    $build = $view_builder->view($referencing_entity_1, 'teaser');
-+    $output = (string) $renderer->renderRoot($build);
+     $output = (string) $renderer->renderRoot($build);
 +    // 2 occurrences of the entity title per entity.
 +    $expected_occurrences = 4;
-+
-+    $actual_occurrences = substr_count($output, $referencing_entity_1->get('name')->value);
-+    $this->assertEquals($expected_occurrences, $actual_occurrences);
-+
-+    // Self-references should not be rendered.
-+    // entity_1 -> entity_1
-     $build = $view_builder->view($referencing_entity_1, 'default');
-     $output = (string) $renderer->renderRoot($build);
-+    $expected_occurrences = 2;
-+    $actual_occurrences = substr_count($output, $referencing_entity_1->get('name')->value);
-+    $this->assertEquals($expected_occurrences, $actual_occurrences);
-+    $build = $view_builder->view($referencing_entity_1, 'default');
  
 -    // The title of entity_test entities is printed twice by default, so we have
 -    // to multiply the formatter's recursive rendering protection limit by 2.
@@ -390,56 +362,114 @@ index 9d4449cc68297e053464cf5a9442db669733ed64..f7719f15cc05b38a2ccefae75924955b
 -    // the entity title because we're rendering the full entity, not just the
 -    // reference field.
 -    $expected_occurrences = EntityReferenceEntityFormatter::RECURSIVE_RENDER_LIMIT * 2 + 2;
-+    // Repetition is not wrongly detected as recursion.
+-    $actual_occurrences = substr_count($output, $referencing_entity_1->label());
++    $actual_occurrences = substr_count($output, $referencing_entity_1_label);
++    $this->assertEquals($expected_occurrences, $actual_occurrences);
++
++    // Self-references should not be rendered.
 +    // entity_1 -> entity_1
++    $build = $view_builder->view($referencing_entity_1, $this->nonCacheableViewMode);
 +    $output = (string) $renderer->renderRoot($build);
-     $actual_occurrences = substr_count($output, $referencing_entity_1->label());
++    $expected_occurrences = 2;
++    $actual_occurrences = substr_count($output, $referencing_entity_1_label);
      $this->assertEquals($expected_occurrences, $actual_occurrences);
++    $build = $view_builder->view($referencing_entity_1, $this->nonCacheableViewMode);
  
 -    // Repeat the process with another entity in order to check that the
 -    // 'recursive_render_id' counter is generated properly.
++    // Repetition is not wrongly detected as recursion.
++    // entity_1 -> entity_1
++    $output = (string) $renderer->renderRoot($build);
++    $actual_occurrences = substr_count($output, $referencing_entity_1_label);
++    $this->assertEquals($expected_occurrences, $actual_occurrences);
++
 +    // Referencing from another entity works fine.
 +    // entity_2 -> entity_1
      $referencing_entity_2 = $storage->create(['name' => $this->randomMachineName()]);
      $referencing_entity_2->save();
 -    $referencing_entity_2->{$this->fieldName}->entity = $referencing_entity_2;
++    $referencing_entity_2_label = $referencing_entity_2->label();
 +    $referencing_entity_2->{$this->fieldName}->entity = $referencing_entity_1;
      $referencing_entity_2->save();
 -
-     $build = $view_builder->view($referencing_entity_2, 'default');
+-    $build = $view_builder->view($referencing_entity_2, 'default');
++    $build = $view_builder->view($referencing_entity_2, $this->nonCacheableViewMode);
      $output = (string) $renderer->renderRoot($build);
  
 -    $actual_occurrences = substr_count($output, $referencing_entity_2->label());
-+    $actual_occurrences = substr_count($output, $referencing_entity_1->get('name')->value);
++    $actual_occurrences = substr_count($output, $referencing_entity_1_label);
      $this->assertEquals($expected_occurrences, $actual_occurrences);
  
 -    // Now render both entities at the same time and check again.
+-    $build = $view_builder->viewMultiple([$referencing_entity_1, $referencing_entity_2], 'default');
 +    // Referencing from multiple is fine.
 +    // entity_1 -> entity_1
 +    // entity_2 -> entity_1
-     $build = $view_builder->viewMultiple([$referencing_entity_1, $referencing_entity_2], 'default');
++    $build = $view_builder->viewMultiple([$referencing_entity_1, $referencing_entity_2], $this->nonCacheableViewMode);
      $output = (string) $renderer->renderRoot($build);
 -
+-    $actual_occurrences = substr_count($output, $referencing_entity_1->label());
 +    // entity_1 should be seen once as a parent and once as a child of entity_2.
 +    $expected_occurrences = 4;
-+    $actual_occurrences = substr_count($output, $referencing_entity_1->get('name')->value);
-+    $this->assertEquals($expected_occurrences, $actual_occurrences);
++    $actual_occurrences = substr_count($output, $referencing_entity_1_label);
+     $this->assertEquals($expected_occurrences, $actual_occurrences);
+-
+-    $actual_occurrences = substr_count($output, $referencing_entity_2->label());
 +    // entity_2 is seen only once, as a parent.
 +    $expected_occurrences = 2;
-+    $actual_occurrences = substr_count($output, $referencing_entity_2->get('name')->value);
++    $actual_occurrences = substr_count($output, $referencing_entity_2_label);
 +    $this->assertEquals($expected_occurrences, $actual_occurrences);
 +    // Indirect recursion is not ok.
 +    // entity_2 -> entity_1 -> entity_2
 +    $referencing_entity_1->{$this->fieldName}->entity = $referencing_entity_2;
 +    $referencing_entity_1->save();
-+    $build = $view_builder->view($referencing_entity_2, 'default');
++    $build = $view_builder->view($referencing_entity_2, $this->nonCacheableViewMode);
 +    $output = (string) $renderer->renderRoot($build);
 +    // Each entity should be seen once.
 +    $expected_occurrences = 2;
-     $actual_occurrences = substr_count($output, $referencing_entity_1->label());
++    $actual_occurrences = substr_count($output, $referencing_entity_1_label);
      $this->assertEquals($expected_occurrences, $actual_occurrences);
++    $expected_occurrences = 2;
++    $actual_occurrences = substr_count($output, $referencing_entity_2_label);
++    $this->assertEquals($expected_occurrences, $actual_occurrences);
++
++    restore_error_handler();
+   }
  
-@@ -341,6 +404,50 @@ public function testEntityReferenceRecursiveProtectionWithManyRenderedEntities()
+   /**
+    * Renders the same entity referenced from different places.
+    */
+   public function testEntityReferenceRecursiveProtectionWithManyRenderedEntities(): void {
+-    $formatter = 'entity_reference_entity_view';
+     $view_builder = $this->entityTypeManager->getViewBuilder($this->entityType);
+ 
+-    // Set the default view mode to use the 'entity_reference_entity_view'
+-    // formatter.
+-    \Drupal::service('entity_display.repository')
+-      ->getViewDisplay($this->entityType, $this->bundle)
+-      ->setComponent($this->fieldName, [
+-        'type' => $formatter,
+-      ])
+-      ->save();
++    $this->createNonCacheableViewMode();
+ 
+     $storage = $this->entityTypeManager->getStorage($this->entityType);
+     /** @var \Drupal\Core\Entity\ContentEntityInterface $referenced_entity */
+@@ -330,7 +394,7 @@ public function testEntityReferenceRecursiveProtectionWithManyRenderedEntities()
+       return $referencing_entity;
+     }, $range);
+ 
+-    $build = $view_builder->viewMultiple($referencing_entities, 'default');
++    $build = $view_builder->viewMultiple($referencing_entities, $this->nonCacheableViewMode);
+     $output = $this->render($build);
+ 
+     // The title of entity_test entities is printed twice by default, so we have
+@@ -339,10 +403,46 @@ public function testEntityReferenceRecursiveProtectionWithManyRenderedEntities()
+     // the entity title because we're rendering the full entity, not just the
+     // reference field.
+     $expected_occurrences = 30 * 2 + 2;
+-    $actual_occurrences = substr_count($output, $referenced_entity->get('name')->value);
++    $actual_occurrences = substr_count($output, $referenced_entity->label());
      $this->assertEquals($expected_occurrences, $actual_occurrences);
    }
  
@@ -449,17 +479,9 @@ index 9d4449cc68297e053464cf5a9442db669733ed64..f7719f15cc05b38a2ccefae75924955b
 +  public function testEntityReferenceRecursionProtectionWithRepeatedReferencingEntity(): void {
 +    /** @var \Drupal\Core\Render\RendererInterface $renderer */
 +    $renderer = $this->container->get('renderer');
-+    $formatter = 'entity_reference_entity_view';
 +    $view_builder = $this->entityTypeManager->getViewBuilder($this->entityType);
 +
-+    // Set the default view mode to use the 'entity_reference_entity_view'
-+    // formatter.
-+    \Drupal::service('entity_display.repository')
-+      ->getViewDisplay($this->entityType, $this->bundle)
-+      ->setComponent($this->fieldName, [
-+        'type' => $formatter,
-+      ])
-+      ->save();
++    $this->createNonCacheableViewMode();
 +
 +    $storage = \Drupal::entityTypeManager()->getStorage($this->entityType);
 +    $entity = $storage->create(['name' => $this->randomMachineName()]);
@@ -472,37 +494,71 @@ index 9d4449cc68297e053464cf5a9442db669733ed64..f7719f15cc05b38a2ccefae75924955b
 +
 +    // Large-scale repetition within a single render root is not recursion.
 +    $count = 30;
-+    $build = $view_builder->viewMultiple(array_fill(0, $count, $referencing_entity), 'default');
++    $build = $view_builder->viewMultiple(array_fill(0, $count, $referencing_entity), $this->nonCacheableViewMode);
 +    $output = (string) $renderer->renderRoot($build);
 +    // The title of entity_test entities is printed twice by default, so we have
 +    // to multiply our count by 2.
-+    $this->assertSame($count * 2, substr_count($output, $entity->get('name')->value));
++    $this->assertSame($count * 2, substr_count($output, $entity->label()));
 +
 +    // Large-scale repetition across render roots is not recursion.
 +    for ($i = 0; $i < $count; $i++) {
-+      $build = $view_builder->view($referencing_entity, 'default');
++      $build = $view_builder->view($referencing_entity, $this->nonCacheableViewMode);
 +      $output = (string) $renderer->renderRoot($build);
 +      // The title of entity_test entities is printed twice by default.
-+      $this->assertSame(2, substr_count($output, $entity->get('name')->value));
++      $this->assertSame(2, substr_count($output, $entity->label()));
 +    }
 +  }
 +
    /**
     * Tests the label formatter.
     */
+@@ -498,4 +598,33 @@ protected function buildRenderArray(array $referenced_entities, $formatter, $for
+     return $items->view(['type' => $formatter, 'settings' => $formatter_options]);
+   }
+ 
++  /**
++   * Creates a non cacheable view mode.
++   */
++  protected function createNonCacheableViewMode(): void {
++    EntityViewMode::create([
++      'id' => $this->entityType . '.' . $this->nonCacheableViewMode,
++      'label' => 'No cache view mode',
++      'targetEntityType' => $this->entityType,
++      'cache' => FALSE,
++    ])
++      ->save();
++
++    // Set the new view mode to use the 'entity_reference_entity_view'
++    // formatter displaying entities in non cacheable view mode as well.
++    EntityViewDisplay::create([
++      'targetEntityType' => $this->entityType,
++      'bundle' => $this->bundle,
++      'mode' => $this->nonCacheableViewMode,
++      'status' => TRUE,
++    ])
++      ->setComponent($this->fieldName, [
++        'type' => 'entity_reference_entity_view',
++        'settings' => [
++          'view_mode' => $this->nonCacheableViewMode,
++        ],
++      ])
++      ->save();
++  }
++
+ }
 diff --git a/core/modules/media/src/Plugin/Filter/MediaEmbed.php b/core/modules/media/src/Plugin/Filter/MediaEmbed.php
-index 118422bf2c28d594569aa58a806ef722e4e0c4e4..426d429e6256641ec9800366b025c89d19296402 100644
+index 5a5cd3f90cbcd90911a4ab605b1b8df36c973295..037d54052ca8dec86b795d1712e2ff356e9aecc5 100644
 --- a/core/modules/media/src/Plugin/Filter/MediaEmbed.php
 +++ b/core/modules/media/src/Plugin/Filter/MediaEmbed.php
-@@ -7,7 +7,6 @@
- use Drupal\Core\Entity\EntityRepositoryInterface;
+@@ -8,7 +8,6 @@
  use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
  use Drupal\Core\Entity\EntityTypeManagerInterface;
+ use Drupal\Core\Entity\EntityViewModeInterface;
 -use Drupal\Core\Field\Plugin\Field\FieldFormatter\EntityReferenceEntityFormatter;
  use Drupal\Core\Form\FormStateInterface;
  use Drupal\Core\Logger\LoggerChannelFactoryInterface;
  use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-@@ -85,18 +84,6 @@ class MediaEmbed extends FilterBase implements ContainerFactoryPluginInterface,
+@@ -88,18 +87,6 @@ class MediaEmbed extends FilterBase implements ContainerFactoryPluginInterface,
     */
    protected $loggerFactory;
  
@@ -521,7 +577,7 @@ index 118422bf2c28d594569aa58a806ef722e4e0c4e4..426d429e6256641ec9800366b025c89d
    /**
     * Constructs a MediaEmbed object.
     *
-@@ -213,25 +200,6 @@ public static function validateOptions(array &$element, FormStateInterface $form
+@@ -212,25 +199,6 @@ public static function validateOptions(array &$element, FormStateInterface $form
     *   A render array.
     */
    protected function renderMedia(MediaInterface $media, $view_mode, $langcode) {
@@ -548,10 +604,10 @@ index 118422bf2c28d594569aa58a806ef722e4e0c4e4..426d429e6256641ec9800366b025c89d
        ->getViewBuilder('media')
        ->view($media, $view_mode, $langcode);
 diff --git a/core/modules/media/tests/src/Kernel/MediaEmbedFilterTest.php b/core/modules/media/tests/src/Kernel/MediaEmbedFilterTest.php
-index e283aae92bb1bb8eb2bda4d2f7631d59903cf984..0af8d0b4ffe34ab127fa74b66f98e1d297e735fe 100644
+index c782a1070089783e2a80179c1f7dd4339ace241c..39395de288da3aee0318952f9ad5b9a70eb5ff7b 100644
 --- a/core/modules/media/tests/src/Kernel/MediaEmbedFilterTest.php
 +++ b/core/modules/media/tests/src/Kernel/MediaEmbedFilterTest.php
-@@ -381,16 +381,11 @@ public function testRecursionProtection(): void {
+@@ -390,16 +390,11 @@ public function testRecursionProtection(): void {
        'data-entity-uuid' => static::EMBEDDED_ENTITY_UUID,
      ]);
  
@@ -571,7 +627,7 @@ index e283aae92bb1bb8eb2bda4d2f7631d59903cf984..0af8d0b4ffe34ab127fa74b66f98e1d2
  
    /**
 diff --git a/core/tests/Drupal/Tests/EntityViewTrait.php b/core/tests/Drupal/Tests/EntityViewTrait.php
-index 95fb08ac964d38e7f0359b6427ed53ebbf8e24c3..1cc279453b794d5db35ec4d03d95777e7cae5f8d 100644
+index c869a91a582e414383729403c4cc500d669bbd5c..b1c44f21a787f57651f2440ec5e340f69cb4d1cf 100644
 --- a/core/tests/Drupal/Tests/EntityViewTrait.php
 +++ b/core/tests/Drupal/Tests/EntityViewTrait.php
 @@ -64,6 +64,15 @@ protected function buildEntityView(EntityInterface $entity, $view_mode = 'full',
