@@ -353,7 +353,7 @@
             "drupal/core": {
                 "Allow image style to be selected in text editor @see https://www.drupal.org/i/2061377": "resources/patch/php/drupal/core/2061377.mr10767-note521506.diff",
                 "Allow making the file description a required field @see https://www.drupal.org/i/2320877": "resources/patch/php/drupal/core/2320877.mr5876-note502317.diff",
-                "Delete should not be the default action on /admin/content @see https://www.drupal.org/i/2381293": "resources/patch/php/drupal/core/2381293-commitd57ca76e.diff.diff",
+                "Delete should not be the default action on /admin/content @see https://www.drupal.org/i/2381293": "resources/patch/php/drupal/core/2381293-commitd57ca76e.diff",
                 "Upcast named arguments/named parameters in views @see https://www.drupal.org/project/drupal/issues/2528166": "resources/patch/php/drupal/core/2528166.patch",
                 "Enlarge file_usage entity ID length. @see https://www.drupal.org/node/2675600": "resources/patch/php/drupal/core/2675600.diff",
                 "Allow plurals on bundle labels @see https://www.drupal.org/i/2765065": "resources/patch/php/drupal/core/2765065.mr13213-note586842.diff",
