@@ -1,0 +1,274 @@
+diff --git a/core/modules/rest/tests/src/Unit/CollectRoutesTest.php b/core/modules/rest/tests/src/Unit/CollectRoutesTest.php
+index 7b46865003847f4af5a9515f6970eff809ed0b1d..d1ebbcd24d8eab9e5f9c41e6a8003bda5a621312 100644
+--- a/core/modules/rest/tests/src/Unit/CollectRoutesTest.php
++++ b/core/modules/rest/tests/src/Unit/CollectRoutesTest.php
+@@ -85,6 +85,7 @@ protected function setUp(): void {
+       ->willReturn(['basic_auth' => 'data', 'cookie' => 'data']);
+ 
+     $container->setParameter('serializer.format_providers', ['json']);
++    $container->set('string_translation', $this->getStringTranslationStub());
+ 
+     \Drupal::setContainer($container);
+ 
+diff --git a/core/modules/views/src/Plugin/views/display/PathPluginBase.php b/core/modules/views/src/Plugin/views/display/PathPluginBase.php
+index e824637245b3ee365ec78fbd509abffa9ece9369..67758ef81b7ca3da5a09eb2fa9e48ef0552708fb 100644
+--- a/core/modules/views/src/Plugin/views/display/PathPluginBase.php
++++ b/core/modules/views/src/Plugin/views/display/PathPluginBase.php
+@@ -134,6 +134,8 @@ protected function getRoute($view_id, $display_id) {
+     $total_arguments = count($argument_ids);
+ 
+     $argument_map = [];
++    $parameters = [];
++    $argument_stack = $this->getHandlers('argument');
+ 
+     $bits = [];
+     if (is_string($path)) {
+@@ -155,6 +157,13 @@ protected function getRoute($view_id, $display_id) {
+           $arg_id = 'arg_' . $arg_counter++;
+           $argument_map[$arg_id] = $parameter_name;
+           $bits[$pos] = '{' . $parameter_name . '}';
++          /** @var \Drupal\views\Plugin\views\argument\ArgumentPluginBase $argument */
++          if (($argument = array_shift($argument_stack)) && $context_definition = $argument->getContextDefinition()) {
++            $type = $context_definition->getDataType();
++            if (strpos($type, 'entity:') === 0) {
++              $parameters[$parameter_name]['type'] = $type;
++            }
++          }
+         }
+       }
+     }
+@@ -182,6 +191,11 @@ protected function getRoute($view_id, $display_id) {
+ 
+     $route = new Route($route_path, $defaults);
+ 
++    // Set type for named parameters.
++    if ($parameters) {
++      $route->setOption('parameters', $parameters);
++    }
++
+     // Add access check parameters to the route.
+     $access_plugin = $this->getPlugin('access');
+     if (!isset($access_plugin)) {
+diff --git a/core/modules/views/tests/modules/param_upcast_test/param_upcast_test.info.yml b/core/modules/views/tests/modules/param_upcast_test/param_upcast_test.info.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..52ea40d2504d5a6ede0c376837fa001a4513f4e4
+--- /dev/null
++++ b/core/modules/views/tests/modules/param_upcast_test/param_upcast_test.info.yml
+@@ -0,0 +1,7 @@
++name: 'Param upcasting test'
++type: module
++description: 'Support module for named param upcasting testing.'
++package: Testing
++version: VERSION
++dependencies:
++  - drupal:views
+diff --git a/core/modules/views/tests/modules/param_upcast_test/param_upcast_test.module b/core/modules/views/tests/modules/param_upcast_test/param_upcast_test.module
+new file mode 100644
+index 0000000000000000000000000000000000000000..b24c48e5daddd88f8228631eb783a37dfac1a894
+--- /dev/null
++++ b/core/modules/views/tests/modules/param_upcast_test/param_upcast_test.module
+@@ -0,0 +1,23 @@
++<?php
++
++/**
++ * @file
++ * Contains param_upcast_test.module.
++ */
++
++declare(strict_types=1);
++
++use Drupal\user\UserInterface;
++use Drupal\views\ViewExecutable;
++
++/**
++ * Implements hook_views_post_execute().
++ */
++function param_upcast_test_views_post_execute(ViewExecutable $view): void {
++  if ($view->id() === 'param_upcast') {
++    $account = \Drupal::routeMatch()->getParameter('user');
++    if ($account instanceof UserInterface) {
++      \Drupal::state()->set('param_upcast_test.upcasted', TRUE);
++    }
++  }
++}
+diff --git a/core/modules/views/tests/modules/param_upcast_test/test_views/views.view.param_upcast.yml b/core/modules/views/tests/modules/param_upcast_test/test_views/views.view.param_upcast.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..f2287054254d1647abf078c88e0d5ca910e24d05
+--- /dev/null
++++ b/core/modules/views/tests/modules/param_upcast_test/test_views/views.view.param_upcast.yml
+@@ -0,0 +1,48 @@
++dependencies:
++  module:
++    - entity_test
++id: param_upcast
++label: Param upcast
++module: views
++base_table: entity_test
++base_field: id
++display:
++  default:
++    display_plugin: default
++    id: default
++    display_title: Master
++    position: 0
++    display_options:
++      fields:
++        name:
++          table: entity_test
++          field: name
++          id: name
++          entity_type: null
++          entity_field: name
++          plugin_id: field
++          type: string
++      arguments:
++        user_id:
++          id: user_id
++          table: entity_test
++          field: user_id
++          default_action: 'not found'
++          specify_validation: true
++          validate:
++            type: 'entity:user'
++            fail: 'not found'
++          validate_options:
++            operation: view
++            multiple: 0
++            access: false
++            restrict_roles: false
++            roles: {  }
++          entity_type: entity_test
++          entity_field: user_id
++          plugin_id: entity_target_id
++  page_1:
++    display_plugin: page
++    id: page_1
++    display_options:
++      path: user/%user/content
+diff --git a/core/modules/views/tests/src/Functional/Entity/NamedParamUpcastingTest.php b/core/modules/views/tests/src/Functional/Entity/NamedParamUpcastingTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..ff64df9f53b9242b86c18c9cf3f83112587a4085
+--- /dev/null
++++ b/core/modules/views/tests/src/Functional/Entity/NamedParamUpcastingTest.php
+@@ -0,0 +1,96 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\views\Functional\Entity;
++
++use Drupal\entity_test\Entity\EntityTest;
++use Drupal\Tests\views\Functional\ViewTestBase;
++use Drupal\views\Tests\ViewTestData;
++use PHPUnit\Framework\Attributes\Group;
++use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
++
++/**
++ * Tests named parameters upcasting.
++ */
++#[Group('views')]
++#[RunTestsInSeparateProcesses]
++class NamedParamUpcastingTest extends ViewTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = ['entity_test', 'param_upcast_test'];
++
++  /**
++   * {@inheritdoc}
++   */
++  protected $defaultTheme = 'stark';
++
++  /**
++   * {@inheritdoc}
++   */
++  public static $testViews = ['param_upcast'];
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp($import_test_views = TRUE, $modules = ['views_test_config']): void {
++    parent::setUp(FALSE);
++    ViewTestData::createTestViews(get_class($this), ['param_upcast_test']);
++  }
++
++  /**
++   * Tests named parameters upcasting.
++   */
++  public function testNamedParamUpcasting(): void {
++    $account1 = $this->createUser();
++    $account2 = $this->createUser();
++    EntityTest::create([
++      'name' => 'Entity 1',
++      'user_id' => $account1,
++      'type' => 'entity_test',
++    ])->save();
++    EntityTest::create([
++      'name' => 'Entity 2',
++      'user_id' => $account2,
++      'type' => 'entity_test',
++    ])->save();
++
++    $this->drupalLogin($this->createUser(['view test entity']));
++
++    // Check that named 'user' parameter has been upcasted to user entity.
++    $this->drupalGet("/user/{$account1->id()}/content");
++    $this->assertSession()->pageTextContains('Entity 1');
++    $this->assertSession()->pageTextNotContains('Entity 2');
++    $this->assertUpcasted();
++
++    $this->drupalGet("/user/{$account2->id()}/content");
++    $this->assertSession()->pageTextContains('Entity 2');
++    $this->assertSession()->pageTextNotContains('Entity 1');
++    $this->assertUpcasted();
++
++    // Test with a wrong ID.
++    $this->drupalGet('/user/99999/content');
++    $this->assertNotUpcasted();
++  }
++
++  /**
++   * Asserts that the user ID parameter has been upcasted.
++   */
++  protected function assertUpcasted(): void {
++    $state = \Drupal::state();
++    $this->assertTrue($state->get('param_upcast_test.upcasted'));
++    $state->delete('param_upcast_test.upcasted');
++  }
++
++  /**
++   * Asserts that the user ID parameter has not been upcasted.
++   */
++  protected function assertNotUpcasted(): void {
++    $state = \Drupal::state();
++    $this->assertNull($state->get('param_upcast_test.upcasted'));
++    $state->delete('param_upcast_test.upcasted');
++  }
++
++}
+diff --git a/core/modules/views/tests/src/Unit/Plugin/display/PathPluginBaseTest.php b/core/modules/views/tests/src/Unit/Plugin/display/PathPluginBaseTest.php
+index 1649c6a3dca2bb164a1a1a0641a61eecc3f3e5e8..a3330ffb52b3db4e6d7201fe7d0532b2a35ca4cc 100644
+--- a/core/modules/views/tests/src/Unit/Plugin/display/PathPluginBaseTest.php
++++ b/core/modules/views/tests/src/Unit/Plugin/display/PathPluginBaseTest.php
+@@ -57,8 +57,11 @@ protected function setUp(): void {
+     $this->state = $this->createMock('\Drupal\Core\State\StateInterface');
+     $this->pathPlugin = $this->getMockBuilder('Drupal\views\Plugin\views\display\PathPluginBase')
+       ->setConstructorArgs([[], 'path_base', [], $this->routeProvider, $this->state])
+-      ->onlyMethods([])
++      ->onlyMethods(['getHandlers'])
+       ->getMock();
++    $this->pathPlugin->expects($this->any())
++      ->method('getHandlers')
++      ->willReturn([]);
+     $this->setupContainer();
+   }
+ 
+@@ -71,6 +74,7 @@ public function setupContainer(): void {
+       ->getMock();
+     $container = new ContainerBuilder();
+     $container->set('plugin.manager.views.access', $this->accessPluginManager);
++    $container->set('string_translation', $this->getStringTranslationStub());
+ 
+     $config = [
+       'views.settings' => [
