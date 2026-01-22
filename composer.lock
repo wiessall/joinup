@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2526aed3912ae34983cc5da99d3c35de",
+    "content-hash": "11e4f48e0e8abc6833fb96e0c887bbe1",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -14850,10 +14850,10 @@
         },
         {
             "name": "npm-asset/jquery",
-            "version": "4.0.0",
+            "version": "3.7.1",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/jquery/-/jquery-4.0.0.tgz"
+                "url": "https://registry.npmjs.org/jquery/-/jquery-3.7.1.tgz"
             },
             "type": "npm-asset",
             "license": [
