@@ -129,10 +129,9 @@ class SubscribedDiscussionCommentSubscriber implements EventSubscriberInterface 
     // Notifications for anonymous comments are not sent on comment creation but
     // when the comment is approved/published.
     if ($this->comment->getOwner()->isAnonymous()) {
-      /** @var \Drupal\comment\CommentInterface $original_comment */
-      $original_comment = $this->comment->original;
+      $original_comment = $this->comment->getOriginal();
       // An anonymous comment has been just approved.
-      if (!$original_comment->isPublished() && $this->comment->isPublished()) {
+      if ($original_comment && !$original_comment->isPublished() && $this->comment->isPublished()) {
         $this->sendMessage();
       }
     }
