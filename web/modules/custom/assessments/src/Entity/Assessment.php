@@ -149,6 +149,9 @@ class Assessment extends ContentEntityBase implements AssessmentInterface {
       ->setTranslatable(TRUE)
       ->setDescription(t('The time that the assessment was last edited.'));
 
+    // Assessment entities are unpublished by default.
+    $fields['status']->setDefaultValue(FALSE);
+
     return $fields;
   }
 
