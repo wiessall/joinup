@@ -20,6 +20,8 @@
     <ini name="error_reporting" value="32767"/>
     <!-- Do not limit the amount of memory tests take to run. -->
     <ini name="memory_limit" value="-1"/>
+    <!-- Prevent custom error handler being registered @see resources/runner/drupal.yml -->
+    <env name="DO_NOT_REGISTER_ERROR_HANDLER" value="1"/>
 
     <!--
       Configure PHPUnit by setting the following environment variables:

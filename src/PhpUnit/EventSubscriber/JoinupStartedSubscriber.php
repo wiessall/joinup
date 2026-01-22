@@ -23,9 +23,6 @@ class JoinupStartedSubscriber implements StartedSubscriber {
   public function notify(Started $event): void {
     static::runCommand("drupal:settings phpunit --root={$this->getPath('web')} --sites-subdir=default");
     TestModeManager::set(TestMode::PhpUnit);
-
-    // @see web/sites/default/settings.php
-    define('DO_NOT_REGISTER_ERROR_HANDLER', TRUE);
   }
 
 }
