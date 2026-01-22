@@ -1,0 +1,47 @@
+diff --git a/src/EventSubscriber/ConfigSubscriber.php b/src/EventSubscriber/ConfigSubscriber.php
+index 82547c97cbb33af765a27f54bd83222b7e6604be..bda5a5cf1070d63b7173bc8fec9d28c78e7d9808 100644
+--- a/src/EventSubscriber/ConfigSubscriber.php
++++ b/src/EventSubscriber/ConfigSubscriber.php
+@@ -17,6 +17,7 @@ use Drupal\Core\Config\StorageCacheInterface;
+ use Drupal\Core\Database\Connection;
+ use Drupal\Core\Database\DatabaseExceptionWrapper;
+ use Drupal\Core\DestructableInterface;
++use Drupal\Core\Installer\InstallerKernel;
+ use Drupal\language\Config\LanguageConfigOverrideCrudEvent;
+ use Drupal\language\Config\LanguageConfigOverrideEvents;
+ use Drupal\language\ConfigurableLanguageManagerInterface;
+@@ -106,15 +107,31 @@ class ConfigSubscriber implements EventSubscriberInterface, DestructableInterfac
+    *   The event.
+    */
+   public function removeTranslationsForChangedSource(ConfigCrudEvent $event): void {
+-    if ($event->getConfig()->isNew()) {
++    // Don't do anything during installation.
++    if (!InstallerKernel::installationAttempted()) {
+       return;
+     }
+ 
+-    $configName = $event->getConfig()->getName();
++    // Configs with no translatable properties must not have "langcode" prop.
++    // See https://www.drupal.org/node/3427629
++    $currentData = $event->getConfig()->get();
++    if (!array_key_exists('langcode', $currentData)) {
++      return;
++    }
+ 
++    // It's too late check the is new flag at this phase, but configs which were
++    // saved just now have en empty array as original value. This approach also
++    // works if the config only contains optional keys because in that case we
++    // didn't have any translation in the database.
+     $originalData = $event->getConfig()->getOriginal();
+-    $currentData = $event->getConfig()->get();
++    if (!array_diff_key($originalData, ['langcode' => 1, '_core' => 1])) {
++      return;
++    }
++    if ($originalData === $currentData) {
++      return;
++    }
+ 
++    $configName = $event->getConfig()->getName();
+     foreach ($this->configTranslatables->get($configName) as $path => $context) {
+       $pathArray = explode('.', $path);
+       $originalValue = NestedArray::getValue($originalData, $pathArray);
