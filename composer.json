@@ -378,8 +378,7 @@
                 "ImageItem generate sample value should take into account if the files exist @see https://www.drupal.org/i/3516691": "resources/patch/php/drupal/core/3516691-10.5.x.diff",
                 "File widget with multiple values may duplicate empty items": "resources/patch/php/drupal/core/3276280.diff",
                 "Odd behaviour with tabs on validation failure": "resources/patch/php/drupal/core/3508418.diff",
-                "Violation property path not properly tracked @see https://www.drupal.org/project/drupal/issues/3229493": "resources/patch/php/drupal/core/3229493.patch",
-                "Installing from existing config causes massive cache.config population and slow installs @see https://www.drupal.org/i/3559030": "resources/patch/php/drupal/core/3559030.diff"
+                "Violation property path not properly tracked @see https://www.drupal.org/project/drupal/issues/3229493": "resources/patch/php/drupal/core/3229493.patch"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
