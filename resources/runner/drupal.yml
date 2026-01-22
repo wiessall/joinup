@@ -315,6 +315,9 @@ drupal:
       European Commission eTranslation: |
         $config['tmgmt.translator.ec_etranslation']['settings']['username'] = getenv('TMGMT_ETRANSLATION_USERNAME') ?: '';
         $config['tmgmt.translator.ec_etranslation']['settings']['password'] = getenv('TMGMT_ETRANSLATION_PASSWORD') ?: '';
+        if (!empty(getenv('TMGMT_ETRANSLATION_CALLBACK_HOSTNAME'))) {
+          $config['tmgmt.translator.ec_etranslation']['settings']['callback_hostname'] = getenv('TMGMT_ETRANSLATION_CALLBACK_HOSTNAME') ?: '';
+        }
       OpenEuropa Webtools Analytics: |
         $config['oe_webtools_analytics.settings']['siteID'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_ID');
         $config['oe_webtools_analytics.settings']['sitePath'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_PATH');
