@@ -164,7 +164,7 @@
         "ext-libxml": "*",
         "dantleech/gherkin-lint": "^0.2.3",
         "drupal/admin_toolbar": "^3.4",
-        "drupal/cas_mock_server": "2.0.2",
+        "drupal/cas_mock_server": "^2.0",
         "drupal/coder": "^8.3",
         "drupal/composer_deploy": "^1.6",
         "drupal/config_inspector": "^2.1",
