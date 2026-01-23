@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - assessments.type.participation
+    - field.field.assessment.participation.eu_countries
     - field.field.assessment.participation.participant_type
     - field.field.assessment.participation.stakeholder_country
   module:
@@ -14,9 +15,16 @@ targetEntityType: assessment
 bundle: participation
 mode: default
 content:
+  eu_countries:
+    type: boolean_checkbox
+    weight: 1
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
   participant_type:
     type: tagify_select_widget
-    weight: 1
+    weight: 0
     region: content
     settings:
       match_operator: CONTAINS
@@ -30,7 +38,7 @@ content:
         rewrite_description: 0
   stakeholder_country:
     type: tagify_select_widget
-    weight: 4
+    weight: 2
     region: content
     settings:
       match_operator: CONTAINS
