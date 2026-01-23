@@ -16,6 +16,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\assessments\AssessmentInterface;
+use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\AssessmentSubEntity;
 use Drupal\assessments\Entity\BindingRequirementParagraph;
@@ -458,6 +459,13 @@ function assessments_inline_entity_form_entity_form_alter(array &$entity_form, F
     // In this context the landing page is mandatory.
     $entity_form['landing_page']['widget']['uri']['#required'] = TRUE;
   }
+  if ($solution->bundle() === 'participation') {
+    $entity_form['stakeholder_country']['#states'] = [
+      'visible' => [
+        ':input[name="has_participation[0][inline_entity_form][eu_countries][value]"]' => ['checked' => FALSE],
+      ],
+    ];
+  }
 }
 
 /**
@@ -533,6 +541,19 @@ function assessments_assessment_presave(AssessmentInterface $entity): void {
       // Truncate to 255 characters if necessary.
       $name = mb_strlen($initiative_name) > 255 ? mb_substr($initiative_name, 0, 255) : $initiative_name;
       $entity->set('name', $name);
+    }
+  }
+  elseif ($entity->bundle() === 'participation') {
+    $eu_country = $entity->get('eu_countries')->value;
+    $vocabHelper = \Drupal::service(AssessmentVocabularyHelper::class);
+    if ($eu_country) {
+      $term_id = $vocabHelper->getTermIdFromIdentifier('spatial', 'EU');
+      if (!$term_id) {
+        throw new \UnexpectedValueException(
+          'Required EU term not found in the "spatial" vocabulary.'
+        );
+      }
+      $entity->set('stakeholder_country', ['target_id' => $term_id]);
     }
   }
 }
