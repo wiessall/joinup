@@ -8,6 +8,7 @@ use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
 use Joinup\TaskRunner\Traits\TaskRunnerTrait;
 use Joinup\TestMode;
 use Joinup\TestModeManager;
+use PHPUnit\TextUI\Configuration\Builder;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -34,6 +35,9 @@ class BehatEnvironmentListener implements EventSubscriberInterface {
     if ($this->isDryRun()) {
       return;
     }
+    // Initialize PHPUnit Configuration for assertion support in Behat.
+    // PHPUnit 11+ requires Registry::init() before using Assert methods.
+    (new Builder())->build([]);
     // Setup behat specific settings + set test mode.
     static::runCommand('drupal:settings behat --root=' . static::getPath('web') . ' --sites-subdir=default');
     TestModeManager::set(TestMode::Behat);
