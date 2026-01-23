@@ -53,8 +53,6 @@ settings:
         - '<img src alt data-entity-type data-entity-uuid>'
         - '<a hreflang>'
         - '<blockquote cite>'
-        - '<ul type>'
-        - '<ol type>'
     linkit_extension:
       linkit_enabled: false
 image_upload:
