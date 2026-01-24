@@ -326,6 +326,15 @@ class AssessmentReportResource extends ResourceBase {
   }
 
   /**
+   * The European organisation types that don't have a country.
+   */
+  protected const EUROPEAN_ORGANISATION_TYPES = [
+    'european_union_institution',
+    'european_union_body',
+    'european_union_agency',
+  ];
+
+  /**
    * Links and, if needed creates, a public organisation.
    *
    * @param array|string $provider
@@ -335,12 +344,15 @@ class AssessmentReportResource extends ResourceBase {
    *   The public organisation.
    */
   protected function getPublicOrganisation(array|string $provider): PublicOrganisation|string|int|null {
+    // Try to find an existing organisation matching the given criteria.
+    $existingOrganisation = $this->findExistingPublicOrganisation($provider);
+    if ($existingOrganisation) {
+      return $existingOrganisation;
+    }
+
     if (is_string($provider)) {
-      $organisation = $this->entityRepository->loadEntityByUuid('assessment', $provider);
-      if (!$organisation) {
-        $this->addError('/provider', "A public organisation with ID '$provider' does not exist");
-      }
-      return $organisation;
+      // UUID lookup failed in findExistingPublicOrganisation.
+      return NULL;
     }
 
     return $this->getAssessmentStorage()->create([
@@ -351,6 +363,68 @@ class AssessmentReportResource extends ResourceBase {
       'country' => isset($provider['country']) ? $this->getTermIdFromIdentifier('spatial', $provider['country'], "/provider/country", 'code') : NULL,
       'status' => TRUE,
     ]);
+  }
+
+  /**
+   * Finds an existing public organisation matching the given provider data.
+   *
+   * @param array|string $provider
+   *   Either the public organisation data, or an existing entity UUID.
+   *
+   * @return \Drupal\assessments\Entity\PublicOrganisation|null
+   *   The matching public organisation, or NULL if not found.
+   */
+  protected function findExistingPublicOrganisation(array|string $provider): ?PublicOrganisation {
+    // If provider is a UUID, try to load by UUID.
+    if (is_string($provider)) {
+      $organisation = $this->entityRepository->loadEntityByUuid('assessment', $provider);
+      if (!$organisation) {
+        $this->addError('/provider', "A public organisation with ID '$provider' does not exist");
+        return NULL;
+      }
+      return $organisation instanceof PublicOrganisation ? $organisation : NULL;
+    }
+
+    $organisationTypeIds = $this->getTermIdFromIdentifier('assess_provider_type', $provider['organisation_type'], "/provider/organisation_type");
+    if (empty($organisationTypeIds)) {
+      return NULL;
+    }
+
+    $isEuropean = in_array($provider['organisation_type'], self::EUROPEAN_ORGANISATION_TYPES, TRUE);
+
+    // Build the query to find organisations of the given type.
+    $query = $this->getAssessmentStorage()->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', 'public_organisation')
+      ->condition('organisation_type', $organisationTypeIds, 'IN');
+
+    // For non-European types, also filter by country.
+    if (!$isEuropean && isset($provider['country'])) {
+      $countryIds = $this->getTermIdFromIdentifier('spatial', $provider['country'], "/provider/country", 'code');
+      if (!empty($countryIds)) {
+        $query->condition('country', $countryIds, 'IN');
+      }
+    }
+
+    $ids = $query->execute();
+    if (empty($ids)) {
+      return NULL;
+    }
+
+    // Load all matching organisations and compare names case-insensitively.
+    $organisations = $this->getAssessmentStorage()->loadMultiple($ids);
+    $searchName = mb_strtolower(trim($provider['name']));
+
+    foreach ($organisations as $organisation) {
+      if (!$organisation instanceof PublicOrganisation) {
+        continue;
+      }
+      if (mb_strtolower(trim($organisation->label())) === $searchName) {
+        return $organisation;
+      }
+    }
+
+    return NULL;
   }
 
   /**
