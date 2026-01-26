@@ -302,6 +302,31 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
   }
 
   /**
+   * Tests that 401 errors return JSON response.
+   */
+  public function testUnauthorizedReturnsJson(): void {
+    $url = Url::fromUri('internal:/api/assessments/v1/assessment')
+      ->setAbsolute()
+      ->toString();
+
+    $response = \Drupal::httpClient()->post($url, [
+      RequestOptions::HTTP_ERRORS => FALSE,
+      RequestOptions::HEADERS => [
+        'Accept' => 'application/json',
+        'Content-Type' => 'application/json',
+        'Authorization' => 'Bearer invalid_token',
+      ],
+      RequestOptions::JSON => ['name' => 'Test'],
+    ]);
+
+    $this->assertSame(401, $response->getStatusCode());
+    $this->assertStringContainsString('application/json', $response->getHeaderLine('Content-Type'));
+    $data = Json::decode($response->getBody()->getContents());
+    $this->assertIsArray($data);
+    $this->assertArrayHasKey('error', $data);
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function tearDown(): void {
