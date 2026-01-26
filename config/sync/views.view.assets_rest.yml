@@ -407,6 +407,7 @@ display:
         options:
           formats:
             json: json
+          pager: true
       row:
         type: data_field
         options:
