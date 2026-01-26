@@ -359,15 +359,15 @@
                 "Allow plurals on bundle labels @see https://www.drupal.org/i/2765065": "resources/patch/php/drupal/core/2765065.commit6031e764.diff",
                 "Use comment access handler instead of hardcoding permissions @see https://www.drupal.org/i/2879087": "resources/patch/php/drupal/core/2879087-commit1f11b08b.diff",
                 "Add thread depth configuration to comments @see https://www.drupal.org/i/2786587": "resources/patch/php/drupal/core/2786587.mr11292-note588511.diff",
-                "Set fixed depth for comment threads.": "resources/patch/php/drupal/core/2786587-thread-depth-fixed-limit.patch",
+                "Set fixed depth for comment threads @see https://www.drupal.org/i/2786587.": "resources/patch/php/drupal/core/2786587-thread-depth-fixed-limit.patch",
                 "Views with a different query plugin created via the UI do not have the correct query plugin ID in the view config @see https://www.drupal.org/i/2836237": "resources/patch/php/drupal/core/2836237-commit7e8d2533.diff",
                 "Cache tags are not invalidated on revision delete @see https://www.drupal.org/i/2945928": "resources/patch/php/drupal/core/2945928-commit78bff01c.diff",
                 "Have responsive image module ignore svg @see https://www.drupal.org/i/2957924": "resources/patch/php/drupal/core/2957924-commit6894dae2.diff",
                 "Restrict images to this site\" restricts images that, by definition, *are* on this site @see https://www.drupal.org/i/2998318": "resources/patch/php/drupal/core/2998318.patch",
                 "Layout builder doesn't support bundle computed field @see https://drupal.org/i/3034979": "resources/patch/php/drupal/core/layoutbuilder-bundlecomputedfieldsfix-3034979-21-11.x.patch",
                 "Views Block Display skips preBlockBuild() call on ajax rebuild https://www.drupal.org/i/2605218": "resources/patch/php/drupal/core/2605218-commitfd6208c3.diff",
-                "PHP deprecation error in PhpMail::mail @see https://www.drupal.org/project/drupal/issues/3418098": "resources/patch/php/drupal/core/3418098.diff",
-                "Set the toolbar to position fixed on mobile (for group banner positioning and toolbar on mobile) @see https://www.drupal.org/project/drupal/issues/2516938": "resources/patch/php/drupal/core/3809.diff",
+                "PHP deprecation error in PhpMail::mail @see https://www.drupal.org/i/3418098": "resources/patch/php/drupal/core/3418098.diff",
+                "Set the toolbar to position fixed on mobile (for group banner positioning and toolbar on mobile) @see https://www.drupal.org/i/2516938": "resources/patch/php/drupal/core/3809.diff",
                 "Media Library: Argument #1 ($array) must be of type array, null given in array_filter(). @see https://www.drupal.org/i/3340973": "resources/patch/php/drupal/core/3340973.diff",
                 "Allow contrib extensions to be installed by Drupal when core branch is 11.x @see https://www.drupal.org/i/3387322": "resources/patch/php/drupal/core/3387322.mr8615-note353552.diff",
                 "MediaLibraryUiBuilder service does not properly allow additional contextual filter arguments @see https://www.drupal.org/i/3401726": "resources/patch/php/drupal/core/3401726.diff",
@@ -375,9 +375,9 @@
                 "Can only intentionally re-render an entity with references 20 times @see https://www.drupal.org/i/2940605": "resources/patch/php/drupal/core/2940605-commit4d11c55dcb.diff",
                 "Time-based custom caching is broken since configuration expects an integer @see https://www.drupal.org/i/3233105": "resources/patch/php/drupal/core/3233105.diff",
                 "ImageItem generate sample value should take into account if the files exist @see https://www.drupal.org/i/3516691": "resources/patch/php/drupal/core/3516691-commite2bfef56.diff",
-                "File widget with multiple values may duplicate empty items": "resources/patch/php/drupal/core/3276280.diff",
-                "Odd behaviour with tabs on validation failure": "resources/patch/php/drupal/core/3508418.diff",
-                "Violation property path not properly tracked @see https://www.drupal.org/project/drupal/issues/3229493": "resources/patch/php/drupal/core/3229493.patch"
+                "File widget with multiple values may duplicate empty items @see https://www.drupal.org/i/3276280": "resources/patch/php/drupal/core/3276280.diff",
+                "Odd behaviour with tabs on validation failure @see https://www.drupal.org/i/3508418": "resources/patch/php/drupal/core/3508418.diff",
+                "Violation property path not properly tracked @see https://www.drupal.org/i/3229493": "resources/patch/php/drupal/core/3229493.patch"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
