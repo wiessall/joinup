@@ -131,7 +131,7 @@ class SubscribedDiscussionCommentSubscriber implements EventSubscriberInterface 
     if ($this->comment->getOwner()->isAnonymous()) {
       $original_comment = $this->comment->getOriginal();
       // An anonymous comment has been just approved.
-      if ($original_comment && !$original_comment->isPublished() && $this->comment->isPublished()) {
+      if (!$original_comment->isPublished() && $this->comment->isPublished()) {
         $this->sendMessage();
       }
     }

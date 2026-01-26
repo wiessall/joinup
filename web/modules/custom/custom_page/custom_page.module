@@ -126,9 +126,6 @@ function custom_page_node_update(NodeInterface $entity): void {
   }
 
   $original = $entity->getOriginal();
-  if (!$original) {
-    return;
-  }
 
   // Update all links that point to this custom page if the title has changed,
   // or if the entity becomes (un)published.

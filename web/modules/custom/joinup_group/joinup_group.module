@@ -859,7 +859,7 @@ function joinup_group_user_predelete(EntityInterface $entity): void {
 function joinup_group_user_update(UserInterface $user): void {
   // Only invalidate the tags if the user is being (un)blocked.
   $original = $user->getOriginal();
-  if (empty($original) || $user->isBlocked() == $original->isBlocked()) {
+  if ($user->isBlocked() == $original->isBlocked()) {
     return;
   }
 
@@ -887,9 +887,6 @@ function joinup_group_entity_update(EntityInterface $group): void {
   }
 
   $group_original_entity = $group->getOriginal();
-  if (!$group_original_entity) {
-    return;
-  }
   if ($group_original_entity->getShortId() !== $group->getShortId()) {
     \Drupal::getContainer()->get('joinup_group.url_alias_updater')->queueGroupContent($group);
     $bundle_info = \Drupal::getContainer()->get('entity_type.bundle.info')->getBundleInfo($group->getEntityTypeId())[$group->bundle()];
