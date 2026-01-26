@@ -1,0 +1,136 @@
+diff --git a/core/modules/rest/config/schema/rest.views.schema.yml b/core/modules/rest/config/schema/rest.views.schema.yml
+index 040187acfdb3..2151d453ae7c 100644
+--- a/core/modules/rest/config/schema/rest.views.schema.yml
++++ b/core/modules/rest/config/schema/rest.views.schema.yml
+@@ -39,3 +39,6 @@ views.style.serializer:
+       sequence:
+         type: string
+         label: 'Format'
++    pager:
++      type: boolean
++      label: 'Add pager information'
+diff --git a/core/modules/rest/rest.install b/core/modules/rest/rest.install
+index 6a80d19f0f96..25dfb65ac62b 100644
+--- a/core/modules/rest/rest.install
++++ b/core/modules/rest/rest.install
+@@ -8,6 +8,33 @@
+ /**
+  * Implements hook_update_last_removed().
+  */
+-function rest_update_last_removed() {
++function rest_update_last_removed(): int {
+   return 8401;
+ }
++
++/**
++ * Update views with "serializer" display adding pager setting if not set yet.
++ */
++function rest_update_11001(): void {
++
++  $config_factory = \Drupal::configFactory();
++  $view_ids = $config_factory->listAll('views.view.');
++
++  foreach ($view_ids as $view_id) {
++    $views_config = $config_factory->get($view_id);
++    $displays = $views_config->get('display');
++
++    foreach ($displays as $display) {
++      $display_id = $display['id'];
++      $display_style_type = $views_config->get('display.' . $display_id . ".display_options.style.type");
++      $pager_conf = $views_config->get('display.' . $display_id . '.display_options.style.options.pager');
++
++      // Only add pager configuration if it is not already set.
++      if ($display_style_type === 'serializer' && is_null($pager_conf)) {
++        $editable_view_config = $config_factory->getEditable($view_id);
++        $editable_view_config->set('display.' . $display_id . '.display_options.style.options.pager', FALSE);
++        $editable_view_config->save();
++      }
++    }
++  }
++}
+diff --git a/core/modules/rest/src/Plugin/views/style/Serializer.php b/core/modules/rest/src/Plugin/views/style/Serializer.php
+index abdd42c02..57ca40480b 100644
+--- a/core/modules/rest/src/Plugin/views/style/Serializer.php
++++ b/core/modules/rest/src/Plugin/views/style/Serializer.php
+@@ -6,6 +6,7 @@ use Drupal\Core\Cache\Cache;
+ use Drupal\Core\Cache\CacheableDependencyInterface;
+ use Drupal\Core\Form\FormStateInterface;
+ use Drupal\Core\StringTranslation\TranslatableMarkup;
++use Drupal\rest\Plugin\views\display\RestExport;
+ use Drupal\views\Attribute\ViewsStyle;
+ use Drupal\views\Plugin\views\style\StylePluginBase;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+@@ -87,6 +88,7 @@ class Serializer extends StylePluginBase implements CacheableDependencyInterface
+   protected function defineOptions() {
+     $options = parent::defineOptions();
+     $options['formats'] = ['default' => []];
++    $options['pager'] = ['default' => FALSE];
+
+     return $options;
+   }
+@@ -104,6 +106,12 @@ class Serializer extends StylePluginBase implements CacheableDependencyInterface
+       '#options' => $this->getFormatOptions(),
+       '#default_value' => $this->options['formats'],
+     ];
++    $form['pager'] = [
++      '#type' => 'checkbox',
++      '#title' => $this->t('Add pager information'),
++      '#description' => $this->t('Pager information will be added to rest export. <b>Output structure will be changed.</b>'),
++      '#default_value' => $this->options['pager'],
++    ];
+   }
+
+   /**
+@@ -140,7 +148,51 @@ class Serializer extends StylePluginBase implements CacheableDependencyInterface
+     else {
+       $content_type = !empty($this->options['formats']) ? reset($this->options['formats']) : 'json';
+     }
+-    return $this->serializer->serialize($rows, $content_type, ['views_style_plugin' => $this]);
++
++    $result = $rows;
++    if ($this->options['pager'] && $this->view->pager && $this->displayHandler instanceof RestExport) {
++      $result = $this->wrapRowsInPager($rows);
++    }
++
++    return $this->serializer->serialize($result, $content_type, ['views_style_plugin' => $this]);
++  }
++
++  /**
++   * Wraps an array of rows in another array with page info.
++   *
++   * @param array $rows
++   *   Array with the rows to wrap.
++   *
++   * @return array
++   *   An array with the following keys:
++   *   - rows: the original rows array.
++   *   - pager: the pager info, including the following keys:
++   *     - current_page: the current page number.
++   *     - total_items: the total items of the view.
++   *     - total_pages: the total number of pages of the view.
++   *     - total_items_per_page: the number of items displayed on each page.
++   */
++  protected function wrapRowsInPager(array $rows): array {
++    $pager = $this->view->pager;
++    $class = get_class($pager);
++    $current_page = $pager->getCurrentPage();
++    $items_per_page = $pager->getItemsPerPage();
++    $total_items = $pager->getTotalItems();
++
++    $total_pages = 0;
++    if (!in_array($class, ['Drupal\views\Plugin\views\pager\None', 'Drupal\views\Plugin\views\pager\Some'], TRUE)) {
++      $total_pages = $pager->getPagerTotal();
++    }
++
++    return [
++      'rows' => $rows,
++      'pager' => [
++        'current_page' => (int) $current_page,
++        'total_items' => (int) $total_items,
++        'total_pages' => (int) $total_pages,
++        'items_per_page' => (int) $items_per_page,
++      ],
++    ];
+   }
+
+   /**
