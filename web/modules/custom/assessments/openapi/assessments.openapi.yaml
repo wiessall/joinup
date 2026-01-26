@@ -741,10 +741,17 @@ components:
               - regional_public_sector_body
           description: The participation type.
         country:
-          type: array
-          items:
-            $ref: '#/components/schemas/EuropeanUnionCountry'
-          description: Stakeholder's countries. Each as 2-letter country code.
+          oneOf:
+            - type: array
+              items:
+                type: string
+                enum: [EU]
+              minItems: 1
+              maxItems: 1
+            - type: array
+              items:
+                $ref: '#/components/schemas/EuropeanUnionCountry'
+          description: Stakeholder's countries. Each as ISO-3166 2-letter country code or "EU" for EU-wide entities.
 
     Asset:
       type: object
