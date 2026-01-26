@@ -453,7 +453,7 @@
                 "Use Drupal core time service with fallback @see https://drupal.org/i/2999614": "resources/patch/php/drupal/memcache/2999614-mr41-20f8103bd2.diff"
             },
             "drupal/message": {
-                "Renderer service can only accept array @see https://www.drupal.org/i/3531949": "resources/patch/php/drupal/message/3531949-commit24333e61.diff"
+                "Renderer service can only accept array @see https://www.drupal.org/i/3531949": "resources/patch/php/drupal/message/3531949.mr56-commit24333e61.diff"
             },
             "drupal/message_digest": {
                 "Renderer::renderPlain() is deprecated @see https://www.drupal.org/i/3511648": "resources/patch/php/drupal/message_digest/3511648.diff"
@@ -510,7 +510,7 @@
                 "Race Condition in Translation Callback": "resources/patch/php/drupal/tmgmt_ec_etranslation/3526972.diff"
             },
             "drupal/ui_patterns": {
-                "8.x Incompatibility with Drupal 11.3 see https://www.drupal.org/i/3563941": "resources/patch/php/drupal/ui_patterns/3563941-commit9ea4e992.diff"
+                "8.x Incompatibility with Drupal 11.3 see https://www.drupal.org/i/3563941": "resources/patch/php/drupal/ui_patterns/3563941.mr472-commit9ea4e992.diff"
             },
             "drupal/video_embed_field": {
                 "Add title attribute to YouTube, Vimeo, and Playlist embeds @see https://www.drupal.org/project/video_embed_field/issues/3200253": "resources/patch/php/drupal/video_embed_field/3200253-26.patch",
