@@ -35,6 +35,7 @@ Feature: Assessment Report Entity Management
     # Binding requirements
     When I click "New binding requirement"
     And a modal should open
+    And I should see the button "Clear" in the "Modal buttons" region
     And I press "Save" in the "Modal buttons" region
     And I should see the text "3 errors have been found: NameName of the initiativeDescription" in the "Modal content" region
 
