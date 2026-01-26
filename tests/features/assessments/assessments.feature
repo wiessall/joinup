@@ -74,16 +74,17 @@ Feature: Assessment Report Entity Management
     And I type "Test" in the "asset[form][0][entity_id]" autocomplete field
     And I pick "Test solution" from the autocomplete suggestions
     And I press "Add Interoperability solution" in the "Modal content" region
-    And the "IEF table" table should be:
-      | Title         | Relevant website       | Description      | Operations |
-      | Test solution | http://www.example.com | default abstract |            |
     And I should see the text "Identify the interoperability solutions mandatory to use for the implementation of the assessed binding requirement" in the "Modal content" region
     And I should see the button "Select an Interoperability solution" in the "Modal content" region
     And I press "Add a new Interoperability solution" in the "Modal content" region
     And I fill in "Title of Solution" with "European Interoperability Framework (EIF)" in the "Modal content" region
-    And I enter "Description of European Interoperability Framework (EIF)" in the "asset[form][1][description][0][value]" wysiwyg editor
-    And I fill in "Relevant website" with "https://interoperable-europe.ec.europa.eu/collection/eif" in the "Modal content" region
+    And I enter "Description of EIF" in the "asset[form][1][description][0][value]" wysiwyg editor
+    And I fill in "Relevant website" with "http://no-abstract.com" in the "Modal content" region
     Then I press "Add Interoperability solution" in the "Modal content" region
+    Then the "IEF table" table should contain the following columns:
+      | Title                                     | Relevant website       | Description        |
+      | Test solution                             | http://www.example.com | default abstract   |
+      | European Interoperability Framework (EIF) | http://no-abstract.com | Description of EIF |
 
     When I click "Trans-European digital public services" in the "Modal content" region
     And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
