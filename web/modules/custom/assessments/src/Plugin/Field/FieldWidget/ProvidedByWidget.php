@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Plugin\Field\FieldWidget;
 
+use Drupal\Core\Entity\ContentEntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\Core\Field\Attribute\FieldWidget;
@@ -13,6 +14,7 @@ use Drupal\Core\Field\WidgetBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\assessments\ProvidedByHelperTrait;
 use Drupal\views\Views;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -44,6 +46,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ProvidedByWidget extends WidgetBase {
 
   use MessengerTrait;
+  use ProvidedByHelperTrait;
 
   /**
    * Operation identifier for organisation type select.
@@ -877,11 +880,7 @@ class ProvidedByWidget extends WidgetBase {
 
       if ($term && $term->hasField('id')) {
         $machineName = $term->get('id')->value;
-        return !empty($machineName) && in_array($machineName, [
-          'european_union_institution',
-          'european_union_agency',
-          'european_union_body',
-        ], TRUE);
+        return !empty($machineName) && $this->isEuropeanOrganisationType($machineName);
       }
     }
     catch (\Exception) {
@@ -1075,6 +1074,15 @@ class ProvidedByWidget extends WidgetBase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  protected function getProvidedByAssessmentStorage(): ContentEntityStorageInterface {
+    $storage = $this->entityTypeManager->getStorage('assessment');
+    assert($storage instanceof ContentEntityStorageInterface);
+    return $storage;
+  }
+
+  /**
    * Validates pending organisation data.
    *
    * @param array $element
@@ -1260,14 +1268,13 @@ class ProvidedByWidget extends WidgetBase {
     // Perform case-insensitive name comparison on matching organisations.
     if (!empty($candidateIds)) {
       $candidates = $storage->loadMultiple($candidateIds);
-      foreach ($candidates as $candidate) {
-        if (strcasecmp($candidate->label(), $name) === 0) {
-          return [
-            'id' => (int) $candidate->id(),
-            'found' => TRUE,
-            'name' => $candidate->label(),
-          ];
-        }
+      $existingOrganisation = static::matchOrganisationByName($name, $candidates);
+      if ($existingOrganisation) {
+        return [
+          'id' => (int) $existingOrganisation->id(),
+          'found' => TRUE,
+          'name' => $existingOrganisation->label(),
+        ];
       }
     }
 

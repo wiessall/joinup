@@ -24,6 +24,7 @@ use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\AssessmentStatement;
 use Drupal\assessments\Entity\PublicOrganisation;
+use Drupal\assessments\ProvidedByHelperTrait;
 use Drupal\file\FileInterface;
 use Drupal\file\Plugin\Field\FieldType\FileFieldItemList;
 use Drupal\file\Upload\FileUploadHandler;
@@ -63,6 +64,7 @@ class AssessmentReportResource extends ResourceBase {
 
   use FileUploadLocationTrait;
   use FileValidatorSettingsTrait;
+  use ProvidedByHelperTrait;
 
   /**
    * Assessment storage static cache.
@@ -326,15 +328,6 @@ class AssessmentReportResource extends ResourceBase {
   }
 
   /**
-   * The European organisation types that don't have a country.
-   */
-  protected const EUROPEAN_ORGANISATION_TYPES = [
-    'european_union_institution',
-    'european_union_body',
-    'european_union_agency',
-  ];
-
-  /**
    * Links and, if needed creates, a public organisation.
    *
    * @param array|string $provider
@@ -390,7 +383,7 @@ class AssessmentReportResource extends ResourceBase {
       return NULL;
     }
 
-    $isEuropean = in_array($provider['organisation_type'], self::EUROPEAN_ORGANISATION_TYPES, TRUE);
+    $isEuropean = $this->isEuropeanOrganisationType($provider['organisation_type']);
 
     // Build the query to find organisations of the given type.
     $query = $this->getAssessmentStorage()->getQuery()
@@ -407,24 +400,8 @@ class AssessmentReportResource extends ResourceBase {
     }
 
     $ids = $query->execute();
-    if (empty($ids)) {
-      return NULL;
-    }
 
-    // Load all matching organisations and compare names case-insensitively.
-    $organisations = $this->getAssessmentStorage()->loadMultiple($ids);
-    $searchName = mb_strtolower(trim($provider['name']));
-
-    foreach ($organisations as $organisation) {
-      if (!$organisation instanceof PublicOrganisation) {
-        continue;
-      }
-      if (mb_strtolower(trim($organisation->label())) === $searchName) {
-        return $organisation;
-      }
-    }
-
-    return NULL;
+    return $this->findOrganisationByName($provider['name'], $ids);
   }
 
   /**
@@ -830,6 +807,13 @@ class AssessmentReportResource extends ResourceBase {
       $this->assessmentStorage = $storage;
     }
     return $this->assessmentStorage;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getProvidedByAssessmentStorage(): ContentEntityStorageInterface {
+    return $this->getAssessmentStorage();
   }
 
   /**
