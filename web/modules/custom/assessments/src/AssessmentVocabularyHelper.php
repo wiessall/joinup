@@ -23,6 +23,8 @@ class AssessmentVocabularyHelper {
    *   The vocabulary.
    * @param string $identifier
    *   The term identifier.
+   * @param string $field
+   *   The field.
    *
    * @return int
    *   The term ID.
@@ -30,8 +32,7 @@ class AssessmentVocabularyHelper {
    * @throws \InvalidArgumentException
    *   When no term exists for the passed vocabulary and identifier.
    */
-  public function getTermIdFromIdentifier(string $vid, string $identifier): int {
-    $field = ($vid === 'spatial') ? 'code' : 'id';
+  public function getTermIdFromIdentifier(string $vid, string $identifier, string $field = 'id'): int {
     $tids = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery()
       ->accessCheck(FALSE)
       ->condition('vid', $vid)
