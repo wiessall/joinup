@@ -21,7 +21,7 @@ Feature: Provided by widget functionality
     # Regression test - organizations should only be created on successful save.
     Then I press "Save as draft"
     # Should see validation error
-    Then I should see the error message "1 error has been found: Binding requirements"
+    Then I should see the error message "1 error has been found: Identification of binding requirement(s) assessed"
     # Organization should NOT have been created
     Then the public_organisation assessment "GR1" should not exist
 
