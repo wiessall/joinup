@@ -1,41 +1,9 @@
-From 7c1b5b9efbf1a31d6b67312636f4e0a79f28ef43 Mon Sep 17 00:00:00 2001
-From: Claudiu Cristea <clau.cristea@gmail.com>
-Date: Mon, 18 Oct 2021 19:07:19 +0300
-Subject: [PATCH 1/4] Patch #2528166-55
-
----
- .../src/Plugin/views/display/RestExport.php   |  1 +
- .../rest/tests/src/Unit/CollectRoutesTest.php |  1 +
- .../Plugin/views/display/PathPluginBase.php   | 14 +++
- .../param_upcast_test.info.yml                |  7 ++
- .../param_upcast_test.module                  | 21 +++++
- .../test_views/views.view.param_upcast.yml    | 47 ++++++++++
- .../Entity/NamedParamUpcastingTest.php        | 94 +++++++++++++++++++
- .../Plugin/display/PathPluginBaseTest.php     |  7 +-
- 8 files changed, 191 insertions(+), 1 deletion(-)
- create mode 100644 core/modules/views/tests/modules/param_upcast_test/param_upcast_test.info.yml
- create mode 100644 core/modules/views/tests/modules/param_upcast_test/param_upcast_test.module
- create mode 100644 core/modules/views/tests/modules/param_upcast_test/test_views/views.view.param_upcast.yml
- create mode 100644 core/modules/views/tests/src/Functional/Entity/NamedParamUpcastingTest.php
-
-diff --git a/core/modules/rest/src/Plugin/views/display/RestExport.php b/core/modules/rest/src/Plugin/views/display/RestExport.php
-index b3733e4ec87e..fdf7baa261b0 100644
---- a/core/modules/rest/src/Plugin/views/display/RestExport.php
-+++ b/core/modules/rest/src/Plugin/views/display/RestExport.php
-@@ -10,6 +10,7 @@
- use Drupal\Core\Routing\RouteProviderInterface;
- use Drupal\Core\State\StateInterface;
- use Drupal\views\Plugin\views\display\ResponseDisplayPluginInterface;
-+use Drupal\views\Plugin\ViewsPluginManager;
- use Drupal\views\Render\ViewsRenderPipelineMarkup;
- use Drupal\views\ViewExecutable;
- use Drupal\views\Plugin\views\display\PathPluginBase;
 diff --git a/core/modules/rest/tests/src/Unit/CollectRoutesTest.php b/core/modules/rest/tests/src/Unit/CollectRoutesTest.php
-index faf3fda7316b..fe8cdad09baf 100644
+index 7b46865003847f4af5a9515f6970eff809ed0b1d..d1ebbcd24d8eab9e5f9c41e6a8003bda5a621312 100644
 --- a/core/modules/rest/tests/src/Unit/CollectRoutesTest.php
 +++ b/core/modules/rest/tests/src/Unit/CollectRoutesTest.php
-@@ -88,6 +88,7 @@ protected function setUp(): void {
-       ->will($this->returnValue(['basic_auth' => 'data', 'cookie' => 'data']));
+@@ -85,6 +85,7 @@ protected function setUp(): void {
+       ->willReturn(['basic_auth' => 'data', 'cookie' => 'data']);
  
      $container->setParameter('serializer.format_providers', ['json']);
 +    $container->set('string_translation', $this->getStringTranslationStub());
@@ -43,10 +11,10 @@ index faf3fda7316b..fe8cdad09baf 100644
      \Drupal::setContainer($container);
  
 diff --git a/core/modules/views/src/Plugin/views/display/PathPluginBase.php b/core/modules/views/src/Plugin/views/display/PathPluginBase.php
-index a6d6b81a933d..a913096443ff 100644
+index e824637245b3ee365ec78fbd509abffa9ece9369..67758ef81b7ca3da5a09eb2fa9e48ef0552708fb 100644
 --- a/core/modules/views/src/Plugin/views/display/PathPluginBase.php
 +++ b/core/modules/views/src/Plugin/views/display/PathPluginBase.php
-@@ -144,6 +144,8 @@ protected function getRoute($view_id, $display_id) {
+@@ -134,6 +134,8 @@ protected function getRoute($view_id, $display_id) {
      $total_arguments = count($argument_ids);
  
      $argument_map = [];
@@ -55,7 +23,7 @@ index a6d6b81a933d..a913096443ff 100644
  
      $bits = [];
      if (is_string($path)) {
-@@ -165,6 +167,13 @@ protected function getRoute($view_id, $display_id) {
+@@ -155,6 +157,13 @@ protected function getRoute($view_id, $display_id) {
            $arg_id = 'arg_' . $arg_counter++;
            $argument_map[$arg_id] = $parameter_name;
            $bits[$pos] = '{' . $parameter_name . '}';
@@ -69,21 +37,21 @@ index a6d6b81a933d..a913096443ff 100644
          }
        }
      }
-@@ -206,6 +215,11 @@ protected function getRoute($view_id, $display_id) {
-     $route->setOption('_view_display_plugin_class', static::class);
-     $route->setOption('_view_display_show_admin_links', $this->getOption('show_admin_links'));
+@@ -182,6 +191,11 @@ protected function getRoute($view_id, $display_id) {
+ 
+     $route = new Route($route_path, $defaults);
  
 +    // Set type for named parameters.
 +    if ($parameters) {
 +      $route->setOption('parameters', $parameters);
 +    }
 +
-     // Store whether the view will return a response.
-     $route->setOption('returns_response', !empty($this->getPluginDefinition()['returns_response']));
- 
+     // Add access check parameters to the route.
+     $access_plugin = $this->getPlugin('access');
+     if (!isset($access_plugin)) {
 diff --git a/core/modules/views/tests/modules/param_upcast_test/param_upcast_test.info.yml b/core/modules/views/tests/modules/param_upcast_test/param_upcast_test.info.yml
 new file mode 100644
-index 000000000000..52ea40d2504d
+index 0000000000000000000000000000000000000000..52ea40d2504d5a6ede0c376837fa001a4513f4e4
 --- /dev/null
 +++ b/core/modules/views/tests/modules/param_upcast_test/param_upcast_test.info.yml
 @@ -0,0 +1,7 @@
@@ -96,16 +64,18 @@ index 000000000000..52ea40d2504d
 +  - drupal:views
 diff --git a/core/modules/views/tests/modules/param_upcast_test/param_upcast_test.module b/core/modules/views/tests/modules/param_upcast_test/param_upcast_test.module
 new file mode 100644
-index 000000000000..6341b3e02dc8
+index 0000000000000000000000000000000000000000..b24c48e5daddd88f8228631eb783a37dfac1a894
 --- /dev/null
 +++ b/core/modules/views/tests/modules/param_upcast_test/param_upcast_test.module
-@@ -0,0 +1,21 @@
+@@ -0,0 +1,23 @@
 +<?php
 +
 +/**
 + * @file
-+ * Contains param_upcast_test.module
++ * Contains param_upcast_test.module.
 + */
++
++declare(strict_types=1);
 +
 +use Drupal\user\UserInterface;
 +use Drupal\views\ViewExecutable;
@@ -113,7 +83,7 @@ index 000000000000..6341b3e02dc8
 +/**
 + * Implements hook_views_post_execute().
 + */
-+function param_upcast_test_views_post_execute(ViewExecutable $view) {
++function param_upcast_test_views_post_execute(ViewExecutable $view): void {
 +  if ($view->id() === 'param_upcast') {
 +    $account = \Drupal::routeMatch()->getParameter('user');
 +    if ($account instanceof UserInterface) {
@@ -123,14 +93,15 @@ index 000000000000..6341b3e02dc8
 +}
 diff --git a/core/modules/views/tests/modules/param_upcast_test/test_views/views.view.param_upcast.yml b/core/modules/views/tests/modules/param_upcast_test/test_views/views.view.param_upcast.yml
 new file mode 100644
-index 000000000000..c224e4350402
+index 0000000000000000000000000000000000000000..f2287054254d1647abf078c88e0d5ca910e24d05
 --- /dev/null
 +++ b/core/modules/views/tests/modules/param_upcast_test/test_views/views.view.param_upcast.yml
-@@ -0,0 +1,47 @@
+@@ -0,0 +1,48 @@
 +dependencies:
 +  module:
 +    - entity_test
 +id: param_upcast
++label: Param upcast
 +module: views
 +base_table: entity_test
 +base_field: id
@@ -168,7 +139,7 @@ index 000000000000..c224e4350402
 +            roles: {  }
 +          entity_type: entity_test
 +          entity_field: user_id
-+          plugin_id: numeric
++          plugin_id: entity_target_id
 +  page_1:
 +    display_plugin: page
 +    id: page_1
@@ -176,25 +147,27 @@ index 000000000000..c224e4350402
 +      path: user/%user/content
 diff --git a/core/modules/views/tests/src/Functional/Entity/NamedParamUpcastingTest.php b/core/modules/views/tests/src/Functional/Entity/NamedParamUpcastingTest.php
 new file mode 100644
-index 000000000000..ffdc882958c7
+index 0000000000000000000000000000000000000000..ff64df9f53b9242b86c18c9cf3f83112587a4085
 --- /dev/null
 +++ b/core/modules/views/tests/src/Functional/Entity/NamedParamUpcastingTest.php
-@@ -0,0 +1,94 @@
+@@ -0,0 +1,96 @@
 +<?php
 +
-+declare(strict_types = 1);
++declare(strict_types=1);
 +
 +namespace Drupal\Tests\views\Functional\Entity;
 +
 +use Drupal\entity_test\Entity\EntityTest;
 +use Drupal\Tests\views\Functional\ViewTestBase;
 +use Drupal\views\Tests\ViewTestData;
++use PHPUnit\Framework\Attributes\Group;
++use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 +
 +/**
 + * Tests named parameters upcasting.
-+ *
-+ * @group views
 + */
++#[Group('views')]
++#[RunTestsInSeparateProcesses]
 +class NamedParamUpcastingTest extends ViewTestBase {
 +
 +  /**
@@ -215,7 +188,7 @@ index 000000000000..ffdc882958c7
 +  /**
 +   * {@inheritdoc}
 +   */
-+  protected function setUp($import_test_views = TRUE): void {
++  protected function setUp($import_test_views = TRUE, $modules = ['views_test_config']): void {
 +    parent::setUp(FALSE);
 +    ViewTestData::createTestViews(get_class($this), ['param_upcast_test']);
 +  }
@@ -275,18 +248,10 @@ index 000000000000..ffdc882958c7
 +
 +}
 diff --git a/core/modules/views/tests/src/Unit/Plugin/display/PathPluginBaseTest.php b/core/modules/views/tests/src/Unit/Plugin/display/PathPluginBaseTest.php
-index 7429aefb8a6c..322c8ad87622 100644
+index 1649c6a3dca2bb164a1a1a0641a61eecc3f3e5e8..a3330ffb52b3db4e6d7201fe7d0532b2a35ca4cc 100644
 --- a/core/modules/views/tests/src/Unit/Plugin/display/PathPluginBaseTest.php
 +++ b/core/modules/views/tests/src/Unit/Plugin/display/PathPluginBaseTest.php
-@@ -9,6 +9,7 @@
- 
- use Drupal\Core\DependencyInjection\ContainerBuilder;
- use Drupal\Tests\UnitTestCase;
-+use Drupal\views\Plugin\views\display\PathPluginBase;
- use Symfony\Component\Routing\Route;
- use Symfony\Component\Routing\RouteCollection;
- 
-@@ -56,8 +57,11 @@ protected function setUp(): void {
+@@ -57,8 +57,11 @@ protected function setUp(): void {
      $this->state = $this->createMock('\Drupal\Core\State\StateInterface');
      $this->pathPlugin = $this->getMockBuilder('Drupal\views\Plugin\views\display\PathPluginBase')
        ->setConstructorArgs([[], 'path_base', [], $this->routeProvider, $this->state])
@@ -299,7 +264,7 @@ index 7429aefb8a6c..322c8ad87622 100644
      $this->setupContainer();
    }
  
-@@ -70,6 +74,7 @@ public function setupContainer() {
+@@ -71,6 +74,7 @@ public function setupContainer(): void {
        ->getMock();
      $container = new ContainerBuilder();
      $container->set('plugin.manager.views.access', $this->accessPluginManager);
@@ -307,112 +272,3 @@ index 7429aefb8a6c..322c8ad87622 100644
  
      $config = [
        'views.settings' => [
--- 
-GitLab
-
-
-From 9c60132da984a4e028281932ea816e1fa5f5dd8c Mon Sep 17 00:00:00 2001
-From: Claudiu Cristea <clau.cristea@gmail.com>
-Date: Mon, 18 Oct 2021 19:10:32 +0300
-Subject: [PATCH 2/4] Coding standards
-
----
- core/modules/rest/src/Plugin/views/display/RestExport.php        | 1 -
- .../views/tests/src/Unit/Plugin/display/PathPluginBaseTest.php   | 1 -
- 2 files changed, 2 deletions(-)
-
-diff --git a/core/modules/rest/src/Plugin/views/display/RestExport.php b/core/modules/rest/src/Plugin/views/display/RestExport.php
-index fdf7baa261b0..b3733e4ec87e 100644
---- a/core/modules/rest/src/Plugin/views/display/RestExport.php
-+++ b/core/modules/rest/src/Plugin/views/display/RestExport.php
-@@ -10,7 +10,6 @@
- use Drupal\Core\Routing\RouteProviderInterface;
- use Drupal\Core\State\StateInterface;
- use Drupal\views\Plugin\views\display\ResponseDisplayPluginInterface;
--use Drupal\views\Plugin\ViewsPluginManager;
- use Drupal\views\Render\ViewsRenderPipelineMarkup;
- use Drupal\views\ViewExecutable;
- use Drupal\views\Plugin\views\display\PathPluginBase;
-diff --git a/core/modules/views/tests/src/Unit/Plugin/display/PathPluginBaseTest.php b/core/modules/views/tests/src/Unit/Plugin/display/PathPluginBaseTest.php
-index 322c8ad87622..455327617458 100644
---- a/core/modules/views/tests/src/Unit/Plugin/display/PathPluginBaseTest.php
-+++ b/core/modules/views/tests/src/Unit/Plugin/display/PathPluginBaseTest.php
-@@ -9,7 +9,6 @@
- 
- use Drupal\Core\DependencyInjection\ContainerBuilder;
- use Drupal\Tests\UnitTestCase;
--use Drupal\views\Plugin\views\display\PathPluginBase;
- use Symfony\Component\Routing\Route;
- use Symfony\Component\Routing\RouteCollection;
- 
--- 
-GitLab
-
-
-From 82b6093ad31353986967f8ee66cd55773da59fa7 Mon Sep 17 00:00:00 2001
-From: Claudiu Cristea <clau.cristea@gmail.com>
-Date: Mon, 18 Oct 2021 19:14:15 +0300
-Subject: [PATCH 3/4] More coding standards
-
----
- .../tests/modules/param_upcast_test/param_upcast_test.module    | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/core/modules/views/tests/modules/param_upcast_test/param_upcast_test.module b/core/modules/views/tests/modules/param_upcast_test/param_upcast_test.module
-index 6341b3e02dc8..79604b05c0a5 100644
---- a/core/modules/views/tests/modules/param_upcast_test/param_upcast_test.module
-+++ b/core/modules/views/tests/modules/param_upcast_test/param_upcast_test.module
-@@ -2,7 +2,7 @@
- 
- /**
-  * @file
-- * Contains param_upcast_test.module
-+ * Contains param_upcast_test.module.
-  */
- 
- use Drupal\user\UserInterface;
--- 
-GitLab
-
-
-From 06ab07064fc59cfc5af3866d2447c8cd53bd82c4 Mon Sep 17 00:00:00 2001
-From: "claudiu.cristea" <claudiucristea@56348.no-reply.drupal.org>
-Date: Thu, 13 Oct 2022 20:59:53 +0000
-Subject: [PATCH 4/4] Set the parameters before the access plugin is altering
- the route
-
----
- .../views/src/Plugin/views/display/PathPluginBase.php  | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/core/modules/views/src/Plugin/views/display/PathPluginBase.php b/core/modules/views/src/Plugin/views/display/PathPluginBase.php
-index a913096443ff..6a3c8acc16ff 100644
---- a/core/modules/views/src/Plugin/views/display/PathPluginBase.php
-+++ b/core/modules/views/src/Plugin/views/display/PathPluginBase.php
-@@ -201,6 +201,11 @@ protected function getRoute($view_id, $display_id) {
- 
-     $route = new Route($route_path, $defaults);
- 
-+    // Set type for named parameters.
-+    if ($parameters) {
-+      $route->setOption('parameters', $parameters);
-+    }
-+
-     // Add access check parameters to the route.
-     $access_plugin = $this->getPlugin('access');
-     if (!isset($access_plugin)) {
-@@ -215,11 +220,6 @@ protected function getRoute($view_id, $display_id) {
-     $route->setOption('_view_display_plugin_class', static::class);
-     $route->setOption('_view_display_show_admin_links', $this->getOption('show_admin_links'));
- 
--    // Set type for named parameters.
--    if ($parameters) {
--      $route->setOption('parameters', $parameters);
--    }
--
-     // Store whether the view will return a response.
-     $route->setOption('returns_response', !empty($this->getPluginDefinition()['returns_response']));
- 
--- 
-GitLab
-

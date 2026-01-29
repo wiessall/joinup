@@ -499,7 +499,7 @@ class SubscribeGroupForm extends FormBase {
    *   The wrapper format. Empty string if the wrapper format is not set.
    */
   protected function getRequestWrapperFormat(): string {
-    return $this->getRequest()->get(MainContentViewSubscriber::WRAPPER_FORMAT, '');
+    return $this->getRequest()->query->get(MainContentViewSubscriber::WRAPPER_FORMAT, '');
   }
 
 }
