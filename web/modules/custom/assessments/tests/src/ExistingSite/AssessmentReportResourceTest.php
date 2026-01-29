@@ -80,6 +80,77 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
   }
 
   /**
+   * Tests that empty strings are rejected for mandatory string fields.
+   */
+  public function testEmptyStringsValidation(): void {
+    ['payload' => $payload] = $this->getTestCase('valid_optional_fields_omitted');
+
+    // Set all mandatory string fields to empty strings.
+    $payload['name'] = '';
+    $payload['provider']['name'] = '';
+    $payload['binding_requirement'][0]['description'] = '';
+    $payload['binding_requirement'][0]['expression'][0]['name'] = '';
+    $payload['binding_requirement'][0]['expression'][0]['description'] = '';
+    $payload['binding_requirement'][0]['affects'][0]['name'] = '';
+    // Add an asset with empty strings to test Asset validation.
+    $payload['binding_requirement'][0]['asset'] = [
+      [
+        'title' => '',
+        'description' => '',
+        'landing_page' => 'https://example.com',
+      ],
+    ];
+
+    $response = $this->post($payload);
+    $this->assertSame(422, $response->getStatusCode());
+
+    $data = Json::decode($response->getBody()->getContents());
+    $errors = $data['errors'];
+
+    // Verify each mandatory field has a minLength error.
+    $this->assertContains(
+      'Must be at least 1 characters long',
+      $errors['/name'] ?? [],
+      'Assessment name should reject empty string'
+    );
+    $this->assertContains(
+      'Must be at least 1 characters long',
+      $errors['/provider/name'] ?? [],
+      'Provider name should reject empty string'
+    );
+    $this->assertContains(
+      'Must be at least 1 characters long',
+      $errors['/binding_requirement/0/description'] ?? [],
+      'Binding requirement description should reject empty string'
+    );
+    $this->assertContains(
+      'Must be at least 1 characters long',
+      $errors['/binding_requirement/0/expression/0/name'] ?? [],
+      'Expression name should reject empty string'
+    );
+    $this->assertContains(
+      'Must be at least 1 characters long',
+      $errors['/binding_requirement/0/expression/0/description'] ?? [],
+      'Expression description should reject empty string'
+    );
+    $this->assertContains(
+      'Must be at least 1 characters long',
+      $errors['/binding_requirement/0/affects/0/name'] ?? [],
+      'Public service name should reject empty string'
+    );
+    $this->assertContains(
+      'Must be at least 1 characters long',
+      $errors['/binding_requirement/0/asset/0/title'] ?? [],
+      'Asset title should reject empty string'
+    );
+    $this->assertContains(
+      'Must be at least 1 characters long',
+      $errors['/binding_requirement/0/asset/0/description'] ?? [],
+      'Asset description should reject empty string'
+    );
+  }
+
+  /**
    * Tests posting a structured payload returns 201 and echoes the data.
    */
   public function testValidPostDataAndStatus(): void {
