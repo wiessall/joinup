@@ -20,7 +20,7 @@ id: paragraph.binding_requirement.description
 field_name: description
 entity_type: paragraph
 bundle: binding_requirement
-label: Description
+label: 'Description of the binding requirement'
 description: 'Provide a short description or a title for the binding requirements for the purpose of referring back to the specific requirement in the assessment process'
 required: true
 translatable: true
