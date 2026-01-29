@@ -1,5 +1,5 @@
 diff --git a/core/modules/comment/config/optional/views.view.comment.yml b/core/modules/comment/config/optional/views.view.comment.yml
-index f3edd69dc65..b6d81ca4d43 100644
+index f3edd69dc65f858e21b54514c8dad8f41d7be7d0..b6d81ca4d43fb21fb75af56024c5c52c112e9688 100644
 --- a/core/modules/comment/config/optional/views.view.comment.yml
 +++ b/core/modules/comment/config/optional/views.view.comment.yml
 @@ -75,6 +75,9 @@ display:
@@ -23,7 +23,7 @@ index f3edd69dc65..b6d81ca4d43 100644
            id: subject
            table: comment_field_data
 diff --git a/core/modules/media/config/optional/views.view.media.yml b/core/modules/media/config/optional/views.view.media.yml
-index 329ac243387..a143ce0d1c1 100644
+index 329ac24338705996c4348a1d42eb5b5c806d21a1..a143ce0d1c1f7e10134484cc30c8fbf85d67d938 100644
 --- a/core/modules/media/config/optional/views.view.media.yml
 +++ b/core/modules/media/config/optional/views.view.media.yml
 @@ -76,6 +76,11 @@ display:
@@ -39,7 +39,7 @@ index 329ac243387..a143ce0d1c1 100644
            id: thumbnail__target_id
            table: media_field_data
 diff --git a/core/modules/media/tests/modules/media_test_views/config/install/views.view.test_media_bulk_form.yml b/core/modules/media/tests/modules/media_test_views/config/install/views.view.test_media_bulk_form.yml
-index f194dfb53fa..87a5a478483 100644
+index f194dfb53fa0355f283df7bd3782fbff4e686ede..87a5a478483d44300b0d22248f99615128f5ba09 100644
 --- a/core/modules/media/tests/modules/media_test_views/config/install/views.view.test_media_bulk_form.yml
 +++ b/core/modules/media/tests/modules/media_test_views/config/install/views.view.test_media_bulk_form.yml
 @@ -41,6 +41,11 @@ display:
@@ -55,7 +55,7 @@ index f194dfb53fa..87a5a478483 100644
            id: name
            table: media_field_data
 diff --git a/core/modules/media/tests/src/Functional/MediaBulkFormTest.php b/core/modules/media/tests/src/Functional/MediaBulkFormTest.php
-index 85c1d59eb15..a9bc842cc99 100644
+index 10da4c44caba2277f0d37061acffd0b7d1ed839c..8469ac79a7a882b6790d7de1f9f63da54c2690ee 100644
 --- a/core/modules/media/tests/src/Functional/MediaBulkFormTest.php
 +++ b/core/modules/media/tests/src/Functional/MediaBulkFormTest.php
 @@ -4,6 +4,7 @@
@@ -65,8 +65,8 @@ index 85c1d59eb15..a9bc842cc99 100644
 +use Behat\Mink\Element\NodeElement;
  use Drupal\media\Entity\Media;
  use Drupal\views\Views;
- 
-@@ -74,16 +75,18 @@ public function testBulkForm(): void {
+ use PHPUnit\Framework\Attributes\Group;
+@@ -76,16 +77,18 @@ public function testBulkForm(): void {
  
      // Check the operations are accessible to the logged in user.
      $this->drupalGet('test-media-bulk-form');
@@ -93,7 +93,7 @@ index 85c1d59eb15..a9bc842cc99 100644
      // Test unpublishing in bulk.
      $page->checkField('media_bulk_form[0]');
 diff --git a/core/modules/media_library/config/install/views.view.media_library.yml b/core/modules/media_library/config/install/views.view.media_library.yml
-index 70974811ee4..ac57599bb25 100644
+index 70974811ee4f33591234d95e33a1ddb1d9fe8a4b..ac57599bb250cc7683ea0be1898d5ad4882e7fc1 100644
 --- a/core/modules/media_library/config/install/views.view.media_library.yml
 +++ b/core/modules/media_library/config/install/views.view.media_library.yml
 @@ -81,6 +81,11 @@ display:
@@ -121,20 +121,18 @@ index 70974811ee4..ac57599bb25 100644
            id: name
            table: media_field_data
 diff --git a/core/modules/media_library/tests/src/FunctionalJavascript/MediaOverviewTest.php b/core/modules/media_library/tests/src/FunctionalJavascript/MediaOverviewTest.php
-index a88502c6596..27402b597bb 100644
+index 8e6968d7f0494caecb8afbe7a1c8bdd2007c57ab..a47100e0b7d4dc19c1c62a3f5229a9ec4cb79e79 100644
 --- a/core/modules/media_library/tests/src/FunctionalJavascript/MediaOverviewTest.php
 +++ b/core/modules/media_library/tests/src/FunctionalJavascript/MediaOverviewTest.php
-@@ -4,6 +4,9 @@
+@@ -4,6 +4,7 @@
  
  namespace Drupal\Tests\media_library\FunctionalJavascript;
  
 +use Behat\Mink\Element\NodeElement;
-+use PHPUnit\Framework\Attributes\Group;
-+
- /**
-  * Tests the grid-style media overview page.
-  *
-@@ -66,6 +69,18 @@ public function testAdministrationPage(): void {
+ use PHPUnit\Framework\Attributes\Group;
+ use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+ 
+@@ -69,6 +70,18 @@ public function testAdministrationPage(): void {
      // Visit the administration page.
      $this->drupalGet('admin/content/media');
  
@@ -153,7 +151,7 @@ index a88502c6596..27402b597bb 100644
      // There should be links to both the grid and table displays.
      $assert_session->linkExists('Grid');
      $assert_session->linkExists('Table');
-@@ -116,6 +131,7 @@ public function testAdministrationPage(): void {
+@@ -119,6 +132,7 @@ public function testAdministrationPage(): void {
  
      // This tests that anchor tags clicked inside the preview are suppressed.
      $this->getSession()->executeScript('jQuery(".js-click-to-select-trigger a")[4].click()');
@@ -162,7 +160,7 @@ index a88502c6596..27402b597bb 100644
      $assert_session->pageTextContains('Dog');
      $assert_session->pageTextNotContains('Cat');
 diff --git a/core/modules/node/config/optional/views.view.content.yml b/core/modules/node/config/optional/views.view.content.yml
-index 09ba3dcc35a..024f0d69df1 100644
+index 09ba3dcc35ae181937e3f2ac1b34ac81ec588a3d..024f0d69df1f01d889bbe8d860f4445e0ec27db0 100644
 --- a/core/modules/node/config/optional/views.view.content.yml
 +++ b/core/modules/node/config/optional/views.view.content.yml
 @@ -36,6 +36,18 @@ display:
@@ -185,7 +183,7 @@ index 09ba3dcc35a..024f0d69df1 100644
            id: title
            table: node_field_data
 diff --git a/core/modules/node/tests/modules/node_test_views/test_views/views.view.test_node_bulk_form.yml b/core/modules/node/tests/modules/node_test_views/test_views/views.view.test_node_bulk_form.yml
-index 107165a27fb..32a44807292 100644
+index 107165a27fb64a3d8d3b40a0a1407c6a34125f34..32a44807292c4c4f420b664e3747993b032c2499 100644
 --- a/core/modules/node/tests/modules/node_test_views/test_views/views.view.test_node_bulk_form.yml
 +++ b/core/modules/node/tests/modules/node_test_views/test_views/views.view.test_node_bulk_form.yml
 @@ -30,6 +30,18 @@ display:
@@ -208,7 +206,7 @@ index 107165a27fb..32a44807292 100644
            id: title
            table: node_field_data
 diff --git a/core/modules/node/tests/src/Functional/Views/BulkFormTest.php b/core/modules/node/tests/src/Functional/Views/BulkFormTest.php
-index 8514b3cee00..d04dad1070b 100644
+index a90186913aa61153b0c0606fa5a350a486d9863d..56c7e63d7ba56e250442548a9f668d14eabbc6e1 100644
 --- a/core/modules/node/tests/src/Functional/Views/BulkFormTest.php
 +++ b/core/modules/node/tests/src/Functional/Views/BulkFormTest.php
 @@ -4,6 +4,7 @@
@@ -218,8 +216,8 @@ index 8514b3cee00..d04dad1070b 100644
 +use Behat\Mink\Element\NodeElement;
  use Drupal\language\Entity\ConfigurableLanguage;
  use Drupal\views\Views;
- 
-@@ -103,6 +104,30 @@ protected function setUp($import_test_views = TRUE, $modules = ['node_test_views
+ use PHPUnit\Framework\Attributes\Group;
+@@ -106,6 +107,30 @@ protected function setUp($import_test_views = TRUE, $modules = ['node_test_views
     * Tests the node bulk form.
     */
    public function testBulkForm(): void {
@@ -251,7 +249,7 @@ index 8514b3cee00..d04dad1070b 100644
      $node = reset($this->nodes);
      $this->assertTrue($node->isPublished(), 'Node is initially published');
 diff --git a/core/modules/user/config/optional/views.view.user_admin_people.yml b/core/modules/user/config/optional/views.view.user_admin_people.yml
-index 001c3e20cfb..1b57644e4f3 100644
+index 001c3e20cfb9981cbb798aad5bd9bebfaf6d934f..1b57644e4f3debef9e56ede3997a805adf3504a8 100644
 --- a/core/modules/user/config/optional/views.view.user_admin_people.yml
 +++ b/core/modules/user/config/optional/views.view.user_admin_people.yml
 @@ -69,6 +69,10 @@ display:
@@ -266,10 +264,10 @@ index 001c3e20cfb..1b57644e4f3 100644
            id: name
            table: users_field_data
 diff --git a/core/modules/user/tests/src/Functional/Views/BulkFormTest.php b/core/modules/user/tests/src/Functional/Views/BulkFormTest.php
-index 4047df4eadb..9c1704f74cc 100644
+index 4d8627c6eafa1fe85c28808ee4040a97fcfafd5a..5a9debde8c653496248c6f33220bf6467ae9e98e 100644
 --- a/core/modules/user/tests/src/Functional/Views/BulkFormTest.php
 +++ b/core/modules/user/tests/src/Functional/Views/BulkFormTest.php
-@@ -121,7 +121,7 @@ public function testBulkForm(): void {
+@@ -124,7 +124,7 @@ public function testBulkForm(): void {
      $action_id = 'user_add_role_action.' . $role;
      $edit = [
        'options[include_exclude]' => 'exclude',
@@ -279,10 +277,10 @@ index 4047df4eadb..9c1704f74cc 100644
      $this->drupalGet('admin/structure/views/nojs/handler/test_user_bulk_form/default/field/user_bulk_form');
      $this->submitForm($edit, 'Apply');
 diff --git a/core/modules/views/config/schema/views.data_types.schema.yml b/core/modules/views/config/schema/views.data_types.schema.yml
-index 0e011d73dc1..ef213cf4bf6 100644
+index 31c6b2f6479ef9304899c95ccf484e02eccbfeff..8539f0f971cc6456c765362d30fc8f021ce79918 100644
 --- a/core/modules/views/config/schema/views.data_types.schema.yml
 +++ b/core/modules/views/config/schema/views.data_types.schema.yml
-@@ -921,3 +921,9 @@ views_field_bulk_form:
+@@ -932,3 +932,9 @@ views_field_bulk_form:
        sequence:
          type: string
          label: 'Action'
@@ -290,11 +288,11 @@ index 0e011d73dc1..ef213cf4bf6 100644
 +      type: sequence
 +      label: 'Actions order'
 +      sequence:
-+        type: string
++        type: machine_name
 +        label: 'Action'
 diff --git a/core/modules/views/css/views.bulk_form.css b/core/modules/views/css/views.bulk_form.css
 new file mode 100644
-index 00000000000..488c792d63f
+index 0000000000000000000000000000000000000000..488c792d63f6793219e75efb43fef08b0fd78d4b
 --- /dev/null
 +++ b/core/modules/views/css/views.bulk_form.css
 @@ -0,0 +1,12 @@
@@ -311,7 +309,7 @@ index 00000000000..488c792d63f
 +  margin-right: 3px;
 +}
 diff --git a/core/modules/views/src/Plugin/views/field/BulkForm.php b/core/modules/views/src/Plugin/views/field/BulkForm.php
-index 2fcf8588bb7..ce20dee1467 100644
+index 2fcf8588bb78aac7e93f42242a353a1a902d082d..ce20dee14672d6a470f96a06ddbf034a9c99a15d 100644
 --- a/core/modules/views/src/Plugin/views/field/BulkForm.php
 +++ b/core/modules/views/src/Plugin/views/field/BulkForm.php
 @@ -217,6 +217,9 @@ protected function defineOptions() {
@@ -440,18 +438,18 @@ index 2fcf8588bb7..ce20dee1467 100644
          $in_selected = in_array($id, $this->options['selected_actions']);
          // If the field is configured to include only the selected actions,
 diff --git a/core/modules/views/src/ViewsConfigUpdater.php b/core/modules/views/src/ViewsConfigUpdater.php
-index 9c5d38e10ac..728c15c9cc5 100644
+index 2bfa7deb2e22bf9b01c37b6998e3c0bacc1a9092..47fdd496549ad077e69f7bb2144d6405b4f94c4b 100644
 --- a/core/modules/views/src/ViewsConfigUpdater.php
 +++ b/core/modules/views/src/ViewsConfigUpdater.php
 @@ -7,6 +7,7 @@
- use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+ use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
  use Drupal\Core\Entity\EntityFieldManagerInterface;
  use Drupal\Core\Entity\EntityTypeManagerInterface;
 +use Drupal\views\Plugin\views\field\BulkForm;
- use Symfony\Component\DependencyInjection\ContainerInterface;
+ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  
  /**
-@@ -131,6 +132,9 @@ public function updateAll(ViewEntityInterface $view) {
+@@ -72,6 +73,9 @@ public function updateAll(ViewEntityInterface $view) {
        if ($this->processEntityArgumentUpdate($view)) {
          $changed = TRUE;
        }
@@ -461,7 +459,7 @@ index 9c5d38e10ac..728c15c9cc5 100644
        if ($this->processRememberRolesUpdate($handler, $handler_type)) {
          $changed = TRUE;
        }
-@@ -359,4 +363,45 @@ public function processTableCssClassUpdate(ViewEntityInterface $view): bool {
+@@ -472,4 +476,45 @@ public function processRssViewModeUpdate(ViewEntityInterface $view, ?string $pre
      return $changed;
    }
  
@@ -508,7 +506,7 @@ index 9c5d38e10ac..728c15c9cc5 100644
 +
  }
 diff --git a/core/modules/views/tests/modules/action_bulk_test/config/install/views.view.test_bulk_form.yml b/core/modules/views/tests/modules/action_bulk_test/config/install/views.view.test_bulk_form.yml
-index 573705f502d..b1395eb6278 100644
+index 573705f502dade83ce6afda8d8936c326b0285dd..b1395eb62781724a03dfdd75b1f730dad682b5aa 100644
 --- a/core/modules/views/tests/modules/action_bulk_test/config/install/views.view.test_bulk_form.yml
 +++ b/core/modules/views/tests/modules/action_bulk_test/config/install/views.view.test_bulk_form.yml
 @@ -89,6 +89,18 @@ display:
@@ -531,7 +529,7 @@ index 573705f502d..b1395eb6278 100644
          type: full
          options:
 diff --git a/core/modules/views/tests/src/Functional/BulkFormTest.php b/core/modules/views/tests/src/Functional/BulkFormTest.php
-index 842b9ff642b..6badbed7b25 100644
+index b95748337dbaaf63898d057908a1c79104d7dd7b..c55691810805c6c20adb6dbb896d93c1c51c7e4e 100644
 --- a/core/modules/views/tests/src/Functional/BulkFormTest.php
 +++ b/core/modules/views/tests/src/Functional/BulkFormTest.php
 @@ -4,6 +4,7 @@
@@ -542,7 +540,7 @@ index 842b9ff642b..6badbed7b25 100644
  use Drupal\Tests\BrowserTestBase;
  use Drupal\Tests\node\Traits\NodeCreationTrait;
  use Drupal\views\Views;
-@@ -71,6 +72,55 @@ public function testBulkForm(): void {
+@@ -74,6 +75,55 @@ public function testBulkForm(): void {
  
      $this->drupalGet('test_bulk_form');
  
@@ -599,10 +597,10 @@ index 842b9ff642b..6badbed7b25 100644
      $this->assertSession()->elementExists('xpath', '//form/div[1][@id = "edit-header"]');
  
 diff --git a/core/modules/views/tests/src/Functional/Plugin/ViewsBulkTest.php b/core/modules/views/tests/src/Functional/Plugin/ViewsBulkTest.php
-index 5c33bcb27a7..3e7a049f387 100644
+index ff7beec41be0b356084a142f16217ea808ce2de1..bacac05d7371a2ed7b98c69d02d9535e52243331 100644
 --- a/core/modules/views/tests/src/Functional/Plugin/ViewsBulkTest.php
 +++ b/core/modules/views/tests/src/Functional/Plugin/ViewsBulkTest.php
-@@ -71,7 +71,8 @@ public function testBulkSelection(): void {
+@@ -73,7 +73,8 @@ public function testBulkSelection(): void {
  
      // Now click 'Apply to selected items' and assert the first node is selected
      // on the confirm form.
@@ -612,7 +610,7 @@ index 5c33bcb27a7..3e7a049f387 100644
      $this->assertSession()->pageTextContains($node_1->getTitle());
      $this->assertSession()->pageTextNotContains($node_2->getTitle());
  
-@@ -92,7 +93,8 @@ public function testBulkSelection(): void {
+@@ -94,7 +95,8 @@ public function testBulkSelection(): void {
  
      // Now click 'Apply to selected items' and assert the second node is
      // selected on the confirm form.
@@ -624,10 +622,10 @@ index 5c33bcb27a7..3e7a049f387 100644
    }
 diff --git a/core/modules/views/tests/src/Functional/Update/ViewsBulkFormActionsOrderUpdateTest.php b/core/modules/views/tests/src/Functional/Update/ViewsBulkFormActionsOrderUpdateTest.php
 new file mode 100644
-index 00000000000..116faf69d19
+index 0000000000000000000000000000000000000000..7ed91571d62d687bfaea07d44a6fb6d8b8eec616
 --- /dev/null
 +++ b/core/modules/views/tests/src/Functional/Update/ViewsBulkFormActionsOrderUpdateTest.php
-@@ -0,0 +1,43 @@
+@@ -0,0 +1,45 @@
 +<?php
 +
 +declare(strict_types=1);
@@ -638,6 +636,7 @@ index 00000000000..116faf69d19
 +use PHPUnit\Framework\Attributes\CoversFunction;
 +use PHPUnit\Framework\Attributes\Group;
 +use PHPUnit\Framework\Attributes\IgnoreDeprecations;
++use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 +
 +/**
 + * Tests views_post_update_bulk_form_action_order().
@@ -645,6 +644,7 @@ index 00000000000..116faf69d19
 +#[Group('Update')]
 +#[CoversFunction('views_post_update_bulk_form_action_order')]
 +#[IgnoreDeprecations]
++#[RunTestsInSeparateProcesses]
 +class ViewsBulkFormActionsOrderUpdateTest extends UpdatePathTestBase {
 +
 +  /**
@@ -672,7 +672,7 @@ index 00000000000..116faf69d19
 +
 +}
 diff --git a/core/modules/views/views.libraries.yml b/core/modules/views/views.libraries.yml
-index 08ff2d16407..89cc2558c70 100644
+index 08ff2d1640798b7f9e862b32074392f2f392d7ae..89cc2558c707951a84aed80b417fb40e03f0f5f3 100644
 --- a/core/modules/views/views.libraries.yml
 +++ b/core/modules/views/views.libraries.yml
 @@ -22,3 +22,9 @@ views.responsive-grid:
@@ -686,12 +686,12 @@ index 08ff2d16407..89cc2558c70 100644
 +    component:
 +      css/views.bulk_form.css: {}
 diff --git a/core/modules/views/views.post_update.php b/core/modules/views/views.post_update.php
-index 48623fc593e..b406341c7c9 100644
+index f94938a6e5b51c8af8ce42ed4a74c11f516a9616..3c8622907140fd486d5e6ef5f2e39b7dd0735c37 100644
 --- a/core/modules/views/views.post_update.php
 +++ b/core/modules/views/views.post_update.php
-@@ -110,3 +110,15 @@ function views_post_update_block_items_per_page(?array &$sandbox = NULL): void {
-       return FALSE;
-     });
+@@ -129,3 +129,15 @@ function views_post_update_block_items_per_page(?array &$sandbox = NULL): void {
+ function views_post_update_add_date_default_arguments(): void {
+   // Empty update to cause a cache rebuild so that schema additions are read.
  }
 +
 +/**
@@ -706,7 +706,7 @@ index 48623fc593e..b406341c7c9 100644
 +  });
 +}
 diff --git a/core/profiles/demo_umami/config/optional/views.view.media.yml b/core/profiles/demo_umami/config/optional/views.view.media.yml
-index 5e60f311a0d..7836b0e4752 100644
+index 5e60f311a0d39796da2e7c506f4850cb41ceb55e..7836b0e4752f87c1802c1fcca0606a1048ab1ee1 100644
 --- a/core/profiles/demo_umami/config/optional/views.view.media.yml
 +++ b/core/profiles/demo_umami/config/optional/views.view.media.yml
 @@ -76,6 +76,11 @@ display:
@@ -722,7 +722,7 @@ index 5e60f311a0d..7836b0e4752 100644
            id: thumbnail__target_id
            table: media_field_data
 diff --git a/core/tests/fixtures/config_install/multilingual/views.view.content.yml b/core/tests/fixtures/config_install/multilingual/views.view.content.yml
-index 5f7a02fde70..6dd1d30f39b 100644
+index 5f7a02fde7042cf13e1a266b26e7386dc57dc802..6dd1d30f39b6b630533552635dffd77eab7ca4da 100644
 --- a/core/tests/fixtures/config_install/multilingual/views.view.content.yml
 +++ b/core/tests/fixtures/config_install/multilingual/views.view.content.yml
 @@ -39,6 +39,18 @@ display:
@@ -745,7 +745,7 @@ index 5f7a02fde70..6dd1d30f39b 100644
            id: title
            table: node_field_data
 diff --git a/core/tests/fixtures/config_install/multilingual/views.view.user_admin_people.yml b/core/tests/fixtures/config_install/multilingual/views.view.user_admin_people.yml
-index 8c0aa01004e..b95298423c3 100644
+index 8c0aa01004ee894c5eaeaf1411514a2ba15302ee..b95298423c3eb30aef81e7cedadefcdaafb45630 100644
 --- a/core/tests/fixtures/config_install/multilingual/views.view.user_admin_people.yml
 +++ b/core/tests/fixtures/config_install/multilingual/views.view.user_admin_people.yml
 @@ -72,6 +72,10 @@ display:
@@ -760,7 +760,7 @@ index 8c0aa01004e..b95298423c3 100644
            id: name
            table: users_field_data
 diff --git a/core/themes/claro/claro.info.yml b/core/themes/claro/claro.info.yml
-index 87156826550..4fde9d2bb3d 100644
+index 597f0f78ba3f808395553c42142aab7188941622..b32bf45c8149296a82b78a7a892ef1be91c4553e 100644
 --- a/core/themes/claro/claro.info.yml
 +++ b/core/themes/claro/claro.info.yml
 @@ -97,6 +97,11 @@ libraries-override:
@@ -777,7 +777,7 @@ index 87156826550..4fde9d2bb3d 100644
        component:
 diff --git a/core/themes/claro/css/components/views.bulk_form.css b/core/themes/claro/css/components/views.bulk_form.css
 new file mode 100644
-index 00000000000..2cae782ff1a
+index 0000000000000000000000000000000000000000..2cae782ff1a3259519d488ef08d68fa45a0cda6f
 --- /dev/null
 +++ b/core/themes/claro/css/components/views.bulk_form.css
 @@ -0,0 +1,12 @@
@@ -795,7 +795,7 @@ index 00000000000..2cae782ff1a
 +}
 diff --git a/core/themes/stable9/css/views/views.bulk_form.css b/core/themes/stable9/css/views/views.bulk_form.css
 new file mode 100644
-index 00000000000..488c792d63f
+index 0000000000000000000000000000000000000000..488c792d63f6793219e75efb43fef08b0fd78d4b
 --- /dev/null
 +++ b/core/themes/stable9/css/views/views.bulk_form.css
 @@ -0,0 +1,12 @@
@@ -812,10 +812,10 @@ index 00000000000..488c792d63f
 +  margin-right: 3px;
 +}
 diff --git a/core/themes/stable9/stable9.info.yml b/core/themes/stable9/stable9.info.yml
-index 71dc76f30b6..8ac2d7b1abb 100644
+index 3bc1a134def5c7d14f93a8a0e49102c65faa4f6c..784053cced78514e48e22dcb8787b39a52bcf42e 100644
 --- a/core/themes/stable9/stable9.info.yml
 +++ b/core/themes/stable9/stable9.info.yml
-@@ -302,6 +302,11 @@ libraries-override:
+@@ -324,6 +324,11 @@ libraries-override:
        component:
          css/views.module.css: css/views/views.module.css
  

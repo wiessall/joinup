@@ -31,8 +31,8 @@
         "drupal/changed_fields": "^3.2",
         "drupal/colorbox": "^2.0",
         "drupal/config_ignore": "^3.0",
-        "drupal/core-composer-scaffold": "^11.2.4",
-        "drupal/core-recommended": "^11.2.4",
+        "drupal/core-composer-scaffold": "^11.3.2",
+        "drupal/core-recommended": "^11.3.2",
         "drupal/custom_markup_block": "^1.2",
         "drupal/default_content": "^2.0",
         "drupal/diff": "^2.0",
@@ -189,7 +189,7 @@
         "phpro/grumphp-shim": "2.17",
         "phpspec/prophecy-phpunit": "^2",
         "phpstan/extension-installer": "^1.3",
-        "phpunit/phpunit": "^10.5",
+        "phpunit/phpunit": "^11",
         "symfony/phpunit-bridge": "^6.3",
         "vincentlanglet/twig-cs-fixer": "^2.10",
         "vlucas/phpdotenv": "~5",
@@ -353,35 +353,31 @@
             "drupal/core": {
                 "Allow image style to be selected in text editor @see https://www.drupal.org/i/2061377": "resources/patch/php/drupal/core/2061377.mr10767-note521506.diff",
                 "Allow making the file description a required field @see https://www.drupal.org/i/2320877": "resources/patch/php/drupal/core/2320877.mr5876-note502317.diff",
-                "Delete should not be the default action on /admin/content @see https://www.drupal.org/i/2381293": "resources/patch/php/drupal/core/2381293-11.2.x-mr4583-note586540.diff",
-                "Upcast named arguments/named parameters in views @see https://www.drupal.org/project/drupal/issues/2528166": "resources/patch/php/drupal/core/2528166.patch",
+                "Delete should not be the default action on /admin/content @see https://www.drupal.org/i/2381293": "resources/patch/php/drupal/core/2381293.mr4583-commitd57ca76e.diff",
+                "Upcast named arguments/named parameters in views @see https://www.drupal.org/i/2528166": "resources/patch/php/drupal/core/2528166.mr14124-commitb55472cb.diff",
                 "Enlarge file_usage entity ID length. @see https://www.drupal.org/node/2675600": "resources/patch/php/drupal/core/2675600.diff",
-                "Allow plurals on bundle labels @see https://www.drupal.org/i/2765065": "resources/patch/php/drupal/core/2765065.mr13213-note586842.diff",
-                "Use comment access handler instead of hardcoding permissions @see https://www.drupal.org/i/2879087": "resources/patch/php/drupal/core/2879087.mr23-note588375.patch",
+                "Allow plurals on bundle labels @see https://www.drupal.org/i/2765065": "resources/patch/php/drupal/core/2765065.mr4252-commit6031e764.diff",
+                "Use comment access handler instead of hardcoding permissions @see https://www.drupal.org/i/2879087": "resources/patch/php/drupal/core/2879087.mr23-commit1f11b08b.diff",
                 "Add thread depth configuration to comments @see https://www.drupal.org/i/2786587": "resources/patch/php/drupal/core/2786587.mr11292-note588511.diff",
-                "Set fixed depth for comment threads.": "resources/patch/php/drupal/core/2786587-thread-depth-fixed-limit.patch",
-                "Views with a different query plugin created via the UI do not have the correct query plugin ID in the view config @see https://www.drupal.org/project/drupal/issues/2836237": "resources/patch/php/drupal/core/2836237.patch",
-                "Cache tags are not invalidated on revision delete @see https://www.drupal.org/project/drupal/issues/2945928": "resources/patch/php/drupal/core/2945928.mr14146commit12cee46f.patch",
-                "Have responsive image module ignore svg @see https://www.drupal.org/project/drupal/issues/2957924": "resources/patch/php/drupal/core/2957924.patch",
+                "Set fixed depth for comment threads @see https://www.drupal.org/i/2786587.": "resources/patch/php/drupal/core/2786587-thread-depth-fixed-limit.patch",
+                "Views with a different query plugin created via the UI do not have the correct query plugin ID in the view config @see https://www.drupal.org/i/2836237": "resources/patch/php/drupal/core/2836237.mr274-commit7e8d2533.diff",
+                "Cache tags are not invalidated on revision delete @see https://www.drupal.org/i/2945928": "resources/patch/php/drupal/core/2945928.mr14146-commit78bff01c.diff",
+                "Have responsive image module ignore svg @see https://www.drupal.org/i/2957924": "resources/patch/php/drupal/core/2957924.mr14454-commit6894dae2.diff",
                 "Restrict images to this site\" restricts images that, by definition, *are* on this site @see https://www.drupal.org/i/2998318": "resources/patch/php/drupal/core/2998318.patch",
                 "Layout builder doesn't support bundle computed field @see https://drupal.org/i/3034979": "resources/patch/php/drupal/core/layoutbuilder-bundlecomputedfieldsfix-3034979-21-11.x.patch",
-                "Views Block Display skips preBlockBuild() call on ajax rebuild https://www.drupal.org/i/2605218": "resources/patch/php/drupal/core/2605218.mr4399-note588625.diff",
-                "PHP deprecation error in PhpMail::mail @see https://www.drupal.org/project/drupal/issues/3418098": "resources/patch/php/drupal/core/3418098.diff",
-                "Set the toolbar to position fixed on mobile (for group banner positioning and toolbar on mobile) @see https://www.drupal.org/project/drupal/issues/2516938": "resources/patch/php/drupal/core/3809.diff",
+                "Views Block Display skips preBlockBuild() call on ajax rebuild https://www.drupal.org/i/2605218": "resources/patch/php/drupal/core/2605218.mr4399-commitfd6208c3.diff",
+                "PHP deprecation error in PhpMail::mail @see https://www.drupal.org/i/3418098": "resources/patch/php/drupal/core/3418098.diff",
+                "Set the toolbar to position fixed on mobile (for group banner positioning and toolbar on mobile) @see https://www.drupal.org/i/2516938": "resources/patch/php/drupal/core/3809.diff",
                 "Media Library: Argument #1 ($array) must be of type array, null given in array_filter(). @see https://www.drupal.org/i/3340973": "resources/patch/php/drupal/core/3340973.diff",
                 "Allow contrib extensions to be installed by Drupal when core branch is 11.x @see https://www.drupal.org/i/3387322": "resources/patch/php/drupal/core/3387322.mr8615-note353552.diff",
                 "MediaLibraryUiBuilder service does not properly allow additional contextual filter arguments @see https://www.drupal.org/i/3401726": "resources/patch/php/drupal/core/3401726.diff",
                 "JS errors from Drupal.dialog.resetSize when rapidly closing dialogs @see https://www.drupal.org/i/3472624": "resources/patch/php/drupal/core/3472624-4d97ff80.diff",
-                "Can only intentionally re-render an entity with references 20 times @see https://www.drupal.org/i/2940605": "resources/patch/php/drupal/core/2940605.mr4994-note568717.diff",
-                "Unserialize(): Passing null to parameter #1 ($data) of type string is deprecated @see https://drupal.org/i/3300404": "resources/patch/php/drupal/core/3300404.patch",
-                "Deprecated function: preg_match(): Passing null to parameter #2 ($subject) of type string is deprecated in Drupal\\Core\\Routing\\UrlGenerator->doGenerate() @see https://drupal.org/i/3338057": "resources/patch/php/drupal/core/3338057.diff",
+                "Can only intentionally re-render an entity with references 20 times @see https://www.drupal.org/i/2940605": "resources/patch/php/drupal/core/2940605-committed4d11c55d.diff",
                 "Time-based custom caching is broken since configuration expects an integer @see https://www.drupal.org/i/3233105": "resources/patch/php/drupal/core/3233105.diff",
-                "ImageItem generate sample value should take into account if the files exist @see https://www.drupal.org/i/3516691": "resources/patch/php/drupal/core/3516691-10.5.x.diff",
-                "File widget with multiple values may duplicate empty items": "resources/patch/php/drupal/core/3276280.diff",
-                "Odd behaviour with tabs on validation failure": "resources/patch/php/drupal/core/3508418.diff",
-                "Violation property path not properly tracked @see https://www.drupal.org/project/drupal/issues/3229493": "resources/patch/php/drupal/core/3229493.patch",
-                "Link widget placeholder_url should use label @see https://www.drupal.org/i/3547582": "resources/patch/php/drupal/core/3547582.diff",
-                "Installing from existing config causes massive cache.config population and slow installs @see https://www.drupal.org/i/3559030": "resources/patch/php/drupal/core/3559030.diff"
+                "ImageItem generate sample value should take into account if the files exist @see https://www.drupal.org/i/3516691": "resources/patch/php/drupal/core/3516691.mr11729-commite2bfef56.diff",
+                "File widget with multiple values may duplicate empty items @see https://www.drupal.org/i/3276280": "resources/patch/php/drupal/core/3276280.diff",
+                "Odd behaviour with tabs on validation failure @see https://www.drupal.org/i/3508418": "resources/patch/php/drupal/core/3508418.diff",
+                "Violation property path not properly tracked @see https://www.drupal.org/i/3229493": "resources/patch/php/drupal/core/3229493.patch"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
@@ -456,6 +452,9 @@
             "drupal/memcache": {
                 "Use Drupal core time service with fallback @see https://drupal.org/i/2999614": "resources/patch/php/drupal/memcache/2999614-mr41-20f8103bd2.diff"
             },
+            "drupal/message": {
+                "Renderer service can only accept array @see https://www.drupal.org/i/3531949": "resources/patch/php/drupal/message/3531949.mr56-commit24333e61.diff"
+            },
             "drupal/message_digest": {
                 "Renderer::renderPlain() is deprecated @see https://www.drupal.org/i/3511648": "resources/patch/php/drupal/message_digest/3511648.diff"
             },
@@ -509,6 +508,9 @@
             },
             "drupal/tmgmt_ec_etranslation": {
                 "Race Condition in Translation Callback": "resources/patch/php/drupal/tmgmt_ec_etranslation/3526972.diff"
+            },
+            "drupal/ui_patterns": {
+                "8.x Incompatibility with Drupal 11.3 see https://www.drupal.org/i/3563941": "resources/patch/php/drupal/ui_patterns/3563941.mr472-commit9ea4e992.diff"
             },
             "drupal/video_embed_field": {
                 "Add title attribute to YouTube, Vimeo, and Playlist embeds @see https://www.drupal.org/project/video_embed_field/issues/3200253": "resources/patch/php/drupal/video_embed_field/3200253-26.patch",
