@@ -46,7 +46,7 @@ third_party_settings:
       children:
         - description
         - documented_in
-      label: Description
+      label: Requirement(s)
       region: content
       parent_name: group_tabs
       weight: 20
@@ -62,7 +62,7 @@ third_party_settings:
     group_assets:
       children:
         - asset
-      label: 'Interoperability solutions'
+      label: 'Interoperability solution(s)'
       region: content
       parent_name: group_tabs
       weight: 50
@@ -78,7 +78,7 @@ third_party_settings:
     group_related_services:
       children:
         - affects
-      label: 'Trans-European digital public services'
+      label: 'Trans-european digital public service(s)'
       region: content
       parent_name: group_tabs
       weight: 30
@@ -94,7 +94,7 @@ third_party_settings:
     group_affected_parties:
       children:
         - has_participation
-      label: 'Affected stakeholders'
+      label: 'Affected stakeholder(s)'
       region: content
       parent_name: group_tabs
       weight: 40
@@ -110,7 +110,7 @@ third_party_settings:
     group_initiatives:
       children:
         - expression
-      label: Initiatives
+      label: Initiative(s)
       region: content
       parent_name: group_tabs
       weight: 10
@@ -126,7 +126,7 @@ third_party_settings:
     group_documents:
       children:
         - requirement_documents
-      label: Documents
+      label: 'Supporting document(s)'
       region: content
       parent_name: group_tabs
       weight: 60
