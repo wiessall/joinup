@@ -415,7 +415,8 @@
             },
             "drupal/field_group": {
                 "Links from validation message don't point to proper fields under horizontal tabs @see https://www.drupal.org/i/3362124": "resources/patch/php/drupal/field_group/3362124-mr110-commit_6462709d7f.diff",
-                "Activate tab by link anchor is broken @see https://www.drupal.org/project/field_group/issues/3226844": "resources/patch/php/drupal/field_group/3226844.diff"
+                "Activate tab by link anchor is broken @see https://www.drupal.org/project/field_group/issues/3226844": "resources/patch/php/drupal/field_group/3226844.diff",
+                "Emptiness check in field_group_remove_empty_form_groups() does not account for empty containers @see https://www.drupal.org/i/3069365": "resources/patch/php/drupal/field_group/3069365-mr109.commit044666d7.diff"
             },
             "drupal/field_permissions": {
                 "Skip role with isAdmin when save custom permission @see https://www.drupal.org/project/field_permissions/issues/3470671": "resources/patch/php/drupal/field_permissions/3470671.mr36-note366100.diff"
