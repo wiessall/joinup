@@ -65,7 +65,7 @@ function assessments_form_alter(array &$form, FormStateInterface $formState, str
 
   $form['cross_border'] = [
     '#type' => 'html_tag',
-    '#tag' => 'h3',
+    '#tag' => 'h4',
     '#value' => t('Identified effects on cross-border interoperability'),
   ];
   $form['#attached']['library'][] = 'assessments/radios_inline';
