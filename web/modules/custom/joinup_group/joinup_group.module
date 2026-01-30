@@ -454,7 +454,7 @@ function joinup_group_node_update(EntityInterface $entity): void {
   // Log an informational message if contact was changed.
   $contactInfoFieldName = $entity->getContactInformationFieldName();
   $contactInfoField = $entity->get($contactInfoFieldName);
-  $original = $entity->original;
+  $original = $entity->getOriginal();
   if (
     $original &&
     !$contactInfoField->equals($originalField = $original->get($contactInfoFieldName))
@@ -858,7 +858,8 @@ function joinup_group_user_predelete(EntityInterface $entity): void {
  */
 function joinup_group_user_update(UserInterface $user): void {
   // Only invalidate the tags if the user is being (un)blocked.
-  if ($user->isBlocked() == $user->original->isBlocked()) {
+  $original = $user->getOriginal();
+  if ($user->isBlocked() == $original->isBlocked()) {
     return;
   }
 
@@ -885,8 +886,7 @@ function joinup_group_entity_update(EntityInterface $group): void {
     return;
   }
 
-  /** @var \Drupal\joinup_group\Entity\GroupInterface $group_original_entity */
-  $group_original_entity = $group->original;
+  $group_original_entity = $group->getOriginal();
   if ($group_original_entity->getShortId() !== $group->getShortId()) {
     \Drupal::getContainer()->get('joinup_group.url_alias_updater')->queueGroupContent($group);
     $bundle_info = \Drupal::getContainer()->get('entity_type.bundle.info')->getBundleInfo($group->getEntityTypeId())[$group->bundle()];

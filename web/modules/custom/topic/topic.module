@@ -37,13 +37,15 @@ function topic_entity_bundle_info_alter(&$bundles): void {
  * Implements hook_ENTITY_TYPE_update().
  */
 function topic_taxonomy_term_update(TermInterface $term): void {
-  if ($term instanceof TopicInterface) {
-    /** @var \Drupal\topic\Entity\TopicInterface $original */
-    if (($original = $term->original) && $term->label() != $original->label()) {
-      /** @var \Drupal\topic\Entity\TopicMetaEntity $meta_entity */
-      if ($meta_entity = $term->topic->entity) {
-        $meta_entity->set('label', $term->label())->save();
-      }
+  if (!$term instanceof TopicInterface) {
+    return;
+  }
+
+  $original = $term->getOriginal();
+  if ($original && $term->label() != $original->label()) {
+    /** @var \Drupal\topic\Entity\TopicMetaEntity $meta_entity */
+    if ($meta_entity = $term->topic->entity) {
+      $meta_entity->set('label', $term->label())->save();
     }
   }
 }
@@ -52,15 +54,17 @@ function topic_taxonomy_term_update(TermInterface $term): void {
  * Implements hook_ENTITY_TYPE_update().
  */
 function topic_meta_entity_update(EntityInterface $entity): void {
-  if ($entity instanceof TopicMetaEntityInterface) {
-    // If the term is unpublished, remove it from the curated entityqueue list.
-    /** @var \Drupal\topic\Entity\TopicMetaEntityInterface $original */
-    if (($original = $entity->original) && $entity->published->value !== $original->published->value && !$entity->published->value) {
-      $queue = \Drupal::entityTypeManager()->getStorage('entity_subqueue')->load('homepage_topics');
-      if ($queue->hasItem($entity)) {
-        $queue->removeItem($entity)->save();
-        \Drupal::messenger()->addMessage(t('The topic has been removed from the homepage topics curated list since it was unpublished.'));
-      }
+  if (!$entity instanceof TopicMetaEntityInterface) {
+    return;
+  }
+
+  // If the term is unpublished, remove it from the curated entityqueue list.
+  $original = $entity->getOriginal();
+  if ($original && $entity->published->value !== $original->published->value && !$entity->published->value) {
+    $queue = \Drupal::entityTypeManager()->getStorage('entity_subqueue')->load('homepage_topics');
+    if ($queue->hasItem($entity)) {
+      $queue->removeItem($entity)->save();
+      \Drupal::messenger()->addMessage(t('The topic has been removed from the homepage topics curated list since it was unpublished.'));
     }
   }
 }

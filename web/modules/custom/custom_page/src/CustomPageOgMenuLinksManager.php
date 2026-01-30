@@ -136,7 +136,8 @@ readonly class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksMana
    */
   public function updateLink(MenuLinkContentInterface $menuLink): void {
     // Do a quick check to see if the menu link entity's ableness has changed.
-    if ($menuLink->isEnabled() === $menuLink->original->isEnabled()) {
+    $original = $menuLink->getOriginal();
+    if (empty($original) || $menuLink->isEnabled() === $original->isEnabled()) {
       return;
     }
 
