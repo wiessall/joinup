@@ -383,7 +383,7 @@ class AssessmentReportResource extends ResourceBase {
       return $organisation instanceof PublicOrganisation ? $organisation : NULL;
     }
 
-    $organisationTypeIds = $this->getTermIdFromIdentifier('assess_provider_type', $provider['organisation_type'], "/provider/organisation_type");
+    $organisationTypeIds = $this->getTermIdByName('assess_provider_type', $provider['organisation_type'], "/provider/organisation_type");
     if (empty($organisationTypeIds)) {
       return NULL;
     }
@@ -398,7 +398,7 @@ class AssessmentReportResource extends ResourceBase {
 
     // For non-European types, also filter by country.
     if (!$isEuropean && isset($provider['country'])) {
-      $countryIds = $this->getTermIdFromIdentifier('spatial', $provider['country'], "/provider/country", 'code');
+      $countryIds = $this->getTermIdByName('spatial', $provider['country'], "/provider/country", 'code');
       if (!empty($countryIds)) {
         $query->condition('country', $countryIds, 'IN');
       }
@@ -693,7 +693,8 @@ class AssessmentReportResource extends ResourceBase {
    *   A list of term IDs.
    */
   protected function getTermIdByName(string $vid, array|string $identifier, string $path, string $field = 'id'): array {
-    return $this->assessmentVocabularyHelper->getTermIdFromIdentifier($vid, $identifier, $field);
+    $tids = $this->assessmentVocabularyHelper->getTermIdFromIdentifier($vid, $identifier, $field);
+    return (is_array($tids)) ? $tids : [$tids];
   }
 
   /**
