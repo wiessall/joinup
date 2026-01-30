@@ -143,6 +143,7 @@ function assessments_form_layout_paragraphs_component_form_alter(array &$form, F
     // We use layout paragraphs, but we use everytime the 1 column layout.
     $form['layout_paragraphs']['#access'] = FALSE;
     $form['asset']['widget']['#title_display'] = 'invisible';
+    $form['actions']['cancel']['#value'] = t('Clear');
     $form['documented_in']['widget'][0]['uri']['#description'] = t('Use <a href="https://eur-lex.europa.eu/eli-register/what_is_eli.html" target="_blank" rel="noopener noreferrer">ELI format</a>, if possible – otherwise provide a URL pointing to the binding requirement assessed.');
   }
 }
@@ -490,6 +491,35 @@ function assessments_inline_entity_form_table_fields_alter(array &$fields, array
       'type' => 'field',
       'label' => t('Description'),
       'weight' => 11,
+      'display_options' => [
+        'type' => 'field_fallback_formatter',
+        'settings' => [
+          'main_field_formatter_id' => 'string',
+          'main_field_formatter_settings' => ['link_to_entity' => FALSE],
+          'fallback_field_id' => 'description',
+          'fallback_field_formatter_id' => 'smart_trim',
+          'fallback_field_formatter_settings' => [
+            'trim_length' => 255,
+            'trim_type' => 'chars',
+            'trim_suffix' => '…',
+            'wrap_output' => FALSE,
+            'wrap_class' => 'trimmed',
+            'more' => [
+              'display_link' => FALSE,
+              'target_blank' => FALSE,
+              'link_trim_only' => FALSE,
+              'class' => 'more-link',
+              'text' => '',
+              'aria_label' => '',
+            ],
+            'trim_options' => [
+              'text' => TRUE,
+              'trim_zero' => FALSE,
+              'replace_tokens' => FALSE,
+            ],
+          ],
+        ],
+      ],
     ];
   }
 }
