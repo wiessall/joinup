@@ -1,0 +1,11 @@
+uuid: 56c309bc-f65e-48b7-af4a-f89aeea305a7
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.solution_membership_invitation
+id: message.solution_membership_invitation
+target_entity_type_id: message
+target_bundle: solution_membership_invitation
+default_langcode: site_default
+language_alterable: false

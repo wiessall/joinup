@@ -1,0 +1,11 @@
+uuid: cbfe6d5a-480d-415d-ba0e-b1f4f85d47f2
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.discussion_updated
+id: message.discussion_updated
+target_entity_type_id: message
+target_bundle: discussion_updated
+default_langcode: site_default
+language_alterable: false

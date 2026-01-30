@@ -1,0 +1,18 @@
+uuid: 201d8e1c-2473-4623-88f9-b8df5c9510a9
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.oss_intended_audience_scope
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: taxonomy_term.oss_intended_audience_scope
+target_entity_type_id: taxonomy_term
+target_bundle: oss_intended_audience_scope
+default_langcode: site_default
+language_alterable: false

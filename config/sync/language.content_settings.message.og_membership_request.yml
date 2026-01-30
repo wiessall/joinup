@@ -1,0 +1,11 @@
+uuid: 23a91478-54eb-41ee-8d4f-77918c820498
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.og_membership_request
+id: message.og_membership_request
+target_entity_type_id: message
+target_bundle: og_membership_request
+default_langcode: site_default
+language_alterable: false

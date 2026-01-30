@@ -1,0 +1,11 @@
+uuid: 3f9531a7-1fda-4021-9c54-7cc4adb9448c
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.col_arc_del_sol_no_affiliates
+id: message.col_arc_del_sol_no_affiliates
+target_entity_type_id: message
+target_bundle: col_arc_del_sol_no_affiliates
+default_langcode: site_default
+language_alterable: false
