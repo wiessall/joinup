@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Plugin\rest\resource;
 
+use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\Component\Render\PlainTextOutput;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\ContentEntityStorageInterface;
@@ -42,6 +43,7 @@ use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\CannotWriteFileException;
 use Symfony\Component\HttpFoundation\File\Exception\NoFileException;
@@ -93,6 +95,8 @@ class AssessmentReportResource extends ResourceBase {
     protected readonly FileSystemInterface $fileSystem,
     protected readonly FileUploadHandler $uploadHandler,
     protected readonly AccountProxyInterface $currentUser,
+    #[Autowire(AssessmentVocabularyHelper::class)]
+    protected readonly AssessmentVocabularyHelper $assessmentVocabularyHelper,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition, $serializerFormats, $logger);
   }
@@ -115,6 +119,7 @@ class AssessmentReportResource extends ResourceBase {
       $container->get('file_system'),
       $container->get('file.upload_handler'),
       $container->get('current_user'),
+      $container->get(AssessmentVocabularyHelper::class),
     );
   }
 
@@ -315,7 +320,7 @@ class AssessmentReportResource extends ResourceBase {
       $report->{$statementType} = $statementStorage->create([
         'type' => $statementType,
         'langcode' => $this->langcode,
-        'interpretation' => $this->getTermIdFromIdentifier('assess_statement_interpretation', $result['interpretation'], "/results_in/$statementType/interpretation"),
+        'interpretation' => $this->getTermIdByName('assess_statement_interpretation', $result['interpretation'], "/results_in/$statementType/interpretation"),
         'judgement' => $this->buildFormattedText($result, 'judgement'),
       ]);
     }
@@ -347,8 +352,8 @@ class AssessmentReportResource extends ResourceBase {
       'type' => 'public_organisation',
       'langcode' => $this->langcode,
       'name' => $provider['name'],
-      'organisation_type' => $this->getTermIdFromIdentifier('assess_provider_type', $provider['organisation_type'], "/provider/organisation_type"),
-      'country' => isset($provider['country']) ? $this->getTermIdFromIdentifier('spatial', $provider['country'], "/provider/country", 'code') : NULL,
+      'organisation_type' => $this->getTermIdByName('assess_provider_type', $provider['organisation_type'], "/provider/organisation_type"),
+      'country' => isset($provider['country']) ? $this->getTermIdByName('spatial', $provider['country'], "/provider/country", 'code') : NULL,
       'status' => TRUE,
     ]);
   }
@@ -422,8 +427,8 @@ class AssessmentReportResource extends ResourceBase {
         'type' => 'public_service',
         'langcode' => $this->langcode,
         'name' => $item['name'],
-        'thematic_area' => isset($item['thematic_area']) ? $this->getTermIdFromIdentifier('assess_public_service_area', $item['thematic_area'], "$path/affects/$delta/thematic_area") : [],
-        'countries' => isset($item['country']) ? $this->getTermIdFromIdentifier('spatial', $item['country'], "$path/affects/$delta/country", 'code') : [],
+        'thematic_area' => isset($item['thematic_area']) ? $this->getTermIdByName('assess_public_service_area', $item['thematic_area'], "$path/affects/$delta/thematic_area") : [],
+        'countries' => isset($item['country']) ? $this->getTermIdByName('spatial', $item['country'], "$path/affects/$delta/country", 'code') : [],
         'status' => TRUE,
       ]);
     }
@@ -449,8 +454,8 @@ class AssessmentReportResource extends ResourceBase {
       $participation[] = $this->getAssessmentStorage()->create([
         'type' => 'participation',
         'langcode' => $this->langcode,
-        'participant_type' => $this->getTermIdFromIdentifier('assess_participant_type', $item['participant_type'], "$path/has_participation/$delta/participant_type"),
-        'stakeholder_country' => isset($item['country']) ? $this->getTermIdFromIdentifier('spatial', $item['country'], "$path/has_participation/$delta/country", 'code') : [],
+        'participant_type' => $this->getTermIdByName('assess_participant_type', $item['participant_type'], "$path/has_participation/$delta/participant_type"),
+        'stakeholder_country' => isset($item['country']) ? $this->getTermIdByName('spatial', $item['country'], "$path/has_participation/$delta/country", 'code') : [],
         'status' => TRUE,
       ]);
     }
@@ -628,34 +633,12 @@ class AssessmentReportResource extends ResourceBase {
    *   The vocabulary ID.
    * @param array|string $identifier
    *   One or many term identifiers.
-   * @param string $path
-   *   The path to the property.
-   * @param string $field
-   *   The field containing the identifier. Defaults to 'id'.
    *
    * @returns list<string|int>
    *   A list of term IDs.
    */
-  protected function getTermIdFromIdentifier(string $vid, array|string $identifier, string $path, string $field = 'id'): array {
-    $identifiers = (array) $identifier;
-
-    $tids = [];
-    foreach ($identifiers as $identifier) {
-      $ids = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery()
-        ->accessCheck(FALSE)
-        ->condition('vid', $vid)
-        ->condition($field, $identifier)
-        ->execute();
-
-      if (!$ids) {
-        $this->addError($path, "A term with identifier '$identifier' does not exist in the '$vid' vocabulary");
-        continue;
-      }
-
-      $tids[] = reset($ids);
-    }
-
-    return $tids;
+  protected function getTermIdByName(string $vid, array|string $identifier): array {
+    return $this->assessmentVocabularyHelper->getTermIdFromIdentifier($vid, $identifier);
   }
 
   /**
