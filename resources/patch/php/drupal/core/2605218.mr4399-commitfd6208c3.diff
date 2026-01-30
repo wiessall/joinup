@@ -1,8 +1,8 @@
 diff --git a/core/modules/views/src/Hook/ViewsHooks.php b/core/modules/views/src/Hook/ViewsHooks.php
-index b309887723c..b93fb819cea 100644
+index db5f581b853daf3be6a9028f06ca3bc442370a9f..0193986b0c2dcac9a2dc5a5750a9653252baf89a 100644
 --- a/core/modules/views/src/Hook/ViewsHooks.php
 +++ b/core/modules/views/src/Hook/ViewsHooks.php
-@@ -394,4 +394,52 @@ public function blockPresave(BlockInterface $block): void {
+@@ -259,4 +259,52 @@ public function blockPresave(BlockInterface $block): void {
      }
    }
  
@@ -56,10 +56,10 @@ index b309887723c..b93fb819cea 100644
 +
  }
 diff --git a/core/modules/views/src/Plugin/views/display/Block.php b/core/modules/views/src/Plugin/views/display/Block.php
-index 5692ee1df01..b4c9d7cae0d 100644
+index d696681c80eb4ceee28d0a64999d22d1ed1491eb..6e5c5871368b4698c3b2d8a7a2a1e05bcc427d45 100644
 --- a/core/modules/views/src/Plugin/views/display/Block.php
 +++ b/core/modules/views/src/Plugin/views/display/Block.php
-@@ -2,16 +2,24 @@
+@@ -2,15 +2,23 @@
  
  namespace Drupal\views\Plugin\views\display;
  
@@ -81,12 +81,11 @@ index 5692ee1df01..b4c9d7cae0d 100644
 +use Drupal\Core\Url;
  use Drupal\views\Attribute\ViewsDisplay;
  use Drupal\views\Plugin\Block\ViewsBlock;
- use Symfony\Component\DependencyInjection\ContainerInterface;
 +use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
  
  /**
   * The plugin that handles a block.
-@@ -54,6 +62,34 @@ class Block extends DisplayPluginBase {
+@@ -53,6 +61,34 @@ class Block extends DisplayPluginBase {
     */
    protected $blockManager;
  
@@ -121,7 +120,7 @@ index 5692ee1df01..b4c9d7cae0d 100644
    /**
     * Constructs a new Block instance.
     *
-@@ -67,12 +103,33 @@ class Block extends DisplayPluginBase {
+@@ -66,12 +102,33 @@ class Block extends DisplayPluginBase {
     *   The entity type manager.
     * @param \Drupal\Core\Block\BlockManagerInterface $block_manager
     *   The block manager.
@@ -156,19 +155,7 @@ index 5692ee1df01..b4c9d7cae0d 100644
    }
  
    /**
-@@ -84,7 +141,10 @@ public static function create(ContainerInterface $container, array $configuratio
-       $plugin_id,
-       $plugin_definition,
-       $container->get('entity_type.manager'),
--      $container->get('plugin.manager.block')
-+      $container->get('plugin.manager.block'),
-+      $container->get('keyvalue'),
-+      $container->get('context.repository'),
-+      $container->get('context.handler')
-     );
-   }
- 
-@@ -361,17 +421,193 @@ public function blockSubmit(ViewsBlock $block, $form, FormStateInterface $form_s
+@@ -350,17 +407,193 @@ public function blockSubmit(ViewsBlock $block, $form, FormStateInterface $form_s
    /**
     * Allows to change the display settings right before executing the block.
     *
@@ -364,10 +351,10 @@ index 5692ee1df01..b4c9d7cae0d 100644
     * {@inheritdoc}
     */
 diff --git a/core/modules/views/src/Plugin/views/display/DisplayPluginBase.php b/core/modules/views/src/Plugin/views/display/DisplayPluginBase.php
-index d3adc61de5a..197e78ebea6 100644
+index ce8890fc978e774a5515179e381b9c5b1d9b6621..f19f2d3b8ac920720a5d5eb7d63eed142c8e38b8 100644
 --- a/core/modules/views/src/Plugin/views/display/DisplayPluginBase.php
 +++ b/core/modules/views/src/Plugin/views/display/DisplayPluginBase.php
-@@ -2497,6 +2497,12 @@ public static function buildBasicRenderable($view_id, $display_id, array $args =
+@@ -2481,6 +2481,12 @@ public static function buildBasicRenderable($view_id, $display_id, array $args =
  
    }
  
@@ -381,7 +368,7 @@ index d3adc61de5a..197e78ebea6 100644
     * {@inheritdoc}
     */
 diff --git a/core/modules/views/src/Plugin/views/display/DisplayPluginInterface.php b/core/modules/views/src/Plugin/views/display/DisplayPluginInterface.php
-index c1227c301b1..6f8c6011c78 100644
+index c1227c301b1b792eeb7c200e1dfa39e60a663d93..6f8c6011c78c232325f4f613ec737c7f33f2044e 100644
 --- a/core/modules/views/src/Plugin/views/display/DisplayPluginInterface.php
 +++ b/core/modules/views/src/Plugin/views/display/DisplayPluginInterface.php
 @@ -509,6 +509,11 @@ public static function buildBasicRenderable($view_id, $display_id, array $args =
@@ -397,10 +384,10 @@ index c1227c301b1..6f8c6011c78 100644
     * Renders the display for the purposes of a live preview.
     *
 diff --git a/core/modules/views/src/ViewExecutable.php b/core/modules/views/src/ViewExecutable.php
-index 407260ed285..6d5c61e5ae6 100644
+index a8b58497a4c40eb77b77bc10b120d460acd728ad..50190fa16aab0568b20c6bc5929a4b9b67a5b14d 100644
 --- a/core/modules/views/src/ViewExecutable.php
 +++ b/core/modules/views/src/ViewExecutable.php
-@@ -1719,6 +1719,11 @@ public function preview($display_id = NULL, $args = []) {
+@@ -1713,6 +1713,11 @@ public function preview($display_id = NULL, $args = []) {
      }
  
      $this->preview = TRUE;
@@ -412,19 +399,247 @@ index 407260ed285..6d5c61e5ae6 100644
      $this->preExecute($args);
      // Preview the view.
      $output = $this->display_handler->preview();
+diff --git a/core/modules/views/tests/modules/views_test_config/test_views/views.view.content_block_overrides_ajax_test.yml b/core/modules/views/tests/modules/views_test_config/test_views/views.view.content_block_overrides_ajax_test.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..bbe4e675e16ccd704d03cc24deb11c0e96613f93
+--- /dev/null
++++ b/core/modules/views/tests/modules/views_test_config/test_views/views.view.content_block_overrides_ajax_test.yml
+@@ -0,0 +1,222 @@
++langcode: en
++status: true
++dependencies:
++  module:
++    - node
++    - user
++id: content_block_overrides_ajax_test
++label: 'Content block overrides AJAX test'
++module: views
++description: ''
++tag: ''
++base_table: node_field_data
++base_field: nid
++display:
++  default:
++    display_plugin: default
++    id: default
++    display_title: Master
++    position: 0
++    display_options:
++      access:
++        type: perm
++        options:
++          perm: 'access content'
++      cache:
++        type: tag
++        options: {  }
++      query:
++        type: views_query
++        options:
++          disable_sql_rewrite: false
++          distinct: false
++          replica: false
++          query_comment: ''
++          query_tags: {  }
++      exposed_form:
++        type: basic
++        options:
++          submit_button: Apply
++          reset_button: false
++          reset_button_label: Reset
++          exposed_sorts_label: 'Sort by'
++          expose_sort_order: true
++          sort_asc_label: Asc
++          sort_desc_label: Desc
++      pager:
++        type: full
++        options:
++          items_per_page: 10
++          offset: 0
++          id: 0
++          total_pages: null
++          expose:
++            items_per_page: false
++            items_per_page_label: 'Items per page'
++            items_per_page_options: '5, 10, 25, 50'
++            items_per_page_options_all: false
++            items_per_page_options_all_label: '- All -'
++            offset: false
++            offset_label: Offset
++          tags:
++            previous: '‹ Previous'
++            next: 'Next ›'
++            first: '« First'
++            last: 'Last »'
++          quantity: 9
++      style:
++        type: table
++      row:
++        type: fields
++      fields:
++        title:
++          id: title
++          table: node_field_data
++          field: title
++          entity_type: node
++          entity_field: title
++          alter:
++            alter_text: false
++            make_link: false
++            absolute: false
++            trim: false
++            word_boundary: false
++            ellipsis: false
++            strip_tags: false
++            html: false
++          hide_empty: false
++          empty_zero: false
++          settings:
++            link_to_entity: true
++          plugin_id: field
++          relationship: none
++          group_type: group
++          admin_label: ''
++          label: Title
++          exclude: false
++          element_type: ''
++          element_class: ''
++          element_label_type: ''
++          element_label_class: ''
++          element_label_colon: true
++          element_wrapper_type: ''
++          element_wrapper_class: ''
++          element_default_classes: true
++          empty: ''
++          hide_alter_empty: true
++          click_sort_column: value
++          type: string
++          group_column: value
++          group_columns: {  }
++          group_rows: true
++          delta_limit: 0
++          delta_offset: 0
++          delta_reversed: false
++          delta_first_last: false
++          multi_type: separator
++          separator: ', '
++          field_api_classes: false
++      filters:
++        status:
++          value: '1'
++          table: node_field_data
++          field: status
++          plugin_id: boolean
++          entity_type: node
++          entity_field: status
++          id: status
++          expose:
++            operator: ''
++          group: 1
++        title:
++          id: title
++          table: node_field_data
++          field: title
++          relationship: none
++          group_type: group
++          admin_label: ''
++          operator: contains
++          value: ''
++          group: 1
++          exposed: true
++          expose:
++            operator_id: title_op
++            label: Title
++            description: ''
++            use_operator: false
++            operator: title_op
++            identifier: title
++            required: false
++            remember: false
++            multiple: false
++            remember_roles:
++              authenticated: authenticated
++              anonymous: '0'
++              administrator: '0'
++            placeholder: ''
++          is_grouped: false
++          group_info:
++            label: ''
++            description: ''
++            identifier: ''
++            optional: true
++            widget: select
++            multiple: false
++            remember: false
++            default_group: All
++            default_group_multiple: {  }
++            group_items: {  }
++          entity_type: node
++          entity_field: title
++          plugin_id: string
++      sorts:
++        created:
++          id: created
++          table: node_field_data
++          field: created
++          relationship: none
++          group_type: group
++          admin_label: ''
++          order: ASC
++          exposed: false
++          expose:
++            label: ''
++          granularity: second
++          entity_type: node
++          entity_field: created
++          plugin_id: date
++      title: 'Content block overrides AJAX test'
++      header: {  }
++      footer: {  }
++      empty: {  }
++      relationships: {  }
++      arguments: {  }
++      display_extenders: {  }
++      use_ajax: true
++    cache_metadata:
++      max-age: -1
++      contexts:
++        - 'languages:language_content'
++        - 'languages:language_interface'
++        - url
++        - url.query_args
++        - 'user.node_grants:view'
++        - user.permissions
++      tags: {  }
++  block_1:
++    display_plugin: block
++    id: block_1
++    display_title: Block
++    position: 1
++    display_options:
++      display_extenders: {  }
++    cache_metadata:
++      max-age: -1
++      contexts:
++        - 'languages:language_content'
++        - 'languages:language_interface'
++        - url
++        - url.query_args
++        - 'user.node_grants:view'
++        - user.permissions
++      tags: {  }
 diff --git a/core/modules/views/tests/src/Unit/Plugin/views/display/BlockTest.php b/core/modules/views/tests/src/Unit/Plugin/views/display/BlockTest.php
-index 6988a04d8b4..332581f0a83 100644
+index 44fd1277ca878c394dfc3d82adc585ab9198d71a..41c1d8b96ba37ce61fd5639a13cd0287e60b38cd 100644
 --- a/core/modules/views/tests/src/Unit/Plugin/views/display/BlockTest.php
 +++ b/core/modules/views/tests/src/Unit/Plugin/views/display/BlockTest.php
-@@ -5,6 +5,7 @@
- namespace Drupal\Tests\views\Unit\Plugin\views\display;
- 
- use Drupal\Tests\UnitTestCase;
+@@ -9,6 +9,7 @@
+ use PHPUnit\Framework\Attributes\CoversClass;
+ use PHPUnit\Framework\Attributes\Group;
+ use PHPUnit\Framework\Attributes\TestWith;
 +use Symfony\Component\HttpFoundation\Request;
  
  /**
-  * @coversDefaultClass \Drupal\views\Plugin\views\display\Block
-@@ -39,19 +40,74 @@ class BlockTest extends UnitTestCase {
+  * Tests Drupal\views\Plugin\views\display\Block.
+@@ -44,19 +45,74 @@ class BlockTest extends UnitTestCase {
    protected function setUp(): void {
      parent::setUp();
  

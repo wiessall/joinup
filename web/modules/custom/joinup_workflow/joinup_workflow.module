@@ -234,7 +234,7 @@ function joinup_workflow_message_form_submit_draft(array &$form, FormStateInterf
       $status_messages = $messenger->messagesByType('status');
       $messenger->deleteByType('status');
       $args = [
-        '@type' => node_get_type_label($node),
+        '@type' => $node->getBundleEntity()?->label(),
         '%title' => $node->toLink()->toString(),
         '%state' => $node->get('field_state')->getString(),
         ':user' => Url::fromRoute('user.page')->toString(),
