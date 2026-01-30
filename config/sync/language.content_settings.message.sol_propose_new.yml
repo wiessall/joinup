@@ -1,0 +1,11 @@
+uuid: aa096f2e-dd7a-4af0-9351-124867f60e78
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.sol_propose_new
+id: message.sol_propose_new
+target_entity_type_id: message
+target_bundle: sol_propose_new
+default_langcode: site_default
+language_alterable: false

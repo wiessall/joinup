@@ -4,6 +4,13 @@ status: true
 dependencies:
   config:
     - media.type.news_logo
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
 id: media.news_logo
 target_entity_type_id: media
 target_bundle: news_logo
