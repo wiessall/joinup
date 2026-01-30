@@ -13,7 +13,7 @@ diff --git a/core/modules/rest/rest.install b/core/modules/rest/rest.install
 index 6a80d19f0f96..25dfb65ac62b 100644
 --- a/core/modules/rest/rest.install
 +++ b/core/modules/rest/rest.install
-@@ -8,6 +8,33 @@
+@@ -8,6 +8,32 @@
  /**
   * Implements hook_update_last_removed().
   */
@@ -26,7 +26,6 @@ index 6a80d19f0f96..25dfb65ac62b 100644
 + * Update views with "serializer" display adding pager setting if not set yet.
 + */
 +function rest_update_11001(): void {
-+
 +  $config_factory = \Drupal::configFactory();
 +  $view_ids = $config_factory->listAll('views.view.');
 +
@@ -81,7 +80,7 @@ index abdd42c02..57ca40480b 100644
    }
 
    /**
-@@ -140,7 +148,51 @@ class Serializer extends StylePluginBase implements CacheableDependencyInterface
+@@ -140,7 +148,47 @@ class Serializer extends StylePluginBase implements CacheableDependencyInterface
      else {
        $content_type = !empty($this->options['formats']) ? reset($this->options['formats']) : 'json';
      }
@@ -112,15 +111,11 @@ index abdd42c02..57ca40480b 100644
 +   */
 +  protected function wrapRowsInPager(array $rows): array {
 +    $pager = $this->view->pager;
-+    $class = get_class($pager);
 +    $current_page = $pager->getCurrentPage();
 +    $items_per_page = $pager->getItemsPerPage();
 +    $total_items = $pager->getTotalItems();
 +
-+    $total_pages = 0;
-+    if (!in_array($class, ['Drupal\views\Plugin\views\pager\None', 'Drupal\views\Plugin\views\pager\Some'], TRUE)) {
-+      $total_pages = $pager->getPagerTotal();
-+    }
++    $total_pages = $pager->usePager() ? $pager->getPagerTotal() : 0;
 +
 +    return [
 +      'rows' => $rows,
