@@ -63,6 +63,9 @@ class JsErrorsContext extends RawDrupalContext {
    * Reports JS warnings, if any.
    */
   public function reportWarnings(array $warnings, AfterScenarioScope $scope): void {
+    // Normalize items to strings (some may be arrays from JS).
+    $warnings = array_map(fn(mixed $item): string => is_string($item) ? $item : json_encode($item), $warnings);
+
     if ($this->ignoredWarnings) {
       $warnings = array_filter($warnings, fn(string $warning): bool => !$this->matchPatterns($warning, $this->ignoredWarnings));
     }
@@ -81,6 +84,9 @@ class JsErrorsContext extends RawDrupalContext {
    * @throws \WebDriver\Exception\JavaScriptError
    */
   public function reportErrors(array $errors, AfterScenarioScope $scope): void {
+    // Normalize items to strings (some may be arrays from JS).
+    $errors = array_map(fn(mixed $item): string => is_string($item) ? $item : json_encode($item), $errors);
+
     if ($this->ignoredErrors) {
       $errors = array_filter($errors, fn(string $error): bool => !$this->matchPatterns($error, $this->ignoredErrors));
     }
