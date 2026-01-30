@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Plugin\rest\resource;
 
-use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\Component\Render\PlainTextOutput;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\ContentEntityStorageInterface;
@@ -22,6 +21,7 @@ use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\assessments\AssessmentInterface;
+use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\AssessmentStatement;
 use Drupal\assessments\Entity\PublicOrganisation;
@@ -633,12 +633,16 @@ class AssessmentReportResource extends ResourceBase {
    *   The vocabulary ID.
    * @param array|string $identifier
    *   One or many term identifiers.
+   * @param string $path
+   *   The path.
+   * @param string $field
+   *   The field.
    *
    * @returns list<string|int>
    *   A list of term IDs.
    */
-  protected function getTermIdByName(string $vid, array|string $identifier): array {
-    return $this->assessmentVocabularyHelper->getTermIdFromIdentifier($vid, $identifier);
+  protected function getTermIdByName(string $vid, array|string $identifier, string $path, string $field = 'id'): array {
+    return $this->assessmentVocabularyHelper->getTermIdFromIdentifier($vid, $identifier, $field);
   }
 
   /**
