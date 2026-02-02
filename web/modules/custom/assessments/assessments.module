@@ -580,7 +580,7 @@ function assessments_assessment_presave(AssessmentInterface $entity): void {
     $eu_country = $entity->get('eu_countries')->value;
     $vocabHelper = \Drupal::service(AssessmentVocabularyHelper::class);
     if ($eu_country) {
-      $term_id = (int) $vocabHelper->getTermIdFromIdentifier('spatial', 'EU', 'code');
+      $term_id = $vocabHelper->getTermIdFromIdentifier('spatial', 'EU', 'code');
       $entity->set('stakeholder_country', ['target_id' => $term_id]);
     }
   }
