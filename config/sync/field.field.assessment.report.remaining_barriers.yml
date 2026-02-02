@@ -16,8 +16,8 @@ id: assessment.report.remaining_barriers
 field_name: remaining_barriers
 entity_type: assessment
 bundle: report
-label: 'Remaining barriers of interoperability'
-description: 'If yes, provide a description'
+label: 'Remaining barriers to cross-border interoperability'
+description: 'Have you discovered any remaining barriers to cross-border interoperability?'
 required: false
 translatable: false
 default_value: {  }
