@@ -693,7 +693,14 @@ class AssessmentReportResource extends ResourceBase {
    *   A list of term IDs.
    */
   protected function getTermIdByName(string $vid, array|string $identifier, string $path, string $field = 'id'): array {
-    $tids = $this->assessmentVocabularyHelper->getTermIdFromIdentifier($vid, $identifier, $field);
+    $tids = [];
+    try {
+      $tids = $this->assessmentVocabularyHelper->getTermIdFromIdentifier($vid, $identifier, $field);
+    }
+    catch (\Exception $e) {
+      $this->addError($path, $e->getMessage());
+    }
+
     return (is_array($tids)) ? $tids : [$tids];
   }
 
