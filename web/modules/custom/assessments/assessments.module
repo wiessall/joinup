@@ -16,6 +16,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\assessments\AssessmentInterface;
+use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\AssessmentSubEntity;
 use Drupal\assessments\Entity\BindingRequirementParagraph;
@@ -142,6 +143,10 @@ function assessments_form_layout_paragraphs_component_form_alter(array &$form, F
     // We use layout paragraphs, but we use everytime the 1 column layout.
     $form['layout_paragraphs']['#access'] = FALSE;
     $form['asset']['widget']['#title_display'] = 'invisible';
+    $form['actions']['cancel']['#value'] = t('Clear');
+    $form['documented_in']['widget'][0]['uri']['#description'] = t('Use <a href=":eli_url" target="_blank" rel="noopener noreferrer">ELI format</a>, if possible – otherwise provide a URL pointing to the binding requirement assessed.', [
+      ':eli_url' => 'https://eur-lex.europa.eu/eli-register/what_is_eli.html',
+    ]);
   }
 }
 
@@ -458,6 +463,13 @@ function assessments_inline_entity_form_entity_form_alter(array &$entity_form, F
     // In this context the landing page is mandatory.
     $entity_form['landing_page']['widget']['uri']['#required'] = TRUE;
   }
+  if ($solution->bundle() === 'participation') {
+    $entity_form['stakeholder_country']['#states'] = [
+      'visible' => [
+        ':input[name="has_participation[0][inline_entity_form][eu_countries][value]"]' => ['checked' => FALSE],
+      ],
+    ];
+  }
 }
 
 /**
@@ -481,6 +493,35 @@ function assessments_inline_entity_form_table_fields_alter(array &$fields, array
       'type' => 'field',
       'label' => t('Description'),
       'weight' => 11,
+      'display_options' => [
+        'type' => 'field_fallback_formatter',
+        'settings' => [
+          'main_field_formatter_id' => 'string',
+          'main_field_formatter_settings' => ['link_to_entity' => FALSE],
+          'fallback_field_id' => 'description',
+          'fallback_field_formatter_id' => 'smart_trim',
+          'fallback_field_formatter_settings' => [
+            'trim_length' => 255,
+            'trim_type' => 'chars',
+            'trim_suffix' => '…',
+            'wrap_output' => FALSE,
+            'wrap_class' => 'trimmed',
+            'more' => [
+              'display_link' => FALSE,
+              'target_blank' => FALSE,
+              'link_trim_only' => FALSE,
+              'class' => 'more-link',
+              'text' => '',
+              'aria_label' => '',
+            ],
+            'trim_options' => [
+              'text' => TRUE,
+              'trim_zero' => FALSE,
+              'replace_tokens' => FALSE,
+            ],
+          ],
+        ],
+      ],
     ];
   }
 }
@@ -533,6 +574,19 @@ function assessments_assessment_presave(AssessmentInterface $entity): void {
       // Truncate to 255 characters if necessary.
       $name = mb_strlen($initiative_name) > 255 ? mb_substr($initiative_name, 0, 255) : $initiative_name;
       $entity->set('name', $name);
+    }
+  }
+  elseif ($entity->bundle() === 'participation') {
+    $eu_country = $entity->get('eu_countries')->value;
+    $vocabHelper = \Drupal::service(AssessmentVocabularyHelper::class);
+    if ($eu_country) {
+      $term_id = $vocabHelper->getTermIdFromIdentifier('spatial', 'EU');
+      if (!$term_id) {
+        throw new \UnexpectedValueException(
+          'Required EU term not found in the "spatial" vocabulary.'
+        );
+      }
+      $entity->set('stakeholder_country', ['target_id' => $term_id]);
     }
   }
 }

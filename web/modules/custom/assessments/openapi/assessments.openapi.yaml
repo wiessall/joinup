@@ -466,6 +466,7 @@ components:
         name:
           type: string
           description: A short name assigned for easy identification.
+          minLength: 1
           maxLength: 255
         provider:
           description: |
@@ -539,6 +540,7 @@ components:
         name:
           type: string
           description: The public organisation name.
+          minLength: 1
           maxLength: 255
         organisation_type:
           type: string
@@ -571,6 +573,7 @@ components:
         name:
           type: string
           description: The public organisation name.
+          minLength: 1
           maxLength: 255
         organisation_type:
           type: string
@@ -596,6 +599,7 @@ components:
         name:
           type: string
           description: The public organisation name.
+          minLength: 1
           maxLength: 255
         organisation_type:
           type: string
@@ -629,6 +633,7 @@ components:
         description:
           type: string
           description: The binding requirement short description.
+          minLength: 1
         documents:
           type: array
           description: |
@@ -681,10 +686,12 @@ components:
         name:
           type: string
           description: The name of the initiative.
+          minLength: 1
           maxLength: 255
         description:
           type: string
           description: The description of the initiative.
+          minLength: 1
         documented_in:
           type: string
           format: uri
@@ -699,6 +706,7 @@ components:
         name:
           type: string
           description: The name of the public service.
+          minLength: 1
           maxLength: 255
         thematic_area:
           type: string
@@ -741,10 +749,17 @@ components:
               - regional_public_sector_body
           description: The participation type.
         country:
-          type: array
-          items:
-            $ref: '#/components/schemas/EuropeanUnionCountry'
-          description: Stakeholder's countries. Each as 2-letter country code.
+          oneOf:
+            - type: array
+              items:
+                type: string
+                enum: [EU]
+              minItems: 1
+              maxItems: 1
+            - type: array
+              items:
+                $ref: '#/components/schemas/EuropeanUnionCountry'
+          description: Stakeholder's countries. Each as ISO-3166 2-letter country code or "EU" for EU-wide entities.
 
     Asset:
       type: object
@@ -767,10 +782,12 @@ components:
         title:
           type: string
           description: The title of the interoperability solution.
+          minLength: 1
           maxLength: 255
         description:
           type: string
           description: The interoperability solution description.
+          minLength: 1
         landing_page:
           type: string
           description: The interoperability solution relevant website.

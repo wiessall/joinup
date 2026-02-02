@@ -31,10 +31,11 @@ class AssessmentVocabularyHelper {
    *   When no term exists for the passed vocabulary and identifier.
    */
   public function getTermIdFromIdentifier(string $vid, string $identifier): int {
+    $field = ($vid === 'spatial') ? 'code' : 'id';
     $tids = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery()
       ->accessCheck(FALSE)
       ->condition('vid', $vid)
-      ->condition('id', $identifier)
+      ->condition($field, $identifier)
       ->execute();
     if (!$tids) {
       throw new \InvalidArgumentException("No term exists for vocabulary '$vid' and identifier '$identifier'");

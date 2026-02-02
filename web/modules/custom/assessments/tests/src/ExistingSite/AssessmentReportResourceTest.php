@@ -80,6 +80,77 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
   }
 
   /**
+   * Tests that empty strings are rejected for mandatory string fields.
+   */
+  public function testEmptyStringsValidation(): void {
+    ['payload' => $payload] = $this->getTestCase('valid_optional_fields_omitted');
+
+    // Set all mandatory string fields to empty strings.
+    $payload['name'] = '';
+    $payload['provider']['name'] = '';
+    $payload['binding_requirement'][0]['description'] = '';
+    $payload['binding_requirement'][0]['expression'][0]['name'] = '';
+    $payload['binding_requirement'][0]['expression'][0]['description'] = '';
+    $payload['binding_requirement'][0]['affects'][0]['name'] = '';
+    // Add an asset with empty strings to test Asset validation.
+    $payload['binding_requirement'][0]['asset'] = [
+      [
+        'title' => '',
+        'description' => '',
+        'landing_page' => 'https://example.com',
+      ],
+    ];
+
+    $response = $this->post($payload);
+    $this->assertSame(422, $response->getStatusCode());
+
+    $data = Json::decode($response->getBody()->getContents());
+    $errors = $data['errors'];
+
+    // Verify each mandatory field has a minLength error.
+    $this->assertContains(
+      'Must be at least 1 characters long',
+      $errors['/name'] ?? [],
+      'Assessment name should reject empty string'
+    );
+    $this->assertContains(
+      'Must be at least 1 characters long',
+      $errors['/provider/name'] ?? [],
+      'Provider name should reject empty string'
+    );
+    $this->assertContains(
+      'Must be at least 1 characters long',
+      $errors['/binding_requirement/0/description'] ?? [],
+      'Binding requirement description should reject empty string'
+    );
+    $this->assertContains(
+      'Must be at least 1 characters long',
+      $errors['/binding_requirement/0/expression/0/name'] ?? [],
+      'Expression name should reject empty string'
+    );
+    $this->assertContains(
+      'Must be at least 1 characters long',
+      $errors['/binding_requirement/0/expression/0/description'] ?? [],
+      'Expression description should reject empty string'
+    );
+    $this->assertContains(
+      'Must be at least 1 characters long',
+      $errors['/binding_requirement/0/affects/0/name'] ?? [],
+      'Public service name should reject empty string'
+    );
+    $this->assertContains(
+      'Must be at least 1 characters long',
+      $errors['/binding_requirement/0/asset/0/title'] ?? [],
+      'Asset title should reject empty string'
+    );
+    $this->assertContains(
+      'Must be at least 1 characters long',
+      $errors['/binding_requirement/0/asset/0/description'] ?? [],
+      'Asset description should reject empty string'
+    );
+  }
+
+  /**
    * Tests posting a structured payload returns 201 and echoes the data.
    */
   public function testValidPostDataAndStatus(): void {
@@ -193,6 +264,104 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
   }
 
   /**
+   * Tests that existing organisations are reused if matched by label.
+   *
+   * @dataProvider organisationDeduplicationProvider
+   */
+  public function testOrganisationDeduplication(string $variantName, int $expectedNewOrganisations): void {
+    ['payload' => $basePayload] = $this->getTestCase('valid_optional_fields_omitted');
+
+    // Submit the first report to create the initial organisation.
+    $response = $this->post($basePayload);
+    $this->assertSame(201, $response->getStatusCode());
+    $data = Json::decode($response->getBody()->getContents());
+    $firstReportId = $data['id'];
+    $firstProviderId = $data['provider']['id'];
+
+    $initialCount = $this->countPublicOrganisations();
+
+    // Submit a second report with the variant name.
+    $payload = $basePayload;
+    $payload['name'] = "Report for: $variantName";
+    $payload['provider']['name'] = $variantName;
+
+    $response = $this->post($payload);
+    $this->assertSame(201, $response->getStatusCode(), "Failed for name: '$variantName'");
+    $data = Json::decode($response->getBody()->getContents());
+    $secondReportId = $data['id'];
+
+    // Verify the organisation count matches expectation.
+    $this->assertSame(
+      $initialCount + $expectedNewOrganisations,
+      $this->countPublicOrganisations(),
+      "Expected $expectedNewOrganisations new organisation(s) for name: '$variantName'"
+    );
+
+    // Verify provider reuse based on expectation.
+    if ($expectedNewOrganisations === 0) {
+      $this->assertSame(
+        $firstProviderId,
+        $data['provider']['id'],
+        "Should reuse same provider for name: '$variantName'"
+      );
+    }
+    else {
+      $this->assertNotSame(
+        $firstProviderId,
+        $data['provider']['id'],
+        "Should create new provider for name: '$variantName'"
+      );
+    }
+
+    // Cleanup.
+    $entityRepository = \Drupal::service('entity.repository');
+    foreach ([$firstReportId, $secondReportId] as $reportId) {
+      $report = $entityRepository->loadEntityByUuid('assessment', $reportId);
+      if ($report) {
+        $this->markEntityForCleanup($report);
+      }
+    }
+  }
+
+  /**
+   * Data provider for testOrganisationDeduplication.
+   *
+   * The base provider name in valid_optional_fields_omitted is
+   * "European Commission".
+   *
+   * @return array
+   *   Test cases with variant name and expected new organisation count.
+   */
+  public static function organisationDeduplicationProvider(): array {
+    // Base name from valid_optional_fields_omitted test case.
+    $baseName = 'European Commission';
+
+    return [
+      'uppercase' => [mb_strtoupper($baseName), 0],
+      'lowercase' => [mb_strtolower($baseName), 0],
+      'leading and trailing spaces' => ['  ' . $baseName . '  ', 0],
+      'uppercase with spaces' => ['  ' . mb_strtoupper($baseName) . '  ', 0],
+      'different name' => ['A Completely Different Organisation', 1],
+    ];
+  }
+
+  /**
+   * Returns the count of public organisation entities.
+   *
+   * @return int
+   *   The count of public organisations.
+   */
+  protected function countPublicOrganisations(): int {
+    return (int) \Drupal::entityTypeManager()
+      ->getStorage('assessment')
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', 'public_organisation')
+      ->count()
+      ->execute();
+  }
+
+  /**
    * Tests posting a payload with optional fields omitted.
    */
   public function testValidPostWithOptionalFieldsOmitted(): void {
@@ -299,6 +468,31 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     ];
 
     return Json::decode((string) \Drupal::httpClient()->post($url, $options)->getBody())['access_token'];
+  }
+
+  /**
+   * Tests that 401 errors return JSON response.
+   */
+  public function testUnauthorizedReturnsJson(): void {
+    $url = Url::fromUri('internal:/api/assessments/v1/assessment')
+      ->setAbsolute()
+      ->toString();
+
+    $response = \Drupal::httpClient()->post($url, [
+      RequestOptions::HTTP_ERRORS => FALSE,
+      RequestOptions::HEADERS => [
+        'Accept' => 'application/json',
+        'Content-Type' => 'application/json',
+        'Authorization' => 'Bearer invalid_token',
+      ],
+      RequestOptions::JSON => ['name' => 'Test'],
+    ]);
+
+    $this->assertSame(401, $response->getStatusCode());
+    $this->assertStringContainsString('application/json', $response->getHeaderLine('Content-Type'));
+    $data = Json::decode($response->getBody()->getContents());
+    $this->assertIsArray($data);
+    $this->assertArrayHasKey('error', $data);
   }
 
   /**

@@ -33,7 +33,6 @@ third_party_settings:
         - group_organisational
         - group_semantic
         - group_technical
-        - group_other
       label: Tabs
       region: content
       parent_name: ''
@@ -110,22 +109,6 @@ third_party_settings:
         formatter: closed
         description: ''
         required_fields: true
-    group_other:
-      children:
-        - remaining_barriers
-      label: 'Remaining barriers'
-      region: content
-      parent_name: group_tabs
-      weight: 50
-      format_type: tab
-      format_settings:
-        classes: ''
-        show_empty_fields: true
-        id: ''
-        label_as_html: false
-        formatter: closed
-        description: ''
-        required_fields: true
 id: assessment.report.default
 targetEntityType: assessment
 bundle: report
@@ -155,7 +138,7 @@ content:
     third_party_settings: {  }
   documents:
     type: file_generic
-    weight: 6
+    weight: 7
     region: content
     settings:
       progress_indicator: throbber
@@ -240,7 +223,7 @@ content:
         rewrite_description: 1
   remaining_barriers:
     type: text_textarea
-    weight: 53
+    weight: 6
     region: content
     settings:
       rows: 5
@@ -250,9 +233,9 @@ content:
         hide_help: '1'
         hide_guidelines: '1'
       entity_form_field_label:
-        new_label: 'Have you discovered any remaining barriers to cross-border interoperability?'
-        rewrite_label: 1
-        new_description: 'If yes, provide a description'
+        new_label: ''
+        rewrite_label: 0
+        new_description: ''
         rewrite_description: 0
   semantic:
     type: inline_entity_form_simple
@@ -269,7 +252,7 @@ content:
     third_party_settings: {  }
   state:
     type: state_machine_buttons
-    weight: 7
+    weight: 8
     region: content
     settings:
       use_transition_label: 1
