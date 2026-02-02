@@ -15,7 +15,7 @@ Feature: Assessment Report Entity Management
     Then I should see the heading "Create assessment report"
 
     When I press "Save as draft"
-    Then I should see the error message "3 errors have been found: Short titleType of public sector bodyBinding requirements"
+    Then I should see the error message "3 errors have been found: Short titleType of public sector bodyIdentification of binding requirement(s) assessed"
 
     When I fill in "Short title" with "Test Assessment Report 2025"
     And I should see "This will be used as the title of the published report. Maximum 255 characters."
@@ -35,26 +35,27 @@ Feature: Assessment Report Entity Management
     # Binding requirements
     When I click "New binding requirement"
     And a modal should open
+    And I should see the button "Clear" in the "Modal buttons" region
     And I press "Save" in the "Modal buttons" region
     And I should see the text "3 errors have been found: NameName of the initiativeDescription" in the "Modal content" region
 
     Then I should see the following lines of text in the correct order in "Modal content":
-      | Initiatives                            |
-      | Description                            |
-      | Trans-European digital public services |
-      | Affected stakeholders                  |
-      | Interoperability solutions             |
-      | Documents                              |
+      | Initiative(s)                            |
+      | Requirement(s)                           |
+      | Trans-european digital public service(s) |
+      | Affected stakeholder(s)                  |
+      | Interoperability solution(s)             |
+      | Supporting document(s)                   |
 
-    When I click "Initiatives" in the "Modal content" region
+    When I click "Initiative(s)" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Digital Transformation Initiative" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][documented_in][0][uri]" with "https://interoperable-europe.ec.europa.eu/initiatives" in the "Modal content" region
 
-    When I click "Description" in the "Modal content" region
+    When I click "Requirement(s)" in the "Modal content" region
     And I fill in "description[0][value]" with "This is the general binding requirement description" in the "Modal content" region
     And I fill in "documented_in[0][uri]" with "https://interoperable-europe.ec.europa.eu/general" in the "Modal content" region
 
-    When I click "Trans-European digital public services" in the "Modal content" region
+    When I click "Trans-european digital public service(s)" in the "Modal content" region
     And I should see the text "Specify the trans-European digital public service(s) concerned" in the "Modal content" region
     And I should see the text "Specify the concerned function(s) of trans-European digital public service(s)" in the "Modal content" region
     And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
@@ -62,38 +63,43 @@ Feature: Assessment Report Entity Management
     And I select "Luxembourg" from "affects[0][inline_entity_form][countries][]" in the "Modal content" region
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
 
-    When I click "Affected stakeholders" in the "Modal content" region
+    When I click "Affected stakeholder(s)" in the "Modal content" region
     Then I should see the text "Public and/or private stakeholders affected" in the "Modal content" region
     And the page should contain the html text 'aria-placeholder="Select or start typing..."'
     When I select "Local public sector body" from "has_participation[0][inline_entity_form][participant_type][]" in the "Modal content" region
     And I select "Belgium" from "has_participation[0][inline_entity_form][stakeholder_country][]" in the "Modal content" region
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
 
-    When I click "Interoperability solutions" in the "Modal content" region
+    When I click "Interoperability solution(s)" in the "Modal content" region
     Then I press "Select an Interoperability solution" in the "Modal content" region
     And I type "Test" in the "asset[form][0][entity_id]" autocomplete field
     And I pick "Test solution" from the autocomplete suggestions
     And I press "Add Interoperability solution" in the "Modal content" region
-    And the "IEF table" table should be:
-      | Title         | Relevant website       | Description      | Operations |
-      | Test solution | http://www.example.com | default abstract |            |
     And I should see the text "Identify the interoperability solutions mandatory to use for the implementation of the assessed binding requirement" in the "Modal content" region
     And I should see the button "Select an Interoperability solution" in the "Modal content" region
     And I press "Add a new Interoperability solution" in the "Modal content" region
     And I fill in "Title of Solution" with "European Interoperability Framework (EIF)" in the "Modal content" region
-    And I enter "Description of European Interoperability Framework (EIF)" in the "asset[form][1][description][0][value]" wysiwyg editor
-    And I fill in "Relevant website" with "https://interoperable-europe.ec.europa.eu/collection/eif" in the "Modal content" region
+    And I enter "Description of EIF" in the "asset[form][1][description][0][value]" wysiwyg editor
+    And I fill in "Relevant website" with "http://no-abstract.com" in the "Modal content" region
     Then I press "Add Interoperability solution" in the "Modal content" region
+    Then the "IEF table" table should contain the following columns:
+      | Title                                     | Relevant website       | Description        |
+      | Test solution                             | http://www.example.com | default abstract   |
+      | European Interoperability Framework (EIF) | http://no-abstract.com | Description of EIF |
 
-    When I click "Trans-European digital public services" in the "Modal content" region
+    When I click "Trans-european digital public service(s)" in the "Modal content" region
     And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
     And I select "Core governance and administration" from "affects[0][inline_entity_form][thematic_area][]" in the "Modal content" region
 
-    When I click "Affected stakeholders" in the "Modal content" region
+    When I click "Affected stakeholder(s)" in the "Modal content" region
+    And I should see "Check this box to select all European Union countries" in the "Modal content" region
     And I select "Local public sector body" from "has_participation[0][inline_entity_form][participant_type][]" in the "Modal content" region
+    And I check "Check this box to select all European Union countries"
+    Then I should not see "has_participation[0][inline_entity_form][stakeholder_country][]" in the "Modal content" region
+    Then I uncheck "Check this box to select all European Union countries"
     And I select "Belgium" from "has_participation[0][inline_entity_form][stakeholder_country][]" in the "Modal content" region
 
-    When I click "Documents" in the "Modal content" region
+    When I click "Supporting document(s)" in the "Modal content" region
     And I attach the file "text.pdf" to "Add a new file"
     And I should see "Maximum 5 files. 10 MB limit. Allowed types: txt doc docx pdf ppt pptx zip rar xls xlsx." in the "Modal content" region
     Then I press "Save" in the "Modal buttons" region
@@ -123,8 +129,7 @@ Feature: Assessment Report Entity Management
     And I select the radio button "Beneficial" with the name "technical[0][inline_entity_form][interpretation]"
     And I fill in "technical[0][inline_entity_form][judgement][0][value]" with "Implements REST APIs and OpenAPI specs"
 
-    When I click "Remaining barriers" in the "Content" region
-    And I fill in "Have you discovered any remaining barriers to cross-border interoperability?" with "No significant barriers identified."
+    And I fill in "Remaining barriers to cross-border interoperability" with "No significant barriers identified."
 
     # Assessment supporting documents
     And I attach the file "text.pdf" to "Add a new file"
@@ -174,14 +179,14 @@ Feature: Assessment Report Entity Management
     When I click "New binding requirement"
     And a modal should open
 
-    When I click "Initiatives" in the "Modal content" region
+    When I click "Initiative(s)" in the "Modal content" region
     # This is a 323-character string to test that initiative_name accepts more than 255 characters
     And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Comprehensive Overview and Strategic Analysis of System Architecture, Functional Requirements, Operational Constraints, Governance Models, Security and Compliance Requirements, Performance Optimization, and Long-Term Maintainability Considerations for Scalable Digital Platforms in Enterprise and Public-Sector Environments" in the "Modal content" region
 
-    When I click "Description" in the "Modal content" region
+    When I click "Requirement(s)" in the "Modal content" region
     And I fill in "description[0][value]" with "Test description for initiative name length validation" in the "Modal content" region
 
-    When I click "Trans-European digital public services" in the "Modal content" region
+    When I click "Trans-european digital public service(s)" in the "Modal content" region
     And I fill in "affects[0][inline_entity_form][name][0][value]" with "Test Service" in the "Modal content" region
 
     Then I press "Save" in the "Modal buttons" region
