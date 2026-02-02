@@ -21,13 +21,6 @@ final class ApiExceptionSubscriber extends HttpExceptionSubscriberBase {
   }
 
   /**
-   * {@inheritdoc}
-   */
-  protected static function getPriority(): int {
-    return 75;
-  }
-
-  /**
    * Handles 401 Unauthorized exceptions for the assessments API.
    *
    * @param \Symfony\Component\HttpKernel\Event\ExceptionEvent $event
