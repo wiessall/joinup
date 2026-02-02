@@ -165,6 +165,7 @@ permissions:
   - 'revert all revisions'
   - 'skip comment approval'
   - 'sparql endpoint query'
+  - 'translate editable entities'
   - 'unflag bookmark'
   - 'unflag like'
   - 'unflag subscribe_discussions'
