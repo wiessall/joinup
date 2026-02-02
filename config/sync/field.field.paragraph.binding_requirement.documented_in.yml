@@ -19,8 +19,8 @@ id: paragraph.binding_requirement.documented_in
 field_name: documented_in
 entity_type: paragraph
 bundle: binding_requirement
-label: 'Documented in'
-description: 'Provide a legal reference for the binding requirement, if available'
+label: 'Legal reference'
+description: ''
 required: false
 translatable: true
 default_value: {  }
