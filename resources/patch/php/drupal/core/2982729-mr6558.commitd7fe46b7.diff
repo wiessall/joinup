@@ -1,0 +1,803 @@
+diff -ruN a/core/modules/rest/config/schema/rest.views.schema.yml b/core/modules/rest/config/schema/rest.views.schema.yml
+--- a/core/modules/rest/config/schema/rest.views.schema.yml	2025-11-12 22:53:53.000000000 +0100
++++ b/core/modules/rest/config/schema/rest.views.schema.yml	2026-02-03 00:05:08.986978773 +0100
+@@ -39,3 +39,6 @@
+       sequence:
+         type: string
+         label: 'Format'
++    pager:
++      type: boolean
++      label: 'Add pager information'
+diff -ruN a/core/modules/rest/rest.module b/core/modules/rest/rest.module
+--- a/core/modules/rest/rest.module	2025-11-12 22:53:53.000000000 +0100
++++ b/core/modules/rest/rest.module	2026-02-03 00:05:08.987715354 +0100
+@@ -7,6 +7,8 @@
+ 
+ use Drupal\Core\Url;
+ use Drupal\Core\Routing\RouteMatchInterface;
++use Drupal\rest\Plugin\views\style\Serializer;
++use Drupal\views\ViewExecutable;
+ 
+ /**
+  * Implements hook_help().
+@@ -34,3 +36,27 @@
+       return $output;
+   }
+ }
++
++/**
++ * Implements hook_views_pre_execute().
++ *
++ * Adds page-based offset support for REST serializer views whose pager does
++ * not natively handle pagination
++ * (e.g. "Display a specified number of items").
++ */
++function rest_views_pre_execute(ViewExecutable $view): void {
++  $style = $view->getStyle();
++  if (!$style instanceof Serializer || empty($style->options['pager'])) {
++    return;
++  }
++  $pager = $view->pager;
++  if (!$pager || $pager->usePager()) {
++    return;
++  }
++  $items_per_page = (int) $pager->getItemsPerPage();
++  $page = $view->getRequest()->query->getInt('page');
++  if ($items_per_page > 0 && $page > 0) {
++    $base_offset = (int) $pager->getOffset();
++    $view->query->setOffset($base_offset + ($page * $items_per_page));
++  }
++}
+diff -ruN a/core/modules/rest/rest.post_update.php b/core/modules/rest/rest.post_update.php
+--- a/core/modules/rest/rest.post_update.php	2025-11-12 22:53:53.000000000 +0100
++++ b/core/modules/rest/rest.post_update.php	2026-02-03 00:05:08.987500855 +0100
+@@ -5,6 +5,10 @@
+  * Post update functions for Rest.
+  */
+ 
++use Drupal\Core\Config\Entity\ConfigEntityUpdater;
++use Drupal\views\ViewEntityInterface;
++use Drupal\views\ViewsConfigUpdater;
++
+ /**
+  * Implements hook_removed_post_updates().
+  */
+@@ -16,3 +20,18 @@
+     'rest_post_update_delete_settings' => '10.0.0',
+   ];
+ }
++
++/**
++ * Add pager option to serializer style displays.
++ */
++function rest_post_update_add_serializer_pager(?array &$sandbox = NULL): void {
++  if (!\Drupal::moduleHandler()->moduleExists('views')) {
++    return;
++  }
++  /** @var \Drupal\views\ViewsConfigUpdater $view_config_updater */
++  $view_config_updater = \Drupal::classResolver(ViewsConfigUpdater::class);
++  $view_config_updater->setDeprecationsEnabled(FALSE);
++  \Drupal::classResolver(ConfigEntityUpdater::class)->update($sandbox, 'view', function (ViewEntityInterface $view) use ($view_config_updater): bool {
++    return $view_config_updater->needsSerializerPagerUpdate($view);
++  });
++}
+diff -ruN a/core/modules/rest/src/Plugin/views/style/Serializer.php b/core/modules/rest/src/Plugin/views/style/Serializer.php
+--- a/core/modules/rest/src/Plugin/views/style/Serializer.php	2025-11-12 22:53:53.000000000 +0100
++++ b/core/modules/rest/src/Plugin/views/style/Serializer.php	2026-02-03 00:05:08.988652101 +0100
+@@ -6,6 +6,7 @@
+ use Drupal\Core\Cache\CacheableDependencyInterface;
+ use Drupal\Core\Form\FormStateInterface;
+ use Drupal\Core\StringTranslation\TranslatableMarkup;
++use Drupal\rest\Plugin\views\display\RestExport;
+ use Drupal\views\Attribute\ViewsStyle;
+ use Drupal\views\Plugin\views\style\StylePluginBase;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+@@ -87,6 +88,7 @@
+   protected function defineOptions() {
+     $options = parent::defineOptions();
+     $options['formats'] = ['default' => []];
++    $options['pager'] = ['default' => FALSE];
+ 
+     return $options;
+   }
+@@ -104,6 +106,12 @@
+       '#options' => $this->getFormatOptions(),
+       '#default_value' => $this->options['formats'],
+     ];
++    $form['pager'] = [
++      '#type' => 'checkbox',
++      '#title' => $this->t('Add pager information'),
++      '#description' => $this->t('Pager information will be added to rest export. <b>Output structure will be changed.</b>'),
++      '#default_value' => $this->options['pager'],
++    ];
+   }
+ 
+   /**
+@@ -140,7 +148,63 @@
+     else {
+       $content_type = !empty($this->options['formats']) ? reset($this->options['formats']) : 'json';
+     }
+-    return $this->serializer->serialize($rows, $content_type, ['views_style_plugin' => $this]);
++
++    $result = $rows;
++    if ($this->options['pager'] && $this->view->pager && $this->displayHandler instanceof RestExport) {
++      $result = $this->wrapRowsInPager($rows);
++    }
++
++    return $this->serializer->serialize($result, $content_type, ['views_style_plugin' => $this]);
++  }
++
++  /**
++   * Wraps an array of rows in another array with page info.
++   *
++   * @param array $rows
++   *   Array with the rows to wrap.
++   *
++   * @return array
++   *   An array with the following keys:
++   *   - rows: the original rows array.
++   *   - pager: an array with the following keys:
++   *     - current_page: the zero-based current page number.
++   *     - items_per_page: the number of items displayed per page.
++   *     - total_items: the total number of items in the view result.
++   *     - total_pages: the total number of pages.
++   */
++  protected function wrapRowsInPager(array $rows): array {
++    $pager = $this->view->pager;
++    $items_per_page = (int) $pager->getItemsPerPage();
++
++    if ($pager->useCountQuery()) {
++      $current_page = (int) $pager->getCurrentPage();
++      $total_items = (int) $pager->getTotalItems();
++    }
++    else {
++      // Pagers without a count query (e.g. "some") do not track current page
++      // or total items accurately, so read them from the request and query.
++      $total_items = (int) $pager->getTotalItems();
++      if (isset($this->view->build_info['count_query'])) {
++        $count_query = clone $this->view->build_info['count_query'];
++        $count_query->preExecute();
++        $total_items = (int) $count_query->countQuery()->execute()->fetchField();
++      }
++      $current_page = $this->view->getRequest()->query->getInt('page');
++    }
++
++    $total_pages = ($items_per_page > 0)
++      ? (int) ceil($total_items / $items_per_page)
++      : 1;
++
++    return [
++      'rows' => $rows,
++      'pager' => [
++        'current_page' => $current_page,
++        'items_per_page' => $items_per_page,
++        'total_items' => $total_items,
++        'total_pages' => $total_pages,
++      ],
++    ];
+   }
+ 
+   /**
+@@ -167,7 +231,11 @@
+    * {@inheritdoc}
+    */
+   public function getCacheContexts() {
+-    return ['request_format'];
++    $contexts = ['request_format'];
++    if ($this->options['pager']) {
++      $contexts[] = 'url.query_args:page';
++    }
++    return $contexts;
+   }
+ 
+   /**
+diff -ruN a/core/modules/rest/tests/fixtures/update/test_serializer_pager.php b/core/modules/rest/tests/fixtures/update/test_serializer_pager.php
+--- a/core/modules/rest/tests/fixtures/update/test_serializer_pager.php	1970-01-01 01:00:00.000000000 +0100
++++ b/core/modules/rest/tests/fixtures/update/test_serializer_pager.php	2026-02-03 00:05:08.994828831 +0100
+@@ -0,0 +1,19 @@
++<?php
++
++/**
++ * @file
++ * Test fixture.
++ */
++
++use Drupal\Core\Database\Database;
++use Drupal\Core\Serialization\Yaml;
++
++$connection = Database::getConnection();
++
++$connection->insert('config')
++  ->fields([
++    'collection' => '',
++    'name' => 'views.view.test_serializer_pager_update',
++    'data' => serialize(Yaml::decode(file_get_contents('core/modules/rest/tests/fixtures/update/views.view.test_serializer_pager_update.yml'))),
++  ])
++  ->execute();
+diff -ruN a/core/modules/rest/tests/fixtures/update/views.view.test_serializer_pager_update.yml b/core/modules/rest/tests/fixtures/update/views.view.test_serializer_pager_update.yml
+--- a/core/modules/rest/tests/fixtures/update/views.view.test_serializer_pager_update.yml	1970-01-01 01:00:00.000000000 +0100
++++ b/core/modules/rest/tests/fixtures/update/views.view.test_serializer_pager_update.yml	2026-02-03 00:05:08.994845497 +0100
+@@ -0,0 +1,82 @@
++uuid: a1b2c3d4-e5f6-7890-abcd-ef1234567890
++langcode: en
++status: true
++dependencies:
++  module:
++    - node
++    - rest
++    - user
++id: test_serializer_pager_update
++label: 'Test serializer pager update'
++module: rest
++description: ''
++tag: ''
++base_table: node_field_data
++base_field: nid
++display:
++  default:
++    id: default
++    display_title: Default
++    display_plugin: default
++    position: 0
++    display_options:
++      access:
++        type: none
++        options: {  }
++      cache:
++        type: tag
++        options: {  }
++      query:
++        type: views_query
++        options: {  }
++      exposed_form:
++        type: basic
++        options: {  }
++      pager:
++        type: full
++        options:
++          items_per_page: 10
++      style:
++        type: serializer
++        options: {  }
++      row:
++        type: data_entity
++        options:
++          relationship: none
++      fields:
++        title:
++          id: title
++          table: node_field_data
++          field: title
++          label: ''
++          plugin_id: field
++      sorts:
++        created:
++          id: created
++          table: node_field_data
++          field: created
++          order: DESC
++          plugin_id: date
++      title: 'Test serializer pager update'
++      arguments: {  }
++  rest_export_1:
++    id: rest_export_1
++    display_title: 'REST export'
++    display_plugin: rest_export
++    position: 1
++    display_options:
++      defaults:
++        access: false
++        style: false
++        row: false
++      path: test/serialize/pager-update
++      access:
++        type: none
++        options: {  }
++      style:
++        type: serializer
++        options: {  }
++      row:
++        type: data_entity
++        options:
++          relationship: none
+diff -ruN a/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_excluded_field_token_display.yml b/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_excluded_field_token_display.yml
+--- a/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_excluded_field_token_display.yml	2025-11-12 22:53:53.000000000 +0100
++++ b/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_excluded_field_token_display.yml	2026-02-03 00:05:08.991153218 +0100
+@@ -66,6 +66,8 @@
+             next: ››
+       style:
+         type: serializer
++          options:
++            pager: false
+       row:
+         type: fields
+         options:
+@@ -256,6 +258,7 @@
+       style:
+         type: serializer
+         options:
++            pager: false
+           formats:
+             json: json
+       row:
+diff -ruN a/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_field_counter_display.yml b/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_field_counter_display.yml
+--- a/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_field_counter_display.yml	2025-11-12 22:53:53.000000000 +0100
++++ b/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_field_counter_display.yml	2026-02-03 00:05:08.991880674 +0100
+@@ -68,6 +68,7 @@
+       style:
+         type: serializer
+         options:
++            pager: false
+           formats:
+             json: json
+       row:
+diff -ruN a/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_serializer_display_entity.yml b/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_serializer_display_entity.yml
+--- a/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_serializer_display_entity.yml	2025-11-12 22:53:53.000000000 +0100
++++ b/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_serializer_display_entity.yml	2026-02-03 00:05:08.992312464 +0100
+@@ -30,6 +30,8 @@
+         type: basic
+       style:
+         type: serializer
++          options:
++            pager: false
+       row:
+         type: data_entity
+       sorts:
+diff -ruN a/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_serializer_display_entity_translated.yml b/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_serializer_display_entity_translated.yml
+--- a/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_serializer_display_entity_translated.yml	2025-11-12 22:53:53.000000000 +0100
++++ b/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_serializer_display_entity_translated.yml	2026-02-03 00:05:08.992630213 +0100
+@@ -30,6 +30,8 @@
+         type: basic
+       style:
+         type: serializer
++          options:
++            pager: false
+       row:
+         type: data_entity
+       title: 'Test serialize translated entity rows'
+diff -ruN a/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_serializer_display_field.yml b/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_serializer_display_field.yml
+--- a/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_serializer_display_field.yml	2025-11-12 22:53:53.000000000 +0100
++++ b/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_serializer_display_field.yml	2026-02-03 00:05:08.993900167 +0100
+@@ -30,6 +30,8 @@
+         type: basic
+       style:
+         type: serializer
++          options:
++            pager: false
+       row:
+         type: data_field
+       fields:
+@@ -86,6 +88,8 @@
+         type: none
+       style:
+         type: serializer
++          options:
++            pager: false
+       row:
+         type: data_field
+   rest_export_2:
+@@ -105,5 +109,7 @@
+           perm: 'administer views'
+       style:
+         type: serializer
++          options:
++            pager: false
+       row:
+         type: data_field
+diff -ruN a/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_serializer_node_display_field.yml b/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_serializer_node_display_field.yml
+--- a/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_serializer_node_display_field.yml	2025-11-12 22:53:53.000000000 +0100
++++ b/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_serializer_node_display_field.yml	2026-02-03 00:05:08.994107541 +0100
+@@ -35,6 +35,8 @@
+         type: basic
+       style:
+         type: serializer
++          options:
++            pager: false
+       row:
+         type: data_field
+       fields:
+@@ -146,6 +148,8 @@
+         type: none
+       style:
+         type: serializer
++          options:
++            pager: false
+       row:
+         type: data_field
+ 
+diff -ruN a/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_serializer_node_exposed_filter.yml b/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_serializer_node_exposed_filter.yml
+--- a/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_serializer_node_exposed_filter.yml	2025-11-12 22:53:53.000000000 +0100
++++ b/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_serializer_node_exposed_filter.yml	2026-02-03 00:05:08.994182916 +0100
+@@ -35,6 +35,8 @@
+         type: basic
+       style:
+         type: serializer
++          options:
++            pager: false
+       row:
+         type: data_field
+       fields:
+@@ -167,5 +169,7 @@
+         type: none
+       style:
+         type: serializer
++          options:
++            pager: false
+       row:
+         type: data_field
+diff -ruN a/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_serializer_shared_path.yml b/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_serializer_shared_path.yml
+--- a/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_serializer_shared_path.yml	2025-11-12 22:53:53.000000000 +0100
++++ b/core/modules/rest/tests/modules/rest_test_views/test_views/views.view.test_serializer_shared_path.yml	2026-02-03 00:05:08.994538415 +0100
+@@ -30,6 +30,8 @@
+         type: basic
+       style:
+         type: serializer
++          options:
++            pager: false
+       row:
+         type: data_entity
+       sorts:
+diff -ruN a/core/modules/rest/tests/src/Functional/Update/SerializerPagerUpdateTest.php b/core/modules/rest/tests/src/Functional/Update/SerializerPagerUpdateTest.php
+--- a/core/modules/rest/tests/src/Functional/Update/SerializerPagerUpdateTest.php	1970-01-01 01:00:00.000000000 +0100
++++ b/core/modules/rest/tests/src/Functional/Update/SerializerPagerUpdateTest.php	2026-02-03 00:05:08.994883164 +0100
+@@ -0,0 +1,79 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\rest\Functional\Update;
++
++use Drupal\FunctionalTests\Update\UpdatePathTestBase;
++use Drupal\views\Entity\View;
++use PHPUnit\Framework\Attributes\Group;
++use PHPUnit\Framework\Attributes\IgnoreDeprecations;
++use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
++
++/**
++ * Tests the addition of the pager option to serializer style displays.
++ *
++ * @see rest_post_update_add_serializer_pager()
++ */
++#[Group('Update')]
++#[IgnoreDeprecations]
++#[RunTestsInSeparateProcesses]
++class SerializerPagerUpdateTest extends UpdatePathTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = ['node', 'user'];
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setDatabaseDumpFiles(): void {
++    $this->databaseDumpFiles = [
++      __DIR__ . '/../../../../../system/tests/fixtures/update/drupal-10.3.0.filled.standard.php.gz',
++      __DIR__ . '/../../../fixtures/update/test_serializer_pager.php',
++    ];
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
++
++    $this->installModulesFromClassProperty($this->container);
++  }
++
++  /**
++   * Tests the upgrade path adding pager option to serializer displays.
++   */
++  public function testSerializerPagerUpdate(): void {
++    $view = View::load('test_serializer_pager_update');
++    $data = $view->toArray();
++
++    // Verify that serializer displays do not have the pager option before update.
++    foreach ($data['display'] as $display) {
++      if (isset($display['display_options']['style']) && $display['display_options']['style']['type'] === 'serializer') {
++        $this->assertArrayNotHasKey('pager', $display['display_options']['style']['options']);
++      }
++    }
++
++    $this->runUpdates();
++
++    $view = View::load('test_serializer_pager_update');
++    $data = $view->toArray();
++
++    // Verify that serializer displays now have the pager option set to FALSE.
++    $serializer_count = 0;
++    foreach ($data['display'] as $display) {
++      if (isset($display['display_options']['style']) && $display['display_options']['style']['type'] === 'serializer') {
++        $this->assertArrayHasKey('pager', $display['display_options']['style']['options']);
++        $this->assertFalse($display['display_options']['style']['options']['pager']);
++        $serializer_count++;
++      }
++    }
++
++    $this->assertEquals(2, $serializer_count);
++  }
++
++}
+diff -ruN a/core/modules/rest/tests/src/Functional/Views/StyleSerializerTest.php b/core/modules/rest/tests/src/Functional/Views/StyleSerializerTest.php
+--- a/core/modules/rest/tests/src/Functional/Views/StyleSerializerTest.php	2025-11-12 22:53:53.000000000 +0100
++++ b/core/modules/rest/tests/src/Functional/Views/StyleSerializerTest.php	2026-02-03 00:05:08.995281704 +0100
+@@ -321,4 +321,199 @@
+     $this->assertSame($expected, $names, 'The translated content was found in the JSON.');
+   }
+ 
++
++  /**
++   * Tests the pager option in REST export.
++   */
++  public function testRestViewsPager(): void {
++    $this->drupalCreateContentType(['type' => 'page']);
++
++    // Create multiple nodes for pagination testing.
++    $nodes = [];
++    for ($i = 0; $i < 10; $i++) {
++      $nodes[] = $this->drupalCreateNode(['title' => 'Node ' . $i]);
++    }
++
++    // Load the view and configure it with a pager.
++    $view = Views::getView('test_serializer_node_display_field');
++    $view->setDisplay('rest_export_1');
++
++    // Set pager to show 5 items per page.
++    $view->displayHandlers->get('rest_export_1')->overrideOption('pager', [
++      'type' => 'full',
++      'options' => ['items_per_page' => 5],
++    ]);
++
++    // Enable the pager option in the style plugin.
++    $view->displayHandlers->get('rest_export_1')->overrideOption('style', [
++      'type' => 'serializer',
++      'options' => [
++        'formats' => ['json'],
++        'pager' => TRUE,
++      ],
++    ]);
++    $view->save();
++
++    // Request the first page.
++    $result = Json::decode($this->drupalGet('test/serialize/node-field', ['query' => ['_format' => 'json']]));
++
++    // Verify pager structure exists in the response.
++    $this->assertArrayHasKey('rows', $result, 'Response contains rows key.');
++    $this->assertArrayHasKey('pager', $result, 'Response contains pager key.');
++    $this->assertCount(5, $result['rows'], 'First page contains 5 items.');
++
++    // Verify pager information is correct.
++    $this->assertEquals(0, $result['pager']['current_page'], 'Current page is 0.');
++    $this->assertEquals(10, $result['pager']['total_items'], 'Total items is 10.');
++    $this->assertEquals(2, $result['pager']['total_pages'], 'Total pages is 2.');
++    $this->assertEquals(5, $result['pager']['items_per_page'], 'Items per page is 5.');
++
++    // Request the second page.
++    $result = Json::decode($this->drupalGet('test/serialize/node-field', ['query' => ['_format' => 'json', 'page' => 1]]));
++
++    // Verify second page pager info.
++    $this->assertArrayHasKey('pager', $result, 'Second page response contains pager key.');
++    $this->assertEquals(1, $result['pager']['current_page'], 'Current page is 1.');
++    $this->assertCount(5, $result['rows'], 'Second page contains 5 items.');
++    $this->assertEquals(10, $result['pager']['total_items'], 'Total items is consistent on second page.');
++    $this->assertEquals(2, $result['pager']['total_pages'], 'Total pages is consistent on second page.');
++    $this->assertEquals(5, $result['pager']['items_per_page'], 'Items per page is consistent on second page.');
++  }
++
++  /**
++   * Tests that pager metadata is consistent across paginated requests.
++   *
++   * Verifies that total_items, total_pages, and current_page are correct
++   * regardless of which page is requested and whether the page parameter is
++   * present. Covers both pagers with a count query ("full") and without
++   * ("some").
++   */
++  public function testRestViewsPagerTotalItemsConsistency(): void {
++    $this->drupalCreateContentType(['type' => 'page']);
++
++    $cases = [
++      ['full', 7, 3],
++      ['full', 10, 5],
++      ['some', 7, 3],
++      ['some', 10, 5],
++    ];
++
++    foreach ($cases as [$pager_type, $node_count, $items_per_page]) {
++      // Clean up nodes from previous iteration.
++      foreach (\Drupal::entityTypeManager()->getStorage('node')->loadMultiple() as $node) {
++        $node->delete();
++      }
++
++      for ($i = 0; $i < $node_count; $i++) {
++        $this->drupalCreateNode(['title' => 'Node ' . $i]);
++      }
++
++      $view = Views::getView('test_serializer_node_display_field');
++      $view->setDisplay('rest_export_1');
++
++      $view->displayHandlers->get('rest_export_1')->overrideOption('pager', [
++        'type' => $pager_type,
++        'options' => ['items_per_page' => $items_per_page],
++      ]);
++      $view->displayHandlers->get('rest_export_1')->overrideOption('style', [
++        'type' => 'serializer',
++        'options' => [
++          'formats' => ['json'],
++          'pager' => TRUE,
++        ],
++      ]);
++      $view->save();
++
++      $expected_pages = (int) ceil($node_count / $items_per_page);
++      $query = ['_format' => 'json'];
++
++      // Request without page parameter (implicit page 0).
++      $result_without_page = Json::decode(
++        $this->drupalGet('test/serialize/node-field', ['query' => $query])
++      );
++
++      // Request with explicit page=1.
++      $result_with_page = Json::decode(
++        $this->drupalGet(
++          'test/serialize/node-field',
++          ['query' => $query + ['page' => 1]],
++        )
++      );
++
++      $msg = "pager=$pager_type, nodes=$node_count, per_page=$items_per_page";
++
++      // total_items and total_pages must be identical regardless of the
++      // page parameter.
++      $this->assertSame(
++        $result_without_page['pager']['total_items'],
++        $result_with_page['pager']['total_items'],
++        "total_items must match with and without page param ($msg).",
++      );
++      $this->assertSame(
++        $result_without_page['pager']['total_pages'],
++        $result_with_page['pager']['total_pages'],
++        "total_pages must match with and without page param ($msg).",
++      );
++
++      // total_items must equal the actual node count.
++      $this->assertNotEquals(
++        $items_per_page,
++        $result_without_page['pager']['total_items'],
++        "total_items must not equal items_per_page ($msg).",
++      );
++      $this->assertEquals($node_count, $result_without_page['pager']['total_items'], $msg);
++      $this->assertEquals($node_count, $result_with_page['pager']['total_items'], $msg);
++      $this->assertEquals($expected_pages, $result_without_page['pager']['total_pages'], $msg);
++
++      // current_page must reflect the requested page.
++      $this->assertEquals(0, $result_without_page['pager']['current_page'], $msg);
++      $this->assertEquals(1, $result_with_page['pager']['current_page'], $msg);
++
++      // Cross-check: sum of rows across all pages equals total_items.
++      $total_rows = 0;
++      for ($page = 0; $page < $expected_pages; $page++) {
++        $result = Json::decode(
++          $this->drupalGet(
++            'test/serialize/node-field',
++            ['query' => $query + ['page' => $page]],
++          )
++        );
++        $total_rows += count($result['rows']);
++      }
++      $this->assertEquals($node_count, $total_rows, "Row sum across pages ($msg).");
++    }
++  }
++
++  /**
++   * Tests that pager option is disabled by default.
++   */
++  public function testRestViewsPagerDisabledByDefault(): void {
++    $this->drupalCreateContentType(['type' => 'page']);
++
++    // Create a few nodes.
++    for ($i = 0; $i < 3; $i++) {
++      $this->drupalCreateNode(['title' => 'Node ' . $i]);
++    }
++
++    // Load the view without enabling the pager option.
++    $view = Views::getView('test_serializer_node_display_field');
++    $view->setDisplay('rest_export_1');
++
++    // Set a pager but don't enable the pager style option.
++    $view->displayHandlers->get('rest_export_1')->overrideOption('pager', [
++      'type' => 'full',
++      'options' => ['items_per_page' => 10],
++    ]);
++    $view->save();
++
++    // Request the view.
++    $result = Json::decode($this->drupalGet('test/serialize/node-field', ['query' => ['_format' => 'json']]));
++
++    // Verify that the response is a plain array without pager wrapper.
++    $this->assertArrayNotHasKey('rows', $result, 'Response does not contain rows key when pager option is disabled.');
++    $this->assertArrayNotHasKey('pager', $result, 'Response does not contain pager key when pager option is disabled.');
++    $this->assertIsArray($result, 'Response is an array.');
++    $this->assertCount(3, $result, 'Response contains all 3 items.');
++  }
++
+ }
+diff -ruN a/core/modules/rest/tests/src/Unit/Plugin/views/style/SerializerTest.php b/core/modules/rest/tests/src/Unit/Plugin/views/style/SerializerTest.php
+--- a/core/modules/rest/tests/src/Unit/Plugin/views/style/SerializerTest.php	2025-11-12 22:53:53.000000000 +0100
++++ b/core/modules/rest/tests/src/Unit/Plugin/views/style/SerializerTest.php	2026-02-03 00:05:08.990509345 +0100
+@@ -71,7 +71,9 @@
+       ->shouldBeCalled();
+ 
+     $view_serializer_style = new Serializer([], 'dummy_serializer', [], $mock_serializer->reveal(), ['json', 'xml'], ['json' => 'serialization', 'xml' => 'serialization']);
+-    $view_serializer_style->options = ['formats' => ['xml', 'json']];
++    // Define a minimal value for options or the class will break for using an
++    // empty array of options.
++    $view_serializer_style->options = ['formats' => [], 'pager' => []];
+     $view_serializer_style->view = $this->view;
+     $view_serializer_style->displayHandler = $this->displayHandler;
+     $view_serializer_style->render();
+diff -ruN a/core/modules/views/src/ViewsConfigUpdater.php b/core/modules/views/src/ViewsConfigUpdater.php
+--- a/core/modules/views/src/ViewsConfigUpdater.php	2025-11-12 22:53:53.000000000 +0100
++++ b/core/modules/views/src/ViewsConfigUpdater.php	2026-02-03 00:05:08.989392182 +0100
+@@ -159,6 +159,9 @@
+       if ($this->addLabelIfMissing($view)) {
+         $changed = TRUE;
+       }
++      if ($this->processSerializerPagerUpdate($view)) {
++        $changed = TRUE;
++      }
+       return $changed;
+     });
+   }
+@@ -689,4 +692,49 @@
+     return $handler_type === 'field' && $plugin_id === 'rendered_entity';
+   }
+ 
++
++  /**
++   * Checks if a serializer display needs the pager option added.
++   *
++   * @param \Drupal\views\ViewEntityInterface $view
++   *   The view entity.
++   *
++   * @return bool
++   *   TRUE if the view has any serializer displays missing the pager option.
++   */
++  public function needsSerializerPagerUpdate(ViewEntityInterface $view): bool {
++    return $this->processSerializerPagerUpdate($view);
++  }
++
++  /**
++   * Adds the pager option to serializer style displays that are missing it.
++   *
++   * @param \Drupal\views\ViewEntityInterface $view
++   *   The view entity.
++   *
++   * @return bool
++   *   TRUE if the view was updated.
++   */
++  public function processSerializerPagerUpdate(ViewEntityInterface $view): bool {
++    $changed = FALSE;
++    $displays = $view->get('display');
++
++    foreach ($displays as &$display) {
++      if (
++        isset($display['display_options']['style']) &&
++        $display['display_options']['style']['type'] === 'serializer' &&
++        !isset($display['display_options']['style']['options']['pager'])
++      ) {
++        $display['display_options']['style']['options']['pager'] = FALSE;
++        $changed = TRUE;
++      }
++    }
++
++    if ($changed) {
++      $view->set('display', $displays);
++    }
++
++    return $changed;
++  }
++
+ }
+[31mFailed to execute command `diff -ruN /tmp/drupal-core-clean /tmp/drupal-core-patched`: exit status 1[0m
