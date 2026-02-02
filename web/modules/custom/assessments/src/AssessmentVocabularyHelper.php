@@ -26,29 +26,23 @@ class AssessmentVocabularyHelper {
    * @param string $field
    *   The field.
    *
-   * @return array|string
-   *   The term IDs.
+   * @return string
+   *   The term ID.
    *
    * @throws \InvalidArgumentException
    *   When no term exists for the passed vocabulary and identifier.
    */
-  public function getTermIdFromIdentifier(string $vid, array|string $identifier, string $field = 'id'): array|string {
-    $identifiers = (array) $identifier;
-
-    $tids = [];
-    foreach ($identifiers as $identifier) {
-      $ids = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery()
-        ->accessCheck(FALSE)
-        ->condition('vid', $vid)
-        ->condition($field, $identifier)
-        ->execute();
-      if (!$ids) {
-        throw new \InvalidArgumentException("No term exists for vocabulary '$vid' and identifier '$identifier'");
-      }
-      $tids[] = reset($ids);
+  public function getTermIdFromIdentifier(string $vid, string $identifier, string $field = 'id'): string {
+    $tid = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('vid', $vid)
+      ->condition($field, $identifier)
+      ->execute();
+    if (!$tid) {
+      throw new \InvalidArgumentException("No term exists for vocabulary '$vid' and identifier '$identifier'");
     }
 
-    return (count($tids) > 1) ? $tids : reset($tids);
+    return reset($tid);
   }
 
   /**
