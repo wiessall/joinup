@@ -300,7 +300,6 @@ permissions:
   - 'replicate entities'
   - 'revert all sitewide alert revisions'
   - 'translate any entity'
-  - 'translate configuration'
   - 'translate interface'
   - 'translate menu_link_content'
   - 'unarchived community content'
