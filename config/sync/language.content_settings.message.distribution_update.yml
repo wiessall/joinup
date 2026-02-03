@@ -1,0 +1,11 @@
+uuid: bbc60760-0ff9-4254-b7a6-a94e1ffae617
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.distribution_update
+id: message.distribution_update
+target_entity_type_id: message
+target_bundle: distribution_update
+default_langcode: site_default
+language_alterable: false
