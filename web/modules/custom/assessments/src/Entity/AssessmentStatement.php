@@ -178,12 +178,12 @@ final class AssessmentStatement extends ContentEntityBase implements AssessmentS
     }
 
     $assessmentStorage = $this->entityTypeManager()->getStorage('assessment');
-    $query = $assessmentStorage->getQuery();
-    // The report has 4 fields named after the bundles of the statements.
-    $query->condition($this->bundle(), $this->id())
+    $results = $assessmentStorage->getQuery()
       ->accessCheck(FALSE)
-      ->range(0, 1);
-    $results = $query->execute();
+      // The report has 4 fields named after the bundles of the statements.
+      ->condition($this->bundle(), $this->id())
+      ->range(0, 1)
+      ->execute();
     if (empty($results)) {
       return NULL;
     }
