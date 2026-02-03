@@ -580,12 +580,7 @@ function assessments_assessment_presave(AssessmentInterface $entity): void {
     $eu_country = $entity->get('eu_countries')->value;
     $vocabHelper = \Drupal::service(AssessmentVocabularyHelper::class);
     if ($eu_country) {
-      $term_id = $vocabHelper->getTermIdFromIdentifier('spatial', 'EU');
-      if (!$term_id) {
-        throw new \UnexpectedValueException(
-          'Required EU term not found in the "spatial" vocabulary.'
-        );
-      }
+      $term_id = $vocabHelper->getTermIdFromIdentifier('spatial', 'EU', 'code');
       $entity->set('stakeholder_country', ['target_id' => $term_id]);
     }
   }
