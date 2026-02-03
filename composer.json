@@ -378,7 +378,8 @@
                 "ImageItem generate sample value should take into account if the files exist @see https://www.drupal.org/i/3516691": "resources/patch/php/drupal/core/3516691.mr11729-commite2bfef56.diff",
                 "File widget with multiple values may duplicate empty items @see https://www.drupal.org/i/3276280": "resources/patch/php/drupal/core/3276280.diff",
                 "Odd behaviour with tabs on validation failure @see https://www.drupal.org/i/3508418": "resources/patch/php/drupal/core/3508418.diff",
-                "Violation property path not properly tracked @see https://www.drupal.org/i/3229493": "resources/patch/php/drupal/core/3229493.patch"
+                "Violation property path not properly tracked @see https://www.drupal.org/i/3229493": "resources/patch/php/drupal/core/3229493.patch",
+                "Configs for untranslatable bundles @see https://www.drupal.org/i/3570351": "resources/patch/php/drupal/core/3570351.mr14561-commitd9636386.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
@@ -479,8 +480,8 @@
                 "Missing langcode in purge_users.settings and config/install missing @see https://www.drupal.org/i/3542620": "resources/patch/php/drupal/purge_users/3542620.diff"
             },
             "drupal/search_api": {
-                "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199.patch",
-                "View recalculated with wrong data from cache @see https://drupal.org/i/3327645": "resources/patch/php/drupal/search_api/sapi-views_cache_metadata-3327645-9--fix-only.patch"
+                "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199-42e0e284.diff",
+                "View recalculated with wrong data from cache @see https://drupal.org/i/3327645": "resources/patch/php/drupal/search_api/3327645-d510c98e.diff"
             },
             "drupal/search_api_spellcheck": {
                 "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372": "resources/patch/php/drupal/search_api_spellcheck/3280372.patch"

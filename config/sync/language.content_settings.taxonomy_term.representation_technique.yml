@@ -1,0 +1,18 @@
+uuid: 2d5f1dd0-fe28-4ec9-9160-c529ec9d1a98
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.representation_technique
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: taxonomy_term.representation_technique
+target_entity_type_id: taxonomy_term
+target_bundle: representation_technique
+default_langcode: site_default
+language_alterable: false
