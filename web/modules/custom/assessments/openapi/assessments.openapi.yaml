@@ -263,20 +263,24 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Assessment'
+                $ref: '#/components/schemas/PaginatedReportList'
               examples:
                 fetched:
                   value:
-                    - id: "43a50ef2-7d90-4562-ab81-59af10f2e082"
-                      uri: "https://interoperable-europe.ec.europa.eu/assessment/report/43a50ef2-7d90-4562-ab81-59af10f2e082"
-                      name: "Report 1"
-                      country: "PT"
-                    - id: "7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7c"
-                      uri: "https://interoperable-europe.ec.europa.eu/assessment/report/7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7c"
-                      name: "Report 2"
-                      country: null
+                    rows:
+                      - id: "43a50ef2-7d90-4562-ab81-59af10f2e082"
+                        uri: "https://interoperable-europe.ec.europa.eu/assessment/report/43a50ef2-7d90-4562-ab81-59af10f2e082"
+                        name: "Report 1"
+                        country: "PT"
+                      - id: "7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7c"
+                        uri: "https://interoperable-europe.ec.europa.eu/assessment/report/7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7c"
+                        name: "Report 2"
+                        country: null
+                    pager:
+                      current_page: 0
+                      items_per_page: 200
+                      total_items: 2
+                      total_pages: 1
   /assessment/{id}:
     servers:
       - url: /api/assessments/v1
@@ -343,20 +347,24 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Asset'
+                $ref: '#/components/schemas/PaginatedAssetList'
               examples:
                 fetched:
                   value:
-                    - id: "43a50ef2-7d90-4562-ab81-59af10f2e081"
-                      uri: "http://data.europa.eu/w21/43a50ef2-7d90-4562-ab81-59af10f2e081"
-                      title: "Waste Management"
-                      url: "https://interoperable-europe.ec.europa.eu/collection/environment/solution/waste-managemet"
-                    - id: "7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7b"
-                      uri: "http://data.europa.eu/w21/7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7b"
-                      name: "Citizen's Forum"
-                      url: "https://interoperable-europe.ec.europa.eu/collection/participation/solution/forum"
+                    rows:
+                      - id: "43a50ef2-7d90-4562-ab81-59af10f2e081"
+                        uri: "http://data.europa.eu/w21/43a50ef2-7d90-4562-ab81-59af10f2e081"
+                        title: "Waste Management"
+                        url: "https://interoperable-europe.ec.europa.eu/collection/environment/solution/waste-managemet"
+                      - id: "7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7b"
+                        uri: "http://data.europa.eu/w21/7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7b"
+                        title: "Citizen's Forum"
+                        url: "https://interoperable-europe.ec.europa.eu/collection/participation/solution/forum"
+                    pager:
+                      current_page: 0
+                      items_per_page: 200
+                      total_items: 2
+                      total_pages: 1
   /organisation:
     servers:
       - url: /api/assessments/v1
@@ -382,26 +390,30 @@ paths:
           example: 0
       responses:
         '200':
-          description: The fetched public organisations.
+          description: The fetched public organisations with pagination info.
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Organisation'
+                $ref: '#/components/schemas/PaginatedOrganisationList'
               examples:
                 fetched:
                   value:
-                    - id: "43a50ef2-7d90-4562-ab81-59af10f2e081"
-                      uri: "https://interoperable-europe.ec.europa.eu/assessment/public-organisation/43a50ef2-7d90-4562-ab81-59af10f2e081"
-                      name: "Public Organisation 1"
-                      "organisation_type": "local_public_sector_body"
-                      country: "bg"
-                    - id: "7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7b"
-                      uri: "https://interoperable-europe.ec.europa.eu/assessment/public-organisation/7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7b"
-                      name: "Public Organisation 2"
-                      "organisation_type": "national_public_sector_body"
-                      country: null
+                    rows:
+                      - id: "43a50ef2-7d90-4562-ab81-59af10f2e081"
+                        uri: "https://interoperable-europe.ec.europa.eu/assessment/public-organisation/43a50ef2-7d90-4562-ab81-59af10f2e081"
+                        name: "Public Organisation 1"
+                        organisation_type: "local_public_sector_body"
+                        country: "BG"
+                      - id: "7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7b"
+                        uri: "https://interoperable-europe.ec.europa.eu/assessment/public-organisation/7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7b"
+                        name: "Public Organisation 2"
+                        organisation_type: "national_public_sector_body"
+                        country: null
+                    pager:
+                      current_page: 0
+                      items_per_page: 200
+                      total_items: 2
+                      total_pages: 1
 components:
 
   securitySchemes:
@@ -852,3 +864,106 @@ components:
     UUID:
       type: string
       pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
+
+    # Pagination wrapper schemas
+
+    Pager:
+      type: object
+      description: Pagination metadata returned with list responses.
+      properties:
+        current_page:
+          type: integer
+          description: The zero-based current page number.
+        items_per_page:
+          type: integer
+          description: The number of items displayed per page (200).
+        total_items:
+          type: integer
+          description: The total number of items in the result set.
+        total_pages:
+          type: integer
+          description: The total number of pages.
+
+    PaginatedReportList:
+      type: object
+      description: Paginated list of assessment reports.
+      properties:
+        rows:
+          type: array
+          description: The list of reports for the current page.
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: The report UUID.
+              uri:
+                type: string
+                format: uri
+                description: The canonical URI of the report.
+              name:
+                type: string
+                description: The report name.
+              country:
+                type: string
+                nullable: true
+                description: The provider's country code (ISO-3166 alpha-2).
+        pager:
+          $ref: '#/components/schemas/Pager'
+
+    PaginatedOrganisationList:
+      type: object
+      description: Paginated list of public organisations.
+      properties:
+        rows:
+          type: array
+          description: The list of organisations for the current page.
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: The organisation UUID.
+              uri:
+                type: string
+                format: uri
+                description: The canonical URI of the organisation.
+              name:
+                type: string
+                description: The organisation name.
+              organisation_type:
+                type: string
+                description: The organisation type identifier.
+              country:
+                type: string
+                nullable: true
+                description: The country code (ISO-3166 alpha-2).
+        pager:
+          $ref: '#/components/schemas/Pager'
+
+    PaginatedAssetList:
+      type: object
+      description: Paginated list of assets (interoperability solutions).
+      properties:
+        rows:
+          type: array
+          description: The list of assets for the current page.
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: The asset UUID.
+              uri:
+                type: string
+                format: uri
+                description: The canonical URI of the asset.
+              title:
+                type: string
+                description: The asset title.
+              url:
+                type: string
+                format: uri
+                description: The URL to the asset page on the portal.
+        pager:
+          $ref: '#/components/schemas/Pager'
