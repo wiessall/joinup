@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - facets.facet.assessment_org_country
     - facets.facet.domain
     - facets.facet.group
     - facets.facet.interoperable_flag
@@ -66,6 +67,12 @@ facets:
   domain:
     checked: true
     label: Domain
+    separator: ', '
+    show_count: false
+    weight: 0
+  assessment_org_country:
+    checked: true
+    label: 'Organisation country'
     separator: ', '
     show_count: false
     weight: 0
