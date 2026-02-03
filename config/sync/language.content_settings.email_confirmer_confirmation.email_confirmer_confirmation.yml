@@ -1,0 +1,11 @@
+uuid: dbc2eb91-e70f-449b-badd-b473a6f12609
+langcode: en
+status: true
+dependencies:
+  module:
+    - email_confirmer
+id: email_confirmer_confirmation.email_confirmer_confirmation
+target_entity_type_id: email_confirmer_confirmation
+target_bundle: email_confirmer_confirmation
+default_langcode: site_default
+language_alterable: false
