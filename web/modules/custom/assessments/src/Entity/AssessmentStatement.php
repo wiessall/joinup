@@ -35,6 +35,7 @@ use Drupal\assessments\AssessmentVocabularyHelper;
  *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
  *     },
  *   },
+ *   admin_permission = "administer assessment statements",
  *   base_table = "assessment_statement",
  *   data_table = "assessment_statement_field_data",
  *   entity_keys = {
