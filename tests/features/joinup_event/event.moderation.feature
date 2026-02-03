@@ -48,7 +48,6 @@ Feature: Event moderation
 
     # Edit the collection and set it to allow only members to create new
     # content.
-    Then break
     When I am logged in as a moderator
     And I go to the edit form of the "Wet Lords" collection
     And I expand the "Additional fields" accordion section
