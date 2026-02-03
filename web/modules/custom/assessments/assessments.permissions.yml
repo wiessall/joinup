@@ -24,3 +24,7 @@ view assessment listing:
   title: 'View assessment listing'
   description: 'Access the assessment listing page.'
   restrict access: true
+administer assessment statements:
+  title: 'Administer assessment statements'
+  description: 'Maintain the types of assessment statement entity.'
+  restrict access: true
