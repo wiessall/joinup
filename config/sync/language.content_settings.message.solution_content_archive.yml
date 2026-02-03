@@ -1,0 +1,11 @@
+uuid: 9be5b3d0-7e3c-4d55-b437-1b61ab71e8e7
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.solution_content_archive
+id: message.solution_content_archive
+target_entity_type_id: message
+target_bundle: solution_content_archive
+default_langcode: site_default
+language_alterable: false

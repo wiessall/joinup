@@ -1,0 +1,11 @@
+uuid: 7e2cea31-27a8-43b5-9329-82f20b00df0f
+langcode: en
+status: true
+dependencies:
+  config:
+    - joinup_invite.invitation_type.group_membership
+id: invitation.group_membership
+target_entity_type_id: invitation
+target_bundle: group_membership
+default_langcode: site_default
+language_alterable: false

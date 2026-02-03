@@ -6,7 +6,14 @@ dependencies:
     - field.storage.node.field_attachment
     - node.type.news
   module:
+    - content_translation
     - file
+third_party_settings:
+  content_translation:
+    translation_sync:
+      target_id: target_id
+      display: display
+      description: description
 _core:
   default_config_hash: ioCq-TanE9IbjUKws6JLj-B2dQ5GumqI-LsSFy-gFdE
 id: node.news.field_attachment

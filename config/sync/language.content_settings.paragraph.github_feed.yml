@@ -1,0 +1,18 @@
+uuid: e772b9b1-debd-48a5-b097-4ab0cd190e6c
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.github_feed
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: paragraph.github_feed
+target_entity_type_id: paragraph
+target_bundle: github_feed
+default_langcode: site_default
+language_alterable: false
