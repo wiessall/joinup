@@ -19,6 +19,8 @@
     {{ title_suffix }}
   {% endif %}
   {% if content %}
+    {% block content %}
     {{- content -}}
+    {% endblock %}
   {% endif %}
 </article>
