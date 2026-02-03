@@ -1,0 +1,11 @@
+uuid: 763546ee-2e9f-401d-9ef0-8ed1978e4342
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.release_request_changes
+id: message.release_request_changes
+target_entity_type_id: message
+target_bundle: release_request_changes
+default_langcode: site_default
+language_alterable: false
