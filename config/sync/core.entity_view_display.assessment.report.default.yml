@@ -21,6 +21,7 @@ dependencies:
     - entity_reference_revisions
     - field_delimiter
     - field_formatter_range
+    - field_group
     - file
     - joinup_slick
     - layout_builder
@@ -34,6 +35,176 @@ third_party_settings:
     allow_custom: false
   entity_print:
     pdf_label: 'Download PDF'
+  field_group:
+    group_general_info:
+      children:
+        - group_general_info_content
+      label: 'General information'
+      parent_name: ''
+      region: content
+      weight: 0
+      format_type: html_element
+      format_settings:
+        classes: my-5
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: true
+        label_element: h2
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+    group_binding_req:
+      children:
+        - group_binding_req_content
+      label: 'Binding requirements'
+      parent_name: ''
+      region: content
+      weight: 1
+      format_type: html_element
+      format_settings:
+        classes: my-5
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: true
+        label_element: h2
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+    group_general_info_content:
+      children:
+        - uid
+        - created
+        - relevant_report
+        - provider
+        - state
+      label: 'General info content'
+      parent_name: group_general_info
+      region: content
+      weight: 1
+      format_type: html_element
+      format_settings:
+        classes: 'card border rounded shadow-sm px-3'
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+    group_results:
+      children:
+        - group_result_content
+      label: Results
+      parent_name: ''
+      region: content
+      weight: 20
+      format_type: html_element
+      format_settings:
+        classes: my-5
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: true
+        label_element: h2
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+    group_result_content:
+      children:
+        - legal
+        - organisational
+        - semantic
+        - technical
+        - remaining_barriers
+      label: 'Result content'
+      parent_name: group_results
+      region: content
+      weight: 20
+      format_type: html_element
+      format_settings:
+        classes: 'card border rounded shadow-sm px-3'
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+    group_supporting_docs:
+      children:
+        - group_supporting_docs_content
+      label: 'Supporting documents and general comments'
+      parent_name: ''
+      region: content
+      weight: 20
+      format_type: html_element
+      format_settings:
+        classes: my-5
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: true
+        label_element: h2
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+    group_supporting_docs_content:
+      children:
+        - other_comment
+        - documents
+      label: 'Supporting docs content'
+      parent_name: group_supporting_docs
+      region: content
+      weight: 20
+      format_type: html_element
+      format_settings:
+        classes: 'card border rounded shadow-sm px-3'
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+    group_binding_req_content:
+      children:
+        - binding_requirement
+      label: 'Binding requirements content'
+      parent_name: group_binding_req
+      region: content
+      weight: 20
+      format_type: html_element
+      format_settings:
+        classes: 'card border rounded shadow-sm px-3'
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
 id: assessment.report.default
 targetEntityType: assessment
 bundle: report
@@ -50,7 +221,7 @@ content:
     region: content
   created:
     type: timestamp
-    label: hidden
+    label: above
     settings:
       date_format: medium
       custom_date_format: ''
@@ -74,11 +245,11 @@ content:
     region: content
   documents:
     type: file_default
-    label: above
+    label: visually_hidden
     settings:
       use_description_as_link_text: true
     third_party_settings: {  }
-    weight: 6
+    weight: 2
     region: content
   entity_print_view_pdf:
     settings: {  }
@@ -94,14 +265,6 @@ content:
     third_party_settings: {  }
     weight: 7
     region: content
-  name:
-    type: string
-    label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 0
-    region: content
   organisational:
     type: entity_reference_entity_view
     label: above
@@ -113,10 +276,10 @@ content:
     region: content
   other_comment:
     type: basic_string
-    label: hidden
+    label: visually_hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 12
+    weight: 1
     region: content
   provider:
     type: entity_reference_entity_view
@@ -129,7 +292,7 @@ content:
     region: content
   relevant_report:
     type: link
-    label: hidden
+    label: above
     settings:
       trim_length: 80
       url_only: false
@@ -171,7 +334,7 @@ content:
     region: content
   state:
     type: list_default
-    label: hidden
+    label: inline
     settings: {  }
     third_party_settings: {  }
     weight: 11
@@ -187,7 +350,7 @@ content:
     region: content
   uid:
     type: entity_reference_label
-    label: hidden
+    label: above
     settings:
       link: true
     third_party_settings: {  }
@@ -197,6 +360,7 @@ hidden:
   entity_print_view_epub: true
   entity_print_view_word_docx: true
   langcode: true
+  name: true
   search_api_excerpt: true
   status: true
   uri: true
