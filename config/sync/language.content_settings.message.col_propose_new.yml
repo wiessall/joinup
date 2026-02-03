@@ -1,0 +1,11 @@
+uuid: 1a37a432-ad61-4b11-a9f9-40b4c1e291ab
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.col_propose_new
+id: message.col_propose_new
+target_entity_type_id: message
+target_bundle: col_propose_new
+default_langcode: site_default
+language_alterable: false

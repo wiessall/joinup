@@ -1,0 +1,11 @@
+uuid: dae2f8c1-be4b-42af-afb1-e63bef0e9df2
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.contact_form_submission
+id: message.contact_form_submission
+target_entity_type_id: message
+target_bundle: contact_form_submission
+default_langcode: site_default
+language_alterable: false

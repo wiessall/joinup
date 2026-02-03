@@ -1,0 +1,11 @@
+uuid: 5abd9ca8-cf5a-4d31-8ae2-0436879d93e8
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.cc_transition_reject_deletion
+id: message.cc_transition_reject_deletion
+target_entity_type_id: message
+target_bundle: cc_transition_reject_deletion
+default_langcode: site_default
+language_alterable: false
