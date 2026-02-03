@@ -8,6 +8,7 @@ use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\assessments\AssessmentStatementInterface;
 use Drupal\assessments\AssessmentVocabularyHelper;
 
 /**
@@ -48,7 +49,7 @@ use Drupal\assessments\AssessmentVocabularyHelper;
  *    },
  * )
  */
-final class AssessmentStatement extends ContentEntityBase {
+final class AssessmentStatement extends ContentEntityBase implements AssessmentStatementInterface {
 
   /**
    * {@inheritdoc}
@@ -166,6 +167,28 @@ final class AssessmentStatement extends ContentEntityBase {
     $tid = \Drupal::service(AssessmentVocabularyHelper::class)
       ->getTermIdFromIdentifier('assess_statement_type', $this->bundle());
     $this->set('statement_type', $tid);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getRelevantReport(): ?AssessmentReport {
+    if (empty($this->bundle())) {
+      return NULL;
+    }
+
+    $assessmentStorage = $this->entityTypeManager()->getStorage('assessment');
+    $query = $assessmentStorage->getQuery();
+    // The report has 4 fields named after the bundles of the statements.
+    $query->condition($this->bundle(), $this->id())
+      ->accessCheck(FALSE)
+      ->range(0, 1);
+    $results = $query->execute();
+    if (empty($results)) {
+      return NULL;
+    }
+
+    return $assessmentStorage->load(key($results));
   }
 
 }
