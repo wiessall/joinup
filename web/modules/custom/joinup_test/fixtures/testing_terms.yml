@@ -75,6 +75,7 @@ spatial:
     code: CH
   - name: 'European Union'
     code: EU
+    uuid: 0e15426a-db00-4869-9ef1-7dac0caf1aeb
   - name: Luxembourg
     code: LU
     eu_member: true

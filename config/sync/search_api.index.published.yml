@@ -3,6 +3,8 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.storage.assessment.country
+    - field.storage.assessment.provider
     - field.storage.meta_entity.count
     - field.storage.meta_entity.field_featured
     - field.storage.meta_entity.field_pinned_in
@@ -150,6 +152,17 @@ field_settings:
     type: text
     boost: 5.0
     dependencies:
+      module:
+        - assessments
+  assessment_org_country:
+    label: 'Organisation country'
+    datasource_id: 'entity:assessment'
+    property_path: 'provider:entity:country'
+    type: integer
+    dependencies:
+      config:
+        - field.storage.assessment.country
+        - field.storage.assessment.provider
       module:
         - assessments
   body:
