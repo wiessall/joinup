@@ -1,0 +1,11 @@
+uuid: f4234986-f622-46fc-9a2f-500b6c41a5cf
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.distribution_delete
+id: message.distribution_delete
+target_entity_type_id: message
+target_bundle: distribution_delete
+default_langcode: site_default
+language_alterable: false
