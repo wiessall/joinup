@@ -33,7 +33,11 @@ final class AssessmentStatementAccessControlHandler extends EntityAccessControlH
     return match ($operation) {
       'view' => AccessResult::allowedIfHasPermission($account, 'access content')
         ->addCacheableDependency($entity),
-      'update', 'delete' => AccessResult::allowedIfHasPermission($account, 'administer assessment statements')
+      'update' => AccessResult::allowedIfHasPermission($account, 'moderate assessment report')
+        ->orIf(AccessResult::allowedIf(!empty($entity->getRelevantReport())
+          && $entity->getRelevantReport()->access('update', $account)
+        ))->addCacheableDependency($entity),
+      'delete' => AccessResult::allowedIfHasPermission($account, 'moderate assessment report')
         ->addCacheableDependency($entity),
       default => AccessResult::neutral()
         ->cachePerPermissions()
