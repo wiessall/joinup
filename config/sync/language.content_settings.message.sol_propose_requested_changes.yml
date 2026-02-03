@@ -1,0 +1,11 @@
+uuid: 49967588-1e06-440e-9fe5-5f4bcc1d77b8
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.sol_propose_requested_changes
+id: message.sol_propose_requested_changes
+target_entity_type_id: message
+target_bundle: sol_propose_requested_changes
+default_langcode: site_default
+language_alterable: false

@@ -85,8 +85,6 @@ display:
             - change_collection
             - archive_solution
             - unarchive_solution
-          link_to_item: false
-          use_highlighting: false
         title:
           id: title
           table: search_api_datasource_published_entity_node

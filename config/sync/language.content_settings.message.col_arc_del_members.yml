@@ -1,0 +1,11 @@
+uuid: 15fbc5ff-9a9c-4468-bb2e-e50b2f158fe5
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.col_arc_del_members
+id: message.col_arc_del_members
+target_entity_type_id: message
+target_bundle: col_arc_del_members
+default_langcode: site_default
+language_alterable: false
