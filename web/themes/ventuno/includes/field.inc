@@ -32,6 +32,31 @@ function ventuno_theme_suggestions_field_alter(array &$suggestions, array $varia
     $suggestions[] = $element['#extra_suggestion'];
   }
 
+  $base = implode('__', [
+    'field',
+    $element['#entity_type'],
+    $element['#bundle'],
+  ]);
+  // Get the key of the $base suggestion. We insert the view mode specific
+  // suggestion right after it.
+  $baseKey = array_search($base, $suggestions, TRUE);
+  if ($baseKey !== FALSE) {
+    // Let's not assume that $suggestions is an indexed array...
+    $baseKeyPos = array_search($baseKey, array_keys($suggestions), TRUE);
+    $typeBundleModeSuggestion = implode('__', [
+      'field',
+      $element['#entity_type'],
+      $element['#bundle'],
+      $element['#view_mode'],
+    ]);
+
+    $suggestions = array_merge(
+      array_slice($suggestions, 0, $baseKeyPos + 1),
+      [$typeBundleModeSuggestion],
+      array_slice($suggestions, $baseKeyPos + 1),
+    );
+  }
+
   // Also add suggestion which varies by entity, field, bundle and view mode.
   $suggestions[] = implode('__', [
     'field',
