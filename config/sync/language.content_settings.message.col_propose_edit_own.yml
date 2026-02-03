@@ -1,0 +1,11 @@
+uuid: f7a9d3a0-cd6f-4f8e-aaba-7d3568f6d66a
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.col_propose_edit_own
+id: message.col_propose_edit_own
+target_entity_type_id: message
+target_bundle: col_propose_edit_own
+default_langcode: site_default
+language_alterable: false

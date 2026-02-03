@@ -1,0 +1,11 @@
+uuid: cb5a383e-6395-4b5f-8fc0-22a8a3da2d20
+langcode: en
+status: true
+dependencies:
+  config:
+    - og_menu.ogmenu.quick_links
+id: ogmenu_instance.quick_links
+target_entity_type_id: ogmenu_instance
+target_bundle: quick_links
+default_langcode: site_default
+language_alterable: false

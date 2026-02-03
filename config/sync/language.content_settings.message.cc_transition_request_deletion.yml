@@ -1,0 +1,11 @@
+uuid: 33789146-c63f-4d70-935b-0608fbb2b7d1
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.cc_transition_request_deletion
+id: message.cc_transition_request_deletion
+target_entity_type_id: message
+target_bundle: cc_transition_request_deletion
+default_langcode: site_default
+language_alterable: false
