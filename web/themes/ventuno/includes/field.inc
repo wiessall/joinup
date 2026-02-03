@@ -14,22 +14,32 @@ use Drupal\Core\Template\Attribute;
  * Implements hook_theme_suggestions_HOOK_alter().
  */
 function ventuno_theme_suggestions_field_alter(array &$suggestions, array $variables): void {
+  $element = $variables['element'];
   // Do not output field labels and wrapping markup for paragraph fields. This
   // excludes binding_requirement paragraphs which are not used like the other
   // paragraphs in the site (for content editing).
   if (
-    isset($variables['element']['#entity_type'])
-    && $variables['element']['#entity_type'] === 'paragraph'
-    && $variables['element']['#bundle'] !== 'binding_requirement'
+    isset($element['#entity_type'])
+    && $element['#entity_type'] === 'paragraph'
+    && $element['#bundle'] !== 'binding_requirement'
   ) {
     // Prepend the new suggestion right after the default field template. This
     // allows overriding single fields, while keeping all the rest markup-free.
     array_unshift($suggestions, 'field__bare');
   }
   // Add extra suggestion for field elements.
-  if (isset($variables['element']['#extra_suggestion'])) {
-    $suggestions[] = $variables['element']['#extra_suggestion'];
+  if (isset($element['#extra_suggestion'])) {
+    $suggestions[] = $element['#extra_suggestion'];
   }
+
+  // Also add suggestion which varies by entity, field, bundle and view mode.
+  $suggestions[] = implode('__', [
+    'field',
+    $element['#entity_type'],
+    $element['#field_name'],
+    $element['#bundle'],
+    $element['#view_mode'],
+  ]);
 }
 
 /**
