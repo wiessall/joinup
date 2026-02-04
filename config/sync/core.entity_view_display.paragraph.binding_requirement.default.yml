@@ -89,8 +89,8 @@ content:
       trim_length: 80
       url_only: false
       url_plain: false
-      rel: ''
-      target: ''
+      rel: nofollow
+      target: _blank
     third_party_settings: {  }
     weight: 1
     region: content
@@ -102,7 +102,7 @@ content:
       link: false
     third_party_settings:
       entity_form_field_label:
-        new_label: Initiative(s)
+        new_label: Initiative
         rewrite_label: 1
       field_delimiter:
         delimiter: ''
