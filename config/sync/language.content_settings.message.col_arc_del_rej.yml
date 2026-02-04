@@ -1,0 +1,11 @@
+uuid: 8a5203ee-3a7e-45a8-b2c9-47bc9421081a
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.col_arc_del_rej
+id: message.col_arc_del_rej
+target_entity_type_id: message
+target_bundle: col_arc_del_rej
+default_langcode: site_default
+language_alterable: false

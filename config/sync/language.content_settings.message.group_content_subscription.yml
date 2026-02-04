@@ -1,0 +1,11 @@
+uuid: a42715a3-6c4a-4b17-be28-296fa29f5c56
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.group_content_subscription
+id: message.group_content_subscription
+target_entity_type_id: message
+target_bundle: group_content_subscription
+default_langcode: site_default
+language_alterable: false

@@ -1,0 +1,11 @@
+uuid: f53299c9-f7f0-4d3e-9efb-14b0a3435c18
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.sol_blacklist
+id: message.sol_blacklist
+target_entity_type_id: message
+target_bundle: sol_blacklist
+default_langcode: site_default
+language_alterable: false

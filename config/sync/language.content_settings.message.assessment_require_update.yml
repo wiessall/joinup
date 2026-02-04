@@ -1,0 +1,11 @@
+uuid: 11710b60-3403-4cb1-8779-530c6c163356
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.assessment_require_update
+id: message.assessment_require_update
+target_entity_type_id: message
+target_bundle: assessment_require_update
+default_langcode: site_default
+language_alterable: false
