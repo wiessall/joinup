@@ -18,9 +18,14 @@ class EifRdfSyncTest extends JoinupExistingSiteTestBase {
    * Tests synchronization of EIF perspective data.
    */
   public function testRdfSync(): void {
+    $collection = $this->createNode([
+      'type' => 'collection',
+      'title' => $this->randomString(),
+    ]);
     $solution = $this->createNode([
       'type' => 'solution',
       'label' => $this->randomString(),
+      'og_audience' => $collection,
     ]);
     /** @var \Drupal\eif\Entity\EifPerspectiveInterface $eif */
     $eif = MetaEntity::create([
@@ -99,10 +104,11 @@ class EifRdfSyncTest extends JoinupExistingSiteTestBase {
     // Remove blank node IDs. They were used only to structure data.
     $actual['http://data.europa.eu/eif/Recommendation'] = array_values($actual['http://data.europa.eu/eif/Recommendation']);
 
-    $this->assertEqualsCanonicalizing($this->getExpected($solution->id()), $actual);
+    $this->assertEqualsCanonicalizing($this->getExpected($solution->getUri()), $actual);
 
     // Delete the solution.
     $solution->delete();
+    $collection->delete();
     \Drupal::getContainer()->get('rdf_sync.synchronizer')->destruct();
 
     // Check that after deletion, triples, including blank nodes, were removed.
