@@ -17,6 +17,7 @@ dependencies:
     - field_formatter_range
     - file
     - joinup_slick
+    - link
     - template_suggestion
     - text
 id: paragraph.binding_requirement.default
@@ -25,13 +26,14 @@ bundle: binding_requirement
 mode: default
 content:
   affects:
-    type: entity_reference_label
+    type: entity_reference_entity_view
     label: above
     settings:
+      view_mode: default
       link: false
     third_party_settings:
       entity_form_field_label:
-        new_label: 'Trans-European digital public service(s)'
+        new_label: 'Concerned public services'
         rewrite_label: 1
       field_delimiter:
         delimiter: ''
@@ -43,7 +45,7 @@ content:
         preset: ''
         field_label: true
       template_suggestion:
-        template_suggestion: ''
+        template_suggestion: assessment__report__item_list
     weight: 2
     region: content
   asset:
@@ -65,7 +67,7 @@ content:
         preset: ''
         field_label: true
       template_suggestion:
-        template_suggestion: ''
+        template_suggestion: assessment__report__item_list
     weight: 4
     region: content
   description:
@@ -74,42 +76,56 @@ content:
     settings: {  }
     third_party_settings:
       entity_form_field_label:
-        new_label: 'Binding requirement'
+        new_label: Requirement
         rewrite_label: 1
       template_suggestion:
-        template_suggestion: ''
+        template_suggestion: assessment__report__item_list
+    weight: 0
+    region: content
+  documented_in:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
     weight: 1
     region: content
   expression:
-    type: entity_reference_label
+    type: entity_reference_entity_view
     label: above
     settings:
+      view_mode: default
       link: false
     third_party_settings:
       entity_form_field_label:
         new_label: Initiative(s)
         rewrite_label: 1
       field_delimiter:
-        delimiter: ','
+        delimiter: ''
       field_formatter_range:
         order: 0
         limit: 0
         offset: 0
       joinup_slick:
         preset: ''
-        field_label: true
+        field_label: false
       template_suggestion:
-        template_suggestion: ''
-    weight: 0
+        template_suggestion: assessment__report__item_list
+    weight: -1
     region: content
   has_participation:
-    type: entity_reference_label
+    type: entity_reference_entity_view
     label: above
     settings:
+      view_mode: default
       link: false
     third_party_settings:
       entity_form_field_label:
-        new_label: 'Public and/or private stakeholder(s) affected'
+        new_label: 'Affected stakeholders'
         rewrite_label: 1
       field_delimiter:
         delimiter: ''
@@ -121,7 +137,7 @@ content:
         preset: ''
         field_label: true
       template_suggestion:
-        template_suggestion: ''
+        template_suggestion: assessment__report__item_list
     weight: 3
     region: content
   requirement_documents:
@@ -129,11 +145,24 @@ content:
     label: above
     settings:
       use_description_as_link_text: true
-    third_party_settings: {  }
+    third_party_settings:
+      entity_form_field_label:
+        new_label: 'Supporting documents'
+        rewrite_label: 1
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+      template_suggestion:
+        template_suggestion: assessment__report__item_list
     weight: 5
     region: content
 hidden:
-  documented_in: true
   search_api_excerpt: true
   uri: true
   uuid: true
