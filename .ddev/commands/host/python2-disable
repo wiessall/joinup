@@ -1,0 +1,18 @@
+#!/bin/bash
+
+## Description: Disable Python 2 service
+## Usage: python2-disable
+## Example: ddev python2-disable
+
+set -e
+
+DDEV_DIR="$(dirname "$0")/../.."
+TARGET="$DDEV_DIR/docker-compose.python2.yaml"
+
+if [ ! -f "$TARGET" ]; then
+    echo "Python 2 service is already disabled."
+    exit 0
+fi
+
+rm "$TARGET"
+echo "Python 2 service disabled. Run 'ddev restart' to apply changes."
