@@ -1,0 +1,11 @@
+uuid: 39f42efa-f0b1-460b-b719-6bae0c56c5b2
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.comment_delete
+id: message.comment_delete
+target_entity_type_id: message
+target_bundle: comment_delete
+default_langcode: site_default
+language_alterable: false

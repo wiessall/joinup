@@ -1,0 +1,51 @@
+diff --git a/src/Plugin/views/field/SearchApiBulkForm.php b/src/Plugin/views/field/SearchApiBulkForm.php
+index 7d6d406b3b0152169911a49d6bdf3cab78fb8be7..e195bb3cd8684515820125f07e5c18f4d87855d5 100644
+--- a/src/Plugin/views/field/SearchApiBulkForm.php
++++ b/src/Plugin/views/field/SearchApiBulkForm.php
+@@ -26,8 +26,22 @@ class SearchApiBulkForm extends BulkForm {
+ 
+   use SearchApiFieldTrait {
+     preRender as traitPreRender;
+-    defineOptions as ignoreDefineOptions;
+-    buildOptionsForm as ignoreBuildOptionsForm;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function defineOptions(): array {
++    // Intentionally overridden to avoid SearchApiFieldTrait implementation.
++    return parent::defineOptions();
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function buildOptionsForm(&$form, FormStateInterface $form_state): void {
++    // Intentionally overridden to avoid SearchApiFieldTrait implementation.
++    parent::buildOptionsForm($form, $form_state);
+   }
+ 
+   /**
+diff --git a/src/Plugin/views/field/SearchApiFieldTrait.php b/src/Plugin/views/field/SearchApiFieldTrait.php
+index d21cdc4095b60cb3b829480089f80198c43330f1..bc0e0ad256866f0d62c2e1dc2661700b27a9096d 100644
+--- a/src/Plugin/views/field/SearchApiFieldTrait.php
++++ b/src/Plugin/views/field/SearchApiFieldTrait.php
+@@ -412,7 +412,7 @@ trait SearchApiFieldTrait {
+       $field_id = $this->definition['search_api field'];
+     }
+     $this->addRetrievedProperty($combined_property_path, $field_id);
+-    if ($this->options['link_to_item']) {
++    if (!empty($this->options['link_to_item'])) {
+       // @todo We don't actually know which object we need, might be from this
+       //   property or any of its parents – depending where the closest entity
+       //   ancestor is. To be 100% accurate, we'd have to somehow already
+@@ -1279,7 +1279,7 @@ trait SearchApiFieldTrait {
+           'value' => $value,
+         ];
+ 
+-        if ($this->options['link_to_item']) {
++        if (!empty($this->options['link_to_item'])) {
+           $item['make_link'] = TRUE;
+           $item['url'] = $this->getItemUrl($values, $i);
+         }

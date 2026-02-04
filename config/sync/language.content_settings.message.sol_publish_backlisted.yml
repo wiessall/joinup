@@ -1,0 +1,11 @@
+uuid: 5c608d73-1ec6-4d98-bfa3-c2815af46e86
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.sol_publish_backlisted
+id: message.sol_publish_backlisted
+target_entity_type_id: message
+target_bundle: sol_publish_backlisted
+default_langcode: site_default
+language_alterable: false

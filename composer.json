@@ -385,6 +385,7 @@
                 "Remove the automatic cron run from the installer. @see https://www.drupal.org/i/2422681": "resources/patch/php/drupal/core/2422681.diff",
                 "Link widget placeholder_url should use label @see https://www.drupal.org/i/3547582": "resources/patch/php/drupal/core/3547582.diff",
                 "Installing from existing config causes massive cache.config population and slow installs @see https://www.drupal.org/i/3559030": "resources/patch/php/drupal/core/3559030.diff",
+                "Configs for untranslatable bundles @see https://www.drupal.org/i/3570351": "resources/patch/php/drupal/core/3570351.mr14561-commitd9636386.diff",
                 "REST views: Add pagination information and total count result @see https://www.drupal.org/i/2982729": "resources/patch/php/drupal/core/2982729-mr6558.commit6081bf34.diff"
             },
             "drupal/default_content": {
@@ -507,8 +508,8 @@
                 "Add support for deriver in RdfUriGenerator @see https://www.drupal.org/project/rdf_sync/issues/3567259": "resources/patch/php/drupal/rdf_sync/3567259.diff"
             },
             "drupal/search_api": {
-                "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199.patch",
-                "View recalculated with wrong data from cache @see https://drupal.org/i/3327645": "resources/patch/php/drupal/search_api/sapi-views_cache_metadata-3327645-9--fix-only.patch"
+                "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199-42e0e284.diff",
+                "View recalculated with wrong data from cache @see https://drupal.org/i/3327645": "resources/patch/php/drupal/search_api/3327645-d510c98e.diff"
             },
             "drupal/search_api_spellcheck": {
                 "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372": "resources/patch/php/drupal/search_api_spellcheck/3280372.patch"
