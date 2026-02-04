@@ -143,7 +143,6 @@ function assessments_form_layout_paragraphs_component_form_alter(array &$form, F
     // We use layout paragraphs, but we use everytime the 1 column layout.
     $form['layout_paragraphs']['#access'] = FALSE;
     $form['asset']['widget']['#title_display'] = 'invisible';
-    $form['actions']['cancel']['#value'] = t('Clear');
     $form['documented_in']['widget'][0]['uri']['#description'] = t('Use <a href=":eli_url" target="_blank" rel="noopener noreferrer">ELI format</a>, if possible – otherwise provide a URL pointing to the binding requirement assessed.', [
       ':eli_url' => 'https://eur-lex.europa.eu/eli-register/what_is_eli.html',
     ]);
