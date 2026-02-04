@@ -6,6 +6,7 @@ namespace Drupal\Tests\assessments\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\assessments\Entity\Assessment;
+use Drupal\assessments\Entity\AssessmentStatement;
 use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
 
@@ -316,6 +317,44 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
     $this->assertTrue($organisation->access('view', $this->assessmentModeratorUser));
     $this->assertTrue($organisation->access('view', $this->authenticatedUser));
     $this->assertTrue($organisation->access('view', User::getAnonymousUser()));
+  }
+
+  /**
+   * Tests update access for assessment statements delegates to parent report.
+   *
+   * @covers \Drupal\assessments\AssessmentStatementAccessControlHandler::checkAccess
+   */
+  public function testAssessmentStatementAccess(): void {
+    // Create a draft report owned by ownerUser.
+    $report = Assessment::create([
+      'type' => 'report',
+      'name' => 'Test Report',
+      'state' => 'draft',
+      'uid' => $this->ownerUser->id(),
+    ]);
+    $report->save();
+    $this->markEntityForCleanup($report);
+
+    // Create a statement and link it to the report.
+    $statement = AssessmentStatement::create(['type' => 'legal']);
+    $statement->save();
+    $this->markEntityForCleanup($statement);
+    $report->set('legal', $statement->id())->save();
+
+    // Owner can update draft report, so they can update the statement.
+    $this->assertTrue($statement->access('update', $this->ownerUser));
+    // Non-owner cannot update draft report, so cannot update the statement.
+    $this->assertFalse($statement->access('update', $this->nonOwnerUser));
+
+    // Orphan statement (no parent report) cannot be updated.
+    $orphan = AssessmentStatement::create(['type' => 'semantic']);
+    $orphan->save();
+    $this->markEntityForCleanup($orphan);
+    $this->assertFalse($orphan->access('update', $this->ownerUser));
+
+    // Assessment moderators can update anyway.
+    $this->assertTrue($statement->access('update', $this->assessmentModeratorUser));
+    $this->assertTrue($orphan->access('update', $this->assessmentModeratorUser));
   }
 
   /**
