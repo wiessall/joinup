@@ -1,0 +1,53 @@
+diff --git a/core/modules/content_translation/content_translation.admin.inc b/core/modules/content_translation/content_translation.admin.inc
+index c038550b623b963c864bb7a0389a5d0d2d3363ba..9eca7229f656f3fc44810b7302daf1db5da721c6 100644
+--- a/core/modules/content_translation/content_translation.admin.inc
++++ b/core/modules/content_translation/content_translation.admin.inc
+@@ -365,6 +365,11 @@ function content_translation_form_language_content_settings_submit(array $form,
+           if (isset($bundle_settings['columns'][$field_name]) && !array_filter($bundle_settings['columns'][$field_name])) {
+             $translatable = FALSE;
+           }
++          // Skip fields for bundles that are not translatable and were not
++          // previously enabled for translation.
++          if (empty($bundle_settings['translatable']) && !$content_translation_manager->isEnabled($entity_type_id, $bundle)) {
++            continue;
++          }
+           $field_config = $fields[$field_name]->getConfig($bundle);
+           if ($field_config->isTranslatable() != $translatable) {
+             $field_config
+diff --git a/core/modules/content_translation/tests/src/Functional/ContentTranslationSettingsTest.php b/core/modules/content_translation/tests/src/Functional/ContentTranslationSettingsTest.php
+index 024089b28b245d1dbad892a5294550524031d660..d60868ffcb7e59091a8e685d37a590acf39be801 100644
+--- a/core/modules/content_translation/tests/src/Functional/ContentTranslationSettingsTest.php
++++ b/core/modules/content_translation/tests/src/Functional/ContentTranslationSettingsTest.php
+@@ -102,6 +102,8 @@ public function testSettingsUI(): void {
+       'settings[comment][comment_article][fields][status]' => FALSE,
+       'settings[comment][comment_article][fields][subject]' => FALSE,
+       'settings[comment][comment_article][fields][uid]' => FALSE,
++      // Configurable fields must also be set to FALSE.
++      'settings[comment][comment_article][fields][comment_body]' => FALSE,
+     ];
+     $this->assertSettings('comment', 'comment_article', FALSE, $edit);
+     $this->assertSession()->statusMessageContains('At least one field needs to be translatable to enable Comment_article for translation.', 'error');
+@@ -137,10 +139,12 @@ public function testSettingsUI(): void {
+     $definition = $entity_field_manager->getFieldDefinitions('comment', 'comment_article')['subject'];
+     $this->assertFalse($definition->isTranslatable(), 'Article comment subject is not translatable.');
+ 
++    // For non-translatable bundles, field translatability is not modified,
++    // so fields retain their default translatability settings.
+     $definition = $entity_field_manager->getFieldDefinitions('comment', 'comment')['comment_body'];
+-    $this->assertFalse($definition->isTranslatable(), 'Page comment body is not translatable.');
++    $this->assertTrue($definition->isTranslatable(), 'Page comment body retains default translatability.');
+     $definition = $entity_field_manager->getFieldDefinitions('comment', 'comment')['subject'];
+-    $this->assertFalse($definition->isTranslatable(), 'Page comment subject is not translatable.');
++    $this->assertTrue($definition->isTranslatable(), 'Page comment subject retains default translatability.');
+ 
+     // Test that translation can be enabled for base fields.
+     $edit = [
+@@ -151,7 +155,7 @@ public function testSettingsUI(): void {
+     ];
+     $this->assertSettings('entity_test_mul', 'entity_test_mul', TRUE, $edit);
+     $field_override = BaseFieldOverride::loadByName('entity_test_mul', 'entity_test_mul', 'name');
+-    $this->assertTrue($field_override->isTranslatable(), 'Base fields can be overridden with a base field bundle override entity.');
++    $this->assertNull($field_override, 'No BaseFieldOverride is created when translatability matches the default.');
+     $definitions = $entity_field_manager->getFieldDefinitions('entity_test_mul', 'entity_test_mul');
+     $this->assertTrue($definitions['name']->isTranslatable());
+     $this->assertFalse($definitions['user_id']->isTranslatable());

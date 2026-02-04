@@ -1,0 +1,11 @@
+uuid: e5d9e0d2-107e-4e3f-b7a0-58001f2063b8
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.announcement
+id: message.announcement
+target_entity_type_id: message
+target_bundle: announcement
+default_langcode: site_default
+language_alterable: false

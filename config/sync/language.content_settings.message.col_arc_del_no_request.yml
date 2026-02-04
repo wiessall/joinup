@@ -1,0 +1,11 @@
+uuid: 0bb97ead-7590-4811-8a20-1981d1d84ac7
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.col_arc_del_no_request
+id: message.col_arc_del_no_request
+target_entity_type_id: message
+target_bundle: col_arc_del_no_request
+default_langcode: site_default
+language_alterable: false
