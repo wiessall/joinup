@@ -1,0 +1,11 @@
+uuid: f59cdd5f-0be0-4dda-983f-94cc51c6e7b1
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.collection_membership_invitation
+id: message.collection_membership_invitation
+target_entity_type_id: message
+target_bundle: collection_membership_invitation
+default_langcode: site_default
+language_alterable: false

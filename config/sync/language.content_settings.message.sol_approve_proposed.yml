@@ -1,0 +1,11 @@
+uuid: 09abac30-e2e3-4bef-b7b8-50295b8020b9
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.sol_approve_proposed
+id: message.sol_approve_proposed
+target_entity_type_id: message
+target_bundle: sol_approve_proposed
+default_langcode: site_default
+language_alterable: false

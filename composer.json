@@ -143,7 +143,7 @@
         "npm-asset/chart.js": "^4.5",
         "npm-asset/dompurify": "^3.0.9",
         "npm-asset/jquery-colorbox": "^1.6.4",
-        "npm-asset/jquery-jsonview": "^1.2.3",
+        "npm-asset/jquery-jsonview": "^1.2",
         "npm-asset/js-cookie": "^3.0.5",
         "npm-asset/slick-carousel": ">1.6.0 <1.8.1",
         "npm-asset/yaireo--tagify": "^4.35.4",
@@ -330,6 +330,7 @@
         },
         "patches": {
             "drupal/babel": {
+                "Resolve site install slowness caused by Babel @see https://drupal.org/i/3568967": "resources/patch/php/drupal/babel/3568967-mr73-commit2d784807.diff",
                 "TypeError in BabelTranslateForm::ajaxUpdateTranslation see @see https://www.drupal.org/i/3561002": "resources/patch/php/drupal/babel/3561002.diff"
             },
             "drupal/calendar_view": {
@@ -378,6 +379,7 @@
                 "Remove the automatic cron run from the installer. @see https://www.drupal.org/i/2422681": "resources/patch/php/drupal/core/2422681.diff",
                 "Link widget placeholder_url should use label @see https://www.drupal.org/i/3547582": "resources/patch/php/drupal/core/3547582.diff",
                 "Installing from existing config causes massive cache.config population and slow installs @see https://www.drupal.org/i/3559030": "resources/patch/php/drupal/core/3559030.diff",
+                "Configs for untranslatable bundles @see https://www.drupal.org/i/3570351": "resources/patch/php/drupal/core/3570351.mr14561-commitd9636386.diff",
                 "Fatal error when saving translation configuration @see https://www.drupal.org/i/3549469": "resources/patch/php/drupal/core/3549469.diff",
                 "Translations of nodes with comment settings field set to non-translatable returns EntityUntranslatableFieldsConstraint @see https://www.drupal.org/i/3015675": "resources/patch/php/drupal/core/3015675-83bb966c.diff"
             },
@@ -491,8 +493,8 @@
                 "Allow $bundle to be nullable @see https://www.drupal.org/i/3529979": "resources/patch/php/drupal/rdf_sync/3529979.diff"
             },
             "drupal/search_api": {
-                "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199.patch",
-                "View recalculated with wrong data from cache @see https://drupal.org/i/3327645": "resources/patch/php/drupal/search_api/sapi-views_cache_metadata-3327645-9--fix-only.patch"
+                "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199-42e0e284.diff",
+                "View recalculated with wrong data from cache @see https://drupal.org/i/3327645": "resources/patch/php/drupal/search_api/3327645-d510c98e.diff"
             },
             "drupal/search_api_spellcheck": {
                 "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372": "resources/patch/php/drupal/search_api_spellcheck/3280372.patch"
@@ -590,123 +592,6 @@
                     "url": "git@github.com:SEMICeu/adms-ap_validator.git",
                     "type": "git",
                     "reference": "master"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "npm-asset/jquery-jsonview",
-                "version": "1.2.3",
-                "type": "drupal-library",
-                "dist": {
-                    "url": "https://github.com/yesmeck/jquery-jsonview/archive/refs/tags/v1.2.3.zip",
-                    "type": "zip"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "npm-asset/chart.js",
-                "version": "4.5.1",
-                "type": "npm-asset",
-                "dist": {
-                    "url": "https://github.com/chartjs/Chart.js/archive/refs/tags/v4.5.1.zip",
-                    "type": "zip"
-                },
-                "require": {
-                    "npm-asset/kurkle--color": ">=0.3.0,<0.4.0"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "npm-asset/kurkle--color",
-                "version": "0.3.4",
-                "type": "npm-asset",
-                "dist": {
-                    "url": "https://github.com/kurkle/color/archive/refs/tags/v0.3.4.zip",
-                    "type": "zip"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "npm-asset/dompurify",
-                "version": "3.3.0",
-                "type": "npm-asset",
-                "dist": {
-                    "url": "https://github.com/cure53/DOMPurify/archive/refs/tags/3.3.0.zip",
-                    "type": "zip"
-                },
-                "require": {
-                    "npm-asset/types--trusted-types": ">=2.0.7,<3.0.0"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "npm-asset/types--trusted-types",
-                "version": "2.0.7",
-                "type": "npm-asset",
-                "dist": {
-                    "url": "https://registry.npmjs.org/@types/trusted-types/-/trusted-types-2.0.7.tgz",
-                    "type": "tar"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "npm-asset/jquery",
-                "version": "3.7.1",
-                "type": "npm-asset",
-                "dist": {
-                    "url": "https://github.com/jquery/jquery/archive/refs/tags/3.7.1.zip",
-                    "type": "zip"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "npm-asset/jquery-colorbox",
-                "version": "1.6.4",
-                "type": "npm-asset",
-                "dist": {
-                    "url": "https://github.com/jackmoore/colorbox/archive/refs/tags/1.6.4.zip",
-                    "type": "zip"
-                },
-                "require": {
-                    "npm-asset/jquery": ">=1.3.2"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "npm-asset/js-cookie",
-                "version": "3.0.5",
-                "type": "npm-asset",
-                "dist": {
-                    "url": "https://github.com/js-cookie/js-cookie/archive/refs/tags/v3.0.5.zip",
-                    "type": "zip"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "npm-asset/yaireo--tagify",
-                "version": "4.35.6",
-                "type": "npm-asset",
-                "dist": {
-                    "url": "https://github.com/yairEO/tagify/archive/refs/tags/v4.35.6.zip",
-                    "type": "zip"
                 }
             }
         }
