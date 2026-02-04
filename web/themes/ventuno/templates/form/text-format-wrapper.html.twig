@@ -1,0 +1,26 @@
+{#
+/**
+ * @file
+ * Theme override for a text format-enabled form element.
+ *
+ * Available variables:
+ * - children: Text format element children.
+ * - description: Text format element description.
+ * - attributes: HTML attributes for the description container.
+ * - aria_description: Flag indicating whether ARIA attributes are already set.
+ *
+ * @see template_preprocess_text_format_wrapper()
+ */
+#}
+<div class="js-text-format-wrapper js-form-item form-item my-4">
+  <div class="text-format-inner">
+    {{ children }}
+  </div>
+
+  {% if description %}
+    {% set description_attributes = attributes.addClass('form-text', 'text-muted') %}
+    <small{{ description_attributes }}>
+      {{ description }}
+    </small>
+  {% endif %}
+</div>
