@@ -22,11 +22,6 @@ export const projectConfig = {
       email: "moderator@example.com",
       password: "moderator",
     },
-    translator: {
-      name: "translator",
-      email: "translator@example.com",
-      password: "translator",
-    },
     user: {
       name: "user",
       email: "user@example.com",

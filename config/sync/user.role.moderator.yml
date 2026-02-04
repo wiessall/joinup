@@ -27,7 +27,9 @@ dependencies:
   module:
     - collection
     - comment
+    - config_translation
     - contact_form
+    - content_translation
     - custom_page
     - dashboard
     - entity_legal
@@ -43,6 +45,7 @@ dependencies:
     - joinup_featured
     - joinup_group
     - joinup_group_content_management
+    - joinup_i18n
     - joinup_legal
     - joinup_licence
     - joinup_log
@@ -54,8 +57,10 @@ dependencies:
     - joinup_solution
     - joinup_subscription
     - joinup_webform
+    - locale
     - media
     - menu_admin_per_menu
+    - menu_link_content
     - meta_entity
     - moderation
     - node
@@ -115,8 +120,8 @@ permissions:
   - 'administer webform via ui'
   - 'assign licence_manager role'
   - 'assign oss_catalogue_manager role'
-  - 'assign translator role'
   - 'bypass code of conduct'
+  - 'bypass enforced english'
   - 'bypass entity legal acceptance'
   - 'bypass node creation limit'
   - 'create blocked_reason'
@@ -126,6 +131,7 @@ permissions:
   - 'create content for any_user option'
   - 'create content for facilitators_and_authors option'
   - 'create content for only_members option'
+  - 'create content translations'
   - 'create custom_page content'
   - 'create discussion content'
   - 'create discussion_logo media'
@@ -170,6 +176,7 @@ permissions:
   - 'delete any private message'
   - 'delete any release content'
   - 'delete any solution_logo media'
+  - 'delete content translations'
   - 'delete paragraph content block'
   - 'delete paragraph content call_to_action'
   - 'delete paragraph content carousel'
@@ -292,10 +299,14 @@ permissions:
   - 'perform solution_workflow workflow validate transition on any entity'
   - 'replicate entities'
   - 'revert all sitewide alert revisions'
+  - 'translate any entity'
+  - 'translate interface'
+  - 'translate menu_link_content'
   - 'unarchived community content'
   - 'unfeature entity'
   - 'unflag interoperability'
   - 'update collection_settings meta-entity'
+  - 'update content translations'
   - 'update eif_perspective meta-entity'
   - 'update homepage_topics entityqueue'
   - 'update paragraph content block'
@@ -322,6 +333,7 @@ permissions:
   - 'vbo joinup archive action'
   - 'vbo joinup change group action'
   - 'vbo joinup unarchive action'
+  - 'view admin pages in preferred language'
   - 'view all sitewide alert revisions'
   - 'view any unpublished content'
   - 'view any webform submission'

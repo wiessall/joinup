@@ -6,9 +6,9 @@ Feature: Language selector block and popover functionality
 
   Background:
     Given users:
-      | Username        | Roles      | E-mail                   |
-      | Regular User    |            | regular.user@example.com |
-      | Translator User | Translator | translator@example.com   |
+      | Username       | Roles     | E-mail                   |
+      | Regular User   |           | regular.user@example.com |
+      | Moderator User | Moderator | translator@example.com   |
 
   Scenario Outline: Users without translator role cannot see top bar region
     Given I am <login_state>
@@ -23,7 +23,7 @@ Feature: Language selector block and popover functionality
 
   @javascript
   Scenario: Language selector popover opens when clicked
-    Given I am logged in as "Translator User"
+    Given I am logged in as "Moderator User"
 
     When I am on the homepage
     Then I should see "EN" in the "Top Bar" region
