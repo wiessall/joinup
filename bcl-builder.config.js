@@ -317,6 +317,10 @@ module.exports = {
           dest: "inline-items.min.css",
         },
         {
+          entry: "components/swagger-ui-integration.scss",
+          dest: "swagger-ui-integration.min.css",
+        },
+        {
           entry: "components/oss-solution-indicator.scss",
           dest: "oss-solution-indicator.min.css",
         },
