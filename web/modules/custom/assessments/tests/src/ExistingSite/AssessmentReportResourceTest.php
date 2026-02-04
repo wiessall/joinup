@@ -471,14 +471,16 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
   }
 
   /**
-   * Tests that 401 errors return JSON response.
+   * Tests that HTTP errors return JSON responses.
    */
-  public function testUnauthorizedReturnsJson(): void {
-    $url = Url::fromUri('internal:/api/assessments/v1/assessment')
+  public function testHttpErrorsReturnJson(): void {
+    $httpClient = \Drupal::httpClient();
+    $baseUrl = Url::fromUri('internal:/api/assessments/v1/assessment')
       ->setAbsolute()
       ->toString();
 
-    $response = \Drupal::httpClient()->post($url, [
+    // Test 401 Unauthorized (invalid token).
+    $response = $httpClient->post($baseUrl, [
       RequestOptions::HTTP_ERRORS => FALSE,
       RequestOptions::HEADERS => [
         'Accept' => 'application/json',
@@ -487,8 +489,41 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
       ],
       RequestOptions::JSON => ['name' => 'Test'],
     ]);
+    $this->assertJsonErrorResponse($response, 401);
 
-    $this->assertSame(401, $response->getStatusCode());
+    // Test 404 Not Found (non-existent assessment).
+    $response = $httpClient->get($baseUrl . '/non-existent-uuid', [
+      RequestOptions::HTTP_ERRORS => FALSE,
+      RequestOptions::HEADERS => [
+        'Accept' => 'application/json',
+        'Authorization' => 'Bearer ' . $this->getAccessToken(),
+      ],
+    ]);
+    $this->assertJsonErrorResponse($response, 403);
+
+    // Test 405 Method Not Allowed (PATCH not supported).
+    $response = $httpClient->patch($baseUrl, [
+      RequestOptions::HTTP_ERRORS => FALSE,
+      RequestOptions::HEADERS => [
+        'Accept' => 'application/json',
+        'Content-Type' => 'application/json',
+        'Authorization' => 'Bearer ' . $this->getAccessToken(),
+      ],
+      RequestOptions::JSON => ['name' => 'Test'],
+    ]);
+    $this->assertJsonErrorResponse($response, 405);
+  }
+
+  /**
+   * Asserts that an HTTP response is a JSON error with the expected status.
+   *
+   * @param \Psr\Http\Message\ResponseInterface $response
+   *   The HTTP response.
+   * @param int $expectedStatus
+   *   The expected HTTP status code.
+   */
+  private function assertJsonErrorResponse(ResponseInterface $response, int $expectedStatus): void {
+    $this->assertSame($expectedStatus, $response->getStatusCode());
     $this->assertStringContainsString('application/json', $response->getHeaderLine('Content-Type'));
     $data = Json::decode($response->getBody()->getContents());
     $this->assertIsArray($data);

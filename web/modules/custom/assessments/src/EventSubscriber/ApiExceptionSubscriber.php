@@ -7,26 +7,50 @@ namespace Drupal\assessments\EventSubscriber;
 use Drupal\Core\EventSubscriber\HttpExceptionSubscriberBase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 /**
- * Returns JSON responses for 401 exceptions on the assessments API.
+ * Returns JSON responses for HTTP exceptions on the assessments API.
  */
 final class ApiExceptionSubscriber extends HttpExceptionSubscriberBase {
 
   /**
    * {@inheritdoc}
+   *
+   * @return list<string>
+   *   An empty array to handle all formats.
    */
   protected function getHandledFormats(): array {
     return [];
   }
 
   /**
-   * Handles 401 Unauthorized exceptions for the assessments API.
+   * Handles all 4xx client error exceptions for the assessments API.
    *
    * @param \Symfony\Component\HttpKernel\Event\ExceptionEvent $event
    *   The event to process.
    */
-  public function on401(ExceptionEvent $event): void {
+  public function on4xx(ExceptionEvent $event): void {
+    $this->handleException($event);
+  }
+
+  /**
+   * Handles all 5xx server error exceptions for the assessments API.
+   *
+   * @param \Symfony\Component\HttpKernel\Event\ExceptionEvent $event
+   *   The event to process.
+   */
+  public function on5xx(ExceptionEvent $event): void {
+    $this->handleException($event);
+  }
+
+  /**
+   * Handles HTTP exceptions for the assessments API.
+   *
+   * @param \Symfony\Component\HttpKernel\Event\ExceptionEvent $event
+   *   The event to process.
+   */
+  private function handleException(ExceptionEvent $event): void {
     $request = $event->getRequest();
 
     // Only handle paths under the assessments API.
@@ -34,7 +58,15 @@ final class ApiExceptionSubscriber extends HttpExceptionSubscriberBase {
       return;
     }
 
-    $event->setResponse(new JsonResponse(['error' => $event->getThrowable()->getMessage()], 401));
+    $throwable = $event->getThrowable();
+    $statusCode = $throwable instanceof HttpExceptionInterface
+      ? $throwable->getStatusCode()
+      : 500;
+    $message = $throwable instanceof HttpExceptionInterface
+      ? $throwable->getMessage()
+      : 'An unexpected error occurred.';
+
+    $event->setResponse(new JsonResponse(['error' => $message], $statusCode));
   }
 
 }
