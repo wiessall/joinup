@@ -223,4 +223,54 @@
   #edit-other .form-check {
     display: inline-block;
   }
+
+  #edit-provider,
+  #edit-relevant-report-wrapper .table-responsive {
+    .form-item {
+      margin: 0 !important;
+    }
+    label {
+      color: $gray-900;
+      font-size: 1rem;
+    }
+  }
+
+  .field--name-provider {
+    margin-bottom: $spacer * 2 !important;
+  }
+
+  #edit-binding-requirement {
+    margin-bottom: $spacer * 2 !important;
+    .fieldset-legend {
+      color: $primary;
+      font-family: $headings-font-family;
+      font-size: $h4-font-size;
+      font-weight: normal !important;
+    }
+  }
+
+  #edit-legal,
+  #edit-organisational,
+  #edit-semantic,
+  #edit-technical {
+    .fieldset-legend {
+      font-weight: normal !important;
+    }
+    .form-check-label {
+      font-size: 1rem;
+    }
+  }
+
+  .field--name-documents {
+    summary {
+      color: $primary;
+      font-family: $headings-font-family;
+      font-size: $h4-font-size;
+      font-weight: normal !important;
+    }
+    .form-label {
+      color: $gray-900;
+      font-size: 1rem;
+    }
+  }
 }
