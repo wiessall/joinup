@@ -17,7 +17,7 @@ dependencies:
 id: licence_manager
 label: 'Licence manager'
 weight: -10
-is_admin: null
+is_admin: false
 permissions:
   - 'access compatibility document overview'
   - 'access dashboard'

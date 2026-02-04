@@ -277,7 +277,7 @@ index 4d8627c6eafa1fe85c28808ee4040a97fcfafd5a..5a9debde8c653496248c6f33220bf646
      $this->drupalGet('admin/structure/views/nojs/handler/test_user_bulk_form/default/field/user_bulk_form');
      $this->submitForm($edit, 'Apply');
 diff --git a/core/modules/views/config/schema/views.data_types.schema.yml b/core/modules/views/config/schema/views.data_types.schema.yml
-index 31c6b2f6479ef9304899c95ccf484e02eccbfeff..8539f0f971cc6456c765362d30fc8f021ce79918 100644
+index 31c6b2f6479ef9304899c95ccf484e02eccbfeff..3636f314ed4c7841b418e280ea762c9caf3b71c2 100644
 --- a/core/modules/views/config/schema/views.data_types.schema.yml
 +++ b/core/modules/views/config/schema/views.data_types.schema.yml
 @@ -932,3 +932,9 @@ views_field_bulk_form:
@@ -288,7 +288,7 @@ index 31c6b2f6479ef9304899c95ccf484e02eccbfeff..8539f0f971cc6456c765362d30fc8f02
 +      type: sequence
 +      label: 'Actions order'
 +      sequence:
-+        type: machine_name
++        type: string
 +        label: 'Action'
 diff --git a/core/modules/views/css/views.bulk_form.css b/core/modules/views/css/views.bulk_form.css
 new file mode 100644
@@ -309,10 +309,10 @@ index 0000000000000000000000000000000000000000..488c792d63f6793219e75efb43fef08b
 +  margin-right: 3px;
 +}
 diff --git a/core/modules/views/src/Plugin/views/field/BulkForm.php b/core/modules/views/src/Plugin/views/field/BulkForm.php
-index 2fcf8588bb78aac7e93f42242a353a1a902d082d..ce20dee14672d6a470f96a06ddbf034a9c99a15d 100644
+index 421a16b7b03eb4f095534f092b2ca28b477f87ea..fee1099795d082152b4889ad40f564e70fe28244 100644
 --- a/core/modules/views/src/Plugin/views/field/BulkForm.php
 +++ b/core/modules/views/src/Plugin/views/field/BulkForm.php
-@@ -217,6 +217,9 @@ protected function defineOptions() {
+@@ -211,6 +211,9 @@ protected function defineOptions() {
      $options['selected_actions'] = [
        'default' => [],
      ];
@@ -322,7 +322,7 @@ index 2fcf8588bb78aac7e93f42242a353a1a902d082d..ce20dee14672d6a470f96a06ddbf034a
      return $options;
    }
  
-@@ -240,13 +243,52 @@ public function buildOptionsForm(&$form, FormStateInterface $form_state) {
+@@ -234,13 +237,52 @@ public function buildOptionsForm(&$form, FormStateInterface $form_state) {
        ],
        '#default_value' => $this->options['include_exclude'],
      ];
@@ -378,7 +378,7 @@ index 2fcf8588bb78aac7e93f42242a353a1a902d082d..ce20dee14672d6a470f96a06ddbf034a
      parent::buildOptionsForm($form, $form_state);
    }
  
-@@ -256,8 +298,16 @@ public function buildOptionsForm(&$form, FormStateInterface $form_state) {
+@@ -250,8 +292,16 @@ public function buildOptionsForm(&$form, FormStateInterface $form_state) {
    public function validateOptionsForm(&$form, FormStateInterface $form_state) {
      parent::validateOptionsForm($form, $form_state);
  
@@ -397,7 +397,7 @@ index 2fcf8588bb78aac7e93f42242a353a1a902d082d..ce20dee14672d6a470f96a06ddbf034a
    }
  
    /**
-@@ -327,6 +377,11 @@ public function viewsForm(&$form, FormStateInterface $form_state) {
+@@ -321,6 +371,11 @@ public function viewsForm(&$form, FormStateInterface $form_state) {
  
        // Replace the form submit button label.
        $form['actions']['submit']['#value'] = $this->t('Apply to selected items');
@@ -409,7 +409,7 @@ index 2fcf8588bb78aac7e93f42242a353a1a902d082d..ce20dee14672d6a470f96a06ddbf034a
  
        // Ensure a consistent container for filters/operations in the view
        // header.
-@@ -345,6 +400,7 @@ public function viewsForm(&$form, FormStateInterface $form_state) {
+@@ -339,6 +394,7 @@ public function viewsForm(&$form, FormStateInterface $form_state) {
          '#title' => $this->options['action_title'],
          '#options' => $this->getBulkOptions(),
          '#empty_option' => $this->t('- Select -'),
@@ -417,7 +417,7 @@ index 2fcf8588bb78aac7e93f42242a353a1a902d082d..ce20dee14672d6a470f96a06ddbf034a
        ];
  
        // Duplicate the form actions into the action container in the header.
-@@ -367,8 +423,18 @@ public function viewsForm(&$form, FormStateInterface $form_state) {
+@@ -361,8 +417,18 @@ public function viewsForm(&$form, FormStateInterface $form_state) {
     */
    protected function getBulkOptions($filtered = TRUE) {
      $options = [];
