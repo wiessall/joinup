@@ -226,24 +226,4 @@ class LinkContext extends RawDrupalContext {
     return ['cookies' => $cookie_jar];
   }
 
-  /**
-   * Click link by hreflang attribute.
-   *
-   * @When I click the :text link with hreflang :lang
-   */
-  public function clickLinkWithHreflang($text, $lang): void {
-    $xpath = sprintf(
-      "//a[@hreflang='%s' and normalize-space()='%s']",
-      $lang,
-      $text
-    );
-
-    $link = $this->getSession()->getPage()->find('xpath', $xpath);
-    if (!$link) {
-      throw new \Exception("Link '{$text}' with hreflang '{$lang}' not found.");
-    }
-
-    $link->click();
-  }
-
 }
