@@ -1,0 +1,11 @@
+uuid: bb76347a-29e1-4840-af36-80e7cefd87c1
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.comment_update
+id: message.comment_update
+target_entity_type_id: message
+target_bundle: comment_update
+default_langcode: site_default
+language_alterable: false

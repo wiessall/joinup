@@ -1,0 +1,11 @@
+uuid: 6be1b66d-1aaa-4880-8054-0706b38ee366
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.comment_create
+id: message.comment_create
+target_entity_type_id: message
+target_bundle: comment_create
+default_langcode: site_default
+language_alterable: false

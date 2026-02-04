@@ -1,0 +1,11 @@
+uuid: 2a08022e-80ba-4158-bdd0-dc56dfe4f921
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.og_membership_role_change
+id: message.og_membership_role_change
+target_entity_type_id: message
+target_bundle: og_membership_role_change
+default_langcode: site_default
+language_alterable: false
