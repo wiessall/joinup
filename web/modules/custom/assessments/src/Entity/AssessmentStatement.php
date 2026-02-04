@@ -57,7 +57,7 @@ final class AssessmentStatement extends ContentEntityBase implements AssessmentS
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type): array {
     $fields = parent::baseFieldDefinitions($entity_type);
     $fields['judgement'] = BaseFieldDefinition::create('string_long')
-      ->setLabel(t('Judgement'))
+      ->setLabel(t('Justification'))
       ->setTranslatable(TRUE)
       ->setDisplayOptions('form', [
         'type' => 'string_textarea',
