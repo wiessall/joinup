@@ -354,7 +354,7 @@
             "drupal/core": {
                 "Allow image style to be selected in text editor @see https://www.drupal.org/i/2061377": "resources/patch/php/drupal/core/2061377.mr10767-note521506.diff",
                 "Allow making the file description a required field @see https://www.drupal.org/i/2320877": "resources/patch/php/drupal/core/2320877.mr5876-note502317.diff",
-                "Delete should not be the default action on /admin/content @see https://www.drupal.org/i/2381293": "resources/patch/php/drupal/core/2381293.mr4583-commitd57ca76e.diff",
+                "Delete should not be the default action on /admin/content @see https://www.drupal.org/i/2381293": "resources/patch/php/drupal/core/2381293.mr4583-commitd592670a0.diff",
                 "Upcast named arguments/named parameters in views @see https://www.drupal.org/i/2528166": "resources/patch/php/drupal/core/2528166.mr14124-commitb55472cb.diff",
                 "Enlarge file_usage entity ID length. @see https://www.drupal.org/node/2675600": "resources/patch/php/drupal/core/2675600.diff",
                 "Allow plurals on bundle labels @see https://www.drupal.org/i/2765065": "resources/patch/php/drupal/core/2765065.mr4252-commit6031e764.diff",
@@ -487,7 +487,8 @@
                 "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372": "resources/patch/php/drupal/search_api_spellcheck/3280372.patch"
             },
             "drupal/sitewide_alert": {
-                "Cache prevents display of alert @see https://www.drupal.org/i/3543046": "resources/patch/php/drupal/sitewide_alert/3543046.diff"
+                "Cache prevents display of alert @see https://www.drupal.org/i/3543046": "resources/patch/php/drupal/sitewide_alert/3543046.diff",
+                "Regex constraint should use named arguments @see https://www.drupal.org/i/3567470": "resources/patch/php/drupal/sitewide_alert/3567470.87m4-commitf0b45a55.diff"
             },
             "drupal/social_media_links": {
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "resources/patch/php/drupal/social_media_links/2898680.patch",
