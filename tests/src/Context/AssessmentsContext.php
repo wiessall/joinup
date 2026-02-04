@@ -17,8 +17,10 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\collection\Entity\CollectionInterface;
+use Drupal\joinup\Traits\AwaitTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
+use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\user\UserInterface;
@@ -29,10 +31,12 @@ use PHPUnit\Framework\Assert;
  */
 class AssessmentsContext extends RawDrupalContext {
 
+  use AwaitTrait;
   use EntityTrait;
   use FileTrait;
-  use UtilityTrait;
+  use JavascriptTrait;
   use TestingEntitiesTrait;
+  use UtilityTrait;
 
   /**
    * Programmatically creates assessment contents.
@@ -370,6 +374,45 @@ class AssessmentsContext extends RawDrupalContext {
           count($participations)
         )
       );
+    }
+  }
+
+  /**
+   * Asserts that autocomplete suggestions appear in a specific order.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   A table with expected suggestion order.
+   *
+   * @throws \Exception
+   *   When suggestions are not in the expected order.
+   */
+  #[Then('the autocomplete suggestions should appear in this order:')]
+  public function assertAutocompleteSuggestionsOrder(TableNode $table): void {
+    $this->assertJavaScriptEnabledBrowser();
+
+    $page = $this->getSession()->getPage();
+
+    // Wait up to 5 seconds for autocomplete suggestions to appear.
+    $suggestions = [];
+    $page->waitFor(5, function () use ($page, &$suggestions): bool {
+      $suggestions = $page->findAll('css', '.ui-autocomplete li a');
+      return !empty($suggestions);
+    });
+
+    if (empty($suggestions)) {
+      throw new \Exception('No autocomplete suggestions found.');
+    }
+
+    $actualOrder = array_map(fn($s) => $s->getText(), $suggestions);
+    $expectedOrder = array_column($table->getRows(), 0);
+
+    foreach ($expectedOrder as $index => $expected) {
+      if (!isset($actualOrder[$index])) {
+        throw new \Exception("Expected suggestion '$expected' at position $index, but only " . count($actualOrder) . " suggestions found.");
+      }
+      if (!str_contains($actualOrder[$index], $expected)) {
+        throw new \Exception("Expected suggestion containing '$expected' at position $index, but found '{$actualOrder[$index]}'.");
+      }
     }
   }
 

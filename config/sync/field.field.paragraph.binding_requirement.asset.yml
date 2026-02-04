@@ -7,6 +7,7 @@ dependencies:
     - node.type.solution
     - paragraphs.paragraphs_type.binding_requirement
   module:
+    - assessments
     - rdf_sync
     - tmgmt_content
 third_party_settings:
@@ -27,7 +28,7 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:node'
+  handler: ies_solution
   handler_settings:
     target_bundles:
       solution: solution
