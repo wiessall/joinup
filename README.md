@@ -375,7 +375,7 @@ You can access the Mailpit UI at https://[your-project-name].ddev.local:8026.
 The publiccode-editor is a web application for creating and editing
 `publiccode.yml` files. It requires Node 10 and Python 2 to build.
 
-> **Note:** Starting with DDEV v1.24, the web container uses Debian 13 (Trixie),
+> **Note:** Starting with DDEV v1.25, the web container uses Debian 13 (Trixie),
 > which removed support for Python 2 and the `mime-support` package. A separate
 > Python 2 service is provided for building the publiccode-editor. This service
 > is disabled by default to conserve resources.

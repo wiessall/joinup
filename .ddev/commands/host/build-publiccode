@@ -24,7 +24,8 @@ cp web/themes/ventuno/assets/images/favicon/favicon-32x32.png $EDITOR_DIR/src/as
 
 # Build the distribution using the python2 service (Node 10 + Python 2).
 # Debian 13 no longer supports Python 2, so we use a separate container.
-docker exec -w /var/www/html ddev-${DDEV_SITENAME}-python2 bash -c "
+# Run as current user to avoid root-owned files that can't be moved/deleted.
+docker exec -u "$(id -u):$(id -g)" -w /var/www/html ddev-${DDEV_SITENAME}-python2 bash -c "
   cd $EDITOR_DIR && \
   yarn install && \
   yarn build-prod
