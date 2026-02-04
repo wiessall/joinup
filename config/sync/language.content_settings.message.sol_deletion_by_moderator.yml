@@ -1,0 +1,11 @@
+uuid: 33c708a1-13df-4382-a260-daf93ae1cf60
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.sol_deletion_by_moderator
+id: message.sol_deletion_by_moderator
+target_entity_type_id: message
+target_bundle: sol_deletion_by_moderator
+default_langcode: site_default
+language_alterable: false

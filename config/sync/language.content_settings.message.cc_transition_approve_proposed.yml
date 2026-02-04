@@ -1,0 +1,11 @@
+uuid: cb407070-6ba5-4b9f-9955-c6837932167f
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.cc_transition_approve_proposed
+id: message.cc_transition_approve_proposed
+target_entity_type_id: message
+target_bundle: cc_transition_approve_proposed
+default_langcode: site_default
+language_alterable: false

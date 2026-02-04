@@ -1,0 +1,18 @@
+uuid: d2292217-bece-44d2-aa26-585561bccdb6
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.eif_principle
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: taxonomy_term.eif_principle
+target_entity_type_id: taxonomy_term
+target_bundle: eif_principle
+default_langcode: site_default
+language_alterable: false

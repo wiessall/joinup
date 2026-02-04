@@ -1,0 +1,11 @@
+uuid: cf89449f-8118-4455-8cb6-1be7528adb6a
+langcode: en
+status: true
+dependencies:
+  config:
+    - joinup_invite.invitation_type.discussion
+id: invitation.discussion
+target_entity_type_id: invitation
+target_bundle: discussion
+default_langcode: site_default
+language_alterable: false
