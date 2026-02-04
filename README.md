@@ -370,6 +370,37 @@ directory. However, Mailpit is more convenient to use, as it provides a web UI
 to view the emails.
 You can access the Mailpit UI at https://[your-project-name].ddev.local:8026.
 
+### Publiccode Editor
+
+The publiccode-editor is a web application for creating and editing
+`publiccode.yml` files. It requires Node 10 and Python 2 to build.
+
+> **Note:** Starting with DDEV v1.24, the web container uses Debian 13 (Trixie),
+> which removed support for Python 2 and the `mime-support` package. A separate
+> Python 2 service is provided for building the publiccode-editor. This service
+> is disabled by default to conserve resources.
+
+#### Building the Publiccode Editor
+
+1. Enable the Python 2 service:
+   ```shell
+   ddev python2-enable
+   ddev restart
+   ```
+
+2. Build the editor:
+   ```shell
+   ddev build-publiccode
+   ```
+
+3. When done, disable the Python 2 service to free resources:
+   ```shell
+   ddev python2-disable
+   ddev restart
+   ```
+
+The built editor will be available at `web/publiccode-editor`.
+
 ### Additional information
 
 * [Code of Conduct](docs/code_of_conduct.md)
