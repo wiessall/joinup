@@ -172,7 +172,7 @@ final class AssessmentStatement extends ContentEntityBase implements AssessmentS
   /**
    * {@inheritdoc}
    */
-  public function getRelevantReport(): ?AssessmentReport {
+  public function getParentReport(): ?AssessmentReport {
     if (empty($this->bundle())) {
       return NULL;
     }
