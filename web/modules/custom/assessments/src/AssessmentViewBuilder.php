@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\assessments;
 
+use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityViewBuilder;
@@ -77,28 +78,6 @@ class AssessmentViewBuilder extends EntityViewBuilder {
    *   The renderable array of the component.
    */
   protected function buildSubmittedBy(AssessmentReport $assessmentReport, string $viewMode): array {
-    $providerField = $assessmentReport->get('provider');
-    assert($providerField instanceof EntityReferenceFieldItemListInterface);
-    $provider = $providerField->referencedEntities()[0] ?? NULL;
-    assert($provider instanceof PublicOrganisation);
-    $providerOrgTypeField = $provider->get('organisation_type');
-    assert($providerOrgTypeField instanceof EntityReferenceFieldItemListInterface);
-    $providerOrgType = $providerOrgTypeField->referencedEntities()[0] ?? NULL;
-    $providerCountryField = $provider->get('country');
-    assert($providerCountryField instanceof EntityReferenceFieldItemListInterface);
-    $providerCountry = $providerCountryField->referencedEntities()[0] ?? NULL;
-    $created = $assessmentReport->getCreatedTime();
-    $arguments = [
-      '@date' => $created ? $this->dateFormatter->format($created, 'fallback') : NULL,
-      '%provider-name' => $provider->label(),
-      '@provider-type' => $providerOrgType?->label(),
-      '@provider-country' => $providerCountry?->label(),
-    ];
-
-    $submittedBy = $providerCountry
-      ? $this->t('Submitted on @date by %provider-name, a @provider-type from @provider-country', $arguments)
-      : $this->t('Submitted on @date by %provider-name, a @provider-type', $arguments);
-
     return [
       '#theme' => 'field',
       '#title' => $this->t('Submitted by'),
@@ -116,9 +95,48 @@ class AssessmentViewBuilder extends EntityViewBuilder {
       '#is_multiple' => FALSE,
       '#third_party_settings' => [],
       [
-        '#markup' => $submittedBy,
+        '#markup' => $this->submittedByMarkup($assessmentReport),
       ],
     ];
+  }
+
+  /**
+   * Constructs the translatable markup for assessment report's submitted by.
+   *
+   * @param \Drupal\assessments\Entity\AssessmentReport $assessmentReport
+   *   The assessment report.
+   *
+   * @return \Drupal\Component\Render\MarkupInterface
+   *   The markup of the submitted by extra field.
+   */
+  protected function submittedByMarkup(AssessmentReport $assessmentReport): MarkupInterface {
+    $created = $assessmentReport->getCreatedTime();
+    $arguments = [
+      '@date' => $created ? $this->dateFormatter->format($created) : NULL,
+    ];
+    $providerField = $assessmentReport->get('provider');
+    assert($providerField instanceof EntityReferenceFieldItemListInterface);
+    $provider = $providerField->referencedEntities()[0] ?? NULL;
+    if (!$provider instanceof PublicOrganisation) {
+      return $this->t('Submitted on @date', $arguments);
+    }
+
+    $providerOrgTypeField = $provider->get('organisation_type');
+    assert($providerOrgTypeField instanceof EntityReferenceFieldItemListInterface);
+    $providerOrgType = $providerOrgTypeField->referencedEntities()[0] ?? NULL;
+    $providerCountryField = $provider->get('country');
+    assert($providerCountryField instanceof EntityReferenceFieldItemListInterface);
+    $providerCountry = $providerCountryField->referencedEntities()[0] ?? NULL;
+    $arguments += [
+      '%provider-name' => $provider->label(),
+      '@provider-type' => $providerOrgType?->label(),
+      '@provider-country' => $providerCountry?->label(),
+    ];
+    if ($providerCountry) {
+      return $this->t('Submitted on @date by %provider-name, a @provider-type from @provider-country', $arguments);
+    }
+
+    return $this->t('Submitted on @date by %provider-name, a @provider-type', $arguments);
   }
 
 }
