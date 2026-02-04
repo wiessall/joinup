@@ -15,7 +15,7 @@ Feature: Assessment Report Entity Management
     Then I should see the heading "Create assessment report"
 
     When I press "Save as draft"
-    Then I should see the error message "3 errors have been found: Short titleType of public sector bodyIdentification of binding requirements assessed"
+    Then I should see the error message "3 errors have been found: Short titleType of public sector bodyIdentification of binding requirement(s) assessed"
 
     When I fill in "Short title" with "Test Assessment Report 2025"
     And I should see "This will be used as the title of the published report. Maximum 255 characters."
@@ -56,8 +56,8 @@ Feature: Assessment Report Entity Management
     And I fill in "documented_in[0][uri]" with "https://interoperable-europe.ec.europa.eu/general" in the "Modal content" region
 
     When I click "Concerned public services" in the "Modal content" region
-    And I should see the text "Specify the Concerned public services concerned" in the "Modal content" region
-    And I should see the text "Specify the concerned function(s) of Concerned public services" in the "Modal content" region
+    And I should see the text "Specify the trans-European digital public service(s) concerned" in the "Modal content" region
+    And I should see the text "Specify the concerned function(s) of trans-European digital public service(s)" in the "Modal content" region
     And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
     And I select "Core governance and administration" from "affects[0][inline_entity_form][thematic_area][]" in the "Modal content" region
     And I select "Luxembourg" from "affects[0][inline_entity_form][countries][]" in the "Modal content" region
