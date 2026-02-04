@@ -7,11 +7,10 @@ Feature: Translating collections
       | Test collection | short description of collection | long description of collection |
 
     # Create translation
-    Given I am logged in as a user with the "developer" role
+    Given I am logged in as a user with the "moderator" role
     When I go to the homepage of the "Test collection" collection
     When I click "Translate" in the "Entity actions" region
     And I should see "Add" in the "Polish" row
-    And I check "edit-languages-pl"
     Then I click "Add" in the "Polish" row
     And I should see "Create Polish translation of Test collection"
     And I fill in "Title" with "Testowa kolekcja"

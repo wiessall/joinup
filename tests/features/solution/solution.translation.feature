@@ -10,11 +10,10 @@ Feature: Translating solutions
       | Test solution | short description of solution | long description of solution |
 
     # Create translation
-    Given I am logged in as a user with the "developer" role
+    Given I am logged in as a user with the "moderator" role
     When I go to the homepage of the "Test solution" solution
     When I click "Translate" in the "Entity actions" region
     And I should see "Add" in the "Polish" row
-    And I check "edit-languages-pl"
     Then I click "Add" in the "Polish" row
     And I should see "Create Polish translation of Test solution"
     And I fill in "Title" with "Testowa solucja"
