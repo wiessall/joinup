@@ -19,8 +19,7 @@ final class AssessmentStatementAccessControlHandler extends EntityAccessControlH
    */
   protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account): AccessResult {
     // Admin permission grants full access.
-    $adminResult = AccessResult::allowedIfHasPermission($account, $this->entityType->getAdminPermission())
-      ->addCacheableDependency($entity);
+    $adminResult = AccessResult::allowedIfHasPermission($account, $this->entityType->getAdminPermission());
 
     if (!$adminResult->isNeutral()) {
       return $adminResult;
@@ -30,19 +29,29 @@ final class AssessmentStatementAccessControlHandler extends EntityAccessControlH
     // entity form. They should be accessible to anyone who can access the
     // parent assessment. Since they are always embedded and never accessed
     // directly, we allow view access to all authenticated users.
-    return match ($operation) {
-      'view' => AccessResult::allowedIfHasPermission($account, 'access content')
-        ->addCacheableDependency($entity),
-      'update' => AccessResult::allowedIfHasPermission($account, 'moderate assessment report')
-        ->orIf(AccessResult::allowedIf(!empty($entity->getRelevantReport())
-          && $entity->getRelevantReport()->access('update', $account)
-        ))->addCacheableDependency($entity),
-      'delete' => AccessResult::allowedIfHasPermission($account, 'moderate assessment report')
-        ->addCacheableDependency($entity),
-      default => AccessResult::neutral()
-        ->cachePerPermissions()
-        ->addCacheableDependency($entity),
-    };
+    switch ($operation) {
+      case 'view':
+        return AccessResult::allowedIfHasPermission($account, 'access content');
+
+      case 'update':
+        $access = AccessResult::allowedIfHasPermission($account, 'moderate assessment report');
+        if ($access->isAllowed()) {
+          return $access;
+        }
+
+        // Fallback to the parent report access.
+        $report = $entity->getRelevantReport();
+        if ($report) {
+          $access = $access->orIf($report->access('update', $account, TRUE));
+        }
+        return $access->addCacheableDependency($entity);
+
+      case 'delete':
+        return AccessResult::allowedIfHasPermission($account, 'moderate assessment report');
+
+      default:
+        return AccessResult::neutral()->cachePerPermissions();
+    }
   }
 
   /**
