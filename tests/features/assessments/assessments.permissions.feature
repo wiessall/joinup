@@ -56,13 +56,13 @@ Feature: Assessment report permissions and access control
     When I click "New binding requirement"
     And a modal should open
 
-    When I click "Initiative(s)" in the "Modal content" region
+    When I click "Initiative" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Digital Transformation Initiative" in the "Modal content" region
 
-    When I click "Requirement(s)" in the "Modal content" region
+    When I click "Requirements" in the "Modal content" region
     And I fill in "description[0][value]" with "This is the general binding requirement description" in the "Modal content" region
 
-    When I click "Trans-european digital public service(s)" in the "Modal content" region
+    When I click "Concerned public services" in the "Modal content" region
     And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
 
     Then I press "Save" in the "Modal buttons" region
