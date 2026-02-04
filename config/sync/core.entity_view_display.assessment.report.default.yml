@@ -59,6 +59,7 @@ third_party_settings:
     group_binding_req:
       children:
         - group_binding_req_content
+        - binding_requirement
       label: 'Binding requirements'
       parent_name: ''
       region: content
@@ -78,11 +79,9 @@ third_party_settings:
         speed: fast
     group_general_info_content:
       children:
-        - uid
-        - created
-        - relevant_report
-        - provider
+        - submitted_by
         - state
+        - relevant_report
       label: 'General info content'
       parent_name: group_general_info
       region: content
@@ -106,7 +105,7 @@ third_party_settings:
       label: Results
       parent_name: ''
       region: content
-      weight: 20
+      weight: 2
       format_type: html_element
       format_settings:
         classes: my-5
@@ -130,7 +129,7 @@ third_party_settings:
       label: 'Result content'
       parent_name: group_results
       region: content
-      weight: 20
+      weight: 0
       format_type: html_element
       format_settings:
         classes: 'card border rounded shadow-sm px-3'
@@ -150,7 +149,7 @@ third_party_settings:
       label: 'Supporting documents and general comments'
       parent_name: ''
       region: content
-      weight: 20
+      weight: 3
       format_type: html_element
       format_settings:
         classes: my-5
@@ -171,27 +170,7 @@ third_party_settings:
       label: 'Supporting docs content'
       parent_name: group_supporting_docs
       region: content
-      weight: 20
-      format_type: html_element
-      format_settings:
-        classes: 'card border rounded shadow-sm px-3'
-        show_empty_fields: false
-        id: ''
-        label_as_html: false
-        element: div
-        show_label: false
-        label_element: h3
-        label_element_classes: ''
-        attributes: ''
-        effect: none
-        speed: fast
-    group_binding_req_content:
-      children:
-        - binding_requirement
-      label: 'Binding requirements content'
-      parent_name: group_binding_req
-      region: content
-      weight: 20
+      weight: 0
       format_type: html_element
       format_settings:
         classes: 'card border rounded shadow-sm px-3'
@@ -217,31 +196,7 @@ content:
       view_mode: default
       link: ''
     third_party_settings: {  }
-    weight: 5
-    region: content
-  created:
-    type: timestamp
-    label: above
-    settings:
-      date_format: medium
-      custom_date_format: ''
-      timezone: ''
-      tooltip:
-        date_format: long
-        custom_date_format: ''
-      time_diff:
-        enabled: false
-        future_format: '@interval hence'
-        past_format: '@interval ago'
-        granularity: 2
-        refresh: 60
-    third_party_settings:
-      entity_form_field_label:
-        new_label: ''
-        rewrite_label: 0
-      template_suggestion:
-        template_suggestion: ''
-    weight: 2
+    weight: 0
     region: content
   documents:
     type: file_default
@@ -249,12 +204,12 @@ content:
     settings:
       use_description_as_link_text: true
     third_party_settings: {  }
-    weight: 2
+    weight: 1
     region: content
   entity_print_view_pdf:
     settings: {  }
     third_party_settings: {  }
-    weight: 14
+    weight: 4
     region: content
   legal:
     type: entity_reference_entity_view
@@ -263,7 +218,7 @@ content:
       view_mode: default
       link: true
     third_party_settings: {  }
-    weight: 7
+    weight: 0
     region: content
   organisational:
     type: entity_reference_entity_view
@@ -272,23 +227,14 @@ content:
       view_mode: default
       link: true
     third_party_settings: {  }
-    weight: 8
+    weight: 1
     region: content
   other_comment:
     type: basic_string
     label: visually_hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 1
-    region: content
-  provider:
-    type: entity_reference_entity_view
-    label: hidden
-    settings:
-      view_mode: default
-      link: true
-    third_party_settings: {  }
-    weight: 4
+    weight: 0
     region: content
   relevant_report:
     type: link
@@ -314,14 +260,14 @@ content:
         field_label: true
       template_suggestion:
         template_suggestion: ''
-    weight: 3
+    weight: 2
     region: content
   remaining_barriers:
     type: text_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 13
+    weight: 4
     region: content
   semantic:
     type: entity_reference_entity_view
@@ -330,14 +276,19 @@ content:
       view_mode: default
       link: true
     third_party_settings: {  }
-    weight: 9
+    weight: 2
     region: content
   state:
     type: list_default
     label: inline
     settings: {  }
     third_party_settings: {  }
-    weight: 11
+    weight: 1
+    region: content
+  submitted_by:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
     region: content
   technical:
     type: entity_reference_entity_view
@@ -346,22 +297,17 @@ content:
       view_mode: default
       link: true
     third_party_settings: {  }
-    weight: 10
-    region: content
-  uid:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 1
+    weight: 3
     region: content
 hidden:
+  created: true
   entity_print_view_epub: true
   entity_print_view_word_docx: true
   langcode: true
   name: true
+  provider: true
   search_api_excerpt: true
   status: true
+  uid: true
   uri: true
   uuid: true
