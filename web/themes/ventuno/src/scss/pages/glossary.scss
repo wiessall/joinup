@@ -40,4 +40,9 @@
     font-size: 1.25rem;
     font-weight: $font-weight-bold;
   }
+  .views-field-field-glossary-definition {
+    p {
+      display: inline;
+    }
+  }
 }
