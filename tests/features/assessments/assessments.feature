@@ -40,12 +40,12 @@ Feature: Assessment Report Entity Management
     And I should see the text "3 errors have been found: NameName of the initiativeDescription" in the "Modal content" region
 
     Then I should see the following lines of text in the correct order in "Modal content":
-      | Initiative                            |
-      | Requirements                           |
+      | Initiative                |
+      | Requirements              |
       | Concerned public services |
-      | Affected stakeholders                  |
-      | Interoperability solution             |
-      | Supporting document                   |
+      | Affected stakeholders     |
+      | Interoperability solution |
+      | Supporting document       |
 
     When I click "Initiative" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Digital Transformation Initiative" in the "Modal content" region
