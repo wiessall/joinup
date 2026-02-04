@@ -1,0 +1,18 @@
+uuid: e83a8b14-2245-4311-964c-708add7b6640
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.accordion_item
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: paragraph.accordion_item
+target_entity_type_id: paragraph
+target_bundle: accordion_item
+default_langcode: site_default
+language_alterable: false
