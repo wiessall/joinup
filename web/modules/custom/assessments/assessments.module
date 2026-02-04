@@ -463,9 +463,10 @@ function assessments_inline_entity_form_entity_form_alter(array &$entity_form, F
     $entity_form['landing_page']['widget']['uri']['#required'] = TRUE;
   }
   if ($solution->bundle() === 'participation') {
+    $delta = $entity_form['#ief_row_delta'];
     $entity_form['stakeholder_country']['#states'] = [
       'visible' => [
-        ':input[name="has_participation[0][inline_entity_form][eu_countries][value]"]' => ['checked' => FALSE],
+        ':input[name="has_participation[' . $delta . '][inline_entity_form][eu_countries][value]"]' => ['checked' => FALSE],
       ],
     ];
   }
