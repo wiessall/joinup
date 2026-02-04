@@ -30,6 +30,8 @@ libraries-extend:
     - ventuno/alert
   assessments/inline-items:
     - ventuno/inline-items
+  openapi_ui_swagger/swagger_ui_integration:
+    - ventuno/swagger_ui_integration
 
 libraries-override:
   calendar_view/calendar:
