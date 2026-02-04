@@ -8,7 +8,9 @@
 
 {% set attributes = view_mode in ['default', 'full'] ? attributes.addClass('mb-3') %}
 {% set interpretation = content.interpretation|render|striptags %}
-{% set interpretation_sentence = 'Has a <strong>:interpretation</strong> interpretation'|t({':interpretation': interpretation }) %}
+{% set interpretation_sentence = 'Has a <strong>:interpretation</strong> interpretation'|t({
+  ':interpretation': interpretation
+}) %}
 
 {% block content %}
   {{ interpretation_sentence }}
