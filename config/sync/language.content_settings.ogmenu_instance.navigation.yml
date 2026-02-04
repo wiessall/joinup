@@ -1,0 +1,11 @@
+uuid: e2752f3a-1d49-443f-9208-51fa1cbf6c39
+langcode: en
+status: true
+dependencies:
+  config:
+    - og_menu.ogmenu.navigation
+id: ogmenu_instance.navigation
+target_entity_type_id: ogmenu_instance
+target_bundle: navigation
+default_langcode: site_default
+language_alterable: false

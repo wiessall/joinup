@@ -1,0 +1,18 @@
+uuid: ad82ac00-753a-44e0-b723-00b5cc77590c
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.oss_used_by
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: taxonomy_term.oss_used_by
+target_entity_type_id: taxonomy_term
+target_bundle: oss_used_by
+default_langcode: site_default
+language_alterable: false

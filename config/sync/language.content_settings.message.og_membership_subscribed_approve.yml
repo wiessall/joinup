@@ -1,0 +1,11 @@
+uuid: 696dc095-bfa5-44ef-b7e6-132c094872d7
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.og_membership_subscribed_approve
+id: message.og_membership_subscribed_approve
+target_entity_type_id: message
+target_bundle: og_membership_subscribed_approve
+default_langcode: site_default
+language_alterable: false

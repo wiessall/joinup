@@ -1,0 +1,18 @@
+uuid: c2fb96a2-3e1c-43d0-b162-58248386a21b
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.eif_interoperability_layer
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: taxonomy_term.eif_interoperability_layer
+target_entity_type_id: taxonomy_term
+target_bundle: eif_interoperability_layer
+default_langcode: site_default
+language_alterable: false

@@ -1,0 +1,11 @@
+uuid: f60bafb4-5fdf-4039-aeb3-74ab3431b333
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.col_arc_del_apr_own
+id: message.col_arc_del_apr_own
+target_entity_type_id: message
+target_bundle: col_arc_del_apr_own
+default_langcode: site_default
+language_alterable: false
