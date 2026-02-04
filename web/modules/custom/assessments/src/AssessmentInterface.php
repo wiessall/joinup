@@ -27,6 +27,11 @@ interface AssessmentInterface extends ContentEntityInterface, EntityOwnerInterfa
   public const string SOLUTION_COLLECTOR = 'e0f3b87b-9de3-48d5-8fff-5ec88ccd1a71';
 
   /**
+   * The UUID of the EU spatial taxonomy term.
+   */
+  public const string EU_COUNTRY_TERM = '0e15426a-db00-4869-9ef1-7dac0caf1aeb';
+
+  /**
    * Gets the related report entity for this assessment entity.
    *
    * @return \Drupal\assessments\Entity\AssessmentReport|null

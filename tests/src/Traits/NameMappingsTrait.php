@@ -404,6 +404,7 @@ trait NameMappingsTrait {
    */
   protected function getFacetIdFromAlias(string $alias): string {
     $mappings = [
+      'Organisation country' => 'assessment_org_country',
       'Collection event date' => 'collection_event_type',
       'Content listing types' => 'content_listing_type',
       'Content types' => 'type',
