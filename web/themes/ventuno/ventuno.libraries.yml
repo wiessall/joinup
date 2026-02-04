@@ -566,3 +566,9 @@ inline-items:
   css:
     theme:
       assets/css/inline-items.min.css: { minified: true }
+
+# Extends openapi_ui_swagger/swagger_ui_integration.
+swagger_ui_integration:
+  css:
+    theme:
+      assets/css/swagger-ui-integration.min.css: { minified: true }
