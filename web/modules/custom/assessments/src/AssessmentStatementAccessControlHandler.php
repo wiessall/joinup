@@ -40,7 +40,7 @@ final class AssessmentStatementAccessControlHandler extends EntityAccessControlH
         }
 
         // Fallback to the parent report access.
-        $report = $entity->getRelevantReport();
+        $report = $entity->getParentReport();
         if ($report) {
           $access = $access->orIf($report->access('update', $account, TRUE));
         }

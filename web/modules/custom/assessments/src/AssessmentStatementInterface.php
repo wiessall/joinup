@@ -18,6 +18,6 @@ interface AssessmentStatementInterface {
    *   The report entity that the statement is linked to, or NULL if none
    *   exists.
    */
-  public function getRelevantReport(): ?AssessmentReport;
+  public function getParentReport(): ?AssessmentReport;
 
 }
