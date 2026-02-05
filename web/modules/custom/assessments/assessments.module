@@ -51,6 +51,14 @@ function assessments_entity_extra_field_info(): array {
             'weight' => 0,
           ],
         ],
+        'display' => [
+          'submitted_by' => [
+            'label' => t('Submitted by'),
+            'description' => t('Info about when and by who was the report submitted'),
+            'weight' => 0,
+            'visible' => FALSE,
+          ],
+        ],
       ],
     ],
   ];

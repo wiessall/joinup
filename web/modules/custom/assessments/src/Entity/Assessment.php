@@ -44,6 +44,7 @@ use Drupal\user\EntityOwnerTrait;
  *     "route_provider" = {
  *       "html" = "Drupal\assessments\Routing\AssessmentsHtmlRouteProvider",
  *     },
+ *      "view_builder" = "Drupal\assessments\AssessmentViewBuilder",
  *   },
  *   base_table = "assessment",
  *   data_table = "assessment_field_data",
