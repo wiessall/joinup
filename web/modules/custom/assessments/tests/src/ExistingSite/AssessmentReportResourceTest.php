@@ -491,7 +491,7 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     ]);
     $this->assertJsonErrorResponse($response, 401);
 
-    // Test 404 Not Found (non-existent assessment).
+    // Test 403 Forbidden (non-existent assessment).
     $response = $httpClient->get($baseUrl . '/non-existent-uuid', [
       RequestOptions::HTTP_ERRORS => FALSE,
       RequestOptions::HEADERS => [

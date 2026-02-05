@@ -58,15 +58,11 @@ final class ApiExceptionSubscriber extends HttpExceptionSubscriberBase {
       return;
     }
 
-    $throwable = $event->getThrowable();
-    $statusCode = $throwable instanceof HttpExceptionInterface
-      ? $throwable->getStatusCode()
-      : 500;
-    $message = $throwable instanceof HttpExceptionInterface
-      ? $throwable->getMessage()
-      : 'An unexpected error occurred.';
-
-    $event->setResponse(new JsonResponse(['error' => $message], $statusCode));
+    $exception = $event->getThrowable();
+    $response = $exception instanceof HttpExceptionInterface
+      ? new JsonResponse(['error' => $exception->getMessage()], $exception->getStatusCode(), $exception->getHeaders())
+      : new JsonResponse(['error' => 'An unexpected error occurred.'], 500);
+    $event->setResponse($response);
   }
 
 }
