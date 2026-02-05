@@ -36,8 +36,8 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
 
     if ($update) {
       $this->onUpdateEntityReferenceFieldsOwned();
-      $this->onUpdateReflectPublicationStatus();
     }
+    $this->onSaveReflectPublicationStatus();
   }
 
   /**
@@ -62,9 +62,16 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
   /**
    * Acts on parent entity update to reflect publication status.
    */
-  protected function onUpdateReflectPublicationStatus(): void {
-    // If the publication status did not change, do nothing.
-    if ($this->isPublished() === $this->original->isPublished()) {
+  protected function onSaveReflectPublicationStatus(): void {
+    // On update, if the publication status did not change, do nothing.
+    if (isset($this->original) && $this->isPublished() === $this->original->isPublished()) {
+      return;
+    }
+
+    // On insert, only sync children when the report is being published.
+    // We don't want to unpublish shared entities when creating an unpublished
+    // report that references them.
+    if (!isset($this->original) && !$this->isPublished()) {
       return;
     }
 

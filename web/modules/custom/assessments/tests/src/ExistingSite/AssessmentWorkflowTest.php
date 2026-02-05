@@ -139,6 +139,56 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
   }
 
   /**
+   * Tests that directly creating a published report publishes related entities.
+   *
+   * This tests the scenario where a report is created with status=TRUE from
+   * the start, rather than first creating it as unpublished and then updating.
+   *
+   * @covers \Drupal\assessments\Entity\AssessmentReport::postSave
+   */
+  public function testDirectlyPublishingReportPublishesRelatedEntities(): void {
+    $bindingRequirement = $this->createParagraphBindingRequirement();
+    $organisation = $this->createAssessmentOrganisation();
+
+    // Verify the organisation is unpublished before we create the report.
+    $this->assertFalse($organisation->isPublished(), 'Organisation should be unpublished initially.');
+
+    // Create a report that is published directly (status=TRUE on creation).
+    /** @var \Drupal\assessments\Entity\AssessmentReport $report */
+    $report = Assessment::create([
+      'type' => 'report',
+      'name' => 'Directly Published Report',
+      'state' => 'published',
+      'binding_requirement' => ['entity' => $bindingRequirement],
+      'provider' => ['entity' => $organisation],
+      'status' => TRUE,
+    ]);
+    $this->markEntityForCleanup($report);
+    $report->save();
+
+    // Reload the binding requirement paragraph to get the sub-entities.
+    $bindingRequirement = $report->get('binding_requirement')->entity;
+    \assert($bindingRequirement instanceof ParagraphInterface);
+
+    $expression = $bindingRequirement->get('expression')->entity;
+    $publicService = $bindingRequirement->get('affects')->entity;
+    $participation = $bindingRequirement->get('has_participation')->entity;
+    $organisation = $report->get('provider')->entity;
+    $asset = $bindingRequirement->get('asset')->entity;
+
+    // Assert that the report is published.
+    $this->assertTrue($report->isPublished(), 'Report should be published.');
+    $this->assertEquals('published', $report->getWorkflowState(), 'Report workflow state should be published.');
+
+    // Assert that all related entities are also published immediately.
+    $this->assertTrue($expression->isPublished(), 'Expression should be published when report is created as published.');
+    $this->assertTrue($publicService->isPublished(), 'Public service should be published when report is created as published.');
+    $this->assertTrue($participation->isPublished(), 'Participation should be published when report is created as published.');
+    $this->assertTrue($organisation->isPublished(), 'Organisation should be published when report is created as published.');
+    $this->assertTrue($asset->isPublished(), 'Asset should be published when report is created as published.');
+  }
+
+  /**
    * Creates a binding requirement paragraph with all dependencies.
    *
    * @return \Drupal\paragraphs\ParagraphInterface
