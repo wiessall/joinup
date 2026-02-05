@@ -1,0 +1,36 @@
+#!/bin/bash
+
+## Description: Builds the publiccode.yml editor
+## Usage: build-publiccode
+## Example: ddev build-publiccode
+
+set -e
+
+# Check if python2 service is running
+if ! docker ps --format '{{.Names}}' | grep -q "ddev-${DDEV_SITENAME}-python2"; then
+    echo "Error: Python 2 service is not running."
+    echo "Enable it with: ddev python2-enable && ddev restart"
+    exit 1
+fi
+
+PUBLICCODE_DIR=".ddev/publiccode"
+EDITOR_DIR="$PUBLICCODE_DIR/editor"
+WEB_DIR="web/publiccode-editor"
+
+rm -rf $EDITOR_DIR
+git clone --depth=1 --single-branch --branch v1.4.3 https://github.com/italia/publiccode-editor.git $EDITOR_DIR
+cat $PUBLICCODE_DIR/joinup.diff | patch -p1 -d $EDITOR_DIR
+cp web/themes/ventuno/assets/images/favicon/favicon-32x32.png $EDITOR_DIR/src/asset/img/
+
+# Build the distribution using the python2 service (Node 10 + Python 2).
+# Debian 13 no longer supports Python 2, so we use a separate container.
+# Run as current user to avoid root-owned files that can't be moved/deleted.
+docker exec -u "$(id -u):$(id -g)" -w /var/www/html ddev-${DDEV_SITENAME}-python2 bash -c "
+  cd $EDITOR_DIR && \
+  yarn install && \
+  yarn build-prod
+"
+
+# Copy the distribution under webroot.
+rm -rf $WEB_DIR
+mv $EDITOR_DIR/dist $WEB_DIR
