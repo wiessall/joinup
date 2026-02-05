@@ -92,8 +92,7 @@ function assessments_form_alter(array &$form, FormStateInterface $formState, str
 /**
  * Implements hook_field_widget_complete_form_alter().
  */
-function assessments_field_widget_complete_form_alter(array &$element, FormStateInterface $form_state, array $context): void
-{
+function assessments_field_widget_complete_form_alter(array &$element, FormStateInterface $form_state, array $context): void {
   // Only for the asset field.
   if (!isset($context['items']) || $context['items']->getFieldDefinition()->getName() !== 'asset') {
     return;
@@ -133,7 +132,8 @@ function assessments_field_widget_complete_form_alter(array &$element, FormState
     $arguments = $markup->getArguments();
     $widget['actions']['ief_add']['#value'] = new TranslatableMarkup('Add a new @type_singular', $arguments);
     $widget['actions']['ief_add']['#weight'] = 10;
-  } elseif (isset($widget['form']['actions']['ief_reference_save'])) {
+  }
+  elseif (isset($widget['form']['actions']['ief_reference_save'])) {
     $widget['actions']['#suffix'] = t('Browse the <a href = "/interoperable-europe-solutions" target="_blank">solutions</a> recommended by the <a href="/collection/governance-board" target="_blank">Interoperable Europe Board.</a>');
   }
 }
