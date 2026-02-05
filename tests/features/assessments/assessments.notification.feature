@@ -21,8 +21,8 @@ Feature: Assessment report email notifications
 
   Scenario: Email notification: Your assessment report has been published
     Given report assessments:
-      | name                 | state  | provider          | uid          |
-      | Moderatable Report 1 | review | Test Organization | Regular User |
+      | name                 | state  | provider          | uid          | created    |
+      | Moderatable Report 1 | review | Test Organization | Regular User | 1770235600 |
     And the following report has binding requirement:
       | report     | Moderatable Report 1 |
       | expression | Test Expression      |
@@ -33,9 +33,9 @@ Feature: Assessment report email notifications
     And I go to the moderate form of the "Moderatable Report 1" assessment report
     Then I see the text "Interoperability assessments space" in the "Header" region
     And I should see the following lines of text:
-      | Provided by Test Organization, a European Union institution           |
-      | Status: In Review                                                     |
-      | The assessment report was based on the following binding requirements |
+      | Submitted on Wed, 04/02/2026 - 20:06 by Test Organization, a European Union institution |
+      | Status: In Review                                                                       |
+      | Binding requirements                                                                    |
     When I press "Publish"
     Then I should see the success message containing "The assessment report has been published"
 

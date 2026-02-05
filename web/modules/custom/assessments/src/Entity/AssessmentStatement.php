@@ -57,7 +57,7 @@ final class AssessmentStatement extends ContentEntityBase implements AssessmentS
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type): array {
     $fields = parent::baseFieldDefinitions($entity_type);
     $fields['judgement'] = BaseFieldDefinition::create('string_long')
-      ->setLabel(t('Judgement'))
+      ->setLabel(t('Justification'))
       ->setTranslatable(TRUE)
       ->setDisplayOptions('form', [
         'type' => 'string_textarea',
@@ -74,12 +74,10 @@ final class AssessmentStatement extends ContentEntityBase implements AssessmentS
         ],
       ])
       ->setDisplayOptions('view', [
-        'label' => 'hidden',
+        'label' => 'inline',
         'type' => 'text_default',
         'weight' => 1,
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
+      ]);
 
     $fields['interpretation'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Interpretation'))
@@ -104,9 +102,8 @@ final class AssessmentStatement extends ContentEntityBase implements AssessmentS
         'label' => 'hidden',
         'type' => 'entity_reference_label',
         'weight' => 0,
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
+        'settings' => ['link_to_entity' => FALSE],
+      ]);
 
     $fields['statement_type'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Type'))
@@ -117,9 +114,7 @@ final class AssessmentStatement extends ContentEntityBase implements AssessmentS
         'target_bundles' => [
           'assess_statement_type' => 'assess_statement_type',
         ],
-      ])
-      ->setDisplayConfigurable('form', FALSE)
-      ->setDisplayConfigurable('view', FALSE);
+      ]);
 
     $fields['landing_page'] = BaseFieldDefinition::create('file')
       ->setLabel(t('Statement supporting document'))
@@ -142,9 +137,7 @@ final class AssessmentStatement extends ContentEntityBase implements AssessmentS
           'display_field' => FALSE,
           'max_filesize' => '10 MB',
         ],
-      ])
-      ->setDisplayConfigurable('form', FALSE)
-      ->setDisplayConfigurable('view', FALSE);
+      ]);
 
     return $fields;
   }

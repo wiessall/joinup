@@ -8,8 +8,10 @@ dependencies:
     - field.field.assessment.expression.documented_in
     - field.field.assessment.expression.initiative_name
   module:
+    - collection
+    - entity_form_field_label
     - link
-    - text
+    - template_suggestion
 id: assessment.expression.default
 targetEntityType: assessment
 bundle: expression
@@ -24,19 +26,24 @@ content:
     region: content
   documented_in:
     type: link
-    label: hidden
+    label: visually_hidden
     settings:
       trim_length: 80
       url_only: false
       url_plain: false
-      rel: ''
-      target: ''
-    third_party_settings: {  }
+      rel: nofollow
+      target: _blank
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+      template_suggestion:
+        template_suggestion: ''
     weight: 2
     region: content
   initiative_name:
     type: string
-    label: hidden
+    label: visually_hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }

@@ -15,7 +15,7 @@ id: assessment.report.state
 field_name: state
 entity_type: assessment
 bundle: report
-label: State
+label: Status
 description: ''
 required: true
 translatable: false
