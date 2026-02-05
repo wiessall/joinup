@@ -122,4 +122,15 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
     }
   }
 
+  /**
+   * Returns the entity creation timestamp.
+   *
+   * @return int|null
+   *   Creation timestamp of the entity, or NULL if unknown.
+   */
+  public function getCreatedTime(): int|null {
+    $createdTime = $this->get('created')->value;
+    return $createdTime !== NULL ? (int) $createdTime : NULL;
+  }
+
 }

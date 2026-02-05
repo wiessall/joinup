@@ -1,0 +1,18 @@
+{#
+/**
+ * @file
+ * Template override for the host field of binding requirement paragraph items.
+ */
+#}
+{%
+  set field_item_classes = [
+    'field__item',
+    'card',
+    'border',
+    'rounded',
+    'shadow-sm',
+    'px-3',
+    'mb-2',
+  ]
+%}
+{% extends 'field--assessment--report--full.html.twig' %}

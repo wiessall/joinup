@@ -1,68 +1,23 @@
 {#
 /**
  * @file
- * Default theme implementation to present an assessment entity.
+ * Template override to display an assessment report entity.
  */
 #}
-<article{{ attributes }}>
-  {% if view_mode != 'full' %}
-    {{ title_prefix }}
-    {{ title_suffix }}
-  {% endif %}
+{% extends '@assessments/assessment.html.twig' %}
 
-  <div class="page-title__details">
-    <span
-      class="page-title__detail">{{ 'Submitted by'|t }}&nbsp;{{ content.uid }}</span>
-    <span
-      class="page-title__detail">{{ 'on'|t }}&nbsp;{{ content.created }},</span>
-    <span class="page-title__detail"><strong>{{ 'Provided by'|t }}</strong>&nbsp;{{ content.provider }}</span>
-    <span
-      class="page-title__detail">{{ 'Status:'|t }}&nbsp;{{ content.state }}</span>
-  </div>
+{% set has_title = page and content.name %}
 
-  <div class="row">
-    <div class="col">
-      {% if not (assessment.relevant_report.isEmpty == true) and content.relevant_report is defined %}
-        <span
-          class="heading-d mt-4">{{ 'The report has been connected to the following previous/relevant reports'|t }}: </span>
-        {{ content.relevant_report }}
-      {% endif %}
-    </div>
-    <div class="col text-end">
-      {% if content.entity_print_view_pdf %}
-        {{ content.entity_print_view_pdf }}
-      {% endif %}
-    </div>
-  </div>
-  <hr/>
+{% block title %}
+{%- if has_title -%}
+  <h2{{ title_attributes }}>{{ content.name }}</h2>
+{%- endif -%}
+{% endblock %}
 
-  {% if not (assessment.binding_requirement.isEmpty == true) and content.binding_requirement is defined %}
-    <h2
-      class="heading-d mt-3">{{ 'The assessment report was based on the following binding requirements'|t }}</h2>
-    {{ content.binding_requirement }}
-  {% endif %}
-
-  <h2 class="heading-d mt-4">{{ 'Results'|t }}</h2>
-  <div class="row row-cols-1 row-cols-md-2 g-3 mt-2">
-    {% for section in [
-      'legal',
-      'organisational',
-      'semantic',
-      'technical',
-    ] %}
-      {% if not (assessment[section].isEmpty == true) and content[section] is defined %}
-        <div class="col">
-          {{ content[section] }}
-        </div>
-      {% endif %}
-    {% endfor %}
-
-  </div>
-
-  <div class="mt-4">
-    {{ content.remaining_barriers }}
-  </div>
-
-  {{ content.other_comment }}
-
-</article>
+{% block content %}
+  {% if not page and has_title -%}
+    {{ content|without('name') }}
+  {%- else -%}
+    {{ content }}
+  {%- endif %}
+{% endblock %}

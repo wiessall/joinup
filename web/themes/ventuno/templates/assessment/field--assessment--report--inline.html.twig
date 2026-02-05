@@ -1,0 +1,13 @@
+{#
+/**
+ * @file
+ * Template for a field with inline values.
+ */
+#}
+{# Fields with inline display don't need bold label. #}
+{%
+  set title_classes = title_classes|default([
+    'field__label',
+  ])
+%}
+{% extends '@ventuno/field/field--inline.html.twig' %}
