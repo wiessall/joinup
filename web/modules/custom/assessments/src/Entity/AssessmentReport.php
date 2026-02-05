@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity;
 
-use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
@@ -60,69 +59,46 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
   }
 
   /**
-   * Acts on parent entity update to reflect publication status.
+   * Publishes child entities when the report is published.
    */
   protected function onSaveReflectPublicationStatus(): void {
-    // On update, if the publication status did not change, do nothing.
-    if (isset($this->original) && $this->isPublished() === $this->original->isPublished()) {
+    // Only proceed if the report is published.
+    if (!$this->isPublished()) {
       return;
     }
 
-    // On insert, only sync children when the report is being published.
-    // We don't want to unpublish shared entities when creating an unpublished
-    // report that references them.
-    if (!isset($this->original) && !$this->isPublished()) {
-      return;
-    }
+    // Collect unpublished child entities that need to be published.
+    $entitiesToPublish = [];
+    $assetsToPublish = [];
 
-    // We need to collect the entities that should be updated.
-    $entitiesToUpdate = [];
-    $assetsToUpdate = [];
-    $reportIsPublished = $this->isPublished();
-
-    // Only keep providers that are to be published.
-    $providerEntities = array_filter($this->get('provider')->referencedEntities(), function (AssessmentInterface $entity) use ($reportIsPublished): bool {
-      // Only update providers towards the published state because they might
-      // later be referred to by other reports, and we don't want them to be
-      // re-unpublished.
-      return $reportIsPublished && !$entity->isPublished();
-    });
-    $entitiesToUpdate = array_merge($entitiesToUpdate, $providerEntities);
+    // Collect unpublished providers.
+    $providerEntities = array_filter($this->get('provider')->referencedEntities(), fn(AssessmentInterface $entity): bool => !$entity->isPublished());
+    $entitiesToPublish = array_merge($entitiesToPublish, $providerEntities);
 
     // Binding requirements are paragraphs. There is nothing to publish there,
     // but we need to go through them to get to other entities.
     $bindingRequirementEntities = $this->get('binding_requirement')->referencedEntities();
     foreach ($bindingRequirementEntities as $bindingRequirementEntity) {
-      $expressions = $bindingRequirementEntity->get('expression')->referencedEntities();
-      $entitiesToUpdate = array_merge($entitiesToUpdate, $expressions);
-      $assets = $bindingRequirementEntity->get('asset')->referencedEntities();
-      $assets = array_filter($assets, function (SolutionInterface $entity) use ($reportIsPublished): bool {
-        // Only update solutions towards the published state because they might
-        // later be referred to by other reports, and we don't want them to be
-        // re-unpublished.
-        return $entity->getGroup()->uuid() === AssessmentInterface::SOLUTION_COLLECTOR
-          && $reportIsPublished
-          && !$entity->isPublished();
-      });
-      $assetsToUpdate = array_merge($assetsToUpdate, $assets);
-      $publicServices = $bindingRequirementEntity->get('affects')->referencedEntities();
-      $entitiesToUpdate = array_merge($entitiesToUpdate, $publicServices);
-      $participations = $bindingRequirementEntity->get('has_participation')->referencedEntities();
-      $entitiesToUpdate = array_merge($entitiesToUpdate, $participations);
+      $expressions = array_filter($bindingRequirementEntity->get('expression')->referencedEntities(), fn(AssessmentInterface $entity): bool => !$entity->isPublished());
+      $entitiesToPublish = array_merge($entitiesToPublish, $expressions);
+
+      $assets = array_filter($bindingRequirementEntity->get('asset')->referencedEntities(), fn(SolutionInterface $entity): bool => $entity->getGroup()->uuid() === AssessmentInterface::SOLUTION_COLLECTOR && !$entity->isPublished());
+      $assetsToPublish = array_merge($assetsToPublish, $assets);
+
+      $publicServices = array_filter($bindingRequirementEntity->get('affects')->referencedEntities(), fn(AssessmentInterface $entity): bool => !$entity->isPublished());
+      $entitiesToPublish = array_merge($entitiesToPublish, $publicServices);
+
+      $participations = array_filter($bindingRequirementEntity->get('has_participation')->referencedEntities(), fn(AssessmentInterface $entity): bool => !$entity->isPublished());
+      $entitiesToPublish = array_merge($entitiesToPublish, $participations);
     }
 
-    // Update the publication status of collected entities.
-    foreach ($entitiesToUpdate as $entity) {
-      if ($entity instanceof EntityPublishedInterface && $entity->isPublished() !== $this->isPublished()) {
-        match ($this->isPublished()) {
-          TRUE => $entity->setPublished(),
-          FALSE => $entity->setUnpublished(),
-        };
-        $entity->save();
-      }
+    // Publish the collected entities.
+    foreach ($entitiesToPublish as $entity) {
+      $entity->setPublished();
+      $entity->save();
     }
 
-    foreach ($assetsToUpdate as $asset) {
+    foreach ($assetsToPublish as $asset) {
       $asset->setWorkflowState('published');
       $asset->skip_notification = TRUE;
       $asset->save();
