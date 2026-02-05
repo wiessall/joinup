@@ -105,7 +105,8 @@ invalid_references:
         description: "Article 5"
         affects:
           - name: "Digital Monitoring Unit"
-            thematic_area: "digital_and_innovation_services"
+            thematic_area:
+              - "digital_and_innovation_services"
         asset:
           - "3b1548db-0f29-42f4-a23c-2ee43ed20ba9"
     documents:
@@ -157,9 +158,13 @@ valid:
           - '__base_url__/sites/default/files/assessment-test/requirement2.pdf'
         affects:
           - name: "Digital Monitoring Unit"
-            thematic_area: "digital_and_innovation_services"
+            thematic_area:
+              - "digital_and_innovation_services"
+              - "health_and_wellbeing"
+              - "social_and_community_services"
           - name: "Training Centre"
-            thematic_area: "education_and_research"
+            thematic_area:
+              - "education_and_research"
             country:
               - "BE"
               - "IT"
@@ -220,6 +225,8 @@ valid:
           - name: "Digital Monitoring Unit"
             thematic_area:
               - digital_and_innovation_services
+              - health_and_wellbeing
+              - social_and_community_services
             country: []
           - name: "Training Centre"
             thematic_area:
@@ -338,7 +345,8 @@ invalid_country_for_eu_organisation:
           - "https://www.rd.usda.gov/sites/default/files/pdf-sample_0.pdf"
         affects:
           - name: "Digital Monitoring Unit"
-            thematic_area: "digital_and_innovation_services"
+            thematic_area:
+              - "digital_and_innovation_services"
         description: "test"
         has_participation:
           - country:
@@ -375,7 +383,9 @@ invalid_missing_country_for_non_eu_organisation:
           - "https://www.rd.usda.gov/sites/default/files/pdf-sample_0.pdf"
         affects:
           - name: "Digital Monitoring Unit"
-            thematic_area: "digital_and_innovation_services"
+            thematic_area:
+              - "digital_and_innovation_services"
+              - "economy_and_employment"
         description: "test"
         has_participation:
           - country:
