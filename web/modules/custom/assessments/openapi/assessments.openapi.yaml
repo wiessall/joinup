@@ -88,12 +88,15 @@ paths:
                         - https://example.com/regulation/eu-1655467-s
                       affects:
                         - name: Digital Monitoring Unit
-                          thematic_area: digital_and_innovation_services
+                          thematic_area:
+                            - digital_and_innovation_services
+                            - environment_and_energy
                           country:
                             - BE
                             - NL
                         - name: Training Centre
-                          thematic_area: education_and_research
+                          thematic_area:
+                            - education_and_research
                           country:
                             - BE
                       has_participation:
@@ -170,6 +173,7 @@ paths:
                           - name: "Digital Monitoring Unit"
                             thematic_area:
                               - "digital_and_innovation_services"
+                              - "environment_and_energy"
                             country:
                               - "BE"
                               - "NL"
@@ -492,6 +496,7 @@ components:
             - $ref: '#/components/schemas/UUID'
         relevant_report:
           type: array
+          uniqueItems: true
           items:
             type: string
             format: uri
@@ -523,6 +528,7 @@ components:
           description: Describe possible remaining barriers to interoperability.
         documents:
           type: array
+          uniqueItems: true
           description: |
             List of URLs of documents supporting this assessment report.
           items:
@@ -648,6 +654,7 @@ components:
           minLength: 1
         documents:
           type: array
+          uniqueItems: true
           description: |
             List of URLs of documents supporting this binding requirement.
           items:
@@ -721,21 +728,25 @@ components:
           minLength: 1
           maxLength: 255
         thematic_area:
-          type: string
+          type: array
+          uniqueItems: true
           description: The concerned function of trans-European digital public service(s).
-          enum:
-            - core_governance_and_administration
-            - digital_and_innovation_services
-            - economy_and_employment
-            - education_and_research
-            - environment_and_energy
-            - health_and_wellbeing
-            - international_and_regional_cooperation
-            - security_justice_and_emergency_services
-            - social_and_community_services
-            - transport_and_infrastructure
+          items:
+            type: string
+            enum:
+              - core_governance_and_administration
+              - digital_and_innovation_services
+              - economy_and_employment
+              - education_and_research
+              - environment_and_energy
+              - health_and_wellbeing
+              - international_and_regional_cooperation
+              - security_justice_and_emergency_services
+              - social_and_community_services
+              - transport_and_infrastructure
         country:
           type: array
+          uniqueItems: true
           description: The concerned country(s) of trans-European digital public service(s).
           items:
             $ref: '#/components/schemas/EuropeanUnionCountry'
@@ -748,6 +759,7 @@ components:
       properties:
         participant_type:
           type: array
+          uniqueItems: true
           items:
             type: string
             description: The type of the affected stakeholder.
@@ -761,6 +773,7 @@ components:
               - regional_public_sector_body
           description: The participation type.
         country:
+          description: Stakeholder's countries. Each as ISO-3166 2-letter country code or "EU" for EU-wide entities.
           oneOf:
             - type: array
               items:
@@ -769,9 +782,9 @@ components:
               minItems: 1
               maxItems: 1
             - type: array
+              uniqueItems: true
               items:
                 $ref: '#/components/schemas/EuropeanUnionCountry'
-          description: Stakeholder's countries. Each as ISO-3166 2-letter country code or "EU" for EU-wide entities.
 
     Asset:
       type: object
