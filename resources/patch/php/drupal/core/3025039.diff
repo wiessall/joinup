@@ -1,4 +1,4 @@
-Subject: [PATCH] Patch for issue 3025039 compatible with core 10.5
+Subject: [PATCH] Patch from https://www.drupal.org/project/drupal/issues/3025039 compatible with drupal 10.5
 ---
 Index: core/tests/Drupal/KernelTests/Core/Entity/EntityUntranslatableFieldsConstraintTest.php
 IDEA additional info:
@@ -167,7 +167,7 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 ===================================================================
 diff --git a/core/lib/Drupal/Core/Field/WidgetBase.php b/core/lib/Drupal/Core/Field/WidgetBase.php
 --- a/core/lib/Drupal/Core/Field/WidgetBase.php	(revision 3245d571a9f92cfea946ed0615f940eed7c3b029)
-+++ b/core/lib/Drupal/Core/Field/WidgetBase.php	(date 1770133519877)
++++ b/core/lib/Drupal/Core/Field/WidgetBase.php	(date 1770282650032)
 @@ -518,13 +518,16 @@
  
        // Let the widget massage the submitted values.
@@ -178,7 +178,7 @@ diff --git a/core/lib/Drupal/Core/Field/WidgetBase.php b/core/lib/Drupal/Core/Fi
 -      $items->setValue($values);
 -      $items->filterEmptyItems();
 +      $widget = NestedArray::getValue($form, $field_state['array_parents']);
-+      if (Element::isVisibleElement($widget) || $items->getFieldDefinition()->getName() == 'status') {
++      if (Element::isVisibleElement($widget) || $items->getFieldDefinition()->getName() == 'status' || $items->getFieldDefinition()->getName() == 'field_state') {
 +        $items->setValue($values);
 +        $items->filterEmptyItems();
 +      }
