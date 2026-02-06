@@ -431,6 +431,7 @@ components:
 
     Assessment:
       type: object
+      description: European Union Interoperability Act assessment report.
       required:
         - name
         - binding_requirement
@@ -448,32 +449,7 @@ components:
           readOnly: true
           description: The canonical URI of the assessment report
         language:
-          type: string
-          enum:
-            - bg  # Bulgarian
-            - cs  # Czech
-            - da  # Danish
-            - de  # German
-            - el  # Greek
-            - en  # English
-            - es  # Spanish
-            - et  # Estonian
-            - fi  # Finnish
-            - fr  # French
-            - ga  # Irish
-            - hr  # Croatian
-            - hu  # Hungarian
-            - it  # Italian
-            - lt  # Lithuanian
-            - lv  # Latvian
-            - mt  # Maltese
-            - nl  # Dutch
-            - pl  # Polish
-            - pt  # Portuguese
-            - ro  # Romanian
-            - sk  # Slovak
-            - sl  # Slovenian
-            - sv  # Swedish
+          $ref: '#/components/schemas/EuropeanUnionLanguage'
           description: The report's language. If omitted, defaults to English.
         name:
           type: string
@@ -967,3 +943,31 @@ components:
                 description: The URL to the asset page on the portal.
         pager:
           $ref: '#/components/schemas/Pager'
+
+    EuropeanUnionLanguage:
+      type: string
+      enum:
+        - bg  # Bulgarian
+        - cs  # Czech
+        - da  # Danish
+        - de  # German
+        - el  # Greek
+        - en  # English
+        - es  # Spanish
+        - et  # Estonian
+        - fi  # Finnish
+        - fr  # French
+        - ga  # Irish
+        - hr  # Croatian
+        - hu  # Hungarian
+        - it  # Italian
+        - lt  # Lithuanian
+        - lv  # Latvian
+        - mt  # Maltese
+        - nl  # Dutch
+        - pl  # Polish
+        - pt  # Portuguese
+        - ro  # Romanian
+        - sk  # Slovak
+        - sl  # Slovenian
+        - sv  # Swedish
