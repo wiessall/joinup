@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use Drupal\Core\Utility\UpdateException;
 use Drupal\assessments\AssessmentVocabularyHelper;
+use Drupal\assessments\WebformSubmissionMigrator;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_assessment\AssessmentInterface as LegacyAssessmentInterface;
 use Drupal\webform\Entity\Webform;
@@ -191,4 +192,16 @@ function assessments_deploy_200802(): void {
   \assert($webform instanceof WebformInterface);
   $webform->setStatus(WebformInterface::STATUS_CLOSED);
   $webform->save();
+}
+
+/**
+ * Migrate webform assessment submissions to assessment report entities.
+ */
+function assessments_deploy_200803(): void {
+  $migrator = \Drupal::service(WebformSubmissionMigrator::class);
+  $result = $migrator->migrateAll();
+  \Drupal::logger('assessments')->info('Webform migration completed: @migrated migrated, @failed failed.', [
+    '@migrated' => $result['migrated'],
+    '@failed' => $result['failed'],
+  ]);
 }
