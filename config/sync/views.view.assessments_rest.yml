@@ -446,7 +446,7 @@ display:
           admin_label: 'RDF URI'
           entity_type: assessment
           plugin_id: standard
-          required: false
+          required: true
       header: {  }
       footer: {  }
       display_extenders:
@@ -577,6 +577,7 @@ display:
         - 'languages:language_interface'
         - request_format
         - url.query_args
+        - 'url.query_args:page'
         - user.permissions
       tags:
         - 'config:field.storage.taxonomy_term.code'
@@ -1049,7 +1050,7 @@ display:
           admin_label: 'RDF URI'
           entity_type: assessment
           plugin_id: standard
-          required: false
+          required: true
       display_description: ''
       display_extenders:
         metatag_display_extender:
@@ -1064,6 +1065,7 @@ display:
         - request_format
         - url
         - url.query_args
+        - 'url.query_args:page'
         - user.permissions
       tags:
         - 'config:field.storage.taxonomy_term.code'
