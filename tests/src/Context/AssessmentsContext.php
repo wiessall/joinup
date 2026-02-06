@@ -25,6 +25,7 @@ use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\user\UserInterface;
 use PHPUnit\Framework\Assert;
+use WebDriver\Element;
 
 /**
  * Step definitions for assessments.
@@ -378,32 +379,50 @@ class AssessmentsContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that autocomplete suggestions appear in a specific order.
+   * Asserts that Tagify autocomplete suggestions appear in a specific order.
    *
+   * @param string $text
+   *   The text to type in the tagify input.
+   * @param string $fieldName
+   *   The field name to search for.
    * @param \Behat\Gherkin\Node\TableNode $table
    *   A table with expected suggestion order.
    *
    * @throws \Exception
    *   When suggestions are not in the expected order.
    */
-  #[Then('the autocomplete suggestions should appear in this order:')]
-  public function assertAutocompleteSuggestionsOrder(TableNode $table): void {
+  #[Then('I type :text in the :fieldName tagify and the suggestions should appear in this order:')]
+  public function assertTagifySuggestionsOrder(string $text, string $fieldName, TableNode $table): void {
     $this->assertJavaScriptEnabledBrowser();
 
-    $page = $this->getSession()->getPage();
+    $session = $this->getSession();
+    $page = $session->getPage();
 
-    // Wait up to 5 seconds for autocomplete suggestions to appear.
+    // Find the tagify input by field name.
+    $fieldNameCss = str_replace('_', '-', $fieldName);
+    $tagifyInput = $page->find('css', '.field--name-' . $fieldNameCss . ' .tagify__input');
+
+    if (!$tagifyInput) {
+      throw new \Exception("Tagify input for field '$fieldName' not found.");
+    }
+
+    // Use JavaScript to trigger input and show dropdown.
+    $element = $session->getDriver()->getWebDriverSession()?->element('xpath', $tagifyInput->getXpath());
+    \assert($element instanceof Element);
+    $element->postValue(['text' => $text]);
+
+    // Wait for tagify dropdown suggestions to appear.
     $suggestions = [];
     $page->waitFor(5, function () use ($page, &$suggestions): bool {
-      $suggestions = $page->findAll('css', '.ui-autocomplete li a');
+      $suggestions = $page->findAll('css', '.tagify__dropdown__item');
       return !empty($suggestions);
     });
 
     if (empty($suggestions)) {
-      throw new \Exception('No autocomplete suggestions found.');
+      throw new \Exception('No Tagify autocomplete suggestions found.');
     }
 
-    $actualOrder = array_map(fn($s) => $s->getText(), $suggestions);
+    $actualOrder = array_map(fn($s) => trim($s->getText()), $suggestions);
     $expectedOrder = array_column($table->getRows(), 0);
 
     foreach ($expectedOrder as $index => $expected) {

@@ -258,7 +258,7 @@ class TagifyContext extends RawDrupalContext {
    * Gets tagify inupt element.
    *
    * @param string $fieldName
-   *   Field name.
+   *   Field name or input name attribute.
    *
    * @return \Behat\Mink\Element\NodeElement|mixed
    *   Tagify input element.
@@ -270,11 +270,33 @@ class TagifyContext extends RawDrupalContext {
       throw new \Exception('This function requires JavaScript to run.');
     }
     $session = $this->getSession();
-    $fieldName = str_replace('_', '-', $this->getNodeFieldNameFromLabel($fieldName));
-    $locator = '.field--name-' . $fieldName . ' .tagify__input';
-    $tagifyInput = $session->getPage()->find('css', $locator);
+    $page = $session->getPage();
+    $tagifyInput = NULL;
+
+    // Check if fieldName looks like an input name (contains brackets).
+    if (str_contains($fieldName, '[')) {
+      // Find by input name attribute (for IEF forms).
+      $hiddenInput = $page->find('css', '[name="' . $fieldName . '"]');
+      if ($hiddenInput) {
+        // The Tagify wrapper is the parent of the hidden input.
+        $tagifyWrapper = $hiddenInput->getParent();
+        $tagifyInput = $tagifyWrapper?->find('css', '.tagify__input');
+      }
+    }
+    else {
+      // Standard Drupal field: find by field wrapper class.
+      $fieldNameCss = str_replace('_', '-', $this->getNodeFieldNameFromLabel($fieldName));
+      $locator = '.field--name-' . $fieldNameCss . ' .tagify__input';
+      $tagifyInput = $page->find('css', $locator);
+    }
+
+    // Final fallback: find any visible tagify input in IEF form context.
     if (!$tagifyInput) {
-      throw new \Exception('Tagify input not found');
+      $tagifyInput = $page->find('css', '.ief-form .tagify__input');
+    }
+
+    if (!$tagifyInput) {
+      throw new \Exception('Tagify input not found for: ' . $fieldName);
     }
     return $tagifyInput;
   }

@@ -73,8 +73,8 @@ Feature: Assessment Report Entity Management
     When I click "Interoperability solution" in the "Modal content" region
     And I should see "Browse the solutions recommended by the Interoperable Europe Board."
     Then I press "Select an Interoperability solution" in the "Modal content" region
-    And I type "Test" in the "asset[form][0][entity_id]" autocomplete field
-    And I pick "Test solution" from the autocomplete suggestions
+    And I wait for AJAX to finish
+    And I select "Test solution" option from "asset[form][0][entity_id]"
     And I press "Add Interoperability solution" in the "Modal content" region
     And I should see the text "Identify the interoperability solutions mandatory to use for the implementation of the assessed binding requirement" in the "Modal content" region
     And I should see "Browse the solutions recommended by the Interoperable Europe Board."
@@ -284,10 +284,9 @@ Feature: Assessment Report Entity Management
     And I fill in "description[0][value]" with "Test requirement" in the "Modal content" region
     And I fill in "documented_in[0][uri]" with "https://example.com/req" in the "Modal content" region
 
-    # Test IES solution prioritization - IES solutions should appear first
+    # Test IES solution prioritization - IES solutions should appear first using Tagify
     When I click "Interoperability solution" in the "Modal content" region
     And I press "Select an Interoperability solution" in the "Modal content" region
-    And I type "Behat" in the "asset[form][0][entity_id]" autocomplete field
-    Then the autocomplete suggestions should appear in this order:
+    Then I type "Behat" in the "asset" tagify and the suggestions should appear in this order:
       | Behat IES Solution     |
       | Behat Regular Solution |

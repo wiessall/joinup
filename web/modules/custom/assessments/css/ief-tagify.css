@@ -1,0 +1,40 @@
+/**
+ * @file
+ * Styles for Inline Entity Form Tagify widget.
+ *
+ * Fixes z-index and display issues when Tagify is used inside modals/dialogs.
+ */
+
+/* Ensure Tagify dropdown appears above modal dialogs */
+.tagify__dropdown {
+  z-index: 10001 !important;
+}
+
+/* Ensure the dropdown is positioned correctly in dialogs */
+.ui-dialog .tagify__dropdown,
+.dialog-off-canvas-main-canvas .tagify__dropdown {
+  z-index: 10001 !important;
+}
+
+/* Fix dropdown height/visibility in dialogs */
+.ui-dialog .tagify__dropdown,
+.ief-form .tagify__dropdown {
+  min-height: auto !important;
+  max-height: 300px !important;
+  overflow: auto !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.ui-dialog .tagify__dropdown__wrapper,
+.ief-form .tagify__dropdown__wrapper {
+  max-height: 300px !important;
+  overflow: auto !important;
+}
+
+/* Ensure dropdown items are visible */
+.ui-dialog .tagify__dropdown__item,
+.ief-form .tagify__dropdown__item {
+  display: block !important;
+  padding: 0.5em 1em !important;
+}
