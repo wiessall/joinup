@@ -1,0 +1,14 @@
+uuid: dca64254-09ff-4e87-8081-d7838f400aaf
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.assess_provider_type
+id: taxonomy_vocabulary_assess_provider_type
+entity_type_id: taxonomy_vocabulary
+entity_id: assess_provider_type
+action: access_denied
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied
