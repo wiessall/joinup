@@ -496,7 +496,6 @@ components:
             - $ref: '#/components/schemas/UUID'
         relevant_report:
           type: array
-          uniqueItems: true
           items:
             type: string
             format: uri
@@ -528,7 +527,6 @@ components:
           description: Describe possible remaining barriers to interoperability.
         documents:
           type: array
-          uniqueItems: true
           description: |
             List of URLs of documents supporting this assessment report.
           items:
@@ -654,7 +652,6 @@ components:
           minLength: 1
         documents:
           type: array
-          uniqueItems: true
           description: |
             List of URLs of documents supporting this binding requirement.
           items:
@@ -729,7 +726,6 @@ components:
           maxLength: 255
         thematic_area:
           type: array
-          uniqueItems: true
           description: The concerned function of trans-European digital public service(s).
           items:
             type: string
@@ -746,7 +742,6 @@ components:
               - transport_and_infrastructure
         country:
           type: array
-          uniqueItems: true
           description: The concerned country(s) of trans-European digital public service(s).
           items:
             $ref: '#/components/schemas/EuropeanUnionCountry'
@@ -759,7 +754,6 @@ components:
       properties:
         participant_type:
           type: array
-          uniqueItems: true
           items:
             type: string
             description: The type of the affected stakeholder.
@@ -782,7 +776,6 @@ components:
               minItems: 1
               maxItems: 1
             - type: array
-              uniqueItems: true
               items:
                 $ref: '#/components/schemas/EuropeanUnionCountry'
 
