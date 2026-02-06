@@ -4,28 +4,34 @@
  * Default template for a field.
  */
 #}
+
+{% set list_tag = list_tag|default('div') %}
+{% set list_item_tag = list_item_tag|default('div') %}
+{% set field_item_classes = field_item_classes|default(['field__item']) %}
 {%
-  set classes = [
+  set classes = classes|default([
     'field--name-' ~ field_name|clean_class,
     bundle|clean_class ~ '__' ~ field_name_clean|clean_class,
     label_display == 'inline' ? 'd-flex',
-  ]
+  ])
 %}
 {%
-  set title_classes = [
+  set title_classes = title_classes|default([
     'field__label',
     'fw-bold',
     label_display == 'visually_hidden' ? 'visually-hidden',
-  ]
+  ])
 %}
 
 {% if label_hidden %}
   {% if multiple %}
-    <div{{ attributes.addClass(classes) }}>
+    <{{ list_tag }}{{ attributes.addClass(classes) }}>
       {% for item in items %}
-        <div{{ item.attributes.addClass('field__item') }}>{{ item.content }}</div>
+        <{{ list_item_tag }}{{ item.attributes.addClass(field_item_classes) }}>
+          {{- item.content -}}
+        </{{ list_item_tag }}>
       {% endfor %}
-    </div>
+    </{{ list_tag }}>
   {% else %}
     {% for item in items %}
       <div{{ attributes.addClass(classes) }}>{{ item.content }}</div>
@@ -36,14 +42,16 @@
     <div{{ title_attributes.addClass(title_classes) }}>
       {{ label }}{% if label_display == 'inline' %}<span class="me-1">:</span>{% endif %}
     </div>
-    {% if multiple %}
-    <div class="field__items">
-      {% endif %}
+    {% if multiple -%}
+    <{{ list_tag }} class="field__items">
+      {%- endif %}
       {% for item in items %}
-        <div{{ item.attributes.addClass('field__item') }}>{{ item.content }}</div>
+        <{{ list_item_tag }}{{ item.attributes.addClass(field_item_classes) }}>
+          {{- item.content -}}
+        </{{ list_item_tag }}>
       {% endfor %}
-      {% if multiple %}
-    </div>
-    {% endif %}
+      {% if multiple -%}
+    </{{ list_tag }}>
+    {%- endif %}
   </div>
 {% endif %}

@@ -7,24 +7,20 @@ dependencies:
     - field.field.assessment.participation.eu_countries
     - field.field.assessment.participation.participant_type
     - field.field.assessment.participation.stakeholder_country
+  module:
+    - entity_form_field_label
+    - field_delimiter
+    - field_formatter_range
+    - joinup_slick
+    - template_suggestion
 id: assessment.participation.default
 targetEntityType: assessment
 bundle: participation
 mode: default
 content:
-  eu_countries:
-    type: boolean
-    label: above
-    settings:
-      format: default
-      format_custom_false: ''
-      format_custom_true: ''
-    third_party_settings: {  }
-    weight: 3
-    region: content
   participant_type:
     type: entity_reference_label
-    label: hidden
+    label: visually_hidden
     settings:
       link: false
     third_party_settings:
@@ -32,7 +28,7 @@ content:
         new_label: ''
         rewrite_label: 0
       field_delimiter:
-        delimiter: ''
+        delimiter: ','
       field_formatter_range:
         order: 0
         limit: 0
@@ -41,15 +37,29 @@ content:
         preset: ''
         field_label: false
       template_suggestion:
-        template_suggestion: ''
-    weight: 0
+        template_suggestion: assessment__report__inline
+    weight: 1
     region: content
   stakeholder_country:
     type: entity_reference_label
-    label: hidden
+    label: visually_hidden
     settings:
-      link: true
-    third_party_settings: {  }
+      link: false
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+      field_delimiter:
+        delimiter: ','
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+      template_suggestion:
+        template_suggestion: assessment__report__inline
     weight: 2
     region: content
 hidden:
@@ -57,6 +67,7 @@ hidden:
   entity_print_view_epub: true
   entity_print_view_pdf: true
   entity_print_view_word_docx: true
+  eu_countries: true
   langcode: true
   name: true
   search_api_excerpt: true

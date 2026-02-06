@@ -31,6 +31,7 @@ Feature: Provided by widget functionality
 
     When I click "Initiative" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Digital Transformation Initiative" in the "Modal content" region
+    And I fill in "expression[0][inline_entity_form][description][0][value]" with "Some description" in the "Modal content" region
 
     When I click "Requirements" in the "Modal content" region
     And I fill in "description[0][value]" with "This is the general binding requirement description" in the "Modal content" region
