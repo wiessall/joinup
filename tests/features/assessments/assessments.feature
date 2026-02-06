@@ -37,7 +37,7 @@ Feature: Assessment Report Entity Management
     And a modal should open
     And I should see the button "Cancel" in the "Modal buttons" region
     And I press "Save" in the "Modal buttons" region
-    And I should see the text "3 errors have been found: NameName of the initiativeDescription" in the "Modal content" region
+    And I should see the text "4 errors have been found: NameName of the initiativeDescriptionDescription of the binding requirement" in the "Modal content" region
 
     Then I should see the following lines of text in the correct order in "Modal content":
       | Initiative                |
@@ -50,6 +50,7 @@ Feature: Assessment Report Entity Management
     When I click "Initiative" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Digital Transformation Initiative" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][documented_in][0][uri]" with "https://interoperable-europe.ec.europa.eu/initiatives" in the "Modal content" region
+    And I fill in "expression[0][inline_entity_form][description][0][value]" with "Some description" in the "Modal content" region
 
     When I click "Requirements" in the "Modal content" region
     And I fill in "description[0][value]" with "This is the general binding requirement description" in the "Modal content" region
@@ -185,6 +186,7 @@ Feature: Assessment Report Entity Management
     When I click "Initiative" in the "Modal content" region
     # This is a 323-character string to test that initiative_name accepts more than 255 characters
     And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Comprehensive Overview and Strategic Analysis of System Architecture, Functional Requirements, Operational Constraints, Governance Models, Security and Compliance Requirements, Performance Optimization, and Long-Term Maintainability Considerations for Scalable Digital Platforms in Enterprise and Public-Sector Environments" in the "Modal content" region
+    And I fill in "expression[0][inline_entity_form][description][0][value]" with "Some description" in the "Modal content" region
 
     When I click "Requirements" in the "Modal content" region
     And I fill in "description[0][value]" with "Test description for initiative name length validation" in the "Modal content" region
