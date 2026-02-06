@@ -118,32 +118,43 @@ function assessments_field_widget_complete_form_alter(array &$element, FormState
   }
 
   $widget = &$element['widget'];
+  $ief_id = $element['widget']['#ief_id'];
+  $ief_state = $form_state->get(['inline_entity_form', $ief_id, 'form']);
+  if ($ief_state === NULL) {
 
-  // Only modify if both action buttons are present.
-  if (isset($widget['actions']['ief_add_existing']) && isset($widget['actions']['ief_add'])) {
-    // Add description before the buttons.
-    $widget['description'] = [
-      '#markup' => t('Identify the interoperability solutions mandatory to use for the implementation of the assessed binding requirement'),
+    // Only modify if both action buttons are present.
+    if (isset($widget['actions']['ief_add_existing']) && isset($widget['actions']['ief_add'])) {
+      // Add description before the buttons.
+      $widget['description'] = [
+        '#markup' => t('Identify the interoperability solutions mandatory to use for the implementation of the assessed binding requirement'),
+      ];
+      // Modify the ief_add_existing button.
+      /** @var \Drupal\Core\StringTranslation\TranslatableMarkup $markup */
+      $markup = $widget['actions']['ief_add_existing']['#value'];
+      $arguments = $markup->getArguments();
+      $widget['actions']['ief_add_existing']['#value'] = new TranslatableMarkup('Select an @type_singular', $arguments);
+      $widget['actions']['ief_add_existing']['#weight'] = 0;
+
+      // Modify the ief_add button.
+      /** @var \Drupal\Core\StringTranslation\TranslatableMarkup $markup */
+      $markup = $widget['actions']['ief_add']['#value'];
+      $arguments = $markup->getArguments();
+      $widget['actions']['ief_add']['#value'] = new TranslatableMarkup('Add a new @type_singular', $arguments);
+      $widget['actions']['ief_add']['#weight'] = 10;
+    }
+  }
+  if ($ief_state === NULL || $ief_state === 'ief_add_existing') {
+    $widget['additional_info'] = [
+      '#weight' => 200,
+      '#markup' => t('Browse the <a href=":solutions" target="_blank">solutions</a> recommended by the <a href=":governance" target="_blank">Interoperable Europe Board.</a>', [
+        ':solutions' => Url::fromUri('internal:/interoperable-europe-solutions')
+          ->toString(),
+        ':governance' => Url::fromUri('internal:/collection/governance-board')
+          ->toString(),
+      ]),
     ];
-    $widget['actions']['#suffix'] = t('Browse the <a href = "/interoperable-europe-solutions" target="_blank">solutions</a> recommended by the <a href="/collection/governance-board" target="_blank">Interoperable Europe Board.</a>');
-
-    // Modify the ief_add_existing button.
-    /** @var \Drupal\Core\StringTranslation\TranslatableMarkup $markup */
-    $markup = $widget['actions']['ief_add_existing']['#value'];
-    $arguments = $markup->getArguments();
-    $widget['actions']['ief_add_existing']['#value'] = new TranslatableMarkup('Select an @type_singular', $arguments);
-    $widget['actions']['ief_add_existing']['#weight'] = 0;
-
-    // Modify the ief_add button.
-    /** @var \Drupal\Core\StringTranslation\TranslatableMarkup $markup */
-    $markup = $widget['actions']['ief_add']['#value'];
-    $arguments = $markup->getArguments();
-    $widget['actions']['ief_add']['#value'] = new TranslatableMarkup('Add a new @type_singular', $arguments);
-    $widget['actions']['ief_add']['#weight'] = 10;
   }
-  elseif (isset($widget['form']['actions']['ief_reference_save'])) {
-    $widget['actions']['#suffix'] = t('Browse the <a href = "/interoperable-europe-solutions" target="_blank">solutions</a> recommended by the <a href="/collection/governance-board" target="_blank">Interoperable Europe Board.</a>');
-  }
+
 }
 
 /**
