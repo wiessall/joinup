@@ -56,7 +56,7 @@ final class ApiExceptionSubscriber extends HttpExceptionSubscriberBase {
     // Only handle paths under the assessments API but exclude the base path
     // which presents the swagger file.
     $path = $request->getPathInfo();
-    if (!str_starts_with($path, '/api/assessments/') && trim($path, '/') !== 'api/assessments/v1') {
+    if (!str_starts_with($path, '/api/assessments/') || trim($path, '/') === 'api/assessments/v1') {
       return;
     }
 
