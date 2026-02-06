@@ -49,41 +49,51 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
   /**
    * Tests validation errors.
    *
+   * @param string $scenario
+   *   The scenario identifier.
+   *
    * @covers \Drupal\joinup_api\OpenApiSchemaValidator::validate
    * @covers \Drupal\assessments\Plugin\rest\resource\AssessmentReportResource
+   * @dataProvider providerTestValidation
    */
-  public function testValidation(): void {
+  public function testValidation(string $scenario): void {
     // Create testing files.
     file_put_contents("public://assessment-test/evil.exe", "qux");
     file_put_contents("public://assessment-test/fat.docx", str_repeat("x", 11000000));
     file_put_contents("public://assessment-test/" . str_repeat('very_', 48) . 'long_name.pdf', 'quxx');
 
-    ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('invalid_schema');
-    $response = $this->post($payload);
-    $this->assertSame(422, $response->getStatusCode());
-    $this->assertSame($expect, Json::decode($response->getBody()->getContents()));
-
-    ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('invalid_references');
-    $response = $this->post($payload);
-    $this->assertSame(422, $response->getStatusCode());
-    $this->assertSame($expect, Json::decode($response->getBody()->getContents()));
-
-    ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('invalid_country_for_eu_organisation');
-    $response = $this->post($payload);
-    $this->assertSame(422, $response->getStatusCode());
-    $this->assertSame($expect, Json::decode($response->getBody()->getContents()));
-
-    ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('invalid_missing_country_for_non_eu_organisation');
+    ['payload' => $payload, 'expect' => $expect] = $this->getTestCase($scenario);
     $response = $this->post($payload);
     $this->assertSame(422, $response->getStatusCode());
     $this->assertSame($expect, Json::decode($response->getBody()->getContents()));
   }
 
   /**
+   * Provides test scenarios for self::testValidation().
+   *
+   * @return iterable<string, list<string>>
+   *   List of scenarios.
+   *
+   * @see web/modules/custom/assessments/tests/fixture/test_cases.yml
+   */
+  public static function providerTestValidation(): iterable {
+    $scenarios = [
+      'Invalid schema',
+      'Invalid references',
+      'Missing country for a non-EU organisation',
+      'Trying to create an EU organisation',
+    ];
+
+    foreach ($scenarios as $scenario) {
+      yield $scenario => [$scenario];
+    }
+  }
+
+  /**
    * Tests that empty strings are rejected for mandatory string fields.
    */
   public function testEmptyStringsValidation(): void {
-    ['payload' => $payload] = $this->getTestCase('valid_optional_fields_omitted');
+    ['payload' => $payload] = $this->getTestCase('Valid with optional fields omitted');
 
     // Set all mandatory string fields to empty strings.
     $payload['name'] = '';
@@ -161,7 +171,7 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     // File for second binding requirement.
     file_put_contents("public://assessment-test/requirement3.pdf", "qux");
 
-    // Create a solution to be referred in report.
+    // Create a solution to be referred to in the report.
     $this->createNode([
       'type' => 'solution',
       'title' => 'Used in assessments',
@@ -173,7 +183,7 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
       'field_state' => 'published',
     ]);
 
-    ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('valid');
+    ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('Valid');
 
     // Add a second binding requirement with its own document to verify
     // documents are attached to the correct binding requirement delta.
@@ -304,7 +314,7 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
    * @dataProvider organisationDeduplicationProvider
    */
   public function testOrganisationDeduplication(string $variantName, int $expectedNewOrganisations): void {
-    ['payload' => $basePayload] = $this->getTestCase('valid_optional_fields_omitted');
+    ['payload' => $basePayload] = $this->getTestCase('Valid with optional fields omitted');
 
     // Submit the first report to create the initial organisation.
     $response = $this->post($basePayload);
@@ -361,15 +371,15 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
   /**
    * Data provider for testOrganisationDeduplication.
    *
-   * The base provider name in valid_optional_fields_omitted is
-   * "European Commission".
+   * The base provider name in Valid with optional fields omitted is
+   * "ACME Corp".
    *
    * @return array
    *   Test cases with variant name and expected new organisation count.
    */
   public static function organisationDeduplicationProvider(): array {
-    // Base name from valid_optional_fields_omitted test case.
-    $baseName = 'European Commission';
+    // Base name from Valid with optional fields omitted test case.
+    $baseName = 'ACME Corp';
 
     return [
       'uppercase' => [mb_strtoupper($baseName), 0],
@@ -381,26 +391,10 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
   }
 
   /**
-   * Returns the count of public organisation entities.
-   *
-   * @return int
-   *   The count of public organisations.
-   */
-  protected function countPublicOrganisations(): int {
-    return (int) \Drupal::entityTypeManager()
-      ->getStorage('assessment')
-      ->getQuery()
-      ->accessCheck(FALSE)
-      ->condition('type', 'public_organisation')
-      ->count()
-      ->execute();
-  }
-
-  /**
    * Tests posting a payload with optional fields omitted.
    */
   public function testValidPostWithOptionalFieldsOmitted(): void {
-    ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('valid_optional_fields_omitted');
+    ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('Valid with optional fields omitted');
 
     $response = $this->post($payload);
     $this->assertSame(201, $response->getStatusCode());
@@ -420,6 +414,47 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     // Cleanup.
     $report = \Drupal::service('entity.repository')->loadEntityByUuid('assessment', $data['id']);
     $this->markEntityForCleanup($report);
+  }
+
+  /**
+   * Tests that 401 errors return JSON response.
+   */
+  public function testUnauthorizedReturnsJson(): void {
+    $url = Url::fromUri('internal:/api/assessments/v1/assessment')
+      ->setAbsolute()
+      ->toString();
+
+    $response = \Drupal::httpClient()->post($url, [
+      RequestOptions::HTTP_ERRORS => FALSE,
+      RequestOptions::HEADERS => [
+        'Accept' => 'application/json',
+        'Content-Type' => 'application/json',
+        'Authorization' => 'Bearer invalid_token',
+      ],
+      RequestOptions::JSON => ['name' => 'Test'],
+    ]);
+
+    $this->assertSame(401, $response->getStatusCode());
+    $this->assertStringContainsString('application/json', $response->getHeaderLine('Content-Type'));
+    $data = Json::decode($response->getBody()->getContents());
+    $this->assertIsArray($data);
+    $this->assertArrayHasKey('error', $data);
+  }
+
+  /**
+   * Returns the count of public organisation entities.
+   *
+   * @return int
+   *   The count of public organisations.
+   */
+  protected function countPublicOrganisations(): int {
+    return (int) \Drupal::entityTypeManager()
+      ->getStorage('assessment')
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', 'public_organisation')
+      ->count()
+      ->execute();
   }
 
   /**
@@ -472,10 +507,14 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
    *   The test case.
    */
   protected function getTestCase(string $id): array {
-    $yaml = file_get_contents(__DIR__ . '/../../fixture/test_cases.yml');
-    // Replace environment dependent tokens.
-    $yaml = str_replace('__base_url__', $GLOBALS['base_url'], $yaml);
-    $data = Yaml::decode($yaml);
+    static $data;
+
+    if (!isset($data)) {
+      $yaml = file_get_contents(__DIR__ . '/../../fixture/test_cases.yml');
+      // Replace environment dependent tokens.
+      $yaml = str_replace('__base_url__', $GLOBALS['base_url'], $yaml);
+      $data = Yaml::decode($yaml);
+    }
 
     return $data[$id];
   }
