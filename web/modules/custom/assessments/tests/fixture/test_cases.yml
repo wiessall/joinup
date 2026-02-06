@@ -160,8 +160,7 @@ valid:
           - name: "Digital Monitoring Unit"
             thematic_area:
               - "digital_and_innovation_services"
-              - "health_and_wellbeing"
-              - "social_and_community_services"
+              - "education_and_research"
           - name: "Training Centre"
             thematic_area:
               - "education_and_research"
@@ -225,8 +224,7 @@ valid:
           - name: "Digital Monitoring Unit"
             thematic_area:
               - digital_and_innovation_services
-              - health_and_wellbeing
-              - social_and_community_services
+              - education_and_research
             country: []
           - name: "Training Centre"
             thematic_area:
