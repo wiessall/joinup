@@ -1,0 +1,625 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Drupal\assessments;
+
+use Drupal\Core\Entity\ContentEntityStorageInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\assessments\Entity\AssessmentReport;
+use Drupal\assessments\Entity\PublicOrganisation;
+use Drupal\paragraphs\ParagraphInterface;
+use Drupal\webform\WebformSubmissionInterface;
+use Psr\Log\LoggerInterface;
+
+/**
+ * Migrates webform assessment submissions into assessment report entities.
+ */
+class WebformSubmissionMigrator {
+
+  use ProvidedByHelperTrait;
+
+  /**
+   * Map of webform provider type labels to taxonomy identifiers.
+   */
+  protected const array PROVIDER_TYPE_MAP = [
+    'Local public sector body' => 'local_public_sector_body',
+    'Regional public sector body' => 'regional_public_sector_body',
+    'National public sector body' => 'national_public_sector_body',
+    'European Union institution' => 'european_union_institution',
+    'European Union agency' => 'european_union_agency',
+    'European Union body' => 'european_union_body',
+  ];
+
+  /**
+   * Map of webform thematic area labels to taxonomy identifiers.
+   */
+  protected const array THEMATIC_AREA_MAP = [
+    'Defense' => 'core_governance_and_administration',
+    'Economic affairs' => 'economy_and_employment',
+    'Education' => 'education_and_research',
+    'Environmental Protection' => 'environment_and_energy',
+    'General public services' => 'core_governance_and_administration',
+    'Health' => 'health_and_wellbeing',
+    'Housing and Community Amenities' => 'social_and_community_services',
+    'Public Order and Safety' => 'security_justice_and_emergency_services',
+    'Recreation, Culture, and Religion' => 'international_and_regional_cooperation',
+    'Social Protection' => 'social_and_community_services',
+  ];
+
+  /**
+   * Map of webform interpretation labels to taxonomy identifiers.
+   */
+  protected const array INTERPRETATION_MAP = [
+    'Beneficial' => 'positive',
+    'Negligible' => 'neutral',
+    'Risky' => 'negative',
+  ];
+
+  /**
+   * Map of webform participant type labels to taxonomy identifiers.
+   *
+   * Includes trailing-space variant found in webform config.
+   */
+  protected const array PARTICIPANT_TYPE_MAP = [
+    'Local public sector body' => 'local_public_sector_body',
+    'Regional public sector body' => 'regional_public_sector_body',
+    'National public sector body' => 'national_public_sector_body',
+    'European Union institution' => 'european_union_institution',
+    'European Union agency' => 'european_union_agency',
+    'European Union body' => 'european_union_body',
+    'Private Businesses' => 'private_businesses',
+    'Private Businesses ' => 'private_businesses',
+  ];
+
+  /**
+   * Assessment entity storage.
+   */
+  protected ContentEntityStorageInterface $assessmentStorage;
+
+  /**
+   * The logger.
+   */
+  protected readonly LoggerInterface $logger;
+
+  public function __construct(
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly AssessmentVocabularyHelper $vocabularyHelper,
+    protected readonly EntityRepositoryInterface $entityRepository,
+    LoggerChannelFactoryInterface $loggerFactory,
+  ) {
+    $this->logger = $loggerFactory->get('assessments');
+  }
+
+  /**
+   * Migrates all assessment webform submissions.
+   *
+   * @return array{migrated: int, failed: int}
+   *   Count of migrated and failed submissions.
+   */
+  public function migrateAll(): array {
+    $storage = $this->entityTypeManager->getStorage('webform_submission');
+    $ids = $storage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('webform_id', 'assessment')
+      ->sort('sid')
+      ->execute();
+
+    $migrated = 0;
+    $failed = 0;
+
+    foreach ($storage->loadMultiple($ids) as $submission) {
+      \assert($submission instanceof WebformSubmissionInterface);
+      try {
+        $this->migrateSubmission($submission);
+        $migrated++;
+        $this->logger->info('Migrated webform submission @sid.', [
+          '@sid' => $submission->id(),
+        ]);
+      }
+      catch (\Exception $e) {
+        $failed++;
+        $this->logger->error('Failed to migrate webform submission @sid: @error', [
+          '@sid' => $submission->id(),
+          '@error' => $e->getMessage(),
+        ]);
+      }
+    }
+
+    return ['migrated' => $migrated, 'failed' => $failed];
+  }
+
+  /**
+   * Migrates a single webform submission into an assessment report.
+   */
+  protected function migrateSubmission(WebformSubmissionInterface $submission): void {
+    $data = $submission->getData();
+
+    $provider = $this->createProvider($data);
+    $expressions = $this->createExpressions($data);
+    $publicServices = $this->createPublicServices($data);
+    $participations = $this->createParticipation($data);
+    $assets = $this->getAssets($data);
+    $bindingRequirements = $this->createBindingRequirements(
+      $data,
+      $expressions,
+      $publicServices,
+      $participations,
+      $assets,
+    );
+    $state = $submission->isDraft() ? 'draft' : 'published';
+
+    $reportValues = [
+      'type' => 'report',
+      'name' => $data['short_title'] ?? 'Untitled assessment',
+      'provider' => $provider,
+      'binding_requirement' => $bindingRequirements,
+      'state' => $state,
+      'uid' => $submission->getOwnerId(),
+    ];
+
+    // Relevant reports (only if "Yes").
+    if (($data['previous_assessments'] ?? '') === 'Yes') {
+      $links = [];
+      foreach ((array) ($data['reference_of_the_linked_assessment'] ?? []) as $reference) {
+        if (!empty($reference)) {
+          $links[] = ['uri' => $reference, 'title' => ''];
+        }
+      }
+      if ($links) {
+        $reportValues['relevant_report'] = $links;
+      }
+    }
+
+    // Remaining barriers (only if "Yes").
+    if (($data['remaining_barriers'] ?? '') === 'Yes' && !empty($data['remaining_barriers_description'])) {
+      $reportValues['remaining_barriers'] = [
+        'value' => $data['remaining_barriers_description'],
+        'format' => 'plain_text',
+      ];
+    }
+
+    // Other comment.
+    if (!empty($data['comments'])) {
+      $reportValues['other_comment'] = is_array($data['comments'])
+        ? ($data['comments']['value'] ?? '')
+        : $data['comments'];
+    }
+
+    // Documents.
+    $documentFids = (array) ($data['upload_assessment_documents'] ?? []);
+    if ($documentFids) {
+      $reportValues['documents'] = $this->loadFileEntities($documentFids);
+    }
+
+    $report = $this->getAssessmentStorage()->create($reportValues);
+    \assert($report instanceof AssessmentReport);
+
+    // Add statements.
+    $statementStorage = $this->entityTypeManager->getStorage('assessment_statement');
+    foreach (['legal', 'organisational', 'semantic', 'technical'] as $type) {
+      $statementData = $data["identified_effects_cross_border_{$type}"] ?? NULL;
+      if (empty($statementData)) {
+        continue;
+      }
+      $interpretation = $statementData['legal_options'] ?? NULL;
+      $judgement = $statementData['organisational_options'] ?? NULL;
+
+      if (empty($interpretation) && empty($judgement)) {
+        continue;
+      }
+
+      $statementValues = [
+        'type' => $type,
+      ];
+
+      if (!empty($interpretation) && isset(self::INTERPRETATION_MAP[$interpretation])) {
+        $statementValues['interpretation'] = $this->vocabularyHelper->getTermIdFromIdentifier(
+          'assess_statement_interpretation',
+          self::INTERPRETATION_MAP[$interpretation],
+        );
+      }
+
+      if (!empty($judgement)) {
+        $statementValues['judgement'] = $judgement;
+      }
+
+      $report->{$type} = $statementStorage->create($statementValues);
+    }
+
+    $report->save();
+  }
+
+  /**
+   * Creates or finds a provider public organisation.
+   *
+   * @return \Drupal\assessments\Entity\PublicOrganisation|int
+   *   The provider entity or its ID.
+   */
+  protected function createProvider(array $data): PublicOrganisation|int {
+    $typeLabel = $data['public_sector_body'] ?? '';
+    $typeIdentifier = self::PROVIDER_TYPE_MAP[$typeLabel] ?? NULL;
+
+    if (!$typeIdentifier) {
+      throw new \RuntimeException("Unknown provider type: '$typeLabel'");
+    }
+
+    $typeTid = $this->vocabularyHelper->getTermIdFromIdentifier('assess_provider_type', $typeIdentifier);
+    $name = $data['organisation'] ?? '';
+    $isEuropean = $this->isEuropeanOrganisationType($typeIdentifier);
+
+    $countryTid = NULL;
+    if (!$isEuropean && !empty($data['country'])) {
+      $countryTid = $this->vocabularyHelper->getTermIdFromIdentifier('spatial', $data['country'], 'name');
+    }
+
+    // Try to find an existing matching organisation.
+    $query = $this->getAssessmentStorage()->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', 'public_organisation')
+      ->condition('organisation_type', $typeTid);
+
+    if (!$isEuropean && $countryTid !== NULL) {
+      $query->condition('country', $countryTid);
+    }
+
+    $ids = $query->execute();
+    $existing = $this->findOrganisationByName($name, $ids);
+    if ($existing) {
+      return $existing;
+    }
+
+    // Create a new organisation.
+    $values = [
+      'type' => 'public_organisation',
+      'name' => $name,
+      'organisation_type' => $typeTid,
+      'status' => TRUE,
+      'uid' => 1,
+    ];
+
+    if ($countryTid !== NULL) {
+      $values['country'] = $countryTid;
+    }
+
+    $organisation = $this->getAssessmentStorage()->create($values);
+    \assert($organisation instanceof PublicOrganisation);
+
+    return $organisation;
+  }
+
+  /**
+   * Creates expression entities from webform data.
+   *
+   * @return list<\Drupal\assessments\AssessmentInterface>
+   *   Expression entities.
+   */
+  protected function createExpressions(array $data): array {
+    $expressions = [];
+
+    foreach ((array) ($data['initiatives'] ?? []) as $initiative) {
+      if (empty($initiative['initiative'])) {
+        continue;
+      }
+
+      $values = [
+        'type' => 'expression',
+        'initiative_name' => $initiative['initiative'],
+        'description' => [
+          'value' => $initiative['initiative'],
+          'format' => 'plain_text',
+        ],
+        'status' => TRUE,
+      ];
+
+      if (!empty($initiative['initiative_link'])) {
+        $values['documented_in'] = [
+          'uri' => $initiative['initiative_link'],
+          'title' => '',
+        ];
+      }
+
+      $expressions[] = $this->getAssessmentStorage()->create($values);
+    }
+
+    return $expressions;
+  }
+
+  /**
+   * Creates public service entities from webform data.
+   *
+   * @return list<\Drupal\assessments\AssessmentInterface>
+   *   Public service entities.
+   */
+  protected function createPublicServices(array $data): array {
+    $serviceNames = array_filter((array) ($data['trans_european_digital_public_service_concerned'] ?? []));
+    if (empty($serviceNames)) {
+      return [];
+    }
+
+    // Resolve thematic areas.
+    $thematicAreaTids = [];
+    $selectedAreas = array_filter((array) ($data['concerned_application_domain_sector'] ?? []));
+    $mappedIdentifiers = [];
+    foreach ($selectedAreas as $areaLabel) {
+      $identifier = self::THEMATIC_AREA_MAP[$areaLabel] ?? NULL;
+      if ($identifier && !in_array($identifier, $mappedIdentifiers, TRUE)) {
+        $mappedIdentifiers[] = $identifier;
+        $thematicAreaTids[] = $this->vocabularyHelper->getTermIdFromIdentifier('assess_public_service_area', $identifier);
+      }
+    }
+
+    // Resolve countries from geographical_origin.
+    $countryTids = $this->resolveGeographicalOriginCountries($data);
+
+    $services = [];
+    foreach ($serviceNames as $serviceName) {
+      $services[] = $this->getAssessmentStorage()->create([
+        'type' => 'public_service',
+        'name' => $serviceName,
+        'thematic_area' => $thematicAreaTids,
+        'countries' => $countryTids,
+        'status' => TRUE,
+      ]);
+    }
+
+    return $services;
+  }
+
+  /**
+   * Creates participation entities from webform data.
+   *
+   * @return list<\Drupal\assessments\AssessmentInterface>
+   *   Participation entities.
+   */
+  protected function createParticipation(array $data): array {
+    // Resolve participant types.
+    $participantTypeTids = [];
+    $selectedTypes = array_filter((array) ($data['data_processed_by'] ?? []));
+    foreach ($selectedTypes as $typeLabel) {
+      $typeLabel = trim($typeLabel);
+      $identifier = self::PARTICIPANT_TYPE_MAP[$typeLabel] ?? NULL;
+      if ($identifier) {
+        $participantTypeTids[] = $this->vocabularyHelper->getTermIdFromIdentifier('assess_participant_type', $identifier);
+      }
+    }
+
+    if (empty($participantTypeTids)) {
+      return [];
+    }
+
+    // Resolve stakeholder countries from geographical_origin.
+    $countryTids = $this->resolveGeographicalOriginCountries($data);
+
+    $participationValues = [
+      'type' => 'participation',
+      'participant_type' => $participantTypeTids,
+      'stakeholder_country' => $countryTids,
+      'status' => TRUE,
+    ];
+
+    // Check for "All EU" in geographical origins.
+    $hasAllEu = FALSE;
+    foreach ((array) ($data['geographical_origin'] ?? []) as $item) {
+      if (($item['geographical_origin'] ?? '') === 'All EU') {
+        $hasAllEu = TRUE;
+        break;
+      }
+    }
+
+    if ($hasAllEu) {
+      $participationValues['eu_countries'] = TRUE;
+    }
+
+    return [$this->getAssessmentStorage()->create($participationValues)];
+  }
+
+  /**
+   * Loads existing solution node entities referenced in the webform.
+   *
+   * @return list<\Drupal\joinup_solution\Entity\SolutionInterface>
+   *   Solution entities.
+   */
+  protected function getAssets(array $data): array {
+    $nodeStorage = $this->entityTypeManager->getStorage('node');
+    $assets = [];
+
+    // Portal solutions (entity autocomplete references by nid).
+    foreach ((array) ($data['portal_solutions'] ?? []) as $nid) {
+      if (empty($nid)) {
+        continue;
+      }
+      $solution = $nodeStorage->load($nid);
+      if ($solution) {
+        $assets[] = $solution;
+      }
+    }
+
+    // External solution links → create new solution nodes.
+    foreach ((array) ($data['portal_solutions_link'] ?? []) as $linkData) {
+      if (empty($linkData['title']) && empty($linkData['url'])) {
+        continue;
+      }
+
+      $title = !empty($linkData['title']) ? $linkData['title'] : ($linkData['url'] ?? 'Untitled solution');
+      $solutionCollector = $this->entityRepository->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR);
+
+      $solution = $nodeStorage->create([
+        'type' => 'solution',
+        'title' => $title,
+        'og_audience' => $solutionCollector,
+        'landing_page' => $linkData['url'] ?? '',
+        'field_state' => 'draft',
+      ]);
+      $solution->save();
+      $assets[] = $solution;
+    }
+
+    return $assets;
+  }
+
+  /**
+   * Creates binding requirement paragraphs.
+   *
+   * @return list<\Drupal\paragraphs\ParagraphInterface>
+   *   Binding requirement paragraphs.
+   */
+  protected function createBindingRequirements(
+    array $data,
+    array $expressions,
+    array $publicServices,
+    array $participations,
+    array $assets,
+  ): array {
+    $paragraphStorage = $this->entityTypeManager->getStorage('paragraph');
+    $bindingRequirements = (array) ($data['binding_requirement_assessed'] ?? []);
+
+    if (empty($bindingRequirements)) {
+      // Create a single binding requirement with all shared entities.
+      $paragraph = $paragraphStorage->create([
+        'type' => 'binding_requirement',
+        'description' => [
+          'value' => 'Migrated from webform submission',
+          'format' => 'plain_text',
+        ],
+        'expression' => $expressions,
+        'affects' => $publicServices,
+        'has_participation' => $participations,
+        'asset' => $assets,
+      ]);
+      \assert($paragraph instanceof ParagraphInterface);
+
+      // Binding requirement documents.
+      $docFids = (array) ($data['binding_requirement_documents'] ?? []);
+      if ($docFids) {
+        $paragraph->set('requirement_documents', $this->loadFileEntities($docFids));
+      }
+
+      return [$paragraph];
+    }
+
+    $paragraphs = [];
+    foreach ($bindingRequirements as $requirement) {
+      $values = [
+        'type' => 'binding_requirement',
+        'expression' => $expressions,
+        'affects' => $publicServices,
+        'has_participation' => $participations,
+        'asset' => $assets,
+      ];
+
+      // Description.
+      $description = $requirement['description_1'] ?? '';
+      $values['description'] = [
+        'value' => !empty($description) ? $description : 'Migrated from webform submission',
+        'format' => 'plain_text',
+      ];
+
+      // Legal reference as documented_in link.
+      if (!empty($requirement['legal_reference'])) {
+        $values['documented_in'] = [
+          'uri' => $requirement['legal_reference'],
+          'title' => '',
+        ];
+      }
+
+      $paragraph = $paragraphStorage->create($values);
+      \assert($paragraph instanceof ParagraphInterface);
+
+      // Binding requirement documents (shared across all requirements).
+      $docFids = (array) ($data['binding_requirement_documents'] ?? []);
+      if ($docFids) {
+        $paragraph->set('requirement_documents', $this->loadFileEntities($docFids));
+      }
+
+      $paragraphs[] = $paragraph;
+    }
+
+    return $paragraphs;
+  }
+
+  /**
+   * Resolves geographical_origin composite field to country term IDs.
+   *
+   * @return list<string>
+   *   Country term IDs.
+   */
+  protected function resolveGeographicalOriginCountries(array $data): array {
+    $countryTids = [];
+    $seen = [];
+
+    foreach ((array) ($data['geographical_origin'] ?? []) as $item) {
+      $countryName = $item['geographical_origin'] ?? '';
+      if (empty($countryName) || isset($seen[$countryName])) {
+        continue;
+      }
+      $seen[$countryName] = TRUE;
+
+      if ($countryName === 'All EU') {
+        // Use the EU spatial term UUID constant.
+        $term = $this->entityRepository->loadEntityByUuid('taxonomy_term', AssessmentInterface::EU_COUNTRY_TERM);
+        if ($term) {
+          $countryTids[] = $term->id();
+        }
+        continue;
+      }
+
+      try {
+        $countryTids[] = $this->vocabularyHelper->getTermIdFromIdentifier('spatial', $countryName, 'name');
+      }
+      catch (\InvalidArgumentException $e) {
+        $this->logger->warning('Could not resolve country "@name": @error', [
+          '@name' => $countryName,
+          '@error' => $e->getMessage(),
+        ]);
+      }
+    }
+
+    return $countryTids;
+  }
+
+  /**
+   * Loads file entities from an array of file IDs.
+   *
+   * @return list<\Drupal\file\FileInterface>
+   *   File entities.
+   */
+  protected function loadFileEntities(array $fids): array {
+    $fileStorage = $this->entityTypeManager->getStorage('file');
+    $files = [];
+
+    foreach ($fids as $fid) {
+      if (empty($fid)) {
+        continue;
+      }
+      $file = $fileStorage->load($fid);
+      if ($file) {
+        $files[] = $file;
+      }
+    }
+
+    return $files;
+  }
+
+  /**
+   * Returns and statically caches the assessment entity storage.
+   */
+  protected function getAssessmentStorage(): ContentEntityStorageInterface {
+    if (!isset($this->assessmentStorage)) {
+      $storage = $this->entityTypeManager->getStorage('assessment');
+      \assert($storage instanceof ContentEntityStorageInterface);
+      $this->assessmentStorage = $storage;
+    }
+    return $this->assessmentStorage;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getProvidedByAssessmentStorage(): ContentEntityStorageInterface {
+    return $this->getAssessmentStorage();
+  }
+
+}
