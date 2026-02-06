@@ -158,6 +158,8 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     file_put_contents("public://assessment-test/report.pdf", "foo");
     file_put_contents("public://assessment-test/requirement1.pdf", "bar");
     file_put_contents("public://assessment-test/requirement2.pdf", "baz");
+    // File for second binding requirement.
+    file_put_contents("public://assessment-test/requirement3.pdf", "qux");
 
     // Create a solution to be referred in report.
     $this->createNode([
@@ -172,6 +174,33 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     ]);
 
     ['payload' => $payload, 'expect' => $expect] = $this->getTestCase('valid');
+
+    // Add a second binding requirement with its own document to verify
+    // documents are attached to the correct binding requirement delta.
+    $request = \Drupal::request();
+    $baseUrl = $request->getSchemeAndHttpHost();
+    $payload['binding_requirement'][] = [
+      'expression' => [
+        ['name' => 'Second Legal Act', 'description' => 'Another expression'],
+      ],
+      'description' => 'Second binding requirement',
+      'documents' => ["$baseUrl/sites/default/files/assessment-test/requirement3.pdf"],
+      'affects' => [
+        ['name' => 'Another Service'],
+      ],
+    ];
+    $expect['binding_requirement'][] = [
+      'expression' => [
+        ['name' => 'Second Legal Act', 'description' => 'Another expression', 'documented_in' => NULL],
+      ],
+      'description' => 'Second binding requirement',
+      'documents' => ["$baseUrl/sites/default/files/assessments/report/requirement3.pdf"],
+      'affects' => [
+        ['name' => 'Another Service', 'thematic_area' => [], 'country' => []],
+      ],
+      'has_participation' => [],
+      'asset' => [],
+    ];
 
     $response = $this->post($payload);
     $data = Json::decode($response->getBody()->getContents());
@@ -207,8 +236,14 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     $provider = $report->get('provider')->entity;
     $this->assertTrue($provider->isPublished(), 'Provider (public organisation) should be published');
 
+    // Verify documents are attached to the correct binding requirement.
+    // First binding requirement should have 2 documents, second should have 1.
+    $requirements = $report->get('binding_requirement')->referencedEntities();
+    $this->assertCount(2, $requirements[0]->get('requirement_documents'), 'First binding requirement should have 2 documents');
+    $this->assertCount(1, $requirements[1]->get('requirement_documents'), 'Second binding requirement should have 1 document');
+
     // Verify binding requirement paragraph and its referenced entities.
-    foreach ($report->get('binding_requirement')->referencedEntities() as $requirement) {
+    foreach ($requirements as $requirement) {
       // Verify expression entities are published.
       foreach ($requirement->get('expression')->referencedEntities() as $expression) {
         $this->assertTrue($expression->isPublished(), 'Expression entity should be published');
