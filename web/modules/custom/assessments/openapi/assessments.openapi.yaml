@@ -802,45 +802,6 @@ components:
           type: string
           description: The personal opinion on the report.
 
-    # Generic reusable types
-
-    EuropeanUnionCountry:
-      type: string
-      nullable: true
-      description: ISO-3166 alpha-2 country code
-      enum:
-        - AT  # Austria
-        - BE  # Belgium
-        - BG  # Bulgaria
-        - HR  # Croatia
-        - CY  # Cyprus
-        - CZ  # Czechia
-        - DK  # Denmark
-        - EE  # Estonia
-        - FI  # Finland
-        - FR  # France
-        - DE  # Germany
-        - GR  # Greece
-        - HU  # Hungary
-        - IE  # Ireland
-        - IT  # Italy
-        - LV  # Latvia
-        - LT  # Lithuania
-        - LU  # Luxembourg
-        - MT  # Malta
-        - NL  # Netherlands
-        - PL  # Poland
-        - PT  # Portugal
-        - RO  # Romania
-        - SK  # Slovakia
-        - SI  # Slovenia
-        - ES  # Spain
-        - SE  # Sweden
-
-    UUID:
-      type: string
-      pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
-
     # Pagination wrapper schemas
 
     Pager:
@@ -944,6 +905,41 @@ components:
         pager:
           $ref: '#/components/schemas/Pager'
 
+    # Generic reusable types
+
+    EuropeanUnionCountry:
+      type: string
+      nullable: true
+      description: ISO-3166 alpha-2 country code
+      enum:
+        - AT  # Austria
+        - BE  # Belgium
+        - BG  # Bulgaria
+        - HR  # Croatia
+        - CY  # Cyprus
+        - CZ  # Czechia
+        - DK  # Denmark
+        - EE  # Estonia
+        - FI  # Finland
+        - FR  # France
+        - DE  # Germany
+        - GR  # Greece
+        - HU  # Hungary
+        - IE  # Ireland
+        - IT  # Italy
+        - LV  # Latvia
+        - LT  # Lithuania
+        - LU  # Luxembourg
+        - MT  # Malta
+        - NL  # Netherlands
+        - PL  # Poland
+        - PT  # Portugal
+        - RO  # Romania
+        - SK  # Slovakia
+        - SI  # Slovenia
+        - ES  # Spain
+        - SE  # Sweden
+
     EuropeanUnionLanguage:
       type: string
       enum:
@@ -971,3 +967,7 @@ components:
         - sk  # Slovak
         - sl  # Slovenian
         - sv  # Swedish
+
+    UUID:
+      type: string
+      pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
