@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity;
 
+use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
-use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 
@@ -67,41 +67,53 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
       return;
     }
 
-    // Collect unpublished child entities that need to be published.
+    // Collect unpublished child entities that need to be published, keyed by
+    // entity ID to avoid duplicates.
     $entitiesToPublish = [];
-    $assetsToPublish = [];
 
     // Collect unpublished providers.
-    $providerEntities = array_filter($this->get('provider')->referencedEntities(), fn(AssessmentInterface $entity): bool => !$entity->isPublished());
-    $entitiesToPublish = array_merge($entitiesToPublish, $providerEntities);
+    $this->collectUnpublished($entitiesToPublish, $this->get('provider')->referencedEntities());
 
     // Binding requirements are paragraphs. There is nothing to publish there,
     // but we need to go through them to get to other entities.
-    $bindingRequirementEntities = $this->get('binding_requirement')->referencedEntities();
-    foreach ($bindingRequirementEntities as $bindingRequirementEntity) {
-      $expressions = array_filter($bindingRequirementEntity->get('expression')->referencedEntities(), fn(AssessmentInterface $entity): bool => !$entity->isPublished());
-      $entitiesToPublish = array_merge($entitiesToPublish, $expressions);
-
-      $assets = array_filter($bindingRequirementEntity->get('asset')->referencedEntities(), fn(SolutionInterface $entity): bool => $entity->getGroup()->uuid() === AssessmentInterface::SOLUTION_COLLECTOR && !$entity->isPublished());
-      $assetsToPublish = array_merge($assetsToPublish, $assets);
-
-      $publicServices = array_filter($bindingRequirementEntity->get('affects')->referencedEntities(), fn(AssessmentInterface $entity): bool => !$entity->isPublished());
-      $entitiesToPublish = array_merge($entitiesToPublish, $publicServices);
-
-      $participations = array_filter($bindingRequirementEntity->get('has_participation')->referencedEntities(), fn(AssessmentInterface $entity): bool => !$entity->isPublished());
-      $entitiesToPublish = array_merge($entitiesToPublish, $participations);
+    foreach ($this->get('binding_requirement')->referencedEntities() as $bindingRequirementEntity) {
+      $this->collectUnpublished($entitiesToPublish, $bindingRequirementEntity->get('expression')->referencedEntities());
+      foreach ($bindingRequirementEntity->get('asset')->referencedEntities() as $entity) {
+        if ($entity->getGroup()->uuid() === AssessmentInterface::SOLUTION_COLLECTOR && !$entity->isPublished()) {
+          $entitiesToPublish[$entity->id()] = $entity;
+        }
+      }
+      $this->collectUnpublished($entitiesToPublish, $bindingRequirementEntity->get('affects')->referencedEntities());
+      $this->collectUnpublished($entitiesToPublish, $bindingRequirementEntity->get('has_participation')->referencedEntities());
     }
 
     // Publish the collected entities.
     foreach ($entitiesToPublish as $entity) {
-      $entity->setPublished();
+      if ($entity instanceof EntityWorkflowStateInterface) {
+        $entity->setWorkflowState('published');
+      }
+      elseif ($entity instanceof EntityPublishedInterface) {
+        $entity->setPublished();
+      }
+
+      $entity->skip_notification = TRUE;
       $entity->save();
     }
+  }
 
-    foreach ($assetsToPublish as $asset) {
-      $asset->setWorkflowState('published');
-      $asset->skip_notification = TRUE;
-      $asset->save();
+  /**
+   * Collects unpublished entities into the given array, keyed by entity ID.
+   *
+   * @param \Drupal\Core\Entity\EntityPublishedInterface[] $collect
+   *   The array to collect into, passed by reference.
+   * @param \Drupal\Core\Entity\EntityPublishedInterface[] $entities
+   *   The entities to filter.
+   */
+  protected function collectUnpublished(array &$collect, array $entities): void {
+    foreach ($entities as $entity) {
+      if (!$entity->isPublished()) {
+        $collect[$entity->id()] = $entity;
+      }
     }
   }
 
