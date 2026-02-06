@@ -1,0 +1,14 @@
+uuid: 6e8bd261-8d46-4661-8129-32107898ab5e
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.assess_participant_type
+id: taxonomy_vocabulary_assess_participant_type
+entity_type_id: taxonomy_vocabulary
+entity_id: assess_participant_type
+action: access_denied
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

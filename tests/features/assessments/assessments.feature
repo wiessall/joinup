@@ -202,10 +202,17 @@ Feature: Assessment Report Entity Management
     # The 323-char initiative_name gets copied to the name field and truncated to 255 chars by the presave hook
     Then the "expression" assessment with name "Comprehensive Overview and Strategic Analysis of System Architecture, Functional Requirements, Operational Constraints, Governance Models, Security and Compliance Requirements, Performance Optimization, and Long-Term Maintainability Considerations for Sca" should exist
 
-  Scenario: Check taxonomy term page canonical access
-    # Check access restrictions applied by rabbit_hole.
-    When I go to the "Beneficial" assess_statement_interpretation term page
+  Scenario Outline: Check taxonomy term canonical page access restrictions (applied by rabbit_hole)
+    When I go to the "<label>" <vocabulary> term page
     Then I should see the heading "Sign in to continue"
     When I am logged in as an "authenticated user"
-    When I go to the "Beneficial" assess_statement_interpretation term page
+    When I go to the "<label>" <vocabulary> term page
     Then the response status code should be 403
+
+    Examples:
+      | vocabulary                      | label                              |
+      | assess_statement_interpretation | Beneficial                         |
+      | assess_participant_type         | Local public sector body           |
+      | assess_provider_type            | European Union institution         |
+      | assess_public_service_area      | Core governance and administration |
+      | assess_statement_type           | Legal                              |

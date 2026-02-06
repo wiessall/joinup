@@ -1,0 +1,14 @@
+uuid: 1f84c0b1-620a-4575-9444-623bf314fedd
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.assess_public_service_area
+id: taxonomy_vocabulary_assess_public_service_area
+entity_type_id: taxonomy_vocabulary
+entity_id: assess_public_service_area
+action: access_denied
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied
