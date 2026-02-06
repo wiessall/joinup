@@ -1,11 +1,11 @@
 diff --git a/core/lib/Drupal/Core/Routing/UrlGenerator.php b/core/lib/Drupal/Core/Routing/UrlGenerator.php
-index 49613536..2304716e 100644
+index bf224d90880eda472745227b42e63599a78d17de..c9f1c644dfc32c037f61d3e54240e5823bc50e45 100644
 --- a/core/lib/Drupal/Core/Routing/UrlGenerator.php
 +++ b/core/lib/Drupal/Core/Routing/UrlGenerator.php
-@@ -204,12 +204,17 @@ protected function doGenerate(array $variables, array $defaults, array $tokens,
+@@ -218,12 +218,17 @@ protected function doGenerate(array $variables, array $defaults, array $tokens,
        if ('variable' === $token[0]) {
          if (!$optional || !array_key_exists($token[3], $defaults) || (isset($mergedParams[$token[3]]) && (string) $mergedParams[$token[3]] !== (string) $defaults[$token[3]])) {
-           // Check requirement
+           // Check requirement.
 -          if (!preg_match('#^' . $token[2] . '$#', $mergedParams[$token[3]])) {
 -            $message = sprintf('Parameter "%s" for route "%s" must match "%s" ("%s" given) to generate a corresponding URL.', $token[3], $name, $token[2], $mergedParams[$token[3]]);
 -            throw new InvalidParameterException($message);
@@ -15,12 +15,12 @@ index 49613536..2304716e 100644
 +              throw new InvalidParameterException($message);
 +            }
 +            $url = $token[1] . $mergedParams[$token[3]] . $url;
-           }
++          }
 +          else {
 +            $url = $token[1] . $url;
-
+           }
+ 
 -          $url = $token[1] . $mergedParams[$token[3]] . $url;
-+          }
            $optional = FALSE;
          }
        }
