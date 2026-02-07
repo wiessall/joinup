@@ -80,7 +80,7 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
       $this->collectUnpublished($entitiesToPublish, $bindingRequirementEntity->get('expression')->referencedEntities());
       foreach ($bindingRequirementEntity->get('asset')->referencedEntities() as $entity) {
         if ($entity->getGroup()->uuid() === AssessmentInterface::SOLUTION_COLLECTOR && !$entity->isPublished()) {
-          $entitiesToPublish[$entity->id()] = $entity;
+          $entitiesToPublish[$entity->uuid()] = $entity;
         }
       }
       $this->collectUnpublished($entitiesToPublish, $bindingRequirementEntity->get('affects')->referencedEntities());
@@ -112,7 +112,7 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
   protected function collectUnpublished(array &$collect, array $entities): void {
     foreach ($entities as $entity) {
       if (!$entity->isPublished()) {
-        $collect[$entity->id()] = $entity;
+        $collect[$entity->uuid()] = $entity;
       }
     }
   }
