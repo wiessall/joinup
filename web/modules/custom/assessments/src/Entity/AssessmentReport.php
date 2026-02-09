@@ -105,5 +105,4 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
     return $result;
   }
 
-
 }
