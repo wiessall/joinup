@@ -218,3 +218,32 @@ Feature: Assessment Report Entity Management
       | assess_provider_type            | European Union institution         |
       | assess_public_service_area      | Core governance and administration |
       | assess_statement_type           | Legal                              |
+
+  Scenario: Check assessment canonical page restrictions
+    Given I am logged in as an "authenticated user"
+
+    Given "report" assessment:
+      | name     | state     |
+      | Report 1 | published |
+    When I go to the "Report 1" "report" assessment page
+    Then the response status code should be 200
+    Given "participation" assessment:
+      | name          |
+      | Stakeholder 1 |
+    When I go to the "Stakeholder 1" "participation" assessment page
+    Then the response status code should be 404
+    Given "public_service" assessment:
+      | name             |
+      | Public Service 1 |
+    When I go to the "Public Service 1" "public_service" assessment page
+    Then the response status code should be 404
+    Given "public_organisation" assessment:
+      | name                  |
+      | Public Organisation 1 |
+    When I go to the "Public Organisation 1" "public_organisation" assessment page
+    Then the response status code should be 404
+    And "expression" assessment:
+      | initiative_name |
+      | Expression 1    |
+    When I go to the "Expression 1" "expression" assessment page
+    Then the response status code should be 404
