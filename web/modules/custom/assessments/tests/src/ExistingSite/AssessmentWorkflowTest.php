@@ -139,6 +139,142 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
   }
 
   /**
+   * Tests that directly creating a published report publishes related entities.
+   *
+   * This tests the scenario where a report is created with status=TRUE from
+   * the start, rather than first creating it as unpublished and then updating.
+   *
+   * @covers \Drupal\assessments\Entity\AssessmentReport::postSave
+   */
+  public function testDirectlyPublishingReportPublishesRelatedEntities(): void {
+    $bindingRequirement = $this->createParagraphBindingRequirement();
+    $organisation = $this->createAssessmentOrganisation();
+
+    // Verify the organisation is unpublished before we create the report.
+    $this->assertFalse($organisation->isPublished(), 'Organisation should be unpublished initially.');
+
+    // Create a report that is published directly (status=TRUE on creation).
+    /** @var \Drupal\assessments\Entity\AssessmentReport $report */
+    $report = Assessment::create([
+      'type' => 'report',
+      'name' => 'Directly Published Report',
+      'state' => 'published',
+      'binding_requirement' => ['entity' => $bindingRequirement],
+      'provider' => ['entity' => $organisation],
+      'status' => TRUE,
+    ]);
+    $this->markEntityForCleanup($report);
+    $report->save();
+
+    // Reload the binding requirement paragraph to get the sub-entities.
+    $bindingRequirement = $report->get('binding_requirement')->entity;
+    \assert($bindingRequirement instanceof ParagraphInterface);
+
+    $expression = $bindingRequirement->get('expression')->entity;
+    $publicService = $bindingRequirement->get('affects')->entity;
+    $participation = $bindingRequirement->get('has_participation')->entity;
+    $organisation = $report->get('provider')->entity;
+    $asset = $bindingRequirement->get('asset')->entity;
+
+    // Assert that the report is published.
+    $this->assertTrue($report->isPublished(), 'Report should be published.');
+    $this->assertEquals('published', $report->getWorkflowState(), 'Report workflow state should be published.');
+
+    // Assert that all related entities are also published immediately.
+    $this->assertTrue($expression->isPublished(), 'Expression should be published when report is created as published.');
+    $this->assertTrue($publicService->isPublished(), 'Public service should be published when report is created as published.');
+    $this->assertTrue($participation->isPublished(), 'Participation should be published when report is created as published.');
+    $this->assertTrue($organisation->isPublished(), 'Organisation should be published when report is created as published.');
+    $this->assertTrue($asset->isPublished(), 'Asset should be published when report is created as published.');
+  }
+
+  /**
+   * Tests adding new children to an already published report.
+   *
+   * When a published report is updated to add new binding requirements with
+   * new child entities (expression, public_service, participation), those
+   * children should be published when the report is saved.
+   *
+   * @covers \Drupal\assessments\Entity\AssessmentReport::postSave
+   */
+  public function testAddingChildrenToPublishedReportPublishesThem(): void {
+    $bindingRequirement = $this->createParagraphBindingRequirement();
+    $organisation = $this->createAssessmentOrganisation();
+
+    // Create a published report.
+    /** @var \Drupal\assessments\Entity\AssessmentReport $report */
+    $report = Assessment::create([
+      'type' => 'report',
+      'name' => 'Published Report for Child Addition Test',
+      'state' => 'published',
+      'binding_requirement' => ['entity' => $bindingRequirement],
+      'provider' => ['entity' => $organisation],
+      'status' => TRUE,
+    ]);
+    $this->markEntityForCleanup($report);
+    $report->save();
+
+    // Verify the report is published.
+    $this->assertTrue($report->isPublished(), 'Report should be published.');
+
+    // Create a new binding requirement with new child entities.
+    $newExpression = Assessment::create([
+      'type' => 'expression',
+      'description' => ['value' => $this->randomString()],
+      'documented_in' => ['uri' => 'https://interoperable-europe.ec.europa.eu/new'],
+    ]);
+    $this->markEntityForCleanup($newExpression);
+
+    $newPublicService = Assessment::create([
+      'type' => 'public_service',
+      'thematic_area' => ['entity' => $this->assessmentVocabularyHelper->getTermFromIdentifier('assess_public_service_area', 'core_governance_and_administration')],
+    ]);
+    $this->markEntityForCleanup($newPublicService);
+
+    $newParticipation = Assessment::create([
+      'type' => 'participation',
+      'participant_type' => ['entity' => $this->assessmentVocabularyHelper->getTermFromIdentifier('assess_participant_type', 'european_union_agency')],
+    ]);
+    $this->markEntityForCleanup($newParticipation);
+
+    $newBindingRequirement = Paragraph::create([
+      'type' => 'binding_requirement',
+      'description' => ['value' => $this->randomString()],
+      'documented_in' => ['uri' => 'https://interoperable-europe.ec.europa.eu/new'],
+      'expression' => ['entity' => $newExpression],
+      'affects' => ['entity' => $newPublicService],
+      'has_participation' => ['entity' => $newParticipation],
+    ]);
+    $this->markEntityForCleanup($newBindingRequirement);
+
+    // Verify the new children are unpublished before adding to the report.
+    $this->assertFalse($newExpression->isPublished(), 'New expression should be unpublished initially.');
+    $this->assertFalse($newPublicService->isPublished(), 'New public service should be unpublished initially.');
+    $this->assertFalse($newParticipation->isPublished(), 'New participation should be unpublished initially.');
+
+    // Add the new binding requirement to the published report.
+    $existingBindingRequirements = $report->get('binding_requirement')->getValue();
+    $existingBindingRequirements[] = ['entity' => $newBindingRequirement];
+    $report->set('binding_requirement', $existingBindingRequirements);
+    $report->save();
+
+    // Reload the new binding requirement to get the updated child entities.
+    $report = Assessment::load($report->id());
+    $bindingRequirements = $report->get('binding_requirement')->referencedEntities();
+    $newBindingRequirement = end($bindingRequirements);
+    \assert($newBindingRequirement instanceof ParagraphInterface);
+
+    $newExpression = $newBindingRequirement->get('expression')->entity;
+    $newPublicService = $newBindingRequirement->get('affects')->entity;
+    $newParticipation = $newBindingRequirement->get('has_participation')->entity;
+
+    // Assert that the new children are now published.
+    $this->assertTrue($newExpression->isPublished(), 'New expression should be published after adding to published report.');
+    $this->assertTrue($newPublicService->isPublished(), 'New public service should be published after adding to published report.');
+    $this->assertTrue($newParticipation->isPublished(), 'New participation should be published after adding to published report.');
+  }
+
+  /**
    * Creates a binding requirement paragraph with all dependencies.
    *
    * @return \Drupal\paragraphs\ParagraphInterface
