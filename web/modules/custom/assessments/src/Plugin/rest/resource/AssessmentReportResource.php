@@ -239,6 +239,7 @@ class AssessmentReportResource extends ResourceBase {
       $bindingRequirements[] = [
         'expression' => $expressions,
         'description' => $requirement->get('description')->value,
+        'documented_in' => $requirement->get('documented_in')->uri,
         'documents' => $this->fileUrls($requirement->get('requirement_documents')),
         'affects' => $affects,
         'has_participation' => $hasParticipation,
@@ -428,6 +429,7 @@ class AssessmentReportResource extends ResourceBase {
         'type' => 'binding_requirement',
         'expression' => $this->createExpressions($requirement['expression']),
         'description' => $this->buildFormattedText($requirement, 'description'),
+        'documented_in' => $requirement['documented_in'] ?? NULL,
         'affects' => $this->createPublicServices($requirement['affects'], $path),
         'has_participation' => $this->createParticipation($requirement['has_participation'] ?? [], $path),
         'asset' => $this->getAssets($requirement['asset'] ?? [], $path),
@@ -670,11 +672,34 @@ class AssessmentReportResource extends ResourceBase {
     $file = $result->getFile();
 
     // Attach the file entity to the report.
-    // @todo Find a more elegant way.
     match($entityTypeId) {
       'assessment' => $report->get('documents')->appendItem($file),
-      'paragraph' => $report->get('binding_requirement')->entity->get('requirement_documents')->appendItem($file),
+      'paragraph' => $this->attachFileToParagraph($report, $path, $fieldName, $file),
     };
+  }
+
+  /**
+   * Attaches a file to the correct binding requirement paragraph.
+   *
+   * @param \Drupal\assessments\Entity\AssessmentReport $report
+   *   The assessment report entity.
+   * @param string $path
+   *   The path from the payload (e.g., "/binding_requirement/1/documents/0").
+   * @param string $fieldName
+   *   The field name to attach the file to.
+   * @param \Drupal\file\FileInterface $file
+   *   The file entity to attach.
+   */
+  protected function attachFileToParagraph(AssessmentReport $report, string $path, string $fieldName, FileInterface $file): void {
+    // Extract the binding requirement delta from the path.
+    // Path format: /binding_requirement/{delta}/documents/{docIndex}.
+    if (preg_match('#^/binding_requirement/(\d+)/#', $path, $matches)) {
+      $delta = (int) $matches[1];
+      $bindingRequirements = $report->get('binding_requirement');
+      if (isset($bindingRequirements[$delta])) {
+        $bindingRequirements[$delta]->entity->get($fieldName)->appendItem($file);
+      }
+    }
   }
 
   /**

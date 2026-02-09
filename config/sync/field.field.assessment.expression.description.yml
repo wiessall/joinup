@@ -23,7 +23,7 @@ entity_type: assessment
 bundle: expression
 label: Description
 description: ''
-required: false
+required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''
