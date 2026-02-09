@@ -152,6 +152,7 @@ valid:
             description: "Reference to an EU legal expression"
             documented_in: "https://example.com/eli/act"
         description: "Article 5"
+        documented_in: "https://example.com/eli/act"
         documents:
           - '__base_url__/sites/default/files/assessment-test/requirement1.pdf'
           - '__base_url__/sites/default/files/assessment-test/requirement2.pdf'
@@ -213,6 +214,7 @@ valid:
             description: "Reference to an EU legal expression"
             documented_in: "https://example.com/eli/act"
         description: "Article 5"
+        documented_in: "https://example.com/eli/act"
         documents:
           - '__base_url__/sites/default/files/assessments/report/requirement1.pdf'
           - '__base_url__/sites/default/files/assessments/report/requirement2.pdf'
@@ -305,6 +307,7 @@ valid_optional_fields_omitted:
             description: "A regulation without documented_in"
             documented_in: null
         description: "Article 1"
+        documented_in: ""
         documents: []
         affects:
           - name: "Basic Service"

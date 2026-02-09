@@ -72,11 +72,13 @@ Feature: Assessment Report Entity Management
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
 
     When I click "Interoperability solution" in the "Modal content" region
+    And I should see "Browse the solutions recommended by the Interoperable Europe Board."
     Then I press "Select an Interoperability solution" in the "Modal content" region
     And I type "Test" in the "asset[form][0][entity_id]" autocomplete field
     And I pick "Test solution" from the autocomplete suggestions
     And I press "Add Interoperability solution" in the "Modal content" region
     And I should see the text "Identify the interoperability solutions mandatory to use for the implementation of the assessed binding requirement" in the "Modal content" region
+    And I should see "Browse the solutions recommended by the Interoperable Europe Board."
     And I should see the button "Select an Interoperability solution" in the "Modal content" region
     And I press "Add a new Interoperability solution" in the "Modal content" region
     And I fill in "Title of Solution" with "European Interoperability Framework (EIF)" in the "Modal content" region
