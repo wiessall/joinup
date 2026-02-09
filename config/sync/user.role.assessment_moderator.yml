@@ -12,3 +12,4 @@ permissions:
   - 'moderate assessment report'
   - 'view any unpublished assessment report'
   - 'view assessment listing'
+  - 'view paragraph content binding_requirement'
