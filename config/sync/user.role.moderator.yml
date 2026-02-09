@@ -121,7 +121,6 @@ permissions:
   - 'assign licence_manager role'
   - 'assign oss_catalogue_manager role'
   - 'bypass code of conduct'
-  - 'bypass enforced english'
   - 'bypass entity legal acceptance'
   - 'bypass node creation limit'
   - 'create blocked_reason'
