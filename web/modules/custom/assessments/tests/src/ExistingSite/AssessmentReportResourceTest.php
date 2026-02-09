@@ -201,6 +201,7 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
       ],
       'has_participation' => [],
       'asset' => [],
+      'documented_in' => NULL,
     ];
 
     $response = $this->post($payload);
@@ -225,7 +226,7 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     unset($data['binding_requirement'][0]['asset'][0]['url']);
     unset($data['binding_requirement'][0]['asset'][1]['url']);
 
-    $this->assertEqualsCanonicalizing($expect, $data);
+    $this->assertEquals($expect, $data);
 
     // Verify all entities created through the API are published.
     $entityRepository = \Drupal::service('entity.repository');
@@ -278,14 +279,17 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     $assert->statusCodeEquals(200);
     // The page is cacheable but this is the first hit.
     $assert->responseHeaderEquals('X-Drupal-Cache', 'MISS');
-    $this->assertEqualsCanonicalizing($expect, $actual);
+    $this->assertEquals($expect, $actual);
 
     // Test that the response is cached.
     $this->drupalGet('/api/assessments/v1/assessment/' . $data['id']);
     $assert->statusCodeEquals(200);
     // The response is retrieved from cache.
     $assert->responseHeaderEquals('X-Drupal-Cache', 'HIT');
-    $this->assertEqualsCanonicalizing($expect, $actual);
+    // Asset URL is not testable because depends on the environment.
+    unset($actual['binding_requirement'][0]['asset'][0]['url']);
+    unset($actual['binding_requirement'][0]['asset'][1]['url']);
+    $this->assertEquals($expect, $actual);
 
     // Cleanup.
     $report = \Drupal::service('entity.repository')->loadEntityByUuid('assessment', $data['id']);
