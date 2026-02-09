@@ -1,0 +1,13 @@
+uuid: 4d9d6986-6547-4eb6-a8a0-0f0bdc8afb74
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.expression
+id: assessment.expression
+targetEntityType: assessment
+bundle: expression
+action: access_denied
+no_bypass: false
+bypass_message: true
+configuration: {  }

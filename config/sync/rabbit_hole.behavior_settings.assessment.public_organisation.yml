@@ -1,0 +1,13 @@
+uuid: e3261a9e-a94a-4d52-bb61-d9ee144d18ed
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.public_organisation
+id: assessment.public_organisation
+targetEntityType: assessment
+bundle: public_organisation
+action: access_denied
+no_bypass: false
+bypass_message: true
+configuration: {  }
