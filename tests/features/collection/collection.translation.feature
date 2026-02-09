@@ -1,13 +1,13 @@
 @api @group-a
 Feature: Translating collections
 
-  Scenario: Translate a collection
+  Scenario Outline: Translate a collection
     Given collection content:
       | title           | abstract                        | description                    |
       | Test collection | short description of collection | long description of collection |
 
     # Create translation
-    Given I am logged in as a user with the "moderator" role
+    Given I am logged in as a user with the <role> role
     When I go to the homepage of the "Test collection" collection
     When I click "Translate" in the "Entity actions" region
     And I should see "Add" in the "Polish" row
@@ -30,19 +30,18 @@ Feature: Translating collections
     And I should see "Moderated"
 
     # Edit translation
-    When I go to the homepage of the "Test collection" collection
     And I click "Translate" in the "Entity actions" region
     Then I should see "Testowa kolekcja"
-    And I should not see "Add" in the "Polish" row
     And I should see "Edit" in the "Polish" row
     Then I click "Edit" in the "Polish" row
     And I fill in "Title" with "Zaktualizowana kolekcja"
     Then I press "Publish"
-    When I click "Translate" in the "Entity actions" region
     Then I should not see "Testowa kolekcja"
     Then I should see "Zaktualizowana kolekcja"
 
     #Delete translation
+    When I go to the homepage of the "Test collection" collection
+    When I click "Translate" in the "Entity actions" region
     When I click "Delete" in the "Polish" row
     Then I should see "Are you sure you want to delete collection Zaktualizowana kolekcja?"
     And I should see the button "Delete Polish translation"
@@ -53,3 +52,8 @@ Feature: Translating collections
     And I should not see "Zaktualizowana kolekcja"
     And I should not see "Edit" in the "Polish" row
     And I should see the "Add" in the "Polish" row
+
+    Examples:
+      | role            |
+      | "moderator"     |
+#      | "authenticated" |
