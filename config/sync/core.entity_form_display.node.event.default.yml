@@ -229,7 +229,7 @@ content:
     weight: 25
     region: content
     settings:
-      include_locked: true
+      include_locked: false
     third_party_settings: {  }
   simple_sitemap:
     weight: 12
