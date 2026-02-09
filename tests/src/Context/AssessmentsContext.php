@@ -237,16 +237,6 @@ class AssessmentsContext extends RawDrupalContext {
   }
 
   /**
-   * Visit an assessment entity page.
-   */
-  #[Given('I go to the :name :bundle assessment page')]
-  public function visitAssessmentPage(string $label, ?string $bundle = NULL): void {
-    /** @var \Drupal\assessments\AssessmentInterface $assessment */
-    $assessment = static::getEntityByLabel('assessment', $label, $bundle);
-    $this->visitPath($assessment->toUrl()->toString());
-  }
-
-  /**
    * Navigates to the moderate form of a specific assessment report.
    *
    * @param string $title
