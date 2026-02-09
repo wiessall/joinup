@@ -1,0 +1,24 @@
+#!/bin/bash
+
+## Description: Enable Python 2 service (needed for build-publiccode)
+## Usage: python2-enable
+## Example: ddev python2-enable
+
+set -e
+
+DDEV_DIR="$(dirname "$0")/../.."
+SOURCE="$DDEV_DIR/python2/docker-compose.python2.yaml"
+TARGET="$DDEV_DIR/docker-compose.python2.yaml"
+
+if [ -f "$TARGET" ]; then
+    echo "Python 2 service is already enabled."
+    exit 0
+fi
+
+if [ ! -f "$SOURCE" ]; then
+    echo "Error: Source file not found: $SOURCE"
+    exit 1
+fi
+
+ln -s "python2/docker-compose.python2.yaml" "$TARGET"
+echo "Python 2 service enabled. Run 'ddev restart' to start the service."
