@@ -242,6 +242,7 @@ class AssessmentReportResource extends ResourceBase {
       $bindingRequirements[] = [
         'expression' => $expressions,
         'description' => $requirement->get('description')->value,
+        'documented_in' => $requirement->get('documented_in')->uri,
         'documents' => $this->fileUrls($requirement->get('requirement_documents')),
         'affects' => $affects,
         'has_participation' => $hasParticipation,
@@ -431,6 +432,7 @@ class AssessmentReportResource extends ResourceBase {
         'type' => 'binding_requirement',
         'expression' => $this->createExpressions($requirement['expression']),
         'description' => $this->buildFormattedText($requirement, 'description'),
+        'documented_in' => $requirement['documented_in'] ?? NULL,
         'affects' => $this->createPublicServices($requirement['affects'], $path),
         'has_participation' => $this->createParticipation($requirement['has_participation'] ?? [], $path),
         'asset' => $this->getAssets($requirement['asset'] ?? [], $path),
