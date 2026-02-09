@@ -791,7 +791,7 @@ class AssessmentReportResource extends ResourceBase {
       $items[] = $object->$property;
     }
 
-    return $cardinality == 1 ? reset($items) : $items;
+    return $cardinality == 1 ? ($items ? reset($items) : NULL) : $items;
   }
 
   /**
