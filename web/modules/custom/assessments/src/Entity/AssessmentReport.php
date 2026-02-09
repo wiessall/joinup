@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 
@@ -62,32 +63,22 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
    * Publishes child entities when the report is published.
    */
   protected function onSaveReflectPublicationStatus(): void {
-    // Only proceed if the report is published.
     if (!$this->isPublished()) {
       return;
     }
 
-    // Collect unpublished child entities that need to be published, keyed by
-    // entity ID to avoid duplicates.
-    $entitiesToPublish = [];
+    // Collect unpublished child entities that need to be published.
+    $entitiesToPublish = $this->collectUnpublishedEntities($this->get('provider')->referencedEntities());
 
-    // Collect unpublished providers.
-    $this->collectUnpublished($entitiesToPublish, $this->get('provider')->referencedEntities());
-
-    // Binding requirements are paragraphs. There is nothing to publish there,
-    // but we need to go through them to get to other entities.
-    foreach ($this->get('binding_requirement')->referencedEntities() as $bindingRequirementEntity) {
-      $this->collectUnpublished($entitiesToPublish, $bindingRequirementEntity->get('expression')->referencedEntities());
-      foreach ($bindingRequirementEntity->get('asset')->referencedEntities() as $entity) {
-        if ($entity->getGroup()->uuid() === AssessmentInterface::SOLUTION_COLLECTOR && !$entity->isPublished()) {
-          $entitiesToPublish[$entity->uuid()] = $entity;
-        }
-      }
-      $this->collectUnpublished($entitiesToPublish, $bindingRequirementEntity->get('affects')->referencedEntities());
-      $this->collectUnpublished($entitiesToPublish, $bindingRequirementEntity->get('has_participation')->referencedEntities());
+    // Collect from binding requirements.
+    foreach ($this->get('binding_requirement')->referencedEntities() as $bindingRequirement) {
+      $entitiesToPublish += $this->collectUnpublishedEntities($bindingRequirement->get('expression')->referencedEntities());
+      $entitiesToPublish += $this->collectUnpublishedEntities(array_filter($bindingRequirement->get('asset')->referencedEntities(), static fn(SolutionInterface $entity) => $entity->getGroup()->uuid() === AssessmentInterface::SOLUTION_COLLECTOR));
+      $entitiesToPublish += $this->collectUnpublishedEntities($bindingRequirement->get('affects')->referencedEntities());
+      $entitiesToPublish += $this->collectUnpublishedEntities($bindingRequirement->get('has_participation')->referencedEntities());
     }
 
-    // Publish the collected entities.
+    // Publish all collected entities.
     foreach ($entitiesToPublish as $entity) {
       if ($entity instanceof EntityWorkflowStateInterface) {
         $entity->setWorkflowState('published');
@@ -102,19 +93,17 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
   }
 
   /**
-   * Collects unpublished entities into the given array, keyed by entity ID.
-   *
-   * @param \Drupal\Core\Entity\EntityPublishedInterface[] $collect
-   *   The array to collect into, passed by reference.
-   * @param \Drupal\Core\Entity\EntityPublishedInterface[] $entities
-   *   The entities to filter.
+   * Collect unpublished entities, keyed by UUID.
    */
-  protected function collectUnpublished(array &$collect, array $entities): void {
+  protected function collectUnpublishedEntities(array $entities): array {
+    $result = [];
     foreach ($entities as $entity) {
       if (!$entity->isPublished()) {
-        $collect[$entity->uuid()] = $entity;
+        $result[$entity->uuid()] = $entity;
       }
     }
+    return $result;
   }
+
 
 }
