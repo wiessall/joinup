@@ -1,0 +1,23 @@
+# Python 2 service for building publiccode-editor (requires Node 10 + Python 2).
+# Debian 13 (Trixie) no longer supports Python 2, so we use Node 10 image
+# which is based on Debian Buster and includes Python 2.
+
+services:
+  python2:
+    container_name: ddev-${DDEV_SITENAME}-python2
+    # Node 10 image includes Python 2 and is based on Debian Buster
+    image: node:10-buster
+    restart: "no"
+    working_dir: /var/www/html
+    labels:
+      com.ddev.site-name: ${DDEV_SITENAME}
+      com.ddev.approot: $DDEV_APPROOT
+    volumes:
+      - "../:/var/www/html"
+      - ".:/mnt/ddev_config"
+    # Keep container running for exec commands
+    command: ["tail", "-f", "/dev/null"]
+
+  web:
+    links:
+      - python2
