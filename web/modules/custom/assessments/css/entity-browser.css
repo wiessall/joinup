@@ -1,0 +1,69 @@
+/**
+ * @file
+ * Styles for Entity Browser in nested modals.
+ *
+ * Fixes z-index and display issues when Entity Browser is used inside modals.
+ */
+
+/* Entity Browser modal should appear above other dialogs */
+.entity-browser-modal-iframe,
+.entity-browser-modal {
+  z-index: 10002 !important;
+}
+
+/* Fix iframe visibility */
+.entity-browser-modal iframe {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 400px !important;
+  display: block !important;
+  visibility: visible !important;
+}
+
+/* Ensure the modal content is visible and has proper height */
+.ui-dialog.entity-browser-modal .ui-dialog-content {
+  overflow: auto !important;
+  padding: 0 !important;
+  height: auto !important;
+  min-height: 400px !important;
+}
+
+.ui-dialog.entity-browser-modal {
+  min-height: 500px !important;
+}
+
+.ui-dialog.entity-browser-modal .ui-dialog-content iframe {
+  min-height: 450px !important;
+  height: 100% !important;
+}
+
+/* Fix nested modal z-index stacking */
+.ui-dialog.entity-browser-modal {
+  z-index: 10002 !important;
+}
+
+.ui-widget-overlay.entity-browser-modal-overlay {
+  z-index: 10001 !important;
+}
+
+/* Entity browser view table styling in modal */
+.entity-browser-form .views-table {
+  width: 100%;
+}
+
+.entity-browser-form .views-table th,
+.entity-browser-form .views-table td {
+  padding: 8px;
+  text-align: left;
+}
+
+/* Ensure form elements are visible */
+.entity-browser-form .form-item {
+  margin-bottom: 1em;
+}
+
+.entity-browser-form .form-actions {
+  margin-top: 1em;
+  padding-top: 1em;
+  border-top: 1px solid #ccc;
+}

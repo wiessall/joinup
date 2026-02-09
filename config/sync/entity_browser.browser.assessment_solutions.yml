@@ -1,0 +1,42 @@
+uuid: 3b73fcc6-567a-4f48-ae01-54780ea3752a
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.assessment_solutions_browser
+  module:
+    - entity_browser_entity_form
+    - views
+name: assessment_solutions
+label: 'Interoperability Solutions Browser'
+display: modal
+display_configuration:
+  width: 80%
+  height: 75%
+  link_text: 'Select Interoperability Solution'
+  auto_open: false
+selection_display: no_display
+selection_display_configuration: {  }
+widget_selector: tabs
+widget_selector_configuration: {  }
+widgets:
+  29f0f1a8-5c7a-4b3e-9d1f-2a8b6c4e5d7f:
+    id: view
+    uuid: 29f0f1a8-5c7a-4b3e-9d1f-2a8b6c4e5d7f
+    label: 'Select existing'
+    weight: 0
+    settings:
+      submit_text: 'Select solution'
+      auto_select: false
+      view: assessment_solutions_browser
+      view_display: entity_browser_1
+  a1b2c3d4-e5f6-7890-abcd-ef1234567890:
+    id: entity_form
+    uuid: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+    label: 'Create new'
+    weight: 1
+    settings:
+      submit_text: 'Create solution'
+      entity_type: node
+      bundle: solution
+      form_mode: default

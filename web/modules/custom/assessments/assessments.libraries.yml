@@ -14,3 +14,8 @@ ief_tagify:
       css/ief-tagify.css: {}
   dependencies:
     - tagify/default
+
+entity_browser:
+  css:
+    component:
+      css/entity-browser.css: {}

@@ -28,6 +28,16 @@ use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 
 /**
+ * Implements hook_page_attachments().
+ */
+function assessments_page_attachments(array &$attachments): void {
+  // Attach entity browser CSS fixes when the module is installed.
+  if (\Drupal::moduleHandler()->moduleExists('entity_browser')) {
+    $attachments['#attached']['library'][] = 'assessments/entity_browser';
+  }
+}
+
+/**
  * Implements hook_theme().
  */
 function assessments_theme(): array {
@@ -65,9 +75,14 @@ function assessments_entity_extra_field_info(): array {
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_form_alter().
  */
 function assessments_form_alter(array &$form, FormStateInterface $formState, string $formId): void {
+  // Handle solution creation via Entity Browser.
+  if ($formId === 'node_solution_form') {
+    _assessments_alter_solution_form_for_entity_browser($form, $formState);
+  }
+
   if (!in_array($formId, ['assessment_report_add_form', 'assessment_report_edit_form'], TRUE)) {
     return;
   }
@@ -419,9 +434,18 @@ function _assessments_process_asset_form_button(array $element, FormStateInterfa
 function assessments_inline_entity_form_entity_form_alter(array &$entity_form, FormStateInterface &$formState): void {
   $solution = $entity_form['#entity'];
 
-  if ($entity_form['#ief_id'] === 'asset-form' && $solution instanceof SolutionInterface) {
+  // Check if this IEF is for a solution within the binding_requirement paragraph.
+  $isAssetForm = $entity_form['#ief_id'] === 'asset-form' && $solution instanceof SolutionInterface;
+
+  // Check if this IEF is within Entity Browser for assessment solutions.
+  $route = \Drupal::routeMatch()->getRouteName();
+  $isEntityBrowserForm = $route === 'entity_browser.assessment_solutions' && $solution instanceof SolutionInterface;
+
+  if ($isAssetForm || $isEntityBrowserForm) {
     if ($entity_form['#op'] === 'add') {
-      $entity_form['#after_build'][] = '_assessments_process_asset_form_button';
+      if ($isAssetForm) {
+        $entity_form['#after_build'][] = '_assessments_process_asset_form_button';
+      }
     }
 
     $collection = \Drupal::service('entity.repository')->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR);
@@ -435,6 +459,16 @@ function assessments_inline_entity_form_entity_form_alter(array &$entity_form, F
 
     // In this context the landing page is mandatory.
     $entity_form['landing_page']['widget']['uri']['#required'] = TRUE;
+
+    // Hide the og_audience field since it's auto-populated.
+    if (isset($entity_form['og_audience'])) {
+      $entity_form['og_audience']['#access'] = FALSE;
+    }
+
+    // Hide the state field since it's auto-set.
+    if (isset($entity_form['field_state'])) {
+      $entity_form['field_state']['#access'] = FALSE;
+    }
   }
   if ($solution->bundle() === 'participation') {
     $delta = $entity_form['#ief_row_delta'];
@@ -548,6 +582,32 @@ function assessments_node_create_access(AccountInterface $account, array $contex
 }
 
 /**
+ * Implements hook_ENTITY_TYPE_create() for node entities.
+ *
+ * Sets the group for solutions created via Entity Browser before
+ * the form is built, so the state machine transition guard can work.
+ */
+function assessments_node_create(\Drupal\node\NodeInterface $node): void {
+  if ($node->bundle() !== 'solution') {
+    return;
+  }
+
+  // Check if this is within Entity Browser context for assessment solutions.
+  $route = \Drupal::routeMatch()->getRouteName();
+  if ($route !== 'entity_browser.assessment_solutions') {
+    return;
+  }
+
+  // Load the collector collection and set it on the solution.
+  $collection = \Drupal::service('entity.repository')->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR);
+  if ($collection instanceof CollectionInterface) {
+    /** @var \Drupal\joinup_solution\Entity\SolutionInterface $node */
+    $node->setGroup($collection);
+    $node->set('field_state', 'published');
+  }
+}
+
+/**
  * Implements hook_ENTITY_TYPE_presave() for assessment entities.
  */
 function assessments_assessment_presave(AssessmentInterface $entity): void {
@@ -614,4 +674,49 @@ function assessments_views_data_alter(array &$data): void {
   $code_value['title'] = $code_value['title short'] = new TranslatableMarkup('Assessment country code');
   $code_value['argument']['id'] = 'assessment_country_code';
   $data['taxonomy_term__code']['assessment_country_code'] = $code_value;
+}
+
+/**
+ * Alters the solution form when loaded via Entity Browser.
+ *
+ * Sets the og_audience to the SOLUTION_COLLECTOR collection for solutions
+ * created through the assessment's Entity Browser widget.
+ *
+ * @param array $form
+ *   The form array.
+ * @param \Drupal\Core\Form\FormStateInterface $formState
+ *   The form state.
+ */
+function _assessments_alter_solution_form_for_entity_browser(array &$form, FormStateInterface $formState): void {
+  // Check if this form is loaded within Entity Browser context.
+  $route = \Drupal::routeMatch()->getRouteName();
+  if ($route !== 'entity_browser.assessment_solutions') {
+    return;
+  }
+
+  // Load the collector collection.
+  $collection = \Drupal::service('entity.repository')->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR);
+  if (!$collection instanceof CollectionInterface) {
+    return;
+  }
+
+  // Get the solution entity from the form and set the group directly.
+  // This must happen during form_alter, not just in submit, because
+  // Solution::getGroup() is called during form building/validation.
+  /** @var \Drupal\joinup_solution\Entity\SolutionInterface $solution */
+  $solution = $formState->getFormObject()->getEntity();
+  if ($solution instanceof SolutionInterface) {
+    $solution->setGroup($collection);
+    $solution->set('field_state', 'published');
+  }
+
+  // Hide the og_audience field since it's auto-populated.
+  if (isset($form['og_audience'])) {
+    $form['og_audience']['#access'] = FALSE;
+  }
+
+  // Hide the state field since it's auto-set.
+  if (isset($form['field_state'])) {
+    $form['field_state']['#access'] = FALSE;
+  }
 }

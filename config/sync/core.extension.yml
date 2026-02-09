@@ -52,6 +52,8 @@ module:
   eira: 0
   email_confirmer: 0
   email_contact: 0
+  entity_browser: 0
+  entity_browser_entity_form: 0
   entity_form_field_label: 0
   entity_legal: 0
   entity_print: 0

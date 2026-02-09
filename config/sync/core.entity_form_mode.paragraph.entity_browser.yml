@@ -1,0 +1,11 @@
+uuid: b0a42a9c-df95-4df1-90ce-e8dd8131a74e
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs
+id: paragraph.entity_browser
+label: 'Entity Browser'
+description: ''
+targetEntityType: paragraph
+cache: true

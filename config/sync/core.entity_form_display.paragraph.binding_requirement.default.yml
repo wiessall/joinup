@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_form_mode.node.assessment
+    - entity_browser.browser.assessment_solutions
     - field.field.paragraph.binding_requirement.affects
     - field.field.paragraph.binding_requirement.asset
     - field.field.paragraph.binding_requirement.description
@@ -14,6 +15,7 @@ dependencies:
     - paragraphs.paragraphs_type.binding_requirement
   module:
     - allowed_formats
+    - entity_browser
     - entity_form_field_label
     - field_group
     - file
@@ -158,25 +160,18 @@ content:
       revision: false
     third_party_settings: {  }
   asset:
-    type: inline_entity_form_tagify
+    type: entity_browser_entity_reference
     weight: 3
     region: content
     settings:
-      form_mode: assessment
-      override_labels: true
-      label_singular: 'Interoperability solution'
-      label_plural: 'Interoperability solutions'
-      allow_new: true
-      allow_existing: true
-      match_operator: CONTAINS
-      allow_duplicate: false
-      collapsible: false
-      collapsed: false
-      revision: false
-      removed_reference: keep
-      suggestions_dropdown: 1
-      match_limit: 10
-      show_entity_id: false
+      entity_browser: assessment_solutions
+      field_widget_display: label
+      field_widget_edit: true
+      field_widget_remove: true
+      field_widget_replace: false
+      open: false
+      field_widget_display_settings: {  }
+      selection_mode: selection_append
     third_party_settings:
       entity_form_field_label:
         new_label: ''

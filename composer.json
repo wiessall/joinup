@@ -44,6 +44,7 @@
         "drupal/email_confirmer": "^1.0",
         "drupal/email_contact": "^2.0.4",
         "drupal/embed_block": "^1.0",
+        "drupal/entity_browser": "^2.15",
         "drupal/entity_form_field_label": "^2.1",
         "drupal/entity_legal": "^4.0",
         "drupal/entity_print": "^2.15",
