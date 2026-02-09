@@ -83,6 +83,7 @@ paths:
                           description: Reference to an EU legal expression
                           documented_in: https://example.com/eli/act
                       description: Article 5
+                      documented_in: "https://example.com/eli/act"
                       documents:
                         - https://example.com/law/123
                         - https://example.com/regulation/eu-1655467-s
@@ -165,6 +166,7 @@ paths:
                             description: "Reference to an EU legal expression"
                             documented_in: "https://example.com/eli/act"
                         description: "Article 5"
+                        documented_in: "https://example.com/eli/act"
                         documents: [
                           "https://my.local.domain/documents/fetched-renamed-file-ab.pdf",
                           "https://my.local.domain/documents/fetched-renamed-file-cd.pdf"
@@ -650,6 +652,10 @@ components:
           type: string
           description: The binding requirement short description.
           minLength: 1
+        documented_in:
+          type: string
+          format: uri
+          description: The binding requirement url.
         documents:
           type: array
           description: |
