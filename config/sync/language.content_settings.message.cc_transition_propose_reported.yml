@@ -1,0 +1,11 @@
+uuid: 99673686-eb86-4888-8f15-1a015850c032
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.cc_transition_propose_reported
+id: message.cc_transition_propose_reported
+target_entity_type_id: message
+target_bundle: cc_transition_propose_reported
+default_langcode: site_default
+language_alterable: false

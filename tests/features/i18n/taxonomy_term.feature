@@ -1,8 +1,8 @@
 @api @group-a
-Feature:  The translator is able to translate taxonomy terms.
+Feature:  The moderator is able to translate taxonomy terms.
 
-  Scenario: The translator is able to translate.
-    Given I am logged in as a translator
+  Scenario: The moderator is able to translate.
+    Given I am logged in as a moderator
 
     When I click "Translate"
     Then I should see the heading "Translate"

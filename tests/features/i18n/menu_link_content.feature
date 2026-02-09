@@ -1,8 +1,8 @@
 @api @group-a
-Feature:  The translator is able to translate
+Feature:  The moderator is able to translate
 
-  Scenario: The translator is able to translate.
-    Given I am logged in as a translator
+  Scenario: The moderator is able to translate.
+    Given I am logged in as a moderator
 
     When I click "Menus" in the "Administration toolbar"
     And I click "List links" in the "European Commission" row
