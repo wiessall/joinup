@@ -1,0 +1,13 @@
+uuid: dca64254-09ff-4e87-8081-d7838f400aaf
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.assess_provider_type
+id: taxonomy_term.assess_provider_type
+targetEntityType: taxonomy_term
+bundle: assess_provider_type
+action: access_denied
+no_bypass: false
+bypass_message: true
+configuration: {  }
