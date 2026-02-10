@@ -1,0 +1,13 @@
+uuid: 1f84c0b1-620a-4575-9444-623bf314fedd
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.assess_public_service_area
+id: taxonomy_term.assess_public_service_area
+targetEntityType: taxonomy_term
+bundle: assess_public_service_area
+action: access_denied
+no_bypass: false
+bypass_message: true
+configuration: {  }

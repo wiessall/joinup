@@ -76,6 +76,8 @@ class AssessmentsHtmlRouteProvider extends DefaultHtmlRouteProvider {
     $route->setOption('parameters', [
       $entity_type_id => [
         'type' => 'entity:' . $entity_type_id,
+        // Limit canonical routes to assessment report, 404 for other bundles.
+        'bundle' => ['report'],
       ],
       'assessment_type' => [
         'type' => 'entity:assessment_type',
