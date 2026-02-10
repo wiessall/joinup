@@ -378,7 +378,6 @@ Trying to create an EU organisation:
             thematic_area:
               - "digital_and_innovation_services"
               - "economy_and_employment"
-        description: "test"
         has_participation:
           - country:
               - "BE"
