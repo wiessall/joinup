@@ -8,6 +8,7 @@
 {%
   set title_classes = title_classes|default([
     'field__label',
+    label_display == 'visually_hidden' ? 'visually-hidden',
   ])
 %}
 {% extends '@ventuno/field/field--inline.html.twig' %}

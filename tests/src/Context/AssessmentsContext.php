@@ -340,4 +340,28 @@ class AssessmentsContext extends RawDrupalContext {
     throw new \Exception("Email not found to '$recipient_email' with subject '$expected_subject' and body '{$data['body']}'.");
   }
 
+  /**
+   * Asserts that no participation entities exist for a given assessment report.
+   *
+   * @param string $title
+   *   The title of the assessment report.
+   */
+  #[Then('no participation entities should exist for the :title assessment report')]
+  public function assertNoParticipationEntitiesExist(string $title): void {
+    $report = $this->getEntityByLabel('assessment', $title, 'report');
+
+    $binding_requirements = $report->get('binding_requirement')->referencedEntities();
+    foreach ($binding_requirements as $paragraph) {
+      $participations = $paragraph->get('has_participation')->referencedEntities();
+      Assert::assertEmpty(
+        $participations,
+        sprintf(
+          'Expected no participation entities for report "%s", but found %d.',
+          $title,
+          count($participations)
+        )
+      );
+    }
+  }
+
 }
