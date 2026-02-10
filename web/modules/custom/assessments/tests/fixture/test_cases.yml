@@ -103,7 +103,8 @@ Invalid references:
         description: "Article 5"
         affects:
           - name: "Digital Monitoring Unit"
-            thematic_area: "digital_and_innovation_services"
+            thematic_area:
+              - "digital_and_innovation_services"
         asset:
           - "3b1548db-0f29-42f4-a23c-2ee43ed20ba9"
     documents:
@@ -156,9 +157,12 @@ Valid:
           - '__base_url__/sites/default/files/assessment-test/requirement2.pdf'
         affects:
           - name: "Digital Monitoring Unit"
-            thematic_area: "digital_and_innovation_services"
+            thematic_area:
+              - "digital_and_innovation_services"
+              - "education_and_research"
           - name: "Training Centre"
-            thematic_area: "education_and_research"
+            thematic_area:
+              - "education_and_research"
             country:
               - "BE"
               - "IT"
@@ -220,6 +224,7 @@ Valid:
           - name: "Digital Monitoring Unit"
             thematic_area:
               - digital_and_innovation_services
+              - education_and_research
             country: []
           - name: "Training Centre"
             thematic_area:
@@ -335,7 +340,8 @@ Missing country for a non-EU organisation:
             description: "test"
         affects:
           - name: "Digital Monitoring Unit"
-            thematic_area: "digital_and_innovation_services"
+            thematic_area:
+              - "digital_and_innovation_services"
         description: "test"
         has_participation:
           - country:
@@ -369,7 +375,22 @@ Trying to create an EU organisation:
         description: "Article 5"
         affects:
           - name: "Digital Monitoring Unit"
-            thematic_area: "digital_and_innovation_services"
+            thematic_area:
+              - "digital_and_innovation_services"
+              - "economy_and_employment"
+        description: "test"
+        has_participation:
+          - country:
+              - "BE"
+              - "NL"
+              - "LU"
+            participant_type:
+              - "national_public_sector_body"
+          - country:
+              - "IT"
+            participant_type:
+              - "national_public_sector_body"
+              - "private_businesses"
   expect:
     errors:
       /provider:
