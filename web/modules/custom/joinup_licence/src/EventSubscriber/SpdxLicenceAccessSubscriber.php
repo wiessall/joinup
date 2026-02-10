@@ -12,6 +12,8 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * Denies access to SPDX licence canonical route for all users.
+ *
+ * @todo Drop this EventSubscriber in ISAICP-10824.
  */
 class SpdxLicenceAccessSubscriber implements EventSubscriberInterface {
 

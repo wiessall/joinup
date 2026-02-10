@@ -13,6 +13,8 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * Denies anonymous access to contact information canonical route.
+ *
+ * @todo Drop this EventSubscriber in ISAICP-10824.
  */
 class ContactInformationAccessSubscriber implements EventSubscriberInterface {
 

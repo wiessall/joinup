@@ -13,6 +13,8 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * Denies anonymous access to owner canonical route.
+ *
+ * @todo Drop this EventSubscriber in ISAICP-10824.
  */
 class OwnerAccessSubscriber implements EventSubscriberInterface {
 
