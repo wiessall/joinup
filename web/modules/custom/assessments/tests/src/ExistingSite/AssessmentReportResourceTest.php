@@ -115,6 +115,7 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     $this->assertSame(422, $response->getStatusCode());
 
     $data = Json::decode($response->getBody()->getContents());
+    $this->assertArrayHasKey('errors', $data);
     $errors = $data['errors'];
 
     // Verify each mandatory field has a minLength error.
@@ -217,6 +218,7 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     $data = Json::decode($response->getBody()->getContents());
 
     // Update the expectation with generated UUIDs and URIs.
+    $this->assertArrayNotHasKey('errors', $data);
     $uuid = $data['id'];
     $uri = 'http://data.europa.eu/s2k/' . $uuid;
     $expect = ['id' => $uuid, 'uri' => $uri] + $expect;
@@ -324,6 +326,7 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     $response = $this->post($basePayload);
     $this->assertSame(201, $response->getStatusCode());
     $data = Json::decode($response->getBody()->getContents());
+    $this->assertArrayNotHasKey('errors', $data);
     $firstReportId = $data['id'];
     $firstProviderId = $data['provider']['id'];
 
@@ -337,6 +340,7 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     $response = $this->post($payload);
     $this->assertSame(201, $response->getStatusCode(), "Failed for name: '$variantName'");
     $data = Json::decode($response->getBody()->getContents());
+    $this->assertArrayNotHasKey('errors', $data);
     $secondReportId = $data['id'];
 
     // Verify the organisation count matches expectation.
@@ -403,6 +407,7 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     $response = $this->post($payload);
     $this->assertSame(201, $response->getStatusCode());
     $data = Json::decode($response->getBody()->getContents());
+    $this->assertArrayNotHasKey('errors', $data);
 
     // Update the expectation with generated UUIDs and URIs.
     $uuid = $data['id'];
