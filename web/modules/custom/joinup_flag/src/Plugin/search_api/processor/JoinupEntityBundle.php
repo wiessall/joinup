@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_flag\Plugin\search_api\processor;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\search_api\Attribute\SearchApiProcessor;
 use Drupal\search_api\Datasource\DatasourceInterface;
 use Drupal\search_api\Item\ItemInterface;
 use Drupal\search_api\Processor\ProcessorPluginBase;
@@ -12,18 +14,17 @@ use Drupal\search_api\SearchApiException;
 
 /**
  * Adds entity type ID and bundle id of the flagging.
- *
- * @SearchApiProcessor(
- *   id = "joinup_entity_bundle",
- *   label = @Translation("Joinup entity bundle"),
- *   description = @Translation("Get entity bundle from flagging item."),
- *   stages = {
- *     "add_properties" = 0,
- *   },
- *   locked = true,
- *   hidden = true,
- * )
  */
+#[SearchApiProcessor(
+  id: "joinup_entity_bundle",
+  label: new TranslatableMarkup("Joinup entity bundle"),
+  description: new TranslatableMarkup("Get entity bundle from flagging item."),
+  stages: [
+    "add_properties" => 0,
+  ],
+  locked: true,
+  hidden: true,
+)]
 class JoinupEntityBundle extends ProcessorPluginBase {
 
   /**
