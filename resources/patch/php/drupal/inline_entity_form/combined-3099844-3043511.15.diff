@@ -1,8 +1,7 @@
-diff --git a/src/Element/InlineEntityForm.php b/src/Element/InlineEntityForm.php
-index 74a7142..5315b06 100644
---- a/src/Element/InlineEntityForm.php
-+++ b/src/Element/InlineEntityForm.php
-@@ -5,7 +5,7 @@ namespace Drupal\inline_entity_form\Element;
+diff -ruN inline_entity_form-3.0.0-rc21/src/Element/InlineEntityForm.php inline_entity_form-patched/src/Element/InlineEntityForm.php
+--- inline_entity_form-3.0.0-rc21/src/Element/InlineEntityForm.php	2025-05-05 16:33:07
++++ inline_entity_form-patched/src/Element/InlineEntityForm.php	2026-02-06 08:34:32
+@@ -5,7 +5,7 @@
  use Drupal\Core\Entity\EntityInterface;
  use Drupal\Core\Entity\RevisionLogInterface;
  use Drupal\Core\Form\FormStateInterface;
@@ -11,7 +10,7 @@ index 74a7142..5315b06 100644
  use Drupal\inline_entity_form\ElementSubmit;
  use Drupal\inline_entity_form\TranslationHelper;
  
-@@ -28,7 +28,7 @@ use Drupal\inline_entity_form\TranslationHelper;
+@@ -28,7 +28,7 @@
   *
   * @RenderElement("inline_entity_form")
   */
@@ -20,11 +19,10 @@ index 74a7142..5315b06 100644
  
    /**
     * {@inheritdoc}
-diff --git a/src/Form/EntityInlineForm.php b/src/Form/EntityInlineForm.php
-index 9d193c9..c3cda09 100644
---- a/src/Form/EntityInlineForm.php
-+++ b/src/Form/EntityInlineForm.php
-@@ -16,6 +16,7 @@ use Drupal\Core\Render\Element;
+diff -ruN inline_entity_form-3.0.0-rc21/src/Form/EntityInlineForm.php inline_entity_form-patched/src/Form/EntityInlineForm.php
+--- inline_entity_form-3.0.0-rc21/src/Form/EntityInlineForm.php	2025-05-05 16:33:07
++++ inline_entity_form-patched/src/Form/EntityInlineForm.php	2026-02-06 09:13:57
+@@ -16,6 +16,7 @@
  use Drupal\Core\StringTranslation\StringTranslationTrait;
  use Drupal\Core\Theme\ThemeManagerInterface;
  use Drupal\inline_entity_form\InlineFormInterface;
@@ -32,7 +30,7 @@ index 9d193c9..c3cda09 100644
  use Drupal\rat\v1\RenderArray;
  use Symfony\Component\DependencyInjection\ContainerInterface;
  
-@@ -261,26 +262,58 @@ class EntityInlineForm implements InlineFormInterface {
+@@ -261,24 +262,75 @@
     * {@inheritdoc}
     */
    public function entityFormValidate(array &$entity_form, FormStateInterface $form_state) {
@@ -65,8 +63,8 @@ index 9d193c9..c3cda09 100644
          $form_state->setError($triggering_element, $message);
        }
      }
-   }
- 
++  }
++
 +  /**
 +   * Checks if an entity is empty.
 +   *
@@ -86,24 +84,40 @@ index 9d193c9..c3cda09 100644
 +
 +    foreach ($entity as $name => $items) {
 +      if ($widget = $form_display->getRenderer($name)) {
-+        if (!$entity->get($name)->isEmpty()) {
++        $field = $entity->get($name);
++
++        // Treat boolean fields with FALSE value as empty (default/unchecked).
++        if ($field->getFieldDefinition()->getType() === 'boolean') {
++          if (!empty($field->value)) {
++            return FALSE;
++          }
++          continue;
++        }
++
++        if (!$field->isEmpty()) {
 +          // Take nested inline entity forms into account.
-+          return $widget instanceof InlineEntityFormBase && $this->isEmptyEntity($entity->get($name)->first()->entity, $widget->getSetting('form_mode'));
++          if ($widget instanceof InlineEntityFormBase) {
++            $nested = $field->first()->entity;
++            if ($nested && !$this->isEmptyEntity($nested, $widget->getSetting('form_mode'))) {
++              return FALSE;
++            }
++            // Nested entity is empty, continue checking other fields.
++          }
++          else {
++            return FALSE;
++          }
 +        }
 +      }
 +    }
 +
 +    return TRUE;
-+  }
-+
+   }
+ 
    /**
-    * {@inheritdoc}
-    */
-diff --git a/src/Plugin/Field/FieldWidget/InlineEntityFormBase.php b/src/Plugin/Field/FieldWidget/InlineEntityFormBase.php
-index 69869be..4771cba 100644
---- a/src/Plugin/Field/FieldWidget/InlineEntityFormBase.php
-+++ b/src/Plugin/Field/FieldWidget/InlineEntityFormBase.php
-@@ -196,13 +196,17 @@ abstract class InlineEntityFormBase extends WidgetBase implements ContainerFacto
+diff -ruN inline_entity_form-3.0.0-rc21/src/Plugin/Field/FieldWidget/InlineEntityFormBase.php inline_entity_form-patched/src/Plugin/Field/FieldWidget/InlineEntityFormBase.php
+--- inline_entity_form-3.0.0-rc21/src/Plugin/Field/FieldWidget/InlineEntityFormBase.php	2025-05-05 16:33:07
++++ inline_entity_form-patched/src/Plugin/Field/FieldWidget/InlineEntityFormBase.php	2026-02-06 08:36:15
+@@ -196,13 +196,17 @@
    /**
     * Gets the bundles for which the current user has create access.
     *
@@ -123,11 +137,10 @@ index 69869be..4771cba 100644
          $create_bundles[] = $bundle;
        }
      }
-@@ -210,6 +214,23 @@ abstract class InlineEntityFormBase extends WidgetBase implements ContainerFacto
-     return $create_bundles;
+@@ -211,6 +215,23 @@
    }
  
-+  /**
+   /**
 +   * Creates and returns create access context.
 +   *
 +   * @return array
@@ -144,10 +157,11 @@ index 69869be..4771cba 100644
 +    ];
 +  }
 +
-   /**
++  /**
     * {@inheritdoc}
     */
-@@ -600,12 +621,26 @@ abstract class InlineEntityFormBase extends WidgetBase implements ContainerFacto
+   public static function defaultSettings() {
+@@ -600,12 +621,29 @@
    /**
     * Determines if the current user can add any new entities.
     *
@@ -163,24 +177,26 @@ index 69869be..4771cba 100644
 +  protected function canAddNew(array $context = []) {
 +    $create_bundles = $this->getCreateBundles($context);
      return !empty($create_bundles);
-   }
- 
++  }
++
 +  /**
 +   * {@inheritdoc}
 +   */
 +  public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
++    $form_mode = $this->getSetting('form_mode');
 +    // Remove any entities considered to be empty.
-+    return array_filter($values, function ($value) use ($form) {
-+      return empty($value['entity']) || !$this->inlineFormHandler->isEmptyEntity($value['entity'], $this->getSetting('form_mode'));
++    // This uses the inline form handler's isEmptyEntity method which properly
++    // handles nested inline entity forms.
++    return array_filter($values, function ($value) use ($form_mode) {
++      return empty($value['entity']) || !$this->inlineFormHandler->isEmptyEntity($value['entity'], $form_mode);
 +    });
-+  }
-+
+   }
+ 
  }
-diff --git a/src/Plugin/Field/FieldWidget/InlineEntityFormComplex.php b/src/Plugin/Field/FieldWidget/InlineEntityFormComplex.php
-index bd176e0..a6fde15 100644
---- a/src/Plugin/Field/FieldWidget/InlineEntityFormComplex.php
-+++ b/src/Plugin/Field/FieldWidget/InlineEntityFormComplex.php
-@@ -315,11 +315,13 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
+diff -ruN inline_entity_form-3.0.0-rc21/src/Plugin/Field/FieldWidget/InlineEntityFormComplex.php inline_entity_form-patched/src/Plugin/Field/FieldWidget/InlineEntityFormComplex.php
+--- inline_entity_form-3.0.0-rc21/src/Plugin/Field/FieldWidget/InlineEntityFormComplex.php	2025-05-05 16:33:07
++++ inline_entity_form-patched/src/Plugin/Field/FieldWidget/InlineEntityFormComplex.php	2026-02-06 08:37:30
+@@ -315,11 +315,13 @@
        'handler' => $this->getFieldSetting('handler'),
      ] + $selection_settings;
  
@@ -196,7 +212,7 @@ index bd176e0..a6fde15 100644
  
      if (!$allow_new && $allow_existing) {
        // Only count referencable entities if existing entities are allowed
-@@ -353,13 +355,6 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
+@@ -353,13 +355,6 @@
      // Get the fields that should be displayed in the table.
      $target_bundles = $this->getTargetBundles();
      $fields = $this->inlineFormHandler->getTableFields($target_bundles);
@@ -210,7 +226,7 @@ index bd176e0..a6fde15 100644
      $this->moduleHandler->alter('inline_entity_form_table_fields', $fields, $context);
      $element['entities']['#table_fields'] = $fields;
  
-@@ -544,7 +539,7 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
+@@ -544,7 +539,7 @@
        return $element;
      }
  
@@ -219,7 +235,7 @@ index bd176e0..a6fde15 100644
      $create_bundles_count = count($create_bundles);
      $allow_new = $settings['allow_new'] && !empty($create_bundles);
      $hide_cancel = FALSE;
-@@ -648,7 +643,7 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
+@@ -648,7 +643,7 @@
            '#attributes' => ['class' => ['ief-form', 'ief-form-bottom']],
            'inline_entity_form' => $this->getInlineEntityForm(
              'add',
@@ -228,16 +244,16 @@ index bd176e0..a6fde15 100644
              $parent_langcode,
              $new_key,
              array_merge($parents, [$new_key])
-@@ -706,7 +701,7 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
+@@ -706,7 +701,7 @@
        return;
      }
      $triggering_element = $form_state->getTriggeringElement();
 -    if (empty($triggering_element['#ief_submit_trigger'])) {
-+    if (empty($triggering_element['#ief_submit_trigger']) && !empty($triggered_element['#ief_submit_trigger_all'])) {
++    if (empty($triggering_element['#ief_submit_trigger']) && empty($triggering_element['#ief_submit_trigger_all'])) {
        return;
      }
  
-@@ -1032,13 +1027,16 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
+@@ -1032,13 +1027,16 @@
     *
     * @param \Drupal\Core\Form\FormStateInterface $form_state
     *   Current form state.
@@ -255,7 +271,7 @@ index bd176e0..a6fde15 100644
      $ief_settings = $form_state->get(['inline_entity_form', $this->getIefId()]);
      if (!empty($ief_settings['form settings']['bundle'])) {
        return $ief_settings['form settings']['bundle'];
-@@ -1047,7 +1045,7 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
+@@ -1047,7 +1045,7 @@
        return $ief_settings['bundle'];
      }
      else {
@@ -264,11 +280,10 @@ index bd176e0..a6fde15 100644
        return reset($target_bundles);
      }
    }
-diff --git a/src/Plugin/Field/FieldWidget/InlineEntityFormSimple.php b/src/Plugin/Field/FieldWidget/InlineEntityFormSimple.php
-index 42fa2f5..3adf096 100644
---- a/src/Plugin/Field/FieldWidget/InlineEntityFormSimple.php
-+++ b/src/Plugin/Field/FieldWidget/InlineEntityFormSimple.php
-@@ -106,7 +106,7 @@ class InlineEntityFormSimple extends InlineEntityFormBase {
+diff -ruN inline_entity_form-3.0.0-rc21/src/Plugin/Field/FieldWidget/InlineEntityFormSimple.php inline_entity_form-patched/src/Plugin/Field/FieldWidget/InlineEntityFormSimple.php
+--- inline_entity_form-3.0.0-rc21/src/Plugin/Field/FieldWidget/InlineEntityFormSimple.php	2025-05-05 16:33:07
++++ inline_entity_form-patched/src/Plugin/Field/FieldWidget/InlineEntityFormSimple.php	2026-02-06 08:37:51
+@@ -106,7 +106,7 @@
      }
  
      // Remove add options if the user cannot add new entities.
