@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Drupal\joinup_search\Plugin\search_api\processor;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\search_api\Attribute\SearchApiProcessor;
 use Drupal\search_api\Processor\ProcessorPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -14,16 +16,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * This is currently hardcoded on topics since it is the only hierarchical data
  * we are indexing right now. In the future this can be expanded to loop over
  * all fields and check if any are hierarchical.
- *
- * @SearchApiProcessor(
- *   id = "aggregated_topic_hierarchy",
- *   label = @Translation("Index aggregated topic hierarchy"),
- *   description = @Translation("Allows the indexing of values along with all their ancestors for the topic aggregated hierarchical fields."),
- *   stages = {
- *     "preprocess_index" = -50
- *   }
- * )
  */
+#[SearchApiProcessor(
+  id: "aggregated_topic_hierarchy",
+  label: new TranslatableMarkup("Index aggregated topic hierarchy"),
+  description: new TranslatableMarkup("Allows the indexing of values along with all their ancestors for the topic aggregated hierarchical fields."),
+  stages: [
+    "preprocess_index" => -50,
+  ],
+)]
 class AddAggregatedTopicHierarchy extends ProcessorPluginBase {
 
   public function __construct(

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_solution\Plugin\search_api\processor;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\flag\FlagServiceInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
+use Drupal\search_api\Attribute\SearchApiProcessor;
 use Drupal\search_api\Datasource\DatasourceInterface;
 use Drupal\search_api\Item\ItemInterface;
 use Drupal\search_api\Processor\ProcessorPluginBase;
@@ -15,18 +17,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Adds Interoperable flag field to the indexed data.
- *
- * @SearchApiProcessor(
- *   id = "interoperable_flag",
- *   label = @Translation("Interoperable flag"),
- *   description = @Translation("Adds the Interoperable value to the solr."),
- *   stages = {
- *     "add_properties" = 0,
- *   },
- *   locked = false,
- *   hidden = false,
- * )
  */
+#[SearchApiProcessor(
+  id: "interoperable_flag",
+  label: new TranslatableMarkup("Interoperable flag"),
+  description: new TranslatableMarkup("Adds the Interoperable value to the solr."),
+  stages: [
+    "add_properties" => 0,
+  ],
+  locked: false,
+  hidden: false,
+)]
 class InteroperableFlagProcessor extends ProcessorPluginBase {
 
   /**

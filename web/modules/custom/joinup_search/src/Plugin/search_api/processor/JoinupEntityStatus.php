@@ -8,10 +8,12 @@ use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\node\NodeInterface;
+use Drupal\search_api\Attribute\SearchApiProcessor;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Item\ItemInterface;
 use Drupal\search_api\Plugin\PluginFormTrait;
@@ -21,16 +23,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Excludes unpublished entities from the index.
- *
- * @SearchApiProcessor(
- *   id = "joinup_entity_status",
- *   label = @Translation("Joinup entity status"),
- *   description = @Translation("Exclude unpublished content and users."),
- *   stages = {
- *     "alter_items" = 0,
- *   },
- * )
  */
+#[SearchApiProcessor(
+  id: "joinup_entity_status",
+  label: new TranslatableMarkup("Joinup entity status"),
+  description: new TranslatableMarkup("Exclude unpublished content and users."),
+  stages: [
+    "alter_items" => 0,
+  ],
+)]
 class JoinupEntityStatus extends ProcessorPluginBase implements PluginFormInterface {
 
   use PluginFormTrait;
