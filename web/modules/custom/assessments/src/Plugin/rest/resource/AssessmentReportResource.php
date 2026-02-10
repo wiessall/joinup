@@ -25,6 +25,7 @@ use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\AssessmentStatement;
 use Drupal\assessments\Entity\PublicOrganisation;
+use Drupal\assessments\ErrorMessage;
 use Drupal\assessments\ProvidedByHelperTrait;
 use Drupal\file\FileInterface;
 use Drupal\file\Plugin\Field\FieldType\FileFieldItemList;
@@ -156,7 +157,9 @@ class AssessmentReportResource extends ResourceBase {
   public function post(array $data): ResourceResponse {
     // Check data against the schema defined in the OpenAPI swagger.
     if ($errors = $this->getOpenApiSchemaErrors($data)) {
-      return new ResourceResponse(['errors' => $errors], 422);
+      return new ResourceResponse([
+        'errors' => $this->prepareErrorMessages($errors, $data),
+      ], 422);
     }
 
     $report = $this->createReport($data);
@@ -850,6 +853,58 @@ class AssessmentReportResource extends ResourceBase {
   protected function addError(string $path, string $message): void {
     $this->errors[$path][] = $message;
     $this->errors[$path] = array_unique($this->errors[$path]);
+  }
+
+  /**
+   * Prepares a collection of error messages based on the provided input.
+   *
+   * Validation errors are sometimes too cryptic to be useful for the consumer.
+   * This method tries to enhance them by providing more meaningful messages.
+   *
+   * A typical case is the assessments API we often assign two alternative
+   * schemas to a property by using the oneOf operator. The practical case is
+   * when we need EITHER to create an object OR refer it by its ID. When we pass
+   * an object which doesn't validate, the following sequence or error messages
+   * is generated:
+   * - Object value found, but a string is required
+   * - Failed to match exactly one schema
+   * The same happens when the string is found but is invalid. But this looks
+   * quite misleading for the consumer. We enhance it by replacing both
+   * messages with one more meaningful.
+   *
+   * @param array $errorsByPath
+   *   An array containing validation errors for specific fields.
+   * @param array $data
+   *   An array containing the original data related to the errors.
+   *
+   * @return array
+   *   An array of processed error messages.
+   */
+  protected function prepareErrorMessages(array $errorsByPath, array $data): array {
+    foreach ($errorsByPath as &$errors) {
+      // Key by error message as is easier to handle. We'll revert later.
+      $errors = array_combine($errors, $errors);
+
+      if (!isset($errors[ErrorMessage::OneOf->value])) {
+        continue;
+      }
+      unset($errors[ErrorMessage::OneOf->value]);
+
+      if (isset($errors[ErrorMessage::ObjectFoundStringRequired->value])) {
+        unset($errors[ErrorMessage::ObjectFoundStringRequired->value]);
+        $errors[ErrorMessage::ObjectFoundStringRequiredAlt->value] = ErrorMessage::ObjectFoundStringRequiredAlt->value;
+      }
+
+      if (isset($errors[ErrorMessage::StringFoundObjectRequired->value])) {
+        unset($errors[ErrorMessage::StringFoundObjectRequired->value]);
+        $errors[ErrorMessage::StringFoundObjectRequiredAlt->value] = ErrorMessage::StringFoundObjectRequiredAlt->value;
+      }
+    }
+
+    return array_map(
+      fn(array $errors): array => array_values($errors),
+      $errorsByPath,
+    );
   }
 
 }

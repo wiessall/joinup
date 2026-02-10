@@ -477,8 +477,7 @@ function assessments_inline_entity_form_entity_form_alter(array &$entity_form, F
     assert($collection instanceof CollectionInterface);
 
     $solution
-      // All solutions created via assessments form are belonging to a
-      // 'collector' collection.
+      // All solutions created via this form belong to a 'collector' collection.
       ->setGroup($collection)
       // And are published by default.
       ->set('field_state', 'published');
