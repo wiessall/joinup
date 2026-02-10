@@ -1,0 +1,13 @@
+uuid: 41d954f8-bd3f-48e4-a063-dcad515a53f7
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.spatial
+id: taxonomy_term.spatial
+targetEntityType: taxonomy_term
+bundle: spatial
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }
