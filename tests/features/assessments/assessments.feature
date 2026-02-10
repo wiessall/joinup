@@ -1,10 +1,9 @@
-@api @group-c
+@api @group-c @javascript
 Feature: Assessment Report Entity Management
   In order to manage assessment reports directly
   As a user with appropriate permissions
   I need to be able to create, edit, and delete assessment report entities
 
-  @javascript
   Scenario: Create a new assessment report with required fields
     Given solution content:
       | title         | landing page           |
@@ -166,7 +165,6 @@ Feature: Assessment Report Entity Management
     When I press "Delete"
     Then I should see the success message containing "The assessment Test Assessment Report 2025 v2 has been deleted."
 
-  @javascript
   Scenario: Initiative name field accepts 256+ characters but expression title is truncated to 255
     Given I am logged in as an "authenticated user"
     And I go to "/collection/assessments/report/create"
@@ -203,3 +201,41 @@ Feature: Assessment Report Entity Management
     # Verify that the expression entity title (name field) was truncated to exactly 255 characters
     # The 323-char initiative_name gets copied to the name field and truncated to 255 chars by the presave hook
     Then the "expression" assessment with name "Comprehensive Overview and Strategic Analysis of System Architecture, Functional Requirements, Operational Constraints, Governance Models, Security and Compliance Requirements, Performance Optimization, and Long-Term Maintainability Considerations for Sca" should exist
+
+  # Regression test for ISAICP-10806: Empty participation entities are created
+  Scenario: Empty participation entities should not be created when affected stakeholders section is left empty
+    Given I am logged in as an "authenticated user"
+    And I go to "/collection/assessments/report/create"
+    Then I should see the heading "Create assessment report"
+
+    When I fill in "Short title" with "Test Empty Participation ISAICP-10806"
+    And I select "Local public sector body" from "Type of public sector body"
+    And I wait for AJAX to finish
+    And I select "Belgium" from "Country"
+    And I wait for AJAX to finish
+    And I fill in "New organisation name" with "Test Organisation"
+
+    # Add binding requirement with required fields but WITHOUT filling "Affected stakeholders"
+    When I click "New binding requirement"
+    And a modal should open
+
+    When I click "Initiative" in the "Modal content" region
+    And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Test Initiative" in the "Modal content" region
+    And I fill in "expression[0][inline_entity_form][description][0][value]" with "Some description" in the "Modal content" region
+
+    When I click "Concerned public services" in the "Modal content" region
+    And I fill in "affects[0][inline_entity_form][name][0][value]" with "Test Service" in the "Modal content" region
+
+    # Fill description last to avoid losing value during tab switching
+    When I click "Requirements" in the "Modal content" region
+    And I fill in "description[0][value]" with "Test requirement description" in the "Modal content" region
+
+    # Press Save directly without clicking other tabs
+    Then I press "Save" in the "Modal buttons" region
+    And the modal should be closed
+
+    When I press "Save as draft"
+    Then I should see the success message containing "New assessment Test Empty Participation ISAICP-10806 has been created."
+
+    # Verify that no empty participation entities were created
+    Then no participation entities should exist for the "Test Empty Participation ISAICP-10806" assessment report
