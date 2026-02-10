@@ -110,7 +110,7 @@ Invalid references:
     documents:
       # Cannot reach this host.
       - 'https://files.example.com/documents/req-1.pdf'
-      # Extension not allowed.
+      # Extension isn't allowed.
       - '__base_url__/sites/default/files/assessment-test/evil.exe'
       # Exceeds max file size.
       - '__base_url__/sites/default/files/assessment-test/fat.docx'
@@ -292,7 +292,7 @@ Valid with optional fields omitted:
           - participant_type:
               - "national_public_sector_body"
         # asset is omitted (optional)
-        # documents is omitted (optional)
+        # documents are omitted (optional)
     # results_in is omitted (optional)
     # remaining_barriers is omitted (optional)
     # documents is omitted (optional)
