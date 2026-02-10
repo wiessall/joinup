@@ -105,6 +105,7 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     $this->assertSame(422, $response->getStatusCode());
 
     $data = Json::decode($response->getBody()->getContents());
+    $this->assertArrayHasKey('errors', $data);
     $errors = $data['errors'];
 
     // Verify each mandatory field has a minLength error.
@@ -200,12 +201,14 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
       ],
       'has_participation' => [],
       'asset' => [],
+      'documented_in' => NULL,
     ];
 
     $response = $this->post($payload);
     $data = Json::decode($response->getBody()->getContents());
 
     // Update the expectation with generated UUIDs and URIs.
+    $this->assertArrayNotHasKey('errors', $data);
     $uuid = $data['id'];
     $uri = 'http://data.europa.eu/s2k/' . $uuid;
     $expect = ['id' => $uuid, 'uri' => $uri] + $expect;
@@ -223,7 +226,7 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     unset($data['binding_requirement'][0]['asset'][0]['url']);
     unset($data['binding_requirement'][0]['asset'][1]['url']);
 
-    $this->assertEqualsCanonicalizing($expect, $data);
+    $this->assertEquals($expect, $data);
 
     // Verify all entities created through the API are published.
     $entityRepository = \Drupal::service('entity.repository');
@@ -276,14 +279,17 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     $assert->statusCodeEquals(200);
     // The page is cacheable but this is the first hit.
     $assert->responseHeaderEquals('X-Drupal-Cache', 'MISS');
-    $this->assertEqualsCanonicalizing($expect, $actual);
+    $this->assertEquals($expect, $actual);
 
     // Test that the response is cached.
     $this->drupalGet('/api/assessments/v1/assessment/' . $data['id']);
     $assert->statusCodeEquals(200);
     // The response is retrieved from cache.
     $assert->responseHeaderEquals('X-Drupal-Cache', 'HIT');
-    $this->assertEqualsCanonicalizing($expect, $actual);
+    // Asset URL is not testable because depends on the environment.
+    unset($actual['binding_requirement'][0]['asset'][0]['url']);
+    unset($actual['binding_requirement'][0]['asset'][1]['url']);
+    $this->assertEquals($expect, $actual);
 
     // Cleanup.
     $report = \Drupal::service('entity.repository')->loadEntityByUuid('assessment', $data['id']);
@@ -310,6 +316,7 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     $response = $this->post($basePayload);
     $this->assertSame(201, $response->getStatusCode());
     $data = Json::decode($response->getBody()->getContents());
+    $this->assertArrayNotHasKey('errors', $data);
     $firstReportId = $data['id'];
     $firstProviderId = $data['provider']['id'];
 
@@ -323,6 +330,7 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     $response = $this->post($payload);
     $this->assertSame(201, $response->getStatusCode(), "Failed for name: '$variantName'");
     $data = Json::decode($response->getBody()->getContents());
+    $this->assertArrayNotHasKey('errors', $data);
     $secondReportId = $data['id'];
 
     // Verify the organisation count matches expectation.
@@ -405,6 +413,7 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     $response = $this->post($payload);
     $this->assertSame(201, $response->getStatusCode());
     $data = Json::decode($response->getBody()->getContents());
+    $this->assertArrayNotHasKey('errors', $data);
 
     // Update the expectation with generated UUIDs and URIs.
     $uuid = $data['id'];
