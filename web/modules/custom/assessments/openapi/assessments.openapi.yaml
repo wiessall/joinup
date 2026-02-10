@@ -437,6 +437,7 @@ components:
 
     Assessment:
       type: object
+      description: European Union Interoperability Act assessment report.
       required:
         - name
         - binding_requirement
@@ -454,32 +455,7 @@ components:
           readOnly: true
           description: The canonical URI of the assessment report
         language:
-          type: string
-          enum:
-            - bg  # Bulgarian
-            - cs  # Czech
-            - da  # Danish
-            - de  # German
-            - el  # Greek
-            - en  # English
-            - es  # Spanish
-            - et  # Estonian
-            - fi  # Finnish
-            - fr  # French
-            - ga  # Irish
-            - hr  # Croatian
-            - hu  # Hungarian
-            - it  # Italian
-            - lt  # Lithuanian
-            - lv  # Latvian
-            - mt  # Maltese
-            - nl  # Dutch
-            - pl  # Polish
-            - pt  # Portuguese
-            - ro  # Romanian
-            - sk  # Slovak
-            - sl  # Slovenian
-            - sv  # Swedish
+          $ref: '#/components/schemas/EuropeanUnionLanguage'
           description: The report's language. If omitted, defaults to English.
         name:
           type: string
@@ -488,13 +464,14 @@ components:
           maxLength: 255
         provider:
           description: |
-            A public organisation. Pass an `Organisation` object to create a new
-            organisation or the organisation's ID to refer an existing one. To
-            find out which are all existing organisations, use the
-            `/organisation` GET resource, documented in this page.
+            A public organisation. For an existing organisationm pass its ID. To
+            create a new organisation pass a `MemberStateOrganisation` object.
+            It's not possible to to create a new European Union organisation,
+            you should always pass an ID to refer one. To find out which are all
+            existing organisations, use the `/organisation` GET resource,
+            documented in this page.
           oneOf:
-            - $ref: '#/components/schemas/EuropeanProvider'
-            - $ref: '#/components/schemas/CountryProvider'
+            - $ref: '#/components/schemas/MemberStateOrganisation'
             - $ref: '#/components/schemas/UUID'
         relevant_report:
           type: array
@@ -538,8 +515,10 @@ components:
           type: string
           description: Any additional comments or notes about the assessment.
 
-    Organisation:
+    EuropeanUnionOrganisation:
       type: object
+      description: |
+        An European Union organisation such as an intitution, agency or body.
       required:
         - name
         - organisation_type
@@ -549,60 +528,30 @@ components:
           schema:
             $ref: '#/components/schemas/UUID'
           readOnly: true
-          description: The universally unique ID of the public organisation.
+          description: The ID of the European Union organisation.
         uri:
           type: string
           format: uri
           readOnly: true
-          description: The canonical URI of the public organisation
+          description: The RDF resource URI of the European Union organisation.
         name:
           type: string
-          description: The public organisation name.
+          description: The European Union organisation name.
           minLength: 1
           maxLength: 255
         organisation_type:
           type: string
-          description: The public organisation type.
-          enum:
-            - european_union_agency
-            - european_union_body
-            - european_union_institution
-            - local_public_sector_body
-            - national_public_sector_body
-            - regional_public_sector_body
-        country:
-          $ref: '#/components/schemas/EuropeanUnionCountry'
-          description: |
-            The public organisation type. To be omitted for EU institutions,
-            bodies, agencies.
-
-    EuropeanProvider:
-      type: object
-      required:
-        - name
-        - organisation_type
-      additionalProperties: false
-      properties:
-        id:
-          schema:
-            $ref: '#/components/schemas/UUID'
-          readOnly: true
-          description: The universally unique ID of the public organisation.
-        name:
-          type: string
-          description: The public organisation name.
-          minLength: 1
-          maxLength: 255
-        organisation_type:
-          type: string
-          description: The public organisation type.
+          description: The European Union organisation type.
           enum:
             - european_union_agency
             - european_union_body
             - european_union_institution
 
-    CountryProvider:
+    MemberStateOrganisation:
       type: object
+      description: |
+        An organisation acting on a European Union members state, on a national,
+        regional or local level.
       required:
         - name
         - organisation_type
@@ -613,24 +562,27 @@ components:
           schema:
             $ref: '#/components/schemas/UUID'
           readOnly: true
-          description: The universally unique ID of the public organisation.
+          description: The ID of the members state organisation.
+        uri:
+          type: string
+          format: uri
+          readOnly: true
+          description: The RDF resource URI of the members state organisation.
         name:
           type: string
-          description: The public organisation name.
+          description: The members state organisation name.
           minLength: 1
           maxLength: 255
         organisation_type:
           type: string
-          description: The public organisation type.
+          description: The member state organisation type.
           enum:
             - local_public_sector_body
             - national_public_sector_body
             - regional_public_sector_body
         country:
           $ref: '#/components/schemas/EuropeanUnionCountry'
-          description: |
-            The public organisation type. To be omitted for EU institutions,
-            bodies, agencies.
+          description: The member state organisation country.
 
     BindingRequirement:
       type: object
@@ -838,45 +790,6 @@ components:
           type: string
           description: The personal opinion on the report.
 
-    # Generic reusable types
-
-    EuropeanUnionCountry:
-      type: string
-      nullable: true
-      description: ISO-3166 alpha-2 country code
-      enum:
-        - AT  # Austria
-        - BE  # Belgium
-        - BG  # Bulgaria
-        - HR  # Croatia
-        - CY  # Cyprus
-        - CZ  # Czechia
-        - DK  # Denmark
-        - EE  # Estonia
-        - FI  # Finland
-        - FR  # France
-        - DE  # Germany
-        - GR  # Greece
-        - HU  # Hungary
-        - IE  # Ireland
-        - IT  # Italy
-        - LV  # Latvia
-        - LT  # Lithuania
-        - LU  # Luxembourg
-        - MT  # Malta
-        - NL  # Netherlands
-        - PL  # Poland
-        - PT  # Portugal
-        - RO  # Romania
-        - SK  # Slovakia
-        - SI  # Slovenia
-        - ES  # Spain
-        - SE  # Sweden
-
-    UUID:
-      type: string
-      pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
-
     # Pagination wrapper schemas
 
     Pager:
@@ -979,3 +892,70 @@ components:
                 description: The URL to the asset page on the portal.
         pager:
           $ref: '#/components/schemas/Pager'
+
+    # Generic reusable types
+
+    EuropeanUnionCountry:
+      type: string
+      nullable: true
+      description: ISO-3166 alpha-2 country code
+      enum:
+        - AT  # Austria
+        - BE  # Belgium
+        - BG  # Bulgaria
+        - HR  # Croatia
+        - CY  # Cyprus
+        - CZ  # Czechia
+        - DK  # Denmark
+        - EE  # Estonia
+        - FI  # Finland
+        - FR  # France
+        - DE  # Germany
+        - GR  # Greece
+        - HU  # Hungary
+        - IE  # Ireland
+        - IT  # Italy
+        - LV  # Latvia
+        - LT  # Lithuania
+        - LU  # Luxembourg
+        - MT  # Malta
+        - NL  # Netherlands
+        - PL  # Poland
+        - PT  # Portugal
+        - RO  # Romania
+        - SK  # Slovakia
+        - SI  # Slovenia
+        - ES  # Spain
+        - SE  # Sweden
+
+    EuropeanUnionLanguage:
+      type: string
+      enum:
+        - bg  # Bulgarian
+        - cs  # Czech
+        - da  # Danish
+        - de  # German
+        - el  # Greek
+        - en  # English
+        - es  # Spanish
+        - et  # Estonian
+        - fi  # Finnish
+        - fr  # French
+        - ga  # Irish
+        - hr  # Croatian
+        - hu  # Hungarian
+        - it  # Italian
+        - lt  # Lithuanian
+        - lv  # Latvian
+        - mt  # Maltese
+        - nl  # Dutch
+        - pl  # Polish
+        - pt  # Portuguese
+        - ro  # Romanian
+        - sk  # Slovak
+        - sl  # Slovenian
+        - sv  # Swedish
+
+    UUID:
+      type: string
+      pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
