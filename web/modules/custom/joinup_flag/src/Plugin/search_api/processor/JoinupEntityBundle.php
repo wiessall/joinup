@@ -22,8 +22,8 @@ use Drupal\search_api\SearchApiException;
   stages: [
     "add_properties" => 0,
   ],
-  locked: true,
-  hidden: true,
+  locked: TRUE,
+  hidden: TRUE,
 )]
 class JoinupEntityBundle extends ProcessorPluginBase {
 

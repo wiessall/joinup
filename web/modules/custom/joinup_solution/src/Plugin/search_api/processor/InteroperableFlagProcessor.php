@@ -25,8 +25,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   stages: [
     "add_properties" => 0,
   ],
-  locked: false,
-  hidden: false,
+  locked: FALSE,
+  hidden: FALSE,
 )]
 class InteroperableFlagProcessor extends ProcessorPluginBase {
 
