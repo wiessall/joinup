@@ -16,7 +16,7 @@ use Drupal\taxonomy\Entity\Vocabulary;
 class AssessmentAccessUiTest extends JoinupExistingSiteTestBase {
 
   /**
-   * Tests canonical pages access restrictions.
+   * Tests assessment canonical pages access.
    */
   public function testAssessmentPagesAccess(): void {
     $this->drupalLogin($this->createUser());
@@ -47,7 +47,7 @@ class AssessmentAccessUiTest extends JoinupExistingSiteTestBase {
   }
 
   /**
-   * Tests canonical pages access restrictions.
+   * Tests taxonomy term canonical pages access.
    */
   public function testTaxonomyTermPagesAccess(): void {
     $this->drupalLogin($this->createUser());
