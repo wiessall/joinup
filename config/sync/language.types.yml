@@ -11,7 +11,7 @@ negotiation:
   language_content:
     enabled:
       oss-language-content-entity: -9
-      language-interface: 9
+      language-url: -8
       language-selected: 12
     method_weights:
       language-content-entity: -9
