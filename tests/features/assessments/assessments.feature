@@ -134,8 +134,17 @@ Feature: Assessment Report Entity Management
     When I click "Technical" in the "Content" region
     Then I should not see "Provide a justification"
     And the response should contain "<span class=\"visually-hidden fieldset-legend fw-bold\">Identified effects on cross-border technical interoperability</span>"
+    # Fill in a judgement value to verify it gets cleared on N/A.
     When I select the radio button "Beneficial" with the name "technical[0][inline_entity_form][interpretation]"
     Then I should see "Provide a justification"
+    And I fill in "technical[0][inline_entity_form][judgement][0][value]" with "Implements REST APIs and OpenAPI specs"
+    # Selecting N/A should hide and clear the judgement field.
+    When I select the radio button "N/A" with the name "technical[0][inline_entity_form][interpretation]"
+    Then I should not see "Provide a justification"
+    # Switching back to Beneficial should show an empty judgement field.
+    When I select the radio button "Beneficial" with the name "technical[0][inline_entity_form][interpretation]"
+    Then I should see "Provide a justification"
+    And the "technical[0][inline_entity_form][judgement][0][value]" field should contain ""
     And I fill in "technical[0][inline_entity_form][judgement][0][value]" with "Implements REST APIs and OpenAPI specs"
 
     And I should see "Describe any remaining barriers to cross-border interoperability discovered."
