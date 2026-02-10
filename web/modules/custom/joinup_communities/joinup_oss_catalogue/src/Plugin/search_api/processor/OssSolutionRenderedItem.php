@@ -30,8 +30,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   stages: [
     "add_properties" => 0,
   ],
-  locked: true,
-  hidden: true,
+  locked: TRUE,
+  hidden: TRUE,
 )]
 class OssSolutionRenderedItem extends ProcessorPluginBase {
 
