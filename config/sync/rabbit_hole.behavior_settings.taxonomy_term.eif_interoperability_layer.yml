@@ -1,0 +1,13 @@
+uuid: 049aeb69-a811-4e9e-b302-cddcba09b4d3
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.eif_interoperability_layer
+id: taxonomy_term.eif_interoperability_layer
+targetEntityType: taxonomy_term
+bundle: eif_interoperability_layer
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }
