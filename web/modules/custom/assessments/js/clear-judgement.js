@@ -4,13 +4,10 @@
  */
 
 (function (Drupal) {
-
-  'use strict';
-
-  const sections = ['legal', 'organisational', 'semantic', 'technical'];
+  const sections = ["legal", "organisational", "semantic", "technical"];
 
   Drupal.behaviors.assessmentsClearJudgement = {
-    attach: function (context) {
+    attach(context) {
       sections.forEach((section) => {
         const prefix = `${section}[0][inline_entity_form]`;
         const radios = context.querySelectorAll(
@@ -18,8 +15,8 @@
         );
 
         radios.forEach((radio) => {
-          radio.addEventListener('change', (e) => {
-            if (e.target.value !== '_none') {
+          radio.addEventListener("change", (e) => {
+            if (e.target.value !== "_none") {
               return;
             }
 
@@ -27,12 +24,11 @@
               `textarea[name="${prefix}[judgement][0][value]"]`,
             );
             if (judgement) {
-              judgement.value = '';
+              judgement.value = "";
             }
           });
         });
       });
     },
   };
-
 })(Drupal);
