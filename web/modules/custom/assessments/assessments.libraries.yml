@@ -7,9 +7,3 @@ inline-items:
   css:
     component:
       css/inline-items.css: {}
-
-clear_judgement:
-  js:
-    js/clear-judgement.js: {}
-  dependencies:
-    - core/drupal
