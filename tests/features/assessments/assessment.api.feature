@@ -28,8 +28,8 @@ Feature: Assessments API
       | ACME        | european_union_institution | 5d8be6b1-8038-429e-b84e-6ca8c35fd9b0 |            |
       | Bad Company | local_public_sector_body   | e4893580-f468-4c11-921d-1fe68b8540ae | Luxembourg |
     Given the following assessment statements:
-      | id  | statement_type | judgement             |
-      | 900 | legal          | Needs more assessment |
+      | id  | statement_type | interpretation | judgement             |
+      | 900 | legal          | neutral        | Needs more assessment |
     And report assessment:
       | name     | provider | uuid                                 | state     | results_in |
       | Report 1 | ACME     | 5d8be6b1-8038-429e-b84e-6ca8c35fd9b1 | published | 900        |
@@ -122,7 +122,7 @@ Feature: Assessments API
     binding_requirement: []
     results_in:
       legal:
-        interpretation: null
+        interpretation: neutral
         judgement: Needs more assessment
     remaining_barriers: null
     documents: []
