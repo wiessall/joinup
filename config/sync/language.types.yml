@@ -28,7 +28,6 @@ negotiation:
     enabled:
       joinup_admin_english: -19
       language-url: -18
-      language-user: -17
       language-selected: -13
     method_weights:
       joinup_admin_english: -19
