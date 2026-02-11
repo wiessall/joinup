@@ -1,0 +1,13 @@
+uuid: f31af672-ebd2-4566-8773-e8f9d5eaff70
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.eif_recommendation
+id: taxonomy_term.eif_recommendation
+targetEntityType: taxonomy_term
+bundle: eif_recommendation
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

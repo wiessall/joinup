@@ -1,0 +1,13 @@
+uuid: b0d1e2a4-3c41-4d11-a822-9640a04b6610
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.licence_type
+id: taxonomy_term.licence_type
+targetEntityType: taxonomy_term
+bundle: licence_type
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

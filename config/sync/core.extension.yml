@@ -224,6 +224,7 @@ module:
   purge_queuer_coretags: 0
   purge_users: 0
   queue_ui: 0
+  rabbit_hole: 0
   rdf_sync: 0
   rdf_sync_published: 0
   redirect: 0
