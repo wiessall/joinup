@@ -199,6 +199,15 @@ class AssessmentsContext extends RawDrupalContext {
       $values['type'] = $values['statement_type'];
       $values = (object) $values;
 
+      if (!empty($values->interpretation)) {
+        $tids = \Drupal::entityQuery('taxonomy_term')->accessCheck(FALSE)
+          ->condition('vid', 'assess_statement_interpretation')
+          ->condition('id', $values->interpretation)
+          ->execute();
+        assert(count($tids) === 1);
+        $values->interpretation = reset($tids);
+      }
+
       if (!empty($values->landing_page)) {
         $fileValues = [];
         foreach ($this->explodeDelimitedSeparatedStepArgument($values->landing_page) as $filename) {
