@@ -1,0 +1,13 @@
+uuid: 6fbb1d64-d5ab-4207-895b-ea4bc091eece
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.oss_platform
+id: taxonomy_term.oss_platform
+targetEntityType: taxonomy_term
+bundle: oss_platform
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

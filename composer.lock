@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f077c39a3db983740b012ebcbed81633",
+    "content-hash": "38d3e63c186b2bfcffc2b8946362d82c",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -8558,6 +8558,86 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/queue_ui",
                 "issues": "https://www.drupal.org/project/issues/queue_ui"
+            }
+        },
+        {
+            "name": "drupal/rabbit_hole",
+            "version": "2.0.0-beta1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/rabbit_hole.git",
+                "reference": "2.0.0-beta1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/rabbit_hole-2.0.0-beta1.zip",
+                "reference": "2.0.0-beta1",
+                "shasum": "8e81aa09ed02fc7562fbe29c70e86f55ba0ba7f2"
+            },
+            "require": {
+                "drupal/core": "^9.5 || ^10 || ^11"
+            },
+            "require-dev": {
+                "drupal/commerce_product": "*",
+                "drupal/file_entity": "*",
+                "drupal/group": "*",
+                "drupal/paragraphs-paragraphs_library": "*",
+                "drupal/token": "*",
+                "drupal/tour": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.0-beta1",
+                    "datestamp": "1736896334",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "aleksey.tk",
+                    "homepage": "https://www.drupal.org/user/22093"
+                },
+                {
+                    "name": "bohart",
+                    "homepage": "https://www.drupal.org/user/289861"
+                },
+                {
+                    "name": "dylan donkersgoed",
+                    "homepage": "https://www.drupal.org/user/2803351"
+                },
+                {
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
+                },
+                {
+                    "name": "matroskeen",
+                    "homepage": "https://www.drupal.org/user/3426249"
+                },
+                {
+                    "name": "mparker17",
+                    "homepage": "https://www.drupal.org/user/536298"
+                },
+                {
+                    "name": "Odd Hill",
+                    "homepage": "https://www.drupal.org/user/789934"
+                },
+                {
+                    "name": "olofbokedal",
+                    "homepage": "https://www.drupal.org/user/1198438"
+                }
+            ],
+            "description": "Basic functionality that is shared among the different Rabbit Hole modules.",
+            "homepage": "https://www.drupal.org/project/rabbit_hole",
+            "support": {
+                "source": "https://git.drupalcode.org/project/rabbit_hole"
             }
         },
         {
