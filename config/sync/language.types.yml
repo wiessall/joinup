@@ -28,7 +28,6 @@ negotiation:
       language-url-fallback: 1
   language_interface:
     enabled:
-      joinup_force_english: -20
       joinup_admin_english: -19
       language-url: -18
       language-user: -17
@@ -41,4 +40,3 @@ negotiation:
       language-session: -15
       language-user-admin: -14
       language-selected: -13
-      joinup_force_english: -20

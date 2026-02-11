@@ -4,7 +4,6 @@ status: true
 dependencies:
   module:
     - joinup_i18n
-    - user
   theme:
     - ventuno
 id: ventuno_languagepicker
@@ -18,11 +17,4 @@ settings:
   label: 'Language Picker'
   label_display: '0'
   provider: joinup_i18n
-visibility:
-  user_role:
-    id: user_role
-    negate: false
-    context_mapping:
-      user: '@user.current_user_context:current_user'
-    roles:
-      moderator: moderator
+visibility: {}
