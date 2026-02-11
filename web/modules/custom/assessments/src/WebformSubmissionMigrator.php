@@ -7,14 +7,12 @@ namespace Drupal\assessments;
 use Drupal\Core\Entity\ContentEntityStorageInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\PublicOrganisation;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\webform\WebformSubmissionInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Migrates webform assessment submissions into assessment report entities.
@@ -96,19 +94,10 @@ class WebformSubmissionMigrator {
    */
   protected readonly LoggerInterface $logger;
 
-  /**
-   * CSV file handle for migration logging (local development only).
-   *
-   * @var resource|null
-   */
-  protected $csvHandle = NULL;
-
   public function __construct(
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly AssessmentVocabularyHelper $vocabularyHelper,
     protected readonly EntityRepositoryInterface $entityRepository,
-    protected readonly FileSystemInterface $fileSystem,
-    protected readonly RequestStack $requestStack,
     LoggerChannelFactoryInterface $loggerFactory,
   ) {
     $this->logger = $loggerFactory->get('assessments');
@@ -132,9 +121,6 @@ class WebformSubmissionMigrator {
     $skipped = 0;
     $failed = 0;
 
-    // Initialize CSV logging if enabled.
-    $this->initCsvLog();
-
     foreach ($storage->loadMultiple($ids) as $submission) {
       \assert($submission instanceof WebformSubmissionInterface);
       try {
@@ -154,13 +140,8 @@ class WebformSubmissionMigrator {
           '@sid' => $submission->id(),
           '@error' => $e->getMessage(),
         ]);
-        // Log failed migrations to CSV as well.
-        $this->logToCsv($submission, NULL, $e->getMessage());
       }
     }
-
-    // Close CSV file.
-    $this->closeCsvLog();
 
     return ['migrated' => $migrated, 'skipped' => $skipped, 'failed' => $failed];
   }
@@ -181,7 +162,6 @@ class WebformSubmissionMigrator {
         '@sid' => $submission->id(),
         '@type' => $typeLabel,
       ]);
-      $this->logToCsv($submission, NULL, "Skipped: empty or unknown provider type '$typeLabel'");
       return FALSE;
     }
 
@@ -283,9 +263,6 @@ class WebformSubmissionMigrator {
     }
 
     $report->save();
-
-    // Log successful migration to CSV.
-    $this->logToCsv($submission, $report);
 
     return TRUE;
   }
@@ -717,72 +694,6 @@ class WebformSubmissionMigrator {
     $text = preg_replace("#\n{3,}#", "\n\n", $text);
 
     return trim($text);
-  }
-
-  /**
-   * Initializes CSV logging if enabled via environment variable.
-   *
-   * Set ASSESSMENT_MIGRATION_CSV=1 to enable CSV logging.
-   * The CSV file will be created in the public files directory.
-   */
-  protected function initCsvLog(): void {
-
-    $filePath = 'public://assessment_migration_' . date('Y-m-d_H-i-s') . '.csv';
-    $realPath = $this->fileSystem->realpath($filePath);
-    if ($realPath === FALSE) {
-      $directory = $this->fileSystem->realpath('public://');
-      $realPath = $directory . '/assessment_migration_' . date('Y-m-d_H-i-s') . '.csv';
-    }
-
-    $this->csvHandle = fopen($realPath, 'w');
-    if ($this->csvHandle) {
-      fputcsv($this->csvHandle, [
-        'Webform ID',
-        'Report ID',
-        'Webform Status',
-        'Report State',
-        'Webform Title',
-        'Report Name',
-        'Webform URL',
-        'Report URL',
-        'Error',
-      ]);
-      $this->logger->info('CSV migration log initialized: @path', ['@path' => $realPath]);
-    }
-  }
-
-  /**
-   * Logs a migration to the CSV file.
-   */
-  protected function logToCsv(WebformSubmissionInterface $submission, ?AssessmentReport $report, string $error = ''): void {
-    if (!$this->csvHandle) {
-      return;
-    }
-
-    $data = $submission->getData();
-    $baseUrl = $this->requestStack->getCurrentRequest()?->getSchemeAndHttpHost() ?? '';
-
-    fputcsv($this->csvHandle, [
-      $submission->id(),
-      $report?->id() ?? '',
-      $submission->isDraft() ? 'draft' : 'completed',
-      $report?->get('state')->value ?? '',
-      $data['short_title'] ?? 'Untitled',
-      $report?->label() ?? '',
-      $baseUrl . '/admin/structure/webform/manage/assessment/submission/' . $submission->id(),
-      $report ? $baseUrl . '/assessment/' . $report->id() : '',
-      $error,
-    ]);
-  }
-
-  /**
-   * Closes the CSV log file.
-   */
-  protected function closeCsvLog(): void {
-    if ($this->csvHandle) {
-      fclose($this->csvHandle);
-      $this->csvHandle = NULL;
-    }
   }
 
 }
