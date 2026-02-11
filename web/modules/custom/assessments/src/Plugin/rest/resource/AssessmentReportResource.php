@@ -255,10 +255,12 @@ class AssessmentReportResource extends ResourceBase {
       if (!$report->get($type)->isEmpty()) {
         $item = $report->get($type)->entity;
         assert($item instanceof AssessmentStatement);
-        $resultsIn[$type] = [
-          'interpretation' => $this->itemListToValue($item->get('interpretation'), 'id'),
-          'judgement' => $item->get('judgement')->value,
-        ];
+        if ($interpretation = $this->itemListToValue($item->get('interpretation'), 'id')) {
+          $resultsIn[$type] = [
+            'interpretation' => $interpretation,
+            'judgement' => $item->get('judgement')->value,
+          ];
+        }
       }
     }
 
@@ -794,7 +796,7 @@ class AssessmentReportResource extends ResourceBase {
       $items[] = $object->$property;
     }
 
-    return $cardinality == 1 ? reset($items) : $items;
+    return $cardinality == 1 ? ($items ? reset($items) : NULL) : $items;
   }
 
   /**
