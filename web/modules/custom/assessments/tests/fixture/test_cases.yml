@@ -25,8 +25,9 @@ Invalid schema:
           - country:
               - "BE"
               - "NL"
-              - "LU"
             participant_type:
+              # "national_public_sector_body" is listed twice to test uniqueItems constraint.
+              - "national_public_sector_body"
               - "national_public_sector_body"
           - country:
               - "IT"
@@ -67,6 +68,8 @@ Invalid schema:
         - The property description is required
       /binding_requirement/0/expression/0/description:
         - The property description is required
+      /binding_requirement/0/has_participation/0/participant_type:
+        - There are no duplicates allowed in the array
       /binding_requirement/0/has_participation/1/country:
         - There must be a maximum of 1 items in the array, 2 found
       /binding_requirement/0/has_participation/1/country/0:
