@@ -1,4 +1,4 @@
-invalid_schema:
+Invalid schema:
   payload:
     # This property is not accepted.
     foo: bar
@@ -76,14 +76,12 @@ invalid_schema:
       /other_comment:
         - Integer value found, but a string is required
       /provider:
-        - The property country is not defined and the definition does not allow additional properties
         - An object or a string is required. Object value found, but is invalid
       /provider/country:
         - Does not have a value in the enumeration ["AT","BE","BG","HR","CY","CZ","DK","EE","FI","FR","DE","GR","HU","IE","IT","LV","LT","LU","MT","NL","PL","PT","RO","SK","SI","ES","SE"]
       /provider/name:
         - The property name is required
       /provider/organisation_type:
-        - Does not have a value in the enumeration ["european_union_agency","european_union_body","european_union_institution"]
         - Does not have a value in the enumeration ["local_public_sector_body","national_public_sector_body","regional_public_sector_body"]
       /relevant_report:
         - String value found, but an array is required
@@ -93,7 +91,7 @@ invalid_schema:
         - Array value found, but a string is required
         - Does not have a value in the enumeration ["negative","neutral","positive"]
 
-invalid_references:
+Invalid references:
   payload:
     name: "Legislation waste management"
     provider: 'f2f6bdae-7767-4230-9570-309b42392d1b'
@@ -105,13 +103,14 @@ invalid_references:
         description: "Article 5"
         affects:
           - name: "Digital Monitoring Unit"
-            thematic_area: "digital_and_innovation_services"
+            thematic_area:
+              - "digital_and_innovation_services"
         asset:
           - "3b1548db-0f29-42f4-a23c-2ee43ed20ba9"
     documents:
       # Cannot reach this host.
       - 'https://files.example.com/documents/req-1.pdf'
-      # Extension not allowed.
+      # Extension isn't allowed.
       - '__base_url__/sites/default/files/assessment-test/evil.exe'
       # Exceeds max file size.
       - '__base_url__/sites/default/files/assessment-test/fat.docx'
@@ -136,7 +135,7 @@ invalid_references:
       /provider:
         - "A public organisation with ID 'f2f6bdae-7767-4230-9570-309b42392d1b' does not exist"
 
-valid:
+Valid:
   payload:
     name: "Legislation waste management"
     provider:
@@ -152,14 +151,18 @@ valid:
             description: "Reference to an EU legal expression"
             documented_in: "https://example.com/eli/act"
         description: "Article 5"
+        documented_in: "https://example.com/eli/act"
         documents:
           - '__base_url__/sites/default/files/assessment-test/requirement1.pdf'
           - '__base_url__/sites/default/files/assessment-test/requirement2.pdf'
         affects:
           - name: "Digital Monitoring Unit"
-            thematic_area: "digital_and_innovation_services"
+            thematic_area:
+              - "digital_and_innovation_services"
+              - "education_and_research"
           - name: "Training Centre"
-            thematic_area: "education_and_research"
+            thematic_area:
+              - "education_and_research"
             country:
               - "BE"
               - "IT"
@@ -213,6 +216,7 @@ valid:
             description: "Reference to an EU legal expression"
             documented_in: "https://example.com/eli/act"
         description: "Article 5"
+        documented_in: "https://example.com/eli/act"
         documents:
           - '__base_url__/sites/default/files/assessments/report/requirement1.pdf'
           - '__base_url__/sites/default/files/assessments/report/requirement2.pdf'
@@ -220,6 +224,7 @@ valid:
           - name: "Digital Monitoring Unit"
             thematic_area:
               - digital_and_innovation_services
+              - education_and_research
             country: []
           - name: "Training Centre"
             thematic_area:
@@ -266,12 +271,13 @@ valid:
     other_comment: 'Still work to be done. Waiting for a new iteration.'
 
 # Test case with optional fields omitted to ensure proper null handling.
-valid_optional_fields_omitted:
+Valid with optional fields omitted:
   payload:
     name: "Minimal report"
     provider:
-      name: "European Commission"
-      organisation_type: "european_union_institution"
+      name: "ACME Corp"
+      organisation_type: "local_public_sector_body"
+      country: BE
     binding_requirement:
       - expression:
           # documented_in is omitted (optional)
@@ -286,7 +292,7 @@ valid_optional_fields_omitted:
           - participant_type:
               - "national_public_sector_body"
         # asset is omitted (optional)
-        # documents is omitted (optional)
+        # documents are omitted (optional)
     # results_in is omitted (optional)
     # remaining_barriers is omitted (optional)
     # documents is omitted (optional)
@@ -295,9 +301,9 @@ valid_optional_fields_omitted:
     language: en
     name: "Minimal report"
     provider:
-      name: "European Commission"
-      organisation_type: "european_union_institution"
-      country: null
+      name: ACME Corp
+      organisation_type: local_public_sector_body
+      country: BE
     relevant_report: []
     binding_requirement:
       - expression:
@@ -305,6 +311,7 @@ valid_optional_fields_omitted:
             description: "A regulation without documented_in"
             documented_in: null
         description: "Article 1"
+        documented_in: ""
         documents: []
         affects:
           - name: "Basic Service"
@@ -320,47 +327,7 @@ valid_optional_fields_omitted:
     documents: []
     other_comment: null
 
-invalid_country_for_eu_organisation:
-  payload:
-    name: "European Data Authority"
-    provider:
-      name: "Public organisation"
-      # The organisation type identifier is invalid.
-      organisation_type: "european_union_institution"
-      # Country code invalid.
-      country: "BE"
-    binding_requirement:
-      - expression:
-          - name: "Legal Act 2024"
-            documented_in: "https://example.com/eli/act"
-            description: "test"
-        documents:
-          - "https://www.rd.usda.gov/sites/default/files/pdf-sample_0.pdf"
-        affects:
-          - name: "Digital Monitoring Unit"
-            thematic_area: "digital_and_innovation_services"
-        description: "test"
-        has_participation:
-          - country:
-              - "BE"
-              - "NL"
-              - "LU"
-            participant_type:
-              - "national_public_sector_body"
-          - country:
-              - "IT"
-            participant_type:
-              - "national_public_sector_body"
-              - "private_businesses"
-  expect:
-    errors:
-      /provider:
-        - "The property country is not defined and the definition does not allow additional properties"
-        - "An object or a string is required. Object value found, but is invalid"
-      /provider/organisation_type:
-        - "Does not have a value in the enumeration [\"local_public_sector_body\",\"national_public_sector_body\",\"regional_public_sector_body\"]"
-
-invalid_missing_country_for_non_eu_organisation:
+Missing country for a non-EU organisation:
   payload:
     name: "European Data Authority"
     provider:
@@ -371,11 +338,10 @@ invalid_missing_country_for_non_eu_organisation:
           - name: "Legal Act 2024"
             documented_in: "https://example.com/eli/act"
             description: "test"
-        documents:
-          - "https://www.rd.usda.gov/sites/default/files/pdf-sample_0.pdf"
         affects:
           - name: "Digital Monitoring Unit"
-            thematic_area: "digital_and_innovation_services"
+            thematic_area:
+              - "digital_and_innovation_services"
         description: "test"
         has_participation:
           - country:
@@ -395,6 +361,40 @@ invalid_missing_country_for_non_eu_organisation:
         - "An object or a string is required. Object value found, but is invalid"
       /provider/country:
         - "The property country is required"
-      /provider/organisation_type:
-        - "Does not have a value in the enumeration [\"european_union_agency\",\"european_union_body\",\"european_union_institution\"]"
 
+Trying to create an EU organisation:
+  payload:
+    name: "Invalid provider"
+    provider:
+      name: "European Guerrilla Unit"
+      organisation_type: "european_union_institution"
+    binding_requirement:
+      - expression:
+          - name: "Legal Act 2024"
+            description: "Reference to an EU legal expression"
+        description: "Article 5"
+        affects:
+          - name: "Digital Monitoring Unit"
+            thematic_area:
+              - "digital_and_innovation_services"
+              - "economy_and_employment"
+        has_participation:
+          - country:
+              - "BE"
+              - "NL"
+              - "LU"
+            participant_type:
+              - "national_public_sector_body"
+          - country:
+              - "IT"
+            participant_type:
+              - "national_public_sector_body"
+              - "private_businesses"
+  expect:
+    errors:
+      /provider:
+        - An object or a string is required. Object value found, but is invalid
+      /provider/country:
+        - The property country is required
+      /provider/organisation_type:
+        - Does not have a value in the enumeration ["local_public_sector_body","national_public_sector_body","regional_public_sector_body"]
