@@ -328,9 +328,9 @@ paths:
     get:
       summary: Get all assets
       description: |
-        Returns all assets (also known as interoperability solutions). Results are
-        paginated with 200 items per page. Use the `page` parameter to navigate
-        through pages (0-indexed).
+        Returns all assets (also known as interoperability solutions). Results
+        are paginated with 200 items per page. Use the `page` parameter to
+        navigate through pages (0-indexed).
       operationId: getAssets
       tags:
         - Resources
