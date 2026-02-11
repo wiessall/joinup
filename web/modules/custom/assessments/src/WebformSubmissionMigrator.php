@@ -7,12 +7,14 @@ namespace Drupal\assessments;
 use Drupal\Core\Entity\ContentEntityStorageInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\PublicOrganisation;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\webform\WebformSubmissionInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Migrates webform assessment submissions into assessment report entities.
@@ -75,6 +77,16 @@ class WebformSubmissionMigrator {
   ];
 
   /**
+   * Map of webform country names to spatial taxonomy term names.
+   *
+   * Used to normalize country names from webform data to match taxonomy terms.
+   */
+  protected const array COUNTRY_NAME_MAP = [
+    'EU' => 'European Union',
+    'Czech Republic' => 'Czechia',
+  ];
+
+  /**
    * Assessment entity storage.
    */
   protected ContentEntityStorageInterface $assessmentStorage;
@@ -84,10 +96,19 @@ class WebformSubmissionMigrator {
    */
   protected readonly LoggerInterface $logger;
 
+  /**
+   * CSV file handle for migration logging (local development only).
+   *
+   * @var resource|null
+   */
+  protected $csvHandle = NULL;
+
   public function __construct(
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly AssessmentVocabularyHelper $vocabularyHelper,
     protected readonly EntityRepositoryInterface $entityRepository,
+    protected readonly FileSystemInterface $fileSystem,
+    protected readonly RequestStack $requestStack,
     LoggerChannelFactoryInterface $loggerFactory,
   ) {
     $this->logger = $loggerFactory->get('assessments');
@@ -96,8 +117,8 @@ class WebformSubmissionMigrator {
   /**
    * Migrates all assessment webform submissions.
    *
-   * @return array{migrated: int, failed: int}
-   *   Count of migrated and failed submissions.
+   * @return array{migrated: int, skipped: int, failed: int}
+   *   Count of migrated, skipped, and failed submissions.
    */
   public function migrateAll(): array {
     $storage = $this->entityTypeManager->getStorage('webform_submission');
@@ -108,16 +129,24 @@ class WebformSubmissionMigrator {
       ->execute();
 
     $migrated = 0;
+    $skipped = 0;
     $failed = 0;
+
+    // Initialize CSV logging if enabled.
+    $this->initCsvLog();
 
     foreach ($storage->loadMultiple($ids) as $submission) {
       \assert($submission instanceof WebformSubmissionInterface);
       try {
-        $this->migrateSubmission($submission);
-        $migrated++;
-        $this->logger->info('Migrated webform submission @sid.', [
-          '@sid' => $submission->id(),
-        ]);
+        if ($this->migrateSubmission($submission)) {
+          $migrated++;
+          $this->logger->info('Migrated webform submission @sid.', [
+            '@sid' => $submission->id(),
+          ]);
+        }
+        else {
+          $skipped++;
+        }
       }
       catch (\Exception $e) {
         $failed++;
@@ -125,17 +154,36 @@ class WebformSubmissionMigrator {
           '@sid' => $submission->id(),
           '@error' => $e->getMessage(),
         ]);
+        // Log failed migrations to CSV as well.
+        $this->logToCsv($submission, NULL, $e->getMessage());
       }
     }
 
-    return ['migrated' => $migrated, 'failed' => $failed];
+    // Close CSV file.
+    $this->closeCsvLog();
+
+    return ['migrated' => $migrated, 'skipped' => $skipped, 'failed' => $failed];
   }
 
   /**
    * Migrates a single webform submission into an assessment report.
+   *
+   * @return bool
+   *   TRUE if the submission was migrated, FALSE if it was skipped.
    */
-  protected function migrateSubmission(WebformSubmissionInterface $submission): void {
+  protected function migrateSubmission(WebformSubmissionInterface $submission): bool {
     $data = $submission->getData();
+
+    // Skip submissions with empty or unknown provider type.
+    $typeLabel = $data['public_sector_body'] ?? '';
+    if (empty($typeLabel) || !isset(self::PROVIDER_TYPE_MAP[$typeLabel])) {
+      $this->logger->notice('Skipping webform submission @sid: empty or unknown provider type "@type".', [
+        '@sid' => $submission->id(),
+        '@type' => $typeLabel,
+      ]);
+      $this->logToCsv($submission, NULL, "Skipped: empty or unknown provider type '$typeLabel'");
+      return FALSE;
+    }
 
     $provider = $this->createProvider($data);
     $expressions = $this->createExpressions($data);
@@ -149,11 +197,11 @@ class WebformSubmissionMigrator {
       $participations,
       $assets,
     );
-    $state = $submission->isDraft() ? 'draft' : 'published';
+    $state = $submission->isDraft() ? 'draft' : 'review';
 
     $reportValues = [
       'type' => 'report',
-      'name' => $data['short_title'] ?? 'Untitled assessment',
+      'name' => !empty($data['short_title']) ? $data['short_title'] : 'Assessment #' . $submission->id(),
       'provider' => $provider,
       'binding_requirement' => $bindingRequirements,
       'state' => $state,
@@ -176,16 +224,17 @@ class WebformSubmissionMigrator {
     // Remaining barriers (only if "Yes").
     if (($data['remaining_barriers'] ?? '') === 'Yes' && !empty($data['remaining_barriers_description'])) {
       $reportValues['remaining_barriers'] = [
-        'value' => $data['remaining_barriers_description'],
+        'value' => $this->htmlToPlainText($data['remaining_barriers_description']),
         'format' => 'plain_text',
       ];
     }
 
     // Other comment.
     if (!empty($data['comments'])) {
-      $reportValues['other_comment'] = is_array($data['comments'])
+      $comment = is_array($data['comments'])
         ? ($data['comments']['value'] ?? '')
         : $data['comments'];
+      $reportValues['other_comment'] = $this->htmlToPlainText($comment);
     }
 
     // Documents.
@@ -203,6 +252,10 @@ class WebformSubmissionMigrator {
       $statementData = $data["identified_effects_cross_border_{$type}"] ?? NULL;
       if (empty($statementData)) {
         continue;
+      }
+      // Webform composite with #multiple: false still wraps data in [0 => []].
+      if (isset($statementData[0]) && is_array($statementData[0])) {
+        $statementData = $statementData[0];
       }
       $interpretation = $statementData['legal_options'] ?? NULL;
       $judgement = $statementData['organisational_options'] ?? NULL;
@@ -223,13 +276,18 @@ class WebformSubmissionMigrator {
       }
 
       if (!empty($judgement)) {
-        $statementValues['judgement'] = $judgement;
+        $statementValues['judgement'] = $this->htmlToPlainText($judgement);
       }
 
       $report->{$type} = $statementStorage->create($statementValues);
     }
 
     $report->save();
+
+    // Log successful migration to CSV.
+    $this->logToCsv($submission, $report);
+
+    return TRUE;
   }
 
   /**
@@ -252,7 +310,8 @@ class WebformSubmissionMigrator {
 
     $countryTid = NULL;
     if (!$isEuropean && !empty($data['country'])) {
-      $countryTid = $this->vocabularyHelper->getTermIdFromIdentifier('spatial', $data['country'], 'name');
+      $countryName = self::COUNTRY_NAME_MAP[$data['country']] ?? $data['country'];
+      $countryTid = $this->vocabularyHelper->getTermIdFromIdentifier('spatial', $countryName, 'name');
     }
 
     // Try to find an existing matching organisation.
@@ -567,7 +626,8 @@ class WebformSubmissionMigrator {
       }
 
       try {
-        $countryTids[] = $this->vocabularyHelper->getTermIdFromIdentifier('spatial', $countryName, 'name');
+        $mappedName = self::COUNTRY_NAME_MAP[$countryName] ?? $countryName;
+        $countryTids[] = $this->vocabularyHelper->getTermIdFromIdentifier('spatial', $mappedName, 'name');
       }
       catch (\InvalidArgumentException $e) {
         $this->logger->warning('Could not resolve country "@name": @error', [
@@ -620,6 +680,109 @@ class WebformSubmissionMigrator {
    */
   protected function getProvidedByAssessmentStorage(): ContentEntityStorageInterface {
     return $this->getAssessmentStorage();
+  }
+
+  /**
+   * Converts basic HTML to structured plain text.
+   *
+   * Supports paragraphs, lists, links (extracts URL), and line breaks.
+   */
+  protected function htmlToPlainText(string $html): string {
+    // Normalize line endings.
+    $text = str_replace(["\r\n", "\r"], "\n", $html);
+
+    // Replace <br> variants with newlines.
+    $text = preg_replace('#<br\s*/?>#i', "\n", $text);
+
+    // Extract URLs from anchor tags.
+    $text = preg_replace('#<a\s[^>]*href=["\']([^"\']+)["\'][^>]*>.*?</a>#is', '$1', $text);
+
+    // Convert list items to "- item\n".
+    $text = preg_replace('#<li[^>]*>\s*#i', '- ', $text);
+    $text = preg_replace('#\s*</li>#i', "\n", $text);
+
+    // Convert closing block tags to double newlines.
+    $text = preg_replace('#</(?:p|div|h[1-6])>#i', "\n\n", $text);
+
+    // Remove opening block tags.
+    $text = preg_replace('#<(?:p|div|h[1-6]|ul|ol|/ul|/ol)[^>]*>#i', '', $text);
+
+    // Strip any remaining tags.
+    $text = strip_tags($text);
+
+    // Decode HTML entities.
+    $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+    // Collapse 3+ consecutive newlines into 2.
+    $text = preg_replace("#\n{3,}#", "\n\n", $text);
+
+    return trim($text);
+  }
+
+  /**
+   * Initializes CSV logging if enabled via environment variable.
+   *
+   * Set ASSESSMENT_MIGRATION_CSV=1 to enable CSV logging.
+   * The CSV file will be created in the public files directory.
+   */
+  protected function initCsvLog(): void {
+
+    $filePath = 'public://assessment_migration_' . date('Y-m-d_H-i-s') . '.csv';
+    $realPath = $this->fileSystem->realpath($filePath);
+    if ($realPath === FALSE) {
+      $directory = $this->fileSystem->realpath('public://');
+      $realPath = $directory . '/assessment_migration_' . date('Y-m-d_H-i-s') . '.csv';
+    }
+
+    $this->csvHandle = fopen($realPath, 'w');
+    if ($this->csvHandle) {
+      fputcsv($this->csvHandle, [
+        'Webform ID',
+        'Report ID',
+        'Webform Status',
+        'Report State',
+        'Webform Title',
+        'Report Name',
+        'Webform URL',
+        'Report URL',
+        'Error',
+      ]);
+      $this->logger->info('CSV migration log initialized: @path', ['@path' => $realPath]);
+    }
+  }
+
+  /**
+   * Logs a migration to the CSV file.
+   */
+  protected function logToCsv(WebformSubmissionInterface $submission, ?AssessmentReport $report, string $error = ''): void {
+    if (!$this->csvHandle) {
+      return;
+    }
+
+    $data = $submission->getData();
+    $baseUrl = $this->requestStack->getCurrentRequest()?->getSchemeAndHttpHost() ?? '';
+
+    fputcsv($this->csvHandle, [
+      $submission->id(),
+      $report?->id() ?? '',
+      $submission->isDraft() ? 'draft' : 'completed',
+      $report?->get('state')->value ?? '',
+      $data['short_title'] ?? 'Untitled',
+      $report?->label() ?? '',
+      $baseUrl . '/admin/structure/webform/manage/assessment/submission/' . $submission->id(),
+      $report ? $baseUrl . '/assessment/' . $report->id() : '',
+      $error,
+    ]);
+  }
+
+  /**
+   * Closes the CSV log file.
+   */
+  protected function closeCsvLog(): void {
+    if ($this->csvHandle) {
+      fclose($this->csvHandle);
+      $this->csvHandle = NULL;
+    }
   }
 
 }
