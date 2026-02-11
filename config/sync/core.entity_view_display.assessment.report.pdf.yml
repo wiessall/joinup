@@ -1,0 +1,335 @@
+uuid: febab9de-520b-4e5b-bdc5-20439141a32a
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.report
+    - core.entity_view_mode.assessment.pdf
+    - field.field.assessment.report.binding_requirement
+    - field.field.assessment.report.documents
+    - field.field.assessment.report.legal
+    - field.field.assessment.report.organisational
+    - field.field.assessment.report.other_comment
+    - field.field.assessment.report.provider
+    - field.field.assessment.report.relevant_report
+    - field.field.assessment.report.remaining_barriers
+    - field.field.assessment.report.semantic
+    - field.field.assessment.report.state
+    - field.field.assessment.report.technical
+  module:
+    - entity_form_field_label
+    - entity_print
+    - entity_reference_revisions
+    - field_delimiter
+    - field_formatter_range
+    - field_group
+    - file
+    - joinup_slick
+    - layout_builder
+    - link
+    - options
+    - template_suggestion
+    - text
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+  entity_print:
+    pdf_label: 'Download PDF'
+  field_group:
+    group_general_info:
+      children:
+        - group_general_info_content
+      label: 'General information'
+      parent_name: ''
+      region: content
+      weight: 0
+      format_type: html_element
+      format_settings:
+        classes: my-5
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: true
+        label_element: h2
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+    group_binding_req:
+      children:
+        - binding_requirement
+      label: 'Binding requirements'
+      parent_name: ''
+      region: content
+      weight: 1
+      format_type: html_element
+      format_settings:
+        classes: my-5
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: true
+        label_element: h2
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+    group_general_info_content:
+      children:
+        - submitted_by
+        - state
+        - relevant_report
+      label: 'General info content'
+      parent_name: group_general_info
+      region: content
+      weight: 1
+      format_type: html_element
+      format_settings:
+        classes: 'card border rounded shadow-sm px-3'
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+    group_results:
+      children:
+        - group_result_content
+      label: Results
+      parent_name: ''
+      region: content
+      weight: 2
+      format_type: html_element
+      format_settings:
+        classes: my-5
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: true
+        label_element: h2
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+    group_result_content:
+      children:
+        - legal
+        - organisational
+        - semantic
+        - technical
+        - remaining_barriers
+      label: 'Result content'
+      parent_name: group_results
+      region: content
+      weight: 0
+      format_type: html_element
+      format_settings:
+        classes: 'card border rounded shadow-sm px-3'
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+    group_supporting_docs:
+      children:
+        - group_supporting_docs_content
+      label: 'Supporting documents and general comments'
+      parent_name: ''
+      region: content
+      weight: 3
+      format_type: html_element
+      format_settings:
+        classes: my-5
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: true
+        label_element: h2
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+    group_supporting_docs_content:
+      children:
+        - other_comment
+        - documents
+      label: 'Supporting docs content'
+      parent_name: group_supporting_docs
+      region: content
+      weight: 0
+      format_type: html_element
+      format_settings:
+        classes: 'card border rounded shadow-sm px-3'
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+id: assessment.report.pdf
+targetEntityType: assessment
+bundle: report
+mode: pdf
+content:
+  binding_requirement:
+    type: entity_reference_revisions_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  documents:
+    type: file_default
+    label: visually_hidden
+    settings:
+      use_description_as_link_text: true
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+      template_suggestion:
+        template_suggestion: assessment__report__item_list
+    weight: 1
+    region: content
+  legal:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  name:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  organisational:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  other_comment:
+    type: basic_string
+    label: visually_hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  relevant_report:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: nofollow
+      target: _blank
+    third_party_settings:
+      entity_form_field_label:
+        new_label: 'The report has been connected to the following previous/relevant reports:'
+        rewrite_label: 1
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+      template_suggestion:
+        template_suggestion: assessment__report__item_list
+    weight: 2
+    region: content
+  remaining_barriers:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings:
+      entity_form_field_label:
+        new_label: 'Remaining barriers of interoperability:'
+        rewrite_label: 1
+      template_suggestion:
+        template_suggestion: ''
+    weight: 4
+    region: content
+  semantic:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  state:
+    type: list_default
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  submitted_by:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  technical:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+hidden:
+  created: true
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  langcode: true
+  provider: true
+  search_api_excerpt: true
+  status: true
+  uid: true
+  uri: true
+  uuid: true
