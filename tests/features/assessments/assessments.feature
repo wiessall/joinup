@@ -140,11 +140,10 @@ Feature: Assessment Report Entity Management
     # Selecting N/A should hide and clear the judgement field.
     When I select the radio button "N/A" with the name "technical[0][inline_entity_form][interpretation]"
     Then I should not see "Provide a justification"
-    # Switching back to Beneficial should show an empty judgement field.
+    # Switching back to Beneficial should show the preserved judgement value.
     When I select the radio button "Beneficial" with the name "technical[0][inline_entity_form][interpretation]"
     Then I should see "Provide a justification"
-    And the "technical[0][inline_entity_form][judgement][0][value]" field should contain ""
-    And I fill in "technical[0][inline_entity_form][judgement][0][value]" with "Implements REST APIs and OpenAPI specs"
+    And the "technical[0][inline_entity_form][judgement][0][value]" field should contain "Implements REST APIs and OpenAPI specs"
 
     And I should see "Describe any remaining barriers to cross-border interoperability discovered."
     And I fill in "Remaining barriers to cross-border interoperability" with "No significant barriers identified."
