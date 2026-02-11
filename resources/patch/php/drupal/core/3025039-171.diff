@@ -1,0 +1,49 @@
+
+diff --git a/core/lib/Drupal/Core/Field/WidgetBase.php b/core/lib/Drupal/Core/Field/WidgetBase.php
+index 1812fe695be..16b358bcfe3 100644
+--- a/core/lib/Drupal/Core/Field/WidgetBase.php
++++ b/core/lib/Drupal/Core/Field/WidgetBase.php
+@@ -503,13 +503,16 @@ public function extractFormValues(FieldItemListInterface $items, array $form, Fo
+ 
+       // Let the widget massage the submitted values.
+       $values = $this->massageFormValues($values, $form, $form_state);
++      $field_state = static::getWidgetState($form['#parents'], $field_name, $form_state);
+ 
+       // Assign the values and remove the empty ones.
+-      $items->setValue($values);
+-      $items->filterEmptyItems();
++      $widget = NestedArray::getValue($form, $field_state['array_parents']);
++      if (Element::isVisibleElement($widget)) {
++        $items->setValue($values);
++        $items->filterEmptyItems();
++      }
+ 
+       // Put delta mapping in $form_state, so that flagErrors() can use it.
+-      $field_state = static::getWidgetState($form['#parents'], $field_name, $form_state);
+       foreach ($items as $delta => $item) {
+         $field_state['original_deltas'][$delta] = $item->_original_delta ?? $delta;
+         unset($item->_original_delta, $item->_weight, $item->_actions);
+diff --git a/core/modules/content_moderation/content_moderation.module b/core/modules/content_moderation/content_moderation.module
+index 71bb1025398..5c9653a1aee 100644
+--- a/core/modules/content_moderation/content_moderation.module
++++ b/core/modules/content_moderation/content_moderation.module
+@@ -382,3 +382,19 @@ function content_moderation_views_post_execute(ViewExecutable $view) {
+     }
+   }
+ }
++
++/**
++ * Implements hook_entity_bundle_field_info_alter().
++ */
++function content_moderation_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle) {
++  /** @var \Drupal\content_moderation\ModerationInformationInterface $moderation_info */
++  $moderation_info = \Drupal::service('content_moderation.moderation_information');
++  if ($moderation_info->shouldModerateEntitiesOfBundle($entity_type, $bundle)) {
++    // Force the published field to be translatable since moderation_state is
++    // always translatable and controls it.
++    $published_field = $entity_type->getKey('published');
++    if ($published_field && isset($fields[$published_field])) {
++      $fields[$published_field]->setTranslatable(TRUE);
++    }
++  }
++}
