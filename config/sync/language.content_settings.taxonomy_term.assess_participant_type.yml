@@ -1,0 +1,11 @@
+uuid: 926045ae-75d2-4051-89de-515735abc6ee
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.assess_participant_type
+id: taxonomy_term.assess_participant_type
+target_entity_type_id: taxonomy_term
+target_bundle: assess_participant_type
+default_langcode: site_default
+language_alterable: false
