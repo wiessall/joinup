@@ -489,6 +489,7 @@ components:
             One ore multiple objects can be submitted, each following the
             BindingRequirement schema.
           type: array
+          uniqueItems: true
           minItems: 1
           items:
             $ref: '#/components/schemas/BindingRequirement'
@@ -600,6 +601,7 @@ components:
       properties:
         expression:
           type: array
+          uniqueItems: true
           minItems: 1
           description: |-
             One ore multiple objects can be submitted, each following the
@@ -624,6 +626,7 @@ components:
             format: uri
         affects:
           type: array
+          uniqueItems: true
           description: |-
             One ore multiple objects can be submitted, each following the
             `PublicService` schema.
@@ -632,6 +635,7 @@ components:
             $ref: '#/components/schemas/PublicService'
         has_participation:
           type: array
+          uniqueItems: true
           description: |-
             One ore multiple objects can be submitted, each following the
             `Participation` schema.
@@ -639,6 +643,7 @@ components:
             $ref: '#/components/schemas/Participation'
         asset:
           type: array
+          uniqueItems: true
           description: |-
             One ore multiple items can be submitted. Each item is:
             - EITHER an object following the `Asset` schema. In this case a new
@@ -832,6 +837,7 @@ components:
       properties:
         rows:
           type: array
+          uniqueItems: true
           description: The list of reports for the current page.
           items:
             type: object
@@ -859,6 +865,7 @@ components:
       properties:
         rows:
           type: array
+          uniqueItems: true
           description: The list of organisations for the current page.
           items:
             type: object
@@ -889,6 +896,7 @@ components:
       properties:
         rows:
           type: array
+          uniqueItems: true
           description: The list of assets for the current page.
           items:
             type: object
