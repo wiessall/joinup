@@ -6,7 +6,9 @@ namespace Drupal\joinup_oss_catalogue\Plugin\search_api\processor;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
+use Drupal\search_api\Attribute\SearchApiProcessor;
 use Drupal\search_api\Datasource\DatasourceInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Item\FieldInterface;
@@ -20,19 +22,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Adds field containing the rendered item for all languages.
  *
  * @see \Drupal\search_api\Plugin\search_api\processor\Property\RenderedItemProperty
- *
- * @SearchApiProcessor(
- *   id = "oss_solution_rendered_item",
- *   label = @Translation("Oss Solution rendered item"),
- *   description = @Translation("Adds field containing the rendered item for
- *   all languages."),
- *   stages = {
- *     "add_properties" = 0,
- *   },
- *   locked = true,
- *   hidden = true,
- * )
  */
+#[SearchApiProcessor(
+  id: "oss_solution_rendered_item",
+  label: new TranslatableMarkup("Oss Solution rendered item"),
+  description: new TranslatableMarkup("Adds field containing the rendered item for all languages."),
+  stages: [
+    "add_properties" => 0,
+  ],
+  locked: TRUE,
+  hidden: TRUE,
+)]
 class OssSolutionRenderedItem extends ProcessorPluginBase {
 
   use LoggerTrait;
