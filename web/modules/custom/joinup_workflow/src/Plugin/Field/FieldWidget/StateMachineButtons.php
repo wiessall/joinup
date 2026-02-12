@@ -119,7 +119,10 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
     // Hide the current field since it is a dropdown and we want to show a row
     // of buttons instead. The data in this field is used later on to populate
     // the buttons in the form. See ::processActions().
-    $element['#access'] = FALSE;
+    $element['#title_display'] = 'invisible';
+    $element['#attributes'] = [
+      'class' => ['visually-hidden'],
+    ];
 
     // Add a process callback to add the buttons in the form actions.
     // @see \Drupal\content_moderation\Plugin\Field\FieldWidget\ModerationStateWidget::formElement()
