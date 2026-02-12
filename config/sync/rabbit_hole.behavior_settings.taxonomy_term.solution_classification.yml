@@ -1,0 +1,13 @@
+uuid: 195e2666-de05-4dfc-8f55-d5465205921c
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.solution_classification
+id: taxonomy_term.solution_classification
+targetEntityType: taxonomy_term
+bundle: solution_classification
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

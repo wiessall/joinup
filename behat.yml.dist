@@ -29,7 +29,7 @@
         - '.toolbar'
         # Third-party code injected in page with Javascript.
         - '.wt-globan--container'
-  - Drupal\joinup\Context\AssessmentContext
+  - Drupal\joinup\Context\AssessmentsContext
   - Drupal\joinup\Context\BootstrapContext
   - Drupal\joinup\Context\PrivateMessageContext
   - Drupal\joinup\Context\CalendarContext
@@ -53,6 +53,7 @@
   - Drupal\joinup\Context\InputFilterContext
   - Drupal\joinup\Context\Isa2AnalyticsContext
   - Drupal\joinup\Context\JavascriptContext
+  - Drupal\joinup\Context\JoinupAssessmentContext
   - Drupal\joinup\Context\JoinupCommunityContentContext
   - Drupal\joinup\Context\JoinupContext
   - Drupal\joinup\Context\JoinupCoreContext
@@ -85,6 +86,7 @@
   - Drupal\joinup\Context\MetaEntityContext
   - Drupal\joinup\Context\MinkContext
   - Drupal\joinup\Context\ModerationContext
+  - Drupal\joinup\Context\OauthClientContext
   - Drupal\joinup\Context\OeNewsroomNewsletterContext
   - Drupal\joinup\Context\OwnerContext
   - Drupal\joinup\Context\PollContext
@@ -181,6 +183,7 @@ default:
         'OSS catalogue list': '.oss-catalogue-list table'
         'Owner IEF': '.field--name-owner .ief-entity-table'
         'Users': 'table'
+        'IEF table': '.ief-entity-table'
     Drupal\DrupalExtension:
       api_driver: 'drupal'
       blackbox: ~

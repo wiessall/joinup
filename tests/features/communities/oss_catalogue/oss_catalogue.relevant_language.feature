@@ -61,7 +61,7 @@ Feature:
       | DE Feature 1         |
       | DE Feature 2         |
 
-    Given I am logged in as a user with the "oss_catalogue_manager" role
+    Given I am logged in as a user with the "moderator" role
     When I visit "/admin/content/eu-oss-catalogue/oss-solutions"
     Then I should see the heading "Open Source Software Solutions"
     And I should see the "EU OSS Catalogue administration" table

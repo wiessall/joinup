@@ -1,3 +1,2 @@
-administer joinup oss catalogue:
-  title: 'Administer Joinup OSS Catalogue'
-  restrict access: true
+eu oss catalogue log:
+  title: 'Access eu oss catalogue log'

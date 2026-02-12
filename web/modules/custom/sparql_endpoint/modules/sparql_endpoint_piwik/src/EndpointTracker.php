@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\sparql_endpoint_piwik;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use GuzzleHttp\ClientInterface;
@@ -17,15 +18,21 @@ use Symfony\Component\HttpFoundation\Request;
  */
 readonly class EndpointTracker {
 
-  private const string CONFIG_NAME = 'sparql_endpoint_piwik.settings';
+  /**
+   * Module configuration.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  protected ImmutableConfig $config;
 
   public function __construct(
     protected ClientInterface $httpClient,
     protected AccountProxyInterface $currentUser,
     #[Autowire(service: 'logger.channel.sparql_endpoint')]
     protected LoggerChannelInterface $logger,
-    protected ConfigFactoryInterface $configFactory,
+    ConfigFactoryInterface $configFactory,
   ) {
+    $this->config = $configFactory->get('sparql_endpoint_piwik.settings');
   }
 
   /**
@@ -68,9 +75,8 @@ readonly class EndpointTracker {
    * @see https://developers.piwik.pro/en/latest/data_collection/api/http_api.html
    */
   protected function buildQuery(Request $request): array {
-    $config = $this->configFactory->get(self::CONFIG_NAME);
     $query = [
-      'idsite' => $config->get('site_id'),
+      'idsite' => $this->config->get('site_id'),
       'rec' => 1,
       'url' => $request->getUri(),
       'action_name' => 'sparql_endpoint',
@@ -111,8 +117,7 @@ readonly class EndpointTracker {
    *   The endpoint URL.
    */
   protected function getUrl(): ?string {
-    $config = $this->configFactory->get(self::CONFIG_NAME);
-    $url = $config->get('base_uri');
+    $url = $this->config->get('base_uri');
     if (empty($url)) {
       return NULL;
     }

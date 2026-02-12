@@ -1,0 +1,22 @@
+assessments.api_docs:
+  path: '/api/assessments/v1'
+  defaults:
+    _controller: '\Drupal\assessments\Controller\AssessmentsApiController::apiDocs'
+    _title: 'Assessments API Documentation'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+assessments.moderate:
+  path: '/collection/assessments/{assessment_type}/{assessment}/moderate'
+  defaults:
+    _form: '\Drupal\assessments\Form\AssessmentModerationForm'
+    _title: 'Moderate'
+  requirements:
+    _custom_access: '\Drupal\assessments\Form\AssessmentModerationForm::access'
+    assessment_type: report
+  options:
+    parameters:
+      assessment_type:
+        type: 'entity:assessment_type'
+      assessment:
+        type: 'entity:assessment'

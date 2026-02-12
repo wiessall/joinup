@@ -310,7 +310,7 @@ display:
       access:
         type: perm
         options:
-          perm: 'administer joinup oss catalogue'
+          perm: 'eu oss catalogue log'
       cache:
         type: tag
         options: {  }

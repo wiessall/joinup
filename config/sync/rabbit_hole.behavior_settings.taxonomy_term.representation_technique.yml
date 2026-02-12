@@ -1,0 +1,13 @@
+uuid: 0ed3f6de-9c6f-4fc3-88e1-b82b60e26d81
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.representation_technique
+id: taxonomy_term.representation_technique
+targetEntityType: taxonomy_term
+bundle: representation_technique
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

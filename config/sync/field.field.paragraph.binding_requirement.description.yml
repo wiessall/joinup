@@ -1,0 +1,32 @@
+uuid: 6aed1120-d406-43d4-9deb-7b548d2b731a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.description
+    - filter.format.plain_text
+    - paragraphs.paragraphs_type.binding_requirement
+  module:
+    - text
+    - tmgmt_content
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://data.europa.eu/2sa/cav#valueDescription'
+      type: null
+  tmgmt_content:
+    excluded: false
+id: paragraph.binding_requirement.description
+field_name: description
+entity_type: paragraph
+bundle: binding_requirement
+label: 'Description of the binding requirement'
+description: 'Provide a short description or a title for the binding requirements for the purpose of referring back to the specific requirement in the assessment process'
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - plain_text
+field_type: text_long

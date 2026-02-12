@@ -1,0 +1,20 @@
+uuid: 1ab92dc2-6b3e-4fb2-8912-c9728ef221a7
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+    - taxonomy
+id: assessment.organisation_type
+field_name: organisation_type
+entity_type: assessment
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

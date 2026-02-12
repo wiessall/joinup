@@ -6,6 +6,7 @@ services:
 
   custom_page.og_menu_links_manager:
     class: Drupal\custom_page\CustomPageOgMenuLinksManager
+    lazy: true
   Drupal\custom_page\CustomPageOgMenuLinksManagerInterface: '@custom_page.og_menu_links_manager'
 
   custom_page.provider:

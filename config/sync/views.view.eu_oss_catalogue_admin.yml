@@ -1377,7 +1377,7 @@ display:
       access:
         type: perm
         options:
-          perm: 'administer joinup oss catalogue'
+          perm: 'administer nodes'
       filters:
         type:
           id: type

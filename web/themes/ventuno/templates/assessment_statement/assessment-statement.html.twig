@@ -1,0 +1,18 @@
+{#
+/**
+ * @file
+ * Template override for assessment-statement.html.twig
+ */
+#}
+{% extends '@assessments/assessment-statement.html.twig' %}
+
+{% set attributes = view_mode in ['default', 'full'] ? attributes.addClass('mb-3') %}
+{% set interpretation = content.interpretation|render|striptags %}
+{% set interpretation_sentence = 'Has a <strong>:interpretation</strong> interpretation'|t({
+  ':interpretation': interpretation
+}) %}
+
+{% block content %}
+  {{ interpretation_sentence }}
+  {{ content|without('interpretation') }}
+{% endblock %}

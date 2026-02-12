@@ -27,14 +27,22 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 )]
 class DeleteGroupMembership extends DeleteOgMembership {
 
+  /**
+   * The user private tempstore.
+   *
+   * @var \Drupal\Core\TempStore\PrivateTempStore
+   */
+  protected $privateTempStore;
+
   public function __construct(
     array $configuration,
     string $plugin_id,
     array $plugin_definition,
     OgAccessInterface $og_access,
-    protected readonly PrivateTempStoreFactory $tempStoreFactory,
+    PrivateTempStoreFactory $temp_store_factory,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $og_access);
+    $this->privateTempStore = $temp_store_factory->get('joinup_group.og_membership_delete_action');
   }
 
   /**
@@ -54,9 +62,7 @@ class DeleteGroupMembership extends DeleteOgMembership {
    * {@inheritdoc}
    */
   public function executeMultiple(array $memberships): void {
-    $this->tempStoreFactory
-      ->get('joinup_group.og_membership_delete_action')
-      ->set('memberships', $memberships);
+    $this->privateTempStore->set('memberships', $memberships);
   }
 
   /**
