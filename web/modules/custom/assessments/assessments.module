@@ -16,6 +16,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\assessments\AssessmentInterface;
+use Drupal\assessments\AssessmentStatementInterface;
 use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\AssessmentSubEntity;
@@ -488,6 +489,16 @@ function assessments_inline_entity_form_entity_form_alter(array &$entity_form, F
     $entity_form['stakeholder_country']['#states'] = [
       'visible' => [
         ':input[name="has_participation[' . $delta . '][inline_entity_form][eu_countries][value]"]' => ['checked' => FALSE],
+      ],
+    ];
+  }
+
+  if ($solution instanceof AssessmentStatementInterface) {
+    $selector = ':input[name="' . $solution->bundle() . '[0][inline_entity_form][interpretation]"]';
+    $entity_form['judgement']['#states'] = [
+      'invisible' => [
+        [$selector => ['value' => '_none']],
+        [$selector => ['checked' => FALSE]],
       ],
     ];
   }
