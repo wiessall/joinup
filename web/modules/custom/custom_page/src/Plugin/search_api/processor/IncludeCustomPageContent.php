@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\custom_page\Plugin\search_api\processor;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\custom_page\CustomPageProviderInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\search_api\Attribute\SearchApiProcessor;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Processor\ProcessorPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -21,16 +23,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * This processor enriches the indexed data of groups with the content of their
  * custom pages.
- *
- * @SearchApiProcessor(
- *   id = "include_custom_page_content",
- *   label = @Translation("Include custom page content"),
- *   description = @Translation("Improves searchability of collections and solutions by including the content of custom pages."),
- *   stages = {
- *     "preprocess_index" = 0,
- *   },
- * )
  */
+#[SearchApiProcessor(
+  id: "include_custom_page_content",
+  label: new TranslatableMarkup("Include custom page content"),
+  description: new TranslatableMarkup("Improves searchability of collections and solutions by including the content of custom pages."),
+  stages: [
+    "preprocess_index" => 0,
+  ],
+)]
 class IncludeCustomPageContent extends ProcessorPluginBase {
 
   /**
