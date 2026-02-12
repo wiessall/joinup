@@ -20,10 +20,10 @@ paths:
         description: Assessments API endpoint
     post:
       summary: Create an assessment report
-      description: Submit a single Assessment JSON object. Some referred
-        objects (such as provider or asset) can be either reused by passing
-        their ID, or created by passing fully-structured objects, as is defined
-        by their schema.
+      description: |-
+        Submit a single Assessment JSON object. Some referred objects (such as
+        provider or asset) can be either reused by passing their ID, or created
+        by passing fully-structured objects, as is defined by their schema.
       operationId: createAssessment
       tags:
         - Assessments
@@ -32,7 +32,7 @@ paths:
       parameters:
         - in: header
           name: Authorization
-          description: |
+          description: |-
             Bearer access token. Format: 'Bearer <access_token>'. See the
             "Authentication" on how to obtain an access token.
           required: true
@@ -132,7 +132,7 @@ paths:
                   other_comment: Still work to be done. Waiting for a new iteration.
       responses:
         '201':
-          description: |
+          description: |-
             The created assessment report. The response will contain exactly the
             same structure as the submitted JSON plus the IDs of the created
             objects.
@@ -238,7 +238,9 @@ paths:
                     type: string
     get:
       summary: Get all Assessments of type reports
-      description: Returns all assessment reports dependently on country code of referenced public institution
+      description: |-
+        Returns all assessment reports dependently on country code of referenced
+        public institution.
       operationId: getReport
       tags:
         - Assessments
@@ -247,16 +249,18 @@ paths:
         - in: query
           name: country
           required: false
-          description: The two-letter ISO-3166 country code to filter reports by their provider's country.
-            Alternatively, use "EU" to fetch reports from EU institutions, bodies, agencies.
+          description: |-
+            The two-letter ISO-3166 country code to filter reports by their
+            provider's country. Alternatively, use "EU" to fetch reports from EU
+            institutions, bodies, agencies.
           schema:
             $ref: '#/components/schemas/EuropeanUnionCountry'
           example: BE, EU
         - in: query
           name: page
-          description: |
-            Page number for pagination (0-indexed). Each page contains 200 items.
-            Default is 0 (first page).
+          description: |-
+            Page number for pagination (0-indexed). Each page contains 200
+            items. Default is 0 (first page).
           required: false
           schema:
             type: integer
@@ -327,7 +331,7 @@ paths:
         description: Assessments API endpoint
     get:
       summary: Get all assets
-      description: |
+      description: |-
         Returns all assets (also known as interoperability solutions). Results
         are paginated with 200 items per page. Use the `page` parameter to
         navigate through pages (0-indexed).
@@ -338,9 +342,9 @@ paths:
       parameters:
         - in: query
           name: page
-          description: |
-            Page number for pagination (0-indexed). Each page contains 200 items.
-            Default is 0 (first page).
+          description: |-
+            Page number for pagination (0-indexed). Each page contains 200
+            items. Default is 0 (first page).
           required: false
           schema:
             type: integer
@@ -385,9 +389,9 @@ paths:
       parameters:
         - in: query
           name: page
-          description: |
-            Page number for pagination (0-indexed). Each page contains 200 items.
-            Default is 0 (first page).
+          description: |-
+            Page number for pagination (0-indexed). Each page contains 200
+            items. Default is 0 (first page).
           required: false
           schema:
             type: integer
@@ -463,7 +467,7 @@ components:
           minLength: 1
           maxLength: 255
         provider:
-          description: |
+          description: |-
             A public organisation. For an existing organisationm pass its ID. To
             create a new organisation pass a `MemberStateOrganisation` object.
             It's not possible to to create a new European Union organisation,
@@ -481,7 +485,7 @@ components:
             format: uri
           description: Relevant assessment reports
         binding_requirement:
-          description: |
+          description: |-
             One ore multiple objects can be submitted, each following the
             BindingRequirement schema.
           type: array
@@ -490,7 +494,7 @@ components:
             $ref: '#/components/schemas/BindingRequirement'
         results_in:
           type: object
-          description: |
+          description: |-
             Identified effects on cross-border interoperability from different
             perspectives: legal, organisational, semantic, and technical.
           properties:
@@ -508,7 +512,7 @@ components:
         documents:
           type: array
           uniqueItems: true
-          description: |
+          description: |-
             List of URLs of documents supporting this assessment report.
           items:
             type: string
@@ -519,8 +523,8 @@ components:
 
     EuropeanUnionOrganisation:
       type: object
-      description: |
-        An European Union organisation such as an intitution, agency or body.
+      description: |-
+        An European Union organisation such as an institution, agency or body.
       required:
         - name
         - organisation_type
@@ -551,7 +555,7 @@ components:
 
     MemberStateOrganisation:
       type: object
-      description: |
+      description: |-
         An organisation acting on a European Union members state, on a national,
         regional or local level.
       required:
@@ -597,7 +601,7 @@ components:
         expression:
           type: array
           minItems: 1
-          description: |
+          description: |-
             One ore multiple objects can be submitted, each following the
             `Expression` schema.
           items:
@@ -613,14 +617,14 @@ components:
         documents:
           type: array
           uniqueItems: true
-          description: |
+          description: |-
             List of URLs of documents supporting this binding requirement.
           items:
             type: string
             format: uri
         affects:
           type: array
-          description: |
+          description: |-
             One ore multiple objects can be submitted, each following the
             `PublicService` schema.
           minItems: 1
@@ -628,14 +632,14 @@ components:
             $ref: '#/components/schemas/PublicService'
         has_participation:
           type: array
-          description: |
+          description: |-
             One ore multiple objects can be submitted, each following the
             `Participation` schema.
           items:
             $ref: '#/components/schemas/Participation'
         asset:
           type: array
-          description: |
+          description: |-
             One ore multiple items can be submitted. Each item is:
             - EITHER an object following the `Asset` schema. In this case a new
               asset will be created along with the assessment report,
@@ -688,7 +692,8 @@ components:
         thematic_area:
           type: array
           uniqueItems: true
-          description: The concerned function of trans-European digital public service(s).
+          description: |-
+            The concerned function of trans-European digital public service(s).
           items:
             type: string
             enum:
@@ -705,7 +710,9 @@ components:
         country:
           type: array
           uniqueItems: true
-          description: The concerned country(s) of trans-European digital public service(s).
+          description: |-
+            The concerned country(s) of trans-European digital public
+            service(s).
           items:
             $ref: '#/components/schemas/EuropeanUnionCountry'
 
@@ -731,7 +738,9 @@ components:
               - regional_public_sector_body
           description: The participation type.
         country:
-          description: Stakeholder's countries. Each as ISO-3166 2-letter country code or "EU" for EU-wide entities.
+          description: |-
+            Stakeholder's countries. Each as ISO-3166 2-letter country code or
+            "EU" for EU-wide entities.
           oneOf:
             - type: array
               uniqueItems: true
