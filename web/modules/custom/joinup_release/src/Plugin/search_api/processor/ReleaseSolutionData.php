@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_release\Plugin\search_api\processor;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
+use Drupal\search_api\Attribute\SearchApiProcessor;
 use Drupal\search_api\Processor\ProcessorPluginBase;
 use Drupal\search_api\SearchApiException;
 use Drupal\taxonomy\TermInterface;
@@ -17,16 +19,15 @@ use Drupal\taxonomy\TermInterface;
  * AddAggregatedTopicHierarchy processor.
  *
  * @see \Drupal\joinup_search\Plugin\search_api\processor\AddAggregatedTopicHierarchy
- *
- * @SearchApiProcessor(
- *   id = "release_solution_data",
- *   label = @Translation("Release solution data"),
- *   description = @Translation("Attaches necessary data from the solution to the release."),
- *   stages = {
- *     "preprocess_index" = -60,
- *   },
- * )
  */
+#[SearchApiProcessor(
+  id: "release_solution_data",
+  label: new TranslatableMarkup("Release solution data"),
+  description: new TranslatableMarkup("Attaches necessary data from the solution to the release."),
+  stages: [
+    "preprocess_index" => -60,
+  ],
+)]
 class ReleaseSolutionData extends ProcessorPluginBase {
 
   /**
