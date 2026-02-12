@@ -82,6 +82,7 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
       'Invalid references',
       'Missing country for a non-EU organisation',
       'Trying to create an EU organisation',
+      'UniqueItems violations',
     ];
 
     foreach ($scenarios as $scenario) {

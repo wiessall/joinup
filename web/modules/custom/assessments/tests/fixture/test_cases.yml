@@ -25,7 +25,6 @@ Invalid schema:
           - country:
               - "BE"
               - "NL"
-              - "LU"
             participant_type:
               - "national_public_sector_body"
           - country:
@@ -398,3 +397,105 @@ Trying to create an EU organisation:
         - The property country is required
       /provider/organisation_type:
         - Does not have a value in the enumeration ["local_public_sector_body","national_public_sector_body","regional_public_sector_body"]
+
+UniqueItems violations:
+  payload:
+    name: "UniqueItems violations test"
+    provider:
+      name: "City of Brussels"
+      organisation_type: "local_public_sector_body"
+      country: "BE"
+    relevant_report:
+      - "https://example.com/report"
+      - "https://example.com/report"
+    binding_requirement:
+      - expression:
+          - name: "Legal Act 2024"
+            description: "A legal expression"
+          - name: "Legal Act 2024"
+            description: "A legal expression"
+        description: "Article 5"
+        documents:
+          - "https://example.com/doc.pdf"
+          - "https://example.com/doc.pdf"
+        affects:
+          - name: "Digital Service"
+            thematic_area:
+              - "digital_and_innovation_services"
+              - "digital_and_innovation_services"
+            country:
+              - "BE"
+              - "BE"
+        has_participation:
+          - participant_type:
+              - "national_public_sector_body"
+              - "national_public_sector_body"
+            country:
+              - "BE"
+              - "BE"
+        asset:
+          - "ad882176-8b1d-4506-9e90-886c5802f1c7"
+          - "ad882176-8b1d-4506-9e90-886c5802f1c7"
+      # The second and third binding requirements are identical to each other.
+      - expression:
+          - name: "Regulation 2025"
+            description: "An EU regulation"
+        description: "Article 1"
+        affects:
+          - name: "Basic Service"
+          - name: "Basic Service"
+        has_participation:
+          - participant_type:
+              - "national_public_sector_body"
+          - participant_type:
+              - "national_public_sector_body"
+      - expression:
+          - name: "Regulation 2025"
+            description: "An EU regulation"
+        description: "Article 1"
+        affects:
+          - name: "Basic Service"
+          - name: "Basic Service"
+        has_participation:
+          - participant_type:
+              - "national_public_sector_body"
+          - participant_type:
+              - "national_public_sector_body"
+    documents:
+      - "https://example.com/assessment-doc.pdf"
+      - "https://example.com/assessment-doc.pdf"
+  expect:
+    errors:
+      /binding_requirement:
+        - There are no duplicates allowed in the array
+      /binding_requirement/0/affects/0/country:
+        - There are no duplicates allowed in the array
+      /binding_requirement/0/affects/0/thematic_area:
+        - There are no duplicates allowed in the array
+      /binding_requirement/0/asset:
+        - There are no duplicates allowed in the array
+      /binding_requirement/0/documents:
+        - There are no duplicates allowed in the array
+      /binding_requirement/0/expression:
+        - There are no duplicates allowed in the array
+      /binding_requirement/0/has_participation/0/country:
+        - There are no duplicates allowed in the array
+        - There must be a maximum of 1 items in the array, 2 found
+      /binding_requirement/0/has_participation/0/country/0:
+        - Does not have a value in the enumeration ["EU"]
+      /binding_requirement/0/has_participation/0/country/1:
+        - Does not have a value in the enumeration ["EU"]
+      /binding_requirement/0/has_participation/0/participant_type:
+        - There are no duplicates allowed in the array
+      /binding_requirement/1/affects:
+        - There are no duplicates allowed in the array
+      /binding_requirement/1/has_participation:
+        - There are no duplicates allowed in the array
+      /binding_requirement/2/affects:
+        - There are no duplicates allowed in the array
+      /binding_requirement/2/has_participation:
+        - There are no duplicates allowed in the array
+      /documents:
+        - There are no duplicates allowed in the array
+      /relevant_report:
+        - There are no duplicates allowed in the array
