@@ -13,6 +13,7 @@ dependencies:
     - field.storage.node.body
     - field.storage.node.classification
     - field.storage.node.contact
+    - field.storage.node.country
     - field.storage.node.description
     - field.storage.node.domain
     - field.storage.node.field_event_agenda
@@ -588,6 +589,17 @@ field_settings:
       module:
         - meta_entity
         - node
+  organisation_origin:
+    label: 'Organisation origin'
+    datasource_id: 'entity:node'
+    property_path: 'owner:entity:country'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.owner
+        - field.storage.node.country
+      module:
+        - node
   organization:
     label: Organization
     datasource_id: 'entity:node'
@@ -870,6 +882,7 @@ datasource_settings:
         - event
         - licence
         - news
+        - owner
         - release
         - solution
     languages:
