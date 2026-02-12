@@ -29,23 +29,6 @@ Feature:
       | 3333 |
       | 4444 |
 
-  Scenario: OSS Catalogue Manager can see unpublished OSS solutions.
-    Given oss_solution content:
-      | title   | oss_development_status | oss_source        | oss_categories | oss_short_description   | oss_git_description   | status      | oss_release_date |
-      | Olympus | development            | developers_italia | data-analytics | Foo's short description | Foo's GIT description | unpublished | 2014-11-19       |
-
-    When I am logged in as a user with the "oss_catalogue_manager" role
-    And I visit the "Olympus" "oss_solution"
-    Then I should see the heading "Olympus"
-
-    When I visit "/admin/content/eu-oss-catalogue/oss-solutions"
-    Then the available options in the "Action" select should be "-- Select action --,Unpublish with all translations,Publish with all translations"
-    And the "EU OSS Catalogue administration" table should contain the following columns:
-      | Title   | URL | Short description       | Source Catalogue  | Languages | Published |
-      | Olympus |     | Foo's short description | Developers Italia | EN        | No        |
-
-    When I visit "/admin/content/eu-oss-catalogue/log"
-
   Scenario: User sees GIT description on OSS Solution page if short description is missing.
     Given oss_solution content:
       | title | oss_development_status | oss_source        | oss_categories | oss_short_description | oss_git_description   | status    | oss_release_date |

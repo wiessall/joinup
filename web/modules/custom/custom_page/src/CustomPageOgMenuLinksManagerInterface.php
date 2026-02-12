@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\custom_page;
 
-use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og_menu\OgMenuInstanceInterface;
 
@@ -53,17 +52,14 @@ interface CustomPageOgMenuLinksManagerInterface {
   public function moveLinks(NodeInterface $customPage, string $groupId): CustomPageOgMenuLinksManagerInterface;
 
   /**
-   * Updates index of group, when link is enabled/disabled.
+   * Deletes all the corresponding OG menu links pointing to a custom page.
    *
-   * Whenever a custom page that is linked in the navigation menu of
-   *  a collection or solution becomes enabled or disabled
-   *  we need to reindex the group, since the content of the custom menu
-   *  should now be included or excluded.
+   * @param \Drupal\node\NodeInterface $customPage
+   *   The custom page entity.
    *
-   * @param \Drupal\menu_link_content\MenuLinkContentInterface $menuLink
-   *   The menu link content.
+   * @return $this
    */
-  public function updateLink(MenuLinkContentInterface $menuLink): void;
+  public function deleteLinks(NodeInterface $customPage): CustomPageOgMenuLinksManagerInterface;
 
   /**
    * Gets the OG menu instance, given a custom page.

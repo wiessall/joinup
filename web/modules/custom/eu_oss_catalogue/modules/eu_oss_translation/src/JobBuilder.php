@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Drupal\eu_oss_translation;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\tmgmt\Data;
 use Drupal\tmgmt\SourceManager;
+use Drupal\tmgmt_content\Plugin\tmgmt\Source\ContentEntitySource;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
@@ -23,6 +25,20 @@ readonly class JobBuilder implements JobBuilderInterface {
    */
   public const string TARGET_LANGUAGE = 'en';
 
+  /**
+   * Module config.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  protected ImmutableConfig $config;
+
+  /**
+   * Content source.
+   *
+   * @var \Drupal\tmgmt_content\Plugin\tmgmt\Source\ContentEntitySource
+   */
+  protected ContentEntitySource $contentSource;
+
   public function __construct(
     protected AccountInterface $currentUser,
     protected EntityTypeManagerInterface $entityTypeManager,
@@ -32,8 +48,10 @@ readonly class JobBuilder implements JobBuilderInterface {
     protected SourceManager $sourcePluginManager,
     #[Autowire(service: 'tmgmt.data')]
     protected Data $tmgmtData,
-    protected ConfigFactoryInterface $configFactory,
+    ConfigFactoryInterface $configFactory,
   ) {
+    $this->config = $configFactory->get('eu_oss_translation.settings');
+    $this->contentSource = $this->sourcePluginManager->createInstance('content');
   }
 
   /**
@@ -85,9 +103,7 @@ readonly class JobBuilder implements JobBuilderInterface {
       ? $entity->getTranslation($sourceLangCode)
       : $entity;
 
-    /** @var \Drupal\tmgmt_content\Plugin\tmgmt\Source\ContentEntitySource $contentSource */
-    $contentSource = $this->sourcePluginManager->createInstance('content');
-    $data = $contentSource->extractTranslatableData($sourceEntity);
+    $data = $this->contentSource->extractTranslatableData($sourceEntity);
     // Use TMGMT's built-in method to filter out empty translatable content.
     $filteredData = $this->tmgmtData->filterTranslatable($data);
     return !empty($filteredData);
@@ -102,7 +118,6 @@ readonly class JobBuilder implements JobBuilderInterface {
   protected function createJob(OssSolutionInterface $entity): void {
     try {
       $jobStorage = $this->entityTypeManager->getStorage('tmgmt_job');
-      $config = $this->configFactory->get('eu_oss_translation.settings');
 
       /** @var \Drupal\tmgmt\JobInterface $job */
       $job = $jobStorage->create(
@@ -110,7 +125,7 @@ readonly class JobBuilder implements JobBuilderInterface {
           'source_language' => $entity->getRelevantLangCode(),
           'target_language' => self::TARGET_LANGUAGE,
           'uid' => $this->currentUser->id(),
-          'translator' => $config->get('translator'),
+          'translator' => $this->config->get('translator'),
         ]
       );
       $job->addItem('content', $entity->getEntityTypeId(), $entity->id());

@@ -1,0 +1,16 @@
+diff --git a/src/HttpMiddleware/BasicAuthSwap.php b/src/HttpMiddleware/BasicAuthSwap.php
+index 03f6660..20ee04d 100644
+--- a/src/HttpMiddleware/BasicAuthSwap.php
++++ b/src/HttpMiddleware/BasicAuthSwap.php
+@@ -53,7 +53,9 @@ class BasicAuthSwap implements HttpKernelInterface {
+     if (
+       strpos($request->getPathInfo(), '/oauth/token') !== FALSE &&
+       $request->headers->has('PHP_AUTH_USER') &&
+-      $request->headers->has('PHP_AUTH_PW')
++      $request->headers->has('PHP_AUTH_PW') &&
++      !$request->request->get('client_id') &&
++      !$request->request->get('client_secret')
+     ) {
+       // Swap the Basic Auth credentials into the request data.
+       $request->request->set('client_id', $request->headers->get('PHP_AUTH_USER'));
+

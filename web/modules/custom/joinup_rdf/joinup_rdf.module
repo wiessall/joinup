@@ -127,7 +127,7 @@ function _joinup_rdf_resync_parent_entities(EntityInterface $entity): void {
 
   if (!empty($parent)) {
     \Drupal::getContainer()->get('rdf_sync.synchronizer')->synchronize(
-      SyncMethod::Update,
+      SyncMethod::UPDATE,
       [$parent]
     );
   }

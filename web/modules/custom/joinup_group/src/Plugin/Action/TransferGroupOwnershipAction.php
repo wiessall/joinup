@@ -11,6 +11,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\Entity\OgMembership;
@@ -31,6 +32,13 @@ class TransferGroupOwnershipAction extends ActionBase implements ContainerFactor
   use StringTranslationTrait;
 
   /**
+   * The Joinup group transfer temporary storage.
+   *
+   * @var \Drupal\Core\TempStore\PrivateTempStore
+   */
+  protected PrivateTempStore $tempStore;
+
+  /**
    * Messages collector in case of warnings or errors.
    *
    * @var array[]
@@ -41,10 +49,11 @@ class TransferGroupOwnershipAction extends ActionBase implements ContainerFactor
     array $configuration,
     string $plugin_id,
     array $plugin_definition,
-    protected readonly PrivateTempStoreFactory $tempStoreFactory,
+    PrivateTempStoreFactory $temp_store_factory,
     protected readonly AccountInterface $currentUser,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->tempStore = $temp_store_factory->get('joinup_transfer_group_ownership');
   }
 
   /**
@@ -96,7 +105,7 @@ class TransferGroupOwnershipAction extends ActionBase implements ContainerFactor
     // the redirect alter event subscriber.
     // @see \Drupal\joinup_group\Form\TransferGroupOwnershipConfirmForm
     // @see \Drupal\joinup_group\EventSubscriber\TransferGroupOwnershipSubscriber
-    $this->tempStoreFactory->get('joinup_transfer_group_ownership')->set($this->currentUser->id(), [
+    $this->tempStore->set($this->currentUser->id(), [
       'membership' => $membership->id(),
       'messages' => $this->messages,
     ]);

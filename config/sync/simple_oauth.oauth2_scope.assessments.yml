@@ -1,0 +1,22 @@
+uuid: 29f9b658-f3a8-400e-99d4-f6c6d894ef04
+langcode: en
+status: true
+dependencies: {  }
+id: assessments
+name: assessments
+description: 'Assessments operations'
+grant_types:
+  authorization_code:
+    status: false
+    description: ''
+  client_credentials:
+    status: true
+    description: ''
+  refresh_token:
+    status: false
+    description: ''
+umbrella: false
+parent: _none
+granularity_id: role
+granularity_configuration:
+  role: assessment_reporter

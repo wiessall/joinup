@@ -12,6 +12,7 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Menu\MenuLinkInterface;
 use Drupal\Core\Menu\MenuLinkManagerInterface;
 use Drupal\Core\Menu\MenuLinkTreeElement;
 use Drupal\Core\Menu\MenuLinkTreeInterface;
@@ -307,14 +308,10 @@ class OgMenuInstanceForm extends OriginalOgMenuInstanceForm {
           '#default_value' => $link->getParent(),
         ];
 
-        $pathinfo = $link->getUrlObject()->toString();
-        // @todo Remove this workaround once this is fixed in core.
-        // @see https://www.drupal.org/project/drupal/issues/2548095
-        $pathinfo = substr($pathinfo, strlen(base_path()) - 1);
-
         // Disable nesting of links that are not pointing to nodes.
-        $route_info = $this->url_matcher->match($pathinfo);
-        if ($route_info['_route'] !== 'entity.node.canonical') {
+        $route_info = $this->getRouteInfo($link);
+        $is_node_route = !empty($route_info['_route']) && $route_info['_route'] === 'entity.node.canonical';
+        if (!$is_node_route) {
           // Force parent value to be empty. This will disable any value
           // submission for this form element, thus disallowing any parent to
           // be selected.
@@ -335,7 +332,7 @@ class OgMenuInstanceForm extends OriginalOgMenuInstanceForm {
         // manually somehow, probably by an administrator.
         if (
           // The link is a canonical path of a node.
-          $route_info['_route'] === 'entity.node.canonical'
+          $is_node_route
           && ($node = $route_info['node'] ?? FALSE)
           && $node instanceof NodeInterface
           // It should be a group or a custom page.
@@ -377,6 +374,24 @@ class OgMenuInstanceForm extends OriginalOgMenuInstanceForm {
       ->applyTo($form);
 
     return $form;
+  }
+
+  /**
+   * Load route info for the given link.
+   */
+  private function getRouteInfo(MenuLinkInterface $link): ?array {
+    $pathinfo = $link->getUrlObject()->toString();
+    // @todo Remove this workaround once this is fixed in core.
+    // @see https://www.drupal.org/project/drupal/issues/2548095
+    $pathinfo = substr($pathinfo, strlen(base_path()) - 1);
+
+    try {
+      return $this->url_matcher->match($pathinfo);
+    }
+    catch (\Exception) {
+      $this->messenger()->addWarning($this->t("Unable to load route for url '%url'", ['%url' => $pathinfo]));
+      return NULL;
+    }
   }
 
 }

@@ -1,0 +1,14 @@
+uuid: f2bcb172-4e14-4b3b-afa1-dc6a5aea4732
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.assessment_moderator
+  module:
+    - user
+id: user_remove_role_action.assessment_moderator
+label: 'Remove the Assessment moderator role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: assessment_moderator

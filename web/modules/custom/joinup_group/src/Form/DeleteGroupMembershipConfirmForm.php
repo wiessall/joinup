@@ -12,6 +12,7 @@ use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
+use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\Core\Url;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -25,6 +26,11 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
 
   use AutowireTrait;
+
+  /**
+   * The user private tempstore.
+   */
+  protected PrivateTempStore $privateTempStore;
 
   /**
    * The group memberships.
@@ -42,6 +48,7 @@ class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
     protected readonly PrivateTempStoreFactory $privateTempStoreFactory,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {
+    $this->privateTempStore = $privateTempStoreFactory->get('joinup_group.og_membership_delete_action');
   }
 
   /**
@@ -184,8 +191,7 @@ class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
    */
   protected function getMemberships(): array {
     if (!isset($this->memberships)) {
-      $privateTempStore = $this->privateTempStoreFactory->get('joinup_group.og_membership_delete_action');
-      if (!$this->memberships = $privateTempStore->get('memberships')) {
+      if (!$this->memberships = $this->privateTempStore->get('memberships')) {
         throw new \RuntimeException('No memberships.');
       }
     }

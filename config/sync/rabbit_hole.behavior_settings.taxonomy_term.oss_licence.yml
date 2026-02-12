@@ -1,0 +1,13 @@
+uuid: 5232c708-8acc-40ad-a04c-a1f3501c0bbc
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.oss_licence
+id: taxonomy_term.oss_licence
+targetEntityType: taxonomy_term
+bundle: oss_licence
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

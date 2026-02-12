@@ -81,3 +81,4 @@ hidden:
   solution_logo: true
   spatial_coverage: true
   uri: true
+  uuid: true

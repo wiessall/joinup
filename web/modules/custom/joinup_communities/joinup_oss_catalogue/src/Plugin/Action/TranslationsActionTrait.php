@@ -17,7 +17,7 @@ trait TranslationsActionTrait {
    */
   public function access($object, ?AccountInterface $account = NULL, $return_as_object = FALSE): AccessResult|bool {
     $account = $account ?: \Drupal::currentUser();
-    $result = AccessResult::allowedIfHasPermission($account, 'administer joinup oss catalogue');
+    $result = AccessResult::allowedIfHasPermission($account, 'administer nodes');
     return $return_as_object ? $result : $result->isAllowed();
   }
 

@@ -331,6 +331,7 @@ trait NameMappingsTrait {
   protected function entityTypeAliases(): array {
     return [
       'announcement' => 'message',
+      'assessment' => 'assessment',
       'collection' => 'node',
       'contact information' => 'node',
       'contact_information' => 'node',
@@ -349,6 +350,7 @@ trait NameMappingsTrait {
       'oss_solution' => 'node',
       'owner' => 'node',
       'release' => 'node',
+      'report' => 'assessment',
       'solution' => 'node',
       'spdx licence' => 'taxonomy_term',
       'topic' => 'taxonomy_term',
@@ -366,6 +368,7 @@ trait NameMappingsTrait {
    */
   protected function bundleAliases(): array {
     return [
+      'assessment' => 'report',
       'collection' => 'collection',
       'contact information' => 'contact_information',
       'custom page' => 'custom_page',
@@ -401,6 +404,7 @@ trait NameMappingsTrait {
    */
   protected function getFacetIdFromAlias(string $alias): string {
     $mappings = [
+      'Organisation country' => 'assessment_org_country',
       'Collection event date' => 'collection_event_type',
       'Content listing types' => 'content_listing_type',
       'Content types' => 'type',
@@ -427,7 +431,6 @@ trait NameMappingsTrait {
       'spatial coverage' => 'spatial_coverage',
       'topic' => 'topic',
       'Type of document' => 'type_of_document',
-      'Organisation origin' => 'organisation_origin',
       'OSS category' => 'oss_category',
       'OSS intended audience' => 'oss_scope',
       'OSS development status' => 'oss_development_status',

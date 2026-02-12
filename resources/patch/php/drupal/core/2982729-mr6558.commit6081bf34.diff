@@ -1,0 +1,282 @@
+diff --git a/core/modules/rest/config/schema/rest.views.schema.yml b/core/modules/rest/config/schema/rest.views.schema.yml
+--- a/core/modules/rest/config/schema/rest.views.schema.yml
++++ b/core/modules/rest/config/schema/rest.views.schema.yml
+@@ -39,3 +39,6 @@ views.style.serializer:
+       sequence:
+         type: string
+         label: 'Format'
++    pager:
++      type: boolean
++      label: 'Add pager information'
+diff --git a/core/modules/rest/rest.module b/core/modules/rest/rest.module
+--- a/core/modules/rest/rest.module
++++ b/core/modules/rest/rest.module
+@@ -7,6 +7,8 @@
+ 
+ use Drupal\Core\Url;
+ use Drupal\Core\Routing\RouteMatchInterface;
++use Drupal\rest\Plugin\views\style\Serializer;
++use Drupal\views\ViewExecutable;
+ 
+ /**
+  * Implements hook_help().
+@@ -34,3 +36,35 @@ function rest_help($route_name, RouteMatchInterface $route_match) {
+       return $output;
+   }
+ }
++
++/**
++ * Implements hook_views_pre_execute().
++ *
++ * Adds page-based offset support for REST serializer views whose pager does
++ * not natively handle pagination (e.g. "some" pager).
++ *
++ * For pagers that do not use pagination (usePager() returns FALSE), this
++ * hook enables page-based navigation by adjusting the query offset. The
++ * pager's current page is also updated so that Serializer::wrapRowsInPager()
++ * can report the correct page number.
++ */
++function rest_views_pre_execute(ViewExecutable $view): void {
++  $style = $view->getStyle();
++  if (!$style instanceof Serializer || empty($style->options['pager'])) {
++    return;
++  }
++  $pager = $view->pager;
++  if (!$pager || $pager->usePager()) {
++    return;
++  }
++  $items_per_page = (int) $pager->getItemsPerPage();
++  if ($items_per_page <= 0) {
++    return;
++  }
++  $current_page = $view->getRequest()->query->getInt('page');
++  $pager->setCurrentPage($current_page);
++  if ($current_page > 0) {
++    $base_offset = (int) $pager->getOffset();
++    $view->query->setOffset($base_offset + ($current_page * $items_per_page));
++  }
++}
+diff --git a/core/modules/rest/rest.post_update.php b/core/modules/rest/rest.post_update.php
+--- a/core/modules/rest/rest.post_update.php
++++ b/core/modules/rest/rest.post_update.php
+@@ -5,6 +5,10 @@
+  * Post update functions for Rest.
+  */
+ 
++use Drupal\Core\Config\Entity\ConfigEntityUpdater;
++use Drupal\rest\RestConfigUpdater;
++use Drupal\views\ViewEntityInterface;
++
+ /**
+  * Implements hook_removed_post_updates().
+  */
+@@ -16,3 +20,17 @@ function rest_removed_post_updates() {
+     'rest_post_update_delete_settings' => '10.0.0',
+   ];
+ }
++
++/**
++ * Add pager option to serializer style displays.
++ */
++function rest_post_update_add_serializer_pager(?array &$sandbox = NULL): void {
++  if (!\Drupal::moduleHandler()->moduleExists('views')) {
++    return;
++  }
++  /** @var \Drupal\rest\RestConfigUpdater $rest_config_updater */
++  $rest_config_updater = \Drupal::classResolver(RestConfigUpdater::class);
++  \Drupal::classResolver(ConfigEntityUpdater::class)->update($sandbox, 'view', function (ViewEntityInterface $view) use ($rest_config_updater): bool {
++    return $rest_config_updater->processSerializerPagerUpdate($view);
++  });
++}
+diff --git a/core/modules/rest/rest.services.yml b/core/modules/rest/rest.services.yml
+--- a/core/modules/rest/rest.services.yml
++++ b/core/modules/rest/rest.services.yml
+@@ -24,3 +24,5 @@ services:
+   rest.resource.entity.post_route.subscriber:
+     class: \Drupal\rest\EventSubscriber\EntityResourcePostRouteSubscriber
+     arguments: ['@entity_type.manager']
++  Drupal\rest\RestConfigUpdater:
++    autowire: true
+diff --git a/core/modules/rest/src/Plugin/views/style/Serializer.php b/core/modules/rest/src/Plugin/views/style/Serializer.php
+--- a/core/modules/rest/src/Plugin/views/style/Serializer.php
++++ b/core/modules/rest/src/Plugin/views/style/Serializer.php
+@@ -6,6 +6,7 @@ use Drupal\Core\Cache\Cache;
+ use Drupal\Core\Cache\CacheableDependencyInterface;
+ use Drupal\Core\Form\FormStateInterface;
+ use Drupal\Core\StringTranslation\TranslatableMarkup;
++use Drupal\rest\Plugin\views\display\RestExport;
+ use Drupal\views\Attribute\ViewsStyle;
+ use Drupal\views\Plugin\views\style\StylePluginBase;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+@@ -87,6 +88,7 @@ class Serializer extends StylePluginBase implements CacheableDependencyInterface
+   protected function defineOptions() {
+     $options = parent::defineOptions();
+     $options['formats'] = ['default' => []];
++    $options['pager'] = ['default' => FALSE];
+ 
+     return $options;
+   }
+@@ -104,6 +106,12 @@ class Serializer extends StylePluginBase implements CacheableDependencyInterface
+       '#options' => $this->getFormatOptions(),
+       '#default_value' => $this->options['formats'],
+     ];
++    $form['pager'] = [
++      '#type' => 'checkbox',
++      '#title' => $this->t('Add pager information'),
++      '#description' => $this->t('Pager information will be added to rest export. <b>Output structure will be changed.</b>'),
++      '#default_value' => $this->options['pager'],
++    ];
+   }
+ 
+   /**
+@@ -140,7 +148,62 @@ class Serializer extends StylePluginBase implements CacheableDependencyInterface
+     else {
+       $content_type = !empty($this->options['formats']) ? reset($this->options['formats']) : 'json';
+     }
+-    return $this->serializer->serialize($rows, $content_type, ['views_style_plugin' => $this]);
++
++    $result = $rows;
++    if ($this->options['pager'] && $this->view->pager && $this->displayHandler instanceof RestExport) {
++      $result = $this->wrapRowsInPager($rows);
++    }
++
++    return $this->serializer->serialize($result, $content_type, ['views_style_plugin' => $this]);
++  }
++
++  /**
++   * Wraps an array of rows in another array with page info.
++   *
++   * @param array $rows
++   *   Array with the rows to wrap.
++   *
++   * @return array
++   *   An array with the following keys:
++   *   - rows: the original rows array.
++   *   - pager: an array with the following keys:
++   *     - current_page: the zero-based current page number.
++   *     - items_per_page: the number of items displayed per page.
++   *     - total_items: the total number of items in the view result.
++   *     - total_pages: the total number of pages.
++   */
++  protected function wrapRowsInPager(array $rows): array {
++    $pager = $this->view->pager;
++    $items_per_page = (int) $pager->getItemsPerPage();
++    $current_page = (int) $pager->getCurrentPage();
++
++    if ($pager->useCountQuery()) {
++      $total_items = (int) $pager->getTotalItems();
++    }
++    elseif (isset($this->view->build_info['count_query'])) {
++      // Pagers without a count query (e.g. "some") do not track total items
++      // accurately, so run the count query if available.
++      $count_query = clone $this->view->build_info['count_query'];
++      $count_query->preExecute();
++      $total_items = (int) $count_query->countQuery()->execute()->fetchField();
++    }
++    else {
++      $total_items = (int) $pager->getTotalItems();
++    }
++
++    $total_pages = ($items_per_page > 0)
++      ? (int) ceil($total_items / $items_per_page)
++      : 1;
++
++    return [
++      'rows' => $rows,
++      'pager' => [
++        'current_page' => $current_page,
++        'items_per_page' => $items_per_page,
++        'total_items' => $total_items,
++        'total_pages' => $total_pages,
++      ],
++    ];
+   }
+ 
+   /**
+@@ -167,7 +224,11 @@ class Serializer extends StylePluginBase implements CacheableDependencyInterface
+    * {@inheritdoc}
+    */
+   public function getCacheContexts() {
+-    return ['request_format'];
++    $contexts = ['request_format'];
++    if ($this->options['pager']) {
++      $contexts[] = 'url.query_args:page';
++    }
++    return $contexts;
+   }
+ 
+   /**
+diff --git a/core/modules/rest/src/RestConfigUpdater.php b/core/modules/rest/src/RestConfigUpdater.php
+new file mode 100644
+--- /dev/null
++++ b/core/modules/rest/src/RestConfigUpdater.php
+@@ -0,0 +1,69 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\rest;
++
++use Drupal\views\ViewEntityInterface;
++
++/**
++ * Provides a BC layer for modules providing old configurations.
++ *
++ * @internal
++ */
++class RestConfigUpdater {
++
++  /**
++   * Checks if a serializer display needs the pager option added.
++   *
++   * @param \Drupal\views\ViewEntityInterface $view
++   *   The view entity.
++   *
++   * @return bool
++   *   TRUE if the view has any serializer displays missing the pager option.
++   */
++  public function needsSerializerPagerUpdate(ViewEntityInterface $view): bool {
++    foreach ($view->get('display') as $display) {
++      if (
++        isset($display['display_options']['style']) &&
++        $display['display_options']['style']['type'] === 'serializer' &&
++        !isset($display['display_options']['style']['options']['pager'])
++      ) {
++        return TRUE;
++      }
++    }
++    return FALSE;
++  }
++
++  /**
++   * Adds the pager option to serializer style displays that are missing it.
++   *
++   * @param \Drupal\views\ViewEntityInterface $view
++   *   The view entity.
++   *
++   * @return bool
++   *   TRUE if the view was updated.
++   */
++  public function processSerializerPagerUpdate(ViewEntityInterface $view): bool {
++    $changed = FALSE;
++    $displays = $view->get('display');
++
++    foreach ($displays as &$display) {
++      if (
++        isset($display['display_options']['style']) &&
++        $display['display_options']['style']['type'] === 'serializer' &&
++        !isset($display['display_options']['style']['options']['pager'])
++      ) {
++        $display['display_options']['style']['options']['pager'] = FALSE;
++        $changed = TRUE;
++      }
++    }
++
++    if ($changed) {
++      $view->set('display', $displays);
++    }
++
++    return $changed;
++  }
++
++}

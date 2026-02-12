@@ -1,0 +1,63 @@
+uuid: 977aba26-e6f4-4c46-be52-1e6c094ce7f0
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.expression
+    - field.field.assessment.expression.description
+    - field.field.assessment.expression.documented_in
+    - field.field.assessment.expression.initiative_name
+  module:
+    - collection
+    - entity_form_field_label
+    - link
+    - template_suggestion
+id: assessment.expression.default
+targetEntityType: assessment
+bundle: expression
+mode: default
+content:
+  description:
+    type: text_default
+    label: visually_hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  documented_in:
+    type: link
+    label: visually_hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: nofollow
+      target: _blank
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+      template_suggestion:
+        template_suggestion: ''
+    weight: 2
+    region: content
+  initiative_name:
+    type: string
+    label: visually_hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  langcode: true
+  name: true
+  search_api_excerpt: true
+  status: true
+  uid: true
+  uri: true
+  uuid: true

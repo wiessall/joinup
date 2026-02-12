@@ -6,6 +6,7 @@ namespace Drupal\eu_oss_vitality_index;
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
@@ -21,22 +22,25 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 class VitalityIndexGenerator implements VitalityIndexGeneratorInterface {
 
   /**
-   * Config name.
-   */
-  protected const string CONFIG_NAME = 'eu_oss_vitality_index.settings';
-
-  /**
    * Directory relative to 'private://'.
    */
-  protected const string GIT_CLONE_DIR = 'eu_oss_catalogue';
+  protected const GIT_CLONE_DIR = 'eu_oss_catalogue';
+
+  /**
+   * Module config.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  protected ImmutableConfig $config;
 
   public function __construct(
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     #[Autowire(service: 'logger.channel.eu_oss_catalogue')]
     protected readonly LoggerChannelInterface $logger,
     protected readonly FileSystemInterface $fileSystem,
-    protected readonly ConfigFactoryInterface $configFactory,
+    ConfigFactoryInterface $config_factory,
   ) {
+    $this->config = $config_factory->get('eu_oss_vitality_index.settings');
   }
 
   /**
@@ -129,10 +133,9 @@ class VitalityIndexGenerator implements VitalityIndexGeneratorInterface {
    *   The repository or NULL if fetch failed.
    */
   protected function gitFetch(string $localPath): ?Repository {
-    $config = $this->configFactory->get(self::CONFIG_NAME);
     $repository = new Repository($localPath,
       [
-        'process_timeout' => $config->get('process_timeout'),
+        'process_timeout' => $this->config->get('process_timeout'),
       ]
     );
     $repository->run('fetch');
@@ -152,7 +155,6 @@ class VitalityIndexGenerator implements VitalityIndexGeneratorInterface {
    *   The repository or NULL if clone failed.
    */
   protected function gitClone(string $localPath, string $remoteUrl): ?Repository {
-    $config = $this->configFactory->get(self::CONFIG_NAME);
     return Admin::cloneRepository($localPath, $remoteUrl,
       [
         '--mirror',
@@ -160,7 +162,7 @@ class VitalityIndexGenerator implements VitalityIndexGeneratorInterface {
         '--filter=tree:0',
       ],
       [
-        'process_timeout' => $config->get('process_timeout'),
+        'process_timeout' => $this->config->get('process_timeout'),
       ],
     );
   }
