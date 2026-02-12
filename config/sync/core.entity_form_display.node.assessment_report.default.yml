@@ -8,7 +8,6 @@ dependencies:
     - field.field.node.assessment_report.submission
     - node.type.assessment_report
   module:
-    - og
     - path
     - publication_date
 id: node.assessment_report.default
@@ -30,7 +29,7 @@ content:
       include_locked: true
     third_party_settings: {  }
   og_audience:
-    type: og_complex
+    type: entity_reference_autocomplete
     weight: 122
     region: content
     settings:
