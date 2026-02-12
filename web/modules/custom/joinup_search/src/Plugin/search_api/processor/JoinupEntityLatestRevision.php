@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Drupal\joinup_search\Plugin\search_api\processor;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\node\NodeInterface;
+use Drupal\search_api\Attribute\SearchApiProcessor;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Processor\ProcessorPluginBase;
 use Drupal\state_machine_revisions\RevisionManagerInterface;
@@ -13,16 +15,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Ensures that the item to be indexed is the latest version.
- *
- * @SearchApiProcessor(
- *   id = "joinup_entity_latest_revision",
- *   label = @Translation("Joinup entity latest revision"),
- *   description = @Translation("Ensures that the version of the entity is the
- *   latest revision."), stages = {
- *     "alter_items" = -20,
- *   },
- * )
  */
+#[SearchApiProcessor(
+  id: "joinup_entity_latest_revision",
+  label: new TranslatableMarkup("Joinup entity latest revision"),
+  description: new TranslatableMarkup("Ensures that the version of the entity is the latest revision."),
+  stages: [
+    "alter_items" => -20,
+  ],
+)]
 class JoinupEntityLatestRevision extends ProcessorPluginBase {
 
   public function __construct(
