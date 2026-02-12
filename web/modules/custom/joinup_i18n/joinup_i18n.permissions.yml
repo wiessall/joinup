@@ -1,6 +1,3 @@
-bypass enforced english:
-  title: 'Bypass English for Regular Users'
-  description: 'Allow UI Language Selection for Privileged Users'
 view admin pages in preferred language:
   title: 'View admin pages in user-preferred language'
   description: 'Allows admin pages to be shown in the user’s preferred interface language.'
