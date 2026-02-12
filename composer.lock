@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "21095619f4ab3f77c24950ef5b5e0ccc",
+    "content-hash": "09ba0aa8a2281a99ff20c63b1b4ba18a",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -14251,33 +14251,6 @@
             ]
         },
         {
-            "name": "npm-asset/jquery",
-            "version": "4.0.0",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/jquery/-/jquery-4.0.0.tgz"
-            },
-            "type": "npm-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
-            "name": "npm-asset/jquery-colorbox",
-            "version": "1.6.4",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/jquery-colorbox/-/jquery-colorbox-1.6.4.tgz"
-            },
-            "require": {
-                "npm-asset/jquery": ">=1.3.2"
-            },
-            "type": "npm-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
             "name": "npm-asset/jquery-jsonview",
             "version": "1.2.3",
             "dist": {
@@ -20753,6 +20726,15 @@
                 "source": "https://github.com/tijsverkoyen/CssToInlineStyles/tree/v2.4.0"
             },
             "time": "2025-12-02T11:56:42+00:00"
+        },
+        {
+            "name": "turbojettechnologies/colorbox",
+            "version": "1.7.0",
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/TurbojetTechnologies/colorbox/archive/1.7.0.zip"
+            },
+            "type": "drupal-library"
         },
         {
             "name": "twig/twig",

@@ -143,7 +143,6 @@
         "mglaman/composer-drupal-lenient": "^1.0",
         "npm-asset/chart.js": "^4.5",
         "npm-asset/dompurify": "^3.0.9",
-        "npm-asset/jquery-colorbox": "^1.6.4",
         "npm-asset/jquery-jsonview": "^1.2",
         "npm-asset/js-cookie": "^3.0.5",
         "npm-asset/slick-carousel": ">1.6.0 <1.8.1",
@@ -157,7 +156,8 @@
         "psr/http-factory-implementation": "^1.0",
         "semiceu/adms-ap_validator": "^1.0",
         "sweetrdf/easyrdf": "^1.9",
-        "symfony/http-client": "^6.4"
+        "symfony/http-client": "^6.4",
+        "turbojettechnologies/colorbox": "^1.7.0"
     },
     "require-dev": {
         "ext-fileinfo": "*",
@@ -277,7 +277,7 @@
                 "npm-asset/slick-carousel"
             ],
             "web/libraries/colorbox": [
-                "npm-asset/jquery-colorbox"
+                "turbojettechnologies/colorbox"
             ],
             "web/libraries/tagify": [
                 "npm-asset/yaireo--tagify"
@@ -559,6 +559,18 @@
                     "url": "git@github.com:SEMICeu/adms-ap_validator.git",
                     "type": "git",
                     "reference": "master"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "turbojettechnologies/colorbox",
+                "version": "1.7.0",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/TurbojetTechnologies/colorbox/archive/1.7.0.zip",
+                    "type": "zip"
                 }
             }
         }
