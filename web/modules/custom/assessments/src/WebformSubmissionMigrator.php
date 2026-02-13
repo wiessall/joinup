@@ -504,7 +504,7 @@ class WebformSubmissionMigrator {
         'title' => $title,
         'og_audience' => $solutionCollector,
         'landing_page' => $linkData['url'] ?? '',
-        'field_state' => 'draft',
+        'field_state' => 'published',
         'uid' => $ownerId,
       ]);
       $solution->save();
