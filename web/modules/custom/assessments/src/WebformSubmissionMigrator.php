@@ -169,11 +169,12 @@ class WebformSubmissionMigrator {
       return FALSE;
     }
 
-    $provider = $this->createProvider($data);
-    $expressions = $this->createExpressions($data);
-    $publicServices = $this->createPublicServices($data);
-    $participations = $this->createParticipation($data);
-    $assets = $this->getAssets($data);
+    $ownerId = $submission->getOwnerId();
+    $provider = $this->createProvider($data, $ownerId);
+    $expressions = $this->createExpressions($data, $ownerId);
+    $publicServices = $this->createPublicServices($data, $ownerId);
+    $participations = $this->createParticipation($data, $ownerId);
+    $assets = $this->getAssets($data, $ownerId);
     $bindingRequirements = $this->createBindingRequirements(
       $data,
       $expressions,
@@ -189,7 +190,7 @@ class WebformSubmissionMigrator {
       'provider' => $provider,
       'binding_requirement' => $bindingRequirements,
       'state' => $state,
-      'uid' => $submission->getOwnerId(),
+      'uid' => $ownerId,
     ];
 
     // Relevant reports (only if "Yes").
@@ -286,7 +287,7 @@ class WebformSubmissionMigrator {
    * @return \Drupal\assessments\Entity\PublicOrganisation|int
    *   The provider entity or its ID.
    */
-  protected function createProvider(array $data): PublicOrganisation|int {
+  protected function createProvider(array $data, int $ownerId): PublicOrganisation|int {
     $typeLabel = $data['public_sector_body'] ?? '';
     $typeIdentifier = self::PROVIDER_TYPE_MAP[$typeLabel] ?? NULL;
 
@@ -326,7 +327,7 @@ class WebformSubmissionMigrator {
       'name' => $name,
       'organisation_type' => $typeTid,
       'status' => TRUE,
-      'uid' => 1,
+      'uid' => $ownerId,
     ];
 
     if ($countryTid !== NULL) {
@@ -345,7 +346,7 @@ class WebformSubmissionMigrator {
    * @return list<\Drupal\assessments\AssessmentInterface>
    *   Expression entities.
    */
-  protected function createExpressions(array $data): array {
+  protected function createExpressions(array $data, int $ownerId): array {
     $expressions = [];
 
     foreach ((array) ($data['initiatives'] ?? []) as $initiative) {
@@ -361,6 +362,7 @@ class WebformSubmissionMigrator {
           'format' => 'plain_text',
         ],
         'status' => TRUE,
+        'uid' => $ownerId,
       ];
 
       if (!empty($initiative['initiative_link'])) {
@@ -382,7 +384,7 @@ class WebformSubmissionMigrator {
    * @return list<\Drupal\assessments\AssessmentInterface>
    *   Public service entities.
    */
-  protected function createPublicServices(array $data): array {
+  protected function createPublicServices(array $data, int $ownerId): array {
     $serviceNames = array_filter((array) ($data['trans_european_digital_public_service_concerned'] ?? []));
     if (empty($serviceNames)) {
       return [];
@@ -411,6 +413,7 @@ class WebformSubmissionMigrator {
         'thematic_area' => $thematicAreaTids,
         'countries' => $countryTids,
         'status' => TRUE,
+        'uid' => $ownerId,
       ]);
     }
 
@@ -423,7 +426,7 @@ class WebformSubmissionMigrator {
    * @return list<\Drupal\assessments\AssessmentInterface>
    *   Participation entities.
    */
-  protected function createParticipation(array $data): array {
+  protected function createParticipation(array $data, int $ownerId): array {
     // Resolve participant types.
     $participantTypeTids = [];
     $selectedTypes = array_filter((array) ($data['data_processed_by'] ?? []));
@@ -447,6 +450,7 @@ class WebformSubmissionMigrator {
       'participant_type' => $participantTypeTids,
       'stakeholder_country' => $countryTids,
       'status' => TRUE,
+      'uid' => $ownerId,
     ];
 
     // Check for "All EU" in geographical origins.
@@ -471,7 +475,7 @@ class WebformSubmissionMigrator {
    * @return list<\Drupal\joinup_solution\Entity\SolutionInterface>
    *   Solution entities.
    */
-  protected function getAssets(array $data): array {
+  protected function getAssets(array $data, int $ownerId): array {
     $nodeStorage = $this->entityTypeManager->getStorage('node');
     $assets = [];
 
@@ -501,6 +505,7 @@ class WebformSubmissionMigrator {
         'og_audience' => $solutionCollector,
         'landing_page' => $linkData['url'] ?? '',
         'field_state' => 'draft',
+        'uid' => $ownerId,
       ]);
       $solution->save();
       $assets[] = $solution;

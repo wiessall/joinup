@@ -177,6 +177,24 @@ class MigrationComparisonController extends ControllerBase {
       $report->get('name')->value ?? '',
     ];
 
+    // Author (uid).
+    $webformAuthor = '';
+    if ($submission) {
+      $owner = $submission->getOwner();
+      $webformAuthor = $owner
+        ? $owner->getDisplayName() . ' (' . $owner->id() . ')'
+        : (string) $submission->getOwnerId();
+    }
+    $reportOwner = $report->getOwner();
+    $reportAuthor = $reportOwner
+      ? $reportOwner->getDisplayName() . ' (' . $reportOwner->id() . ')'
+      : '';
+    $rows[] = [
+      $this->t('Author'),
+      $webformAuthor,
+      $reportAuthor,
+    ];
+
     // State.
     $stateWebform = $submission ? ($submission->isDraft() ? 'draft' : 'review') : '';
     $rows[] = [
