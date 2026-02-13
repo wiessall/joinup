@@ -220,6 +220,15 @@ Feature: Collection membership administration
     And I go to the "Medical diagnosis" collection
     Then I should not see the plus button menu
 
+  Scenario: Unblock an already active membership
+    Given I am logged in as "Lisa Cuddy"
+    When I am on the members page of "Medical diagnosis"
+    And I check the box "Update the member Gregory House"
+    Then I select "Unblock the selected membership(s)" from "Action"
+    And I press "Apply to selected items"
+    Then the response status code should be 200
+    And I should see the error message "No access to execute Unblock the selected membership(s) on the OG membership Gregory House."
+
   Scenario: Assign a new role to a member
     # Check that Dr House can't edit the collection.
     When I am logged in as "Gregory House"
