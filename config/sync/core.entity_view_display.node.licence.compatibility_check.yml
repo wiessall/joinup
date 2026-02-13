@@ -75,3 +75,4 @@ hidden:
   spdx_licence_text: true
   spdx_see_also: true
   uri: true
+  uuid: true

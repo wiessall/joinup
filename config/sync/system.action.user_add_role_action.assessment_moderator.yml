@@ -1,0 +1,14 @@
+uuid: 5f5b6af0-af9a-44d9-81d9-8913fdaf2d31
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.assessment_moderator
+  module:
+    - user
+id: user_add_role_action.assessment_moderator
+label: 'Add the Assessment moderator role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: assessment_moderator

@@ -26,3 +26,4 @@ hidden:
   search_api_excerpt: true
   state: true
   subject: true
+  uuid: true

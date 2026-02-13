@@ -20,3 +20,4 @@ hidden:
   professional_domain: true
   state: true
   subject: true
+  uuid: true

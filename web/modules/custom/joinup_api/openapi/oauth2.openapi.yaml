@@ -1,0 +1,91 @@
+openapi: 3.1.1
+info:
+  title: Authentication API
+  version: 1.0.0
+  description: |
+    This API allows clients to obtain OAuth2 access tokens using the
+    Client Credentials flow.
+
+    In order to be able to access the API, you need to request an OAuth2 client
+    from your profile. Please, head to the [profile page](/user/edit/oauth) and
+    request a client. Once approved, you will be able to set the secret for
+    your client and use it to obtain an access token.
+
+    After you obtain the access token, you can use it to authenticate requests
+    to other protected endpoints in the website.
+servers:
+  - url: /oauth
+    description: OAuth2 endpoint
+security:
+  # @todo When the assessment client type and scopes are defined in the
+  #   project, set up the security requirements accordingly.
+  # @see https://swagger.io/docs/specification/v3_0/authentication/
+  - oauth2: [ ]
+paths:
+  /token:
+    servers:
+      - url: /oauth
+        description: OAuth2 endpoint
+    post:
+      summary: Obtain OAuth2 access token (Client Credentials)
+      description: Issue an access token using OAuth 2.0 Client Credentials flow.
+      operationId: oauthToken
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [ grant_type, client_id, client_secret ]
+              properties:
+                grant_type:
+                  type: string
+                  enum: [ client_credentials ]
+                  description: Must be 'client_credentials'
+                client_id:
+                  type: string
+                  description: The OAuth2 client identifier as seen in your
+                    profile page's OAuth2 clients section.
+                client_secret:
+                  type: string
+                  description: The OAuth2 client secret you set when your
+                    client is approved.
+            example:
+              grant_type: client_credentials
+              client_id: your_client_id
+              client_secret: your_client_secret
+      responses:
+        '200':
+          description: Access token response
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ access_token, token_type, expires_in ]
+                properties:
+                  token_type:
+                    type: string
+                    example: Bearer
+                  access_token:
+                    type: string
+                    description: The OAuth2 access token to be used in
+                      authenticated requests as a Bearer token.
+                  expires_in:
+                    type: integer
+                    format: int32
+              example:
+                token_type: Bearer
+                expires_in: 300
+                access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        '401':
+          description: Unauthorized
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth/token
+          scopes: { }

@@ -32,7 +32,7 @@ class SolutionMultistepController extends MultistepController {
       $form['actions']['next']['#ief_submit_trigger_all'] = TRUE;
     }
     // Preserve only specific form actions steps other than confirmation.
-    if ($this->stepSettings->group_name !== 'group_confirmation') {
+    if ($this->stepSettings->group_name !== 'group_confirmation' && isset($form['field_state']['widget']['#options'])) {
       $form['field_state']['widget']['#options'] = \array_intersect_key($form['field_state']['widget']['#options'], ['delete' => TRUE]);
     }
 

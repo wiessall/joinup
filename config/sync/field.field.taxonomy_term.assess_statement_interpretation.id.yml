@@ -1,0 +1,24 @@
+uuid: bd06b1b8-2fcc-48ee-b332-0f7fe8019f0c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.id
+    - taxonomy.vocabulary.assess_statement_interpretation
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: taxonomy_term.assess_statement_interpretation.id
+field_name: id
+entity_type: taxonomy_term
+bundle: assess_statement_interpretation
+label: Identifier
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

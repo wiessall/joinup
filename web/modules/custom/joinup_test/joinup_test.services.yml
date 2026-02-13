@@ -5,6 +5,7 @@ services:
     autowire: true
 
   Drupal\joinup_test\EventSubscriber\SearchApiFinishRequestSubscriber: { }
+  Drupal\joinup_test\DefaultContentHelper: { }
   Drupal\joinup_test\Config\TestModeConfigOverrider:
     tags:
       - { name: config.factory.override }
