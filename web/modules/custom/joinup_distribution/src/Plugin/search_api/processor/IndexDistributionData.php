@@ -6,10 +6,12 @@ namespace Drupal\joinup_distribution\Plugin\search_api\processor;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileUrlGeneratorInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\file\FileInterface;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_distribution\Entity\DistributionsParentInterface;
 use Drupal\link\LinkItemInterface;
+use Drupal\search_api\Attribute\SearchApiProcessor;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Item\ItemInterface;
 use Drupal\search_api\Processor\ProcessorPluginBase;
@@ -22,16 +24,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * data (title, description, URL, licence, etc) is indexed in the parent Search
  * API record, so that searching for a keyword belonging to a distribution will
  * retrieve their parent (release or solution).
- *
- * @SearchApiProcessor(
- *   id = "index_distribution_data",
- *   label = @Translation("Index distribution data"),
- *   description = @Translation("Indexes the distribution data into the distribution parent Search API record."),
- *   stages = {
- *     "preprocess_index" = 0,
- *   },
- * )
  */
+#[SearchApiProcessor(
+  id: "index_distribution_data",
+  label: new TranslatableMarkup("Index distribution data"),
+  description: new TranslatableMarkup("Indexes the distribution data into the distribution parent Search API record."),
+  stages: [
+    "preprocess_index" => 0,
+  ],
+)]
 class IndexDistributionData extends ProcessorPluginBase {
 
   public function __construct(

@@ -49,7 +49,7 @@
         "drupal/entity_print": "^2.15",
         "drupal/entityqueue": "^1.2",
         "drupal/error_page": "^2.1@beta",
-        "drupal/facets": "3.0.1",
+        "drupal/facets": "^3.0",
         "drupal/facets_block": "^2.0@beta",
         "drupal/facets_date_range": "^1.0@beta",
         "drupal/field_delimiter": "^2.0",
@@ -91,7 +91,7 @@
         "drupal/openapi_ui": "^1.0@RC",
         "drupal/openapi_ui_swagger": "^1.1",
         "drupal/other_view_filter": "^1.3",
-        "drupal/page_manager": "*",
+        "drupal/page_manager": "^4.0",
         "drupal/paragraphs": "^1.12",
         "drupal/pathauto": "~1.8",
         "drupal/pluginreference": "^3.0",
@@ -106,7 +106,7 @@
         "drupal/redirect": "^1.6",
         "drupal/replicate_actions": "^1.7",
         "drupal/replicate_ui": "^1.1",
-        "drupal/role_delegation": "^1.2",
+        "drupal/role_delegation": "^1.5",
         "drupal/schema_digital_document": "^1.1",
         "drupal/schema_metatag": "^3.0",
         "drupal/schema_social_media_posting": "^1.0",
@@ -149,20 +149,20 @@
         "npm-asset/chart.js": "^4.5",
         "npm-asset/dompurify": "^3.0.9",
         "npm-asset/jquery-colorbox": "^1.6.4",
-        "npm-asset/jquery-jsonview": "^1.2.3",
+        "npm-asset/jquery-jsonview": "^1.2",
         "npm-asset/js-cookie": "^3.0.5",
-        "npm-asset/slick-carousel": ">1.8.1 || <1.8.1",
-        "npm-asset/yaireo--tagify": "4.35.4",
+        "npm-asset/slick-carousel": ">1.6.0 <1.8.1",
+        "npm-asset/yaireo--tagify": "^4.35.4",
         "oomphinc/composer-installers-extender": "^2.0",
         "openeuropa/composer-artifacts": "^1.0",
         "openeuropa/oe_authentication": "^1.20",
         "openeuropa/oe_bootstrap_theme": "^1.21",
         "openeuropa/oe_dashboard_agent": "^1.0",
         "openeuropa/oe_webtools": "^1.40",
-        "psr/http-factory-implementation": "*",
-        "semiceu/adms-ap_validator": "1.0.0-alpha1",
+        "psr/http-factory-implementation": "^1.0",
+        "semiceu/adms-ap_validator": "^1.0",
         "sweetrdf/easyrdf": "^1.9",
-        "symfony/http-client": "*"
+        "symfony/http-client": "^6.4"
     },
     "require-dev": {
         "ext-fileinfo": "*",
@@ -170,7 +170,7 @@
         "ext-libxml": "*",
         "dantleech/gherkin-lint": "^0.2.3",
         "drupal/admin_toolbar": "^3.4",
-        "drupal/cas_mock_server": "2.0.2",
+        "drupal/cas_mock_server": "^2.0",
         "drupal/coder": "^8.3",
         "drupal/composer_deploy": "^1.6",
         "drupal/config_inspector": "^2.1",
@@ -338,6 +338,7 @@
         },
         "patches": {
             "drupal/babel": {
+                "Resolve site install slowness caused by Babel @see https://drupal.org/i/3568967": "resources/patch/php/drupal/babel/3568967-mr73-commit2d784807.diff",
                 "TypeError in BabelTranslateForm::ajaxUpdateTranslation see @see https://www.drupal.org/i/3561002": "resources/patch/php/drupal/babel/3561002.diff"
             },
             "drupal/calendar_view": {
@@ -418,9 +419,9 @@
                 "Restrict the dynamic fields in bundles @see https://www.drupal.org/i/3468563": "resources/patch/php/drupal/entity_print/3468563.mr66-note523124.diff"
             },
             "drupal/facets": {
-                "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/i/2873480": "resources/patch/php/drupal/facets/2873480.patch",
-                "Add 0 option in 'Soft limit' and apply soft limit to facet root li tags and add. @see https://www.drupal.org/i/3208580 and https://www.drupal.org/i/3307082": "resources/patch/php/drupal/facets/3208580-and-3307082.patch",
-                "Typeerror: Return value must be of type string, none returned in getCount #see https://www.drupal.org/i/3488396": "resources/patch/php/drupal/facets/3488396.diff"
+                "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/i/2873480": "resources/patch/php/drupal/facets/2873480.mr128.note647733.diff",
+                "Add 0 option in 'Soft limit' and apply soft limit to facet root li tags and add. @see https://www.drupal.org/i/3208580 and https://www.drupal.org/i/3307082": "resources/patch/php/drupal/facets/3208580.mr126.commit39be3797-and-3307082.mr127-commitcc678f86.patch",
+                "Entity Reference convert Entity ID to Label issue @see https://www.drupal.org/i/3031821": "resources/patch/php/drupal/facets/3031821.mr357commit4e49bf3c.diff"
             },
             "drupal/field_delimiter": {
                 "Doesn't work in layout builder. @see https://www.drupal.org/i/3099580": "resources/patch/php/drupal/field_delimiter/3099580.patch"

@@ -155,6 +155,11 @@ final class AssessmentStatement extends ContentEntityBase implements AssessmentS
   public function preSave(EntityStorageInterface $storage): void {
     parent::preSave($storage);
 
+    // If there's no interpretation, there's no judgement.
+    if ($this->get('interpretation')->isEmpty()) {
+      $this->set('judgement', NULL);
+    }
+
     // An RDF mapping is needed for the statement type because we cannot map the
     // bundle. The 'type' is kept in sync with the bundle value.
     $tid = \Drupal::service(AssessmentVocabularyHelper::class)

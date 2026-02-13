@@ -108,28 +108,42 @@ Feature: Assessment Report Entity Management
 
     # Identified effects on cross-border interoperability
     When I click "Legal" in the "Content" region
-    And I should see "Provide a justification"
+    Then I should not see "Provide a justification"
     And the response should contain "<span class=\"visually-hidden fieldset-legend fw-bold\">Identified effects on cross-border legal interoperability</span>"
-    And I select the radio button "Beneficial" with the name "legal[0][inline_entity_form][interpretation]"
+    When I select the radio button "N/A" with the name "legal[0][inline_entity_form][interpretation]"
+    Then I should not see "Provide a justification"
+    When I select the radio button "Beneficial" with the name "legal[0][inline_entity_form][interpretation]"
+    Then I should see "Provide a justification"
     And I fill in "legal[0][inline_entity_form][judgement][0][value]" with "Complies with GDPR and eIDAS regulations"
 
     When I click "Organisational" in the "Content" region
-    And I should see "Provide a justification"
+    Then I should not see "Provide a justification"
     And the response should contain "<span class=\"visually-hidden fieldset-legend fw-bold\">Identified effects on cross-border organisational interoperability</span>"
-    And I select the radio button "Negligible" with the name "organisational[0][inline_entity_form][interpretation]"
+    When I select the radio button "Negligible" with the name "organisational[0][inline_entity_form][interpretation]"
+    Then I should see "Provide a justification"
     And I fill in "organisational[0][inline_entity_form][judgement][0][value]" with "Requires coordination between authorities"
 
     When I click "Semantic" in the "Content" region
-    And I should see "Provide a justification"
+    Then I should not see "Provide a justification"
     And the response should contain "<span class=\"visually-hidden fieldset-legend fw-bold\">Identified effects on cross-border semantic interoperability</span>"
-    And I select the radio button "Beneficial" with the name "semantic[0][inline_entity_form][interpretation]"
+    When I select the radio button "Beneficial" with the name "semantic[0][inline_entity_form][interpretation]"
+    Then I should see "Provide a justification"
     And I fill in "semantic[0][inline_entity_form][judgement][0][value]" with "Uses standardized Core Vocabularies"
 
     When I click "Technical" in the "Content" region
-    And I should see "Provide a justification"
+    Then I should not see "Provide a justification"
     And the response should contain "<span class=\"visually-hidden fieldset-legend fw-bold\">Identified effects on cross-border technical interoperability</span>"
-    And I select the radio button "Beneficial" with the name "technical[0][inline_entity_form][interpretation]"
+    # Fill in a judgement value to verify it gets cleared on N/A.
+    When I select the radio button "Beneficial" with the name "technical[0][inline_entity_form][interpretation]"
+    Then I should see "Provide a justification"
     And I fill in "technical[0][inline_entity_form][judgement][0][value]" with "Implements REST APIs and OpenAPI specs"
+    # Selecting N/A should hide and clear the judgement field.
+    When I select the radio button "N/A" with the name "technical[0][inline_entity_form][interpretation]"
+    Then I should not see "Provide a justification"
+    # Switching back to Beneficial should show the preserved judgement value.
+    When I select the radio button "Beneficial" with the name "technical[0][inline_entity_form][interpretation]"
+    Then I should see "Provide a justification"
+    And the "technical[0][inline_entity_form][judgement][0][value]" field should contain "Implements REST APIs and OpenAPI specs"
 
     And I should see "Describe any remaining barriers to cross-border interoperability discovered."
     And I fill in "Remaining barriers to cross-border interoperability" with "No significant barriers identified."
