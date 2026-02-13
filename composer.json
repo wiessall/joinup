@@ -457,6 +457,9 @@
             "drupal/meta_entity": {
                 "Allow $bundle to be nullable @see https://www.drupal.org/i/3529976": "resources/patch/php/drupal/meta_entity/3529976.diff"
             },
+            "drupal/og": {
+                "OgMembership does not define a label entity key @see https://www.drupal.org/i/3573327": "resources/patch/php/drupal/og/3573327.mr69-commit2dfadf17.diff"
+            },
             "drupal/og_menu": {
                 "Fix fatal error in OgMenuInstanceForm @see https://www.drupal.org/i/3528599": "resources/patch/php/drupal/og_menu/3528599.diff"
             },
