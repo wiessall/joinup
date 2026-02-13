@@ -6,7 +6,7 @@ namespace Drupal\Tests\assessments\ExistingSite;
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\File\FileSystemInterface;
-use Drupal\Core\Serialization\Yaml;
+use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Url;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\consumers\Entity\Consumer;
