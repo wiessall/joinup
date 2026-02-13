@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\assessments;
 
+use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\ContentEntityStorageInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -99,6 +101,8 @@ class WebformSubmissionMigrator {
     protected readonly AssessmentVocabularyHelper $vocabularyHelper,
     protected readonly EntityRepositoryInterface $entityRepository,
     LoggerChannelFactoryInterface $loggerFactory,
+    protected readonly Connection $database,
+    protected readonly TimeInterface $time,
   ) {
     $this->logger = $loggerFactory->get('assessments');
   }
@@ -263,6 +267,15 @@ class WebformSubmissionMigrator {
     }
 
     $report->save();
+
+    // Record the migration mapping for comparison tooling.
+    $this->database->merge('assessments_migration_map')
+      ->keys(['sid' => (int) $submission->id()])
+      ->fields([
+        'report_id' => (int) $report->id(),
+        'migrated' => $this->time->getRequestTime(),
+      ])
+      ->execute();
 
     return TRUE;
   }

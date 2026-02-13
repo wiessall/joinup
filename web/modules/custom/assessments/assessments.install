@@ -1,0 +1,54 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the Assessments module.
+ */
+
+declare(strict_types=1);
+
+/**
+ * Implements hook_schema().
+ */
+function assessments_schema(): array {
+  $schema['assessments_migration_map'] = [
+    'description' => 'Maps webform submission IDs to assessment report entity IDs.',
+    'fields' => [
+      'sid' => [
+        'description' => 'The webform submission ID.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'report_id' => [
+        'description' => 'The assessment report entity ID.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'migrated' => [
+        'description' => 'Timestamp when the migration occurred.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+    'primary key' => ['sid'],
+    'indexes' => [
+      'report_id' => ['report_id'],
+    ],
+  ];
+
+  return $schema;
+}
+
+/**
+ * Create the assessments_migration_map table.
+ */
+function assessments_update_200805(): void {
+  $schema = \Drupal::database()->schema();
+  if (!$schema->tableExists('assessments_migration_map')) {
+    $schema->createTable('assessments_migration_map', assessments_schema()['assessments_migration_map']);
+  }
+}
