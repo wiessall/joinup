@@ -52,6 +52,7 @@ class UniqueFieldValueInGroupAndBundleTest extends KernelTestBase {
 
     $this->installConfig(['og', 'unique_field_value_in_group_and_bundle_test']);
     $this->installEntitySchema('entity_test');
+    $this->installEntitySchema('og_membership');
     $this->installEntitySchema('user');
 
     // Create two group bundles.
@@ -65,9 +66,14 @@ class UniqueFieldValueInGroupAndBundleTest extends KernelTestBase {
     EntityTestHelper::createBundle('group_content', 'Group 1');
     EntityTestHelper::createBundle('other_group_content', 'Group 2');
 
-    // Create groups.
-    $this->group['group1'] = EntityTest::create(['type' => 'group']);
-    $this->group['group2'] = EntityTest::create(['type' => 'group']);
+    // Set up a current user as group owner. OG 2.0 validates that the current
+    // user has permission to post content in the group. Group owners bypass
+    // this check when 'group_manager_full_access' is enabled (the default).
+    $owner = $this->setUpCurrentUser();
+
+    // Create groups owned by the current user.
+    $this->group['group1'] = EntityTest::create(['type' => 'group', 'user_id' => $owner->id()]);
+    $this->group['group2'] = EntityTest::create(['type' => 'group', 'user_id' => $owner->id()]);
     array_walk($this->group, function (EntityTest $entity): void {
       $entity->save();
     });

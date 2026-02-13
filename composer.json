@@ -143,7 +143,6 @@
         "mglaman/composer-drupal-lenient": "^1.0",
         "npm-asset/chart.js": "^4.5",
         "npm-asset/dompurify": "^3.0.9",
-        "npm-asset/jquery-colorbox": "^1.6.4",
         "npm-asset/jquery-jsonview": "^1.2",
         "npm-asset/js-cookie": "^3.0.5",
         "npm-asset/slick-carousel": ">1.6.0 <1.8.1",
@@ -157,7 +156,8 @@
         "psr/http-factory-implementation": "^1.0",
         "semiceu/adms-ap_validator": "^1.0",
         "sweetrdf/easyrdf": "^1.9",
-        "symfony/http-client": "^6.4"
+        "symfony/http-client": "^6.4",
+        "turbojettechnologies/colorbox": "^1.7.0"
     },
     "require-dev": {
         "ext-fileinfo": "*",
@@ -277,7 +277,7 @@
                 "npm-asset/slick-carousel"
             ],
             "web/libraries/colorbox": [
-                "npm-asset/jquery-colorbox"
+                "turbojettechnologies/colorbox"
             ],
             "web/libraries/tagify": [
                 "npm-asset/yaireo--tagify"
@@ -337,10 +337,6 @@
             "drupal/core": "-p2"
         },
         "patches": {
-            "drupal/babel": {
-                "Resolve site install slowness caused by Babel @see https://drupal.org/i/3568967": "resources/patch/php/drupal/babel/3568967-mr73-commit2d784807.diff",
-                "TypeError in BabelTranslateForm::ajaxUpdateTranslation see @see https://www.drupal.org/i/3561002": "resources/patch/php/drupal/babel/3561002.diff"
-            },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff",
                 "Weekly view doesn't show first week of new year @see https://www.drupal.org/i/3484325": "resources/patch/php/drupal/calendar_view/3484325.comment16152620.patch"
@@ -369,9 +365,8 @@
                 "Views Block Display skips preBlockBuild() call on ajax rebuild https://www.drupal.org/i/2605218": "resources/patch/php/drupal/core/2605218.mr4399-commitfd6208c3.diff",
                 "PHP deprecation error in PhpMail::mail @see https://www.drupal.org/i/3418098": "resources/patch/php/drupal/core/3418098.diff",
                 "Set the toolbar to position fixed on mobile (for group banner positioning and toolbar on mobile) @see https://www.drupal.org/i/2516938": "resources/patch/php/drupal/core/3809.diff",
-                "Media Library: Argument #1 ($array) must be of type array, null given in array_filter(). @see https://www.drupal.org/i/3340973": "resources/patch/php/drupal/core/3340973.diff",
+                "This error occurs when we click on 'Insert Selected' button from the media library without selecting or uploading a media @see https://www.drupal.org/i/3303889": "resources/patch/php/drupal/core/3303889.mr9413-commitd500fff6.diff",
                 "Allow contrib extensions to be installed by Drupal when core branch is 11.x @see https://www.drupal.org/i/3387322": "resources/patch/php/drupal/core/3387322.mr8615-note353552.diff",
-                "MediaLibraryUiBuilder service does not properly allow additional contextual filter arguments @see https://www.drupal.org/i/3401726": "resources/patch/php/drupal/core/3401726.diff",
                 "JS errors from Drupal.dialog.resetSize when rapidly closing dialogs @see https://www.drupal.org/i/3472624": "resources/patch/php/drupal/core/3472624-4d97ff80.diff",
                 "Can only intentionally re-render an entity with references 20 times @see https://www.drupal.org/i/2940605": "resources/patch/php/drupal/core/2940605-committed4d11c55d.diff",
                 "Deprecated function: preg_match(): Passing null to parameter #2 ($subject) of type string is deprecated in Drupal\\Core\\Routing\\UrlGenerator->doGenerate() @see https://drupal.org/i/3338057": "resources/patch/php/drupal/core/3338057.mr6989-commit386ed857.diff",
@@ -419,9 +414,6 @@
                 "Links from validation message don't point to proper fields under horizontal tabs @see https://www.drupal.org/i/3362124": "resources/patch/php/drupal/field_group/3362124-mr110-commit_6462709d7f.diff",
                 "Activate tab by link anchor is broken @see https://www.drupal.org/project/field_group/issues/3226844": "resources/patch/php/drupal/field_group/3226844.diff"
             },
-            "drupal/field_permissions": {
-                "Skip role with isAdmin when save custom permission @see https://www.drupal.org/project/field_permissions/issues/3470671": "resources/patch/php/drupal/field_permissions/3470671.mr36-note366100.diff"
-            },
             "drupal/flag": {
                 "TypeError: Argument 1 passed to FlagCount::count() must implement interface @see https://www.drupal.org/project/flag/issues/3168014": "resources/patch/php/drupal/flag/3168014.diff",
                 "AJAX link broken if flaggable entity id is string @see https://www.drupal.org/project/flag/issues/3359007": "resources/patch/php/drupal/flag/3359007-47.patch"
@@ -466,7 +458,7 @@
                 "Allow $bundle to be nullable @see https://www.drupal.org/i/3529976": "resources/patch/php/drupal/meta_entity/3529976.diff"
             },
             "drupal/og": {
-                "[regression] MembershipManager::getMembership since 1.0.0-alpha11": "resources/patch/php/drupal/og/3524972.diff"
+                "OgMembership does not define a label entity key @see https://www.drupal.org/i/3573327": "resources/patch/php/drupal/og/3573327.mr69-commit2dfadf17.diff"
             },
             "drupal/og_menu": {
                 "Fix fatal error in OgMenuInstanceForm @see https://www.drupal.org/i/3528599": "resources/patch/php/drupal/og_menu/3528599.diff"
@@ -497,25 +489,16 @@
                 "Field templating and multiple value fields not functioning as expected @see https://www.drupal.org/i/3122406": "resources/patch/php/drupal/social_media_links/3122406.patch"
             },
             "drupal/state_machine": {
-                "Do not force default state in options. @see https://www.drupal.org/project/state_machine/issues/2746091": "resources/patch/php/drupal/state_machine/2746091.diff",
-                "Fatal error and deprecated code: StateFieldBuilder. @see https://www.drupal.org/project/state_machine/issues/3542871": "resources/patch/php/drupal/state_machine/3542871.diff"
+                "Do not force default state in options. @see https://www.drupal.org/project/state_machine/issues/2746091": "resources/patch/php/drupal/state_machine/2746091.diff"
             },
             "drupal/svg_image": {
                 "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.mr20-note535548.diff"
             },
             "drupal/tour": {
-                "JS Event Timing Bug @see https://www.drupal.org/i/3567257": "resources/patch/php/drupal/tour/3567257.diff",
                 "Support page manager variants on front page @see https://www.drupal.org/i/3568815": "resources/patch/php/drupal/tour/3568815.patch"
-            },
-            "drupal/tagify": {
-                "Improve hierarchical dropdown with a better appearance. @see https://www.drupal.org/project/tagify/issues/3508891": "resources/patch/php/drupal/tagify/3508891.diff",
-                "Tagify placeholder is not translatable @see https://www.drupal.org/i/3547609": "resources/patch/php/drupal/tagify/3547609.diff"
             },
             "drupal/tmgmt_ec_etranslation": {
                 "Race Condition in Translation Callback": "resources/patch/php/drupal/tmgmt_ec_etranslation/3526972.diff"
-            },
-            "drupal/ui_patterns": {
-                "8.x Incompatibility with Drupal 11.3 see https://www.drupal.org/i/3563941": "resources/patch/php/drupal/ui_patterns/3563941.mr472-commit9ea4e992.diff"
             },
             "drupal/video_embed_field": {
                 "Add title attribute to YouTube, Vimeo, and Playlist embeds @see https://www.drupal.org/project/video_embed_field/issues/3200253": "resources/patch/php/drupal/video_embed_field/3200253-26.patch",
@@ -530,13 +513,6 @@
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff",
                 "Webform referenced and rendered in paragraph @see https://www.drupal.org/i/3230135": "resources/patch/php/drupal/webform/3230135.diff"
-            },
-            "gitonomy/gitlib": {
-                "The log parser fails in the case of a mergetag": "resources/patch/php/gitonomy/gitlib/231.diff",
-                "Skip third party unsupported lines @see https://github.com/gitonomy/gitlib/pull/232.diff": "resources/patch/php/gitonomy/gitlib/232.diff"
-            },
-            "openeuropa/oe_authentication": {
-                "Missing langcode in oe_authentication.settings @see https://github.com/openeuropa/oe_authentication/issues/229": "resources/patch/php/openeuropa/oe_authentication/230.diff"
             },
             "m4tthumphrey/php-gitlab-api": {
                 "GraphQL API @see https://github.com/GitLabPHP/Client/issues/766": "resources/patch/php/m4tthumphrey/php-gitlab-api/772.diff",
@@ -586,6 +562,18 @@
                     "url": "git@github.com:SEMICeu/adms-ap_validator.git",
                     "type": "git",
                     "reference": "master"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "turbojettechnologies/colorbox",
+                "version": "1.7.0",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/TurbojetTechnologies/colorbox/archive/1.7.0.zip",
+                    "type": "zip"
                 }
             }
         }
