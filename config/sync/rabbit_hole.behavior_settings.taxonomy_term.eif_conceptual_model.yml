@@ -1,0 +1,13 @@
+uuid: 53e87c8a-02ff-411e-bb89-1d297c4e68c7
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.eif_conceptual_model
+id: taxonomy_term.eif_conceptual_model
+targetEntityType: taxonomy_term
+bundle: eif_conceptual_model
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

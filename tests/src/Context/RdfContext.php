@@ -10,6 +10,7 @@ use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\rdf_sync\Model\SyncMethod;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -20,6 +21,8 @@ use function PHPUnit\Framework\assertSame;
  * Behat step definitions to test ADMS-AP validation.
  */
 class RdfContext extends RawDrupalContext {
+
+  use UtilityTrait;
 
   /**
    * Asserts that a list of triples exists in a certain graph.
@@ -57,6 +60,8 @@ class RdfContext extends RawDrupalContext {
         $date = preg_replace('/[+\-]00(:?)00$/', 'Z', $date);
         $triple['object'] = $date;
       }
+      $triple['subject'] = $this->escapeStringWithVariables($triple['subject'], FALSE);
+      $triple['object'] = $this->escapeStringWithVariables($triple['object'], FALSE);
       $subjects[$triple['subject']][] = $rows[implode(' ', $triple)] = $triple;
     }
 
@@ -320,6 +325,24 @@ class RdfContext extends RawDrupalContext {
       throw new \InvalidArgumentException("No entity found for URI $uri");
     }
     $this->visitPath($entity->toUrl()->toString());
+  }
+
+  /**
+   * Visit the export page of an entity given its RDF resource (URI).
+   *
+   * @param string $uri
+   *   The entity RDF URI.
+   * @param string $format
+   *   The export format.
+   */
+  #[Given('I visit the export page of the entity having :uri as RDF resource in :format format')]
+  public function visitEntityExportPageByRdfUri(string $uri, string $format): void {
+    if (!$entity = \Drupal::getContainer()
+      ->get('rdf_sync.mapper')
+      ->getEntityByUri($uri)) {
+      throw new \InvalidArgumentException("No entity found for URI $uri");
+    }
+    $this->visitPath($entity->toUrl(NULL, ['query' => ['_format' => $format]])->toString());
   }
 
   /**

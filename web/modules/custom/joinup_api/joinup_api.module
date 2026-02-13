@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\joinup_notification\MailContentTypeHeader;
+use Drupal\oauth_client\Entity\NotificationType;
 
 /**
  * Implements hook_local_tasks_alter().
@@ -19,20 +20,20 @@ function joinup_api_local_tasks_alter(array &$local_tasks): void {
 }
 
 /**
- * Implements hook_mail().
+ * Implements hook_mail_alter().
  */
-function joinup_api_mail(string $key, array &$message, array $params): void {
-  if ($key !== 'oauth_client_notification') {
+function joinup_api_mail_alter(array &$message): void {
+  if ($message['module'] !== 'oauth_client') {
     return;
   }
 
-  if (!empty($params['context']['subject'])) {
-    $message['subject'] = $params['context']['subject'];
-  }
-  if (!empty($params['context']['message'])) {
-    // Convert plain text to HTML paragraphs.
-    $message['body'][] = _filter_autop($params['context']['message']);
+  if (!NotificationType::tryFrom($message['key'])) {
+    return;
   }
 
+  // Convert body to HTML paragraphs and set HTML content type.
+  if (!empty($message['body'])) {
+    $message['body'] = array_map('_filter_autop', $message['body']);
+  }
   $message['headers']['Content-Type'] = MailContentTypeHeader::TextHtml->value;
 }

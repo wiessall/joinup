@@ -1,0 +1,19 @@
+uuid: eabc8615-5191-4e67-b417-becfab9e6f83
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+    - link
+id: assessment.relevant_report
+field_name: relevant_report
+entity_type: assessment
+type: link
+settings: {  }
+module: link
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

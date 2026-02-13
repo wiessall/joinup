@@ -1,0 +1,38 @@
+uuid: e5831661-5493-491a-9f8d-f37d939d9020
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.public_service
+    - field.storage.assessment.thematic_area
+    - taxonomy.vocabulary.assess_public_service_area
+  module:
+    - tmgmt_content
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://data.europa.eu/m8g/thematicArea'
+      type: resource
+  tmgmt_content:
+    excluded: false
+id: assessment.public_service.thematic_area
+field_name: thematic_area
+entity_type: assessment
+bundle: public_service
+label: Functions
+description: 'Specify the concerned function(s) of trans-European digital public service(s)'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      assess_public_service_area: assess_public_service_area
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

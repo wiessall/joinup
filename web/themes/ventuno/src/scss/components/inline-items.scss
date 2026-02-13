@@ -1,0 +1,6 @@
+@import "../partials/core";
+
+.assessments-inline__item.assessments-inline__item {
+  // Overrides the margins added by the .my* classes which also use !important.
+  margin-block: 0 !important;
+}

@@ -14,16 +14,57 @@ use Drupal\Core\Template\Attribute;
  * Implements hook_theme_suggestions_HOOK_alter().
  */
 function ventuno_theme_suggestions_field_alter(array &$suggestions, array $variables): void {
-  // Do not output field labels and wrapping markup for paragraph fields.
-  if (isset($variables['element']['#entity_type']) && $variables['element']['#entity_type'] === 'paragraph') {
+  $element = $variables['element'];
+  // Do not output field labels and wrapping markup for paragraph fields. This
+  // excludes binding_requirement paragraphs which are not used like the other
+  // paragraphs in the site (for content editing).
+  if (
+    isset($element['#entity_type'])
+    && $element['#entity_type'] === 'paragraph'
+    && $element['#bundle'] !== 'binding_requirement'
+  ) {
     // Prepend the new suggestion right after the default field template. This
     // allows overriding single fields, while keeping all the rest markup-free.
     array_unshift($suggestions, 'field__bare');
   }
   // Add extra suggestion for field elements.
-  if (isset($variables['element']['#extra_suggestion'])) {
-    $suggestions[] = $variables['element']['#extra_suggestion'];
+  if (isset($element['#extra_suggestion'])) {
+    $suggestions[] = $element['#extra_suggestion'];
   }
+
+  $base = implode('__', [
+    'field',
+    $element['#entity_type'],
+    $element['#bundle'],
+  ]);
+  // Get the key of the $base suggestion. We insert the view mode specific
+  // suggestion right after it.
+  $baseKey = array_search($base, $suggestions, TRUE);
+  if ($baseKey !== FALSE) {
+    // Let's not assume that $suggestions is an indexed array...
+    $baseKeyPos = array_search($baseKey, array_keys($suggestions), TRUE);
+    $typeBundleModeSuggestion = implode('__', [
+      'field',
+      $element['#entity_type'],
+      $element['#bundle'],
+      $element['#view_mode'],
+    ]);
+
+    $suggestions = array_merge(
+      array_slice($suggestions, 0, $baseKeyPos + 1),
+      [$typeBundleModeSuggestion],
+      array_slice($suggestions, $baseKeyPos + 1),
+    );
+  }
+
+  // Also add suggestion which varies by entity, field, bundle and view mode.
+  $suggestions[] = implode('__', [
+    'field',
+    $element['#entity_type'],
+    $element['#field_name'],
+    $element['#bundle'],
+    $element['#view_mode'],
+  ]);
 }
 
 /**
@@ -63,10 +104,6 @@ function ventuno_preprocess_field_multiple_value_form(array &$variables): void {
       foreach ($variables['table']['#rows'] as &$value_row) {
         $value_row['data'][1]['data']['uri']['#title'] = $label;
       }
-      // Remove table header for this very specific case to avoid redundancy.
-      if ($variables['element']['#id'] === 'edit-field-event-online-location') {
-        unset($variables['table']['#header']);
-      }
     }
 
     // Set first input 'id' as 'for' attribute for table label.
@@ -77,6 +114,20 @@ function ventuno_preprocess_field_multiple_value_form(array &$variables): void {
         ]);
         break;
       }
+    }
+
+    // Visually hide table header for specific fields.
+    $fields = [
+      // Node: event.
+      'field_event_online_location',
+      // Paragraph: binding_requirement.
+      'expression',
+      'affects',
+      'has_participation',
+      'relevant_report',
+    ];
+    if (\in_array($variables['element']['#field_name'], $fields)) {
+      $variables['table']['#attributes']['class'][] = 'thead-visually-hidden';
     }
   }
 

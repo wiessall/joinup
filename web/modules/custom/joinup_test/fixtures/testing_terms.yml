@@ -68,10 +68,26 @@ language:
   - name: English
 spatial:
   - name: Belgium
+    code: BE
+    eu_member: true
+    uri: 'http://example.com/taxonomy-term/spatial/dfa6aecc-1a7d-4bee-83b7-363b0db1ba66'
   - name: Switzerland
+    code: CH
   - name: 'European Union'
+    code: EU
+    uuid: 0e15426a-db00-4869-9ef1-7dac0caf1aeb
   - name: Luxembourg
+    code: LU
+    eu_member: true
   - name: Greece
+    code: GR
+    eu_member: true
+  - name: Netherlands
+    code: NL
+    eu_member: true
+  - name: Italy
+    code: IT
+    eu_member: true
 file_type:
   - name: 'ZIP'
     mime_type: 'application/zip'
@@ -260,3 +276,54 @@ tags:
   - name: 'games'
   - name: 'some unpublished tag'
     status: 0
+# Assessment vocabularies
+assess_provider_type:
+  - name: European Union institution
+    id: european_union_institution
+    uuid: 828392c1-6de1-4ee0-af73-bab457d621eb
+    uri: 'http://example.com/taxonomy-term/assess-provider-type/5870cf04-2d28-472d-9486-39b1e4670b25'
+  - name: European Union body
+    id: european_union_body
+    uuid: 430a3cd6-7cff-4c4e-8d22-84623bd14d44
+  - name: European Union agency
+    id: european_union_agency
+    uuid: 36f8c33b-e402-478b-aa75-f1acd387a63a
+  - name: Local public sector body
+    id: local_public_sector_body
+assess_participant_type:
+  - name: Local public sector body
+    id: local_public_sector_body
+    uri: 'http://example.com/taxonomy-term/assess-participant-type/b8c59bef-e579-440a-91f0-8c7983524336'
+  - name: European Union agency
+    id: european_union_agency
+  - name: National public sector body
+    id: national_public_sector_body
+  - name: 'Private Businesses'
+    id: private_businesses
+assess_public_service_area:
+  - name: Core governance and administration
+    id: core_governance_and_administration
+    uri: 'http://example.com/taxonomy-term/assess-public-service-area/34229fe8-14ac-40f8-9434-765e441eae3b'
+  - name: Digital and Innovation Services
+    id: digital_and_innovation_services
+  - name: Education and Research
+    id: education_and_research
+assess_statement_interpretation:
+  - name: Beneficial
+    id: positive
+  - name: Risky
+    id: negative
+  - name: Negligible
+    id: neutral
+assess_statement_type:
+  - name: Legal
+    id: legal
+    uri: 'http://example.com/taxonomy-term/assess-statement-type/219d8117-fd8e-4455-830d-9a0c6e81ab47'
+  - name: Organisational
+    id: organisational
+  - name: Semantic
+    id: semantic
+  - name: Technical
+    id: technical
+  - name: Other
+    id: other

@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use Drupal\Core\Template\Attribute;
 use Drupal\block\Entity\Block;
+use Drupal\node\NodeInterface;
 use Drupal\topic\Entity\TopicMetaEntityInterface;
 
 /**
@@ -138,7 +139,8 @@ function ventuno_preprocess_container__text_format_filter_help(array &$variables
  * Implements hook_theme_suggestions_HOOK_alter() for page.html.twig.
  */
 function ventuno_theme_suggestions_page_alter(array &$suggestions, array $variables): void {
-  if ($node = \Drupal::routeMatch()->getParameter('node')) {
+  $node = \Drupal::routeMatch()->getParameter('node');
+  if ($node instanceof NodeInterface) {
     $content_type = $node->bundle();
     $suggestions[] = 'page__' . $content_type;
   }

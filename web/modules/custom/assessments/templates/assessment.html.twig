@@ -1,0 +1,29 @@
+{#
+/**
+ * @file
+ * Default theme implementation to present an assessment entity.
+ *
+ * Available variables:
+ * - content: A list of content items. Use 'content' to print all content, or
+ *   print a subset such as 'content.label'.
+ * - attributes: HTML attributes for the container element.
+ *
+ * @see template_preprocess_assessment()
+ */
+#}
+
+{% set page = view_mode == 'full' %}
+
+<article{{ attributes }}>
+  {% block title_components -%}
+  {% if not page %}
+    {{ title_prefix }}
+    {%- block title -%}
+    {%- endblock -%}
+    {{ title_suffix }}
+  {% endif %}
+  {%- endblock %}
+  {% block content -%}
+    {{ content }}
+  {%- endblock %}
+</article>
