@@ -29,6 +29,7 @@ settings:
     - 'facet_block:type_of_document'
     - 'facet_block:spatial_coverage'
     - 'facet_block:interoperable_flag'
+    - 'facet_block:organisation_origin'
     - 'facet_block:assessment_org_country'
     - 'facet_block:status'
     - 'facet_block:date'

@@ -81,7 +81,7 @@ class AssessmentViewBuilder extends EntityViewBuilder {
     return [
       '#theme' => 'field',
       '#title' => $this->t('Submitted by'),
-      '#label_display' => 'visually_hidden',
+      '#label_display' => 'hidden',
       '#view_mode' => $viewMode,
       '#language' => $assessmentReport->language()->getId(),
       '#field_name' => 'submitted_by',

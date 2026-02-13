@@ -27,9 +27,14 @@ Feature: Assessments API
       | name        | organisation_type          | uuid                                 | country    |
       | ACME        | european_union_institution | 5d8be6b1-8038-429e-b84e-6ca8c35fd9b0 |            |
       | Bad Company | local_public_sector_body   | e4893580-f468-4c11-921d-1fe68b8540ae | Luxembourg |
+    Given the following assessment statements:
+      | id  | statement_type | interpretation | judgement             |
+      | 900 | legal          | neutral        | Needs more assessment |
+    And report assessment:
+      | name     | provider | uuid                                 | state     | results_in |
+      | Report 1 | ACME     | 5d8be6b1-8038-429e-b84e-6ca8c35fd9b1 | published | 900        |
     And report assessments:
       | name     | provider    | uuid                                 | state     |
-      | Report 1 | ACME        | 5d8be6b1-8038-429e-b84e-6ca8c35fd9b1 | published |
       | Report 2 | Bad Company | e4893580-f468-4c11-921d-1fe68b8540a2 | published |
       | Report 3 | Bad Company | e4893580-f468-4c11-921d-1fe68b8540a3 | draft     |
     Then a GET request to "/api/assessments/v1/organisation" should return the following JSON:
@@ -100,3 +105,26 @@ Feature: Assessments API
     """
     Then I go to "/api/assessments/v1/assessment?country=FOOBAR"
     Then the response status code should be 404
+
+    Then a GET request to "/api/assessments/v1/assessment/5d8be6b1-8038-429e-b84e-6ca8c35fd9b1" should return the following JSON:
+    """
+    id: 5d8be6b1-8038-429e-b84e-6ca8c35fd9b1
+    uri: http://data.europa.eu/s2k/5d8be6b1-8038-429e-b84e-6ca8c35fd9b1
+    language: en
+    name: Report 1
+    provider:
+      id: 5d8be6b1-8038-429e-b84e-6ca8c35fd9b0
+      uri: http://data.europa.eu/s2k/5d8be6b1-8038-429e-b84e-6ca8c35fd9b0
+      name: ACME
+      organisation_type: european_union_institution
+      country: null
+    relevant_report: []
+    binding_requirement: []
+    results_in:
+      legal:
+        interpretation: neutral
+        judgement: Needs more assessment
+    remaining_barriers: null
+    documents: []
+    other_comment: null
+    """

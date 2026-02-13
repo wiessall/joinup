@@ -1,0 +1,20 @@
+uuid: 8a694b10-6c58-4b8c-92fa-02d57a0448f9
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.oss_solution
+  module:
+    - dashboard
+    - joinup_oss_catalogue
+    - system
+    - view_unpublished
+id: oss_catalogue_manager
+label: 'OSS Catalogue Manager'
+weight: -2
+is_admin: null
+permissions:
+  - 'access dashboard'
+  - 'administer joinup oss catalogue'
+  - 'view any unpublished oss_solution content'
+  - 'view the administration theme'
