@@ -1,0 +1,29 @@
+uuid: d43263ea-6906-416a-8a9e-676bb1c67b19
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.expression
+    - field.storage.assessment.initiative_name
+  module:
+    - rdf_sync
+    - tmgmt_content
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://purl.org/dc/terms/title'
+      type: null
+  tmgmt_content:
+    excluded: false
+id: assessment.expression.initiative_name
+field_name: initiative_name
+entity_type: assessment
+bundle: expression
+label: 'Name of the initiative'
+description: 'Provide the name of the initiative, project or action containing the binding requirements to be assessed'
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

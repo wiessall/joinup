@@ -1,0 +1,46 @@
+diff --git a/src/Event/RdfSyncNormalizeEvent.php b/src/Event/RdfSyncNormalizeEvent.php
+index 479caa5f98fac6e5b2c71c95a0dd713d1a41fb81..6d67edef044aa81be570202515fe2a1c482eceaa 100644
+--- a/src/Event/RdfSyncNormalizeEvent.php
++++ b/src/Event/RdfSyncNormalizeEvent.php
+@@ -21,10 +21,13 @@ class RdfSyncNormalizeEvent extends Event {
+    *   The normalized representation of the entity.
+    * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+    *   The entity being normalized.
++   * @param array $context
++   *   The context received by the normalizer.
+    */
+   public function __construct(
+     protected array $normalizedArray,
+     protected ContentEntityInterface $entity,
++    protected array $context = [],
+   ) {}
+ 
+   /**
+@@ -60,4 +63,14 @@ class RdfSyncNormalizeEvent extends Event {
+     return $this->entity;
+   }
+ 
++  /**
++   * Returns the normalization context.
++   *
++   * @return array
++   *   The context.
++   */
++  public function getContext(): array {
++    return $this->context;
++  }
++
+ }
+diff --git a/src/Normalizer/RdfSyncNormalizer.php b/src/Normalizer/RdfSyncNormalizer.php
+index fd579d0e35299580b9c878ad58e150c305051621..bd78aec56c239bc72e223a66d26f63945639442a 100644
+--- a/src/Normalizer/RdfSyncNormalizer.php
++++ b/src/Normalizer/RdfSyncNormalizer.php
+@@ -118,7 +118,7 @@ class RdfSyncNormalizer extends EntityNormalizer {
+     }
+ 
+     // Allow 3rd-party to alter the normalized array.
+-    $event = new RdfSyncNormalizeEvent($rdf, $object);
++    $event = new RdfSyncNormalizeEvent($rdf, $object, $context);
+     $this->eventDispatcher->dispatch($event);
+ 
+     return $event->getNormalizedArray();

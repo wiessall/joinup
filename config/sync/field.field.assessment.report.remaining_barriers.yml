@@ -1,0 +1,28 @@
+uuid: bb8998f4-06b8-4383-8223-c5f206b01213
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.report
+    - field.storage.assessment.remaining_barriers
+    - filter.format.plain_text
+  module:
+    - text
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: assessment.report.remaining_barriers
+field_name: remaining_barriers
+entity_type: assessment
+bundle: report
+label: 'Remaining barriers to cross-border interoperability'
+description: 'Describe any remaining barriers to cross-border interoperability discovered.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - plain_text
+field_type: text_long

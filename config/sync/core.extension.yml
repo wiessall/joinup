@@ -1,10 +1,11 @@
 _core:
-  default_config_hash: R4IF-ClDHXxblLcG0L7MgsLvfBIMAvi_skumNFQwkDc
+  default_config_hash: 4GIX5Esnc_umpXUBj4IIocRX7Mt5fPhm4AgXfE3E56E
 module:
   addtocal: 0
   adms_validator: 0
   allowed_formats: 0
   antibot: 0
+  assessments: 0
   autologout: 0
   babel: 0
   babel_content_entity: 0
@@ -51,6 +52,7 @@ module:
   eira: 0
   email_confirmer: 0
   email_contact: 0
+  entity_form_field_label: 0
   entity_legal: 0
   entity_print: 0
   entity_reference_revisions: 0
@@ -170,6 +172,7 @@ module:
   media: 0
   media_library: 0
   memcache: 0
+  menu_link_content: 0
   menu_link_destination: 0
   menu_ui: 0
   message: 0
@@ -199,6 +202,8 @@ module:
   oe_webtools_maps: 0
   og: 0
   og_menu: 0
+  openapi_ui: 0
+  openapi_ui_swagger: 0
   options: 0
   other_view_filter: 0
   owner: 0
@@ -219,6 +224,7 @@ module:
   purge_queuer_coretags: 0
   purge_users: 0
   queue_ui: 0
+  rabbit_hole: 0
   rdf_sync: 0
   rdf_sync_published: 0
   redirect: 0
@@ -278,6 +284,7 @@ module:
   ui_patterns_library: 0
   ui_patterns_settings: 0
   user: 0
+  uuid_extra: 0
   ventuno_helper: 0
   view_unpublished: 0
   views_block_area: 0
@@ -290,7 +297,6 @@ module:
   webform_ui: 0
   webform_views: 0
   menu_admin_per_menu: 1
-  menu_link_content: 1
   pathauto: 1
   content_translation: 10
   externalauth: 10
@@ -299,8 +305,8 @@ module:
   publication_date: 99
   joinup: 1000
 theme:
-  ventuno: 0
-  oe_bootstrap_theme: 0
   claro: 0
+  oe_bootstrap_theme: 0
+  ventuno: 0
   iop: 0
 profile: joinup

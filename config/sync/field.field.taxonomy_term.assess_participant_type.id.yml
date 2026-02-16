@@ -1,0 +1,24 @@
+uuid: f1180593-6c94-443e-8232-47739e3a6a72
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.id
+    - taxonomy.vocabulary.assess_participant_type
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: taxonomy_term.assess_participant_type.id
+field_name: id
+entity_type: taxonomy_term
+bundle: assess_participant_type
+label: Identifier
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

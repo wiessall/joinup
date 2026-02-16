@@ -1,0 +1,38 @@
+uuid: e7efe440-5acc-423e-bc48-b62f926b3939
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.public_organisation
+    - field.storage.assessment.organisation_type
+    - taxonomy.vocabulary.assess_provider_type
+  module:
+    - tmgmt_content
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://www.w3.org/ns/org#classification'
+      type: resource
+  tmgmt_content:
+    excluded: false
+id: assessment.public_organisation.organisation_type
+field_name: organisation_type
+entity_type: assessment
+bundle: public_organisation
+label: 'Type of public sector body'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      assess_provider_type: assess_provider_type
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
