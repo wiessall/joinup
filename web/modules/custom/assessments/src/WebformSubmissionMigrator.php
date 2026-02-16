@@ -225,7 +225,7 @@ class WebformSubmissionMigrator {
     // Documents.
     $documentFids = (array) ($data['upload_assessment_documents'] ?? []);
     if ($documentFids) {
-      $reportValues['documents'] = $this->loadFileEntities($documentFids);
+      $reportValues['documents'] = $this->entityTypeManager->getStorage('file')->loadMultiple($documentFids);
     }
 
     $report = $this->getAssessmentStorage()->create($reportValues);
@@ -548,7 +548,7 @@ class WebformSubmissionMigrator {
       // Binding requirement documents.
       $docFids = (array) ($data['binding_requirement_documents'] ?? []);
       if ($docFids) {
-        $paragraph->set('requirement_documents', $this->loadFileEntities($docFids));
+        $paragraph->set('requirement_documents', $this->entityTypeManager->getStorage('file')->loadMultiple($docFids));
       }
 
       return [$paragraph];
@@ -585,7 +585,7 @@ class WebformSubmissionMigrator {
       // Binding requirement documents (shared across all requirements).
       $docFids = (array) ($data['binding_requirement_documents'] ?? []);
       if ($docFids) {
-        $paragraph->set('requirement_documents', $this->loadFileEntities($docFids));
+        $paragraph->set('requirement_documents', $this->entityTypeManager->getStorage('file')->loadMultiple($docFids));
       }
 
       $paragraphs[] = $paragraph;
@@ -633,17 +633,6 @@ class WebformSubmissionMigrator {
     }
 
     return $countryTids;
-  }
-
-  /**
-   * Loads file entities from an array of file IDs.
-   *
-   * @return list<\Drupal\file\FileInterface>
-   *   File entities.
-   */
-  protected function loadFileEntities(array $fids): array {
-    $fileStorage = $this->entityTypeManager->getStorage('file');
-    return $fileStorage->loadMultiple($fids);
   }
 
   /**
