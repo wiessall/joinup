@@ -1,0 +1,13 @@
+uuid: d63770ed-76d2-4ab1-8cf9-5949abc246bf
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.oss_intended_audience_scope
+id: taxonomy_term.oss_intended_audience_scope
+targetEntityType: taxonomy_term
+bundle: oss_intended_audience_scope
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

@@ -1,0 +1,127 @@
+uuid: a2c919cb-3c72-4996-af31-0865832f3f95
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.node.assessment
+    - field.field.node.solution.abstract
+    - field.field.node.solution.classification
+    - field.field.node.solution.contact
+    - field.field.node.solution.description
+    - field.field.node.solution.domain
+    - field.field.node.solution.field_state
+    - field.field.node.solution.field_topic
+    - field.field.node.solution.keywords
+    - field.field.node.solution.landing_page
+    - field.field.node.solution.language
+    - field.field.node.solution.logo
+    - field.field.node.solution.metrics_page
+    - field.field.node.solution.og_audience
+    - field.field.node.solution.owner
+    - field.field.node.solution.process_status
+    - field.field.node.solution.related_solutions
+    - field.field.node.solution.release_number
+    - field.field.node.solution.resources
+    - field.field.node.solution.short_id
+    - field.field.node.solution.site_featured
+    - field.field.node.solution.solution_type
+    - field.field.node.solution.translation
+    - node.type.solution
+  module:
+    - allowed_formats
+    - entity_form_field_label
+    - joinup_core
+    - text
+id: node.solution.assessment
+targetEntityType: node
+bundle: solution
+mode: assessment
+content:
+  description:
+    type: text_textarea
+    weight: 3
+    region: content
+    settings:
+      rows: 4
+      placeholder: ''
+    third_party_settings:
+      allowed_formats:
+        hide_help: '1'
+        hide_guidelines: '1'
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+        new_description: ''
+        rewrite_description: 1
+  field_is_description:
+    type: text_textarea
+    weight: 3
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  landing_page:
+    type: link_legacy_multicardinality
+    weight: 41
+    region: content
+    settings:
+      placeholder_url: 'Start typing the homepage address of your solution in an external platform...'
+      placeholder_title: ''
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+        new_description: ''
+        rewrite_description: 1
+  title:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings:
+      entity_form_field_label:
+        new_label: 'Title of Solution'
+        rewrite_label: 1
+        new_description: ''
+        rewrite_description: 0
+hidden:
+  abstract: true
+  classification: true
+  contact: true
+  created: true
+  current_workflow_state: true
+  domain: true
+  field_shared_in: true
+  field_state: true
+  field_topic: true
+  keywords: true
+  langcode: true
+  language: true
+  logo: true
+  metrics_page: true
+  node_preview: true
+  og_audience: true
+  owner: true
+  path: true
+  process_status: true
+  promote: true
+  published_at: true
+  related_solutions: true
+  release_number: true
+  resources: true
+  short_id: true
+  simple_sitemap: true
+  site_featured: true
+  solution_type: true
+  status: true
+  sticky: true
+  tca: true
+  transition_motivation: true
+  translation: true
+  uid: true
+  uri: true
+  url_redirects: true
+  uuid: true

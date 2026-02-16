@@ -1,0 +1,13 @@
+uuid: 6e8bd261-8d46-4661-8129-32107898ab5e
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.assess_participant_type
+id: taxonomy_term.assess_participant_type
+targetEntityType: taxonomy_term
+bundle: assess_participant_type
+action: access_denied
+no_bypass: false
+bypass_message: true
+configuration: {  }

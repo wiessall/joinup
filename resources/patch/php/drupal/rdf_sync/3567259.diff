@@ -1,0 +1,18 @@
+diff --git a/src/Attribute/RdfUriGenerator.php b/src/Attribute/RdfUriGenerator.php
+index f1271885aaf45e05fb818ec889b2ccef851e6c85..e28f8d7679922230a92e88623f5f93c819bf7729 100644
+--- a/src/Attribute/RdfUriGenerator.php
++++ b/src/Attribute/RdfUriGenerator.php
+@@ -20,10 +20,13 @@ class RdfUriGenerator extends Plugin {
+    *   The plugin ID.
+    * @param \Drupal\Core\StringTranslation\TranslatableMarkup $label
+    *   The human-readable name of the widget type.
++   * @param string $deriver
++   *   The deriver of plugin.
+    */
+   public function __construct(
+     public readonly string $id,
+     public readonly TranslatableMarkup $label,
++    public readonly ?string $deriver = NULL,
+   ) {}
+ 
+ }

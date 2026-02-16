@@ -399,7 +399,7 @@ Feature: Global search
       | kyleu    | kyle.u@example.com | Kyle       | Freeman     | E-inclusion         |
 
     When I visit the advanced search page
-    Then I should see the text "SEARCH RESULTS (4)"
+    Then I should see the text "SEARCH RESULTS (6)"
     When I check the "User profiles (3)" checkbox from the "Content types" facet
     And I should see the "Lyle Uname" tile
     And I should see the "Kyle Freeman" tile
