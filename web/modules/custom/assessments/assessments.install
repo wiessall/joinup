@@ -46,7 +46,7 @@ function assessments_schema(): array {
 /**
  * Create the assessments_migration_map table.
  */
-function assessments_update_200805(): void {
+function assessments_update_200900(): void {
   $schema = \Drupal::database()->schema();
   if (!$schema->tableExists('assessments_migration_map')) {
     $schema->createTable('assessments_migration_map', assessments_schema()['assessments_migration_map']);

@@ -13,7 +13,7 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Fix/Update the public service thematic areas.
  */
-function assessments_deploy_200804(): string {
+function assessments_deploy_200900(): string {
   $vid = 'assess_public_service_area';
 
   // Clear existing terms.
@@ -55,7 +55,7 @@ function assessments_deploy_200804(): string {
 /**
  * Migrate webform assessment submissions to assessment report entities.
  */
-function assessments_deploy_200805(): void {
+function assessments_deploy_200901(): void {
   $migrator = \Drupal::service(WebformSubmissionMigrator::class);
   $result = $migrator->migrateAll();
   \Drupal::logger('assessments')->info('Webform migration completed: @migrated migrated, @skipped skipped, @failed failed.', [
