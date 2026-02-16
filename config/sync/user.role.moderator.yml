@@ -112,6 +112,7 @@ permissions:
   - 'administer sitewide alert entities'
   - 'administer solution ownership'
   - 'administer users'
+  - 'view assessment migration comparison'
   - 'administer webform via ui'
   - 'assign assessment_moderator role'
   - 'assign assessment_reporter role'

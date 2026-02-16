@@ -169,7 +169,7 @@ class WebformSubmissionMigrator {
       return FALSE;
     }
 
-    $ownerId = $submission->getOwnerId();
+    $ownerId = (int) $submission->getOwnerId();
     $provider = $this->createProvider($data, $ownerId);
     $expressions = $this->createExpressions($data, $ownerId);
     $publicServices = $this->createPublicServices($data, $ownerId);
@@ -643,19 +643,7 @@ class WebformSubmissionMigrator {
    */
   protected function loadFileEntities(array $fids): array {
     $fileStorage = $this->entityTypeManager->getStorage('file');
-    $files = [];
-
-    foreach ($fids as $fid) {
-      if (empty($fid)) {
-        continue;
-      }
-      $file = $fileStorage->load($fid);
-      if ($file) {
-        $files[] = $file;
-      }
-    }
-
-    return $files;
+    return $fileStorage->loadMultiple($fids);
   }
 
   /**
