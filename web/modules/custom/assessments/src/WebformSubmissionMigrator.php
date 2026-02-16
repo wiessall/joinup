@@ -39,16 +39,22 @@ class WebformSubmissionMigrator {
    * Map of webform thematic area labels to taxonomy identifiers.
    */
   protected const array THEMATIC_AREA_MAP = [
-    'Defense' => 'core_governance_and_administration',
-    'Economic affairs' => 'economy_and_employment',
-    'Education' => 'education_and_research',
-    'Environmental Protection' => 'environment_and_energy',
-    'General public services' => 'core_governance_and_administration',
-    'Health' => 'health_and_wellbeing',
-    'Housing and Community Amenities' => 'social_and_community_services',
-    'Public Order and Safety' => 'security_justice_and_emergency_services',
-    'Recreation, Culture, and Religion' => 'international_and_regional_cooperation',
-    'Social Protection' => 'social_and_community_services',
+    'Defense' => 'defence',
+    'Defence' => 'defence',
+    'Economic affairs' => 'economic_affairs',
+    'Education' => 'education',
+    'Environmental Protection' => 'environmental_protection',
+    'Environmental protection' => 'environmental_protection',
+    'General public services' => 'general_public_services',
+    'Health' => 'health',
+    'Housing and Community Amenities' => 'housing_and_community_amenities',
+    'Housing and community amenities' => 'housing_and_community_amenities',
+    'Public Order and Safety' => 'public_order_and_safety',
+    'Public order and safety' => 'public_order_and_safety',
+    'Recreation, Culture, and Religion' => 'recreation_culture_and_religion',
+    'Recreation, culture and religion' => 'recreation_culture_and_religion',
+    'Social Protection' => 'social_protection',
+    'Social protection' => 'social_protection',
   ];
 
   /**
