@@ -187,7 +187,7 @@ content:
     weight: 4
     region: content
     settings:
-      include_locked: true
+      include_locked: false
     third_party_settings: {  }
   logo:
     type: image_library_widget
