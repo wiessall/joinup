@@ -182,7 +182,15 @@ class WebformSubmissionMigrator {
       $participations,
       $assets,
     );
-    $state = $submission->isDraft() ? 'draft' : 'review';
+    if ($submission->isDraft()) {
+      $state = 'draft';
+    }
+    elseif ($submission->isLocked()) {
+      $state = 'review';
+    }
+    else {
+      $state = 'published';
+    }
 
     $reportValues = [
       'type' => 'report',
@@ -190,6 +198,7 @@ class WebformSubmissionMigrator {
       'provider' => $provider,
       'binding_requirement' => $bindingRequirements,
       'state' => $state,
+      'status' => $state === 'published',
       'uid' => $ownerId,
     ];
 
