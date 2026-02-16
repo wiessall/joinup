@@ -21,39 +21,6 @@ function joinup_api_install(): void {
 }
 
 /**
- * Cleanup comment REST demo.
- */
-function joinup_api_update_200800(): void {
-  // The webform_update_8648 updates roles with a given permission. The
-  // developer role, being an admin, has all permissions so it tries to grant
-  // them a new permission. This triggers a series of events that collects all
-  // permissions according to all providers, one of which is the rest module.
-  // The removed discussion_comment REST resource is still registered there
-  // during the update process, causing a plugin not found exception, as the
-  // class does not exist yet. To avoid this, we delete the configuration here
-  // before  the rest module collects permissions.
-  \Drupal::configFactory()->getEditable('rest.resource.discussion_comment')->delete();
-
-  // Delete testing OAuth2 client requests and clients.
-  $storage = \Drupal::entityTypeManager()->getStorage('oauth_client_request');
-  $ids = $storage->getQuery()->accessCheck(FALSE)->execute();
-  if ($ids) {
-    $storage->delete($storage->loadMultiple($ids));
-  }
-}
-
-/**
- * Implements hook_update_dependencies().
- */
-function joinup_api_update_dependencies(): array {
-  return [
-    'webform' => [
-      8648 => ['joinup_api' => 200800],
-    ],
-  ];
-}
-
-/**
  * Implements hook_requirements().
  */
 function joinup_api_requirements($phase): array {
