@@ -1,0 +1,20 @@
+uuid: abeeadf9-c1e4-47c1-aa4e-102252653da8
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+    - taxonomy
+id: assessment.thematic_area
+field_name: thematic_area
+entity_type: assessment
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

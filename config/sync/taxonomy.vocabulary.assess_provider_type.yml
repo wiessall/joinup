@@ -1,0 +1,31 @@
+uuid: 2b9aa018-b9e8-4ab3-8003-62f1a53fbd6c
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_taxonomy
+    - rdf_sync
+third_party_settings:
+  joinup_taxonomy:
+    locked: true
+  rdf_sync:
+    type: 'http://data.europa.eu/2qy/iopa#Code'
+    uri_plugin: null
+    fields:
+      vid:
+        target_id:
+          predicate: 'http://www.w3.org/2004/02/skos/core#inScheme'
+          type: resource
+      name:
+        value:
+          predicate: 'http://www.w3.org/2004/02/skos/core#prefLabel'
+          type: null
+      id:
+        value:
+          predicate: 'http://www.w3.org/2004/02/skos/core#altLabel'
+          type: 'xsd:string'
+name: 'Assessments: Provider type'
+vid: assess_provider_type
+description: null
+weight: 0
+new_revision: false

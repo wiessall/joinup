@@ -1,0 +1,38 @@
+uuid: 9a4bc5e5-df4a-45bb-b1ee-a5e5e1484b88
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.participation
+    - field.storage.assessment.participant_type
+    - taxonomy.vocabulary.assess_participant_type
+  module:
+    - tmgmt_content
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://purl.org/dc/terms/type'
+      type: resource
+  tmgmt_content:
+    excluded: false
+id: assessment.participation.participant_type
+field_name: participant_type
+entity_type: assessment
+bundle: participation
+label: 'Participant type'
+description: 'Select the groups of stakeholders to which binding requirement(s) are relevant'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      assess_participant_type: assess_participant_type
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

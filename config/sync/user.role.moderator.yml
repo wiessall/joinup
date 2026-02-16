@@ -25,6 +25,7 @@ dependencies:
     - taxonomy.vocabulary.legal_type
     - taxonomy.vocabulary.tags
   module:
+    - assessments
     - collection
     - comment
     - config_translation
@@ -38,7 +39,6 @@ dependencies:
     - file
     - filter
     - flag
-    - joinup_assessment
     - joinup_community_content
     - joinup_core
     - joinup_distribution
@@ -118,6 +118,8 @@ permissions:
   - 'administer solution ownership'
   - 'administer users'
   - 'administer webform via ui'
+  - 'assign assessment_moderator role'
+  - 'assign assessment_reporter role'
   - 'assign licence_manager role'
   - 'assign oss_catalogue_manager role'
   - 'bypass code of conduct'
@@ -175,6 +177,7 @@ permissions:
   - 'delete any private message'
   - 'delete any release content'
   - 'delete any solution_logo media'
+  - 'delete assessment report'
   - 'delete content translations'
   - 'delete paragraph content block'
   - 'delete paragraph content call_to_action'
@@ -221,7 +224,6 @@ permissions:
   - 'edit terms in tags'
   - 'feature entity'
   - 'flag interoperability'
-  - 'manage assessments'
   - 'manage custom landing pages'
   - 'manage group add members'
   - 'manage group announcements'
@@ -233,6 +235,8 @@ permissions:
   - 'perform announcement workflow reject transition on any entity'
   - 'perform announcement workflow send transition on any entity'
   - 'perform announcement workflow undo transition on any entity'
+  - 'perform assessment_workflow workflow publish_from_draft transition on own entity'
+  - 'perform assessment_workflow workflow update_published transition on any entity'
   - 'perform collection_workflow workflow archive transition on any entity'
   - 'perform collection_workflow workflow draft transition on any entity'
   - 'perform collection_workflow workflow propose transition on any entity'
@@ -334,8 +338,10 @@ permissions:
   - 'vbo joinup unarchive action'
   - 'view admin pages in preferred language'
   - 'view all sitewide alert revisions'
+  - 'view any unpublished assessment report'
   - 'view any unpublished content'
   - 'view any webform submission'
+  - 'view assessment listing'
   - 'view blocked_reason'
   - 'view licence overview page'
   - 'view own blocked_reason'

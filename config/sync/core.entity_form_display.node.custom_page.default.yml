@@ -151,3 +151,4 @@ hidden:
   status: true
   sticky: true
   uid: true
+  uuid: true

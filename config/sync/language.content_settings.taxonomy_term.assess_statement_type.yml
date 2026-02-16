@@ -1,0 +1,11 @@
+uuid: 32af4f93-627c-4ef6-bdd2-8565b7ff440e
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.assess_statement_type
+id: taxonomy_term.assess_statement_type
+target_entity_type_id: taxonomy_term
+target_bundle: assess_statement_type
+default_langcode: site_default
+language_alterable: false

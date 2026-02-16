@@ -1,0 +1,15 @@
+{#
+/**
+ * @file
+ * Template override to display an assessment report entity.
+ */
+#}
+{% extends 'assessment--report.html.twig' %}
+
+{% block title %}
+  <h1{{ title_attributes }}>{{ content.name }}</h1>
+{% endblock %}
+
+{% block content %}
+  {{ content|without('name') }}
+{% endblock %}

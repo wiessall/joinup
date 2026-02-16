@@ -1,0 +1,39 @@
+assessment_workflow:
+  id: assessment_workflow
+  label: 'Assessments'
+  group: assessments
+  states:
+    draft:
+      label: Draft
+      published: false
+    review:
+      label: In Review
+      published: false
+    published:
+      label: Published
+      published: true
+  transitions:
+    save_as_draft:
+      label: 'Save as draft'
+      from: [ draft ]
+      to: draft
+    submit_for_review:
+      label: Submit
+      from: [ draft ]
+      to: review
+    require_updates:
+      label: Require updates
+      from: [ review ]
+      to: draft
+    publish_from_draft:
+      label: Publish
+      from: [ draft ]
+      to: published
+    publish_from_review:
+      label: Publish
+      from: [ review ]
+      to: published
+    update_published:
+      label: Update
+      from: [ published ]
+      to: published

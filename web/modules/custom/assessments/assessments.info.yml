@@ -1,0 +1,17 @@
+name: 'Assessments'
+type: module
+description: 'Allows to submit assessments based on the IOPA model.'
+package: Custom
+core_version_requirement: ^10 || ^11
+dependencies:
+  - drupal:options
+  - drupal:taxonomy
+  - drupal:rest
+  - inline_entity_form:inline_entity_form
+  - joinup:joinup_api
+  - joinup:joinup_notification
+  - joinup:joinup_rdf
+  - joinup:joinup_workflow
+  - openapi_ui_swagger:openapi_ui_swagger
+  - paragraphs:paragraphs
+  - state_machine_permissions:state_machine_permissions
