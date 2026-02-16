@@ -227,7 +227,7 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
 
     $newPublicService = Assessment::create([
       'type' => 'public_service',
-      'thematic_area' => ['entity' => $this->assessmentVocabularyHelper->getTermFromIdentifier('assess_public_service_area', 'core_governance_and_administration')],
+      'thematic_area' => ['entity' => $this->assessmentVocabularyHelper->getTermFromIdentifier('assess_public_service_area', 'general_public_services')],
     ]);
     $this->markEntityForCleanup($newPublicService);
 
@@ -290,7 +290,7 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
 
     $publicService = Assessment::create([
       'type' => 'public_service',
-      'thematic_area' => ['entity' => $this->assessmentVocabularyHelper->getTermFromIdentifier('assess_public_service_area', 'core_governance_and_administration')],
+      'thematic_area' => ['entity' => $this->assessmentVocabularyHelper->getTermFromIdentifier('assess_public_service_area', 'general_public_services')],
     ]);
     $this->markEntityForCleanup($publicService);
 
