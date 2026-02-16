@@ -1,0 +1,24 @@
+uuid: a22eb6d2-fc55-4493-832a-f0646715978b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.id
+    - taxonomy.vocabulary.assess_statement_type
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: taxonomy_term.assess_statement_type.id
+field_name: id
+entity_type: taxonomy_term
+bundle: assess_statement_type
+label: Identifier
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,13 @@
+uuid: 5539a24c-dff2-4156-a00e-41311762e106
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.language
+id: taxonomy_term.language
+targetEntityType: taxonomy_term
+bundle: language
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

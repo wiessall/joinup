@@ -24,3 +24,4 @@ content:
     third_party_settings: {  }
 hidden:
   subject: true
+  uuid: true

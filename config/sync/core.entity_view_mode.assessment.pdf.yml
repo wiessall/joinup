@@ -1,0 +1,11 @@
+uuid: 759e63b5-49cb-444a-ae2e-0f0e3a6b40a8
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+id: assessment.pdf
+label: 'Entity print PDF'
+description: "View mode intended to be used by Entity Print's PDF functionality"
+targetEntityType: assessment
+cache: true

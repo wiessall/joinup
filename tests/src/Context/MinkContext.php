@@ -7,6 +7,7 @@ namespace Drupal\joinup\Context;
 use Behat\Mink\Element\ElementInterface;
 use Behat\Mink\Selector\Xpath\Escaper;
 use Behat\Step\Given;
+use Behat\Step\When;
 use Drupal\DrupalExtension\Context\MinkContext as DrupalExtensionMinkContext;
 use Drupal\joinup\Traits\JavascriptTrait;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -75,6 +76,49 @@ class MinkContext extends DrupalExtensionMinkContext {
     }
 
     $radio->selectOption($value);
+  }
+
+  /**
+   * Selects a radio button by name attribute and label.
+   *
+   * @param string $label
+   *   The label of the radio button.
+   * @param string $name
+   *   The name attribute of the radio button.
+   */
+  #[When('I select the radio button :label with the name :name')]
+  public function assertSelectRadioByName(string $label, string $name): void {
+    $page = $this->getSession()->getPage();
+
+    // Find all radio buttons with the given name attribute.
+    $radios = $page->findAll('css', sprintf('input[type="radio"][name="%s"]', $name));
+
+    if (empty($radios)) {
+      throw new \Exception(sprintf('No radio buttons found with name "%s" on the page %s', $name, $this->getSession()->getCurrentUrl()));
+    }
+
+    $target_radio = NULL;
+    foreach ($radios as $radio) {
+      $radio_id = $radio->getAttribute('id');
+      if (!$radio_id) {
+        continue;
+      }
+
+      $label_element = $page->find('css', sprintf('label[for="%s"]', $radio_id));
+      if (!$label_element || trim($label_element->getText()) !== $label) {
+        continue;
+      }
+
+      $target_radio = $radio;
+      break;
+    }
+
+    if (!$target_radio) {
+      throw new \Exception(sprintf('Radio button with label "%s" and name "%s" was not found on the page %s', $label, $name, $this->getSession()->getCurrentUrl()));
+    }
+
+    $value = $target_radio->getAttribute('value');
+    $target_radio->selectOption($value);
   }
 
   /**

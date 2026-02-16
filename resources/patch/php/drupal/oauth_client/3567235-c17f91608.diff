@@ -1,0 +1,744 @@
+diff --git a/config/install/oauth_client.settings.yml b/config/install/oauth_client.settings.yml
+deleted file mode 100644
+index 78b5ac7c6d62b4e400abdb92b33649c1b37a1739..0000000000000000000000000000000000000000
+--- a/config/install/oauth_client.settings.yml
++++ /dev/null
+@@ -1,48 +0,0 @@
+-langcode: en
+-notifications:
+-  request:
+-    enabled: true
+-    subject: 'New OAuth client request from [oauth_client_request:owner] on [site:name]'
+-    body: |
+-      Dear [user:name],
+-
+-      A new OAuth client request has been submitted by [oauth_client_request:owner] on [site:name] with the following request details:
+-      - [oauth_client_request:label]
+-      - [oauth_client_request:request_reason]
+-
+-      You may see the pending requests at [oauth_client:client_requests] or directly take action on the request at [oauth_client_request:request-edit-url]
+-
+-      Best regards,
+-      The [site:name] Team
+-
+-  approve:
+-    enabled: true
+-    subject: 'Your OAuth client request has been approved'
+-    body: |
+-      Dear [oauth_client_request:owner],
+-
+-      We are pleased to inform you that your OAuth client request, [oauth_client_request:label], has been approved.
+-
+-      What is next?
+-      - Visit the [oauth_client_request:owner:client_requests] to view the available list of your requests.
+-      - Visit the [oauth_client_request:client-edit-url] page to view the client ID and set the client secret.
+-
+-      If you have any questions, feel free to contact our support team.
+-
+-      Best regards,
+-      The [site:name] Team
+-
+-  reject:
+-    enabled: true
+-    subject: 'Your OAuth client request has been rejected'
+-    body: |
+-      Dear [oauth_client_request:owner],
+-
+-      We regret to inform you that your OAuth client request, [oauth_client_request:label], could not be approved at this time.
+-
+-      The reason for the rejection is: [oauth_client_request:reject_reason]
+-
+-      Thank you for your understanding.
+-
+-      Best regards,
+-      The [site:name] Team
+diff --git a/config/schema/oauth_client.schema.yml b/config/schema/oauth_client.schema.yml
+index 7b960a98e3a391ea0ae3c301cbce1bbfe2d4fbc3..4b6112aa4ffdd422feb3b31635c679298457a5eb 100644
+--- a/config/schema/oauth_client.schema.yml
++++ b/config/schema/oauth_client.schema.yml
+@@ -24,6 +24,19 @@ oauth_client.type.*:
+     scope:
+       type: string
+       label: Scope
++    notifications:
++      type: mapping
++      label: 'Email notifications'
++      mapping:
++        request:
++          type: oauth_client.notification
++          label: 'Request notification'
++        approve:
++          type: oauth_client.notification
++          label: 'Approve notification'
++        reject:
++          type: oauth_client.notification
++          label: 'Reject notification'
+ 
+ 
+ oauth_client.grant_type_default:
+@@ -61,24 +74,6 @@ oauth_client.grant_type.authorization_code:
+           type: boolean
+           label: Use PKCE?
+ 
+-oauth_client.settings:
+-  type: config_object
+-  label: 'OAuth Client Notification Settings'
+-  mapping:
+-    notifications:
+-      type: mapping
+-      label: 'Email notifications'
+-      mapping:
+-        request:
+-          type: oauth_client.notification
+-          label: 'Request notification'
+-        approve:
+-          type: oauth_client.notification
+-          label: 'Approve notification'
+-        reject:
+-          type: oauth_client.notification
+-          label: 'Reject notification'
+-
+ oauth_client.notification:
+   type: mapping
+   label: 'Email notification'
+diff --git a/oauth_client.install b/oauth_client.install
+new file mode 100644
+index 0000000000000000000000000000000000000000..1786f65e644ff23749427fe6478dd9a9863d808a
+--- /dev/null
++++ b/oauth_client.install
+@@ -0,0 +1,31 @@
++<?php
++
++/**
++ * @file
++ * Install, update and uninstall functions for the OAuth Client module.
++ */
++
++declare(strict_types=1);
++
++/**
++ * Migrate notification settings from global config to request types.
++ */
++function oauth_client_update_10001(): void {
++  $configFactory = \Drupal::configFactory();
++  $entityTypeManager = \Drupal::entityTypeManager();
++
++  $globalSettings = $configFactory->get('oauth_client.settings');
++  $globalNotifications = $globalSettings->get('notifications');
++
++  if (empty($globalNotifications)) {
++    return;
++  }
++
++  $requestTypeStorage = $entityTypeManager->getStorage('oauth_client_request_type');
++  $requestTypes = $requestTypeStorage->loadMultiple();
++
++  foreach ($requestTypes as $requestType) {
++    $requestType->set('notifications', $globalNotifications);
++    $requestType->save();
++  }
++}
+diff --git a/oauth_client.links.task.yml b/oauth_client.links.task.yml
+index 2bcceb1c1e386c85e85bba1fb3354d06bef270dd..2c097fc54cdfb07edb124dc9b1c833467642225f 100644
+--- a/oauth_client.links.task.yml
++++ b/oauth_client.links.task.yml
+@@ -15,13 +15,6 @@ oauth_client_request_type.collection:
+   base_route: oauth2_token.settings
+   weight: 20
+ 
+-oauth_client.notification.settings:
+-  route_name: oauth_client.notification_settings
+-  parent_id: oauth_client_request_type.collection
+-  title: Notifications
+-  base_route: oauth2_token.settings
+-  weight: 30
+-
+ oauth_client_request_type.collection.types:
+   route_name: entity.oauth_client_request_type.collection
+   parent_id: oauth_client_request_type.collection
+diff --git a/oauth_client.module b/oauth_client.module
+index 3174b51467cfcde3c01ff7eb4ed2b1a35b292933..ed2c9006d57f1fd275320b0b04c2cbbe26cc6f04 100644
+--- a/oauth_client.module
++++ b/oauth_client.module
+@@ -68,3 +68,14 @@ function oauth_client_token_info(): array {
+ function oauth_client_tokens(string $type, array $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata): array {
+   return \Drupal::service(OauthClientTokenHooks::class)->tokens($type, $tokens, $data, $options, $bubbleable_metadata);
+ }
++
++/**
++ * Implements hook_mail().
++ *
++ * @phpstan-ignore-next-line as Attribute class
++ *   Drupal\Core\Hook\Attribute\LegacyHook does not exist.
++ */
++#[LegacyHook]
++function oauth_client_mail(string $key, array &$message, array $params): void {
++  \Drupal::service(OauthClientHooks::class)->prepareMail($key, $message, $params);
++}
+diff --git a/oauth_client.routing.yml b/oauth_client.routing.yml
+index 54d39ab74bf44e9a8b58063eb43418ad9d6cbb70..00538cce9b8c77e6b7dbbb21504aaa8bd97fe401 100644
+--- a/oauth_client.routing.yml
++++ b/oauth_client.routing.yml
+@@ -40,11 +40,3 @@ oauth_client.delete:
+         type: entity:user
+       client:
+         type: entity:consumer
+-
+-oauth_client.notification_settings:
+-  path: /admin/config/services/consumer/notifications
+-  defaults:
+-    _title: Notification settings
+-    _form: Drupal\oauth_client\Form\NotificationSettingsForm
+-  requirements:
+-    _permission: 'administer oauth notifications'
+diff --git a/src/Entity/OauthClientRequestType.php b/src/Entity/OauthClientRequestType.php
+index d9194627f8a771d10e3c67d554310e7fa2ec53d5..a1cfe53c3c8553ff6ef23980b4f199c09dfb0d03 100644
+--- a/src/Entity/OauthClientRequestType.php
++++ b/src/Entity/OauthClientRequestType.php
+@@ -60,6 +60,7 @@ use Drupal\user\Entity\EntityPermissionsRouteProvider;
+  *     "description",
+  *     "grant_type",
+  *     "scope",
++ *     "notifications",
+  *   },
+  * )
+  *
+@@ -107,6 +108,7 @@ use Drupal\user\Entity\EntityPermissionsRouteProvider;
+     'description',
+     'grant_type',
+     'scope',
++    'notifications',
+   ],
+ )]
+ class OauthClientRequestType extends ConfigEntityBundleBase implements OauthClientRequestTypeInterface {
+@@ -149,6 +151,29 @@ class OauthClientRequestType extends ConfigEntityBundleBase implements OauthClie
+    */
+   protected ?string $scope = NULL;
+ 
++  /**
++   * Email notification settings for this request type.
++   *
++   * @var array<string, array>
++   */
++  protected array $notifications = [
++    'request' => [
++      'enabled' => TRUE,
++      'subject' => 'New OAuth client request from [oauth_client_request:owner] on [site:name]',
++      'body' => "Dear [user:name],\n\nA new OAuth client request has been submitted by [oauth_client_request:owner] on [site:name] with the following request details:\n- [oauth_client_request:label]\n- [oauth_client_request:request_reason]\n\nYou may see the pending requests at [oauth_client:client_requests] or directly take action on the request at [oauth_client_request:request-edit-url]\n\nBest regards,\nThe [site:name] Team\n",
++    ],
++    'approve' => [
++      'enabled' => TRUE,
++      'subject' => 'Your OAuth client request has been approved',
++      'body' => "Dear [oauth_client_request:owner],\n\nWe are pleased to inform you that your OAuth client request, [oauth_client_request:label], has been approved.\n\nWhat is next?\n- Visit the [oauth_client_request:owner:client_requests] to view the available list of your requests.\n- Visit the [oauth_client_request:client-edit-url] page to view the client ID and set the client secret.\n\nIf you have any questions, feel free to contact our support team.\n\nBest regards,\nThe [site:name] Team\n",
++    ],
++    'reject' => [
++      'enabled' => TRUE,
++      'subject' => 'Your OAuth client request has been rejected',
++      'body' => "Dear [oauth_client_request:owner],\n\nWe regret to inform you that your OAuth client request, [oauth_client_request:label], could not be approved at this time.\n\nThe reason for the rejection is: [oauth_client_request:reject_reason]\n\nThank you for your understanding.\n\nBest regards,\nThe [site:name] Team\n",
++    ],
++  ];
++
+   /**
+    * {@inheritdoc}
+    */
+@@ -201,6 +226,27 @@ class OauthClientRequestType extends ConfigEntityBundleBase implements OauthClie
+     return NULL;
+   }
+ 
++  /**
++   * {@inheritdoc}
++   */
++  public function getNotifications(): array {
++    return $this->notifications;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getNotificationSetting(NotificationType $notificationType, string $key): mixed {
++    return $this->notifications[$notificationType->value][$key] ?? NULL;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function isNotificationEnabled(NotificationType $notificationType): bool {
++    return (bool) ($this->notifications[$notificationType->value]['enabled'] ?? FALSE);
++  }
++
+   /**
+    * {@inheritdoc}
+    */
+diff --git a/src/Entity/OauthClientRequestTypeInterface.php b/src/Entity/OauthClientRequestTypeInterface.php
+index c53c85d36f23d6afd5824a35cefeb94155e1324b..871f4c895a7710cae5addb695522a1b82aac0cb0 100644
+--- a/src/Entity/OauthClientRequestTypeInterface.php
++++ b/src/Entity/OauthClientRequestTypeInterface.php
+@@ -64,4 +64,36 @@ interface OauthClientRequestTypeInterface extends ConfigEntityInterface, EntityD
+    */
+   public function getScope(): ?Oauth2ScopeInterface;
+ 
++  /**
++   * Gets the notification settings.
++   *
++   * @return array<string, array>
++   *   The notification settings array keyed by notification type.
++   */
++  public function getNotifications(): array;
++
++  /**
++   * Gets a specific notification setting.
++   *
++   * @param \Drupal\oauth_client\Entity\NotificationType $notificationType
++   *   The notification type.
++   * @param string $key
++   *   The setting key (enabled, subject, or body).
++   *
++   * @return mixed
++   *   The setting value.
++   */
++  public function getNotificationSetting(NotificationType $notificationType, string $key): mixed;
++
++  /**
++   * Checks if a notification type is enabled.
++   *
++   * @param \Drupal\oauth_client\Entity\NotificationType $notificationType
++   *   The notification type.
++   *
++   * @return bool
++   *   TRUE if enabled, FALSE otherwise.
++   */
++  public function isNotificationEnabled(NotificationType $notificationType): bool;
++
+ }
+diff --git a/src/Form/NotificationSettingsForm.php b/src/Form/NotificationSettingsForm.php
+deleted file mode 100644
+index 6fb3e0a13f1a8fe24d3cbff4183878a5354e798d..0000000000000000000000000000000000000000
+--- a/src/Form/NotificationSettingsForm.php
++++ /dev/null
+@@ -1,94 +0,0 @@
+-<?php
+-
+-declare(strict_types=1);
+-
+-namespace Drupal\oauth_client\Form;
+-
+-use Drupal\Core\Form\ConfigFormBase;
+-use Drupal\Core\Form\FormStateInterface;
+-
+-/**
+- * Configure OAuth2 Client notification settings.
+- */
+-final class NotificationSettingsForm extends ConfigFormBase {
+-
+-  /**
+-   * {@inheritdoc}
+-   */
+-  public function getFormId(): string {
+-    return 'oauth_client_notification_settings';
+-  }
+-
+-  /**
+-   * {@inheritdoc}
+-   */
+-  protected function getEditableConfigNames(): array {
+-    return ['oauth_client.settings'];
+-  }
+-
+-  /**
+-   * {@inheritdoc}
+-   */
+-  public function buildForm(array $form, FormStateInterface $form_state): array {
+-    $form['#tree'] = TRUE;
+-    $form['notifications']['request'] = $this->buildActionElement('request', 'Request');
+-    $form['notifications']['approve'] = $this->buildActionElement('approve', 'Approve');
+-    $form['notifications']['reject'] = $this->buildActionElement('reject', 'Reject');
+-
+-    return parent::buildForm($form, $form_state);
+-  }
+-
+-  /**
+-   * Helper to build a notification sub-form.
+-   *
+-   * @param string $key
+-   *   The notification key.
+-   * @param string $title
+-   *   The notification title.
+-   *
+-   * @return array
+-   *   The form element.
+-   */
+-  protected function buildActionElement(string $key, string $title): array {
+-    $element = [
+-      '#type' => 'details',
+-      '#title' => $this->t('@title notification', ['@title' => $title]),
+-      '#open' => TRUE,
+-    ];
+-    $element['enabled'] = [
+-      '#type' => 'checkbox',
+-      '#title' => $this->t('Enabled'),
+-      '#config_target' => "oauth_client.settings:notifications.$key.enabled",
+-    ];
+-    $element['subject'] = [
+-      '#type' => 'textfield',
+-      '#title' => $this->t('Subject'),
+-      '#config_target' => "oauth_client.settings:notifications.$key.subject",
+-      '#required' => TRUE,
+-    ];
+-    $element['body'] = [
+-      '#type' => 'textarea',
+-      '#title' => $this->t('Body'),
+-      '#config_target' => "oauth_client.settings:notifications.$key.body",
+-      '#required' => TRUE,
+-    ];
+-
+-    $element['help_text'] = [
+-      '#type' => 'item',
+-      // We cannot use the tokens service as we would need to inject the
+-      // service, and thus, override the constructor. This will result in
+-      // tests failing as long as the previous major version is part of the
+-      // tests. The reason is that there has been a change in the signature
+-      // of the parent constructor between Drupal 10 and 11.
+-      // @see https://www.drupal.org/node/3404140
+-      '#markup' => $this->t('Tokens are supported. You may use the following tokens: <br>
+-        <code>[current-user:display-name]</code>,
+-        <code>[current-user:mail]</code>,
+-        <code>[oauth_client_request:label</code>,
+-        <code>[oauth_client_request:request_reason]</code> etc.'),
+-    ];
+-
+-    return $element;
+-  }
+-
+-}
+diff --git a/src/Form/OauthClientRequestTypeForm.php b/src/Form/OauthClientRequestTypeForm.php
+index 98f9a97460ec78287fd3b2d6288470f12ecce49e..2660cac5aad1bdcdc93cd9cf4ba933fa167af82e 100644
+--- a/src/Form/OauthClientRequestTypeForm.php
++++ b/src/Form/OauthClientRequestTypeForm.php
+@@ -9,6 +9,7 @@ use Drupal\Core\Entity\BundleEntityFormBase;
+ use Drupal\Core\Entity\EntityTypeInterface;
+ use Drupal\Core\Form\FormStateInterface;
+ use Drupal\oauth_client\Entity\GrantType;
++use Drupal\oauth_client\Entity\NotificationType;
+ use Drupal\oauth_client\Entity\OauthClientRequestType;
+ use Drupal\oauth_client\Entity\OauthClientRequestTypeInterface;
+ use Drupal\simple_oauth\Oauth2ScopeInterface;
+@@ -114,6 +115,18 @@ class OauthClientRequestTypeForm extends BundleEntityFormBase {
+       '#required' => TRUE,
+     ];
+ 
++    $form['notifications'] = [
++      '#type' => 'details',
++      '#tree' => TRUE,
++      '#title' => $this->t('Email notifications'),
++      '#description' => $this->t('Configure email notifications for this request type. Each notification can be customized with specific content relevant to this type.'),
++      '#open' => TRUE,
++    ];
++
++    foreach (NotificationType::cases() as $notificationType) {
++      $form['notifications'][$notificationType->value] = $this->buildNotificationElement($notificationType);
++    }
++
+     return $form;
+   }
+ 
+@@ -148,6 +161,64 @@ class OauthClientRequestTypeForm extends BundleEntityFormBase {
+     return [];
+   }
+ 
++  /**
++   * Builds a notification sub-form element.
++   *
++   * @param \Drupal\oauth_client\Entity\NotificationType $notificationType
++   *   The notification type.
++   *
++   * @return array
++   *   The form element.
++   */
++  protected function buildNotificationElement(NotificationType $notificationType): array {
++    $notifications = $this->getEntity()->getNotifications();
++    $notificationData = $notifications[$notificationType->value] ?? [];
++
++    $labels = [
++      'request' => $this->t('Request'),
++      'approve' => $this->t('Approve'),
++      'reject' => $this->t('Reject'),
++    ];
++
++    $visibilityStates = [
++      '#states' => [
++        'visible' => [
++          ':input[name="notifications[' . $notificationType->value . '][enabled]"]' => ['checked' => TRUE],
++        ],
++      ],
++    ];
++
++    $element = [
++      '#type' => 'details',
++      '#title' => $this->t('@title notification', ['@title' => $labels[$notificationType->value]]),
++      '#open' => FALSE,
++    ];
++
++    $element['enabled'] = [
++      '#type' => 'checkbox',
++      '#title' => $this->t('Enabled'),
++      '#default_value' => $notificationData['enabled'] ?? TRUE,
++    ];
++
++    $element['subject'] = [
++      '#type' => 'textfield',
++      '#title' => $this->t('Subject'),
++      '#default_value' => $notificationData['subject'] ?? '',
++      '#required' => TRUE,
++    ] + $visibilityStates;
++
++    $element['body'] = [
++      '#type' => 'textarea',
++      '#title' => $this->t('Body'),
++      '#description' => $this->t('The email body content. Available tokens: <code>[oauth_client_request:label]</code>, <code>[oauth_client_request:owner]</code>, <code>[oauth_client_request:request_reason]</code>, <code>[oauth_client_request:reject_reason]</code>, <code>[site:name]</code>, <code>[user:name]</code>, etc.'),
++      '#default_value' => $notificationData['body'] ?? '',
++      '#required' => TRUE,
++      '#rows' => 10,
++    ] + $visibilityStates;
++
++    return $element;
++  }
++
+   /**
+    * {@inheritdoc}
+    */
+diff --git a/src/Hook/OauthClientHooks.php b/src/Hook/OauthClientHooks.php
+index 2aeae48647f0008506ff01d57c587feace5bbe60..e48c0064d6130e18cdd77093686dddcd9169d85d 100644
+--- a/src/Hook/OauthClientHooks.php
++++ b/src/Hook/OauthClientHooks.php
+@@ -6,6 +6,7 @@ namespace Drupal\oauth_client\Hook;
+ 
+ use Drupal\Core\Entity\EntityInterface;
+ use Drupal\Core\Hook\Attribute\Hook;
++use Drupal\oauth_client\Entity\NotificationType;
+ use Drupal\oauth_client\Entity\OauthClientRequestInterface;
+ use Drupal\oauth_client\Entity\OauthClientRequestStatus;
+ use Drupal\oauth_client\Service\OauthClientConsumerService;
+@@ -73,4 +74,31 @@ class OauthClientHooks {
+     }
+   }
+ 
++  /**
++   * Prepares notification mail message.
++   *
++   * @param string $key
++   *   The mail key.
++   * @param array $message
++   *   The message array to modify.
++   * @param array $params
++   *   The parameters array containing context.
++   *
++   * @phpstan-ignore-next-line as Attribute class
++   *   Drupal\Core\Hook\Attribute\Hook does not exist.
++   */
++  #[Hook('mail')]
++  public function prepareMail(string $key, array &$message, array $params): void {
++    if (!NotificationType::tryFrom($key)) {
++      return;
++    }
++
++    if (!empty($params['context']['subject'])) {
++      $message['subject'] = $params['context']['subject'];
++    }
++    if (!empty($params['context']['message'])) {
++      $message['body'][] = $params['context']['message'];
++    }
++  }
++
+ }
+diff --git a/src/NotificationSender.php b/src/NotificationSender.php
+index e7601b613df0afca22d556e7a23d6b0b4c1d64c0..498d0c206f1b934e8d64562bf855680144dcea61 100644
+--- a/src/NotificationSender.php
++++ b/src/NotificationSender.php
+@@ -12,6 +12,7 @@ use Drupal\Core\Utility\Token;
+ use Drupal\oauth_client\Entity\NotificationType;
+ use Drupal\oauth_client\Entity\OauthClientRequestInterface;
+ use Drupal\oauth_client\Entity\OauthClientRequestStatus;
++use Drupal\oauth_client\Entity\OauthClientRequestTypeInterface;
+ use Drupal\user\Entity\Role;
+ 
+ /**
+@@ -19,13 +20,6 @@ use Drupal\user\Entity\Role;
+  */
+ class NotificationSender implements NotificationSenderInterface {
+ 
+-  /**
+-   * Cached OAuth client settings.
+-   *
+-   * @var array|null
+-   */
+-  protected ?array $oauthClientSettings;
+-
+   /**
+    * Constructs a NotificationSender object.
+    */
+@@ -44,7 +38,8 @@ class NotificationSender implements NotificationSenderInterface {
+    *   The OAuth client request entity.
+    */
+   public function handleRequestNotification(OauthClientRequestInterface $entity): void {
+-    if (!$this->isActionEnabled(NotificationType::Request)) {
++    $requestType = $this->getRequestType($entity);
++    if (!$requestType?->isNotificationEnabled(NotificationType::Request)) {
+       return;
+     }
+ 
+@@ -65,7 +60,8 @@ class NotificationSender implements NotificationSenderInterface {
+    *   The OAuth client request entity.
+    */
+   public function handleApprovalNotification(OauthClientRequestInterface $entity): void {
+-    if (!$this->isActionEnabled(NotificationType::Approve)) {
++    $requestType = $this->getRequestType($entity);
++    if (!$requestType?->isNotificationEnabled(NotificationType::Approve)) {
+       return;
+     }
+     $requestUserId = $entity->getUser()?->id();
+@@ -83,7 +79,8 @@ class NotificationSender implements NotificationSenderInterface {
+    *   The OAuth client request entity.
+    */
+   public function handleRejectionNotification(OauthClientRequestInterface $entity): void {
+-    if (!$this->isActionEnabled(NotificationType::Reject)) {
++    $requestType = $this->getRequestType($entity);
++    if (!$requestType?->isNotificationEnabled(NotificationType::Reject)) {
+       return;
+     }
+     $requestUserId = $entity->getUser()?->id();
+@@ -95,34 +92,19 @@ class NotificationSender implements NotificationSenderInterface {
+   }
+ 
+   /**
+-   * Checks if a specific action is enabled in the configuration.
+-   *
+-   * @param \Drupal\oauth_client\Entity\NotificationType $action
+-   *   The action enum (Request, Approve, Reject).
+-   *
+-   * @return bool
+-   *   TRUE if the action is enabled, FALSE otherwise.
+-   */
+-  protected function isActionEnabled(NotificationType $action): bool {
+-    $settings = $this->getActionSettings($action);
+-    return !empty($settings['enabled']);
+-  }
+-
+-  /**
+-   * Retrieves action settings from configuration.
++   * Gets the request type entity from the request.
+    *
+-   * @param \Drupal\oauth_client\Entity\NotificationType $action
+-   *   The action enum (Request, Approve, Reject).
++   * @param \Drupal\oauth_client\Entity\OauthClientRequestInterface $entity
++   *   The OAuth client request entity.
+    *
+-   * @return array{enabled: bool, subject: string, body: string}
+-   *   An associative array containing 'enabled', 'subject', and 'body' keys.
++   * @return \Drupal\oauth_client\Entity\OauthClientRequestTypeInterface|null
++   *   The request type entity or NULL if not found.
+    */
+-  protected function getActionSettings(NotificationType $action): array {
+-    if (empty($this->oauthClientSettings)) {
+-      $this->oauthClientSettings = $this->configFactory->get('oauth_client.settings')->getRawData();
+-    }
++  protected function getRequestType(OauthClientRequestInterface $entity): ?OauthClientRequestTypeInterface {
++    $requestType = $this->entityTypeManager->getStorage('oauth_client_request_type')
++      ->load($entity->bundle());
+ 
+-    return $this->oauthClientSettings['notifications'][$action->value];
++    return $requestType instanceof OauthClientRequestTypeInterface ? $requestType : NULL;
+   }
+ 
+   /**
+@@ -161,32 +143,34 @@ class NotificationSender implements NotificationSenderInterface {
+    *   The action triggering the email.
+    */
+   protected function sendEmailToUsers(OauthClientRequestInterface $entity, array $uids, NotificationType $action): void {
+-    $notification = $this->getActionSettings($action);
++    $requestType = $this->getRequestType($entity);
++    if (!$requestType) {
++      return;
++    }
++
++    $subjectTemplate = $requestType->getNotificationSetting($action, 'subject') ?? '';
++    $bodyTemplate = $requestType->getNotificationSetting($action, 'body') ?? '';
+     $userStorage = $this->entityTypeManager->getStorage('user');
+     $accounts = $userStorage->loadMultiple($uids);
+     foreach ($accounts as $account) {
+-      $subject = $notification['subject'];
+-      $body = $notification['body'];
+       $data = [
+         'oauth_client_request' => $entity,
+         'user' => $account,
+         'oauth_client' => NULL,
+       ];
+ 
+-      $subject = $this->token->replace($subject, $data, ['clear' => TRUE]);
+-      $body = $this->token->replace($body, $data, ['clear' => TRUE]);
++      $subject = $this->token->replace($subjectTemplate, $data, ['clear' => TRUE]);
++      $body = $this->token->replace($bodyTemplate, $data, ['clear' => TRUE]);
+       $to = $account->getEmail();
+       $langcode = $account->getPreferredLangcode() ?: $this->languageManager->getDefaultLanguage()->getId();
+ 
+-      // Use core's 'system' action_send_email which accepts 'subject' and
+-      // 'message' via params['context'].
+       $params = [
+         'context' => [
+           'subject' => $subject,
+           'message' => $body,
+         ],
+       ];
+-      $this->mailManager->mail('system', 'action_send_email', $to, $langcode, $params);
++      $this->mailManager->mail('oauth_client', $action->value, $to, $langcode, $params);
+     }
+   }
+ 
+diff --git a/tests/src/Functional/NotificationFunctionalTest.php b/tests/src/Functional/NotificationFunctionalTest.php
+index 68cd481dec84500eb3aab0251b2c1892b1cc38b8..32b7eb1f4f5c4cefb8822bbf32c49c30c0e95546 100644
+--- a/tests/src/Functional/NotificationFunctionalTest.php
++++ b/tests/src/Functional/NotificationFunctionalTest.php
+@@ -52,6 +52,23 @@ class NotificationFunctionalTest extends OauthClientFunctionalTestBase {
+       'description' => 'Description of type 1',
+       'grant_type' => ['client_credentials' => ['enabled' => TRUE]],
+       'scope' => 'scope1',
++      'notifications' => [
++        'request' => [
++          'enabled' => TRUE,
++          'subject' => 'New OAuth client request from [oauth_client_request:owner] on [site:name]',
++          'body' => "Dear [user:name],\n\nA new OAuth client request has been submitted by [oauth_client_request:owner] on [site:name] with the following request details:\n- [oauth_client_request:label]\n- [oauth_client_request:request_reason]\n\nYou may see the pending requests at [oauth_client:client_requests] or directly take action on the request at [oauth_client_request:request-edit-url]\n\nBest regards,\nThe [site:name] Team\n",
++        ],
++        'approve' => [
++          'enabled' => TRUE,
++          'subject' => 'Your OAuth client request has been approved',
++          'body' => "Dear [oauth_client_request:owner],\n\nWe are pleased to inform you that your OAuth client request, [oauth_client_request:label], has been approved.\n\nWhat is next?\n- Visit the [oauth_client_request:owner:client_requests] to view the available list of your requests.\n- Visit the [oauth_client_request:client-edit-url] page to view the client ID and set the client secret.\n\nIf you have any questions, feel free to contact our support team.\n\nBest regards,\nThe [site:name] Team\n",
++        ],
++        'reject' => [
++          'enabled' => TRUE,
++          'subject' => 'Your OAuth client request has been rejected',
++          'body' => "Dear [oauth_client_request:owner],\n\nWe regret to inform you that your OAuth client request, [oauth_client_request:label], could not be approved at this time.\n\nThe reason for the rejection is: [oauth_client_request:reject_reason]\n\nThank you for your understanding.\n\nBest regards,\nThe [site:name] Team\n",
++        ],
++      ],
+     ])->save();
+ 
+     $this->requester = $this->createUser(
+@@ -66,12 +83,14 @@ class NotificationFunctionalTest extends OauthClientFunctionalTestBase {
+    * Tests that no notifications are sent for disabled actions.
+    */
+   public function testNoNotificationsWhenDisabled(): void {
+-    // Disable all notifications.
+-    $config = $this->container->get('config.factory')->getEditable('oauth_client.settings');
+-    $config->set('notifications.request.enabled', FALSE);
+-    $config->set('notifications.approve.enabled', FALSE);
+-    $config->set('notifications.reject.enabled', FALSE);
+-    $config->save();
++    // Disable all notifications on the request type.
++    $requestType = OauthClientRequestType::load('type1');
++    $requestType->set('notifications', [
++      'request' => ['enabled' => FALSE, 'subject' => '', 'body' => ''],
++      'approve' => ['enabled' => FALSE, 'subject' => '', 'body' => ''],
++      'reject' => ['enabled' => FALSE, 'subject' => '', 'body' => ''],
++    ]);
++    $requestType->save();
+ 
+     $requester = user_load_by_name('requester');
+     $requesterId = $requester->id();

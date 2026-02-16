@@ -56,7 +56,10 @@ function joinup_assessment_preprocess_views_view(array &$variables): void {
       '#title' => t('My assessments'),
       '#url' => Url::fromUserInput('/collection/assessments/assessment-reports/questionnaire/submissions'),
       '#attributes' => [
-        'class' => ['m-3'],
+        'class' => [
+          'btn',
+          'btn-primary',
+        ],
       ],
       '#access' => \Drupal::currentUser()->isAuthenticated(),
     ];

@@ -1,0 +1,11 @@
+assessment.type_add:
+  title: 'Add assessment type'
+  route_name: entity.assessment_type.add_form
+  appears_on:
+    - entity.assessment_type.collection
+
+assessment.add_page:
+  title: 'Add assessment'
+  route_name: entity.assessment.add_page
+  appears_on:
+    - entity.assessment.collection

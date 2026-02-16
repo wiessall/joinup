@@ -69,3 +69,4 @@ hidden:
   label: true
   path: true
   target: true
+  uuid: true

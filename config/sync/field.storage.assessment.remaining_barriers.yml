@@ -1,0 +1,19 @@
+uuid: 3fa86142-8a3b-4f60-989a-b038deb7a337
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+    - text
+id: assessment.remaining_barriers
+field_name: remaining_barriers
+entity_type: assessment
+type: text_long
+settings: {  }
+module: text
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
