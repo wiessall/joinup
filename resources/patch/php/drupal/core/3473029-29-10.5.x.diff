@@ -1,0 +1,44 @@
+diff --git a/core/modules/content_translation/src/ContentTranslationHandler.php b/core/modules/content_translation/src/ContentTranslationHandler.php
+index a4894b99f1a..4352d3726bb 100644
+--- a/core/modules/content_translation/src/ContentTranslationHandler.php
++++ b/core/modules/content_translation/src/ContentTranslationHandler.php
+@@ -551,7 +551,7 @@ public function entityFormAlter(array &$form, FormStateInterface $form_state, En
+         '#default_value' => User::load($uid),
+         // Validation is done by static::entityFormValidate().
+         '#validate_reference' => FALSE,
+-        '#maxlength' => 60,
++        '#maxlength' => 1024,
+         '#description' => t('Leave blank for %anonymous.', ['%anonymous' => \Drupal::config('user.settings')->get('anonymous')]),
+       ];
+ 
+diff --git a/core/modules/content_translation/tests/src/Functional/ContentTranslationUITestBase.php b/core/modules/content_translation/tests/src/Functional/ContentTranslationUITestBase.php
+index 75aaec084a8..afe0fa97d58 100644
+--- a/core/modules/content_translation/tests/src/Functional/ContentTranslationUITestBase.php
++++ b/core/modules/content_translation/tests/src/Functional/ContentTranslationUITestBase.php
+@@ -12,6 +12,7 @@
+ use Drupal\Core\Url;
+ use Drupal\language\Entity\ConfigurableLanguage;
+ use Drupal\Tests\system\Functional\Cache\AssertPageCacheContextsAndTagsTrait;
++use Drupal\user\UserInterface;
+ 
+ /**
+  * Tests the Content Translation UI.
+@@ -363,6 +364,18 @@ protected function doTestAuthoringInfo() {
+     $metadata = $this->manager->getTranslationMetadata($entity->getTranslation($langcode));
+     $this->assertEquals($values[$langcode]['uid'], $metadata->getAuthor()->id(), 'Translation author correctly kept.');
+     $this->assertEquals($values[$langcode]['created'], $metadata->getCreatedTime(), 'Translation date correctly kept.');
++
++    // Verify that long usernames can be saved as the translation author.
++    $user = $this->drupalCreateUser([], $this->randomMachineName(UserInterface::USERNAME_MAX_LENGTH));
++    $edit = [
++      // Format the username as it is entered in autocomplete fields.
++      'content_translation[uid]' => $user->getAccountName() . ' (' . $user->id() . ')',
++      'content_translation[created]' => $this->container->get('date.formatter')->format($values[$langcode]['created'], 'custom', 'Y-m-d H:i:s O'),
++    ];
++    $this->submitForm($edit, $this->getFormSubmitAction($entity, $langcode));
++    $reloaded_entity = $storage->load($this->entityId);
++    $metadata = $this->manager->getTranslationMetadata($reloaded_entity->getTranslation($langcode));
++    $this->assertEquals($user->id(), $metadata->getAuthor()->id(), 'Translation author correctly set.');
+   }
+ 
+   /**
