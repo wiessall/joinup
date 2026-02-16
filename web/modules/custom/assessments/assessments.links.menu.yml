@@ -1,0 +1,17 @@
+entity.assessment_type.collection:
+  title: 'Assessment types'
+  description: 'Manage Assessment type config entities.'
+  parent: system.admin_structure
+  route_name: entity.assessment_type.collection
+
+entity.assessment.collection:
+  title: 'Assessments'
+  description: 'List of assessment entities.'
+  route_name: entity.assessment.collection
+  parent: system.admin_content
+
+entity.assessment_statement.collection:
+  title: 'Assessment statements'
+  description: 'List of assessment entities.'
+  route_name: entity.assessment_statement.collection
+  parent: system.admin_content

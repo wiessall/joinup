@@ -1,0 +1,23 @@
+{#
+/**
+ * @file
+ * Template override to display an assessment report entity.
+ */
+#}
+{% extends '@assessments/assessment.html.twig' %}
+
+{% set has_title = page and content.name %}
+
+{% block title %}
+{%- if has_title -%}
+  <h2{{ title_attributes }}>{{ content.name }}</h2>
+{%- endif -%}
+{% endblock %}
+
+{% block content %}
+  {% if not page and has_title -%}
+    {{ content|without('name') }}
+  {%- else -%}
+    {{ content }}
+  {%- endif %}
+{% endblock %}

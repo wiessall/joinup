@@ -1,0 +1,61 @@
+uuid: 4989ab53-f775-485c-89cb-770153880b5b
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.public_organisation
+    - field.field.assessment.public_organisation.country
+    - field.field.assessment.public_organisation.organisation_type
+  module:
+    - entity_form_field_label
+    - template_suggestion
+id: assessment.public_organisation.default
+targetEntityType: assessment
+bundle: public_organisation
+mode: default
+content:
+  country:
+    type: entity_reference_label
+    label: visually_hidden
+    settings:
+      link: false
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+      template_suggestion:
+        template_suggestion: ''
+    weight: 3
+    region: content
+  name:
+    type: string
+    label: visually_hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  organisation_type:
+    type: entity_reference_label
+    label: visually_hidden
+    settings:
+      link: false
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
+    region: content
+hidden:
+  created: true
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  langcode: true
+  search_api_excerpt: true
+  status: true
+  uid: true
+  uri: true
+  uuid: true

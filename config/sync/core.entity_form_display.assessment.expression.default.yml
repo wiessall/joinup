@@ -1,0 +1,69 @@
+uuid: b0c80cd7-9f48-47de-9d44-c5a04683d577
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.expression
+    - field.field.assessment.expression.description
+    - field.field.assessment.expression.documented_in
+    - field.field.assessment.expression.initiative_name
+  module:
+    - allowed_formats
+    - entity_form_field_label
+    - link
+    - text
+id: assessment.expression.default
+targetEntityType: assessment
+bundle: expression
+mode: default
+content:
+  description:
+    type: text_textarea
+    weight: 1
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings:
+      allowed_formats:
+        hide_help: '1'
+        hide_guidelines: '1'
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+        new_description: ''
+        rewrite_description: 0
+  documented_in:
+    type: link_default
+    weight: 2
+    region: content
+    settings:
+      placeholder_url: 'Type a URL such as https://example.com'
+      placeholder_title: ''
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+        new_description: 'If applicable, provide a link to the initiative, project or action concerned'
+        rewrite_description: 1
+  initiative_name:
+    type: string_textarea
+    weight: 0
+    region: content
+    settings:
+      rows: 3
+      placeholder: ''
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+        new_description: ''
+        rewrite_description: 0
+hidden:
+  created: true
+  langcode: true
+  name: true
+  status: true
+  uid: true
+  uri: true
+  uuid: true

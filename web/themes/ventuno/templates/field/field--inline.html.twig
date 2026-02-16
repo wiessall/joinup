@@ -4,46 +4,5 @@
  * Template for a field with inline values.
  */
 #}
-{%
-  set classes = [
-  'field--name-' ~ field_name|clean_class,
-  bundle|clean_class ~ '__' ~ field_name_clean|clean_class,
-  label_display == 'inline' ? 'd-flex',
-]
-%}
-{%
-  set title_classes = [
-  'field__label',
-  'fw-bold',
-  label_display == 'visually_hidden' ? 'visually-hidden',
-]
-%}
-
-{% if label_hidden %}
-  {% if multiple %}
-    <div{{ attributes.addClass(classes) }}>
-      {% for item in items %}
-        <span{{ item.attributes.addClass('field__item') }}>{{ item.content }}</span>
-      {% endfor %}
-    </div>
-  {% else %}
-    {% for item in items %}
-      <span{{ attributes.addClass(classes) }}>{{ item.content }}</span>
-    {% endfor %}
-  {% endif %}
-{% else %}
-  <div{{ attributes.addClass(classes) }}>
-    <div{{ title_attributes.addClass(title_classes) }}>
-      {{ label }}{% if label_display == 'inline' %}<span class="me-1">:</span>{% endif %}
-    </div>
-    {% if multiple %}
-    <div class="field__items">
-      {% endif %}
-      {% for item in items %}
-        <span{{ item.attributes.addClass('field__item') }}>{{ item.content }}</span>
-      {% endfor %}
-      {% if multiple %}
-    </div>
-    {% endif %}
-  </div>
-{% endif %}
+{% set list_item_tag = 'span' %}
+{% extends 'field.html.twig' %}

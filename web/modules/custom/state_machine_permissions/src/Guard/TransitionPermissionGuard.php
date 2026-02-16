@@ -6,6 +6,7 @@ namespace Drupal\state_machine_permissions\Guard;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\assessments\AssessmentInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
@@ -38,6 +39,7 @@ class TransitionPermissionGuard implements GuardInterface {
       || $entity instanceof OwnerInterface
       || $entity instanceof SolutionInterface
       || $entity instanceof ContactInformationInterface
+      || $entity instanceof AssessmentInterface
     ) {
       // Handled in their respective modules as there are specific cases for
       // these entities.

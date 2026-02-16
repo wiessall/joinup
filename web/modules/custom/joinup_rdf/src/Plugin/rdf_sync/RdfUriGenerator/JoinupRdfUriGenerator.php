@@ -13,7 +13,8 @@ use Drupal\rdf_sync\RdfUriGeneratorPluginBase;
  */
 #[RdfUriGenerator(
   id: "joinup_po_namespace",
-  label: new TranslatableMarkup("Joinup PO namespace (data.europa.eu/w21)"),
+  label: new TranslatableMarkup("Joinup PO namespace"),
+  deriver: "Drupal\joinup_rdf\Plugin\Derivative\JoinupPoNamespace"
 )]
 class JoinupRdfUriGenerator extends RdfUriGeneratorPluginBase {
 
@@ -21,7 +22,9 @@ class JoinupRdfUriGenerator extends RdfUriGeneratorPluginBase {
    * {@inheritdoc}
    */
   public function generate(): string {
-    return 'http://data.europa.eu/w21/' . $this->getEntity()->uuid();
+    $namespace = $this->getDerivativeId();
+
+    return "http://data.europa.eu/{$namespace}/" . $this->getEntity()->uuid();
   }
 
 }

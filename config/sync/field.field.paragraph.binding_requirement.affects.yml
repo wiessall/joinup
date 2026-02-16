@@ -1,0 +1,38 @@
+uuid: 675c7b3b-4403-416c-9461-7391050eba4b
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.public_service
+    - field.storage.paragraph.affects
+    - paragraphs.paragraphs_type.binding_requirement
+  module:
+    - tmgmt_content
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://data.europa.eu/2qy/iopa#affects'
+      type: resource
+  tmgmt_content:
+    excluded: false
+id: paragraph.binding_requirement.affects
+field_name: affects
+entity_type: paragraph
+bundle: binding_requirement
+label: 'Affected service'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:assessment'
+  handler_settings:
+    target_bundles:
+      public_service: public_service
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

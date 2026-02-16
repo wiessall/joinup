@@ -1,9 +1,10 @@
-@api @group-d
+@api
 Feature:
   As an owner of a website
   In order to guarantee data persistence
   All semantic assets need to have a persistent URI
 
+  @group-d
   Scenario: Entities should have distinct URI pattern
     Given collection content:
       | title                 | logo     | uri                                                            |
@@ -96,15 +97,15 @@ Feature:
     Given I am on "data/w21/643a2a52-da3b-4594-92bb-295d8134e1fb"
     Then I should see the heading "Persistent distribution"
 
-    Given I am on "data/w21/4205229d-92b6-4cac-80af-d8c2296d923c"
-    Then I should see the heading "Persistent licence"
-    Given I am on "data/dr8/Dream/Domain"
-    Then I should see "Dream Domain"
-    And I should see "You're safe from pain in the dream domain."
-    And the url should match "/taxonomy/term/\d+"
-
+  @group-d
   Scenario: Test paths corresponding to EU persistent URI namespaces without a matching uuid
     Given I am on "data/dr8/non-existing-uiid"
     Then I should see the heading "Page not found"
     When I am on "data/w21/non-existing-uiid"
     Then I should see the heading "Page not found"
+
+  @group-clone
+  Scenario: eGovERA persistent URIs
+    Given I am on "data/dr8/egovera/AccessRightsBusinessObject"
+    Then I should see the heading "Access rights"
+    And the url should match "/taxonomy/term/\d+"

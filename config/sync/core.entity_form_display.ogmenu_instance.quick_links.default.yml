@@ -13,3 +13,4 @@ content: {  }
 hidden:
   langcode: true
   og_audience: true
+  uuid: true

@@ -1,0 +1,21 @@
+uuid: 7a1b57be-17f2-4565-a04e-2679c6822bc2
+langcode: en
+status: true
+dependencies:
+  module:
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    type: 'http://purl.org/vocab/cpsv#PublicService'
+    uri_plugin: 'joinup_po_namespace:s2k'
+    fields:
+      name:
+        value:
+          predicate: 'http://purl.org/dc/terms/title'
+          type: null
+label_singular: 'public service'
+label_plural: 'public services'
+label_count:
+  no_count_capitalize: !!binary UHVibGljIHNlcnZpY2UDUHVibGljIHNlcnZpY2Vz
+id: public_service
+label: 'Public service'

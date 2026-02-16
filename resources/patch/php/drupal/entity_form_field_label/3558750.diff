@@ -1,0 +1,16 @@
+diff --git a/entity_form_field_label.module b/entity_form_field_label.module
+index 94e4d116bd184f980f63ffba8073ea296ed078fa..b0232c231b519d05a5befdbe4d0c4882ccd9cf6d 100644
+--- a/entity_form_field_label.module
++++ b/entity_form_field_label.module
+@@ -206,6 +206,11 @@ function entity_form_field_label_field_widget_complete_form_alter(array &$elemen
+  * Implements hook_preprocess_field().
+  */
+ function entity_form_field_label_preprocess_field(&$variables) {
++  // Escape early if the #object is not set - custom field is not recognized.
++  if (!isset($variables['element']['#object'])) {
++    return;
++  }
++
+   $entity_display = EntityViewDisplay::collectRenderDisplay($variables['element']['#object'], $variables['element']['#view_mode']);
+   $label_settings = $variables['element']['#third_party_settings']['entity_form_field_label'] ?? [];
+ 

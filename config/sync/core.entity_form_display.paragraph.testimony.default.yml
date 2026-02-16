@@ -60,3 +60,4 @@ content:
 hidden:
   created: true
   status: true
+  uuid: true
