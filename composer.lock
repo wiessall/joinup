@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ab08ca14666e4db21deba5ee821c3c26",
+    "content-hash": "39976eef7fb3281e2f51ccc07ce77bef",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -64,16 +64,16 @@
         },
         {
             "name": "bfabio/publiccode-parser-php",
-            "version": "v1.0.1",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bfabio/publiccode-parser-php.git",
-                "reference": "b96c62640cbb75cbac6863a663c425bc3650d02b"
+                "reference": "b37651fec09cc6656575a534975a35505f6b932d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bfabio/publiccode-parser-php/zipball/b96c62640cbb75cbac6863a663c425bc3650d02b",
-                "reference": "b96c62640cbb75cbac6863a663c425bc3650d02b",
+                "url": "https://api.github.com/repos/bfabio/publiccode-parser-php/zipball/b37651fec09cc6656575a534975a35505f6b932d",
+                "reference": "b37651fec09cc6656575a534975a35505f6b932d",
                 "shasum": ""
             },
             "require": {
@@ -112,9 +112,9 @@
             ],
             "support": {
                 "issues": "https://github.com/bfabio/publiccode-parser-php/issues",
-                "source": "https://github.com/bfabio/publiccode-parser-php/tree/v1.0.1"
+                "source": "https://github.com/bfabio/publiccode-parser-php/tree/v1.1.1"
             },
-            "time": "2025-10-22T05:55:27+00:00"
+            "time": "2025-11-30T16:30:38+00:00"
         },
         {
             "name": "bitbucket/client",
