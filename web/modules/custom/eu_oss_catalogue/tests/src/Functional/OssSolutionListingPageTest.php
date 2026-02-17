@@ -98,7 +98,7 @@ class OssSolutionListingPageTest extends FetchTestBase {
           'EN, DE, IT',
           'Yes',
           'No',
-          '',
+          'View',
         ],
         [
           'Project 1.1',
@@ -109,7 +109,7 @@ class OssSolutionListingPageTest extends FetchTestBase {
           'EN, DE, IT',
           'Yes',
           'No',
-          '',
+          'View',
         ],
         [
           'Project 1.2',
@@ -120,7 +120,7 @@ class OssSolutionListingPageTest extends FetchTestBase {
           'EN, DE, IT',
           'Yes',
           'No',
-          '',
+          'View',
         ],
         [
           'Project 1.4',
@@ -131,7 +131,7 @@ class OssSolutionListingPageTest extends FetchTestBase {
           'EN, DE',
           'Yes',
           'No',
-          '',
+          'View',
         ],
         [
           'Project 1',
@@ -142,7 +142,7 @@ class OssSolutionListingPageTest extends FetchTestBase {
           'EN, DE',
           'Yes',
           'No',
-          '',
+          'View',
         ],
       ],
       $this->getTableCellsText($table)
