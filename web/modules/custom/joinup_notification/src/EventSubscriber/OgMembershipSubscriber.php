@@ -148,12 +148,11 @@ class OgMembershipSubscriber extends NotificationSubscriberBase {
       return FALSE;
     }
 
-    if (empty($this->membership->original)) {
+    $original_membership = $this->membership->getOriginal();
+    if (empty($original_membership)) {
       return FALSE;
     }
 
-    /** @var \Drupal\og\Entity\OgMembership $original_membership */
-    $original_membership = $this->membership->original;
     // Only send an email when a membership is approved.
     if ($original_membership->getState() !== OgMembershipInterface::STATE_PENDING || $this->membership->getState() !== OgMembershipInterface::STATE_ACTIVE) {
       return FALSE;

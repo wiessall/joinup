@@ -17,6 +17,7 @@ dependencies:
   - joinup:contact_information
   - joinup:joinup_bundle_class
   - joinup:joinup_publication_date
+  - joinup:joinup_rdf
   - joinup:joinup_validation
   - joinup:joinup_workflow
   - joinup:oe_newsroom_newsletter
