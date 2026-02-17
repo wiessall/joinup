@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Validator;
 
-
 /**
  * Service for validating publiccode.yml files.
- *
  */
 class PublicCodeValidator implements PublicCodeValidatorInterface {
 
