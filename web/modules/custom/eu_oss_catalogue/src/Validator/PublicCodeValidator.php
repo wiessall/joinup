@@ -21,14 +21,12 @@ class PublicCodeValidator implements PublicCodeValidatorInterface {
       return new PublicCodeValidationResult(
         isValid: FALSE,
         errors: ['publiccode.yml is missing'],
-        publicCode: NULL,
       );
     }
 
     return new PublicCodeValidationResult(
       isValid: FALSE,
       errors: ['publiccode.yml validation is currently in progress and not yet available.'],
-      publicCode: NULL,
     );
   }
 
