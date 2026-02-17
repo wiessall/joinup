@@ -366,10 +366,6 @@ class WebformSubmissionMigrator {
       $values = [
         'type' => 'expression',
         'initiative_name' => $initiative['initiative'],
-        'description' => [
-          'value' => $initiative['initiative'],
-          'format' => 'plain_text',
-        ],
         'status' => TRUE,
         'uid' => $ownerId,
       ];
