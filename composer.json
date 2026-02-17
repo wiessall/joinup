@@ -582,9 +582,6 @@
             },
             "weitzman/logintrait": {
                 "LoginTrait::drupalLogout() @see https://gitlab.com/weitzman/logintrait/-/issues/2": "resources/patch/php/weitzman/logintrait/3.patch"
-            },
-            "bfabio/publiccode-parser-php": {
-                "Add multi-platform support for Linux ARM64, macOS Intel, and macOS Apple Silicon. @see https://github.com/bfabio/publiccode-parser-php/issues/23": "resources/patch/php/bfabio/publiccode-parser-php/24.diff"
             }
         },
         "artifacts": {
