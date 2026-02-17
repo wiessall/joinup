@@ -491,7 +491,8 @@
                 "File entity references incorrectly shared across cloned paragraph instances. @see https://www.drupal.org/i/3079729": "resources/patch/php/drupal/paragraphs/3079729.mr214-commit56372ecc.diff"
             },
             "drupal/private_message": {
-                "Missing langcode in private_message.settings @see https://www.drupal.org/project/private_message/issues/3542616": "resources/patch/php/drupal/private_message/3542616.diff"
+                "Missing langcode in private_message.settings @see https://www.drupal.org/i/3542616": "resources/patch/php/drupal/private_message/3542616.diff",
+                "Drupal 11 deprecation: Renderer::render(NULL) @see https://www.drupal.org/i/3565601": "resources/patch/php/drupal/private_message/3565601.mr210-commit4be8b7a9.diff"
             },
             "drupal/purge_users": {
                 "Users are deleted without prior notification when \"Notification User Before Deletion\" is enabled @see https://www.drupal.org/i/3521201": "resources/patch/php/drupal/purge_users/3521201.diff",
