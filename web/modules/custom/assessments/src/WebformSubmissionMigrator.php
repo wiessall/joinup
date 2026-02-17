@@ -132,7 +132,6 @@ class WebformSubmissionMigrator {
     $failed = 0;
 
     foreach ($storage->loadMultiple($ids) as $submission) {
-      \assert($submission instanceof WebformSubmissionInterface);
       try {
         if ($this->migrateSubmission($submission)) {
           $migrated++;
@@ -242,9 +241,7 @@ class WebformSubmissionMigrator {
     if ($documentFids) {
       $reportValues['documents'] = $this->entityTypeManager->getStorage('file')->loadMultiple($documentFids);
     }
-
     $report = $this->getAssessmentStorage()->create($reportValues);
-    \assert($report instanceof AssessmentReport);
 
     // Add statements.
     $statementStorage = $this->entityTypeManager->getStorage('assessment_statement');
@@ -349,10 +346,7 @@ class WebformSubmissionMigrator {
       $values['country'] = $countryTid;
     }
 
-    $organisation = $this->getAssessmentStorage()->create($values);
-    \assert($organisation instanceof PublicOrganisation);
-
-    return $organisation;
+    return $this->getAssessmentStorage()->create($values);
   }
 
   /**
@@ -545,30 +539,6 @@ class WebformSubmissionMigrator {
     $paragraphStorage = $this->entityTypeManager->getStorage('paragraph');
     $bindingRequirements = (array) ($data['binding_requirement_assessed'] ?? []);
 
-    if (empty($bindingRequirements)) {
-      // Create a single binding requirement with all shared entities.
-      $paragraph = $paragraphStorage->create([
-        'type' => 'binding_requirement',
-        'description' => [
-          'value' => 'Migrated from webform submission',
-          'format' => 'plain_text',
-        ],
-        'expression' => $expressions,
-        'affects' => $publicServices,
-        'has_participation' => $participations,
-        'asset' => $assets,
-      ]);
-      \assert($paragraph instanceof ParagraphInterface);
-
-      // Binding requirement documents.
-      $docFids = (array) ($data['binding_requirement_documents'] ?? []);
-      if ($docFids) {
-        $paragraph->set('requirement_documents', $this->entityTypeManager->getStorage('file')->loadMultiple($docFids));
-      }
-
-      return [$paragraph];
-    }
-
     $paragraphs = [];
     foreach ($bindingRequirements as $requirement) {
       $values = [
@@ -579,12 +549,12 @@ class WebformSubmissionMigrator {
         'asset' => $assets,
       ];
 
-      // Description.
-      $description = $requirement['description_1'] ?? '';
-      $values['description'] = [
-        'value' => !empty($description) ? $description : 'Migrated from webform submission',
-        'format' => 'plain_text',
-      ];
+      if ($description = $requirement['description_1'] ?? '') {
+        $values['description'] = [
+          'value' => $description,
+          'format' => 'plain_text',
+        ];
+      }
 
       // Legal reference as documented_in link.
       if (!empty($requirement['legal_reference'])) {
@@ -595,7 +565,6 @@ class WebformSubmissionMigrator {
       }
 
       $paragraph = $paragraphStorage->create($values);
-      \assert($paragraph instanceof ParagraphInterface);
 
       // Binding requirement documents (shared across all requirements).
       $docFids = (array) ($data['binding_requirement_documents'] ?? []);
@@ -656,7 +625,6 @@ class WebformSubmissionMigrator {
   protected function getAssessmentStorage(): ContentEntityStorageInterface {
     if (!isset($this->assessmentStorage)) {
       $storage = $this->entityTypeManager->getStorage('assessment');
-      \assert($storage instanceof ContentEntityStorageInterface);
       $this->assessmentStorage = $storage;
     }
     return $this->assessmentStorage;
