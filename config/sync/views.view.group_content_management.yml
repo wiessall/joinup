@@ -9,6 +9,7 @@ dependencies:
     - node.type.collection
     - node.type.custom_page
     - node.type.discussion
+    - node.type.distribution
     - node.type.document
     - node.type.event
     - node.type.news
@@ -615,12 +616,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              interoperability_validator: '0'
-              moderator: '0'
-              administrator: '0'
-              developer: '0'
             reduce: true
           is_grouped: false
           group_info:
@@ -662,9 +657,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              moderator: '0'
-              administrator: '0'
           is_grouped: false
           group_info:
             label: ''
@@ -703,10 +695,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              moderator: '0'
-              administrator: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -849,6 +837,7 @@ display:
           empty_table: false
           caption: ''
           description: ''
+          class: ''
       row:
         type: fields
       query:
