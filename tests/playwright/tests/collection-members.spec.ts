@@ -11,8 +11,8 @@ test.describe("Collection members page", () => {
     await page.goto("/collection/portal-support/members");
     await pageUtils.prepareForScreenshot(page);
 
-    await expect(page.locator("#block-ventuno-content")).toHaveScreenshot(
-      "block-ventuno-content.png",
-    );
+    await expect(
+      page.locator("#views-exposed-form-members-overview-default"),
+    ).toHaveScreenshot("block-ventuno-content.png");
   });
 });
