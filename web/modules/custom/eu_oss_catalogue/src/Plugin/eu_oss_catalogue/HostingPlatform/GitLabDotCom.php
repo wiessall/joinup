@@ -377,7 +377,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
 
     if ($requestedFiles) {
       $flippedFiles = array_flip($requestedFiles);
-      foreach ($project['repository']['blobs']['nodes'] as $fileData) {
+      foreach ($project['repository']['blobs']['nodes'] ?? [] as $fileData) {
         // @see self:getProjectWithRestApi()
         $fileId = $fileData['__file_id'] ?? $flippedFiles[$fileData['path']];
         $files[$fileId] = $fileData['rawBlob'];
@@ -395,9 +395,9 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       platformReference: $project['id'],
       description: $project['description'],
       logo: $project['avatarUrl'] ?? NULL,
-      numberOfForks: $project['forksCount'],
-      numberOfStars: $project['starCount'],
-      numberOfIssues: $project['openIssuesCount'],
+      numberOfForks: $project['forksCount'] ?? NULL,
+      numberOfStars: $project['starCount'] ?? NULL,
+      numberOfIssues: $project['openIssuesCount'] ?? NULL,
       numberOfPullRequests: $project['openMergeRequestsCount'] ?? NULL,
       files: $files,
     );

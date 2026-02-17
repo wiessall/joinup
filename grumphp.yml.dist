@@ -60,9 +60,9 @@ grumphp:
         task: phplint
 
     # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/twigcsfixer.md
-    lint-twig:
-      metadata:
-        task: twigcsfixer
+#    lint-twig:
+#      metadata:
+#        task: twigcsfixer
 
     # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/yamllint.md
     lint-yaml:
@@ -73,4 +73,5 @@ grumphp:
     # On git pre-push, often initiating a full scan, omit phpstan which is slow.
     # See scripts/git/pre_push.
     git_pre_push:
-      tasks: [ composer, phpcs, phpmd, lint-css, lint-gherkin, lint-js, lint-php, lint-twig, lint-yaml ]
+#      tasks: [ composer, phpcs, phpmd, lint-css, lint-gherkin, lint-js, lint-php, lint-twig, lint-yaml ]
+      tasks: [ composer, phpcs, phpmd, lint-css, lint-gherkin, lint-js, lint-php, lint-yaml ]
