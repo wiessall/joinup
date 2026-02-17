@@ -301,13 +301,13 @@ assess_participant_type:
   - name: 'Private Businesses'
     id: private_businesses
 assess_public_service_area:
-  - name: Core governance and administration
-    id: core_governance_and_administration
+  - name: General public services
+    id: general_public_services
     uri: 'http://example.com/taxonomy-term/assess-public-service-area/34229fe8-14ac-40f8-9434-765e441eae3b'
-  - name: Digital and Innovation Services
-    id: digital_and_innovation_services
-  - name: Education and Research
-    id: education_and_research
+  - name: Education
+    id: education
+  - name: Economic affairs
+    id: economic_affairs
 assess_statement_interpretation:
   - name: Beneficial
     id: positive
