@@ -19,17 +19,17 @@
 /* Fix dropdown height/visibility in dialogs */
 .ui-dialog .tagify__dropdown,
 .ief-form .tagify__dropdown {
+  visibility: visible !important;
+  overflow: auto !important;
   min-height: auto !important;
   max-height: 300px !important;
-  overflow: auto !important;
-  visibility: visible !important;
   opacity: 1 !important;
 }
 
 .ui-dialog .tagify__dropdown__wrapper,
 .ief-form .tagify__dropdown__wrapper {
-  max-height: 300px !important;
   overflow: auto !important;
+  max-height: 300px !important;
 }
 
 /* Ensure dropdown items are visible */

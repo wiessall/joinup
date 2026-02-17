@@ -26,6 +26,7 @@ use Drupal\assessments\Event\AssessmentReportEvent;
 use Drupal\assessments\NotificationEvents;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_page_attachments().
@@ -133,7 +134,13 @@ function assessments_field_widget_complete_form_alter(array &$element, FormState
   }
 
   $widget = &$element['widget'];
-  $ief_id = $element['widget']['#ief_id'];
+
+  // Only apply IEF customizations when the widget is an IEF complex widget.
+  if (!isset($widget['#ief_id'])) {
+    return;
+  }
+
+  $ief_id = $widget['#ief_id'];
   // IEF state can be NULL (initial state) / ief_add_existing / add.
   /** @see \Drupal\inline_entity_form\Plugin\Field\FieldWidget\InlineEntityFormComplex::formElement */
   $ief_state = $form_state->get(['inline_entity_form', $ief_id, 'form']);
@@ -145,18 +152,22 @@ function assessments_field_widget_complete_form_alter(array &$element, FormState
     ];
 
     // Modify the ief_add_existing button.
-    /** @var \Drupal\Core\StringTranslation\TranslatableMarkup $markup */
-    $markup = $widget['actions']['ief_add_existing']['#value'];
-    $arguments = $markup->getArguments();
-    $widget['actions']['ief_add_existing']['#value'] = new TranslatableMarkup('Select an @type_singular', $arguments);
-    $widget['actions']['ief_add_existing']['#weight'] = 0;
+    if (isset($widget['actions']['ief_add_existing']['#value'])) {
+      /** @var \Drupal\Core\StringTranslation\TranslatableMarkup $markup */
+      $markup = $widget['actions']['ief_add_existing']['#value'];
+      $arguments = $markup->getArguments();
+      $widget['actions']['ief_add_existing']['#value'] = new TranslatableMarkup('Select an @type_singular', $arguments);
+      $widget['actions']['ief_add_existing']['#weight'] = 0;
+    }
 
     // Modify the ief_add button.
-    /** @var \Drupal\Core\StringTranslation\TranslatableMarkup $markup */
-    $markup = $widget['actions']['ief_add']['#value'];
-    $arguments = $markup->getArguments();
-    $widget['actions']['ief_add']['#value'] = new TranslatableMarkup('Add a new @type_singular', $arguments);
-    $widget['actions']['ief_add']['#weight'] = 10;
+    if (isset($widget['actions']['ief_add']['#value'])) {
+      /** @var \Drupal\Core\StringTranslation\TranslatableMarkup $markup */
+      $markup = $widget['actions']['ief_add']['#value'];
+      $arguments = $markup->getArguments();
+      $widget['actions']['ief_add']['#value'] = new TranslatableMarkup('Add a new @type_singular', $arguments);
+      $widget['actions']['ief_add']['#weight'] = 10;
+    }
   }
 
   if ($ief_state === NULL || $ief_state === 'ief_add_existing') {
@@ -434,7 +445,8 @@ function _assessments_process_asset_form_button(array $element, FormStateInterfa
 function assessments_inline_entity_form_entity_form_alter(array &$entity_form, FormStateInterface &$formState): void {
   $solution = $entity_form['#entity'];
 
-  // Check if this IEF is for a solution within the binding_requirement paragraph.
+  // Check if this IEF is for a solution within the binding_requirement
+  // paragraph.
   $isAssetForm = $entity_form['#ief_id'] === 'asset-form' && $solution instanceof SolutionInterface;
 
   // Check if this IEF is within Entity Browser for assessment solutions.
@@ -587,7 +599,7 @@ function assessments_node_create_access(AccountInterface $account, array $contex
  * Sets the group for solutions created via Entity Browser before
  * the form is built, so the state machine transition guard can work.
  */
-function assessments_node_create(\Drupal\node\NodeInterface $node): void {
+function assessments_node_create(NodeInterface $node): void {
   if ($node->bundle() !== 'solution') {
     return;
   }

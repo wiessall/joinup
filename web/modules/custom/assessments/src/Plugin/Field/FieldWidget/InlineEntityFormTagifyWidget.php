@@ -180,8 +180,9 @@ class InlineEntityFormTagifyWidget extends InlineEntityFormComplex {
     // Add value callback to convert Tagify JSON to entity ID before validation.
     $element['entity_id']['#value_callback'] = [static::class, 'valueCallback'];
 
-    // Replace core EntityAutocomplete validation with our own simple validation.
-    // EntityAutocomplete validation changes the value format which breaks IEF.
+    // Replace core EntityAutocomplete validation with our own simple
+    // validation. EntityAutocomplete validation changes the value format
+    // which breaks IEF.
     $element['entity_id']['#element_validate'] = [
       [static::class, 'validateEntityExists'],
     ];
@@ -212,7 +213,7 @@ class InlineEntityFormTagifyWidget extends InlineEntityFormComplex {
    * @return mixed
    *   The value in "Label (ID)" format for IEF compatibility.
    */
-  public static function valueCallback(array &$element, $input, FormStateInterface $form_state) {
+  public static function valueCallback(array &$element, $input, FormStateInterface $form_state): mixed {
     // If no input, return NULL.
     if ($input === FALSE) {
       return NULL;

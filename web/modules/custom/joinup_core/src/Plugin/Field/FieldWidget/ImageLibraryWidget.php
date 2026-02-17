@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_core\Plugin\Field\FieldWidget;
 
+use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\image_library_widget\Plugin\Field\FieldWidget\ImageLibraryWidget as OriginalImageLibraryWidget;
@@ -19,6 +20,15 @@ class ImageLibraryWidget extends OriginalImageLibraryWidget {
    * Copied from \Drupal\svg_image\Plugin\Field\FieldWidget\SvgImageWidget.
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state): array {
+    // The parent widget expects 'form_display' in form state storage, but it's
+    // not set when rendered inside an inline entity form. Ensure it's available
+    // to prevent an "Undefined array key" warning.
+    $storage = $form_state->getStorage();
+    if (!isset($storage['form_display'])) {
+      $entity = $items->getEntity();
+      $form_state->set('form_display', EntityFormDisplay::collectRenderDisplay($entity, 'default'));
+    }
+
     $element = parent::formElement($items, $delta, $element, $form, $form_state);
 
     $field_settings = $this->getFieldSettings();
