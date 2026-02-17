@@ -142,3 +142,4 @@ hidden:
   solution_settings: true
   solution_type: true
   uri: true
+  uuid: true

@@ -24,10 +24,13 @@ dependencies:
     - node.type.event
     - node.type.news
     - node.type.owner
+    - oauth_client.type.assessments
+    - rest.resource.assessment_report
     - search_api_autocomplete.search.search
     - search_api_autocomplete.search.search_oss_catalogue
     - taxonomy.vocabulary.tags
   module:
+    - assessments
     - collection
     - comment
     - contextual
@@ -48,7 +51,6 @@ dependencies:
     - private_message
     - rest
     - search_api_autocomplete
-    - simple_oauth
     - sitewide_alert
     - sparql_endpoint
     - state_machine_permissions
@@ -69,6 +71,7 @@ permissions:
   - 'access user profiles'
   - 'cancel account'
   - 'cancel own vote'
+  - 'create assessment report'
   - 'create collection content'
   - 'create contact_information content'
   - 'create content for any_user option'
@@ -136,12 +139,15 @@ permissions:
   - 'edit own news content'
   - 'edit own owner content'
   - 'edit own polls'
+  - 'entity print access type assessment'
   - 'entity print access type webform_submission'
   - 'flag bookmark'
   - 'flag like'
   - 'flag subscribe_discussions'
   - 'legal re-accept legal_notice'
   - 'legal view legal_notice'
+  - 'perform assessment_workflow workflow save_as_draft transition on own entity'
+  - 'perform assessment_workflow workflow submit_for_review transition on own entity'
   - 'perform collection_workflow workflow draft transition on own entity'
   - 'perform collection_workflow workflow propose transition on own entity'
   - 'perform contact_information_workflow workflow propose_changes transition on own entity'
@@ -162,6 +168,8 @@ permissions:
   - 'perform owner_workflow workflow validate transition on own entity'
   - 'post comments'
   - 'propose collection content'
+  - 'request assessments oauth2 client'
+  - 'restful get assessment_report'
   - 'revert all revisions'
   - 'skip comment approval'
   - 'sparql endpoint query'
@@ -208,6 +216,7 @@ permissions:
   - 'view eif_perspective meta-entity'
   - 'view interoperability'
   - 'view media'
+  - 'view own unpublished assessment report'
   - 'view own unpublished content'
   - 'view paragraph content accordion'
   - 'view paragraph content accordion_item'

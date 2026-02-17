@@ -1,0 +1,43 @@
+uuid: 9cfb0251-a334-4d5c-b70d-558fd2375ac5
+langcode: en
+status: true
+dependencies:
+  module:
+    - slick
+  enforced:
+    module:
+      - oauth_client
+name: 'OAuth Client Minimal (Internal)'
+format: oauth_client_minimal
+weight: 10
+filters:
+  filter_autop:
+    id: filter_autop
+    provider: filter
+    status: true
+    weight: 0
+    settings: {  }
+  filter_html:
+    id: filter_html
+    provider: filter
+    status: true
+    weight: -10
+    settings:
+      allowed_html: '<a href hreflang> <p> <br>'
+      filter_html_help: false
+      filter_html_nofollow: false
+  filter_url:
+    id: filter_url
+    provider: filter
+    status: true
+    weight: 0
+    settings:
+      filter_url_length: 72
+  slick_filter:
+    id: slick_filter
+    provider: slick
+    status: false
+    weight: 4
+    settings:
+      optionset: default
+      media_switch: ''

@@ -142,7 +142,7 @@ readonly class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksMana
 
     // Ignore external links.
     $urlObject = $menuLink->getUrlObject();
-    if ($urlObject->isExternal()) {
+    if ($urlObject->isExternal() || !$urlObject->isRouted()) {
       return;
     }
 

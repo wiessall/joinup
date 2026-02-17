@@ -1,5 +1,0 @@
-services:
-  _defaults:
-    autoconfigure: true
-  Drupal\joinup_assessment\EventSubscriber\AssessmentSubscriber:
-    parent: joinup_notification.notification_subscriber_base

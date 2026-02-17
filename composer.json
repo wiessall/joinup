@@ -17,6 +17,7 @@
         "composer/installers": "^2",
         "composer/spdx-licenses": "^1.5",
         "cweagans/composer-patches": "^1.7",
+        "devizzent/cebe-php-openapi": "^1.1",
         "drupal/addtocal": "^3.0",
         "drupal/allowed_formats": "^3.0",
         "drupal/antibot": "^2.0",
@@ -43,6 +44,7 @@
         "drupal/email_confirmer": "^1.0",
         "drupal/email_contact": "^2.0.4",
         "drupal/embed_block": "^1.0",
+        "drupal/entity_form_field_label": "^2.1",
         "drupal/entity_legal": "^4.0",
         "drupal/entity_print": "^2.15",
         "drupal/entityqueue": "^1.2",
@@ -86,6 +88,8 @@
         "drupal/oauth_client": "^1.0",
         "drupal/og": "^2.0",
         "drupal/og_menu": "^2.0",
+        "drupal/openapi_ui": "^1.0@RC",
+        "drupal/openapi_ui_swagger": "^1.1",
         "drupal/other_view_filter": "^1.3",
         "drupal/page_manager": "^4.0",
         "drupal/paragraphs": "^1.12",
@@ -97,6 +101,7 @@
         "drupal/publication_date": "^3.1",
         "drupal/purge_users": "^4.0",
         "drupal/queue_ui": "^3.1",
+        "drupal/rabbit_hole": "^2.0",
         "drupal/rdf_sync": "^1.0",
         "drupal/redirect": "^1.6",
         "drupal/replicate_actions": "^1.7",
@@ -110,7 +115,6 @@
         "drupal/search_api_solr": "^4.2.7",
         "drupal/search_api_spellcheck": "^4.0",
         "drupal/simple_multistep": "^2.1",
-        "drupal/simple_oauth": "^6.0",
         "drupal/simple_sitemap": "^4.0",
         "drupal/sitewide_alert": "^3.0",
         "drupal/slick": "^3.0",
@@ -126,6 +130,7 @@
         "drupal/token": "~1.7",
         "drupal/tour": "^1.0",
         "drupal/twig_field_value": "^2.0",
+        "drupal/uuid_extra": "^2.0",
         "drupal/view_unpublished": "^1.0",
         "drupal/views_autosubmit": "^1.7",
         "drupal/views_block_area": "^2.0",
@@ -140,6 +145,7 @@
         "jakeasmith/http_build_url": "^1.0",
         "knplabs/github-api": "^3.13",
         "m4tthumphrey/php-gitlab-api": "^11.12",
+        "mnsami/composer-custom-directory-installer": "^2.0",
         "npm-asset/chart.js": "^4.5",
         "npm-asset/dompurify": "^3.0.9",
         "npm-asset/jquery-colorbox": "^1.6.4",
@@ -212,6 +218,7 @@
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "drupal/core-composer-scaffold": true,
             "ec-europa/toolkit-composer-plugin": true,
+            "mnsami/composer-custom-directory-installer": true,
             "oomphinc/composer-installers-extender": true,
             "openeuropa/composer-artifacts": true,
             "php-http/discovery": true,
@@ -284,6 +291,7 @@
                 "type:drupal-core"
             ],
             "web/libraries/{$name}": [
+                "swagger-api/swagger-ui",
                 "type:drupal-library",
                 "type:bower-asset",
                 "type:npm-asset"
@@ -380,6 +388,7 @@
                 "Link widget placeholder_url should use label @see https://www.drupal.org/i/3547582": "resources/patch/php/drupal/core/3547582.diff",
                 "Installing from existing config causes massive cache.config population and slow installs @see https://www.drupal.org/i/3559030": "resources/patch/php/drupal/core/3559030.diff",
                 "Configs for untranslatable bundles @see https://www.drupal.org/i/3570351": "resources/patch/php/drupal/core/3570351.mr14561-commitd9636386.diff",
+                "REST views: Add pagination information and total count result @see https://www.drupal.org/i/2982729": "resources/patch/php/drupal/core/2982729-mr6558.commit6081bf34.diff",
                 "Fatal error when saving translation configuration @see https://www.drupal.org/i/3549469": "resources/patch/php/drupal/core/3549469.diff",
                 "Translations of nodes with comment settings field set to non-translatable returns EntityUntranslatableFieldsConstraint @see https://www.drupal.org/i/3015675": "resources/patch/php/drupal/core/3015675-83bb966c.diff",
                 "Wrong maxlength on Authored By field for translation @see https://www.drupal.org/i/3473029": "resources/patch/php/drupal/core/3473029-29-10.5.x.diff"
@@ -398,6 +407,10 @@
             },
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.mr3-note490206.diff"
+            },
+            "drupal/entity_form_field_label": {
+                "Add possibility to alter field's description @see https://www.drupal.org/i/3420361": "resources/patch/php/drupal/entity_form_field_label/3420361.mr10-note563504.diff",
+                "Illegal argument NULL @see https://www.drupal.org/i/3558750": "resources/patch/php/drupal/entity_form_field_label/3558750.diff"
             },
             "drupal/email_contact": {
                 "Use AjaxHelperTrait::isAjax() to fix modal behavior for non-Ajax requests. @see https://www.drupal.org/i/3546736": "resources/patch/php/drupal/email_contact/3546736.diff"
@@ -421,6 +434,9 @@
                 "Activate tab by link anchor is broken @see https://www.drupal.org/project/field_group/issues/3226844": "resources/patch/php/drupal/field_group/3226844.diff",
                 "Emptiness check in field_group_remove_empty_form_groups() does not account for empty containers @see https://www.drupal.org/i/3069365": "resources/patch/php/drupal/field_group/3069365-mr109.commit044666d7.diff"
             },
+            "drupal/field_group_markup": {
+                "Provide schema for the module @see https://www.drupal.org/i/3347747": "resources/patch/php/drupal/field_group_markup/3347747-2.patch"
+            },
             "drupal/field_permissions": {
                 "Skip role with isAdmin when save custom permission @see https://www.drupal.org/project/field_permissions/issues/3470671": "resources/patch/php/drupal/field_permissions/3470671.mr36-note366100.diff"
             },
@@ -440,7 +456,8 @@
             "drupal/inline_entity_form": {
                 "Autocomplete field doesn't allow to reference entities with long titles @see https://www.drupal.org/node/2895663": "resources/patch/php/drupal/inline_entity_form/2895663.patch",
                 "Undefined array key \"delete\". @see https://www.drupal.org/i/3416328": "resources/patch/php/drupal/inline_entity_form/3416328.patch",
-                "Required fields make an optional IEF (erroneously) required @see https://www.drupal.org/i/3099844": "resources/patch/php/drupal/inline_entity_form/3099844.diff"
+                "Combined: @see https://www.drupal.org/i/3099844 and https://www.drupal.org/i/3043511": "resources/patch/php/drupal/inline_entity_form/combined-3099844-3043511.15.diff",
+                "Foreach expects array|object, null given @see https://www.drupal.org/i/3516478": "resources/patch/php/drupal/inline_entity_form/3516478.diff"
             },
             "drupal/l10n_pconfig": {
                 "Update state var on language entity update (not only on form edit) @see https://www.drupal.org/i/3533900": "resources/patch/php/drupal/l10n_pconfig/3533900.diff",
@@ -467,6 +484,10 @@
             "drupal/mimemail": {
                 "Errors when sending a mail with files @see https://www.drupal.org/project/mimemail/issues/2904611": "resources/patch/php/drupal/mimemail/mimemail_attachment_errors-2904611-55.patch"
             },
+            "drupal/oauth_client": {
+                "Add post-update hook to install OAuth Client Minimal filter format. @see https://www.drupal.org/i/3555048": "resources/patch/php/drupal/oauth_client/3555048v2.diff",
+                "Notifications per request type. @see https://www.drupal.org/i/3567235": "resources/patch/php/drupal/oauth_client/3567235-c17f91608.diff"
+            },
             "drupal/og": {
                 "[regression] MembershipManager::getMembership since 1.0.0-alpha11": "resources/patch/php/drupal/og/3524972.diff"
             },
@@ -477,7 +498,7 @@
                 "Some mandatory parameters are missing to generate a URL for route 'entity.page.devel_load' @see https://www.drupal.org/i/3438993": "resources/patch/php/drupal/page_manager/3438993.diff"
             },
             "drupal/paragraphs": {
-                "Patch paragraphs to duplicate correctly nested paragraphs (remove when using Drupal 11.2). @see https://www.drupal.org/i/3510842": "resources/patch/php/drupal/paragraphs/3510842.patch"
+                "File entity references incorrectly shared across cloned paragraph instances. @see https://www.drupal.org/i/3079729": "resources/patch/php/drupal/paragraphs/3079729.diff"
             },
             "drupal/private_message": {
                 "Missing langcode in private_message.settings @see https://www.drupal.org/project/private_message/issues/3542616": "resources/patch/php/drupal/private_message/3542616.diff"
@@ -487,11 +508,10 @@
                 "Missing langcode in purge_users.settings and config/install missing @see https://www.drupal.org/i/3542620": "resources/patch/php/drupal/purge_users/3542620.diff"
             },
             "drupal/rdf_sync": {
-                "Allow to update the URI @see https://www.drupal.org/i/3507137": "resources/patch/php/drupal/rdf_sync/3507137.diff",
-                "Add attributes alternative for RdfUriGenerator @see https://www.drupal.org/i/3510908": "resources/patch/php/drupal/rdf_sync/3510908.diff",
-                "Warning on bundle entity form @see https://drupal.org/i/3518353": "resources/patch/php/drupal/rdf_sync/3518353-mr37-hash-6aab66c4.diff",
-                "Forms using entity builders of RDF Sync cannot be serialized @see https://drupal.org/i/3527977": "resources/patch/php/drupal/rdf_sync/3527977-mr38-hash-8dc503eb.diff",
-                "Allow $bundle to be nullable @see https://www.drupal.org/i/3529979": "resources/patch/php/drupal/rdf_sync/3529979.diff"
+                "Pass the context to the normalize subscribers @see https://www.drupal.org/i/3560752": "resources/patch/php/drupal/rdf_sync/3560752.mr43-note632794.diff",
+                "Configure namaspaces @see https://www.drupal.org/i/3560781": "resources/patch/php/drupal/rdf_sync/3560781.mr44-note633150.diff",
+                "View support @see https://www.drupal.org/project/i/3473743": "resources/patch/php/drupal/rdf_sync/3560781.mr45-commitf08c1b33.diff",
+                "Add support for deriver in RdfUriGenerator @see https://www.drupal.org/project/rdf_sync/issues/3567259": "resources/patch/php/drupal/rdf_sync/3567259.diff"
             },
             "drupal/search_api": {
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199-42e0e284.diff",
@@ -499,6 +519,9 @@
             },
             "drupal/search_api_spellcheck": {
                 "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372": "resources/patch/php/drupal/search_api_spellcheck/3280372.patch"
+            },
+            "drupal/simple_oauth": {
+                "Allow BasicAuth to co-exist with oAuth @see https://www.drupal.org/i/3256312": "resources/patch/php/drupal/simple_oauth/3256312-1.patch"
             },
             "drupal/sitewide_alert": {
                 "Cache prevents display of alert @see https://www.drupal.org/i/3543046": "resources/patch/php/drupal/sitewide_alert/3543046.diff"

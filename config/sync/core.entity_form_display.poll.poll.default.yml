@@ -93,3 +93,4 @@ content:
 hidden:
   anonymous_vote_allow: true
   uid: true
+  uuid: true
