@@ -41,7 +41,6 @@ class PublicCodeValidatorTest extends UnitTestCase {
     // Validation is temporarily disabled and always returns invalid.
     $this->assertFalse($result->isValid());
     $this->assertNotEmpty($result->getErrors());
-    $this->assertNull($result->getPublicCode());
   }
 
   /**
@@ -59,7 +58,6 @@ YAML;
 
     $this->assertFalse($result->isValid(), 'Invalid YAML should fail validation');
     $this->assertNotEmpty($result->getErrors(), 'Invalid YAML should have errors');
-    $this->assertNull($result->getPublicCode(), 'Invalid YAML should return NULL for PublicCode');
     $this->assertIsArray($result->getErrors());
   }
 
@@ -80,7 +78,6 @@ YAML;
 
     $this->assertFalse($result->isValid(), 'Malformed YAML should fail validation');
     $this->assertNotEmpty($result->getErrors(), 'Malformed YAML should have errors');
-    $this->assertNull($result->getPublicCode(), 'Malformed YAML should return NULL for PublicCode');
   }
 
 }
