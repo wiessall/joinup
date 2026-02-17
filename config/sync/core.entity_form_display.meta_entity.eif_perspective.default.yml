@@ -63,3 +63,4 @@ hidden:
   path: true
   target: true
   uri: true
+  uuid: true

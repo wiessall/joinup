@@ -6,6 +6,8 @@ namespace Drupal\joinup\Context;
 
 use Behat\Mink\Element\ElementInterface;
 use Behat\Mink\Selector\Xpath\Escaper;
+use Behat\Step\Given;
+use Behat\Step\When;
 use Drupal\DrupalExtension\Context\MinkContext as DrupalExtensionMinkContext;
 use Drupal\joinup\Traits\JavascriptTrait;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -43,9 +45,8 @@ class MinkContext extends DrupalExtensionMinkContext {
    *
    * @param string $seconds
    *   The seconds to wait.
-   *
-   * @Given I wait for :seconds second(s)
    */
+  #[Given('I wait for :seconds second(s)')]
   public function iWaitForSeconds(string $seconds): void {
     $this->getSession()->wait($seconds * 1000);
   }
@@ -78,6 +79,49 @@ class MinkContext extends DrupalExtensionMinkContext {
   }
 
   /**
+   * Selects a radio button by name attribute and label.
+   *
+   * @param string $label
+   *   The label of the radio button.
+   * @param string $name
+   *   The name attribute of the radio button.
+   */
+  #[When('I select the radio button :label with the name :name')]
+  public function assertSelectRadioByName(string $label, string $name): void {
+    $page = $this->getSession()->getPage();
+
+    // Find all radio buttons with the given name attribute.
+    $radios = $page->findAll('css', sprintf('input[type="radio"][name="%s"]', $name));
+
+    if (empty($radios)) {
+      throw new \Exception(sprintf('No radio buttons found with name "%s" on the page %s', $name, $this->getSession()->getCurrentUrl()));
+    }
+
+    $target_radio = NULL;
+    foreach ($radios as $radio) {
+      $radio_id = $radio->getAttribute('id');
+      if (!$radio_id) {
+        continue;
+      }
+
+      $label_element = $page->find('css', sprintf('label[for="%s"]', $radio_id));
+      if (!$label_element || trim($label_element->getText()) !== $label) {
+        continue;
+      }
+
+      $target_radio = $radio;
+      break;
+    }
+
+    if (!$target_radio) {
+      throw new \Exception(sprintf('Radio button with label "%s" and name "%s" was not found on the page %s', $label, $name, $this->getSession()->getCurrentUrl()));
+    }
+
+    $value = $target_radio->getAttribute('value');
+    $target_radio->selectOption($value);
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function assertRegionPressButton($button, $region): void {
@@ -105,11 +149,10 @@ class MinkContext extends DrupalExtensionMinkContext {
   /**
    * Change the option of a select in the specified region.
    *
-   * @Given I select :value from :field in the :region( region)
-   *
    * @throws \Exception
    *   If region cannot be found.
    */
+  #[Given('I select :value from :field in the :region( region)')]
   public function selectRegionFillField(string $field, string $value, string $region): void {
     $select = $this->fixStepArgument($field);
     $option = $this->fixStepArgument($value);
@@ -128,9 +171,8 @@ class MinkContext extends DrupalExtensionMinkContext {
    * Change the attachments file to field in the specified region.
    *
    * Example: And I attach the file "hi.png" to "image" in the "Modal" region.
-   *
-   * @Given /^(?:|I )attach the file "(?P<path>[^"]*)" to "(?P<field>(?:[^"]|\\")*)" in the "(?P<region>[^"]*)" region$/
    */
+  #[Given('/^(?:|I )attach the file "(?P<path>[^"]*)" to "(?P<field>(?:[^"]|\\")*)" in the "(?P<region>[^"]*)" region$/')]
   public function attachRegionFileToField(string $field, string $path, string $region): void {
     $this->attachFile($field, $path, $this->getRegion($region));
   }

@@ -537,11 +537,30 @@ function joinup_core_mail_alter(&$message): void {
  * Implements hook_field_widget_single_element_WIDGET_TYPE_form_alter().
  */
 function joinup_core_field_widget_single_element_tagify_entity_reference_autocomplete_widget_form_alter(array &$element, FormStateInterface $form_state, array $context): void {
-  // Remove the "Drag to re-order @entity_types." mention in description.
+  _joinup_core_remove_drag_message_in_description($element, $context);
+}
+
+/**
+ * Implements hook_field_widget_single_element_WIDGET_TYPE_form_alter().
+ */
+function joinup_core_field_widget_single_element_tagify_select_widget_form_alter(array &$element, FormStateInterface $form_state, array $context): void {
+  _joinup_core_remove_drag_message_in_description($element, $context);
+}
+
+/**
+ * Remove the "Drag to re-order @entity_types." mention in description.
+ *
+ * @param array $element
+ *   The field widget form element.
+ * @param array $context
+ *   Context array.
+ */
+function _joinup_core_remove_drag_message_in_description(array &$element, array $context): void {
   /* @see \Drupal\tagify\Plugin\Field\FieldWidget\TagifyEntityReferenceAutocompleteWidget::formElement */
   $items = $context['items'];
   \assert($items instanceof FieldItemListInterface);
-  $element['#description'] = FieldFilteredMarkup::create(\Drupal::token()->replace((string) $items->getFieldDefinition()->getDescription()));
+  $element['#description'] = FieldFilteredMarkup::create(\Drupal::token()
+    ->replace((string) $items->getFieldDefinition()->getDescription()));
 }
 
 /**

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
 
@@ -19,9 +20,8 @@ class PopoverContext extends RawDrupalContext {
 
   /**
    * Asserts that a popover is opened.
-   *
-   * @Then a popover should open
    */
+  #[Then('a popover should open')]
   public function aPopoverShouldOpen(): void {
     $this->assertJavaScriptEnabledBrowser();
     $this->waitForElementVisible('region', 'Popover');

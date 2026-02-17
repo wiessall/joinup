@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Step\Then;
+use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
 
@@ -21,9 +23,8 @@ class ModerationContext extends RawDrupalContext {
    *   The title of the node of which to check the moderation preview.
    * @param string $text
    *   The text that is expected to be present.
-   *
-   * @Then the moderation preview of :title should contain the text :text
    */
+  #[Then('the moderation preview of :title should contain the text :text')]
   public function assertModerationPreviewContainsText($title, $text): void {
     $node = $this->getEntityByLabel('node', $title);
     $xpath = '//h1/a[@href = "' . $node->toUrl('canonical', [
@@ -39,9 +40,8 @@ class ModerationContext extends RawDrupalContext {
    *   The text of the link to click.
    * @param string $title
    *   The title of the node for which to click the link.
-   *
-   * @When I click the :link_text link in the :title moderation preview
    */
+  #[When('I click the :link_text link in the :title moderation preview')]
   public function clickLinkInModerationPreview($link_text, $title): void {
     $node = $this->getEntityByLabel('node', $title);
     $xpath = '//h1/a[@href = "' . $node->toUrl('canonical', [

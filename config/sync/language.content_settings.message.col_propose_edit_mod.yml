@@ -1,0 +1,11 @@
+uuid: 9f8e1c91-610c-4faf-b63d-1fa075293bd3
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.col_propose_edit_mod
+id: message.col_propose_edit_mod
+target_entity_type_id: message
+target_bundle: col_propose_edit_mod
+default_langcode: site_default
+language_alterable: false

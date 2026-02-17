@@ -1,0 +1,11 @@
+uuid: d0ed48d1-9bf7-4080-a390-e32f947ede24
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.assessment
+label: Assessment
+description: ''
+targetEntityType: node
+cache: true

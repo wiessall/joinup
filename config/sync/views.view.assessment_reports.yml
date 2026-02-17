@@ -88,7 +88,7 @@ display:
           separator: ', '
           field_api_classes: false
       pager:
-        type: mini
+        type: full
         options:
           offset: 0
           pagination_heading_level: h4
@@ -98,6 +98,8 @@ display:
           tags:
             next: ››
             previous: ‹‹
+            first: '« First'
+            last: 'Last »'
           expose:
             items_per_page: false
             items_per_page_label: 'Items per page'
@@ -106,6 +108,7 @@ display:
             items_per_page_options_all_label: '- All -'
             offset: false
             offset_label: Offset
+          quantity: 9
       exposed_form:
         type: basic
         options:
@@ -234,7 +237,7 @@ display:
           plugin_id: text
           empty: true
           content:
-            value: '<a href="/collection/assessments/assessment-reports/questionnaire" class="btn btn-primary">New assessment</a>'
+            value: '<a href="/collection/assessments/assessment-reports/questionnaire" class="btn btn-primary me-2">New assessment</a>'
             format: full_html
           tokenize: false
       footer: {  }

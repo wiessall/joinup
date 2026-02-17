@@ -1,0 +1,14 @@
+uuid: 206337ec-0124-4d2c-99ee-4de01696d3fe
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.assessment_reporter
+  module:
+    - user
+id: user_add_role_action.assessment_reporter
+label: 'Add the Assessment reporter role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: assessment_reporter

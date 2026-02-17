@@ -69,3 +69,4 @@ content:
     third_party_settings: {  }
 hidden:
   uri: true
+  uuid: true

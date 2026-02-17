@@ -1,0 +1,18 @@
+uuid: 4e8f7070-78e2-4fb9-8291-857c57668194
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.oss_licence
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: taxonomy_term.oss_licence
+target_entity_type_id: taxonomy_term
+target_bundle: oss_licence
+default_langcode: site_default
+language_alterable: false

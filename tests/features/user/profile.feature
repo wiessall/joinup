@@ -21,34 +21,9 @@ Feature: User profile
 
     When I click "Edit"
     Then the following fields should be present "Email, First name"
-    And the following fields should be present "Family name, Photo, Country of origin, Site language, Professional domain, Business title"
+    And the following fields should be present "Family name, Photo, Country of origin, Professional domain, Business title"
     And the following fields should be present "Facebook, X, LinkedIn, GitHub, SlideShare, Youtube, Vimeo"
     And the following fields should not be present "Time zone"
-    And the "Site language" select should contain the following options:
-      | Bulgarian  |
-      | Croatian   |
-      | Czech      |
-      | Danish     |
-      | Dutch      |
-      | English    |
-      | Estonian   |
-      | Finnish    |
-      | French     |
-      | German     |
-      | Greek      |
-      | Hungarian  |
-      | Irish      |
-      | Italian    |
-      | Latvian    |
-      | Lithuanian |
-      | Maltese    |
-      | Polish     |
-      | Portuguese |
-      | Romanian   |
-      | Slovak     |
-      | Slovenian  |
-      | Spanish    |
-      | Swedish    |
     And I should see the text "Username"
     And I should see the text "Leonardo Da Vinci"
     And I fill in "First name" with "Leoke"

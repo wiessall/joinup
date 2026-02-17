@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Hook\BeforeScenario;
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
@@ -27,9 +31,8 @@ class JoinupLogContext extends RawDrupalContext {
 
   /**
    * Prepare clean-up data.
-   *
-   * @BeforeScenario
    */
+  #[BeforeScenario]
   public function prepareData(): void {
     $this->timestamp = time();
   }
@@ -39,9 +42,8 @@ class JoinupLogContext extends RawDrupalContext {
    *
    * @param string $group
    *   The name of the group.
-   *
-   * @When I go to the actions log report for :group
    */
+  #[When('I go to the actions log report for :group')]
   public function visitActionsLogReport(string $group): void {
     $entityGroup = $this->getEntityByLabel('node', $group);
     $url = Url::fromRoute('view.actions_log.logs', [
@@ -55,9 +57,8 @@ class JoinupLogContext extends RawDrupalContext {
    *
    * @param string $message
    *   Message.
-   *
-   * @Then Log entry with the message :message should exist.
    */
+  #[Then('Log entry with the message :message should exist.')]
   public function joinupLogEntryShouldExist(string $message): void {
     $count = \Drupal::entityQuery('joinup_log')
       ->accessCheck(FALSE)
@@ -76,9 +77,8 @@ class JoinupLogContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The joinup log data.
-   *
-   * @Given the following joinup log:
    */
+  #[Given('the following joinup log:')]
   public function createJoinupLog(TableNode $table): void {
     $storage = \Drupal::entityTypeManager()->getStorage('joinup_log');
     foreach ($table->getColumnsHash() as $values) {

@@ -1,16 +1,3 @@
-joinup_assessment.moderation:
-  path: /collection/assessments/assessment-reports/questionnaire/{submission}/moderate
-  defaults:
-    _form: Drupal\joinup_assessment\Form\AssessmentModerationForm
-  requirements:
-    _custom_access: Drupal\joinup_assessment\Form\AssessmentModerationForm::access
-  options:
-    parameters:
-      submission:
-        type: entity:webform_submission
-        bundle:
-          - assessment
-
 joinup_assessment.edit:
   path: /collection/assessments/assessment-reports/questionnaire/{webform_submission}/edit
   defaults:
