@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Drupal\Tests\joinup_oss_catalogue\Functional;
+
 use Drupal\Tests\eu_oss_catalogue\Functional\DevelopersItaliaFetchTestBase;
 
 /**
