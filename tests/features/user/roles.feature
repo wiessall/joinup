@@ -48,6 +48,7 @@ Feature: User role management
       | Developer                  |
       | Licence manager            |
       | Moderator                  |
+      | OSS Catalogue Manager      |
       | Translator                 |
       | Interoperability validator |
 
