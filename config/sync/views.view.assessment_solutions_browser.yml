@@ -2,10 +2,18 @@ uuid: 77eeb9cd-8c50-432e-b3d2-2c60803a98e2
 langcode: en
 status: true
 dependencies:
+  config:
+    - field.storage.node.abstract
+    - flag.flag.interoperability
+    - node.type.solution
+    - taxonomy.vocabulary.domain
   module:
+    - better_exposed_filters
     - entity_browser
+    - flag
     - node
-    - og
+    - smart_trim
+    - taxonomy
     - user
 id: assessment_solutions_browser
 label: 'Assessment solutions browser'
@@ -138,15 +146,15 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        body:
-          id: body
-          table: node__body
-          field: body
+        abstract:
+          id: abstract
+          table: node__abstract
+          field: abstract
           relationship: none
           group_type: group
           admin_label: ''
           plugin_id: field
-          label: Description
+          label: Abstract
           exclude: false
           alter:
             alter_text: false
@@ -165,14 +173,14 @@ display:
             suffix: ''
             target: ''
             nl2br: false
-            max_length: 100
+            max_length: 0
             word_boundary: true
             ellipsis: true
             more_link: false
             more_link_text: ''
             more_link_path: ''
-            strip_tags: true
-            trim: true
+            strip_tags: false
+            trim: false
             preserve_tags: ''
             html: false
           element_type: ''
@@ -188,9 +196,24 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: value
-          type: text_trimmed
+          type: smart_trim
           settings:
-            trim_length: 100
+            trim_length: 600
+            trim_type: chars
+            trim_suffix: ''
+            wrap_output: false
+            wrap_class: trimmed
+            more:
+              display_link: true
+              target_blank: true
+              link_trim_only: false
+              class: more-link
+              text: More
+              aria_label: 'Read more about [node:title]'
+            trim_options:
+              text: true
+              trim_zero: false
+              replace_tokens: false
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -224,15 +247,49 @@ display:
             offset_label: Offset
           quantity: 9
       exposed_form:
-        type: basic
+        type: bef
         options:
           submit_button: Search
-          reset_button: true
+          reset_button: false
           reset_button_label: Reset
           exposed_sorts_label: 'Sort by'
           expose_sort_order: true
           sort_asc_label: Asc
           sort_desc_label: Desc
+          text_input_required: 'Select any filter and click on Apply to see results'
+          text_input_required_format: content_editor
+          bef:
+            general:
+              autosubmit: true
+              autosubmit_exclude_textfield: false
+              autosubmit_textfield_delay: 500
+              autosubmit_textfield_minimum_length: 3
+              autosubmit_hide: false
+              input_required: false
+              allow_secondary: false
+              secondary_label: 'Advanced options'
+              secondary_open: false
+              reset_button_always_show: false
+            filter:
+              flagged:
+                plugin_id: default
+                advanced:
+                  sort_options: false
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  is_secondary: false
+                  hide_label: false
+              title:
+                plugin_id: default
+                advanced:
+                  placeholder_text: ''
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  is_secondary: false
+                  hide_label: false
       access:
         type: perm
         options:
@@ -253,19 +310,6 @@ display:
           content: 'No solutions found matching your criteria.'
           tokenize: false
       sorts:
-        og_audience_target_id:
-          id: og_audience_target_id
-          table: node__og_audience
-          field: og_audience_target_id
-          relationship: none
-          group_type: count
-          admin_label: 'IES First'
-          plugin_id: standard
-          order: DESC
-          expose:
-            label: ''
-            field_identifier: ''
-          exposed: false
         title:
           id: title
           table: node_field_data
@@ -341,6 +385,110 @@ display:
             remember_roles:
               authenticated: authenticated
           is_grouped: false
+        flagged:
+          id: flagged
+          table: flagging
+          field: flagged
+          relationship: flag_relationship
+          group_type: group
+          admin_label: ''
+          entity_type: flagging
+          plugin_id: flag_filter
+          operator: '='
+          value: All
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: Interoperable
+            description: ''
+            use_operator: false
+            operator: flagged_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: interoperable
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              interoperability_validator: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+              translator: '0'
+              oss_catalogue_manager: '0'
+              assessment_reporter: '0'
+              assessment_moderator: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        domain_target_id:
+          id: domain_target_id
+          table: node__domain
+          field: domain_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: taxonomy_index_tid
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: domain_target_id_op
+            label: Domain
+            description: ''
+            use_operator: false
+            operator: domain_target_id_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: domain
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              interoperability_validator: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+              translator: '0'
+              oss_catalogue_manager: '0'
+              assessment_reporter: '0'
+              assessment_moderator: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          vid: domain
+          type: select
+          hierarchy: false
+          limit: true
+          error_message: true
         title:
           id: title
           table: node_field_data
@@ -424,33 +572,57 @@ display:
           distinct: true
           replica: false
           query_tags: {  }
-      relationships: {  }
+      relationships:
+        flag_relationship:
+          id: flag_relationship
+          table: node_field_data
+          field: flag_relationship
+          relationship: none
+          group_type: group
+          admin_label: Flags
+          entity_type: node
+          plugin_id: flag_relationship
+          required: false
+          flag: interoperability
+          user_scope: any
       use_ajax: true
       header: {  }
       footer: {  }
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
     cache_metadata:
-      max-age: 0
+      max-age: -1
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url
         - url.query_args
+        - 'user.node_grants:view'
         - user.permissions
-      tags: {  }
+      tags:
+        - 'config:field.storage.node.abstract'
+        - flag.flag.interoperability
   entity_browser_1:
     id: entity_browser_1
     display_title: 'Entity browser'
     display_plugin: entity_browser
     position: 1
     display_options:
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
     cache_metadata:
-      max-age: 0
+      max-age: -1
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url
         - url.query_args
+        - 'user.node_grants:view'
         - user.permissions
-      tags: {  }
+      tags:
+        - 'config:field.storage.node.abstract'
+        - flag.flag.interoperability
