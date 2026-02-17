@@ -12,10 +12,67 @@ namespace Drupal\Tests\eu_oss_catalogue\Functional;
 class DevelopersItaliaFetchTest extends DevelopersItaliaFetchTestBase {
 
   /**
-   * @covers
+   * Tests the Developers Italia fetch, creation, and update process.
    */
   public function testDevelopersItalia(): void {
     $this->assertDevelopersItaliaFetch();
+
+    $this->assertOssSolution('GitHub solution 1', 'en');
+    $this->assertOssContractor('ACME Ltd');
+    $this->assertOssContractor('Das Auto GmbH');
+    $this->assertOssContact('Peter Gregory');
+
+    $this->assertOssSolution('Project 1.1', 'it');
+    $this->assertOssContact('Big Brother');
+
+    $this->assertOssSolution('Project 1.2', 'de');
+    $this->assertOssContact('John Doe');
+    $this->assertOssContact('Jane Roe');
+
+    $this->assertOssSolution('Project 1.4', 'de');
+    $this->assertOssSolution('Project 1', 'de');
+
+    $createdSolutions = [
+      'GitHub solution 1',
+      'Project 1.1',
+      'Project 1.2',
+      'Project 1',
+    ];
+    foreach ($createdSolutions as $name) {
+      $this->assertCount(
+        1,
+        $this->getLogEntries('Solution @solution was created.', serialize(['@solution' => $name])),
+        "Creation log entry for $name",
+      );
+    }
+
+    $this->assertCount(
+      2,
+      $this->getLogEntries('OSS solution of project @project-name (@project-url) fetched from @provider cannot be parsed, created or saved.'),
+    );
+  }
+
+  /**
+   * Tests that a solution is updated when re-fetched from a new provider.
+   */
+  public function testUpdateFromNewProvider(): void {
+    $this->assertDevelopersItaliaFetch();
+
+    // Re-run the process and update one solution from a new source-provider.
+    $this->fetchSolutions('testing_provider', 7);
+
+    $this->assertFalse($this->getNodeByTitle('GitHub solution 1'));
+    $updatedSolution = $this->getNodeByTitle('GitHub solution 1 (updated)', TRUE);
+    $this->assertSame('3.0.0', $updatedSolution->get('oss_software_version')->value);
+    $this->assertTrue($updatedSolution->get('oss_maintenance_contractors')->isEmpty());
+    $this->assertTrue($updatedSolution->get('oss_maintenance_contacts')->isEmpty());
+    $this->assertSame('UviES-yJZ_QF-Xp_Ivd4RwxVno_qG_8nutZOqff3Vy0', $updatedSolution->get('oss_source_hash')->value);
+    // Assert that the provider has been added to the list of providers.
+    $this->assertSame(2, $updatedSolution->get('oss_source')->count());
+    $expectedProviders = ['developers_italia', 'testing_provider'];
+    $this->assertSame($expectedProviders, array_map(fn (array $item): string => $item['plugin_id'], $updatedSolution->get('oss_source')->getValue()));
+
+    $this->assertStringContainsString('Update, because data has been changed in "Testing provider" source/catalogue', $updatedSolution->getRevisionLogMessage(), 'Update revision message for GitHub solution 1');
   }
 
   /**
