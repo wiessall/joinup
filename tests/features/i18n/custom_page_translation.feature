@@ -19,7 +19,7 @@ Feature: Translating a custom page.
 
     And I fill in "Title" with "Page personnalisée de test de traduction"
     And I fill in "Abstract" with "Un court résumé pour les tests"
-    And I press "Update"
+    And I press "Save"
 
     # Verify the translation is visible on the French page.
     Then I go to the "Translation Test Custom Page" custom_page
@@ -44,8 +44,10 @@ Feature: Translating a custom page.
 
     And I fill in "Title" with "Page paragraphe texte"
     And I fill in "Abstract" with "Résumé du paragraphe texte"
+    And I edit from the "Custom page body" form field the paragraph in position 1
     And I enter "Ceci est un paragraphe de texte de test." in the "Body" wysiwyg editor
-    And I press "Update"
+    And I save the layout paragraphs dialog
+    And I press "Save"
 
     # Verify the paragraph field translation is visible on the French page.
     Then I go to the "Text Paragraph Page" custom_page
@@ -71,8 +73,10 @@ Feature: Translating a custom page.
 
     And I fill in "Title" with "Page paragraphe titre"
     And I fill in "Abstract" with "Résumé du paragraphe titre"
+    And I edit from the "Custom page body" form field the paragraph in position 1
     And I fill in "Heading text" with "Paragraphe de titre de test"
-    And I press "Update"
+    And I save the layout paragraphs dialog
+    And I press "Save"
 
     # Verify the paragraph field translation is visible on the French page.
     Then I go to the "Heading Paragraph Page" custom_page
@@ -97,8 +101,10 @@ Feature: Translating a custom page.
 
     And I fill in "Title" with "Page paragraphe citation"
     And I fill in "Abstract" with "Résumé du paragraphe citation"
+    And I edit from the "Custom page body" form field the paragraph in position 1
     And I fill in "Quote" with "C'est un petit pas pour l'homme, un bond de géant pour l'humanité."
-    And I press "Update"
+    And I save the layout paragraphs dialog
+    And I press "Save"
 
     # Verify the paragraph field translation is visible on the French page.
     Then I go to the "Quote Paragraph Page" custom_page
@@ -124,8 +130,10 @@ Feature: Translating a custom page.
 
     And I fill in "Title" with "Page paragraphe carrousel"
     And I fill in "Abstract" with "Résumé du paragraphe carrousel"
+    And I edit from the "Custom page body" form field the paragraph in position 1
     And I fill in "Heading" with "Titre du carrousel"
-    And I press "Update"
+    And I save the layout paragraphs dialog
+    And I press "Save"
 
     # Verify the paragraph field translation is visible on the French page.
     Then I go to the "Carousel Paragraph Page" custom_page
