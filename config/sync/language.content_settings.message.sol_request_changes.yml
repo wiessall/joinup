@@ -1,0 +1,11 @@
+uuid: 530bb199-7c51-49fa-bd06-67f885b362e0
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.sol_request_changes
+id: message.sol_request_changes
+target_entity_type_id: message
+target_bundle: sol_request_changes
+default_langcode: site_default
+language_alterable: false

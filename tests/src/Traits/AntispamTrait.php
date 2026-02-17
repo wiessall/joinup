@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Traits;
 
+use Behat\Hook\BeforeScenario;
+use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\ConfigContext;
 
 /**
@@ -16,9 +18,8 @@ trait AntispamTrait {
    *
    * @throws \Exception
    *   When the expectancy is not met.
-   *
-   * @Then the form is protected by Antibot
    */
+  #[Then('the form is protected by Antibot')]
   public function assertFormIsProtectedByAntibot(): void {
     $session = $this->getSession();
 
@@ -36,9 +37,8 @@ trait AntispamTrait {
    *
    * @throws \Exception
    *   When the expectancy is not met.
-   *
-   * @Then the form is protected by Honeypot
    */
+  #[Then('the form is protected by Honeypot')]
   public function assertFormIsProtectedByHoneypot(): void {
     $session = $this->getSession();
 
@@ -50,9 +50,8 @@ trait AntispamTrait {
 
   /**
    * Disable anti-spam for all scenarios unless tagged with @antispam.
-   *
-   * @BeforeScenario ~@antispam&&@api
    */
+  #[BeforeScenario('~@antispam&&@api')]
   public function disableAntispamBeforeScenarioStarts(): void {
     $config_context = $this->getContext(ConfigContext::class);
     $config_context->setConfig('antibot.settings', 'form_ids', NULL);

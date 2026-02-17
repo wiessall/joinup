@@ -1,0 +1,29 @@
+assessments.type.*:
+  type: bundle_entity_with_plural_labels
+  label: 'Assessment type config'
+  constraints:
+    FullyValidatable: ~
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
+
+assessments.type.*.third_party.rdf_sync:
+  type: rdf_sync.bundle_mapping
+
+paragraphs.paragraphs_type.*.third_party.rdf_sync:
+  type: rdf_sync.bundle_mapping
+
+field.widget.settings.conditional_link:
+  type: field.widget.settings.link_default
+  label: Link with confirmation widget settings
+  mapping:
+    condition:
+      type: string
+      label: Condition
+    default_option:
+      type: string
+      label: Default option

@@ -1,0 +1,13 @@
+uuid: 01c55129-e450-47cd-8b71-e30fc037e963
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.legal_type
+id: taxonomy_term.legal_type
+targetEntityType: taxonomy_term
+bundle: legal_type
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

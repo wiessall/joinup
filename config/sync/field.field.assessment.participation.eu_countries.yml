@@ -1,0 +1,26 @@
+uuid: 9662f576-88f8-4536-936e-04a7a70e7e10
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.participation
+    - field.storage.assessment.eu_countries
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: assessment.participation.eu_countries
+field_name: eu_countries
+entity_type: assessment
+bundle: participation
+label: 'Check this box to select all European Union countries'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: '1'
+  off_label: '0'
+field_type: boolean
