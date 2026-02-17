@@ -90,14 +90,14 @@ paths:
                       affects:
                         - name: Digital Monitoring Unit
                           thematic_area:
-                            - digital_and_innovation_services
-                            - environment_and_energy
+                            - general_public_services
+                            - environmental_protection
                           country:
                             - BE
                             - NL
                         - name: Training Centre
                           thematic_area:
-                            - education_and_research
+                            - education
                           country:
                             - BE
                       has_participation:
@@ -174,14 +174,14 @@ paths:
                         affects:
                           - name: "Digital Monitoring Unit"
                             thematic_area:
-                              - "digital_and_innovation_services"
-                              - "environment_and_energy"
+                              - "general_public_services"
+                              - "environmental_protection"
                             country:
                               - "BE"
                               - "NL"
                           - name: "Training Centre"
                             thematic_area:
-                              - "education_and_research"
+                              - "education"
                             country:
                               - "BE"
                         has_participation:
@@ -702,16 +702,16 @@ components:
           items:
             type: string
             enum:
-              - core_governance_and_administration
-              - digital_and_innovation_services
-              - economy_and_employment
-              - education_and_research
-              - environment_and_energy
-              - health_and_wellbeing
-              - international_and_regional_cooperation
-              - security_justice_and_emergency_services
-              - social_and_community_services
-              - transport_and_infrastructure
+              - general_public_services
+              - defence
+              - public_order_and_safety
+              - economic_affairs
+              - environmental_protection
+              - housing_and_community_amenities
+              - health
+              - recreation_culture_and_religion
+              - education
+              - social_protection
         country:
           type: array
           uniqueItems: true
