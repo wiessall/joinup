@@ -190,11 +190,16 @@ class WebformSubmissionMigrator {
     if ($submission->isDraft()) {
       $state = 'draft';
     }
+    elseif ($submission->isCompleted()) {
+      $state = 'published';
+    }
     elseif ($submission->isLocked()) {
       $state = 'review';
     }
     else {
-      $state = 'published';
+      $this->logger->notice('Skipping webform submission @sid: unknown submission state.', [
+        '@sid' => $submission->id(),
+      ]);
     }
 
     $reportValues = [
