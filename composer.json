@@ -211,7 +211,8 @@
     "config": {
         "sort-packages": true,
         "platform": {
-            "php": "8.3"
+            "php": "8.3",
+            "ext-ffi": "8.3"
         },
         "allow-plugins": {
             "composer/installers": true,
