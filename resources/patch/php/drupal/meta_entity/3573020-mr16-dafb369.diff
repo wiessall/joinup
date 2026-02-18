@@ -1,0 +1,866 @@
+diff --git a/meta_entity.install b/meta_entity.install
+index 3ce22ef64f1cb0afbe34d8839b39e543b3f10a25..451842677f3e71d5ab0fd08fd60108285e2af1d0 100644
+--- a/meta_entity.install
++++ b/meta_entity.install
+@@ -8,7 +8,27 @@
+ declare(strict_types=1);
+ 
+ use Drupal\Core\Config\Entity\ConfigEntityUpdater;
++use Drupal\Core\Entity\EntityDefinitionUpdateManagerInterface;
++use Drupal\Core\Field\BaseFieldDefinition;
++use Drupal\Core\Language\LanguageInterface;
+ use Drupal\meta_entity\Entity\MetaEntityTypeInterface;
++use Drupal\views\Views;
++
++/**
++ * Implements hook_update_dependencies().
++ */
++function meta_entity_update_dependencies(): array {
++  return [
++    'meta_entity' => [
++      8003 => [
++        'meta_entity' => 8002,
++      ],
++      8004 => [
++        'meta_entity' => 8003,
++      ],
++    ],
++  ];
++}
+ 
+ /**
+  * Allow meta entity auto-creation and auto-deletion.
+@@ -28,3 +48,80 @@ function meta_entity_update_8001(array &$sandbox): void {
+     return TRUE;
+   });
+ }
++
++/**
++ * Install new base fields for meta entities to make them translatable.
++ */
++function meta_entity_update_8002(): void {
++  $entityDefinitionUpdateManager = \Drupal::service('entity.definition_update_manager');
++  assert($entityDefinitionUpdateManager instanceof EntityDefinitionUpdateManagerInterface);
++  $metaFieldStorageDefinitions = \Drupal::service('entity_field.manager')->getFieldStorageDefinitions('meta_entity');
++
++  $defaultLangcodeDefinition = $metaFieldStorageDefinitions['default_langcode'];
++  assert($defaultLangcodeDefinition instanceof BaseFieldDefinition);
++  $defaultLangcodeDefinition->setInitialValue(TRUE);
++  $entityDefinitionUpdateManager->installFieldStorageDefinition('default_langcode', 'meta_entity', 'meta_entity', $defaultLangcodeDefinition);
++
++  $langcodeDefinition = $metaFieldStorageDefinitions['langcode'];
++  assert($langcodeDefinition instanceof BaseFieldDefinition);
++  // By default, set language code to undefined since this is how field config
++  // values are stored.
++  $langcodeDefinition->setInitialValue(LanguageInterface::LANGCODE_NOT_SPECIFIED);
++  $entityDefinitionUpdateManager->installFieldStorageDefinition('langcode', 'meta_entity', 'meta_entity', $langcodeDefinition);
++}
++
++/**
++ * Updates storage schema of meta entities.
++ */
++function meta_entity_update_8003(array &$sandbox) {
++  if (!isset($sandbox['last_percentage'])) {
++    $sandbox['last_percentage'] = 0;
++  }
++
++  $entityDefinitionUpdateManager = \Drupal::service('entity.definition_update_manager');
++  assert($entityDefinitionUpdateManager instanceof EntityDefinitionUpdateManagerInterface);
++  $entityTypeManager = \Drupal::entityTypeManager();
++  $metaFieldStorageDefinitions = \Drupal::service('entity_field.manager')->getFieldStorageDefinitions('meta_entity');
++
++  $entityDefinitionUpdateManager->updateFieldableEntityType($entityTypeManager->getDefinition('meta_entity'), $metaFieldStorageDefinitions, $sandbox);
++
++  $percentage = floor($sandbox['#finished'] * 100);
++  if ($percentage && $sandbox['last_percentage'] <> $percentage) {
++    $sandbox['last_percentage'] = $percentage;
++    return t('Meta entity schema conversion progress: @percentage%', ['@percentage' => $percentage]);
++  }
++}
++
++/**
++ * Update Views' view displays to match meta entity listings to the new schema.
++ */
++function meta_entity_update_8004(): void {
++  $componentTypes = ['fields', 'sorts', 'filters', 'arguments', 'relationships'];
++  $views = Views::getAllViews();
++  foreach ($views as $view) {
++    $displays = $view->get('display');
++    $baseIsMetaEntity = $view->get('base_table') === 'meta_entity';
++    $saveIsNeeded = $baseIsMetaEntity;
++    if ($baseIsMetaEntity) {
++      $view->set('base_table', 'meta_entity_field_data');
++    }
++    foreach ($displays as $displayId => $displayData) {
++      $displayOptions = $displayData['display_options'];
++      foreach ($componentTypes as $componentType) {
++        if (!array_key_exists($componentType, $displayOptions)) {
++          continue;
++        }
++        foreach ($displayOptions[$componentType] as $component => $componentData) {
++          if (!array_key_exists('table', $componentData) || $componentData['table'] !== 'meta_entity') {
++            continue;
++          }
++          $displays[$displayId]['display_options'][$componentType][$component]['table'] = 'meta_entity_field_data';
++          $saveIsNeeded = TRUE;
++        }
++      }
++    }
++    if ($saveIsNeeded) {
++      $view->set('display', $displays)->save();
++    }
++  }
++}
+diff --git a/meta_entity.post_update.php b/meta_entity.post_update.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..a70e458536dd36627bb9ea71b972bcc0bfca56b8
+--- /dev/null
++++ b/meta_entity.post_update.php
+@@ -0,0 +1,75 @@
++<?php
++
++/**
++ * @file
++ * Post update function for Meta Entity.
++ */
++
++declare(strict_types=1);
++
++use Drupal\Core\Entity\TranslatableInterface;
++use Drupal\Core\Language\LanguageInterface;
++use Drupal\Core\Site\Settings;
++
++/**
++ * Updates meta entities to make them match their target entity language.
++ */
++function meta_entity_post_update_8002(array &$sandbox) {
++  $metaEntityStorage = \Drupal::entityTypeManager()->getStorage('meta_entity');
++  $metaEntityType = \Drupal::entityTypeManager()->getDefinition('meta_entity');
++  $db = \Drupal::database();
++  if (!isset($sandbox['to_be_processed'])) {
++    $sandbox['to_be_processed'] = $metaEntityStorage->getQuery()->accessCheck(FALSE)->execute();
++    natsort($sandbox['to_be_processed']);
++    $sandbox['count_total'] = count($sandbox['to_be_processed']);
++    $sandbox['count_processed'] = 0;
++    $sandbox['last_percentage'] = 0;
++    $sandbox['entity_tables'] = array_filter([
++      $metaEntityStorage->getBaseTable(),
++      $metaEntityStorage->getDataTable(),
++      $metaEntityStorage->getRevisionTable(),
++      $metaEntityStorage->getRevisionDataTable(),
++    ]);
++    $sandbox['field_tables'] = array_diff(
++      $metaEntityStorage->getTableMapping()->getTableNames(),
++      $sandbox['entity_tables'],
++    );
++  }
++
++  $idsToProcess = array_splice($sandbox['to_be_processed'], 0, Settings::get('entity_update_batch_size') ?? 50);
++  $updatesPerLangcode = [];
++
++  foreach ($metaEntityStorage->loadMultiple($idsToProcess) as $metaEntity) {
++    $target = $metaEntity->get('target')->entity;
++    $langcode = $target instanceof TranslatableInterface
++      ? $target->language()->getId()
++      : LanguageInterface::LANGCODE_NOT_APPLICABLE;
++    $updatesPerLangcode[$langcode][] = $metaEntity->id();
++  }
++
++  foreach ($updatesPerLangcode as $langcode => $metaIds) {
++    foreach ($sandbox['entity_tables'] as $table) {
++      $db->update($table)
++        ->fields([$metaEntityType->getKey('langcode') => $langcode])
++        ->condition($metaEntityType->getKey('id'), $metaIds, 'IN')
++        ->execute();
++    }
++
++    foreach ($sandbox['field_tables'] as $table) {
++      $db->update($table)
++        ->fields(['langcode' => $langcode])
++        ->condition('entity_id', $metaIds, 'IN')
++        ->execute();
++    }
++  }
++  $sandbox['count_processed'] += count($idsToProcess);
++  $sandbox['#finished'] = $sandbox['count_processed'] / $sandbox['count_total'];
++  $percentage = floor($sandbox['#finished'] * 100);
++
++  if ($percentage && $sandbox['last_percentage'] <> $percentage) {
++    $sandbox['last_percentage'] = $percentage;
++    return sprintf('Meta entity language code update progress: %s%%', $percentage);
++  }
++
++  $d = 1;
++}
+diff --git a/src/Entity/MetaEntity.php b/src/Entity/MetaEntity.php
+index 993face808812b34716700bdc0f23e89e5940185..b79b68b8fa2936ce6f8538c510ad4211095dffbd 100644
+--- a/src/Entity/MetaEntity.php
++++ b/src/Entity/MetaEntity.php
+@@ -34,12 +34,14 @@ use Drupal\Core\Field\BaseFieldDefinition;
+  *     "access" = "Drupal\meta_entity\MetaEntityAccessControlHandler",
+  *   },
+  *   base_table = "meta_entity",
++ *   data_table = "meta_entity_field_data",
+  *   admin_permission = "administer meta entity",
+  *   entity_keys = {
+  *     "id" = "id",
+  *     "bundle" = "type",
+  *     "label" = "label",
+  *     "uuid" = "uuid",
++ *     "langcode" = "langcode",
+  *   },
+  *   links = {
+  *     "add-form" = "/admin/content/meta-entity/add/{meta_entity_type}",
+@@ -51,6 +53,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
+  *   },
+  *   bundle_entity_type = "meta_entity_type",
+  *   field_ui_base_route = "entity.meta_entity_type.edit_form",
++ *   translatable = TRUE,
+  * )
+  */
+ class MetaEntity extends ContentEntityBase implements MetaEntityInterface {
+@@ -96,6 +99,7 @@ class MetaEntity extends ContentEntityBase implements MetaEntityInterface {
+     $fields['created'] = BaseFieldDefinition::create('created')
+       ->setLabel(t('Created on'))
+       ->setDescription(t('The time that the meta entity was created.'))
++      ->setTranslatable(TRUE)
+       ->setDisplayOptions('view', [
+         'label' => 'inline',
+         'type' => 'timestamp',
+@@ -106,6 +110,7 @@ class MetaEntity extends ContentEntityBase implements MetaEntityInterface {
+     $fields['changed'] = BaseFieldDefinition::create('changed')
+       ->setLabel(t('Changed'))
+       ->setDescription(t('The time that the meta entity was last edited.'))
++      ->setTranslatable(TRUE)
+       ->setDisplayOptions('view', [
+         'label' => 'inline',
+         'type' => 'timestamp',
+diff --git a/src/Entity/MetaEntityInterface.php b/src/Entity/MetaEntityInterface.php
+index 8c780117c116e8090bb3aec67d2cb0e40a2c417e..c37e3ed96910fdce5820696fb1102add2d92afb0 100644
+--- a/src/Entity/MetaEntityInterface.php
++++ b/src/Entity/MetaEntityInterface.php
+@@ -5,11 +5,12 @@ declare(strict_types=1);
+ namespace Drupal\meta_entity\Entity;
+ 
+ use Drupal\Core\Entity\ContentEntityInterface;
++use Drupal\Core\Entity\EntityChangedInterface;
+ 
+ /**
+  * Provides an interface for 'meta_entity' entities.
+  */
+-interface MetaEntityInterface extends ContentEntityInterface {
++interface MetaEntityInterface extends ContentEntityInterface, EntityChangedInterface {
+ 
+   /**
+    * Gets the meta entity creation timestamp.
+diff --git a/src/Form/MetaEntityForm.php b/src/Form/MetaEntityForm.php
+index e545f95c12ea0b2c6bda94f49da79b66890fdb5d..c882fa11688bd0e77781476df94f3131a8cc113d 100644
+--- a/src/Form/MetaEntityForm.php
++++ b/src/Form/MetaEntityForm.php
+@@ -64,9 +64,19 @@ class MetaEntityForm extends ContentEntityForm {
+ 
+     if ($result === SAVED_NEW) {
+       $this->logger('meta_entity')->notice('Created meta new entity %label', $logger_arguments);
++      $this->messenger()->addStatus($this->t('Created meta new entity %label', $logger_arguments));
+     }
+     else {
+       $this->logger('meta_entity')->notice('Updated %label meta entity meta.', $logger_arguments);
++      $this->messenger()->addStatus($this->t('Updated %label meta entity meta.', $logger_arguments));
++    }
++
++    if ($form_state->getRedirect() === NULL && $entity->access('view')) {
++      $form_state->setRedirect(
++        'entity.meta_entity.canonical',
++        ['meta_entity' => $entity->id()],
++        ['language' => $entity->language()]
++      );
+     }
+ 
+     return $result;
+diff --git a/tests/fixtures/translatable-update/cache_meta_entity.repository.php b/tests/fixtures/translatable-update/cache_meta_entity.repository.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..977ee6fc1b53d503d9acfc825aca9e778a627258
+--- /dev/null
++++ b/tests/fixtures/translatable-update/cache_meta_entity.repository.php
+@@ -0,0 +1,81 @@
++<?php
++// phpcs:ignoreFile
++/**
++ * @file
++ * A database agnostic dump for testing purposes.
++ *
++ * Generated by Smart DB Tools.
++ */
++
++use Drupal\Core\Database\Database;
++
++$connection = Database::getConnection();
++// Ensure any tables with a serial column with a value of 0 are created as
++// expected.
++if ($connection->databaseType() === 'mysql') {
++  $sql_mode = $connection->query("SELECT @@sql_mode;")->fetchField();
++  $connection->query("SET sql_mode = '$sql_mode,NO_AUTO_VALUE_ON_ZERO'");
++}
++
++$connection->schema()->createTable('cache_meta_entity.repository', [
++  'fields' => [
++    'cid' => [
++      'type' => 'varchar_ascii',
++      'not null' => TRUE,
++      'length' => '255',
++      'default' => '',
++      'binary' => TRUE,
++    ],
++    'data' => [
++      'type' => 'blob',
++      'not null' => FALSE,
++      'size' => 'big',
++    ],
++    'expire' => [
++      'type' => 'int',
++      'not null' => TRUE,
++      'size' => 'big',
++      'default' => '0',
++    ],
++    'created' => [
++      'type' => 'numeric',
++      'not null' => TRUE,
++      'precision' => '14',
++      'scale' => '3',
++      'default' => '0.000',
++    ],
++    'serialized' => [
++      'type' => 'int',
++      'not null' => TRUE,
++      'size' => 'small',
++      'default' => '0',
++    ],
++    'tags' => [
++      'type' => 'text',
++      'not null' => FALSE,
++      'size' => 'big',
++    ],
++    'checksum' => [
++      'type' => 'varchar_ascii',
++      'not null' => TRUE,
++      'length' => '255',
++    ],
++  ],
++  'primary key' => [
++    'cid',
++  ],
++  'indexes' => [
++    'expire' => [
++      'expire',
++    ],
++    'created' => [
++      'created',
++    ],
++  ],
++  'mysql_character_set' => 'utf8mb4',
++]);
++
++// Reset the SQL mode.
++if ($connection->databaseType() === 'mysql') {
++  $connection->query("SET sql_mode = '$sql_mode'");
++}
+diff --git a/tests/fixtures/translatable-update/config.php b/tests/fixtures/translatable-update/config.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..55d64e27eab032adad45db5df8a02c06a87c89a5
+--- /dev/null
++++ b/tests/fixtures/translatable-update/config.php
+@@ -0,0 +1,45 @@
++<?php
++// phpcs:ignoreFile
++/**
++ * @file
++ * A database agnostic dump for testing purposes.
++ *
++ * Initially generated by Smart DB Tools, then it was customized.
++ */
++
++use Drupal\Core\Database\Database;
++
++$connection = Database::getConnection();
++
++$connection->insert('config')
++->fields([
++  'collection',
++  'name',
++  'data',
++])
++->values([
++  'collection' => '',
++  'name' => 'core.entity_form_display.meta_entity.example.default',
++  'data' => 'a:10:{s:4:"uuid";s:36:"10808c8f-0a7a-4ad7-a709-b93f724de14d";s:8:"langcode";s:2:"en";s:6:"status";b:1;s:12:"dependencies";a:2:{s:6:"config";a:2:{i:0;s:52:"field.field.meta_entity.example.field_special_number";i:1;s:24:"meta_entity.type.example";}s:6:"module";a:1:{i:0;s:24:"dynamic_entity_reference";}}s:2:"id";s:27:"meta_entity.example.default";s:16:"targetEntityType";s:11:"meta_entity";s:6:"bundle";s:7:"example";s:4:"mode";s:7:"default";s:7:"content";a:3:{s:20:"field_special_number";a:5:{s:4:"type";s:6:"number";s:6:"weight";i:-4;s:6:"region";s:7:"content";s:8:"settings";a:1:{s:11:"placeholder";s:0:"";}s:20:"third_party_settings";a:0:{}}s:5:"label";a:5:{s:4:"type";s:16:"string_textfield";s:6:"weight";i:-5;s:6:"region";s:7:"content";s:8:"settings";a:2:{s:4:"size";i:60;s:11:"placeholder";s:0:"";}s:20:"third_party_settings";a:0:{}}s:6:"target";a:5:{s:4:"type";s:32:"dynamic_entity_reference_default";s:6:"weight";i:0;s:6:"region";s:7:"content";s:8:"settings";a:4:{s:14:"match_operator";s:8:"CONTAINS";s:11:"match_limit";i:10;s:4:"size";i:40;s:11:"placeholder";s:0:"";}s:20:"third_party_settings";a:0:{}}}s:6:"hidden";a:0:{}}',
++])
++->values([
++  'collection' => '',
++  'name' => 'core.entity_view_display.meta_entity.example.default',
++  'data' => 'a:10:{s:4:"uuid";s:36:"6b25b626-2507-4e92-b508-cfacf72cdf53";s:8:"langcode";s:2:"en";s:6:"status";b:1;s:12:"dependencies";a:1:{s:6:"config";a:2:{i:0;s:52:"field.field.meta_entity.example.field_special_number";i:1;s:24:"meta_entity.type.example";}}s:2:"id";s:27:"meta_entity.example.default";s:16:"targetEntityType";s:11:"meta_entity";s:6:"bundle";s:7:"example";s:4:"mode";s:7:"default";s:7:"content";a:4:{s:7:"changed";a:6:{s:4:"type";s:9:"timestamp";s:5:"label";s:6:"inline";s:8:"settings";a:5:{s:11:"date_format";s:6:"medium";s:18:"custom_date_format";s:0:"";s:8:"timezone";s:0:"";s:7:"tooltip";a:2:{s:11:"date_format";s:4:"long";s:18:"custom_date_format";s:0:"";}s:9:"time_diff";a:5:{s:7:"enabled";b:0;s:13:"future_format";s:15:"@interval hence";s:11:"past_format";s:13:"@interval ago";s:11:"granularity";i:2;s:7:"refresh";i:60;}}s:20:"third_party_settings";a:0:{}s:6:"weight";i:22;s:6:"region";s:7:"content";}s:7:"created";a:6:{s:4:"type";s:9:"timestamp";s:5:"label";s:6:"inline";s:8:"settings";a:5:{s:11:"date_format";s:6:"medium";s:18:"custom_date_format";s:0:"";s:8:"timezone";s:0:"";s:7:"tooltip";a:2:{s:11:"date_format";s:4:"long";s:18:"custom_date_format";s:0:"";}s:9:"time_diff";a:5:{s:7:"enabled";b:0;s:13:"future_format";s:15:"@interval hence";s:11:"past_format";s:13:"@interval ago";s:11:"granularity";i:2;s:7:"refresh";i:60;}}s:20:"third_party_settings";a:0:{}s:6:"weight";i:20;s:6:"region";s:7:"content";}s:20:"field_special_number";a:6:{s:4:"type";s:14:"number_integer";s:5:"label";s:5:"above";s:8:"settings";a:2:{s:18:"thousand_separator";s:0:"";s:13:"prefix_suffix";b:1;}s:20:"third_party_settings";a:0:{}s:6:"weight";i:23;s:6:"region";s:7:"content";}s:5:"label";a:6:{s:4:"type";s:6:"string";s:5:"label";s:6:"hidden";s:8:"settings";a:1:{s:14:"link_to_entity";b:0;}s:20:"third_party_settings";a:0:{}s:6:"weight";i:-5;s:6:"region";s:7:"content";}}s:6:"hidden";a:1:{s:6:"target";b:1;}}',
++])
++->values([
++  'collection' => '',
++  'name' => 'field.field.meta_entity.example.field_special_number',
++  'data' => 'a:16:{s:4:"uuid";s:36:"997be0e3-1415-46a4-8b71-5fee54bb9213";s:8:"langcode";s:2:"en";s:6:"status";b:1;s:12:"dependencies";a:1:{s:6:"config";a:2:{i:0;s:46:"field.storage.meta_entity.field_special_number";i:1;s:24:"meta_entity.type.example";}}s:2:"id";s:40:"meta_entity.example.field_special_number";s:10:"field_name";s:20:"field_special_number";s:11:"entity_type";s:11:"meta_entity";s:6:"bundle";s:7:"example";s:5:"label";s:39:"The special number for the content item";s:11:"description";s:0:"";s:8:"required";b:0;s:12:"translatable";b:0;s:13:"default_value";a:0:{}s:22:"default_value_callback";s:0:"";s:8:"settings";a:4:{s:3:"min";N;s:3:"max";N;s:6:"prefix";s:0:"";s:6:"suffix";s:0:"";}s:10:"field_type";s:7:"integer";}',
++])
++->values([
++  'collection' => '',
++  'name' => 'field.storage.meta_entity.field_special_number',
++  'data' => 'a:16:{s:4:"uuid";s:36:"a1d5e007-cedb-4c5b-9a6c-8ac25ce0d633";s:8:"langcode";s:2:"en";s:6:"status";b:1;s:12:"dependencies";a:1:{s:6:"module";a:1:{i:0;s:11:"meta_entity";}}s:2:"id";s:32:"meta_entity.field_special_number";s:10:"field_name";s:20:"field_special_number";s:11:"entity_type";s:11:"meta_entity";s:4:"type";s:7:"integer";s:8:"settings";a:2:{s:8:"unsigned";b:0;s:4:"size";s:6:"normal";}s:6:"module";s:4:"core";s:6:"locked";b:0;s:11:"cardinality";i:1;s:12:"translatable";b:1;s:7:"indexes";a:0:{}s:22:"persist_with_no_fields";b:0;s:14:"custom_storage";b:0;}',
++])
++->values([
++  'collection' => '',
++  'name' => 'meta_entity.type.example',
++  'data' => 'a:8:{s:4:"uuid";s:36:"ec9cc79e-6fbe-42d2-bff4-c015893f7b65";s:8:"langcode";s:2:"en";s:6:"status";b:1;s:12:"dependencies";a:2:{s:6:"config";a:2:{i:0;s:17:"node.type.article";i:1;s:27:"node.type.test_content_type";}s:6:"module";a:1:{i:0;s:4:"node";}}s:2:"id";s:7:"example";s:5:"label";s:7:"Example";s:11:"description";s:0:"";s:7:"mapping";a:1:{s:4:"node";a:2:{s:7:"article";a:2:{s:10:"field_name";s:0:"";s:11:"auto_create";b:1;}s:17:"test_content_type";a:2:{s:10:"field_name";s:0:"";s:11:"auto_create";b:0;}}}}',
++])
++->execute();
+diff --git a/tests/fixtures/translatable-update/key_value.php b/tests/fixtures/translatable-update/key_value.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..8aefd0fe9f88670e8b7b6f5e2d59b784aebd6586
+Binary files /dev/null and b/tests/fixtures/translatable-update/key_value.php differ
+diff --git a/tests/fixtures/translatable-update/meta_entity.php b/tests/fixtures/translatable-update/meta_entity.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..9318bed5afd9d9d13ed7219c172f3bccc5f9324b
+--- /dev/null
++++ b/tests/fixtures/translatable-update/meta_entity.php
+@@ -0,0 +1,111 @@
++<?php
++// phpcs:ignoreFile
++/**
++ * @file
++ * A database agnostic dump for testing purposes.
++ *
++ * Generated by Smart DB Tools.
++ */
++
++use Drupal\Core\Database\Database;
++
++$connection = Database::getConnection();
++// Ensure any tables with a serial column with a value of 0 are created as
++// expected.
++if ($connection->databaseType() === 'mysql') {
++  $sql_mode = $connection->query("SELECT @@sql_mode;")->fetchField();
++  $connection->query("SET sql_mode = '$sql_mode,NO_AUTO_VALUE_ON_ZERO'");
++}
++
++$connection->schema()->createTable('meta_entity', [
++  'fields' => [
++    'id' => [
++      'type' => 'serial',
++      'not null' => TRUE,
++      'size' => 'normal',
++      'unsigned' => TRUE,
++    ],
++    'type' => [
++      'type' => 'varchar_ascii',
++      'not null' => TRUE,
++      'length' => '32',
++    ],
++    'uuid' => [
++      'type' => 'varchar_ascii',
++      'not null' => TRUE,
++      'length' => '128',
++    ],
++    'label' => [
++      'type' => 'varchar',
++      'not null' => FALSE,
++      'length' => '512',
++    ],
++    'target__target_id' => [
++      'type' => 'int',
++      'not null' => FALSE,
++      'size' => 'normal',
++      'unsigned' => TRUE,
++    ],
++    'target__target_type' => [
++      'type' => 'varchar',
++      'not null' => FALSE,
++      'length' => '32',
++    ],
++    'created' => [
++      'type' => 'int',
++      'not null' => FALSE,
++      'size' => 'normal',
++    ],
++    'changed' => [
++      'type' => 'int',
++      'not null' => FALSE,
++      'size' => 'normal',
++    ],
++  ],
++  'primary key' => [
++    'id',
++  ],
++  'unique keys' => [
++    'meta_entity_field__uuid__value' => [
++      'uuid',
++    ],
++  ],
++  'indexes' => [
++    'meta_entity_field__type__target_id' => [
++      'type',
++    ],
++    'meta_entity_field__target__target_id' => [
++      'target__target_id',
++      'target__target_type',
++    ],
++  ],
++  'mysql_character_set' => 'utf8mb4',
++]);
++
++$connection->insert('meta_entity')
++->fields([
++  'id',
++  'type',
++  'uuid',
++  'label',
++  'target__target_id',
++  'target__target_type',
++  'created',
++  'changed',
++])
++->values([
++  'id' => '1',
++  'type' => 'example',
++  'uuid' => 'be8510bb-b55e-4e41-9da8-4daf7cc7aeab',
++  'label' => 'Test title content item (Example)',
++  'target__target_id' => '8',
++  'target__target_type' => 'node',
++  'created' => '1770846377',
++  'changed' => '1770846377',
++])
++->execute();
++
++// Reset the SQL mode.
++if ($connection->databaseType() === 'mysql') {
++  $connection->query("SET sql_mode = '$sql_mode'");
++}
+diff --git a/tests/fixtures/translatable-update/meta_entity__field_special_number.php b/tests/fixtures/translatable-update/meta_entity__field_special_number.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..8fb5b3d8b237e6a4fbc7c2b2bb211d9d5b74ef9d
+--- /dev/null
++++ b/tests/fixtures/translatable-update/meta_entity__field_special_number.php
+@@ -0,0 +1,105 @@
++<?php
++// phpcs:ignoreFile
++/**
++ * @file
++ * A database agnostic dump for testing purposes.
++ *
++ * Generated by Smart DB Tools.
++ */
++
++use Drupal\Core\Database\Database;
++
++$connection = Database::getConnection();
++// Ensure any tables with a serial column with a value of 0 are created as
++// expected.
++if ($connection->databaseType() === 'mysql') {
++  $sql_mode = $connection->query("SELECT @@sql_mode;")->fetchField();
++  $connection->query("SET sql_mode = '$sql_mode,NO_AUTO_VALUE_ON_ZERO'");
++}
++
++$connection->schema()->createTable('meta_entity__field_special_number', [
++  'fields' => [
++    'bundle' => [
++      'type' => 'varchar_ascii',
++      'not null' => TRUE,
++      'length' => '128',
++      'default' => '',
++    ],
++    'deleted' => [
++      'type' => 'int',
++      'not null' => TRUE,
++      'size' => 'tiny',
++      'default' => '0',
++    ],
++    'entity_id' => [
++      'type' => 'int',
++      'not null' => TRUE,
++      'size' => 'normal',
++      'unsigned' => TRUE,
++    ],
++    'revision_id' => [
++      'type' => 'int',
++      'not null' => TRUE,
++      'size' => 'normal',
++      'unsigned' => TRUE,
++    ],
++    'langcode' => [
++      'type' => 'varchar_ascii',
++      'not null' => TRUE,
++      'length' => '32',
++      'default' => '',
++    ],
++    'delta' => [
++      'type' => 'int',
++      'not null' => TRUE,
++      'size' => 'normal',
++      'unsigned' => TRUE,
++    ],
++    'field_special_number_value' => [
++      'type' => 'int',
++      'not null' => TRUE,
++      'size' => 'normal',
++    ],
++  ],
++  'primary key' => [
++    'entity_id',
++    'deleted',
++    'delta',
++    'langcode',
++  ],
++  'indexes' => [
++    'bundle' => [
++      'bundle',
++    ],
++    'revision_id' => [
++      'revision_id',
++    ],
++  ],
++  'mysql_character_set' => 'utf8mb4',
++]);
++
++$connection->insert('meta_entity__field_special_number')
++->fields([
++  'bundle',
++  'deleted',
++  'entity_id',
++  'revision_id',
++  'langcode',
++  'delta',
++  'field_special_number_value',
++])
++->values([
++  'bundle' => 'example',
++  'deleted' => '0',
++  'entity_id' => '1',
++  'revision_id' => '1',
++  'langcode' => 'und',
++  'delta' => '0',
++  'field_special_number_value' => '3',
++])
++->execute();
++
++// Reset the SQL mode.
++if ($connection->databaseType() === 'mysql') {
++  $connection->query("SET sql_mode = '$sql_mode'");
++}
+diff --git a/tests/src/Functional/MetaEntityTranslationUITest.php b/tests/src/Functional/MetaEntityTranslationUITest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..ad7b7de5b40d90f41bf21d28ed9f4ed9a13c5431
+--- /dev/null
++++ b/tests/src/Functional/MetaEntityTranslationUITest.php
+@@ -0,0 +1,104 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\meta_entity\Functional;
++
++use Drupal\Tests\content_translation\Functional\ContentTranslationUITestBase;
++use Drupal\Tests\language\Traits\LanguageTestTrait;
++
++/**
++ * Tests how meta entities are translated.
++ */
++class MetaEntityTranslationUITest extends ContentTranslationUITestBase {
++
++  use LanguageTestTrait;
++
++  /**
++   * {@inheritdoc}
++   */
++  protected $defaultTheme = 'stark';
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = [
++    'content_translation',
++    'entity_test',
++    'meta_entity',
++    'meta_entity_test',
++  ];
++
++  /**
++   * {@inheritdoc}
++   */
++  protected $defaultCacheContexts = [
++    'theme',
++    'timezone',
++    'url.query_args:_wrapper_format',
++    'url.site',
++    'user.permissions',
++  ];
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function getTranslatorPermissions(): array {
++    return array_merge(
++      parent::getTranslatorPermissions(),
++      [
++        'administer meta entity',
++        'update download_count meta-entity',
++      ],
++    );
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function getEditorPermissions(): array {
++    return [
++      'administer meta entity',
++      'create download_count meta-entity',
++    ];
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function getAdministratorPermissions(): array {
++    return array_merge(
++      parent::getAdministratorPermissions(),
++      [
++        'access administration pages',
++        'administer meta entity',
++      ],
++    );
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    $this->entityTypeId = 'meta_entity';
++    $this->bundle = 'download_count';
++
++    parent::setUp();
++    $this->doSetup();
++
++    static::enableBundleTranslation('meta_entity', 'download_count');
++    $this->drupalLogin($this->translator);
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function getNewEntityValues($langcode): array {
++    return [
++      'label' => [
++        ['value' => $this->randomMachineName()],
++      ],
++    ] + parent::getNewEntityValues($langcode);
++  }
++
++}
+diff --git a/tests/src/Functional/Update/TranslatableMetaEntityUpdateTest.php b/tests/src/Functional/Update/TranslatableMetaEntityUpdateTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..a87dfbb995e0d4189f9520fb8a17e9a07c293830
+--- /dev/null
++++ b/tests/src/Functional/Update/TranslatableMetaEntityUpdateTest.php
+@@ -0,0 +1,85 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\meta_entity\Functional\Update;
++
++use Drupal\Core\Database\Database;
++use Drupal\FunctionalTests\Update\UpdatePathTestBase;
++use Drupal\meta_entity\Entity\MetaEntity;
++
++/**
++ * Tests definition update to make Meta entities translatable.
++ */
++class TranslatableMetaEntityUpdateTest extends UpdatePathTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setDatabaseDumpFiles(): void {
++    $fixtureDir = dirname(__FILE__, 4) . '/fixtures/translatable-update/';
++
++    $this->databaseDumpFiles[] = DRUPAL_ROOT . '/core/modules/system/tests/fixtures/update/drupal-10.3.0.filled.standard.php.gz';
++    $this->databaseDumpFiles[] = $fixtureDir . 'cache_meta_entity.repository.php';
++    $this->databaseDumpFiles[] = $fixtureDir . 'config.php';
++    $this->databaseDumpFiles[] = $fixtureDir . 'key_value.php';
++    $this->databaseDumpFiles[] = $fixtureDir . 'meta_entity.php';
++    $this->databaseDumpFiles[] = $fixtureDir . 'meta_entity__field_special_number.php';
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function doInstall(): void {
++    parent::doInstall();
++
++    // In core.extension config, meta_entity and dynamic_entity_reference should
++    // be marked as installed.
++    $connection = Database::getConnection();
++    $coreExtensionRaw = $connection->select('config', 'c')
++      ->condition('collection', '')
++      ->condition('name', 'core.extension')
++      ->fields('c', ['data'])
++      ->execute()
++      ->fetchField();
++    $coreExtension = unserialize($coreExtensionRaw, ['allowed_classes' => FALSE]);
++    $coreExtension['module'] += [
++      'dynamic_entity_reference' => 0,
++      'meta_entity' => 0,
++    ];
++    $connection->update('config')
++      ->condition('collection', '')
++      ->condition('name', 'core.extension')
++      ->fields(['data' => serialize($coreExtension)])
++      ->execute();
++  }
++
++  /**
++   * Check whether entity field definitions are up-to-date.
++   *
++   * This is done automatically by UpdatePathTestTrait since
++   * static::checkEntityFieldDefinitionUpdates is TRUE.
++   * UpdatePathTestTrait::runUpdates() makes sure that updates are fine and it
++   * also verifies that the entity schema is intact.
++   */
++  public function testUpdatedSite(): void {
++    $this->runUpdates();
++
++    $this->assertEquals(
++      [
++        'id' => [['value' => 1]],
++        'uuid' => [['value' => 'be8510bb-b55e-4e41-9da8-4daf7cc7aeab']],
++        'langcode' => [['value' => 'en']],
++        'type' => [['target_id' => 'example']],
++        'label' => [['value' => 'Test title content item (Example)']],
++        'target' => [['target_id' => '8', 'target_type' => 'node']],
++        'created' => [['value' => 1770846377]],
++        'changed' => [['value' => 1770846377]],
++        'default_langcode' => [['value' => 1]],
++        'field_special_number' => [['value' => 3]],
++      ],
++      MetaEntity::load(1)->toArray(),
++    );
++  }
++
++}
+diff --git a/tests/src/Kernel/TargetEntityComputedFieldTest.php b/tests/src/Kernel/TargetEntityComputedFieldTest.php
+index 1f810847dd494ff6cc3fc19d7b287b33f3752857..4ea2e7224d8ef38e32866098df90fc39ca1d6def 100644
+--- a/tests/src/Kernel/TargetEntityComputedFieldTest.php
++++ b/tests/src/Kernel/TargetEntityComputedFieldTest.php
+@@ -282,6 +282,11 @@ class TargetEntityComputedFieldTest extends KernelTestBase {
+       ]),
+     ]);
+     $entity->save();
++
++    // Entity must be loaded from storage since computed properties are going
++    // out of sync.
++    $entity = EntityTestStringId::load($entity->id());
++
+     $download_count = $entity->get('downloads')->entity;
+     $visit_count = $entity->get('visits')->entity;
+     $this->assertSame('entity_test_string_id', $download_count->target->target_type);
