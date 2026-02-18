@@ -377,9 +377,9 @@ class WebformSubmissionMigrator {
       ];
 
       if (!empty($initiative['initiative_link'])) {
-        $values['documented_in'] = [
-          'uri' => $initiative['initiative_link'],
-          'title' => '',
+        $values['description'] = [
+          'value' => 'Legal reference: ' . $initiative['initiative_link'],
+          'format' => 'plain_text',
         ];
       }
 
@@ -563,18 +563,17 @@ class WebformSubmissionMigrator {
     foreach ($bindingRequirements as $requirement) {
       $values = $sharedValues;
 
+      $descriptionParts = [];
       if ($description = $requirement['description_1'] ?? '') {
-        $values['description'] = [
-          'value' => $description,
-          'format' => 'plain_text',
-        ];
+        $descriptionParts[] = $description;
       }
-
-      // Legal reference as documented_in link.
       if (!empty($requirement['legal_reference'])) {
-        $values['documented_in'] = [
-          'uri' => $requirement['legal_reference'],
-          'title' => '',
+        $descriptionParts[] = 'Legal reference: ' . $requirement['legal_reference'];
+      }
+      if ($descriptionParts) {
+        $values['description'] = [
+          'value' => implode("\n", $descriptionParts),
+          'format' => 'plain_text',
         ];
       }
 
