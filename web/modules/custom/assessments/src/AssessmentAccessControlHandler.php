@@ -13,6 +13,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\PublicOrganisation;
+use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\joinup_workflow\WorkflowHelperInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -227,7 +228,18 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler im
    *   The access result.
    */
   protected function checkDeleteAccess(AssessmentInterface $entity, AccountInterface $account): AccessResultInterface {
+    $deleteOwnDraftAccess = AccessResult::allowedIfHasPermission($account, 'delete own draft assessment report')
+      ->andIf(AccessResult::allowedIf(
+        $entity instanceof EntityWorkflowStateInterface
+        && $entity->getWorkflowState() === 'draft'
+        && $entity->getOwnerId() == $account->id()
+      )
+        ->cachePerUser()
+        ->addCacheableDependency($entity)
+      );
+
     return AccessResult::allowedIfHasPermission($account, 'delete assessment report')
+      ->orIf($deleteOwnDraftAccess)
       ->addCacheableDependency($entity);
   }
 
