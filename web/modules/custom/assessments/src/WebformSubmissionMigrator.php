@@ -10,9 +10,7 @@ use Drupal\Core\Entity\ContentEntityStorageInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\PublicOrganisation;
-use Drupal\paragraphs\ParagraphInterface;
 use Drupal\webform\WebformSubmissionInterface;
 use Psr\Log\LoggerInterface;
 
@@ -200,6 +198,7 @@ class WebformSubmissionMigrator {
       $this->logger->notice('Skipping webform submission @sid: unknown submission state.', [
         '@sid' => $submission->id(),
       ]);
+      return FALSE;
     }
 
     $reportValues = [
@@ -539,16 +538,20 @@ class WebformSubmissionMigrator {
   ): array {
     $paragraphStorage = $this->entityTypeManager->getStorage('paragraph');
     $bindingRequirements = (array) ($data['binding_requirement_assessed'] ?? []);
+    $docFids = (array) ($data['binding_requirement_documents'] ?? []);
+
+    // Shared values applied to every binding requirement paragraph.
+    $sharedValues = [
+      'type' => 'binding_requirement',
+      'expression' => $expressions,
+      'affects' => $publicServices,
+      'has_participation' => $participations,
+      'asset' => $assets,
+    ];
 
     $paragraphs = [];
     foreach ($bindingRequirements as $requirement) {
-      $values = [
-        'type' => 'binding_requirement',
-        'expression' => $expressions,
-        'affects' => $publicServices,
-        'has_participation' => $participations,
-        'asset' => $assets,
-      ];
+      $values = $sharedValues;
 
       if ($description = $requirement['description_1'] ?? '') {
         $values['description'] = [
@@ -567,8 +570,20 @@ class WebformSubmissionMigrator {
 
       $paragraph = $paragraphStorage->create($values);
 
-      // Binding requirement documents (shared across all requirements).
-      $docFids = (array) ($data['binding_requirement_documents'] ?? []);
+      if ($docFids) {
+        $paragraph->set('requirement_documents', $this->entityTypeManager->getStorage('file')->loadMultiple($docFids));
+      }
+
+      $paragraphs[] = $paragraph;
+    }
+
+    // If no specific requirements were listed but the submission identifies
+    // that binding requirements exist (via the concern field), create a
+    // placeholder paragraph to preserve the associated shared data
+    // (expressions, services, etc.) that would otherwise be lost.
+    if (empty($paragraphs) && !empty($data['binding_requirements_identified_concern'])) {
+      $paragraph = $paragraphStorage->create($sharedValues);
+
       if ($docFids) {
         $paragraph->set('requirement_documents', $this->entityTypeManager->getStorage('file')->loadMultiple($docFids));
       }
