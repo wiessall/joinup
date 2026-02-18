@@ -189,10 +189,12 @@ class WebformSubmissionMigrator {
       $state = 'draft';
     }
     elseif ($submission->isCompleted()) {
+      // isLocked() is always true alongside isCompleted() because the webform
+      // locks submissions automatically on submit. There is therefore no
+      // separate isLocked branch needed.
+      // Note: as agreed, under review submissions will be migrated as
+      // published so that they can be edited by moderators.
       $state = 'published';
-    }
-    elseif ($submission->isLocked()) {
-      $state = 'review';
     }
     else {
       $this->logger->notice('Skipping webform submission @sid: unknown submission state.', [
@@ -394,10 +396,7 @@ class WebformSubmissionMigrator {
    *   Public service entities.
    */
   protected function createPublicServices(array $data, int $ownerId): array {
-    $serviceNames = array_filter((array) ($data['trans_european_digital_public_service_concerned'] ?? []));
-    if (empty($serviceNames)) {
-      return [];
-    }
+    $serviceNames = array_values(array_filter((array) ($data['trans_european_digital_public_service_concerned'] ?? [])));
 
     // Resolve thematic areas.
     $thematicAreaTids = [];
@@ -413,6 +412,16 @@ class WebformSubmissionMigrator {
 
     // Resolve countries from geographical_origin.
     $countryTids = $this->resolveGeographicalOriginCountries($data);
+
+    // If no specific service names were given (e.g. the "Potentially many"
+    // scope was selected), create one placeholder service to preserve the
+    // thematic area data, leaving the name empty.
+    if (empty($serviceNames)) {
+      if (empty($thematicAreaTids)) {
+        return [];
+      }
+      $serviceNames = [''];
+    }
 
     $services = [];
     foreach ($serviceNames as $serviceName) {
@@ -447,20 +456,8 @@ class WebformSubmissionMigrator {
       }
     }
 
-    if (empty($participantTypeTids)) {
-      return [];
-    }
-
     // Resolve stakeholder countries from geographical_origin.
     $countryTids = $this->resolveGeographicalOriginCountries($data);
-
-    $participationValues = [
-      'type' => 'participation',
-      'participant_type' => $participantTypeTids,
-      'stakeholder_country' => $countryTids,
-      'status' => TRUE,
-      'uid' => $ownerId,
-    ];
 
     // Check for "All EU" in geographical origins.
     $hasAllEu = FALSE;
@@ -470,6 +467,19 @@ class WebformSubmissionMigrator {
         break;
       }
     }
+
+    // Nothing to migrate if no participant types and no country data at all.
+    if (empty($participantTypeTids) && empty($countryTids) && !$hasAllEu) {
+      return [];
+    }
+
+    $participationValues = [
+      'type' => 'participation',
+      'participant_type' => $participantTypeTids,
+      'stakeholder_country' => $countryTids,
+      'status' => TRUE,
+      'uid' => $ownerId,
+    ];
 
     if ($hasAllEu) {
       $participationValues['eu_countries'] = TRUE;
