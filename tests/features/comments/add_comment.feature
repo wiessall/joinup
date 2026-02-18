@@ -270,31 +270,35 @@ Feature: Add comments
 
   # Regression test: Verify that the comment form is not displayed to anonymous users.
   # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-10945
-  Scenario Outline: Anonymous users can't see and submit the comment form on community content.
-    Given <content type> content:
-      | title           | body                                                | collection        |
-      | Comment Bosinga | How could this ever happen? Moral panic on its way! | Gossip collection |
-      | Comment Roseta  | How could this ever happen, Moral panic on its way! | Gossip collection |
+  Scenario: Anonymous users can't see and submit the comment form on community content.
+    Given news content:
+      | title           | body                   | collection        |
+      | Comment Bosinga | Node with comments.    | Gossip collection |
+      | Comment Roseta  | Node without comments. | Gossip collection |
+      | Comment Living  | Node without comments. | Gossip collection |
+
+    Then I am logged in as an "authenticated user"
+    And I visit the "Comment Bosinga" news
+    Then the following fields should be present "Create comment"
+    And I should see the button "Post comment"
+    And I enter "This is a test comment." in the "Create comment" wysiwyg editor
+    And I press "Post comment"
+    Then I should see the success message "Your comment has been posted."
+
+    Then the cache has been cleared
 
     Then I am an anonymous user
-    When I visit the "Comment Bosinga" "<content type>"
+    When I visit the "Comment Roseta" news
     Then the following fields should not be present "Create comment"
     And I should not see the button "Post comment"
     And I should see the text "Login or create an account to comment."
 
-    When I visit the "Comment Roseta" "<content type>"
+    When I visit the "Comment Bosinga" news
     Then the following fields should not be present "Create comment"
     And I should not see the button "Post comment"
     And I should see the text "Login or create an account to comment."
 
-    Then I visit the "Comment Bosinga" "<content type>"
+    Then I visit the "Comment Living" news
     Then the following fields should not be present "Create comment"
     And I should not see the button "Post comment"
     And I should see the text "Login or create an account to comment."
-
-    Examples:
-      | content type |
-      | news         |
-      | event        |
-      | discussion   |
-      | document     |
