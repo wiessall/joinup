@@ -78,6 +78,16 @@ class SubscribersReportController extends ControllerBase {
         'field' => 'news',
         'initial_click_sort' => 'desc',
       ],
+      [
+        'data' => $this->t('Distribution'),
+        'field' => 'distribution',
+        'initial_click_sort' => 'desc',
+      ],
+      [
+        'data' => $this->t('Release'),
+        'field' => 'release',
+        'initial_click_sort' => 'desc',
+      ],
     ];
 
     $data = $this->getSubscriberData();
@@ -283,7 +293,7 @@ SQL;
    */
   protected function sortData(array &$data, ?string $sort = 'asc', ?string $order_by = 'label'): void {
     usort($data, function (array $a, array $b) use ($sort, $order_by): int {
-      $result = $a[$order_by] <=> $b[$order_by];
+      $result = ($a[$order_by] ?? '') <=> ($b[$order_by] ?? '');
       return $sort === 'asc' ? $result : -$result;
     });
   }
