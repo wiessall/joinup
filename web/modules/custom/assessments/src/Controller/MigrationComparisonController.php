@@ -80,7 +80,7 @@ class MigrationComparisonController extends ControllerBase {
     foreach ($results as $row) {
       $data = isset($submissions[$row->sid]) ? $submissions[$row->sid]->getData() : [];
 
-      $hasBarriers = !empty($data['binding_requirement_assessed']);
+      $hasBarriers = !empty($data['binding_requirement_assessed']) || !empty($data['binding_requirements_identified_concern']);
       $hasAssessmentDocs = !empty($data['upload_assessment_documents']);
       $hasRequirementDocs = !empty($data['binding_requirement_documents']);
       $hasServices = !empty(array_filter((array) ($data['trans_european_digital_public_service_concerned'] ?? [])));
@@ -92,7 +92,16 @@ class MigrationComparisonController extends ControllerBase {
         )));
 
       $rows[] = [
-        $row->sid,
+        [
+          'data' => [
+            '#type' => 'link',
+            '#title' => $row->sid,
+            '#url' => Url::fromRoute('entity.webform_submission.canonical', [
+              'webform' => 'assessment',
+              'webform_submission' => $row->sid,
+            ]),
+          ],
+        ],
         [
           'data' => [
             '#type' => 'link',
@@ -300,6 +309,13 @@ class MigrationComparisonController extends ControllerBase {
     // Remaining report fields.
     $rows[] = [
       ['data' => $this->t('Additional report fields'), 'header' => TRUE, 'colspan' => 3],
+    ];
+
+    // Binding requirements concern.
+    $rows[] = [
+      $this->t('Binding requirements concern'),
+      $webformData['binding_requirements_identified_concern'] ?? '',
+      '',
     ];
 
     // Remaining barriers.
