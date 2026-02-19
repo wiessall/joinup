@@ -9,3 +9,9 @@ assessment.add_page:
   route_name: entity.assessment.add_page
   appears_on:
     - entity.assessment.collection
+
+assessments.migration_list:
+  title: 'Migration comparison'
+  route_name: assessments.migration_list
+  appears_on:
+    - entity.assessment.collection
