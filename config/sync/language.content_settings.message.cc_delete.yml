@@ -1,0 +1,11 @@
+uuid: a982667e-1c93-4b88-8c91-ac584866dc72
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.cc_delete
+id: message.cc_delete
+target_entity_type_id: message
+target_bundle: cc_delete
+default_langcode: site_default
+language_alterable: false

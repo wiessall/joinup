@@ -40,9 +40,10 @@ class StateMachinePermissions implements ContainerInjectionInterface {
       foreach ($transitions as $transition_id => $transition) {
         foreach (['own', 'any'] as $ownership) {
           $permissions["perform $workflow_id workflow $transition_id transition on $ownership entity"] = [
-            'title' => $this->t('Perform %workflow_name workflow: %transition_name transition', [
+            'title' => $this->t('Perform %workflow_name workflow: %transition_name transition on %ownership entity', [
               '%workflow_name' => $workflowDefinition->getLabel(),
               '%transition_name' => $transition->getLabel(),
+              '%ownership' => $this->t('@entity-ownership', ['@entity-ownership' => $ownership], ['context' => 'own or any (entity)']),
             ]),
           ];
         }

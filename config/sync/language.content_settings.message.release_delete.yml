@@ -1,0 +1,11 @@
+uuid: 27e920d3-9651-417d-bdb8-cc60ddcc2eaa
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.release_delete
+id: message.release_delete
+target_entity_type_id: message
+target_bundle: release_delete
+default_langcode: site_default
+language_alterable: false

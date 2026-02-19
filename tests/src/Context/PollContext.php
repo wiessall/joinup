@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Given;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -23,9 +24,8 @@ class PollContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The poll data.
-   *
-   * @Given the following polls:
    */
+  #[Given('the following polls:')]
   public function createPolls(TableNode $table): void {
     $storage = \Drupal::entityTypeManager()->getStorage('poll');
     foreach ($table->getColumnsHash() as $values) {

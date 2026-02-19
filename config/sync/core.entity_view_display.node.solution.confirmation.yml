@@ -350,3 +350,4 @@ hidden:
   solution_subscribe: true
   translation: true
   uri: true
+  uuid: true

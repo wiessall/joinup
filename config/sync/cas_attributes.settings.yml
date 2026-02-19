@@ -1,6 +1,7 @@
 _core:
   default_config_hash: 1Ipw0F9YNfPUvW0q63zjIRwxB8mxPTUpgPz2pT1IoE0
 sitewide_token_support: true
+token_allowed_attributes: {  }
 field:
   sync_frequency: 2
   overwrite: true
@@ -8,6 +9,11 @@ field:
     mail: '[cas:attribute:email]'
     field_user_family_name: '[cas:attribute:lastname]'
     field_user_first_name: '[cas:attribute:firstname]'
+    name: ''
+    blocked_reason: ''
+    field_user_business_title: ''
+    field_user_frequency: ''
+    field_user_organisation: ''
 role:
   sync_frequency: 0
   deny_login_no_match: false

@@ -52,9 +52,8 @@ class JoinupOssCatalogueImagecacheWarmerTest extends DevelopersItaliaFetchTest {
     // Ensure logos and screenshots are queued to be downloaded.
     // Check how incoming data has been queued. Only one item is active.
     $imagecacheWarmerQueue = \Drupal::queue('joinup_oss_catalogue_imagecache_warmer');
-    // The queue should contain 3 logos and 3 original + 1 updated screenshot
-    // images summarized.
-    $this->assertSame(7, $imagecacheWarmerQueue->numberOfItems());
+    // The queue should contain 3 logos and 3 screenshots.
+    $this->assertSame(6, $imagecacheWarmerQueue->numberOfItems());
     // "Externals" directory does not exist.
     $this->assertFalse(imagecache_external_get_directory_path());
 
@@ -90,8 +89,6 @@ class JoinupOssCatalogueImagecacheWarmerTest extends DevelopersItaliaFetchTest {
         '4bba7c249bf66c43b239038015aec57f.jpg',
         // GitHub solution 1: EN Screenshot2.
         '89b189f663b5f0fb61c5ca30e4bcd6f3.jpg',
-        // GitHub solution 1: EN Screenshot2 updated.
-        'eebe2e9044c879b129809f019d9f821d.jpg',
       ],
       array_values($cachedImages)
     );

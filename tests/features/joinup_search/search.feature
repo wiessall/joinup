@@ -104,16 +104,26 @@ Feature: Global search
     Then I should see the text "SEARCH RESULTS (7)"
 
   @javascript
-  Scenario: Alphabetical order for the spatial coverage in the search page.
-    Given collection content:
+  Scenario: Alphabetical order for the spatial coverage and organisation origin in the search page.
+    Given owner content:
+      | name         | country  |
+      | Search owner | Greece   |
+    And collection content:
       | title            | description                      | abstract                       | state     |
       | Collection alpha | collection beta description.     | The collection gamma abstract. | published |
+    And solution content:
+      | title            | description                      | abstract                       | owner        |
+      | Collection alpha | collection beta description.     | The collection gamma abstract. | Search owner |
     And event content:
       | title       | field_paragraphs_body    | spatial coverage | collection       | state     |
       | Event Omega | The epsilon event.       | Greece           | Collection alpha | published |
       | Alt event   | Background event.        | Luxembourg       | Collection alpha | published |
 
     When I visit the advanced search page
+    And I should not see the "Organisation origin" facet
+    When I check the "Solution (1)" checkbox from the "Content types" facet
+    And I should see the "Organisation origin" facet
+    Then I click "Clear filters"
     Then I click show more from the "spatial coverage" facet
     And the "spatial coverage" checkbox facet should allow selecting the following values "Greece (1), Luxembourg (1)"
     When I check the "Luxembourg (1)" checkbox from the "spatial coverage" facet
@@ -389,7 +399,7 @@ Feature: Global search
       | kyleu    | kyle.u@example.com | Kyle       | Freeman     | E-inclusion         |
 
     When I visit the advanced search page
-    Then I should see the text "SEARCH RESULTS (4)"
+    Then I should see the text "SEARCH RESULTS (6)"
     When I check the "User profiles (3)" checkbox from the "Content types" facet
     And I should see the "Lyle Uname" tile
     And I should see the "Kyle Freeman" tile

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Given;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\entity_legal\Entity\EntityLegalDocumentAcceptance;
 use Drupal\entity_legal\Entity\EntityLegalDocumentVersion;
@@ -49,9 +50,8 @@ class JoinupLegalContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a column name is incorrect.
-   *
-   * @Given (the following )legal document version(s):
    */
+  #[Given('(the following )legal document version(s):')]
   public function givenLegalDocumentVersions(TableNode $collection_table): void {
     $published = [];
     foreach ($collection_table->getColumnsHash() as $version) {
@@ -116,9 +116,8 @@ class JoinupLegalContext extends RawDrupalContext {
    * @throws \Exception
    *   When legal document with label $document_label doesn't exist or the legal
    *   document with version $version doesn't exist.
-   *
-   * @Given (the )version :version_label of :document_label (legal document )is published
    */
+  #[Given('(the )version :version_label of :document_label (legal document )is published')]
   public function publishLegalDocumentVersion(string $document_label, string $version_label): void {
     /** @var \Drupal\entity_legal\EntityLegalDocumentInterface $document */
     $document = $this->getEntityByLabel(ENTITY_LEGAL_DOCUMENT_ENTITY_NAME, $document_label);
@@ -139,9 +138,8 @@ class JoinupLegalContext extends RawDrupalContext {
    *   Thrown when an entity with the given label does not exist.
    * @throws \Drupal\Core\Entity\EntityStorageException
    *   In case of failure on entity deletion.
-   *
-   * @Given I delete the version :version_label of( document) :document_label
    */
+  #[Given('I delete the version :version_label of( document) :document_label')]
   public function deleteLegalDocumentVersion(string $document_label, string $version_label): void {
     $document = $this->getEntityByLabel(ENTITY_LEGAL_DOCUMENT_ENTITY_NAME, $document_label);
     $version = $this->getEntityByLabel(ENTITY_LEGAL_DOCUMENT_VERSION_ENTITY_NAME, $version_label, $document->id());
@@ -158,9 +156,8 @@ class JoinupLegalContext extends RawDrupalContext {
    *   When the current user is not logged in.
    * @throws \InvalidArgumentException
    *   When the given legal document has no published version.
-   *
-   * @Given I accept the :document_label agreement
    */
+  #[Given('I accept the :document_label agreement')]
   public function iAcceptTheLegalDocument(string $document_label): void {
     if ($this->getUserManager()->currentUserIsAnonymous()) {
       throw new \Exception('User should be logged in when accepting a document.');
@@ -197,9 +194,8 @@ class JoinupLegalContext extends RawDrupalContext {
    * @throws \InvalidArgumentException
    *   When the given legal document has no published version or invalid
    *   usernames were passed.
-   *
-   * @Given the following :document_label acceptances:
    */
+  #[Given('the following :document_label acceptances:')]
   public function setAcceptances(string $document_label, TableNode $table): void {
     /** @var \Drupal\entity_legal\EntityLegalDocumentInterface $document */
     $document = $this->getEntityByLabel(ENTITY_LEGAL_DOCUMENT_ENTITY_NAME, $document_label);

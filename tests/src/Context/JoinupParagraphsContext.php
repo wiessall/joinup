@@ -6,9 +6,13 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Hook\AfterScenario;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Layout\LayoutPluginManagerInterface;
@@ -69,9 +73,8 @@ class JoinupParagraphsContext extends RawDrupalContext {
    *   The label of the field.
    * @param string $field
    *   The field in which to take action.
-   *
-   * @When I fill in the :position :label with :text in the :field field
    */
+  #[When('I fill in the :position :label with :text in the :field field')]
   public function fillInParagraphsFieldInRawOrder(string $position, string $text, string $label, string $field): void {
     $position = $this->convertOrdinalToNumber($position);
     // Convert ordinal to array index.
@@ -102,9 +105,8 @@ class JoinupParagraphsContext extends RawDrupalContext {
    *   The label of the field containing the WYSIWYG editor.
    * @param string $field
    *   The field in which to take action.
-   *
-   * @When I enter :text in the :position :label wysiwyg editor in the :field field
    */
+  #[When('I enter :text in the :position :label wysiwyg editor in the :field field')]
   public function enterWysywigInRawOrder(string $text, string $position, string $label, string $field): void {
     $position = $this->convertOrdinalToNumber($position);
     // Convert ordinal to array index.
@@ -139,10 +141,9 @@ class JoinupParagraphsContext extends RawDrupalContext {
    *   (optional) The position of the item to remove. Starts at 1 for
    *   readability. If left empty, the button will be searched in the entire
    *   field.
-   *
-   * @Given I click :label in the :field field for paragraph :delta
-   * @Given I click :label in the :field paragraphs field
    */
+  #[Given('I click :label in the :field field for paragraph :delta')]
+  #[Given('I click :label in the :field paragraphs field')]
   public function clickLinkInParagraphsField(string $label, string $field, ?int $delta = NULL): void {
     $paragraph_item = ($delta === NULL) ? $this->getParagraphsElement($field) : $this->getParagraphsElementItem($field, --$delta);
     if (!$link = $paragraph_item->findButton($label)) {
@@ -183,10 +184,9 @@ class JoinupParagraphsContext extends RawDrupalContext {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    *   When content listing paragraph is not found in the page.
-   *
-   * @Then the :filter filter of the :paragraph content listing paragraph value is :expected_value
-   * @Then the :filter filter of the :paragraph content listing paragraph is empty
    */
+  #[Then('the :filter filter of the :paragraph content listing paragraph value is :expected_value')]
+  #[Then('the :filter filter of the :paragraph content listing paragraph is empty')]
   public function assertFilterFromParagraphHasValue(string $paragraph, string $filter, ?string $expected_value = NULL): void {
     $paragraph_0_based_delta = $this->convertOrdinalToNumber($paragraph) - 1;
     $field = $this->getParagraphsElement('Custom content listing', $paragraph_0_based_delta);
@@ -215,9 +215,8 @@ class JoinupParagraphsContext extends RawDrupalContext {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    *   When content listing paragraph is not found in the page.
-   *
-   * @Then I click :button at :filter filter of the :paragraph content listing paragraph
    */
+  #[Then('I click :button at :filter filter of the :paragraph content listing paragraph')]
   public function pressRemoveFilterFromParagraph(string $button, string $paragraph, string $filter): void {
     $paragraph_0_based_delta = $this->convertOrdinalToNumber($paragraph) - 1;
     $field = $this->getParagraphsElement('Custom content listing', $paragraph_0_based_delta);
@@ -301,9 +300,8 @@ class JoinupParagraphsContext extends RawDrupalContext {
    * Cleans up the paragraphs entities created when nodes where created.
    *
    * This uses the orphan paragraphs purger queue worker.
-   *
-   * @AfterScenario
    */
+  #[AfterScenario]
   public function paragraphsCleanup(): void {
     /** @var \Drupal\Core\Queue\QueueWorkerInterface $worker */
     $worker = \Drupal::service('plugin.manager.queue_worker')->createInstance('entity_reference_revisions_orphan_purger');
@@ -329,10 +327,9 @@ class JoinupParagraphsContext extends RawDrupalContext {
    * @param \Behat\Gherkin\Node\TableNode $table
    *   Paragraph's fields.
    *
-   * @Given I append :paragraph_type to :parent_field field in :parent_type_id entity with following :parent_name title:
-   *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
+  #[Given('I append :paragraph_type to :parent_field field in :parent_type_id entity with following :parent_name title:')]
   public function iAppendParagraphToFieldInEntityWithFollowingTitle(
     string $paragraph_type,
     string $parent_field,
@@ -357,10 +354,9 @@ class JoinupParagraphsContext extends RawDrupalContext {
    * @param string $parent_name
    *   Parent name.
    *
-   * @Given I append poll :poll to :parent_field field in :parent_type_id entity with following :parent_name title
-   *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
+  #[Given('I append poll :poll to :parent_field field in :parent_type_id entity with following :parent_name title')]
   public function iAppendPollToFieldInEntityWithFollowingTitle(
     string $poll,
     string $parent_field,
@@ -389,10 +385,9 @@ class JoinupParagraphsContext extends RawDrupalContext {
    * @param \Behat\Gherkin\Node\PyStringNode $value
    *   Serialized value.
    *
-   * @Given I append content listing to :parent_field field in :parent_type_id entity with following :parent_name title with:
-   *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
+  #[Given('I append content listing to :parent_field field in :parent_type_id entity with following :parent_name title with:')]
   public function iAppendContentListingToFieldInEntityWithFollowingTitleWith(
     string $parent_field,
     string $parent_type_id,
@@ -477,6 +472,24 @@ class JoinupParagraphsContext extends RawDrupalContext {
   /**
    * Creates a paragraph with the given values.
    *
+   * @param string $type
+   *   The type of the paragraph.
+   * @param \Behat\Gherkin\Node\TableNode $values
+   *   The data to add in the paragraph.
+   */
+  #[Given('the following :type paragraph:')]
+  public function iCreateParagraphWith(string $type, TableNode $values): void {
+    $values = $values->getRowsHash();
+    $values['type'] = $type;
+    $values = (object) $values;
+
+    $this->parseEntityFields('paragraph', $values);
+    $this->getDriver()->createEntity('paragraph', $values);
+  }
+
+  /**
+   * Creates a paragraph with the given values.
+   *
    * If saved, then the paragraph is queued to be removed after the current test
    * is finished.
    *
@@ -524,11 +537,10 @@ class JoinupParagraphsContext extends RawDrupalContext {
    * @param string $regionId
    *   The field name in the layout paragraph to add the paragraph into.
    *   Optional, defaults to "content".
-   *
-   * @Given I append :type to :fieldName layout paragraphs field
-   * @Given I append :type to :fieldName layout paragraphs field with :layoutId layout
-   * @Given I append :type to :fieldName layout paragraphs field into :layoutId layout's :regionId region
    */
+  #[Given('I append :type to :fieldName layout paragraphs field')]
+  #[Given('I append :type to :fieldName layout paragraphs field with :layoutId layout')]
+  #[Given("I append :type to :fieldName layout paragraphs field into :layoutId layout's :regionId region")]
   public function appendParagraphToCurrentForm(
     string $type,
     string $fieldName,
@@ -598,9 +610,8 @@ class JoinupParagraphsContext extends RawDrupalContext {
    *   Paragraphs types.
    *
    * @throws \Exception
-   *
-   * @Then I should see the following paragraph types in the modal in order:
    */
+  #[Then('I should see the following paragraph types in the modal in order:')]
   public function iShouldSeeParagraphTypesInTheModalInOrder(TableNode $table): void {
     // Get expected order from the table.
     $expectedOrder = array_map(function ($row) {

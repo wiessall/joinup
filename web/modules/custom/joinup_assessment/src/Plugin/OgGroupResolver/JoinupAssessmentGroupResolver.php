@@ -7,7 +7,9 @@ namespace Drupal\joinup_assessment\Plugin\OgGroupResolver;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_assessment\AssessmentInterface;
+use Drupal\og\Attribute\OgGroupResolver;
 use Drupal\og\GroupTypeManagerInterface;
 use Drupal\og\OgResolvedGroupCollectionInterface;
 use Drupal\og\OgRouteGroupResolverBase;
@@ -16,12 +18,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Resolves the group for assessment routes.
- *
- * @OgGroupResolver(
- *   id = "joinup_assessment_routes",
- *   label = "Routes related to assessment",
- * )
  */
+#[OgGroupResolver(
+  id: 'joinup_assessment_routes',
+  label: new TranslatableMarkup('Routes related to assessment'),
+  description: new TranslatableMarkup('Routes related to assessment')
+)]
 class JoinupAssessmentGroupResolver extends OgRouteGroupResolverBase {
 
   public function __construct(
@@ -76,7 +78,6 @@ class JoinupAssessmentGroupResolver extends OgRouteGroupResolverBase {
    */
   protected function isModerationRoute(): bool {
     $moderationRoutes = [
-      'joinup_assessment.moderation',
       'joinup_assessment.edit',
       'collection/assessments/assessment-reports/questionnaire/submissions',
     ];

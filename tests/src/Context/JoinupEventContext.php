@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
+use Behat\Hook\AfterScenario;
+use Behat\Hook\BeforeScenario;
 use Drupal\Core\Site\Settings;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
@@ -67,9 +69,8 @@ class JoinupEventContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the Geocoding results are not being cached.
-   *
-   * @BeforeScenario @api
    */
+  #[BeforeScenario('@api')]
   public static function trackCachedFiles(): void {
     $cache_settings = Settings::get('cache');
 
@@ -92,9 +93,8 @@ class JoinupEventContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when live requests were done to the service during the test.
-   *
-   * @AfterScenario @api
    */
+  #[AfterScenario('@api')]
   public static function checkCachedFiles(AfterScenarioScope $scope): void {
     $expected_count = self::$geocodingCacheCount;
 

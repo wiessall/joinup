@@ -282,3 +282,4 @@ hidden:
   published_at: true
   status: true
   sticky: true
+  uuid: true

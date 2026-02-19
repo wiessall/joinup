@@ -1,0 +1,13 @@
+uuid: f658fdea-9958-423f-8377-92bf922bc03a
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.eif_principle
+id: taxonomy_term.eif_principle
+targetEntityType: taxonomy_term
+bundle: eif_principle
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

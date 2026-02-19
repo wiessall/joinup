@@ -1,0 +1,11 @@
+uuid: 6853c9dc-3928-4802-bf1a-b85f674c9e45
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.discussion_delete
+id: message.discussion_delete
+target_entity_type_id: message
+target_bundle: discussion_delete
+default_langcode: site_default
+language_alterable: false

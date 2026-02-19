@@ -1,0 +1,34 @@
+services:
+
+  _defaults:
+    autoconfigure: true
+    autowire: true
+
+  Drupal\assessments\AssessmentVocabularyHelper: {}
+
+  Drupal\assessments\EventSubscriber\RdfSyncNormalizeSubscriber: {}
+
+  Drupal\assessments\EventSubscriber\SearchApiSubscriber: { }
+
+  Drupal\assessments\AssessmentReportNotificationInterface:
+    class: Drupal\assessments\AssessmentReportNotification
+
+  Drupal\assessments\EventSubscriber\AssessmentReportNotificationSubscriber: { }
+
+  Drupal\assessments\EventSubscriber\ApiExceptionSubscriber: { }
+
+  Drupal\assessments\PageCache\AllowPublicResources:
+    tags:
+      - { name: page_cache_request_policy }
+
+  Drupal\assessments\Guard\AssessmentReportPermissionGuard:
+    tags:
+      - { name: state_machine.guard, group: assessments, priority: 1}
+
+  Drupal\assessments\Guard\AssessmentReportSubmitGuard:
+    tags:
+      - { name: state_machine.guard, group: assessments, priority: 5}
+
+  Drupal\assessments\Access\AssessmentAddFormAccessCheck:
+    tags:
+      - { name: access_check, applies_to: _assessment_add_form_access}

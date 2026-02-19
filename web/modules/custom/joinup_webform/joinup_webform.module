@@ -7,9 +7,33 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\webform\WebformSubmissionInterface;
+
 /**
  * Implements hook_webform_access_rules_alter().
  */
 function joinup_webform_webform_access_rules_alter(array &$access_rules): void {
   $access_rules['administer']['permissions'][] = 'administer webform via ui';
+}
+
+/**
+ * Implements hook_entity_presave().
+ */
+function joinup_webform_entity_presave(EntityInterface $entity): void {
+  if (!$entity instanceof WebformSubmissionInterface) {
+    return;
+  }
+
+  $sourceUrl = $entity->uri->value;
+  // URI column is a string limited to 2000 chars in
+  // WebformSubmissions::baseFieldDefinitions.
+  if ($sourceUrl && mb_strlen($sourceUrl) > 2000) {
+    $parsedUrl = parse_url($sourceUrl);
+    // Keep only the path if there is a query.
+    $shortenedUrl = $parsedUrl && array_key_exists('query', $parsedUrl)
+      ? $parsedUrl['path']
+      : $sourceUrl;
+    $entity->uri = mb_substr($shortenedUrl, 0, 2000);
+  }
 }
