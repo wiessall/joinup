@@ -63,19 +63,10 @@ To set the `baseURL` variable you need to:
 ⚠️ Tokens expire after a short period and must be re‑requested when invalid.
 
 ---
-## Payload examples
-The POST requests include complete, working JSON payloads that demonstrate:
-- Providers
-- Binding requirements
-- Expressions
-- Participations
-- Assets
-- Results and judgements
+## API documentation (Swagger)
+To explore the API, understand available endpoints, and view request/response schemas, use the official Swagger documentation:
 
-These can be used as:
-- Reference implementations
-- Templates for client integrations
-- Validation examples
+👉 https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference/-/blob/master/web/modules/custom/assessments/openapi/assessments.openapi.yaml
 
 ---
 ## Notes
