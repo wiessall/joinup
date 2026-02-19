@@ -1,4 +1,4 @@
-# Assessments API – Postman Collection (Local)
+# Assessments API – Postman Collection
 This repository contains a **Postman collection** for interacting with the **Assessments API (local/development environment)**.
 The collection demonstrates the full request flow:
 - Obtaining an OAuth2 access token
