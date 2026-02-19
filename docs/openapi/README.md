@@ -24,48 +24,14 @@ To access protected endpoints, you must request API credentials.
   - You must set a **Client Secret**
 
 No additional configuration or documentation is required beyond this process.
----
-## Endpoints included
-### 1\. OAuth Token
-**POST** `/oauth/token`
-Used to obtain an access token.
-- Grant type: `client_credentials`
-- Required fields:
-  - `client_id`
-  - `client_secret`
-  - `scope` (e.g. `assessments`)
-
-The response contains an `access_token`.
----
-### 2\. Get Assessments (Public)
-**GET** `/api/assessments/v1/assessment`
-- Authentication: ❌ Not required
-- Purpose: Retrieve a list of existing assessments
-- Query parameters (optional):
-  - `country`: Filter by 2-character country code (e.g., `BE`, `NL`, `IT`)
-  - `country=EU`: Show all assessments provided by European entities
-
-**Examples:**
-- `/api/assessments/v1/assessment` – Get all assessments
-- `/api/assessments/v1/assessment?country=BE` – Get assessments from Belgium
-- `/api/assessments/v1/assessment?country=EU` – Get assessments from European entities
 
 ---
-### 3\. Get Single Assessment (Public)
-**GET** `/api/assessments/v1/assessment/{assessment-uuid}`
-- Authentication: ❌ Not required
-- Purpose: Retrieve a specific assessment by its UUID
-- Path parameters:
-  - `assessment-uuid`: The UUID of the assessment to retrieve
+## How to use the collection
 
 **Example:**
 - `/api/assessments/v1/assessment/12345678-1234-1234-1234-123456789abc`
 
 ---
-### 4\. Get Organisations (Public)
-**GET** `/api/assessments/v1/organisation`
-- Authentication: ❌ Not required
-- Purpose: Retrieve organisation data
 
 ---
 ### 5\. Get Assets (Public)
