@@ -1,0 +1,13 @@
+uuid: 4502da92-4541-4362-8002-a4716a3eb4db
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.oss_software_type
+id: taxonomy_term.oss_software_type
+targetEntityType: taxonomy_term
+bundle: oss_software_type
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

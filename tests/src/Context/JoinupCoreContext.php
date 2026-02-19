@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Hook\BeforeSuite;
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
 use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\FieldItemListInterface;
@@ -37,10 +41,9 @@ class JoinupCoreContext extends RawDrupalContext {
    *
    * @throws \Exception
    *    Thrown when the region is not found.
-   *
-   * @Then the page should show( only) the( following) chip(s):
-   * @Then the page should show( only) the( following) chip(s) in the :region( region):
    */
+  #[Then('the page should show( only) the( following) chip(s):')]
+  #[Then('the page should show( only) the( following) chip(s) in the :region( region):')]
   public function assertChipElements(TableNode $table, ?string $region = NULL): void {
     $chips = $this->getChips($region);
     $found = array_map(function (Chip $element) {
@@ -63,12 +66,11 @@ class JoinupCoreContext extends RawDrupalContext {
    *
    * @throws \Exception
    *    Thrown when the region is not found.
-   *
-   * @Then the page should contain :number chip(s)
-   * @Then the page should not contain any chips
-   * @Then the :region region should contain :number chip(s)
-   * @Then the :region region should not contain any chips
    */
+  #[Then('the page should contain :number chip(s)')]
+  #[Then('the page should not contain any chips')]
+  #[Then('the :region region should contain :number chip(s)')]
+  #[Then('the :region region should not contain any chips')]
   public function assertChipCount(?string $number = NULL, ?string $region = NULL): void {
     $number = (int) $number;
     Assert::assertCount($number, $this->getChips($region));
@@ -82,9 +84,8 @@ class JoinupCoreContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when either the chip or its remove button are not found.
-   *
-   * @When I press the remove button on the chip :text
    */
+  #[When('I press the remove button on the chip :text')]
   public function clickRemoveChipButton(string $text): void {
     // Find the element that contains the given text.
     $chip = $this->getChipByText($text);
@@ -173,11 +174,10 @@ class JoinupCoreContext extends RawDrupalContext {
    * @param string|null $bundle
    *   (optional) Filter by bundle.
    *
-   * @Given I go to the :name :bundle term page
-   *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    *   Thrown when the taxonomy term does not have a URL to go to.
    */
+  #[Given('I go to the :name :bundle term page')]
   public function visitTaxonomyTermPage(string $name, ?string $bundle = NULL): void {
     /** @var \Drupal\taxonomy\TermInterface $term */
     $term = static::getEntityByLabel('taxonomy_term', $name, $bundle);
@@ -192,10 +192,9 @@ class JoinupCoreContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a field is not found by name or is not disabled.
-   *
-   * @Then the following field(s) should be disabled :fields
-   * @Then the following button(s) should be disabled :fields
    */
+  #[Then('the following field(s) should be disabled :fields')]
+  #[Then('the following button(s) should be disabled :fields')]
   public function givenDisabledFields(string $fields): void {
     $fields = $this->explodeDelimitedSeparatedStepArgument($fields);
     $found = [];
@@ -219,9 +218,8 @@ class JoinupCoreContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a field is not found by name or is disabled.
-   *
-   * @Then the following fields should not be disabled :fields
    */
+  #[Then('the following fields should not be disabled :fields')]
   public function givenNotDisabledFields(string $fields): void {
     $fields = $this->explodeDelimitedSeparatedStepArgument($fields);
     $found = [];
@@ -242,27 +240,24 @@ class JoinupCoreContext extends RawDrupalContext {
    *
    * @param string $content_type
    *   The expected content type.
-   *
-   * @Then the content type of the response should be :content_type
    */
+  #[Then('the content type of the response should be :content_type')]
   public function assertResponseContentType(string $content_type): void {
     $this->assertSession()->responseHeaderEquals('Content-Type', $content_type);
   }
 
   /**
    * Asserts the order of elements.
-   *
-   * @Then I should see the following quick links menu items in the specified order:
    */
+  #[Then('I should see the following quick links menu items in the specified order:')]
   public function assertQuickMenuLinks(TableNode $table): void {
     $this->assertGroupMenuItems($table, 'Quick links');
   }
 
   /**
    * Asserts the order of elements.
-   *
-   * @Then I should see the following navigation menu items in the specified order:
    */
+  #[Then('I should see the following navigation menu items in the specified order:')]
   public function assertNavigationMenuLinks(TableNode $table): void {
     $this->assertGroupMenuItems($table, 'Navigation menu');
   }
@@ -296,9 +291,8 @@ class JoinupCoreContext extends RawDrupalContext {
    *
    * @param string $link
    *   The link locator.
-   *
-   * @Given I click the last :link link
    */
+  #[Given('I click the last :link link')]
   public function assertClickLastLink(string $link): void {
     $locator = ['link', $link];
     $links = $this->getSession()->getPage()->findAll('named', $locator);
@@ -311,9 +305,8 @@ class JoinupCoreContext extends RawDrupalContext {
    *
    * @param \Behat\Testwork\Hook\Scope\BeforeSuiteScope $before_suite
    *   Contains information about the suite.
-   *
-   * @BeforeSuite
    */
+  #[BeforeSuite]
   public static function setDefaultTimezone(BeforeSuiteScope $before_suite): void {
     date_default_timezone_set('UTC');
   }
@@ -323,9 +316,8 @@ class JoinupCoreContext extends RawDrupalContext {
    *
    * @param string $expected
    *   The expected cache backend service.
-   *
-   * @Given /^the default cache backend is set to "([^"]*)"$/
    */
+  #[Given('/^the default cache backend is set to "([^"]*)"$/')]
   public function theDefaultCacheBackendIsSetTo(string $expected): void {
     $container = \Drupal::getContainer();
     $factory = $container->get($expected);
@@ -341,9 +333,8 @@ class JoinupCoreContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The table node.
-   *
-   * @Given /^I should see the following table rows:$/
    */
+  #[Given('/^I should see the following table rows:$/')]
   public function iShouldSeeTheFollowingTableRows(TableNode $table): void {
     $rows = $table->getRows();
     // Get all table rows/headers in the page regardless of the table.
@@ -374,10 +365,9 @@ class JoinupCoreContext extends RawDrupalContext {
    *
    * @returns \Drupal\Core\Field\FieldItemListInterface
    *   The field instance.
-   *
-   * @Then /^the (?'fieldName'\w*) field in "(?'label'[^"]*)" "?(?'entityTypeId'[\w]*)"? (?'emptiness'should be empty|should not be empty)$/
-   * @Then /^the (?'fieldName'\w*) field in "(?'label'[^"]*)" "?(?'entityTypeId'[\w]*)"? with type "?(?'bundle'[\w]*)"? should be (?'emptiness'should be empty|should not be empty)$/
    */
+  #[Then('/^the (?P<fieldName>\w*) field in "(?P<label>[^"]*)" "?(?P<entityTypeId>[\w]*)"? (?P<emptiness>should be empty|should not be empty)$/')]
+  #[Then('/^the (?P<fieldName>\w*) field in "(?P<label>[^"]*)" "?(?P<entityTypeId>[\w]*)"? with type "?(?P<bundle>[\w]*)"? should be (?P<emptiness>should be empty|should not be empty)$/')]
   public function assertEntityFieldEmptiness(
     string $entityTypeId,
     string $label,
@@ -448,10 +438,9 @@ class JoinupCoreContext extends RawDrupalContext {
    *   to exclude dynamic content from comparison.
    * @param string|null $bundle
    *   The bundle of the entity. Use NULL to not apply this restriction.
-   *
-   * @Then the string value of the :fieldName field in :label :entityTypeId should be :expectedValue
-   * @Then the string value of the :fieldName field in :label :entityTypeId with type :bundle should be :expectedValue
    */
+  #[Then('the string value of the :fieldName field in :label :entityTypeId should be :expectedValue')]
+  #[Then('the string value of the :fieldName field in :label :entityTypeId with type :bundle should be :expectedValue')]
   public function assertFieldValueString(
     string $entityTypeId,
     string $label,
@@ -479,6 +468,25 @@ class JoinupCoreContext extends RawDrupalContext {
         $actual,
       ),
     );
+  }
+
+  /**
+   * Asserts that the response body contains multiple lines of text.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The table node.
+   */
+  #[Then('the response should contain the following lines of text:')]
+  public function assertResponseBodyEquals(TableNode $table): void {
+    $response = $this->getSession()->getDriver()->getContent();
+    foreach ($table->getColumn(0) as $expectedLine) {
+      $expectedLine = $this->escapeStringWithVariables($expectedLine, FALSE);
+      Assert::assertStringContainsString(
+        $expectedLine,
+        $response,
+        "The expected line '$expectedLine' was not found in the response body.",
+      );
+    }
   }
 
 }

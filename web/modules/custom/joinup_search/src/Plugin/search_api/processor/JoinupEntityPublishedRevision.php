@@ -5,23 +5,24 @@ declare(strict_types=1);
 namespace Drupal\joinup_search\Plugin\search_api\processor;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\node\NodeInterface;
+use Drupal\search_api\Attribute\SearchApiProcessor;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Processor\ProcessorPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Ensures that the item to be indexed is the published version.
- *
- * @SearchApiProcessor(
- *   id = "joinup_entity_published_revision",
- *   label = @Translation("Joinup entity published revision"),
- *   description = @Translation("Ensures that the version of the entity is the published revision."),
- *   stages = {
- *     "alter_items" = -20,
- *   },
- * )
  */
+#[SearchApiProcessor(
+  id: "joinup_entity_published_revision",
+  label: new TranslatableMarkup("Joinup entity published revision"),
+  description: new TranslatableMarkup("Ensures that the version of the entity is the published revision."),
+  stages: [
+    "alter_items" => -20,
+  ],
+)]
 class JoinupEntityPublishedRevision extends ProcessorPluginBase {
 
   public function __construct(

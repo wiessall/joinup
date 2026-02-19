@@ -1,0 +1,13 @@
+uuid: eed11bfb-152a-4e8b-94c9-923cdd24bf79
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.owner_type
+id: taxonomy_term.owner_type
+targetEntityType: taxonomy_term
+bundle: owner_type
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

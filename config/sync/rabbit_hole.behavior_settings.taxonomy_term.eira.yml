@@ -1,0 +1,13 @@
+uuid: a9f7eee9-970e-4ca8-b785-78ce9781268a
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.eira
+id: taxonomy_term.eira
+targetEntityType: taxonomy_term
+bundle: eira
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

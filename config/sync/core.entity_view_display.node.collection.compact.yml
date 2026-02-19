@@ -81,4 +81,5 @@ hidden:
   solutions: true
   spatial_coverage: true
   uri: true
+  uuid: true
   website_url: true

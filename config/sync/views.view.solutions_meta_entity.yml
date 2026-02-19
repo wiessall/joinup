@@ -493,7 +493,6 @@ display:
         - user.permissions
       tags:
         - 'config:search_api.index.published'
-        - 'config:views.view.solutions_meta_entity'
         - 'search_api_list:published'
   solutions_meta_entity_block:
     id: solutions_meta_entity_block
@@ -516,5 +515,4 @@ display:
         - user.permissions
       tags:
         - 'config:search_api.index.published'
-        - 'config:views.view.solutions_meta_entity'
         - 'search_api_list:published'

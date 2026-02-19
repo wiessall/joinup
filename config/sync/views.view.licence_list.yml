@@ -264,7 +264,6 @@ display:
         - user.permissions
       tags:
         - 'config:search_api.index.published'
-        - 'config:views.view.licence_list'
         - 'search_api_list:published'
   licence_list_block:
     id: licence_list_block
@@ -285,7 +284,6 @@ display:
         - user.permissions
       tags:
         - 'config:search_api.index.published'
-        - 'config:views.view.licence_list'
         - 'search_api_list:published'
   licence_list_block_jlc:
     id: licence_list_block_jlc
@@ -338,5 +336,4 @@ display:
         - user.permissions
       tags:
         - 'config:search_api.index.published'
-        - 'config:views.view.licence_list'
         - 'search_api_list:published'

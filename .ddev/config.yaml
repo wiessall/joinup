@@ -2,21 +2,12 @@
 # - Basic: https://ddev.readthedocs.io/en/stable/users/configuration/config/
 # - Extend/override: https://ddev.readthedocs.io/en/stable/users/extend/customization-extendibility/#extending-configyaml-with-custom-configyaml-files
 
-ddev_version_constraint: ">=v1.23.0"
+ddev_version_constraint: ">=v1.25.0"
 type: drupal
 docroot: web
 php_version: "8.3"
 webimage_extra_packages:
     - php-apcu
-    # Both required by mydumper.
-    - libatomic1
-    - zstd
-    # Required by python2.
-    - mime-support
-    # Required for building publiccode-parser-php binaries with CGO.
-    - build-essential
-    - wget
-    - file
 
 # It's not possible to use fpfis/httpd-php because DDEV is strongly advising
 # against using a non-DDEV image. But this has no impact on the Interoperable Europe Portal code runs

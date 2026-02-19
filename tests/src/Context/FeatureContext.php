@@ -8,12 +8,18 @@ use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Hook\AfterScenario;
+use Behat\Hook\AfterStep;
+use Behat\Hook\BeforeScenario;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Exception\ExpectationException;
 use Behat\Mink\Exception\ResponseTextException;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Datetime\DrupalDateTime;
@@ -70,18 +76,16 @@ class FeatureContext extends RawDrupalContext {
 
   /**
    * Checks that a 200 OK response occurred.
-   *
-   * @Then I should get a valid web page
    */
+  #[Then('I should get a valid web page')]
   public function assertSuccessfulResponse(): void {
     $this->assertSession()->statusCodeEquals(200);
   }
 
   /**
    * Checks that a 403 Access Denied error occurred.
-   *
-   * @Then I should get an access denied error
    */
+  #[Then('I should get an access denied error')]
   public function assertAccessDenied(): void {
     $this->assertSession()->statusCodeEquals(403);
   }
@@ -96,10 +100,9 @@ class FeatureContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when an expected field is not present.
-   *
-   * @Then (the following )field(s) should be present :fields
-   * @Then I should see the :fields field(s) in the :region region
    */
+  #[Then('(the following )field(s) should be present :fields')]
+  #[Then('I should see the :fields field(s) in the :region region')]
   public function assertFieldsPresent(string $fields, string $region = ''): void {
     $fields = $this->explodeDelimitedSeparatedStepArgument($fields);
     $region_element = $region ? $this->getRegion($region) : $this->getSession()->getPage();
@@ -125,10 +128,9 @@ class FeatureContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a column name is incorrect.
-   *
-   * @Then (the following )field(s) should not be present :fields
-   * @Then I should not see the :fields field(s) in the :region region
    */
+  #[Then('(the following )field(s) should not be present :fields')]
+  #[Then('I should not see the :fields field(s) in the :region region')]
   public function assertFieldsNotPresent(string $fields, string $region = ''): void {
     $fields = $this->explodeDelimitedSeparatedStepArgument($fields);
     $region_element = $region ? $this->getRegion($region) : $this->getSession()->getPage();
@@ -148,9 +150,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when an expected field is not present or is not visible.
-   *
-   * @Then (the following )field(s) should be visible :fields
    */
+  #[Then('(the following )field(s) should be visible :fields')]
   public function assertFieldsVisible(string $fields): void {
     $fields = $this->explodeDelimitedSeparatedStepArgument($fields);
     $page = $this->getSession()->getPage();
@@ -190,9 +191,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a field is not present or is visible.
-   *
-   * @Then (the following )field(s) should not be visible :fields
    */
+  #[Then('(the following )field(s) should not be visible :fields')]
   public function assertFieldsNotVisible(string $fields): void {
     $fields = $this->explodeDelimitedSeparatedStepArgument($fields);
     $page = $this->getSession()->getPage();
@@ -231,10 +231,9 @@ class FeatureContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a fieldset is not found.
-   *
-   * @Then (the following )field widgets should be present :fieldsets
-   * @Then (the following )fieldsets should be present :fieldsets
    */
+  #[Then('(the following )field widgets should be present :fieldsets')]
+  #[Then('(the following )fieldsets should be present :fieldsets')]
   public function assertFieldsetsPresent(string $fieldsets): void {
     $fieldsets = $this->explodeDelimitedSeparatedStepArgument($fieldsets);
     $page = $this->getSession()->getPage();
@@ -262,10 +261,9 @@ class FeatureContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a fieldset is not found or is not visible.
-   *
-   * @Then (the following )field widgets should be visible :fieldsets
-   * @Then (the following )fieldsets should be visible :fieldsets
    */
+  #[Then('(the following )field widgets should be visible :fieldsets')]
+  #[Then('(the following )fieldsets should be visible :fieldsets')]
   public function assertFieldsetsVisible(string $fieldsets): void {
     $fieldsets = $this->explodeDelimitedSeparatedStepArgument($fieldsets);
     $page = $this->getSession()->getPage();
@@ -298,10 +296,9 @@ class FeatureContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a fieldset is not found or is visible.
-   *
-   * @Then (the following )field widgets should not be visible :fieldsets
-   * @Then (the following )fieldsets should not be visible :fieldsets
    */
+  #[Then('(the following )field widgets should not be visible :fieldsets')]
+  #[Then('(the following )fieldsets should not be visible :fieldsets')]
   public function assertFieldsetsNotVisible(string $fieldsets): void {
     $fieldsets = $this->explodeDelimitedSeparatedStepArgument($fieldsets);
     $page = $this->getSession()->getPage();
@@ -335,9 +332,8 @@ class FeatureContext extends RawDrupalContext {
    * @throws \Exception
    *   If one of the images is missing, or if the order of the images is
    *   different than expected.
-   *
-   * @Then I (should ) have the following images on the page( in this order)
    */
+  #[Then('I (should ) have the following images on the page( in this order)')]
   public function assertImagesPresentInOrder(TableNode $imagesTable): void {
     $this->assertImagesInOrder($imagesTable, FALSE);
   }
@@ -351,9 +347,8 @@ class FeatureContext extends RawDrupalContext {
    * @throws \Exception
    *   If one of the images is missing or is not visible, or if the order of
    *   the images is different than expected.
-   *
-   * @Then I (should ) see the following images on the page( in this order)
    */
+  #[Then('I (should ) see the following images on the page( in this order)')]
   public function assertImagesVisibleInOrder(TableNode $imagesTable): void {
     $this->assertImagesInOrder($imagesTable, TRUE);
   }
@@ -440,9 +435,8 @@ class FeatureContext extends RawDrupalContext {
    * @param \Behat\Mink\Element\NodeElement|null $element
    *   The element to look for the image in. Optional. Search is performed on
    *   the entire page if omitted or called with NULL.
-   *
-   * @Then I (should )see the image :filename
    */
+  #[Then('I (should )see the image :filename')]
   public function assertImagePresent(string $filename, ?NodeElement $element = NULL): void {
     foreach ($this->getAllImages($filename, $element) as $imageNode) {
       try {
@@ -464,9 +458,8 @@ class FeatureContext extends RawDrupalContext {
    * @param \Behat\Mink\Element\NodeElement|null $element
    *   The element to look for the image in. Optional. Search is performed on
    *   the entire page if omitted or called with NULL.
-   *
-   * @Then I should not see the image :filename
    */
+  #[Then('I should not see the image :filename')]
   public function assertImageNotPresent(string $filename, ?NodeElement $element = NULL): void {
     if ($imageNode = $this->getImage($filename, $element)) {
       try {
@@ -486,9 +479,8 @@ class FeatureContext extends RawDrupalContext {
    *   The filename.
    * @param string $tile
    *   The tile title.
-   *
-   * @Then I (should )see the image ":filename" in the :tile tile
    */
+  #[Then('I (should )see the image ":filename" in the :tile tile')]
   public function assertImagePresentInRegion(string $filename, string $tile): void {
     $tileElement = $this->getTileByHeading($tile);
     Assert::assertNotEmpty($tileElement, "Tile cannot be found");
@@ -504,9 +496,8 @@ class FeatureContext extends RawDrupalContext {
    *   verify that there is at least one image in the tile.
    * @param string $tile
    *   The title of the tile.
-   *
-   * @Then there should be :count image(s) in the :tile tile
    */
+  #[Then('there should be :count image(s) in the :tile tile')]
   public function assertAnyImagePresentInTile(string $count, string $tile): void {
     $tileElement = $this->getTileByHeading($tile);
     Assert::assertNotEmpty($tileElement, "Tile cannot be found");
@@ -534,9 +525,8 @@ class FeatureContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when an option with the given text does not exist, or when it is
    *   not selected.
-   *
-   * @Then the option :option should be selected
    */
+  #[Then('the option :option should be selected')]
   public function assertOptionSelected(string $text): void {
     $option = $this->getSession()->getPage()->find('xpath', '//option[text()="' . $text . '"]');
 
@@ -560,10 +550,9 @@ class FeatureContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the select is not found in the page or the selected option is
    *   not the expected one.
-   *
-   * @Then the option with text :option from select :select is selected
-   * @Then the option with text :option from select :select should be selected
    */
+  #[Then('the option with text :option from select :select is selected')]
+  #[Then('the option with text :option from select :select should be selected')]
   public function assertFieldOptionSelected(string $option, string $select): void {
     $this->assertFieldOptionSelectedInRegion($option, $select);
   }
@@ -577,9 +566,8 @@ class FeatureContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the select is not found in the page or the selected option is
    *   not the expected one.
-   *
-   * @Then no option from select :select is selected
    */
+  #[Then('no option from select :select is selected')]
   public function assertFieldOptionNoSelected(string $select): void {
     $this->assertFieldOptionSelectedInRegion('none', $select);
   }
@@ -628,9 +616,8 @@ class FeatureContext extends RawDrupalContext {
    *   The node type.
    * @param string $title
    *   The title of the node.
-   *
-   * @Then I should have a :type (content )page titled :title
    */
+  #[Then('I should have a :type (content )page titled :title')]
   public function assertContentPageByTitle(string $type, string $title): void {
     $type = $this->getEntityByLabel('node_type', $type);
     // If the node doesn't exist, the exception will be thrown here.
@@ -642,9 +629,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @param string $element
    *   The element label to click.
-   *
-   * @Then /^I click on element "([^"]*)"$/
    */
+  #[Then('/^I click on element "([^"]*)"$/')]
   public function iClickOn(string $element): void {
     $this->assertSession()->elementExists('css', $element)->click();
   }
@@ -655,10 +641,9 @@ class FeatureContext extends RawDrupalContext {
    * @param string $element
    *   The label to click.
    *
-   * @Then I click on label :element
-   *
    * @throws \Exception
    */
+  #[Then('I click on label :element')]
   public function iClickOnLabel(string $element): void {
     $page = $this->getSession()->getPage();
     $labelElement = $page->find('xpath', "//label[text()='$element']");
@@ -679,9 +664,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   When either the region or the link are not found.
-   *
-   * @Then I click the contextual link :text in the :region region
    */
+  #[Then('I click the contextual link :text in the :region region')]
   public function iClickTheContextualLinkInTheRegion(string $text, string $region): void {
     $this->clickContextualLink($this->getRegion($region), $text);
   }
@@ -696,9 +680,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the contextual link is not found in the region.
-   *
-   * @Then I (should )see the contextual link :text in the :region region
    */
+  #[Then('I (should )see the contextual link :text in the :region region')]
   public function assertContextualLinkInRegionPresent(string $text, string $region): void {
     $links = $this->findContextualLinkPaths($this->getRegion($region));
 
@@ -715,9 +698,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the contextual link is not found in the page.
-   *
-   * @Then I (should )see the contextual link :text
    */
+  #[Then('I (should )see the contextual link :text')]
   public function assertContextualLinkInPagePresent(string $text): void {
     $region = $this->getSession()->getPage();
     $links = $this->findContextualLinkPaths($region);
@@ -737,9 +719,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the contextual link is found in the region.
-   *
-   * @Then I should not see the contextual link :text in the :region region
    */
+  #[Then('I should not see the contextual link :text in the :region region')]
   public function assertContextualLinkInRegionNotPresent(string $text, string $region): void {
     $links = $this->findContextualLinkPaths($this->getRegion($region));
 
@@ -756,9 +737,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the contextual link is found in the page.
-   *
-   * @Then I should not see the contextual link :text
    */
+  #[Then('I should not see the contextual link :text')]
   public function assertContextualLinkInPageNotPresent(string $text): void {
     $region = $this->getSession()->getPage();
     $links = $this->findContextualLinkPaths($region);
@@ -776,9 +756,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when any contextual link is found in the region.
-   *
-   * @Then I should not see any contextual links in the :region region
    */
+  #[Then('I should not see any contextual links in the :region region')]
   public function assertNoContextualLinksInRegion(string $region): void {
     $links = $this->findContextualLinkPaths($this->getRegion($region));
 
@@ -795,10 +774,9 @@ class FeatureContext extends RawDrupalContext {
    *
    * @param string $region
    *   The region in which the contextual link is expected to be visible.
-   *
-   * @Then I (should )see the contextual links button in the :region( region)
-   * @Then the contextual links button should be visible in the :region( region)
    */
+  #[Then('I (should )see the contextual links button in the :region( region)')]
+  #[Then('the contextual links button should be visible in the :region( region)')]
   public function assertContextualLinkButtonVisible(string $region): void {
     $button = $this->findContextualLinkButton($this->getRegion($region));
     $this->assertVisuallyVisible($button);
@@ -809,9 +787,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @param string $region
    *   The name of the region where the contextual links button resides.
-   *
-   * @When I click the contextual links button in the :region( region)
    */
+  #[When('I click the contextual links button in the :region( region)')]
   public function clickContextualLinkButton(string $region): void {
     $button = $this->findContextualLinkButton($this->getRegion($region));
     $button->click();
@@ -832,9 +809,8 @@ class FeatureContext extends RawDrupalContext {
    *   The element tag.
    * @param string $region
    *   The region selector.
-   *
-   * @Then the :locator :element in the :region( region) should not be visible
    */
+  #[Then('the :locator :element in the :region( region) should not be visible')]
   public function assertElementNotVisibleInRegion(string $locator, string $element, string $region): void {
     $region = $this->getRegion($region);
     $element = $this->findNamedElementInRegion($locator, $element, $region);
@@ -856,9 +832,8 @@ class FeatureContext extends RawDrupalContext {
    *   The element tag.
    * @param string $region
    *   The region selector.
-   *
-   * @Then the :locator :element in the :region( region) should be visible
    */
+  #[Then('the :locator :element in the :region( region) should be visible')]
   public function assertElementVisibleInRegion(string $locator, string $element, string $region): void {
     $region = $this->getRegion($region);
     $element = $this->findNamedElementInRegion($locator, $element, $region);
@@ -873,9 +848,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   When the tab is not found on the page.
-   *
-   * @When I click( the) :tab tab
    */
+  #[When('I click( the) :tab tab')]
   public function clickVerticalTabLink(string $tab): void {
     // When this is running in a browser without JavaScript the vertical tabs
     // are rendered as detail elements.
@@ -905,9 +879,8 @@ class FeatureContext extends RawDrupalContext {
    * @throws \Exception
    *   When the field cannot be found or the number of values is different from
    *   the number of elements found.
-   *
-   * @When I fill in :field with values :values
    */
+  #[When('I fill in :field with values :values')]
   public function fillFieldWithValues(string $field, string $values): void {
     $values = $this->explodeDelimitedSeparatedStepArgument($values);
 
@@ -935,9 +908,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the region is found in the page.
-   *
-   * @Then I should not see the :region region
    */
+  #[Then('I should not see the :region region')]
   public function assertRegionNotPresent(string $region): void {
     $session = $this->getSession();
     $element = $session->getPage()->find('region', $region);
@@ -956,9 +928,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the title tag is not found or the text doesn't match.
-   *
-   * @Then the HTML title of the page should be :text
    */
+  #[Then('the HTML title of the page should be :text')]
   public function assertPageTitleTagContainsText(string $text): void {
     $session = $this->getSession();
     $page_title = $session->getPage()->find('xpath', '//head/title');
@@ -991,9 +962,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $headingsTable
    *   A list of headings.
-   *
-   * @Then I (should )see the following headings:
    */
+  #[Then('I (should )see the following headings:')]
   public function assertHeadings(TableNode $headingsTable): void {
     $page = $this->getSession()->getPage();
     $headings = $headingsTable->getColumn(0);
@@ -1022,9 +992,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $headingsTable
    *   A list of headings.
-   *
-   * @Then I should not see the following headings:
    */
+  #[Then('I should not see the following headings:')]
   public function assertNoHeadings(TableNode $headingsTable): void {
     $page = $this->getSession()->getPage();
     $headings = $headingsTable->getColumn(0);
@@ -1053,9 +1022,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   A list of texts.
-   *
-   * @Then I (should )see the following lines of text:
    */
+  #[Then('I (should )see the following lines of text:')]
   public function assertTexts(TableNode $table): void {
     $lines = $table->getColumn(0);
     $errors = [];
@@ -1085,10 +1053,9 @@ class FeatureContext extends RawDrupalContext {
    * @param string|null $region
    *   The region where to look. If none is given,
    *   it will search in the page.
-   *
-   * @Then I (should )see the following lines of text in the correct order:
-   * @Then I (should )see the following lines of text in the correct order in :region:
    */
+  #[Then('I (should )see the following lines of text in the correct order:')]
+  #[Then('I (should )see the following lines of text in the correct order in :region:')]
   public function assertPageTextOrder(TableNode $table, ?string $region = NULL): void {
     $session = $this->getSession();
 
@@ -1132,9 +1099,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   A list of texts.
-   *
-   * @Then I should not see the following lines of text:
    */
+  #[Then('I should not see the following lines of text:')]
   public function assertNoTexts(TableNode $table): void {
     $lines = $table->getColumn(0);
     $errors = [];
@@ -1163,10 +1129,9 @@ class FeatureContext extends RawDrupalContext {
    *   A list of links.
    * @param string $region
    *   Optional region to check.
-   *
-   * @Then I (should )see the following links:
-   * @Then I (should )see the following links in the :region( region):
    */
+  #[Then('I (should )see the following links:')]
+  #[Then('I (should )see the following links in the :region( region):')]
   public function assertLinks(TableNode $table, string $region = ''): void {
     $region_element = $region ? $this->getRegion($region) : $this->getSession()->getPage();
     $links = $table->getColumn(0);
@@ -1194,10 +1159,9 @@ class FeatureContext extends RawDrupalContext {
    *   A list of links.
    * @param string $region
    *   Optional region to check.
-   *
-   * @Then I should not see the following links:
-   * @Then I should not see the following links in the :region( region):
    */
+  #[Then('I should not see the following links:')]
+  #[Then('I should not see the following links in the :region( region):')]
   public function assertNoLinks(TableNode $table, string $region = ''): void {
     $region_element = $region ? $this->getRegion($region) : $this->getSession()->getPage();
     $links = $table->getColumn(0);
@@ -1215,27 +1179,24 @@ class FeatureContext extends RawDrupalContext {
 
   /**
    * Checks that the page is cacheable.
-   *
-   * @Then the page should be cacheable
    */
+  #[Then('the page should be cacheable')]
   public function assertPageCacheable(): void {
     Assert::assertTrue($this->isPageCacheable());
   }
 
   /**
    * Checks that the page is cached.
-   *
-   * @Then the page should be cached
    */
+  #[Then('the page should be cached')]
   public function assertPageCached(): void {
     Assert::assertTrue($this->isPageCached());
   }
 
   /**
    * Checks that the page is not cached.
-   *
-   * @Then the page should not be cached
    */
+  #[Then('the page should not be cached')]
   public function assertPageNotCached(): void {
     Assert::assertFalse($this->isPageCached());
   }
@@ -1251,9 +1212,8 @@ class FeatureContext extends RawDrupalContext {
    *   contains no checkbox or radio button.
    * @throws \Behat\Mink\Exception\ExpectationException
    *   If the checkbox is unchecked.
-   *
-   * @Then the row :text is selected/checked
    */
+  #[Then('the row :text is selected/checked')]
   public function assertRowIsChecked(string $text): void {
     if (!$this->getCheckboxOrRadioByRowText($text)->isChecked()) {
       throw new ExpectationException("Checkbox/radio-button in '$text' row is unchecked/unselected but it should be checked/selected.", $this->getSession()->getDriver());
@@ -1271,9 +1231,8 @@ class FeatureContext extends RawDrupalContext {
    *   contains no checkbox or radio button.
    * @throws \Behat\Mink\Exception\ExpectationException
    *   If the checkbox is checked.
-   *
-   * @Then the row :text is not selected/checked
    */
+  #[Then('the row :text is not selected/checked')]
   public function assertRowIsNotChecked(string $text): void {
     if ($this->getCheckboxOrRadioByRowText($text)->isChecked()) {
       throw new ExpectationException("Checkbox/radio-button in '$text' row is checked/selected but it should be unchecked/unselected.", $this->getSession()->getDriver());
@@ -1289,9 +1248,8 @@ class FeatureContext extends RawDrupalContext {
    * @throws \Exception
    *   If the page contains no rows, no row contains the text or the row
    *   contains no checkbox or radio button.
-   *
-   * @Given I select/check the :text row
    */
+  #[Given('I select/check the :text row')]
   public function checkTableselectRow(string $text): void {
     $element = $this->getCheckboxOrRadioByRowText($text);
     if ($element->getAttribute('type') === 'checkbox') {
@@ -1313,9 +1271,8 @@ class FeatureContext extends RawDrupalContext {
    *   contains no checkbox or radio button.
    * @throws \InvalidArgumentException
    *   If this step definition was used on a radio button.
-   *
-   * @Given I deselect/uncheck the :text row
    */
+  #[Given('I deselect/uncheck the :text row')]
   public function uncheckTableselectRow(string $text): void {
     $element = $this->getCheckboxOrRadioByRowText($text);
     if ($element->getAttribute('type') === 'radio') {
@@ -1331,9 +1288,8 @@ class FeatureContext extends RawDrupalContext {
    *   The link to search for.
    * @param string $row_text
    *   Text contained in a row. Must be unique.
-   *
-   * @Given I click the :link_text link in the :row_text row
    */
+  #[Given('I click the :link_text link in the :row_text row')]
   public function clickLinkInRow(string $link_text, string $row_text): void {
     $element = $this->getRowByRowText($row_text);
     $link = $element->findLink($link_text);
@@ -1353,9 +1309,8 @@ class FeatureContext extends RawDrupalContext {
    *   The text to be filled in.
    * @param string $rowText
    *   Text contained in a row. Must be unique.
-   *
-   * @When I fill in the :index occurrence of the :field field with :text in the :rowText row
    */
+  #[When('I fill in the :index occurrence of the :field field with :text in the :rowText row')]
   public function fillFieldInRowByIndex(string $index, string $field, string $text, string $rowText): void {
     $index = $this->convertOrdinalToNumber($index);
     $row = $this->getRowByRowText($rowText);
@@ -1376,10 +1331,9 @@ class FeatureContext extends RawDrupalContext {
    *   Text of row.
    *
    * @throws \Exception
-   *
-   * @When I press the button :button in the :text row
-   * @When I press the :button button in the :text row
    */
+  #[When('I press the button :button in the :text row')]
+  #[When('I press the :button button in the :text row')]
   public function pressButtonsInRow(string $buttonIdentifier, string $rowText): void {
     $row = $this->getRowByRowText($rowText);
 
@@ -1455,9 +1409,8 @@ class FeatureContext extends RawDrupalContext {
 
   /**
    * Runs a batch operations process.
-   *
-   * @Given I wait for the batch process to finish
    */
+  #[Given('I wait for the batch process to finish')]
   public function waitForBatchProcess(): void {
     while ($refresh = $this->getSession()
       ->getPage()
@@ -1493,9 +1446,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @see \Drupal\Core\Cache\DatabaseCacheTagsChecksum
    * @see https://github.com/jhedstrom/drupalextension/issues/133
-   *
-   * @AfterStep
    */
+  #[AfterStep]
   public function clearCacheTagsStaticCache(AfterStepScope $event): void {
     if ($this->getScenario()->hasTag('api') || $event->getFeature()->hasTag('api')) {
       // Sample tests needing this:
@@ -1532,10 +1484,9 @@ class FeatureContext extends RawDrupalContext {
    * scenario because entities are cleaned after a scenario and we need to
    * ensure that the RDF data is synchronized after each scenario. If this does
    * not run, the RDF data will be left in the RDF database as stale data.
-   *
-   * @AfterStep
-   * @AfterScenario
    */
+  #[AfterStep]
+  #[AfterScenario]
   public function afterStepRdfSyncDestruct(): void {
     \Drupal::service('rdf_sync.synchronizer')->destruct();
   }
@@ -1545,9 +1496,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @param string $text
    *   The text to search for.
-   *
-   * @Given I wait until the page contains the text :text
    */
+  #[Given('I wait until the page contains the text :text')]
   public function iWaitUntilPageContains(string $text): void {
     $text = addslashes($text);
     $result = $this->getSession()->wait(60000,
@@ -1576,9 +1526,8 @@ class FeatureContext extends RawDrupalContext {
    *   The ID, name, label or value of the autocomplete field to fill in.
    * @param string $value
    *   The text to type in the autocomplete field.
-   *
-   * @When I type :value in the :field autocomplete field
    */
+  #[When('I type :value in the :field autocomplete field')]
   public function fillAutoCompleteField(string $field, string $value): void {
     $this->assertJavaScriptEnabledBrowser();
 
@@ -1590,9 +1539,8 @@ class FeatureContext extends RawDrupalContext {
 
   /**
    * Installs the testing module for scenarios tagged with @errorPage.
-   *
-   * @BeforeScenario @errorPage&&@api
    */
+  #[BeforeScenario('@errorPage&&@api')]
   public function beforeErrorPageTesting(): void {
     static::toggleModule('install', ['error_page_test']);
 
@@ -1605,9 +1553,8 @@ class FeatureContext extends RawDrupalContext {
 
   /**
    * Uninstalls the testing module for scenarios tagged with @errorPage.
-   *
-   * @AfterScenario @errorPage&&@api
    */
+  #[AfterScenario('@errorPage&&@api')]
   public function afterErrorPageTesting(): void {
     static::toggleModule('uninstall', ['error_page_test']);
 
@@ -1626,9 +1573,8 @@ class FeatureContext extends RawDrupalContext {
    * @param string|null $error_level
    *   (optional) The error level. If not passed, the original error level is
    *   restored.
-   *
-   * @Given the site error reporting verbosity is( set to) :error_level
    */
+  #[Given('the site error reporting verbosity is( set to) :error_level')]
   public function setSiteErrorLevel(?string $error_level = NULL): void {
     static $original_error_level;
 
@@ -1654,9 +1600,8 @@ class FeatureContext extends RawDrupalContext {
    *   The term name.
    * @param string $format
    *   The RDF serialization format.
-   *
-   * @Given I visit the :vocabulary_name term :term_name page in the :format serialisation
    */
+  #[Given('I visit the :vocabulary_name term :term_name page in the :format serialisation')]
   public function visitTermWithFormat(string $vocabulary_name, string $term_name, string $format): void {
     /** @var \Drupal\taxonomy\Entity\Vocabulary $vocabulary */
     $vocabulary = $this->getEntityByLabel('taxonomy_vocabulary', $vocabulary_name);
@@ -1671,9 +1616,8 @@ class FeatureContext extends RawDrupalContext {
    *   The name of the vocabulary.
    * @param string $term_name
    *   The term name.
-   *
-   * @Given I delete the :vocabulary_name term :term_name
    */
+  #[Given('I delete the :vocabulary_name term :term_name')]
   public function deleteTermByName(string $vocabulary_name, string $term_name): void {
     /** @var \Drupal\taxonomy\Entity\Vocabulary $vocabulary */
     $vocabulary = $this->getEntityByLabel('taxonomy_vocabulary', $vocabulary_name);
@@ -1689,9 +1633,8 @@ class FeatureContext extends RawDrupalContext {
    * @code
    * @generateMediaTypes:<mediaType1>,<mediaType2>,...
    * @endcode
-   *
-   * @BeforeScenario @generateMedia
    */
+  #[BeforeScenario('@generateMedia')]
   public function generateMedia(BeforeScenarioScope $scope): void {
     $mediaTypes = $this->getTagValues($scope, 'generateMediaTypes');
     if (empty($mediaTypes)) {
@@ -1741,9 +1684,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * Tests that interact with the version file should be tagged with
    * `@joinupVersion`.
-   *
-   * @BeforeScenario @joinupVersion&&@api
    */
+  #[BeforeScenario('@joinupVersion&&@api')]
   public function backupJoinupVersion(): void {
     $filename = JoinupVersionInterface::PATH;
     $this->version = file_exists($filename) ? file_get_contents($filename) : FALSE;
@@ -1751,9 +1693,8 @@ class FeatureContext extends RawDrupalContext {
 
   /**
    * Restores the backup of the Joinup `VERSION` file.
-   *
-   * @AfterScenario @joinupVersion&&@api
    */
+  #[AfterScenario('@joinupVersion&&@api')]
   public function restoreJoinupVersion(): void {
     if ($this->version === FALSE) {
       unlink(JoinupVersionInterface::PATH);
@@ -1773,9 +1714,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @param string $version
    *   The Joinup version to set, e.g. 'v1.57.0' or 'v1.57.0-66-g1234abcde'.
-   *
-   * @When the Interoperable Europe Portal version is set to :version
    */
+  #[When('the Interoperable Europe Portal version is set to :version')]
   public function setJoinupVersion(string $version): void {
     // Alert the user that the `@joinupVersion` tag is required.
     Assert::assertTrue($this->hasTag('joinupVersion'), 'The `@joinupVersion` tag is required for scenarios that want to change the Interoperable Europe Portal version.');
@@ -1793,9 +1733,8 @@ class FeatureContext extends RawDrupalContext {
 
   /**
    * Cleans the mail collector before the scenario starts.
-   *
-   * @BeforeScenario @api
    */
+  #[BeforeScenario('@api')]
   public function cleanUpEmailCollector(): void {
     \Drupal::state()->delete('system.test_mail_collector');
   }
@@ -1810,9 +1749,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @throws \InvalidArgumentException
    *   When the offset is invalid or the field doesn't exist.
-   *
-   * @When I select image #:offset as :content_type logo
    */
+  #[When('I select image #:offset as :content_type logo')]
   public function selectImageFromTheFieldImageLibraryBrowser(string $offset, string $content_type): void {
     $this->validateImageLibraryBrowserStepDefinitionParams($content_type, $offset);
     $map = $this->getImageLibraryBrowserMapping($content_type);
@@ -1867,9 +1805,8 @@ class FeatureContext extends RawDrupalContext {
    *   Thrown when an entity with the given $title does not exist.
    * @throws \Exception
    *   When no image of type $type has been clicked.
-   *
-   * @Then the :title :content_type logo is image #:offset
    */
+  #[Then('the :title :content_type logo is image #:offset')]
   public function assertLogoFromTheFieldImageLibraryBrowser(string $content_type, string $title, string $offset): void {
     $this->validateImageLibraryBrowserStepDefinitionParams($content_type, $offset);
     $map = $this->getImageLibraryBrowserMapping($content_type);
@@ -1917,9 +1854,8 @@ class FeatureContext extends RawDrupalContext {
    *   When the field is not found.
    *
    * @todo Extend this step definition to handle also item with delta > 0.
-   *
-   * @When I remove the (first )file from (the ):field( field)
    */
+  #[When('I remove the (first )file from (the ):field( field)')]
   public function removeFirstFileFromField(string $field_name): void {
     $session = $this->getSession();
     $locator = '//label[text()="' . $field_name . '"]';
@@ -1942,9 +1878,8 @@ class FeatureContext extends RawDrupalContext {
    *   Attribute name.
    * @param string $region
    *   Region name.
-   *
-   * @Then I( should) see the :tag element with empty :atr attribute in the :region( region)
    */
+  #[Then('I( should) see the :tag element with empty :atr attribute in the :region( region)')]
   public function assertRegionElementEmptyAttribute(string $tag, string $atr, string $region): void {
     $region_container = $this->getRegion($region);
     $elements = $region_container->findAll('css', $tag);
@@ -1974,9 +1909,8 @@ class FeatureContext extends RawDrupalContext {
    *   Attribute name.
    * @param string $attr_value
    *   Attribute value.
-   *
-   * @Then the :tag element with :attr_name attribute should contain :value
    */
+  #[Then('the :tag element with :attr_name attribute should contain :value')]
   public function assertElementAttributeContains(string $tag, string $attr_name, string $attr_value): void {
     $element = $this->getSession()->getPage()->find('xpath', "//{$tag}[contains(@$attr_name,'$attr_value')]");
     if (empty($element)) {
@@ -1986,9 +1920,8 @@ class FeatureContext extends RawDrupalContext {
 
   /**
    * Verifies that no elements with a title attribute contain HTML tags.
-   *
-   * @Then I should not see any HTML tags inside elements with title attribute
    */
+  #[Then('I should not see any HTML tags inside elements with title attribute')]
   public function assertNoTagsInsideDiv(): void {
     // Find all elements with a title attribute.
     $elements = $this->getSession()->getPage()->findAll('css', '[title]');
@@ -2008,9 +1941,8 @@ class FeatureContext extends RawDrupalContext {
 
   /**
    * Disable cookie consent for all scenarios unless tagged with @cookieConsent.
-   *
-   * @BeforeScenario ~@cookieConsent&&@api
    */
+  #[BeforeScenario('~@cookieConsent&&@api')]
   public function disableCookieConsent(): void {
     $config_context = $this->getContext(ConfigContext::class);
     $name = 'oe_webtools_cookie_consent.settings';
@@ -2028,9 +1960,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @throws \Exception
    *    Thrown when the input fill failed.
-   *
-   * @When I fill :label with the absolute URL :URL
    */
+  #[When('I fill :label with the absolute URL :URL')]
   public function iFillWithTheCurrentUrlPath(string $label, string $url): void {
     $this->getSession()->getPage()->fillField($label, $this->locatePath($url));
   }
@@ -2040,9 +1971,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @param string $expected_theme_name
    *   The expected theme label.
-   *
-   * @Then the page should be rendered using the :expected_theme_name theme
    */
+  #[Then('the page should be rendered using the :expected_theme_name theme')]
   public function assertCurrentTheme(string $expected_theme_name): void {
     $theme_list = \Drupal::service('theme_handler')->listInfo();
     $expected_theme = array_reduce(array_keys($theme_list), function (?string $expected_theme, string $theme) use ($expected_theme_name, $theme_list): ?string {
@@ -2089,9 +2019,8 @@ class FeatureContext extends RawDrupalContext {
    *   The entity bundle.
    * @param string $time
    *   The time as string.
-   *
-   * @When I update the :label :bundle at :time
    */
+  #[When('I update the :label :bundle at :time')]
   public function updateEntityAtDateTime(string $label, string $bundle, string $time): void {
     $entity_type_id = static::entityTypeAliases()[$bundle];
     $entity = $this->getEntityByLabel($entity_type_id, $label);
@@ -2112,9 +2041,8 @@ class FeatureContext extends RawDrupalContext {
    *   The entity bundle.
    * @param string $field_label
    *   The field label.
-   *
-   * @Then the :label :bundle :field_label time has just been updated
    */
+  #[Then('the :label :bundle :field_label time has just been updated')]
   public function assertTimestampFieldUpdatedToNow(string $label, string $bundle, string $field_label): void {
     $entity_type_id = static::entityTypeAliases()[$bundle];
     $entity = $this->getEntityByLabel($entity_type_id, $label);
@@ -2143,9 +2071,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @param string $queue_name
    *   The queue name.
-   *
-   * @When I run the :queue_name queue worker
    */
+  #[When('I run the :queue_name queue worker')]
   public function iRunTheQueueWorker(string $queue_name): void {
     // Create a new Process instance to run the Drush command.
     $process = Process::fromShellCommandline(
@@ -2167,9 +2094,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @param string $module
    *   The implementer module of the cron hook.
-   *
-   * @When I run the :module cron
    */
+  #[When('I run the :module cron')]
   public function iRunSpecificCron(string $module): void {
     Assert::assertTrue(function_exists($cronFunction = "{$module}_cron"));
     call_user_func($cronFunction);
@@ -2182,10 +2108,9 @@ class FeatureContext extends RawDrupalContext {
    *   The queue name.
    * @param int $itemCount
    *   The expected number of items in the queue.
-   *
-   * @Then the number of items in the :queueName queue should be :itemCount
-   * @Then the number of items in the :queueName queue must be :itemCount
    */
+  #[Then('the number of items in the :queueName queue should be :itemCount')]
+  #[Then('the number of items in the :queueName queue must be :itemCount')]
   public function assertNumberOfQueueItems(string $queueName, int $itemCount): void {
     Assert::assertSame($itemCount, \Drupal::queue($queueName)->numberOfItems());
   }
@@ -2195,9 +2120,8 @@ class FeatureContext extends RawDrupalContext {
    *
    * @param string $queueName
    *   The queue name.
-   *
-   * @Given the :queueName queue is empty
    */
+  #[Given('the :queueName queue is empty')]
   public function emptyQueue(string $queueName): void {
     $queue = \Drupal::queue($queueName);
     $queue->deleteQueue();

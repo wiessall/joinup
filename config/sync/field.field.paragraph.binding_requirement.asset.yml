@@ -1,0 +1,39 @@
+uuid: bb7bd1c1-8cf4-4dd1-9881-fb91f289ee13
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.asset
+    - node.type.solution
+    - paragraphs.paragraphs_type.binding_requirement
+  module:
+    - rdf_sync
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+  rdf_sync:
+    target_id:
+      predicate: 'http://purl.org/dc/terms/relation'
+      type: resource
+id: paragraph.binding_requirement.asset
+field_name: asset
+entity_type: paragraph
+bundle: binding_requirement
+label: Asset
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      solution: solution
+    sort:
+      field: title
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

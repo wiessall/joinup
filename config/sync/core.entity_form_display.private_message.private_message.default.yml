@@ -29,4 +29,5 @@ content:
       allowed_formats:
         hide_help: '1'
         hide_guidelines: '1'
-hidden: {  }
+hidden:
+  uuid: true

@@ -1,0 +1,11 @@
+uuid: 59189b99-33a6-41cb-b6d7-93e110f8dd1b
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.discussion_invite
+id: message.discussion_invite
+target_entity_type_id: message
+target_bundle: discussion_invite
+default_langcode: site_default
+language_alterable: false

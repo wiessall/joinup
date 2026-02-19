@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Given;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\JsonLdObjectInspector;
 use Drupal\joinup\Traits\EntityTrait;
+use Drupal\joinup\Traits\UtilityTrait;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -16,6 +18,7 @@ use PHPUnit\Framework\Assert;
 class JoinupSeoContext extends RawDrupalContext {
 
   use EntityTrait;
+  use UtilityTrait;
 
   /**
    * Asserts that a list of meta tags are presented in the page.
@@ -34,9 +37,8 @@ class JoinupSeoContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown if at least one of the tags is not found or has a wrong value.
-   *
-   * @Given the following meta tags should available in the html:
    */
+  #[Given('the following meta tags should available in the html:')]
   public function assertMetaTagListInPage(TableNode $list): void {
     $page = $this->getSession()->getPage();
     $missing = [];
@@ -80,10 +82,9 @@ class JoinupSeoContext extends RawDrupalContext {
 
   /**
    * Asserts that the schema.org metatags are attached in page.
-   *
-   * @Given the metatag JSON should be attached in the page
-   * @Given the metatag JSON should be attached in the page with context :context
    */
+  #[Given('the metatag JSON should be attached in the page')]
+  #[Given('the metatag JSON should be attached in the page with context :context')]
   public function assertJsonMetatagsInPage(string $context = '', bool $checkSchemaContext = TRUE): void {
     $json = $this->getMetatagsAsJson();
     Assert::assertNotEmpty($json, 'Entity metadata are found in the table.');
@@ -110,18 +111,16 @@ class JoinupSeoContext extends RawDrupalContext {
 
   /**
    * Asserts that the schema.org metatags are attached in page.
-   *
-   * @Given the metatag JSON should be attached in the page without context
    */
+  #[Given('the metatag JSON should be attached in the page without context')]
   public function assertJsonMetatagsInPageWithoutSchemaContext(): void {
     $this->assertJsonMetatagsInPage(checkSchemaContext: FALSE);
   }
 
   /**
    * Asserts that the schema.org metatags are attached in page.
-   *
-   * @Given the metatag JSON should not be attached in the page
    */
+  #[Given('the metatag JSON should not be attached in the page')]
   public function assertMetatagsNotInPage(): void {
     $json = $this->getMetatagsAsJson();
     Assert::assertEmpty($json, 'Entity metadata are not attached in the page.');
@@ -134,9 +133,8 @@ class JoinupSeoContext extends RawDrupalContext {
    *   The number of graphs of the given type.
    * @param string $type
    *   The type of graph which is the schema class.
-   *
-   * @Given :count metatag graph of type :type should exist in the page
    */
+  #[Given(':count metatag graph of type :type should exist in the page')]
   public function assertNumberOfEntityGraphsExist(int $count, string $type): void {
     $found = 0;
     $json = $this->getMetatagsAsJson(FALSE);
@@ -167,12 +165,11 @@ class JoinupSeoContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown if the graph is not found in the page or the requested sub
    *   property does not exist.
-   *
-   * @Given the metatag (sub)graph of the item with :property :value should have the following properties:
-   * @Given the metatag (sub)graph of the item with :property :value should have the following :sub_property properties:
-   * @Given the metatag (sub)graph of the item with :property :value should have the following properties in index :delta:
-   * @Given the metatag (sub)graph of the item with :property :value should have the following :sub_property properties in index :delta:
    */
+  #[Given('the metatag (sub)graph of the item with :property :value should have the following properties:')]
+  #[Given('the metatag (sub)graph of the item with :property :value should have the following :sub_property properties:')]
+  #[Given('the metatag (sub)graph of the item with :property :value should have the following properties in index :delta:')]
+  #[Given('the metatag (sub)graph of the item with :property :value should have the following :sub_property properties in index :delta:')]
   public function assertPropertiesOfMetatagGraph(
     string $property,
     string $value,
@@ -256,31 +253,6 @@ class JoinupSeoContext extends RawDrupalContext {
   }
 
   /**
-   * Escapes available variables from string and prepares it for a regex match.
-   *
-   * @param string $string
-   *   The string to convert.
-   *
-   * @return string
-   *   The converted string.
-   */
-  protected function escapeStringWithVariables(string $string): string {
-    // The URL structure is very important in the SEO metatags as a wrong URL
-    // or an internal path could cause search engines to be misled. Thus,
-    // the full URL must be always asserted.
-    $base_url = $this->getMinkParameter('base_url');
-
-    $string = preg_quote($string, '#');
-    $replacements = [
-      '__base_url__' => preg_quote($base_url),
-      '__random_text__' => '([^/]*)?',
-      '__timezone__' => '\d{2}',
-    ];
-
-    return strtr($string, $replacements);
-  }
-
-  /**
    * Verifies that a graph object exists on the page.
    *
    * @param string $property
@@ -290,10 +262,9 @@ class JoinupSeoContext extends RawDrupalContext {
    * @param string|null $not
    *   NULL if we want to ensure that the graph is present, or the string "not"
    *   if the graph shouldn't be present.
-   *
-   * @Given the metatag graph of the item with :property :value should be present
-   * @Given the metatag graph of the item with :property :value should :not be present
    */
+  #[Given('the metatag graph of the item with :property :value should be present')]
+  #[Given('the metatag graph of the item with :property :value should :not be present')]
   public function jsonLdGraphObjectExistsByLabel(string $property, string $value, ?string $not = NULL): void {
     Assert::assertTrue(in_array($not, [NULL, 'not'], TRUE));
     $count = 0;

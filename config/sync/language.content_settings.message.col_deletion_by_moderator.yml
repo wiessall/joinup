@@ -1,0 +1,11 @@
+uuid: 2ec97c55-41b7-45ad-896b-c7c13213e8be
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.col_deletion_by_moderator
+id: message.col_deletion_by_moderator
+target_entity_type_id: message
+target_bundle: col_deletion_by_moderator
+default_langcode: site_default
+language_alterable: false

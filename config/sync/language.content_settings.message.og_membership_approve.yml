@@ -1,0 +1,11 @@
+uuid: 03aea818-8a7a-492e-b1fb-81f691fb168b
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.og_membership_approve
+id: message.og_membership_approve
+target_entity_type_id: message
+target_bundle: og_membership_approve
+default_langcode: site_default
+language_alterable: false

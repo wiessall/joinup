@@ -85,8 +85,6 @@ display:
             - change_collection
             - archive_solution
             - unarchive_solution
-          link_to_item: false
-          use_highlighting: false
         title:
           id: title
           table: search_api_datasource_published_entity_node
@@ -598,7 +596,10 @@ display:
       relationships: {  }
       header: {  }
       footer: {  }
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
     cache_metadata:
       max-age: 0
       contexts:
@@ -611,7 +612,6 @@ display:
       tags:
         - 'config:field.storage.node.field_state'
         - 'config:search_api.index.published'
-        - 'config:views.view.manage_collection_solutions'
         - 'search_api_list:published'
   manage_solutions:
     id: manage_solutions
@@ -646,5 +646,4 @@ display:
       tags:
         - 'config:field.storage.node.field_state'
         - 'config:search_api.index.published'
-        - 'config:views.view.manage_collection_solutions'
         - 'search_api_list:published'

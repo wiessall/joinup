@@ -49,3 +49,4 @@ content:
 hidden:
   coc_date: true
   coc_document: true
+  uuid: true

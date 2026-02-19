@@ -1,0 +1,18 @@
+uuid: f8140342-5a02-41e8-9b86-f71b52bee8dc
+langcode: en
+status: true
+dependencies:
+  config:
+    - entity_legal.document.legal_notice
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: entity_legal_document_version.legal_notice
+target_entity_type_id: entity_legal_document_version
+target_bundle: legal_notice
+default_langcode: site_default
+language_alterable: false

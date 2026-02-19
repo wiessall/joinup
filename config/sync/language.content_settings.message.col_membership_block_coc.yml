@@ -1,0 +1,11 @@
+uuid: d32ec999-5e88-4939-b180-0756f6f8d023
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.col_membership_block_coc
+id: message.col_membership_block_coc
+target_entity_type_id: message
+target_bundle: col_membership_block_coc
+default_langcode: site_default
+language_alterable: false
