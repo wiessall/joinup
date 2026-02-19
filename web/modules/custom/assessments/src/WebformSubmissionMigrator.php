@@ -10,9 +10,7 @@ use Drupal\Core\Entity\ContentEntityStorageInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\PublicOrganisation;
-use Drupal\paragraphs\ParagraphInterface;
 use Drupal\webform\WebformSubmissionInterface;
 use Psr\Log\LoggerInterface;
 
@@ -132,7 +130,6 @@ class WebformSubmissionMigrator {
     $failed = 0;
 
     foreach ($storage->loadMultiple($ids) as $submission) {
-      \assert($submission instanceof WebformSubmissionInterface);
       try {
         if ($this->migrateSubmission($submission)) {
           $migrated++;
@@ -191,18 +188,28 @@ class WebformSubmissionMigrator {
     if ($submission->isDraft()) {
       $state = 'draft';
     }
-    elseif ($submission->isLocked()) {
-      $state = 'review';
+    elseif ($submission->isCompleted()) {
+      // isLocked() is always true alongside isCompleted() because the webform
+      // locks submissions automatically on submit. There is therefore no
+      // separate isLocked branch needed.
+      // Note: as agreed, under review submissions will be migrated as
+      // published so that they can be edited by moderators.
+      $state = 'published';
     }
     else {
-      $state = 'published';
+      $this->logger->notice('Skipping webform submission @sid: unknown submission state.', [
+        '@sid' => $submission->id(),
+      ]);
+      return FALSE;
     }
 
     $reportValues = [
       'type' => 'report',
-      'name' => !empty($data['short_title']) ? $data['short_title'] : 'Assessment #' . $submission->id(),
+      'name' => (!empty($data['short_title']) ? $data['short_title'] : 'Assessment') . ' #' . $submission->id(),
       'provider' => $provider,
       'binding_requirement' => $bindingRequirements,
+      'created' => $submission->getCreatedTime(),
+      'changed' => $submission->getChangedTime(),
       'state' => $state,
       'status' => $state === 'published',
       'uid' => $ownerId,
@@ -242,9 +249,7 @@ class WebformSubmissionMigrator {
     if ($documentFids) {
       $reportValues['documents'] = $this->entityTypeManager->getStorage('file')->loadMultiple($documentFids);
     }
-
     $report = $this->getAssessmentStorage()->create($reportValues);
-    \assert($report instanceof AssessmentReport);
 
     // Add statements.
     $statementStorage = $this->entityTypeManager->getStorage('assessment_statement');
@@ -349,10 +354,7 @@ class WebformSubmissionMigrator {
       $values['country'] = $countryTid;
     }
 
-    $organisation = $this->getAssessmentStorage()->create($values);
-    \assert($organisation instanceof PublicOrganisation);
-
-    return $organisation;
+    return $this->getAssessmentStorage()->create($values);
   }
 
   /**
@@ -372,18 +374,14 @@ class WebformSubmissionMigrator {
       $values = [
         'type' => 'expression',
         'initiative_name' => $initiative['initiative'],
-        'description' => [
-          'value' => $initiative['initiative'],
-          'format' => 'plain_text',
-        ],
         'status' => TRUE,
         'uid' => $ownerId,
       ];
 
       if (!empty($initiative['initiative_link'])) {
-        $values['documented_in'] = [
-          'uri' => $initiative['initiative_link'],
-          'title' => '',
+        $values['description'] = [
+          'value' => 'Legal reference: ' . $initiative['initiative_link'],
+          'format' => 'plain_text',
         ];
       }
 
@@ -400,10 +398,7 @@ class WebformSubmissionMigrator {
    *   Public service entities.
    */
   protected function createPublicServices(array $data, int $ownerId): array {
-    $serviceNames = array_filter((array) ($data['trans_european_digital_public_service_concerned'] ?? []));
-    if (empty($serviceNames)) {
-      return [];
-    }
+    $serviceNames = array_values(array_filter((array) ($data['trans_european_digital_public_service_concerned'] ?? [])));
 
     // Resolve thematic areas.
     $thematicAreaTids = [];
@@ -419,6 +414,16 @@ class WebformSubmissionMigrator {
 
     // Resolve countries from geographical_origin.
     $countryTids = $this->resolveGeographicalOriginCountries($data);
+
+    // If no specific service names were given (e.g. the "Potentially many"
+    // scope was selected), create one placeholder service to preserve the
+    // thematic area data, leaving the name empty.
+    if (empty($serviceNames)) {
+      if (empty($thematicAreaTids)) {
+        return [];
+      }
+      $serviceNames = [''];
+    }
 
     $services = [];
     foreach ($serviceNames as $serviceName) {
@@ -453,20 +458,8 @@ class WebformSubmissionMigrator {
       }
     }
 
-    if (empty($participantTypeTids)) {
-      return [];
-    }
-
     // Resolve stakeholder countries from geographical_origin.
     $countryTids = $this->resolveGeographicalOriginCountries($data);
-
-    $participationValues = [
-      'type' => 'participation',
-      'participant_type' => $participantTypeTids,
-      'stakeholder_country' => $countryTids,
-      'status' => TRUE,
-      'uid' => $ownerId,
-    ];
 
     // Check for "All EU" in geographical origins.
     $hasAllEu = FALSE;
@@ -476,6 +469,19 @@ class WebformSubmissionMigrator {
         break;
       }
     }
+
+    // Nothing to migrate if no participant types and no country data at all.
+    if (empty($participantTypeTids) && empty($countryTids) && !$hasAllEu) {
+      return [];
+    }
+
+    $participationValues = [
+      'type' => 'participation',
+      'participant_type' => $participantTypeTids,
+      'stakeholder_country' => $countryTids,
+      'status' => TRUE,
+      'uid' => $ownerId,
+    ];
 
     if ($hasAllEu) {
       $participationValues['eu_countries'] = TRUE;
@@ -544,61 +550,51 @@ class WebformSubmissionMigrator {
   ): array {
     $paragraphStorage = $this->entityTypeManager->getStorage('paragraph');
     $bindingRequirements = (array) ($data['binding_requirement_assessed'] ?? []);
+    $docFids = (array) ($data['binding_requirement_documents'] ?? []);
 
-    if (empty($bindingRequirements)) {
-      // Create a single binding requirement with all shared entities.
-      $paragraph = $paragraphStorage->create([
-        'type' => 'binding_requirement',
-        'description' => [
-          'value' => 'Migrated from webform submission',
-          'format' => 'plain_text',
-        ],
-        'expression' => $expressions,
-        'affects' => $publicServices,
-        'has_participation' => $participations,
-        'asset' => $assets,
-      ]);
-      \assert($paragraph instanceof ParagraphInterface);
-
-      // Binding requirement documents.
-      $docFids = (array) ($data['binding_requirement_documents'] ?? []);
-      if ($docFids) {
-        $paragraph->set('requirement_documents', $this->entityTypeManager->getStorage('file')->loadMultiple($docFids));
-      }
-
-      return [$paragraph];
-    }
+    // Shared values applied to every binding requirement paragraph.
+    $sharedValues = [
+      'type' => 'binding_requirement',
+      'expression' => $expressions,
+      'affects' => $publicServices,
+      'has_participation' => $participations,
+      'asset' => $assets,
+    ];
 
     $paragraphs = [];
     foreach ($bindingRequirements as $requirement) {
-      $values = [
-        'type' => 'binding_requirement',
-        'expression' => $expressions,
-        'affects' => $publicServices,
-        'has_participation' => $participations,
-        'asset' => $assets,
-      ];
+      $values = $sharedValues;
 
-      // Description.
-      $description = $requirement['description_1'] ?? '';
-      $values['description'] = [
-        'value' => !empty($description) ? $description : 'Migrated from webform submission',
-        'format' => 'plain_text',
-      ];
-
-      // Legal reference as documented_in link.
+      $descriptionParts = [];
+      if ($description = $requirement['description_1'] ?? '') {
+        $descriptionParts[] = $description;
+      }
       if (!empty($requirement['legal_reference'])) {
-        $values['documented_in'] = [
-          'uri' => $requirement['legal_reference'],
-          'title' => '',
+        $descriptionParts[] = 'Legal reference: ' . $requirement['legal_reference'];
+      }
+      if ($descriptionParts) {
+        $values['description'] = [
+          'value' => implode("\n", $descriptionParts),
+          'format' => 'plain_text',
         ];
       }
 
       $paragraph = $paragraphStorage->create($values);
-      \assert($paragraph instanceof ParagraphInterface);
 
-      // Binding requirement documents (shared across all requirements).
-      $docFids = (array) ($data['binding_requirement_documents'] ?? []);
+      if ($docFids) {
+        $paragraph->set('requirement_documents', $this->entityTypeManager->getStorage('file')->loadMultiple($docFids));
+      }
+
+      $paragraphs[] = $paragraph;
+    }
+
+    // If no specific requirements were listed but the submission identifies
+    // that binding requirements exist (via the concern field), create a
+    // placeholder paragraph to preserve the associated shared data
+    // (expressions, services, etc.) that would otherwise be lost.
+    if (empty($paragraphs) && !empty($data['binding_requirements_identified_concern'])) {
+      $paragraph = $paragraphStorage->create($sharedValues);
+
       if ($docFids) {
         $paragraph->set('requirement_documents', $this->entityTypeManager->getStorage('file')->loadMultiple($docFids));
       }
@@ -656,7 +652,6 @@ class WebformSubmissionMigrator {
   protected function getAssessmentStorage(): ContentEntityStorageInterface {
     if (!isset($this->assessmentStorage)) {
       $storage = $this->entityTypeManager->getStorage('assessment');
-      \assert($storage instanceof ContentEntityStorageInterface);
       $this->assessmentStorage = $storage;
     }
     return $this->assessmentStorage;
