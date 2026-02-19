@@ -205,7 +205,7 @@ class WebformSubmissionMigrator {
 
     $reportValues = [
       'type' => 'report',
-      'name' => !empty($data['short_title']) ? $data['short_title'] : 'Assessment #' . $submission->id(),
+      'name' => (!empty($data['short_title']) ? $data['short_title'] : 'Assessment') . ' #' . $submission->id(),
       'provider' => $provider,
       'binding_requirement' => $bindingRequirements,
       'created' => $submission->getCreatedTime(),
