@@ -5,20 +5,15 @@ The collection demonstrates the full request flow:
 - Calling public (unauthenticated) GET endpoints
 - Submitting assessments via authenticated POST requests
 
----
-## What this collection is
-- **Environment**: Local / development
-- **Purpose**: Reference and testing of the Assessments API
-- **Audience**: Developers and technical users integrating with the API
+## Installing Postman
+To use this collection, you can install Postman on your machine.
 
-The collection is intended to be imported directly into Postman.
----
-## Authentication overview
-The API uses **OAuth 2.0 – Client Credentials flow**.
-- **GET requests** are public and do **not** require authentication
-- **POST requests** require a **Bearer token**
+You can download it here:
+https://www.postman.com/downloads/
 
-Bearer tokens are obtained via the `/oauth/token` endpoint and are short‑lived.
+Postman provides installers for Windows, macOS, and Linux.<br>
+Once installed, you can import the collection JSON file and start making requests immediately.
+
 ---
 ## How to obtain Client ID & Client Secret
 To access protected endpoints, you must request API credentials.
