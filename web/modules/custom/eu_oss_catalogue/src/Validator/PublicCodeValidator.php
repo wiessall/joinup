@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Validator;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
+
 /**
  * Service for validating publiccode.yml files.
  */
 class PublicCodeValidator implements PublicCodeValidatorInterface {
 
   public function __construct(
-    protected bool $disableNetwork,
+    protected ConfigFactoryInterface $configFactory,
   ) {}
 
   /**
