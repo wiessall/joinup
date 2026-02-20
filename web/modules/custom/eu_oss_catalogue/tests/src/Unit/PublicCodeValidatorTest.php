@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Unit;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Tests\UnitTestCase;
 use Drupal\eu_oss_catalogue\Validator\PublicCodeValidator;
 
@@ -27,7 +28,9 @@ class PublicCodeValidatorTest extends UnitTestCase {
    */
   protected function setUp(): void {
     parent::setUp();
-    $this->validator = new PublicCodeValidator(disableNetwork: TRUE);
+    $this->validator = new PublicCodeValidator(
+      configFactory: $this->createMock(ConfigFactoryInterface::class),
+    );
   }
 
   /**
