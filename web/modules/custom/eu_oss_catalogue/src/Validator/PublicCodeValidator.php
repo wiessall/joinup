@@ -49,7 +49,7 @@ readonly class PublicCodeValidator implements PublicCodeValidatorInterface {
       ->get('publiccode_api_url');
 
     try {
-      $response = $this->httpClient->request('QUERY', $apiUrl . '/v1/validate', [
+      $response = $this->httpClient->request('QUERY', $apiUrl . PublicCodeValidatorInterface::VALIDATE_PATH, [
         'headers' => ['Content-Type' => 'application/yaml'],
         'body' => $yamlContent,
       ]);
