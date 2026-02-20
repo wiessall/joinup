@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Drupal\Tests\eu_oss_catalogue\Unit;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Tests\UnitTestCase;
+use Drupal\Tests\eu_oss_catalogue\Traits\SimpleResponseMockTrait;
 use Drupal\eu_oss_catalogue\Validator\PublicCodeValidator;
+use GuzzleHttp\Psr7\Response;
 
 /**
  * Tests PublicCodeValidator.
@@ -16,20 +19,41 @@ use Drupal\eu_oss_catalogue\Validator\PublicCodeValidator;
  */
 class PublicCodeValidatorTest extends UnitTestCase {
 
+  use SimpleResponseMockTrait;
+
   /**
-   * The validator under test.
+   * The config factory mock.
    *
-   * @var \Drupal\eu_oss_catalogue\Validator\PublicCodeValidator
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
-  protected PublicCodeValidator $validator;
+  protected ConfigFactoryInterface $configFactory;
 
   /**
    * {@inheritdoc}
    */
   protected function setUp(): void {
     parent::setUp();
-    $this->validator = new PublicCodeValidator(
-      configFactory: $this->createMock(ConfigFactoryInterface::class),
+
+    $config = $this->createMock(ImmutableConfig::class);
+    $config->method('get')->willReturn('http://fake-publiccode-api.example.com');
+
+    $this->configFactory = $this->createMock(ConfigFactoryInterface::class);
+    $this->configFactory->method('get')->willReturn($config);
+  }
+
+  /**
+   * Creates a validator with a mock HTTP client returning the given responses.
+   *
+   * @param \GuzzleHttp\Psr7\Response ...$responses
+   *   Mock API responses to return in order.
+   *
+   * @return \Drupal\eu_oss_catalogue\Validator\PublicCodeValidator
+   *   The validator under test.
+   */
+  protected function createValidator(Response ...$responses): PublicCodeValidator {
+    return new PublicCodeValidator(
+      configFactory: $this->configFactory,
+      httpClient: $this->buildHttpClientMock(...$responses),
     );
   }
 
@@ -39,11 +63,17 @@ class PublicCodeValidatorTest extends UnitTestCase {
    * @covers ::validate
    */
   public function testValidPublicCodeYaml(): void {
-    $result = $this->validator->validate('name: Example');
+    $apiResponse = json_encode([
+      'valid' => TRUE,
+      'normalized' => 'name: Example',
+      'results' => [],
+    ]);
 
-    // Validation is temporarily disabled and always returns invalid.
-    $this->assertFalse($result->isValid());
-    $this->assertNotEmpty($result->getErrors());
+    $result = $this->createValidator(new Response(200, [], $apiResponse))
+      ->validate('name: Example');
+
+    $this->assertTrue($result->isValid());
+    $this->assertEmpty($result->getResults());
   }
 
   /**
@@ -57,11 +87,26 @@ publiccodeYmlVersion: '0.4'
 invalidField: this should not be here
 YAML;
 
-    $result = $this->validator->validate($yamlContent);
+    $apiResponse = json_encode([
+      'valid' => FALSE,
+      'normalized' => NULL,
+      'results' => [
+        [
+          'key' => 'invalidField',
+          'description' => 'Unknown key.',
+          'line' => 2,
+          'column' => 0,
+          'type' => 'error',
+        ],
+      ],
+    ]);
+
+    $result = $this->createValidator(new Response(200, [], $apiResponse))
+      ->validate($yamlContent);
 
     $this->assertFalse($result->isValid(), 'Invalid YAML should fail validation');
-    $this->assertNotEmpty($result->getErrors(), 'Invalid YAML should have errors');
-    $this->assertIsArray($result->getErrors());
+    $this->assertIsArray($result->getResults());
+    $this->assertNotEmpty($result->getResults(), 'Invalid YAML should have errors');
   }
 
   /**
@@ -77,10 +122,25 @@ name: Example
     - this is malformed
 YAML;
 
-    $result = $this->validator->validate($yamlContent);
+    $apiResponse = json_encode([
+      'valid' => FALSE,
+      'normalized' => NULL,
+      'results' => [
+        [
+          'key' => 'name',
+          'description' => 'YAML parse error.',
+          'line' => 3,
+          'column' => 2,
+          'type' => 'error',
+        ],
+      ],
+    ]);
+
+    $result = $this->createValidator(new Response(200, [], $apiResponse))
+      ->validate($yamlContent);
 
     $this->assertFalse($result->isValid(), 'Malformed YAML should fail validation');
-    $this->assertNotEmpty($result->getErrors(), 'Malformed YAML should have errors');
+    $this->assertNotEmpty($result->getResults(), 'Malformed YAML should have errors');
   }
 
 }
