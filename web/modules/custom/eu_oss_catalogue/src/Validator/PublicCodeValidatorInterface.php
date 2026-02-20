@@ -4,20 +4,25 @@ declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Validator;
 
+use Drupal\eu_oss_catalogue\Validator\Model\ValidationApiResponseInterface;
+
 /**
  * Interface for publiccode.yml validator.
  */
 interface PublicCodeValidatorInterface {
 
   /**
-   * Validates a publiccode.yml YAML string.
+   * Validates a publiccode.yml YAML string via the PublicCode validator API.
    *
    * @param string|null $yamlContent
    *   The YAML content to validate.
    *
-   * @return \Drupal\eu_oss_catalogue\Validator\PublicCodeValidationResultInterface
-   *   The validation result.
+   * @return \Drupal\eu_oss_catalogue\Validator\Model\ValidationApiResponseInterface
+   *   The deserialized API response.
+   *
+   * @throws \RuntimeException
+   *   When the API request fails.
    */
-  public function validate(?string $yamlContent): PublicCodeValidationResultInterface;
+  public function validate(?string $yamlContent): ValidationApiResponseInterface;
 
 }
