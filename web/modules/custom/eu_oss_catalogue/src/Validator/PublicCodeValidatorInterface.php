@@ -12,6 +12,11 @@ use Drupal\eu_oss_catalogue\Validator\Model\ValidationApiResponseInterface;
 interface PublicCodeValidatorInterface {
 
   /**
+   * The API path used for validation requests.
+   */
+  const string VALIDATE_PATH = '/v1/validate';
+
+  /**
    * Validates a publiccode.yml YAML string via the PublicCode validator API.
    *
    * @param string|null $yamlContent

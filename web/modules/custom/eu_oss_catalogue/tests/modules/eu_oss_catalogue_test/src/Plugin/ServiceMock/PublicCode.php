@@ -8,6 +8,7 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\eu_oss_catalogue\Validator\PublicCodeValidatorInterface;
 use Drupal\eu_oss_catalogue_test\IntegrationTestTrait;
 use Drupal\http_request_mock\Attribute\ServiceMock;
 use Drupal\http_request_mock\ServiceMockPluginInterface;
@@ -33,7 +34,7 @@ class PublicCode extends PluginBase implements ServiceMockPluginInterface {
   public function applies(RequestInterface $request, array $options): bool {
     return !$this->isIntegrationTest()
       && $request->getMethod() === 'QUERY'
-      && str_ends_with($request->getUri()->getPath(), '/v1/validate');
+      && str_ends_with($request->getUri()->getPath(), PublicCodeValidatorInterface::VALIDATE_PATH);
   }
 
   /**
