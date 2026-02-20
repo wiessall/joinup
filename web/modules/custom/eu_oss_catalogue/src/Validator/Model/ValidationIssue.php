@@ -31,4 +31,14 @@ readonly class ValidationIssue {
     public ValidationIssueType $type,
   ) {}
 
+  /**
+   * Returns a string representation of the issue.
+   *
+   * @return string
+   *   The issue formatted as "[key:line:column] description".
+   */
+  public function __toString(): string {
+    return sprintf('[%s:%d:%d] %s', $this->key, $this->line, $this->column, $this->description);
+  }
+
 }
