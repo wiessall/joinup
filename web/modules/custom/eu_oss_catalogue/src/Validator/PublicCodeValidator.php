@@ -19,6 +19,11 @@ use Symfony\Component\Serializer\Serializer;
  */
 readonly class PublicCodeValidator implements PublicCodeValidatorInterface {
 
+  /**
+   * Serializer for deserializing API responses.
+   *
+   * @var \Symfony\Component\Serializer\Serializer
+   */
   private Serializer $localSerializer;
 
   public function __construct(
