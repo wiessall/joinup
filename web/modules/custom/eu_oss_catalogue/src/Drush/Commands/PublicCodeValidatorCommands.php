@@ -6,7 +6,8 @@ namespace Drupal\eu_oss_catalogue\Drush\Commands;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
-use Drupal\eu_oss_catalogue\Validator\PublicCodeValidationResultInterface;
+use Drupal\eu_oss_catalogue\Validator\Model\ValidationApiResponseInterface;
+use Drupal\eu_oss_catalogue\Validator\Model\ValidationIssueType;
 use Drupal\eu_oss_catalogue\Validator\PublicCodeValidatorInterface;
 use Drush\Attributes as CLI;
 use Drush\Commands\AutowireTrait;
@@ -42,9 +43,16 @@ class PublicCodeValidatorCommands extends DrushCommands {
       return DrushCommands::EXIT_FAILURE;
     }
 
-    $validationResult = $this->publicCodeValidator->validate(
-      $node->getPublicCodeYaml()
-    );
+    try {
+      $validationResult = $this->publicCodeValidator->validate(
+        $node->getPublicCodeYaml()
+      );
+    }
+    catch (\Exception $e) {
+      $this->io()
+        ->error(dt('Validation failed: @error', ['@error' => $e->getMessage()]));
+      return DrushCommands::EXIT_FAILURE;
+    }
 
     $this->io()->title(dt('Validation results for node @nid: @title', [
       '@nid' => $nid,
@@ -71,7 +79,14 @@ class PublicCodeValidatorCommands extends DrushCommands {
       return DrushCommands::EXIT_FAILURE;
     }
 
-    $validationResult = $this->publicCodeValidator->validate($publiccode);
+    try {
+      $validationResult = $this->publicCodeValidator->validate($publiccode);
+    }
+    catch (\Exception $e) {
+      $this->io()
+        ->error(dt('Validation failed: @error', ['@error' => $e->getMessage()]));
+      return DrushCommands::EXIT_FAILURE;
+    }
 
     $this->io()
       ->title(dt('Validation results for URL: @url', ['@url' => $url]));
@@ -82,26 +97,26 @@ class PublicCodeValidatorCommands extends DrushCommands {
   /**
    * Displays validation result and returns appropriate exit code.
    *
-   * @param \Drupal\eu_oss_catalogue\Validator\PublicCodeValidationResultInterface $validationResult
-   *   The validation result.
+   * @param \Drupal\eu_oss_catalogue\Validator\Model\ValidationApiResponseInterface $validationResult
+   *   The validation API response.
    *
    * @return int
    *   The exit code.
    */
-  protected function displayValidationResult(PublicCodeValidationResultInterface $validationResult): int {
-    if ($validationResult->isValid()) {
-      $this->io()->success(dt('The publiccode.yml is valid.'));
-      return DrushCommands::EXIT_SUCCESS;
+  protected function displayValidationResult(ValidationApiResponseInterface $validationResult): int {
+    $validationResult->isValid() ?
+      $this->io()->success(dt('The publiccode.yml is valid.')) :
+      $this->io()->error(dt('The publiccode.yml is invalid.'));
+
+    foreach ($validationResult->getResults() as $issue) {
+      $message = (string) $issue;
+      $issue->type === ValidationIssueType::Warning
+        ? $this->io()->warning($message)
+        : $this->io()->error($message);
     }
 
-    $this->io()->error(dt('The publiccode.yml is invalid.'));
-    $errors = $validationResult->getErrors();
-    $this->io()->writeln(dt('Validation errors:'));
-    foreach ($errors as $error) {
-      $this->io()->writeln('  - ' . $error);
-    }
-
-    return DrushCommands::EXIT_FAILURE;
+    return $validationResult->isValid() ?
+      DrushCommands::EXIT_SUCCESS : DrushCommands::EXIT_FAILURE;
   }
 
 }
