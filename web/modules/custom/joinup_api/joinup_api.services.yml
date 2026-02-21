@@ -5,3 +5,5 @@ services:
     autowire: true
 
   Drupal\joinup_api\OpenApiSchemaValidator: {}
+
+  Drupal\assessments\EventSubscriber\ApiExceptionSubscriber: { }
