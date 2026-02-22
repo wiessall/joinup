@@ -66,19 +66,6 @@ final class ApiExceptionSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public static function getSubscribedEvents(): array {
-    // ExceptionLoggingSubscriber runs with priority 50. No exception handler
-    // should run before it as it would prevent it from logging the exception.
-    $events[KernelEvents::EXCEPTION][] = ['onKernelRequestException', 49];
-    // Handle cases where the error response is set directly on kernel.request
-    // (e.g., maintenance mode).
-    $events[KernelEvents::RESPONSE][] = ['onKernelResponse'];
-    return $events;
-  }
-
-  /**
    * Checks if the subscriber should handle this request.
    *
    * @param string $path
@@ -95,6 +82,19 @@ final class ApiExceptionSubscriber implements EventSubscriberInterface {
     }
 
     return is_countable($acceptableTypes) && count($acceptableTypes) === 1 && $acceptableTypes[0] === 'application/json';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getSubscribedEvents(): array {
+    // ExceptionLoggingSubscriber runs with priority 50. No exception handler
+    // should run before it as it would prevent it from logging the exception.
+    $events[KernelEvents::EXCEPTION][] = ['onKernelRequestException', 49];
+    // Handle cases where the error response is set directly on kernel.request
+    // (e.g., maintenance mode).
+    $events[KernelEvents::RESPONSE][] = ['onKernelResponse'];
+    return $events;
   }
 
 }
