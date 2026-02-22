@@ -31,10 +31,7 @@ final class ApiExceptionSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    $response = $exception instanceof HttpExceptionInterface
-      ? new JsonResponse(['error' => $exception->getMessage()], $exception->getStatusCode(), $exception->getHeaders())
-      : new JsonResponse(['error' => 'An unexpected error occurred.'], 500);
-
+    $response = new JsonResponse(['error' => $exception->getMessage()], $exception->getStatusCode(), $exception->getHeaders());
     $event->setResponse($response);
   }
 
