@@ -43,7 +43,7 @@ class ApiExceptionSubscriberTest extends JoinupExistingSiteTestBase {
    * Tests that HTTP errors return JSON responses.
    *
    * Covers the main path through handleException(): path under /api/ with
-   * exactly Accept: application/json and an HttpExceptionInterface throwable.
+   * Accept: application/json and an HttpExceptionInterface throwable.
    */
   public function testHttpErrorsReturnJson(): void {
     $httpClient = \Drupal::httpClient();
