@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
- * Returns JSON responses for HTTP errors on the assessments API.
+ * Returns JSON responses for errors on the assessments API.
  */
 final class ApiExceptionSubscriber implements EventSubscriberInterface {
 
