@@ -53,10 +53,16 @@ final class ApiExceptionSubscriber extends HttpExceptionSubscriberBase {
   private function handleException(ExceptionEvent $event): void {
     $request = $event->getRequest();
 
-    // Only handle paths under the assessments API but exclude the base path
-    // which presents the swagger file.
+    // Only handle paths under the API endpoint.
     $path = $request->getPathInfo();
     if (!str_starts_with($path, '/api/')) {
+      return;
+    }
+
+    // If the request requests application/json, return a JSON response.
+    // Otherwise, let the default HTML response be returned.
+    $acceptable_types = $request->getAcceptableContentTypes();
+    if (!is_countable($acceptable_types) || count($acceptable_types) !== 1 || $acceptable_types[0] !== 'application/json') {
       return;
     }
 
@@ -64,6 +70,7 @@ final class ApiExceptionSubscriber extends HttpExceptionSubscriberBase {
     $response = $exception instanceof HttpExceptionInterface
       ? new JsonResponse(['error' => $exception->getMessage()], $exception->getStatusCode(), $exception->getHeaders())
       : new JsonResponse(['error' => 'An unexpected error occurred.'], 500);
+
     $event->setResponse($response);
   }
 
