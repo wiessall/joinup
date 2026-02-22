@@ -6,4 +6,4 @@ services:
 
   Drupal\joinup_api\OpenApiSchemaValidator: {}
 
-  Drupal\assessments\EventSubscriber\ApiExceptionSubscriber: { }
+  Drupal\joinup_api\EventSubscriber\ApiExceptionSubscriber: { }
