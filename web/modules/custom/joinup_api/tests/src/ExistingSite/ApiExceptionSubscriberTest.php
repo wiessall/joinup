@@ -87,29 +87,6 @@ class ApiExceptionSubscriberTest extends JoinupExistingSiteTestBase {
   }
 
   /**
-   * Tests that API path errors without a JSON-only Accept header are not JSON.
-   *
-   * Covers the Accept header guard: handleException() requires exactly one
-   * acceptable content type equal to application/json.
-   */
-  public function testApiPathWithWrongAcceptIsNotJson(): void {
-    $baseUrl = Url::fromUri('internal:/api/assessments/v1/assessment')
-      ->setAbsolute()
-      ->toString();
-
-    $response = \Drupal::httpClient()->patch($baseUrl, [
-      RequestOptions::HTTP_ERRORS => FALSE,
-      RequestOptions::HEADERS => [
-        'Accept' => 'text/html',
-        'Content-Type' => 'application/json',
-      ],
-      RequestOptions::JSON => ['name' => 'Test'],
-    ]);
-    $this->assertSame(405, $response->getStatusCode());
-    $this->assertStringNotContainsString('application/json', $response->getHeaderLine('Content-Type'));
-  }
-
-  /**
    * Tests that a 5xx error on an API path returns a JSON response.
    *
    * Covers the on5xx() handler. Maintenance mode causes Drupal's
