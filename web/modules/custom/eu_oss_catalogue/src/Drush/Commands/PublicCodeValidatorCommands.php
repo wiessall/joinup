@@ -6,8 +6,8 @@ namespace Drupal\eu_oss_catalogue\Drush\Commands;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
-use Drupal\eu_oss_catalogue\Validator\Model\ValidationApiResponseInterface;
-use Drupal\eu_oss_catalogue\Validator\Model\ValidationIssueType;
+use Drupal\eu_oss_catalogue\Model\Validation\ValidationIssueType;
+use Drupal\eu_oss_catalogue\Model\Validation\ValidationResponseInterface;
 use Drupal\eu_oss_catalogue\Validator\PublicCodeValidatorInterface;
 use Drush\Attributes as CLI;
 use Drush\Commands\AutowireTrait;
@@ -97,18 +97,18 @@ class PublicCodeValidatorCommands extends DrushCommands {
   /**
    * Displays validation result and returns appropriate exit code.
    *
-   * @param \Drupal\eu_oss_catalogue\Validator\Model\ValidationApiResponseInterface $validationResult
+   * @param \Drupal\eu_oss_catalogue\Model\Validation\ValidationResponseInterface $validationResult
    *   The validation API response.
    *
    * @return int
    *   The exit code.
    */
-  protected function displayValidationResult(ValidationApiResponseInterface $validationResult): int {
+  protected function displayValidationResult(ValidationResponseInterface $validationResult): int {
     $validationResult->isValid() ?
       $this->io()->success(dt('The publiccode.yml is valid.')) :
       $this->io()->error(dt('The publiccode.yml is invalid.'));
 
-    foreach ($validationResult->getResults() as $issue) {
+    foreach ($validationResult->getIssues() as $issue) {
       $message = (string) $issue;
       $issue->type === ValidationIssueType::Warning
         ? $this->io()->warning($message)
