@@ -12,6 +12,8 @@ use GuzzleHttp\Psr7\Response;
 
 /**
  * Trait for mocking HTTP client responses.
+ *
+ * @property \Symfony\Component\DependencyInjection\ContainerInterface $container
  */
 trait SimpleResponseMockTrait {
 

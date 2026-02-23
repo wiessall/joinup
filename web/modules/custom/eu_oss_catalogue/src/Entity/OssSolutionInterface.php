@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\eu_oss_catalogue\Entity;
 
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
-use Drupal\eu_oss_catalogue\Validator\PublicCodeValidationResultInterface;
+use Drupal\eu_oss_catalogue\Validator\Model\ValidationApiResponseInterface;
 use Drupal\node\NodeInterface;
 
 /**
@@ -90,11 +90,11 @@ interface OssSolutionInterface extends NodeInterface {
   /**
    * Updates validation result of the OSS solution.
    *
-   * @param \Drupal\eu_oss_catalogue\Validator\PublicCodeValidationResultInterface $validationResult
-   *   A validation result object.
+   * @param \Drupal\eu_oss_catalogue\Validator\Model\ValidationApiResponseInterface $validationResult
+   *   The deserialized API response.
    *
    * @return $this
    */
-  public function setValidationResult(PublicCodeValidationResultInterface $validationResult): self;
+  public function setValidationResult(ValidationApiResponseInterface $validationResult): self;
 
 }

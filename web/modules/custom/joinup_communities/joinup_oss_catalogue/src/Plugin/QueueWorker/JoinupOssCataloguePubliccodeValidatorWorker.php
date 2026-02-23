@@ -42,7 +42,7 @@ class JoinupOssCataloguePubliccodeValidatorWorker extends QueueWorkerBase implem
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
       $plugin_id,
@@ -62,28 +62,31 @@ class JoinupOssCataloguePubliccodeValidatorWorker extends QueueWorkerBase implem
       return;
     }
 
-    // Validate.
     $publiccode = $solution->getPublicCodeYaml();
-    $validationResult = $this->publicCodeValidator->validate($publiccode);
-
-    // Make sure that the publiccode.yml of the current OSS solution wasn't
-    // updated since we started the validation. If it was updated, we re-queue
-    // the current item.
-    if ($publiccode !== $this->getOssSolution($data)->getPublicCodeYaml()) {
-      throw new DelayedRequeueException();
-    }
-    // Save current validation result to the OSS solution object.
     $solution->setNewRevision(FALSE);
     $solution->skip_notification = TRUE;
     try {
+      $validationResult = $this->publicCodeValidator->validate($publiccode);
+
+      // Make sure that the publiccode.yml of the current OSS solution wasn't
+      // updated since we started the validation. If it was updated, we re-queue
+      // the current item.
+      if ($publiccode !== $this->getOssSolution($data)->getPublicCodeYaml()) {
+        throw new DelayedRequeueException();
+      }
+
+      // Save current validation result to the OSS solution object.
       $solution
         ->setSyncing(TRUE)
         ->setValidationResult($validationResult)
         ->save();
     }
+    catch (DelayedRequeueException $e) {
+      throw $e;
+    }
     catch (\Exception $e) {
       $this->logger->error(
-        "Exception when trying to save validation results to solution '@solution' (@url): @error",
+        "Exception when trying to validate or save solution '@solution' (@url): @error",
         [
           '@solution' => $solution->label(),
           '@url' => $solution->toUrl()->toString(),
