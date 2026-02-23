@@ -1,24 +1,19 @@
-# Assessments API – Postman Collection (Local)
+# Assessments API – Postman Collection
 This repository contains a **Postman collection** for interacting with the **Assessments API (local/development environment)**.
 The collection demonstrates the full request flow:
 - Obtaining an OAuth2 access token
 - Calling public (unauthenticated) GET endpoints
 - Submitting assessments via authenticated POST requests
 
----
-## What this collection is
-- **Environment**: Local / development
-- **Purpose**: Reference and testing of the Assessments API
-- **Audience**: Developers and technical users integrating with the API
+## Installing Postman
+To use this collection, you can install Postman on your machine.
 
-The collection is intended to be imported directly into Postman.
----
-## Authentication overview
-The API uses **OAuth 2.0 – Client Credentials flow**.
-- **GET requests** are public and do **not** require authentication
-- **POST requests** require a **Bearer token**
+You can download it here:
+https://www.postman.com/downloads/
 
-Bearer tokens are obtained via the `/oauth/token` endpoint and are short‑lived.
+Postman provides installers for Windows, macOS, and Linux.<br>
+Once installed, you can import the collection JSON file and start making requests immediately.
+
 ---
 ## How to obtain Client ID & Client Secret
 To access protected endpoints, you must request API credentials.
@@ -29,109 +24,49 @@ To access protected endpoints, you must request API credentials.
   - You must set a **Client Secret**
 
 No additional configuration or documentation is required beyond this process.
----
-## Endpoints included
-### 1\. OAuth Token
-**POST** `/oauth/token`
-Used to obtain an access token.
-- Grant type: `client_credentials`
-- Required fields:
-  - `client_id`
-  - `client_secret`
-  - `scope` (e.g. `assessments`)
 
-The response contains an `access_token`.
----
-### 2\. Get Assessments (Public)
-**GET** `/api/assessments/v1/assessment`
-- Authentication: ❌ Not required
-- Purpose: Retrieve a list of existing assessments
-- Query parameters (optional):
-  - `country`: Filter by 2-character country code (e.g., `BE`, `NL`, `IT`)
-  - `country=EU`: Show all assessments provided by European entities
-
-**Examples:**
-- `/api/assessments/v1/assessment` – Get all assessments
-- `/api/assessments/v1/assessment?country=BE` – Get assessments from Belgium
-- `/api/assessments/v1/assessment?country=EU` – Get assessments from European entities
-
----
-### 3\. Get Single Assessment (Public)
-**GET** `/api/assessments/v1/assessment/{assessment-uuid}`
-- Authentication: ❌ Not required
-- Purpose: Retrieve a specific assessment by its UUID
-- Path parameters:
-  - `assessment-uuid`: The UUID of the assessment to retrieve
-
-**Example:**
-- `/api/assessments/v1/assessment/12345678-1234-1234-1234-123456789abc`
-
----
-### 4\. Get Organisations (Public)
-**GET** `/api/assessments/v1/organisation`
-- Authentication: ❌ Not required
-- Purpose: Retrieve organisation data
-
----
-### 5\. Get Assets (Public)
-**GET** `/api/assessments/v1/asset`
-- Authentication: ❌ Not required
-- Purpose: Retrieve asset data
-- Query parameters (optional):
-  - `page`: Page number for pagination (e.g., `0`, `1`, `2`)
-
-**Example:**
-- `/api/assessments/v1/asset?page=0` – Get first page of assets
-
----
-### 6\. Post Assessment (Authenticated)
-**POST** `/api/assessments/v1/assessment`
-- Authentication: ✅ Bearer Token required
-- Purpose: Submit a complete assessment payload
-
-The collection includes two example POST requests:
-- `Post-complete`
-- `Post-complete european`
-
-These demonstrate valid payload structures for different provider types.
 ---
 ## How to use the collection
-### Step 1: Import the collection
-Import the Postman collection JSON file into Postman.
+
+### Step 1: Import the collection JSON file into Postman
+ - In the Postman app, on top of the left sidebar you have **New** and **Import** buttons, click on the import button and select `Assessments API.postman_collection.json`.
+ - Once this is done you will see the collection under **Assessment API** in the left sidebar.
+ - If you click the down-arrow you will notice the example requests.
+
 ---
+
 ### Step 2: Configure the base URL
-Set the `baseURL` variable to match your local or target environment.
+ If you click on any of the example requests you will notice the `{{baseURL}}` placeholder.<br>
+ The **baseURL** will be your local URL (in case of ddev it would be something like https://joinup.ddev.local).
+
+To set the `baseURL` variable you need to:
+ - click on the **Variables** tab in your center screen. There you will see the **baseURL** under **Variable**.
+ - Next to it, under **Value** set your local or target URL.
+
 ---
 ### Step 3: Request an access token
 1. Open the **oauth/token** request
-2. Fill in:
-  - `client_id`
-  - `client_secret`
+2. click on the **Body** tab as the values are under the POST body.
+2. Fill in:<br>
+  `client_id`<br>
+  `client_secret`
 3. Send the request
-4. Copy the value of `access_token`
+4. Copy the value of `access_token` from the JSON response
 
 ---
 ### Step 4: Use the Bearer token for POST requests
-1. Open a POST request
-2. Go to **Authorization → Bearer Token**
+1. Open a Request (for example Assessments)
+2. Open the **Authorization** tab, select **Bearer Token** from the **Auth Type** select field.
 3. Paste the access token
-4. Send the request
+4. Send the request, you should receive a JSON response.
 
 ⚠️ Tokens expire after a short period and must be re‑requested when invalid.
----
-## Payload examples
-The POST requests include complete, working JSON payloads that demonstrate:
-- Providers
-- Binding requirements
-- Expressions
-- Participations
-- Assets
-- Results and judgements
 
-These can be used as:
-- Reference implementations
-- Templates for client integrations
-- Validation examples
+---
+## API documentation (Swagger)
+To explore the API, understand available endpoints, and view request/response schemas, use the official Swagger documentation:
+
+👉 https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference/-/blob/master/web/modules/custom/assessments/openapi/assessments.openapi.yaml
 
 ---
 ## Notes

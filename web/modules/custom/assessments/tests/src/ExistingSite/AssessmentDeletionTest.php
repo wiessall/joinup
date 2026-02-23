@@ -122,7 +122,7 @@ class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
 
     $public_service = Assessment::create([
       'type' => 'public_service',
-      'thematic_area' => ['entity' => $this->assessmentVocabularyHelper->getTermFromIdentifier('assess_public_service_area', 'core_governance_and_administration')],
+      'thematic_area' => ['entity' => $this->assessmentVocabularyHelper->getTermFromIdentifier('assess_public_service_area', 'general_public_services')],
     ]);
     $this->markEntityForCleanup($public_service);
 
