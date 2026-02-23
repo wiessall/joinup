@@ -20,7 +20,7 @@ mode: default
 content:
   participant_type:
     type: entity_reference_label
-    label: visually_hidden
+    label: hidden
     settings:
       link: false
     third_party_settings:
@@ -42,7 +42,7 @@ content:
     region: content
   stakeholder_country:
     type: entity_reference_label
-    label: visually_hidden
+    label: hidden
     settings:
       link: false
     third_party_settings:
