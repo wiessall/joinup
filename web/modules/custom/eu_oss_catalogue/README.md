@@ -225,8 +225,8 @@ be processed later, on cron run.
 Before creating or updating an OSS Solution, the publiccode.yml content is
 validated against the standard schema using `PublicCodeValidatorInterface`.
 
-The validation uses the [bfabio/publiccode-parser-php](https://github.com/bfabio/publiccode-parser-php)
-library, which requires the PHP FFI extension.
+The validation uses the [publiccode-validator-api](https://github.com/italia/publiccode-validator-api)
+service, which provides a REST API for publiccode.yml validation.
 
 **For new solutions:**
 - If publiccode.yml is invalid, the solution is **rejected** (not created)
