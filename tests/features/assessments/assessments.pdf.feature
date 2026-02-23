@@ -64,27 +64,29 @@ Feature: Assessment report PDF download
       | documented_in          | https://example.com/br-doc |
       | asset                  | Test Solution              |
       | requirement_documents  | text.pdf                   |
-    # Report field group labels.
-    Then the PDF HTML for the "PDF View Report" report should contain "General information"
-    And the PDF HTML for the "PDF View Report" report should contain "Binding requirements"
-    And the PDF HTML for the "PDF View Report" report should contain "Results"
-    And the PDF HTML for the "PDF View Report" report should contain "Supporting documents and general comments"
-    # Report field labels.
-    And the PDF HTML for the "PDF View Report" report should contain "Identified effects on cross-border legal interoperability"
-    And the PDF HTML for the "PDF View Report" report should contain "Identified effects on cross-border organisational interoperability"
-    And the PDF HTML for the "PDF View Report" report should contain "Identified effects on cross-border semantic interoperability"
-    And the PDF HTML for the "PDF View Report" report should contain "Identified effects on cross-border technical interoperability"
-    And the PDF HTML for the "PDF View Report" report should contain "Remaining barriers of interoperability:"
-    And the PDF HTML for the "PDF View Report" report should contain "The report has been connected to the following previous/relevant reports:"
-    # Binding requirement paragraph labels.
-    And the PDF HTML for the "PDF View Report" report should contain "Initiative"
-    And the PDF HTML for the "PDF View Report" report should contain "Requirement"
-    And the PDF HTML for the "PDF View Report" report should contain "Legal reference"
-    And the PDF HTML for the "PDF View Report" report should contain "Concerned public services"
-    And the PDF HTML for the "PDF View Report" report should contain "Affected stakeholders"
-    And the PDF HTML for the "PDF View Report" report should contain "Interoperability solutions"
-    And the PDF HTML for the "PDF View Report" report should contain "Supporting documents"
+    # Report field group labels, report field labels, and binding requirement
+    # paragraph labels.
+    Then the PDF HTML for the "PDF View Report" report should contain:
+      | General information                                                       |
+      | Binding requirements                                                      |
+      | Results                                                                   |
+      | Supporting documents and general comments                                 |
+      | Identified effects on cross-border legal interoperability                 |
+      | Identified effects on cross-border organisational interoperability        |
+      | Identified effects on cross-border semantic interoperability              |
+      | Identified effects on cross-border technical interoperability             |
+      | Remaining barriers of interoperability:                                   |
+      | The report has been connected to the following previous/relevant reports: |
+      | Initiative                                                                |
+      | Requirement                                                               |
+      | Legal reference                                                           |
+      | Concerned public services                                                 |
+      | Affected stakeholders                                                     |
+      | Interoperability solutions                                                |
+      | Supporting documents                                                      |
     # Sub-entity fields with hidden labels should not show labels in the PDF.
-    And the PDF HTML for the "PDF View Report" report should not contain "Participant type"
-    And the PDF HTML for the "PDF View Report" report should not contain "Stakeholder’s countries"
-    And the PDF HTML for the "PDF View Report" report should not contain "Name of the initiative"
+    And the PDF HTML for the "PDF View Report" report should not contain:
+      | Other comment           |
+      | Participant type        |
+      | Stakeholder’s countries |
+      | Name of the initiative  |
