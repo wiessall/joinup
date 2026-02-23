@@ -16,6 +16,7 @@ use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\AssessmentVocabularyHelper;
+use Drupal\assessments\Entity\AssessmentStatement;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
@@ -120,10 +121,14 @@ class AssessmentsContext extends RawDrupalContext {
    * Adds a binding requirement paragraph to a report assessment.
    *
    * Table format (vertical):
-   * | report      | Report Name     |
-   * | expression  | Expression Name |
-   * | service     | Service Name    |
-   * | description | Description     |
+   * | report                | Report Name              |
+   * | expression            | Expression Name          |
+   * | service               | Service Name             |
+   * | participation         | Participation Name       |
+   * | description           | Description              |
+   * | documented_in         | https://example.com      |
+   * | asset                 | Solution Name            |
+   * | requirement_documents | text.pdf                 |
    *
    * @param \Behat\Gherkin\Node\TableNode $bindingTable
    *   The table with binding requirement data.
@@ -136,6 +141,7 @@ class AssessmentsContext extends RawDrupalContext {
 
     $expression_id = NULL;
     $service_id = NULL;
+    $participation_id = NULL;
 
     if (!empty($binding['expression'])) {
       $expression = $this->getEntityByLabel('assessment', $binding['expression'], 'expression');
@@ -147,15 +153,37 @@ class AssessmentsContext extends RawDrupalContext {
       $service_id = $service->id();
     }
 
+    if (!empty($binding['participation'])) {
+      $participation = $this->getEntityByLabel('assessment', $binding['participation'], 'participation');
+      $participation_id = $participation->id();
+    }
+
     $description = $binding['description'] ?? 'Test requirement description';
+    $values = [
+      'type' => 'binding_requirement',
+      'description' => ['value' => $description, 'format' => 'plain_text'],
+      'expression' => $expression_id ? [$expression_id] : [],
+      'affects' => $service_id ? [$service_id] : [],
+      'has_participation' => $participation_id ? [$participation_id] : [],
+    ];
+
+    if (!empty($binding['documented_in'])) {
+      $values['documented_in'] = ['uri' => $binding['documented_in']];
+    }
+
+    if (!empty($binding['asset'])) {
+      $node = $this->getEntityByLabel('node', $binding['asset'], 'solution');
+      $values['asset'] = [$node->id()];
+    }
+
+    if (!empty($binding['requirement_documents'])) {
+      $file = $this->createFile($binding['requirement_documents']);
+      $values['requirement_documents'] = [['target_id' => $file->id()]];
+    }
+
     $paragraph = \Drupal::entityTypeManager()
       ->getStorage('paragraph')
-      ->create([
-        'type' => 'binding_requirement',
-        'description' => ['value' => $description, 'format' => 'plain_text'],
-        'expression' => $expression_id ? [$expression_id] : [],
-        'has_related_service' => $service_id ? [$service_id] : [],
-      ]);
+      ->create($values);
     $paragraph->save();
 
     $this->entities['paragraph'][$paragraph->id()] = $paragraph;
@@ -347,6 +375,62 @@ class AssessmentsContext extends RawDrupalContext {
     }
 
     throw new \Exception("Email not found to '$recipient_email' with subject '$expected_subject' and body '{$data['body']}'.");
+  }
+
+  /**
+   * Creates assessment statements of given types and links them to a report.
+   *
+   * Table format:
+   * | type           |
+   * | legal          |
+   * | organisational |
+   *
+   * @param string $name
+   *   The report name.
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   Single-column table with a 'type' header listing statement types.
+   */
+  #[Given('the :name report has assessment statements of types:')]
+  public function addAssessmentStatementsToReport(string $name, TableNode $table): void {
+    $report = $this->getEntityByLabel('assessment', $name, 'report');
+    foreach ($table->getHash() as $row) {
+      $type = $row['type'];
+      $statement = AssessmentStatement::create(['type' => $type]);
+      $statement->save();
+      $this->entities['assessment_statement'][$statement->id()] = $statement;
+      $report->get($type)->setValue(['target_id' => $statement->id()]);
+    }
+    $report->save();
+  }
+
+  /**
+   * Asserts that the PDF HTML for a report contains a given string.
+   *
+   * @param string $name
+   *   The report name.
+   * @param string $text
+   *   The text expected in the PDF HTML.
+   */
+  #[Then('the PDF HTML for the :name report should contain :text')]
+  public function assertPdfHtmlContains(string $name, string $text): void {
+    $report = $this->getEntityByLabel('assessment', $name, 'report');
+    $html = \Drupal::service('entity_print.print_builder')->printHtml($report, FALSE, FALSE);
+    Assert::assertStringContainsString($text, $html);
+  }
+
+  /**
+   * Asserts that the PDF HTML for a report does not contain a given string.
+   *
+   * @param string $name
+   *   The report name.
+   * @param string $text
+   *   The text not expected in the PDF HTML.
+   */
+  #[Then('the PDF HTML for the :name report should not contain :text')]
+  public function assertPdfHtmlNotContains(string $name, string $text): void {
+    $report = $this->getEntityByLabel('assessment', $name, 'report');
+    $html = \Drupal::service('entity_print.print_builder')->printHtml($report, FALSE, FALSE);
+    Assert::assertStringNotContainsString($text, $html);
   }
 
   /**
