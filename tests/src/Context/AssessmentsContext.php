@@ -404,33 +404,37 @@ class AssessmentsContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that the PDF HTML for a report contains a given string.
+   * Asserts that the PDF HTML for a report contains the given strings.
    *
    * @param string $name
    *   The report name.
-   * @param string $text
-   *   The text expected in the PDF HTML.
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   A table of strings expected in the PDF HTML.
    */
-  #[Then('the PDF HTML for the :name report should contain :text')]
-  public function assertPdfHtmlContains(string $name, string $text): void {
+  #[Then('the PDF HTML for the :name report should contain:')]
+  public function assertPdfHtmlContains(string $name, TableNode $table): void {
     $report = $this->getEntityByLabel('assessment', $name, 'report');
     $html = \Drupal::service('entity_print.print_builder')->printHtml($report, FALSE, FALSE);
-    Assert::assertStringContainsString($text, $html);
+    foreach ($table->getColumn(0) as $text) {
+      Assert::assertStringContainsString($text, $html);
+    }
   }
 
   /**
-   * Asserts that the PDF HTML for a report does not contain a given string.
+   * Asserts that the PDF HTML for a report does not contain the given strings.
    *
    * @param string $name
    *   The report name.
-   * @param string $text
-   *   The text not expected in the PDF HTML.
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   A table of strings not expected in the PDF HTML.
    */
-  #[Then('the PDF HTML for the :name report should not contain :text')]
-  public function assertPdfHtmlNotContains(string $name, string $text): void {
+  #[Then('the PDF HTML for the :name report should not contain:')]
+  public function assertPdfHtmlNotContains(string $name, TableNode $table): void {
     $report = $this->getEntityByLabel('assessment', $name, 'report');
     $html = \Drupal::service('entity_print.print_builder')->printHtml($report, FALSE, FALSE);
-    Assert::assertStringNotContainsString($text, $html);
+    foreach ($table->getColumn(0) as $text) {
+      Assert::assertStringNotContainsString($text, $html);
+    }
   }
 
   /**

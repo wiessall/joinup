@@ -248,7 +248,7 @@ content:
     region: content
   other_comment:
     type: basic_string
-    label: visually_hidden
+    label: hidden
     settings: {  }
     third_party_settings: {  }
     weight: 0
