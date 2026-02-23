@@ -10,7 +10,7 @@ Feature: RDF Sync integration for assessments.
       | http://data.europa.eu/s2k/f5379633-58af-49bd-ab71-22d8ab77d59a | Stakeholder 1 | Belgium             | local_public_sector_body |
     And "public_service" assessment:
       | uri                                                            | name             | identifier | thematic_area                      |
-      | http://data.europa.eu/s2k/d4a2ecb3-c0c8-4a13-9dd0-8dddb23c40af | Public Service 1 | PS-001     | core_governance_and_administration |
+      | http://data.europa.eu/s2k/d4a2ecb3-c0c8-4a13-9dd0-8dddb23c40af | Public Service 1 | PS-001     | general_public_services |
     And "public_organisation" assessment:
       | uri                                                            | name                  | organisation_type          | country |
       | http://data.europa.eu/s2k/542770eb-a1e8-44fe-be6d-d48c33837018 | Public Organisation 1 | european_union_institution | Belgium |
@@ -103,8 +103,8 @@ Feature: RDF Sync integration for assessments.
       | a skos:Concept .                                                                                                                                                                                                 |
       | <http://example.com/taxonomy-term/assess-public-service-area/34229fe8-14ac-40f8-9434-765e441eae3b>                                                                                                               |
       | skos:inScheme iopa:Code ;                                                                                                                                                                                        |
-      | skos:prefLabel "Core governance and administration"@en ;                                                                                                                                                         |
-      | skos:altLabel "core_governance_and_administration"^^xsd:string ;                                                                                                                                                 |
+      | skos:prefLabel "General public services"@en ;                                                                                                                                                                    |
+      | skos:altLabel "general_public_services"^^xsd:string ;                                                                                                                                                              |
       | a skos:Concept .                                                                                                                                                                                                 |
       | <http://example.com/taxonomy-term/assess-participant-type/b8c59bef-e579-440a-91f0-8c7983524336>                                                                                                                  |
       | skos:inScheme iopa:Code ;                                                                                                                                                                                        |
