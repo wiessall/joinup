@@ -511,7 +511,8 @@
                 "Pass the context to the normalize subscribers @see https://www.drupal.org/i/3560752": "resources/patch/php/drupal/rdf_sync/3560752.mr43-note632794.diff",
                 "Configure namaspaces @see https://www.drupal.org/i/3560781": "resources/patch/php/drupal/rdf_sync/3560781.mr44-note633150.diff",
                 "View support @see https://www.drupal.org/project/i/3473743": "resources/patch/php/drupal/rdf_sync/3560781.mr45-commitf08c1b33.diff",
-                "Add support for deriver in RdfUriGenerator @see https://www.drupal.org/project/rdf_sync/issues/3567259": "resources/patch/php/drupal/rdf_sync/3567259.diff"
+                "Add support for deriver in RdfUriGenerator @see https://www.drupal.org/project/rdf_sync/issues/3567259": "resources/patch/php/drupal/rdf_sync/3567259.diff",
+                "Incorrect type hint in rdf_sync_entity_bundle_field_info() hook implementation - https://www.drupal.org/i/3529979": "resources/patch/php/drupal/rdf_sync/3529979-mr39-commit307d5e52.diff"
             },
             "drupal/search_api": {
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199-42e0e284.diff",
