@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Drupal\eu_oss_catalogue\Validator\Model;
+namespace Drupal\eu_oss_catalogue\Model\Validation;
 
 /**
- * Value object representing a single issue from the PublicCode validator API.
+ * Value object representing a single validation issue.
  */
 readonly class ValidationIssue {
 
@@ -20,7 +20,7 @@ readonly class ValidationIssue {
    *   Line number where the issue was found.
    * @param int $column
    *   Column number where the issue was found.
-   * @param \Drupal\eu_oss_catalogue\Validator\Model\ValidationIssueType $type
+   * @param \Drupal\eu_oss_catalogue\Model\Validation\ValidationIssueType $type
    *   The severity type of the issue.
    */
   public function __construct(
