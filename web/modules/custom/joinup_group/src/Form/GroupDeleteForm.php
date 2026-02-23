@@ -9,7 +9,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\collection\Entity\CollectionInterface;
-use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 
 /**
@@ -22,18 +21,13 @@ class GroupDeleteForm extends ContentEntityDeleteForm {
    */
   public function getQuestion(): TranslatableMarkup {
     $entity = $this->getEntity();
-    if (!$entity instanceof CollectionInterface || empty($entity->getSolutions())) {
-      return $entity instanceof GroupInterface
-        ? $this->t('Are you sure you want to delete @type %name?', [
-          '@type' => $entity->get('type')->entity->getSingularLabel(),
-          '%name' => $entity->label(),
-        ])
-        : parent::getQuestion();
+    if ($entity instanceof CollectionInterface && $entity->isDefaultTranslation() && !empty($entity->getSolutions())) {
+      return $this->t('The collection %collection cannot be deleted because it contains the following solutions:', [
+        '%collection' => $entity->label(),
+      ]);
     }
 
-    return $this->t('The collection %collection cannot be deleted because it contains the following solutions:', [
-      '%collection' => $entity->label(),
-    ]);
+    return parent::getQuestion();
   }
 
   /**
@@ -41,7 +35,7 @@ class GroupDeleteForm extends ContentEntityDeleteForm {
    */
   public function getDescription(): TranslatableMarkup {
     $entity = $this->getEntity();
-    if (!($entity instanceof CollectionInterface) || empty($entity->getSolutions())) {
+    if (!$entity instanceof CollectionInterface || !$entity->isDefaultTranslation() || empty($entity->getSolutions())) {
       return parent::getDescription();
     }
 
@@ -55,7 +49,7 @@ class GroupDeleteForm extends ContentEntityDeleteForm {
     $form = parent::buildForm($form, $form_state);
 
     $entity = $this->getEntity();
-    if (!($entity instanceof CollectionInterface) || $entity->isNew()) {
+    if (!$entity instanceof CollectionInterface || !$entity->isDefaultTranslation() || $entity->isNew()) {
       return $form;
     }
 

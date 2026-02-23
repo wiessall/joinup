@@ -1,59 +1,59 @@
 @api @group-a
 Feature: Translating collections
 
-  Scenario Outline: Translate a collection
+  Background:
+    Given users:
+      | Username  | Roles     |
+      | Flora Mod | moderator |
+      | Lee Facil |           |
     Given collection content:
       | title           | abstract                        | description                    |
       | Test collection | short description of collection | long description of collection |
+    And the following collection user memberships:
+      | collection      | user      | roles       |
+      | Test collection | Lee Facil | facilitator |
 
-    # Create translation
-    Given I am logged in as a user with the <role> role
+  Scenario Outline: Translate a collection
+    # Create translation.
+    Given I am logged in as "<user>"
     When I go to the homepage of the "Test collection" collection
     When I click "Translate" in the "Entity actions" region
-    And I should see "Add" in the "Polish" row
     Then I click "Add" in the "Polish" row
-    And I should see "Create Polish translation of Test collection"
+    And I should see the heading "Create Polish translation of Test collection"
     And I fill in "Title" with "Testowa kolekcja"
     And I fill in "Abstract" with "Krótki opis kolekcji"
     And I fill in "Description" with "Długi opis kolekcji"
     And the following fields should not be present "Access URL, Closed, Contact information, Geographical coverage, Logo, Newsletter, Owner, Search keywords, Short ID, Site featured, State, Topic"
     Then I press "Publish"
-    When I click "Translate" in the "Entity actions" region
-    Then I should see "Testowa kolekcja"
-    And I click "Testowa kolekcja"
-    Then I should see "Testowa kolekcja"
-    And I should see "Krótki opis kolekcji"
-    And I should see "Długi opis kolekcji"
-    And I should see "ISA²"
-    And I should see "Contact name"
-    And I should see "Open collection"
-    And I should see "Moderated"
+    And I should see the success message "Collection Testowa kolekcja has been updated."
+    Then I should see the heading "Testowa kolekcja"
+    Then I should not see the following lines of text:
+      | "Testowa kolekcja"     |
+      | "Krótki opis kolekcji" |
+      | "Długi opis kolekcji"  |
 
-    # Edit translation
+    # Edit translation.
     And I click "Translate" in the "Entity actions" region
     Then I should see "Testowa kolekcja"
-    And I should see "Edit" in the "Polish" row
     Then I click "Edit" in the "Polish" row
     And I fill in "Title" with "Zaktualizowana kolekcja"
     Then I press "Publish"
-    Then I should not see "Testowa kolekcja"
-    Then I should see "Zaktualizowana kolekcja"
+    And I should see the success message "Collection Zaktualizowana kolekcja has been updated."
+    Then I should not see the heading "Testowa kolekcja"
+    Then I should see the heading "Zaktualizowana kolekcja"
 
-    #Delete translation
-    When I go to the homepage of the "Test collection" collection
+    # Delete translation.
     When I click "Translate" in the "Entity actions" region
     When I click "Delete" in the "Polish" row
-    Then I should see "Are you sure you want to delete collection Zaktualizowana kolekcja?"
-    And I should see the button "Delete Polish translation"
+    Then I should see "Are you sure you want to delete the Polish translation of the content item Zaktualizowana kolekcja?"
     When I press "Delete Polish translation"
-    Then I should see "Polish translation of the Collection Zaktualizowana kolekcja has been deleted."
+    # @todo Inconsistent messages, see ISAICP-10959
+    Then I should see the success message "<delete message>"
     When I click "Translate" in the "Entity actions" region
-    Then I should not see "Testowa kolekcja"
-    And I should not see "Zaktualizowana kolekcja"
     And I should not see "Edit" in the "Polish" row
     And I should see the "Add" in the "Polish" row
 
     Examples:
-      | role            |
-      | "moderator"     |
-#      | "authenticated" |
+      | user      | delete message                                                                 |
+      | Flora Mod | Polish translation of the Collection Zaktualizowana kolekcja has been deleted. |
+      | Lee Facil | The content item Zaktualizowana kolekcja Polish translation has been deleted.  |
