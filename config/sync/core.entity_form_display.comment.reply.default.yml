@@ -44,3 +44,4 @@ hidden:
   field_attachment: true
   langcode: true
   subject: true
+  uuid: true

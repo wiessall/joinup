@@ -1,0 +1,14 @@
+uuid: 9487c48a-f493-4960-b78c-4d5d5330c731
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.assessment_reporter
+  module:
+    - user
+id: user_remove_role_action.assessment_reporter
+label: 'Remove the Assessment reporter role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: assessment_reporter

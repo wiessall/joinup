@@ -1,0 +1,27 @@
+uuid: eacb6dca-dfa5-4e10-8592-9fab7459d9db
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.message.mail_body
+    - message.template.assessment_report_updates
+  module:
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: message.assessment_report_updates.mail_body
+targetEntityType: message
+bundle: assessment_report_updates
+mode: mail_body
+content:
+  partial_1:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  partial_0: true
+  search_api_excerpt: true
+  uuid: true

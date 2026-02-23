@@ -309,7 +309,7 @@ content:
     weight: 3
     region: content
     settings:
-      include_locked: true
+      include_locked: false
     third_party_settings: {  }
   language:
     type: tagify_entity_reference_autocomplete_widget
@@ -455,3 +455,4 @@ hidden:
   uid: true
   uri: true
   url_redirects: true
+  uuid: true

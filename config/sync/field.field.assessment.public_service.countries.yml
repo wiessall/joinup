@@ -1,0 +1,35 @@
+uuid: 96d4c3b8-0a3c-4c34-92e0-1cc1cbca5674
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.public_service
+    - field.storage.assessment.countries
+  module:
+    - rdf_sync
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+  rdf_sync:
+    target_id:
+      predicate: 'http://purl.org/dc/terms/spatial'
+      type: resource
+id: assessment.public_service.countries
+field_name: countries
+entity_type: assessment
+bundle: public_service
+label: Countries
+description: 'Specify the concerned country(s) of trans-European digital public service(s)'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: eu_countries
+      display_name: entity_reference_eu_countries
+      arguments: {  }
+field_type: entity_reference

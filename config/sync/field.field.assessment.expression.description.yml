@@ -1,0 +1,33 @@
+uuid: cd2e69b1-4a07-402e-9120-eeecdb65e471
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.expression
+    - field.storage.assessment.description
+    - filter.format.plain_text
+  module:
+    - rdf_sync
+    - text
+    - tmgmt_content
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://purl.org/dc/terms/description'
+      type: null
+  tmgmt_content:
+    excluded: false
+id: assessment.expression.description
+field_name: description
+entity_type: assessment
+bundle: expression
+label: Description
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - plain_text
+field_type: text_long

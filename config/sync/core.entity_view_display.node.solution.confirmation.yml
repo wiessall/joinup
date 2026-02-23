@@ -347,3 +347,4 @@ hidden:
   solution_settings: true
   solution_subscribe: true
   uri: true
+  uuid: true
