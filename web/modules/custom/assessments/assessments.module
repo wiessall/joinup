@@ -256,38 +256,6 @@ function assessments_theme_suggestions_assessment(array $variables): array {
 }
 
 /**
- * Implements hook_user_cancel().
- */
-function assessments_user_cancel($edit, UserInterface $account, $method): void {
-  switch ($method) {
-    case 'user_cancel_block_unpublish':
-      // Unpublish assessments.
-      $storage = \Drupal::entityTypeManager()->getStorage('assessment');
-      $assessment_ids = $storage->getQuery()
-        ->condition('uid', $account->id())
-        ->condition('status', 1)
-        ->accessCheck(FALSE)
-        ->execute();
-      foreach ($storage->loadMultiple($assessment_ids) as $assessment) {
-        $assessment->set('status', FALSE)->save();
-      }
-      break;
-
-    case 'user_cancel_reassign':
-      // Anonymize assessments.
-      $storage = \Drupal::entityTypeManager()->getStorage('assessment');
-      $assessment_ids = $storage->getQuery()
-        ->condition('uid', $account->id())
-        ->accessCheck(FALSE)
-        ->execute();
-      foreach ($storage->loadMultiple($assessment_ids) as $assessment) {
-        $assessment->setOwnerId(0)->save();
-      }
-      break;
-  }
-}
-
-/**
  * Implements hook_ENTITY_TYPE_predelete() for user entities.
  */
 function assessments_user_predelete(UserInterface $account): void {
