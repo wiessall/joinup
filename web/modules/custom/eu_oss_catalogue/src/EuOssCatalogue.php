@@ -380,6 +380,20 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
       'Error when validating data for solution "@project-name" (@project-url) of "@provider" source/catalogue. Errors: @errors',
       $context,
     );
+
+    // For existing solutions, save just the validation tracking fields.
+    $solution = $this->loadBySolutionUrl($project->url);
+    if ($solution !== NULL) {
+      $solution->setValidationResult($validationResult);
+      $solution->set('oss_source_hash', $project->getHash());
+      $solution->setNewRevision();
+      $solution->setRevisionCreationTime($this->time->getRequestTime());
+      $solution->setRevisionLogMessage((string) $this->t(
+        'Update skipped: invalid publiccode.yml in "@provider" source/catalogue.',
+        ['@provider' => $provider->getPluginDefinition()['label']],
+      ));
+      $solution->save();
+    }
   }
 
 }
