@@ -16,7 +16,11 @@ use Drupal\eu_oss_catalogue\Event\EuOssPostFetchEvent;
 use Drupal\eu_oss_catalogue\Event\EuOssSolutionPostSaveEvent;
 use Drupal\eu_oss_catalogue\Event\EuOssSolutionPreSaveEvent;
 use Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException;
+use Drupal\eu_oss_catalogue\Exception\PublicCodeValidatorException;
 use Drupal\eu_oss_catalogue\Model\Project;
+use Drupal\eu_oss_catalogue\Model\Validation\ValidationIssue;
+use Drupal\eu_oss_catalogue\Model\Validation\ValidationIssueType;
+use Drupal\eu_oss_catalogue\Model\Validation\ValidationResponseInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -141,6 +145,12 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     $parser = $this->parserManager->createInstance($provider->getPluginDefinition()['parser']);
 
     try {
+      $validationResult = $parser->isValid($project);
+      if (!$validationResult->isValid()) {
+        $this->handleInvalidSolution($project, $validationResult, $provider);
+        return;
+      }
+
       // The parser is responsible to create the solution node entity.
       $solution = $parser->parse($project, $provider);
 
@@ -149,6 +159,9 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
 
       // Finally, allow 3rd-party to add their alters.
       $this->eventDispatcher->dispatch(new EuOssSolutionPreSaveEvent($solution, $project));
+
+      // Marks valid, clears any previous errors.
+      $solution->setValidationResult($validationResult);
 
       // Set source hash.
       $solution->set('oss_source_hash', $project->getHash());
@@ -185,14 +198,17 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
       // Allow 3rd-party to act after save.
       $this->eventDispatcher->dispatch(new EuOssSolutionPostSaveEvent($solution, $project));
     }
+    catch (PublicCodeValidatorException $exception) {
+      $this->logger->error(
+        'Validation API unavailable for "@project-name" (@project-url) of "@provider" source/catalogue. Skipping. Error: @error',
+        $this->projectLogContext($project, $provider) + ['@error' => $exception->getMessage()],
+      );
+      return;
+    }
     catch (\Exception $exception) {
       // The solution could not be parsed, created or saved.
       $logMessage = 'OSS solution of project @project-name (@project-url) fetched from @provider cannot be parsed, created or saved.';
-      $logContext = [
-        '@project-name' => $project->name,
-        '@project-url' => $project->url,
-        '@provider' => $provider->getPluginDefinition()['label'],
-      ];
+      $logContext = $this->projectLogContext($project, $provider);
       // Entity storage exceptions are already logged at this phase, so we just
       // log a simple error with some data about the project in addition.
       if ($exception instanceof EntityStorageException) {
@@ -315,6 +331,55 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
       ]);
 
     return empty($solutionNodes);
+  }
+
+  /**
+   * Returns a base logger context array for a project and provider.
+   *
+   * @param \Drupal\eu_oss_catalogue\Model\Project $project
+   *   The project value object.
+   * @param \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider
+   *   The provider plugin instance.
+   *
+   * @return array
+   *   Context array with @project-name, @project-url and @provider keys.
+   */
+  protected function projectLogContext(Project $project, EuOssCatalogueProviderInterface $provider): array {
+    $context = [
+      '@project-name' => $project->name,
+      '@project-url' => $project->url,
+      '@provider' => $provider->getPluginDefinition()['label'],
+    ];
+    if ($solution = $this->loadBySolutionUrl($project->url)) {
+      $context['oss_solution'] = $solution->id();
+    }
+    return $context;
+  }
+
+  /**
+   * Handles an invalid publiccode.yml validation result.
+   *
+   * @param \Drupal\eu_oss_catalogue\Model\Project $project
+   *   The project value object.
+   * @param \Drupal\eu_oss_catalogue\Model\Validation\ValidationResponseInterface $validationResult
+   *   The invalid validation response.
+   * @param \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider
+   *   The provider plugin instance.
+   */
+  protected function handleInvalidSolution(
+    Project $project,
+    ValidationResponseInterface $validationResult,
+    EuOssCatalogueProviderInterface $provider,
+  ): void {
+    $errors = implode(' | ', array_map(
+      static fn(ValidationIssue $issue): string => (string) $issue,
+      $validationResult->getIssuesByType(ValidationIssueType::Error),
+    ));
+    $context = $this->projectLogContext($project, $provider) + ['@errors' => $errors];
+    $this->logger->error(
+      'Error when validating data for solution "@project-name" (@project-url) of "@provider" source/catalogue. Errors: @errors',
+      $context,
+    );
   }
 
 }
