@@ -474,14 +474,6 @@ class WebformSubmissionMigrator {
     // Resolve stakeholder countries from geographical_origin.
     $countryTids = $this->resolveGeographicalOriginCountries($data);
 
-    $participationValues = [
-      'type' => 'participation',
-      'participant_type' => $participantTypeTids,
-      'stakeholder_country' => $countryTids,
-      'status' => TRUE,
-      'uid' => $ownerId,
-    ];
-
     // Check for "All EU" in geographical origins.
     $hasAllEu = FALSE;
     foreach ((array) ($data['geographical_origin'] ?? []) as $item) {
@@ -492,7 +484,7 @@ class WebformSubmissionMigrator {
     }
 
     // Nothing to migrate if no participant types and no country data at all.
-    if (empty($participantTypeTids) && empty($countryTids) && !$hasAllEu) {
+    if (empty($countryTids) && !$hasAllEu) {
       return [];
     }
 
