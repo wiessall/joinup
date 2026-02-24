@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\eu_oss_catalogue\Validator;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\eu_oss_catalogue\Exception\PublicCodeValidatorException;
 use Drupal\eu_oss_catalogue\Model\Validation\ValidationIssue;
 use Drupal\eu_oss_catalogue\Model\Validation\ValidationIssueType;
 use Drupal\eu_oss_catalogue\Model\Validation\ValidationResponse;
@@ -55,10 +56,9 @@ readonly class PublicCodeValidator implements PublicCodeValidatorInterface {
       ]);
     }
     catch (\Exception $e) {
-      throw new \RuntimeException(
-        sprintf('PublicCode validator API request failed: %s', $e->getMessage()),
-        0,
-        $e,
+      throw new PublicCodeValidatorException(
+        message: sprintf('PublicCode validator API request failed: %s', $e->getMessage()),
+        previous: $e,
       );
     }
 
