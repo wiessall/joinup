@@ -6,6 +6,8 @@ services:
 
   Drupal\assessments\AssessmentVocabularyHelper: {}
 
+  Drupal\assessments\WebformSubmissionMigrator: {}
+
   Drupal\assessments\EventSubscriber\RdfSyncNormalizeSubscriber: {}
 
   Drupal\assessments\EventSubscriber\SearchApiSubscriber: { }
