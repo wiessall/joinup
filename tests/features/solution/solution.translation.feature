@@ -22,6 +22,11 @@ Feature: Translating solutions
   Scenario Outline: Users who do have edit access can manage translations.
     Given I am logged in as "<user>"
 
+    # Assert language select options/value.
+    When I go to the edit form of the "Test solution" solution
+    Then the available options in the "Language" select should match the site languages
+    And the selected option in the "Language" select should be "en"
+
     # Create translation.
     When I go to the homepage of the "Test solution" solution
     And I click "Translate" in the "Entity actions" region
