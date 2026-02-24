@@ -15,7 +15,7 @@ label: 'Homepage topics'
 module: views
 description: ''
 tag: ''
-base_table: meta_entity
+base_table: meta_entity_field_data
 base_field: id
 display:
   default:
@@ -28,7 +28,7 @@ display:
       fields:
         rendered_entity:
           id: rendered_entity
-          table: meta_entity
+          table: meta_entity_field_data
           field: rendered_entity
           relationship: none
           group_type: group
@@ -103,7 +103,7 @@ display:
       sorts:
         entityqueue_relationship:
           id: entityqueue_relationship
-          table: meta_entity
+          table: meta_entity_field_data
           field: entityqueue_relationship
           relationship: none
           group_type: group
@@ -119,7 +119,7 @@ display:
       filters:
         type:
           id: type
-          table: meta_entity
+          table: meta_entity_field_data
           field: type
           entity_type: meta_entity
           entity_field: type
@@ -189,7 +189,7 @@ display:
       relationships:
         entityqueue_relationship:
           id: entityqueue_relationship
-          table: meta_entity
+          table: meta_entity_field_data
           field: entityqueue_relationship
           relationship: none
           group_type: group
