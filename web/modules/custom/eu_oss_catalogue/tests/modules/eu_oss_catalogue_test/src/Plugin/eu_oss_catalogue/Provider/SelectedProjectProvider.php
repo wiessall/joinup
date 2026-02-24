@@ -88,13 +88,16 @@ abstract class SelectedProjectProvider extends DevelopersItalia {
    *
    * @param \Drupal\eu_oss_catalogue\Model\Project $project
    *   Project.
+   * @param string|null $publiccodeYml
+   *   Replacement YAML content. If NULL, a corruption suffix is appended.
    *
    * @return \Drupal\eu_oss_catalogue\Model\Project
-   *   Project with invalid YAML file.
+   *   Project with modified publiccodeYml.
    */
-  protected function makeInvalid(Project $project): Project {
+  protected function makeInvalid(Project $project, ?string $publiccodeYml = NULL): Project {
     $values = $project->toArray();
-    $values['files']['publiccodeYml'] .= "\n   name: Project 1";
+    $values['files']['publiccodeYml'] = $publiccodeYml
+      ?? $values['files']['publiccodeYml'] . "\n   name: Project 1";
 
     return new Project(...$values);
   }
