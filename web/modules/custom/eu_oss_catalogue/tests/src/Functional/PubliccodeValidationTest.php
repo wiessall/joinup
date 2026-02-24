@@ -87,6 +87,7 @@ class PubliccodeValidationTest extends FetchTestBase {
     $this->assertSame('0.2', $existingNode->get('oss_publiccode_yml_version')->getString());
     $this->assertSame('stable', $existingNode->get('oss_development_status')->getString());
     $this->assertSame('de', $existingNode->get('oss_available_languages')->getString());
+    $this->assertStringContainsString('Update skipped: invalid publiccode.yml', $existingNode->getRevisionLogMessage());
     $this->assertNotEmpty(
       $this->getLogEntries('Error when validating data for solution "@project-name" (@project-url) of "@provider" source/catalogue. Errors: @errors'),
       'An error should be logged when the update is skipped due to API-invalid YAML.',
