@@ -36,7 +36,7 @@ interface EuOssCatalogueParserInterface extends PluginInspectionInterface {
    * @return \Drupal\eu_oss_catalogue\Model\Validation\ValidationResponseInterface
    *   The validation response.
    *
-   * @throws \RuntimeException
+   * @throws \Drupal\eu_oss_catalogue\Exception\PublicCodeValidatorException
    *   When the underlying validation service is unavailable.
    */
   public function isValid(Project $project): ValidationResponseInterface;

@@ -25,7 +25,7 @@ interface PublicCodeValidatorInterface {
    * @return \Drupal\eu_oss_catalogue\Model\Validation\ValidationResponseInterface
    *   The deserialized API response.
    *
-   * @throws \RuntimeException
+   * @throws \Drupal\eu_oss_catalogue\Exception\PublicCodeValidatorException
    *   When the API request fails.
    */
   public function validate(?string $yamlContent): ValidationResponseInterface;
