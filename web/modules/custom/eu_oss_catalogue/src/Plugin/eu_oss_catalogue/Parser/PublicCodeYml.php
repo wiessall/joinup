@@ -21,6 +21,8 @@ use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
 use Drupal\eu_oss_catalogue\Exception\UnresolvableValueException;
 use Drupal\eu_oss_catalogue\Model\FieldOverridingPolicy;
 use Drupal\eu_oss_catalogue\Model\Project;
+use Drupal\eu_oss_catalogue\Model\Validation\ValidationResponseInterface;
+use Drupal\eu_oss_catalogue\Validator\PublicCodeValidatorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -41,6 +43,7 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
     protected LoggerChannelInterface $logger,
     protected LanguageManagerInterface $languageManager,
     protected TypedConfigManagerInterface $typedConfigManager,
+    protected PublicCodeValidatorInterface $publicCodeValidator,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $this->entityTypeManager, $this->resolverManager, $logger, $this->languageManager);
   }
@@ -58,7 +61,16 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
       $container->get('logger.channel.eu_oss_catalogue'),
       $container->get('language_manager'),
       $container->get('config.typed'),
+      $container->get('eu_oss_catalogue.publiccode_validator'),
     );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isValid(Project $project): ValidationResponseInterface {
+    $yamlContent = $project->files['publiccodeYml'] ?? NULL;
+    return $this->publicCodeValidator->validate($yamlContent);
   }
 
   /**
