@@ -29,6 +29,16 @@ class PublicCode extends PluginBase implements ServiceMockPluginInterface {
   use IntegrationTestTrait;
 
   /**
+   * Marker embedded in YAML content to trigger an invalid API response.
+   */
+  const string INVALID_YAML_MARKER = '__eu_oss_publiccode_invalid__';
+
+  /**
+   * Marker embedded in YAML content to trigger a validator API exception.
+   */
+  const string EXCEPTION_YAML_MARKER = '__eu_oss_publiccode_exception__';
+
+  /**
    * {@inheritdoc}
    */
   public function applies(RequestInterface $request, array $options): bool {
@@ -41,10 +51,17 @@ class PublicCode extends PluginBase implements ServiceMockPluginInterface {
    * {@inheritdoc}
    */
   public function getResponse(RequestInterface $request, array $options): ResponseInterface {
+    $body = (string) $request->getBody();
+
+    if (str_contains($body, self::EXCEPTION_YAML_MARKER)) {
+      return new Response(500, [], 'Internal Server Error');
+    }
+
+    $fixtureKey = str_contains($body, self::INVALID_YAML_MARKER) ? 'invalid' : 'valid';
     $response = Json::encode(
       Yaml::decode(
         file_get_contents(__DIR__ . '/../../../../../fixtures/http_response/publiccode_validator.yml')
-      )['valid']
+      )[$fixtureKey]
     );
 
     return new Response(200, [
