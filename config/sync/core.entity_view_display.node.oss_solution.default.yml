@@ -49,7 +49,6 @@ dependencies:
     - layout_builder
     - layout_discovery
     - options
-    - text
     - user
 third_party_settings:
   layout_builder:
@@ -909,7 +908,7 @@ bundle: oss_solution
 mode: default
 content:
   oss_validation_issues:
-    type: text_default
+    type: validation_issue
     label: above
     settings: {  }
     third_party_settings: {  }

@@ -1,13 +1,12 @@
-uuid: 14d7a3de-d308-4d1d-a5c4-e07feb4d58eb
+uuid: e154a289-c43e-4c00-92fb-45868f38b570
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.oss_validation_issues
-    - filter.format.plain_text
     - node.type.oss_solution
   module:
-    - text
+    - eu_oss_catalogue
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
@@ -22,7 +21,5 @@ required: false
 translatable: true
 default_value: {  }
 default_value_callback: ''
-settings:
-  allowed_formats:
-    - plain_text
-field_type: text_long
+settings: {  }
+field_type: validation_issue
