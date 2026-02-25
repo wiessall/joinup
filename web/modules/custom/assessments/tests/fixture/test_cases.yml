@@ -103,7 +103,7 @@ Invalid references:
         affects:
           - name: "Digital Monitoring Unit"
             thematic_area:
-              - "digital_and_innovation_services"
+              - "general_public_services"
         asset:
           - "3b1548db-0f29-42f4-a23c-2ee43ed20ba9"
     documents:
@@ -157,11 +157,11 @@ Valid:
         affects:
           - name: "Digital Monitoring Unit"
             thematic_area:
-              - "digital_and_innovation_services"
-              - "education_and_research"
+              - "general_public_services"
+              - "education"
           - name: "Training Centre"
             thematic_area:
-              - "education_and_research"
+              - "education"
             country:
               - "BE"
               - "IT"
@@ -222,12 +222,12 @@ Valid:
         affects:
           - name: "Digital Monitoring Unit"
             thematic_area:
-              - digital_and_innovation_services
-              - education_and_research
+              - general_public_services
+              - education
             country: []
           - name: "Training Centre"
             thematic_area:
-              - education_and_research
+              - education
             country:
               - "BE"
               - "IT"
@@ -340,7 +340,7 @@ Missing country for a non-EU organisation:
         affects:
           - name: "Digital Monitoring Unit"
             thematic_area:
-              - "digital_and_innovation_services"
+              - "general_public_services"
         description: "test"
         has_participation:
           - country:
@@ -375,8 +375,8 @@ Trying to create an EU organisation:
         affects:
           - name: "Digital Monitoring Unit"
             thematic_area:
-              - "digital_and_innovation_services"
-              - "economy_and_employment"
+              - "general_public_services"
+              - "economic_affairs"
         has_participation:
           - country:
               - "BE"
@@ -421,8 +421,8 @@ UniqueItems violations:
         affects:
           - name: "Digital Service"
             thematic_area:
-              - "digital_and_innovation_services"
-              - "digital_and_innovation_services"
+              - "general_public_services"
+              - "general_public_services"
             country:
               - "BE"
               - "BE"
