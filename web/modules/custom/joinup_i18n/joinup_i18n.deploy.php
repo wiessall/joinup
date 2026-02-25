@@ -14,7 +14,7 @@ use Drupal\tmgmt_ec_etranslation\Plugin\tmgmt\Translator\ETranslationTranslator;
 /**
  * Remove leftovers.
  */
-function joinup_i18n_deploy_200800(): void {
+function joinup_i18n_deploy_200900(): void {
   // An erroneous translation has been created in an early stage for this link.
   if ($link = MenuLinkContent::load(20694)) {
     if ($link->hasTranslation('bg')) {
@@ -54,7 +54,7 @@ function joinup_i18n_deploy_200800(): void {
 /**
  * Creates continuous tasks for Babel strings.
  */
-function joinup_i18n_deploy_200801(): void {
+function joinup_i18n_deploy_200901(): void {
   foreach (\Drupal::languageManager()->getLanguages() as $langcode => $language) {
     if ($langcode !== 'en') {
       tmgmt_job_create('en', $langcode, 0, [
@@ -65,30 +65,4 @@ function joinup_i18n_deploy_200801(): void {
       ])->save();
     }
   }
-}
-
-/**
- * Schedule job items creation.
- */
-function joinup_i18n_deploy_200802(array &$sandbox): string {
-  $queue = \Drupal::queue('babel_tmgmt_continuous_job_item');
-  $queue->createQueue();
-
-  if (!isset($sandbox['hashes'])) {
-    $sandbox['hashes'] = \Drupal::database()->select('babel_source')
-      ->fields('babel_source', ['hash'])
-      ->condition('status', 1)
-      ->execute()
-      ->fetchCol();
-    $sandbox['progress'] = 0;
-    $sandbox['total'] = count($sandbox['hashes']);
-  }
-
-  $hashes = array_splice($sandbox['hashes'], 0, 100);
-  array_walk($hashes, fn(string $hash) => $queue->createItem(['hash' => $hash]));
-
-  $sandbox['progress'] += count($hashes);
-  $sandbox['#finished'] = (int) empty($sandbox['hashes']);
-
-  return "Scheduled {$sandbox['progress']} out of {$sandbox['total']} source string hashes";
 }
