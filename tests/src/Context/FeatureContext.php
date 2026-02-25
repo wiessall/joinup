@@ -1919,6 +1919,31 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts an attribute value on the root HTML element.
+   *
+   * Mink's DocumentElement does not support getAttribute(), so this method
+   * falls back to parsing the raw HTML output.
+   *
+   * @param string $attribute
+   *   The attribute name (e.g. 'lang', 'dir').
+   * @param string $value
+   *   The expected attribute value.
+   */
+  #[Then('the :attribute attribute of the page should be :value')]
+  public function assertPageAttribute(string $attribute, string $value): void {
+    $html = $this->getSession()->getPage()->find('css', 'html');
+    $actual = $html ? $html->getAttribute($attribute) : NULL;
+    if ($actual === NULL) {
+      // Fallback: extract from raw HTML.
+      $content = $this->getSession()->getPage()->getOuterHtml();
+      if (preg_match('/<html[^>]+' . preg_quote($attribute, '/') . '="([^"]+)"/', $content, $matches)) {
+        $actual = $matches[1];
+      }
+    }
+    Assert::assertSame($value, $actual, sprintf('Expected the "%s" attribute of the page to be "%s" but got "%s".', $attribute, $value, $actual));
+  }
+
+  /**
    * Verifies that no elements with a title attribute contain HTML tags.
    */
   #[Then('I should not see any HTML tags inside elements with title attribute')]

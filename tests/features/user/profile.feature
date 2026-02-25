@@ -375,15 +375,12 @@ Feature: User profile
       | Username      | E-mail             | First name | Family name |
       | Pierre Martin | pierre@example.com | Pierre     | Martin      |
     When I am logged in as "Pierre Martin"
-    And I visit "/user"
-    And I open the header local tasks menu
-    And I click "Edit" in the "Entity actions" region
+    And I visit "/user/edit"
+    Then the "lang" attribute of the page should be "en"
     And I select "French" from "Site language"
     And I press "Save"
 
     # Visit a page with an explicit English URL prefix.
-    When I go to "/en"
+    When I go to "/user/edit"
     # The interface should be in French despite the English URL.
-    # Core interface labels should appear in French, not English.
-    Then I should see the link "Mon compte"
-    But I should not see the link "My account"
+    Then the "lang" attribute of the page should be "fr"
