@@ -666,3 +666,19 @@ function assessments_views_data_alter(array &$data): void {
   $code_value['argument']['id'] = 'assessment_country_code';
   $data['taxonomy_term__code']['assessment_country_code'] = $code_value;
 }
+
+/**
+ * Implements hook_inline_entity_form_reference_form_alter().
+ */
+function assessments_inline_entity_form_reference_form_alter(&$reference_form, FormStateInterface $form_state): void {
+  $form_id = $form_state->getFormObject()->getFormId();
+  if ($form_id === 'layout_paragraphs_component_form' && $reference_form['#ief_id'] === 'asset-form') {
+    $reference_form["entity_id"]["#selection_handler"] = 'views';
+    $reference_form["entity_id"]["#selection_settings"] = [
+      "view" => [
+        "view_name" => "solutions_reference",
+        "display_name" => "entity_reference_1",
+      ],
+    ];
+  }
+}
