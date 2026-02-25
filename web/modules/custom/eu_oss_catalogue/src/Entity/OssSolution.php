@@ -7,7 +7,6 @@ namespace Drupal\eu_oss_catalogue\Entity;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
 use Drupal\eu_oss_catalogue\Model\Validation\ValidationIssue;
-use Drupal\eu_oss_catalogue\Model\Validation\ValidationIssueType;
 use Drupal\eu_oss_catalogue\Model\Validation\ValidationResponseInterface;
 use Drupal\eu_oss_catalogue\Plugin\Field\RelevantLanguageCode;
 use Drupal\node\Entity\Node;
@@ -91,12 +90,20 @@ class OssSolution extends Node implements OssSolutionInterface {
    */
   public function setValidationResult(ValidationResponseInterface $validationResult): self {
     $status = $validationResult->isValid() ? ValidationStatus::Valid : ValidationStatus::Invalid;
-    $errors = array_map(
-      fn(ValidationIssue $issue): string => (string) $issue,
-      $validationResult->getIssuesByType(ValidationIssueType::Error),
+
+    $issues = array_map(
+      fn(ValidationIssue $issue): array => [
+        'key' => $issue->key,
+        'description' => $issue->description,
+        'line' => $issue->line,
+        'column' => $issue->column,
+        'type' => $issue->type->value,
+      ],
+      $validationResult->getIssues(),
     );
+
     return $this->set(static::PUBLICCODE_VALIDATION_STATUS_FIELD, $status->value)
-      ->set(static::PUBLICCODE_VALIDATION_ISSUES_FIELD, $errors);
+      ->set(static::PUBLICCODE_VALIDATION_ISSUES_FIELD, $issues);
   }
 
 }
