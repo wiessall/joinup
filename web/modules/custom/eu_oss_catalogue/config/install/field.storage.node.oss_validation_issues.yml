@@ -2,17 +2,17 @@ langcode: en
 status: true
 dependencies:
   module:
+    - eu_oss_catalogue
     - node
-    - text
 id: node.oss_validation_issues
 field_name: oss_validation_issues
 entity_type: node
-type: text_long
-settings: {  }
-module: text
+type: validation_issue
+module: eu_oss_catalogue
 locked: false
 cardinality: -1
-translatable: true
+translatable: false
 indexes: {  }
 persist_with_no_fields: false
 custom_storage: false
+settings: {  }
