@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "528c0b0e4cc192bf9747cfbc0f36537e",
+    "content-hash": "3aa18685aa5ea412aef9637a47388c46",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2273,17 +2273,17 @@
         },
         {
             "name": "drupal/babel",
-            "version": "1.0.0-alpha7",
+            "version": "1.0.0-alpha9",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/babel.git",
-                "reference": "1.0.0-alpha7"
+                "reference": "1.0.0-alpha9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/babel-1.0.0-alpha7.zip",
-                "reference": "1.0.0-alpha7",
-                "shasum": "97712b8f761f5fd78f88be5df4c895a258adf1c8"
+                "url": "https://ftp.drupal.org/files/projects/babel-1.0.0-alpha9.zip",
+                "reference": "1.0.0-alpha9",
+                "shasum": "9595f504d12f9d09d6077edeab42be899f427c91"
             },
             "require": {
                 "drupal/core": "^10.4 || ^11.1",
@@ -2296,8 +2296,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.0-alpha7",
-                    "datestamp": "1763730247",
+                    "version": "1.0.0-alpha9",
+                    "datestamp": "1769428158",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -9089,12 +9089,16 @@
             ],
             "authors": [
                 {
-                    "name": "DamienMcKenna",
+                    "name": "damienmckenna",
                     "homepage": "https://www.drupal.org/user/108450"
                 },
                 {
-                    "name": "KarenS",
+                    "name": "karens",
                     "homepage": "https://www.drupal.org/user/45874"
+                },
+                {
+                    "name": "thejimbirch",
+                    "homepage": "https://www.drupal.org/user/2507260"
                 },
                 {
                     "name": "wells",
