@@ -38,7 +38,7 @@ dependencies:
     - field.field.node.oss_solution.oss_source
     - field.field.node.oss_solution.oss_source_hash
     - field.field.node.oss_solution.oss_used_by
-    - field.field.node.oss_solution.oss_validation_errors
+    - field.field.node.oss_solution.oss_validation_issues
     - field.field.node.oss_solution.oss_validation_status
     - field.field.node.oss_solution.oss_vitality_index
     - field.field.node.oss_solution.oss_vitality_index_range
@@ -867,8 +867,8 @@ third_party_settings:
             uuid: 95d14214-a271-458c-a71f-c1f434363833
             region: content
             configuration:
-              id: 'field_block:node:oss_solution:oss_validation_errors'
-              label: 'Validation errors'
+              id: 'field_block:node:oss_solution:oss_validation_issues'
+              label: 'Validation issues'
               label_display: '0'
               provider: layout_builder
               context_mapping:
@@ -908,7 +908,7 @@ targetEntityType: node
 bundle: oss_solution
 mode: default
 content:
-  oss_validation_errors:
+  oss_validation_issues:
     type: text_default
     label: above
     settings: {  }

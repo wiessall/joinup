@@ -32,7 +32,7 @@ interface OssSolutionInterface extends NodeInterface {
    *
    * @const string
    */
-  const string PUBLICCODE_VALIDATION_ERRORS_FIELD = 'oss_validation_errors';
+  const string PUBLICCODE_VALIDATION_ISSUES_FIELD = 'oss_validation_issues';
 
   /**
    * Appends a new provider to the source field.

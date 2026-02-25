@@ -179,7 +179,7 @@ Feature:
       | Administration 6 |
       | Administration 7 |
     And oss_solution content:
-      | title      | status    | oss_release_date | oss_validation_errors | oss_available_languages                | oss_used_by                                                                                                            |
+      | title      | status    | oss_release_date | oss_validation_issues | oss_available_languages                | oss_used_by                                                                                                            |
       | With modal | published | 2014-11-19       | There is an error     | it,en,de,pt,eo,fr,he,ja,lt,pl,ro,gd,si | Administration 1,Administration 2,Administration 3,Administration 4,Administration 5,Administration 6,Administration 7 |
 
     When I visit the "With modal" "oss_solution"

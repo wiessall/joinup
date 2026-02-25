@@ -4,8 +4,8 @@ dependencies:
   module:
     - node
     - text
-id: node.oss_validation_errors
-field_name: oss_validation_errors
+id: node.oss_validation_issues
+field_name: oss_validation_issues
 entity_type: node
 type: text_long
 settings: {  }

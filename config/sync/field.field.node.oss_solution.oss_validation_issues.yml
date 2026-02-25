@@ -1,9 +1,9 @@
-uuid: fa3014bb-c01b-4ed0-b8e6-ef0dc67e1a0c
+uuid: 14d7a3de-d308-4d1d-a5c4-e07feb4d58eb
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.oss_validation_errors
+    - field.storage.node.oss_validation_issues
     - filter.format.plain_text
     - node.type.oss_solution
   module:
@@ -12,11 +12,11 @@ dependencies:
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: node.oss_solution.oss_validation_errors
-field_name: oss_validation_errors
+id: node.oss_solution.oss_validation_issues
+field_name: oss_validation_issues
 entity_type: node
 bundle: oss_solution
-label: 'Validation errors'
+label: 'Validation issues'
 description: ''
 required: false
 translatable: true
