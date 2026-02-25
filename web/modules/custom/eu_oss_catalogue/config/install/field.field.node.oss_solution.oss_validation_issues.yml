@@ -3,10 +3,9 @@ status: true
 dependencies:
   config:
     - field.storage.node.oss_validation_issues
-    - filter.format.plain_text
     - node.type.oss_solution
   module:
-    - text
+    - eu_oss_catalogue
 id: node.oss_solution.oss_validation_issues
 field_name: oss_validation_issues
 entity_type: node
@@ -17,7 +16,5 @@ required: false
 translatable: true
 default_value: {  }
 default_value_callback: ''
-settings:
-  allowed_formats:
-    - plain_text
-field_type: text_long
+settings: {  }
+field_type: validation_issue
