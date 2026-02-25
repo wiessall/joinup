@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Drupal\eu_oss_catalogue\Validator;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\eu_oss_catalogue\Validator\Model\ValidationApiResponse;
-use Drupal\eu_oss_catalogue\Validator\Model\ValidationApiResponseInterface;
-use Drupal\eu_oss_catalogue\Validator\Model\ValidationIssue;
-use Drupal\eu_oss_catalogue\Validator\Model\ValidationIssueType;
+use Drupal\eu_oss_catalogue\Exception\PublicCodeValidatorException;
+use Drupal\eu_oss_catalogue\Model\Validation\ValidationIssue;
+use Drupal\eu_oss_catalogue\Model\Validation\ValidationIssueType;
+use Drupal\eu_oss_catalogue\Model\Validation\ValidationResponse;
+use Drupal\eu_oss_catalogue\Model\Validation\ValidationResponseInterface;
 use Drupal\eu_oss_catalogue\Validator\Normalizer\ValidationApiResponseNormalizer;
 use GuzzleHttp\ClientInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -39,7 +40,7 @@ readonly class PublicCodeValidator implements PublicCodeValidatorInterface {
   /**
    * {@inheritdoc}
    */
-  public function validate(?string $yamlContent): ValidationApiResponseInterface {
+  public function validate(?string $yamlContent): ValidationResponseInterface {
     if ($yamlContent === NULL) {
       return $this->missingYamlResponse();
     }
@@ -55,16 +56,15 @@ readonly class PublicCodeValidator implements PublicCodeValidatorInterface {
       ]);
     }
     catch (\Exception $e) {
-      throw new \RuntimeException(
-        sprintf('PublicCode validator API request failed: %s', $e->getMessage()),
-        0,
-        $e,
+      throw new PublicCodeValidatorException(
+        message: sprintf('PublicCode validator API request failed: %s', $e->getMessage()),
+        previous: $e,
       );
     }
 
     return $this->localSerializer->deserialize(
       (string) $response->getBody(),
-      ValidationApiResponse::class,
+      ValidationResponse::class,
       'json',
     );
   }
@@ -72,14 +72,14 @@ readonly class PublicCodeValidator implements PublicCodeValidatorInterface {
   /**
    * Returns an invalid response indicating the publiccode.yml file is missing.
    *
-   * @return \Drupal\eu_oss_catalogue\Validator\Model\ValidationApiResponseInterface
+   * @return \Drupal\eu_oss_catalogue\Model\Validation\ValidationResponseInterface
    *   An invalid response with a single error issue.
    */
-  private function missingYamlResponse(): ValidationApiResponseInterface {
-    return new ValidationApiResponse(
+  private function missingYamlResponse(): ValidationResponseInterface {
+    return new ValidationResponse(
       valid: FALSE,
       normalized: NULL,
-      results: [
+      issues: [
         new ValidationIssue(
           key: 'publiccodeYmlVersion',
           description: 'publiccode.yml is missing.',

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Drupal\eu_oss_catalogue\Validator\Model;
+namespace Drupal\eu_oss_catalogue\Model\Validation;
 
 /**
- * Types of issues returned by the PublicCode validator API.
+ * Types of validation issues.
  */
 enum ValidationIssueType: string {
 
