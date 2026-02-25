@@ -50,7 +50,6 @@ dependencies:
     - joinup_oss_catalogue
     - layout_builder
     - template_suggestion
-    - text
     - user
 third_party_settings:
   layout_builder:
@@ -93,7 +92,7 @@ content:
     weight: 0
     region: content
   oss_validation_issues:
-    type: text_default
+    type: validation_issue
     label: above
     settings: {  }
     third_party_settings: {  }

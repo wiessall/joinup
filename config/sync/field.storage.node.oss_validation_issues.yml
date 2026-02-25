@@ -1,19 +1,19 @@
-uuid: e33d5eda-eaa9-4fbd-b600-22cafabcd062
+uuid: 1b9e6bd7-ce97-40ec-b237-264740fac2ee
 langcode: en
 status: true
 dependencies:
   module:
+    - eu_oss_catalogue
     - node
-    - text
 id: node.oss_validation_issues
 field_name: oss_validation_issues
 entity_type: node
-type: text_long
+type: validation_issue
 settings: {  }
-module: text
+module: eu_oss_catalogue
 locked: false
 cardinality: -1
-translatable: true
+translatable: false
 indexes: {  }
 persist_with_no_fields: false
 custom_storage: false
