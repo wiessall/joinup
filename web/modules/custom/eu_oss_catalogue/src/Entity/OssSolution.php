@@ -96,7 +96,7 @@ class OssSolution extends Node implements OssSolutionInterface {
       $validationResult->getIssuesByType(ValidationIssueType::Error),
     );
     return $this->set(static::PUBLICCODE_VALIDATION_STATUS_FIELD, $status->value)
-      ->set(static::PUBLICCODE_VALIDATION_ERRORS_FIELD, $errors);
+      ->set(static::PUBLICCODE_VALIDATION_ISSUES_FIELD, $errors);
   }
 
 }
