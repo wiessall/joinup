@@ -179,8 +179,11 @@ Feature:
       | Administration 6 |
       | Administration 7 |
     And oss_solution content:
-      | title      | status    | oss_release_date | oss_validation_issues | oss_available_languages                | oss_used_by                                                                                                            |
-      | With modal | published | 2014-11-19       | There is an error     | it,en,de,pt,eo,fr,he,ja,lt,pl,ro,gd,si | Administration 1,Administration 2,Administration 3,Administration 4,Administration 5,Administration 6,Administration 7 |
+      | title      | status    | oss_release_date | oss_available_languages                | oss_used_by                                                                                                            |
+      | With modal | published | 2014-11-19       | it,en,de,pt,eo,fr,he,ja,lt,pl,ro,gd,si | Administration 1,Administration 2,Administration 3,Administration 4,Administration 5,Administration 6,Administration 7 |
+    And the "With modal" oss_solution has the following validation issues:
+      | key              | description       | line | column | type  |
+      | validation_error | There is an error | 1    | 1      | error |
 
     When I visit the "With modal" "oss_solution"
 
@@ -235,11 +238,11 @@ Feature:
     And I should not see the following lines of text:
       | Romanian,     |
       | Scots Gaelic, |
-    And I should not see the text "There is an error"
+    And I should not see the text "[validation_error line:1 column:1] There is an error"
     But I should see the link "publiccode.yml is invalid"
     When I click "publiccode.yml is invalid"
     Then a modal should open
-    And I should see the text "There is an error"
+    And I should see the text "[validation_error line:1 column:1] There is an error"
 
   @javascript
   Scenario: Screenshot carousel with 4 items works as expected.
