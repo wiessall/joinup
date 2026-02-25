@@ -73,7 +73,7 @@ class PublicCodeValidatorTest extends UnitTestCase {
       ->validate('name: Example');
 
     $this->assertTrue($result->isValid());
-    $this->assertEmpty($result->getResults());
+    $this->assertEmpty($result->getIssues());
   }
 
   /**
@@ -105,8 +105,8 @@ YAML;
       ->validate($yamlContent);
 
     $this->assertFalse($result->isValid(), 'Invalid YAML should fail validation');
-    $this->assertIsArray($result->getResults());
-    $this->assertNotEmpty($result->getResults(), 'Invalid YAML should have errors');
+    $this->assertIsArray($result->getIssues());
+    $this->assertNotEmpty($result->getIssues(), 'Invalid YAML should have errors');
   }
 
   /**
@@ -140,7 +140,7 @@ YAML;
       ->validate($yamlContent);
 
     $this->assertFalse($result->isValid(), 'Malformed YAML should fail validation');
-    $this->assertNotEmpty($result->getResults(), 'Malformed YAML should have errors');
+    $this->assertNotEmpty($result->getIssues(), 'Malformed YAML should have errors');
   }
 
 }

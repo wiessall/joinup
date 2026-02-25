@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Validator\Normalizer;
 
-use Drupal\eu_oss_catalogue\Validator\Model\ValidationApiResponse;
-use Drupal\eu_oss_catalogue\Validator\Model\ValidationIssue;
-use Drupal\eu_oss_catalogue\Validator\Model\ValidationIssueType;
+use Drupal\eu_oss_catalogue\Model\Validation\ValidationIssue;
+use Drupal\eu_oss_catalogue\Model\Validation\ValidationIssueType;
+use Drupal\eu_oss_catalogue\Model\Validation\ValidationResponse;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 /**
- * Denormalizer for the ValidationApiResponse model.
+ * Denormalizer for the ValidationResponse model.
  */
 class ValidationApiResponseNormalizer implements DenormalizerInterface {
 
   /**
    * {@inheritdoc}
    */
-  public function denormalize(mixed $data, string $type, ?string $format = NULL, array $context = []): ValidationApiResponse {
+  public function denormalize(mixed $data, string $type, ?string $format = NULL, array $context = []): ValidationResponse {
     $results = [];
     foreach ($data['results'] ?? [] as $issue) {
       $results[] = new ValidationIssue(
@@ -29,10 +29,10 @@ class ValidationApiResponseNormalizer implements DenormalizerInterface {
       );
     }
 
-    return new ValidationApiResponse(
+    return new ValidationResponse(
       valid: $data['valid'],
       normalized: $data['normalized'] ?? NULL,
-      results: $results,
+      issues: $results,
     );
   }
 
@@ -40,14 +40,14 @@ class ValidationApiResponseNormalizer implements DenormalizerInterface {
    * {@inheritdoc}
    */
   public function supportsDenormalization(mixed $data, string $type, ?string $format = NULL, array $context = []): bool {
-    return $type === ValidationApiResponse::class;
+    return $type === ValidationResponse::class;
   }
 
   /**
    * {@inheritdoc}
    */
   public function getSupportedTypes(?string $format): array {
-    return [ValidationApiResponse::class => TRUE];
+    return [ValidationResponse::class => TRUE];
   }
 
 }

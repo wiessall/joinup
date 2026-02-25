@@ -7,6 +7,7 @@ namespace Drupal\eu_oss_catalogue;
 use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\Model\Project;
+use Drupal\eu_oss_catalogue\Model\Validation\ValidationResponseInterface;
 
 /**
  * Provides an interface for parser plugins.
@@ -25,5 +26,19 @@ interface EuOssCatalogueParserInterface extends PluginInspectionInterface {
    *   The new or updates OSS Solution node. If NULL is returned, parse failed.
    */
   public function parse(Project $project, EuOssCatalogueProviderInterface $provider): OssSolutionInterface;
+
+  /**
+   * Checks whether the fetched project is valid.
+   *
+   * @param \Drupal\eu_oss_catalogue\Model\Project $project
+   *   The project value object.
+   *
+   * @return \Drupal\eu_oss_catalogue\Model\Validation\ValidationResponseInterface
+   *   The validation response.
+   *
+   * @throws \Drupal\eu_oss_catalogue\Exception\PublicCodeValidatorException
+   *   When the underlying validation service is unavailable.
+   */
+  public function isValid(Project $project): ValidationResponseInterface;
 
 }

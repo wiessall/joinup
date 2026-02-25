@@ -6,10 +6,10 @@ namespace Drupal\eu_oss_catalogue\Entity;
 
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
+use Drupal\eu_oss_catalogue\Model\Validation\ValidationIssue;
+use Drupal\eu_oss_catalogue\Model\Validation\ValidationIssueType;
+use Drupal\eu_oss_catalogue\Model\Validation\ValidationResponseInterface;
 use Drupal\eu_oss_catalogue\Plugin\Field\RelevantLanguageCode;
-use Drupal\eu_oss_catalogue\Validator\Model\ValidationApiResponseInterface;
-use Drupal\eu_oss_catalogue\Validator\Model\ValidationIssue;
-use Drupal\eu_oss_catalogue\Validator\Model\ValidationIssueType;
 use Drupal\node\Entity\Node;
 use Drupal\pluginreference\Plugin\Field\FieldType\PluginReferenceItem;
 
@@ -89,11 +89,11 @@ class OssSolution extends Node implements OssSolutionInterface {
   /**
    * {@inheritdoc}
    */
-  public function setValidationResult(ValidationApiResponseInterface $validationResult): self {
+  public function setValidationResult(ValidationResponseInterface $validationResult): self {
     $status = $validationResult->isValid() ? ValidationStatus::Valid : ValidationStatus::Invalid;
     $errors = array_map(
       fn(ValidationIssue $issue): string => (string) $issue,
-      $validationResult->getResultsByType(ValidationIssueType::Error),
+      $validationResult->getIssuesByType(ValidationIssueType::Error),
     );
     return $this->set(static::PUBLICCODE_VALIDATION_STATUS_FIELD, $status->value)
       ->set(static::PUBLICCODE_VALIDATION_ERRORS_FIELD, $errors);
