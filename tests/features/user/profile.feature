@@ -370,7 +370,7 @@ Feature: User profile
     # The nationality should not be displayed since the referenced entity is gone
     But I should not see the text "Country of origin:"
 
-  Scenario: The interface language follows the user preferred site language regardless of the URL language.
+  Scenario: The URL determines the interface language and login redirects to the user preferred language.
     Given users:
       | Username      | E-mail             | First name | Family name |
       | Pierre Martin | pierre@example.com | Pierre     | Martin      |
@@ -380,7 +380,9 @@ Feature: User profile
     And I select "French" from "Site language"
     And I press "Save"
 
-    # Visit a page with an explicit English URL prefix.
-    When I go to "/user/edit"
-    # The interface should be in French despite the English URL.
+    When I am an anonymous user
+    Then the "lang" attribute of the page should be "en"
+
+    # After login, the user is redirected to their preferred language.
+    When I am logged in as "Pierre Martin"
     Then the "lang" attribute of the page should be "fr"
