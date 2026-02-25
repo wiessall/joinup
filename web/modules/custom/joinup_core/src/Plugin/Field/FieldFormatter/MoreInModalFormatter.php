@@ -133,7 +133,8 @@ class MoreInModalFormatter extends FormatterBase {
         '#url' => Url::fromRoute('<current>'),
       ];
     }
-    if ($entity->isNew() || $maxItemsToShow < 0 || $items->count() <= $maxItemsToShow) {
+
+    if ($entity->isNew() || $maxItemsToShow < 0 || $items->count() <= $maxItemsToShow || empty($childKeys)) {
       return $renderable;
     }
 
