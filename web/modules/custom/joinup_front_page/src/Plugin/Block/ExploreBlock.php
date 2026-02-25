@@ -6,10 +6,13 @@ namespace Drupal\joinup_front_page\Plugin\Block;
 
 use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
+use Drupal\assessments\AssessmentInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -42,6 +45,7 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
     string $plugin_id,
     mixed $plugin_definition,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly EntityRepositoryInterface $entityRepository,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
@@ -55,6 +59,7 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
       $plugin_id,
       $plugin_definition,
       $container->get('entity_type.manager'),
+      $container->get('entity.repository'),
     );
   }
 
@@ -71,13 +76,13 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
       'collections' => [
         'label' => $this->t('Collections'),
         'plural_type' => $this->t('collections'),
-        'data' => $this->getContent('collection'),
+        'data' => $this->getCollectionContent(),
         'url' => $get_url('collection'),
       ],
       'solutions' => [
         'label' => $this->t('Solutions'),
         'plural_type' => $this->t('solutions'),
-        'data' => $this->getContent('solution'),
+        'data' => $this->getSolutionContent(),
         'url' => $get_url('solution'),
       ],
     ];
@@ -121,10 +126,49 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
   }
 
   /**
-   * Returns the 12 most recent nodes of the given type as render arrays.
+   * Returns the base query for content retrieval.
    *
    * @param string $type
-   *   The type of content.
+   *   The content type to query.
+   *
+   * @return \Drupal\Core\Entity\Query\QueryInterface
+   *   The configured entity query.
+   */
+  protected function getContentQuery(string $type): QueryInterface {
+    $query = $this->entityTypeManager->getStorage('node')
+      ->getQuery()
+      ->accessCheck(FALSE);
+    return $query->condition('status', 1)
+      ->condition('type', $type)
+      ->condition('field_state', 'archived', '<>')
+      ->sort('changed', 'DESC')
+      ->range(0, 12);
+  }
+
+  /**
+   * Returns the content items for the given query.
+   *
+   * @param \Drupal\Core\Entity\Query\QueryInterface $query
+   *   The query to execute.
+   *
+   * @return array
+   *   List of content with view mode "explore_item".
+   */
+  protected function getContentItems(QueryInterface $query): array {
+    $content = [];
+    $entity_storage = $this->entityTypeManager->getStorage('node');
+    $view_builder = $this->entityTypeManager->getViewBuilder('node');
+
+    $entities = $entity_storage->loadMultiple($query->execute());
+    foreach ($entities as $node) {
+      $content[] = $view_builder->view($node, $this->viewMode);
+    }
+
+    return $content;
+  }
+
+  /**
+   * Returns the 12 most recent collections as render arrays.
    *
    * @return array
    *   List of content with view mode "explore_item".
@@ -132,25 +176,24 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  protected function getContent(string $type): array {
-    $content = [];
-    $entity = $this->entityTypeManager->getStorage('node');
-    $view_builder = $this->entityTypeManager->getViewBuilder('node');
-    $query = $entity->getQuery()->accessCheck(FALSE);
+  protected function getCollectionContent(): array {
+    return $this->getContentItems($this->getContentQuery('collection'));
+  }
 
-    $ids = $query->condition('status', 1)
-      ->condition('type', $type)
-      ->condition('field_state', 'archived', '<>')
-      ->sort('changed', 'DESC')
-      ->range(0, 12)
-      ->execute();
-
-    $entities = $entity->loadMultiple($ids);
-    foreach ($entities as $node) {
-      $content[] = $view_builder->view($node, $this->viewMode);
-    }
-
-    return $content;
+  /**
+   * Returns the 12 most recent solutions of the given type as render arrays.
+   *
+   * @return array
+   *   List of content with view mode "explore_item".
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  protected function getSolutionContent(): array {
+    $query = $this->getContentQuery('solution');
+    $collector = $this->entityRepository->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR);
+    $query->condition('og_audience', $collector->id(), '<>');
+    return $this->getContentItems($query);
   }
 
 }
