@@ -136,6 +136,23 @@ function eu_oss_catalogue_node_access(NodeInterface $entity, string $operation, 
 }
 
 /**
+ * Implements hook_theme().
+ */
+function eu_oss_catalogue_theme(): array {
+  return [
+    'validation_issue' => [
+      'variables' => [
+        'type' => NULL,
+        'key' => NULL,
+        'line' => NULL,
+        'column' => NULL,
+        'description' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
  * Implements hook_cron().
  */
 function eu_oss_catalogue_cron(): void {

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\Field\FieldFormatter;
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
+use Drupal\Core\Render\Markup;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue\Model\Validation\ValidationIssueType;
 
@@ -31,7 +33,12 @@ class ValidationIssueFormatter extends FormatterBase {
         continue;
       }
       $elements[$delta] = [
-        '#plain_text' => sprintf('[%s line:%d column:%d] %s', $item->key, (int) $item->line, (int) $item->column, $item->description),
+        '#theme' => 'validation_issue',
+        '#type' => $item->type,
+        '#key' => Markup::create(Html::escape($item->key)),
+        '#line' => (int) $item->line,
+        '#column' => (int) $item->column,
+        '#description' => Markup::create(Html::escape($item->description)),
       ];
     }
 
