@@ -210,7 +210,7 @@ display:
           field_api_classes: false
         operations:
           id: operations
-          table: meta_entity_field_data
+          table: meta_entity
           field: operations
           relationship: none
           group_type: group

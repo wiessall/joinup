@@ -28,7 +28,7 @@ display:
       fields:
         rendered_entity:
           id: rendered_entity
-          table: meta_entity_field_data
+          table: meta_entity
           field: rendered_entity
           relationship: none
           group_type: group
