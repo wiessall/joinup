@@ -1,8 +1,8 @@
 diff --git a/meta_entity.install b/meta_entity.install
-index 3ce22ef64f1cb0afbe34d8839b39e543b3f10a25..451842677f3e71d5ab0fd08fd60108285e2af1d0 100644
+index 3ce22ef64f1cb0afbe34d8839b39e543b3f10a25..6e59922a327a4f52d935080934fc81e803b4a300 100644
 --- a/meta_entity.install
 +++ b/meta_entity.install
-@@ -8,7 +8,27 @@
+@@ -8,7 +8,28 @@
  declare(strict_types=1);
  
  use Drupal\Core\Config\Entity\ConfigEntityUpdater;
@@ -10,6 +10,7 @@ index 3ce22ef64f1cb0afbe34d8839b39e543b3f10a25..451842677f3e71d5ab0fd08fd6010828
 +use Drupal\Core\Field\BaseFieldDefinition;
 +use Drupal\Core\Language\LanguageInterface;
  use Drupal\meta_entity\Entity\MetaEntityTypeInterface;
++use Drupal\views\Plugin\ViewsHandlerManager;
 +use Drupal\views\Views;
 +
 +/**
@@ -30,7 +31,7 @@ index 3ce22ef64f1cb0afbe34d8839b39e543b3f10a25..451842677f3e71d5ab0fd08fd6010828
  
  /**
   * Allow meta entity auto-creation and auto-deletion.
-@@ -28,3 +48,80 @@ function meta_entity_update_8001(array &$sandbox): void {
+@@ -28,3 +49,103 @@ function meta_entity_update_8001(array &$sandbox): void {
      return TRUE;
    });
  }
@@ -82,9 +83,17 @@ index 3ce22ef64f1cb0afbe34d8839b39e543b3f10a25..451842677f3e71d5ab0fd08fd6010828
 + * Update Views' view displays to match meta entity listings to the new schema.
 + */
 +function meta_entity_update_8004(): void {
-+  $componentTypes = ['fields', 'sorts', 'filters', 'arguments', 'relationships'];
-+  $views = Views::getAllViews();
-+  foreach ($views as $view) {
++  if (!\Drupal::moduleHandler()->moduleExists('views')) {
++    return;
++  }
++  $componentTypes = [
++    'plugin.manager.views.field' => 'fields',
++    'plugin.manager.views.sort' => 'sorts',
++    'plugin.manager.views.filter' => 'filters',
++    'plugin.manager.views.argument' => 'arguments',
++    'plugin.manager.views.relationship' => 'relationships',
++  ];
++  foreach (Views::getAllViews() as $view) {
 +    $displays = $view->get('display');
 +    $baseIsMetaEntity = $view->get('base_table') === 'meta_entity';
 +    $saveIsNeeded = $baseIsMetaEntity;
@@ -93,15 +102,30 @@ index 3ce22ef64f1cb0afbe34d8839b39e543b3f10a25..451842677f3e71d5ab0fd08fd6010828
 +    }
 +    foreach ($displays as $displayId => $displayData) {
 +      $displayOptions = $displayData['display_options'];
-+      foreach ($componentTypes as $componentType) {
++      foreach ($componentTypes as $componentHandlerId => $componentType) {
 +        if (!array_key_exists($componentType, $displayOptions)) {
 +          continue;
 +        }
++        $componentManager = \Drupal::service($componentHandlerId);
++        \assert($componentManager instanceof ViewsHandlerManager);
++
 +        foreach ($displayOptions[$componentType] as $component => $componentData) {
 +          if (!array_key_exists('table', $componentData) || $componentData['table'] !== 'meta_entity') {
 +            continue;
 +          }
-+          $displays[$displayId]['display_options'][$componentType][$component]['table'] = 'meta_entity_field_data';
++
++          $originalHandler = $componentManager->getHandler($componentData);
++          if (!$originalHandler->broken()) {
++            continue;
++          }
++
++          $componentData['table'] = 'meta_entity_field_data';
++          $newHandler = $componentManager->getHandler($componentData);
++          if ($newHandler->broken()) {
++            // We cannot fix this config.
++            continue;
++          }
++          $displays[$displayId]['display_options'][$componentType][$component] = $componentData;
 +          $saveIsNeeded = TRUE;
 +        }
 +      }

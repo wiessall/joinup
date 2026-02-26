@@ -479,7 +479,7 @@
                 "Renderer::renderPlain() is deprecated @see https://www.drupal.org/i/3511648": "resources/patch/php/drupal/message_digest/3511648.diff"
             },
             "drupal/meta_entity": {
-                "Make meta entities translatable @see https://drupal.org/i/3573020": "resources/patch/php/drupal/meta_entity/3573020-mr16-dafb369.diff",
+                "Make meta entities translatable @see https://drupal.org/i/3573020": "resources/patch/php/drupal/meta_entity/3573020-mr16-bdde1ca.diff",
                 "Allow $bundle to be nullable @see https://www.drupal.org/i/3529976": "resources/patch/php/drupal/meta_entity/3529976.diff"
             },
             "drupal/mimemail": {
