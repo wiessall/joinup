@@ -43,7 +43,7 @@ class PublicCode extends PluginBase implements ServiceMockPluginInterface {
    */
   public function applies(RequestInterface $request, array $options): bool {
     return !$this->isIntegrationTest()
-      && $request->getMethod() === 'QUERY'
+      && $request->getMethod() === PublicCodeValidatorInterface::VALIDATE_METHOD
       && str_ends_with($request->getUri()->getPath(), PublicCodeValidatorInterface::VALIDATE_PATH);
   }
 

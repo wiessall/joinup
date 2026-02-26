@@ -12,6 +12,11 @@ use Drupal\eu_oss_catalogue\Model\Validation\ValidationResponseInterface;
 interface PublicCodeValidatorInterface {
 
   /**
+   * The HTTP method used for validation requests.
+   */
+  const string VALIDATE_METHOD = 'POST';
+
+  /**
    * The API path used for validation requests.
    */
   const string VALIDATE_PATH = '/v1/validate';
