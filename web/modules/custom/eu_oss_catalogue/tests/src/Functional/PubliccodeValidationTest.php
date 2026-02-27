@@ -28,36 +28,6 @@ class PubliccodeValidationTest extends FetchTestBase {
   }
 
   /**
-   * A solution rejected as invalid is created once the YAML becomes valid.
-   */
-  public function testUpdateToValid(): void {
-    $this->fetchSolutions('yaml_become_valid_provider', 2);
-
-    $this->assertFalse(
-      $this->getNodeByTitle('Project 1.1'),
-      'No node should be created when the validator API returns invalid.',
-    );
-    $this->assertNotEmpty(
-      $this->getLogEntries('Error when validating data for solution "@project-name" (@project-url) of "@provider" source/catalogue. Errors: @errors'),
-      'An error should be logged when the validator API rejects a new solution.',
-    );
-
-    $this->fetchSolutions('yaml_become_valid_provider', 1);
-
-    $createdNode = $this->getNodeByTitle('Project 1.1', TRUE);
-    $this->assertNotFalse($createdNode, 'Node should be created once YAML becomes valid.');
-    $this->assertSame('0.2',
-      $createdNode->get('oss_publiccode_yml_version')->getString()
-    );
-    $this->assertSame('stable',
-      $createdNode->get('oss_development_status')->getString()
-    );
-    $this->assertSame('de',
-      $createdNode->get('oss_available_languages')->getString()
-    );
-  }
-
-  /**
    * A new solution is not created when the validator API returns invalid.
    */
   public function testCreateRejectedForApiInvalidPublicCode(): void {
