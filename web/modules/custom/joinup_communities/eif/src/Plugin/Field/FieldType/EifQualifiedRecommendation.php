@@ -84,7 +84,7 @@ class EifQualifiedRecommendation extends EntityReferenceItem {
    */
   public function isEmpty(): bool {
     $value = $this->get('value')->getValue();
-    return parent::isEmpty() && ($value === NULL || $value === '');
+    return parent::isEmpty() || ($value === NULL || $value === '');
   }
 
 }
