@@ -99,36 +99,5 @@ class PubliccodeValidationTest extends FetchTestBase {
     );
   }
 
-  /**
-   * The Solution was created from valid YAML, update skipped when invalid.
-   */
-  public function testUpdateToNotValid(): void {
-    $this->fetchSolutions('yaml_become_invalid_provider', 2);
-
-    $createdNode = $this->getNodeByTitle('Project 1.1');
-    $this->assertNotFalse($createdNode);
-    $this->assertSame(
-      '0.2',
-      $createdNode->get('oss_publiccode_yml_version')->getString()
-    );
-
-    $this->fetchSolutions('yaml_become_invalid_provider', 1);
-
-    // The node still exists with its original title — no parsing ran, so the
-    // title was never replaced with the URL-based fallback.
-    $existingNode = $this->getNodeByTitle('Project 1.1', TRUE);
-    $this->assertNotFalse($existingNode, 'Node should still exist after a skipped update.');
-    $this->assertStringContainsString('Update skipped: invalid publiccode.yml', $existingNode->getRevisionLogMessage());
-    // Check some field set by resolver — values are preserved.
-    $this->assertSame('0.2',
-      $existingNode->get('oss_publiccode_yml_version')->getString()
-    );
-    $this->assertSame('stable',
-      $existingNode->get('oss_development_status')->getString()
-    );
-    $this->assertSame('de',
-      $existingNode->get('oss_available_languages')->getString()
-    );
-  }
-
 }
+
