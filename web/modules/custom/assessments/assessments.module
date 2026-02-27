@@ -124,9 +124,6 @@ function assessments_field_widget_complete_form_alter(array &$element, FormState
   /** @see \Drupal\inline_entity_form\Plugin\Field\FieldWidget\InlineEntityFormComplex::formElement */
   $ief_state = $form_state->get(['inline_entity_form', $ief_id, 'form']);
 
-  if (isset($widget['actions']['bundle'])) {
-    unset($widget['actions']['bundle']);
-  }
   if ($ief_state === NULL) {
     // Add description before the buttons.
     $widget['description'] = [
