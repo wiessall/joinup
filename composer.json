@@ -452,7 +452,8 @@
             "drupal/inline_entity_form": {
                 "Autocomplete field doesn't allow to reference entities with long titles @see https://www.drupal.org/node/2895663": "resources/patch/php/drupal/inline_entity_form/2895663.patch",
                 "Undefined array key \"delete\". @see https://www.drupal.org/i/3416328": "resources/patch/php/drupal/inline_entity_form/3416328.patch",
-                "Combined: @see https://www.drupal.org/i/3099844 and https://www.drupal.org/i/3043511": "resources/patch/php/drupal/inline_entity_form/combined-3099844-3043511.15.diff",
+                "Combined: @see https://www.drupal.org/i/3099844": "resources/patch/php/drupal/inline_entity_form/3099844-mr136-commit6ac43ae3.diff",
+                "https://www.drupal.org/i/3043511": "resources/patch/php/drupal/inline_entity_form/3043511-mr154-commit2d80c52d.diff",
                 "Foreach expects array|object, null given @see https://www.drupal.org/i/3516478": "resources/patch/php/drupal/inline_entity_form/3516478.diff"
             },
             "drupal/l10n_pconfig": {
