@@ -7,7 +7,6 @@ namespace Drupal\eu_oss_catalogue_test\Plugin\eu_oss_catalogue\Provider;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueProvider;
 use Drupal\eu_oss_catalogue\Entity\CatalogueType;
-use Drupal\eu_oss_catalogue_test\Plugin\ServiceMock\PublicCode;
 
 /**
  * Provider used to test that updates are skipped when the API returns invalid.
@@ -34,7 +33,7 @@ class ApiInvalidUpdateProvider extends SelectedProjectProvider {
 
     foreach (parent::fetch() as $project) {
       if ($project->url === $updateUrl && $wasCreated) {
-        yield $this->makeInvalid($project, PublicCode::INVALID_YAML_MARKER);
+        yield $this->makeInvalid($project);
         continue;
       }
 
