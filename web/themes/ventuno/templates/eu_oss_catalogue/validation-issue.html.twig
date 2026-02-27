@@ -1,0 +1,20 @@
+{#
+/**
+ * @file
+ * Theme override for a single validation issue.
+ *
+ * Available variables:
+ * - type: The severity type of the issue: 'error' or 'warning'.
+ * - key: The publiccode.yml field key that triggered the issue.
+ * - line: Line number where the issue was found.
+ * - column: Column number where the issue was found.
+ * - description: Human-readable description of the issue.
+ *
+ * @ingroup themeable
+ */
+#}
+<div class="mb-2">
+  {% trans with {context: 'Validation issue'} %}
+    [{{ key }} line:{{ line }} column:{{ column }}] {{ description }}
+  {% endtrans %}
+</div>
