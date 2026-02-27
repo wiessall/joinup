@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Parser;
 
-use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
 use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -119,10 +118,8 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
         }
       }
 
-      if ($override === FieldOverridingPolicy::Always && empty($resolved) && empty($project->getSilentErrors())) {
-        // Force-clear the field across all translations if there are no errors;
-        // otherwise, publiccode.yml is not valid,
-        // and we want to preserve the previous values.
+      if ($override === FieldOverridingPolicy::Always && empty($resolved)) {
+        // Force-clear the field across all translations.
         foreach ($solution->getTranslationLanguages() as $langcode => $translation) {
           $solution->getTranslation($langcode)->set($fieldName, NULL);
         }
@@ -145,17 +142,7 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
    * {@inheritdoc}
    */
   protected function getMetadata(Project $project): array {
-    if ($project->getPubliccodeYml() === NULL) {
-      $project->addSilentError("publiccodeYml does not exist for $project->url");
-      return [];
-    }
-    try {
-      return Yaml::decode($project->getPubliccodeYml()) ?? [];
-    }
-    catch (InvalidDataTypeException $exception) {
-      $project->addSilentError("Cannot decode publiccode.yml of $project->url. Message: {$exception->getMessage()}");
-      return [];
-    }
+    return Yaml::decode($project->getPubliccodeYml()) ?? [];
   }
 
   /**
