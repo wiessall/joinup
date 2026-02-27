@@ -1,8 +1,8 @@
 diff --git a/src/Element/InlineEntityForm.php b/src/Element/InlineEntityForm.php
-index 74a71424736eab114f8fae45c5baf1c19475166e..bf394798750b4d34259be21bace00559505113d5 100644
+index 74a7142..5315b06 100644
 --- a/src/Element/InlineEntityForm.php
 +++ b/src/Element/InlineEntityForm.php
-@@ -5,7 +5,7 @@ namespace Drupal\inline_entity_form\Element;
+@@ -5,7 +5,7 @@
  use Drupal\Core\Entity\EntityInterface;
  use Drupal\Core\Entity\RevisionLogInterface;
  use Drupal\Core\Form\FormStateInterface;
@@ -11,7 +11,7 @@ index 74a71424736eab114f8fae45c5baf1c19475166e..bf394798750b4d34259be21bace00559
  use Drupal\inline_entity_form\ElementSubmit;
  use Drupal\inline_entity_form\TranslationHelper;
  
-@@ -28,7 +28,7 @@ use Drupal\inline_entity_form\TranslationHelper;
+@@ -28,7 +28,7 @@
   *
   * @RenderElement("inline_entity_form")
   */
@@ -20,19 +20,11 @@ index 74a71424736eab114f8fae45c5baf1c19475166e..bf394798750b4d34259be21bace00559
  
    /**
     * {@inheritdoc}
-@@ -51,6 +51,7 @@ class InlineEntityForm extends RenderElement {
-       '#save_entity' => TRUE,
-       // 'add', 'edit' or 'duplicate'.
-       '#op' => NULL,
-+      '#ief_required' => TRUE,
-       '#process' => [
-         // Core's #process for groups, don't remove it.
-         [$class, 'processGroup'],
 diff --git a/src/Form/EntityInlineForm.php b/src/Form/EntityInlineForm.php
-index 9d193c95773ac170a06fe5ca2f710813b5db7ff0..7a161676274543b99e723d93237180d476cf96b8 100644
+index 9d193c9..f38a3b3 100644
 --- a/src/Form/EntityInlineForm.php
 +++ b/src/Form/EntityInlineForm.php
-@@ -10,12 +10,14 @@ use Drupal\Core\Entity\EntityInterface;
+@@ -10,12 +10,14 @@
  use Drupal\Core\Entity\EntityTypeInterface;
  use Drupal\Core\Entity\EntityTypeManagerInterface;
  use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -47,44 +39,36 @@ index 9d193c95773ac170a06fe5ca2f710813b5db7ff0..7a161676274543b99e723d93237180d4
  use Drupal\rat\v1\RenderArray;
  use Symfony\Component\DependencyInjection\ContainerInterface;
  
-@@ -184,6 +186,15 @@ class EntityInlineForm implements InlineFormInterface {
+@@ -184,6 +186,7 @@ public function entityForm(array $entity_form, FormStateInterface $form_state) {
      $entity = $entity_form['#entity'];
      $form_display = $this->getFormDisplay($entity, $entity_form['#form_mode']);
      $form_display->buildForm($entity, $entity_form, $form_state);
 +
-+    // When the parent field is optional, strip #required from child fields
-+    // so the inline form can be submitted empty.
-+    if (isset($entity_form['#ief_required']) && !$entity_form['#ief_required']) {
-+      foreach (Element::children($entity_form) as $field_name) {
-+        static::stripRequired($entity_form[$field_name]);
-+      }
-+    }
-+
      $entity_form['#ief_element_submit'][] = [
        get_class($this),
        'submitCleanFormState',
-@@ -261,26 +272,82 @@ class EntityInlineForm implements InlineFormInterface {
+@@ -261,26 +264,84 @@ public function entityForm(array $entity_form, FormStateInterface $form_state) {
     * {@inheritdoc}
     */
    public function entityFormValidate(array &$entity_form, FormStateInterface $form_state) {
--    // Perform entity validation only if the inline form was submitted,
--    // skipping other requests such as file uploads.
 +    /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
 +    $entity = $entity_form['#entity'];
 +    $this->buildEntity($entity_form, $entity, $form_state);
 +
+     // Perform entity validation only if the inline form was submitted,
+     // skipping other requests such as file uploads.
      $triggering_element = $form_state->getTriggeringElement();
-+
-+    // Only validate if the IEF form was submitted.
      if (!empty($triggering_element['#ief_submit_trigger'])) {
 -      /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
 -      $entity = $entity_form['#entity'];
 -      $this->buildEntity($entity_form, $entity, $form_state);
-+      if ($this->isEmptyEntity($entity, $entity_form['#form_mode'])) {
++      // Skip validation if the parent field is optional and the entity has
++      // no user-entered values (allows optional IEF fields to be submitted
++      // empty without triggering required field errors).
++      if (!$entity_form['#required'] && $this->isEmptyEntity($entity, $entity_form['#form_mode'])) {
 +        return;
 +      }
 +
-+      // Otherwise, proceed with validation.
        $form_display = $this->getFormDisplay($entity, $entity_form['#form_mode']);
        $form_display->validateFormValues($entity, $entity_form, $form_state);
        $entity->setValidationRequired(FALSE);
@@ -154,36 +138,22 @@ index 9d193c95773ac170a06fe5ca2f710813b5db7ff0..7a161676274543b99e723d93237180d4
    /**
     * {@inheritdoc}
     */
-@@ -379,4 +446,16 @@ class EntityInlineForm implements InlineFormInterface {
-     return EntityFormDisplay::collectRenderDisplay($entity, $form_mode);
-   }
- 
-+  /**
-+   * Recursively strips #required from a form element and its children.
-+   */
-+  protected static function stripRequired(array &$element) {
-+    if (isset($element['#required'])) {
-+      $element['#required'] = FALSE;
-+    }
-+    foreach (Element::children($element) as $key) {
-+      static::stripRequired($element[$key]);
-+    }
-+  }
-+
- }
 diff --git a/src/Plugin/Field/FieldWidget/InlineEntityFormBase.php b/src/Plugin/Field/FieldWidget/InlineEntityFormBase.php
-index 69869be8e099ea191d6fdbcfcd5c4acda05c0ad9..282bd1c28c2290c1e3d7bfe334c618d917849a67 100644
+index 69869be..b9d4916 100644
 --- a/src/Plugin/Field/FieldWidget/InlineEntityFormBase.php
 +++ b/src/Plugin/Field/FieldWidget/InlineEntityFormBase.php
-@@ -445,6 +445,7 @@ abstract class InlineEntityFormBase extends WidgetBase implements ContainerFacto
+@@ -445,6 +445,10 @@ protected function getInlineEntityForm($operation, $bundle, $langcode, $delta, a
        '#ief_labels' => $this->getEntityTypeLabels(),
        // Identifies the IEF widget to which the form belongs.
        '#ief_id' => $this->getIefId(),
-+      '#ief_required' => $this->fieldDefinition->isRequired(),
++      // Mark as required so that EntityInlineForm::entityForm() does not
++      // strip #required from child fields. The simple widget overrides this
++      // to FALSE for optional fields.
++      '#required' => TRUE,
      ];
  
      return $element;
-@@ -608,4 +609,15 @@ abstract class InlineEntityFormBase extends WidgetBase implements ContainerFacto
+@@ -608,4 +612,19 @@ protected function canAddNew() {
      return !empty($create_bundles);
    }
  
@@ -191,19 +161,23 @@ index 69869be8e099ea191d6fdbcfcd5c4acda05c0ad9..282bd1c28c2290c1e3d7bfe334c618d9
 +   * {@inheritdoc}
 +   */
 +  public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
-+    $form_mode = $this->getSetting('form_mode');
-+    // Filter out empty entities.
-+    return array_filter($values, function ($value) use ($form_mode) {
-+      return empty($value['entity']) || !$this->inlineFormHandler->isEmptyEntity($value['entity'], $form_mode);
-+    });
++    // When the parent field is optional, filter out empty entities so that
++    // an unfilled inline entity form does not trigger validation errors.
++    if (!$this->fieldDefinition->isRequired()) {
++      $form_mode = $this->getSetting('form_mode');
++      $values = array_values(array_filter($values, function ($value) use ($form_mode) {
++        return empty($value['entity']) || !$this->inlineFormHandler->isEmptyEntity($value['entity'], $form_mode);
++      }));
++    }
++    return $values;
 +  }
 +
  }
 diff --git a/src/Plugin/Field/FieldWidget/InlineEntityFormComplex.php b/src/Plugin/Field/FieldWidget/InlineEntityFormComplex.php
-index bd176e0b2387a26fcf020379bbdef0a104a83b4d..7c2391d13e624c53919c4cd6b4f9b6e55a0c5ed5 100644
+index bd176e0..7c2391d 100644
 --- a/src/Plugin/Field/FieldWidget/InlineEntityFormComplex.php
 +++ b/src/Plugin/Field/FieldWidget/InlineEntityFormComplex.php
-@@ -706,7 +706,7 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
+@@ -706,7 +706,7 @@ public function extractFormValues(FieldItemListInterface $items, array $form, Fo
        return;
      }
      $triggering_element = $form_state->getTriggeringElement();
@@ -212,28 +186,43 @@ index bd176e0b2387a26fcf020379bbdef0a104a83b4d..7c2391d13e624c53919c4cd6b4f9b6e5
        return;
      }
  
-diff --git a/tests/src/FunctionalJavascript/OptionalIefRequiredFieldsTest.php b/tests/src/FunctionalJavascript/OptionalIefRequiredFieldsTest.php
+diff --git a/src/Plugin/Field/FieldWidget/InlineEntityFormSimple.php b/src/Plugin/Field/FieldWidget/InlineEntityFormSimple.php
+index 42fa2f5..1fb717e 100644
+--- a/src/Plugin/Field/FieldWidget/InlineEntityFormSimple.php
++++ b/src/Plugin/Field/FieldWidget/InlineEntityFormSimple.php
+@@ -64,6 +64,7 @@ public function formElement(FieldItemListInterface $items, $delta, array $elemen
+     ]);
+     $bundle = $this->getBundle();
+     $element['inline_entity_form'] = $this->getInlineEntityForm($op, $bundle, $langcode, $delta, $parents, $entity);
++    $element['inline_entity_form']['#required'] = $this->fieldDefinition->isRequired();
+ 
+     if ($op == 'edit') {
+       /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
+diff --git a/tests/src/FunctionalJavascript/OptionalSimpleWidgetTest.php b/tests/src/FunctionalJavascript/OptionalSimpleWidgetTest.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..af1efea5f3c839b1bc452715312591780ebbf627
+index 0000000..622b746
 --- /dev/null
-+++ b/tests/src/FunctionalJavascript/OptionalIefRequiredFieldsTest.php
-@@ -0,0 +1,184 @@
++++ b/tests/src/FunctionalJavascript/OptionalSimpleWidgetTest.php
+@@ -0,0 +1,172 @@
 +<?php
 +
 +namespace Drupal\Tests\inline_entity_form\FunctionalJavascript;
 +
 +use Drupal\Core\Entity\Entity\EntityFormDisplay;
 +use PHPUnit\Framework\Attributes\Group;
-+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 +
 +/**
-+ * Tests that optional IEF fields with required target entity fields work.
++ * Tests that optional IEF simple widget fields handle submissions correctly.
++ *
++ * When an IEF simple widget field is optional and the user fills in content,
++ * the child entity's required fields should still be enforced. When all
++ * required fields are filled, the child entity should be created and
++ * referenced.
 + *
 + * @see https://www.drupal.org/project/inline_entity_form/issues/3099844
 + */
 +#[Group('inline_entity_form')]
-+#[RunTestsInSeparateProcesses]
-+class OptionalIefRequiredFieldsTest extends InlineEntityFormTestBase {
++class OptionalSimpleWidgetTest extends InlineEntityFormTestBase {
 +
 +  /**
 +   * Modules to enable.
@@ -255,8 +244,6 @@ index 0000000000000000000000000000000000000000..af1efea5f3c839b1bc45271531259178
 +      'create ief_test_custom content',
 +      'edit any ief_simple_single content',
 +      'edit own ief_test_custom content',
-+      'create ief_test_complex content',
-+      'edit any ief_test_complex content',
 +      'view own unpublished content',
 +    ]);
 +    $this->drupalLogin($this->user);
@@ -278,33 +265,34 @@ index 0000000000000000000000000000000000000000..af1efea5f3c839b1bc45271531259178
 +  }
 +
 +  /**
-+   * Tests simple widget: optional IEF submitted empty saves successfully.
++   * Tests that child required fields remain marked as required.
++   *
++   * When the IEF field is optional, the child entity's required fields
++   * should still have the required attribute so the user knows which
++   * fields must be filled when adding content.
 +   */
-+  public function testOptionalSimpleIefEmptySubmission() {
++  public function testOptionalIefChildFieldsAreRequired() {
 +    $assert_session = $this->assertSession();
-+    $page = $this->getSession()->getPage();
 +    $this->setupOptionalSimpleIef();
 +
 +    $this->drupalGet('node/add/ief_simple_single');
 +
-+    $title_field_xpath = $this->getXpathForNthInputByLabelText('Title', 1);
++    // The host entity title should be required.
++    $host_title = $assert_session->elementExists('css', '#edit-title-0-value');
++    $this->assertTrue($host_title->hasAttribute('required'), 'Host title field is required.');
 +
-+    $host_title = 'Host node with empty optional IEF';
-+    $assert_session->elementExists('xpath', $title_field_xpath)->setValue($host_title);
-+    $page->pressButton('Save');
-+
-+    $assert_session->pageTextContains("$host_title has been created.");
-+    $assert_session->pageTextNotContains('field is required');
-+
-+    $host_node = $this->drupalGetNodeByTitle($host_title);
-+    $this->assertNotNull($host_node);
-+    $this->assertTrue($host_node->get('single')->isEmpty());
++    // The IEF child entity title should also be required.
++    $ief_title = $assert_session->elementExists('css', '#edit-single-0-inline-entity-form-title-0-value');
++    $this->assertTrue($ief_title->hasAttribute('required'), 'IEF child title field is required.');
 +  }
 +
 +  /**
-+   * Tests simple widget: optional IEF with filled fields saves entity.
++   * Tests that an optional IEF field with filled values saves the child entity.
++   *
++   * When the user fills in the child entity fields, the entity should be
++   * created and referenced even though the field is optional.
 +   */
-+  public function testOptionalSimpleIefFilledSubmission() {
++  public function testOptionalIefFilledSubmission() {
 +    $assert_session = $this->assertSession();
 +    $page = $this->getSession()->getPage();
 +    $this->setupOptionalSimpleIef();
@@ -321,48 +309,27 @@ index 0000000000000000000000000000000000000000..af1efea5f3c839b1bc45271531259178
 +    $assert_session->elementExists('xpath', $nested_title_field_xpath)->setValue($child_title);
 +    $assert_session->elementExists('xpath', $positive_int_field_xpath)->setValue('5');
 +    $page->pressButton('Save');
++    $this->assertNotEmpty($assert_session->waitForElement('css', 'div[data-drupal-messages]'));
 +
 +    $assert_session->pageTextContains("$host_title has been created.");
 +
 +    $host_node = $this->drupalGetNodeByTitle($host_title);
-+    $this->assertNotNull($host_node);
-+    $this->assertFalse($host_node->get('single')->isEmpty());
++    $this->assertNotNull($host_node, 'Host node was created.');
++    $this->assertFalse($host_node->get('single')->isEmpty(), 'The IEF field is not empty.');
 +
 +    $child_node = $host_node->get('single')->entity;
-+    $this->assertNotNull($child_node);
-+    $this->assertEquals($child_title, $child_node->label());
-+    $this->assertEquals('5', $child_node->get('positive_int')->value);
++    $this->assertNotNull($child_node, 'Child entity was created.');
++    $this->assertEquals($child_title, $child_node->label(), 'Child entity has the correct title.');
++    $this->assertEquals('5', $child_node->get('positive_int')->value, 'Child entity has the correct positive_int value.');
 +  }
 +
 +  /**
-+   * Tests complex widget: optional IEF with no entities added saves.
++   * Tests that partial fill still enforces required fields.
++   *
++   * When the user fills in some child entity fields but not the required
++   * ones, the form should not save and no node should be created.
 +   */
-+  public function testOptionalComplexIefNoEntitiesAdded() {
-+    $assert_session = $this->assertSession();
-+    $page = $this->getSession()->getPage();
-+
-+    $field_config = $this->fieldConfigStorage->load('node.ief_test_complex.multi');
-+    $field_config->setRequired(FALSE);
-+    $field_config->save();
-+
-+    $this->drupalGet('node/add/ief_test_complex');
-+
-+    $title_field_xpath = $this->getXpathForNthInputByLabelText('Title', 1);
-+    $host_title = 'Complex host no IEF entities';
-+    $assert_session->elementExists('xpath', $title_field_xpath)->setValue($host_title);
-+    $page->pressButton('Save');
-+
-+    $assert_session->pageTextContains("$host_title has been created.");
-+
-+    $host_node = $this->drupalGetNodeByTitle($host_title);
-+    $this->assertNotNull($host_node);
-+    $this->assertTrue($host_node->get('multi')->isEmpty());
-+  }
-+
-+  /**
-+   * Tests partial fill: non-empty entity still validates required fields.
-+   */
-+  public function testOptionalSimpleIefPartialFillShowsError() {
++  public function testOptionalIefPartialFillShowsError() {
 +    $assert_session = $this->assertSession();
 +    $page = $this->getSession()->getPage();
 +    $this->setupOptionalSimpleIef();
@@ -374,31 +341,38 @@ index 0000000000000000000000000000000000000000..af1efea5f3c839b1bc45271531259178
 +
 +    $host_title = 'Host with partial IEF';
 +    $assert_session->elementExists('xpath', $title_field_xpath)->setValue($host_title);
++    // Fill in a non-required field but leave the required IEF title empty.
 +    $assert_session->elementExists('xpath', $positive_int_field_xpath)->setValue('5');
 +    $page->pressButton('Save');
 +
-+    $assert_session->addressEquals('node/add/ief_simple_single');
-+    $assert_session->pageTextNotContains('has been created.');
++    // The node should NOT be created because the IEF title is required.
 +    $this->assertNoNodeByTitle($host_title);
 +  }
 +
 +  /**
-+   * Tests that IEF child fields have no required attribute when optional.
++   * Tests that a required IEF simple widget still requires entity creation.
++   *
++   * When the IEF field is required, submitting with an empty inline entity
++   * form should still trigger a validation error.
 +   */
-+  public function testOptionalIefFieldsNotRequired() {
++  public function testRequiredIefStillValidates() {
 +    $assert_session = $this->assertSession();
-+    $this->setupOptionalSimpleIef();
++    $page = $this->getSession()->getPage();
++
++    // Ensure the field is required (default).
++    $field_config = $this->fieldConfigStorage->load('node.ief_simple_single.single');
++    $this->assertTrue($field_config->isRequired(), 'The single field is required by default.');
 +
 +    $this->drupalGet('node/add/ief_simple_single');
 +
-+    $host_title_element = $assert_session->elementExists('css', '#edit-title-0-value');
-+    $this->assertTrue($host_title_element->hasAttribute('required'));
++    $title_field_xpath = $this->getXpathForNthInputByLabelText('Title', 1);
 +
-+    $ief_title = $assert_session->elementExists('css', '#edit-single-0-inline-entity-form-title-0-value');
-+    $this->assertFalse($ief_title->hasAttribute('required'));
++    $host_title = 'Host with required empty IEF';
++    $assert_session->elementExists('xpath', $title_field_xpath)->setValue($host_title);
++    $page->pressButton('Save');
 +
-+    $ief_int = $assert_session->elementExists('css', '#edit-single-0-inline-entity-form-positive-int-0-value');
-+    $this->assertFalse($ief_int->hasAttribute('required'));
++    // The node should NOT be created because the required IEF field is empty.
++    $this->assertNoNodeByTitle($host_title);
 +  }
 +
 +}
