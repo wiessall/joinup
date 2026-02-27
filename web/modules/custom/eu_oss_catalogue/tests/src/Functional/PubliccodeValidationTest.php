@@ -28,27 +28,32 @@ class PubliccodeValidationTest extends FetchTestBase {
   }
 
   /**
-   * The Solution was created from invalid YAML, updated to valid.
+   * A solution rejected as invalid is created once the YAML becomes valid.
    */
   public function testUpdateToValid(): void {
     $this->fetchSolutions('yaml_become_valid_provider', 2);
 
-    $createdNode = $this->getNodeByTitle('group1/project-1-1');
-    $this->assertNotFalse($createdNode);
-    $this->assertTrue($createdNode->get('oss_publiccode_yml_version')
-      ->isEmpty());
-    $this->assertStringContainsString('Cannot decode publiccode.yml', $createdNode->getRevisionLogMessage());
+    $this->assertFalse(
+      $this->getNodeByTitle('Project 1.1'),
+      'No node should be created when the validator API returns invalid.',
+    );
+    $this->assertNotEmpty(
+      $this->getLogEntries('Error when validating data for solution "@project-name" (@project-url) of "@provider" source/catalogue. Errors: @errors'),
+      'An error should be logged when the validator API rejects a new solution.',
+    );
+
     $this->fetchSolutions('yaml_become_valid_provider', 1);
 
-    $updatedNode = $this->getNodeByTitle('Project 1.1', TRUE);
+    $createdNode = $this->getNodeByTitle('Project 1.1', TRUE);
+    $this->assertNotFalse($createdNode, 'Node should be created once YAML becomes valid.');
     $this->assertSame('0.2',
-      $updatedNode->get('oss_publiccode_yml_version')->getString()
+      $createdNode->get('oss_publiccode_yml_version')->getString()
     );
     $this->assertSame('stable',
-      $updatedNode->get('oss_development_status')->getString()
+      $createdNode->get('oss_development_status')->getString()
     );
     $this->assertSame('de',
-      $updatedNode->get('oss_available_languages')->getString()
+      $createdNode->get('oss_available_languages')->getString()
     );
   }
 
@@ -95,7 +100,7 @@ class PubliccodeValidationTest extends FetchTestBase {
   }
 
   /**
-   * The Solution was created from valid YAML, updated to invalid.
+   * The Solution was created from valid YAML, update skipped when invalid.
    */
   public function testUpdateToNotValid(): void {
     $this->fetchSolutions('yaml_become_invalid_provider', 2);
@@ -109,17 +114,20 @@ class PubliccodeValidationTest extends FetchTestBase {
 
     $this->fetchSolutions('yaml_become_invalid_provider', 1);
 
-    $updatedNode = $this->getNodeByTitle('group1/project-1-1', TRUE);
-    $this->assertStringContainsString('Cannot decode publiccode.yml', $updatedNode->getRevisionLogMessage());
-    // Check some field set by resolver.
+    // The node still exists with its original title — no parsing ran, so the
+    // title was never replaced with the URL-based fallback.
+    $existingNode = $this->getNodeByTitle('Project 1.1', TRUE);
+    $this->assertNotFalse($existingNode, 'Node should still exist after a skipped update.');
+    $this->assertStringContainsString('Update skipped: invalid publiccode.yml', $existingNode->getRevisionLogMessage());
+    // Check some field set by resolver — values are preserved.
     $this->assertSame('0.2',
-      $updatedNode->get('oss_publiccode_yml_version')->getString()
+      $existingNode->get('oss_publiccode_yml_version')->getString()
     );
     $this->assertSame('stable',
-      $updatedNode->get('oss_development_status')->getString()
+      $existingNode->get('oss_development_status')->getString()
     );
     $this->assertSame('de',
-      $updatedNode->get('oss_available_languages')->getString()
+      $existingNode->get('oss_available_languages')->getString()
     );
   }
 
