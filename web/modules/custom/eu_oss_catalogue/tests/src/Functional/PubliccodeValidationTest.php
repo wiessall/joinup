@@ -70,4 +70,3 @@ class PubliccodeValidationTest extends FetchTestBase {
   }
 
 }
-
