@@ -69,8 +69,9 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
    * {@inheritdoc}
    */
   public function isValid(Project $project): ValidationResponseInterface {
-    $yamlContent = $project->files['publiccodeYml'] ?? NULL;
-    return $this->publicCodeValidator->validate($yamlContent);
+    return $this->publicCodeValidator->validate(
+      $project->getPubliccodeYml()
+    );
   }
 
   /**
@@ -144,12 +145,12 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
    * {@inheritdoc}
    */
   protected function getMetadata(Project $project): array {
-    if (!isset($project->files['publiccodeYml'])) {
+    if ($project->getPubliccodeYml() === NULL) {
       $project->addSilentError("publiccodeYml does not exist for $project->url");
       return [];
     }
     try {
-      return Yaml::decode($project->files['publiccodeYml']) ?? [];
+      return Yaml::decode($project->getPubliccodeYml()) ?? [];
     }
     catch (InvalidDataTypeException $exception) {
       $project->addSilentError("Cannot decode publiccode.yml of $project->url. Message: {$exception->getMessage()}");
