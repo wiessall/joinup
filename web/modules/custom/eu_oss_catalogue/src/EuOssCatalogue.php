@@ -193,6 +193,16 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
 
       // Allow 3rd-party to act after save.
       $this->eventDispatcher->dispatch(new EuOssSolutionPostSaveEvent($solution, $project));
+
+      if ($operationResult === SAVED_NEW) {
+        $loggerArguments = [
+          '@solution' => $solution->label(),
+          'oss_landing_url' => $solution->get('oss_landing_url')->getString(),
+          'oss_solution' => $solution->id(),
+          'oss_source' => $provider->getPluginId(),
+        ];
+        $this->logger->info('Solution @solution was created.', $loggerArguments);
+      }
     }
     catch (PublicCodeValidatorException $exception) {
       $this->logger->error(
@@ -215,16 +225,6 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
         Error::logException($this->logger, $exception, $logMessage, $logContext);
       }
       return;
-    }
-
-    if ($operationResult === SAVED_NEW) {
-      $loggerArguments = [
-        '@solution' => $solution->label(),
-        'oss_landing_url' => $solution->get('oss_landing_url')->getString(),
-        'oss_solution' => $solution->id(),
-        'oss_source' => $provider->getPluginId(),
-      ];
-      $this->logger->info('Solution @solution was created.', $loggerArguments);
     }
   }
 
