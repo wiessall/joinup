@@ -57,6 +57,16 @@ class Project {
   }
 
   /**
+   * Returns the publiccode.yml content, if present.
+   *
+   * @return string|null
+   *   The raw publiccode.yml string, or NULL if not present.
+   */
+  public function getPubliccodeYml(): ?string {
+    return $this->files['publiccodeYml'] ?? NULL;
+  }
+
+  /**
    * Computes and returns a hash from metadata.
    *
    * @return string
