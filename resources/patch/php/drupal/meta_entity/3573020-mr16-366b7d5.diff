@@ -1,8 +1,8 @@
 diff --git a/meta_entity.install b/meta_entity.install
-index 3ce22ef64f1cb0afbe34d8839b39e543b3f10a25..6e59922a327a4f52d935080934fc81e803b4a300 100644
+index 3ce22ef64f1cb0afbe34d8839b39e543b3f10a25..05dc686fda5bb08364a17f4b1f530b4bd6fc96f8 100644
 --- a/meta_entity.install
 +++ b/meta_entity.install
-@@ -8,7 +8,28 @@
+@@ -8,7 +8,12 @@
  declare(strict_types=1);
  
  use Drupal\Core\Config\Entity\ConfigEntityUpdater;
@@ -12,26 +12,10 @@ index 3ce22ef64f1cb0afbe34d8839b39e543b3f10a25..6e59922a327a4f52d935080934fc81e8
  use Drupal\meta_entity\Entity\MetaEntityTypeInterface;
 +use Drupal\views\Plugin\ViewsHandlerManager;
 +use Drupal\views\Views;
-+
-+/**
-+ * Implements hook_update_dependencies().
-+ */
-+function meta_entity_update_dependencies(): array {
-+  return [
-+    'meta_entity' => [
-+      8003 => [
-+        'meta_entity' => 8002,
-+      ],
-+      8004 => [
-+        'meta_entity' => 8003,
-+      ],
-+    ],
-+  ];
-+}
  
  /**
   * Allow meta entity auto-creation and auto-deletion.
-@@ -28,3 +49,103 @@ function meta_entity_update_8001(array &$sandbox): void {
+@@ -28,3 +33,103 @@ function meta_entity_update_8001(array &$sandbox): void {
      return TRUE;
    });
  }
@@ -137,10 +121,10 @@ index 3ce22ef64f1cb0afbe34d8839b39e543b3f10a25..6e59922a327a4f52d935080934fc81e8
 +}
 diff --git a/meta_entity.post_update.php b/meta_entity.post_update.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..a70e458536dd36627bb9ea71b972bcc0bfca56b8
+index 0000000000000000000000000000000000000000..087e9c7cab70d4bcb1f189e267223be1277aa849
 --- /dev/null
 +++ b/meta_entity.post_update.php
-@@ -0,0 +1,75 @@
+@@ -0,0 +1,72 @@
 +<?php
 +
 +/**
@@ -151,7 +135,6 @@ index 0000000000000000000000000000000000000000..a70e458536dd36627bb9ea71b972bcc0
 +declare(strict_types=1);
 +
 +use Drupal\Core\Entity\TranslatableInterface;
-+use Drupal\Core\Language\LanguageInterface;
 +use Drupal\Core\Site\Settings;
 +
 +/**
@@ -184,17 +167,17 @@ index 0000000000000000000000000000000000000000..a70e458536dd36627bb9ea71b972bcc0
 +
 +  foreach ($metaEntityStorage->loadMultiple($idsToProcess) as $metaEntity) {
 +    $target = $metaEntity->get('target')->entity;
-+    $langcode = $target instanceof TranslatableInterface
-+      ? $target->language()->getId()
-+      : LanguageInterface::LANGCODE_NOT_APPLICABLE;
-+    $updatesPerLangcode[$langcode][] = $metaEntity->id();
++    if (!$target instanceof TranslatableInterface) {
++      continue;
++    }
++    $updatesPerLangcode[$target->language()->getId()][] = $metaEntity->id();
 +  }
 +
 +  foreach ($updatesPerLangcode as $langcode => $metaIds) {
 +    foreach ($sandbox['entity_tables'] as $table) {
 +      $db->update($table)
-+        ->fields([$metaEntityType->getKey('langcode') => $langcode])
-+        ->condition($metaEntityType->getKey('id'), $metaIds, 'IN')
++        ->fields(['langcode' => $langcode])
++        ->condition('id', $metaIds, 'IN')
 +        ->execute();
 +    }
 +
@@ -213,8 +196,6 @@ index 0000000000000000000000000000000000000000..a70e458536dd36627bb9ea71b972bcc0
 +    $sandbox['last_percentage'] = $percentage;
 +    return sprintf('Meta entity language code update progress: %s%%', $percentage);
 +  }
-+
-+  $d = 1;
 +}
 diff --git a/src/Entity/MetaEntity.php b/src/Entity/MetaEntity.php
 index 993face808812b34716700bdc0f23e89e5940185..b79b68b8fa2936ce6f8538c510ad4211095dffbd 100644
