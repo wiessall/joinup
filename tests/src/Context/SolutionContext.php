@@ -95,7 +95,7 @@ class SolutionContext extends RawDrupalContext {
   public function givenSolutionNewValue(string $fieldName, string $label, string $fieldValue): void {
     $fieldName = $this->getNodeFieldNameFromAlias('solution', $fieldName);
     $solution = static::getEntityByLabel('node', $label, 'solution');
-    Assert::assertInstanceOf(SolutionInterface::class, $solution, "Cannot find any solution with label $label");
+    \assert($solution instanceof SolutionInterface, "Cannot find any solution with label $label");
     $fieldManager = \Drupal::service('entity_field.manager');
     $fieldDefinitions = $fieldManager->getFieldDefinitions('node', 'solution');
     Assert::assertArrayHasKey($fieldName, $fieldDefinitions, "Field $fieldName does not exist in the solution entity");
@@ -417,7 +417,7 @@ class SolutionContext extends RawDrupalContext {
       // the collection which triggered destruction issues in RDF syncronizer.
       $environment = $scope->getEnvironment();
       $context = $environment->getContext(DrupalContext::class);
-      Assert::assertInstanceOf(DrupalContext::class, $context);
+      \assert($context instanceof DrupalContext);
       $collection = $context->nodeCreate((object) [
         'type' => 'collection',
         'title' => $label,

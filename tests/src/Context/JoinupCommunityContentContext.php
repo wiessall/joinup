@@ -281,7 +281,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     }
 
     $content = Node::load($node->nid);
-    Assert::assertInstanceOf(NodeInterface::class, $content);
+    \assert($content instanceof NodeInterface);
     $groupLabels = array_map(
       fn (string $groupLabel): string => trim($groupLabel),
       explode(',', $node->field_shared_in),

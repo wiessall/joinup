@@ -71,11 +71,7 @@ class JoinupDiscussionContext extends RawDrupalContext {
     $userManager->setCurrentUser($user = $userManager->getUser($userName));
     $authenticationManager->logIn($user);
     $discussion = $this->getEntityByLabel('node', $discussionLabel, 'discussion');
-    Assert::assertInstanceOf(
-      DiscussionInterface::class,
-      $discussion,
-      sprintf("Cannot find the discussion with label '%s'", $discussionLabel),
-    );
+    \assert($discussion instanceof DiscussionInterface, sprintf("Cannot find the discussion with label '%s'", $discussionLabel));
     $this->visitPath($discussion->toUrl()->toString());
     $session->getPage()->fillField('Create comment', $commentMessage);
     $session->getPage()->pressButton('Post comment');
