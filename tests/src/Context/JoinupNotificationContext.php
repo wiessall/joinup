@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Mink\Exception\ExpectationException;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
@@ -17,7 +18,6 @@ use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_notification\MailContentTypeHeader;
 use Drupal\message\Entity\MessageTemplate;
 use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\ExpectationFailedException;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -338,7 +338,7 @@ class JoinupNotificationContext extends RawDrupalContext {
           continue 2;
         }
         if (!$match && $pos !== FALSE) {
-          throw new ExpectationFailedException("Email with subject '$subject' sent to '$recipient' contains the text '$text'.");
+          throw new ExpectationException("Email with subject '$subject' sent to '$recipient' contains the text '$text'.", $this->getSession()->getDriver());
         }
       }
       if ($match) {
@@ -346,7 +346,7 @@ class JoinupNotificationContext extends RawDrupalContext {
       }
     }
     if ($match) {
-      throw new ExpectationFailedException("Did not find expected email to '$recipient' with subject '$subject'.");
+      throw new ExpectationException("Did not find expected email to '$recipient' with subject '$subject'.", $this->getSession()->getDriver());
     }
   }
 
@@ -389,7 +389,7 @@ class JoinupNotificationContext extends RawDrupalContext {
       sort($expected_recipients);
       sort($actual_recipients);
       if ($expected_recipients !== $actual_recipients) {
-        throw new ExpectationFailedException("Expected recipients $recipients. Got " . implode(', ', $actual_recipients));
+        throw new ExpectationException("Expected recipients $recipients. Got " . implode(', ', $actual_recipients), $this->getSession()->getDriver());
       }
     }
   }

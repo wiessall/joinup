@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Mink\Exception\ExpectationException;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
@@ -23,7 +24,6 @@ use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgMembershipInterface;
 use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\ExpectationFailedException;
 
 /**
  * Behat step definitions for interacting with groups.
@@ -143,7 +143,7 @@ class JoinupGroupContext extends RawDrupalContext {
       throw new ElementNotFoundException($session, 'link', $link_label, 'label');
     }
     if (!$link->hasClass('group-menu-link-external')) {
-      throw new ExpectationFailedException("Link '{$link_label}' should point to a resource outside the current group but it doesn't.");
+      throw new ExpectationException("Link '{$link_label}' should point to a resource outside the current group but it doesn't.", $this->getSession()->getDriver());
     }
   }
 

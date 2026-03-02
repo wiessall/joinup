@@ -7,6 +7,7 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Mink\Exception\ExpectationException;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -23,7 +24,6 @@ use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\ExpectationFailedException;
 
 /**
  * Behat step definitions to test common community content functionality.
@@ -373,7 +373,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
   #[Then('I should not see the link :label in comment #:comment_number')]
   public function assertCommentNotContainsLink(string $label, int $comment_number): void {
     if ($this->getNumberedComment($comment_number - 1)->findLink($label)) {
-      throw new ExpectationFailedException("Link '{$label}' exists in comment #{$comment_number} but it should not.");
+      throw new ExpectationException("Link '{$label}' exists in comment #{$comment_number} but it should not.", $this->getSession()->getDriver());
     }
   }
 

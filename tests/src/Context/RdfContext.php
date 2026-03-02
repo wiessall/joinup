@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Hook\BeforeScenario;
+use Behat\Mink\Exception\ExpectationException;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
@@ -13,7 +14,6 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\rdf_sync\Model\SyncMethod;
 use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\ExpectationFailedException;
 use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertSame;
 
@@ -86,10 +86,10 @@ class RdfContext extends RawDrupalContext {
     }
 
     if (!empty($rows)) {
-      throw new ExpectationFailedException(sprintf("Triple(s) %s doesn't exists in the RDF backend", implode(PHP_EOL, array_keys($rows))));
+      throw new ExpectationException(sprintf("Triple(s) %s doesn't exists in the RDF backend", implode(PHP_EOL, array_keys($rows))), $this->getSession()->getDriver());
     }
     if (!empty($unexpectedTriples)) {
-      throw new ExpectationFailedException(sprintf("These triple(s) %s were unexpectedly found in the RDF backend", implode(PHP_EOL, array_keys($unexpectedTriples))));
+      throw new ExpectationException(sprintf("These triple(s) %s were unexpectedly found in the RDF backend", implode(PHP_EOL, array_keys($unexpectedTriples))), $this->getSession()->getDriver());
     }
   }
 
@@ -121,7 +121,7 @@ class RdfContext extends RawDrupalContext {
       elseif (str_starts_with($row['object'], 'bnode:')) {
         $triplesWithBnodesAsObject[$row['object']][] = $row['predicate'] . ' ' . $row['object'];
         if (isset($objects[$row['object']]) && $objects[$row['object']] !== $row['predicate']) {
-          throw new ExpectationFailedException('Currently, only one predicate per object can be tested.');
+          throw new ExpectationException('Currently, only one predicate per object can be tested.', $this->getSession()->getDriver());
         }
         // The subject here is the entity referencing the bnode.
         $objects[$row['subject']][$row['object']] = [
@@ -174,7 +174,7 @@ class RdfContext extends RawDrupalContext {
       }
       $subject = $findSubject($objects, $bnode);
       if (!$subject) {
-        throw new ExpectationFailedException('The subject for the bnode ' . $bnode . ' was not found.');
+        throw new ExpectationException('The subject for the bnode ' . $bnode . ' was not found.', $this->getSession()->getDriver());
       }
 
       $predicate = $objects[$subject][$bnode]['predicate'];
@@ -209,11 +209,11 @@ class RdfContext extends RawDrupalContext {
       }
 
       if (!empty($bnodedResults)) {
-        throw new ExpectationFailedException('There are still triples in the database for bnode ' . $bnode . ' that do not match the expected triples.');
+        throw new ExpectationException('There are still triples in the database for bnode ' . $bnode . ' that do not match the expected triples.', $this->getSession()->getDriver());
       }
     }
 
-    // The ExpectationFailedException above asserts that the triples fetched
+    // The ExpectationException above asserts that the triples fetched
     // from the database do not exceed the number of expected triples. The check
     // above is happening for all requested subjects individually, but the
     // result works as a total because all of them are checked eventually. The

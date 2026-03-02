@@ -9,6 +9,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Hook\AfterScenario;
 use Behat\Hook\AfterStep;
 use Behat\Hook\BeforeScenario;
+use Behat\Mink\Exception\ExpectationException;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
@@ -23,7 +24,6 @@ use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_user\JoinupUserDeletedInterface;
 use Drupal\user\UserInterface;
 use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\ExpectationFailedException;
 
 /**
  * Behat step definitions for testing users.
@@ -218,7 +218,7 @@ class JoinupUserContext extends RawDrupalContext {
       ->execute();
 
     if (!$uids) {
-      throw new ExpectationFailedException("The user '$name' doesn't exist or is not $status.");
+      throw new ExpectationException("The user '$name' doesn't exist or is not $status.", $this->getSession()->getDriver());
     }
   }
 
@@ -231,7 +231,7 @@ class JoinupUserContext extends RawDrupalContext {
   #[Then("the :name user doesn't exist")]
   public function userNotExists(string $name): void {
     if (\Drupal::entityQuery('user')->accessCheck(FALSE)->condition('name', $name)->execute()) {
-      throw new ExpectationFailedException("The user $name exists but it should not.");
+      throw new ExpectationException("The user $name exists but it should not.", $this->getSession()->getDriver());
     }
   }
 
@@ -244,7 +244,7 @@ class JoinupUserContext extends RawDrupalContext {
   #[Then('the :name user exist')]
   public function userExists(string $name): void {
     if (!\Drupal::entityQuery('user')->accessCheck(FALSE)->condition('name', $name)->execute()) {
-      throw new ExpectationFailedException("The user $name exists but it should not.");
+      throw new ExpectationException("The user $name exists but it should not.", $this->getSession()->getDriver());
     }
   }
 
