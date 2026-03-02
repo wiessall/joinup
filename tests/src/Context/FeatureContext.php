@@ -45,7 +45,6 @@ use Drupal\media\Entity\Media;
 use Drush\TestTraits\DrushTestTrait;
 use LoversOfBehat\TableExtension\Hook\Scope\AfterTableFetchScope;
 use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\ExpectationFailedException;
 use Symfony\Component\Process\Process;
 
 /**
@@ -1831,7 +1830,7 @@ class FeatureContext extends RawDrupalContext {
     $entity = $this->getEntityByLabel($map['type'], $title, $content_type);
     $image_field = $entity->get($map['fields']['logo']);
     if ($image_field->isEmpty()) {
-      throw new ExpectationFailedException("The {$title} logo field is empty but it should point to the image at position #{$offset}.");
+      throw new ExpectationException("The {$title} logo field is empty but it should point to the image at position #{$offset}.", $this->getSession()->getDriver());
     }
 
     $state = \Drupal::state();
@@ -1840,7 +1839,7 @@ class FeatureContext extends RawDrupalContext {
       throw new \Exception("The logo images should have been clicked but it was not.");
     }
     if ($clicks[$content_type]['logo'][$offset] !== $image_field->target_id) {
-      throw new ExpectationFailedException("The $title logo should contain the image #$offset but it doesn't.");
+      throw new ExpectationException("The $title logo should contain the image #$offset but it doesn't.", $this->getSession()->getDriver());
     }
   }
 
@@ -2080,7 +2079,7 @@ class FeatureContext extends RawDrupalContext {
     // the test responsibility to set other fixed timestamps with values not
     // very close to NOW, in order to avoid collision.
     if (\Drupal::time()->getRequestTime() - $value > 3) {
-      throw new ExpectationFailedException("The entity wasn't updated recently");
+      throw new ExpectationException("The entity wasn't updated recently", $this->getSession()->getDriver());
     }
   }
 

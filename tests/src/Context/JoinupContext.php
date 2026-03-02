@@ -11,6 +11,7 @@ use Behat\Hook\AfterScenario;
 use Behat\Hook\BeforeScenario;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Mink\Exception\ExpectationException;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
@@ -1580,7 +1581,7 @@ class JoinupContext extends RawDrupalContext {
     $failed = ($method === 'be' && $current_url !== $url) || ($method === 'match' && !preg_match($url, $current_url));
 
     if ($failed) {
-      throw new ExpectationFailedException("Url $current_url does not match expected $url.");
+      throw new ExpectationException("Url $current_url does not match expected $url.", $this->getSession()->getDriver());
     }
   }
 
@@ -1726,7 +1727,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the field does not have a description.
-   * @throws \PHPUnit\Framework\ExpectationFailedException
+   * @throws \Behat\Mink\Exception\ExpectationException
    *   Thrown when none of the field's descriptions match the given text.
    */
   #[Then('I should see the description :description for (the ):label( field)')]
@@ -1746,7 +1747,7 @@ class JoinupContext extends RawDrupalContext {
         // The description did not match the expected string, keep searching.
       }
     }
-    throw new ExpectationFailedException("The description $description was not found for the $label field.");
+    throw new ExpectationException("The description $description was not found for the $label field.", $this->getSession()->getDriver());
   }
 
   /**
@@ -2199,7 +2200,7 @@ class JoinupContext extends RawDrupalContext {
   #[Then('the :tile tile should be marked as pinned')]
   public function assertTileMarkedAsPinned(string $heading): void {
     if (!$this->getTileByHeading($heading)->find('css', 'div.pin')) {
-      throw new ExpectationFailedException("The tile '$heading' is not marked as pinned, but it should be.");
+      throw new ExpectationException("The tile '$heading' is not marked as pinned, but it should be.", $this->getSession()->getDriver());
     }
   }
 
@@ -2212,7 +2213,7 @@ class JoinupContext extends RawDrupalContext {
   #[Then('the :tile tile should not be marked as pinned')]
   public function assertTileNotMarkedAsPinned(string $heading): void {
     if ($this->getTileByHeading($heading)->find('css', 'div.pin')) {
-      throw new ExpectationFailedException("The tile '$heading' is marked as pinned, but it shouldn't be.");
+      throw new ExpectationException("The tile '$heading' is marked as pinned, but it shouldn't be.", $this->getSession()->getDriver());
     }
   }
 
