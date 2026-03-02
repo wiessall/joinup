@@ -419,7 +419,7 @@ class JoinupGroupContext extends RawDrupalContext {
   ): void {
     Assert::assertContains($group, ['collection', 'solution']);
     $groupEntity = static::getEntityByLabel('node', $groupLabel, $group);
-    Assert::assertInstanceOf(GroupInterface::class, $groupEntity);
+    \assert($groupEntity instanceof GroupInterface);
     $fieldName = preg_replace('/\s+/', '_', mb_strtolower($config));
     $fieldMapping = [
       'group_moderation' => ['yes' => 1, 'no' => 0],

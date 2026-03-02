@@ -577,7 +577,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
       assert($layoutDiscovery instanceof LayoutPluginManagerInterface);
       $layoutParagraphsLayout = $lpTempStore->getWithStorageKey($storageKey);
       // Fail loud if the layout object cannot be loaded...
-      Assert::assertInstanceOf(LayoutParagraphsLayout::class, $layoutParagraphsLayout);
+      \assert($layoutParagraphsLayout instanceof LayoutParagraphsLayout);
       // ...And also when the layout is missing.
       Assert::assertTrue($layoutDiscovery->hasDefinition($layoutId));
       $layoutInstance = $layoutDiscovery->createInstance($layoutId);
