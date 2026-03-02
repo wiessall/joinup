@@ -38,7 +38,7 @@ dependencies:
     - field.field.node.oss_solution.oss_source
     - field.field.node.oss_solution.oss_source_hash
     - field.field.node.oss_solution.oss_used_by
-    - field.field.node.oss_solution.oss_validation_errors
+    - field.field.node.oss_solution.oss_validation_issues
     - field.field.node.oss_solution.oss_validation_status
     - field.field.node.oss_solution.oss_vitality_index
     - field.field.node.oss_solution.oss_vitality_index_range
@@ -46,6 +46,7 @@ dependencies:
   module:
     - datetime
     - entityqueue
+    - eu_oss_catalogue
     - field_group
     - link
     - path
@@ -129,7 +130,7 @@ third_party_settings:
     group_validation:
       children:
         - oss_validation_status
-        - oss_validation_errors
+        - oss_validation_issues
       label: Validation
       region: content
       parent_name: ''
@@ -448,13 +449,11 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  oss_validation_errors:
-    type: text_textarea
+  oss_validation_issues:
+    type: validation_issue
     weight: 23
     region: content
-    settings:
-      rows: 5
-      placeholder: ''
+    settings: {  }
     third_party_settings: {  }
   oss_validation_status:
     type: options_select
