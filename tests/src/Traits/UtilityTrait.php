@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Drupal\joinup\Traits;
 
 use Behat\Mink\Element\NodeElement;
-use Behat\Mink\Exception\ExpectationException;
-use PHPUnit\Framework\Assert;
 
 /**
  * Contains utility methods.
  */
 trait UtilityTrait {
+
+  use AssertTrait;
 
   /**
    * Explodes and sanitizes a comma separated step argument.
@@ -80,7 +80,7 @@ trait UtilityTrait {
    *   Thrown if the element is not visible.
    */
   protected function assertVisuallyVisible(NodeElement $element): void {
-    Assert::assertTrue($this->isVisuallyVisible($element), 'The element is visually visible');
+    $this->assertCondition($this->isVisuallyVisible($element), 'The element is visually visible');
   }
 
   /**
@@ -102,7 +102,7 @@ trait UtilityTrait {
    *   Thrown if the element is visible.
    */
   protected function assertNotVisuallyVisible(NodeElement $element): void {
-    Assert::assertFalse($this->isVisuallyVisible($element), 'The element is not visually visible');
+    $this->assertCondition(!$this->isVisuallyVisible($element), 'The element is not visually visible');
   }
 
   /**
@@ -181,26 +181,6 @@ trait UtilityTrait {
       throw new \Exception("Could not convert {$number} to a number.");
     }
     return (int) $return;
-  }
-
-  /**
-   * Asserts a condition, throwing an ExpectationException on failure.
-   *
-   * Mirrors the WebAssert::assert() pattern but uses the native Behat/Mink
-   * exception so no PHPUnit runner initialization is required.
-   *
-   * @param bool $condition
-   *   The condition to assert.
-   * @param string $message
-   *   The failure message shown in the Behat report.
-   *
-   * @throws \Behat\Mink\Exception\ExpectationException
-   *   Thrown when the condition is FALSE.
-   */
-  protected function assertCondition(bool $condition, string $message): void {
-    if (!$condition) {
-      throw new ExpectationException($message, $this->getSession()->getDriver());
-    }
   }
 
 }
