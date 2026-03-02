@@ -204,7 +204,8 @@
   }
 }
 
-[data-drupal-selector="edit-og-membership-bulk-form"] {
+[data-drupal-selector="edit-og-membership-bulk-form"],
+[data-drupal-selector="views-exposed-form-members-overview-default"] {
   label[for="edit-action"].form-required::after {
     content: none !important;
   }

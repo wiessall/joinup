@@ -217,9 +217,10 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
 
     $response = $this->post($payload);
     $data = Json::decode($response->getBody()->getContents());
+    $this->assertArrayNotHasKey('errors', $data);
+    $data = $this->normalizeAssessmentResponse($data);
 
     // Update the expectation with generated UUIDs and URIs.
-    $this->assertArrayNotHasKey('errors', $data);
     $uuid = $data['id'];
     $uri = 'http://data.europa.eu/s2k/' . $uuid;
     $expect = ['id' => $uuid, 'uri' => $uri] + $expect;
@@ -233,10 +234,6 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     $expect['binding_requirement'][0]['asset'][0] = $asset;
     // Add URI for the referenced existing asset.
     $expect['binding_requirement'][0]['asset'][1]['uri'] = 'http://data.europa.eu/w21/' . $expect['binding_requirement'][0]['asset'][1]['id'];
-    // Asset URL is not testable because depends on the environment.
-    unset($data['binding_requirement'][0]['asset'][0]['url']);
-    unset($data['binding_requirement'][0]['asset'][1]['url']);
-
     $this->assertEquals($expect, $data);
 
     // Verify all entities created through the API are published.
@@ -282,9 +279,8 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     // Test the GET resource.
     $this->drupalGet('/api/assessments/v1/assessment/' . $data['id']);
     $actual = Json::decode($this->getSession()->getPage()->getContent());
-    // Asset URL is not testable because depends on th environment.
-    unset($actual['binding_requirement'][0]['asset'][0]['url']);
-    unset($actual['binding_requirement'][0]['asset'][1]['url']);
+    $this->assertArrayNotHasKey('errors', $actual);
+    $actual = $this->normalizeAssessmentResponse($actual);
 
     $assert = $this->assertSession();
     $assert->statusCodeEquals(200);
@@ -297,9 +293,6 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     $assert->statusCodeEquals(200);
     // The response is retrieved from cache.
     $assert->responseHeaderEquals('X-Drupal-Cache', 'HIT');
-    // Asset URL is not testable because depends on the environment.
-    unset($actual['binding_requirement'][0]['asset'][0]['url']);
-    unset($actual['binding_requirement'][0]['asset'][1]['url']);
     $this->assertEquals($expect, $actual);
 
     // Cleanup.
@@ -409,6 +402,7 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     $this->assertSame(201, $response->getStatusCode());
     $data = Json::decode($response->getBody()->getContents());
     $this->assertArrayNotHasKey('errors', $data);
+    $data = $this->normalizeAssessmentResponse($data);
 
     // Update the expectation with generated UUIDs and URIs.
     $uuid = $data['id'];
@@ -419,7 +413,7 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     $provider = ['id' => $uuid, 'uri' => $providerUri] + $expect['provider'];
     $expect['provider'] = $provider;
 
-    $this->assertEqualsCanonicalizing($expect, $data);
+    $this->assertEquals($expect, $data);
 
     // Cleanup.
     $report = \Drupal::service('entity.repository')->loadEntityByUuid('assessment', $data['id']);
@@ -612,6 +606,28 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     $data = Json::decode($response->getBody()->getContents());
     $this->assertIsArray($data);
     $this->assertArrayHasKey('error', $data);
+  }
+
+  /**
+   * Normalizes the API response (used before asserting equality).
+   */
+  private function normalizeAssessmentResponse(array $data): array {
+    foreach ($data['binding_requirement'] ?? [] as $i => $requirement) {
+      // Sort documents if present (order is not guaranteed).
+      if (!empty($requirement['documents']) && \is_array($requirement['documents'])) {
+        sort($requirement['documents']);
+      }
+
+      // Remove environment-dependent URLs from assets.
+      foreach ($requirement['asset'] ?? [] as $j => $asset) {
+        unset($asset['url']);
+        $requirement['asset'][$j] = $asset;
+      }
+
+      $data['binding_requirement'][$i] = $requirement;
+    }
+
+    return $data;
   }
 
   /**
