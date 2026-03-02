@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_oss_catalogue\Functional;
 
-use Drupal\Tests\eu_oss_catalogue\Functional\DevelopersItaliaFetchTest;
+use Drupal\Tests\eu_oss_catalogue\Functional\DevelopersItaliaFetchTestBase;
 
 /**
  * Tests file cache warming build for Imagecache External.
@@ -12,7 +12,7 @@ use Drupal\Tests\eu_oss_catalogue\Functional\DevelopersItaliaFetchTest;
  * @group joinup_oss_catalogue
  * @group joinup
  */
-class JoinupOssCatalogueImagecacheWarmerTest extends DevelopersItaliaFetchTest {
+class JoinupOssCatalogueImagecacheWarmerTest extends DevelopersItaliaFetchTestBase {
 
   /**
    * {@inheritdoc}
@@ -25,9 +25,6 @@ class JoinupOssCatalogueImagecacheWarmerTest extends DevelopersItaliaFetchTest {
    * {@inheritdoc}
    */
   public function setUp(): void {
-    if ($this->name() !== 'testDevelopersItalia') {
-      $this->markTestSkipped();
-    }
     parent::setUp();
 
     // Allow SVGs in Imagecache External.
@@ -49,7 +46,7 @@ class JoinupOssCatalogueImagecacheWarmerTest extends DevelopersItaliaFetchTest {
    * Tests file cache warming build for Imagecache External.
    */
   public function testDevelopersItalia(): void {
-    parent::testDevelopersItalia();
+    $this->assertDevelopersItaliaFetch();
 
     // Ensure logos and screenshots are queued to be downloaded.
     // Check how incoming data has been queued. Only one item is active.
