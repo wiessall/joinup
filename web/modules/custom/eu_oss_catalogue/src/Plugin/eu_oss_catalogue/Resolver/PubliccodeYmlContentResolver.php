@@ -26,7 +26,7 @@ class PubliccodeYmlContentResolver extends DefaultResolver implements EuOssCatal
   public function resolve(?array &$value, Project $project, array $metadata, FieldItemListInterface $fieldItemList): void {
     // Store the original YAML content to preserve formatting and data types.
     // Avoids issues like date strings being converted to timestamps.
-    $value[LanguageInterface::LANGCODE_DEFAULT] = [$project->files['publiccodeYml'] ?? NULL];
+    $value[LanguageInterface::LANGCODE_DEFAULT] = [$project->getPubliccodeYml()];
   }
 
 }

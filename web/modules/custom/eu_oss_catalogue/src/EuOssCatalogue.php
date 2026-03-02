@@ -166,26 +166,22 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
       // Set source hash.
       $solution->set('oss_source_hash', $project->getHash());
 
-      $silentErrors = implode(", ", $project->getSilentErrors());
       if (!$solution->isNew()) {
         $solution->setNewRevision();
         $solution->setRevisionCreationTime($this->time->getRequestTime());
 
         $message = match ($solution->get('oss_archived')->getString()) {
-          '1' => $this->t('Unarchive, because re-added (present again) in "@provider" source/catalogue. @errors', [
+          '1' => $this->t('Unarchive, because re-added (present again) in "@provider" source/catalogue.', [
             '@provider' => $provider->getPluginDefinition()['label'],
-            '@errors' => $silentErrors,
           ]),
-          default => $this->t('Update, because data has been changed in "@provider" source/catalogue. @errors', [
+          default => $this->t('Update, because data has been changed in "@provider" source/catalogue.', [
             '@provider' => $provider->getPluginDefinition()['label'],
-            '@errors' => $silentErrors,
           ]),
         };
       }
       else {
-        $message = $this->t('Import from "@provider" source/catalogue. @errors', [
+        $message = $this->t('Import from "@provider" source/catalogue.', [
           '@provider' => $provider->getPluginDefinition()['label'],
-          '@errors' => $silentErrors,
         ]);
       }
       $solution->setRevisionLogMessage((string) $message);
@@ -197,6 +193,16 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
 
       // Allow 3rd-party to act after save.
       $this->eventDispatcher->dispatch(new EuOssSolutionPostSaveEvent($solution, $project));
+
+      if ($operationResult === SAVED_NEW) {
+        $loggerArguments = [
+          '@solution' => $solution->label(),
+          'oss_landing_url' => $solution->get('oss_landing_url')->getString(),
+          'oss_solution' => $solution->id(),
+          'oss_source' => $provider->getPluginId(),
+        ];
+        $this->logger->info('Solution @solution was created.', $loggerArguments);
+      }
     }
     catch (PublicCodeValidatorException $exception) {
       $this->logger->error(
@@ -219,16 +225,6 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
         Error::logException($this->logger, $exception, $logMessage, $logContext);
       }
       return;
-    }
-
-    if ($operationResult === SAVED_NEW) {
-      $loggerArguments = [
-        '@solution' => $solution->label(),
-        'oss_landing_url' => $solution->get('oss_landing_url')->getString(),
-        'oss_solution' => $solution->id(),
-        'oss_source' => $provider->getPluginId(),
-      ];
-      $this->logger->info('Solution @solution was created.', $loggerArguments);
     }
   }
 
