@@ -386,3 +386,6 @@ Feature: User profile
     # After login, the user is redirected to their preferred language.
     When I am logged in as "Pierre Martin"
     Then the "lang" attribute of the page should be "fr"
+
+    When I visit "/pt/user"
+    Then the "lang" attribute of the page should be "pt"
