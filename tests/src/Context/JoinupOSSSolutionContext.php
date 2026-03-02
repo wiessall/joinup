@@ -10,11 +10,14 @@ use Behat\Step\Given;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
+use Drupal\joinup\Traits\EntityTrait;
 
 /**
  * Behat step definitions for testing OSS solution.
  */
 class JoinupOSSSolutionContext extends RawDrupalContext {
+
+  use EntityTrait;
 
   /**
    * OSS search page path.
@@ -39,16 +42,8 @@ class JoinupOSSSolutionContext extends RawDrupalContext {
    */
   #[Given('the :title oss_solution has the following validation issues:')]
   public function setValidationIssues(string $title, TableNode $table): void {
-    $nodes = \Drupal::entityTypeManager()
-      ->getStorage('node')
-      ->loadByProperties(['title' => $title, 'type' => 'oss_solution']);
-
-    if (empty($nodes)) {
-      throw new \RuntimeException(sprintf('No oss_solution node with title "%s" found.', $title));
-    }
-
     /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $node */
-    $node = reset($nodes);
+    $node = static::getEntityByLabel('node', $title, 'oss_solution');
     $node->set(OssSolutionInterface::PUBLICCODE_VALIDATION_ISSUES_FIELD, $table->getColumnsHash());
     $node->save();
   }
