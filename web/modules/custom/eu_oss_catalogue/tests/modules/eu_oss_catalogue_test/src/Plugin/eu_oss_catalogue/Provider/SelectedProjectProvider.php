@@ -7,6 +7,7 @@ namespace Drupal\eu_oss_catalogue_test\Plugin\eu_oss_catalogue\Provider;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider\DevelopersItalia;
+use Drupal\eu_oss_catalogue_test\Plugin\ServiceMock\PublicCode;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -88,16 +89,15 @@ abstract class SelectedProjectProvider extends DevelopersItalia {
    *
    * @param \Drupal\eu_oss_catalogue\Model\Project $project
    *   Project.
-   * @param string|null $publiccodeYml
-   *   Replacement YAML content. If NULL, a corruption suffix is appended.
+   * @param string $publiccodeYml
+   *   Replacement YAML content. Defaults to the API-invalid marker.
    *
    * @return \Drupal\eu_oss_catalogue\Model\Project
    *   Project with modified publiccodeYml.
    */
-  protected function makeInvalid(Project $project, ?string $publiccodeYml = NULL): Project {
+  protected function makeInvalid(Project $project, string $publiccodeYml = PublicCode::INVALID_YAML_MARKER): Project {
     $values = $project->toArray();
-    $values['files']['publiccodeYml'] = $publiccodeYml
-      ?? $values['files']['publiccodeYml'] . "\n   name: Project 1";
+    $values['files']['publiccodeYml'] = $publiccodeYml;
 
     return new Project(...$values);
   }

@@ -7,7 +7,6 @@ namespace Drupal\eu_oss_catalogue_test\Plugin\eu_oss_catalogue\Provider;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueProvider;
 use Drupal\eu_oss_catalogue\Entity\CatalogueType;
-use Drupal\eu_oss_catalogue_test\Plugin\ServiceMock\PublicCode;
 
 /**
  * Provider used to test rejection of new solutions with API-invalid YAML.
@@ -32,7 +31,7 @@ class ApiInvalidNewProvider extends SelectedProjectProvider {
    */
   public function fetch(): iterable {
     foreach (parent::fetch() as $project) {
-      yield $this->makeInvalid($project, PublicCode::INVALID_YAML_MARKER);
+      yield $this->makeInvalid($project);
     }
   }
 
