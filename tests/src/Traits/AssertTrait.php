@@ -30,7 +30,7 @@ trait AssertTrait {
   }
 
   /**
-   * Asserts that two values are identical, showing a serialized diff on failure.
+   * Asserts that two values are identical, showing a diff on failure.
    *
    * @param mixed $expected
    *   The expected value.
