@@ -10,6 +10,7 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\Entity\OgMembership;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\OgMembershipInterface;
+
 /**
  * Contains helper methods regarding the organic groups.
  */

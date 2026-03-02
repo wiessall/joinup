@@ -8,6 +8,7 @@ use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Element\TraversableElement;
 use Drupal\editor\Entity\Editor;
 use Drupal\joinup\Exception\WysiwygEditorNotFoundException;
+
 /**
  * Helper methods for interacting with WYSIWYG editors.
  */
