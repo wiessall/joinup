@@ -7,7 +7,6 @@
 
 declare(strict_types=1);
 
-use Drupal\assessments\Plugin\Field\FieldWidget\ProvidedByWidget;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
@@ -25,6 +24,7 @@ use Drupal\assessments\Entity\BindingRequirementParagraph;
 use Drupal\assessments\Entity\PublicOrganisation;
 use Drupal\assessments\Event\AssessmentReportEvent;
 use Drupal\assessments\NotificationEvents;
+use Drupal\assessments\Plugin\Field\FieldWidget\ProvidedByWidget;
 use Drupal\collection\Entity\CollectionInterface;
 
 /**
@@ -356,7 +356,7 @@ function assessments_inline_entity_form_entity_form_alter(array &$entityForm, Fo
 
     // In this context the landing page is mandatory.
     $entityForm['landing_page']['widget']['uri']['#required'] = TRUE;
- }
+  }
 
   if ($solution->bundle() === 'participation') {
     $delta = $entityForm['#ief_row_delta'];
