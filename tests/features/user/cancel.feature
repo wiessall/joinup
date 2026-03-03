@@ -165,3 +165,13 @@ Feature:
       | document     |
       | event        |
       | news         |
+
+  @deletedUser
+  Scenario: Assessments are preserved when their author is deleted.
+    Given report assessments:
+      | name               | state     | uid          |
+      | Climate Assessment | published | alicia__1997 |
+
+    Then the report assessment with name "Climate Assessment" should exist
+    When I delete the "alicia__1997" user
+    Then the report assessment with name "Climate Assessment" should exist
