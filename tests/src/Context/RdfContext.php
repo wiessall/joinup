@@ -11,17 +11,16 @@ use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\rdf_sync\Model\SyncMethod;
-use PHPUnit\Framework\Assert;
-use function PHPUnit\Framework\assertCount;
-use function PHPUnit\Framework\assertSame;
 
 /**
  * Behat step definitions to test ADMS-AP validation.
  */
 class RdfContext extends RawDrupalContext {
 
+  use AssertTrait;
   use UtilityTrait;
 
   /**
@@ -139,7 +138,7 @@ class RdfContext extends RawDrupalContext {
 
     $objectsSum = array_sum(array_map('count', $objects));
     // Mainly assert that for each bnode, we have also triples to assert.
-    assertSame(count($subjects), $objectsSum, 'The number of blank node identifiers as subject must match the number of blank node identifiers as object');
+    $this->assertSameValues(count($subjects), $objectsSum, 'The number of blank node identifiers as subject must match the number of blank node identifiers as object');
     $connection = \Drupal::getContainer()->get('rdf_sync.connection');
 
     // Start from the objects. Get all data from the database for the given
@@ -221,7 +220,7 @@ class RdfContext extends RawDrupalContext {
     // database - The triples fetched from the database are not less than the
     // expected. As a derivative, the number of the expected data and found data
     // are the same.
-    assertCount(0, $triplesWithBnodesAsSubject, 'The triples with blank nodes as subject were not found');
+    $this->assertCount(0, $triplesWithBnodesAsSubject, 'The triples with blank nodes as subject were not found');
     return $rows;
   }
 
@@ -240,7 +239,7 @@ class RdfContext extends RawDrupalContext {
     $validator = \Drupal::service('adms_validator.validator');
     $result = $validator->validateByGraphUri('http://adms-validation');
     $sparqlEndpoint->query('CLEAR GRAPH <http://adms-validation>');
-    Assert::assertTrue($result->isSuccessful(), 'The published graph is not ADMS-AP compliant.');
+    $this->assertCondition($result->isSuccessful(), 'The published graph is not ADMS-AP compliant.');
   }
 
   /**
@@ -372,7 +371,7 @@ class RdfContext extends RawDrupalContext {
       $messages[] = sprintf('%s %s', $result->entity, $result->p);
     }
 
-    Assert::assertCount(0, $results, "There are triples with $property $uri in the $graph graph. Results found: " . implode(', ', $messages));
+    $this->assertCount(0, $results, "There are triples with $property $uri in the $graph graph. Results found: " . implode(', ', $messages));
   }
 
 }
