@@ -10,14 +10,15 @@ use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\UtilityTrait;
+use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\WysiwygTrait;
-use PHPUnit\Framework\Assert;
 
 /**
  * Behat step definitions for interacting with WYSIWYG editors.
  */
 class WysiwygContext extends RawDrupalContext {
 
+  use AssertTrait;
   use JavascriptTrait;
   use UtilityTrait;
   use WysiwygTrait;
@@ -72,7 +73,7 @@ class WysiwygContext extends RawDrupalContext {
    */
   #[Then('I should see the :label wysiwyg editor')]
   public function assertWysiwyg(string $label): void {
-    Assert::assertTrue($this->hasWysiwyg($label));
+    $this->assertCondition($this->hasWysiwyg($label), "The '$label' wysiwyg editor was not found.");
   }
 
   /**
@@ -135,7 +136,7 @@ class WysiwygContext extends RawDrupalContext {
   public function assertWysiwygButtons(string $label, string $buttons): void {
     $actual_buttons = $this->getWysiwygButtons($label);
     $expected_buttons = array_map('trim', explode(',', $buttons));
-    Assert::assertEquals(array_values($expected_buttons), array_values($actual_buttons));
+    $this->assertSameValues(array_values($expected_buttons), array_values($actual_buttons));
   }
 
   /**

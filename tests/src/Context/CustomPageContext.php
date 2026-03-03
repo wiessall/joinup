@@ -14,16 +14,17 @@ use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\TraversingTrait;
+use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og_menu\Tests\Traits\OgMenuTrait;
-use PHPUnit\Framework\Assert;
 
 /**
  * Behat step definitions for testing custom pages.
  */
 class CustomPageContext extends RawDrupalContext {
 
+  use AssertTrait;
   use FileTrait;
   use EntityTrait;
   use OgMenuTrait;
@@ -186,7 +187,7 @@ class CustomPageContext extends RawDrupalContext {
     $build = $link_tree_service->build($tree);
     $actual = !empty($build['#items']) ? count($build['#items']) : 0;
 
-    Assert::assertEquals($count, $actual);
+    $this->assertSameValues($count, $actual);
   }
 
   /**
@@ -204,7 +205,7 @@ class CustomPageContext extends RawDrupalContext {
   #[Then('the :menu menu of the :label :type should have :count item(s)')]
   public function assertItemsInMenuForm(string $menu, string $label, string $type, int $count): void {
     $tree = $this->getOgMenuTreeByNameLabelAndType($menu, $label, $type);
-    Assert::assertEquals($count, count($tree));
+    $this->assertSameValues($count, count($tree));
   }
 
   /**
@@ -315,7 +316,7 @@ class CustomPageContext extends RawDrupalContext {
     $image_style = $entity_type_manager->getStorage('image_style')->load('tile_md_1x');
     $expected_url = \Drupal::service('file_url_generator')->transformRelative($image_style->buildUrl($image->getFileUri()));
 
-    Assert::assertEquals($expected_url, $actual_url, 'The logo shown is not the correct one.');
+    $this->assertSameValues($expected_url, $actual_url, 'The logo shown is not the correct one.');
   }
 
 }

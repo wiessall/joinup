@@ -18,18 +18,19 @@ use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeUserCreateScope;
 use Drupal\DrupalExtension\TagTrait;
+use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_user\JoinupUserDeletedInterface;
 use Drupal\user\UserInterface;
-use PHPUnit\Framework\Assert;
 
 /**
  * Behat step definitions for testing users.
  */
 class JoinupUserContext extends RawDrupalContext {
 
+  use AssertTrait;
   use MailCollectorTrait;
   use StringTranslationTrait;
   use TagTrait;
@@ -141,10 +142,10 @@ class JoinupUserContext extends RawDrupalContext {
     foreach ($profile_data as $field => $values) {
       $expected_values = explode(',', $values);
       $actual_values = $user->get($field)->getValue();
-      Assert::assertSameSize($expected_values, $actual_values);
+      $this->assertCount(count($expected_values), $actual_values);
       foreach ($expected_values as $key => $expected_value) {
         $actual_value = $user->get($field)->get($key)->value;
-        Assert::assertSame($expected_value, $actual_value);
+        $this->assertSameValues($expected_value, $actual_value);
       }
     }
   }
