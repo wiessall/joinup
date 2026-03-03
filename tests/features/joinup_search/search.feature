@@ -120,9 +120,9 @@ Feature: Global search
       | Alt event   | Background event.        | Luxembourg       | Collection alpha | published |
 
     When I visit the advanced search page
-    And I should not see the "Organisation origin" facet
+    And I should not see the "Solution organisation country" facet
     When I check the "Solution (1)" checkbox from the "Content types" facet
-    And I should see the "Organisation origin" facet
+    And I should see the "Solution organisation country" facet
     Then I click "Clear filters"
     Then I click show more from the "spatial coverage" facet
     And the "spatial coverage" checkbox facet should allow selecting the following values "Greece (1), Luxembourg (1)"

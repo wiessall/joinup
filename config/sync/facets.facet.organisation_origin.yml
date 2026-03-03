@@ -8,7 +8,7 @@ dependencies:
   module:
     - search_api
 id: organisation_origin
-name: 'Organisation origin'
+name: 'Organisation country'
 weight: -4
 min_count: 1
 missing: false
