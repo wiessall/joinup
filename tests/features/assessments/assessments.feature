@@ -85,7 +85,7 @@ Feature: Assessment Report Entity Management
     And I press "Select Interoperability Solution" in the "Modal content" region
     And I switch to the "assessment_solutions" entity browser
     And I click "New solution"
-    And I wait for AJAX to finish
+    And I wait until ".ck-editor__editable" element exists
     And I fill in "Title of Solution" with "European Interoperability Framework (EIF)"
     And I enter "Description of EIF" in the "Description" wysiwyg editor
     And I fill in "Relevant website" with "http://no-abstract.com"
