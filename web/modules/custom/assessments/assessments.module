@@ -66,10 +66,10 @@ function assessments_entity_extra_field_info(): array {
 }
 
 /**
- * Implements hook_form_alter().
+ * Implements hook_form_BASE_FORM_ID_alter().
  */
-function assessments_form_alter(array &$form, FormStateInterface $formState, string $formId): void {
-  if (!in_array($formId, ['assessment_report_add_form', 'assessment_report_edit_form'], TRUE)) {
+function assessments_form_assessment_form_alter(array &$form, FormStateInterface $formState): void {
+  if (!$formState->getFormObject()->getEntity() instanceof AssessmentReport) {
     return;
   }
 
