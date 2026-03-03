@@ -18,7 +18,7 @@ use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UtilityTrait;
-use PHPUnit\Framework\Assert;
+
 
 /**
  * Behat step definitions for functionalities provided by Joinup core module.
@@ -51,7 +51,7 @@ class JoinupCoreContext extends RawDrupalContext {
     }, $chips);
 
     $expected = $table->getColumn(0);
-    Assert::assertEquals($expected, $found, "The expected chip elements don't match the ones found in the page", 0.0, 10, TRUE);
+    $this->assertSameValues($expected, $found, "The expected chip elements don't match the ones found in the page");
   }
 
   /**
@@ -73,7 +73,7 @@ class JoinupCoreContext extends RawDrupalContext {
   #[Then('the :region region should not contain any chips')]
   public function assertChipCount(?string $number = NULL, ?string $region = NULL): void {
     $number = (int) $number;
-    Assert::assertCount($number, $this->getChips($region));
+    $this->assertCount($number, $this->getChips($region));
   }
 
   /**
@@ -274,12 +274,12 @@ class JoinupCoreContext extends RawDrupalContext {
     $navigation_menu_selector = $this->getRegionSelector($region);
     $parent = $this->getSession()->getPage()->findAll('css', "$navigation_menu_selector .nav a");
     $table_hash = $table->getHash();
-    Assert::assertSameSize($table_hash, $parent);
+    $this->assertCount(count($table_hash), $parent);
     $i = 0;
     foreach ($table_hash as $expected_element) {
       $expected_text = $expected_element['text'];
       $actual_text = $parent[$i++]->getText();
-      Assert::assertSame($expected_text, $actual_text);
+      $this->assertSameValues($expected_text, $actual_text);
     }
   }
 
@@ -321,11 +321,11 @@ class JoinupCoreContext extends RawDrupalContext {
   public function theDefaultCacheBackendIsSetTo(string $expected): void {
     $container = \Drupal::getContainer();
     $factory = $container->get($expected);
-    Assert::assertNotNull($factory, "The service $expected does not exist. Note, that you need to pass a service ID, not a class name.");
+    $this->assertCondition($factory !== NULL, "The service $expected does not exist. Note, that you need to pass a service ID, not a class name.");
 
     $actual = get_class(\Drupal::cache());
     $expected = get_class($factory->get('default'));
-    Assert::assertSame($expected, $actual);
+    $this->assertSameValues($expected, $actual);
   }
 
   /**
@@ -344,7 +344,7 @@ class JoinupCoreContext extends RawDrupalContext {
     }, $table_rows);
 
     foreach ($rows as $row) {
-      Assert::assertContains(implode(' ', $row), $table_rows);
+      $this->assertCondition(in_array(implode(' ', $row), $table_rows, TRUE), 'The expected row was not found in the table.');
     }
   }
 
@@ -377,19 +377,18 @@ class JoinupCoreContext extends RawDrupalContext {
   ): FieldItemListInterface {
     $bundle = is_string($bundle) ? $this->translateBundle($bundle) : NULL;
     $entity = $this->getEntityByLabel($this->translateEntityTypeAlias($entityTypeId), $label, $bundle);
-    Assert::assertInstanceOf(
-      FieldableEntityInterface::class,
-      $entity,
+    $this->assertCondition(
+      $entity instanceof FieldableEntityInterface,
       'No fieldable entity was found',
     );
-    Assert::assertTrue(
+    $this->assertCondition(
       $entity->hasField($fieldName),
       sprintf("The entity has no '%s' field", $fieldName),
     );
 
     $field = $entity->get($fieldName);
-    Assert::assertFalse(
-      $field->isEmpty(),
+    $this->assertCondition(
+      !$field->isEmpty(),
       sprintf(
         "The '%s' field in the entity with label '%s' is empty",
         $fieldName,
@@ -398,7 +397,7 @@ class JoinupCoreContext extends RawDrupalContext {
     );
 
     if ($emptiness === 'empty') {
-      Assert::assertTrue(
+      $this->assertCondition(
         $field->isEmpty(),
         sprintf(
           "The '%s' field in the entity with label '%s' is not empty",
@@ -408,8 +407,8 @@ class JoinupCoreContext extends RawDrupalContext {
       );
     }
     else {
-      Assert::assertFalse(
-        $field->isEmpty(),
+      $this->assertCondition(
+        !$field->isEmpty(),
         sprintf(
           "The '%s' field in the entity with label '%s' is empty",
           $fieldName,
@@ -457,9 +456,8 @@ class JoinupCoreContext extends RawDrupalContext {
       '.*',
       preg_quote($expectedValue, '/')
     );
-    Assert::assertMatchesRegularExpression(
-      '/^' . $expectedValuePattern . '$/',
-      $actual = $field->getString(),
+    $this->assertCondition(
+      (bool) preg_match('/^' . $expectedValuePattern . '$/', $actual = $field->getString()),
       sprintf(
         $template,
         $fieldName,
@@ -481,9 +479,8 @@ class JoinupCoreContext extends RawDrupalContext {
     $response = $this->getSession()->getDriver()->getContent();
     foreach ($table->getColumn(0) as $expectedLine) {
       $expectedLine = $this->escapeStringWithVariables($expectedLine, FALSE);
-      Assert::assertStringContainsString(
-        $expectedLine,
-        $response,
+      $this->assertCondition(
+        str_contains($response, $expectedLine),
         "The expected line '$expectedLine' was not found in the response body.",
       );
     }

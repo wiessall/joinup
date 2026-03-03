@@ -23,7 +23,7 @@ use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
-use PHPUnit\Framework\Assert;
+
 
 /**
  * Behat step definitions to test common community content functionality.
@@ -99,7 +99,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     if (!$node instanceof EntityPublicationTimeInterface) {
       throw new \InvalidArgumentException('Node does not have a publication date field.');
     }
-    Assert::assertEmpty($node->getPublicationTime());
+    $this->assertCondition(empty($node->getPublicationTime()), 'The node should not have a publication time yet.');
   }
 
   /**
@@ -119,8 +119,8 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     if (!$node instanceof EntityPublicationTimeInterface) {
       throw new \InvalidArgumentException('Node does not have a publication date field.');
     }
-    Assert::assertNotEmpty($node->getPublicationTime());
-    Assert::assertNotEquals($node->created->value, $node->getPublicationTime());
+    $this->assertCondition(!empty($node->getPublicationTime()), 'The node does not have a publication time.');
+    $this->assertCondition($node->getPublicationTime() !== $node->created->value, 'The publication time should be different from the created date.');
   }
 
   /**
@@ -140,13 +140,13 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     if (!$node instanceof EntityPublicationTimeInterface) {
       throw new \InvalidArgumentException('Node does not have a publication date field.');
     }
-    Assert::assertNotEmpty($node->getPublicationTime());
+    $this->assertCondition(!empty($node->getPublicationTime()), 'The node does not have a publication time.');
 
     // Depending on the performance of the test environment it is possible that
     // a small amount of time has passed between the moment the node was created
     // and the moment it was published. We allow a grace period of 5 seconds to
     // account for the difference between the created and the publication date.
-    Assert::assertTrue(abs((int) $node->created->value - (int) $node->getPublicationTime()) < 5);
+    $this->assertCondition(abs((int) $node->created->value - (int) $node->getPublicationTime()) < 5, 'The publication time differs from the created date by more than 5 seconds.');
   }
 
   /**
@@ -192,7 +192,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     if (!$revision instanceof EntityPublicationTimeInterface) {
       throw new \InvalidArgumentException('Node revision does not have a publication date field.');
     }
-    Assert::assertEquals($node->getPublicationTime(), $revision->getPublicationTime());
+    $this->assertSameValues($node->getPublicationTime(), $revision->getPublicationTime());
   }
 
   /**
@@ -298,16 +298,15 @@ class JoinupCommunityContentContext extends RawDrupalContext {
       explode(',', $sharedInAtString),
     );
     if ($groupLabels) {
-      Assert::assertInstanceOf(ShareableContentInterface::class, $content);
+      $this->assertCondition($content instanceof ShareableContentInterface, 'The content does not implement ShareableContentInterface.');
     }
 
     foreach ($groupLabels as $delta => $groupLabel) {
       // Right now content can be shared only between groups.
       $group = $this->getEntityByLabel('node', $groupLabel);
 
-      Assert::assertInstanceOf(
-        GroupInterface::class,
-        $group,
+      $this->assertCondition(
+        $group instanceof GroupInterface,
         sprintf(
           "Cannot share content '%s' to '%s' since latter is not a group.",
           $content->label(),
@@ -336,7 +335,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
   public function assertCommentContainsMarkup(string $comment_number, string $markup): void {
     $comment = $this->getNumberedComment($comment_number - 1);
     $regex = '/' . preg_quote($markup, '/') . '/ui';
-    Assert::assertMatchesRegularExpression($regex, $comment->getOuterHtml());
+    $this->assertCondition((bool) preg_match($regex, $comment->getOuterHtml()), "The markup '$markup' was not found in the comment HTML.");
   }
 
   /**
@@ -355,7 +354,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
   public function assertCommentIndent(int $comment_number, int $indent): void {
     $comment = $this->getNumberedComment($comment_number - 1);
     $nested_comments = $comment->findAll('xpath', '/ancestor::div[contains(concat(" ", @class, " "), " indented ")]');
-    Assert::assertCount($indent, $nested_comments);
+    $this->assertCount($indent, $nested_comments);
   }
 
   /**
@@ -437,23 +436,23 @@ class JoinupCommunityContentContext extends RawDrupalContext {
   public function assertInTheSpotlight(TableNode $table): void {
     $columns = $table->getColumnsHash();
     $articles = $this->getSession()->getPage()->findAll('css', '.view-in-the-spotlight article.tile');
-    Assert::assertEquals(count($columns), count($articles), sprintf('Expected %d items in the "In the spotlight" section but found %d items.', count($columns), count($articles)));
+    $this->assertSameValues(count($columns), count($articles), sprintf('Expected %d items in the "In the spotlight" section but found %d items.', count($columns), count($articles)));
 
     foreach ($columns as $i => $expected_data) {
       $actual_data = array_shift($articles);
 
       // Check title text.
       $actual_title = $actual_data->find('css', '.tile__title')->getText();
-      Assert::assertEquals($expected_data['title'], $actual_title, sprintf('Expected title "%s" for article %d in the "In the spotlight" section but instead found "%s".', $expected_data['title'], $i + 1, $actual_title));
+      $this->assertSameValues($expected_data['title'], $actual_title, sprintf('Expected title "%s" for article %d in the "In the spotlight" section but instead found "%s".', $expected_data['title'], $i + 1, $actual_title));
 
       // Check that title links to the canonical page of the article.
       $node = $this->getEntityByLabel('node', $actual_title);
       $xpath = '//a[@href = "' . $this->getEntityUri($node) . '"]';
-      Assert::assertNotEmpty($actual_data->find('xpath', $xpath), sprintf('Article "%s" does not link to the canonical page.', $actual_title));
+      $this->assertCondition(!empty($actual_data->find('xpath', $xpath)), sprintf('Article "%s" does not link to the canonical page.', $actual_title));
 
       // Check the body text.
       $actual_body = $actual_data->find('css', '.tile__body .tile__text')->getText();
-      Assert::assertEquals(
+      $this->assertSameValues(
         $expected_data['body'],
         $actual_body,
         sprintf(
