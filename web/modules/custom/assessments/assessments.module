@@ -26,7 +26,6 @@ use Drupal\assessments\Entity\PublicOrganisation;
 use Drupal\assessments\Event\AssessmentReportEvent;
 use Drupal\assessments\NotificationEvents;
 use Drupal\collection\Entity\CollectionInterface;
-use Drupal\joinup_solution\Entity\SolutionInterface;
 
 /**
  * Implements hook_theme().
@@ -342,24 +341,11 @@ function assessments_entity_operation(EntityInterface $entity): array {
 /**
  * Implements hook_inline_entity_form_entity_form_alter().
  */
-function assessments_inline_entity_form_entity_form_alter(array &$entity_form, FormStateInterface &$formState): void {
-  $solution = $entity_form['#entity'];
+function assessments_inline_entity_form_entity_form_alter(array &$entityForm, FormStateInterface $formState): void {
+  $solution = $entityForm['#entity'];
 
-  // Check if this IEF is for a solution within the binding_requirement
-  // paragraph.
-  $isAssetForm = $entity_form['#ief_id'] === 'asset-form' && $solution instanceof SolutionInterface;
-
-  // Check if this IEF is within Entity Browser for assessment solutions.
-  $route = \Drupal::routeMatch()->getRouteName();
-  $isEntityBrowserForm = $route === 'entity_browser.assessment_solutions' && $solution instanceof SolutionInterface;
-
-  if ($isAssetForm || $isEntityBrowserForm) {
-    if ($entity_form['#op'] === 'add') {
-      if ($isAssetForm) {
-        $entity_form['#after_build'][] = '_assessments_process_asset_form_button';
-      }
-    }
-
+  // @see config/sync/entity_browser.browser.assessment_solutions.yml
+  if ($formState->get('entity_browser_current_widget') === 'a1b2c3d4-e5f6-7890-abcd-ef1234567890') {
     $collection = \Drupal::service('entity.repository')->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR);
     assert($collection instanceof CollectionInterface);
 
@@ -370,11 +356,12 @@ function assessments_inline_entity_form_entity_form_alter(array &$entity_form, F
       ->set('field_state', 'published');
 
     // In this context the landing page is mandatory.
-    $entity_form['landing_page']['widget']['uri']['#required'] = TRUE;
+    $entityForm['landing_page']['widget']['uri']['#required'] = TRUE;
+ }
 
   if ($solution->bundle() === 'participation') {
-    $delta = $entity_form['#ief_row_delta'];
-    $entity_form['stakeholder_country']['#states'] = [
+    $delta = $entityForm['#ief_row_delta'];
+    $entityForm['stakeholder_country']['#states'] = [
       'visible' => [
         ':input[name="has_participation[' . $delta . '][inline_entity_form][eu_countries][value]"]' => ['checked' => FALSE],
       ],
@@ -383,7 +370,7 @@ function assessments_inline_entity_form_entity_form_alter(array &$entity_form, F
 
   if ($solution instanceof AssessmentStatementInterface) {
     $selector = ':input[name="' . $solution->bundle() . '[0][inline_entity_form][interpretation]"]';
-    $entity_form['judgement']['#states'] = [
+    $entityForm['judgement']['#states'] = [
       'invisible' => [
         [$selector => ['value' => '_none']],
         [$selector => ['checked' => FALSE]],
