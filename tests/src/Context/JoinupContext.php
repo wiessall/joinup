@@ -595,7 +595,7 @@ class JoinupContext extends RawDrupalContext {
       ->count()
       ->execute();
 
-    $this->assertSameValues($count, $revision_count);
+    $this->assertSameValues((int) $count, (int) $revision_count);
   }
 
   /**
@@ -1441,7 +1441,7 @@ class JoinupContext extends RawDrupalContext {
       // might be present in wysiwygs or are used to add multiple values to a
       // field.
       $actual = count($this->getSession()->getPage()->findAll('xpath', '//main//div[contains(concat(" ", normalize-space(@class), " "), " form-actions ")]//input[@type = "submit"]'));
-      $this->assertSameValues($count, $actual);
+      $this->assertSameValues((int) $count, $actual);
     }
   }
 
