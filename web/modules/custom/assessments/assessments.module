@@ -71,11 +71,6 @@ function assessments_entity_extra_field_info(): array {
  * Implements hook_form_alter().
  */
 function assessments_form_alter(array &$form, FormStateInterface $formState, string $formId): void {
-  // Handle solution creation via Entity Browser.
-  if ($formId === 'node_solution_form') {
-    _assessments_alter_solution_form_for_entity_browser($form, $formState);
-  }
-
   if (!in_array($formId, ['assessment_report_add_form', 'assessment_report_edit_form'], TRUE)) {
     return;
   }
@@ -675,49 +670,4 @@ function assessments_views_data_alter(array &$data): void {
   $code_value['title'] = $code_value['title short'] = new TranslatableMarkup('Assessment country code');
   $code_value['argument']['id'] = 'assessment_country_code';
   $data['taxonomy_term__code']['assessment_country_code'] = $code_value;
-}
-
-/**
- * Alters the solution form when loaded via Entity Browser.
- *
- * Sets the og_audience to the SOLUTION_COLLECTOR collection for solutions
- * created through the assessment's Entity Browser widget.
- *
- * @param array $form
- *   The form array.
- * @param \Drupal\Core\Form\FormStateInterface $formState
- *   The form state.
- */
-function _assessments_alter_solution_form_for_entity_browser(array &$form, FormStateInterface $formState): void {
-  // Check if this form is loaded within Entity Browser context.
-  $route = \Drupal::routeMatch()->getRouteName();
-  if ($route !== 'entity_browser.assessment_solutions') {
-    return;
-  }
-
-  // Load the collector collection.
-  $collection = \Drupal::service('entity.repository')->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR);
-  if (!$collection instanceof CollectionInterface) {
-    return;
-  }
-
-  // Get the solution entity from the form and set the group directly.
-  // This must happen during form_alter, not just in submit, because
-  // Solution::getGroup() is called during form building/validation.
-  /** @var \Drupal\joinup_solution\Entity\SolutionInterface $solution */
-  $solution = $formState->getFormObject()->getEntity();
-  if ($solution instanceof SolutionInterface) {
-    $solution->setGroup($collection);
-    $solution->set('field_state', 'published');
-  }
-
-  // Hide the og_audience field since it's auto-populated.
-  if (isset($form['og_audience'])) {
-    $form['og_audience']['#access'] = FALSE;
-  }
-
-  // Hide the state field since it's auto-set.
-  if (isset($form['field_state'])) {
-    $form['field_state']['#access'] = FALSE;
-  }
 }
