@@ -17,27 +17,22 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\collection\Entity\CollectionInterface;
-use Drupal\joinup\Traits\AwaitTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
-use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\user\UserInterface;
 use PHPUnit\Framework\Assert;
-use WebDriver\Element;
 
 /**
  * Step definitions for assessments.
  */
 class AssessmentsContext extends RawDrupalContext {
 
-  use AwaitTrait;
   use EntityTrait;
   use FileTrait;
-  use JavascriptTrait;
-  use TestingEntitiesTrait;
   use UtilityTrait;
+  use TestingEntitiesTrait;
 
   /**
    * Programmatically creates assessment contents.
@@ -375,63 +370,6 @@ class AssessmentsContext extends RawDrupalContext {
           count($participations)
         )
       );
-    }
-  }
-
-  /**
-   * Asserts that Tagify autocomplete suggestions appear in a specific order.
-   *
-   * @param string $text
-   *   The text to type in the tagify input.
-   * @param string $fieldName
-   *   The field name to search for.
-   * @param \Behat\Gherkin\Node\TableNode $table
-   *   A table with expected suggestion order.
-   *
-   * @throws \Exception
-   *   When suggestions are not in the expected order.
-   */
-  #[Then('I type :text in the :fieldName tagify and the suggestions should appear in this order:')]
-  public function assertTagifySuggestionsOrder(string $text, string $fieldName, TableNode $table): void {
-    $this->assertJavaScriptEnabledBrowser();
-
-    $session = $this->getSession();
-    $page = $session->getPage();
-
-    // Find the tagify input by field name.
-    $fieldNameCss = str_replace('_', '-', $fieldName);
-    $tagifyInput = $page->find('css', '.field--name-' . $fieldNameCss . ' .tagify__input');
-
-    if (!$tagifyInput) {
-      throw new \Exception("Tagify input for field '$fieldName' not found.");
-    }
-
-    // Use JavaScript to trigger input and show dropdown.
-    $element = $session->getDriver()->getWebDriverSession()?->element('xpath', $tagifyInput->getXpath());
-    \assert($element instanceof Element);
-    $element->postValue(['text' => $text]);
-
-    // Wait for tagify dropdown suggestions to appear.
-    $suggestions = [];
-    $page->waitFor(5, function () use ($page, &$suggestions): bool {
-      $suggestions = $page->findAll('css', '.tagify__dropdown__item');
-      return !empty($suggestions);
-    });
-
-    if (empty($suggestions)) {
-      throw new \Exception('No Tagify autocomplete suggestions found.');
-    }
-
-    $actualOrder = array_map(fn($s) => trim($s->getText()), $suggestions);
-    $expectedOrder = array_column($table->getRows(), 0);
-
-    foreach ($expectedOrder as $index => $expected) {
-      if (!isset($actualOrder[$index])) {
-        throw new \Exception("Expected suggestion '$expected' at position $index, but only " . count($actualOrder) . " suggestions found.");
-      }
-      if (!str_contains($actualOrder[$index], $expected)) {
-        throw new \Exception("Expected suggestion containing '$expected' at position $index, but found '{$actualOrder[$index]}'.");
-      }
     }
   }
 

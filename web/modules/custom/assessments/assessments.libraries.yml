@@ -8,13 +8,6 @@ inline-items:
     component:
       css/inline-items.css: {}
 
-ief_tagify:
-  css:
-    component:
-      css/ief-tagify.css: {}
-  dependencies:
-    - tagify/default
-
 entity_browser:
   css:
     component:
