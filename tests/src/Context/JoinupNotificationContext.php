@@ -17,7 +17,6 @@ use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_notification\MailContentTypeHeader;
 use Drupal\message\Entity\MessageTemplate;
-use PHPUnit\Framework\Assert;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -162,7 +161,7 @@ class JoinupNotificationContext extends RawDrupalContext {
       }
 
       if (isset($bcc)) {
-        Assert::assertStringContainsString($bcc, $mail['headers']['Bcc'] ?? "", 'Bcc is properly set to the email.');
+        $this->assertCondition(str_contains($mail['headers']['Bcc'] ?? '', $bcc), 'Bcc is properly set to the email.');
       }
 
       // We found a match. Stop searching.
@@ -170,17 +169,17 @@ class JoinupNotificationContext extends RawDrupalContext {
       break;
     }
 
-    Assert::assertTrue($email_found, "Did not find expected email to '$recipient' with subject '$subject'.");
+    $this->assertCondition($email_found, "Did not find expected email to '$recipient' with subject '$subject'.");
 
     // If the previous assertion passed, the $mail variable contains the correct
     // mail.
     /** @var array $mail */
     $expected = $html ? MailContentTypeHeader::TextHtml : MailContentTypeHeader::TextPlain;
     if ($html) {
-      Assert::assertStringContainsString($expected->value, $mail['headers']['Content-Type'], 'The mail is not sent as HTML.');
+      $this->assertCondition(str_contains($mail['headers']['Content-Type'], $expected->value), 'The mail is not sent as HTML.');
     }
     else {
-      Assert::assertStringContainsString($expected->value, $mail['headers']['Content-Type'], 'The mail is not sent as plain text.');
+      $this->assertCondition(str_contains($mail['headers']['Content-Type'], $expected->value), 'The mail is not sent as plain text.');
     }
   }
 
@@ -515,7 +514,7 @@ class JoinupNotificationContext extends RawDrupalContext {
     else {
       throw new \InvalidArgumentException("Invalid '$username_or_email' value passed. Should be either a valid username or a vaid email address.");
     }
-    Assert::assertEmpty($this->getMails(['to' => $recipient]));
+    $this->assertCondition(empty($this->getMails(['to' => $recipient])), "No email should have been sent to '$username_or_email'.");
   }
 
   /**

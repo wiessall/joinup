@@ -29,7 +29,6 @@ use Drupal\layout_paragraphs\LayoutParagraphsLayoutTempstoreRepository;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\user\Entity\User;
-use PHPUnit\Framework\Assert;
 
 /**
  * Behat step definitions for testing searches.
@@ -196,10 +195,10 @@ class JoinupParagraphsContext extends RawDrupalContext {
       throw new ElementNotFoundException($this->getSession()->getDriver(), "Text field from $paragraph paragraph");
     }
     if ($expected_value) {
-      Assert::assertStringContainsString($expected_value, $input->getAttribute('value'));
+      $this->assertCondition(str_contains($input->getAttribute('value') ?? '', $expected_value), "The filter value does not contain '$expected_value'.");
     }
     else {
-      Assert::assertEmpty($input->getAttribute('value'));
+      $this->assertCondition(empty($input->getAttribute('value')), 'The filter value is not empty.');
     }
   }
 
@@ -562,13 +561,9 @@ class JoinupParagraphsContext extends RawDrupalContext {
     $accountSwitcher = \Drupal::service('account_switcher');
     assert($accountSwitcher instanceof AccountSwitcherInterface);
     $accountSwitcher->switchTo(User::load($uid));
-    Assert::assertArrayHasKey(
-      $type,
-     \Drupal::entityTypeManager()->getStorage('paragraphs_type')->loadMultiple(),
-      sprintf(
-        "The specified paragraphs type '%s' is not available",
-        $type
-      )
+    $this->assertCondition(
+      array_key_exists($type, \Drupal::entityTypeManager()->getStorage('paragraphs_type')->loadMultiple()),
+      sprintf("The specified paragraphs type '%s' is not available", $type)
     );
     try {
       $lpTempStore = \Drupal::service('layout_paragraphs.tempstore_repository');
@@ -579,7 +574,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
       // Fail loud if the layout object cannot be loaded...
       \assert($layoutParagraphsLayout instanceof LayoutParagraphsLayout);
       // ...And also when the layout is missing.
-      Assert::assertTrue($layoutDiscovery->hasDefinition($layoutId));
+      $this->assertCondition($layoutDiscovery->hasDefinition($layoutId), "The layout '$layoutId' is not available.");
       $layoutInstance = $layoutDiscovery->createInstance($layoutId);
       $itemParagraph = $this->createParagraph($type, $table, FALSE);
       // Create the layout paragraph and set its settings.
@@ -593,7 +588,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
           'region' => NULL,
         ]
       );
-      Assert::assertContainsEquals($regionId, $layoutInstance->getPluginDefinition()->getRegionNames());
+      $this->assertCondition(in_array($regionId, $layoutInstance->getPluginDefinition()->getRegionNames(), FALSE), "The region '$regionId' is not available in the layout '$layoutId'.");
       $layoutParagraphsLayout->appendComponent($layoutParagraph);
       $layoutParagraphsLayout->insertIntoRegion($layoutParagraph->uuid(), $regionId, $itemParagraph);
       $lpTempStore->set($layoutParagraphsLayout);
