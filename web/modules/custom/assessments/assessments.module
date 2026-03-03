@@ -185,11 +185,11 @@ function template_preprocess_assessment_statement(array &$variables): void {
 function assessments_theme_suggestions_assessment(array $variables): array {
   $suggestions = [];
   $assessment = $variables['elements']['#assessment'];
-  $sanitized_view_mode = strtr($variables['elements']['#view_mode'], '.', '_');
+  $sanitizedViewMode = strtr($variables['elements']['#view_mode'], '.', '_');
 
-  $suggestions[] = 'assessment__' . $sanitized_view_mode;
+  $suggestions[] = 'assessment__' . $sanitizedViewMode;
   $suggestions[] = 'assessment__' . $assessment->bundle();
-  $suggestions[] = 'assessment__' . $assessment->bundle() . '__' . $sanitized_view_mode;
+  $suggestions[] = 'assessment__' . $assessment->bundle() . '__' . $sanitizedViewMode;
 
   return $suggestions;
 }
@@ -318,8 +318,7 @@ function assessments_entity_operation(EntityInterface $entity): array {
     return $operations;
   }
 
-  $current_user = \Drupal::service('current_user')->getAccount();
-  $access = _assessments_can_moderate($entity, $current_user);
+  $access = _assessments_can_moderate($entity, \Drupal::service('current_user')->getAccount());
 
   // Only add the operation if access is explicitly allowed.
   if (!$access->isAllowed()) {
@@ -453,7 +452,7 @@ function assessments_module_implements_alter(array &$implementations, $hook): vo
 /**
  * Implements hook_ENTITY_TYPE_create_access().
  */
-function assessments_node_create_access(AccountInterface $account, array $context, string $entity_bundle): AccessResultInterface {
+function assessments_node_create_access(AccountInterface $account, array $context, string $entityBundle): AccessResultInterface {
   // Detect if the access is checked as part of the inline entity form widget,
   // specifically, the one that allow adding new solutions.
   $isAssetInlineEntityFormWidget = isset($context['parent_entity_type']) &&
@@ -467,7 +466,7 @@ function assessments_node_create_access(AccountInterface $account, array $contex
     return AccessResult::allowed();
   }
 
-  return state_machine_permissions_node_create_access($account, $context, $entity_bundle);
+  return state_machine_permissions_node_create_access($account, $context, $entityBundle);
 }
 
 /**
@@ -476,19 +475,19 @@ function assessments_node_create_access(AccountInterface $account, array $contex
 function assessments_assessment_presave(AssessmentInterface $entity): void {
   // For expression entities, copy initiative_name to name field.
   if ($entity->bundle() === 'expression' && $entity->hasField('initiative_name')) {
-    $initiative_name = $entity->get('initiative_name')->value;
-    if (!empty($initiative_name)) {
+    $initiativeName = $entity->get('initiative_name')->value;
+    if (!empty($initiativeName)) {
       // Truncate to 255 characters if necessary.
-      $name = mb_strlen($initiative_name) > 255 ? mb_substr($initiative_name, 0, 255) : $initiative_name;
+      $name = mb_strlen($initiativeName) > 255 ? mb_substr($initiativeName, 0, 255) : $initiativeName;
       $entity->set('name', $name);
     }
   }
   elseif ($entity->bundle() === 'participation') {
-    $eu_country = $entity->get('eu_countries')->value;
+    $euCountry = $entity->get('eu_countries')->value;
     $vocabHelper = \Drupal::service(AssessmentVocabularyHelper::class);
-    if ($eu_country) {
-      $term_id = $vocabHelper->getTermIdFromIdentifier('spatial', 'EU', 'code');
-      $entity->set('stakeholder_country', ['target_id' => $term_id]);
+    if ($euCountry) {
+      $termId = $vocabHelper->getTermIdFromIdentifier('spatial', 'EU', 'code');
+      $entity->set('stakeholder_country', ['target_id' => $termId]);
     }
   }
 }
@@ -518,10 +517,10 @@ function _assessments_handle_report_state_notification(AssessmentInterface $enti
     return;
   }
 
-  $original_state = $entity->original instanceof AssessmentReport ? $entity->original->getWorkflowState() : NULL;
-  $current_state = $entity->getWorkflowState();
+  $originalState = $entity->original instanceof AssessmentReport ? $entity->original->getWorkflowState() : NULL;
+  $currentState = $entity->getWorkflowState();
 
-  if ($current_state === 'review' && $original_state !== 'review') {
+  if ($currentState === 'review' && $originalState !== 'review') {
     $event = new AssessmentReportEvent($entity);
     \Drupal::service('event_dispatcher')
       ->dispatch($event, NotificationEvents::ASSESSMENT_REPORT_SUBMITTED_FOR_REVIEW);
@@ -533,8 +532,8 @@ function _assessments_handle_report_state_notification(AssessmentInterface $enti
  */
 function assessments_views_data_alter(array &$data): void {
   // Duplicate data to provide custom argument handler for assessment country.
-  $code_value = $data['taxonomy_term__code']['code_value'];
-  $code_value['title'] = $code_value['title short'] = new TranslatableMarkup('Assessment country code');
-  $code_value['argument']['id'] = 'assessment_country_code';
-  $data['taxonomy_term__code']['assessment_country_code'] = $code_value;
+  $codeValue = $data['taxonomy_term__code']['code_value'];
+  $codeValue['title'] = $codeValue['title short'] = new TranslatableMarkup('Assessment country code');
+  $codeValue['argument']['id'] = 'assessment_country_code';
+  $data['taxonomy_term__code']['assessment_country_code'] = $codeValue;
 }
