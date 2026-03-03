@@ -7,16 +7,17 @@ namespace Drupal\joinup\Context;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup_discussion\Entity\DiscussionInterface;
 use Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface;
-use PHPUnit\Framework\Assert;
 
 /**
  * Behat step definitions for testing discussions.
  */
 class JoinupDiscussionContext extends RawDrupalContext {
 
+  use AssertTrait;
   use EntityTrait;
 
   /**
@@ -31,7 +32,7 @@ class JoinupDiscussionContext extends RawDrupalContext {
   public function assertSubscribers(string $title, int $count): void {
     $discussion = $this->getEntityByLabel('node', $title, 'discussion');
     $subscribers = $this->getDiscussionSubscriptionService()->getSubscribers($discussion, 'subscribe_discussions');
-    Assert::assertEquals($count, count($subscribers));
+    $this->assertCount($count, $subscribers);
   }
 
   /**
