@@ -372,16 +372,6 @@ function assessments_inline_entity_form_entity_form_alter(array &$entity_form, F
     // In this context the landing page is mandatory.
     $entity_form['landing_page']['widget']['uri']['#required'] = TRUE;
 
-    // Hide the og_audience field since it's auto-populated.
-    if (isset($entity_form['og_audience'])) {
-      $entity_form['og_audience']['#access'] = FALSE;
-    }
-
-    // Hide the state field since it's auto-set.
-    if (isset($entity_form['field_state'])) {
-      $entity_form['field_state']['#access'] = FALSE;
-    }
-  }
   if ($solution->bundle() === 'participation') {
     $delta = $entity_form['#ief_row_delta'];
     $entity_form['stakeholder_country']['#states'] = [
