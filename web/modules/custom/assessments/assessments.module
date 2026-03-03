@@ -29,15 +29,6 @@ use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\node\NodeInterface;
 
-/**
- * Implements hook_page_attachments().
- */
-function assessments_page_attachments(array &$attachments): void {
-  // Attach entity browser CSS fixes when the module is installed.
-  if (\Drupal::moduleHandler()->moduleExists('entity_browser')) {
-    $attachments['#attached']['library'][] = 'assessments/entity_browser';
-  }
-}
 
 /**
  * Implements hook_theme().
