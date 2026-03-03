@@ -17,6 +17,7 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\collection\Entity\CollectionInterface;
+use Drupal\joinup\Traits\AwaitTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
@@ -29,6 +30,7 @@ use PHPUnit\Framework\Assert;
  */
 class AssessmentsContext extends RawDrupalContext {
 
+  use AwaitTrait;
   use EntityTrait;
   use FileTrait;
   use UtilityTrait;
@@ -347,6 +349,43 @@ class AssessmentsContext extends RawDrupalContext {
     }
 
     throw new \Exception("Email not found to '$recipient_email' with subject '$expected_subject' and body '{$data['body']}'.");
+  }
+
+  /**
+   * Switches to an entity browser iframe.
+   *
+   * @param string $browserName
+   *   The machine name of the entity browser.
+   */
+  #[Then('I switch to the :browserName entity browser')]
+  public function switchToEntityBrowserIframe(string $browserName): void {
+    $iframeName = 'entity_browser_iframe_' . $browserName;
+    $this->waitForElement('css', "iframe[name=\"$iframeName\"]");
+    $this->getSession()->switchToIFrame($iframeName);
+    $this->waitForAjax();
+  }
+
+  /**
+   * Switches back from an entity browser iframe to the parent frame.
+   */
+  #[Then('I switch back from the entity browser')]
+  public function switchBackFromEntityBrowser(): void {
+    $this->getSession()->switchToIFrame();
+    $this->waitForNoElement('css', '.entity-browser-modal-iframe');
+  }
+
+  /**
+   * Selects an entity in the entity browser by checking its row checkbox.
+   *
+   * @param string $title
+   *   The title of the entity to select.
+   */
+  #[Then('I select :title in the entity browser')]
+  public function selectEntityInBrowser(string $title): void {
+    $row = $this->waitForElement('xpath', '//table//tr[contains(., "' . $title . '")]');
+    $checkbox = $row->find('css', 'input[type="checkbox"]');
+    Assert::assertNotNull($checkbox, sprintf('Checkbox not found in the row containing "%s".', $title));
+    $checkbox->check();
   }
 
   /**

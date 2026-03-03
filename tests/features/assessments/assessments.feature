@@ -71,23 +71,28 @@ Feature: Assessment Report Entity Management
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
 
     When I click "Interoperability solution" in the "Modal content" region
-    And I should see "Browse the solutions recommended by the Interoperable Europe Board."
-    Then I press "Select an Interoperability solution" in the "Modal content" region
+    And I press "Asset"
+    # Select an existing solution via entity browser.
+    Then I press "Select Interoperability Solution" in the "Modal content" region
+    And I switch to the "assessment_solutions" entity browser
+    And I select "Test solution" in the entity browser
+    And I press "Select solutions"
+    And I switch back from the entity browser
     And I wait for AJAX to finish
-    And I select "Test solution" option from "asset[form][0][entity_id]"
-    And I press "Add Interoperability solution" in the "Modal content" region
-    And I should see the text "Identify the interoperability solutions mandatory to use for the implementation of the assessed binding requirement" in the "Modal content" region
-    And I should see "Browse the solutions recommended by the Interoperable Europe Board."
-    And I should see the button "Select an Interoperability solution" in the "Modal content" region
-    And I press "Add a new Interoperability solution" in the "Modal content" region
-    And I fill in "Title of Solution" with "European Interoperability Framework (EIF)" in the "Modal content" region
-    And I enter "Description of EIF" in the "asset[form][1][description][0][value]" wysiwyg editor
-    And I fill in "Relevant website" with "http://no-abstract.com" in the "Modal content" region
-    Then I press "Add Interoperability solution" in the "Modal content" region
-    Then the "IEF table" table should contain the following columns:
-      | Title                                     | Relevant website       | Description        |
-      | Test solution                             | http://www.example.com | default abstract   |
-      | European Interoperability Framework (EIF) | http://no-abstract.com | Description of EIF |
+    And I should see "Test solution" in the "Modal content" region
+    And I should see the button "Select Interoperability Solution" in the "Modal content" region
+    # Create a new solution via entity browser.
+    And I press "Select Interoperability Solution" in the "Modal content" region
+    And I switch to the "assessment_solutions" entity browser
+    And I click "New solution"
+    And I wait for AJAX to finish
+    And I fill in "Title of Solution" with "European Interoperability Framework (EIF)"
+    And I enter "Description of EIF" in the "Description" wysiwyg editor
+    And I fill in "Relevant website" with "http://no-abstract.com"
+    And I press "Create"
+    And I switch back from the entity browser
+    And I wait for AJAX to finish
+    And I should see "European Interoperability Framework (EIF)" in the "Modal content" region
 
     When I click "Concerned public services" in the "Modal content" region
     And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
