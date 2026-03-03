@@ -88,11 +88,11 @@ function assessments_form_assessment_form_alter(array &$form, FormStateInterface
   $form['technical']['widget'][0]['#title_display'] = 'invisible';
   $form['other']['widget'][0]['#title_display'] = 'invisible';
 
-  // Register submit handler to create organizations after validation.
+  // Register the submit-handler to create organizations after validation.
   $handler = [ProvidedByWidget::class, 'submitCreateOrganisations'];
   $existingHandlers = $form['actions']['submit']['#submit'] ?? [];
   if (!in_array($handler, $existingHandlers, TRUE)) {
-    // Execute before entity builder to set org IDs before entity save.
+    // Execute before the entity-builder to set org IDs before the entity saves.
     array_unshift($form['actions']['submit']['#submit'], $handler);
   }
 }
