@@ -590,7 +590,7 @@ field_settings:
         - meta_entity
         - node
   organisation_origin:
-    label: 'Organisation origin'
+    label: 'Organisation country'
     datasource_id: 'entity:node'
     property_path: 'owner:entity:country'
     type: string
