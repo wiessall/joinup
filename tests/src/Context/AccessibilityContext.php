@@ -17,8 +17,8 @@ use Drupal\Component\Serialization\Yaml;
 use Drupal\Component\Utility\SortArray;
 use Drupal\Core\StreamWrapper\PublicStream;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
-use PHPUnit\Framework\Assert;
 
 /**
  * Step definitions for accessibility checks.
@@ -32,6 +32,7 @@ use PHPUnit\Framework\Assert;
  */
 class AccessibilityContext extends RawDrupalContext {
 
+  use AssertTrait;
   use JavascriptTrait;
 
   /**
@@ -176,7 +177,7 @@ class AccessibilityContext extends RawDrupalContext {
     if (!file_exists($file)) {
       \Drupal::service('file_system')->copy(DRUPAL_ROOT . '/../node_modules/axe-core/axe.min.js', 'public://a11y/');
     }
-    Assert::assertFileExists('public://a11y/axe.min.js');
+    $this->assertCondition(file_exists('public://a11y/axe.min.js'), 'The axe.min.js file does not exist at public://a11y/axe.min.js.');
     return \Drupal::service('file_url_generator')->generateString('public://a11y/axe.min.js');
   }
 
