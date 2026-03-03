@@ -38,6 +38,7 @@ interface JoinupUserDeletedInterface extends DestructableInterface {
    *   revisionable, NULL is set as revision user key.
    */
   public const array ENTITY_TYPES = [
+    'assessment' => ['uid', NULL],
     'comment' => ['uid', NULL],
     'node' => ['uid', 'revision_uid'],
   ];
