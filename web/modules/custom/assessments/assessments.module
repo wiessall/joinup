@@ -340,21 +340,6 @@ function assessments_entity_operation(EntityInterface $entity): array {
 }
 
 /**
- * After build callback to change "Create" to "Add" for asset form button.
- */
-function _assessments_process_asset_form_button(array $element, FormStateInterface $form_state): array {
-  // At this point, buildEntityFormActions has already run and created the
-  // button.
-  if (isset($element['actions']['ief_add_save'])) {
-    /** @var \Drupal\Core\StringTranslation\TranslatableMarkup $markup */
-    $markup = $element['actions']['ief_add_save']['#value'];
-    $arguments = $markup->getArguments();
-    $element['actions']['ief_add_save']['#value'] = new TranslatableMarkup('Add @type_singular', $arguments);
-  }
-  return $element;
-}
-
-/**
  * Implements hook_inline_entity_form_entity_form_alter().
  */
 function assessments_inline_entity_form_entity_form_alter(array &$entity_form, FormStateInterface &$formState): void {
