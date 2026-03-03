@@ -542,7 +542,12 @@ class AssessmentReportResource extends ResourceBase {
         if (!$solution) {
           $this->addError("$path/asset/$delta", "An asset (interoperability solution) with ID '$asset' does not exist");
         }
-        $solutions[] = $solution;
+        if ($solution->get('field_state')->value === 'published' && $solution->isPublished()) {
+          $solutions[] = $solution;
+        }
+        else {
+          $this->addError("$path/asset/$delta", "The asset (interoperability solution) with ID '$asset' is invalid");
+        }
         continue;
       }
 
