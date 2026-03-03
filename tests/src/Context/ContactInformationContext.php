@@ -11,6 +11,7 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\contact_information\ContactInformationEmailConfirmInterface;
 use Drupal\email_confirmer\EmailConfirmationInterface;
 use Drupal\joinup\Traits\AliasTranslatorTrait;
+use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\NodeTrait;
@@ -24,6 +25,7 @@ use Drupal\joinup\Traits\UserTrait;
 class ContactInformationContext extends RawDrupalContext {
 
   use AliasTranslatorTrait;
+  use AssertTrait;
   use EntityTrait;
   use MailCollectorTrait;
   use NodeTrait;

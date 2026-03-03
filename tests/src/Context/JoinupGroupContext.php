@@ -13,6 +13,7 @@ use Behat\Step\When;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
+use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
@@ -29,6 +30,7 @@ use Drupal\og\OgMembershipInterface;
  */
 class JoinupGroupContext extends RawDrupalContext {
 
+  use AssertTrait;
   use EntityTrait;
   use MailCollectorTrait;
   use TestingEntitiesTrait;
