@@ -5,18 +5,13 @@ declare(strict_types=1);
 namespace Drupal\Tests\assessments\ExistingSite;
 
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Tests\assessments\Traits\AssessmentEntityCreationTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\assessments\AssessmentInterface;
-use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\assessments\Entity\Assessment;
 use Drupal\assessments\Entity\AssessmentStatement;
 use Drupal\file\Entity\File;
-use Drupal\joinup_solution\Entity\Solution;
-use Drupal\og\OgGroupAudienceHelperInterface;
-use Drupal\paragraphs\Entity\Paragraph;
-use Drupal\paragraphs\ParagraphInterface;
 
 /**
  * Tests the assessment deletion.
@@ -25,20 +20,12 @@ use Drupal\paragraphs\ParagraphInterface;
  */
 class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
 
+  use AssessmentEntityCreationTrait;
+
   /**
    * The entity type manager.
    */
   private EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * The assessment vocabulary helper.
-   */
-  private AssessmentVocabularyHelper $assessmentVocabularyHelper;
-
-  /**
-   * The entity repository.
-   */
-  private EntityRepositoryInterface $entityRepository;
 
   /**
    * {@inheritdoc}
@@ -47,8 +34,6 @@ class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
     parent::setUp();
 
     $this->entityTypeManager = $this->container->get(EntityTypeManagerInterface::class);
-    $this->assessmentVocabularyHelper = $this->container->get(AssessmentVocabularyHelper::class);
-    $this->entityRepository = $this->container->get('entity.repository');
   }
 
   /**
@@ -106,7 +91,7 @@ class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
     // were deleted.
     $should_persist = static fn ($entity) => $entity instanceof AssessmentInterface && $entity->bundle() === 'public_organisation';
     $entities = \array_filter($this->cleanupEntities, static fn ($entity) => !$should_persist($entity));
-    $this->assertCount(17, $entities);
+    $this->assertCount(15, $entities);
     foreach ($entities as $entity) {
       $this->assertEntityNotExists($entity);
     }
@@ -129,8 +114,8 @@ class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
     $collectorAsset = $this->createSolutionAsset(AssessmentInterface::SOLUTION_COLLECTOR);
     $nonCollectorAsset = $this->createSolutionAsset(AssessmentInterface::GROUP_UUID);
 
-    $bindingRequirement1 = $this->createParagraphBindingRequirementWithAsset($collectorAsset);
-    $bindingRequirement1b = $this->createParagraphBindingRequirementWithAsset($nonCollectorAsset);
+    $bindingRequirement1 = $this->createParagraphBindingRequirement($collectorAsset);
+    $bindingRequirement1b = $this->createParagraphBindingRequirement($nonCollectorAsset);
     $report1 = Assessment::create([
       'type' => 'report',
       'name' => 'Orphaned asset test report 1',
@@ -143,7 +128,7 @@ class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
     $this->markEntityForCleanup($report1);
     $report1->save();
 
-    $bindingRequirement2 = $this->createParagraphBindingRequirementWithAsset($collectorAsset);
+    $bindingRequirement2 = $this->createParagraphBindingRequirement($collectorAsset);
     $report2 = Assessment::create([
       'type' => 'report',
       'name' => 'Orphaned asset test report 2',
@@ -167,118 +152,23 @@ class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
   }
 
   /**
-   * Creates a solution node inside the given collection.
-   */
-  private function createSolutionAsset(string $groupUuid): Solution {
-    $collection = $this->entityRepository->loadEntityByUuid('node', $groupUuid);
-    $asset = Solution::create([
-      'type' => 'solution',
-      'title' => 'Test Asset ' . $this->randomMachineName(),
-      OgGroupAudienceHelperInterface::DEFAULT_FIELD => ['target_id' => $collection->id()],
-      'field_state' => 'published',
-    ]);
-    $this->markEntityForCleanup($asset);
-    return $asset;
-  }
-
-  /**
-   * Creates a binding requirement paragraph referencing the given solution.
-   */
-  private function createParagraphBindingRequirementWithAsset(Solution $asset): ParagraphInterface {
-    $expression = Assessment::create([
-      'type' => 'expression',
-      'description' => ['value' => $this->randomString()],
-      'documented_in' => ['uri' => 'https://interoperable-europe.ec.europa.eu/'],
-    ]);
-    $this->markEntityForCleanup($expression);
-
-    $publicService = Assessment::create([
-      'type' => 'public_service',
-      'thematic_area' => ['entity' => $this->assessmentVocabularyHelper->getTermFromIdentifier('assess_public_service_area', 'general_public_services')],
-    ]);
-    $this->markEntityForCleanup($publicService);
-
-    $participation = Assessment::create([
-      'type' => 'participation',
-      'participant_type' => ['entity' => $this->assessmentVocabularyHelper->getTermFromIdentifier('assess_participant_type', 'european_union_agency')],
-    ]);
-    $this->markEntityForCleanup($participation);
-
-    $bindingRequirement = Paragraph::create([
-      'type' => 'binding_requirement',
-      'description' => ['value' => $this->randomString()],
-      'documented_in' => ['uri' => 'https://interoperable-europe.ec.europa.eu/'],
-      'expression' => ['entity' => $expression],
-      'affects' => ['entity' => $publicService],
-      'has_participation' => ['entity' => $participation],
-      'asset' => ['entity' => $asset],
-    ]);
-    $this->markEntityForCleanup($bindingRequirement);
-
-    return $bindingRequirement;
-  }
-
-  /**
-   * Creates a binding requirement paragraph with all dependencies.
-   */
-  private function createParagraphBindingRequirement(): ParagraphInterface {
-    $expression = Assessment::create([
-      'type' => 'expression',
-      'description' => ['value' => $this->randomString()],
-      'documented_in' => ['uri' => 'https://interoperable-europe.ec.europa.eu/'],
-    ]);
-    $this->markEntityForCleanup($expression);
-
-    $public_service = Assessment::create([
-      'type' => 'public_service',
-      'thematic_area' => ['entity' => $this->assessmentVocabularyHelper->getTermFromIdentifier('assess_public_service_area', 'general_public_services')],
-    ]);
-    $this->markEntityForCleanup($public_service);
-
-    $participation = Assessment::create([
-      'type' => 'participation',
-      'participant_type' => ['entity' => $this->assessmentVocabularyHelper->getTermFromIdentifier('assess_participant_type', 'european_union_agency')],
-    ]);
-    $this->markEntityForCleanup($participation);
-
-    $binding_requirement = Paragraph::create([
-      'type' => 'binding_requirement',
-      'description' => ['value' => $this->randomString()],
-      'documented_in' => ['uri' => 'https://interoperable-europe.ec.europa.eu/'],
-      'expression' => ['entity' => $expression],
-      'affects' => ['entity' => $public_service],
-      'has_participation' => ['entity' => $participation],
-      'requirement_documents' => ['entity' => $this->createFileDocument()],
-    ]);
-    $this->markEntityForCleanup($binding_requirement);
-
-    return $binding_requirement;
-  }
-
-  /**
-   * Creates assessment statements for all statement types.
+   * Creates an assessment statement of the given bundle.
    */
   private function createAssessmentStatement(string $bundle): AssessmentStatement {
     $statement = AssessmentStatement::create([
       'type' => $bundle,
-      'interpretation' => ['entity' => $this->assessmentVocabularyHelper->getTermFromIdentifier('assess_statement_interpretation', 'positive')],
-      'statement_type' => ['entity' => $this->assessmentVocabularyHelper->getTermFromIdentifier('assess_statement_type', $bundle)],
+      'interpretation' => [
+        'entity' => $this->getAssessmentVocabularyHelper()
+          ->getTermFromIdentifier('assess_statement_interpretation', 'positive'),
+      ],
+      'statement_type' => [
+        'entity' => $this->getAssessmentVocabularyHelper()
+          ->getTermFromIdentifier('assess_statement_type', $bundle),
+      ],
       'judgement' => ['value' => $this->randomString()],
     ]);
     $this->markEntityForCleanup($statement);
     return $statement;
-  }
-
-  /**
-   * Creates an assessment organisation.
-   */
-  private function createAssessmentOrganisation(): AssessmentInterface {
-    $organisation = Assessment::create([
-      'type' => 'public_organisation',
-      'name' => 'Test Organisation',
-    ]);
-    $this->markEntityForCleanup($organisation);
-    return $organisation;
   }
 
   /**
