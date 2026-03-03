@@ -362,7 +362,8 @@ class AssessmentsContext extends RawDrupalContext {
     $iframeName = 'entity_browser_iframe_' . $browserName;
     $this->waitForElement('css', "iframe[name=\"$iframeName\"]");
     $this->getSession()->switchToIFrame($iframeName);
-    $this->waitForAjax();
+    // Wait for the entity browser form to be fully loaded inside the iframe.
+    $this->waitForElement('css', '.entity-browser-form');
   }
 
   /**
