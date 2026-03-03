@@ -64,16 +64,9 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
     $solutions = [];
     foreach ($this->get('binding_requirement')->referencedEntities() as $bindingRequirement) {
       foreach ($bindingRequirement->get('asset')->referencedEntities() as $solution) {
-        if (!$solution instanceof SolutionInterface) {
-          continue;
-        }
-        try {
-          if ($solution->getGroup()->uuid() === AssessmentInterface::SOLUTION_COLLECTOR) {
-            $solutions[$solution->id()] = $solution;
-          }
-        }
-        catch (\Throwable) {
-          // Solution has no group; skip.
+        assert($solution instanceof SolutionInterface);
+        if ($solution->getGroup()->uuid() === AssessmentInterface::SOLUTION_COLLECTOR) {
+          $solutions[$solution->id()] = $solution;
         }
       }
     }
