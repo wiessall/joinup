@@ -12,7 +12,6 @@ use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
-use Drupal\assessments\AssessmentInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -67,25 +66,30 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
    * {@inheritdoc}
    */
   public function build(): array {
-    $get_url = function (string $type): string {
-      return Url::fromRoute('view.search.page_1', [], [
-        'query' => ['f' => ['type:' . $type]],
-      ])->toString();
-    };
-    $data = [
-      'collections' => [
+    $types = [
+      'collection' => [
+        'id' => 'collections',
         'label' => $this->t('Collections'),
         'plural_type' => $this->t('collections'),
-        'data' => $this->getCollectionContent(),
-        'url' => $get_url('collection'),
       ],
-      'solutions' => [
+      'solution' => [
+        'id' => 'solutions',
         'label' => $this->t('Solutions'),
         'plural_type' => $this->t('solutions'),
-        'data' => $this->getSolutionContent(),
-        'url' => $get_url('solution'),
       ],
     ];
+
+    $data = [];
+    foreach ($types as $bundle => $info) {
+      $data[$info['id']] = [
+        'label' => $info['label'],
+        'plural_type' => $info['plural_type'],
+        'data' => $this->getContentItems($bundle),
+        'url' => Url::fromRoute('view.search.page_1', [], [
+          'query' => ['f' => ['type:' . $bundle]],
+        ])->toString(),
+      ];
+    }
 
     return [
       '#theme' => 'explore_block',
@@ -146,54 +150,32 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
   }
 
   /**
-   * Returns the content items for the given query.
+   * Returns the content items for the given bundle.
    *
-   * @param \Drupal\Core\Entity\Query\QueryInterface $query
-   *   The query to execute.
+   * @param string $bundle
+   *   The bundle to query.
    *
    * @return array
    *   List of content with view mode "explore_item".
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  protected function getContentItems(QueryInterface $query): array {
+  protected function getContentItems(string $bundle): array {
     $content = [];
     $entity_storage = $this->entityTypeManager->getStorage('node');
     $view_builder = $this->entityTypeManager->getViewBuilder('node');
 
+    // Add a custom tag to allow other modules to alter the query without
+    // affecting dependencies between modules.
+    $tag = "explore_block_{$bundle}";
+    $query = $this->getContentQuery($bundle)->addTag($tag);
     $entities = $entity_storage->loadMultiple($query->execute());
     foreach ($entities as $node) {
       $content[] = $view_builder->view($node, $this->viewMode);
     }
 
     return $content;
-  }
-
-  /**
-   * Returns the 12 most recent collections as render arrays.
-   *
-   * @return array
-   *   List of content with view mode "explore_item".
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   */
-  protected function getCollectionContent(): array {
-    return $this->getContentItems($this->getContentQuery('collection'));
-  }
-
-  /**
-   * Returns the 12 most recent solutions of the given type as render arrays.
-   *
-   * @return array
-   *   List of content with view mode "explore_item".
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   */
-  protected function getSolutionContent(): array {
-    $query = $this->getContentQuery('solution');
-    $collector = $this->entityRepository->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR);
-    $query->condition('og_audience', $collector->id(), '<>');
-    return $this->getContentItems($query);
   }
 
 }
