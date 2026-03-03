@@ -25,7 +25,6 @@ use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Entity\Server;
 
-
 /**
  * Behat step definitions for testing searches.
  */

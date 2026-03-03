@@ -24,7 +24,6 @@ use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 
-
 /**
  * Behat step definitions to test common community content functionality.
  */

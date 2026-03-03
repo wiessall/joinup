@@ -19,7 +19,6 @@ use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 
-
 /**
  * Behat step definitions for functionalities provided by Joinup core module.
  */
