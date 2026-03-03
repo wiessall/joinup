@@ -534,19 +534,13 @@ class AssessmentReportResource extends ResourceBase {
    */
   protected function getAssets(array $assets, string $path): array {
     $storage = $this->entityTypeManager->getStorage('node');
-    $collector = $this->entityRepository
-      ->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR);
-
     $solutions = [];
     foreach ($assets as $delta => $asset) {
       if (is_string($asset)) {
         $solution = $this->entityRepository->loadEntityByUuid('node', $asset);
 
         if (!$solution) {
-          $this->addError(
-            "$path/asset/$delta",
-            "An asset (interoperability solution) with ID '$asset' does not exist"
-          );
+          $this->addError("$path/asset/$delta", "An asset (interoperability solution) with ID '$asset' does not exist");
         }
 
         $solutions[] = $solution;
@@ -556,10 +550,10 @@ class AssessmentReportResource extends ResourceBase {
       $solution = $storage->create([
         'type' => 'solution',
         'langcode' => $this->langcode,
-        'og_audience' => $collector,
+        'og_audience' => $this->entityRepository->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR),
         'title' => $asset['title'],
         'description' => $this->buildFormattedText($asset, 'description', 'content_editor'),
-        'landing_page' => $asset['landing_page'] ?? NULL,
+        'landing_page' => $asset['landing_page'],
         'field_state' => 'published',
       ]);
 
@@ -567,10 +561,7 @@ class AssessmentReportResource extends ResourceBase {
       $violations = $solution->validate();
 
       foreach ($violations->getByField('title') as $violation) {
-        $this->addError(
-          "$path/asset/$delta/title",
-          $violation->getMessage()->__toString()
-        );
+        $this->addError("$path/asset/$delta/title", $violation->getMessage()->__toString());
       }
 
       $solutions[] = $solution;
