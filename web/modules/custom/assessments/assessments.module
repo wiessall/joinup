@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\assessments\Plugin\Field\FieldWidget\ProvidedByWidget;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
@@ -102,10 +103,7 @@ function assessments_form_alter(array &$form, FormStateInterface $formState, str
   $form['other']['widget'][0]['#title_display'] = 'invisible';
 
   // Register submit handler to create organizations after validation.
-  $handler = [
-    'Drupal\assessments\Plugin\Field\FieldWidget\ProvidedByWidget',
-    'submitCreateOrganisations',
-  ];
+  $handler = [ProvidedByWidget::class, 'submitCreateOrganisations'];
   $existingHandlers = $form['actions']['submit']['#submit'] ?? [];
   if (!in_array($handler, $existingHandlers, TRUE)) {
     // Execute before entity builder to set org IDs before entity save.
