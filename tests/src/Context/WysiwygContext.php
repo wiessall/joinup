@@ -8,9 +8,9 @@ use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\UtilityTrait;
-use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\WysiwygTrait;
 
 /**
