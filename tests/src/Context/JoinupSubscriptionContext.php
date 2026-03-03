@@ -32,7 +32,6 @@ use Drupal\message_digest\Traits\MessageDigestTrait;
 use Drupal\og\OgMembershipInterface;
 use Drupal\user\Entity\User;
 
-
 /**
  * Behat step definitions for testing subscriptions.
  */

@@ -51,7 +51,6 @@ use Drupal\og\OgRoleInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use GuzzleHttp\Client;
 
-
 /**
  * Behat step definitions that are generally useful for the Joinup project.
  */
