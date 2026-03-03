@@ -27,8 +27,6 @@ use Drupal\assessments\Event\AssessmentReportEvent;
 use Drupal\assessments\NotificationEvents;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
-use Drupal\node\NodeInterface;
-
 
 /**
  * Implements hook_theme().
@@ -575,32 +573,6 @@ function assessments_node_create_access(AccountInterface $account, array $contex
   }
 
   return state_machine_permissions_node_create_access($account, $context, $entity_bundle);
-}
-
-/**
- * Implements hook_ENTITY_TYPE_create() for node entities.
- *
- * Sets the group for solutions created via Entity Browser before
- * the form is built, so the state machine transition guard can work.
- */
-function assessments_node_create(NodeInterface $node): void {
-  if ($node->bundle() !== 'solution') {
-    return;
-  }
-
-  // Check if this is within Entity Browser context for assessment solutions.
-  $route = \Drupal::routeMatch()->getRouteName();
-  if ($route !== 'entity_browser.assessment_solutions') {
-    return;
-  }
-
-  // Load the collector collection and set it on the solution.
-  $collection = \Drupal::service('entity.repository')->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR);
-  if ($collection instanceof CollectionInterface) {
-    /** @var \Drupal\joinup_solution\Entity\SolutionInterface $node */
-    $node->setGroup($collection);
-    $node->set('field_state', 'published');
-  }
 }
 
 /**
