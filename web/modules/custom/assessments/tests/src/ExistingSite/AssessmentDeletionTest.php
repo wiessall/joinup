@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\Tests\assessments\ExistingSite;
 
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\assessments\AssessmentInterface;
@@ -12,6 +13,8 @@ use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\assessments\Entity\Assessment;
 use Drupal\assessments\Entity\AssessmentStatement;
 use Drupal\file\Entity\File;
+use Drupal\joinup_solution\Entity\Solution;
+use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\ParagraphInterface;
 
@@ -33,6 +36,11 @@ class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
   private AssessmentVocabularyHelper $assessmentVocabularyHelper;
 
   /**
+   * The entity repository.
+   */
+  private EntityRepositoryInterface $entityRepository;
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp(): void {
@@ -40,6 +48,7 @@ class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
 
     $this->entityTypeManager = $this->container->get(EntityTypeManagerInterface::class);
     $this->assessmentVocabularyHelper = $this->container->get(AssessmentVocabularyHelper::class);
+    $this->entityRepository = $this->container->get('entity.repository');
   }
 
   /**
@@ -107,6 +116,106 @@ class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
     foreach ($entities as $entity) {
       $this->assertEntityExists($entity);
     }
+  }
+
+  /**
+   * Tests that SOLUTION_COLLECTOR assets are deleted only when orphaned.
+   *
+   * Assets belonging to other groups must never be deleted on report deletion.
+   *
+   * @covers \Drupal\assessments\Entity\AssessmentReport::postDelete
+   */
+  public function testOrphanedAssetDeletion(): void {
+    $collectorAsset = $this->createSolutionAsset(AssessmentInterface::SOLUTION_COLLECTOR);
+    $nonCollectorAsset = $this->createSolutionAsset(AssessmentInterface::GROUP_UUID);
+
+    $bindingRequirement1 = $this->createParagraphBindingRequirementWithAsset($collectorAsset);
+    $bindingRequirement1b = $this->createParagraphBindingRequirementWithAsset($nonCollectorAsset);
+    $report1 = Assessment::create([
+      'type' => 'report',
+      'name' => 'Orphaned asset test report 1',
+      'state' => 'draft',
+      'binding_requirement' => [
+        ['entity' => $bindingRequirement1],
+        ['entity' => $bindingRequirement1b],
+      ],
+    ]);
+    $this->markEntityForCleanup($report1);
+    $report1->save();
+
+    $bindingRequirement2 = $this->createParagraphBindingRequirementWithAsset($collectorAsset);
+    $report2 = Assessment::create([
+      'type' => 'report',
+      'name' => 'Orphaned asset test report 2',
+      'state' => 'draft',
+      'binding_requirement' => ['entity' => $bindingRequirement2],
+    ]);
+    $this->markEntityForCleanup($report2);
+    $report2->save();
+
+    // Collector asset is still referenced by report2; non-collector is never
+    // deleted.
+    $report1->delete();
+    $this->assertEntityExists($collectorAsset);
+    $this->assertEntityExists($nonCollectorAsset);
+
+    // Collector asset is now orphaned and must be deleted; non-collector
+    // persists.
+    $report2->delete();
+    $this->assertEntityNotExists($collectorAsset);
+    $this->assertEntityExists($nonCollectorAsset);
+  }
+
+  /**
+   * Creates a solution node inside the given collection.
+   */
+  private function createSolutionAsset(string $groupUuid): Solution {
+    $collection = $this->entityRepository->loadEntityByUuid('node', $groupUuid);
+    $asset = Solution::create([
+      'type' => 'solution',
+      'title' => 'Test Asset ' . $this->randomMachineName(),
+      OgGroupAudienceHelperInterface::DEFAULT_FIELD => ['target_id' => $collection->id()],
+      'field_state' => 'published',
+    ]);
+    $this->markEntityForCleanup($asset);
+    return $asset;
+  }
+
+  /**
+   * Creates a binding requirement paragraph referencing the given solution.
+   */
+  private function createParagraphBindingRequirementWithAsset(Solution $asset): ParagraphInterface {
+    $expression = Assessment::create([
+      'type' => 'expression',
+      'description' => ['value' => $this->randomString()],
+      'documented_in' => ['uri' => 'https://interoperable-europe.ec.europa.eu/'],
+    ]);
+    $this->markEntityForCleanup($expression);
+
+    $publicService = Assessment::create([
+      'type' => 'public_service',
+      'thematic_area' => ['entity' => $this->assessmentVocabularyHelper->getTermFromIdentifier('assess_public_service_area', 'general_public_services')],
+    ]);
+    $this->markEntityForCleanup($publicService);
+
+    $participation = Assessment::create([
+      'type' => 'participation',
+      'participant_type' => ['entity' => $this->assessmentVocabularyHelper->getTermFromIdentifier('assess_participant_type', 'european_union_agency')],
+    ]);
+    $this->markEntityForCleanup($participation);
+
+    $bindingRequirement = Paragraph::create([
+      'type' => 'binding_requirement',
+      'description' => ['value' => $this->randomString()],
+      'documented_in' => ['uri' => 'https://interoperable-europe.ec.europa.eu/'],
+      'expression' => ['entity' => $expression],
+      'affects' => ['entity' => $publicService],
+      'has_participation' => ['entity' => $participation],
+      'asset' => ['entity' => $asset],
+    ]);
+    $this->markEntityForCleanup($bindingRequirement);
+
+    return $bindingRequirement;
   }
 
   /**
