@@ -9,9 +9,9 @@ Feature: Assessments API
     """
     rows:
       - id: 993958d5-2892-413c-a239-3d7a66daa0a8
+        uri: http://data.europa.eu/w21/993958d5-2892-413c-a239-3d7a66daa0a8
         title: Citizen's Forum
         url: __base_url__/collection/portal-support/solution/citizens-forum
-        uri: http://data.europa.eu/w21/993958d5-2892-413c-a239-3d7a66daa0a8
     pager:
       current_page: 0
       total_items: 1
