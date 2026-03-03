@@ -11,7 +11,6 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Url;
 use Drupal\Core\Utility\TableSort;
 use Drupal\csv_serialization\Encoder\CsvEncoder;
-use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\rdf_sync\RdfSyncConnectionInterface;
@@ -78,6 +77,16 @@ class SubscribersReportController extends ControllerBase {
         'field' => 'news',
         'initial_click_sort' => 'desc',
       ],
+      [
+        'data' => $this->t('Distribution'),
+        'field' => 'distribution',
+        'initial_click_sort' => 'desc',
+      ],
+      [
+        'data' => $this->t('Release'),
+        'field' => 'release',
+        'initial_click_sort' => 'desc',
+      ],
     ];
 
     $data = $this->getSubscriberData();
@@ -138,6 +147,8 @@ class SubscribersReportController extends ControllerBase {
         [$this->t('Document'), $group_data['document']],
         [$this->t('Event'), $group_data['event']],
         [$this->t('News'), $group_data['news']],
+        [$this->t('Distribution'), $group_data['distribution']],
+        [$this->t('Release'), $group_data['release']],
       ];
       return [
         'table' => [
@@ -213,7 +224,13 @@ SQL;
       'bundle' => $group?->bundle() ?: '',
       'subscribers' => 0,
       'solution' => 0,
-    ] + array_fill_keys(CommunityContentHelper::BUNDLES, 0));
+      'discussion' => 0,
+      'document' => 0,
+      'event' => 0,
+      'news' => 0,
+      'distribution' => 0,
+      'release' => 0,
+    ]);
     $data = NestedArray::mergeDeepArray([$data, $subscribers], TRUE);
 
     // Retrieve the number of subscribers by bundle.
@@ -283,7 +300,7 @@ SQL;
    */
   protected function sortData(array &$data, ?string $sort = 'asc', ?string $order_by = 'label'): void {
     usort($data, function (array $a, array $b) use ($sort, $order_by): int {
-      $result = $a[$order_by] <=> $b[$order_by];
+      $result = ($a[$order_by] ?? '') <=> ($b[$order_by] ?? '');
       return $sort === 'asc' ? $result : -$result;
     });
   }
