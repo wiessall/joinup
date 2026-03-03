@@ -23,7 +23,6 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgMembershipInterface;
-use PHPUnit\Framework\Assert;
 
 /**
  * Behat step definitions for interacting with groups.
@@ -160,7 +159,7 @@ class JoinupGroupContext extends RawDrupalContext {
   public function assertAnonGroupJoinTrackingCookiePresent(string $label): void {
     $cookie = $this->getSession()->getCookie('join_group');
     $entity = $this->getEntityByLabel('node', $label);
-    Assert::assertEquals($entity->id(), $cookie, "A cookie was expected to track that an anonymous user wants to join the '$label' group.");
+    $this->assertSameValues($entity->id(), $cookie, "A cookie was expected to track that an anonymous user wants to join the '$label' group.");
   }
 
   /**
@@ -168,7 +167,7 @@ class JoinupGroupContext extends RawDrupalContext {
    */
   #[Then('the cookie that tracks which group I want to join should not be set')]
   public function assertNoAnonGroupJoinTrackingCookiePresent(): void {
-    Assert::assertEmpty($this->getSession()->getCookie('join_group'), 'No cookie should be set that tracks which group an anonymous user wants to join.');
+    $this->assertCondition(empty($this->getSession()->getCookie('join_group')), 'No cookie should be set that tracks which group an anonymous user wants to join.');
   }
 
   /**
@@ -361,9 +360,9 @@ class JoinupGroupContext extends RawDrupalContext {
         $body_processed = str_replace('@recipient_name', user_load_by_mail($member_email)->getDisplayName(), $body);
         $emails = $this->getEmailsBySubjectAndMail($announcement->getSubject(), $member_email);
         $email = reset($emails);
-        Assert::assertSame($member_email, $email['to']);
-        Assert::assertSame($subject, $email['subject']);
-        Assert::assertStringContainsString($body_processed, (string) $email['body']);
+        $this->assertSameValues($member_email, $email['to'], "Expected recipient '$member_email' but got '{$email['to']}'.");
+        $this->assertSameValues($subject, $email['subject'], "Expected subject '$subject' but got '{$email['subject']}'.");
+        $this->assertCondition(str_contains((string) $email['body'], $body_processed), 'The email body does not contain the expected content.');
         $offset += $limit;
       }
     }
@@ -417,7 +416,7 @@ class JoinupGroupContext extends RawDrupalContext {
     ?string $value = NULL,
     ?string $entityTypeId = NULL,
   ): void {
-    Assert::assertContains($group, ['collection', 'solution']);
+    $this->assertCondition(in_array($group, ['collection', 'solution']), "The group type must be 'collection' or 'solution', got '$group'.");
     $groupEntity = static::getEntityByLabel('node', $groupLabel, $group);
     \assert($groupEntity instanceof GroupInterface);
     $fieldName = preg_replace('/\s+/', '_', mb_strtolower($config));
@@ -433,11 +432,10 @@ class JoinupGroupContext extends RawDrupalContext {
       $groupEntity->getSetting($fieldName);
     }
     catch (\InvalidArgumentException) {
-      Assert::fail(sprintf(
-        "The '%s' setting does not exist. (Tried to get field name '%s'.)",
-        $config,
-        $fieldName,
-      ));
+      throw new ExpectationException(
+        sprintf("The '%s' setting does not exist. (Tried to get field name '%s'.)", $config, $fieldName),
+        $this->getSession()->getDriver(),
+      );
     }
 
     if (isset($value)) {
