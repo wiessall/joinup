@@ -27,10 +27,3 @@ field.widget.settings.conditional_link:
     default_option:
       type: string
       label: Default option
-
-entity_reference_selection.ies_solution:
-  type: entity_reference_selection.default
-  label: 'Interoperable Europe Solution selection handler settings'
-
-entity_reference_selection.ies_solution:*:
-  type: entity_reference_selection.ies_solution
