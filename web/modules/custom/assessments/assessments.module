@@ -73,6 +73,8 @@ function assessments_form_assessment_form_alter(array &$form, FormStateInterface
     return;
   }
 
+  $form['#attached']['library'][] = 'assessments/entity_browser';
+
   $form['cross_border'] = [
     '#type' => 'html_tag',
     '#tag' => 'h4',
