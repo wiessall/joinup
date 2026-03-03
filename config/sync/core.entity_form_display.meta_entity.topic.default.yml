@@ -10,6 +10,7 @@ dependencies:
     - image.style.thumbnail
     - meta_entity.type.topic
   module:
+    - entity_form_field_label
     - layout_paragraphs
     - svg_image
     - text
@@ -36,6 +37,18 @@ content:
       progress_indicator: throbber
       preview_image_style: thumbnail
     third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: -1
+    region: content
+    settings:
+      include_locked: false
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+        new_description: ''
+        rewrite_description: 0
   published:
     type: boolean_checkbox
     weight: 3
@@ -48,10 +61,17 @@ content:
     weight: 2
     region: content
     settings:
+      view_mode: default
       preview_view_mode: default
+      form_display_mode: default
       nesting_depth: 0
       require_layouts: 1
       empty_message: ''
+    third_party_settings: {  }
+  translation:
+    weight: 10
+    region: content
+    settings: {  }
     third_party_settings: {  }
 hidden:
   label: true

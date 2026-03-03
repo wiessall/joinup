@@ -86,3 +86,7 @@ field.value.joinup_group_reference_with_timestamp:
 field.formatter.settings.joinup_group_reference_with_timestamp:
   type: field.formatter.settings.entity_reference_label
   label: 'Reference with timestamp field formatter settings'
+
+field.widget.settings.joinup_group_reference_with_timestamp:
+  type: field.widget.settings.entity_reference_autocomplete
+  label: 'Reference with timestamp field widget settings'

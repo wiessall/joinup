@@ -12,6 +12,7 @@ dependencies:
     - meta_entity.type.eif_perspective
   module:
     - eif
+    - entity_form_field_label
     - text
 id: meta_entity.eif_perspective.default
 targetEntityType: meta_entity
@@ -55,6 +56,23 @@ content:
   eif_solution_type:
     type: options_buttons
     weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: -1
+    region: content
+    settings:
+      include_locked: false
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+        new_description: ''
+        rewrite_description: 0
+  translation:
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }
