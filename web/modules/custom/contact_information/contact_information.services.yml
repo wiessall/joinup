@@ -17,5 +17,3 @@ services:
   Drupal\contact_information\EventSubscriber\ContactInformationContactFormRouteSubscriber: { }
 
   Drupal\contact_information\EventSubscriber\ExceptionSubscriber: { }
-
-  Drupal\contact_information\EventSubscriber\ContactInformationAccessSubscriber: { }

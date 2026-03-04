@@ -19,5 +19,3 @@ services:
     parent: default_plugin_manager
 
   Drupal\joinup_licence\EventSubscriber\SpdxVocabularySubscriber: { }
-
-  Drupal\joinup_licence\EventSubscriber\SpdxLicenceAccessSubscriber: { }
