@@ -73,25 +73,19 @@ Feature: Assessment Report Entity Management
     When I click "Interoperability solution" in the "Modal content" region
     And I press "Asset"
     # Select an existing solution via entity browser.
-    Then I press "Select Interoperability Solution" in the "Modal content" region
-    And I switch to the "assessment_solutions" entity browser
+    And I press "Select Interoperability Solution" in the "Modal content" region to open the entity browser
     And I select "Test solution" in the entity browser
-    And I press "Select solutions"
-    And I switch back from the entity browser
-    And I wait for AJAX to finish
+    And I press "Select solutions" to close the entity browser
     And I should see "Test solution" in the "Modal content" region
     And I should see the button "Select Interoperability Solution" in the "Modal content" region
     # Create a new solution via entity browser.
-    And I press "Select Interoperability Solution" in the "Modal content" region
-    And I switch to the "assessment_solutions" entity browser
+    And I press "Select Interoperability Solution" in the "Modal content" region to open the entity browser
     And I click "New solution"
     And I wait until ".ck-editor__editable" element exists
     And I fill in "Title of Solution" with "European Interoperability Framework (EIF)"
     And I enter "Description of EIF" in the "Description" wysiwyg editor
     And I fill in "Relevant website" with "http://no-abstract.com"
-    And I press "Create"
-    And I switch back from the entity browser
-    And I wait for AJAX to finish
+    And I press "Create" to close the entity browser
     And I should see "European Interoperability Framework (EIF)" in the "Modal content" region
 
     When I click "Concerned public services" in the "Modal content" region
