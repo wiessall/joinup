@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Unit;
 
+use Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitHub;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
@@ -13,14 +17,12 @@ use Psr\Http\Client\ClientInterface;
 
 /**
  * Tests computing file raw URL.
- *
- * @group eu_oss_catalogue
  */
+#[CoversClass(GitHub::class)]
+#[Group('eu_oss_catalogue')]
 class FileRawUrlTest extends UnitTestCase {
 
   /**
-   * @covers \Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitHub::doGetFileRawUrl
-   * @dataProvider providerFileRawUrl
    *
    * @param string $class
    *   The coding hosting platform plugin class.
@@ -33,6 +35,7 @@ class FileRawUrlTest extends UnitTestCase {
    * @param string|null $expectedUrl
    *   The expected URL.
    */
+  #[DataProvider('providerFileRawUrl')]
   public function testFileRawUrl(
     string $class,
     string $platformUrl,

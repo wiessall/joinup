@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_translation\Functional;
 
+use PHPUnit\Framework\Attributes\Group;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\Queue\QueueInterface;
@@ -16,10 +17,9 @@ use Drupal\tmgmt_ec_etranslation\Plugin\QueueWorker\TranslationQueueWorker;
 
 /**
  * Tests auto translation.
- *
- * @group eu_oss_catalogue
- * @group eu_oss_translation
  */
+#[Group('eu_oss_catalogue')]
+#[Group('eu_oss_translation')]
 class AutoTranslationTest extends FetchTestBase {
 
   /**

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_community_content\Kernel;
 
+use PHPUnit\Framework\Attributes\Group;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Url;
 use Drupal\Tests\node\Traits\ContentTypeCreationTrait;
@@ -12,9 +13,8 @@ use Drupal\node\Entity\Node;
 
 /**
  * Tests the tokens provided by the joinup_community_content module.
- *
- * @group joinup_community_content
  */
+#[Group('joinup_community_content')]
 class CustomTokensTest extends TokenReplaceKernelTestBase {
 
   use ContentTypeCreationTrait;

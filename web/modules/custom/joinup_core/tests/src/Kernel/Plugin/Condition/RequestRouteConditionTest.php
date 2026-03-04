@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\Kernel\Plugin\Condition;
 
+use PHPUnit\Framework\Attributes\Group;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Routing\RouteObjectInterface;
 use Drupal\KernelTests\KernelTestBase;
@@ -14,13 +15,13 @@ use Symfony\Component\Routing\Route;
 /**
  * Tests that the Request Route condition plugin works as expected.
  *
- * @group Plugin
  *
  * @todo Replace this with the Route Condition module.
  *
  * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6062
  * @see https://www.drupal.org/project/route_condition
  */
+#[Group('Plugin')]
 class RequestRouteConditionTest extends KernelTestBase {
 
   /**
