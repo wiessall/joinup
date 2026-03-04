@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_pin\ExistingSite;
 
+use PHPUnit\Framework\Attributes\Group;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
@@ -12,9 +13,8 @@ use Drupal\og\OgGroupAudienceHelperInterface;
 
 /**
  * Tests pinnable entities.
- *
- * @group joinup_pin
  */
+#[Group('joinup_pin')]
 class PinnableEntitiesTest extends JoinupExistingSiteTestBase {
 
   /**

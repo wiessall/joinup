@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\ExistingSite;
 
+use PHPUnit\Framework\Attributes\Group;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\joinup_core\Entity\OutdatedContentInterface;
 
 /**
  * Tests outdated content.
- *
- * @group joinup_core
  */
+#[Group('joinup_core')]
 class OutdatedContentTest extends JoinupExistingSiteTestBase {
 
   /**

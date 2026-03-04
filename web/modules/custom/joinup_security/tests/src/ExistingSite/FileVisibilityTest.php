@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_security\ExistingSite;
 
+use PHPUnit\Framework\Attributes\Group;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
@@ -19,9 +20,8 @@ use Drupal\track_usage\Recorder;
 
 /**
  * Tests integration with the file_visibility module.
- *
- * @group joinup_security
  */
+#[Group('joinup_security')]
 class FileVisibilityTest extends JoinupExistingSiteTestBase {
 
   /**

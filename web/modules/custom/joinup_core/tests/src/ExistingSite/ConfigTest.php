@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\ExistingSite;
 
+use PHPUnit\Framework\Attributes\Group;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drush\TestTraits\DrushTestTrait;
 
 /**
  * Tests the Joinup configuration.
- *
- * @group joinup_core
  */
+#[Group('joinup_core')]
 class ConfigTest extends JoinupExistingSiteTestBase {
 
   use DrushTestTrait;

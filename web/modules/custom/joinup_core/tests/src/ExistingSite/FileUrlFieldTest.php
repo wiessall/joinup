@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\ExistingSite;
 
+use PHPUnit\Framework\Attributes\Group;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Tests\joinup_core\Traits\TestFileTrait;
@@ -15,9 +16,8 @@ use weitzman\LoginTrait\LoginTrait;
 
 /**
  * Provides methods specifically for testing File module's field handling.
- *
- * @group joinup_core
  */
+#[Group('joinup_core')]
 class FileUrlFieldTest extends JoinupExistingSiteTestBase {
 
   use TestFileTrait;

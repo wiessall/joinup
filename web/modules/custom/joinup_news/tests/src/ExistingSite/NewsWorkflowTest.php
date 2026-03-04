@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_news\ExistingSite;
 
+use PHPUnit\Framework\Attributes\Group;
 use Drupal\Tests\joinup_community_content\ExistingSite\CommunityContentWorkflowTestBase;
 
 /**
  * Tests CRUD operations and workflow transitions for the news node.
- *
- * @group workflow
  */
+#[Group('workflow')]
 class NewsWorkflowTest extends CommunityContentWorkflowTestBase {
 
   /**

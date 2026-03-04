@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\ExistingSite;
 
+use PHPUnit\Framework\Attributes\Group;
 use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\rdf_sync\Encoder\RdfSyncEncoder;
 
 /**
  * Test description.
- *
- * @group joinup_core
  */
+#[Group('joinup_core')]
 final class ExceptionHandleTest extends JoinupExistingSiteTestBase {
 
   /**

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_release\ExistingSite;
 
+use PHPUnit\Framework\Attributes\Group;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Tests\joinup_workflow\ExistingSite\JoinupWorkflowExistingSiteTestBase;
@@ -14,9 +15,8 @@ use Drupal\og\OgRoleInterface;
 
 /**
  * Tests crud operations and the workflow for the release entity.
- *
- * @group joinup_release
  */
+#[Group('joinup_release')]
 class ReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
 
   /**

@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_licence\ExistingSite;
 
+use PHPUnit\Framework\Attributes\Group;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\joinup_validation\Plugin\Validation\Constraint\UniqueFieldInBundleConstraint;
 
 /**
  * Tests the validation on the licence bundle entity.
- *
- * @group entity_validation
  */
+#[Group('entity_validation')]
 class UniqueSpdxReferenceTest extends JoinupExistingSiteTestBase {
 
   /**

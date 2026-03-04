@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\ExistingSite;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\File\FileSystemInterface;
@@ -17,6 +19,8 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * Tests assessment report POST resource.
  */
+#[CoversClass(\Drupal\joinup_api\OpenApiSchemaValidator::class)]
+#[CoversClass(\Drupal\assessments\Plugin\rest\resource\AssessmentReportResource::class)]
 class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
 
   /**
@@ -51,11 +55,8 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
    *
    * @param string $scenario
    *   The scenario identifier.
-   *
-   * @covers \Drupal\joinup_api\OpenApiSchemaValidator::validate
-   * @covers \Drupal\assessments\Plugin\rest\resource\AssessmentReportResource
-   * @dataProvider providerTestValidation
    */
+  #[DataProvider('providerTestValidation')]
   public function testValidation(string $scenario): void {
     // Create testing files.
     file_put_contents("public://assessment-test/evil.exe", "qux");
@@ -310,9 +311,8 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
 
   /**
    * Tests that existing organisations are reused if matched by label.
-   *
-   * @dataProvider organisationDeduplicationProvider
    */
+  #[DataProvider('organisationDeduplicationProvider')]
   public function testOrganisationDeduplication(string $variantName, int $expectedNewOrganisations): void {
     ['payload' => $basePayload] = $this->getTestCase('Valid with optional fields omitted');
 
