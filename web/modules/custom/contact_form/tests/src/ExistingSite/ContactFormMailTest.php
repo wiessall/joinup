@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\contact_form\Functional;
 
-use PHPUnit\Framework\Attributes\DataProvider;
 use Drupal\Tests\joinup_core\Traits\MailTestTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\joinup_notification\MailContentTypeHeader;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests emails sent on contact form submission including message digest email.

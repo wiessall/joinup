@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_community_content\ExistingSite;
 
-use PHPUnit\Framework\Attributes\Group;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Tests\joinup_test\Traits\NodeCreationTrait;
 use Drupal\Tests\joinup_workflow\ExistingSite\JoinupWorkflowExistingSiteTestBase;
@@ -15,6 +14,7 @@ use Drupal\node\NodeInterface;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgMembershipInterface;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Base setup for a Joinup workflow test for community content.

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_security\ExistingSite;
 
-use PHPUnit\Framework\Attributes\Group;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
@@ -17,6 +16,7 @@ use Drupal\file_visibility\FileVisibility;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\og\Entity\OgRole;
 use Drupal\track_usage\Recorder;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests integration with the file_visibility module.

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_eulogin\ExistingSite;
 
-use PHPUnit\Framework\Attributes\Group;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\Tests\joinup_test\Traits\NodeCreationTrait;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the 403 redirection cache.
@@ -17,7 +17,6 @@ use Drupal\Tests\joinup_test\Traits\NodeCreationTrait;
  * anonymous access denied pages pages to EU Login login page. This redirect
  * response is cached. This test makes sure that the redirect cache is correctly
  * invalidated when the entity visibility changes.
- *
  *
  * @see \Drupal\joinup_eulogin\Event\Subscriber\JoinupEuLoginAnonymous403Subscriber
  */

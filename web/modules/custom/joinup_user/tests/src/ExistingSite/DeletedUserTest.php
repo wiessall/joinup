@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_user\ExistingSite;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\joinup_collection\JoinupCollectionHelper;
@@ -16,7 +13,13 @@ use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\node\NodeStorageInterface;
 use Drupal\user\UserInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
+/**
+ *
+ */
 #[CoversClass(\Drupal\joinup_user\JoinupUserDeleted::class)]
 #[CoversClass(\joinup_user_user_access::class)]
 #[Group('joinup_user')]

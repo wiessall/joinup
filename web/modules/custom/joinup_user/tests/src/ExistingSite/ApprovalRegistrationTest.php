@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_user\Functional;
 
-use PHPUnit\Framework\Attributes\Group;
 use Drupal\Tests\cas\Traits\CasTestTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests auto-registration with admin approval on registration.
