@@ -453,6 +453,10 @@ function assessments_module_implements_alter(array &$implementations, $hook): vo
  * Implements hook_ENTITY_TYPE_create_access().
  */
 function assessments_node_create_access(AccountInterface $account, array $context, string $entityBundle): AccessResultInterface {
+  if ($entityBundle !== 'solution') {
+    return state_machine_permissions_node_create_access($account, $context, $entityBundle);
+  }
+
   // Allow access from the entity browser used for assessment solutions.
   if (\Drupal::routeMatch()->getRouteName() === 'entity_browser.assessment_solutions') {
     return AccessResult::allowed();
