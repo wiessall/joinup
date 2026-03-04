@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_user\ExistingSite;
 
-use Drupal\joinup_user\JoinupUserDeleted;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_community_content\CommunityContentHelper;
+use Drupal\joinup_user\JoinupUserDeleted;
 use Drupal\joinup_user\JoinupUserDeletedInterface;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;

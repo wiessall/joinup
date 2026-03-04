@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\ExistingSite;
 
-use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\assessments\Entity\Assessment;
+use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\joinup_solution\Entity\Solution;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\paragraphs\Entity\Paragraph;

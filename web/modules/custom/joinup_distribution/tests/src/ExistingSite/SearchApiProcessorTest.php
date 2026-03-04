@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_distribution\ExistingSite;
 
-use Drupal\joinup_distribution\Plugin\search_api\processor\IndexDistributionData;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\Tests\joinup_test\Traits\ParagraphTrait;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
+use Drupal\joinup_distribution\Plugin\search_api\processor\IndexDistributionData;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 
