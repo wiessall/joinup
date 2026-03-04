@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_release\ExistingSite;
 
-use PHPUnit\Framework\Attributes\Group;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Tests\joinup_workflow\ExistingSite\JoinupWorkflowExistingSiteTestBase;
@@ -12,6 +11,7 @@ use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\OgRoleInterface;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests crud operations and the workflow for the release entity.

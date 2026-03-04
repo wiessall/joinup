@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_licence\ExistingSite;
 
-use PHPUnit\Framework\Attributes\Group;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\joinup_validation\Plugin\Validation\Constraint\UniqueFieldInBundleConstraint;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the validation on the licence bundle entity.

@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_html_stripper\Unit;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
 use Drupal\joinup_html_stripper\Plugin\Filter\AccessibilityFilter;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Tests the accessibility filter.
- *
- *
  */
 #[CoversClass(\Drupal\joinup_html_stripper\Plugin\Filter\AccessibilityFilter::class)]
 #[Group('joinup_html_stripper')]

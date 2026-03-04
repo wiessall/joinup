@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_pin\ExistingSite;
 
-use PHPUnit\Framework\Attributes\Group;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
 use Drupal\joinup_news\Entity\NewsInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests pinnable entities.

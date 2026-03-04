@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\ExistingSite;
 
-use PHPUnit\Framework\Attributes\Group;
 use Drupal\Core\Extension\Extension;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests that our custom blocks satisfy at least one of the available contexts.
- *
  *
  * @todo Shouldn't this be a Kernel test?
  */

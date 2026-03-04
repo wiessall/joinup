@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\ExistingSite;
 
-use PHPUnit\Framework\Attributes\Group;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\joinup_core\Entity\OutdatedContentInterface;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests outdated content.

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\ExistingSite;
 
-use PHPUnit\Framework\Attributes\Group;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Tests\joinup_core\Traits\TestFileTrait;
@@ -12,6 +11,7 @@ use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\file\FileInterface;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\node\Entity\Node;
+use PHPUnit\Framework\Attributes\Group;
 use weitzman\LoginTrait\LoginTrait;
 
 /**

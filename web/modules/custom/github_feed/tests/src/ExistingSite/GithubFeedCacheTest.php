@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\github_feed\ExistingSite;
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
@@ -14,6 +12,8 @@ use Drupal\Tests\node\Traits\NodeCreationTrait;
 use Drupal\joinup_test\Plugin\ServiceMock\GitHubCom;
 use Drupal\joinup_test\Traits\GitHubApiMockTrait;
 use Drupal\joinup_test_time\Traits\TestTimeTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests caching of rendered GitHub feeds.

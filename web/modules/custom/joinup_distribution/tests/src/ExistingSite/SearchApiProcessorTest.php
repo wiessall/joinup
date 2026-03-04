@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_distribution\ExistingSite;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\Tests\joinup_test\Traits\ParagraphTrait;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
+/**
+ *
+ */
 #[CoversClass(\Drupal\joinup_distribution\Plugin\search_api\processor\IndexDistributionData::appendDistributionData)]
 #[Group('joinup_distribution')]
 class SearchApiProcessorTest extends JoinupExistingSiteTestBase {

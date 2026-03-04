@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\ExistingSite;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\File\FileSystemInterface;
@@ -14,6 +12,8 @@ use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\consumers\Entity\Consumer;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use GuzzleHttp\RequestOptions;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Http\Message\ResponseInterface;
 
 /**

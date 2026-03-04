@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\ExistingSite;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\assessments\AssessmentInterface;
@@ -15,6 +13,8 @@ use Drupal\joinup_solution\Entity\Solution;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\ParagraphInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the assessment workflow and related entity publication.
