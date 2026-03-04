@@ -76,11 +76,11 @@ final class ApiExceptionSubscriber implements EventSubscriberInterface {
    *   TRUE if the subscriber should handle the request.
    */
   private function appliesToRequest(string $path, array $acceptableTypes): bool {
-    if (!str_starts_with($path, '/api/')) {
+    if (!str_starts_with($path, '/api/') && !str_starts_with($path, '/oauth/')) {
       return FALSE;
     }
 
-    return is_countable($acceptableTypes) && count($acceptableTypes) === 1 && $acceptableTypes[0] === 'application/json';
+    return is_countable($acceptableTypes) && count($acceptableTypes) === 1 && ($acceptableTypes[0] === 'application/json' || $acceptableTypes[0] === '*/*');
   }
 
   /**
