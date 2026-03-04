@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\ExistingSite;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
@@ -17,9 +19,10 @@ use Drupal\paragraphs\ParagraphInterface;
 
 /**
  * Tests the assessment deletion.
- *
- * @group assessments
  */
+#[CoversClass(\Drupal\assessments\Entity\AssessmentReport::class)]
+#[CoversClass(\Drupal\assessments\Entity\BindingRequirementParagraph::class)]
+#[Group('assessments')]
 class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
 
   /**
@@ -44,11 +47,6 @@ class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
 
   /**
    * Tests assessment report deletion.
-   *
-   * @covers \Drupal\assessments\Entity\AssessmentReport::postSave
-   * @covers \Drupal\assessments\Entity\AssessmentReport::postDelete
-   * @covers \Drupal\assessments\Entity\BindingRequirementParagraph::postSave
-   * @covers \Drupal\assessments\Entity\BindingRequirementParagraph::postDelete
    */
   public function testAssessmentEntityDelete(): void {
     // Create assessment report with all sub-entities.

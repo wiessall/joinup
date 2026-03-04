@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\ExistingSite;
 
+use PHPUnit\Framework\Attributes\Group;
 use Drupal\Core\Extension\Extension;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 
 /**
  * Tests that our custom blocks satisfy at least one of the available contexts.
  *
- * @group joinup_core
  *
  * @todo Shouldn't this be a Kernel test?
  */
+#[Group('joinup_core')]
 class BlockContextSatisfactionTest extends JoinupExistingSiteTestBase {
 
   /**

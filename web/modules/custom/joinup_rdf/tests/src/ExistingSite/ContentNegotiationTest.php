@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_rdf\ExistingSite;
 
+use PHPUnit\Framework\Attributes\Group;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\rdf_sync\Encoder\RdfSyncEncoder;
@@ -11,9 +12,8 @@ use EasyRdf\Format;
 
 /**
  * Tests content negotiation.
- *
- * @group joinup_rdf
  */
+#[Group('joinup_rdf')]
 class ContentNegotiationTest extends JoinupExistingSiteTestBase {
 
   /**

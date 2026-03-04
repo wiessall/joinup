@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_eulogin\ExistingSite;
 
+use PHPUnit\Framework\Attributes\Group;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\Tests\joinup_test\Traits\NodeCreationTrait;
 
@@ -17,10 +18,10 @@ use Drupal\Tests\joinup_test\Traits\NodeCreationTrait;
  * response is cached. This test makes sure that the redirect cache is correctly
  * invalidated when the entity visibility changes.
  *
- * @group joinup_eulogin
  *
  * @see \Drupal\joinup_eulogin\Event\Subscriber\JoinupEuLoginAnonymous403Subscriber
  */
+#[Group('joinup_eulogin')]
 class Anonymous403RedirectCacheTest extends JoinupExistingSiteTestBase {
 
   use NodeCreationTrait;

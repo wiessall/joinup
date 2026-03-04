@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\contact_information\ExistingSite;
 
+use PHPUnit\Framework\Attributes\Group;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Tests\joinup_workflow\ExistingSite\JoinupWorkflowExistingSiteTestBase;
 
 /**
  * Tests the workflow for the contact information entity.
- *
- * @group contact_information
  */
+#[Group('contact_information')]
 class ContactInformationWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
 
   /**

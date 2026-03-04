@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_user\ExistingSite;
 
+use PHPUnit\Framework\Attributes\Group;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use weitzman\LoginTrait\LoginTrait;
 
 /**
  * Tests that a warning is shown on the user profile of users with many groups.
- *
- * @group joinup_user
  */
+#[Group('joinup_user')]
 class ProfileOverviewTest extends JoinupExistingSiteTestBase {
 
   use LoginTrait;

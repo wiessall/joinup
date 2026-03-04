@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\owner\ExistingSite;
 
+use PHPUnit\Framework\Attributes\Group;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Tests\joinup_workflow\ExistingSite\JoinupWorkflowExistingSiteTestBase;
 
 /**
  * Tests crud operations and the workflow for the owner rdf entity.
- *
- * @group owner
  */
+#[Group('owner')]
 class OwnerWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
 
   /**

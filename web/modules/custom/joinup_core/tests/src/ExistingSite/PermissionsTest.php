@@ -4,22 +4,22 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\ExistingSite;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 
 /**
  * Tests that used permissions are defined.
  *
  * @see https://www.drupal.org/node/3193348
- *
- * @group joinup_core
  */
+#[Group('joinup_core')]
 class PermissionsTest extends JoinupExistingSiteTestBase {
 
   /**
    * Tests that roles permissions are defined.
-   *
-   * @dataProvider providerPermissionTypes
    */
+  #[DataProvider('providerPermissionTypes')]
   public function testPermissionsAreDefined(string $entity_type_id, string $label): void {
     $output = [];
     $all_permissions = $this->getAllPermissions($entity_type_id);

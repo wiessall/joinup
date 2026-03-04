@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\ExistingSite;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\Tests\token\Functional\TokenTestTrait;
 use Drupal\node\Entity\Node;
@@ -27,9 +28,8 @@ class TokenTest extends JoinupExistingSiteTestBase {
    *   The title of the entity.
    * @param string $expected_token
    *   The expected token replacement for the 'short_id_or_title'.
-   *
-   * @dataProvider shortIdOrTitleDataProvider
    */
+  #[DataProvider('shortIdOrTitleDataProvider')]
   public function testShortIdOrTitleToken(string $bundle, string $short_id, string $title, string $expected_token): void {
     $entity = Node::create([
       'type' => $bundle,

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_user\ExistingSite;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\joinup_collection\JoinupCollectionHelper;
@@ -14,10 +17,9 @@ use Drupal\node\NodeInterface;
 use Drupal\node\NodeStorageInterface;
 use Drupal\user\UserInterface;
 
-/**
- * @coversDefaultClass \Drupal\joinup_user\JoinupUserDeleted
- * @group joinup_user
- */
+#[CoversClass(\Drupal\joinup_user\JoinupUserDeleted::class)]
+#[CoversClass(\joinup_user_user_access::class)]
+#[Group('joinup_user')]
 class DeletedUserTest extends JoinupExistingSiteTestBase {
 
   /**
@@ -28,20 +30,13 @@ class DeletedUserTest extends JoinupExistingSiteTestBase {
   protected array $nodes = [];
 
   /**
-   * @covers ::onUserDelete
-   * @covers ::destruct
-   * @covers ::getFullName
-   * @covers ::isAccountDeleted
-   * @covers ::getDeletedUserPseudoAccount
-   * @covers ::onEntityDelete
-   * @covers \joinup_user_user_access
-   * @dataProvider fullNameCases
    *
    * @param array $initialName
    *   Initial username, first name, family name, expected full name.
    * @param array $updatedName
    *   Updated username, first name, family name, expected full name.
    */
+  #[DataProvider('fullNameCases')]
   public function testFullName(array $initialName, array $updatedName): void {
     [$username, $firstName, $familyName, $expectedFullName] = $initialName;
     $account = $this->createUser([], $username, FALSE, [
