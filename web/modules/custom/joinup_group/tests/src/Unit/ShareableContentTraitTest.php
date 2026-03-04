@@ -7,7 +7,6 @@ namespace Drupal\Tests\joinup_group\Unit;
 use Drupal\Tests\UnitTestCase;
 use Drupal\joinup_group\Entity\ShareableContentTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 
@@ -30,7 +29,6 @@ class ShareableContentTraitTest extends UnitTestCase {
    *   The expected result, also inY-n-j format.
    */
   #[DataProvider('providerTest')]
-  #[CoversMethod(ShareableContentTrait::class, 'someMonthsLater')]
   public function testSomeMonthLater(string $initial, int $months, string $expected): void {
     $timestamp = (new \DateTime("$initial", new \DateTimeZone('UTC')))->getTimestamp();
 
