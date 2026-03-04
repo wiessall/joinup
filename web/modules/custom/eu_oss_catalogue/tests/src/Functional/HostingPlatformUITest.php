@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
-use PHPUnit\Framework\Attributes\Group;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\user\UserInterface;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Hosting platform UI test.

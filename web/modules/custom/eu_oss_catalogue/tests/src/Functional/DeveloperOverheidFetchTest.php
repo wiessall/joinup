@@ -20,6 +20,9 @@ class DeveloperOverheidFetchTest extends FetchTestBase {
     'oss_category' => ['digital-citizenship'],
   ];
 
+  /**
+   * Tests the import of solutions from Developer Overheid.
+   */
   public function testImport(): void {
     $this->fetchSolutions('developer_overheid', 3);
 

@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Kernel;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\eu_oss_catalogue\Traits\LoggerTestTrait;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\Bitbucket;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the Bitbucket hosting platform plugin.
- *
  *
  * @see \Drupal\eu_oss_catalogue_test\Plugin\ServiceMock\Bitbucket
  */
@@ -156,8 +155,6 @@ class BitbucketHostingPlatformPluginTest extends KernelTestBase implements Logge
    *   The URL of the project.
    * @param bool $expected
    *   The expected result.
-   *
-   *
    */
   #[DataProvider('providerTestIsFileRawUrl')]
   public function testIsFileRawUrl(string $url, string $projectUrl, bool $expected): void {
@@ -224,8 +221,6 @@ class BitbucketHostingPlatformPluginTest extends KernelTestBase implements Logge
    *   The expected URL, or NULL if the file cannot be found in the repository.
    * @param array|null $expectedLogs
    *   The expected logged messages.
-   *
-   *
    */
   #[DataProvider('providerTestGetFileRawUrl')]
   public function testGetFileRawUrl(

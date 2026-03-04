@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Unit;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
 use Drupal\Tests\UnitTestCase;
 use Drupal\eu_oss_catalogue\Model\GitUri;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests GitUri.
@@ -24,8 +24,6 @@ class GitUriTest extends UnitTestCase {
    *   The URI string to test with.
    * @param array $expected
    *   The expected values in the GitUri object, as array.
-   *
-   *
    */
   #[DataProvider('providerFromUriString')]
   public function testFromUriString(string $uriString, ?array $expected): void {

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_translation\Functional;
 
-use PHPUnit\Framework\Attributes\Group;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\Queue\QueueInterface;
@@ -14,6 +13,7 @@ use Drupal\Tests\eu_oss_catalogue\Functional\FetchTestBase;
 use Drupal\eu_oss_translation\Plugin\QueueWorker\TranslationRequester;
 use Drupal\tmgmt\TranslatorInterface;
 use Drupal\tmgmt_ec_etranslation\Plugin\QueueWorker\TranslationQueueWorker;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests auto translation.

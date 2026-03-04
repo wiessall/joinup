@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_i18n\ExistingSite;
 
-use PHPUnit\Framework\Attributes\Group;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\user\UserInterface;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Interface text language detection.

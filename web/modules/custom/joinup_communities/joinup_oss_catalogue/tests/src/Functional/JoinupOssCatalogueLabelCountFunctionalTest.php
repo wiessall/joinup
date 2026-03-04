@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_oss_catalogue\Functional;
 
-use PHPUnit\Framework\Attributes\Group;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\node\Entity\NodeType;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests count labels for `oss_solution` and `oss_contractor`.
