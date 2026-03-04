@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\Kernel;
 
+use PHPUnit\Framework\Attributes\Group;
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
@@ -14,9 +15,8 @@ use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Tests Joinup sync configuration.
- *
- * @group joinup_core
  */
+#[Group('joinup_core')]
 class JoinupConfigSyncTest extends KernelTestBase {
 
   use SchemaCheckTestTrait;

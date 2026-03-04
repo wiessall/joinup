@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
+use PHPUnit\Framework\Attributes\Group;
 use Behat\Mink\Element\NodeElement;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
 
 /**
  * Tests the OSS solution listing page.
- *
- * @group eu_oss_catalogue
  */
+#[Group('eu_oss_catalogue')]
 class OssSolutionListingPageTest extends FetchTestBase {
 
   /**

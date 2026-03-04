@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\custom_page\Kernel;
 
+use PHPUnit\Framework\Attributes\Group;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\node\Entity\Node;
@@ -14,9 +15,8 @@ use Drupal\og_menu\Entity\OgMenuInstance;
 
 /**
  * Tests the custom page OG menu link updater service.
- *
- * @group custom_page
  */
+#[Group('custom_page')]
 class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
 
   /**

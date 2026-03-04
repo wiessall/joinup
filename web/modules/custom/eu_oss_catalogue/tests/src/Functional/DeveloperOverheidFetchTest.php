@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
+use PHPUnit\Framework\Attributes\Group;
+
 /**
  * EU OSS Catalogue test.
- *
- * @group eu_oss_catalogue
  */
+#[Group('eu_oss_catalogue')]
 class DeveloperOverheidFetchTest extends FetchTestBase {
 
   /**
@@ -19,9 +20,6 @@ class DeveloperOverheidFetchTest extends FetchTestBase {
     'oss_category' => ['digital-citizenship'],
   ];
 
-  /**
-   * @covers
-   */
   public function testImport(): void {
     $this->fetchSolutions('developer_overheid', 3);
 

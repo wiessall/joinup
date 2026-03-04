@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
+use PHPUnit\Framework\Attributes\Group;
 use Drupal\eu_oss_catalogue\Entity\CatalogueType;
 use Drupal\eu_oss_catalogue\Entity\HostingPlatformConfig;
 
 /**
  * Tests the GitLab code hosting provider.
- *
- * @group eu_oss_catalogue
  */
+#[Group('eu_oss_catalogue')]
 class GitLabFetchTest extends FetchTestBase {
 
   /**

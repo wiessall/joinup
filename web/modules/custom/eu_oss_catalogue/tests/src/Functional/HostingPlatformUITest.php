@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
+use PHPUnit\Framework\Attributes\Group;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\user\UserInterface;
 
 /**
  * Hosting platform UI test.
- *
- * @group eu_oss_catalogue
  */
+#[Group('eu_oss_catalogue')]
 class HostingPlatformUITest extends BrowserTestBase {
 
   /**

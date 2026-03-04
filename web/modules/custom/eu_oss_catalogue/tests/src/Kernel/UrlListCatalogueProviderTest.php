@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Kernel;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\eu_oss_catalogue\ApiGuesserInterface;
@@ -22,9 +24,8 @@ use Prophecy\Prophecy\ProphecyInterface;
 
 /**
  * Tests the URL list provider base class.
- *
- * @coversDefaultClass \Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider\UrlListCatalogueProviderBase
  */
+#[CoversClass(UrlListCatalogueProviderBase::class)]
 class UrlListCatalogueProviderTest extends KernelTestBase {
 
   /**
@@ -89,9 +90,8 @@ class UrlListCatalogueProviderTest extends KernelTestBase {
    *   The expected results (projects) as array.
    *
    * @throws \Drupal\eu_oss_catalogue\Exception\ProviderFetchException
-   *
-   * @dataProvider providerFetchTest
    */
+  #[DataProvider('providerFetchTest')]
   public function testPlugin(
     array $apiResponses,
     array $pluginConfiguration,

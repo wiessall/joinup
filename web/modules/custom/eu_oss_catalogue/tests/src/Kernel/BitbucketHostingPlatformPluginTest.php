@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Kernel;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\KernelTests\KernelTestBase;
@@ -14,11 +17,11 @@ use Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\Bitbucket;
 /**
  * Tests the Bitbucket hosting platform plugin.
  *
- * @coversDefaultClass \Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\Bitbucket
  *
  * @see \Drupal\eu_oss_catalogue_test\Plugin\ServiceMock\Bitbucket
- * @group eu_oss_catalogue
  */
+#[CoversClass(Bitbucket::class)]
+#[Group('eu_oss_catalogue')]
 class BitbucketHostingPlatformPluginTest extends KernelTestBase implements LoggerChannelInterface {
 
   use LoggerTestTrait;
@@ -154,10 +157,9 @@ class BitbucketHostingPlatformPluginTest extends KernelTestBase implements Logge
    * @param bool $expected
    *   The expected result.
    *
-   * @covers ::isFileRawUrl
    *
-   * @dataProvider providerTestIsFileRawUrl
    */
+  #[DataProvider('providerTestIsFileRawUrl')]
   public function testIsFileRawUrl(string $url, string $projectUrl, bool $expected): void {
     $this->assertSame(
       $expected,
@@ -223,11 +225,9 @@ class BitbucketHostingPlatformPluginTest extends KernelTestBase implements Logge
    * @param array|null $expectedLogs
    *   The expected logged messages.
    *
-   * @covers ::doGetFileRawUrl
-   * @covers ::getFileRawUrl
    *
-   * @dataProvider providerTestGetFileRawUrl
    */
+  #[DataProvider('providerTestGetFileRawUrl')]
   public function testGetFileRawUrl(
     string $source,
     string $projectUrl,
