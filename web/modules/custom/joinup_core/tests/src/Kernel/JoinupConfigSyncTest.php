@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\Kernel;
 
-use PHPUnit\Framework\Attributes\Group;
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\SchemaCheckTestTrait;
 use Drupal\config_test\TestInstallStorage;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**

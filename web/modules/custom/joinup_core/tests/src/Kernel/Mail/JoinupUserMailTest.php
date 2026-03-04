@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\Kernel\Mail;
 
-use PHPUnit\Framework\Attributes\Group;
 use Drupal\joinup_notification\MailContentTypeHeader;
 use Drupal\user\UserInterface;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests user password reset email.

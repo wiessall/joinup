@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_community_content\Kernel;
 
-use PHPUnit\Framework\Attributes\Group;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Url;
 use Drupal\Tests\node\Traits\ContentTypeCreationTrait;
 use Drupal\Tests\system\Kernel\Token\TokenReplaceKernelTestBase;
 use Drupal\node\Entity\Node;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the tokens provided by the joinup_community_content module.

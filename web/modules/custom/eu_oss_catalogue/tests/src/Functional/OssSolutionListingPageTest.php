@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
-use PHPUnit\Framework\Attributes\Group;
 use Behat\Mink\Element\NodeElement;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the OSS solution listing page.
