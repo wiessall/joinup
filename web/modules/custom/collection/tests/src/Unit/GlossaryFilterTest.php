@@ -6,15 +6,16 @@ namespace Drupal\Tests\joinup_collection\Unit;
 
 use Drupal\Component\Utility\Html;
 use Drupal\collection\Plugin\Filter\Glossary;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Tests the collection glossary filter.
- *
- * @group joinup_collection
- *
- * @coversDefaultClass \Drupal\collection\Plugin\Filter\Glossary
  */
+#[Group('joinup_collection')]
+#[CoversClass(\Drupal\collection\Plugin\Filter\Glossary::class)]
 class GlossaryFilterTest extends TestCase {
 
   /**
@@ -27,10 +28,8 @@ class GlossaryFilterTest extends TestCase {
    *
    * @throws \ReflectionException
    *   If creating the reflection class fails.
-   *
-   * @covers ::isLinkText
-   * @dataProvider provideTestIsLinkTextDate
    */
+  #[DataProvider('provideTestIsLinkTextDate')]
   public function testIsLinkText(string $markup, bool $expectation): void {
     $assert_method = $expectation ? 'assertTrue' : 'assertFalse';
 
