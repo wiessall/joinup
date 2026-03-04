@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
  * Tests the collection glossary filter.
  */
 #[Group('joinup_collection')]
-#[CoversClass(\Drupal\collection\Plugin\Filter\Glossary::class)]
+#[CoversClass(Glossary::class)]
 class GlossaryFilterTest extends TestCase {
 
   /**

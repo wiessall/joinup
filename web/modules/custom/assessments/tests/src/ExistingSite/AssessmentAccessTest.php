@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\ExistingSite;
 
+use Drupal\assessments\AssessmentAccessControlHandler;
+use Drupal\assessments\AssessmentStatementAccessControlHandler;
+use Drupal\assessments\Entity\PublicOrganisation;
+use Drupal\assessments\Entity\AssessmentSubEntity;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\assessments\Entity\Assessment;
 use Drupal\assessments\Entity\AssessmentStatement;
@@ -20,11 +24,11 @@ use PHPUnit\Framework\Attributes\Group;
  * correctly across different user roles and assessment states. It tests view,
  * create, update, and delete operations for various user personas.
  */
-#[CoversClass(\Drupal\assessments\AssessmentAccessControlHandler::class)]
-#[CoversClass(\Drupal\assessments\AssessmentStatementAccessControlHandler::class)]
-#[CoversClass(\Drupal\assessments\Entity\Assessment::class)]
-#[CoversClass(\Drupal\assessments\Entity\PublicOrganisation::class)]
-#[CoversClass(\Drupal\assessments\Entity\AssessmentSubEntity::class)]
+#[CoversClass(AssessmentAccessControlHandler::class)]
+#[CoversClass(AssessmentStatementAccessControlHandler::class)]
+#[CoversClass(Assessment::class)]
+#[CoversClass(PublicOrganisation::class)]
+#[CoversClass(AssessmentSubEntity::class)]
 #[Group('assessments')]
 class AssessmentAccessTest extends JoinupExistingSiteTestBase {
 

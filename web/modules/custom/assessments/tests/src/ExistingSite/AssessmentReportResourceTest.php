@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\ExistingSite;
 
+use Drupal\joinup_api\OpenApiSchemaValidator;
+use Drupal\assessments\Plugin\rest\resource\AssessmentReportResource;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\File\FileSystemInterface;
@@ -19,8 +21,8 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * Tests assessment report POST resource.
  */
-#[CoversClass(\Drupal\joinup_api\OpenApiSchemaValidator::class)]
-#[CoversClass(\Drupal\assessments\Plugin\rest\resource\AssessmentReportResource::class)]
+#[CoversClass(OpenApiSchemaValidator::class)]
+#[CoversClass(AssessmentReportResource::class)]
 class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
 
   /**

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_user\ExistingSite;
 
+use Drupal\joinup_user\JoinupUserDeleted;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\joinup_collection\JoinupCollectionHelper;
@@ -20,7 +21,7 @@ use PHPUnit\Framework\Attributes\Group;
 /**
  * Tests behaviour related to deleted user accounts.
  */
-#[CoversClass(\Drupal\joinup_user\JoinupUserDeleted::class)]
+#[CoversClass(JoinupUserDeleted::class)]
 #[CoversClass(\joinup_user_user_access::class)]
 #[Group('joinup_user')]
 class DeletedUserTest extends JoinupExistingSiteTestBase {

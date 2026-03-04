@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_distribution\ExistingSite;
 
+use Drupal\joinup_distribution\Plugin\search_api\processor\IndexDistributionData;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\Tests\joinup_test\Traits\ParagraphTrait;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
@@ -13,7 +14,7 @@ use PHPUnit\Framework\Attributes\Group;
 /**
  * Tests the Search API processor for distribution data.
  */
-#[CoversClass(\Drupal\joinup_distribution\Plugin\search_api\processor\IndexDistributionData::appendDistributionData)]
+#[CoversClass(IndexDistributionData::appendDistributionData)]
 #[Group('joinup_distribution')]
 class SearchApiProcessorTest extends JoinupExistingSiteTestBase {
 
