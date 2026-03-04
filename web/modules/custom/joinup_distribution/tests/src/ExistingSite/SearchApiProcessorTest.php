@@ -11,7 +11,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 
 /**
- *
+ * Tests the Search API processor for distribution data.
  */
 #[CoversClass(\Drupal\joinup_distribution\Plugin\search_api\processor\IndexDistributionData::appendDistributionData)]
 #[Group('joinup_distribution')]

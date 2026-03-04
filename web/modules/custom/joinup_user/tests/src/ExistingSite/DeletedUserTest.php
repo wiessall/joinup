@@ -18,7 +18,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 
 /**
- *
+ * Tests behaviour related to deleted user accounts.
  */
 #[CoversClass(\Drupal\joinup_user\JoinupUserDeleted::class)]
 #[CoversClass(\joinup_user_user_access::class)]
@@ -33,6 +33,7 @@ class DeletedUserTest extends JoinupExistingSiteTestBase {
   protected array $nodes = [];
 
   /**
+   * Tests the full name display of a user account through its lifecycle.
    *
    * @param array $initialName
    *   Initial username, first name, family name, expected full name.
