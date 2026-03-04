@@ -15,6 +15,7 @@ use Drupal\node\NodeInterface;
 use Drupal\node\NodeStorageInterface;
 use Drupal\user\UserInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 
@@ -22,7 +23,7 @@ use PHPUnit\Framework\Attributes\Group;
  * Tests behaviour related to deleted user accounts.
  */
 #[CoversClass(JoinupUserDeleted::class)]
-#[CoversClass(\joinup_user_user_access::class)]
+#[CoversFunction('joinup_user_user_access')]
 #[Group('joinup_user')]
 class DeletedUserTest extends JoinupExistingSiteTestBase {
 
