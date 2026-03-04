@@ -534,15 +534,14 @@ class AssessmentReportResource extends ResourceBase {
    */
   protected function getAssets(array $assets, string $path): array {
     $storage = $this->entityTypeManager->getStorage('node');
+
     $solutions = [];
     foreach ($assets as $delta => $asset) {
       if (is_string($asset)) {
         $solution = $this->entityRepository->loadEntityByUuid('node', $asset);
-
         if (!$solution) {
           $this->addError("$path/asset/$delta", "An asset (interoperability solution) with ID '$asset' does not exist");
         }
-
         $solutions[] = $solution;
         continue;
       }
@@ -557,10 +556,7 @@ class AssessmentReportResource extends ResourceBase {
         'field_state' => 'published',
       ]);
 
-      $solution->getFieldDefinition('title')->addConstraint('UniqueSolutionTitle');
-      $violations = $solution->validate();
-
-      foreach ($violations->getByField('title') as $violation) {
+      foreach ($solution->validate()->getByField('title') as $violation) {
         $this->addError("$path/asset/$delta/title", $violation->getMessage()->__toString());
       }
 
