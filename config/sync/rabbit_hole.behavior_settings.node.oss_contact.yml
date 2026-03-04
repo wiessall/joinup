@@ -1,0 +1,13 @@
+uuid: 77e82673-fc2f-48c7-a05d-b6a272494c2e
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.oss_contact
+id: node.oss_contact
+targetEntityType: node
+bundle: oss_contact
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

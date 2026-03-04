@@ -1,0 +1,13 @@
+uuid: f21feed5-211e-4cc3-8b80-671303741273
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.assessment_report
+id: node.assessment_report
+targetEntityType: node
+bundle: assessment_report
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

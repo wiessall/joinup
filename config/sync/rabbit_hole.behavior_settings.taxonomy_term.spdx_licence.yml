@@ -7,7 +7,7 @@ dependencies:
 id: taxonomy_term.spdx_licence
 targetEntityType: taxonomy_term
 bundle: spdx_licence
-action: display_page
+action: access_denied
 no_bypass: false
 bypass_message: false
 configuration: {  }
