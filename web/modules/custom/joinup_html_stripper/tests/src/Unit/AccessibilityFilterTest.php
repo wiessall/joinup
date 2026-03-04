@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests the accessibility filter.
  */
-#[CoversClass(\Drupal\joinup_html_stripper\Plugin\Filter\AccessibilityFilter::class)]
+#[CoversClass(AccessibilityFilter::class)]
 #[Group('joinup_html_stripper')]
 class AccessibilityFilterTest extends TestCase {
 

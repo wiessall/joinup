@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\ExistingSite;
 
+use Drupal\assessments\Entity\AssessmentReport;
+use Drupal\assessments\Entity\BindingRequirementParagraph;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
@@ -20,8 +22,8 @@ use PHPUnit\Framework\Attributes\Group;
 /**
  * Tests the assessment deletion.
  */
-#[CoversClass(\Drupal\assessments\Entity\AssessmentReport::class)]
-#[CoversClass(\Drupal\assessments\Entity\BindingRequirementParagraph::class)]
+#[CoversClass(AssessmentReport::class)]
+#[CoversClass(BindingRequirementParagraph::class)]
 #[Group('assessments')]
 class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\ExistingSite;
 
+use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\assessments\AssessmentInterface;
@@ -19,7 +20,7 @@ use PHPUnit\Framework\Attributes\Group;
 /**
  * Tests the assessment workflow and related entity publication.
  */
-#[CoversClass(\Drupal\assessments\Entity\AssessmentReport::class)]
+#[CoversClass(AssessmentReport::class)]
 #[Group('assessments')]
 class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
 
