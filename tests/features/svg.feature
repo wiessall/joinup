@@ -48,3 +48,4 @@ Feature: Test SVG attachments.
 
     When I go to the discussions page of "SVG"
     Then I should see the image "simple.svg"
+    And the image "simple.svg" should not be rendered through an image style

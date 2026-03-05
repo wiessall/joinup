@@ -58,9 +58,10 @@
   font-size: 0;
 }
 
-.shepherd-header {
+.shepherd-has-title .shepherd-content .shepherd-header {
   display: flex;
   padding: $spacer $spacer 0; // 16px 16px 0
+  background: none;
 }
 
 .shepherd-text {
@@ -78,7 +79,7 @@
 .shepherd-arrow::before {
   content: "";
   transform: rotate(45deg);
-  background: $white;
+  background: $white !important;
 }
 
 .tour-progress {

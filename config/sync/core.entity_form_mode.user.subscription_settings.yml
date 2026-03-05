@@ -8,6 +8,6 @@ _core:
   default_config_hash: 4YW2QTY8Vq02jYiWQhELAd7udKHkIkWN649D4woKboI
 id: user.subscription_settings
 label: 'Subscription settings'
-description: ''
+description: null
 targetEntityType: user
 cache: true
