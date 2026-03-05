@@ -454,7 +454,7 @@ function assessments_module_implements_alter(array &$implementations, $hook): vo
  */
 function assessments_node_create_access(AccountInterface $account, array $context, string $entityBundle): AccessResultInterface {
   if ($entityBundle !== 'solution') {
-    return state_machine_permissions_node_create_access($account, $context, $entityBundle);
+    return AccessResult::neutral();
   }
 
   // Allow access from the entity browser used for assessment solutions.
