@@ -451,6 +451,24 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
+   * Checks that a given image is not rendered through an image style.
+   *
+   * This verifies that the image src does not contain '/styles/', meaning it
+   * is served from its original path rather than as an image style derivative.
+   * This is important for SVG images which are not supported by image toolkits.
+   *
+   * @param string $filename
+   *   The filename.
+   */
+  #[Then('the image :filename should not be rendered through an image style')]
+  public function assertImageNotRenderedThroughImageStyle(string $filename): void {
+    $image = $this->getImage($filename);
+    Assert::assertNotNull($image, "Image '$filename' not found on the page.");
+    $src = $image->getAttribute('src');
+    Assert::assertStringNotContainsString('/styles/', $src, "Image '$filename' is rendered through an image style: $src");
+  }
+
+  /**
    * Checks that a given image is not present.
    *
    * @param string $filename

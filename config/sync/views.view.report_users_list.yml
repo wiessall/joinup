@@ -1102,12 +1102,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              interoperability_validator: '0'
-              moderator: '0'
-              administrator: '0'
-              developer: '0'
             placeholder: ''
           is_grouped: false
           group_info:
@@ -1151,12 +1145,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              interoperability_validator: '0'
-              moderator: '0'
-              administrator: '0'
-              developer: '0'
           is_grouped: false
           group_info:
             label: ''
@@ -1197,12 +1185,6 @@ display:
             multiple: true
             remember_roles:
               authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              interoperability_validator: '0'
-              moderator: '0'
-              administrator: '0'
-              developer: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -1245,12 +1227,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              interoperability_validator: '0'
-              moderator: '0'
-              administrator: '0'
-              developer: '0'
           is_grouped: true
           group_info:
             label: 'User status'
