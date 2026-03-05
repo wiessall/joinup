@@ -78,7 +78,9 @@ function joinup_test_node_presave(EntityInterface $entity): void {
   // done by `\collection_node_delete()` for the Joinup test collection so that
   // tests can be predictable.
   // @see \collection_node_delete().
-  $entity->setChangedTime($entity->original->getChangedTime());
+  if ($changedTime = $entity->getOriginal()?->getChangedTime()) {
+    $entity->setChangedTime($changedTime);
+  }
 }
 
 /**

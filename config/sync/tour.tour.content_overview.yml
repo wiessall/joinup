@@ -6,7 +6,6 @@ dependencies:
     - joinup_core
 id: content_overview
 label: 'Tour for the content overview.'
-module: joinup_core
 routes:
   -
     route_name: view.content_overview.page_1
