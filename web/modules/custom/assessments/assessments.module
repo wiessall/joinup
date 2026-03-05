@@ -433,39 +433,6 @@ function assessments_inline_entity_form_table_fields_alter(array &$fields, array
 }
 
 /**
- * Implements hook_module_implements_alter().
- */
-function assessments_module_implements_alter(array &$implementations, $hook): void {
-  if ($hook === 'node_create_access') {
-    // The state_machine_permissions_node_create_access() implementation,
-    // forbids access to a solution which is not in the context of a group. But
-    // in the context of assessments, we allow a user to create solutions via
-    // the assessment report form, and immediately, we set the group to a
-    // collection acting as a collector for such solutions. We add our own
-    // implementation that allows this exception.
-    // @see state_machine_permissions_node_create_access()
-    // @see assessments_node_create_access()
-    unset($implementations['state_machine_permissions']);
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_create_access().
- */
-function assessments_node_create_access(AccountInterface $account, array $context, string $entityBundle): AccessResultInterface {
-  if ($entityBundle !== 'solution') {
-    return AccessResult::neutral();
-  }
-
-  // Allow access from the entity browser used for assessment solutions.
-  if (\Drupal::routeMatch()->getRouteName() === 'entity_browser.assessment_solutions') {
-    return AccessResult::allowed();
-  }
-
-  return state_machine_permissions_node_create_access($account, $context, $entityBundle);
-}
-
-/**
  * Implements hook_ENTITY_TYPE_presave() for assessment entities.
  */
 function assessments_assessment_presave(AssessmentInterface $entity): void {

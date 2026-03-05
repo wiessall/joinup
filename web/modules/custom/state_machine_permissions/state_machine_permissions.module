@@ -25,9 +25,9 @@ function state_machine_permissions_node_create_access(AccountInterface $account,
     return AccessResult::neutral();
   }
 
-  $ignored_bundles = ['collection', 'contact_information', 'custom_page', 'licence'];
+  $ignored_bundles = ['collection', 'contact_information', 'custom_page', 'licence', 'solution'];
   if (empty($context['group']) && in_array($entity_bundle, $ignored_bundles, TRUE)) {
-    return AccessResult::neutral('Custom pages and licences can be created as individual pages.');
+    return AccessResult::neutral();
   }
 
   if (empty($context['group'])) {
