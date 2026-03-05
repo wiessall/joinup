@@ -332,7 +332,6 @@ permissions:
   - 'view any unpublished content'
   - 'view any webform submission'
   - 'view assessment listing'
-  - 'view assessment migration comparison'
   - 'view blocked_reason'
   - 'view licence overview page'
   - 'view own blocked_reason'
