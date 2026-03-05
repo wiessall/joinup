@@ -537,3 +537,10 @@ function assessments_views_data_alter(array &$data): void {
   $codeValue['argument']['id'] = 'assessment_country_code';
   $data['taxonomy_term__code']['assessment_country_code'] = $codeValue;
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter() for entity_browser_assessment_solutions_form.
+ */
+function assessments_form_entity_browser_assessment_solutions_form_alter(array &$form, FormStateInterface $formState): void {
+  $form['#attached']['library'][] = 'assessments/entity_browser';
+}
