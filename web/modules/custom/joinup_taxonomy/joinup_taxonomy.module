@@ -76,7 +76,7 @@ function joinup_taxonomy_node_presave(EntityInterface $entity): void {
   $state_id = $entity->getWorkflowState();
   $is_published = $workflow_helper->isWorkflowStatePublished($state_id, $workflow);
 
-  if ($is_published && isset($entity->original) && $entity->original->get('published_at')->isEmpty()) {
+  if ($is_published && $entity->getOriginal()?->get('published_at')->isEmpty()) {
     // If the entity is being approved for the first time, publish the keywords.
     $keywords = $entity->get('keywords')->referencedEntities();
     foreach ($keywords as $keyword) {

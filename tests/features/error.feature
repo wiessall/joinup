@@ -13,14 +13,14 @@ Feature: On errors I want to see a friendly page and be able to report an
     When I am on "/error_page_test/exception"
     Then the response status code should be 500
     And I should see the heading "There was an unexpected problem serving your request"
-    And I should see text matching "Please try again and contact us if the problem persist including [0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12} in your message."
+    And I should see text matching "Please try again and contact us if the problem persist including [0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12} in your message\."
     And I should not see "Exception: donuts in Drupal\error_page_test\Controller\ErrorPageTestController->exception()"
     And the response should not contain "<pre class=\"backtrace\">"
 
     When I am on "/error_page_test/fatal_error"
     Then the response status code should be 500
     And I should see the heading "There was an unexpected problem serving your request"
-    And should see text matching "Please try again and contact us if the problem persist including [0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12} in your message."
+    And should see text matching "Please try again and contact us if the problem persist including [0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12} in your message\."
     And I should not see "Error: Call to undefined method Drupal\error_page_test\Controller\ErrorPageTestController::functionDoesNotExist() in Drupal\error_page_test\Controller\ErrorPageTestController->fatalError()"
     And the response should not contain "<pre class=\"backtrace\">"
 
@@ -50,14 +50,14 @@ Feature: On errors I want to see a friendly page and be able to report an
     When I am on "/error_page_test/exception"
     Then the response status code should be 500
     And I should see the heading "There was an unexpected problem serving your request"
-    And I should see text matching "Please try again and contact us if the problem persist including [0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12} in your message."
+    And I should see text matching "Please try again and contact us if the problem persist including [0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12} in your message\."
     And I should see "Exception: donuts in Drupal\error_page_test\Controller\ErrorPageTestController->exception()"
     And the response should not contain "<pre class=\"backtrace\">"
 
     When I am on "/error_page_test/fatal_error"
     Then the response status code should be 500
     And I should see the heading "There was an unexpected problem serving your request"
-    And should see text matching "Please try again and contact us if the problem persist including [0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12} in your message."
+    And should see text matching "Please try again and contact us if the problem persist including [0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12} in your message\."
     And I should see "Error: Call to undefined method Drupal\error_page_test\Controller\ErrorPageTestController::functionDoesNotExist() in Drupal\error_page_test\Controller\ErrorPageTestController->fatalError()"
     And the response should not contain "<pre class=\"backtrace\">"
 
@@ -87,14 +87,14 @@ Feature: On errors I want to see a friendly page and be able to report an
     When I am on "/error_page_test/exception"
     Then the response status code should be 500
     And I should see the heading "There was an unexpected problem serving your request"
-    And I should see text matching "Please try again and contact us if the problem persist including [0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12} in your message."
+    And I should see text matching "Please try again and contact us if the problem persist including [0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12} in your message\."
     And I should see "Exception: donuts in Drupal\error_page_test\Controller\ErrorPageTestController->exception()"
     And the response should not contain "<pre class=\"backtrace\">"
 
     When I am on "/error_page_test/fatal_error"
     Then the response status code should be 500
     And I should see the heading "There was an unexpected problem serving your request"
-    And should see text matching "Please try again and contact us if the problem persist including [0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12} in your message."
+    And should see text matching "Please try again and contact us if the problem persist including [0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12} in your message\."
     And I should see "Error: Call to undefined method Drupal\error_page_test\Controller\ErrorPageTestController::functionDoesNotExist() in Drupal\error_page_test\Controller\ErrorPageTestController->fatalError()"
     And the response should not contain "<pre class=\"backtrace\">"
 
@@ -124,14 +124,14 @@ Feature: On errors I want to see a friendly page and be able to report an
     When I am on "/error_page_test/exception"
     Then the response status code should be 500
     And I should see the heading "There was an unexpected problem serving your request"
-    And I should see text matching "Please try again and contact us if the problem persist including [0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12} in your message."
+    And I should see text matching "Please try again and contact us if the problem persist including [0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12} in your message\."
     And I should see "Exception: donuts in Drupal\error_page_test\Controller\ErrorPageTestController->exception()"
     And the response should contain "<pre class=\"backtrace\">"
 
     When I am on "/error_page_test/fatal_error"
     Then the response status code should be 500
     And I should see the heading "There was an unexpected problem serving your request"
-    And should see text matching "Please try again and contact us if the problem persist including [0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12} in your message."
+    And should see text matching "Please try again and contact us if the problem persist including [0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12} in your message\."
     And I should see "Error: Call to undefined method Drupal\error_page_test\Controller\ErrorPageTestController::functionDoesNotExist() in Drupal\error_page_test\Controller\ErrorPageTestController->fatalError()"
     And the response should contain "<pre class=\"backtrace\">"
 

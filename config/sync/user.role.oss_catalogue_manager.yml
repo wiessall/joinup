@@ -12,7 +12,7 @@ dependencies:
 id: oss_catalogue_manager
 label: 'OSS Catalogue Manager'
 weight: -2
-is_admin: null
+is_admin: false
 permissions:
   - 'access dashboard'
   - 'administer joinup oss catalogue'
