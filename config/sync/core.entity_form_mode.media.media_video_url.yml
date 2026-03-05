@@ -6,6 +6,6 @@ dependencies:
     - media
 id: media.media_video_url
 label: 'Media video URL'
-description: ''
+description: null
 targetEntityType: media
 cache: true

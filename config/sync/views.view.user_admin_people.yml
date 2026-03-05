@@ -661,10 +661,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              moderator: '0'
-              administrator: '0'
             placeholder: ''
           is_grouped: false
           group_info:
@@ -707,9 +703,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              moderator: '0'
-              administrator: '0'
           is_grouped: false
           group_info:
             label: ''
@@ -748,9 +741,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              moderator: '0'
-              administrator: '0'
           is_grouped: false
           group_info:
             label: ''
@@ -789,8 +779,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -967,10 +955,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              moderator: '0'
-              administrator: '0'
             min_placeholder: ''
             max_placeholder: ''
             placeholder: 'A date in the format DD-MM-YYYY.'
@@ -1018,10 +1002,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              moderator: '0'
-              administrator: '0'
             min_placeholder: ''
             max_placeholder: ''
             placeholder: 'A date in the format DD-MM-YYYY.'
@@ -1063,12 +1043,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              interoperability_validator: '0'
-              moderator: '0'
-              administrator: '0'
-              developer: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -1162,6 +1136,7 @@ display:
           empty_table: true
           caption: ''
           description: ''
+          class: ''
       row:
         type: fields
       query:
