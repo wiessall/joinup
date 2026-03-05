@@ -58,12 +58,49 @@
 }
 
 /* Ensure form elements are visible */
-.entity-browser-form .form-item {
+.entity-browser-form .form-item:not(.form-check) {
   margin-bottom: 1em;
 }
 
-.entity-browser-form .form-actions {
-  margin-top: 1em;
-  padding-top: 1em;
-  border-top: 1px solid #ccc;
+/* Style entity_browser_assessment_solutions_form. */
+.view-assessment-solutions-browser,
+.entity-browser-assessment-solutions-form > .form-wrapper {
+  padding: 0 1rem 1rem 1rem;
+}
+.entity-browser-assessment-solutions-form > .form-wrapper {
+  margin-bottom: 3rem;
+}
+.view-assessment-solutions-browser .view-content {
+  padding-bottom: 3rem;
+}
+.view-assessment-solutions-browser nav {
+  position: fixed;
+  z-index: 50;
+  right: 2rem;
+  bottom: 0;
+  padding: 1rem;
+  text-align: right;
+}
+.view-assessment-solutions-browser nav .pagination {
+  margin-bottom: 0;
+}
+
+@media (max-width: 975px) {
+  .view-assessment-solutions-browser
+    nav
+    .pagination
+    .pager__item:not([class*="pager__item--"], .is-active) {
+    display: none;
+  }
+}
+.entity-browser-assessment-solutions-form > .form-actions {
+  position: fixed;
+  z-index: 49;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin-bottom: 0;
+  padding: 1rem;
+  border-top: 1px solid #ddd;
+  background: white;
 }
