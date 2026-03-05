@@ -6,27 +6,6 @@ assessments.api_docs:
   requirements:
     _user_is_logged_in: 'TRUE'
 
-assessments.migration_list:
-  path: '/admin/content/assessment/migration'
-  defaults:
-    _controller: '\Drupal\assessments\Controller\MigrationComparisonController::list'
-    _title: 'Migration comparison'
-  requirements:
-    _permission: 'view assessment migration comparison'
-  options:
-    _admin_route: TRUE
-
-assessments.migration_compare:
-  path: '/admin/content/assessment/migration/{report_id}'
-  defaults:
-    _controller: '\Drupal\assessments\Controller\MigrationComparisonController::compare'
-    _title: 'Compare migration'
-  requirements:
-    _permission: 'view assessment migration comparison'
-    report_id: \d+
-  options:
-    _admin_route: TRUE
-
 assessments.moderate:
   path: '/collection/assessments/{assessment_type}/{assessment}/moderate'
   defaults:

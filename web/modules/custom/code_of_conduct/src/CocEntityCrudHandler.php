@@ -76,7 +76,7 @@ final class CocEntityCrudHandler implements CocEntityCrudHandlerInterface {
     //    revoked because CoC is now in effect.
     // 3. The page was updated from published to published. Memberships are
     //    revoked because they have to accept the new CoC.
-    $original = $customPage->original;
+    $original = $customPage->getOriginal();
     if (empty($original)) {
       return;
     }
@@ -110,7 +110,7 @@ final class CocEntityCrudHandler implements CocEntityCrudHandlerInterface {
       $this->membershipHandler->revokeFullMemberships($group);
     }
     else {
-      $original = $metaEntity?->original;
+      $original = $metaEntity?->getOriginal();
       if ($original && !$original->get('code_of_conduct')->equals($codeOfConduct)) {
         $codeOfConduct->isEmpty() ? $this->membershipHandler->restoreFullMemberships($group) : $this->membershipHandler->revokeFullMemberships($group);
       }
