@@ -360,7 +360,6 @@
                 "Enlarge file_usage entity ID length. @see https://www.drupal.org/node/2675600": "resources/patch/php/drupal/core/2675600.diff",
                 "Allow plurals on bundle labels @see https://www.drupal.org/i/2765065": "resources/patch/php/drupal/core/2765065.mr4252-commit6031e764.diff",
                 "Use comment access handler instead of hardcoding permissions @see https://www.drupal.org/i/2879087": "resources/patch/php/drupal/core/2879087_mr23_37499d5e-plus-2786587_mr11292_c99e8e10.diff",
-                "Workaround @see https://www.drupal.org/i/3576074": "resources/patch/php/drupal/core/2879087.fiber_trap.diff",
                 "Views with a different query plugin created via the UI do not have the correct query plugin ID in the view config @see https://www.drupal.org/i/2836237": "resources/patch/php/drupal/core/2836237.mr274-commit7e8d2533.diff",
                 "Cache tags are not invalidated on revision delete @see https://www.drupal.org/i/2945928": "resources/patch/php/drupal/core/2945928.mr14146-commit78bff01c.diff",
                 "Have responsive image module ignore svg @see https://www.drupal.org/i/2957924": "resources/patch/php/drupal/core/2957924.mr14454-commit6d26770b.diff",
