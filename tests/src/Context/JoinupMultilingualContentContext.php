@@ -6,8 +6,12 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Given;
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
+use Drupal\babel\BabelStorageInterface;
+use Drupal\babel\Model\Source;
 use Drupal\node\NodeInterface;
 
 /**
@@ -65,6 +69,213 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
         fn (string|array $value): bool => $value !== '~~~' && $value !== ['~~~']
       );
       $original->addTranslation($node->langcode, $translation)->save();
+    }
+  }
+
+  /**
+   * Adds locale string translations via Babel.
+   *
+   * Creates locale source strings and their translations programmatically,
+   * replicating what the Babel translate UI does. Accepts a table in the form:
+   * @code
+   * | source          | language | translation         | status |
+   * | My term         | fr       | Mon terme           | 1      |
+   * | Another string  | de       | Ein anderer Begriff |        |
+   * @endcode
+   *
+   * The "status" column is optional and defaults to 1 (active). A value of 0
+   * marks the string as inactive in the Babel UI.
+   *
+   * If any content entity field value matches the source string (i.e. the
+   * entity was already created before this step runs), an entity-level
+   * translation is also created for that field, mirroring what the Babel
+   * translate form does across all registered plugins.
+   */
+  #[Given('the following locale string translations:')]
+  public function addLocaleStringTranslations(TableNode $table): void {
+    /** @var \Drupal\locale\StringStorageInterface $localeStorage */
+    $localeStorage = \Drupal::service('locale.storage');
+    /** @var \Drupal\babel\BabelStorageInterface $babelStorage */
+    $babelStorage = \Drupal::service(BabelStorageInterface::class);
+
+    foreach ($table->getHash() as $row) {
+      $sourceText = $row['source'];
+      $langcode = $row['language'];
+      $translation = $row['translation'];
+      $status = isset($row['status']) && $row['status'] !== '' ? (bool) $row['status'] : TRUE;
+
+      // Find or create the source string in locales_source.
+      $localeString = $localeStorage->findString(['source' => $sourceText]);
+      if (!$localeString) {
+        $localeString = $localeStorage->createString(['source' => $sourceText, 'context' => '']);
+        $localeStorage->save($localeString);
+      }
+
+      $lid = $localeString->getId();
+
+      // Create or update the translation in locales_target.
+      $existing = $localeStorage->findTranslation(['lid' => $lid, 'language' => $langcode]);
+      if ($existing) {
+        $existing->setValues(['translation' => $translation, 'customized' => LOCALE_CUSTOMIZED, 'language' => $langcode]);
+        $localeStorage->save($existing);
+      }
+      else {
+        $localeStorage->createTranslation([
+          'lid' => $lid,
+          'language' => $langcode,
+          'translation' => $translation,
+          'customized' => LOCALE_CUSTOMIZED,
+        ])->save();
+      }
+
+      // Refresh locale string caches.
+      _locale_refresh_translations([$langcode], [$lid]);
+
+      // Register the string in Babel's tracking tables, then apply the
+      // requested status. BabelStorage::update() inserts with the plugin's
+      // default status (TRUE for locale), so we always call
+      // updateStatusForHash() afterwards to honour the requested value.
+      $source = new Source($sourceText, '');
+      $babelStorage->update('locale', [(string) $lid => $source]);
+      $babelStorage->updateStatusForHash($source->getHash(), $status);
+
+      // For any content entity whose field value matches this source string,
+      // also create an entity-level translation so that Views using
+      // rendering_language picks it up. This mirrors what BabelTranslateForm
+      // does: it iterates getSourceStringInstances() across all plugins and
+      // calls each plugin's updateTranslation().
+      $entityTypeManager = \Drupal::entityTypeManager();
+      foreach ($babelStorage->getSourceStringInstances($source->getHash()) as $pluginId => $ids) {
+        if (!str_starts_with($pluginId, 'content_entity:')) {
+          continue;
+        }
+        [, $entityTypeId] = explode(':', $pluginId, 2);
+        $entityStorage = $entityTypeManager->getStorage($entityTypeId);
+        foreach ($ids as $id) {
+          [, $entityId, $fieldName, $delta] = explode(':', $id);
+          $entity = $entityStorage->load($entityId);
+          if (!$entity) {
+            continue;
+          }
+          if ($entity->hasTranslation($langcode)) {
+            $translated = $entity->getTranslation($langcode);
+          }
+          else {
+            $translated = $entity->addTranslation($langcode, $entity->toArray());
+          }
+          $translated->get($fieldName)->set((int) $delta, $translation);
+          $translated->save();
+        }
+      }
+    }
+  }
+
+  /**
+   * Adds entity translations to existing entities.
+   *
+   * Looks up each entity by its label, then creates or updates an
+   * entity-level translation for the given language.
+   *
+   * Example:
+   * @code
+   * Given the following taxonomy term entity translations:
+   *   | source            | language | name              |
+   *   | Complete Solution | fr       | Solution complète |
+   * Given the following glossary entity translations:
+   *   | source   | language | title     | definition           |
+   *   | Alphabet | fr       | Alphabète | Définition détaillée |
+   * @endcode
+   *
+   * @param string $entity_type_alias
+   *   The entity type alias (e.g. 'node', 'taxonomy term', 'glossary').
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The table of translations.
+   *
+   * @throws \Exception
+   *   If the source entity or its label key is not found.
+   */
+  #[Given('/^the following (.*) entity translation(?:s)?:$/')]
+  public function addEntityTranslations(string $entity_type_alias, TableNode $table): void {
+    $entity_type_id = match ($entity_type_alias) {
+      'taxonomy term' => 'taxonomy_term',
+      'glossary', 'node' => 'node',
+      default => str_replace(' ', '_', $entity_type_alias),
+    };
+    $storage = \Drupal::entityTypeManager()->getStorage($entity_type_id);
+    $entity_type = $storage->getEntityType();
+    $label_key = $entity_type->getKey('label');
+
+    if (!$label_key) {
+      throw new \Exception(sprintf("Entity type '%s' does not have a label key.", $entity_type->id()));
+    }
+
+    foreach ($table->getHash() as $row) {
+      if (!isset($row['source']) || !isset($row['language'])) {
+        throw new \Exception("The 'source' and 'language' columns are mandatory.");
+      }
+
+      $entities = $storage->loadByProperties([$label_key => $row['source']]);
+      if (!$entities) {
+        throw new \Exception(sprintf("Entity of type '%s' with label '%s' not found.", $entity_type->id(), $row['source']));
+      }
+
+      $entity = reset($entities);
+      \assert($entity instanceof ContentEntityInterface);
+
+      if ($entity->hasTranslation($row['language'])) {
+        $translated = $entity->getTranslation($row['language']);
+      }
+      else {
+        $translated = $entity->addTranslation($row['language'], $entity->toArray());
+      }
+
+      $processed_fields = ['source', 'language'];
+      foreach ($row as $field => $value) {
+        if (in_array($field, $processed_fields)) {
+          continue;
+        }
+
+        // For glossary terms, we know the field is field_glossary_definition.
+        if ($entity_type_id === 'node' && $field === 'definition') {
+          $field_name = 'field_glossary_definition';
+        }
+        elseif ($translated->hasField($field)) {
+          $field_name = $field;
+        }
+        else {
+          // Fallback to simple underscore to camelCase or similar if needed,
+          // but usually Drupal Behat extension handles this via mapping.
+          // For now, let's try to find the field name.
+          $field_name = $field;
+        }
+
+        $field_definition = $translated->getFieldDefinition($field_name);
+
+        if (!$field_definition) {
+          throw new \InvalidArgumentException(sprintf("Field '%s' (aliased from '%s') is unknown on entity type '%s'.", $field_name, $field, $entity_type->id()));
+        }
+
+        if ($field_definition->getType() === 'text_with_summary') {
+          $translated->set($field_name, [
+            'value' => $value,
+            'summary' => $row['summary'] ?? '',
+            'format' => 'content_editor',
+          ]);
+          $processed_fields[] = 'summary';
+        }
+        else {
+          $translated->set($field_name, $value);
+        }
+        $processed_fields[] = $field;
+      }
+
+      // Ensure the translation is published if the source is published and the
+      // entity type supports it.
+      if ($entity instanceof EntityPublishedInterface && $entity->isPublished()) {
+        $translated->setPublished();
+      }
+
+      $translated->save();
     }
   }
 
