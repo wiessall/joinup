@@ -102,7 +102,7 @@ At the moment the following 2 provider plugins are implemented (as wip):
 
 - Developers Italia: Italian National OSS Catalogue,
 by https://developers.italia.it website
-- Open CoDE: German National OSS Catalogue,
+- Open Code: German National OSS Catalogue,
 by https://opencode.de website. (GitLab (self hosted))
 
 These plugin type allows to fetch data from any source by defining its own
@@ -120,7 +120,7 @@ each _provider_ should designate a _parser_, the later knows how to process data
 produced by the _provider_. Then, why we need a _parser_ when we already have a
 _provider_? Well, several providers might use the same data structure, thus the
 same parser. A good example are the [Developers Italia](
-https://developers.italia.it) and [Open CoDE](https://opencode.de) catalogues as they share the same
+https://developers.italia.it) and [Open Code](https://opencode.de) catalogues as they share the same
 [publiccode.yml](https://yml.publiccode.tools/) schema for describing Open Source
 Software Solutions.
 
@@ -234,7 +234,7 @@ Run the following, to fetch from
 ```
 
 Run the following, to fetch from
-[Open CoDE (German National OSS Catalogue)](https://opencode.de)
+[Open Code (German National OSS Catalogue)](https://opencode.de)
 ```bash
 ./vendor/bin/drush eu-oss:fetch hosting_platform:open_code
 ```
