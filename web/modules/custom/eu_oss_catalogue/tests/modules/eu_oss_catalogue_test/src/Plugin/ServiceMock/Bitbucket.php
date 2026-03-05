@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Drupal\eu_oss_catalogue_test\Plugin\ServiceMock;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Component\Serialization\Yaml;
 use Drupal\Component\Utility\Random;
 use Drupal\Core\Plugin\PluginBase;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\http_request_mock\Attribute\ServiceMock;
 use Drupal\http_request_mock\ServiceMockPluginInterface;

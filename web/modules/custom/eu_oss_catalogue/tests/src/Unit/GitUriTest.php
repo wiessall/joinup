@@ -58,8 +58,8 @@ class GitUriTest extends UnitTestCase {
         ],
       ],
       'Gitlab URL with deep namespace + .git extension' => [
-        'URI' => 'https://gitlab.opencode.de/xleitstelle/xplanung/validierungsregeln/profile/berlin.git',
-        'Expected object' => [
+        'uriString' => 'https://gitlab.opencode.de/xleitstelle/xplanung/validierungsregeln/profile/berlin.git',
+        'expected' => [
           'scheme' => 'https',
           'host' => 'gitlab.opencode.de',
           'namespace' => 'xleitstelle/xplanung/validierungsregeln/profile',
@@ -67,12 +67,12 @@ class GitUriTest extends UnitTestCase {
         ],
       ],
       'Partial URI' => [
-        'URI' => 'http://foo.bar.baz',
-        'Expected object' => NULL,
+        'uriString' => 'http://foo.bar.baz',
+        'expected' => NULL,
       ],
       'Invalid URI' => [
-        'URI' => 'foo-bar-baz',
-        'Expected object' => NULL,
+        'uriString' => 'foo-bar-baz',
+        'expected' => NULL,
       ],
     ];
   }
