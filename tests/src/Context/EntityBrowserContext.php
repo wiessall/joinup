@@ -72,4 +72,18 @@ class EntityBrowserContext extends RawDrupalContext {
     $checkbox->check();
   }
 
+  /**
+   * Removes an entity from the entity browser widget by its title.
+   *
+   * @param string $title
+   *   The title of the entity to remove.
+   */
+  #[When('I remove :title from the entity browser widget')]
+  public function removeEntityFromBrowserWidget(string $title): void {
+    $container = $this->waitForElement('xpath', '//div[contains(@class, "item-container")][contains(., "' . $title . '")]');
+    $removeButton = $container->find('css', 'input.remove-button');
+    Assert::assertNotNull($removeButton, sprintf('Remove button not found for "%s".', $title));
+    $removeButton->press();
+  }
+
 }
