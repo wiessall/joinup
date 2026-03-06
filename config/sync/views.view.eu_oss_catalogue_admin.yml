@@ -393,11 +393,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              moderator: '0'
-              administrator: '0'
-              rdf_graph_manager: '0'
             placeholder: ''
           is_grouped: false
           group_info:
@@ -437,11 +432,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              moderator: '0'
-              administrator: '0'
-              rdf_graph_manager: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -487,11 +477,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              moderator: '0'
-              administrator: '0'
-              rdf_graph_manager: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -630,6 +615,7 @@ display:
           empty_table: false
           caption: ''
           description: ''
+          class: ''
       row:
         type: fields
       query:
@@ -1240,8 +1226,8 @@ display:
           click_sort_column: value
           type: timestamp
           settings:
-            date_format: short
-            custom_date_format: ''
+            date_format: custom
+            custom_date_format: 'd/m/Y - H:i'
             timezone: ''
             tooltip:
               date_format: ''
@@ -1416,11 +1402,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              moderator: '0'
-              administrator: '0'
-              rdf_graph_manager: '0'
             placeholder: ''
           is_grouped: false
           group_info:
@@ -1463,11 +1444,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              moderator: '0'
-              administrator: '0'
-              rdf_graph_manager: '0'
             placeholder: ''
           is_grouped: false
           group_info:
@@ -1510,11 +1486,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              moderator: '0'
-              administrator: '0'
-              rdf_graph_manager: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -1556,11 +1527,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              moderator: '0'
-              administrator: '0'
-              rdf_graph_manager: '0'
           is_grouped: false
           group_info:
             label: ''
@@ -1599,10 +1565,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              moderator: '0'
-              administrator: '0'
           is_grouped: false
           group_info:
             label: ''

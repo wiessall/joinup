@@ -1,0 +1,63 @@
+diff --git a/private_message.module b/private_message.module
+index 17ca29717a2b22901047a9c4ae66aff7a3eed9d8..8fd30957c99af8eba6d870bdef7c23ee8bdd9aa2 100644
+--- a/private_message.module
++++ b/private_message.module
+@@ -24,6 +24,8 @@ use Drupal\user\RoleInterface;
+ 
+ /**
+  * Implements hook_views_data().
++ *
++ * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\LegacyHook does not exist.
+  */
+ #[LegacyHook]
+ function private_message_views_data(): array {
+@@ -508,7 +510,6 @@ function template_preprocess_private_message_thread(array &$variables): void {
+   $variables['private_message_thread'] = $variables['elements']['#private_message_thread'];
+   /** @var \Drupal\private_message\Entity\PrivateMessageThreadInterface $private_message_thread */
+   $private_message_thread = $variables['private_message_thread'];
+-  $variables['last_update'] = \Drupal::service('renderer')->render($variables['elements']['updated']);
+ 
+   $variables['url'] = $private_message_thread->toUrl('canonical', [
+     'language' => $private_message_thread->language(),
+diff --git a/src/Entity/PrivateMessageThread.php b/src/Entity/PrivateMessageThread.php
+index 307746f0f2d5338aa95308bce46ced8b408a3169..fba1324ce6f5eff4a36c54707478c79e5ed4a49e 100644
+--- a/src/Entity/PrivateMessageThread.php
++++ b/src/Entity/PrivateMessageThread.php
+@@ -356,7 +356,11 @@ class PrivateMessageThread extends ContentEntityBase implements PrivateMessageTh
+ 
+     $fields['updated'] = BaseFieldDefinition::create('changed')
+       ->setLabel(t('Updated'))
+-      ->setDescription(t('The most recent time at which the thread was updated'));
++      ->setDescription(t('The most recent time at which the thread was updated'))
++      ->setDisplayOptions('view', [
++        'region' => 'hidden',
++      ])
++      ->setDisplayConfigurable('view', TRUE);
+ 
+     // Member(s) of the private message thread.
+     // Entity reference field, holds the reference to user objects.
+diff --git a/src/Hook/ViewsHooks.php b/src/Hook/ViewsHooks.php
+index 9badf8059542c3a2ca927cb618262b35f3549a93..a87b71da5851799dd9a1251d4049e75ed59d8809 100644
+--- a/src/Hook/ViewsHooks.php
++++ b/src/Hook/ViewsHooks.php
+@@ -16,6 +16,8 @@ class ViewsHooks {
+ 
+   /**
+    * Implements hook_views_data().
++   *
++   * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\Hook does not exist.
+    */
+   #[Hook('views_data')]
+   public function viewsData(): array {
+diff --git a/templates/private-message-thread.html.twig b/templates/private-message-thread.html.twig
+index bb70050370fc8bb7362a180288c433143f59dc3f..6b13e25f167cf54958303c4c7d0ee6d34bcc0f53 100644
+--- a/templates/private-message-thread.html.twig
++++ b/templates/private-message-thread.html.twig
+@@ -10,7 +10,6 @@
+  *   or print a subset such as {{ content.field_example }}. Use
+  *   {{ content|without('field_example') }} to temporarily suppress the printing
+  *   of a given child element.
+- * - last_update: Themed display of the last update time for the thread
+  * - url: Direct URL of the current private message thread.
+  * - view_mode: View mode; for example, "teaser" or "full".
+  * - logged_in: Flag for authenticated user status. Will be true when the
