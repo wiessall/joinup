@@ -88,11 +88,6 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
    *
    * The "status" column is optional and defaults to 1 (active). A value of 0
    * marks the string as inactive in the Babel UI.
-   *
-   * If any content entity field value matches the source string (i.e. the
-   * entity was already created before this step runs), an entity-level
-   * translation is also created for that field, mirroring what the Babel
-   * translate form does across all registered plugins.
    */
   #[Given('the following locale string translations:')]
   public function addLocaleStringTranslations(TableNode $table): void {
@@ -139,35 +134,6 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
       $source = new Source($sourceText, '');
       $babelStorage->update('locale', [(string) $lid => $source]);
       $babelStorage->updateStatusForHash($source->getHash(), $status);
-
-      // For any content entity whose field value matches this source string,
-      // also create an entity-level translation so that Views using
-      // rendering_language picks it up. This mirrors what BabelTranslateForm
-      // does: it iterates getSourceStringInstances() across all plugins and
-      // calls each plugin's updateTranslation().
-      $entityTypeManager = \Drupal::entityTypeManager();
-      foreach ($babelStorage->getSourceStringInstances($source->getHash()) as $pluginId => $ids) {
-        if (!str_starts_with($pluginId, 'content_entity:')) {
-          continue;
-        }
-        [, $entityTypeId] = explode(':', $pluginId, 2);
-        $entityStorage = $entityTypeManager->getStorage($entityTypeId);
-        foreach ($ids as $id) {
-          [, $entityId, $fieldName, $delta] = explode(':', $id);
-          $entity = $entityStorage->load($entityId);
-          if (!$entity) {
-            continue;
-          }
-          if ($entity->hasTranslation($langcode)) {
-            $translated = $entity->getTranslation($langcode);
-          }
-          else {
-            $translated = $entity->addTranslation($langcode, $entity->toArray());
-          }
-          $translated->get($fieldName)->set((int) $delta, $translation);
-          $translated->save();
-        }
-      }
     }
   }
 
@@ -250,7 +216,6 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
         else {
           $translated->set($field, $value);
         }
-        $processedFields[] = $field;
       }
 
       // Ensure the translation is published if the source is published and the
@@ -297,7 +262,6 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
       $node->$key = $multiline;
     }
   }
-
 
   /**
    * Visits a version of an entity in a given language.
