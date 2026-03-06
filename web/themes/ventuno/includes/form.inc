@@ -73,9 +73,6 @@ function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface 
     $form['keys']['#title_display'] = 'invisible';
     $form['keys']['#attributes']['placeholder'] = t('Start typing to search…');
     $form['keys']['#joinup_parent'] = $form_id . '_' . $view->id();
-    // Ensure the ID is unique, using "search-box" as base.
-    $form['keys']['#id'] = Html::getUniqueId('search-box');
-    $form['#id'] = Html::getUniqueId($form['#id']);
     $form['actions']['submit']['#attributes']['class'][] = 'visually-hidden';
   }
 
@@ -97,6 +94,13 @@ function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface 
     // page, hide the "Sort by" select.
     unset($form['sort_by']);
   }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_views_exposed_form__block_exposedformsearchpage_header(&$variables): void {
+  $variables['form']['keys']['#id'] = Html::getUniqueId('search-box');
 }
 
 /**
@@ -239,7 +243,13 @@ function ventuno_form_poll_view_form_alter(array &$form, FormStateInterface $for
  * Implements hook_preprocess_input__submit().
  */
 function ventuno_preprocess_input__submit(array &$variables): void {
-  if (!isset($variables['element']['#button_type'])) {
+  $element = $variables['element'];
+  if (!isset($element['#button_type'])) {
+    $variables['attributes']['class'][] = 'btn-primary';
+  }
+  // Restore btn-primary for field widget "Add another item" buttons, which
+  // since Drupal 11 have #button_type set to 'small'.
+  elseif (in_array('field-add-more-submit', $element['#attributes']['class'] ?? [])) {
     $variables['attributes']['class'][] = 'btn-primary';
   }
 }

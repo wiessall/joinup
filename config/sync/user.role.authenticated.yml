@@ -108,6 +108,7 @@ permissions:
   - 'create remote_video media'
   - 'create terms in tags'
   - 'delete own comments'
+  - 'delete own draft assessment report'
   - 'delete paragraph content accordion'
   - 'delete paragraph content accordion_item'
   - 'delete paragraph content call_to_action'

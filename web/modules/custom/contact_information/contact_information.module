@@ -92,8 +92,7 @@ function contact_information_entity_field_access(string $operation, FieldDefinit
  */
 function contact_information_node_update(NodeInterface $entity): void {
   if ($entity instanceof ContactInformationInterface) {
-    /** @var \Drupal\contact_information\Entity\ContactInformationInterface|null $original */
-    if ($original = $entity->original ?? NULL) {
+    if ($original = $entity->getOriginal()) {
       $original_email = $original->get('email')->value;
       $email = $entity->get('email')->value;
       if (!empty($original_email) && $original_email !== $email) {
