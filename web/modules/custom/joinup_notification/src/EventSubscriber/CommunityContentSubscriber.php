@@ -88,7 +88,7 @@ class CommunityContentSubscriber extends NotificationSubscriberBase {
     // Only initialize the workflow if it is available. It is unavailable when
     // the entity is being deleted during cleanup of orphaned group content.
     if ($this->entity instanceof EntityWorkflowStateInterface && $this->entity->hasWorkflow()) {
-      $from_state = $this->entity->field_state_initial_value ?? 'draft';
+      $from_state = $this->entity->getOriginal()?->getWorkflowState() ?? 'draft';
       $to_state = $this->entity->getWorkflowState();
 
       $this->workflow = $this->entity->getWorkflow();
@@ -129,8 +129,8 @@ class CommunityContentSubscriber extends NotificationSubscriberBase {
       return FALSE;
     }
 
-    // If there is no original version, then it is not an update.
-    if (isset($this->entity->original)) {
+    // If there is an original version, then it is an update.
+    if ($this->entity->getOriginal()) {
       return FALSE;
     }
 
