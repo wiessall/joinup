@@ -6,7 +6,6 @@ dependencies:
     - joinup_core
 id: entity_canonical
 label: 'Canonical entity page.'
-module: joinup_core
 routes:
   -
     route_name: entity.node.canonical

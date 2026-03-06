@@ -6,7 +6,6 @@ dependencies:
     - joinup_core
 id: account
 label: 'User account tour.'
-module: joinup_core
 routes:
   -
     route_name: entity.user.canonical

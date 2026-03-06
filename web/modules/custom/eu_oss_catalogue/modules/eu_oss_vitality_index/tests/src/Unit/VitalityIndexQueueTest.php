@@ -74,19 +74,19 @@ class VitalityIndexQueueTest extends UnitTestCase {
   public static function providerForQueue(): array {
     return [
       'Less queue items than nodes' => [
-        'number of items in queue' => 1,
-        'number of oss nodes' => 2,
-        'whether queue element should be added' => TRUE,
+        'numberOfItems' => 1,
+        'numberOfNodes' => 2,
+        'shouldBeAdded' => TRUE,
       ],
       'More queue items than nodes' => [
-        'number of items in queue' => 2,
-        'number of oss nodes' => 1,
-        'whether queue element should be added' => FALSE,
+        'numberOfItems' => 2,
+        'numberOfNodes' => 1,
+        'shouldBeAdded' => FALSE,
       ],
       'Equal queue size and node number' => [
-        'number of items in queue' => 3,
-        'number of oss nodes' => 3,
-        'whether queue element should be added' => TRUE,
+        'numberOfItems' => 3,
+        'numberOfNodes' => 3,
+        'shouldBeAdded' => TRUE,
       ],
     ];
   }

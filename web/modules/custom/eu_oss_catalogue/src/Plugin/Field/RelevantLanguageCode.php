@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Drupal\eu_oss_catalogue\Plugin\Field;
 
 use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
+use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Field\FieldItemList;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\TypedData\ComputedItemListTrait;
 use Drupal\eu_oss_catalogue\Entity\OssSolution;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;

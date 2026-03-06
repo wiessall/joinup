@@ -92,6 +92,7 @@ class MigrationComparisonController extends ControllerBase {
         )));
 
       $rows[] = [
+        $row->sid,
         [
           'data' => [
             '#type' => 'link',
