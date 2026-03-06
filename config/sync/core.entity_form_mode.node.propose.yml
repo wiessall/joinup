@@ -6,6 +6,6 @@ dependencies:
     - node
 id: node.propose
 label: Propose
-description: ''
+description: null
 targetEntityType: node
 cache: true

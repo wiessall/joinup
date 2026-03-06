@@ -1,0 +1,42 @@
+diff --git a/core/lib/Drupal/Core/Pager/PagerPreprocess.php b/core/lib/Drupal/Core/Pager/PagerPreprocess.php
+index 6bd13da4f8895eea613c2c7242a7157462547eec..b69b2fded70ba266b0ac441cacf63e224e53bcec 100644
+--- a/core/lib/Drupal/Core/Pager/PagerPreprocess.php
++++ b/core/lib/Drupal/Core/Pager/PagerPreprocess.php
+@@ -51,7 +51,10 @@ public function preprocessPager(array &$variables): void {
+ 
+     $link_attributes = [];
+ 
+-    if ($this->requestStack->getCurrentRequest()?->get(MainContentViewSubscriber::WRAPPER_FORMAT) === 'drupal_modal') {
++    // Allow pagers to opt out of generic modal AJAX handling (e.g., Views with
++    // AJAX enabled has its own pager AJAX handling that conflicts with this).
++    if (empty($variables['pager']['#skip_modal_ajax']) &&
++      $this->requestStack->getCurrentRequest()?->get(MainContentViewSubscriber::WRAPPER_FORMAT) === 'drupal_modal') {
+       $link_attributes = [
+         'class' => ['use-ajax'],
+         'data-dialog-type' => 'modal',
+diff --git a/core/modules/views/src/Plugin/views/pager/Full.php b/core/modules/views/src/Plugin/views/pager/Full.php
+index 7a2689062af9f802cdf32a09c9a9818929b460b9..b4eba2608ee16253fe5cd926c35e0a92f0b55d55 100644
+--- a/core/modules/views/src/Plugin/views/pager/Full.php
++++ b/core/modules/views/src/Plugin/views/pager/Full.php
+@@ -102,6 +102,8 @@ public function render($input) {
+       '#parameters' => $input,
+       '#quantity' => $this->options['quantity'],
+       '#route_name' => !empty($this->view->live_preview) ? '<current>' : '<none>',
++      // Skip generic modal AJAX attributes when Views AJAX handles paging.
++      '#skip_modal_ajax' => $this->view->ajaxEnabled(),
+     ];
+   }
+ 
+diff --git a/core/modules/views/src/Plugin/views/pager/Mini.php b/core/modules/views/src/Plugin/views/pager/Mini.php
+index 140e862c6601b717578fa4ca018a4b9be41c6a0f..26a2d35f189a5233da68ee0677f7e5bebfe142d5 100644
+--- a/core/modules/views/src/Plugin/views/pager/Mini.php
++++ b/core/modules/views/src/Plugin/views/pager/Mini.php
+@@ -110,6 +110,8 @@ public function render($input) {
+       '#pagination_heading_level' => parent::getHeadingLevel(),
+       '#parameters' => $input,
+       '#route_name' => !empty($this->view->live_preview) ? '<current>' : '<none>',
++      // Skip generic modal AJAX attributes when Views AJAX handles paging.
++      '#skip_modal_ajax' => $this->view->ajaxEnabled(),
+     ];
+   }
+ 
