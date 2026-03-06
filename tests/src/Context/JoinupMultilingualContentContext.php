@@ -233,28 +233,14 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
           continue;
         }
 
-        // For glossary terms, we know the field is field_glossary_definition.
-        if ($entityTypeId === 'node' && $field === 'definition') {
-          $fieldName = 'field_glossary_definition';
-        }
-        elseif ($translated->hasField($field)) {
-          $fieldName = $field;
-        }
-        else {
-          // Fallback to simple underscore to camelCase or similar if needed,
-          // but usually Drupal Behat extension handles this via mapping.
-          // For now, let's try to find the field name.
-          $fieldName = $field;
-        }
-
-        $fieldDefinition = $translated->getFieldDefinition($fieldName);
+        $fieldDefinition = $translated->getFieldDefinition($field);
 
         if (!$fieldDefinition) {
-          throw new \InvalidArgumentException(sprintf("Field '%s' (aliased from '%s') is unknown on entity type '%s'.", $fieldName, $field, $entityType->id()));
+          throw new \InvalidArgumentException(sprintf("Field '%s' is unknown on entity type '%s'.", $field, $entityType->id()));
         }
 
         if ($fieldDefinition->getType() === 'text_with_summary') {
-          $translated->set($fieldName, [
+          $translated->set($field, [
             'value' => $value,
             'summary' => $row['summary'] ?? '',
             'format' => 'content_editor',
@@ -262,7 +248,7 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
           $processedFields[] = 'summary';
         }
         else {
-          $translated->set($fieldName, $value);
+          $translated->set($field, $value);
         }
         $processedFields[] = $field;
       }

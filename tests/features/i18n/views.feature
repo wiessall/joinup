@@ -47,8 +47,8 @@ Feature: Views display translated entities correctly.
       | title    | synonyms | summary             | definition                       | collection        | state     |
       | Alphabet | ABC      | Summary of Alphabet | Long, long body definition field | A World of Things | published |
     And the following glossary entity translations:
-      | source   | language | title     | definition           | summary            |
-      | Alphabet | fr       | Alphabète | Définition détaillée | Résumé de l'entrée |
+      | source   | language | title     | field_glossary_definition | summary            |
+      | Alphabet | fr       | Alphabète | Définition détaillée      | Résumé de l'entrée |
     When I am an anonymous user
     And I go to the "A World of Things" collection
     And I click "Glossary"
