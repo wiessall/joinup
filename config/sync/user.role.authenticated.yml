@@ -33,6 +33,7 @@ dependencies:
     - assessments
     - collection
     - comment
+    - content_translation
     - contextual
     - email_confirmer
     - entity_legal
@@ -49,6 +50,7 @@ dependencies:
     - paragraphs_type_permissions
     - poll
     - private_message
+    - rabbit_hole
     - rest
     - search_api_autocomplete
     - sitewide_alert
@@ -168,6 +170,7 @@ permissions:
   - 'perform owner_workflow workflow validate transition on own entity'
   - 'post comments'
   - 'propose collection content'
+  - 'rabbit hole bypass node'
   - 'request assessments oauth2 client'
   - 'restful get assessment_report'
   - 'revert all revisions'

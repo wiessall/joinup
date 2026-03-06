@@ -7,5 +7,3 @@ services:
   Drupal\owner\Guard\OwnerTransitionGuard:
     tags:
       - { name: state_machine.guard, group: owner }
-
-  Drupal\owner\EventSubscriber\OwnerAccessSubscriber: { }

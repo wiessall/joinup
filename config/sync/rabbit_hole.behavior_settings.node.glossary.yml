@@ -1,0 +1,13 @@
+uuid: 20369eec-edfc-4663-9e79-fb8c008de9b8
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.glossary
+id: node.glossary
+targetEntityType: node
+bundle: glossary
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

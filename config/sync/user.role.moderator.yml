@@ -28,7 +28,6 @@ dependencies:
     - assessments
     - collection
     - comment
-    - config_translation
     - contact_form
     - content_translation
     - custom_page
@@ -45,7 +44,6 @@ dependencies:
     - joinup_featured
     - joinup_group
     - joinup_group_content_management
-    - joinup_i18n
     - joinup_legal
     - joinup_licence
     - joinup_log
