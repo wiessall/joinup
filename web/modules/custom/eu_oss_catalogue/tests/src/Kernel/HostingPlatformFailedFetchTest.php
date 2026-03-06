@@ -107,49 +107,49 @@ class HostingPlatformFailedFetchTest extends KernelTestBase implements LoggerCha
   public static function providerTestHostingPlatformFetch(): array {
     return [
       'Bitbucket.org' => [
-        'Mocked errors' => [500],
-        'Plugin ID' => 'bitbucket_org',
-        'Config' => [
+        'statusCodes' => [500],
+        'pluginId' => 'bitbucket_org',
+        'config' => [
           'baseUrl' => 'https://bitbucket.com',
           'projects' => ['foo' => NULL],
         ],
       ],
       'Github.com' => [
-        'Mocked errors' => [500],
-        'Plugin ID' => 'github',
-        'Config' => [
+        'statusCodes' => [500],
+        'pluginId' => 'github',
+        'config' => [
           'baseUrl' => 'https://github.com',
           'projects' => ['foo' => NULL],
         ],
       ],
       'Gitlab.com' => [
-        'Mocked errors' => [500],
-        'Plugin ID' => 'gitlab_com',
-        'Config' => [
+        'statusCodes' => [500],
+        'pluginId' => 'gitlab_com',
+        'config' => [
           'baseUrl' => 'https://gitlab.com',
           'projects' => ['foo' => NULL],
         ],
       ],
       'Gitlab, self-hosted, no GraphQL' => [
-        'Mocked errors' => [503],
-        'Plugin ID' => 'gitlab_self_hosted',
-        'Config' => [
+        'statusCodes' => [503],
+        'pluginId' => 'gitlab_self_hosted',
+        'config' => [
           'baseUrl' => 'https://gitlab.example.com',
           'projects' => ['foo' => NULL],
         ],
       ],
       'Gitlab, self-hosted, not a group' => [
-        'Mocked errors' => [404, 503],
-        'Plugin ID' => 'gitlab_self_hosted',
-        'Config' => [
+        'statusCodes' => [404, 503],
+        'pluginId' => 'gitlab_self_hosted',
+        'config' => [
           'baseUrl' => 'https://gitlab.example.com',
           'projects' => ['foo' => ['bar']],
         ],
       ],
       'Gitlab, self-hosted, everything' => [
-        'Mocked errors' => [429, 429],
-        'Plugin ID' => 'gitlab_self_hosted',
-        'Config' => [
+        'statusCodes' => [429, 429],
+        'pluginId' => 'gitlab_self_hosted',
+        'config' => [
           'baseUrl' => 'https://gitlab.example.com',
           'projects' => [],
         ],

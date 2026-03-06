@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Exception;
 
-use Drupal\Core\Serialization\Yaml;
+use Drupal\Component\Serialization\Yaml;
 
 /**
  * Exception used for logging field resolution failures.

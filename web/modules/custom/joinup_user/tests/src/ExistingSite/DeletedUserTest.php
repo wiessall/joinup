@@ -200,11 +200,13 @@ class DeletedUserTest extends JoinupExistingSiteTestBase {
    *   The ID of the expected author.
    */
   protected function assertAuthor(NodeInterface $node, int|string $expectedUid): void {
+    $this->assertSame((int) $expectedUid, (int) $node->getOwnerId());
+
     $storage = \Drupal::entityTypeManager()->getStorage('node');
     assert($storage instanceof NodeStorageInterface);
-
-    $this->assertSame((int) $expectedUid, (int) $node->getOwnerId());
-    foreach ($storage->loadMultipleRevisions($storage->revisionIds($node)) as $revision) {
+    $query = $storage->getQuery()->allRevisions()->condition('nid', $node->id())->accessCheck(FALSE);
+    $revision_ids = array_keys($query->execute());
+    foreach ($storage->loadMultipleRevisions($revision_ids) as $revision) {
       $this->assertSame((int) $expectedUid, (int) $revision->getRevisionUserId());
     }
   }
