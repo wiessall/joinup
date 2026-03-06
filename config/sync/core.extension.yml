@@ -108,7 +108,6 @@ module:
   joinup_discussion: 0
   joinup_distribution: 0
   joinup_document: 0
-  joinup_entity_browser: 0
   joinup_eulogin: 0
   joinup_event: 0
   joinup_featured: 0

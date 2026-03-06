@@ -30,3 +30,9 @@ services:
   Drupal\assessments\Access\AssessmentAddFormAccessCheck:
     tags:
       - { name: access_check, applies_to: _assessment_add_form_access}
+
+  Drupal\assessments\Access\AssessmentAssetCreationAccessCheck:
+    tags:
+      - { name: access_check, applies_to: _assessments_asset_creation_access}
+
+  Drupal\assessments\Routing\AssessmentsRouteSubscriber: { }

@@ -1,8 +1,0 @@
-name: Joinup Entity Browser
-type: module
-description: Provides entity browser create access handling for Joinup.
-package: Joinup
-core_version_requirement: "^10.4 || ^11"
-dependencies:
-  - drupal:node
-  - entity_browser:entity_browser
