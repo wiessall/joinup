@@ -21,7 +21,7 @@ index 74a71424736eab114f8fae45c5baf1c19475166e..5315b065bd29ff930d45547ada451c31
    /**
     * {@inheritdoc}
 diff --git a/src/Form/EntityInlineForm.php b/src/Form/EntityInlineForm.php
-index 9d193c95773ac170a06fe5ca2f710813b5db7ff0..fe515eb2bbee2736c3279c8616340a0684ed96b5 100644
+index 9d193c95773ac170a06fe5ca2f710813b5db7ff0..2a58de1ceb7b5cc7210808c09ebae36d3a311273 100644
 --- a/src/Form/EntityInlineForm.php
 +++ b/src/Form/EntityInlineForm.php
 @@ -10,12 +10,14 @@ use Drupal\Core\Entity\EntityInterface;
@@ -47,7 +47,7 @@ index 9d193c95773ac170a06fe5ca2f710813b5db7ff0..fe515eb2bbee2736c3279c8616340a06
      $entity_form['#ief_element_submit'][] = [
        get_class($this),
        'submitCleanFormState',
-@@ -261,26 +264,75 @@ class EntityInlineForm implements InlineFormInterface {
+@@ -261,26 +264,79 @@ class EntityInlineForm implements InlineFormInterface {
     * {@inheritdoc}
     */
    public function entityFormValidate(array &$entity_form, FormStateInterface $form_state) {
@@ -90,19 +90,23 @@ index 9d193c95773ac170a06fe5ca2f710813b5db7ff0..fe515eb2bbee2736c3279c8616340a06
 +    $form_display = $this->getFormDisplay($entity, $form_mode);
 +    $label_key = $entity->getEntityType()->getKey('label');
 +
-+    foreach ($entity as $name => $items) {
++    foreach ($entity as $name => $field) {
 +      $widget = $form_display->getRenderer($name);
 +      if (!$widget) {
 +        continue;
 +      }
 +
-+      $field = $entity->get($name);
 +      $definition = $field->getFieldDefinition();
 +
++      // Skip base fields (except the label) because their default values
++      // (status, uid, etc.) would make every entity appear non-empty.
++      // If no label key exists, all displayed fields are checked.
 +      if (!$definition instanceof FieldConfigInterface && $label_key && $name !== $label_key) {
 +        continue;
 +      }
 +
++      // FieldItemInterface::isEmpty() returns FALSE for 0 (unchecked),
++      // so only treat an explicitly checked boolean as non-empty.
 +      if ($definition->getType() === 'boolean') {
 +        if (!empty($field->value)) {
 +          return FALSE;
@@ -132,18 +136,18 @@ index 9d193c95773ac170a06fe5ca2f710813b5db7ff0..fe515eb2bbee2736c3279c8616340a06
     * {@inheritdoc}
     */
 diff --git a/src/Plugin/Field/FieldWidget/InlineEntityFormBase.php b/src/Plugin/Field/FieldWidget/InlineEntityFormBase.php
-index 69869be8e099ea191d6fdbcfcd5c4acda05c0ad9..c896d8e1f2ca8d1e068f227f46b8a5939f853e6d 100644
+index 69869be8e099ea191d6fdbcfcd5c4acda05c0ad9..5197b16b7decfaa853d8919681a9d8889653598e 100644
 --- a/src/Plugin/Field/FieldWidget/InlineEntityFormBase.php
 +++ b/src/Plugin/Field/FieldWidget/InlineEntityFormBase.php
 @@ -445,6 +445,7 @@ abstract class InlineEntityFormBase extends WidgetBase implements ContainerFacto
        '#ief_labels' => $this->getEntityTypeLabels(),
        // Identifies the IEF widget to which the form belongs.
        '#ief_id' => $this->getIefId(),
-+      '#required' => TRUE,
++      '#required' => $this->fieldDefinition->isRequired(),
      ];
  
      return $element;
-@@ -608,4 +609,19 @@ abstract class InlineEntityFormBase extends WidgetBase implements ContainerFacto
+@@ -608,4 +609,18 @@ abstract class InlineEntityFormBase extends WidgetBase implements ContainerFacto
      return !empty($create_bundles);
    }
  
@@ -151,13 +155,12 @@ index 69869be8e099ea191d6fdbcfcd5c4acda05c0ad9..c896d8e1f2ca8d1e068f227f46b8a593
 +   * {@inheritdoc}
 +   */
 +  public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
-+    // When the parent field is optional, filter out empty entities so that
-+    // an unfilled inline entity form does not trigger validation errors.
 +    if (!$this->fieldDefinition->isRequired()) {
 +      $form_mode = $this->getSetting('form_mode');
-+      $values = array_values(array_filter($values, function ($value) use ($form_mode) {
-+        return empty($value['entity']) || !$this->inlineFormHandler->isEmptyEntity($value['entity'], $form_mode);
-+      }));
++      $values = array_values(array_filter(
++        $values,
++        fn($value) => empty($value['entity']) || !$this->inlineFormHandler->isEmptyEntity($value['entity'], $form_mode),
++      ));
 +    }
 +    return $values;
 +  }
@@ -176,18 +179,56 @@ index bd176e0b2387a26fcf020379bbdef0a104a83b4d..7c2391d13e624c53919c4cd6b4f9b6e5
        return;
      }
  
-diff --git a/src/Plugin/Field/FieldWidget/InlineEntityFormSimple.php b/src/Plugin/Field/FieldWidget/InlineEntityFormSimple.php
-index 42fa2f5ec7d1348c1dc6778910729a31cf35dc67..1fb717e21e3320a531e378a59472fcb191f1c6b5 100644
---- a/src/Plugin/Field/FieldWidget/InlineEntityFormSimple.php
-+++ b/src/Plugin/Field/FieldWidget/InlineEntityFormSimple.php
-@@ -64,6 +64,7 @@ class InlineEntityFormSimple extends InlineEntityFormBase {
-     ]);
-     $bundle = $this->getBundle();
-     $element['inline_entity_form'] = $this->getInlineEntityForm($op, $bundle, $langcode, $delta, $parents, $entity);
-+    $element['inline_entity_form']['#required'] = $this->fieldDefinition->isRequired();
- 
-     if ($op == 'edit') {
-       /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
+diff --git a/tests/modules/inline_entity_form_test/src/Entity/EntityTestNoLabel.php b/tests/modules/inline_entity_form_test/src/Entity/EntityTestNoLabel.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..7f8f48e336b76f227a8d5fad076d53373d5cff7e
+--- /dev/null
++++ b/tests/modules/inline_entity_form_test/src/Entity/EntityTestNoLabel.php
+@@ -0,0 +1,44 @@
++<?php
++
++namespace Drupal\inline_entity_form_test\Entity;
++
++use Drupal\Core\Entity\ContentEntityBase;
++use Drupal\Core\Entity\EntityTypeInterface;
++use Drupal\Core\Field\BaseFieldDefinition;
++
++/**
++ * Defines a test entity type without a label key.
++ *
++ * @ContentEntityType(
++ *   id = "entity_test_no_label",
++ *   label = @Translation("Test entity without label key"),
++ *   base_table = "entity_test_no_label",
++ *   admin_permission = "administer entity_test_no_label content",
++ *   entity_keys = {
++ *     "id" = "id",
++ *     "uuid" = "uuid",
++ *   },
++ * )
++ */
++class EntityTestNoLabel extends ContentEntityBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
++    $fields = parent::baseFieldDefinitions($entity_type);
++
++    $fields['name'] = BaseFieldDefinition::create('string')
++      ->setLabel(t('Name'))
++      ->setDescription(t('The name of the test entity.'))
++      ->setSetting('max_length', 32)
++      ->setDisplayOptions('form', [
++        'type' => 'string_textfield',
++        'weight' => -5,
++      ])
++      ->setDisplayConfigurable('form', TRUE);
++
++    return $fields;
++  }
++
++}
 diff --git a/tests/src/FunctionalJavascript/OptionalSimpleWidgetTest.php b/tests/src/FunctionalJavascript/OptionalSimpleWidgetTest.php
 new file mode 100644
 index 0000000000000000000000000000000000000000..7b9128e32e526ce95cd2c71208ef462e4ae65dad
@@ -337,6 +378,113 @@ index 0000000000000000000000000000000000000000..7b9128e32e526ce95cd2c71208ef462e
 +    $page->pressButton('Save');
 +
 +    $this->assertNoNodeByTitle($host_title);
++  }
++
++}
+diff --git a/tests/src/Kernel/IsEmptyEntityNoLabelTest.php b/tests/src/Kernel/IsEmptyEntityNoLabelTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..a4e0aadfe42d114b4f8dfa9ddcbee6ebf236097e
+--- /dev/null
++++ b/tests/src/Kernel/IsEmptyEntityNoLabelTest.php
+@@ -0,0 +1,101 @@
++<?php
++
++namespace Drupal\Tests\inline_entity_form\Kernel;
++
++use Drupal\Core\Entity\Entity\EntityFormDisplay;
++use Drupal\inline_entity_form\Form\EntityInlineForm;
++use Drupal\KernelTests\KernelTestBase;
++use PHPUnit\Framework\Attributes\Group;
++use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
++
++/**
++ * Tests isEmptyEntity() for entity types without a label key.
++ *
++ * @see \Drupal\inline_entity_form\Form\EntityInlineForm::isEmptyEntity()
++ * @see https://www.drupal.org/project/inline_entity_form/issues/3099844
++ */
++#[Group('inline_entity_form')]
++#[RunTestsInSeparateProcesses]
++class IsEmptyEntityNoLabelTest extends KernelTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = [
++    'system',
++    'user',
++    'inline_entity_form',
++    'inline_entity_form_test',
++  ];
++
++  /**
++   * The inline form handler under test.
++   *
++   * @var \Drupal\inline_entity_form\Form\EntityInlineForm
++   */
++  protected $inlineFormHandler;
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
++
++    $this->installEntitySchema('entity_test_no_label');
++
++    // Create a form display that shows the 'name' base field.
++    $form_display = EntityFormDisplay::create([
++      'targetEntityType' => 'entity_test_no_label',
++      'bundle' => 'entity_test_no_label',
++      'mode' => 'default',
++      'status' => TRUE,
++    ]);
++    $form_display->setComponent('name', [
++      'type' => 'string_textfield',
++      'weight' => 0,
++    ]);
++    $form_display->save();
++
++    $entity_type = $this->container->get('entity_type.manager')
++      ->getDefinition('entity_test_no_label');
++    $this->inlineFormHandler = EntityInlineForm::createInstance(
++      $this->container,
++      $entity_type
++    );
++  }
++
++  /**
++   * Tests that an entity without a label key checks all displayed fields.
++   */
++  public function testEmptyEntityWithoutLabelKey() {
++    $entity_type = $this->container->get('entity_type.manager')
++      ->getDefinition('entity_test_no_label');
++
++    $this->assertFalse($entity_type->getKey('label'));
++
++    $storage = $this->container->get('entity_type.manager')
++      ->getStorage('entity_test_no_label');
++
++    $empty_entity = $storage->create();
++    $this->assertTrue($this->inlineFormHandler->isEmptyEntity($empty_entity, 'default'));
++
++    $filled_entity = $storage->create(['name' => 'Test value']);
++    $this->assertFalse($this->inlineFormHandler->isEmptyEntity($filled_entity, 'default'));
++  }
++
++  /**
++   * Tests that a non-displayed field does not affect emptiness.
++   */
++  public function testNonDisplayedFieldIgnored() {
++    $storage = $this->container->get('entity_type.manager')
++      ->getStorage('entity_test_no_label');
++
++    $form_display = EntityFormDisplay::load('entity_test_no_label.entity_test_no_label.default');
++    $form_display->removeComponent('name');
++    $form_display->save();
++
++    $entity = $storage->create(['name' => 'Test value']);
++    $this->assertTrue($this->inlineFormHandler->isEmptyEntity($entity, 'default'));
 +  }
 +
 +}
