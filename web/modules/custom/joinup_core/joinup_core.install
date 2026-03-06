@@ -26,32 +26,3 @@ function joinup_core_requirements($phase): array {
 
   return $requirements;
 }
-
-/**
- * Sync content_listing values from data table to revisions table.
- */
-function joinup_core_update_200900(): void {
-  $database = \Drupal::database();
-  $messenger = \Drupal::messenger();
-
-  $query = $database->select('paragraph__content_listing', 'p')
-    ->fields('p', ['entity_id', 'revision_id', 'delta', 'content_listing_value']);
-  // Probably delta is not needed but just to keep it sane.
-  $query->join('paragraph_revision__content_listing', 'pr', 'p.entity_id = pr.entity_id AND p.revision_id = pr.revision_id AND p.delta = pr.delta');
-  $query->where('p.content_listing_value <> pr.content_listing_value');
-  $results = $query->execute()->fetchAll();
-
-  $count = 0;
-  foreach ($results as $row) {
-    $database->update('paragraph_revision__content_listing')
-      ->fields(['content_listing_value' => $row->content_listing_value])
-      ->condition('entity_id', $row->entity_id)
-      ->condition('revision_id', $row->revision_id)
-      ->condition('delta', $row->delta)
-      ->execute();
-    $count++;
-    $messenger->addMessage("Synced content_listing for paragraph {$row->entity_id} (revision {$row->revision_id})");
-  }
-
-  $messenger->addMessage(t('@count rows synced from paragraph__content_listing to paragraph_revision__content_listing.', ['@count' => $count]));
-}
