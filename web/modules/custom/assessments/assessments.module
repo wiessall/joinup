@@ -24,6 +24,7 @@ use Drupal\assessments\Entity\BindingRequirementParagraph;
 use Drupal\assessments\Entity\PublicOrganisation;
 use Drupal\assessments\Event\AssessmentReportEvent;
 use Drupal\assessments\NotificationEvents;
+use Drupal\assessments\Plugin\EntityBrowser\Widget\OgAwareEntityForm;
 use Drupal\assessments\Plugin\Field\FieldWidget\ProvidedByWidget;
 use Drupal\collection\Entity\CollectionInterface;
 
@@ -487,6 +488,15 @@ function _assessments_handle_report_state_notification(AssessmentInterface $enti
     $event = new AssessmentReportEvent($entity);
     \Drupal::service('event_dispatcher')
       ->dispatch($event, NotificationEvents::ASSESSMENT_REPORT_SUBMITTED_FOR_REVIEW);
+  }
+}
+
+/**
+ * Implements hook_entity_browser_widget_info_alter().
+ */
+function assessments_entity_browser_widget_info_alter(array &$info): void {
+  if (isset($info['entity_form'])) {
+    $info['entity_form']['class'] = OgAwareEntityForm::class;
   }
 }
 
