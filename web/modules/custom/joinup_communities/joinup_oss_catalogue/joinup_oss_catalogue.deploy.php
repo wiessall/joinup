@@ -12,7 +12,7 @@ use Drupal\Core\Entity\ContentEntityStorageInterface;
 /**
  * Queue OSS solutions to be validated.
  */
-function joinup_oss_catalogue_deploy_200901(): string {
+function joinup_oss_catalogue_deploy_201000(): string {
   $queue = \Drupal::queue('joinup_oss_catalogue_publiccode_validator');
   $queue->createQueue();
   $solutionStorage = \Drupal::service('entity_type.manager')->getStorage('node');
