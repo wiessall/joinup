@@ -4,10 +4,9 @@ status: true
 dependencies:
   config:
     - field.storage.meta_entity.eif_description
-    - filter.format.basic_html
+    - filter.format.content_editor
     - meta_entity.type.eif_perspective
   module:
-    - rdf_sync
     - text
 third_party_settings:
   rdf_sync:
@@ -21,7 +20,7 @@ bundle: eif_perspective
 label: Description
 description: ''
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:

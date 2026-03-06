@@ -112,7 +112,6 @@ content:
 hidden:
   announcements_enabled: true
   landing_page: true
-  langcode: true
   meta_entity_solution_settings_listing_content_inline_facets: true
   meta_entity_solution_settings_listing_content_top: true
   search_api_excerpt: true

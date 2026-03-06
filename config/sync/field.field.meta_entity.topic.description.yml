@@ -15,7 +15,7 @@ bundle: topic
 label: Description
 description: "The description field appears both in the header and the homepage. <strong>If you would like to have different text in the homepage, please set the text as a summary and it will automatically replace the full description.</strong>\r\nIf the summary is not filled, <strong>only the first 100 characters will be printed in the homepage</strong>."
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
