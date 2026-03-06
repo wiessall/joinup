@@ -83,7 +83,7 @@ readonly class WebtoolsAnalyticsSubscriber implements EventSubscriberInterface {
     }
 
     $current_request = $this->requestStack->getCurrentRequest();
-    if ($keys = $current_request?->get('keys')) {
+    if ($keys = $current_request?->query->get('keys')) {
       $search_data = $event->getSearch();
       // Resolve malformed UTF-8 characters, possibly incorrectly encoded.
       $search_data->setKeyword(mb_convert_encoding($keys, 'UTF-8', 'UTF-8'));

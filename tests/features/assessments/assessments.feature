@@ -14,7 +14,7 @@ Feature: Assessment Report Entity Management
     Then I should see the heading "Create assessment report"
 
     When I press "Save as draft"
-    Then I should see the error message "3 errors have been found: Short titleType of public sector bodyIdentification of binding requirement(s) assessed"
+    Then I should see the error message "3 errors have been found: Short title Type of public sector body Identification of binding requirement(s) assessed"
 
     When I fill in "Short title" with "Test Assessment Report 2025"
     And I should see "This will be used as the title of the published report. Maximum 255 characters."
@@ -36,7 +36,7 @@ Feature: Assessment Report Entity Management
     And a modal should open
     And I should see the button "Cancel" in the "Modal buttons" region
     And I press "Save" in the "Modal buttons" region
-    And I should see the text "4 errors have been found: NameName of the initiativeDescriptionDescription of the binding requirement" in the "Modal content" region
+    And I should see the text "4 errors have been found: Name Name of the initiative Description Description of the binding requirement" in the "Modal content" region
 
     Then I should see the following lines of text in the correct order in "Modal content":
       | Initiative                |

@@ -257,7 +257,12 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
 
     $this->assertFalse($assessment->access('delete', $this->assessmentReporterUser));
     $this->assertFalse($assessment->access('delete', $this->assessmentModeratorUser));
-    $this->assertFalse($assessment->access('delete', $this->ownerUser));
+    if ($state === 'draft') {
+      $this->assertTrue($assessment->access('delete', $this->ownerUser));
+    }
+    else {
+      $this->assertFalse($assessment->access('delete', $this->ownerUser));
+    }
     $this->assertFalse($assessment->access('delete', $this->nonOwnerUser));
     $this->assertFalse($assessment->access('delete', $this->authenticatedUser));
   }
@@ -363,7 +368,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
    * @return array
    *   Test cases with state names.
    */
-  public function nonPublishedStatesProvider(): array {
+  public static function nonPublishedStatesProvider(): array {
     return [
       'draft' => ['draft'],
       'review' => ['review'],
@@ -377,7 +382,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
    * @return array
    *   Test cases with state names.
    */
-  public function allStatesProvider(): array {
+  public static function allStatesProvider(): array {
     return [
       'draft' => ['draft'],
       'review' => ['review'],
@@ -536,7 +541,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
    * @return array
    *   Test cases with bundle names and paragraph field names.
    */
-  public function subEntityTypesProvider(): array {
+  public static function subEntityTypesProvider(): array {
     return [
       'expression' => ['expression', 'expression'],
       'participation' => ['participation', 'has_participation'],

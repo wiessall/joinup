@@ -7,7 +7,7 @@ dependencies:
 id: interoperability_validator
 label: 'Interoperability validator'
 weight: -7
-is_admin: null
+is_admin: false
 permissions:
   - 'flag interoperability'
   - 'unflag interoperability'

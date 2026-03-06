@@ -186,6 +186,9 @@ trait MailCollectorTrait {
       }
 
       $link = strpos($pattern, '?<url>') === FALSE ? $match[0] : $match['url'];
+      // Remove trailing punctuation that might have been captured from sentence
+      // endings when HTML is converted to plain text.
+      $link = rtrim($link, '.,;!?');
       $this->visitPath($link);
       return;
     }

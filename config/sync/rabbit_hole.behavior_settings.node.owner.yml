@@ -1,0 +1,13 @@
+uuid: 4b0d114e-a4ce-41d5-8795-8ceb1e823d08
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.owner
+id: node.owner
+targetEntityType: node
+bundle: owner
+action: access_denied
+no_bypass: false
+bypass_message: false
+configuration: {  }

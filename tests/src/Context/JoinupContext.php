@@ -268,40 +268,6 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Register a user.
-   */
-  #[Given('the following user registration at :location:')]
-  public function submitRegistrationForm(TableNode $table, $location): void {
-    $this->visitPath($location);
-
-    // Fill in fields.
-    foreach ($table->getRowsHash() as $field => $value) {
-      $this->getSession()->getPage()->fillField($field, $value);
-      if ($field == 'Username') {
-        $username = $value;
-      }
-    }
-
-    $this->getSession()->getPage()->pressButton("Create new account");
-
-    // Get the last registered user.
-    $results = \Drupal::entityTypeManager()->getStorage('user')->loadByProperties(['name' => $username]);
-    /** @var \Drupal\user\UserInterface $user */
-    $user = reset($results);
-
-    if ($user) {
-      // Track user for auto delete in tear-down.
-      $this->getUserManager()->addUser((object) [
-        'name' => $username,
-        'uid' => $user->id(),
-      ]);
-    }
-    else {
-      throw new \Exception('User not registered.');
-    }
-  }
-
-  /**
    * Asserts that the selected option(s) in matches the expected value(s).
    *
    * @param string $select

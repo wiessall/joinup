@@ -28,7 +28,6 @@ dependencies:
     - assessments
     - collection
     - comment
-    - config_translation
     - contact_form
     - content_translation
     - custom_page
@@ -45,7 +44,6 @@ dependencies:
     - joinup_featured
     - joinup_group
     - joinup_group_content_management
-    - joinup_i18n
     - joinup_legal
     - joinup_licence
     - joinup_log
@@ -300,6 +298,7 @@ permissions:
   - 'perform solution_workflow workflow unarchive transition on any entity'
   - 'perform solution_workflow workflow update_validated transition on any entity'
   - 'perform solution_workflow workflow validate transition on any entity'
+  - 'rebuild node access permissions'
   - 'replicate entities'
   - 'revert all sitewide alert revisions'
   - 'translate any entity'
@@ -341,7 +340,6 @@ permissions:
   - 'view any unpublished content'
   - 'view any webform submission'
   - 'view assessment listing'
-  - 'view assessment migration comparison'
   - 'view blocked_reason'
   - 'view licence overview page'
   - 'view own blocked_reason'

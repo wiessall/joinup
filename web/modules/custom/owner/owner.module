@@ -108,8 +108,6 @@ function owner_node_access(NodeInterface $entity, string $operation, AccountInte
       ->addCacheTags($tags);
   }
 
-  // Access control for anonymous users viewing owner canonical route is
-  // handled by OwnerAccessSubscriber event subscriber.
   return AccessResult::neutral();
 }
 

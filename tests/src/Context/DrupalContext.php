@@ -38,7 +38,7 @@ class DrupalContext extends DrupalExtensionDrupalContext {
    * names, and translates filenames of images in the fixtures folder for the
    * user profile pictures.
    */
-  public function createUsers(TableNode $usersTable) {
+  public function createUsers(TableNode $usersTable): void {
     foreach ($usersTable->getHash() as $userHash) {
       $this->createUser($userHash);
     }
