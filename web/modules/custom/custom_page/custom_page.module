@@ -125,8 +125,7 @@ function custom_page_node_update(NodeInterface $entity): void {
     return;
   }
 
-  /** @var \Drupal\custom_page\Entity\CustomPageInterface $original */
-  $original = $entity->original;
+  $original = $entity->getOriginal();
 
   // Update all links that point to this custom page if the title has changed,
   // or if the entity becomes (un)published.
@@ -322,7 +321,7 @@ function custom_page_node_presave(NodeInterface $entity): void {
     return;
   }
 
-  $original = $entity->original ?? NULL;
+  $original = $entity->getOriginal();
   assert($original instanceof CustomPageInterface || $original === NULL);
   if ($original && $original->isPublished() && $entity->isArchived() && $entity->isGroupLandingPage()) {
     throw new Exception("This page acts as landing page for the {$entity->getGroup()->get('type')->entity->getSingularLabel()}. In order to unpublished it should be first unset as landing page.");
