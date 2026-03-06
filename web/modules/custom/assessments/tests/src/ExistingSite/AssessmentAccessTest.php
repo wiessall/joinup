@@ -247,7 +247,12 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
 
     $this->assertFalse($assessment->access('delete', $this->assessmentReporterUser));
     $this->assertFalse($assessment->access('delete', $this->assessmentModeratorUser));
-    $this->assertFalse($assessment->access('delete', $this->ownerUser));
+    if ($state === 'draft') {
+      $this->assertTrue($assessment->access('delete', $this->ownerUser));
+    }
+    else {
+      $this->assertFalse($assessment->access('delete', $this->ownerUser));
+    }
     $this->assertFalse($assessment->access('delete', $this->nonOwnerUser));
     $this->assertFalse($assessment->access('delete', $this->authenticatedUser));
   }

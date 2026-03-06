@@ -56,6 +56,10 @@ Feature:
       | Recommendation 1 \| Subsidiarity and proportionality |
       | Recommendation 2 \| Openness                         |
 
+    When I fill in "eif_recommendation[0][value]" with "Blab, blib, blop!"
+    And I press "Save"
+    Then I should see the inline form error message "Recommendation field is required."
+
     Given I select "Recommendation 2 | Openness" from "Recommendation"
     And I press "Save"
     Then I should see the heading "Some EIF solution"

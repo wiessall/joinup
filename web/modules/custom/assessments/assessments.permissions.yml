@@ -13,6 +13,9 @@ delete assessment report:
   title: 'Delete assessment reports'
   description: 'Delete assessment reports.'
   restrict access: true
+delete own draft assessment report:
+  title: 'Delete own draft assessment report'
+  restrict access: false
 view own unpublished assessment report:
   title: 'View own unpublished assessment reports'
   description: 'View assessment reports created by the user.'
@@ -27,8 +30,4 @@ view assessment listing:
 administer assessment statements:
   title: 'Administer assessment statements'
   description: 'Maintain the types of assessment statement entity.'
-  restrict access: true
-view assessment migration comparison:
-  title: 'View assessment migration comparison'
-  description: 'Access the migration comparison pages.'
   restrict access: true
