@@ -6,9 +6,9 @@ Feature: Views display translated entities correctly.
 
   # covers solution_classification view.
   Scenario: Solution classification terms are listed on the public classification page.
-    Given the following taxonomy term entity translations:
-      | source            | language | name              |
-      | Complete Solution | fr       | Solution complète |
+    Given the following locale string translations:
+      | source            | language | translation       | status |
+      | Complete Solution | fr       | Solution complète | 1      |
     When I am an anonymous user
     And I visit "/solution-classification"
     Then I should see "Complete Solution"
@@ -25,21 +25,23 @@ Feature: Views display translated entities correctly.
       | title               | collection     |
       | Views Test Solution | Views Test Hub |
     And custom_page content:
-      | title           | collection     |
-      | Views Test Page | Views Test Hub |
-    And the following locale string translations:
-      | source              | language | translation           | status |
-      | Views Test Hub      | fr       | Concentrateur de test | 1      |
-      | Views Test Solution | fr       | Solution de test      | 1      |
-      | Views Test Page     | fr       | Page de test          | 1      |
-    When I am an anonymous user
-    And I go to the "Views Test Hub" collection
-    And I click "Views Test Page"
-    Then I should see the heading "Views Test Page"
+      | title                         | collection     | solution            | state     |
+      | Collection page with EN title | Views Test Hub |                     | published |
+      | Solution page with EN title   |                | Views Test Solution | published |
+    And the following content entity translations:
+      | source                        | language | title                         |
+      | Collection page with EN title | el       | Collection page with EL title |
+      | Solution page with EN title   | el       | Solution page with EL title   |
+    When I am logged in as a moderator
+    And I go to the "el" version of the "Views Test Hub" collection
+    Then I click "Settings" in the "Entity actions" region
+    And I select "Collection page with GR title" from "Landing page"
 
+
+  # covers glossary view.
   Scenario: Glossary terms are translated and correctly listed.
     Given collection content:
-      | nid | title             | state     |
+      | nid  | title             | state     |
       | 3000 | A World of Things | published |
     And glossary content:
       | title    | synonyms | summary             | definition                       | collection        | state     |
@@ -79,18 +81,12 @@ Feature: Views display translated entities correctly.
     And news content:
       | title          | headline       | collection   | state     |
       | Breaking Story | Latest updates | News Central | published |
-    And news content:
-      | title            | headline             | collection   | state     | langcode |
-      | Nouvelle urgente | Dernières actualités | News Central | published | fr       |
     And the following locale string translations:
-      | source         | language | translation          | status |
-      | News Central   | fr       | Centre des nouvelles | 1      |
-      | Breaking Story | fr       | Nouvelle urgente     | 1      |
-      | Latest updates | fr       | Dernières actualités | 1      |
+      | source         | language | translation      | status |
+      | Breaking Story | fr       | Nouvelle urgente | 1      |
     And the "In the spotlight" content listing contains:
-      | type    | label            |
-      | content | Breaking Story   |
-      | content | Nouvelle urgente |
+      | type    | label          |
+      | content | Breaking Story |
     When I am on the homepage
     Then I should see "Breaking Story"
     When I visit "/fr"

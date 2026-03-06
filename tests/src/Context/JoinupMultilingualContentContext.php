@@ -12,12 +12,15 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\babel\BabelStorageInterface;
 use Drupal\babel\Model\Source;
+use Drupal\joinup\Traits\EntityTrait;
 use Drupal\node\NodeInterface;
 
 /**
  * Creates multilingual content.
  */
 class JoinupMultilingualContentContext extends RawDrupalContext {
+
+  use EntityTrait;
 
   /**
    * Creates content and also adds translations if any.
@@ -93,9 +96,7 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
    */
   #[Given('the following locale string translations:')]
   public function addLocaleStringTranslations(TableNode $table): void {
-    /** @var \Drupal\locale\StringStorageInterface $localeStorage */
     $localeStorage = \Drupal::service('locale.storage');
-    /** @var \Drupal\babel\BabelStorageInterface $babelStorage */
     $babelStorage = \Drupal::service(BabelStorageInterface::class);
 
     foreach ($table->getHash() as $row) {
@@ -177,6 +178,7 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
    * entity-level translation for the given language.
    *
    * Example:
+   *
    * @code
    * Given the following taxonomy term entity translations:
    *   | source            | language | name              |
@@ -186,7 +188,7 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
    *   | Alphabet | fr       | Alphabète | Définition détaillée |
    * @endcode
    *
-   * @param string $entity_type_alias
+   * @param string $entityTypeAlias
    *   The entity type alias (e.g. 'node', 'taxonomy term', 'glossary').
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The table of translations.
@@ -194,19 +196,15 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
    * @throws \Exception
    *   If the source entity or its label key is not found.
    */
-  #[Given('/^the following (.*) entity translation(?:s)?:$/')]
-  public function addEntityTranslations(string $entity_type_alias, TableNode $table): void {
-    $entity_type_id = match ($entity_type_alias) {
-      'taxonomy term' => 'taxonomy_term',
-      'glossary', 'node' => 'node',
-      default => str_replace(' ', '_', $entity_type_alias),
-    };
-    $storage = \Drupal::entityTypeManager()->getStorage($entity_type_id);
-    $entity_type = $storage->getEntityType();
-    $label_key = $entity_type->getKey('label');
+  #[Given('the following :entityTypeAlias entity translation(s):')]
+  public function addEntityTranslations(string $entityTypeAlias, TableNode $table): void {
+    $entityTypeId = $this->translateEntityTypeAlias($entityTypeAlias);
+    $storage = \Drupal::entityTypeManager()->getStorage($entityTypeId);
+    $entityType = $storage->getEntityType();
+    $labelKey = $entityType->getKey('label');
 
-    if (!$label_key) {
-      throw new \Exception(sprintf("Entity type '%s' does not have a label key.", $entity_type->id()));
+    if (!$labelKey) {
+      throw new \Exception(sprintf("Entity type '%s' does not have a label key.", $entityType->id()));
     }
 
     foreach ($table->getHash() as $row) {
@@ -214,9 +212,9 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
         throw new \Exception("The 'source' and 'language' columns are mandatory.");
       }
 
-      $entities = $storage->loadByProperties([$label_key => $row['source']]);
+      $entities = $storage->loadByProperties([$labelKey => $row['source']]);
       if (!$entities) {
-        throw new \Exception(sprintf("Entity of type '%s' with label '%s' not found.", $entity_type->id(), $row['source']));
+        throw new \Exception(sprintf("Entity of type '%s' with label '%s' not found.", $entityType->id(), $row['source']));
       }
 
       $entity = reset($entities);
@@ -229,44 +227,44 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
         $translated = $entity->addTranslation($row['language'], $entity->toArray());
       }
 
-      $processed_fields = ['source', 'language'];
+      $processedFields = ['source', 'language'];
       foreach ($row as $field => $value) {
-        if (in_array($field, $processed_fields)) {
+        if (in_array($field, $processedFields)) {
           continue;
         }
 
         // For glossary terms, we know the field is field_glossary_definition.
-        if ($entity_type_id === 'node' && $field === 'definition') {
-          $field_name = 'field_glossary_definition';
+        if ($entityTypeId === 'node' && $field === 'definition') {
+          $fieldName = 'field_glossary_definition';
         }
         elseif ($translated->hasField($field)) {
-          $field_name = $field;
+          $fieldName = $field;
         }
         else {
           // Fallback to simple underscore to camelCase or similar if needed,
           // but usually Drupal Behat extension handles this via mapping.
           // For now, let's try to find the field name.
-          $field_name = $field;
+          $fieldName = $field;
         }
 
-        $field_definition = $translated->getFieldDefinition($field_name);
+        $fieldDefinition = $translated->getFieldDefinition($fieldName);
 
-        if (!$field_definition) {
-          throw new \InvalidArgumentException(sprintf("Field '%s' (aliased from '%s') is unknown on entity type '%s'.", $field_name, $field, $entity_type->id()));
+        if (!$fieldDefinition) {
+          throw new \InvalidArgumentException(sprintf("Field '%s' (aliased from '%s') is unknown on entity type '%s'.", $fieldName, $field, $entityType->id()));
         }
 
-        if ($field_definition->getType() === 'text_with_summary') {
-          $translated->set($field_name, [
+        if ($fieldDefinition->getType() === 'text_with_summary') {
+          $translated->set($fieldName, [
             'value' => $value,
             'summary' => $row['summary'] ?? '',
             'format' => 'content_editor',
           ]);
-          $processed_fields[] = 'summary';
+          $processedFields[] = 'summary';
         }
         else {
-          $translated->set($field_name, $value);
+          $translated->set($fieldName, $value);
         }
-        $processed_fields[] = $field;
+        $processedFields[] = $field;
       }
 
       // Ensure the translation is published if the source is published and the
@@ -312,6 +310,31 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
       $multiline = preg_replace('#\\\\n#', PHP_EOL, substr($value, 11));
       $node->$key = $multiline;
     }
+  }
+
+
+  /**
+   * Visits a version of an entity in a given language.
+   *
+   * @param string $language
+   *   The language name. Example: "el", "fr".
+   * @param string $label
+   *   The label of the entity.
+   * @param string $bundle
+   *   The entity bundle. Example: "collection", "solution".
+   *
+   * @throws \Exception
+   *   Thrown when the entity is not found.
+   */
+  #[Given('I go to the :language version of the :label :bundle')]
+  public function visitEntityInGivenLanguage(string $language, string $label, string $bundle): void {
+    $entityTypeId = $this->translateEntityTypeAlias($bundle);
+    $bundleId = $this->translateBundle($bundle);
+    $entity = $this->getEntityByLabel($entityTypeId, $label, $bundleId);
+
+    $url = $entity->toUrl();
+    $url->setOption('language', \Drupal::languageManager()->getLanguage($language));
+    $this->visitPath($url->toString());
   }
 
 }
