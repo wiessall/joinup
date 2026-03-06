@@ -15,7 +15,6 @@ Feature: Views display translated entities correctly.
     When I visit "/fr/solution-classification"
     Then I should see "Solution complète"
 
-  # covers languages_eu view.
   # covers custom_pages view.
   Scenario: EU language terms and custom pages are prepared for entity reference views.
     Given collection content:
@@ -28,21 +27,22 @@ Feature: Views display translated entities correctly.
       | title                         | collection     | solution            | state     |
       | Collection page with EN title | Views Test Hub |                     | published |
       | Solution page with EN title   |                | Views Test Solution | published |
-    And the following content entity translations:
+    And the following "custom page" entity translations:
       | source                        | language | title                         |
       | Collection page with EN title | el       | Collection page with EL title |
       | Solution page with EN title   | el       | Solution page with EL title   |
     When I am logged in as a moderator
     And I go to the "el" version of the "Views Test Hub" collection
     Then I click "Settings" in the "Entity actions" region
-    And I select "Collection page with GR title" from "Landing page"
-
+    And I select "Collection page with EL title" from "Landing page"
+    When I go to the "el" version of the "Views Test Solution" solution
+    And I click "Edit" in the "Entity actions" region
 
   # covers glossary view.
   Scenario: Glossary terms are translated and correctly listed.
     Given collection content:
-      | nid  | title             | state     |
-      | 3000 | A World of Things | published |
+      | title             | state     |
+      | A World of Things | published |
     And glossary content:
       | title    | synonyms | summary             | definition                       | collection        | state     |
       | Alphabet | ABC      | Summary of Alphabet | Long, long body definition field | A World of Things | published |
@@ -53,10 +53,12 @@ Feature: Views display translated entities correctly.
     And I go to the "A World of Things" collection
     And I click "Glossary"
     Then I should see the link "Alphabet"
-    And I visit "/fr/node/3000/glossary"
+    And I go to the "fr" version of the "A World of Things" collection
+    And I click "Glossary"
     Then I should see "Alphabète"
 
   # covers assessment_reports view.
+  @demoAssessment
   Scenario: Assessment report nodes are prepared for the assessment reports block view.
     Given collection content:
       | title          |
@@ -71,6 +73,13 @@ Feature: Views display translated entities correctly.
       | source         | language | translation     | status |
       | Assessment Hub | fr       | Pôle évaluation | 1      |
       | Annual Report  | fr       | Rapport annuel  | 1      |
+    When I am an anonymous user
+    And I go to the "Interoperability assessments space" collection
+    And I click "Assessment reports"
+    Then I should see "Annual Report"
+    When I go to the "fr" version of the "Interoperability assessments space" collection
+    And I click "Assessment reports"
+    Then I should see "Rapport annuel"
 
   # covers latest_news view.
   # covers in_the_spotlight view.
@@ -81,16 +90,16 @@ Feature: Views display translated entities correctly.
     And news content:
       | title          | headline       | collection   | state     |
       | Breaking Story | Latest updates | News Central | published |
-    And the following locale string translations:
-      | source         | language | translation      | status |
-      | Breaking Story | fr       | Nouvelle urgente | 1      |
+    And the following news entity translations:
+      | source         | language | title             |
+      | Breaking Story | el       | Breaking GR Story |
     And the "In the spotlight" content listing contains:
       | type    | label          |
       | content | Breaking Story |
     When I am on the homepage
     Then I should see "Breaking Story"
-    When I visit "/fr"
-    Then I should see "Nouvelle urgente"
+    When I visit "/el"
+    Then I should see "Breaking GR Story"
 
   # covers eu_oss_catalogue_admin view.
   Scenario: OSS solutions are accessible on the public OSS catalogue page.
