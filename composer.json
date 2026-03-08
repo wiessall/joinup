@@ -39,7 +39,7 @@
         "drupal/diff": "^2.0",
         "drupal/digital_size_formatter": "~2.0",
         "drupal/dropsolid_purge": "^1.0@beta",
-        "drupal/dynamic_entity_reference": "^4.0",
+        "drupal/dynamic_entity_reference": "^3",
         "drupal/editor_file": "^2.1",
         "drupal/email_confirmer": "^1.0",
         "drupal/email_contact": "^2.0.4",
