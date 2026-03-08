@@ -6,14 +6,14 @@ Feature: Views display translated entities correctly.
 
   # covers solution_classification view.
   Scenario: Solution classification terms are listed on the public classification page.
-    Given the following locale string translations:
-      | source            | language | translation       | status |
-      | Complete Solution | fr       | Solution complète | 1      |
+    Given the following term entity translation:
+      | source            | language | name                |
+      | Complete Solution | el       | Πλήρης λύση         |
     When I am an anonymous user
     And I visit "/solution-classification"
     Then I should see "Complete Solution"
-    When I visit "/fr/solution-classification"
-    Then I should see "Solution complète"
+    When I visit "/el/solution-classification"
+    Then I should see "Πλήρης λύση"
 
   # covers custom_pages view.
   Scenario: EU language terms and custom pages are prepared for entity reference views.
