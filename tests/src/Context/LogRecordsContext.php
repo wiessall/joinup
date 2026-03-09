@@ -10,12 +10,14 @@ use Behat\Step\Given;
 use Drupal\Component\Utility\Variable;
 use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use PHPUnit\Framework\Assert;
+use Drupal\joinup\Traits\AssertTrait;
 
 /**
  * Behat step definitions to check log records created during tests.
  */
 class LogRecordsContext extends RawDrupalContext {
+
+  use AssertTrait;
 
   /**
    * Whether Database Log module was originally enabled or not.
@@ -47,7 +49,7 @@ class LogRecordsContext extends RawDrupalContext {
       $logRecords
     );
 
-    Assert::assertCount(
+    $this->assertCount(
       $count,
       $logRecords,
       'Number of log records is different than expected. Log records found: ' . implode(', ', $messages)
@@ -127,8 +129,9 @@ class LogRecordsContext extends RawDrupalContext {
   public function assertLogRecordExists(string $severity, string $description): void {
     $logRecords = $this->getLogRecords();
     $severity = mb_convert_case($severity, MB_CASE_TITLE);
-    Assert::assertNotFalse(
-      $severityCode = array_search($severity, RfcLogLevel::getLevels()),
+    $severityCode = array_search($severity, RfcLogLevel::getLevels());
+    $this->assertCondition(
+      $severityCode !== FALSE,
       sprintf(
         "Invalid severity level '%s'. Allowed values are: %s",
         $severity,

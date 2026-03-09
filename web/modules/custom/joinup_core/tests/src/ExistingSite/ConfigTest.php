@@ -6,12 +6,12 @@ namespace Drupal\Tests\joinup_core\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drush\TestTraits\DrushTestTrait;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the Joinup configuration.
- *
- * @group joinup_core
  */
+#[Group('joinup_core')]
 class ConfigTest extends JoinupExistingSiteTestBase {
 
   use DrushTestTrait;

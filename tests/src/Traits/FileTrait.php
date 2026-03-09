@@ -7,13 +7,13 @@ namespace Drupal\joinup\Traits;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\file\FileInterface;
 use Drupal\paragraphs\Entity\Paragraph;
-use PHPUnit\Framework\Assert;
 
 /**
  * Helper methods for dealing with files.
  */
 trait FileTrait {
 
+  use AssertTrait;
   use TestingEntitiesTrait;
 
   /**
@@ -68,7 +68,7 @@ trait FileTrait {
       $this->getMinkParameter('files_path')
     ), DIRECTORY_SEPARATOR);
     $sourcePath = $filesPath . DIRECTORY_SEPARATOR . $filename;
-    Assert::assertTrue(
+    $this->assertCondition(
       is_file($sourcePath),
       sprintf(
         "File '%s' was not found at '%s'",
