@@ -8,12 +8,12 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\Queue\QueueInterface;
 use Drupal\KernelTests\KernelTestBase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the cron timing logic.
- *
- * @group eu_oss_catalogue
  */
+#[Group('eu_oss_catalogue')]
 class CronTimingTest extends KernelTestBase {
 
   /**

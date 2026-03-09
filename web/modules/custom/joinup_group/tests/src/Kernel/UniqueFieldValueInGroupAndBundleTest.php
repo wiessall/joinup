@@ -8,12 +8,12 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\user\Traits\UserCreationTrait;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\entity_test\EntityTestHelper;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the UniqueFieldValueInGroupAndBundle constraint.
- *
- * @group joinup_group
  */
+#[Group('joinup_group')]
 class UniqueFieldValueInGroupAndBundleTest extends KernelTestBase {
 
   use UserCreationTrait;
