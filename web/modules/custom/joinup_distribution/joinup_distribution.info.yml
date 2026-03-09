@@ -8,3 +8,4 @@ dependencies:
   - 'joinup:joinup_taxonomy'
   - 'joinup:joinup_release'
   - 'joinup:joinup_solution'
+  - 'joinup:joinup_paragraphs'

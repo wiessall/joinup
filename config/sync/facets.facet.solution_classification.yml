@@ -50,12 +50,6 @@ processor_configs:
       sort: 20
     settings:
       sort: DESC
-  count_widget_order:
-    processor_id: count_widget_order
-    weights:
-      sort: 30
-    settings:
-      sort: DESC
   dependent_processor:
     processor_id: dependent_processor
     weights:

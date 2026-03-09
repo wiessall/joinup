@@ -26,7 +26,6 @@ use Drupal\assessments\Event\AssessmentReportEvent;
 use Drupal\assessments\NotificationEvents;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
-use Drupal\user\UserInterface;
 
 /**
  * Implements hook_theme().
@@ -253,53 +252,6 @@ function assessments_theme_suggestions_assessment(array $variables): array {
   $suggestions[] = 'assessment__' . $assessment->bundle() . '__' . $sanitized_view_mode;
 
   return $suggestions;
-}
-
-/**
- * Implements hook_user_cancel().
- */
-function assessments_user_cancel($edit, UserInterface $account, $method): void {
-  switch ($method) {
-    case 'user_cancel_block_unpublish':
-      // Unpublish assessments.
-      $storage = \Drupal::entityTypeManager()->getStorage('assessment');
-      $assessment_ids = $storage->getQuery()
-        ->condition('uid', $account->id())
-        ->condition('status', 1)
-        ->accessCheck(FALSE)
-        ->execute();
-      foreach ($storage->loadMultiple($assessment_ids) as $assessment) {
-        $assessment->set('status', FALSE)->save();
-      }
-      break;
-
-    case 'user_cancel_reassign':
-      // Anonymize assessments.
-      $storage = \Drupal::entityTypeManager()->getStorage('assessment');
-      $assessment_ids = $storage->getQuery()
-        ->condition('uid', $account->id())
-        ->accessCheck(FALSE)
-        ->execute();
-      foreach ($storage->loadMultiple($assessment_ids) as $assessment) {
-        $assessment->setOwnerId(0)->save();
-      }
-      break;
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_predelete() for user entities.
- */
-function assessments_user_predelete(UserInterface $account): void {
-  // Delete assessments that belong to this account.
-  $storage = \Drupal::entityTypeManager()->getStorage('assessment');
-  $assessment_ids = $storage->getQuery()
-    ->condition('uid', $account->id())
-    ->accessCheck(FALSE)
-    ->execute();
-  $storage->delete(
-    $storage->loadMultiple($assessment_ids)
-  );
 }
 
 /**

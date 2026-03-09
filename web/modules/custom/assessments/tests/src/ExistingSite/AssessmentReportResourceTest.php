@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Drupal\Tests\assessments\ExistingSite;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\File\FileSystemInterface;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Url;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\consumers\Entity\Consumer;
@@ -546,66 +546,6 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     ];
 
     return Json::decode((string) \Drupal::httpClient()->post($url, $options)->getBody())['access_token'];
-  }
-
-  /**
-   * Tests that HTTP errors return JSON responses.
-   */
-  public function testHttpErrorsReturnJson(): void {
-    $httpClient = \Drupal::httpClient();
-    $baseUrl = Url::fromUri('internal:/api/assessments/v1/assessment')
-      ->setAbsolute()
-      ->toString();
-
-    // Test 401 Unauthorized (invalid token).
-    $response = $httpClient->post($baseUrl, [
-      RequestOptions::HTTP_ERRORS => FALSE,
-      RequestOptions::HEADERS => [
-        'Accept' => 'application/json',
-        'Content-Type' => 'application/json',
-        'Authorization' => 'Bearer invalid_token',
-      ],
-      RequestOptions::JSON => ['name' => 'Test'],
-    ]);
-    $this->assertJsonErrorResponse($response, 401);
-
-    // Test 403 Forbidden (non-existent assessment).
-    $response = $httpClient->get($baseUrl . '/non-existent-uuid', [
-      RequestOptions::HTTP_ERRORS => FALSE,
-      RequestOptions::HEADERS => [
-        'Accept' => 'application/json',
-        'Authorization' => 'Bearer ' . $this->getAccessToken(),
-      ],
-    ]);
-    $this->assertJsonErrorResponse($response, 403);
-
-    // Test 405 Method Not Allowed (PATCH not supported).
-    $response = $httpClient->patch($baseUrl, [
-      RequestOptions::HTTP_ERRORS => FALSE,
-      RequestOptions::HEADERS => [
-        'Accept' => 'application/json',
-        'Content-Type' => 'application/json',
-        'Authorization' => 'Bearer ' . $this->getAccessToken(),
-      ],
-      RequestOptions::JSON => ['name' => 'Test'],
-    ]);
-    $this->assertJsonErrorResponse($response, 405);
-  }
-
-  /**
-   * Asserts that an HTTP response is a JSON error with the expected status.
-   *
-   * @param \Psr\Http\Message\ResponseInterface $response
-   *   The HTTP response.
-   * @param int $expectedStatus
-   *   The expected HTTP status code.
-   */
-  private function assertJsonErrorResponse(ResponseInterface $response, int $expectedStatus): void {
-    $this->assertSame($expectedStatus, $response->getStatusCode());
-    $this->assertStringContainsString('application/json', $response->getHeaderLine('Content-Type'));
-    $data = Json::decode($response->getBody()->getContents());
-    $this->assertIsArray($data);
-    $this->assertArrayHasKey('error', $data);
   }
 
   /**

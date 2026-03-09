@@ -1,0 +1,1178 @@
+diff --git a/core/config/schema/core.entity.schema.yml b/core/config/schema/core.entity.schema.yml
+index 3b3fe95679da5e7f81ce92bf714004a8539224ea..046dc38f52b0685a75413aa022b3dde596ac9f0c 100644
+--- a/core/config/schema/core.entity.schema.yml
++++ b/core/config/schema/core.entity.schema.yml
+@@ -453,6 +453,29 @@ field.formatter.settings.entity_reference_label:
+       type: boolean
+       label: 'Link label to the referenced entity'
+ 
++bundle_entity_with_plural_labels:
++  type: config_entity
++  label: 'Bundle'
++  mapping:
++    label_singular:
++      type: label
++      nullable: true
++      label: 'Indefinite singular name'
++      translation context: 'Bundle singular label'
++    label_plural:
++      type: label
++      nullable: true
++      label: 'Indefinite plural name'
++      translation context: 'Bundle plural label'
++    label_count:
++      type: sequence
++      nullable: true
++      label: 'Count labels'
++      sequence:
++        type: plural_label
++        label: 'Count label'
++        translation context: 'Bundle count label variant'
++
+ block.settings.field_block:*:*:*:
+   type: block_settings
+   mapping:
+diff --git a/core/lib/Drupal/Core/Config/Entity/EntityBundleWithPluralLabelsInterface.php b/core/lib/Drupal/Core/Config/Entity/EntityBundleWithPluralLabelsInterface.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..b200111cb05067f7f0427dbabf83555a424a95bc
+--- /dev/null
++++ b/core/lib/Drupal/Core/Config/Entity/EntityBundleWithPluralLabelsInterface.php
+@@ -0,0 +1,64 @@
++<?php
++
++namespace Drupal\Core\Config\Entity;
++
++/**
++ * Allows bundle configuration entities to support label plural variants.
++ */
++interface EntityBundleWithPluralLabelsInterface extends ConfigEntityInterface {
++
++  /**
++   * Sets the singular label of the bundle.
++   *
++   * @param string $singular_label
++   *   The singular label.
++   *
++   * @return $this
++   */
++  public function setSingularLabel(string $singular_label): self;
++
++  /**
++   * Returns the singular label of the bundle.
++   *
++   * @return string|null
++   *   The singular label or NULL if it was not set.
++   */
++  public function getSingularLabel(): ?string;
++
++  /**
++   * Sets the plural label of the bundle.
++   *
++   * @param string $plural_label
++   *   The plural label.
++   *
++   * @return $this
++   */
++  public function setPluralLabel(string $plural_label): self;
++
++  /**
++   * Returns the plural label of the bundle.
++   *
++   * @return string|null
++   *   The plural label or NULL if it was not set.
++   */
++  public function getPluralLabel(): ?string;
++
++  /**
++   * Sets the count label.
++   *
++   * @param string[] $count_label
++   *   The list of count label variants.
++   *
++   * @return $this
++   */
++  public function setCountLabel(array $count_label): self;
++
++  /**
++   * Returns the count label of the bundle.
++   *
++   * @return array|null
++   *   The count label or NULL if it was not set.
++   */
++  public function getCountLabel(): ?array;
++
++}
+diff --git a/core/lib/Drupal/Core/Config/Entity/EntityBundleWithPluralLabelsTrait.php b/core/lib/Drupal/Core/Config/Entity/EntityBundleWithPluralLabelsTrait.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..867797f362ed4e50153a3806e6d9f387fe12d834
+--- /dev/null
++++ b/core/lib/Drupal/Core/Config/Entity/EntityBundleWithPluralLabelsTrait.php
+@@ -0,0 +1,105 @@
++<?php
++
++namespace Drupal\Core\Config\Entity;
++
++/**
++ * Allows bundle configuration entities to support label plural variants.
++ */
++trait EntityBundleWithPluralLabelsTrait {
++
++  /**
++   * The indefinite singular name of the bundle.
++   *
++   * @var string|null
++   */
++  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName
++  protected $label_singular;
++
++  /**
++   * The indefinite plural name of the bundle.
++   *
++   * @var string|null
++   */
++  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName
++  protected $label_plural;
++
++  /**
++   * A list of definite singular/plural count label variants.
++   *
++   * @var string[]|null
++   *
++   * Unlimited definite singular/plural count labels can be defined in order to
++   * cover various contexts where they are used. The array keys are strings or
++   * integers, identifying the count label variant. For instance, a site might
++   * need two or more versions of the count labels:
++   * - singular '1 article', plural '@count article',
++   * - singular '1 article was found', plural '@count articles were found'.
++   * For this case the value of this property is:
++   * @code
++   * [
++   *   'default' => "1 article\x03@count article",
++   *   'items_found' => "1 article was found\x03@count articles were found",
++   * ]
++   * @endcode
++   * Note that the context ('default', 'items_found') is an arbitrary string
++   * identifier used to retrieve the desired version. If the array keys are
++   * missed, the array item integer index is used as variant ID:
++   * @code
++   * [
++   *   "1 item\x03@count items",
++   * ]
++   * @endcode
++   * Each value is a definite singular/plural count label with the plural
++   * variants separated by ETX (PoItem::DELIMITER).
++   *
++   * @see \Drupal\Component\Gettext\PoItem::DELIMITER
++   */
++  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName
++  protected $label_count;
++
++  /**
++   * {@inheritdoc}
++   */
++  public function setSingularLabel(string $singular_label): EntityBundleWithPluralLabelsInterface {
++    $this->label_singular = $singular_label;
++    return $this;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getSingularLabel(): ?string {
++    return $this->label_singular;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function setPluralLabel(string $plural_label): EntityBundleWithPluralLabelsInterface {
++    $this->label_plural = $plural_label;
++    return $this;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getPluralLabel(): ?string {
++    return $this->label_plural;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function setCountLabel(array $count_label): EntityBundleWithPluralLabelsInterface {
++    $this->label_count = $count_label;
++    return $this;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getCountLabel(): ?array {
++    return $this->label_count;
++  }
++
++}
+diff --git a/core/lib/Drupal/Core/Entity/EntityTypeBundleInfo.php b/core/lib/Drupal/Core/Entity/EntityTypeBundleInfo.php
+index 18bc083220a9751ce18a42fe7fa4dc426371e007..da987fa5fe48625d8e88cf995d72141343973427 100644
+--- a/core/lib/Drupal/Core/Entity/EntityTypeBundleInfo.php
++++ b/core/lib/Drupal/Core/Entity/EntityTypeBundleInfo.php
+@@ -2,9 +2,12 @@
+ 
+ namespace Drupal\Core\Entity;
+ 
++use Drupal\Component\Gettext\PoItem;
++use Drupal\Component\Render\FormattableMarkup;
+ use Drupal\Core\Cache\Cache;
+ use Drupal\Core\Cache\CacheBackendInterface;
+ use Drupal\Core\Cache\UseCacheBackendTrait;
++use Drupal\Core\Config\Entity\EntityBundleWithPluralLabelsInterface;
+ use Drupal\Core\Extension\ModuleHandlerInterface;
+ use Drupal\Core\Language\LanguageManagerInterface;
+ use Drupal\Core\TypedData\TypedDataManagerInterface;
+@@ -109,6 +112,13 @@ public function getAllBundleInfo() {
+           if ($bundle_entity_type = $entity_type->getBundleEntityType()) {
+             foreach ($this->entityTypeManager->getStorage($bundle_entity_type)->loadMultiple() as $entity) {
+               $this->bundleInfo[$type][$entity->id()]['label'] = $entity->label();
++              if ($entity instanceof EntityBundleWithPluralLabelsInterface) {
++                $this->bundleInfo[$type][$entity->id()] += [
++                  'label_singular' => $entity->getSingularLabel(),
++                  'label_plural' => $entity->getPluralLabel(),
++                  'label_count' => $entity->getCountLabel(),
++                ];
++              }
+             }
+           }
+           // If entity type bundles are not supported and
+@@ -139,4 +149,62 @@ public function clearCachedBundles() {
+     $this->typedDataManager->clearCachedDefinitions();
+   }
+ 
++  /**
++   * {@inheritdoc}
++   */
++  public function getBundleCountLabel(string $entity_type_id, string $bundle, int $count, $variant): ?string {
++    if (!$bundles_info = $this->getBundleInfo($entity_type_id)) {
++      throw new \InvalidArgumentException("The '{$entity_type_id}' doesn't exist.");
++    }
++    $bundle_info = $bundles_info[$bundle] ?? NULL;
++    if (!$bundle_info) {
++      throw new \InvalidArgumentException("The '{$entity_type_id}' entity type bundle '{$bundle}' doesn't exist.");
++    }
++
++    if (!empty($bundle_info['label_count'])) {
++      if (empty($bundle_info['label_count'][$variant])) {
++        throw new \InvalidArgumentException("There's no variant '{$variant}' defined in label_count for bundle '{$bundle}' of '{$entity_type_id}' entity type.");
++      }
++
++      $index = static::getPluralIndex($count);
++      if ($index === -1) {
++        // If the index cannot be computed, fallback to a single plural variant.
++        $index = $count > 1 ? 1 : 0;
++      }
++
++      $label_count = explode(PoItem::DELIMITER, $bundle_info['label_count'][$variant]);
++      if (!empty($label_count[$index])) {
++        return new FormattableMarkup($label_count[$index], ['@count' => $count]);
++      }
++    }
++
++    return NULL;
++  }
++
++  /**
++   * Gets the plural index through the gettext formula.
++   *
++   * @param int $count
++   *   Number to return plural for.
++   *
++   * @return int
++   *   The numeric index of the plural variant to use for the current language
++   *   and the given $count number or -1 if the language was not found or does
++   *   not have a plural formula.
++   *
++   * @todo Remove this method when https://www.drupal.org/node/2766857 gets in.
++   */
++  protected static function getPluralIndex(int $count): int {
++    // We have to test both if the function and the service exist since in
++    // certain situations it is possible that locale code might be loaded but
++    // the service does not exist. For example, where the parent test site has
++    // locale installed but the child site does not.
++    // @todo Refactor in https://www.drupal.org/node/2660338 so this code does
++    //   not depend on knowing that the Locale module exists.
++    if (function_exists('locale_get_plural') && \Drupal::hasService('locale.plural.formula')) {
++      return locale_get_plural($count);
++    }
++    return -1;
++  }
++
+ }
+diff --git a/core/lib/Drupal/Core/Entity/EntityTypeBundleInfoInterface.php b/core/lib/Drupal/Core/Entity/EntityTypeBundleInfoInterface.php
+index e32074eb43bdd082b681108fb98d01fc939ddf9d..9e665e1c02aaac5823c9c9ec50235e67eed069cf 100644
+--- a/core/lib/Drupal/Core/Entity/EntityTypeBundleInfoInterface.php
++++ b/core/lib/Drupal/Core/Entity/EntityTypeBundleInfoInterface.php
+@@ -48,4 +48,30 @@ public function getBundleLabels(string $entity_type_id): array;
+    */
+   public function clearCachedBundles();
+ 
++  /**
++   * Gets the count label for a given bundle.
++   *
++   * @param string $entity_type_id
++   *   The bundle's entity type ID.
++   * @param string $bundle
++   *   The bundle.
++   * @param int $count
++   *   The item count to display if the plural form was requested.
++   * @param string|int $variant
++   *   The variant of the count label. This is actually the, string or integer,
++   *   array item key corresponding to the count label variant. A bundle can
++   *   define unlimited definite singular/plural count labels in order to cover
++   *   various contexts where they are used. Pass the variant, as a string or
++   *   integer identifier, to get the appropriate version of the count label.
++   *
++   * @return string|null
++   *   The count label. NULL is returned in one of the following cases:
++   *   - The bundle didn't define a 'label_count' variant list.
++   *   - There's no plural formula for the given $count.
++   *
++   * @throws \InvalidArgumentException
++   *   If the passed entity type, bundle or count label variant doesn't exist.
++   */
++  public function getBundleCountLabel(string $entity_type_id, string $bundle, int $count, $variant): ?string;
++
+ }
+diff --git a/core/lib/Drupal/Core/Entity/entity.api.php b/core/lib/Drupal/Core/Entity/entity.api.php
+index 5f8042ef3e321046df5df9d5d1b6e003d53487b0..af08d8bb4760edfe8df1f85948ae4757d8b82b8b 100644
+--- a/core/lib/Drupal/Core/Entity/entity.api.php
++++ b/core/lib/Drupal/Core/Entity/entity.api.php
+@@ -878,6 +878,31 @@ function hook_entity_view_mode_info_alter(&$view_modes) {
+  *   An associative array of all entity bundles, keyed by the entity
+  *   type name, and then the bundle name, with the following keys:
+  *   - label: The human-readable name of the bundle.
++ *   - label_singular: (optional) A translated string with the indefinite
++ *     singular label of the bundle. This is typically a lowercase label but it
++ *     can be also translated as a capitalized label for languages such as
++ *     German. For instance, given a bundle with the ID 'fruit', the singular
++ *     label would be 'fruit' but for German translation will be capitalized as
++ *     'Obst'.
++ *   - label_plural: (optional)  A translated string with the indefinite plural
++ *     label of the bundle. The same capitalization rules should be applied as
++ *     for 'label_singular'.
++ *   - label_count: (optional) An array containing one or more count label
++ *     variants for this bundle. Depending on context a site might need
++ *     different versions of the count label. For instance, a site will define
++ *     the following variants, depending on the use-case:
++ *     - On a regular page: @code 1 article\x03@count articles @endcode.
++ *     - On a search results page: @code 1 article was found\x03@count articles
++ *       were found @endcode. Note that we cannot build this version by deriving
++ *       the first one because of the was/were forms.
++ *     - On a different page: @code <span>1</span>
++ *       article\x03<span>@count</span> articles @endcode.
++ *     - On other pages the count might be displayed in a different @code <div>
++ *       @endcode or even in a different theme hook, so it needs a variant
++ *       without the count part: @code Article\x03Articles @endcode.
++ *     A meaningful key may be added to each variant in order to allow a more
++ *     developer friendly identification. If the key is missed, the array index
++ *     value should be used to identify which count plural variant to be used.
+  *   - uri_callback: (optional) The same as the 'uri_callback' key defined for
+  *     the entity type in the EntityTypeManager, but for the bundle only. When
+  *     determining the URI of an entity, if a 'uri_callback' is defined for both
+@@ -895,6 +920,16 @@ function hook_entity_view_mode_info_alter(&$view_modes) {
+  */
+ function hook_entity_bundle_info(): array {
+   $bundles['user']['user']['label'] = t('User');
++  $bundles['user']['user']['label_singular'] = t('user');
++  $bundles['user']['user']['label_plural'] = t('users');
++  $bundles['user']['user']['label_count'] = [
++    // This variant misses a key and is identifiable by its array delta.
++    t("1 user\x03@count users"),
++    // The following variants have a meaningful identifier as key.
++    'search results' => t("1 user is found\x03@count users were found"),
++    'with_markup' => t("<span>1</span> user\x03<span>@count</span> users"),
++    'no count' => t("User\x03Users"),
++  ];
+   return $bundles;
+ }
+ 
+@@ -902,7 +937,9 @@ function hook_entity_bundle_info(): array {
+  * Alter the bundles for entity types.
+  *
+  * @param array $bundles
+- *   An array of bundles, keyed first by entity type, then by bundle name.
++ *   An array of bundles, keyed first by entity type, then by bundle name. Each
++ *   value is an array with the same structure as the hook_entity_bundle_info()
++ *   return array element.
+  *
+  * @see Drupal\Core\Entity\EntityTypeBundleInfo::getBundleInfo()
+  * @see hook_entity_bundle_info()
+@@ -911,6 +948,8 @@ function hook_entity_bundle_info_alter(&$bundles) {
+   $bundles['user']['user']['label'] = t('Full account');
+   // Override the bundle class for the "article" node type in a custom module.
+   $bundles['node']['article']['class'] = 'Drupal\my_module\Entity\Article';
++  // Override the count label.
++  $bundles['user']['user']['label_count']['search results'] = t('1 user is registered\x03@count users are registered');
+ }
+ 
+ /**
+diff --git a/core/misc/cspell/dictionary.txt b/core/misc/cspell/dictionary.txt
+index a8eb34fef4aa2a3ceca6f2fcd2e901e65b51a12a..2afaa2580c031b2a269f4d3917b40c6c19e8ee10 100644
+--- a/core/misc/cspell/dictionary.txt
++++ b/core/misc/cspell/dictionary.txt
+@@ -324,6 +324,8 @@ notsimpletest
+ nourriture
+ nplurals
+ ntfs
++nyholm
++obst
+ oembed
+ onecol
+ oneplusfourgrid
+diff --git a/core/modules/jsonapi/tests/src/Functional/NodeTypeTest.php b/core/modules/jsonapi/tests/src/Functional/NodeTypeTest.php
+index 18951f423f8ad7c3dba87f3cc71faa52347bd8f8..32d36a40e6a528d0935ef06b1bfabbfaa169deb8 100644
+--- a/core/modules/jsonapi/tests/src/Functional/NodeTypeTest.php
++++ b/core/modules/jsonapi/tests/src/Functional/NodeTypeTest.php
+@@ -96,6 +96,9 @@ protected function getExpectedDocument(): array {
+           'display_submitted' => TRUE,
+           'help' => NULL,
+           'langcode' => 'en',
++          'label_count' => NULL,
++          'label_plural' => NULL,
++          'label_singular' => NULL,
+           'name' => 'Camelids',
+           'new_revision' => TRUE,
+           'preview_mode' => 1,
+diff --git a/core/modules/node/config/schema/node.schema.yml b/core/modules/node/config/schema/node.schema.yml
+index 21891479e63798dc0efd3c0c8112e39acb2acaef..d215346013fcf0541826031799e1dba150bc1979 100644
+--- a/core/modules/node/config/schema/node.schema.yml
++++ b/core/modules/node/config/schema/node.schema.yml
+@@ -11,7 +11,7 @@ node.settings:
+       label: 'Use administration theme when editing or creating content'
+ 
+ node.type.*:
+-  type: config_entity
++  type: bundle_entity_with_plural_labels
+   label: 'Content type'
+   constraints:
+     FullyValidatable: ~
+diff --git a/core/modules/node/migrations/d6_node_type.yml b/core/modules/node/migrations/d6_node_type.yml
+index ca251f88224f2a5e44469e3021a8e3118d4047c8..52772ccb1e4a3a0e49b58727675a5dbb824ed3d8 100644
+--- a/core/modules/node/migrations/d6_node_type.yml
++++ b/core/modules/node/migrations/d6_node_type.yml
+@@ -8,6 +8,7 @@ source:
+   constants:
+     preview: 1 # NodePreviewMode::Optional
+     create_body: false
++    null_value: null
+ process:
+   type: type
+   name: name
+@@ -39,5 +40,8 @@ process:
+       'management:': 'admin:'
+       'navigation:': 'tools:'
+       'user-menu:': 'account:'
++  label_singular: 'constants/null_value'
++  label_plural: 'constants/null_value'
++  label_count: 'constants/null_value'
+ destination:
+   plugin: entity:node_type
+diff --git a/core/modules/node/migrations/d7_node_type.yml b/core/modules/node/migrations/d7_node_type.yml
+index 1e814f5ceb820e106d873132c3706c0ca9511883..eaf5292e7ff1b88f9d9e39fed748c5a300964bb8 100644
+--- a/core/modules/node/migrations/d7_node_type.yml
++++ b/core/modules/node/migrations/d7_node_type.yml
+@@ -36,5 +36,8 @@ process:
+       'management:0:': 'admin:'
+       'navigation:0:': 'tools:'
+       'user-menu:0:': 'account:'
++  label_singular: 'constants/null_value'
++  label_plural: 'constants/null_value'
++  label_count: 'constants/null_value'
+ destination:
+   plugin: entity:node_type
+diff --git a/core/modules/node/node.post_update.php b/core/modules/node/node.post_update.php
+index 632e2a716bac369eba20214b530b8e0f25e479ef..6767be9601ab97c2cfea6171d74902954b7a1e47 100644
+--- a/core/modules/node/node.post_update.php
++++ b/core/modules/node/node.post_update.php
+@@ -59,3 +59,12 @@ function node_post_update_add_rebuild_permission_to_roles(?array &$sandbox = NUL
+     return TRUE;
+   });
+ }
++
++/**
++ * Add plural label variants to node-type entities.
++ */
++function node_post_update_plural_variants(array &$sandbox): void {
++  \Drupal::classResolver(ConfigEntityUpdater::class)->update($sandbox, 'node_type', function (): bool {
++    return TRUE;
++  });
++}
+diff --git a/core/modules/node/src/Entity/NodeType.php b/core/modules/node/src/Entity/NodeType.php
+index 63595fbd922906f4aab63661862270b64eff8d91..85e7948fb151458dafb97e2cb9db44361a539b59 100644
+--- a/core/modules/node/src/Entity/NodeType.php
++++ b/core/modules/node/src/Entity/NodeType.php
+@@ -4,13 +4,14 @@
+ 
+ use Drupal\Core\Config\Action\Attribute\ActionMethod;
+ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
++use Drupal\Core\Config\Entity\EntityBundleWithPluralLabelsTrait;
+ use Drupal\Core\Entity\Attribute\ConfigEntityType;
+ use Drupal\Core\Entity\EntityStorageInterface;
+ use Drupal\Core\StringTranslation\TranslatableMarkup;
+ use Drupal\node\Form\NodeTypeDeleteConfirm;
++use Drupal\node\Form\NodeTypeForm;
+ use Drupal\node\NodePreviewMode;
+ use Drupal\node\NodeTypeAccessControlHandler;
+-use Drupal\node\Form\NodeTypeForm;
+ use Drupal\node\NodeTypeInterface;
+ use Drupal\node\NodeTypeListBuilder;
+ use Drupal\user\Entity\EntityPermissionsRouteProvider;
+@@ -61,10 +62,15 @@
+     'new_revision',
+     'preview_mode',
+     'display_submitted',
++    'label_singular',
++    'label_plural',
++    'label_count',
+   ],
+ )]
+ class NodeType extends ConfigEntityBundleBase implements NodeTypeInterface {
+ 
++  use EntityBundleWithPluralLabelsTrait;
++
+   /**
+    * The machine name of this node type.
+    *
+diff --git a/core/modules/node/src/NodeTypeInterface.php b/core/modules/node/src/NodeTypeInterface.php
+index 995f3e07e1a02c97fa784033eeae12a282f97a6e..2a610c456222bd21fe9918cfa44e0b777bc3f478 100644
+--- a/core/modules/node/src/NodeTypeInterface.php
++++ b/core/modules/node/src/NodeTypeInterface.php
+@@ -3,12 +3,13 @@
+ namespace Drupal\node;
+ 
+ use Drupal\Core\Config\Entity\ConfigEntityInterface;
++use Drupal\Core\Config\Entity\EntityBundleWithPluralLabelsInterface;
+ use Drupal\Core\Entity\RevisionableEntityBundleInterface;
+ 
+ /**
+  * Provides an interface defining a node type entity.
+  */
+-interface NodeTypeInterface extends ConfigEntityInterface, RevisionableEntityBundleInterface {
++interface NodeTypeInterface extends ConfigEntityInterface, RevisionableEntityBundleInterface, EntityBundleWithPluralLabelsInterface {
+ 
+   /**
+    * Determines whether the node type is locked.
+diff --git a/core/modules/node/tests/src/Functional/Rest/NodeTypeResourceTestBase.php b/core/modules/node/tests/src/Functional/Rest/NodeTypeResourceTestBase.php
+index 2fce1ebd8a4d392f713399dd1ae209aafe3f0fea..9133a6c61c8eea1f21597a3d3b286e4c10834c10 100644
+--- a/core/modules/node/tests/src/Functional/Rest/NodeTypeResourceTestBase.php
++++ b/core/modules/node/tests/src/Functional/Rest/NodeTypeResourceTestBase.php
+@@ -61,6 +61,9 @@ protected function getExpectedNormalizedEntity() {
+       'description' => 'Camelids are large, strictly herbivorous animals with slender necks and long legs.',
+       'display_submitted' => TRUE,
+       'help' => NULL,
++      'label_count' => NULL,
++      'label_plural' => NULL,
++      'label_singular' => NULL,
+       'langcode' => 'en',
+       'name' => 'Camelids',
+       'new_revision' => TRUE,
+diff --git a/core/modules/node/tests/src/Functional/Update/NodeUpdateTest.php b/core/modules/node/tests/src/Functional/Update/NodeUpdateTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..9c6852ee9010ccf7a92ad451e07a5340dd82a07a
+--- /dev/null
++++ b/core/modules/node/tests/src/Functional/Update/NodeUpdateTest.php
+@@ -0,0 +1,51 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\node\Functional\Update;
++
++use Drupal\FunctionalTests\Update\UpdatePathTestBase;
++use PHPUnit\Framework\Attributes\CoversFunction;
++use PHPUnit\Framework\Attributes\Group;
++use PHPUnit\Framework\Attributes\IgnoreDeprecations;
++use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
++
++/**
++ * Tests node module updates.
++ */
++#[Group('node')]
++#[IgnoreDeprecations]
++#[CoversFunction('node_post_update_plural_variants')]
++#[RunTestsInSeparateProcesses]
++class NodeUpdateTest extends UpdatePathTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setDatabaseDumpFiles(): void {
++    $this->databaseDumpFiles[] = __DIR__ . '/../../../../../system/tests/fixtures/update/drupal-10.3.0.bare.standard.php.gz';
++  }
++
++  /**
++   * Tests node_post_update_plural_variants().
++   */
++  public function testPostUpdatePluralVariants(): void {
++    $properties = ['label_singular', 'label_plural', 'label_count'];
++
++    // Check that plural label variant properties are not present before update.
++    $node_type = $this->config('node.type.page')->getRawData();
++    foreach ($properties as $property) {
++      $this->assertArrayNotHasKey($property, $node_type);
++    }
++
++    $this->runUpdates();
++
++    // Check that plural label variant properties were added as NULL.
++    $node_type = $this->config('node.type.page')->getRawData();
++    foreach ($properties as $property) {
++      $this->assertArrayHasKey($property, $node_type);
++      $this->assertNull($node_type[$property]);
++    }
++  }
++
++}
+diff --git a/core/modules/node/tests/src/Kernel/NodeTypeValidationTest.php b/core/modules/node/tests/src/Kernel/NodeTypeValidationTest.php
+index 9d4f69474909f409d47cb0a4febf726de82a7384..dfb781d1e9d5d38299d8cb84a1c789aea01b305b 100644
+--- a/core/modules/node/tests/src/Kernel/NodeTypeValidationTest.php
++++ b/core/modules/node/tests/src/Kernel/NodeTypeValidationTest.php
+@@ -35,6 +35,9 @@ class NodeTypeValidationTest extends ConfigEntityValidationTestBase {
+   protected static array $propertiesWithOptionalValues = [
+     'description',
+     'help',
++    'label_singular',
++    'label_plural',
++    'label_count',
+   ];
+ 
+   /**
+diff --git a/core/modules/system/tests/modules/config_mapping_test/config/optional/node.type.config_mapping_test.yml b/core/modules/system/tests/modules/config_mapping_test/config/optional/node.type.config_mapping_test.yml
+index 65d30760b78a5326b8a3a53017f8322486ec07a2..e478db567678f9fd882bc9e255c2bd3cb237c5af 100644
+--- a/core/modules/system/tests/modules/config_mapping_test/config/optional/node.type.config_mapping_test.yml
++++ b/core/modules/system/tests/modules/config_mapping_test/config/optional/node.type.config_mapping_test.yml
+@@ -11,3 +11,6 @@ help: null
+ new_revision: false
+ preview_mode: 1
+ display_submitted: true
++label_singular: null
++label_plural: null
++label_count: null
+diff --git a/core/modules/system/tests/modules/config_mapping_test/config_mapping_test.info.yml b/core/modules/system/tests/modules/config_mapping_test/config_mapping_test.info.yml
+index 1c5aa4d17132f7ca00201184b688ed5d3ba386f7..7338e8710118ffefbad2cf38fb87c3362f6cbec9 100644
+--- a/core/modules/system/tests/modules/config_mapping_test/config_mapping_test.info.yml
++++ b/core/modules/system/tests/modules/config_mapping_test/config_mapping_test.info.yml
+@@ -4,5 +4,5 @@ description: 'Test configuration mapping.'
+ dependencies:
+   - drupal:node
+   - drupal:comment
+-package: Core
++package: Testing
+ version: VERSION
+diff --git a/core/modules/system/tests/modules/entity_bundle_test/entity_bundle_test.info.yml b/core/modules/system/tests/modules/entity_bundle_test/entity_bundle_test.info.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..660bf0c41ea8ab0719f49f1647465ee243d5c960
+--- /dev/null
++++ b/core/modules/system/tests/modules/entity_bundle_test/entity_bundle_test.info.yml
+@@ -0,0 +1,4 @@
++name: 'Entity bundle test'
++type: module
++description: 'Provides support for testing entity bundles.'
++package: Testing
+diff --git a/core/modules/system/tests/modules/entity_bundle_test/src/Hook/EntityBundleTestHooks.php b/core/modules/system/tests/modules/entity_bundle_test/src/Hook/EntityBundleTestHooks.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..45d142e8d231ee778d8cc6b1c18fcb4800a83701
+--- /dev/null
++++ b/core/modules/system/tests/modules/entity_bundle_test/src/Hook/EntityBundleTestHooks.php
+@@ -0,0 +1,74 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\entity_bundle_test\Hook;
++
++use Drupal\Core\Hook\Attribute\Hook;
++use Drupal\Core\StringTranslation\StringTranslationTrait;
++
++/**
++ * Module hook implementations.
++ */
++class EntityBundleTestHooks {
++
++  use StringTranslationTrait;
++
++  /**
++   * Implements hook_entity_type_alter().
++   */
++  #[Hook('entity_type_alter')]
++  public function setBundleEntityType(array &$entity_types): void {
++    // Use 'entity_test_bundle_plural_labels' as bundle entity for
++    // 'entity_test_with_bundle' in order to test bundle plural labels.
++    // @see \Drupal\KernelTests\Core\Entity\EntityTypeBundleInfoPluralLabelTest
++    $entity_types['entity_test_with_bundle']->set('bundle_entity_type', 'entity_test_bundle_plural_labels');
++  }
++
++  /**
++   * Implements hook_entity_bundle_info().
++   */
++  #[Hook('entity_bundle_info')]
++  public function bundleInfo(): array {
++    return [
++      'entity_test' => [
++        'artist' => [
++          'label' => $this->t('Artist'),
++          'label_singular' => $this->t('artist'),
++          'label_plural' => $this->t('artists'),
++          'label_count' => [
++            "1 artist\x03@count artists",
++            'search results' => "1 artist was awarded\x03@count artists were awarded",
++          ],
++        ],
++      ],
++    ];
++  }
++
++  /**
++   * Implements hook_entity_bundle_info_alter().
++   */
++  #[Hook('entity_bundle_info_alter')]
++  public function alterBundleInfo(array &$bundles): void {
++    // Allow the test to trigger altering.
++    // @see \Drupal\KernelTests\Core\Entity\EntityTypeBundleInfoPluralLabelTest
++    if (\Drupal::state()->get('entity_bundle_test.allow_alter', FALSE)) {
++      // Bundle defined via config entity.
++      $bundles['entity_test_with_bundle']['article']['label_singular'] = 'article item';
++      $bundles['entity_test_with_bundle']['article']['label_plural'] = 'article items';
++      $bundles['entity_test_with_bundle']['article']['label_count'] = [
++        "1 article item\x03@count article items",
++        'search results' => "1 article item was found\x03@count article items were found",
++      ];
++
++      // Bundle defined via hook_entity_bundle_info().
++      $bundles['entity_test']['artist']['label_singular'] = 'creator';
++      $bundles['entity_test']['artist']['label_plural'] = 'creators';
++      $bundles['entity_test']['artist']['label_count'] = [
++        "1 creator\x03@count creators",
++        'search results' => "1 creator was awarded\x03@count creators were awarded",
++      ];
++    }
++  }
++
++}
+diff --git a/core/modules/system/tests/modules/entity_test/config/schema/entity_test.schema.yml b/core/modules/system/tests/modules/entity_test/config/schema/entity_test.schema.yml
+index 2970939fd39b4ff6b0f4856e75d07c8038e2f6eb..2d47fde4021cc34af38299b87ca891e0c804cb42 100644
+--- a/core/modules/system/tests/modules/entity_test/config/schema/entity_test.schema.yml
++++ b/core/modules/system/tests/modules/entity_test/config/schema/entity_test.schema.yml
+@@ -48,3 +48,13 @@ entity_test.entity_test_no_id_bundle.*:
+     id:
+       type: string
+       label: 'Machine-readable name'
++
++entity_test.entity_test_bundle_plural_labels.*:
++  type: bundle_entity_with_plural_labels
++  mapping:
++    label:
++      type: label
++      label: 'Label'
++    id:
++      type: string
++      label: 'Machine-readable name'
+diff --git a/core/modules/system/tests/modules/entity_test/src/Entity/EntityTestBundleWithPluralLabels.php b/core/modules/system/tests/modules/entity_test/src/Entity/EntityTestBundleWithPluralLabels.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..a96885356aad93e9ae7cd4223b5c6598d5181160
+--- /dev/null
++++ b/core/modules/system/tests/modules/entity_test/src/Entity/EntityTestBundleWithPluralLabels.php
+@@ -0,0 +1,36 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\entity_test\Entity;
++
++use Drupal\Core\Config\Entity\EntityBundleWithPluralLabelsInterface;
++use Drupal\Core\Config\Entity\EntityBundleWithPluralLabelsTrait;
++use Drupal\Core\Entity\Attribute\ConfigEntityType;
++use Drupal\Core\StringTranslation\TranslatableMarkup;
++
++/**
++ * Defines the Test entity bundle with plural labels configuration entity.
++ */
++#[ConfigEntityType(
++  id: 'entity_test_bundle_plural_labels',
++  label: new TranslatableMarkup('Test entity bundle with plural labels'),
++  config_prefix: 'entity_test_bundle_plural_labels',
++  entity_keys: [
++    'id' => 'id',
++    'label' => 'label',
++  ],
++  bundle_of: 'entity_test_with_bundle',
++  config_export: [
++    'id',
++    'label',
++    'label_singular',
++    'label_plural',
++    'label_count',
++  ],
++)]
++class EntityTestBundleWithPluralLabels extends EntityTestBundle implements EntityBundleWithPluralLabelsInterface {
++
++  use EntityBundleWithPluralLabelsTrait;
++
++}
+diff --git a/core/profiles/demo_umami/config/install/node.type.article.yml b/core/profiles/demo_umami/config/install/node.type.article.yml
+index ae8e9d12580b22cb2a38e40384818ac1bff2ce79..f88d2219e341dec33f0d5f10859633eb4d731987 100644
+--- a/core/profiles/demo_umami/config/install/node.type.article.yml
++++ b/core/profiles/demo_umami/config/install/node.type.article.yml
+@@ -8,3 +8,7 @@ help: null
+ new_revision: true
+ preview_mode: 1
+ display_submitted: true
++label_singular: article
++label_plural: articles
++label_count:
++  - "1 article\x03@count articles"
+diff --git a/core/profiles/demo_umami/config/install/node.type.page.yml b/core/profiles/demo_umami/config/install/node.type.page.yml
+index 176315b5824423a5445b4ea8ea9d8b0b8266138c..d79b97a12d608c70447083764101d684845bda23 100644
+--- a/core/profiles/demo_umami/config/install/node.type.page.yml
++++ b/core/profiles/demo_umami/config/install/node.type.page.yml
+@@ -8,3 +8,7 @@ help: null
+ new_revision: true
+ preview_mode: 1
+ display_submitted: false
++label_singular: page
++label_plural: pages
++label_count:
++  - "1 page\x03@count pages"
+diff --git a/core/profiles/demo_umami/config/install/node.type.recipe.yml b/core/profiles/demo_umami/config/install/node.type.recipe.yml
+index 1810e77bcf292e37a3941adc5839f7ff5066f1bc..a07f30888b453c60391feee066013f31285890f5 100644
+--- a/core/profiles/demo_umami/config/install/node.type.recipe.yml
++++ b/core/profiles/demo_umami/config/install/node.type.recipe.yml
+@@ -14,3 +14,7 @@ help: null
+ new_revision: true
+ preview_mode: 1
+ display_submitted: false
++label_singular: recipe
++label_plural: recipes
++label_count:
++  - "1 recipe\x03@count recipes"
+diff --git a/core/profiles/standard/config/install/node.type.article.yml b/core/profiles/standard/config/install/node.type.article.yml
+index ae8e9d12580b22cb2a38e40384818ac1bff2ce79..f88d2219e341dec33f0d5f10859633eb4d731987 100644
+--- a/core/profiles/standard/config/install/node.type.article.yml
++++ b/core/profiles/standard/config/install/node.type.article.yml
+@@ -8,3 +8,7 @@ help: null
+ new_revision: true
+ preview_mode: 1
+ display_submitted: true
++label_singular: article
++label_plural: articles
++label_count:
++  - "1 article\x03@count articles"
+diff --git a/core/profiles/standard/config/install/node.type.page.yml b/core/profiles/standard/config/install/node.type.page.yml
+index 176315b5824423a5445b4ea8ea9d8b0b8266138c..d79b97a12d608c70447083764101d684845bda23 100644
+--- a/core/profiles/standard/config/install/node.type.page.yml
++++ b/core/profiles/standard/config/install/node.type.page.yml
+@@ -8,3 +8,7 @@ help: null
+ new_revision: true
+ preview_mode: 1
+ display_submitted: false
++label_singular: page
++label_plural: pages
++label_count:
++  - "1 page\x03@count pages"
+diff --git a/core/recipes/article_content_type/config/node.type.article.yml b/core/recipes/article_content_type/config/node.type.article.yml
+index ae8e9d12580b22cb2a38e40384818ac1bff2ce79..f88d2219e341dec33f0d5f10859633eb4d731987 100644
+--- a/core/recipes/article_content_type/config/node.type.article.yml
++++ b/core/recipes/article_content_type/config/node.type.article.yml
+@@ -8,3 +8,7 @@ help: null
+ new_revision: true
+ preview_mode: 1
+ display_submitted: true
++label_singular: article
++label_plural: articles
++label_count:
++  - "1 article\x03@count articles"
+diff --git a/core/recipes/page_content_type/config/node.type.page.yml b/core/recipes/page_content_type/config/node.type.page.yml
+index 755e8ed8ce5be5a015b5f34b80d10d332e0976b0..c86385625f3b6bafd8583c93bdcba2f9c3426103 100644
+--- a/core/recipes/page_content_type/config/node.type.page.yml
++++ b/core/recipes/page_content_type/config/node.type.page.yml
+@@ -8,3 +8,7 @@ help: null
+ new_revision: true
+ preview_mode: 1
+ display_submitted: false
++label_singular: page
++label_plural: pages
++label_count:
++  - "1 page\x03@count pages"
+diff --git a/core/tests/Drupal/KernelTests/Core/Entity/EntityTypeBundleInfoPluralLabelTest.php b/core/tests/Drupal/KernelTests/Core/Entity/EntityTypeBundleInfoPluralLabelTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..54a300fe6156451077efeca8ef669fa419960244
+--- /dev/null
++++ b/core/tests/Drupal/KernelTests/Core/Entity/EntityTypeBundleInfoPluralLabelTest.php
+@@ -0,0 +1,244 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\KernelTests\Core\Entity;
++
++use Drupal\Core\Entity\EntityTypeBundleInfo;
++use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
++use Drupal\entity_test\Entity\EntityTestBundleWithPluralLabels;
++use Drupal\KernelTests\KernelTestBase;
++use PHPUnit\Framework\Attributes\CoversClass;
++use PHPUnit\Framework\Attributes\Group;
++use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
++
++/**
++ * Tests bundle singular, plural and count labels.
++ */
++#[Group('Entity')]
++#[CoversClass(EntityTypeBundleInfo::class)]
++#[RunTestsInSeparateProcesses]
++class EntityTypeBundleInfoPluralLabelTest extends KernelTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = [
++    'entity_bundle_test',
++    'entity_test',
++    'user',
++  ];
++
++  /**
++   * The entity type bundle info service.
++   */
++  protected EntityTypeBundleInfoInterface $bundleInfo;
++
++  /**
++   * The tested entity type ID.
++   */
++  protected string $entityTypeId;
++
++  /**
++   * The tested bundle.
++   */
++  protected string $bundle;
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
++    $this->bundleInfo = $this->container->get('entity_type.bundle.info');
++  }
++
++  /**
++   * Tests singular, plural and count labels for bundles as config entities.
++   */
++  public function testLabelsForBundlesAsConfigEntities(): void {
++    // Test bundles stored in config entities.
++    $this->setTestingBundle('entity_test_with_bundle', 'article');
++
++    /** @var \Drupal\Core\Config\Entity\EntityBundleWithPluralLabelsInterface $bundle_entity */
++    $bundle_entity = EntityTestBundleWithPluralLabels::create([
++      'id' => 'article',
++      'label' => 'Article',
++    ]);
++    $bundle_entity->save();
++
++    // Check the config entity getters.
++    $this->assertNull($bundle_entity->getSingularLabel());
++    $this->assertNull($bundle_entity->getPluralLabel());
++    $this->assertNull($bundle_entity->getCountLabel());
++    // Check that bundle info returns no label with bundle undefined labels.
++    $this->assertSingularLabel(NULL);
++    $this->assertPluralLabel(NULL);
++    $this->assertCountLabel(1, 0, NULL);
++    $this->assertCountLabel(100, 0, NULL);
++    $this->assertCountLabel(1, 'search results', NULL);
++    $this->assertCountLabel(100, 'search results', NULL);
++
++    // Set singular, plural and count labels on the bundle entity.
++    $bundle_entity
++      ->setSingularLabel('article')
++      ->setPluralLabel('articles')
++      ->setCountLabel([
++        "1 article\x03@count articles",
++        'search results' => "1 article was found\x03@count articles were found",
++      ])
++      ->save();
++
++    // Check the config entity getters.
++    $this->assertSame('article', $bundle_entity->getSingularLabel());
++    $this->assertSame('articles', $bundle_entity->getPluralLabel());
++    $this->assertSame([
++      "1 article\x03@count articles",
++      'search results' => "1 article was found\x03@count articles were found",
++    ], $bundle_entity->getCountLabel());
++    // Check that labels are correctly returned by the bundle info service.
++    $this->assertSingularLabel('article');
++    $this->assertPluralLabel('articles');
++    $this->assertCountLabel(1, 0, '1 article');
++    $this->assertCountLabel(100, 0, '100 articles');
++    $this->assertCountLabel(1, 'search results', '1 article was found');
++    $this->assertCountLabel(100, 'search results', '100 articles were found');
++
++    // Allow altering the labels via hook_entity_bundle_info_alter().
++    // @see \entity_bundle_test_entity_bundle_info_alter()
++    \Drupal::state()->set('entity_bundle_test.allow_alter', TRUE);
++    // Also, clear the bundle info cache, to get fresh bundle definitions.
++    $this->bundleInfo->clearCachedBundles();
++
++    // Check that altered labels are returned by the bundle info service.
++    $this->assertSingularLabel('article item');
++    $this->assertPluralLabel('article items');
++    $this->assertCountLabel(1, 0, '1 article item');
++    $this->assertCountLabel(100, 0, '100 article items');
++    $this->assertCountLabel(1, 'search results', '1 article item was found');
++    $this->assertCountLabel(100, 'search results', '100 article items were found');
++    // However, the getters are still showing the stored values.
++    // @see https://www.drupal.org/project/drupal/issues/3186688
++    $this->assertSame('article', $bundle_entity->getSingularLabel());
++    $this->assertSame('articles', $bundle_entity->getPluralLabel());
++    $this->assertSame([
++      "1 article\x03@count articles",
++      'search results' => "1 article was found\x03@count articles were found",
++    ], $bundle_entity->getCountLabel());
++  }
++
++  /**
++   * Tests singular, plural and count labels for bundles defined in code.
++   */
++  public function testLabelsForBundlesWithoutConfigEntities(): void {
++    // Test entities with bundles not stored in config entities.
++    // @see entity_bundle_test_entity_bundle_info()
++    $this->setTestingBundle('entity_test', 'artist');
++
++    // Check that labels are correctly returned.
++    $this->assertSingularLabel('artist');
++    $this->assertPluralLabel('artists');
++    $this->assertCountLabel(1, 0, '1 artist');
++    $this->assertCountLabel(100, 0, '100 artists');
++    $this->assertCountLabel(1, 'search results', '1 artist was awarded');
++    $this->assertCountLabel(100, 'search results', '100 artists were awarded');
++
++    // Allow altering the labels via hook_entity_bundle_info_alter().
++    // @see \entity_bundle_test_entity_bundle_info_alter()
++    \Drupal::state()->set('entity_bundle_test.allow_alter', TRUE);
++    // Also, clear the bundle info cache, to get fresh bundle definitions.
++    $this->bundleInfo->clearCachedBundles();
++
++    // Check that altered labels are correctly returned.
++    $this->assertSingularLabel('creator');
++    $this->assertPluralLabel('creators');
++    $this->assertCountLabel(1, 0, '1 creator');
++    $this->assertCountLabel(100, 0, '100 creators');
++    $this->assertCountLabel(1, 'search results', '1 creator was awarded');
++    $this->assertCountLabel(100, 'search results', '100 creators were awarded');
++  }
++
++  /**
++   * Test passing a wrong entity type to ::getBundleCountLabel().
++   */
++  public function testGetBundleCountLabelWithWrongEntityType(): void {
++    $this->expectExceptionObject(new \InvalidArgumentException("The 'nonexistent_entity_type' doesn't exist."));
++    $this->bundleInfo->getBundleCountLabel('nonexistent_entity_type', 'article', 123, 'default');
++  }
++
++  /**
++   * Test passing a wrong bundle type to ::getBundleCountLabel().
++   */
++  public function testGetBundleCountLabelWithWrongBundle(): void {
++    $this->expectExceptionObject(new \InvalidArgumentException("The 'entity_test' entity type bundle 'nonexistent_bundle' doesn't exist."));
++    $this->bundleInfo->getBundleCountLabel('entity_test', 'nonexistent_bundle', 123, 'default');
++  }
++
++  /**
++   * Test passing a wrong bundle count label variant to ::getBundleCountLabel().
++   */
++  public function testGetBundleCountLabelWithWrongVariant(): void {
++    EntityTestBundleWithPluralLabels::create([
++      'id' => 'article',
++      'label' => 'Article',
++      'label_count' => [
++        'default' => "1 item\x03@count items",
++      ],
++    ])->save();
++
++    $this->expectExceptionObject(new \InvalidArgumentException("There's no variant 'nonexistent_variant' defined in label_count for bundle 'article' of 'entity_test_with_bundle' entity type."));
++    $this->bundleInfo->getBundleCountLabel('entity_test_with_bundle', 'article', 123, 'nonexistent_variant');
++  }
++
++  /**
++   * Asserts that a given bundle has an expected singular label.
++   *
++   * @param string|null $expected_singular_label
++   *   The expected bundle singular label.
++   */
++  protected function assertSingularLabel(?string $expected_singular_label): void {
++    $bundle_info = $this->bundleInfo->getBundleInfo($this->entityTypeId)[$this->bundle];
++    $this->assertEquals($expected_singular_label, $bundle_info['label_singular']);
++  }
++
++  /**
++   * Asserts that a given bundle has an expected plural label.
++   *
++   * @param string|null $expected_plural_label
++   *   The expected bundle plural label.
++   *
++   * @throws \Exception
++   */
++  protected function assertPluralLabel(?string $expected_plural_label): void {
++    $bundle_info = $this->bundleInfo->getBundleInfo($this->entityTypeId)[$this->bundle];
++    $this->assertEquals($expected_plural_label, $bundle_info['label_plural']);
++  }
++
++  /**
++   * Asserts an expected count label on a given bundle, count and variant.
++   *
++   * @param int $count
++   *   The count.
++   * @param string|int $variant
++   *   The count label variant ID.
++   * @param string|null $expected_count_label
++   *   The expected count label.
++   */
++  protected function assertCountLabel(int $count, $variant, ?string $expected_count_label): void {
++    $actual_count_label = $this->bundleInfo->getBundleCountLabel($this->entityTypeId, $this->bundle, $count, $variant);
++    $this->assertEquals($expected_count_label, $actual_count_label);
++  }
++
++  /**
++   * Sets the bundle being tested.
++   *
++   * @param string $entity_type_id
++   *   The bundle's entity type ID.
++   * @param string $bundle
++   *   The bundle.
++   */
++  protected function setTestingBundle(string $entity_type_id, string $bundle): void {
++    $this->entityTypeId = $entity_type_id;
++    $this->bundle = $bundle;
++  }
++
++}
+diff --git a/core/tests/Drupal/KernelTests/Core/Recipe/RecipeRunnerTest.php b/core/tests/Drupal/KernelTests/Core/Recipe/RecipeRunnerTest.php
+index dfcd0f754ed90ce0feec7b443ba56d098e91d2d4..1daad84d9e661e8c673b75dd108508c65ba64add 100644
+--- a/core/tests/Drupal/KernelTests/Core/Recipe/RecipeRunnerTest.php
++++ b/core/tests/Drupal/KernelTests/Core/Recipe/RecipeRunnerTest.php
+@@ -98,7 +98,7 @@ public function testModuleConfigurationOverride(): void {
+     $node_type_data = $this->config('node.type.test')->get();
+     $this->assertGreaterThan(0, strlen($node_type_data['uuid']), 'The node type configuration has been assigned a UUID.');
+     // cSpell:disable-next-line
+-    $this->assertSame('8Jlq8CmNXHVtNIHBHgFGpnAKthlUz0XoW_D0g56QXqY', $node_type_data['_core']['default_config_hash']);
++    $this->assertSame('JpzAh72kX-G39SvXWAgTnuLBTdEvOnHQysAzQMQ4HqI', $node_type_data['_core']['default_config_hash']);
+   }
+ 
+   /**
+diff --git a/core/tests/fixtures/recipes/install_node_with_config/config/node.type.test.yml b/core/tests/fixtures/recipes/install_node_with_config/config/node.type.test.yml
+index adffa484d4b1b7edd71c485324548cdff6b982a1..050d6cfa57696c03c19df18ec859e83adf0a6355 100644
+--- a/core/tests/fixtures/recipes/install_node_with_config/config/node.type.test.yml
++++ b/core/tests/fixtures/recipes/install_node_with_config/config/node.type.test.yml
+@@ -7,3 +7,6 @@ help: null
+ new_revision: true
+ preview_mode: 1
+ display_submitted: true
++label_singular: null
++label_plural: null
++label_count: null

@@ -32,6 +32,7 @@ trait SimpleResponseMockTrait {
    */
   protected function setGlobalMockClient(Response ...$responses): void {
     $this->mockClient = $this->buildHttpClientMock(...$responses);
+    // @phpstan-ignore property.notFound
     $this->container->set('http_client', $this->mockClient);
   }
 

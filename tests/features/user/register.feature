@@ -12,15 +12,15 @@ Feature: User registration
     Then I click "People"
     Then I click "Add user"
     Then I am at "admin/people/create"
-    Given the following user registration at "admin/people/create":
-      | Email                      | miomio@example.org |
-      | Username                   | miomio             |
-      | First name                 | Miomir             |
-      | Family name                | Kurzmann           |
-      | Password                   | 98eZRhoP           |
-      | Confirm password           | 98eZRhoP           |
-      | Notify user of new account | 1                  |
-      | Active                     | 1                  |
+    And I fill in "Email address" with "miomio@example.org"
+    And I fill in "Username" with "miomio"
+    And I fill in "Password" with "98eZRhoP"
+    And I fill in "Confirm password" with "98eZRhoP"
+    And I select the radio button "Active"
+    And I check "Notify user of new account"
+    And I fill in "First name" with "Miomir"
+    And I fill in "Family name" with "Kurzmann"
+    And I press "Create new account"
     Then the following email should have been sent:
       | recipient | miomio                                                                                                                          |
       | subject   | Your Interoperable Europe Portal account was created successfully.                                                                                   |

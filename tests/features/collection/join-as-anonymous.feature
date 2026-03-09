@@ -280,6 +280,28 @@ Feature: Joining a collection as an anonymous user
     When I reload the page
     And I should not see the success message "You cannot join Reannual plants because your account has been blocked."
 
+  Scenario Outline: Anonymous users can browse community content under a group without triggering a server error.
+    Given collection content:
+      | title          |
+      | Stellar plants |
+    And solution content:
+      | title            | collection     |
+      | Stellar solution | Stellar plants |
+    And <content type> content:
+      | title                  | solution         |
+      | Stellar <content type> | Stellar solution |
+    And I am an anonymous user
+    When I visit the "Stellar <content type>" "<content type>"
+    Then I should not see the button "Post comment"
+    And I should see the text "Login or create an account to comment."
+
+    Examples:
+      | content type |
+      | discussion   |
+      | news         |
+      | event        |
+      | document     |
+
   @javascript
   Scenario: Show relevant message to a blocked user who tries to rejoin as anonymous
     Given I am an anonymous user

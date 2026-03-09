@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Drupal\eu_oss_catalogue_test\Plugin\ServiceMock;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Plugin\PluginBase;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue\Validator\PublicCodeValidatorInterface;
 use Drupal\eu_oss_catalogue_test\IntegrationTestTrait;
