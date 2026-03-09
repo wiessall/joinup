@@ -7,6 +7,8 @@
 
 declare(strict_types=1);
 
+use Drupal\views\Hook\ViewsThemeHooks;
+
 /**
  * Implements hook_theme().
  */
@@ -34,6 +36,5 @@ function joinup_tiles_theme(array $existing, string $type, string $theme, string
  *   - rows: An array of row items. Each row is an array of content.
  */
 function template_preprocess_joinup_tiles(array &$variables): void {
-  \Drupal::moduleHandler()->loadInclude('views', 'inc', 'views.theme');
-  template_preprocess_views_view_unformatted($variables);
+  \Drupal::service(ViewsThemeHooks::class)->preprocessViewsViewUnformatted($variables);
 }

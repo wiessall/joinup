@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup_core\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests EU branding elements.
- *
- * @group joinup_core
  */
+#[Group('joinup_core')]
 class EuBrandingTest extends JoinupExistingSiteTestBase {
 
   /**

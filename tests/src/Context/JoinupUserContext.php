@@ -9,6 +9,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Hook\AfterScenario;
 use Behat\Hook\AfterStep;
 use Behat\Hook\BeforeScenario;
+use Behat\Mink\Exception\ExpectationException;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
@@ -17,19 +18,19 @@ use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeUserCreateScope;
 use Drupal\DrupalExtension\TagTrait;
+use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_user\JoinupUserDeletedInterface;
 use Drupal\user\UserInterface;
-use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\ExpectationFailedException;
 
 /**
  * Behat step definitions for testing users.
  */
 class JoinupUserContext extends RawDrupalContext {
 
+  use AssertTrait;
   use MailCollectorTrait;
   use StringTranslationTrait;
   use TagTrait;
@@ -141,10 +142,10 @@ class JoinupUserContext extends RawDrupalContext {
     foreach ($profile_data as $field => $values) {
       $expected_values = explode(',', $values);
       $actual_values = $user->get($field)->getValue();
-      Assert::assertSameSize($expected_values, $actual_values);
+      $this->assertCount(count($expected_values), $actual_values);
       foreach ($expected_values as $key => $expected_value) {
         $actual_value = $user->get($field)->get($key)->value;
-        Assert::assertSame($expected_value, $actual_value);
+        $this->assertSameValues($expected_value, $actual_value);
       }
     }
   }
@@ -218,7 +219,7 @@ class JoinupUserContext extends RawDrupalContext {
       ->execute();
 
     if (!$uids) {
-      throw new ExpectationFailedException("The user '$name' doesn't exist or is not $status.");
+      throw new ExpectationException("The user '$name' doesn't exist or is not $status.", $this->getSession()->getDriver());
     }
   }
 
@@ -231,7 +232,7 @@ class JoinupUserContext extends RawDrupalContext {
   #[Then("the :name user doesn't exist")]
   public function userNotExists(string $name): void {
     if (\Drupal::entityQuery('user')->accessCheck(FALSE)->condition('name', $name)->execute()) {
-      throw new ExpectationFailedException("The user $name exists but it should not.");
+      throw new ExpectationException("The user $name exists but it should not.", $this->getSession()->getDriver());
     }
   }
 
@@ -244,7 +245,7 @@ class JoinupUserContext extends RawDrupalContext {
   #[Then('the :name user exist')]
   public function userExists(string $name): void {
     if (!\Drupal::entityQuery('user')->accessCheck(FALSE)->condition('name', $name)->execute()) {
-      throw new ExpectationFailedException("The user $name exists but it should not.");
+      throw new ExpectationException("The user $name exists but it should not.", $this->getSession()->getDriver());
     }
   }
 

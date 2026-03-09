@@ -1,0 +1,43 @@
+diff --git a/src/Entity/OgMembership.php b/src/Entity/OgMembership.php
+index 1975dd6c0056cc3ee55d71694c7338f30baaa569..4347ce5c6d75f59e34119d52eabb60473ddd6160 100644
+--- a/src/Entity/OgMembership.php
++++ b/src/Entity/OgMembership.php
+@@ -137,6 +137,14 @@ class OgMembership extends ContentEntityBase implements OgMembershipInterface {
+ 
+   use EntityChangedTrait;
+ 
++  /**
++   * {@inheritdoc}
++   */
++  public function label(): ?string {
++    $owner = $this->get('uid')->entity;
++    return $owner ? $owner->getDisplayName() : (string) $this->id();
++  }
++
+   /**
+    * {@inheritdoc}
+    */
+diff --git a/tests/src/Kernel/Entity/OgMembershipTest.php b/tests/src/Kernel/Entity/OgMembershipTest.php
+index 6361084158cffcfbd086dfc3bdd19f1327171fe4..9a61de2a421c26fe8b77103cb8c03f6009bdd344 100644
+--- a/tests/src/Kernel/Entity/OgMembershipTest.php
++++ b/tests/src/Kernel/Entity/OgMembershipTest.php
+@@ -894,6 +894,19 @@ class OgMembershipTest extends KernelTestBase {
+     $this->assertFalse($membership->isOwner());
+   }
+ 
++  /**
++   * Tests that the label returns the owner's display name.
++   *
++   * @covers ::label
++   */
++  public function testLabel(): void {
++    $membership = Og::createMembership($this->group, $this->user);
++    $membership->save();
++
++    $membership = $this->entityTypeManager->getStorage('og_membership')->loadUnchanged($membership->id());
++    $this->assertEquals($this->user->getDisplayName(), $membership->label());
++  }
++
+   /**
+    * Provides test data to check states.
+    *
