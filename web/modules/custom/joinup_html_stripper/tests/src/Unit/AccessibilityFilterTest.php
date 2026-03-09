@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup_html_stripper\Unit;
 
 use Drupal\joinup_html_stripper\Plugin\Filter\AccessibilityFilter;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Tests the accessibility filter.
- *
- * @group joinup_html_stripper
- *
- * @coversDefaultClass \Drupal\joinup_html_stripper\Plugin\Filter\AccessibilityFilter
  */
+#[CoversClass(AccessibilityFilter::class)]
+#[Group('joinup_html_stripper')]
 class AccessibilityFilterTest extends TestCase {
 
   /**
@@ -23,10 +24,8 @@ class AccessibilityFilterTest extends TestCase {
    *   The input HTML.
    * @param string $expected
    *   The expected output HTML.
-   *
-   * @covers ::process
-   * @dataProvider provideTestProcessData
    */
+  #[DataProvider('provideTestProcessData')]
   public function testProcess(string $input, string $expected): void {
     $filter = new AccessibilityFilter([], 'joinup_accessibility_filter', ['provider' => 'joinup_html_stripper']);
     $result = $filter->process($input, 'en');

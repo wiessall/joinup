@@ -26,7 +26,6 @@ use Drupal\assessments\Event\AssessmentReportEvent;
 use Drupal\assessments\NotificationEvents;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
-use Drupal\user\UserInterface;
 
 /**
  * Implements hook_theme().
@@ -253,53 +252,6 @@ function assessments_theme_suggestions_assessment(array $variables): array {
   $suggestions[] = 'assessment__' . $assessment->bundle() . '__' . $sanitized_view_mode;
 
   return $suggestions;
-}
-
-/**
- * Implements hook_user_cancel().
- */
-function assessments_user_cancel($edit, UserInterface $account, $method): void {
-  switch ($method) {
-    case 'user_cancel_block_unpublish':
-      // Unpublish assessments.
-      $storage = \Drupal::entityTypeManager()->getStorage('assessment');
-      $assessment_ids = $storage->getQuery()
-        ->condition('uid', $account->id())
-        ->condition('status', 1)
-        ->accessCheck(FALSE)
-        ->execute();
-      foreach ($storage->loadMultiple($assessment_ids) as $assessment) {
-        $assessment->set('status', FALSE)->save();
-      }
-      break;
-
-    case 'user_cancel_reassign':
-      // Anonymize assessments.
-      $storage = \Drupal::entityTypeManager()->getStorage('assessment');
-      $assessment_ids = $storage->getQuery()
-        ->condition('uid', $account->id())
-        ->accessCheck(FALSE)
-        ->execute();
-      foreach ($storage->loadMultiple($assessment_ids) as $assessment) {
-        $assessment->setOwnerId(0)->save();
-      }
-      break;
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_predelete() for user entities.
- */
-function assessments_user_predelete(UserInterface $account): void {
-  // Delete assessments that belong to this account.
-  $storage = \Drupal::entityTypeManager()->getStorage('assessment');
-  $assessment_ids = $storage->getQuery()
-    ->condition('uid', $account->id())
-    ->accessCheck(FALSE)
-    ->execute();
-  $storage->delete(
-    $storage->loadMultiple($assessment_ids)
-  );
 }
 
 /**
@@ -662,4 +614,20 @@ function assessments_views_data_alter(array &$data): void {
   $code_value['title'] = $code_value['title short'] = new TranslatableMarkup('Assessment country code');
   $code_value['argument']['id'] = 'assessment_country_code';
   $data['taxonomy_term__code']['assessment_country_code'] = $code_value;
+}
+
+/**
+ * Implements hook_inline_entity_form_reference_form_alter().
+ */
+function assessments_inline_entity_form_reference_form_alter(&$reference_form, FormStateInterface $form_state): void {
+  $form_id = $form_state->getFormObject()->getFormId();
+  if ($form_id === 'layout_paragraphs_component_form' && $reference_form['#ief_id'] === 'asset-form') {
+    $reference_form["entity_id"]["#selection_handler"] = 'views';
+    $reference_form["entity_id"]["#selection_settings"] = [
+      "view" => [
+        "view_name" => "solutions_reference",
+        "display_name" => "entity_reference_1",
+      ],
+    ];
+  }
 }

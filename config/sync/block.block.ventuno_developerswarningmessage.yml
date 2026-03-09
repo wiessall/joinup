@@ -17,7 +17,7 @@ settings:
   id: developer_warning_message
   label: 'Developers warning message'
   label_display: '0'
-  provider: developer
+  provider: joinup_user
 visibility:
   user_role:
     id: user_role

@@ -40,7 +40,7 @@ variant_settings:
             provider: views
             context_mapping: {  }
             views_label: 'Main topics'
-            items_per_page: none
+            items_per_page: null
           weight: 0
           additional: {  }
       third_party_settings: {  }
@@ -60,7 +60,7 @@ variant_settings:
             provider: views
             context_mapping: {  }
             views_label: ''
-            items_per_page: none
+            items_per_page: null
           weight: 0
           additional: {  }
       third_party_settings: {  }
@@ -80,7 +80,7 @@ variant_settings:
             provider: views
             context_mapping: {  }
             views_label: ''
-            items_per_page: none
+            items_per_page: null
           weight: 0
           additional: {  }
         8fc92d7e-8761-4b54-b538-d95432184ca2:
@@ -93,7 +93,7 @@ variant_settings:
             provider: views
             context_mapping: {  }
             views_label: ''
-            items_per_page: none
+            items_per_page: null
           weight: 1
           additional: {  }
       third_party_settings: {  }

@@ -9,14 +9,16 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\user\Traits\UserCreationTrait;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\flag\Entity\Flag;
+use Drupal\joinup_subscription\JoinupDiscussionSubscription;
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the JoinupDiscussionSubscription service.
- *
- * @coversDefaultClass \Drupal\joinup_subscription\JoinupDiscussionSubscription
- * @group joinup
  */
+#[CoversClass(JoinupDiscussionSubscription::class)]
+#[Group('joinup')]
 class JoinupSubscriberServiceTest extends KernelTestBase {
 
   use UserCreationTrait;
@@ -111,8 +113,6 @@ class JoinupSubscriberServiceTest extends KernelTestBase {
 
   /**
    * Tests subscribers retrieval.
-   *
-   * @covers ::getSubscribers
    */
   public function testGetSubscribers(): void {
     // Create some subscribed test users.
@@ -124,8 +124,6 @@ class JoinupSubscriberServiceTest extends KernelTestBase {
 
   /**
    * Tests subscribing a user.
-   *
-   * @covers ::subscribe
    */
   public function testSubscribe(): void {
     $users = [];
@@ -138,8 +136,6 @@ class JoinupSubscriberServiceTest extends KernelTestBase {
 
   /**
    * Tests subscribing a user.
-   *
-   * @covers ::unsubscribe
    */
   public function testUnsubscribe(): void {
     $users = $this->createSubscribedUsers();

@@ -18,18 +18,19 @@ use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\assessments\Entity\AssessmentStatement;
 use Drupal\collection\Entity\CollectionInterface;
+use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\user\UserInterface;
-use PHPUnit\Framework\Assert;
 
 /**
  * Step definitions for assessments.
  */
 class AssessmentsContext extends RawDrupalContext {
 
+  use AssertTrait;
   use EntityTrait;
   use FileTrait;
   use UtilityTrait;
@@ -270,7 +271,7 @@ class AssessmentsContext extends RawDrupalContext {
     $this->visitPath($path);
     $actual = Json::decode($this->getSession()->getPage()->getContent());
 
-    Assert::assertEquals($expected, $actual);
+    $this->assertSameValues($expected, $actual);
   }
 
   /**
@@ -304,7 +305,7 @@ class AssessmentsContext extends RawDrupalContext {
       'type' => $type,
       'name' => $name,
     ]);
-    Assert::assertNotEmpty($entities, sprintf(
+    $this->assertCondition(!empty($entities), sprintf(
       'No assessment of type "%s" with name "%s" found.',
       $type,
       $name
@@ -328,7 +329,7 @@ class AssessmentsContext extends RawDrupalContext {
     $page = $this->getSession()->getPage();
     $link = $page->findLink((string) $id);
 
-    Assert::assertNotEmpty($link, sprintf('Could not find ID link "%s" for assessment "%s"', $id, $name));
+    $this->assertCondition(!empty($link), sprintf('Could not find ID link "%s" for assessment "%s"', $id, $name));
     $link->click();
   }
 
@@ -450,8 +451,8 @@ class AssessmentsContext extends RawDrupalContext {
     $binding_requirements = $report->get('binding_requirement')->referencedEntities();
     foreach ($binding_requirements as $paragraph) {
       $participations = $paragraph->get('has_participation')->referencedEntities();
-      Assert::assertEmpty(
-        $participations,
+      $this->assertCondition(
+        empty($participations),
         sprintf(
           'Expected no participation entities for report "%s", but found %d.',
           $title,

@@ -1,0 +1,78 @@
+diff --git a/core/modules/views/src/Plugin/views/display/DisplayPluginBase.php b/core/modules/views/src/Plugin/views/display/DisplayPluginBase.php
+index ce8890fc978e774a5515179e381b9c5b1d9b6621..e55e60189c6908287cceaab9be456114399a2cd3 100644
+--- a/core/modules/views/src/Plugin/views/display/DisplayPluginBase.php
++++ b/core/modules/views/src/Plugin/views/display/DisplayPluginBase.php
+@@ -799,6 +799,10 @@ public function getPlugin($type) {
+     if ($type == 'query') {
+       $views_data = Views::viewsData()->get($this->view->storage->get('base_table'));
+       $name = $views_data['table']['base']['query_id'] ?? 'views_query';
++      if ($name != $options['type']) {
++        $options['type'] = $name;
++        $this->setOption($type, $options);
++      }
+     }
+     else {
+       $name = $options['type'];
+diff --git a/core/modules/views/src/Plugin/views/wizard/WizardPluginBase.php b/core/modules/views/src/Plugin/views/wizard/WizardPluginBase.php
+index 139906433f58720f0388efb4daacc51c531c53e0..ac793ec1a3c4a43a44e4e4b741308e8ed08fa5b6 100644
+--- a/core/modules/views/src/Plugin/views/wizard/WizardPluginBase.php
++++ b/core/modules/views/src/Plugin/views/wizard/WizardPluginBase.php
+@@ -862,6 +862,10 @@ protected function defaultDisplayOptions() {
+     // choose the first field with a field handler.
+     $default_table = $this->base_table;
+     $data = Views::viewsData()->get($default_table);
++    if (isset($data['table']['base']['query_id'])) {
++      // Use the base table query plugin id as defined.
++      $display_options['query']['type'] = $data['table']['base']['query_id'];
++    }
+     if (isset($data['table']['base']['defaults']['field'])) {
+       $default_field = $data['table']['base']['defaults']['field'];
+       // If the table for the default field is different to the base table,
+diff --git a/core/modules/views/tests/src/Kernel/Plugin/DisplayKernelTest.php b/core/modules/views/tests/src/Kernel/Plugin/DisplayKernelTest.php
+index b2c2d14b0ea4c46393b98639a2975d68d7ca1188..5d1db41d3cddad877b7632dd005cde5acf602369 100644
+--- a/core/modules/views/tests/src/Kernel/Plugin/DisplayKernelTest.php
++++ b/core/modules/views/tests/src/Kernel/Plugin/DisplayKernelTest.php
+@@ -26,7 +26,7 @@ class DisplayKernelTest extends ViewsKernelTestBase {
+   /**
+    * {@inheritdoc}
+    */
+-  protected static $modules = ['block', 'node', 'field', 'user'];
++  protected static $modules = ['block', 'node', 'field', 'user', 'views_test_data'];
+ 
+   /**
+    * Views plugin types to test.
+@@ -117,6 +117,34 @@ public function testGetPlugin(): void {
+     $this->assertSame($first, $second, 'The same plugin instance was returned.');
+   }
+ 
++  /**
++   * Tests \Drupal\views\Plugin\views\display\DisplayPluginBase::getPlugin().
++   */
++  public function testQueryPluginId(): void {
++    $view = Views::getView('test_view');
++    $view->initDisplay();
++    $display_handler = $view->display_handler;
++    // Assert that the query plugin ID defaults to "views_query".
++    $this->assertSame('views_query', $display_handler->getPlugin('query')->getPluginId());
++    $query_options = $display_handler->getOption('query');
++    $this->assertSame('views_query', $query_options['type']);
++
++    // Update the views data definition so the base plugin is now "query_test".
++    /** @var \Drupal\Core\State\StateInterface $state */
++    $state = $this->container->get('state');
++    $data = $state->get('views_test_data_views_data');
++    // Use the test query plugin as the base table name.
++    $data['views_test_data']['table']['base']['query_id'] = 'query_test';
++    $state->set('views_test_data_views_data', $data);
++    $this->container->get('views.views_data')->clear();
++
++    // Check that the plugin ID and configuration setting has been updated to
++    // match the new ID.
++    $this->assertSame('query_test', $display_handler->getPlugin('query')->getPluginId());
++    $query_options = $display_handler->getOption('query');
++    $this->assertSame('query_test', $query_options['type']);
++  }
++
+   /**
+    * Tests the ::isIdentifierUnique method.
+    */

@@ -1,0 +1,27 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Joinup\PhpUnit\Extension;
+
+use Joinup\PhpUnit\EventSubscriber\JoinupFinishedSubscriber;
+use Joinup\PhpUnit\EventSubscriber\JoinupStartedSubscriber;
+use PHPUnit\Runner\Extension\Extension;
+use PHPUnit\Runner\Extension\Facade;
+use PHPUnit\Runner\Extension\ParameterCollection;
+use PHPUnit\TextUI\Configuration\Configuration;
+
+/**
+ * Registers Joinup PHPUnit event subscribers.
+ */
+class JoinupExtension implements Extension {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function bootstrap(Configuration $configuration, Facade $facade, ParameterCollection $parameters): void {
+    $facade->registerSubscriber(new JoinupStartedSubscriber());
+    $facade->registerSubscriber(new JoinupFinishedSubscriber());
+  }
+
+}
