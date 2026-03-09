@@ -374,7 +374,7 @@ abstract class ContactInformationFormBase extends ContactForm {
     return !empty($this->fieldSettings['modal']) &&
       preg_match(
         '/\bdrupal_(?>ajax|modal|dialog)\b/',
-        $this->getRequest()->get(MainContentViewSubscriber::WRAPPER_FORMAT, '')
+        $this->getRequest()->query->get(MainContentViewSubscriber::WRAPPER_FORMAT, '')
       );
   }
 

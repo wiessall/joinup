@@ -8,12 +8,12 @@ use Drupal\Tests\TestFileCreationTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\Tests\joinup_test\Traits\ParagraphTrait;
 use Drupal\file\FileInterface;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Test description.
- *
- * @group custom_page
  */
+#[Group('custom_page')]
 final class ThemingTest extends JoinupExistingSiteTestBase {
 
   use TestFileCreationTrait;

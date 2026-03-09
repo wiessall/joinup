@@ -9,12 +9,12 @@ use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
 use Drupal\joinup_news\Entity\NewsInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests pinnable entities.
- *
- * @group joinup_pin
  */
+#[Group('joinup_pin')]
 class PinnableEntitiesTest extends JoinupExistingSiteTestBase {
 
   /**

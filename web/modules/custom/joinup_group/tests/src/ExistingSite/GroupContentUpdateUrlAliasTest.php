@@ -8,13 +8,13 @@ use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\joinup\Traits\RandomGeneratorTrait;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drush\TestTraits\DrushTestTrait;
+use PHPUnit\Framework\Attributes\Group;
 use weitzman\LoginTrait\LoginTrait;
 
 /**
  * Tests group content URL aliases update when the group short ID changes.
- *
- * @group joinup_group
  */
+#[Group('joinup_group')]
 class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
 
   use DrushTestTrait;

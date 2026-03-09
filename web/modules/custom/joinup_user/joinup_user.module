@@ -382,8 +382,10 @@ function joinup_user_og_membership_presave(OgMembershipInterface $entity): void 
     return;
   }
 
-  /** @var \Drupal\og\OgMembershipInterface $original_membership */
-  $original_membership = $entity->original;
+  $original_membership = $entity->getOriginal();
+  if (empty($original_membership)) {
+    return;
+  }
 
   // The group bundle is only stored in memberships after og_update_8001() has
   // run. If our original entity doesn't have the bundle set we cannot retrieve

@@ -1,0 +1,23 @@
+diff --git a/message.module b/message.module
+index 955906942981f75cd101b06eec9519c2c6d26a3e..f3aef69e6d6dc27d43097f06a61ff776aff27b24 100644
+--- a/message.module
++++ b/message.module
+@@ -229,10 +229,14 @@ function template_preprocess_message(array &$variables) {
+ 
+   /** @var \Drupal\message\MessageInterface $message */
+   $message = $variables['message'];
+-  $variables['date'] = \Drupal::service('renderer')->render($variables['elements']['created']);
+-  unset($variables['elements']['created']);
+-  $variables['author_name'] = \Drupal::service('renderer')->render($variables['elements']['uid']);
+-  unset($variables['elements']['uid']);
++  if (isset($variables['elements']['created']) && is_array($variables['elements']['created'])) {
++    $variables['date'] = \Drupal::service('renderer')->render($variables['elements']['created']);
++    unset($variables['elements']['created']);
++  }
++  if (isset($variables['elements']['uid']) && is_array($variables['elements']['uid'])) {
++    $variables['author_name'] = \Drupal::service('renderer')->render($variables['elements']['uid']);
++    unset($variables['elements']['uid']);
++  }
+ 
+   // The 'page' variable is set to TRUE in two occasions:
+   // - The view mode is 'full' and we are on the 'message.view' route.

@@ -7,12 +7,12 @@ namespace Drupal\Tests\eu_oss_catalogue\Functional;
 use Behat\Mink\Element\NodeElement;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the OSS solution listing page.
- *
- * @group eu_oss_catalogue
  */
+#[Group('eu_oss_catalogue')]
 class OssSolutionListingPageTest extends FetchTestBase {
 
   /**
@@ -98,7 +98,7 @@ class OssSolutionListingPageTest extends FetchTestBase {
           'EN, DE, IT',
           'Yes',
           'No',
-          '',
+          'View',
         ],
         [
           'Project 1.1',
@@ -109,7 +109,7 @@ class OssSolutionListingPageTest extends FetchTestBase {
           'EN, DE, IT',
           'Yes',
           'No',
-          '',
+          'View',
         ],
         [
           'Project 1.2',
@@ -120,7 +120,7 @@ class OssSolutionListingPageTest extends FetchTestBase {
           'EN, DE, IT',
           'Yes',
           'No',
-          '',
+          'View',
         ],
         [
           'Project 1.4',
@@ -131,7 +131,7 @@ class OssSolutionListingPageTest extends FetchTestBase {
           'EN, DE',
           'Yes',
           'No',
-          '',
+          'View',
         ],
         [
           'Project 1',
@@ -142,7 +142,7 @@ class OssSolutionListingPageTest extends FetchTestBase {
           'EN, DE',
           'Yes',
           'No',
-          '',
+          'View',
         ],
       ],
       $this->getTableCellsText($table)
