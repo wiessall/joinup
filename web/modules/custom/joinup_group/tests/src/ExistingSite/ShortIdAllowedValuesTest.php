@@ -7,6 +7,7 @@ namespace Drupal\Tests\joinup_group\ExistingSite;
 use Drupal\Core\Validation\Plugin\Validation\Constraint\RegexConstraint;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\node\Entity\Node;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests the short ID allowed values.
@@ -27,9 +28,8 @@ class ShortIdAllowedValuesTest extends JoinupExistingSiteTestBase {
 
   /**
    * Tests the short ID field and possible values.
-   *
-   * @dataProvider shortIdAllowedValuesProvider
    */
+  #[DataProvider('shortIdAllowedValuesProvider')]
   public function testShortIdAllowedValues(string $short_id, bool $violation_expected): void {
     foreach (['collection', 'solution'] as $bundle) {
       $entity = Node::create([
