@@ -32,7 +32,7 @@ settings:
     target_bundles:
       solution: solution
     sort:
-      field: title
+      field: _none
       direction: ASC
     auto_create: false
     auto_create_bundle: ''

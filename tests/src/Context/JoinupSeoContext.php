@@ -8,15 +8,16 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Given;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\JsonLdObjectInspector;
+use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\UtilityTrait;
-use PHPUnit\Framework\Assert;
 
 /**
  * Behat step definitions for testing SEO.
  */
 class JoinupSeoContext extends RawDrupalContext {
 
+  use AssertTrait;
   use EntityTrait;
   use UtilityTrait;
 
@@ -87,25 +88,25 @@ class JoinupSeoContext extends RawDrupalContext {
   #[Given('the metatag JSON should be attached in the page with context :context')]
   public function assertJsonMetatagsInPage(string $context = '', bool $checkSchemaContext = TRUE): void {
     $json = $this->getMetatagsAsJson();
-    Assert::assertNotEmpty($json, 'Entity metadata are found in the table.');
+    $this->assertCondition(!empty($json), 'Entity metadata are found in the table.');
     if (!$checkSchemaContext) {
       return;
     }
     // Assert that the context of the metatag is 'schema.org' to ensure that the
     // correct metatag is loaded and exists.
-    Assert::assertArrayHasKey('@context', $json, '@context key not found in the metatag array.');
+    $this->assertCondition(array_key_exists('@context', $json), '@context key not found in the metatag array.');
 
     // Check whether the expected schema exists.
     $failureMessage = 'The @context property value is not set to the appropriate url.';
     if (!$context) {
-      Assert::assertEquals($json['@context'], 'https://schema.org', $failureMessage);
+      $this->assertSameValues('https://schema.org', $json['@context'], $failureMessage);
       return;
     }
     if (array_search($context, $json['@context']) !== FALSE) {
-      Assert::assertContains($context, $json['@context'], $failureMessage);
+      $this->assertCondition(in_array($context, $json['@context']), $failureMessage);
     }
     else {
-      Assert::assertArrayHasKey($context, $json['@context'], $failureMessage);
+      $this->assertCondition(array_key_exists($context, $json['@context']), $failureMessage);
     }
   }
 
@@ -123,7 +124,7 @@ class JoinupSeoContext extends RawDrupalContext {
   #[Given('the metatag JSON should not be attached in the page')]
   public function assertMetatagsNotInPage(): void {
     $json = $this->getMetatagsAsJson();
-    Assert::assertEmpty($json, 'Entity metadata are not attached in the page.');
+    $this->assertCondition(empty($json), 'Entity metadata are not attached in the page.');
   }
 
   /**
@@ -144,7 +145,7 @@ class JoinupSeoContext extends RawDrupalContext {
     }
     catch (\Exception) {
     }
-    Assert::assertEquals($count, $found, "{$count} graph of type {$type} was expected. {$found} were found.");
+    $this->assertSameValues($count, $found, "{$count} graph of type {$type} was expected. {$found} were found.");
   }
 
   /**
@@ -266,7 +267,7 @@ class JoinupSeoContext extends RawDrupalContext {
   #[Given('the metatag graph of the item with :property :value should be present')]
   #[Given('the metatag graph of the item with :property :value should :not be present')]
   public function jsonLdGraphObjectExistsByLabel(string $property, string $value, ?string $not = NULL): void {
-    Assert::assertTrue(in_array($not, [NULL, 'not'], TRUE));
+    $this->assertCondition(in_array($not, [NULL, 'not'], TRUE), 'The $not parameter must be NULL or "not".');
     $count = 0;
     try {
       $jsonLdInspector = new JsonLdObjectInspector(
@@ -280,9 +281,8 @@ class JoinupSeoContext extends RawDrupalContext {
     }
 
     if (!isset($not)) {
-      Assert::assertGreaterThan(
-        0,
-        $count,
+      $this->assertCondition(
+        $count > 0,
         sprintf(
           "No graphs were found that have a property '%s' with value '%s'.",
           $property,
@@ -292,7 +292,7 @@ class JoinupSeoContext extends RawDrupalContext {
       return;
     }
 
-    Assert::assertSame(
+    $this->assertSameValues(
       0,
       $count,
       sprintf(

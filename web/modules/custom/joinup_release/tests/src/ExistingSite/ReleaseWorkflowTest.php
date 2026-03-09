@@ -11,12 +11,12 @@ use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\OgRoleInterface;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests crud operations and the workflow for the release entity.
- *
- * @group joinup_release
  */
+#[Group('joinup_release')]
 class ReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
 
   /**
