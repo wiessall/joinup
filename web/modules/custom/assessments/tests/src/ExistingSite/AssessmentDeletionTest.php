@@ -10,16 +10,21 @@ use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\assessments\Entity\Assessment;
+use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\AssessmentStatement;
+use Drupal\assessments\Entity\BindingRequirementParagraph;
 use Drupal\file\Entity\File;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\ParagraphInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the assessment deletion.
- *
- * @group assessments
  */
+#[CoversClass(AssessmentReport::class)]
+#[CoversClass(BindingRequirementParagraph::class)]
+#[Group('assessments')]
 class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
 
   /**
@@ -44,11 +49,6 @@ class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
 
   /**
    * Tests assessment report deletion.
-   *
-   * @covers \Drupal\assessments\Entity\AssessmentReport::postSave
-   * @covers \Drupal\assessments\Entity\AssessmentReport::postDelete
-   * @covers \Drupal\assessments\Entity\BindingRequirementParagraph::postSave
-   * @covers \Drupal\assessments\Entity\BindingRequirementParagraph::postDelete
    */
   public function testAssessmentEntityDelete(): void {
     // Create assessment report with all sub-entities.
