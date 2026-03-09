@@ -7,7 +7,6 @@ namespace Drupal\joinup\Context;
 use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\TraversingTrait;
-use PHPUnit\Framework\Assert;
 
 /**
  * Behat step definitions for testing the newsletter integration.
@@ -27,7 +26,7 @@ class JoinupNewsletterContext extends RawDrupalContext {
     }
 
     end($tiles);
-    Assert::assertNotEquals('Newsletter', key($tiles));
+    $this->assertCondition(key($tiles) != 'Newsletter', 'The last tile should not be a newsletter subscription form but it is.');
   }
 
   /**
@@ -41,7 +40,7 @@ class JoinupNewsletterContext extends RawDrupalContext {
     }
 
     end($tiles);
-    Assert::assertEquals('Newsletter', key($tiles));
+    $this->assertCondition(key($tiles) == 'Newsletter', 'The last tile should be a newsletter subscription form but it is not.');
   }
 
 }

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Traits;
 
+use Behat\Mink\Exception\ExpectationException;
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\user\UserInterface;
-use PHPUnit\Framework\ExpectationFailedException;
 
 /**
  * Contains utility methods.
@@ -91,13 +91,13 @@ trait MailCollectorTrait {
    * @return array
    *   An array of emails found.
    *
-   * @throws \PHPUnit\Framework\ExpectationFailedException
+   * @throws \Behat\Mink\Exception\ExpectationException
    *   When no emails are found with the given subject and/or recipient.
    */
   protected function getEmailsBySubjectAndMail(string $subject, string $recipient, bool $strict = TRUE, bool $search_recipient_in_list = FALSE): array {
     $emails_found = $this->getMails(['to' => $recipient, 'subject' => $subject], $search_recipient_in_list);
     if (empty($emails_found) && $strict) {
-      throw new ExpectationFailedException("No emails found sent to {$recipient} with subject '{$subject}'.");
+      throw new ExpectationException("No emails found sent to {$recipient} with subject '{$subject}'.", $this->getSession()->getDriver());
     }
     return $emails_found;
   }

@@ -7,13 +7,15 @@ namespace Drupal\joinup\Context;
 use Behat\Mink\Element\NodeElement;
 use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\joinup\Traits\AssertTrait;
 use Drupal\oe_webtools_analytics\AnalyticsEventInterface;
-use PHPUnit\Framework\Assert;
 
 /**
  * Behat step definitions for testing visitor analytics.
  */
 class Isa2AnalyticsContext extends RawDrupalContext {
+
+  use AssertTrait;
 
   /**
    * Checks the presence of a site section in the analytics reporting data.
@@ -43,8 +45,8 @@ class Isa2AnalyticsContext extends RawDrupalContext {
    */
   protected function assertAnalyticsJsonContainsParameter(string $parameter, string $value): void {
     $analytics_data = $this->getAnalyticsData();
-    Assert::assertArrayHasKey($parameter, $analytics_data);
-    Assert::assertEquals($value, $analytics_data[$parameter]);
+    $this->assertCondition(array_key_exists($parameter, $analytics_data), "The parameter '$parameter' was not found in the analytics data.");
+    $this->assertSameValues($value, $analytics_data[$parameter]);
   }
 
   /**
@@ -55,7 +57,7 @@ class Isa2AnalyticsContext extends RawDrupalContext {
    */
   protected function assertAnalyticsJsonNotContainsParameter(string $parameter): void {
     $analytics_data = $this->getAnalyticsData();
-    Assert::assertArrayNotHasKey($parameter, $analytics_data);
+    $this->assertCondition(!array_key_exists($parameter, $analytics_data), "The parameter '$parameter' was found in the analytics data, but it should not be present.");
   }
 
   /**
@@ -79,7 +81,7 @@ class Isa2AnalyticsContext extends RawDrupalContext {
     });
 
     // Fail if there are multiple analytics JSON arrays found.
-    Assert::assertCount(1, $analytics_data_arrays, 'There should be exactly 1 analytics JSON array in the page.');
+    $this->assertCount(1, $analytics_data_arrays, 'There should be exactly 1 analytics JSON array in the page.');
 
     return reset($analytics_data_arrays);
   }
