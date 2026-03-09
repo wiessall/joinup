@@ -6,6 +6,6 @@ dependencies:
     - node
 id: node.default
 label: Default
-description: ''
+description: null
 targetEntityType: node
 cache: true

@@ -111,12 +111,7 @@ class ReleaseSubscriber extends NotificationSubscriberBase {
 
     $this->event = $event;
     $this->workflow = $this->entity->getWorkflow();
-    if (isset($this->entity->field_state_initial_value)) {
-      $this->fromState = $this->entity->field_state_initial_value;
-    }
-    else {
-      $this->fromState = isset($this->entity->original) ? $this->entity->original->getWorkflowState() : 'draft';
-    }
+    $this->fromState = $this->entity->getOriginal()?->getWorkflowState() ?? 'draft';
     $this->toState = $this->entity->getWorkflowState();
     $this->transition = $this->workflow->findTransition($this->fromState, $this->toState);
     $this->motivation = empty($this->entity->motivation) ? '' : $this->entity->motivation;

@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
+use PHPUnit\Framework\Attributes\Group;
+
 /**
  * Tests validation of publiccode.yml.
- *
- * @group eu_oss_catalogue
  */
+#[Group('eu_oss_catalogue')]
 class PubliccodeValidationTest extends FetchTestBase {
 
   /**
