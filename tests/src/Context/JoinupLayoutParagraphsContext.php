@@ -11,18 +11,17 @@ use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\WysiwygTrait;
-use PHPUnit\Framework\Assert;
-use function PHPUnit\Framework\assertSame;
-use function PHPUnit\Framework\assertTrue;
 
 /**
  * Behat step definitions for layout paragraphs.
  */
 class JoinupLayoutParagraphsContext extends RawDrupalContext {
 
+  use AssertTrait;
   use JavascriptTrait;
   use WysiwygTrait;
   use TraversingTrait;
@@ -96,7 +95,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
 
     // Get the 'layout' property from the table.
     $layout = $layout_properties->getRowsHash()['layout'];
-    assertTrue(isset(self::LAYOUTS_MAP[$layout]), "The layout '$layout' is not defined in the context.");
+    $this->assertCondition(isset(self::LAYOUTS_MAP[$layout]), "The layout '$layout' is not defined in the context.");
     $layout = self::LAYOUTS_MAP[$layout];
 
     $modalContent = $this->getRegion('Modal content');
@@ -116,7 +115,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
         continue;
       }
 
-      assertTrue(isset(self::LAYOUT_PROPERTIES_MAP[strtolower($property)]), "The layout property '$property' is not defined in the context.");
+      $this->assertCondition(isset(self::LAYOUT_PROPERTIES_MAP[strtolower($property)]), "The layout property '$property' is not defined in the context.");
       $type = self::LAYOUT_PROPERTIES_MAP[strtolower($property)];
       if ($type === 'select') {
         $modalContent->selectFieldOption($property, $value);
@@ -269,7 +268,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    */
   protected function performAction(TraversableElement $link, string $action): void {
     $actions = ['delete', 'edit', 'move up', 'move down', 'duplicate'];
-    assertTrue(in_array($action, $actions), "The action '$action' is not defined in the context. Available actions are ", implode(', ', $actions));
+    $this->assertCondition(in_array($action, $actions), "The action '$action' is not defined in the context. Available actions are " . implode(', ', $actions));
 
     $link->clickLink(ucfirst($action));
     $this->waitForAjax();
@@ -313,11 +312,11 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
       $actual[] = $layout_paragraph->getAttribute('data-layout');
     }
     $expected = array_map(function (string $layout_alias): string {
-      assertTrue(isset(self::LAYOUTS_MAP[$layout_alias]), "The layout '$layout_alias' is not defined in the context.");
+      $this->assertCondition(isset(self::LAYOUTS_MAP[$layout_alias]), "The layout '$layout_alias' is not defined in the context.");
       return self::LAYOUTS_MAP[$layout_alias];
     }, $layout_list->getColumn(0));
 
-    assertSame($expected, $actual);
+    $this->assertSameValues($expected, $actual);
   }
 
   /**
@@ -329,7 +328,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   #[Then('there should be :expected_rows paragraph(s) in the page')]
   #[Then('the page should contain no paragraphs')]
   public function assertParagraphsCountInPage(int $expected_rows = 0): void {
-    Assert::assertCount($expected_rows, $this->getSession()->getPage()->findAll('xpath', static::PARAGRAPH_ITEM_XPATH));
+    $this->assertCount($expected_rows, $this->getSession()->getPage()->findAll('xpath', static::PARAGRAPH_ITEM_XPATH));
   }
 
   /**
@@ -345,7 +344,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
     $actual = array_map(function (TraversableElement $paragraph): string {
       return $paragraph->getText();
     }, $paragraphs);
-    Assert::assertSame($expected, $actual);
+    $this->assertSameValues($expected, $actual);
   }
 
   /**
@@ -385,7 +384,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
       $expected[$row[0]][] = $row[1];
     }
 
-    assertSame($expected, $actual);
+    $this->assertSameValues($expected, $actual);
   }
 
   /**
