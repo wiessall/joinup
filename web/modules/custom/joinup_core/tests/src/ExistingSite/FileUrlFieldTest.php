@@ -11,13 +11,13 @@ use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\file\FileInterface;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\node\Entity\Node;
+use PHPUnit\Framework\Attributes\Group;
 use weitzman\LoginTrait\LoginTrait;
 
 /**
  * Provides methods specifically for testing File module's field handling.
- *
- * @group joinup_core
  */
+#[Group('joinup_core')]
 class FileUrlFieldTest extends JoinupExistingSiteTestBase {
 
   use TestFileTrait;

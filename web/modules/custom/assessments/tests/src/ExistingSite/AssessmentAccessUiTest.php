@@ -7,12 +7,12 @@ namespace Drupal\Tests\assessments\ExistingSite;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\assessments\Entity\Assessment;
 use Drupal\taxonomy\Entity\Vocabulary;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests assessments access.
- *
- * @group assessments
  */
+#[Group('assessments')]
 class AssessmentAccessUiTest extends JoinupExistingSiteTestBase {
 
   /**

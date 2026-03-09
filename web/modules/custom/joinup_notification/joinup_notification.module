@@ -26,21 +26,13 @@ function joinup_notification_node_insert(EntityInterface $entity): void {
 /**
  * Implements hook_ENTITY_TYPE_presave().
  *
- * It is really hard to keep track of the from_state since state_machine does
- * not give us access to the initialValue protected property of the StateItem
- * class.
- *
- * Load the unchanged latest version and get the source state and save it to the
- * entity.
- *
- * This workaround comes because the $entity->original property points to the
- * latest published version instead of the latest revision.
- *
- * @see https://www.drupal.org/node/2833084
+ * Track if entity had a published version before this save.
  */
 function joinup_notification_node_presave(EntityInterface $entity): void {
   if (!$entity->isNew() && $entity instanceof EntityWorkflowStateInterface && $entity->hasWorkflow()) {
-    $entity->field_state_initial_value = $entity->get('field_state')->first()->getOriginalId();
+    // Track if entity had a published version before this save.
+    $stored = \Drupal::entityTypeManager()->getStorage('node')->load($entity->id());
+    $entity->had_published_version = !empty($stored) && $stored->isPublished();
   }
 }
 

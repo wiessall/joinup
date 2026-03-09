@@ -12,6 +12,8 @@ use Drupal\Tests\node\Traits\NodeCreationTrait;
 use Drupal\joinup_test\Plugin\ServiceMock\GitHubCom;
 use Drupal\joinup_test\Traits\GitHubApiMockTrait;
 use Drupal\joinup_test_time\Traits\TestTimeTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests caching of rendered GitHub feeds.
@@ -19,9 +21,8 @@ use Drupal\joinup_test_time\Traits\TestTimeTrait;
  * @see \Drupal\github_feed\Plugin\Field\FieldFormatter\GitHubFeedDefaultFormatter
  * @see \Drupal\github_feed\GitHubFeedLazyBuilder
  * @see \Drupal\github_feed\GitHubFeed
- *
- * @group github_feed
  */
+#[Group('github_feed')]
 class GithubFeedCacheTest extends JoinupExistingSiteTestBase {
 
   use NodeCreationTrait;
@@ -41,9 +42,8 @@ class GithubFeedCacheTest extends JoinupExistingSiteTestBase {
 
   /**
    * Tests how rendered GitHub feeds and their page is cached.
-   *
-   * @dataProvider providerTestCaching
    */
+  #[DataProvider('providerTestCaching')]
   public function testCaching(string $repositoryUrl): void {
     $nodeWithGitHubFeed = $this->createNode([
       'type' => 'custom_page',
