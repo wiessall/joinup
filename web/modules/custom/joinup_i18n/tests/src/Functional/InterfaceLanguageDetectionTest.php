@@ -7,12 +7,12 @@ namespace Drupal\Tests\joinup_i18n\ExistingSite;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\user\UserInterface;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Interface text language detection.
- *
- * @group joinup_i18n
  */
+#[Group('joinup_i18n')]
 class InterfaceLanguageDetectionTest extends BrowserTestBase {
 
   /**

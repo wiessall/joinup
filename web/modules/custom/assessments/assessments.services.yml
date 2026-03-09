@@ -6,8 +6,6 @@ services:
 
   Drupal\assessments\AssessmentVocabularyHelper: {}
 
-  Drupal\assessments\WebformSubmissionMigrator: {}
-
   Drupal\assessments\EventSubscriber\RdfSyncNormalizeSubscriber: {}
 
   Drupal\assessments\EventSubscriber\SearchApiSubscriber: { }
@@ -16,8 +14,6 @@ services:
     class: Drupal\assessments\AssessmentReportNotification
 
   Drupal\assessments\EventSubscriber\AssessmentReportNotificationSubscriber: { }
-
-  Drupal\assessments\EventSubscriber\ApiExceptionSubscriber: { }
 
   Drupal\assessments\PageCache\AllowPublicResources:
     tags:

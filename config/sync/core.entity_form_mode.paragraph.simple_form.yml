@@ -6,6 +6,6 @@ dependencies:
     - paragraphs
 id: paragraph.simple_form
 label: 'Simple form'
-description: ''
+description: null
 targetEntityType: paragraph
 cache: true

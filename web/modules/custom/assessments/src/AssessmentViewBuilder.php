@@ -112,7 +112,7 @@ class AssessmentViewBuilder extends EntityViewBuilder {
   protected function submittedByMarkup(AssessmentReport $assessmentReport): MarkupInterface {
     $created = $assessmentReport->getCreatedTime();
     $arguments = [
-      '@date' => $created ? $this->dateFormatter->format($created) : NULL,
+      '@date' => $created ? $this->dateFormatter->format($created) : '',
     ];
     $providerField = $assessmentReport->get('provider');
     assert($providerField instanceof EntityReferenceFieldItemListInterface);
@@ -128,9 +128,9 @@ class AssessmentViewBuilder extends EntityViewBuilder {
     assert($providerCountryField instanceof EntityReferenceFieldItemListInterface);
     $providerCountry = $providerCountryField->referencedEntities()[0] ?? NULL;
     $arguments += [
-      '%provider-name' => $provider->label(),
-      '@provider-type' => $providerOrgType?->label(),
-      '@provider-country' => $providerCountry?->label(),
+      '%provider-name' => $provider->label() ?? '',
+      '@provider-type' => $providerOrgType?->label() ?? '',
+      '@provider-country' => $providerCountry?->label() ?? '',
     ];
     if ($providerCountry) {
       return $this->t('Submitted on @date by %provider-name, a @provider-type from @provider-country', $arguments);

@@ -11,12 +11,12 @@ use Drupal\node\Entity\NodeType;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og_menu\Entity\OgMenu;
 use Drupal\og_menu\Entity\OgMenuInstance;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the custom page OG menu link updater service.
- *
- * @group custom_page
  */
+#[Group('custom_page')]
 class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
 
   /**

@@ -34,7 +34,9 @@ class InteroperableLink extends ConfirmForm {
    */
   public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity, ?string $view_mode = NULL): array {
     $build = parent::getAsFlagLink($flag, $entity, $view_mode);
-    if (isset($build['#theme']) && in_array($view_mode, $this->actionViewModes, TRUE)) {
+    $action = $this->getAction($flag, $entity);
+    $access = $flag->actionAccess($action, $this->currentUser, $entity);
+    if ($access->isAllowed() && in_array($view_mode, $this->actionViewModes, TRUE)) {
       return $build;
     }
 
