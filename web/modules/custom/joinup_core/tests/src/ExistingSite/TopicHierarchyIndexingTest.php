@@ -7,13 +7,13 @@ namespace Drupal\Tests\joinup_core\ExistingSite;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\search_api\Entity\Index;
 use Drupal\taxonomy\Entity\Vocabulary;
+use PHPUnit\Framework\Attributes\Group;
 use weitzman\DrupalTestTraits\Entity\TaxonomyCreationTrait;
 
 /**
  * Tests hierarchy indexing for the aggregated field 'Topic'.
- *
- * @group joinup_core
  */
+#[Group('joinup_core')]
 class TopicHierarchyIndexingTest extends JoinupExistingSiteTestBase {
 
   use TaxonomyCreationTrait;

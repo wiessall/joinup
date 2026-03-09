@@ -34,7 +34,7 @@ solr_rollback: True
 solr_refresh_acc: True
 solr_asda: True
 
-virtuoso_image: registry.fpfis.eu/fpfis/virtuoso:latest
+virtuoso_image: registry.dhs.tech.ec.europa.eu/fpfis/virtuoso:latest
 virtuoso_rollback: False
 virtuoso_refresh_acc: False
 virtuoso_asda: False

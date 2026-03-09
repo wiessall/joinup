@@ -8,13 +8,13 @@ use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Element\TraversableElement;
 use Drupal\editor\Entity\Editor;
 use Drupal\joinup\Exception\WysiwygEditorNotFoundException;
-use PHPUnit\Framework\Assert;
 
 /**
  * Helper methods for interacting with WYSIWYG editors.
  */
 trait WysiwygTrait {
 
+  use AssertTrait;
   use JavascriptTrait;
 
   /**
@@ -35,9 +35,8 @@ trait WysiwygTrait {
    */
   public function pressWysiwygButton(string $label, string $button, ?TraversableElement $region = NULL): void {
     $buttonElement = $this->getWysiwygButton($label, $button, $region);
-    Assert::assertInstanceOf(
-      NodeElement::class,
-      $buttonElement,
+    $this->assertCondition(
+      $buttonElement instanceof NodeElement,
       sprintf(
         "Could not find the '%s' button.",
         $button,
@@ -66,7 +65,7 @@ trait WysiwygTrait {
       return NULL;
     }
 
-    Assert::assertCount(
+    $this->assertCount(
       1,
       $matchingButtons,
       sprintf(
