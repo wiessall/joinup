@@ -6,14 +6,15 @@ namespace Drupal\Tests\joinup_core\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\joinup_core\Plugin\Filter\FilterIframe;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the "joinup_iframe" filter.
- *
- * @coversDefaultClass \Drupal\joinup_core\Plugin\Filter\FilterIframe
- *
- * @group joinup_core
  */
+#[CoversClass(FilterIframe::class)]
+#[Group('joinup_core')]
 class FilterIframeTest extends KernelTestBase {
 
   /**
@@ -42,10 +43,9 @@ class FilterIframeTest extends KernelTestBase {
   }
 
   /**
-   * @covers ::process
-   *
-   * @dataProvider providerHtml
+   * Tests the iframe filter processing.
    */
+  #[DataProvider('providerHtml')]
   public function testProcess(string $html, string $expected, ?array $settings = []): void {
     $config = ['settings' => $settings + ['allowed_domains' => []]];
     $filter = new FilterIframe($config, 'filter_iframe', ['provider' => 'test'], $this->container->get('router.request_context'));

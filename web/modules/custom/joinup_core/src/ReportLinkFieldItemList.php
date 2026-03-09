@@ -16,7 +16,7 @@ class ReportLinkFieldItemList extends FieldItemList {
   /**
    * {@inheritdoc}
    */
-  public function getIterator() {
+  public function getIterator(): \ArrayIterator {
     $this->ensureLoaded();
     return new \ArrayIterator($this->list);
   }

@@ -6,13 +6,15 @@ namespace Drupal\Tests\eu_oss_catalogue\Unit;
 
 use Drupal\Tests\UnitTestCase;
 use Drupal\eu_oss_catalogue\Model\GitUri;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests GitUri.
- *
- * @coversDefaultClass \Drupal\eu_oss_catalogue\Model\GitUri
- * @group eu_oss_catalogue
  */
+#[CoversClass(GitUri::class)]
+#[Group('eu_oss_catalogue')]
 class GitUriTest extends UnitTestCase {
 
   /**
@@ -22,11 +24,8 @@ class GitUriTest extends UnitTestCase {
    *   The URI string to test with.
    * @param array $expected
    *   The expected values in the GitUri object, as array.
-   *
-   * @covers ::fromUriString
-   *
-   * @dataProvider providerFromUriString
    */
+  #[DataProvider('providerFromUriString')]
   public function testFromUriString(string $uriString, ?array $expected): void {
     $gitUri = GitUri::fromUriString($uriString);
     if (!is_null($expected)) {
@@ -58,8 +57,8 @@ class GitUriTest extends UnitTestCase {
         ],
       ],
       'Gitlab URL with deep namespace + .git extension' => [
-        'URI' => 'https://gitlab.opencode.de/xleitstelle/xplanung/validierungsregeln/profile/berlin.git',
-        'Expected object' => [
+        'uriString' => 'https://gitlab.opencode.de/xleitstelle/xplanung/validierungsregeln/profile/berlin.git',
+        'expected' => [
           'scheme' => 'https',
           'host' => 'gitlab.opencode.de',
           'namespace' => 'xleitstelle/xplanung/validierungsregeln/profile',
@@ -67,12 +66,12 @@ class GitUriTest extends UnitTestCase {
         ],
       ],
       'Partial URI' => [
-        'URI' => 'http://foo.bar.baz',
-        'Expected object' => NULL,
+        'uriString' => 'http://foo.bar.baz',
+        'expected' => NULL,
       ],
       'Invalid URI' => [
-        'URI' => 'foo-bar-baz',
-        'Expected object' => NULL,
+        'uriString' => 'foo-bar-baz',
+        'expected' => NULL,
       ],
     ];
   }

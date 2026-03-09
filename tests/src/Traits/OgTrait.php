@@ -10,12 +10,13 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\Entity\OgMembership;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\OgMembershipInterface;
-use PHPUnit\Framework\Assert;
 
 /**
  * Contains helper methods regarding the organic groups.
  */
 trait OgTrait {
+
+  use AssertTrait;
 
   /**
    * Creates an Og membership to a group optionally assigning roles as well.
@@ -295,7 +296,7 @@ trait OgTrait {
     $user_name = $user->getAccountName();
     $group_name = $group->label();
     $message = "The $operation operation should " . ($expected_result ? '' : 'not ') . "be accessible for $user_name in $group_name";
-    Assert::assertEquals($expected_result, $group->access($operation, $user), $message);
+    $this->assertSameValues($expected_result, $group->access($operation, $user), $message);
   }
 
 }

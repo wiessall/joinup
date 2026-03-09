@@ -14,12 +14,12 @@ use Drupal\node\NodeInterface;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgMembershipInterface;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Base setup for a Joinup workflow test for community content.
- *
- * @group joinup_community_content
  */
+#[Group('joinup_community_content')]
 abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSiteTestBase {
 
   use NodeCreationTrait;
