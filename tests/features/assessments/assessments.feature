@@ -14,7 +14,7 @@ Feature: Assessment Report Entity Management
     Then I should see the heading "Create assessment report"
 
     When I press "Save as draft"
-    Then I should see the error message "3 errors have been found: Short titleType of public sector bodyIdentification of binding requirement(s) assessed"
+    Then I should see the error message "3 errors have been found: Short title Type of public sector body Identification of binding requirement(s) assessed"
 
     When I fill in "Short title" with "Test Assessment Report 2025"
     And I should see "This will be used as the title of the published report. Maximum 255 characters."
@@ -36,7 +36,7 @@ Feature: Assessment Report Entity Management
     And a modal should open
     And I should see the button "Cancel" in the "Modal buttons" region
     And I press "Save" in the "Modal buttons" region
-    And I should see the text "4 errors have been found: NameName of the initiativeDescriptionDescription of the binding requirement" in the "Modal content" region
+    And I should see the text "4 errors have been found: Name Name of the initiative Description Description of the binding requirement" in the "Modal content" region
 
     Then I should see the following lines of text in the correct order in "Modal content":
       | Initiative                |
@@ -253,3 +253,24 @@ Feature: Assessment Report Entity Management
 
     # Verify that no empty participation entities were created
     Then no participation entities should exist for the "Test Empty Participation ISAICP-10806" assessment report
+
+  Scenario: User can browse only published solutions in binding requirement
+    Given solution content:
+      | title                     | state       |
+      | Test solution published   | published   |
+      | Test solution archived    | archived    |
+      | Test solution proposed    | proposed    |
+      | Test solution draft       | draft       |
+      | Test solution unpublished | unpublished |
+
+    Given I am logged in as an "authenticated user"
+    And I go to "/collection/assessments/report/create"
+    And I click "New binding requirement"
+    Then I click "Interoperability solution" in the "Modal content" region
+    Then I press "Select an Interoperability solution" in the "Modal content" region
+    When I type "Test" in the "asset[form][0][entity_id]" autocomplete field
+    Then I should see "Test solution published"
+    And I should not see "Test solution archived"
+    And I should not see "Test solution proposed"
+    And I should not see "Test solution draft"
+    And I should not see "Test solution unpublished"

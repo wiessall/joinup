@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Mink\Exception\ExpectationException;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
@@ -26,7 +27,6 @@ use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\og\OgGroupAudienceHelper;
 use Drupal\og\OgRoleInterface;
 use Drupal\user\Entity\User;
-use PHPUnit\Framework\ExpectationFailedException;
 
 /**
  * Behat step definitions for testing collections.
@@ -481,7 +481,7 @@ class CollectionContext extends RawDrupalContext {
 
     if (!$expected_navigator) {
       if ($navigator_node) {
-        throw new ExpectationFailedException("The glossary navigator exists on the page but it should not.");
+        throw new ExpectationException("The glossary navigator exists on the page but it should not.", $this->getSession()->getDriver());
       }
       return;
     }
@@ -492,7 +492,7 @@ class CollectionContext extends RawDrupalContext {
 
     $actual_navigator = $navigator_node->getText();
     if ($actual_navigator !== $expected_navigator) {
-      throw new ExpectationFailedException("Expected navigator '{$expected_navigator}' but found '{$actual_navigator}'.");
+      throw new ExpectationException("Expected navigator '{$expected_navigator}' but found '{$actual_navigator}'.", $this->getSession()->getDriver());
     }
   }
 

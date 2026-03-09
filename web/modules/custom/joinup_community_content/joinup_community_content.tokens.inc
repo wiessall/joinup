@@ -39,7 +39,8 @@ function joinup_community_content_tokens($type, array $tokens, array $data = [],
           // two revisions.
           /** @var \Drupal\node\NodeStorageInterface $node_storage */
           $node_storage = \Drupal::entityTypeManager()->getStorage('node');
-          $revision_ids = $node_storage->revisionIds($node);
+          $query = $node_storage->getQuery()->allRevisions()->condition('nid', $node->id())->accessCheck(FALSE);
+          $revision_ids = array_keys($query->execute());
           if (count($revision_ids) > 1) {
             [$left_revision, $right_revision] = array_slice($revision_ids, -2, 2);
 

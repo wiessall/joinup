@@ -35,6 +35,16 @@ Feature: Assessment report permissions and access control
     And I should see the link "Delete"
     And I should not see the button "Submit"
 
+  Scenario: Assessment owner sees Delete link on their own draft report
+    Given user:
+      | Username | draft_report_owner |
+    And report assessments:
+      | name         | state | uid                |
+      | Draft Report | draft | draft_report_owner |
+    And I am logged in as draft_report_owner
+    When I go to the edit form of the "Draft Report" assessment
+    Then I should see the link "Delete"
+
   @javascript
   Scenario: Published assessments are viewable by anonymous and authenticated users
     Given user:

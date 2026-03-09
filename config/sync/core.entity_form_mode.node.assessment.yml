@@ -6,6 +6,6 @@ dependencies:
     - node
 id: node.assessment
 label: Assessment
-description: ''
+description: null
 targetEntityType: node
 cache: true

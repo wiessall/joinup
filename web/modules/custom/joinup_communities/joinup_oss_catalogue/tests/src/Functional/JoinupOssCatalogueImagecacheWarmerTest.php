@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup_oss_catalogue\Functional;
 
 use Drupal\Tests\eu_oss_catalogue\Functional\DevelopersItaliaFetchTestBase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests file cache warming build for Imagecache External.
- *
- * @group joinup_oss_catalogue
- * @group joinup
  */
+#[Group('joinup_oss_catalogue')]
+#[Group('joinup')]
 class JoinupOssCatalogueImagecacheWarmerTest extends DevelopersItaliaFetchTestBase {
 
   /**

@@ -10,7 +10,9 @@ use Drupal\Core\Entity\ContentEntityStorageInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\PublicOrganisation;
+use Drupal\paragraphs\ParagraphInterface;
 use Drupal\webform\WebformSubmissionInterface;
 use Psr\Log\LoggerInterface;
 
@@ -130,6 +132,7 @@ class WebformSubmissionMigrator {
     $failed = 0;
 
     foreach ($storage->loadMultiple($ids) as $submission) {
+      \assert($submission instanceof WebformSubmissionInterface);
       try {
         if ($this->migrateSubmission($submission)) {
           $migrated++;
@@ -249,7 +252,9 @@ class WebformSubmissionMigrator {
     if ($documentFids) {
       $reportValues['documents'] = $this->entityTypeManager->getStorage('file')->loadMultiple($documentFids);
     }
+
     $report = $this->getAssessmentStorage()->create($reportValues);
+    \assert($report instanceof AssessmentReport);
 
     // Add statements.
     $statementStorage = $this->entityTypeManager->getStorage('assessment_statement');
@@ -374,6 +379,10 @@ class WebformSubmissionMigrator {
       $values = [
         'type' => 'expression',
         'initiative_name' => $initiative['initiative'],
+        'description' => [
+          'value' => $initiative['initiative'],
+          'format' => 'plain_text',
+        ],
         'status' => TRUE,
         'uid' => $ownerId,
       ];
@@ -458,6 +467,10 @@ class WebformSubmissionMigrator {
       }
     }
 
+    if (empty($participantTypeTids)) {
+      return [];
+    }
+
     // Resolve stakeholder countries from geographical_origin.
     $countryTids = $this->resolveGeographicalOriginCountries($data);
 
@@ -471,7 +484,7 @@ class WebformSubmissionMigrator {
     }
 
     // Nothing to migrate if no participant types and no country data at all.
-    if (empty($participantTypeTids) && empty($countryTids) && !$hasAllEu) {
+    if (empty($countryTids) && !$hasAllEu) {
       return [];
     }
 
@@ -580,6 +593,7 @@ class WebformSubmissionMigrator {
       }
 
       $paragraph = $paragraphStorage->create($values);
+      \assert($paragraph instanceof ParagraphInterface);
 
       if ($docFids) {
         $paragraph->set('requirement_documents', $this->entityTypeManager->getStorage('file')->loadMultiple($docFids));
@@ -652,6 +666,7 @@ class WebformSubmissionMigrator {
   protected function getAssessmentStorage(): ContentEntityStorageInterface {
     if (!isset($this->assessmentStorage)) {
       $storage = $this->entityTypeManager->getStorage('assessment');
+      \assert($storage instanceof ContentEntityStorageInterface);
       $this->assessmentStorage = $storage;
     }
     return $this->assessmentStorage;

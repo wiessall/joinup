@@ -8,14 +8,15 @@ use Behat\Hook\AfterScenario;
 use Behat\Hook\BeforeScenario;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\TagTrait;
+use Drupal\joinup\Traits\AssertTrait;
 use Drupal\oe_newsroom_newsletter\NewsletterSubscriber\MockNewsletterSubscriber;
-use PHPUnit\Framework\Assert;
 
 /**
  * Behat integration for the OpenEuropa Newsroom Newsletter module.
  */
 class OeNewsroomNewsletterContext extends RawDrupalContext {
 
+  use AssertTrait;
   use TagTrait;
 
   /**
@@ -49,7 +50,7 @@ class OeNewsroomNewsletterContext extends RawDrupalContext {
    */
   protected function assertNewsletterTagPresent(): void {
     $tags = $this->getTags();
-    Assert::assertTrue(in_array('newsroom_newsletter', $tags));
+    $this->assertCondition(in_array('newsroom_newsletter', $tags), "Current scenario does not have the 'newsroom_newsletter' tag.");
   }
 
   /**

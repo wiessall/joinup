@@ -10,15 +10,15 @@ use Behat\Hook\BeforeFeature;
 use Behat\Hook\BeforeScenario;
 use Behat\Hook\BeforeSuite;
 use Behat\Mink\Element\DocumentElement;
+use Behat\Mink\Exception\ExpectationException;
 use Behat\Step\Then;
 use Drupal\Component\Serialization\Json;
+use Drupal\Component\Serialization\Yaml;
 use Drupal\Component\Utility\SortArray;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\StreamWrapper\PublicStream;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
-use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\ExpectationFailedException;
 
 /**
  * Step definitions for accessibility checks.
@@ -32,6 +32,7 @@ use PHPUnit\Framework\ExpectationFailedException;
  */
 class AccessibilityContext extends RawDrupalContext {
 
+  use AssertTrait;
   use JavascriptTrait;
 
   /**
@@ -156,11 +157,12 @@ class AccessibilityContext extends RawDrupalContext {
 
     $this->updateFullReport($violations);
 
-    throw new ExpectationFailedException(
+    throw new ExpectationException(
       "Detected accessibility standards violations\n" .
       str_repeat("=", self::LINE_LENGTH) . "\n" .
       implode("\n", $report) . "\n" .
-      'A full report, containing also the offending HTML elements, has been created at ' . static::getReportPath()
+      'A full report, containing also the offending HTML elements, has been created at ' . static::getReportPath(),
+      $this->getSession()->getDriver()
     );
   }
 
@@ -175,7 +177,7 @@ class AccessibilityContext extends RawDrupalContext {
     if (!file_exists($file)) {
       \Drupal::service('file_system')->copy(DRUPAL_ROOT . '/../node_modules/axe-core/axe.min.js', 'public://a11y/');
     }
-    Assert::assertFileExists('public://a11y/axe.min.js');
+    $this->assertCondition(file_exists('public://a11y/axe.min.js'), 'The axe.min.js file does not exist at public://a11y/axe.min.js.');
     return \Drupal::service('file_url_generator')->generateString('public://a11y/axe.min.js');
   }
 

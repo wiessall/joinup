@@ -9,6 +9,7 @@ use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
+use Drupal\node\NodeInterface;
 use Drupal\og\Event\GroupContentEntityOperationAccessEventInterface;
 use Drupal\og\Event\PermissionEventInterface;
 use Drupal\og\GroupContentOperationPermission;
@@ -202,8 +203,7 @@ final class WorkflowOgEventSubscriber implements EventSubscriberInterface {
     //   if there is only 1 revision. This would be a function change that needs
     //   prior approval by the functional team.
     // @see https://www.drupal.org/node/3001224
-    $node_storage = $this->entityTypeManager->getStorage('node');
-    if ($content->isDefaultRevision() && ($node_storage->countDefaultLanguageRevisions($content) == 1)) {
+    if ($content->isDefaultRevision() && $this->countDefaultLanguageRevisions($content) === 1) {
       $event->denyAccess();
       return;
     }
@@ -236,6 +236,7 @@ final class WorkflowOgEventSubscriber implements EventSubscriberInterface {
     // Check if the access to the default revision and finally, if the
     // node passed in is not the default revision then access to that, too.
     $node_access = $this->entityTypeManager->getAccessControlHandler('node');
+    $node_storage = $this->entityTypeManager->getStorage('node');
     $result = $result->andIf($node_access->access($node_storage->load($content->id()), 'view', $account, TRUE));
     if (!$content->isDefaultRevision()) {
       $result = $result->andIf($node_access->access($content, 'view', $account, TRUE));
@@ -244,6 +245,24 @@ final class WorkflowOgEventSubscriber implements EventSubscriberInterface {
     if ($result->isAllowed()) {
       $event->grantAccess();
     }
+  }
+
+  /**
+   * Counts the number of revisions in the default language.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   The node entity.
+   *
+   * @return int
+   *   The number of revisions in the default language.
+   */
+  protected function countDefaultLanguageRevisions(NodeInterface $node): int {
+    $query = $this->entityTypeManager->getStorage('node')->getQuery()
+      ->allRevisions()
+      ->condition('nid', $node->id())
+      ->condition('default_langcode', 1)
+      ->accessCheck(FALSE);
+    return count(array_keys($query->execute()));
   }
 
 }
