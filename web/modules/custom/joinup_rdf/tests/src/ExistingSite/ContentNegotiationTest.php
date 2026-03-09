@@ -8,12 +8,12 @@ use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\rdf_sync\Encoder\RdfSyncEncoder;
 use EasyRdf\Format;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests content negotiation.
- *
- * @group joinup_rdf
  */
+#[Group('joinup_rdf')]
 class ContentNegotiationTest extends JoinupExistingSiteTestBase {
 
   /**

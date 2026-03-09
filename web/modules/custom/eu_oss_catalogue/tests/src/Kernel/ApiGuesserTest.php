@@ -8,13 +8,14 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\eu_oss_catalogue\ApiGuesser;
 use Drupal\eu_oss_catalogue\Model\ApiGuess;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Argument;
 
 /**
  * Tests the OSS Solution API Guesser service.
- *
- * @group eu_oss_catalogue
  */
+#[Group('eu_oss_catalogue')]
 class ApiGuesserTest extends KernelTestBase {
 
   /**
@@ -47,9 +48,8 @@ class ApiGuesserTest extends KernelTestBase {
    *   The URL of a git repository.
    * @param array|null $expectedApi
    *   The expected result from the API Guesser service.
-   *
-   * @dataProvider providerTestApiGuesser
    */
+  #[DataProvider('providerTestApiGuesser')]
   public function testApiGuesser(string $url, ?array $expectedApi): void {
     if ($expectedApi === NULL) {
       $logger = $this->prophesize(LoggerChannelInterface::class);
@@ -189,9 +189,8 @@ class ApiGuesserTest extends KernelTestBase {
    *   The URL of a git repository.
    * @param string $expectedException
    *   The expected exception.
-   *
-   * @dataProvider providerTestApiGuesserExceptions
    */
+  #[DataProvider('providerTestApiGuesserExceptions')]
   public function testApiGuesserExceptions(string $url, string $expectedException): void {
     $this->expectException($expectedException);
     $this->apiGuesser->getHostingPlatformApi($url);
