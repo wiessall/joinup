@@ -8,14 +8,15 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\EntityTrait;
-use PHPUnit\Framework\Assert;
 
 /**
  * Behat step definitions to interact with elements on the Joinup homepage.
  */
 class HomepageContext extends RawDrupalContext {
 
+  use AssertTrait;
   use EntityTrait;
 
   /**
@@ -41,7 +42,7 @@ class HomepageContext extends RawDrupalContext {
   public function assertExplore(TableNode $table): void {
     $columns = $table->getColumnsHash();
     $articles = $this->getSession()->getPage()->findAll('css', '.block-joinup-front-page-explore-block article');
-    Assert::assertEquals(count($columns), count($articles), sprintf('Expected %d items in the "Explore" section but found %d items.', count($columns), count($articles)));
+    $this->assertSameValues(count($columns), count($articles), sprintf('Expected %d items in the "Explore" section but found %d items.', count($columns), count($articles)));
 
     foreach ($columns as $expected_data) {
       $actual_data = array_shift($articles);
@@ -58,30 +59,30 @@ class HomepageContext extends RawDrupalContext {
       // Check that title links to the canonical page of the
       // news, event, solution and collection.
       $xpath = '//h3/a[@href = "' . $this->getEntityUri($entity) . '" and contains(., "' . $expected_data['title'] . '")]';
-      Assert::assertNotEmpty($actual_data->find('xpath', $xpath), sprintf('%s "%s" does not have the correct title which links to the canonical page.', $type, $expected_data['title']));
+      $this->assertCondition(!empty($actual_data->find('xpath', $xpath)), sprintf('%s "%s" does not have the correct title which links to the canonical page.', $type, $expected_data['title']));
 
       // Check the body/description text. XPath varies in case of news and
       // events, because 'filtered_entity_reference_bundles' formatter does not
       // use field theme functions.
       $description_element = $actual_data->find('css', '.explore-item__description > div')
         ?: $actual_data->find('css', '.explore-item__description');
-      Assert::assertInstanceOf(NodeElement::class, $description_element, sprintf('Did not find a description for the %s "%s" in the "Explore" section.', $type, $expected_data['title']));
+      $this->assertCondition($description_element instanceof NodeElement, sprintf('Did not find a description for the %s "%s" in the "Explore" section.', $type, $expected_data['title']));
 
       $actual_description = $description_element->getHtml();
       // Note: Please, take care, that the following will not work properly if
       // twig debug is enabled. In that case, the output will contain a lot of
       // HTML comments which will not be stripped out by the formatter.
-      Assert::assertEquals($expected_data['description'], trim($actual_description), sprintf('The body text for the %s "%s" in the "Explore" section does not contain the expected text.', $type, $expected_data['title']));
+      $this->assertSameValues($expected_data['description'], trim($actual_description), sprintf('The body text for the %s "%s" in the "Explore" section does not contain the expected text.', $type, $expected_data['title']));
 
       // Check date.
       $expected_date = date("d/m/Y", strtotime($expected_data['date']));
       $xpath = '//*[text() = "' . $expected_date . '"]';
-      Assert::assertNotEmpty($actual_data->find('xpath', $xpath), sprintf('The date for the %s "%s" in the "Explore" section does not contain the expected format.', $type, $expected_data['title']));
+      $this->assertCondition(!empty($actual_data->find('xpath', $xpath)), sprintf('The date for the %s "%s" in the "Explore" section does not contain the expected format.', $type, $expected_data['title']));
 
       // Check that a "Read more" link is present which leads to the canonical
       // page of the news, event, solution and collection.
       $xpath = '//a[@href = "' . $read_more_url . '" and contains(@class, "read-more")]';
-      Assert::assertNotEmpty($actual_data->find('xpath', $xpath), sprintf('%s "%s" does not have a "Read more" link which leads to the canonical page.', $type, $expected_data['title']));
+      $this->assertCondition(!empty($actual_data->find('xpath', $xpath)), sprintf('%s "%s" does not have a "Read more" link which leads to the canonical page.', $type, $expected_data['title']));
     }
   }
 
