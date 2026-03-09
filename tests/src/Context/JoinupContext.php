@@ -412,7 +412,7 @@ class JoinupContext extends RawDrupalContext {
     $languages = \Drupal::languageManager()->getLanguages();
     $expectedOptions = array_keys($languages);
 
-    Assert::assertEquals($expectedOptions, $availableOptions, "The '$select' select options don't match the site languages.");
+    $this->assertSameValues($expectedOptions, $availableOptions, "The '$select' select options don't match the site languages.");
   }
 
   /**

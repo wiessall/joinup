@@ -1957,7 +1957,7 @@ class FeatureContext extends RawDrupalContext {
         $actual = $matches[1];
       }
     }
-    Assert::assertSame($value, $actual, sprintf('Expected the "%s" attribute of the page to be "%s" but got "%s".', $attribute, $value, $actual));
+    $this->assertSameValues($value, $actual, sprintf('Expected the "%s" attribute of the page to be "%s" but got "%s".', $attribute, $value, $actual));
   }
 
   /**
