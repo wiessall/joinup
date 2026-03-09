@@ -20,7 +20,7 @@
   <div class="page-title page__title-wrapper">
     <h1{{ h1_attributes.addClass(classes) }}>
       <span>
-        {{ title|striptags }}
+        {{ title }}
         {% if permalink %}
           <a class="permalink" href="{{ permalink }}" title="{{ 'Permalink'|t }}">
             {{ pattern('icon', {

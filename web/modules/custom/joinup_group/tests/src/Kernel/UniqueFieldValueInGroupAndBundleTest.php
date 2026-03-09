@@ -7,12 +7,13 @@ namespace Drupal\Tests\joinup_group\Kernel;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\user\Traits\UserCreationTrait;
 use Drupal\entity_test\Entity\EntityTest;
+use Drupal\entity_test\EntityTestHelper;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the UniqueFieldValueInGroupAndBundle constraint.
- *
- * @group joinup_group
  */
+#[Group('joinup_group')]
 class UniqueFieldValueInGroupAndBundleTest extends KernelTestBase {
 
   use UserCreationTrait;
@@ -51,22 +52,28 @@ class UniqueFieldValueInGroupAndBundleTest extends KernelTestBase {
 
     $this->installConfig(['og', 'unique_field_value_in_group_and_bundle_test']);
     $this->installEntitySchema('entity_test');
+    $this->installEntitySchema('og_membership');
     $this->installEntitySchema('user');
 
     // Create two group bundles.
-    entity_test_create_bundle('group');
-    entity_test_create_bundle('other_group');
+    EntityTestHelper::createBundle('group');
+    EntityTestHelper::createBundle('other_group');
     $this->container->get('config.factory')->getEditable('og.settings')
       ->set('groups.entity_test', ['group', 'other_group'])
       ->save();
 
     // Create two group content bundles.
-    entity_test_create_bundle('group_content', 'Group 1');
-    entity_test_create_bundle('other_group_content', 'Group 2');
+    EntityTestHelper::createBundle('group_content', 'Group 1');
+    EntityTestHelper::createBundle('other_group_content', 'Group 2');
 
-    // Create groups.
-    $this->group['group1'] = EntityTest::create(['type' => 'group']);
-    $this->group['group2'] = EntityTest::create(['type' => 'group']);
+    // Set up a current user as group owner. OG 2.0 validates that the current
+    // user has permission to post content in the group. Group owners bypass
+    // this check when 'group_manager_full_access' is enabled (the default).
+    $owner = $this->setUpCurrentUser();
+
+    // Create groups owned by the current user.
+    $this->group['group1'] = EntityTest::create(['type' => 'group', 'user_id' => $owner->id()]);
+    $this->group['group2'] = EntityTest::create(['type' => 'group', 'user_id' => $owner->id()]);
     array_walk($this->group, function (EntityTest $entity): void {
       $entity->save();
     });

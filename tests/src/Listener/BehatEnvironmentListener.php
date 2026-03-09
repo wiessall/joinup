@@ -31,6 +31,9 @@ class BehatEnvironmentListener implements EventSubscriberInterface {
    * Setup.
    */
   public function beforeExercise(): void {
+    if ($this->isDryRun()) {
+      return;
+    }
     // Setup behat specific settings + set test mode.
     static::runCommand('drupal:settings behat --root=' . static::getPath('web') . ' --sites-subdir=default');
     TestModeManager::set(TestMode::Behat);
@@ -40,9 +43,20 @@ class BehatEnvironmentListener implements EventSubscriberInterface {
    * Teardown.
    */
   public function afterExercise(): void {
+    if ($this->isDryRun()) {
+      return;
+    }
     // Revert to initial state.
     static::runCommand('drupal:settings site-clean --root=' . static::getPath('web') . ' --sites-subdir=default');
     TestModeManager::clear();
+  }
+
+  /**
+   * Checks if Behat is running in dry-run mode.
+   */
+  private function isDryRun(): bool {
+    global $argv;
+    return in_array('--dry-run', $argv ?? [], TRUE);
   }
 
 }

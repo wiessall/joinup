@@ -12,27 +12,26 @@ use Drupal\Core\Queue\QueueInterface;
 use Drupal\Tests\UnitTestCase;
 use Drupal\eu_oss_vitality_index\VitalityIndexQueue;
 use Drupal\node\NodeStorageInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Argument;
 
 /**
  * Tests VitalityIndexQueue.
- *
- * @coversDefaultClass \Drupal\eu_oss_vitality_index\VitalityIndexQueue
- *
- * @group eu_oss_catalogue
- * @group eu_oss_vitality_index
  */
+#[CoversClass(VitalityIndexQueue::class)]
+#[Group('eu_oss_catalogue')]
+#[Group('eu_oss_vitality_index')]
 class VitalityIndexQueueTest extends UnitTestCase {
 
   /**
    * Test addToQueue() method.
    *
-   * @covers ::addToQueue
-   * @dataProvider providerForQueue
-   *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
+  #[DataProvider('providerForQueue')]
   public function testAddingToQueue(int $numberOfItems, int $numberOfNodes, bool $shouldBeAdded): void {
     $nid = 22381;
     $numberOfAdds = (int) $shouldBeAdded;
@@ -74,19 +73,19 @@ class VitalityIndexQueueTest extends UnitTestCase {
   public static function providerForQueue(): array {
     return [
       'Less queue items than nodes' => [
-        'number of items in queue' => 1,
-        'number of oss nodes' => 2,
-        'whether queue element should be added' => TRUE,
+        'numberOfItems' => 1,
+        'numberOfNodes' => 2,
+        'shouldBeAdded' => TRUE,
       ],
       'More queue items than nodes' => [
-        'number of items in queue' => 2,
-        'number of oss nodes' => 1,
-        'whether queue element should be added' => FALSE,
+        'numberOfItems' => 2,
+        'numberOfNodes' => 1,
+        'shouldBeAdded' => FALSE,
       ],
       'Equal queue size and node number' => [
-        'number of items in queue' => 3,
-        'number of oss nodes' => 3,
-        'whether queue element should be added' => TRUE,
+        'numberOfItems' => 3,
+        'numberOfNodes' => 3,
+        'shouldBeAdded' => TRUE,
       ],
     ];
   }

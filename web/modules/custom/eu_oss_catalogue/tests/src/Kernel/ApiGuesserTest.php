@@ -8,13 +8,14 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\eu_oss_catalogue\ApiGuesser;
 use Drupal\eu_oss_catalogue\Model\ApiGuess;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Argument;
 
 /**
  * Tests the OSS Solution API Guesser service.
- *
- * @group eu_oss_catalogue
  */
+#[Group('eu_oss_catalogue')]
 class ApiGuesserTest extends KernelTestBase {
 
   /**
@@ -47,9 +48,8 @@ class ApiGuesserTest extends KernelTestBase {
    *   The URL of a git repository.
    * @param array|null $expectedApi
    *   The expected result from the API Guesser service.
-   *
-   * @dataProvider providerTestApiGuesser
    */
+  #[DataProvider('providerTestApiGuesser')]
   public function testApiGuesser(string $url, ?array $expectedApi): void {
     if ($expectedApi === NULL) {
       $logger = $this->prophesize(LoggerChannelInterface::class);
@@ -77,88 +77,88 @@ class ApiGuesserTest extends KernelTestBase {
   public static function providerTestApiGuesser(): array {
     return [
       'GitLab home' => [
-        'URL' => 'https://gitlab.com/z.a.horvath/smart_title',
-        'Expected' => [
+        'url' => 'https://gitlab.com/z.a.horvath/smart_title',
+        'expectedApi' => [
           'pluginId' => 'gitlab_com',
           'baseUrl' => 'https://gitlab.com',
         ],
       ],
       'GitLab HTTP URL' => [
-        'URL' => 'https://gitlab.com/z.a.horvath/smart_title.git',
-        'Expected' => [
+        'url' => 'https://gitlab.com/z.a.horvath/smart_title.git',
+        'expectedApi' => [
           'pluginId' => 'gitlab_com',
           'baseUrl' => 'https://gitlab.com',
         ],
       ],
 
       'Self-hosted GitLab home' => [
-        'URL' => 'https://self-hosted.gitlab.example.com/subpath/ec-europa/digit-joinup-reference',
-        'Expected' => [
+        'url' => 'https://self-hosted.gitlab.example.com/subpath/ec-europa/digit-joinup-reference',
+        'expectedApi' => [
           'pluginId' => 'gitlab_self_hosted',
           'baseUrl' => 'https://self-hosted.gitlab.example.com/subpath',
         ],
       ],
       'Self-hosted GitLab home with trailing slash' => [
-        'URL' => 'https://self-hosted.gitlab.example.com/subpath/ec-europa/digit-joinup-reference/',
-        'Expected' => [
+        'url' => 'https://self-hosted.gitlab.example.com/subpath/ec-europa/digit-joinup-reference/',
+        'expectedApi' => [
           'pluginId' => 'gitlab_self_hosted',
           'baseUrl' => 'https://self-hosted.gitlab.example.com/subpath',
         ],
       ],
       'Self-hosted GitLab HTTP URL' => [
-        'URL' => 'https://self-hosted.gitlab.example.com/subpath/ec-europa/digit-joinup-reference.git',
-        'Expected' => [
+        'url' => 'https://self-hosted.gitlab.example.com/subpath/ec-europa/digit-joinup-reference.git',
+        'expectedApi' => [
           'pluginId' => 'gitlab_self_hosted',
           'baseUrl' => 'https://self-hosted.gitlab.example.com/subpath',
         ],
       ],
 
       'Self-hosted GitLab in deep subpath' => [
-        'URL' => 'https://self-hosted.gitlab.example.com/bit/deeper/subpath/ec-europa/digit-joinup-poc-reference/',
-        'Expected' => [
+        'url' => 'https://self-hosted.gitlab.example.com/bit/deeper/subpath/ec-europa/digit-joinup-poc-reference/',
+        'expectedApi' => [
           'pluginId' => 'gitlab_self_hosted',
           'baseUrl' => 'https://self-hosted.gitlab.example.com/bit/deeper/subpath',
         ],
       ],
 
       'Self-hosted GitLab in root, with deep namespace' => [
-        'URL' => 'https://gitlab.opencode.de.example.com/xleitstelle/xplanung/validierungsregeln/profile/berlin',
-        'Expected' => [
+        'url' => 'https://gitlab.opencode.de.example.com/xleitstelle/xplanung/validierungsregeln/profile/berlin',
+        'expectedApi' => [
           'pluginId' => 'gitlab_self_hosted',
           'baseUrl' => 'https://gitlab.opencode.de.example.com',
         ],
       ],
 
       'Self-hosted GitLab in subpath, with deep namespace' => [
-        'URL' => 'https://self-hosted.gitlab.example.com/bit/deeper/subpath/deep/namespace/package',
-        'Expected' => [
+        'url' => 'https://self-hosted.gitlab.example.com/bit/deeper/subpath/deep/namespace/package',
+        'expectedApi' => [
           'pluginId' => 'gitlab_self_hosted',
           'baseUrl' => 'https://self-hosted.gitlab.example.com/bit/deeper/subpath',
         ],
       ],
       'Self-hosted GitLab non-repository' => [
-        'URL' => 'https://self-hosted.gitlab.example.com/bit',
-        'Expected' => NULL,
+        'url' => 'https://self-hosted.gitlab.example.com/bit',
+        'expectedApi' => NULL,
       ],
       'Self-hosted GitLab non-repository (host only)' => [
-        'URL' => 'https://self-hosted.gitlab.example.com',
-        'Expected' => NULL,
+        'url' => 'https://self-hosted.gitlab.example.com',
+        'expectedApi' => NULL,
       ],
       'Self-hosted GitLab non-repository (arbitrary path)' => [
-        'URL' => 'https://self-hosted.gitlab.example.com/foo/bar/baz/qux',
-        'Expected' => NULL,
+        'url' => 'https://self-hosted.gitlab.example.com/foo/bar/baz/qux',
+        'expectedApi' => NULL,
       ],
 
       'GitHub home' => [
-        'URL' => 'https://github.com/ec-europa/toolkit',
-        'Expected' => [
+        'url' => 'https://github.com/ec-europa/toolkit',
+        'expectedApi' => [
           'pluginId' => 'github',
           'baseUrl' => 'https://github.com',
         ],
       ],
       'GitHub HTTP URL' => [
-        'URL' => 'https://github.com/ec-europa/toolkit.git',
-        'Expected' => [
+        'url' => 'https://github.com/ec-europa/toolkit.git',
+        'expectedApi' => [
           'pluginId' => 'github',
           'baseUrl' => 'https://github.com',
         ],
@@ -166,15 +166,15 @@ class ApiGuesserTest extends KernelTestBase {
 
       // Bitbucket.org.
       'Bitbucket home' => [
-        'URL' => 'https://bitbucket.org/atlassianlabs/docker-browse',
-        'Expected' => [
+        'url' => 'https://bitbucket.org/atlassianlabs/docker-browse',
+        'expectedApi' => [
           'pluginId' => 'bitbucket_org',
           'baseUrl' => 'https://bitbucket.org',
         ],
       ],
       'Bitbucket HTTP URL' => [
-        'URL' => 'https://bitbucket.org/atlassianlabs/docker-browse.git',
-        'Expected' => [
+        'url' => 'https://bitbucket.org/atlassianlabs/docker-browse.git',
+        'expectedApi' => [
           'pluginId' => 'bitbucket_org',
           'baseUrl' => 'https://bitbucket.org',
         ],
@@ -189,9 +189,8 @@ class ApiGuesserTest extends KernelTestBase {
    *   The URL of a git repository.
    * @param string $expectedException
    *   The expected exception.
-   *
-   * @dataProvider providerTestApiGuesserExceptions
    */
+  #[DataProvider('providerTestApiGuesserExceptions')]
   public function testApiGuesserExceptions(string $url, string $expectedException): void {
     $this->expectException($expectedException);
     $this->apiGuesser->getHostingPlatformApi($url);
@@ -206,8 +205,8 @@ class ApiGuesserTest extends KernelTestBase {
   public static function providerTestApiGuesserExceptions(): array {
     return [
       'Invalid URL' => [
-        'URL' => 'sdivsdoifvsfo sftestApiGuessersdflvsdfv;∂ßńvsdfv',
-        'Expected exception' => \InvalidArgumentException::class,
+        'url' => 'sdivsdoifvsfo sftestApiGuessersdflvsdfv;∂ßńvsdfv',
+        'expectedException' => \InvalidArgumentException::class,
       ],
     ];
   }

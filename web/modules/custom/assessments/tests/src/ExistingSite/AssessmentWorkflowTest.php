@@ -8,22 +8,23 @@ use Drupal\Tests\assessments\Traits\AssessmentEntityCreationTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\Entity\Assessment;
+use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\ParagraphInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the assessment workflow and related entity publication.
- *
- * @group assessments
  */
+#[CoversClass(AssessmentReport::class)]
+#[Group('assessments')]
 class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
 
   use AssessmentEntityCreationTrait;
 
   /**
    * Tests that publishing a report also publishes all related entities.
-   *
-   * @covers \Drupal\assessments\Entity\AssessmentReport::postSave
    */
   public function testReportPublishingPublishesRelatedEntities(): void {
     $asset = $this->createSolutionAsset(AssessmentInterface::SOLUTION_COLLECTOR);
@@ -122,8 +123,6 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
    *
    * This tests the scenario where a report is created with status=TRUE from
    * the start, rather than first creating it as unpublished and then updating.
-   *
-   * @covers \Drupal\assessments\Entity\AssessmentReport::postSave
    */
   public function testDirectlyPublishingReportPublishesRelatedEntities(): void {
     $asset = $this->createSolutionAsset(AssessmentInterface::SOLUTION_COLLECTOR);
@@ -174,8 +173,6 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
    * When a published report is updated to add new binding requirements with
    * new child entities (expression, public_service, participation), those
    * children should be published when the report is saved.
-   *
-   * @covers \Drupal\assessments\Entity\AssessmentReport::postSave
    */
   public function testAddingChildrenToPublishedReportPublishesThem(): void {
     $bindingRequirement = $this->createParagraphBindingRequirement();
