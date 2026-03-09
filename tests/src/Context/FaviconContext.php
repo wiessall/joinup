@@ -7,12 +7,14 @@ namespace Drupal\joinup\Context;
 use Behat\Mink\Element\NodeElement;
 use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use PHPUnit\Framework\Assert;
+use Drupal\joinup\Traits\AssertTrait;
 
 /**
  * Behat step definitions to detect the presence of favicons.
  */
 class FaviconContext extends RawDrupalContext {
+
+  use AssertTrait;
 
   /**
    * Lists acceptable MIME types for favicons.
@@ -58,7 +60,7 @@ class FaviconContext extends RawDrupalContext {
         throw new \RuntimeException(sprintf('Cannot open favicon URL: %s', $url));
       }
       $mime_type = $finfo->buffer($file);
-      Assert::assertTrue(in_array($mime_type, self::MIME_TYPES), sprintf('The favicon with URL "%s" has a MIME type of "%s" which is not in the list of acceptable MIME types.', $url, $mime_type));
+      $this->assertCondition(in_array($mime_type, self::MIME_TYPES), sprintf('The favicon with URL "%s" has a MIME type of "%s" which is not in the list of acceptable MIME types.', $url, $mime_type));
     }
   }
 

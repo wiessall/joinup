@@ -11,13 +11,13 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\contact_information\ContactInformationEmailConfirmInterface;
 use Drupal\email_confirmer\EmailConfirmationInterface;
 use Drupal\joinup\Traits\AliasTranslatorTrait;
+use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UserTrait;
-use PHPUnit\Framework\Assert;
 
 /**
  * Behat step definitions for testing contact information entities.
@@ -25,6 +25,7 @@ use PHPUnit\Framework\Assert;
 class ContactInformationContext extends RawDrupalContext {
 
   use AliasTranslatorTrait;
+  use AssertTrait;
   use EntityTrait;
   use MailCollectorTrait;
   use NodeTrait;
@@ -89,15 +90,15 @@ class ContactInformationContext extends RawDrupalContext {
    */
   #[Then(':count :status confirmation request(s) for :email_confirmation should exist')]
   public function assertNumberOfConfirmationRequests(string $count, string $status, string $email_confirmation): void {
-    Assert::assertTrue(in_array($count, ['no', 'a', 'an']), "The count '$count' is not supported.");
+    $this->assertCondition(in_array($count, ['no', 'a', 'an']), "The count '$count' is not supported.");
 
     $email_confirmer = \Drupal::getContainer()->get('email_confirmer');
     $confirmation = $email_confirmer->getConfirmation($email_confirmation, $status, ContactInformationEmailConfirmInterface::REALM);
     if ($count === 'no') {
-      Assert::assertEmpty($confirmation, "There should be no confirmation requests with status '$status' for '$email_confirmation'.");
+      $this->assertCondition(empty($confirmation), "There should be no confirmation requests with status '$status' for '$email_confirmation'.");
     }
     else {
-      Assert::assertNotEmpty($confirmation, "There should be at least one confirmation request with status '$status' for '$email_confirmation'.");
+      $this->assertCondition(!empty($confirmation), "There should be at least one confirmation request with status '$status' for '$email_confirmation'.");
     }
   }
 
@@ -114,7 +115,7 @@ class ContactInformationContext extends RawDrupalContext {
     if (empty($confirmation)) {
       throw new \RuntimeException("No confirmation request found for $email");
     }
-    Assert::assertTrue($confirmation->isExpired(), 'Confirmation request is expired.');
+    $this->assertCondition($confirmation->isExpired(), 'Confirmation request is expired.');
   }
 
   /**
@@ -126,7 +127,7 @@ class ContactInformationContext extends RawDrupalContext {
   #[Given('the confirmation request for :email should not be expired')]
   public function givenConfirmationNotExpired(string $email): void {
     $confirmation = $this->getEmailConfirmation($email, NULL);
-    Assert::assertFalse($confirmation->isExpired(), 'Confirmation request is not expired.');
+    $this->assertCondition(!$confirmation->isExpired(), 'Confirmation request is not expired.');
   }
 
   /**
