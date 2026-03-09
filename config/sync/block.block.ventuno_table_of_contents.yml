@@ -18,7 +18,7 @@ plugin: 'custom_page_toc:navigation'
 settings:
   id: 'custom_page_toc:navigation'
   label: 'Table of contents'
-  label_display: '1'
+  label_display: '0'
   provider: custom_page
   context_mapping:
     og: '@og.context:og'

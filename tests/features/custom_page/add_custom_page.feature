@@ -122,11 +122,11 @@ Feature: "Add custom page" visibility options.
       | title             |
       | Aggressive Rubber |
     And custom_page content:
-      | title        | collection        | field_hide_title |
-      | Rubber bands | Aggressive Rubber | 1                |
+      | title          | collection        | field_hide_title |
+      | Rubber's bands | Aggressive Rubber | 1                |
 
-    When I go to the "Rubber bands" custom_page
-    Then I see the text "Rubber bands" in the "Visually hidden title" region
+    When I go to the "Rubber's bands" custom_page
+    Then I see the text "Rubber's bands" in the "Visually hidden title" region
 
   Scenario: Moderators can access the "Add custom page" menu item.
     Given users:
