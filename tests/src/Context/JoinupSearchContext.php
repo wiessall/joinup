@@ -24,7 +24,6 @@ use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Entity\Server;
-use PHPUnit\Framework\Assert;
 
 /**
  * Behat step definitions for testing searches.
@@ -159,7 +158,7 @@ class JoinupSearchContext extends RawDrupalContext {
     // **** and the text has the value $bundle.
     $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' facets-widget-checkbox ')][.//a[contains(concat(' ', normalize-space(@class), ' '), ' is-active ')][.//span[text()='$bundle']]]";
     $element = $this->getSession()->getPage()->find('xpath', $xpath);
-    Assert::assertNotEmpty($element);
+    $this->assertCondition(!empty($element), 'The active content type facet item was not found in the page.');
   }
 
   /**
@@ -192,7 +191,7 @@ class JoinupSearchContext extends RawDrupalContext {
     }
 
     $present = array_map('trim', $present);
-    Assert::assertSame($labels, $present);
+    $this->assertSameValues($labels, $present);
   }
 
   /**
@@ -360,7 +359,7 @@ class JoinupSearchContext extends RawDrupalContext {
         unset($topics[$index]);
       }
     }
-    Assert::assertSame(count($topics), $number);
+    $this->assertSameValues(count($topics), $number);
   }
 
   /**
@@ -372,7 +371,7 @@ class JoinupSearchContext extends RawDrupalContext {
   #[Then('I should see the :facet facet')]
   public function iShouldSeeTheFacet(string $facet): void {
     $facet_element = $this->findFacetByAlias($facet);
-    Assert::assertNotEmpty($facet_element->getText(), "The facet '{$facet}' was not found in the page.");
+    $this->assertCondition(!empty($facet_element->getText()), "The facet '{$facet}' was not found in the page.");
   }
 
   /**
@@ -385,7 +384,7 @@ class JoinupSearchContext extends RawDrupalContext {
   public function iShouldNotSeeTheFacet(string $facet): void {
     $element = $this->findFacetByAlias($facet, NULL, '*', FALSE);
     // The facet might be present but with no options.
-    Assert::assertTrue(empty($element) || empty($element->getText()), "The facet '{$facet}' was found in the page.");
+    $this->assertCondition(empty($element) || empty($element->getText()), "The facet '{$facet}' was found in the page.");
   }
 
   /**
@@ -439,7 +438,7 @@ class JoinupSearchContext extends RawDrupalContext {
     /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
     $entity = $this->getEntityByLabel('node', $label, $bundle);
     $index = Index::load($index);
-    Assert::assertNotNull($index, "The index '{$index->label()}' was not found.");
+    $this->assertCondition($index !== NULL, "The index '{$index->label()}' was not found.");
 
     $query = $index->query();
     $query->addCondition($index->getField('nid')->getFieldIdentifier(), $entity->id());
@@ -448,7 +447,7 @@ class JoinupSearchContext extends RawDrupalContext {
     $results = $results->getResultItems();
     $document = reset($results);
     /** @var \Drupal\search_api\Item\ItemInterface $document */
-    Assert::assertNotEmpty($document, "The entity '$label' was not found in the index.");
+    $this->assertCondition(!empty($document), "The entity '$label' was not found in the index.");
 
     foreach ($fields->getRows() as $row) {
       $field_name = $row[0];
@@ -461,7 +460,7 @@ class JoinupSearchContext extends RawDrupalContext {
       $actual_values = $document->getField($field_name)->getValues();
       sort($actual_values);
       sort($expected_values);
-      Assert::assertEquals($expected_values, $actual_values, "The field '$field_name' does not match the expected values.");
+      $this->assertSameValues($expected_values, $actual_values, "The field '$field_name' does not match the expected values.");
     }
   }
 
@@ -528,7 +527,7 @@ class JoinupSearchContext extends RawDrupalContext {
       return $item->getText();
     }, $element->findAll('css', 'li.facet-item'));
 
-    Assert::assertEquals($values->getColumn(0), $found, "The '{$facet}' values mismatch the expected ones.");
+    $this->assertSameValues($values->getColumn(0), $found, "The '{$facet}' values mismatch the expected ones.");
   }
 
   /**
@@ -557,7 +556,7 @@ class JoinupSearchContext extends RawDrupalContext {
     }, $element->findAll('css', $css));
 
     $values = $this->explodeDelimitedSeparatedStepArgument($values);
-    Assert::assertEquals(
+    $this->assertSameValues(
       $values,
       $found,
       sprintf(
@@ -666,8 +665,8 @@ class JoinupSearchContext extends RawDrupalContext {
   protected function getSearchBarElement(?string $input = 'search bar'): NodeElement {
     $elements = $this->getElementsMatchingElementAlias($input);
 
-    Assert::assertNotEmpty($elements, 'Could not find the search field in the page.');
-    Assert::assertCount(1, $elements, 'There are multiple search fields on the page.');
+    $this->assertCondition(!empty($elements), 'Could not find the search field in the page.');
+    $this->assertCount(1, $elements, 'There are multiple search fields on the page.');
 
     return reset($elements);
   }
@@ -695,7 +694,7 @@ class JoinupSearchContext extends RawDrupalContext {
 
     $present = array_map('trim', $present);
     $present_labels = array_map('trim', $present_labels);
-    Assert::assertEquals($present_labels, $present);
+    $this->assertSameValues($present_labels, $present);
   }
 
   /**
@@ -735,7 +734,7 @@ class JoinupSearchContext extends RawDrupalContext {
     $number = $number === 'one' ? 1 : (int) $number;
     $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' block-facets-summary-blocksearch-facets-summary ')]//li[contains(concat(' ', normalize-space(@class), ' '), ' facet-summary-item--facet ')]";
     $elements = $this->getSession()->getPage()->findAll('xpath', $xpath);
-    Assert::assertCount($number, $elements);
+    $this->assertCount($number, $elements);
   }
 
   /**
@@ -756,7 +755,7 @@ class JoinupSearchContext extends RawDrupalContext {
     }
     $headings_in_page = array_keys($result);
     $headings_expected = $titles_table->getColumn(0);
-    Assert::assertEquals($headings_expected, $headings_in_page, 'The expected search header were not found or were not in the proper order.');
+    $this->assertSameValues($headings_expected, $headings_in_page, 'The expected search header were not found or were not in the proper order.');
   }
 
   /**
@@ -877,7 +876,7 @@ class JoinupSearchContext extends RawDrupalContext {
   public function setGroupContentArchivedOption(string $label, string $bundle, string $option): void {
     $option = strtolower($option);
     $options = ['all', 'archived', 'unarchived'];
-    Assert::assertTrue(in_array($option, $options), sprintf('The option should be one of: %s', implode(', ', $options)));
+    $this->assertCondition(in_array($option, $options), sprintf('The option should be one of: %s', implode(', ', $options)));
     $entity = $this->getEntityByLabel('node', $label, $bundle);
     $meta_entity = \Drupal::getContainer()
       ->get('meta_entity.repository')
@@ -947,7 +946,7 @@ class JoinupSearchContext extends RawDrupalContext {
       return $item->getText();
     }, $element->findAll('css', 'a.tab'));
 
-    Assert::assertEquals($values->getColumn(0), $found, "The '{$facet}' values mismatch the expected ones.");
+    $this->assertSameValues($values->getColumn(0), $found, "The '{$facet}' values mismatch the expected ones.");
   }
 
 }
