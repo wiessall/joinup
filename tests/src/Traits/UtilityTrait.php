@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Drupal\joinup\Traits;
 
 use Behat\Mink\Element\NodeElement;
-use PHPUnit\Framework\Assert;
 
 /**
  * Contains utility methods.
  */
 trait UtilityTrait {
+
+  use AssertTrait;
 
   /**
    * Explodes and sanitizes a comma separated step argument.
@@ -79,7 +80,7 @@ trait UtilityTrait {
    *   Thrown if the element is not visible.
    */
   protected function assertVisuallyVisible(NodeElement $element): void {
-    Assert::assertTrue($this->isVisuallyVisible($element), 'The element is visually visible');
+    $this->assertCondition($this->isVisuallyVisible($element), 'The element is visually visible');
   }
 
   /**
@@ -101,7 +102,7 @@ trait UtilityTrait {
    *   Thrown if the element is visible.
    */
   protected function assertNotVisuallyVisible(NodeElement $element): void {
-    Assert::assertFalse($this->isVisuallyVisible($element), 'The element is not visually visible');
+    $this->assertCondition(!$this->isVisuallyVisible($element), 'The element is not visually visible');
   }
 
   /**

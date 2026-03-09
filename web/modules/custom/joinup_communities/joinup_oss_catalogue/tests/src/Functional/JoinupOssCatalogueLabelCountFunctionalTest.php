@@ -6,13 +6,13 @@ namespace Drupal\Tests\joinup_oss_catalogue\Functional;
 
 use Drupal\Tests\BrowserTestBase;
 use Drupal\node\Entity\NodeType;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests count labels for `oss_solution` and `oss_contractor`.
- *
- * @group joinup_oss_catalogue
- * @group joinup
  */
+#[Group('joinup_oss_catalogue')]
+#[Group('joinup')]
 final class JoinupOssCatalogueLabelCountFunctionalTest extends BrowserTestBase {
 
   /**

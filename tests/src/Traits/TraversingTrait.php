@@ -8,13 +8,13 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
-use PHPUnit\Framework\Assert;
 
 /**
  * Helper methods to deal with traversing of page elements.
  */
 trait TraversingTrait {
 
+  use AssertTrait;
   use NameMappingsTrait;
 
   /**
@@ -129,10 +129,10 @@ trait TraversingTrait {
     foreach ($expected_options as $expected_option) {
       $actual_option = array_shift($actual_options);
 
-      Assert::assertEquals($strip_multiple_spaces($expected_option[0]), $strip_multiple_spaces($actual_option['text']));
+      $this->assertSameValues($strip_multiple_spaces($expected_option[0]), $strip_multiple_spaces($actual_option['text']));
 
       if (isset($expected_option[1])) {
-        Assert::assertEquals($expected_option[1], $actual_option['indentation']);
+        $this->assertSameValues($expected_option[1], (string) $actual_option['indentation']);
       }
     }
   }
@@ -254,8 +254,8 @@ trait TraversingTrait {
           return trim($element->getText()) === $listTitle;
         }
       );
-      Assert::assertNotEmpty(
-        $listTitleElements,
+      $this->assertCondition(
+        !empty($listTitleElements),
         sprintf(
           "Cannot find the heading '%s'",
           $listTitle,
@@ -754,7 +754,7 @@ trait TraversingTrait {
     $expected_query = $this->normalizeQueryString($expected_url);
     $current_url = $this->getSession()->getCurrentUrl();
     $actual_query = $this->normalizeQueryString($current_url);
-    Assert::assertEquals($expected_query, $actual_query, sprintf('Expected the %s url but found %s.', $expected_url, $current_url));
+    $this->assertSameValues($expected_query, $actual_query, sprintf('Expected the %s url but found %s.', $expected_url, $current_url));
   }
 
   /**

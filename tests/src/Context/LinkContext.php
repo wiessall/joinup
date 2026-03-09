@@ -8,6 +8,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Driver\BrowserKitDriver;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Mink\Exception\ExpectationException;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
 use Behat\Step\Then;
 use Drupal\Core\Site\Settings;
@@ -16,7 +17,6 @@ use Drupal\joinup\Traits\EntityTrait;
 use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Cookie\SetCookie;
-use PHPUnit\Framework\ExpectationFailedException;
 
 /**
  * Defines generic step definitions.
@@ -69,7 +69,7 @@ class LinkContext extends RawDrupalContext {
     $not_found = $this->searchMissingContent($content, $strings_table);
 
     if (!empty($not_found)) {
-      throw new ExpectationFailedException("Following strings were not found in the downloaded file:\n- " . implode("\n- ", $not_found));
+      throw new ExpectationException("Following strings were not found in the downloaded file:\n- " . implode("\n- ", $not_found), $this->getSession()->getDriver());
     }
   }
 
@@ -99,7 +99,7 @@ class LinkContext extends RawDrupalContext {
     }
 
     if ($not_found = $this->searchMissingContent($content, $strings_table)) {
-      throw new ExpectationFailedException("Following strings were not found in the linked content:\n- " . implode("\n- ", $not_found));
+      throw new ExpectationException("Following strings were not found in the linked content:\n- " . implode("\n- ", $not_found), $this->getSession()->getDriver());
     }
   }
 
@@ -129,7 +129,7 @@ class LinkContext extends RawDrupalContext {
     }
 
     if ($found = array_diff($strings_table->getColumn(0), $this->searchMissingContent($content, $strings_table))) {
-      throw new ExpectationFailedException("Following strings were found in the linked content:\n- " . implode("\n- ", $found));
+      throw new ExpectationException("Following strings were found in the linked content:\n- " . implode("\n- ", $found), $this->getSession()->getDriver());
     }
   }
 
