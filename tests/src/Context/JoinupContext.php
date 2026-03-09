@@ -1950,7 +1950,7 @@ class JoinupContext extends RawDrupalContext {
   #[When('I pick :value from the autocomplete suggestions')]
   public function fillFieldWithNormalisedEntityReference(string $value, ?string $field = NULL): void {
     if ($this->hasJavascriptSupport()) {
-      $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), " ui-autocomplete ")]//a[text() = "' . $value . '"]';
+      $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), " ui-autocomplete ")]//a[normalize-space(.) = "' . $value . '"]';
       $this->waitForElementVisible('xpath', $xpath)->click();
     }
     else {
