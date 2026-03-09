@@ -8,12 +8,14 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use PHPUnit\Framework\Assert;
+use Drupal\joinup\Traits\AssertTrait;
 
 /**
  * Behat step definitions to interact with the page header.
  */
 class HeaderContext extends RawDrupalContext {
+
+  use AssertTrait;
 
   /**
    * Maps HTML element names to human readable aliases.
@@ -37,13 +39,13 @@ class HeaderContext extends RawDrupalContext {
   #[Then('I should see the Interoperable Europe logo in the navigation bar')]
   public function assertLogo(): void {
     $link_element = $this->getSession()->getPage()->find('css', '.joinup-navbar a.navbar-brand');
-    Assert::assertInstanceOf(NodeElement::class, $link_element, 'A link for the logo is present in the navbar.');
-    Assert::assertEquals(base_path(), $link_element->getAttribute('href'), 'The logo links to the homepage.');
+    $this->assertCondition($link_element instanceof NodeElement, 'A link for the logo is present in the navbar.');
+    $this->assertSameValues(base_path(), $link_element->getAttribute('href'), 'The logo links to the homepage.');
     $logo_element = $link_element->find('css', 'img.navbar-brand-image');
-    Assert::assertInstanceOf(NodeElement::class, $logo_element, 'A logo is present in the navbar.');
-    Assert::assertEquals('Interoperable Europe logo', $logo_element->getAttribute('alt'), 'The logo has an alt text.');
+    $this->assertCondition($logo_element instanceof NodeElement, 'A logo is present in the navbar.');
+    $this->assertSameValues('Interoperable Europe logo', $logo_element->getAttribute('alt'), 'The logo has an alt text.');
     $expected_logo_uri = base_path() . \Drupal::service('extension.list.theme')->getPath('ventuno') . '/assets/images/logo-interoperable-europe.svg';
-    Assert::assertEquals($expected_logo_uri, $logo_element->getAttribute('src'), 'The Interoperable Europe Portal logo is shown in the navbar.');
+    $this->assertSameValues($expected_logo_uri, $logo_element->getAttribute('src'), 'The Interoperable Europe Portal logo is shown in the navbar.');
   }
 
   /**
@@ -64,15 +66,15 @@ class HeaderContext extends RawDrupalContext {
         $actual_item = array_shift($desktop_items);
 
         // Check that the item exists.
-        Assert::assertInstanceOf(NodeElement::class, $actual_item, sprintf('Expected the %s item in the main navigation menu but instead found nothing.', $item['link']));
+        $this->assertCondition($actual_item instanceof NodeElement, sprintf('Expected the %s item in the main navigation menu but instead found nothing.', $item['link']));
 
         // Check that the item is the expected type.
         $actual_tag = $actual_item->getTagName();
-        Assert::assertEquals(self::HTML_ELEMENT_ALIASES[$item['desktop menu']], $actual_tag, sprintf('Expected that the %s item in the main navigation menu was a %s but instead found a %s element.', $item['link'], $item['desktop menu'], $actual_tag));
+        $this->assertSameValues(self::HTML_ELEMENT_ALIASES[$item['desktop menu']], $actual_tag, sprintf('Expected that the %s item in the main navigation menu was a %s but instead found a %s element.', $item['link'], $item['desktop menu'], $actual_tag));
 
         // Check the item text.
         $actual_text = trim($actual_item->getHtml());
-        Assert::assertEquals($item['link'], $actual_text, sprintf('Expected the %s item in the main navigation menu but instead found %s.', $item['link'], $actual_text));
+        $this->assertSameValues($item['link'], $actual_text, sprintf('Expected the %s item in the main navigation menu but instead found %s.', $item['link'], $actual_text));
       }
 
       // Check the mobile menu.
@@ -80,20 +82,20 @@ class HeaderContext extends RawDrupalContext {
         $actual_item = array_shift($mobile_items);
 
         // Check that the item exists.
-        Assert::assertInstanceOf(NodeElement::class, $actual_item, sprintf('Expected the %s item in the mobile menu but instead found nothing.', $item['link']));
+        $this->assertCondition($actual_item instanceof NodeElement, sprintf('Expected the %s item in the mobile menu but instead found nothing.', $item['link']));
 
         // Check that the item is the expected type.
         $actual_tag = $actual_item->getTagName();
-        Assert::assertEquals(self::HTML_ELEMENT_ALIASES[$item['mobile menu']], $actual_tag, sprintf('Expected that the %s item in the mobile menu was a %s but instead found a %s element.', $item['link'], $item['mobile menu'], $actual_tag));
+        $this->assertSameValues(self::HTML_ELEMENT_ALIASES[$item['mobile menu']], $actual_tag, sprintf('Expected that the %s item in the mobile menu was a %s but instead found a %s element.', $item['link'], $item['mobile menu'], $actual_tag));
 
         // Check the item text.
         $actual_text = trim($actual_item->getHtml());
-        Assert::assertEquals($item['link'], $actual_text, sprintf('Expected the %s item in the mobile menu but instead found %s.', $item['link'], $actual_text));
+        $this->assertSameValues($item['link'], $actual_text, sprintf('Expected the %s item in the mobile menu but instead found %s.', $item['link'], $actual_text));
       }
     }
 
-    Assert::assertNotEmpty($desktop_items);
-    Assert::assertEmpty($mobile_items);
+    $this->assertCondition(!empty($desktop_items), 'Expected remaining items in the desktop navigation.');
+    $this->assertCondition(empty($mobile_items), 'Expected no remaining items in the mobile navigation.');
   }
 
   /**

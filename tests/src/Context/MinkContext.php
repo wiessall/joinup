@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Mink\Element\ElementInterface;
+use Behat\Mink\Exception\ExpectationException;
 use Behat\Mink\Selector\Xpath\Escaper;
 use Behat\Step\Given;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\MinkContext as DrupalExtensionMinkContext;
 use Drupal\joinup\Traits\JavascriptTrait;
-use PHPUnit\Framework\ExpectationFailedException;
 
 /**
  * Provides step definitions for interacting with Mink.
@@ -29,7 +29,7 @@ class MinkContext extends DrupalExtensionMinkContext {
       $xpath = '//*[text()[contains(.,"' . $text . '")]]';
       foreach ($this->getSession()->getPage()->findAll('xpath', $xpath) as $element) {
         if ($element->isVisible()) {
-          throw new ExpectationFailedException("Element with text '$text' is visually visible.");
+          throw new ExpectationException("Element with text '$text' is visually visible.", $this->getSession()->getDriver());
         }
       }
     }
