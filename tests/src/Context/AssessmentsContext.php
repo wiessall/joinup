@@ -417,7 +417,7 @@ class AssessmentsContext extends RawDrupalContext {
     $report = $this->getEntityByLabel('assessment', $name, 'report');
     $html = \Drupal::service('entity_print.print_builder')->printHtml($report, FALSE, FALSE);
     foreach ($table->getColumn(0) as $text) {
-      Assert::assertStringContainsString($text, $html);
+      $this->assertCondition(str_contains($html, $text), "The text '$text' was not found in the PDF HTML.");
     }
   }
 
@@ -434,7 +434,7 @@ class AssessmentsContext extends RawDrupalContext {
     $report = $this->getEntityByLabel('assessment', $name, 'report');
     $html = \Drupal::service('entity_print.print_builder')->printHtml($report, FALSE, FALSE);
     foreach ($table->getColumn(0) as $text) {
-      Assert::assertStringNotContainsString($text, $html);
+      $this->assertCondition(!str_contains($html, $text), "The text '$text' was found in the PDF HTML.");
     }
   }
 
