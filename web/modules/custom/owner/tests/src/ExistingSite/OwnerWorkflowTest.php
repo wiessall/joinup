@@ -6,12 +6,12 @@ namespace Drupal\Tests\owner\ExistingSite;
 
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Tests\joinup_workflow\ExistingSite\JoinupWorkflowExistingSiteTestBase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests crud operations and the workflow for the owner rdf entity.
- *
- * @group owner
  */
+#[Group('owner')]
 class OwnerWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
 
   /**

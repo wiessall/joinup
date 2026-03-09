@@ -8,14 +8,15 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\Url;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\consumers\Entity\Consumer;
+use Drupal\joinup_api\EventSubscriber\ApiExceptionSubscriber;
 use GuzzleHttp\RequestOptions;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Psr\Http\Message\ResponseInterface;
 
 /**
  * Tests that HTTP errors on API paths return JSON responses.
- *
- * @covers \Drupal\joinup_api\EventSubscriber\ApiExceptionSubscriber
  */
+#[CoversClass(ApiExceptionSubscriber::class)]
 class ApiExceptionSubscriberTest extends JoinupExistingSiteTestBase {
 
   /**
