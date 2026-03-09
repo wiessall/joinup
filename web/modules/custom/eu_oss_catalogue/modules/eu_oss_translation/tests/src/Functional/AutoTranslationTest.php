@@ -13,13 +13,13 @@ use Drupal\Tests\eu_oss_catalogue\Functional\FetchTestBase;
 use Drupal\eu_oss_translation\Plugin\QueueWorker\TranslationRequester;
 use Drupal\tmgmt\TranslatorInterface;
 use Drupal\tmgmt_ec_etranslation\Plugin\QueueWorker\TranslationQueueWorker;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests auto translation.
- *
- * @group eu_oss_catalogue
- * @group eu_oss_translation
  */
+#[Group('eu_oss_catalogue')]
+#[Group('eu_oss_translation')]
 class AutoTranslationTest extends FetchTestBase {
 
   /**

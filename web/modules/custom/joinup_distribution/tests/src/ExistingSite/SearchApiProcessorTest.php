@@ -7,11 +7,15 @@ namespace Drupal\Tests\joinup_distribution\ExistingSite;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\Tests\joinup_test\Traits\ParagraphTrait;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
+use Drupal\joinup_distribution\Plugin\search_api\processor\IndexDistributionData;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
- * @covers \Drupal\joinup_distribution\Plugin\search_api\processor\IndexDistributionData::appendDistributionData
- * @group joinup_distribution
+ * Tests the Search API processor for distribution data.
  */
+#[CoversMethod(IndexDistributionData::class, 'appendDistributionData')]
+#[Group('joinup_distribution')]
 class SearchApiProcessorTest extends JoinupExistingSiteTestBase {
 
   use ParagraphTrait;

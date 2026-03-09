@@ -12,7 +12,6 @@ selection_criteria:
   af573398-c50f-484c-b4dc-1e503b58541a:
     id: 'entity_bundle:meta_entity'
     negate: false
-    uuid: af573398-c50f-484c-b4dc-1e503b58541a
     context_mapping:
       meta_entity: meta_entity
     bundles:

@@ -12,7 +12,6 @@ selection_criteria:
   52c869c9-1196-4960-84d9-063aaec721dd:
     id: 'entity_bundle:node'
     negate: false
-    uuid: 52c869c9-1196-4960-84d9-063aaec721dd
     context_mapping:
       node: node
     bundles:

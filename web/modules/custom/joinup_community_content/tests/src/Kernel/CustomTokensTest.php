@@ -6,16 +6,18 @@ namespace Drupal\Tests\joinup_community_content\Kernel;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Url;
+use Drupal\Tests\node\Traits\ContentTypeCreationTrait;
 use Drupal\Tests\system\Kernel\Token\TokenReplaceKernelTestBase;
 use Drupal\node\Entity\Node;
-use Drupal\node\Entity\NodeType;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the tokens provided by the joinup_community_content module.
- *
- * @group joinup_community_content
  */
+#[Group('joinup_community_content')]
 class CustomTokensTest extends TokenReplaceKernelTestBase {
+
+  use ContentTypeCreationTrait;
 
   /**
    * {@inheritdoc}
@@ -58,13 +60,11 @@ class CustomTokensTest extends TokenReplaceKernelTestBase {
 
     $this->diffLayoutManager = $this->container->get('plugin.manager.diff.layout');
 
-    $node_type = NodeType::create([
+    $this->createContentType([
       'type' => 'article',
       'name' => 'Article',
       'new_revision' => TRUE,
     ]);
-    $node_type->save();
-    node_add_body_field($node_type);
   }
 
   /**
