@@ -8,9 +8,9 @@ Feature: Global search
       | title                        | moderation | topic      | spatial coverage | state     |
       | Molecular cooking collection | no         | Demography | Belgium          | published |
     Given solution content:
-      | title          | collection                   | description                                                     | topic      | domain           | state     |
-      | Spherification | Molecular cooking collection | Spherification is the culinary process of shaping a liquid      | Demography | Defense          | published |
-      | Foam           | Molecular cooking collection | The use of foam in cuisine has been used in many forms          | eGov       | Economic affairs | published |
+      | title          | collection                   | description                                                | topic      | domain           | state     |
+      | Spherification | Molecular cooking collection | Spherification is the culinary process of shaping a liquid | Demography | Defense          | published |
+      | Foam           | Molecular cooking collection | The use of foam in cuisine has been used in many forms     | eGov       | Economic affairs | published |
     And news content:
       | title                | headline              | field_paragraphs_body | collection                   | topic       | spatial coverage | state     |
       | El Tuba de Los Lobos | El Celler de Can Roca | The best in town      | Molecular cooking collection | E-inclusion | Luxembourg       | published |
@@ -91,10 +91,10 @@ Feature: Global search
 
     # Test date filtering.
     Given news content:
-      | title           | field_paragraphs_body    | collection                   | topic         | spatial coverage | state     | created    | changed    | published_at |
-      | Muscle atrophy  | Researchers from Tsukuba | Molecular cooking collection | Demography    | Luxembourg       | published | 01/01/2019 | 01/01/2019 | 01/01/2019   |
-      | El Cabo da Roca | The best in town         | Molecular cooking collection | E-inclusion   | Luxembourg       | published | 01/12/2020 | 01/12/2020 | 01/12/2020   |
-      | Funny news 1    | Dummy body               | Molecular cooking collection | Demography    | Luxembourg       | published | 06/25/2020 | 06/25/2020 | 06/25/2020   |
+      | title           | field_paragraphs_body    | collection                   | topic       | spatial coverage | state     | created    | changed    | published_at |
+      | Muscle atrophy  | Researchers from Tsukuba | Molecular cooking collection | Demography  | Luxembourg       | published | 01/01/2019 | 01/01/2019 | 01/01/2019   |
+      | El Cabo da Roca | The best in town         | Molecular cooking collection | E-inclusion | Luxembourg       | published | 01/12/2020 | 01/12/2020 | 01/12/2020   |
+      | Funny news 1    | Dummy body               | Molecular cooking collection | Demography  | Luxembourg       | published | 06/25/2020 | 06/25/2020 | 06/25/2020   |
 
     # Filter content from 01-01-2020 to 30-06-2020.
     When I go to "/search?f[0]=date:(min:1577880000,max:1593518400)"
@@ -106,22 +106,24 @@ Feature: Global search
   @javascript
   Scenario: Alphabetical order for the spatial coverage and organisation origin in the search page.
     Given owner content:
-      | name         | country  |
-      | Search owner | Greece   |
+      | name           | country        |
+      | Search owner   | Greece         |
+      | European owner | European Union |
     And collection content:
-      | title            | description                      | abstract                       | state     |
-      | Collection alpha | collection beta description.     | The collection gamma abstract. | published |
+      | title            | description                  | abstract                       | state     |
+      | Collection alpha | collection beta description. | The collection gamma abstract. | published |
     And solution content:
-      | title            | description                      | abstract                       | owner        |
-      | Collection alpha | collection beta description.     | The collection gamma abstract. | Search owner |
+      | title            | description                  | abstract                       | owner          |
+      | Collection alpha | collection beta description. | The collection gamma abstract. | Search owner   |
+      | Collection beta  | collection beta description. | The collection gamma abstract. | European owner |
     And event content:
-      | title       | field_paragraphs_body    | spatial coverage | collection       | state     |
-      | Event Omega | The epsilon event.       | Greece           | Collection alpha | published |
-      | Alt event   | Background event.        | Luxembourg       | Collection alpha | published |
+      | title       | field_paragraphs_body | spatial coverage | collection       | state     |
+      | Event Omega | The epsilon event.    | Greece           | Collection alpha | published |
+      | Alt event   | Background event.     | Luxembourg       | Collection alpha | published |
 
     When I visit the advanced search page
     And I should not see the "Organisation origin" facet
-    When I check the "Solution (1)" checkbox from the "Content types" facet
+    When I check the "Solutions (2)" checkbox from the "Content types" facet
     And I should see the "Organisation origin" facet
     Then I click "Clear filters"
     Then I click show more from the "spatial coverage" facet
@@ -129,13 +131,21 @@ Feature: Global search
     When I check the "Luxembourg (1)" checkbox from the "spatial coverage" facet
     Then the "Luxembourg" content checkbox item should be selected
 
+    Given I click "Clear filters"
+    When I check the "Solutions (2)" checkbox from the "Content types" facet
+    And I should see the "Organisation origin" facet
+    And the "Organisation origin" checkbox facet should allow selecting the following values "European Union (1), Greece (1)"
+    And I check the "European Union (1)" checkbox from the "Organisation origin" facet
+    Then I should see the "Collection beta" tile
+    And I should not see the "Collection alpha" tile
+
   Scenario: Content can be found with a full-text search.
     Given collection content:
-      | title            | description                      | abstract                       | keywords | state     |
-      | Collection alpha | collection beta description.     | The collection gamma abstract. | Alphabet | published |
+      | title            | description                  | abstract                       | keywords | state     |
+      | Collection alpha | collection beta description. | The collection gamma abstract. | Alphabet | published |
     Given solution content:
-      | title          | description                      | keywords | collection       | state     |
-      | Solution alpha | solution beta description.       | Alphabet | Collection alpha | published |
+      | title          | description                | keywords | collection       | state     |
+      | Solution alpha | solution beta description. | Alphabet | Collection alpha | published |
     And news content:
       | title      | headline            | field_paragraphs_body     | keywords | collection       | state     |
       | News omega | News headline delta | The epsilon news content. | Alphabet | Collection alpha | published |
@@ -294,8 +304,8 @@ Feature: Global search
       | title                    | moderation | topic      | spatial coverage | state     |
       | Radio cooking collection | no         | Demography | Belgium          | published |
     Given solution content:
-      | title    | collection               | description                   | topic      | state     |
-      | Spheres  | Radio cooking collection | Spherification process.       | Demography | published |
+      | title   | collection               | description             | topic      | state     |
+      | Spheres | Radio cooking collection | Spherification process. | Demography | published |
     And news content:
       | title        | field_paragraphs_body | collection               | topic       | spatial coverage | state     |
       | El Cabo Roca | The best in town.     | Radio cooking collection | E-inclusion | Luxembourg       | published |
@@ -342,8 +352,8 @@ Feature: Global search
       | title             | description       | state     |
       | Custom collection | Some custom data. | published |
     And news content:
-      | title               | headline               | body                      | collection        | state     | created    | changed    |
-      | Quantum information | Relativity is the word | No one cares about body.  | Custom collection | published | 01/01/2019 | 03/08/2019 |
+      | title               | headline               | body                     | collection        | state     | created    | changed    |
+      | Quantum information | Relativity is the word | No one cares about body. | Custom collection | published | 01/01/2019 | 03/08/2019 |
     When I visit the advanced search page
     Then I should see the text "Last update: 08/03/2019" in the "Quantum information" card
 
@@ -367,13 +377,13 @@ Feature: Global search
   @javascript
   Scenario: Search page - Show the abstract or description in the search results.
     Given collection content:
-      | title       | description                  | abstract                      | state     |
-      | Pull alpha  | collection pull description. | The collection pull abstract. | published |
-      | Roll alpha  | collection roll description. | The collection roll abstract. | archived  |
+      | title      | description                  | abstract                      | state     |
+      | Pull alpha | collection pull description. | The collection pull abstract. | published |
+      | Roll alpha | collection roll description. | The collection roll abstract. | archived  |
     Given solution content:
-      | title         | description                  | abstract                    | collection | state     |
-      | Solution pull | solution pull description.   | The solution pull abstract. | Pull alpha | published |
-      | Solution roll | solution roll description.   | The solution roll abstract. | Roll alpha | published |
+      | title         | description                | abstract                    | collection | state     |
+      | Solution pull | solution pull description. | The solution pull abstract. | Pull alpha | published |
+      | Solution roll | solution roll description. | The solution roll abstract. | Roll alpha | published |
 
     When I visit the advanced search page
     And I should see the "Pull alpha" tile
