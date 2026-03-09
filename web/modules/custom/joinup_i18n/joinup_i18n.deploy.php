@@ -15,7 +15,7 @@ use Drupal\tmgmt_ec_etranslation\Plugin\tmgmt\Translator\ETranslationTranslator;
  * Remove leftovers.
  */
 function joinup_i18n_deploy_201100(): void {
-  // An erroneous translation has been created in an early stage for this link.
+  // An erroneous translation has been created at an early stage for this link.
   if ($link = MenuLinkContent::load(20694)) {
     if ($link->hasTranslation('bg')) {
       $link->removeTranslation('bg');
@@ -23,7 +23,7 @@ function joinup_i18n_deploy_201100(): void {
     }
   }
 
-  // Duplicate of source strings were detected. The root cause couldn't be
+  // Duplicates of sources strings were detected. The root cause couldn't be
   // detected immediately, but the problem is deferred to ISAICP-10740.
   // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-10740
   $db = \Drupal::database();
