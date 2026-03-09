@@ -8,6 +8,6 @@ _core:
   default_config_hash: pNaJsRLc3-YRwgw87mti0wB12Qlp02uHtsW2SC5DX8Q
 id: node.collection_custom_page
 label: 'Collection custom page'
-description: ''
+description: null
 targetEntityType: node
 cache: true

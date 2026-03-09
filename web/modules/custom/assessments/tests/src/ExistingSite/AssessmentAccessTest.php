@@ -5,10 +5,17 @@ declare(strict_types=1);
 namespace Drupal\Tests\assessments\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
+use Drupal\assessments\AssessmentAccessControlHandler;
+use Drupal\assessments\AssessmentStatementAccessControlHandler;
 use Drupal\assessments\Entity\Assessment;
 use Drupal\assessments\Entity\AssessmentStatement;
+use Drupal\assessments\Entity\AssessmentSubEntity;
+use Drupal\assessments\Entity\PublicOrganisation;
 use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the assessment access control handler.
@@ -16,10 +23,13 @@ use Drupal\user\UserInterface;
  * This test suite verifies that the assessment entity access control works
  * correctly across different user roles and assessment states. It tests view,
  * create, update, and delete operations for various user personas.
- *
- * @group assessments
- * @coversDefaultClass \Drupal\assessments\AssessmentAccessControlHandler
  */
+#[CoversClass(AssessmentAccessControlHandler::class)]
+#[CoversClass(AssessmentStatementAccessControlHandler::class)]
+#[CoversClass(Assessment::class)]
+#[CoversClass(PublicOrganisation::class)]
+#[CoversClass(AssessmentSubEntity::class)]
+#[Group('assessments')]
 class AssessmentAccessTest extends JoinupExistingSiteTestBase {
 
   /**
@@ -121,9 +131,6 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
 
   /**
    * Tests view access for published assessment reports.
-   *
-   * @covers ::checkAccess
-   * @covers ::checkViewAccess
    */
   public function testViewPublishedAssessment(): void {
     $assessment = $this->testAssessments['published'];
@@ -138,11 +145,8 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
 
   /**
    * Tests view access for non-published assessment reports.
-   *
-   * @covers ::checkAccess
-   * @covers ::checkViewAccess
-   * @dataProvider nonPublishedStatesProvider
    */
+  #[DataProvider('nonPublishedStatesProvider')]
   public function testViewNonPublishedAssessment(string $state): void {
     $assessment = $this->testAssessments[$state];
 
@@ -157,8 +161,6 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
 
   /**
    * Tests create access for assessment reports.
-   *
-   * @covers ::checkCreateAccess
    */
   public function testCreateAssessment(): void {
     $this->assertTrue($this->accessHandler->createAccess('report', $this->ownerUser));
@@ -172,9 +174,6 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
 
   /**
    * Tests update access for draft assessment reports.
-   *
-   * @covers ::checkAccess
-   * @covers ::checkUpdateAccess
    */
   public function testUpdateDraftAssessment(): void {
     $assessment = $this->testAssessments['draft'];
@@ -190,9 +189,6 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
 
   /**
    * Tests update access for review state assessment reports.
-   *
-   * @covers ::checkAccess
-   * @covers ::checkUpdateAccess
    */
   public function testUpdateReviewAssessment(): void {
     $assessment = $this->testAssessments['review'];
@@ -227,9 +223,6 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
 
   /**
    * Tests update access for published state assessment reports.
-   *
-   * @covers ::checkAccess
-   * @covers ::checkUpdateAccess
    */
   public function testUpdatePublishedAssessment(): void {
     $assessment = $this->testAssessments['published'];
@@ -245,11 +238,8 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
 
   /**
    * Tests delete access for assessment reports in all states.
-   *
-   * @covers ::checkAccess
-   * @covers ::checkDeleteAccess
-   * @dataProvider allStatesProvider
    */
+  #[DataProvider('allStatesProvider')]
   public function testDeleteAssessment(string $state): void {
     $assessment = $this->testAssessments[$state];
 
@@ -269,8 +259,6 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
 
   /**
    * Tests view access for public_organisation assessments.
-   *
-   * @covers ::checkAccessForPublicOrganisation
    */
   public function testPublicOrganisationAccess(): void {
     $access_handler = \Drupal::entityTypeManager()
@@ -326,8 +314,6 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
 
   /**
    * Tests update access for assessment statements delegates to parent report.
-   *
-   * @covers \Drupal\assessments\AssessmentStatementAccessControlHandler::checkAccess
    */
   public function testAssessmentStatementAccess(): void {
     // Create a draft report owned by ownerUser.
@@ -368,7 +354,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
    * @return array
    *   Test cases with state names.
    */
-  public function nonPublishedStatesProvider(): array {
+  public static function nonPublishedStatesProvider(): array {
     return [
       'draft' => ['draft'],
       'review' => ['review'],
@@ -382,7 +368,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
    * @return array
    *   Test cases with state names.
    */
-  public function allStatesProvider(): array {
+  public static function allStatesProvider(): array {
     return [
       'draft' => ['draft'],
       'review' => ['review'],
@@ -410,8 +396,6 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
 
   /**
    * Tests getRelatedReport for report entities returns NULL.
-   *
-   * @covers \Drupal\assessments\Entity\Assessment::getRelatedReport
    */
   public function testGetRelatedReportForReportReturnsNull(): void {
     $report = $this->testAssessments['published'];
@@ -424,8 +408,6 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
 
   /**
    * Tests getRelatedReport for PublicOrganisation with published report.
-   *
-   * @covers \Drupal\assessments\Entity\PublicOrganisation::getRelatedReport
    */
   public function testGetRelatedReportForPublicOrganisationWithPublishedReport(): void {
     // Create a public organisation.
@@ -454,8 +436,6 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
 
   /**
    * Tests getRelatedReport prioritizes published over unpublished reports.
-   *
-   * @covers \Drupal\assessments\Entity\PublicOrganisation::getRelatedReport
    */
   public function testGetRelatedReportPrioritizesPublishedReports(): void {
     // Create a public organisation.
@@ -494,10 +474,8 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
 
   /**
    * Tests getRelatedReport for sub-entities with paragraph references.
-   *
-   * @covers \Drupal\assessments\Entity\AssessmentSubEntity::getRelatedReport
-   * @dataProvider subEntityTypesProvider
    */
+  #[DataProvider('subEntityTypesProvider')]
   public function testGetRelatedReportForSubEntities(string $bundle, string $paragraph_field): void {
     // Use existing published report.
     $report = $this->testAssessments['published'];
@@ -541,7 +519,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
    * @return array
    *   Test cases with bundle names and paragraph field names.
    */
-  public function subEntityTypesProvider(): array {
+  public static function subEntityTypesProvider(): array {
     return [
       'expression' => ['expression', 'expression'],
       'participation' => ['participation', 'has_participation'],

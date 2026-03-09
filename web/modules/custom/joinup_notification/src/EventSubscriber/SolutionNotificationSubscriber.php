@@ -81,7 +81,7 @@ class SolutionNotificationSubscriber extends NotificationSubscriberBase {
    *
    * @var \Drupal\state_machine\Plugin\Workflow\WorkflowTransition|null
    */
-  protected WorkflowTransition $transition;
+  protected ?WorkflowTransition $transition;
 
   /**
    * The workflow object.
@@ -144,12 +144,12 @@ class SolutionNotificationSubscriber extends NotificationSubscriberBase {
 
     $this->event = $event;
     $this->workflow = $this->entity->getWorkflow();
-    $this->fromState = isset($this->entity->original) ? $this->entity->original->getWorkflowState() : 'draft';
+    $this->fromState = $this->entity->getOriginal()?->getWorkflowState() ?? 'draft';
     $to_state = $this->entity->getWorkflowState();
-    if (!$this->workflow->findTransition($this->fromState, $to_state)) {
+    $this->transition = $this->workflow->findTransition($this->fromState, $to_state);
+    if (!$this->transition) {
       return;
     }
-    $this->transition = $this->workflow->findTransition($this->fromState, $to_state);
     $this->motivation = empty($this->entity->motivation) ? '' : $this->entity->motivation;
     $this->hasPublished = $this->hasPublishedVersion($this->entity);
   }

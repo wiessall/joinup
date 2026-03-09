@@ -35,10 +35,7 @@ readonly class UserRoleLogger implements ContainerInjectionInterface {
   public function detectChanges(UserInterface $user): void {
     $newRoles = $user->getRoles();
 
-    $originalRoles = [];
-    if (isset($user->original) && $user->original instanceof UserInterface) {
-      $originalRoles = $user->original->getRoles();
-    }
+    $originalRoles = $user->getOriginal()?->getRoles() ?? [];
 
     $newDiff = $this->removeSystemRoles(array_diff($newRoles, $originalRoles));
     $removedDiff = $this->removeSystemRoles(array_diff($originalRoles, $newRoles));
