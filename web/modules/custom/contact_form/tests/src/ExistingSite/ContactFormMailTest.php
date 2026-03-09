@@ -7,6 +7,7 @@ namespace Drupal\Tests\contact_form\Functional;
 use Drupal\Tests\joinup_core\Traits\MailTestTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\joinup_notification\MailContentTypeHeader;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests emails sent on contact form submission including message digest email.
@@ -31,9 +32,8 @@ class ContactFormMailTest extends JoinupExistingSiteTestBase {
    *
    * @param bool $with_copy
    *   Whether test user asks for the copy of their message or not.
-   *
-   * @dataProvider providerTestEmailSending
    */
+  #[DataProvider('providerTestEmailSending')]
   public function testEmailSending(bool $with_copy): void {
     $this->drupalGet('contact');
     $this->assertSession()->statusCodeEquals(200);

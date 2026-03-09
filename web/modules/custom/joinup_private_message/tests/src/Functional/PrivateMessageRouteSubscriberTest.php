@@ -7,13 +7,13 @@ namespace Drupal\Tests\joinup_private_message\Functional;
 use Drupal\Core\Routing\RouteProviderInterface;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\UiHelperTrait;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
  * Tests the route alterations in the PrivateMessageRouteSubscriber.
- *
- * @group joinup_private_message
  */
+#[Group('joinup_private_message')]
 class PrivateMessageRouteSubscriberTest extends BrowserTestBase {
 
   use UiHelperTrait;
