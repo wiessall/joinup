@@ -8,16 +8,23 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_community_content\CommunityContentHelper;
+use Drupal\joinup_user\JoinupUserDeleted;
 use Drupal\joinup_user\JoinupUserDeletedInterface;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\node\NodeStorageInterface;
 use Drupal\user\UserInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversFunction;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
- * @coversDefaultClass \Drupal\joinup_user\JoinupUserDeleted
- * @group joinup_user
+ * Tests behaviour related to deleted user accounts.
  */
+#[CoversClass(JoinupUserDeleted::class)]
+#[CoversFunction('joinup_user_user_access')]
+#[Group('joinup_user')]
 class DeletedUserTest extends JoinupExistingSiteTestBase {
 
   /**
@@ -28,20 +35,14 @@ class DeletedUserTest extends JoinupExistingSiteTestBase {
   protected array $nodes = [];
 
   /**
-   * @covers ::onUserDelete
-   * @covers ::destruct
-   * @covers ::getFullName
-   * @covers ::isAccountDeleted
-   * @covers ::getDeletedUserPseudoAccount
-   * @covers ::onEntityDelete
-   * @covers \joinup_user_user_access
-   * @dataProvider fullNameCases
+   * Tests the full name display of a user account through its lifecycle.
    *
    * @param array $initialName
    *   Initial username, first name, family name, expected full name.
    * @param array $updatedName
    *   Updated username, first name, family name, expected full name.
    */
+  #[DataProvider('fullNameCases')]
   public function testFullName(array $initialName, array $updatedName): void {
     [$username, $firstName, $familyName, $expectedFullName] = $initialName;
     $account = $this->createUser([], $username, FALSE, [
