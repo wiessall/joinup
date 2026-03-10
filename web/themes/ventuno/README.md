@@ -27,7 +27,7 @@ you will need to install the following dependencies:
 ## Development workflow
 
 The code is publicly available at
-[https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference](https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference)
+[https://gitlab.dhs.tech.ec.europa.eu/ec-europa/digit-joinup-reference](https://gitlab.dhs.tech.ec.europa.eu/ec-europa/digit-joinup-reference)
 as part of the Joinup project. The development is coordinated in a private Jira
 instance: [https://citnet.tech.ec.europa.eu/CITnet/jira/projects/ISAICP](https://citnet.tech.ec.europa.eu/CITnet/jira/projects/ISAICP).
 
