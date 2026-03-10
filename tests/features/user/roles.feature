@@ -48,8 +48,8 @@ Feature: User role management
       | Developer                  |
       | Licence manager            |
       | Moderator                  |
-      | Translator                 |
       | OSS Catalogue Manager      |
+      | Translator                 |
       | Interoperability validator |
 
   Scenario: Verify options available to the moderator.

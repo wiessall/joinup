@@ -1,5 +1,5 @@
 # Install mydumper.
-# This is adapted from https://git.fpfis.tech.ec.europa.eu/digit/devsecops/httpd-php/-/blob/master/install-scripts/full.sh
+# This is adapted from https://gitlab.dhs.tech.ec.europa.eu/digit/devsecops/httpd-php/-/blob/master/install-scripts/full.sh
 ARG MYDUMPER_RELEASE="v0.19.3-3"
 COPY ./importdb.sh /scripts/importdb.sh
 RUN apt-get update -y -qq \

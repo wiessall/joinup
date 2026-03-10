@@ -29,3 +29,64 @@ Feature: Assessment report PDF download
     When I am an anonymous user
     And I go to the "Infrastructure Review" report
     Then I should not see the link "Download PDF"
+
+  Scenario: PDF view display contains the same field labels as the default view
+    Given solution content:
+      | title         |
+      | Test Solution |
+    And public_organisation assessments:
+      | name              | organisation_type          | country |
+      | PDF Test Provider | european_union_institution | Belgium |
+    And expression assessments:
+      | name          |
+      | PDF Test Expr |
+    And public_service assessments:
+      | name         |
+      | PDF Test Svc |
+    And participation assessments:
+      | name            |
+      | PDF Test Partic |
+    And report assessments:
+      | name            | state     | provider          | remaining_barriers                   | other_comment          | document | relevant_report             |
+      | PDF View Report | published | PDF Test Provider | Some barriers remain to be addressed | This is a test comment | text.pdf | https://example.com/related |
+    And the "PDF View Report" report has assessment statements of types:
+      | type           |
+      | legal          |
+      | organisational |
+      | semantic       |
+      | technical      |
+    And the following report has binding requirement:
+      | report                 | PDF View Report            |
+      | expression             | PDF Test Expr              |
+      | service                | PDF Test Svc               |
+      | participation          | PDF Test Partic            |
+      | description            | PDF test BR                |
+      | documented_in          | https://example.com/br-doc |
+      | asset                  | Test Solution              |
+      | requirement_documents  | text.pdf                   |
+    # Report field group labels, report field labels, and binding requirement
+    # paragraph labels.
+    Then the PDF HTML for the "PDF View Report" report should contain:
+      | General information                                                       |
+      | Binding requirements                                                      |
+      | Results                                                                   |
+      | Supporting documents and general comments                                 |
+      | Identified effects on cross-border legal interoperability                 |
+      | Identified effects on cross-border organisational interoperability        |
+      | Identified effects on cross-border semantic interoperability              |
+      | Identified effects on cross-border technical interoperability             |
+      | Remaining barriers of interoperability:                                   |
+      | The report has been connected to the following previous/relevant reports: |
+      | Initiative                                                                |
+      | Requirement                                                               |
+      | Legal reference                                                           |
+      | Concerned public services                                                 |
+      | Affected stakeholders                                                     |
+      | Interoperability solutions                                                |
+      | Supporting documents                                                      |
+    # Sub-entity fields with hidden labels should not show labels in the PDF.
+    And the PDF HTML for the "PDF View Report" report should not contain:
+      | Other comment           |
+      | Participant type        |
+      | Stakeholder’s countries |
+      | Name of the initiative  |

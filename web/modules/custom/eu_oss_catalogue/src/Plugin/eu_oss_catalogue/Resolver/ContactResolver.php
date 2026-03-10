@@ -63,11 +63,6 @@ class ContactResolver extends DefaultResolver implements ContainerFactoryPluginI
     $targets = [];
     foreach ($value as $langcode => $contacts) {
       foreach ($contacts as $contact) {
-        if (is_string($contact)) {
-          // This is a malformed contact because it should be an array, but we
-          // allow this and amend later, when we check the schema.
-          $contact = ['name' => $contact];
-        }
         if (empty($contact['name'])) {
           // Cannot handle this entry.
           continue;
