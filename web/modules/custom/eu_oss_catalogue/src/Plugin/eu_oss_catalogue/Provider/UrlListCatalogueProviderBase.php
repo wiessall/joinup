@@ -219,9 +219,7 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
    *   A preprocessed project object, or NULL if the given item must be skipped.
    */
   protected function preprocessProject(Project $project): ?Project {
-    return isset($project->files['publiccodeYml'])
-      ? $project
-      : NULL;
+    return $project->getPubliccodeYml() !== NULL ? $project : NULL;
   }
 
   /**
