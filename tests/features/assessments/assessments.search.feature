@@ -14,6 +14,7 @@ Feature: Assessment report search functionality
       | Acme Report          |                       | published | 2020-01-03T00:00:00Z |
       | Risk Evaluation      |                       | review    | 2020-01-04T00:00:00Z |
       | Draft Observation    |                       | draft     | 2020-01-05T00:00:00Z |
+
     And I am an anonymous user
     When I visit the advanced search page
     And I check the "Assessment reports (3)" checkbox from the "Content types" facet
@@ -25,17 +26,17 @@ Feature: Assessment report search functionality
     Then the page should show only the tiles "Initial Overview"
 
     When I visit the advanced search page
-    Then I should not see the "Assessment organisation country" facet
+    Then I should not see the "Organisation country" facet
     And I check the "Assessment reports (3)" checkbox from the "Content types" facet
-    Then I should see the "Assessment organisation country" facet
-    Then the "Assessment organisation country" inline facet should allow selecting the following values:
+    Then I should see the "Organisation country" facet
+    Then the "Organisation country" inline facet should allow selecting the following values:
       | Belgium (1)        |
       | European Union (2) |
-    And I check the "Belgium (1)" checkbox from the "Assessment organisation country" facet
+    And I check the "Belgium (1)" checkbox from the "Organisation country" facet
     Then the page should show only the tiles "Initial Overview"
     And I should see the following facet summary "Assessment report, Belgium"
-    And I uncheck the "Belgium (1)" checkbox from the "Assessment organisation country" facet
-    And I check the "European Union (2)" checkbox from the "Assessment organisation country" facet
+    And I uncheck the "Belgium (1)" checkbox from the "Organisation country" facet
+    And I check the "European Union (2)" checkbox from the "Organisation country" facet
     Then the page should show only the tiles "Transmission Summary, Acme Report"
     And I should see the following facet summary "Assessment reports, European Union"
 
