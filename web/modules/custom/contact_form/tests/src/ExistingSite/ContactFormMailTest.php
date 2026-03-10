@@ -107,7 +107,7 @@ class ContactFormMailTest extends JoinupExistingSiteTestBase {
    */
   public static function providerTestEmailSending(): array {
     return [
-      'Withouth copy' => [FALSE],
+      'Without copy' => [FALSE],
       'With copy' => [TRUE],
     ];
   }
