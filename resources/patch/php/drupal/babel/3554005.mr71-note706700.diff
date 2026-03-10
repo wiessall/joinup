@@ -1,0 +1,3284 @@
+diff --git a/.cspell-project-words.txt b/.cspell-project-words.txt
+index 683228f173ee4619222952e6dd9088aa0e9c80b4..72464efe1a1d8a28444293f2776a20bdf8973280 100644
+--- a/.cspell-project-words.txt
++++ b/.cspell-project-words.txt
+@@ -1,8 +1,14 @@
+ # Tests terms
+ blackfire
++salut
++saluturi
+ xhprof
+ 
+ # Code
++bookmarkable
++nocontext
++pconfig
++tmgmt
++valuems
+ webform
+ webforms
+-bookmarkable
+diff --git a/.ddev/addon-metadata/ddev-drupal-contrib/manifest.yaml b/.ddev/addon-metadata/ddev-drupal-contrib/manifest.yaml
+index aeac517ead4636d52db4f3a73ba12c7f245f8c42..24d40f6961a62fc41d78b77536bac3faa9b19852 100644
+--- a/.ddev/addon-metadata/ddev-drupal-contrib/manifest.yaml
++++ b/.ddev/addon-metadata/ddev-drupal-contrib/manifest.yaml
+@@ -1,8 +1,9 @@
+ name: ddev-drupal-contrib
+ repository: ddev/ddev-drupal-contrib
+-version: 1.0.0
+-install_date: "2025-06-24T16:57:12+02:00"
++version: 1.1.5
++install_date: "2026-02-25T15:47:56+02:00"
+ project_files:
++    - commands/host/core-version
+     - commands/web/eslint
+     - commands/web/expand-composer-json
+     - commands/web/nightwatch
+diff --git a/.ddev/commands/host/core-version b/.ddev/commands/host/core-version
+new file mode 100644
+index 0000000000000000000000000000000000000000..e3e012246064d5b742ea36b3c9efd7ee1d65c2d8
+--- /dev/null
++++ b/.ddev/commands/host/core-version
+@@ -0,0 +1,22 @@
++#!/usr/bin/env bash
++
++#ddev-generated
++## Command provided by https://github.com/ddev/ddev-drupal-contrib
++## Description: Switch the core version and rebuild.
++## Usage: core-version [version]
++## Example: "ddev core-version ^11" or "ddev core-version ~11.1.0"
++
++set -eu -o pipefail
++
++# Handle default values.
++DRUPAL_CORE=${1:-default}
++if [ "$DRUPAL_CORE" == "default" ]; then
++  DRUPAL_CORE=""
++fi
++
++# Set/clear the env.
++ddev dotenv set .ddev/.env.web --drupal-core "${DRUPAL_CORE}"
++
++# Restart and rebuild.
++ddev restart
++ddev poser
+diff --git a/.ddev/commands/web/eslint b/.ddev/commands/web/eslint
+index 9afbe702457864ce39f1fc81e998505c1ef255ba..6be295c6a311c37d34a0129503b227e5e3a068ba 100755
+--- a/.ddev/commands/web/eslint
++++ b/.ddev/commands/web/eslint
+@@ -7,12 +7,14 @@
+ ## Example: "ddev eslint"
+ ## ExecRaw: true
+ 
++set -eu -o pipefail
++
+ if "$DDEV_DOCROOT/core/node_modules/.bin/eslint" --version >/dev/null ; then
+   # Configure prettier
+   test -e .prettierrc.json || ln -s $DDEV_DOCROOT/core/.prettierrc.json .
+   test -e .prettierignore || echo '*.yml' > .prettierignore
+   # Change directory to the project root folder
+-  cd "$DDEV_DOCROOT/modules/custom/${DDEV_SITENAME//-/_}" || exit
++  cd "$DDEV_DOCROOT/$DRUPAL_PROJECTS_PATH/${DDEV_SITENAME//-/_}" || exit
+   "$DDEV_COMPOSER_ROOT/$DDEV_DOCROOT/core/node_modules/.bin/eslint" --config="../../../core/.eslintrc.passing.json" --no-error-on-unmatched-pattern --ignore-pattern="*.es6.js" --resolve-plugins-relative-to=$DDEV_COMPOSER_ROOT/$DDEV_DOCROOT/core --ext=.js,.yml . "$@"
+ else
+   echo "eslint is not available. You may need to 'ddev exec \"cd $DDEV_DOCROOT/core && yarn install\"'"
+diff --git a/.ddev/commands/web/expand-composer-json b/.ddev/commands/web/expand-composer-json
+index 742265fdb76d2e16991ed73a55bb26eb442ffa4c..509e414a98b84c493e392daa7d2891a11d4ab3cf 100755
+--- a/.ddev/commands/web/expand-composer-json
++++ b/.ddev/commands/web/expand-composer-json
+@@ -6,10 +6,17 @@
+ ## Usage: expand-composer-json [flags] [PROJECT_NAME]
+ ## Example: "ddev expand-composer-json ctools"
+ ## ExecRaw: true
++## MutagenSync: true
++
++set -eu -o pipefail
++
++# Set the default core version.
++export DRUPAL_CORE=${DRUPAL_CORE:-^11}
+ 
+ export _WEB_ROOT=$DDEV_DOCROOT
+ cd "$DDEV_COMPOSER_ROOT" || exit
+ curl -OL https://git.drupalcode.org/project/gitlab_templates/-/raw/default-ref/scripts/expand_composer_json.php
++_ddev_drupal_contrib_empty_composer=false
+ if [[ ! -f composer.json ]]; then
+   echo "{}" > composer.json
+   _ddev_drupal_contrib_empty_composer=true
+diff --git a/.ddev/commands/web/install b/.ddev/commands/web/install
+index e59bb171328bba0f4e626b113df0056f2ad53a09..85cfc40994f1088a3f0559fa89980c8cb3be26fe 100755
+--- a/.ddev/commands/web/install
++++ b/.ddev/commands/web/install
+@@ -5,5 +5,5 @@
+ ## Example: "ddev install"
+ 
+ vendor/bin/drush site:install --yes
+-vendor/bin/drush pm:install babel_content_entity,babel_menu_link_content --yes
++vendor/bin/drush pm:install babel_content_entity,babel_menu_link_content,babel_tmgmt --yes
+ vendor/bin/drush php:eval 'Drupal\language\Entity\ConfigurableLanguage::createFromLangcode("it")->save();'
+diff --git a/.ddev/commands/web/nightwatch b/.ddev/commands/web/nightwatch
+deleted file mode 100755
+index 99089b55b43f6de794b5be7ab656e084a0fba704..0000000000000000000000000000000000000000
+--- a/.ddev/commands/web/nightwatch
++++ /dev/null
+@@ -1,10 +0,0 @@
+-#!/usr/bin/env bash
+-
+-#ddev-generated
+-## Command provided by https://github.com/ddev/ddev-drupal-contrib
+-## Description: Run nightwatch inside the web container
+-## Usage: nightwatch [flags] [args]
+-## Example: "ddev nightwatch"
+-## ExecRaw: true
+-
+-yarn --cwd "$DDEV_DOCROOT/core" test:nightwatch  "$DDEV_COMPOSER_ROOT/$DDEV_DOCROOT/modules/custom/" "$@"
+diff --git a/.ddev/commands/web/phpcbf b/.ddev/commands/web/phpcbf
+index 48ab77a5c3401a265ce7ef40bb6ed947db88f93b..25393e07b9e0bc8c616bc467f78c1246041d9ac0 100755
+--- a/.ddev/commands/web/phpcbf
++++ b/.ddev/commands/web/phpcbf
+@@ -7,9 +7,11 @@
+ ## Example: "ddev phpcbf" or "ddev phpcbf -n"
+ ## ExecRaw: true
+ 
++set -eu -o pipefail
++
+ if ! command -v phpcbf >/dev/null; then
+   echo "phpcbf is not available. You may need to 'ddev composer install'"
+   exit 1
+ fi
+ test -e phpcs.xml.dist || curl -OL https://git.drupalcode.org/project/gitlab_templates/-/raw/default-ref/assets/phpcs.xml.dist
+-phpcbf -s --report-full --report-summary --report-source $DDEV_DOCROOT/modules/custom "$@"
++phpcbf -s --report-full --report-summary --report-source $DDEV_DOCROOT/$DRUPAL_PROJECTS_PATH "$@"
+diff --git a/.ddev/commands/web/phpcs b/.ddev/commands/web/phpcs
+index 8e34f9f5be979eec9558a01ff151ad2fe2e46fa4..efcf54af3b58730e5e6fd9c5843f3c824afdd9e8 100755
+--- a/.ddev/commands/web/phpcs
++++ b/.ddev/commands/web/phpcs
+@@ -7,9 +7,11 @@
+ ## Example: "ddev phpcs" or "ddev phpcs -n"
+ ## ExecRaw: true
+ 
++set -eu -o pipefail
++
+ if ! command -v phpcs >/dev/null; then
+   echo "phpcs is not available. You may need to 'ddev composer install'"
+   exit 1
+ fi
+ test -e phpcs.xml.dist || curl -OL https://git.drupalcode.org/project/gitlab_templates/-/raw/default-ref/assets/phpcs.xml.dist
+-phpcs -s --report-full --report-summary --report-source $DDEV_DOCROOT/modules/custom --ignore=*/.ddev/* "$@"
++phpcs -s --report-full --report-summary --report-source $DDEV_DOCROOT/$DRUPAL_PROJECTS_PATH --ignore=*/.ddev/* "$@"
+diff --git a/.ddev/commands/web/phpstan b/.ddev/commands/web/phpstan
+index 11edce8b1961ed32149d8fcaeffb91ea62aafe3b..253ff6d4a4b928bd397ca092e4c8c6c8e14448c1 100755
+--- a/.ddev/commands/web/phpstan
++++ b/.ddev/commands/web/phpstan
+@@ -6,6 +6,9 @@
+ ## Usage: phpstan [flags] [args]
+ ## Example: "ddev phpstan" or "ddev phpstan -n"
+ ## ExecRaw: true
++## MutagenSync: true
++
++set -eu -o pipefail
+ 
+ if ! command -v phpstan >/dev/null; then
+   echo "phpstan is not available. You may need to 'ddev poser'"
+@@ -16,4 +19,10 @@ test -e phpstan.neon || curl -OL https://git.drupalcode.org/project/gitlab_templ
+ sed -i 's/BASELINE_PLACEHOLDER/phpstan-baseline.neon/g' phpstan.neon
+ # Add an empty baseline file to ensure it exists.
+ test -e phpstan-baseline.neon || touch phpstan-baseline.neon
+-phpstan analyse $DDEV_DOCROOT/modules/custom "$@"
++
++EXTENSION_DIRECTORY=$DDEV_DOCROOT/$DRUPAL_PROJECTS_PATH/${DDEV_SITENAME//-/_}
++cd "$EXTENSION_DIRECTORY" || exit 1
++# Ensure PHPStan configuration is symlinked from project root.
++ln -s $DDEV_DOCROOT/phpstan.neon 2>/dev/null || true
++ln -s $DDEV_DOCROOT/phpstan-baseline.neon 2>/dev/null || true
++phpstan analyze . "$@"
+diff --git a/.ddev/commands/web/phpunit b/.ddev/commands/web/phpunit
+index 8d936a87eae5c6901438e092042624a166db0204..b967304199f62e7e959df452e7c11683f8e920c4 100755
+--- a/.ddev/commands/web/phpunit
++++ b/.ddev/commands/web/phpunit
+@@ -5,8 +5,12 @@
+ ## Description: Run phpunit inside the web container
+ ## Usage: phpunit [flags] [args]
+ ## Example: "ddev phpunit" or "ddev phpunit --stop-on-failure"
++## Example: "ddev phpunit web/modules/custom/mymodule/tests/src/Unit/MyTest.php"
++## Example: "ddev phpunit --filter testMyFunction"
+ ## ExecRaw: true
+ 
++set -eu -o pipefail
++
+ if ! command -v phpunit >/dev/null; then
+   echo "phpunit is not available. You may need to 'ddev composer install'"
+   exit 1
+@@ -14,9 +18,16 @@ fi
+ 
+ # CHECK for local config.
+ if [ -f "phpunit.xml" ]; then
+-    # Defer to local config
+-    phpunit "$@"
++  # Defer to local config
++  phpunit "$@"
+ else
+-    # Bootstrap Drupal tests and run all custom module tests.
+-    phpunit --bootstrap $PWD/$DDEV_DOCROOT/core/tests/bootstrap.php $DDEV_DOCROOT/modules/custom "$@"
++  # Check if we are running a specific test or test folder.
++  if [ $# -gt 0 ] && [ -e "$1" ]; then
++    TEST_PATH="$1"
++    shift
++    phpunit --bootstrap $PWD/$DDEV_DOCROOT/core/tests/bootstrap.php "$TEST_PATH" "$@"
++  else
++    # Run all custom module tests.
++    phpunit --bootstrap $PWD/$DDEV_DOCROOT/core/tests/bootstrap.php $DDEV_DOCROOT/$DRUPAL_PROJECTS_PATH "$@"
++  fi
+ fi
+diff --git a/.ddev/commands/web/poser b/.ddev/commands/web/poser
+index a27d325976b90aae8ef5c70be0ee929ff0a78ebd..e6d6617f81c233bb61fd3dc01b6f994f4e243358 100755
+--- a/.ddev/commands/web/poser
++++ b/.ddev/commands/web/poser
+@@ -6,9 +6,12 @@
+ ## Usage: poser [flags] [args]
+ ## Example: "ddev poser" or "ddev poser --prefer-source"
+ ## ExecRaw: true
++## MutagenSync: true
++
++set -eu -o pipefail
+ 
+ export COMPOSER=composer.contrib.json
+-.ddev/commands/web/expand-composer-json "$DDEV_PROJECT_NAME"
++.ddev/commands/web/expand-composer-json
+ composer install "$@"
+ # The -f flag suppresses errors if lock file does not exist.
+ rm -f composer.contrib.json composer.contrib.lock
+diff --git a/.ddev/commands/web/stylelint b/.ddev/commands/web/stylelint
+index 677c270a602ca9d075932f1be5b38df68adfc1c1..521d3bc7532ba8f5b5bf2fee56dc84dd9fb205b3 100755
+--- a/.ddev/commands/web/stylelint
++++ b/.ddev/commands/web/stylelint
+@@ -7,9 +7,13 @@
+ ## Example: "ddev stylelint"
+ ## ExecRaw: true
+ 
+-if $DDEV_DOCROOT/core/node_modules/.bin/stylelint --version >/dev/null ; then
++set -eu -o pipefail
++
++if "$DDEV_DOCROOT/core/node_modules/.bin/stylelint" --version >/dev/null ; then
++  # Configure prettier
++  test -e .prettierrc.json || ln -s $DDEV_DOCROOT/core/.prettierrc.json .
+   # Change directory to the project root folder
+-  cd "$DDEV_DOCROOT/modules/custom/${DDEV_SITENAME//-/_}" || exit
++  cd "$DDEV_DOCROOT/$DRUPAL_PROJECTS_PATH/${DDEV_SITENAME//-/_}" || exit
+   "$DDEV_COMPOSER_ROOT/$DDEV_DOCROOT/core/node_modules/.bin/stylelint" --color --config "$DDEV_COMPOSER_ROOT/$DDEV_DOCROOT/core/.stylelintrc.json" "./**/*.css" "$@"
+ else
+   echo "stylelint is not available. You may need to 'ddev exec \"cd $DDEV_DOCROOT/core && yarn install\"'"
+diff --git a/.ddev/commands/web/symlink-project b/.ddev/commands/web/symlink-project
+index 0a4b29638ed0e29daf012e5f53df9d5aeeba1935..7db02d30c5f265a67a516735b14379531db8954a 100755
+--- a/.ddev/commands/web/symlink-project
++++ b/.ddev/commands/web/symlink-project
+@@ -2,18 +2,26 @@
+ 
+ #ddev-generated
+ ## Command provided by https://github.com/ddev/ddev-drupal-contrib
+-## Description: Symlink all root files/dirs into web.modules/custom/[PROJECT_NAME]
++## Description: Symlink project files into the configured location (defaults to `web/modules/custom/[PROJECT_NAME]`)
+ ## Usage: symlink-project [flags] [args]
+ ## Example: "ddev symlink-project"
+ ## ExecRaw: true
+ 
++set -eu -o pipefail
++
+ export _WEB_ROOT=$DDEV_DOCROOT
+-export DRUPAL_PROJECTS_PATH=${DRUPAL_PROJECTS_PATH:-modules/custom}
+-#todo use more dynamic ref.
+ cd "$DDEV_COMPOSER_ROOT" || exit
+ curl -OL https://git.drupalcode.org/project/gitlab_templates/-/raw/default-ref/scripts/symlink_project.php
+ 
++if [ -n "${PROJECT_FILES-}" ]; then
++  # Suppress a warning.
++  PROJECT_FILES=$(ls -A --ignore="web" --ignore="vendor" --ignore="symlink_project.php" --ignore=".ddev" --ignore=".idea")
++  export PROJECT_FILES
++fi
++
+ # Symlink name using underscores.
+ # @see https://www.drupal.org/docs/develop/creating-modules/naming-and-placing-your-drupal-module
+-php symlink_project.php "${DDEV_SITENAME//-/_}"
++# DRUPAL_PROJECT_FOLDER is used by the symlink-project script in gitlab_templates
++export DRUPAL_PROJECT_FOLDER=${DDEV_DOCROOT}/${DRUPAL_PROJECTS_PATH}/${DDEV_SITENAME//-/_}
++php symlink_project.php
+ rm -f symlink_project.php
+diff --git a/.ddev/config.contrib.yaml b/.ddev/config.contrib.yaml
+index e9e7b24cb9605d6a65660c6ddd4036db96e22952..344b786ae2081a62ff7fc2eb2d7ee966b05f2d6c 100644
+--- a/.ddev/config.contrib.yaml
++++ b/.ddev/config.contrib.yaml
+@@ -1,9 +1,15 @@
+ #ddev-generated
+ ## Command provided by https://github.com/ddev/ddev-drupal-contrib
++## To customize this configuration, see:
++## https://ddev.readthedocs.io/en/stable/users/extend/customization-extendibility/
+ web_environment:
+   # To change the Drupal core version, see the README:
+   # https://github.com/ddev/ddev-drupal-contrib/blob/main/README.md#changing-the-drupal-core-version
+-  - DRUPAL_CORE=^11
++  # https://git.drupalcode.org/project/gitlab_templates/-/blob/1.9.6/scripts/expand_composer_json.php?ref_type=tags#L15
++  - IGNORE_PROJECT_DRUPAL_CORE_VERSION=1
++  # To change the location of your project code, see the README:
++  # https://github.com/ddev/ddev-drupal-contrib/blob/main/README.md#changing-the-symlink-location
++  - DRUPAL_PROJECTS_PATH=modules/custom
+   - SIMPLETEST_DB=mysql://db:db@db/db
+   - SIMPLETEST_BASE_URL=http://web
+   - BROWSERTEST_OUTPUT_DIRECTORY=/tmp
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 7fe6bbe4e2edb55471c95a186d8fb638c308f8e8..5c7c738cb69f5a889b3683be437f4cac3b1ee16e 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -36,6 +36,12 @@ variables:
+   SKIP_NIGHTWATCH: '1'
+   _PHPUNIT_CONCURRENT: '1'
+ 
++composer (next major):
++  variables:
++    _LENIENT_ALLOW_LIST: tmgmt,l10n_pconfig
++  after_script:
++    # Don't check for core compatibility.
++    - patch -p1 web/core/lib/Drupal/Core/Extension/InfoParserDynamic.php < d12.diff
+ phpstan:
+   allow_failure: false
+ phpcs:
+diff --git a/README.md b/README.md
+index 92eabdb3b653a8ae36d94867dd92c4af592b9f3d..e6b28f9c92bb1706688246277299487b796d65e5 100644
+--- a/README.md
++++ b/README.md
+@@ -2,26 +2,40 @@
+ 
+ [![https://drupalcode.org/project/babel/badges/1.x/pipeline.svg](https://drupalcode.org/project/babel/badges/1.x/pipeline.svg)](https://drupalcode.org/project/babel)
+ 
+-## Description
+-
+ Babel is an open-architecture module that enables the translation of all Drupal UI strings, whether they originate from code or configuration. Unlike the Locale module, Babel is not limited to configuration strings shipped with Drupal core or contributed modules; it exposes all strings through a unified interface.
+ 
+-### What is it trying to achieve?
++## What is it trying to achieve?
+ 
+ Translators are typically non-technical users. Even if they can distinguish between interface translation and content translation, the concept of a string "coming from code" versus "coming from configuration" can be difficult to grasp. It may also be unclear why some configuration strings are available for translation while others are not. Additionally, finding the correct place to translate a string—such as one originating from a View—can be a challenge.
+ 
+ The Babel module aims to centralize all translatable strings, providing translators with a single point of access for their work.
+ 
+-### What it is not
++## What it is not
+ 
+ * It doesn't store any translations. Babel only connects the dots, acting as a hub for different translation types: code strings, configuration strings. Because of its open architecture, Babel is able even to translate simple content entities such as menu link content, shortcut, or taxonomy terms.
+ * Babel doesn't communicate with [https://localize.drupal.org](https://localize.drupal.org). However, as it handles Locale module translations, it allows other modules to do so (e.g., `l10n_client`).
+ 
+-### Features
++## Features
++
++### Translation user interface
++
++A page where all UI source strings are available for translation, allowing a translator to quickly find and translate strings. It's a unified interface, meaning that all translatable strings are available here regardless if they are coming from code strings, configuration, or even some content entities. It supports languages with more than two plural variants such as Polish, Romanian, etc.
++
++### File export/import
++
++Exporters and importers are plugins, so a third-party module can easily add new plugins to extend the exported formats.
++
++### Curated list of source strings
++
++Very often, projects don't need to translate all strings. For instance, many projects are not translating the administrative pages. Babel allows translators to curate a list of source strings that are exposed for translation. Only approved strings are exported or sent to TMGMT translators.
++
++### Preservation of manual translated strings
++
++As soon as a string is translated (or the translation is updated) via the Babel translation interface, the string translation gets locked. That ensures that manual translations are not overwritten by automated translations or translations imported from files. Manual translation in Babel always takes precedence. But translators are able to use the UI to unlock a translation, so it makes it again exposed to automated translation.
++
++### TMGMT support
+ 
+-* A page where all UI source strings are available for translation, allowing a translator to quickly find and translate strings.
+-* Support for plural variants.
+-* File export/import. Exporters and importers are plugins, so a third-party module can easily add new plugins to extend the exported formats.
++The curated list of sources are available to be sent to [TMGMT](https://www.drupal.org/project/tmgmt) for translation. A TMGMT source plugin is shipped with the `babel_tmgmt` sub-module.
+ 
+ ## Architecture
+ 
+diff --git a/babel.info.yml b/babel.info.yml
+index 566d0947b3f1dc95b607238faa4000b385f3ce2c..d5bd2283092bd471012200501f97f9d9bbf6e595 100644
+--- a/babel.info.yml
++++ b/babel.info.yml
+@@ -1,6 +1,6 @@
+ type: module
+ name: Babel
+ description: Translate Drupal user interface
+-core_version_requirement: '^10.4 || ^11.1'
++core_version_requirement: "^10.4 || ^11.1 || ^12"
+ dependencies:
+   - drupal:locale
+diff --git a/babel.install b/babel.install
+index b6ffc7d13db138e5da64a4fc839f6db2a226657d..217e95ed481d1a808994865393527eb7feb350e5 100644
+--- a/babel.install
++++ b/babel.install
+@@ -10,7 +10,9 @@ declare(strict_types=1);
+ use Drupal\babel\BabelBatchProcessor;
+ use Drupal\babel\BabelConfigTranslatables;
+ use Drupal\babel\BabelStorageInterface;
++use Drupal\babel\BackwardsCompatibilityHelper;
+ use Drupal\babel\Model\Source;
++use Drupal\Component\Gettext\PoItem;
+ use Drupal\Core\Batch\BatchBuilder;
+ 
+ /**
+@@ -140,7 +142,7 @@ function babel_update_8001(): void {
+   $rows = \Drupal::database()->select('locales_source', 'ls')
+     ->fields('ls', ['lid', 'source', 'context'])
+     ->execute()
+-    ->fetchAll(\PDO::FETCH_NUM);
++    ->fetchAll(BackwardsCompatibilityHelper::fetchMode(\PDO::FETCH_NUM));
+ 
+   $sources = [];
+   foreach ($rows as [$lid, $source, $context]) {
+@@ -190,3 +192,29 @@ function babel_update_8002(): void {
+     $schema->createTable('babel_source_lock', $table_schema);
+   }
+ }
++
++/**
++ * Handle configuration only via 'config' translation type plugin.
++ */
++function babel_update_8003(): void {
++  $lids = \Drupal::database()->select('locales_location')
++    ->fields('locales_location', ['sid'])
++    ->condition('type', 'configuration')
++    ->execute()
++    ->fetchCol();
++
++  if ($lids) {
++    \Drupal::service(BabelStorageInterface::class)->delete(pluginId: 'locale', ids: $lids);
++  }
++}
++
++/**
++ * Replace plural delimiter special character with space in the sort key.
++ */
++function babel_update_8004(): void {
++  \Drupal::database()->update('babel_source')
++    ->expression('sort_key', 'REPLACE(sort_key, :delimiter, :space)', [
++      ':delimiter' => PoItem::DELIMITER,
++      ':space' => ' ',
++    ])->execute();
++}
+diff --git a/composer.json b/composer.json
+index bb611c42d9520c2d58aba4389c56a870f32ab046..537c1994e61c542bfc456f33cffc8b2fd492a51b 100644
+--- a/composer.json
++++ b/composer.json
+@@ -14,6 +14,8 @@
+         "phpoffice/phpspreadsheet": "^5.0"
+     },
+     "require-dev": {
++        "drupal/tmgmt": "^1.17",
++        "drupal/l10n_pconfig": "*",
+         "drush/drush": "^12 || ^13"
+     },
+     "minimum-stability": "dev",
+diff --git a/d12.diff b/d12.diff
+new file mode 100644
+index 0000000000000000000000000000000000000000..8841fde6f07f6c6a65acddafdef33d03d6874eb9
+--- /dev/null
++++ b/d12.diff
+@@ -0,0 +1,12 @@
++diff --git a/lib/Drupal/Core/Extension/InfoParserDynamic.php b/lib/Drupal/Core/Extension/InfoParserDynamic.php
++--- a/lib/Drupal/Core/Extension/InfoParserDynamic.php
+++++ b/lib/Drupal/Core/Extension/InfoParserDynamic.php	(date 1771924818000)
++@@ -59,7 +59,7 @@
++     // Determine if the extension is compatible with the current version of
++     // Drupal core.
++     try {
++-      $parsed_info['core_incompatible'] = !Semver::satisfies(\Drupal::VERSION, $parsed_info['core_version_requirement']);
+++      $parsed_info['core_incompatible'] = FALSE;
++     }
++     catch (\UnexpectedValueException) {
++       throw new InfoParserException("The 'core_version_requirement' constraint ({$parsed_info['core_version_requirement']}) is not a valid value in $filename");
+diff --git a/modules/babel_content_entity/babel_content_entity.info.yml b/modules/babel_content_entity/babel_content_entity.info.yml
+index 9efdf58339d4f230545c63e326b7c7063b697205..2e9a77e433d7b6163f497adc6f1218d04da8330b 100644
+--- a/modules/babel_content_entity/babel_content_entity.info.yml
++++ b/modules/babel_content_entity/babel_content_entity.info.yml
+@@ -1,6 +1,6 @@
+ type: module
+ name: Babel Content Entities
+ description: Support for content entities
+-core_version_requirement: '^10.4 || ^11.1'
++core_version_requirement: "^10.4 || ^11.1 || ^12"
+ dependencies:
+   - babel:babel
+diff --git a/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php b/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php
+index 701b7a9da91edab8756cf1dc3753438eac72135c..e2bbd8634ef52069e02b17ade98f842c9d7e6754 100644
+--- a/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php
++++ b/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php
+@@ -76,18 +76,13 @@ class ContentEntity extends TranslationTypePluginBase implements PluginFormInter
+    * {@inheritdoc}
+    */
+   public function getStrings(string $langcode, array $ids = []): array {
+-    if (!$ids) {
+-      $ids = $this->babelStorage->getBaseQuery(
+-        pluginId: $this->getPluginId(),
+-        includeSortKey: FALSE,
+-      )->execute()->fetchCol();
+-    }
++    $entityIds = $status = [];
+ 
+-    $entityIds = [];
+-    foreach ($ids as $id) {
+-      [$entity, $fieldName, $delta] = $this->service->destructSourceInstanceId($this->getPluginId(), $id);
++    foreach ($this->getStringsFromDatabase($ids)->execute()->fetchAll() as $row) {
++      [$entity, $fieldName, $delta] = $this->service->destructSourceInstanceId($this->getPluginId(), $row->id);
+       if ($entity) {
+         $entityIds[$entity->id()][] = [$fieldName, $delta];
++        $status[$row->id] = (bool) $row->status;
+       }
+     }
+ 
+@@ -120,7 +115,7 @@ class ContentEntity extends TranslationTypePluginBase implements PluginFormInter
+         ) : NULL;
+         $id = $this->service->buildSourceInstanceId($entity, $fieldName, $delta);
+         $strings[$id] = new StringTranslation(
+-          source: new Source(string: $source, context: '', status: TRUE),
++          source: new Source(string: $source, context: '', status: $status[$id]),
+           translation: $translation,
+         );
+       }
+diff --git a/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php b/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php
+index 0ea0fec04020cec4a729e9ac8fb2c600b4fa9a73..1f2365049aef9656de83b7e54a4f7e6579e26d2f 100644
+--- a/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php
++++ b/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php
+@@ -78,7 +78,7 @@ class ContentEntityTest extends TranslationTypePluginTestBase {
+         $termsCount--;
+       }
+     }
+-    $this->assertEquals(
++    $this->assertEqualsCanonicalizing(
+       $expected,
+       array_keys($this->plugin->getStrings($langcode, $stringIds))
+     );
+diff --git a/modules/babel_menu_link_content/babel_menu_link_content.info.yml b/modules/babel_menu_link_content/babel_menu_link_content.info.yml
+index cec86857bedbc34cc3b5eb959f75aa4cbc6701c2..0dc0d80c724063a75cf75d5e0b94c64c52b5eaca 100644
+--- a/modules/babel_menu_link_content/babel_menu_link_content.info.yml
++++ b/modules/babel_menu_link_content/babel_menu_link_content.info.yml
+@@ -1,7 +1,7 @@
+ type: module
+ name: Babel Custom Menu Links
+ description: Support for Custom Menu Links module
+-core_version_requirement: '^10.4 || ^11.1'
++core_version_requirement: "^10.4 || ^11.1 || ^12"
+ dependencies:
+   - babel:babel
+   - drupal:menu_link_content
+diff --git a/modules/babel_menu_link_content/src/Plugin/Babel/TranslationType/MenuLinkContent.php b/modules/babel_menu_link_content/src/Plugin/Babel/TranslationType/MenuLinkContent.php
+index f293d0c30395b0d8b4f7815ca43589230d7b7d29..2d33e3d840919fcf5f95da75c2cc97741d166a21 100644
+--- a/modules/babel_menu_link_content/src/Plugin/Babel/TranslationType/MenuLinkContent.php
++++ b/modules/babel_menu_link_content/src/Plugin/Babel/TranslationType/MenuLinkContent.php
+@@ -66,17 +66,12 @@ class MenuLinkContent extends TranslationTypePluginBase implements PluginFormInt
+    * {@inheritdoc}
+    */
+   public function getStrings(string $langcode, array $ids = []): array {
+-    if (!$ids) {
+-      $ids = $this->babelStorage->getBaseQuery(
+-        pluginId: $this->getPluginId(),
+-        includeSortKey: FALSE
+-      )->execute()->fetchCol();
+-    }
++    $lids = $status = [];
+ 
+-    $lids = [];
+-    foreach ($ids as $id) {
+-      [, $lid, $fieldName, $delta] = explode(':', $id);
++    foreach ($this->getStringsFromDatabase($ids)->execute()->fetchAll() as $row) {
++      [, $lid, $fieldName, $delta] = explode(':', $row->id);
+       $lids[$lid][] = [$fieldName, $delta];
++      $status[$row->id] = (bool) $row->status;
+     }
+ 
+     $storage = $this->entityTypeManager->getStorage('menu_link_content');
+@@ -104,7 +99,7 @@ class MenuLinkContent extends TranslationTypePluginBase implements PluginFormInt
+         ) : NULL;
+         $id = "{$link->getMenuName()}:$lid:$fieldName:$delta";
+         $strings[$id] = new StringTranslation(
+-          source: new Source(string: $source, context: '', status: TRUE),
++          source: new Source(string: $source, context: '', status: $status[$id]),
+           translation: $translation,
+         );
+       }
+diff --git a/modules/babel_menu_link_content/tests/src/Kernel/Plugin/Babel/TranslationType/MenuLinkContentTest.php b/modules/babel_menu_link_content/tests/src/Kernel/Plugin/Babel/TranslationType/MenuLinkContentTest.php
+index 4ebc5bcad52a6ac45931735b549558d39e603c12..6619188063b84d3551b4b8c95c02c2b30f145bd0 100644
+--- a/modules/babel_menu_link_content/tests/src/Kernel/Plugin/Babel/TranslationType/MenuLinkContentTest.php
++++ b/modules/babel_menu_link_content/tests/src/Kernel/Plugin/Babel/TranslationType/MenuLinkContentTest.php
+@@ -72,7 +72,7 @@ class MenuLinkContentTest extends TranslationTypePluginTestBase {
+         $numberOfPreexistingLinks--;
+       }
+     }
+-    $this->assertEquals(
++    $this->assertEqualsCanonicalizing(
+       $expected,
+       array_keys($this->plugin->getStrings($langcode, $stringIds))
+     );
+diff --git a/modules/babel_tmgmt/babel_tmgmt.info.yml b/modules/babel_tmgmt/babel_tmgmt.info.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..51d870036b39da1bd155a9b46f2cfd4745d3d7e6
+--- /dev/null
++++ b/modules/babel_tmgmt/babel_tmgmt.info.yml
+@@ -0,0 +1,7 @@
++type: module
++name: Babel TMGMT
++description: Provides a TMGMT source plugin
++core_version_requirement: "^10.4 || ^11.1 || ^12"
++dependencies:
++  - babel:babel
++  - tmgmt:tmgmt
+diff --git a/modules/babel_tmgmt/babel_tmgmt.module b/modules/babel_tmgmt/babel_tmgmt.module
+new file mode 100644
+index 0000000000000000000000000000000000000000..99b0e4057123a481c7195575a863732a1a2420a1
+--- /dev/null
++++ b/modules/babel_tmgmt/babel_tmgmt.module
+@@ -0,0 +1,33 @@
++<?php
++
++/**
++ * @file
++ * Hook implementations for Babel TMGMT module.
++ */
++
++declare(strict_types=1);
++
++use Drupal\babel_tmgmt\Hook\BabelTmgmtHooks;
++use Drupal\Core\Form\FormStateInterface;
++use Drupal\Core\Hook\Attribute\LegacyHook;
++use Drupal\tmgmt\JobInterface;
++
++/**
++ * Implements hook_form_FORM_ID_alter() for 'babel_settings_form' form.
++ *
++ * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\LegacyHook does not exist.
++ */
++#[LegacyHook]
++function babel_tmgmt_form_babel_settings_form_alter(array &$form, FormStateInterface $formState): void {
++  \Drupal::service(BabelTmgmtHooks::class)->babelTmgmtSettings($form, $formState);
++}
++
++/**
++ * Implements hook_ENTITY_TYPE_insert() for 'tmgmt_job' entity type.
++ *
++ * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\LegacyHook does not exist.
++ */
++#[LegacyHook]
++function babel_tmgmt_tmgmt_job_insert(JobInterface $job): void {
++  \Drupal::service(BabelTmgmtHooks::class)->jobCreated($job);
++}
+diff --git a/modules/babel_tmgmt/babel_tmgmt.services.yml b/modules/babel_tmgmt/babel_tmgmt.services.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..9600a347d2c7f829f9a0bb4f5bbc545784e5bed8
+--- /dev/null
++++ b/modules/babel_tmgmt/babel_tmgmt.services.yml
+@@ -0,0 +1,11 @@
++services:
++  _defaults:
++    autoconfigure: true
++    autowire: true
++
++  Drupal\babel_tmgmt\BabelTmgmtIntegration: {}
++
++  Drupal\babel_tmgmt\EventSubscriber\BabelTmgmtSubscriber: {}
++
++  # TODO: Remove this line when Drupal 10 support is discontinued.
++  Drupal\babel_tmgmt\Hook\BabelTmgmtHooks: {}
+diff --git a/modules/babel_tmgmt/config/install/babel_tmgmt.settings.yml b/modules/babel_tmgmt/config/install/babel_tmgmt.settings.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..286cd1b4f232ff40066165f94f4b68ff193a4bde
+--- /dev/null
++++ b/modules/babel_tmgmt/config/install/babel_tmgmt.settings.yml
+@@ -0,0 +1 @@
++translators: []
+diff --git a/modules/babel_tmgmt/config/schema/babel_tmgmt.schema.yml b/modules/babel_tmgmt/config/schema/babel_tmgmt.schema.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..95e5d8b6b5e69fa484ff4fd8a1fbf23b2c16c45b
+--- /dev/null
++++ b/modules/babel_tmgmt/config/schema/babel_tmgmt.schema.yml
+@@ -0,0 +1,12 @@
++babel_tmgmt.settings:
++  type: config_object
++  label: TMGMT integration settings
++  mapping:
++    translators:
++      type: sequence
++      label: Translators
++      sequence:
++        type: string
++        constraints:
++          ConfigExists:
++            prefix: tmgmt.translator.
+diff --git a/modules/babel_tmgmt/src/BabelTmgmtIntegration.php b/modules/babel_tmgmt/src/BabelTmgmtIntegration.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..5f42a263d6c496bd9a02ce3f99c2aa4c71a20935
+--- /dev/null
++++ b/modules/babel_tmgmt/src/BabelTmgmtIntegration.php
+@@ -0,0 +1,228 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\babel_tmgmt;
++
++use Drupal\babel\BabelStorageInterface;
++use Drupal\babel\BabelStringsRepositoryInterface;
++use Drupal\Core\Config\ConfigFactoryInterface;
++use Drupal\Core\Entity\ContentEntityStorageInterface;
++use Drupal\Core\Entity\EntityTypeManagerInterface;
++use Drupal\Core\Session\AccountInterface;
++use Drupal\tmgmt\ContinuousManager;
++use Drupal\tmgmt\JobInterface;
++use Drupal\tmgmt\JobItemInterface;
++use Drupal\tmgmt\TMGMTException;
++use Symfony\Component\DependencyInjection\Attribute\Autowire;
++
++/**
++ * TMGMT integration service.
++ */
++class BabelTmgmtIntegration {
++
++  /**
++   * Static cache of job item storage.
++   */
++  protected ContentEntityStorageInterface $jobItemStorage;
++
++  public function __construct(
++    protected readonly AccountInterface $currentUser,
++    protected readonly ConfigFactoryInterface $configFactory,
++    protected readonly EntityTypeManagerInterface $entityTypeManager,
++    protected readonly BabelStorageInterface $storage,
++    protected readonly BabelStringsRepositoryInterface $stringsRepository,
++    #[Autowire(service: 'tmgmt.continuous')]
++    protected readonly ContinuousManager $continuousManager,
++  ) {}
++
++  /**
++   * Creates continuous job items.
++   *
++   * @param string $hash
++   *   The source string hash.
++   *
++   * @return array<int|string, \Drupal\tmgmt\JobItemInterface>
++   *   A list of created continuous job items keyed by their ID.
++   */
++  public function createContinuousJobItems(string $hash): array {
++    $jobItems = [];
++
++    if (!$this->storage->hashExists($hash)) {
++      return $jobItems;
++    }
++
++    foreach ($this->continuousManager->getContinuousJobs('en') as $job) {
++      if ($jobItem = $this->createContinuousJobItemForJob($job, $hash)) {
++        $jobItems[$jobItem->id()] = $jobItem;
++      }
++    }
++
++    return $jobItems;
++  }
++
++  /**
++   * Creates an item for a continuous job and a source string hash.
++   *
++   * @param \Drupal\tmgmt\JobInterface $job
++   *   The continuous job.
++   * @param string $hash
++   *   The source string hash.
++   *
++   * @return \Drupal\tmgmt\JobItemInterface|null
++   *   The created job item or NULL if the job item could not be created.
++   */
++  public function createContinuousJobItemForJob(JobInterface $job, string $hash): ?JobItemInterface {
++    if (!$job->isContinuous()) {
++      throw new \InvalidArgumentException(__METHOD__ . '() handles only continuous jobs');
++    }
++
++    // Skip strings that are either disabled or locked for translation.
++    $translation = $this->stringsRepository->getStringTranslationByHash($job->getTargetLangcode(), $hash);
++    if (!$translation || !$translation->source->getStatus() || $translation->isLocked()) {
++      return NULL;
++    }
++
++    // Remove any existing job item for this hash.
++    $existingJobItems = $job->getItems([
++      'plugin' => 'babel',
++      'item_type' => 'default',
++      'item_id' => $hash,
++    ]);
++    if ($existingJobItems) {
++      $this->getJobItemStorage()->delete($existingJobItems);
++    }
++
++    try {
++      return $this->continuousManager->addItem($job, 'babel', 'default', $hash);
++    }
++    catch (TMGMTException) {
++      // Ignore this job if, for some reason, a job item cannot be created.
++      return NULL;
++    }
++  }
++
++  /**
++   * Deletes continuous job items.
++   *
++   * @param string $hash
++   *   The source string hash.
++   */
++  public function deleteContinuousJobItems(string $hash): void {
++    $jobItems = [];
++    foreach ($this->continuousManager->getContinuousJobs('en') as $job) {
++      $jobItems += $job->getItems([
++        'plugin' => 'babel',
++        'item_type' => 'default',
++        'item_id' => $hash,
++      ]);
++    }
++    if ($jobItems) {
++      $this->entityTypeManager->getStorage('tmgmt_job_item')->delete($jobItems);
++    }
++  }
++
++  /**
++   * Creates job items given a source string hash.
++   *
++   * The method creates a job items for each combination of target languages and
++   * translators that are qualifying to perform the translation.
++   *
++   * @param string $hash
++   *   The source string hash.
++   *
++   * @return array<int|string, \Drupal\tmgmt\JobItemInterface>
++   *   A list of job items keyed by their ID.
++   */
++  public function createJobItems(string $hash): array {
++    $jobItems = [];
++    if (!$this->storage->hashExists($hash)) {
++      return $jobItems;
++    }
++
++    $translatorIds = $this->configFactory->get('babel_tmgmt.settings')->get('translators');
++    if (!$translatorIds) {
++      // No translators are configured to be used by the 'babel' source.
++      return $jobItems;
++    }
++
++    // Load translator entities.
++    $translatorStorage = $this->entityTypeManager->getStorage('tmgmt_translator');
++    if (!$translators = $translatorStorage->loadMultiple($translatorIds)) {
++      return $jobItems;
++    }
++
++    $existing = $this->getExistingGraph($hash);
++    foreach (tmgmt_available_languages(['en']) as $langcode => $name) {
++      $translation = $this->stringsRepository->getStringTranslationByHash($langcode, $hash);
++      if ($translation->isTranslated()) {
++        // Already translated, and not requested to be translated again.
++        continue;
++      }
++
++      foreach ($translators as $translatorId => $translator) {
++        if (isset($existing[$langcode][$translatorId])) {
++          // This job already exists.
++          continue;
++        }
++
++        // Create the job.
++        $values = ['translator' => $translator];
++        $job = tmgmt_job_create('en', $langcode, $this->currentUser->id(), $values);
++
++        if (!$translator->checkTranslatable($job)->getSuccess()) {
++          // This job cannot be translated by this translator.
++          continue;
++        }
++
++        $job->save();
++        $jobItem = $job->addItem('babel', 'default', $hash);
++        $jobItems[$jobItem->id()] = $jobItem;
++      }
++    }
++
++    return $jobItems;
++  }
++
++  /**
++   * Create a graph with the existing jobs for a give hash.
++   *
++   * @param string $hash
++   *   The source string hash.
++   *
++   * @return array<string, array<string, true>>
++   *   Associative array keyed by language code. Values are associative arrays,
++   *   each keys/values as the translator ID.
++   */
++  protected function getExistingGraph(string $hash): array {
++    $return = [];
++
++    if (!$latest = tmgmt_job_item_load_latest('babel', 'default', $hash, 'en')) {
++      return $return;
++    }
++
++    foreach ($latest as $langcode => $jobItem) {
++      if ($translator = $jobItem->getTranslator()) {
++        $return[$langcode][$translator->id()] = $translator->id();
++      }
++    }
++
++    return $return;
++  }
++
++  /**
++   * Retrieves the entity storage of the translation job items.
++   *
++   * @return \Drupal\Core\Entity\ContentEntityStorageInterface
++   *   The entity storage of the translation job items.
++   */
++  protected function getJobItemStorage(): ContentEntityStorageInterface {
++    if (!isset($this->jobItemStorage)) {
++      $storage = $this->entityTypeManager->getStorage('tmgmt_job_item');
++      assert($storage instanceof ContentEntityStorageInterface);
++      $this->jobItemStorage = $storage;
++    }
++    return $this->jobItemStorage;
++  }
++
++}
+diff --git a/modules/babel_tmgmt/src/EventSubscriber/BabelTmgmtSubscriber.php b/modules/babel_tmgmt/src/EventSubscriber/BabelTmgmtSubscriber.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..a5e6f244a738a199c48c05018c3f1afc98228aca
+--- /dev/null
++++ b/modules/babel_tmgmt/src/EventSubscriber/BabelTmgmtSubscriber.php
+@@ -0,0 +1,94 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\babel_tmgmt\EventSubscriber;
++
++use Drupal\babel\Event\SourceStringDisabled;
++use Drupal\babel\Event\SourceStringEnabled;
++use Drupal\babel\Event\SourceStringInserted;
++use Drupal\babel\Event\SourceStringStatusChangedBase;
++use Drupal\babel\Event\TranslationLockChangedBase;
++use Drupal\babel\Event\TranslationLocked;
++use Drupal\babel\Event\TranslationUnlocked;
++use Drupal\Core\Queue\QueueFactory;
++use Symfony\Component\EventDispatcher\EventSubscriberInterface;
++
++/**
++ * Listens to events that require creation or deletion of continuous job items.
++ */
++class BabelTmgmtSubscriber implements EventSubscriberInterface {
++
++  public function __construct(protected QueueFactory $queueFactory) {}
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function getSubscribedEvents(): array {
++    return [
++      SourceStringInserted::class => 'onSourceStringInserted',
++      SourceStringEnabled::class => 'onSourceStringStatusChanged',
++      SourceStringDisabled::class => 'onSourceStringStatusChanged',
++      TranslationUnlocked::class => 'onTranslationLockChanged',
++      TranslationLocked::class => 'onTranslationLockChanged',
++    ];
++  }
++
++  /**
++   * Schedules new source strings for continuous job items creation.
++   *
++   * @param \Drupal\babel\Event\SourceStringInserted $event
++   *   The event instance.
++   */
++  public function onSourceStringInserted(SourceStringInserted $event): void {
++    $this->queueStrings('create', $event->hashes);
++  }
++
++  /**
++   * Creates or deletes continuous job items when source string status changes.
++   *
++   * @param \Drupal\babel\Event\SourceStringStatusChangedBase $event
++   *   The event instance.
++   */
++  public function onSourceStringStatusChanged(SourceStringStatusChangedBase $event): void {
++    $operation = match(TRUE) {
++      $event instanceof SourceStringEnabled => 'create',
++      $event instanceof SourceStringDisabled => 'delete',
++    };
++    $this->queueStrings($operation, [$event->hash]);
++  }
++
++  /**
++   * Creates or deletes continuous job items when the translation lock changes.
++   *
++   * @param \Drupal\babel\Event\TranslationLockChangedBase $event
++   *   The event instance.
++   */
++  public function onTranslationLockChanged(TranslationLockChangedBase $event): void {
++    $operation = match(TRUE) {
++      $event instanceof TranslationUnlocked => 'create',
++      $event instanceof TranslationLocked => 'delete',
++    };
++    $this->queueStrings($operation, [$event->hash]);
++  }
++
++  /**
++   * Schedules a list of strings for continuous job items creation or deletion.
++   *
++   * @param string $operation
++   *   The operation to perform. Either 'create' or 'delete'.
++   * @param list<string> $hashes
++   *   List of source string hashes.
++   */
++  protected function queueStrings(string $operation, array $hashes): void {
++    assert($operation === 'create' || $operation === 'delete');
++
++    $queue = $this->queueFactory->get('babel_tmgmt_continuous_job_item');
++    $queue->createQueue();
++
++    foreach ($hashes as $hash) {
++      $queue->createItem(['operation' => $operation, 'hash' => $hash]);
++    }
++  }
++
++}
+diff --git a/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php b/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..4fd4e25545ed052b97d6e9a60df6d12dfc66702d
+--- /dev/null
++++ b/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
+@@ -0,0 +1,85 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\babel_tmgmt\Hook;
++
++use Drupal\Core\Entity\EntityTypeManagerInterface;
++use Drupal\Core\Form\ConfigTarget;
++use Drupal\Core\Form\FormStateInterface;
++use Drupal\Core\Hook\Attribute\Hook;
++use Drupal\Core\Queue\QueueFactory;
++use Drupal\Core\StringTranslation\StringTranslationTrait;
++use Drupal\tmgmt\JobInterface;
++use Drupal\tmgmt\TranslatorInterface;
++
++/**
++ * Hook implementations for Babel TMGMT module.
++ */
++class BabelTmgmtHooks {
++
++  use StringTranslationTrait;
++
++  public function __construct(
++    protected EntityTypeManagerInterface $entityTypeManager,
++    protected QueueFactory $queueFactory,
++  ) {}
++
++  /**
++   * Implements hook_form_FORM_ID_alter() for 'babel_settings_form' form.
++   *
++   * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\Hook does not exist.
++   */
++  #[Hook('form_babel_settings_form_alter')]
++  public function babelTmgmtSettings(array &$form, FormStateInterface $formState): void {
++    if (!$this->entityTypeManager->hasDefinition('tmgmt_translator')) {
++      return;
++    }
++
++    $options = array_map(
++      fn(TranslatorInterface $translator): string|\Stringable => $translator->label(),
++      $this->entityTypeManager->getStorage('tmgmt_translator')->loadMultiple(),
++    );
++
++    if (!$options) {
++      return;
++    }
++
++    $form['tmgmt'] = [
++      '#type' => 'details',
++      '#title' => $this->t('TMGMT integration'),
++      'translators' => [
++        '#type' => 'checkboxes',
++        '#title' => $this->t('Translators'),
++        '#description' => $this->t('Select the TMGMT translators used to translate the strings managed by Babel.'),
++        '#options' => $options,
++        '#config_target' => new ConfigTarget(
++          configName: 'babel_tmgmt.settings',
++          propertyPath: 'translators',
++          fromConfig: fn(?array $value): array => (array) $value,
++          toConfig: fn(array $value): array => array_keys(array_filter($value)),
++        ),
++      ],
++    ];
++  }
++
++  /**
++   * Creates items for a newly created continuous job.
++   *
++   * @param \Drupal\tmgmt\JobInterface $job
++   *   A continuous job.
++   *
++   * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\Hook does not exist.
++   */
++  #[Hook('tmgmt_job_insert')]
++  public function jobCreated(JobInterface $job): void {
++    if ($job->isContinuous()) {
++      $this->queueFactory->get('babel_tmgmt_continuous_job_item')
++        ->createItem([
++          'operation' => 'continuous_job_created',
++          'job_id' => $job->id(),
++        ]);
++    }
++  }
++
++}
+diff --git a/modules/babel_tmgmt/src/Plugin/QueueWorker/ContinuousJobItemCreationWorker.php b/modules/babel_tmgmt/src/Plugin/QueueWorker/ContinuousJobItemCreationWorker.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..f6bcfc17731f0aec999a7712f9870ce77c8d3e5d
+--- /dev/null
++++ b/modules/babel_tmgmt/src/Plugin/QueueWorker/ContinuousJobItemCreationWorker.php
+@@ -0,0 +1,142 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\babel_tmgmt\Plugin\QueueWorker;
++
++use Drupal\babel_tmgmt\BabelTmgmtIntegration;
++use Drupal\Core\Database\Connection;
++use Drupal\Core\Entity\EntityTypeManagerInterface;
++use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
++use Drupal\Core\Queue\Attribute\QueueWorker;
++use Drupal\Core\Queue\QueueFactory;
++use Drupal\Core\Queue\QueueWorkerBase;
++use Drupal\Core\StringTranslation\TranslatableMarkup;
++use Symfony\Component\DependencyInjection\ContainerInterface;
++
++/**
++ * Create/delete continuous job items.
++ */
++#[QueueWorker(
++  id: 'babel_tmgmt_continuous_job_item',
++  title: new TranslatableMarkup('Create continuous job item'),
++  cron: ['time' => 30],
++)]
++class ContinuousJobItemCreationWorker extends QueueWorkerBase implements ContainerFactoryPluginInterface {
++
++  private const ALLOWED_OPERATIONS = ['create', 'delete', 'continuous_job_created'];
++
++  public function __construct(
++    array $configuration,
++    $pluginId,
++    $pluginDefinition,
++    protected readonly BabelTmgmtIntegration $babelTmgmt,
++    protected readonly EntityTypeManagerInterface $entityTypeManager,
++    protected readonly Connection $db,
++    protected QueueFactory $queueFactory,
++  ) {
++    parent::__construct($configuration, $pluginId, $pluginDefinition);
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
++    return new static(
++      $configuration,
++      $plugin_id,
++      $plugin_definition,
++      $container->get(BabelTmgmtIntegration::class),
++      $container->get('entity_type.manager'),
++      $container->get('database'),
++      $container->get('queue'),
++    );
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function processItem($data): void {
++    if (!isset($data['operation']) || !in_array($data['operation'], self::ALLOWED_OPERATIONS, TRUE)) {
++      throw new \InvalidArgumentException('Invalid operation.');
++    }
++
++    match($data['operation']) {
++      'create', 'delete' => $this->createOrDeleteJobItems($data),
++      'continuous_job_created' => $this->addItemsForNewJob($data),
++    };
++  }
++
++  /**
++   * Creates or deletes continuous job items.
++   *
++   * @param array $data
++   *   The queue item data.
++   */
++  protected function createOrDeleteJobItems(array $data): void {
++    if (empty($data['hash']) || !is_string($data['hash']) || strlen($data['hash']) !== 64) {
++      throw new \InvalidArgumentException('Invalid hash.');
++    }
++
++    match($data['operation']) {
++      'create' => $this->babelTmgmt->createContinuousJobItems($data['hash']),
++      'delete' => $this->babelTmgmt->deleteContinuousJobItems($data['hash']),
++    };
++  }
++
++  /**
++   * Adds new job items for a new continuous job.
++   *
++   * @param array $data
++   *   The queue item data.
++   *
++   * @see \Drupal\babel_tmgmt\Hook\BabelTmgmtHooks::jobCreated()
++   */
++  protected function addItemsForNewJob(array $data): void {
++    if (!isset($data['job_id']) || !is_numeric($data['job_id'])) {
++      throw new \InvalidArgumentException('Invalid job ID');
++    }
++
++    $job = $this->entityTypeManager->getStorage('tmgmt_job')->load($data['job_id']);
++    if (!$job) {
++      // The job entity might have been deleted in the meantime. Exit silently.
++      return;
++    }
++
++    if (!$job->isContinuous()) {
++      throw new \InvalidArgumentException("Job with ID {$data['job_id']} is not a continuous job");
++    }
++
++    if (!isset($data['hashes'])) {
++      // This is the first iteration for this new job. Create all items and
++      // queue them for processing later, in the same queue.
++      $allHashes = $this->db->select('babel_source')
++        ->fields('babel_source', ['hash'])
++        ->execute()
++        ->fetchCol();
++      if (!$allHashes) {
++        return;
++      }
++
++      $queue = $this->queueFactory->get('babel_tmgmt_continuous_job_item');
++      $queue->createQueue();
++
++      // Queue hashes in batches of 50.
++      foreach (array_chunk($allHashes, 50) as $hashes) {
++        $queue->createItem([
++          'operation' => 'continuous_job_created',
++          'job_id' => $data['job_id'],
++          'hashes' => $hashes,
++        ]);
++      }
++
++      // We are done. Future worker runs will process scheduled hashes.
++      return;
++    }
++
++    foreach ($data['hashes'] as $hash) {
++      $this->babelTmgmt->createContinuousJobItemForJob($job, $hash);
++    }
++  }
++
++}
+diff --git a/modules/babel_tmgmt/src/Plugin/tmgmt/Source/BabelSource.php b/modules/babel_tmgmt/src/Plugin/tmgmt/Source/BabelSource.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..8053bc6c5018226f37be0eed96e393543b8ece0d
+--- /dev/null
++++ b/modules/babel_tmgmt/src/Plugin/tmgmt/Source/BabelSource.php
+@@ -0,0 +1,213 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\babel_tmgmt\Plugin\tmgmt\Source;
++
++use Drupal\babel\BabelStorageInterface;
++use Drupal\babel\BabelStringsRepositoryInterface;
++use Drupal\babel\Plugin\Babel\TranslationTypePluginManager;
++use Drupal\babel\Utility;
++use Drupal\Component\Gettext\PoItem;
++use Drupal\Core\Database\Connection;
++use Drupal\Core\Form\FormStateInterface;
++use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
++use Drupal\tmgmt\ContinuousSourceInterface;
++use Drupal\tmgmt\Entity\Job;
++use Drupal\tmgmt\JobItemInterface;
++use Drupal\tmgmt\SourcePluginBase;
++use Symfony\Component\DependencyInjection\ContainerInterface;
++
++/**
++ * Translation Source plugin for Babel strings.
++ *
++ * @SourcePlugin(
++ *   id = "babel",
++ *   label = @Translation("Babel"),
++ *   description = @Translation("Source handler for Babel strings."),
++ *   ui = "Drupal\babel_tmgmt\Plugin\tmgmt\Source\BabelSourceUi",
++ * ),
++ */
++class BabelSource extends SourcePluginBase implements ContainerFactoryPluginInterface, ContinuousSourceInterface {
++
++  public function __construct(
++    array $configuration,
++    string $pluginId,
++    array $pluginDefinition,
++    protected readonly TranslationTypePluginManager $translationTypeManager,
++    protected readonly BabelStringsRepositoryInterface $babelStringsRepository,
++    protected readonly BabelStorageInterface $babelStorage,
++    protected Connection $db,
++  ) {
++    parent::__construct($configuration, $pluginId, $pluginDefinition);
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
++    return new static(
++      $configuration,
++      $plugin_id,
++      $plugin_definition,
++      $container->get(TranslationTypePluginManager::class),
++      $container->get(BabelStringsRepositoryInterface::class),
++      $container->get(BabelStorageInterface::class),
++      $container->get('database'),
++    );
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getItemTypes(): array {
++    return ['default' => $this->t('Default')];
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getLabel(JobItemInterface $job_item): string|false {
++    $sortKey = $this->db->select('babel_source')
++      ->fields('babel_source', ['sort_key'])
++      ->condition('hash', $job_item->getItemId())
++      ->execute()
++      ->fetchField();
++
++    // Remove a potential trailing delimiter when the translation context is an
++    // empty string.
++    return rtrim($sortKey, ':');
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getData(JobItemInterface $job_item): array {
++    $sourceLangcode = $job_item->getSourceLangCode();
++    $targetLangcode = $job_item->getJob()->getTargetLangcode();
++
++    $translation = $this->babelStringsRepository
++      ->getStringTranslationByHash($sourceLangcode, $job_item->getItemId());
++
++    $variants = $translation->getSourcePluralVariants();
++    $isPlural = $translation->isPlural();
++    $variantsCount = $isPlural ? (int) $this->getNumberOfPlurals($targetLangcode) : 1;
++
++    $data = [];
++    for ($delta = 0; $delta < $variantsCount; $delta++) {
++      // Identify placeholders that need to be escaped. Assume that placeholders
++      // consist of alphanumeric characters and _,- only and are delimited by
++      // non-alphanumeric characters. There are cases that don't match, for
++      // example, appended SI units like "@valuems", there only @value is the
++      // actual placeholder.
++      $escape = [];
++      if (isset($variants[$delta])) {
++        if (preg_match_all('/([@!%][a-zA-Z0-9_-]+)/', $variants[$delta], $matches, PREG_OFFSET_CAPTURE)) {
++          foreach ($matches[0] as $match) {
++            $escape[$match[1]]['string'] = $match[0];
++          }
++        }
++      }
++
++      $variant = $variants[$delta] ?? '';
++
++      // The target language has more plural variants than the source. Fill the
++      // additional source plural variants with the first plural if it exists.
++      if ($variant === '' && $delta >= count($variants) && !empty($variants[1])) {
++        $variant = $variants[1];
++      }
++
++      [$key, $label] = $this->getKeyAndLabel($delta);
++      $data[$key] = [
++        '#label' => $label,
++        '#text' => $variant,
++        '#translate' => TRUE,
++        '#escape' => $escape,
++      ];
++    }
++
++    return $data;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function saveTranslation(JobItemInterface $job_item, $target_langcode): bool {
++    $data = $job_item->getData();
++    $isPlural = count($data) > 1;
++    $variantsCount = $isPlural ? (int) $this->getNumberOfPlurals($target_langcode) : 1;
++    $variants = [];
++
++    for ($delta = 0; $delta < $variantsCount; $delta++) {
++      [$key] = $this->getKeyAndLabel($delta);
++      $variants[$delta] = trim($data[$key]['#translation']['#text'] ?? '');
++
++    }
++
++    // Remove a potential trailing delimiter.
++    $translated = rtrim(implode(PoItem::DELIMITER, $variants), PoItem::DELIMITER);
++    if (!$translated) {
++      return FALSE;
++    }
++
++    $hash = $job_item->getItemId();
++    $translation = $this->babelStringsRepository->getStringTranslationByHash($target_langcode, $hash);
++    $instances = $this->babelStorage->getSourceStringInstances($hash);
++
++    foreach ($instances as $pluginId => $ids) {
++      $plugin = $this->translationTypeManager->createInstance($pluginId);
++      foreach ($ids as $id) {
++        $plugin->updateTranslation($translation, $id, $target_langcode, $translated);
++      }
++    }
++
++    return TRUE;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getSourceLangCode(JobItemInterface $job_item): string|false {
++    // Babel depend on Locale module and handles its strings. For Locale source,
++    // English is always the source language.
++    return 'en';
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function continuousSettingsForm(array &$form, FormStateInterface $form_state, Job $job): array {
++    return [];
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function shouldCreateContinuousItem(Job $job, $plugin, $item_type, $item_id): bool {
++    $translation = $this->babelStringsRepository->getStringTranslationByHash($job->getTargetLangcode(), $item_id);
++    return $translation && !$translation->isLocked();
++  }
++
++  /**
++   * Returns the data key and label given the plural variant delta.
++   *
++   * @param int $delta
++   *   The plural variant delta.
++   *
++   * @return array{string, string|\Stringable}
++   *   A tuple with the data key and the label:
++   *   0: The key.
++   *   1: The label.
++   */
++  protected function getKeyAndLabel(int $delta): array {
++    return match(TRUE) {
++      $delta === 0 => ['singular', $this->t('Singular')],
++      $delta === 1 => ['plural:1', $this->t('Plural')],
++      default => ["plural:$delta", $this->t('@nth plural', [
++        '@nth' => Utility::getOrdinal($delta),
++      ]),
++      ],
++    };
++  }
++
++}
+diff --git a/modules/babel_tmgmt/src/Plugin/tmgmt/Source/BabelSourceUi.php b/modules/babel_tmgmt/src/Plugin/tmgmt/Source/BabelSourceUi.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..82a40da047213e9392c239ce40455d05383fba70
+--- /dev/null
++++ b/modules/babel_tmgmt/src/Plugin/tmgmt/Source/BabelSourceUi.php
+@@ -0,0 +1,371 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\babel_tmgmt\Plugin\tmgmt\Source;
++
++use Drupal\babel\BabelStringsRepositoryInterface;
++use Drupal\babel\Model\StringTranslation;
++use Drupal\Core\Batch\BatchBuilder;
++use Drupal\Core\Config\ConfigFactoryInterface;
++use Drupal\Core\Form\FormStateInterface;
++use Drupal\Core\Language\LanguageInterface;
++use Drupal\Core\Language\LanguageManagerInterface;
++use Drupal\Core\Pager\PagerManagerInterface;
++use Drupal\Core\Render\RendererInterface;
++use Drupal\tmgmt\SourcePluginUiBase;
++use Symfony\Component\HttpFoundation\Request;
++
++/**
++ * Babel source plugin UI.
++ */
++class BabelSourceUi extends SourcePluginUiBase {
++
++  /**
++   * No context value.
++   *
++   * @var string
++   */
++  private const NO_CONTEXT = '*****NOCONTEXT*****';
++
++  /**
++   * {@inheritdoc}
++   */
++  public function overviewForm(array $form, FormStateInterface $form_state, $type): array {
++    $form = parent::overviewForm($form, $form_state, $type);
++
++    $perPage = $this->getConfigFactory()->get('tmgmt.settings')->get('source_list_limit') ?? 20;
++
++    $form['items']['#empty'] = $this->t('No strings matching given criteria have been found.');
++
++    // Strings were already stored in form stare, in ::overviewSearchFormPart().
++    $all = $form_state->get('all_strings');
++
++    $pager = $this->getPagerManager()->getPager() ?: $this->getPagerManager()->createPager(count($all), $perPage);
++    if ($pager->getTotalItems() !== count($all)) {
++      // We have to reinitialize the pager.
++      // @see https://drupal.org/i/3388718
++      $pager = $this->getPagerManager()->createPager(count($all), $perPage);
++    }
++
++    $strings = array_slice($all, $pager->getCurrentPage() * $perPage, $perPage);
++
++    foreach ($strings as $hash => $languages) {
++      $form['items']['#options'][$hash] = ['id' => $hash];
++      $jobItems = tmgmt_job_item_load_latest('babel', $type, $hash, 'en') ?: NULL;
++      foreach ($languages as $langcode => $stringTranslation) {
++        $form['items']['#options'][$hash]['source'] ??= $stringTranslation->source->string;
++        $form['items']['#options'][$hash]['context'] ??= $stringTranslation->source->context;
++
++        $status = $this->getTranslationStatus($langcode, $stringTranslation);
++        $build = $this->buildTranslationStatus($status, $jobItems[$langcode] ?? NULL);
++        $form['items']['#options'][$hash]["langcode-$langcode"] = $this->getRenderer()->render($build);
++      }
++    }
++
++    $form['pager'] = ['#type' => 'pager'];
++
++    return $form;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function overviewSearchFormPart(array $form, FormStateInterface $form_state, $type): array {
++    $form = parent::overviewSearchFormPart($form, $form_state, $type);
++
++    $params = $this->getSearchFormSubmittedParams();
++
++    $form['search_wrapper']['search']['text'] = [
++      '#type' => 'textfield',
++      '#title' => t('Source text'),
++      '#default_value' => $params['text'],
++    ];
++
++    $languages = array_map(function (LanguageInterface $language): string {
++      return $language->getName();
++    }, $this->getLanguageManager()->getLanguages());
++    // Unset English as it is the source language for all strings.
++    unset($languages['en']);
++
++    $form['search_wrapper']['search']['missing'] = [
++      '#type' => 'select',
++      '#title' => t('Not translated to'),
++      '#options' => $languages,
++      '#empty_option' => '--',
++      '#default_value' => $params['missing'],
++    ];
++
++    $form_state->set('all_strings', $this->getStrings());
++
++    $form['search_wrapper']['search']['context'] = [
++      '#type' => 'select',
++      '#title' => t('Context'),
++      '#empty_option' => $this->t('--'),
++      '#empty_value' => self::NO_CONTEXT,
++      '#options' => $this->getContexts($form_state),
++      '#default_value' => $params['context'] ?? self::NO_CONTEXT,
++    ];
++
++    return $form;
++  }
++
++  /**
++   * Returns the TMGMT translation status string.
++   *
++   * @param string $langcode
++   *   The language code.
++   * @param \Drupal\babel\Model\StringTranslation $translation
++   *   The translation string object.
++   *
++   * @return string
++   *   The TMGMT translation status string.
++   */
++  protected function getTranslationStatus(string $langcode, StringTranslation $translation): string {
++    return match(TRUE) {
++      $langcode === 'en' => 'original',
++      $translation->isTranslated() => 'current',
++      default => 'missing',
++    };
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function overviewSearchFormRedirect(array $form, FormStateInterface $form_state, $type): bool {
++    if (
++      $form_state->getTriggeringElement()['#id'] == 'edit-search-submit' &&
++      $form_state->hasValue(['search', 'context']) &&
++      $form_state->getValue(['search', 'context']) === self::NO_CONTEXT
++    ) {
++      // Unset the context query string when no filtering on this parameter has
++      // been requested.
++      $form_state->unsetValue(['search', 'context']);
++    }
++
++    return parent::overviewSearchFormRedirect($form, $form_state, $type);
++  }
++
++  /**
++   * Returns all Babel strings.
++   *
++   * @return array<string, array<string, \Drupal\babel\Model\StringTranslation>>
++   *   All translatable strings.
++   */
++  protected function getStrings(): array {
++    $langcodes = array_keys($this->getLanguageManager()->getLanguages());
++
++    // Get filters.
++    $params = $this->getSearchFormSubmittedParams();
++
++    $strings = [];
++    foreach ($langcodes as $langcode) {
++      $langStrings = $this->getBabelStringsRepository()->getStrings(
++        langcode: $langcode,
++        translationStatus: (!empty($params['missing']) && $params['missing'] === $langcode) ? FALSE : NULL,
++        search: $params['text'],
++        context: $params['context'],
++        sourceStatus: TRUE,
++      );
++      foreach ($langStrings as $hash => $langString) {
++        $strings[$hash][$langcode] = $langString;
++      }
++    }
++
++    // Remove incomplete hashes. For instance a filter one of the languages
++    // might be set. Is such case remove this string in all languages.
++    foreach ($strings as $hash => $languages) {
++      if (count($languages) !== count($langcodes)) {
++        unset($strings[$hash]);
++      }
++    }
++
++    return $strings;
++  }
++
++  /**
++   * Returns overview form header.
++   *
++   * @return array
++   *   Header array definition as expected by table.
++   */
++  public function overviewFormHeader(): array {
++    $languages = $this->getLanguageManager()->getLanguages();
++
++    $header = [
++      'source' => ['data' => t('Source text')],
++      'context' => ['data' => t('Context')],
++      'langcode-en' => ['data' => $languages['en']->getName()],
++    ];
++    foreach ($languages as $langcode => $language) {
++      if ($langcode !== 'en') {
++        $header["langcode-$langcode"] = ['data' => $language->getName()];
++      }
++    }
++
++    return $header;
++  }
++
++  /**
++   * Gets submitted search parameters.
++   *
++   * @return array{text: string|null, missing: string|null, context:
++   *   string|null} Search parameters.
++   */
++  public function getSearchFormSubmittedParams(): array {
++    $query = $this->getCurrentRequest()->query;
++    return [
++      'text' => $query->get('text', FALSE) ?: NULL,
++      'missing' => $query->get('missing', FALSE) ?: NULL,
++      'context' => $query->get('context'),
++    ];
++  }
++
++  /**
++   * Gets a list of contexts.
++   *
++   * @return array<string, string|\Stringable>
++   *   List of contexts from the filtered list of strings.
++   */
++  public function getContexts(FormStateInterface $formState): array {
++    $contexts = [];
++    foreach ($formState->get('all_strings') as ['en' => $translation]) {
++      assert($translation instanceof StringTranslation);
++      $context = $translation->source->context;
++      if (!isset($contexts[$context])) {
++        $label = $context === '' ? $this->t('Default context ("")') : $context;
++        $contexts[$context] = $label;
++      }
++    }
++
++    return $contexts;
++  }
++
++  /**
++   * Adds selected sources to continuous jobs.
++   *
++   * @param \Drupal\Core\Form\FormStateInterface $formState
++   *   Form state array.
++   * @param string $itemType
++   *   Entity type.
++   */
++  public function overviewSubmitToContinuousJobs(FormStateInterface $formState, string $itemType): void {
++    $sourceLangcode = $formState->getValue('source_language');
++    $sourceLangcode = $sourceLangcode === '_source' ? 'en' : $sourceLangcode;
++
++    if ($formState->getValue('add_all_to_continuous_jobs')) {
++      $hashes = array_keys($this->getBabelStringsRepository()->getStrings(
++        langcode: $sourceLangcode,
++        sourceStatus: TRUE,
++      ));
++    }
++    else {
++      $hashes = array_keys(array_filter($formState->getValue('items')));
++    }
++
++    if (!$hashes) {
++      return;
++    }
++
++    $batch = new BatchBuilder();
++    foreach ($hashes as $hash) {
++      $batch->addOperation([static::class, 'createContinuousJobItem'], [$hash, $sourceLangcode]);
++    }
++
++    batch_set($batch->toArray());
++  }
++
++  /**
++   * Creates a continuous job item.
++   *
++   * @param string $hash
++   *   The source string hash.
++   * @param string $sourceLangcode
++   *   The source language code.
++   */
++  public static function createContinuousJobItem(string $hash, string $sourceLangcode): void {
++    $continuousManager = \Drupal::service('tmgmt.continuous');
++    foreach ($continuousManager->getContinuousJobs($sourceLangcode) as $job) {
++      $continuousManager->addItem($job, 'babel', 'default', $hash);
++    }
++  }
++
++  /**
++   * Returns the renderer service.
++   *
++   * Note that this type of plugin doesn't allow dependency injection.
++   *
++   * @return \Drupal\Core\Render\RendererInterface
++   *   The renderer service.
++   */
++  protected function getRenderer(): RendererInterface {
++    // @phpstan-ignore-next-line globalDrupalDependencyInjection.useDependencyInjection
++    return \Drupal::service('renderer');
++  }
++
++  /**
++   * Returns the pager manager service.
++   *
++   * Note that this type of plugin doesn't allow dependency injection.
++   *
++   * @return \Drupal\Core\Pager\PagerManagerInterface
++   *   The pager manager service.
++   */
++  protected function getPagerManager(): PagerManagerInterface {
++    // @phpstan-ignore-next-line globalDrupalDependencyInjection.useDependencyInjection
++    return \Drupal::service('pager.manager');
++  }
++
++  /**
++   * Returns the config factory service.
++   *
++   * Note that this type of plugin doesn't allow dependency injection.
++   *
++   * @return \Drupal\Core\Config\ConfigFactoryInterface
++   *   The config factory service.
++   */
++  protected function getConfigFactory(): ConfigFactoryInterface {
++    // @phpstan-ignore-next-line globalDrupalDependencyInjection.useDependencyInjection
++    return \Drupal::configFactory();
++  }
++
++  /**
++   * Returns the Babel strings repository service.
++   *
++   * Note that this type of plugin doesn't allow dependency injection.
++   *
++   * @return \Drupal\babel\BabelStringsRepositoryInterface
++   *   The Babel strings repository service.
++   */
++  protected function getBabelStringsRepository(): BabelStringsRepositoryInterface {
++    // @phpstan-ignore-next-line globalDrupalDependencyInjection.useDependencyInjection
++    return \Drupal::service(BabelStringsRepositoryInterface::class);
++  }
++
++  /**
++   * Returns the language manager service.
++   *
++   * Note that this type of plugin doesn't allow dependency injection.
++   *
++   * @return \Drupal\Core\Language\LanguageManagerInterface
++   *   The language manager service.
++   */
++  protected function getLanguageManager(): LanguageManagerInterface {
++    // @phpstan-ignore-next-line globalDrupalDependencyInjection.useDependencyInjection
++    return \Drupal::languageManager();
++  }
++
++  /**
++   * Returns the current request.
++   *
++   * Note that this type of plugin doesn't allow dependency injection.
++   *
++   * @return \Symfony\Component\HttpFoundation\Request
++   *   The current request.
++   */
++  protected function getCurrentRequest(): Request {
++    // @phpstan-ignore-next-line globalDrupalDependencyInjection.useDependencyInjection
++    return \Drupal::service('request_stack')->getCurrentRequest();
++  }
++
++}
+diff --git a/modules/babel_tmgmt/tests/src/Functional/BabelTmgmtTest.php b/modules/babel_tmgmt/tests/src/Functional/BabelTmgmtTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..cf504434fdd3e1e94168152eeaffaabe1f1ebab9
+--- /dev/null
++++ b/modules/babel_tmgmt/tests/src/Functional/BabelTmgmtTest.php
+@@ -0,0 +1,148 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\babel_tmgmt\Functional;
++
++use Drupal\language\Entity\ConfigurableLanguage;
++use Drupal\Tests\babel\Traits\ModuleInstallHelperTrait;
++use Drupal\Tests\BrowserTestBase;
++use Drupal\user\UserInterface;
++
++/**
++ * Tests the TMGMT integration.
++ *
++ * @group babel
++ * @coversDefaultClass \Drupal\babel_tmgmt\Plugin\tmgmt\Source\BabelSource
++ */
++class BabelTmgmtTest extends BrowserTestBase {
++
++  use ModuleInstallHelperTrait;
++
++  /**
++   * {@inheritdoc}
++   */
++  protected $defaultTheme = 'stark';
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = [
++    'babel_test_config',
++    'babel_tmgmt',
++    'l10n_pconfig',
++    'tmgmt_local',
++  ];
++
++  /**
++   * Testing user account.
++   */
++  protected UserInterface $account;
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
++
++    // Use a language that has more than 2 plural variants.
++    ConfigurableLanguage::createFromLangcode('ro')->save();
++
++    $this->account = $this->createUser(
++      permissions: [
++        'administer tmgmt',
++        'provide translation services',
++        'administer languages',
++      ],
++      values: [
++        'tmgmt_translation_skills' => [
++          'language_from' => 'en',
++          'language_to' => 'ro',
++        ],
++      ],
++    );
++    $this->drupalLogin($this->account);
++
++    // Add plural formula to Romanian.
++    $this->drupalGet('/admin/config/regional/language/edit/ro');
++    $this->submitForm([
++      'plural_formula' => 'nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;',
++    ], 'Save language');
++
++    // Ensure that the \Drupal\locale\LocaleTranslation::$translations property
++    // has some cached translations in it.
++    $lookup = \Drupal::service('string_translator.locale.lookup');
++    // Hash: f071ac91d5854385bc8d295ba8aa003cd45cba6597b596cf5d06825595259d44.
++    $lookup->getStringTranslation('ro', 'Test', '');
++    // Hash: 3a6b2fe60c9b0ef6a66569054e58b56a1a3315c60b694777b9433d5021826035.
++    $lookup->getStringTranslation('ro', "1 hello\x03@count hellos", '');
++    $this->runInstallBatchOperations();
++  }
++
++  /**
++   * Tests TMGMT integration.
++   */
++  public function testIntegration(): void {
++    $this->drupalGet('/admin/tmgmt/sources/babel/default', ['query' => ['text' => 'Test']]);
++    $this->submitForm([
++      'source_language' => 'en',
++      'target_language' => 'ro',
++      'items[f071ac91d5854385bc8d295ba8aa003cd45cba6597b596cf5d06825595259d44]' => TRUE,
++    ], 'Request translation');
++
++    $this->submitForm(['settings[translator]' => $this->account->id()], 'Submit to provider');
++
++    $assert = $this->assertSession();
++
++    $assert->statusMessageContains('The translation for Test is now being processed.', 'status');
++    $assert->statusMessageContains('The translation job has been submitted.', 'status');
++
++    $this->drupalGet('/admin/tmgmt/sources/babel/default', ['query' => ['text' => 'hellos']]);
++    $this->submitForm([
++      'source_language' => 'en',
++      'target_language' => 'ro',
++      'items[3a6b2fe60c9b0ef6a66569054e58b56a1a3315c60b694777b9433d5021826035]' => TRUE,
++    ], 'Request translation');
++    $this->submitForm(['settings[translator]' => $this->account->id()], 'Submit to provider');
++
++    $assert->statusMessageContains('The translation for 1 hello @count hellos is now being processed.', 'status');
++    $assert->statusMessageContains('The translation job has been submitted.', 'status');
++
++    // Perform translations, including manager approvals.
++    $this->drupalGet('translate/items/1');
++    $this->submitForm(['singular[translation]' => '[RO] Test'], 'Save as completed');
++    $assert->statusMessageContains('The translation for Test has been saved as completed.', 'status');
++    $this->drupalGet('admin/tmgmt/items/1');
++    $this->submitForm([], 'Save as completed');
++    $assert->statusMessageContains('Validation completed successfully.', 'status');
++    $assert->statusMessageContains('The translation for Test has been accepted.', 'status');
++
++    $this->drupalGet('translate/items/2');
++    $this->submitForm([
++      'singular[translation]' => 'un salut',
++      'plural:1[translation]' => '@count saluturi',
++      'plural:2[translation]' => '@count de saluturi',
++    ], 'Save as completed');
++    $assert->statusMessageContains('The translation for 1 hello @count hellos has been saved as completed.', 'status');
++    $this->drupalGet('admin/tmgmt/items/2');
++    $this->submitForm([], 'Save as completed');
++    $assert->statusMessageContains('Validation completed successfully.', 'status');
++    $assert->statusMessageContains('The translation for 1 hello @count hellos has been accepted.', 'status');
++
++    // Inspect the Locale backend.
++    $storage = \Drupal::service('locale.storage');
++    $translation = $storage->getTranslations(['source' => 'Test', 'context' => '']);
++    $this->assertCount(1, $translation);
++    $this->assertSame('[RO] Test', $translation[0]->getString());
++    $translation = $storage->getTranslations(['source' => "1 hello\x03@count hellos", 'context' => '']);
++    $this->assertCount(1, $translation);
++    $this->assertSame("un salut\x03@count saluturi\x03@count de saluturi", $translation[0]->getString());
++
++    // Inspect the Config backend.
++    \Drupal::languageManager()->setConfigOverrideLanguage(ConfigurableLanguage::load('ro'));
++    $config = \Drupal::configFactory()->get('babel_test_config.content');
++    $this->assertSame('[RO] Test', $config->get('label'));
++    $this->assertSame("un salut\x03@count saluturi\x03@count de saluturi", $config->get('content.value'));
++  }
++
++}
+diff --git a/modules/babel_tmgmt/tests/src/Kernel/BabelTmgmtIntegrationTest.php b/modules/babel_tmgmt/tests/src/Kernel/BabelTmgmtIntegrationTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..674d08445dab204b3fe81abd76a3fc9d23494d3d
+--- /dev/null
++++ b/modules/babel_tmgmt/tests/src/Kernel/BabelTmgmtIntegrationTest.php
+@@ -0,0 +1,266 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\babel_tmgmt\Kernel;
++
++use Drupal\babel\BabelLockServiceInterface;
++use Drupal\babel\BabelStorageInterface;
++use Drupal\babel\Model\Source;
++use Drupal\babel_tmgmt\BabelTmgmtIntegration;
++use Drupal\KernelTests\KernelTestBase;
++use Drupal\language\Entity\ConfigurableLanguage;
++use Drupal\Tests\babel\Traits\ModuleInstallHelperTrait;
++use Drupal\Tests\user\Traits\UserCreationTrait;
++use Drupal\tmgmt\JobInterface;
++
++/**
++ * Tests the Drupal\babel_tmgmt\BabelTmgmtIntegration service.
++ *
++ * @coversDefaultClass \Drupal\babel_tmgmt\BabelTmgmtIntegration
++ * @group babel
++ */
++class BabelTmgmtIntegrationTest extends KernelTestBase {
++
++  use ModuleInstallHelperTrait;
++  use UserCreationTrait;
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = [
++    'babel',
++    'babel_tmgmt',
++    'field',
++    'language',
++    'locale',
++    'options',
++    'system',
++    'text',
++    'tmgmt',
++    'tmgmt_language_combination',
++    'tmgmt_local',
++    'user',
++    'views',
++  ];
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
++
++    $this->installEntitySchema('user');
++    $this->installEntitySchema('tmgmt_job');
++    $this->installEntitySchema('tmgmt_job_item');
++    $this->installEntitySchema('tmgmt_message');
++    $this->installEntitySchema('tmgmt_local_task');
++    $this->installEntitySchema('tmgmt_local_task_item');
++    $this->installEntitySchema('tmgmt_remote');
++    $this->installSchema('babel', ['babel_source', 'babel_source_instance', 'babel_source_lock']);
++    $this->installSchema('locale', ['locales_source', 'locales_target', 'locales_location']);
++    $this->installConfig(['language', 'tmgmt_local']);
++
++    // Ensure that the \Drupal\locale\LocaleTranslation::$translations property
++    // has some cached translations in it.
++    $lookup = \Drupal::service('string_translator.locale.lookup');
++    $lookup->getStringTranslation('it', 'Test', '');
++
++    $this->runInstallBatchOperations();
++  }
++
++  /**
++   * Tests creating continuous job items.
++   *
++   * @legacy-covers covers ::createContinuousJobItems
++   */
++  public function testCreateContinuousJobItems(): void {
++    $service = $this->container->get(BabelTmgmtIntegration::class);
++    $translatorManager = $this->container->get('plugin.manager.tmgmt.translator');
++    $lockService = $this->container->get(BabelLockServiceInterface::class);
++    $storage = $this->container->get(BabelStorageInterface::class);
++
++    $jobItems = $service->createContinuousJobItems('non-existing hash');
++    $this->assertEmpty($jobItems);
++
++    $testingHash = (new Source('Test', ''))->getHash();
++
++    // The hash exists, but no continuous job is available.
++    $jobItems = $service->createContinuousJobItems($testingHash);
++    $this->assertEmpty($jobItems);
++
++    // Create a continuous job.
++    ConfigurableLanguage::createFromLangcode('it')->save();
++    tmgmt_translator_auto_create($translatorManager->getDefinition('local'));
++    $job = tmgmt_job_create('en', 'it', 0, [
++      'label' => 'Testing continuous job',
++      'translator' => 'local',
++      'job_type' => JobInterface::TYPE_CONTINUOUS,
++      'state' => JobInterface::STATE_CONTINUOUS,
++    ]);
++    $job->save();
++
++    $this->runQueue('babel_tmgmt_continuous_job_item');
++    $jobItems = $service->createContinuousJobItems($testingHash);
++    $queriedJobItems = $job->getItems([
++      'plugin' => 'babel',
++      'item_type' => 'default',
++      'item_id' => $testingHash,
++    ]);
++    $this->assertEquals(array_keys($queriedJobItems), array_keys($jobItems));
++
++    $this->assertCount(1, $jobItems);
++    $jobItem = reset($jobItems);
++    $this->assertSame('Testing continuous job', $jobItem->getJob()->label());
++    $this->assertSame('Test', $jobItem->label());
++    $this->assertSame('babel', $jobItem->getPlugin());
++    $this->assertSame('default', $jobItem->getItemType());
++    $this->assertSame($testingHash, $jobItem->getItemId());
++    $this->assertSame('Test', $jobItem->getData(['singular', '#text']));
++
++    // Locking a service removes the continuous job items.
++    $lockService->lock($testingHash, 'it');
++    $this->runQueue('babel_tmgmt_continuous_job_item');
++    $queriedJobItems = $job->getItems([
++      'plugin' => 'babel',
++      'item_type' => 'default',
++      'item_id' => $testingHash,
++    ]);
++    $this->assertEmpty($queriedJobItems);
++
++    // Unlocking a string translation adds the continuous job items.
++    $lockService->unlock($testingHash, 'it');
++    $this->runQueue('babel_tmgmt_continuous_job_item');
++    $queriedJobItems = $job->getItems([
++      'plugin' => 'babel',
++      'item_type' => 'default',
++      'item_id' => $testingHash,
++    ]);
++    $this->assertNotEmpty($queriedJobItems);
++
++    // Disabling the source string status also removes the continuous job items.
++    $storage->updateStatusForHash($testingHash, FALSE);
++    $this->runQueue('babel_tmgmt_continuous_job_item');
++    $queriedJobItems = $job->getItems([
++      'plugin' => 'babel',
++      'item_type' => 'default',
++      'item_id' => $testingHash,
++    ]);
++    $this->assertEmpty($queriedJobItems);
++
++    // Enabling a source string adds the continuous job items.
++    $storage->updateStatusForHash($testingHash, TRUE);
++    $this->runQueue('babel_tmgmt_continuous_job_item');
++    $queriedJobItems = $job->getItems([
++      'plugin' => 'babel',
++      'item_type' => 'default',
++      'item_id' => $testingHash,
++    ]);
++    $this->assertNotEmpty($queriedJobItems);
++  }
++
++  /**
++   * Tests creating job items.
++   *
++   * @legacy-covers ::createJobItems
++   */
++  public function testCreateJobItems(): void {
++    $account = $this->createUser();
++    $this->setCurrentUser($account);
++
++    $service = $this->container->get(BabelTmgmtIntegration::class);
++    $translatorManager = $this->container->get('plugin.manager.tmgmt.translator');
++
++    $service->createJobItems('non-existing hash');
++    $this->assertNoJobItemExists('non-existing hash');
++
++    $testingHash = (new Source('Test', ''))->getHash();
++
++    // Try to create a job for an existing hash.
++    $service->createJobItems($testingHash);
++    // Job was not created because there are no translators configured yet.
++    $this->assertNoJobItemExists($testingHash);
++
++    // Configure a translator.
++    $this->config('babel_tmgmt.settings')->set('translators.0', 'local')->save();
++
++    // Try again to create a job for an existing hash.
++    $service->createJobItems($testingHash);
++    // Job was not created because there are no translator entities yet.
++    $this->assertNoJobItemExists($testingHash);
++
++    // Add a translator.
++    tmgmt_translator_auto_create($translatorManager->getDefinition('local'));
++
++    // Try again. Now we have a translator.
++    $service->createJobItems($testingHash);
++    // There are no target languages.
++    $this->assertNoJobItemExists($testingHash);
++
++    // Create a target language.
++    ConfigurableLanguage::createFromLangcode('it')->save();
++
++    // Try again. Now we have a translator.
++    $service->createJobItems($testingHash);
++    // Now we have a target language but the translator doesn't support the
++    // translation from 'en' to 'it'.
++    $this->assertNoJobItemExists($testingHash);
++
++    // Support translations in all directions.
++    $this->config('tmgmt_local.settings')->set('allow_all', TRUE)->save();
++
++    // Try again. Now the translator supports this job.
++    $service->createJobItems($testingHash);
++    $this->assertJobItemExists($testingHash, 'it');
++
++    // Try again to create a new job while one already exists for the same hash.
++    $jobItems = $service->createJobItems($testingHash);
++    $this->assertEmpty($jobItems);
++  }
++
++  /**
++   * Asserts that a job item has been created for a hash and a target language.
++   *
++   * @param string $hash
++   *   The source string hash.
++   * @param string $targetLangcode
++   *   The target langcode.
++   */
++  protected function assertJobItemExists(string $hash, string $targetLangcode): void {
++    $jobItem = \tmgmt_job_item_load_latest('babel', 'default', $hash, 'en')[$targetLangcode] ?? NULL;
++    $this->assertNotNull($jobItem);
++    $this->assertSame('babel', $jobItem->getPlugin());
++    $this->assertSame('default', $jobItem->getItemType());
++    $this->assertSame('en', $jobItem->getSourceLangCode());
++    $this->assertSame($targetLangcode, $jobItem->getJob()->getTargetLangcode());
++    $this->assertSame($hash, $jobItem->getItemId());
++  }
++
++  /**
++   * Asserts that no job item has been created for a given hash.
++   *
++   * @param string $hash
++   *   The source string hash.
++   */
++  protected function assertNoJobItemExists(string $hash): void {
++    $this->assertEmpty(\tmgmt_job_item_load_latest('babel', 'default', $hash, 'en'));
++  }
++
++  /**
++   * Processes all pending items from a given queue.
++   *
++   * @param string $queueName
++   *   The queue name.
++   */
++  protected function runQueue(string $queueName): void {
++    $queueWorkerManager = $this->container->get('plugin.manager.queue_worker');
++    $queue = $this->container->get('queue')->get($queueName);
++
++    $worker = $queueWorkerManager->createInstance($queueName);
++    while ($item = $queue->claimItem()) {
++      $worker->processItem($item->data);
++      $queue->deleteItem($item);
++    }
++  }
++
++}
+diff --git a/src/BabelBatchProcessor.php b/src/BabelBatchProcessor.php
+index b57e41f9a7071c4ad4b5cd449c6dae777c124155..a3a241bdca304aff51947c875de9f04b0e1ea822 100644
+--- a/src/BabelBatchProcessor.php
++++ b/src/BabelBatchProcessor.php
+@@ -20,10 +20,14 @@ class BabelBatchProcessor {
+    */
+   public static function importExistingLocaleStrings(array &$context): void {
+     // Populate with locale source strings.
+-    $rows = \Drupal::database()->select('locales_source', 'ls')
+-      ->fields('ls', ['lid', 'source', 'context'])
++    $query = \Drupal::database()->select('locales_source', 'ls')
++      ->fields('ls', ['lid', 'source', 'context']);
++    $query->innerJoin('locales_location', 'll', 'ls.lid = ll.sid');
++    $rows = $query
++      // Configuration is handled by the 'config' translation type plugin.
++      ->condition('ll.type', 'configuration', '<>')
+       ->execute()
+-      ->fetchAll(\PDO::FETCH_NUM);
++      ->fetchAll(BackwardsCompatibilityHelper::fetchMode(\PDO::FETCH_NUM));
+ 
+     $sources = [];
+     foreach ($rows as [$lid, $source, $string_context]) {
+diff --git a/src/BabelLockService.php b/src/BabelLockService.php
+index d7a78251a1633473a08f1e163152b1667cc9571c..4a0ca2ac67376f9d720e8de3d51d9104538da57f 100644
+--- a/src/BabelLockService.php
++++ b/src/BabelLockService.php
+@@ -4,7 +4,10 @@ declare(strict_types=1);
+ 
+ namespace Drupal\babel;
+ 
++use Drupal\babel\Event\TranslationLocked;
++use Drupal\babel\Event\TranslationUnlocked;
+ use Drupal\Core\Database\Connection;
++use Psr\EventDispatcher\EventDispatcherInterface;
+ 
+ /**
+  * Service for managing translation locks.
+@@ -13,6 +16,7 @@ class BabelLockService implements BabelLockServiceInterface {
+ 
+   public function __construct(
+     protected readonly Connection $db,
++    protected readonly EventDispatcherInterface $eventDispatcher,
+   ) {}
+ 
+   /**
+@@ -22,6 +26,7 @@ class BabelLockService implements BabelLockServiceInterface {
+     $this->db->merge('babel_source_lock')
+       ->keys(['hash' => $hash, 'langcode' => $langcode])
+       ->execute();
++    $this->eventDispatcher->dispatch(new TranslationLocked($hash, $langcode));
+   }
+ 
+   /**
+@@ -32,6 +37,7 @@ class BabelLockService implements BabelLockServiceInterface {
+       ->condition('hash', $hash)
+       ->condition('langcode', $langcode)
+       ->execute();
++    $this->eventDispatcher->dispatch(new TranslationUnlocked($hash, $langcode));
+   }
+ 
+   /**
+diff --git a/src/BabelStorage.php b/src/BabelStorage.php
+index 583f9d88ae2c44e77f361acda0316b6156331f9e..cb92f9675a618d78e40e89d6baf0fa14f7190c57 100644
+--- a/src/BabelStorage.php
++++ b/src/BabelStorage.php
+@@ -4,9 +4,13 @@ declare(strict_types=1);
+ 
+ namespace Drupal\babel;
+ 
++use Drupal\babel\Event\SourceStringDisabled;
++use Drupal\babel\Event\SourceStringEnabled;
+ use Drupal\babel\Plugin\Babel\TranslationTypePluginManager;
++use Drupal\babel\Event\SourceStringInserted;
+ use Drupal\Core\Database\Connection;
+ use Drupal\Core\Database\Query\SelectInterface;
++use Psr\EventDispatcher\EventDispatcherInterface;
+ 
+ /**
+  * Storage service for babel data.
+@@ -24,6 +28,7 @@ class BabelStorage implements BabelStorageInterface {
+     protected Connection $db,
+     protected readonly TranslationTypePluginManager $translationTypeManager,
+     protected readonly StringsCollectorFactory $collectorFactory,
++    protected readonly EventDispatcherInterface $eventDispatcher,
+   ) {}
+ 
+   /**
+@@ -87,6 +92,10 @@ class BabelStorage implements BabelStorageInterface {
+         $upsert->values($value);
+       }
+       $upsert->execute();
++
++      // Notify that new sources were added to Babel storage.
++      $newHashes = array_keys(array_diff_key($data, $existingStatuses));
++      $this->eventDispatcher->dispatch(new SourceStringInserted($newHashes, $pluginId));
+     }
+   }
+ 
+@@ -125,7 +134,7 @@ class BabelStorage implements BabelStorageInterface {
+     $this->collectorFactory->invalidateHashes($select->execute()->fetchCol());
+ 
+     $delete->execute();
+-    $this->updateSourceTable();
++    $this->updateSourceTables();
+   }
+ 
+   /**
+@@ -151,10 +160,26 @@ class BabelStorage implements BabelStorageInterface {
+    * {@inheritdoc}
+    */
+   public function updateStatusForHash(string $hash, bool $status): void {
++    $currentStatus = (bool) $this->db->select('babel_source')
++      ->fields('babel_source', ['status'])
++      ->condition('hash', $hash)
++      ->execute()
++      ->fetchField();
++
++    if ($status === $currentStatus) {
++      return;
++    }
++
+     $this->db->update('babel_source')
+       ->fields(['status' => (int) $status])
+       ->condition('hash', $hash)
+       ->execute();
++
++    $this->collectorFactory->invalidateHashes([$hash]);
++
++    // Let the world know that status has changed.
++    $event = $status ? new SourceStringEnabled($hash) : new SourceStringDisabled($hash);
++    $this->eventDispatcher->dispatch($event);
+   }
+ 
+   /**
+@@ -218,10 +243,11 @@ class BabelStorage implements BabelStorageInterface {
+   }
+ 
+   /**
+-   * Updates {babel_source} table.
++   * Updates {babel_source} and {babel_source_lock} tables.
+    */
+-  protected function updateSourceTable(): void {
+-    $this->db->query("DELETE bs FROM {babel_source} bs LEFT JOIN {babel_source_instance} bsi ON bs.hash = bsi.hash WHERE bsi.hash IS NULL ");
++  protected function updateSourceTables(): void {
++    $this->db->query("DELETE bs FROM {babel_source} bs LEFT JOIN {babel_source_instance} bsi ON bs.hash = bsi.hash WHERE bsi.hash IS NULL");
++    $this->db->query("DELETE bsl FROM {babel_source_lock} bsl LEFT JOIN {babel_source_instance} bsi ON bsl.hash = bsi.hash WHERE bsi.hash IS NULL");
+   }
+ 
+ }
+diff --git a/src/BabelStringsRepository.php b/src/BabelStringsRepository.php
+index 9661090b8a98cc8a7e54296a52eb58a7aebd5dc0..699391c59a655c6bff8a04cbef92a8e9e29a1040 100644
+--- a/src/BabelStringsRepository.php
++++ b/src/BabelStringsRepository.php
+@@ -5,6 +5,7 @@ declare(strict_types=1);
+ namespace Drupal\babel;
+ 
+ use Drupal\babel\Model\StringTranslation;
++use Drupal\babel\Plugin\Babel\TranslationTypePluginManager;
+ use Drupal\Core\Database\Connection;
+ 
+ /**
+@@ -16,6 +17,7 @@ class BabelStringsRepository implements BabelStringsRepositoryInterface {
+     protected readonly Connection $db,
+     protected readonly StringsCollectorFactory $collectorFactory,
+     protected readonly BabelLockServiceInterface $lockService,
++    protected readonly TranslationTypePluginManager $translationTypeManager,
+   ) {}
+ 
+   /**
+@@ -25,12 +27,13 @@ class BabelStringsRepository implements BabelStringsRepositoryInterface {
+     string $langcode,
+     ?bool $translationStatus = NULL,
+     ?string $search = NULL,
++    ?string $context = NULL,
+     ?bool $sourceStatus = NULL,
+   ): array {
+     $stringsCollector = $this->collectorFactory->get($langcode);
+ 
+     $query = $this->db->select('babel_source')
+-      ->fields('babel_source', ['hash', 'status'])
++      ->fields('babel_source', ['hash'])
+       ->orderBy('sort_key');
+ 
+     // A specific status is requested by the caller.
+@@ -43,35 +46,47 @@ class BabelStringsRepository implements BabelStringsRepositoryInterface {
+       'babel_source.hash = bsl.hash AND bsl.langcode = :langcode',
+       [':langcode' => $langcode]
+     );
+-    $query->addField('bsl', 'hash', 'locked_hash');
++    $query->addExpression('IF(bsl.hash IS NOT NULL, 1, 0)', 'locked');
+ 
+     $strings = [];
+     foreach ($query->execute()->fetchAll() as $row) {
+-      $hash = $row->hash;
+-      $status = $row->status;
+-      $value = $stringsCollector->get($hash);
++      $value = $stringsCollector->get($row->hash);
+       if ($value === NULL) {
+         // Safeguard against malformed cache entries.
+         continue;
+       }
+ 
+       $string = StringTranslation::fromArray($value);
+-      $string->source->setStatus((bool) $status);
+ 
+       // Set locked status if there's a lock record.
+-      $string->source->setLocked(!empty($row->locked_hash));
++      if ($row->locked) {
++        $string->lock();
++      }
++      else {
++        $string->unlock();
++      }
+ 
+       if (
+         $this->getTranslationConditions($string, $translationStatus) &&
+-        $this->getSearchCondition($string, $search)
++        $this->getSearchCondition($string, $search) &&
++        $this->getContextCondition($string, $context)
+       ) {
+-        $strings[$hash] = $string;
++        $strings[$row->hash] = $string;
+       }
+     }
+ 
+     return $strings;
+   }
+ 
++  /**
++   * {@inheritdoc}
++   */
++  public function getStringTranslationByHash(string $langcode, string $hash): ?StringTranslation {
++    $value = $this->collectorFactory->get($langcode)->get($hash);
++    // Safeguard against malformed cache entries.
++    return $value ? StringTranslation::fromArray($value) : NULL;
++  }
++
+   /**
+    * Checks if the 'translated string' condition is satisfied.
+    *
+@@ -119,4 +134,19 @@ class BabelStringsRepository implements BabelStringsRepositoryInterface {
+     return $sourceContains || $translationContains;
+   }
+ 
++  /**
++   * Checks if the search for context condition is satisfied.
++   *
++   * @param \Drupal\babel\Model\StringTranslation $string
++   *   The string object (translated or not).
++   * @param string|null $context
++   *   The source context to filter on. If NULL is passed no filtering occurs.
++   *
++   * @return bool
++   *   Whether the context condition is satisfied.
++   */
++  protected function getContextCondition(StringTranslation $string, ?string $context): bool {
++    return $context === NULL || $string->source->context === $context;
++  }
++
+ }
+diff --git a/src/BabelStringsRepositoryInterface.php b/src/BabelStringsRepositoryInterface.php
+index 56c3b00b66833d7aba427ff95d8c5a3acecd94b2..692c30d4a5f8a3903cb27a8e348ed0f622e4341c 100644
+--- a/src/BabelStringsRepositoryInterface.php
++++ b/src/BabelStringsRepositoryInterface.php
+@@ -4,6 +4,8 @@ declare(strict_types=1);
+ 
+ namespace Drupal\babel;
+ 
++use Drupal\babel\Model\StringTranslation;
++
+ /**
+  * Interface for strings repository service.
+  */
+@@ -21,6 +23,8 @@ interface BabelStringsRepositoryInterface {
+    *   A string which should appear either in the source string or in the
+    *   translation, if there is any. Optional, defaults to NULL which means no
+    *   filtering. Check is case-insensitive.
++   * @param string|null $context
++   *   The source string context. Defaults to NULL which means no filtering.
+    * @param bool|null $sourceStatus
+    *   (optional) The status of the source string object to filter for. Defaults
+    *   to NULL which means no filtering.
+@@ -33,7 +37,21 @@ interface BabelStringsRepositoryInterface {
+     string $langcode,
+     ?bool $translationStatus = NULL,
+     ?string $search = NULL,
++    ?string $context = NULL,
+     ?bool $sourceStatus = NULL,
+   ): array;
+ 
++  /**
++   * Returns a string translation object given a language and the source hash.
++   *
++   * @param string $langcode
++   *   The code of the language for which to retrieve the string translation.
++   * @param string $hash
++   *   The source string hash.
++   *
++   * @return \Drupal\babel\Model\StringTranslation|null
++   *   The string translation object, ot NULL if none can be found.
++   */
++  public function getStringTranslationByHash(string $langcode, string $hash): ?StringTranslation;
++
+ }
+diff --git a/src/BackwardsCompatibilityHelper.php b/src/BackwardsCompatibilityHelper.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..79888cac531125321a3c18f445cc73cfeb7bfbe8
+--- /dev/null
++++ b/src/BackwardsCompatibilityHelper.php
+@@ -0,0 +1,53 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\babel;
++
++use Drupal\Component\Utility\DeprecationHelper;
++use Drupal\Core\Database\Statement\FetchAs;
++
++/**
++ * Backwards-compatibility layer.
++ *
++ * @todo Remove once Drupal <11.2.0 support is dropped.
++ */
++class BackwardsCompatibilityHelper {
++
++  /**
++   * Provides a backwards-compatibility layer for PDO fetch mode.
++   *
++   * @param int $fetchMode
++   *   The fetch mode.
++   *
++   * @return \Drupal\Core\Database\Statement\FetchAs|int
++   *   The fetch mode either as an enum or as an integer.
++   *
++   * @see https://www.drupal.org/node/3488338
++   *
++   * @phpstan-ignore-next-line
++   */
++  public static function fetchMode(int $fetchMode): FetchAs|int {
++    return DeprecationHelper::backwardsCompatibleCall(
++      currentVersion: \Drupal::VERSION,
++      deprecatedVersion: '11.2.0',
++      currentCallable: function () use ($fetchMode): mixed {
++        return match ($fetchMode) {
++          // @phpstan-ignore class.notFound
++          \PDO::FETCH_ASSOC => FetchAs::Associative,
++          // @phpstan-ignore class.notFound
++          \PDO::FETCH_CLASS, \PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE => FetchAs::ClassObject,
++          // @phpstan-ignore class.notFound
++          \PDO::FETCH_COLUMN => FetchAs::Column,
++          // @phpstan-ignore class.notFound
++          \PDO::FETCH_NUM => FetchAs::List,
++          // @phpstan-ignore class.notFound
++          \PDO::FETCH_OBJ => FetchAs::Object,
++          default => throw new \RuntimeException("Fetch mode '$fetchMode' is not supported. Use supported modes only."),
++        };
++      },
++      deprecatedCallable: fn(): int => $fetchMode,
++    );
++  }
++
++}
+diff --git a/src/Event/SourceStringDisabled.php b/src/Event/SourceStringDisabled.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..421bf605a9ef0862b67483135596bd93d67cfb30
+--- /dev/null
++++ b/src/Event/SourceStringDisabled.php
+@@ -0,0 +1,10 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\babel\Event;
++
++/**
++ * Event triggered when a source string is disabled.
++ */
++class SourceStringDisabled extends SourceStringStatusChangedBase {}
+diff --git a/src/Event/SourceStringEnabled.php b/src/Event/SourceStringEnabled.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..6c22ac17b4092d5c18f81cbce670c824c098333f
+--- /dev/null
++++ b/src/Event/SourceStringEnabled.php
+@@ -0,0 +1,10 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\babel\Event;
++
++/**
++ * Event triggered when a source string is enabled.
++ */
++class SourceStringEnabled extends SourceStringStatusChangedBase {}
+diff --git a/src/Event/SourceStringInserted.php b/src/Event/SourceStringInserted.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..c30acf6897cbb972548e86c9f6dbe2bd8659ff71
+--- /dev/null
++++ b/src/Event/SourceStringInserted.php
+@@ -0,0 +1,27 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\babel\Event;
++
++use Symfony\Contracts\EventDispatcher\Event;
++
++/**
++ * Triggered after a list of sources is inserted in the Babel table.
++ */
++class SourceStringInserted extends Event {
++
++  /**
++   * Constructs a new event object.
++   *
++   * @param string[] $hashes
++   *   List of hashes added to the Babel storage.
++   * @param string $pluginId
++   *   The plugin that caused the additions.
++   */
++  public function __construct(
++    public readonly array $hashes,
++    public readonly string $pluginId,
++  ) {}
++
++}
+diff --git a/src/Event/SourceStringStatusChangedBase.php b/src/Event/SourceStringStatusChangedBase.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..f8dde51e94566af28b025861f2e277acd0949635
+--- /dev/null
++++ b/src/Event/SourceStringStatusChangedBase.php
+@@ -0,0 +1,14 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\babel\Event;
++
++/**
++ * Base class for status change events.
++ */
++abstract class SourceStringStatusChangedBase {
++
++  public function __construct(public readonly string $hash) {}
++
++}
+diff --git a/src/Event/TranslationLockChangedBase.php b/src/Event/TranslationLockChangedBase.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..d56ac25ab1eadc2437d0bfed2a66332cde2090e1
+--- /dev/null
++++ b/src/Event/TranslationLockChangedBase.php
+@@ -0,0 +1,19 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\babel\Event;
++
++use Symfony\Contracts\EventDispatcher\Event;
++
++/**
++ * Base class for translation locked events.
++ */
++abstract class TranslationLockChangedBase extends Event {
++
++  public function __construct(
++    public readonly string $hash,
++    public readonly string $langcode,
++  ) {}
++
++}
+diff --git a/src/Event/TranslationLocked.php b/src/Event/TranslationLocked.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..c8567f0afd4c809f2a47272e8fc22e57e3db29e7
+--- /dev/null
++++ b/src/Event/TranslationLocked.php
+@@ -0,0 +1,10 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\babel\Event;
++
++/**
++ * Triggered after a translation was locked.
++ */
++class TranslationLocked extends TranslationLockChangedBase {}
+diff --git a/src/Event/TranslationUnlocked.php b/src/Event/TranslationUnlocked.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..3167e3326d11e3103b186e9a89f00d7ca1679c59
+--- /dev/null
++++ b/src/Event/TranslationUnlocked.php
+@@ -0,0 +1,10 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\babel\Event;
++
++/**
++ * Triggered after a translation was unlocked.
++ */
++class TranslationUnlocked extends TranslationLockChangedBase {}
+diff --git a/src/Form/BabelExportForm.php b/src/Form/BabelExportForm.php
+index 08e987ad7962e97115b19c91caa6acb16fcc4a88..0d2dc50e35d1047cdf6b3ca9729d0164815830b3 100644
+--- a/src/Form/BabelExportForm.php
++++ b/src/Form/BabelExportForm.php
+@@ -117,7 +117,7 @@ class BabelExportForm extends FormBase {
+ 
+     // Filter out locked strings.
+     $strings = array_filter($allStrings, function ($string) {
+-      return !$string->source->isLocked();
++      return !$string->isLocked();
+     });
+ 
+     $plugin = $this->dataTransferManager->createInstance($form_state->getValue('plugin'));
+diff --git a/src/Form/BabelTranslateForm.php b/src/Form/BabelTranslateForm.php
+index 2fd7fa9afa68a667ae1d3cd6d1aa278f4ae5f408..02a7974657ae59a714924bf69cdc1e1325ba5999 100644
+--- a/src/Form/BabelTranslateForm.php
++++ b/src/Form/BabelTranslateForm.php
+@@ -77,8 +77,12 @@ class BabelTranslateForm extends FormBase {
+     };
+     $stringStatus = $includeInactive ? NULL : TRUE;
+     $all = $selectedLangcode
+-      ? $this->stringsRepository->getStrings($selectedLangcode, $translationStatusArg, $search, $stringStatus)
+-      : [];
++      ? $this->stringsRepository->getStrings(
++        langcode: $selectedLangcode,
++        translationStatus: $translationStatusArg,
++        search: $search,
++        sourceStatus: $stringStatus,
++      ) : [];
+     $pager = $this->pagerManager->getPager() ?: $this->pagerManager->createPager(count($all), static::LIMIT);
+     if ($pager->getTotalItems() !== count($all)) {
+       // We have to reinitialize the pager.
+@@ -397,7 +401,7 @@ class BabelTranslateForm extends FormBase {
+     ];
+ 
+     // Add lock/unlock toggle button.
+-    $isLocked = $string->source->isLocked();
++    $isLocked = $string->isLocked();
+     $lockClasses = $isLocked
+       ? ['use-ajax-submit', 'babel-lock-button', 'locked']
+       : ['use-ajax-submit', 'babel-lock-button'];
+@@ -552,7 +556,7 @@ class BabelTranslateForm extends FormBase {
+     $response = new AjaxResponse();
+ 
+     if ($hash && $langcode && $string) {
+-      $this->toggleTranslationLock($hash, $langcode, $string->source->isLocked());
++      $this->toggleTranslationLock($hash, $langcode, $string->isLocked());
+     }
+ 
+     $formSelector = 'form[data-babel-form-id="' . $form['#attributes']['data-babel-form-id'] . '"]';
+@@ -636,7 +640,7 @@ class BabelTranslateForm extends FormBase {
+         $stringKey = array_reverse($trigger['#array_parents'])[1];
+         $string = $form_state->get('strings')[$stringKey] ?? NULL;
+         if ($string) {
+-          $this->toggleTranslationLock($stringKey, $langcode, $string->source->isLocked());
++          $this->toggleTranslationLock($stringKey, $langcode, $string->isLocked());
+         }
+         return;
+ 
+diff --git a/src/Model/Source.php b/src/Model/Source.php
+index bd3562abe9676c8c805aec5efead63ad508dbfd0..d15add57fa03caa4f570172cb706024239754d58 100644
+--- a/src/Model/Source.php
++++ b/src/Model/Source.php
+@@ -4,6 +4,7 @@ declare(strict_types=1);
+ 
+ namespace Drupal\babel\Model;
+ 
++use Drupal\Component\Gettext\PoItem;
+ use Drupal\Component\Transliteration\PhpTransliteration;
+ 
+ /**
+@@ -13,25 +14,14 @@ class Source {
+ 
+   /**
+    * The hash of the source.
+-   *
+-   * @var string
+    */
+   protected string $hash;
+ 
+   /**
+    * The value to use when sorting source objects.
+-   *
+-   * @var string
+    */
+   protected string $sortKey;
+ 
+-  /**
+-   * Whether this translation is locked (transient, populated per-language).
+-   *
+-   * @var bool
+-   */
+-  protected bool $locked = FALSE;
+-
+   public function __construct(
+     public readonly string $string,
+     public readonly string $context,
+@@ -73,29 +63,6 @@ class Source {
+     return $this;
+   }
+ 
+-  /**
+-   * Sets the locked status.
+-   *
+-   * @param bool $locked
+-   *   The locked status to set.
+-   *
+-   * @return $this
+-   */
+-  public function setLocked(bool $locked): self {
+-    $this->locked = $locked;
+-    return $this;
+-  }
+-
+-  /**
+-   * Returns the locked status of this string translation.
+-   *
+-   * @return bool
+-   *   The current locked status.
+-   */
+-  public function isLocked(): bool {
+-    return $this->locked;
+-  }
+-
+   /**
+    * Returns a unique identifier for the source string.
+    *
+@@ -119,6 +86,9 @@ class Source {
+     if (!isset($this->sortKey)) {
+       $this->sortKey = strip_tags($this->string) . ':' . $this->context;
+ 
++      // Replace plural delimiter special character with space.
++      $this->sortKey = str_replace(PoItem::DELIMITER, ' ', $this->sortKey);
++
+       // Replace chars such as \n, \t, \r with space.
+       $this->sortKey = preg_replace('/\s/', ' ', $this->sortKey);
+ 
+@@ -134,7 +104,7 @@ class Source {
+       $this->sortKey = preg_replace('#^[^a-z0-9]+([a-z0-9].*)$#i', '$1', $this->sortKey);
+ 
+       // 64 characters limit is enough to show a decent sorting for humans.
+-      return substr($this->sortKey, 0, 64);
++      $this->sortKey = substr($this->sortKey, 0, 64);
+     }
+ 
+     return $this->sortKey;
+@@ -160,7 +130,7 @@ class Source {
+   /**
+    * Creates a source instance out of an array.
+    *
+-   * @param array{source: string, context: string, status?: bool|null} $values
++   * @param array{string: string, context: string, status?: bool|null} $values
+    *   The input array.
+    *
+    * @return $this
+diff --git a/src/Model/StringTranslation.php b/src/Model/StringTranslation.php
+index 012bf509d4b26d0cdff2a727280b6ee0100ded62..246aebab7a0c5b213147d85c219afcad34bb80bd 100644
+--- a/src/Model/StringTranslation.php
++++ b/src/Model/StringTranslation.php
+@@ -18,10 +18,13 @@ class StringTranslation {
+    *   The source string object.
+    * @param \Drupal\babel\Model\Translation|null $translation
+    *   The translation string object.
++   * @param bool $locked
++   *   Whether this translation is locked.
+    */
+   public function __construct(
+     public readonly Source $source,
+     protected ?Translation $translation = NULL,
++    protected bool $locked = FALSE,
+   ) {}
+ 
+   /**
+@@ -87,6 +90,36 @@ class StringTranslation {
+     return $this->translation ? explode(PoItem::DELIMITER, (string) $this->translation->string) : [];
+   }
+ 
++  /**
++   * Locks this translation.
++   *
++   * @return $this
++   */
++  public function lock(): self {
++    $this->locked = TRUE;
++    return $this;
++  }
++
++  /**
++   * Unlocks this translation.
++   *
++   * @return $this
++   */
++  public function unlock(): self {
++    $this->locked = FALSE;
++    return $this;
++  }
++
++  /**
++   * Returns the locked status of this string translation.
++   *
++   * @return bool
++   *   The current locked status.
++   */
++  public function isLocked(): bool {
++    return $this->locked;
++  }
++
+   /**
+    * Returns an array representation of the object.
+    *
+diff --git a/src/Plugin/Babel/TranslationType/Config.php b/src/Plugin/Babel/TranslationType/Config.php
+index 363a74ce19ddf3832dde307add3fbbdf62ca2ce3..16b6f512fe949f05744969b4af0022acd3d0e688 100644
+--- a/src/Plugin/Babel/TranslationType/Config.php
++++ b/src/Plugin/Babel/TranslationType/Config.php
+@@ -11,12 +11,15 @@ use Drupal\babel\Model\StringTranslation;
+ use Drupal\babel\Model\Translation;
+ use Drupal\babel\Plugin\Babel\TranslationType;
+ use Drupal\babel\Plugin\Babel\TranslationTypePluginBase;
++use Drupal\babel\Plugin\Babel\TranslationTypePluginManager;
+ use Drupal\babel\StringsCollectorFactory;
+ use Drupal\Component\Utility\NestedArray;
+ use Drupal\Core\Config\ConfigFactoryInterface;
+ use Drupal\Core\Config\StorageCacheInterface;
+ use Drupal\Core\StringTranslation\TranslatableMarkup;
+ use Drupal\language\ConfigurableLanguageManagerInterface;
++use Drupal\locale\SourceString;
++use Drupal\locale\StringStorageInterface;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+ 
+ /**
+@@ -38,6 +41,8 @@ class Config extends TranslationTypePluginBase {
+     protected readonly ConfigurableLanguageManagerInterface $languageManager,
+     protected readonly ConfigFactoryInterface $configFactory,
+     protected readonly BabelConfigTranslatables $configTranslatables,
++    protected readonly TranslationTypePluginManager $translationTypeManager,
++    protected readonly StringStorageInterface $localeStringStorage,
+   ) {
+     parent::__construct($configuration, $pluginId, $pluginDefinition, $babelStorage, $collectorFactory);
+   }
+@@ -56,6 +61,8 @@ class Config extends TranslationTypePluginBase {
+       $container->get('language_manager'),
+       $container->get('config.factory'),
+       $container->get(BabelConfigTranslatables::class),
++      $container->get(TranslationTypePluginManager::class),
++      $container->get('locale.storage'),
+     );
+   }
+ 
+@@ -63,16 +70,12 @@ class Config extends TranslationTypePluginBase {
+    * {@inheritdoc}
+    */
+   public function getStrings(string $langcode, array $ids = []): array {
+-    // @todo Consider replacing and simplifying this with high level API calls
+-    //   in https://drupal.org/i/3535124.
+-    if (!$ids) {
+-      $ids = $this->babelStorage->getBaseQuery($this->getPluginId())->execute()->fetchAllKeyed(0, 0);
+-    }
++    $list = $pathsByName = $status = [];
+ 
+-    $list = $pathsByName = [];
+-    foreach ($ids as $id) {
+-      [$name, $path] = explode(':', $id, 2);
++    foreach ($this->getStringsFromDatabase($ids)->execute()->fetchAll() as $row) {
++      [$name, $path] = explode(':', $row->id, 2);
+       $pathsByName[$name][] = explode('.', $path);
++      $status[$row->id] = (bool) $row->status;
+     }
+ 
+     $names = array_keys($pathsByName);
+@@ -81,7 +84,7 @@ class Config extends TranslationTypePluginBase {
+     $translations = $storage->readMultiple($names) ?: [];
+ 
+     foreach ($pathsByName as $name => $paths) {
+-      // Skip if configuration doesn't exist.
++      // Skip if the configuration doesn't exist.
+       if (!isset($sources[$name])) {
+         continue;
+       }
+@@ -92,10 +95,12 @@ class Config extends TranslationTypePluginBase {
+         $translation = NestedArray::getValue($configTranslations, $path);
+         $pathAsString = implode('.', $path);
+ 
+-        $list["$name:$pathAsString"] = new StringTranslation(
++        $id = "$name:$pathAsString";
++        $list[$id] = new StringTranslation(
+           source: new Source(
+             string: NestedArray::getValue($sources[$name], $path),
+             context: $translatables[$pathAsString],
++            status: $status[$id],
+           ),
+           translation: $translation ? new Translation(
+             language: $langcode,
+@@ -123,6 +128,19 @@ class Config extends TranslationTypePluginBase {
+     $override->save();
+     $this->configFactory->reset();
+ 
++    // Config shipped by core or modules is stored also in the Locale tables.
++    if ($this->configFactory->get($name)->get('_core.default_config_hash')) {
++      $sourceString = $this->localeStringStorage->findString([
++        'source' => $string->source->string,
++        'context' => $string->source->context,
++      ]);
++      if ($sourceString instanceof SourceString) {
++        $lid = (string) $sourceString->getId();
++        $this->translationTypeManager->createInstance('locale')
++          ->updateTranslation($string, $lid, $langcode, $translation);
++      }
++    }
++
+     parent::updateTranslation($string, $id, $langcode, $translation);
+   }
+ 
+diff --git a/src/Plugin/Babel/TranslationType/Locale.php b/src/Plugin/Babel/TranslationType/Locale.php
+index d95af6d399871af069501ed69071284ed592af80..f9077dbc97779da043acc264154b94532c81b41f 100644
+--- a/src/Plugin/Babel/TranslationType/Locale.php
++++ b/src/Plugin/Babel/TranslationType/Locale.php
+@@ -6,14 +6,13 @@ namespace Drupal\babel\Plugin\Babel\TranslationType;
+ 
+ use Drupal\babel\BabelLockServiceInterface;
+ use Drupal\babel\BabelStorageInterface;
++use Drupal\babel\BackwardsCompatibilityHelper;
+ use Drupal\babel\Model\Source;
+ use Drupal\babel\Model\StringTranslation;
+ use Drupal\babel\Model\Translation;
+ use Drupal\babel\Plugin\Babel\TranslationType;
+ use Drupal\babel\Plugin\Babel\TranslationTypePluginBase;
+ use Drupal\babel\StringsCollectorFactory;
+-use Drupal\Component\Utility\DeprecationHelper;
+-use Drupal\Core\Database\Statement\FetchAs;
+ use Drupal\Core\StringTranslation\TranslatableMarkup;
+ use Drupal\locale\StringStorageInterface;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+@@ -58,9 +57,7 @@ class Locale extends TranslationTypePluginBase {
+    * {@inheritdoc}
+    */
+   public function getStrings(string $langcode, array $ids = []): array {
+-    $query = $this->babelStorage->getBaseQuery($this->getPluginId(), $ids)
+-      ->fields('bs', ['status']);
+-
++    $query = $this->getStringsFromDatabase($ids);
+     $query->innerJoin('locales_source', 'ls', 'bsi.id = ls.lid');
+     $query->fields('ls', ['source', 'context']);
+     if ($ids) {
+@@ -69,22 +66,8 @@ class Locale extends TranslationTypePluginBase {
+     $query->leftJoin('locales_target', 'lt', 'ls.lid = lt.lid AND lt.language = :langcode', [':langcode' => $langcode]);
+     $query->fields('lt', ['translation']);
+ 
+-    // @todo Remove when Drupal 11.2 is the minimum supported core version.
+-    $mode = DeprecationHelper::backwardsCompatibleCall(
+-      currentVersion: \Drupal::VERSION,
+-      deprecatedVersion: '11.2',
+-      // This enum only exists in Drupal core 11.2+.
+-      // @phpstan-ignore-next-line
+-      currentCallable: fn() => FetchAs::Associative,
+-      deprecatedCallable: fn() => \PDO::FETCH_ASSOC,
+-    );
+-
+     return array_map(
+       function (array $row) use ($langcode): StringTranslation {
+-        $row['plugin'] = $this->getPluginId();
+-        $row['sortKey'] = $row['sort_key'];
+-        unset($row['sort_key']);
+-
+         return new StringTranslation(
+           source: new Source(
+             string: $row['source'],
+@@ -97,7 +80,7 @@ class Locale extends TranslationTypePluginBase {
+           ) : NULL,
+         );
+       },
+-      $query->execute()->fetchAllAssoc('id', $mode),
++      $query->execute()->fetchAllAssoc('id', BackwardsCompatibilityHelper::fetchMode(\PDO::FETCH_ASSOC)),
+     );
+   }
+ 
+diff --git a/src/Plugin/Babel/TranslationTypePluginBase.php b/src/Plugin/Babel/TranslationTypePluginBase.php
+index 7e92e22c1407ef0b0bf021da26abdf9c6edfa039..c7720771132f2c76d31648f79b04da4ba505cfe8 100644
+--- a/src/Plugin/Babel/TranslationTypePluginBase.php
++++ b/src/Plugin/Babel/TranslationTypePluginBase.php
+@@ -8,6 +8,7 @@ use Drupal\babel\BabelStorageInterface;
+ use Drupal\babel\Model\StringTranslation;
+ use Drupal\babel\Model\Translation;
+ use Drupal\babel\StringsCollectorFactory;
++use Drupal\Core\Database\Query\SelectInterface;
+ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+ use Drupal\Core\Plugin\PluginBase;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+@@ -74,4 +75,24 @@ abstract class TranslationTypePluginBase extends PluginBase implements Translati
+     return [];
+   }
+ 
++  /**
++   * Provides a reusable method to the base query for retrieving strings.
++   *
++   * @param array $ids
++   *   (optional) A list of the IDs to limit the results.
++   *
++   * @return \Drupal\Core\Database\Query\SelectInterface
++   *   List of strings for this plugin.
++   *
++   * @todo Consider replacing and simplifying this with high level API calls
++   *   in https://drupal.org/i/3535124.
++   */
++  protected function getStringsFromDatabase(array $ids = []): SelectInterface {
++    return $this->babelStorage->getBaseQuery(
++      pluginId: $this->getPluginId(),
++      limitToIds: $ids,
++      includeSortKey: FALSE,
++    )->fields('bs', ['status']);
++  }
++
+ }
+diff --git a/src/StringsCollector.php b/src/StringsCollector.php
+index acb4be318a6ff345c536c87fdcfcf10bb2961b6f..b3c167ea5e1d0e9337a85a3e402152f3e07e5936 100644
+--- a/src/StringsCollector.php
++++ b/src/StringsCollector.php
+@@ -43,7 +43,7 @@ class StringsCollector extends CacheCollector {
+       foreach ($this->getPluginStringsForLanguage($pluginId, $this->langcode, $ids) as $string) {
+         // A translated string takes precedence.
+         if (!$value || $string->isTranslated()) {
+-          // Store as array of scalars to avoid serializing class instances.
++          // Store as an array of scalars to avoid serializing class instances.
+           $value = $string->toArray();
+         }
+       }
+diff --git a/tests/modules/babel_test/babel_test.info.yml b/tests/modules/babel_test/babel_test.info.yml
+index 080d4e23997d613987d4f3f56a17e1442ea84fdc..8b9ada814aa2a68b42f499a0981843fd1976f736 100644
+--- a/tests/modules/babel_test/babel_test.info.yml
++++ b/tests/modules/babel_test/babel_test.info.yml
+@@ -1,7 +1,7 @@
+ type: module
+ name: Babel Test
+ description: Babel testing module
+-core_version_requirement: '^10.4 || ^11.1'
++core_version_requirement: "^10.4 || ^11.1 || ^12"
+ package: Testing
+ dependencies:
+   - babel:babel
+diff --git a/tests/modules/babel_test_config/babel_test_config.info.yml b/tests/modules/babel_test_config/babel_test_config.info.yml
+index 080d4e23997d613987d4f3f56a17e1442ea84fdc..8b9ada814aa2a68b42f499a0981843fd1976f736 100644
+--- a/tests/modules/babel_test_config/babel_test_config.info.yml
++++ b/tests/modules/babel_test_config/babel_test_config.info.yml
+@@ -1,7 +1,7 @@
+ type: module
+ name: Babel Test
+ description: Babel testing module
+-core_version_requirement: '^10.4 || ^11.1'
++core_version_requirement: "^10.4 || ^11.1 || ^12"
+ package: Testing
+ dependencies:
+   - babel:babel
+diff --git a/tests/src/Kernel/Plugin/Babel/TranslationType/ConfigTest.php b/tests/src/Kernel/Plugin/Babel/TranslationType/ConfigTest.php
+index 7563a1713dd7f1ff2989a59abc86e8e28a5148c5..96949ce75afa0a44ca0656ae8f79e15c09e6e2c6 100644
+--- a/tests/src/Kernel/Plugin/Babel/TranslationType/ConfigTest.php
++++ b/tests/src/Kernel/Plugin/Babel/TranslationType/ConfigTest.php
+@@ -50,7 +50,7 @@ class ConfigTest extends TranslationTypePluginTestBase {
+     array $stringIds = [],
+     array $expected = [],
+   ): void {
+-    $this->assertEquals(
++    $this->assertEqualsCanonicalizing(
+       $expected,
+       array_keys($this->plugin->getStrings($langcode, $stringIds))
+     );
+diff --git a/tests/src/Kernel/Plugin/Babel/TranslationType/LocaleTest.php b/tests/src/Kernel/Plugin/Babel/TranslationType/LocaleTest.php
+index 862fe91f66d741055d572e5b4f66ce666ab8983d..01f8c55e6f3d8ba2842dc98aac7571d7b20d8d35 100644
+--- a/tests/src/Kernel/Plugin/Babel/TranslationType/LocaleTest.php
++++ b/tests/src/Kernel/Plugin/Babel/TranslationType/LocaleTest.php
+@@ -55,7 +55,7 @@ class LocaleTest extends TranslationTypePluginTestBase {
+     array $stringIds = [],
+     array $expected = [],
+   ): void {
+-    $this->assertEquals(
++    $this->assertEqualsCanonicalizing(
+       $expected,
+       array_map(
+         fn (StringTranslation $translation) => $translation->toArray(),
