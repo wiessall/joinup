@@ -1,0 +1,606 @@
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index d6e47eb6f5bd104ab98264d0ca0f93ee36370aee..f8b2e9855aa9e253c5ae0ae5fa192a597c90967b 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -34,7 +34,7 @@ include:
+ #
+ 
+ variables:
+-  _CSPELL_WORDS: 'webgate'
++  _CSPELL_WORDS: 'webgate,teilnehmen,wirst'
+   DRUPAL_CORE: "$CORE_STABLE"
+   _TARGET_PHP: "$CORE_PHP_MIN"
+   OPT_IN_TEST_NEXT_MINOR: 1
+diff --git a/config/schema/tmgmt_ec_etranslation.schema.yml b/config/schema/tmgmt_ec_etranslation.schema.yml
+index cc10c2da97fd0b96309a3b13874684ae443117f5..6d51cedb79ba60e2ce05f13caa770f3a0ad84399 100644
+--- a/config/schema/tmgmt_ec_etranslation.schema.yml
++++ b/config/schema/tmgmt_ec_etranslation.schema.yml
+@@ -19,3 +19,13 @@ tmgmt.translator.settings.ec_etranslation:
+     use_queue:
+       type: boolean
+       label: 'Queue the process for incoming translations.'
++    non_translatable_parts:
++      type: mapping
++      label: 'Non-translatable text parts'
++      mapping:
++        patterns:
++          type: string
++          label: 'Preserved strings patterns'
++        clean:
++          type: boolean
++          label: 'Remove malformed [notranslate] tags'
+diff --git a/phpstan-baseline.neon b/phpstan-baseline.neon
+index 743647d7063674b6c5cfe5b3590d265db3cbf10e..319cbd142360ebf8d7f43c57fd4f303bbf7690c7 100644
+--- a/phpstan-baseline.neon
++++ b/phpstan-baseline.neon
+@@ -20,6 +20,16 @@ parameters:
+ 			count: 1
+ 			path: tests/src/Functional/ETranslationServiceTest.php
+ 
++		-
++			message: "#^Attribute class PHPUnit\\\\Framework\\\\Attributes\\\\CoversClass does not exist\\.$#"
++			count: 2
++			path: tests/src/Functional/NonTranslatablePartsTest.php
++
++		-
++			message: "#^Attribute class PHPUnit\\\\Framework\\\\Attributes\\\\Group does not exist\\.$#"
++			count: 1
++			path: tests/src/Functional/NonTranslatablePartsTest.php
++
+ 		-
+ 			message: "#^Attribute class PHPUnit\\\\Framework\\\\Attributes\\\\CoversClass does not exist\\.$#"
+ 			count: 1
+@@ -35,6 +45,21 @@ parameters:
+ 			count: 1
+ 			path: tests/src/Unit/CallbackControllerTest.php
+ 
++		-
++			message: "#^Attribute class PHPUnit\\\\Framework\\\\Attributes\\\\CoversClass does not exist\\.$#"
++			count: 1
++			path: tests/src/Unit/NonTranslatableStringsTest.php
++
++		-
++			message: "#^Attribute class PHPUnit\\\\Framework\\\\Attributes\\\\DataProvider does not exist\\.$#"
++			count: 1
++			path: tests/src/Unit/NonTranslatableStringsTest.php
++
++		-
++			message: "#^Attribute class PHPUnit\\\\Framework\\\\Attributes\\\\Group does not exist\\.$#"
++			count: 1
++			path: tests/src/Unit/NonTranslatableStringsTest.php
++
+ 		-
+ 			message: "#^Attribute class PHPUnit\\\\Framework\\\\Attributes\\\\CoversClass does not exist\\.$#"
+ 			count: 1
+diff --git a/src/ETranslationTranslatorUi.php b/src/ETranslationTranslatorUi.php
+index 9ff2da291af0e7ff8d9110a48a7f0aa239583a90..305ce59b5080ee2d0de6c1889fcc5e653a5b0ea0 100644
+--- a/src/ETranslationTranslatorUi.php
++++ b/src/ETranslationTranslatorUi.php
+@@ -4,6 +4,7 @@ declare(strict_types=1);
+ 
+ namespace Drupal\tmgmt_ec_etranslation;
+ 
++use Drupal\Core\Config\ImmutableConfig;
+ use Drupal\Core\Form\FormStateInterface;
+ use Drupal\Core\Render\Element;
+ use Drupal\tmgmt\TranslatorPluginUiBase;
+@@ -61,23 +62,56 @@ class ETranslationTranslatorUi extends TranslatorPluginUiBase {
+       '#description' => $this->t('Queue the process for incoming translations.'),
+     ];
+ 
+-    $config = \Drupal::config($translator->getConfigDependencyName());
+-    foreach (Element::children($form) as $child) {
+-      $key = 'settings.' . $child;
++    $form['non_translatable_parts'] = [
++      '#type' => 'details',
++      '#title' => $this->t('Non-translatable text parts'),
++      'patterns' => [
++        '#type' => 'textarea',
++        '#title' => $this->t('Non-translatable strings patterns'),
++        '#description' => $this->t('Enter one regular expression per line. The translator will ignore all strings that match the regular expression. Regular expressions <strong>should not</strong> be wrapped with delimiters. Lines starting with a hash (#) are considered comments and are ignored.'),
++      ],
++      'clean' => [
++        '#type' => 'checkbox',
++        '#title' => $this->t('Clean-up [notranslate] tags missing opening/closing tag'),
++        '#description' => $this->t('If enabled, the translator will remove [notranslate] tags without a matching closing or opening tag to avoid rejecting the whole translation.'),
++      ],
++    ];
++
++    return $this->prepare($form, \Drupal::config($translator->getConfigDependencyName()));
++  }
++
++  /**
++   * Prepares the form: sets default values and disables overridden fields.
++   *
++   * @param array $element
++   *   The form or a nested form element.
++   * @param \Drupal\Core\Config\ImmutableConfig $config
++   *   The underlying config of the translator entity.
++   * @param array $path
++   *   The path to the configuration key.
++   *
++   * @return array
++   *   The prepared form render array.
++   */
++  protected function prepare(array $element, ImmutableConfig $config, array $path = ['settings']): array {
++    foreach (Element::children($element) as $child) {
++      if (Element::children($element[$child])) {
++        $element[$child] = $this->prepare($element[$child], $config, [...$path, $child]);
++        continue;
++      }
++
++      $key = implode('.', [...$path, $child]);
+       $value = $config->get($key);
+       $original = $config->getOriginal($key, FALSE);
+ 
+       if ($value !== $original) {
+-        $form[$child]['#placeholder'] = $value;
+-        $form[$child]['#disabled'] = TRUE;
+-        $form[$child]['#description'] = $this->t('This config cannot be changed because it is overridden.');
+-      }
+-      else {
+-        $form[$child]['#default_value'] = $value;
++        $element[$child]['#disabled'] = TRUE;
++        $element[$child]['#description'] = $this->t('This config cannot be changed because it is overridden.');
+       }
++      $element[$child]['#default_value'] = $value;
+     }
+ 
+-    return $form;
++    return $element;
+   }
+ 
+   /**
+diff --git a/src/Plugin/tmgmt/Translator/ETranslationTranslator.php b/src/Plugin/tmgmt/Translator/ETranslationTranslator.php
+index a870ba708a73f8ec93d7fb86067ff53f98b83e6b..62d1db15ca355d60cf1d967fb6eab22a7f4ff8ab 100644
+--- a/src/Plugin/tmgmt/Translator/ETranslationTranslator.php
++++ b/src/Plugin/tmgmt/Translator/ETranslationTranslator.php
+@@ -85,6 +85,13 @@ class ETranslationTranslator extends TranslatorPluginBase implements ContainerFa
+    */
+   protected TextValidatorInterface $textValidator;
+ 
++  /**
++   * Static cache of non-translatable parts settings.
++   *
++   * @var array{patterns: list<string>, clean: bool}
++   */
++  protected array $nonTranslatable;
++
+   /**
+    * {@inheritdoc}
+    */
+@@ -116,6 +123,7 @@ class ETranslationTranslator extends TranslatorPluginBase implements ContainerFa
+       'email' => NULL,
+       'callback_hostname' => NULL,
+       'use_queue' => FALSE,
++      'non_translatable_parts' => ['patterns' => '', 'clean' => FALSE],
+     ];
+   }
+ 
+@@ -197,20 +205,22 @@ class ETranslationTranslator extends TranslatorPluginBase implements ContainerFa
+           $data['destinations']['emailDestinations'] = [$email];
+         }
+ 
+-        if ($this->textValidator->isHtml($field['#text'])) {
++        $text = $this->preserveNonTranslatables($field['#text'], $translator);
++
++        if ($this->textValidator->isHtml($text)) {
+           $data['documentToTranslateBase64'] = [
+-            'content' => base64_encode($field['#text']),
++            'content' => base64_encode($text),
+             'format' => 'html',
+           ];
+         }
+-        elseif (!$this->textValidator->canTextToTranslateBeUsed($field['#text'])) {
++        elseif (!$this->textValidator->canTextToTranslateBeUsed($text)) {
+           $data['documentToTranslateBase64'] = [
+-            'content' => base64_encode($field['#text']),
++            'content' => base64_encode($text),
+             'format' => 'txt',
+           ];
+         }
+         else {
+-          $data['textToTranslate'] = $field['#text'];
++          $data['textToTranslate'] = $text;
+         }
+ 
+         try {
+@@ -321,4 +331,96 @@ class ETranslationTranslator extends TranslatorPluginBase implements ContainerFa
+     return $data;
+   }
+ 
++  /**
++   * Prepare the text by wrapping non-translatable parts in [notranslate] tags.
++   *
++   * Site builders are able to configure regular expressions to match parts of
++   * the text that should not be translated. This method wraps the detected
++   * non-translatable parts in [notranslate] tags, which is the eTranslation API
++   * official method to exclude parts of text from translation.
++   *
++   * The method is aware that the incoming text might contain already wrapped
++   * non-translatable parts and will preserve them.
++   *
++   * @param string $text
++   *   The initial text.
++   * @param \Drupal\tmgmt\TranslatorInterface $translator
++   *   The translator entity.
++   *
++   * @return string
++   *   The resulting text.
++   *
++   * @see https://language-tools.ec.europa.eu/dev-corner/additional-resources/tips-and-tricks#notranslate
++   */
++  protected function preserveNonTranslatables(string $text, TranslatorInterface $translator): string {
++    if (!isset($this->nonTranslatable)) {
++      $this->nonTranslatable = $translator->getSetting('non_translatable_parts');
++      // Replace non-Unix line endings.
++      $this->nonTranslatable['patterns'] = str_replace("\r", "\n", $this->nonTranslatable['patterns']);
++      // Convert to array and remove empty lines.
++      $this->nonTranslatable['patterns'] = array_filter(
++        array_map('trim', explode("\n", $this->nonTranslatable['patterns']))
++      );
++      // Accept comments starting with #.
++      $this->nonTranslatable['patterns'] = array_filter(
++        $this->nonTranslatable['patterns'],
++        fn(string $pattern): bool => !str_starts_with($pattern, '#'),
++      );
++    }
++
++    foreach ($this->nonTranslatable['patterns'] as $regexp) {
++      // Match all non-translatable parts that already exist in text before
++      // we're processing. They could be there from the original text or from a
++      // previous regexp replacement.
++      preg_match_all('#\[notranslate](?:(?!\[/notranslate]).)*\[/notranslate]#s', $text, $matches, PREG_OFFSET_CAPTURE);
++
++      $translatable_parts = $non_translatable_parts = [];
++      $index = $offset = 0;
++
++      // Split the text into translatable and non-translatable parts. We'll
++      // assemble back the parts later.
++      foreach ($matches[0] as [$non_translatable, $position]) {
++        $translatable = substr($text, $offset, $position - $offset);
++        $translatable_parts[$index++] = $translatable;
++        $offset += strlen($translatable);
++
++        $non_translatable_parts[$index++] = $non_translatable;
++        $offset += strlen($non_translatable);
++      }
++      // Potential translatable part after the last non-translatable match or
++      // there are no non-translatable parts at all.
++      if ($offset < strlen($text)) {
++        $translatable_parts[$index] = substr($text, $offset);
++      }
++
++      $regexp = '/' . str_replace('/', '\/', $regexp) . '/';
++      foreach ($translatable_parts as &$translatable) {
++        if ($this->nonTranslatable['clean']) {
++          // According to eTranslation documentation, the presence of an opening
++          // [notranslate] tag without a matching closing [/notranslate] tag
++          // will make the translation fail. At this stage $translatable_parts
++          // might contain [notranslate] tags without a matching closing
++          // [/notranslate], or [/notranslate] closing tags without a matching
++          // opening [notranslate] tag. To avoid failing the translation, we
++          // remove them because, anyway, they are a result of a malformed use.
++          // @see https://language-tools.ec.europa.eu/dev-corner/additional-resources/tips-and-tricks#notranslate
++          $translatable = str_replace(['[notranslate]', '[/notranslate]'], '', $translatable);
++        }
++
++        // Wrap the non-translatable parts in [notranslate] tags.
++        $wrapped = preg_replace($regexp, '[notranslate]${0}[/notranslate]', $translatable);
++        // Ignore a malformed regexp.
++        if ($wrapped !== NULL) {
++          $translatable = $wrapped;
++        }
++      }
++
++      $parts = $translatable_parts + $non_translatable_parts;
++      ksort($parts);
++      $text = implode('', $parts);
++    }
++
++    return $text;
++  }
++
+ }
+diff --git a/src/TranslationResponseProcessor.php b/src/TranslationResponseProcessor.php
+index 87bc50f514c6bdae95eb52abab49751151b91c02..1ce9b7b0805e833b60a7e8be1bc64455e0ff902d 100644
+--- a/src/TranslationResponseProcessor.php
++++ b/src/TranslationResponseProcessor.php
+@@ -83,6 +83,9 @@ class TranslationResponseProcessor implements TranslationResponseProcessorInterf
+       $translation['#text'] = $response;
+     }
+ 
++    // Remove the [notranslate] and [/notranslate] tags.
++    $translation['#text'] = str_replace(['[notranslate]', '[/notranslate]'], '', $translation['#text']);
++
+     $this->logger->notice('Translation received for job item @id: @translation', [
+       '@id' => $jobItem->id(),
+       '@translation' => $translation['#text'],
+diff --git a/tests/modules/tmgmt_ec_etranslation_test/src/Plugin/ServiceMock/ETranslationMock.php b/tests/modules/tmgmt_ec_etranslation_test/src/Plugin/ServiceMock/ETranslationMock.php
+index 7ff859bf2bda67109b43459d28ce1894559df764..a4623394ca18503a71b91758fc8b871438300b09 100644
+--- a/tests/modules/tmgmt_ec_etranslation_test/src/Plugin/ServiceMock/ETranslationMock.php
++++ b/tests/modules/tmgmt_ec_etranslation_test/src/Plugin/ServiceMock/ETranslationMock.php
+@@ -175,7 +175,10 @@ class ETranslationMock extends PluginBase implements ServiceMockPluginInterface,
+    *   Translated string.
+    */
+   public static function translate(string $text, string $sourceLanguage, string $targetLanguage): string {
+-    return $text . ' ' . strtolower($sourceLanguage . ' ' . $targetLanguage);
++    return match($text) {
++      'Hi [notranslate][user:name][/notranslate], will you be attending the [notranslate]@event[/notranslate] event on [notranslate][date:custom:Y-m-d][/notranslate]?' => 'Hallo [notranslate][user:name][/notranslate], wirst du an der [notranslate]@event[/notranslate] am [notranslate][date:custom:Y-m-d][/notranslate] teilnehmen?',
++      default => $text . ' ' . strtolower($sourceLanguage . ' ' . $targetLanguage),
++    };
+   }
+ 
+ }
+diff --git a/tests/src/Functional/NonTranslatablePartsTest.php b/tests/src/Functional/NonTranslatablePartsTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..85426f54cedaa0b6862a9f55ef5b85eb63229e5e
+--- /dev/null
++++ b/tests/src/Functional/NonTranslatablePartsTest.php
+@@ -0,0 +1,100 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\tmgmt_ec_etranslation\Functional;
++
++use Drupal\Tests\tmgmt\Functional\TMGMTTestBase;
++use Drupal\Tests\tmgmt\Functional\TmgmtEntityTestTrait;
++use Drupal\tmgmt\Entity\JobItem;
++use Drupal\tmgmt\Entity\Translator;
++use Drupal\tmgmt\JobInterface;
++use Drupal\tmgmt\TranslatorInterface;
++use Drupal\tmgmt_ec_etranslation\Controller\CallbackController;
++use Drupal\tmgmt_ec_etranslation\Plugin\tmgmt\Translator\ETranslationTranslator;
++use PHPUnit\Framework\Attributes\CoversClass;
++use PHPUnit\Framework\Attributes\Group;
++
++/**
++ * Integration test for the non-translatable text parts.
++ */
++#[Group('tmgmt_ec_etranslation')]
++#[CoversClass(ETranslationTranslator::class)]
++#[CoversClass(CallbackController::class)]
++class NonTranslatablePartsTest extends TMGMTTestBase {
++
++  use TmgmtEntityTestTrait;
++
++  /**
++   * The translator entity.
++   */
++  protected TranslatorInterface $translator;
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = [
++    'http_request_mock',
++    'tmgmt_content',
++    'tmgmt_ec_etranslation',
++    'tmgmt_ec_etranslation_test',
++  ];
++
++  /**
++   * {@inheritdoc}
++   */
++  public function setUp(): void {
++    parent::setUp();
++
++    $this->addLanguage('de');
++    $this->createNodeType('page', 'Page', TRUE, FALSE);
++
++    $this->translator = (Translator::load(ETranslationTranslator::ID))
++      ->setSetting('username', $this->randomMachineName())
++      ->setSetting('password', $this->randomString())
++      ->setSetting('domain', 'SPD')
++      ->setSetting('use_queue', FALSE)
++      ->setSetting('non_translatable_parts', [
++        'patterns' => <<<PATTERN
++          # Drupal placeholders
++          [@!%][a-zA-Z0-9:_-]+
++          # Drupal tokens
++          \[[a-zA-Z0-9:_-]+\]
++          PATTERN,
++        'clean' => TRUE,
++      ]);
++    $this->translator->save();
++  }
++
++  /**
++   * Tests basic API methods of the plugin.
++   */
++  public function testNonTranslatableParts(): void {
++    $node = $this->createTranslatableNode('page')
++      ->set('title', 'Test page')
++      ->set('body', [
++        'value' => 'Hi [user:name], will you be attending the @event event on [date:custom:Y-m-d]?',
++        'format' => filter_default_format(),
++      ]);
++    $node->save();
++
++    $job = $this->createJob('en', 'de', 0, [
++      'label' => $this->randomString(),
++      'job_type' => JobInterface::TYPE_CONTINUOUS,
++      'translator' => $this->translator->id(),
++    ]);
++    $job->save();
++    $item = $job->addItem('content', 'node', $node->id());
++
++    // Perform translation.
++    $this->assertTrue($job->canRequestTranslation()->getSuccess());
++    $job->requestTranslation();
++
++    $this->assertEquals(2, $job->getCountTranslated());
++
++    $item = JobItem::load($item->id());
++    $translation = $item->getData(['body', 0, 'value', '#translation', '#text']);
++    $this->assertSame('Hallo [user:name], wirst du an der @event am [date:custom:Y-m-d] teilnehmen?', $translation);
++  }
++
++}
+diff --git a/tests/src/Unit/NonTranslatableStringsTest.php b/tests/src/Unit/NonTranslatableStringsTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..d4702d748a54dc2a2094e091c5b8953efb03fb3f
+--- /dev/null
++++ b/tests/src/Unit/NonTranslatableStringsTest.php
+@@ -0,0 +1,160 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\tmgmt_ec_etranslation\Unit;
++
++use Drupal\tmgmt\TranslatorInterface;
++use Drupal\tmgmt_ec_etranslation\Plugin\tmgmt\Translator\ETranslationTranslator;
++use PHPUnit\Framework\Attributes\CoversClass;
++use PHPUnit\Framework\Attributes\DataProvider;
++use PHPUnit\Framework\Attributes\Group;
++use PHPUnit\Framework\TestCase;
++
++/**
++ * Tests non-translatable text chunks.
++ */
++#[Group('tmgmt_ec_etranslation')]
++#[CoversClass(ETranslationTranslator::class)]
++class NonTranslatableStringsTest extends TestCase {
++
++  /**
++   * Tests non-translatable strings.
++   *
++   * @param string $patterns
++   *   A text blob containing one-per-line regular expressions.
++   * @param bool $clean
++   *   Whether to clean the text for malformed [notranslate] tags.
++   * @param string $text
++   *   The text to test.
++   * @param string $expected
++   *   The expected processed text.
++   *
++   * @legacy-covers ::prepareText
++   * @dataProvider nonTranslatableStringsProvider
++   */
++  #[DataProvider('nonTranslatableStringsProvider')]
++  public function testNonTranslatableStrings(string $patterns, bool $clean, string $text, string $expected): void {
++    $translator = $this->createMock(TranslatorInterface::class);
++    $translator
++      ->method('getSetting')
++      ->with('non_translatable_parts')
++      ->willReturn(['patterns' => $patterns, 'clean' => $clean]);
++
++    $method = new \ReflectionMethod(ETranslationTranslator::class, 'preserveNonTranslatables');
++    $actual = $method->invoke(new ETranslationTranslator([], ETranslationTranslator::ID, []), $text, $translator);
++    $this->assertSame($expected, $actual);
++  }
++
++  /**
++   * Provides test data for testNonTranslatableStrings().
++   *
++   * @return iterable
++   *   List of test cases.
++   */
++  public static function nonTranslatableStringsProvider(): iterable {
++    yield 'No filtering' => [
++      "\r\n \n\n   \t",
++      TRUE,
++      'Foo bar baz',
++      'Foo bar baz',
++    ];
++
++    yield 'Drupal placeholders' => [
++      <<<PATTERN
++        # This is a comment
++        [@!%][a-zA-Z0-9:_-]+
++        PATTERN,
++      TRUE,
++      <<<TEXT
++        @foo valid placeholder
++        !bar valid placeholder
++        %baz valid placeholder
++        §qux invalid placeholder
++        TEXT,
++      <<<EXPECTED
++        [notranslate]@foo[/notranslate] valid placeholder
++        [notranslate]!bar[/notranslate] valid placeholder
++        [notranslate]%baz[/notranslate] valid placeholder
++        §qux invalid placeholder
++        EXPECTED,
++    ];
++
++    yield 'Drupal placeholders with non-alphanumeric characters' => [
++      <<<PATTERN
++        # This is a comment
++        [@!%][a-zA-Z0-9:_-]+
++        PATTERN,
++      TRUE,
++      <<<TEXT
++        @foo123_abc:some-placeholder valid placeholder
++        !bar098_xyz:other-placeholder valid placeholder
++        %baz90x_123:more:complex:place-holder_1 valid placeholder
++        §qux111_some invalid placeholder
++        TEXT,
++      <<<EXPECTED
++        [notranslate]@foo123_abc:some-placeholder[/notranslate] valid placeholder
++        [notranslate]!bar098_xyz:other-placeholder[/notranslate] valid placeholder
++        [notranslate]%baz90x_123:more:complex:place-holder_1[/notranslate] valid placeholder
++        §qux111_some invalid placeholder
++        EXPECTED,
++    ];
++
++    yield 'Drupal placeholders and tokens with initial [notranslate] tags' => [
++      <<<PATTERN
++        # Drupal placeholders
++        [@!%][a-zA-Z0-9:_-]+
++        # Drupal tokens
++        \[[a-zA-Z0-9:_-]+\]
++        PATTERN,
++      TRUE,
++      <<<TEXT
++        [notranslate]@place:holder inside
++          non-translatable area 😍[/notranslate],
++        [notranslate][drupal:token] inside
++          non-translatable area[/notranslate],
++        and [notranslate]a 3rd !placeholder in non-translatable area[/notranslate]
++        missing opening tag: [/notranslate] but @qux will be wrapped 👏
++        missing closing tag: [notranslate] but @quux will be wrapped
++        TEXT,
++      <<<EXPECTED
++        [notranslate]@place:holder inside
++          non-translatable area 😍[/notranslate],
++        [notranslate][drupal:token] inside
++          non-translatable area[/notranslate],
++        and [notranslate]a 3rd !placeholder in non-translatable area[/notranslate]
++        missing opening tag:  but [notranslate]@qux[/notranslate] will be wrapped 👏
++        missing closing tag:  but [notranslate]@quux[/notranslate] will be wrapped
++        EXPECTED,
++    ];
++
++    yield 'Drupal placeholders and tokens with initial [notranslate] tags. Preserve malformed tags.' => [
++      <<<PATTERN
++        # Drupal placeholders
++        [@!%][a-zA-Z0-9:_-]+
++        # Drupal tokens
++        \[[a-zA-Z0-9:_-]+\]
++        PATTERN,
++      FALSE,
++      <<<TEXT
++        [notranslate]@place:holder inside
++          non-translatable area 😍[/notranslate],
++        [notranslate][drupal:token] inside
++          non-translatable area[/notranslate],
++        and [notranslate]a 3rd !placeholder in non-translatable area[/notranslate]
++        missing opening tag: [/notranslate] but @qux will be wrapped 👏
++        missing closing tag: [notranslate] but @quux will be wrapped
++        TEXT,
++      <<<EXPECTED
++        [notranslate]@place:holder inside
++          non-translatable area 😍[/notranslate],
++        [notranslate][drupal:token] inside
++          non-translatable area[/notranslate],
++        and [notranslate]a 3rd !placeholder in non-translatable area[/notranslate]
++        missing opening tag: [/notranslate] but [notranslate]@qux[/notranslate] will be wrapped 👏
++        missing closing tag: [notranslate] but [notranslate]@quux[/notranslate] will be wrapped
++        EXPECTED,
++    ];
++  }
++
++}
