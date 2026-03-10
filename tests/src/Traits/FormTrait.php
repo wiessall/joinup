@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Traits;
 
-use PHPUnit\Framework\Assert;
-
 /**
  * Helper methods for dealing with forms.
  */
 trait FormTrait {
+
+  use AssertTrait;
 
   /**
    * Asserts that the given form submission buttons are present on the page.
@@ -39,7 +39,7 @@ trait FormTrait {
     }
 
     if ($strict) {
-      Assert::assertSame($actual_labels, $labels);
+      $this->assertSameValues($actual_labels, $labels);
     }
   }
 

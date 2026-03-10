@@ -8,15 +8,16 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Given;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
-use function PHPUnit\Framework\assertArrayHasKey;
 
 /**
  * Behat step definitions for testing meta entities.
  */
 class MetaEntityContext extends RawDrupalContext {
 
+  use AssertTrait;
   use EntityTrait;
 
   /**
@@ -57,7 +58,7 @@ class MetaEntityContext extends RawDrupalContext {
       'canonical' => 'canonical',
       'edit' => 'edit-form',
     ];
-    assertArrayHasKey($type, $path_types, "The path type '$type' is not supported. One of 'canonical' or 'edit' is expected.");
+    $this->assertCondition(array_key_exists($type, $path_types), "The path type '$type' is not supported. One of 'canonical' or 'edit' is expected.");
 
     $entity_type_mapping = [
       'content' => 'node',

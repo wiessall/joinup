@@ -7,12 +7,12 @@ namespace Drupal\Tests\eu_oss_catalogue\Functional;
 use Behat\Mink\Element\NodeElement;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the OSS solution listing page.
- *
- * @group eu_oss_catalogue
  */
+#[Group('eu_oss_catalogue')]
 class OssSolutionListingPageTest extends FetchTestBase {
 
   /**
