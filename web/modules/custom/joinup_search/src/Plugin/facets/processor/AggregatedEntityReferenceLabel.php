@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_search\Plugin\facets\processor;
 
+use Drupal\Core\Entity\EntityDefinitionUpdateManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\facets\FacetInterface;
 use Drupal\facets\FacetSource\SearchApiFacetSourceInterface;
@@ -36,6 +38,7 @@ class AggregatedEntityReferenceLabel extends ProcessorPluginBase implements Buil
     mixed $plugin_definition,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly LoggerInterface $logger,
+    protected readonly EntityDefinitionUpdateManagerInterface $entityDefinitionUpdateManager,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
@@ -49,7 +52,8 @@ class AggregatedEntityReferenceLabel extends ProcessorPluginBase implements Buil
       $plugin_id,
       $plugin_definition,
       $container->get('entity_type.manager'),
-      $container->get('logger.factory')->get('joinup_core')
+      $container->get('logger.factory')->get('joinup_core'),
+      $container->get('entity.definition_update_manager')
     );
   }
 
@@ -79,8 +83,16 @@ class AggregatedEntityReferenceLabel extends ProcessorPluginBase implements Buil
     // the field definition associated with them.
     $reference_types = [];
     foreach ($field->getConfiguration()['fields'] as $combined_id) {
+      $nested_field_storage = NULL;
       [$datasource_id, $property_path] = Utility::splitCombinedId($combined_id);
       $properties = $index->getPropertyDefinitions($datasource_id);
+      [$referenced_field, $nested_field] = Utility::splitPropertyPath($property_path, FALSE);
+      if (!empty($nested_field)) {
+        $property_path = $referenced_field;
+        [, $nested_field] = Utility::splitPropertyPath($nested_field);
+        [, $entity_type_id] = Utility::splitPropertyPath($datasource_id);
+        $nested_field_storage = $this->entityDefinitionUpdateManager->getFieldStorageDefinition($nested_field, $entity_type_id);
+      }
       if (isset($properties[$property_path])) {
         $property = $properties[$property_path];
 
@@ -90,7 +102,7 @@ class AggregatedEntityReferenceLabel extends ProcessorPluginBase implements Buil
           $property->getType(),
           ['entity_reference', 'og_standard_reference']
         )) {
-          $target_type = $property->getSetting('target_type');
+          $target_type = ($nested_field_storage instanceof FieldStorageDefinitionInterface) ? $nested_field_storage->getSetting('target_type') : $property->getSetting('target_type');
 
           // Ensure that the entry exists in the array.
           $reference_types += [$target_type => 0];
