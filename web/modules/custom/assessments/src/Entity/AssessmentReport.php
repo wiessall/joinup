@@ -48,7 +48,53 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
 
     foreach ($entities as $entity) {
       \assert($entity instanceof static);
+      $orphanCandidates = $entity->collectSolutionCollectorAssets();
       $entity->onDeleteEntityReferenceFieldsOwned();
+      $entity->deleteOrphanedSolutionCollectorAssets($orphanCandidates);
+    }
+  }
+
+  /**
+   * Collects SOLUTION_COLLECTOR assets from the report's requirements.
+   *
+   * @return \Drupal\joinup_solution\Entity\SolutionInterface[]
+   *   Solutions belonging to the SOLUTION_COLLECTOR group, keyed by node ID.
+   */
+  protected function collectSolutionCollectorAssets(): array {
+    $solutions = [];
+    foreach ($this->get('binding_requirement')->referencedEntities() as $bindingRequirement) {
+      foreach ($bindingRequirement->get('asset')->referencedEntities() as $solution) {
+        assert($solution instanceof SolutionInterface);
+        if ($solution->getGroup()->uuid() === AssessmentInterface::SOLUTION_COLLECTOR) {
+          $solutions[$solution->id()] = $solution;
+        }
+      }
+    }
+    return $solutions;
+  }
+
+  /**
+   * Deletes orphaned SOLUTION_COLLECTOR solutions when no longer referenced.
+   *
+   * A solution is considered orphaned if no binding requirement paragraph
+   * still references it via the asset field.
+   *
+   * @param \Drupal\joinup_solution\Entity\SolutionInterface[] $solutions
+   *   Candidate solutions, keyed by node ID.
+   */
+  protected function deleteOrphanedSolutionCollectorAssets(array $solutions): void {
+    $database = \Drupal::database();
+    foreach ($solutions as $solution) {
+      $count = (int) $database
+        ->select('paragraph__asset', 'pa')
+        ->condition('pa.asset_target_id', $solution->id())
+        ->countQuery()
+        ->execute()
+        ->fetchField();
+
+      if ($count === 0) {
+        $solution->delete();
+      }
     }
   }
 
