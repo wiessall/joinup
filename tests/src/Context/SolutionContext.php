@@ -31,7 +31,6 @@ use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
-use PHPUnit\Framework\Assert;
 
 /**
  * Behat step definitions for testing solutions.
@@ -95,10 +94,10 @@ class SolutionContext extends RawDrupalContext {
   public function givenSolutionNewValue(string $fieldName, string $label, string $fieldValue): void {
     $fieldName = $this->getNodeFieldNameFromAlias('solution', $fieldName);
     $solution = static::getEntityByLabel('node', $label, 'solution');
-    Assert::assertInstanceOf(SolutionInterface::class, $solution, "Cannot find any solution with label $label");
+    \assert($solution instanceof SolutionInterface, "Cannot find any solution with label $label");
     $fieldManager = \Drupal::service('entity_field.manager');
     $fieldDefinitions = $fieldManager->getFieldDefinitions('node', 'solution');
-    Assert::assertArrayHasKey($fieldName, $fieldDefinitions, "Field $fieldName does not exist in the solution entity");
+    $this->assertCondition(array_key_exists($fieldName, $fieldDefinitions), "Field $fieldName does not exist in the solution entity.");
 
     // For reference fields, we need to convert the value to the entity ID.
     if ($fieldDefinitions[$fieldName]->getType() === 'entity_reference') {
@@ -112,7 +111,7 @@ class SolutionContext extends RawDrupalContext {
     }
 
     $solution->set($fieldName, $fieldValue);
-    Assert::assertSame(SAVED_UPDATED, $solution->save(), "Solution cannot be updated");
+    $this->assertSameValues(SAVED_UPDATED, $solution->save(), 'Solution cannot be updated.');
   }
 
   /**
@@ -171,11 +170,7 @@ class SolutionContext extends RawDrupalContext {
           continue;
         }
         $group = $this->getEntityByLabel('node', $groupLabel);
-        Assert::assertInstanceOf(
-          GroupInterface::class,
-          $group,
-          "Cannot pin solution {$entity->label()} in $groupLabel since it does not exist or is not a group."
-        );
+        $this->assertCondition($group instanceof GroupInterface, "Cannot pin solution {$entity->label()} in $groupLabel since it does not exist or is not a group.");
         $entity->pin($group);
       }
     }
@@ -187,11 +182,7 @@ class SolutionContext extends RawDrupalContext {
           continue;
         }
         $group = $this->getEntityByLabel('node', $groupLabel);
-        Assert::assertInstanceOf(
-          GroupInterface::class,
-          $group,
-          "Cannot pin solution {$entity->label()} in $groupLabel since it does not exist or is not a group."
-        );
+        $this->assertCondition($group instanceof GroupInterface, "Cannot pin solution {$entity->label()} in $groupLabel since it does not exist or is not a group.");
         $entity->unpin($group);
       }
     }
@@ -309,7 +300,7 @@ class SolutionContext extends RawDrupalContext {
   public function assertTileContainsDownloadCount(string $heading, int $count): void {
     $tile = $this->getTileByHeading($heading);
     $elements = $tile->findAll('xpath', "//span[contains(text(), '$count')]");
-    Assert::assertCount(1, $elements);
+    $this->assertCount(1, $elements);
   }
 
   /**
@@ -325,7 +316,7 @@ class SolutionContext extends RawDrupalContext {
   public function assertTileNotContainsDownloadIcon(string $heading): void {
     $tile = $this->getTileByHeading($heading);
     $elements = $tile->findAll('xpath', '//span[contains(concat(" ", normalize-space(@class), " "), " icon--download ")]');
-    Assert::assertEmpty($elements);
+    $this->assertCondition(empty($elements), 'The download icon should not be shown but it was found.');
   }
 
   /**
@@ -351,7 +342,7 @@ class SolutionContext extends RawDrupalContext {
 
     $actual = $field->getAttribute($attribute);
 
-    Assert::assertSame($expected, $actual);
+    $this->assertSameValues($expected, $actual);
   }
 
   /**
@@ -382,14 +373,9 @@ class SolutionContext extends RawDrupalContext {
       if (!isset($value_mapping[$field])) {
         continue;
       }
-      Assert::assertArrayHasKey(
-        $value,
-        $value_mapping[$field],
-        sprintf(
-          "Value '%s' is not an acceptable value for solution field %s.",
-          $value,
-          $field,
-        )
+      $this->assertCondition(
+        array_key_exists($value, $value_mapping[$field]),
+        sprintf("Value '%s' is not an acceptable value for solution field %s.", $value, $field),
       );
 
       $node->$field = $value_mapping[$field][$value];
@@ -417,7 +403,7 @@ class SolutionContext extends RawDrupalContext {
       // the collection which triggered destruction issues in RDF syncronizer.
       $environment = $scope->getEnvironment();
       $context = $environment->getContext(DrupalContext::class);
-      Assert::assertInstanceOf(DrupalContext::class, $context);
+      \assert($context instanceof DrupalContext);
       $collection = $context->nodeCreate((object) [
         'type' => 'collection',
         'title' => $label,
