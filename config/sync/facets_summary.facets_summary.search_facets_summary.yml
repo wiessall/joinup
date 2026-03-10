@@ -1,0 +1,78 @@
+uuid: 7ad3e4ef-3885-4f71-97b2-d43df90f489e
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.domain
+    - facets.facet.group
+    - facets.facet.interoperable_flag
+    - facets.facet.organisation_country
+    - facets.facet.solution_classification
+    - facets.facet.spatial_coverage
+    - facets.facet.topic
+    - facets.facet.type
+    - facets.facet.type_of_document
+    - search_api.index.published
+    - views.view.search
+  module:
+    - search_api
+id: search_facets_summary
+name: 'Search facets summary'
+facet_source_id: 'search_api:views_page__search__page_1'
+only_visible_when_facet_source_is_visible: true
+processor_configs: {  }
+facets:
+  domain:
+    checked: true
+    label: 'Solution Domain'
+    separator: ', '
+    show_count: false
+    weight: 0
+  group:
+    checked: true
+    label: Collection/Solution
+    separator: ', '
+    show_count: false
+    weight: 0
+  interoperable_flag:
+    checked: true
+    label: 'Interoperable flag'
+    separator: ', '
+    show_count: false
+    weight: 0
+  organisation_country:
+    checked: true
+    label: 'Organisation Country'
+    separator: ', '
+    show_count: false
+    weight: 0
+  solution_classification:
+    checked: true
+    label: 'Solution classification'
+    separator: ', '
+    show_count: false
+    weight: 0
+  spatial_coverage:
+    checked: true
+    label: 'Geographic coverage'
+    separator: ', '
+    show_count: false
+    weight: 0
+  topic:
+    checked: true
+    label: Topics
+    separator: ', '
+    show_count: false
+    weight: 0
+  type:
+    checked: true
+    label: 'Content types'
+    separator: ', '
+    show_count: false
+    weight: 0
+  type_of_document:
+    checked: true
+    label: 'Type of document'
+    separator: ', '
+    show_count: false
+    weight: 0
