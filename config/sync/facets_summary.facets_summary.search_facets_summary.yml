@@ -22,57 +22,57 @@ facet_source_id: 'search_api:views_page__search__page_1'
 only_visible_when_facet_source_is_visible: true
 processor_configs: {  }
 facets:
-  domain:
-    checked: true
-    label: 'Solution Domain'
-    separator: ', '
-    show_count: false
-    weight: 0
-  group:
-    checked: true
-    label: Collection/Solution
-    separator: ', '
-    show_count: false
-    weight: 0
-  interoperable_flag:
-    checked: true
-    label: 'Interoperable flag'
-    separator: ', '
-    show_count: false
-    weight: 0
-  organisation_country:
-    checked: true
-    label: 'Organisation Country'
-    separator: ', '
-    show_count: false
-    weight: 0
   solution_classification:
     checked: true
     label: 'Solution classification'
     separator: ', '
     show_count: false
-    weight: 0
+    weight: -10
   spatial_coverage:
     checked: true
     label: 'Geographic coverage'
     separator: ', '
     show_count: false
-    weight: 0
+    weight: -9
   topic:
     checked: true
     label: Topics
     separator: ', '
     show_count: false
-    weight: 0
+    weight: -8
   type:
     checked: true
     label: 'Content types'
     separator: ', '
     show_count: false
-    weight: 0
+    weight: -7
   type_of_document:
     checked: true
     label: 'Type of document'
     separator: ', '
     show_count: false
-    weight: 0
+    weight: -6
+  group:
+    checked: true
+    label: Collection/Solution
+    separator: ', '
+    show_count: false
+    weight: -5
+  interoperable_flag:
+    checked: true
+    label: 'Interoperable flag'
+    separator: ', '
+    show_count: false
+    weight: -4
+  domain:
+    checked: true
+    label: 'Solution Domain'
+    separator: ', '
+    show_count: false
+    weight: -3
+  organisation_country:
+    checked: true
+    label: 'Organisation Country'
+    separator: ', '
+    show_count: false
+    weight: -2
