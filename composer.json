@@ -345,6 +345,9 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "drupal/babel": {
+                "TMGMT @see https://www.drupal.org/i/3554005": "resources/patch/php/drupal/babel/3554005.mr71-note706700.diff"
+            },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff",
                 "Weekly view doesn't show first week of new year @see https://www.drupal.org/i/3484325": "resources/patch/php/drupal/calendar_view/3484325.comment16152620.patch"
