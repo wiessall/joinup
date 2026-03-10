@@ -8,14 +8,15 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
+use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\EntityTrait;
-use PHPUnit\Framework\Assert;
 
 /**
  * Behat step definitions for testing news pages.
  */
 class JoinupNewsContext extends RawDrupalContext {
 
+  use AssertTrait;
   use EntityTrait;
 
   /**
@@ -35,29 +36,29 @@ class JoinupNewsContext extends RawDrupalContext {
   public function assertLatestNews(TableNode $table): void {
     $columns = $table->getColumnsHash();
     $articles = $this->getSession()->getPage()->findAll('css', '.view-latest-news .tile');
-    Assert::assertEquals(count($columns), count($articles), sprintf('Expected %d articles in the "Latest news" section but found %d articles', count($columns), count($articles)));
+    $this->assertSameValues(count($columns), count($articles), sprintf('Expected %d articles in the "Latest news" section but found %d articles', count($columns), count($articles)));
 
     foreach ($columns as $i => $expected_data) {
       $actual_data = array_shift($articles);
 
       // Check title text.
       $actual_title = $actual_data->find('css', '.tile__title')->getText();
-      Assert::assertEquals($expected_data['title'], $actual_title, sprintf('Expected title "%s" for article %d in the "Latest news" section but instead found "%s".', $expected_data['title'], $i + 1, $actual_title));
+      $this->assertSameValues($expected_data['title'], $actual_title, sprintf('Expected title "%s" for article %d in the "Latest news" section but instead found "%s".', $expected_data['title'], $i + 1, $actual_title));
 
       // Check that title links to the canonical page of the news article.
       $news_node = $this->getEntityByLabel('node', $actual_title, 'news');
       $xpath = '//a[@href = "' . $this->getEntityUri($news_node) . '"]';
-      Assert::assertNotEmpty($actual_data->find('xpath', $xpath), sprintf('Article "%s" does not link to the canonical news page.', $actual_title));
+      $this->assertCondition(!empty($actual_data->find('xpath', $xpath)), sprintf('Article "%s" does not link to the canonical news page.', $actual_title));
 
       // Check that the correct number of topics are present.
       $expected_topic_titles = array_map('trim', explode(',', $expected_data['topics']));
       $topic_elements = $actual_data->findAll('css', '.tile__body .badge');
-      Assert::assertEquals(count($expected_topic_titles), count($topic_elements), sprintf('Expected %d topics for the "%s" article in the "Latest news" section but found %d topics.', count($expected_topic_titles), $expected_data['title'], count($topic_elements)));
+      $this->assertSameValues(count($expected_topic_titles), count($topic_elements), sprintf('Expected %d topics for the "%s" article in the "Latest news" section but found %d topics.', count($expected_topic_titles), $expected_data['title'], count($topic_elements)));
 
       // Check the body text. It should not contain any HTML tags.
       $actual_body = $actual_data->find('css', '.tile__body .tile__text')->getHtml();
-      Assert::assertEquals(strip_tags($actual_body), $actual_body, sprintf('The body text for the article "%s" in the "Latest news" section should have all HTML tags stripped.', $actual_title));
-      Assert::assertEquals($expected_data['body'], trim($actual_body), sprintf('The body text for the article "%s" in the "Latest news" section does not contain the expected text.', $actual_title));
+      $this->assertSameValues(strip_tags($actual_body), $actual_body, sprintf('The body text for the article "%s" in the "Latest news" section should have all HTML tags stripped.', $actual_title));
+      $this->assertSameValues($expected_data['body'], trim($actual_body), sprintf('The body text for the article "%s" in the "Latest news" section does not contain the expected text.', $actual_title));
 
       foreach ($expected_topic_titles as $j => $expected_topic_title) {
         /** @var \Behat\Mink\Element\NodeElement $topic_element */
@@ -65,7 +66,7 @@ class JoinupNewsContext extends RawDrupalContext {
 
         // Check the title of each topic.
         $actual_topic_title = $topic_element->getText();
-        Assert::assertEquals($expected_topic_title, $actual_topic_title, sprintf('Expected topic #%d to be "%s" for the "%s" article in the "Latest news" section but instead found "%s".', $j + 1, $expected_topic_title, $actual_title, $actual_topic_title));
+        $this->assertSameValues($expected_topic_title, $actual_topic_title, sprintf('Expected topic #%d to be "%s" for the "%s" article in the "Latest news" section but instead found "%s".', $j + 1, $expected_topic_title, $actual_title, $actual_topic_title));
       }
     }
   }

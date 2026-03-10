@@ -8,12 +8,14 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Then;
 use Drupal\Component\Utility\Variable;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use PHPUnit\Framework\Assert;
+use Drupal\joinup\Traits\AssertTrait;
 
 /**
  * Behat step definitions for testing Webtools eTrans translatable text.
  */
 class JoinupEtransContext extends RawDrupalContext {
+
+  use AssertTrait;
 
   /**
    * Verifies that the given text is translatable by eTrans service.
@@ -22,8 +24,9 @@ class JoinupEtransContext extends RawDrupalContext {
   public function eTransTextMatches(TableNode $table): void {
     $expectedLines = $table->getColumn(0);
     $translatableText = $this->getTranslatableText();
-    Assert::assertEmpty(
-      array_diff($expectedLines, $actual = explode(PHP_EOL, $translatableText)),
+    $actual = explode(PHP_EOL, $translatableText);
+    $this->assertCondition(
+      empty(array_diff($expectedLines, $actual)),
       sprintf(
         "Translatable text does not contain all the expected lines.\nExpected lines:\n%s\nActual lines:\n%s ",
         Variable::export($expectedLines),

@@ -234,7 +234,7 @@ function joinup_workflow_message_form_submit_draft(array &$form, FormStateInterf
       $status_messages = $messenger->messagesByType('status');
       $messenger->deleteByType('status');
       $args = [
-        '@type' => node_get_type_label($node),
+        '@type' => $node->getBundleEntity()?->label(),
         '%title' => $node->toLink()->toString(),
         '%state' => $node->get('field_state')->getString(),
         ':user' => Url::fromRoute('user.page')->toString(),
@@ -280,14 +280,18 @@ function joinup_workflow_entity_presave(EntityInterface $entity): void {
     }
   }
 
-  if ($entity->isNew() || !$entity instanceof ArchivableEntityInterface ||
-    empty($entity->original) || !$entity->original instanceof ArchivableEntityInterface) {
+  if ($entity->isNew() || !$entity instanceof ArchivableEntityInterface) {
+    return;
+  }
+
+  $original = $entity->getOriginal();
+  if (empty($original)) {
     return;
   }
 
   // Prevent changes to update date in case we archive or unarchive entity.
-  if ($entity->isArchived() || $entity->original->isArchived()) {
-    $entity->set('changed', $entity->original->get('changed')->getValue());
+  if ($entity->isArchived() || $original->isArchived()) {
+    $entity->set('changed', $original->get('changed')->getValue());
   }
 }
 

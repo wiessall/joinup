@@ -13,17 +13,18 @@ use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\HtmlManipulator;
+use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup_licence\Entity\CompatibilityDocument;
 use LoversOfBehat\TableExtension\Hook\Scope\AfterTableFetchScope;
-use PHPUnit\Framework\Assert;
 
 /**
  * Behat step definitions and related methods provided by the eupl module.
  */
 class EuplContext extends RawDrupalContext {
 
+  use AssertTrait;
   use EntityTrait;
   use JavascriptTrait;
 
@@ -149,7 +150,7 @@ class EuplContext extends RawDrupalContext {
     $actual = array_map(function (NodeElement $element) {
       return $element->getText();
     }, $category_nodes);
-    Assert::assertEquals($expected, $actual);
+    $this->assertSameValues($expected, $actual, 'The categories or their order do not match.');
   }
 
   /**
