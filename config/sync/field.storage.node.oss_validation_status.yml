@@ -1,0 +1,21 @@
+uuid: 3ea7009f-f9e0-45f1-896a-5b093c0b7677
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.oss_validation_status
+field_name: oss_validation_status
+entity_type: node
+type: list_string
+settings:
+  allowed_values: {  }
+  allowed_values_function: 'Drupal\eu_oss_catalogue\Entity\ValidationStatus::getValues'
+module: options
+locked: false
+cardinality: 1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
