@@ -42,7 +42,7 @@ facets:
     weight: -9
   type:
     checked: true
-    label: 'Content types'
+    label: 'Type'
     separator: ', '
     show_count: false
     weight: -8
@@ -66,7 +66,7 @@ facets:
     weight: -5
   domain:
     checked: true
-    label: 'Solution Domain'
+    label: 'Domain'
     separator: ', '
     show_count: false
     weight: 0
