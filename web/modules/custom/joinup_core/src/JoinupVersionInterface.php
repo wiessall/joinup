@@ -22,7 +22,7 @@ interface JoinupVersionInterface {
   /**
    * The base URL for the repo.
    */
-  const REPO_BASE_URL = 'https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference/';
+  const REPO_BASE_URL = 'https://gitlab.dhs.tech.ec.europa.eu/ec-europa/digit-joinup-reference/';
 
   /**
    * Returns a string that uniquely identifies the current Joinup version.

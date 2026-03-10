@@ -1,3 +1,11 @@
+eu_oss_catalogue.settings:
+  type: config_object
+  label: EU OSS Catalogue settings
+  mapping:
+    publiccode_api_url:
+      type: uri
+      label: Base URL of the PublicCode validator API.
+
 field.field.*.*.*.third_party.eu_oss_catalogue:
   type: sequence
   label: Parsers

@@ -66,7 +66,7 @@ To set the `baseURL` variable you need to:
 ## API documentation (Swagger)
 To explore the API, understand available endpoints, and view request/response schemas, use the official Swagger documentation:
 
-👉 https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference/-/blob/master/web/modules/custom/assessments/openapi/assessments.openapi.yaml
+👉 https://gitlab.dhs.tech.ec.europa.eu/ec-europa/digit-joinup-reference/-/blob/master/web/modules/custom/assessments/openapi/assessments.openapi.yaml
 
 ---
 ## Notes

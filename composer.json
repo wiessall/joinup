@@ -421,6 +421,9 @@
             "drupal/field_delimiter": {
                 "Doesn't work in layout builder. @see https://www.drupal.org/i/3099580": "resources/patch/php/drupal/field_delimiter/3099580.patch"
             },
+            "drupal/field_fallback_formatter": {
+                "Issue #3557037: Option to not override #theme function of formatted output": "resources/patch/php/drupal/field_fallback_formatter/8.diff"
+            },
             "drupal/field_group": {
                 "Links from validation message don't point to proper fields under horizontal tabs @see https://www.drupal.org/i/3362124": "resources/patch/php/drupal/field_group/3362124-mr110-commit_6462709d7f.diff",
                 "Activate tab by link anchor is broken @see https://www.drupal.org/project/field_group/issues/3226844": "resources/patch/php/drupal/field_group/3226844.diff"
