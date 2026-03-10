@@ -553,7 +553,7 @@ class AssessmentReportResource extends ResourceBase {
         continue;
       }
 
-      $solutions[] = $storage->create([
+      $solution = $storage->create([
         'type' => 'solution',
         'langcode' => $this->langcode,
         'og_audience' => $this->entityRepository->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR),
@@ -562,6 +562,12 @@ class AssessmentReportResource extends ResourceBase {
         'landing_page' => $asset['landing_page'],
         'field_state' => 'published',
       ]);
+
+      foreach ($solution->validate()->getByField('title') as $violation) {
+        $this->addError("$path/asset/$delta/title", $violation->getMessage()->__toString());
+      }
+
+      $solutions[] = $solution;
     }
 
     return $solutions;
