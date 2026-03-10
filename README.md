@@ -60,7 +60,7 @@ streamlined and unified development process.
 #### Checkout the project
 
 ```shell
-git clone git@git.fpfis.tech.ec.europa.eu:ec-europa/digit-joinup-reference.git joinup
+git clone git@gitlab.dhs.tech.ec.europa.eu:ec-europa/digit-joinup-reference.git joinup
 cd joinup
 ```
 

@@ -1,11 +1,11 @@
 # Deployment workflow
 
 We have 3 repositories that Interoperable Europe Portal uses: the
-[development repository](https://git.fpfis.tech.ec.europa.eu/digit/digit-joinup-dev),
+[development repository](https://gitlab.dhs.tech.ec.europa.eu/digit/digit-joinup-dev),
 which is where the development takes place, the
-[reference repository](https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference),
+[reference repository](https://gitlab.dhs.tech.ec.europa.eu/ec-europa/digit-joinup-reference),
 which is where the releases are published, and the
-[POC reference repository](https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-poc-reference),
+[POC reference repository](https://gitlab.dhs.tech.ec.europa.eu/ec-europa/digit-joinup-poc-reference),
 which is where the POC environment is deployed.
 
 For the following document, we will assume that the developer already has
@@ -16,14 +16,14 @@ If you have not added the reference repository as a remote, you can do so by
 running the following command:
 
 ```shell
-git remote add reference https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference.git
+git remote add reference https://gitlab.dhs.tech.ec.europa.eu/ec-europa/digit-joinup-reference.git
 ```
 
 If you have not added the POC reference repository as a remote, you can do so
 by running the following command:
 
 ```shell
-git remote add poc-reference https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-poc-reference.git
+git remote add poc-reference https://gitlab.dhs.tech.ec.europa.eu/ec-europa/digit-joinup-poc-reference.git
 ```
 
 The two main branches are the `master` branch on the reference repository and
@@ -38,7 +38,7 @@ development repository, you can add the reference repository as a remote by
 running the following command:
 
 ```shell
-git remote add reference https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference.git
+git remote add reference https://gitlab.dhs.tech.ec.europa.eu/ec-europa/digit-joinup-reference.git
 ```
 
 The release procedure is as follows:
@@ -99,7 +99,7 @@ The release procedure is as follows:
 
 After the release is done, before the post upgrade update hook removals below,
 the POC environment should be updated with the release. The POC environment is
-[https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-poc-reference](https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-poc-reference).
+[https://gitlab.dhs.tech.ec.europa.eu/ec-europa/digit-joinup-poc-reference](https://gitlab.dhs.tech.ec.europa.eu/ec-europa/digit-joinup-poc-reference).
 In order to trigger the release, checkout the release tag branch using the
 following command:
 

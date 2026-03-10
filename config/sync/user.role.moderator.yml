@@ -33,6 +33,7 @@ dependencies:
     - dashboard
     - entity_legal
     - entityqueue
+    - eu_oss_catalogue
     - field_permissions
     - file
     - filter
@@ -47,7 +48,6 @@ dependencies:
     - joinup_licence
     - joinup_log
     - joinup_newsletter
-    - joinup_oss_catalogue
     - joinup_reports
     - joinup_search
     - joinup_security
