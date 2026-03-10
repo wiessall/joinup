@@ -397,7 +397,8 @@
                 "Do not process empty batches. @see https://github.com/jhedstrom/DrupalDriver/pull/284": "resources/patch/php/drupal/drupal-driver/284.diff"
             },
             "drupal/dynamic_entity_reference": {
-                "Undefined array key on dependency removal @see https://www.drupal.org/i/3099176": "resources/patch/php/drupal/dynamic_entity_reference/3099176-3.x-16.diff"
+                "Undefined array key on dependency removal @see https://www.drupal.org/i/3099176": "resources/patch/php/drupal/dynamic_entity_reference/3099176-3.x-16.diff",
+                "Declaration of variable problem @see https://www.drupal.org/i/3538270": "resources/patch/php/drupal/dynamic_entity_reference/3538270.diff"
             },
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.mr3-note490206.diff"
