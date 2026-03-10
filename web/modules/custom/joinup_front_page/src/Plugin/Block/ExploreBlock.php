@@ -6,7 +6,9 @@ namespace Drupal\joinup_front_page\Plugin\Block;
 
 use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
@@ -42,6 +44,7 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
     string $plugin_id,
     mixed $plugin_definition,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly EntityRepositoryInterface $entityRepository,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
@@ -55,6 +58,7 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
       $plugin_id,
       $plugin_definition,
       $container->get('entity_type.manager'),
+      $container->get('entity.repository'),
     );
   }
 
@@ -62,25 +66,30 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
    * {@inheritdoc}
    */
   public function build(): array {
-    $get_url = function (string $type): string {
-      return Url::fromRoute('view.search.page_1', [], [
-        'query' => ['f' => ['type:' . $type]],
-      ])->toString();
-    };
-    $data = [
-      'collections' => [
+    $types = [
+      'collection' => [
+        'id' => 'collections',
         'label' => $this->t('Collections'),
         'plural_type' => $this->t('collections'),
-        'data' => $this->getContent('collection'),
-        'url' => $get_url('collection'),
       ],
-      'solutions' => [
+      'solution' => [
+        'id' => 'solutions',
         'label' => $this->t('Solutions'),
         'plural_type' => $this->t('solutions'),
-        'data' => $this->getContent('solution'),
-        'url' => $get_url('solution'),
       ],
     ];
+
+    $data = [];
+    foreach ($types as $bundle => $info) {
+      $data[$info['id']] = [
+        'label' => $info['label'],
+        'plural_type' => $info['plural_type'],
+        'data' => $this->getContentItems($bundle),
+        'url' => Url::fromRoute('view.search.page_1', [], [
+          'query' => ['f' => ['type:' . $bundle]],
+        ])->toString(),
+      ];
+    }
 
     return [
       '#theme' => 'explore_block',
@@ -121,10 +130,30 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
   }
 
   /**
-   * Returns the 12 most recent nodes of the given type as render arrays.
+   * Returns the base query for content retrieval.
    *
    * @param string $type
-   *   The type of content.
+   *   The content type to query.
+   *
+   * @return \Drupal\Core\Entity\Query\QueryInterface
+   *   The configured entity query.
+   */
+  protected function getContentQuery(string $type): QueryInterface {
+    $query = $this->entityTypeManager->getStorage('node')
+      ->getQuery()
+      ->accessCheck(FALSE);
+    return $query->condition('status', 1)
+      ->condition('type', $type)
+      ->condition('field_state', 'archived', '<>')
+      ->sort('changed', 'DESC')
+      ->range(0, 12);
+  }
+
+  /**
+   * Returns the content items for the given bundle.
+   *
+   * @param string $bundle
+   *   The bundle to query.
    *
    * @return array
    *   List of content with view mode "explore_item".
@@ -132,20 +161,16 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  protected function getContent(string $type): array {
+  protected function getContentItems(string $bundle): array {
     $content = [];
-    $entity = $this->entityTypeManager->getStorage('node');
+    $entity_storage = $this->entityTypeManager->getStorage('node');
     $view_builder = $this->entityTypeManager->getViewBuilder('node');
-    $query = $entity->getQuery()->accessCheck(FALSE);
 
-    $ids = $query->condition('status', 1)
-      ->condition('type', $type)
-      ->condition('field_state', 'archived', '<>')
-      ->sort('changed', 'DESC')
-      ->range(0, 12)
-      ->execute();
-
-    $entities = $entity->loadMultiple($ids);
+    // Add a custom tag to allow other modules to alter the query without
+    // affecting dependencies between modules.
+    $tag = "explore_block_{$bundle}";
+    $query = $this->getContentQuery($bundle)->addTag($tag);
+    $entities = $entity_storage->loadMultiple($query->execute());
     foreach ($entities as $node) {
       $content[] = $view_builder->view($node, $this->viewMode);
     }
