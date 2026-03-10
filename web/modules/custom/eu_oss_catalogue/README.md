@@ -79,11 +79,33 @@ type of federated source.
 
 ## Install & configure
 
-TBD...
+### GitHub Access Token
+
+For fetching data from GitHub repositories, configure an access token in your `settings.php` file:
+
+```php
+$settings['eu_oss_catalogue']['platform_github']['access_token'] = 'your_github_token_here';
+```
+
+### Hosting Platform Configuration
+
+Configure custom hosting platforms (GitLab instances, GitHub Enterprise, etc.) through the Drupal admin interface:
+
+`/admin/config/eu-oss-catalogue/hosting-platform`
+
+### Cron Configuration
+
+The module uses Drupal's cron system to process the queue of fetched solutions. Ensure cron is running regularly:
+
+```bash
+./vendor/bin/drush cron
+```
 
 ## Usage
 
-TBD...
+The module provides Drush commands to fetch OSS solutions from various national catalogues and hosting platforms. Fetched data is queued and processed via cron, creating or updating OSS Solution nodes.
+
+See the "Triggering the process" section below for detailed command examples.
 
 ## Internal Architecture
 
@@ -95,23 +117,32 @@ provide the module's functionality.
 
 #### The Provider
 
-Each provider plugin is responsible in fetching data from certain source called
-_provider_.
+Each provider plugin is responsible for fetching data from a specific source called
+a _provider_.
 
-At the moment the following 2 provider plugins are implemented (as wip):
+The module currently supports the following providers:
 
-- Developers Italia: Italian National OSS Catalogue,
-by https://developers.italia.it website
-- Open CoDE: German National OSS Catalogue,
-by https://opencode.de website. (GitLab (self hosted))
+**National Catalogues:**
+- **Open Code Belgium** (BE) - Belgian OSS Catalogue
+- **Developers Italia** (IT) - Italian National OSS Catalogue
+- **Offentligkod.se** (SE) - Swedish National Catalogue
+- **Awesome CodeGouvFr** (FR) - French National Catalogue
+- **Developer Overheid** (NL) - Dutch National OSS Catalogue
+- **Avoinkoodi.fi** (FI) - Finnish OSS Catalogue
 
-These plugin type allows to fetch data from any source by defining its own
-logic. The only constraint is that data fetched by the plugin should be an
-array of array items. Each item is a structured array, following the same
-schema. The plugin is responsible also for the consistency validity of the data
-that is fetched.
+**Hosting Platforms:**
+- **Code Europa EU** - European Commission OSS Catalogue (GitLab self-hosted)
+- **Open CoDE** - German National OSS Catalogue (GitLab self-hosted)
 
-Each provider plugin must designate a _parser_ plugin in their annotation block.
+**Other:**
+- **Custom** - Solutions not part of any national catalogue
+
+These plugin types allow fetching data from any source by defining custom logic.
+The only constraint is that data fetched by the plugin must be an array of items,
+where each item is a structured array following the same schema. The plugin is
+responsible for data consistency and validity.
+
+Each provider plugin must designate a _parser_ plugin in their attribute definition.
 
 #### The Parser
 
@@ -152,12 +183,8 @@ platform, such as GitHub, GitLab, BitBucket, etc.
 
 ##### GitHub
 
-GitHub API calls are authenticated. You should obtain an access token and store
-it in the `settings.php` file:
-
-```php
-$settings['eu_oss_catalogue']['platform_github']['access_token'] = '...';
-```
+GitHub API calls are authenticated. See the "Install & configure" section for
+access token configuration.
 
 ##### GitLab
 
@@ -193,6 +220,27 @@ object.
 The list retrieved in the previous step is queued using Drupal Queue API, to
 be processed later, on cron run.
 
+#### Publiccode.yml validation
+
+Before creating or updating an OSS Solution, the publiccode.yml content is
+validated against the standard schema using `PublicCodeValidatorInterface`.
+
+The validation uses the [publiccode-validator-api](https://github.com/italia/publiccode-validator-api)
+service, which provides a REST API for publiccode.yml validation.
+
+**For new solutions:**
+- If publiccode.yml is invalid, the solution is **rejected** (not created)
+- Validation errors are logged to `joinup_log`
+
+**For existing solutions (updates):**
+- If publiccode.yml becomes invalid, the solution data is **not updated**
+- Only tracking fields (timestamps, source hash) are updated
+- Validation errors are logged to `joinup_log`
+- The existing solution remains accessible with its previous valid data
+
+This ensures data quality and prevents invalid or corrupted metadata from
+entering the catalogue.
+
 #### Consuming the queue
 
 A queue worker plugin consumes the queue by calling using the `eu_oss_catalogue`
@@ -214,11 +262,19 @@ Drupal node entity storage.
 
 #### Removing dead OSS Solutions
 
-TBD (based on discussion from DDD2023 Vienna, we queue an item with the list of
-fetched solutions and their provider. Then the worker looks at each solution. If
-the provider is the sole provider in `oss_source` field, it archives the node.
-Otherwise, it removes that provider form `oss_source`). The assumption should be
-verified again.
+After all solutions are fetched and queued, a cleanup operation is automatically
+queued. The cleanup process identifies OSS Solutions that were previously imported
+from a provider but are no longer present in the latest fetch.
+
+For each identified solution, the queue worker performs the following:
+- Removes the provider from the solution's `oss_source` field
+- If the provider was the sole source (solution has no other providers), the
+  solution is **archived** (marked with `oss_archived = 1`)
+- If the solution has other providers remaining in `oss_source`, it remains
+  active with only the removed provider excluded
+
+This ensures that solutions removed from a national catalogue are properly handled
+while preserving solutions that exist in multiple catalogues.
 
 ### Triggering the process
 
@@ -228,27 +284,21 @@ from the command line.
 Example:
 
 Run the following, to fetch from
+[Open Code Belgium](https://www.imio.be) (Belgian OSS Catalogue)
+```bash
+./vendor/bin/drush eu-oss:fetch imio
+```
+
+Run the following, to fetch from
 [Developers Italia (Italian National OSS Catalogue)](https://developers.italia.it)
 ```bash
 ./vendor/bin/drush eu-oss:fetch developers_italia
 ```
 
 Run the following, to fetch from
-[Open CoDE (German National OSS Catalogue)](https://opencode.de)
+[Offentligkod.se](https://offentligkod.se) (Swedish National Catalogue)
 ```bash
-./vendor/bin/drush eu-oss:fetch hosting_platform:open_code
-```
-
-Run the following, to fetch from
-[Code Europa EU (European Commission OSS Catalogue)](https://code.europa.eu)
-```bash
-./vendor/bin/drush eu-oss:fetch hosting_platform:code_europa_eu
-```
-
-Run the following, to fetch from
-[Developer Overheid](https://developer.overheid.nl)
-```bash
-./vendor/bin/drush eu-oss:fetch developer_overheid
+./vendor/bin/drush eu-oss:fetch offentligkod_se
 ```
 
 Run the following, to fetch from
@@ -258,9 +308,32 @@ Run the following, to fetch from
 ```
 
 Run the following, to fetch from
+[Developer Overheid](https://developer.overheid.nl)
+```bash
+./vendor/bin/drush eu-oss:fetch developer_overheid
+```
+
+Run the following, to fetch from
 [Avoinkoodi.fi](http://avoinkoodi.fi)
 ```bash
 ./vendor/bin/drush eu-oss:fetch avoinkoodi_fi
+```
+
+Run the following, to fetch from
+[Code Europa EU (European Commission OSS Catalogue)](https://code.europa.eu)
+```bash
+./vendor/bin/drush eu-oss:fetch hosting_platform:code_europa_eu
+```
+
+Run the following, to fetch from
+[Open CoDE (German National OSS Catalogue)](https://opencode.de)
+```bash
+./vendor/bin/drush eu-oss:fetch hosting_platform:open_code
+```
+
+Run the following, to fetch from Other (custom solutions not part of any catalogue):
+```bash
+./vendor/bin/drush eu-oss:fetch custom:other
 ```
 
 This command queries the configured provider endpoints, fetches the data
@@ -270,4 +343,23 @@ is gradually creating or updating the OSS Solutions.
 You can trigger manually OSS catalogue queue worker:
 ```bash
 ./vendor/bin/drush queue:run eu_oss_catalogue
+```
+
+### Validation Commands
+
+The module provides commands to validate publiccode.yml files against the standard schema.
+
+Validate the publiccode.yml of an OSS solution node:
+```bash
+./vendor/bin/drush eu-oss:validate-node <NODE_ID>
+```
+
+Validate publiccode.yml content from a URL:
+```bash
+./vendor/bin/drush eu-oss:validate-url <URL>
+```
+
+Example:
+```bash
+./vendor/bin/drush eu-oss:validate-url https://raw.githubusercontent.com/example/repo/main/publiccode.yml
 ```
