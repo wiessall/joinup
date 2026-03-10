@@ -34,13 +34,6 @@ class UniqueDistributionTitleConstraint extends SymfonyConstraint {
   /**
    * {@inheritdoc}
    */
-  public function getDefaultOption(): array {
-    return [];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getRequiredOptions(): array {
     return [];
   }

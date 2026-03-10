@@ -98,10 +98,13 @@ function eu_oss_catalogue_entity_bundle_field_info_alter(array &$fields, EntityT
     ->setComputed(TRUE)
     ->setClass(RelevantLanguageCode::class);
 
-  $computedFieldCandidates = [
-    $fields['oss_screenshots'],
-    $fields['oss_documentation'],
-  ];
+  // During module installation, configurable fields may not be available yet
+  // when this hook is called, as the EntityFieldManager cache hasn't been
+  // rebuilt. Filter out any missing fields to handle this timing issue.
+  $computedFieldCandidates = array_filter([
+    $fields['oss_screenshots'] ?? NULL,
+    $fields['oss_documentation'] ?? NULL,
+  ]);
   foreach ($computedFieldCandidates as $fieldDefinition) {
     \assert($fieldDefinition instanceof FieldDefinitionInterface);
     $computedName = preg_replace('#^oss_(.*)$#', 'oss__$1', $fieldDefinition->getName());

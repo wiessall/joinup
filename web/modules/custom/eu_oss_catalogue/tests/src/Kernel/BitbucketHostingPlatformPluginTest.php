@@ -10,15 +10,17 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\eu_oss_catalogue\Traits\LoggerTestTrait;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\Bitbucket;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the Bitbucket hosting platform plugin.
  *
- * @coversDefaultClass \Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\Bitbucket
- *
  * @see \Drupal\eu_oss_catalogue_test\Plugin\ServiceMock\Bitbucket
- * @group eu_oss_catalogue
  */
+#[CoversClass(Bitbucket::class)]
+#[Group('eu_oss_catalogue')]
 class BitbucketHostingPlatformPluginTest extends KernelTestBase implements LoggerChannelInterface {
 
   use LoggerTestTrait;
@@ -153,11 +155,8 @@ class BitbucketHostingPlatformPluginTest extends KernelTestBase implements Logge
    *   The URL of the project.
    * @param bool $expected
    *   The expected result.
-   *
-   * @covers ::isFileRawUrl
-   *
-   * @dataProvider providerTestIsFileRawUrl
    */
+  #[DataProvider('providerTestIsFileRawUrl')]
   public function testIsFileRawUrl(string $url, string $projectUrl, bool $expected): void {
     $this->assertSame(
       $expected,
@@ -174,38 +173,38 @@ class BitbucketHostingPlatformPluginTest extends KernelTestBase implements Logge
   public static function providerTestIsFileRawUrl(): array {
     return [
       'Bitbucket with exclamation mark' => [
-        'URL' => 'https://bitbucket.org/!api/2.0/repositories/foo/bar/src/da001cdf6ce8f3fd3f/publiccode.yml',
-        'project URL' => 'https://bitbucket.org/foo/bar',
+        'url' => 'https://bitbucket.org/!api/2.0/repositories/foo/bar/src/da001cdf6ce8f3fd3f/publiccode.yml',
+        'projectUrl' => 'https://bitbucket.org/foo/bar',
         'expected' => TRUE,
       ],
       'Bitbucket without exclamation mark' => [
-        'URL' => 'https://bitbucket.org/api/2.0/repositories/foo/bar/src/master/publiccode.yml',
-        'project URL' => 'https://bitbucket.org/foo/bar',
+        'url' => 'https://bitbucket.org/api/2.0/repositories/foo/bar/src/master/publiccode.yml',
+        'projectUrl' => 'https://bitbucket.org/foo/bar',
         'expected' => TRUE,
       ],
       'Bitbucket API host with tag' => [
-        'URL' => 'https://api.bitbucket.org/2.0/repositories/foo/bar/src/12.2.1/publiccode.yml',
-        'project URL' => 'https://bitbucket.org/foo/bar',
+        'url' => 'https://api.bitbucket.org/2.0/repositories/foo/bar/src/12.2.1/publiccode.yml',
+        'projectUrl' => 'https://bitbucket.org/foo/bar',
         'expected' => TRUE,
       ],
       'Bytebucket without exclamation mark' => [
-        'URL' => 'https://bytebucket.org/api/2.0/repositories/foo/bar/src/master/publiccode.yml',
-        'project URL' => 'https://bitbucket.org/foo/bar',
+        'url' => 'https://bytebucket.org/api/2.0/repositories/foo/bar/src/master/publiccode.yml',
+        'projectUrl' => 'https://bitbucket.org/foo/bar',
         'expected' => TRUE,
       ],
       'Bytebucket with exclamation mark' => [
-        'URL' => 'https://bytebucket.org/!api/2.0/repositories/foo/bar/src/master/publiccode.yml',
-        'project URL' => 'https://bitbucket.org/foo/bar',
+        'url' => 'https://bytebucket.org/!api/2.0/repositories/foo/bar/src/master/publiccode.yml',
+        'projectUrl' => 'https://bitbucket.org/foo/bar',
         'expected' => TRUE,
       ],
       'Relative URL' => [
-        'URL' => 'images/logo.png',
-        'project URL' => 'https://bitbucket.org/foo/bar',
+        'url' => 'images/logo.png',
+        'projectUrl' => 'https://bitbucket.org/foo/bar',
         'expected' => FALSE,
       ],
       'Project avatar' => [
-        'URL' => 'https://bytebucket.org/ravatar/%7Bf9883d63-17c1-44b6-8fb1-0478c7b9e557%7D?ts=453345',
-        'project URL' => 'https://bitbucket.org/foo/bar',
+        'url' => 'https://bytebucket.org/ravatar/%7Bf9883d63-17c1-44b6-8fb1-0478c7b9e557%7D?ts=453345',
+        'projectUrl' => 'https://bitbucket.org/foo/bar',
         'expected' => TRUE,
       ],
     ];
@@ -222,12 +221,8 @@ class BitbucketHostingPlatformPluginTest extends KernelTestBase implements Logge
    *   The expected URL, or NULL if the file cannot be found in the repository.
    * @param array|null $expectedLogs
    *   The expected logged messages.
-   *
-   * @covers ::doGetFileRawUrl
-   * @covers ::getFileRawUrl
-   *
-   * @dataProvider providerTestGetFileRawUrl
    */
+  #[DataProvider('providerTestGetFileRawUrl')]
   public function testGetFileRawUrl(
     string $source,
     string $projectUrl,
@@ -255,9 +250,9 @@ class BitbucketHostingPlatformPluginTest extends KernelTestBase implements Logge
     return [
       'Missing file' => [
         'source' => 'https://bitbucket.org/fooNamespace/bar-project/missing.csv',
-        'project url' => 'https://bitbucket.org/fooNamespace/bar-project',
+        'projectUrl' => 'https://bitbucket.org/fooNamespace/bar-project',
         'expected' => NULL,
-        'expected log items' => [
+        'expectedLogs' => [
           'notice' => [
             [
               'message' => "Cannot find the '%filename' file in '%repository' on '%base_url' in branch / tag / commit '%reference'.",
@@ -273,12 +268,12 @@ class BitbucketHostingPlatformPluginTest extends KernelTestBase implements Logge
       ],
       'File in root' => [
         'source' => 'https://bitbucket.org/fooNamespace/bar-project/publiccode.yml',
-        'project url' => 'https://bitbucket.org/fooNamespace/bar-project',
+        'projectUrl' => 'https://bitbucket.org/fooNamespace/bar-project',
         'expected' => 'https://api.bitbucket.org/2.0/repositories/fooNamespace/bar-project/src/792a6afb90c17383af0a5c3f9642c2a5cb55f6fe/publiccode.yml',
       ],
       'File in subpath' => [
         'source' => 'https://bitbucket.org/fooNamespace/bar-project/images/bar_logo.png',
-        'project url' => 'https://bitbucket.org/fooNamespace/bar-project',
+        'projectUrl' => 'https://bitbucket.org/fooNamespace/bar-project',
         'expected' => 'https://api.bitbucket.org/2.0/repositories/fooNamespace/bar-project/src/792a6afb90c17383af0a5c3f9642c2a5cb55f6fe/images/bar_logo.png',
       ],
     ];

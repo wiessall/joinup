@@ -31,7 +31,6 @@ use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
 use Drupal\message_digest\Traits\MessageDigestTrait;
 use Drupal\og\OgMembershipInterface;
 use Drupal\user\Entity\User;
-use PHPUnit\Framework\Assert;
 
 /**
  * Behat step definitions for testing subscriptions.
@@ -159,7 +158,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
             break 1;
           }
         }
-        Assert::assertNotEmpty($entity_type, "Unknown bundle $subscription_bundle.");
+        $this->assertCondition(!empty($entity_type), "Unknown bundle $subscription_bundle.");
         $subscriptions[] = [
           'entity_type' => $entity_type,
           'bundle' => $subscription_bundle,
@@ -199,7 +198,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
     $card = $this->getGroupSubscriptionCardByHeading($label);
     $button = $this->findNamedElementInRegion($button, 'button', $card);
     $disabled = !$button->hasAttribute('disabled');
-    Assert::assertEquals($expected_status, $disabled);
+    $this->assertSameValues($expected_status, $disabled);
   }
 
   /**
@@ -380,7 +379,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
       unset($expectedBundleIds[array_search('announcements', $expectedBundleIds)]);
       $announcements = TRUE;
     }
-    Assert::assertSame($announcements, (bool) $membership->get('announcements')->value);
+    $this->assertSameValues($announcements, (bool) $membership->get('announcements')->value);
 
     $actualBundleIds = array_map(function (array $item): string {
       return $item['bundle'];
@@ -389,7 +388,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
     sort($expectedBundleIds);
     sort($actualBundleIds);
 
-    Assert::assertEquals($expectedBundleIds, $actualBundleIds);
+    $this->assertSameValues($expectedBundleIds, $actualBundleIds);
   }
 
   /**
@@ -410,7 +409,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
     $group = $this->getEntityByLabel('node', $label, $bundle);
     assert($group instanceof GroupInterface);
     $membership = $this->getMembershipByGroupAndUser($group, $account, OgMembershipInterface::ALL_STATES);
-    Assert::assertEmpty($membership->get('subscription_bundles')->getValue());
+    $this->assertCondition(empty($membership->get('subscription_bundles')->getValue()), 'The user should not be subscribed to any bundle.');
   }
 
   /**
@@ -446,7 +445,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
   #[Then('the :interval group content subscription digest for :username should :scope the following message(s) for the :label :entity_type:')]
   #[Then('the :interval group content subscription digest for :username should :scope the following message(s):')]
   public function assertDigestContains(TableNode $table, string $interval, string $username, string $scope, $label = NULL, $entity_type = NULL): void {
-    Assert::assertContains($scope, ['match', 'include'], sprintf('Unknown scope %s.', $scope));
+    $this->assertCondition(in_array($scope, ['match', 'include'], TRUE), sprintf('Unknown scope %s.', $scope));
 
     // If a scenario shows content in digests which has been created by Behat
     // but subsequently been manipulated by a logged in user in the browser,
@@ -467,7 +466,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
       $actual_message_labels = array_map(function (GroupContentSubscriptionMessageInterface $message): string {
         return $message->getSubscribedGroupContent()->label();
       }, $actual_messages);
-      Assert::assertEquals(count($expected_messages), count($actual_messages), sprintf('Expected %d messages in the %s digest for user %s, found %d messages: %s.', count($expected_messages), $interval, $username, count($actual_messages), implode(', ', $actual_message_labels)));
+      $this->assertSameValues(count($expected_messages), count($actual_messages), sprintf('Expected %d messages in the %s digest for user %s, found %d messages: %s.', count($expected_messages), $interval, $username, count($actual_messages), implode(', ', $actual_message_labels)));
     }
 
     $found_messages = [];
@@ -597,7 +596,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
     $email_address = $user->getEmail();
     $emails = $this->getGroupSubscriptionEmailsByEmail($email_address);
 
-    Assert::assertCount(1, $emails, "Expected 1 digest message for user $username, found " . count($emails) . ' messages.');
+    $this->assertCount(1, $emails, "Expected 1 digest message for user $username, found " . count($emails) . ' messages.');
 
     $email = reset($emails);
 
@@ -642,10 +641,10 @@ class JoinupSubscriptionContext extends RawDrupalContext {
     $email_address = $user->getEmail();
     $emails = $this->getGroupSubscriptionEmailsByEmail($email_address);
 
-    Assert::assertCount(1, $emails, "Expected 1 digest message for user $username, found " . count($emails) . ' messages.');
+    $this->assertCount(1, $emails, "Expected 1 digest message for user $username, found " . count($emails) . ' messages.');
 
     $email = reset($emails);
-    Assert::assertEquals($subject, $email['subject']);
+    $this->assertSameValues($subject, $email['subject']);
   }
 
   /**

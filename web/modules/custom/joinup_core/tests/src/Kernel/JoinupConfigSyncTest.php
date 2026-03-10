@@ -10,13 +10,13 @@ use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\SchemaCheckTestTrait;
 use Drupal\config_test\TestInstallStorage;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Tests Joinup sync configuration.
- *
- * @group joinup_core
  */
+#[Group('joinup_core')]
 class JoinupConfigSyncTest extends KernelTestBase {
 
   use SchemaCheckTestTrait;

@@ -6,12 +6,12 @@ namespace Drupal\Tests\contact_information\ExistingSite;
 
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Tests\joinup_workflow\ExistingSite\JoinupWorkflowExistingSiteTestBase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the workflow for the contact information entity.
- *
- * @group contact_information
  */
+#[Group('contact_information')]
 class ContactInformationWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
 
   /**
