@@ -1,0 +1,58 @@
+diff --git a/tests/src/Functional/ETranslationServiceTest.php b/tests/src/Functional/ETranslationServiceTest.php
+index dc9775d47205fedf3c64127a69d482dbc822669e..d6673308120e08b1b4d31494a4f50d43573ad134 100644
+--- a/tests/src/Functional/ETranslationServiceTest.php
++++ b/tests/src/Functional/ETranslationServiceTest.php
+@@ -4,6 +4,7 @@ declare(strict_types=1);
+ 
+ namespace Drupal\Tests\tmgmt_ec_etranslation\Functional;
+ 
++use Drupal\Component\Utility\DeprecationHelper;
+ use Drupal\Core\Entity\EntityTypeManagerInterface;
+ use Drupal\Core\Queue\QueueFactory;
+ use Drupal\Core\Queue\QueueWorkerManagerInterface;
+@@ -117,7 +118,20 @@ class ETranslationServiceTest extends TMGMTTestBase {
+ 
+     $this->assertTrue($job->canRequestTranslation()->getSuccess());
+     $job->requestTranslation();
+-    $this->assertEquals(3, $queue->numberOfItems());
++
++    // The node body field has not been installed by default anymore after
++    // Drupal 11.3. Instead, the 'testing' profile provides a similar text_long
++    // field, which does not have a summary property. Therefore, starting with
++    // Drupal 11.4, we expect only 2 queue items, for the value and format.
++    // @see https://www.drupal.org/node/3540814
++    $expected_queue_items = DeprecationHelper::backwardsCompatibleCall(
++      currentVersion: \Drupal::VERSION,
++      deprecatedVersion: '11.4.0',
++      currentCallable: fn() => 2,
++      deprecatedCallable: fn() => 3,
++    );
++
++    $this->assertEquals($expected_queue_items, $queue->numberOfItems());
+ 
+     $queue_worker = $this->queueWorker
+       ->createInstance(TranslationQueueWorker::ID);
+@@ -127,7 +141,7 @@ class ETranslationServiceTest extends TMGMTTestBase {
+     }
+ 
+     $this->assertEquals(0, $queue->numberOfItems());
+-    $this->assertEquals(3, $job->getCountTranslated());
++    $this->assertEquals($expected_queue_items, $job->getCountTranslated());
+ 
+     $item = $this->entityTypeManager->getStorage('tmgmt_job_item')
+       ->load($item->id());
+@@ -136,7 +150,13 @@ class ETranslationServiceTest extends TMGMTTestBase {
+     $body = $node->get('body')->getValue();
+     $this->assertEquals(ETranslationMock::translate($node->getTitle(), 'en', 'de'), $data['title'][0]['value']['#translation']['#text']);
+     $this->assertEquals(ETranslationMock::translate($body[0]['value'], 'en', 'de'), $data['body'][0]['value']['#translation']['#text']);
+-    $this->assertEquals(ETranslationMock::translate($body[0]['summary'], 'en', 'de'), $data['body']['0']['summary']['#translation']['#text']);
++    // @see https://www.drupal.org/node/3540814
++    DeprecationHelper::backwardsCompatibleCall(
++      currentVersion: \Drupal::VERSION,
++      deprecatedVersion: '11.4.0',
++      currentCallable: fn() => NULL,
++      deprecatedCallable: fn() => $this->assertEquals(ETranslationMock::translate($body[0]['summary'], 'en', 'de'), $data['body']['0']['summary']['#translation']['#text']),
++    );
+   }
+ 
+   /**
