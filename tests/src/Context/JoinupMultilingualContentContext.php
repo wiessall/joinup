@@ -94,6 +94,7 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
     $localeStorage = \Drupal::service('locale.storage');
     $babelStorage = \Drupal::service(BabelStorageInterface::class);
 
+    $lidsToRefresh = [];
     foreach ($table->getHash() as $row) {
       $sourceText = $row['source'];
       $langcode = $row['language'];
@@ -124,8 +125,8 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
         ])->save();
       }
 
-      // Refresh locale string caches.
-      _locale_refresh_translations([$langcode], [$lid]);
+      // Collect LIDs to refresh.
+      $lidsToRefresh[$langcode][] = $lid;
 
       // Register the string in Babel's tracking tables, then apply the
       // requested status. BabelStorage::update() inserts with the plugin's
@@ -134,6 +135,11 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
       $source = new Source($sourceText, '');
       $babelStorage->update('locale', [(string) $lid => $source]);
       $babelStorage->updateStatusForHash($source->getHash(), $status);
+    }
+
+    // Refresh the Babel cache for the affected strings.
+    foreach ($lidsToRefresh as $langcode => $lids) {
+      _locale_refresh_translations([$langcode], $lids);
     }
   }
 
