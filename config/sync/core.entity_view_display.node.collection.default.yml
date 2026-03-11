@@ -10,6 +10,7 @@ dependencies:
     - field.field.node.collection.field_state
     - field.field.node.collection.field_topic
     - field.field.node.collection.keywords
+    - field.field.node.collection.last_content_deletion
     - field.field.node.collection.logo
     - field.field.node.collection.newsletter
     - field.field.node.collection.owner
