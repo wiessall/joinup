@@ -30,6 +30,7 @@ Feature: Translating distributions
     When I go to the homepage of the "Test distribution" distribution
     And I click "Translate" in the "Entity actions" region
     And I click "Add" in the "Polish" row
+    Then the following fields should be present "Title, Description"
     Then I should see the heading "Create Polish translation of Test distribution"
     When I fill in "Title" with "Testowa dystrybucja"
     And I fill in "Description" with "Opis dystrybucji"
@@ -52,9 +53,8 @@ Feature: Translating distributions
     # Delete translation.
     When I click "Translate" in the "Entity actions" region
     And I click "Delete" in the "Polish" row
-#    Then I should see "Are you sure you want to delete the Polish translation of the content item Zaktualizowana kolekcja?"
+    Then I should see "Are you sure you want to delete the Polish translation of the content item Zaktualizowana dystrybucja?"
     When I press "Delete Polish translation"
-    # @todo Inconsistent messages, see ISAICP-10959
     Then I should see the success message "Polish translation of the Distribution Zaktualizowana dystrybucja has been deleted."
     When I click "Translate" in the "Entity actions" region
     Then I should not see "Edit" in the "Polish" row
