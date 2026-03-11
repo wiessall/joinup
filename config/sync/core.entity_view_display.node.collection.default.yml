@@ -617,6 +617,7 @@ hidden:
   field_topic: true
   join_collection: true
   langcode: true
+  last_content_deletion: true
   last_update: true
   logo: true
   members: true
