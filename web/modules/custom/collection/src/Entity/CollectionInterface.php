@@ -81,4 +81,21 @@ interface CollectionInterface extends GroupInterface {
    */
   public function hasPublishedCodeOfConduct(): bool;
 
+  /**
+   * Returns the last content deletion timestamp.
+   *
+   * @return int|null
+   *   The last content deletion timestamp, or NULL if not set.
+   */
+  public function getLastContentDeletion(): ?int;
+
+  /**
+   * Sets the last content deletion timestamp.
+   *
+   * @param int $timestamp
+   *   The last content deletion timestamp.
+   *
+   * @return static
+   */
+  public function setLastContentDeletion(int $timestamp): static;
 }
