@@ -73,13 +73,13 @@ Feature: Translating events
       | Lee Facil | solution   |
 
   Scenario Outline: Users who do not have edit access cannot manage translations.
-    And the following <bundle> user memberships:
+    Given the following <bundle> user memberships:
       | <bundle>      | user        | roles |
       | Test <bundle> | John Member |       |
     And event content:
       | title      | <bundle>      |
       | Test event | Test <bundle> |
-
+    Then break
     Given I am logged in as "<user>"
     When I go to "<url>"
     Then I should see the heading "Access denied"
@@ -88,5 +88,5 @@ Feature: Translating events
       | user        | bundle     | url                                                            |
       | John Member | collection | /collection/test-collection/event/test-event/translations      |
       | Ross Auth   | collection | /collection/test-collection/event/test-event/translations      |
-      | John Member | solution   | /collection/portal-support/solution/test-solution/translations |
-      | Ross Auth   | solution   | /collection/portal-support/solution/test-solution/translations |
+      | John Member | solution   | /collection/portal-support/solution/test-solution/event/test-event/translations |
+      | Ross Auth   | solution   | /collection/portal-support/solution/test-solution/event/test-event/translations |
