@@ -218,9 +218,8 @@ class Collection extends Node implements CollectionInterface {
   /**
    * {@inheritdoc}
    */
-  public function setLastContentDeletion(int $timestamp): static {
+  public function setLastContentDeletion(int $timestamp): void {
     $this->set('last_content_deletion', $timestamp);
-    return $this;
   }
 
 }
