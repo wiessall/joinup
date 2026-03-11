@@ -96,4 +96,5 @@ interface CollectionInterface extends GroupInterface {
    *   The last content deletion timestamp.
    */
   public function setLastContentDeletion(int $timestamp): void;
+
 }
