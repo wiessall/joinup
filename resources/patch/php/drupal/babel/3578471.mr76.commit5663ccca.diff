@@ -353,10 +353,10 @@ index a5e6f244a738a199c48c05018c3f1afc98228aca..00000000000000000000000000000000
 -
 -}
 diff --git a/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php b/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
-index 4fd4e25545ed052b97d6e9a60df6d12dfc66702d..59599d76cad4fcc9baf43054f47c12a12e93ef2d 100644
+index 4fd4e25545ed052b97d6e9a60df6d12dfc66702d..55c17be7d9b278db1139c0ffcdb7fbf1b911962d 100644
 --- a/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
 +++ b/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
-@@ -4,14 +4,18 @@ declare(strict_types=1);
+@@ -4,14 +4,19 @@ declare(strict_types=1);
  
  namespace Drupal\babel_tmgmt\Hook;
  
@@ -370,12 +370,13 @@ index 4fd4e25545ed052b97d6e9a60df6d12dfc66702d..59599d76cad4fcc9baf43054f47c12a1
  use Drupal\Core\StringTranslation\StringTranslationTrait;
 +use Drupal\tmgmt\ContinuousManager;
  use Drupal\tmgmt\JobInterface;
++use Drupal\tmgmt\JobItemInterface;
  use Drupal\tmgmt\TranslatorInterface;
 +use Symfony\Component\DependencyInjection\Attribute\Autowire;
  
  /**
   * Hook implementations for Babel TMGMT module.
-@@ -23,6 +27,9 @@ class BabelTmgmtHooks {
+@@ -23,6 +28,9 @@ class BabelTmgmtHooks {
    public function __construct(
      protected EntityTypeManagerInterface $entityTypeManager,
      protected QueueFactory $queueFactory,
@@ -385,7 +386,7 @@ index 4fd4e25545ed052b97d6e9a60df6d12dfc66702d..59599d76cad4fcc9baf43054f47c12a1
    ) {}
  
    /**
-@@ -64,21 +71,64 @@ class BabelTmgmtHooks {
+@@ -64,21 +72,77 @@ class BabelTmgmtHooks {
    }
  
    /**
@@ -431,6 +432,19 @@ index 4fd4e25545ed052b97d6e9a60df6d12dfc66702d..59599d76cad4fcc9baf43054f47c12a1
 +        ->execute()
 +        ->fetchCol();
 +      $hashes = array_diff($allHashes, $locked);
++
++      // Remove existing job items in a dead-end state (aborted, in review).
++      $jobItemsToDelete = $job->getItems([
++        'plugin' => 'babel',
++        'item_type' => 'default',
++        'state' => [
++          'value' => [JobItemInterface::STATE_ABORTED, JobItemInterface::STATE_REVIEW],
++          'operator' => 'IN',
++        ],
++      ]);
++      if ($jobItemsToDelete) {
++        $storage->delete($jobItemsToDelete);
++      }
 +
 +      // Get hashes of already created job items.
 +      $existing = array_column(
