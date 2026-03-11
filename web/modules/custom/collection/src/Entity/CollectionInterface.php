@@ -94,8 +94,6 @@ interface CollectionInterface extends GroupInterface {
    *
    * @param int $timestamp
    *   The last content deletion timestamp.
-   *
-   * @return static
    */
-  public function setLastContentDeletion(int $timestamp): static;
+  public function setLastContentDeletion(int $timestamp): void;
 }
