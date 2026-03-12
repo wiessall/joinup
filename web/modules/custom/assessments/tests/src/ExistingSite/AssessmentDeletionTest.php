@@ -6,16 +6,14 @@ namespace Drupal\Tests\assessments\ExistingSite;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Tests\assessments\Traits\AssessmentEntityCreationTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\assessments\AssessmentInterface;
-use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\assessments\Entity\Assessment;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\AssessmentStatement;
 use Drupal\assessments\Entity\BindingRequirementParagraph;
 use Drupal\file\Entity\File;
-use Drupal\paragraphs\Entity\Paragraph;
-use Drupal\paragraphs\ParagraphInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 
@@ -27,15 +25,12 @@ use PHPUnit\Framework\Attributes\Group;
 #[Group('assessments')]
 class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
 
+  use AssessmentEntityCreationTrait;
+
   /**
    * The entity type manager.
    */
   private EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * The assessment vocabulary helper.
-   */
-  private AssessmentVocabularyHelper $assessmentVocabularyHelper;
 
   /**
    * {@inheritdoc}
@@ -44,7 +39,6 @@ class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
     parent::setUp();
 
     $this->entityTypeManager = $this->container->get(EntityTypeManagerInterface::class);
-    $this->assessmentVocabularyHelper = $this->container->get(AssessmentVocabularyHelper::class);
   }
 
   /**
@@ -97,7 +91,7 @@ class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
     // were deleted.
     $should_persist = static fn ($entity) => $entity instanceof AssessmentInterface && $entity->bundle() === 'public_organisation';
     $entities = \array_filter($this->cleanupEntities, static fn ($entity) => !$should_persist($entity));
-    $this->assertCount(17, $entities);
+    $this->assertCount(15, $entities);
     foreach ($entities as $entity) {
       $this->assertEntityNotExists($entity);
     }
@@ -110,66 +104,71 @@ class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
   }
 
   /**
-   * Creates a binding requirement paragraph with all dependencies.
+   * Tests that SOLUTION_COLLECTOR assets are deleted only when orphaned.
+   *
+   * Assets belonging to other groups must never be deleted on report deletion.
+   *
+   * @covers \Drupal\assessments\Entity\AssessmentReport::postDelete
    */
-  private function createParagraphBindingRequirement(): ParagraphInterface {
-    $expression = Assessment::create([
-      'type' => 'expression',
-      'description' => ['value' => $this->randomString()],
-      'documented_in' => ['uri' => 'https://interoperable-europe.ec.europa.eu/'],
-    ]);
-    $this->markEntityForCleanup($expression);
+  public function testOrphanedAssetDeletion(): void {
+    $collectorAsset = $this->createSolutionAsset(AssessmentInterface::SOLUTION_COLLECTOR);
+    $nonCollectorAsset = $this->createSolutionAsset(AssessmentInterface::GROUP_UUID);
 
-    $public_service = Assessment::create([
-      'type' => 'public_service',
-      'thematic_area' => ['entity' => $this->assessmentVocabularyHelper->getTermFromIdentifier('assess_public_service_area', 'general_public_services')],
+    $bindingRequirement1 = $this->createParagraphBindingRequirement($collectorAsset);
+    $bindingRequirement1b = $this->createParagraphBindingRequirement($nonCollectorAsset);
+    $report1 = Assessment::create([
+      'type' => 'report',
+      'name' => 'Orphaned asset test report 1',
+      'state' => 'draft',
+      'binding_requirement' => [
+        ['entity' => $bindingRequirement1],
+        ['entity' => $bindingRequirement1b],
+      ],
     ]);
-    $this->markEntityForCleanup($public_service);
+    $this->markEntityForCleanup($report1);
+    $report1->save();
 
-    $participation = Assessment::create([
-      'type' => 'participation',
-      'participant_type' => ['entity' => $this->assessmentVocabularyHelper->getTermFromIdentifier('assess_participant_type', 'european_union_agency')],
+    $bindingRequirement2 = $this->createParagraphBindingRequirement($collectorAsset);
+    $report2 = Assessment::create([
+      'type' => 'report',
+      'name' => 'Orphaned asset test report 2',
+      'state' => 'draft',
+      'binding_requirement' => ['entity' => $bindingRequirement2],
     ]);
-    $this->markEntityForCleanup($participation);
+    $this->markEntityForCleanup($report2);
+    $report2->save();
 
-    $binding_requirement = Paragraph::create([
-      'type' => 'binding_requirement',
-      'description' => ['value' => $this->randomString()],
-      'documented_in' => ['uri' => 'https://interoperable-europe.ec.europa.eu/'],
-      'expression' => ['entity' => $expression],
-      'affects' => ['entity' => $public_service],
-      'has_participation' => ['entity' => $participation],
-      'requirement_documents' => ['entity' => $this->createFileDocument()],
-    ]);
-    $this->markEntityForCleanup($binding_requirement);
+    // Collector asset is still referenced by report2; non-collector is never
+    // deleted.
+    $report1->delete();
+    $this->assertEntityExists($collectorAsset);
+    $this->assertEntityExists($nonCollectorAsset);
 
-    return $binding_requirement;
+    // Collector asset is now orphaned and must be deleted; non-collector
+    // persists.
+    $report2->delete();
+    $this->assertEntityNotExists($collectorAsset);
+    $this->assertEntityExists($nonCollectorAsset);
   }
 
   /**
-   * Creates assessment statements for all statement types.
+   * Creates an assessment statement of the given bundle.
    */
   private function createAssessmentStatement(string $bundle): AssessmentStatement {
     $statement = AssessmentStatement::create([
       'type' => $bundle,
-      'interpretation' => ['entity' => $this->assessmentVocabularyHelper->getTermFromIdentifier('assess_statement_interpretation', 'positive')],
-      'statement_type' => ['entity' => $this->assessmentVocabularyHelper->getTermFromIdentifier('assess_statement_type', $bundle)],
+      'interpretation' => [
+        'entity' => $this->getAssessmentVocabularyHelper()
+          ->getTermFromIdentifier('assess_statement_interpretation', 'positive'),
+      ],
+      'statement_type' => [
+        'entity' => $this->getAssessmentVocabularyHelper()
+          ->getTermFromIdentifier('assess_statement_type', $bundle),
+      ],
       'judgement' => ['value' => $this->randomString()],
     ]);
     $this->markEntityForCleanup($statement);
     return $statement;
-  }
-
-  /**
-   * Creates an assessment organisation.
-   */
-  private function createAssessmentOrganisation(): AssessmentInterface {
-    $organisation = Assessment::create([
-      'type' => 'public_organisation',
-      'name' => 'Test Organisation',
-    ]);
-    $this->markEntityForCleanup($organisation);
-    return $organisation;
   }
 
   /**
