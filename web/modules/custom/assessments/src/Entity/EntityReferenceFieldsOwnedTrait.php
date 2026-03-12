@@ -72,16 +72,12 @@ trait EntityReferenceFieldsOwnedTrait {
         continue;
       }
 
-      $targetIds = $this->getEntityReferenceFieldTargetIds($this, $fieldName);
-      if (empty($targetIds)) {
-        continue;
-      }
+      $itemList = $this->get($fieldName);
+      \assert($itemList instanceof EntityReferenceFieldItemListInterface);
 
-      $fieldDefinition = $this->getFieldDefinition($fieldName);
-      $targetType = $fieldDefinition->getSetting('target_type');
-      $entityStorage = $this->entityTypeManager()->getStorage($targetType);
-      $entities = $entityStorage->loadMultiple($targetIds);
-      $entityStorage->delete($entities);
+      foreach ($itemList->referencedEntities() as $referencedEntity) {
+        $referencedEntity->delete();
+      }
     }
   }
 
@@ -106,29 +102,9 @@ trait EntityReferenceFieldsOwnedTrait {
     $itemList = $entity->get($fieldName);
     \assert($itemList instanceof EntityReferenceFieldItemListInterface);
 
-    $entityId = $entity->id();
-    $entityTypeId = $entity->getEntityTypeId();
-    $tableName = "{$entityTypeId}__{$fieldName}";
-    $columnName = "{$fieldName}_target_id";
-
-    $database = \Drupal::database();
     foreach ($itemList as $item) {
-      if (empty($item->target_id)) {
-        continue;
-      }
-
-      $targetId = $item->target_id;
-
-      // Check whether the table has references other than the entity ID.
-      $count = (int) $database->select($tableName, 't')
-        ->condition("t.{$columnName}", $targetId)
-        ->condition('t.entity_id', $entityId, '<>')
-        ->countQuery()
-        ->execute()
-        ->fetchField();
-
-      if ($count === 0) {
-        $ids[] = $targetId;
+      if (!empty($item->target_id)) {
+        $ids[] = $item->target_id;
       }
     }
 
