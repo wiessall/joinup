@@ -43,7 +43,6 @@
         "drupal/editor_file": "^2.1",
         "drupal/email_confirmer": "^1.0",
         "drupal/email_contact": "^2.0.4",
-        "drupal/embed_block": "^1.0",
         "drupal/entity_form_field_label": "^2.1",
         "drupal/entity_legal": "^4.0",
         "drupal/entity_print": "^2.15",
@@ -132,7 +131,6 @@
         "drupal/twig_field_value": "^2.0",
         "drupal/uuid_extra": "^2.0",
         "drupal/view_unpublished": "^1.0",
-        "drupal/views_autosubmit": "^1.7",
         "drupal/views_block_area": "^2.0",
         "drupal/views_bulk_operations": "^4.4",
         "drupal/views_data_export": "^1.0",
@@ -431,9 +429,6 @@
                 "Activate tab by link anchor is broken @see https://www.drupal.org/project/field_group/issues/3226844": "resources/patch/php/drupal/field_group/3226844.diff",
                 "Emptiness check in field_group_remove_empty_form_groups() does not account for empty containers @see https://www.drupal.org/i/3069365": "resources/patch/php/drupal/field_group/3069365-mr109.commit044666d7.diff"
             },
-            "drupal/field_group_markup": {
-                "Provide schema for the module @see https://www.drupal.org/i/3347747": "resources/patch/php/drupal/field_group_markup/3347747-2.patch"
-            },
             "drupal/flag": {
                 "TypeError: Argument 1 passed to FlagCount::count() must implement interface @see https://www.drupal.org/project/flag/issues/3168014": "resources/patch/php/drupal/flag/3168014.diff",
                 "AJAX link broken if flaggable entity id is string @see https://www.drupal.org/project/flag/issues/3359007": "resources/patch/php/drupal/flag/3359007-47.patch",
@@ -455,8 +450,7 @@
                 "Foreach expects array|object, null given @see https://www.drupal.org/i/3516478": "resources/patch/php/drupal/inline_entity_form/3516478.diff"
             },
             "drupal/l10n_pconfig": {
-                "Update state var on language entity update (not only on form edit) @see https://www.drupal.org/i/3533900": "resources/patch/php/drupal/l10n_pconfig/3533900.diff",
-                "Add missing plural formulae @see https://www.drupal.org/i/3312406": "resources/patch/php/drupal/l10n_pconfig/3312406.diff"
+                "Add missing plural formulae @see https://www.drupal.org/i/3312406": "resources/patch/php/drupal/l10n_pconfig/3312406.mr4.commit1a0a53cb.diff"
             },
             "drupal/linkit": {
                 "Link shown after the autocomplete selection is the bare node/xxx link, not the alias @see https://www.drupal.org/node/2877535": "resources/patch/php/drupal/linkit/2877535.diff",
@@ -536,9 +530,6 @@
             },
             "drupal/tour": {
                 "Support page manager variants on front page @see https://www.drupal.org/i/3568815": "resources/patch/php/drupal/tour/3568815.patch"
-            },
-            "drupal/tmgmt_ec_etranslation": {
-                "Race Condition in Translation Callback": "resources/patch/php/drupal/tmgmt_ec_etranslation/3526972.diff"
             },
             "drupal/views_block_area": {
                 "Render logic not working @see https://www.drupal.org/i/3499861": "resources/patch/php/drupal/views_block_area/3499861.patch"
