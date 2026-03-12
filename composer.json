@@ -58,7 +58,7 @@
         "drupal/field_group": "^4.0",
         "drupal/field_permissions": "^1.1",
         "drupal/file_visibility": "^1.0",
-        "drupal/flag": "^4.0@beta",
+        "drupal/flag": "^5.0",
         "drupal/geocoder": "^4.4",
         "drupal/geofield": "~1.6",
         "drupal/honeypot": "~2",
@@ -345,6 +345,9 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "drupal/babel": {
+                "TMGMT @see https://www.drupal.org/i/3554005": "resources/patch/php/drupal/babel/3554005.mr71-note706700.diff"
+            },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff",
                 "Weekly view doesn't show first week of new year @see https://www.drupal.org/i/3484325": "resources/patch/php/drupal/calendar_view/3484325.comment16152620.patch"
@@ -420,6 +423,9 @@
             "drupal/field_delimiter": {
                 "Doesn't work in layout builder. @see https://www.drupal.org/i/3099580": "resources/patch/php/drupal/field_delimiter/3099580.patch"
             },
+            "drupal/field_fallback_formatter": {
+                "Issue #3557037: Option to not override #theme function of formatted output": "resources/patch/php/drupal/field_fallback_formatter/8.diff"
+            },
             "drupal/field_group": {
                 "Links from validation message don't point to proper fields under horizontal tabs @see https://www.drupal.org/i/3362124": "resources/patch/php/drupal/field_group/3362124-mr110-commit_6462709d7f.diff",
                 "Activate tab by link anchor is broken @see https://www.drupal.org/project/field_group/issues/3226844": "resources/patch/php/drupal/field_group/3226844.diff",
@@ -430,7 +436,8 @@
             },
             "drupal/flag": {
                 "TypeError: Argument 1 passed to FlagCount::count() must implement interface @see https://www.drupal.org/project/flag/issues/3168014": "resources/patch/php/drupal/flag/3168014.diff",
-                "AJAX link broken if flaggable entity id is string @see https://www.drupal.org/project/flag/issues/3359007": "resources/patch/php/drupal/flag/3359007-47.patch"
+                "AJAX link broken if flaggable entity id is string @see https://www.drupal.org/project/flag/issues/3359007": "resources/patch/php/drupal/flag/3359007-47.patch",
+                "Flag cache tags result in Purge module exception @see https://www.drupal.org/project/flag/issues/3557145": "resources/patch/php/drupal/flag/3557145.71mr-commitf248789c.diff"
             },
             "drupal/honeypot": {
                 "Behat integration. @see https://www.drupal.org/project/honeypot/issues/3059040": "resources/patch/php/drupal/honeypot/3059040.patch",

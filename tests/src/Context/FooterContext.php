@@ -35,7 +35,7 @@ class FooterContext extends RawDrupalContext {
   public function assertVersion(): void {
     $element = $this->getSession()->getPage()->find('css', 'footer .joinup-version a');
     $this->assertCondition($element instanceof NodeElement, 'The version is shown in the footer.');
-    $this->assertCondition(str_starts_with($element->getAttribute('href') ?? '', 'https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference/'), 'The version links to the Gitlab instance.');
+    $this->assertCondition(str_starts_with($element->getAttribute('href') ?? '', 'https://gitlab.dhs.tech.ec.europa.eu/ec-europa/digit-joinup-reference/'), 'The version links to the Gitlab instance.');
     $this->assertCondition((bool) preg_match('/^v?(\d+\.){2}\d+(-\d+-g[0-9a-f]+)?$/', $element->getText()), 'The version text does not match the expected format.');
   }
 
