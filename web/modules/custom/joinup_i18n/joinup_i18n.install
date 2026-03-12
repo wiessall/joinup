@@ -1,0 +1,42 @@
+<?php
+
+/**
+ * @file
+ * Install, update, uninstall hook implementations for Joinup i18n module.
+ */
+
+declare(strict_types=1);
+
+/**
+ * Implements hook_requirements().
+ *
+ * @todo Remove in ISAICP-10740.
+ */
+function joinup_i18n_requirements(string $phase): array {
+  if ($phase !== 'runtime') {
+    return [];
+  }
+
+  $sql = <<<SQL
+    SELECT GROUP_CONCAT(lid ORDER BY lid SEPARATOR ', ')
+    FROM locales_source
+    GROUP BY source, context
+    HAVING COUNT(source) > 1
+    SQL;
+
+  if (!$rows = \Drupal::database()->query($sql)->fetchCol()) {
+    return [];
+  }
+
+  return [
+    'joinup_i18n_source_duplicate' => [
+      'severity' => REQUIREMENT_ERROR,
+      'title' => t('Locale source strings'),
+      'value' => t('Duplicate Locale source string(s):'),
+      'description' => [
+        '#theme' => 'item_list',
+        '#items' => $rows,
+      ],
+    ],
+  ];
+}
