@@ -9,7 +9,7 @@ dependencies:
     - search_api
 id: type
 name: 'Content types'
-weight: -6
+weight: -5
 min_count: 1
 missing: false
 missing_label: others
