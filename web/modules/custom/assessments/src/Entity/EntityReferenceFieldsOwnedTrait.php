@@ -33,6 +33,7 @@ trait EntityReferenceFieldsOwnedTrait {
       return;
     }
 
+    // Do not handle files here. They are handled by Drupal.
     $fieldNames = $this->getEntityReferenceFieldsOwned(includeDocumentFields: FALSE);
     foreach ($fieldNames as $fieldName) {
       if (!$this->hasField($fieldName) || !$this->original->hasField($fieldName)) {
@@ -69,6 +70,7 @@ trait EntityReferenceFieldsOwnedTrait {
       return;
     }
 
+    // Do not handle files here. They are handled by Drupal.
     $fieldNames = $this->getEntityReferenceFieldsOwned(includeDocumentFields: FALSE);
     foreach ($fieldNames as $fieldName) {
       if (!$this->hasField($fieldName)) {
