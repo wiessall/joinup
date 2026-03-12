@@ -41,7 +41,7 @@ class BindingRequirementParagraph extends Paragraph {
    * {@inheritdoc}
    */
   protected function getEntityReferenceFieldsOwned(): array {
-    return ['expression', 'affects', 'has_participation', 'requirement_documents'];
+    return ['expression', 'affects', 'has_participation'];
   }
 
 }
