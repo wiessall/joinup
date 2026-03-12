@@ -15,10 +15,13 @@ trait EntityReferenceFieldsOwnedTrait {
   /**
    * Returns ER fields whose entities are owned by this parent entity.
    *
+   * @param bool $includeDocumentFields
+   *   (optional) Whether to include document fields. Defaults to TRUE.
+   *
    * @return string[]
    *   Array of field names.
    */
-  abstract protected function getEntityReferenceFieldsOwned(): array;
+  abstract protected function getEntityReferenceFieldsOwned(bool $includeDocumentFields = TRUE): array;
 
   /**
    * Acts on parent entity update.
@@ -30,7 +33,7 @@ trait EntityReferenceFieldsOwnedTrait {
       return;
     }
 
-    $fieldNames = $this->getEntityReferenceFieldsOwned();
+    $fieldNames = $this->getEntityReferenceFieldsOwned(includeDocumentFields: FALSE);
     foreach ($fieldNames as $fieldName) {
       if (!$this->hasField($fieldName) || !$this->original->hasField($fieldName)) {
         continue;
@@ -66,7 +69,7 @@ trait EntityReferenceFieldsOwnedTrait {
       return;
     }
 
-    $fieldNames = $this->getEntityReferenceFieldsOwned();
+    $fieldNames = $this->getEntityReferenceFieldsOwned(includeDocumentFields: FALSE);
     foreach ($fieldNames as $fieldName) {
       if (!$this->hasField($fieldName)) {
         continue;
