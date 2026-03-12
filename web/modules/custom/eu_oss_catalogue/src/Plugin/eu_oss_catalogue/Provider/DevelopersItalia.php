@@ -136,7 +136,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
           $this->processedUrls[] = $project->url;
 
           // Try to use publiccodeYml from the Git repository if it is provided.
-          if (isset($project->files['publiccodeYml']) || !isset($this->yamlContent[$project->url])) {
+          if ($project->getPubliccodeYml() !== NULL || !isset($this->yamlContent[$project->url])) {
             yield $project;
             continue;
           }

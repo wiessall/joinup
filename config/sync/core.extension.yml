@@ -10,6 +10,7 @@ module:
   babel: 0
   babel_content_entity: 0
   babel_menu_link_content: 0
+  babel_tmgmt: 0
   better_exposed_filters: 0
   blazy: 0
   block: 0
