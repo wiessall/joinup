@@ -344,7 +344,8 @@
         },
         "patches": {
             "drupal/babel": {
-                "TMGMT @see https://www.drupal.org/i/3554005": "resources/patch/php/drupal/babel/3554005.mr71-note706700.diff"
+                "TMGMT @see https://www.drupal.org/i/3554005": "resources/patch/php/drupal/babel/3554005.mr71-note706700.diff",
+                "Menu Link Content plugin creates invalid entity translations when Babel string translations are deleted @see https://drupal.org/i/3578415": "resources/patch/php/drupal/babel/3578415.mr77-commit6da4c667.diff"
             },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff",
