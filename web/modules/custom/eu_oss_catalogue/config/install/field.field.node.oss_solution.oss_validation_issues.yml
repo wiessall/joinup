@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.oss_validation_issues
+    - node.type.oss_solution
+  module:
+    - eu_oss_catalogue
+id: node.oss_solution.oss_validation_issues
+field_name: oss_validation_issues
+entity_type: node
+bundle: oss_solution
+label: 'Validation issues'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: validation_issue

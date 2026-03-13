@@ -92,7 +92,7 @@ class HostingPlatform extends EuOssCatalogueProviderPluginBase implements Config
     try {
       foreach ($this->getPlatform()->getProjects($requestedFiles) as $project) {
         \assert($project instanceof Project);
-        if (array_key_exists('publiccodeYml', $project->files)) {
+        if ($project->getPubliccodeYml() !== NULL) {
           yield $project;
         }
       }
