@@ -104,23 +104,22 @@ Feature: Global search
     Then I should see the text "SEARCH RESULTS (7)"
 
   @javascript
-  Scenario: Alphabetical order for the spatial coverage and organisation origin in the search page.
+  Scenario: Alphabetical order for the spatial coverage and organisation country in the search page.
     Given owner content:
       | name           | country        |
       | Search owner   | Greece         |
       | European owner | European Union |
     And collection content:
-      | title            | description                  | abstract                       | state     |
-      | Collection alpha | collection beta description. | The collection gamma abstract. | published |
+      | title            | description                  | abstract                       | state     | owner        |
+      | Collection alpha | collection beta description. | The collection gamma abstract. | published | Search owner |
     And solution content:
       | title            | description                  | abstract                       | owner          |
-      | Collection alpha | collection beta description. | The collection gamma abstract. | Search owner   |
-      | Collection beta  | collection beta description. | The collection gamma abstract. | European owner |
+      | Solution alpha | collection beta description. | The collection gamma abstract. | Search owner   |
+      | Solution beta  | collection beta description. | The collection gamma abstract. | European owner |
     And event content:
       | title       | field_paragraphs_body | spatial coverage | collection       | state     |
       | Event Omega | The epsilon event.    | Greece           | Collection alpha | published |
       | Alt event   | Background event.     | Luxembourg       | Collection alpha | published |
-
     When I visit the advanced search page
     And I should not see the "Organisation country" facet
     When I check the "Solutions (2)" checkbox from the "Content types" facet
@@ -133,11 +132,16 @@ Feature: Global search
 
     Given I click "Clear filters"
     When I check the "Solutions (2)" checkbox from the "Content types" facet
+    And I check the "Collections (4)" checkbox from the "Content types" facet
     And I should see the "Organisation country" facet
-    And the "Organisation country" checkbox facet should allow selecting the following values "European Union (1), Greece (1)"
+    And the "Organisation country" checkbox facet should allow selecting the following values "European Union (1), Greece (2)"
     And I check the "European Union (1)" checkbox from the "Organisation country" facet
-    Then I should see the "Collection beta" tile
-    And I should not see the "Collection alpha" tile
+    Then I should see the "Solution beta" tile
+    And I should not see the "Solution alpha" tile
+    When I uncheck the "European Union (1)" checkbox from the "Organisation country" facet
+    And I check the "Greece (2)" checkbox from the "Organisation country" facet
+    Then I should see the "Collection alpha" tile
+    Then I should see the "Solution alpha" tile
 
   Scenario: Content can be found with a full-text search.
     Given collection content:
