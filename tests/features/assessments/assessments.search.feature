@@ -14,7 +14,6 @@ Feature: Assessment report search functionality
       | Acme Report          |                       | published | 2020-01-03T00:00:00Z |
       | Risk Evaluation      |                       | review    | 2020-01-04T00:00:00Z |
       | Draft Observation    |                       | draft     | 2020-01-05T00:00:00Z |
-
     And I am an anonymous user
     When I visit the advanced search page
     And I check the "Assessment reports (3)" checkbox from the "Content types" facet
