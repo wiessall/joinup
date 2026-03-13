@@ -3,12 +3,14 @@ langcode: en
 status: true
 dependencies:
   config:
+    - facets.facet.date
     - facets.facet.domain
     - facets.facet.group
     - facets.facet.interoperable_flag
     - facets.facet.organisation_country
     - facets.facet.solution_classification
     - facets.facet.spatial_coverage
+    - facets.facet.status
     - facets.facet.topic
     - facets.facet.type
     - facets.facet.type_of_document
@@ -73,6 +75,18 @@ facets:
   organisation_country:
     checked: true
     label: 'Organisation country'
+    separator: ', '
+    show_count: false
+    weight: 0
+  date:
+    checked: true
+    label: Date
+    separator: ', '
+    show_count: false
+    weight: 0
+  status:
+    checked: true
+    label: Status
     separator: ', '
     show_count: false
     weight: 0
