@@ -25,12 +25,12 @@ Feature: User profile
     And the following fields should be present "Facebook, X, LinkedIn, GitHub, SlideShare, Youtube, Vimeo"
     And the following fields should not be present "Time zone"
     And the "Site language" select should contain the following options:
+      | English    |
       | Bulgarian  |
       | Croatian   |
       | Czech      |
       | Danish     |
       | Dutch      |
-      | English    |
       | Estonian   |
       | Finnish    |
       | French     |
