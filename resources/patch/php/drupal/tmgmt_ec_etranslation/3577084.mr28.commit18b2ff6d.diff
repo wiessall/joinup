@@ -1,13 +1,13 @@
 diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index d6e47eb6f5bd104ab98264d0ca0f93ee36370aee..f8b2e9855aa9e253c5ae0ae5fa192a597c90967b 100644
+index 092fe16cff44dbe1d5814f136fbc9313644baef8..2617572b69e996e0199558b4b2e1589787b31caa 100644
 --- a/.gitlab-ci.yml
 +++ b/.gitlab-ci.yml
 @@ -34,7 +34,7 @@ include:
  #
  
  variables:
--  _CSPELL_WORDS: 'webgate'
-+  _CSPELL_WORDS: 'webgate,teilnehmen,wirst'
+-  _CSPELL_WORDS: 'webgate,tjid'
++  _CSPELL_WORDS: 'webgate,teilnehmen,wirst,tjid'
    DRUPAL_CORE: "$CORE_STABLE"
    _TARGET_PHP: "$CORE_PHP_MIN"
    OPT_IN_TEST_NEXT_MINOR: 1
@@ -30,12 +30,12 @@ index cc10c2da97fd0b96309a3b13874684ae443117f5..6d51cedb79ba60e2ce05f13caa770f3a
 +          type: boolean
 +          label: 'Remove malformed [notranslate] tags'
 diff --git a/phpstan-baseline.neon b/phpstan-baseline.neon
-index 743647d7063674b6c5cfe5b3590d265db3cbf10e..319cbd142360ebf8d7f43c57fd4f303bbf7690c7 100644
+index 2b75b9728f1f2d2dcff5c718b17330afaa0210d0..29186f2a4f7982e1f90e4dcbf71bac6b5acd19c6 100644
 --- a/phpstan-baseline.neon
 +++ b/phpstan-baseline.neon
-@@ -20,6 +20,16 @@ parameters:
+@@ -45,6 +45,16 @@ parameters:
  			count: 1
- 			path: tests/src/Functional/ETranslationServiceTest.php
+ 			path: tests/src/Kernel/TimeoutTest.php
  
 +		-
 +			message: "#^Attribute class PHPUnit\\\\Framework\\\\Attributes\\\\CoversClass does not exist\\.$#"
@@ -50,7 +50,7 @@ index 743647d7063674b6c5cfe5b3590d265db3cbf10e..319cbd142360ebf8d7f43c57fd4f303b
  		-
  			message: "#^Attribute class PHPUnit\\\\Framework\\\\Attributes\\\\CoversClass does not exist\\.$#"
  			count: 1
-@@ -35,6 +45,21 @@ parameters:
+@@ -60,6 +70,21 @@ parameters:
  			count: 1
  			path: tests/src/Unit/CallbackControllerTest.php
  
@@ -152,10 +152,10 @@ index 9ff2da291af0e7ff8d9110a48a7f0aa239583a90..305ce59b5080ee2d0de6c1889fcc5e65
  
    /**
 diff --git a/src/Plugin/tmgmt/Translator/ETranslationTranslator.php b/src/Plugin/tmgmt/Translator/ETranslationTranslator.php
-index a870ba708a73f8ec93d7fb86067ff53f98b83e6b..62d1db15ca355d60cf1d967fb6eab22a7f4ff8ab 100644
+index c15e9bf847e09ca8e03347554807b33f0f72dec1..680a79b6d4d8b5e6169f7ee7f19cbcbb07bdbb53 100644
 --- a/src/Plugin/tmgmt/Translator/ETranslationTranslator.php
 +++ b/src/Plugin/tmgmt/Translator/ETranslationTranslator.php
-@@ -85,6 +85,13 @@ class ETranslationTranslator extends TranslatorPluginBase implements ContainerFa
+@@ -94,6 +94,13 @@ class ETranslationTranslator extends TranslatorPluginBase implements ContainerFa
     */
    protected TextValidatorInterface $textValidator;
  
@@ -169,7 +169,7 @@ index a870ba708a73f8ec93d7fb86067ff53f98b83e6b..62d1db15ca355d60cf1d967fb6eab22a
    /**
     * {@inheritdoc}
     */
-@@ -116,6 +123,7 @@ class ETranslationTranslator extends TranslatorPluginBase implements ContainerFa
+@@ -125,6 +132,7 @@ class ETranslationTranslator extends TranslatorPluginBase implements ContainerFa
        'email' => NULL,
        'callback_hostname' => NULL,
        'use_queue' => FALSE,
@@ -177,7 +177,7 @@ index a870ba708a73f8ec93d7fb86067ff53f98b83e6b..62d1db15ca355d60cf1d967fb6eab22a
      ];
    }
  
-@@ -197,20 +205,22 @@ class ETranslationTranslator extends TranslatorPluginBase implements ContainerFa
+@@ -206,20 +214,22 @@ class ETranslationTranslator extends TranslatorPluginBase implements ContainerFa
            $data['destinations']['emailDestinations'] = [$email];
          }
  
@@ -205,7 +205,7 @@ index a870ba708a73f8ec93d7fb86067ff53f98b83e6b..62d1db15ca355d60cf1d967fb6eab22a
          }
  
          try {
-@@ -321,4 +331,96 @@ class ETranslationTranslator extends TranslatorPluginBase implements ContainerFa
+@@ -330,4 +340,96 @@ class ETranslationTranslator extends TranslatorPluginBase implements ContainerFa
      return $data;
    }
  
