@@ -15,17 +15,30 @@ settings:
   password: ''
   domain: SPD
   email: ''
-  callback_hostname: ''
+  callback_hostname:
   use_queue: false
 remote_languages_mappings:
+  bg: bg
+  hr: hr
   cs: cs
   da: da
   nl: nl
   en: en
   et: et
+  fi: fi
   fr: fr
   de: de
   el: el
+  hu: hu
+  ga: ga
   it: it
+  lv: lv
+  lt: lt
+  mt: mt
+  pl: pl
+  pt: pt
+  ro: ro
+  sk: sk
   sl: sl
   es: es
+  sv: sv

@@ -37,13 +37,6 @@ class RelevantLanguageCode extends FieldItemList {
   const FLAGSHIP_FIELD = 'oss_features';
 
   /**
-   * Name of the field storing the raw publiccode.yml file content.
-   *
-   * @const string
-   */
-  const PUBLICCODE_YAML_FIELD = 'oss_publiccode_yml_content';
-
-  /**
    * {@inheritdoc}
    */
   protected function computeValue(): void {
@@ -108,12 +101,10 @@ class RelevantLanguageCode extends FieldItemList {
   protected function getLanguageCodesFromPublicCodeYaml(): array {
     $ossSolution = $this->getEntity();
     \assert($ossSolution instanceof OssSolutionInterface);
-    $field = $ossSolution->get(static::PUBLICCODE_YAML_FIELD);
-    \assert($field->getFieldDefinition()->isTranslatable() === FALSE);
-    if ($field->isEmpty()) {
+    $publicCodeYamlContent = $ossSolution->getPublicCodeYaml();
+    if (is_null($publicCodeYamlContent)) {
       return [];
     }
-    $publicCodeYamlContent = $field->first()->getValue()[$field->first()->mainPropertyName()];
 
     try {
       $publicCodeYaml = Yaml::decode($publicCodeYamlContent);

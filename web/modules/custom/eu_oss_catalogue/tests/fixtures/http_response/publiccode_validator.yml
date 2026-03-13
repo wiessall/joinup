@@ -1,0 +1,16 @@
+valid:
+  valid: true
+  normalized: |
+    publiccodeYmlVersion: "0.4"
+    name: Example Solution
+    url: https://example.com/solution
+  results: []
+invalid:
+  valid: false
+  normalized: null
+  results:
+    - key: name
+      description: Required field 'name' is missing.
+      line: 0
+      column: 0
+      type: error
