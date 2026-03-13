@@ -532,10 +532,6 @@
             "drupal/tour": {
                 "Support page manager variants on front page @see https://www.drupal.org/i/3568815": "resources/patch/php/drupal/tour/3568815.patch"
             },
-            "drupal/tmgmt_ec_etranslation": {
-                "Fix tests @see https://www.drupal.org/i/3578229": "resources/patch/php/drupal/tmgmt_ec_etranslation/3578229.mr30.commiteab07476.diff",
-                "Handle stale job items @see https://www.drupal.org/i/3578662": "resources/patch/php/drupal/tmgmt_ec_etranslation/3578662.mr29.commit6318f939.diff"
-            },
             "drupal/views_block_area": {
                 "Render logic not working @see https://www.drupal.org/i/3499861": "resources/patch/php/drupal/views_block_area/3499861.patch"
             },
