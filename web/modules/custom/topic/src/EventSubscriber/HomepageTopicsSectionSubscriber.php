@@ -51,7 +51,7 @@ readonly class HomepageTopicsSectionSubscriber implements EventSubscriberInterfa
       $build['#configuration']['label_display'] = FALSE;
     }
     elseif (!empty($entity_queue->block_label->value)) {
-      $build['#configuration']['label'] = $entity_queue->block_label->value;
+      $build['content']['#title'] = $entity_queue->block_label->value;
     }
 
     CacheableMetadata::createFromObject($entity_queue)

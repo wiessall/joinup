@@ -262,11 +262,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              moderator: '0'
-              administrator: '0'
-              rdf_graph_manager: '0'
             expose_fields: false
             placeholder: 'Start typing to search…'
             searched_fields_id: search_api_fulltext_searched_fields

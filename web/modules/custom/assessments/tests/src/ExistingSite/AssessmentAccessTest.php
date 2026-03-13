@@ -368,7 +368,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
    * @return array
    *   Test cases with state names.
    */
-  public function nonPublishedStatesProvider(): array {
+  public static function nonPublishedStatesProvider(): array {
     return [
       'draft' => ['draft'],
       'review' => ['review'],
@@ -382,7 +382,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
    * @return array
    *   Test cases with state names.
    */
-  public function allStatesProvider(): array {
+  public static function allStatesProvider(): array {
     return [
       'draft' => ['draft'],
       'review' => ['review'],
@@ -541,7 +541,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
    * @return array
    *   Test cases with bundle names and paragraph field names.
    */
-  public function subEntityTypesProvider(): array {
+  public static function subEntityTypesProvider(): array {
     return [
       'expression' => ['expression', 'expression'],
       'participation' => ['participation', 'has_participation'],

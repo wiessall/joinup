@@ -15,7 +15,7 @@ dependencies:
 id: translator
 label: Translator
 weight: -3
-is_admin: null
+is_admin: false
 permissions:
   - 'access dashboard'
   - 'access toolbar'

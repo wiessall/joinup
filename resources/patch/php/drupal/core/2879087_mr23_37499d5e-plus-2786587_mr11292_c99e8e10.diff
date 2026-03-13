@@ -1,0 +1,819 @@
+diff --git a/core/modules/comment/comment.post_update.php b/modules/comment/comment.post_update.php
+index 9c49d3645f..44214461ab 100644
+--- a/core/modules/comment/comment.post_update.php
++++ b/core/modules/comment/comment.post_update.php
+@@ -5,6 +5,10 @@
+  * Post update functions for the comment module.
+  */
+ 
++use Drupal\comment\Plugin\Field\FieldType\CommentItemInterface;
++use Drupal\Core\Config\Entity\ConfigEntityUpdater;
++use Drupal\field\FieldConfigInterface;
++
+ /**
+  * Implements hook_removed_post_updates().
+  */
+@@ -14,3 +18,19 @@ function comment_removed_post_updates(): array {
+     'comment_post_update_add_ip_address_setting' => '9.0.0',
+   ];
+ }
++
++/**
++ * Set the default value of 'thread_limit' setting for all comment fields.
++ */
++function comment_post_update_add_thread_limit_field_setting(?array &$sandbox = NULL): void {
++  \Drupal::classResolver(ConfigEntityUpdater::class)->update($sandbox, 'field_config', function (FieldConfigInterface $field_config): bool {
++    if ($field_config->getType() === 'comment') {
++      $field_config->setSetting('thread_limit', [
++        'depth' => 2,
++        'mode' => CommentItemInterface::THREAD_DEPTH_REPLY_MODE_ALLOW,
++      ]);
++      return TRUE;
++    }
++    return FALSE;
++  });
++}
+diff --git a/core/modules/comment/config/schema/comment.schema.yml b/modules/comment/config/schema/comment.schema.yml
+index 33b3e55ac3..2e5603c8bf 100644
+--- a/core/modules/comment/config/schema/comment.schema.yml
++++ b/core/modules/comment/config/schema/comment.schema.yml
+@@ -79,6 +79,16 @@ field.field_settings.comment:
+     default_mode:
+       type: integer
+       label: 'Threading'
++    thread_limit:
++      type: mapping
++      label: 'Thread limiting'
++      mapping:
++        depth:
++          type: integer
++          label: 'Thread depth'
++        mode:
++          type: integer
++          label: 'Limit mode'
+     per_page:
+       type: integer
+       label: 'Comments per page'
+diff --git a/core/modules/comment/src/CommentAccessControlHandler.php b/modules/comment/src/CommentAccessControlHandler.php
+index 87805f3935..453f97e3f1 100644
+--- a/core/modules/comment/src/CommentAccessControlHandler.php
++++ b/core/modules/comment/src/CommentAccessControlHandler.php
+@@ -4,6 +4,7 @@ namespace Drupal\comment;
+ 
+ use Drupal\comment\Plugin\Field\FieldType\CommentItemInterface;
+ use Drupal\Core\Access\AccessResult;
++use Drupal\Core\Access\AccessResultInterface;
+ use Drupal\Core\Entity\EntityAccessControlHandler;
+ use Drupal\Core\Entity\EntityInterface;
+ use Drupal\Core\Field\FieldDefinitionInterface;
+@@ -30,6 +31,23 @@ class CommentAccessControlHandler extends EntityAccessControlHandler {
+         ->addCacheableDependency($entity);
+     }
+ 
++    if ($operation === 'reply') {
++      $access = $this->checkReplyThreadAccess($entity)->addCacheableDependency($entity);
++
++      if (!$access->isForbidden()) {
++        $context = ['commented_entity' => $entity->getCommentedEntity()];
++        $access = $access->orIf(
++          // The user must be able to view the comment.
++          $this->checkAccess($entity, 'view', $account)
++            // And must be able to create comments.
++            ->andIf($this->createAccess($entity->bundle(), $account, $context, TRUE))
++            // And comment must be published.
++            ->andIf(AccessResult::allowedIf($entity->isPublished()))
++        );
++      }
++      return $access;
++    }
++
+     if ($comment_admin) {
+       $access = AccessResult::allowed()->cachePerPermissions();
+       return ($operation != 'view') ? $access : $access->andIf($entity->getCommentedEntity()->access($operation, $account, TRUE));
+@@ -66,6 +84,42 @@ class CommentAccessControlHandler extends EntityAccessControlHandler {
+     return AccessResult::allowedIfHasPermission($account, 'post comments');
+   }
+ 
++  /**
++   * Checks if this comment accepts replies according to field config.
++   */
++  protected function checkReplyThreadAccess(CommentInterface $comment): AccessResultInterface {
++    $access_result = AccessResult::neutral();
++    $commented_entity = $comment->getCommentedEntity();
++    if (!$commented_entity instanceof EntityInterface) {
++      return $access_result;
++    }
++
++    // Forbid if this reply, to a threaded comment, is about to exceed the
++    // maximum thread depth.
++    $field_definition = $commented_entity->getFieldDefinition($comment->getFieldName());
++    \assert($field_definition instanceof FieldDefinitionInterface);
++    $access_result->addCacheableDependency($field_definition->getConfig($commented_entity->bundle()));
++    $field_settings = $field_definition->getSettings();
++
++    // Only check if the depth is limited.
++    if ($field_settings && $field_settings['default_mode'] === CommentManagerInterface::COMMENT_MODE_THREADED_DEPTH_LIMIT) {
++      $thread_limit_settings = $field_settings['thread_limit'];
++      \assert($field_settings['thread_limit']['depth'] >= 2, 'Thread depth limit should be greater than or equal to 2.');
++
++      // Only check if the depth limitation is configured to deny replies.
++      if ($thread_limit_settings['mode'] === CommentItemInterface::THREAD_DEPTH_REPLY_MODE_DENY) {
++        // Prevent replying to the deepest comment.
++        $comment_indent = count(explode('.', $comment->getThread()));
++        $max_indent = $field_settings['thread_limit']['depth'];
++        if ($comment_indent >= $max_indent) {
++          return $access_result->andIf(AccessResult::forbidden('Thread limit hit'));
++        }
++      }
++    }
++
++    return $access_result;
++  }
++
+   /**
+    * {@inheritdoc}
+    */
+@@ -159,4 +213,14 @@ class CommentAccessControlHandler extends EntityAccessControlHandler {
+     return parent::checkFieldAccess($operation, $field_definition, $account, $items);
+   }
+ 
++  /**
++   * {@inheritdoc}
++   */
++  protected function buildCreateAccessCid(array $context, ?string $entity_bundle): string {
++    $cid = parent::buildCreateAccessCid($context, $entity_bundle);
++    // Vary the static access cache depending on the commented/host entity.
++    $cid .= ':' . (isset($context['commented_entity']) ? $context['commented_entity']->id() : '0');
++    return $cid;
++  }
++
+ }
+diff --git a/core/modules/comment/src/CommentFieldItemList.php b/modules/comment/src/CommentFieldItemList.php
+index ab257a008a..379c82fc0f 100644
+--- a/core/modules/comment/src/CommentFieldItemList.php
++++ b/core/modules/comment/src/CommentFieldItemList.php
+@@ -3,6 +3,8 @@
+ namespace Drupal\comment;
+ 
+ use Drupal\Core\Access\AccessResult;
++use Drupal\Core\Access\AccessResultInterface;
++use Drupal\Core\Cache\CacheableMetadata;
+ use Drupal\Core\Field\FieldItemList;
+ use Drupal\Core\Session\AccountInterface;
+ 
+@@ -43,24 +45,83 @@ class CommentFieldItemList extends FieldItemList {
+    * {@inheritdoc}
+    */
+   public function access($operation = 'view', ?AccountInterface $account = NULL, $return_as_object = FALSE) {
++    $account = $account ?: \Drupal::currentUser();
+     if ($operation === 'edit') {
+       // Only users with administer comments permission can edit the comment
+       // status field.
+-      $result = AccessResult::allowedIfHasPermission($account ?: \Drupal::currentUser(), 'administer comments');
++      $result = AccessResult::allowedIfHasPermission($account, 'administer comments');
+       return $return_as_object ? $result : $result->isAllowed();
+     }
+     if ($operation === 'view') {
+-      // Only users with "post comments" or "access comments" permission can
+-      // view the field value. The formatter,
+-      // Drupal\comment\Plugin\Field\FieldFormatter\CommentDefaultFormatter,
+-      // takes care of showing the thread and form based on individual
+-      // permissions, so if a user only has ‘post comments’ access, only the
+-      // form will be shown and not the comments.
+-      $result = AccessResult::allowedIfHasPermission($account ?: \Drupal::currentUser(), 'access comments')
+-        ->orIf(AccessResult::allowedIfHasPermission($account ?: \Drupal::currentUser(), 'post comments'));
++      // This operation is only used by EntityViewDisplay::buildMultiple(). In
++      // this case check both: 'view comment list' or 'create' access, since
++      // this field is considered a composition of listed comments and comment
++      // form. The decision to show only comments, only comment form or both
++      // will be made by CommentDefaultFormatter::viewElements() later. Uses
++      // recursive calls on same method invoking lower operations.
++      $result = $this->access('view comment list', $account, TRUE);
++      if (!$result->isAllowed()) {
++        $result = $result->orIf($this->access('create', $account, TRUE));
++      }
++
+       return $return_as_object ? $result : $result->isAllowed();
+     }
++    if ($operation === 'view comment list') {
++      // In contrast to 'view', this operation is used as the lowest operation
++      // by various methods to check only a single permission on last comment.
++      // If a user is able to view the last published comments, they are able
++      // to view the whole list of comments.
++      return $this->lastPublishedCommentAccess($account, $return_as_object);
++    }
++
++    if ($operation === 'create') {
++      // In contrast to 'view', this operation is used as the lowest operation
++      // by various methods to check only the single 'create' permission on the
++      // comment entity.
++      $bundle = $this->getSetting('comment_type');
++      $access_control_handler = \Drupal::entityTypeManager()->getAccessControlHandler('comment');
++
++      // The commented entity and, when replying, the parent comment are
++      // valuable information when comment entity 'create access' handler makes
++      // the decision.
++      $commented_entity = $this->getEntity();
++      $cache_metadata = (new CacheableMetadata())->addCacheableDependency($commented_entity);
++      $context = ['commented_entity' => $commented_entity];
++
++      /** @var \Drupal\Core\Access\AccessResult $result */
++      $result = $access_control_handler->createAccess($bundle, $account, $context, TRUE);
++      return $return_as_object ? $result->addCacheableDependency($cache_metadata) : $result->isAllowed();
++    }
+     return parent::access($operation, $account, $return_as_object);
+   }
+ 
++  /**
++   * Checks the access on the last published comment.
++   *
++   * @param \Drupal\Core\Session\AccountInterface $account
++   *   The user for which to check access.
++   * @param bool $return_as_object
++   *   If the method's return is an access result object or a boolean.
++   *
++   * @return bool|\Drupal\Core\Access\AccessResultInterface
++   *   The access result either as an access result object or a boolean,
++   *   depending on $return_as_object
++   */
++  protected function lastPublishedCommentAccess(AccountInterface $account, bool $return_as_object): bool|AccessResultInterface {
++    // Load the last published comment in the thread.
++    $last_published_comment_id = $this->first()->getValue()['cid'] ?? NULL;
++    if ($last_published_comment_id) {
++      if ($comment = \Drupal::entityTypeManager()->getStorage('comment')->load($last_published_comment_id)) {
++        // Allow if access on comment is allowed.
++        $access = $comment->access('view', $account, $return_as_object);
++        if ($return_as_object) {
++          $access->addCacheableDependency($comment);
++        }
++        return $access;
++      }
++    }
++    // If there are no comments, make no opinion.
++    return $return_as_object ? AccessResult::neutral() : FALSE;
++  }
++
+ }
+diff --git a/core/modules/comment/src/CommentForm.php b/modules/comment/src/CommentForm.php
+index e90c05f9c6..b110efbb6e 100644
+--- a/core/modules/comment/src/CommentForm.php
++++ b/core/modules/comment/src/CommentForm.php
+@@ -377,7 +377,7 @@ class CommentForm extends ContentEntityForm {
+     $uri = $entity->toUrl();
+     $logger = $this->logger('comment');
+ 
+-    if ($this->currentUser->hasPermission('post comments') && ($this->currentUser->hasPermission('administer comments') || $entity->{$field_name}->status == CommentItemInterface::OPEN)) {
++    if ($comment->access('create', $this->currentUser) && ($this->currentUser->hasPermission('administer comments') || $entity->{$field_name}->status == CommentItemInterface::OPEN)) {
+       $comment->save();
+       $form_state->setValue('cid', $comment->id());
+ 
+diff --git a/core/modules/comment/src/CommentLazyBuilders.php b/modules/comment/src/CommentLazyBuilders.php
+index 5d949a3203..4f6f4ca7f5 100644
+--- a/core/modules/comment/src/CommentLazyBuilders.php
++++ b/core/modules/comment/src/CommentLazyBuilders.php
+@@ -114,7 +114,7 @@ class CommentLazyBuilders implements TrustedCallbackInterface {
+       'pid' => NULL,
+     ];
+     $comment = $this->entityTypeManager->getStorage('comment')->create($values);
+-    return $this->entityFormBuilder->getForm($comment);
++    return $comment->access('create', $this->currentUser) ? $this->entityFormBuilder->getForm($comment) : [];
+   }
+ 
+   /**
+@@ -191,9 +191,8 @@ class CommentLazyBuilders implements TrustedCallbackInterface {
+         ];
+       }
+       $field_definition = $commented_entity->getFieldDefinition($entity->getFieldName());
+-      if ($entity->isPublished()
+-        && $entity->access('create')
+-        && $field_definition->getSetting('default_mode') === CommentManagerInterface::COMMENT_MODE_THREADED) {
++      $is_threaded = $field_definition->getSetting('default_mode') !== CommentManagerInterface::COMMENT_MODE_FLAT;
++      if ($is_threaded && $entity->access('reply')) {
+         $links['comment-reply'] = [
+           'title' => $this->t('Reply'),
+           'url' => Url::fromRoute('comment.reply', [
+diff --git a/core/modules/comment/src/CommentLinkBuilder.php b/modules/comment/src/CommentLinkBuilder.php
+index 09034eb304..6207632c14 100644
+--- a/core/modules/comment/src/CommentLinkBuilder.php
++++ b/core/modules/comment/src/CommentLinkBuilder.php
+@@ -97,7 +97,8 @@ class CommentLinkBuilder implements CommentLinkBuilderInterface {
+         continue;
+       }
+       $links = [];
+-      $commenting_status = $entity->get($field_name)->status;
++      $field = $entity->get($field_name);
++      $commenting_status = $field->status;
+       if ($commenting_status != CommentItemInterface::HIDDEN) {
+         // Entity has commenting status open or closed.
+         $field_definition = $entity->getFieldDefinition($field_name);
+@@ -105,20 +106,18 @@ class CommentLinkBuilder implements CommentLinkBuilderInterface {
+           // Teaser view: display the number of comments that have been posted,
+           // or a link to add new comments if the user has permission, the
+           // entity is open to new comments, and there currently are none.
+-          if ($this->currentUser->hasPermission('access comments')) {
+-            if (!empty($entity->get($field_name)->comment_count)) {
+-              $links['comment-comments'] = [
+-                'title' => $this->formatPlural($entity->get($field_name)->comment_count, '1 comment', '@count comments'),
+-                'attributes' => ['title' => $this->t('Jump to the first comment.')],
+-                'fragment' => 'comments',
+-                'url' => $entity->toUrl(),
+-              ];
+-            }
++          if ($field->comment_count > 0 && $field->access('view comment list', $this->currentUser)) {
++            $links['comment-comments'] = [
++              'title' => $this->formatPlural($field->comment_count, '1 comment', '@count comments'),
++              'attributes' => ['title' => $this->t('Jump to the first comment.')],
++              'fragment' => 'comments',
++              'url' => $entity->toUrl(),
++            ];
+           }
+           // Provide a link to new comment form.
+           if ($commenting_status == CommentItemInterface::OPEN) {
+             $comment_form_location = $field_definition->getSetting('form_location');
+-            if ($this->currentUser->hasPermission('post comments')) {
++            if ($field->access('create', $this->currentUser)) {
+               $links['comment-add'] = [
+                 'title' => $this->t('Add new comment'),
+                 'language' => $entity->language(),
+@@ -149,10 +148,12 @@ class CommentLinkBuilder implements CommentLinkBuilderInterface {
+           // comments.
+           if ($commenting_status == CommentItemInterface::OPEN) {
+             $comment_form_location = $field_definition->getSetting('form_location');
+-            if ($this->currentUser->hasPermission('post comments')) {
++            if ($field->access('create', $this->currentUser)) {
+               // Show the "post comment" link if the form is on another page, or
+               // if there are existing comments that the link will skip past.
+-              if ($comment_form_location == CommentItemInterface::FORM_SEPARATE_PAGE || (!empty($entity->get($field_name)->comment_count) && $this->currentUser->hasPermission('access comments'))) {
++              $separate_form_location = $comment_form_location === CommentItemInterface::FORM_SEPARATE_PAGE;
++              $existing_comments = $field->comment_count > 0 && $field->access('view comment list', $this->currentUser);
++              if ($separate_form_location || $existing_comments) {
+                 $links['comment-add'] = [
+                   'title' => $this->t('Add new comment'),
+                   'attributes' => ['title' => $this->t('Share your thoughts and opinions.')],
+diff --git a/core/modules/comment/src/CommentManager.php b/modules/comment/src/CommentManager.php
+index 9e19df532e..3b1e4d1249 100644
+--- a/core/modules/comment/src/CommentManager.php
++++ b/core/modules/comment/src/CommentManager.php
+@@ -11,12 +11,12 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
+ use Drupal\Core\Entity\FieldableEntityInterface;
+ use Drupal\Core\Extension\ModuleHandlerInterface;
+ use Drupal\Core\Session\AccountInterface;
++use Drupal\Core\Session\UserSession;
+ use Drupal\Core\StringTranslation\StringTranslationTrait;
+ use Drupal\Core\StringTranslation\TranslationInterface;
+ use Drupal\Core\Url;
+ use Drupal\field\Entity\FieldStorageConfig;
+ use Drupal\field\Entity\FieldConfig;
+-use Drupal\user\RoleInterface;
+ use Drupal\user\UserInterface;
+ 
+ /**
+@@ -151,19 +151,28 @@ class CommentManager implements CommentManagerInterface {
+    * {@inheritdoc}
+    */
+   public function forbiddenMessage(EntityInterface $entity, $field_name) {
++    // Get comments-field.
++    $field = $entity->get($field_name);
+     if (!isset($this->authenticatedCanPostComments)) {
+       // We only output a link if we are certain that users will get the
+-      // permission to post comments by logging in.
+-      $this->authenticatedCanPostComments = $this->entityTypeManager
+-        ->getStorage('user_role')
+-        ->load(RoleInterface::AUTHENTICATED_ID)
+-        ->hasPermission('post comments');
++      // permission to post comments by logging in, so check 'create' access for
++      // authenticated user using CommentAccessControlHandler (proxying over
++      // field). Simulate authenticated user by creating a dummy user session
++      // with uid = '-1', which is actually not valid, but avoid real user
++      // access cache.
++      $dummy_authenticated_user = new UserSession([
++        'uid' => -1,
++        'roles' => [
++          UserInterface::AUTHENTICATED_ROLE,
++        ],
++      ]);
++      $this->authenticatedCanPostComments = $field->access('create', $dummy_authenticated_user);
+     }
+ 
+     if ($this->authenticatedCanPostComments) {
+       // We cannot use the redirect.destination service here because these links
+       // sometimes appear on /node and taxonomy listing pages.
+-      if ($entity->get($field_name)->getFieldDefinition()->getSetting('form_location') == CommentItemInterface::FORM_SEPARATE_PAGE) {
++      if ($field->getFieldDefinition()->getSetting('form_location') == CommentItemInterface::FORM_SEPARATE_PAGE) {
+         $comment_reply_parameters = [
+           'entity_type' => $entity->getEntityTypeId(),
+           'entity' => $entity->id(),
+diff --git a/core/modules/comment/src/CommentManagerInterface.php b/modules/comment/src/CommentManagerInterface.php
+index c573e7355a..29705a0536 100644
+--- a/core/modules/comment/src/CommentManagerInterface.php
++++ b/core/modules/comment/src/CommentManagerInterface.php
+@@ -15,10 +15,15 @@ interface CommentManagerInterface {
+   const COMMENT_MODE_FLAT = 0;
+ 
+   /**
+-   * Comments are displayed as a threaded list - expanded.
++   * Comments are displayed as a threaded list - expanded, no depth limitation.
+    */
+   const COMMENT_MODE_THREADED = 1;
+ 
++  /**
++   * Comments are displayed as a threaded list - expanded, depth is limited.
++   */
++  const COMMENT_MODE_THREADED_DEPTH_LIMIT = 2;
++
+   /**
+    * Utility function to return an array of comment fields.
+    *
+diff --git a/core/modules/comment/src/CommentStorageInterface.php b/modules/comment/src/CommentStorageInterface.php
+index 764a5e4a9b..8a90310f76 100644
+--- a/core/modules/comment/src/CommentStorageInterface.php
++++ b/core/modules/comment/src/CommentStorageInterface.php
+@@ -59,8 +59,9 @@ interface CommentStorageInterface extends ContentEntityStorageInterface {
+    * @param \Drupal\comment\CommentInterface $comment
+    *   The comment to use as a reference point.
+    * @param int $comment_mode
+-   *   The comment display mode: CommentManagerInterface::COMMENT_MODE_FLAT or
+-   *   CommentManagerInterface::COMMENT_MODE_THREADED.
++   *   The comment display mode: CommentManagerInterface::COMMENT_MODE_FLAT,
++   *   CommentManagerInterface::COMMENT_MODE_THREADED or
++   *   CommentManagerInterface::COMMENT_MODE_THREADED_DEPTH_LIMIT.
+    * @param int $divisor
+    *   Defaults to 1, which returns the display ordinal for a comment. If the
+    *   number of comments per page is provided, the returned value will be the
+@@ -91,8 +92,9 @@ interface CommentStorageInterface extends ContentEntityStorageInterface {
+    * @param string $field_name
+    *   The field_name whose comment(s) needs rendering.
+    * @param int $mode
+-   *   The comment display mode: CommentManagerInterface::COMMENT_MODE_FLAT or
+-   *   CommentManagerInterface::COMMENT_MODE_THREADED.
++   *   The comment display mode: CommentManagerInterface::COMMENT_MODE_FLAT,
++   *   CommentManagerInterface::COMMENT_MODE_THREADED or
++   *   CommentManagerInterface::COMMENT_MODE_THREADED_DEPTH_LIMIT.
+    * @param int $comments_per_page
+    *   (optional) The amount of comments to display per page.
+    *   Defaults to 0, which means show all comments.
+diff --git a/core/modules/comment/src/CommentViewBuilder.php b/modules/comment/src/CommentViewBuilder.php
+index ffe89ba086..d1d1094c11 100644
+--- a/core/modules/comment/src/CommentViewBuilder.php
++++ b/core/modules/comment/src/CommentViewBuilder.php
+@@ -84,7 +84,7 @@ class CommentViewBuilder extends EntityViewBuilder {
+     $build['#comment_threaded'] =
+       is_null($commented_entity)
+       || $commented_entity->getFieldDefinition($entity->getFieldName())
+-        ->getSetting('default_mode') === CommentManagerInterface::COMMENT_MODE_THREADED;
++        ->getSetting('default_mode') !== CommentManagerInterface::COMMENT_MODE_FLAT;
+     // If threading is enabled, don't render cache individual comments, but do
+     // keep the cacheability metadata, so it can bubble up.
+     if ($build['#comment_threaded']) {
+@@ -116,6 +116,22 @@ class CommentViewBuilder extends EntityViewBuilder {
+     }
+     $this->entityTypeManager->getStorage('user')->loadMultiple(array_unique($uids));
+ 
++    // Commented entities already loaded after self::getBuildDefaults().
++    $commented_entity = $entity->getCommentedEntity();
++
++    // Compute the comment maximum indent if any.
++    $max_indent = 2;
++    // The maximum indent can only be determined for non-orphan comments.
++    if ($commented_entity) {
++      $field_settings = $commented_entity
++        ->getFieldDefinition($entity->getFieldName())
++        ?->getSettings();
++      if (isset($field_settings['default_mode']) && $field_settings['default_mode'] === CommentManagerInterface::COMMENT_MODE_THREADED_DEPTH_LIMIT) {
++        \assert($field_settings['thread_limit']['depth'] >= 2, 'Thread depth limit should be greater than or equal to 2.');
++        $max_indent = $field_settings['thread_limit']['depth'] - 1;
++      }
++    }
++
+     parent::buildComponents($build, $entities, $displays, $view_mode);
+ 
+     // A counter to track the indentation level.
+@@ -124,7 +140,7 @@ class CommentViewBuilder extends EntityViewBuilder {
+     foreach ($entities as $id => $entity) {
+       if ($build[$id]['#comment_threaded']) {
+         $comment_indent = count(explode('.', (string) $entity->getThread())) - 1;
+-        if ($comment_indent > $current_indent) {
++        if ($comment_indent > $current_indent && (!$max_indent || $comment_indent <= $max_indent)) {
+           // Set 1 to indent this comment from the previous one (its parent).
+           // Set only one extra level of indenting even if the difference in
+           // depth is higher.
+@@ -136,11 +152,15 @@ class CommentViewBuilder extends EntityViewBuilder {
+           // or negative value to point an amount indents to close.
+           $build[$id]['#comment_indent'] = $comment_indent - $current_indent;
+           $current_indent = $comment_indent;
++          // Adjust indentation relative to the defined thread depth.
++          if ($max_indent && ($comment_indent > $max_indent)) {
++            $indent_adjustment = $comment_indent - $max_indent;
++            $build[$id]['#comment_indent'] -= $indent_adjustment;
++            $current_indent -= $indent_adjustment;
++          }
+         }
+       }
+ 
+-      // Commented entities already loaded after self::getBuildDefaults().
+-      $commented_entity = $entity->getCommentedEntity();
+       // Set defaults if the commented_entity does not exist.
+       $bundle = $commented_entity ? $commented_entity->bundle() : '';
+ 
+diff --git a/core/modules/comment/src/Controller/CommentController.php b/modules/comment/src/Controller/CommentController.php
+index 7ff431314b..810f5ae2ed 100644
+--- a/core/modules/comment/src/Controller/CommentController.php
++++ b/core/modules/comment/src/Controller/CommentController.php
+@@ -289,32 +289,29 @@ class CommentController extends ControllerBase {
+       throw new NotFoundHttpException();
+     }
+ 
+-    $account = $this->currentUser();
+-
+-    // Check if the user has the proper permissions.
+-    $access = AccessResult::allowedIfHasPermission($account, 'post comments');
+-
+-    // If commenting is open on the entity.
+-    $status = $entity->{$field_name}->status;
+-    $access = $access->andIf(AccessResult::allowedIf($status == CommentItemInterface::OPEN)
+-      ->addCacheableDependency($entity))
+-      // And if user has access to the host entity.
+-      ->andIf(AccessResult::allowedIf($entity->access('view')));
++    /** @var \Drupal\comment\CommentFieldItemList $field */
++    $field = $entity->{$field_name};
++    // The user must have view access to the host entity.
++    $access = $entity->access('view', NULL, TRUE)
++      // And commenting must be open on this entity.
++      ->andIf(AccessResult::allowedIf((int) $field->status === CommentItemInterface::OPEN));
+ 
+-    // $pid indicates that this is a reply to a comment.
+     if ($pid) {
+-      // Check if the user has the proper permissions.
+-      $access = $access->andIf(AccessResult::allowedIfHasPermission($account, 'access comments'));
+-
+-      // Load the parent comment.
+-      $comment = $this->entityTypeManager()->getStorage('comment')->load($pid);
+-      // Check if the parent comment is published and belongs to the entity.
+-      $access = $access->andIf(AccessResult::allowedIf($comment && $comment->isPublished() && $comment->getCommentedEntityId() == $entity->id()));
+-      if ($comment) {
+-        $access->addCacheableDependency($comment);
++      // If replying, load the parent comment.
++      $parent_comment = $this->entityTypeManager()->getStorage('comment')->load($pid);
++      if (!$parent_comment instanceof CommentInterface) {
++        return $access->andIf(AccessResult::forbidden('Cannot reply to a non-existing comment'));
+       }
++
++      return $access
++        // The user must be able to reply.
++        ->andIf($parent_comment->access('reply', NULL, TRUE))
++        // And the parent comment host belongs to the entity.
++        ->andIf(AccessResult::allowedIf($parent_comment->getCommentedEntityId() === $entity->id()));
+     }
+-    return $access;
++
++    // The user must be able to create comments.
++    return $access->andIf($field->access('create', NULL, TRUE));
+   }
+ 
+   /**
+diff --git a/core/modules/comment/src/Entity/Comment.php b/modules/comment/src/Entity/Comment.php
+index b90fda7df1..c734726439 100644
+--- a/core/modules/comment/src/Entity/Comment.php
++++ b/core/modules/comment/src/Entity/Comment.php
+@@ -22,6 +22,7 @@ use Drupal\Core\Entity\EntityPublishedTrait;
+ use Drupal\Core\Entity\EntityStorageInterface;
+ use Drupal\Core\Entity\EntityTypeInterface;
+ use Drupal\Core\Field\BaseFieldDefinition;
++use Drupal\Core\Session\AccountInterface;
+ use Drupal\field\Entity\FieldStorageConfig;
+ use Drupal\user\Entity\User;
+ use Drupal\user\EntityOwnerTrait;
+@@ -530,6 +531,19 @@ class Comment extends ContentEntityBase implements CommentInterface {
+     return $user;
+   }
+ 
++  /**
++   * {@inheritdoc}
++   */
++  public function access($operation, ?AccountInterface $account = NULL, $return_as_object = FALSE) {
++    if ($operation === 'create') {
++      $context = ['commented_entity' => $this->getCommentedEntity()];
++      return $this->entityTypeManager()
++        ->getAccessControlHandler($this->entityTypeId)
++        ->createAccess($this->bundle(), $account, $context, $return_as_object);
++    }
++    return parent::access($operation, $account, $return_as_object);
++  }
++
+   /**
+    * Get the comment type ID for this comment.
+    *
+diff --git a/core/modules/comment/src/Hook/CommentHooks.php b/modules/comment/src/Hook/CommentHooks.php
+index 4072434de9..f896af7113 100644
+--- a/core/modules/comment/src/Hook/CommentHooks.php
++++ b/core/modules/comment/src/Hook/CommentHooks.php
+@@ -351,13 +351,15 @@ class CommentHooks {
+         continue;
+       }
+       // Do not make a string if comments are hidden.
+-      $status = $node->get($field_name)->status;
+-      if (\Drupal::currentUser()->hasPermission('access comments') && $status != CommentItemInterface::HIDDEN) {
+-        if ($status == CommentItemInterface::OPEN) {
++      $status = (int) $node->get($field_name)->status;
++      if ($status !== CommentItemInterface::HIDDEN) {
++        if ($status === CommentItemInterface::OPEN) {
+           // At least one comment field is open.
+           $open = TRUE;
+         }
+-        $comments += $node->get($field_name)->comment_count;
++        if ($node->get($field_name)->access('view comment list')) {
++          $comments += $node->get($field_name)->comment_count;
++        }
+       }
+     }
+     // Do not make a string if there are no comment fields, or no comments exist
+diff --git a/core/modules/comment/src/Plugin/Field/FieldFormatter/CommentDefaultFormatter.php b/modules/comment/src/Plugin/Field/FieldFormatter/CommentDefaultFormatter.php
+index e081bdabbb..adb85e1c32 100644
+--- a/core/modules/comment/src/Plugin/Field/FieldFormatter/CommentDefaultFormatter.php
++++ b/core/modules/comment/src/Plugin/Field/FieldFormatter/CommentDefaultFormatter.php
+@@ -3,6 +3,7 @@
+ namespace Drupal\comment\Plugin\Field\FieldFormatter;
+ 
+ use Drupal\comment\Plugin\Field\FieldType\CommentItemInterface;
++use Drupal\Core\Cache\CacheableMetadata;
+ use Drupal\Core\Entity\Entity\EntityViewDisplay;
+ use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
+ use Drupal\Core\Entity\EntityFormBuilderInterface;
+@@ -143,6 +144,7 @@ class CommentDefaultFormatter extends FormatterBase {
+   public function viewElements(FieldItemListInterface $items, $langcode) {
+     $elements = [];
+     $output = [];
++    $cacheability = new CacheableMetadata();
+ 
+     $field_name = $this->fieldDefinition->getName();
+     $entity = $items->getEntity();
+@@ -160,14 +162,18 @@ class CommentDefaultFormatter extends FormatterBase {
+       // Unpublished comments are not included in
+       // $entity->get($field_name)->comment_count, but unpublished comments
+       // should display if the user is an administrator.
+-      $elements['#cache']['contexts'][] = 'user.permissions';
+-      if ($this->currentUser->hasPermission('access comments') || $this->currentUser->hasPermission('administer comments')) {
++      $comment_admin = $this->currentUser->hasPermission('administer comments');
++      $cacheability->addCacheContexts(['user.permissions']);
++      $items_access = $items->access('view comment list', $this->currentUser, TRUE);
++      $cacheability->addCacheableDependency($items_access);
++      if ($comment_admin || $items_access->isAllowed()) {
+         $output['comments'] = [];
+ 
+-        if ($entity->get($field_name)->comment_count || $this->currentUser->hasPermission('administer comments')) {
++        if ($items->comment_count || $comment_admin) {
+           $mode = $comment_settings['default_mode'];
+           $comments_per_page = $comment_settings['per_page'];
+           $comments = $this->storage->loadThread($entity, $field_name, $mode, $comments_per_page, $this->getSetting('pager_id'));
++
+           if ($comments) {
+             $build = $this->viewBuilder->viewMultiple($comments, $this->getSetting('view_mode'));
+             $build['pager']['#type'] = 'pager';
+@@ -188,22 +194,20 @@ class CommentDefaultFormatter extends FormatterBase {
+       // Append comment form if the comments are open and the form is set to
+       // display below the entity. Do not show the form for the print view mode.
+       if ($status == CommentItemInterface::OPEN && $comment_settings['form_location'] == CommentItemInterface::FORM_BELOW && $this->viewMode != 'print') {
+-        // Only show the add comment form if the user has permission.
+-        $elements['#cache']['contexts'][] = 'user.roles';
+-        if ($this->currentUser->hasPermission('post comments')) {
+-          $output['comment_form'] = [
+-            '#lazy_builder' => [
+-              'comment.lazy_builders:renderForm',
+-              [
+-                $entity->getEntityTypeId(),
+-                $entity->id(),
+-                $field_name,
+-                $this->getFieldSetting('comment_type'),
+-              ],
++        // Inject a lazy builder which will show the add comment form if the
++        // user has access.
++        $output['comment_form'] = [
++          '#lazy_builder' => [
++            'comment.lazy_builders:renderForm',
++            [
++              $entity->getEntityTypeId(),
++              $entity->id(),
++              $field_name,
++              $this->getFieldSetting('comment_type'),
+             ],
+-            '#create_placeholder' => TRUE,
+-          ];
+-        }
++          ],
++          '#create_placeholder' => TRUE,
++        ];
+       }
+ 
+       $elements[] = $output + [
+@@ -214,6 +218,7 @@ class CommentDefaultFormatter extends FormatterBase {
+       ];
+     }
+ 
++    $cacheability->applyTo($elements);
+     return $elements;
+   }
+ 
+diff --git a/core/modules/comment/src/Plugin/Field/FieldType/CommentItem.php b/modules/comment/src/Plugin/Field/FieldType/CommentItem.php
+index 2334471209..d1ec05332e 100644
+--- a/core/modules/comment/src/Plugin/Field/FieldType/CommentItem.php
++++ b/core/modules/comment/src/Plugin/Field/FieldType/CommentItem.php
+@@ -46,6 +46,10 @@ class CommentItem extends FieldItemBase implements CommentItemInterface {
+   public static function defaultFieldSettings() {
+     return [
+       'default_mode' => CommentManagerInterface::COMMENT_MODE_THREADED,
++      'thread_limit' => [
++        'depth' => 2,
++        'mode' => CommentItemInterface::THREAD_DEPTH_REPLY_MODE_ALLOW,
++      ],
+       'per_page' => 50,
+       'form_location' => CommentItemInterface::FORM_BELOW,
+       'anonymous' => CommentInterface::ANONYMOUS_MAYNOT_CONTACT,
+@@ -107,13 +111,57 @@ class CommentItem extends FieldItemBase implements CommentItemInterface {
+ 
+     $settings = $this->getSettings();
+ 
++    // Check access for anonymous user.
+     $anonymous_user = new AnonymousUserSession();
++    $anonymous_user_access = \Drupal::entityTypeManager()
++      ->getAccessControlHandler('comment')
++      ->createAccess($this->getSetting('comment_type'), $anonymous_user);
+ 
+     $element['default_mode'] = [
+-      '#type' => 'checkbox',
+-      '#title' => $this->t('Threading'),
++      '#type' => 'radios',
++      '#title' => $this->t('Threading mode'),
++      '#options' => [
++        CommentManagerInterface::COMMENT_MODE_FLAT => $this->t('Flat list'),
++        CommentManagerInterface::COMMENT_MODE_THREADED => $this->t('Threaded (no depth limit)'),
++        CommentManagerInterface::COMMENT_MODE_THREADED_DEPTH_LIMIT => $this->t('Threaded (limited depth)'),
++      ],
+       '#default_value' => $settings['default_mode'],
+-      '#description' => $this->t('Show comment replies in a threaded list.'),
++      '#description' => $this->t('If the comments are displayed as a flat list or threaded.'),
++    ];
++    $element['thread_limit'] = [
++      '#type' => 'fieldset',
++      '#title' => $this->t('Limited depth settings'),
++      '#states' => [
++        'visible' => [
++          ':input[name="settings[default_mode]"]' => [
++            'value' => CommentManagerInterface::COMMENT_MODE_THREADED_DEPTH_LIMIT,
++          ],
++        ],
++      ],
++    ];
++    $element['thread_limit']['depth'] = [
++      '#type' => 'number',
++      '#title' => $this->t('Thread depth limit'),
++      '#default_value' => $settings['thread_limit']['depth'],
++      '#description' => $this->t('Define comment thread depth.'),
++      // The maximum thread deep cannot be less than 2 as it doesn't makes sense
++      // to have threaded comments with only one level.
++      '#min' => 2,
++    ];
++    $element['thread_limit']['mode'] = [
++      '#type' => 'radios',
++      '#title' => $this->t('Replying to deepest comment'),
++      '#default_value' => $settings['thread_limit']['mode'],
++      '#options' => [
++        CommentItemInterface::THREAD_DEPTH_REPLY_MODE_ALLOW => $this->t('Allowed'),
++        CommentItemInterface::THREAD_DEPTH_REPLY_MODE_DENY => $this->t('Denied'),
++      ],
++      CommentItemInterface::THREAD_DEPTH_REPLY_MODE_ALLOW => [
++        '#description' => $this->t('Users are able to reply to the deepest comment. The reply will be displayed on the same level as the comment that receives the reply.'),
++      ],
++      CommentItemInterface::THREAD_DEPTH_REPLY_MODE_DENY => [
++        '#description' => $this->t('Users cannot reply to the deepest comment.'),
++      ],
+     ];
+     $element['per_page'] = [
+       '#type' => 'number',
+@@ -133,7 +181,7 @@ class CommentItem extends FieldItemBase implements CommentItemInterface {
+         CommentInterface::ANONYMOUS_MAY_CONTACT => $this->t('Anonymous posters may leave their contact information'),
+         CommentInterface::ANONYMOUS_MUST_CONTACT => $this->t('Anonymous posters must leave their contact information'),
+       ],
+-      '#access' => $anonymous_user->hasPermission('post comments'),
++      '#access' => $anonymous_user_access,
+     ];
+     $element['form_location'] = [
+       '#type' => 'checkbox',
+diff --git a/core/modules/comment/src/Plugin/Field/FieldType/CommentItemInterface.php b/modules/comment/src/Plugin/Field/FieldType/CommentItemInterface.php
+index 1caee56297..eacccdad9b 100644
+--- a/core/modules/comment/src/Plugin/Field/FieldType/CommentItemInterface.php
++++ b/core/modules/comment/src/Plugin/Field/FieldType/CommentItemInterface.php
+@@ -32,4 +32,14 @@ interface CommentItemInterface {
+    */
+   const FORM_BELOW = 1;
+ 
++  /**
++   * Replying to the deepest comment creates a new comment on the same level.
++   */
++  const THREAD_DEPTH_REPLY_MODE_ALLOW = 0;
++
++  /**
++   * Replying to the deepest comment is not allowed.
++   */
++  const THREAD_DEPTH_REPLY_MODE_DENY = 1;
++
+ }

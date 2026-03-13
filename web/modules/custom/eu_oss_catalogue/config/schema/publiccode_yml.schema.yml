@@ -294,7 +294,8 @@ eu_oss_catalogue.publiccode_yml.country_base:
       label: Version of the country extension
       required: true
       constraints:
-        - regex: '/^1\.0\.0$/'
+        - Regex:
+            pattern: '/^1\.0\.0$/'
 
 eu_oss_catalogue.publiccode_yml.country.it:
   type: eu_oss_catalogue.publiccode_yml.country_base
