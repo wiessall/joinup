@@ -16,7 +16,7 @@ settings:
   domain: SPD
   email: ''
   callback_hostname:
-  use_queue: false
+  use_queue: true
 remote_languages_mappings:
   bg: bg
   hr: hr
