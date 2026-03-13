@@ -87,6 +87,8 @@ class AggregatedEntityReferenceLabel extends ProcessorPluginBase implements Buil
     foreach ($field->getConfiguration()['fields'] as $combined_id) {
       $property = $this->getProperty($index, $combined_id);
       $property_field = $this->getPropertyFieldName($combined_id);
+      // When the field is a entity reference or an OG group audience field,
+      // collect the target type.
       if ($property instanceof FieldDefinitionInterface && in_array(
           $property->getType(),
           ['entity_reference', 'og_standard_reference']
