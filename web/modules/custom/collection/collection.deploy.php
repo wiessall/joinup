@@ -10,7 +10,7 @@ declare(strict_types=1);
 /**
  * Fix stale pending draft revisions caused by child content deletion.
  */
-function collection_deploy_201000(array &$sandbox): string {
+function collection_deploy_201100(array &$sandbox): string {
   $storage = \Drupal::entityTypeManager()->getStorage('node');
 
   if (!isset($sandbox['nids'])) {
