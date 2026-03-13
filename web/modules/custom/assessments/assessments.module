@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Database\Query\AlterableInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
@@ -629,5 +630,18 @@ function assessments_inline_entity_form_reference_form_alter(&$reference_form, F
         "display_name" => "entity_reference_1",
       ],
     ];
+  }
+}
+
+/**
+ * Implements hook_query_TAG_alter().
+ */
+function assessments_query_explore_block_solution_alter(AlterableInterface $query): void {
+  /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
+  $entity_repository = \Drupal::service('entity.repository');
+  $collector = $entity_repository->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR);
+  if ($collector) {
+    $query->join('node__og_audience', 'oa', 'oa.entity_id = node_field_data.nid');
+    $query->condition('og_audience_target_id', $collector->id(), '<>');
   }
 }
