@@ -14,7 +14,7 @@ use Drupal\tmgmt_ec_etranslation\Plugin\tmgmt\Translator\ETranslationTranslator;
 /**
  * Remove leftovers.
  */
-function joinup_i18n_deploy_201000(): void {
+function joinup_i18n_deploy_201100(): void {
   // An erroneous translation has been created in an early stage for this link.
   if ($link = MenuLinkContent::load(20694)) {
     if ($link->hasTranslation('bg')) {
@@ -54,7 +54,7 @@ function joinup_i18n_deploy_201000(): void {
 /**
  * Creates continuous tasks for Babel strings.
  */
-function joinup_i18n_deploy_201001(): void {
+function joinup_i18n_deploy_201101(): void {
   foreach (\Drupal::languageManager()->getLanguages() as $langcode => $language) {
     if ($langcode !== 'en') {
       tmgmt_job_create('en', $langcode, 0, [
