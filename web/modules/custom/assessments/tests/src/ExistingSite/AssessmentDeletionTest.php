@@ -6,7 +6,6 @@ namespace Drupal\Tests\assessments\ExistingSite;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\file\FileInterface;
 use Drupal\Tests\assessments\Traits\AssessmentEntityCreationTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\assessments\AssessmentInterface;
@@ -15,6 +14,7 @@ use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\AssessmentStatement;
 use Drupal\assessments\Entity\BindingRequirementParagraph;
 use Drupal\file\Entity\File;
+use Drupal\file\FileInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 
@@ -101,6 +101,11 @@ class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
     $this->assertCount(4, $entities);
     foreach ($entities as $entity) {
       $this->assertEntityExists($entity);
+      if ($entity instanceof FileInterface) {
+        // Reload and assert that the file is temporary.
+        $entity = $this->entityTypeManager->getStorage($entity->getEntityTypeId())->load($entity->id());
+        $this->assertTrue($entity->isTemporary());
+      }
     }
   }
 
