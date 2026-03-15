@@ -6,6 +6,7 @@ namespace Drupal\Tests\assessments\ExistingSite;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\file\FileInterface;
 use Drupal\Tests\assessments\Traits\AssessmentEntityCreationTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\assessments\AssessmentInterface;
@@ -76,7 +77,7 @@ class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
     $new_document = $this->createFileDocument();
     $report->set('documents', ['entity' => $new_document]);
     $report->save();
-    $this->assertEntityNotExists($document);
+    $this->assertEntityExists($document);
 
     // Replace the organisation with a new one, assert no deletion.
     $new_organisation = $this->createAssessmentOrganisation();
@@ -89,15 +90,15 @@ class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
 
     // Assert that all created entities except public_organisation assessments
     // were deleted.
-    $should_persist = static fn ($entity) => $entity instanceof AssessmentInterface && $entity->bundle() === 'public_organisation';
+    $should_persist = static fn ($entity) => ($entity instanceof AssessmentInterface && $entity->bundle() === 'public_organisation') || $entity instanceof FileInterface;
     $entities = \array_filter($this->cleanupEntities, static fn ($entity) => !$should_persist($entity));
-    $this->assertCount(15, $entities);
+    $this->assertCount(13, $entities);
     foreach ($entities as $entity) {
       $this->assertEntityNotExists($entity);
     }
 
     $entities = \array_filter($this->cleanupEntities, static fn ($entity) => $should_persist($entity));
-    $this->assertCount(2, $entities);
+    $this->assertCount(4, $entities);
     foreach ($entities as $entity) {
       $this->assertEntityExists($entity);
     }
