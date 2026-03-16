@@ -1,5 +1,5 @@
 diff --git a/src/Element/InlineEntityForm.php b/src/Element/InlineEntityForm.php
-index 74a71424736eab114f8fae45c5baf1c19475166e..5315b065bd29ff930d45547ada451c3120b1e347 100644
+index 74a71424736eab114f8fae45c5baf1c19475166e..c6a140dc5e750be2b0d61c1feb1f0676bac4d762 100644
 --- a/src/Element/InlineEntityForm.php
 +++ b/src/Element/InlineEntityForm.php
 @@ -5,7 +5,7 @@ namespace Drupal\inline_entity_form\Element;
@@ -20,8 +20,20 @@ index 74a71424736eab114f8fae45c5baf1c19475166e..5315b065bd29ff930d45547ada451c31
  
    /**
     * {@inheritdoc}
+@@ -151,6 +151,11 @@ class InlineEntityForm extends RenderElement {
+     // ElementSubmit::attach() since form alters run before #process callbacks.
+     ElementSubmit::attach($complete_form, $form_state);
+ 
++    // @todo Remove when https://www.drupal.org/project/drupal/issues/1797438
++    // adds novalidate to all forms by default.
++    if (isset($entity_form['#required']) && !$entity_form['#required']) {
++      $complete_form['#attributes']['novalidate'] = 'novalidate';
++    }
+     return $entity_form;
+   }
+ 
 diff --git a/src/Form/EntityInlineForm.php b/src/Form/EntityInlineForm.php
-index 9d193c95773ac170a06fe5ca2f710813b5db7ff0..2a58de1ceb7b5cc7210808c09ebae36d3a311273 100644
+index 9d193c95773ac170a06fe5ca2f710813b5db7ff0..e3ce38d3c6b55983a08742947c24750be50d42c1 100644
 --- a/src/Form/EntityInlineForm.php
 +++ b/src/Form/EntityInlineForm.php
 @@ -10,12 +10,14 @@ use Drupal\Core\Entity\EntityInterface;
@@ -47,7 +59,7 @@ index 9d193c95773ac170a06fe5ca2f710813b5db7ff0..2a58de1ceb7b5cc7210808c09ebae36d
      $entity_form['#ief_element_submit'][] = [
        get_class($this),
        'submitCleanFormState',
-@@ -261,26 +264,79 @@ class EntityInlineForm implements InlineFormInterface {
+@@ -261,26 +264,87 @@ class EntityInlineForm implements InlineFormInterface {
     * {@inheritdoc}
     */
    public function entityFormValidate(array &$entity_form, FormStateInterface $form_state) {
@@ -56,6 +68,14 @@ index 9d193c95773ac170a06fe5ca2f710813b5db7ff0..2a58de1ceb7b5cc7210808c09ebae36d
 +    /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
 +    $entity = $entity_form['#entity'];
 +    $this->buildEntity($entity_form, $entity, $form_state);
++
++    // Optional IEF left empty: clear core's #required errors on child
++    // elements and skip validation. Empty entity is discarded in
++    // massageFormValues().
++    if (isset($entity_form['#required']) && !$entity_form['#required'] && $this->isEmptyEntity($entity, $entity_form['#form_mode'])) {
++      $this->clearIefErrors($entity_form, $form_state);
++      return;
++    }
 +
      $triggering_element = $form_state->getTriggeringElement();
      if (!empty($triggering_element['#ief_submit_trigger'])) {
@@ -135,6 +155,38 @@ index 9d193c95773ac170a06fe5ca2f710813b5db7ff0..2a58de1ceb7b5cc7210808c09ebae36d
    /**
     * {@inheritdoc}
     */
+@@ -307,6 +371,31 @@ class EntityInlineForm implements InlineFormInterface {
+     $storage_handler->delete($entities);
+   }
+ 
++  /**
++   * Removes validation errors belonging to this inline entity form.
++   *
++   * Preserves any unrelated errors on the parent form.
++   *
++   * @param array $entity_form
++   *   The inline entity form render array.
++   * @param \Drupal\Core\Form\FormStateInterface $form_state
++   *   The current form state.
++   */
++  protected function clearIefErrors(array $entity_form, FormStateInterface $form_state) {
++    $errors = $form_state->getErrors();
++    if (empty($errors)) {
++      return;
++    }
++
++    $prefix = implode('][', $entity_form['#parents']);
++    $form_state->clearErrors();
++    foreach ($errors as $name => $error) {
++      if (!str_starts_with($name, $prefix)) {
++        $form_state->setErrorByName($name, $error);
++      }
++    }
++  }
++
+   /**
+    * Builds an updated entity object based upon the submitted form values.
+    *
 diff --git a/src/Plugin/Field/FieldWidget/InlineEntityFormBase.php b/src/Plugin/Field/FieldWidget/InlineEntityFormBase.php
 index 69869be8e099ea191d6fdbcfcd5c4acda05c0ad9..5197b16b7decfaa853d8919681a9d8889653598e 100644
 --- a/src/Plugin/Field/FieldWidget/InlineEntityFormBase.php
@@ -229,6 +281,58 @@ index 0000000000000000000000000000000000000000..7f8f48e336b76f227a8d5fad076d5337
 +  }
 +
 +}
+diff --git a/tests/modules/inline_entity_form_test/src/IefTestForm.php b/tests/modules/inline_entity_form_test/src/IefTestForm.php
+index 39d212a252d9d72b2741a1fa8ad60b99f04e584c..00c0c3d447735d5dbdc0d3e5150fdc16bdc83991 100644
+--- a/tests/modules/inline_entity_form_test/src/IefTestForm.php
++++ b/tests/modules/inline_entity_form_test/src/IefTestForm.php
+@@ -27,6 +27,7 @@ class IefTestForm extends FormBase {
+       '#entity_type' => 'node',
+       '#bundle' => 'ief_test_custom',
+       '#form_mode' => $form_mode,
++      '#required' => TRUE,
+     ];
+     $form['submit'] = [
+       '#type' => 'submit',
+diff --git a/tests/src/FunctionalJavascript/ElementWebTest.php b/tests/src/FunctionalJavascript/ElementWebTest.php
+index de02c82ab97e83e04f6368c214464cea17760030..f7b552901643d2ff81d1cdbed5cb2da31fe865f7 100644
+--- a/tests/src/FunctionalJavascript/ElementWebTest.php
++++ b/tests/src/FunctionalJavascript/ElementWebTest.php
+@@ -54,23 +54,23 @@ class ElementWebTest extends InlineEntityFormTestBase {
+       $assert_session->pageTextContains('Positive int');
+       $this->checkFormDisplayFields("node.ief_test_custom.$form_mode_possibility", 'inline_entity_form');
+ 
++      // Submit empty form: server-side validation should prevent creation.
+       $page->pressButton('Save');
++      $assert_session->waitForElement('css', 'input[name="op"]');
+       $assert_session->pageTextNotContains("Created Content $title");
+-
+-      // @todo How do we test Chrome's HTML 5 validation?
+-      // $assert_session->pageTextContains('Please fill out this field.');
+-      // Fix in https://www.drupal.org/project/inline_entity_form/issues/3100883
+       $this->assertNoNodeByTitle($title);
+ 
+       $assert_session->elementExists('xpath', $title_field_xpath)->setValue($title);
+       $assert_session->elementExists('xpath', $positive_int_field_xpath)->setValue('-1');
+ 
+       $page->pressButton('Save');
++      $assert_session->waitForElement('css', 'input[name="op"]');
+       $assert_session->pageTextNotContains("Created Content $title");
+       $this->assertNoNodeByTitle($title);
+ 
+       $assert_session->elementExists('xpath', $positive_int_field_xpath)->setValue('11');
+       $page->pressButton('Save');
++      $assert_session->waitForElement('css', 'div[data-drupal-messages]');
+       $assert_session->pageTextContains("Created Content $title");
+       $this->assertNodeByTitle($title, 'ief_test_custom');
+       $node = $this->getNodeByTitle($title);
+@@ -83,6 +83,7 @@ class ElementWebTest extends InlineEntityFormTestBase {
+       $this->assertSame('11', $assert_session->elementExists('xpath', $positive_int_field_xpath)->getValue());
+       $assert_session->elementExists('xpath', $title_field_xpath)->setValue($title . ' - updated');
+       $page->pressButton('Update');
++      $assert_session->waitForElement('css', 'div[data-drupal-messages]');
+       $this->assertNodeByTitle($title . ' - updated', 'ief_test_custom');
+     }
+   }
 diff --git a/tests/src/FunctionalJavascript/OptionalSimpleWidgetTest.php b/tests/src/FunctionalJavascript/OptionalSimpleWidgetTest.php
 new file mode 100644
 index 0000000000000000000000000000000000000000..7b9128e32e526ce95cd2c71208ef462e4ae65dad
