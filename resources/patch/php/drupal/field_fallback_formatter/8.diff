@@ -1,0 +1,89 @@
+diff --git a/config/schema/field_fallback_formatter.schema.yml b/config/schema/field_fallback_formatter.schema.yml
+index d54913cd3c6ee869c78880a4184364ebe9ccf7f1..6c99b1e9e344ccd6584eae67b9fb5acb6c28e062 100644
+--- a/config/schema/field_fallback_formatter.schema.yml
++++ b/config/schema/field_fallback_formatter.schema.yml
+@@ -17,3 +17,7 @@ field.formatter.settings.field_fallback_formatter:
+     fallback_field_formatter_settings:
+       type: field.formatter.settings.[%parent.fallback_field_formatter_id]
+       label: 'Settings of the fallback field formatter'
++    reset_theme:
++      type: boolean
++      label: 'Whether #theme function should be enforced to "field"'
++      nullable: true
+diff --git a/src/Plugin/Field/FieldFormatter/FormatterWithFallbackField.php b/src/Plugin/Field/FieldFormatter/FormatterWithFallbackField.php
+index 48e65d9685f679c1139b6e330d142fe13abb2894..743d424b4a14da6ff2fa2d5502e3e7494a06d8dd 100644
+--- a/src/Plugin/Field/FieldFormatter/FormatterWithFallbackField.php
++++ b/src/Plugin/Field/FieldFormatter/FormatterWithFallbackField.php
+@@ -38,6 +38,7 @@ class FormatterWithFallbackField extends FormatterBase implements ContainerFacto
+   const FALLBACK_FIELD_ID_KEY = 'fallback_field_id';
+   const FALLBACK_FIELD_FORMATTER_ID_KEY = 'fallback_field_formatter_id';
+   const FALLBACK_FIELD_FORMATTER_SETTINGS_KEY = 'fallback_field_formatter_settings';
++  const RESET_THEME_KEY = 'reset_theme';
+ 
+   /**
+    * Temporary storage for the fallback field.
+@@ -126,6 +127,7 @@ class FormatterWithFallbackField extends FormatterBase implements ContainerFacto
+       static::FALLBACK_FIELD_ID_KEY => NULL,
+       static::FALLBACK_FIELD_FORMATTER_ID_KEY => NULL,
+       static::FALLBACK_FIELD_FORMATTER_SETTINGS_KEY => [],
++      static::RESET_THEME_KEY => TRUE,
+     ] + parent::defaultSettings();
+   }
+ 
+@@ -145,7 +147,6 @@ class FormatterWithFallbackField extends FormatterBase implements ContainerFacto
+     if (Element::children($elements)) {
+       $entity = $items->getEntity();
+       $info = [
+-        '#theme' => 'field',
+         '#title' => $realDefinition->getLabel(),
+         '#label_display' => $this->label,
+         '#view_mode' => $this->viewMode,
+@@ -161,6 +162,9 @@ class FormatterWithFallbackField extends FormatterBase implements ContainerFacto
+         '#is_multiple' => $realDefinition->getFieldStorageDefinition()->isMultiple(),
+         '#third_party_settings' => $this->getThirdPartySettings(),
+       ];
++      if ($this->getSetting(static::RESET_THEME_KEY)) {
++        $info['#theme'] = 'field';
++      }
+ 
+       $elements = array_merge($elements, $info);
+     }
+@@ -246,6 +250,11 @@ class FormatterWithFallbackField extends FormatterBase implements ContainerFacto
+       return [$this->t('Not yet configured')];
+     }
+ 
++    if ($this->getSetting(static::RESET_THEME_KEY)) {
++      $summary[] = $this->t('#theme function reset to "field"');
++      $summary[] = '---';
++    }
++
+     $mainFormatter = $this->formatterPluginManager->getInstance([
+       'field_definition' => $this->fieldDefinition,
+       'configuration' => [
+@@ -294,6 +303,14 @@ class FormatterWithFallbackField extends FormatterBase implements ContainerFacto
+   public function settingsForm(array $form, FormStateInterface $form_state): array {
+     $form = parent::settingsForm($form, $form_state);
+ 
++    // Reset "#theme" function to "field".
++    $form[static::RESET_THEME_KEY] = [
++      '#type' => 'checkbox',
++      '#title' => $this->t('Reset <code>#theme</code> function to "field"'),
++      '#description' => $this->t("The renderable array's #theme function is enforced to be just \"field\"."),
++      '#default_value' => $this->getSetting(static::RESET_THEME_KEY),
++    ];
++
+     // Formatter configurations for the current field (applied if field is not
+     // empty).
+     $form += $this->getFormatterElementsForField(
+diff --git a/tests/src/FunctionalJavascript/FieldFallbackFormatterSettingsTest.php b/tests/src/FunctionalJavascript/FieldFallbackFormatterSettingsTest.php
+index d7698ab684340b1d3dafdc09fbbc3288fee166dd..b0b2d35f31f5b97c2f5f5a6695303b46b3aebbcf 100644
+--- a/tests/src/FunctionalJavascript/FieldFallbackFormatterSettingsTest.php
++++ b/tests/src/FunctionalJavascript/FieldFallbackFormatterSettingsTest.php
+@@ -134,6 +134,7 @@ class FieldFallbackFormatterSettingsTest extends WebDriverTestBase {
+           FormatterWithFallbackField::FALLBACK_FIELD_FORMATTER_SETTINGS_KEY => [
+             'link_to_entity' => TRUE,
+           ],
++          'reset_theme' => TRUE,
+         ],
+         'third_party_settings' => [],
+         'weight' => 0,

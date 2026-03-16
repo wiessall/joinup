@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+
 /**
  * Tests the OSS solution page.
- *
- * @group eu_oss_catalogue
  */
+#[Group('eu_oss_catalogue')]
 class OssSolutionPageTest extends FetchTestBase {
 
   /**
@@ -18,9 +20,8 @@ class OssSolutionPageTest extends FetchTestBase {
    *   Archive value.
    * @param int $code
    *   Status code for a not logged in user.
-   *
-   * @dataProvider viewDataProvider
    */
+  #[DataProvider('viewDataProvider')]
   public function testViewAccess(int $archive, int $code): void {
     $node = $this->createNode([
       'type' => 'oss_solution',

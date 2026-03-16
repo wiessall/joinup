@@ -38,6 +38,8 @@ dependencies:
     - field.field.node.oss_solution.oss_source
     - field.field.node.oss_solution.oss_source_hash
     - field.field.node.oss_solution.oss_used_by
+    - field.field.node.oss_solution.oss_validation_issues
+    - field.field.node.oss_solution.oss_validation_status
     - field.field.node.oss_solution.oss_vitality_index
     - field.field.node.oss_solution.oss_vitality_index_range
     - node.type.oss_solution
@@ -46,6 +48,8 @@ dependencies:
     - joinup_layout
     - layout_builder
     - layout_discovery
+    - options
+    - user
 third_party_settings:
   layout_builder:
     enabled: true
@@ -858,12 +862,65 @@ third_party_settings:
                     template_suggestion: ''
             weight: 1
             additional: {  }
+          95d14214-a271-458c-a71f-c1f434363833:
+            uuid: 95d14214-a271-458c-a71f-c1f434363833
+            region: content
+            configuration:
+              id: 'field_block:node:oss_solution:oss_validation_issues'
+              label: 'Validation issues'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: field_fallback_formatter
+                label: hidden
+                settings:
+                  main_field_formatter_id: joinup_core_more_in_modal
+                  main_field_formatter_settings:
+                    max_items_to_show: 0
+                    modal_link_label_single: 'Show item'
+                    modal_link_label_multiple: 'Show all @count items'
+                    modal_view_mode: modal
+                  fallback_field_id: oss_validation_status
+                  fallback_field_formatter_id: list_default
+                  fallback_field_formatter_settings: {  }
+                  reset_theme: false
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  joinup_slick:
+                    preset: ''
+                    field_label: true
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 10
+            additional: {  }
         third_party_settings: {  }
 id: node.oss_solution.default
 targetEntityType: node
 bundle: oss_solution
 mode: default
-content: {  }
+content:
+  oss_validation_issues:
+    type: validation_issue
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: second
+  oss_validation_status:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: second
 hidden:
   description: true
   langcode: true
