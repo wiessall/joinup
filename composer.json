@@ -345,7 +345,7 @@
         "patches": {
             "drupal/babel": {
                 "TMGMT @see https://www.drupal.org/i/3554005": "resources/patch/php/drupal/babel/3554005.mr71-note706700.diff",
-                "Strengthen the creation of continuous job items @see https://www.drupal.org/i/3578471": "resources/patch/php/drupal/babel/3578471.mr76.commit5663ccca.diff"
+                "Strengthen the creation of continuous job items @see https://www.drupal.org/i/3578471": "resources/patch/php/drupal/babel/3578471.mr76.commit333eff4d.diff"
             },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff",
