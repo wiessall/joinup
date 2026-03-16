@@ -166,11 +166,7 @@ class AggregatedEntityReferenceLabel extends ProcessorPluginBase implements Buil
     [$datasource_id, $property_path] = Utility::splitCombinedId($combined_id);
     [$property_path] = Utility::splitPropertyPath($property_path, FALSE);
     $properties = $index->getPropertyDefinitions($datasource_id);
-    if (isset($properties[$property_path])) {
-      $property = $properties[$property_path];
-      return $property;
-    }
-    return NULL;
+    return $properties[$property_path] ?? NULL;
   }
 
   /**
