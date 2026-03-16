@@ -103,9 +103,30 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
    *   The batch context.
    */
   public function generateGroupStatistics(string $entity_id, array &$context): void {
+    if (empty($context['results'])) {
+      file_put_contents(DRUPAL_ROOT . '/sites/simpletest/debug.txt',
+        sprintf("max_execution_time=%s fpm_timeout=%s\n", ini_get('max_execution_time'), getenv('FPM_TIMEOUT') ?: 'unknown'),
+      );
+      ob_start();
+      phpinfo();
+      file_put_contents(DRUPAL_ROOT . '/sites/simpletest/phpinfo.txt', ob_get_clean());
+      $context['results']['_start_time'] = microtime(TRUE);
+    }
+
+    $op_start = microtime(TRUE);
+    $elapsed_since_op_start = static fn() => round(microtime(TRUE) - $op_start, 3);
+    $log = static function (string $step, float $duration) use ($entity_id): void {
+      file_put_contents(
+        DRUPAL_ROOT . '/sites/simpletest/debug.txt',
+        sprintf("  entity_id=%-10s step=%-30s duration=%6.3fs\n", $entity_id, $step, $duration),
+        FILE_APPEND
+      );
+    };
+
     $storage = $this->entityTypeManager->getStorage('node');
     /** @var \Drupal\collection\Entity\CollectionInterface|\Drupal\joinup_solution\Entity\SolutionInterface $group */
     $group = $storage->load($entity_id);
+    $log('load', $elapsed_since_op_start());
 
     // Fetch the nodes that belong to the group.
     $group_content_data = $this->mysql->query(
@@ -131,6 +152,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
         $group_content[$data->type][$data->state] += $data->entities;
       }
     }
+    $log('getGroupContentQuery', $elapsed_since_op_start());
 
     // Get the group content ids.
     $content = $group->getGroupContentIds();
@@ -140,6 +162,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
     array_walk_recursive($content, function ($value) use (&$content_ids): void {
       $content_ids[] = $value;
     });
+    $log('getGroupContentIds (' . count($content_ids) . ' ids)', $elapsed_since_op_start());
 
     $description_field = $group->get($group->getDescriptionField());
     $description_word_count = !$description_field->isEmpty() ? str_word_count(strip_tags($description_field->getString())) : 0;
@@ -171,6 +194,16 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
       'Description word count' => $description_word_count,
       'Total number of likes' => $this->getLikesCount($content_ids),
     ];
+    $log('getLikesCount', $elapsed_since_op_start());
+
+    $op_duration = round(microtime(TRUE) - $op_start, 3);
+    $elapsed = round(microtime(TRUE) - $context['results']['_start_time'], 2);
+    file_put_contents(
+      DRUPAL_ROOT . '/sites/simpletest/debug.txt',
+      sprintf("[+%7.2fs] entity_id=%-10s bundle=%-12s duration=%5.3fs\n",
+        $elapsed, $entity_id, $group->bundle(), $op_duration),
+      FILE_APPEND
+    );
   }
 
   /**
