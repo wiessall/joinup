@@ -13,16 +13,16 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Tests\UnitTestCase;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_vitality_index\VitalityIndexGenerator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Argument;
 
 /**
  * Tests VitalityIndexGenerator.
- *
- * @coversDefaultClass \Drupal\eu_oss_vitality_index\VitalityIndexGenerator
- *
- * @group eu_oss_catalogue
- * @group eu_oss_vitality_index
  */
+#[CoversClass(VitalityIndexGenerator::class)]
+#[Group('eu_oss_catalogue')]
+#[Group('eu_oss_vitality_index')]
 class VitalityIndexGeneratorTest extends UnitTestCase {
 
   /**

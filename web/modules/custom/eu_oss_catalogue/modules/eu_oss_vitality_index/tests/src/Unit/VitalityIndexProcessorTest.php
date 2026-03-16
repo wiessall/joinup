@@ -6,23 +6,22 @@ namespace Drupal\Tests\eu_oss_vitality_index\Unit;
 
 use Drupal\Tests\UnitTestCase;
 use Drupal\eu_oss_vitality_index\VitalityIndexProcessor;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests VitalityIndexProcessor.
- *
- * @coversDefaultClass \Drupal\eu_oss_vitality_index\VitalityIndexProcessor
- *
- * @group eu_oss_catalogue
- * @group eu_oss_vitality_index
  */
+#[CoversClass(VitalityIndexProcessor::class)]
+#[Group('eu_oss_catalogue')]
+#[Group('eu_oss_vitality_index')]
 class VitalityIndexProcessorTest extends UnitTestCase {
 
   use GitRepositoryTrait;
 
   /**
    * Provides test cases for getPointsPerDay() method.
-   *
-   * @covers ::getPointsPerDay
    */
   public function testGetPointsPerDay(): void {
     $commits = $this->generateCommits();
@@ -44,9 +43,8 @@ class VitalityIndexProcessorTest extends UnitTestCase {
 
   /**
    * Tests longevity range.
-   *
-   * @dataProvider providerLongevityRange
    */
+  #[DataProvider('providerLongevityRange')]
   public function testLongevityRange(int $creationOfLastCommit, int $expectedPoints): void {
     $commit = $this->generateCommit($creationOfLastCommit);
     $tag = $this->generateTag($commit);
@@ -74,9 +72,8 @@ class VitalityIndexProcessorTest extends UnitTestCase {
 
   /**
    * Tests code activity range.
-   *
-   * @dataProvider providerCodeActivityRange
    */
+  #[DataProvider('providerCodeActivityRange')]
   public function testCodeActivityRange(int $numberOfCommits, int $expectedPoints): void {
     $commits = [];
     for ($x = 1; $x <= $numberOfCommits; $x++) {
@@ -111,9 +108,8 @@ class VitalityIndexProcessorTest extends UnitTestCase {
 
   /**
    * Tests user community range.
-   *
-   * @dataProvider providerUserCommunityRange
    */
+  #[DataProvider('providerUserCommunityRange')]
   public function testUserCommunityRange(int $numberOfCommits, int $expectedPoints): void {
     $commits = [];
     for ($x = 1; $x <= $numberOfCommits; $x++) {
@@ -147,9 +143,8 @@ class VitalityIndexProcessorTest extends UnitTestCase {
 
   /**
    * Tests release history.
-   *
-   * @dataProvider providerReleaseHistory
    */
+  #[DataProvider('providerReleaseHistory')]
   public function testReleaseHistory(int $numberOfTags, int $expectedPoints): void {
     $commits = [];
     for ($x = 1; $x <= $numberOfTags; $x++) {

@@ -4,50 +4,31 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\ExistingSite;
 
-use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Tests\assessments\Traits\AssessmentEntityCreationTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\assessments\AssessmentInterface;
-use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\assessments\Entity\Assessment;
-use Drupal\joinup_solution\Entity\Solution;
-use Drupal\og\OgGroupAudienceHelperInterface;
+use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\ParagraphInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the assessment workflow and related entity publication.
- *
- * @group assessments
  */
+#[CoversClass(AssessmentReport::class)]
+#[Group('assessments')]
 class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
 
-  /**
-   * The assessment vocabulary helper.
-   */
-  private AssessmentVocabularyHelper $assessmentVocabularyHelper;
-
-  /**
-   * The entity repository.
-   */
-  private EntityRepositoryInterface $entityRepository;
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp(): void {
-    parent::setUp();
-
-    $this->assessmentVocabularyHelper = $this->container->get(AssessmentVocabularyHelper::class);
-    $this->entityRepository = $this->container->get('entity.repository');
-  }
+  use AssessmentEntityCreationTrait;
 
   /**
    * Tests that publishing a report also publishes all related entities.
-   *
-   * @covers \Drupal\assessments\Entity\AssessmentReport::postSave
    */
   public function testReportPublishingPublishesRelatedEntities(): void {
-    $bindingRequirement = $this->createParagraphBindingRequirement();
+    $asset = $this->createSolutionAsset(AssessmentInterface::SOLUTION_COLLECTOR);
+    $bindingRequirement = $this->createParagraphBindingRequirement($asset);
     $organisation = $this->createAssessmentOrganisation();
 
     /** @var \Drupal\assessments\Entity\AssessmentReport $report */
@@ -69,7 +50,6 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
     $expression = $bindingRequirement->get('expression')->entity;
     $publicService = $bindingRequirement->get('affects')->entity;
     $participation = $bindingRequirement->get('has_participation')->entity;
-    $asset = $bindingRequirement->get('asset')->entity;
 
     // Assert that the report and all related entities are unpublished.
     $this->assertFalse($report->isPublished(), 'Report should be unpublished initially.');
@@ -143,11 +123,10 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
    *
    * This tests the scenario where a report is created with status=TRUE from
    * the start, rather than first creating it as unpublished and then updating.
-   *
-   * @covers \Drupal\assessments\Entity\AssessmentReport::postSave
    */
   public function testDirectlyPublishingReportPublishesRelatedEntities(): void {
-    $bindingRequirement = $this->createParagraphBindingRequirement();
+    $asset = $this->createSolutionAsset(AssessmentInterface::SOLUTION_COLLECTOR);
+    $bindingRequirement = $this->createParagraphBindingRequirement($asset);
     $organisation = $this->createAssessmentOrganisation();
 
     // Verify the organisation is unpublished before we create the report.
@@ -194,8 +173,6 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
    * When a published report is updated to add new binding requirements with
    * new child entities (expression, public_service, participation), those
    * children should be published when the report is saved.
-   *
-   * @covers \Drupal\assessments\Entity\AssessmentReport::postSave
    */
   public function testAddingChildrenToPublishedReportPublishesThem(): void {
     $bindingRequirement = $this->createParagraphBindingRequirement();
@@ -217,37 +194,12 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
     // Verify the report is published.
     $this->assertTrue($report->isPublished(), 'Report should be published.');
 
-    // Create a new binding requirement with new child entities.
-    $newExpression = Assessment::create([
-      'type' => 'expression',
-      'description' => ['value' => $this->randomString()],
-      'documented_in' => ['uri' => 'https://interoperable-europe.ec.europa.eu/new'],
-    ]);
-    $this->markEntityForCleanup($newExpression);
+    // Create a new binding requirement and verify its children are unpublished.
+    $newBindingRequirement = $this->createParagraphBindingRequirement();
+    $newExpression = $newBindingRequirement->get('expression')->entity;
+    $newPublicService = $newBindingRequirement->get('affects')->entity;
+    $newParticipation = $newBindingRequirement->get('has_participation')->entity;
 
-    $newPublicService = Assessment::create([
-      'type' => 'public_service',
-      'thematic_area' => ['entity' => $this->assessmentVocabularyHelper->getTermFromIdentifier('assess_public_service_area', 'general_public_services')],
-    ]);
-    $this->markEntityForCleanup($newPublicService);
-
-    $newParticipation = Assessment::create([
-      'type' => 'participation',
-      'participant_type' => ['entity' => $this->assessmentVocabularyHelper->getTermFromIdentifier('assess_participant_type', 'european_union_agency')],
-    ]);
-    $this->markEntityForCleanup($newParticipation);
-
-    $newBindingRequirement = Paragraph::create([
-      'type' => 'binding_requirement',
-      'description' => ['value' => $this->randomString()],
-      'documented_in' => ['uri' => 'https://interoperable-europe.ec.europa.eu/new'],
-      'expression' => ['entity' => $newExpression],
-      'affects' => ['entity' => $newPublicService],
-      'has_participation' => ['entity' => $newParticipation],
-    ]);
-    $this->markEntityForCleanup($newBindingRequirement);
-
-    // Verify the new children are unpublished before adding to the report.
     $this->assertFalse($newExpression->isPublished(), 'New expression should be unpublished initially.');
     $this->assertFalse($newPublicService->isPublished(), 'New public service should be unpublished initially.');
     $this->assertFalse($newParticipation->isPublished(), 'New participation should be unpublished initially.');
@@ -272,72 +224,6 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
     $this->assertTrue($newExpression->isPublished(), 'New expression should be published after adding to published report.');
     $this->assertTrue($newPublicService->isPublished(), 'New public service should be published after adding to published report.');
     $this->assertTrue($newParticipation->isPublished(), 'New participation should be published after adding to published report.');
-  }
-
-  /**
-   * Creates a binding requirement paragraph with all dependencies.
-   *
-   * @return \Drupal\paragraphs\ParagraphInterface
-   *   The created binding requirement paragraph.
-   */
-  private function createParagraphBindingRequirement(): ParagraphInterface {
-    $expression = Assessment::create([
-      'type' => 'expression',
-      'description' => ['value' => $this->randomString()],
-      'documented_in' => ['uri' => 'https://interoperable-europe.ec.europa.eu/'],
-    ]);
-    $this->markEntityForCleanup($expression);
-
-    $publicService = Assessment::create([
-      'type' => 'public_service',
-      'thematic_area' => ['entity' => $this->assessmentVocabularyHelper->getTermFromIdentifier('assess_public_service_area', 'general_public_services')],
-    ]);
-    $this->markEntityForCleanup($publicService);
-
-    $participation = Assessment::create([
-      'type' => 'participation',
-      'participant_type' => ['entity' => $this->assessmentVocabularyHelper->getTermFromIdentifier('assess_participant_type', 'european_union_agency')],
-    ]);
-    $this->markEntityForCleanup($participation);
-
-    $collection = $this->entityRepository->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR);
-    $asset = Solution::create([
-      'type' => 'solution',
-      'title' => 'Test Asset',
-      OgGroupAudienceHelperInterface::DEFAULT_FIELD => ['target_id' => $collection->id()],
-      // Solutions are published by default.
-      // @see \assessments_inline_entity_form_entity_form_alter
-      'field_state' => 'published',
-    ]);
-    $this->markEntityForCleanup($asset);
-
-    $bindingRequirement = Paragraph::create([
-      'type' => 'binding_requirement',
-      'description' => ['value' => $this->randomString()],
-      'documented_in' => ['uri' => 'https://interoperable-europe.ec.europa.eu/'],
-      'expression' => ['entity' => $expression],
-      'affects' => ['entity' => $publicService],
-      'has_participation' => ['entity' => $participation],
-      'asset' => ['entity' => $asset],
-    ]);
-    $this->markEntityForCleanup($bindingRequirement);
-
-    return $bindingRequirement;
-  }
-
-  /**
-   * Creates an assessment organisation.
-   *
-   * @return \Drupal\assessments\AssessmentInterface
-   *   The created assessment organisation.
-   */
-  private function createAssessmentOrganisation(): AssessmentInterface {
-    $organisation = Assessment::create([
-      'type' => 'public_organisation',
-      'name' => 'Test Organisation',
-    ]);
-    $this->markEntityForCleanup($organisation);
-    return $organisation;
   }
 
 }

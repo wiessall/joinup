@@ -11,13 +11,6 @@ use Drupal\Component\Utility\Crypt;
  */
 class Project {
 
-  /**
-   * Silent errors.
-   *
-   * @var string[]
-   */
-  protected array $silentErrors = [];
-
   public function __construct(
     public readonly string $namespace,
     public readonly string $name,
@@ -57,6 +50,16 @@ class Project {
   }
 
   /**
+   * Returns the publiccode.yml content, if present.
+   *
+   * @return string|null
+   *   The raw publiccode.yml string, or NULL if not present.
+   */
+  public function getPubliccodeYml(): ?string {
+    return $this->files['publiccodeYml'] ?? NULL;
+  }
+
+  /**
    * Computes and returns a hash from metadata.
    *
    * @return string
@@ -73,30 +76,7 @@ class Project {
    *   Array representation of the value object.
    */
   public function toArray(): array {
-    $data = get_object_vars($this);
-    unset($data['silentErrors']);
-
-    return $data;
-  }
-
-  /**
-   * Add silent error.
-   *
-   * @param string $error
-   *   An error.
-   */
-  public function addSilentError(string $error): void {
-    $this->silentErrors[] = $error;
-  }
-
-  /**
-   * Gets silent errors.
-   *
-   * @return array
-   *   Errors.
-   */
-  public function getSilentErrors(): array {
-    return $this->silentErrors;
+    return get_object_vars($this);
   }
 
 }

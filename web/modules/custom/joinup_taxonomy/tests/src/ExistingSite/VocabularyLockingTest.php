@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup_taxonomy\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
+use PHPUnit\Framework\Attributes\Group;
 use weitzman\LoginTrait\LoginTrait;
 
 /**
  * Tests adding, editing and deleting terms in an unlocked vocabulary.
- *
- * @group joinup_taxonomy
  */
+#[Group('joinup_taxonomy')]
 class VocabularyLockingTest extends JoinupExistingSiteTestBase {
 
   use LoginTrait;

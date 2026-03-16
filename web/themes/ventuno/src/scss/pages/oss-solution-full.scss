@@ -325,9 +325,22 @@
       margin-right: $spacer * 0.5;
       .field__item {
         display: inline;
-        &[data-modal-link] {
+        &--joinup-modal {
           display: block;
         }
+      }
+    }
+  }
+
+  .oss-validation-status-val {
+    &.is-valid {
+      &::before {
+        @include get-bootstrap-icon("check-circle-fill", $success);
+      }
+    }
+    &.is-invalid {
+      &::before {
+        @include get-bootstrap-icon("exclamation-circle-fill", $danger);
       }
     }
   }

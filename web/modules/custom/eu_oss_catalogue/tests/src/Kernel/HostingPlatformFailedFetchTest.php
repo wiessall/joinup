@@ -19,12 +19,13 @@ use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
 use Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests how hosting platform plugins handle exceptional API responses.
- *
- * @group eu_oss_catalogue
  */
+#[Group('eu_oss_catalogue')]
 class HostingPlatformFailedFetchTest extends KernelTestBase implements LoggerChannelInterface {
 
   use LoggerTestTrait;
@@ -77,9 +78,8 @@ class HostingPlatformFailedFetchTest extends KernelTestBase implements LoggerCha
    *   The ID of the provider plugin to test.
    * @param array $config
    *   The configuration of the provider plugin.
-   *
-   * @dataProvider providerTestHostingPlatformFetch
    */
+  #[DataProvider('providerTestHostingPlatformFetch')]
   public function testHostingPlatformFetch(array $statusCodes, string $pluginId, array $config): void {
     $this->setGlobalMockClientFromResponseCodes(...array_merge($statusCodes, [500]));
 
