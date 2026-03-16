@@ -59,7 +59,7 @@
         "drupal/file_visibility": "^1.0",
         "drupal/flag": "^5.0",
         "drupal/geocoder": "^4.4",
-        "drupal/geofield": "~1.6",
+        "drupal/geofield": "^10.3",
         "drupal/honeypot": "~2",
         "drupal/iframe": "^3.0",
         "drupal/image_library_widget": "^2.0",
@@ -524,6 +524,9 @@
             },
             "drupal/svg_image": {
                 "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.mr20-note535548.diff"
+            },
+            "drupal/tmgmt": {
+                "Filtering job items crashes @see https://www.drupal.org/i/3578626": "resources/patch/php/drupal/tmgmt/3578626.mr159.commit3ee8064a.diff"
             },
             "drupal/tour": {
                 "Support page manager variants on front page @see https://www.drupal.org/i/3568815": "resources/patch/php/drupal/tour/3568815.patch"
