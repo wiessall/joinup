@@ -16,12 +16,12 @@ use Drupal\file_visibility\FileVisibility;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\og\Entity\OgRole;
 use Drupal\track_usage\Recorder;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests integration with the file_visibility module.
- *
- * @group joinup_security
  */
+#[Group('joinup_security')]
 class FileVisibilityTest extends JoinupExistingSiteTestBase {
 
   /**

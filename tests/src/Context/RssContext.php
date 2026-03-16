@@ -8,12 +8,14 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Behat\Step\Then;
 use Drupal\Component\Utility\Html;
-use PHPUnit\Framework\Assert;
+use Drupal\joinup\Traits\AssertTrait;
 
 /**
  * Provides steps definitions for interacting with RSS feeds.
  */
 class RssContext extends RawMinkContext {
+
+  use AssertTrait;
 
   /**
    * The current feed being analysed.
@@ -72,8 +74,8 @@ class RssContext extends RawMinkContext {
     foreach ($elements as $key => $value) {
       $nodes = $xpath->query('//channel/' . $key);
       // Support is limited to nodes that appear once only.
-      Assert::assertCount(1, $nodes, "Invalid count for $key element.");
-      Assert::assertEquals($value, trim($nodes->item(0)->nodeValue));
+      $this->assertCount(1, $nodes, "Invalid count for $key element.");
+      $this->assertSameValues($value, trim($nodes->item(0)->nodeValue));
     }
   }
 
@@ -88,7 +90,7 @@ class RssContext extends RawMinkContext {
     $this->assertRssLoaded();
 
     $items = $this->getXpathInstance()->query('//channel/item');
-    Assert::assertCount($count, $items);
+    $this->assertCount($count, $items);
   }
 
   /**
@@ -117,9 +119,9 @@ class RssContext extends RawMinkContext {
       foreach ($item as $key => $value) {
         $nodes = $xpath->query("//channel/item[$xpath_node_index]/$key");
         // Support is limited to nodes that appear once only.
-        Assert::assertCount(1, $nodes, "Invalid count for $key element.");
+        $this->assertCount(1, $nodes, "Invalid count for $key element.");
         $actual_value = trim($nodes->item(0)->nodeValue);
-        Assert::assertSame($value, $actual_value);
+        $this->assertSameValues($value, $actual_value);
       }
     }
   }
@@ -192,7 +194,7 @@ class RssContext extends RawMinkContext {
     );
 
     $nodes = $this->getSession()->getPage()->findAll('xpath', $xpath);
-    Assert::assertCount(1, $nodes);
+    $this->assertCount(1, $nodes);
   }
 
   /**
@@ -204,7 +206,7 @@ class RssContext extends RawMinkContext {
   #[Then('the page should contain :count RSS autodiscovery link(s)')]
   public function assertRssAutodiscoveryLinkCount(int $count): void {
     $xpath = '//head/link[@rel="alternate"][@type="application/rss+xml"]';
-    Assert::assertCount($count, $this->getSession()->getPage()->findAll('xpath', $xpath));
+    $this->assertCount($count, $this->getSession()->getPage()->findAll('xpath', $xpath));
   }
 
 }

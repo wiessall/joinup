@@ -70,8 +70,8 @@ Feature:
       | name  |
       | macOs |
     Given oss_solution content:
-      | title                  | oss_available_languages | oss_development_status | oss_source        | oss_categories                    | oss_long_description                                                                             | oss_short_description | oss_git_description | status    | oss_release_date | oss_documentation   | oss_features         | oss_git_url         | oss_landing_url     | oss_license      | oss_logo                         | oss_maintenance_contacts | oss_maintenance_contractors | oss_maintenance_type | oss_owner       | oss_platforms | oss_publiccode_yml_version | oss_scope                       | oss_screenshots                                                                                    | oss_software_type  | oss_software_version | oss_vitality_index | oss_vitality_index_range               | oss_used_by                                        |
-      | Super Awesome Software | it,en,de,error,pt       | stable                 | developers_italia | document-management,collaboration | The long description. A patient developer can make this long enough to be at least 5 lines long. | The short description | The GIT description | published | 2014-11-19       | https://example.com | Feature A, Feature B | https://example.com | https://example.com | GPL-2.0-or-later | https://placehold.co/200x200.png | FOSS Conference          | ACME Ltd.                   | community            | FOSS Conference | macOs         | 0.4                        | science-and-technology,security | https://placehold.co/600x400.png,https://placehold.co/400x400.png,https://placehold.co/800x400.jpg | standalone/desktop | 3.17.143             | 0.419              | "[12,45,56,7,90,29,34,20,47,48,50,80]" | Administration 1,Administration 2,Administration 3 |
+      | title                  | oss_available_languages | oss_development_status | oss_source        | oss_categories                    | oss_long_description                                                                             | oss_short_description | oss_git_description | status    | oss_release_date | oss_documentation   | oss_features         | oss_git_url         | oss_landing_url     | oss_license      | oss_logo                         | oss_maintenance_contacts | oss_maintenance_contractors | oss_maintenance_type | oss_owner       | oss_platforms | oss_publiccode_yml_version | oss_scope                       | oss_screenshots                                                                                    | oss_software_type  | oss_software_version | oss_vitality_index | oss_vitality_index_range               | oss_used_by                                        | oss_validation_status |
+      | Super Awesome Software | it,en,de,error,pt       | stable                 | developers_italia | document-management,collaboration | The long description. A patient developer can make this long enough to be at least 5 lines long. | The short description | The GIT description | published | 2014-11-19       | https://example.com | Feature A, Feature B | https://example.com | https://example.com | GPL-2.0-or-later | https://placehold.co/200x200.png | FOSS Conference          | ACME Ltd.                   | community            | FOSS Conference | macOs         | 0.4                        | science-and-technology,security | https://placehold.co/600x400.png,https://placehold.co/400x400.png,https://placehold.co/800x400.jpg | standalone/desktop | 3.17.143             | 0.419              | "[12,45,56,7,90,29,34,20,47,48,50,80]" | Administration 1,Administration 2,Administration 3 | valid                 |
     When I visit the "Super Awesome Software" "oss_solution"
     Then I should be on "/eu-oss-catalogue/solutions/super-awesome-software"
     And the site should not have log records with level lower than "notice" for "php" errors
@@ -118,6 +118,7 @@ Feature:
       | FOSS Conference                                                                                  |
       | Vitality                                                                                         |
       | 41%                                                                                              |
+      | publiccode.yml is valid                                                                          |
     And the "div" element with "title" attribute should contain "The software is typically installed and run in a a desktop operating system environment."
     And I should not see any HTML tags inside elements with title attribute
     And the "canvas" element with "data-vitality-index-range" attribute should contain "[12,45,56,7,90,29,34,20,47,48,50,80]"
@@ -180,6 +181,10 @@ Feature:
     And oss_solution content:
       | title      | status    | oss_release_date | oss_available_languages                | oss_used_by                                                                                                            |
       | With modal | published | 2014-11-19       | it,en,de,pt,eo,fr,he,ja,lt,pl,ro,gd,si | Administration 1,Administration 2,Administration 3,Administration 4,Administration 5,Administration 6,Administration 7 |
+    And the "With modal" oss_solution has the following validation issues:
+      | key                | description         | line | column | type    |
+      | validation_error   | There is an error   | 1    | 1      | error   |
+      | validation_warning | There is an warning | 2    | 2      | warning |
 
     When I visit the "With modal" "oss_solution"
 
@@ -234,6 +239,12 @@ Feature:
     And I should not see the following lines of text:
       | Romanian,     |
       | Scots Gaelic, |
+    And I should not see the text "[validation_error line:1 column:1] There is an error"
+    But I should see the link "publiccode.yml is invalid"
+    When I click "publiccode.yml is invalid"
+    Then a modal should open
+    And I should see the text "[validation_error line:1 column:1] There is an error"
+    And I should not see the text "[validation_warning line:2 column:2] There is an warning"
 
   @javascript
   Scenario: Screenshot carousel with 4 items works as expected.

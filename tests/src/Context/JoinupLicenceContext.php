@@ -8,14 +8,15 @@ use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
+use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\EntityTrait;
-use PHPUnit\Framework\Assert;
 
 /**
  * Behat step definitions for testing licences.
  */
 class JoinupLicenceContext extends RawDrupalContext {
 
+  use AssertTrait;
   use EntityTrait;
 
   /**
@@ -61,7 +62,8 @@ class JoinupLicenceContext extends RawDrupalContext {
    */
   #[Then('I should have :number licence(s)')]
   public function assertLicenceCount(int $number): void {
-    Assert::assertEquals($number, \Drupal::entityQuery('node')->accessCheck(FALSE)->count()->condition('type', 'licence')->execute());
+    $actual = \Drupal::entityQuery('node')->accessCheck(FALSE)->count()->condition('type', 'licence')->execute();
+    $this->assertSameValues($number, $actual);
   }
 
 }

@@ -9,17 +9,20 @@ use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueProvider;
 use Drupal\eu_oss_catalogue\Entity\CatalogueType;
 
 /**
- * Provider to be used in testing.
+ * Provider used to test that updates are skipped when the API returns invalid.
  *
- * Same as developers_italia but we need a different name.
+ * On the first fetch both projects are yielded as-is (valid). On subsequent
+ * fetches the gitlab project's YAML is replaced with the API-invalid marker so
+ * the mock validator returns invalid, while the hash change ensures the
+ * solution is still queued for re-processing.
  */
 #[EuOssCatalogueProvider(
-  id: "yaml_become_valid_provider",
-  label: new TranslatableMarkup("YAML become valid"),
+  id: "api_invalid_update_provider",
+  label: new TranslatableMarkup("API invalid (existing solution update)"),
   parser: "publiccode_yml",
   type: CatalogueType::Local,
 )]
-class YamlBecomeValidProvider extends SelectedProjectProvider {
+class ApiInvalidUpdateProvider extends SelectedProjectProvider {
 
   /**
    * {@inheritdoc}
@@ -29,7 +32,7 @@ class YamlBecomeValidProvider extends SelectedProjectProvider {
     $wasCreated = $this->wasCreated($updateUrl);
 
     foreach (parent::fetch() as $project) {
-      if ($project->url === $updateUrl && !$wasCreated) {
+      if ($project->url === $updateUrl && $wasCreated) {
         yield $this->makeInvalid($project);
         continue;
       }
