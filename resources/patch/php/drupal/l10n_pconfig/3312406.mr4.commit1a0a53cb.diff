@@ -1,8 +1,8 @@
 diff --git a/src/DrupalOrgPluralFormula.php b/src/DrupalOrgPluralFormula.php
-index ccdcc39959a08e22f9a609681caeea3907744450..42ef653c88ab0d11ec2b71624e06b3a10a3efbd7 100644
+index a62bb2a7df836fa2b87694bb7d7328aa4e5cb191..b7a9541aea6d7889cc0f6e5474e1f12c371a90bc 100644
 --- a/src/DrupalOrgPluralFormula.php
 +++ b/src/DrupalOrgPluralFormula.php
-@@ -28,9 +28,14 @@ class DrupalOrgPluralFormula implements DrupalOrgPluralFormulaInterface {
+@@ -44,9 +44,14 @@ class DrupalOrgPluralFormula implements DrupalOrgPluralFormulaInterface {
        'am' => 'nplurals=2; plural=(n > 1);',
        // Wordforge says nplurals=4!?
        'ar' => 'nplurals=6; plural=n==1 ? 0 : n==0 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;',
@@ -17,7 +17,7 @@ index ccdcc39959a08e22f9a609681caeea3907744450..42ef653c88ab0d11ec2b71624e06b3a1
        'bs' => 'nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);',
        // Wordforge has different rules!?
        'ca' => 'nplurals=2; plural=(n > 1);',
-@@ -42,7 +47,9 @@ class DrupalOrgPluralFormula implements DrupalOrgPluralFormulaInterface {
+@@ -58,7 +63,9 @@ class DrupalOrgPluralFormula implements DrupalOrgPluralFormulaInterface {
        // Wordforge has nplurals=1, but this might fit us better.
        'dz' => $default,
        'el' => $default,
@@ -27,7 +27,7 @@ index ccdcc39959a08e22f9a609681caeea3907744450..42ef653c88ab0d11ec2b71624e06b3a1
        'eo' => $default,
        'es' => $default,
        'et' => $default,
-@@ -53,10 +60,12 @@ class DrupalOrgPluralFormula implements DrupalOrgPluralFormulaInterface {
+@@ -69,10 +76,12 @@ class DrupalOrgPluralFormula implements DrupalOrgPluralFormulaInterface {
        'fil' => 'nplurals=2; plural=(n > 1);',
        'fo' => $default,
        'fr' => $default,
@@ -41,7 +41,7 @@ index ccdcc39959a08e22f9a609681caeea3907744450..42ef653c88ab0d11ec2b71624e06b3a1
        'he' => $default,
        'hi' => $default,
        'hr' => 'nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;',
-@@ -70,17 +79,28 @@ class DrupalOrgPluralFormula implements DrupalOrgPluralFormulaInterface {
+@@ -86,36 +95,58 @@ class DrupalOrgPluralFormula implements DrupalOrgPluralFormulaInterface {
        'it' => $default,
        // Wordforge has nplurals=1, but this might fit us better.
        'ja' => $default,
@@ -70,10 +70,11 @@ index ccdcc39959a08e22f9a609681caeea3907744450..42ef653c88ab0d11ec2b71624e06b3a1
        'my' => $default,
        'nb' => $default,
        'ne' => $default,
-@@ -88,35 +108,53 @@ class DrupalOrgPluralFormula implements DrupalOrgPluralFormulaInterface {
+       'nl' => $default,
        'nn' => $default,
        // The 'no' code is superseded by nb and nn
-       //'no' => array('Norwegian', $default),
+-      // 'no' => array('Norwegian', $default).
++      // 'no' => array('Norwegian', $default),
 +      'oc' => 'nplurals=2; plural=(n > 1)',
 +      'or' => $default,
 +      'os' => $default,
@@ -98,8 +99,9 @@ index ccdcc39959a08e22f9a609681caeea3907744450..42ef653c88ab0d11ec2b71624e06b3a1
        'sl' => 'nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);',
 +      'so' => $default,
        'sq' => $default,
-       // Wordforge has nplurals=4 here, and could be right, based on the .po file data?!?
-       'sr' => 'nplurals=3; plural=(n%10==1 && n%100 !=11) ? 0 : ((n%10 >=2 && n%10 <= 4) && (n%100 < 10 || n%100 >= 20) ? 1 : 2);',
+       // Wordforge has nplurals=4 here, and could be right, based on the
+       // .po file data?
+@@ -123,18 +154,22 @@ class DrupalOrgPluralFormula implements DrupalOrgPluralFormulaInterface {
        'sv' => $default,
        'sw' => $default,
        'ta' => $default,
@@ -115,9 +117,9 @@ index ccdcc39959a08e22f9a609681caeea3907744450..42ef653c88ab0d11ec2b71624e06b3a1
        'ur' => $default,
        'uz' => $default,
        'vi' => $one,
-+      'xx-lolspeak' => $default,
-+      'yi' => 'nplurals=2; plural=(n > 1);',
-       // How are the two zh- variants are different? This is how it is set up on l.d.o and nobody complained.
+-      // How are the two zh- variants are different? This is how it is set
+-      // up on l.d.o and nobody complained.
++      // How are the two zh- variants are different? This is how it is set up on l.d.o and nobody complained.
        'zh-hans' => $default,
        'zh-hant' => $one,
 -      'xx-lolspeak' => $default,
@@ -126,7 +128,7 @@ index ccdcc39959a08e22f9a609681caeea3907744450..42ef653c88ab0d11ec2b71624e06b3a1
    }
  
 diff --git a/tests/src/Functional/PluralFormulaLanguageFormTest.php b/tests/src/Functional/PluralFormulaLanguageFormTest.php
-index ddbac766fbd0a5f2b9211896b73a3159cb5624f8..fa8ff17da8663f1030b8ea4e55965b8244a31a84 100644
+index 45e54008255c14fdc9e2e18a18900ac73f2bdd88..985c184fe3e73931b1913595f382c10b9f7b5704 100644
 --- a/tests/src/Functional/PluralFormulaLanguageFormTest.php
 +++ b/tests/src/Functional/PluralFormulaLanguageFormTest.php
 @@ -66,25 +66,25 @@ class PluralFormulaLanguageFormTest extends BrowserTestBase {

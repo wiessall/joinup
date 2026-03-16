@@ -130,9 +130,10 @@ The module currently supports the following providers:
 - **Developer Overheid** (NL) - Dutch National OSS Catalogue
 - **Avoinkoodi.fi** (FI) - Finnish OSS Catalogue
 
-**Hosting Platforms:**
-- **Code Europa EU** - European Commission OSS Catalogue (GitLab self-hosted)
-- **Open CoDE** - German National OSS Catalogue (GitLab self-hosted)
+- Developers Italia: Italian National OSS Catalogue,
+by https://developers.italia.it website
+- Open Code: German National OSS Catalogue,
+by https://opencode.de website. (GitLab (self hosted))
 
 **Other:**
 - **Custom** - Solutions not part of any national catalogue
@@ -151,7 +152,7 @@ each _provider_ should designate a _parser_, the later knows how to process data
 produced by the _provider_. Then, why we need a _parser_ when we already have a
 _provider_? Well, several providers might use the same data structure, thus the
 same parser. A good example are the [Developers Italia](
-https://developers.italia.it) and [Open CoDE](https://opencode.de) catalogues as they share the same
+https://developers.italia.it) and [Open Code](https://opencode.de) catalogues as they share the same
 [publiccode.yml](https://yml.publiccode.tools/) schema for describing Open Source
 Software Solutions.
 
@@ -296,7 +297,7 @@ Run the following, to fetch from
 ```
 
 Run the following, to fetch from
-[Offentligkod.se](https://offentligkod.se) (Swedish National Catalogue)
+[Open CoDE (German National OSS Catalogue)](https://opencode.de)
 ```bash
 ./vendor/bin/drush eu-oss:fetch offentligkod_se
 ```
@@ -305,6 +306,12 @@ Run the following, to fetch from
 [Awesome CodeGouvFr](https://code.gouv.fr/sources/#/awesome)
 ```bash
 ./vendor/bin/drush eu-oss:fetch awesome_code_gouv_fr
+```
+
+Run the following, to fetch from
+[Digitaal gedreven door Gent](https://district09.gent)
+```bash
+./vendor/bin/drush eu-oss:fetch hosting_platform:city_of_ghent
 ```
 
 Run the following, to fetch from
