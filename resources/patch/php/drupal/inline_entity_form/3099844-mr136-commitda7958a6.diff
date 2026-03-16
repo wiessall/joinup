@@ -33,7 +33,7 @@ index 74a71424736eab114f8fae45c5baf1c19475166e..c6a140dc5e750be2b0d61c1feb1f0676
    }
  
 diff --git a/src/Form/EntityInlineForm.php b/src/Form/EntityInlineForm.php
-index 9d193c95773ac170a06fe5ca2f710813b5db7ff0..e3ce38d3c6b55983a08742947c24750be50d42c1 100644
+index 9d193c95773ac170a06fe5ca2f710813b5db7ff0..b6c8fd366296e5f0ddaef0c4372782026ac4b85e 100644
 --- a/src/Form/EntityInlineForm.php
 +++ b/src/Form/EntityInlineForm.php
 @@ -10,12 +10,14 @@ use Drupal\Core\Entity\EntityInterface;
@@ -59,7 +59,7 @@ index 9d193c95773ac170a06fe5ca2f710813b5db7ff0..e3ce38d3c6b55983a08742947c24750b
      $entity_form['#ief_element_submit'][] = [
        get_class($this),
        'submitCleanFormState',
-@@ -261,26 +264,87 @@ class EntityInlineForm implements InlineFormInterface {
+@@ -261,26 +264,89 @@ class EntityInlineForm implements InlineFormInterface {
     * {@inheritdoc}
     */
    public function entityFormValidate(array &$entity_form, FormStateInterface $form_state) {
@@ -69,19 +69,21 @@ index 9d193c95773ac170a06fe5ca2f710813b5db7ff0..e3ce38d3c6b55983a08742947c24750b
 +    $entity = $entity_form['#entity'];
 +    $this->buildEntity($entity_form, $entity, $form_state);
 +
-+    // Optional IEF left empty: clear core's #required errors on child
-+    // elements and skip validation. Empty entity is discarded in
-+    // massageFormValues().
-+    if (isset($entity_form['#required']) && !$entity_form['#required'] && $this->isEmptyEntity($entity, $entity_form['#form_mode'])) {
-+      $this->clearIefErrors($entity_form, $form_state);
-+      return;
-+    }
-+
      $triggering_element = $form_state->getTriggeringElement();
++
++    // Only validate if the IEF form was submitted.
      if (!empty($triggering_element['#ief_submit_trigger'])) {
 -      /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
 -      $entity = $entity_form['#entity'];
 -      $this->buildEntity($entity_form, $entity, $form_state);
++      // Optional IEF left empty: clear core's #required errors on child
++      // elements and skip validation. Empty entity is discarded in
++      // massageFormValues().
++      if (isset($entity_form['#required']) && !$entity_form['#required'] && $this->isEmptyEntity($entity, $entity_form['#form_mode'])) {
++        $this->clearIefErrors($entity_form, $form_state);
++        return;
++      }
++
        $form_display = $this->getFormDisplay($entity, $entity_form['#form_mode']);
        $form_display->validateFormValues($entity, $entity_form, $form_state);
        $entity->setValidationRequired(FALSE);
@@ -155,7 +157,7 @@ index 9d193c95773ac170a06fe5ca2f710813b5db7ff0..e3ce38d3c6b55983a08742947c24750b
    /**
     * {@inheritdoc}
     */
-@@ -307,6 +371,31 @@ class EntityInlineForm implements InlineFormInterface {
+@@ -307,6 +373,41 @@ class EntityInlineForm implements InlineFormInterface {
      $storage_handler->delete($entities);
    }
  
@@ -171,17 +173,27 @@ index 9d193c95773ac170a06fe5ca2f710813b5db7ff0..e3ce38d3c6b55983a08742947c24750b
 +   */
 +  protected function clearIefErrors(array $entity_form, FormStateInterface $form_state) {
 +    $errors = $form_state->getErrors();
-+    if (empty($errors)) {
++    $prefix = implode('][', $entity_form['#parents']);
++    $non_ief_errors = array_filter(
++      $errors,
++      static fn(string $name): bool =>
++        $name !== $prefix && !str_starts_with($name, $prefix . ']['),
++      ARRAY_FILTER_USE_KEY,
++    );
++
++    if ($non_ief_errors === $errors) {
 +      return;
 +    }
 +
-+    $prefix = implode('][', $entity_form['#parents']);
++    // Suspend limit_validation_errors during the swap so that
++    // setErrorByName() does not discard errors in AJAX requests.
++    $limit = $form_state->getLimitValidationErrors();
++    $form_state->setLimitValidationErrors(NULL);
 +    $form_state->clearErrors();
-+    foreach ($errors as $name => $error) {
-+      if (!str_starts_with($name, $prefix)) {
-+        $form_state->setErrorByName($name, $error);
-+      }
++    foreach ($non_ief_errors as $name => $error) {
++      $form_state->setErrorByName($name, $error);
 +    }
++    $form_state->setLimitValidationErrors($limit);
 +  }
 +
    /**
