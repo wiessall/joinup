@@ -8,12 +8,12 @@ use Drupal\Core\Url;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\private_message\Entity\PrivateMessage;
 use Drupal\user\UserInterface;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests for the Private Messages.
- *
- * @group joinup_private_message
  */
+#[Group('joinup_private_message')]
 class PrivateMessageTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
