@@ -31,7 +31,7 @@ widget:
   config:
     show_numbers: true
     arbitrary_facet_plugin: _none
-    soft_limit: 6
+    soft_limit: 5
     show_reset_link: false
     reset_text: 'Show all'
     hide_reset_when_no_selection: false
@@ -54,11 +54,6 @@ processor_configs:
     weights:
       build: 5
     settings:
-      assessment_org_country:
-        enable: false
-        condition: null
-        values: ''
-        negate: false
       date:
         enable: false
         condition: null
@@ -75,11 +70,6 @@ processor_configs:
         values: ''
         negate: false
       interoperable_flag:
-        enable: false
-        condition: null
-        values: ''
-        negate: false
-      organisation_origin:
         enable: false
         condition: null
         values: ''
