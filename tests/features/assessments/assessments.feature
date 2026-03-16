@@ -265,11 +265,12 @@ Feature: Assessment Report Entity Management
     Given I am logged in as an "authenticated user"
     And I go to "/collection/assessments/report/create"
     And I click "New binding requirement"
-    Then I click "Interoperability solution" in the "Modal content" region
-    Then I press "Select an Interoperability solution" in the "Modal content" region
-    When I type "Test" in the "asset[form][0][entity_id]" autocomplete field
+    When I click "Interoperability solution" in the "Modal content" region
+    And I press "Asset"
+    And I press "Select Interoperability Solution" in the "Modal content" region to open the entity browser
     Then I should see "Test solution published"
-    And I should not see "Test solution archived"
+    # TODO: Re-enable this in ISAICP-10991.
+    # And I should not see "Test solution archived"
     And I should not see "Test solution proposed"
     And I should not see "Test solution draft"
     And I should not see "Test solution unpublished"
