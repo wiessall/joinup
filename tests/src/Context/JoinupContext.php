@@ -537,6 +537,21 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Navigates to the translation overview form of an entity.
+   *
+   * @param string $title
+   *   The title of the entity.
+   * @param string $bundle
+   *   An alias of a bundle as defined in the
+   *   \Drupal\joinup\Traits\NameMappingsTrait::bundleAliases method.
+   */
+  #[When('I visit the translation overview form of the :title :bundle')]
+  public function visitEntityTranslationOverviewForm(string $title, string $bundle): void {
+    $node = $this->getEntityByLabel('node', $title, $bundle);
+    $this->visitPath($node->toUrl('drupal:content-translation-overview')->toString());
+  }
+
+  /**
    * Navigates to the revisions form of a node.
    *
    * @param string $title

@@ -2,12 +2,6 @@
 Feature: Translating documents
 
   Background:
-    Given users:
-      | Username    | Roles     |
-      | Flora Mod   | moderator |
-      | Lee Facil   |           |
-      | John Member |           |
-      | Ross Auth   |           |
     Given collection content:
       | title           |
       | Test collection |
@@ -16,6 +10,11 @@ Feature: Translating documents
       | Test solution |
 
   Scenario Outline: Users who do have edit access can manage translations.
+    Given users:
+      | Username    | Roles     |
+      | Flora Mod   | moderator |
+      | Lee Facil   |           |
+      | John Member |           |
     Given the following <bundle> user memberships:
       | <bundle>      | user        | roles       |
       | Test <bundle> | Lee Facil   | facilitator |
@@ -79,6 +78,10 @@ Feature: Translating documents
       | Lee Facil | solution   |
 
   Scenario Outline: Users who do not have edit access cannot manage translations.
+    Given users:
+      | Username    | Roles     |
+      | John Member |           |
+      | Ross Auth   |           |
     Given the following <bundle> user memberships:
       | <bundle>      | user        | roles |
       | Test <bundle> | John Member |       |
@@ -86,12 +89,12 @@ Feature: Translating documents
       | title         | <bundle>      |
       | Test document | Test <bundle> |
     Given I am logged in as "<user>"
-    When I go to "<url>"
+    When I visit the translation overview form of the "Test document" document
     Then I should see the heading "Access denied"
 
     Examples:
-      | user        | bundle     | url                                                                                   |
-      | John Member | collection | /collection/test-collection/document/test-document/translations                       |
-      | Ross Auth   | collection | /collection/test-collection/document/test-document/translations                       |
-      | John Member | solution   | /collection/portal-support/solution/test-solution/document/test-document/translations |
-      | Ross Auth   | solution   | /collection/portal-support/solution/test-solution/document/test-document/translations |
+      | user        | bundle     |
+      | John Member | collection |
+      | Ross Auth   | collection |
+      | John Member | solution   |
+      | Ross Auth   | solution   |
