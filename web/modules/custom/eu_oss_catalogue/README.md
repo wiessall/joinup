@@ -309,6 +309,12 @@ Run the following, to fetch from
 ```
 
 Run the following, to fetch from
+[Digitaal gedreven door Gent](https://district09.gent)
+```bash
+./vendor/bin/drush eu-oss:fetch hosting_platform:city_of_ghent
+```
+
+Run the following, to fetch from
 [Developer Overheid](https://developer.overheid.nl)
 ```bash
 ./vendor/bin/drush eu-oss:fetch developer_overheid
