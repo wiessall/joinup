@@ -531,6 +531,9 @@
             "drupal/tour": {
                 "Support page manager variants on front page @see https://www.drupal.org/i/3568815": "resources/patch/php/drupal/tour/3568815.patch"
             },
+            "drupal/tmgmt_ec_etranslation": {
+                "Preserve placeholders @see https://www.drupal.org/i/3577084": "resources/patch/php/drupal/tmgmt_ec_etranslation/3577084.mr28.commit18b2ff6d.diff"
+            },
             "drupal/views_block_area": {
                 "Render logic not working @see https://www.drupal.org/i/3499861": "resources/patch/php/drupal/views_block_area/3499861.patch"
             },
