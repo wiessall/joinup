@@ -952,6 +952,7 @@ function joinup_group_node_view_alter(array &$build, EntityInterface $entity, En
  */
 function joinup_group_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, string $view_mode): void {
   if ($entity instanceof GroupInterface && $view_mode === 'group_header') {
+    unset($build['logo']);
     // The group header featured stats visibility is controlled by the group
     // settings. Add the relevant cache tags.
     $bundle = "{$entity->bundle()}_settings";
