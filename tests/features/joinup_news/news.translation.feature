@@ -12,8 +12,8 @@ Feature: Translating news
       | title           |
       | Test collection |
     Given solution content:
-      | title         |
-      | Test solution |
+      | title         | collection      |
+      | Test solution | Test collection |
 
   Scenario Outline: Users who do have edit access can manage translations.
     Given the following <bundle> user memberships:
@@ -36,21 +36,20 @@ Feature: Translating news
     And I click "Add" in the "Polish" row
     Then I should see the heading "Create Polish translation of Test news"
     Then the following fields should be present "Headline, Short title, Abstract, Body, Add a new file, Source URL"
+    Then the following fields should not be present "Collection, Comments,Geographical coverage,Logo, Referenced solution, Search keywords, Site featured, State, Topic"
     When I fill in "Headline" with "Testowy news"
     And I fill in "Abstract" with "Opis newsa"
     And I fill in "Short title" with "Krótki tytuł newsa"
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value | To jest polskie tłumaczenie newsa |
     And I attach the file "test.zip" to "Add a new file"
+    And I press "Upload"
     And I press "Update"
     Then I should see the following lines of text:
       | The Attachments field description is required. |
-    When I fill in the following:
-      | File description | Plik testowy |
-    And I press "Upload"
-    Then the following fields should not be present "Collection, Comments,Geographical coverage,Logo, Referenced solution, Search keywords, Site featured, State, Topic"
-    When I press "Update"
-#    Then I should see the success message "News Krótki tytuł has been updated."
+    And I fill in "File description" with "Plik testowy"
+    And I press "Update"
+    Then I should see "News Krótki tytuł newsa has been updated."
     And I should see "Krótki tytuł newsa"
     And I should see the heading "Testowy news"
     And I should see "To jest polskie tłumaczenie newsa"
@@ -91,12 +90,12 @@ Feature: Translating news
       | title     | <bundle>      |
       | Test news | Test <bundle> |
     Given I am logged in as "<user>"
-    When I go to "<url>"
+    When I visit the translation overview form of the "Test news" news
     Then I should see the heading "Access denied"
 
     Examples:
-      | user        | bundle     | url                                                                           |
-      | John Member | collection | /collection/test-collection/news/test-news/translations                       |
-      | Ross Auth   | collection | /collection/test-collection/news/test-news/translations                       |
-      | John Member | solution   | /collection/portal-support/solution/test-solution/news/test-news/translations |
-      | Ross Auth   | solution   | /collection/portal-support/solution/test-solution/news/test-news/translations |
+      | user        | bundle     |
+      | John Member | collection |
+      | Ross Auth   | collection |
+      | John Member | solution   |
+      | Ross Auth   | solution   |
