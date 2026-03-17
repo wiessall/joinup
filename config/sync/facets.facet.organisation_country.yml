@@ -1,4 +1,4 @@
-uuid: 19759932-a7e4-4ed0-8410-2bdcfb8891e4
+uuid: b76b2a53-f43a-4889-8ddc-10a275b64df0
 langcode: en
 status: true
 dependencies:
@@ -7,15 +7,15 @@ dependencies:
     - views.view.search
   module:
     - search_api
-id: assessment_org_country
-name: 'Organisation country'
-weight: 4
+id: organisation_country
+name: 'Organisation Country'
+weight: -5
 min_count: 1
 missing: false
-missing_label: ''
-url_alias: assessment_org_country
+missing_label: others
+url_alias: organisation_country
 facet_source_id: 'search_api:views_page__search__page_1'
-field_identifier: assessment_org_country
+field_identifier: country
 query_operator: or
 hard_limit: 0
 exclude: false
@@ -31,7 +31,7 @@ widget:
   config:
     show_numbers: true
     arbitrary_facet_plugin: _none
-    soft_limit: 10
+    soft_limit: 5
     show_reset_link: false
     reset_text: 'Show all'
     hide_reset_when_no_selection: false
@@ -44,6 +44,11 @@ only_visible_when_facet_source_is_visible: true
 show_only_one_result: false
 show_title: true
 processor_configs:
+  aggregated_entity_reference_label:
+    processor_id: aggregated_entity_reference_label
+    weights:
+      build: 5
+    settings: {  }
   dependent_processor:
     processor_id: dependent_processor
     weights:
@@ -92,7 +97,7 @@ processor_configs:
       type:
         enable: true
         condition: values
-        values: report
+        values: 'collection, solution, report'
         negate: false
       type_of_document:
         enable: false
@@ -109,11 +114,6 @@ processor_configs:
     processor_id: hierarchy_processor
     weights:
       build: 100
-    settings: {  }
-  translate_entity:
-    processor_id: translate_entity
-    weights:
-      build: 5
     settings: {  }
   url_processor_handler:
     processor_id: url_processor_handler
