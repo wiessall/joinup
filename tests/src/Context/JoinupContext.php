@@ -11,6 +11,7 @@ use Behat\Hook\AfterScenario;
 use Behat\Hook\BeforeScenario;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Mink\Exception\ExpectationException;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
@@ -49,8 +50,6 @@ use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use GuzzleHttp\Client;
-use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\ExpectationFailedException;
 
 /**
  * Behat step definitions that are generally useful for the Joinup project.
@@ -106,7 +105,7 @@ class JoinupContext extends RawDrupalContext {
     $regex = '/' . preg_quote($text, '/') . '/ui';
     $message = sprintf('The text "%s" was not found anywhere in the text of the current page.', $text);
 
-    Assert::assertMatchesRegularExpression($regex, $actual, $message);
+    $this->assertCondition((bool) preg_match($regex, $actual), $message);
   }
 
   /**
@@ -328,7 +327,7 @@ class JoinupContext extends RawDrupalContext {
     $sorted_options = $available_options;
     sort($sorted_options);
 
-    Assert::assertSame($available_options, $sorted_options);
+    $this->assertSameValues($available_options, $sorted_options);
   }
 
   /**
@@ -396,7 +395,7 @@ class JoinupContext extends RawDrupalContext {
 
     // The PHPUnit assertion will allow to understand easily which values are
     // missing and which one are extra.
-    Assert::assertEquals($options, $availableOptions, "The '$select' select options don't match the wanted ones.");
+    $this->assertSameValues($options, $availableOptions, "The '$select' select options don't match the wanted ones.");
   }
 
   /**
@@ -413,7 +412,7 @@ class JoinupContext extends RawDrupalContext {
     $languages = \Drupal::languageManager()->getLanguages();
     $expectedOptions = array_keys($languages);
 
-    Assert::assertEquals($expectedOptions, $availableOptions, "The '$select' select options don't match the site languages.");
+    $this->assertSameValues($expectedOptions, $availableOptions, "The '$select' select options don't match the site languages.");
   }
 
   /**
@@ -444,7 +443,7 @@ class JoinupContext extends RawDrupalContext {
     sort($expectedOptions);
     sort($checkboxLabels);
 
-    Assert::assertEquals($expectedOptions, $checkboxLabels);
+    $this->assertSameValues($expectedOptions, $checkboxLabels);
   }
 
   /**
@@ -463,7 +462,7 @@ class JoinupContext extends RawDrupalContext {
     }, $this->getSelectOptions($field));
     $options = $this->explodeDelimitedSeparatedStepArgument($options);
 
-    Assert::assertEmpty(array_intersect($availableOptions, $options), "The '$select' select options include at least one of the given values.");
+    $this->assertCondition(empty(array_intersect($availableOptions, $options)), "The '$select' select options include at least one of the given values.");
   }
 
   /**
@@ -481,7 +480,7 @@ class JoinupContext extends RawDrupalContext {
     $options = $this->explodeDelimitedSeparatedStepArgument($optgroups);
 
     foreach ($options as $option) {
-      Assert::assertContains($option, $availableOptgroups, "The '$select' select doesn't contain the option '$option''.", TRUE);
+      $this->assertCondition(in_array($option, $availableOptgroups, TRUE), "The '$select' select doesn't contain the option '$option''.");
     }
   }
 
@@ -535,6 +534,21 @@ class JoinupContext extends RawDrupalContext {
     else {
       $this->visitEntityForm($action, $title, $bundle);
     }
+  }
+
+  /**
+   * Navigates to the translation overview form of an entity.
+   *
+   * @param string $title
+   *   The title of the entity.
+   * @param string $bundle
+   *   An alias of a bundle as defined in the
+   *   \Drupal\joinup\Traits\NameMappingsTrait::bundleAliases method.
+   */
+  #[When('I visit the translation overview form of the :title :bundle')]
+  public function visitEntityTranslationOverviewForm(string $title, string $bundle): void {
+    $node = $this->getEntityByLabel('node', $title, $bundle);
+    $this->visitPath($node->toUrl('drupal:content-translation-overview')->toString());
   }
 
   /**
@@ -640,7 +654,7 @@ class JoinupContext extends RawDrupalContext {
       ->count()
       ->execute();
 
-    Assert::assertEquals($count, $revision_count);
+    $this->assertSameValues((int) $count, (int) $revision_count);
   }
 
   /**
@@ -1004,7 +1018,7 @@ class JoinupContext extends RawDrupalContext {
     $element = reset($elements);
     $date = $element->findField('Date')->getValue();
     $time = $element->findField('Time')->getValue();
-    Assert::assertEquals(trim($date . ' ' . $time), $value);
+    $this->assertSameValues(trim($date . ' ' . $time), $value);
   }
 
   /**
@@ -1025,7 +1039,7 @@ class JoinupContext extends RawDrupalContext {
     /** @var \Drupal\joinup_workflow\EntityWorkflowStateInterface $node */
     $node = $this->getEntityByLabel('node', $title, $type);
     $actual = $node->getWorkflowState();
-    Assert::assertEquals($state, $actual, "The $title $type content has the expected state '$state' (actual: '$actual')");
+    $this->assertSameValues($state, $actual, "The $title $type content has the expected state '$state' (actual: '$actual')");
   }
 
   /**
@@ -1039,14 +1053,13 @@ class JoinupContext extends RawDrupalContext {
   #[Given('the workflow state of the :label content should be :stateExpected')]
   public function assertEntityWorkflowState(string $label, string $stateExpected): void {
     $entity = $this->getEntityByLabel('node', $label);
-    Assert::assertInstanceOf(
-      EntityWorkflowStateInterface::class,
-      $entity,
+    $this->assertCondition(
+      $entity instanceof EntityWorkflowStateInterface,
       "The entity doesn't seem to have any workflow."
     );
     // State might be a label or a machine name.
     $stateIdExpected = static::translateWorkflowStateAlias($stateExpected);
-    Assert::assertSame(
+    $this->assertSameValues(
       $stateIdExpected,
       $actual = $entity->getWorkflowState(),
       sprintf(
@@ -1181,7 +1194,7 @@ class JoinupContext extends RawDrupalContext {
 
     sort($headings);
     sort($tiles_in_page);
-    Assert::assertEquals(
+    $this->assertSameValues(
       $headings,
       $tiles_in_page,
       sprintf(
@@ -1205,7 +1218,7 @@ class JoinupContext extends RawDrupalContext {
   public function assertTilesInBlock(TableNode $titles_table, $region): void {
     $headings_in_page = array_keys($this->getTiles($region));
     $headings_expected = $titles_table->getColumn(0);
-    Assert::assertEquals($headings_expected, $headings_in_page, 'The expected tiles were not found in the wanted region or were not in the proper order.');
+    $this->assertSameValues($headings_expected, $headings_in_page, 'The expected tiles were not found in the wanted region or were not in the proper order.');
   }
 
   /**
@@ -1247,7 +1260,7 @@ class JoinupContext extends RawDrupalContext {
       return array_map('trim', $split);
     }, $headings_expected);
     $headings_expected = array_merge(...$headings_expected);
-    Assert::assertEquals($headings_expected, $headings, 'The expected tiles were not found or were not in the proper order.');
+    $this->assertSameValues($headings_expected, $headings, 'The expected tiles were not found or were not in the proper order.');
   }
 
   /**
@@ -1487,7 +1500,7 @@ class JoinupContext extends RawDrupalContext {
       // might be present in wysiwygs or are used to add multiple values to a
       // field.
       $actual = count($this->getSession()->getPage()->findAll('xpath', '//main//div[contains(concat(" ", normalize-space(@class), " "), " form-actions ")]//input[@type = "submit"]'));
-      Assert::assertEquals($count, $actual);
+      $this->assertSameValues((int) $count, $actual);
     }
   }
 
@@ -1523,7 +1536,7 @@ class JoinupContext extends RawDrupalContext {
   #[Then('I should see the plus button menu')]
   public function assertPlusButtonMenuPresent(): void {
     $element = $this->getSession()->getPage()->find('css', '#dropdown-add-content');
-    Assert::assertNotEmpty($element);
+    $this->assertCondition(!empty($element), 'The plus button menu was not found on the page.');
   }
 
   /**
@@ -1532,7 +1545,7 @@ class JoinupContext extends RawDrupalContext {
   #[Then('I should not see the plus button menu')]
   public function assertPlusButtonMenuNotPresent(): void {
     $element = $this->getSession()->getPage()->find('css', 'div.add-content-menu ul');
-    Assert::assertEmpty($element);
+    $this->assertCondition(empty($element), 'The plus button menu was found on the page but should not be.');
   }
 
   /**
@@ -1624,7 +1637,7 @@ class JoinupContext extends RawDrupalContext {
     $failed = ($method === 'be' && $current_url !== $url) || ($method === 'match' && !preg_match($url, $current_url));
 
     if ($failed) {
-      throw new ExpectationFailedException("Url $current_url does not match expected $url.");
+      throw new ExpectationException("Url $current_url does not match expected $url.", $this->getSession()->getDriver());
     }
   }
 
@@ -1690,7 +1703,7 @@ class JoinupContext extends RawDrupalContext {
           ->condition('name', $comment_values['author'])
           ->range(0, 1);
         $result = $query->execute();
-        Assert::assertNotEmpty($result, 'Unable to load author of comment.');
+        $this->assertCondition(!empty($result), 'Unable to load author of comment.');
         $uid = reset($result);
       }
 
@@ -1745,7 +1758,7 @@ class JoinupContext extends RawDrupalContext {
     if (empty($element)) {
       throw new \Exception('The current workflow state field is not present on the page.');
     }
-    Assert::assertEquals($state, trim($element->getText()));
+    $this->assertSameValues($state, trim($element->getText()));
   }
 
   /**
@@ -1770,7 +1783,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when the field does not have a description.
-   * @throws \PHPUnit\Framework\ExpectationFailedException
+   * @throws \Behat\Mink\Exception\ExpectationException
    *   Thrown when none of the field's descriptions match the given text.
    */
   #[Then('I should see the description :description for (the ):label( field)')]
@@ -1782,15 +1795,15 @@ class JoinupContext extends RawDrupalContext {
     }
     foreach ($elements as $element) {
       try {
-        Assert::assertStringContainsString($description, $element->getText());
+        $this->assertCondition(str_contains($element->getText(), $description), "The description '$description' was not found in this element.");
         // The description was found, stop searching.
         return;
       }
-      catch (ExpectationFailedException $e) {
+      catch (ExpectationException $e) {
         // The description did not match the expected string, keep searching.
       }
     }
-    throw new ExpectationFailedException("The description $description was not found for the $label field.");
+    throw new ExpectationException("The description $description was not found for the $label field.", $this->getSession()->getDriver());
   }
 
   /**
@@ -1925,7 +1938,7 @@ class JoinupContext extends RawDrupalContext {
     ])->setAbsolute()->toString();
     $href = $link_element->getAttribute('href');
 
-    Assert::assertStringContainsString(urlencode($entity_url), $href);
+    $this->assertCondition(str_contains($href, urlencode($entity_url)), 'The entity URL is not present in the link href.');
   }
 
   /**
@@ -1944,7 +1957,7 @@ class JoinupContext extends RawDrupalContext {
   public function assertLinkPointsToUrl(string $title, string $link): void {
     $link_element = $this->getSession()->getPage()->findLink($title);
     $href = $link_element->getAttribute('href');
-    Assert::assertEquals($href, $link);
+    $this->assertSameValues($href, $link);
   }
 
   /**
@@ -1994,7 +2007,7 @@ class JoinupContext extends RawDrupalContext {
   #[When('I pick :value from the autocomplete suggestions')]
   public function fillFieldWithNormalisedEntityReference(string $value, ?string $field = NULL): void {
     if ($this->hasJavascriptSupport()) {
-      $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), " ui-autocomplete ")]//a[text() = "' . $value . '"]';
+      $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), " ui-autocomplete ")]//a[normalize-space(.) = "' . $value . '"]';
       $this->waitForElementVisible('xpath', $xpath)->click();
     }
     else {
@@ -2064,7 +2077,7 @@ class JoinupContext extends RawDrupalContext {
     }
 
     $attribute = trim($element->getAttribute('href'), '/');
-    Assert::assertEquals($href, $attribute, "The link '$link' in the region '$region' doesn't point to the expected path '$href'.");
+    $this->assertSameValues($href, $attribute, "The link '$link' in the region '$region' doesn't point to the expected path '$href'.");
   }
 
   /**
@@ -2094,7 +2107,7 @@ class JoinupContext extends RawDrupalContext {
     sort($foundLinks);
     sort($expectedLinks);
 
-    Assert::assertSame($expectedLinks, $foundLinks, "The active links in the '$region' region do not match the expected ones.");
+    $this->assertSameValues($expectedLinks, $foundLinks, "The active links in the '$region' region do not match the expected ones.");
   }
 
   /**
@@ -2243,7 +2256,7 @@ class JoinupContext extends RawDrupalContext {
   #[Then('the :tile tile should be marked as pinned')]
   public function assertTileMarkedAsPinned(string $heading): void {
     if (!$this->getTileByHeading($heading)->find('css', 'div.pin')) {
-      throw new ExpectationFailedException("The tile '$heading' is not marked as pinned, but it should be.");
+      throw new ExpectationException("The tile '$heading' is not marked as pinned, but it should be.", $this->getSession()->getDriver());
     }
   }
 
@@ -2256,7 +2269,7 @@ class JoinupContext extends RawDrupalContext {
   #[Then('the :tile tile should not be marked as pinned')]
   public function assertTileNotMarkedAsPinned(string $heading): void {
     if ($this->getTileByHeading($heading)->find('css', 'div.pin')) {
-      throw new ExpectationFailedException("The tile '$heading' is marked as pinned, but it shouldn't be.");
+      throw new ExpectationException("The tile '$heading' is marked as pinned, but it shouldn't be.", $this->getSession()->getDriver());
     }
   }
 
@@ -2292,12 +2305,12 @@ class JoinupContext extends RawDrupalContext {
     /** @var \Behat\Mink\Element\NodeElement[] $rows */
     $rows = $this->getSession()->getPage()->findAll('css', '#menu-overview tbody tr.draggable');
     $expected = $table->getColumnsHash();
-    Assert::assertSameSize($expected, $rows);
+    $this->assertCount(count($expected), $rows);
 
     foreach ($expected as $delta => $data) {
       $current_row = $rows[$delta];
       $title_element = $current_row->find('css', 'td:first-of-type a:not(.tabledrag-handle)');
-      Assert::assertEquals($data['title'], trim($title_element->getText()));
+      $this->assertSameValues($data['title'], trim($title_element->getText()));
 
       $menu_link = $this->getMenuLinkByTitle($data['title'], $group->id(), 'navigation');
       $parent_input = $current_row->find('css', 'input[name="links[menu_plugin_id:' . $menu_link->getPluginId() . '][parent]"]');
@@ -2308,9 +2321,9 @@ class JoinupContext extends RawDrupalContext {
 
       if (!isset($data['parent']) || $data['parent'] === '') {
         if (!empty($parent_input)) {
-          Assert::assertEmpty($parent_input->getValue());
+          $this->assertCondition(empty($parent_input->getValue()), "The parent input for menu link '{$data['title']}' should be empty.");
         }
-        Assert::assertCount(0, $indentation, "The menu link '{$data['title']}' should not be indented but it is.");
+        $this->assertCount(0, $indentation, "The menu link '{$data['title']}' should not be indented but it is.");
       }
       else {
         if (!$parent_input) {
@@ -2318,8 +2331,8 @@ class JoinupContext extends RawDrupalContext {
         }
 
         $parent_link = $this->getMenuLinkByTitle($data['parent'], $group->id(), 'navigation');
-        Assert::assertEquals($parent_link->getPluginId(), $parent_input->getValue());
-        Assert::assertNotCount(0, $indentation, "The menu link '{$data['title']}' should be indented but it's not.");
+        $this->assertSameValues($parent_link->getPluginId(), $parent_input->getValue());
+        $this->assertCondition(count($indentation) !== 0, "The menu link '{$data['title']}' should be indented but it's not.");
       }
     }
   }
@@ -2339,25 +2352,25 @@ class JoinupContext extends RawDrupalContext {
     $rows = $this->getSession()->getPage()->findAll('css', '#facet-display-overview tbody tr.draggable');
     $expected = $table->getColumnsHash();
 
-    Assert::assertSameSize($expected, $rows, 'Number of table rows does not match.');
+    $this->assertCount(count($expected), $rows, 'Number of table rows does not match.');
 
     foreach ($expected as $index => $expected_row) {
       $row = $rows[$index];
 
       // Check title.
       $title_element = $row->find('css', 'td .tabledrag-cell-content__item');
-      Assert::assertNotNull($title_element, "Missing title in row $index.");
-      Assert::assertEquals($expected_row['title'], trim($title_element->getText()), "Title mismatch in row $index.");
+      $this->assertCondition($title_element !== NULL, "Missing title in row $index.");
+      $this->assertSameValues($expected_row['title'], trim($title_element->getText()), "Title mismatch in row $index.");
 
       // Check type (region).
       $type_select = $row->find('css', 'select.field-region');
-      Assert::assertNotNull($type_select, "Missing region (type) select in row $index for '{$expected_row['title']}'.");
+      $this->assertCondition($type_select !== NULL, "Missing region (type) select in row $index for '{$expected_row['title']}'.");
 
       $selected_value = $type_select->getValue();
       $selected_option = $type_select->find('css', 'option[value="' . $selected_value . '"]');
-      Assert::assertNotNull($selected_option, 'Selected option not found by value.');
+      $this->assertCondition($selected_option !== NULL, 'Selected option not found by value.');
       $option_value = $selected_option->getHtml();
-      Assert::assertEquals(
+      $this->assertSameValues(
         $expected_row['type'],
         $option_value,
         "Region mismatch in row $index for field '{$expected_row['title']}': expected '{$expected_row['type']}', got '$option_value'."
@@ -2365,9 +2378,9 @@ class JoinupContext extends RawDrupalContext {
 
       // Check weight.
       $weight_select = $row->find('css', 'select.field-weight');
-      Assert::assertNotNull($weight_select, "Missing weight select in row $index.");
+      $this->assertCondition($weight_select !== NULL, "Missing weight select in row $index.");
       $weight_value = $weight_select->getValue();
-      Assert::assertEquals(
+      $this->assertSameValues(
         $expected_row['weight'],
         $weight_value,
         "Weight mismatch in row $index for field '{$expected_row['title']}': expected '{$expected_row['weight']}', got '$weight_value'."
@@ -2613,7 +2626,7 @@ class JoinupContext extends RawDrupalContext {
     $expected_status = $status === 'enabled';
     $button = $this->findNamedElementInRegion($button, 'button', $region);
     $disabled = !($button->getAttribute('disabled') === 'disabled');
-    Assert::assertEquals($expected_status, $disabled);
+    $this->assertSameValues($expected_status, $disabled);
   }
 
   /**
@@ -2658,7 +2671,7 @@ class JoinupContext extends RawDrupalContext {
    */
   #[Then('there should be exactly :count :element_name on the page')]
   public function assertElementCount(string $count, string $element_name): void {
-    Assert::assertEquals((int) $count, count($this->getElementsMatchingElementAlias($element_name)));
+    $this->assertSameValues((int) $count, count($this->getElementsMatchingElementAlias($element_name)));
   }
 
   /**
@@ -2670,7 +2683,7 @@ class JoinupContext extends RawDrupalContext {
   #[Then('I should see a paragraph containing the text :text')]
   public function assertParagraphText(string $text): void {
     $element = $this->getSession()->getPage()->find('xpath', '//p[contains(text(), "' . $text . '")]');
-    Assert::assertNotEmpty($element);
+    $this->assertCondition(!empty($element), "A paragraph containing the text '$text' was not found in the page.");
   }
 
   /**
@@ -2751,10 +2764,10 @@ class JoinupContext extends RawDrupalContext {
     $expected = '<loc>' . $link_text . '</loc>';
     $response = $this->getSession()->getPage()->getContent();
     if ($exists) {
-      Assert::assertStringContainsString($expected, $response);
+      $this->assertCondition(str_contains($response, $expected), "The URL for '$entity_label' was not found in the sitemap.");
     }
     else {
-      Assert::assertStringNotContainsString($expected, $response);
+      $this->assertCondition(!str_contains($response, $expected), "The URL for '$entity_label' should not be in the sitemap but was found.");
     }
   }
 

@@ -56,7 +56,6 @@ hidden:
   label_join: true
   label_leave: true
   landing_page: true
-  langcode: true
   metadata_banner_disabled: true
   search_api_excerpt: true
   target: true

@@ -44,8 +44,7 @@ use Drupal\joinup_core\JoinupVersionInterface;
 use Drupal\media\Entity\Media;
 use Drush\TestTraits\DrushTestTrait;
 use LoversOfBehat\TableExtension\Hook\Scope\AfterTableFetchScope;
-use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\ExpectationFailedException;
+
 use Symfony\Component\Process\Process;
 
 /**
@@ -447,7 +446,7 @@ class FeatureContext extends RawDrupalContext {
       catch (UnsupportedDriverActionException | UnsupportedDrupalDriverActionException) {
       }
     }
-    Assert::assertTrue($this->hasImage($filename, $element));
+    $this->assertCondition($this->hasImage($filename, $element), "The image '$filename' was not found on the page.");
   }
 
   /**
@@ -463,9 +462,9 @@ class FeatureContext extends RawDrupalContext {
   #[Then('the image :filename should not be rendered through an image style')]
   public function assertImageNotRenderedThroughImageStyle(string $filename): void {
     $image = $this->getImage($filename);
-    Assert::assertNotNull($image, "Image '$filename' not found on the page.");
+    $this->assertCondition($image !== NULL, "Image '$filename' not found on the page.");
     $src = $image->getAttribute('src');
-    Assert::assertStringNotContainsString('/styles/', $src, "Image '$filename' is rendered through an image style: $src");
+    $this->assertCondition(!str_contains($src, '/styles/'), "Image '$filename' is rendered through an image style: $src");
   }
 
   /**
@@ -481,13 +480,13 @@ class FeatureContext extends RawDrupalContext {
   public function assertImageNotPresent(string $filename, ?NodeElement $element = NULL): void {
     if ($imageNode = $this->getImage($filename, $element)) {
       try {
-        Assert::assertFalse($imageNode->isVisible());
+        $this->assertCondition(!$imageNode->isVisible(), "The image '$filename' is visible but should not be.");
         return;
       }
       catch (UnsupportedDriverActionException | UnsupportedDrupalDriverActionException) {
       }
     }
-    Assert::assertFalse($this->hasImage($filename, $element));
+    $this->assertCondition(!$this->hasImage($filename, $element), "The image '$filename' was found on the page but should not be.");
   }
 
   /**
@@ -501,7 +500,7 @@ class FeatureContext extends RawDrupalContext {
   #[Then('I (should )see the image ":filename" in the :tile tile')]
   public function assertImagePresentInRegion(string $filename, string $tile): void {
     $tileElement = $this->getTileByHeading($tile);
-    Assert::assertNotEmpty($tileElement, "Tile cannot be found");
+    $this->assertCondition(!empty($tileElement), "Tile cannot be found");
     $this->assertImagePresent($filename, $tileElement);
   }
 
@@ -518,10 +517,10 @@ class FeatureContext extends RawDrupalContext {
   #[Then('there should be :count image(s) in the :tile tile')]
   public function assertAnyImagePresentInTile(string $count, string $tile): void {
     $tileElement = $this->getTileByHeading($tile);
-    Assert::assertNotEmpty($tileElement, "Tile cannot be found");
+    $this->assertCondition(!empty($tileElement), "Tile cannot be found");
     $imageNodes = $this->getImages($tileElement);
     if (in_array($count, ['an', 'some'], TRUE)) {
-      Assert::assertNotEmpty($imageNodes);
+      $this->assertCondition(!empty($imageNodes), "No images were found in the '$tile' tile.");
       return;
     }
 
@@ -531,7 +530,7 @@ class FeatureContext extends RawDrupalContext {
     if ((string) $countInt !== $count && $count !== 'no') {
       throw new \Exception("Count must be either the string 'an', or a number");
     }
-    Assert::assertCount($countInt, $imageNodes);
+    $this->assertCount($countInt, $imageNodes);
   }
 
   /**
@@ -1104,7 +1103,7 @@ class FeatureContext extends RawDrupalContext {
     }
     ksort($actual_order);
 
-    Assert::assertSame($expected_order, array_values($actual_order), 'Strings found but incorrectly ordered');
+    $this->assertSameValues($expected_order, array_values($actual_order), 'Strings found but incorrectly ordered');
   }
 
   /**
@@ -1200,7 +1199,7 @@ class FeatureContext extends RawDrupalContext {
    */
   #[Then('the page should be cacheable')]
   public function assertPageCacheable(): void {
-    Assert::assertTrue($this->isPageCacheable());
+    $this->assertCondition($this->isPageCacheable(), 'The page is not cacheable.');
   }
 
   /**
@@ -1208,7 +1207,7 @@ class FeatureContext extends RawDrupalContext {
    */
   #[Then('the page should be cached')]
   public function assertPageCached(): void {
-    Assert::assertTrue($this->isPageCached());
+    $this->assertCondition($this->isPageCached(), 'The page is not cached.');
   }
 
   /**
@@ -1216,7 +1215,7 @@ class FeatureContext extends RawDrupalContext {
    */
   #[Then('the page should not be cached')]
   public function assertPageNotCached(): void {
-    Assert::assertFalse($this->isPageCached());
+    $this->assertCondition(!$this->isPageCached(), 'The page is cached but should not be.');
   }
 
   /**
@@ -1311,7 +1310,7 @@ class FeatureContext extends RawDrupalContext {
   public function clickLinkInRow(string $link_text, string $row_text): void {
     $element = $this->getRowByRowText($row_text);
     $link = $element->findLink($link_text);
-    Assert::assertNotEmpty($link);
+    $this->assertCondition(!empty($link), "The link '$link_text' was not found in the '$row_text' row.");
     $link->click();
   }
 
@@ -1521,7 +1520,7 @@ class FeatureContext extends RawDrupalContext {
     $result = $this->getSession()->wait(60000,
       'document.evaluate(\'//*[contains(., "' . $text . '")]\', document, null, XPathResult.ANY_TYPE, null).iterateNext()'
     );
-    Assert::assertTrue($result);
+    $this->assertCondition($result, "Timed out waiting for the page to contain '$text'.");
   }
 
   /**
@@ -1736,10 +1735,10 @@ class FeatureContext extends RawDrupalContext {
   #[When('the Interoperable Europe Portal version is set to :version')]
   public function setJoinupVersion(string $version): void {
     // Alert the user that the `@joinupVersion` tag is required.
-    Assert::assertTrue($this->hasTag('joinupVersion'), 'The `@joinupVersion` tag is required for scenarios that want to change the Interoperable Europe Portal version.');
+    $this->assertCondition($this->hasTag('joinupVersion'), 'The `@joinupVersion` tag is required for scenarios that want to change the Interoperable Europe Portal version.');
 
     // We also require the Drupal API to retrieve the project root folder.
-    Assert::assertTrue($this->hasTag('api'), 'The `@api` tag is required for scenarios that use the `@joinupVersion` tag.');
+    $this->assertCondition($this->hasTag('api'), 'The `@api` tag is required for scenarios that use the `@joinupVersion` tag.');
 
     file_put_contents(JoinupVersionInterface::PATH, $version);
 
@@ -1831,7 +1830,7 @@ class FeatureContext extends RawDrupalContext {
     $entity = $this->getEntityByLabel($map['type'], $title, $content_type);
     $image_field = $entity->get($map['fields']['logo']);
     if ($image_field->isEmpty()) {
-      throw new ExpectationFailedException("The {$title} logo field is empty but it should point to the image at position #{$offset}.");
+      throw new ExpectationException("The {$title} logo field is empty but it should point to the image at position #{$offset}.", $this->getSession()->getDriver());
     }
 
     $state = \Drupal::state();
@@ -1840,7 +1839,7 @@ class FeatureContext extends RawDrupalContext {
       throw new \Exception("The logo images should have been clicked but it was not.");
     }
     if ($clicks[$content_type]['logo'][$offset] !== $image_field->target_id) {
-      throw new ExpectationFailedException("The $title logo should contain the image #$offset but it doesn't.");
+      throw new ExpectationException("The $title logo should contain the image #$offset but it doesn't.", $this->getSession()->getDriver());
     }
   }
 
@@ -1958,7 +1957,7 @@ class FeatureContext extends RawDrupalContext {
         $actual = $matches[1];
       }
     }
-    Assert::assertSame($value, $actual, sprintf('Expected the "%s" attribute of the page to be "%s" but got "%s".', $attribute, $value, $actual));
+    $this->assertSameValues($value, $actual, sprintf('Expected the "%s" attribute of the page to be "%s" but got "%s".', $attribute, $value, $actual));
   }
 
   /**
@@ -2034,7 +2033,7 @@ class FeatureContext extends RawDrupalContext {
     $drupal_settings = $this->getSession()->getPage()->find('xpath', '//script[@data-drupal-selector="drupal-settings-json"]');
     $actual_theme = Json::decode($drupal_settings->getText())['theme'];
 
-    Assert::assertSame($expected_theme, $actual_theme);
+    $this->assertSameValues($expected_theme, $actual_theme);
   }
 
   /**
@@ -2105,7 +2104,7 @@ class FeatureContext extends RawDrupalContext {
     // the test responsibility to set other fixed timestamps with values not
     // very close to NOW, in order to avoid collision.
     if (\Drupal::time()->getRequestTime() - $value > 3) {
-      throw new ExpectationFailedException("The entity wasn't updated recently");
+      throw new ExpectationException("The entity wasn't updated recently", $this->getSession()->getDriver());
     }
   }
 
@@ -2140,7 +2139,7 @@ class FeatureContext extends RawDrupalContext {
    */
   #[When('I run the :module cron')]
   public function iRunSpecificCron(string $module): void {
-    Assert::assertTrue(function_exists($cronFunction = "{$module}_cron"));
+    $this->assertCondition(function_exists($cronFunction = "{$module}_cron"), "The cron function '{$module}_cron' does not exist.");
     call_user_func($cronFunction);
   }
 
@@ -2155,7 +2154,7 @@ class FeatureContext extends RawDrupalContext {
   #[Then('the number of items in the :queueName queue should be :itemCount')]
   #[Then('the number of items in the :queueName queue must be :itemCount')]
   public function assertNumberOfQueueItems(string $queueName, int $itemCount): void {
-    Assert::assertSame($itemCount, \Drupal::queue($queueName)->numberOfItems());
+    $this->assertSameValues($itemCount, \Drupal::queue($queueName)->numberOfItems());
   }
 
   /**
@@ -2168,7 +2167,7 @@ class FeatureContext extends RawDrupalContext {
   public function emptyQueue(string $queueName): void {
     $queue = \Drupal::queue($queueName);
     $queue->deleteQueue();
-    Assert::assertSame(0, $queue->numberOfItems());
+    $this->assertSameValues(0, $queue->numberOfItems());
   }
 
 }

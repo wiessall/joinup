@@ -1,0 +1,79 @@
+@api @group-a
+Feature: Translating releases
+
+  Background:
+    Given users:
+      | Username    | Roles     |
+      | Flora Mod   | moderator |
+      | Lee Facil   |           |
+      | John Member |           |
+      | Ross Auth   |           |
+    And solution content:
+      | title         |
+      | Test solution |
+    And release content:
+      | title        | is version of |
+      | Test release | Test solution |
+    And the following solution user memberships:
+      | solution      | user        | roles       |
+      | Test solution | Lee Facil   | facilitator |
+      | Test solution | John Member |             |
+
+  Scenario Outline: Users who do have edit access can manage translations.
+    Given I am logged in as "<user>"
+
+    # Assert language select options/value.
+    When I go to the edit form of the "Test release" release
+    Then the available options in the "Language" select should match the site languages
+    And the selected option in the "Language" select should be "en"
+
+    # Create translation.
+    When I go to the homepage of the "Test release" release
+    And I click "Translate" in the "Entity actions" region
+    And I click "Add" in the "Polish" row
+    Then I should see the heading "Create Polish translation of Test release"
+    Then the following fields should be present "Name, Release notes"
+    When I fill in "Name" with "Testowe wydanie"
+    And I fill in "Release notes" with "Notatki do Testowego wydania"
+    Then the following fields should not be present "Documentation, Geographical coverage, Is version of, Language, Release version, Search keywords, Solution data, State, Status"
+    When I press "Update"
+    Then I should see the success message "Release Testowe wydanie has been updated."
+    And I should not see the following lines of text:
+      | "Testowe wydanie"              |
+      | "Notatki do Testowego wydania" |
+
+    # Edit translation.
+    When I click "Translate" in the "Entity actions" region
+    Then I should see "Testowe wydanie"
+    When I click "Edit" in the "Polish" row
+    And I fill in "Name" with "Zaktualizowane wydanie"
+    And I press "Update"
+    Then I should see the success message "Release Zaktualizowane wydanie has been updated."
+    And I should not see "Testowe wydanie"
+    And I should see "Zaktualizowane wydanie"
+
+    # Delete translation.
+    When I click "Translate" in the "Entity actions" region
+    And I click "Delete" in the "Polish" row
+    Then I should see "Are you sure you want to delete the Polish translation of the content item Zaktualizowane wydanie?"
+    When I press "Delete Polish translation"
+    Then I should see the success message "<delete message>"
+    When I click "Translate" in the "Entity actions" region
+    Then I should not see "Edit" in the "Polish" row
+    And I should see the "Add" in the "Polish" row
+
+    Examples:
+      | user      | delete message                                                               |
+      | Flora Mod | Polish translation of the Release Zaktualizowane wydanie has been deleted.   |
+      | Lee Facil | The content item Zaktualizowane wydanie Polish translation has been deleted. |
+
+  Scenario Outline: Users who do not have edit access cannot manage translations.
+    Given I am logged in as "<user>"
+    When I go to the homepage of the "Test release" release
+    Then I should not see the link "Edit" in the "Entity actions" region
+    And I should not see the link "Translate" in the "Entity actions" region
+
+    Examples:
+      | user        |
+      | John Member |
+      | Ross Auth   |

@@ -4,10 +4,11 @@ status: true
 dependencies:
   config:
     - field.field.node.contact_information.email
-    - field.field.node.contact_information.webpage
     - field.field.node.contact_information.field_state
+    - field.field.node.contact_information.webpage
     - node.type.contact_information
   module:
+    - entity_form_field_label
     - joinup_core
     - joinup_workflow
 id: node.contact_information.default
@@ -17,7 +18,7 @@ mode: default
 content:
   current_workflow_state:
     type: current_workflow_state_widget
-    weight: 3
+    weight: 4
     region: content
     settings:
       title: 'Current workflow state'
@@ -26,7 +27,7 @@ content:
     third_party_settings: {  }
   email:
     type: email_legacy_multicardinality
-    weight: 1
+    weight: 2
     region: content
     settings:
       placeholder: ''
@@ -34,27 +35,39 @@ content:
     third_party_settings: {  }
   field_state:
     type: state_machine_buttons
-    weight: 4
+    weight: 5
     region: content
     settings:
       use_transition_label: 1
     third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 0
+    region: content
+    settings:
+      include_locked: false
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+        new_description: ''
+        rewrite_description: 0
   title:
     type: string_textfield
-    weight: 0
+    weight: 1
     region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
   translation:
-    weight: 10
+    weight: 6
     region: content
     settings: {  }
     third_party_settings: {  }
   webpage:
     type: link_legacy_multicardinality
-    weight: 2
+    weight: 3
     region: content
     settings:
       placeholder_url: ''
@@ -62,7 +75,6 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
-  langcode: true
   path: true
   promote: true
   published_at: true

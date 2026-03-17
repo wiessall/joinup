@@ -43,7 +43,6 @@
         "drupal/editor_file": "^2.1",
         "drupal/email_confirmer": "^1.0",
         "drupal/email_contact": "^2.0.4",
-        "drupal/embed_block": "^1.0",
         "drupal/entity_form_field_label": "^2.1",
         "drupal/entity_legal": "^4.0",
         "drupal/entity_print": "^2.15",
@@ -58,7 +57,7 @@
         "drupal/field_group": "^4.0",
         "drupal/field_permissions": "^1.1",
         "drupal/file_visibility": "^1.0",
-        "drupal/flag": "^4.0@beta",
+        "drupal/flag": "^5.0",
         "drupal/geocoder": "^4.4",
         "drupal/geofield": "~1.6",
         "drupal/honeypot": "~2",
@@ -132,7 +131,6 @@
         "drupal/twig_field_value": "^2.0",
         "drupal/uuid_extra": "^2.0",
         "drupal/view_unpublished": "^1.0",
-        "drupal/views_autosubmit": "^1.7",
         "drupal/views_block_area": "^2.0",
         "drupal/views_bulk_operations": "^4.4",
         "drupal/views_data_export": "^1.0",
@@ -345,6 +343,9 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "drupal/babel": {
+                "TMGMT @see https://www.drupal.org/i/3554005": "resources/patch/php/drupal/babel/3554005.mr71-note706700.diff"
+            },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff",
                 "Weekly view doesn't show first week of new year @see https://www.drupal.org/i/3484325": "resources/patch/php/drupal/calendar_view/3484325.comment16152620.patch"
@@ -420,17 +421,18 @@
             "drupal/field_delimiter": {
                 "Doesn't work in layout builder. @see https://www.drupal.org/i/3099580": "resources/patch/php/drupal/field_delimiter/3099580.patch"
             },
+            "drupal/field_fallback_formatter": {
+                "Issue #3557037: Option to not override #theme function of formatted output": "resources/patch/php/drupal/field_fallback_formatter/8.diff"
+            },
             "drupal/field_group": {
                 "Links from validation message don't point to proper fields under horizontal tabs @see https://www.drupal.org/i/3362124": "resources/patch/php/drupal/field_group/3362124-mr110-commit_6462709d7f.diff",
                 "Activate tab by link anchor is broken @see https://www.drupal.org/project/field_group/issues/3226844": "resources/patch/php/drupal/field_group/3226844.diff",
                 "Emptiness check in field_group_remove_empty_form_groups() does not account for empty containers @see https://www.drupal.org/i/3069365": "resources/patch/php/drupal/field_group/3069365-mr109.commit044666d7.diff"
             },
-            "drupal/field_group_markup": {
-                "Provide schema for the module @see https://www.drupal.org/i/3347747": "resources/patch/php/drupal/field_group_markup/3347747-2.patch"
-            },
             "drupal/flag": {
                 "TypeError: Argument 1 passed to FlagCount::count() must implement interface @see https://www.drupal.org/project/flag/issues/3168014": "resources/patch/php/drupal/flag/3168014.diff",
-                "AJAX link broken if flaggable entity id is string @see https://www.drupal.org/project/flag/issues/3359007": "resources/patch/php/drupal/flag/3359007-47.patch"
+                "AJAX link broken if flaggable entity id is string @see https://www.drupal.org/project/flag/issues/3359007": "resources/patch/php/drupal/flag/3359007-47.patch",
+                "Flag cache tags result in Purge module exception @see https://www.drupal.org/project/flag/issues/3557145": "resources/patch/php/drupal/flag/3557145.71mr-commitf248789c.diff"
             },
             "drupal/honeypot": {
                 "Behat integration. @see https://www.drupal.org/project/honeypot/issues/3059040": "resources/patch/php/drupal/honeypot/3059040.patch",
@@ -448,8 +450,7 @@
                 "Foreach expects array|object, null given @see https://www.drupal.org/i/3516478": "resources/patch/php/drupal/inline_entity_form/3516478.diff"
             },
             "drupal/l10n_pconfig": {
-                "Update state var on language entity update (not only on form edit) @see https://www.drupal.org/i/3533900": "resources/patch/php/drupal/l10n_pconfig/3533900.diff",
-                "Add missing plural formulae @see https://www.drupal.org/i/3312406": "resources/patch/php/drupal/l10n_pconfig/3312406.diff"
+                "Add missing plural formulae @see https://www.drupal.org/i/3312406": "resources/patch/php/drupal/l10n_pconfig/3312406.mr4.commit1a0a53cb.diff"
             },
             "drupal/linkit": {
                 "Link shown after the autocomplete selection is the bare node/xxx link, not the alias @see https://www.drupal.org/node/2877535": "resources/patch/php/drupal/linkit/2877535.diff",
@@ -470,7 +471,6 @@
                 "Renderer::renderPlain() is deprecated @see https://www.drupal.org/i/3511648": "resources/patch/php/drupal/message_digest/3511648.diff"
             },
             "drupal/meta_entity": {
-                "Make meta entities translatable @see https://drupal.org/i/3573020": "resources/patch/php/drupal/meta_entity/3573020-mr16-366b7d5.diff",
                 "Allow $bundle to be nullable @see https://www.drupal.org/i/3529976": "resources/patch/php/drupal/meta_entity/3529976.diff"
             },
             "drupal/oauth_client": {
@@ -530,9 +530,6 @@
             },
             "drupal/tour": {
                 "Support page manager variants on front page @see https://www.drupal.org/i/3568815": "resources/patch/php/drupal/tour/3568815.patch"
-            },
-            "drupal/tmgmt_ec_etranslation": {
-                "Race Condition in Translation Callback": "resources/patch/php/drupal/tmgmt_ec_etranslation/3526972.diff"
             },
             "drupal/views_block_area": {
                 "Render logic not working @see https://www.drupal.org/i/3499861": "resources/patch/php/drupal/views_block_area/3499861.patch"

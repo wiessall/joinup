@@ -6,13 +6,13 @@ namespace Drupal\joinup\Context;
 
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Mink\Exception\ExpectationException;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\UtilityTrait;
-use PHPUnit\Framework\ExpectationFailedException;
 
 /**
  * Step definitions for interacting with pages using the Bootstrap framework.
@@ -199,9 +199,9 @@ class BootstrapContext extends RawDrupalContext {
     });
     if (!$condition) {
       if ($expect_expanded) {
-        throw new ExpectationFailedException("The Bootstrap '$label' collapse element should be expanded but instead is collapsed");
+        throw new ExpectationException("The Bootstrap '$label' collapse element should be expanded but instead is collapsed", $this->getSession()->getDriver());
       }
-      throw new ExpectationFailedException("The Bootstrap '$label' collapse element should be collapsed but instead is expanded");
+      throw new ExpectationException("The Bootstrap '$label' collapse element should be collapsed but instead is expanded", $this->getSession()->getDriver());
     }
   }
 
