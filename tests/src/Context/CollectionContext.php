@@ -533,8 +533,7 @@ class CollectionContext extends RawDrupalContext {
   }
 
   /**
-   * Assigns a ghost SVG logo (DB record only, no physical file) to a
-   * collection.
+   * Assigns a ghost SVG logo.
    *
    * @param string $title
    *   The collection title.
