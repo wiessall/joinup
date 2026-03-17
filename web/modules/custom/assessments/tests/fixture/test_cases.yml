@@ -3,6 +3,7 @@ Invalid schema:
     # This property is not accepted.
     foo: bar
     name: "Legislation waste management"
+    language: "it"
     # Provider is missing the name
     provider:
       # The organisation type identifier is invalid.
@@ -57,6 +58,7 @@ Invalid schema:
     errors:
       /:
         - The property foo is not defined and the definition does not allow additional properties
+        - The property language is not defined and the definition does not allow additional properties
       /binding_requirement/0/affects:
         - There must be a minimum of 1 items in the array, 0 found
       /binding_requirement/0/asset/1:
