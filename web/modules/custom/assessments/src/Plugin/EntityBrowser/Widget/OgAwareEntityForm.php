@@ -16,7 +16,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Extends EntityForm widget with entity browser permission access checking.
+ * EntityForm widget with extended access control logic.
+ *
+ * Access is granted if the user has entity browser permission; otherwise,
+ * the standard node membership check is applied.
  */
 class OgAwareEntityForm extends EntityForm {
 

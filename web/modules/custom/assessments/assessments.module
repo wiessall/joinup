@@ -497,6 +497,8 @@ function _assessments_handle_report_state_notification(AssessmentInterface $enti
  */
 function assessments_entity_browser_widget_info_alter(array &$info): void {
   if (isset($info['entity_form'])) {
+    // Default EntityForm limits access to OG members.
+    // OgAwareEntityForm also allows users with entity browser permission.
     $info['entity_form']['class'] = OgAwareEntityForm::class;
   }
 }
