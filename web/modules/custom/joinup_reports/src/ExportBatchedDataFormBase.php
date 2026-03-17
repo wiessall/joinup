@@ -108,7 +108,7 @@ abstract class ExportBatchedDataFormBase extends FormBase {
     $csv_encoder = new CsvEncoder(';');
     $data = $csv_encoder->encode(array_values($results['data']), 'csv');
     $this->cacheStorage->set($this->getFormId(), $data, $expire);
-    $this->messenger()->addMessage('Data have been rebuilt.');
+    $this->messenger()->addMessage('Data has been rebuilt.');
 
     // Handle the file here.
     return new RedirectResponse(Url::fromRoute($this->getRedirectRouteName())
