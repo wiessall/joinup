@@ -67,9 +67,8 @@ Feature: Translating distributions
 
   Scenario Outline: Users who do not have edit access cannot manage translations.
     Given I am logged in as "<user>"
-    When I go to the homepage of the "Test distribution" distribution
-    Then I should not see the link "Edit" in the "Entity actions" region
-    And I should not see the link "Translate" in the "Entity actions" region
+    When I visit the translation overview form of the "Test distribution" distribution
+    Then I should see the heading "Access denied"
 
     Examples:
       | user        |
