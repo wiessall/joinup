@@ -48,6 +48,5 @@ Feature: Translating owners
 
   Scenario: Users who do not have edit access cannot manage translations.
     When I am logged in as an authenticated
-    When I go to the homepage of the "Test owner" owner
-    Then I should not see the link "Edit" in the "Entity actions" region
-    And I should not see the link "Translate" in the "Entity actions" region
+    When I visit the translation overview form of the "Test owner" owner
+    Then I should see the heading "Access denied"
