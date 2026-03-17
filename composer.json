@@ -481,6 +481,9 @@
             "drupal/og_menu": {
                 "Fix fatal error in OgMenuInstanceForm @see https://www.drupal.org/i/3528599": "resources/patch/php/drupal/og_menu/3528599.diff"
             },
+            "drupal/openapi_ui_swagger": {
+                "library definition missing minified value @see https://www.drupal.org/project/openapi_ui_swagger/issues/3577490": "resources/patch/php/drupal/openapi_ui_swagger/3577490.mr8-commit6cdb693e.diff"
+            },
             "drupal/page_manager": {
                 "Some mandatory parameters are missing to generate a URL for route 'entity.page.devel_load' @see https://www.drupal.org/i/3438993": "resources/patch/php/drupal/page_manager/3438993.diff"
             },
