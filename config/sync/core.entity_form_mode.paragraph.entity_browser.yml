@@ -6,6 +6,6 @@ dependencies:
     - paragraphs
 id: paragraph.entity_browser
 label: 'Entity Browser'
-description: ''
+description: null
 targetEntityType: paragraph
 cache: true
