@@ -7,11 +7,24 @@ namespace Drupal\joinup_core\Plugin\Field\FieldWidget;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\image_library_widget\Plugin\Field\FieldWidget\ImageLibraryWidget as OriginalImageLibraryWidget;
+use Symfony\Component\Validator\ConstraintViolationInterface;
 
 /**
  * Extends the original image library widget and add SVG support.
  */
 class ImageLibraryWidget extends OriginalImageLibraryWidget {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function errorElement(array $element, ConstraintViolationInterface $error, array $form, FormStateInterface $form_state): array|false {
+    $property_path_array = explode('.', $error->getPropertyPath());
+    if (!isset($property_path_array[1])) {
+      return $element;
+    }
+    $element = parent::errorElement($element, $error, $form, $form_state);
+    return is_array($element) ? $element : FALSE;
+  }
 
   /**
    * {@inheritdoc}
