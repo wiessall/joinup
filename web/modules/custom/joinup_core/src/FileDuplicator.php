@@ -70,11 +70,12 @@ final class FileDuplicator {
     $changed = FALSE;
 
     $referencedEntities = $fieldItems->referencedEntities();
+    $messages = [];
     if ($fieldItems->count() !== count($referencedEntities)) {
       $changed = TRUE;
       $entity->set($fieldName, $referencedEntities);
       $entity->save();
-      $this->messages[$entity->id()] = sprintf('Removed dead file references for %s entity %s.', $entity->getEntityTypeId(), $entity->id());
+      $messages[] = sprintf('Removed dead file references for %s entity %s.', $entity->getEntityTypeId(), $entity->id());
     }
 
     foreach ($fieldItems->referencedEntities() as $delta => $file) {
@@ -86,20 +87,20 @@ final class FileDuplicator {
 
       try {
         $newFile = $file->createDuplicate();
-        $newUri = $this->fileSystem->copy($originalUri, $file->getFileUri());
+        $newUri = $this->fileSystem->copy($originalUri, $this::FILE_DIRECTORY . DIRECTORY_SEPARATOR . $newFile->getFilename());
         $newFile->setFileUri($newUri);
         $newFile->save();
         $fieldItems->set($delta, $newFile);
         $this->processed[$newUri] = $file;
         $changed = TRUE;
-
-        $this->messages[$entity->id()] = sprintf('Duplicated file with URI %s for entity %s.', $originalUri, $entity->id());
+        $messages[] = sprintf('Duplicated file with URI %s for entity %s.', $originalUri, $entity->id());
       }
       catch (\Exception $e) {
-        $this->messages[$entity->id()] = $e->getMessage();
+        $messages[] = $e->getMessage();
       }
     }
 
+    $this->messages = array_merge($this->messages, $messages);
     if ($changed) {
       $entity->save();
     }
