@@ -79,8 +79,6 @@ final class FileDuplicator {
 
     foreach ($fieldItems->referencedEntities() as $delta => $file) {
       $originalUri = $file->getFileUri();
-
-      // Skip already processed files.
       if (!isset($this->processed[$originalUri])) {
         $this->processed[$originalUri] = $file;
         continue;
