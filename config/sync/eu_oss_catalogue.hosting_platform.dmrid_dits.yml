@@ -8,8 +8,8 @@ type: national
 country: CY
 weblinks:
   -
-    url: 'https://www.gov.cy/dmrid-dits/'
-    title: ''
+    url: 'https://www.gov.cy/dmrid-dits'
+    title: null
 description: 'The Department of Information Technology Services promotes open-source solutions for public sector IT.'
 platformId: github
 platformSettings:
