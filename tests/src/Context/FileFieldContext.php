@@ -122,36 +122,6 @@ class FileFieldContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that all file links of a given field are different in the page.
-   *
-   * @param string $fieldLabel
-   *   The label of the field.
-   */
-  #[Given('all :fieldLabel file links should be different')]
-  public function assertDifferentFileLinks(string $fieldLabel): void {
-    $xpath = "//div[div[normalize-space()='$fieldLabel']]";
-    $fileFields = $this->getSession()->getPage()->findAll('xpath', $xpath);
-    if (empty($fileFields)) {
-      throw new ElementNotFoundException($this->getSession()->getDriver(), 'File fields not found', $fieldLabel);
-    }
-
-    $found = [];
-    foreach ($fileFields as $fileField) {
-      $links = $fileField->findAll('css', 'a');
-      if (empty($links)) {
-        throw new ElementNotFoundException($this->getSession()->getDriver(), 'File link not found in file field', $fieldLabel);
-      }
-      foreach ($links as $link) {
-        $href = $link->getAttribute('href');
-        if (in_array($href, $found)) {
-          throw new \Exception("Duplicate file link found: {$href}");
-        }
-        $found[] = $href;
-      }
-    }
-  }
-
-  /**
    * Returns a file field element.
    *
    * @param string $field
