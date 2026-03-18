@@ -15,13 +15,10 @@ trait EntityReferenceFieldsOwnedTrait {
   /**
    * Returns ER fields whose entities are owned by this parent entity.
    *
-   * @param bool $includeDocumentFields
-   *   (optional) Whether to include document fields. Defaults to TRUE.
-   *
    * @return string[]
    *   Array of field names.
    */
-  abstract protected function getEntityReferenceFieldsOwned(bool $includeDocumentFields = TRUE): array;
+  abstract protected function getEntityReferenceFieldsOwned(): array;
 
   /**
    * Acts on parent entity update.
@@ -34,7 +31,7 @@ trait EntityReferenceFieldsOwnedTrait {
     }
 
     // Do not handle files here. They are handled by Drupal.
-    $fieldNames = $this->getEntityReferenceFieldsOwned(includeDocumentFields: FALSE);
+    $fieldNames = $this->getEntityReferenceFieldsOwned();
     foreach ($fieldNames as $fieldName) {
       if (!$this->hasField($fieldName) || !$this->original->hasField($fieldName)) {
         continue;
@@ -71,7 +68,7 @@ trait EntityReferenceFieldsOwnedTrait {
     }
 
     // Do not handle files here. They are handled by Drupal.
-    $fieldNames = $this->getEntityReferenceFieldsOwned(includeDocumentFields: FALSE);
+    $fieldNames = $this->getEntityReferenceFieldsOwned();
     foreach ($fieldNames as $fieldName) {
       if (!$this->hasField($fieldName)) {
         continue;
