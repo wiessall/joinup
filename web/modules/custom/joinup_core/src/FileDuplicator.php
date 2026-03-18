@@ -71,6 +71,20 @@ final class FileDuplicator {
     }
 
     $changed = FALSE;
+
+    $referencedEntities = $fieldItems->referencedEntities();
+    if ($fieldItems->count() !== count($referencedEntities)) {
+      $changed = TRUE;
+      $entity->set($fieldName, $referencedEntities);
+      $entity->save();
+
+      $this->loggerChannelJoinupCore->warning('Removed dead file references for @entityTypeId entity @entity.', [
+        '@entityTypeId' => $entity->getEntityTypeId(),
+        '@entity' => $entity->id(),
+      ]);
+      $this->messages[$entity->id()] = sprintf('Removed dead file references for %s entity %s.', $entity->getEntityTypeId(), $entity->id());
+    }
+
     foreach ($fieldItems->referencedEntities() as $delta => $file) {
       $originalUri = $file->getFileUri();
 
