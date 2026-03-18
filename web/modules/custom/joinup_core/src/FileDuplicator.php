@@ -7,8 +7,6 @@ namespace Drupal\joinup_core;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\File\FileSystemInterface;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Looks up and duplicates files for specific entities.
@@ -32,8 +30,6 @@ final class FileDuplicator {
   public function __construct(
     private readonly EntityTypeManagerInterface $entityTypeManager,
     private readonly FileSystemInterface $fileSystem,
-    #[Autowire('logger.channel.joinup_core')]
-    private readonly LoggerInterface $loggerChannelJoinupCore,
   ) {}
 
   /**
@@ -78,11 +74,6 @@ final class FileDuplicator {
       $changed = TRUE;
       $entity->set($fieldName, $referencedEntities);
       $entity->save();
-
-      $this->loggerChannelJoinupCore->warning('Removed dead file references for @entityTypeId entity @entity.', [
-        '@entityTypeId' => $entity->getEntityTypeId(),
-        '@entity' => $entity->id(),
-      ]);
       $this->messages[$entity->id()] = sprintf('Removed dead file references for %s entity %s.', $entity->getEntityTypeId(), $entity->id());
     }
 
@@ -104,19 +95,9 @@ final class FileDuplicator {
         $this->processed[$newUri] = $file;
         $changed = TRUE;
 
-        $this->loggerChannelJoinupCore->info('Duplicated file with URI @uri for entity @entity.', [
-          '@uri' => $originalUri,
-          '@entity' => $entity->id(),
-        ]);
-
         $this->messages[$entity->id()] = sprintf('Duplicated file with URI %s for entity %s.', $originalUri, $entity->id());
       }
       catch (\Exception $e) {
-        $this->loggerChannelJoinupCore->error('Failed to duplicate file with URI @uri for entity @entity: @message', [
-          '@uri' => $originalUri,
-          '@entity' => $entity->id(),
-          '@message' => $e->getMessage(),
-        ]);
         $this->messages[$entity->id()] = $e->getMessage();
       }
     }
