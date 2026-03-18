@@ -7,7 +7,6 @@ namespace Drupal\joinup_core;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\File\FileSystemInterface;
-use Drupal\file\FileInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -18,7 +17,7 @@ final class FileDuplicator {
   /**
    * List of processed files indexed by their URI.
    *
-   * @var array<string, FileInterface>
+   * @var array<string, \Drupal\file\FileInterface>
    */
   protected array $processed = [];
 
@@ -40,7 +39,7 @@ final class FileDuplicator {
    */
   public function processEntities(string $entityType, string $bundle, string $fieldName): array {
     $entities = $this->loadEntities($entityType, $bundle, $fieldName);
-    foreach($entities as $entity) {
+    foreach ($entities as $entity) {
       $this->duplicateFile($entity, $fieldName);
     }
 
