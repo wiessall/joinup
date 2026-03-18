@@ -27,6 +27,13 @@ final class FileDuplicator {
    */
   protected array $messages = [];
 
+  /**
+   * The file target directory.
+   *
+   * @var string
+   */
+  protected string $targetDir = 'public://assessment/report';
+
   public function __construct(
     private readonly EntityTypeManagerInterface $entityTypeManager,
     private readonly FileSystemInterface $fileSystem,
@@ -36,6 +43,7 @@ final class FileDuplicator {
    * Processes the entities by given criteria.
    */
   public function processEntities(string $entityType, string $bundle, string $fieldName): array {
+    $this->fileSystem->prepareDirectory($this->targetDir, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
     $entities = $this->loadEntities($entityType, $bundle, $fieldName);
     foreach ($entities as $entity) {
       $this->duplicateFile($entity, $fieldName);
@@ -79,21 +87,21 @@ final class FileDuplicator {
 
     foreach ($fieldItems->referencedEntities() as $delta => $file) {
       $originalUri = $file->getFileUri();
-      if (!isset($this->processed[$originalUri])) {
+      if (!isset($this->processed[$originalUri]) && !str_contains($originalUri, 'webform/assessment')) {
         $this->processed[$originalUri] = $file;
         continue;
       }
 
       try {
         $newFile = $file->createDuplicate();
-        $newUri = $this->fileSystem->copy($originalUri, $file->getFileUri());
+        $newUri = $this->fileSystem->copy($originalUri, $this->targetDir . DIRECTORY_SEPARATOR . $newFile->getFilename());
         $newFile->setFileUri($newUri);
         $newFile->save();
         $fieldItems->set($delta, $newFile);
         $this->processed[$newUri] = $file;
         $changed = TRUE;
 
-        $this->messages[$entity->id()] = sprintf('Duplicated file with URI %s for entity %s.', $originalUri, $entity->id());
+        $this->messages[$entity->id()] = sprintf('Duplicating URI %s to %s for entity %s.', $originalUri, $newFile->getFileUri(), $entity->id());
       }
       catch (\Exception $e) {
         $this->messages[$entity->id()] = $e->getMessage();
