@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Looks up and duplicates files for specific entities.
@@ -31,6 +32,7 @@ final class FileDuplicator {
   public function __construct(
     private readonly EntityTypeManagerInterface $entityTypeManager,
     private readonly FileSystemInterface $fileSystem,
+    #[Autowire('logger.channel.joinup_core')]
     private readonly LoggerInterface $loggerChannelJoinupCore,
   ) {}
 
