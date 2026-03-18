@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Drupal\Tests\custom_page\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\custom_page\CustomPageOgMenuLinksManager;
 use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\joinup_group\GroupMenuManagerInterface;
+use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\og\OgGroupAudienceHelperInterface;
@@ -23,6 +26,7 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
    * {@inheritdoc}
    */
   protected static $modules = [
+    'content_translation',
     'custom_page',
     'field',
     'joinup_group',
@@ -125,6 +129,122 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
       ->getStorage('field_config')
       ->create($field);
     $instance->save();
+  }
+
+  /**
+   * Tests that addLink() creates a menu link with the correct langcode.
+   */
+  public function testAddLinkSetsLangcode(): void {
+    $collection = $this->createCollection();
+    $ogMenuInstance = $this->createOgMenuInstance();
+    $manager = $this->createManagerWithMockedGroupMenu($ogMenuInstance);
+
+    $customPage = Node::create([
+      'type' => 'custom_page',
+      'title' => 'My custom page',
+      'langcode' => 'en',
+      OgGroupAudienceHelperInterface::DEFAULT_FIELD => $collection->id(),
+    ]);
+    $customPage->save();
+
+    $manager->addLink($customPage, 'navigation');
+
+    $links = $this->assertMenuLinkHelper($ogMenuInstance->id(), $customPage->id());
+    $this->assertCount(1, $links);
+    $this->assertSame('en', reset($links)->get('langcode')->value);
+  }
+
+  /**
+   * Tests that updateLinkTitles() adds and updates menu link translations.
+   */
+  public function testUpdateLinkTitles(): void {
+    ConfigurableLanguage::createFromLangcode('fr')->save();
+
+    $collection = $this->createCollection();
+    $ogMenuInstance = $this->createOgMenuInstance();
+    $manager = $this->createManagerWithMockedGroupMenu($ogMenuInstance);
+
+    $enPage = Node::create([
+      'type' => 'custom_page',
+      'title' => 'EN title',
+      'langcode' => 'en',
+      OgGroupAudienceHelperInterface::DEFAULT_FIELD => $collection->id(),
+    ]);
+    $enPage->save();
+    $manager->addLink($enPage, 'navigation');
+
+    // Pass an in-memory FR translation — only id(), language()->getId(), and
+    // getTitle() are used by updateLinkTitles(), no DB save needed.
+    $frPage = $enPage->addTranslation('fr', ['title' => 'FR title']);
+
+    // No FR translation on the menu link yet — it should be added.
+    $manager->updateLinkTitles($frPage);
+
+    $storage = $this->container->get('entity_type.manager')
+      ->getStorage('menu_link_content');
+    $storage->resetCache();
+    $link = reset($this->assertMenuLinkHelper($ogMenuInstance->id(), $enPage->id()));
+    $this->assertTrue($link->hasTranslation('fr'));
+    $this->assertSame('FR title', $link->getTranslation('fr')->get('title')->value);
+
+    // Existing FR translation — it should be updated.
+    $frPage->setTitle('FR title updated');
+    $manager->updateLinkTitles($frPage);
+
+    $storage->resetCache();
+    $link = reset($this->assertMenuLinkHelper($ogMenuInstance->id(), $enPage->id()));
+    $this->assertSame('FR title updated', $link->getTranslation('fr')->get('title')->value);
+  }
+
+  /**
+   * Creates and saves a collection node.
+   *
+   * @return \Drupal\node\Entity\Node
+   *   The saved collection node.
+   */
+  protected function createCollection(): Node {
+    $collection = Node::create([
+      'type' => 'collection',
+      'title' => $this->randomString(),
+    ]);
+    $collection->save();
+    return $collection;
+  }
+
+  /**
+   * Creates an OG menu instance for the navigation menu.
+   *
+   * @return \Drupal\og_menu\Entity\OgMenuInstance
+   *   The saved OG menu instance.
+   */
+  protected function createOgMenuInstance(): OgMenuInstance {
+    /** @var \Drupal\og_menu\Entity\OgMenuInstance $instance */
+    $instance = OgMenuInstance::create(['type' => 'navigation']);
+    $instance->save();
+    return $instance;
+  }
+
+  /**
+   * Returns a CustomPageOgMenuLinksManager with a mocked group menu manager.
+   *
+   * The mock always returns the given OG menu instance, bypassing the
+   * GroupInterface check present in the real GroupMenuManager.
+   *
+   * @param \Drupal\og_menu\Entity\OgMenuInstance $ogMenuInstance
+   *   The OG menu instance to return from the mock.
+   *
+   * @return \Drupal\custom_page\CustomPageOgMenuLinksManager
+   *   The manager under test.
+   */
+  protected function createManagerWithMockedGroupMenu(OgMenuInstance $ogMenuInstance): CustomPageOgMenuLinksManager {
+    $groupMenuManager = $this->createMock(GroupMenuManagerInterface::class);
+    $groupMenuManager->method('getMenuByGroupId')->willReturn($ogMenuInstance);
+    return new CustomPageOgMenuLinksManager(
+      $this->container->get('entity_type.manager'),
+      $this->container->get('plugin.manager.menu.link'),
+      $groupMenuManager,
+      $this->container->get('search_api.entity_datasource.tracking_manager'),
+    );
   }
 
   /**

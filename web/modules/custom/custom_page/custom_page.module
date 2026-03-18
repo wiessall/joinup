@@ -130,15 +130,7 @@ function custom_page_node_update(NodeInterface $entity): void {
   // Update all links that point to this custom page if the title has changed,
   // or if the entity becomes (un)published.
   if ($entity->isPublished() !== $original->isPublished() || $entity->getTitle() !== $original->getTitle()) {
-    /** @var \Drupal\Core\Menu\MenuLinkManagerInterface $menu_link_manager */
-    $menu_link_manager = \Drupal::service('plugin.manager.menu.link');
-    $result = $menu_link_manager->loadLinksByRoute('entity.node.canonical', ['node' => $entity->id()]);
-
-    if (!empty($result)) {
-      foreach ($result as $instance) {
-        $menu_link_manager->updateDefinition($instance->getPluginId(), ['title' => $entity->getTitle()], TRUE);
-      }
-    }
+    \Drupal::service('custom_page.og_menu_links_manager')->updateLinkTitles($entity);
   }
 
   // Update the OG menu link only if the group has changed.
