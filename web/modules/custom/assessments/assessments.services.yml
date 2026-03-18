@@ -10,8 +10,6 @@ services:
 
   Drupal\assessments\EventSubscriber\SearchApiSubscriber: { }
 
-  Drupal\assessments\Routing\EntityBrowserRouteSubscriber: {}
-
   Drupal\assessments\AssessmentReportNotificationInterface:
     class: Drupal\assessments\AssessmentReportNotification
 
