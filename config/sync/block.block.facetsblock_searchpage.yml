@@ -24,13 +24,12 @@ settings:
   facets_to_include:
     - 'facet_block:topic'
     - 'facet_block:type'
+    - 'facet_block:organisation_country'
     - 'facet_block:solution_classification'
     - 'facet_block:domain'
     - 'facet_block:type_of_document'
     - 'facet_block:spatial_coverage'
     - 'facet_block:interoperable_flag'
-    - 'facet_block:organisation_origin'
-    - 'facet_block:assessment_org_country'
     - 'facet_block:status'
     - 'facet_block:date'
   add_js_classes: true
