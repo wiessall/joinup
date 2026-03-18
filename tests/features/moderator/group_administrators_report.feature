@@ -40,7 +40,7 @@ Feature: Group administrators report
 
     When I press "Generate data"
     And I wait for the batch process to finish
-    Then I should see the success message "Data have been rebuilt."
+    Then I should see the success message "Data has been rebuilt."
     And I should see the button "Download"
     And I should see the button "Regenerate data"
     But I should not see the button "Generate data"
