@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "677d2b0aa3db39ad33a910491ddf3181",
+    "content-hash": "aa1f46e480cf76610b91cf83e600287a",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -10317,17 +10317,17 @@
         },
         {
             "name": "drupal/tmgmt_ec_etranslation",
-            "version": "1.1.3",
+            "version": "1.1.4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/tmgmt_ec_etranslation.git",
-                "reference": "1.1.3"
+                "reference": "1.1.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/tmgmt_ec_etranslation-1.1.3.zip",
-                "reference": "1.1.3",
-                "shasum": "36fb954dc8d3abef78efb9782b563ba3bbffcc14"
+                "url": "https://ftp.drupal.org/files/projects/tmgmt_ec_etranslation-1.1.4.zip",
+                "reference": "1.1.4",
+                "shasum": "6105413d442a2608029c189ba26981b9ded580be"
             },
             "require": {
                 "drupal/core": "^9.2 || ^10 || ^11",
@@ -10340,8 +10340,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.1.3",
-                    "datestamp": "1773138050",
+                    "version": "1.1.4",
+                    "datestamp": "1773400817",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"

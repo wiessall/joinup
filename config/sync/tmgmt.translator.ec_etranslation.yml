@@ -15,8 +15,11 @@ settings:
   password: ''
   domain: SPD
   email: ''
-  callback_hostname:
-  use_queue: false
+  callback_hostname: ''
+  use_queue: true
+  non_translatable_parts:
+    patterns: "# Drupal placeholders\n[@!%][a-zA-Z0-9:_-]+\n\n# Drupal tokens\n\\[[a-zA-Z0-9:_-]+\\]\n"
+    clean: true
 remote_languages_mappings:
   bg: bg
   hr: hr
