@@ -27,6 +27,7 @@ visibility:
       - entity.user.canonical
       - entity.user.edit_form
       - entity.meta_entity.canonical
+      - entity_browser.assessment_solutions
       - view.content_overview.page_1
       - view.discussions.overview
   request_path:
