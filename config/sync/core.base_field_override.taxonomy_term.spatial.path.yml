@@ -1,0 +1,20 @@
+uuid: 93a20977-a014-4236-a096-4ba8621c8963
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.spatial
+  module:
+    - path
+id: taxonomy_term.spatial.path
+field_name: path
+entity_type: taxonomy_term
+bundle: spatial
+label: 'URL alias'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path
