@@ -1,0 +1,20 @@
+uuid: 865da203-42fd-493f-8fa0-86f69ac3f0d1
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.spatial
+  module:
+    - metatag
+id: taxonomy_term.spatial.metatag
+field_name: metatag
+entity_type: taxonomy_term
+bundle: spatial
+label: 'Metatags (Hidden field for JSON support)'
+description: 'The computed meta tags for the entity.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: metatag_computed
