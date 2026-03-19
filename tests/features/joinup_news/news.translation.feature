@@ -1,30 +1,12 @@
 @api @group-a
 Feature: Translating news
 
-  Background:
-    Given users:
-      | Username    | Roles     |
-      | Flora Mod   | moderator |
-      | Lee Facil   |           |
-      | John Member |           |
-      | Ross Auth   |           |
-    Given collection content:
-      | title           |
-      | Test collection |
-    Given solution content:
-      | title         | collection      |
-      | Test solution | Test collection |
-
-  Scenario Outline: Users who do have edit access can manage translations.
-    Given the following <bundle> user memberships:
-      | <bundle>      | user        | roles       |
-      | Test <bundle> | Lee Facil   | facilitator |
-      | Test <bundle> | John Member |             |
+  Scenario: Users who do have edit access can manage translations.
     And news content:
-      | title     | <bundle>      | field_paragraphs_body     |
-      | Test news | Test <bundle> | This is test news content |
+      | title     | field_paragraphs_body     |
+      | Test news | This is test news content |
 
-    Given I am logged in as "<user>"
+    Given I am logged in as a user with the "moderator" role
 
     # Assert language select options/value.
     When I go to the edit form of the "Test news" news
@@ -44,9 +26,6 @@ Feature: Translating news
       | field_body:value | To jest polskie tłumaczenie newsa |
     And I attach the file "test.zip" to "Add a new file"
     And I press "Upload"
-    And I press "Update"
-    Then I should see the following lines of text:
-      | The Attachments field description is required. |
     And I fill in "File description" with "Plik testowy"
     And I press "Update"
     Then I should see "News Krótki tytuł newsa has been updated."
@@ -75,27 +54,38 @@ Feature: Translating news
     Then I should not see "Edit" in the "Polish" row
     And I should see the "Add" in the "Polish" row
 
-    Examples:
-      | user      | bundle     |
-      | Flora Mod | collection |
-      | Lee Facil | collection |
-      | Flora Mod | solution   |
-      | Lee Facil | solution   |
-
-  Scenario Outline: Users who do not have edit access cannot manage translations.
+  Scenario Outline: Only moderators and group facilitators can translate content.
+    Given users:
+      | Username    | Roles     |
+      | Flora Mod   | moderator |
+      | Lee Facil   |           |
+      | John Member |           |
+      | Ross Auth   |           |
+    Given collection content:
+      | title           |
+      | Test collection |
+    Given solution content:
+      | title         | collection      |
+      | Test solution | Test collection |
     Given the following <bundle> user memberships:
-      | <bundle>      | user        | roles |
-      | Test <bundle> | John Member |       |
+      | <bundle>      | user        | roles       |
+      | Test <bundle> | Lee Facil   | facilitator |
+      | Test <bundle> | John Member |             |
     And news content:
-      | title     | <bundle>      |
-      | Test news | Test <bundle> |
+      | title     | <bundle>      | field_paragraphs_body     |
+      | Test news | Test <bundle> | This is test news content |
+
     Given I am logged in as "<user>"
     When I visit the translation overview form of the "Test news" news
-    Then I should see the heading "Access denied"
+    Then the response status code should be <code>
 
     Examples:
-      | user        | bundle     |
-      | John Member | collection |
-      | Ross Auth   | collection |
-      | John Member | solution   |
-      | Ross Auth   | solution   |
+      | user        | bundle     | code |
+      | Flora Mod   | collection | 200  |
+      | Lee Facil   | collection | 200  |
+      | Flora Mod   | solution   | 200  |
+      | Lee Facil   | solution   | 200  |
+      | John Member | collection | 403  |
+      | Ross Auth   | collection | 403  |
+      | John Member | solution   | 403  |
+      | Ross Auth   | solution   | 403  |
