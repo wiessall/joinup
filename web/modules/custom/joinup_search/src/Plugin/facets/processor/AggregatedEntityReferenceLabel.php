@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_search\Plugin\facets\processor;
 
+use Drupal\Core\Entity\EntityDefinitionUpdateManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\TypedData\DataDefinitionInterface;
 use Drupal\facets\FacetInterface;
 use Drupal\facets\FacetSource\SearchApiFacetSourceInterface;
 use Drupal\facets\Processor\BuildProcessorInterface;
 use Drupal\facets\Processor\ProcessorPluginBase;
+use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Plugin\search_api\processor\Property\AggregatedFieldProperty;
 use Drupal\search_api\Utility\Utility;
 use Psr\Log\LoggerInterface;
@@ -36,6 +39,7 @@ class AggregatedEntityReferenceLabel extends ProcessorPluginBase implements Buil
     mixed $plugin_definition,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly LoggerInterface $logger,
+    protected readonly EntityDefinitionUpdateManagerInterface $entityDefinitionUpdateManager,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
@@ -49,7 +53,8 @@ class AggregatedEntityReferenceLabel extends ProcessorPluginBase implements Buil
       $plugin_id,
       $plugin_definition,
       $container->get('entity_type.manager'),
-      $container->get('logger.factory')->get('joinup_core')
+      $container->get('logger.factory')->get('joinup_core'),
+      $container->get('entity.definition_update_manager')
     );
   }
 
@@ -76,26 +81,32 @@ class AggregatedEntityReferenceLabel extends ProcessorPluginBase implements Buil
     }
 
     // Loop all the fields that are part of this aggregated field, and retrieve
-    // the field definition associated with them.
+    // the field definition associated with them. Checks nested references
+    // (ex. provider:entity:country)
     $reference_types = [];
     foreach ($field->getConfiguration()['fields'] as $combined_id) {
-      [$datasource_id, $property_path] = Utility::splitCombinedId($combined_id);
-      $properties = $index->getPropertyDefinitions($datasource_id);
-      if (isset($properties[$property_path])) {
-        $property = $properties[$property_path];
-
-        // When the field is a entity reference or an OG group audience field,
-        // collect the target type.
-        if ($property instanceof FieldDefinitionInterface && in_array(
+      $property = $this->getProperty($index, $combined_id);
+      $property_field = $this->getPropertyFieldName($combined_id);
+      // When the field is a entity reference or an OG group audience field,
+      // collect the target type.
+      if ($property instanceof FieldDefinitionInterface && in_array(
           $property->getType(),
           ['entity_reference', 'og_standard_reference']
         )) {
-          $target_type = $property->getSetting('target_type');
-
-          // Ensure that the entry exists in the array.
-          $reference_types += [$target_type => 0];
-          $reference_types[$target_type] += 1;
+        // Check if there is referenced nested field.
+        if (!empty($property_field)) {
+          [$datasource_id] = Utility::splitCombinedId($combined_id);
+          [, $entity_type_id] = Utility::splitPropertyPath($datasource_id);
+          $nested_field_storage = $this->entityDefinitionUpdateManager->getFieldStorageDefinition($property_field, $entity_type_id);
+          $target_type = $nested_field_storage->getSetting('target_type');
         }
+        else {
+          $target_type = $property->getSetting('target_type');
+        }
+
+        // Ensure that the entry exists in the array.
+        $reference_types += [$target_type => 0];
+        $reference_types[$target_type] += 1;
       }
     }
 
@@ -139,6 +150,35 @@ class AggregatedEntityReferenceLabel extends ProcessorPluginBase implements Buil
     }
 
     return $results;
+  }
+
+  /**
+   * Gets aggregated field by index and field id.
+   *
+   * @param \Drupal\search_api\IndexInterface $index
+   *   Facet source index.
+   * @param string $combined_id
+   *   Aggregated field id.
+   *
+   * @throws \Drupal\search_api\SearchApiException
+   */
+  protected function getProperty(IndexInterface $index, string $combined_id): ?DataDefinitionInterface {
+    [$datasource_id, $property_path] = Utility::splitCombinedId($combined_id);
+    [$property_path] = Utility::splitPropertyPath($property_path, FALSE);
+    $properties = $index->getPropertyDefinitions($datasource_id);
+    return $properties[$property_path] ?? NULL;
+  }
+
+  /**
+   * Gets referenced property field name from combined id.
+   *
+   * @param string $combined_id
+   *   Aggregated field id.
+   */
+  protected function getPropertyFieldName(string $combined_id): ?string {
+    [, $property_path] = Utility::splitCombinedId($combined_id);
+    $propertyField = explode(':entity:', $property_path);
+    return (isset($propertyField[1])) ? $propertyField[1] : NULL;
   }
 
 }
