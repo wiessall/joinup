@@ -132,7 +132,7 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
   }
 
   /**
-   * Tests that addLink() sets the correct langcode and updateLinkTitles() works.
+   * Tests the correct langcode and updateLinkTitles() works.
    */
   public function testUpdateLinkTitles(): void {
     ConfigurableLanguage::createFromLangcode('fr')->save();
