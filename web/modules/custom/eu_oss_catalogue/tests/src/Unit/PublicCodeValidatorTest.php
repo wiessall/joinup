@@ -10,13 +10,14 @@ use Drupal\Tests\UnitTestCase;
 use Drupal\Tests\eu_oss_catalogue\Traits\SimpleResponseMockTrait;
 use Drupal\eu_oss_catalogue\Validator\PublicCodeValidator;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests PublicCodeValidator.
- *
- * @coversDefaultClass \Drupal\eu_oss_catalogue\Validator\PublicCodeValidator
- * @group eu_oss_catalogue
  */
+#[CoversClass(PublicCodeValidator::class)]
+#[Group('eu_oss_catalogue')]
 class PublicCodeValidatorTest extends UnitTestCase {
 
   use SimpleResponseMockTrait;
@@ -59,8 +60,6 @@ class PublicCodeValidatorTest extends UnitTestCase {
 
   /**
    * Tests validation with valid publiccode.yml content.
-   *
-   * @covers ::validate
    */
   public function testValidPublicCodeYaml(): void {
     $apiResponse = json_encode([
@@ -78,8 +77,6 @@ class PublicCodeValidatorTest extends UnitTestCase {
 
   /**
    * Tests validation with invalid publiccode.yml content.
-   *
-   * @covers ::validate
    */
   public function testInvalidPublicCodeYaml(): void {
     $yamlContent = <<<YAML
@@ -111,8 +108,6 @@ YAML;
 
   /**
    * Tests validation with malformed YAML.
-   *
-   * @covers ::validate
    */
   public function testMalformedYaml(): void {
     $yamlContent = <<<YAML

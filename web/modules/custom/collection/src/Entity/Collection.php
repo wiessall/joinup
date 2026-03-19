@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\collection\Entity;
 
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -187,16 +186,16 @@ class Collection extends Node implements CollectionInterface {
    * {@inheritdoc}
    */
   protected function doGetGroupContentIds(): array {
-    $ids = ['node' => $this->getNodeGroupContent()];
-    $solutions = $this->getSolutions();
-    $ids = NestedArray::mergeDeep($ids, [
-      'node' => [
-        'solution' => array_keys($solutions),
-      ],
-    ]);
-    foreach ($solutions as $solution) {
-      $ids = NestedArray::mergeDeep($ids, $solution->getGroupContentIds());
+    $ids = ['node' => $this->fetchNodeIdsByOgAudience([$this->id()])];
+
+    // Fetch nested solution group content.
+    $solution_ids = $ids['node']['solution'] ?? [];
+    if ($solution_ids) {
+      foreach ($this->fetchNodeIdsByOgAudience($solution_ids) as $type => $nids) {
+        $ids['node'][$type] = array_merge($ids['node'][$type] ?? [], $nids);
+      }
     }
+
     return $ids;
   }
 
@@ -205,6 +204,21 @@ class Collection extends Node implements CollectionInterface {
    */
   public function getWebsiteLinkFieldName(): string {
     return 'website_url';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getLastContentDeletion(): ?int {
+    $value = $this->get('last_content_deletion')->value;
+    return $value !== NULL ? (int) $value : NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setLastContentDeletion(int $timestamp): void {
+    $this->set('last_content_deletion', $timestamp);
   }
 
 }

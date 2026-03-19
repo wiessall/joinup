@@ -344,7 +344,8 @@
         },
         "patches": {
             "drupal/babel": {
-                "TMGMT @see https://www.drupal.org/i/3554005": "resources/patch/php/drupal/babel/3554005.mr71-note706700.diff"
+                "TMGMT @see https://www.drupal.org/i/3554005": "resources/patch/php/drupal/babel/3554005.mr71-note706700.diff",
+                "Strengthen the creation of continuous job items @see https://www.drupal.org/i/3578471": "resources/patch/php/drupal/babel/3578471.mr76.commit333eff4d.diff"
             },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff",
@@ -481,6 +482,9 @@
             "drupal/og_menu": {
                 "Fix fatal error in OgMenuInstanceForm @see https://www.drupal.org/i/3528599": "resources/patch/php/drupal/og_menu/3528599.diff"
             },
+            "drupal/openapi_ui_swagger": {
+                "library definition missing minified value @see https://www.drupal.org/project/openapi_ui_swagger/issues/3577490": "resources/patch/php/drupal/openapi_ui_swagger/3577490.mr8-commit6cdb693e.diff"
+            },
             "drupal/page_manager": {
                 "Some mandatory parameters are missing to generate a URL for route 'entity.page.devel_load' @see https://www.drupal.org/i/3438993": "resources/patch/php/drupal/page_manager/3438993.diff"
             },
@@ -531,6 +535,9 @@
             },
             "drupal/tour": {
                 "Support page manager variants on front page @see https://www.drupal.org/i/3568815": "resources/patch/php/drupal/tour/3568815.patch"
+            },
+            "drupal/tmgmt_ec_etranslation": {
+                "Preserve placeholders @see https://www.drupal.org/i/3577084": "resources/patch/php/drupal/tmgmt_ec_etranslation/3577084.mr28.commit18b2ff6d.diff"
             },
             "drupal/views_block_area": {
                 "Render logic not working @see https://www.drupal.org/i/3499861": "resources/patch/php/drupal/views_block_area/3499861.patch"
