@@ -86,8 +86,8 @@ class FileDuplicator implements ContainerInjectionInterface {
     }
 
     $fileReferences = $fieldItems->referencedEntities();
+    $fileDirectory = $this->targetDir . DIRECTORY_SEPARATOR . $entity->bundle() . DIRECTORY_SEPARATOR . $entity->id() . DIRECTORY_SEPARATOR;
     if (count($fileReferences)) {
-      $fileDirectory = $this->targetDir . DIRECTORY_SEPARATOR . $entity->bundle() . DIRECTORY_SEPARATOR . $entity->id() . DIRECTORY_SEPARATOR;
       $this->fileSystem->prepareDirectory($fileDirectory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
     }
 
