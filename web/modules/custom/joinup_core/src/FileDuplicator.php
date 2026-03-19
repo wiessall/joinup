@@ -75,8 +75,6 @@ class FileDuplicator implements ContainerInjectionInterface {
    */
   protected function duplicateFile(FieldableEntityInterface $entity, string $fieldName): void {
     $fieldItems = $entity->get($fieldName);
-    $fileDirectory = $this->targetDir . DIRECTORY_SEPARATOR . $entity->bundle() . DIRECTORY_SEPARATOR . $entity->id() . DIRECTORY_SEPARATOR;
-    $this->fileSystem->prepareDirectory($fileDirectory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
 
     $changed = FALSE;
     $referencedEntities = $fieldItems->referencedEntities();
@@ -87,7 +85,13 @@ class FileDuplicator implements ContainerInjectionInterface {
       $this->messages[] = sprintf('Removed dead file references for %s entity %s.', $entity->getEntityTypeId(), $entity->id());
     }
 
-    foreach ($fieldItems->referencedEntities() as $delta => $file) {
+    $fileReferences = $fieldItems->referencedEntities();
+    if (count($fileReferences)) {
+      $fileDirectory = $this->targetDir . DIRECTORY_SEPARATOR . $entity->bundle() . DIRECTORY_SEPARATOR . $entity->id() . DIRECTORY_SEPARATOR;
+      $this->fileSystem->prepareDirectory($fileDirectory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
+    }
+
+    foreach ($fileReferences as $delta => $file) {
       $originalUri = $file->getFileUri();
       if (!str_contains($originalUri, 'webform/assessment')) {
         continue;
