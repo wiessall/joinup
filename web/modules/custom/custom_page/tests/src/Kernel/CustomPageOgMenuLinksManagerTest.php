@@ -132,36 +132,18 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
   }
 
   /**
-   * Tests that addLink() creates a menu link with the correct langcode.
-   */
-  public function testAddLinkSetsLangcode(): void {
-    $collection = $this->createCollection();
-    $ogMenuInstance = $this->createOgMenuInstance();
-    $manager = $this->createManagerWithMockedGroupMenu($ogMenuInstance);
-
-    $customPage = Node::create([
-      'type' => 'custom_page',
-      'title' => 'My custom page',
-      'langcode' => 'en',
-      OgGroupAudienceHelperInterface::DEFAULT_FIELD => $collection->id(),
-    ]);
-    $customPage->save();
-
-    $manager->addLink($customPage, 'navigation');
-
-    $links = $this->assertMenuLinkHelper($ogMenuInstance->id(), $customPage->id());
-    $this->assertCount(1, $links);
-    $this->assertSame('en', reset($links)->get('langcode')->value);
-  }
-
-  /**
-   * Tests that updateLinkTitles() adds and updates menu link translations.
+   * Tests that addLink() sets the correct langcode and updateLinkTitles() works.
    */
   public function testUpdateLinkTitles(): void {
     ConfigurableLanguage::createFromLangcode('fr')->save();
 
-    $collection = $this->createCollection();
-    $ogMenuInstance = $this->createOgMenuInstance();
+    $collection = Node::create(['type' => 'collection', 'title' => $this->randomString()]);
+    $collection->save();
+
+    /** @var \Drupal\og_menu\Entity\OgMenuInstance $ogMenuInstance */
+    $ogMenuInstance = OgMenuInstance::create(['type' => 'navigation']);
+    $ogMenuInstance->save();
+
     $manager = $this->createManagerWithMockedGroupMenu($ogMenuInstance);
 
     $enPage = Node::create([
@@ -173,16 +155,15 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
     $enPage->save();
     $manager->addLink($enPage, 'navigation');
 
-    // Pass an in-memory FR translation — only id(), language()->getId(), and
-    // getTitle() are used by updateLinkTitles(), no DB save needed.
-    // og_audience must be included because it is translatable by default and
-    // getOgMenuInstanceByCustomPage() reads it to find the OG menu.
+    $links = $this->assertMenuLinkHelper($ogMenuInstance->id(), $enPage->id());
+    $this->assertCount(1, $links);
+    $this->assertSame('en', reset($links)->get('langcode')->value);
+
     $frPage = $enPage->addTranslation('fr', [
       'title' => 'FR title',
       OgGroupAudienceHelperInterface::DEFAULT_FIELD => $collection->id(),
     ]);
 
-    // No FR translation on the menu link yet — it should be added.
     $manager->updateLinkTitles($frPage);
 
     $storage = $this->container->get('entity_type.manager')
@@ -193,7 +174,6 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
     $this->assertTrue($link->hasTranslation('fr'));
     $this->assertSame('FR title', $link->getTranslation('fr')->get('title')->value);
 
-    // Existing FR translation — it should be updated.
     $frPage->setTitle('FR title updated');
     $manager->updateLinkTitles($frPage);
 
@@ -201,34 +181,6 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
     $links = $this->assertMenuLinkHelper($ogMenuInstance->id(), $enPage->id());
     $link = reset($links);
     $this->assertSame('FR title updated', $link->getTranslation('fr')->get('title')->value);
-  }
-
-  /**
-   * Creates and saves a collection node.
-   *
-   * @return \Drupal\node\Entity\Node
-   *   The saved collection node.
-   */
-  protected function createCollection(): Node {
-    $collection = Node::create([
-      'type' => 'collection',
-      'title' => $this->randomString(),
-    ]);
-    $collection->save();
-    return $collection;
-  }
-
-  /**
-   * Creates an OG menu instance for the navigation menu.
-   *
-   * @return \Drupal\og_menu\Entity\OgMenuInstance
-   *   The saved OG menu instance.
-   */
-  protected function createOgMenuInstance(): OgMenuInstance {
-    /** @var \Drupal\og_menu\Entity\OgMenuInstance $instance */
-    $instance = OgMenuInstance::create(['type' => 'navigation']);
-    $instance->save();
-    return $instance;
   }
 
   /**
