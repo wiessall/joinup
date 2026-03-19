@@ -175,7 +175,12 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
 
     // Pass an in-memory FR translation — only id(), language()->getId(), and
     // getTitle() are used by updateLinkTitles(), no DB save needed.
-    $frPage = $enPage->addTranslation('fr', ['title' => 'FR title']);
+    // og_audience must be included because it is translatable by default and
+    // getOgMenuInstanceByCustomPage() reads it to find the OG menu.
+    $frPage = $enPage->addTranslation('fr', [
+      'title' => 'FR title',
+      OgGroupAudienceHelperInterface::DEFAULT_FIELD => $collection->id(),
+    ]);
 
     // No FR translation on the menu link yet — it should be added.
     $manager->updateLinkTitles($frPage);
