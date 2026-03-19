@@ -152,6 +152,7 @@ Feature: Test adding solutions.
     And I should not see the following error messages:
       | error messages          |
       | Logo field is required. |
+    But I should not see a logo on the header
     And I should see the heading "Espresso is the solution"
     When I am logged in as "Ruth Lee"
     And I go to the edit form of the "Espresso is the solution" solution
