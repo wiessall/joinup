@@ -1,0 +1,18 @@
+uuid: cb3a83c6-288c-4f67-bafe-a68f1fdd7a34
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.participation
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: assessment.participation
+target_entity_type_id: assessment
+target_bundle: participation
+default_langcode: site_default
+language_alterable: false
