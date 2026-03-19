@@ -141,7 +141,8 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
       $content_ids[] = $value;
     });
 
-    $description = $group->get($group->getDescriptionField())->value;
+    $description_field = $group->get($group->getDescriptionField());
+    $description_word_count = !$description_field->isEmpty() ? str_word_count(strip_tags($description_field->getString())) : 0;
 
     $total_published = 0;
     $total_archived = 0;
@@ -167,7 +168,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
       'Total number of items' => $total_published,
       'Total number of archived items' => $total_archived,
       'Number of members' => $group->getActiveMemberCount(),
-      'Description word count' => str_word_count(strip_tags($description)),
+      'Description word count' => $description_word_count,
       'Total number of likes' => $this->getLikesCount($content_ids),
     ];
   }

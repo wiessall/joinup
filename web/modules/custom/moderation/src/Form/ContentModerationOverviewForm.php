@@ -10,6 +10,7 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -32,6 +33,7 @@ class ContentModerationOverviewForm extends FormBase {
 
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
+    protected EntityTypeBundleInfoInterface $bundleInfo,
   ) {
     $this->nodeStorage = $this->entityTypeManager->getStorage('node');
   }
@@ -127,12 +129,13 @@ class ContentModerationOverviewForm extends FormBase {
     $options = [];
     $total_count = 0;
 
+    $bundle_labels = $this->bundleInfo->getBundleLabels('node');
     foreach ($content_count as $type => $states_count) {
       $type_count = array_reduce($states_count, function ($total, $state_count) {
         return $total + $state_count;
       }, 0);
       $total_count += $type_count;
-      $options[$type] = node_type_get_names()[$type] . " ($type_count)";
+      $options[$type] = $bundle_labels[$type] . " ($type_count)";
     }
 
     return [

@@ -6,8 +6,8 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider;
 
 use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
 use Drupal\Component\Serialization\Json;
+use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Logger\LoggerChannelInterface;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue\ApiGuesserInterface;
 use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueProvider;
@@ -136,7 +136,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
           $this->processedUrls[] = $project->url;
 
           // Try to use publiccodeYml from the Git repository if it is provided.
-          if (isset($project->files['publiccodeYml']) || !isset($this->yamlContent[$project->url])) {
+          if ($project->getPubliccodeYml() !== NULL || !isset($this->yamlContent[$project->url])) {
             yield $project;
             continue;
           }

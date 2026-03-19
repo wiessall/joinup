@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         bootstrap="vendor/weitzman/drupal-test-traits/src/bootstrap.php"
-         colors="true"
-         beStrictAboutTestsThatDoNotTestAnything="true"
-         beStrictAboutOutputDuringTests="true"
-         beStrictAboutChangesToGlobalState="true"
-         failOnWarning="true"
-         printerClass="\Drupal\Tests\Listeners\HtmlOutputPrinter"
-         verbose="true"
-         processIsolation="true"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+    bootstrap="vendor/weitzman/drupal-test-traits/src/bootstrap.php"
+    colors="true"
+    beStrictAboutTestsThatDoNotTestAnything="true"
+    beStrictAboutOutputDuringTests="true"
+    beStrictAboutChangesToGlobalState="true"
+    failOnRisky="true"
+    failOnWarning="true"
+    failOnPhpunitDeprecation="true"
+    displayDetailsOnTestsThatTriggerErrors="true"
+    displayDetailsOnTestsThatTriggerWarnings="true"
+    displayDetailsOnTestsThatTriggerDeprecations="true"
+    displayDetailsOnPhpunitDeprecations="true"
+    processIsolation="true"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+    cacheDirectory=".phpunit.cache"
+>
   <php>
     <!-- Set error reporting to E_ALL. -->
     <ini name="error_reporting" value="32767"/>
     <!-- Do not limit the amount of memory tests take to run. -->
     <ini name="memory_limit" value="-1"/>
+    <!-- Prevent custom error handler being registered @see resources/runner/drupal.yml -->
+    <env name="DO_NOT_REGISTER_ERROR_HANDLER" value="1"/>
 
     <!--
       Configure PHPUnit by setting the following environment variables:
@@ -47,33 +54,35 @@
         ['chrome', null, 'http://localhost:4444/wd/hub']").
     -->
   </php>
+
+  <extensions>
+    <bootstrap class="Joinup\PhpUnit\Extension\JoinupExtension"/>
+
+    <!-- Functional tests HTML output logging. -->
+    <!-- For documentation check See web/core/phpunit.xml.dist -->
+    <bootstrap class="Drupal\TestTools\Extension\HtmlLogging\HtmlOutputLogger">
+      <parameter name="outputDirectory" value="sites/simpletest/browser_output"/>
+      <parameter name="verbose" value="true"/>
+    </bootstrap>
+    <bootstrap class="Drupal\TestTools\Extension\Dump\DebugDump">
+      <parameter name="colors" value="true"/>
+      <parameter name="printCaller" value="true"/>
+    </bootstrap>
+  </extensions>
+
   <testsuites>
     <testsuite name="unit">
-      <directory>web/modules/custom/*/tests/src/Unit</directory>
-      <directory>web/modules/custom/*/modules/*/tests/src/Unit</directory>
-      <directory>web/modules/custom/*/*/tests/src/Unit</directory>
+      <directory>web/modules/custom/**/tests/src/Unit</directory>
     </testsuite>
     <testsuite name="kernel">
-      <directory>web/modules/custom/*/tests/src/Kernel</directory>
-      <directory>web/modules/custom/*/modules/*/tests/src/Kernel</directory>
-      <directory>web/modules/custom/*/*/tests/src/Kernel</directory>
+      <directory>web/modules/custom/**/tests/src/Kernel</directory>
     </testsuite>
     <testsuite name="functional">
-      <directory>web/modules/custom/*/tests/src/Functional</directory>
-      <directory>web/modules/custom/*/modules/*/tests/src/Functional</directory>
-      <directory>web/modules/custom/*/*/tests/src/Functional</directory>
+      <directory>web/modules/custom/**/tests/src/Functional</directory>
     </testsuite>
     <testsuite name="existing-site">
-      <directory>web/modules/custom/*/tests/src/ExistingSite</directory>
-      <directory>web/modules/custom/*/modules/*/tests/src/ExistingSite</directory>
-      <directory>web/modules/custom/*/*/tests/src/ExistingSite</directory>
+      <directory>web/modules/custom/**/tests/src/ExistingSite</directory>
       <directory>web/themes/ventuno/tests/src/ExistingSite</directory>
     </testsuite>
   </testsuites>
-  <listeners>
-    <listener class="\Drupal\Tests\Listeners\DrupalListener"/>
-  </listeners>
-  <extensions>
-    <extension class="Joinup\PhpUnit\Hooks\DrupalSettingsHook"/>
-  </extensions>
 </phpunit>

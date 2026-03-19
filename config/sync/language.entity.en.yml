@@ -12,5 +12,5 @@ _core:
 id: en
 label: English
 direction: ltr
-weight: -7
+weight: -13
 locked: false

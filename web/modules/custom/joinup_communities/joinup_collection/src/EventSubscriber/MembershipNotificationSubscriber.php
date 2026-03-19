@@ -68,8 +68,7 @@ class MembershipNotificationSubscriber extends NotificationSubscriberBase {
     }
 
     // Act on specific membership state transitions.
-    /** @var \Drupal\og\Entity\OgMembership $original_membership */
-    $original_membership = $this->membership->original;
+    $original_membership = $this->membership->getOriginal();
     match ([$original_membership->getState(), $this->membership->getState()]) {
       [OgMembershipInterface::STATE_ACTIVE, OgMembershipInterface::STATE_BLOCKED] => $this->onUpdateMembershipBlocked(),
       default => NULL,
@@ -108,7 +107,7 @@ class MembershipNotificationSubscriber extends NotificationSubscriberBase {
       return FALSE;
     }
 
-    if (empty($this->membership->original)) {
+    if (empty($this->membership->getOriginal())) {
       return FALSE;
     }
 

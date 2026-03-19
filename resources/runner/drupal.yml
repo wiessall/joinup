@@ -178,6 +178,11 @@ drupal:
       }
     sections:
       Main settings: |
+        # Remove this once all modules have Drupal 11 compatible versions. This
+        # will happen when the composer.json `extra.drupal-lenient.allowed-list`
+        # property becomes is empty.
+        $settings['extension_discovery_ignore_core_version_requirement'] = TRUE;
+
         if (!$hash_salt = getenv('DRUPAL_HASH_SALT')) {
           $hash_salt = \Drupal\Component\Utility\Crypt::randomBytesBase64(55);
           $env_file = "{$app_root}/../.env.pipeline";
@@ -315,6 +320,9 @@ drupal:
       European Commission eTranslation: |
         $config['tmgmt.translator.ec_etranslation']['settings']['username'] = getenv('TMGMT_ETRANSLATION_USERNAME') ?: '';
         $config['tmgmt.translator.ec_etranslation']['settings']['password'] = getenv('TMGMT_ETRANSLATION_PASSWORD') ?: '';
+        if (!empty(getenv('TMGMT_ETRANSLATION_CALLBACK_HOSTNAME'))) {
+          $config['tmgmt.translator.ec_etranslation']['settings']['callback_hostname'] = getenv('TMGMT_ETRANSLATION_CALLBACK_HOSTNAME') ?: '';
+        }
       OpenEuropa Webtools Analytics: |
         $config['oe_webtools_analytics.settings']['siteID'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_ID');
         $config['oe_webtools_analytics.settings']['sitePath'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_PATH');
@@ -327,10 +335,16 @@ drupal:
           $settings['memcache']['servers'] = array_fill_keys(explode(',', $memcache_hosts), 'default');
         }
       Custom error handler: |
-        $settings['error_page']['uuid'] = TRUE;
-        $settings['error_page']['template_dir'] = DRUPAL_ROOT . '/../resources/error_page';
-        set_error_handler(['Drupal\error_page\ErrorPageErrorHandler', 'handleError']);
-        set_exception_handler(['Drupal\error_page\ErrorPageErrorHandler', 'handleException']);
+        # Do not register the error handlers when running PHPUnit tests.
+        # @see \Drupal\Core\Test\TestRunnerKernel::boot()
+        # @see ./phpunit.xml
+        $skipErrorHandlerRegistration = array_key_exists('DO_NOT_REGISTER_ERROR_HANDLER', getenv());
+        if (!$skipErrorHandlerRegistration) {
+          $settings['error_page']['uuid'] = TRUE;
+          $settings['error_page']['template_dir'] = DRUPAL_ROOT . '/../resources/error_page';
+          set_error_handler(['Drupal\error_page\ErrorPageErrorHandler', 'handleError']);
+          set_exception_handler(['Drupal\error_page\ErrorPageErrorHandler', 'handleException']);
+        }
       OpenEuropa Newsroom Newsletter Mock: |
         $config['oe_newsroom_newsletter.subscriber']['class'] = 'Drupal\oe_newsroom_newsletter\NewsletterSubscriber\MockNewsletterSubscriber';
       OpenEuropa Newsroom Newsletter Settings: |

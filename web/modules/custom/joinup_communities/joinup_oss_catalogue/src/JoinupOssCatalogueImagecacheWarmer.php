@@ -144,9 +144,10 @@ final readonly class JoinupOssCatalogueImagecacheWarmer {
    *   language code; NULL otherwise.
    */
   protected function getOriginal(OssSolutionInterface $ossSolution): ?OssSolutionInterface {
-    if ($ossSolution->original instanceof OssSolutionInterface) {
-      $languageCode = $ossSolution->original->getRelevantLangCode();
-      return $ossSolution->original->getTranslation($languageCode);
+    $original = $ossSolution->getOriginal();
+    if ($original instanceof OssSolutionInterface) {
+      $languageCode = $original->getRelevantLangCode();
+      return $original->getTranslation($languageCode);
     }
     return NULL;
   }

@@ -14,7 +14,7 @@ Feature: Assessment Report Entity Management
     Then I should see the heading "Create assessment report"
 
     When I press "Save as draft"
-    Then I should see the error message "3 errors have been found: Short titleType of public sector bodyIdentification of binding requirement(s) assessed"
+    Then I should see the error message "3 errors have been found: Short title Type of public sector body Identification of binding requirement(s) assessed"
 
     When I fill in "Short title" with "Test Assessment Report 2025"
     And I should see "This will be used as the title of the published report. Maximum 255 characters."
@@ -36,7 +36,7 @@ Feature: Assessment Report Entity Management
     And a modal should open
     And I should see the button "Cancel" in the "Modal buttons" region
     And I press "Save" in the "Modal buttons" region
-    And I should see the text "4 errors have been found: NameName of the initiativeDescriptionDescription of the binding requirement" in the "Modal content" region
+    And I should see the text "4 errors have been found: Name Name of the initiative Description Description of the binding requirement" in the "Modal content" region
 
     Then I should see the following lines of text in the correct order in "Modal content":
       | Initiative                |
@@ -71,23 +71,22 @@ Feature: Assessment Report Entity Management
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
 
     When I click "Interoperability solution" in the "Modal content" region
-    And I should see "Browse the solutions recommended by the Interoperable Europe Board."
-    Then I press "Select an Interoperability solution" in the "Modal content" region
-    And I wait for AJAX to finish
-    And I select "Test solution" option from "asset[form][0][entity_id]"
-    And I press "Add Interoperability solution" in the "Modal content" region
-    And I should see the text "Identify the interoperability solutions mandatory to use for the implementation of the assessed binding requirement" in the "Modal content" region
-    And I should see "Browse the solutions recommended by the Interoperable Europe Board."
-    And I should see the button "Select an Interoperability solution" in the "Modal content" region
-    And I press "Add a new Interoperability solution" in the "Modal content" region
-    And I fill in "Title of Solution" with "European Interoperability Framework (EIF)" in the "Modal content" region
-    And I enter "Description of EIF" in the "asset[form][1][description][0][value]" wysiwyg editor
-    And I fill in "Relevant website" with "http://no-abstract.com" in the "Modal content" region
-    Then I press "Add Interoperability solution" in the "Modal content" region
-    Then the "IEF table" table should contain the following columns:
-      | Title                                     | Relevant website       | Description        |
-      | Test solution                             | http://www.example.com | default abstract   |
-      | European Interoperability Framework (EIF) | http://no-abstract.com | Description of EIF |
+    And I press "Asset"
+    # Select an existing solution via entity browser.
+    And I press "Select Interoperability Solution" in the "Modal content" region to open the entity browser
+    And I select "Test solution" in the entity browser
+    And I press "Select solutions" to close the entity browser
+    And I should see "Test solution" in the "Modal content" region
+    And I should see the button "Select Interoperability Solution" in the "Modal content" region
+    # Create a new solution via entity browser.
+    And I press "Select Interoperability Solution" in the "Modal content" region to open the entity browser
+    And I click "New solution"
+    And I wait until ".ck-editor__editable" element exists
+    And I fill in "Title of Solution" with "European Interoperability Framework (EIF)"
+    And I enter "Description of EIF" in the "Description" wysiwyg editor
+    And I fill in "Relevant website" with "http://no-abstract.com"
+    And I press "Create" to close the entity browser
+    And I should see "European Interoperability Framework (EIF)" in the "Modal content" region
 
     When I click "Concerned public services" in the "Modal content" region
     And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
@@ -253,3 +252,98 @@ Feature: Assessment Report Entity Management
 
     # Verify that no empty participation entities were created
     Then no participation entities should exist for the "Test Empty Participation ISAICP-10806" assessment report
+
+  Scenario: User can browse only published solutions in binding requirement
+    Given solution content:
+      | title                     | state       |
+      | Test solution published   | published   |
+      | Test solution archived    | archived    |
+      | Test solution proposed    | proposed    |
+      | Test solution draft       | draft       |
+      | Test solution unpublished | unpublished |
+
+    Given I am logged in as an "authenticated user"
+    And I go to "/collection/assessments/report/create"
+    And I click "New binding requirement"
+    When I click "Interoperability solution" in the "Modal content" region
+    And I press "Asset"
+    And I press "Select Interoperability Solution" in the "Modal content" region to open the entity browser
+    Then I should not see the text "Interoperability Solutions Browser"
+    And I should see "Test solution published"
+    # TODO: Re-enable this in ISAICP-10991.
+    # And I should not see "Test solution archived"
+    And I should not see "Test solution proposed"
+    And I should not see "Test solution draft"
+    And I should not see "Test solution unpublished"
+
+  Scenario: Entity browser: add existing asset, create new asset, and remove asset
+    Given solution content:
+      | title                | landing page           |
+      | Asset to be removed  | http://www.example.com |
+
+    Given I am logged in as an "authenticated user"
+    And I go to "/collection/assessments/report/create"
+    Then I should see the heading "Create assessment report"
+
+    When I fill in "Short title" with "Test Entity Browser Remove Asset"
+    And I select "Local public sector body" from "Type of public sector body"
+    And I wait for AJAX to finish
+    And I select "Belgium" from "Country"
+    And I wait for AJAX to finish
+    And I fill in "New organisation name" with "Test Organisation"
+
+    When I click "New binding requirement"
+    And a modal should open
+
+    When I click "Initiative" in the "Modal content" region
+    And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Test Initiative for EB" in the "Modal content" region
+    And I fill in "expression[0][inline_entity_form][description][0][value]" with "Some description" in the "Modal content" region
+
+    When I click "Requirements" in the "Modal content" region
+    And I fill in "description[0][value]" with "Test requirement description" in the "Modal content" region
+
+    When I click "Concerned public services" in the "Modal content" region
+    And I fill in "affects[0][inline_entity_form][name][0][value]" with "Test Service" in the "Modal content" region
+
+    When I click "Interoperability solution" in the "Modal content" region
+    And I press "Asset"
+    And I press "Select Interoperability Solution" in the "Modal content" region to open the entity browser
+    And I select "Asset to be removed" in the entity browser
+    And I press "Select solutions" to close the entity browser
+    And I should see "Asset to be removed" in the "Modal content" region
+
+    And I press "Select Interoperability Solution" in the "Modal content" region to open the entity browser
+    And I click "New solution"
+    And I wait until ".ck-editor__editable" element exists
+    And I fill in "Title of Solution" with "Asset that should remain"
+    And I enter "Description of the asset" in the "Description" wysiwyg editor
+    And I fill in "Relevant website" with "http://remaining-asset.com"
+    And I press "Create" to close the entity browser
+    And I should see "Asset that should remain" in the "Modal content" region
+
+    Then I press "Save" in the "Modal buttons" region
+    And the modal should be closed
+    When I press "Save as draft"
+    Then I should see the success message containing "New assessment Test Entity Browser Remove Asset has been created."
+    And I should see the text "Asset to be removed"
+    And I should see the text "Asset that should remain"
+
+    When I go to the edit form of the "Test Entity Browser Remove Asset" assessment
+    And I click on element ".lpb-edit"
+    And a modal should open
+
+    When I click "Interoperability solution" in the "Modal content" region
+    And I should see "Asset to be removed" in the "Modal content" region
+    And I should see "Asset that should remain" in the "Modal content" region
+
+    When I remove "Asset to be removed" from the entity browser widget
+    And I wait for AJAX to finish
+    Then I should not see "Asset to be removed" in the "Modal content" region
+    And I should see "Asset that should remain" in the "Modal content" region
+
+    Then I press "Save" in the "Modal buttons" region
+    And the modal should be closed
+    When I press "Update"
+    Then I should see the success message containing "The assessment Test Entity Browser Remove Asset has been updated."
+    And I should see the text "Asset that should remain"
+    And I should not see the text "Asset to be removed"
