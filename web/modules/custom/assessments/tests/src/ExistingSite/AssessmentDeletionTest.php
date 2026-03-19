@@ -23,6 +23,7 @@ use PHPUnit\Framework\Attributes\Group;
 #[CoversClass(AssessmentReport::class)]
 #[CoversClass(BindingRequirementParagraph::class)]
 #[Group('assessments')]
+#[CoversClass(AssessmentReport::class)]
 class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
 
   use AssessmentEntityCreationTrait;
@@ -107,8 +108,6 @@ class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
    * Tests that SOLUTION_COLLECTOR assets are deleted only when orphaned.
    *
    * Assets belonging to other groups must never be deleted on report deletion.
-   *
-   * @covers \Drupal\assessments\Entity\AssessmentReport::postDelete
    */
   public function testOrphanedAssetDeletion(): void {
     $collectorAsset = $this->createSolutionAsset(AssessmentInterface::SOLUTION_COLLECTOR);
