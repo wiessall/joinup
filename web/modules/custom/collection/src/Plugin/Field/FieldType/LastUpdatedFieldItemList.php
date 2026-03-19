@@ -26,6 +26,7 @@ class LastUpdatedFieldItemList extends FieldItemList {
    *
    * The last change time is determined by computing the maximum value between:
    * - The collection changed timestamp.
+   * - The last content deletion timestamp.
    * - The highest timestamp of the collection solutions.
    * - The highest timestamp of the collection community content and custom
    *   pages.
@@ -43,6 +44,12 @@ class LastUpdatedFieldItemList extends FieldItemList {
 
     // Store the collection changed timestamp.
     $last_updated = $collection->getChangedTime();
+
+    // Check if a content deletion occurred more recently.
+    $last_deletion = $collection->getLastContentDeletion();
+    if ($last_deletion > $last_updated) {
+      $last_updated = $last_deletion;
+    }
 
     // Check for a higher child solution changed timestamp.
     foreach ($collection->getSolutions(TRUE) as $solution) {
