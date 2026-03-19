@@ -81,11 +81,10 @@ class FileDuplicator implements ContainerInjectionInterface {
     if ($fieldItems->count() !== count($referencedEntities)) {
       $changed = TRUE;
       $entity->set($fieldName, $referencedEntities);
-      $entity->save();
       $this->messages[] = sprintf('Removed dead file references for %s entity %s.', $entity->getEntityTypeId(), $entity->id());
     }
 
-    $fileReferences = $fieldItems->referencedEntities();
+    $fileReferences = $entity->get($fieldName)->referencedEntities();
     $fileDirectory = $this->targetDir . '/' . $entity->bundle() . '/' . $entity->id() . '/';
     if (count($fileReferences)) {
       $this->fileSystem->prepareDirectory($fileDirectory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
@@ -102,7 +101,7 @@ class FileDuplicator implements ContainerInjectionInterface {
         $newUri = $this->fileSystem->copy($originalUri, $fileDirectory . $newFile->getFilename());
         $newFile->setFileUri($newUri);
         $newFile->save();
-        $fieldItems->set($delta, $newFile);
+        $entity->get($fieldName)->set($delta, $newFile);
         $changed = TRUE;
 
         $this->messages[] = sprintf('Duplicating URI %s to %s for entity %s.', $originalUri, $newFile->getFileUri(), $entity->id());
