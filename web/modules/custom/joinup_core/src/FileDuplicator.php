@@ -27,7 +27,7 @@ class FileDuplicator implements ContainerInjectionInterface {
    *
    * @var string
    */
-  protected string $targetDir = 'public://assessment/report/migration';
+  protected string $targetDir = 'public://assessments/report/migration';
 
   public function __construct(
     private readonly EntityTypeManagerInterface $entityTypeManager,
