@@ -206,4 +206,19 @@ class Collection extends Node implements CollectionInterface {
     return 'website_url';
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getLastContentDeletion(): ?int {
+    $value = $this->get('last_content_deletion')->value;
+    return $value !== NULL ? (int) $value : NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setLastContentDeletion(int $timestamp): void {
+    $this->set('last_content_deletion', $timestamp);
+  }
+
 }

@@ -1,0 +1,18 @@
+uuid: cd3bd513-ea00-4d23-aeea-3cd7a7768810
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.report
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: assessment.report
+target_entity_type_id: assessment
+target_bundle: report
+default_langcode: site_default
+language_alterable: false
