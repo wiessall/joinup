@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_news\EventSubscriber;
 
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\PathProcessor\InboundPathProcessorInterface;
 use Drupal\Core\Routing\LocalRedirectResponse;
 use Drupal\Core\Url;
@@ -19,6 +20,7 @@ readonly class JoinupNewsEventSubscriber implements EventSubscriberInterface {
 
   public function __construct(
     protected InboundPathProcessorInterface $pathProcessor,
+    protected LanguageManagerInterface $languageManager,
   ) {}
 
   /**
@@ -62,6 +64,7 @@ readonly class JoinupNewsEventSubscriber implements EventSubscriberInterface {
     if ($path === '/news') {
       $url = Url::fromRoute('view.search.page_1');
       $url->setOption('query', ['f' => ['type:news']]);
+      $url->setOption('language', $this->languageManager->getCurrentLanguage());
       $response = new LocalRedirectResponse($url->toString(), Response::HTTP_FOUND);
       $event->setResponse($response);
     }

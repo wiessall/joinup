@@ -40,7 +40,7 @@
         <h2{{ title_attributes }}>{{ label }}</h2>
       {% endif %}
       {{ title_suffix }}
-      {{ link('More news'|t, 'base:news', {class: ['more-link']}) }}
+      {{ link('More news'|t, 'internal:/search?f[0]=type:news', {'class': ['more-link']}) }}
     </div>
     <div class="h-100 contextual-region block-content">
       {% block content %}
