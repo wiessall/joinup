@@ -4,21 +4,16 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_core;
 
+use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\File\FileSystemInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Looks up and duplicates files for specific entities.
  */
-final class FileDuplicator {
-
-  /**
-   * List of processed files indexed by their URI.
-   *
-   * @var array<string, \Drupal\file\FileInterface>
-   */
-  protected array $processed = [];
+class FileDuplicator implements ContainerInjectionInterface {
 
   /**
    * A list of messages to return after processing, indexed by entity ID.
@@ -32,12 +27,22 @@ final class FileDuplicator {
    *
    * @var string
    */
-  protected string $targetDir = 'public://assessment/report';
+  protected string $targetDir = 'public://assessment/report/migration';
 
   public function __construct(
     private readonly EntityTypeManagerInterface $entityTypeManager,
     private readonly FileSystemInterface $fileSystem,
   ) {}
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container): self {
+    return new static(
+      $container->get('entity_type.manager'),
+      $container->get('file_system'),
+    );
+  }
 
   /**
    * Processes the entities by given criteria.
@@ -70,46 +75,39 @@ final class FileDuplicator {
    */
   protected function duplicateFile(FieldableEntityInterface $entity, string $fieldName): void {
     $fieldItems = $entity->get($fieldName);
-    if ($fieldItems->isEmpty()) {
-      // Failsafe return.
-      return;
-    }
+    $fileDirectory = $this->targetDir . DIRECTORY_SEPARATOR . $entity->bundle() . DIRECTORY_SEPARATOR . $entity->id() . DIRECTORY_SEPARATOR;
+    $this->fileSystem->prepareDirectory($fileDirectory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
 
     $changed = FALSE;
-
     $referencedEntities = $fieldItems->referencedEntities();
-    $messages = [];
     if ($fieldItems->count() !== count($referencedEntities)) {
       $changed = TRUE;
       $entity->set($fieldName, $referencedEntities);
       $entity->save();
-      $messages[] = sprintf('Removed dead file references for %s entity %s.', $entity->getEntityTypeId(), $entity->id());
+      $this->messages[] = sprintf('Removed dead file references for %s entity %s.', $entity->getEntityTypeId(), $entity->id());
     }
 
     foreach ($fieldItems->referencedEntities() as $delta => $file) {
       $originalUri = $file->getFileUri();
-      if (!isset($this->processed[$originalUri]) && !str_contains($originalUri, 'webform/assessment')) {
-        $this->processed[$originalUri] = $file;
+      if (!str_contains($originalUri, 'webform/assessment')) {
         continue;
       }
 
       try {
         $newFile = $file->createDuplicate();
-        $newUri = $this->fileSystem->copy($originalUri, $this->targetDir . DIRECTORY_SEPARATOR . $newFile->getFilename());
+        $newUri = $this->fileSystem->copy($originalUri, $fileDirectory . $newFile->getFilename());
         $newFile->setFileUri($newUri);
         $newFile->save();
         $fieldItems->set($delta, $newFile);
-        $this->processed[$newUri] = $file;
         $changed = TRUE;
 
-        $this->messages[$entity->id()] = sprintf('Duplicating URI %s to %s for entity %s.', $originalUri, $newFile->getFileUri(), $entity->id());
+        $this->messages[] = sprintf('Duplicating URI %s to %s for entity %s.', $originalUri, $newFile->getFileUri(), $entity->id());
       }
       catch (\Exception $e) {
-        $messages[] = $e->getMessage();
+        $this->messages[] = $e->getMessage();
       }
     }
 
-    $this->messages = array_merge($this->messages, $messages);
     if ($changed) {
       $entity->save();
     }
