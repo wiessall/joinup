@@ -188,7 +188,8 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
     $storage = $this->container->get('entity_type.manager')
       ->getStorage('menu_link_content');
     $storage->resetCache();
-    $link = reset($this->assertMenuLinkHelper($ogMenuInstance->id(), $enPage->id()));
+    $links = $this->assertMenuLinkHelper($ogMenuInstance->id(), $enPage->id());
+    $link = reset($links);
     $this->assertTrue($link->hasTranslation('fr'));
     $this->assertSame('FR title', $link->getTranslation('fr')->get('title')->value);
 
@@ -197,7 +198,8 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
     $manager->updateLinkTitles($frPage);
 
     $storage->resetCache();
-    $link = reset($this->assertMenuLinkHelper($ogMenuInstance->id(), $enPage->id()));
+    $links = $this->assertMenuLinkHelper($ogMenuInstance->id(), $enPage->id());
+    $link = reset($links);
     $this->assertSame('FR title updated', $link->getTranslation('fr')->get('title')->value);
   }
 
