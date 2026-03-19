@@ -516,10 +516,6 @@
             "drupal/simple_oauth": {
                 "Allow BasicAuth to co-exist with oAuth @see https://www.drupal.org/i/3256312": "resources/patch/php/drupal/simple_oauth/3256312-1.patch"
             },
-            "drupal/sitewide_alert": {
-                "Cache prevents display of alert @see https://www.drupal.org/i/3543046": "resources/patch/php/drupal/sitewide_alert/3543046.diff",
-                "Regex constraint should use named arguments @see https://www.drupal.org/i/3567470": "resources/patch/php/drupal/sitewide_alert/3567470.87m4-commitf0b45a55.diff"
-            },
             "drupal/social_media_links": {
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "resources/patch/php/drupal/social_media_links/2898680.patch",
                 "Field templating and multiple value fields not functioning as expected @see https://www.drupal.org/i/3122406": "resources/patch/php/drupal/social_media_links/3122406.patch"
