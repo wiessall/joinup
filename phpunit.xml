@@ -7,6 +7,7 @@
     beStrictAboutChangesToGlobalState="true"
     failOnRisky="true"
     failOnWarning="true"
+    failOnPhpunitDeprecation="true"
     displayDetailsOnTestsThatTriggerErrors="true"
     displayDetailsOnTestsThatTriggerWarnings="true"
     displayDetailsOnTestsThatTriggerDeprecations="true"

@@ -79,14 +79,14 @@ Feature: Translating events
     And event content:
       | title      | <bundle>      |
       | Test event | Test <bundle> |
-    Then break
+
     Given I am logged in as "<user>"
-    When I go to "<url>"
+    When I visit the translation overview form of the "Test <bundle>" <bundle>
     Then I should see the heading "Access denied"
 
     Examples:
-      | user        | bundle     | url                                                            |
-      | John Member | collection | /collection/test-collection/event/test-event/translations      |
-      | Ross Auth   | collection | /collection/test-collection/event/test-event/translations      |
-      | John Member | solution   | /collection/portal-support/solution/test-solution/event/test-event/translations |
-      | Ross Auth   | solution   | /collection/portal-support/solution/test-solution/event/test-event/translations |
+      | user        | bundle     |
+      | John Member | collection |
+      | Ross Auth   | collection |
+      | John Member | solution   |
+      | Ross Auth   | solution   |
