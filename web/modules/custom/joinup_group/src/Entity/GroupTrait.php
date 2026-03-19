@@ -256,27 +256,43 @@ trait GroupTrait {
   abstract protected function doGetGroupContentIds(): array;
 
   /**
-   * Returns a list of group content node IDs, grouped by node type.
+   * Fetches node IDs grouped by type for the given og_audience parent IDs.
+   *
+   * @param array $parent_ids
+   *   The parent entity IDs to query against og_audience.
    *
    * @return int[][]
    *   An associative array keyed by node type and having node IDs as values.
    */
-  protected function getNodeGroupContent(): array {
-    $storage = $this->entityTypeManager()->getStorage('node');
-
-    $nids = $storage->getQuery()->accessCheck(FALSE)
-      ->condition(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $this->id())
-      // Only allow community content bundles to be returned.
-      ->condition('type', 'solution', '<>')
+  protected function fetchNodeIdsByOgAudience(array $parent_ids): array {
+    $nids = $this->entityTypeManager()
+      ->getStorage('node')
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->condition(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $parent_ids, 'IN')
       ->execute();
 
-    if (!$nids) {
-      return [];
-    }
+    return $nids ? $this->groupNidsByType($nids) : [];
+  }
+
+  /**
+   * Groups node IDs by bundle type using a direct database query.
+   *
+   * @param array $nids
+   *   The node IDs to group.
+   *
+   * @return int[][]
+   *   An associative array keyed by node type and having node IDs as values.
+   */
+  protected function groupNidsByType(array $nids): array {
+    $result = \Drupal::database()->select('node', 'n')
+      ->fields('n', ['nid', 'type'])
+      ->condition('nid', $nids, 'IN')
+      ->execute();
 
     $nids_per_bundle = [];
-    foreach ($storage->loadMultiple($nids) as $nid => $node) {
-      $nids_per_bundle[$node->bundle()][] = $nid;
+    foreach ($result as $row) {
+      $nids_per_bundle[$row->type][] = (int) $row->nid;
     }
 
     return $nids_per_bundle;

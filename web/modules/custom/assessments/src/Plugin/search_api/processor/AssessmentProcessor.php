@@ -79,7 +79,7 @@ class AssessmentProcessor extends ProcessorPluginBase {
       }
 
       // Index the "EU" country term when the field value is empty.
-      $field = $item->getField('assessment_org_country');
+      $field = $item->getField('country');
       \assert($field instanceof FieldInterface);
       if (!$field->getValues()) {
         $eu_term = $this->entityRepository->loadEntityByUuid('taxonomy_term', AssessmentInterface::EU_COUNTRY_TERM);
