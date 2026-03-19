@@ -661,8 +661,15 @@ function joinup_solution_node_delete(NodeInterface $solution): void {
     $requestTime = \Drupal::time()->getRequestTime();
     foreach ($ids as $collectionId) {
       $collection = Collection::load($collectionId);
+      if (!$collection instanceof CollectionInterface) {
+        return;
+      }
+
       $collection->skip_notification = TRUE;
-      $collection->setChangedTime($requestTime)->save();
+      $collection->setNewRevision(FALSE);
+      $collection->setLastContentDeletion($requestTime);
+      $collection->setSyncing(TRUE);
+      $collection->save();
     }
   }
 }

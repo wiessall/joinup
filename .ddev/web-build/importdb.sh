@@ -1,5 +1,5 @@
 #!/bin/bash
-# This is adapted from https://git.fpfis.tech.ec.europa.eu/digit/devsecops/httpd-php/-/blob/master/scripts/myloader.sh
+# This is adapted from https://gitlab.dhs.tech.ec.europa.eu/digit/devsecops/httpd-php/-/blob/master/scripts/myloader.sh
 set -euo pipefail
 
 export MYSQL_HOST="db"
