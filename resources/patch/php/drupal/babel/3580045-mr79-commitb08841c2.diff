@@ -1,0 +1,245 @@
+diff --git a/modules/babel_content_entity/src/BabelContentEntityService.php b/modules/babel_content_entity/src/BabelContentEntityService.php
+index 4ee88e35a6c3887068727cdeb937cd01057fe0ca..daac54a2cda375495fe94d16e7440fa9848ef231 100644
+--- a/modules/babel_content_entity/src/BabelContentEntityService.php
++++ b/modules/babel_content_entity/src/BabelContentEntityService.php
+@@ -32,11 +32,16 @@ class BabelContentEntityService {
+    * @const string[]
+    */
+   public const EXCLUDED_FIELDS = [
++    'created',
++    'changed',
++    // See \Drupal\content_translation\ContentTranslationHandler::getFieldDefinitions.
+     'content_translation_created',
++    'content_translation_changed',
+     'content_translation_outdated',
+     'content_translation_source',
+     'content_translation_status',
+     'content_translation_uid',
++    // Ignore language related entity keys.
+     'default_langcode',
+     'langcode',
+     'revision_translation_affected',
+@@ -110,6 +115,11 @@ class BabelContentEntityService {
+         continue;
+       }
+ 
++      // Find out something for fields having multiple properties, as the next
++      // code does not work well in case of TextareaWithSummary fields (summary
++      // is ignored) and definitely wrong in case of translatable FileItem
++      // fields (target_id is the main property, but alt and title won't be
++      // translated).
+       $property = $definition->getFieldStorageDefinition()->getMainPropertyName();
+       foreach ($field as $delta => $item) {
+         $value = (string) $item->{$property};
+diff --git a/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php b/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php
+index e2bbd8634ef52069e02b17ade98f842c9d7e6754..1d22af08d76584ab6b9116df47b66c04e75c69e0 100644
+--- a/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php
++++ b/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php
+@@ -13,12 +13,17 @@ use Drupal\babel\Plugin\Babel\TranslationTypePluginBase;
+ use Drupal\babel\StringsCollectorFactory;
+ use Drupal\babel_content_entity\BabelContentEntityService;
+ use Drupal\babel_content_entity\Plugin\Babel\BabelContentEntityDeriver;
++use Drupal\Component\Datetime\TimeInterface;
+ use Drupal\Component\Plugin\PluginBase;
++use Drupal\content_translation\ContentTranslationManagerInterface;
+ use Drupal\Core\Entity\EntityFieldManagerInterface;
+ use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+ use Drupal\Core\Entity\EntityTypeManagerInterface;
++use Drupal\Core\Entity\TranslatableInterface;
+ use Drupal\Core\Form\FormStateInterface;
++use Drupal\Core\Logger\LoggerChannelInterface;
+ use Drupal\Core\Plugin\PluginFormInterface;
++use Drupal\Core\Session\AccountProxyInterface;
+ use Drupal\Core\StringTranslation\TranslatableMarkup;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+ 
+@@ -44,6 +49,10 @@ class ContentEntity extends TranslationTypePluginBase implements PluginFormInter
+     protected BabelContentEntityService $service,
+     protected EntityTypeBundleInfoInterface $bundleInfo,
+     protected EntityFieldManagerInterface $fieldManager,
++    protected readonly TimeInterface $time,
++    protected readonly AccountProxyInterface $currentUser,
++    protected readonly LoggerChannelInterface $loggerChannel,
++    protected readonly ?ContentTranslationManagerInterface $contentTranslationManager,
+   ) {
+     parent::__construct($configuration, $pluginId, $pluginDefinition, $babelStorage, $collectorFactory);
+   }
+@@ -62,6 +71,10 @@ class ContentEntity extends TranslationTypePluginBase implements PluginFormInter
+       $container->get(BabelContentEntityService::class),
+       $container->get('entity_type.bundle.info'),
+       $container->get('entity_field.manager'),
++      $container->get('datetime.time'),
++      $container->get('current_user'),
++      $container->get('logger.channel.babel'),
++      $container->get('content_translation.manager', ContainerInterface::NULL_ON_INVALID_REFERENCE),
+     );
+   }
+ 
+@@ -128,21 +141,85 @@ class ContentEntity extends TranslationTypePluginBase implements PluginFormInter
+    * {@inheritdoc}
+    */
+   public function updateTranslation(StringTranslation $string, string $id, string $langcode, string $translation): void {
++    parent::updateTranslation($string, $id, $langcode, $translation);
++    if (!$this->contentTranslationManager) {
++      return;
++    }
++
+     [$entity, $fieldName, $delta] = $this->service->destructSourceInstanceId($this->getPluginId(), $id);
++    if (!$entity instanceof TranslatableInterface) {
++      return;
++    }
++    if (!$this->contentTranslationManager->isEnabled($entity->getEntityTypeId(), $entity->bundle())) {
++      return;
++    }
+ 
+-    if ($entity) {
+-      if ($entity->hasTranslation($langcode)) {
+-        $translated = $entity->getTranslation($langcode);
+-      }
+-      else {
+-        $translated = $entity->addTranslation($langcode, $entity->toArray());
+-      }
++    // Ignore language property and fields which are provided by
++    // content_translation.
++    $translatableFields = array_diff_key(
++      $entity->getTranslatableFields(FALSE),
++      array_combine(
++        BabelContentEntityService::EXCLUDED_FIELDS,
++        BabelContentEntityService::EXCLUDED_FIELDS,
++      )
++    );
+ 
+-      $translated->get($fieldName)->setValue([$delta => $translation]);
+-      $translated->save();
++    if (!array_key_exists($fieldName, $translatableFields)) {
++      return;
+     }
+ 
+-    parent::updateTranslation($string, $id, $langcode, $translation);
++    $entityTranslation = $entity->hasTranslation($langcode)
++      ? $entity->getTranslation($langcode)
++      : $entity->addTranslation($langcode, $entity->toArray());
++    $metadata = $this->contentTranslationManager->getTranslationMetadata($entityTranslation);
++
++    if ($entityTranslation->isNewTranslation()) {
++      // Update the translation creation time and source.
++      $entityType = $entity->getEntityType();
++      $metadata->setCreatedTime($this->time->getRequestTime());
++      $metadata->setChangedTime($this->time->getRequestTime());
++      $metadata->setSource($entity->getUntranslated()->language()->getId());
++    }
++
++    $currentUser = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
++    $metadata->setAuthor($currentUser);
++
++    // Change only the main property, so we will be in sync with
++    // \Drupal\babel_content_entity\BabelContentEntityService::getSourcesForEntity.
++    $entityTranslationField = $entityTranslation->get($fieldName);
++    $untranslatedValue = $entity->get($fieldName)->getValue()[$delta];
++    $mainProperty = $entityTranslationField->getFieldDefinition()->getFieldStorageDefinition()->getMainPropertyName();
++    $newTranslationValue = [$mainProperty => $translation] + $untranslatedValue;
++    $entityTranslationField->set($delta, $translation ? $newTranslationValue : $untranslatedValue);
++
++    // Translation must validate to be saved.
++    if (!$entityTranslation->validate()->count()) {
++      $source = array_intersect_key($entity->toArray(), $translatableFields);
++      $trans = array_intersect_key($entityTranslation->toArray(), $translatableFields);
++      if ($source !== $trans) {
++        $entityTranslation->save();
++        return;
++      }
++    }
++    else {
++      $message = $entityTranslation->isNewTranslation()
++        ? "New translation wasn't saved."
++        : "Translation was deleted.";
++      $this->loggerChannel->warning(
++        $message . ' The automatically created translation of @label @type_label_singular does not validate after @property value was changed to "@value".',
++        [
++          '@label' => $entity->label(),
++          '@type_label_singular' => $entity->getEntityType()->getSingularLabel(),
++          '@property' => $fieldName,
++          '@value' => $translation,
++        ],
++      );
++    }
++
++    if (!$entityTranslation->isNewTranslation()) {
++      $entity->removeTranslation($langcode);
++      $entity->save();
++    }
+   }
+ 
+   /**
+diff --git a/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php b/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php
+index 1f2365049aef9656de83b7e54a4f7e6579e26d2f..9c64177942a5e12847adb23c6a286e2ea953d2de 100644
+--- a/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php
++++ b/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php
+@@ -35,7 +35,12 @@ class ContentEntityTest extends TranslationTypePluginTestBase {
+   protected function setUp(): void {
+     parent::setUp();
+ 
++    $this->installEntitySchema('user');
+     $this->installEntitySchema('taxonomy_term');
++    $this->installConfig('filter');
++
++    \Drupal::moduleHandler()->loadInclude('user', 'install');
++    user_install();
+ 
+     $this->container->get('module_installer')->install(['babel_content_entity']);
+     $this->config('babel_content_entity.settings')
+@@ -149,6 +154,42 @@ class ContentEntityTest extends TranslationTypePluginTestBase {
+     $this->assertTrue($term->hasTranslation($this->language->getId()));
+     $this->assertEquals('[TRANSLATED] Test term name', $term->getTranslation($this->language->getId())->label());
+     $this->assertEquals('[TRANSLATED] Some description', $term->getTranslation($this->language->getId())->getDescription());
++    $this->assertEquals(
++      [
++        'name' => [['value' => '[TRANSLATED] Test term name']],
++        'description' => [['value' => '[TRANSLATED] Some description', 'format' => 'plain_text']],
++      ],
++      array_intersect_key(
++        $term->getTranslation(static::LANGCODE)->toArray(),
++        ['name' => 1, 'description' => 1],
++      ),
++    );
++
++    // Delete the term's description translation.
++    $this->plugin->updateTranslation(
++      $strings['tags:1:description:0'],
++      'tags:1:description:0',
++      $this->language->getId(),
++      '',
++    );
++    $this->assertEquals(
++      [
++        'name' => [['value' => '[TRANSLATED] Test term name']],
++        'description' => [['value' => 'Some description', 'format' => 'plain_text']],
++      ],
++      array_intersect_key(
++        $term->getTranslation(static::LANGCODE)->toArray(),
++        ['name' => 1, 'description' => 1],
++      ),
++    );
++
++    // Delete the translation of the name of the term too.
++    $this->plugin->updateTranslation(
++      $strings['tags:1:name:0'],
++      'tags:1:name:0',
++      $this->language->getId(),
++      '',
++    );
+   }
+ 
+   /**
+@@ -169,7 +210,10 @@ class ContentEntityTest extends TranslationTypePluginTestBase {
+       'vid' => 'tags',
+       'name' => $name ?: "Tag $nextId",
+       'langcode' => 'en',
+-      'description' => $description,
++      'description' => [
++        'value' => $description,
++        'format' => filter_fallback_format(),
++      ],
+     ]));
+     $term->save();
+ 
