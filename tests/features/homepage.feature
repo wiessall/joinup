@@ -275,6 +275,7 @@ Feature: Homepage
     When I click "More events"
     Then I should be on "/upcoming-events"
 
+  @group-clone
   Scenario: The /news path redirects to the search page filtered on news.
     When I go to "/news"
     Then I should be on the advanced search page
