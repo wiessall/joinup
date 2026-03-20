@@ -35,7 +35,7 @@ Feature: Translating distributions
     When I fill in "Title" with "Testowa dystrybucja"
     And I fill in "Description" with "Opis dystrybucji"
     Then the following fields should not be present "Access URL, File size, Format, Groups audience, Licence, Release, Representation technique , State, Status"
-    When I press "Update"
+    When I press "Save (all translations)"
     Then I should see the success message "Distribution Testowa dystrybucja has been updated."
     And I should see the heading "Testowa dystrybucja"
     And I should see "Opis dystrybucji"
