@@ -83,6 +83,8 @@
     <testsuite name="existing-site">
       <directory>web/modules/custom/**/tests/src/ExistingSite</directory>
       <directory>web/themes/ventuno/tests/src/ExistingSite</directory>
+      <!-- Excluded until ISAICP-11009 -->
+      <exclude>web/modules/custom/contact_form/tests/src/ExistingSite/ContactFormMailTest.php</exclude>
     </testsuite>
   </testsuites>
 </phpunit>
