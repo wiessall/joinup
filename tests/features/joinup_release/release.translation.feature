@@ -36,7 +36,7 @@ Feature: Translating releases
     When I fill in "Name" with "Testowe wydanie"
     And I fill in "Release notes" with "Notatki do Testowego wydania"
     Then the following fields should not be present "Documentation, Geographical coverage, Is version of, Language, Release version, Search keywords, Solution data, State, Status"
-    When I press "Update"
+    When I press "Save (all translations)"
     Then I should see the success message "Release Testowe wydanie has been updated."
     And I should not see the following lines of text:
       | "Testowe wydanie"              |
