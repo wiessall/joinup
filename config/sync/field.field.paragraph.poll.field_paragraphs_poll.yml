@@ -11,8 +11,8 @@ entity_type: paragraph
 bundle: poll
 label: Poll
 description: ''
-required: false
-translatable: true
+required: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
