@@ -7,7 +7,7 @@ Feature: Site alerts
   Scenario: Show a site wide alert and hide it again
     Given I am logged in as a moderator
     When I click "Site alerts" in the "Administration toolbar" region
-    Then I should see the text "There are no Sitewide Alerts yet."
+    Then I should see the text "No sitewide alerts have been created yet."
 
     When I click "Add new Sitewide Alert"
     And I fill in "Name" with "Site maintenance 18:00-20:00"

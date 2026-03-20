@@ -1,0 +1,18 @@
+uuid: 351c7451-3a39-492f-ac96-8ae34b5201c9
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.expression
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: assessment.expression
+target_entity_type_id: assessment
+target_bundle: expression
+default_langcode: site_default
+language_alterable: false
