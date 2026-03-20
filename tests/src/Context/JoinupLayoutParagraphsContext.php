@@ -259,44 +259,6 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   }
 
   /**
-   * Performs an action on a standalone paragraph in the given field.
-   *
-   * Unlike layout paragraphs, standalone paragraphs are direct children of the
-   * LP builder without a layout wrapper. This is common on translation forms
-   * where paragraphs are appended programmatically.
-   *
-   * @param string $action
-   *   The action to perform. Available actions are 'delete', 'edit', 'move up',
-   *   'move down', 'duplicate'.
-   * @param string $field_alias
-   *   The field alias as defined in
-   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::FIELD_MAP.
-   * @param string $position
-   *   The position of the paragraph (1-based).
-   */
-  #[When('I :action from the :field_alias form field the paragraph in position :position')]
-  public function actionOnStandaloneParagraph(string $action, string $field_alias, string $position): void {
-    $this->assertJavaScriptEnabledBrowser();
-    $field = $this->getParagraphsElement($field_alias);
-    $xpath = '//div[contains(concat(" ", @class, " "), " js-lpb-component ") and not(contains(concat(" ", @class, " "), " lpb-layout "))]';
-    $paragraphs = $field->findAll('xpath', $xpath);
-    $link = $paragraphs[(int) $position - 1]->find('css', '.lpb-controls');
-
-    $this->performAction($link, $action);
-  }
-
-  /**
-   * Saves the layout paragraphs edit dialog.
-   */
-  #[When('I save the layout paragraphs dialog')]
-  public function saveLayoutParagraphsDialog(): void {
-    $save = $this->waitForElementVisible('css', '.ui-dialog-buttonpane .lpb-btn--save');
-    $save->press();
-    $this->waitForAjax();
-    $this->waitForModalToClose();
-  }
-
-  /**
    * Perform an action on link.
    *
    * @param \Behat\Mink\Element\TraversableElement $link
