@@ -80,6 +80,7 @@ Feature: Translating news
     And I fill in "Headline" with "Zaktualizowany news"
     And I fill in "Short title" with "Zakt. news"
     And I press "Update"
+    Then I should see the success message "News Zakt. news has been updated."
     And I should not see the heading "Testowy news"
     And I should see the heading "Zaktualizowany news"
 
