@@ -43,18 +43,18 @@ Feature: Translating custom pages
       | John Member | Test solution custom page   | 403  |
       | Ross Auth   | Test solution custom page   | 403  |
 
-  Scenario: Test creating node translation from UI.
-    Given I am logged in as "Flora Mod"
+  Scenario Outline: Test creating node translation from UI.
+    Given I am logged in as "<user>"
     # Assert language select options/value.
-    When I go to the edit form of the "Test collection custom page" custom_page
+    When I go to the edit form of the "<title>" custom_page
     Then the available options in the "Language" select should match the site languages
     And the selected option in the "Language" select should be "en"
 
     # Create translation.
-    When I go to the homepage of the "Test collection custom page" custom_page
+    When I go to the homepage of the "<title>" custom_page
     And I click "Translate" in the "Entity actions" region
     And I click "Add" in the "Polish" row
-    Then I should see the heading "Create Polish translation of Test collection custom page"
+    Then I should see the heading "Create Polish translation of <title>"
     Then the following fields should be present "Title, Abstract, Add a new file"
     Then the following fields should not be present "Group, Hide title, Logo, Search keywords, State, Topic"
     When I fill in "Title" with "Testowa strona niestandardowa"
@@ -91,3 +91,10 @@ Feature: Translating custom pages
     When I click "Translate" in the "Entity actions" region
     Then I should not see "Edit" in the "Polish" row
     And I should see the "Add" in the "Polish" row
+
+    Examples:
+      | user      | title                       |
+      | Flora Mod | Test collection custom page |
+      | Lee Facil | Test collection custom page |
+      | Flora Mod | Test solution custom page   |
+      | Lee Facil | Test solution custom page   |
