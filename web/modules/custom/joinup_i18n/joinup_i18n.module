@@ -13,7 +13,7 @@ use Drupal\Core\Template\Attribute;
  * Implements hook_module_implements_alter().
  */
 function joinup_i18n_module_implements_alter(array &$implementations, string $hook): void {
-  if ($hook === 'requirements' && isset($implementations['locale'])) {
+  if (in_array($hook, ['requirements', 'runtime_requirements'], TRUE) && isset($implementations['locale'])) {
     // Remove the locale module from the requirements list.
     unset($implementations['locale']);
   }
