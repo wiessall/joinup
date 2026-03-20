@@ -1,0 +1,6 @@
+joinup_news.news:
+  path: '/news'
+  defaults:
+    _controller: '\Drupal\joinup_news\Controller\NewsController::redirect'
+  requirements:
+    _access: 'TRUE'
