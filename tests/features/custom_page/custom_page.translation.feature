@@ -23,9 +23,9 @@ Feature: Translating custom pages
       | Test solution | Lee Facil   | facilitator |
       | Test solution | John Member |             |
     And custom_page content:
-      | title                       | collection      | solution      | field_paragraphs_body            |
-      | Test collection custom page | Test collection |               | This is test custom page content |
-      | Test solution custom page   |                 | Test solution | This is test custom page content |
+      | title                       | collection      | solution      | field_paragraphs_body            | field_hide_title |
+      | Test collection custom page | Test collection |               | This is test custom page content | 0                |
+      | Test solution custom page   |                 | Test solution | This is test custom page content | 0                |
 
   Scenario Outline: Test translation access.
     Given I am logged in as "<user>"
@@ -49,6 +49,7 @@ Feature: Translating custom pages
     When I go to the edit form of the "Test collection custom page" custom_page
     Then the available options in the "Language" select should match the site languages
     And the selected option in the "Language" select should be "en"
+
     # Create translation.
     When I go to the homepage of the "Test collection custom page" custom_page
     And I click "Translate" in the "Entity actions" region
