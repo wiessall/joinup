@@ -29,11 +29,11 @@ Feature: Translating news
 
   Scenario Outline: Test translation access.
     Given I am logged in as "<user>"
-    When I visit the translation overview form of the "<news>" news
+    When I visit the translation overview form of the "<title>" news
     Then the response status code should be <code>
 
     Examples:
-      | user        | news                 | code |
+      | user        | title                | code |
       | Flora Mod   | Test collection news | 200  |
       | Lee Facil   | Test collection news | 200  |
       | Flora Mod   | Test solution news   | 200  |
@@ -43,18 +43,19 @@ Feature: Translating news
       | John Member | Test solution news   | 403  |
       | Ross Auth   | Test solution news   | 403  |
 
-  Scenario: Test creating node translation from UI.
-    And I am logged in as "Flora Mod"
+  Scenario Outline: Test creating node translation from UI.
+    Given I am logged in as "<user>"
 
     # Assert language select options/value.
-    When I go to the edit form of the "Test collection news" news
+    When I go to the edit form of the "<title>" news
     Then the available options in the "Language" select should match the site languages
     And the selected option in the "Language" select should be "en"
+
     # Create translation.
-    When I go to the homepage of the "Test collection news" news
+    When I go to the homepage of the "<title>" news
     And I click "Translate" in the "Entity actions" region
     And I click "Add" in the "Polish" row
-    Then I should see the heading "Create Polish translation of Test collection news"
+    Then I should see the heading "Create Polish translation of <title>"
     Then the following fields should be present "Headline, Short title, Abstract, Body, Add a new file, Source URL"
     Then the following fields should not be present "Collection, Comments,Geographical coverage,Logo, Referenced solution, Search keywords, Site featured, State, Topic"
     When I fill in "Headline" with "Testowy news"
@@ -91,3 +92,10 @@ Feature: Translating news
     When I click "Translate" in the "Entity actions" region
     Then I should not see "Edit" in the "Polish" row
     And I should see the "Add" in the "Polish" row
+
+    Examples:
+      | user      | title                |
+      | Flora Mod | Test collection news |
+      | Lee Facil | Test collection news |
+      | Flora Mod | Test solution news   |
+      | Lee Facil | Test solution news   |
