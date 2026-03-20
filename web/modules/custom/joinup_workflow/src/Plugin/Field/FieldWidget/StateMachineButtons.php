@@ -10,6 +10,7 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\Plugin\Field\FieldWidget\OptionsSelectWidget;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\joinup_workflow\Event\StateMachineButtonLabelsEvent;
@@ -35,6 +36,7 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
     array $settings,
     array $third_party_settings,
     protected readonly EventDispatcherInterface $eventDispatcher,
+    protected readonly RouteMatchInterface $routeMatch,
   ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings);
   }
@@ -49,7 +51,8 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
       $configuration['field_definition'],
       $configuration['settings'],
       $configuration['third_party_settings'],
-      $container->get('event_dispatcher')
+      $container->get('event_dispatcher'),
+      $container->get('current_route_match')
     );
   }
 
@@ -101,6 +104,17 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
     // Avoid using this widget in places other than the entity edit forms.
     $base_form_id = $form_state->getFormObject()->getBaseFormId();
     if (!in_array($base_form_id, ['node_form', 'assessment_form'], TRUE)) {
+      return $element;
+    }
+
+    // When adding or editing a translation, hide the state field and leave the
+    // default form buttons.
+    $entity_type_id = $this->fieldDefinition->getTargetEntityTypeId();
+    $translation_routes = [
+      "entity.{$entity_type_id}.content_translation_add",
+      "entity.{$entity_type_id}.content_translation_edit",
+    ];
+    if (in_array($this->routeMatch->getRouteName(), $translation_routes, TRUE)) {
       return $element;
     }
 
