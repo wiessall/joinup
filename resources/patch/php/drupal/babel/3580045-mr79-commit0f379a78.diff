@@ -1,5 +1,5 @@
 diff --git a/modules/babel_content_entity/src/BabelContentEntityService.php b/modules/babel_content_entity/src/BabelContentEntityService.php
-index 4ee88e35a6c3887068727cdeb937cd01057fe0ca..d69190c2c6d1f06ecec8c0c32e96d45e9cc99350 100644
+index 4ee88e35a6c3887068727cdeb937cd01057fe0ca..7c962c91272a82dcd253e5f755b7dfb6d2e61659 100644
 --- a/modules/babel_content_entity/src/BabelContentEntityService.php
 +++ b/modules/babel_content_entity/src/BabelContentEntityService.php
 @@ -32,11 +32,16 @@ class BabelContentEntityService {
@@ -25,9 +25,9 @@ index 4ee88e35a6c3887068727cdeb937cd01057fe0ca..d69190c2c6d1f06ecec8c0c32e96d45e
  
 +      // This logic does not work well for fields having multiple properties,
 +      // like TextareaWithSummary fields (summary is ignored) and it is
-+      // definitely wrong in case of translatable FileItem fields (target_id isű
-+      // the main property, alt and title won't be translated but we usually want
-+      // the other way around).
++      // definitely wrong in case of translatable FileItem fields (target_id is
++      // the main property, alt and title won't be translated but we usually
++      // want the other way around).
 +      // @todo Address this in https://drupal.org/i/3580366.
        $property = $definition->getFieldStorageDefinition()->getMainPropertyName();
        foreach ($field as $delta => $item) {
