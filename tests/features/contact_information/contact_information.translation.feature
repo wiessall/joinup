@@ -35,7 +35,7 @@ Feature: Translating contact information
     Then I should see "Dane kontaktowe"
     When I click "Edit" in the "Polish" row
     And I fill in "Name" with "Zaktualizowane dane"
-    And I press "Update"
+    And I press "Save (all translations)"
     Then I should see the success message "Contact information Zaktualizowane dane has been updated."
     And I should not see the heading "Dane kontaktowe"
     And I should see the heading "Zaktualizowane dane"

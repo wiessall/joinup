@@ -55,7 +55,7 @@ Feature: Translating documents
     Then I should see "Testowy dokument"
     When I click "Edit" in the "Polish" row
     And I fill in "Title" with "Zaktualizowany dokument"
-    And I press "Update"
+    And I press "Save (all translations)"
     Then I should see the success message "Document Zaktualizowany dokument has been updated."
     And I should not see the heading "Testowy dokument"
     And I should see the heading "Zaktualizowany dokument"

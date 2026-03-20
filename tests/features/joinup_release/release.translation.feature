@@ -47,7 +47,7 @@ Feature: Translating releases
     Then I should see "Testowe wydanie"
     When I click "Edit" in the "Polish" row
     And I fill in "Name" with "Zaktualizowane wydanie"
-    And I press "Update"
+    And I press "Save (all translations)"
     Then I should see the success message "Release Zaktualizowane wydanie has been updated."
     And I should not see "Testowe wydanie"
     And I should see "Zaktualizowane wydanie"

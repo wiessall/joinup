@@ -49,7 +49,7 @@ Feature: Translating events
     Then I should see "Testowe wydarzenie"
     When I click "Edit" in the "Polish" row
     And I fill in "Title" with "Zaktualizowane wydarzenie"
-    And I press "Update"
+    And I press "Save (all translations)"
     Then I should see the success message "Event Zaktualizowane wydarzenie has been updated."
     And I should not see the heading "Testowe wydarzenie"
     And I should see the heading "Zaktualizowane wydarzenie"

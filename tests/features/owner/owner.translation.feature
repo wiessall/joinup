@@ -31,7 +31,7 @@ Feature: Translating owners
     Then I should see "Testowy właściciel"
     When I click "Edit" in the "Polish" row
     And I fill in "Name" with "Zaktualizowany właściciel"
-    And I press "Update"
+    And I press "Save (all translations)"
     Then I should see the success message "Owner Zaktualizowany właściciel has been updated."
     And I should not see the heading "Testowy właściciel"
     And I should see the heading "Zaktualizowany właściciel"
