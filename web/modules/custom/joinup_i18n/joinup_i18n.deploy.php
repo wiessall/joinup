@@ -38,3 +38,37 @@ function joinup_i18n_deploy_201200(): void {
       ->execute();
   }
 }
+
+/**
+ * Queue path alias creation for all enabled languages on existing nodes.
+ */
+function joinup_i18n_deploy_201201(array &$sandbox): string {
+  if (!isset($sandbox['nids'])) {
+    $sandbox['nids'] = array_values(\Drupal::entityTypeManager()
+      ->getStorage('node')->getQuery()
+      ->accessCheck(FALSE)->execute());
+    $sandbox['total'] = count($sandbox['nids']);
+    $sandbox['processed'] = 0;
+  }
+
+  if (empty($sandbox['nids'])) {
+    $sandbox['#finished'] = 1;
+    return "No nodes to process.";
+  }
+
+  $batch_size = 500;
+  $nids = array_splice($sandbox['nids'], 0, $batch_size);
+  $queue = \Drupal::queue('joinup_i18n:translation_alias');
+
+  foreach ($nids as $nid) {
+    $queue->createItem([
+      'entity_type_id' => 'node',
+      'entity_id' => $nid,
+    ]);
+  }
+
+  $sandbox['processed'] += count($nids);
+  $sandbox['#finished'] = $sandbox['total'] ? $sandbox['processed'] / $sandbox['total'] : 1;
+
+  return "Queued {$sandbox['processed']}/{$sandbox['total']} nodes for alias generation.";
+}
