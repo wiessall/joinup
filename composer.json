@@ -383,7 +383,8 @@
                 "Violation property path not properly tracked @see https://www.drupal.org/i/3229493": "resources/patch/php/drupal/core/3229493.patch",
                 "Configs for untranslatable bundles @see https://www.drupal.org/i/3570351": "resources/patch/php/drupal/core/3570351.mr14561-commitd9636386.diff",
                 "Fix for pagination inside Media library @see https://www.drupal.org/i/3567237": "resources/patch/php/drupal/core/3567237.mr14654-commit0edaf95a.diff",
-                "REST views: Add pagination information and total count result @see https://www.drupal.org/i/2982729": "resources/patch/php/drupal/core/2982729-mr6558.commit290eabb1.diff"
+                "REST views: Add pagination information and total count result @see https://www.drupal.org/i/2982729": "resources/patch/php/drupal/core/2982729-mr6558.commit290eabb1.diff",
+                "Slow admin/config page load. @see https://www.drupal.org/i/3336621": "resources/patch/php/drupal/core/3336621.mr15137-commit7b9c8c6a.patch"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
@@ -516,10 +517,6 @@
             },
             "drupal/simple_oauth": {
                 "Allow BasicAuth to co-exist with oAuth @see https://www.drupal.org/i/3256312": "resources/patch/php/drupal/simple_oauth/3256312-1.patch"
-            },
-            "drupal/sitewide_alert": {
-                "Cache prevents display of alert @see https://www.drupal.org/i/3543046": "resources/patch/php/drupal/sitewide_alert/3543046.diff",
-                "Regex constraint should use named arguments @see https://www.drupal.org/i/3567470": "resources/patch/php/drupal/sitewide_alert/3567470.87m4-commitf0b45a55.diff"
             },
             "drupal/social_media_links": {
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "resources/patch/php/drupal/social_media_links/2898680.patch",
