@@ -66,19 +66,10 @@ class EntityBrowserContext extends RawDrupalContext {
    */
   #[When('I select :title in the entity browser')]
   public function selectEntityInBrowser(string $title): void {
-    $this->getSession()->executeScript("
-    var rows = document.querySelectorAll('table tr');
-    rows.forEach(function(row) {
-    if (row.innerText.includes('$title')) {
-      var checkbox = row.querySelector('input[type=\"checkbox\"]');
-      if (checkbox) {
-        checkbox.scrollIntoView({block: 'center'});
-        checkbox.checked = true;
-        checkbox.dispatchEvent(new Event('change'));
-      }
-    }
-  });
-");
+    $row = $this->waitForElement('xpath', '//table//tr[contains(., "' . $title . '")]');
+    $checkbox = $row->find('css', 'input[type="checkbox"]');
+    Assert::assertNotNull($checkbox, sprintf('Checkbox not found in the row containing "%s".', $title));
+    $checkbox->check();
   }
 
   /**
