@@ -1,0 +1,11 @@
+uuid: 17e5dcc0-ab36-4ade-a4cb-5a6a7e98b79e
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.assessment_report_submitted
+id: message.assessment_report_submitted
+target_entity_type_id: message
+target_bundle: assessment_report_submitted
+default_langcode: site_default
+language_alterable: false
