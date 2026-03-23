@@ -39,7 +39,7 @@ Feature: Translating events
     And I fill in "Abstract" with "Opis wydarzenia"
     And I fill in "Agenda" with "Plan wydarzenia"
     Then the following fields should not be present "Attachments, Body, Comments, Contact email, Date, Geographical coverage, Geographic coordinates, Groups audience, Logo, Organisation, Organisation type, Physical location, Scope, Search keywords, Short title, Site featured, State, Topic, Virtual location,  Website"
-    When I press "Update"
+    When I press "Save (all translations)"
     Then I should see the success message "Event Testowe wydarzenie has been updated."
     And I should see the heading "Testowe wydarzenie"
     And I should see "Plan wydarzenia"
@@ -49,7 +49,7 @@ Feature: Translating events
     Then I should see "Testowe wydarzenie"
     When I click "Edit" in the "Polish" row
     And I fill in "Title" with "Zaktualizowane wydarzenie"
-    And I press "Update"
+    And I press "Save (all translations)"
     Then I should see the success message "Event Zaktualizowane wydarzenie has been updated."
     And I should not see the heading "Testowe wydarzenie"
     And I should see the heading "Zaktualizowane wydarzenie"

@@ -37,7 +37,7 @@ Feature: Translating solutions
     And I fill in "Description" with "Długi opis solucji"
     Then the following fields should not be present "Access URL, Closed, Contact information, Geographical coverage, Logo, Newsletter, Owner, Search keywords, Short ID, Site featured, State, Topic"
     When I press "Confirm"
-    And I press "Publish"
+    And I press "Save (all translations)"
     Then I should see the success message "Solution Testowa solucja has been updated."
     And I should see the heading "Testowa solucja"
     And I should not see the following lines of text:
@@ -51,7 +51,7 @@ Feature: Translating solutions
     When I click "Edit" in the "Polish" row
     And I fill in "Title" with "Zaktualizowana solucja"
     And I press "Confirm"
-    And I press "Publish"
+    And I press "Save (all translations)"
     Then I should see the success message "Solution Zaktualizowana solucja has been updated."
     And I should not see the heading "Testowa solucja"
     And I should see the heading "Zaktualizowana solucja"

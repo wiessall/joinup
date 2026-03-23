@@ -42,7 +42,7 @@ Feature: Translating documents
       | field_body:value | To jest polskie tłumaczenie dokumentu |
     And I fill in "Description" with "Opis pliku dokumentu"
     Then the following fields should not be present "Geographical coverage, Groups audience, Licence, Logo, Search keywords, Site featured, State, Topic, Type of document"
-    When I press "Update"
+    When I press "Save (all translations)"
     Then I should see the success message "Document Testowy dokument has been updated."
     And I should see the following lines of text:
       | Test. dok.                            |
@@ -55,7 +55,7 @@ Feature: Translating documents
     Then I should see "Testowy dokument"
     When I click "Edit" in the "Polish" row
     And I fill in "Title" with "Zaktualizowany dokument"
-    And I press "Update"
+    And I press "Save (all translations)"
     Then I should see the success message "Document Zaktualizowany dokument has been updated."
     And I should not see the heading "Testowy dokument"
     And I should see the heading "Zaktualizowany dokument"

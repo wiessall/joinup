@@ -25,7 +25,7 @@ Feature: Translating contact information
     When I fill in "Name" with "Dane kontaktowe"
     And I fill in "Website URL" with "https://dame-kontaktowe.pl"
     Then the following fields should not be present "State"
-    When I press "Update"
+    When I press "Save (all translations)"
     Then I should see the success message "Contact information Dane kontaktowe has been updated."
     And I should see the heading "Dane kontaktowe"
     And I should see "https://dame-kontaktowe.pl"
@@ -35,7 +35,7 @@ Feature: Translating contact information
     Then I should see "Dane kontaktowe"
     When I click "Edit" in the "Polish" row
     And I fill in "Name" with "Zaktualizowane dane"
-    And I press "Update"
+    And I press "Save (all translations)"
     Then I should see the success message "Contact information Zaktualizowane dane has been updated."
     And I should not see the heading "Dane kontaktowe"
     And I should see the heading "Zaktualizowane dane"
