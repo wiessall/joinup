@@ -1,0 +1,282 @@
+diff --git a/core/modules/system/src/Controller/SystemController.php b/core/modules/system/src/Controller/SystemController.php
+index 7ff2da4118ba4295596785196516e2f2b021fa58..5c97c47ba93b8dbbf66f44d24562bc7c189c9ba5 100644
+--- a/core/modules/system/src/Controller/SystemController.php
++++ b/core/modules/system/src/Controller/SystemController.php
+@@ -52,7 +52,7 @@ public function __construct(
+    */
+   public function overview($link_id) {
+     // Check for status report errors.
+-    if ($this->currentUser()->hasPermission('administer site configuration') && $this->systemManager->checkRequirements()) {
++    if ($this->currentUser()->hasPermission('administer site configuration') && $this->systemManager->hasCachedRequirementErrors()) {
+       $this->messenger()->addError($this->t('One or more problems were detected with your Drupal installation. Check the <a href=":status">status report</a> for more information.', [':status' => Url::fromRoute('system.status')->toString()]));
+     }
+     // Load all menu links below it.
+diff --git a/core/modules/system/system.services.yml b/core/modules/system/system.services.yml
+--- a/core/modules/system/system.services.yml
++++ b/core/modules/system/system.services.yml
+@@ -24,7 +24,7 @@
+       - { name: access_check, applies_to: _access_admin_overview_page }
+   system.manager:
+     class: Drupal\system\SystemManager
+-    arguments: ['@module_handler', '@request_stack', '@menu.link_tree', '@menu.active_trail']
++    arguments: ['@module_handler', '@request_stack', '@menu.link_tree', '@menu.active_trail', '@state']
+   Drupal\system\SystemManager: '@system.manager'
+   system.breadcrumb.default:
+     class: Drupal\system\PathBasedBreadcrumbBuilder
+diff --git a/core/modules/system/src/SystemManager.php b/core/modules/system/src/SystemManager.php
+index fd5a0f6a2ab6e6e6bb3fe8b0c9049131b414be61..d7560f1e9ab5f6370ee37914a14123f66775817a 100644
+--- a/core/modules/system/src/SystemManager.php
++++ b/core/modules/system/src/SystemManager.php
+@@ -8,6 +8,7 @@
+ use Drupal\Core\Menu\MenuLinkInterface;
+ use Drupal\Core\Menu\MenuLinkTreeInterface;
+ use Drupal\Core\Menu\MenuTreeParameters;
++use Drupal\Core\State\StateInterface;
+ use Drupal\Core\StringTranslation\StringTranslationTrait;
+ use Symfony\Component\HttpFoundation\RequestStack;
+
+@@ -46,6 +47,13 @@ class SystemManager {
+    */
+   protected $menuActiveTrail;
+
++  /**
++   * The state service.
++   *
++   * @var \Drupal\Core\State\StateInterface
++   */
++  protected $state;
++
+   /**
+    * Constructs a SystemManager object.
+    *
+@@ -57,12 +65,15 @@ class SystemManager {
+    *   The menu tree manager.
+    * @param \Drupal\Core\Menu\MenuActiveTrailInterface $menu_active_trail
+    *   The active menu trail service.
++   * @param \Drupal\Core\State\StateInterface $state
++   *   The state service.
+    */
+-  public function __construct(ModuleHandlerInterface $module_handler, RequestStack $request_stack, MenuLinkTreeInterface $menu_tree, MenuActiveTrailInterface $menu_active_trail) {
++  public function __construct(ModuleHandlerInterface $module_handler, RequestStack $request_stack, MenuLinkTreeInterface $menu_tree, MenuActiveTrailInterface $menu_active_trail, StateInterface $state) {
+     $this->moduleHandler = $module_handler;
+     $this->requestStack = $request_stack;
+     $this->menuTree = $menu_tree;
+     $this->menuActiveTrail = $menu_active_trail;
++    $this->state = $state;
+   }
+
+   /**
+@@ -76,9 +87,22 @@ public function checkRequirements() {
+     return RequirementSeverity::maxSeverityFromRequirements($requirements) === RequirementSeverity::Error;
+   }
+
++  /**
++   * Returns the cached result of the last requirements check.
++   *
++   * @return bool
++   *   TRUE if the last check found requirement errors.
++   */
++  public function hasCachedRequirementErrors(): bool {
++    return (bool) $this->state->get('system.requirements_has_errors', FALSE);
++  }
++
+   /**
+    * Displays the site status report. Can also be used as a pure check.
+    *
++   * Also caches the error status in state so that /admin/config can read it
++   * without invoking all hook_requirements() implementations.
++   *
+    * @return array
+    *   An array of system requirements.
+    */
+@@ -104,6 +128,8 @@ public function listRequirements() {
+       return isset($b['weight']) ? $a['weight'] - $b['weight'] : $a['weight'];
+     });
+
++    $this->state->set('system.requirements_has_errors', RequirementSeverity::maxSeverityFromRequirements($requirements) === RequirementSeverity::Error);
++
+     return $requirements;
+   }
+
+diff --git a/core/modules/system/system.post_update.php b/core/modules/system/system.post_update.php
+index 53f21ade080e3fc30f8a14ab8b7dabe2ebe75a42..400d4e1ecffc0cf4d75b230e2d0908243953d502 100644
+--- a/core/modules/system/system.post_update.php
++++ b/core/modules/system/system.post_update.php
+@@ -148,3 +148,12 @@ function system_post_update_delete_rss_config(array &$sandbox): void {
+     \Drupal::configFactory()->getEditable('system.rss')->delete();
+   }
+ }
++
++/**
++ * Populate the cached requirements error status.
++ */
++function system_post_update_cache_requirements_status(): void {
++  /** @var \Drupal\system\SystemManager $system_manager */
++  $system_manager = \Drupal::service('system.manager');
++  $system_manager->listRequirements();
++}
+diff --git a/core/modules/system/tests/modules/requirements_overview_error_test/requirements_overview_error_test.info.yml b/core/modules/system/tests/modules/requirements_overview_error_test/requirements_overview_error_test.info.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..2fcc92391a2aefe5be88dc04994dccec2d09c120
+--- /dev/null
++++ b/core/modules/system/tests/modules/requirements_overview_error_test/requirements_overview_error_test.info.yml
+@@ -0,0 +1,5 @@
++name: 'Requirements Overview Error Test'
++type: module
++description: 'Test module that always reports a runtime requirements error.'
++package: Testing
++version: VERSION
+diff --git a/core/modules/system/tests/modules/requirements_overview_error_test/src/Hook/RequirementsOverviewErrorTestHooks.php b/core/modules/system/tests/modules/requirements_overview_error_test/src/Hook/RequirementsOverviewErrorTestHooks.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..6388e4a60676a216948012e425e9967a77628840
+--- /dev/null
++++ b/core/modules/system/tests/modules/requirements_overview_error_test/src/Hook/RequirementsOverviewErrorTestHooks.php
+@@ -0,0 +1,32 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\requirements_overview_error_test\Hook;
++
++use Drupal\Core\Extension\Requirement\RequirementSeverity;
++use Drupal\Core\Hook\Attribute\Hook;
++use Drupal\Core\StringTranslation\StringTranslationTrait;
++
++/**
++ * Hook implementations for requirements_overview_error_test.
++ */
++class RequirementsOverviewErrorTestHooks {
++
++  use StringTranslationTrait;
++
++  /**
++   * Implements hook_runtime_requirements().
++   */
++  #[Hook('runtime_requirements')]
++  public function runtimeRequirements(): array {
++    return [
++      'requirements_overview_error_test' => [
++        'title' => $this->t('Requirements overview error test'),
++        'severity' => RequirementSeverity::Error,
++        'description' => $this->t('Simulated error for testing.'),
++      ],
++    ];
++  }
++
++}
+diff --git a/core/modules/system/tests/modules/requirements_overview_test/requirements_overview_test.info.yml b/core/modules/system/tests/modules/requirements_overview_test/requirements_overview_test.info.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..f1d3b110946c43dfb476bb3290272acdafbd8c59
+--- /dev/null
++++ b/core/modules/system/tests/modules/requirements_overview_test/requirements_overview_test.info.yml
+@@ -0,0 +1,5 @@
++name: 'Requirements Overview Test'
++type: module
++description: 'Test module that tracks hook_runtime_requirements() invocations.'
++package: Testing
++version: VERSION
+diff --git a/core/modules/system/tests/modules/requirements_overview_test/src/Hook/RequirementsOverviewTestHooks.php b/core/modules/system/tests/modules/requirements_overview_test/src/Hook/RequirementsOverviewTestHooks.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..d25e611af971773cf03870806f430681bd71a4d5
+--- /dev/null
++++ b/core/modules/system/tests/modules/requirements_overview_test/src/Hook/RequirementsOverviewTestHooks.php
+@@ -0,0 +1,24 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\requirements_overview_test\Hook;
++
++use Drupal\Core\Hook\Attribute\Hook;
++
++/**
++ * Hook implementations for requirements_overview_test.
++ */
++class RequirementsOverviewTestHooks {
++
++  /**
++   * Implements hook_runtime_requirements().
++   */
++  #[Hook('runtime_requirements')]
++  public function runtimeRequirements(): array {
++    $count = \Drupal::state()->get('requirements_overview_test.count', 0);
++    \Drupal::state()->set('requirements_overview_test.count', $count + 1);
++    return [];
++  }
++
++}
+diff --git a/core/modules/system/tests/src/Functional/Controller/AdminConfigRequirementsOverheadTest.php b/core/modules/system/tests/src/Functional/Controller/AdminConfigRequirementsOverheadTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..002d40cb7e7b093cd47ce023bb9d116e8cd9c512
+--- /dev/null
++++ b/core/modules/system/tests/src/Functional/Controller/AdminConfigRequirementsOverheadTest.php
+@@ -0,0 +1,69 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\system\Functional\Controller;
++
++use Drupal\Tests\BrowserTestBase;
++use PHPUnit\Framework\Attributes\Group;
++use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
++
++/**
++ * Tests that /admin/config does not invoke checkRequirements() on every load.
++ *
++ * @see https://www.drupal.org/project/drupal/issues/3336621
++ * @see \Drupal\system\Controller\SystemController::overview()
++ */
++#[Group('system')]
++#[RunTestsInSeparateProcesses]
++class AdminConfigRequirementsOverheadTest extends BrowserTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = [
++    'requirements_overview_test',
++    'requirements_overview_error_test',
++  ];
++
++  /**
++   * {@inheritdoc}
++   */
++  protected $defaultTheme = 'stark';
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
++    $this->drupalLogin($this->drupalCreateUser([
++      'access administration pages',
++      'administer site configuration',
++    ]));
++  }
++
++  /**
++   * Tests /admin/config uses cached requirements instead of live checks.
++   */
++  public function testAdminConfigDoesNotRunCheckRequirements(): void {
++    $this->drupalGet('admin/config');
++    $this->assertSession()->statusCodeEquals(200);
++    $this->drupalGet('admin/config');
++    $this->assertSession()->statusCodeEquals(200);
++
++    // The counter tracks hook_runtime_requirements() calls. It must be 0.
++    $this->assertSame(0, \Drupal::state()->get('requirements_overview_test.count', 0));
++
++    // The status report caches the error from requirements_overview_error_test.
++    $this->drupalGet('admin/reports/status');
++    $this->assertSession()->statusCodeEquals(200);
++    \Drupal::state()->set('requirements_overview_test.count', 0);
++
++    // The warning must appear from cached state, not a live check.
++    $this->drupalGet('admin/config');
++    $this->assertSession()->statusCodeEquals(200);
++    $this->assertSession()->pageTextContains('One or more problems were detected with your Drupal installation.');
++    $this->assertSame(0, \Drupal::state()->get('requirements_overview_test.count', 0));
++  }
++
++}

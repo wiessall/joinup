@@ -67,7 +67,6 @@ paths:
                   find out which are all existing organisations, use the
                   `/organisation` GET resource,  documented below.
                 value:
-                  language: it
                   name: Legislation waste management
                   provider:
                     name: City of Brussels
@@ -150,7 +149,7 @@ paths:
                   value:
                     id: "76269914-0d50-46a6-8cd5-19ec67474e99"
                     uri: "https://joinup.ddev.local/assessment/report/76269914-0d50-46a6-8cd5-19ec67474e99"
-                    language: "it"
+                    language: "en"
                     name: "Legislation waste management"
                     provider:
                       id: "a74fcfc7-290d-4b37-b3a6-13e506a4f010"
@@ -458,9 +457,6 @@ components:
           format: uri
           readOnly: true
           description: The canonical URI of the assessment report
-        language:
-          $ref: '#/components/schemas/EuropeanUnionLanguage'
-          description: The report's language. If omitted, defaults to English.
         name:
           type: string
           description: A short name assigned for easy identification.
