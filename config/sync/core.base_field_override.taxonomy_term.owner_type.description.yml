@@ -1,0 +1,21 @@
+uuid: cf836779-156c-4762-b2f5-cea7fdf8d01d
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.owner_type
+  module:
+    - text
+id: taxonomy_term.owner_type.description
+field_name: description
+entity_type: taxonomy_term
+bundle: owner_type
+label: Description
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

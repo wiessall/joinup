@@ -1,0 +1,158 @@
+diff --git a/src/Plugin/Field/FieldWidget/InlineEntityFormBase.php b/src/Plugin/Field/FieldWidget/InlineEntityFormBase.php
+index 282bd1c..2a96880 100644
+--- a/src/Plugin/Field/FieldWidget/InlineEntityFormBase.php
++++ b/src/Plugin/Field/FieldWidget/InlineEntityFormBase.php
+@@ -196,13 +196,17 @@ abstract class InlineEntityFormBase extends WidgetBase implements ContainerFacto
+   /**
+    * Gets the bundles for which the current user has create access.
+    *
++   * @param array $context
++   *   (optional) An array of key-value pairs to pass additional context when
++   *   needed.
++   *
+    * @return string[]
+    *   The list of bundles.
+    */
+-  protected function getCreateBundles() {
++  protected function getCreateBundles(array $context = []) {
+     $create_bundles = [];
+     foreach ($this->getTargetBundles() as $bundle) {
+-      if ($this->getAccessHandler()->createAccess($bundle)) {
++      if ($this->getAccessHandler()->createAccess($bundle, NULL, $context)) {
+         $create_bundles[] = $bundle;
+       }
+     }
+@@ -210,6 +214,23 @@ abstract class InlineEntityFormBase extends WidgetBase implements ContainerFacto
+     return $create_bundles;
+   }
+ 
++  /**
++   * Creates and returns create access context.
++   *
++   * @return array
++   *   Access context.
++   */
++  protected function getCreateAccessContext(FieldItemListInterface $items): array {
++    return [
++      'parent_entity' => $items->getEntity(),
++      'parent_entity_type' => $this->fieldDefinition->getTargetEntityTypeId(),
++      'parent_bundle' => $this->fieldDefinition->getTargetBundle(),
++      'field_name' => $this->fieldDefinition->getName(),
++      'entity_type' => $this->getFieldSetting('target_type'),
++      'allowed_bundles' => $this->getTargetBundles(),
++    ];
++  }
++
+   /**
+    * {@inheritdoc}
+    */
+@@ -601,11 +622,15 @@ abstract class InlineEntityFormBase extends WidgetBase implements ContainerFacto
+   /**
+    * Determines if the current user can add any new entities.
+    *
++   * @param array $context
++   *   (optional) An array of key-value pairs to pass additional context when
++   *   needed.
++   *
+    * @return bool
+    *   Returns bool to allow or not new entity additions.
+    */
+-  protected function canAddNew() {
+-    $create_bundles = $this->getCreateBundles();
++  protected function canAddNew(array $context = []) {
++    $create_bundles = $this->getCreateBundles($context);
+     return !empty($create_bundles);
+   }
+ 
+diff --git a/src/Plugin/Field/FieldWidget/InlineEntityFormComplex.php b/src/Plugin/Field/FieldWidget/InlineEntityFormComplex.php
+index 96fdff0..35c7fef 100644
+--- a/src/Plugin/Field/FieldWidget/InlineEntityFormComplex.php
++++ b/src/Plugin/Field/FieldWidget/InlineEntityFormComplex.php
+@@ -315,11 +315,13 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
+       'handler' => $this->getFieldSetting('handler'),
+     ] + $selection_settings;
+ 
++    $context = $this->getCreateAccessContext($items);
++
+     // Prepare information about which operations may be available to the user.
+     $settings = $this->getSettings();
+     $allow_existing = $settings['allow_existing'];
+-    $allow_duplicate = $settings['allow_duplicate'] && $this->canAddNew();
+-    $allow_new = $settings['allow_new'] && $this->canAddNew();
++    $allow_duplicate = $settings['allow_duplicate'] && $this->canAddNew($context);
++    $allow_new = $settings['allow_new'] && $this->canAddNew($context);
+ 
+     if (!$allow_new && $allow_existing) {
+       // Only count referencable entities if existing entities are allowed
+@@ -353,13 +355,6 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
+     // Get the fields that should be displayed in the table.
+     $target_bundles = $this->getTargetBundles();
+     $fields = $this->inlineFormHandler->getTableFields($target_bundles);
+-    $context = [
+-      'parent_entity_type' => $this->fieldDefinition->getTargetEntityTypeId(),
+-      'parent_bundle' => $this->fieldDefinition->getTargetBundle(),
+-      'field_name' => $this->fieldDefinition->getName(),
+-      'entity_type' => $target_type,
+-      'allowed_bundles' => $target_bundles,
+-    ];
+     $this->moduleHandler->alter('inline_entity_form_table_fields', $fields, $context);
+     $element['entities']['#table_fields'] = $fields;
+ 
+@@ -544,7 +539,7 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
+       return $element;
+     }
+ 
+-    $create_bundles = $this->getCreateBundles();
++    $create_bundles = $this->getCreateBundles($context);
+     $create_bundles_count = count($create_bundles);
+     $allow_new = $settings['allow_new'] && !empty($create_bundles);
+     $hide_cancel = FALSE;
+@@ -648,7 +643,7 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
+           '#attributes' => ['class' => ['ief-form', 'ief-form-bottom']],
+           'inline_entity_form' => $this->getInlineEntityForm(
+             'add',
+-            $this->determineBundle($form_state),
++            $this->determineBundle($form_state, $context),
+             $parent_langcode,
+             $new_key,
+             array_merge($parents, [$new_key])
+@@ -1032,13 +1027,16 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
+    *
+    * @param \Drupal\Core\Form\FormStateInterface $form_state
+    *   Current form state.
++   * @param array $context
++   *   (optional) An array of key-value pairs to pass additional context when
++   *   needed.
+    *
+    * @return string
+    *   Bundle machine name.
+    *
+    * @todo Figure out if can be simplified.
+    */
+-  protected function determineBundle(FormStateInterface $form_state) {
++  protected function determineBundle(FormStateInterface $form_state, array $context = []) {
+     $ief_settings = $form_state->get(['inline_entity_form', $this->getIefId()]);
+     if (!empty($ief_settings['form settings']['bundle'])) {
+       return $ief_settings['form settings']['bundle'];
+@@ -1047,7 +1045,7 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
+       return $ief_settings['bundle'];
+     }
+     else {
+-      $target_bundles = $this->getCreateBundles();
++      $target_bundles = $this->getCreateBundles($context);
+       return reset($target_bundles);
+     }
+   }
+diff --git a/src/Plugin/Field/FieldWidget/InlineEntityFormSimple.php b/src/Plugin/Field/FieldWidget/InlineEntityFormSimple.php
+index 42fa2f5..3adf096 100644
+--- a/src/Plugin/Field/FieldWidget/InlineEntityFormSimple.php
++++ b/src/Plugin/Field/FieldWidget/InlineEntityFormSimple.php
+@@ -106,7 +106,7 @@ class InlineEntityFormSimple extends InlineEntityFormBase {
+     }
+ 
+     // Remove add options if the user cannot add new entities.
+-    if (!$this->canAddNew()) {
++    if (!$this->canAddNew($this->getCreateAccessContext($items))) {
+       if (isset($element['add_more'])) {
+         unset($element['add_more']);
+       }
