@@ -274,3 +274,14 @@ Feature: Homepage
     Given I am on the homepage
     When I click "More events"
     Then I should be on "/upcoming-events"
+
+  @group-clone
+  Scenario: The /news path redirects to the search page filtered on news.
+    When I go to "/news"
+    Then I should be on the advanced search page
+    And I should see the following facet summary "News"
+
+    # Verify that the /news path respects the language prefix.
+    When I go to "/fr/news"
+    And the url should match "/fr/search"
+    And I should see the following facet summary "News"
