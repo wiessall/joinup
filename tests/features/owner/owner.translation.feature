@@ -1,4 +1,4 @@
-@api @group-a
+@api @group-j
 Feature: Translating owners
 
   Background:
@@ -6,7 +6,7 @@ Feature: Translating owners
       | name       |
       | Test owner |
 
-  Scenario: Users who do have edit access can manage translations.
+  Scenario: Test creating node translation from UI.
     Given I am logged in as a user with the "moderator" role
 
     # Assert language select options/value.

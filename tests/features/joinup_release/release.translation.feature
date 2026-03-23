@@ -1,4 +1,4 @@
-@api @group-a
+@api @group-j
 Feature: Translating releases
 
   Background:
@@ -19,7 +19,19 @@ Feature: Translating releases
       | Test solution | Lee Facil   | facilitator |
       | Test solution | John Member |             |
 
-  Scenario Outline: Users who do have edit access can manage translations.
+  Scenario Outline: Test translation access.
+    Given I am logged in as "<user>"
+    When I visit the translation overview form of the "<title>" release
+    Then the response status code should be <code>
+
+    Examples:
+      | user        | title        | code |
+      | Flora Mod   | Test release | 200  |
+      | Lee Facil   | Test release | 200  |
+      | John Member | Test release | 403  |
+      | Ross Auth   | Test release | 403  |
+
+  Scenario Outline: Test creating node translation from UI.
     Given I am logged in as "<user>"
 
     # Assert language select options/value.
@@ -33,9 +45,9 @@ Feature: Translating releases
     And I click "Add" in the "Polish" row
     Then I should see the heading "Create Polish translation of Test release"
     Then the following fields should be present "Name, Release notes"
+    Then the following fields should not be present "Documentation, Geographical coverage, Is version of, Language, Release version, Search keywords, Solution data, State, Status"
     When I fill in "Name" with "Testowe wydanie"
     And I fill in "Release notes" with "Notatki do Testowego wydania"
-    Then the following fields should not be present "Documentation, Geographical coverage, Is version of, Language, Release version, Search keywords, Solution data, State, Status"
     When I press "Update"
     Then I should see the success message "Release Testowe wydanie has been updated."
     And I should not see the following lines of text:
@@ -66,13 +78,3 @@ Feature: Translating releases
       | user      | delete message                                                               |
       | Flora Mod | Polish translation of the Release Zaktualizowane wydanie has been deleted.   |
       | Lee Facil | The content item Zaktualizowane wydanie Polish translation has been deleted. |
-
-  Scenario Outline: Users who do not have edit access cannot manage translations.
-    Given I am logged in as "<user>"
-    When I visit the translation overview form of the "Test release" release
-    Then I should see the heading "Access denied"
-
-    Examples:
-      | user        |
-      | John Member |
-      | Ross Auth   |

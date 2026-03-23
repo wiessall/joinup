@@ -1,13 +1,12 @@
-
-@api @group-a
+@api @group-j
 Feature: Translating contact information
 
   Background:
     And contact_information content:
-      | name       |
+      | name                     |
       | Test contact information |
 
-  Scenario: Users who do have edit access can manage translations.
+  Scenario: Test creating node translation from UI.
     Given I am logged in as a user with the "moderator" role
 
     # Assert language select options/value.

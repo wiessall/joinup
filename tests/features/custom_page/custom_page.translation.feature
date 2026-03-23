@@ -1,4 +1,4 @@
-@api @group-a
+@api @group-j
 Feature: Translating custom pages
 
   Background:
