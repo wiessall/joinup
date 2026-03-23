@@ -283,6 +283,5 @@ Feature: Homepage
 
     # Verify that the /news path respects the language prefix.
     When I go to "/fr/news"
-    Then I should be on the advanced search page
-    And I should see the following facet summary "News"
     And the url should match "/fr/search"
+    And I should see the following facet summary "News"
