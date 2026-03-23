@@ -12,7 +12,7 @@ use Drupal\joinup_core\FileDuplicator;
 /**
  * Duplicates files that are the same among entities.
  */
-function joinup_core_deploy_201100(): string {
+function joinup_core_deploy_201200(): string {
   $fileDuplicator = \Drupal::classResolver()->getInstanceFromDefinition(FileDuplicator::class);
   $messages = $fileDuplicator->processEntities('assessment', 'report', 'documents');
   $messages += $fileDuplicator->processEntities('paragraph', 'binding_requirement', 'requirement_documents');
