@@ -7,8 +7,6 @@
 
 declare(strict_types=1);
 
-use Drupal\Core\Entity\EntityDefinitionUpdateManagerInterface;
-
 /**
  * Implements hook_requirements().
  */
@@ -27,31 +25,4 @@ function joinup_core_requirements($phase): array {
   }
 
   return $requirements;
-}
-
-/**
- * Updates DB schema of Meta entities after DER4 to DER3 downgrade.
- */
-function joinup_core_update_201200(array &$sandbox): string {
-  // @todo Delete this hook in ISAICP-11008 since meta_entity_update_8003 does
-  //   does the same.
-  if (!isset($sandbox['last_percentage'])) {
-    $sandbox['last_percentage'] = 0;
-  }
-
-  $entityDefinitionUpdateManager = \Drupal::service('entity.definition_update_manager');
-  assert($entityDefinitionUpdateManager instanceof EntityDefinitionUpdateManagerInterface);
-  $entityTypeManager = \Drupal::entityTypeManager();
-  $metaFieldStorageDefinitions = \Drupal::service('entity_field.manager')->getFieldStorageDefinitions('meta_entity');
-  $entityDefinitionUpdateManager->updateFieldableEntityType($entityTypeManager->getDefinition('meta_entity'), $metaFieldStorageDefinitions, $sandbox);
-
-  $percentage = floor($sandbox['#finished'] * 100);
-  if ($percentage && $sandbox['last_percentage'] <> $percentage) {
-    $sandbox['last_percentage'] = $percentage;
-    return sprintf(
-      'Meta entity schema conversion progress: %s%%',
-      $percentage,
-    );
-  }
-  return '';
 }
