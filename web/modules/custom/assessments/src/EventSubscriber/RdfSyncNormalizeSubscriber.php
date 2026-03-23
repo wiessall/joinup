@@ -61,8 +61,7 @@ class RdfSyncNormalizeSubscriber implements EventSubscriberInterface {
 
     $normalized = $event->getNormalizedArray();
 
-    foreach ($entity->get($fieldName) as $item) {
-      $file = $item->entity;
+    foreach ($entity->get($fieldName)->referencedEntities() as $file) {
       assert($file instanceof FileInterface);
       $fileUrl = Url::fromUserInput($file->get('uri')->url)
         ->setAbsolute()
