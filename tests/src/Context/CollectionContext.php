@@ -533,6 +533,27 @@ class CollectionContext extends RawDrupalContext {
   }
 
   /**
+   * Assigns a ghost SVG logo.
+   *
+   * @param string $title
+   *   The collection title.
+   */
+  #[Given('the :title collection has a logo with a missing physical file')]
+  public function setCollectionGhostLogo(string $title): void {
+    $filename = 'ghost-logo-' . uniqid() . '.svg';
+    $file = \Drupal::entityTypeManager()->getStorage('file')->create([
+      'uri' => 'public://' . $filename,
+      'filename' => $filename,
+      'filemime' => 'image/svg+xml',
+      'status' => 1,
+    ]);
+    $file->save();
+    $node = static::getEntityByLabel('node', $title, 'collection');
+    $node->set('logo', ['target_id' => $file->id(), 'alt' => 'Ghost logo']);
+    $node->save();
+  }
+
+  /**
    * Returns and caches the Joinup collection.
    *
    * @return \Drupal\collection\Entity\CollectionInterface
