@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_news\Controller;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\LocalRedirectResponse;
 use Drupal\Core\Url;
@@ -38,8 +39,12 @@ class NewsController implements ContainerInjectionInterface {
   public function redirect(): Response {
     $url = Url::fromRoute('view.search.page_1');
     $url->setOption('query', ['f' => ['type:news']]);
-    $url->setOption('language', $this->languageManager->getCurrentLanguage());
-    return new LocalRedirectResponse($url->toString(), Response::HTTP_FOUND);
+    $url->setOption('language', $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_URL));
+    $response = new LocalRedirectResponse($url->toString(), Response::HTTP_FOUND);
+    $response->getCacheableMetadata()->addCacheContexts([
+      'languages:language_url',
+    ]);
+    return $response;
   }
 
 }
