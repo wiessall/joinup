@@ -44,7 +44,6 @@ hidden:
   changed: true
   created: true
   image: true
-  langcode: true
   published: true
   search_api_excerpt: true
   target: true

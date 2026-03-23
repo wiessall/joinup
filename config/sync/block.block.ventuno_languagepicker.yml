@@ -17,4 +17,4 @@ settings:
   label: 'Language Picker'
   label_display: '0'
   provider: joinup_i18n
-visibility: {  }
+visibility: {}
