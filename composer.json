@@ -518,6 +518,9 @@
             "drupal/simple_oauth": {
                 "Allow BasicAuth to co-exist with oAuth @see https://www.drupal.org/i/3256312": "resources/patch/php/drupal/simple_oauth/3256312-1.patch"
             },
+            "drupal/sitewide_alert": {
+                "Followup: Generate UUID @see https://www.drupal.org/i/3561256": "resources/patch/php/drupal/sitewide_alert/3561256.mr103.commit-62c42f85.diff"
+            },
             "drupal/social_media_links": {
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "resources/patch/php/drupal/social_media_links/2898680.patch",
                 "Field templating and multiple value fields not functioning as expected @see https://www.drupal.org/i/3122406": "resources/patch/php/drupal/social_media_links/3122406.patch"
