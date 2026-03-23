@@ -1,0 +1,11 @@
+uuid: 9576198d-e7e4-4e76-85a3-b5751efdc140
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.assessment_report_published
+id: message.assessment_report_published
+target_entity_type_id: message
+target_bundle: assessment_report_published
+default_langcode: site_default
+language_alterable: false

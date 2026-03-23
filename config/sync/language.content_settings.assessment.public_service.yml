@@ -1,0 +1,18 @@
+uuid: d273a7af-f6f8-476c-9109-d999cd582e41
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.public_service
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: assessment.public_service
+target_entity_type_id: assessment
+target_bundle: public_service
+default_langcode: site_default
+language_alterable: false
