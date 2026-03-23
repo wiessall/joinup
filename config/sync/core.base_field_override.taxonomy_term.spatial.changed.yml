@@ -1,0 +1,18 @@
+uuid: 735f6014-93c4-45a7-930e-21aded15e441
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.spatial
+id: taxonomy_term.spatial.changed
+field_name: changed
+entity_type: taxonomy_term
+bundle: spatial
+label: Changed
+description: 'The time that the term was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

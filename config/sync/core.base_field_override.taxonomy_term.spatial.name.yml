@@ -1,0 +1,18 @@
+uuid: 0415cdbd-d74f-41f9-a65a-e27ed4f18f99
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.spatial
+id: taxonomy_term.spatial.name
+field_name: name
+entity_type: taxonomy_term
+bundle: spatial
+label: Name
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

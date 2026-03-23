@@ -7,11 +7,24 @@ namespace Drupal\joinup_core\Plugin\Field\FieldWidget;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\image_library_widget\Plugin\Field\FieldWidget\ImageLibraryWidget as OriginalImageLibraryWidget;
+use Symfony\Component\Validator\ConstraintViolationInterface;
 
 /**
  * Extends the original image library widget and add SVG support.
  */
 class ImageLibraryWidget extends OriginalImageLibraryWidget {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function errorElement(array $element, ConstraintViolationInterface $error, array $form, FormStateInterface $form_state): array|false {
+    $property_path_array = explode('.', $error->getPropertyPath());
+    if (!isset($property_path_array[1])) {
+      return $element;
+    }
+    $element = parent::errorElement($element, $error, $form, $form_state);
+    return is_array($element) ? $element : FALSE;
+  }
 
   /**
    * {@inheritdoc}
@@ -32,20 +45,10 @@ class ImageLibraryWidget extends OriginalImageLibraryWidget {
     // toolkit supported extensions.
     $extensions = !empty($extensions) ? array_intersect(explode(' ', $extensions), $supported_extensions) : $supported_extensions;
 
-    // Drupal 10.2 changes the file validation API.
-    // @see https://www.drupal.org/node/3363700
-    if (version_compare(\Drupal::VERSION, '10.2', '>=')) {
-      // Remove default image validation.
-      unset($element['#upload_validators']['FileIsImage']);
+    // Remove default image validation. Otherwise, we get an error on upload.
+    unset($element['#upload_validators']['FileIsImage']);
 
-      $element['#upload_validators']['FileExtension']['extensions'] = implode(' ', $extensions);
-    }
-    else {
-      // Remove default image validation.
-      unset($element['#upload_validators']['file_validate_is_image']);
-
-      $element['#upload_validators']['file_validate_extensions'][0] = implode(' ', $extensions);
-    }
+    $element['#upload_validators']['FileExtension']['extensions'] = implode(' ', $extensions);
 
     return $element;
   }
