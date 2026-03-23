@@ -1,0 +1,24 @@
+uuid: 6de7d216-58c1-487e-ae9b-eed0c73def36
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.last_content_deletion
+    - node.type.collection
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: node.collection.last_content_deletion
+field_name: last_content_deletion
+entity_type: node
+bundle: collection
+label: 'Last content deletion'
+description: 'The timestamp of the most recent deletion of content belonging to this group.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: timestamp

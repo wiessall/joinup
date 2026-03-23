@@ -307,6 +307,8 @@ class AssessmentReportResource extends ResourceBase {
   protected function createReport(array $data): AssessmentReport {
     // Make sure we start on clean if the plugin is reused in the same request.
     $this->errors = [];
+    // Support of report langcode on creation was removed in ISAICP-11003
+    // temporarily.
     $this->langcode = $data['language'] ?? 'en';
 
     $statementStorage = $this->entityTypeManager->getStorage('assessment_statement');
