@@ -11,7 +11,6 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
-use Joinup\EnvironmentDetector;
 use Joinup\TestMode;
 use Joinup\TestModeManager;
 
@@ -81,14 +80,4 @@ function joinup_test_node_presave(EntityInterface $entity): void {
   if ($changedTime = $entity->getOriginal()?->getChangedTime()) {
     $entity->setChangedTime($changedTime);
   }
-}
-
-/**
- * Implements hook_autologout_prevent().
- */
-function joinup_test_autologout_prevent(): bool {
-  // Joinup test is only enabled on local environments. Prevent autologout from
-  // logging out users on local environments by blocking the JS refresh from
-  // being attached.
-  return EnvironmentDetector::isLocal();
 }
