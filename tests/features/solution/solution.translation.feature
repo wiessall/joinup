@@ -50,7 +50,7 @@ Feature: Translating solutions
     And I fill in "Abstract" with "Krótki opis solucji"
     And I fill in "Description" with "Długi opis solucji"
     When I press "Confirm"
-    And I press "Publish"
+    And I press "Save (all translations)"
     Then I should see the success message "Solution Testowa solucja has been updated."
     And I should see the heading "Testowa solucja"
     And I should not see the following lines of text:
@@ -64,7 +64,7 @@ Feature: Translating solutions
     When I click "Edit" in the "Polish" row
     And I fill in "Title" with "Zaktualizowana solucja"
     And I press "Confirm"
-    And I press "Publish"
+    And I press "Save (all translations)"
     Then I should see the success message "Solution Zaktualizowana solucja has been updated."
     And I should not see the heading "Testowa solucja"
     And I should see the heading "Zaktualizowana solucja"

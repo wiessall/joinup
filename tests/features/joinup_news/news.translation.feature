@@ -66,7 +66,7 @@ Feature: Translating news
     And I attach the file "test.zip" to "Add a new file"
     And I press "Upload"
     And I fill in "File description" with "Plik testowy"
-    And I press "Update"
+    And I press "Save (all translations)"
     Then I should see the success message "News Krótki tytuł newsa has been updated."
     And I should see "Krótki tytuł newsa"
     And I should see the heading "Testowy news"
@@ -79,7 +79,7 @@ Feature: Translating news
     When I click "Edit" in the "Polish" row
     And I fill in "Headline" with "Zaktualizowany news"
     And I fill in "Short title" with "Zakt. news"
-    And I press "Update"
+    And I press "Save (all translations)"
     Then I should see the success message "News Zakt. news has been updated."
     And I should not see the heading "Testowy news"
     And I should see the heading "Zaktualizowany news"

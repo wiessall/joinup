@@ -22,7 +22,7 @@ Feature: Translating owners
     Then the following fields should be present "Name"
     When I fill in "Name" with "Testowy właściciel"
     Then the following fields should not be present "State, Type"
-    When I press "Update"
+    When I press "Save (all translations)"
     Then I should see the success message "Owner Testowy właściciel has been updated."
     And I should see the heading "Testowy właściciel"
 
@@ -31,7 +31,7 @@ Feature: Translating owners
     Then I should see "Testowy właściciel"
     When I click "Edit" in the "Polish" row
     And I fill in "Name" with "Zaktualizowany właściciel"
-    And I press "Update"
+    And I press "Save (all translations)"
     Then I should see the success message "Owner Zaktualizowany właściciel has been updated."
     And I should not see the heading "Testowy właściciel"
     And I should see the heading "Zaktualizowany właściciel"

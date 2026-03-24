@@ -48,7 +48,7 @@ Feature: Translating releases
     Then the following fields should not be present "Documentation, Geographical coverage, Is version of, Language, Release version, Search keywords, Solution data, State, Status"
     When I fill in "Name" with "Testowe wydanie"
     And I fill in "Release notes" with "Notatki do Testowego wydania"
-    When I press "Update"
+    When I press "Save (all translations)"
     Then I should see the success message "Release Testowe wydanie has been updated."
     And I should not see the following lines of text:
       | "Testowe wydanie"              |
@@ -59,7 +59,7 @@ Feature: Translating releases
     Then I should see "Testowe wydanie"
     When I click "Edit" in the "Polish" row
     And I fill in "Name" with "Zaktualizowane wydanie"
-    And I press "Update"
+    And I press "Save (all translations)"
     Then I should see the success message "Release Zaktualizowane wydanie has been updated."
     And I should not see "Testowe wydanie"
     And I should see "Zaktualizowane wydanie"

@@ -47,7 +47,7 @@ Feature: Translating distributions
     Then I should see the heading "Create Polish translation of Test distribution"
     When I fill in "Title" with "Testowa dystrybucja"
     And I fill in "Description" with "Opis dystrybucji"
-    When I press "Update"
+    When I press "Save (all translations)"
     Then I should see the success message "Distribution Testowa dystrybucja has been updated."
     And I should see the heading "Testowa dystrybucja"
     And I should see "Opis dystrybucji"
@@ -57,7 +57,7 @@ Feature: Translating distributions
     Then I should see "Testowa dystrybucja"
     When I click "Edit" in the "Polish" row
     And I fill in "Title" with "Zaktualizowana dystrybucja"
-    And I press "Update"
+    And I press "Save (all translations)"
     Then I should see the success message "Distribution Zaktualizowana dystrybucja has been updated."
     And I should not see the heading "Testowa dystrybucja"
     And I should see the heading "Zaktualizowana dystrybucja"

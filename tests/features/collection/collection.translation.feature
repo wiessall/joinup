@@ -46,7 +46,7 @@ Feature: Translating collections
     When I fill in "Title" with "Testowa kolekcja"
     And I fill in "Abstract" with "Krótki opis kolekcji"
     And I fill in "Description" with "Długi opis kolekcji"
-    When I press "Publish"
+    And I press "Save (all translations)"
     Then I should see the success message "Collection Testowa kolekcja has been updated."
     And I should see the heading "Testowa kolekcja"
     And I should not see the following lines of text:
@@ -59,7 +59,7 @@ Feature: Translating collections
     Then I should see "Testowa kolekcja"
     When I click "Edit" in the "Polish" row
     And I fill in "Title" with "Zaktualizowana kolekcja"
-    And I press "Publish"
+    And I press "Save (all translations)"
     Then I should see the success message "Collection Zaktualizowana kolekcja has been updated."
     And I should not see the heading "Testowa kolekcja"
     And I should see the heading "Zaktualizowana kolekcja"
