@@ -92,7 +92,7 @@ display:
           field_api_classes: false
         parent:
           id: parent
-          table: meta_entity
+          table: meta_entity_field_data
           field: parent
           relationship: none
           group_type: group
@@ -456,7 +456,7 @@ display:
       fields:
         id:
           id: id
-          table: meta_entity
+          table: meta_entity_field_data
           field: id
           relationship: none
           group_type: group
