@@ -325,8 +325,19 @@ display:
               secondary_open: false
               reset_button_always_show: false
             filter:
-              message:
-                plugin_id: default
+              timestamp:
+                plugin_id: bef_datepicker
+                advanced:
+                  placeholder_text: ''
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+                  sort_options_unsupported: ''
+              timestamp_1:
+                plugin_id: bef_datepicker
                 advanced:
                   placeholder_text: ''
                   collapsible: false
@@ -351,6 +362,17 @@ display:
                   is_secondary: false
                   hide_label: false
                   field_classes: ''
+              message:
+                plugin_id: default
+                advanced:
+                  placeholder_text: ''
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+                  sort_options_unsupported: ''
       access:
         type: perm
         options:
@@ -388,34 +410,87 @@ display:
           exposed: false
       arguments: {  }
       filters:
-        message:
-          id: message
+        timestamp:
+          id: timestamp
           table: joinup_log
-          field: message
+          field: timestamp
           relationship: none
           group_type: group
           admin_label: ''
           entity_type: joinup_log
-          entity_field: message
-          plugin_id: string
-          operator: contains
-          value: ''
+          entity_field: timestamp
+          plugin_id: date
+          operator: '>='
+          value:
+            min: ''
+            max: ''
+            value: ''
+            type: date
           group: 1
           exposed: true
           expose:
-            operator_id: message_op
-            label: Message
+            operator_id: timestamp_op
+            label: 'Created from'
             description: ''
             use_operator: false
-            operator: message_op
+            operator: timestamp_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: message
+            identifier: from
             required: false
             remember: false
             multiple: false
             remember_roles:
               authenticated: authenticated
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        timestamp_1:
+          id: timestamp_1
+          table: joinup_log
+          field: timestamp
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: joinup_log
+          entity_field: timestamp
+          plugin_id: date
+          operator: '<='
+          value:
+            min: ''
+            max: ''
+            value: ''
+            type: date
+          group: 1
+          exposed: true
+          expose:
+            operator_id: timestamp_1_op
+            label: 'Created to'
+            description: ''
+            use_operator: false
+            operator: timestamp_1_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: to
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            min_placeholder: ''
+            max_placeholder: ''
             placeholder: ''
           is_grouped: false
           group_info:
@@ -470,6 +545,47 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+        message:
+          id: message
+          table: joinup_log
+          field: message
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: joinup_log
+          entity_field: message
+          plugin_id: string
+          operator: contains
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: message_op
+            label: Message
+            description: ''
+            use_operator: false
+            operator: message_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: message
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
         type:
           id: type
           table: joinup_log
@@ -512,6 +628,10 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
       style:
         type: table
         options:
