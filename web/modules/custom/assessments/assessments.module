@@ -515,6 +515,13 @@ function assessments_views_data_alter(array &$data): void {
 }
 
 /**
+ * Implements hook_form_FORM_ID_alter() for entity_browser_assessment_solutions_form.
+ */
+function assessments_form_entity_browser_assessment_solutions_form_alter(array &$form, FormStateInterface $formState): void {
+  $form['#attached']['library'][] = 'assessments/entity_browser';
+}
+
+/**
  * Implements hook_inline_entity_form_reference_form_alter().
  */
 function assessments_inline_entity_form_reference_form_alter(&$reference_form, FormStateInterface $form_state): void {
