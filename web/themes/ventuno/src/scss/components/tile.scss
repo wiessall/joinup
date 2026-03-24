@@ -27,6 +27,7 @@
       height: auto;
       margin-bottom: 0;
     }
+
     // Set max-height on SVG files, see ISAICP-10617.
     img[src$=".svg"] {
       @include media-breakpoint-up(sm) {
