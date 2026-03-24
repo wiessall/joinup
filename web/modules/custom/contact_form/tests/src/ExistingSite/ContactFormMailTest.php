@@ -52,7 +52,7 @@ class ContactFormMailTest extends JoinupExistingSiteTestBase {
 
     $this->assertSession()->statusCodeEquals(200);
     $this->assertSession()->statusMessageContains('Your message has been submitted. Thank you for your feedback.', 'status');
-    $this->assertEquals(
+    $this->assertSame(
       [
         [
           'id' => 'message_notify_contact_form_submission',
