@@ -15,10 +15,15 @@
           align-items: center !important;
         }
 
+        &__logo {
+          width: 60px;
+        }
+
         &__meta {
           display: none !important;
         }
         @include media-breakpoint-down(lg) {
+          &__logo,
           &__actions {
             display: none !important;
           }
@@ -29,6 +34,11 @@
 }
 
 .group-banner {
+  &__logo {
+    flex-shrink: 0;
+    width: 100px;
+    transition: width 0.5s;
+  }
   &__title {
     flex: 10 1 0;
   }
