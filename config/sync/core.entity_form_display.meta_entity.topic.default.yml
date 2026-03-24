@@ -55,14 +55,10 @@ content:
       require_layouts: 1
       empty_message: ''
     third_party_settings: {  }
-  translation:
-    weight: 4
-    region: content
-    settings: {  }
-    third_party_settings: {  }
 hidden:
   label: true
   langcode: true
   path: true
   target: true
+  translation: true
   uuid: true

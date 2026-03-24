@@ -107,14 +107,10 @@ content:
     settings:
       display_label: true
     third_party_settings: {  }
-  translation:
-    weight: 10
-    region: content
-    settings: {  }
-    third_party_settings: {  }
 hidden:
   label: true
   langcode: true
   path: true
   target: true
+  translation: true
   uuid: true

@@ -4,16 +4,18 @@ status: true
 dependencies:
   config:
     - field.storage.meta_entity.eif_description
-    - filter.format.basic_html
+    - filter.format.content_editor
     - meta_entity.type.eif_perspective
   module:
-    - rdf_sync
     - text
+    - tmgmt_content
 third_party_settings:
   rdf_sync:
     processed:
       predicate: 'http://purl.org/dc/terms/description'
       type: 'xsd:string'
+  tmgmt_content:
+    excluded: false
 id: meta_entity.eif_perspective.eif_description
 field_name: eif_description
 entity_type: meta_entity
@@ -26,5 +28,5 @@ default_value: {  }
 default_value_callback: ''
 settings:
   allowed_formats:
-    - basic_html
+    - content_editor
 field_type: text_long

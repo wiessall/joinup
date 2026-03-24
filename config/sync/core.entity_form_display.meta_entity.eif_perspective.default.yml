@@ -58,15 +58,11 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  translation:
-    weight: 6
-    region: content
-    settings: {  }
-    third_party_settings: {  }
 hidden:
   label: true
   langcode: true
   path: true
   target: true
+  translation: true
   uri: true
   uuid: true
