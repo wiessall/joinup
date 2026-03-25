@@ -307,3 +307,12 @@ Feature: Proposing a collection
     And I press "Propose"
     Then I should see the heading "SVG API example"
     And I should own the "SVG API example" collection
+
+  Scenario: The node add collection route redirects to the propose form.
+    Given I am logged in as an "authenticated user"
+    When I go to "/node/add/collection"
+    Then the url should match "/propose/collection"
+    And I should see the heading "Propose collection"
+    When I go to "/fr/node/add/collection"
+    Then the url should match "/fr/propose/collection"
+    And I should see the heading "Propose collection"
