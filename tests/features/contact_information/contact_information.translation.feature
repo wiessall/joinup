@@ -43,7 +43,7 @@ Feature: Translating contact information
     And I click "Delete" in the "Polish" row
     Then I should see "Are you sure you want to delete the Polish translation of the content item Zaktualizowane dane?"
     When I press "Delete Polish translation"
-    Then I should see the success message "Polish translation of the Contact information Zaktualizowane dane has been deleted"
+    Then I should see the success message "Polish translation of the Contact information Zaktualizowane dane has been deleted."
     When I click "Translate" in the "Entity actions" region
     Then I should not see "Edit" in the "Polish" row
     And I should see the "Add" in the "Polish" row
