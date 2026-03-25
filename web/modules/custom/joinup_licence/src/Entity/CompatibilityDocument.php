@@ -5,11 +5,17 @@ declare(strict_types=1);
 namespace Drupal\joinup_licence\Entity;
 
 use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Core\Entity\Attribute\ContentEntityType;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\Routing\AdminHtmlRouteProvider;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
+use Drupal\joinup_licence\CompatibilityDocumentListBuilder;
+use Drupal\joinup_licence\CompatibilityDocumentViewBuilder;
+use Drupal\joinup_licence\Form\CompatibilityDocumentForm;
 use Drupal\joinup_licence\Plugin\Field\CompatibilityDocumentLicenceFieldItemList;
 
 /**
@@ -32,34 +38,33 @@ use Drupal\joinup_licence\Plugin\Field\CompatibilityDocumentLicenceFieldItemList
  *
  * This information is stored in a content entity so it can be edited by
  * moderators on the production environment.
- *
- * @ContentEntityType(
- *   id = "compatibility_document",
- *   label = @Translation("Compatibility document"),
- *   label_collection = @Translation("Compatibility documents"),
- *   handlers = {
- *     "form" = {
- *       "edit" = "Drupal\joinup_licence\Form\CompatibilityDocumentForm",
- *     },
- *     "list_builder" = "Drupal\joinup_licence\CompatibilityDocumentListBuilder",
- *     "route_provider" = {
- *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
- *     },
- *     "view_builder" = "Drupal\joinup_licence\CompatibilityDocumentViewBuilder",
- *   },
- *   base_table = "compatibility_document",
- *   admin_permission = "access compatibility document overview",
- *   entity_keys = {
- *     "id" = "id",
- *     "label" = "title"
- *   },
- *   links = {
- *     "edit-form" = "/admin/structure/compatibility-document/{compatibility_document}/edit",
- *     "collection" = "/admin/structure/compatibility-document"
- *   },
- *   field_ui_base_route = "entity.compatibility_document.collection"
- * )
  */
+#[ContentEntityType(
+  id: 'compatibility_document',
+  label: new TranslatableMarkup('Compatibility document'),
+  label_collection: new TranslatableMarkup('Compatibility documents'),
+  handlers: [
+    'form' => [
+      'edit' =>CompatibilityDocumentForm::class,
+    ],
+    'list_builder' => CompatibilityDocumentListBuilder::class,
+    'route_provider' => [
+      'html' => AdminHtmlRouteProvider::class,
+    ],
+    'view_builder' => CompatibilityDocumentViewBuilder::class,
+  ],
+  base_table: 'compatibility_document',
+  admin_permission: 'access compatibility document overview',
+  entity_keys: [
+    'id' => 'id',
+    'label' => 'title',
+  ],
+  links: [
+    'edit-form' => '/admin/structure/compatibility-document/{compatibility_document}/edit',
+    'collection' => '/admin/structure/compatibility-document',
+  ],
+  field_ui_base_route: 'entity.compatibility_document.collection',
+)]
 class CompatibilityDocument extends ContentEntityBase implements CompatibilityDocumentInterface {
 
   use JoinupBundleClassFieldAccessTrait;

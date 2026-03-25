@@ -4,74 +4,77 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity;
 
+use Drupal\assessments\AssessmentAccessControlHandler;
+use Drupal\assessments\AssessmentListBuilder;
+use Drupal\assessments\Form\AssessmentForm;
+use Drupal\Core\Entity\Attribute\ContentEntityType;
 use Drupal\Core\Entity\ContentEntityBase;
+use Drupal\Core\Entity\ContentEntityDeleteForm;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityPublishedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\Form\DeleteMultipleForm;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\ctools\Testing\EntityCreationTrait;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 use Drupal\user\EntityOwnerTrait;
+use Drupal\views\EntityViewsData;
 
 /**
  * Defines the assessment entity class.
- *
- * @ContentEntityType(
- *   id = "assessment",
- *   label = @Translation("Assessment"),
- *   label_collection = @Translation("Assessments"),
- *   label_singular = @Translation("assessment"),
- *   label_plural = @Translation("assessments"),
- *   label_count = @PluralTranslation(
- *     singular = "@count assessments",
- *     plural = "@count assessments",
- *   ),
- *   bundle_label = @Translation("Assessment type"),
- *   handlers = {
- *     "list_builder" = "Drupal\assessments\AssessmentListBuilder",
- *     "views_data" = "Drupal\views\EntityViewsData",
- *     "access" = "Drupal\assessments\AssessmentAccessControlHandler",
- *     "form" = {
- *       "add" = "Drupal\assessments\Form\AssessmentForm",
- *       "edit" = "Drupal\assessments\Form\AssessmentForm",
- *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm",
- *       "delete-multiple-confirm" = "Drupal\Core\Entity\Form\DeleteMultipleForm",
- *     },
- *     "route_provider" = {
- *       "html" = "Drupal\assessments\Routing\AssessmentsHtmlRouteProvider",
- *     },
- *      "view_builder" = "Drupal\assessments\AssessmentViewBuilder",
- *   },
- *   base_table = "assessment",
- *   data_table = "assessment_field_data",
- *   translatable = TRUE,
- *   admin_permission = "administer assessment types",
- *   entity_keys = {
- *     "id" = "id",
- *     "langcode" = "langcode",
- *     "bundle" = "type",
- *     "label" = "name",
- *     "uuid" = "uuid",
- *     "owner" = "uid",
- *     "published" = "status",
- *   },
- *   links = {
- *     "collection" = "/admin/content/assessment",
- *     "add-form" = "/collection/assessments/{assessment_type}/create",
- *     "add-page" = "/collection/assessments/add",
- *     "canonical" = "/collection/assessments/{assessment_type}/{assessment}",
- *     "edit-form" = "/collection/assessments/{assessment_type}/{assessment}/edit",
- *     "delete-form" = "/collection/assessments/{assessment_type}/{assessment}/delete",
- *     "delete-multiple-form" = "/admin/content/assessment/delete-multiple",
- *   },
- *   bundle_entity_type = "assessment_type",
- *   field_ui_base_route = "entity.assessment_type.edit_form",
- * )
  */
+#[ContentEntityType(
+  id: 'assessment',
+  label: new TranslatableMarkup('Assessment'),
+  label_collection: new TranslatableMarkup('Assessments'),
+  label_singular: new TranslatableMarkup('assessment'),
+  label_plural: new TranslatableMarkup('assessments'),
+  label_count: [
+    'singular' => '@count assessments',
+    'plural' => '@count assessments',
+  ],
+  bundle_label: new TranslatableMarkup('Assessment type'),
+  handlers: [
+    'list_builder' => AssessmentListBuilder::class,
+    'views_data' => EntityViewsData::class,
+    'access' => AssessmentAccessControlHandler::class,
+    'form' => [
+      'add' => AssessmentForm::class,
+      'edit' => AssessmentForm::class,
+      'delete' => ContentEntityDeleteForm::class,
+      'delete-multiple-confirm' => DeleteMultipleForm::class,
+    ],
+  ],
+  base_table: 'assessment',
+  data_table: 'assessment_field_data',
+  translatable: TRUE,
+  admin_permission: 'administer assessment type',
+  entity_keys: [
+    'id' => 'id',
+    'langcode' => 'langcode',
+    'bundle' => 'type',
+    'label' => 'name',
+    'uuid' => 'uuid',
+    'owner' => 'uid',
+    'published' => 'status',
+  ],
+  links: [
+    'collection' => '/admin/content/assessment',
+    'add-form' => '/collection/assessments/{assessment_type}/create',
+    'add-page' => '/collection/assessments/add',
+    'canonical' => '/collection/assessments/{assessment_type}/{assessment}',
+    'edit-form' => '/collection/assessments/{assessment_type}/{assessment}/edit',
+    'delete-form' => '/collection/assessments/{assessment_type}/{assessment}/delete',
+    'delete-multiple-form' => '/admin/content/assessment/delete-multiple'
+  ],
+  bundle_entity_type: 'assessment_type',
+  field_ui_base_route: 'entity.assessment_type.edit_form'
+)]
 class Assessment extends ContentEntityBase implements AssessmentInterface {
 
   use EntityChangedTrait;

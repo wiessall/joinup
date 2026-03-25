@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity;
 
+use Drupal\assessments\AssessmentStatementAccessControlHandler;
+use Drupal\assessments\AssessmentStatementListBuilder;
+use Drupal\Core\Entity\Attribute\ContentEntityType;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\Routing\AdminHtmlRouteProvider;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\assessments\AssessmentStatementInterface;
 use Drupal\assessments\AssessmentVocabularyHelper;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
  * Defines the Assessment statement entity.
@@ -17,38 +22,37 @@ use Drupal\assessments\AssessmentVocabularyHelper;
  * Bundles of this entity type are defined in code.
  *
  * @see assessments_entity_bundle_info()
- *
- * @ContentEntityType(
- *   id = "assessment_statement",
- *   label = @Translation("Assessment statement"),
- *   label_collection = @Translation("Assessment statements"),
- *   label_singular = @Translation("assessment statement"),
- *   label_plural = @Translation("assessment statements"),
- *   label_count = @PluralTranslation(
- *     singular = "@count assessment statement",
- *     plural = "@count assessment statements",
- *   ),
- *   handlers = {
- *     "access" = "Drupal\assessments\AssessmentStatementAccessControlHandler",
- *     "list_builder" = "Drupal\assessments\AssessmentStatementListBuilder",
- *     "route_provider" = {
- *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
- *     },
- *   },
- *   admin_permission = "administer assessment statements",
- *   base_table = "assessment_statement",
- *   data_table = "assessment_statement_field_data",
- *   entity_keys = {
- *     "id" = "id",
- *     "label" = "id",
- *     "uuid" = "uuid",
- *     "bundle" = "type"
- *   },
- *   links = {
- *      "collection" = "/admin/content/assessment-statement",
- *    },
- * )
  */
+#[ContentEntityType(
+  id: 'assessment_statement',
+  label: new TranslatableMarkup('Assessment statement'),
+  label_collection: new TranslatableMarkup('Assessment statements'),
+  label_singular: new TranslatableMarkup('assessment statement'),
+  label_plural: new TranslatableMarkup('assessment statements'),
+  label_count: [
+    'singular' => '@count assessment statement',
+    'plural' => '@count assessment statements',
+  ],
+  handlers: [
+    'access' => AssessmentStatementAccessControlHandler::class,
+    'list_builder' => AssessmentStatementListBuilder::class,
+    'route_provider' => [
+      'html' => AdminHtmlRouteProvider::class,
+    ],
+  ],
+  admin_permission: 'administer assessment statements',
+  base_table: 'assessment_statement',
+  data_table: 'assessment_statement_field_data',
+  entity_keys: [
+    'id' => 'id',
+    'label' => 'id',
+    'uuid' => 'uuid',
+    'bundle' => 'type',
+  ],
+  links: [
+    'collection' => '/admin/content/assessment-statement',
+  ],
+)]
 final class AssessmentStatement extends ContentEntityBase implements AssessmentStatementInterface {
 
   /**

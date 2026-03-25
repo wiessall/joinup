@@ -5,47 +5,51 @@ declare(strict_types=1);
 namespace Drupal\eu_oss_catalogue\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBase;
+use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
+use Drupal\Core\Entity\Attribute\ConfigEntityType;
+use Drupal\Core\Entity\Routing\AdminHtmlRouteProvider;
 use Drupal\Core\Plugin\DefaultSingleLazyPluginCollection;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\eu_oss_catalogue\Form\HostingPlatformConfigForm;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Stores the configuration of a 'hosting_platform' plugin instance.
- *
- * @ConfigEntityType(
- *   id = "hosting_platform",
- *   label = @Translation("Code hosting platform config"),
- *   handlers = {
- *     "form" = {
- *       "edit" = "Drupal\eu_oss_catalogue\Form\HostingPlatformConfigForm",
- *       "delete" = "Drupal\eu_oss_catalogue\Form\HostingPlatformConfigDeleteForm"
- *     },
- *     "route_provider" = {
- *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
- *     },
- *     "list_builder" = "Drupal\Core\Config\Entity\ConfigEntityListBuilder",
- *   },
- *   admin_permission = "administer eu oss catalogue",
- *   config_prefix = "hosting_platform",
- *   entity_keys = {
- *     "id" = "id",
- *     "label" = "label",
- *   },
- *   links = {
- *     "edit-form" = "/admin/content/eu-oss-catalogue/hosting-platform/manage/{hosting_platform}",
- *     "delete-form" = "/admin/content/eu-oss-catalogue/hosting-platform/manage/{hosting_platform}/delete",
- *   },
- *   config_export = {
- *     "id",
- *     "label",
- *     "type",
- *     "weblinks",
- *     "country",
- *     "description",
- *     "platformId",
- *     "platformSettings",
- *   },
- * )
  */
+#[ConfigEntityType(
+  id: 'hosting_platform',
+  label: new TranslatableMarkup('Code hosting platform config'),
+  handlers: [
+    'form' => [
+      'edit' => HostingPlatformConfigForm::class,
+      'delete' => HostingPlatformConfigDeleteForm::class,
+    ],
+    'route_provider' => [
+      'html' =>AdminHtmlRouteProvider::class,
+    ],
+    'list_builder' => ConfigEntityListBuilder::class,
+  ],
+  admin_permission: 'administer eu oss catalogue',
+  config_prefix: 'hosting_platform',
+  entity_keys: [
+    'id' => 'id',
+    'label' => 'label',
+  ],
+  links: [
+    'edit-form' => '/admin/content/eu-oss-catalogue/hosting-platform/manage/{hosting_platform}',
+    'delete-form' => '/admin/content/eu-oss-catalogue/hosting-platform/manage/{hosting_platform}/delete',
+  ],
+  config_export: [
+    'id',
+    'label',
+    'type',
+    'weblinks',
+    'country',
+    'description',
+    'platformId',
+    'platformSettings',
+  ],
+)]
 class HostingPlatformConfig extends ConfigEntityBase implements HostingPlatformConfigInterface {
 
   /**

@@ -33,26 +33,25 @@ use Drupal\user\UserInterface;
  * in a discussion can be found in the InviteToDiscussionForm.
  *
  * @see \Drupal\joinup_discussion\Form\InviteToDiscussionForm
- *
- * @ContentEntityType(
- *   id = "invitation",
- *   label = @Translation("Invitation"),
- *   bundle_label = @Translation("Invitation type"),
- *   handlers = {
- *     "views_data" = "Drupal\views\EntityViewsData",
- *   },
- *   base_table = "invitation",
- *   entity_keys = {
- *     "id" = "id",
- *     "bundle" = "bundle",
- *     "uuid" = "uuid",
- *     "uid" = "uid",
- *     "langcode" = "langcode",
- *     "status" = "status",
- *   },
- *   bundle_entity_type = "invitation_type"
- * )
  */
+#[ContentEntityType(
+  id: 'invitation',
+  label: new TranslatableMarkup('Invitation'),
+  bundle_label: new TranslatableMarkup('Invitation type'),
+  handlers: [
+    'views_data' => \Drupal\views\EntityViewsData::class,
+  ],
+  base_table: 'invitation',
+  entity_keys: [
+    'id' => 'id',
+    'bundle' => 'bundle',
+    'uuid' => 'uuid',
+    'uid' => 'uid',
+    'langcode' => 'langcode',
+    'status' => 'status',
+  ],
+  bundle_entity_type: 'invitation_type',
+)]
 class Invitation extends ContentEntityBase implements InvitationInterface {
 
   use EntityChangedTrait;
