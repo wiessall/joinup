@@ -20,10 +20,9 @@ Feature: Translating contact information
     And I click "Add" in the "Polish" row
     Then I should see the heading "Create Polish translation of Test contact information"
     And the following fields should be present "Name, Website URL"
-    Then the following fields should be present "Name"
+    Then the following fields should not be present "State"
     When I fill in "Name" with "Dane kontaktowe"
     And I fill in "Website URL" with "https://dame-kontaktowe.pl"
-    Then the following fields should not be present "State"
     When I press "Save (all translations)"
     Then I should see the success message "Contact information Dane kontaktowe has been updated."
     And I should see the heading "Dane kontaktowe"
