@@ -7,8 +7,6 @@
 
 declare(strict_types=1);
 
-use Drupal\Core\Template\Attribute;
-
 /**
  * Implements hook_module_implements_alter().
  */
@@ -16,33 +14,6 @@ function joinup_i18n_module_implements_alter(array &$implementations, string $ho
   if (in_array($hook, ['requirements', 'runtime_requirements'], TRUE) && isset($implementations['locale'])) {
     // Remove the locale module from the requirements list.
     unset($implementations['locale']);
-  }
-}
-
-/**
- * Implements hook_theme().
- */
-function joinup_i18n_theme(): array {
-  return [
-    'language_picker' => [
-      'variables' => [
-        'current_language' => NULL,
-        'languages' => [],
-      ],
-      'template' => 'language-picker',
-    ],
-  ];
-}
-
-/**
- * Implements hook_preprocess_language_picker().
- */
-function template_preprocess_language_picker(array &$variables): void {
-  foreach ($variables['languages'] as &$language) {
-    $language['attributes'] = new Attribute(['class' => ['language-picker__link']]);
-    if ($language['is_current']) {
-      $language['attributes']->addClass('language-picker__link--active');
-    }
   }
 }
 

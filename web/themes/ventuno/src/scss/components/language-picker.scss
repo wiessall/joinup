@@ -1,25 +1,23 @@
 @import "../partials/core";
 
-.block-language-picker {
+.language-picker {
   position: relative;
   z-index: 504;
-  #language-picker__button {
+  &__button {
     &::before {
       @include get-bootstrap-icon("globe");
     }
   }
-  .dropdown-menu {
+  &__dropdown-menu {
     width: calc(100vw - var(--bs-gutter-x));
     max-width: 30rem;
+    .language-picker__code {
+      display: inline-block;
+      width: 1.4em;
+      color: $gray-800;
+    }
     .language-picker__link {
-      display: block;
-      padding: 0.1rem 0;
-      .language-picker__code {
-        display: inline-block;
-        width: 1.4em;
-        color: $gray-800;
-      }
-      &--active {
+      &.is-active {
         text-decoration: underline;
         text-decoration-color: currentColor !important;
       }

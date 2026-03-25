@@ -8,6 +8,21 @@
 declare(strict_types=1);
 
 /**
+ * Implements hook_preprocess_links__language_block().
+ */
+function ventuno_preprocess_links__language_block(array &$variables): void {
+  $current = \Drupal::languageManager()->getCurrentLanguage();
+  $variables['current_language'] = [
+    'code' => $current->getId(),
+    'name' => $current->getName(),
+  ];
+
+  foreach ($variables['links'] as $langcode => &$link) {
+    $link['code'] = $langcode;
+  }
+}
+
+/**
  * Implements hook_preprocess_links__media_library_menu().
  */
 function ventuno_preprocess_links__media_library_menu(array &$variables): void {
