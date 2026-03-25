@@ -69,6 +69,8 @@ Feature: Translating events
     Then I should see the success message "Event Testowe wydarzenie has been updated."
     And I should see the heading "Testowe wydarzenie"
     And I should see "Plan wydarzenia"
+    And I should see "To jest polskie tłumaczenie wydarzenia"
+    And I should see "Plik testowy"
 
     # Edit translation.
     When I click "Translate" in the "Entity actions" region
