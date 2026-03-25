@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity;
 
+use Drupal\assessments\Routing\AssessmentsHtmlRouteProvider;
 use Drupal\Core\Entity\Attribute\ContentEntityType;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\ContentEntityDeleteForm;
@@ -43,6 +44,9 @@ use Drupal\views\EntityViewsData;
     'list_builder' => AssessmentListBuilder::class,
     'views_data' => EntityViewsData::class,
     'access' => AssessmentAccessControlHandler::class,
+    'route_provider' => [
+      'html' => AssessmentsHtmlRouteProvider::class,
+    ],
     'form' => [
       'add' => AssessmentForm::class,
       'edit' => AssessmentForm::class,
