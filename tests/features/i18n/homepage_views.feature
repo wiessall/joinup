@@ -24,3 +24,10 @@ Feature: Test translations in the homepage.
     And I should see "Only Greek have a description"
     When I click "Data gathering but Greek"
     Then I should see "Only Greek have a description"
+
+    # Test that the translated meta entities do not produce duplicates in
+    # the administration screen.
+    Given I am logged in as a moderator
+    And I go to "/admin/homepage-topics"
+    Then I should see "Data gathering and processing"
+    But I should not see "Data gathering but Greek"
