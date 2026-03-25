@@ -8,6 +8,9 @@ Feature: Translating a solution should not cause field group errors.
     Given "fr" translation for the "taxonomy_term" entity with label "English":
       | field | value   |
       | name  | Anglais |
+    And "fr" translation for the "taxonomy_term" entity with label "Belgium":
+      | field | value    |
+      | name  | Belgique |
     When I am logged in as a moderator
     # French version of the "Portal Support" collection.
     And I go to "/fr/node/3"
@@ -17,3 +20,7 @@ Feature: Translating a solution should not cause field group errors.
     # Reload the page to empty the field option.
     When I reload the page
     Then the "Language availability" tagify should contain the following option "Anglais"
+    When I click "Contact details"
+    And I press "Add new owner"
+    And I wait for AJAX to finish
+    Then the "Country" tagify should contain the following option "Belgique"

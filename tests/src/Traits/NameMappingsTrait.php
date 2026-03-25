@@ -467,6 +467,7 @@ trait NameMappingsTrait {
       'Solution classification' => 'classification',
       'Topic' => 'field_topic',
       'Type' => 'owner_type',
+      'Country' => 'country',
     ];
     return $mapping[$label];
   }
