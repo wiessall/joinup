@@ -126,7 +126,7 @@
                 ':unsubscribe_url': message.recipient_unsubscribe,
                 ':subscriptions_url': message.recipient_subscriptions
               }) }}</p>
-              <p>{{ 'This is an unmonitored email address, please do not reply.<br> You can contact directly :group_title :group_type via the <a href=":group_url" target="_blank">Overview</a> page.'|t({
+              <p>{{ 'This is an unmonitored email address, please do not reply.'|t({
                 ':group_title': message.group_title,
                 ':group_type': message.group_type,
                 ':group_url': message.group_landing_page
