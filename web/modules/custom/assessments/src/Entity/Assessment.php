@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity;
 
-use Drupal\assessments\AssessmentViewBuilder;
 use Drupal\Core\Entity\Attribute\ContentEntityType;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\ContentEntityDeleteForm;
@@ -20,6 +19,7 @@ use Drupal\Core\Url;
 use Drupal\assessments\AssessmentAccessControlHandler;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\AssessmentListBuilder;
+use Drupal\assessments\AssessmentViewBuilder;
 use Drupal\assessments\Form\AssessmentForm;
 use Drupal\assessments\Routing\AssessmentsHtmlRouteProvider;
 use Drupal\ctools\Testing\EntityCreationTrait;
