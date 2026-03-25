@@ -20,8 +20,8 @@ Feature: Translating owners
     And I click "Add" in the "Polish" row
     Then I should see the heading "Create Polish translation of Test owner"
     Then the following fields should be present "Name"
-    When I fill in "Name" with "Testowy właściciel"
     Then the following fields should not be present "State, Type"
+    When I fill in "Name" with "Testowy właściciel"
     When I press "Save (all translations)"
     Then I should see the success message "Owner Testowy właściciel has been updated."
     And I should see the heading "Testowy właściciel"
