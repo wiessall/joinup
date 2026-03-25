@@ -7,6 +7,8 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Url;
+
 /**
  * Implements hook_module_implements_alter().
  */
@@ -14,6 +16,18 @@ function joinup_i18n_module_implements_alter(array &$implementations, string $ho
   if (in_array($hook, ['requirements', 'runtime_requirements'], TRUE) && isset($implementations['locale'])) {
     // Remove the locale module from the requirements list.
     unset($implementations['locale']);
+  }
+}
+
+/**
+ * Implements hook_language_switch_links_alter().
+ */
+function joinup_i18n_language_switch_links_alter(array &$links, string $type, Url $url): void {
+  $native_languages = \Drupal::service('language_manager')->getNativeLanguages();
+  foreach ($links as $code => &$link) {
+    if (isset($native_languages[$code])) {
+      $link['title'] = $native_languages[$code]->getName();
+    }
   }
 }
 
