@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity;
 
-use Drupal\assessments\AssessmentAccessControlHandler;
-use Drupal\assessments\AssessmentListBuilder;
-use Drupal\assessments\Form\AssessmentForm;
 use Drupal\Core\Entity\Attribute\ContentEntityType;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\ContentEntityDeleteForm;
@@ -19,7 +16,10 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
+use Drupal\assessments\AssessmentAccessControlHandler;
 use Drupal\assessments\AssessmentInterface;
+use Drupal\assessments\AssessmentListBuilder;
+use Drupal\assessments\Form\AssessmentForm;
 use Drupal\ctools\Testing\EntityCreationTrait;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 use Drupal\user\EntityOwnerTrait;
@@ -70,7 +70,7 @@ use Drupal\views\EntityViewsData;
     'canonical' => '/collection/assessments/{assessment_type}/{assessment}',
     'edit-form' => '/collection/assessments/{assessment_type}/{assessment}/edit',
     'delete-form' => '/collection/assessments/{assessment_type}/{assessment}/delete',
-    'delete-multiple-form' => '/admin/content/assessment/delete-multiple'
+    'delete-multiple-form' => '/admin/content/assessment/delete-multiple',
   ],
   bundle_entity_type: 'assessment_type',
   field_ui_base_route: 'entity.assessment_type.edit_form'

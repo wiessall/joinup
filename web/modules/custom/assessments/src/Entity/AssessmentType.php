@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity;
 
-use Drupal\assessments\AssessmentTypeAccessControlHandler;
-use Drupal\assessments\AssessmentTypeListBuilder;
-use Drupal\assessments\Form\AssessmentTypeForm;
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 use Drupal\Core\Config\Entity\EntityBundleWithPluralLabelsInterface;
 use Drupal\Core\Config\Entity\EntityBundleWithPluralLabelsTrait;
@@ -14,6 +11,9 @@ use Drupal\Core\Entity\Attribute\ConfigEntityType;
 use Drupal\Core\Entity\EntityDeleteForm;
 use Drupal\Core\Entity\Routing\AdminHtmlRouteProvider;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\assessments\AssessmentTypeAccessControlHandler;
+use Drupal\assessments\AssessmentTypeListBuilder;
+use Drupal\assessments\Form\AssessmentTypeForm;
 
 /**
  * Defines the Assessment type configuration entity.

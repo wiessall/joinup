@@ -10,6 +10,7 @@ use Drupal\Core\Entity\Attribute\ConfigEntityType;
 use Drupal\Core\Entity\Routing\AdminHtmlRouteProvider;
 use Drupal\Core\Plugin\DefaultSingleLazyPluginCollection;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\eu_oss_catalogue\Form\HostingPlatformConfigDeleteForm;
 use Drupal\eu_oss_catalogue\Form\HostingPlatformConfigForm;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
@@ -25,7 +26,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
       'delete' => HostingPlatformConfigDeleteForm::class,
     ],
     'route_provider' => [
-      'html' =>AdminHtmlRouteProvider::class,
+      'html' => AdminHtmlRouteProvider::class,
     ],
     'list_builder' => ConfigEntityListBuilder::class,
   ],

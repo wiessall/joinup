@@ -45,7 +45,7 @@ use Drupal\joinup_licence\Plugin\Field\CompatibilityDocumentLicenceFieldItemList
   label_collection: new TranslatableMarkup('Compatibility documents'),
   handlers: [
     'form' => [
-      'edit' =>CompatibilityDocumentForm::class,
+      'edit' => CompatibilityDocumentForm::class,
     ],
     'list_builder' => CompatibilityDocumentListBuilder::class,
     'route_provider' => [

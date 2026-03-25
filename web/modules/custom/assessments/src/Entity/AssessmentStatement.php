@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity;
 
-use Drupal\assessments\AssessmentStatementAccessControlHandler;
-use Drupal\assessments\AssessmentStatementListBuilder;
 use Drupal\Core\Entity\Attribute\ContentEntityType;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\Routing\AdminHtmlRouteProvider;
 use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\assessments\AssessmentStatementInterface;
-use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\assessments\AssessmentStatementAccessControlHandler;
+use Drupal\assessments\AssessmentStatementInterface;
+use Drupal\assessments\AssessmentStatementListBuilder;
+use Drupal\assessments\AssessmentVocabularyHelper;
 
 /**
  * Defines the Assessment statement entity.
