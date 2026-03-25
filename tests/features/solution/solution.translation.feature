@@ -53,10 +53,10 @@ Feature: Translating solutions
     And I press "Save (all translations)"
     Then I should see the success message "Solution Testowa solucja has been updated."
     And I should see the heading "Testowa solucja"
-    And I should not see the following lines of text:
-      | "Testowa solucja"     |
-      | "Krótki opis solucji" |
-      | "Długi opis solucji"  |
+    And I should see the following lines of text:
+      | Testowa solucja     |
+      | Krótki opis solucji |
+      | Długi opis solucji  |
 
     # Edit translation.
     When I click "Translate" in the "Entity actions" region

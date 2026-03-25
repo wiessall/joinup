@@ -50,9 +50,9 @@ Feature: Translating releases
     And I fill in "Release notes" with "Notatki do Testowego wydania"
     When I press "Save (all translations)"
     Then I should see the success message "Release Testowe wydanie has been updated."
-    And I should not see the following lines of text:
-      | "Testowe wydanie"              |
-      | "Notatki do Testowego wydania" |
+    And I should see the following lines of text:
+      | Testowe wydanie              |
+      | Notatki do Testowego wydania |
 
     # Edit translation.
     When I click "Translate" in the "Entity actions" region

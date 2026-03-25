@@ -49,10 +49,10 @@ Feature: Translating collections
     And I press "Save (all translations)"
     Then I should see the success message "Collection Testowa kolekcja has been updated."
     And I should see the heading "Testowa kolekcja"
-    And I should not see the following lines of text:
-      | "Testowa kolekcja"     |
-      | "Krótki opis kolekcji" |
-      | "Długi opis kolekcji"  |
+    And I should see the following lines of text:
+      | Testowa kolekcja     |
+      | Krótki opis kolekcji |
+      | Długi opis kolekcji  |
 
     # Edit translation.
     When I click "Translate" in the "Entity actions" region
