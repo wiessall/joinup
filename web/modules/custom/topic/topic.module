@@ -47,7 +47,9 @@ function topic_taxonomy_term_update(TermInterface $term): void {
     if ($meta_entity = $term->topic->entity) {
       // Trigger the update of the label.
       // @see \topic_meta_entity_presave.
-      $meta_entity->getTranslation($term->language()->getId())->save();
+      $langcode = $term->language()->getId();
+      $translated = $meta_entity->hasTranslation($langcode) ? $meta_entity->getTranslation($langcode) : $meta_entity->addTranslation($langcode);
+      $translated->save();
     }
   }
 }
