@@ -1,4 +1,4 @@
-@api @group-a
+@api @group-j
 Feature: Translating custom pages
 
   Background:
@@ -62,11 +62,11 @@ Feature: Translating custom pages
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value | To jest polskie tłumaczenie strony |
     And I attach the file "test.zip" to "Add a new file"
-    And I press "Update"
+    And I press "Save (all translations)"
     Then I should see the following lines of text:
       | The Attachments field description is required. |
     And I fill in "Description" with "Plik testowy"
-    And I press "Update"
+    And I press "Save (all translations)"
     Then I should see the success message "Custom page Testowa strona niestandardowa has been updated."
     And I should see the heading "Testowa strona niestandardowa"
     And I should see "To jest polskie tłumaczenie strony"
@@ -77,7 +77,7 @@ Feature: Translating custom pages
     Then I should see "Testowa strona niestandardowa"
     When I click "Edit" in the "Polish" row
     And I fill in "Title" with "Zaktualizowana strona"
-    And I press "Update"
+    And I press "Save (all translations)"
     Then I should see the success message "Custom page Zaktualizowana strona has been updated."
     And I should not see the heading "Testowa strona niestandardowa"
     And I should see the heading "Zaktualizowana strona"
@@ -87,7 +87,7 @@ Feature: Translating custom pages
     And I click "Delete" in the "Polish" row
     Then I should see "Are you sure you want to delete the Polish translation of the content item Zaktualizowana strona?"
     When I press "Delete Polish translation"
-    Then I should see "Polish translation of the Custom page Zaktualizowana strona has been deleted."
+    Then I should see the success message "Polish translation of the Custom page Zaktualizowana strona has been deleted."
     When I click "Translate" in the "Entity actions" region
     Then I should not see "Edit" in the "Polish" row
     And I should see the "Add" in the "Polish" row
