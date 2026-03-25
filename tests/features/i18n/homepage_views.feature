@@ -1,12 +1,12 @@
-@api @group-f
+@api @topic @group-f
 Feature: Test translations in the homepage.
 
   Scenario: Homepage topics are translatable.
-    Given "el" translation for the "taxonomy_term" entity with label "Data gathering and processing":
+    Given the following topics are enabled in the homepage:
+      | Data gathering and processing |
+    And "el" translation for the "taxonomy_term" entity with label "Data gathering and processing":
       | field | value                    |
       | name  | Data gathering but Greek |
-    And the following topics are enabled in the homepage:
-      | Data gathering and processing |
     And "el" translation for the "meta_entity" entity with label "Data gathering and processing":
       | field       | value                         |
       | description | Only Greek have a description |
@@ -31,3 +31,6 @@ Feature: Test translations in the homepage.
     And I go to "/admin/homepage-topics"
     Then I should see "Data gathering and processing"
     But I should not see "Data gathering but Greek"
+
+    # Manually delete the translation because the topic persists after tests.
+    Then I delete the "el" translation for the "meta_entity" entity with label "Data gathering and processing"

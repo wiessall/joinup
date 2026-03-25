@@ -99,6 +99,30 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
   }
 
   /**
+   * Deletes a specific translation for an entity.
+   *
+   * @param string $langcode
+   *   The language code of the translation to delete.
+   * @param string $entityTypeId
+   *   The entity type ID of the entity.
+   * @param string $label
+   *   The label of the entity whose translation is to be deleted.
+   */
+  #[Given('I delete the :langcode translation for the :entityTypeId entity with label :label')]
+  public function deleteTranslationForEntity(string $langcode, string $entityTypeId, string $label): void {
+    $entity = $this->getEntityByLabel($entityTypeId, $label);
+    if (!$entity instanceof TranslatableInterface) {
+      throw new \RuntimeException(sprintf('The entity with label "%s" is not translatable.', $label));
+    }
+
+    if (!$entity->hasTranslation($langcode)) {
+      throw new \RuntimeException(sprintf('The entity with label "%s" does not have a "%s" translation.', $label, $langcode));
+    }
+
+    $entity->removeTranslation($langcode);
+  }
+
+  /**
    * Transforms string field values with "!multiline!" notation to be multiline.
    *
    * Kinda useful if we want to put a YAML file content into a text field, but
