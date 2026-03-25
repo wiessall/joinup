@@ -1,0 +1,18 @@
+uuid: a88ac823-b2c4-4c72-b0da-3fff862df02d
+langcode: en
+status: true
+dependencies:
+  config:
+    - meta_entity.type.featured
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: meta_entity.featured
+target_entity_type_id: meta_entity
+target_bundle: featured
+default_langcode: site_default
+language_alterable: false

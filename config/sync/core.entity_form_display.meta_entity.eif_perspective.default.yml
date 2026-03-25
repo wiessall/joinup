@@ -60,7 +60,9 @@ content:
     third_party_settings: {  }
 hidden:
   label: true
+  langcode: true
   path: true
   target: true
+  translation: true
   uri: true
   uuid: true
