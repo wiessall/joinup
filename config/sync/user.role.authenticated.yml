@@ -31,12 +31,12 @@ dependencies:
     - taxonomy.vocabulary.tags
   module:
     - assessments
-    - collection
     - comment
     - contextual
     - email_confirmer
     - entity_legal
     - entity_print
+    - field_permissions
     - filter
     - flag
     - joinup_community_content
@@ -168,7 +168,6 @@ permissions:
   - 'perform owner_workflow workflow update_needs_changes transition on own entity'
   - 'perform owner_workflow workflow validate transition on own entity'
   - 'post comments'
-  - 'propose collection content'
   - 'request assessments oauth2 client'
   - 'restful get assessment_report'
   - 'revert all revisions'
@@ -216,6 +215,7 @@ permissions:
   - 'view eif_perspective meta-entity'
   - 'view interoperability'
   - 'view media'
+  - 'view newsletter'
   - 'view own unpublished assessment report'
   - 'view own unpublished content'
   - 'view paragraph content accordion'
