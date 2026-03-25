@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\Component\Utility\SortArray;
 use Drupal\Core\Url;
 
 /**
@@ -29,6 +30,8 @@ function joinup_i18n_language_switch_links_alter(array &$links, string $type, Ur
       $link['title'] = $native_languages[$code]->getName();
     }
   }
+
+  uasort($links, [SortArray::class, 'sortByTitleElement']);
 }
 
 /**
