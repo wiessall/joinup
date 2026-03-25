@@ -2,7 +2,7 @@
 Feature: Translating owners
 
   Background:
-    And owner content:
+    Given owner content:
       | name       |
       | Test owner |
 
@@ -47,6 +47,6 @@ Feature: Translating owners
     And I should see the "Add" in the "Polish" row
 
   Scenario: Users who do not have edit access cannot manage translations.
-    When I am logged in as an authenticated
+    Given I am logged in as an authenticated
     When I visit the translation overview form of the "Test owner" owner
     Then I should see the heading "Access denied"

@@ -2,7 +2,7 @@
 Feature: Translating contact information
 
   Background:
-    And contact_information content:
+    Given contact_information content:
       | name                     |
       | Test contact information |
 
@@ -49,6 +49,6 @@ Feature: Translating contact information
     And I should see the "Add" in the "Polish" row
 
   Scenario: Users who do not have edit access cannot manage translations.
-    When I am logged in as an authenticated
+    Given I am logged in as an authenticated
     When I visit the translation overview form of the "Test contact information" contact_information
     Then I should see the heading "Access denied"
