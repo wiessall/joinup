@@ -219,11 +219,13 @@ class TagifyContext extends RawDrupalContext {
       throw new \Exception('This step requires JavaScript to run.');
     }
     $tagifyInput = $this->getTagifyInput($fieldName);
-    $tagifyInput->setValue($option);
-    $dropdownItem = $this->waitForElementVisible('css', '.tagify__dropdown__item:contains("' . $option . '")');
-    if (empty($dropdownItem)) {
-      throw new \Exception('Option "' . $option . '" not found');
-    }
+    $element = $this->getSession()->getDriver()->getWebDriverSession()?->element('xpath', $tagifyInput->getXpath());
+    // Because we want to assert the presence of an option without selecting it
+    // we use the postValue that sends keystrokes one by one.
+    // @see \WebDriver\Element::postValue.
+    $element->postValue(['text' => $option]);
+    $this->waitForElementVisible('css', '.tagify__dropdown__item:contains("' . $option . '")');
+    $this->getSession()->getDriver()->blur($tagifyInput->getXpath());
   }
 
   /**
