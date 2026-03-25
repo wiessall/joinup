@@ -203,6 +203,30 @@ class TagifyContext extends RawDrupalContext {
   }
 
   /**
+   * Checks if options are visible in tagify dropdown options.
+   *
+   * @param string $fieldName
+   *   Field name.
+   * @param string $option
+   *   Option that should be present in the dropdown.
+   *
+   * @throws \Exception
+   *   Thrown when the tagify option is not found.
+   */
+  #[When('the :fieldName tagify should contain the following option :option')]
+  public function checkTagifyOptionsArePresent(string $fieldName, string $option): void {
+    if (!$this->hasJavascriptSupport()) {
+      throw new \Exception('This step requires JavaScript to run.');
+    }
+    $tagifyInput = $this->getTagifyInput($fieldName);
+    $tagifyInput->setValue($option);
+    $dropdownItem = $this->waitForElementVisible('css', '.tagify__dropdown__item:contains("' . $option . '")');
+    if (empty($dropdownItem)) {
+      throw new \Exception('Option "' . $option . '" not found');
+    }
+  }
+
+  /**
    * Checks if options are not visible in tagify dropdown options.
    *
    * @param string $fieldName

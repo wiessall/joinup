@@ -1,0 +1,19 @@
+@api @javascript @group-g @loggedErrors
+Feature: Translating a solution should not cause field group errors.
+  In order to make solutions available in multiple languages
+  As a translator
+  I need to be able to translate solution nodes without encountering errors
+
+  Scenario: Language is presented in the interface language.
+    Given "fr" translation for the "taxonomy_term" entity with label "English":
+      | field | value   |
+      | name  | Anglais |
+    When I am logged in as a moderator
+    # French version of the "Portal Support" collection.
+    And I go to "/fr/node/3"
+    And I open the plus button menu
+    And I click "Add solution"
+    Then the "Language availability" tagify should not contain the following option "English"
+    # Reload the page to empty the field option.
+    When I reload the page
+    Then the "Language availability" tagify should contain the following option "Anglais"
