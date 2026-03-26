@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
+use Drupal\tmgmt\JobInterface;
 
 /**
  * Implements hook_requirements().
@@ -49,4 +50,40 @@ function joinup_i18n_requirements(string $phase): array {
       ],
     ],
   ];
+}
+
+/**
+ * Rename legacy Babel continuous jobs and align their continuous_settings.
+ */
+function joinup_i18n_update_201200(): string {
+  $jobStorage = \Drupal::entityTypeManager()->getStorage('tmgmt_job');
+  $ids = $jobStorage->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('job_type', JobInterface::TYPE_CONTINUOUS)
+    ->condition('label', 'Babel:%', 'LIKE')
+    ->execute();
+
+  if (empty($ids)) {
+    return 'No Babel continuous jobs found.';
+  }
+
+  $continuousSettings = [
+    'content' => [
+      'node' => ['enabled' => 1],
+      'poll' => ['enabled' => 1],
+      'poll_choice' => ['enabled' => 1],
+    ],
+  ];
+
+  $count = 0;
+  foreach ($jobStorage->loadMultiple($ids) as $job) {
+    $sourceLangcode = $job->getSourceLangcode();
+    $targetLangcode = $job->getTargetLangcode();
+    $job->set('label', "Joinup: {$sourceLangcode} > {$targetLangcode}");
+    $job->set('continuous_settings', $continuousSettings);
+    $job->save();
+    $count++;
+  }
+
+  return "Updated {$count} continuous job(s).";
 }
