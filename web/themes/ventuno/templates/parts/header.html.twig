@@ -6,7 +6,7 @@
     <div class="container">
       <div class="d-flex w-100 justify-content-between align-items-end">
         <a class="navbar-brand py-0" href="https://ec.europa.eu/info/index_{{ lang }}" aria-label="{{ 'Visit European Commission website'|t }}">
-          <img src="{{ file_url(logo_path) }}" alt="{{ 'European Commission logo'|t }}" width="100" height="25"/>
+          <img src="{{ file_url(logo_path) }}" alt="{{ 'European Commission logo'|t }}" width="100" height="25" loading="eager" fetchpriority="high" />
         </a>
         {% if top_bar %}
           <div class="region-top-bar">
