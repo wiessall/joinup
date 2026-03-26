@@ -373,6 +373,65 @@ class JoinupI18nContext extends RawDrupalContext {
   }
 
   /**
+   * Checks that the given TMGMT job items exist.
+   */
+  #[Given('the following job items should exist:')]
+  public function assertTmgmtJobItemsExist(TableNode $table): void {
+    $this->assertTmgmtJobItems($table, TRUE);
+  }
+
+  /**
+   * Checks that the given TMGMT job items do not exist.
+   */
+  #[Given('the following job items should not exist:')]
+  public function assertTmgmtJobItemsNotExist(TableNode $table): void {
+    $this->assertTmgmtJobItems($table, FALSE);
+  }
+
+  /**
+   * Asserts TMGMT job items existence.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The table with job items.
+   * @param bool $exists
+   *   TRUE to assert existence, FALSE to assert non-existence.
+   */
+  protected function assertTmgmtJobItems(TableNode $table, bool $exists): void {
+    $entityTypeManager = \Drupal::entityTypeManager();
+    foreach ($table->getHash() as $row) {
+      $jobQuery = $entityTypeManager->getStorage('tmgmt_job')->getQuery();
+      $jobQuery->accessCheck(FALSE)
+        ->condition('source_language', $row['source'])
+        ->condition('target_language', $row['target'])
+        ->condition('translator', $row['plugin']);
+      $jobIds = $jobQuery->execute();
+
+      if ($exists) {
+        $this->assertCondition(!empty($jobIds), sprintf('TMGMT job from %s to %s with plugin %s not found.', $row['source'], $row['target'], $row['plugin']));
+      }
+      elseif (empty($jobIds)) {
+        // Job does not exist, so job items definitely don't exist.
+        continue;
+      }
+
+      $entity = $this->getEntityByLabel($row['type'], $row['label']);
+      $itemQuery = $entityTypeManager->getStorage('tmgmt_job_item')->getQuery();
+      $itemQuery->accessCheck(FALSE)
+        ->condition('tjid', $jobIds, 'IN')
+        ->condition('item_type', $row['type'])
+        ->condition('item_id', $entity->id(), 'IN');
+      $itemIds = $itemQuery->execute();
+
+      if ($exists) {
+        $this->assertCondition(!empty($itemIds), sprintf('TMGMT job item for entity %s (%s) and job %s > %s not found.', $row['label'], $row['type'], $row['source'], $row['target']));
+      }
+      else {
+        $this->assertCondition(empty($itemIds), sprintf('TMGMT job item for entity %s (%s) and job %s > %s found, but it should not exist.', $row['label'], $row['type'], $row['source'], $row['target']));
+      }
+    }
+  }
+
+  /**
    * Deletes all continuous jobs for a given plugin.
    */
   #[Given('no continuous tmgmt jobs exist for the :plugin plugin')]

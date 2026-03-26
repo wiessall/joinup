@@ -31,9 +31,9 @@ Feature: TMGMT Continuous Job Creation
       | en              | de              | ec_etranslation |
 
     Given news multilingual content:
-      | title                  | langcode | default_translation | published   |
-      | 2nd French parent      | fr       | 1                   | published   |
-      | 2nd German translation | de       | 0                   | published   |
+      | title                  | langcode | default_translation | published |
+      | 2nd French parent      | fr       | 1                   | published |
+      | 2nd German translation | de       | 0                   | published |
     Then the following tmgmt jobs should not exist:
       | source language | target language | plugin          |
       | de              | en              | ec_etranslation |
@@ -44,3 +44,13 @@ Feature: TMGMT Continuous Job Creation
       | en              | de              | ec_etranslation |
       | fr              | en              | ec_etranslation |
       | fr              | de              | ec_etranslation |
+    And the following job items should exist:
+      | type | label             | source | target | plugin          |
+      | node | English parent    | en     | fr     | ec_etranslation |
+      | node | English parent    | en     | de     | ec_etranslation |
+      | node | 2nd French parent | fr     | en     | ec_etranslation |
+      | node | 2nd French parent | fr     | de     | ec_etranslation |
+    And the following job items should not exist:
+      | type | label          | source | target | plugin          |
+      | node | English parent | de     | en     | ec_etranslation |
+      | node | English parent | de     | fr     | ec_etranslation |
