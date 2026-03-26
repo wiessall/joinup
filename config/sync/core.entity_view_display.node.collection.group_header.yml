@@ -19,14 +19,12 @@ dependencies:
     - field.field.node.collection.site_featured
     - field.field.node.collection.spatial_coverage
     - field.field.node.collection.website_url
-    - image.style.logo
     - node.type.collection
   module:
     - field_delimiter
     - field_formatter_range
     - joinup_slick
     - layout_builder
-    - svg_image
     - template_suggestion
     - user
 third_party_settings:
@@ -55,39 +53,22 @@ content:
         field_label: true
       template_suggestion:
         template_suggestion: group_header_topic
-    weight: 5
+    weight: 3
     region: content
   join_collection:
     settings: {  }
     third_party_settings: {  }
-    weight: 2
-    region: content
-  logo:
-    type: image
-    label: hidden
-    settings:
-      image_link: ''
-      image_style: logo
-      image_loading:
-        attribute: eager
-      svg_attributes:
-        width: null
-        height: null
-      svg_render_as_image: true
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: bare
     weight: 0
     region: content
   members:
     settings: {  }
     third_party_settings: {  }
-    weight: 3
+    weight: 1
     region: content
   solutions:
     settings: {  }
     third_party_settings: {  }
-    weight: 4
+    weight: 2
     region: content
 hidden:
   abstract: true
@@ -97,13 +78,12 @@ hidden:
   description: true
   featured: true
   field_state: true
-  join_collection: true
   keywords: true
   langcode: true
   last_content_deletion: true
   last_update: true
   links: true
-  members: true
+  logo: true
   newsletter: true
   node_collection_listing_content_inline_facets: true
   node_collection_listing_content_top: true
@@ -116,7 +96,6 @@ hidden:
   search_api_excerpt: true
   short_id: true
   site_featured: true
-  solutions: true
   spatial_coverage: true
   uri: true
   uuid: true
