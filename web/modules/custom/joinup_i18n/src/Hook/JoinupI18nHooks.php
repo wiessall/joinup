@@ -68,6 +68,11 @@ class JoinupI18nHooks {
       return;
     }
 
+    // Ensure our generic check is only for desired entity type IDs.
+    if (!in_array($entity->getEntityTypeId(), array_keys(self::CONTINUOUS_SETTINGS['content']))) {
+      return;
+    }
+
     $sourceLangcode = $entity->language()->getId();
     $targetLangcodeArray = $this->languageManager->getLanguages();
     $targetLangcodes = array_filter(
@@ -78,6 +83,12 @@ class JoinupI18nHooks {
     if (empty($targetLangcodes)) {
       return;
     }
+
+    $settings = self::CONTINUOUS_SETTINGS;
+    // TMGMT forces the need to have the bundle set when checking if a job item
+    // should be created.
+    // @see \Drupal\tmgmt_content\Plugin\tmgmt\Source\ContentEntitySource::shouldCreateContinuousItem
+    $settings['content']['node']['bundles'] = $this->getAllNodeBundles();
 
     // Load all existing continuous jobs for this source language + translator
     // in one query for performance.
@@ -100,9 +111,20 @@ class JoinupI18nHooks {
         'settings' => [],
         'state' => JobInterface::STATE_CONTINUOUS,
         'job_type' => JobInterface::TYPE_CONTINUOUS,
-        'continuous_settings' => self::CONTINUOUS_SETTINGS,
+        'continuous_settings' => $settings,
       ])->save();
     }
+  }
+
+  /**
+   * Loads and returns an array of all node bundles.
+   *
+   * @return array
+   *   An associative array where the keys are bundle machine names and
+   *   the values are all set to 1.
+   */
+  public function getAllNodeBundles(): array {
+    return array_fill_keys(array_keys($this->entityTypeManager->getStorage('node_type')->loadMultiple()), 1);
   }
 
 }
