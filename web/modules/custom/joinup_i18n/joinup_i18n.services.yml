@@ -1,0 +1,3 @@
+
+  Drupal\joinup_i18n\Hook\JoinupI18nHooks:
+    class: Drupal\joinup_i18n\Hook\JoinupI18nHooks
