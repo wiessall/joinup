@@ -127,4 +127,44 @@ class JoinupI18nHooks {
     return array_fill_keys(array_keys($this->entityTypeManager->getStorage('node_type')->loadMultiple()), 1);
   }
 
+  /**
+   * Implements hook_ENTITY_TYPE_insert() for node_type entity type.
+   */
+  #[Hook('node_type_insert')]
+  public function entityNodeTypeInsert(EntityInterface $entity): void {
+      $this->updateContinuousJobsWithNodeBundles();
+  }
+
+  /**
+   * Implements hook_ENTITY_TYPE_delete() for node_type entity type.
+   */
+  #[Hook('node_type_delete')]
+  public function entityNodeTypeDelete(EntityInterface $entity): void {
+    $this->updateContinuousJobsWithNodeBundles();
+  }
+
+  /**
+   * Updates all continuous jobs with the existing node bundles.
+   *
+   * This updates the continuous jobs as needed based on the current set of
+   * bundles available across all node types in the system.
+   */
+  private function updateContinuousJobsWithNodeBundles(): void {
+    $continuousSettings = self::CONTINUOUS_SETTINGS;
+    $nodeBundles = $this->getAllNodeBundles();
+    $continuousSettings['content']['node']['bundles'] = $nodeBundles;
+
+    $jobStorage = $this->entityTypeManager->getStorage('tmgmt_job');
+    $jobStorage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('job_type', JobInterface::TYPE_CONTINUOUS)
+      ->condition('translator', 'ec_etranslation')
+      ->execute();
+
+    foreach ($jobStorage->loadMultiple() as $job) {
+      $job->set('continuous_settings', $continuousSettings);
+      $job->save();
+    }
+  }
+
 }
