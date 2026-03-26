@@ -1,18 +1,18 @@
-uuid: ec2c7b29-c5d8-414c-be92-5453f895346f
+uuid: da659525-8ff0-4e2e-913c-7604224c3ec9
 langcode: en
 status: true
 dependencies:
   config:
-    - node.type.oss_solution
+    - node.type.solution
   module:
     - content_translation
 third_party_settings:
   content_translation:
     enabled: true
     bundle_settings:
-      untranslatable_fields_hide: '0'
-id: node.oss_solution
+      untranslatable_fields_hide: '1'
+id: node.solution
 target_entity_type_id: node
-target_bundle: oss_solution
-default_langcode: current_interface
-language_alterable: false
+target_bundle: solution
+default_langcode: site_default
+language_alterable: true
