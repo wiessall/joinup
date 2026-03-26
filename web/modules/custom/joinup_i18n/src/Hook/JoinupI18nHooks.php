@@ -11,6 +11,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Hook\Order\OrderBefore;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\joinup_i18n\JoinupI18nHelper;
 use Drupal\tmgmt\JobInterface;
 
 /**
@@ -18,18 +19,11 @@ use Drupal\tmgmt\JobInterface;
  */
 class JoinupI18nHooks {
 
-  protected const array CONTINUOUS_SETTINGS = [
-    'content' => [
-      'node' => ['enabled' => 1],
-      'poll' => ['enabled' => 1],
-      'poll_choice' => ['enabled' => 1],
-    ],
-  ];
-
   public function __construct(
     protected Connection $connection,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected LanguageManagerInterface $languageManager,
+    protected JoinupI18nHelper $joinupI18nHelper,
   ) {
   }
 
@@ -69,7 +63,7 @@ class JoinupI18nHooks {
     }
 
     // Ensure our generic check is only for desired entity type IDs.
-    if (!in_array($entity->getEntityTypeId(), array_keys(self::CONTINUOUS_SETTINGS['content']))) {
+    if (!in_array($entity->getEntityTypeId(), array_keys($this->joinupI18nHelper::CONTINUOUS_SETTINGS['content']))) {
       return;
     }
 
@@ -84,12 +78,9 @@ class JoinupI18nHooks {
       return;
     }
 
-    $settings = self::CONTINUOUS_SETTINGS;
     // TMGMT forces the need to have the bundle set when checking if a job item
     // should be created.
     // @see \Drupal\tmgmt_content\Plugin\tmgmt\Source\ContentEntitySource::shouldCreateContinuousItem
-    $settings['content']['node']['bundles'] = $this->getAllNodeBundles();
-
     // Load all existing continuous jobs for this source language + translator
     // in one query for performance.
     $existingTargetLangcodes = $this->connection->select('tmgmt_job', 'tj')
@@ -101,6 +92,7 @@ class JoinupI18nHooks {
       ->fetchCol();
 
     $jobStorage = $this->entityTypeManager->getStorage('tmgmt_job');
+    $settings = $this->joinupI18nHelper->getContinuousSettings();
     foreach (array_diff($targetLangcodes, $existingTargetLangcodes) as $targetLangcode) {
       $jobStorage->create([
         'source_language' => $sourceLangcode,
@@ -117,22 +109,11 @@ class JoinupI18nHooks {
   }
 
   /**
-   * Loads and returns an array of all node bundles.
-   *
-   * @return array
-   *   An associative array where the keys are bundle machine names and
-   *   the values are all set to 1.
-   */
-  public function getAllNodeBundles(): array {
-    return array_fill_keys(array_keys($this->entityTypeManager->getStorage('node_type')->loadMultiple()), 1);
-  }
-
-  /**
    * Implements hook_ENTITY_TYPE_insert() for node_type entity type.
    */
   #[Hook('node_type_insert')]
   public function entityNodeTypeInsert(EntityInterface $entity): void {
-      $this->updateContinuousJobsWithNodeBundles();
+    $this->updateContinuousJobsWithNodeBundles();
   }
 
   /**
@@ -150,9 +131,7 @@ class JoinupI18nHooks {
    * bundles available across all node types in the system.
    */
   private function updateContinuousJobsWithNodeBundles(): void {
-    $continuousSettings = self::CONTINUOUS_SETTINGS;
-    $nodeBundles = $this->getAllNodeBundles();
-    $continuousSettings['content']['node']['bundles'] = $nodeBundles;
+    $continuousSettings = $this->joinupI18nHelper->getContinuousSettings();
 
     $jobStorage = $this->entityTypeManager->getStorage('tmgmt_job');
     $jobStorage->getQuery()

@@ -56,8 +56,8 @@ function joinup_i18n_requirements(string $phase): array {
  * Rename legacy Babel continuous jobs and align their continuous_settings.
  */
 function joinup_i18n_update_201200(): string {
-  $jobStorage = \Drupal::entityTypeManager()->getStorage('tmgmt_job');
-  $ids = $jobStorage->getQuery()
+  $job_storage = \Drupal::entityTypeManager()->getStorage('tmgmt_job');
+  $ids = $job_storage->getQuery()
     ->accessCheck(FALSE)
     ->condition('job_type', JobInterface::TYPE_CONTINUOUS)
     ->condition('label', 'Babel:%', 'LIKE')
@@ -67,20 +67,13 @@ function joinup_i18n_update_201200(): string {
     return 'No Babel continuous jobs found.';
   }
 
-  $continuousSettings = [
-    'content' => [
-      'node' => ['enabled' => 1],
-      'poll' => ['enabled' => 1],
-      'poll_choice' => ['enabled' => 1],
-    ],
-  ];
-
+  $joinup_i18n_helper = \Drupal::service('joinup_i18n.helper');
   $count = 0;
-  foreach ($jobStorage->loadMultiple($ids) as $job) {
-    $sourceLangcode = $job->getSourceLangcode();
-    $targetLangcode = $job->getTargetLangcode();
-    $job->set('label', "Joinup: {$sourceLangcode} > {$targetLangcode}");
-    $job->set('continuous_settings', $continuousSettings);
+  foreach ($job_storage->loadMultiple($ids) as $job) {
+    $source_langcode = $job->getSourceLangcode();
+    $target_langcode = $job->getTargetLangcode();
+    $job->set('label', "Joinup: {$source_langcode} > {$target_langcode}");
+    $job->set('continuous_settings', $joinup_i18n_helper->getContinuousSettings());
     $job->save();
     $count++;
   }
