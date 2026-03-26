@@ -36,11 +36,15 @@ use Drupal\views\EntityViewsData;
   label_collection: new TranslatableMarkup('Assessments'),
   label_singular: new TranslatableMarkup('assessment'),
   label_plural: new TranslatableMarkup('assessments'),
-  label_count: [
-    'singular' => '@count assessments',
-    'plural' => '@count assessments',
+  entity_keys: [
+    'id' => 'id',
+    'langcode' => 'langcode',
+    'bundle' => 'type',
+    'label' => 'name',
+    'uuid' => 'uuid',
+    'owner' => 'uid',
+    'published' => 'status',
   ],
-  bundle_label: new TranslatableMarkup('Assessment type'),
   handlers: [
     'list_builder' => AssessmentListBuilder::class,
     'views_data' => EntityViewsData::class,
@@ -56,19 +60,6 @@ use Drupal\views\EntityViewsData;
       'delete-multiple-confirm' => DeleteMultipleForm::class,
     ],
   ],
-  base_table: 'assessment',
-  data_table: 'assessment_field_data',
-  translatable: TRUE,
-  admin_permission: 'administer assessment types',
-  entity_keys: [
-    'id' => 'id',
-    'langcode' => 'langcode',
-    'bundle' => 'type',
-    'label' => 'name',
-    'uuid' => 'uuid',
-    'owner' => 'uid',
-    'published' => 'status',
-  ],
   links: [
     'collection' => '/admin/content/assessment',
     'add-form' => '/collection/assessments/{assessment_type}/create',
@@ -78,7 +69,16 @@ use Drupal\views\EntityViewsData;
     'delete-form' => '/collection/assessments/{assessment_type}/{assessment}/delete',
     'delete-multiple-form' => '/admin/content/assessment/delete-multiple',
   ],
+  admin_permission: 'administer assessment types',
   bundle_entity_type: 'assessment_type',
+  bundle_label: new TranslatableMarkup('Assessment type'),
+  base_table: 'assessment',
+  data_table: 'assessment_field_data',
+  translatable: TRUE,
+  label_count: [
+    'singular' => '@count assessments',
+    'plural' => '@count assessments',
+  ],
   field_ui_base_route: 'entity.assessment_type.edit_form'
 )]
 class Assessment extends ContentEntityBase implements AssessmentInterface {

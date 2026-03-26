@@ -27,20 +27,20 @@ use Drupal\user\UserInterface;
   label_collection: new TranslatableMarkup('Joinup logs'),
   label_singular: new TranslatableMarkup('joinup log'),
   label_plural: new TranslatableMarkup('joinup logs'),
-  label_count: [
-    'singular' => '@count joinup log',
-    'plural' => '@count joinup logs',
+  entity_keys: [
+    'id' => 'id',
+    'owner' => 'uid',
   ],
   handlers: [
     'storage' => JoinupLogStorage::class,
     'storage_schema' => JoinupLogStorageSchema::class,
     'views_data' => JoinupLogViewsData::class,
   ],
-  base_table: 'joinup_log',
   admin_permission: 'access site reports',
-  entity_keys: [
-    'id' => 'id',
-    'owner' => 'uid',
+  base_table: 'joinup_log',
+  label_count: [
+    'singular' => '@count joinup log',
+    'plural' => '@count joinup logs',
   ],
 )]
 final class JoinupLog extends ContentEntityBase implements JoinupLogInterface {

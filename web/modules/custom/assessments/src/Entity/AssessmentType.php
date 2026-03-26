@@ -24,9 +24,11 @@ use Drupal\assessments\Form\AssessmentTypeForm;
   label_collection: new TranslatableMarkup('Assessment types'),
   label_singular: new TranslatableMarkup('assessment type'),
   label_plural: new TranslatableMarkup('assessment types'),
-  label_count: [
-    'singular' => '@count assessment type',
-    'plural' => '@count assessment types',
+  config_prefix: 'type',
+  entity_keys: [
+    'id' => 'id',
+    'label' => 'label',
+    'uuid' => 'uuid',
   ],
   handlers: [
     'access' => AssessmentTypeAccessControlHandler::class,
@@ -40,19 +42,17 @@ use Drupal\assessments\Form\AssessmentTypeForm;
       'html' => AdminHtmlRouteProvider::class,
     ],
   ],
-  admin_permission: 'administer assessment types',
-  bundle_of: 'assessment',
-  config_prefix: 'type',
-  entity_keys: [
-    'id' => 'id',
-    'label' => 'label',
-    'uuid' => 'uuid',
-  ],
   links: [
     'add-form' => '/admin/structure/assessment_types/add',
     'edit-form' => '/admin/structure/assessment_types/manage/{assessment_type}',
     'delete-form' => '/admin/structure/assessment_types/manage/{assessment_type}/delete',
     'collection' => '/admin/structure/assessment_types',
+  ],
+  admin_permission: 'administer assessment types',
+  bundle_of: 'assessment',
+  label_count: [
+    'singular' => '@count assessment type',
+    'plural' => '@count assessment types',
   ],
   config_export: [
     'id',

@@ -17,20 +17,20 @@ use Drupal\views\EntityViewsData;
 
 /**
  * Provides a backend for asset distribution download event logging.
-*/
+ */
 #[ContentEntityType(
   id: 'download_event',
   label: new TranslatableMarkup('Download event'),
+  entity_keys: [
+    'id' => 'id',
+    'uid' => 'uid',
+  ],
   handlers: [
     'storage_schema' => DownloadEventStorageSchema::class,
     'views_data' => EntityViewsData::class,
   ],
   base_table: 'joinup_download_event',
   translatable: FALSE,
-  entity_keys: [
-    'id' => 'id',
-    'uid' => 'uid',
-  ],
   constraints: [
     'DownloadEvent' => [],
   ],

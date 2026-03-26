@@ -15,12 +15,12 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
   id: 'invitation_type',
   label: new TranslatableMarkup('Invitation type'),
   config_prefix: 'invitation_type',
-  bundle_of: 'invitation',
   entity_keys: [
     'id' => 'id',
     'label' => 'label',
     'uuid' => 'uuid',
   ],
+  bundle_of: 'invitation',
   config_export: [
     'id',
     'label',

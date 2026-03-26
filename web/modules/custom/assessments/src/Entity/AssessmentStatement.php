@@ -29,9 +29,11 @@ use Drupal\assessments\AssessmentVocabularyHelper;
   label_collection: new TranslatableMarkup('Assessment statements'),
   label_singular: new TranslatableMarkup('assessment statement'),
   label_plural: new TranslatableMarkup('assessment statements'),
-  label_count: [
-    'singular' => '@count assessment statement',
-    'plural' => '@count assessment statements',
+  entity_keys: [
+    'id' => 'id',
+    'label' => 'id',
+    'uuid' => 'uuid',
+    'bundle' => 'type',
   ],
   handlers: [
     'access' => AssessmentStatementAccessControlHandler::class,
@@ -40,17 +42,15 @@ use Drupal\assessments\AssessmentVocabularyHelper;
       'html' => AdminHtmlRouteProvider::class,
     ],
   ],
+  links: [
+    'collection' => '/admin/content/assessment-statement',
+  ],
   admin_permission: 'administer assessment statements',
   base_table: 'assessment_statement',
   data_table: 'assessment_statement_field_data',
-  entity_keys: [
-    'id' => 'id',
-    'label' => 'id',
-    'uuid' => 'uuid',
-    'bundle' => 'type',
-  ],
-  links: [
-    'collection' => '/admin/content/assessment-statement',
+  label_count: [
+    'singular' => '@count assessment statement',
+    'plural' => '@count assessment statements',
   ],
 )]
 final class AssessmentStatement extends ContentEntityBase implements AssessmentStatementInterface {

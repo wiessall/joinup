@@ -43,6 +43,10 @@ use Drupal\joinup_licence\Plugin\Field\CompatibilityDocumentLicenceFieldItemList
   id: 'compatibility_document',
   label: new TranslatableMarkup('Compatibility document'),
   label_collection: new TranslatableMarkup('Compatibility documents'),
+  entity_keys: [
+    'id' => 'id',
+    'label' => 'title',
+  ],
   handlers: [
     'form' => [
       'edit' => CompatibilityDocumentForm::class,
@@ -53,16 +57,12 @@ use Drupal\joinup_licence\Plugin\Field\CompatibilityDocumentLicenceFieldItemList
     ],
     'view_builder' => CompatibilityDocumentViewBuilder::class,
   ],
-  base_table: 'compatibility_document',
-  admin_permission: 'access compatibility document overview',
-  entity_keys: [
-    'id' => 'id',
-    'label' => 'title',
-  ],
   links: [
     'edit-form' => '/admin/structure/compatibility-document/{compatibility_document}/edit',
     'collection' => '/admin/structure/compatibility-document',
   ],
+  admin_permission: 'access compatibility document overview',
+  base_table: 'compatibility_document',
   field_ui_base_route: 'entity.compatibility_document.collection',
 )]
 class CompatibilityDocument extends ContentEntityBase implements CompatibilityDocumentInterface {

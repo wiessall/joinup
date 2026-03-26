@@ -20,6 +20,11 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 #[ConfigEntityType(
   id: 'hosting_platform',
   label: new TranslatableMarkup('Code hosting platform config'),
+  config_prefix: 'hosting_platform',
+  entity_keys: [
+    'id' => 'id',
+    'label' => 'label',
+  ],
   handlers: [
     'form' => [
       'edit' => HostingPlatformConfigForm::class,
@@ -30,16 +35,11 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
     ],
     'list_builder' => ConfigEntityListBuilder::class,
   ],
-  admin_permission: 'administer eu oss catalogue',
-  config_prefix: 'hosting_platform',
-  entity_keys: [
-    'id' => 'id',
-    'label' => 'label',
-  ],
   links: [
     'edit-form' => '/admin/content/eu-oss-catalogue/hosting-platform/manage/{hosting_platform}',
     'delete-form' => '/admin/content/eu-oss-catalogue/hosting-platform/manage/{hosting_platform}/delete',
   ],
+  admin_permission: 'administer eu oss catalogue',
   config_export: [
     'id',
     'label',

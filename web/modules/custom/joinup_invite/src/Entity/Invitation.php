@@ -14,6 +14,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\user\UserInterface;
+use Drupal\views\EntityViewsData;
 
 /**
  * Defines the Invitation entity.
@@ -39,11 +40,6 @@ use Drupal\user\UserInterface;
 #[ContentEntityType(
   id: 'invitation',
   label: new TranslatableMarkup('Invitation'),
-  bundle_label: new TranslatableMarkup('Invitation type'),
-  handlers: [
-    'views_data' => \Drupal\views\EntityViewsData::class,
-  ],
-  base_table: 'invitation',
   entity_keys: [
     'id' => 'id',
     'bundle' => 'bundle',
@@ -52,7 +48,12 @@ use Drupal\user\UserInterface;
     'langcode' => 'langcode',
     'status' => 'status',
   ],
+  handlers: [
+    'views_data' => EntityViewsData::class,
+  ],
   bundle_entity_type: 'invitation_type',
+  bundle_label: new TranslatableMarkup('Invitation type'),
+  base_table: 'invitation',
 )]
 class Invitation extends ContentEntityBase implements InvitationInterface {
 
