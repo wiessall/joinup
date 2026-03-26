@@ -1,0 +1,28 @@
+uuid: d3b11111-97c8-4015-9fe7-04a0c76b9a6b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.meta_entity.approval_message
+    - filter.format.basic_html
+    - meta_entity.type.collection_settings
+  module:
+    - text
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: meta_entity.collection_settings.approval_message
+field_name: approval_message
+entity_type: meta_entity
+bundle: collection_settings
+label: 'Post approval email message'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - basic_html
+field_type: text_long
