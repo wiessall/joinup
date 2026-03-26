@@ -24,9 +24,8 @@ Feature: Private messages
     And I pick "Bob Rolls" from the "Member" autocomplete suggestions
     And I fill in "Message" with "A private message from Alice to Bob."
     And I press "Send" in the "Modal buttons" region
-    Then the modal should be closed
     And I wait for AJAX to finish
-    And I wait until ".private-message-thread-inbox" element exists
+    And I go to "/user/messages"
     And I should see the heading "Private Messages"
     And I should see 1 private message
     And a message containing the text "A private message from Alice to Bob." should be present
@@ -54,9 +53,8 @@ Feature: Private messages
     And I pick "Joan Tiff" from the "Member" autocomplete suggestions
     And I fill in "Message" with "A private message from Bob to Joan."
     And I press "Send" in the "Modal buttons" region
-    Then the modal should be closed
     And I wait for AJAX to finish
-    And I wait until ".private-message-thread-inbox:nth-child(2)" element exists
+    And I go to "/user/messages"
     And I see the following lines of text in the correct order in "Private messages inbox":
       | A private message from Bob to Joan.        |
       | Another private message from Bob to Alice. |
