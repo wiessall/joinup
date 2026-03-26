@@ -21,7 +21,7 @@ use Drupal\node\NodeInterface;
 /**
  * Creates multilingual content.
  */
-class JoinupMultilingualContentContext extends RawDrupalContext {
+class JoinupI18nContext extends RawDrupalContext {
 
   use EntityTrait;
   use TraversingTrait;

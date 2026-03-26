@@ -62,13 +62,13 @@
   - Drupal\joinup\Context\JoinupEventContext
   - Drupal\joinup\Context\JoinupFeaturedContext
   - Drupal\joinup\Context\JoinupGroupContext
+  - Drupal\joinup\Context\JoinupI18nContext
   - Drupal\joinup\Context\JoinupInviteContext
   - Drupal\joinup\Context\JoinupLayoutParagraphsContext
   - Drupal\joinup\Context\JoinupLegalContext
   - Drupal\joinup\Context\JoinupLicenceContext
   - Drupal\joinup\Context\JoinupLogContext
   - Drupal\joinup\Context\JoinupMessageContext
-  - Drupal\joinup\Context\JoinupMultilingualContentContext
   - Drupal\joinup\Context\JoinupNewsContext
   - Drupal\joinup\Context\JoinupNewsletterContext
   - Drupal\joinup\Context\JoinupNotificationContext
