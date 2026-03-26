@@ -100,3 +100,17 @@ Feature: Translating news
       | Lee Facil | Test collection news |
       | Flora Mod | Test solution news   |
       | Lee Facil | Test solution news   |
+
+  @javascript
+  Scenario: Default language of new node should be same as language of the interface
+    Given I am logged in as "Flora Mod"
+    When I go to the "Test collection" collection
+    And I click "Add news" in the plus button menu
+    Then the available options in the "Language" select should match the site languages
+    And the selected option in the "Language" select should be "en"
+    Then I should see "EN" in the "Top Bar" region
+    When I press "EN" in the "Top Bar" region
+    Then a popover should open
+    And I should see "PL" in the "Popover" region
+    Then I click "PL" in the "Popover" region
+    And the selected option in the "Language" select should be "pl"
