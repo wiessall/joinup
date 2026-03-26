@@ -59,7 +59,7 @@ use Drupal\views\EntityViewsData;
   base_table: 'assessment',
   data_table: 'assessment_field_data',
   translatable: TRUE,
-  admin_permission: 'administer assessment type',
+  admin_permission: 'administer assessment types',
   entity_keys: [
     'id' => 'id',
     'langcode' => 'langcode',
