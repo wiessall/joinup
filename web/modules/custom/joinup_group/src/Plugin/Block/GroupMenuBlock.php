@@ -238,7 +238,6 @@ class GroupMenuBlock extends OgMenuBlock {
     ];
   }
 
-
   /**
    * {@inheritdoc}
    */
