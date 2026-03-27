@@ -1,4 +1,4 @@
-@api @group-k
+@api @group-j
 Feature: Search API views show translated content with english as fallback
 
   Background:
@@ -77,3 +77,20 @@ Feature: Search API views show translated content with english as fallback
       | English Solution    |
       | BG Solution         |
     And I should not see "Bilingual Solution"
+
+  Scenario: Test "content_overview" view shows translated content
+    Given news multilingual content:
+      | title            | collection      | langcode | default_translation  |
+      | Test news        | Test collection | en       | 1                    |
+      | Bilingual news   | Test collection | en       | 1                    |
+      | BG news          | ~~~             | bg       | 0                    |
+    Given I visit the content overview page
+    Then I should see the following lines of text:
+      | Test news       |
+      | Bilingual news  |
+    And I should not see "BG news"
+    When I click "Bulgarian"
+    Then I should see the following lines of text:
+      | Test news    |
+      | BG news      |
+    And I should not see "Bilingual news"
