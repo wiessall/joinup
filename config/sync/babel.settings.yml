@@ -20,6 +20,11 @@ translation_type:
         - spatial
         - status
         - topic
+    'content_entity:meta_entity':
+      bundle:
+        - collection_settings
+        - eif_perspective
+        - solution_settings
 data_transfer:
   plugin:
     spreadsheet: {  }
