@@ -24,7 +24,7 @@ translation_type:
       bundle:
         - collection_settings
         - eif_perspective
-        - solution_settings
+        - topic
 data_transfer:
   plugin:
     spreadsheet: {  }
