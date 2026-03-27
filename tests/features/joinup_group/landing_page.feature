@@ -173,7 +173,6 @@ Feature: Tests the group landing page customization.
     And the following custom pages navigation menu structure for the "Space Weavers" collection:
       | title | parent    | enabled |
       | Orion | Andromeda | no      |
-    When I am logged in as a facilitator of the "Space Weavers" collection
     And I visit the "Andromeda" "custom page"
     And I should see the following navigation menu items in the specified order:
       | text      |
@@ -181,4 +180,4 @@ Feature: Tests the group landing page customization.
       | Andromeda |
     Then "Andromeda" should be the active items in the "Navigation menu" region
     When I visit the "Orion" "custom page"
-    Then "Andromeda" should be the active items in the "Navigation menu" region
+    Then no items should be active in the "Navigation menu" region

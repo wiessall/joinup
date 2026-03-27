@@ -115,7 +115,7 @@ class GroupMenuBlock extends OgMenuBlock {
     // For single-level rendering, only keep the exact active link in the trail.
     if ($parameters->maxDepth === 1 && !empty($parameters->activeTrail)) {
       $trail = array_filter($parameters->activeTrail);
-      $leaf = end($trail);
+      $leaf = reset($trail);
       $parameters->activeTrail = $leaf ? [$leaf => $leaf] : [];
     }
 
