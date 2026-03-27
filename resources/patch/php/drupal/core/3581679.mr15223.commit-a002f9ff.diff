@@ -1,0 +1,15 @@
+diff --git a/core/modules/views/src/Hook/ViewsViewsHooks.php b/core/modules/views/src/Hook/ViewsViewsHooks.php
+index f42927f237bc6c8439f378dc9e92a0a8c11ded37..873c6598f51f938c87074a8966dd95dabcd3636a 100644
+--- a/core/modules/views/src/Hook/ViewsViewsHooks.php
++++ b/core/modules/views/src/Hook/ViewsViewsHooks.php
+@@ -151,6 +151,10 @@ public function viewsData(): array {
+       if (empty($actions)) {
+         continue;
+       }
++      $base_table = $entity_info->getBaseTable();
++      if (!$base_table) {
++        continue;
++      }
+       $data[$entity_info->getBaseTable()][$entity_type . '_bulk_form'] = [
+         'title' => $this->t('Bulk update'),
+         'help' => $this->t('Allows users to apply an action to one or more items.'),
