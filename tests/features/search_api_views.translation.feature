@@ -1,10 +1,11 @@
-@api @group-j
+@api @group-k
 Feature: Search API views show translated content with english as fallback
 
   Background:
-    Given collection content:
-      | title           |
-      | Test collection |
+    Given collection multilingual content:
+      | title           | langcode  | default_translation  |
+      | Test collection | en        | 1                    |
+      | BG collection   | bg        | 0                    |
     And solution multilingual content:
       | title               | collection      | abstract            | langcode | default_translation  |
       | English Solution    | Test collection | Only in English     | en       | 1                    |
@@ -18,6 +19,26 @@ Feature: Search API views show translated content with english as fallback
       | title               | status    | oss_source        | langcode | default_translation |
       | Test oss catalogue  | published | developers_italia | en       | 1                   |
       | BG oss catalogue    | ~~~       | ~~~               | bg       | 0                   |
+
+  Scenario: Test "group_feed" view shows translated content
+    Given I go to the homepage of the "Test collection" collection
+    When I click "RSS feed" in the "Entity actions" region
+    Then I should see a valid RSS feed
+    And the RSS feed items should be:
+      | title                         |
+      | Solution: English Solution    |
+      | Solution: Bilingual Solution  |
+      | Custom page: Test custom page |
+    When I go to the homepage of the "Test collection" collection
+    And I click "Bulgarian"
+    And I click "RSS feed" in the "Entity actions" region
+    Then I should see a valid RSS feed
+    And the RSS feed items should be:
+      | title                                 |
+      # @todo Remove "English Solution" once the re-indexing fix is removed.
+      | Solution: English Solution  |
+      | Solution: BG Solution                 |
+      | Custom page: BG custom page           |
 
   Scenario: Test "oss_solutions_listing" view shows translated content
     And I append "block" to "field_paragraphs_body" field in "node" entity with following "Test custom page" title:
