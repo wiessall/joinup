@@ -1,0 +1,26 @@
+diff --git a/src/Form/ManageComponentAttributesForm.php b/src/Form/ManageComponentAttributesForm.php
+index de265cc8c562c5b7e5bfb320e9e88e55818beca6..b4c0d27d895701aaefd2095332a782afac145b00 100644
+--- a/src/Form/ManageComponentAttributesForm.php
++++ b/src/Form/ManageComponentAttributesForm.php
+@@ -105,14 +105,13 @@ class ManageComponentAttributesForm extends FormBase {
+    * @return array
+    *   The form array.
+    */
+-  public function buildForm(array $form, FormStateInterface $form_state, SectionStorageInterface $section_storage = NULL, $delta = NULL, $uuid = NULL) {
+-    $parameters = array_slice(func_get_args(), 2);
+-    foreach ($parameters as $parameter) {
+-      if (is_null($parameter)) {
+-        throw new \InvalidArgumentException('ManageComponentAttributesForm requires all parameters.');
+-      }
+-    }
+-
++  public function buildForm(
++    array $form,
++    FormStateInterface $form_state,
++    ?SectionStorageInterface $section_storage = NULL,
++    ?int $delta = NULL,
++    ?string $uuid = NULL,
++  ) {
+     $config = $this->configFactory->get('layout_builder_component_attributes.settings')->get();
+ 
+     // Determine which categories, if any, are empty (i.e. no
