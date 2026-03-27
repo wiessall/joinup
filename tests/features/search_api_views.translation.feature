@@ -108,3 +108,17 @@ Feature: Search API views show translated content with english as fallback
       | Interoperability assessments space    |
       | Portal support                        |
       | BG collection                         |
+
+  Scenario: Test "search" view shows translated content
+    Given I am on the advanced search page
+    Then I should see the following lines of text:
+      | Solutions mentioned in an assessment  |
+      | Interoperability assessments space    |
+      | Portal support                        |
+      | Test collection                       |
+    When I click "Bulgarian"
+    Then I should see the following lines of text:
+      | Solutions mentioned in an assessment  |
+      | Interoperability assessments space    |
+      | Portal support                        |
+      | BG collection                         |
