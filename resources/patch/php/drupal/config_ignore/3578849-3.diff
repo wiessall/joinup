@@ -1,0 +1,18 @@
+---
+ src/Form/IgnoreSettingsForm.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/Form/IgnoreSettingsForm.php b/src/Form/IgnoreSettingsForm.php
+index 34d0b63..df9c899 100644
+--- a/src/Form/IgnoreSettingsForm.php
++++ b/src/Form/IgnoreSettingsForm.php
+@@ -33,7 +33,7 @@ class IgnoreSettingsForm extends ConfigFormBase {
+   /**
+    * {@inheritdoc}
+    */
+-  public function buildForm(array $form, FormStateInterface $form_state, Request $request = NULL) {
++  public function buildForm(array $form, FormStateInterface $form_state, ?Request $request = NULL) {
+ 
+     $config = $this->config('config_ignore.settings');
+     $ignoreConfig = ConfigIgnoreConfig::fromConfig($config);
+-- 
