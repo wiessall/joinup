@@ -4,7 +4,7 @@
     "type": "project",
     "license": "EUPL-1.2",
     "require": {
-        "php": ">=8.3",
+        "php": ">=8.5",
         "ext-dom": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
@@ -208,7 +208,7 @@
     "config": {
         "sort-packages": true,
         "platform": {
-            "php": "8.3"
+            "php": "8.5"
         },
         "allow-plugins": {
             "composer/installers": true,
