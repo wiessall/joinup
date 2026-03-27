@@ -484,7 +484,8 @@
                 "Renderer service can only accept array @see https://www.drupal.org/i/3531949": "resources/patch/php/drupal/message/3531949.mr56-commit24333e61.diff"
             },
             "drupal/message_digest": {
-                "Renderer::renderPlain() is deprecated @see https://www.drupal.org/i/3511648": "resources/patch/php/drupal/message_digest/3511648.diff"
+                "Renderer::renderPlain() is deprecated @see https://www.drupal.org/i/3511648": "resources/patch/php/drupal/message_digest/3511648.diff",
+                "PHP 8.4 @see https://www.drupal.org/i/3511077": "resources/patch/php/drupal/message_digest/3511077.commit-bd0f5776.diff"
             },
             "drupal/meta_entity": {
                 "hook_entity_insert() auto-creates duplicate @see https://www.drupal.org/i/3583434": "resources/patch/php/drupal/meta_entity/3583434.mr20-commitf3ef1e53.diff"
