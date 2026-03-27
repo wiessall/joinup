@@ -98,7 +98,7 @@
         "drupal/private_message": "^4.0@alpha",
         "drupal/private_message_flood": "^2.0@alpha",
         "drupal/publication_date": "^3.1",
-        "drupal/purge_users": "^4.0",
+        "drupal/purge_users": "^5.0",
         "drupal/queue_ui": "^3.1",
         "drupal/rabbit_hole": "^2.0",
         "drupal/rdf_sync": "^1.0",
@@ -498,7 +498,7 @@
             },
             "drupal/purge_users": {
                 "Users are deleted without prior notification when \"Notification User Before Deletion\" is enabled @see https://www.drupal.org/i/3521201": "resources/patch/php/drupal/purge_users/3521201.diff",
-                "Missing langcode in purge_users.settings and config/install missing @see https://www.drupal.org/i/3542620": "resources/patch/php/drupal/purge_users/3542620.diff"
+                "Replace deprecated (integer) cast with (int) in purge_users_update_9001() @see https://www.drupal.org/i/3578633": "resources/patch/php/drupal/purge_users/3578633.commit-2f9cc8d07c4.diff"
             },
             "drupal/search_api": {
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199-42e0e284.diff",
