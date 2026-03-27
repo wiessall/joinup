@@ -4,11 +4,20 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_notification\EventSubscriber;
 
+use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Session\AccountProxy;
 use Drupal\Core\Url;
+use Drupal\joinup_notification\EntityMessageHelper;
 use Drupal\joinup_notification\Event\NotificationEvent;
+use Drupal\joinup_notification\JoinupMessageDeliveryInterface;
 use Drupal\joinup_notification\NotificationEvents;
+use Drupal\joinup_workflow\WorkflowHelperInterface;
+use Drupal\node\Entity\Node;
+use Drupal\og\MembershipManager;
 use Drupal\og\OgMembershipInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Handles notifications related to changes in group memberships.
@@ -26,6 +35,20 @@ class OgMembershipSubscriber extends NotificationSubscriberBase {
    * @var \Drupal\og\Entity\OgMembership
    */
   protected $membership;
+
+  public function __construct(
+    EntityTypeManagerInterface $entityTypeManager,
+    ConfigFactory $configFactory,
+    AccountProxy $currentUser,
+    MembershipManager $ogMembershipManager,
+    WorkflowHelperInterface $workflowHelper,
+    JoinupMessageDeliveryInterface $messageDelivery,
+    #[Autowire(service: 'joinup_notification.entity_message_helper')]
+    protected readonly EntityMessageHelper $entityMessageHelper,
+  ) {
+    parent::__construct($entityTypeManager, $configFactory, $currentUser, $ogMembershipManager, $workflowHelper, $messageDelivery);
+  }
+
 
   /**
    * {@inheritdoc}
@@ -121,10 +144,13 @@ class OgMembershipSubscriber extends NotificationSubscriberBase {
     }
 
     $recipient_id = $this->membership->getOwnerId();
-    $template = $this->membership->get('subscription_bundles')->isEmpty() ?
-      self::TEMPLATE_APPROVE_MEMBERSHIP :
-      self::TEMPLATE_APPROVE_MEMBERSHIP_WITH_SUBSCRIPTION;
-
+    if($this->entityMessageHelper->hasCustomApprovalMessage($this->entity->id())) {
+      $template = $this->entity->id() .'-approval-message';
+    } else {
+      $template = $this->membership->get('subscription_bundles')->isEmpty() ?
+        self::TEMPLATE_APPROVE_MEMBERSHIP :
+        self::TEMPLATE_APPROVE_MEMBERSHIP_WITH_SUBSCRIPTION;
+    }
     $user_data = [
       $template => [
         $recipient_id => $recipient_id,
