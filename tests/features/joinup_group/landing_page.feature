@@ -161,3 +161,24 @@ Feature: Tests the group landing page customization.
 
     When I go to the "Michigan" custom_page
     Then I should be on "/collection/united-states"
+
+  Scenario: Active navigation link is correct on flat group navigation when visiting a nested custom page
+    Given collection content:
+      | title         |
+      | Space Weavers |
+    And custom_page content:
+      | title     | collection    |
+      | Andromeda | Space Weavers |
+      | Orion     | Space Weavers |
+    And the following custom pages navigation menu structure for the "Space Weavers" collection:
+      | title | parent    | enabled |
+      | Orion | Andromeda | no      |
+    When I am logged in as a facilitator of the "Space Weavers" collection
+    And I visit the "Andromeda" "custom page"
+    And I should see the following navigation menu items in the specified order:
+      | text      |
+      | Overview  |
+      | Andromeda |
+    Then "Andromeda" should be the active items in the "Navigation menu" region
+    When I visit the "Orion" "custom page"
+    Then "Andromeda" should be the active items in the "Navigation menu" region
