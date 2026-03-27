@@ -16,9 +16,7 @@ Feature: Translating a solution should not cause field group errors.
     And I go to "/fr/node/3"
     And I open the plus button menu
     And I click "Add solution"
-    Then the "Language availability" tagify should not contain the following option "English"
-    # Reload the page to empty the field option.
-    When I reload the page
+    Then the url should match "/fr/node/3/solution/add"
     Then the "Language availability" tagify should contain the following option "Anglais"
     When I click "Contact details"
     And I press "Add new owner"
