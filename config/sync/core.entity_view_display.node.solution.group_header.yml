@@ -25,7 +25,6 @@ dependencies:
     - field.field.node.solution.short_id
     - field.field.node.solution.site_featured
     - field.field.node.solution.solution_type
-    - field.field.node.solution.translation
     - image.style.logo
     - node.type.solution
   module:
