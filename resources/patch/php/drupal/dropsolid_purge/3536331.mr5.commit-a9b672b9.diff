@@ -1,0 +1,19 @@
+diff --git a/src/Plugin/Purge/Purger/DropsolidPurger.php b/src/Plugin/Purge/Purger/DropsolidPurger.php
+index 6caf0370f10865e0ca3159f05d55952420aa981d..5f11d826bc176097fef30761739a3ca7a62f297a 100644
+--- a/src/Plugin/Purge/Purger/DropsolidPurger.php
++++ b/src/Plugin/Purge/Purger/DropsolidPurger.php
+@@ -169,12 +169,12 @@ class DropsolidPurger extends PurgerBase implements PurgerInterface {
+    *
+    * @param \Psr\Http\Message\ResponseInterface $r
+    *   The HTTP response object.
+-   * @param \GuzzleHttp\Exception\RequestException $r
++   * @param \GuzzleHttp\Exception\RequestException|null $r
+    *   Optional exception in case of failures.
+    *
+    * @return string[]
+    */
+-  protected function debugInfoForResponse(ResponseInterface $r, RequestException $e = NULL) {
++  protected function debugInfoForResponse(ResponseInterface $r, ?RequestException $e = NULL) {
+     $info = [];
+     $info['rsp http'] = $r->getProtocolVersion();
+     $info['rsp status'] = $r->getStatusCode();
