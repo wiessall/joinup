@@ -94,3 +94,17 @@ Feature: Search API views show translated content with english as fallback
       | Test news    |
       | BG news      |
     And I should not see "Bilingual news"
+
+  Scenario: Test "collections" view shows translated content
+    Given I visit the collection overview page
+    Then I should see the following lines of text:
+      | Solutions mentioned in an assessment  |
+      | Interoperability assessments space    |
+      | Portal support                        |
+      | Test collection                       |
+    When I click "Bulgarian"
+    Then I should see the following lines of text:
+      | Solutions mentioned in an assessment  |
+      | Interoperability assessments space    |
+      | Portal support                        |
+      | BG collection                         |
