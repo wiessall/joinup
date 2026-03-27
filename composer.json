@@ -442,6 +442,9 @@
                 "AJAX link broken if flaggable entity id is string @see https://www.drupal.org/project/flag/issues/3359007": "resources/patch/php/drupal/flag/3359007-47.patch",
                 "Flag cache tags result in Purge module exception @see https://www.drupal.org/project/flag/issues/3557145": "resources/patch/php/drupal/flag/3557145.71mr-commitf248789c.diff"
             },
+            "drupal/geofield": {
+                "Wrong placeholders @see https://www.drupal.org/i/3581484": "resources/patch/php/drupal/geofield/3581484.mr46.commit-36a20a21.diff"
+            },
             "drupal/honeypot": {
                 "Behat integration. @see https://www.drupal.org/project/honeypot/issues/3059040": "resources/patch/php/drupal/honeypot/3059040.patch",
                 "Provide ways to clean up old honeypot_time_restriction values @see https://www.drupal.org/project/honeypot/issues/2997609": "resources/patch/php/drupal/honeypot/2997609.patch"

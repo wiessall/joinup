@@ -1,0 +1,37 @@
+diff --git a/geofield.views.inc b/geofield.views.inc
+index d0f7b8f9bd933cc1d134b47e3dd4b775b3a0218b..01ce4194ef985290702a7eb92cfa497345e00fe6 100644
+--- a/geofield.views.inc
++++ b/geofield.views.inc
+@@ -54,7 +54,9 @@ function geofield_field_views_data(FieldStorageConfigInterface $field_storage) {
+         'entity_type' => $entity_type_id,
+         'field_name' => $field_name . '_proximity',
+         'real field' => $field_name,
+-        'label' => t('Distance to !field_name', [$field_name]),
++        'label' => t('Distance to @field_name', [
++          '@field_name' => $field_name,
++        ]),
+         'empty field name' => '- No value -',
+         'additional fields' => [
+           $field_name . 'value',
+@@ -85,7 +87,9 @@ function geofield_field_views_data(FieldStorageConfigInterface $field_storage) {
+         'entity_type' => $entity_type_id,
+         'field_name' => $field_name . '_boundary',
+         'real field' => $field_name,
+-        'label' => t('Rectangular Boundaries around !field_name', [$field_name]),
++        'label' => t('Rectangular Boundaries around @field_name', [
++          '@field_name' => $field_name,
++        ]),
+         'empty field name' => '- No value -',
+         'additional fields' => [
+           $field_name . '_lat',
+@@ -98,7 +102,9 @@ function geofield_field_views_data(FieldStorageConfigInterface $field_storage) {
+         'entity_type' => $entity_type_id,
+         'field_name' => $field_name . '_boundary',
+         'real field' => $field_name,
+-        'label' => t('Rectangular Boundaries around !field_name', [$field_name]),
++        'label' => t('Rectangular Boundaries around @field_name', [
++          '@field_name' => $field_name,
++        ]),
+         'allow empty' => TRUE,
+         'additional fields' => [
+           $field_name . '_lat',
