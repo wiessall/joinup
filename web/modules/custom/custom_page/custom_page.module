@@ -384,11 +384,16 @@ function custom_page_preprocess_menu__og__navigation(array &$variables): void {
     return;
   }
 
+  // Only mark the landing page item as active when no item is already active,
+  // to avoid overriding Drupal's active trail on inner pages.
+  $has_active = array_filter($variables['items'], fn($item) => $item['in_active_trail']);
+  if ($has_active) {
+    return;
+  }
+
   foreach ($variables['items'] as $key => $item) {
     if ($item['url']->isRouted()
       && ($item['url']->getRouteParameters()['node'] ?? NULL) == $landing_page->id()) {
-      // Marks the landing page menu item as active when visiting
-      // the group canonical page.
       $variables['items'][$key]['in_active_trail'] = TRUE;
     }
   }
