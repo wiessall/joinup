@@ -5,10 +5,9 @@
 ddev_version_constraint: ">=v1.25.0"
 type: drupal
 docroot: web
-php_version: "8.3"
+php_version: "8.5"
 webimage_extra_packages:
     - php-apcu
-
 # It's not possible to use fpfis/httpd-php because DDEV is strongly advising
 # against using a non-DDEV image. But this has no impact on the Interoperable Europe Portal code runs
 # in CI/CD or on production.
