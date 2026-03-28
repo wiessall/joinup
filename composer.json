@@ -543,7 +543,8 @@
                 "Do not force default state in options. @see https://www.drupal.org/project/state_machine/issues/2746091": "resources/patch/php/drupal/state_machine/2746091.diff"
             },
             "drupal/svg_image": {
-                "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.mr20-note535548.diff"
+                "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.mr20-note535548.diff",
+                "PHP 8.5 @see https://www.drupal.org/i/3565902": "resources/patch/php/drupal/svg_image/3565902.commit-eb75af2259.diff"
             },
             "drupal/tmgmt": {
                 "Filtering job items crashes @see https://www.drupal.org/i/3578626": "resources/patch/php/drupal/tmgmt/3578626.mr159.commit3ee8064a.diff",

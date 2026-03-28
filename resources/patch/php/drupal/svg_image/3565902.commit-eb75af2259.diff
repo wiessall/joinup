@@ -1,0 +1,13 @@
+diff --git a/svg_image.module b/svg_image.module
+index 838030e94438e597e6f0f3ff1e0f8fb60bb6393a..ae8dfbfa3726573dd4494ab8af5a2bb4297864f7 100644
+--- a/svg_image.module
++++ b/svg_image.module
+@@ -109,7 +109,7 @@ function svg_image_get_image_file_dimensions(File $file) {
+         if ($svg) {
+           foreach ($svg->attributes() as $attribute => $value) {
+             if (in_array($attribute, $neededVariables)) {
+-              $variables[$attribute] = (integer) $value;
++              $variables[$attribute] = (int) $value;
+             }
+           }
+         }
