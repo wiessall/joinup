@@ -1,0 +1,543 @@
+diff --git a/modules/search_api_db/src/Plugin/search_api/backend/Database.php b/modules/search_api_db/src/Plugin/search_api/backend/Database.php
+index 8c0c130130cede1a92c32543977e80e4c881b7ba..c5a1cf062a7d1efd6b608570fef8a85654d3f06e 100644
+--- a/modules/search_api_db/src/Plugin/search_api/backend/Database.php
++++ b/modules/search_api_db/src/Plugin/search_api/backend/Database.php
+@@ -1943,7 +1943,7 @@ class Database extends BackendPluginBase implements AutocompleteBackendInterface
+    */
+   protected function createDbQuery(QueryInterface $query, array $fields) {
+     $keys = &$query->getKeys();
+-    $keys_set = (boolean) $keys;
++    $keys_set = (bool) $keys;
+     $tokenizer_active = $query->getIndex()->isValidProcessor('tokenizer');
+     $keys = $this->prepareKeys($keys, $tokenizer_active);
+ 
+@@ -2527,11 +2527,11 @@ class Database extends BackendPluginBase implements AutocompleteBackendInterface
+         // For NULL values, we can just use the single-values table, since we
+         // only need to know if there's any value at all for that field.
+         if ($value === NULL || empty($field_info['multi-valued'])) {
+-          if (empty($tables[NULL])) {
++          if (empty($tables[''])) {
+             $table = ['table' => $db_info['index_table']];
+-            $tables[NULL] = $this->getTableAlias($table, $db_query);
++            $tables[''] = $this->getTableAlias($table, $db_query);
+           }
+-          $column = $tables[NULL] . '.' . $field_info['column'];
++          $column = $tables[''] . '.' . $field_info['column'];
+           if ($value === NULL) {
+             $method = $not_equals ? 'isNotNull' : 'isNull';
+             $db_condition->$method($column);
+diff --git a/src/Entity/Index.php b/src/Entity/Index.php
+index 3f1f55eb23ae177d7be63548b884a0148f6a7db7..baf42e2319cb5dda69934e34df545e821726b4ad 100644
+--- a/src/Entity/Index.php
++++ b/src/Entity/Index.php
+@@ -1015,7 +1015,7 @@ class Index extends ConfigEntityBase implements IndexInterface {
+    * {@inheritdoc}
+    */
+   public function getPropertyDefinitions($datasource_id) {
+-    if (!isset($this->properties[$datasource_id])) {
++    if (!isset($this->properties["$datasource_id"])) {
+       if (isset($datasource_id)) {
+         $datasource = $this->getDatasource($datasource_id);
+         $properties = $datasource->getPropertyDefinitions();
+@@ -1029,10 +1029,10 @@ class Index extends ConfigEntityBase implements IndexInterface {
+         $properties += $processor->getPropertyDefinitions($datasource);
+       }
+ 
+-      $this->properties[$datasource_id] = $properties;
++      $this->properties["$datasource_id"] = $properties;
+     }
+ 
+-    return $this->properties[$datasource_id];
++    return $this->properties["$datasource_id"];
+   }
+ 
+   /**
+@@ -1052,7 +1052,7 @@ class Index extends ConfigEntityBase implements IndexInterface {
+     $items_by_datasource = [];
+     foreach ($item_ids as $item_id) {
+       [$datasource_id, $raw_id] = Utility::splitCombinedId($item_id);
+-      $items_by_datasource[$datasource_id][$raw_id] = $item_id;
++      $items_by_datasource["$datasource_id"][$raw_id] = $item_id;
+     }
+ 
+     // Load the items from the datasources and keep track of which were
+@@ -1066,14 +1066,14 @@ class Index extends ConfigEntityBase implements IndexInterface {
+           $id = $raw_ids[$raw_id];
+           $items[$id] = $item;
+           // Remember that we successfully loaded this item.
+-          unset($items_by_datasource[$datasource_id][$raw_id]);
++          unset($items_by_datasource["$datasource_id"][$raw_id]);
+         }
+       }
+       catch (SearchApiException $e) {
+         $this->logException($e);
+         // If the complete datasource could not be loaded, don't report all its
+         // individual requested items as missing.
+-        unset($items_by_datasource[$datasource_id]);
++        unset($items_by_datasource["$datasource_id"]);
+       }
+     }
+ 
+diff --git a/src/Entity/Server.php b/src/Entity/Server.php
+index 24c68f7fb5b78766bf179e205fd624f76ad753fd..3f6da8303c840b4acaa1d5141bc3be28101c5340 100644
+--- a/src/Entity/Server.php
++++ b/src/Entity/Server.php
+@@ -197,8 +197,10 @@ class Server extends ConfigEntityBase implements ServerInterface {
+    * {@inheritdoc}
+    */
+   public function hasValidBackend() {
++    $backend_id = $this->getBackendId();
+     /** @noinspection PhpUnhandledExceptionInspection */
+-    return (bool) $this->backendPluginManager()->getDefinition($this->getBackendId(), FALSE);
++    return $backend_id !== NULL
++      && $this->backendPluginManager()->getDefinition($backend_id, FALSE);
+   }
+ 
+   /**
+@@ -213,15 +215,19 @@ class Server extends ConfigEntityBase implements ServerInterface {
+    */
+   public function getBackend() {
+     if (!$this->backendPlugin) {
++      $backend_id = $this->getBackendId();
++      if ($backend_id === NULL) {
++        $label = $this->label() ?: $this->id();
++        throw new SearchApiException("Backend ID not set for server \"$label\".");
++      }
+       $backend_plugin_manager = $this->backendPluginManager();
+       $config = $this->backend_config;
+       $config['#server'] = $this;
+       try {
+-        $this->backendPlugin = $backend_plugin_manager->createInstance($this->getBackendId(), $config);
++        $this->backendPlugin = $backend_plugin_manager->createInstance($backend_id, $config);
+       }
+       catch (PluginException) {
+-        $backend_id = $this->getBackendId();
+-        $label = $this->label();
++        $label = $this->label() ?: $this->id();
+         throw new SearchApiException("The backend with ID '$backend_id' could not be retrieved for server '$label'.");
+       }
+     }
+@@ -588,6 +594,10 @@ class Server extends ConfigEntityBase implements ServerInterface {
+       if (isset($overrides['backend'])) {
+         $backend_id = $overrides['backend'];
+       }
++      if ($backend_id === NULL) {
++        $label = $this->label() ?: $this->id();
++        throw new SearchApiException("Backend ID not set for server \"$label\".");
++      }
+       $backend_plugin_manager = $this->backendPluginManager();
+       $backend_config['#server'] = $this;
+       if (!($backend = $backend_plugin_manager->createInstance($backend_id, $backend_config))) {
+diff --git a/src/Item/Field.php b/src/Item/Field.php
+index dc1282565cbfc839cb23847dde031cc9f9deba80..5c7870023c33ba41a5ab846f10989585eaa1dc65 100644
+--- a/src/Item/Field.php
++++ b/src/Item/Field.php
+@@ -523,8 +523,10 @@ class Field implements \IteratorAggregate, FieldInterface {
+    */
+   public function getDataTypePlugin() {
+     $data_type_manager = $this->getDataTypeManager();
+-    if ($data_type_manager->hasDefinition($this->getType())) {
+-      return $data_type_manager->createInstance($this->getType());
++    $type = $this->getType();
++    // To guard against incomplete field definitions, explicitly check for NULL.
++    if ($type !== NULL && $data_type_manager->hasDefinition($type)) {
++      return $data_type_manager->createInstance($type);
+     }
+     return NULL;
+   }
+diff --git a/src/Plugin/search_api/processor/AggregatedFields.php b/src/Plugin/search_api/processor/AggregatedFields.php
+index 7c8b42e4bffe11609d3f29c591122ba2a69c82a1..875dea4b76a8ef204796ed3b551a1c4962026c4a 100644
+--- a/src/Plugin/search_api/processor/AggregatedFields.php
++++ b/src/Plugin/search_api/processor/AggregatedFields.php
+@@ -54,13 +54,13 @@ class AggregatedFields extends ProcessorPluginBase {
+     $aggregated_fields = $this->getFieldsHelper()
+       ->filterForPropertyPath($fields, NULL, 'aggregated_field');
+     $required_properties_by_datasource = [
+-      NULL => [],
++      '' => [],
+       $item->getDatasourceId() => [],
+     ];
+     foreach ($aggregated_fields as $field) {
+       foreach ($field->getConfiguration()['fields'] as $combined_id) {
+         [$datasource_id, $property_path] = Utility::splitCombinedId($combined_id);
+-        $required_properties_by_datasource[$datasource_id][$property_path] = $combined_id;
++        $required_properties_by_datasource["$datasource_id"][$property_path] = $combined_id;
+       }
+     }
+ 
+diff --git a/src/Plugin/search_api/processor/Highlight.php b/src/Plugin/search_api/processor/Highlight.php
+index a51fa4247987bbbf659a8f7d46a8052f9e460eb7..7b346251b21a6871122cf95f1401291cb2eb64f4 100644
+--- a/src/Plugin/search_api/processor/Highlight.php
++++ b/src/Plugin/search_api/processor/Highlight.php
+@@ -403,7 +403,7 @@ class Highlight extends ProcessorPluginBase implements PluginFormInterface {
+       }
+ 
+       if ($this->getDataTypeHelper()->isTextType($field->getType())) {
+-        $fields_by_datasource[$field->getDatasourceId()][$path] = $field_id;
++        $fields_by_datasource[(string) $field->getDatasourceId()][$path] = $field_id;
+       }
+     }
+ 
+diff --git a/src/Plugin/search_api/processor/NumberFieldBoost.php b/src/Plugin/search_api/processor/NumberFieldBoost.php
+index dc9e72b1c3870a59bd46c0ae3e338afd4649459a..6819f322ac08d4190d0dc0881d02ef85b6e7a026 100644
+--- a/src/Plugin/search_api/processor/NumberFieldBoost.php
++++ b/src/Plugin/search_api/processor/NumberFieldBoost.php
+@@ -134,7 +134,7 @@ class NumberFieldBoost extends ProcessorPluginBase implements PluginFormInterfac
+               }
+               // Make sure the value is never negative.
+               $value = max($value, 0);
+-              $item->setBoost($item->getBoost() * (double) $value * (double) $settings['boost_factor']);
++              $item->setBoost($item->getBoost() * (float) $value * (float) $settings['boost_factor']);
+             }
+           }
+         }
+diff --git a/src/Plugin/search_api/processor/Property/AggregatedFieldProperty.php b/src/Plugin/search_api/processor/Property/AggregatedFieldProperty.php
+index 4e16e991ea977676f35e30bfb7c7a8fcf62664bc..6676afad6a63a6508b08e3765e7b58fed509339f 100644
+--- a/src/Plugin/search_api/processor/Property/AggregatedFieldProperty.php
++++ b/src/Plugin/search_api/processor/Property/AggregatedFieldProperty.php
+@@ -217,7 +217,7 @@ class AggregatedFieldProperty extends ConfigurablePropertyBase {
+    */
+   protected function getDatasourceLabelPrefixes(IndexInterface $index) {
+     $prefixes = [
+-      NULL => $this->t('General') . ' » ',
++      '' => $this->t('General') . ' » ',
+     ];
+ 
+     foreach ($index->getDatasources() as $datasource_id => $datasource) {
+diff --git a/src/Plugin/search_api/processor/TypeBoost.php b/src/Plugin/search_api/processor/TypeBoost.php
+index 99ac00b868014e7afd548a3f553be36b77fa2708..4622fd7ee564578987a7f224c7c352b9c850c262 100644
+--- a/src/Plugin/search_api/processor/TypeBoost.php
++++ b/src/Plugin/search_api/processor/TypeBoost.php
+@@ -130,9 +130,9 @@ class TypeBoost extends ProcessorPluginBase implements PluginFormInterface {
+       $datasource_id = $item->getDatasourceId();
+       $bundle = $item->getDatasource()->getItemBundle($item->getOriginalObject());
+ 
+-      $item_boost = (double) ($boosts[$datasource_id]['datasource_boost'] ?? 1.0);
++      $item_boost = (float) ($boosts[$datasource_id]['datasource_boost'] ?? 1.0);
+       if ($bundle && isset($boosts[$datasource_id]['bundle_boosts'][$bundle])) {
+-        $item_boost = (double) $boosts[$datasource_id]['bundle_boosts'][$bundle];
++        $item_boost = (float) $boosts[$datasource_id]['bundle_boosts'][$bundle];
+       }
+ 
+       $item->setBoost($item->getBoost() * $item_boost);
+diff --git a/src/Plugin/views/field/SearchApiEntityField.php b/src/Plugin/views/field/SearchApiEntityField.php
+index 59d47247a37bb9a390aaa32ec520269eb6b7ac18..504916d4be687df13e13f5623202dd475af68571 100644
+--- a/src/Plugin/views/field/SearchApiEntityField.php
++++ b/src/Plugin/views/field/SearchApiEntityField.php
+@@ -303,11 +303,11 @@ class SearchApiEntityField extends EntityField {
+ 
+     $parent_path = $this->getParentPath();
+     $combined_parent_path = $this->createCombinedPropertyPath($this->getDatasourceId(), $parent_path);
+-    if (empty($values->_relationship_objects[$combined_parent_path])) {
++    if (empty($values->_relationship_objects["$combined_parent_path"])) {
+       return [];
+     }
+     $build = [];
+-    foreach (array_keys($values->_relationship_objects[$combined_parent_path]) as $i) {
++    foreach (array_keys($values->_relationship_objects["$combined_parent_path"]) as $i) {
+       $this->valueIndex = $i;
+       $build[] = parent::getItems($values);
+     }
+diff --git a/src/Plugin/views/field/SearchApiFieldTrait.php b/src/Plugin/views/field/SearchApiFieldTrait.php
+index 2183bd5d824adcf42177677380651551fdaa2c03..4a6e40a236a6f6da7307c70623fb320642db493a 100644
+--- a/src/Plugin/views/field/SearchApiFieldTrait.php
++++ b/src/Plugin/views/field/SearchApiFieldTrait.php
+@@ -363,7 +363,7 @@ trait SearchApiFieldTrait {
+     }
+ 
+     [$datasource_id, $property_path] = Utility::splitCombinedId($combined_property_path);
+-    $this->retrievedProperties[$datasource_id][$property_path] = $combined_property_path;
++    $this->retrievedProperties["$datasource_id"][$property_path] = $combined_property_path;
+     return $this;
+   }
+ 
+@@ -409,7 +409,7 @@ trait SearchApiFieldTrait {
+         $value_index = $values->_relationship_parent_indices[$combined_property_path][$value_index];
+       }
+       [$property_path] = Utility::splitPropertyPath($property_path);
+-      $combined_property_path = $this->createCombinedPropertyPath($datasource_id, $property_path);
++      $combined_property_path = (string) $this->createCombinedPropertyPath($datasource_id, $property_path);
+     }
+ 
+     return NULL;
+@@ -435,7 +435,7 @@ trait SearchApiFieldTrait {
+    * @see \Drupal\views\Plugin\views\field\FieldHandlerInterface::getValue()
+    */
+   public function getValue(ResultRow $values, $field = NULL) {
+-    return $this->overriddenValues[$field] ?? parent::getValue($values, $field);
++    return $this->overriddenValues["$field"] ?? parent::getValue($values, $field);
+   }
+ 
+   /**
+@@ -519,17 +519,17 @@ trait SearchApiFieldTrait {
+           $paths_to_add[] = $path_to_add;
+         }
+         foreach ($paths_to_add as $path_to_add) {
+-          if (!isset($required_properties[$datasource_id][$path_to_add])) {
++          if (!isset($required_properties["$datasource_id"]["$path_to_add"])) {
+             $path = $this->createCombinedPropertyPath($datasource_id, $path_to_add);
+-            if (isset($this->propertyReplacements[$path])) {
+-              $path = $this->propertyReplacements[$path];
++            if (isset($this->propertyReplacements["$path"])) {
++              $path = $this->propertyReplacements["$path"];
+             }
+-            $required_properties[$datasource_id][$path_to_add] = [
++            $required_properties["$datasource_id"]["$path_to_add"] = [
+               'combined_property_path' => $path,
+               'dependents' => [],
+             ];
+           }
+-          $required_properties[$datasource_id][$path_to_add]['dependents'][] = $combined_property_path;
++          $required_properties["$datasource_id"]["$path_to_add"]['dependents'][] = $combined_property_path;
+         }
+       }
+     }
+@@ -557,7 +557,7 @@ trait SearchApiFieldTrait {
+       $object = $row->_item->getOriginalObject(FALSE);
+       if ($object) {
+         $row->_object = $object;
+-        $row->_relationship_objects[NULL] = [$object];
++        $row->_relationship_objects[''] = [$object];
+         continue;
+       }
+       // We also don't need to load the object if all field values that depend
+@@ -584,7 +584,7 @@ trait SearchApiFieldTrait {
+     foreach ($to_load as $item_id => $i) {
+       if (!empty($items[$item_id])) {
+         $values[$i]->_object = $items[$item_id];
+-        $values[$i]->_relationship_objects[NULL] = [$items[$item_id]];
++        $values[$i]->_relationship_objects[''] = [$items[$item_id]];
+       }
+     }
+   }
+@@ -613,7 +613,7 @@ trait SearchApiFieldTrait {
+     // Determine the path of the parent property, and the property key to
+     // take from it for this property.
+     [$parent_path, $name] = Utility::splitPropertyPath($property_path);
+-    $combined_parent_path = $this->createCombinedPropertyPath($datasource_id, $parent_path);
++    $combined_parent_path = (string) $this->createCombinedPropertyPath($datasource_id, $parent_path);
+ 
+     // For top-level properties, we need the definition to check whether its
+     // a processor-generated property later.
+@@ -1166,7 +1166,7 @@ trait SearchApiFieldTrait {
+    * @see \Drupal\views\Plugin\views\field\MultiItemsFieldHandlerInterface::render_item()
+    */
+   public function render_item($count, $item) {
+-    $this->overriddenValues[NULL] = $item['value'];
++    $this->overriddenValues[''] = $item['value'];
+     $render = $this->render(new ResultRow());
+     $this->overriddenValues = [];
+     return $render;
+@@ -1293,11 +1293,11 @@ trait SearchApiFieldTrait {
+       }
+     }
+ 
+-    if (!empty($row->_relationship_objects[NULL][0])) {
++    if (!empty($row->_relationship_objects[''][0])) {
+       try {
+         return $this->getIndex()
+           ->getDatasource($row->search_api_datasource)
+-          ->getItemUrl($row->_relationship_objects[NULL][0]);
++          ->getItemUrl($row->_relationship_objects[''][0]);
+       }
+       catch (SearchApiException) {
+       }
+diff --git a/src/Plugin/views/query/SearchApiQuery.php b/src/Plugin/views/query/SearchApiQuery.php
+index b36aa302061a40824efe61ca2bd4dda61a9d9468..9db90274f9dcb392d0026b68470a2e30cc9cd6b8 100644
+--- a/src/Plugin/views/query/SearchApiQuery.php
++++ b/src/Plugin/views/query/SearchApiQuery.php
+@@ -713,7 +713,7 @@ class SearchApiQuery extends QueryPluginBase {
+         $object = $result->getOriginalObject(FALSE);
+         if ($object) {
+           $values['_object'] = $object;
+-          $values['_relationship_objects'][NULL] = [$object];
++          $values['_relationship_objects'][''] = [$object];
+           if ($object instanceof EntityAdapter) {
+             $values['_entity'] = $object->getEntity();
+           }
+diff --git a/src/Utility/DataTypeHelper.php b/src/Utility/DataTypeHelper.php
+index 0d3bb5421cff2bd7d6118e571a1b1b6e7717f7ae..60f39cf0adb8de5e0c1de36cf9b4e8cc3fe72acb 100644
+--- a/src/Utility/DataTypeHelper.php
++++ b/src/Utility/DataTypeHelper.php
+@@ -96,7 +96,7 @@ class DataTypeHelper implements DataTypeHelperInterface {
+           'boolean',
+         ],
+         // Types we know about but want/have to ignore.
+-        NULL => [
++        '' => [
+           'language',
+         ],
+       ];
+@@ -127,7 +127,7 @@ class DataTypeHelper implements DataTypeHelperInterface {
+    */
+   public function getDataTypeFallbackMapping(IndexInterface $index) {
+     // Check the cache first.
+-    $indexId = $index->id();
++    $indexId = (string) $index->id();
+     if (empty($this->dataTypeFallbackMapping[$indexId])) {
+       $server = NULL;
+       try {
+diff --git a/src/Utility/FieldsHelper.php b/src/Utility/FieldsHelper.php
+index 854d1a40a5046a153bc703713b229e53681b7b95..37dc9ed78d332f327641b9558fd034be6b687de5 100644
+--- a/src/Utility/FieldsHelper.php
++++ b/src/Utility/FieldsHelper.php
+@@ -196,12 +196,12 @@ class FieldsHelper implements FieldsHelperInterface {
+       $processor_fields = [];
+       $needed_processors = [];
+       foreach ([NULL, $item->getDatasourceId()] as $datasource_id) {
+-        if (empty($required_properties[$datasource_id])) {
++        if (empty($required_properties["$datasource_id"])) {
+           continue;
+         }
+ 
+         $properties = $index->getPropertyDefinitions($datasource_id);
+-        foreach ($required_properties[$datasource_id] as $property_path => $combined_id) {
++        foreach ($required_properties["$datasource_id"] as $property_path => $combined_id) {
+           // Extract a field ID the caller might have added to the property
+           // path.
+           $field_id = NULL;
+diff --git a/src/Utility/PostRequestIndexing.php b/src/Utility/PostRequestIndexing.php
+index 45362ff7aa9fe28bd530a1a8ea84724f5e5f49a1..b275b4caa0273b2194501b6e87311d5f2d6a1902 100644
+--- a/src/Utility/PostRequestIndexing.php
++++ b/src/Utility/PostRequestIndexing.php
+@@ -117,7 +117,15 @@ class PostRequestIndexing implements PostRequestIndexingInterface, DestructableI
+   /**
+    * {@inheritdoc}
+    */
+-  public function removeFromIndexing($index_id, array $item_ids): void {
++  public function removeFromIndexing(/* string */ $index_id, array $item_ids): void {
++    // Unfortunately, when adding this method we only added type hint for
++    // $index_id to the interface, not to this class, so it is technically
++    // possible to pass NULL. Trigger a deprecation warning in this case and
++    // cast to a string.
++    if (!is_string($index_id)) {
++      @trigger_error('Passing a non-string as the first parameter of \Drupal\search_api\Utility\PostRequestIndexing::removeFromIndexing() is deprecated in search_api:8.x-1.41 and causes an error in search_api:2.0.0. If $index_id is NULL in your code, do not call this method. See https://www.drupal.org/node/3562988');
++      $index_id = "$index_id";
++    }
+     foreach ($item_ids as $item_id) {
+       unset($this->operations[$index_id][$item_id]);
+     }
+diff --git a/tests/src/Kernel/Index/IndexChangesTest.php b/tests/src/Kernel/Index/IndexChangesTest.php
+index f12654d7278ea7db4c23cf85996346f59d4cc3ed..77f19715347a7ecbf970b4208f452ca633e976fc 100644
+--- a/tests/src/Kernel/Index/IndexChangesTest.php
++++ b/tests/src/Kernel/Index/IndexChangesTest.php
+@@ -191,6 +191,7 @@ class IndexChangesTest extends KernelTestBase {
+     $info = [
+       'datasource_id' => 'entity:entity_test_mulrev_changed',
+       'property_path' => 'id',
++      'type' => 'string',
+     ];
+     $field = \Drupal::getContainer()
+       ->get('search_api.fields_helper')
+@@ -335,10 +336,12 @@ class IndexChangesTest extends KernelTestBase {
+     $info = [
+       'datasource_id' => 'entity:entity_test_mulrev_changed',
+       'property_path' => 'id',
++      'type' => 'string',
+     ];
+     $this->index->addField($fields_helper->createField($this->index, 'id', $info));
+     $info = [
+       'property_path' => 'search_api_url',
++      'type' => 'string',
+     ];
+     $this->index->addField($fields_helper->createField($this->index, 'url', $info));
+ 
+@@ -413,11 +416,13 @@ class IndexChangesTest extends KernelTestBase {
+     $info = [
+       'datasource_id' => $datasource_id,
+       'property_path' => 'field1',
++      'type' => 'string',
+     ];
+     $this->index->addField($fields_helper->createField($this->index, 'field1', $info));
+     $info = [
+       'datasource_id' => $datasource_id,
+       'property_path' => 'field2',
++      'type' => 'string',
+     ];
+     $this->index->addField($fields_helper->createField($this->index, 'field2', $info));
+ 
+@@ -447,6 +452,7 @@ class IndexChangesTest extends KernelTestBase {
+     $info = [
+       'datasource_id' => $datasource_id,
+       'property_path' => 'name',
++      'type' => 'string',
+     ];
+     $field = \Drupal::getContainer()
+       ->get('search_api.fields_helper')
+diff --git a/tests/src/Kernel/Index/IndexLoadItemsTest.php b/tests/src/Kernel/Index/IndexLoadItemsTest.php
+index 1564c2c2a23a7a063a91fad795eb662c9c94804f..ddafb7ceca52245bd508b5ee912681b4b001d0fb 100644
+--- a/tests/src/Kernel/Index/IndexLoadItemsTest.php
++++ b/tests/src/Kernel/Index/IndexLoadItemsTest.php
+@@ -46,7 +46,9 @@ class IndexLoadItemsTest extends KernelTestBase {
+       'id' => 'test',
+       'backend' => 'search_api_test',
+     ]);
++    $server->save();
+     $this->index = Index::create([
++      'id' => 'test',
+       'tracker_settings' => [
+         'search_api_test' => [],
+       ],
+@@ -55,6 +57,7 @@ class IndexLoadItemsTest extends KernelTestBase {
+       ],
+     ]);
+     $this->index->setServer($server);
++    $this->index->save();
+   }
+ 
+   /**
+diff --git a/tests/src/Kernel/System/FieldValuesExtractionTest.php b/tests/src/Kernel/System/FieldValuesExtractionTest.php
+index 81979331e89b0036fe5b2b76c33444963e30a07f..9256a30aca1f984243d2f42c84c303a436beec53 100644
+--- a/tests/src/Kernel/System/FieldValuesExtractionTest.php
++++ b/tests/src/Kernel/System/FieldValuesExtractionTest.php
+@@ -204,7 +204,7 @@ class FieldValuesExtractionTest extends KernelTestBase {
+     );
+ 
+     $properties = [
+-      NULL => [
++      '' => [
+         'rendered_item' => 'a',
+         // Since there is no field defined on "aggregated_field" for the index,
+         // we won't be able to extract it.
+diff --git a/tests/src/Kernel/Views/ViewsFieldTraitTest.php b/tests/src/Kernel/Views/ViewsFieldTraitTest.php
+index e7f85c792043fcb5ba2f00d37afd74e4ae48315b..5d734c574616f44cb437010f6be6e820302faba2 100644
+--- a/tests/src/Kernel/Views/ViewsFieldTraitTest.php
++++ b/tests/src/Kernel/Views/ViewsFieldTraitTest.php
+@@ -157,7 +157,7 @@ class ViewsFieldTraitTest extends KernelTestBase {
+       '_item' => $item,
+       '_object' => $item->getOriginalObject(),
+       '_relationship_objects' => [
+-        NULL => [$item->getOriginalObject()],
++        '' => [$item->getOriginalObject()],
+       ],
+     ]);
+     $item_id = Utility::createCombinedId($datasource_id, '2:en');
+diff --git a/tests/src/Kernel/Views/ViewsPropertyExtractionTest.php b/tests/src/Kernel/Views/ViewsPropertyExtractionTest.php
+index 2fc7fe79c32d5265071aa5654dd412c561aebe83..517ab8818def5e2c77dbf0e779e8d1c53bc32f31 100644
+--- a/tests/src/Kernel/Views/ViewsPropertyExtractionTest.php
++++ b/tests/src/Kernel/Views/ViewsPropertyExtractionTest.php
+@@ -175,7 +175,7 @@ class ViewsPropertyExtractionTest extends KernelTestBase {
+       '_item' => $item,
+       '_object' => $object,
+       '_relationship_objects' => [
+-        NULL => [$object],
++        '' => [$object],
+       ],
+     ]);
+     // For the configurable property, change the property path if it matches a
+diff --git a/tests/src/Unit/ItemFieldTest.php b/tests/src/Unit/ItemFieldTest.php
+index 2dffa49f4b2546f665a1b49ee2d26316d6712cb1..af96ae70d36572ba402416b1e84934cea5ef1a7e 100644
+--- a/tests/src/Unit/ItemFieldTest.php
++++ b/tests/src/Unit/ItemFieldTest.php
+@@ -49,8 +49,9 @@ class ItemFieldTest extends UnitTestCase {
+ 
+     $index = new Index([], 'search_api_index');
+ 
+-    $this->field = new Field($index, 'field');
+-    $this->field->setDataTypeManager($data_type_manager);
++    $this->field = (new Field($index, 'field'))
++      ->setType('test')
++      ->setDataTypeManager($data_type_manager);
+   }
+ 
+   /**
