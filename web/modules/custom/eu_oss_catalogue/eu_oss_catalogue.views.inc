@@ -19,13 +19,15 @@ function eu_oss_catalogue_views_data_alter(array &$data): void {
   $entityTypeManager = Drupal::entityTypeManager();
 
   foreach ($entityTypeManager->getDefinitions() as $entityInfo) {
-    $data[$entityInfo->getBaseTable()]['translation_list'] = [
-      'title' => 'Translation list',
-      'help' => t('Displays all available translations.'),
-      'field' => [
-        'id' => 'translation_list',
-      ],
-    ];
+    if ($baseTable = $entityInfo->getBaseTable()) {
+      $data[$baseTable]['translation_list'] = [
+        'title' => 'Translation list',
+        'help' => t('Displays all available translations.'),
+        'field' => [
+          'id' => 'translation_list',
+        ],
+      ];
+    }
   }
 }
 
