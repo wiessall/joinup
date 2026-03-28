@@ -579,6 +579,9 @@
             "lullabot/mink-selenium2-driver": {
                 "Add missing mouseover before clicking on radio/select elements - https://github.com/Lullabot/MinkSelenium2Driver/pull/14": "resources/patch/php/lullabot/mink-selenium2-driver/selenium2-mouseover-fixes.diff"
             },
+            "openeuropa/oe_webtools": {
+                "PHP 8.5 compatibility @see https://github.com/openeuropa/oe_webtools/pull/311": "resources/patch/php/openeuropa/oe_webtools/pr311.commit-d4a22bb.diff"
+            },
             "sweetrdf/easyrdf": {
                 "Add a method to remove resources from graph @see https://github.com/sweetrdf/easyrdf/pull/44": "resources/patch/php/sweetrdf/easyrdf/44.diff"
             },
