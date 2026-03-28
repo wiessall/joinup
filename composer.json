@@ -573,6 +573,9 @@
                 "GraphQL API @see https://github.com/GitLabPHP/Client/issues/766": "resources/patch/php/m4tthumphrey/php-gitlab-api/772.diff",
                 "Add support for prefixed URIs on base path @see https://github.com/GitLabPHP/Client/issues/726": "resources/patch/php/m4tthumphrey/php-gitlab-api/726.diff"
             },
+            "neilime/php-css-lint": {
+                "PHP 8.4 @see https://www.drupal.org/i/3566065": "resources/patch/php/neilime/php-css-lint/3566065.local_parch.diff"
+            },
             "lullabot/mink-selenium2-driver": {
                 "Add missing mouseover before clicking on radio/select elements - https://github.com/Lullabot/MinkSelenium2Driver/pull/14": "resources/patch/php/lullabot/mink-selenium2-driver/selenium2-mouseover-fixes.diff"
             },
