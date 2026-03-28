@@ -22,8 +22,6 @@ class CountLink extends OriginalCountLink {
    * {@inheritdoc}
    */
   public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity, ?string $view_mode = NULL): array {
-    assert(is_subclass_of($this, ActionLinkTypePluginInterface::class), __CLASS__ . ' is intended to be used in action link plugin.');
-
     if ($entity instanceof ArchivableEntityInterface && $entity->isArchived()) {
       return [
         '#theme' => 'flag_count_archived',
