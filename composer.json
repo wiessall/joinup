@@ -582,6 +582,9 @@
             "openeuropa/oe_webtools": {
                 "PHP 8.5 compatibility @see https://github.com/openeuropa/oe_webtools/pull/311": "resources/patch/php/openeuropa/oe_webtools/pr311.commit-d4a22bb.diff"
             },
+            "solarium/solarium": {
+                "PHP 8.5 support @see https://github.com/solariumphp/solarium/pull/1178": "resources/patch/php/solarium/solarium/pr1178.commit-8f11b58.diff"
+            },
             "sweetrdf/easyrdf": {
                 "Add a method to remove resources from graph @see https://github.com/sweetrdf/easyrdf/pull/44": "resources/patch/php/sweetrdf/easyrdf/44.diff"
             },

@@ -1,0 +1,21 @@
+diff --git a/src/Core/Client/Adapter/Curl.php b/src/Core/Client/Adapter/Curl.php
+index c8b25addc..d76c115d3 100644
+--- a/src/Core/Client/Adapter/Curl.php
++++ b/src/Core/Client/Adapter/Curl.php
+@@ -56,7 +56,6 @@ public function getResponse(\CurlHandle $handle, $httpResponse): Response
+         if (CURLE_OK !== curl_errno($handle)) {
+             $errno = curl_errno($handle);
+             $error = curl_error($handle);
+-            curl_close($handle);
+             throw new HttpException(sprintf('HTTP request failed, %s', $error), $errno);
+         }
+ 
+@@ -64,8 +63,6 @@ public function getResponse(\CurlHandle $handle, $httpResponse): Response
+         $headers = [];
+         $headers[] = 'HTTP/1.1 '.$httpCode.' OK';
+ 
+-        curl_close($handle);
+-
+         return new Response($httpResponse, $headers);
+     }
+ 
