@@ -1,0 +1,27 @@
+diff --git a/src/Hook/TokenTokenInfoHooks.php b/src/Hook/TokenTokenInfoHooks.php
+index e7830d42209fe447fbc543f08acdb98473ff163d..6e996c2d5447df9943a6916b79cd1baffee2dc42 100644
+--- a/src/Hook/TokenTokenInfoHooks.php
++++ b/src/Hook/TokenTokenInfoHooks.php
+@@ -691,13 +691,15 @@ final class TokenTokenInfoHooks {
+           }
+           elseif (($property_definition instanceof DataReferenceDefinitionInterface) && ($property_definition->getTargetDefinition() instanceof EntityDataDefinitionInterface)) {
+             $referenced_entity_type = $property_definition->getTargetDefinition()->getEntityTypeId();
+-            $referenced_token_type = $this->tokenEntityMapper->getTokenTypeForEntityType($referenced_entity_type);
+-            $info['tokens'][$field_token_name][$property] = [
+-              'name' => $property_definition->getLabel(),
+-              'description' => $property_definition->getDescription(),
+-              'module' => 'token',
+-              'type' => $referenced_token_type,
+-            ];
++            if ($referenced_entity_type) {
++              $referenced_token_type = $this->tokenEntityMapper->getTokenTypeForEntityType($referenced_entity_type);
++              $info['tokens'][$field_token_name][$property] = [
++                'name' => $property_definition->getLabel(),
++                'description' => $property_definition->getDescription(),
++                'module' => 'token',
++                'type' => $referenced_token_type,
++              ];
++            }
+           }
+         }
+         // Provide image_with_image_style tokens for image fields.
