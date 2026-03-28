@@ -521,6 +521,9 @@
                 "Users are deleted without prior notification when \"Notification User Before Deletion\" is enabled @see https://www.drupal.org/i/3521201": "resources/patch/php/drupal/purge_users/3521201.diff",
                 "Replace deprecated (integer) cast with (int) in purge_users_update_9001() @see https://www.drupal.org/i/3578633": "resources/patch/php/drupal/purge_users/3578633.commit-2f9cc8d07c4.diff"
             },
+            "drupal/rdf_sync": {
+                "Ensure a non-null plugin ID @see https://www.drupal.org/i/3581647": "resources/patch/php/drupal/rdf_sync/3581647.mr47.commit-495a3deb.diff"
+            },
             "drupal/search_api": {
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199-42e0e284.diff",
                 "View recalculated with wrong data from cache @see https://drupal.org/i/3327645": "resources/patch/php/drupal/search_api/3327645-d510c98e.diff"

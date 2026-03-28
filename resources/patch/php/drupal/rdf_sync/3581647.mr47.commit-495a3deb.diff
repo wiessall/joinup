@@ -1,0 +1,34 @@
+diff --git a/src/RdfSyncMapperInterface.php b/src/RdfSyncMapperInterface.php
+index ddddef87117997a738c3f550127e65cd647b3bbc..ff2e1c7fe48afdfd47c1c5436244d855bf42425f 100644
+--- a/src/RdfSyncMapperInterface.php
++++ b/src/RdfSyncMapperInterface.php
+@@ -103,7 +103,7 @@ interface RdfSyncMapperInterface {
+    * @param string $bundle
+    *   The bundle.
+    *
+-   * @return array|null
++   * @return string|null
+    *   The bundle RDF URI plugin ID.
+    */
+   public function getRdfUriPluginId(string $entityTypeId, string $bundle): ?string;
+diff --git a/src/RdfSyncUriFieldItemList.php b/src/RdfSyncUriFieldItemList.php
+index 7bd77d41da77cf8f13df2dd9677d1f4e9422a515..457e1905b2a41fe10524545e8555059892fb03c5 100644
+--- a/src/RdfSyncUriFieldItemList.php
++++ b/src/RdfSyncUriFieldItemList.php
+@@ -72,11 +72,14 @@ class RdfSyncUriFieldItemList extends FieldItemList {
+     // The following empty check allows the URI to be set manually during the
+     // entity creation process.
+     if (empty($this->list)) {
++      $manager = \Drupal::service('plugin.manager.rdf_sync.uri_generator');
++
+       // No entity ID has been explicitly set in creation. Use the URI
+       // generator plugin to create a URI.
+       $pluginId = \Drupal::service('rdf_sync.mapper')->getRdfUriPluginId($entity->getEntityTypeId(), $entity->bundle());
+-      /** @var \Drupal\rdf_sync\RdfUriGeneratorPluginInterface $plugin */
+-      $plugin = \Drupal::getContainer()->get('plugin.manager.rdf_sync.uri_generator')->createInstance($pluginId);
++      $pluginId ??= $manager->getFallbackPluginId($pluginId);
++      $plugin = $manager->createInstance($pluginId);
++      assert($plugin instanceof RdfUriGeneratorPluginInterface);
+       $uri = $plugin->setEntity($entity)->generate();
+       // Set the value in case it is needed immediately i.e. database operations
+       // before the transaction is committed.
