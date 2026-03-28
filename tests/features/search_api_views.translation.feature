@@ -20,6 +20,31 @@ Feature: Search API views show translated content with english as fallback
       | Test oss catalogue  | published | developers_italia | en       | 1                   |
       | BG oss catalogue    | ~~~       | ~~~               | bg       | 0                   |
 
+  Scenario: Test "solutions_meta_entity_block" view shows translated content
+    Given custom_page multilingual content:
+      | title     | collection      | langcode | default_translation  | nid    |
+      | Test page | Test collection | en       | 1                    | 705372 |
+      | BG page   | ~~~             | bg       | 0                    |        |
+    And solution multilingual content:
+      | title     | collection       | langcode | default_translation  |
+      | Jordan 1  | Test collection  | en       | 1                    |
+      | Jordan 2  | Test collection  | en       | 1                    |
+      | Jordan BG | Test collection  | bg       | 0                    |
+    And the following EIF perspective data for the "Jordan 1" solution:
+      | Description | Desc 1 |
+    And the following EIF perspective data for the "Jordan 2" solution:
+      | Description | Desc 2 |
+    Then I visit the "Test page" "custom page"
+    And I should see the following headings:
+      | Jordan 1 |
+      | Jordan 2 |
+    And I should not see "Jordan BG"
+    When I click "Bulgarian"
+    And I should see the following headings:
+      | Jordan 1  |
+      | Jordan BG |
+    And I should not see "Jordan 2"
+
   Scenario: Test "group_feed" view shows translated content
     Given I go to the homepage of the "Test collection" collection
     When I click "RSS feed" in the "Entity actions" region
