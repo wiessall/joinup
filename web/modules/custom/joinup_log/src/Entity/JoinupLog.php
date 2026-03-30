@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_log\Entity;
 
+use Drupal\Core\Entity\Attribute\ContentEntityType;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
@@ -11,35 +12,37 @@ use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_log\JoinupLogStorage;
+use Drupal\joinup_log\JoinupLogStorageSchema;
+use Drupal\joinup_log\JoinupLogViewsData;
 use Drupal\user\EntityOwnerTrait;
 use Drupal\user\UserInterface;
 
 /**
  * Defines the joinup log entity class.
- *
- * @ContentEntityType(
- *   id = "joinup_log",
- *   label = @Translation("Joinup log"),
- *   label_collection = @Translation("Joinup logs"),
- *   label_singular = @Translation("joinup log"),
- *   label_plural = @Translation("joinup logs"),
- *   label_count = @PluralTranslation(
- *     singular = "@count joinup log",
- *     plural = "@count joinup logs",
- *   ),
- *   handlers = {
- *     "storage" = "Drupal\joinup_log\JoinupLogStorage",
- *     "storage_schema" = "Drupal\joinup_log\JoinupLogStorageSchema",
- *     "views_data" = "Drupal\joinup_log\JoinupLogViewsData",
- *   },
- *   base_table = "joinup_log",
- *   admin_permission = "access site reports",
- *   entity_keys = {
- *     "id" = "id",
- *     "owner" = "uid",
- *   },
- * )
  */
+#[ContentEntityType(
+  id: 'joinup_log',
+  label: new TranslatableMarkup('Joinup log'),
+  label_collection: new TranslatableMarkup('Joinup logs'),
+  label_singular: new TranslatableMarkup('joinup log'),
+  label_plural: new TranslatableMarkup('joinup logs'),
+  entity_keys: [
+    'id' => 'id',
+    'owner' => 'uid',
+  ],
+  handlers: [
+    'storage' => JoinupLogStorage::class,
+    'storage_schema' => JoinupLogStorageSchema::class,
+    'views_data' => JoinupLogViewsData::class,
+  ],
+  admin_permission: 'access site reports',
+  base_table: 'joinup_log',
+  label_count: [
+    'singular' => '@count joinup log',
+    'plural' => '@count joinup logs',
+  ],
+)]
 final class JoinupLog extends ContentEntityBase implements JoinupLogInterface {
 
   use StringTranslationTrait, EntityOwnerTrait;
