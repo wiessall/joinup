@@ -14,6 +14,7 @@ use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\AssessmentStatement;
 use Drupal\assessments\Entity\BindingRequirementParagraph;
 use Drupal\file\Entity\File;
+use Drupal\file\FileInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 
@@ -77,7 +78,7 @@ class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
     $new_document = $this->createFileDocument();
     $report->set('documents', ['entity' => $new_document]);
     $report->save();
-    $this->assertEntityNotExists($document);
+    $this->assertEntityExists($document);
 
     // Replace the organisation with a new one, assert no deletion.
     $new_organisation = $this->createAssessmentOrganisation();
@@ -90,17 +91,22 @@ class AssessmentDeletionTest extends JoinupExistingSiteTestBase {
 
     // Assert that all created entities except public_organisation assessments
     // were deleted.
-    $should_persist = static fn ($entity) => $entity instanceof AssessmentInterface && $entity->bundle() === 'public_organisation';
+    $should_persist = static fn ($entity) => ($entity instanceof AssessmentInterface && $entity->bundle() === 'public_organisation') || $entity instanceof FileInterface;
     $entities = \array_filter($this->cleanupEntities, static fn ($entity) => !$should_persist($entity));
-    $this->assertCount(15, $entities);
+    $this->assertCount(13, $entities);
     foreach ($entities as $entity) {
       $this->assertEntityNotExists($entity);
     }
 
     $entities = \array_filter($this->cleanupEntities, static fn ($entity) => $should_persist($entity));
-    $this->assertCount(2, $entities);
+    $this->assertCount(4, $entities);
     foreach ($entities as $entity) {
       $this->assertEntityExists($entity);
+      if ($entity instanceof FileInterface) {
+        // Reload and assert that the file is temporary.
+        $entity = $this->entityTypeManager->getStorage($entity->getEntityTypeId())->load($entity->id());
+        $this->assertTrue($entity->isTemporary());
+      }
     }
   }
 
