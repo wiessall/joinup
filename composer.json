@@ -560,7 +560,8 @@
                 "PHP 8.4 @see https://www.drupal.org/i/3564894": "resources/patch/php/drupal/ui_patterns_settings/3564894.mr58.commit-17615e84.diff"
             },
             "drupal/views_block_area": {
-                "Render logic not working @see https://www.drupal.org/i/3499861": "resources/patch/php/drupal/views_block_area/3499861.patch"
+                "Render logic not working @see https://www.drupal.org/i/3499861": "resources/patch/php/drupal/views_block_area/3499861.patch",
+                "PHP 8.4 @see https://www.drupal.org/i/3541588": "resources/patch/php/drupal/views_block_area/3541588.mr13.commit-8108f239.diff"
             },
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff",
