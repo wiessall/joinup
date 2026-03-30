@@ -79,4 +79,3 @@ Feature: The moderator is able to translate meta entity strings.
     And I go to the canonical path of the "topic" meta entity of the "E-justice" topic "taxonomy term"
     When I click "Polish"
     Then I should see the text "Krótki opis sądowy."
-    And I take a screenshot 'topic'
