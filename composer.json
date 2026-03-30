@@ -385,7 +385,9 @@
                 "Fix for pagination inside Media library @see https://www.drupal.org/i/3567237": "resources/patch/php/drupal/core/3567237.mr14654-commit0edaf95a.diff",
                 "REST views: Add pagination information and total count result @see https://www.drupal.org/i/2982729": "resources/patch/php/drupal/core/2982729-mr6558.commit290eabb1.diff",
                 "Slow admin/config page load. @see https://www.drupal.org/i/3336621": "resources/patch/php/drupal/core/3336621.mr15137-commit7b9c8c6a.patch",
-                "Exposed filters get values from url when ajax is on @see https://www.drupal.org/i/3121172": "resources/patch/php/drupal/core/3121172-mr10230-commit41ded0c5.diff"
+                "Exposed filters get values from url when ajax is on @see https://www.drupal.org/i/3121172": "resources/patch/php/drupal/core/3121172-mr10230-commit41ded0c5.diff",
+                "[PHP 8.5] ViewsViewsHooks::viewsData() should not add Bulk Update fields for entity types without base table @see https://www.drupal.org/i/3581679": "resources/patch/php/drupal/core/3581679.mr15223.commit-a002f9ff.diff",
+                "[PHP 8.5] FieldViewsDataProvider::defaultFieldImplementation() should be aware of missing data table @see https://www.drupal.org/i/3582171": "resources/patch/php/drupal/core/3582171.mr15279.commit-75675d54.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
