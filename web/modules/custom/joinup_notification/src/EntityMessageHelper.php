@@ -178,12 +178,16 @@ readonly class EntityMessageHelper implements EntityMessageHelperInterface {
   }
 
   /**
-   * Checks if approval message collection settings is
+   * Checks if approval message collection settings is set.
    *
    * @param int|string $id
+   *   Node id.
    *
    * @return bool
+   *   True if approval_message field is not empty.
+   *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   *
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function hasCustomApprovalMessage(int|string $id): bool {
@@ -192,9 +196,11 @@ readonly class EntityMessageHelper implements EntityMessageHelperInterface {
   }
 
   /**
-   * @param string $template_id
+   * Retrieves collection id from template id and returns collection.
    *
-   * @return \Drupal\collection\Entity\CollectionInterface
+   * @param string $template_id
+   *   Message template id.
+   *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
@@ -206,10 +212,13 @@ readonly class EntityMessageHelper implements EntityMessageHelperInterface {
   }
 
   /**
-   * @param \Drupal\collection\Entity\CollectionInterface $collection
-   * @param string $approval_message
+   * Updates approval_message field in collection_settings.
    *
-   * @return void
+   * @param \Drupal\collection\Entity\CollectionInterface $collection
+   *   Collection with collection_settings to update.
+   * @param string $approval_message
+   *   Text of approval message body.
+   *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function updateApprovalMessageSettingsField(CollectionInterface $collection, string $approval_message): void {
