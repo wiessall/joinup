@@ -7,10 +7,13 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Url;
+
 /**
  * Implements hook_preprocess_links__language_block().
  */
 function ventuno_preprocess_links__language_block(array &$variables): void {
+  // Add the current language info.
   $current = \Drupal::languageManager()->getCurrentLanguage();
   $variables['current_language'] = [
     'code' => $current->getId(),
@@ -19,6 +22,12 @@ function ventuno_preprocess_links__language_block(array &$variables): void {
 
   foreach ($variables['links'] as $langcode => &$link) {
     $link['code'] = $langcode;
+
+    if ($langcode === $current->getId()) {
+      // Render the active language as a non-clickable <span> via <nolink>.
+      $link['link']['#url'] = Url::fromRoute('<nolink>');
+      $link['attributes']['class'][] = 'is-active';
+    }
   }
 }
 
