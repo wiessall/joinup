@@ -80,7 +80,6 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
       ->expression('full_name', "CONCAT('user+', uid)")
       ->execute();
 
-    // First name.
     $tables = $this->getFieldTables('user', 'field_user_first_name');
     foreach ($tables as $table) {
       $this->db->update($table)
@@ -88,7 +87,6 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
         ->execute();
     }
 
-    // Family name.
     $tables = $this->getFieldTables('user', 'field_user_family_name');
     foreach ($tables as $table) {
       $this->db->update($table)
