@@ -337,13 +337,29 @@ function collection_form_meta_entity_collection_settings_form_alter(array &$form
   $form['actions']['submit']['#submit'][] = 'collection_form_meta_entity_collection_settings_alter_submit';
 }
 
+/**
+ *
+ */
 function collection_form_meta_entity_collection_settings_alter_submit(array &$form, FormStateInterface $form_state): void {
-if(!empty($text = $form_state->getValue('approval_message')[0]['value'])) {
-  $collection = \Drupal::routeMatch()->getParameter('node');
-  $template = $collection->get('nid')->value . '_approval_message';
-  \Drupal::service('joinup_notification.entity_message_helper')->createMessageTemplate($template, $collection->getTitle(), 'test', [$text]);
+  if (!empty($message_body = $form_state->getValue('approval_message')[0]['value'])) {
+    $collection = \Drupal::routeMatch()->getParameter('node');
+    $template = $collection->get('nid')->value . '_approval_message';
+    $message_title = '<p>Interoperable Europe Portal: Your request to join the @entity:bundle @entity:title was approved</p>';
+    \Drupal::service('joinup_notification.entity_message_helper')->createMessageTemplate($template, $collection->getTitle(), 'test', [$message_title, $message_body]);
+  }
+
 }
 
+/**
+ *
+ */
+function collection_form_message_template_edit_form_alter(array &$form, FormStateInterface $form_state): void {
+  $template_id = $form['template']['#default_value'];
+  if (!str_contains($template_id, '_approval_message')) {
+    return;
+  }
+  $collection = \Drupal::service('joinup_notification.entity_message_helper')->getCollectionByTemplateId($template_id);
+  \Drupal::service('joinup_notification.entity_message_helper')->updateApprovalMessageSettingsField($collection, $form['text'][1]['#default_value']);
 }
 
 /**

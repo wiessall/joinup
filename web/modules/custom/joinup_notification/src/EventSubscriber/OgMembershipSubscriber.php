@@ -14,7 +14,6 @@ use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\JoinupMessageDeliveryInterface;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\joinup_workflow\WorkflowHelperInterface;
-use Drupal\node\Entity\Node;
 use Drupal\og\MembershipManager;
 use Drupal\og\OgMembershipInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -48,7 +47,6 @@ class OgMembershipSubscriber extends NotificationSubscriberBase {
   ) {
     parent::__construct($entityTypeManager, $configFactory, $currentUser, $ogMembershipManager, $workflowHelper, $messageDelivery);
   }
-
 
   /**
    * {@inheritdoc}
@@ -144,9 +142,10 @@ class OgMembershipSubscriber extends NotificationSubscriberBase {
     }
 
     $recipient_id = $this->membership->getOwnerId();
-    if($this->entityMessageHelper->hasCustomApprovalMessage($this->entity->id())) {
-      $template = $this->entity->id() .'-approval-message';
-    } else {
+    if ($this->entityMessageHelper->hasCustomApprovalMessage($this->entity->id())) {
+      $template = $this->entity->id() . '_approval_message';
+    }
+    else {
       $template = $this->membership->get('subscription_bundles')->isEmpty() ?
         self::TEMPLATE_APPROVE_MEMBERSHIP :
         self::TEMPLATE_APPROVE_MEMBERSHIP_WITH_SUBSCRIPTION;

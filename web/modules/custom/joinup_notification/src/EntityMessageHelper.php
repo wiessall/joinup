@@ -8,9 +8,11 @@ use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Language\Language;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\message\Entity\MessageTemplate;
 use Drupal\message\MessageInterface;
+use Drupal\message\MessageTemplateInterface;
+use Drupal\meta_entity\Entity\MetaEntity;
 
 /**
  * Service that assists in handling messages for entities.
@@ -137,7 +139,7 @@ readonly class EntityMessageHelper implements EntityMessageHelperInterface {
    * @return \Drupal\message\MessageTemplateInterface
    *   A saved message template entity.
    */
-  function createMessageTemplate($template = NULL, $label = NULL, $description = NULL, array $text = [], array $settings = [], $langcode = Language::LANGCODE_NOT_SPECIFIED) {
+  public function createMessageTemplate($template = NULL, $label = NULL, $description = NULL, array $text = [], array $settings = [], $langcode = 'en'): MessageTemplateInterface {
     $settings += [
       'token options' => [
         'token replace' => TRUE,
@@ -158,7 +160,7 @@ readonly class EntityMessageHelper implements EntityMessageHelperInterface {
       }
     }
     $message_template = MessageTemplate::load($template);
-    if(empty($message_template)) {
+    if (empty($message_template)) {
       $message_template = MessageTemplate::Create([
         'template' => $template,
         'label' => $label,
@@ -167,16 +169,56 @@ readonly class EntityMessageHelper implements EntityMessageHelperInterface {
         'settings' => $settings,
         'langcode' => $langcode,
       ]);
-    } else {
+    }
+    else {
       $message_template->set('text', $text);
     }
     $message_template->save();
     return $message_template;
   }
 
-  function hasCustomApprovalMessage(int|string $id): bool {
+  /**
+   * Checks if approval message collection settings is
+   *
+   * @param int|string $id
+   *
+   * @return bool
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  public function hasCustomApprovalMessage(int|string $id): bool {
     $node = $this->entityTypeManager->getStorage('node')->load($id);
     return !empty($node->getSetting('approval_message')->value);
+  }
+
+  /**
+   * @param string $template_id
+   *
+   * @return \Drupal\collection\Entity\CollectionInterface
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  public function getCollectionByTemplateId(string $template_id): CollectionInterface {
+    $collection_id = explode('_', $template_id)[0];
+    $collection = $this->entityTypeManager->getStorage('node')->load($collection_id);
+    assert($collection instanceof CollectionInterface);
+    return $collection;
+  }
+
+  /**
+   * @param \Drupal\collection\Entity\CollectionInterface $collection
+   * @param string $approval_message
+   *
+   * @return void
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function updateApprovalMessageSettingsField(CollectionInterface $collection, string $approval_message): void {
+    $meta_entity = MetaEntity::loadOrCreate('collection_settings', $collection);
+    $meta_entity->set('approval_message', [
+      'value' => $approval_message,
+      'format' => 'text_long',
+    ]);
+    $meta_entity->save();
   }
 
 }
