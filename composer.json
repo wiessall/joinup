@@ -345,7 +345,8 @@
         "patches": {
             "drupal/babel": {
                 "TMGMT @see https://www.drupal.org/i/3554005": "resources/patch/php/drupal/babel/3554005.mr71-note706700.diff",
-                "Strengthen the creation of continuous job items @see https://www.drupal.org/i/3578471": "resources/patch/php/drupal/babel/3578471.mr76.commit333eff4d.diff"
+                "Strengthen the creation of continuous job items @see https://www.drupal.org/i/3578471": "resources/patch/php/drupal/babel/3578471.mr76.commit333eff4d.diff",
+                "babel_content_entity: fatal error on fresh install @see https://www.drupal.org/i/3582168": "resources/patch/php/drupal/babel/3582168.mr80.commit539af713.diff"
             },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff",
