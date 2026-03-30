@@ -29,7 +29,7 @@ widgets:
       submit_text: 'Select solutions'
       auto_select: false
       view: assessment_solutions_browser
-      view_display: entity_browser_1
+      view_display: entity_browser_assessment_solutions
   a1b2c3d4-e5f6-7890-abcd-ef1234567890:
     id: entity_form
     uuid: a1b2c3d4-e5f6-7890-abcd-ef1234567890
