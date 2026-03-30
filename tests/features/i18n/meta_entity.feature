@@ -57,3 +57,26 @@ Feature: The moderator is able to translate meta entity strings.
     And I go to the EIF perspective page of the "EIF Test Machine" solution
     When I click "Polish"
     Then I should see the text "Dobra perspektywa."
+
+  Scenario: The moderator is able to translate topic strings.
+    Given I am logged in as a moderator
+    And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    And I fill in "Description" with "A cross-border e-justice description."
+    And I press "Save"
+
+    When I click "Translate" in the "Administration toolbar"
+    Then I should see the heading "Translate"
+
+    Given I select "Polish" from "Language"
+    And I fill in "Search" with "A cross-border e-justice description."
+    And I check "Show inactive"
+    And I press "Filter"
+
+    When I fill in the 2nd occurrence of the "Singular form" field with "Krótki opis sądowy." in the "A cross-border e-justice description." row
+    And I press the 2nd button in the "A cross-border e-justice description." row
+    Then I should see the success message 'Translation of source string "A cross-border e-justice description., basic_html" in language Polish was updated.'
+
+    And I go to the canonical path of the "topic" meta entity of the "E-justice" topic "taxonomy term"
+    When I click "Polish"
+    Then I should see the text "Krótki opis sądowy."
+    And I take a screenshot 'topic'
