@@ -409,7 +409,7 @@
                 "Add option for field widget to display as table @see https://www.drupal.org/i/2973457": "resources/patch/php/drupal/entity_browser/2973457.mr15.commit49824a77.diff"
             },
             "drupal/email_confirmer": {
-                "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.mr3-note490206.diff"
+                "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.mr3.commit-9d2fe508.diff"
             },
             "drupal/entity_form_field_label": {
                 "Add possibility to alter field's description @see https://www.drupal.org/i/3420361": "resources/patch/php/drupal/entity_form_field_label/3420361.mr10-note563504.diff",

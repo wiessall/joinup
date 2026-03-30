@@ -257,7 +257,7 @@ index e6222694f577b4eda1e4e1d52a27e49763629dbb..7b5c76d586e9683a14af0cefc8afd30c
    email_confirmer.confirmation_uuid_param_converter:
      class: Drupal\email_confirmer\ParamConverter\UuidConverter
 diff --git a/src/EmailConfirmerManager.php b/src/EmailConfirmerManager.php
-index 009fafef74160d091949530c74f76d0d93ac0118..9b119125c6b0ce112a97b5987e05abccc829e1eb 100644
+index 009fafef74160d091949530c74f76d0d93ac0118..412bc8d7b77be2df84ae02d4e39e25790b9e1db3 100644
 --- a/src/EmailConfirmerManager.php
 +++ b/src/EmailConfirmerManager.php
 @@ -2,9 +2,11 @@
@@ -326,7 +326,7 @@ index 009fafef74160d091949530c74f76d0d93ac0118..9b119125c6b0ce112a97b5987e05abcc
     */
 -  public function createConfirmation($email) {
 -    return $this->entityTypeManager->getStorage('email_confirmer_confirmation')->create([
-+  public function createConfirmation($email, EmailConfirmerMessage $emailConfirmerMessage = NULL) {
++  public function createConfirmation($email, ?EmailConfirmerMessage $emailConfirmerMessage = NULL) {
 +    $data = [
        'email' => $email,
 -    ]);
