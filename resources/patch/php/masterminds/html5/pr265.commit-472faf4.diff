@@ -1,0 +1,15 @@
+diff --git a/src/HTML5/Parser/Tokenizer.php b/src/HTML5/Parser/Tokenizer.php
+index 77e268f..94b9947 100644
+--- a/src/HTML5/Parser/Tokenizer.php
++++ b/src/HTML5/Parser/Tokenizer.php
+@@ -1208,6 +1208,10 @@ protected function decodeCharacterReference($inAttribute = false)
+      */
+     protected function is_alpha($input)
+     {
++        if (empty($input)) {
++            return false;
++        }
++
+         $code = ord($input);
+ 
+         return ($code >= 97 && $code <= 122) || ($code >= 65 && $code <= 90);

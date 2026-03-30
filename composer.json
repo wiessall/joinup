@@ -582,6 +582,9 @@
             "lullabot/mink-selenium2-driver": {
                 "Add missing mouseover before clicking on radio/select elements - https://github.com/Lullabot/MinkSelenium2Driver/pull/14": "resources/patch/php/lullabot/mink-selenium2-driver/selenium2-mouseover-fixes.diff"
             },
+            "masterminds/html5": {
+                "PHP 8.5 @see https://github.com/Masterminds/html5-php/pull/265": "resources/patch/php/masterminds/html5/pr265.commit-472faf4.diff"
+            },
             "openeuropa/oe_webtools": {
                 "PHP 8.5 compatibility @see https://github.com/openeuropa/oe_webtools/pull/311": "resources/patch/php/openeuropa/oe_webtools/pr311.commit-d4a22bb.diff"
             },
