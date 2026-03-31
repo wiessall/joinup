@@ -22,3 +22,18 @@
 @import "fonts/latin-700-italic.css";
 @import "fonts/latin-ext-700-italic.css";
 @import "fonts/greek-700-italic.css";
+
+// ECsquaresanspro fonts.
+@font-face {
+  font-family: ecsquare-regular;
+  src: url("../../assets/fonts/ecsquaresanspro/ecsquaresanspro-medium-web.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: ecsquare-bold;
+  src: url("../../assets/fonts/ecsquaresanspro/ecsquaresanspro-bold-web.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}

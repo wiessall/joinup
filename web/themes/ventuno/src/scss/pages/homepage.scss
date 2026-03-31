@@ -15,22 +15,38 @@
   }
 }
 
-.iop-gradient {
-  // background: linear-gradient(to right, #278ebf 0%, #44bfb8 32%, #50c1b0 37%, #70c89a 45%, #a4d377 56%, #c2d962 62%, #f6921e 100%); // Full IOP gradient
-  background: linear-gradient(
-    to right,
-    #c2d962 0%,
-    #f6921e 100%
-  ); // Only last 2 colors
-
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
 // Hero
 .region-featured {
   background-color: #001e2f;
+  &::before {
+    position: absolute;
+    content: '';
+    display: inline-block;
+    height: 5rem;
+    width: 100%;
+    background: linear-gradient(to bottom, #001e2f 0%, #001e2f 30%, rgba(0, 30, 47, 0) 100%);
+  }
+  .iop-header {
+    font-size: 2.4rem;
+    font-family: $font-family-ecsquare-regular;
+    &--gradient {
+      font-family: $font-family-ecsquare-bold;
+      display: inline-block;
+      background: linear-gradient(
+        90deg,
+        #238dc1 0%,
+        #19d3c5 33%,
+        #cdd854 66%,
+        #f29100 100%,
+      );
+
+      background-clip: text;
+      -webkit-background-clip: text;
+
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+    }
+  }
   .search-bar {
     .search-bar__input {
       padding-left: $spacer * 2.6;
@@ -53,11 +69,12 @@
       }
     }
   }
-  @include media-breakpoint-up(lg) {
-    background:
-      url("../images/portal-left.svg") left/contain no-repeat,
-      url("../images/portal-right.svg") right/contain no-repeat,
-      #001e2f;
+  > .container {
+    background: url("../images/homepage-banner-2026.svg") center / 100% no-repeat, transparent;
+    @include media-breakpoint-up(lg) {
+      background-position: right;
+      background-size: 60%;
+    }
   }
 }
 
