@@ -78,7 +78,9 @@ div.view-assessment-solutions-browser .views-exposed-form > .form-actions {
   margin-top: 0 !important;
   margin-bottom: 0 !important;
 }
-div.view-assessment-solutions-browser .views-exposed-form > .js-form-item-title {
+div.view-assessment-solutions-browser
+  .views-exposed-form
+  > .js-form-item-title {
   flex-basis: 0;
   flex-grow: 1;
 }
