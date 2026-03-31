@@ -102,7 +102,7 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
    * {@inheritdoc}
    */
   protected function getEntityReferenceFieldsOwned(): array {
-    return ['legal', 'organisational', 'semantic', 'technical', 'documents', 'binding_requirement'];
+    return ['legal', 'organisational', 'semantic', 'technical', 'binding_requirement'];
   }
 
   /**
