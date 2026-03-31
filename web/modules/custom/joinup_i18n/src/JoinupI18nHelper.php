@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Drupal\joinup_i18n;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\content_translation\ContentTranslationManagerInterface;
+use Drupal\node\NodeTypeInterface;
 
 /**
  * Helper class for joinup_i18n.
@@ -13,6 +15,7 @@ class JoinupI18nHelper {
 
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
+    protected ContentTranslationManagerInterface $translationManager,
   ) {}
 
   /**
@@ -37,8 +40,9 @@ class JoinupI18nHelper {
     // TMGMT forces the need to have the bundle set when checking if a job item
     // should be created.
     // @see \Drupal\tmgmt_content\Plugin\tmgmt\Source\ContentEntitySource::shouldCreateContinuousItem
-    $settings['content']['node']['bundles'] = array_fill_keys(array_keys($this->entityTypeManager->getStorage('node_type')->loadMultiple()), 1);
-
+    $bundles = $this->entityTypeManager->getStorage('node_type')->loadMultiple();
+    $bundles = array_filter($bundles, fn (NodeTypeInterface $bundle) => $this->translationManager->isEnabled('node', $bundle->id()));
+    $settings['content']['node']['bundles'] = array_fill_keys(array_keys($bundles), 1);
     return $settings;
   }
 
