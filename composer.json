@@ -69,7 +69,7 @@
         "drupal/json_field": "^1.5",
         "drupal/l10n_pconfig": "^2.0",
         "drupal/layout_builder_component_attributes": "^2.1",
-        "drupal/layout_custom_section_classes": "^1.0",
+        "drupal/layout_custom_section_classes": "^2.0",
         "drupal/layout_paragraphs": "^2.0",
         "drupal/linkit": "^7.0",
         "drupal/markdown_easy": "^1.0",
