@@ -276,6 +276,64 @@ Feature: Assessment Report Entity Management
     And I should not see "Test solution draft"
     And I should not see "Test solution unpublished"
 
+  Scenario: Entity browser exposed filters: name, domain and interoperable filters
+    Given solution content:
+      | title              | state     | domain           |
+      | Alpha Framework    | published | Defense          |
+      | Beta Platform      | published | Economic affairs |
+      | Gamma Service      | published | Defense          |
+      | Delta Application  | published | Economic affairs |
+    And the "Alpha Framework" solution is flagged as interoperable
+    And the "Gamma Service" solution is flagged as interoperable
+
+    Given I am logged in as an "authenticated user"
+    And I go to "/collection/assessments/report/create"
+    And I click "New binding requirement"
+    When I click "Interoperability solution" in the "Modal content" region
+    And I press "Asset"
+    And I press "Select Interoperability Solution" in the "Modal content" region to open the entity browser
+
+    Then I should see "Alpha Framework"
+    And I should see "Beta Platform"
+    And I should see "Gamma Service"
+    And I should see "Delta Application"
+
+    When I fill in "title" with "Alpha"
+    And I press "Search"
+    And I wait for AJAX to finish
+    Then I should see "Alpha Framework"
+    And I should not see "Beta Platform"
+    And I should not see "Gamma Service"
+    And I should not see "Delta Application"
+
+    When I fill in "title" with ""
+    And I select "Defense" from "domain"
+    And I press "Search"
+    And I wait for AJAX to finish
+    Then I should see "Alpha Framework"
+    And I should see "Gamma Service"
+    And I should not see "Beta Platform"
+    And I should not see "Delta Application"
+    And the "domain" field should contain the "- Any domain -" option
+
+    When I select "- Any domain -" from "domain"
+    And I check "Interoperable Europe solutions"
+    And I press "Search"
+    And I wait for AJAX to finish
+    Then I should see "Alpha Framework"
+    And I should see "Gamma Service"
+    And I should not see "Beta Platform"
+    And I should not see "Delta Application"
+
+    # Uncheck interoperable to show all solutions again.
+    When I uncheck "Interoperable Europe solutions"
+    And I press "Search"
+    And I wait for AJAX to finish
+    Then I should see "Alpha Framework"
+    And I should see "Beta Platform"
+    And I should see "Gamma Service"
+    And I should see "Delta Application"
+
   Scenario: Entity browser: add existing asset, create new asset, and remove asset
     Given solution content:
       | title                | landing page           |
