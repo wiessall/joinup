@@ -41,7 +41,7 @@ Feature:
       | views_block:calendar-by_week  | Creative Fusion Fest | Code & Coffee Hackathon       |
       | views_block:calendar-by_month | Future Horizons Expo | Innovate & Elevate Conference |
 
-  Scenario Outline: User can navigate through events
+  Scenario Outline: User can navigate through EC events
     Given custom_page content:
       | title           | collection     | abstract        |
       | Events calendar | Portal support | events calendar |
@@ -55,7 +55,7 @@ Feature:
     And I should not see the link "<next event>"
 
     When I click "Previous"
-    Then I should see the link "<previous event>"
+    Then I should not see the link "<previous event>"
     And I should not see the link "<next event>"
 
     #  Start again from Wed Jan 15 2020 11:00:00 GMT+0000
