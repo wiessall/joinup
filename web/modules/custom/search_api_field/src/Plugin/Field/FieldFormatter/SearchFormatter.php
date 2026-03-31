@@ -11,6 +11,7 @@ use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\Core\Pager\PagerManagerInterface;
@@ -52,6 +53,7 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
     array $third_party_settings,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly Request $request,
+    protected readonly LanguageManagerInterface $languageManager,
     protected readonly ParseModePluginManager $parseModeManager,
     protected readonly FilterPluginManagerInterface $filterPluginManager,
     protected readonly LoggerChannelInterface $logger,
@@ -75,6 +77,7 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
       $configuration['third_party_settings'],
       $container->get('entity_type.manager'),
       $container->get('request_stack')->getCurrentRequest(),
+      $container->get('language_manager'),
       $container->get('plugin.manager.search_api.parse_mode'),
       $container->get('plugin.manager.search_api_field.filter'),
       $container->get('logger.channel.search_api'),
@@ -181,7 +184,7 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
       'search_api_field item' => $item,
     ];
     $query = $this->getSearchApiIndex()->query($options);
-    $query->setLanguages([$entity->language()->getId()]);
+    $query->setLanguages([$this->languageManager->getCurrentLanguage()->getId()]);
     $query->setSearchId($field_definition->id());
     $query->setParseMode($this->parseModeManager->createInstance('direct'));
 
