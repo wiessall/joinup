@@ -4,34 +4,37 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_distribution\Entity;
 
+use Drupal\Core\Entity\Attribute\ContentEntityType;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\joinup_distribution\DownloadEventStorageSchema;
 use Drupal\user\EntityOwnerInterface;
 use Drupal\user\UserInterface;
+use Drupal\views\EntityViewsData;
 
 /**
  * Provides a backend for asset distribution download event logging.
- *
- * @ContentEntityType(
- *   id = "download_event",
- *   label = @Translation("Download event"),
- *   handlers = {
- *     "storage_schema" = "Drupal\joinup_distribution\DownloadEventStorageSchema",
- *     "views_data" = "Drupal\views\EntityViewsData",
- *   },
- *   base_table = "joinup_download_event",
- *   translatable = FALSE,
- *   entity_keys = {
- *     "id" = "id",
- *     "uid" = "uid",
- *   },
- *   constraints = {
- *     "DownloadEvent" = {}
- *   },
- * )
  */
+#[ContentEntityType(
+  id: 'download_event',
+  label: new TranslatableMarkup('Download event'),
+  entity_keys: [
+    'id' => 'id',
+    'uid' => 'uid',
+  ],
+  handlers: [
+    'storage_schema' => DownloadEventStorageSchema::class,
+    'views_data' => EntityViewsData::class,
+  ],
+  base_table: 'joinup_download_event',
+  translatable: FALSE,
+  constraints: [
+    'DownloadEvent' => [],
+  ],
+)]
 class DownloadEvent extends ContentEntityBase implements EntityOwnerInterface {
 
   /**
