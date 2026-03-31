@@ -10,7 +10,7 @@
 
 <div{{ attributes.addClass('language-picker') }}>
   <button class="btn btn-link bg-white icon-link d-inline-flex px-3 language-picker__button" type="button" data-bs-toggle="dropdown" aria-label="{{ 'Toggle language picker'|t }}">{{ current_language.code|upper }}</button>
-  <div class="dropdown-menu dropdown-menu-end p-3 language-picker__dropdown-menu" role="menu" aria-labelledby="language-picker__button">
+  <div class="dropdown-menu dropdown-menu-end px-4 py-3 language-picker__dropdown-menu" role="menu" aria-labelledby="language-picker__button">
     <ul class="list-unstyled mb-0 row row-cols-2 row-cols-md-3">
       {% for item in links %}
         {%- if item.link -%}
