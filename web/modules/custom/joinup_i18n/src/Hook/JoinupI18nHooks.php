@@ -79,18 +79,19 @@ class JoinupI18nHooks {
       return;
     }
 
-    // TMGMT forces the need to have the bundle set when checking if a job item
-    // should be created.
-    // @see \Drupal\tmgmt_content\Plugin\tmgmt\Source\ContentEntitySource::shouldCreateContinuousItem
     // Load all existing continuous jobs for this source language + translator
     // in one query for performance.
-    $existingTargetLangcodes = $this->connection->select('tmgmt_job', 'tj')
-      ->fields('tj', ['target_language'])
-      ->condition('source_language', $sourceLangcode)
-      ->condition('translator', ETranslationTranslator::ID)
-      ->condition('job_type', JobInterface::TYPE_CONTINUOUS)
-      ->execute()
-      ->fetchCol();
+    $jobStorage = $this->entityTypeManager->getStorage('tmgmt_job');
+    $existingTargetLangcodes = array_column(
+      $jobStorage->getAggregateQuery()
+        ->accessCheck(FALSE)
+        ->groupBy('target_language')
+        ->condition('source_language', $sourceLangcode)
+        ->condition('translator', ETranslationTranslator::ID)
+        ->condition('job_type', JobInterface::TYPE_CONTINUOUS)
+        ->execute(),
+      'target_language',
+    );
 
     $jobStorage = $this->entityTypeManager->getStorage('tmgmt_job');
     $settings = $this->joinupI18nHelper->getContinuousSettings();
@@ -142,8 +143,8 @@ class JoinupI18nHooks {
       ->execute();
 
     foreach ($jobStorage->loadMultiple() as $job) {
-      $job->set('continuous_settings', $continuousSettings);
-      $job->save();
+      $job->set('continuous_settings', $continuousSettings)
+        ->save();
     }
   }
 

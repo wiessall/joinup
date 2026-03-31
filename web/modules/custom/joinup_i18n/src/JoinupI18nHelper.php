@@ -34,6 +34,9 @@ class JoinupI18nHelper {
    */
   public function getContinuousSettings(): array {
     $settings = self::CONTINUOUS_SETTINGS;
+    // TMGMT forces the need to have the bundle set when checking if a job item
+    // should be created.
+    // @see \Drupal\tmgmt_content\Plugin\tmgmt\Source\ContentEntitySource::shouldCreateContinuousItem
     $settings['content']['node']['bundles'] = array_fill_keys(array_keys($this->entityTypeManager->getStorage('node_type')->loadMultiple()), 1);
 
     return $settings;
