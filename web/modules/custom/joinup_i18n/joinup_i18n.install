@@ -61,6 +61,7 @@ function joinup_i18n_update_201200(): string {
     ->accessCheck(FALSE)
     ->condition('job_type', JobInterface::TYPE_CONTINUOUS)
     ->condition('label', 'Babel:%', 'LIKE')
+    ->condition('source_language', 'en')
     ->execute();
 
   if (empty($ids)) {
