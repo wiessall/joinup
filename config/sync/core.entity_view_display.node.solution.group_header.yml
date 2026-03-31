@@ -32,7 +32,6 @@ dependencies:
     - field_formatter_range
     - joinup_core
     - joinup_slick
-    - svg_image
     - template_suggestion
     - user
 id: node.solution.group_header
@@ -43,7 +42,7 @@ content:
   collections:
     settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 0
     region: content
   field_topic:
     type: entity_reference_custom_link
@@ -65,39 +64,22 @@ content:
         field_label: true
       template_suggestion:
         template_suggestion: group_header_topic
-    weight: 4
+    weight: 3
     region: content
   flag_interoperability:
     settings: {  }
     third_party_settings: {  }
-    weight: 5
-    region: content
-  logo:
-    type: image
-    label: hidden
-    settings:
-      image_link: ''
-      image_style: logo
-      image_loading:
-        attribute: lazy
-      svg_attributes:
-        width: null
-        height: null
-      svg_render_as_image: true
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: bare
-    weight: 0
+    weight: 4
     region: content
   members:
     settings: {  }
     third_party_settings: {  }
-    weight: 3
+    weight: 2
     region: content
   solution_subscribe:
     settings: {  }
     third_party_settings: {  }
-    weight: 2
+    weight: 1
     region: content
 hidden:
   abstract: true
@@ -117,6 +99,7 @@ hidden:
   langcode: true
   language: true
   links: true
+  logo: true
   metrics_page: true
   node_solution_listing_content_inline_facets: true
   node_solution_listing_content_top: true

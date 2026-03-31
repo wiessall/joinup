@@ -5,26 +5,27 @@ declare(strict_types=1);
 namespace Drupal\joinup_invite\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
+use Drupal\Core\Entity\Attribute\ConfigEntityType;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
  * Defines the Invitation type entity, which provides bundles for Invitations.
- *
- * @ConfigEntityType(
- *   id = "invitation_type",
- *   label = @Translation("Invitation type"),
- *   config_prefix = "invitation_type",
- *   bundle_of = "invitation",
- *   entity_keys = {
- *     "id" = "id",
- *     "label" = "label",
- *     "uuid" = "uuid"
- *   },
- *   config_export = {
- *     "id",
- *     "label"
- *   }
- * )
  */
+#[ConfigEntityType(
+  id: 'invitation_type',
+  label: new TranslatableMarkup('Invitation type'),
+  config_prefix: 'invitation_type',
+  entity_keys: [
+    'id' => 'id',
+    'label' => 'label',
+    'uuid' => 'uuid',
+  ],
+  bundle_of: 'invitation',
+  config_export: [
+    'id',
+    'label',
+  ],
+)]
 class InvitationType extends ConfigEntityBundleBase implements InvitationTypeInterface {
 
   /**
