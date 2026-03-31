@@ -69,7 +69,7 @@ Feature: Proposing a collection
     # Regression test for the keywords field in the about page.
     And I should not see the text "Search keywords" in the "Content" region
     And I should not see the text "Some keyword" in the "Content" region
-    And I should see a logo on the header
+    And I should not see a logo on the header
     And I should see "Thank you for proposing a collection. Your request is currently pending approval by the site administrator."
 
     # The user that proposed the collection should be auto-subscribed.
