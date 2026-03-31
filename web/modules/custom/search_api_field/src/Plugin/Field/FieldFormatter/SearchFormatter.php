@@ -181,6 +181,7 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
       'search_api_field item' => $item,
     ];
     $query = $this->getSearchApiIndex()->query($options);
+    $query->setLanguages([$entity->language()->getId()]);
     $query->setSearchId($field_definition->id());
     $query->setParseMode($this->parseModeManager->createInstance('direct'));
 
