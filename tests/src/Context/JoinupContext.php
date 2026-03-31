@@ -1807,12 +1807,12 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that a logo exists in the header.
+   * Asserts that a logo not exists in the header.
    */
-  #[Then('I should see a logo on the header')]
-  public function assertExistingLogo(): void {
+  #[Then('I should not see a logo on the header')]
+  public function assertNotExistingLogo(): void {
     $xpath = '//div[@data-drupal-group-logo]//img';
-    $this->assertSession()->elementsCount('xpath', $xpath, 1);
+    $this->assertSession()->elementsCount('xpath', $xpath, 0);
   }
 
   /**

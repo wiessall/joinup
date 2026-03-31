@@ -328,6 +328,11 @@ clean:
       paths: *paths
       filters:
         tags: '~@wip&&@group-i'
+    group_j:
+      contexts: *contexts
+      paths: *paths
+      filters:
+        tags: '~@wip&&@group-j'
     group_other:
       contexts: *contexts
       paths: *paths
