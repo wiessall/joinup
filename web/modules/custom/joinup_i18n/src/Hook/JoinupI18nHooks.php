@@ -13,6 +13,7 @@ use Drupal\Core\Hook\Order\OrderBefore;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\joinup_i18n\JoinupI18nHelper;
 use Drupal\tmgmt\JobInterface;
+use Drupal\tmgmt_ec_etranslation\Plugin\tmgmt\Translator\ETranslationTranslator;
 
 /**
  * Hook implementations for joinup_i18n.
@@ -86,7 +87,7 @@ class JoinupI18nHooks {
     $existingTargetLangcodes = $this->connection->select('tmgmt_job', 'tj')
       ->fields('tj', ['target_language'])
       ->condition('source_language', $sourceLangcode)
-      ->condition('translator', 'ec_etranslation')
+      ->condition('translator', ETranslationTranslator::ID)
       ->condition('job_type', JobInterface::TYPE_CONTINUOUS)
       ->execute()
       ->fetchCol();
@@ -99,7 +100,7 @@ class JoinupI18nHooks {
         'target_language' => $targetLangcode,
         'label' => "Joinup: {$sourceLangcode} > {$targetLangcode}",
         'uid' => 0,
-        'translator' => 'ec_etranslation',
+        'translator' => ETranslationTranslator::ID,
         'settings' => [],
         'state' => JobInterface::STATE_CONTINUOUS,
         'job_type' => JobInterface::TYPE_CONTINUOUS,
@@ -137,7 +138,7 @@ class JoinupI18nHooks {
     $jobStorage->getQuery()
       ->accessCheck(FALSE)
       ->condition('job_type', JobInterface::TYPE_CONTINUOUS)
-      ->condition('translator', 'ec_etranslation')
+      ->condition('translator', ETranslationTranslator::ID)
       ->execute();
 
     foreach ($jobStorage->loadMultiple() as $job) {
