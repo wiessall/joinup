@@ -81,10 +81,10 @@ Feature: Tests the group landing page customization.
       | Custom Page 1 |
       | Custom Page 2 |
       | Custom Page 3 |
-    And "Welcome" should be the active items in the "Navigation menu" region
+    And "Welcome" should be the active item in the "Navigation menu" region
     When I disable "Welcome" in the navigation menu of the "<group> group" <group>
     And I go to the homepage of the "<group> group" <group>
-    Then "Custom Page 3" should be the active items in the "Navigation menu" region
+    Then "Custom Page 3" should be the active item in the "Navigation menu" region
     And I enable "Welcome" in the navigation menu of the "<group> group" <group>
 
     # Regression test for ticket ISAICP-9253.
