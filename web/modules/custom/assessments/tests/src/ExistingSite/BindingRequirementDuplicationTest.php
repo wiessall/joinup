@@ -11,7 +11,7 @@ use Drupal\paragraphs\Entity\Paragraph;
 use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests the assessment entity duplication.
+ * Tests the business_requirement paragraphs duplication.
  */
 #[Group('assessments')]
 class BindingRequirementDuplicationTest extends JoinupExistingSiteTestBase {
@@ -32,7 +32,12 @@ class BindingRequirementDuplicationTest extends JoinupExistingSiteTestBase {
       'documented_in' => ['uri' => 'https://interoperable-europe.ec.europa.eu/'],
       'requirement_documents' => ['entity' => $file],
     ]);
+    $paragraph->save();
+    $this->markEntityForCleanup($paragraph);
+
     $duplicate = $paragraph->createDuplicate();
+    $duplicate->save();
+    $this->markEntityForCleanup($duplicate);
 
     $duplicate_file = $duplicate->get('requirement_documents')->entity;
     $this->assertInstanceOf(FileInterface::class, $duplicate_file);
