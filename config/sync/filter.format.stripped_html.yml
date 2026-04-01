@@ -4,12 +4,11 @@ status: true
 dependencies:
   module:
     - blazy
-    - joinup_collection
+    - collection
     - editor
     - image
     - joinup_html_stripper
     - linkit
-    - markdown_easy
     - media
     - oe_webtools_cookie_consent
     - slick
@@ -122,14 +121,6 @@ filters:
     weight: -43
     settings:
       title: true
-  markdown_easy:
-    id: markdown_easy
-    provider: markdown_easy
-    status: false
-    weight: 0
-    settings:
-      flavor: standard
-      tips: ''
   media_embed:
     id: media_embed
     provider: media

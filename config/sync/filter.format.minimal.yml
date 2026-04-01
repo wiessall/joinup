@@ -4,7 +4,6 @@ status: true
 dependencies:
   module:
     - blazy
-    - markdown_easy
     - slick
 name: Minimal
 format: minimal
@@ -53,14 +52,6 @@ filters:
     weight: 0
     settings:
       filter_url_length: 72
-  markdown_easy:
-    id: markdown_easy
-    provider: markdown_easy
-    status: false
-    weight: 0
-    settings:
-      flavor: standard
-      tips: ''
   slick_filter:
     id: slick_filter
     provider: slick
