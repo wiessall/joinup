@@ -7,10 +7,11 @@ type: drupal
 docroot: web
 php_version: "8.5"
 webimage_extra_packages:
-    - php-apcu
+    - php${DDEV_PHP_VERSION}-apcu
+    - php${DDEV_PHP_VERSION}-memcached
 # It's not possible to use fpfis/httpd-php because DDEV is strongly advising
-# against using a non-DDEV image. But this has no impact on the Interoperable Europe Portal code runs
-# in CI/CD or on production.
+# against using a non-DDEV image. But this has no impact on the Interoperable
+# Europe Portal code runs in CI/CD or on production.
 # See:
 # - https://ddev.readthedocs.io/en/latest/users/configuration/config/#webimage
 # - https://github.com/ddev/ddev/issues/5497
