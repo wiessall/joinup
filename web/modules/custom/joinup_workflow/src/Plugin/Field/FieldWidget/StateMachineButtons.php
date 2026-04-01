@@ -104,6 +104,14 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
       return $element;
     }
 
+    // Workflow transitions are not available when editing a translation.
+    $entity = $items->getEntity();
+    $form_langcode = $form_state->getFormObject()->getFormLangcode($form_state);
+    $default_langcode = $entity->getUntranslated()->language()->getId();
+    if ($form_langcode !== $default_langcode) {
+      return $element;
+    }
+
     if ($this->getSetting('use_transition_label')) {
       $element['#options'] = $this->replaceStateLabelsWithTransitionLabels($element['#options'], $items);
     }

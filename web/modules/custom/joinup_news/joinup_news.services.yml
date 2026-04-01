@@ -1,8 +1,0 @@
-services:
-
-  _defaults:
-    autoconfigure: true
-    autowire: true
-
-  Drupal\joinup_news\EventSubscriber\JoinupNewsEventSubscriber: { }
-

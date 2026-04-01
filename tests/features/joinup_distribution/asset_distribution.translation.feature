@@ -1,4 +1,4 @@
-@api @group-a
+@api @group-j
 Feature: Translating distributions
 
   Background:
@@ -19,7 +19,19 @@ Feature: Translating distributions
       | title             | solution      |
       | Test distribution | Test solution |
 
-  Scenario Outline: Users who do have edit access can manage translations.
+  Scenario Outline: Test translation access.
+    Given I am logged in as "<user>"
+    When I visit the translation overview form of the "<title>" distribution
+    Then the response status code should be <code>
+
+    Examples:
+      | user        | title              | code |
+      | Flora Mod   | Test distribution  | 200  |
+      | Lee Facil   | Test distribution  | 200  |
+      | John Member | Test distribution  | 403  |
+      | Ross Auth   | Test distribution  | 403  |
+
+  Scenario Outline: Test creating node translation from UI.
     Given I am logged in as "<user>"
 
     # Assert language select options/value.
@@ -31,11 +43,11 @@ Feature: Translating distributions
     And I click "Translate" in the "Entity actions" region
     And I click "Add" in the "Polish" row
     Then the following fields should be present "Title, Description"
+    Then the following fields should not be present "Access URL, File size, Format, Groups audience, Licence, Release, Representation technique , State, Status"
     Then I should see the heading "Create Polish translation of Test distribution"
     When I fill in "Title" with "Testowa dystrybucja"
     And I fill in "Description" with "Opis dystrybucji"
-    Then the following fields should not be present "Access URL, File size, Format, Groups audience, Licence, Release, Representation technique , State, Status"
-    When I press "Update"
+    When I press "Save (all translations)"
     Then I should see the success message "Distribution Testowa dystrybucja has been updated."
     And I should see the heading "Testowa dystrybucja"
     And I should see "Opis dystrybucji"
@@ -45,7 +57,7 @@ Feature: Translating distributions
     Then I should see "Testowa dystrybucja"
     When I click "Edit" in the "Polish" row
     And I fill in "Title" with "Zaktualizowana dystrybucja"
-    And I press "Update"
+    And I press "Save (all translations)"
     Then I should see the success message "Distribution Zaktualizowana dystrybucja has been updated."
     And I should not see the heading "Testowa dystrybucja"
     And I should see the heading "Zaktualizowana dystrybucja"
@@ -64,13 +76,3 @@ Feature: Translating distributions
       | user      |
       | Flora Mod |
       | Lee Facil |
-
-  Scenario Outline: Users who do not have edit access cannot manage translations.
-    Given I am logged in as "<user>"
-    When I visit the translation overview form of the "Test distribution" distribution
-    Then I should see the heading "Access denied"
-
-    Examples:
-      | user        |
-      | John Member |
-      | Ross Auth   |

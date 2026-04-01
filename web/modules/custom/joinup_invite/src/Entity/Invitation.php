@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_invite\Entity;
 
+use Drupal\Core\Entity\Attribute\ContentEntityType;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityChangedTrait;
@@ -11,7 +12,9 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\user\UserInterface;
+use Drupal\views\EntityViewsData;
 
 /**
  * Defines the Invitation entity.
@@ -33,26 +36,25 @@ use Drupal\user\UserInterface;
  * in a discussion can be found in the InviteToDiscussionForm.
  *
  * @see \Drupal\joinup_discussion\Form\InviteToDiscussionForm
- *
- * @ContentEntityType(
- *   id = "invitation",
- *   label = @Translation("Invitation"),
- *   bundle_label = @Translation("Invitation type"),
- *   handlers = {
- *     "views_data" = "Drupal\views\EntityViewsData",
- *   },
- *   base_table = "invitation",
- *   entity_keys = {
- *     "id" = "id",
- *     "bundle" = "bundle",
- *     "uuid" = "uuid",
- *     "uid" = "uid",
- *     "langcode" = "langcode",
- *     "status" = "status",
- *   },
- *   bundle_entity_type = "invitation_type"
- * )
  */
+#[ContentEntityType(
+  id: 'invitation',
+  label: new TranslatableMarkup('Invitation'),
+  entity_keys: [
+    'id' => 'id',
+    'bundle' => 'bundle',
+    'uuid' => 'uuid',
+    'uid' => 'uid',
+    'langcode' => 'langcode',
+    'status' => 'status',
+  ],
+  handlers: [
+    'views_data' => EntityViewsData::class,
+  ],
+  bundle_entity_type: 'invitation_type',
+  bundle_label: new TranslatableMarkup('Invitation type'),
+  base_table: 'invitation',
+)]
 class Invitation extends ContentEntityBase implements InvitationInterface {
 
   use EntityChangedTrait;

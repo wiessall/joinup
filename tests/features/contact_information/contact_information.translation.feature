@@ -1,13 +1,12 @@
-
-@api @group-a
+@api @group-j
 Feature: Translating contact information
 
   Background:
-    And contact_information content:
-      | name       |
+    Given contact_information content:
+      | name                     |
       | Test contact information |
 
-  Scenario: Users who do have edit access can manage translations.
+  Scenario: Test creating node translation from UI.
     Given I am logged in as a user with the "moderator" role
 
     # Assert language select options/value.
@@ -21,11 +20,10 @@ Feature: Translating contact information
     And I click "Add" in the "Polish" row
     Then I should see the heading "Create Polish translation of Test contact information"
     And the following fields should be present "Name, Website URL"
-    Then the following fields should be present "Name"
+    Then the following fields should not be present "State"
     When I fill in "Name" with "Dane kontaktowe"
     And I fill in "Website URL" with "https://dame-kontaktowe.pl"
-    Then the following fields should not be present "State"
-    When I press "Update"
+    When I press "Save (all translations)"
     Then I should see the success message "Contact information Dane kontaktowe has been updated."
     And I should see the heading "Dane kontaktowe"
     And I should see "https://dame-kontaktowe.pl"
@@ -35,7 +33,7 @@ Feature: Translating contact information
     Then I should see "Dane kontaktowe"
     When I click "Edit" in the "Polish" row
     And I fill in "Name" with "Zaktualizowane dane"
-    And I press "Update"
+    And I press "Save (all translations)"
     Then I should see the success message "Contact information Zaktualizowane dane has been updated."
     And I should not see the heading "Dane kontaktowe"
     And I should see the heading "Zaktualizowane dane"
@@ -45,12 +43,12 @@ Feature: Translating contact information
     And I click "Delete" in the "Polish" row
     Then I should see "Are you sure you want to delete the Polish translation of the content item Zaktualizowane dane?"
     When I press "Delete Polish translation"
-    Then I should see the success message "Polish translation of the Contact information Zaktualizowane dane has been deleted"
+    Then I should see the success message "Polish translation of the Contact information Zaktualizowane dane has been deleted."
     When I click "Translate" in the "Entity actions" region
     Then I should not see "Edit" in the "Polish" row
     And I should see the "Add" in the "Polish" row
 
   Scenario: Users who do not have edit access cannot manage translations.
-    When I am logged in as an authenticated
+    Given I am logged in as an authenticated
     When I visit the translation overview form of the "Test contact information" contact_information
     Then I should see the heading "Access denied"
