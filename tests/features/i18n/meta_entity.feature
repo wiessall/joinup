@@ -39,7 +39,9 @@ Feature: The moderator is able to translate meta entity strings.
       | title            |
       | EIF Test Machine |
     And the following EIF perspective data for the "EIF Test Machine" solution:
-      | Description | A great interoperability perspective. |
+      | Description    | A great interoperability perspective.                     |
+      | Solution type  | Common frameworks                                         |
+      | Recommendation | name: Recommendation 21, description: This is recommended |
     And I am logged in as a moderator
 
     When I click "Translate" in the "Administration toolbar"
@@ -50,7 +52,7 @@ Feature: The moderator is able to translate meta entity strings.
     And I check "Show inactive"
     And I press "Filter"
 
-    When I fill in the 2nd occurrence of the "Singular form" field with "Dobra perspektywa." in the "A great interoperability perspective." row
+    When I fill in the 2nd occurrence of the "Singular form" field with "Dobra perspektywa., content_editor" in the "A great interoperability perspective." row
     And I press the 2nd button in the "A great interoperability perspective." row
     Then I should see the success message 'Translation of source string "A great interoperability perspective., content_editor" in language Polish was updated.'
 
