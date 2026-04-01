@@ -26,7 +26,7 @@ Feature: Translated group content should have proper path aliases.
     And I click "Add" in the "French" row
     And I fill in "Title" with "Collection de test alias"
     And I fill in "Abstract" with "Description courte"
-    And I press "Publish"
+    And I press "Save (all translations)"
     Then I should see the heading "Collection de test alias"
     And the url should match "/fr/collection/collection-de-test-alias"
 
