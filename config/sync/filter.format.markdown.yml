@@ -136,7 +136,6 @@ filters:
     weight: -50
     settings:
       flavor: standard
-      tips: ''
   media_embed:
     id: media_embed
     provider: media
