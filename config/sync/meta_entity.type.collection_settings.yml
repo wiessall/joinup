@@ -21,4 +21,4 @@ mapping:
   node:
     collection:
       field_name: collection_settings
-      auto_create: true
+      auto_create: false
