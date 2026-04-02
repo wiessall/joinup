@@ -7,6 +7,9 @@
 
 declare(strict_types=1);
 
+use Drupal\joinup_i18n\Hook\JoinupI18nHooks;
+use Drupal\tmgmt\JobInterface;
+
 /**
  * Locale source strings with duplicates.
  */
@@ -71,4 +74,34 @@ function joinup_i18n_deploy_201201(array &$sandbox): string {
   $sandbox['#finished'] = $sandbox['total'] ? $sandbox['processed'] / $sandbox['total'] : 1;
 
   return "Queued {$sandbox['processed']}/{$sandbox['total']} nodes for alias generation.";
+}
+
+/**
+ * Rename legacy Babel continuous jobs and align their continuous_settings.
+ */
+function joinup_i18n_deploy_201202(): string {
+  $job_storage = \Drupal::entityTypeManager()->getStorage('tmgmt_job');
+  $ids = $job_storage->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('job_type', JobInterface::TYPE_CONTINUOUS)
+    ->condition('label', 'Babel:%', 'LIKE')
+    ->condition('source_language', 'en')
+    ->execute();
+
+  if (empty($ids)) {
+    return 'No Babel continuous jobs found.';
+  }
+
+  $joinup_hooks = \Drupal::classResolver()->getInstanceFromDefinition(JoinupI18nHooks::class);
+  $count = 0;
+  foreach ($job_storage->loadMultiple($ids) as $job) {
+    $source_langcode = $job->getSourceLangcode();
+    $target_langcode = $job->getTargetLangcode();
+    $job->set('label', "Joinup: {$source_langcode} > {$target_langcode}");
+    $job->set('continuous_settings', $joinup_hooks->getContinuousSettings());
+    $job->save();
+    $count++;
+  }
+
+  return "Updated {$count} continuous job(s).";
 }
