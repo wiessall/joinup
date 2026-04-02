@@ -5,7 +5,6 @@ dependencies:
   module:
     - blazy
     - joinup_core
-    - markdown_easy
     - slick
 _core:
   default_config_hash: 6TYT5seKHYxoAB4RSEPFmSEKjRH3L_mp11rav_tcmbo
@@ -62,14 +61,6 @@ filters:
     weight: 0
     settings:
       filter_url_length: 72
-  markdown_easy:
-    id: markdown_easy
-    provider: markdown_easy
-    status: false
-    weight: 0
-    settings:
-      flavor: standard
-      tips: ''
   slick_filter:
     id: slick_filter
     provider: slick
