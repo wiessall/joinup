@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.node.event.abstract
+    - field.field.node.event.european_commission_digit_event
     - field.field.node.event.field_attachment
     - field.field.node.event.field_comments
     - field.field.node.event.field_event_agenda
@@ -77,6 +78,13 @@ content:
       title_display: before
       show_for_new_entities: false
     third_party_settings: {  }
+  european_commission_digit_event:
+    type: boolean_checkbox
+    weight: 10
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
   field_attachment:
     type: file_generic
     weight: 20
@@ -100,7 +108,7 @@ content:
     third_party_settings: {  }
   field_event_contact_email:
     type: email_default
-    weight: 14
+    weight: 13
     region: content
     settings:
       placeholder: ''
@@ -132,7 +140,7 @@ content:
     third_party_settings: {  }
   field_event_web_url:
     type: link_default
-    weight: 15
+    weight: 14
     region: content
     settings:
       placeholder_url: ''
@@ -174,7 +182,7 @@ content:
     third_party_settings: {  }
   field_scope:
     type: tagify_select_widget
-    weight: 16
+    weight: 15
     region: content
     settings:
       match_operator: CONTAINS
@@ -198,7 +206,7 @@ content:
     third_party_settings: {  }
   field_topic:
     type: tagify_entity_reference_autocomplete_widget
-    weight: 17
+    weight: 16
     region: content
     settings:
       match_operator: CONTAINS
@@ -232,13 +240,13 @@ content:
       include_locked: false
     third_party_settings: {  }
   simple_sitemap:
-    weight: 13
+    weight: 12
     region: content
     settings: {  }
     third_party_settings: {  }
   spatial_coverage:
     type: tagify_entity_reference_autocomplete_widget
-    weight: 19
+    weight: 18
     region: content
     settings:
       match_operator: CONTAINS
@@ -260,11 +268,6 @@ content:
     third_party_settings: {  }
   transition_motivation:
     weight: 11
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  translation:
-    weight: 12
     region: content
     settings: {  }
     third_party_settings: {  }
