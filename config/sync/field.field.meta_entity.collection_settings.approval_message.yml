@@ -17,7 +17,7 @@ field_name: approval_message
 entity_type: meta_entity
 bundle: collection_settings
 label: 'Post approval email message'
-description: ''
+description: 'Default message: Interoperable Europe Portal: Your request to join the @entity:bundle @entity:title was approved'
 required: false
 translatable: false
 default_value: {  }
