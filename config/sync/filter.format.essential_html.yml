@@ -4,9 +4,8 @@ status: true
 dependencies:
   module:
     - blazy
-    - joinup_collection
+    - collection
     - joinup_html_stripper
-    - markdown_easy
     - slick
 name: 'Essential HTML'
 format: essential_html
@@ -61,14 +60,6 @@ filters:
     status: true
     weight: -40
     settings: {  }
-  markdown_easy:
-    id: markdown_easy
-    provider: markdown_easy
-    status: false
-    weight: 0
-    settings:
-      flavor: standard
-      tips: ''
   slick_filter:
     id: slick_filter
     provider: slick
