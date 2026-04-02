@@ -1,0 +1,52 @@
+<?php
+
+/**
+ * @file
+ * Install, update, uninstall hook implementations for Joinup i18n module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
+
+/**
+ * Implements hook_requirements().
+ *
+ * @todo Remove in ISAICP-10740.
+ */
+function joinup_i18n_requirements(string $phase): array {
+  if ($phase !== 'runtime') {
+    return [];
+  }
+
+  $sql = <<<SQL
+    SELECT GROUP_CONCAT(lid ORDER BY lid SEPARATOR ', '), source
+    FROM locales_source
+    GROUP BY source, context
+    HAVING COUNT(source) > 1
+    ORDER BY COUNT(source) DESC
+    SQL;
+
+  if (!$rows = \Drupal::database()->query($sql)->fetchAll(\PDO::FETCH_NUM)) {
+    return [];
+  }
+
+  $items = [];
+  foreach ($rows as [$lids, $source]) {
+    $items[] = "$lids: $source";
+  }
+
+  $count = count($rows);
+  return [
+    'joinup_i18n_source_duplicate' => [
+      // This is an error, but we collect more info w/o failing the build.
+      'severity' => REQUIREMENT_INFO,
+      'title' => t('Locale source strings'),
+      'value' => new PluralTranslatableMarkup($count, '@count Locale string with duplicates:', '@count Locale strings with duplicates:'),
+      'description' => [
+        '#theme' => 'item_list',
+        '#items' => $items,
+      ],
+    ],
+  ];
+}
