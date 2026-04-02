@@ -1,7 +1,0 @@
-services:
-
-  _defaults:
-    autoconfigure: true
-    autowire: true
-
-  Drupal\joinup_i18n\JoinupI18nHelper: { }

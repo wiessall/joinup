@@ -8,7 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
-use Drupal\joinup_i18n\JoinupI18nHelper;
+use Drupal\joinup_i18n\Hook\JoinupI18nHooks;
 use Drupal\tmgmt\JobInterface;
 
 /**
@@ -69,7 +69,7 @@ function joinup_i18n_update_201200(): string {
     return 'No Babel continuous jobs found.';
   }
 
-  $joinup_i18n_helper = \Drupal::classResolver()->getInstanceFromDefinition(JoinupI18nHelper::class);
+  $joinup_i18n_helper = \Drupal::classResolver()->getInstanceFromDefinition(JoinupI18nHooks::class);
   $count = 0;
   foreach ($job_storage->loadMultiple($ids) as $job) {
     $source_langcode = $job->getSourceLangcode();

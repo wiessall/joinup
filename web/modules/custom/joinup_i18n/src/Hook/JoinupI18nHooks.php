@@ -11,7 +11,8 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Hook\Order\OrderBefore;
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\joinup_i18n\JoinupI18nHelper;
+use Drupal\content_translation\ContentTranslationManagerInterface;
+use Drupal\node\NodeTypeInterface;
 use Drupal\tmgmt\JobInterface;
 use Drupal\tmgmt_ec_etranslation\Plugin\tmgmt\Translator\ETranslationTranslator;
 
@@ -20,11 +21,22 @@ use Drupal\tmgmt_ec_etranslation\Plugin\tmgmt\Translator\ETranslationTranslator;
  */
 class JoinupI18nHooks {
 
+  /**
+   * The continuous settings for TMGMT.
+   */
+  public const array CONTINUOUS_SETTINGS = [
+    'content' => [
+      'node' => ['enabled' => 1],
+      'poll' => ['enabled' => 1],
+      'poll_choice' => ['enabled' => 1],
+    ],
+  ];
+
   public function __construct(
     protected Connection $connection,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected LanguageManagerInterface $languageManager,
-    protected JoinupI18nHelper $joinupI18nHelper,
+    protected ContentTranslationManagerInterface $translationManager,
   ) {
   }
 
@@ -64,7 +76,7 @@ class JoinupI18nHooks {
     }
 
     // Ensure our generic check is only for desired entity type IDs.
-    if (!in_array($entity->getEntityTypeId(), array_keys($this->joinupI18nHelper::CONTINUOUS_SETTINGS['content']))) {
+    if (!in_array($entity->getEntityTypeId(), array_keys(self::CONTINUOUS_SETTINGS['content']))) {
       return;
     }
 
@@ -94,7 +106,7 @@ class JoinupI18nHooks {
     );
 
     $jobStorage = $this->entityTypeManager->getStorage('tmgmt_job');
-    $settings = $this->joinupI18nHelper->getContinuousSettings();
+    $settings = $this->getContinuousSettings();
     foreach (array_diff($targetLangcodes, $existingTargetLangcodes) as $targetLangcode) {
       $jobStorage->create([
         'source_language' => $sourceLangcode,
@@ -133,7 +145,7 @@ class JoinupI18nHooks {
    * bundles available across all node types in the system.
    */
   private function updateContinuousJobsWithNodeBundles(): void {
-    $continuousSettings = $this->joinupI18nHelper->getContinuousSettings();
+    $continuousSettings = $this->getContinuousSettings();
 
     $jobStorage = $this->entityTypeManager->getStorage('tmgmt_job');
     $jobStorage->getQuery()
@@ -146,6 +158,23 @@ class JoinupI18nHooks {
       $job->set('continuous_settings', $continuousSettings)
         ->save();
     }
+  }
+
+  /**
+   * Returns the continuous job settings with dynamic node bundles.
+   *
+   * @return array
+   *   The continuous job settings array.
+   */
+  public function getContinuousSettings(): array {
+    $settings = self::CONTINUOUS_SETTINGS;
+    // TMGMT forces the need to have the bundle set when checking if a job item
+    // should be created.
+    // @see \Drupal\tmgmt_content\Plugin\tmgmt\Source\ContentEntitySource::shouldCreateContinuousItem
+    $bundles = $this->entityTypeManager->getStorage('node_type')->loadMultiple();
+    $bundles = array_filter($bundles, fn (NodeTypeInterface $bundle) => $this->translationManager->isEnabled('node', $bundle->id()));
+    $settings['content']['node']['bundles'] = array_fill_keys(array_keys($bundles), 1);
+    return $settings;
   }
 
 }
