@@ -268,6 +268,10 @@ abstract class NotificationSubscriberBase implements EventSubscriberInterface {
     $arguments['@site:legal_notice_url'] = Url::fromRoute('entity.entity_legal_document.canonical', ['entity_legal_document' => 'legal_notice'], ['absolute' => TRUE])
       ->toString();
 
+    if (!$this->entity->getSetting('approval_message')->isEmpty()) {
+      $arguments['custom_approval_message'] = $this->entity->getSetting('approval_message')->value;
+    }
+
     return $arguments;
   }
 

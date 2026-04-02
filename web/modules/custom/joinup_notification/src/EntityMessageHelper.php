@@ -8,11 +8,7 @@ use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\collection\Entity\CollectionInterface;
-use Drupal\message\Entity\MessageTemplate;
 use Drupal\message\MessageInterface;
-use Drupal\message\MessageTemplateInterface;
-use Drupal\meta_entity\Entity\MetaEntity;
 
 /**
  * Service that assists in handling messages for entities.
@@ -121,113 +117,33 @@ readonly class EntityMessageHelper implements EntityMessageHelperInterface {
   }
 
   /**
-   * Helper function to create and save a message template entity.
+   * Fills placeholders in message text according with arguments.
    *
-   * @param string $template
-   *   The message template.
-   * @param string $label
-   *   The message template label.
-   * @param string $description
-   *   The message template description.
-   * @param array $text
-   *   The text array for the message template.
-   * @param array $settings
-   *   Data overrides.
-   * @param string $langcode
-   *   The language to use.
-   *
-   * @return \Drupal\message\MessageTemplateInterface
-   *   A saved message template entity.
+   * @param array $arguments
+   *   Message arguments with placeholders/.
+   * @param string $output
+   *   Message text.
    */
-  public function createMessageTemplate($template = NULL, $label = NULL, $description = NULL, array $text = [], array $settings = [], $langcode = 'en'): MessageTemplateInterface {
-    $settings += [
-      'token options' => [
-        'token replace' => TRUE,
-        'clear' => FALSE,
-      ],
-    ];
-
-    // If the $text array is simple text values, transform to text + format.
-    foreach ($text as $key => $detail) {
-      if (!is_array($detail)) {
-        $text[$key] = [
-          'value' => $detail,
-          'format' => filter_default_format(),
-        ];
-      }
-      elseif (!isset($detail['format'])) {
-        $text[$key]['format'] = 'text_long';
-      }
+  public function processArguments(array $arguments, string $output): string {
+    if (empty($arguments)) {
+      return $output;
     }
-    $message_template = MessageTemplate::load($template);
-    if (empty($message_template)) {
-      $message_template = MessageTemplate::Create([
-        'template' => $template,
-        'label' => $label,
-        'description' => $description,
-        'text' => $text,
-        'settings' => $settings,
-        'langcode' => $langcode,
-      ]);
-    }
-    else {
-      $message_template->set('text', $text);
-    }
-    $message_template->save();
-    return $message_template;
+    return $this->replaceMessagePlaceholders($output, $arguments);
   }
 
   /**
-   * Checks if approval message collection settings is set.
+   * Replaces placeholders in message text.
    *
-   * @param int|string $id
-   *   Node id.
-   *
-   * @return bool
-   *   True if approval_message field is not empty.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   *
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @param string $text
+   *   Text with placeholders.
+   * @param array $replacements
+   *   Array of replacements.
    */
-  public function hasCustomApprovalMessage(int|string $id): bool {
-    $node = $this->entityTypeManager->getStorage('node')->load($id);
-    return !empty($node->getSetting('approval_message')->value);
-  }
-
-  /**
-   * Retrieves collection id from template id and returns collection.
-   *
-   * @param string $template_id
-   *   Message template id.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   */
-  public function getCollectionByTemplateId(string $template_id): CollectionInterface {
-    $collection_id = explode('_', $template_id)[0];
-    $collection = $this->entityTypeManager->getStorage('node')->load($collection_id);
-    assert($collection instanceof CollectionInterface);
-    return $collection;
-  }
-
-  /**
-   * Updates approval_message field in collection_settings.
-   *
-   * @param \Drupal\collection\Entity\CollectionInterface $collection
-   *   Collection with collection_settings to update.
-   * @param string $approval_message
-   *   Text of approval message body.
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   */
-  public function updateApprovalMessageSettingsField(CollectionInterface $collection, string $approval_message): void {
-    $meta_entity = MetaEntity::loadOrCreate('collection_settings', $collection);
-    $meta_entity->set('approval_message', [
-      'value' => $approval_message,
-      'format' => 'text_long',
-    ]);
-    $meta_entity->save();
+  public function replaceMessagePlaceholders(string $text, array $replacements): string {
+    return preg_replace_callback('/@([a-zA-Z0-9_]+):([a-zA-Z0-9_]+)/', function ($matches) use ($replacements) {
+      $key = '@' . $matches[1] . ':' . $matches[2];
+      return $replacements[$key] ?? $matches[0];
+    }, $text);
   }
 
 }

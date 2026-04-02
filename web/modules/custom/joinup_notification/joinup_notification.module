@@ -132,6 +132,13 @@ function joinup_notification_mail_alter(array &$message): void {
     // omit the formalities of attaching a warm greeting and signature to the
     // email.
     if ($message['key'] !== 'announcement') {
+      if ($message['key'] === 'og_membership_approve') {
+        $message_entity = $message['params']['message_entity'];
+        $arguments = $message_entity->getArguments();
+        if (isset($arguments['custom_approval_message'])) {
+          $message['body'][0] = \Drupal::service('joinup_notification.entity_message_helper')->processArguments($arguments, $arguments['custom_approval_message']);
+        }
+      }
       $user = user_load_by_mail($message['to']);
       if ($user) {
         $first_name = !empty($user->get('field_user_first_name')->value) ? $user->get('field_user_first_name')->value : 'Interoperable Europe Portal user';
