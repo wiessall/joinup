@@ -7,11 +7,11 @@ Feature:
   Background:
     Given "event" content:
       | title                         | start date          | end date            | EC event |
-      | TechWizards Summit            | 2020-01-15 12:00:00 | 2020-01-15 13:00:00 | Yes      |
-      | Creative Fusion Fest          | 2020-01-08 12:00:00 | 2020-01-08 13:00:00 | No       |
-      | Code & Coffee Hackathon       | 2020-01-22 12:00:00 | 2020-01-22 13:00:00 | Yes      |
-      | Future Horizons Expo          | 2019-12-15 12:00:00 | 2019-12-15 13:00:00 | No       |
-      | Innovate & Elevate Conference | 2020-02-15 12:00:00 | 2020-02-15 13:00:00 | Yes      |
+      | TechWizards Summit            | 2020-01-15 12:00:00 | 2020-01-15 13:00:00 | 1        |
+      | Creative Fusion Fest          | 2020-01-08 12:00:00 | 2020-01-08 13:00:00 | 0        |
+      | Code & Coffee Hackathon       | 2020-01-22 12:00:00 | 2020-01-22 13:00:00 | 1        |
+      | Future Horizons Expo          | 2019-12-15 12:00:00 | 2019-12-15 13:00:00 | 0        |
+      | Innovate & Elevate Conference | 2020-02-15 12:00:00 | 2020-02-15 13:00:00 | 1        |
 
   Scenario Outline: User can navigate through events
     Given custom_page content:
@@ -65,6 +65,6 @@ Feature:
     And I should not see the link "<previous event>"
 
     Examples:
-      | calendar type                          | previous event       | next event                    |
-      | views_block:calendar-ec_event_by_week  | Creative Fusion Fest | Code & Coffee Hackathon       |
-      | views_block:calendar-ec_event_by_month | Future Horizons Expo | Innovate & Elevate Conference |
+      | calendar type                       | previous event       | next event                    |
+      | views_block:calendar-ec_event_week  | Creative Fusion Fest | Code & Coffee Hackathon       |
+      | views_block:calendar-ec_event_month | Future Horizons Expo | Innovate & Elevate Conference |
