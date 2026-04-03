@@ -270,8 +270,7 @@ Feature: Assessment Report Entity Management
     And I press "Select Interoperability Solution" in the "Modal content" region to open the entity browser
     Then I should not see the text "Interoperability Solutions Browser"
     And I should see "Test solution published"
-    # TODO: Re-enable this in ISAICP-10991.
-    # And I should not see "Test solution archived"
+    And I should not see "Test solution archived"
     And I should not see "Test solution proposed"
     And I should not see "Test solution draft"
     And I should not see "Test solution unpublished"
