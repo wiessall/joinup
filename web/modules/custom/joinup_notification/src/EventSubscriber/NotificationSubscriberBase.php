@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_notification\EventSubscriber;
 
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -268,7 +269,7 @@ abstract class NotificationSubscriberBase implements EventSubscriberInterface {
     $arguments['@site:legal_notice_url'] = Url::fromRoute('entity.entity_legal_document.canonical', ['entity_legal_document' => 'legal_notice'], ['absolute' => TRUE])
       ->toString();
 
-    if (!$this->entity->getSetting('approval_message')->isEmpty()) {
+    if ($this->entity instanceof CollectionInterface && !$this->entity->getSetting('approval_message')->isEmpty()) {
       $arguments['custom_approval_message'] = $this->entity->getSetting('approval_message')->value;
     }
 
