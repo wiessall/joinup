@@ -6,12 +6,15 @@ namespace Drupal\collection\Plugin\Filter;
 
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\collection\Entity\CollectionContentInterface;
 use Drupal\collection\Entity\CollectionInterface;
+use Drupal\collection\Entity\GlossaryTermTrait;
 use Drupal\collection\Exception\MissingCollectionException;
 use Drupal\filter\Attribute\Filter;
 use Drupal\filter\FilterProcessResult;
@@ -19,8 +22,9 @@ use Drupal\filter\Plugin\FilterBase;
 use Drupal\filter\Plugin\FilterInterface;
 use Drupal\og\OgContextInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
+use Drupal\path_alias\AliasRepositoryInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Wraps glossary terms with links to their definition page.
@@ -33,6 +37,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 )]
 class Glossary extends FilterBase implements ContainerFactoryPluginInterface {
 
+  use GlossaryTermTrait;
+
   public function __construct(
     array $configuration,
     string $plugin_id,
@@ -40,22 +46,12 @@ class Glossary extends FilterBase implements ContainerFactoryPluginInterface {
     protected readonly OgContextInterface $ogContext,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly LoggerInterface $logger,
+    protected readonly AliasRepositoryInterface $aliasRepository,
+    protected readonly LanguageManagerInterface $languageManager,
+    #[Autowire(service: 'cache.memory')]
+    protected readonly CacheBackendInterface $cache,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->get('og.context'),
-      $container->get('entity_type.manager'),
-      $container->get('logger.channel.collection')
-    );
   }
 
   /**
@@ -70,34 +66,29 @@ class Glossary extends FilterBase implements ContainerFactoryPluginInterface {
       return $result;
     }
 
-    /** @var \Drupal\Core\Cache\RefinableCacheableDependencyInterface $cache_metadata */
-    [$replacements, $cache_metadata] = $this->getReplacementsMap($collection);
+    $cache_metadata = (new CacheableMetadata())
+      // Invalidate the cache when collection glossary settings are changing.
+      ->addCacheableDependency($collection->get('collection_settings')->entity);
 
-    // The reverse ksort will ensure that when, for any reason, there are terms
-    // that overlap together, like "exchange", "exchange currency" and "exchange
-    // platform", it is ensured, that terms with longer terms, are replaced
-    // first and the shorter terms are coming last.
-    krsort($replacements);
+    $map = $this->getReplacementsMap($collection, $cache_metadata);
 
     // This collection has no glossary term entries.
-    if (empty($replacements)) {
+    if (empty($map)) {
       return $result->addCacheableDependency($cache_metadata);
     }
 
     $escaped_replacements = array_map(function (string $replacement): string {
       return preg_quote($replacement, '/');
-    }, array_keys($replacements));
+    }, array_keys($map));
     $pattern = '/\b(' . implode('|', $escaped_replacements) . ')\b/i';
 
-    // First, do a bird-eye check for glossary terms so that we avoid a heavy
+    // First, do a bird-eye check for glossary terms so that we avoid heavy
     // processing if the text contains no term.
     if (!preg_match($pattern, $text)) {
       return $result->addCacheableDependency($cache_metadata);
     }
 
     $link_only_first = $collection->getGlossarySettings()['link_only_first'];
-    // Invalidate the cache when the collection glossary settings are changing.
-    $cache_metadata->addCacheableDependency($collection->get('collection_settings')->entity);
 
     $document = Html::load($text);
     $text_nodes = (new \DOMXPath($document))->evaluate("//text()");
@@ -112,22 +103,22 @@ class Glossary extends FilterBase implements ContainerFactoryPluginInterface {
 
       foreach ($text_parts as $text_part) {
         $text_part_lowercased = \mb_strtolower($text_part);
-        if (!isset($replacements[$text_part_lowercased])) {
+        if (!isset($map[$text_part_lowercased])) {
           $parent_node->insertBefore($document->createTextNode($text_part), $text_node);
           continue;
         }
 
         // @todo Consider replacing the link with a JavaScript tooltip.
         $link = $document->createElement('a', $text_part);
-        $link->setAttribute('href', $replacements[$text_part_lowercased]['url']);
+        $link->setAttribute('href', $map[$text_part_lowercased]['path']);
         $link->setAttribute('class', 'glossary-term');
-        $link->setAttribute('title', $replacements[$text_part_lowercased]['summary']);
+        $link->setAttribute('title', $map[$text_part_lowercased]['summary']);
         $parent_node->insertBefore($link, $text_node);
 
         // If this collection was configured to replace only the first
-        // occurrence of the term, remove this match from replacements list.
+        // occurrence of the term, remove this match from the replacement list.
         if ($link_only_first) {
-          unset($replacements[$text_part_lowercased]);
+          unset($map[$text_part_lowercased]);
         }
       }
       $parent_node->removeChild($text_node);
@@ -159,67 +150,101 @@ class Glossary extends FilterBase implements ContainerFactoryPluginInterface {
   }
 
   /**
-   * Builds and returns a replacements map.
+   * Builds and returns a replacement map.
    *
    * @param \Drupal\collection\Entity\CollectionInterface $collection
    *   The collection for which to return the replacements map.
+   * @param \Drupal\Core\Cache\CacheableMetadata $cache_metadata
+   *   The cache metadata to be attached to the returned replacements map.
    *
-   * @return array
-   *   An indexed array (tuple) with two values:
-   *     0: An associative array keyed by the glossary term or synonym. The
-   *        values are arrays with two keys:
-   *        - url: The glossary term URL.
-   *        - summary: A summary to be used as tooltip.
-   *     1: An object containing the cacheable metadata.
+   * @return array<string, array{path: string, summary: string}>
+   *   An associative array keyed by the glossary term or synonym and having an
+   *   associative with two keys as values:
+   *     - path: The path to the glossary term.
+   *     - summary: A summary to be used as tooltip.
    */
-  protected function getReplacementsMap(CollectionInterface $collection): array {
-    // Make sure the filter cache invalidates when a new glossary term is added
-    // in this collection.
-    $cache_metadata = (new CacheableMetadata())
-      ->addCacheTags(
-        Cache::buildTags('og-group-content', $collection->getCacheTagsToInvalidate())
-      );
+  protected function getReplacementsMap(CollectionInterface $collection, CacheableMetadata $cache_metadata): array {
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    $cid = "joinup_group.collection_glossary_map.{$collection->id()}.$langcode";
 
-    $map = [];
-    $node_storage = $this->entityTypeManager->getStorage('node');
-    $nids = $node_storage->getQuery()->accessCheck(FALSE)
+    if ($cached = $this->cache->get($cid)) {
+      $cache_metadata->addCacheTags($cached->tags);
+      return $cached->data;
+    }
+
+    // Invalidate the cache when the glossary terms are changing.
+    $tags = Cache::buildTags('og-group-content', $collection->getCacheTagsToInvalidate());
+
+    $results = $this->entityTypeManager->getStorage('node')->getAggregateQuery()
+      ->accessCheck(FALSE)
       ->condition('type', 'glossary')
       ->condition(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $collection->id())
       ->condition('status', TRUE)
+      ->groupBy('nid')
+      ->groupBy('title')
+      ->groupBy('field_glossary_synonyms')
+      ->groupBy('field_glossary_definition.value')
+      ->groupBy('field_glossary_definition.summary')
+      ->groupBy('field_glossary_definition.format')
       ->execute();
 
-    if ($nids) {
-      /** @var \Drupal\collection\Entity\GlossaryTermInterface $glossary */
-      foreach ($node_storage->loadMultiple($nids) as $glossary) {
-        $link = [
-          'url' => $glossary->toUrl()->toString(),
-          'summary' => $glossary->getSummary(),
-        ];
+    if (!$results) {
+      return [];
+    }
 
-        // Ensure case-insensitive search.
-        $label = \mb_strtolower($glossary->label());
-        $map[$label] = $link;
-        // Link also the synonyms, if any.
-        foreach ($glossary->getSynonyms() as $synonym) {
-          // Ensure synonym case-insensitive search.
-          $synonym = \mb_strtolower($synonym);
-          if (!isset($map[$synonym])) {
-            $map[$synonym] = $link;
-          }
+    // Build a list of path aliases for the given list of node IDs.
+    $system_paths = array_map(
+      fn(int|string $nid): string => "/node/$nid",
+      array_unique(array_column($results, 'nid')),
+    );
+    $path_aliases = $this->aliasRepository->preloadPathAlias($system_paths, $langcode);
+
+    $map = [];
+    foreach ($results as [
+      'nid' => $nid,
+      'title' => $title,
+      'field_glossary_synonyms' => $synonym,
+      'field_glossary_definition' => $definition,
+      'field_glossary_definition_summary' => $summary,
+      'field_glossary_definition_format' => $format,
+    ]) {
+      $system_path = "/node/$nid";
+      $data = [
+        'summary' => $this->buildSummary($definition, $summary, $format),
+        'path' => $path_aliases[$system_path] ?? $system_path,
+      ];
+      $tags = Cache::mergeTags($tags, ["node:$nid"]);
+
+      // Ensure case-insensitive search.
+      $title = \mb_strtolower($title);
+
+      if (!isset($map[$title])) {
+        $map[$title] = $data;
+      }
+
+      // Link also the synonyms, if any.
+      if ($synonym) {
+        $synonym = \mb_strtolower($synonym);
+        if (!isset($map[$synonym])) {
+          $map[$synonym] = $data;
         }
-
-        // When this glossary node is changing, invalidate the filter cache.
-        $cache_metadata->addCacheableDependency($glossary);
       }
     }
 
-    return [$map, $cache_metadata];
+    // The reverse key sort ensures that, when terms overlap, for example,
+    // "exchange", "exchange currency", and "exchange platform", the longer
+    // terms are replaced first, and the shorter terms last.
+    krsort($map);
+
+    $this->cache->set(cid: $cid, data: $map, tags: $tags);
+
+    return $map;
   }
 
   /**
    * Retrieves the collection from the request context.
    *
-   * This is not ideal but text filters have no direct way to retrieve the
+   * This is not ideal, but text filters have no direct way to retrieve the
    * context they belong to. We do not have access to the field that contains
    * the text.
    *
@@ -231,7 +256,7 @@ class Glossary extends FilterBase implements ContainerFactoryPluginInterface {
    */
   protected function getCollection(): ?CollectionInterface {
     if ($group = $this->ogContext->getGroup()) {
-      // Other kind of group? Maybe a solution which is collection content?
+      // Another kind of group? Maybe a solution that is collection content?
       if ($group instanceof CollectionContentInterface) {
         try {
           $group = $group->getCollection();
