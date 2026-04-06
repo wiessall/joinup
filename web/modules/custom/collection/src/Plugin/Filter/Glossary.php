@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\collection\Plugin\Filter;
 
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Cache\BackendChain;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Cache\CacheableMetadata;
@@ -12,6 +13,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionContentInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Entity\GlossaryTermTrait;
@@ -22,7 +24,6 @@ use Drupal\filter\Plugin\FilterBase;
 use Drupal\filter\Plugin\FilterInterface;
 use Drupal\og\OgContextInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
-use Drupal\path_alias\AliasRepositoryInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
@@ -39,6 +40,11 @@ class Glossary extends FilterBase implements ContainerFactoryPluginInterface {
 
   use GlossaryTermTrait;
 
+  /**
+   * Chained cache backend.
+   */
+  protected BackendChain $cache;
+
   public function __construct(
     array $configuration,
     string $plugin_id,
@@ -46,12 +52,16 @@ class Glossary extends FilterBase implements ContainerFactoryPluginInterface {
     protected readonly OgContextInterface $ogContext,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly LoggerInterface $logger,
-    protected readonly AliasRepositoryInterface $aliasRepository,
-    protected readonly LanguageManagerInterface $languageManager,
     #[Autowire(service: 'cache.memory')]
-    protected readonly CacheBackendInterface $cache,
+    CacheBackendInterface $memoryCache,
+    #[Autowire(service: 'cache.data')]
+    CacheBackendInterface $persistentCache,
+    protected readonly LanguageManagerInterface $languageManager,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->cache = (new BackendChain())
+      ->appendBackend($memoryCache)
+      ->appendBackend($persistentCache);
   }
 
   /**
@@ -80,7 +90,7 @@ class Glossary extends FilterBase implements ContainerFactoryPluginInterface {
     $escaped_replacements = array_map(function (string $replacement): string {
       return preg_quote($replacement, '/');
     }, array_keys($map));
-    $pattern = '/\b(' . implode('|', $escaped_replacements) . ')\b/i';
+    $pattern = '/(' . implode('|', $escaped_replacements) . ')/i';
 
     // First, do a bird-eye check for glossary terms so that we avoid heavy
     // processing if the text contains no term.
@@ -160,8 +170,8 @@ class Glossary extends FilterBase implements ContainerFactoryPluginInterface {
    * @return array<string, array{path: string, summary: string}>
    *   An associative array keyed by the glossary term or synonym and having an
    *   associative with two keys as values:
-   *     - path: The path to the glossary term.
-   *     - summary: A summary to be used as tooltip.
+   *   - path: The path to the glossary term.
+   *   - summary: A summary to be used as tooltip.
    */
   protected function getReplacementsMap(CollectionInterface $collection, CacheableMetadata $cache_metadata): array {
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
@@ -175,6 +185,9 @@ class Glossary extends FilterBase implements ContainerFactoryPluginInterface {
     // Invalidate the cache when the glossary terms are changing.
     $tags = Cache::buildTags('og-group-content', $collection->getCacheTagsToInvalidate());
 
+    // It seems impossible to set the filter by language using this query, we're
+    // altering the query to make sure we get the correct language.
+    // @see \Drupal\collection\Hook\CollectionHooks::alterCollectionGlossaryTermMapQuery()
     $results = $this->entityTypeManager->getStorage('node')->getAggregateQuery()
       ->accessCheck(FALSE)
       ->condition('type', 'glossary')
@@ -186,18 +199,14 @@ class Glossary extends FilterBase implements ContainerFactoryPluginInterface {
       ->groupBy('field_glossary_definition.value')
       ->groupBy('field_glossary_definition.summary')
       ->groupBy('field_glossary_definition.format')
+      // Used to identify the query in the alter hook implementation.
+      ->addTag('glossary_term_map')
+      ->addMetaData('langcode', $langcode)
       ->execute();
 
     if (!$results) {
       return [];
     }
-
-    // Build a list of path aliases for the given list of node IDs.
-    $system_paths = array_map(
-      fn(int|string $nid): string => "/node/$nid",
-      array_unique(array_column($results, 'nid')),
-    );
-    $path_aliases = $this->aliasRepository->preloadPathAlias($system_paths, $langcode);
 
     $map = [];
     foreach ($results as [
@@ -208,10 +217,9 @@ class Glossary extends FilterBase implements ContainerFactoryPluginInterface {
       'field_glossary_definition_summary' => $summary,
       'field_glossary_definition_format' => $format,
     ]) {
-      $system_path = "/node/$nid";
       $data = [
         'summary' => $this->buildSummary($definition, $summary, $format),
-        'path' => $path_aliases[$system_path] ?? $system_path,
+        'path' => Url::fromUri("entity:node/$nid")->toString(),
       ];
       $tags = Cache::mergeTags($tags, ["node:$nid"]);
 
