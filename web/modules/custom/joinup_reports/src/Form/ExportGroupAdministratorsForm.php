@@ -4,39 +4,21 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_reports\Form;
 
-use Drupal\Component\Datetime\TimeInterface;
-use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\Core\Datetime\DateFormatterInterface;
-use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_reports\ExportBatchedDataFormBase;
 use Drupal\og\OgMembershipInterface;
 use Drupal\user\UserInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Provides a form to export the list of group facilitators and administrators.
  */
 class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
 
-  use AutowireTrait;
-
-  public function __construct(
-    #[Autowire(service: 'cache.default')]
-    protected CacheBackendInterface $cache,
-    protected DateFormatterInterface $dateFormatter,
-    protected TimeInterface $time,
-    protected EntityTypeManagerInterface $entityTypeManager,
-  ) {
-    parent::__construct($cache, $dateFormatter, $time);
-  }
-
   /**
    * {@inheritdoc}
    */
-  protected function getRedirectRouteName(): string {
+  protected static function getRedirectRouteName(): string {
     return 'joinup_reports.group_administrators_report';
   }
 
@@ -45,6 +27,13 @@ class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
    */
   protected function getDownloadedFileName(): string {
     return 'user_list.csv';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected static function getCid(): string {
+    return 'joinup_export_group_administrators';
   }
 
   /**
@@ -83,7 +72,7 @@ class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
     $batch_operations = [];
     foreach ($membership_ids as $membership_id) {
       $batch_operations[] = [
-        [$this, 'collectMembershipData'],
+        [static::class, 'collectMembershipData'],
         [$membership_id],
       ];
     }
@@ -107,8 +96,8 @@ class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
    * @param array $context
    *   The batch context.
    */
-  public function collectMembershipData(string $membership_id, array &$context): void {
-    $membership = $this->entityTypeManager->getStorage('og_membership')->load($membership_id);
+  public static function collectMembershipData(string $membership_id, array &$context): void {
+    $membership = \Drupal::entityTypeManager()->getStorage('og_membership')->load($membership_id);
     if (!$membership instanceof OgMembershipInterface) {
       return;
     }
@@ -124,7 +113,7 @@ class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
     $user_url = $user->toUrl()->setAbsolute()->toString();
     $group_label = $group->label();
     $group_url = $group->toUrl()->setAbsolute()->toString();
-    $is_administrator = (string) ($membership->hasRole("node-{$group->bundle()}-administrator") ? $this->t('Yes') : $this->t('No'));
+    $is_administrator = (string) ($membership->hasRole("node-{$group->bundle()}-administrator") ? t('Yes') : t('No'));
 
     $context['results']['data'][$membership->id()] = [
       'User name' => $user->getDisplayName(),

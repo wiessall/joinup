@@ -4,44 +4,20 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_reports\Form;
 
-use Drupal\Component\Datetime\TimeInterface;
-use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\Core\Database\Connection;
-use Drupal\Core\Datetime\DateFormatterInterface;
-use Drupal\Core\DependencyInjection\DependencySerializationTrait;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_reports\ExportBatchedDataFormBase;
 use Drupal\node\NodeInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Provides a form to export the list of group facilitators and administrators.
  */
 class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
 
-  // Use the serialization trait to ensure the read only params get instantiated
-  // given the fact that their read only status prevents the parent class from
-  // doing so.
-  use DependencySerializationTrait;
-
-  public function __construct(
-    #[Autowire(service: 'cache.default')]
-    protected readonly CacheBackendInterface $cache,
-    protected DateFormatterInterface $dateFormatter,
-    protected TimeInterface $time,
-    protected readonly EntityTypeManagerInterface $entityTypeManager,
-    #[Autowire(service: 'database')]
-    protected readonly Connection $mysql,
-  ) {
-    parent::__construct($cache, $dateFormatter, $time);
-  }
-
   /**
    * {@inheritdoc}
    */
-  protected function getRedirectRouteName(): string {
+  protected static function getRedirectRouteName(): string {
     return 'joinup_reports.statistics_per_group';
   }
 
@@ -50,6 +26,13 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
    */
   protected function getDownloadedFileName(): string {
     return 'statistics_export.csv';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected static function getCid(): string {
+    return 'joinup_export_statistics_per_group';
   }
 
   /**
@@ -78,7 +61,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
     $batch_operations = [];
     foreach ($query->execute() as $nid) {
       $batch_operations[] = [
-        [$this, 'generateGroupStatistics'],
+        [static::class, 'generateGroupStatistics'],
         [$nid],
       ];
     }
@@ -102,14 +85,17 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
    * @param array $context
    *   The batch context.
    */
-  public function generateGroupStatistics(string $entity_id, array &$context): void {
-    $storage = $this->entityTypeManager->getStorage('node');
+  public static function generateGroupStatistics(string $entity_id, array &$context): void {
+    $storage = \Drupal::entityTypeManager()->getStorage('node');
+    $mysql = \Drupal::database();
+    $date_formatter = \Drupal::service('date.formatter');
+
     /** @var \Drupal\collection\Entity\CollectionInterface|\Drupal\joinup_solution\Entity\SolutionInterface $group */
     $group = $storage->load($entity_id);
 
     // Fetch the nodes that belong to the group.
-    $group_content_data = $this->mysql->query(
-      $this->getGroupContentQuery(), [':parent_entity_id' => $entity_id]
+    $group_content_data = $mysql->query(
+      static::getGroupContentQuery(), [':parent_entity_id' => $entity_id]
     )->fetchAll();
     $group_content = [
       'custom_page' => ['published' => 0, 'archived' => 0],
@@ -156,7 +142,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
       'Entity ID' => $group->id(),
       'Label' => $group->label(),
       'Bundle' => ucfirst($group->bundle()),
-      'Last update date' => $this->dateFormatter->format($group->getChangedTime(), 'c'),
+      'Last update date' => $date_formatter->format($group->getChangedTime(), 'c'),
       'Custom pages' => $group_content['custom_page']['published'],
       'Discussions' => $group_content['discussion']['published'],
       'Documents' => $group_content['document']['published'],
@@ -169,7 +155,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
       'Total number of archived items' => $total_archived,
       'Number of members' => $group->getActiveMemberCount(),
       'Description word count' => $description_word_count,
-      'Total number of likes' => $this->getLikesCount($content_ids),
+      'Total number of likes' => static::getLikesCount($content_ids),
     ];
   }
 
@@ -182,8 +168,8 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
    * @return string
    *   The sum of likes as a string value.
    */
-  private function getLikesCount(array $entity_ids): string {
-    $query = $this->mysql->select('flag_counts', 'fc');
+  private static function getLikesCount(array $entity_ids): string {
+    $query = \Drupal::database()->select('flag_counts', 'fc');
     $query->addExpression('IFNULL(SUM(count), 0)', 'sum');
     $query->condition('flag_id', 'like');
     $query->condition('entity_id', $entity_ids, 'IN');
@@ -196,15 +182,15 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
    * @return string
    *   The query.
    */
-  private function getGroupContentQuery(): string {
+  private static function getGroupContentQuery(): string {
     return <<<QUERY
-SELECT count(og.entity_id) as entities, n.type, s.field_state_value as state
-FROM {node__og_audience} og
-LEFT JOIN {node_field_data} n ON og.entity_id = n.nid
-LEFT JOIN {node__field_state} s ON n.nid = s.entity_id AND n.vid = s.revision_id
-WHERE og.og_audience_target_id = :parent_entity_id
-group by n.type, s.field_state_value
-QUERY;
+      SELECT count(og.entity_id) as entities, n.type, s.field_state_value as state
+      FROM {node__og_audience} og
+      LEFT JOIN {node_field_data} n ON og.entity_id = n.nid
+      LEFT JOIN {node__field_state} s ON n.nid = s.entity_id AND n.vid = s.revision_id
+      WHERE og.og_audience_target_id = :parent_entity_id
+      GROUP BY n.type, s.field_state_value
+      QUERY;
   }
 
 }
