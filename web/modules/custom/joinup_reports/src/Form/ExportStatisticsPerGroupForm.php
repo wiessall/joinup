@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_reports\Form;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_reports\ExportBatchedDataFormBase;
 use Drupal\node\NodeInterface;
