@@ -67,7 +67,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
         'title' => 'Exporting statistics per group',
         'init_message' => 'Starting collection of data.',
         'operations' => $batch_operations,
-        'finished' => [$this, 'storeToCache'],
+        'finished' => [static::class, 'storeToCache'],
       ];
       batch_set($batch);
     }
