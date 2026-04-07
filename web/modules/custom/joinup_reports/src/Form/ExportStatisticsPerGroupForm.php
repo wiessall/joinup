@@ -85,8 +85,10 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
     $mysql = \Drupal::database();
     $date_formatter = \Drupal::service('date.formatter');
 
-    /** @var \Drupal\collection\Entity\CollectionInterface|\Drupal\joinup_solution\Entity\SolutionInterface $group */
     $group = $storage->load($entity_id);
+    if (!$group instanceof GroupInterface) {
+      return;
+    }
 
     // Fetch the nodes that belong to the group.
     $group_content_data = $mysql->query(

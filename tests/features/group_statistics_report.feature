@@ -1,7 +1,7 @@
 @group-clone @api
-Feature: Minimal install clone testing.
+Feature: Reporting statistics per group.
 
-  Scenario: Regression test for "Reporting Statistics per group".
+  Scenario: A moderator can generate and download the statistics per group report.
     Given I am logged in as a user with the moderator role
     When I am on "/admin/reporting/statistics-per-group"
     Then I should see the heading "Statistics per group"
