@@ -7,7 +7,6 @@
 
 declare(strict_types=1);
 
-use Drupal\Component\Utility\SortArray;
 use Drupal\Core\Url;
 
 /**
@@ -24,14 +23,16 @@ function joinup_i18n_module_implements_alter(array &$implementations, string $ho
  * Implements hook_language_switch_links_alter().
  */
 function joinup_i18n_language_switch_links_alter(array &$links, string $type, Url $url): void {
-  $native_languages = \Drupal::service('language_manager')->getNativeLanguages();
+  // Use native language representations.
+  $native_languages = \Drupal::languageManager()->getNativeLanguages();
   foreach ($links as $code => &$link) {
     if (isset($native_languages[$code])) {
       $link['title'] = $native_languages[$code]->getName();
     }
   }
 
-  uasort($links, [SortArray::class, 'sortByTitleElement']);
+  // Sort by langcode.
+  ksort($links);
 }
 
 /**
