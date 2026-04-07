@@ -311,23 +311,6 @@ class JoinupCoreContext extends RawDrupalContext {
   }
 
   /**
-   * Assert the default cache backend service.
-   *
-   * @param string $expected
-   *   The expected cache backend service.
-   */
-  #[Given('/^the default cache backend is set to "([^"]*)"$/')]
-  public function theDefaultCacheBackendIsSetTo(string $expected): void {
-    $container = \Drupal::getContainer();
-    $factory = $container->get($expected);
-    $this->assertCondition($factory !== NULL, "The service $expected does not exist. Note, that you need to pass a service ID, not a class name.");
-
-    $actual = get_class(\Drupal::cache());
-    $expected = get_class($factory->get('default'));
-    $this->assertSameValues($expected, $actual);
-  }
-
-  /**
    * Asserts that the given HTML list of rows exists in the page.
    *
    * @param \Behat\Gherkin\Node\TableNode $table
