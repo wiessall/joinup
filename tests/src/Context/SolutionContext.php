@@ -189,6 +189,42 @@ class SolutionContext extends RawDrupalContext {
   }
 
   /**
+   * Flags newly created solutions as interoperable.
+   *
+   * This checks if the "interoperable" property is set for a newly created
+   * solution node, and flags it accordingly. This is not done as part of
+   * regular node creation since this data is stored as a flag entity, not a
+   * node field.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope $scope
+   *   The Behat hook scope object containing the metadata of the node that was
+   *   created.
+   *
+   * @AfterNodeCreate
+   */
+  public function flagSolutionAsInteroperable(AfterNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'solution') {
+      return;
+    }
+
+    $is_interoperable = in_array(strtolower((string) ($node->interoperable ?? '')), [
+      'y',
+      'yes',
+    ]);
+    $nid = $node->nid ?? NULL;
+    if ($is_interoperable && $nid) {
+      if ($entity = Node::load((int) $nid)) {
+        $flag_service = \Drupal::service('flag');
+        $flag = $flag_service->getFlagById('interoperability');
+        if ($flag) {
+          $flag_service->flag($flag, $entity);
+        }
+      }
+    }
+  }
+
+  /**
    * Subscribes the given users to the given solution.
    *
    * The role Id of organic group roles are consisting of 3 parts, the entity

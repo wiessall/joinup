@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
-use Behat\Step\Given;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\AwaitTrait;
-use Drupal\joinup\Traits\EntityTrait;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -17,7 +15,6 @@ use PHPUnit\Framework\Assert;
 class EntityBrowserContext extends RawDrupalContext {
 
   use AwaitTrait;
-  use EntityTrait;
 
   /**
    * Presses a button to open an entity browser and switches to its iframe.
@@ -73,21 +70,6 @@ class EntityBrowserContext extends RawDrupalContext {
     $checkbox = $row->find('css', 'input[type="checkbox"]');
     Assert::assertNotNull($checkbox, sprintf('Checkbox not found in the row containing "%s".', $title));
     $checkbox->check();
-  }
-
-  /**
-   * Flags a solution as an interoperable solution.
-   *
-   * @param string $title
-   *   The title of the solution to flag.
-   */
-  #[Given('the :title solution is flagged as interoperable')]
-  public function flagSolutionAsInteroperable(string $title): void {
-    $node = $this->getEntityByLabel('node', $title, 'solution');
-    $flag_service = \Drupal::service('flag');
-    $flag = $flag_service->getFlagById('interoperability');
-    Assert::assertNotNull($flag, 'The "interoperability" flag does not exist.');
-    $flag_service->flag($flag, $node);
   }
 
   /**

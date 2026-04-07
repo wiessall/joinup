@@ -275,13 +275,11 @@ Feature: Assessment Report Entity Management
 
   Scenario: Entity browser exposed filters: name, domain and interoperable filters
     Given solution content:
-      | title              | state     | domain           |
-      | Alpha Framework    | published | Defense          |
-      | Beta Platform      | published | Economic affairs |
-      | Gamma Service      | published | Defense          |
-      | Delta Application  | published | Economic affairs |
-    And the "Alpha Framework" solution is flagged as interoperable
-    And the "Gamma Service" solution is flagged as interoperable
+      | title              | state     | domain           | interoperable |
+      | Alpha Framework    | published | Defense          | yes           |
+      | Beta Platform      | published | Economic affairs |               |
+      | Gamma Service      | published | Defense          | yes           |
+      | Delta Application  | published | Economic affairs |               |
 
     Given I am logged in as an "authenticated user"
     And I go to "/collection/assessments/report/create"
