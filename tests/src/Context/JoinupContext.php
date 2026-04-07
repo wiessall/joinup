@@ -1748,12 +1748,12 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that a logo exists in the header.
+   * Asserts that a logo not exists in the header.
    */
-  #[Then('I should see a logo on the header')]
-  public function assertExistingLogo(): void {
+  #[Then('I should not see a logo on the header')]
+  public function assertNotExistingLogo(): void {
     $xpath = '//div[@data-drupal-group-logo]//img';
-    $this->assertSession()->elementsCount('xpath', $xpath, 1);
+    $this->assertSession()->elementsCount('xpath', $xpath, 0);
   }
 
   /**
@@ -2019,36 +2019,6 @@ class JoinupContext extends RawDrupalContext {
 
     $attribute = trim($element->getAttribute('href'), '/');
     $this->assertSameValues($href, $attribute, "The link '$link' in the region '$region' doesn't point to the expected path '$href'.");
-  }
-
-  /**
-   * Asserts that a specific link is marked as active in a certain region.
-   *
-   * @param string $text
-   *   The link text. You can pass multiple links separated by '>' to
-   *   indicate more than one active items - can happen in multi-level menus.
-   * @param string $region
-   *   The name of the region.
-   *
-   * @throws \Exception
-   *   Thrown when multiple or no links at all are found in the region.
-   */
-  #[Then(':text should be the active item(s) in the :region region')]
-  public function assertActiveLinkInRegion($text, $region): void {
-    $links = $this->findLinksMarkedAsActive($region);
-
-    if (empty($links)) {
-      throw new \Exception("No active links found in the '$region' region.");
-    }
-
-    // In order to get the text from an anchor tag that has the is-active class
-    // right in it, and not a wrapper, we check both getText() and getHtml().
-    $foundLinks = array_map(fn ($link) => $link->getText() ?: $link->getHtml(), $links);
-    $expectedLinks = $this->explodeDelimitedSeparatedStepArgument($text, '>');
-    sort($foundLinks);
-    sort($expectedLinks);
-
-    $this->assertSameValues($expectedLinks, $foundLinks, "The active links in the '$region' region do not match the expected ones.");
   }
 
   /**

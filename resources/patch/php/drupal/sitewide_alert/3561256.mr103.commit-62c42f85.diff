@@ -1,0 +1,12 @@
+diff --git a/sitewide_alert.install b/sitewide_alert.install
+index 9fbae41b2f164304bb7914fc38bf6d5db8cda9df..3cb2674b6fe6871ce3448d67dc9862b6e98995ff 100644
+--- a/sitewide_alert.install
++++ b/sitewide_alert.install
+@@ -241,6 +241,7 @@ function sitewide_alert_update_10303(): void {
+   // Read and write the configuration to active storage.
+   $config_data = $source->read($config_name);
+   if ($config_data !== FALSE) {
++    $config_data['uuid'] = \Drupal::service('uuid')->generate();
+     $active_storage->write($config_name, $config_data);
+   }
+   else {
