@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
-use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
@@ -24,14 +23,12 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperManager;
 use Drupal\Core\Template\Attribute;
 use Drupal\block\BlockInterface;
-use Drupal\joinup_core\ETransBlockConfiguration;
 use Drupal\joinup_core\Element\Datetime;
 use Drupal\joinup_core\Entity\OutdatedContentInterface;
 use Drupal\joinup_core\Plugin\Field\FieldType\OutdatedContentFieldItemList;
 use Drupal\joinup_core\Plugin\Field\FieldType\PermalinkFieldItemList;
 use Drupal\joinup_core\Plugin\Field\FieldWidget\ImageLibraryWidget;
 use Drupal\joinup_core\ReportLinkFieldItemList;
-use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_notification\MailContentTypeHeader;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\link\LinkItemInterface;
@@ -254,15 +251,6 @@ function joinup_core_block_access(BlockInterface $block, string $operation, Acco
     return AccessResult::neutral();
   }
 
-  // Check if we are on a route that is suitable for machine translation.
-  $build = [];
-  $etrans_config = joinup_core_get_etrans_block_config_for_current_page($build);
-
-  if (!empty($etrans_config)) {
-    $cache_meta = CacheableMetadata::createFromRenderArray($build);
-    return AccessResult::allowed()
-      ->addCacheableDependency($cache_meta);
-  }
   return AccessResult::forbidden();
 }
 
