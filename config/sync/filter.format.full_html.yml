@@ -6,7 +6,6 @@ dependencies:
     - blazy
     - editor
     - joinup_html_stripper
-    - markdown_easy
     - slick
 _core:
   default_config_hash: IdcFt_qTrifROuzCX0E2fqcpksJnF9UMz8B80D8I-8Q
@@ -65,14 +64,6 @@ filters:
     status: true
     weight: 13
     settings: {  }
-  markdown_easy:
-    id: markdown_easy
-    provider: markdown_easy
-    status: false
-    weight: 0
-    settings:
-      flavor: standard
-      tips: ''
   slick_filter:
     id: slick_filter
     provider: slick
