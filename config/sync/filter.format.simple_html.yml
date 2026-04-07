@@ -13,7 +13,6 @@ dependencies:
     - image
     - joinup_core
     - linkit
-    - markdown_easy
     - media
     - slick
 name: 'Simple HTML'
@@ -128,14 +127,6 @@ filters:
     weight: -37
     settings:
       title: true
-  markdown_easy:
-    id: markdown_easy
-    provider: markdown_easy
-    status: false
-    weight: 0
-    settings:
-      flavor: standard
-      tips: ''
   media_embed:
     id: media_embed
     provider: media
