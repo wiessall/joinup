@@ -42,7 +42,7 @@ abstract class ExportBatchedDataFormBase extends FormBase {
       '#type' => 'container',
     ];
 
-    if ($data = $this->cacheStorage->get($this->getCid())) {
+    if ($data = $this->cacheStorage->get(static::getCid())) {
       $form['help']['#markup'] = $this->t('Last dump was created at :date and will be removed by :expire', [
         ':date' => $this->dateFormatter->format((int) $data->created),
         ':expire' => $this->dateFormatter->format((int) $data->expire),
@@ -102,15 +102,28 @@ abstract class ExportBatchedDataFormBase extends FormBase {
    *   A redirect response to the page that serves the CSV file as a download.
    */
   public static function storeToCache(bool $success, array $results, array $operations): Response {
+    $messenger = \Drupal::messenger();
+
+    if (!$success) {
+      // $operations contains the operations that remained unprocessed.
+      [$method, $arguments] = reset($operations);
+      $message = t('Error occurred while processing %method with arguments: @arguments', [
+        '%operation' => $method,
+        '@arguments' => print_r($arguments, TRUE),
+      ]);
+      $messenger->addMessage($message, 'error');
+      return new RedirectResponse(Url::fromRoute('<front>')->toString());
+    }
+
     // Set the expiration time to 1 day.
     $expire = \Drupal::time()->getRequestTime() + 3600 * 24;
 
     // Use ';' as a delimiter as some software have an issue when the delimiter
     // and the decimal separator is the same symbol.
     $csv_encoder = new CsvEncoder(';');
-    $data = $csv_encoder->encode(array_values($results['data']), 'csv');
+    $data = $csv_encoder->encode(array_values($results['data'] ?? []), 'csv');
     \Drupal::cache()->set(static::getCid(), $data, $expire);
-    \Drupal::messenger()->addMessage('Data has been rebuilt.');
+    $messenger->addMessage('Data has been rebuilt.');
 
     // Handle the file here.
     return new RedirectResponse(Url::fromRoute(static::getRedirectRouteName())

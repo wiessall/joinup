@@ -44,12 +44,7 @@ class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
   }
 
   /**
-   * Generated the user list data in a batch process.
-   *
-   * @param array $form
-   *   The form array.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The form state object.
+   * {@inheritdoc}
    */
   public function generateData(array &$form, FormStateInterface $form_state): void {
     $membership_query = $this->entityTypeManager->getStorage('og_membership')
@@ -82,7 +77,7 @@ class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
         'title' => 'Exporting group administrators list',
         'init_message' => 'Starting collection of user data.',
         'operations' => $batch_operations,
-        'finished' => [$this, 'storeToCache'],
+        'finished' => [static::class, 'storeToCache'],
       ];
       batch_set($batch);
     }
