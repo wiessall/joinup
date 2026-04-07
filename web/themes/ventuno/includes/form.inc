@@ -97,25 +97,6 @@ function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface 
 }
 
 /**
- * Implements hook_preprocess_views_exposed_form().
- */
-function ventuno_preprocess_views_exposed_form(array &$variables) {
-
-  if (isset($variables['form']['#view'])) {
-
-    $view = $variables['form']['#view'];
-
-    if ($view->id() === 'block-exposed-search') {
-
-      if (isset($variables['form']['keys'])) {
-        $variables['form']['keys']['#attributes']['placeholder'] = t('Search diseases…');
-      }
-
-    }
-  }
-}
-
-/**
  * Implements hook_preprocess_HOOK().
  */
 function ventuno_preprocess_views_exposed_form__block_exposedformsearchpage_header(&$variables): void {
