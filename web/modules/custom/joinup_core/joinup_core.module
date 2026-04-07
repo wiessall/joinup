@@ -250,7 +250,7 @@ function joinup_core_block_access(BlockInterface $block, string $operation, Acco
     return $local_task_links_helper->allowThreeDotsMenu();
   }
 
-  if ($operation !== 'view' || $block->getPluginId() !== 'oe_webtools_etrans') {
+  if ($operation !== 'view') {
     return AccessResult::neutral();
   }
 
@@ -264,30 +264,6 @@ function joinup_core_block_access(BlockInterface $block, string $operation, Acco
       ->addCacheableDependency($cache_meta);
   }
   return AccessResult::forbidden();
-}
-
-/**
- * Implements hook_block_build_BASE_BLOCK_ID_alter().
- *
- * Ensures that the Webtools eTrans block varies by route, since we are altering
- * the block configuration depending on the route.
- *
- * @see \joinup_core_block_view_oe_webtools_etrans_alter()
- */
-function joinup_core_block_build_oe_webtools_etrans_alter(array &$build, BlockPluginInterface $block): void {
-  $cacheable_metadata = CacheableMetadata::createFromRenderArray($build);
-  $cacheable_metadata->addCacheContexts(['route']);
-  $cacheable_metadata->applyTo($build);
-}
-
-/**
- * Implements hook_block_view_BASE_BLOCK_ID_alter().
- *
- * Tailors the HTML elements that need to be translated by the Webtools eTrans
- * service to the type of the current page.
- */
-function joinup_core_block_view_oe_webtools_etrans_alter(array &$build, BlockPluginInterface $block): void {
-  $block->setConfiguration(joinup_core_get_etrans_block_config_for_current_page($build) + $block->getConfiguration());
 }
 
 /**
@@ -310,64 +286,6 @@ function joinup_core_preprocess_block(array &$variables): void {
   if ($variables['base_plugin_id'] === 'views_exposed_filter_block') {
     $variables['content']['#id'] = $variables['attributes']['id'];
   }
-}
-
-/**
- * Returns the Webtools eTrans block configuration for the current page.
- *
- * @param array $build
- *   The renderable array to merge the cache metadata into.
- *
- * @return array
- *   The Webtools eTrans block configuration.
- *
- * @see \Drupal\oe_webtools_etrans\Plugin\Block\ETransBlock
- */
-function joinup_core_get_etrans_block_config_for_current_page(array &$build = []): array {
-  $current_route_name = \Drupal::routeMatch()->getRouteName();
-  if (array_key_exists($current_route_name, ETransBlockConfiguration::CONFIG_MAPPING['routes'])) {
-    return ETransBlockConfiguration::CONFIG_MAPPING['routes'][$current_route_name];
-  }
-
-  /** @var \Drupal\Core\Plugin\Context\ContextRepositoryInterface $context_repository */
-  $context_repository = \Drupal::service('context.repository');
-  $contexts = $context_repository->getRuntimeContexts(
-    [
-      '@node.node_route_context:node',
-    ]
-  );
-  $cachableMetadata = CacheableMetadata::createFromRenderArray($build);
-  $etransConfig = [];
-
-  foreach ($contexts as $context) {
-    if (!$context->hasContextValue()) {
-      continue;
-    }
-
-    $entity = $context->getContextValue();
-    $cachableMetadata->addCacheableDependency($entity);
-    if (!str_ends_with($current_route_name, '.canonical')) {
-      continue;
-    }
-    // Groups might have custom landing page.
-    if ($entity instanceof GroupInterface) {
-      try {
-        $entity = $entity->getSetting('landing_page')->entity ?? $entity;
-      }
-      catch (\InvalidArgumentException) {
-      }
-    }
-    foreach (ETransBlockConfiguration::CONFIG_MAPPING['bundles'] as $bundleClass => $config) {
-      if ($entity instanceof $bundleClass) {
-        $cachableMetadata->addCacheableDependency($entity);
-        $etransConfig = $config;
-        break 2;
-      }
-    }
-  }
-
-  $cachableMetadata->applyTo($build);
-  return $etransConfig;
 }
 
 /**
