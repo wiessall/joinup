@@ -62,6 +62,7 @@
   margin-bottom: 1em;
 }
 
+/* @todo Replace with Drupal's "container-inline" class in ISAICP-11148. */
 /* Inline exposed filters in assessment solutions browser */
 div.view-assessment-solutions-browser .view-filters {
   margin-top: 1.5rem;
