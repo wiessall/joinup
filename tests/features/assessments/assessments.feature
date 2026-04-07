@@ -71,15 +71,14 @@ Feature: Assessment Report Entity Management
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
 
     When I click "Interoperability solution" in the "Modal content" region
-    And I press "Asset"
     # Select an existing solution via entity browser.
-    And I press "Select Interoperability Solution" in the "Modal content" region to open the entity browser
+    And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
     And I select "Test solution" in the entity browser
     And I press "Select solutions" to close the entity browser
     And I should see "Test solution" in the "Modal content" region
-    And I should see the button "Select Interoperability Solution" in the "Modal content" region
+    And I should see the button "Add Interoperability Solution" in the "Modal content" region
     # Create a new solution via entity browser.
-    And I press "Select Interoperability Solution" in the "Modal content" region to open the entity browser
+    And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
     And I click "New solution"
     And I wait until ".ck-editor__editable" element exists
     And I fill in "Title of Solution" with "European Interoperability Framework (EIF)"
@@ -266,8 +265,7 @@ Feature: Assessment Report Entity Management
     And I go to "/collection/assessments/report/create"
     And I click "New binding requirement"
     When I click "Interoperability solution" in the "Modal content" region
-    And I press "Asset"
-    And I press "Select Interoperability Solution" in the "Modal content" region to open the entity browser
+    And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
     Then I should not see the text "Interoperability Solutions Browser"
     And I should see "Test solution published"
     # TODO: Re-enable this in ISAICP-10991.
@@ -290,8 +288,7 @@ Feature: Assessment Report Entity Management
     And I go to "/collection/assessments/report/create"
     And I click "New binding requirement"
     When I click "Interoperability solution" in the "Modal content" region
-    And I press "Asset"
-    And I press "Select Interoperability Solution" in the "Modal content" region to open the entity browser
+    And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
 
     Then I should see "Alpha Framework"
     And I should see "Beta Platform"
@@ -364,13 +361,12 @@ Feature: Assessment Report Entity Management
     And I fill in "affects[0][inline_entity_form][name][0][value]" with "Test Service" in the "Modal content" region
 
     When I click "Interoperability solution" in the "Modal content" region
-    And I press "Asset"
-    And I press "Select Interoperability Solution" in the "Modal content" region to open the entity browser
+    And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
     And I select "Asset to be removed" in the entity browser
     And I press "Select solutions" to close the entity browser
     And I should see "Asset to be removed" in the "Modal content" region
 
-    And I press "Select Interoperability Solution" in the "Modal content" region to open the entity browser
+    And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
     And I click "New solution"
     And I wait until ".ck-editor__editable" element exists
     And I fill in "Title of Solution" with "Asset that should remain"

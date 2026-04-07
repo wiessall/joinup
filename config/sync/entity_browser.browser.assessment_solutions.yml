@@ -13,7 +13,7 @@ display: modal
 display_configuration:
   width: 80%
   height: 75%
-  link_text: 'Select Interoperability Solution'
+  link_text: 'Add Interoperability Solution'
   auto_open: false
 selection_display: no_display
 selection_display_configuration: {  }
