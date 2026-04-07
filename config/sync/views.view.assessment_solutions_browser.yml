@@ -463,7 +463,7 @@ display:
           exposed: true
           expose:
             operator_id: domain_target_id_op
-            label: ''
+            label: Domain
             description: ''
             use_operator: false
             operator: domain_target_id_op
@@ -510,7 +510,7 @@ display:
           exposed: true
           expose:
             operator_id: title_op
-            label: ''
+            label: Name
             description: ''
             use_operator: false
             operator: title_op
