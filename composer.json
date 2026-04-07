@@ -534,7 +534,8 @@
                 "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.mr20-note535548.diff"
             },
             "drupal/tmgmt": {
-                "Filtering job items crashes @see https://www.drupal.org/i/3578626": "resources/patch/php/drupal/tmgmt/3578626.mr159.commit3ee8064a.diff"
+                "Filtering job items crashes @see https://www.drupal.org/i/3578626": "resources/patch/php/drupal/tmgmt/3578626.mr159.commit3ee8064a.diff",
+                "Callers don't account the scenario in which JobItem::acceptTranslation() fails softly @see https://www.drupal.org/i/3580841": "resources/patch/php/drupal/tmgmt/3580841.mr161.commit-7baf8367.diff"
             },
             "drupal/tour": {
                 "Support page manager variants on front page @see https://www.drupal.org/i/3568815": "resources/patch/php/drupal/tour/3568815.patch"
