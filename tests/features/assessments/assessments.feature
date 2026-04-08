@@ -292,7 +292,7 @@ Feature: Assessment Report Entity Management
     And I should see "Gamma Service"
     And I should see "Delta Application"
 
-    When I fill in "title" with "Alpha"
+    When I fill in "Name" with "Alpha"
     And I press "Search"
     And I wait for AJAX to finish
     Then I should see "Alpha Framework"
@@ -300,17 +300,17 @@ Feature: Assessment Report Entity Management
     And I should not see "Gamma Service"
     And I should not see "Delta Application"
 
-    When I fill in "title" with ""
-    And I select "Defense" from "domain"
+    When I fill in "Name" with ""
+    And I select "Defense" from "Domain"
     And I press "Search"
     And I wait for AJAX to finish
     Then I should see "Alpha Framework"
     And I should see "Gamma Service"
     And I should not see "Beta Platform"
     And I should not see "Delta Application"
-    And the "domain" field should contain the "- Any domain -" option
+    And the "Domain" field should contain the "- Any domain -" option
 
-    When I select "- Any domain -" from "domain"
+    When I select "- Any domain -" from "Domain"
     And I check "Interoperable Europe solutions"
     And I press "Search"
     And I wait for AJAX to finish
