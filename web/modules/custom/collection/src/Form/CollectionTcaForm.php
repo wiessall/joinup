@@ -97,7 +97,7 @@ class CollectionTcaForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    $form_state->setRedirect('node.add', ['node_type' => 'collection']);
+    $form_state->setRedirect('collection.propose_form');
   }
 
 }
