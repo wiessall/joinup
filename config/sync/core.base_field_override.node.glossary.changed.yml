@@ -1,0 +1,18 @@
+uuid: 758ed8f9-6ccc-4ec3-8b3a-3c9a7ae178f7
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.glossary
+id: node.glossary.changed
+field_name: changed
+entity_type: node
+bundle: glossary
+label: Changed
+description: 'The time that the node was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed
