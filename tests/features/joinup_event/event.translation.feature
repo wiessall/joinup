@@ -23,9 +23,9 @@ Feature: Translating events
       | Test solution | Lee Facil   | facilitator |
       | Test solution | John Member |             |
     And event content:
-      | title                 | collection      | solution      | field_paragraphs_body      |
-      | Test collection event | Test collection |               | This is test event content |
-      | Test solution event   |                 | Test solution | This is test event content |
+      | title                 | collection      | solution      | field_paragraphs_body      | european_commission_digit_event |
+      | Test collection event | Test collection |               | This is test event content | false                           |
+      | Test solution event   |                 | Test solution | This is test event content | false                           |
 
   Scenario Outline: Test translation access.
     Given I am logged in as "<user>"
