@@ -1,4 +1,4 @@
-@api @eu-oss-catalogue
+@api @eu-oss-catalogue @wip
 Feature:
   In order to show the most data to visitors, EU OSS Catalogue provides a
   special equivalent of the OSS Solution's translatable fields which fetch and

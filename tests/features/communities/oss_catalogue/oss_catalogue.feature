@@ -1,4 +1,4 @@
-@api @eu-oss-catalogue
+@api @eu-oss-catalogue @wip
 
 Feature:
   In order to present the details about EU OSS catalogue
