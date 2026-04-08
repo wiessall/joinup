@@ -9,6 +9,7 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\entity_browser\WidgetValidationManager;
 use Drupal\entity_browser_entity_form\Plugin\EntityBrowser\Widget\EntityForm;
@@ -66,6 +67,48 @@ class OgAwareEntityForm extends EntityForm {
       $container->get('entity_display.repository'),
       $container->get('current_user'),
     );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getForm(array &$original_form, FormStateInterface $form_state, array $additional_widget_parameters) {
+    $form = parent::getForm($original_form, $form_state, $additional_widget_parameters);
+    // Don't let IEF save the entity on its own. We save it in submit() only
+    // after validation passes.
+    if (isset($form['inline_entity_form'])) {
+      $form['inline_entity_form']['#save_entity'] = FALSE;
+    }
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validate(array &$form, FormStateInterface $form_state): void {
+    parent::validate($form, $form_state);
+    if (!empty($form_state->getTriggeringElement()['#eb_widget_main_submit'])) {
+      $widget_form = $form[$form['#browser_parts']['widget']];
+      if (isset($widget_form['inline_entity_form']['#entity'])) {
+        $entity = $widget_form['inline_entity_form']['#entity'];
+        $form_display = $this->entityDisplayRepository->getFormDisplay(
+          $this->configuration['entity_type'],
+          $this->configuration['bundle'],
+          $this->configuration['form_mode'],
+        );
+        $form_display->validateFormValues($entity, $widget_form['inline_entity_form'], $form_state);
+      }
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submit(array &$element, array &$form, FormStateInterface $form_state): void {
+    if ($form_state->hasAnyErrors()) {
+      return;
+    }
+    parent::submit($element, $form, $form_state);
   }
 
   /**
