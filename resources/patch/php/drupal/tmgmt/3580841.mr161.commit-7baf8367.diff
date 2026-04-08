@@ -1,0 +1,62 @@
+diff --git a/src/Entity/JobItem.php b/src/Entity/JobItem.php
+index 519a62436972a456cf23e1c31636d8e79822aa20..b6f3900515a59648b1f79f6760b644e343b2ce59 100644
+--- a/src/Entity/JobItem.php
++++ b/src/Entity/JobItem.php
+@@ -522,7 +522,10 @@ class JobItem extends ContentEntityBase implements JobItemInterface {
+     // Auto accept the translation if the translator is configured for it.
+     if ($this->getTranslator()->isAutoAccept() && !$this->isAborted()) {
+       try {
+-        $this->acceptTranslation();
++        if (!$this->acceptTranslation($rejection_reason)) {
++          $rejection_reason ??= 'Failed to automatically accept translation';
++          $this->addMessage($rejection_reason, [], 'error');
++        }
+       }
+       catch (\Exception $e) {
+         $this->addMessage('Failed to automatically accept translation, error: @error', ['@error' => $e->getMessage()], 'error');
+@@ -917,13 +920,22 @@ class JobItem extends ContentEntityBase implements JobItemInterface {
+   /**
+    * {@inheritdoc}
+    */
+-  public function acceptTranslation() {
+-    if (!$this->isNeedsReview() || !$plugin = $this->getSourcePlugin()) {
++  public function acceptTranslation(?string &$rejection_reason = NULL) {
++    if (!$this->isNeedsReview()) {
++      $rejection_reason = "Job item {$this->id()} status is not 'needs review'";
++      return FALSE;
++    }
++
++    if (!$plugin = $this->getSourcePlugin()) {
++      $rejection_reason = "Invalid source plugin for job item {$this->id()}";
+       return FALSE;
+     }
++
+     if (!$plugin->saveTranslation($this, $this->getJob()->getTargetLangcode())) {
++      $rejection_reason = "Unknown error while saving translation for job item {$this->id()}";
+       return FALSE;
+     }
++
+     // If the plugin could save the translation, we will set it
+     // to the 'accepted' state.
+     $this->accepted();
+diff --git a/src/JobItemInterface.php b/src/JobItemInterface.php
+index 24b9064355f7c028ae1cfbaa9e161e04c03605c3..50fe5b2a0264086093df59c8d758279786feb94d 100644
+--- a/src/JobItemInterface.php
++++ b/src/JobItemInterface.php
+@@ -464,11 +464,15 @@ interface JobItemInterface extends ContentEntityInterface {
+   /**
+    * Propagates the returned job item translations to the sources.
+    *
++   * @param string|null $rejection_reason
++   *   The method can inform the caller about the reason why the translation was
++   *   not accepted by setting this variable.
++   *
+    * @return bool
+    *   TRUE if we were able to propagate the translated data and the item could
+    *   be saved, FALSE otherwise.
+    */
+-  public function acceptTranslation();
++  public function acceptTranslation(?string &$rejection_reason = NULL);
+ 
+   /**
+    * Returns all job item messages attached to this job item.
