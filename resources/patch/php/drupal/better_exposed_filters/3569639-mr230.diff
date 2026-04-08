@@ -1,0 +1,62 @@
+diff --git a/src/Plugin/better_exposed_filters/filter/Single.php b/src/Plugin/better_exposed_filters/filter/Single.php
+index a0c73f7effc28398786706a983e9e317ea084087..2ce4a0d2bbd32f1043c6dcb43b9eacb3de3283b1 100644
+--- a/src/Plugin/better_exposed_filters/filter/Single.php
++++ b/src/Plugin/better_exposed_filters/filter/Single.php
+@@ -87,14 +87,6 @@ class Single extends FilterWidgetBase {
+       //   https://www.drupal.org/project/drupal/issues/288429 is fixed.
+       $input_value = $input[$field_id] ?? ($input[$exposed_id] ?? NULL);
+ 
+-      // Force checkbox submission with fallback value.
+-      $form[$field_id . '_hidden'] = [
+-        '#type' => 'hidden',
+-        '#value' => 0,
+-        '#attributes' => ['name' => $field_id],
+-        '#weight' => $form[$field_id]['#weight'] ?? 0,
+-      ];
+-
+       $form[$field_id]['#type'] = 'checkbox';
+       $form[$field_id]['#attributes']['class'][] = 'single-checkbox';
+       $form[$field_id]['#return_value'] = 1;
+diff --git a/tests/src/Kernel/Plugin/filter/SingleFilterWidgetKernelTest.php b/tests/src/Kernel/Plugin/filter/SingleFilterWidgetKernelTest.php
+index b8ec56749b2e4b34435163dcdf7da59407df8511..fff21465e2259be419614a5d0cdac146028bbefc 100644
+--- a/tests/src/Kernel/Plugin/filter/SingleFilterWidgetKernelTest.php
++++ b/tests/src/Kernel/Plugin/filter/SingleFilterWidgetKernelTest.php
+@@ -42,7 +42,37 @@ class SingleFilterWidgetKernelTest extends BetterExposedFiltersKernelTestBase {
+ 
+     // Check our "FIELD_BEF_BOOLEAN" filter is rendered as a single checkbox.
+     $actual = $this->xpath('//form//input[@type="checkbox" and starts-with(@name, "field_bef_boolean_value")]');
+-    $this->assertCount(1, $actual);
++    $this->assertCount(1, $actual, 'Exposed filter "FIELD_BEF_BOOLEAN" is rendered as a checkbox.');
++
++    $view->destroy();
++  }
++
++  /**
++   * Tests that no hidden field is rendered alongside the checkbox.
++   *
++   * @throws \Drupal\Core\Entity\EntityStorageException
++   */
++  public function testSingleExposedCheckboxNoHiddenField(): void {
++    $view = Views::getView('bef_test');
++
++    $this->setBetterExposedOptions($view, [
++      'filter' => [
++        'field_bef_boolean_value' => [
++          'plugin_id' => 'bef_single',
++        ],
++      ],
++    ]);
++
++    // Render the exposed form.
++    $this->renderExposedForm($view);
++
++    // Check our "FIELD_BEF_BOOLEAN" filter is rendered as a single checkbox.
++    $checkbox = $this->xpath('//form//input[@type="checkbox" and starts-with(@name, "field_bef_boolean_value")]');
++    $this->assertCount(1, $checkbox);
++
++    // Verify there is no hidden field with the same name as the checkbox.
++    $hidden = $this->xpath('//form//input[@type="hidden" and starts-with(@name, "field_bef_boolean_value")]');
++    $this->assertCount(0, $hidden);
+ 
+     $view->destroy();
+   }
