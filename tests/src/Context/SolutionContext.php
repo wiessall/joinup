@@ -31,6 +31,7 @@ use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
+use Drupal\user\Entity\User;
 
 /**
  * Behat step definitions for testing solutions.
@@ -343,6 +344,33 @@ class SolutionContext extends RawDrupalContext {
     $actual = $field->getAttribute($attribute);
 
     $this->assertSameValues($expected, $actual);
+  }
+
+  /**
+   * Sets the interoperability to a given solution.
+   *
+   * @param string $title
+   *   The solution title.
+   *
+   * @throws \Exception
+   *   Thrown if a logged-in user was not found.
+  */
+  #[Then('I set interoperable flag to :title solution')]
+  public function setInteroperableFlagToSolution(string $title): void {
+    $entity = $this->getEntityByLabel('node', $title, 'solution');
+    /** @var \Drupal\flag\FlagServiceInterface $flagService */
+    $flagService = \Drupal::service('flag');
+    $flag = \Drupal::entityTypeManager()
+      ->getStorage('flag')
+      ->load('interoperability');
+
+    $user = $this->getUserManager()->getCurrentUser();
+    $account = User::load($user->uid);
+    if ($account->isAnonymous()) {
+      throw new \Exception("No current logged in user.");
+    }
+
+    $flagService->flag($flag, $entity, $account);
   }
 
   /**
