@@ -1,9 +1,12 @@
+{% set lang = language.getId() ?? app.request.locale %}
+{% set logo_path = 'themes/ventuno/assets/images/logo-ec/logo-ec-' ~ lang ~ '.svg' %}
+
 <div class="bcl-header bcl-header--ec">
-  <div role="complementary" class="w-100 shadow-sm navbar navbar-expand-lg navbar-light" aria-label="{{ 'Site branding'|t }}">
+  <div role="complementary" class="w-100 shadow-sm navbar navbar-expand-lg navbar-light py-0" aria-label="{{ 'Site branding'|t }}">
     <div class="container">
       <div class="d-flex w-100 justify-content-between align-items-end">
-        <a class="navbar-brand" href="https://ec.europa.eu/info/index_en" aria-label="{{ 'Visit European Commission website'|t }}">
-          <img src="{{ file_url('themes/ventuno/assets/images/logo-ec-en.svg') }}" alt="{{ 'European Commission logo'|t }}" width="100" height="25"/>
+        <a class="navbar-brand py-0" href="https://ec.europa.eu/info/index_{{ lang }}" aria-label="{{ 'Visit European Commission website'|t }}">
+          <img src="{{ file_url(logo_path) }}" alt="{{ 'European Commission logo'|t }}" width="100" height="25" loading="eager" fetchpriority="high" />
         </a>
         {% if top_bar %}
           <div class="region-top-bar">
