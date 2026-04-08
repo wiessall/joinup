@@ -1,0 +1,27 @@
+uuid: a9cdfe0a-3b31-4392-b53d-12db9fa02a1f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.european_commission_digit_event
+    - node.type.event
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: node.event.european_commission_digit_event
+field_name: european_commission_digit_event
+entity_type: node
+bundle: event
+label: 'European Commission DIGIT event'
+description: ''
+required: false
+translatable: false
+default_value:
+  - value: 0
+default_value_callback: ''
+settings:
+  on_label: '1'
+  off_label: '0'
+field_type: boolean

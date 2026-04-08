@@ -79,6 +79,20 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
     $this->db->update('joinup_user_deleted_user')
       ->expression('full_name', "CONCAT('user+', uid)")
       ->execute();
+
+    $tables = $this->getFieldTables('user', 'field_user_first_name');
+    foreach ($tables as $table) {
+      $this->db->update($table)
+        ->expression('field_user_first_name_value', "CONCAT('firstname_', [entity_id])")
+        ->execute();
+    }
+
+    $tables = $this->getFieldTables('user', 'field_user_family_name');
+    foreach ($tables as $table) {
+      $this->db->update($table)
+        ->expression('field_user_family_name_value', "CONCAT('lastname_', [entity_id])")
+        ->execute();
+    }
   }
 
   /**
@@ -136,8 +150,10 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
 
   /**
    * Truncates the given table.
+   *
+   * @param string $tableName
+   *   The table name to truncate.
    */
-  #[CLi\Argument(name: 'tableName', description: 'The table name to truncate.')]
   protected function truncateTable(string $tableName): void {
     $this->db->truncate($tableName)->execute();
     $this->logger()->success(dt('@table_name table sanitized.', ['@table_name' => $tableName]));
@@ -145,9 +161,12 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
 
   /**
    * Sanitizes the corresponding entity field tables.
+   *
+   * @param string $entityType
+   *   The entity type ID.
+   * @param array $fieldNames
+   *   An array of field names.
    */
-  #[CLi\Argument(name: 'entityType', description: 'The entity type ID.')]
-  #[CLi\Argument(name: 'fieldNames', description: 'An array of field names.')]
   protected function sanitizeEntityFieldsData(string $entityType, array $fieldNames): void {
     $fieldStorageDefinitions = $this->entityFieldManager->getFieldStorageDefinitions($entityType);
     $fieldStorageDefinitions = array_intersect_key($fieldStorageDefinitions, array_flip($fieldNames));
@@ -184,9 +203,7 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
       };
 
       // Iterate through data/revision field tables.
-      $entityStorageSchemaSql = $this->keyValue->get('entity.storage_schema.sql');
-      $fieldSchema = $entityStorageSchemaSql->get("$entityType.field_schema_data.$fieldName", []);
-      foreach (array_keys($fieldSchema) as $fieldTable) {
+      foreach ($this->getFieldTables($entityType, $fieldName) as $fieldTable) {
         $this->db->update($fieldTable)->fields($updateFields)->execute();
         $this->logger()->success(dt('@table_name table sanitized.', ['@table_name' => $fieldTable]));
       }
@@ -194,6 +211,15 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
       // Reset the entity cache.
       $this->entityTypeManager->getStorage($entityType)->resetCache();
     }
+  }
+
+  /**
+   * Returns the data tables for a given entity field.
+   */
+  protected function getFieldTables(string $entityType, string $fieldName): array {
+    $entityStorageSchemaSql = $this->keyValue->get('entity.storage_schema.sql');
+    $fieldSchema = $entityStorageSchemaSql->get("$entityType.field_schema_data.$fieldName", []);
+    return array_keys($fieldSchema);
   }
 
 }
