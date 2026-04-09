@@ -7,56 +7,62 @@ namespace Drupal\assessments\Entity;
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 use Drupal\Core\Config\Entity\EntityBundleWithPluralLabelsInterface;
 use Drupal\Core\Config\Entity\EntityBundleWithPluralLabelsTrait;
+use Drupal\Core\Entity\Attribute\ConfigEntityType;
+use Drupal\Core\Entity\EntityDeleteForm;
+use Drupal\Core\Entity\Routing\AdminHtmlRouteProvider;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\assessments\AssessmentTypeAccessControlHandler;
+use Drupal\assessments\AssessmentTypeListBuilder;
+use Drupal\assessments\Form\AssessmentTypeForm;
 
 /**
  * Defines the Assessment type configuration entity.
- *
- * @ConfigEntityType(
- *   id = "assessment_type",
- *   label = @Translation("Assessment type"),
- *   label_collection = @Translation("Assessment types"),
- *   label_singular = @Translation("assessment type"),
- *   label_plural = @Translation("assessment types"),
- *   label_count = @PluralTranslation(
- *     singular = "@count assessment type",
- *     plural = "@count assessment types",
- *   ),
- *   handlers = {
- *     "access" = "Drupal\assessments\AssessmentTypeAccessControlHandler",
- *     "form" = {
- *       "add" = "Drupal\assessments\Form\AssessmentTypeForm",
- *       "edit" = "Drupal\assessments\Form\AssessmentTypeForm",
- *       "delete" = "Drupal\Core\Entity\EntityDeleteForm",
- *     },
- *     "list_builder" = "Drupal\assessments\AssessmentTypeListBuilder",
- *     "route_provider" = {
- *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
- *     },
- *   },
- *   admin_permission = "administer assessment types",
- *   bundle_of = "assessment",
- *   config_prefix = "type",
- *   entity_keys = {
- *     "id" = "id",
- *     "label" = "label",
- *     "uuid" = "uuid",
- *   },
- *   links = {
- *     "add-form" = "/admin/structure/assessment_types/add",
- *     "edit-form" = "/admin/structure/assessment_types/manage/{assessment_type}",
- *     "delete-form" = "/admin/structure/assessment_types/manage/{assessment_type}/delete",
- *     "collection" = "/admin/structure/assessment_types",
- *   },
- *   config_export = {
- *     "id",
- *     "label",
- *     "uuid",
- *     "label_singular",
- *     "label_plural",
- *     "label_count",
- *   },
- * )
  */
+#[ConfigEntityType(
+  id: 'assessment_type',
+  label: new TranslatableMarkup('Assessment type'),
+  label_collection: new TranslatableMarkup('Assessment types'),
+  label_singular: new TranslatableMarkup('assessment type'),
+  label_plural: new TranslatableMarkup('assessment types'),
+  config_prefix: 'type',
+  entity_keys: [
+    'id' => 'id',
+    'label' => 'label',
+    'uuid' => 'uuid',
+  ],
+  handlers: [
+    'access' => AssessmentTypeAccessControlHandler::class,
+    'form' => [
+      'add' => AssessmentTypeForm::class,
+      'edit' => AssessmentTypeForm::class,
+      'delete' => EntityDeleteForm::class,
+    ],
+    'list_builder' => AssessmentTypeListBuilder::class,
+    'route_provider' => [
+      'html' => AdminHtmlRouteProvider::class,
+    ],
+  ],
+  links: [
+    'add-form' => '/admin/structure/assessment_types/add',
+    'edit-form' => '/admin/structure/assessment_types/manage/{assessment_type}',
+    'delete-form' => '/admin/structure/assessment_types/manage/{assessment_type}/delete',
+    'collection' => '/admin/structure/assessment_types',
+  ],
+  admin_permission: 'administer assessment types',
+  bundle_of: 'assessment',
+  label_count: [
+    'singular' => '@count assessment type',
+    'plural' => '@count assessment types',
+  ],
+  config_export: [
+    'id',
+    'label',
+    'uuid',
+    'label_singular',
+    'label_plural',
+    'label_count',
+  ],
+)]
 final class AssessmentType extends ConfigEntityBundleBase implements EntityBundleWithPluralLabelsInterface {
 
   use EntityBundleWithPluralLabelsTrait;

@@ -2022,6 +2022,25 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts that no links are marked as active in a certain region.
+   *
+   * @param string $region
+   *   The name of the region.
+   *
+   * @throws \Exception
+   *   Thrown when one or more active links are found in the region.
+   */
+  #[Then('no items should be active in the :region region')]
+  public function assertNoActiveLinkInRegion(string $region): void {
+    $links = $this->findLinksMarkedAsActive($region);
+
+    if (!empty($links)) {
+      $foundLinks = array_map(fn($link) => $link->getText() ?: $link->getHtml(), $links);
+      throw new \Exception("Unexpected active links found in the '$region' region: " . implode(', ', $foundLinks));
+    }
+  }
+
+  /**
    * Asserts that a specific link is marked as active in a certain region.
    *
    * @param string $text

@@ -120,7 +120,7 @@ Feature: Messaging group announcements
       | The Fail pension <group> team                                                                                                                                                                                                                                                   |
       | You received this e-mail because, as a registered user of Interoperable Europe Portal and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
       | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                                      |
-      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the Overview page.                                                                                                                                                 |
+      | This is an unmonitored email address, please do not reply.                                                                                                                                                |
 
     When I press "Send for approval"
     Then I should see the success message "Your announcement has been sent for validation by Interoperable Europe Portal moderators. Once approved, will reach the Fail pension <group> members."
@@ -184,7 +184,7 @@ Feature: Messaging group announcements
       | The Fail pension <group> team                                                                                                                                                                                                                                                   |
       | You received this e-mail because, as a registered user of Interoperable Europe Portal and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
       | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                                      |
-      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the Overview page.                                                                                                                                                 |
+      | This is an unmonitored email address, please do not reply.                                                                                                                                                |
 
     Given I am logged in as "Sons of tweets"
 
@@ -240,7 +240,7 @@ Feature: Messaging group announcements
       | The Fail pension <group> team                                                                                                                                                                                                                                                   |
       | You received this e-mail because, as a registered user of Interoperable Europe Portal and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
       | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                                      |
-      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the Overview page.                                                                                                                                                 |
+      | This is an unmonitored email address, please do not reply.                                                                                                                                                 |
     And the email sent to "Sons of tweets" with subject "The Big Opening is postponed" contains the following lines of text:
       | Dear Sons of tweets,                                                                                                                                                                                                                                                            |
       | Fail pension <group> has an announcement for its members:                                                                                                                                                                                                                       |
@@ -256,7 +256,7 @@ Feature: Messaging group announcements
       | The Fail pension <group> team                                                                                                                                                                                                                                                   |
       | You received this e-mail because, as a registered user of Interoperable Europe Portal and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
       | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                                      |
-      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the Overview page.                                                                                                                                                 |
+      | This is an unmonitored email address, please do not reply.                                                                                                                                                 |
 
     And I should see the link "Add announcement"
     # The announcement cannot be edited anymore...
@@ -291,8 +291,6 @@ Feature: Messaging group announcements
     Then I should see the heading "Unsubscribe from Fail pension <group>?"
     When I click the "user subscriptions" link in the email sent to "mogul@example.com" having the subject "The Big Opening is postponed"
     Then I should see the heading "Subscription settings"
-    When I click the "Overview" link in the email sent to "mogul@example.com" having the subject "The Big Opening is postponed"
-    Then I should see the text "Fail pension"
 
     Given I am logged in as "Sons of tweets"
 

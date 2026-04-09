@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "07812ab22e7a3f9caef5c7515adf3be1",
+    "content-hash": "c3be8c6d5999fd49bae8b67ed22c7a94",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -6047,27 +6047,27 @@
         },
         {
             "name": "drupal/layout_custom_section_classes",
-            "version": "1.0.6",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/layout_custom_section_classes.git",
-                "reference": "1.0.6"
+                "reference": "2.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/layout_custom_section_classes-1.0.6.zip",
-                "reference": "1.0.6",
-                "shasum": "15d83943b10df56ff4842b55ae9b53ed66ffb9ab"
+                "url": "https://ftp.drupal.org/files/projects/layout_custom_section_classes-2.0.0.zip",
+                "reference": "2.0.0",
+                "shasum": "70e61174343e99f2309ccdd10498597e828ae5f4"
             },
             "require": {
-                "drupal/core": "^8.8|^9|^10|^11",
-                "neilime/php-css-lint": "^2.0|^3.0"
+                "drupal/core": "^9.5|^10|^11",
+                "neilime/php-css-lint": "^3.0"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.6",
-                    "datestamp": "1718131809",
+                    "version": "2.0.0",
+                    "datestamp": "1718132899",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6294,17 +6294,17 @@
         },
         {
             "name": "drupal/markdown_easy",
-            "version": "1.0.1",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/markdown_easy.git",
-                "reference": "1.0.1"
+                "reference": "2.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/markdown_easy-1.0.1.zip",
-                "reference": "1.0.1",
-                "shasum": "ecd23d34e1dcda077125e41d8afa3846cef9e137"
+                "url": "https://ftp.drupal.org/files/projects/markdown_easy-2.0.0.zip",
+                "reference": "2.0.0",
+                "shasum": "252dde66a34f8b5896f23182a00d92a4707387ea"
             },
             "require": {
                 "drupal/core": "^9 || ^10 || ^11",
@@ -6313,8 +6313,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.1",
-                    "datestamp": "1713470232",
+                    "version": "2.0.0",
+                    "datestamp": "1755422614",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -24057,16 +24057,16 @@
         },
         {
             "name": "ec-europa/toolkit",
-            "version": "10.26.2",
+            "version": "10.27.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ec-europa/toolkit.git",
-                "reference": "785f2e1ab0731fa34c06faca3b10dcfaf1f9c726"
+                "reference": "66110f3ac08f9aceae3aaec22f09a5178d00f4e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/785f2e1ab0731fa34c06faca3b10dcfaf1f9c726",
-                "reference": "785f2e1ab0731fa34c06faca3b10dcfaf1f9c726",
+                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/66110f3ac08f9aceae3aaec22f09a5178d00f4e9",
+                "reference": "66110f3ac08f9aceae3aaec22f09a5178d00f4e9",
                 "shasum": ""
             },
             "require": {
@@ -24076,7 +24076,7 @@
                 "consolidation/robo": "^3.0 || ^4.0 || ^5.0",
                 "cweagans/composer-patches": "^1.7 || ^2.0",
                 "dantleech/gherkin-lint": "^0.2.3",
-                "drupal/coder": "^8.3.10",
+                "drupal/coder": "^8.3.10 || ^9.0",
                 "drush/drush": "^11.0.4 || ^12.0 || ^13.0",
                 "ec-europa/qa-automation": "^9.5.1",
                 "ec-europa/toolkit-composer-plugin": "^0.0.1",
@@ -24125,7 +24125,7 @@
                 "issues": "https://github.com/ec-europa/toolkit/issues",
                 "source": "https://github.com/ec-europa/toolkit"
             },
-            "time": "2026-02-11T11:25:20+00:00"
+            "time": "2026-03-31T16:15:33+00:00"
         },
         {
             "name": "ec-europa/toolkit-composer-plugin",
