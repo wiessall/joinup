@@ -1,0 +1,90 @@
+diff --git a/meta_entity.module b/meta_entity.module
+index 68cdcbef8cdc87621379f5c36d6c8f5885935b9b..be6d61bc37d2d31ef3d4d5f4e9ce814264b8cacf 100644
+--- a/meta_entity.module
++++ b/meta_entity.module
+@@ -148,6 +148,10 @@ function meta_entity_entity_insert(EntityInterface $entity) {
+     if ($meta_entity_bundles) {
+       $storage = $entity_type_manager->getStorage($meta_entity_type_id);
+       foreach ($meta_entity_bundles as $meta_entity_bundle) {
++        // Skip auto-creation if a meta entity of this type already exists.
++        if ($repository->getMetaEntityForEntity($entity, $meta_entity_bundle)) {
++          continue;
++        }
+         $meta_entity = $storage->create([
+           'type' => $meta_entity_bundle,
+           'target' => $entity,
+diff --git a/tests/src/Kernel/AutoCreationTest.php b/tests/src/Kernel/AutoCreationTest.php
+index 5718f6394b25af64001ad2538a9b1d9ffd1d0b3b..15fc368bf8eca97c8e9e2a9de49a2b6d757a8afc 100644
+--- a/tests/src/Kernel/AutoCreationTest.php
++++ b/tests/src/Kernel/AutoCreationTest.php
+@@ -6,7 +6,9 @@ namespace Drupal\Tests\meta_entity\Kernel;
+ 
+ use Drupal\entity_test\Entity\EntityTest;
+ use Drupal\KernelTests\KernelTestBase;
++use Drupal\meta_entity\Entity\MetaEntity;
+ use Drupal\meta_entity\Entity\MetaEntityType;
++use Drupal\meta_entity\MetaEntityRepositoryInterface;
+ 
+ /**
+  * Tests meta entity auto-creation and auto-deletion.
+@@ -28,14 +30,29 @@ class AutoCreationTest extends KernelTestBase {
+   ];
+ 
+   /**
+-   * Tests meta entity auto-creation.
++   * The meta entity repository.
++   *
++   * @var \Drupal\meta_entity\MetaEntityRepositoryInterface
+    */
+-  public function testAutoCreation(): void {
++  protected MetaEntityRepositoryInterface $repository;
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
+     $this->installConfig(['meta_entity_test']);
+     $this->installEntitySchema('entity_test');
+     $this->installEntitySchema('meta_entity');
+     $this->installEntitySchema('user');
+-    $repository = $this->container->get('meta_entity.repository');
++    $this->repository = $this->container->get('meta_entity.repository');
++  }
++
++  /**
++   * Tests meta entity auto-creation.
++   */
++  public function testAutoCreation(): void {
++    $repository = $this->repository;
+ 
+     $meta_entity_type = MetaEntityType::load('visit_count');
+     // Set the mapping for but don't set any 'auto-*' flag.
+@@ -80,4 +97,27 @@ class AutoCreationTest extends KernelTestBase {
+     $this->assertNull($repository->getMetaEntityForEntity($target_entity, 'visit_count'));
+   }
+ 
++  /**
++   * Tests that auto-creation does not duplicate an already-existing entity.
++   */
++  public function testAutoCreationSkipsExisting(): void {
++    MetaEntityType::load('visit_count')->set('mapping', [
++      'entity_test' => [
++        'entity_test' => [
++          'field_name' => 'visits',
++          'auto_create' => TRUE,
++        ],
++      ],
++    ])->save();
++
++    $target_entity = EntityTest::create([
++      'type' => 'entity_test',
++      'name' => $this->randomString(),
++      'visits' => MetaEntity::create(['type' => 'visit_count']),
++    ]);
++    $target_entity->save();
++
++    $this->assertCount(1, $this->repository->getMetaEntitiesForEntity($target_entity));
++  }
++
+ }

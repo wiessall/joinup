@@ -84,6 +84,7 @@ trait NameMappingsTrait {
         'agenda' => 'field_event_agenda',
         'body' => 'field_paragraphs_body',
         'end date' => 'field_event_date:end_value',
+        'EC event' => 'european_commission_digit_event',
         'keywords' => 'keywords',
         'location' => 'field_location',
         'logo' => 'field_event_logo',
