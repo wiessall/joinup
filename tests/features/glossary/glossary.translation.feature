@@ -18,7 +18,7 @@ Feature: Translating glossary
 
     # Create translation for glossary
     When I go to the homepage of the "Simple" glossary
-    And I click "Easy" in the "Entity actions" region
+    And I click "Translate" in the "Entity actions" region
     And I click "Add" in the "Polish" row
     And the following fields should be present "Glossary term nam, Synonym, Definition"
     When I fill in "Glossary term nam" with "Prosty"
@@ -28,14 +28,14 @@ Feature: Translating glossary
 
     # Create translation for collection
     When I go to the homepage of the "Collection With Glossary" collection
-    And I click "Easy" in the "Entity actions" region
+    And I click "Translate" in the "Entity actions" region
     And I click "Add" in the "Polish" row
     When I fill in "Title" with "Kolekcja ze słownikiem"
     And I fill in "Abstract" with "To prosty test tłumaczenia słownika"
     And I press "Save (all translations)"
     # Check if the glossary was properly processed in collection_glossary
-    And I should see the link "tłumaczenia"
-    Then I click "tłumaczenia"
+    And I should see the link "prosty"
+    Then I click "prosty"
     Then I should see the following lines of text:
       | Prosty                |
       | Definicja tłumaczenia |
@@ -43,19 +43,19 @@ Feature: Translating glossary
 
     # Delete glossary translation
     When I go to the homepage of the "Simple" glossary
-    When I click "Easy" in the "Entity actions" region
+    When I click "Translate" in the "Entity actions" region
     And I click "Delete" in the "Polish" row
     Then I should see "Are you sure you want to delete the Polish translation of the content item Prosty?"
     When I press "Delete Polish translation"
     Then I should see the success message "Polish translation of the Glossary term Prosty has been deleted."
-    When I click "Easy" in the "Entity actions" region
+    When I click "Translate" in the "Entity actions" region
     Then I should not see "Edit" in the "Polish" row
     And I should see the "Add" in the "Polish" row
     # Check if the glossary was properly processed in collection_glossary
     When I go to the homepage of the "Collection With Glossary" collection
-    And I click "Easy" in the "Entity actions" region
+    And I click "Translate" in the "Entity actions" region
     And I click "Kolekcja ze słownikiem"
-    Then I should not see the link "tłumaczenia"
+    Then I should not see the link "prosty"
 
   Scenario: Users who do not have edit access cannot manage translations.
     Given I am logged in as an authenticated
