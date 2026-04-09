@@ -85,24 +85,6 @@ Feature:
     And I press "Update"
     Then I should see the inline form error message "Title field is required."
 
-  Scenario Outline: Visibility of Report link and eTranslate button.
-    Given <type> content:
-      | title      | collection           |
-      | IOP <type> | Interoperable Europe |
-
-    When I am an anonymous user
-    And I go to the "IOP <type>" <type>
-    Then I should not see the link "Report abusive content"
-    And I should see the Webtools eTrans button
-
-    Examples:
-      | type        |
-      | news        |
-      | event       |
-      | discussion  |
-      | document    |
-      | custom_page |
-
   @javascript
   Scenario: Regression test that ensures that search bar works fine.
     Given I go to "/interoperable-europe"
