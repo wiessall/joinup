@@ -260,9 +260,6 @@ class TagifyContext extends RawDrupalContext {
    * @param string $fieldName
    *   Field label.
    *
-   * @return \Behat\Mink\Element\NodeElement
-   *   The dropdown element.
-   *
    * @throws \Exception
    *   Thrown when the dropdown does not appear.
    */
