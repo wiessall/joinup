@@ -255,7 +255,7 @@ class TagifyContext extends RawDrupalContext {
   }
 
   /**
-   * Gets tagify inupt element.
+   * Gets tagify input element.
    *
    * @param string $fieldName
    *   Field name.
@@ -277,37 +277,6 @@ class TagifyContext extends RawDrupalContext {
       throw new \Exception('Tagify input not found');
     }
     return $tagifyInput;
-  }
-
-  /**
-   * Gets field values from tagify JSON data.
-   *
-   * @param string $fieldName
-   *   The field name to check.
-   *
-   * @return array
-   *   Array of label values from the tagify field.
-   *
-   * @throws \Exception
-   *   Thrown when field is not found or JSON is invalid.
-   */
-  protected function getTagifyFieldValues(string $fieldName): array {
-    $field = $this->getSession()->getPage()->findField($fieldName);
-    if (!$field) {
-      throw new \Exception("The field '$fieldName' not found in the page.");
-    }
-
-    $currentValueRaw = $field->getValue();
-    if (empty($currentValueRaw)) {
-      return [];
-    }
-
-    $currentValue = json_decode($currentValueRaw, TRUE);
-    if (json_last_error() !== JSON_ERROR_NONE) {
-      throw new \Exception("Failed to decode JSON from field '$fieldName': " . json_last_error_msg());
-    }
-
-    return array_column($currentValue, 'label');
   }
 
 }
