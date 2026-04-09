@@ -1,0 +1,194 @@
+diff --git a/modules/entity_form/src/Plugin/EntityBrowser/Widget/EntityForm.php b/modules/entity_form/src/Plugin/EntityBrowser/Widget/EntityForm.php
+index 771aeaaaaea18053e4eb93a931fd64d6adb1f156..416380f7733d1e81dd4f42976b7331f1cac810a9 100644
+--- a/modules/entity_form/src/Plugin/EntityBrowser/Widget/EntityForm.php
++++ b/modules/entity_form/src/Plugin/EntityBrowser/Widget/EntityForm.php
+@@ -5,6 +5,7 @@ namespace Drupal\entity_browser_entity_form\Plugin\EntityBrowser\Widget;
+ use Drupal\Core\Ajax\AjaxResponse;
+ use Drupal\Core\Ajax\ReplaceCommand;
+ use Drupal\Core\Entity\EntityInterface;
++use Drupal\Core\Entity\FieldableEntityInterface;
+ use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+ use Drupal\Core\Entity\EntityTypeInterface;
+ use Drupal\Core\Entity\EntityTypeManagerInterface;
+@@ -128,6 +129,33 @@ class EntityForm extends WidgetBase {
+     return [$form[$form['#browser_parts']['widget']]['inline_entity_form']['#entity']];
+   }
+ 
++  /**
++   * {@inheritdoc}
++   */
++  public function validate(array &$form, FormStateInterface $form_state) {
++    // Only validate when the widget's own submit button was pressed, not when
++    // other buttons (e.g., "Use selected" from multi-step selection display)
++    // trigger the form submission.
++    if (empty($form_state->getTriggeringElement()['#eb_widget_main_submit'])) {
++      return;
++    }
++    parent::validate($form, $form_state);
++    if (!$form_state->getErrors()) {
++      $entities = $this->prepareEntities($form, $form_state);
++      foreach ($entities as $entity) {
++        if ($entity instanceof FieldableEntityInterface) {
++          $widget_form = $form[$form['#browser_parts']['widget']];
++          $form_display = $this->entityDisplayRepository->getFormDisplay(
++            $this->configuration['entity_type'],
++            $this->configuration['bundle'],
++            $this->configuration['form_mode'],
++          );
++          $form_display->validateFormValues($entity, $widget_form['inline_entity_form'], $form_state);
++        }
++      }
++    }
++  }
++
+   /**
+    * {@inheritdoc}
+    */
+diff --git a/modules/entity_form/tests/src/FunctionalJavascript/EntityFormWidgetTest.php b/modules/entity_form/tests/src/FunctionalJavascript/EntityFormWidgetTest.php
+index 79c5cc8f6eca3d61e63beac5f6b3a1a924a4e4a9..d5f7a6a6a61abf72a9270f97bb8b86e9aca7d69f 100644
+--- a/modules/entity_form/tests/src/FunctionalJavascript/EntityFormWidgetTest.php
++++ b/modules/entity_form/tests/src/FunctionalJavascript/EntityFormWidgetTest.php
+@@ -2,9 +2,12 @@
+ 
+ namespace Drupal\Tests\entity_browser_entity_form\FunctionalJavascript;
+ 
++use Drupal\Core\Entity\Entity\EntityFormDisplay;
++use Drupal\Core\Entity\Entity\EntityFormMode;
+ use Drupal\Core\Field\FieldStorageDefinitionInterface;
+ use Drupal\field\Entity\FieldConfig;
+ use Drupal\field\Entity\FieldStorageConfig;
++use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+ use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
+ 
+ /**
+@@ -12,6 +15,7 @@ use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
+  *
+  * @group entity_browser_entity_form
+  */
++#[RunTestsInSeparateProcesses]
+ class EntityFormWidgetTest extends WebDriverTestBase {
+ 
+   /**
+@@ -116,9 +120,7 @@ class EntityFormWidgetTest extends WebDriverTestBase {
+ 
+     // Switch back to the main page.
+     $this->getSession()->switchToIFrame();
+-    $this->assertSession()->assertWaitOnAjaxRequest();
+-
+-    $this->assertSession()->pageTextContains('War is peace');
++    $this->assertTrue($this->assertSession()->waitForText('War is peace'));
+     $this->getSession()->getPage()->fillField('title[0][value]', 'Freedom is slavery');
+     $this->assertSession()->buttonExists('Save')->press();
+ 
+@@ -137,13 +139,12 @@ class EntityFormWidgetTest extends WebDriverTestBase {
+     $this->getSession()->switchToIFrame('entity_browser_iframe_entity_browser_test_entity_form');
+     $this->getSession()->getPage()->fillField('inline_entity_form[title][0][value]', 'War is peace');
+     $this->assertSession()->buttonExists('Save node')->press();
++    $this->assertSession()->waitForButton('Use selected');
+     $this->assertSession()->buttonExists('Use selected')->press();
+ 
+     // Switch back to the main page.
+     $this->getSession()->switchToIFrame();
+-    $this->assertSession()->assertWaitOnAjaxRequest();
+-
+-    $this->assertSession()->pageTextContains('War is peace');
++    $this->assertTrue($this->assertSession()->waitForText('War is peace'));
+     $this->getSession()->getPage()->fillField('title[0][value]', 'Ignorance is strength');
+     $this->assertSession()->buttonExists('Save')->press();
+ 
+@@ -165,4 +166,95 @@ class EntityFormWidgetTest extends WebDriverTestBase {
+     $this->assertSession()->pageTextContains('No widgets are available.');
+   }
+ 
++  /**
++   * Tests that validation only applies to fields visible in the form display.
++   */
++  public function testEntityFormRequiredFieldValidation() {
++    $this->drupalCreateContentType(['type' => 'test_bundle', 'name' => 'Test Bundle']);
++
++    FieldStorageConfig::create([
++      'field_name' => 'field_required_text',
++      'entity_type' => 'node',
++      'type' => 'string',
++    ])->save();
++
++    FieldConfig::create([
++      'field_name' => 'field_required_text',
++      'entity_type' => 'node',
++      'bundle' => 'test_bundle',
++      'label' => 'Required text',
++      'required' => TRUE,
++    ])->save();
++
++    EntityFormMode::create([
++      'id' => 'node.entity_browser',
++      'label' => 'Entity Browser',
++      'targetEntityType' => 'node',
++    ])->save();
++
++    EntityFormDisplay::create([
++      'targetEntityType' => 'node',
++      'bundle' => 'test_bundle',
++      'mode' => 'entity_browser',
++      'status' => TRUE,
++    ])
++      ->setComponent('title', ['type' => 'string_textfield', 'weight' => 1])
++      ->setComponent('field_required_text', ['type' => 'string_textfield', 'weight' => 2])
++      ->save();
++
++    $account = $this->drupalCreateUser([
++      'access entity_browser_test_entity_form entity browser pages',
++      'create test_bundle content',
++      'access content',
++    ]);
++    $this->drupalLogin($account);
++
++    /** @var \Drupal\entity_browser\EntityBrowserInterface $browser */
++    $browser = $this->container->get('entity_type.manager')
++      ->getStorage('entity_browser')
++      ->load('entity_browser_test_entity_form');
++
++    $browser->setWidgetSelector('tabs');
++    $widget = $browser->getWidget('9c6ee4c0-4642-4203-b4bd-ec0bad068ad3');
++    $config = $widget->getConfiguration();
++    $config['settings']['entity_type'] = 'node';
++    $config['settings']['bundle'] = 'test_bundle';
++    $config['settings']['form_mode'] = 'entity_browser';
++    $widget->setConfiguration($config);
++    $browser->save();
++
++    $this->drupalGet('entity-browser/iframe/entity_browser_test_entity_form');
++
++    $this->getSession()->getPage()->fillField('inline_entity_form[title][0][value]', 'Test node');
++    $this->assertSession()->buttonExists('Save entity')->press();
++    $this->assertSession()->waitForButton('Save entity');
++
++    $this->assertSession()->pageTextContains('Required text');
++    $this->assertSession()->pageTextNotContains('website encountered an unexpected error');
++    $this->assertSession()->pageTextNotContains('SQLSTATE');
++
++    $nodes = $this->container->get('entity_type.manager')
++      ->getStorage('node')
++      ->loadByProperties(['type' => 'test_bundle']);
++    $this->assertEmpty($nodes, 'The entity was not saved because a displayed required field is empty.');
++
++    EntityFormDisplay::load('node.test_bundle.entity_browser')
++      ->removeComponent('field_required_text')
++      ->save();
++
++    $this->drupalGet('entity-browser/iframe/entity_browser_test_entity_form');
++
++    $this->getSession()->getPage()->fillField('inline_entity_form[title][0][value]', 'Test node hidden');
++    $this->assertSession()->buttonExists('Save entity')->press();
++    $this->assertSession()->waitForButton('Save entity');
++
++    $this->assertSession()->pageTextNotContains('website encountered an unexpected error');
++    $this->assertSession()->pageTextNotContains('SQLSTATE');
++
++    $nodes = $this->container->get('entity_type.manager')
++      ->getStorage('node')
++      ->loadByProperties(['type' => 'test_bundle']);
++    $this->assertCount(1, $nodes, 'The entity was saved because hidden required fields are not validated.');
++  }
++
+ }
