@@ -1,0 +1,229 @@
+diff --git a/.ddev/commands/host/core-version b/.ddev/commands/host/core-version
+old mode 100644
+new mode 100755
+diff --git a/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php b/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php
+index 328dda8eaf962b5e12f48c162a84644a189b014a..0331fc955c0a799d52ce58e17c42968ea7ff2c74 100644
+--- a/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php
++++ b/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php
+@@ -195,12 +195,8 @@ class ContentEntity extends TranslationTypePluginBase implements PluginFormInter
+ 
+     // Translation must validate to be saved.
+     if (!$entityTranslation->validate()->count()) {
+-      $source = array_intersect_key($entity->toArray(), $translatableFields);
+-      $trans = array_intersect_key($entityTranslation->toArray(), $translatableFields);
+-      if ($source !== $trans) {
+-        $entityTranslation->save();
+-        return;
+-      }
++      $entityTranslation->save();
++      return;
+     }
+     else {
+       $message = $entityTranslation->isNewTranslation()
+diff --git a/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php b/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php
+index 9c64177942a5e12847adb23c6a286e2ea953d2de..cc3406a5ecf99b926aae017052ad3e57300b3643 100644
+--- a/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php
++++ b/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php
+@@ -6,6 +6,8 @@ namespace Drupal\Tests\babel_content_entity\Kernel\Plugin\Babel\TranslationType;
+ 
+ use Drupal\babel\Plugin\Babel\TranslationTypePluginManager;
+ use Drupal\babel_content_entity\Plugin\Babel\TranslationType\ContentEntity;
++use Drupal\Component\Utility\DeprecationHelper;
++use Drupal\filter\FilterFormatRepositoryInterface;
+ use Drupal\taxonomy\Entity\Vocabulary;
+ use Drupal\taxonomy\TermInterface;
+ use Drupal\Tests\babel\Kernel\Plugin\Babel\TranslationType\TranslationTypePluginTestBase;
+@@ -212,7 +214,13 @@ class ContentEntityTest extends TranslationTypePluginTestBase {
+       'langcode' => 'en',
+       'description' => [
+         'value' => $description,
+-        'format' => filter_fallback_format(),
++        'format' => DeprecationHelper::backwardsCompatibleCall(
++          currentVersion: \Drupal::VERSION,
++          deprecatedVersion: '11.4.0',
++          // @phpstan-ignore class.notFound
++          currentCallable: fn() => \Drupal::service(FilterFormatRepositoryInterface::class),
++          deprecatedCallable: fn() => filter_fallback_format(),
++        ),
+       ],
+     ]));
+     $term->save();
+diff --git a/modules/babel_menu_link_content/src/Plugin/Babel/TranslationType/MenuLinkContent.php b/modules/babel_menu_link_content/src/Plugin/Babel/TranslationType/MenuLinkContent.php
+index e4aff3546a6b6d142202fcf5720f6a703e8a104c..e337f7996a40476d023c50c5c6f82c2aedba9f8f 100644
+--- a/modules/babel_menu_link_content/src/Plugin/Babel/TranslationType/MenuLinkContent.php
++++ b/modules/babel_menu_link_content/src/Plugin/Babel/TranslationType/MenuLinkContent.php
+@@ -172,14 +172,9 @@ class MenuLinkContent extends TranslationTypePluginBase implements PluginFormInt
+     $translated->get($fieldName)->set($delta, $translation ?: $link->get($fieldName)->getValue()[$delta]);
+ 
+     // Translation must validate to be saved.
+-    $violations = $translated->validate();
+-    if (!$violations->count()) {
+-      $source = array_intersect_key($link->toArray(), $translatableFields);
+-      $trans = array_intersect_key($translated->toArray(), $translatableFields);
+-      if ($source !== $trans) {
+-        $translated->save();
+-        return;
+-      }
++    if (!$translated->validate()->count()) {
++      $translated->save();
++      return;
+     }
+     else {
+       $message = $translated->isNewTranslation()
+diff --git a/modules/babel_menu_link_content/tests/src/Kernel/Plugin/Babel/TranslationType/MenuLinkContentTest.php b/modules/babel_menu_link_content/tests/src/Kernel/Plugin/Babel/TranslationType/MenuLinkContentTest.php
+index 9f1213cca2aee879f68fa203935977e3408000df..909d4038325401a4872740a924c313d1cc2fcacd 100644
+--- a/modules/babel_menu_link_content/tests/src/Kernel/Plugin/Babel/TranslationType/MenuLinkContentTest.php
++++ b/modules/babel_menu_link_content/tests/src/Kernel/Plugin/Babel/TranslationType/MenuLinkContentTest.php
+@@ -168,7 +168,7 @@ class MenuLinkContentTest extends TranslationTypePluginTestBase {
+       $this->language->getId(),
+       '',
+     );
+-    $this->assertFalse($storage->loadUnchanged($link->id())->hasTranslation($this->language->getId()));
++    $this->assertTrue($storage->loadUnchanged($link->id())->hasTranslation($this->language->getId()));
+   }
+ 
+   /**
+diff --git a/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php b/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
+index 55c17be7d9b278db1139c0ffcdb7fbf1b911962d..4a8a4a865948a267d0c45df35f09bff3a4d0afd5 100644
+--- a/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
++++ b/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
+@@ -4,6 +4,7 @@ declare(strict_types=1);
+ 
+ namespace Drupal\babel_tmgmt\Hook;
+ 
++use Drupal\babel\BabelStringsRepositoryInterface;
+ use Drupal\babel_tmgmt\Plugin\QueueWorker\ContinuousJobItemCreationWorker;
+ use Drupal\Core\Database\Connection;
+ use Drupal\Core\Entity\EntityTypeManagerInterface;
+@@ -31,6 +32,7 @@ class BabelTmgmtHooks {
+     protected Connection $db,
+     #[Autowire(service: 'tmgmt.continuous')]
+     protected readonly ContinuousManager $continuousManager,
++    protected readonly BabelStringsRepositoryInterface $stringsRepository,
+   ) {}
+ 
+   /**
+@@ -88,22 +90,16 @@ class BabelTmgmtHooks {
+ 
+     $storage = $this->entityTypeManager->getStorage('tmgmt_job_item');
+ 
+-    $allHashes = $this->db->select('babel_source')
+-      ->fields('babel_source', ['hash'])
+-      ->condition('status', TRUE)
+-      ->execute()
+-      ->fetchCol();
+-
+     foreach ($this->continuousManager->getContinuousJobs('en') as $job) {
+       assert($job instanceof JobInterface);
+ 
+-      // Remove sources that are locked for the target language.
+-      $locked = $this->db->select('babel_source_lock')
+-        ->fields('babel_source_lock', ['hash'])
+-        ->condition('langcode', $job->getTargetLangcode())
+-        ->execute()
+-        ->fetchCol();
+-      $hashes = array_diff($allHashes, $locked);
++      // All untranslated, enabled and unlocked strings for the target langcode.
++      $hashes = array_keys($this->stringsRepository->getStrings(
++        langcode: $job->getTargetLangcode(),
++        translationStatus: FALSE,
++        sourceStatus: TRUE,
++        lockStatus: FALSE,
++      ));
+ 
+       // Remove existing job items in a dead-end state (aborted, in review).
+       $jobItemsToDelete = $job->getItems([
+diff --git a/modules/babel_tmgmt/src/Plugin/QueueWorker/ContinuousJobItemCreationWorker.php b/modules/babel_tmgmt/src/Plugin/QueueWorker/ContinuousJobItemCreationWorker.php
+index ccffe777c09750da5142d2438744f9a39b41295f..7bf23dbf93ead8521b257131ae678080beefb7dc 100644
+--- a/modules/babel_tmgmt/src/Plugin/QueueWorker/ContinuousJobItemCreationWorker.php
++++ b/modules/babel_tmgmt/src/Plugin/QueueWorker/ContinuousJobItemCreationWorker.php
+@@ -78,7 +78,8 @@ class ContinuousJobItemCreationWorker extends QueueWorkerBase implements Contain
+       return;
+     }
+ 
+-    if ($job->getMostRecentItem('babel', 'default', $data['hash'])) {
++    $jobItem = $job->getMostRecentItem('babel', 'default', $data['hash']);
++    if ($jobItem && $jobItem->isInactive()) {
+       // A job item has been created in the meantime by another process.
+       return;
+     }
+diff --git a/src/BabelStringsRepository.php b/src/BabelStringsRepository.php
+index 699391c59a655c6bff8a04cbef92a8e9e29a1040..4e1c63fc0eee7d706bbb60e2c0817697147dfad4 100644
+--- a/src/BabelStringsRepository.php
++++ b/src/BabelStringsRepository.php
+@@ -29,6 +29,7 @@ class BabelStringsRepository implements BabelStringsRepositoryInterface {
+     ?string $search = NULL,
+     ?string $context = NULL,
+     ?bool $sourceStatus = NULL,
++    ?bool $lockStatus = NULL,
+   ): array {
+     $stringsCollector = $this->collectorFactory->get($langcode);
+ 
+@@ -36,7 +37,7 @@ class BabelStringsRepository implements BabelStringsRepositoryInterface {
+       ->fields('babel_source', ['hash'])
+       ->orderBy('sort_key');
+ 
+-    // A specific status is requested by the caller.
++    // The caller requests a specific status.
+     if (is_bool($sourceStatus)) {
+       $query->condition('status', $sourceStatus);
+     }
+@@ -48,6 +49,14 @@ class BabelStringsRepository implements BabelStringsRepositoryInterface {
+     );
+     $query->addExpression('IF(bsl.hash IS NOT NULL, 1, 0)', 'locked');
+ 
++    // Filter by lock status if requested.
++    if ($lockStatus === TRUE) {
++      $query->isNotNull('bsl.hash');
++    }
++    elseif ($lockStatus === FALSE) {
++      $query->isNull('bsl.hash');
++    }
++
+     $strings = [];
+     foreach ($query->execute()->fetchAll() as $row) {
+       $value = $stringsCollector->get($row->hash);
+diff --git a/src/BabelStringsRepositoryInterface.php b/src/BabelStringsRepositoryInterface.php
+index 692c30d4a5f8a3903cb27a8e348ed0f622e4341c..025645bf739f8734f2b741ee0443fa6dccce71ff 100644
+--- a/src/BabelStringsRepositoryInterface.php
++++ b/src/BabelStringsRepositoryInterface.php
+@@ -17,17 +17,24 @@ interface BabelStringsRepositoryInterface {
+    * @param string $langcode
+    *   The results will contain existing translations in the requested language.
+    * @param bool|null $translationStatus
+-   *   The translation status to filter for. NULL means no filtering. Optional,
+-   *   defaults to NULL.
++   *   (optional) Translation status filter. TRUE returns only translated
++   *   strings, FALSE only non-translated strings. Defaults to NULL, which means
++   *   no filtering.
+    * @param string|null $search
+-   *   A string which should appear either in the source string or in the
+-   *   translation, if there is any. Optional, defaults to NULL which means no
++   *   (optional) A string which should appear either in the source string or in
++   *   the translation, if there is any. Defaults to NULL which means no
+    *   filtering. Check is case-insensitive.
+    * @param string|null $context
+-   *   The source string context. Defaults to NULL which means no filtering.
++   *   (optional) The source string context. Defaults to NULL which means no
++   *   filtering.
+    * @param bool|null $sourceStatus
+-   *   (optional) The status of the source string object to filter for. Defaults
+-   *   to NULL which means no filtering.
++   *   (optional) The status of the source string object to filter for. TRUE
++   *   returns only enabled source strings. FALSE returns only disabled source
++   *   strings. Defaults to NULL which means no filtering.
++   * @param bool|null $lockStatus
++   *   (optional) The status of the lock flag to filter for. TRUE returns only
++   *   locked strings for $langcode. FALSE returns only unlocked strings for
++   *   $langcode. Defaults to NULL which means no filtering.
+    *
+    * @return array<array-key, \Drupal\babel\Model\StringTranslation>
+    *   List of strings keyed by the source string hash and having string
+@@ -39,6 +46,7 @@ interface BabelStringsRepositoryInterface {
+     ?string $search = NULL,
+     ?string $context = NULL,
+     ?bool $sourceStatus = NULL,
++    ?bool $lockStatus = NULL,
+   ): array;
+ 
+   /**
