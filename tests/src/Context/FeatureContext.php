@@ -8,6 +8,7 @@ use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Hook\AfterFeature;
 use Behat\Hook\AfterScenario;
 use Behat\Hook\AfterStep;
 use Behat\Hook\BeforeScenario;
@@ -1479,11 +1480,53 @@ class FeatureContext extends RawDrupalContext {
     // - homepage.feature
     // - my_subscriptions.feature
     // - legal_notice.feature.
-    \Drupal::getContainer()->get('entity.memory_cache')->invalidateAll();
+    \Drupal::getContainer()->get('entity.memory_cache')->deleteAll();
 
     // Sample tests needing this:
     // - collection.subscribe-on-join.feature.
-    \Drupal::getContainer()->get('cache.static')->invalidateAll();
+    \Drupal::getContainer()->get('cache.memory')->deleteAll();
+  }
+
+  /**
+   * Resets services/caches that accumulate memory across features.
+   *
+   * In a long-lived Behat process there is no request boundary between
+   * features, so several request-scoped services grow unboundedly. Resetting
+   * them at feature boundaries prevents per-feature allocations from piling
+   * up for the entire suite run.
+   */
+  #[AfterFeature('@api')]
+  public static function resetAccumulatingCaches(): void {
+    /* @see \Drupal\Core\Test\RefreshVariablesTrait::refreshVariables() */
+    \Drupal::service('cache_tags.invalidator')->resetChecksums();
+
+    foreach (Cache::getBins() as $backend) {
+      if (is_callable([$backend, 'reset'])) {
+        $backend->reset();
+      }
+    }
+
+    foreach (Cache::getMemoryBins() as $backend) {
+      if (is_callable([$backend, 'reset'])) {
+        $backend->reset();
+      }
+    }
+
+    \Drupal::service('config.factory')->reset();
+    \Drupal::service('state')->reset();
+    \Drupal::service('entity.memory_cache')->deleteAll();
+
+    // TypedDataManager caches a prototype object per field type/definition key
+    // in $prototypes. Each entity load can add new entries and the cache is
+    // never pruned during the process lifetime. Over a full suite run this
+    // grows to thousands of objects.
+    \Drupal::service('typed_data_manager')->clearCachedDefinitions();
+
+    // Clear the in-process translation string cache in LocaleTranslation.
+    // Each unique source string × language × context encountered for the first
+    // time creates a new LocaleLookup entry, so the cache grows continuously as
+    // the test suite visits more pages and code paths.
+    \Drupal::service('string_translation')->reset();
   }
 
   /**
