@@ -7,6 +7,8 @@
 
 declare(strict_types=1);
 
+use Drupal\babel\StringsCollectorFactory;
+
 /**
  * Locale source strings with duplicates.
  */
@@ -36,5 +38,24 @@ function joinup_i18n_deploy_201200(): void {
       ->condition('plugin', 'locale')
       ->condition('id', $delete, 'IN')
       ->execute();
+  }
+}
+
+/**
+ * Limit language translation to EU languages.
+ */
+function joinup_i18n_deploy_201201(): void {
+  $state = \Drupal::state();
+  $disabled = $state->get('joinup_i18n.update_2012');
+  if ($disabled !== NULL) {
+    $state->delete('joinup_i18n.update_2012');
+    if (!empty($disabled)) {
+      // Keep disabled, non-EU language strings disabled before this deployment.
+      \Drupal::database()->update('babel_source')
+        ->fields(['status' => 0])
+        ->condition('hash', $disabled, 'IN')
+        ->execute();
+      \Drupal::service(StringsCollectorFactory::class)->invalidateHashes($disabled);
+    }
   }
 }
