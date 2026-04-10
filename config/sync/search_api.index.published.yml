@@ -539,6 +539,10 @@ field_settings:
         - field.storage.node.keywords
       module:
         - taxonomy
+  language_with_fallback:
+    label: 'Language (with fallback)'
+    property_path: language_with_fallback
+    type: string
   name:
     label: Name
     datasource_id: 'entity:taxonomy_term'

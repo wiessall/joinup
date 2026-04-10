@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.view_mode_tile
     - field.field.node.event.abstract
+    - field.field.node.event.european_commission_digit_event
     - field.field.node.event.field_attachment
     - field.field.node.event.field_comments
     - field.field.node.event.field_event_agenda
@@ -32,7 +33,7 @@ dependencies:
     - datetime_range
     - field_fallback_formatter
     - joinup_core
-    - responsive_image
+    - svg_image_responsive
     - template_suggestion
     - user
 id: node.event.view_mode_tile
@@ -94,6 +95,7 @@ content:
     region: content
 hidden:
   anonymous_comment_links: true
+  european_commission_digit_event: true
   featured: true
   field_attachment: true
   field_comments: true
