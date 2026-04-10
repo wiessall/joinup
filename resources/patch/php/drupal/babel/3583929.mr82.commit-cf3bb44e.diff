@@ -83,8 +83,94 @@ index 9f1213cca2aee879f68fa203935977e3408000df..909d4038325401a4872740a924c313d1
    }
  
    /**
+diff --git a/modules/babel_tmgmt/babel_tmgmt.services.yml b/modules/babel_tmgmt/babel_tmgmt.services.yml
+index fc205c0260d4980b70f722c1dbf38077b3eb51ce..9600a347d2c7f829f9a0bb4f5bbc545784e5bed8 100644
+--- a/modules/babel_tmgmt/babel_tmgmt.services.yml
++++ b/modules/babel_tmgmt/babel_tmgmt.services.yml
+@@ -5,5 +5,7 @@ services:
+ 
+   Drupal\babel_tmgmt\BabelTmgmtIntegration: {}
+ 
++  Drupal\babel_tmgmt\EventSubscriber\BabelTmgmtSubscriber: {}
++
+   # TODO: Remove this line when Drupal 10 support is discontinued.
+   Drupal\babel_tmgmt\Hook\BabelTmgmtHooks: {}
+diff --git a/modules/babel_tmgmt/src/EventSubscriber/BabelTmgmtSubscriber.php b/modules/babel_tmgmt/src/EventSubscriber/BabelTmgmtSubscriber.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..15fe5bb3e34fc24203f354f8b1ad2a80be272fd7
+--- /dev/null
++++ b/modules/babel_tmgmt/src/EventSubscriber/BabelTmgmtSubscriber.php
+@@ -0,0 +1,68 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\babel_tmgmt\EventSubscriber;
++
++use Drupal\babel\Event\SourceStringDisabled;
++use Drupal\babel\Event\TranslationLocked;
++use Drupal\Core\Entity\EntityTypeManagerInterface;
++use Symfony\Component\EventDispatcher\EventSubscriberInterface;
++
++/**
++ * Removes a job item if a translation is locked or disabled.
++ */
++class BabelTmgmtSubscriber implements EventSubscriberInterface {
++
++  public function __construct(
++    protected readonly EntityTypeManagerInterface $entityTypeManager,
++  ) {}
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function getSubscribedEvents(): array {
++    return [
++      SourceStringDisabled::class => 'onSourceStringDisabled',
++      TranslationLocked::class => 'onTranslationLocked',
++    ];
++  }
++
++  /**
++   * Removes corresponding job items when a source string is disabled.
++   *
++   * @param \Drupal\babel\Event\SourceStringDisabled $event
++   *   The event object.
++   */
++  public function onSourceStringDisabled(SourceStringDisabled $event): void {
++    $storage = $this->entityTypeManager->getStorage('tmgmt_job_item');
++    $jobItems = $storage->loadByProperties([
++      'plugin' => 'babel',
++      'item_type' => 'default',
++      'item_id' => $event->hash,
++    ]);
++    if ($jobItems) {
++      $storage->delete($jobItems);
++    }
++  }
++
++  /**
++   * Removes corresponding job items when a translation is locked.
++   *
++   * @param \Drupal\babel\Event\TranslationLocked $event
++   *   The event object.
++   */
++  public function onTranslationLocked(TranslationLocked $event): void {
++    $storage = $this->entityTypeManager->getStorage('tmgmt_job_item');
++    $ids = $storage->getQuery()->accessCheck(FALSE)
++      ->condition('tjid.entity.target_language', $event->langcode)
++      ->condition('plugin', 'babel')
++      ->condition('item_type', 'default')
++      ->condition('item_id', $event->hash)
++      ->execute();
++    if ($ids) {
++      $storage->delete($storage->loadMultiple($ids));
++    }
++  }
++
++}
 diff --git a/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php b/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
-index 55c17be7d9b278db1139c0ffcdb7fbf1b911962d..4a8a4a865948a267d0c45df35f09bff3a4d0afd5 100644
+index 55c17be7d9b278db1139c0ffcdb7fbf1b911962d..245cc076b3010e45ebb61fba5999cecc556a335b 100644
 --- a/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
 +++ b/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
 @@ -4,6 +4,7 @@ declare(strict_types=1);
@@ -133,6 +219,26 @@ index 55c17be7d9b278db1139c0ffcdb7fbf1b911962d..4a8a4a865948a267d0c45df35f09bff3
  
        // Remove existing job items in a dead-end state (aborted, in review).
        $jobItemsToDelete = $job->getItems([
+@@ -126,6 +122,7 @@ class BabelTmgmtHooks {
+           ->condition('tjid', $job->id())
+           ->condition('plugin', 'babel')
+           ->condition('item_type', 'default')
++          ->condition('state', JobItemInterface::STATE_INACTIVE)
+           ->execute(),
+         'item_id',
+       );
+@@ -138,11 +135,6 @@ class BabelTmgmtHooks {
+           'job_id' => $job->id(),
+         ]);
+       }
+-
+-      // Schedule the deletion of obsolete job items.
+-      foreach (array_diff($existing, $hashes) as $hash) {
+-        $queue->createItem(['operation' => 'delete', 'hash' => $hash]);
+-      }
+     }
+   }
+ 
 diff --git a/modules/babel_tmgmt/src/Plugin/QueueWorker/ContinuousJobItemCreationWorker.php b/modules/babel_tmgmt/src/Plugin/QueueWorker/ContinuousJobItemCreationWorker.php
 index ccffe777c09750da5142d2438744f9a39b41295f..7bf23dbf93ead8521b257131ae678080beefb7dc 100644
 --- a/modules/babel_tmgmt/src/Plugin/QueueWorker/ContinuousJobItemCreationWorker.php
