@@ -1,16 +1,16 @@
 diff --git a/modules/entity_form/src/Plugin/EntityBrowser/Widget/EntityForm.php b/modules/entity_form/src/Plugin/EntityBrowser/Widget/EntityForm.php
-index 771aeaaaaea18053e4eb93a931fd64d6adb1f156..416380f7733d1e81dd4f42976b7331f1cac810a9 100644
+index 771aeaaaaea18053e4eb93a931fd64d6adb1f156..eb5b26f3f8e9dcf9addc8b58e69b7ba4995bd323 100644
 --- a/modules/entity_form/src/Plugin/EntityBrowser/Widget/EntityForm.php
 +++ b/modules/entity_form/src/Plugin/EntityBrowser/Widget/EntityForm.php
-@@ -5,6 +5,7 @@ namespace Drupal\entity_browser_entity_form\Plugin\EntityBrowser\Widget;
- use Drupal\Core\Ajax\AjaxResponse;
- use Drupal\Core\Ajax\ReplaceCommand;
+@@ -7,6 +7,7 @@ use Drupal\Core\Ajax\ReplaceCommand;
  use Drupal\Core\Entity\EntityInterface;
-+use Drupal\Core\Entity\FieldableEntityInterface;
  use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
  use Drupal\Core\Entity\EntityTypeInterface;
++use Drupal\Core\Entity\FieldableEntityInterface;
  use Drupal\Core\Entity\EntityTypeManagerInterface;
-@@ -128,6 +129,33 @@ class EntityForm extends WidgetBase {
+ use Drupal\Core\Form\FormStateInterface;
+ use Drupal\entity_browser\WidgetBase;
+@@ -128,6 +129,35 @@ class EntityForm extends WidgetBase {
      return [$form[$form['#browser_parts']['widget']]['inline_entity_form']['#entity']];
    }
  
@@ -25,18 +25,20 @@ index 771aeaaaaea18053e4eb93a931fd64d6adb1f156..416380f7733d1e81dd4f42976b7331f1
 +      return;
 +    }
 +    parent::validate($form, $form_state);
-+    if (!$form_state->getErrors()) {
-+      $entities = $this->prepareEntities($form, $form_state);
-+      foreach ($entities as $entity) {
-+        if ($entity instanceof FieldableEntityInterface) {
-+          $widget_form = $form[$form['#browser_parts']['widget']];
-+          $form_display = $this->entityDisplayRepository->getFormDisplay(
-+            $this->configuration['entity_type'],
-+            $this->configuration['bundle'],
-+            $this->configuration['form_mode'],
-+          );
-+          $form_display->validateFormValues($entity, $widget_form['inline_entity_form'], $form_state);
-+        }
++    if ($form_state->getErrors()) {
++      return;
++    }
++
++    $entities = $this->prepareEntities($form, $form_state);
++    $widget_form = $form[$form['#browser_parts']['widget']];
++    $form_display = $this->entityDisplayRepository->getFormDisplay(
++      $this->configuration['entity_type'],
++      $this->configuration['bundle'],
++      $this->configuration['form_mode'],
++    );
++    foreach ($entities as $entity) {
++      if ($entity instanceof FieldableEntityInterface) {
++        $form_display->validateFormValues($entity, $widget_form['inline_entity_form'], $form_state);
 +      }
 +    }
 +  }
