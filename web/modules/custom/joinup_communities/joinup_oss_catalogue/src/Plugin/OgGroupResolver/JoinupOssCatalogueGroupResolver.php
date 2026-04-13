@@ -60,7 +60,9 @@ class JoinupOssCatalogueGroupResolver extends OgRouteGroupResolverBase {
     if (!$this->isOssContent()) {
       return;
     }
-
+    /** @var \Drupal\collection\Entity\CollectionInterface $ossCatalogueGroup */
+    $ossCatalogueGroup = $this->entityRepository
+      ->loadEntityByUuid('node', OssCatalogueCollectionInterface::COLLECTION_UUID);
     if (!$ossCatalogueGroup instanceof CollectionInterface) {
       return;
     }
