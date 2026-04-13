@@ -2022,6 +2022,55 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts that no links are marked as active in a certain region.
+   *
+   * @param string $region
+   *   The name of the region.
+   *
+   * @throws \Exception
+   *   Thrown when one or more active links are found in the region.
+   */
+  #[Then('no items should be active in the :region region')]
+  public function assertNoActiveLinkInRegion(string $region): void {
+    $links = $this->findLinksMarkedAsActive($region);
+
+    if (!empty($links)) {
+      $foundLinks = array_map(fn($link) => $link->getText() ?: $link->getHtml(), $links);
+      throw new \Exception("Unexpected active links found in the '$region' region: " . implode(', ', $foundLinks));
+    }
+  }
+
+  /**
+   * Asserts that a specific link is marked as active in a certain region.
+   *
+   * @param string $text
+   *   The link text. You can pass multiple links separated by '>' to
+   *   indicate more than one active items - can happen in multi-level menus.
+   * @param string $region
+   *   The name of the region.
+   *
+   * @throws \Exception
+   *   Thrown when multiple or no links at all are found in the region.
+   */
+  #[Then(':text should be the active item(s) in the :region region')]
+  public function assertActiveLinkInRegion($text, $region): void {
+    $links = $this->findLinksMarkedAsActive($region);
+
+    if (empty($links)) {
+      throw new \Exception("No active links found in the '$region' region.");
+    }
+
+    // In order to get the text from an anchor tag that has the is-active class
+    // right in it, and not a wrapper, we check both getText() and getHtml().
+    $foundLinks = array_map(fn ($link) => $link->getText() ?: $link->getHtml(), $links);
+    $expectedLinks = $this->explodeDelimitedSeparatedStepArgument($text, '>');
+    sort($foundLinks);
+    sort($expectedLinks);
+
+    $this->assertSameValues($expectedLinks, $foundLinks, "The active links in the '$region' region do not match the expected ones.");
+  }
+
+  /**
    * Asserts that a tile is marked as featured.
    *
    * @param string $heading
