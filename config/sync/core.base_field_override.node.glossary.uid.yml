@@ -1,0 +1,20 @@
+uuid: 8af1dbe5-4a09-45db-81fc-89df852ebbfb
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.glossary
+id: node.glossary.uid
+field_name: uid
+entity_type: node
+bundle: glossary
+label: 'Authored by'
+description: 'The username of the content author.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: 'Drupal\node\Entity\Node::getDefaultEntityOwner'
+settings:
+  handler: default
+  handler_settings: {  }
+field_type: entity_reference

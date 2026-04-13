@@ -10,6 +10,8 @@ declare(strict_types=1);
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Template\Attribute;
+use Drupal\search_api\Query\ConditionGroup;
+use Drupal\search_api\Query\QueryInterface;
 
 /**
  * Implements hook_module_implements_alter().
@@ -75,5 +77,39 @@ function joinup_i18n_babel_translation_type_info_alter(array &$definitions): voi
       continue;
     }
     $definitions[$pluginId]['status'] = FALSE;
+  }
+}
+
+/**
+ * Implements hook_search_api_query_alter().
+ *
+ * During re-indexing the language_with_fallback field will have no values thus
+ * we need to add a condition which covers this scenario.
+ */
+function joinup_i18n_search_api_query_alter(QueryInterface $query): void {
+  if (in_array($query->getIndex()->id(), ['published', 'oss_catalogue'])) {
+    return;
+  }
+
+  $group = $query->getConditionGroup();
+  $groupConditions = $group->getConditions();
+
+  foreach ($groupConditions as &$item) {
+    if (!$item instanceof ConditionGroup) {
+      continue;
+    }
+
+    $conditions = &$item->getConditions();
+
+    foreach ($conditions as $key => &$condition) {
+      if ($condition->getField() !== 'language_with_fallback') {
+        continue;
+      }
+
+      $or_group = $query->createConditionGroup('OR');
+      $or_group->addCondition('language_with_fallback', $condition->getValue(), $condition->getOperator());
+      $or_group->addCondition('language_with_fallback', NULL);
+      $conditions[$key] = $or_group;
+    }
   }
 }
