@@ -117,21 +117,6 @@ readonly class EntityMessageHelper implements EntityMessageHelperInterface {
   }
 
   /**
-   * Fills placeholders in message text according with arguments.
-   *
-   * @param array $arguments
-   *   Message arguments with placeholders/.
-   * @param string $output
-   *   Message text.
-   */
-  public function processArguments(array $arguments, string $output): string {
-    if (empty($arguments)) {
-      return $output;
-    }
-    return $this->replaceMessagePlaceholders($output, $arguments);
-  }
-
-  /**
    * Replaces placeholders in message text.
    *
    * @param string $text

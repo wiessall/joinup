@@ -136,7 +136,7 @@ function joinup_notification_mail_alter(array &$message): void {
         $message_entity = $message['params']['message_entity'];
         $arguments = $message_entity->getArguments();
         if (isset($arguments['custom_approval_message'])) {
-          $message['body'][0] = \Drupal::service('joinup_notification.entity_message_helper')->processArguments($arguments, $arguments['custom_approval_message']);
+          $message['body'][0] = \Drupal::service('joinup_notification.entity_message_helper')->replaceMessagePlaceholders($arguments['custom_approval_message'], $arguments);
         }
       }
       $user = user_load_by_mail($message['to']);
