@@ -380,3 +380,26 @@ Feature: Test adding solutions.
     When I click "Custom URL Identifier"
     Then I should see the text "Custom URL Identifier"
     And I should see the text "Content with Custom URL Identifier qwerty already exists."
+
+  @javascript
+  # Regression test for ticket ISAICP-11064.
+  Scenario: Dropdown displays counties based on default language.
+    Given I am logged in as a translator
+    When I click "Translate"
+    Then I should see the heading "Translate"
+    Given I select "Polish" from "Language"
+    And I fill in "Search" with "Netherlands"
+    And I press "Filter"
+
+    When I fill in the 2nd occurrence of the "Singular form" field with "Niderlandy" in the "Netherlands" row
+    And I press the 2nd button in the "Netherlands" row
+    Then I should see the success message 'Translation of source string "Netherlands" in language Polish was updated.'
+
+    Given I am logged in as a moderator
+    And I go to the "Portal support" collection
+    And I open the plus button menu
+    And I click "Add solution"
+    And I click "Contact details"
+    And I press "Add new owner"
+    When I open the "Country" tagify dropdown
+    And I should not see the text "Niderlandy" in the "Content" region
