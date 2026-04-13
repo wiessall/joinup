@@ -434,7 +434,9 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
       $plugin = $this->filterPluginManager->createInstance($plugin_config['plugin'], $plugin_config);
       $plugin->applyFilter($or);
     }
-    $query->addConditionGroup($or);
+    if (!$or->isEmpty()) {
+      $query->addConditionGroup($or);
+    }
   }
 
   /**
