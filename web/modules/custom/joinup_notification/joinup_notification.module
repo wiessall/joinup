@@ -132,7 +132,7 @@ function joinup_notification_mail_alter(array &$message): void {
     // omit the formalities of attaching a warm greeting and signature to the
     // email.
     if ($message['key'] !== 'announcement') {
-      if ($message['key'] === 'og_membership_approve' || $message['key'] ===  'og_membership_subscribed_approve') {
+      if ($message['key'] === 'og_membership_approve' || $message['key'] === 'og_membership_subscribed_approve') {
         $message_entity = $message['params']['message_entity'];
         $arguments = $message_entity->getArguments();
         if (isset($arguments['custom_approval_message'])) {
