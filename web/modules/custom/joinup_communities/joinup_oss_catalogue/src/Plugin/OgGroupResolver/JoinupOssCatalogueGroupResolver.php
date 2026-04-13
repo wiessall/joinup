@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_oss_catalogue\Plugin\OgGroupResolver;
 
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
