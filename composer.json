@@ -194,7 +194,6 @@
         "phpspec/prophecy-phpunit": "^2",
         "phpstan/extension-installer": "^1.3",
         "phpunit/phpunit": "^11",
-        "symfony/phpunit-bridge": "^6.3",
         "vincentlanglet/twig-cs-fixer": "^2.10",
         "vlucas/phpdotenv": "~5",
         "weitzman/drupal-test-traits": "2.x-dev",
@@ -345,6 +344,7 @@
         "patches": {
             "drupal/babel": {
                 "TMGMT @see https://www.drupal.org/i/3554005": "resources/patch/php/drupal/babel/3554005.mr71-note706700.diff",
+                "Babel TMGMT form alter makes form state non-serializable, prevents using Form API batch @see https://drupal.org/i/3583826": "resources/patch/php/drupal/babel/3583826-mr81-commit67cb60ed.diff",
                 "Menu Link Content plugin creates invalid entity translations when Babel string translations are deleted @see https://drupal.org/i/3578415": "resources/patch/php/drupal/babel/3578415.mr77-commit6da4c667.diff",
                 "ContentEntity plugin can trigger exception if string translation is deleted @see https://drupal.org/i/3580045": "resources/patch/php/drupal/babel/3580045-mr79-commit0f379a78.diff",
                 "Strengthen the creation of continuous job items @see https://www.drupal.org/i/3578471": "resources/patch/php/drupal/babel/3578471.mr76.commit333eff4d.diff"
@@ -472,7 +472,8 @@
                 "Renderer::renderPlain() is deprecated @see https://www.drupal.org/i/3511648": "resources/patch/php/drupal/message_digest/3511648.diff"
             },
             "drupal/meta_entity": {
-                "Allow $bundle to be nullable @see https://www.drupal.org/i/3529976": "resources/patch/php/drupal/meta_entity/3529976.diff"
+                "Allow $bundle to be nullable @see https://www.drupal.org/i/3529976": "resources/patch/php/drupal/meta_entity/3529976.diff",
+                "hook_entity_insert() auto-creates duplicate @see https://www.drupal.org/i/3583434": "resources/patch/php/drupal/meta_entity/3583434.mr20-commitf3ef1e53.diff"
             },
             "drupal/oauth_client": {
                 "Add post-update hook to install OAuth Client Minimal filter format. @see https://www.drupal.org/i/3555048": "resources/patch/php/drupal/oauth_client/3555048v2.diff",
