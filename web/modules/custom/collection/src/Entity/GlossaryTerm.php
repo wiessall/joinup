@@ -12,6 +12,7 @@ use Drupal\text\Plugin\Field\FieldType\TextWithSummaryItem;
  */
 class GlossaryTerm extends Node implements GlossaryTermInterface {
 
+  use GlossaryTermTrait;
   use NodeCollectionContentTrait;
 
   /**
@@ -40,24 +41,13 @@ class GlossaryTerm extends Node implements GlossaryTermInterface {
   public function getSummary(): string {
     $field_item = $this->getFirstItem('field_glossary_definition');
 
-    // The definition is a required field so it should normally be present on
+    // The definition is a required field, so it should normally be present on
     // the entity. If not, this is probably a new, unpopulated entity.
     if (!$field_item instanceof TextWithSummaryItem || $field_item->isEmpty()) {
       return '';
     }
 
-    $summary = $field_item->summary ?? '';
-    if (!empty($summary)) {
-      return trim($summary);
-    }
-
-    // If no summary is set, fall back to a shortened version of the main
-    // definition.
-    $definition = $field_item->value ?? '';
-    $format = $field_item->format ?? NULL;
-
-    $summary = text_summary($definition, $format, 300);
-    return trim(strip_tags($summary));
+    return $this->buildSummary($field_item->value, $field_item->summary, $field_item->format);
   }
 
 }

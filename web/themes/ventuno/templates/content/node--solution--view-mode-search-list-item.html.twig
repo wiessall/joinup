@@ -19,11 +19,11 @@
 <article{{ attributes.addClass(classes) }} data-joinup-eif-category="{{ eif_categories }}">
   <div class="row">
     <div class="col-12 col-md-5 mb-3 mb-lg-0">
-      <strong class="d-block text-center mb-3">{{ 'Attributes matching the EIF'|t }}</strong>
+      <p class="mb-3"><strong>{{ 'Attributes matching the EIF'|t }}</strong></p>
       {% for category_list in category_lists %}
-        <div class="d-flex align-items-baseline eif-tile__line eif-tile__line--{{ category_list.class }} fs-sm">
+        <div class="d-flex mb-2 eif-tile__line eif-tile__line--{{ category_list.class }} fs-sm">
           <div class="eif-tile__label-wrapper me-2">
-            <span class="eif-tile__label badge">{{ category_list.title }}</span>
+            <span class="eif-tile__label badge ms-0 w-100">{{ category_list.title }}</span>
           </div>
           <div class="eif-tile__values">
             {% for item in category_list.items %}
@@ -50,7 +50,7 @@
                 {{ content.owner|render|striptags }}
               </div>
               <div class="d-flex justify-content-end mt-3">
-                <a class="btn btn-sm btn-link me-3" href="{{ eif_perspective }}">{{ 'View EIF Perspective'|t }}</a>
+                <a class="btn btn-sm btn-link me-2" href="{{ eif_perspective }}">{{ 'View EIF Perspective'|t }}</a>
                 <a class="btn btn-sm btn-brand" href="{{ solution_url }}">{{ 'Go to Solution'|t }}</a>
               </div>
             </div>
