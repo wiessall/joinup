@@ -152,10 +152,7 @@ class AbsoluteUrlResolver extends DefaultResolver {
       return FALSE;
     }
     // Reject literal IP addresses; valid URLs must use domain names.
-    if (filter_var($host, FILTER_VALIDATE_IP) !== FALSE) {
-      return FALSE;
-    }
-    return TRUE;
+    return filter_var($host, FILTER_VALIDATE_IP) === FALSE;
   }
 
 }
