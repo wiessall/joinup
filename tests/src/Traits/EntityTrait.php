@@ -176,35 +176,6 @@ trait EntityTrait {
   }
 
   /**
-   * Navigates to the edit or delete form of an entity.
-   *
-   * @param string $action
-   *   The action. Either 'edit' or 'delete'.
-   * @param string $title
-   *   The title of the entity.
-   * @param string $bundle
-   *   An alias of a bundle as defined in the
-   *   \Drupal\joinup\Traits\NameMappingsTrait::bundleAliases method.
-   *
-   * @throws \InvalidArgumentException
-   *   Thrown when an invalid action is passed.
-   * @throws \Drupal\Core\Entity\EntityMalformedException
-   *   Thrown when the form URL cannot be generated for the community content.
-   */
-  public function visitEntityForm(string $action, string $title, string $bundle): void {
-    if (!in_array($action, ['edit', 'delete'])) {
-      throw new \InvalidArgumentException('Only "edit" and "delete" actions are allowed.');
-    }
-
-    $entity_type_id = $this->translateEntityTypeAlias($bundle);
-
-    $bundle = $this->translateBundle($bundle);
-    $node = $this->getEntityByLabel($entity_type_id, $title, $bundle);
-    $path = $node->toUrl("{$action}-form")->getInternalPath();
-    $this->visitPath($path);
-  }
-
-  /**
    * Returns the URI of the given entity, prefixed with the base path.
    *
    * Since Behat tests are run from the CLI the base path (which is normally
