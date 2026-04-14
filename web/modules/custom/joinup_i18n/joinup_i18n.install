@@ -8,7 +8,6 @@
 declare(strict_types=1);
 
 use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
-use Drupal\babel\Model\Source;
 
 /**
  * Implements hook_requirements().
@@ -50,60 +49,4 @@ function joinup_i18n_requirements(string $phase): array {
       ],
     ],
   ];
-}
-
-/**
- * Store non-EU languages whose names already exist in Babel and are disabled.
- */
-function joinup_i18n_update_201200(): void {
-  $euLanguages = [
-    'Bulgarian',
-    'Czech',
-    'Danish',
-    'German',
-    'Greek',
-    'English',
-    'Spanish',
-    'Estonian',
-    'Finnish',
-    'French',
-    'Irish',
-    'Croatian',
-    'Hungarian',
-    'Italian',
-    'Lithuanian',
-    'Latvian',
-    'Maltese',
-    'Dutch',
-    'Polish',
-    'Portuguese',
-    'Romanian',
-    'Slovak',
-    'Slovenian',
-    'Swedish',
-  ];
-
-  $names = \Drupal::entityQueryAggregate('taxonomy_term')->accessCheck(FALSE)
-    ->condition('vid', 'language')
-    ->condition('name', $euLanguages, 'NOT IN')
-    ->groupBy('langcode')
-    ->groupBy('name')
-    ->execute();
-  if (!$names) {
-    return;
-  }
-
-  // Get hashes out of names.
-  $hashes = array_map(
-    fn(string $name): string => (new Source($name, ''))->getHash(),
-    array_column($names, 'name'),
-  );
-
-  $enabled = \Drupal::database()->select('babel_source')
-    ->fields('babel_source', ['hash'])
-    ->condition('hash', $hashes, 'IN')
-    ->condition('status', 1)
-    ->execute()
-    ->fetchCol();
-  \Drupal::state()->set('joinup_i18n.update_2012', array_diff($hashes, $enabled));
 }

@@ -7,7 +7,8 @@
 
 declare(strict_types=1);
 
-use Drupal\babel\StringsCollectorFactory;
+use Drupal\babel\BabelStorageInterface;
+use Drupal\babel\Model\Source;
 
 /**
  * Locale source strings with duplicates.
@@ -44,18 +45,80 @@ function joinup_i18n_deploy_201200(): void {
 /**
  * Limit language translation to EU languages.
  */
-function joinup_i18n_deploy_201201(): void {
-  $state = \Drupal::state();
-  $disabled = $state->get('joinup_i18n.update_2012');
-  if ($disabled !== NULL) {
-    $state->delete('joinup_i18n.update_2012');
-    if (!empty($disabled)) {
-      // Keep disabled, non-EU language strings disabled before this deployment.
-      \Drupal::database()->update('babel_source')
-        ->fields(['status' => 0])
-        ->condition('hash', $disabled, 'IN')
-        ->execute();
-      \Drupal::service(StringsCollectorFactory::class)->invalidateHashes($disabled);
+function joinup_i18n_deploy_201201(array &$sandbox): string {
+  if (empty($sandbox['hashes'])) {
+    $euLanguages = [
+      'Bulgarian',
+      'Czech',
+      'Danish',
+      'German',
+      'Greek',
+      'English',
+      'Spanish',
+      'Estonian',
+      'Finnish',
+      'French',
+      'Irish',
+      'Croatian',
+      'Hungarian',
+      'Italian',
+      'Lithuanian',
+      'Latvian',
+      'Maltese',
+      'Dutch',
+      'Polish',
+      'Portuguese',
+      'Romanian',
+      'Slovak',
+      'Slovenian',
+      'Swedish',
+    ];
+
+    $names = \Drupal::entityQueryAggregate('taxonomy_term')->accessCheck(FALSE)
+      ->condition('vid', 'language')
+      ->condition('name', $euLanguages, 'NOT IN')
+      ->groupBy('langcode')
+      ->groupBy('name')
+      ->execute();
+    if (!$names) {
+      $sandbox['#finished'] = 1;
+      return 'No language terms to process';
     }
+
+    // Get hashes out of names.
+    $sandbox['hashes'] = array_map(
+      fn(string $name): string => (new Source($name, ''))->getHash(),
+      array_column($names, 'name'),
+    );
+    $sandbox['total'] = count($sandbox['hashes']);
+    $sandbox['progress'] = 0;
   }
+
+  $hashes = array_splice($sandbox['hashes'], 0, 10);
+  $storage = \Drupal::service(BabelStorageInterface::class);
+  foreach ($hashes as $hash) {
+    $instances = $storage->getSourceStringInstances($hash);
+    if (!isset($instances['content_entity:taxonomy_term'])) {
+      // This could not happen, but just in case.
+      continue;
+    }
+
+    if (count($instances) > 1) {
+      // This source string is handled by more than one plugin.
+      continue;
+    }
+
+    $ids = reset($instances);
+    if (count($ids) > 1) {
+      // Other vocabularies are using this source string.
+      continue;
+    }
+
+    $storage->updateStatusForHash($hash, FALSE);
+  }
+  $sandbox['progress'] += count($hashes);
+
+  $sandbox['#finished'] = (int) empty($sandbox['hashes']);
+
+  return "Processed {$sandbox['progress']} out of {$sandbox['total']} hashes";
 }
