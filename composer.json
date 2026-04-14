@@ -405,7 +405,7 @@
             },
             "drupal/entity_browser": {
                 "TypeError in removeExposedFiltersQueryParameters: exposed form in a div, not a form element @see https://www.drupal.org/i/3582428": "resources/patch/php/drupal/entity_browser/3582428-mr118-commitfd27d6f2.diff",
-                "EntityForm widget missing entity-level validation before save. @see https://www.drupal.org/i/3583922": "resources/patch/php/drupal/entity_browser/3583922.m122.commit186ff80f.diff"
+                "EntityForm widget missing entity-level validation before save. @see https://www.drupal.org/i/3583922": "resources/patch/php/drupal/entity_browser/3583922.m122.commit8291fb8c.diff"
             },
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.mr3-note490206.diff"
