@@ -354,6 +354,7 @@ trait NameMappingsTrait {
       'report' => 'assessment',
       'solution' => 'node',
       'spdx licence' => 'taxonomy_term',
+      'term' => 'taxonomy_term',
       'topic' => 'taxonomy_term',
       'user' => 'user',
       'webform' => 'webform',
