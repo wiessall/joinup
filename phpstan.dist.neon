@@ -1,6 +1,8 @@
 parameters:
     level: 1
     treatPhpDocTypesAsCertain: false
+    bootstrapFiles:
+        - vendor/squizlabs/php_codesniffer/autoload.php
     drupal:
         entityMapping:
             og_membership:
@@ -14,9 +16,5 @@ parameters:
         # new static() is a best practice in Drupal, so we cannot fix that.
         - '#^Unsafe usage of new static#'
     excludePaths:
-        - src/CodingStandards/Sniffs/NamingConventions/ValidUpdateNameSniff.php
         - tests/src/*
-        - web/modules/custom/joinup_core/src/PathProcessor/ModalRouteProcessor.php
-        - web/modules/custom/joinup_test/modules/joinup_test_time/src/Datetime/TestTime.php
-        - web/modules/custom/joinup_test/src/Plugin/ServiceMock/GitHubCom.php
         - web/modules/custom/joinup_stats/src/Event/Subscriber/RefreshCachedFieldsEventSubscriber.php
