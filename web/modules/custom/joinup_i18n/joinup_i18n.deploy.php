@@ -46,6 +46,8 @@ function joinup_i18n_deploy_201200(): void {
  * Limit language translation to EU languages.
  */
 function joinup_i18n_deploy_201201(array &$sandbox): string {
+  $storage = \Drupal::service(BabelStorageInterface::class);
+
   if (empty($sandbox['hashes'])) {
     $euLanguages = [
       'Bulgarian',
@@ -77,7 +79,6 @@ function joinup_i18n_deploy_201201(array &$sandbox): string {
     $names = \Drupal::entityQueryAggregate('taxonomy_term')->accessCheck(FALSE)
       ->condition('vid', 'language')
       ->condition('name', $euLanguages, 'NOT IN')
-      ->groupBy('langcode')
       ->groupBy('name')
       ->execute();
     if (!$names) {
@@ -95,28 +96,20 @@ function joinup_i18n_deploy_201201(array &$sandbox): string {
   }
 
   $hashes = array_splice($sandbox['hashes'], 0, 10);
-  $storage = \Drupal::service(BabelStorageInterface::class);
+  $sandbox['progress'] += count($hashes);
   foreach ($hashes as $hash) {
     $instances = $storage->getSourceStringInstances($hash);
     if (!isset($instances['content_entity:taxonomy_term'])) {
-      // This could not happen, but just in case.
+      // Should not happen, but skip defensively if it does.
       continue;
     }
-
-    if (count($instances) > 1) {
-      // This source string is handled by more than one plugin.
+    if (count($instances) > 1 || count(reset($instances)) > 1) {
+      // This source string is handled by more than one plugin, or other
+      // vocabularies are using this source string.
       continue;
     }
-
-    $ids = reset($instances);
-    if (count($ids) > 1) {
-      // Other vocabularies are using this source string.
-      continue;
-    }
-
     $storage->updateStatusForHash($hash, FALSE);
   }
-  $sandbox['progress'] += count($hashes);
 
   $sandbox['#finished'] = (int) empty($sandbox['hashes']);
 
