@@ -45,17 +45,38 @@ class EntityBrowserContext extends RawDrupalContext {
   }
 
   /**
-   * Presses a button to close the entity browser and switches back.
+   * Presses a button inside the entity browser.
    *
    * @param string $button
    *   The button label.
    */
   #[When('I press :button to close the entity browser')]
   public function pressToCloseEntityBrowser(string $button): void {
-    $this->getSession()->getPage()->pressButton($button);
-    $this->getSession()->switchToIFrame();
+    $this->pressButtonAndLeaveIframe($button);
     $this->waitForNoElement('css', '.entity-browser-modal-iframe');
     $this->waitForAjax();
+  }
+
+  /**
+   * Presses a button in the entity browser without leaving the iframe.
+   *
+   * @param string $button
+   *   The button label.
+   */
+  #[When('I press :button in the entity browser')]
+  public function pressInEntityBrowser(string $button): void {
+    $this->pressButtonAndLeaveIframe($button);
+    $iframe = $this->getSession()->getPage()->find('css', '.entity-browser-modal-iframe');
+    $this->getSession()->switchToIFrame($iframe->getAttribute('name'));
+    $this->waitForElement('css', '.entity-browser-form');
+  }
+
+  /**
+   * Presses a button and switches back to the parent frame.
+   */
+  protected function pressButtonAndLeaveIframe(string $button): void {
+    $this->getSession()->getPage()->pressButton($button);
+    $this->getSession()->switchToIFrame();
   }
 
   /**
