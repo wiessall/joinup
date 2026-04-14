@@ -11,6 +11,7 @@ use Behat\Mink\Exception\ExpectationException;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\AfterNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\NodeTrait;
@@ -236,9 +237,8 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the node is marked to be pinned but is not associated with a
    *   group.
-   *
-   * @AfterNodeCreate
    */
+  #[AfterNodeCreate]
   public function pinCommunityContentInGroup(AfterNodeCreateScope $scope): void {
     $node = $scope->getEntity();
 
@@ -269,9 +269,8 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    * @param \Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope $scope
    *   The Behat hook scope object containing the metadata of the node that was
    *   created.
-   *
-   * @AfterNodeCreate
    */
+  #[AfterNodeCreate]
   public function afterNodeCreateShare(AfterNodeCreateScope $scope): void {
     $node = $scope->getEntity();
 

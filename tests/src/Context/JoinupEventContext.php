@@ -9,6 +9,7 @@ use Behat\Hook\AfterScenario;
 use Behat\Hook\BeforeScenario;
 use Drupal\Core\Site\Settings;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\joinup\Traits\EntityTrait;
@@ -36,9 +37,8 @@ class JoinupEventContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when an invalid format is specified for the dates.
-   *
-   * @BeforeNodeCreate
    */
+  #[BeforeNodeCreate]
   public static function massageEventFieldsBeforeNodeCreate(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
     if ($node->type !== 'event') {

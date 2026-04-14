@@ -9,6 +9,7 @@ use Behat\Step\When;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\EntityTrait;
@@ -41,9 +42,8 @@ class CustomPageContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when a file being attached is not found.
-   *
-   * @BeforeNodeCreate
    */
+  #[BeforeNodeCreate]
   public static function massageCustomPageFieldsBeforeNodeCreate(BeforeNodeCreateScope $scope): void {
     /** @var \stdClass $node */
     $node = $scope->getEntity();

@@ -19,6 +19,7 @@ use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\User\Entity\User;
 use Drupal\comment\CommentInterface;
@@ -614,9 +615,8 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when a logo could not be uploaded, e.g. because the file could not
    *   be found.
-   *
-   * @BeforeNodeCreate
    */
+  #[BeforeNodeCreate]
   public function massageFieldsBeforeNodeCreate(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
     $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', $node->type);

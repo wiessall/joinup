@@ -12,6 +12,7 @@ use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\EntityTrait;
@@ -463,9 +464,8 @@ class JoinupGroupContext extends RawDrupalContext {
 
   /**
    * Stores settings fields in meta_entity.
-   *
-   * @BeforeNodeCreate
    */
+  #[BeforeNodeCreate]
   public function beforeNodeCreateMetaEntity(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
     if ($node->type === 'collection' || $node->type === 'solution') {

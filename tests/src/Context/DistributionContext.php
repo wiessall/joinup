@@ -11,6 +11,7 @@ use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\file\FileInterface;
 use Drupal\joinup\Traits\EntityReferenceTrait;
@@ -39,9 +40,8 @@ class DistributionContext extends RawDrupalContext {
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $event
    *   The before node create event.
-   *
-   * @BeforeNodeCreate
    */
+  #[BeforeNodeCreate]
   public function beforeNodeCreateDistributionFields(BeforeNodeCreateScope $event): void {
     $node = $event->getEntity();
     if ($node->type !== 'distribution') {

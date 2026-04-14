@@ -11,6 +11,8 @@ use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\AfterNodeCreate;
+use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\EntityReferenceTrait;
@@ -150,9 +152,8 @@ class SolutionContext extends RawDrupalContext {
    * @param \Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope $scope
    *   The Behat hook scope object containing the metadata of the node that was
    *   created.
-   *
-   * @AfterNodeCreate
    */
+  #[AfterNodeCreate]
   public function afterNodeCreateHandlePinning(AfterNodeCreateScope $scope): void {
     $node = $scope->getEntity();
     if ($node->type !== 'solution') {
@@ -350,9 +351,8 @@ class SolutionContext extends RawDrupalContext {
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
    *   The before node create scope.
-   *
-   * @BeforeNodeCreate
    */
+  #[BeforeNodeCreate]
   public function convertSolutionValueAliases(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
     if ($node->type !== 'solution') {
@@ -387,9 +387,8 @@ class SolutionContext extends RawDrupalContext {
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
    *   The before node create scope.
-   *
-   * @BeforeNodeCreate
    */
+  #[BeforeNodeCreate]
   public function ensureSolutionParentCollection(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
     if ($node->type !== 'solution') {

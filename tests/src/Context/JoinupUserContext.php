@@ -16,6 +16,7 @@ use Behat\Step\When;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\BeforeUserCreate;
 use Drupal\DrupalExtension\Hook\Scope\BeforeUserCreateScope;
 use Drupal\DrupalExtension\TagTrait;
 use Drupal\joinup\Traits\AssertTrait;
@@ -159,9 +160,8 @@ class JoinupUserContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when some of the values are not one of the expected ones.
-   *
-   * @BeforeUserCreate
    */
+  #[BeforeUserCreate]
   public static function massageFieldsBeforeUserCreate(BeforeUserCreateScope $scope): void {
     $user = $scope->getEntity();
 

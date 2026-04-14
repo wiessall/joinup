@@ -7,6 +7,7 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Given;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\node\NodeInterface;
 
@@ -88,9 +89,8 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
    *   bar:
    *     0: Baz
    * @encode
-   *
-   * @BeforeNodeCreate
    */
+  #[BeforeNodeCreate]
   public function multilinePrepare(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
 
