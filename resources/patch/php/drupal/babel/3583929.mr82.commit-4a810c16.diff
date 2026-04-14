@@ -2,26 +2,28 @@ diff --git a/.ddev/commands/host/core-version b/.ddev/commands/host/core-version
 old mode 100644
 new mode 100755
 diff --git a/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php b/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php
-index 328dda8eaf962b5e12f48c162a84644a189b014a..0331fc955c0a799d52ce58e17c42968ea7ff2c74 100644
+index 328dda8eaf962b5e12f48c162a84644a189b014a..68386be925f245363ce41bf350606e9bcaa55c20 100644
 --- a/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php
 +++ b/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php
-@@ -195,12 +195,8 @@ class ContentEntity extends TranslationTypePluginBase implements PluginFormInter
+@@ -194,13 +194,9 @@ class ContentEntity extends TranslationTypePluginBase implements PluginFormInter
+     $entityTranslationField->set($delta, $translation ? $newTranslationValue : $untranslatedValue);
  
      // Translation must validate to be saved.
-     if (!$entityTranslation->validate()->count()) {
+-    if (!$entityTranslation->validate()->count()) {
 -      $source = array_intersect_key($entity->toArray(), $translatableFields);
 -      $trans = array_intersect_key($entityTranslation->toArray(), $translatableFields);
 -      if ($source !== $trans) {
 -        $entityTranslation->save();
 -        return;
 -      }
++    if ($entityTranslation->validate()->count() === 0) {
 +      $entityTranslation->save();
 +      return;
      }
      else {
        $message = $entityTranslation->isNewTranslation()
 diff --git a/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php b/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php
-index 9c64177942a5e12847adb23c6a286e2ea953d2de..cc3406a5ecf99b926aae017052ad3e57300b3643 100644
+index 9c64177942a5e12847adb23c6a286e2ea953d2de..fc104c18dfabb14e5cd2d40d25a78b269bf10733 100644
 --- a/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php
 +++ b/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php
 @@ -6,6 +6,8 @@ namespace Drupal\Tests\babel_content_entity\Kernel\Plugin\Babel\TranslationType;
@@ -33,7 +35,33 @@ index 9c64177942a5e12847adb23c6a286e2ea953d2de..cc3406a5ecf99b926aae017052ad3e57
  use Drupal\taxonomy\Entity\Vocabulary;
  use Drupal\taxonomy\TermInterface;
  use Drupal\Tests\babel\Kernel\Plugin\Babel\TranslationType\TranslationTypePluginTestBase;
-@@ -212,7 +214,13 @@ class ContentEntityTest extends TranslationTypePluginTestBase {
+@@ -135,6 +137,25 @@ class ContentEntityTest extends TranslationTypePluginTestBase {
+ 
+     $strings = $this->plugin->getStrings($this->language->getId());
+ 
++    // Add a translation matching the source string.
++    $this->plugin->updateTranslation(
++      $strings['tags:1:name:0'],
++      'tags:1:name:0',
++      $this->language->getId(),
++      'Test term name',
++    );
++    $this->plugin->updateTranslation(
++      $strings['tags:1:description:0'],
++      'tags:1:description:0',
++      $this->language->getId(),
++      'Some description',
++    );
++
++    $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($term->id());
++    $this->assertTrue($term->hasTranslation($this->language->getId()));
++    $this->assertSame('Test term name', $term->getTranslation($this->language->getId())->label());
++    $this->assertSame('Some description', $term->getTranslation($this->language->getId())->getDescription());
++
+     // Add translation.
+     $this->plugin->updateTranslation(
+       $strings['tags:1:name:0'],
+@@ -212,7 +233,13 @@ class ContentEntityTest extends TranslationTypePluginTestBase {
        'langcode' => 'en',
        'description' => [
          'value' => $description,
@@ -42,7 +70,7 @@ index 9c64177942a5e12847adb23c6a286e2ea953d2de..cc3406a5ecf99b926aae017052ad3e57
 +          currentVersion: \Drupal::VERSION,
 +          deprecatedVersion: '11.4.0',
 +          // @phpstan-ignore class.notFound
-+          currentCallable: fn() => \Drupal::service(FilterFormatRepositoryInterface::class),
++          currentCallable: fn() => \Drupal::service(FilterFormatRepositoryInterface::class)->getFallbackFormatId(),
 +          deprecatedCallable: fn() => filter_fallback_format(),
 +        ),
        ],
@@ -170,7 +198,7 @@ index 0000000000000000000000000000000000000000..15fe5bb3e34fc24203f354f8b1ad2a80
 +
 +}
 diff --git a/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php b/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
-index 55c17be7d9b278db1139c0ffcdb7fbf1b911962d..245cc076b3010e45ebb61fba5999cecc556a335b 100644
+index 8e02d26c6a55d91acc9544d647ab9ba74817766a..7749c7c944563d08c1ace50f64f4bae048c0c4ec 100644
 --- a/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
 +++ b/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
 @@ -4,6 +4,7 @@ declare(strict_types=1);
@@ -189,7 +217,7 @@ index 55c17be7d9b278db1139c0ffcdb7fbf1b911962d..245cc076b3010e45ebb61fba5999cecc
    ) {}
  
    /**
-@@ -88,22 +90,16 @@ class BabelTmgmtHooks {
+@@ -115,22 +117,16 @@ class BabelTmgmtHooks {
  
      $storage = $this->entityTypeManager->getStorage('tmgmt_job_item');
  
@@ -219,7 +247,7 @@ index 55c17be7d9b278db1139c0ffcdb7fbf1b911962d..245cc076b3010e45ebb61fba5999cecc
  
        // Remove existing job items in a dead-end state (aborted, in review).
        $jobItemsToDelete = $job->getItems([
-@@ -126,6 +122,7 @@ class BabelTmgmtHooks {
+@@ -153,6 +149,7 @@ class BabelTmgmtHooks {
            ->condition('tjid', $job->id())
            ->condition('plugin', 'babel')
            ->condition('item_type', 'default')
@@ -227,7 +255,7 @@ index 55c17be7d9b278db1139c0ffcdb7fbf1b911962d..245cc076b3010e45ebb61fba5999cecc
            ->execute(),
          'item_id',
        );
-@@ -138,11 +135,6 @@ class BabelTmgmtHooks {
+@@ -165,11 +162,6 @@ class BabelTmgmtHooks {
            'job_id' => $job->id(),
          ]);
        }
@@ -253,6 +281,43 @@ index ccffe777c09750da5142d2438744f9a39b41295f..7bf23dbf93ead8521b257131ae678080
        // A job item has been created in the meantime by another process.
        return;
      }
+diff --git a/modules/babel_tmgmt/tests/src/Kernel/BabelTmgmtIntegrationTest.php b/modules/babel_tmgmt/tests/src/Kernel/BabelTmgmtIntegrationTest.php
+index f0f3eb5b8b93dd18700028db6646cf8cbdce5ea8..ab6f29d786eb638532b744ac3b996516ebf7df09 100644
+--- a/modules/babel_tmgmt/tests/src/Kernel/BabelTmgmtIntegrationTest.php
++++ b/modules/babel_tmgmt/tests/src/Kernel/BabelTmgmtIntegrationTest.php
+@@ -34,6 +34,7 @@ class BabelTmgmtIntegrationTest extends KernelTestBase {
+     'babel',
+     'babel_tmgmt',
+     'field',
++    'filter',
+     'language',
+     'locale',
+     'options',
+@@ -114,7 +115,6 @@ class BabelTmgmtIntegrationTest extends KernelTestBase {
+ 
+     // Locking a service removes the continuous job items.
+     $lockService->lock($testingHash, 'it');
+-    $this->populateAndConsumeQueue();
+     $queriedJobItems = $job->getItems([
+       'plugin' => 'babel',
+       'item_type' => 'default',
+@@ -134,7 +134,6 @@ class BabelTmgmtIntegrationTest extends KernelTestBase {
+ 
+     // Disabling the source string status also removes the continuous job items.
+     $storage->updateStatusForHash($testingHash, FALSE);
+-    $this->populateAndConsumeQueue();
+     $queriedJobItems = $job->getItems([
+       'plugin' => 'babel',
+       'item_type' => 'default',
+@@ -154,7 +153,7 @@ class BabelTmgmtIntegrationTest extends KernelTestBase {
+   }
+ 
+   /**
+-   * Run relevant cron and queue.
++   * Run the relevant cron and queue.
+    */
+   protected function populateAndConsumeQueue(): void {
+     // Populate the queue.
 diff --git a/src/BabelStringsRepository.php b/src/BabelStringsRepository.php
 index 699391c59a655c6bff8a04cbef92a8e9e29a1040..4e1c63fc0eee7d706bbb60e2c0817697147dfad4 100644
 --- a/src/BabelStringsRepository.php

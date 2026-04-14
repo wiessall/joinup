@@ -344,7 +344,7 @@
         "patches": {
             "drupal/babel": {
                 "Babel TMGMT form alter makes form state non-serializable, prevents using Form API batch @see https://drupal.org/i/3583826": "resources/patch/php/drupal/babel/3583826-mr81-commit67cb60ed.diff",
-                "Save translation also when is matching the source @see https://www.drupal.org/i/3583929": "resources/patch/php/drupal/babel/3583929.mr82.commit-cf3bb44e.diff"
+                "Save translation also when is matching the source @see https://www.drupal.org/i/3583929": "resources/patch/php/drupal/babel/3583929.mr82.commit-4a810c16.diff"
             },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff",
