@@ -1963,8 +1963,8 @@ class FeatureContext extends RawDrupalContext {
   public function disableCookieConsent(): void {
     $config_context = $this->getContext(ConfigContext::class);
     $name = 'oe_webtools_cookie_consent.settings';
-    $config_context->setConfig($name, 'banner_popup', FALSE);
-    $config_context->setConfig($name, 'video_popup', FALSE);
+    $config_context->setTypedConfig($name, 'banner_popup', json_encode(FALSE));
+    $config_context->setTypedConfig($name, 'video_popup', json_encode(FALSE));
   }
 
   /**
