@@ -77,11 +77,11 @@ Feature:
     And the site should not have log records with level lower than "notice" for "php" errors
     And I should see the following headings:
       | Super Awesome Software |
+      | Detailed information   |
+      | Gallery                |
       | Description            |
       | Features               |
       | Intended audience      |
-      | Detailed information   |
-      | Gallery                |
     And I should see the following lines of text:
       | Source catalogue                                                                                 |
       | The short description                                                                            |
