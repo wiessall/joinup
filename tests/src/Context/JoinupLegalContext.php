@@ -67,7 +67,7 @@ class JoinupLegalContext extends RawDrupalContext {
       }
 
       foreach (['document_name', 'label', 'acceptance_label'] as $required) {
-        if (!isset($required)) {
+        if (!isset($values[$required])) {
           throw new \Exception("Missing column " . array_flip(static::ALIASES)[$required] . "''.");
         }
       }
