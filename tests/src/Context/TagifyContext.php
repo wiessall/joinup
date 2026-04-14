@@ -195,10 +195,7 @@ class TagifyContext extends RawDrupalContext {
     foreach ($table->getRows() as $row) {
       $option = reset($row);
       $tagifyInput->setValue($option);
-      $dropdownItem = $this->waitForElementVisible('css', '.tagify__dropdown__item:contains("' . $option . '")');
-      if (empty($dropdownItem)) {
-        throw new \Exception('Option "' . $option . '" not found');
-      }
+      $this->waitForElementVisible('css', '.tagify__dropdown__item:contains("' . $option . '")');
     }
   }
 
@@ -220,10 +217,7 @@ class TagifyContext extends RawDrupalContext {
     }
     $tagifyInput = $this->getTagifyInput($fieldName);
     $tagifyInput->setValue($option);
-    $dropdownItem = $this->waitForElementVisible('css', '.tagify--dropdown-item-no-match:contains("' . $option . '")');
-    if (empty($dropdownItem)) {
-      throw new \Exception('Option "' . $option . '" found');
-    }
+    $this->waitForElementVisible('css', '.tagify--dropdown-item-no-match:contains("' . $option . '")');
   }
 
   /**
