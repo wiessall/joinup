@@ -189,7 +189,6 @@
         "mikey179/vfsstream": "~1.6",
         "ml/json-ld": "^1.2",
         "nicwortel/behat-unused-step-definitions-extension": "^1.2",
-        "palantirnet/drupal-rector": "^0.20.1",
         "phpro/grumphp-shim": "2.17",
         "phpspec/prophecy-phpunit": "^2",
         "phpstan/extension-installer": "^1.3",
