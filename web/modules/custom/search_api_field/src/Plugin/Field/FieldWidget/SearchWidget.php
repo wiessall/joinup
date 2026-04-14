@@ -492,6 +492,10 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
     // Create a name suffix from the parents to make sure each submit is unique.
     $id_suffix = $parents ? '_' . implode('_', $parents) : '';
     foreach ($filters as $plugin_delta => $plugin_config) {
+      if (!is_array($plugin_config) || empty($plugin_config['plugin'])) {
+        continue;
+      }
+
       /** @var \Drupal\search_api_field\Plugin\FilterPluginInterface $plugin */
       $plugin = $this->filterPluginManager->createInstance($plugin_config['plugin'], $plugin_config);
 
@@ -918,7 +922,10 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
 
     $processed_filters = [];
     foreach (array_keys($filter_values) as $plugin_delta) {
-      $plugin_config = $field_state['query_builder'][$delta]['filters'][$plugin_delta];
+      $plugin_config = $field_state['query_builder'][$delta]['filters'][$plugin_delta] ?? NULL;
+      if (!is_array($plugin_config) || empty($plugin_config['plugin'])) {
+        continue;
+      }
 
       /** @var \Drupal\search_api_field\Plugin\FilterPluginInterface $plugin */
       $plugin = $this->filterPluginManager->createInstance($plugin_config['plugin'], $plugin_config);
