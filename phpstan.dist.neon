@@ -1,14 +1,13 @@
 parameters:
     level: 1
-    customRulesetUsed: true
-    reportUnmatchedIgnoredErrors: false
+    treatPhpDocTypesAsCertain: false
     drupal:
         entityMapping:
             og_membership:
                 class: Drupal\og\Entity\OgMembership
                 storage: Drupal\Core\Entity\Sql\SqlContentEntityStorage
     ignoreErrors:
-       # As an exception, we allow extending these classes.
+        # As an exception, we allow extending these classes.
         - '#Class Drupal\\joinup_group\\Form\\UserCancelForm extends @internal class Drupal\\user\\Form\\UserCancelForm.#'
         - '#Class Drupal\\joinup_group\\Form\\UserMultipleCancelConfirm extends @internal class Drupal\\user\\Form\\UserMultipleCancelConfirm.#'
         - '#Class Drupal\\joinup_media\\JoinupMediaLibrary extends @internal class Drupal\\ckeditor5\\Plugin\\CKEditor5Plugin\\MediaLibrary.#'
@@ -21,7 +20,3 @@ parameters:
         - web/modules/custom/joinup_test/modules/joinup_test_time/src/Datetime/TestTime.php
         - web/modules/custom/joinup_test/src/Plugin/ServiceMock/GitHubCom.php
         - web/modules/custom/joinup_stats/src/Event/Subscriber/RefreshCachedFieldsEventSubscriber.php
-        - web/sites/default/default.settings.php
-
-    scanFiles:
-        - web/modules/contrib/og/src/OgMembershipInterface.php
