@@ -45,6 +45,7 @@ dependencies:
     - node.type.oss_solution
   module:
     - custom_markup_block
+    - eu_oss_catalogue
     - joinup_layout
     - layout_builder
     - layout_discovery
@@ -446,10 +447,11 @@ third_party_settings:
             weight: 1
             additional: {  }
         third_party_settings: {  }
-      - layout_id: layout_onecol
+      -
+        layout_id: layout_onecol
         layout_settings:
           label: 'Detailed information section label'
-          context_mapping: { }
+          context_mapping: {  }
         components:
           2014ec0e-5c65-4cc8-b778-aa44b0c417d9:
             uuid: 2014ec0e-5c65-4cc8-b778-aa44b0c417d9
@@ -459,17 +461,18 @@ third_party_settings:
               label: 'Detailed information section label'
               label_display: '0'
               provider: custom_markup_block
-              context_mapping: { }
+              context_mapping: {  }
               markup:
                 value: "<h2>Detailed information</h2>\r\n"
                 format: content_editor
             weight: 0
-            additional: { }
-        third_party_settings: { }
-      - layout_id: joinup_layout_four_column_grid
+            additional: {  }
+        third_party_settings: {  }
+      -
+        layout_id: joinup_layout_four_column_grid
         layout_settings:
           label: 'Detailed information'
-          context_mapping: { }
+          context_mapping: {  }
         components:
           bccc0ab9-3d36-4077-a0f9-411649036a9b:
             uuid: bccc0ab9-3d36-4077-a0f9-411649036a9b
@@ -492,7 +495,7 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 0
-            additional: { }
+            additional: {  }
           7f00d028-88a5-45b8-bb95-c11da435813b:
             uuid: 7f00d028-88a5-45b8-bb95-c11da435813b
             region: content
@@ -507,12 +510,12 @@ third_party_settings:
               formatter:
                 type: list_default
                 label: above
-                settings: { }
+                settings: {  }
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 2
-            additional: { }
+            additional: {  }
           309f6ae9-ca44-497b-8bba-fe5dec465201:
             uuid: 309f6ae9-ca44-497b-8bba-fe5dec465201
             region: content
@@ -533,7 +536,7 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 3
-            additional: { }
+            additional: {  }
           9b64ad87-97d9-45b6-8a93-3c59d8073f83:
             uuid: 9b64ad87-97d9-45b6-8a93-3c59d8073f83
             region: content
@@ -563,7 +566,7 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 4
-            additional: { }
+            additional: {  }
           4ebe0f3e-b36f-49e8-9108-74f9a80e9d3f:
             uuid: 4ebe0f3e-b36f-49e8-9108-74f9a80e9d3f
             region: content
@@ -578,12 +581,12 @@ third_party_settings:
               formatter:
                 type: list_default
                 label: above
-                settings: { }
+                settings: {  }
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 5
-            additional: { }
+            additional: {  }
           838bf83b-44d2-4a77-a40b-4cae3b31236e:
             uuid: 838bf83b-44d2-4a77-a40b-4cae3b31236e
             region: content
@@ -601,9 +604,9 @@ third_party_settings:
                 settings:
                   link: false
                   tooltip_text: '[term:description]'
-                third_party_settings: { }
+                third_party_settings: {  }
             weight: 6
-            additional: { }
+            additional: {  }
           0d2a18ed-d3bf-4cf5-bcce-bc96c04faa71:
             uuid: 0d2a18ed-d3bf-4cf5-bcce-bc96c04faa71
             region: content
@@ -633,7 +636,7 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 7
-            additional: { }
+            additional: {  }
           af8e91d0-3383-449b-be1a-91f0ba9eb394:
             uuid: af8e91d0-3383-449b-be1a-91f0ba9eb394
             region: content
@@ -660,7 +663,7 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 8
-            additional: { }
+            additional: {  }
           31cfd476-9b72-4c45-8678-61e6a057ec17:
             uuid: 31cfd476-9b72-4c45-8678-61e6a057ec17
             region: content
@@ -687,7 +690,7 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 9
-            additional: { }
+            additional: {  }
           d955f088-9c59-4966-97f2-99b2f1e429f5:
             uuid: d955f088-9c59-4966-97f2-99b2f1e429f5
             region: content
@@ -717,7 +720,7 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 1
-            additional: { }
+            additional: {  }
           95d14214-a271-458c-a71f-c1f434363833:
             uuid: 95d14214-a271-458c-a71f-c1f434363833
             region: content
@@ -741,7 +744,7 @@ third_party_settings:
                     modal_view_mode: modal
                   fallback_field_id: oss_validation_status
                   fallback_field_formatter_id: list_default
-                  fallback_field_formatter_settings: { }
+                  fallback_field_formatter_settings: {  }
                   reset_theme: false
                 third_party_settings:
                   field_delimiter:
@@ -756,8 +759,8 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 10
-            additional: { }
-        third_party_settings: { }
+            additional: {  }
+        third_party_settings: {  }
       -
         layout_id: layout_onecol
         layout_settings:
