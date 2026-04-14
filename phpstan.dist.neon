@@ -15,6 +15,8 @@ parameters:
         - '#Class Drupal\\joinup_media\\JoinupMediaLibrary extends @internal class Drupal\\ckeditor5\\Plugin\\CKEditor5Plugin\\MediaLibrary.#'
         # new static() is a best practice in Drupal, so we cannot fix that.
         - '#^Unsafe usage of new static#'
+        # Behat contexts are instantiated by Behat, not Drupal's container, so DI does not apply.
+        - identifier: globalDrupalDependencyInjection.useDependencyInjection
+          path: tests/src/Context/*
     excludePaths:
-        - tests/src/*
         - web/modules/custom/joinup_stats/src/Event/Subscriber/RefreshCachedFieldsEventSubscriber.php
