@@ -130,6 +130,7 @@ The module currently supports the following providers:
 - **Developer Overheid** (NL) - Dutch National OSS Catalogue
 - **Avoinkoodi.fi** (FI) - Finnish OSS Catalogue
 - **Department of Information Technology Services** (CY) - Cyprus national department promoting open-source solutions for public sector IT
+- **ARTE** (PT) - Portuguese Agency for the Technological Reform of the State, promoting administrative modernization and digital transformation
 
 - Developers Italia: Italian National OSS Catalogue,
 by https://developers.italia.it website
@@ -343,6 +344,12 @@ Run the following, to fetch from
 [Department of Information Technology Services (Cyprus)](https://www.gov.cy/dmrid-dits/)
 ```bash
 ./vendor/bin/drush eu-oss:fetch hosting_platform:dmrid_dits
+```
+
+Run the following, to fetch from
+[ARTE (Portuguese Agency for the Technological Reform of the State)](https://www.arte.gov.pt)
+```bash
+./vendor/bin/drush eu-oss:fetch hosting_platform:arte
 ```
 
 Run the following, to fetch from Other (custom solutions not part of any catalogue):
