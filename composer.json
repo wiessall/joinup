@@ -491,9 +491,6 @@
             "drupal/page_manager": {
                 "Some mandatory parameters are missing to generate a URL for route 'entity.page.devel_load' @see https://www.drupal.org/i/3438993": "resources/patch/php/drupal/page_manager/3438993.diff"
             },
-            "drupal/paragraphs": {
-                "File entity references incorrectly shared across cloned paragraph instances. @see https://www.drupal.org/i/3079729": "resources/patch/php/drupal/paragraphs/3079729.mr214-commit56372ecc.diff"
-            },
             "drupal/private_message": {
                 "Missing langcode in private_message.settings @see https://www.drupal.org/i/3542616": "resources/patch/php/drupal/private_message/3542616.diff",
                 "Drupal 11 deprecation: Renderer::render(NULL) @see https://www.drupal.org/i/3565601": "resources/patch/php/drupal/private_message/3565601.mr210-commit4be8b7a9.diff"
@@ -507,7 +504,8 @@
                 "Configure namaspaces @see https://www.drupal.org/i/3560781": "resources/patch/php/drupal/rdf_sync/3560781.mr44-note633150.diff",
                 "View support @see https://www.drupal.org/project/i/3473743": "resources/patch/php/drupal/rdf_sync/3560781.mr45-commitf08c1b33.diff",
                 "Add support for deriver in RdfUriGenerator @see https://www.drupal.org/project/rdf_sync/issues/3567259": "resources/patch/php/drupal/rdf_sync/3567259.diff",
-                "Incorrect type hint in rdf_sync_entity_bundle_field_info() hook implementation - https://www.drupal.org/i/3529979": "resources/patch/php/drupal/rdf_sync/3529979-mr39-commit307d5e52.diff"
+                "Incorrect type hint in rdf_sync_entity_bundle_field_info() hook implementation - https://www.drupal.org/i/3529979": "resources/patch/php/drupal/rdf_sync/3529979-mr39-commit307d5e52.diff",
+                "Integrity constraint violation when duplicating an entity with an RDF URI - https://www.drupal.org/project/rdf_sync/issues/3582431": "resources/patch/php/drupal/rdf_sync/3582431.mr49-commit61a13f12.diff"
             },
             "drupal/search_api": {
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199-42e0e284.diff",
