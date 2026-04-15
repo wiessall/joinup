@@ -25,17 +25,25 @@ dependencies:
     - svg_image
     - template_suggestion
     - user
+    - user_achievement
 id: user.user.group_header
 targetEntityType: user
 bundle: user
 mode: group_header
 content:
+  achievements:
+    type: user_achievements
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
   blocked_reason:
     type: list_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 2
+    weight: 3
     region: content
   field_social_media:
     type: social_media_links_field_default
@@ -81,7 +89,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
-    weight: 1
+    weight: 2
     region: content
   field_user_first_name:
     type: string
@@ -91,7 +99,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
-    weight: 0
+    weight: 1
     region: content
   field_user_nationality:
     type: entity_reference_label
@@ -101,7 +109,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 4
+    weight: 5
     region: content
   field_user_organisation:
     type: string
@@ -126,7 +134,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
-    weight: 3
+    weight: 4
     region: content
   field_user_professional_domain:
     type: entity_reference_label
