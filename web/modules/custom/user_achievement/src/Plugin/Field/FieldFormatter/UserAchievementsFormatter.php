@@ -109,6 +109,9 @@ class UserAchievementsFormatter extends FormatterBase implements ContainerFactor
       '#theme' => 'item_list',
       '#items' => [],
       '#attributes' => ['class' => ['user-achievements']],
+      '#attached' => [
+        'library' => ['ventuno/user-achievement'],
+      ],
     ];
 
     foreach ($achievements as $achievement) {
