@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_achievement;
 
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\flag\FlagServiceInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -12,6 +13,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  * Awards and revokes flag-backed achievements on user entities.
  */
 class AchievementService implements AchievementServiceInterface {
+
+  use AutowireTrait;
 
   /**
    * Constructs an AchievementService object.
