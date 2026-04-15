@@ -15,6 +15,7 @@ dependencies:
     - field.field.user.user.field_user_organisation
     - field.field.user.user.field_user_photo
     - field.field.user.user.field_user_professional_domain
+    - field.field.user.user.field_user_work_location
     - image.style.thumbnail
   module:
     - entity_form_field_label
@@ -42,13 +43,13 @@ content:
     third_party_settings: {  }
   field_social_media:
     type: social_media_links_field_default
-    weight: 12
+    weight: 13
     region: content
     settings: {  }
     third_party_settings: {  }
   field_user_business_title:
     type: string_textfield
-    weight: 8
+    weight: 9
     region: content
     settings:
       size: 60
@@ -56,7 +57,7 @@ content:
     third_party_settings: {  }
   field_user_content:
     type: search_api_field_default
-    weight: 10
+    weight: 11
     region: content
     settings:
       query_builder: false
@@ -105,7 +106,7 @@ content:
         rewrite_description: 0
   field_user_organisation:
     type: string_textfield
-    weight: 9
+    weight: 10
     region: content
     settings:
       size: 60
@@ -121,7 +122,7 @@ content:
     third_party_settings: {  }
   field_user_professional_domain:
     type: tagify_entity_reference_autocomplete_widget
-    weight: 7
+    weight: 8
     region: content
     settings:
       match_operator: CONTAINS
@@ -133,6 +134,17 @@ content:
       info_label: ''
       parent_selection: 0
     third_party_settings: {  }
+  field_user_work_location:
+    type: tagify_select_widget
+    weight: 7
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      placeholder: ''
+      show_entity_id: 0
+      parent_selection: 1
+    third_party_settings: {  }
   legal_legal_notice:
     weight: -4
     region: content
@@ -140,7 +152,7 @@ content:
     third_party_settings: {  }
   path:
     type: path
-    weight: 11
+    weight: 12
     region: content
     settings: {  }
     third_party_settings: {  }

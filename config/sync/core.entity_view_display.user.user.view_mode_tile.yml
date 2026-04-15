@@ -16,6 +16,7 @@ dependencies:
     - field.field.user.user.field_user_organisation
     - field.field.user.user.field_user_photo
     - field.field.user.user.field_user_professional_domain
+    - field.field.user.user.field_user_work_location
     - responsive_image.styles.tile
   module:
     - smart_trim
@@ -103,6 +104,7 @@ hidden:
   field_user_frequency: true
   field_user_organisation: true
   field_user_professional_domain: true
+  field_user_work_location: true
   langcode: true
   linked_username: true
   masquerade: true
