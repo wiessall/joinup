@@ -69,8 +69,6 @@ content:
       match_operator: CONTAINS
       match_limit: 10
       placeholder: ''
-      show_entity_id: 0
-      parent_selection: 1
     third_party_settings: {  }
   field_user_family_name:
     type: string_textfield
