@@ -1,0 +1,7 @@
+services:
+  user_achievement.commands:
+    class: Drupal\user_achievement\Commands\UserAchievementCommands
+    arguments:
+      - '@entity_type.manager'
+    tags:
+      - { name: drush.command }

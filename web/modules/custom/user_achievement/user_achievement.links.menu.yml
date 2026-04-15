@@ -1,0 +1,13 @@
+user_achievement.admin_config_people:
+  title: 'Achievements'
+  description: 'Manage achievement allocations and badge types.'
+  parent: user.admin_index
+  route_name: entity.user_achievement.collection
+  weight: 10
+
+user_achievement.admin_config_people.types:
+  title: 'Achievement types'
+  description: 'Manage badge types (title, description and icon).'
+  parent: user_achievement.admin_config_people
+  route_name: entity.achievement_type.collection
+  weight: 5
