@@ -101,7 +101,7 @@ function joinup_i18n_search_api_query_alter(QueryInterface $query): void {
 
     $conditions = &$item->getConditions();
 
-    foreach ($conditions as $key => &$condition) {
+    foreach ($conditions as $key => $condition) {
       if ($condition->getField() !== 'language_with_fallback') {
         continue;
       }
