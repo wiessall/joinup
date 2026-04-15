@@ -1,0 +1,11 @@
+user_achievement.collection.tab:
+  title: 'Achievements'
+  route_name: entity.user_achievement.collection
+  base_route: entity.user_achievement.collection
+  weight: 0
+
+user_achievement.types.tab:
+  title: 'Achievement types'
+  route_name: entity.achievement_type.collection
+  base_route: entity.user_achievement.collection
+  weight: 5

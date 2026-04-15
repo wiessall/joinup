@@ -1,0 +1,27 @@
+{#
+/**
+ * @file
+ * Default theme implementation for an Achievement entity.
+ *
+ * Available variables:
+ * - icon_id: The Ventuno sprite icon ID (e.g. "award", "patch-check").
+ * - label: The human-readable achievement type name.
+ * - description: The tooltip description for this badge.
+ * - attributes: HTML attributes for the containing element.
+ * - bcl_icon_path: Path to the Ventuno SVG sprite file (set globally by the
+ *   theme's hook_preprocess()).
+ *
+ * @see template_preprocess_user_achievement()
+ *
+ * @ingroup themeable
+ */
+#}
+
+<span{{ attributes.addClass('user-achievement') }} title="{{ description }}">
+  {% if icon_id %}
+    <svg class="bi icon--s" aria-hidden="true" focusable="false">
+      <use xlink:href="{{ bcl_icon_path }}#{{ icon_id }}"></use>
+    </svg>
+  {% endif %}
+  <span class="user-achievement__label visually-hidden">{{ label }}</span>
+</span>
