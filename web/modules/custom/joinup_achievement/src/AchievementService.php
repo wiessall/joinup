@@ -6,6 +6,7 @@ namespace Drupal\joinup_achievement;
 
 use Drupal\flag\FlagServiceInterface;
 use Drupal\user\UserInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Awards and revokes flag-backed achievements on user entities.
@@ -16,6 +17,7 @@ class AchievementService implements AchievementServiceInterface {
    * Constructs an AchievementService object.
    */
   public function __construct(
+    #[Autowire(service: 'flag')]
     protected readonly FlagServiceInterface $flagService,
   ) {}
 
