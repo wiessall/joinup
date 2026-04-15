@@ -1,0 +1,104 @@
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 6314981f343cad9f693c78160586318e58271082..0c56a86a2075d86a499c8b39791ac0dd4db1253e 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -32,8 +32,13 @@ phpunit:
+     - name: tenforce/virtuoso
+       alias: virtuoso
+ 
++phpunit (max PHP version):
++  allow_failure: false
+ phpunit (next minor):
+   services: !reference [phpunit, services]
++  allow_failure: false
++phpunit (previous major):
++  allow_failure: false
+ 
+ cspell:
+   allow_failure: false
+diff --git a/src/RdfSyncMapperInterface.php b/src/RdfSyncMapperInterface.php
+index ddddef87117997a738c3f550127e65cd647b3bbc..ff2e1c7fe48afdfd47c1c5436244d855bf42425f 100644
+--- a/src/RdfSyncMapperInterface.php
++++ b/src/RdfSyncMapperInterface.php
+@@ -103,7 +103,7 @@ interface RdfSyncMapperInterface {
+    * @param string $bundle
+    *   The bundle.
+    *
+-   * @return array|null
++   * @return string|null
+    *   The bundle RDF URI plugin ID.
+    */
+   public function getRdfUriPluginId(string $entityTypeId, string $bundle): ?string;
+diff --git a/src/RdfSyncUriFieldItemList.php b/src/RdfSyncUriFieldItemList.php
+index 644a020949020ba2d95c87547f6aa49ca6c154f0..b61263ab40a33312061aff915915945f261f3b87 100644
+--- a/src/RdfSyncUriFieldItemList.php
++++ b/src/RdfSyncUriFieldItemList.php
+@@ -83,11 +83,14 @@ class RdfSyncUriFieldItemList extends FieldItemList {
+     // The following empty check allows the URI to be set manually during the
+     // entity creation process.
+     if (empty($this->list)) {
++      $manager = \Drupal::service('plugin.manager.rdf_sync.uri_generator');
++
+       // No entity ID has been explicitly set in creation. Use the URI
+       // generator plugin to create a URI.
+       $pluginId = \Drupal::service('rdf_sync.mapper')->getRdfUriPluginId($entity->getEntityTypeId(), $entity->bundle());
+-      /** @var \Drupal\rdf_sync\RdfUriGeneratorPluginInterface $plugin */
+-      $plugin = \Drupal::getContainer()->get('plugin.manager.rdf_sync.uri_generator')->createInstance($pluginId);
++      $pluginId ??= $manager->getFallbackPluginId($pluginId);
++      $plugin = $manager->createInstance($pluginId);
++      assert($plugin instanceof RdfUriGeneratorPluginInterface);
+       $uri = $plugin->setEntity($entity)->generate();
+       // Set the value in case it is needed immediately i.e. database operations
+       // before the transaction is committed.
+diff --git a/tests/src/Functional/RdfFieldConfigFormTest.php b/tests/src/Functional/RdfFieldConfigFormTest.php
+index 2269bb9b7a30a0d76ae2421470d3efd5751867b4..9e1cd7852fd95e3318d9a6ae21d11c1e26000f18 100644
+--- a/tests/src/Functional/RdfFieldConfigFormTest.php
++++ b/tests/src/Functional/RdfFieldConfigFormTest.php
+@@ -67,8 +67,6 @@ class RdfFieldConfigFormTest extends BrowserTestBase {
+     $data = [
+       'rdf_sync[value][predicate]' => 'https://data.org/value',
+       'rdf_sync[value][type]' => 'resource',
+-      'rdf_sync[summary][predicate]' => 'https://data.org/summary',
+-      'rdf_sync[summary][type]' => 'xsd:string',
+       'rdf_sync[format][predicate]' => 'https://data.org/format',
+       'rdf_sync[format][type]' => 'xsd:string',
+     ];
+diff --git a/tests/src/Functional/RdfSyncRestIntegrationTest.php b/tests/src/Functional/RdfSyncRestIntegrationTest.php
+index 22256f9be00ebd38be33be774f7a5e59457ae934..e86501f263d77141cafb7dac89e4f4d34ee02e41 100644
+--- a/tests/src/Functional/RdfSyncRestIntegrationTest.php
++++ b/tests/src/Functional/RdfSyncRestIntegrationTest.php
+@@ -4,6 +4,7 @@ declare(strict_types=1);
+ 
+ namespace Drupal\Tests\rdf_sync\Functional;
+ 
++use Drupal\Component\Utility\DeprecationHelper;
+ use Drupal\Core\Url;
+ use Drupal\Tests\BrowserTestBase;
+ use Drupal\Tests\rdf_sync\Traits\RdfSyncTestingDataTrait;
+@@ -69,17 +70,24 @@ class RdfSyncRestIntegrationTest extends BrowserTestBase {
+     $this->drupalGet($node->toUrl()->setOption('query', ['_format' => $format]));
+     $this->assertSession()->statusCodeEquals(200);
+ 
++    $expected_content_type = DeprecationHelper::backwardsCompatibleCall(
++      currentVersion: \Drupal::VERSION,
++      deprecatedVersion: '11.4',
++      currentCallable: fn(): string => 'text/plain; charset=utf-8',
++      deprecatedCallable: fn(): string => 'text/plain; charset=UTF-8',
++    );
++
+     // Test unmapped node bundle route, assert 406 Not Acceptable response.
+     $node = $this->drupalCreateNode(['type' => 'article']);
+     $this->drupalGet($node->toUrl()->setOption('query', ['_format' => $format]));
+     $this->assertSession()->statusCodeEquals(406);
+-    $this->assertSession()->responseHeaderEquals('Content-Type', 'text/plain; charset=UTF-8');
++    $this->assertSession()->responseHeaderEquals('Content-Type', $expected_content_type);
+ 
+     // Test non-resource route, assert 404 response.
+     /* @see \Drupal\serialization\EventSubscriber\UserRouteAlterSubscriber::onRoutingAlterAddFormats */
+     $this->drupalGet(Url::fromRoute('user.login_status.http')->setOption('query', ['_format' => $format]));
+     $this->assertSession()->statusCodeEquals(404);
+-    $this->assertSession()->responseHeaderEquals('Content-Type', 'text/plain; charset=UTF-8');
++    $this->assertSession()->responseHeaderEquals('Content-Type', $expected_content_type);
+   }
+ 
+   /**
