@@ -1,0 +1,15 @@
+uuid: fd33fa95-1305-477d-9eee-1d68bb3c21cd
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.iec_member
+  module:
+    - flag
+id: flag_action.iec_member_flag
+label: 'Flag this item'
+type: user
+plugin: 'flag_action:iec_member_flag'
+configuration:
+  flag_id: iec_member
+  flag_action: flag

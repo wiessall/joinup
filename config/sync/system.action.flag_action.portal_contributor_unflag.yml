@@ -1,0 +1,15 @@
+uuid: dfaa6439-1289-4e4c-8e23-539668daa75d
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.portal_contributor
+  module:
+    - flag
+id: flag_action.portal_contributor_unflag
+label: 'Unflag this item'
+type: user
+plugin: 'flag_action:portal_contributor_unflag'
+configuration:
+  flag_id: portal_contributor
+  flag_action: unflag

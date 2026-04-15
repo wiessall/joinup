@@ -1,8 +1,0 @@
-uuid: acd311ca-b168-4bcc-b0e3-66c9775e28e2
-langcode: en
-status: true
-dependencies: {  }
-id: iec_member
-label: 'Interoperable Europe Community member'
-description: 'This user is a member of the Interoperable Europe Community'
-icon: check-circle

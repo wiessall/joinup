@@ -1,5 +1,8 @@
 services:
-  joinup_achievement.achievement_service:
+
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  Drupal\joinup_achievement\AchievementServiceInterface:
     class: Drupal\joinup_achievement\AchievementService
-    arguments:
-      - '@flag'

@@ -25,18 +25,18 @@ dependencies:
     - svg_image
     - template_suggestion
     - user
-    - user_achievement
 id: user.user.group_header
 targetEntityType: user
 bundle: user
 mode: group_header
 content:
   achievements:
-    type: user_achievements
-    label: hidden
-    settings: {  }
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
     third_party_settings: {  }
-    weight: 0
+    weight: 11
     region: content
   blocked_reason:
     type: list_default

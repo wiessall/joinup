@@ -1,0 +1,15 @@
+uuid: e198098b-fdf7-43ee-aea0-208d193d91b0
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.iec_member
+  module:
+    - flag
+id: flag_action.iec_member_unflag
+label: 'Unflag this item'
+type: user
+plugin: 'flag_action:iec_member_unflag'
+configuration:
+  flag_id: iec_member
+  flag_action: unflag

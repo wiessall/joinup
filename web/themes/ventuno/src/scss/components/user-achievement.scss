@@ -1,0 +1,29 @@
+@import "../partials/core";
+
+.achievement-badges {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  vertical-align: middle;
+}
+
+.user-achievements {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.user-achievement {
+  display: inline-flex;
+  align-items: center;
+  color: $light;
+  opacity: 0.9;
+  cursor: default;
+
+  &:hover {
+    opacity: 1;
+  }
+}
