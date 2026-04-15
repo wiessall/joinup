@@ -1,0 +1,5 @@
+services:
+  joinup_achievement.achievement_service:
+    class: Drupal\joinup_achievement\AchievementService
+    arguments:
+      - '@flag'

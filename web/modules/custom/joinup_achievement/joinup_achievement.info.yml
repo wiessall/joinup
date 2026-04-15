@@ -1,0 +1,9 @@
+name: 'Joinup Achievement'
+type: module
+description: 'Provides achievement badges via the flag module, recognising user engagement on the Portal.'
+package: Joinup
+core_version_requirement: ^10 || ^11
+
+dependencies:
+  - drupal:user
+  - flag:flag
