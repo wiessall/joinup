@@ -23,6 +23,7 @@ use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\User\Entity\User;
 use Drupal\comment\CommentInterface;
 use Drupal\comment\Entity\Comment;
+use Drupal\file_visibility\FileVisibilityInterface;
 use Drupal\joinup\Traits\BootstrapTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
@@ -2899,6 +2900,14 @@ class JoinupContext extends RawDrupalContext {
 
     // Also, clean the media click counter.
     \Drupal::state()->delete('image_library_widget.clicks');
+
+    // FileVisibility::$entities queues entity objects for end-of-request
+    // processing, which never fires in Behat. The queue grows indefinitely
+    // across scenarios, so discard it here. File visibility is covered in
+    // PHPUnit, not Behat, so dropping the queue has no impact here.
+    $service = \Drupal::service(FileVisibilityInterface::class);
+    $prop = new \ReflectionProperty($service, 'entities');
+    $prop->setValue($service, []);
   }
 
   /**
