@@ -275,11 +275,12 @@ Feature: Assessment Report Entity Management
 
   Scenario: Entity browser exposed filters: name, domain and interoperable filters
     Given solution content:
-      | title              | state     | domain           | interoperable |
-      | Alpha Framework    | published | Defense          | yes           |
-      | Beta Platform      | published | Economic affairs |               |
-      | Gamma Service      | published | Defense          | yes           |
-      | Delta Application  | published | Economic affairs |               |
+      | title              | state     | domain           | interoperable | description                             |
+      | Alpha Framework    | published | Defense          | yes           | A robust integration tool               |
+      | Beta Platform      | published | Economic affairs |               | A platform for data exchange             |
+      | Gamma Service      | published | Defense          | yes           | Service for robust identity verification |
+      | Delta Application  | published | Economic affairs |               | Application for document management      |
+      | Robust Engine      | published | Defense          |               | A simple computation engine              |
 
     Given I am logged in as an "authenticated user"
     And I go to "/collection/assessments/report/create"
@@ -291,6 +292,7 @@ Feature: Assessment Report Entity Management
     And I should see "Beta Platform"
     And I should see "Gamma Service"
     And I should see "Delta Application"
+    And I should see "Robust Engine"
 
     When I fill in "Name" with "Alpha"
     And I press "Search"
@@ -299,6 +301,16 @@ Feature: Assessment Report Entity Management
     And I should not see "Beta Platform"
     And I should not see "Gamma Service"
     And I should not see "Delta Application"
+    And I should not see "Robust Engine"
+
+    When I fill in "Name" with "robust"
+    And I press "Search"
+    And I wait for AJAX to finish
+    Then I should see "Alpha Framework"
+    And I should not see "Beta Platform"
+    And I should see "Gamma Service"
+    And I should not see "Delta Application"
+    And I should see "Robust Engine"
 
     When I fill in "Name" with ""
     And I select "Defense" from "Domain"
@@ -306,6 +318,7 @@ Feature: Assessment Report Entity Management
     And I wait for AJAX to finish
     Then I should see "Alpha Framework"
     And I should see "Gamma Service"
+    And I should see "Robust Engine"
     And I should not see "Beta Platform"
     And I should not see "Delta Application"
     And the "Domain" field should contain the "- Any domain -" option
@@ -318,8 +331,8 @@ Feature: Assessment Report Entity Management
     And I should see "Gamma Service"
     And I should not see "Beta Platform"
     And I should not see "Delta Application"
+    And I should not see "Robust Engine"
 
-    # Uncheck interoperable to show all solutions again.
     When I uncheck "Interoperable Europe solutions"
     And I press "Search"
     And I wait for AJAX to finish
@@ -327,6 +340,7 @@ Feature: Assessment Report Entity Management
     And I should see "Beta Platform"
     And I should see "Gamma Service"
     And I should see "Delta Application"
+    And I should see "Robust Engine"
 
   Scenario: Entity browser: add existing asset, create new asset, and remove asset
     Given solution content:
