@@ -595,7 +595,6 @@ display:
           bypass_access: false
           skip_access: false
           preserve_facet_query_args: false
-          query_comment: ''
       relationships: {  }
       use_ajax: true
       header: {  }
