@@ -111,6 +111,7 @@ hidden:
   field_user_country_of_residence: true
   field_user_frequency: true
   function_of_administration: true
+  joinup_achievements: true
   langcode: true
   linked_username: true
   masquerade: true
