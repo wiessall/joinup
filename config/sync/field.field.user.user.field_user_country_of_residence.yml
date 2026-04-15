@@ -1,0 +1,30 @@
+uuid: 8db42e27-d19f-437e-8bbe-4fdcda676921
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_user_country_of_residence
+  module:
+    - tmgmt_content
+    - user
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: user.user.field_user_country_of_residence
+field_name: field_user_country_of_residence
+entity_type: user
+bundle: user
+label: 'Country of residence'
+description: 'Please select your country of residence'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: countries
+      display_name: entity_reference_1
+      arguments: {  }
+field_type: entity_reference
