@@ -107,6 +107,7 @@ hidden:
   field_social_media: true
   field_user_content: true
   field_user_frequency: true
+  joinup_achievements: true
   langcode: true
   linked_username: true
   masquerade: true

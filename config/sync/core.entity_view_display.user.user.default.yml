@@ -47,6 +47,7 @@ hidden:
   field_user_organisation: true
   field_user_photo: true
   field_user_professional_domain: true
+  joinup_achievements: true
   langcode: true
   linked_username: true
   masquerade: true
