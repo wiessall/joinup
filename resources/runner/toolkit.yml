@@ -37,9 +37,6 @@ toolkit:
   test:
     phpunit:
       commands:
-        before:
-          - task: exec
-            command: mkdir -m 777 ${joinup.dir}/web/sites/simpletest/browser_output
         after:
           - task: exec
             command: ${drush.bin} en default_content joinup_test_content -y
