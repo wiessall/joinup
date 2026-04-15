@@ -47,6 +47,7 @@ hidden:
   label_join: true
   label_leave: true
   landing_page: true
+  langcode: true
   listing_content: true
   meta_entity_collection_settings_listing_content_inline_facets: true
   meta_entity_collection_settings_listing_content_top: true
