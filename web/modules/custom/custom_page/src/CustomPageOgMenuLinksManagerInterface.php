@@ -78,4 +78,16 @@ interface CustomPageOgMenuLinksManagerInterface {
    */
   public function getOgMenuInstanceByCustomPage(NodeInterface $customPage, string $menuType): ?OgMenuInstanceInterface;
 
+  /**
+   * Updates or adds the menu link title translation for a custom page.
+   *
+   * For each menu_link_content entity pointing to the given custom page,
+   * adds a translation for the node's current language if one does not yet
+   * exist, or updates the existing translation when the title has changed.
+   *
+   * @param \Drupal\node\NodeInterface $customPage
+   *   The custom page node (may be a translation).
+   */
+  public function updateLinkTitles(NodeInterface $customPage): void;
+
 }
