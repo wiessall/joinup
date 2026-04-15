@@ -1,8 +1,0 @@
-name: 'User Achievement'
-type: module
-description: 'Provides achievement badges that recognise user engagement on the Portal.'
-package: Custom
-core_version_requirement: ^10 || ^11
-dependencies:
-  - drupal:user
-  - og:og
