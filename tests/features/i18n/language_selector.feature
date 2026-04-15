@@ -11,12 +11,11 @@ Feature: Language selector block and popover functionality
     Then I should see "EN" in the "Top Bar" region
 
     When I press "EN" in the "Top Bar" region
-    Then a popover should open
-    And I should see "FR" in the "Popover" region
-    And I should see "DE" in the "Popover" region
-    And I should see "ES" in the "Popover" region
+    And I should see "FR" in the "Language picker" region
+    And I should see "DE" in the "Language picker" region
+    And I should see "ES" in the "Language picker" region
 
-    When I click "FR" in the "Popover" region
+    When I click "French" in the "Language picker" region
     Then I should be on "/fr"
     And I should see "FR" in the "Top Bar" region
 

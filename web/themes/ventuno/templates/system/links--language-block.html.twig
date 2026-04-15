@@ -1,0 +1,25 @@
+{#
+/**
+ * @file
+ * Theme override for the language block links with dropdown.
+ *
+ * @ingroup themeable
+ */
+#}
+{{ attach_library('ventuno/language-picker') }}
+
+<div{{ attributes.addClass('language-picker') }}>
+  <button class="btn btn-link bg-white icon-link d-inline-flex px-3 language-picker__button" type="button" data-bs-toggle="dropdown" aria-label="{{ 'Toggle language picker'|t }}">{{ current_language.code|upper }}</button>
+  <div class="dropdown-menu dropdown-menu-end px-4 py-3 language-picker__dropdown-menu" role="menu" aria-labelledby="language-picker__button">
+    <ul class="list-unstyled mb-0 row row-cols-2 row-cols-md-3">
+      {% for item in links %}
+        {%- if item.link -%}
+          <li{{ item.attributes.addClass('col', 'py-1') }}>
+            <span{{ item.text_attributes.addClass('language-picker__code') }}>{{ item.code|upper }}</span>
+            {{ item.link|add_class('language-picker__link') }}
+          </li>
+        {%- endif -%}
+      {% endfor %}
+    </ul>
+  </div>
+</div>

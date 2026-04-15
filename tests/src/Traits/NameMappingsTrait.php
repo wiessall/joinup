@@ -458,6 +458,7 @@ trait NameMappingsTrait {
    */
   protected function getNodeFieldNameFromLabel(string $label): string {
     $mapping = [
+      'Country' => 'country',
       'Domain' => 'domain',
       'Geographical coverage' => 'spatial_coverage',
       'Language availability' => 'language',
@@ -469,6 +470,7 @@ trait NameMappingsTrait {
       'Solution classification' => 'classification',
       'Topic' => 'field_topic',
       'Type' => 'owner_type',
+      'Country' => 'country',
     ];
     return $mapping[$label];
   }

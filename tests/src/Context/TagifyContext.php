@@ -203,6 +203,32 @@ class TagifyContext extends RawDrupalContext {
   }
 
   /**
+   * Checks if options are visible in tagify dropdown options.
+   *
+   * @param string $fieldName
+   *   Field name.
+   * @param string $option
+   *   Option that should be present in the dropdown.
+   *
+   * @throws \Exception
+   *   Thrown when the tagify option is not found.
+   */
+  #[When('the :fieldName tagify should contain the following option :option')]
+  public function checkTagifyOptionsArePresent(string $fieldName, string $option): void {
+    if (!$this->hasJavascriptSupport()) {
+      throw new \Exception('This step requires JavaScript to run.');
+    }
+    $tagifyInput = $this->getTagifyInput($fieldName);
+    $element = $this->getSession()->getDriver()->getWebDriverSession()?->element('xpath', $tagifyInput->getXpath());
+    // Because we want to assert the presence of an option without selecting it
+    // we use the postValue that sends keystrokes one by one.
+    // @see \WebDriver\Element::postValue.
+    $element->postValue(['text' => $option]);
+    $this->waitForElementVisible('css', '.tagify__dropdown__item:contains("' . $option . '")');
+    $this->getSession()->getDriver()->blur($tagifyInput->getXpath());
+  }
+
+  /**
    * Checks if options are not visible in tagify dropdown options.
    *
    * @param string $fieldName
@@ -255,7 +281,22 @@ class TagifyContext extends RawDrupalContext {
   }
 
   /**
-   * Gets tagify inupt element.
+   * Opens the tagify dropdown by clicking the input and waits for it to appear.
+   *
+   * @param string $fieldName
+   *   Field label.
+   *
+   * @throws \Exception
+   *   Thrown when the dropdown does not appear.
+   */
+  #[When('I open the :fieldName tagify dropdown')]
+  public function openTagifyDropdown(string $fieldName): void {
+    $this->getTagifyInput($fieldName)->click();
+    $this->waitForElement('css', '.tagify__dropdown');
+  }
+
+  /**
+   * Gets tagify input element.
    *
    * @param string $fieldName
    *   Field name.
@@ -277,37 +318,6 @@ class TagifyContext extends RawDrupalContext {
       throw new \Exception('Tagify input not found');
     }
     return $tagifyInput;
-  }
-
-  /**
-   * Gets field values from tagify JSON data.
-   *
-   * @param string $fieldName
-   *   The field name to check.
-   *
-   * @return array
-   *   Array of label values from the tagify field.
-   *
-   * @throws \Exception
-   *   Thrown when field is not found or JSON is invalid.
-   */
-  protected function getTagifyFieldValues(string $fieldName): array {
-    $field = $this->getSession()->getPage()->findField($fieldName);
-    if (!$field) {
-      throw new \Exception("The field '$fieldName' not found in the page.");
-    }
-
-    $currentValueRaw = $field->getValue();
-    if (empty($currentValueRaw)) {
-      return [];
-    }
-
-    $currentValue = json_decode($currentValueRaw, TRUE);
-    if (json_last_error() !== JSON_ERROR_NONE) {
-      throw new \Exception("Failed to decode JSON from field '$fieldName': " . json_last_error_msg());
-    }
-
-    return array_column($currentValue, 'label');
   }
 
 }
