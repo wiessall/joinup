@@ -1,6 +1,0 @@
-entity.achievement_type.add_form:
-  route_name: entity.achievement_type.add_form
-  title: 'Add achievement type'
-  appears_on:
-    - entity.achievement_type.collection
-    - entity.user_achievement.collection
