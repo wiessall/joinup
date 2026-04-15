@@ -124,12 +124,12 @@ drupal:
         - Geocoding Cache
         - GitHub Token Setup
         - Verbose error logging
+        - Test mail collector
         - Memcache
         - Custom queue services
         - Monolog
         - EU OSS Catalogue
         - String overrides
-        - Test mail collector
       prod:
         - Main settings
         - Site email
