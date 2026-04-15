@@ -6,8 +6,4 @@
 ## Example: ddev grumphp run --tasks=phpcs
 ## ExecRaw: true
 
-# Temporarily disable the box checker.
-# See https://github.com/phpro/grumphp-shim/issues/30
-# See https://github.com/phpro/grumphp-shim/issues/32
-BOX_REQUIREMENT_CHECKER=0 \
 vendor/bin/grumphp "$@"

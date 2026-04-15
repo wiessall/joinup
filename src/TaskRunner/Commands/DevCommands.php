@@ -26,12 +26,7 @@ class DevCommands extends AbstractCommands {
     // Reset state.
     $collection = [];
     $collection[] = $this->taskExecStack()->exec("rm -f $joinupDir/.git/hooks/pre-push");
-    $collection[] = $this->taskExecStack()
-      // Temporarily disable the box checker.
-      // See https://github.com/phpro/grumphp-shim/issues/30
-      // See https://github.com/phpro/grumphp-shim/issues/32
-      ->envVars(['BOX_REQUIREMENT_CHECKER' => '0'])
-      ->exec("$binDir/grumphp git:deinit --quiet");
+    $collection[] = $this->taskExecStack()->exec("$binDir/grumphp git:deinit --quiet");
 
     // Activate.
     switch ($runOn) {

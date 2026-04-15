@@ -8,11 +8,6 @@
 SHA1_EMPTY="0000000000000000000000000000000000000000"
 FULL_CHECK="0"
 
-# Temporarily disable box checker.
-# See https://github.com/phpro/grumphp-shim/issues/30
-# See https://github.com/phpro/grumphp-shim/issues/32
-export BOX_REQUIREMENT_CHECKER="0"
-
 # Get all changed files, loop over the commits.
 declare -a CHANGED_FILES=()
 while IFS= read -r LINE; do

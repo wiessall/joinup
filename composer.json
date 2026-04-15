@@ -582,6 +582,9 @@
             "openeuropa/oe_webtools": {
                 "PHP 8.5 compatibility @see https://github.com/openeuropa/oe_webtools/pull/311": "resources/patch/php/openeuropa/oe_webtools/pr311.commit-d4a22bb.diff"
             },
+            "phpro/grumphp-shim": {
+                "Temporarily disable box checks @see https://github.com/phpro/grumphp-shim/issues/30": "resources/patch/php/phpro/grumphp-shim/box.diff"
+            },
             "solarium/solarium": {
                 "PHP 8.5 support @see https://github.com/solariumphp/solarium/pull/1178": "resources/patch/php/solarium/solarium/pr1178.commit-8f11b58.diff"
             },
