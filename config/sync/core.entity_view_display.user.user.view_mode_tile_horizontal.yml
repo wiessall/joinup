@@ -18,7 +18,7 @@ dependencies:
     - responsive_image.styles.tile
   module:
     - layout_builder
-    - responsive_image
+    - svg_image_responsive
     - template_suggestion
     - user
 third_party_settings:
@@ -78,6 +78,10 @@ content:
       image_link: ''
       image_loading:
         attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
@@ -97,6 +101,7 @@ content:
     weight: 6
     region: content
 hidden:
+  achievements: true
   block_user: true
   blocked_reason: true
   field_social_media: true
