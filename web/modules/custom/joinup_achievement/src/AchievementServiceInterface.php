@@ -19,36 +19,36 @@ interface AchievementServiceInterface {
    *
    * If the user already holds the achievement, this is a no-op.
    *
-   * @param \Drupal\joinup_achievement\AchievementFlagInterface $achievement
-   *   The achievement to award.
+   * @param string $flagId
+   *   The machine name of the achievement flag (e.g. 'iec_member').
    * @param \Drupal\user\UserInterface $user
    *   The user to award the achievement to.
    */
-  public function award(AchievementFlagInterface $achievement, UserInterface $user): void;
+  public function award(string $flagId, UserInterface $user): void;
 
   /**
    * Revokes an achievement from a user by unflagging the user entity.
    *
    * If the user does not hold the achievement, this is a no-op.
    *
-   * @param \Drupal\joinup_achievement\AchievementFlagInterface $achievement
-   *   The achievement to revoke.
+   * @param string $flag_id
+   *   The machine name of the achievement flag (e.g. 'iec_member').
    * @param \Drupal\user\UserInterface $user
    *   The user to revoke the achievement from.
    */
-  public function revoke(AchievementFlagInterface $achievement, UserInterface $user): void;
+  public function revoke(string $flag_id, UserInterface $user): void;
 
   /**
    * Checks whether a user currently holds a given achievement.
    *
-   * @param \Drupal\joinup_achievement\AchievementFlagInterface $achievement
-   *   The achievement to check.
+   * @param string $flag_id
+   *   The machine name of the achievement flag (e.g. 'iec_member').
    * @param \Drupal\user\UserInterface $user
    *   The user to check.
    *
    * @return bool
    *   TRUE if the user holds the achievement, FALSE otherwise.
    */
-  public function hasAchievement(AchievementFlagInterface $achievement, UserInterface $user): bool;
+  public function hasAchievement(string $flag_id, UserInterface $user): bool;
 
 }

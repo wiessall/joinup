@@ -1,8 +1,0 @@
-uuid: 9acb8658-d56e-4614-9aad-f94984959561
-langcode: en
-status: true
-dependencies: {  }
-id: portal_contributor
-label: 'Portal contributor'
-description: 'This user is a member of the Interoperable Europe Community'
-icon: award

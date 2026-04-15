@@ -22,8 +22,8 @@ class AchievementService implements AchievementServiceInterface {
   /**
    * {@inheritdoc}
    */
-  public function award(AchievementFlagInterface $achievement, UserInterface $user): void {
-    $flag = $this->flagService->getFlagById($achievement->getFlagId());
+  public function award(string $flagId, UserInterface $user): void {
+    $flag = $this->flagService->getFlagById($flagId);
     if ($flag === NULL) {
       return;
     }
@@ -38,8 +38,8 @@ class AchievementService implements AchievementServiceInterface {
   /**
    * {@inheritdoc}
    */
-  public function revoke(AchievementFlagInterface $achievement, UserInterface $user): void {
-    $flag = $this->flagService->getFlagById($achievement->getFlagId());
+  public function revoke(string $flag_id, UserInterface $user): void {
+    $flag = $this->flagService->getFlagById($flag_id);
     if ($flag === NULL) {
       return;
     }
@@ -54,8 +54,8 @@ class AchievementService implements AchievementServiceInterface {
   /**
    * {@inheritdoc}
    */
-  public function hasAchievement(AchievementFlagInterface $achievement, UserInterface $user): bool {
-    $flag = $this->flagService->getFlagById($achievement->getFlagId());
+  public function hasAchievement(string $flag_id, UserInterface $user): bool {
+    $flag = $this->flagService->getFlagById($flag_id);
     if ($flag === NULL) {
       return FALSE;
     }
