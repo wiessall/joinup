@@ -1,0 +1,238 @@
+diff --git a/src/Plugin/views/field/SearchApiBulkForm.php b/src/Plugin/views/field/SearchApiBulkForm.php
+index 7d6d406b3b0152169911a49d6bdf3cab78fb8be7..729c13390be4772463569258e2ff3cadae4a4a90 100644
+--- a/src/Plugin/views/field/SearchApiBulkForm.php
++++ b/src/Plugin/views/field/SearchApiBulkForm.php
+@@ -12,8 +12,10 @@ use Drupal\Core\Language\LanguageInterface;
+ use Drupal\Core\TypedData\TranslatableInterface;
+ use Drupal\search_api\SearchApiException;
+ use Drupal\system\ActionConfigEntityInterface;
++use Drupal\views\Entity\Render\ConfigurableLanguageRenderer;
+ use Drupal\views\Plugin\views\display\DisplayPluginBase;
+ use Drupal\views\Plugin\views\field\BulkForm;
++use Drupal\views\Plugin\views\PluginBase;
+ use Drupal\views\Plugin\views\style\Table;
+ use Drupal\views\ResultRow;
+ use Drupal\views\ViewExecutable;
+@@ -30,6 +32,11 @@ class SearchApiBulkForm extends BulkForm {
+     buildOptionsForm as ignoreBuildOptionsForm;
+   }
+ 
++  /**
++   * Static cache of entity translation renderers.
++   */
++  protected array $entityTranslationRenderers = [];
++
+   /**
+    * {@inheritdoc}
+    */
+@@ -317,4 +324,56 @@ class SearchApiBulkForm extends BulkForm {
+     return TRUE;
+   }
+ 
++  /**
++   * {@inheritdoc}
++   */
++  public function getEntityTranslationByRelationship(EntityInterface $entity, ResultRow $row, string $relationship = 'none'): EntityInterface {
++    if ($entity instanceof TranslatableInterface && count($entity->getTranslationLanguages()) > 1) {
++      $langcode = $this->getEntityTranslationRenderer($entity)->getLangcodeByRelationship($row, $relationship);
++      $translation = $this->getEntityRepository()->getTranslationFromContext($entity, $langcode);
++    }
++    return $translation ?? $entity;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function getEntityTranslationRenderer(?EntityInterface $entity = NULL) {
++    // The standard BulkForm was designed to work with a single entity type.
++    // Results returned by Search API might contain entities of different
++    // entity types so the only way to get the right entity translation
++    // renderer is to inspect the entity.
++    if (!$entity instanceof EntityInterface) {
++      throw new \Exception('Entity is unavailable, entity translation renderer cannot be determined.');
++    }
++    $entity_type_id = $entity->getEntityTypeId();
++
++    if (isset($this->entityTranslationRenderers[$entity_type_id])) {
++      return $this->entityTranslationRenderers[$entity_type_id];
++    }
++
++    $entity_type = $entity->getEntityType();
++    $view = $this->getView();
++    $rendering_language = $view->display_handler->getOption('rendering_language');
++    $dynamic_renderers = [
++      '***LANGUAGE_entity_translation***' => 'TranslationLanguageRenderer',
++      '***LANGUAGE_entity_default***' => 'DefaultLanguageRenderer',
++    ];
++    if (isset($dynamic_renderers[$rendering_language])) {
++      // Dynamic language set based on result rows or instance defaults.
++      $class = '\Drupal\views\Entity\Render\\' . $dynamic_renderers[$rendering_language];
++      return $this->entityTranslationRenderers[$entity_type_id] = new $class($view, $this->getLanguageManager(), $entity_type);
++    }
++    else {
++      if (str_contains($rendering_language, '***LANGUAGE_')) {
++        $langcode = PluginBase::queryLanguageSubstitutions()[$rendering_language];
++      }
++      else {
++        // Specific langcode set.
++        $langcode = $rendering_language;
++      }
++      return $this->entityTranslationRenderers[$entity_type_id] = new ConfigurableLanguageRenderer($view, $this->getLanguageManager(), $entity_type, $langcode);
++    }
++  }
++
+ }
+diff --git a/tests/modules/search_api_test_bulk_form/config/install/search_api.index.test_index.yml b/tests/modules/search_api_test_bulk_form/config/install/search_api.index.test_index.yml
+index 1a10f832d21b4a464d1638c4830aad8544afe875..6bbdf2cc71340fbdf24ac4f4f282601fc779cb36 100644
+--- a/tests/modules/search_api_test_bulk_form/config/install/search_api.index.test_index.yml
++++ b/tests/modules/search_api_test_bulk_form/config/install/search_api.index.test_index.yml
+@@ -10,17 +10,23 @@ field_settings:
+       fields:
+         - search_api_test/foo
+         - 'entity:entity_test/name'
++        - 'entity:entity_test_mul/name'
+         - 'entity:entity_test_string_id/name'
+   name:
+     label: Name
+     type: text
+     datasource_id: 'entity:entity_test'
+     property_path: name
++  language_with_fallback:
++    label: 'Language (with fallback)'
++    property_path: language_with_fallback
++    type: string
+ options:
+   index_directly: true
+ datasource_settings:
+   search_api_test: {  }
+   'entity:entity_test': {  }
++  'entity:entity_test_mul': {  }
+   'entity:entity_test_string_id': {  }
+ processor_settings: {  }
+ tracker_settings:
+diff --git a/tests/modules/search_api_test_bulk_form/config/install/views.view.search_api_test_bulk_form.yml b/tests/modules/search_api_test_bulk_form/config/install/views.view.search_api_test_bulk_form.yml
+index 08b180404d2b7904f07df3a3ee7242cfc2a2b275..0fba159b06772f3164a753ea94ec44bec7f47130 100644
+--- a/tests/modules/search_api_test_bulk_form/config/install/views.view.search_api_test_bulk_form.yml
++++ b/tests/modules/search_api_test_bulk_form/config/install/views.view.search_api_test_bulk_form.yml
+@@ -40,6 +40,21 @@ display:
+           table: search_api_index_test_index
+           field: name
+           plugin_id: standard
++      filters:
++        language_with_fallback:
++          id: language_with_fallback
++          table: search_api_index_test_index
++          field: language_with_fallback
++          relationship: none
++          group_type: group
++          admin_label: ''
++          plugin_id: search_api_language
++          operator: in
++          value:
++            '***LANGUAGE_language_interface***': '***LANGUAGE_language_interface***'
++          group: 1
++          exposed: false
++          is_grouped: false
+       sorts:
+         search_api_id:
+           id: search_api_id
+diff --git a/tests/src/Functional/SearchApiBulkFormTest.php b/tests/src/Functional/SearchApiBulkFormTest.php
+index 474789999a9f266e45721521ffee92ab72a3e8c1..cb0628e7404f28b5a07a2dcce2521d9f631ff416 100644
+--- a/tests/src/Functional/SearchApiBulkFormTest.php
++++ b/tests/src/Functional/SearchApiBulkFormTest.php
+@@ -4,10 +4,13 @@ namespace Drupal\Tests\search_api\Functional;
+ 
+ use Behat\Mink\Element\NodeElement;
+ use Drupal\entity_test\Entity\EntityTest;
++use Drupal\entity_test\Entity\EntityTestMul;
+ use Drupal\entity_test\Entity\EntityTestStringId;
++use Drupal\language\Entity\ConfigurableLanguage;
+ use Drupal\search_api\Entity\Index;
+ use Drupal\search_api_test_bulk_form\TypedData\FooDataDefinition;
+ use Drupal\Tests\BrowserTestBase;
++use Drupal\Tests\content_translation\Traits\ContentTranslationTestTrait;
+ use Drupal\views\Entity\View;
+ use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+ 
+@@ -20,10 +23,14 @@ use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+ #[RunTestsInSeparateProcesses]
+ class SearchApiBulkFormTest extends BrowserTestBase {
+ 
++  use ContentTranslationTestTrait;
++
+   /**
+    * {@inheritdoc}
+    */
+   protected static $modules = [
++    'language',
++    'content_translation',
+     'search_api_test_bulk_form',
+   ];
+ 
+@@ -350,4 +357,66 @@ class SearchApiBulkFormTest extends BrowserTestBase {
+     return $row;
+   }
+ 
++  /**
++   * Tests the Views bulk field with translated content.
++   */
++  public function testBulkFormWithTranslatedContent(): void {
++    $this->enableContentTranslation('entity_test_mul', 'entity_test_mul');
++    ConfigurableLanguage::createFromLangcode('de')->save();
++
++    // Create two, translated multilingual content in addition to the defaults.
++    for ($i = 1; $i <= 2; $i++) {
++      $entity = EntityTestMul::create(['name' => "Multilingual content $i"]);
++      $entity->addTranslation('de')->set('name', "[DE] {$entity->label()}");
++      $entity->save();
++    }
++    $this->index->indexItems();
++
++    $query = \Drupal::getContainer()->get('search_api.query_helper')->createQuery($this->index);
++    $resultIds = array_keys($query->execute()->getResultItems());
++    sort($resultIds);
++    $this->assertEquals(
++      [
++        'entity:entity_test/1:en',
++        'entity:entity_test/2:en',
++        'entity:entity_test_mul/1:de',
++        'entity:entity_test_mul/1:en',
++        'entity:entity_test_mul/2:de',
++        'entity:entity_test_mul/2:en',
++        'entity:entity_test_string_id/1:und',
++        'entity:entity_test_string_id/2:und',
++        'search_api_test/1:en',
++        'search_api_test/2:en',
++      ],
++      $resultIds
++    );
++
++    $assertSession = $this->assertSession();
++    $page = $this->getSession()->getPage();
++
++    $this->drupalGet('/search-api-test-bulk-form');
++    $assertSession->statusCodeEquals(200);
++
++    // Make sure that the view is functional: Check some rows which are, and
++    // also some which are not compatible with the applied action.
++    $this->checkCheckboxInRow('entity:entity_test/1:en');
++    $this->checkCheckboxInRow('entity:entity_test/2:en');
++    $this->checkCheckboxInRow('entity:entity_test_mul/1:en');
++    $this->checkCheckboxInRow('entity:entity_test_string_id/2:und');
++    $page->selectFieldOption('Action', 'Search API test bulk form action: entity_test');
++    $page->pressButton('Apply to selected items');
++
++    // After submitting the VBO form, the page is still functional and we can
++    // see the expected messages.
++    $assertSession->statusMessageContains(
++      'Search API test bulk form action: entity_test was applied to 2 items.',
++      'status',
++    );
++    $entityStringId2 = EntityTestStringId::load(2);
++    $assertSession->statusMessageContains(
++      "Rows Multilingual content 1, {$entityStringId2->label()} removed from selection as they are not compatible with Search API test bulk form action: entity_test action.",
++      'warning',
++    );
++  }
++
+ }

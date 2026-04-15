@@ -90,6 +90,7 @@ readonly class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksMana
     if ($ogMenuInstance = $this->getOgMenuInstanceByCustomPage($customPage, $menuType)) {
       $properties = $properties + [
         'title' => $customPage->label(),
+        'langcode' => $customPage->language()->getId(),
         'menu_name' => 'ogmenu-' . $ogMenuInstance->id(),
         'link' => ['uri' => 'entity:node/' . $customPage->id()],
         'enabled' => TRUE,
@@ -167,6 +168,39 @@ readonly class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksMana
       return $this->groupMenuManager->getMenuByGroupId($groupId, $menuType);
     }
     return NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function updateLinkTitles(NodeInterface $customPage): void {
+    $this->verifyCustomPage($customPage);
+    $menuLinkContentStorage = $this->entityTypeManager->getStorage('menu_link_content');
+    $langcode = $customPage->language()->getId();
+    $title = $customPage->getTitle();
+
+    foreach (['navigation', 'quick_links'] as $menuType) {
+      if (!$ogMenuInstance = $this->getOgMenuInstanceByCustomPage($customPage, $menuType)) {
+        continue;
+      }
+      $menuName = 'ogmenu-' . $ogMenuInstance->id();
+      $mids = $menuLinkContentStorage->getQuery()
+        ->accessCheck(FALSE)
+        ->condition('bundle', 'menu_link_content')
+        ->condition('menu_name', $menuName)
+        ->condition('link.uri', 'entity:node/' . $customPage->id())
+        ->execute();
+
+      foreach ($menuLinkContentStorage->loadMultiple($mids) as $menuLink) {
+        /** @var \Drupal\menu_link_content\MenuLinkContentInterface $menuLink */
+        if ($menuLink->hasTranslation($langcode)) {
+          $menuLink->getTranslation($langcode)->set('title', $title)->save();
+        }
+        else {
+          $menuLink->addTranslation($langcode, ['title' => $title])->save();
+        }
+      }
+    }
   }
 
   /**

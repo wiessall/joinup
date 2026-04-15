@@ -17,6 +17,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\custom_page\Entity\CustomPage;
 use Drupal\custom_page\Entity\CustomPageInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
@@ -130,15 +131,7 @@ function custom_page_node_update(NodeInterface $entity): void {
   // Update all links that point to this custom page if the title has changed,
   // or if the entity becomes (un)published.
   if ($entity->isPublished() !== $original->isPublished() || $entity->getTitle() !== $original->getTitle()) {
-    /** @var \Drupal\Core\Menu\MenuLinkManagerInterface $menu_link_manager */
-    $menu_link_manager = \Drupal::service('plugin.manager.menu.link');
-    $result = $menu_link_manager->loadLinksByRoute('entity.node.canonical', ['node' => $entity->id()]);
-
-    if (!empty($result)) {
-      foreach ($result as $instance) {
-        $menu_link_manager->updateDefinition($instance->getPluginId(), ['title' => $entity->getTitle()], TRUE);
-      }
-    }
+    \Drupal::service('custom_page.og_menu_links_manager')->updateLinkTitles($entity);
   }
 
   // Update the OG menu link only if the group has changed.
@@ -367,6 +360,35 @@ function custom_page_entity_extra_field_info(): array {
   ];
 
   return $fields;
+}
+
+/**
+ * Implements hook_preprocess_menu__og__navigation().
+ */
+function custom_page_preprocess_menu__og__navigation(array &$variables): void {
+  $node = \Drupal::routeMatch()->getParameter('node');
+  if (!$node instanceof GroupInterface) {
+    return;
+  }
+
+  $landing_page = $node->getSetting('landing_page')->entity;
+  if (!$landing_page instanceof CustomPageInterface) {
+    return;
+  }
+
+  // Only mark the landing page item as active when no item is already active,
+  // to avoid overriding Drupal's active trail on inner pages.
+  $has_active = array_filter($variables['items'], fn($item) => $item['in_active_trail']);
+  if ($has_active) {
+    return;
+  }
+
+  foreach ($variables['items'] as $key => $item) {
+    if ($item['url']->isRouted()
+      && ($item['url']->getRouteParameters()['node'] ?? NULL) == $landing_page->id()) {
+      $variables['items'][$key]['in_active_trail'] = TRUE;
+    }
+  }
 }
 
 /**
