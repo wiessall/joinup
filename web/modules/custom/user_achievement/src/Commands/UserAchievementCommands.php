@@ -6,8 +6,9 @@ namespace Drupal\user_achievement\Commands;
 
 use Consolidation\OutputFormatters\StructuredData\RowsOfFields;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\user_achievement\Entity\AchievementInterface;
+use Drupal\user\UserInterface;
 use Drush\Commands\DrushCommands;
+use InvalidArgumentException;
 
 /**
  * Drush commands for managing user achievement badges.
@@ -129,7 +130,7 @@ class UserAchievementCommands extends DrushCommands {
       ->load($type);
 
     if ($achievementType === NULL) {
-      throw new \InvalidArgumentException(dt(
+      throw new InvalidArgumentException(dt(
         'Unknown achievement type "@type". Run user-achievement:list-types to see available types.',
         ['@type' => $type],
       ));
@@ -207,7 +208,7 @@ class UserAchievementCommands extends DrushCommands {
    * @throws \InvalidArgumentException
    *   When no matching user is found.
    */
-  protected function loadUser(string $identifier): \Drupal\user\UserInterface {
+  protected function loadUser(string $identifier): UserInterface {
     $storage = $this->entityTypeManager->getStorage('user');
 
     if (is_numeric($identifier)) {
@@ -219,7 +220,7 @@ class UserAchievementCommands extends DrushCommands {
     }
 
     if ($account === NULL) {
-      throw new \InvalidArgumentException(dt(
+      throw new InvalidArgumentException(dt(
         'No user found matching "@identifier".',
         ['@identifier' => $identifier],
       ));
