@@ -33,7 +33,6 @@ dependencies:
     - dashboard
     - entity_legal
     - entityqueue
-    - eu_oss_catalogue
     - field_permissions
     - file
     - filter
@@ -48,6 +47,7 @@ dependencies:
     - joinup_licence
     - joinup_log
     - joinup_newsletter
+    - joinup_oss_catalogue
     - joinup_reports
     - joinup_search
     - joinup_security
@@ -136,6 +136,7 @@ permissions:
   - 'create event_logo media'
   - 'create licence content'
   - 'create news_logo media'
+  - 'create newsletter'
   - 'create paragraph content block'
   - 'create paragraph content call_to_action'
   - 'create paragraph content carousel'
@@ -209,8 +210,10 @@ permissions:
   - 'edit any solution content'
   - 'edit any solution_logo media'
   - 'edit blocked_reason'
+  - 'edit newsletter'
   - 'edit own blocked_reason'
   - 'edit own document content'
+  - 'edit own newsletter'
   - 'edit require_update_reason'
   - 'edit short id after publication'
   - 'edit sitewide alert entities'
@@ -334,7 +337,9 @@ permissions:
   - 'view assessment listing'
   - 'view blocked_reason'
   - 'view licence overview page'
+  - 'view newsletter'
   - 'view own blocked_reason'
+  - 'view own newsletter'
   - 'view require_update_reason'
   - 'view the administration theme'
   - 'view unpublished sitewide alert entities'

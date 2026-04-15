@@ -15,14 +15,14 @@ test.describe("Language picker", () => {
     await pageUtils.prepareForScreenshot(page);
 
     // Initial closed state.
-    await expect(page.locator(".block-language-picker")).toHaveScreenshot(
-      `block-language-picker-closed.png`,
+    await expect(page.locator(".language-picker")).toHaveScreenshot(
+      "block-language-picker-closed.png",
     );
 
-    const button = page.locator(
-      ".block-language-picker #language-picker__button",
+    const button = page.locator(".language-picker .language-picker__button");
+    const dropdown = page.locator(
+      ".language-picker .language-picker__dropdown-menu",
     );
-    const dropdown = page.locator(".block-language-picker .dropdown-menu");
 
     await button.click();
     await expect(button).toHaveAttribute("aria-expanded", "true");

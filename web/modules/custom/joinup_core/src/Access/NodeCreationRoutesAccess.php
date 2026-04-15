@@ -39,7 +39,7 @@ class NodeCreationRoutesAccess implements AccessInterface {
 
     if ($routeMatch->getRouteName() === 'node.add') {
       $nodeType = $routeMatch->getRawParameter('node_type');
-      $standaloneNodeTypes = ['licence'];
+      $standaloneNodeTypes = ['collection', 'licence'];
       if (in_array($nodeType, $standaloneNodeTypes, TRUE)) {
         return AccessResult::allowed()->addCacheableDependency($cacheMetadata);
       }
