@@ -24,7 +24,7 @@ function joinup_rdf_form_node_form_alter(array &$form, FormStateInterface $form_
   $module_handler = \Drupal::service('module_handler');
   if ($module_handler->moduleExists('honeypot')) {
     $honeypot_forms = [
-      'node_collection_propose_form',
+      'node_collection_form',
       'node_collection_edit_form',
       'node_distribution_form',
       'node_distribution_edit_form',
