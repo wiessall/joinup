@@ -1,0 +1,95 @@
+diff --git a/src/PurgeUsersHelper.php b/src/PurgeUsersHelper.php
+index eb3cd33c5f22e5c23b22a6b78cb8d7f593e28561..86bc5da25d93571e5bcd9ddb4938097f777f94eb 100644
+--- a/src/PurgeUsersHelper.php
++++ b/src/PurgeUsersHelper.php
+@@ -198,8 +198,8 @@ class PurgeUsersHelper implements PurgeUsersHelperInterface {
+     $enable_loggedin = $config->get('enabled_loggedin_users');
+     $enable_inactive = $config->get('enabled_inactive_users');
+     $enable_blocked = $config->get('enabled_blocked_users');
+-    $send_email_user_before_notification = $config->get('send_email_user_before_notification');
+ 
++    $param['send_email_user_before_notification'] = $config->get('send_email_user_before_notification');
+     $param['disregard_blocked_users'] = $config->get('disregard_blocked_users');
+     $param['enabled_do_not_purge_authors'] = $config->get('enabled_do_not_purge_authors');
+     $param['enabled_do_not_purge_commenters'] = $config->get('enabled_do_not_purge_commenters');
+@@ -216,21 +216,24 @@ class PurgeUsersHelper implements PurgeUsersHelperInterface {
+     if ($enable_blocked) {
+       $param['blocked_date'] = strtotime('-' . $config->get('user_blocked_value') . ' ' . $config->get('user_blocked_period'));
+     }
+-    if ($op == 'notification_users' && $send_email_user_before_notification == 1) {
++    if ($param['send_email_user_before_notification'] == 1) {
+       $user_before_notification_value = $config->get('user_before_notification_value');
+       $user_before_notification_period = $config->get('user_before_notification_period');
+-      $notification_interval = '+' . $user_before_notification_value . ' ' . $user_before_notification_period;
++      $param['notification_interval'] = '+' . $user_before_notification_value . ' ' . $user_before_notification_period;
++    }
++
++    if ($op == 'notification_users' && $param['send_email_user_before_notification'] == 1) {
+       if ($enable_never_loggedin) {
+-        $param['never_login_date'] = strtotime($notification_interval, $param['never_login_date']);
++        $param['never_login_date'] = strtotime($param['notification_interval'], $param['never_login_date']);
+       }
+       if ($enable_loggedin) {
+-        $param['login_date'] = strtotime($notification_interval, $param['login_date']);
++        $param['login_date'] = strtotime($param['notification_interval'], $param['login_date']);
+       }
+       if ($enable_inactive) {
+-        $param['inactive_date'] = strtotime($notification_interval, $param['inactive_date']);
++        $param['inactive_date'] = strtotime($param['notification_interval'], $param['inactive_date']);
+       }
+       if ($enable_blocked) {
+-        $param['blocked_date'] = strtotime($notification_interval, $param['blocked_date']);
++        $param['blocked_date'] = strtotime($param['notification_interval'], $param['blocked_date']);
+       }
+     }
+ 
+@@ -261,7 +264,48 @@ class PurgeUsersHelper implements PurgeUsersHelperInterface {
+ 
+     // Merge results to create an array of user ids to purge.
+     $result = array_merge($never_loggedin_users, $not_loggedin_users, $inactive_users, $blocked_users);
+-    return array_unique($result);
++    return $this->checkNotification($op, $param, array_unique($result));
++  }
++
++  /**
++   * Filter users based on their notification status.
++   *
++   * @param string $op
++   *   The operation type: 'purge_users' or 'notification_users'.
++   * @param array $param
++   *   Parameters containing notification settings.
++   * @param array $users
++   *   Array of user IDs to check.
++   *
++   * @return array
++   *   Filtered array of user IDs.
++   */
++  protected function checkNotification(string $op, array $param, array $users): array {
++    if (empty($users) || empty($param['send_email_user_before_notification'])) {
++      return $users;
++    }
++
++    $db = \Drupal::database();
++
++    // Calculate the expiration timestamp.
++    $expiration_timestamp = 0;
++    if (!empty($param['notification_interval'])) {
++      $expiration_timestamp = strtotime('-' . $param['notification_interval']);
++    }
++
++    // Find UIDs that have notifications and are not expired.
++    $query = $db->select('purge_users_notifications', 'pun')
++      ->fields('pun', ['uid'])
++      ->condition('pun.uid', $users, 'IN')
++      ->condition('pun.type', 'notification_users');
++
++    if ($op === 'purge_users') {
++      $query->condition('pun.timestamp', $expiration_timestamp, '<');
++    }
++
++    $notified_uids = $query->execute()->fetchCol();
++
++    return ($op === 'purge_users') ? array_intersect($users, $notified_uids) : array_diff($users, $notified_uids);
+   }
+ 
+   /**
