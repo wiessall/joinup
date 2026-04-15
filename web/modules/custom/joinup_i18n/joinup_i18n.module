@@ -87,7 +87,7 @@ function joinup_i18n_babel_translation_type_info_alter(array &$definitions): voi
  * we need to add a condition which covers this scenario.
  */
 function joinup_i18n_search_api_query_alter(QueryInterface $query): void {
-  if (in_array($query->getIndex()->id(), ['published', 'oss_catalogue'])) {
+  if (!in_array($query->getIndex()->id(), ['published', 'oss_catalogue'])) {
     return;
   }
 
