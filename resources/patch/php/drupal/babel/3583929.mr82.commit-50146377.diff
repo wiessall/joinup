@@ -2,10 +2,10 @@ diff --git a/.ddev/commands/host/core-version b/.ddev/commands/host/core-version
 old mode 100644
 new mode 100755
 diff --git a/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php b/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php
-index 328dda8eaf962b5e12f48c162a84644a189b014a..68386be925f245363ce41bf350606e9bcaa55c20 100644
+index 328dda8eaf962b5e12f48c162a84644a189b014a..3ced38dd9dc16d02559558f531aa8ae83e3b00e6 100644
 --- a/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php
 +++ b/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php
-@@ -194,13 +194,9 @@ class ContentEntity extends TranslationTypePluginBase implements PluginFormInter
+@@ -194,29 +194,24 @@ class ContentEntity extends TranslationTypePluginBase implements PluginFormInter
      $entityTranslationField->set($delta, $translation ? $newTranslationValue : $untranslatedValue);
  
      // Translation must validate to be saved.
@@ -16,12 +16,41 @@ index 328dda8eaf962b5e12f48c162a84644a189b014a..68386be925f245363ce41bf350606e9b
 -        $entityTranslation->save();
 -        return;
 -      }
+-    }
+-    else {
+-      $message = $entityTranslation->isNewTranslation()
+-        ? "New translation wasn't saved."
+-        : "Translation was deleted.";
+-      $this->loggerChannel->warning(
+-        $message . ' The automatically created translation of @label @type_label_singular does not validate after @property value was changed to "@value".',
+-        [
+-          '@label' => $entity->label(),
+-          '@type_label_singular' => $entity->getEntityType()->getSingularLabel(),
+-          '@property' => $fieldName,
+-          '@value' => $translation,
+-        ],
+-      );
 +    if ($entityTranslation->validate()->count() === 0) {
 +      $entityTranslation->save();
 +      return;
      }
-     else {
-       $message = $entityTranslation->isNewTranslation()
+ 
++    $message = $entityTranslation->isNewTranslation()
++      ? "New translation wasn't saved."
++      : "Translation was deleted.";
++    $this->loggerChannel->warning(
++      $message . ' The automatically created translation of @label @type_label_singular does not validate after @property value was changed to "@value".',
++      [
++        '@label' => $entity->label(),
++        '@type_label_singular' => $entity->getEntityType()->getSingularLabel(),
++        '@property' => $fieldName,
++        '@value' => $translation,
++      ],
++    );
++
+     if (!$entityTranslation->isNewTranslation()) {
+       $entity->removeTranslation($langcode);
+       $entity->save();
 diff --git a/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php b/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php
 index 9c64177942a5e12847adb23c6a286e2ea953d2de..fc104c18dfabb14e5cd2d40d25a78b269bf10733 100644
 --- a/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php
@@ -77,10 +106,10 @@ index 9c64177942a5e12847adb23c6a286e2ea953d2de..fc104c18dfabb14e5cd2d40d25a78b26
      ]));
      $term->save();
 diff --git a/modules/babel_menu_link_content/src/Plugin/Babel/TranslationType/MenuLinkContent.php b/modules/babel_menu_link_content/src/Plugin/Babel/TranslationType/MenuLinkContent.php
-index e4aff3546a6b6d142202fcf5720f6a703e8a104c..e337f7996a40476d023c50c5c6f82c2aedba9f8f 100644
+index e4aff3546a6b6d142202fcf5720f6a703e8a104c..1e1c9924bcc9c7217a7eda0cea1cb71baac3bf4c 100644
 --- a/modules/babel_menu_link_content/src/Plugin/Babel/TranslationType/MenuLinkContent.php
 +++ b/modules/babel_menu_link_content/src/Plugin/Babel/TranslationType/MenuLinkContent.php
-@@ -172,14 +172,9 @@ class MenuLinkContent extends TranslationTypePluginBase implements PluginFormInt
+@@ -172,30 +172,24 @@ class MenuLinkContent extends TranslationTypePluginBase implements PluginFormInt
      $translated->get($fieldName)->set($delta, $translation ?: $link->get($fieldName)->getValue()[$delta]);
  
      // Translation must validate to be saved.
@@ -92,12 +121,41 @@ index e4aff3546a6b6d142202fcf5720f6a703e8a104c..e337f7996a40476d023c50c5c6f82c2a
 -        $translated->save();
 -        return;
 -      }
+-    }
+-    else {
+-      $message = $translated->isNewTranslation()
+-        ? "New translation wasn't saved."
+-        : "Translation was deleted.";
+-      $this->logger->warning(
+-        $message . ' The automatically created translation of @label @type_label_singular does not validate after @property value was changed to "@value".',
+-          [
+-            '@label' => $link->getLabel(),
+-            '@type_label_singular' => $link->getEntityType()->getSingularLabel(),
+-            '@property' => $fieldName,
+-            '@value' => $translation,
+-          ],
+-      );
 +    if (!$translated->validate()->count()) {
 +      $translated->save();
 +      return;
      }
-     else {
-       $message = $translated->isNewTranslation()
+ 
++    $message = $translated->isNewTranslation()
++      ? "New translation wasn't saved."
++      : "Translation was deleted.";
++    $this->logger->warning(
++      $message . ' The automatically created translation of @label @type_label_singular does not validate after @property value was changed to "@value".',
++        [
++          '@label' => $link->getLabel(),
++          '@type_label_singular' => $link->getEntityType()->getSingularLabel(),
++          '@property' => $fieldName,
++          '@value' => $translation,
++        ],
++    );
++
+     if (!$translated->isNewTranslation()) {
+       $link->removeTranslation($langcode);
+       $link->save();
 diff --git a/modules/babel_menu_link_content/tests/src/Kernel/Plugin/Babel/TranslationType/MenuLinkContentTest.php b/modules/babel_menu_link_content/tests/src/Kernel/Plugin/Babel/TranslationType/MenuLinkContentTest.php
 index 9f1213cca2aee879f68fa203935977e3408000df..909d4038325401a4872740a924c313d1cc2fcacd 100644
 --- a/modules/babel_menu_link_content/tests/src/Kernel/Plugin/Babel/TranslationType/MenuLinkContentTest.php
