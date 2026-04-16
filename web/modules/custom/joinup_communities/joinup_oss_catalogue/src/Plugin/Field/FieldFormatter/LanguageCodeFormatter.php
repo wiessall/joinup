@@ -68,7 +68,7 @@ class LanguageCodeFormatter extends FormatterBase implements ContainerFactoryPlu
       }
 
       $element[$delta] = [
-        '#markup' => implode(",", $codes),
+        '#plain_text' => implode(",", $codes),
       ];
     }
 
