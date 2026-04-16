@@ -54,8 +54,8 @@ trait AntispamTrait {
   #[BeforeScenario('~@antispam&&@api')]
   public function disableAntispamBeforeScenarioStarts(): void {
     $config_context = $this->getContext(ConfigContext::class);
-    $config_context->setTypedConfig('antibot.settings', 'form_ids', json_encode(NULL));
-    $config_context->setTypedConfig('honeypot.settings', 'form_settings', json_encode([]));
+    $config_context->setBasicConfig('antibot.settings', 'form_ids', 'null');
+    $config_context->setBasicConfig('honeypot.settings', 'form_settings', '[]');
   }
 
 }
