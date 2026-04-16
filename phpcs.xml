@@ -19,6 +19,9 @@
   <rule ref="./vendor/drupal/coder/coder_sniffer/DrupalPractice">
     <exclude name="DrupalPractice.CodeAnalysis.VariableAnalysis.UndefinedVariable"/>
     <exclude name="DrupalPractice.Yaml"/>
+
+    <!-- Covered by PHPStan (mglaman/phpstan-drupal GlobalDrupalDependencyInjectionRule), which is type-aware. -->
+    <exclude name="DrupalPractice.Objects.GlobalDrupal"/>
   </rule>
 
   <rule ref="./vendor/ec-europa/qa-automation/phpcs/QualityAssurance">

@@ -219,7 +219,7 @@ class LinkContext extends RawDrupalContext {
       $session_id = $this->getSession()->getCookie($session_name);
     }
     else {
-      throw new UnsupportedDriverActionException();
+      throw new UnsupportedDriverActionException('Session cookie retrieval is not supported by %s', $driver);
     }
 
     $cookie_jar = CookieJar::fromArray([$session_name => $session_id], $domain);

@@ -80,7 +80,7 @@ class JavascriptContext extends RawDrupalContext {
         "document.querySelector('$selector').classList.contains('slick-initialized'))"
       );
       return $initialized;
-    }, 5000, 'Slick carousel not initialized');
+    });
 
     // Wait for all images in non-cloned slides to load.
     $this->waitUntil(function () use ($selector) {
@@ -92,7 +92,7 @@ class JavascriptContext extends RawDrupalContext {
         "})()"
       );
       return $allLoaded;
-    }, 5000, 'Slick carousel images not loaded');
+    });
 
     $this->waitForCssAnimations();
   }
