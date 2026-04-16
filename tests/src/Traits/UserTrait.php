@@ -11,6 +11,8 @@ use Drupal\user\UserInterface;
  */
 trait UserTrait {
 
+  use FileTrait;
+
   /**
    * Mapping of human readable names to machine names.
    *
