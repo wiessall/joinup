@@ -189,6 +189,22 @@ function ventuno_preprocess_field(array &$variables): void {
       $variables['items'][$key]['content']['#attributes'] += ['target' => '_blank'];
     }
   }
+
+  // Render achievement badges for the joinup_achievements computed field.
+  if ($element['#field_name'] === 'joinup_achievements') {
+    /** @var \Drupal\joinup_achievement\AchievementServiceInterface $achievementService */
+    $achievementService = \Drupal::service(\Drupal\joinup_achievement\AchievementServiceInterface::class);
+    foreach ($variables['items'] as $delta => &$item) {
+      /** @var \Drupal\joinup_achievement\AchievementFlagInterface $flagging */
+      $flagging = $variables['element']['#items'][$delta]->entity;
+      $item['content'] = [
+        '#theme' => 'joinup_achievement',
+        '#icon_id' => $achievementService->getIcon($flagging->bundle()),
+        '#label' => $flagging->getLabel(),
+        '#description' => $achievementService->getDescription($flagging->bundle()),
+      ];
+    }
+  }
 }
 
 /**

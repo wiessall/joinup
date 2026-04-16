@@ -6,6 +6,7 @@ namespace Drupal\joinup_achievement\Plugin\Field\FieldType;
 
 use Drupal\Core\Field\EntityReferenceFieldItemList;
 use Drupal\Core\TypedData\ComputedItemListTrait;
+use Drupal\joinup_achievement\AchievementServiceInterface;
 
 /**
  * Computed field item list for the user achievement flags field.
@@ -19,11 +20,6 @@ class AchievementFlagFieldItemList extends EntityReferenceFieldItemList {
   use ComputedItemListTrait;
 
   /**
-   * Flag IDs that back achievement badges.
-   */
-  const ACHIEVEMENT_FLAG_IDS = ['iec_member', 'portal_contributor'];
-
-  /**
    * {@inheritdoc}
    */
   protected function computeValue(): void {
@@ -32,11 +28,14 @@ class AchievementFlagFieldItemList extends EntityReferenceFieldItemList {
       return;
     }
 
+    $flagIds = \Drupal::service(AchievementServiceInterface::class)
+      ->getAchievementFlagIds();
+
     $flagging_ids = \Drupal::entityQuery('flagging')
       ->accessCheck(FALSE)
       ->condition('entity_type', 'user')
       ->condition('entity_id', $user->id())
-      ->condition('flag_id', self::ACHIEVEMENT_FLAG_IDS, 'IN')
+      ->condition('flag_id', $flagIds, 'IN')
       ->sort('flag_id')
       ->execute();
 
