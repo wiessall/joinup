@@ -393,6 +393,7 @@ class FeatureContext extends RawDrupalContext {
       [],
     );
 
+    $index = 0;
     foreach ($listsToCheck as $imageList) {
       // Check the list.
       foreach ($imageFilenameList as $index => $filename) {
@@ -500,7 +501,6 @@ class FeatureContext extends RawDrupalContext {
   #[Then('I (should )see the image ":filename" in the :tile tile')]
   public function assertImagePresentInRegion(string $filename, string $tile): void {
     $tileElement = $this->getTileByHeading($tile);
-    $this->assertCondition(!empty($tileElement), "Tile cannot be found");
     $this->assertImagePresent($filename, $tileElement);
   }
 
@@ -517,7 +517,6 @@ class FeatureContext extends RawDrupalContext {
   #[Then('there should be :count image(s) in the :tile tile')]
   public function assertAnyImagePresentInTile(string $count, string $tile): void {
     $tileElement = $this->getTileByHeading($tile);
-    $this->assertCondition(!empty($tileElement), "Tile cannot be found");
     $imageNodes = $this->getImages($tileElement);
     if (in_array($count, ['an', 'some'], TRUE)) {
       $this->assertCondition(!empty($imageNodes), "No images were found in the '$tile' tile.");
@@ -622,7 +621,7 @@ class FeatureContext extends RawDrupalContext {
     }
 
     if ($option_element->getText() !== $option) {
-      throw new \Exception(sprintf('The option "%s" was expected to be selected, but %s was selected instead.', $option, $this->getSession()->getCurrentUrl(), $option_element->getHtml()));
+      throw new \Exception(sprintf('The option "%s" was expected to be selected, but "%s" was selected instead.', $option, $option_element->getText()));
     }
   }
 
@@ -1479,11 +1478,11 @@ class FeatureContext extends RawDrupalContext {
     // - homepage.feature
     // - my_subscriptions.feature
     // - legal_notice.feature.
-    \Drupal::getContainer()->get('entity.memory_cache')->invalidateAll();
+    \Drupal::getContainer()->get('entity.memory_cache')->deleteAll();
 
     // Sample tests needing this:
     // - collection.subscribe-on-join.feature.
-    \Drupal::getContainer()->get('cache.static')->invalidateAll();
+    \Drupal::getContainer()->get('cache.memory')->deleteAll();
   }
 
   /**
@@ -1790,12 +1789,9 @@ class FeatureContext extends RawDrupalContext {
     $images[$delta]->click();
 
     // Get the clicked image file ID.
-    $image_classes = $images[$delta]->getAttribute('class');
-    $image_classes = $image_classes ? preg_split('/\s+/', $image_classes) : [];
-    foreach ($image_classes as $class) {
-      if (preg_match('/^image\-(\d+)$/', $class, $found)) {
-        break;
-      }
+    $image_classes = $images[$delta]->getAttribute('class') ?? '';
+    if (!preg_match('/\bimage-(\d+)\b/', $image_classes, $found)) {
+      throw new \Exception('Could not determine the file ID from the image CSS classes.');
     }
     $image_fid = $found[1];
 
@@ -2088,14 +2084,14 @@ class FeatureContext extends RawDrupalContext {
   public function assertTimestampFieldUpdatedToNow(string $label, string $bundle, string $field_label): void {
     $entity_type_id = static::entityTypeAliases()[$bundle];
     $entity = $this->getEntityByLabel($entity_type_id, $label);
-    $found = FALSE;
-    foreach (\Drupal::service('entity_field.manager')->getFieldDefinitions($entity_type_id, $entity->bundle()) as $field_name => $definition) {
+    $field_name = NULL;
+    foreach (\Drupal::service('entity_field.manager')->getFieldDefinitions($entity_type_id, $entity->bundle()) as $fname => $definition) {
       if ($definition->getLabel() == $field_label && $definition->getType() === 'timestamp') {
-        $found = TRUE;
+        $field_name = $fname;
         break;
       }
     }
-    if (!$found) {
+    if ($field_name === NULL) {
       throw new \InvalidArgumentException("Entity type $entity_type_id doesn't have a '$field_label' field or field is not a timestamp.");
     }
     $value = (int) $entity->get($field_name)->value;
