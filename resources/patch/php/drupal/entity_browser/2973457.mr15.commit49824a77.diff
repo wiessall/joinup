@@ -826,7 +826,7 @@ index c12bacc16a54d48e6d3eedef90b8a6c896f6c802..0890779c2d0d0d5cb4fa6a0898d64257
          $return[] = $item_values;
 diff --git a/src/Plugin/Field/FieldWidget/ListBuilder/TableListBuilder.php b/src/Plugin/Field/FieldWidget/ListBuilder/TableListBuilder.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..0678b8da9eccff0e91e2072b9f5e2f8af5129f76
+index 0000000000000000000000000000000000000000..e70a8eda24a1a19f83e3232e0c759ad0552819a0
 --- /dev/null
 +++ b/src/Plugin/Field/FieldWidget/ListBuilder/TableListBuilder.php
 @@ -0,0 +1,443 @@
@@ -987,7 +987,7 @@ index 0000000000000000000000000000000000000000..0678b8da9eccff0e91e2072b9f5e2f8a
 +   * @param \Drupal\Core\Field\FieldDefinitionInterface
 +   *   The field definition interface.
 +   */
-+  public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage, FieldItemListInterface $items, array $entities, ?FieldWidgetDisplayInterface $display = NULL, $wrapper, array $settings, array $parents, FieldDefinitionInterface $field_definition) {
++  public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage, FieldItemListInterface $items, array $entities, ?FieldWidgetDisplayInterface $display, $wrapper, array $settings, array $parents, FieldDefinitionInterface $field_definition) {
 +    $this->storage = $storage;
 +    $this->entityType = $entity_type;
 +    $this->items = $items;
