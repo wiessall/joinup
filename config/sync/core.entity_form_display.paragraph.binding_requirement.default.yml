@@ -159,12 +159,16 @@ content:
       revision: false
     third_party_settings: {  }
   asset:
-    type: entity_browser_entity_reference
+    type: entity_browser_table
     weight: 3
     region: content
     settings:
       entity_browser: assessment_solutions
       field_widget_display: label
+      table_settings:
+        status_column: false
+        bundle_column: false
+        label_column: false
       field_widget_edit: false
       field_widget_remove: true
       field_widget_replace: false
