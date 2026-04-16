@@ -1,5 +1,5 @@
 <?php
-// phpcs:ignoreFile
+
 declare(strict_types=1);
 
 namespace Drupal\joinup_core\PathProcessor;
@@ -15,7 +15,7 @@ use Symfony\Component\Routing\RouterInterface;
 /**
  * Path processor which construct and reveals nice field view paths.
  */
-readonly class ModalRouteProcessor implements InboundPathProcessorInterface, OutboundPathProcessorInterface {
+class ModalRouteProcessor implements InboundPathProcessorInterface, OutboundPathProcessorInterface {
 
   /**
    * Separator to be used in the human friendly path.
@@ -173,6 +173,8 @@ readonly class ModalRouteProcessor implements InboundPathProcessorInterface, Out
    */
   protected function getRouter(): RouterInterface {
     if (!isset($this->router)) {
+      // The service is not injected to avoid container circular dependencies.
+      // @phpstan-ignore-next-line globalDrupalDependencyInjection.useDependencyInjection
       return $this->router = \Drupal::service('router.no_access_checks');
     }
     return $this->router;

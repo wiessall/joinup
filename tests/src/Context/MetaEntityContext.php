@@ -8,6 +8,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Given;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\entityqueue\EntitySubqueueInterface;
 use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
@@ -27,16 +28,16 @@ class MetaEntityContext extends RawDrupalContext {
   public function theFollowingTopicsAreEnabledInTheHomepage(TableNode $table): void {
     $topics = $table->getColumn(0);
     $repository = \Drupal::getContainer()->get('meta_entity.repository');
+    $entity_queue = \Drupal::entityTypeManager()->getStorage('entity_subqueue')->load('homepage_topics');
+    \assert($entity_queue instanceof EntitySubqueueInterface);
     foreach ($topics as $topic) {
       $topic = $this->getEntityByLabel('taxonomy_term', $topic);
       $meta_entity = $repository->getMetaEntityForEntity($topic, 'topic');
       $meta_entity->set('published', TRUE);
       $meta_entity->save();
+      $entity_queue->addItem($meta_entity);
     }
-
-    // Load the homepage_topics entity subqueue.
-    $entity_queue = \Drupal::entityTypeManager()->getStorage('entity_subqueue')->load('homepage_topics');
-    $entity_queue->addItem($meta_entity)->save();
+    $entity_queue->save();
   }
 
   /**
