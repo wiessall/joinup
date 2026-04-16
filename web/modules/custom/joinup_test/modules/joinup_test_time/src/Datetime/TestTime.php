@@ -54,7 +54,7 @@ final class TestTime extends Time {
    */
   protected function getMockTimestamp(): ?int {
     // The service is not injected to avoid container circular dependencies.
-    // phpcs:ignore DrupalPractice.Objects.GlobalDrupal.GlobalDrupal
+    // @phpstan-ignore-next-line globalDrupalDependencyInjection.useDependencyInjection
     return \Drupal::state()->get(self::MOCK_TIMESTAMP_STATE_KEY);
   }
 
