@@ -384,7 +384,7 @@ Feature: Test adding solutions.
   @javascript
   # Regression test for ticket ISAICP-11064.
   Scenario: Dropdown displays counties based on default language.
-    Given I am logged in as a translator
+    Given I am logged in as a moderator
     When I click "Translate"
     Then I should see the heading "Translate"
     Given I select "Polish" from "Language"
