@@ -1,0 +1,5 @@
+{% set title = row._entity.title.value  %}
+{% set url = "/node/" ~ row._entity.nid.value  %}
+<a href="{{ url }}" target="_blank" rel="noopener noreferrer">
+  {{ title }}
+</a>
