@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Template\Attribute;
+use Drupal\joinup_achievement\AchievementServiceInterface;
 
 /**
  * Implements hook_theme_suggestions_HOOK_alter().
@@ -193,7 +194,7 @@ function ventuno_preprocess_field(array &$variables): void {
   // Render achievement badges for the joinup_achievements computed field.
   if ($element['#field_name'] === 'joinup_achievements') {
     /** @var \Drupal\joinup_achievement\AchievementServiceInterface $achievementService */
-    $achievementService = \Drupal::service(\Drupal\joinup_achievement\AchievementServiceInterface::class);
+    $achievementService = \Drupal::service(AchievementServiceInterface::class);
     foreach ($variables['items'] as $delta => &$item) {
       /** @var \Drupal\joinup_achievement\AchievementFlagInterface $flagging */
       $flagging = $variables['element']['#items'][$delta]->entity;
