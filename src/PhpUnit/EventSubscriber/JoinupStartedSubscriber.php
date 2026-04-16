@@ -7,11 +7,11 @@ namespace Joinup\PhpUnit\EventSubscriber;
 use Joinup\TaskRunner\Traits\TaskRunnerTrait;
 use Joinup\TestMode;
 use Joinup\TestModeManager;
-use PHPUnit\Event\TestSuite\Started;
-use PHPUnit\Event\TestSuite\StartedSubscriber;
+use PHPUnit\Event\Application\Started;
+use PHPUnit\Event\Application\StartedSubscriber;
 
 /**
- * Listens to PHPUnit started event.
+ * Listens to PHPUnit application started event.
  */
 class JoinupStartedSubscriber implements StartedSubscriber {
 
