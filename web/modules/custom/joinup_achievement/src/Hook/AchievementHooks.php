@@ -9,8 +9,10 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\joinup_achievement\AchievementServiceInterface;
 use Drupal\joinup_achievement\Entity\AchievementFlagging;
 use Drupal\joinup_achievement\Plugin\Field\FieldType\AchievementFlagFieldItemList;
+use Drupal\og\OgMembershipInterface;
 
 /**
  * Hooks for the joinup_achievement module.
@@ -18,13 +20,20 @@ use Drupal\joinup_achievement\Plugin\Field\FieldType\AchievementFlagFieldItemLis
 class AchievementHooks {
 
   /**
+   * Constructs an AchievementHooks object.
+   */
+  public function __construct(
+    protected readonly AchievementServiceInterface $achievementService,
+  ) {}
+
+  /**
    * Implements hook_entity_bundle_info_alter().
    */
   #[Hook('entity_bundle_info_alter')]
   public function entityBundleInfoAlter(array &$bundles): void {
-    foreach (['iec_member', 'portal_contributor'] as $flag_id) {
-      if (!empty($bundles['flagging'][$flag_id])) {
-        $bundles['flagging'][$flag_id]['class'] = AchievementFlagging::class;
+    foreach ($this->achievementService->getAchievementFlagIds() as $flagId) {
+      if (!empty($bundles['flagging'][$flagId])) {
+        $bundles['flagging'][$flagId]['class'] = AchievementFlagging::class;
       }
     }
   }
@@ -48,9 +57,10 @@ class AchievementHooks {
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', FALSE)
       ->setDisplayOptions('view', [
-        'type' => 'joinup_achievements',
+        'type' => 'entity_reference_label',
         'label' => 'hidden',
         'weight' => 0,
+        'settings' => ['link' => FALSE],
       ])
       ->setDisplayOptions('form', ['region' => 'hidden']);
 
@@ -58,20 +68,16 @@ class AchievementHooks {
   }
 
   /**
-   * Implements hook_theme().
+   * Implements hook_og_membership_insert().
    */
-  #[Hook('theme')]
-  public function theme(): array {
-    return [
-      'joinup_achievement' => [
-        'variables' => [
-          'icon_id' => '',
-          'label' => '',
-          'description' => '',
-          'attributes' => [],
-        ],
-      ],
-    ];
+  #[Hook('og_membership_insert')]
+  public function ogMembershipInsert(OgMembershipInterface $entity): void {
+    $group = $entity->getGroup();
+    if ($group->uuid() === AchievementServiceInterface::IEC_COMMUNITY) {
+      $flagId = 'iec_member';
+      $user = $entity->getOwner();
+      $this->achievementService->award($flagId, $user);
+    }
   }
 
 }
