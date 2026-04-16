@@ -78,3 +78,16 @@ Feature: Translating releases
       | user      | delete message                                                               |
       | Flora Mod | Polish translation of the Release Zaktualizowane wydanie has been deleted.   |
       | Lee Facil | The content item Zaktualizowane wydanie Polish translation has been deleted. |
+
+  Scenario: Default language of new node should be same as language of the interface
+    Given solution content:
+      | title           |
+      | Test solution 2 |
+    Given I am logged in as "Flora Mod"
+    When I go to the "Test solution 2" solution
+    And I click "Add release" in the plus button menu
+    Then the available options in the "Language" select should match the site languages
+    And the selected option in the "Language" select should be "en"
+    When I switch to the "pl" language
+    Then the available options in the "Language" select should match the site languages
+    And the selected option in the "Language" select should be "pl"

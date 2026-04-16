@@ -89,7 +89,6 @@
   - Drupal\joinup\Context\OeNewsroomNewsletterContext
   - Drupal\joinup\Context\OwnerContext
   - Drupal\joinup\Context\PollContext
-  - Drupal\joinup\Context\PopoverContext
   - Drupal\joinup\Context\RdfContext
   - Drupal\joinup\Context\ReleaseContext
   - Drupal\joinup\Context\RssContext
@@ -206,6 +205,7 @@ default:
         In the spotlight: '.block-views-blockin-the-spotlight-block'
         IOPE Menu: '#block-iope-navigation'
         Upcoming event: '.block-views-blockupcoming-event-block'
+        Language picker: '.language-picker'
         Layout paragraphs dialog buttons: '.ui-dialog-buttonpane'
         Layout paragraphs widget: '.field--type-entity-reference-revisions .fieldset-wrapper .js-lpb-component'
         Left sidebar: 'aside.layout-sidebar'
@@ -234,7 +234,6 @@ default:
         Top Bar: '.region-top-bar'
         Draft unpublished block: '#block-ventuno-unpublished-draft'
         Proposed unpublished block: '#block-ventuno-unpublished-proposed'
-        Popover: '#block-ventuno-languagepicker'
         Other unpublished block: '#block-ventuno-unpublished-other'
         Visually hidden title: '#block-ventuno-pagetitle .visually-hidden'
         Private messages inbox: '#block-ventuno-privatemessage-inbox .private-message-thread--full-container'
@@ -336,4 +335,4 @@ clean:
       contexts: *contexts
       paths: *paths
       filters:
-        tags: '~@wip&&~@group-a&&~@group-b&&~@group-c&&~@group-d&&~@group-e&&~@group-f&&~@group-g&&~@group-h&&~@group-i&&~@group-clone'
+        tags: '~@wip&&~@group-a&&~@group-b&&~@group-c&&~@group-d&&~@group-e&&~@group-f&&~@group-g&&~@group-h&&~@group-i&&~@group-j&&~@group-clone'

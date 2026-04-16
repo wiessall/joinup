@@ -1,0 +1,47 @@
+diff --git a/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php b/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
+index 55c17be7d9b278db1139c0ffcdb7fbf1b911962d..8e02d26c6a55d91acc9544d647ab9ba74817766a 100644
+--- a/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
++++ b/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
+@@ -64,13 +64,40 @@ class BabelTmgmtHooks {
+         '#config_target' => new ConfigTarget(
+           configName: 'babel_tmgmt.settings',
+           propertyPath: 'translators',
+-          fromConfig: fn(?array $value): array => (array) $value,
+-          toConfig: fn(array $value): array => array_keys(array_filter($value)),
++          fromConfig: static::class . '::fromConfig',
++          toConfig: static::class . '::toConfig',
+         ),
+       ],
+     ];
+   }
+ 
++  /**
++   * Converts TMGMT translator settings to Form API default values.
++   *
++   * @param string[]|null $value
++   *   The current config value.
++   *
++   * @return array
++   *   The default Form API value for the checkboxes element.
++   */
++  public static function fromConfig(?array $value): array {
++    return (array) $value;
++  }
++
++  /**
++   * Converts TMGMT translator form values to a storable Babel TMGMT settings.
++   *
++   * @param string[] $value
++   *   The current translator checkboxes value from the form state.
++   *
++   * @return array
++   *   The TMGMT translator form values ready to be stored in Babel TMGMT
++   *   settings.
++   */
++  public static function toConfig(array $value): array {
++    return array_keys($value);
++  }
++
+   /**
+    * Creates items for continuous jobs.
+    *

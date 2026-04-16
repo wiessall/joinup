@@ -6,13 +6,16 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Given;
+use Behat\Step\When;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityPublishedInterface;
+use Drupal\Core\Entity\TranslatableInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\babel\BabelStorageInterface;
 use Drupal\babel\Model\Source;
 use Drupal\joinup\Traits\EntityTrait;
+use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\node\NodeInterface;
 
 /**
@@ -21,6 +24,7 @@ use Drupal\node\NodeInterface;
 class JoinupMultilingualContentContext extends RawDrupalContext {
 
   use EntityTrait;
+  use TraversingTrait;
 
   /**
    * Creates content and also adds translations if any.
@@ -237,6 +241,32 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
   }
 
   /**
+   * Creates a translation for an arbitrary entity.
+   *
+   * @param string $langcode
+   *   The language of the translation.
+   * @param string $entityTypeId
+   *   The entity type ID of the entity translated.
+   * @param string $label
+   *   The untranslated label of the entity translated.
+   * @param \Behat\Gherkin\Node\TableNode $fields
+   *   An arbitrary list of fields to pass to the translation.
+   */
+  #[Given(':langcode translation for the :entityTypeId entity with label :label:')]
+  public function createTranslationForEntity(string $langcode, string $entityTypeId, string $label, TableNode $fields): void {
+    $entity = $this->getEntityByLabel($entityTypeId, $label);
+    if (!$entity instanceof TranslatableInterface) {
+      throw new \RuntimeException(sprintf('The entity with label "%s" is not translatable.', $label));
+    }
+
+    $translation = $entity->hasTranslation($langcode) ? $entity->getTranslation($langcode) : $entity->addTranslation($langcode);
+    foreach ($fields->getHash() as $field) {
+      $translation->set($field['field'], $field['value']);
+    }
+    $translation->save();
+  }
+
+  /**
    * Transforms string field values with "!multiline!" notation to be multiline.
    *
    * Kinda useful if we want to put a YAML file content into a text field, but
@@ -293,6 +323,20 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
     $url = $entity->toUrl();
     $url->setOption('language', \Drupal::languageManager()->getLanguage($language));
     $this->visitPath($url->toString());
+  }
+
+  /**
+   * Switch the page to a language, given its langcode.
+   */
+  #[When('I switch to the :langcode language')]
+  public function switchLanguage(string $langcode): void {
+    $region = $this->getRegion('Top Bar');
+    $link = $region->find('css', "a[hreflang='$langcode']");
+    if (!$link) {
+      throw new \RuntimeException("No language switch link found for '$langcode'.");
+    }
+
+    $this->visitPath($link->getAttribute('href'));
   }
 
 }

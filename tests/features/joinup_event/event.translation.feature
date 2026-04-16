@@ -98,3 +98,13 @@ Feature: Translating events
       | Lee Facil | Test collection event |
       | Flora Mod | Test solution event   |
       | Lee Facil | Test solution event   |
+
+  Scenario: Default language of new node should be same as language of the interface
+    Given I am logged in as "Flora Mod"
+    When I go to the "Test collection" collection
+    And I click "Add event" in the plus button menu
+    Then the available options in the "Language" select should match the site languages
+    And the selected option in the "Language" select should be "en"
+    When I switch to the "pl" language
+    Then the available options in the "Language" select should match the site languages
+    And the selected option in the "Language" select should be "pl"
