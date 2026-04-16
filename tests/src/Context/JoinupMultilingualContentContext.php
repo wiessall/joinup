@@ -347,12 +347,12 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
   #[Given('the following tmgmt job(s) should exist(s):')]
   public function assertTmgmtJobsExist(TableNode $table): void {
     foreach ($table->getHash() as $row) {
-      $query = \Drupal::entityTypeManager()->getStorage('tmgmt_job')->getQuery();
-      $query->accessCheck(FALSE)
+      $ids = \Drupal::entityTypeManager()->getStorage('tmgmt_job')->getQuery()
+        ->accessCheck(FALSE)
         ->condition('source_language', $row['source language'])
         ->condition('target_language', $row['target language'])
-        ->condition('translator', $row['plugin']);
-      $ids = $query->execute();
+        ->condition('translator', $row['plugin'])
+        ->execute();
       $this->assertCondition(!empty($ids), sprintf('TMGMT job from %s to %s with plugin %s not found.', $row['source language'], $row['target language'], $row['plugin']));
     }
   }
@@ -363,12 +363,12 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
   #[Given('the following tmgmt job(s) should not exist:')]
   public function assertTmgmtJobsNotExist(TableNode $table): void {
     foreach ($table->getHash() as $row) {
-      $query = \Drupal::entityTypeManager()->getStorage('tmgmt_job')->getQuery();
-      $query->accessCheck(FALSE)
+      $ids = \Drupal::entityTypeManager()->getStorage('tmgmt_job')->getQuery()
+        ->accessCheck(FALSE)
         ->condition('source_language', $row['source language'])
         ->condition('target_language', $row['target language'])
-        ->condition('translator', $row['plugin']);
-      $ids = $query->execute();
+        ->condition('translator', $row['plugin'])
+        ->execute();
       $this->assertCondition(empty($ids), sprintf('TMGMT job from %s to %s with plugin %s found, but it should not exist.', $row['source language'], $row['target language'], $row['plugin']));
     }
   }
@@ -400,12 +400,12 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
   protected function assertTmgmtJobItems(TableNode $table, bool $exists): void {
     $entityTypeManager = \Drupal::entityTypeManager();
     foreach ($table->getHash() as $row) {
-      $jobQuery = $entityTypeManager->getStorage('tmgmt_job')->getQuery();
-      $jobQuery->accessCheck(FALSE)
+      $jobIds = $entityTypeManager->getStorage('tmgmt_job')->getQuery()
+        ->accessCheck(FALSE)
         ->condition('source_language', $row['source'])
         ->condition('target_language', $row['target'])
-        ->condition('translator', $row['plugin']);
-      $jobIds = $jobQuery->execute();
+        ->condition('translator', $row['plugin'])
+        ->execute();
 
       if ($exists) {
         $this->assertCondition(!empty($jobIds), sprintf('TMGMT job from %s to %s with plugin %s not found.', $row['source'], $row['target'], $row['plugin']));
@@ -416,12 +416,12 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
       }
 
       $entity = $this->getEntityByLabel($row['type'], $row['label']);
-      $itemQuery = $entityTypeManager->getStorage('tmgmt_job_item')->getQuery();
-      $itemQuery->accessCheck(FALSE)
+      $itemIds = $entityTypeManager->getStorage('tmgmt_job_item')->getQuery()
+        ->accessCheck(FALSE)
         ->condition('tjid', $jobIds, 'IN')
         ->condition('item_type', $row['type'])
-        ->condition('item_id', $entity->id(), 'IN');
-      $itemIds = $itemQuery->execute();
+        ->condition('item_id', $entity->id(), 'IN')
+        ->execute();
 
       if ($exists) {
         $this->assertCondition(!empty($itemIds), sprintf('TMGMT job item for entity %s (%s) and job %s > %s not found.', $row['label'], $row['type'], $row['source'], $row['target']));
