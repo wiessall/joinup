@@ -83,3 +83,13 @@ Feature: Translating solutions
       | user      | delete message                                                               |
       | Flora Mod | Polish translation of the Solution Zaktualizowana solucja has been deleted.  |
       | Lee Facil | The content item Zaktualizowana solucja Polish translation has been deleted. |
+
+  Scenario: Default language of new node should be same as language of the interface
+    Given I am logged in as "Flora Mod"
+    And I go to the homepage of the "Portal support" collection
+    And I click "Add solution" in the plus button menu
+    Then the available options in the "Language" select should match the site languages
+    And the selected option in the "Language" select should be "en"
+    When I switch to the "pl" language
+    Then the available options in the "Language" select should match the site languages
+    And the selected option in the "Language" select should be "pl"

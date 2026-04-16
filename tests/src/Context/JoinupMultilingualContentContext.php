@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Given;
+use Behat\Step\When;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\TranslatableInterface;
@@ -14,6 +15,7 @@ use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\babel\BabelStorageInterface;
 use Drupal\babel\Model\Source;
 use Drupal\joinup\Traits\EntityTrait;
+use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\node\NodeInterface;
 
 /**
@@ -22,6 +24,7 @@ use Drupal\node\NodeInterface;
 class JoinupMultilingualContentContext extends RawDrupalContext {
 
   use EntityTrait;
+  use TraversingTrait;
 
   /**
    * Creates content and also adds translations if any.
@@ -320,6 +323,20 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
     $url = $entity->toUrl();
     $url->setOption('language', \Drupal::languageManager()->getLanguage($language));
     $this->visitPath($url->toString());
+  }
+
+  /**
+   * Switch the page to a language, given its langcode.
+   */
+  #[When('I switch to the :langcode language')]
+  public function switchLanguage(string $langcode): void {
+    $region = $this->getRegion('Top Bar');
+    $link = $region->find('css', "a[hreflang='$langcode']");
+    if (!$link) {
+      throw new \RuntimeException("No language switch link found for '$langcode'.");
+    }
+
+    $this->visitPath($link->getAttribute('href'));
   }
 
 }
