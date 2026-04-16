@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Given;
+use Behat\Step\When;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\TranslatableInterface;
@@ -21,7 +22,7 @@ use Drupal\node\NodeInterface;
 /**
  * Creates multilingual content.
  */
-class JoinupI18nContext extends RawDrupalContext {
+class JoinupMultilingualContentContext extends RawDrupalContext {
 
   use AssertTrait;
   use EntityTrait;

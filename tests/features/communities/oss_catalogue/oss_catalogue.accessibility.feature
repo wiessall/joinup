@@ -1,4 +1,4 @@
-@api @group-clone @javascript @eu-oss-catalogue @wip
+@api @group-clone @javascript @eu-oss-catalogue
 Feature: Accessibility
 
   Scenario Outline: Accessibility compliance checks.
