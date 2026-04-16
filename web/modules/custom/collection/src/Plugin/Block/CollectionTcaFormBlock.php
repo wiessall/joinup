@@ -49,7 +49,7 @@ class CollectionTcaFormBlock extends BlockBase implements ContainerFactoryPlugin
    * {@inheritdoc}
    */
   protected function blockAccess(AccountInterface $account): AccessResult {
-    return AccessResult::allowedIfHasPermission($account, 'propose collection content');
+    return AccessResult::allowedIfHasPermission($account, 'create collection content');
   }
 
   /**

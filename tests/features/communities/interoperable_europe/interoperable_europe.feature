@@ -85,7 +85,7 @@ Feature:
     And I press "Update"
     Then I should see the inline form error message "Title field is required."
 
-  Scenario Outline: Visibility of Report link and eTranslate button.
+  Scenario Outline: Visibility of Report link.
     Given <type> content:
       | title      | collection           |
       | IOP <type> | Interoperable Europe |
@@ -93,7 +93,6 @@ Feature:
     When I am an anonymous user
     And I go to the "IOP <type>" <type>
     Then I should not see the link "Report abusive content"
-    And I should see the Webtools eTrans button
 
     Examples:
       | type        |

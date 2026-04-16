@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\contact_information\Form;
 
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Utility\Bytes;
 use Drupal\Component\Utility\Environment;
 use Drupal\Core\Ajax\AjaxResponse;
@@ -12,7 +13,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Mail\MailManagerInterface;
-use Drupal\Core\Render\Markup;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\ByteSizeMarkup;
 use Drupal\email_contact\Form\ContactForm;
@@ -291,14 +291,20 @@ abstract class ContactInformationFormBase extends ContactForm {
       $attachment->delete();
     }
 
-    $message = <<<MESSAGE
-        Name: {$params['name']} <br/>
-        Organisation: {$params['organization']} <br />
-        Email: $reply_to <br/>
-        Type of support: {$params['type']} <br />
-        Message:  {$form_state->getValue('message')} <br />
-        MESSAGE;
-    $params['message'] = Markup::create($message);
+    $params['message'] = new FormattableMarkup(
+    'Name: @name <br/>
+       Organisation: @organization <br/>
+       Email: @email <br/>
+       Type of support: @type <br/>
+       Message: @message <br />',
+      [
+        '@name' => $params['name'],
+        '@organization' => $params['organization'],
+        '@email' => $reply_to,
+        '@type' => $params['type'],
+        '@message' => $form_state->getValue('message'),
+      ]
+    );
 
     // Send the e-mail to the recipients.
     $to = implode(', ', $this->getEmailAddresses());

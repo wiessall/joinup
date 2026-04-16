@@ -21,6 +21,10 @@ use Symfony\Component\DomCrawler\Crawler;
  * details from the user. This allows us to only put the "public" methods in the
  * trait, i.e. the ones that are intended to be called in Behat code. So
  * basically this works around the limitations of traits in PHP.
+ *
+ * @mixin \Drupal\DrupalExtension\Context\RawDrupalContext
+ *   Methods like getSession(), locatePath(), etc. are delegated to the context
+ *   via __call(). The "@mixin" annotation lets PHPStan resolve them statically.
  */
 class ContextualLinksHelper {
 

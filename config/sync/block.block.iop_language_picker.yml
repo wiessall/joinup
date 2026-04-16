@@ -3,18 +3,18 @@ langcode: en
 status: true
 dependencies:
   module:
-    - joinup_i18n
+    - language
   theme:
     - iop
-id: iop_languagepicker
+id: iop_language_picker
 theme: iop
 region: top_bar
 weight: 0
 provider: null
-plugin: language_picker
+plugin: 'language_block:language_interface'
 settings:
-  id: language_picker
-  label: 'Language Picker'
+  id: 'language_block:language_interface'
+  label: 'Language switcher'
   label_display: '0'
-  provider: joinup_i18n
+  provider: language
 visibility: {  }

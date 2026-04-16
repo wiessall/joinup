@@ -18,6 +18,10 @@ use Drupal\topic\Entity\TopicReferencingEntityInterface;
 function ventuno_preprocess_block(array &$variables): void {
   $plugin_id = $variables['elements']['#plugin_id'] ?? NULL;
   switch ($plugin_id) {
+    case 'language_block:language_interface':
+      $variables['attributes']['aria-label'] = t('Language switcher');
+      break;
+
     case 'local_actions_block':
       $variables['attributes']['class'][] = 'my-3';
       break;
@@ -72,7 +76,6 @@ function ventuno_preprocess_block(array &$variables): void {
   // List of the blocks to render without contextual links.
   $no_contextual_links_blocks = [
     'add_content',
-    'ventuno_languagepicker',
   ];
   if (in_array($block_id, $no_contextual_links_blocks)
     && isset($variables['title_suffix']['contextual_links'])) {

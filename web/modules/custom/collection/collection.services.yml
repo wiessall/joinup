@@ -17,6 +17,8 @@ services:
 
   Drupal\collection\EventSubscriber\CollectionEventSubscriber: { }
 
+  Drupal\collection\EventSubscriber\CollectionRedirectSubscriber: { }
+
   Drupal\collection\Guard\CollectionTransitionGuard:
     tags:
       - { name: state_machine.guard, group: collection }

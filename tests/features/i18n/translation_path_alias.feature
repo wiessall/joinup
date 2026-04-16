@@ -48,6 +48,6 @@ Feature: Translated group content should have proper path aliases.
 
     When I visit the "Alias test page" "custom page"
     And I press "EN" in the "Top Bar" region
-    And I click "FR" in the "Popover" region
+    And I click "French" in the "Language picker" region
     Then the url should match "/fr/collection/alias-test-collection/page-de-test-alias"
     And I should see the heading "Page de test alias"
