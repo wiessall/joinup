@@ -51,7 +51,8 @@ class ContactFormMailTest extends JoinupExistingSiteTestBase {
     );
 
     $this->assertSession()->statusCodeEquals(200);
-    $this->assertEquals(
+    $this->assertSession()->statusMessageContains('Your message has been submitted. Thank you for your feedback.', 'status');
+    $this->assertSame(
       [
         [
           'id' => 'message_notify_contact_form_submission',
@@ -69,8 +70,8 @@ class ContactFormMailTest extends JoinupExistingSiteTestBase {
             'content-type' => MailContentTypeHeader::TextHtml->value,
             'from' => 'Interoperable Europe Portal <admin@example.com>',
             'mime-version' => '1.0',
-            'sender' => 'admin@example.com',
             'return-path' => 'admin@example.com',
+            'sender' => 'admin@example.com',
             'x-mailer' => 'Drupal',
           ],
           'plain' => self::NOTIFICATION_PLAIN,
@@ -91,8 +92,8 @@ class ContactFormMailTest extends JoinupExistingSiteTestBase {
             'content-type' => MailContentTypeHeader::TextHtml->value,
             'from' => 'Interoperable Europe Portal <admin@example.com>',
             'mime-version' => '1.0',
-            'sender' => 'admin@example.com',
             'return-path' => 'admin@example.com',
+            'sender' => 'admin@example.com',
             'x-mailer' => 'Drupal',
           ],
           'plain' => $with_copy ? self::COPY_PLAIN : self::WITHOUT_COPY_PLAIN,
@@ -107,7 +108,7 @@ class ContactFormMailTest extends JoinupExistingSiteTestBase {
    */
   public static function providerTestEmailSending(): array {
     return [
-      'Withouth copy' => [FALSE],
+      'Without copy' => [FALSE],
       'With copy' => [TRUE],
     ];
   }

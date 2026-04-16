@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 use Drupal\og\Attribute\OgGroupResolver;
@@ -60,14 +61,14 @@ class JoinupOssCatalogueGroupResolver extends OgRouteGroupResolverBase {
     if (!$this->isOssContent()) {
       return;
     }
-
     /** @var \Drupal\collection\Entity\CollectionInterface $ossCatalogueGroup */
     $ossCatalogueGroup = $this->entityRepository
       ->loadEntityByUuid('node', OssCatalogueCollectionInterface::COLLECTION_UUID);
-    if ($ossCatalogueGroup) {
-      $collection->addGroup($ossCatalogueGroup, ['route']);
-      $this->stopPropagation();
+    if (!$ossCatalogueGroup instanceof CollectionInterface) {
+      return;
     }
+    $collection->addGroup($ossCatalogueGroup, ['route']);
+    $this->stopPropagation();
   }
 
   /**

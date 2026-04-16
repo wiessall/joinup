@@ -122,6 +122,7 @@ class EifContext extends RawDrupalContext {
       }
       $field_name = 'eif_' . str_replace(' ', '_', strtolower($row[0]));
       $fields[$field_name] ??= [];
+      $value = [];
       switch ($row[0]) {
         case 'Description':
           $value = [['value' => trim($row[1]), 'format' => 'content_editor']];
@@ -141,7 +142,6 @@ class EifContext extends RawDrupalContext {
           // @endcode
           // The part from the comma symbol on (the description) is optional.
           preg_match('/name:(\s*?)(?<name>[^,]*)(?:,(\s*?)description:(\s*?)(?<description>.*$))?/', $row[1], $matches);
-          $value = NULL;
           if (isset($matches['name'])) {
             $value = [['entity' => $this->getEntityByLabel('taxonomy_term', trim($matches['name']), 'eif_recommendation')]];
             if (isset($matches['description'])) {
