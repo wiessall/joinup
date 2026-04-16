@@ -92,16 +92,16 @@ function joinup_i18n_deploy_201202(): string {
     return 'No Babel continuous jobs found.';
   }
 
-  $joinup_hooks = \Drupal::classResolver()->getInstanceFromDefinition(JoinupI18nHooks::class);
+  $continuous_settings = \Drupal::service(JoinupI18nHooks::class)->getContinuousSettings();
   $count = 0;
   foreach ($job_storage->loadMultiple($ids) as $job) {
     $source_langcode = $job->getSourceLangcode();
     $target_langcode = $job->getTargetLangcode();
-    $job->set('label', "Joinup: {$source_langcode} > {$target_langcode}");
-    $job->set('continuous_settings', $joinup_hooks->getContinuousSettings());
+    $job->set('label', "Joinup: $source_langcode > $target_langcode");
+    $job->set('continuous_settings', $continuous_settings);
     $job->save();
     $count++;
   }
 
-  return "Updated {$count} continuous job(s).";
+  return "Updated $count continuous job(s).";
 }

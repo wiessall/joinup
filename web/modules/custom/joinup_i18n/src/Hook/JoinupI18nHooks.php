@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_i18n\Hook;
 
-use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Hook\Order\OrderBefore;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\content_translation\ContentTranslationManagerInterface;
-use Drupal\node\NodeTypeInterface;
 use Drupal\tmgmt\JobInterface;
 use Drupal\tmgmt_ec_etranslation\Plugin\tmgmt\Translator\ETranslationTranslator;
 
@@ -22,21 +21,17 @@ use Drupal\tmgmt_ec_etranslation\Plugin\tmgmt\Translator\ETranslationTranslator;
 class JoinupI18nHooks {
 
   /**
-   * The continuous settings for TMGMT.
+   * The cached continuous job settings.
+   *
+   * @var array{content: array<string, array{enabled: int, bundles: array<string, int>}
    */
-  public const array CONTINUOUS_SETTINGS = [
-    'content' => [
-      'node' => ['enabled' => 1],
-      'poll' => ['enabled' => 1],
-      'poll_choice' => ['enabled' => 1],
-    ],
-  ];
+  protected array $continuousSettings;
 
   public function __construct(
-    protected Connection $connection,
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected LanguageManagerInterface $languageManager,
-    protected ContentTranslationManagerInterface $translationManager,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly LanguageManagerInterface $languageManager,
+    protected readonly ContentTranslationManagerInterface $translationManager,
+    protected readonly EntityTypeBundleInfoInterface $bundleInfo,
   ) {
   }
 
@@ -76,7 +71,7 @@ class JoinupI18nHooks {
     }
 
     // Ensure our generic check is only for desired entity type IDs.
-    if (!in_array($entity->getEntityTypeId(), array_keys(self::CONTINUOUS_SETTINGS['content']))) {
+    if (!in_array($entity->getEntityTypeId(), array_keys($this->getContinuousSettings()['content']))) {
       return;
     }
 
@@ -106,7 +101,6 @@ class JoinupI18nHooks {
     );
 
     $jobStorage = $this->entityTypeManager->getStorage('tmgmt_job');
-    $settings = $this->getContinuousSettings();
     foreach (array_diff($targetLangcodes, $existingTargetLangcodes) as $targetLangcode) {
       $jobStorage->create([
         'source_language' => $sourceLangcode,
@@ -117,7 +111,7 @@ class JoinupI18nHooks {
         'settings' => [],
         'state' => JobInterface::STATE_CONTINUOUS,
         'job_type' => JobInterface::TYPE_CONTINUOUS,
-        'continuous_settings' => $settings,
+        'continuous_settings' => $this->getContinuousSettings(),
       ])->save();
     }
   }
@@ -145,8 +139,6 @@ class JoinupI18nHooks {
    * bundles available across all node types in the system.
    */
   private function updateContinuousJobsWithNodeBundles(): void {
-    $continuousSettings = $this->getContinuousSettings();
-
     $jobStorage = $this->entityTypeManager->getStorage('tmgmt_job');
     $jobStorage->getQuery()
       ->accessCheck(FALSE)
@@ -155,26 +147,30 @@ class JoinupI18nHooks {
       ->execute();
 
     foreach ($jobStorage->loadMultiple() as $job) {
-      $job->set('continuous_settings', $continuousSettings)
-        ->save();
+      $job->set('continuous_settings', $this->getContinuousSettings())->save();
     }
   }
 
   /**
-   * Returns the continuous job settings with dynamic node bundles.
+   * Returns the continuous job settings.
    *
    * @return array
    *   The continuous job settings array.
    */
   public function getContinuousSettings(): array {
-    $settings = self::CONTINUOUS_SETTINGS;
-    // TMGMT forces the need to have the bundle set when checking if a job item
-    // should be created.
-    // @see \Drupal\tmgmt_content\Plugin\tmgmt\Source\ContentEntitySource::shouldCreateContinuousItem
-    $bundles = $this->entityTypeManager->getStorage('node_type')->loadMultiple();
-    $bundles = array_filter($bundles, fn (NodeTypeInterface $bundle) => $this->translationManager->isEnabled('node', $bundle->id()));
-    $settings['content']['node']['bundles'] = array_fill_keys(array_keys($bundles), 1);
-    return $settings;
+    if (!isset($this->continuousSettings)) {
+      $this->continuousSettings = ['content' => []];
+      foreach ($this->translationManager->getSupportedEntityTypes() as $entityTypeId => $entityType) {
+        foreach ($this->bundleInfo->getBundleInfo($entityTypeId) as $bundle => $info) {
+          if ($this->translationManager->isEnabled($entityTypeId, $bundle)) {
+            $this->continuousSettings['content'][$entityTypeId]['enabled'] = 1;
+            $this->continuousSettings['content'][$entityTypeId]['bundles'][$bundle] = 1;
+          }
+        }
+      }
+    }
+
+    return $this->continuousSettings;
   }
 
 }
