@@ -111,6 +111,11 @@ class AbsoluteUrlResolver extends DefaultResolver {
       return NULL;
     }
 
+    if (!$this->isSafeUrl($url)) {
+      $this->logger->warning('Skipping URL that resolves to a private or reserved address: @url', ['@url' => $url]);
+      return NULL;
+    }
+
     // HTTP verification is required.
     if ($this->getConfiguration()['verify']) {
       try {
@@ -125,6 +130,29 @@ class AbsoluteUrlResolver extends DefaultResolver {
     }
 
     return $url;
+  }
+
+  /**
+   * Returns whether the URL is safe to request.
+   *
+   * @param string $url
+   *   The URL to check.
+   *
+   * @return bool
+   *   TRUE if the URL is safe, FALSE otherwise.
+   */
+  protected function isSafeUrl(string $url): bool {
+    $parsed = parse_url($url);
+    if (!isset($parsed['scheme'], $parsed['host'])) {
+      return FALSE;
+    }
+    $host = $parsed['host'];
+    // Reject common loopback hostnames.
+    if (in_array(strtolower($host), ['localhost', 'ip6-localhost', 'ip6-loopback'], TRUE)) {
+      return FALSE;
+    }
+    // Reject literal IP addresses; valid URLs must use domain names.
+    return filter_var($host, FILTER_VALIDATE_IP) === FALSE;
   }
 
 }
