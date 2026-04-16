@@ -162,6 +162,11 @@ class JoinupI18nHooks {
       $this->continuousSettings = ['content' => []];
       foreach ($this->translationManager->getSupportedEntityTypes() as $entityTypeId => $entityType) {
         foreach ($this->bundleInfo->getBundleInfo($entityTypeId) as $bundle => $info) {
+          // @todo Remove this exception in ISAICP-11093
+          if ($entityTypeId === 'node' && $bundle === 'oss_solution') {
+            continue;
+          }
+
           if ($this->translationManager->isEnabled($entityTypeId, $bundle)) {
             $this->continuousSettings['content'][$entityTypeId]['enabled'] = 1;
             $this->continuousSettings['content'][$entityTypeId]['bundles'][$bundle] = 1;
