@@ -9,7 +9,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\joinup_achievement\AchievementServiceInterface;
+use Drupal\joinup_achievement\AchievementService;
 use Drupal\joinup_achievement\Entity\AchievementFlagging;
 use Drupal\joinup_achievement\Plugin\Field\FieldType\AchievementFlagFieldItemList;
 use Drupal\og\OgMembershipInterface;
@@ -23,7 +23,7 @@ class AchievementHooks {
    * Constructs an AchievementHooks object.
    */
   public function __construct(
-    protected readonly AchievementServiceInterface $achievementService,
+    protected readonly AchievementService $achievementService,
   ) {}
 
   /**
@@ -73,10 +73,8 @@ class AchievementHooks {
   #[Hook('og_membership_insert')]
   public function ogMembershipInsert(OgMembershipInterface $entity): void {
     $group = $entity->getGroup();
-    if ($group->uuid() === AchievementServiceInterface::IEC_COMMUNITY) {
-      $flagId = 'iec_member';
-      $user = $entity->getOwner();
-      $this->achievementService->award($flagId, $user);
+    if ($group->uuid() === AchievementService::IEC_COMMUNITY) {
+      $this->achievementService->award('iec_member', $entity->getOwner());
     }
   }
 
