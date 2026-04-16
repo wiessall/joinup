@@ -2,15 +2,7 @@ services:
 
   _defaults:
     autowire: true
-    autoconfigure: true
 
-  Drupal\joinup_achievement\AchievementService: { }
+  Drupal\joinup_achievement\AchievementService: ~
 
-  Drupal\joinup_achievement\AchievementServiceInterface:
-    alias: Drupal\joinup_achievement\AchievementService
-
-  Drupal\joinup_achievement\Hook\AchievementHooks:
-    arguments:
-      - '@Drupal\joinup_achievement\AchievementServiceInterface'
-    tags:
-      - { name: hooks }
+  Drupal\joinup_achievement\Hook\AchievementHooks: ~

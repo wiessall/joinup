@@ -6,14 +6,10 @@ namespace Drupal\joinup_achievement\Entity;
 
 use Drupal\flag\Entity\Flagging;
 use Drupal\joinup_achievement\AchievementFlagInterface;
-use Drupal\joinup_achievement\AchievementServiceInterface;
+use Drupal\joinup_achievement\AchievementService;
 
 /**
  * Bundle class for Flagging entities that represent achievement badges.
- *
- * Registered for the iec_member and portal_contributor flag bundles via
- * hook_entity_bundle_info_alter(). Reads badge metadata directly from
- * AchievementServiceInterface::ACHIEVEMENTS — no service injection required.
  */
 class AchievementFlagging extends Flagging implements AchievementFlagInterface {
 
@@ -28,14 +24,14 @@ class AchievementFlagging extends Flagging implements AchievementFlagInterface {
    * {@inheritdoc}
    */
   public function getDescription(): string {
-    return AchievementServiceInterface::ACHIEVEMENTS[$this->bundle()]['description'] ?? '';
+    return AchievementService::ACHIEVEMENTS[$this->bundle()]['description'] ?? '';
   }
 
   /**
    * {@inheritdoc}
    */
   public function getIcon(): string {
-    return AchievementServiceInterface::ACHIEVEMENTS[$this->bundle()]['icon'] ?? '';
+    return AchievementService::ACHIEVEMENTS[$this->bundle()]['icon'] ?? '';
   }
 
 }

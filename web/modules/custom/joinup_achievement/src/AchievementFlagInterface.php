@@ -8,11 +8,6 @@ use Drupal\flag\FlaggingInterface;
 
 /**
  * Interface for Flagging bundle classes that represent achievement badges.
- *
- * Flagging entities whose bundle (flag_id) maps to an achievement implement
- * this interface when the module registers the appropriate bundle class via
- * hook_entity_bundle_info_alter(). Code that needs to consume achievement
- * flaggings should type-hint against this interface.
  */
 interface AchievementFlagInterface extends FlaggingInterface {
 

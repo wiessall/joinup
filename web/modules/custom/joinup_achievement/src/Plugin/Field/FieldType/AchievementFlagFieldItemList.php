@@ -6,7 +6,7 @@ namespace Drupal\joinup_achievement\Plugin\Field\FieldType;
 
 use Drupal\Core\Field\EntityReferenceFieldItemList;
 use Drupal\Core\TypedData\ComputedItemListTrait;
-use Drupal\joinup_achievement\AchievementServiceInterface;
+use Drupal\joinup_achievement\AchievementService;
 
 /**
  * Computed field item list for the user achievement flags field.
@@ -28,7 +28,7 @@ class AchievementFlagFieldItemList extends EntityReferenceFieldItemList {
       return;
     }
 
-    $flagIds = \Drupal::service(AchievementServiceInterface::class)
+    $flagIds = \Drupal::service(AchievementService::class)
       ->getAchievementFlagIds();
 
     $flagging_ids = \Drupal::entityQuery('flagging')

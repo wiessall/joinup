@@ -32,7 +32,6 @@ content:
     weight: 0
     region: content
 hidden:
-  achievements: true
   block_user: true
   blocked_reason: true
   field_social_media: true
