@@ -1,0 +1,35 @@
+diff --git a/.ddev/commands/host/core-version b/.ddev/commands/host/core-version
+old mode 100644
+new mode 100755
+diff --git a/src/EventSubscriber/ConfigSubscriber.php b/src/EventSubscriber/ConfigSubscriber.php
+index 6b2d5987120818bb02dc7bfccd288fada43d1a09..05f98365904177938ea31c527caca622ccd4641e 100644
+--- a/src/EventSubscriber/ConfigSubscriber.php
++++ b/src/EventSubscriber/ConfigSubscriber.php
+@@ -74,6 +74,8 @@ class ConfigSubscriber implements EventSubscriberInterface, DestructableInterfac
+     $name = $event->getConfig()->getName();
+     $this->babelStorage->delete('config', "$name:");
+     $this->configTranslatables->delete($name);
++    // Remove from pending list so destruct() won't try to read a deleted config.
++    $this->names = array_diff($this->names, [$name]);
+   }
+ 
+   /**
+@@ -84,6 +86,8 @@ class ConfigSubscriber implements EventSubscriberInterface, DestructableInterfac
+    */
+   public function onConfigRename(ConfigRenameEvent $event): void {
+     $this->babelStorage->delete('config', $event->getOldName() . ':');
++    // Remove the old name from pending list so destruct() won't try to read it.
++    $this->names = array_diff($this->names, [$event->getOldName()]);
+   }
+ 
+   /**
+@@ -218,6 +222,9 @@ class ConfigSubscriber implements EventSubscriberInterface, DestructableInterfac
+     foreach ($this->names as $name) {
+       $paths = $this->configTranslatables->get($name);
+       $data = $this->storage->read($name);
++      if (!is_array($data)) {
++        continue;
++      }
+       foreach ($paths as $path => $context) {
+         $sources["$name:$path"] = new Source(
+           string: NestedArray::getValue($data, explode('.', $path)),
