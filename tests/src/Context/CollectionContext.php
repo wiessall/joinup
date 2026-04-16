@@ -360,7 +360,8 @@ class CollectionContext extends RawDrupalContext {
       }
 
       // Go to the edit form and check that the expected buttons are visible.
-      $this->visitEntityForm('edit', $values['collection'], 'collection');
+      $entity = $this->getEntityByLabel('node', $values['collection'], 'collection');
+      $this->visitPath($entity->toUrl('edit-form')->toString());
       $buttons = $this->explodeDelimitedSeparatedStepArgument($values['buttons']);
       $this->assertSubmitButtonsVisible($buttons);
     }

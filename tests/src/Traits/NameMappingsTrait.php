@@ -458,6 +458,7 @@ trait NameMappingsTrait {
    */
   protected function getNodeFieldNameFromLabel(string $label): string {
     $mapping = [
+      'Country' => 'country',
       'Domain' => 'domain',
       'Geographical coverage' => 'spatial_coverage',
       'Language availability' => 'language',

@@ -31,7 +31,12 @@ collection.code_of_conduct_consent:
 collection.propose_form:
   path: '/propose/collection'
   defaults:
-    _controller: '\Drupal\collection\Controller\CollectionProposeController::proposeEntity'
+    _entity_form: 'node.default'
     _title: 'Propose collection'
+    node_type: collection
   requirements:
-    _permission: 'propose collection content'
+    _entity_create_access: 'node:collection'
+  options:
+    parameters:
+      node_type:
+        type: entity:node_type
