@@ -9,11 +9,3 @@ services:
   Drupal\eu_oss_translation\JobBuilderInterface: '@eu_oss_translation.job_builder'
 
   Drupal\eu_oss_translation\EventSubscriber\SolutionPostSaveSubscriber: { }
-
-
-
-
-
-
-
-
