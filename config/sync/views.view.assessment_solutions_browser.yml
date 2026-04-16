@@ -200,7 +200,7 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: search_api_field
-          label: Abstract
+          label: ''
           exclude: false
           alter:
             alter_text: false
@@ -233,7 +233,7 @@ display:
           element_class: ''
           element_label_type: ''
           element_label_class: ''
-          element_label_colon: true
+          element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
           element_default_classes: true
@@ -255,6 +255,13 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
+          field_rendering: true
+          fallback_handler: search_api
+          fallback_options:
+            link_to_item: false
+            use_highlighting: false
+            multi_type: separator
+            multi_separator: ', '
       pager:
         type: full
         options:
