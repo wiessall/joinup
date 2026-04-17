@@ -5,7 +5,6 @@ ignored_config_entities:
   - core.menu.static_menu_link_overrides
   - joinup_core.outdated_content_threshold
   - 'language.*|*'
-  - memcache_admin.settings
   - update.settings
   - upgrade_status.settings
   - 'webform.webform.*'
