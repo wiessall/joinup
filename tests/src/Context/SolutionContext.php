@@ -293,7 +293,8 @@ class SolutionContext extends RawDrupalContext {
       }
 
       // Go to the edit form and check that the expected buttons are visible.
-      $this->visitEntityForm('edit', $values['solution'], 'solution');
+      $entity = $this->getEntityByLabel('node', $values['solution'], 'solution');
+      $this->visitPath($entity->toUrl('edit-form')->toString());
     }
   }
 
