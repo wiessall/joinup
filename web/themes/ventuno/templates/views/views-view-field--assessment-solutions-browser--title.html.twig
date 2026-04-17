@@ -1,5 +1,3 @@
-{% set title = row._entity.title.value  %}
-{% set url = "/node/" ~ row._entity.nid.value  %}
-<a href="{{ url }}" target="_blank" rel="noopener noreferrer">
-  {{ title }}
+<a href="{{ url('entity.node.canonical', {'node': row._entity.nid.value}) }}" target="_blank" rel="noopener noreferrer" hreflang="{{ row._entity.language.langcode }}">
+  {{ row._entity.title.value }}
 </a>
