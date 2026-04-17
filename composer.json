@@ -536,7 +536,8 @@
                 "Callers don't account the scenario in which JobItem::acceptTranslation() fails softly @see https://www.drupal.org/i/3580841": "resources/patch/php/drupal/tmgmt/3580841.mr161.commit-7baf8367.diff"
             },
             "drupal/tour": {
-                "Support page manager variants on front page @see https://www.drupal.org/i/3568815": "resources/patch/php/drupal/tour/3568815.patch"
+                "Support page manager variants on front page @see https://www.drupal.org/i/3568815": "resources/patch/php/drupal/tour/3568815.patch",
+                "Missing schema for langcode field @see https://www.drupal.org/i/3585288": "resources/patch/php/drupal/tour/3585288.diff"
             },
             "drupal/tmgmt_ec_etranslation": {
                 "Preserve placeholders @see https://www.drupal.org/i/3577084": "resources/patch/php/drupal/tmgmt_ec_etranslation/3577084.mr28.commit18b2ff6d.diff"
