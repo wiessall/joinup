@@ -15,8 +15,10 @@ dependencies:
     - field.field.user.user.field_user_organisation
     - field.field.user.user.field_user_photo
     - field.field.user.user.field_user_professional_domain
+    - field.field.user.user.function_of_administration
     - image.style.profile_icon_big
   module:
+    - entity_form_field_label
     - options
     - social_media_links_field
     - svg_image
@@ -47,7 +49,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 9
+    weight: 10
     region: content
   field_user_business_title:
     type: string
@@ -122,10 +124,23 @@ content:
         template_suggestion: ''
     weight: 5
     region: content
+  function_of_administration:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+      template_suggestion:
+        template_suggestion: ''
+    weight: 8
+    region: content
   member_for:
     settings: {  }
     third_party_settings: {  }
-    weight: 8
+    weight: 9
     region: content
 hidden:
   block_user: true
