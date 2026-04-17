@@ -8,7 +8,6 @@ dependencies:
     - field.field.user.user.field_social_media
     - field.field.user.user.field_user_business_title
     - field.field.user.user.field_user_content
-    - field.field.user.user.field_user_country_of_residence
     - field.field.user.user.field_user_family_name
     - field.field.user.user.field_user_first_name
     - field.field.user.user.field_user_frequency
@@ -59,19 +58,6 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     weight: 8
-    region: content
-  field_user_country_of_residence:
-    type: entity_reference_label
-    label: hidden
-    settings:
-      link: false
-    third_party_settings:
-      entity_form_field_label:
-        new_label: ''
-        rewrite_label: 0
-      template_suggestion:
-        template_suggestion: ''
-    weight: 5
     region: content
   field_user_family_name:
     type: string
