@@ -12,6 +12,8 @@ use Drupal\node\Entity\Node;
  */
 trait NodeTrait {
 
+  use EntityTrait;
+
   /**
    * Returns a list of revision IDs.
    *
