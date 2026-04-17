@@ -26,8 +26,8 @@ class BindingRequirementDuplicationTest extends JoinupExistingSiteTestBase {
    * Tests that duplicating a binding_requirement paragraph copies its files.
    */
   public function testFileDuplicate(): void {
-    $file_repository = $this->container->get(FileRepositoryInterface::class);
-    $file = $file_repository->writeData($this->randomString(), 'temporary://' . $this->randomMachineName() . '.txt');
+    $fileRepository = $this->container->get(FileRepositoryInterface::class);
+    $file = $fileRepository->writeData($this->randomString(), 'temporary://' . $this->randomMachineName() . '.txt');
     $this->markEntityForCleanup($file);
 
     $paragraph = Paragraph::create([
@@ -43,10 +43,10 @@ class BindingRequirementDuplicationTest extends JoinupExistingSiteTestBase {
     $duplicate->save();
     $this->markEntityForCleanup($duplicate);
 
-    $duplicate_file = $duplicate->get('requirement_documents')->entity;
-    $this->assertInstanceOf(FileInterface::class, $duplicate_file);
-    $this->markEntityForCleanup($duplicate_file);
-    $this->assertNotEquals($file->id(), $duplicate_file->id());
+    $duplicatedFile = $duplicate->get('requirement_documents')->entity;
+    $this->assertInstanceOf(FileInterface::class, $duplicatedFile);
+    $this->markEntityForCleanup($duplicatedFile);
+    $this->assertNotEquals($file->id(), $duplicatedFile->id());
   }
 
   /**
@@ -56,31 +56,31 @@ class BindingRequirementDuplicationTest extends JoinupExistingSiteTestBase {
     $paragraph = $this->createParagraphBindingRequirement();
     $paragraph->save();
 
-    $original_expression = $paragraph->get('expression')->entity;
-    $original_affects = $paragraph->get('affects')->entity;
-    $original_participation = $paragraph->get('has_participation')->entity;
+    $originalExpression = $paragraph->get('expression')->entity;
+    $originalAffects = $paragraph->get('affects')->entity;
+    $originalParticipation = $paragraph->get('has_participation')->entity;
 
-    $this->assertInstanceOf(AssessmentInterface::class, $original_expression);
-    $this->assertInstanceOf(AssessmentInterface::class, $original_affects);
-    $this->assertInstanceOf(AssessmentInterface::class, $original_participation);
+    $this->assertInstanceOf(AssessmentInterface::class, $originalExpression);
+    $this->assertInstanceOf(AssessmentInterface::class, $originalAffects);
+    $this->assertInstanceOf(AssessmentInterface::class, $originalParticipation);
 
     $duplicate = $paragraph->createDuplicate();
     $duplicate->save();
     $this->markEntityForCleanup($duplicate);
 
     // Each referenced assessment must be a new, independent entity.
-    foreach (['expression', 'affects', 'has_participation'] as $field_name) {
-      $duplicate_ref = $duplicate->get($field_name)->entity;
-      $this->assertInstanceOf(AssessmentInterface::class, $duplicate_ref, "Field $field_name should reference an assessment.");
-      $this->markEntityForCleanup($duplicate_ref);
-      $this->assertTrue($duplicate_ref->isNew() || $duplicate_ref->id() !== $paragraph->get($field_name)->entity->id(), "Field $field_name should point to a different entity after duplication.");
+    foreach (['expression', 'affects', 'has_participation'] as $fieldName) {
+      $duplicateRef = $duplicate->get($fieldName)->entity;
+      $this->assertInstanceOf(AssessmentInterface::class, $duplicateRef, "Field $fieldName should reference an assessment.");
+      $this->markEntityForCleanup($duplicateRef);
+      $this->assertTrue($duplicateRef->isNew() || $duplicateRef->id() !== $paragraph->get($fieldName)->entity->id(), "Field $fieldName should point to a different entity after duplication.");
     }
 
     // Verify that saving the duplicate persists independent entities.
-    $duplicate_expression = $duplicate->get('expression')->entity;
-    $duplicate_expression->save();
-    $this->markEntityForCleanup($duplicate_expression);
-    $this->assertNotEquals($original_expression->id(), $duplicate_expression->id());
+    $duplicateExpression = $duplicate->get('expression')->entity;
+    $duplicateExpression->save();
+    $this->markEntityForCleanup($duplicateExpression);
+    $this->assertNotEquals($originalExpression->id(), $duplicateExpression->id());
   }
 
 }
