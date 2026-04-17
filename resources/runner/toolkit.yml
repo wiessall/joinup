@@ -46,7 +46,7 @@ toolkit:
             command: ${drush.bin} pmu default_content joinup_test_content -y
           # To resolve issues, inspect $raw_violations using xdebug breakpoints in:
           # @see \Drupal\config_inspector\Commands\InspectorCommands::inspect
-          - { task: exec, command: "${drush.bin} config:inspect --only-error --format=json | sed -n '/^{/,$ p' | jq -e '. == {}' > /dev/null" }
+          - { task: exec, command: "${drush.bin} config:inspect --only-error --format=json | sed -n '/^[{[]/,$ p' | jq -e '. == {} or . == []' > /dev/null" }
 
   install:
     clone:
