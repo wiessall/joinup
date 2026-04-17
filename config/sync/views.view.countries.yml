@@ -249,8 +249,8 @@ display:
         - 'languages:language_interface'
         - user.permissions
       tags: {  }
-  entity_reference_1:
-    id: entity_reference_1
+  countries:
+    id: countries
     display_title: Countries
     display_plugin: entity_reference
     position: 3
