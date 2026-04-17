@@ -473,7 +473,8 @@
                 "Integrity constraint violation @see https://www.drupal.org/project/layout_paragraphs/issues/3528058": "resources/patch/php/drupal/layout_paragraphs/3528058.patch"
             },
             "drupal/memcache": {
-                "Use Drupal core time service with fallback @see https://drupal.org/i/2999614": "resources/patch/php/drupal/memcache/2999614-mr41-20f8103bd2.diff"
+                "Use Drupal core time service with fallback @see https://drupal.org/i/2999614": "resources/patch/php/drupal/memcache/2999614-mr41-20f8103bd2.diff",
+                "Memory leak during long running processes @see https://www.drupal.org/i/3503083": "resources/patch/php/drupal/memcache/3503083-mr40-ec9f9526.diff"
             },
             "drupal/message": {
                 "Renderer service can only accept array @see https://www.drupal.org/i/3531949": "resources/patch/php/drupal/message/3531949.mr56-commit24333e61.diff"

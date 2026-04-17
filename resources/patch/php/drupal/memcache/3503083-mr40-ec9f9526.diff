@@ -1,0 +1,601 @@
+diff --git a/memcache.post_update.php b/memcache.post_update.php
+index 77cc0d8669b7bc432a8278e3e99b33aa8d943e05..59daa08f30220d9b94142bdc9396c276c7280d8b 100644
+--- a/memcache.post_update.php
++++ b/memcache.post_update.php
+@@ -13,3 +13,10 @@ function memcache_post_update_add_datetime() {
+   $kernel = \Drupal::service('kernel');
+   $kernel->invalidateContainer();
+ }
++
++/**
++ * Rebuild container to add the 'memcache.stats_collect' container parameter.
++ */
++function memcache_post_update_add_container_parameter() {
++  // Intentionally empty.
++}
+diff --git a/memcache.services.yml b/memcache.services.yml
+index d523f10d7e1ad95427f3dc246c0bc7f3cf232cb7..2cb1ef78cf751462ea7a7801b9d218cf05b78a72 100644
+--- a/memcache.services.yml
++++ b/memcache.services.yml
+@@ -1,10 +1,12 @@
++parameters:
++  memcache.stats_collect: false
+ services:
+   memcache.settings:
+     class: Drupal\memcache\MemcacheSettings
+     arguments: ['@settings']
+   memcache.factory:
+     class: Drupal\memcache\Driver\MemcacheDriverFactory
+-    arguments: ['@memcache.settings']
++    arguments: ['@memcache.settings', '%memcache.stats_collect%']
+   memcache.timestamp.invalidator.bin:
+     class: Drupal\memcache\Invalidator\MemcacheTimestampInvalidator
+     # Override this service and adjust tolerance if necessary.
+diff --git a/memcache_admin/memcache_admin.services.yml b/memcache_admin/memcache_admin.services.yml
+index 2f0143517cdcdd40aebd2396db8fa1d31edc06f9..ce5f7de538c83dbbab95989a1bd0ec9ec65592c5 100644
+--- a/memcache_admin/memcache_admin.services.yml
++++ b/memcache_admin/memcache_admin.services.yml
+@@ -3,9 +3,10 @@ services:
+     class: Drupal\memcache_admin\EventSubscriber\MemcacheAdminSubscriber
+     arguments:
+       - '@memcache.factory'
+-      - '@config.factory'
++      - '%memcache.stats_collect%'
+       - '@current_user'
+       - '@renderer'
++      - '@kernel'
+     tags:
+       - { name: event_subscriber }
+   memcache_stats.memcached:
+diff --git a/memcache_admin/src/EventSubscriber/MemcacheAdminSubscriber.php b/memcache_admin/src/EventSubscriber/MemcacheAdminSubscriber.php
+index 7a019757ae6d84df34146d653d924c87eb280fd0..8aa05b7c54eb67c4cc2e8a3f4f402ddbf6f32301 100644
+--- a/memcache_admin/src/EventSubscriber/MemcacheAdminSubscriber.php
++++ b/memcache_admin/src/EventSubscriber/MemcacheAdminSubscriber.php
+@@ -3,13 +3,16 @@
+ namespace Drupal\memcache_admin\EventSubscriber;
+ 
+ use Drupal\Component\Render\HtmlEscapedText;
+-use Drupal\Core\Config\ConfigFactoryInterface;
++use Drupal\Core\Config\ConfigCrudEvent;
++use Drupal\Core\Config\ConfigEvents;
++use Drupal\Core\DrupalKernelInterface;
+ use Drupal\Core\Render\HtmlResponse;
+ use Drupal\Core\Render\RendererInterface;
+ use Drupal\Core\Session\AccountInterface;
+ use Drupal\Core\StringTranslation\StringTranslationTrait;
+ use Drupal\memcache\Driver\MemcacheDriverFactory;
+ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
++use Symfony\Component\HttpKernel\Event\RequestEvent;
+ use Symfony\Component\HttpKernel\Event\ResponseEvent;
+ use Symfony\Component\HttpKernel\KernelEvents;
+ 
+@@ -27,11 +30,11 @@ class MemcacheAdminSubscriber implements EventSubscriberInterface {
+   protected $memcacheFactory;
+ 
+   /**
+-   * The config factory service.
++   * Indicates if memcache is collecting stats.
+    *
+-   * @var \Drupal\Core\Config\ConfigFactoryInterface
++   * @var bool
+    */
+-  protected $configFactory;
++  protected bool $statsEnabled;
+ 
+   /**
+    * The current user.
+@@ -47,23 +50,33 @@ class MemcacheAdminSubscriber implements EventSubscriberInterface {
+    */
+   protected $renderer;
+ 
++  /**
++   * The kernel.
++   *
++   * @var \Drupal\Core\DrupalKernelInterface
++   */
++  protected $kernel;
++
+   /**
+    * MemcacheAdminSubscriber constructor.
+    *
+    * @param \Drupal\memcache\Driver\MemcacheDriverFactory $memcache_factory
+    *   The memcache factory service.
+-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+-   *   The config factory service.
++   * @param bool $stats_enabled
++   *   The 'memcache.stats_collect' container parameter.
+    * @param \Drupal\Core\Session\AccountInterface $current_user
+    *   The current user.
+    * @param \Drupal\Core\Render\RendererInterface $renderer
+    *   The renderer service.
++   * @param \Drupal\Core\DrupalKernelInterface $kernel
++   *   The kernel.
+    */
+-  public function __construct(MemcacheDriverFactory $memcache_factory, ConfigFactoryInterface $config_factory, AccountInterface $current_user, RendererInterface $renderer) {
++  public function __construct(MemcacheDriverFactory $memcache_factory, bool $stats_enabled, AccountInterface $current_user, RendererInterface $renderer, DrupalKernelInterface $kernel) {
+     $this->memcacheFactory = $memcache_factory;
+-    $this->configFactory = $config_factory;
++    $this->statsEnabled = $stats_enabled;
+     $this->currentUser = $current_user;
+     $this->renderer = $renderer;
++    $this->kernel = $kernel;
+   }
+ 
+   /**
+@@ -71,101 +84,127 @@ class MemcacheAdminSubscriber implements EventSubscriberInterface {
+    */
+   public static function getSubscribedEvents(): array {
+     $events = [];
++    // Needs to come after user authentication.
++    $events[KernelEvents::REQUEST][] = ['disableStatisticsIfNoPermission', 299];
+     $events[KernelEvents::RESPONSE][] = ['displayStatistics'];
++    $events[ConfigEvents::SAVE][] = ['onConfigSave', 0];
+     return $events;
+   }
+ 
++  /**
++   * Disables statistics if user does not have permission.
++   */
++  public function disableStatisticsIfNoPermission(RequestEvent $event) {
++    if (!$this->statsEnabled) {
++      return;
++    }
++    if (!$this->currentUser->hasPermission('access memcache statistics')) {
++      $memcache = $this->memcacheFactory->get(NULL, TRUE);
++      $memcache->disableStats();
++    }
++  }
++
+   /**
+    * Display statistics on page.
+    */
+   public function displayStatistics(ResponseEvent $event) {
+-    $user = $this->currentUser;
+-    if ($user->id() == 0) {
+-      // Suppress for the above criteria.
++    if (!$this->statsEnabled) {
++      return;
+     }
+-    else {
+-      $response = $event->getResponse();
+-
+-      // Don't call theme() during shutdown if the registry has been rebuilt
+-      // (such as when enabling/disabling modules on admin/build/modules) as
+-      // things break.
+-      // Instead, simply exit without displaying admin statistics for this page
+-      // load.  See http://drupal.org/node/616282 for discussion.
+-      // @todo make sure this is not still a requirement.
+-      // @codingStandardsIgnoreStart
+-      // if (!function_exists('theme_get_registry') || !theme_get_registry()) {
+-      //   return;
+-      // }.
+-      // @codingStandardsIgnoreEnd
+-      // Try not to break non-HTML pages.
+-      if ($response instanceof HtmlResponse) {
+-
+-        // This should only apply to page content.
+-        if (stripos((string) $response->headers->get('content-type'), 'text/html') !== FALSE) {
+-          $show_stats = $this->configFactory->get('memcache_admin.settings')->get('show_memcache_statistics');
+-          if ($show_stats && $user->hasPermission('access memcache statistics')) {
+-            $output = '';
+-
+-            $memcache = $this->memcacheFactory->get(NULL, TRUE);
+-            $memcache_stats = $memcache->requestStats();
+-            if (!empty($memcache_stats['ops'])) {
+-              foreach ($memcache_stats['ops'] as $row => $stats) {
+-                $memcache_stats['ops'][$row][0] = new HtmlEscapedText($stats[0]);
+-                $memcache_stats['ops'][$row][1] = number_format($stats[1], 2);
+-                $hits = number_format($this->statsPercent($stats[2], $stats[3]), 1);
+-                $misses = number_format($this->statsPercent($stats[3], $stats[2]), 1);
+-                $memcache_stats['ops'][$row][2] = number_format($stats[2]) . " ($hits%)";
+-                $memcache_stats['ops'][$row][3] = number_format($stats[3]) . " ($misses%)";
+-              }
+ 
+-              $build = [
+-                '#theme' => 'table',
+-                '#header' => [
+-                  $this->t('operation'),
+-                  $this->t('total ms'),
+-                  $this->t('total hits'),
+-                  $this->t('total misses'),
+-                ],
+-                '#rows' => $memcache_stats['ops'],
+-              ];
+-              $output .= $this->renderer->renderRoot($build);
++    $response = $event->getResponse();
++
++    // Don't call theme() during shutdown if the registry has been rebuilt
++    // (such as when enabling/disabling modules on admin/build/modules) as
++    // things break.
++    // Instead, simply exit without displaying admin statistics for this page
++    // load.  See http://drupal.org/node/616282 for discussion.
++    // @todo make sure this is not still a requirement.
++    // @codingStandardsIgnoreStart
++    // if (!function_exists('theme_get_registry') || !theme_get_registry()) {
++    //   return;
++    // }.
++    // @codingStandardsIgnoreEnd
++    // Try not to break non-HTML pages.
++    if ($response instanceof HtmlResponse) {
++
++      // This should only apply to page content.
++      if (stripos((string) $response->headers->get('content-type'), 'text/html') !== FALSE) {
++        if ($this->currentUser->hasPermission('access memcache statistics')) {
++          $output = '';
++
++          $memcache = $this->memcacheFactory->get(NULL, TRUE);
++          $memcache_stats = $memcache->requestStats();
++          if (!empty($memcache_stats['ops'])) {
++            foreach ($memcache_stats['ops'] as $row => $stats) {
++              $memcache_stats['ops'][$row][0] = new HtmlEscapedText($stats[0]);
++              $memcache_stats['ops'][$row][1] = number_format($stats[1], 2);
++              $hits = number_format($this->statsPercent($stats[2], $stats[3]), 1);
++              $misses = number_format($this->statsPercent($stats[3], $stats[2]), 1);
++              $memcache_stats['ops'][$row][2] = number_format($stats[2]) . " ($hits%)";
++              $memcache_stats['ops'][$row][3] = number_format($stats[3]) . " ($misses%)";
+             }
+ 
+-            if (!empty($memcache_stats['all'])) {
+-              $build = [
+-                '#type'  => 'table',
+-                '#header' => [
+-                  $this->t('ms'),
+-                  $this->t('operation'),
+-                  $this->t('bin'),
+-                  $this->t('key'),
+-                  $this->t('status'),
+-                ],
++            $build = [
++              '#theme' => 'table',
++              '#header' => [
++                $this->t('operation'),
++                $this->t('total ms'),
++                $this->t('total hits'),
++                $this->t('total misses'),
++              ],
++              '#rows' => $memcache_stats['ops'],
++            ];
++            $output .= $this->renderer->renderRoot($build);
++          }
++
++          if (!empty($memcache_stats['all'])) {
++            $build = [
++              '#type'  => 'table',
++              '#header' => [
++                $this->t('ms'),
++                $this->t('operation'),
++                $this->t('bin'),
++                $this->t('key'),
++                $this->t('status'),
++              ],
++            ];
++            foreach ($memcache_stats['all'] as $row => $stats) {
++              $build[$row]['ms'] = ['#plain_text' => $stats[0]];
++              $build[$row]['operation'] = ['#plain_text' => $stats[1]];
++              $build[$row]['bin'] = ['#plain_text' => $stats[2]];
++              $build[$row]['key'] = [
++                '#separator' => ' | ',
+               ];
+-              foreach ($memcache_stats['all'] as $row => $stats) {
+-                $build[$row]['ms'] = ['#plain_text' => $stats[0]];
+-                $build[$row]['operation'] = ['#plain_text' => $stats[1]];
+-                $build[$row]['bin'] = ['#plain_text' => $stats[2]];
+-                $build[$row]['key'] = [
+-                  '#separator' => ' | ',
+-                ];
+-                foreach (explode('\n', $stats[3]) as $akey) {
+-                  $build[$row]['key']['child'][]['#plain_text'] = $akey;
+-                }
+-                $build[$row]['status'] = ['#plain_text' => $stats[4]];
++              foreach (explode('\n', $stats[3]) as $akey) {
++                $build[$row]['key']['child'][]['#plain_text'] = $akey;
+               }
+-              $output .= $this->renderer->renderRoot($build);
++              $build[$row]['status'] = ['#plain_text' => $stats[4]];
+             }
++            $output .= $this->renderer->renderRoot($build);
++          }
+ 
+-            if (!empty($output)) {
+-              $response->setContent($response->getContent() . '<div id="memcache-devel"><h2>' . $this->t('Memcache statistics') . '</h2>' . $output . '</div>');
+-            }
++          if (!empty($output)) {
++            $response->setContent($response->getContent() . '<div id="memcache-devel"><h2>' . $this->t('Memcache statistics') . '</h2>' . $output . '</div>');
+           }
+         }
+       }
+     }
+   }
+ 
++  /**
++   * Causes the container to be rebuilt on the next request, if necessary.
++   *
++   * @param \Drupal\Core\Config\ConfigCrudEvent $event
++   *   The configuration event.
++   */
++  public function onConfigSave(ConfigCrudEvent $event) {
++    $saved_config = $event->getConfig();
++    if ($saved_config->getName() == 'memcache_admin.settings' && $event->isChanged('show_memcache_statistics')) {
++      $this->kernel->invalidateContainer();
++    }
++  }
++
+   /**
+    * Helper function. Calculate a percentage.
+    */
+diff --git a/memcache_admin/src/MemcacheAdminServiceProvider.php b/memcache_admin/src/MemcacheAdminServiceProvider.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..bef80abafd0a74175ef3bd436ebf7d9aef8bc13c
+--- /dev/null
++++ b/memcache_admin/src/MemcacheAdminServiceProvider.php
+@@ -0,0 +1,24 @@
++<?php
++
++namespace Drupal\memcache_admin;
++
++use Drupal\Core\Config\BootstrapConfigStorageFactory;
++use Drupal\Core\DependencyInjection\ContainerBuilder;
++use Drupal\Core\DependencyInjection\ServiceModifierInterface;
++
++/**
++ * Enables memcache stats collection based on configuration.
++ */
++class MemcacheAdminServiceProvider implements ServiceModifierInterface {
++
++  /**
++   * {@inheritdoc}
++   */
++  public function alter(ContainerBuilder $container) {
++    $config_storage = BootstrapConfigStorageFactory::get();
++    $config = $config_storage->read('memcache_admin.settings');
++    // Determine whether stats should be collected using configuration.
++    $container->setParameter('memcache.stats_collect', $config['show_memcache_statistics'] ?? FALSE);
++  }
++
++}
+diff --git a/memcache_admin/tests/src/Functional/MemcacheAdminStatsTest.php b/memcache_admin/tests/src/Functional/MemcacheAdminStatsTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..84ed87d99f9d644f5bf8df0e7b113bc8f464481e
+--- /dev/null
++++ b/memcache_admin/tests/src/Functional/MemcacheAdminStatsTest.php
+@@ -0,0 +1,100 @@
++<?php
++
++namespace Drupal\Tests\memcache_admin\Functional;
++
++use Drupal\Core\Url;
++use Drupal\Tests\BrowserTestBase;
++use Drupal\user\Entity\Role;
++
++/**
++ * Tests displaying memcache statistics.
++ *
++ * @group memcache
++ */
++class MemcacheAdminStatsTest extends BrowserTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected $defaultTheme = 'stark';
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = ['memcache', 'memcache_admin'];
++
++  /**
++   * {@inheritdoc}
++   */
++  public function setUp(): void {
++    parent::setUp();
++    $host = getenv('MEMCACHED_HOST') ?: '127.0.0.1:11211';
++    $settings['settings']['memcache'] = (object) [
++      'value' => [
++        'servers' => [$host => 'default'],
++        'bin' => ['default' => 'default'],
++        'key_prefix' => $this->databasePrefix,
++      ],
++      'required' => TRUE,
++    ];
++    $settings['settings']['cache']['default'] = (object) [
++      'value' => 'cache.backend.memcache',
++      'required' => TRUE,
++    ];
++
++    $settings['settings']['hash_salt'] = (object) [
++      'value' => $this->randomMachineName(),
++      'required' => TRUE,
++    ];
++
++    $this->writeSettings($settings);
++    $this->rebuildAll();
++  }
++
++  /**
++   * Tests displaying memcache statistics.
++   */
++  public function testStats(): void {
++    $front = Url::fromRoute('<front>');
++    // By default, stats are not collected.
++    $this->assertFalse(\Drupal::getContainer()->getParameter('memcache.stats_collect'));
++
++    $this->drupalLogin($this->createUser(['administer site configuration']));
++    $this->drupalGet('admin/config/system/memcache');
++    $this->assertSession()->fieldExists('show_memcache_statistics')->check();
++    $this->assertSession()->buttonExists('Save configuration')->click();
++
++    // The user does not have the permission so should not see any stats.
++    $this->drupalGet($front);
++    $this->assertSession()->pageTextNotContains('Memcache statistics');
++
++    // A user with the permission can see stats.
++    $this->drupalLogin($this->createUser(['access memcache statistics']));
++    $this->drupalGet($front);
++    $this->assertSession()->pageTextContains('Memcache statistics');
++
++    // The anonymous user can not see stats unless they have the permission.
++    $this->drupalLogout();
++    $this->drupalGet($front);
++    $this->assertSession()->pageTextNotContains('Memcache statistics');
++
++    // Ensure you can set up anonymous users to see memcache stats so for
++    // debugging purposes.
++    Role::load(Role::ANONYMOUS_ID)->grantPermission('access memcache statistics')->save();
++    $this->drupalGet($front);
++    $this->assertSession()->pageTextContains('Memcache statistics');
++
++    // Rebuild the container in the test so we can assert against it. The form
++    // save above will have triggered a rebuild in the site-under-test but we
++    // wait till now so the test confirms this has worked.
++    $this->rebuildContainer();
++    $this->assertTrue(\Drupal::getContainer()->getParameter('memcache.stats_collect'));
++
++    \Drupal::service('module_installer')->uninstall(['memcache_admin']);
++    $this->rebuildAll();
++    $this->drupalGet($front);
++    $this->assertSession()->pageTextNotContains('Memcache statistics');
++    $this->assertFalse(\Drupal::getContainer()->getParameter('memcache.stats_collect'));
++  }
++
++}
+diff --git a/src/Driver/DriverBase.php b/src/Driver/DriverBase.php
+index 7e9b6d0e58f130ca09defe622510709173dbf9eb..bac0d3422f1658d5db9ec3b62c03b2fdc16dfea0 100644
+--- a/src/Driver/DriverBase.php
++++ b/src/Driver/DriverBase.php
+@@ -53,6 +53,13 @@ abstract class DriverBase implements DrupalMemcacheInterface {
+     'ops' => [],
+   ];
+ 
++  /**
++   * Flag to indicate if stats collection has been enabled.
++   *
++   * @var bool
++   */
++  private static bool $statsEnabled;
++
+   /**
+    * Constructs a DriverBase object.
+    *
+@@ -62,8 +69,10 @@ abstract class DriverBase implements DrupalMemcacheInterface {
+    *   An existing memcache connection object.
+    * @param string $bin
+    *   The class instance specific cache bin to use.
++   * @param bool $statsEnabled
++   *   Flag to indicate if stats collection has been enabled.
+    */
+-  public function __construct(MemcacheSettings $settings, $memcache, $bin = NULL) {
++  public function __construct(MemcacheSettings $settings, $memcache, $bin = NULL, bool $statsEnabled = FALSE) {
+     $this->settings = $settings;
+     $this->memcache = $memcache;
+     $this->hashAlgorithm = $this->settings->get('key_hash_algorithm', 'sha1');
+@@ -74,6 +83,7 @@ abstract class DriverBase implements DrupalMemcacheInterface {
+     if ($bin) {
+       $this->prefix .= $bin . ':';
+     }
++    self::$statsEnabled = $statsEnabled;
+   }
+ 
+   /**
+@@ -242,6 +252,19 @@ abstract class DriverBase implements DrupalMemcacheInterface {
+     return $stats;
+   }
+ 
++  /**
++   * Disables stats collection.
++   */
++  public function disableStats() {
++    // Clear up.
++    self::$stats = [
++      'all' => [],
++      'ops' => [],
++    ];
++    // Stop recording.
++    self::$statsEnabled = FALSE;
++  }
++
+   /**
+    * Helper function to get the bins.
+    */
+@@ -302,39 +325,12 @@ abstract class DriverBase implements DrupalMemcacheInterface {
+    * Helper function to initialize the stats for a memcache operation.
+    */
+   protected function statsInit() {
+-    static $drupal_static_fast;
+-
+-    if (!isset($drupal_static_fast)) {
+-      // @phpcs:ignore
+-      $drupal_static_fast = &drupal_static(__FUNCTION__, ['variable_checked' => NULL, 'user_access_checked' => NULL]);
+-    }
+-    $variable_checked = &$drupal_static_fast['variable_checked'];
+-    $user_access_checked = &$drupal_static_fast['user_access_checked'];
+-
+-    // Confirm DRUPAL_BOOTSTRAP_VARIABLES has been reached. We don't use
+-    // drupal_get_bootstrap_phase() as it's buggy. We can use variable_get()
+-    // here because _drupal_bootstrap_variables() includes module.inc
+-    // immediately after it calls variable_initialize().
+-    // @codingStandardsIgnoreStart
+-    // if (!isset($variable_checked) && function_exists('module_list')) {
+-    //   $variable_checked = variable_get('show_memcache_statistics', FALSE);
+-    // }
+-    // If statistics are enabled we need to check user access.
+-    // if (!empty($variable_checked) && !isset($user_access_checked) && !empty($GLOBALS['user']) && function_exists('user_access')) {
+-    //   // Statistics are enabled and the $user object has been populated, so check
+-    //   // that the user has access to view them.
+-    //   $user_access_checked = user_access('access memcache statistics');
+-    // }
+-    // @codingStandardsIgnoreEnd
+-    // Return whether or not statistics are enabled and the user can access
+-    // them.
+-    if ((!isset($variable_checked) || $variable_checked) && (!isset($user_access_checked) || $user_access_checked)) {
++    if (self::$statsEnabled) {
+       Timer::start('dmemcache');
+       return TRUE;
+     }
+-    else {
+-      return FALSE;
+-    }
++
++    return FALSE;
+   }
+ 
+   /**
+diff --git a/src/Driver/MemcacheDriverFactory.php b/src/Driver/MemcacheDriverFactory.php
+index 3730376a76705e28540981927c180bc72b81f47e..d395841086d623add21fbe36c921063ea55a7e8a 100644
+--- a/src/Driver/MemcacheDriverFactory.php
++++ b/src/Driver/MemcacheDriverFactory.php
+@@ -68,14 +68,24 @@ class MemcacheDriverFactory {
+    */
+   protected $failedConnectionCache = [];
+ 
++  /**
++   * Flag to indicate if stats collection has been enabled.
++   *
++   * @var bool
++   */
++  private bool $statsEnabled;
++
+   /**
+    * Constructs a MemcacheDriverFactory object.
+    *
+    * @param \Drupal\memcache\MemcacheSettings $settings
+    *   The settings object.
++   * @param bool $statsEnabled
++   *   Flag to indicate if stats collection has been enabled.
+    */
+-  public function __construct(MemcacheSettings $settings) {
++  public function __construct(MemcacheSettings $settings, bool $statsEnabled = FALSE) {
+     $this->settings = $settings;
++    $this->statsEnabled = $statsEnabled;
+ 
+     $this->initialize();
+   }
+@@ -148,7 +158,7 @@ class MemcacheDriverFactory {
+       }
+     }
+ 
+-    return empty($this->connections[$bin]) ? FALSE : new $this->driverClass($this->settings, $this->connections[$bin]->getMemcache(), $bin);
++    return empty($this->connections[$bin]) ? FALSE : new $this->driverClass($this->settings, $this->connections[$bin]->getMemcache(), $bin, $this->statsEnabled);
+   }
+ 
+   /**
