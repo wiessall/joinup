@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use Drupal\joinup_i18n\Hook\JoinupI18nHooks;
 use Drupal\tmgmt\JobInterface;
+use Drupal\tmgmt_ec_etranslation\Plugin\tmgmt\Translator\ETranslationTranslator;
 
 /**
  * Locale source strings with duplicates.
@@ -77,31 +78,54 @@ function joinup_i18n_deploy_201201(array &$sandbox): string {
 }
 
 /**
- * Rename legacy Babel continuous jobs and align their continuous_settings.
+ * Create continuous jobs for all enabled languages.
  */
-function joinup_i18n_deploy_201202(): string {
-  $job_storage = \Drupal::entityTypeManager()->getStorage('tmgmt_job');
-  $ids = $job_storage->getQuery()
-    ->accessCheck(FALSE)
-    ->condition('job_type', JobInterface::TYPE_CONTINUOUS)
-    ->condition('label', 'Babel:%', 'LIKE')
-    ->condition('source_language', 'en')
-    ->execute();
+function joinup_i18n_deploy_201202(array &$sandbox): string {
+  if (!isset($sandbox['pairs'])) {
+    $langcodes = array_keys(\Drupal::languageManager()->getLanguages());
 
-  if (empty($ids)) {
-    return 'No Babel continuous jobs found.';
+    // Get permutations of language codes.
+    for ($i = 0; $i < count($langcodes); $i++) {
+      if ($langcodes[$i] === 'en') {
+        // Continuous jobs with English as source language already exist.
+        continue;
+      }
+
+      for ($j = 0; $j < count($langcodes); $j++) {
+        if ($i !== $j) {
+          $sandbox['pairs'][] = [$langcodes[$i], $langcodes[$j]];
+        }
+      }
+    }
+
+    $sandbox['continuous_settings'] = \Drupal::service(JoinupI18nHooks::class)->getContinuousSettings();
+
+    // Rename legacy Babel continuous jobs and align their continuous_settings.
+    $job_storage = \Drupal::entityTypeManager()->getStorage('tmgmt_job');
+    $ids = $job_storage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('job_type', JobInterface::TYPE_CONTINUOUS)
+      ->condition('label', 'Babel:%', 'LIKE')
+      ->condition('source_language', 'en')
+      ->execute();
+
+    foreach ($job_storage->loadMultiple($ids) as $job) {
+      $job->set('label', "Joinup: en > {$job->getTargetLangcode()}")
+        ->set('continuous_settings', $sandbox['continuous_settings'])
+        ->save();
+    }
   }
 
-  $continuous_settings = \Drupal::service(JoinupI18nHooks::class)->getContinuousSettings();
-  $count = 0;
-  foreach ($job_storage->loadMultiple($ids) as $job) {
-    $source_langcode = $job->getSourceLangcode();
-    $target_langcode = $job->getTargetLangcode();
-    $job->set('label', "Joinup: $source_langcode > $target_langcode");
-    $job->set('continuous_settings', $continuous_settings);
-    $job->save();
-    $count++;
-  }
+  [$source, $target] = array_shift($sandbox['pairs']);
+  tmgmt_job_create($source, $target, values: [
+    'label' => "Joinup: $source > $target",
+    'translator' => ETranslationTranslator::ID,
+    'state' => JobInterface::STATE_CONTINUOUS,
+    'job_type' => JobInterface::TYPE_CONTINUOUS,
+    'continuous_settings' => $sandbox['continuous_settings'],
+  ])->save();
 
-  return "Updated $count continuous job(s).";
+  $sandbox['#finished'] = (int) empty($sandbox['pairs']);
+
+  return "Created continuous job for $source > $target";
 }

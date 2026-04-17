@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_i18n\Hook;
 
-use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Config\ConfigInstallerInterface;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
 use Drupal\Core\Hook\Attribute\Hook;
-use Drupal\Core\Hook\Order\OrderBefore;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\content_translation\ContentTranslationManagerInterface;
+use Drupal\language\ConfigurableLanguageInterface;
+use Drupal\language\ContentLanguageSettingsInterface;
 use Drupal\tmgmt\JobInterface;
 use Drupal\tmgmt_ec_etranslation\Plugin\tmgmt\Translator\ETranslationTranslator;
 
@@ -20,134 +22,98 @@ use Drupal\tmgmt_ec_etranslation\Plugin\tmgmt\Translator\ETranslationTranslator;
  */
 class JoinupI18nHooks {
 
-  /**
-   * The cached continuous job settings.
-   *
-   * @var array{content: array<string, array{enabled: int, bundles: array<string, int>}
-   */
-  protected array $continuousSettings;
-
   public function __construct(
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly LanguageManagerInterface $languageManager,
     protected readonly ContentTranslationManagerInterface $translationManager,
     protected readonly EntityTypeBundleInfoInterface $bundleInfo,
-  ) {
-  }
+    protected readonly Connection $db,
+    protected readonly ConfigInstallerInterface $configInstaller,
+  ) {}
 
   /**
-   * Implements hook_entity_insert().
-   */
-  #[Hook('entity_insert', order: new OrderBefore(['tmgmt_content']))]
-  public function entityInsert(EntityInterface $entity): void {
-    $this->ensureContinuousJobs($entity);
-  }
-
-  /**
-   * Implements hook_entity_update().
-   */
-  #[Hook('entity_update', order: new OrderBefore(['tmgmt_content']))]
-  public function entityUpdate(EntityInterface $entity): void {
-    $this->ensureContinuousJobs($entity);
-  }
-
-  /**
-   * Creates missing ec_etranslation continuous jobs for an entity.
+   * Update the job's continuous settings when a bundle is enabled or disabled.
    *
-   * For each enabled target language that has no continuous job covering the
-   * entity's source language, a new continuous job is created so that
-   * tmgmt_content can immediately attach job items to it.
-   *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   The entity that was inserted or updated.
+   * @param \Drupal\language\ContentLanguageSettingsInterface $settings
+   *   The language content settings entity.
    */
-  public function ensureContinuousJobs(EntityInterface $entity): void {
-    if (!$entity instanceof ContentEntityInterface) {
+  #[Hook('language_content_settings_insert')]
+  #[Hook('language_content_settings_update')]
+  #[Hook('language_content_settings_delete')]
+  public function languageContentSettingsUpdate(ContentLanguageSettingsInterface $settings): void {
+    if ($this->configInstaller->isSyncing()) {
       return;
     }
 
-    if (!$entity->isTranslatable() || $entity->getEntityType()->get('entity_revision_parent_type_field') || !$entity->isDefaultTranslation()) {
-      return;
-    }
+    // On delete, $wasEnabled equals FALSE because the original is NULL.
+    $wasEnabled = !$settings->isNew() && $settings->getOriginal()?->getThirdPartySetting('content_translation', 'enabled', FALSE);
+    $isEnabled = $settings->getThirdPartySetting('content_translation', 'enabled', FALSE);
 
-    // Ensure our generic check is only for desired entity type IDs.
-    if (!in_array($entity->getEntityTypeId(), array_keys($this->getContinuousSettings()['content']))) {
-      return;
-    }
-
-    $sourceLangcode = $entity->language()->getId();
-    $targetLangcodeArray = $this->languageManager->getLanguages();
-    $targetLangcodes = array_filter(
-      array_keys($targetLangcodeArray),
-      fn(string $langcode): bool => $langcode !== $sourceLangcode,
-    );
-
-    if (empty($targetLangcodes)) {
-      return;
-    }
-
-    // Load all existing continuous jobs for this source language + translator
-    // in one query for performance.
-    $jobStorage = $this->entityTypeManager->getStorage('tmgmt_job');
-    $existingTargetLangcodes = array_column(
-      $jobStorage->getAggregateQuery()
-        ->accessCheck(FALSE)
-        ->groupBy('target_language')
-        ->condition('source_language', $sourceLangcode)
-        ->condition('translator', ETranslationTranslator::ID)
+    if ($isEnabled !== $wasEnabled) {
+      $storage = $this->entityTypeManager->getStorage('tmgmt_job');
+      // Use a direct query for the sake of performance.
+      assert($storage instanceof SqlContentEntityStorage);
+      $this->db->update('tmgmt_job')
+        ->fields(['continuous_settings' => serialize($this->getContinuousSettings())])
         ->condition('job_type', JobInterface::TYPE_CONTINUOUS)
-        ->execute(),
-      'target_language',
-    );
-
-    $jobStorage = $this->entityTypeManager->getStorage('tmgmt_job');
-    foreach (array_diff($targetLangcodes, $existingTargetLangcodes) as $targetLangcode) {
-      $jobStorage->create([
-        'source_language' => $sourceLangcode,
-        'target_language' => $targetLangcode,
-        'label' => "Joinup: {$sourceLangcode} > {$targetLangcode}",
-        'uid' => 0,
-        'translator' => ETranslationTranslator::ID,
-        'settings' => [],
-        'state' => JobInterface::STATE_CONTINUOUS,
-        'job_type' => JobInterface::TYPE_CONTINUOUS,
-        'continuous_settings' => $this->getContinuousSettings(),
-      ])->save();
+        ->condition('state', JobInterface::STATE_CONTINUOUS)
+        ->condition('translator', ETranslationTranslator::ID)
+        ->condition('label', 'Joinup: %', 'LIKE')
+        ->execute();
+      $storage->resetCache();
     }
   }
 
   /**
-   * Implements hook_ENTITY_TYPE_insert() for node_type entity type.
-   */
-  #[Hook('node_type_insert')]
-  public function entityNodeTypeInsert(EntityInterface $entity): void {
-    $this->updateContinuousJobsWithNodeBundles();
-  }
-
-  /**
-   * Implements hook_ENTITY_TYPE_delete() for node_type entity type.
-   */
-  #[Hook('node_type_delete')]
-  public function entityNodeTypeDelete(EntityInterface $entity): void {
-    $this->updateContinuousJobsWithNodeBundles();
-  }
-
-  /**
-   * Updates all continuous jobs with the existing node bundles.
+   * Creates a continuous job when a new language is created.
    *
-   * This updates the continuous jobs as needed based on the current set of
-   * bundles available across all node types in the system.
+   * @param \Drupal\language\ConfigurableLanguageInterface $language
+   *   The language entity being inserted.
    */
-  private function updateContinuousJobsWithNodeBundles(): void {
-    $jobStorage = $this->entityTypeManager->getStorage('tmgmt_job');
-    $jobStorage->getQuery()
-      ->accessCheck(FALSE)
-      ->condition('job_type', JobInterface::TYPE_CONTINUOUS)
-      ->condition('translator', ETranslationTranslator::ID)
-      ->execute();
+  #[Hook('configurable_language_insert')]
+  public function onLanguageInsert(ConfigurableLanguageInterface $language): void {
+    $newLangcode = $language->getId();
+    $langcodes = array_keys($this->languageManager->getLanguages());
+    unset($langcodes[array_search($newLangcode, $langcodes)]);
 
-    foreach ($jobStorage->loadMultiple() as $job) {
-      $job->set('continuous_settings', $this->getContinuousSettings())->save();
+    $values = [
+      'translator' => ETranslationTranslator::ID,
+      'state' => JobInterface::STATE_CONTINUOUS,
+      'job_type' => JobInterface::TYPE_CONTINUOUS,
+      'continuous_settings' => $this->getContinuousSettings(),
+    ];
+
+    foreach ($langcodes as $langcode) {
+      tmgmt_job_create($langcode, $newLangcode, 0, $values)
+        ->set('label', "Joinup: $langcode > $newLangcode")
+        ->save();
+      tmgmt_job_create($newLangcode, $langcode, 0, $values)
+        ->set('label', "Joinup: $newLangcode > $langcode")
+        ->save();
+    }
+  }
+
+  /**
+   * Deletes the continuous jobs involving a deleted language.
+   *
+   * @param \Drupal\language\ConfigurableLanguageInterface $language
+   *   The language entity just deleted.
+   */
+  #[Hook('configurable_language_delete')]
+  public function onLanguageDelete(ConfigurableLanguageInterface $language): void {
+    $storage = $this->entityTypeManager->getStorage('tmgmt_job');
+
+    $query = $storage->getQuery()->accessCheck(FALSE)
+      ->condition('translator', ETranslationTranslator::ID)
+      ->condition('state', JobInterface::STATE_CONTINUOUS)
+      ->condition('job_type', JobInterface::TYPE_CONTINUOUS);
+    $or = $query->orConditionGroup()
+      ->condition('source_language', $language->getId())
+      ->condition('target_language', $language->getId());
+    $tjids = $query->condition($or)->execute();
+
+    if ($tjids) {
+      $storage->delete($storage->loadMultiple($tjids));
     }
   }
 
@@ -158,24 +124,22 @@ class JoinupI18nHooks {
    *   The continuous job settings array.
    */
   public function getContinuousSettings(): array {
-    if (!isset($this->continuousSettings)) {
-      $this->continuousSettings = ['content' => []];
-      foreach ($this->translationManager->getSupportedEntityTypes() as $entityTypeId => $entityType) {
-        foreach ($this->bundleInfo->getBundleInfo($entityTypeId) as $bundle => $info) {
-          // @todo Remove this exception in ISAICP-11093
-          if ($entityTypeId === 'node' && $bundle === 'oss_solution') {
-            continue;
-          }
+    $continuousSettings = ['content' => []];
+    foreach ($this->translationManager->getSupportedEntityTypes() as $entityTypeId => $entityType) {
+      foreach ($this->bundleInfo->getBundleInfo($entityTypeId) as $bundle => $info) {
+        // @todo Remove this exception in ISAICP-11093
+        if ($entityTypeId === 'node' && $bundle === 'oss_solution') {
+          continue;
+        }
 
-          if ($this->translationManager->isEnabled($entityTypeId, $bundle)) {
-            $this->continuousSettings['content'][$entityTypeId]['enabled'] = 1;
-            $this->continuousSettings['content'][$entityTypeId]['bundles'][$bundle] = 1;
-          }
+        if ($this->translationManager->isEnabled($entityTypeId, $bundle)) {
+          $continuousSettings['content'][$entityTypeId]['enabled'] = 1;
+          $continuousSettings['content'][$entityTypeId]['bundles'][$bundle] = 1;
         }
       }
     }
 
-    return $this->continuousSettings;
+    return $continuousSettings;
   }
 
 }
