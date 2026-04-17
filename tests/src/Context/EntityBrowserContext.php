@@ -101,8 +101,8 @@ class EntityBrowserContext extends RawDrupalContext {
    */
   #[When('I remove :title from the entity browser widget')]
   public function removeEntityFromBrowserWidget(string $title): void {
-    $container = $this->waitForElement('xpath', '//div[contains(@class, "item-container")][contains(., "' . $title . '")]');
-    $removeButton = $container->find('css', 'input.remove-button');
+    $container = $this->waitForElement('xpath', '//*[contains(@class, "item-container")][contains(., "' . $title . '")]');
+    $removeButton = $container->find('css', '.remove-button');
     Assert::assertNotNull($removeButton, sprintf('Remove button not found for "%s".', $title));
     $removeButton->press();
   }
