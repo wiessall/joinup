@@ -318,6 +318,8 @@ trait TraversingTrait {
         return $element;
       }
     }
+
+    throw new ElementNotFoundException($this->getSession()->getDriver(), "'$heading' tile.");
   }
 
   /**
