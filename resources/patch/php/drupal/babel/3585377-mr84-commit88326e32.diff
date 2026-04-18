@@ -1,0 +1,82 @@
+diff --git a/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php b/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php
+index 328dda8eaf962b5e12f48c162a84644a189b014a..f5fc864238bf3cb89967999af7eb0d25ec690b14 100644
+--- a/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php
++++ b/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php
+@@ -113,8 +113,21 @@ class ContentEntity extends TranslationTypePluginBase implements PluginFormInter
+       }
+ 
+       foreach ($entityIds[$entityId] as [$fieldName, $delta]) {
+-        $source = $entity?->get($fieldName)?->get($delta)->getString();
+-
++        // This mainPropertyName logic does not work well for fields having
++        // multiple properties like TextareaWithSummary fields
++        // (summary is ignored) and it is definitely wrong in case of
++        // translatable FileItem fields (target_id is the main property, alt
++        // and title won't be translated but we usually want the other way
++        // around).
++        // @todo Address this in https://drupal.org/i/3580366.
++
++        /** @var \Drupal\Core\Field\FieldItemInterface $fieldItem */
++        $fieldItem = $entity?->get($fieldName)?->get($delta);
++        if (!$fieldItem) {
++          continue;
++        }
++        $mainProperty = $fieldItem::mainPropertyName();
++        $source = $fieldItem->get($mainProperty)->getString();
+         if (!$source) {
+           continue;
+         }
+diff --git a/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php b/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php
+index 9c64177942a5e12847adb23c6a286e2ea953d2de..794dd7233ca0f84698c081bc990cc198f9fdbf3d 100644
+--- a/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php
++++ b/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php
+@@ -4,6 +4,8 @@ declare(strict_types=1);
+ 
+ namespace Drupal\Tests\babel_content_entity\Kernel\Plugin\Babel\TranslationType;
+ 
++use Drupal\babel\Model\Source;
++use Drupal\babel\Model\StringTranslation;
+ use Drupal\babel\Plugin\Babel\TranslationTypePluginManager;
+ use Drupal\babel_content_entity\Plugin\Babel\TranslationType\ContentEntity;
+ use Drupal\taxonomy\Entity\Vocabulary;
+@@ -79,14 +81,12 @@ class ContentEntityTest extends TranslationTypePluginTestBase {
+   ): void {
+     if ($termsCount) {
+       while ($termsCount > 0) {
+-        $this->createRandomTerm();
++        $this->createRandomTerm('name', 'desc');
+         $termsCount--;
+       }
+     }
+-    $this->assertEqualsCanonicalizing(
+-      $expected,
+-      array_keys($this->plugin->getStrings($langcode, $stringIds))
+-    );
++    $strings = $this->plugin->getStrings($langcode, $stringIds);
++    $this->assertEquals($expected, $strings);
+   }
+ 
+   /**
+@@ -107,7 +107,10 @@ class ContentEntityTest extends TranslationTypePluginTestBase {
+         'termsCount' => 1,
+         'langcode' => 'fi',
+         'stringIds' => [],
+-        'expected' => ['tags:1:name:0'],
++        'expected' => [
++          'tags:1:description:0' => new StringTranslation(new Source('desc', '', TRUE)),
++          'tags:1:name:0' => new StringTranslation(new Source('name', '', TRUE)),
++        ],
+       ],
+       'Load specific' => [
+         'termsCount' => 4,
+@@ -117,8 +120,8 @@ class ContentEntityTest extends TranslationTypePluginTestBase {
+           'tags:4:name:0',
+         ],
+         'expected' => [
+-          'tags:2:name:0',
+-          'tags:4:name:0',
++          'tags:2:name:0' => new StringTranslation(new Source('name', '', TRUE)),
++          'tags:4:name:0' => new StringTranslation(new Source('name', '', TRUE)),
+         ],
+       ],
+     ];
