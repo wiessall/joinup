@@ -49,7 +49,9 @@ class AssessmentsEntityHooks {
       }
       foreach ($duplicate->get($fieldName) as $item) {
         if ($item->entity instanceof AssessmentInterface) {
-          $item->entity = $item->entity->createDuplicate();
+          $newEntity = $item->entity->createDuplicate();
+          $newEntity->save();
+          $item->entity = $newEntity;
         }
       }
     }
