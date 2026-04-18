@@ -10,7 +10,6 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\WebformInterface;
 
@@ -20,7 +19,6 @@ use Drupal\webform\WebformInterface;
 class WebformContext extends RawDrupalContext {
 
   use EntityTrait;
-  use TestingEntitiesTrait;
 
   /**
    * Creates webform entities.
@@ -42,7 +40,6 @@ class WebformContext extends RawDrupalContext {
       $this->prepareFields($values);
       $webform = $webformStorage->create($values);
       $webform->save();
-      $this->entities['webform'][$webform->id()] = $webform;
     }
   }
 
