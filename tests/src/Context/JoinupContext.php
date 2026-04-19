@@ -2890,6 +2890,9 @@ class JoinupContext extends RawDrupalContext {
         $storage = \Drupal::entityTypeManager()->getStorage($entity_type->id());
         $storage->resetCache($ids);
         $entities = $storage->loadMultiple($ids);
+        array_walk($entities, function (FieldableEntityInterface $entity): void {
+          $entity->skip_notification = TRUE;
+        });
         @$storage->delete($entities);
       }
     }
