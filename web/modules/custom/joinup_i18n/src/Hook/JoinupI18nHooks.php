@@ -72,6 +72,10 @@ class JoinupI18nHooks {
    */
   #[Hook('configurable_language_insert')]
   public function onLanguageInsert(ConfigurableLanguageInterface $language): void {
+    if ($this->configInstaller->isSyncing() || $language->isLocked()) {
+      return;
+    }
+
     $newLangcode = $language->getId();
     $langcodes = array_keys($this->languageManager->getLanguages());
     unset($langcodes[array_search($newLangcode, $langcodes)]);
