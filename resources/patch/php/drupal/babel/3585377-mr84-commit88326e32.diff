@@ -1,8 +1,17 @@
+
 diff --git a/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php b/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php
-index 328dda8eaf962b5e12f48c162a84644a189b014a..f5fc864238bf3cb89967999af7eb0d25ec690b14 100644
+index 328dda8eaf962b5e12f48c162a84644a189b014a..8757e123e312b67d33a5bbee7606cc15c155d613 100644
 --- a/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php
 +++ b/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php
-@@ -113,8 +113,21 @@ class ContentEntity extends TranslationTypePluginBase implements PluginFormInter
+@@ -17,6 +17,7 @@ use Drupal\Component\Datetime\TimeInterface;
+ use Drupal\Component\Plugin\PluginBase;
+ use Drupal\content_translation\ContentTranslationManagerInterface;
+ use Drupal\Core\Entity\EntityFieldManagerInterface;
++use Drupal\Core\Entity\EntityInterface;
+ use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+ use Drupal\Core\Entity\EntityTypeManagerInterface;
+ use Drupal\Core\Entity\TranslatableInterface;
+@@ -113,15 +114,23 @@ class ContentEntity extends TranslationTypePluginBase implements PluginFormInter
        }
  
        foreach ($entityIds[$entityId] as [$fieldName, $delta]) {
@@ -15,17 +24,51 @@ index 328dda8eaf962b5e12f48c162a84644a189b014a..f5fc864238bf3cb89967999af7eb0d25
 +        // and title won't be translated but we usually want the other way
 +        // around).
 +        // @todo Address this in https://drupal.org/i/3580366.
-+
-+        /** @var \Drupal\Core\Field\FieldItemInterface $fieldItem */
-+        $fieldItem = $entity?->get($fieldName)?->get($delta);
-+        if (!$fieldItem) {
-+          continue;
-+        }
-+        $mainProperty = $fieldItem::mainPropertyName();
-+        $source = $fieldItem->get($mainProperty)->getString();
++        $source = $this->getMainPropertyValue($entity, $fieldName, $delta);
          if (!$source) {
            continue;
          }
+ 
+-        $translatedString = $hasTranslation
+-          ? $translated?->get($fieldName)?->get($delta)?->getString()
+-          : NULL;
++        $translatedString = NULL;
++        if ($hasTranslation) {
++          $translatedString = $this->getMainPropertyValue($translated, $fieldName, $delta);
++        }
++
+         $translation = $translatedString ? new Translation(
+           language: $langcode,
+           string: $translatedString,
+@@ -308,4 +317,28 @@ class ContentEntity extends TranslationTypePluginBase implements PluginFormInter
+     return $bundles;
+   }
+ 
++  /**
++   * Gets the main property string value given am entity's field and delta.
++   *
++   * @param \Drupal\Core\Entity\EntityInterface $entity
++   *   The entity.
++   * @param string $fieldName
++   *   The field name.
++   * @param int $delta
++   *   The delta.
++   *
++   * @return string|null
++   *   The string value.
++   */
++  protected function getMainPropertyValue(EntityInterface $entity, string $fieldName, int $delta): ?string {
++    /** @var \Drupal\Core\Field\FieldItemInterface $fieldItem */
++    $fieldItem = $entity?->get($fieldName)?->get($delta);
++    if (!$fieldItem) {
++      return NULL;
++    }
++    $mainProperty = $fieldItem::mainPropertyName();
++
++    return $fieldItem->get($mainProperty)->getString();
++  }
++
+ }
 diff --git a/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php b/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php
 index 9c64177942a5e12847adb23c6a286e2ea953d2de..794dd7233ca0f84698c081bc990cc198f9fdbf3d 100644
 --- a/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php
