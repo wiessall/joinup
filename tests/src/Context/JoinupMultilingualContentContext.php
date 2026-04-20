@@ -14,7 +14,6 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\babel\BabelStorageInterface;
 use Drupal\babel\Model\Source;
-use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\node\NodeInterface;
@@ -24,7 +23,6 @@ use Drupal\node\NodeInterface;
  */
 class JoinupMultilingualContentContext extends RawDrupalContext {
 
-  use AssertTrait;
   use EntityTrait;
   use TraversingTrait;
 
@@ -339,115 +337,6 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
     }
 
     $this->visitPath($link->getAttribute('href'));
-  }
-
-  /**
-   * Checks that the given TMGMT jobs exist.
-   */
-  #[Given('the following tmgmt job(s) should exist(s):')]
-  public function assertTmgmtJobsExist(TableNode $table): void {
-    foreach ($table->getHash() as $row) {
-      $ids = \Drupal::entityTypeManager()->getStorage('tmgmt_job')->getQuery()
-        ->accessCheck(FALSE)
-        ->condition('source_language', $row['source language'])
-        ->condition('target_language', $row['target language'])
-        ->condition('translator', $row['plugin'])
-        ->execute();
-      $this->assertCondition(!empty($ids), sprintf('TMGMT job from %s to %s with plugin %s not found.', $row['source language'], $row['target language'], $row['plugin']));
-    }
-  }
-
-  /**
-   * Checks that the given TMGMT jobs do not exist.
-   */
-  #[Given('the following tmgmt job(s) should not exist:')]
-  public function assertTmgmtJobsNotExist(TableNode $table): void {
-    foreach ($table->getHash() as $row) {
-      $ids = \Drupal::entityTypeManager()->getStorage('tmgmt_job')->getQuery()
-        ->accessCheck(FALSE)
-        ->condition('source_language', $row['source language'])
-        ->condition('target_language', $row['target language'])
-        ->condition('translator', $row['plugin'])
-        ->execute();
-      $this->assertCondition(empty($ids), sprintf('TMGMT job from %s to %s with plugin %s found, but it should not exist.', $row['source language'], $row['target language'], $row['plugin']));
-    }
-  }
-
-  /**
-   * Checks that the given TMGMT job items exist.
-   */
-  #[Given('the following job items should exist:')]
-  public function assertTmgmtJobItemsExist(TableNode $table): void {
-    $this->assertTmgmtJobItems($table, TRUE);
-  }
-
-  /**
-   * Checks that the given TMGMT job items do not exist.
-   */
-  #[Given('the following job items should not exist:')]
-  public function assertTmgmtJobItemsNotExist(TableNode $table): void {
-    $this->assertTmgmtJobItems($table, FALSE);
-  }
-
-  /**
-   * Asserts TMGMT job items existence.
-   *
-   * @param \Behat\Gherkin\Node\TableNode $table
-   *   The table with job items.
-   * @param bool $exists
-   *   TRUE to assert existence, FALSE to assert non-existence.
-   */
-  protected function assertTmgmtJobItems(TableNode $table, bool $exists): void {
-    $entityTypeManager = \Drupal::entityTypeManager();
-    foreach ($table->getHash() as $row) {
-      $jobIds = $entityTypeManager->getStorage('tmgmt_job')->getQuery()
-        ->accessCheck(FALSE)
-        ->condition('source_language', $row['source'])
-        ->condition('target_language', $row['target'])
-        ->condition('translator', $row['plugin'])
-        ->execute();
-
-      if ($exists) {
-        $this->assertCondition(!empty($jobIds), sprintf('TMGMT job from %s to %s with plugin %s not found.', $row['source'], $row['target'], $row['plugin']));
-      }
-      elseif (empty($jobIds)) {
-        // Job does not exist, so job items definitely don't exist.
-        continue;
-      }
-
-      $entity = $this->getEntityByLabel($row['type'], $row['label']);
-      $itemIds = $entityTypeManager->getStorage('tmgmt_job_item')->getQuery()
-        ->accessCheck(FALSE)
-        ->condition('tjid', $jobIds, 'IN')
-        ->condition('item_type', $row['type'])
-        ->condition('item_id', $entity->id(), 'IN')
-        ->execute();
-
-      if ($exists) {
-        $this->assertCondition(!empty($itemIds), sprintf('TMGMT job item for entity %s (%s) and job %s > %s not found.', $row['label'], $row['type'], $row['source'], $row['target']));
-      }
-      else {
-        $this->assertCondition(empty($itemIds), sprintf('TMGMT job item for entity %s (%s) and job %s > %s found, but it should not exist.', $row['label'], $row['type'], $row['source'], $row['target']));
-      }
-    }
-  }
-
-  /**
-   * Deletes all continuous jobs for a given plugin.
-   */
-  #[Given('no continuous tmgmt jobs exist for the :plugin plugin')]
-  public function deleteContinuousJobsByPlugin(string $plugin): void {
-    $storage = \Drupal::entityTypeManager()->getStorage('tmgmt_job');
-    $query = $storage->getQuery()
-      ->accessCheck(FALSE)
-      ->condition('job_type', JobInterface::TYPE_CONTINUOUS)
-      ->condition('translator', $plugin);
-    $ids = $query->execute();
-
-    if (!empty($ids)) {
-      $entities = $storage->loadMultiple($ids);
-      $storage->delete($entities);
-    }
   }
 
 }
