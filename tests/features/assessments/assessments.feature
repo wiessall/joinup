@@ -415,3 +415,20 @@ Feature: Assessment Report Entity Management
     Then I should see the success message containing "The assessment Test Entity Browser Remove Asset has been updated."
     And I should see the text "Asset that should remain"
     And I should not see the text "Asset to be removed"
+
+  Scenario: Description is shown as fallback when solution abstract is empty in entity browser
+    Given solution content:
+      | title                     | state     | abstract        | description        |
+      | Solution with abstract    | published | Abstract text   | Hidden description |
+      | Solution without abstract | published |                 | Fallback shown     |
+
+    Given I am logged in as an "authenticated user"
+    And I go to "/collection/assessments/report/create"
+    And I click "New binding requirement"
+    When I click "Interoperability solution" in the "Modal content" region
+    And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
+    # Solution with abstract: abstract is shown, description is not.
+    Then I should see "Abstract text"
+    And I should not see "Hidden description"
+    # Solution without abstract: description is shown as fallback.
+    And I should see "Fallback shown"
