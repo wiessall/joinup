@@ -13,6 +13,6 @@ weblinks:
 description: 'The Department of Information Technology Services promotes open-source solutions for public sector IT.'
 platformId: github
 platformSettings:
-  baseUrl: ''
+  baseUrl: 'https://github.com'
   projects:
     gov-cy: null
