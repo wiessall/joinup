@@ -29,7 +29,7 @@ final class JoinupI18nTest extends JoinupExistingSiteTestBase {
   /**
    * The base continuous settings.
    *
-   * @var array{content: array<string, array{enabled: int, bundles: array<string, int>}>}
+   * @var array{content: array<string, array{enabled: true, bundles: array<string, true>}>}
    */
   protected array $continuousSettingsBase;
 

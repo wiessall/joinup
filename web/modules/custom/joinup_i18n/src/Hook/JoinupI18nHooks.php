@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_i18n\Hook;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ConfigInstallerInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
@@ -20,15 +21,14 @@ use Drupal\tmgmt_ec_etranslation\Plugin\tmgmt\Translator\ETranslationTranslator;
 /**
  * Hook implementations for joinup_i18n.
  */
-class JoinupI18nHooks {
+final readonly class JoinupI18nHooks {
 
   public function __construct(
-    protected readonly EntityTypeManagerInterface $entityTypeManager,
-    protected readonly LanguageManagerInterface $languageManager,
-    protected readonly ContentTranslationManagerInterface $translationManager,
-    protected readonly EntityTypeBundleInfoInterface $bundleInfo,
-    protected readonly Connection $db,
-    protected readonly ConfigInstallerInterface $configInstaller,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected LanguageManagerInterface $languageManager,
+    protected Connection $db,
+    protected ConfigInstallerInterface $configInstaller,
+    protected ConfigFactoryInterface $configFactory,
   ) {}
 
   /**
@@ -124,22 +124,21 @@ class JoinupI18nHooks {
   /**
    * Returns the continuous job settings.
    *
-   * @return array{content: array<string, array{enabled: int, bundles: array<string, int>}>}
+   * @return array{content: array<string, array{enabled: true, bundles: array<string, true>}>}
    *   The continuous job settings array.
    */
   public function getContinuousSettings(): array {
     $continuousSettings = ['content' => []];
-    foreach ($this->translationManager->getSupportedEntityTypes() as $entityTypeId => $entityType) {
-      foreach ($this->bundleInfo->getBundleInfo($entityTypeId) as $bundle => $info) {
+    $entityTypes = $this->configFactory->get('joinup_i18n.settings')->get('tmgmt_content');
+    foreach ($entityTypes as $entityTypeId => $bundles) {
+      foreach ($bundles as $bundle) {
         // @todo Remove this exception in ISAICP-11093
         if ($entityTypeId === 'node' && $bundle === 'oss_solution') {
           continue;
         }
 
-        if ($this->translationManager->isEnabled($entityTypeId, $bundle)) {
-          $continuousSettings['content'][$entityTypeId]['enabled'] = 1;
-          $continuousSettings['content'][$entityTypeId]['bundles'][$bundle] = 1;
-        }
+        $continuousSettings['content'][$entityTypeId]['enabled'] = TRUE;
+        $continuousSettings['content'][$entityTypeId]['bundles'][$bundle] = TRUE;
       }
     }
 
