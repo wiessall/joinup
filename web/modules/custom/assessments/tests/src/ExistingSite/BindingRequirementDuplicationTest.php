@@ -14,8 +14,6 @@ use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the binding_requirement paragraph duplication.
- *
- * Covers \Drupal\assessments\Hook\AssessmentsEntityHooks::paragraphDuplicate.
  */
 #[Group('assessments')]
 class BindingRequirementDuplicationTest extends JoinupExistingSiteTestBase {
