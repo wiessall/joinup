@@ -5,4 +5,6 @@ services:
 
   Drupal\joinup_test_content\EventSubscriber\DefaultContentSubscriber: { }
   Drupal\joinup_test_content\DefaultContentManager: { }
-  Drupal\joinup_test_content\TestContentSetup: { }
+  Drupal\joinup_test_content\TestContentSetup:
+    arguments:
+      $metaEntityRepository: '@meta_entity.repository'
