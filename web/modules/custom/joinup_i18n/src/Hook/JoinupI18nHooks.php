@@ -6,15 +6,10 @@ namespace Drupal\joinup_i18n\Hook;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ConfigInstallerInterface;
-use Drupal\Core\Database\Connection;
-use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\content_translation\ContentTranslationManagerInterface;
 use Drupal\language\ConfigurableLanguageInterface;
-use Drupal\language\ContentLanguageSettingsInterface;
 use Drupal\tmgmt\JobInterface;
 use Drupal\tmgmt_ec_etranslation\Plugin\tmgmt\Translator\ETranslationTranslator;
 
@@ -26,43 +21,9 @@ final readonly class JoinupI18nHooks {
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected LanguageManagerInterface $languageManager,
-    protected Connection $db,
     protected ConfigInstallerInterface $configInstaller,
     protected ConfigFactoryInterface $configFactory,
   ) {}
-
-  /**
-   * Update the job's continuous settings when a bundle is enabled or disabled.
-   *
-   * @param \Drupal\language\ContentLanguageSettingsInterface $settings
-   *   The language content settings entity.
-   */
-  #[Hook('language_content_settings_insert')]
-  #[Hook('language_content_settings_update')]
-  #[Hook('language_content_settings_delete')]
-  public function languageContentSettingsUpdate(ContentLanguageSettingsInterface $settings): void {
-    if ($this->configInstaller->isSyncing()) {
-      return;
-    }
-
-    // On delete, $wasEnabled equals FALSE because the original is NULL.
-    $wasEnabled = !$settings->isNew() && $settings->getOriginal()?->getThirdPartySetting('content_translation', 'enabled', FALSE);
-    $isEnabled = $settings->getThirdPartySetting('content_translation', 'enabled', FALSE);
-
-    if ($isEnabled !== $wasEnabled) {
-      $storage = $this->entityTypeManager->getStorage('tmgmt_job');
-      // Use a direct query for the sake of performance.
-      assert($storage instanceof SqlContentEntityStorage);
-      $this->db->update('tmgmt_job')
-        ->fields(['continuous_settings' => serialize($this->getContinuousSettings())])
-        ->condition('job_type', JobInterface::TYPE_CONTINUOUS)
-        ->condition('state', JobInterface::STATE_CONTINUOUS)
-        ->condition('translator', ETranslationTranslator::ID)
-        ->condition('label', 'Joinup: %', 'LIKE')
-        ->execute();
-      $storage->resetCache();
-    }
-  }
 
   /**
    * Creates a continuous job when a new language is created.
