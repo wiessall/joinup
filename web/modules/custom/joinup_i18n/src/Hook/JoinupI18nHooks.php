@@ -124,7 +124,7 @@ class JoinupI18nHooks {
   /**
    * Returns the continuous job settings.
    *
-   * @return array
+   * @return array{content: array<string, array{enabled: int, bundles: array<string, int>}>}
    *   The continuous job settings array.
    */
   public function getContinuousSettings(): array {
