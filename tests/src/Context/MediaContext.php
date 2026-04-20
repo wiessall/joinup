@@ -9,7 +9,6 @@ use Behat\Step\Given;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\FileTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 
 /**
  * Behat step definitions for testing media.
@@ -18,7 +17,6 @@ class MediaContext extends RawDrupalContext {
 
   use EntityReferenceTrait;
   use FileTrait;
-  use TestingEntitiesTrait;
 
   /**
    * Creates media entities.
@@ -75,7 +73,6 @@ class MediaContext extends RawDrupalContext {
       $media->setChangedTime($revision);
       $media->setRevisionCreationTime($revision);
       $media->save();
-      $this->entities['media'][$media->id()] = $media;
     }
   }
 
