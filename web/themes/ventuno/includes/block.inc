@@ -72,7 +72,6 @@ function ventuno_preprocess_block(array &$variables): void {
   // List of the blocks to render without contextual links.
   $no_contextual_links_blocks = [
     'add_content',
-    'ventuno_languagepicker',
   ];
   if (in_array($block_id, $no_contextual_links_blocks)
     && isset($variables['title_suffix']['contextual_links'])) {

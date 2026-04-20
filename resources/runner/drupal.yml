@@ -238,7 +238,6 @@ drupal:
           'oe_authentication_eulogin_mock',
           'joinup_test',
           'masquerade',
-          'memcache_admin',
           'og_ui',
           'page_manager_ui',
           'slick_ui',

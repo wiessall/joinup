@@ -459,6 +459,18 @@ class JoinupParagraphsContext extends RawDrupalContext {
       throw new \Exception(sprintf("Field not found: %s", $field_name));
     }
 
+    // Check if the last paragraph in the field is a layout paragraph. If so,
+    // nest the new paragraph inside it as a child.
+    $field = $entity->get($field_name);
+    $lastItem = $field->last();
+    if ($lastItem && ($layoutParagraph = $lastItem->entity) && $layoutParagraph->bundle() === 'layout') {
+      $paragraph->setBehaviorSettings('layout_paragraphs', [
+        'parent_uuid' => $layoutParagraph->uuid(),
+        'region' => 'content',
+      ]);
+      $paragraph->save();
+    }
+
     $entity->get($field_name)->appendItem(
       [
         'target_id' => $paragraph->id(),

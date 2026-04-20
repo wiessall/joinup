@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_test\Plugin\ServiceMock;
 
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
+use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\http_request_mock\Attribute\ServiceMock;
 use Drupal\http_request_mock\ServiceMockPluginInterface;
@@ -20,7 +22,7 @@ use Psr\Http\Message\ResponseInterface;
   label: new TranslatableMarkup("api.github.com"),
   weight: 0,
 )]
-class GitHubCom extends PluginBase implements ServiceMockPluginInterface {
+class GitHubCom extends PluginBase implements ServiceMockPluginInterface, ContainerFactoryPluginInterface {
 
   /**
    * The States API key of the status of this mock.
@@ -29,11 +31,20 @@ class GitHubCom extends PluginBase implements ServiceMockPluginInterface {
    */
   public const string MOCK_STATUS_STATES_KEY = 'joinup_test.github_mock.enabled';
 
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected readonly StateInterface $state,
+  ) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+  }
+
   /**
    * {@inheritdoc}
    */
   public function applies(RequestInterface $request, array $options): bool {
-    return \Drupal::state()->get(self::MOCK_STATUS_STATES_KEY, FALSE) && ($request->getUri()->getHost() === 'api.github.com');
+    return $this->state->get(self::MOCK_STATUS_STATES_KEY, FALSE) && $request->getUri()->getHost() === 'api.github.com';
   }
 
   /**

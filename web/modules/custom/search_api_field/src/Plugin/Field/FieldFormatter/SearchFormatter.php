@@ -426,11 +426,17 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
   protected function applyQueryBuilderConfiguration(QueryInterface $query, array $configuration): void {
     $or = $query->createConditionGroup('OR');
     foreach ($configuration['filters'] as $plugin_config) {
+      if (!is_array($plugin_config) || empty($plugin_config['plugin'])) {
+        continue;
+      }
+
       /** @var \Drupal\search_api_field\Plugin\FilterPluginInterface $plugin */
       $plugin = $this->filterPluginManager->createInstance($plugin_config['plugin'], $plugin_config);
       $plugin->applyFilter($or);
     }
-    $query->addConditionGroup($or);
+    if (!$or->isEmpty()) {
+      $query->addConditionGroup($or);
+    }
   }
 
   /**

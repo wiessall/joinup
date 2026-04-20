@@ -6,14 +6,18 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Given;
+use Drupal\Core\Entity\TranslatableInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
+use Drupal\joinup\Traits\EntityTrait;
 use Drupal\node\NodeInterface;
 
 /**
  * Creates multilingual content.
  */
 class JoinupMultilingualContentContext extends RawDrupalContext {
+
+  use EntityTrait;
 
   /**
    * Creates content and also adds translations if any.
@@ -66,6 +70,32 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
       );
       $original->addTranslation($node->langcode, $translation)->save();
     }
+  }
+
+  /**
+   * Creates a translation for an arbitrary entity.
+   *
+   * @param string $langcode
+   *   The language of the translation.
+   * @param string $entityTypeId
+   *   The entity type ID of the entity translated.
+   * @param string $label
+   *   The untranslated label of the entity translated.
+   * @param \Behat\Gherkin\Node\TableNode $fields
+   *   An arbitrary list of fields to pass to the translation.
+   */
+  #[Given(':langcode translation for the :entityTypeId entity with label :label:')]
+  public function createTranslationForEntity(string $langcode, string $entityTypeId, string $label, TableNode $fields): void {
+    $entity = $this->getEntityByLabel($entityTypeId, $label);
+    if (!$entity instanceof TranslatableInterface) {
+      throw new \RuntimeException(sprintf('The entity with label "%s" is not translatable.', $label));
+    }
+
+    $translation = $entity->hasTranslation($langcode) ? $entity->getTranslation($langcode) : $entity->addTranslation($langcode);
+    foreach ($fields->getHash() as $field) {
+      $translation->set($field['field'], $field['value']);
+    }
+    $translation->save();
   }
 
   /**
