@@ -32,8 +32,8 @@
         "drupal/changed_fields": "^3.2",
         "drupal/colorbox": "^2.0",
         "drupal/config_ignore": "^3.0",
-        "drupal/core-composer-scaffold": "^11.3.2",
-        "drupal/core-recommended": "^11.3.2",
+        "drupal/core-composer-scaffold": "^11.3.7",
+        "drupal/core-recommended": "^11.3.7",
         "drupal/custom_markup_block": "^1.2",
         "drupal/default_content": "^2.0",
         "drupal/diff": "^2.0",
@@ -187,13 +187,13 @@
         "ec-europa/toolkit": "^10.5",
         "lovers-of-behat/table-extension": "^1.4",
         "lullabot/mink-selenium2-driver": "^1.7",
+        "mglaman/phpstan-drupal": "^2.0",
         "mikey179/vfsstream": "~1.6",
         "ml/json-ld": "^1.2",
         "nicwortel/behat-unused-step-definitions-extension": "^1.2",
-        "palantirnet/drupal-rector": "^0.20.1",
         "phpro/grumphp-shim": "2.17",
         "phpspec/prophecy-phpunit": "^2",
-        "phpstan/extension-installer": "^1.3",
+        "phpstan/extension-installer": "^1.4",
         "phpunit/phpunit": "^11",
         "vincentlanglet/twig-cs-fixer": "^2.10",
         "vlucas/phpdotenv": "~5",
@@ -376,7 +376,7 @@
                 "PHP deprecation error in PhpMail::mail @see https://www.drupal.org/i/3418098": "resources/patch/php/drupal/core/3418098.diff",
                 "Set the toolbar to position fixed on mobile (for group banner positioning and toolbar on mobile) @see https://www.drupal.org/i/2516938": "resources/patch/php/drupal/core/3809.diff",
                 "This error occurs when we click on 'Insert Selected' button from the media library without selecting or uploading a media @see https://www.drupal.org/i/3303889": "resources/patch/php/drupal/core/3303889.mr9413-commitd500fff6.diff",
-                "Allow contrib extensions to be installed by Drupal when core branch is 11.x @see https://www.drupal.org/i/3387322": "resources/patch/php/drupal/core/3387322.mr8615-note353552.diff",
+                "Allow contrib extensions to be installed by Drupal when core branch is 11.x @see https://www.drupal.org/i/3387322": "resources/patch/php/drupal/core/3387322.other_view_filter.diff",
                 "JS errors from Drupal.dialog.resetSize when rapidly closing dialogs @see https://www.drupal.org/i/3472624": "resources/patch/php/drupal/core/3472624-4d97ff80.diff",
                 "Can only intentionally re-render an entity with references 20 times @see https://www.drupal.org/i/2940605": "resources/patch/php/drupal/core/2940605-committed4d11c55d.diff",
                 "Deprecated function: preg_match(): Passing null to parameter #2 ($subject) of type string is deprecated in Drupal\\Core\\Routing\\UrlGenerator->doGenerate() @see https://drupal.org/i/3338057": "resources/patch/php/drupal/core/3338057.mr6989-commit386ed857.diff",
@@ -389,6 +389,7 @@
                 "Fix for pagination inside Media library @see https://www.drupal.org/i/3567237": "resources/patch/php/drupal/core/3567237.mr14654-commit0edaf95a.diff",
                 "REST views: Add pagination information and total count result @see https://www.drupal.org/i/2982729": "resources/patch/php/drupal/core/2982729-mr6558.commit290eabb1.diff",
                 "Slow admin/config page load. @see https://www.drupal.org/i/3336621": "resources/patch/php/drupal/core/3336621.mr15137-commit7b9c8c6a.patch",
+                "ConfigInstaller isSyncing does not persist to hook_modules_installed() when multiple modules are installed @see https://www.drupal.org/i/3584812": "resources/patch/php/drupal/core/3584812.comment-7.diff",
                 "Exposed filters get values from url when ajax is on @see https://www.drupal.org/i/3121172": "resources/patch/php/drupal/core/3121172-mr10230-commit41ded0c5.diff"
             },
             "drupal/default_content": {
@@ -405,7 +406,8 @@
             },
             "drupal/entity_browser": {
                 "TypeError in removeExposedFiltersQueryParameters: exposed form in a div, not a form element @see https://www.drupal.org/i/3582428": "resources/patch/php/drupal/entity_browser/3582428-mr118-commitfd27d6f2.diff",
-                "EntityForm widget missing entity-level validation before save. @see https://www.drupal.org/i/3583922": "resources/patch/php/drupal/entity_browser/3583922.m122.commit8291fb8c.diff"
+                "EntityForm widget missing entity-level validation before save. @see https://www.drupal.org/i/3583922": "resources/patch/php/drupal/entity_browser/3583922.m122.commit8291fb8c.diff",
+                "Add option for field widget to display as table @see https://www.drupal.org/i/2973457": "resources/patch/php/drupal/entity_browser/2973457.mr15.commit49824a77.diff"
             },
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.mr3-note490206.diff"
@@ -472,7 +474,8 @@
                 "Integrity constraint violation @see https://www.drupal.org/project/layout_paragraphs/issues/3528058": "resources/patch/php/drupal/layout_paragraphs/3528058.patch"
             },
             "drupal/memcache": {
-                "Use Drupal core time service with fallback @see https://drupal.org/i/2999614": "resources/patch/php/drupal/memcache/2999614-mr41-20f8103bd2.diff"
+                "Use Drupal core time service with fallback @see https://drupal.org/i/2999614": "resources/patch/php/drupal/memcache/2999614-mr41-20f8103bd2.diff",
+                "Memory leak during long running processes @see https://www.drupal.org/i/3503083": "resources/patch/php/drupal/memcache/3503083-mr40-ec9f9526.diff"
             },
             "drupal/message": {
                 "Renderer service can only accept array @see https://www.drupal.org/i/3531949": "resources/patch/php/drupal/message/3531949.mr56-commit24333e61.diff"

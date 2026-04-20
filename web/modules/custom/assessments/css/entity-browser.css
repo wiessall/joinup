@@ -62,7 +62,6 @@
   margin-bottom: 1em;
 }
 
-/* @todo Replace with Drupal's "container-inline" class in ISAICP-11148. */
 /* Inline exposed filters in assessment solutions browser */
 div.view-assessment-solutions-browser .view-filters {
   margin-top: 1.5rem;
@@ -74,6 +73,7 @@ div.view-assessment-solutions-browser .views-exposed-form {
   align-items: center;
   gap: 0.5rem 1rem;
 }
+
 div.view-assessment-solutions-browser .views-exposed-form > .form-item,
 div.view-assessment-solutions-browser .views-exposed-form > .form-actions {
   margin-top: 0 !important;

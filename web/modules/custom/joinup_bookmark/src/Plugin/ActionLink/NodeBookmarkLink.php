@@ -26,7 +26,7 @@ class NodeBookmarkLink extends AJAXactionLink {
    * {@inheritdoc}
    */
   public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity, ?string $view_mode = NULL): array {
-    assert(is_subclass_of($this, AJAXactionLink::class), __TRAIT__ . ' is intended to be used in action link plugin.');
+    assert(is_subclass_of($this, AJAXactionLink::class), __CLASS__ . ' is intended to be used in action link plugin.');
 
     $build = parent::getAsFlagLink($flag, $entity, $view_mode);
     if (isset($build['#theme'])) {
