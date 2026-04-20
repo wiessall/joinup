@@ -10,7 +10,6 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\entity_legal\Entity\EntityLegalDocumentAcceptance;
 use Drupal\entity_legal\Entity\EntityLegalDocumentVersion;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 
 /**
  * Behat step definitions for the Joinup Legal module.
@@ -18,7 +17,6 @@ use Drupal\joinup\Traits\TestingEntitiesTrait;
 class JoinupLegalContext extends RawDrupalContext {
 
   use EntityTrait;
-  use TestingEntitiesTrait;
 
   /**
    * Field aliases.
@@ -101,7 +99,6 @@ class JoinupLegalContext extends RawDrupalContext {
         ],
       ]);
       $document_version->save();
-      $this->entities[ENTITY_LEGAL_DOCUMENT_VERSION_ENTITY_NAME][$document_version->id()] = $document_version;
     }
   }
 
@@ -174,7 +171,6 @@ class JoinupLegalContext extends RawDrupalContext {
       'uid' => $this->getUserManager()->getCurrentUser()->uid,
     ]);
     $acceptance->save();
-    $this->entities[ENTITY_LEGAL_DOCUMENT_ACCEPTANCE_ENTITY_NAME][$acceptance->id()] = $acceptance;
   }
 
   /**
@@ -213,7 +209,6 @@ class JoinupLegalContext extends RawDrupalContext {
         'uid' => $account->id(),
       ]);
       $acceptance->save();
-      $this->entities[ENTITY_LEGAL_DOCUMENT_ACCEPTANCE_ENTITY_NAME][$acceptance->id()] = $acceptance;
     }
   }
 
