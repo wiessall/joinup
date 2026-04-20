@@ -6,6 +6,7 @@ topic:
       - name: 'Finance in EU'
         uuid: 'b7af08b1-c271-4d58-a5a7-ec3db533c3d2'
   - name: 'eGov'
+    uuid: 'ee3076fa-ee59-41b8-997e-b8e0fab5559f'
     children:
       - name: 'Supplier exchange'
   - name: 'E-health Dpt.'
@@ -216,6 +217,7 @@ eif_principle:
     uri: 'http://data.europa.eu/UP11'
 eif_solution_type:
   - name: 'Common frameworks'
+    uuid: 'd131f884-9a73-4aa7-8191-d3dde2e5d3a4'
   - name: 'Common services'
   - name: 'Assessment tools'
   - name: 'Generic tools'
@@ -229,6 +231,7 @@ eif_conceptual_model:
     uri: 'http://data.europa.eu/BC7'
 eif_recommendation:
   - name: 'Recommendation 1'
+    uuid: 'f32a68f0-6e43-4bb2-bb70-96fe3fd65a0b'
     field_eif_related_term: 'http://data.europa.eu/UP1'
     uri: 'http://data.europa.eu/Rec1'
   - name: 'Recommendation 2'

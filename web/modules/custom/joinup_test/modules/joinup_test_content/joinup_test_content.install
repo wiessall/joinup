@@ -8,6 +8,14 @@
 declare(strict_types=1);
 
 use Drupal\joinup_test_content\DefaultContentManager;
+use Drupal\joinup_test_content\TestContentSetup;
+
+/**
+ * Implements hook_install().
+ */
+function joinup_test_content_install(): void {
+  \Drupal::service(TestContentSetup::class)->setupTopicPage();
+}
 
 /**
  * Implements hook_uninstall().
@@ -16,4 +24,15 @@ function joinup_test_content_uninstall(): void {
   /** @var \Drupal\joinup_test_content\DefaultContentManager $service */
   $service = \Drupal::service(DefaultContentManager::class);
   $service->deleteDefaultContent('joinup_test_content');
+
+  // Clean up programmatically created meta entities.
+  $storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
+
+  // Remove the EIF perspective meta entity.
+  $eif_entities = $storage->loadByProperties([
+    'uuid' => '501120ce-502c-4ed1-89d0-c61a6daaae78',
+  ]);
+  if ($eif_entities) {
+    $storage->delete($eif_entities);
+  }
 }

@@ -8,6 +8,7 @@ use Drupal\cas\Service\CasUserManager;
 use Drupal\cas_mock_server\UserManagerInterface;
 use Drupal\default_content\Event\DefaultContentEvents;
 use Drupal\default_content\Event\ImportEvent;
+use Drupal\joinup_test_content\TestContentSetup;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -21,6 +22,7 @@ final class DefaultContentSubscriber implements EventSubscriberInterface {
     #[Autowire(service: 'cas_mock_server.user_manager')]
     protected readonly UserManagerInterface $casMockUserManager,
     protected readonly CasUserManager $casUserManager,
+    protected readonly TestContentSetup $testContentSetup,
   ) {
   }
 
@@ -33,6 +35,7 @@ final class DefaultContentSubscriber implements EventSubscriberInterface {
     }
 
     $this->ensureCasUserRegistration($event);
+    $this->testContentSetup->setupEifPerspective();
   }
 
   /**
