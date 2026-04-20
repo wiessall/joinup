@@ -15172,16 +15172,16 @@
         },
         {
             "name": "openeuropa/oe_webtools",
-            "version": "1.44.0",
+            "version": "1.45.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/openeuropa/oe_webtools.git",
-                "reference": "f06788a1e366f76c1dcbb1c65c9d98bc7582200a"
+                "reference": "47bd5c24c47f0aac1355228629ad033448a21f3f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openeuropa/oe_webtools/zipball/f06788a1e366f76c1dcbb1c65c9d98bc7582200a",
-                "reference": "f06788a1e366f76c1dcbb1c65c9d98bc7582200a",
+                "url": "https://api.github.com/repos/openeuropa/oe_webtools/zipball/47bd5c24c47f0aac1355228629ad033448a21f3f",
+                "reference": "47bd5c24c47f0aac1355228629ad033448a21f3f",
                 "shasum": ""
             },
             "require": {
@@ -15246,9 +15246,9 @@
             "description": "OpenEuropa Webtools integration.",
             "support": {
                 "issues": "https://github.com/openeuropa/oe_webtools/issues",
-                "source": "https://github.com/openeuropa/oe_webtools/tree/1.44.0"
+                "source": "https://github.com/openeuropa/oe_webtools/tree/1.45.0"
             },
-            "time": "2026-03-02T15:34:11+00:00"
+            "time": "2026-04-20T13:28:35+00:00"
         },
         {
             "name": "paragonie/random_compat",
