@@ -12,7 +12,6 @@ use Behat\Step\When;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UserTrait;
 
 /**
@@ -21,7 +20,6 @@ use Drupal\joinup\Traits\UserTrait;
 class JoinupLogContext extends RawDrupalContext {
 
   use EntityTrait;
-  use TestingEntitiesTrait;
   use UserTrait;
 
   /**
@@ -105,8 +103,6 @@ class JoinupLogContext extends RawDrupalContext {
       /** @var \Drupal\joinup_log\Entity\JoinupLogInterface $log */
       $log = $storage->create($values);
       $log->save();
-
-      $this->entities['joinup_log'][$log->id()] = $log;
     }
   }
 
