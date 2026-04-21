@@ -12,7 +12,9 @@ use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\AfterNodeCreate;
 use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
+use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\EntityTrait;
@@ -36,6 +38,13 @@ class JoinupGroupContext extends RawDrupalContext {
   use MailCollectorTrait;
   use TestingEntitiesTrait;
   use UserTrait;
+
+  /**
+   * Pending meta entity field values keyed by node title.
+   *
+   * @var array<string, array{type: string, fields: array<string, mixed>}>
+   */
+  protected array $pendingMetaEntityFields = [];
 
   /**
    * Navigates to the members page of the given group.
@@ -463,42 +472,66 @@ class JoinupGroupContext extends RawDrupalContext {
   }
 
   /**
-   * Stores settings fields in meta_entity.
+   * Stores settings fields to be saved as a meta entity after node creation.
    */
   #[BeforeNodeCreate]
   public function beforeNodeCreateMetaEntity(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
-    if ($node->type === 'collection' || $node->type === 'solution') {
-      $meta_entity_type = $node->type . '_settings';
-      $meta_entity = MetaEntity::create([
-        'type' => $meta_entity_type,
-      ]);
-
-      $meta_fields = [
-        'group_moderation',
-        'content_creation',
-        'list_related_entities',
-        'listing_content',
-      ];
-
-      $fieldMapping = [
-        'group_moderation' => ['yes' => 1, 'no' => 0],
-        'list_related_entities' => ['yes' => 1, 'no' => 0],
-        'content_creation' => [
-          'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
-          'registered users' => ContentCreationOptions::REGISTERED_USERS,
-          'members' => ContentCreationOptions::MEMBERS,
-        ],
-      ];
-
-      foreach ($meta_fields as $field) {
-        if (property_exists($node, $field)) {
-          $meta_entity->set($field, $fieldMapping[$field][$node->$field] ?? $node->$field);
-          unset($node->$field);
-        }
-      }
-      $node->$meta_entity_type = $meta_entity;
+    if ($node->type !== 'collection' && $node->type !== 'solution') {
+      return;
     }
+
+    $meta_fields = [
+      'group_moderation',
+      'content_creation',
+      'list_related_entities',
+      'listing_content',
+    ];
+
+    $fieldMapping = [
+      'group_moderation' => ['yes' => 1, 'no' => 0],
+      'list_related_entities' => ['yes' => 1, 'no' => 0],
+      'content_creation' => [
+        'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
+        'registered users' => ContentCreationOptions::REGISTERED_USERS,
+        'members' => ContentCreationOptions::MEMBERS,
+      ],
+    ];
+
+    $pending = [];
+    foreach ($meta_fields as $field) {
+      if (property_exists($node, $field)) {
+        $pending[$field] = $fieldMapping[$field][$node->$field] ?? $node->$field;
+        unset($node->$field);
+      }
+    }
+
+    $this->pendingMetaEntityFields[$node->title] = [
+      'type' => $node->type . '_settings',
+      'fields' => $pending,
+    ];
+  }
+
+  /**
+   * Saves pending meta entity fields after the node is created.
+   */
+  #[AfterNodeCreate]
+  public function afterNodeCreateMetaEntity(AfterNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if (!isset($this->pendingMetaEntityFields[$node->title])) {
+      return;
+    }
+
+    $pending = $this->pendingMetaEntityFields[$node->title];
+    unset($this->pendingMetaEntityFields[$node->title]);
+
+    $entity = \Drupal::entityTypeManager()->getStorage('node')->load($node->nid);
+    \assert($entity instanceof \Drupal\Core\Entity\ContentEntityInterface);
+    $meta_entity = MetaEntity::loadOrCreate($pending['type'], $entity);
+    foreach ($pending['fields'] as $field => $value) {
+      $meta_entity->set($field, $value);
+    }
+    $meta_entity->save();
   }
 
   /**
