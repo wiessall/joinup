@@ -1812,7 +1812,7 @@ class JoinupContext extends RawDrupalContext {
         }
       }
 
-      $this->dispatchHooks('BeforeNodeCreateScope', $fake_node);
+      $this->dispatchHooks(BeforeNodeCreateScope::class, $fake_node);
       // Correction to topic field.
       if (!empty($fake_node->field_topic) && ($topic = $this->getEntityByLabel('taxonomy_term', $fake_node->field_topic, 'topic'))) {
         $fake_node->field_topic = $topic->id();
