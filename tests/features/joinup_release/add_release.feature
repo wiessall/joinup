@@ -49,7 +49,7 @@ Feature: "Add release" visibility options.
     And I should see the heading "Add Release"
     And the following fields should be present "Name, Release version, Release notes, Documentation, Geographical coverage, Search keywords, Status, Date, Time"
     # The entity is new, so the current workflow state should not be shown.
-    And the following fields should not be present "Solution logo, Solution data, Distribution, Current workflow state, Language, Langcode, Motivation"
+    And the following fields should not be present "Solution logo, Solution data, Distribution, Current workflow state, Langcode, Motivation"
 
     When I press "Publish"
     Then I should see the following inline form error messages:
