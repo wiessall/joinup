@@ -60,7 +60,8 @@ Feature: Search API views show translated content with english as fallback
     Then I should see a valid RSS feed
     And the RSS feed items should be:
       | title                                 |
-      # @todo Remove "English Solution" once the re-indexing fix is removed.
+      # @todo Remove "English Solution" once the re-indexing fix is removed,
+      # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-11121
       | Solution: English Solution  |
       | Solution: BG Solution                 |
       | Custom page: BG custom page           |

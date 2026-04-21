@@ -98,3 +98,13 @@ Feature: Translating custom pages
       | Lee Facil | Test collection custom page |
       | Flora Mod | Test solution custom page   |
       | Lee Facil | Test solution custom page   |
+
+  Scenario: Default language of new node should be same as language of the interface
+    Given I am logged in as "Flora Mod"
+    When I go to the "Test collection" collection
+    And I click "Add custom page" in the plus button menu
+    Then the available options in the "Language" select should match the site languages
+    And the selected option in the "Language" select should be "en"
+    When I switch to the "pl" language
+    Then the available options in the "Language" select should match the site languages
+    And the selected option in the "Language" select should be "pl"
