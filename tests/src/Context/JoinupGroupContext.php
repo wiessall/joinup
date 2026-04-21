@@ -16,7 +16,6 @@ use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup_group\ContentCreationOptions;
 use Drupal\joinup_group\Entity\AnnouncementInterface;
@@ -33,7 +32,6 @@ class JoinupGroupContext extends RawDrupalContext {
   use AssertTrait;
   use EntityTrait;
   use MailCollectorTrait;
-  use TestingEntitiesTrait;
   use UserTrait;
 
   /**
@@ -316,7 +314,6 @@ class JoinupGroupContext extends RawDrupalContext {
       $values['created'] = strtotime($values['created']);
       $announcement = $storage->create($values);
       $announcement->save();
-      $this->entities['message'][$announcement->id()] = $announcement;
     }
   }
 
@@ -549,10 +546,6 @@ class JoinupGroupContext extends RawDrupalContext {
 
     if (!$entity) {
       throw new \RuntimeException("Entity not found for bundle: $entityTypeAlias, identifier: $identifier");
-    }
-
-    if (isset($this->entities[$entity->bundle()][$entity->id()])) {
-      unset($this->entities[$entity->bundle()][$entity->id()]);
     }
 
     $entity->skip_notification = TRUE;
