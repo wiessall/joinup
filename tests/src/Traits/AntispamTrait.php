@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Traits;
 
+use Behat\Gherkin\Node\TableNode;
 use Behat\Hook\BeforeScenario;
 use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\ConfigContext;
@@ -55,7 +56,7 @@ trait AntispamTrait {
   public function disableAntispamBeforeScenarioStarts(): void {
     $config_context = $this->getContext(ConfigContext::class);
     $config_context->setBasicConfig('antibot.settings', 'form_ids', 'null');
-    $config_context->setBasicConfig('honeypot.settings', 'form_settings', '[]');
+    $config_context->setComplexConfig('honeypot.settings', 'form_settings', new TableNode([]));
   }
 
 }
