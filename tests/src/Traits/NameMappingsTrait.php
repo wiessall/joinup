@@ -56,6 +56,7 @@ trait NameMappingsTrait {
       'custom_page' => [
         'attachments' => 'field_attachment',
         'body' => 'field_paragraphs_body',
+        'content' => 'field_paragraphs_body',
         'keywords' => 'keywords',
         'logo' => 'field_custom_page_logo',
         'state' => 'field_state',
@@ -110,6 +111,7 @@ trait NameMappingsTrait {
       ],
       'news' => [
         'body' => 'field_paragraphs_body',
+        'content' => 'field_paragraphs_body',
         'headline' => 'field_news_headline',
         'keywords' => 'keywords',
         'logo' => 'field_news_logo',
