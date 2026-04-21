@@ -1,0 +1,79 @@
+diff --git a/core/modules/system/src/Hook/SystemTokensHooks.php b/core/modules/system/src/Hook/SystemTokensHooks.php
+index 8ff35bf8775bc0e40d5f6fce2c4177bd50f4a1ec..816df6f285094c8b85bc3845ff01cf8ea0a59379 100644
+--- a/core/modules/system/src/Hook/SystemTokensHooks.php
++++ b/core/modules/system/src/Hook/SystemTokensHooks.php
+@@ -151,7 +151,7 @@ public function tokens($type, $tokens, array $data, array $options, BubbleableMe
+             /** @var \Drupal\Core\GeneratedUrl $result */
+             $result = Url::fromRoute('<front>', [], $url_options)->toString(TRUE);
+             $bubbleable_metadata->addCacheableDependency($result);
+-            $replacements[$original] = $result->getGeneratedUrl();
++            $replacements[$original] = rtrim($result->getGeneratedUrl(), '/') . '/';
+             break;
+ 
+           case 'url-brief':
+diff --git a/core/modules/system/tests/src/Kernel/Token/TokenReplaceSiteUrlLanguageTest.php b/core/modules/system/tests/src/Kernel/Token/TokenReplaceSiteUrlLanguageTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..9982fb5d2d4f47fd6c85e51386c400a83f1c3053
+--- /dev/null
++++ b/core/modules/system/tests/src/Kernel/Token/TokenReplaceSiteUrlLanguageTest.php
+@@ -0,0 +1,60 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\system\Kernel\Token;
++
++use Drupal\Core\Url;
++use PHPUnit\Framework\Attributes\Group;
++use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
++
++/**
++ * Tests that [site:url] token includes a trailing slash in all languages.
++ */
++#[Group('system')]
++#[Group('language')]
++#[RunTestsInSeparateProcesses]
++class TokenReplaceSiteUrlLanguageTest extends TokenReplaceKernelTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = ['language', 'language_test'];
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
++
++    $this->installConfig(['language']);
++    $this->installEntitySchema('configurable_language');
++
++    $this->container->get('entity_type.manager')
++      ->getStorage('configurable_language')
++      ->create(['id' => 'fr', 'label' => 'French'])
++      ->save();
++
++    $this->config('language.negotiation')
++      ->set('url.prefixes', ['en' => '', 'fr' => 'fr'])
++      ->save();
++
++    $this->container->get('kernel')->rebuildContainer();
++  }
++
++  /**
++   * Tests that [site:url] always ends with a trailing slash.
++   */
++  public function testSiteUrlTokenTrailingSlash(): void {
++    $url_options = ['absolute' => TRUE, 'language' => $this->interfaceLanguage];
++
++    $en_replaced = $this->tokenService->replace('[site:url]user/points', [], ['langcode' => 'en']);
++    $this->assertEquals(Url::fromRoute('<front>', [], $url_options)->toString() . 'user/points', $en_replaced);
++
++    $french_language = $this->container->get('language_manager')->getLanguage('fr');
++    $french_url_options = ['absolute' => TRUE, 'language' => $french_language];
++    $fr_replaced = $this->tokenService->replace('[site:url]user/points', [], ['langcode' => 'fr']);
++    $this->assertEquals(Url::fromRoute('<front>', [], $french_url_options)->toString() . '/user/points', $fr_replaced);
++  }
++
++}

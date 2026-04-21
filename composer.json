@@ -385,7 +385,8 @@
                 "Fix for pagination inside Media library @see https://www.drupal.org/i/3567237": "resources/patch/php/drupal/core/3567237.mr14654-commit0edaf95a.diff",
                 "REST views: Add pagination information and total count result @see https://www.drupal.org/i/2982729": "resources/patch/php/drupal/core/2982729-mr6558.commit290eabb1.diff",
                 "Slow admin/config page load. @see https://www.drupal.org/i/3336621": "resources/patch/php/drupal/core/3336621.mr15137-commit7b9c8c6a.patch",
-                "ConfigInstaller isSyncing does not persist to hook_modules_installed() when multiple modules are installed @see https://www.drupal.org/i/3584812": "resources/patch/php/drupal/core/3584812.comment-7.diff"
+                "ConfigInstaller isSyncing does not persist to hook_modules_installed() when multiple modules are installed @see https://www.drupal.org/i/3584812": "resources/patch/php/drupal/core/3584812.comment-7.diff",
+                "[site:url] token omits trailing slash in other languages @see https://www.drupal.org/i/2163913": "resources/patch/php/drupal/core/2163913.mr15511.commit2d63d017.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
