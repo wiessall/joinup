@@ -132,7 +132,7 @@ Feature: Global search
 
     Given I click "Clear filters"
     When I check the "Solutions (2)" checkbox from the "Content types" facet
-    And I check the "Collections (4)" checkbox from the "Content types" facet
+    And I check the "Collections (3)" checkbox from the "Content types" facet
     And I should see the "Organisation country" facet
     And the "Organisation country" checkbox facet should allow selecting the following values "European Union (1), Greece (2)"
     And I check the "European Union (1)" checkbox from the "Organisation country" facet
@@ -413,7 +413,7 @@ Feature: Global search
       | kyleu    | kyle.u@example.com | Kyle       | Freeman     | E-inclusion         |
 
     When I visit the advanced search page
-    Then I should see the text "SEARCH RESULTS (6)"
+    Then I should see the text "SEARCH RESULTS (5)"
     When I check the "User profiles (3)" checkbox from the "Content types" facet
     And I should see the "Lyle Uname" tile
     And I should see the "Kyle Freeman" tile

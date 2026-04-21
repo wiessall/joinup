@@ -159,6 +159,29 @@ function joinup_oss_catalogue_preprocess_html(array &$variables): void {
 }
 
 /**
+ * Implements hook_preprocess_HOOK() for 'imagecache_external_responsive'.
+ *
+ * GD cannot process SVG files, so responsive image style derivatives would
+ * return HTTP 500 errors. For SVGs, bypass and render an img element pointing
+ * to the original file instead. SVG size is maintained because of the lack of
+ * styling.
+ */
+function joinup_oss_catalogue_preprocess_imagecache_external_responsive(array &$variables): void {
+  if (mb_strtolower(pathinfo($variables['uri'], PATHINFO_EXTENSION)) !== 'svg') {
+    return;
+  }
+  // The following line actually changes the tag from <picture> to <img>.
+  $variables['output_image_tag'] = TRUE;
+  $variables['img_element'] = [
+    '#theme' => 'image',
+    '#uri' => $variables['uri'],
+    '#alt' => $variables['alt'],
+    '#title' => $variables['title'],
+  ];
+  $variables['sources'] = [];
+}
+
+/**
  * Implements hook_preprocess_HOOK() for "image_style".
  *
  * Makes SVG file assets visible even if they are formatted as image styles.
