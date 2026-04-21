@@ -677,9 +677,10 @@ class JoinupContext extends RawDrupalContext {
           }
           $filename = $matches['filename'];
           $file = $context->createFile($filename);
-          // Replace the bare filename with the public:// URI so that
-          // FileHandler::expand() can read the file via Drupal stream wrappers.
-          $piece = str_replace('target_id: ' . $filename, 'target_id: ' . $file->getFileUri(), $piece);
+          // Replace the bare filename with the numeric file entity ID so that
+          // FileHandler::expand() can reuse the pre-created entity directly,
+          // preserving the original filename for links on the page.
+          $piece = str_replace('target_id: ' . $filename, 'target_id: ' . $file->id(), $piece);
         }
         else {
           $context->createFile($piece);

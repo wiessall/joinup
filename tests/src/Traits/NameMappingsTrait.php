@@ -57,6 +57,7 @@ trait NameMappingsTrait {
         'attachments' => 'field_attachment',
         'body' => 'field_paragraphs_body',
         'content' => 'field_paragraphs_body',
+        'creation date' => 'created',
         'keywords' => 'keywords',
         'logo' => 'field_custom_page_logo',
         'state' => 'field_state',

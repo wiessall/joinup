@@ -517,7 +517,7 @@ trait TraversingTrait {
     $session = $this->getSession();
     $element = $region->find('named', [$element, $locator]);
     if (!$element) {
-      throw new \Exception(sprintf('No element with locator "%s" found in the "%s" region on the page %s.', $locator, $region, $session->getCurrentUrl()));
+      throw new \Exception(sprintf('No element with locator "%s" found in the "%s" region on the page %s.', $locator, $region->getXpath(), $session->getCurrentUrl()));
     }
     return $element;
   }
