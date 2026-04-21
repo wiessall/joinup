@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "658d9cd6b8df9af62dc78c7891f0732f",
+    "content-hash": "ddde831b405895edb3d8eaa83fe8f9ce",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -23355,16 +23355,16 @@
         },
         {
             "name": "drupal/drupal-driver",
-            "version": "v2.4.3",
+            "version": "v2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jhedstrom/DrupalDriver.git",
-                "reference": "71a97a34bb35fedc53f84ebd20b45074127ada8c"
+                "reference": "ff64e2d5fb2f9b5652b47fd6c000a49fabfcbf86"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jhedstrom/DrupalDriver/zipball/71a97a34bb35fedc53f84ebd20b45074127ada8c",
-                "reference": "71a97a34bb35fedc53f84ebd20b45074127ada8c",
+                "url": "https://api.github.com/repos/jhedstrom/DrupalDriver/zipball/ff64e2d5fb2f9b5652b47fd6c000a49fabfcbf86",
+                "reference": "ff64e2d5fb2f9b5652b47fd6c000a49fabfcbf86",
                 "shasum": ""
             },
             "require": {
@@ -23379,6 +23379,7 @@
             "require-dev": {
                 "composer/installers": "^2.1",
                 "dms/phpunit-arraysubset-asserts": "^0.4.0 || ^0.5.0",
+                "drevops/phpcs-standard": "^0.7.0",
                 "drupal/coder": "~8.3.0",
                 "drupal/core-composer-scaffold": "^8.4 || ^9 || ^10 || ^11",
                 "drupal/core-recommended": "^8.4 || ^9 || ^10 || ^11",
@@ -23400,6 +23401,9 @@
                 "drupal-scaffold": {
                     "locations": {
                         "web-root": "drupal/"
+                    },
+                    "file-mapping": {
+                        "[project-root]/.gitattributes": false
                     }
                 },
                 "installer-paths": {
@@ -23425,6 +23429,11 @@
                 {
                     "name": "Jonathan Hedstrom",
                     "email": "jhedstrom@gmail.com"
+                },
+                {
+                    "name": "Alex Skrypnyk",
+                    "email": "alex@drevops.com",
+                    "role": "Maintainer"
                 }
             ],
             "description": "A collection of reusable Drupal drivers",
@@ -23436,7 +23445,7 @@
             ],
             "support": {
                 "issues": "https://github.com/jhedstrom/DrupalDriver/issues",
-                "source": "https://github.com/jhedstrom/DrupalDriver/tree/v2.4.3"
+                "source": "https://github.com/jhedstrom/DrupalDriver/tree/v2.5.0"
             },
             "funding": [
                 {
@@ -23444,7 +23453,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-03-17T07:51:15+00:00"
+            "time": "2026-04-17T06:09:47+00:00"
         },
         {
             "name": "drupal/drupal-extension",

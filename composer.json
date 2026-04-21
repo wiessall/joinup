@@ -391,10 +391,7 @@
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
             },
             "drupal/drupal-driver": {
-                "Allow multi-property references. @see https://github.com/jhedstrom/DrupalDriver/pull/252": "resources/patch/php/drupal/drupal-driver/252.diff",
-                "Populate link fields only with URI if value is a string @see https://github.com/jhedstrom/DrupalDriver/pull/267": "resources/patch/php/drupal/drupal-driver/267.diff",
-                "Update Datetime field handler to support both date and datetime fields @see https://github.com/jhedstrom/DrupalDriver/pull/235": "resources/patch/php/drupal/drupal-driver/235.patch",
-                "Do not process empty batches. @see https://github.com/jhedstrom/DrupalDriver/pull/284": "resources/patch/php/drupal/drupal-driver/284.diff"
+                "Make isBaseField() recognise bundle fields (hook_entity_bundle_field_info)": "resources/patch/php/drupal/drupal-driver/356.diff"
             },
             "drupal/dynamic_entity_reference": {
                 "Undefined array key on dependency removal @see https://www.drupal.org/i/3099176": "resources/patch/php/drupal/dynamic_entity_reference/3099176-3.x-16.diff"
