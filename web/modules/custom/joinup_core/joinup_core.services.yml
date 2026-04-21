@@ -51,4 +51,6 @@ services:
     calls:
       - [setWorkflowHelper, ['@?joinup_workflow.workflow_helper']]
 
-  Drupal\joinup_core\BackendModerator: { }
+  Drupal\joinup_core\Update\BackendModerator: { }
+
+  Drupal\joinup_core\Update\BackendModeratorRunner: { }

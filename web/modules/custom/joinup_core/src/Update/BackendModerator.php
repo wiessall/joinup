@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_core;
+namespace Drupal\joinup_core\Update;
 
 use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
