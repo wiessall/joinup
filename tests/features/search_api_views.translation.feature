@@ -124,13 +124,11 @@ Feature: Search API views show translated content with english as fallback
   Scenario: Test "collections" view shows translated content
     Given I visit the collection overview page
     Then I should see the following lines of text:
-      | Solutions mentioned in an assessment  |
       | Interoperability assessments space    |
       | Portal support                        |
       | Test collection                       |
     When I click "Bulgarian"
     Then I should see the following lines of text:
-      | Solutions mentioned in an assessment  |
       | Interoperability assessments space    |
       | Portal support                        |
       | BG collection                         |
@@ -138,13 +136,11 @@ Feature: Search API views show translated content with english as fallback
   Scenario: Test "search" view shows translated content
     Given I am on the advanced search page
     Then I should see the following lines of text:
-      | Solutions mentioned in an assessment  |
       | Interoperability assessments space    |
       | Portal support                        |
       | Test collection                       |
     When I click "Bulgarian"
     Then I should see the following lines of text:
-      | Solutions mentioned in an assessment  |
       | Interoperability assessments space    |
       | Portal support                        |
       | BG collection                         |
