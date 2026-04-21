@@ -6,6 +6,7 @@ _meta:
   default_langcode: en
   depends:
     a737fdb3-1c3d-4802-84f6-21af056a3844: file
+    83c208a4-6354-4e08-95dc-f4e123e2597f: file
     b7af08b1-c271-4d58-a5a7-ec3db533c3d2: taxonomy_term
     df34e3a2-207b-4910-a804-344931654e20: node
 default:
@@ -284,9 +285,9 @@ default:
                       options: {  }
                   paragraph_tile_image:
                     -
-                      entity: a737fdb3-1c3d-4802-84f6-21af056a3844
-                      alt: 'Raster image in paragraph tile'
-                      title: ''
+                      entity: 83c208a4-6354-4e08-95dc-f4e123e2597f
+                      alt: 'SVG image test for tile display'
+                      title: 'Test SVG tile image'
                       width: 200
                       height: 100
             -
