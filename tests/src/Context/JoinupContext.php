@@ -668,18 +668,25 @@ class JoinupContext extends RawDrupalContext {
       $environment = $scope->getEnvironment();
       /** @var \Drupal\joinup\Context\CustomPageContext $context */
       $context = $environment->getContext(self::class);
-      foreach ($context->explodeDelimitedSeparatedStepArgument($node->field_attachment) as $filename) {
-        if (strpos($filename, ':')) {
-          preg_match('/target_id:\s*(?<filename>[^ -]*)/', $filename, $matches);
+      $updated = [];
+      foreach ($context->explodeDelimitedSeparatedStepArgument($node->field_attachment) as $piece) {
+        if (strpos($piece, ':')) {
+          preg_match('/target_id:\s*(?<filename>[^ -]*)/', $piece, $matches);
           if (empty($matches['filename'])) {
-            throw new \Exception("Could not extract filename from '$filename'");
+            throw new \Exception("Could not extract filename from '$piece'");
           }
           $filename = $matches['filename'];
+          $file = $context->createFile($filename);
+          // Replace the bare filename with the public:// URI so that
+          // FileHandler::expand() can read the file via Drupal stream wrappers.
+          $piece = str_replace('target_id: ' . $filename, 'target_id: ' . $file->getFileUri(), $piece);
         }
-        // The file is tracked by its filename so the value still remains to be
-        // the filenames instead of the url.
-        $context->createFile($filename);
+        else {
+          $context->createFile($piece);
+        }
+        $updated[] = $piece;
       }
+      $node->field_attachment = implode(', ', $updated);
     }
 
     // Replace collection and solution group references that use titles with the
