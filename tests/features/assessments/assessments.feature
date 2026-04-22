@@ -406,6 +406,11 @@ Feature: Assessment Report Entity Management
     And I should see "Asset to be removed" in the "Modal content" region
     And I should see "Asset that should remain" in the "Modal content" region
 
+    # Verify the new solution appears in the entity browser table.
+    And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
+    Then I should see the text "Asset that should remain"
+    And I press "Select solutions" to close the entity browser
+
     When I remove "Asset to be removed" from the entity browser widget
     And I wait for AJAX to finish
     Then I should not see "Asset to be removed" in the "Modal content" region
