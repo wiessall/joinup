@@ -112,11 +112,6 @@ final class JoinupI18nHooks {
     $entityTypes = $this->configFactory->get('joinup_i18n.settings')->get('tmgmt_content');
     foreach ($entityTypes as $entityTypeId => $bundles) {
       foreach ($bundles as $bundle) {
-        // @todo Remove this exception in ISAICP-11093
-        if ($entityTypeId === 'node' && $bundle === 'oss_solution') {
-          continue;
-        }
-
         $continuousSettings['content'][$entityTypeId]['enabled'] = TRUE;
         $continuousSettings['content'][$entityTypeId]['bundles'][$bundle] = TRUE;
       }
