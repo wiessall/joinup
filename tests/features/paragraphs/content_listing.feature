@@ -91,6 +91,42 @@ topic|hr";s:13:"show_archived";s:10:"unarchived";s:5:"limit";s:2:"12";s:11:"show
       | Lumina Night Festival |
       | Stardust Gala Evening |
 
+  Scenario: Regression test - Content listing with corrupt query_builder filters does not crash on render.
+    Given news content:
+      | title          | headline       | collection  | content       | state     |
+      | Corrupt news 1 | Corrupt news 1 | Roman ruins | Some content. | published |
+    And custom_page content:
+      | title              | collection  | state     |
+      | Corrupt filter fix | Roman ruins | published |
+    # Serialized value includes corrupt query_builder filters (null and missing plugin key).
+    And I append content listing to "field_paragraphs_body" field in "node" entity with following "Corrupt filter fix" title with:
+    """
+    a:8:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:-1;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:18:"entity_bundle|news";s:13:"show_archived";s:10:"unarchived";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:0;s:13:"query_builder";a:1:{s:7:"filters";a:2:{i:0;N;i:1;a:1:{s:5:"field";s:13:"entity_bundle";}}}}
+    """
+    When I go to the "Corrupt filter fix" custom_page
+    Then I should see the heading "Corrupt filter fix"
+    And the response status code should be 200
+
+  @javascript
+  Scenario: Regression test - Editing a content listing with corrupt query_builder filters does not crash the form.
+    Given custom_page content:
+      | title              | collection  | state     |
+      | Corrupt edit check | Roman ruins | published |
+    And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Corrupt edit check" title:
+      | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
+    And I append content listing to "field_paragraphs_body" field in "node" entity with following "Corrupt edit check" title with:
+    """
+    a:8:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:-1;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:18:"entity_bundle|news";s:13:"show_archived";s:10:"unarchived";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:0;s:13:"query_builder";a:1:{s:7:"filters";a:2:{i:0;N;i:1;a:1:{s:5:"field";s:13:"entity_bundle";}}}}
+    """
+    And I am logged in as a facilitator of the "Roman ruins" collection
+    And I go to the edit form of the "Corrupt edit check" "custom page"
+    # Verify corrupt filters don't crash the edit form.
+    And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
+    Then I should see "Show related content"
+    And I press "Save" in the "Modal buttons" region
+    And I press "Update"
+    Then I should see the text "Corrupt edit check"
+
   Scenario: Content can be filtered by keywords.
     Given event content:
       | title                         | collection  | start date          | end date            | keywords |

@@ -8,6 +8,9 @@
   }
   &.page--news {
     .tiles-wrapper {
+      .tile__img {
+        aspect-ratio: unset;
+      }
       @include media-breakpoint-between(sm, lg) {
         & > .col:nth-child(even) {
           margin-top: $spacer * 3;
@@ -22,6 +25,9 @@
   }
   &.page--events {
     .tiles-wrapper {
+      .tile__img {
+        aspect-ratio: unset;
+      }
       @include media-breakpoint-between(sm, lg) {
         & > .col:nth-child(even) {
           margin-top: $spacer * 3;

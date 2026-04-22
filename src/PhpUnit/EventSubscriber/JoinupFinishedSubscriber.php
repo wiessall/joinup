@@ -6,11 +6,11 @@ namespace Joinup\PhpUnit\EventSubscriber;
 
 use Joinup\TaskRunner\Traits\TaskRunnerTrait;
 use Joinup\TestModeManager;
-use PHPUnit\Event\TestSuite\Finished;
-use PHPUnit\Event\TestSuite\FinishedSubscriber;
+use PHPUnit\Event\Application\Finished;
+use PHPUnit\Event\Application\FinishedSubscriber;
 
 /**
- * Listens to PHPUnit finished event.
+ * Listens to PHPUnit application finished event.
  */
 class JoinupFinishedSubscriber implements FinishedSubscriber {
 

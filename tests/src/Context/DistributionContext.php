@@ -17,7 +17,6 @@ use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_distribution\Entity\DownloadEvent;
 use Drupal\link\LinkItemInterface;
@@ -31,7 +30,6 @@ class DistributionContext extends RawDrupalContext {
   use EntityReferenceTrait;
   use EntityTrait;
   use FileTrait;
-  use TestingEntitiesTrait;
   use JavascriptTrait;
 
   /**
@@ -80,7 +78,7 @@ class DistributionContext extends RawDrupalContext {
     if (!in_array($link_type, ['download', 'external'])) {
       throw new \InvalidArgumentException('Only "download" and "external" values are allowed for $link_type.');
     }
-    $link_type = ucfirst($link_type);
+
     $distribution = $this->getEntityByLabel('node', $distribution);
     if (!$distribution instanceof DistributionInterface) {
       return;
@@ -91,12 +89,11 @@ class DistributionContext extends RawDrupalContext {
       throw new \Exception(sprintf('Distribution "%s" does not contain any download links.', $distribution->label()));
     }
 
-    if ($resource instanceof FileInterface) {
-      $link = \Drupal::service('file_url_generator')->generateAbsoluteString($resource->getFileUri());
-    }
-    elseif ($resource instanceof LinkItemInterface) {
-      $link = \Drupal::service('file_url_generator')->generateAbsoluteString($resource->uri);
-    }
+    $link = match (TRUE) {
+      $resource instanceof FileInterface => \Drupal::service('file_url_generator')->generateAbsoluteString($resource->getFileUri()),
+      $resource instanceof LinkItemInterface => \Drupal::service('file_url_generator')->generateAbsoluteString($resource->uri),
+    };
+
     $result = $this->getSession()
       ->getPage()
       ->find('xpath', "//a[contains(., '{$distribution->label()}')]/ancestor::li[contains(concat(' ', @class, ' '), ' releases__item ')]//a[@href='{$link}']");
@@ -214,7 +211,6 @@ class DistributionContext extends RawDrupalContext {
         'parent_entity_id' => $parent->id(),
       ]);
       $entity->save();
-      $this->entities['download_event'][$entity->id()] = $entity;
     }
   }
 

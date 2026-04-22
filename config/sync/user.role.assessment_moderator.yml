@@ -7,7 +7,7 @@ dependencies:
 id: assessment_moderator
 label: 'Assessment moderator'
 weight: 1
-is_admin: null
+is_admin: false
 permissions:
   - 'moderate assessment report'
   - 'view any unpublished assessment report'
