@@ -16,7 +16,6 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Hook implementations for group node presave and update operations.
@@ -28,8 +27,7 @@ class GroupNodeHooks {
     protected readonly FileSystemInterface $fileSystem,
     protected readonly ExtensionPathResolver $extensionPathResolver,
     protected readonly MembershipManagerInterface $membershipManager,
-    #[Autowire(service: 'search_api.entity_datasource.tracking_manager')]
-    protected readonly ContentEntityTrackingManager $contentTrackingManager,
+    protected readonly ?ContentEntityTrackingManager $contentTrackingManager,
     protected readonly LoggerChannelFactoryInterface $loggerFactory,
   ) {}
 
@@ -95,7 +93,7 @@ class GroupNodeHooks {
       return;
     }
 
-    if ($entity->isPublished()) {
+    if ($entity->isPublished() && $this->contentTrackingManager) {
       $contentIds = $this->membershipManager->getGroupContentIds($entity, ['node']);
       $nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($contentIds['node']);
       foreach ($nodes as $node) {
