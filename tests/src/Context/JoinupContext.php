@@ -20,9 +20,9 @@ use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
-use Drupal\User\Entity\User;
 use Drupal\comment\CommentInterface;
 use Drupal\comment\Entity\Comment;
+use Drupal\file_visibility\FileVisibilityInterface;
 use Drupal\joinup\Traits\BootstrapTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
@@ -34,7 +34,6 @@ use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\RandomGeneratorTrait;
 use Drupal\joinup\Traits\TabledragTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -49,6 +48,7 @@ use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\user\Entity\User;
 use GuzzleHttp\Client;
 
 /**
@@ -68,7 +68,6 @@ class JoinupContext extends RawDrupalContext {
   use RandomGeneratorTrait;
   use StringTranslationTrait;
   use TabledragTrait;
-  use TestingEntitiesTrait;
   use TraversingTrait;
   use UserTrait;
   use UtilityTrait;
@@ -482,14 +481,20 @@ class JoinupContext extends RawDrupalContext {
    */
   #[When('I go to the :action form of the :title :bundle')]
   public function goToEntityForm(string $action, string $title, string $bundle): void {
-    if (!in_array($action, ['edit', 'delete'])) {
-      /** @var \Drupal\node\Entity\Node $node */
-      $node = $this->getEntityByLabel('node', $title, $bundle);
-      $this->visitPath($node->toUrl($action)->toString());
+    $entity_type_id = $this->translateEntityTypeAlias($bundle);
+    $bundle = $this->translateBundle($bundle);
+    $entity = $this->getEntityByLabel($entity_type_id, $title, $bundle);
+
+    $rel = match ($action) {
+      'edit' => 'edit-form',
+      'delete' => 'delete-form',
+      default => $action,
+    };
+    if (!$entity->hasLinkTemplate($rel)) {
+      throw new \Exception("No link template '$rel' found for the '{$entity->getEntityTypeId()}' entity type.");
     }
-    else {
-      $this->visitEntityForm($action, $title, $bundle);
-    }
+
+    $this->visitPath($entity->toUrl($rel)->toString());
   }
 
   /**
@@ -1680,7 +1685,6 @@ class JoinupContext extends RawDrupalContext {
 
       $comment->skip_notification = TRUE;
       $comment->save();
-      $this->entities['comment'][$comment->id()] = $comment;
     }
   }
 
@@ -2886,6 +2890,9 @@ class JoinupContext extends RawDrupalContext {
         $storage = \Drupal::entityTypeManager()->getStorage($entity_type->id());
         $storage->resetCache($ids);
         $entities = $storage->loadMultiple($ids);
+        array_walk($entities, function (FieldableEntityInterface $entity): void {
+          $entity->skip_notification = TRUE;
+        });
         @$storage->delete($entities);
       }
     }
@@ -2899,6 +2906,14 @@ class JoinupContext extends RawDrupalContext {
 
     // Also, clean the media click counter.
     \Drupal::state()->delete('image_library_widget.clicks');
+
+    // FileVisibility::$entities queues entity objects for end-of-request
+    // processing, which never fires in Behat. The queue grows indefinitely
+    // across scenarios, so discard it here. File visibility is covered in
+    // PHPUnit, not Behat, so dropping the queue has no impact here.
+    $service = \Drupal::service(FileVisibilityInterface::class);
+    $prop = new \ReflectionProperty($service, 'entities');
+    $prop->setValue($service, []);
   }
 
   /**

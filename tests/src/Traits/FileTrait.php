@@ -14,7 +14,6 @@ use Drupal\paragraphs\Entity\Paragraph;
 trait FileTrait {
 
   use AssertTrait;
-  use TestingEntitiesTrait;
 
   /**
    * Saves a file for an entity and returns the file entity.
@@ -49,7 +48,6 @@ trait FileTrait {
       'filename' => $filename,
     ]);
     $file->save();
-    $this->entities['file'][$file->id()] = $file;
 
     return $file;
   }

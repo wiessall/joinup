@@ -19,7 +19,6 @@ use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\SearchTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -42,7 +41,6 @@ class SolutionContext extends RawDrupalContext {
   use FileTrait;
   use FormTrait;
   use OgTrait;
-  use TestingEntitiesTrait;
   use SearchTrait;
   use TraversingTrait;
   use UserTrait;
@@ -257,7 +255,8 @@ class SolutionContext extends RawDrupalContext {
       }
 
       // Go to the edit form and check that the expected buttons are visible.
-      $this->visitEntityForm('edit', $values['solution'], 'solution');
+      $entity = $this->getEntityByLabel('node', $values['solution'], 'solution');
+      $this->visitPath($entity->toUrl('edit-form')->toString());
     }
   }
 

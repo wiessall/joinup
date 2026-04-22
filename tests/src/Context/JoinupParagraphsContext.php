@@ -21,7 +21,6 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Exception\WysiwygEditorNotFoundException;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup\Traits\WysiwygTrait;
 use Drupal\layout_paragraphs\LayoutParagraphsLayout;
@@ -39,7 +38,6 @@ class JoinupParagraphsContext extends RawDrupalContext {
   use WysiwygTrait;
   use UtilityTrait;
   use EntityTrait;
-  use TestingEntitiesTrait;
 
   /**
    * A copycat of Behat's internal region mapping.
@@ -459,6 +457,18 @@ class JoinupParagraphsContext extends RawDrupalContext {
       throw new \Exception(sprintf("Field not found: %s", $field_name));
     }
 
+    // Check if the last paragraph in the field is a layout paragraph. If so,
+    // nest the new paragraph inside it as a child.
+    $field = $entity->get($field_name);
+    $lastItem = $field->last();
+    if ($lastItem && ($layoutParagraph = $lastItem->entity) && $layoutParagraph->bundle() === 'layout') {
+      $paragraph->setBehaviorSettings('layout_paragraphs', [
+        'parent_uuid' => $layoutParagraph->uuid(),
+        'region' => 'content',
+      ]);
+      $paragraph->save();
+    }
+
     $entity->get($field_name)->appendItem(
       [
         'target_id' => $paragraph->id(),
@@ -516,7 +526,6 @@ class JoinupParagraphsContext extends RawDrupalContext {
     $paragraph = Paragraph::create($rawArray);
     if ($save) {
       $paragraph->save();
-      $this->entities['paragraph'][$paragraph->id()] = $paragraph;
     }
     return $paragraph;
   }
