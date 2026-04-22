@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 use Drupal\joinup_core\Update\BackendModeratorRunner;
 use Drupal\joinup_release\Update\ArchiveOldReleasesProcess;
-
 /**
  * Archives releases that have not been updated in more than 2 years.
  */
