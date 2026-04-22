@@ -7,6 +7,7 @@ namespace Drupal\joinup_release\Update;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\joinup_core\Update\UpdateProcessInterface;
 use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
@@ -19,6 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class ArchiveOldReleasesProcess implements UpdateProcessInterface, ContainerInjectionInterface {
 
+  use StringTranslationTrait;
   use WorkflowStateChangeMessageTrait;
 
   private const int BATCH_SIZE = 10;
