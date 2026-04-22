@@ -34,7 +34,6 @@ use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\RandomGeneratorTrait;
 use Drupal\joinup\Traits\TabledragTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -69,7 +68,6 @@ class JoinupContext extends RawDrupalContext {
   use RandomGeneratorTrait;
   use StringTranslationTrait;
   use TabledragTrait;
-  use TestingEntitiesTrait;
   use TraversingTrait;
   use UserTrait;
   use UtilityTrait;
@@ -1687,7 +1685,6 @@ class JoinupContext extends RawDrupalContext {
 
       $comment->skip_notification = TRUE;
       $comment->save();
-      $this->entities['comment'][$comment->id()] = $comment;
     }
   }
 
@@ -2893,6 +2890,9 @@ class JoinupContext extends RawDrupalContext {
         $storage = \Drupal::entityTypeManager()->getStorage($entity_type->id());
         $storage->resetCache($ids);
         $entities = $storage->loadMultiple($ids);
+        array_walk($entities, function (FieldableEntityInterface $entity): void {
+          $entity->skip_notification = TRUE;
+        });
         @$storage->delete($entities);
       }
     }

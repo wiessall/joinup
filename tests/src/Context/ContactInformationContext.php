@@ -16,7 +16,6 @@ use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\SearchTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UserTrait;
 
 /**
@@ -30,7 +29,6 @@ class ContactInformationContext extends RawDrupalContext {
   use MailCollectorTrait;
   use NodeTrait;
   use SearchTrait;
-  use TestingEntitiesTrait;
   use UserTrait;
 
   /**
