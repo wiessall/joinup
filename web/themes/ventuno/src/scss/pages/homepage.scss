@@ -77,7 +77,7 @@
       url("../images/homepage-banner-2026.svg") center / 100% no-repeat,
       transparent;
     @include media-breakpoint-up(lg) {
-      background-position: right;
+      background-position: 100% 70%;
       background-size: 60%;
     }
   }
