@@ -1,0 +1,66 @@
+
+diff --git a/babel.services.yml b/babel.services.yml
+index 97eba63719bf48497f262951fe2ad77eaa1f3d78..d80362e1a81b6dc1f259a4658f2208d86e98404f 100644
+--- a/babel.services.yml
++++ b/babel.services.yml
+@@ -15,6 +15,7 @@ services:
+     class: Drupal\babel\BabelStorage
+     tags:
+       - name: backend_overridable
++      - name: needs_destruction
+ 
+   Drupal\babel\BabelConfigTranslatables:
+     tags:
+diff --git a/src/BabelStorage.php b/src/BabelStorage.php
+index cb92f9675a618d78e40e89d6baf0fa14f7190c57..cc1d7e2def8ac7a99da55fc9af1b614aa1905db2 100644
+--- a/src/BabelStorage.php
++++ b/src/BabelStorage.php
+@@ -24,6 +24,13 @@ class BabelStorage implements BabelStorageInterface {
+    */
+   protected array $idsToDelete = [];
+ 
++  /**
++   * Set TRUE for source table synchronizing.
++   *
++   * @var bool
++   */
++  protected bool $sourceTablesNeedSynchronizing = FALSE;
++
+   public function __construct(
+     protected Connection $db,
+     protected readonly TranslationTypePluginManager $translationTypeManager,
+@@ -133,8 +140,9 @@ class BabelStorage implements BabelStorageInterface {
+     // Invalidate the strings cache of existing hashes being deleted.
+     $this->collectorFactory->invalidateHashes($select->execute()->fetchCol());
+ 
+-    $delete->execute();
+-    $this->updateSourceTables();
++    if ($delete->execute() > 0) {
++      $this->sourceTablesNeedSynchronizing = TRUE;
++    }
+   }
+ 
+   /**
+@@ -154,6 +162,10 @@ class BabelStorage implements BabelStorageInterface {
+     foreach ($this->idsToDelete as $pluginId => $ids) {
+       $this->delete(pluginId: $pluginId, ids: $ids);
+     }
++
++    if ($this->sourceTablesNeedSynchronizing) {
++      $this->syncSourceTables();
++    }
+   }
+ 
+   /**
+@@ -243,9 +255,9 @@ class BabelStorage implements BabelStorageInterface {
+   }
+ 
+   /**
+-   * Updates {babel_source} and {babel_source_lock} tables.
++   * Synchronizes {babel_source} and {babel_source_lock} tables.
+    */
+-  protected function updateSourceTables(): void {
++  protected function syncSourceTables(): void {
+     $this->db->query("DELETE bs FROM {babel_source} bs LEFT JOIN {babel_source_instance} bsi ON bs.hash = bsi.hash WHERE bsi.hash IS NULL");
+     $this->db->query("DELETE bsl FROM {babel_source_lock} bsl LEFT JOIN {babel_source_instance} bsi ON bsl.hash = bsi.hash WHERE bsi.hash IS NULL");
+   }
