@@ -88,9 +88,10 @@ class GroupNodeHooks {
     }
 
     if (isset($entity->search_api_skip_tracking) && $entity->search_api_skip_tracking) {
-      // Respect the flag that set the indexing to be skipped during update. This
-      // can be useful e.g. during deployments where the entities are going to be
-      // re-indexed anyway but these updates would delay the deployment by a lot.
+      // Respect the flag that set the indexing to be skipped during update.
+      // This can be useful e.g. during deployments where the entities are
+      // going to be re-indexed anyway, but these updates would delay
+      // the deployment by a lot.
       return;
     }
 
