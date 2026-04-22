@@ -14,7 +14,6 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\NodeTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
@@ -31,7 +30,6 @@ class JoinupCommunityContentContext extends RawDrupalContext {
 
   use EntityTrait;
   use NodeTrait;
-  use TestingEntitiesTrait;
   use TraversingTrait;
 
   /**

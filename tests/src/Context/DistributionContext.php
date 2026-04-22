@@ -17,7 +17,6 @@ use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_distribution\Entity\DownloadEvent;
 use Drupal\link\LinkItemInterface;
@@ -31,7 +30,6 @@ class DistributionContext extends RawDrupalContext {
   use EntityReferenceTrait;
   use EntityTrait;
   use FileTrait;
-  use TestingEntitiesTrait;
   use JavascriptTrait;
 
   /**
@@ -213,7 +211,6 @@ class DistributionContext extends RawDrupalContext {
         'parent_entity_id' => $parent->id(),
       ]);
       $entity->save();
-      $this->entities['download_event'][$entity->id()] = $entity;
     }
   }
 
