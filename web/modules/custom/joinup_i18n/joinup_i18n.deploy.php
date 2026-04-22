@@ -7,6 +7,10 @@
 
 declare(strict_types=1);
 
+use Drupal\joinup_i18n\Hook\JoinupI18nHooks;
+use Drupal\tmgmt\JobInterface;
+use Drupal\tmgmt_ec_etranslation\Plugin\tmgmt\Translator\ETranslationTranslator;
+
 /**
  * Locale source strings with duplicates.
  */
@@ -71,4 +75,57 @@ function joinup_i18n_deploy_201201(array &$sandbox): string {
   $sandbox['#finished'] = $sandbox['total'] ? $sandbox['processed'] / $sandbox['total'] : 1;
 
   return "Queued {$sandbox['processed']}/{$sandbox['total']} nodes for alias generation.";
+}
+
+/**
+ * Create continuous jobs for all enabled languages.
+ */
+function joinup_i18n_deploy_201202(array &$sandbox): string {
+  if (!isset($sandbox['pairs'])) {
+    $langcodes = array_keys(\Drupal::languageManager()->getLanguages());
+
+    // Get permutations of language codes.
+    for ($i = 0; $i < count($langcodes); $i++) {
+      if ($langcodes[$i] === 'en') {
+        // Continuous jobs with English as source language already exist.
+        continue;
+      }
+
+      for ($j = 0; $j < count($langcodes); $j++) {
+        if ($i !== $j) {
+          $sandbox['pairs'][] = [$langcodes[$i], $langcodes[$j]];
+        }
+      }
+    }
+
+    $sandbox['continuous_settings'] = \Drupal::service(JoinupI18nHooks::class)->getContinuousSettings();
+
+    // Rename legacy Babel continuous jobs and align their continuous_settings.
+    $job_storage = \Drupal::entityTypeManager()->getStorage('tmgmt_job');
+    $ids = $job_storage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('job_type', JobInterface::TYPE_CONTINUOUS)
+      ->condition('label', 'Babel:%', 'LIKE')
+      ->condition('source_language', 'en')
+      ->execute();
+
+    foreach ($job_storage->loadMultiple($ids) as $job) {
+      $job->set('label', "Joinup: en > {$job->getTargetLangcode()}")
+        ->set('continuous_settings', $sandbox['continuous_settings'])
+        ->save();
+    }
+  }
+
+  [$source, $target] = array_shift($sandbox['pairs']);
+  tmgmt_job_create($source, $target, values: [
+    'label' => "Joinup: $source > $target",
+    'translator' => ETranslationTranslator::ID,
+    'state' => JobInterface::STATE_CONTINUOUS,
+    'job_type' => JobInterface::TYPE_CONTINUOUS,
+    'continuous_settings' => $sandbox['continuous_settings'],
+  ])->save();
+
+  $sandbox['#finished'] = (int) empty($sandbox['pairs']);
+
+  return "Created continuous job for $source > $target";
 }

@@ -1,0 +1,40 @@
+tmgmt_content:
+  node:
+    - collection
+    - contact_information
+    - custom_page
+    - distribution
+    - document
+    - event
+    - glossary
+    - news
+    - oss_solution
+    - owner
+    - release
+    - solution
+  paragraph:
+    - accordion
+    - accordion_item
+    - block
+    - call_to_action
+    - carousel
+    - heading
+    - iframe
+    - image
+    - image_gallery
+    - poll
+    - quote
+    - resource_file
+    - resource_link
+    - simple_paragraph
+    - social_media
+    - table_of_contents
+    - testimony
+    - text
+    - tile
+    - tiles
+    - video
+  poll:
+    - poll
+  poll_choice:
+    - poll_choice
