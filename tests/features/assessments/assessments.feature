@@ -254,12 +254,13 @@ Feature: Assessment Report Entity Management
 
   Scenario: User can browse only published solutions in binding requirement
     Given solution content:
-      | title                     | state       |
-      | Test solution published   | published   |
-      | Test solution archived    | archived    |
-      | Test solution proposed    | proposed    |
-      | Test solution draft       | draft       |
-      | Test solution unpublished | unpublished |
+      | title                          | state       | interoperable |
+      | Test solution published        | published   |               |
+      | Test solution archived         | archived    |               |
+      | Test solution proposed         | proposed    |               |
+      | Test solution draft            | draft       |               |
+      | Test solution unpublished      | unpublished |               |
+      | Test interoperable solution    | published   | yes           |
 
     Given I am logged in as an "authenticated user"
     And I go to "/collection/assessments/report/create"
@@ -268,6 +269,7 @@ Feature: Assessment Report Entity Management
     And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
     Then I should not see the text "Interoperability Solutions Browser"
     And I should see "Test solution published"
+    And I should see "Test interoperable solution"
     And I should not see "Test solution archived"
     And I should not see "Test solution proposed"
     And I should not see "Test solution draft"
