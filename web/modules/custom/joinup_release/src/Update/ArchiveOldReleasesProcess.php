@@ -64,6 +64,7 @@ class ArchiveOldReleasesProcess implements UpdateProcessInterface, ContainerInje
 
     $sandbox['processed'] += count($ids);
     $sandbox['#finished'] = $sandbox['total'] ? $sandbox['processed'] / $sandbox['total'] : 1;
+    $sandbox['message'] = "Archived {$sandbox['processed']} of {$sandbox['total']} releases.";
   }
 
   /**
