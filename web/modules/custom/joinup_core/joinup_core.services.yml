@@ -47,10 +47,6 @@ services:
 
   Drupal\joinup_core\Routing\NodeCreationAccessRouteSubscriber: { }
 
-  Drupal\joinup_core\Archiver:
-    calls:
-      - [setWorkflowHelper, ['@?joinup_workflow.workflow_helper']]
-
   Drupal\joinup_core\Update\BackendModerator: { }
 
   Drupal\joinup_core\Update\BackendModeratorRunner: { }
