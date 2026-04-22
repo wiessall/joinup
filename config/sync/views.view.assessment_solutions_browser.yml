@@ -298,10 +298,10 @@ display:
           text_input_required_format: content_editor
           bef:
             general:
-              autosubmit: false
+              autosubmit: true
               auto_submit_sort_only: false
               autosubmit_breakpoint: ''
-              autosubmit_exclude_textfield: false
+              autosubmit_exclude_textfield: true
               autosubmit_textfield_delay: 500
               autosubmit_textfield_minimum_length: 3
               autosubmit_hide: false
@@ -586,7 +586,7 @@ display:
             remember_roles:
               authenticated: authenticated
             expose_fields: false
-            placeholder: 'Search by name...'
+            placeholder: 'Search by keyword...'
             searched_fields_id: ''
             value_maxlength: 128
             value_max_words: null

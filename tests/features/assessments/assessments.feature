@@ -315,8 +315,9 @@ Feature: Assessment Report Entity Management
     And I should see "Robust Engine"
 
     When I fill in "Name" with ""
-    And I select "Defense" from "Domain"
     And I press "Search"
+    And I wait for AJAX to finish
+    And I select "Defense" from "Domain"
     And I wait for AJAX to finish
     Then I should see "Alpha Framework"
     And I should see "Gamma Service"
@@ -326,8 +327,8 @@ Feature: Assessment Report Entity Management
     And the "Domain" field should contain the "- Any domain -" option
 
     When I select "- Any domain -" from "Domain"
+    And I wait for AJAX to finish
     And I check "Interoperable Europe solutions"
-    And I press "Search"
     And I wait for AJAX to finish
     Then I should see "Alpha Framework"
     And I should see "Gamma Service"
@@ -336,7 +337,6 @@ Feature: Assessment Report Entity Management
     And I should not see "Robust Engine"
 
     When I uncheck "Interoperable Europe solutions"
-    And I press "Search"
     And I wait for AJAX to finish
     Then I should see "Alpha Framework"
     And I should see "Beta Platform"
