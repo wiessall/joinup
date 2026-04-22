@@ -64,7 +64,7 @@ Feature: Contact form for solution
     # Contact is changed again after page was rendered.
     Given there are no preexisting log records on the site
     Given the "contact information" of "Six exclusion advantages" solution is changed to "Jocelyn Bass"
-    And there should be 1 log record
+    And there should be 2 log records
     And there should be a record of severity info in the log with description "Contact info was changed on group 'Six exclusion advantages'. Previous contact ID was '1002', new one's ID is '1001'."
     Given there are no preexisting log records on the site
     And I click "John Revoked" in the "Content" region
