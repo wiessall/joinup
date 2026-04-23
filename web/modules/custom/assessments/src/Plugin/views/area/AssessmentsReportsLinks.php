@@ -88,6 +88,16 @@ class AssessmentsReportsLinks extends AreaPluginBase {
         'url' => Url::fromRoute('view.assessments_reports.user_reports'),
         'title' => $this->t('My assessments'),
       ],
+      [
+        'url' => Url::fromUri('internal:/search', [
+          'query' => [
+            'f' => [
+              0 => 'type:report',
+            ],
+          ],
+        ]),
+        'title' => $this->t('Search assessments'),
+      ]
     ];
 
     return \array_filter($links, function (array $link) {
