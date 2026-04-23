@@ -9,6 +9,7 @@ use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\DependencyInjection\AutowireTrait;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
@@ -37,6 +38,7 @@ class AnnouncementForm extends FormBase {
     #[Autowire(service: 'logger.channel.group_membership')]
     protected readonly LoggerChannelInterface $logger,
     protected readonly Connection $connection,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {}
 
   /**
@@ -239,13 +241,10 @@ class AnnouncementForm extends FormBase {
     }
 
     if ($trigger['#type'] === 'submit' && !empty($trigger['#test_announcement'])) {
-      $email = $this->currentUser()->getEmail();
-      $this->messageDelivery->sendMessageToEmailAddresses($this->announcement, [
-        $email,
-      ]);
-      $status = $this->t('A sample announcement has been delivered to %email.', [
-        '%email' => $email,
-      ]);
+      /** @var \Drupal\user\UserInterface $user */
+      $user = $this->entityTypeManager->getStorage('user')->load($this->currentUser()->id());
+      $this->messageDelivery->sendMessageToUser($this->announcement, $user);
+      $status = $this->t('A sample announcement has been delivered to %email.', ['%email' => $user->getEmail()]);
     }
     elseif ($is_new) {
       $status = $this->t("The announcement has been created as @to. Review the announcement and, when is ready to be sent, use the 'Send' button.", $args);
