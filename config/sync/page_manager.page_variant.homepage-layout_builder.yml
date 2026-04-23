@@ -1,4 +1,4 @@
-uuid: 26fa967a-df9e-43a4-be94-c35c6efcd6c0
+uuid: c394921e-5fd8-41f8-ab4a-4089ee017ffa
 langcode: en
 status: true
 dependencies:
@@ -10,19 +10,18 @@ dependencies:
     - views.view.upcoming_event
   module:
     - joinup_front_page
-    - joinup_layout
+    - layout_builder
     - layout_discovery
-    - user
     - views
-id: homepage-layout_builder-1
-label: Authenticated
+id: homepage-layout_builder
+label: Homepage
 weight: 0
 variant: layout_builder
 variant_settings:
   id: layout_builder
-  label: Authenticated
+  label: Homepage
   weight: 0
-  uuid: ed4c9549-4a3f-4017-abc1-f60cc2ed2968
+  uuid: c6b4a07e-d959-4562-a8a9-96a8c2a46ae9
   sections:
     -
       layout_id: layout_onecol
@@ -83,8 +82,8 @@ variant_settings:
             items_per_page: null
           weight: 0
           additional: {  }
-        8fc92d7e-8761-4b54-b538-d95432184ca2:
-          uuid: 8fc92d7e-8761-4b54-b538-d95432184ca2
+        6f843070-3c02-4fb0-8a5a-f99787ffc5d5:
+          uuid: 6f843070-3c02-4fb0-8a5a-f99787ffc5d5
           region: second
           configuration:
             id: 'views_block:upcoming_event-block'
@@ -115,13 +114,6 @@ variant_settings:
           additional: {  }
       third_party_settings: {  }
 page: homepage
-selection_criteria:
-  -
-    id: user_role
-    negate: false
-    context_mapping:
-      user: current_user
-    roles:
-      authenticated: authenticated
+selection_criteria: {  }
 selection_logic: and
 static_context: {  }
