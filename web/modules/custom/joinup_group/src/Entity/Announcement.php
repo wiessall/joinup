@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Drupal\joinup_group\Entity;
 
 use Drupal\Core\Database\Query\SelectInterface;
+use Drupal\Core\Url;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\message\Entity\Message;
 use Drupal\og\OgMembershipInterface;
+use Drupal\user\UserInterface;
 
 /**
  * Bundle class for announcement messages.
@@ -100,10 +102,11 @@ class Announcement extends Message implements AnnouncementInterface {
    * {@inheritdoc}
    */
   public function getRecipients(int $offset, int $limit): array {
-    return $this->getRecipientsQuery()
+    $uids = $this->getRecipientsQuery()
       ->range($offset, $limit)
       ->execute()
       ->fetchCol();
+    return array_map('intval', $uids);
   }
 
   /**
@@ -136,14 +139,14 @@ class Announcement extends Message implements AnnouncementInterface {
     }
 
     return $query->condition('og.entity_type', 'node')
-      ->fields('u', ['mail'])
+      ->fields('u', ['uid'])
       ->distinct()
       ->condition('og.entity_bundle', $group->bundle())
       ->condition('og.entity_id', $group->id())
       ->condition('og.state', OgMembershipInterface::STATE_ACTIVE)
       ->condition('og.announcements', 1)
       ->condition('u.status', 1)
-      ->orderBy('u.mail');
+      ->orderBy('u.uid');
   }
 
   /**
@@ -162,6 +165,48 @@ class Announcement extends Message implements AnnouncementInterface {
       fn(array $value) => $value['target_id'],
       $this->get('professional_domain')->getValue(),
     );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getMailVariables(): array {
+    $arguments = $this->getArguments();
+
+    // Resolve callback-style args using the same logic as ::processArguments().
+    $variables = [];
+    foreach ($arguments as $key => $value) {
+      if (is_array($value) && !empty($value['callback']) && is_callable($value['callback'])) {
+        $value += ['pass message' => FALSE, 'arguments' => []];
+        if ($value['pass message']) {
+          $value['arguments']['message'] = $this;
+        }
+        $value = call_user_func_array($value['callback'], $value['arguments']);
+      }
+
+      $key = ltrim($key, '@%!');
+      $variables[$key] = $value;
+    }
+
+    return $variables;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function addUserArguments(UserInterface $user): self {
+    $this->setArguments(array_merge($this->getArguments(), [
+      '@recipient_name' => $user->getDisplayName(),
+      '@recipient_profile' => $user->toUrl()->setAbsolute()->toString(),
+      '@recipient_profile_edit' => $user->toUrl('edit-form')->setAbsolute()->toString(),
+      '@recipient_subscriptions' => Url::fromRoute('joinup_subscription.subscriptions', ['user' => $user->id()])->setAbsolute()->toString(),
+      '@recipient_unsubscribe' => Url::fromRoute('joinup_subscription.unsubscribe', [
+        'user' => $user->id(),
+        'group' => $this->getGroup()->id(),
+        'types' => 'announcements',
+      ])->setAbsolute()->toString(),
+    ]));
+    return $this;
   }
 
 }
