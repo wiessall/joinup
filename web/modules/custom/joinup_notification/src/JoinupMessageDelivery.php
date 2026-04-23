@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_notification;
 
-use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
-use Drupal\Core\Url;
 use Drupal\joinup_group\Entity\AnnouncementInterface;
 use Drupal\message\Entity\Message;
 use Drupal\message\MessageInterface;
@@ -32,7 +30,6 @@ readonly class JoinupMessageDelivery implements JoinupMessageDeliveryInterface {
   public function __construct(
     #[Autowire(service: 'message_notify.sender')]
     protected readonly MessageNotifier $messageNotifier,
-    protected readonly CacheTagsInvalidatorInterface $cacheTagsInvalidator,
   ) {}
 
   /**
@@ -49,10 +46,8 @@ readonly class JoinupMessageDelivery implements JoinupMessageDeliveryInterface {
       // By keying on the user ID we can avoid that a user might get the message
       // more than once.
       $recipients_metadata[$account->id()] = [
-        'options' => $notifier_options + [
-          'save on success' => FALSE,
-          'mail' => $account->getEmail(),
-        ],
+        'owner' => $account,
+        'options' => $notifier_options,
         'notifier' => $digest ? $this->getNotifierId($account) : 'email',
       ];
     }
@@ -68,8 +63,8 @@ readonly class JoinupMessageDelivery implements JoinupMessageDeliveryInterface {
       return FALSE;
     }
 
-    $message->setOwner($account);
     $recipient_metadata = [
+      'owner' => $account,
       'options' => $notifier_options,
       'notifier' => $digest ? $this->getNotifierId($account) : 'email',
     ];
@@ -87,10 +82,7 @@ readonly class JoinupMessageDelivery implements JoinupMessageDeliveryInterface {
     // the same address.
     foreach (array_unique($mails) as $mail) {
       $recipients_metadata[] = [
-        'options' => $notifier_options + [
-          'save on success' => FALSE,
-          'mail' => $mail,
-        ],
+        'options' => $notifier_options + ['mail' => $mail],
         'notifier' => 'email',
       ];
     }
@@ -152,6 +144,7 @@ readonly class JoinupMessageDelivery implements JoinupMessageDeliveryInterface {
    * @param array $recipients_metadata
    *   An array of recipient data, each item an associative array with the
    *   following keys:
+   *   - owner: (optional) The recipient user account.
    *   - options: An associative array of options for the message notifier.
    *   - notifier: The plugin ID of the message notifier to use.
    *
@@ -167,20 +160,33 @@ readonly class JoinupMessageDelivery implements JoinupMessageDeliveryInterface {
       $message->save();
     }
 
-    return array_reduce($recipients_metadata, function (bool $success, array $recipient_metadata) use ($message): bool {
-      if ($message instanceof AnnouncementInterface) {
-        $account = user_load_by_mail($recipient_metadata['options']['mail']);
-        if (!$account) {
-          return FALSE;
+    $success = TRUE;
+    foreach ($recipients_metadata as $recipient_metadata) {
+      // Clone the message per recipient to avoid cross-recipient state leakage.
+      // The original_message reference allows digest notifiers to retrieve the
+      // saved message ID, since createDuplicate() strips the entity ID.
+      $send_message = $message->createDuplicate();
+      $send_message->original_message = $message;
+
+      // The duplicate is never saved: its sole purpose is a per-recipient send.
+      $recipient_metadata['options']['save on success'] = FALSE;
+      $recipient_metadata['options']['save on fail'] = FALSE;
+
+      // Prepare the message.
+      $owner = $recipient_metadata['owner'] ?? NULL;
+      if ($owner instanceof UserInterface) {
+        $send_message->setOwner($owner);
+
+        // For announcements, inject per-recipient tokens.
+        if ($send_message instanceof AnnouncementInterface) {
+          $send_message->addUserArguments($owner);
         }
-        $message->setArguments($message->getArguments() + static::getAnnouncementTokenMappings());
-        $message->setOwner($account);
       }
 
-      // Make sure we're the message build is not cached.
-      $this->cacheTagsInvalidator->invalidateTags($message->getCacheTagsToInvalidate());
-      return $this->messageNotifier->send($message, $recipient_metadata['options'], $recipient_metadata['notifier']) && $success;
-    }, TRUE);
+      // Send the message.
+      $success = $this->messageNotifier->send($send_message, $recipient_metadata['options'], $recipient_metadata['notifier']) && $success;
+    }
+    return $success;
   }
 
   /**
@@ -214,75 +220,6 @@ readonly class JoinupMessageDelivery implements JoinupMessageDeliveryInterface {
    */
   protected function accountIsValid(UserInterface $account): bool {
     return !$account->isAnonymous() && !empty($account->getEmail());
-  }
-
-  /**
-   * Get announcement token mappings.
-   */
-  protected static function getAnnouncementTokenMappings(): array {
-    return [
-      '@recipient_name' => [
-        'pass message' => TRUE,
-        'callback' => [static::class, 'getRecipientName'],
-      ],
-      '@recipient_profile' => [
-        'pass message' => TRUE,
-        'callback' => [static::class, 'getRecipientProfile'],
-      ],
-      '@recipient_profile_edit' => [
-        'pass message' => TRUE,
-        'callback' => [static::class, 'getRecipientProfileEdit'],
-      ],
-      '@recipient_subscriptions' => [
-        'pass message' => TRUE,
-        'callback' => [static::class, 'getRecipientSubscriptions'],
-      ],
-      '@recipient_unsubscribe' => [
-        'pass message' => TRUE,
-        'callback' => [static::class, 'getRecipientUnsubscribe'],
-      ],
-    ];
-  }
-
-  /**
-   * Get recipient name.
-   */
-  public static function getRecipientName(MessageInterface $message): string {
-    return $message->getOwner()->getDisplayName();
-  }
-
-  /**
-   * Get recipient profile.
-   */
-  public static function getRecipientProfile(MessageInterface $message): string {
-    return $message->getOwner()->toUrl()->setAbsolute()->toString();
-  }
-
-  /**
-   * Get recipient profile edit link.
-   */
-  public static function getRecipientProfileEdit(MessageInterface $message): string {
-    return $message->getOwner()->toUrl('edit-form')->setAbsolute()->toString();
-  }
-
-  /**
-   * Get recipient subscriptions.
-   */
-  public static function getRecipientSubscriptions(MessageInterface $message): string {
-    return Url::fromRoute('joinup_subscription.subscriptions', [
-      'user' => $message->getOwner()->id(),
-    ])->setAbsolute()->toString();
-  }
-
-  /**
-   * Get recipient unsubscribe link.
-   */
-  public static function getRecipientUnsubscribe(MessageInterface $message): string {
-    return Url::fromRoute('joinup_subscription.unsubscribe', [
-      'user' => $message->getOwner()->id(),
-      'group' => $message->getGroup()->id(),
-      'types' => 'announcements',
-    ])->setAbsolute()->toString();
   }
 
 }

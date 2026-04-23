@@ -6,6 +6,7 @@ namespace Drupal\joinup_group\Entity;
 
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\message\MessageInterface;
+use Drupal\user\UserInterface;
 
 /**
  * Interface for announcement messages bundle class.
@@ -57,7 +58,7 @@ interface AnnouncementInterface extends MessageInterface, GroupContentInterface,
   public function getBodyFormat(): string;
 
   /**
-   * Returns a list of emails of members subscribed to receive announcements.
+   * Returns a list of user IDs of members subscribed to receive announcements.
    *
    * Note that this method is not using the entity API as some groups may have
    * tens of thousands of members, and we need a fast way to queue them. Doing a
@@ -72,8 +73,8 @@ interface AnnouncementInterface extends MessageInterface, GroupContentInterface,
    * @param int $limit
    *   The query limit.
    *
-   * @return string[]
-   *   A list of groups members emails.
+   * @return int[]
+   *   A list of group member user IDs.
    */
   public function getRecipients(int $offset, int $limit): array;
 
@@ -84,6 +85,24 @@ interface AnnouncementInterface extends MessageInterface, GroupContentInterface,
    *   The number of active members subscribed to receive announcements.
    */
   public function getRecipientsCount(): int;
+
+  /**
+   * Adds per-recipient arguments for the given user.
+   *
+   * @param \Drupal\user\UserInterface $user
+   *   The recipient user.
+   *
+   * @return $this
+   */
+  public function addUserArguments(UserInterface $user): self;
+
+  /**
+   * Returns announcement arguments as template variables.
+   *
+   * @return array
+   *   An associative array of resolved string values.
+   */
+  public function getMailVariables(): array;
 
   /**
    * Sets the professional domains reference value.

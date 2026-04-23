@@ -16,7 +16,6 @@ use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup_group\ContentCreationOptions;
 use Drupal\joinup_group\Entity\AnnouncementInterface;
@@ -33,7 +32,6 @@ class JoinupGroupContext extends RawDrupalContext {
   use AssertTrait;
   use EntityTrait;
   use MailCollectorTrait;
-  use TestingEntitiesTrait;
   use UserTrait;
 
   /**
@@ -316,7 +314,6 @@ class JoinupGroupContext extends RawDrupalContext {
       $values['created'] = strtotime($values['created']);
       $announcement = $storage->create($values);
       $announcement->save();
-      $this->entities['message'][$announcement->id()] = $announcement;
     }
   }
 
@@ -357,16 +354,18 @@ class JoinupGroupContext extends RawDrupalContext {
     $body = $announcement->getBody();
     $offset = 0;
     $limit = 250;
-    while ($member_emails = $announcement->getRecipients($offset, $limit)) {
-      foreach ($member_emails as $member_email) {
-        $body_processed = str_replace('@recipient_name', user_load_by_mail($member_email)->getDisplayName(), $body);
-        $emails = $this->getEmailsBySubjectAndMail($announcement->getSubject(), $member_email);
+    $user_storage = \Drupal::entityTypeManager()->getStorage('user');
+    while ($uids = $announcement->getRecipients($offset, $limit)) {
+      $users = $user_storage->loadMultiple($uids);
+      foreach ($users as $user) {
+        $body_processed = str_replace('@recipient_name', $user->getDisplayName(), $body);
+        $emails = $this->getEmailsBySubjectAndMail($announcement->getSubject(), $user->getEmail());
         $email = reset($emails);
-        $this->assertSameValues($member_email, $email['to'], "Expected recipient '$member_email' but got '{$email['to']}'.");
+        $this->assertSameValues($user->getEmail(), $email['to'], "Expected recipient '{$user->getEmail()}' but got '{$email['to']}'.");
         $this->assertSameValues($subject, $email['subject'], "Expected subject '$subject' but got '{$email['subject']}'.");
         $this->assertCondition(str_contains((string) $email['body'], $body_processed), 'The email body does not contain the expected content.');
-        $offset += $limit;
       }
+      $offset += $limit;
     }
   }
 
@@ -549,10 +548,6 @@ class JoinupGroupContext extends RawDrupalContext {
 
     if (!$entity) {
       throw new \RuntimeException("Entity not found for bundle: $entityTypeAlias, identifier: $identifier");
-    }
-
-    if (isset($this->entities[$entity->bundle()][$entity->id()])) {
-      unset($this->entities[$entity->bundle()][$entity->id()]);
     }
 
     $entity->skip_notification = TRUE;

@@ -30,5 +30,5 @@ Feature: Global Interoperable search
     When I visit the advanced search page
     # 3 demo collections are installed by default.
     # @see joinup_test.install
-    And I check the "Collections (4)" checkbox from the "Content types" facet
+    And I check the "Collections (3)" checkbox from the "Content types" facet
     Then I should not see the text "Interoperable Europe Solutions"
