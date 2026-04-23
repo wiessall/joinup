@@ -97,7 +97,7 @@ class AssessmentsReportsLinks extends AreaPluginBase {
           ],
         ]),
         'title' => $this->t('Search assessments'),
-      ]
+      ],
     ];
 
     return \array_filter($links, function (array $link) {
