@@ -14,7 +14,6 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\private_message\Entity\PrivateMessageBan;
 use Drupal\private_message\Entity\PrivateMessageThreadInterface;
@@ -26,7 +25,6 @@ use Exception;
 class PrivateMessageContext extends RawDrupalContext {
 
   use JavascriptTrait;
-  use TestingEntitiesTrait;
   use UserTrait;
 
   /**
@@ -76,9 +74,6 @@ class PrivateMessageContext extends RawDrupalContext {
       $privateMessage->save();
 
       $privateMessageThread->addMessage($privateMessage)->save();
-
-      $this->entities['private_message'][$privateMessage->id()] = $privateMessage;
-      $this->entities['private_message_thread'][$privateMessageThread->id()] = $privateMessageThread;
     }
   }
 

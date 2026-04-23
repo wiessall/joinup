@@ -9,7 +9,6 @@ use Behat\Step\Given;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 
 /**
  * Behat step definitions for testing OAuth client requests.
@@ -17,7 +16,6 @@ use Drupal\joinup\Traits\TestingEntitiesTrait;
 class OauthClientContext extends RawDrupalContext {
 
   use EntityTrait;
-  use TestingEntitiesTrait;
 
   /**
    * Creates OAuth client requests from table data.
@@ -38,8 +36,6 @@ class OauthClientContext extends RawDrupalContext {
 
       $request = $storage->create($values);
       $request->save();
-
-      $this->entities['oauth_client_request'][$request->id()] = $request;
     }
   }
 

@@ -45,6 +45,7 @@ dependencies:
     - node.type.oss_solution
   module:
     - custom_markup_block
+    - eu_oss_catalogue
     - joinup_layout
     - layout_builder
     - layout_discovery
@@ -449,148 +450,6 @@ third_party_settings:
       -
         layout_id: layout_onecol
         layout_settings:
-          label: Gallery
-          context_mapping: {  }
-        components:
-          47b9fb75-bf99-42bc-b2a4-31851abf70f6:
-            uuid: 47b9fb75-bf99-42bc-b2a4-31851abf70f6
-            region: content
-            configuration:
-              id: 'field_block:node:oss_solution:oss__screenshots'
-              label: Gallery
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: imagecache_external_responsive_image
-                label: hidden
-                settings:
-                  imagecache_external_link: ''
-                  imagecache_external_responsive_style: image_gallery
-                third_party_settings:
-                  field_delimiter:
-                    delimiter: ''
-                  field_formatter_range:
-                    order: 0
-                    limit: 0
-                    offset: 0
-                  joinup_slick:
-                    preset: image_gallery
-                  template_suggestion:
-                    template_suggestion: ''
-            weight: 1
-            additional: {  }
-        third_party_settings: {  }
-      -
-        layout_id: layout_twocol_section
-        layout_settings:
-          label: 'Long description'
-          context_mapping: {  }
-          column_widths: 67-33
-        components:
-          7e17db81-4af4-4c6b-b6df-2b052f018e25:
-            uuid: 7e17db81-4af4-4c6b-b6df-2b052f018e25
-            region: first
-            configuration:
-              id: 'field_block:node:oss_solution:oss_long_description'
-              label: Description
-              label_display: visible
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: text_default
-                label: hidden
-                settings: {  }
-                third_party_settings:
-                  template_suggestion:
-                    template_suggestion: ''
-            weight: 0
-            additional: {  }
-        third_party_settings: {  }
-      -
-        layout_id: layout_twocol_section
-        layout_settings:
-          label: 'Features and Audience'
-          context_mapping: {  }
-          column_widths: 50-50
-        components:
-          eb1487bc-7a20-40e5-9c0f-d4b997f0e11b:
-            uuid: eb1487bc-7a20-40e5-9c0f-d4b997f0e11b
-            region: second
-            configuration:
-              id: 'field_block:node:oss_solution:oss_features'
-              label: Features
-              label_display: visible
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: string
-                label: hidden
-                settings:
-                  link_to_entity: false
-                third_party_settings:
-                  field_delimiter:
-                    delimiter: ''
-                  field_formatter_range:
-                    order: 0
-                    limit: 0
-                    offset: 0
-                  template_suggestion:
-                    template_suggestion: ''
-            weight: 0
-            additional: {  }
-          bedf9535-e494-4215-8413-ef9fa62c9367:
-            uuid: bedf9535-e494-4215-8413-ef9fa62c9367
-            region: second
-            configuration:
-              id: 'field_block:node:oss_solution:oss_scope'
-              label: 'Intended audience'
-              label_display: visible
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: joinup_oss_catalogue_link_to_solution_search
-                label: hidden
-                settings:
-                  facet_id: scope
-                  use_label: true
-                third_party_settings:
-                  field_delimiter:
-                    delimiter: ''
-                  field_formatter_range:
-                    order: 0
-                    limit: 0
-                    offset: 0
-                  template_suggestion:
-                    template_suggestion: ''
-            weight: 1
-            additional: {  }
-          9568bae7-195f-4e8c-88ab-c963049f5e79:
-            uuid: 9568bae7-195f-4e8c-88ab-c963049f5e79
-            region: first
-            configuration:
-              id: custom_markup
-              label: Illustration
-              label_display: '0'
-              provider: custom_markup_block
-              context_mapping: {  }
-              markup:
-                value: '<div class="oss-solution__illustration"></div>'
-                format: full_html
-            weight: 0
-            additional: {  }
-        third_party_settings: {  }
-      -
-        layout_id: layout_onecol
-        layout_settings:
           label: 'Detailed information section label'
           context_mapping: {  }
         components:
@@ -900,6 +759,148 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 10
+            additional: {  }
+        third_party_settings: {  }
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: Gallery
+          context_mapping: {  }
+        components:
+          47b9fb75-bf99-42bc-b2a4-31851abf70f6:
+            uuid: 47b9fb75-bf99-42bc-b2a4-31851abf70f6
+            region: content
+            configuration:
+              id: 'field_block:node:oss_solution:oss__screenshots'
+              label: Gallery
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: imagecache_external_responsive_image
+                label: hidden
+                settings:
+                  imagecache_external_link: ''
+                  imagecache_external_responsive_style: image_gallery
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  joinup_slick:
+                    preset: image_gallery
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 1
+            additional: {  }
+        third_party_settings: {  }
+      -
+        layout_id: layout_twocol_section
+        layout_settings:
+          label: 'Long description'
+          context_mapping: {  }
+          column_widths: 67-33
+        components:
+          7e17db81-4af4-4c6b-b6df-2b052f018e25:
+            uuid: 7e17db81-4af4-4c6b-b6df-2b052f018e25
+            region: first
+            configuration:
+              id: 'field_block:node:oss_solution:oss_long_description'
+              label: Description
+              label_display: visible
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: text_default
+                label: hidden
+                settings: {  }
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+        third_party_settings: {  }
+      -
+        layout_id: layout_twocol_section
+        layout_settings:
+          label: 'Features and Audience'
+          context_mapping: {  }
+          column_widths: 50-50
+        components:
+          eb1487bc-7a20-40e5-9c0f-d4b997f0e11b:
+            uuid: eb1487bc-7a20-40e5-9c0f-d4b997f0e11b
+            region: second
+            configuration:
+              id: 'field_block:node:oss_solution:oss_features'
+              label: Features
+              label_display: visible
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: string
+                label: hidden
+                settings:
+                  link_to_entity: false
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+          bedf9535-e494-4215-8413-ef9fa62c9367:
+            uuid: bedf9535-e494-4215-8413-ef9fa62c9367
+            region: second
+            configuration:
+              id: 'field_block:node:oss_solution:oss_scope'
+              label: 'Intended audience'
+              label_display: visible
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: joinup_oss_catalogue_link_to_solution_search
+                label: hidden
+                settings:
+                  facet_id: scope
+                  use_label: true
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 1
+            additional: {  }
+          9568bae7-195f-4e8c-88ab-c963049f5e79:
+            uuid: 9568bae7-195f-4e8c-88ab-c963049f5e79
+            region: first
+            configuration:
+              id: custom_markup
+              label: Illustration
+              label_display: '0'
+              provider: custom_markup_block
+              context_mapping: {  }
+              markup:
+                value: '<div class="oss-solution__illustration"></div>'
+                format: full_html
+            weight: 0
             additional: {  }
         third_party_settings: {  }
 id: node.oss_solution.default
