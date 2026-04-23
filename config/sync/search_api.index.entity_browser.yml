@@ -95,7 +95,7 @@ field_settings:
     label: Abstract
     datasource_id: 'entity:node'
     property_path: abstract
-    type: text
+    type: 'solr_text_custom:ngram'
     dependencies:
       config:
         - field.storage.node.abstract
@@ -116,7 +116,7 @@ field_settings:
     label: Description
     datasource_id: 'entity:node'
     property_path: 'description:processed'
-    type: text
+    type: 'solr_text_custom:ngram'
     dependencies:
       config:
         - field.storage.node.description
@@ -153,7 +153,7 @@ field_settings:
     label: Keywords
     datasource_id: 'entity:node'
     property_path: 'keywords:entity:name'
-    type: text
+    type: 'solr_text_custom:ngram'
     dependencies:
       config:
         - field.storage.node.keywords
@@ -171,7 +171,7 @@ field_settings:
     label: Title
     datasource_id: 'entity:node'
     property_path: title
-    type: text
+    type: 'solr_text_custom:ngram'
     dependencies:
       module:
         - node
