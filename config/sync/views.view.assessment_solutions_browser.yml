@@ -395,12 +395,10 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: search_api_string
-          operator: '='
+          plugin_id: search_api_options
+          operator: or
           value:
-            min: ''
-            max: ''
-            value: solution
+            solution: solution
           group: 1
           exposed: false
           expose:
@@ -417,9 +415,7 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-            min_placeholder: ''
-            max_placeholder: ''
-            placeholder: ''
+            reduce: false
           is_grouped: false
           group_info:
             label: ''
@@ -432,6 +428,7 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+          reduce_duplicates: false
         entity_status:
           id: entity_status
           table: search_api_index_entity_browser
@@ -607,7 +604,7 @@ display:
           fields:
             - abstract
             - description
-            - rendered_item
+            - keywords
             - title
       filter_groups:
         operator: AND

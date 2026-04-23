@@ -3,17 +3,19 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.default
     - field.storage.node.abstract
     - field.storage.node.description
     - field.storage.node.domain
     - field.storage.node.field_state
+    - field.storage.node.keywords
     - search_api.server.joinup
   module:
     - flag
     - joinup_flag
+    - joinup_solution
     - node
     - search_api_solr
+    - taxonomy
 third_party_settings:
   search_api_solr:
     finalize: false
@@ -107,6 +109,7 @@ field_settings:
 
 
 
+
       fields:
         - 'entity:node/title'
   description:
@@ -130,6 +133,9 @@ field_settings:
     datasource_id: 'entity:node'
     property_path: type
     type: string
+    dependencies:
+      module:
+        - node
   entity_status:
     label: Status
     datasource_id: 'entity:node'
@@ -143,22 +149,16 @@ field_settings:
     datasource_id: 'entity:node'
     property_path: interoperable_flag
     type: boolean
-  rendered_item:
-    label: 'Rendered HTML output'
-    property_path: rendered_item
+  keywords:
+    label: Keywords
+    datasource_id: 'entity:node'
+    property_path: 'keywords:entity:name'
     type: text
-    configuration:
-      roles:
-        - anonymous
-      view_mode:
-        'entity:flagging':
-          ':default': ''
-          bookmark: ''
-          like: ''
-          subscribe_discussions: ''
-        'entity:node':
-          ':default': default
-          solution: ':default'
+    dependencies:
+      config:
+        - field.storage.node.keywords
+      module:
+        - taxonomy
   status:
     label: Published
     datasource_id: 'entity:node'
@@ -172,6 +172,9 @@ field_settings:
     datasource_id: 'entity:node'
     property_path: title
     type: text
+    dependencies:
+      module:
+        - node
 datasource_settings:
   'entity:flagging':
     bundles:
