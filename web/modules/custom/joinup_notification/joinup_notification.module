@@ -10,6 +10,7 @@ declare(strict_types=1);
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Render\Markup;
 use Drupal\joinup_notification\Event\NotificationEvent;
+use Drupal\joinup_notification\EventSubscriber\OgMembershipSubscriber;
 use Drupal\joinup_notification\MailContentTypeHeader;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
@@ -132,7 +133,10 @@ function joinup_notification_mail_alter(array &$message): void {
     // omit the formalities of attaching a warm greeting and signature to the
     // email.
     if ($message['key'] !== 'announcement') {
-      if ($message['key'] === 'og_membership_approve' || $message['key'] === 'og_membership_subscribed_approve') {
+      if (in_array($message['key'], [
+        OgMembershipSubscriber::TEMPLATE_APPROVE_MEMBERSHIP,
+        OgMembershipSubscriber::TEMPLATE_APPROVE_MEMBERSHIP_WITH_SUBSCRIPTION,
+      ], TRUE)) {
         $message_entity = $message['params']['message_entity'];
         $arguments = $message_entity->getArguments();
         if (isset($arguments['custom_approval_message'])) {
