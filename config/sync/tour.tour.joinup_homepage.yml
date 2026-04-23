@@ -6,7 +6,7 @@ id: joinup_homepage
 label: 'Interoperable Europe Portal homepage tour.'
 routes:
   -
-    route_name: page_manager.page_view_homepage_homepage-layout_builder
+    route_name: page_manager.page_view_homepage_homepage-layout_builder-0
 tips:
   account:
     id: account
