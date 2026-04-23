@@ -25,8 +25,9 @@ use Drupal\assessments\Entity\BindingRequirementParagraph;
 use Drupal\assessments\Entity\PublicOrganisation;
 use Drupal\assessments\Event\AssessmentReportEvent;
 use Drupal\assessments\NotificationEvents;
+use Drupal\assessments\Plugin\EntityBrowser\Widget\OgAwareEntityForm;
+use Drupal\assessments\Plugin\Field\FieldWidget\ProvidedByWidget;
 use Drupal\collection\Entity\CollectionInterface;
-use Drupal\joinup_solution\Entity\SolutionInterface;
 
 /**
  * Implements hook_theme().
@@ -66,12 +67,14 @@ function assessments_entity_extra_field_info(): array {
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_form_BASE_FORM_ID_alter().
  */
-function assessments_form_alter(array &$form, FormStateInterface $formState, string $formId): void {
-  if (!in_array($formId, ['assessment_report_add_form', 'assessment_report_edit_form'], TRUE)) {
+function assessments_form_assessment_form_alter(array &$form, FormStateInterface $formState): void {
+  if (!$formState->getFormObject()->getEntity() instanceof AssessmentReport) {
     return;
   }
+
+  $form['#attached']['library'][] = 'assessments/entity_browser';
 
   $form['cross_border'] = [
     '#type' => 'html_tag',
@@ -86,75 +89,13 @@ function assessments_form_alter(array &$form, FormStateInterface $formState, str
   $form['technical']['widget'][0]['#title_display'] = 'invisible';
   $form['other']['widget'][0]['#title_display'] = 'invisible';
 
-  // Register submit handler to create organizations after validation.
-  $handler = [
-    'Drupal\assessments\Plugin\Field\FieldWidget\ProvidedByWidget',
-    'submitCreateOrganisations',
-  ];
+  // Register the submit-handler to create organizations after validation.
+  $handler = [ProvidedByWidget::class, 'submitCreateOrganisations'];
   $existingHandlers = $form['actions']['submit']['#submit'] ?? [];
   if (!in_array($handler, $existingHandlers, TRUE)) {
-    // Execute before entity builder to set org IDs before entity save.
+    // Execute before the entity-builder to set org IDs before the entity saves.
     array_unshift($form['actions']['submit']['#submit'], $handler);
   }
-}
-
-/**
- * Implements hook_field_widget_complete_form_alter().
- */
-function assessments_field_widget_complete_form_alter(array &$element, FormStateInterface $form_state, array $context): void {
-  // Only for the asset field.
-  if (!isset($context['items']) || $context['items']->getFieldDefinition()->getName() !== 'asset') {
-    return;
-  }
-
-  // Check if the parent entity is a paragraph of type binding_requirement.
-  $parent = $context['items']->getEntity();
-  if (!$parent || $parent->getEntityTypeId() !== 'paragraph' || $parent->bundle() !== 'binding_requirement') {
-    return;
-  }
-
-  // The widget element is nested at $element['widget'].
-  if (!isset($element['widget'])) {
-    return;
-  }
-
-  $widget = &$element['widget'];
-  $ief_id = $element['widget']['#ief_id'];
-  // IEF state can be NULL (initial state) / ief_add_existing / add.
-  /** @see \Drupal\inline_entity_form\Plugin\Field\FieldWidget\InlineEntityFormComplex::formElement */
-  $ief_state = $form_state->get(['inline_entity_form', $ief_id, 'form']);
-
-  if ($ief_state === NULL) {
-    // Add description before the buttons.
-    $widget['description'] = [
-      '#markup' => t('Identify the interoperability solutions mandatory to use for the implementation of the assessed binding requirement'),
-    ];
-
-    // Modify the ief_add_existing button.
-    /** @var \Drupal\Core\StringTranslation\TranslatableMarkup $markup */
-    $markup = $widget['actions']['ief_add_existing']['#value'];
-    $arguments = $markup->getArguments();
-    $widget['actions']['ief_add_existing']['#value'] = new TranslatableMarkup('Select an @type_singular', $arguments);
-    $widget['actions']['ief_add_existing']['#weight'] = 0;
-
-    // Modify the ief_add button.
-    /** @var \Drupal\Core\StringTranslation\TranslatableMarkup $markup */
-    $markup = $widget['actions']['ief_add']['#value'];
-    $arguments = $markup->getArguments();
-    $widget['actions']['ief_add']['#value'] = new TranslatableMarkup('Add a new @type_singular', $arguments);
-    $widget['actions']['ief_add']['#weight'] = 10;
-  }
-
-  if ($ief_state === NULL || $ief_state === 'ief_add_existing') {
-    $widget['additional_info'] = [
-      '#weight' => 200,
-      '#markup' => t('Browse the <a href=":solutions" target="_blank">solutions</a> recommended by the <a href=":governance" target="_blank">Interoperable Europe Board.</a>', [
-        ':solutions' => Url::fromUri('internal:/interoperable-europe-solutions')->toString(),
-        ':governance' => Url::fromUri('internal:/collection/governance-board')->toString(),
-      ]),
-    ];
-  }
-
 }
 
 /**
@@ -165,6 +106,7 @@ function assessments_form_layout_paragraphs_component_form_alter(array &$form, F
   if ($paragraph->bundle() === 'binding_requirement') {
     // We use layout paragraphs, but we use everytime the 1 column layout.
     $form['layout_paragraphs']['#access'] = FALSE;
+    $form['asset']['widget']['#type'] = 'container';
     $form['asset']['widget']['#title_display'] = 'invisible';
     $form['documented_in']['widget'][0]['uri']['#description'] = t('Use <a href=":eli_url" target="_blank" rel="noopener noreferrer">ELI format</a>, if possible – otherwise provide a URL pointing to the binding requirement assessed.', [
       ':eli_url' => 'https://eur-lex.europa.eu/eli-register/what_is_eli.html',
@@ -246,11 +188,11 @@ function template_preprocess_assessment_statement(array &$variables): void {
 function assessments_theme_suggestions_assessment(array $variables): array {
   $suggestions = [];
   $assessment = $variables['elements']['#assessment'];
-  $sanitized_view_mode = strtr($variables['elements']['#view_mode'], '.', '_');
+  $sanitizedViewMode = strtr($variables['elements']['#view_mode'], '.', '_');
 
-  $suggestions[] = 'assessment__' . $sanitized_view_mode;
+  $suggestions[] = 'assessment__' . $sanitizedViewMode;
   $suggestions[] = 'assessment__' . $assessment->bundle();
-  $suggestions[] = 'assessment__' . $assessment->bundle() . '__' . $sanitized_view_mode;
+  $suggestions[] = 'assessment__' . $assessment->bundle() . '__' . $sanitizedViewMode;
 
   return $suggestions;
 }
@@ -379,8 +321,7 @@ function assessments_entity_operation(EntityInterface $entity): array {
     return $operations;
   }
 
-  $current_user = \Drupal::service('current_user')->getAccount();
-  $access = _assessments_can_moderate($entity, $current_user);
+  $access = _assessments_can_moderate($entity, \Drupal::service('current_user')->getAccount());
 
   // Only add the operation if access is explicitly allowed.
   if (!$access->isAllowed()) {
@@ -400,31 +341,13 @@ function assessments_entity_operation(EntityInterface $entity): array {
 }
 
 /**
- * After build callback to change "Create" to "Add" for asset form button.
- */
-function _assessments_process_asset_form_button(array $element, FormStateInterface $form_state): array {
-  // At this point, buildEntityFormActions has already run and created the
-  // button.
-  if (isset($element['actions']['ief_add_save'])) {
-    /** @var \Drupal\Core\StringTranslation\TranslatableMarkup $markup */
-    $markup = $element['actions']['ief_add_save']['#value'];
-    $arguments = $markup->getArguments();
-    $element['actions']['ief_add_save']['#value'] = new TranslatableMarkup('Add @type_singular', $arguments);
-  }
-  return $element;
-}
-
-/**
  * Implements hook_inline_entity_form_entity_form_alter().
  */
-function assessments_inline_entity_form_entity_form_alter(array &$entity_form, FormStateInterface &$formState): void {
-  $solution = $entity_form['#entity'];
+function assessments_inline_entity_form_entity_form_alter(array &$entityForm, FormStateInterface $formState): void {
+  $solution = $entityForm['#entity'];
 
-  if ($entity_form['#ief_id'] === 'asset-form' && $solution instanceof SolutionInterface) {
-    if ($entity_form['#op'] === 'add') {
-      $entity_form['#after_build'][] = '_assessments_process_asset_form_button';
-    }
-
+  // @see config/sync/entity_browser.browser.assessment_solutions.yml
+  if ($formState->get('entity_browser_current_widget') === 'a1b2c3d4-e5f6-7890-abcd-ef1234567890') {
     $collection = \Drupal::service('entity.repository')->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR);
     assert($collection instanceof CollectionInterface);
 
@@ -435,11 +358,12 @@ function assessments_inline_entity_form_entity_form_alter(array &$entity_form, F
       ->set('field_state', 'published');
 
     // In this context the landing page is mandatory.
-    $entity_form['landing_page']['widget']['uri']['#required'] = TRUE;
+    $entityForm['landing_page']['widget']['uri']['#required'] = TRUE;
   }
+
   if ($solution->bundle() === 'participation') {
-    $delta = $entity_form['#ief_row_delta'];
-    $entity_form['stakeholder_country']['#states'] = [
+    $delta = $entityForm['#ief_row_delta'];
+    $entityForm['stakeholder_country']['#states'] = [
       'visible' => [
         ':input[name="has_participation[' . $delta . '][inline_entity_form][eu_countries][value]"]' => ['checked' => FALSE],
       ],
@@ -448,7 +372,7 @@ function assessments_inline_entity_form_entity_form_alter(array &$entity_form, F
 
   if ($solution instanceof AssessmentStatementInterface) {
     $selector = ':input[name="' . $solution->bundle() . '[0][inline_entity_form][interpretation]"]';
-    $entity_form['judgement']['#states'] = [
+    $entityForm['judgement']['#states'] = [
       'invisible' => [
         [$selector => ['value' => '_none']],
         [$selector => ['checked' => FALSE]],
@@ -512,61 +436,24 @@ function assessments_inline_entity_form_table_fields_alter(array &$fields, array
 }
 
 /**
- * Implements hook_module_implements_alter().
- */
-function assessments_module_implements_alter(array &$implementations, $hook): void {
-  if ($hook === 'node_create_access') {
-    // The state_machine_permissions_node_create_access() implementation,
-    // forbids access to a solution which is not in the context of a group. But
-    // in the context of assessments, we allow a user to create solutions via
-    // the assessment report form, and immediately, we set the group to a
-    // collection acting as a collector for such solutions. We add our own
-    // implementation that allows this exception.
-    // @see state_machine_permissions_node_create_access()
-    // @see assessments_node_create_access()
-    unset($implementations['state_machine_permissions']);
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_create_access().
- */
-function assessments_node_create_access(AccountInterface $account, array $context, string $entity_bundle): AccessResultInterface {
-  // Detect if the access is checked as part of the inline entity form widget,
-  // specifically, the one that allow adding new solutions.
-  $isAssetInlineEntityFormWidget = isset($context['parent_entity_type']) &&
-    $context['parent_entity_type'] === 'paragraph' &&
-    isset($context['parent_bundle']) &&
-    $context['parent_bundle'] === 'binding_requirement' &&
-    isset($context['field_name']) &&
-    $context['field_name'] === 'asset';
-
-  if ($isAssetInlineEntityFormWidget) {
-    return AccessResult::allowed();
-  }
-
-  return state_machine_permissions_node_create_access($account, $context, $entity_bundle);
-}
-
-/**
  * Implements hook_ENTITY_TYPE_presave() for assessment entities.
  */
 function assessments_assessment_presave(AssessmentInterface $entity): void {
   // For expression entities, copy initiative_name to name field.
   if ($entity->bundle() === 'expression' && $entity->hasField('initiative_name')) {
-    $initiative_name = $entity->get('initiative_name')->value;
-    if (!empty($initiative_name)) {
+    $initiativeName = $entity->get('initiative_name')->value;
+    if (!empty($initiativeName)) {
       // Truncate to 255 characters if necessary.
-      $name = mb_strlen($initiative_name) > 255 ? mb_substr($initiative_name, 0, 255) : $initiative_name;
+      $name = mb_strlen($initiativeName) > 255 ? mb_substr($initiativeName, 0, 255) : $initiativeName;
       $entity->set('name', $name);
     }
   }
   elseif ($entity->bundle() === 'participation') {
-    $eu_country = $entity->get('eu_countries')->value;
+    $euCountry = $entity->get('eu_countries')->value;
     $vocabHelper = \Drupal::service(AssessmentVocabularyHelper::class);
-    if ($eu_country) {
-      $term_id = $vocabHelper->getTermIdFromIdentifier('spatial', 'EU', 'code');
-      $entity->set('stakeholder_country', ['target_id' => $term_id]);
+    if ($euCountry) {
+      $termId = $vocabHelper->getTermIdFromIdentifier('spatial', 'EU', 'code');
+      $entity->set('stakeholder_country', ['target_id' => $termId]);
     }
   }
 }
@@ -596,13 +483,24 @@ function _assessments_handle_report_state_notification(AssessmentInterface $enti
     return;
   }
 
-  $original_state = $entity->original instanceof AssessmentReport ? $entity->original->getWorkflowState() : NULL;
-  $current_state = $entity->getWorkflowState();
+  $originalState = $entity->original instanceof AssessmentReport ? $entity->original->getWorkflowState() : NULL;
+  $currentState = $entity->getWorkflowState();
 
-  if ($current_state === 'review' && $original_state !== 'review') {
+  if ($currentState === 'review' && $originalState !== 'review') {
     $event = new AssessmentReportEvent($entity);
     \Drupal::service('event_dispatcher')
       ->dispatch($event, NotificationEvents::ASSESSMENT_REPORT_SUBMITTED_FOR_REVIEW);
+  }
+}
+
+/**
+ * Implements hook_entity_browser_widget_info_alter().
+ */
+function assessments_entity_browser_widget_info_alter(array &$info): void {
+  if (isset($info['entity_form'])) {
+    // Default EntityForm limits access to OG members.
+    // OgAwareEntityForm also allows users with entity browser permission.
+    $info['entity_form']['class'] = OgAwareEntityForm::class;
   }
 }
 
@@ -611,10 +509,17 @@ function _assessments_handle_report_state_notification(AssessmentInterface $enti
  */
 function assessments_views_data_alter(array &$data): void {
   // Duplicate data to provide custom argument handler for assessment country.
-  $code_value = $data['taxonomy_term__code']['code_value'];
-  $code_value['title'] = $code_value['title short'] = new TranslatableMarkup('Assessment country code');
-  $code_value['argument']['id'] = 'assessment_country_code';
-  $data['taxonomy_term__code']['assessment_country_code'] = $code_value;
+  $codeValue = $data['taxonomy_term__code']['code_value'];
+  $codeValue['title'] = $codeValue['title short'] = new TranslatableMarkup('Assessment country code');
+  $codeValue['argument']['id'] = 'assessment_country_code';
+  $data['taxonomy_term__code']['assessment_country_code'] = $codeValue;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for entity_browser_assessment_solutions_form.
+ */
+function assessments_form_entity_browser_assessment_solutions_form_alter(array &$form, FormStateInterface $formState): void {
+  $form['#attached']['library'][] = 'assessments/entity_browser';
 }
 
 /**

@@ -1,0 +1,130 @@
+/**
+ * @file
+ * Styles for Entity Browser in nested modals.
+ *
+ * Fixes z-index and display issues when Entity Browser is used inside modals.
+ */
+
+/* Entity Browser modal should appear above other dialogs */
+.entity-browser-modal-iframe,
+.entity-browser-modal {
+  z-index: 10002 !important;
+}
+
+/* Fix iframe visibility */
+.entity-browser-modal iframe {
+  display: block !important;
+  visibility: visible !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 400px !important;
+}
+
+/* Ensure the modal content is visible and has proper height */
+.ui-dialog.entity-browser-modal .ui-dialog-content {
+  overflow: auto !important;
+  height: auto !important;
+  min-height: 400px !important;
+  padding: 0 !important;
+}
+
+.ui-dialog.entity-browser-modal {
+  min-height: 500px !important;
+}
+
+.ui-dialog.entity-browser-modal .ui-dialog-content iframe {
+  height: 100% !important;
+  min-height: 450px !important;
+}
+
+/* Fix nested modal z-index stacking */
+.ui-dialog.entity-browser-modal {
+  z-index: 10002 !important;
+}
+
+.ui-widget-overlay.entity-browser-modal-overlay {
+  z-index: 10001 !important;
+}
+
+/* Entity browser view table styling in modal */
+.entity-browser-form .views-table {
+  width: 100%;
+}
+
+.entity-browser-form .views-table th,
+.entity-browser-form .views-table td {
+  padding: 8px;
+  text-align: left;
+}
+
+/* Ensure form elements are visible */
+.entity-browser-form .form-item:not(.form-check) {
+  margin-bottom: 1em;
+}
+
+/* Inline exposed filters in assessment solutions browser */
+div.view-assessment-solutions-browser .view-filters {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+div.view-assessment-solutions-browser .views-exposed-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+}
+
+div.view-assessment-solutions-browser .views-exposed-form > .form-item,
+div.view-assessment-solutions-browser .views-exposed-form > .form-actions {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+div.view-assessment-solutions-browser
+  .views-exposed-form
+  > .js-form-item-title {
+  flex-basis: 0;
+  flex-grow: 1;
+}
+
+/* Style entity_browser_assessment_solutions_form. */
+.view-assessment-solutions-browser,
+.entity-browser-assessment-solutions-form > .form-wrapper {
+  padding: 0 1rem 1rem 1rem;
+}
+.entity-browser-assessment-solutions-form > .form-wrapper {
+  margin-bottom: 3rem;
+}
+.view-assessment-solutions-browser .view-content {
+  padding-bottom: 3rem;
+}
+.view-assessment-solutions-browser nav {
+  position: fixed;
+  z-index: 50;
+  right: 2rem;
+  bottom: 0;
+  padding: 1rem;
+  text-align: right;
+}
+.view-assessment-solutions-browser nav .pagination {
+  margin-bottom: 0;
+}
+
+@media (max-width: 975px) {
+  .view-assessment-solutions-browser
+    nav
+    .pagination
+    .pager__item:not([class*="pager__item--"], .is-active) {
+    display: none;
+  }
+}
+.entity-browser-assessment-solutions-form > .form-actions {
+  position: fixed;
+  z-index: 49;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin-bottom: 0;
+  padding: 1rem;
+  border-top: 1px solid #ddd;
+  background: white;
+}
