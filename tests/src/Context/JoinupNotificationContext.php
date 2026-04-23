@@ -327,25 +327,31 @@ class JoinupNotificationContext extends RawDrupalContext {
     else {
       throw new \InvalidArgumentException("'$username_or_email' is neither a valid username, nor a valid email.");
     }
+
     $mails = $this->getEmailsBySubjectAndMail($subject, $recipient);
+    if ($match && empty($mails)) {
+      throw new ExpectationException("No email with subject '$subject' was sent to '$recipient'.", $this->getSession()->getDriver());
+    }
 
     foreach ($mails as $mail) {
       $body = ($mail['body'] instanceof MarkupInterface) ? $this->formatMailBodyMarkup($mail['body']) : $this->formatMailBodyText($mail['body']);
+      $missing = [];
       foreach ($lines_of_text as $text) {
-        $pos = strpos($body, $text);
-        if ($match && $pos === FALSE) {
-          continue 2;
+        if (strpos($body, $text) === FALSE) {
+          $missing[] = $text;
         }
-        if (!$match && $pos !== FALSE) {
+        elseif (!$match) {
           throw new ExpectationException("Email with subject '$subject' sent to '$recipient' contains the text '$text'.", $this->getSession()->getDriver());
         }
       }
-      if ($match) {
+      if ($match && empty($missing)) {
         return;
       }
     }
+
     if ($match) {
-      throw new ExpectationException("Did not find expected email to '$recipient' with subject '$subject'.", $this->getSession()->getDriver());
+      $missing_quoted = implode("', '", $missing);
+      throw new ExpectationException("Email with subject '$subject' sent to '$recipient' was found but did not contain: '$missing_quoted'.\nActual body:\n$body", $this->getSession()->getDriver());
     }
   }
 
