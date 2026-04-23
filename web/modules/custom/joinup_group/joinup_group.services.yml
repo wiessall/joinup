@@ -69,9 +69,5 @@ services:
 
   Drupal\joinup_group\EventSubscriber\AdjustGroupContentSubscriber: { }
 
-  Drupal\joinup_group\Hook\GroupNodeHooks:
-    arguments:
-      $contentTrackingManager: '@?search_api.entity_datasource.tracking_manager'
-
   Drupal\joinup_group\JoinupGroupPermissionManagerInterface:
     class: Drupal\joinup_group\JoinupGroupPermissionManager
