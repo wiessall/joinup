@@ -61,7 +61,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   // Only supposed to be passed to horizontal tiles, but also vertical tiles on
   // Homepage and Topic pages. But for custom pages, this is generic.
   $routes_with_text = [
-    'page_manager.page_view_homepage_homepage-layout_builder-0',
+    'page_manager.page_view_homepage_homepage-layout_builder',
     'entity.meta_entity.canonical',
   ];
   $is_oss_solution_tile = $variables['view_mode'] === 'view_mode_tile' && $entity instanceof JoinupOssSolution;
