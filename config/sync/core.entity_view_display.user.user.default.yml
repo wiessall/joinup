@@ -30,14 +30,6 @@ content:
     third_party_settings: {  }
     weight: 1
     region: content
-  field_user_work_location:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 2
-    region: content
   user_user_field_user_content_top:
     settings: {  }
     third_party_settings: {  }
@@ -55,6 +47,7 @@ hidden:
   field_user_organisation: true
   field_user_photo: true
   field_user_professional_domain: true
+  field_user_work_location: true
   langcode: true
   linked_username: true
   masquerade: true
