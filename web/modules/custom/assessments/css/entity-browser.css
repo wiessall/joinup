@@ -30,6 +30,7 @@
 
 .ui-dialog.entity-browser-modal {
   min-height: 500px !important;
+  top: 5% !important;
 }
 
 .ui-dialog.entity-browser-modal .ui-dialog-content iframe {
@@ -87,6 +88,11 @@ div.view-assessment-solutions-browser
 }
 
 /* Style entity_browser_assessment_solutions_form. */
+.entity-browser-form {
+  overflow: scroll;
+  max-height: 450px;
+}
+
 .view-assessment-solutions-browser,
 .entity-browser-assessment-solutions-form > .form-wrapper {
   padding: 0 1rem 1rem 1rem;
