@@ -7,6 +7,8 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Field\BaseFieldDefinition;
+
 /**
  * Implements hook_schema().
  */
@@ -41,4 +43,46 @@ function assessments_schema(): array {
   ];
 
   return $schema;
+}
+
+/**
+ * Enable translation for Assessment Statement entities.
+ */
+function assessments_update_201200(array &$sandbox): void {
+  $updateManager = \Drupal::entityDefinitionUpdateManager();
+  $entityTypeId = 'assessment_statement';
+  $entityType = $updateManager->getEntityType($entityTypeId);
+
+  /** @var \Drupal\Core\Entity\EntityLastInstalledSchemaRepositoryInterface $last_installed_schema_repository */
+  $last_installed_schema_repository = \Drupal::service('entity.last_installed_schema.repository');
+  $fieldStorageDefinitions = $last_installed_schema_repository->getLastInstalledFieldStorageDefinitions('assessment_statement');
+
+  $entityKeys = $entityType->getKeys();
+  $entityKeys['langcode'] = 'langcode';
+  $entityKeys['default_langcode'] = 'default_langcode';
+
+  $entityType->set('entity_keys', $entityKeys);
+  $entityType->set('data_table', 'assessment_statement_field_data');
+  $entityType->set('translatable', TRUE);
+
+  $fieldStorageDefinitions['langcode'] = BaseFieldDefinition::create('language')
+    ->setLabel(t('Language'))
+    ->setName('langcode')
+    ->setTranslatable(TRUE)
+    ->setTargetBundle(NULL)
+    ->setTargetEntityTypeId($entityTypeId)
+    ->setDisplayOptions('form', [
+      'type' => 'language_select',
+    ]);
+
+  $fieldStorageDefinitions['default_langcode'] = BaseFieldDefinition::create('boolean')
+    ->setLabel(t('Default translation'))
+    ->setName('default_langcode')
+    ->setDescription(t('A flag indicating whether this is the default translation.'))
+    ->setTargetEntityTypeId($entityTypeId)
+    ->setTargetBundle(NULL)
+    ->setTranslatable(TRUE)
+    ->setDefaultValue(TRUE);
+
+  $updateManager->updateFieldableEntityType($entityType, $fieldStorageDefinitions, $sandbox);
 }
