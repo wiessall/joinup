@@ -36,7 +36,7 @@ third_party_settings:
       label: Tabs
       region: content
       parent_name: ''
-      weight: 5
+      weight: 6
       format_type: tabs
       format_settings:
         classes: ''
@@ -116,7 +116,7 @@ mode: default
 content:
   binding_requirement:
     type: layout_paragraphs
-    weight: 3
+    weight: 4
     region: content
     settings:
       view_mode: default
@@ -132,16 +132,23 @@ content:
         new_description: ''
         rewrite_description: 0
   cross_border:
-    weight: 4
+    weight: 5
     region: content
     settings: {  }
     third_party_settings: {  }
   documents:
     type: file_generic
-    weight: 7
+    weight: 8
     region: content
     settings:
       progress_indicator: throbber
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 0
+    region: content
+    settings:
+      include_locked: true
     third_party_settings: {  }
   legal:
     type: inline_entity_form_simple
@@ -158,7 +165,7 @@ content:
     third_party_settings: {  }
   name:
     type: string_textfield
-    weight: 0
+    weight: 1
     region: content
     settings:
       size: 60
@@ -184,7 +191,7 @@ content:
     third_party_settings: {  }
   other_comment:
     type: string_textarea
-    weight: 52
+    weight: 11
     region: content
     settings:
       rows: 5
@@ -197,7 +204,7 @@ content:
         rewrite_description: 0
   provider:
     type: provided_by_widget
-    weight: 1
+    weight: 2
     region: content
     settings: {  }
     third_party_settings:
@@ -208,7 +215,7 @@ content:
         rewrite_description: 0
   relevant_report:
     type: conditional_link
-    weight: 2
+    weight: 3
     region: content
     settings:
       placeholder_url: ''
@@ -223,7 +230,7 @@ content:
         rewrite_description: 1
   remaining_barriers:
     type: text_textarea
-    weight: 6
+    weight: 7
     region: content
     settings:
       rows: 5
@@ -252,7 +259,7 @@ content:
     third_party_settings: {  }
   state:
     type: state_machine_buttons
-    weight: 8
+    weight: 9
     region: content
     settings:
       use_transition_label: 1
@@ -270,9 +277,13 @@ content:
       collapsed: false
       revision: false
     third_party_settings: {  }
+  translation:
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
 hidden:
   created: true
-  langcode: true
   status: true
   uid: true
   uri: true

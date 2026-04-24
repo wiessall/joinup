@@ -1,0 +1,20 @@
+uuid: eb36ff1e-64be-4282-a0f9-e7e9ffc29cff
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.report
+id: assessment.report.uid
+field_name: uid
+entity_type: assessment
+bundle: report
+label: Author
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: 'Drupal\assessments\Entity\Assessment::getDefaultEntityOwner'
+settings:
+  handler: default
+  handler_settings: {  }
+field_type: entity_reference

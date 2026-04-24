@@ -1,0 +1,22 @@
+uuid: d4c06ea2-f549-404a-9279-1668676f0bf4
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.report
+id: assessment.report.status
+field_name: status
+entity_type: assessment
+bundle: report
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean
