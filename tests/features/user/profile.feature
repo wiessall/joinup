@@ -22,6 +22,7 @@ Feature: User profile
     When I click "Edit"
     Then the following fields should be present "Email, First name"
     And the following fields should be present "Family name, Photo, Country of origin, Country of residence, Professional domain, Business title"
+    And the following fields should be present "Family name, Photo, Country of origin, Function of administration, Professional domain, Business title"
     And the following fields should be present "Facebook, X, LinkedIn, GitHub, SlideShare, Youtube, Vimeo"
     And the following fields should not be present "Time zone"
     And I should see the text "Username"
@@ -31,6 +32,7 @@ Feature: User profile
     And I select "Supplier exchange" options from "Professional domain"
     And I fill in "Country of origin" with "Belgium"
     And I select "Netherlands" from "Country of residence"
+    And I select "Defense" from "Function of administration"
     And I fill in "Facebook" with "leodavinci"
     And I fill in "X" with "therealdavinci"
     And I fill in "LinkedIn" with "leonardo.davinci"
@@ -67,6 +69,7 @@ Feature: User profile
     When I go to the public profile of "Leonardo Da Vinci"
     Then I should see the text "Country of origin: Belgium" in the "Header" region
     Then I should see the text "Country of residence: Netherlands" in the "Header" region
+    Then I should see the text "Function of administration: Defense" in the "Header" region
 
   Scenario: A moderator can navigate to any user's profile and edit it.
     Given users:
@@ -83,7 +86,7 @@ Feature: User profile
     Then I click "Edit"
     Then the following fields should be present "Email, Username"
     And the following fields should be present "First name, Family name, Add a new file, Professional domain, Business title"
-    And the following fields should be present "Country of origin, Country of residence, Organisation"
+    And the following fields should be present "Country of origin, Function of administration, Organisation"
     And the following fields should not be present "Time zone"
     And I should not see the text "Username: Leonardo Da Vinci"
     And I fill in "First name" with "Leo"

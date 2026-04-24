@@ -15,6 +15,7 @@ dependencies:
     - field.field.user.user.field_user_organisation
     - field.field.user.user.field_user_photo
     - field.field.user.user.field_user_professional_domain
+    - field.field.user.user.function_of_administration
     - image.style.thumbnail
   module:
     - entity_form_field_label
@@ -130,6 +131,15 @@ content:
       show_info_label: 0
       info_label: ''
       parent_selection: 0
+    third_party_settings: {  }
+  function_of_administration:
+    type: tagify_select_widget
+    weight: 9
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      placeholder: ''
     third_party_settings: {  }
   legal_legal_notice:
     weight: -4
