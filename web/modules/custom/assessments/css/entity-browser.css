@@ -29,8 +29,8 @@
 }
 
 .ui-dialog.entity-browser-modal {
-  min-height: 500px !important;
   top: 5% !important;
+  min-height: 500px !important;
 }
 
 .ui-dialog.entity-browser-modal .ui-dialog-content iframe {
