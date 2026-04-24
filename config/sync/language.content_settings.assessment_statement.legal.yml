@@ -1,0 +1,17 @@
+uuid: 64b0d347-6c6d-4f2a-b64b-7fb7bab638e1
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+    bundle_settings:
+      untranslatable_fields_hide: '1'
+id: assessment_statement.legal
+target_entity_type_id: assessment_statement
+target_bundle: legal
+default_langcode: current_interface
+language_alterable: true
