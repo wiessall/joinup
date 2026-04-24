@@ -15,6 +15,7 @@ dependencies:
     - field.field.user.user.field_user_organisation
     - field.field.user.user.field_user_photo
     - field.field.user.user.field_user_professional_domain
+    - field.field.user.user.function_of_administration
     - field.field.user.user.field_user_work_location
   module:
     - path
@@ -71,6 +72,7 @@ hidden:
   field_user_organisation: true
   field_user_photo: true
   field_user_professional_domain: true
+  function_of_administration: true
   field_user_work_location: true
   langcode: true
   language: true

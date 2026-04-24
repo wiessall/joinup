@@ -15,6 +15,7 @@ dependencies:
     - field.field.user.user.field_user_photo
     - field.field.user.user.field_user_professional_domain
     - field.field.user.user.field_user_work_location
+    - field.field.user.user.function_of_administration
   module:
     - search_api_field
     - user
@@ -47,6 +48,7 @@ hidden:
   field_user_organisation: true
   field_user_photo: true
   field_user_professional_domain: true
+  function_of_administration: true
   field_user_work_location: true
   langcode: true
   linked_username: true

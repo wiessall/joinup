@@ -1,0 +1,34 @@
+uuid: 40b4bf72-5d67-4337-b7cd-f99c5b160021
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.function_of_administration
+    - taxonomy.vocabulary.domain
+  module:
+    - tmgmt_content
+    - user
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: user.user.function_of_administration
+field_name: function_of_administration
+entity_type: user
+bundle: user
+label: 'Function of administration'
+description: 'Please add the function of the public administration where you work'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      domain: domain
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
