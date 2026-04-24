@@ -11,8 +11,10 @@ use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_reports\ExportBatchedDataFormBase;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
@@ -140,6 +142,16 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
     array_walk_recursive($content, function ($value) use (&$content_ids): void {
       $content_ids[] = $value;
     });
+    $bookmarked_content_parent_ids = [];
+    if ($group instanceof CollectionInterface) {
+      $bookmarked_content_parent_ids[] = (int) $entity_id;
+      if (!empty($content['node']['solution'])) {
+        $bookmarked_content_parent_ids = array_merge($content['node']['solution'], [(int) $entity_id]);
+      }
+    }
+    elseif ($group instanceof SolutionInterface) {
+      $bookmarked_content_parent_ids[] = (int) $entity_id;
+    }
 
     $description_field = $group->get($group->getDescriptionField());
     $description_word_count = !$description_field->isEmpty() ? str_word_count(strip_tags($description_field->getString())) : 0;
@@ -170,6 +182,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
       'Number of members' => $group->getActiveMemberCount(),
       'Description word count' => $description_word_count,
       'Total number of likes' => $this->getLikesCount($content_ids),
+      'Total number of bookmarks' => $this->getBookmarksCount($bookmarked_content_parent_ids),
     ];
   }
 
@@ -187,6 +200,27 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
     $query->addExpression('IFNULL(SUM(count), 0)', 'sum');
     $query->condition('flag_id', 'like');
     $query->condition('entity_id', $entity_ids, 'IN');
+    return $query->execute()->fetchField();
+  }
+
+  /**
+   * Retrieves the sum of bookmarks for the provided group entity IDs.
+   *
+   * @param array $entity_ids
+   *   An array of group entity IDs for calculating the sum of likes.
+   *
+   * @return string
+   *   The sum of bookmarks as a string value.
+   */
+  private function getBookmarksCount(array $entity_ids): string {
+    if (empty($entity_ids)) {
+      return '0';
+    }
+    $query = $this->mysql->select('node__og_audience', 'noa');
+    $query->innerJoin('flag_counts', 'fc', 'fc.entity_id = noa.entity_id');
+    $query->addExpression('IFNULL(SUM(fc.count), 0)', 'total_bookmarks');
+    $query->condition('noa.og_audience_target_id', $entity_ids, 'IN');
+    $query->condition('fc.flag_id', 'bookmark');
     return $query->execute()->fetchField();
   }
 
