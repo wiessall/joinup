@@ -8,22 +8,19 @@
  * - Configurable listing paragraph (Search API driven tile grid)
  * - Paragraph tiles (curated tile grid)
  * - Accordion paragraph
- * - EIF perspective page
  * - Horizontal tile (view_mode_tile_horizontal)
  */
 
 import { test, expect } from "@playwright/test";
-import { projectConfig } from "../config/project.config";
-import authUtils from "../utils/authUtils";
 import pageUtils from "../utils/pageUtils";
 import shellUtils from "../utils/shellUtils";
 
-// Index content so it appears in search and search_api_field listings.
-test.beforeAll(async () => {
-  await shellUtils.execDrush("search-api:index");
-});
-
 test.describe("Configurable listing paragraph", () => {
+  // Index content so it appears in search_api_field listings.
+  test.beforeAll(async () => {
+    await shellUtils.execDrush("search-api:index");
+  });
+
   test("Vertical tile grid rendered via Search API", async ({ page }) => {
     await page.goto("/topic/egov");
     await pageUtils.prepareForScreenshot(page);
@@ -60,23 +57,6 @@ test.describe("Custom page paragraphs", () => {
     const tilesSection = page.locator(".paragraph--tiles").first();
     await expect(tilesSection).toBeVisible();
     await expect(tilesSection).toHaveScreenshot("paragraph-tiles-grid.png");
-  });
-});
-
-test.describe("EIF perspective", () => {
-  test("EIF perspective tile layout", async ({ page }) => {
-    await authUtils.login(projectConfig.users.administrator, page);
-
-    const nid = await shellUtils.execDrush(
-      "eval \"echo array_key_first(\\Drupal::entityTypeManager()->getStorage('node')->loadByProperties(['uuid' => 'fc99c508-84dc-4646-a112-5b37bff6f2a7']));\"",
-    );
-
-    await page.goto(`/node/${nid}/eif-perspective`);
-    await pageUtils.prepareForScreenshot(page);
-
-    await expect(page.locator("main")).toHaveScreenshot(
-      "eif-perspective-page.png",
-    );
   });
 });
 

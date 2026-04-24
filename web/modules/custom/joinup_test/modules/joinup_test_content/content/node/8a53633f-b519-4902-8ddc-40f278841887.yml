@@ -9,64 +9,21 @@ _meta:
     b7af08b1-c271-4d58-a5a7-ec3db533c3d2: taxonomy_term
     df34e3a2-207b-4910-a804-344931654e20: node
 default:
-  revision_uid:
-    -
-      target_id: 1
   status:
     -
       value: true
-  uid:
-    -
-      target_id: 0
   title:
     -
       value: 'European Interoperability Summit 2025'
   created:
     -
       value: 1713534780
-  changed:
-    -
-      value: 1713534780
-  promote:
-    -
-      value: true
-  sticky:
-    -
-      value: false
-  report:
-    -
-      uri: 'internal:/contact'
-      title: 'Report abusive content'
-      options:
-        query:
-          category: report
-          uri: /collection/middle-earth-daily/event/european-interoperability-summit-2025
-          destination: collection/middle-earth-daily/event/european-interoperability-summit-2025
-  path:
-    -
-      alias: /collection/middle-earth-daily/event/european-interoperability-summit-2025
-      langcode: en
-      pathauto: 1
-  content_translation_source:
-    -
-      value: und
-  content_translation_outdated:
-    -
-      value: false
   published_at:
     -
       value: 1713534780
   abstract:
     -
       value: 'Join the annual summit bringing together digital transformation leaders from across the EU to discuss interoperability best practices.'
-  field_comments:
-    -
-      status: 2
-      cid: 0
-      last_comment_timestamp: 1713534780
-      last_comment_name: ''
-      last_comment_uid: 0
-      comment_count: 0
   field_event_coordinates:
     -
       value: 'POINT(4.351710 50.850340)'
@@ -127,9 +84,6 @@ default:
   field_short_title:
     -
       value: 'Interoperability Summit 2025'
-  field_site_featured:
-    -
-      value: false
   field_state:
     -
       value: published

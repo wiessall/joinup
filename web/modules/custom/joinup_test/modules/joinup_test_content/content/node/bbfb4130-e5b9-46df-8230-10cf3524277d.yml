@@ -9,64 +9,21 @@ _meta:
     b7af08b1-c271-4d58-a5a7-ec3db533c3d2: taxonomy_term
     df34e3a2-207b-4910-a804-344931654e20: node
 default:
-  revision_uid:
-    -
-      target_id: 1
   status:
     -
       value: true
-  uid:
-    -
-      target_id: 0
   title:
     -
       value: 'DCAT Application Profile Implementation Guide'
   created:
     -
       value: 1713535020
-  changed:
-    -
-      value: 1713535020
-  promote:
-    -
-      value: false
-  sticky:
-    -
-      value: false
-  report:
-    -
-      uri: 'internal:/contact'
-      title: 'Report abusive content'
-      options:
-        query:
-          category: report
-          uri: /collection/middle-earth-daily/document/dcat-application-profile-implementation-guide
-          destination: collection/middle-earth-daily/document/dcat-application-profile-implementation-guide
-  path:
-    -
-      alias: /collection/middle-earth-daily/document/dcat-application-profile-implementation-guide
-      langcode: en
-      pathauto: 1
-  content_translation_source:
-    -
-      value: und
-  content_translation_outdated:
-    -
-      value: false
   published_at:
     -
       value: 1713535020
   abstract:
     -
       value: 'A comprehensive interoperability guide for implementing the DCAT Application Profile for data portals across European public administrations.'
-  field_comments:
-    -
-      status: 2
-      cid: 0
-      last_comment_timestamp: 1713535020
-      last_comment_name: ''
-      last_comment_uid: 0
-      comment_count: 0
   field_document_logo:
     -
       entity: 83c208a4-6354-4e08-95dc-f4e123e2597f
@@ -103,9 +60,6 @@ default:
   field_short_title:
     -
       value: 'DCAT-AP Guide'
-  field_site_featured:
-    -
-      value: false
   field_state:
     -
       value: published

@@ -9,64 +9,21 @@ _meta:
     b7af08b1-c271-4d58-a5a7-ec3db533c3d2: taxonomy_term
     df34e3a2-207b-4910-a804-344931654e20: node
 default:
-  revision_uid:
-    -
-      target_id: 1
   status:
     -
       value: true
-  uid:
-    -
-      target_id: 0
   title:
     -
       value: 'EU launches new interoperability framework for public services'
   created:
     -
       value: 1713534660
-  changed:
-    -
-      value: 1713534660
-  promote:
-    -
-      value: true
-  sticky:
-    -
-      value: false
-  report:
-    -
-      uri: 'internal:/contact'
-      title: 'Report abusive content'
-      options:
-        query:
-          category: report
-          uri: /collection/middle-earth-daily/news/eu-launches-new-interoperability-framework-public-services
-          destination: collection/middle-earth-daily/news/eu-launches-new-interoperability-framework-public-services
-  path:
-    -
-      alias: /collection/middle-earth-daily/news/eu-launches-new-interoperability-framework-public-services
-      langcode: en
-      pathauto: 1
-  content_translation_source:
-    -
-      value: und
-  content_translation_outdated:
-    -
-      value: false
   published_at:
     -
       value: 1713534660
   abstract:
     -
       value: 'The European Commission has unveiled its new interoperability framework designed to improve digital public services across all member states.'
-  field_comments:
-    -
-      status: 2
-      cid: 0
-      last_comment_timestamp: 1713534660
-      last_comment_name: ''
-      last_comment_uid: 0
-      comment_count: 0
   field_news_headline:
     -
       value: 'New interoperability framework promises seamless cross-border digital services'
@@ -129,9 +86,6 @@ default:
             -
               value: '<p>The framework provides guidelines for achieving semantic and technical interoperability across European public administrations.</p>'
               format: text_html
-  field_site_featured:
-    -
-      value: false
   field_state:
     -
       value: published

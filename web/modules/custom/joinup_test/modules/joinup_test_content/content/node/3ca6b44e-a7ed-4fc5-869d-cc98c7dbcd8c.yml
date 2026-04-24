@@ -8,64 +8,21 @@ _meta:
     b7af08b1-c271-4d58-a5a7-ec3db533c3d2: taxonomy_term
     df34e3a2-207b-4910-a804-344931654e20: node
 default:
-  revision_uid:
-    -
-      target_id: 1
   status:
     -
       value: true
-  uid:
-    -
-      target_id: 0
   title:
     -
       value: 'Breaking: Gandalf supposedly plans his retirement'
   created:
     -
       value: 1413534660
-  changed:
-    -
-      value: 1413534660
-  promote:
-    -
-      value: true
-  sticky:
-    -
-      value: false
-  report:
-    -
-      uri: 'internal:/contact'
-      title: 'Report abusive content'
-      options:
-        query:
-          category: report
-          uri: /collection/middle-earth-daily/news/breaking-gandalf-supposedly-plans-his-retirement
-          destination: collection/middle-earth-daily/news/breaking-gandalf-supposedly-plans-his-retirement
-  path:
-    -
-      alias: /collection/middle-earth-daily/news/breaking-gandalf-supposedly-plans-his-retirement
-      langcode: en
-      pathauto: 1
-  content_translation_source:
-    -
-      value: und
-  content_translation_outdated:
-    -
-      value: false
   published_at:
     -
       value: 1413534660
   abstract:
     -
       value: 'An abstract'
-  field_comments:
-    -
-      status: 2
-      cid: 0
-      last_comment_timestamp: 1413534660
-      last_comment_name: ''
-      last_comment_uid: 0
-      comment_count: 0
   field_news_headline:
     -
       value: 'Top 17739 interoperability tips. You will never believe what is on number 7!'
@@ -121,9 +78,6 @@ default:
             -
               value: '<p>Some body text.</p>'
               format: text_html
-  field_site_featured:
-    -
-      value: false
   field_state:
     -
       value: published

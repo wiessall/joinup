@@ -9,41 +9,15 @@ _meta:
     b7af08b1-c271-4d58-a5a7-ec3db533c3d2: taxonomy_term
     df34e3a2-207b-4910-a804-344931654e20: node
 default:
-  revision_uid:
-    -
-      target_id: 1
   status:
     -
       value: true
-  uid:
-    -
-      target_id: 0
   title:
     -
       value: 'About the Interoperability Solutions Platform'
   created:
     -
       value: 1713535140
-  changed:
-    -
-      value: 1713535140
-  promote:
-    -
-      value: false
-  sticky:
-    -
-      value: false
-  path:
-    -
-      alias: /collection/middle-earth-daily/about-interoperability-solutions-platform
-      langcode: en
-      pathauto: 1
-  content_translation_source:
-    -
-      value: und
-  content_translation_outdated:
-    -
-      value: false
   published_at:
     -
       value: 1713535140

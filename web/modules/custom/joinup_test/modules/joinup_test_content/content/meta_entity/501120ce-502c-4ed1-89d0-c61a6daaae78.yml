@@ -1,0 +1,35 @@
+_meta:
+  version: '1.0'
+  entity_type: meta_entity
+  uuid: 501120ce-502c-4ed1-89d0-c61a6daaae78
+  bundle: eif_perspective
+  default_langcode: en
+  depends:
+    fc99c508-84dc-4646-a112-5b37bff6f2a7: node
+    d131f884-9a73-4aa7-8191-d3dde2e5d3a4: taxonomy_term
+    a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d: taxonomy_term
+    b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e: taxonomy_term
+    f32a68f0-6e43-4bb2-bb70-96fe3fd65a0b: taxonomy_term
+default:
+  target:
+    -
+      target_type: node
+      entity: fc99c508-84dc-4646-a112-5b37bff6f2a7
+  eif_solution_type:
+    -
+      entity: d131f884-9a73-4aa7-8191-d3dde2e5d3a4
+  eif_description:
+    -
+      value: 'This solution provides information sharing protocols that support European interoperability governance.'
+      format: basic_html
+  eif_layer:
+    -
+      entity: a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d
+  eif_principle:
+    -
+      entity: b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e
+  eif_recommendation:
+    -
+      entity: f32a68f0-6e43-4bb2-bb70-96fe3fd65a0b
+      value: 'This solution supports subsidiarity and proportionality principles.'
+      format: basic_html

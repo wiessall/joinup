@@ -10,50 +10,15 @@ _meta:
     df34e3a2-207b-4910-a804-344931654e20: node
     ebbcc55f-51c9-40b4-8eb6-21c9ff0b565d: taxonomy_term
 default:
-  revision_uid:
-    -
-      target_id: 1
   status:
     -
       value: true
-  uid:
-    -
-      target_id: 0
   title:
     -
       value: 'Semantic Interoperability Toolkit'
   created:
     -
       value: 1713535260
-  changed:
-    -
-      value: 1713535260
-  promote:
-    -
-      value: false
-  sticky:
-    -
-      value: false
-  report:
-    -
-      uri: 'internal:/contact'
-      title: 'Report abusive content'
-      options:
-        query:
-          category: report
-          uri: /collection/middle-earth-daily/solution/semantic-interoperability-toolkit
-          destination: collection/middle-earth-daily/solution/semantic-interoperability-toolkit
-  path:
-    -
-      alias: /collection/middle-earth-daily/solution/semantic-interoperability-toolkit
-      langcode: en
-      pathauto: 1
-  content_translation_source:
-    -
-      value: und
-  content_translation_outdated:
-    -
-      value: false
   published_at:
     -
       value: 1713535260

@@ -21,12 +21,16 @@ default_content:
     - ce8f452f-66d7-43c6-a7d7-ea6489a120a9
     - 8a53633f-b519-4902-8ddc-40f278841887
     - 6aaa7ca3-58d2-4511-87e2-ef953c97f17e
+    - 6aaa7ca3-58d2-4511-87e2-ef953c97a16e
     - bbfb4130-e5b9-46df-8230-10cf3524277d
     - 0066b4ea-07f1-4dbc-a7f3-471033af895f
     - 7f36fb2b-d329-4d79-8ddf-0deab4379e5c
     - fb9b35ca-8156-41a8-bd0e-6ec2c714dc45
     - b2b8122b-5c0e-4991-93f6-7c66d4ba1534
     - 8a9fa71a-28fa-488f-ae16-33a1e4b0673c
+  meta_entity:
+    - c7e3a1b2-4d5f-4e6a-8b9c-0d1e2f3a4b5c
+    - 501120ce-502c-4ed1-89d0-c61a6daaae78
   user:
     - 822d66ba-0910-414e-9330-bd702632eb5d
     - 5064d97b-0f69-4ebc-af02-3c7bd6e29691
