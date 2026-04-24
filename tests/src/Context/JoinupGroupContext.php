@@ -354,16 +354,18 @@ class JoinupGroupContext extends RawDrupalContext {
     $body = $announcement->getBody();
     $offset = 0;
     $limit = 250;
-    while ($member_emails = $announcement->getRecipients($offset, $limit)) {
-      foreach ($member_emails as $member_email) {
-        $body_processed = str_replace('@recipient_name', user_load_by_mail($member_email)->getDisplayName(), $body);
-        $emails = $this->getEmailsBySubjectAndMail($announcement->getSubject(), $member_email);
+    $user_storage = \Drupal::entityTypeManager()->getStorage('user');
+    while ($uids = $announcement->getRecipients($offset, $limit)) {
+      $users = $user_storage->loadMultiple($uids);
+      foreach ($users as $user) {
+        $body_processed = str_replace('@recipient_name', $user->getDisplayName(), $body);
+        $emails = $this->getEmailsBySubjectAndMail($announcement->getSubject(), $user->getEmail());
         $email = reset($emails);
-        $this->assertSameValues($member_email, $email['to'], "Expected recipient '$member_email' but got '{$email['to']}'.");
+        $this->assertSameValues($user->getEmail(), $email['to'], "Expected recipient '{$user->getEmail()}' but got '{$email['to']}'.");
         $this->assertSameValues($subject, $email['subject'], "Expected subject '$subject' but got '{$email['subject']}'.");
         $this->assertCondition(str_contains((string) $email['body'], $body_processed), 'The email body does not contain the expected content.');
-        $offset += $limit;
       }
+      $offset += $limit;
     }
   }
 

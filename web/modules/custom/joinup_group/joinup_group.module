@@ -1047,38 +1047,9 @@ function joinup_group_mail(string $key, array &$message, array $params): void {
  */
 function joinup_group_mail_alter(array &$message): void {
   if ($message['module'] === 'message_notify' && $message['key'] === 'announcement') {
-    /** @var \Drupal\joinup_group\Entity\AnnouncementInterface $announcement */
     $announcement = $message['params']['message_entity'];
-    $arguments = $announcement->getArguments();
-    $message += array_combine(
-      array_map(
-        function (string $key): string {
-          return ltrim($key, '@');
-        },
-        array_keys($arguments)
-      ),
-      array_map(
-        function ($value) use ($announcement) {
-          // Check if the value contains a callback.
-          if (is_array($value) && isset($value['callback']) && is_callable($value['callback'])) {
-            // Ensure $message is an instance of MessageInterface.
-            if (!$announcement instanceof AnnouncementInterface) {
-              throw new \InvalidArgumentException('Expected MessageInterface, got ' . gettype($announcement));
-            }
-
-            // Resolve the callback and pass the announcement
-            // if 'pass message' is TRUE.
-            return $value['pass message'] ?? FALSE
-              ? call_user_func($value['callback'], $announcement)
-              : call_user_func($value['callback']);
-          }
-
-          // Return the value as is if no callback exists.
-          return $value;
-        },
-        $arguments
-      )
-    );
+    \assert($announcement instanceof AnnouncementInterface);
+    $message += $announcement->getMailVariables();
   }
 }
 
