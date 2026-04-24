@@ -80,7 +80,9 @@ Feature: Assessment Report Entity Management
     And I should see "Browse the solutions recommended by the Interoperable Europe Board."
     And I should see the button "Select an Interoperability solution" in the "Modal content" region
     And I press "Add a new Interoperability solution" in the "Modal content" region
-    And I fill in "Title of Solution" with "European Interoperability Framework (EIF)" in the "Modal content" region
+    When I press "Add Interoperability solution" in the "Modal content" region
+    Then I should see the error message "Title of Solution field is required. 3 errors have been found: Title of Solution Description Relevant website"
+    When I fill in "Title of Solution" with "European Interoperability Framework (EIF)" in the "Modal content" region
     And I enter "Description of EIF" in the "asset[form][1][description][0][value]" wysiwyg editor
     And I fill in "Relevant website" with "http://no-abstract.com" in the "Modal content" region
     Then I press "Add Interoperability solution" in the "Modal content" region
