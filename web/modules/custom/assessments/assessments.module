@@ -27,6 +27,7 @@ use Drupal\assessments\Event\AssessmentReportEvent;
 use Drupal\assessments\NotificationEvents;
 use Drupal\assessments\Plugin\EntityBrowser\Widget\OgAwareEntityForm;
 use Drupal\assessments\Plugin\Field\FieldWidget\ProvidedByWidget;
+use Drupal\assessments\Render\AssessmentIframePreRender;
 use Drupal\collection\Entity\CollectionInterface;
 
 /**
@@ -552,11 +553,24 @@ function assessments_query_explore_block_solution_alter(AlterableInterface $quer
 }
 
 /**
+ * Implements hook_element_info_alter().
+ */
+function assessments_element_info_alter(array &$info): void {
+  if (isset($info['html_tag'])) {
+    $info['html_tag']['#pre_render'][] = [AssessmentIframePreRender::class, 'disableScrolling'];
+  }
+}
+
+/**
  * Implements hook_ajax_render_alter().
  */
 function assessments_ajax_render_alter(array &$commands): void {
   foreach ($commands as &$command) {
-    if ($command['command'] === 'openDialog' && !empty($command['dialogOptions']['modal']) && isset($command['dialogOptions']['classes']['ui-dialog']) && str_contains($command['dialogOptions']['classes']['ui-dialog'], 'entity-browser-modal')) {
+    if (($command['command'] ?? '') !== 'openDialog') {
+      continue;
+    }
+    $classes = $command['dialogOptions']['classes']['ui-dialog'] ?? '';
+    if (str_contains($classes, 'entity-browser-modal')) {
       $command['dialogOptions']['draggable'] = FALSE;
     }
   }
