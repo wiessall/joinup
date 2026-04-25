@@ -1,0 +1,22 @@
+uuid: 04b8f669-93bb-475f-839c-814be8708ef2
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.assess_public_service_area
+id: taxonomy_term.assess_public_service_area.status
+field_name: status
+entity_type: taxonomy_term
+bundle: assess_public_service_area
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

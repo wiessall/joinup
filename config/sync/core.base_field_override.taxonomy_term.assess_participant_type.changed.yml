@@ -1,0 +1,18 @@
+uuid: 91198a7a-fc05-46d8-9da1-ad0c525b69fa
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.assess_participant_type
+id: taxonomy_term.assess_participant_type.changed
+field_name: changed
+entity_type: taxonomy_term
+bundle: assess_participant_type
+label: Changed
+description: 'The time that the term was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

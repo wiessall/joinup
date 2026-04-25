@@ -1,0 +1,20 @@
+uuid: ca0ede24-ca51-4f00-9c5f-909297d69bb2
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.assess_statement_type
+  module:
+    - path
+id: taxonomy_term.assess_statement_type.path
+field_name: path
+entity_type: taxonomy_term
+bundle: assess_statement_type
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path

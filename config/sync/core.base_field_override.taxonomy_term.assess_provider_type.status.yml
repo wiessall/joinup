@@ -1,0 +1,22 @@
+uuid: d19b450a-7947-43c6-aa50-dd671f285f42
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.assess_provider_type
+id: taxonomy_term.assess_provider_type.status
+field_name: status
+entity_type: taxonomy_term
+bundle: assess_provider_type
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

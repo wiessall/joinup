@@ -1,0 +1,20 @@
+uuid: 48ea7269-46ca-4921-b329-b9901e1ba78c
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.assess_statement_interpretation
+  module:
+    - path
+id: taxonomy_term.assess_statement_interpretation.path
+field_name: path
+entity_type: taxonomy_term
+bundle: assess_statement_interpretation
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path

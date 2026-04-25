@@ -1,0 +1,18 @@
+uuid: ae6da115-1931-479d-8fc8-09e3c692d89f
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.assess_statement_interpretation
+id: taxonomy_term.assess_statement_interpretation.changed
+field_name: changed
+entity_type: taxonomy_term
+bundle: assess_statement_interpretation
+label: Changed
+description: 'The time that the term was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

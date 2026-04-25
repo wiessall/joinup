@@ -1,0 +1,20 @@
+uuid: 998a938c-c20f-4a50-82eb-41f1076ed6f7
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.assess_provider_type
+  module:
+    - path
+id: taxonomy_term.assess_provider_type.path
+field_name: path
+entity_type: taxonomy_term
+bundle: assess_provider_type
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path
