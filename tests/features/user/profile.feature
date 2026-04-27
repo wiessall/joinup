@@ -25,6 +25,7 @@ Feature: User profile
     And the following fields should be present "Family name, Photo, Country of origin, Function of administration, Professional domain, Business title"
     And the following fields should be present "Facebook, X, LinkedIn, GitHub, SlideShare, Youtube, Vimeo"
     And the following fields should not be present "Time zone"
+    And the available options in the "Country of residence" select should not include the "European Union"
     And I should see the text "Username"
     And I should see the text "Leonardo Da Vinci"
     And I fill in "First name" with "Leoke"
