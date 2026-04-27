@@ -60,7 +60,7 @@ class EifContext extends RawDrupalContext {
       'field_state' => 'published',
       'field_topic' => $topic_label,
       'owner' => $owner->title,
-      'contact_information' => $contact->title,
+      'contact' => $contact->title,
     ]);
 
     // Create the EIF Toolbox solution.
@@ -72,7 +72,7 @@ class EifContext extends RawDrupalContext {
       'field_state' => 'published',
       'field_topic' => $topic_label,
       'owner' => $owner->title,
-      'contact_information' => $contact->title,
+      'contact' => $contact->title,
     ]);
 
     $this->nodeCreate((object) [
