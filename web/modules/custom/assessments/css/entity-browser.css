@@ -29,6 +29,7 @@
 }
 
 .ui-dialog.entity-browser-modal {
+  top: 5% !important;
   min-height: 500px !important;
 }
 
@@ -46,7 +47,7 @@
   z-index: 10001 !important;
 }
 
-/* Entity browser view table styling in modal */
+/* Entity browser styling in modal */
 .entity-browser-form .views-table {
   width: 100%;
 }
