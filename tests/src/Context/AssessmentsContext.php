@@ -84,15 +84,11 @@ class AssessmentsContext extends RawDrupalContext {
         unset($assessment['results_in']);
       }
 
-      if (!empty($assessment['document'])) {
-        $fileValues = [];
-        foreach ($this->explodeDelimitedSeparatedStepArgument($assessment['document']) as $filename) {
+      if (!empty($assessment['documents'])) {
+        foreach ($this->explodeDelimitedSeparatedStepArgument($assessment['documents']) as $delta => $filename) {
           $file = $this->createFile($filename);
-          $fileValues[] = [
-            'target_id' => $file->id(),
-          ];
+          $assessment["documents:$delta:target_id"] = $file->id();
         }
-        $assessment['document'] = $fileValues;
       }
 
       // Resolve provider by name if provided (skip for report type).

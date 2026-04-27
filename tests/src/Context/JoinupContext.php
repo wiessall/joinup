@@ -691,8 +691,7 @@ class JoinupContext extends RawDrupalContext {
       $environment = $scope->getEnvironment();
       /** @var \Drupal\joinup\Context\CustomPageContext $context */
       $context = $environment->getContext(self::class);
-      $updated = [];
-      foreach ($context->explodeDelimitedSeparatedStepArgument($node->field_attachment) as $piece) {
+      foreach ($context->explodeDelimitedSeparatedStepArgument($node->field_attachment) as $delta => $piece) {
         if (strpos($piece, ':')) {
           preg_match('/target_id:\s*(?<filename>[^ -]*)/', $piece, $matches);
           if (empty($matches['filename'])) {
@@ -700,17 +699,13 @@ class JoinupContext extends RawDrupalContext {
           }
           $filename = $matches['filename'];
           $file = $context->createFile($filename);
-          // Replace the bare filename with the numeric file entity ID so that
-          // FileHandler::expand() can reuse the pre-created entity directly,
-          // preserving the original filename for links on the page.
-          $piece = str_replace('target_id: ' . $filename, 'target_id: ' . $file->id(), $piece);
         }
         else {
-          $context->createFile($piece);
+          $file = $context->createFile($piece);
         }
-        $updated[] = $piece;
+        $node->{"field_attachment:{$delta}:target_id"} = $file->id();
       }
-      $node->field_attachment = implode(', ', $updated);
+      unset($node->field_attachment);
     }
 
     // Replace collection and solution group references that use titles with the
