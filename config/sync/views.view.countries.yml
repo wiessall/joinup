@@ -249,8 +249,8 @@ display:
         - 'languages:language_interface'
         - user.permissions
       tags: {  }
-  countries:
-    id: countries
+  all_except_european_union:
+    id: all_except_european_union
     display_title: Countries
     display_plugin: entity_reference
     position: 3
@@ -601,6 +601,7 @@ display:
           search_fields:
             name: name
       defaults:
+        fields: false
         filters: false
         filter_groups: false
       display_description: ''

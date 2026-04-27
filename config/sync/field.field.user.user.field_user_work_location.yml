@@ -25,6 +25,6 @@ settings:
   handler_settings:
     view:
       view_name: countries
-      display_name: countries
+      display_name: all_except_european_union
       arguments: {  }
 field_type: entity_reference
