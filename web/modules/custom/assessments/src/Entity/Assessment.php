@@ -169,7 +169,16 @@ class Assessment extends ContentEntityBase implements AssessmentInterface {
    * {@inheritdoc}
    */
   public function label(): string {
-    return $this->get('name')?->value ?? $this->t('@bundle #@id', [
+    if ($this->isTranslatable()) {
+      $langcode = $this->language()->getId();
+      if (!$this->hasTranslation($langcode)) {
+        $name = $this->getUntranslated()->get('name');
+      }
+    }
+
+    $name = $name ?? $this->get('name');
+
+    return $name?->value ?? $this->t('@bundle #@id', [
       '@bundle' => $this->type->entity->label(),
       '@id' => $this->id(),
     ])->render();
