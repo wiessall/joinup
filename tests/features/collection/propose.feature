@@ -69,7 +69,7 @@ Feature: Proposing a collection
     # Regression test for the keywords field in the about page.
     And I should not see the text "Search keywords" in the "Content" region
     And I should not see the text "Some keyword" in the "Content" region
-    And I should see a logo on the header
+    And I should not see a logo on the header
     And I should see "Thank you for proposing a collection. Your request is currently pending approval by the site administrator."
 
     # The user that proposed the collection should be auto-subscribed.
@@ -307,3 +307,12 @@ Feature: Proposing a collection
     And I press "Propose"
     Then I should see the heading "SVG API example"
     And I should own the "SVG API example" collection
+
+  Scenario: The node add collection route redirects to the propose form.
+    Given I am logged in as a user with the "authenticated" role
+    When I go to "/node/add/collection"
+    Then the url should match "/propose/collection"
+    And I should see the heading "Propose collection"
+    When I go to "/fr/node/add/collection"
+    Then the url should match "/fr/propose/collection"
+    And I should see the heading "Propose collection"

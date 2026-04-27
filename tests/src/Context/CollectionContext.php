@@ -360,7 +360,8 @@ class CollectionContext extends RawDrupalContext {
       }
 
       // Go to the edit form and check that the expected buttons are visible.
-      $this->visitEntityForm('edit', $values['collection'], 'collection');
+      $entity = $this->getEntityByLabel('node', $values['collection'], 'collection');
+      $this->visitPath($entity->toUrl('edit-form')->toString());
       $buttons = $this->explodeDelimitedSeparatedStepArgument($values['buttons']);
       $this->assertSubmitButtonsVisible($buttons);
     }
@@ -530,6 +531,27 @@ class CollectionContext extends RawDrupalContext {
     if (in_array($node->type, $collection_content_bundles, TRUE)) {
       $node->collection = $this->getJoinupCollection()->label();
     }
+  }
+
+  /**
+   * Assigns a ghost SVG logo.
+   *
+   * @param string $title
+   *   The collection title.
+   */
+  #[Given('the :title collection has a logo with a missing physical file')]
+  public function setCollectionGhostLogo(string $title): void {
+    $filename = 'ghost-logo-' . uniqid() . '.svg';
+    $file = \Drupal::entityTypeManager()->getStorage('file')->create([
+      'uri' => 'public://' . $filename,
+      'filename' => $filename,
+      'filemime' => 'image/svg+xml',
+      'status' => 1,
+    ]);
+    $file->save();
+    $node = static::getEntityByLabel('node', $title, 'collection');
+    $node->set('logo', ['target_id' => $file->id(), 'alt' => 'Ghost logo']);
+    $node->save();
   }
 
   /**

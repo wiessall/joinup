@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.meta_entity.group_moderation
     - field.field.meta_entity.collection_settings.announcements_enabled
+    - field.field.meta_entity.collection_settings.approval_message
     - field.field.meta_entity.collection_settings.code_of_conduct
     - field.field.meta_entity.collection_settings.content_creation
     - field.field.meta_entity.collection_settings.glossary_link_only_first
@@ -38,6 +39,7 @@ content:
     region: content
 hidden:
   announcements_enabled: true
+  approval_message: true
   changed: true
   code_of_conduct: true
   content_creation: true
@@ -47,6 +49,7 @@ hidden:
   label_join: true
   label_leave: true
   landing_page: true
+  langcode: true
   listing_content: true
   meta_entity_collection_settings_listing_content_inline_facets: true
   meta_entity_collection_settings_listing_content_top: true

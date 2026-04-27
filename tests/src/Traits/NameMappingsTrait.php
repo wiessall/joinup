@@ -84,6 +84,7 @@ trait NameMappingsTrait {
         'agenda' => 'field_event_agenda',
         'body' => 'field_paragraphs_body',
         'end date' => 'field_event_date:end_value',
+        'EC event' => 'european_commission_digit_event',
         'keywords' => 'keywords',
         'location' => 'field_location',
         'logo' => 'field_event_logo',
@@ -404,7 +405,6 @@ trait NameMappingsTrait {
    */
   protected function getFacetIdFromAlias(string $alias): string {
     $mappings = [
-      'Organisation country' => 'assessment_org_country',
       'Collection event date' => 'collection_event_type',
       'Content listing types' => 'content_listing_type',
       'Content types' => 'type',
@@ -431,7 +431,7 @@ trait NameMappingsTrait {
       'spatial coverage' => 'spatial_coverage',
       'topic' => 'topic',
       'Type of document' => 'type_of_document',
-      'Organisation origin' => 'organisation_origin',
+      'Organisation country' => 'organisation_country',
       'OSS category' => 'oss_category',
       'OSS intended audience' => 'oss_scope',
       'OSS development status' => 'oss_development_status',
@@ -457,6 +457,7 @@ trait NameMappingsTrait {
    */
   protected function getNodeFieldNameFromLabel(string $label): string {
     $mapping = [
+      'Country' => 'country',
       'Domain' => 'domain',
       'Geographical coverage' => 'spatial_coverage',
       'Language availability' => 'language',

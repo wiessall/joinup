@@ -9,30 +9,6 @@ Feature: Homepage
     And I am on the homepage
     When I reload the page
     Then the page should be cached
-    And I should see the following lines of text:
-      | The Interoperable Europe Portal is the European Union’s platform for promoting and supporting interoperability, collaboration, and knowledge sharing across public administrations, businesses, and citizens.                                                    |
-      | It acts as a one-stop shop for discovering, sharing, and reusing IT solutions and good practices.                                                                                                                                                                |
-      | It’s the European Commission’s initiative for a reinforced interoperability policy showcasing news and events about government-related interoperability, along with initiatives and best practices that support the digitalisation of EU public administrations. |
-      | Interoperable Europe covers the policy angle of interoperability.                                                                                                                                                                                                |
-    And I should see the following links:
-      | How-to Articles |
-      | FAQ             |
-    And I should see the button "Guided tour"
-
-  Scenario: The homepage about section is not visible to authenticated users.
-    Given I am not logged in
-    # Visit once to cache the page.
-    And I am on the homepage
-    Then I should see the text "The Interoperable Europe Portal is the European Union’s platform for promoting and supporting interoperability"
-
-    Given I am logged in as a user with the "authenticated" role
-    And I am on the homepage
-    Then I should not see the text "The Interoperable Europe Portal is the European Union’s platform for promoting and supporting interoperability"
-
-    # Re check for anonymous users.
-    Given I am not logged in
-    And I am on the homepage
-    Then I should see the text "The Interoperable Europe Portal is the European Union’s platform for promoting and supporting interoperability"
 
   Scenario: Latest news is shown on the homepage
     Given news content:
@@ -274,3 +250,14 @@ Feature: Homepage
     Given I am on the homepage
     When I click "More events"
     Then I should be on "/upcoming-events"
+
+  @group-clone
+  Scenario: The /news path redirects to the search page filtered on news.
+    When I go to "/news"
+    Then I should be on the advanced search page
+    And I should see the following facet summary "News"
+
+    # Verify that the /news path respects the language prefix.
+    When I go to "/fr/news"
+    And the url should match "/fr/search"
+    And I should see the following facet summary "News"

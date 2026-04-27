@@ -1,0 +1,14 @@
+diff --git a/src/Selenium2Driver.php b/src/Selenium2Driver.php
+index 463479be..2964038c 100755
+--- a/src/Selenium2Driver.php
++++ b/src/Selenium2Driver.php
+@@ -953,7 +953,7 @@ public function mouseOver(string $xpath)
+     private function scrollElementIntoView(Element $element): void {
+         $script = <<<JS
+             var e = arguments[0];
+-            e.scrollIntoView({ behavior: 'instant', block: 'end', inline: 'nearest' });
++            e.scrollIntoView({ behavior: 'instant', block: 'center', inline: 'nearest' });
+             var rect = e.getBoundingClientRect();
+             return {'x': rect.left, 'y': rect.top};
+         JS;
+ 

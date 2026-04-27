@@ -41,8 +41,7 @@ function collection_entity_type_alter(array &$entity_types): void {
   /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
   $entity_types['node']
     ->setLinkTemplate('glossary', '/node/{node}/glossary/{letter}')
-    ->setLinkTemplate('subscribe', '/node/{node}/subscribe')
-    ->setFormClass('propose', $entity_types['node']->getFormClass('edit'));
+    ->setLinkTemplate('subscribe', '/node/{node}/subscribe');
 }
 
 /**
@@ -313,15 +312,18 @@ function collection_entity_bundle_field_info(EntityTypeInterface $entity_type, $
  * Implements hook_ENTITY_TYPE_delete().
  */
 function collection_node_delete(NodeInterface $node): void {
-  if (!$node->hasField('og_audience') || !$node->isPublished()) {
+  if (!$node->hasField('og_audience') || !$node->isPublished() || $node->get('og_audience')->isEmpty()) {
     return;
   }
 
-  /** @var \Drupal\node\NodeInterface $group */
-  if (!$node->get('og_audience')->isEmpty() && ($group = Node::load($node->get('og_audience')->target_id)) && $group->bundle() === 'collection') {
+  /** @var \Drupal\collection\Entity\CollectionInterface $group */
+  if (($group = Node::load($node->get('og_audience')->target_id)) && $group instanceof CollectionInterface) {
     // Touch the parent collection in order to update its changed timestamp.
     $group->skip_notification = TRUE;
-    $group->setChangedTime(\Drupal::time()->getRequestTime())->save();
+    $group->setNewRevision(FALSE);
+    $group->setLastContentDeletion(\Drupal::time()->getRequestTime());
+    $group->setSyncing(TRUE);
+    $group->save();
   }
 }
 
