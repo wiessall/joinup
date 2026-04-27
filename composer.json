@@ -43,6 +43,7 @@
         "drupal/editor_file": "^2.1",
         "drupal/email_confirmer": "^1.0",
         "drupal/email_contact": "^2.0.4",
+        "drupal/entity_browser": "^2.15",
         "drupal/entity_form_field_label": "^2.1",
         "drupal/entity_legal": "^4.0",
         "drupal/entity_print": "^2.15",
@@ -350,6 +351,9 @@
                 "Strengthen the creation of continuous job items @see https://www.drupal.org/i/3578471": "resources/patch/php/drupal/babel/3578471.mr76.commit333eff4d.diff",
                 "BabelStorage::updateSourceTables() performs unnecessary full-table-scan DELETEs @see https://www.drupal.org/i/3586174": "resources/patch/php/drupal/babel/3586174.mr86-commitfcf47626.diff"
             },
+            "drupal/better_exposed_filters": {
+                "Single on/off checkbox option not working as expected @see https://www.drupal.org/i/3569639": "resources/patch/php/drupal/better_exposed_filters/3569639-mr230.diff"
+            },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff",
                 "Weekly view doesn't show first week of new year @see https://www.drupal.org/i/3484325": "resources/patch/php/drupal/calendar_view/3484325.comment16152620.patch"
@@ -386,7 +390,8 @@
                 "Fix for pagination inside Media library @see https://www.drupal.org/i/3567237": "resources/patch/php/drupal/core/3567237.mr14654-commit0edaf95a.diff",
                 "REST views: Add pagination information and total count result @see https://www.drupal.org/i/2982729": "resources/patch/php/drupal/core/2982729-mr6558.commit290eabb1.diff",
                 "Slow admin/config page load. @see https://www.drupal.org/i/3336621": "resources/patch/php/drupal/core/3336621.mr15137-commit7b9c8c6a.patch",
-                "ConfigInstaller isSyncing does not persist to hook_modules_installed() when multiple modules are installed @see https://www.drupal.org/i/3584812": "resources/patch/php/drupal/core/3584812.comment-7.diff"
+                "ConfigInstaller isSyncing does not persist to hook_modules_installed() when multiple modules are installed @see https://www.drupal.org/i/3584812": "resources/patch/php/drupal/core/3584812.comment-7.diff",
+                "Exposed filters get values from url when ajax is on @see https://www.drupal.org/i/3121172": "resources/patch/php/drupal/core/3121172-mr10230-commit41ded0c5.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
@@ -399,6 +404,11 @@
             },
             "drupal/dynamic_entity_reference": {
                 "Undefined array key on dependency removal @see https://www.drupal.org/i/3099176": "resources/patch/php/drupal/dynamic_entity_reference/3099176-3.x-16.diff"
+            },
+            "drupal/entity_browser": {
+                "TypeError in removeExposedFiltersQueryParameters: exposed form in a div, not a form element @see https://www.drupal.org/i/3582428": "resources/patch/php/drupal/entity_browser/3582428-mr118-commitfd27d6f2.diff",
+                "EntityForm widget missing entity-level validation before save. @see https://www.drupal.org/i/3583922": "resources/patch/php/drupal/entity_browser/3583922.m122.commit8291fb8c.diff",
+                "Add option for field widget to display as table @see https://www.drupal.org/i/2973457": "resources/patch/php/drupal/entity_browser/2973457.mr15.commit49824a77.diff"
             },
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.mr3-note490206.diff"
@@ -555,7 +565,7 @@
                 "Add support for prefixed URIs on base path @see https://github.com/GitLabPHP/Client/issues/726": "resources/patch/php/m4tthumphrey/php-gitlab-api/726.diff"
             },
             "lullabot/mink-selenium2-driver": {
-                "Add missing mouseover before clicking on radio/select elements - https://github.com/Lullabot/MinkSelenium2Driver/pull/14": "resources/patch/php/lullabot/mink-selenium2-driver/selenium2-mouseover-fixes.patch"
+                "Add missing mouseover before clicking on radio/select elements - https://github.com/Lullabot/MinkSelenium2Driver/pull/14": "resources/patch/php/lullabot/mink-selenium2-driver/selenium2-mouseover-fixes.diff"
             },
             "sweetrdf/easyrdf": {
                 "Add a method to remove resources from graph @see https://github.com/sweetrdf/easyrdf/pull/44": "resources/patch/php/sweetrdf/easyrdf/44.diff"

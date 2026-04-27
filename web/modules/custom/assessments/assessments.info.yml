@@ -8,6 +8,7 @@ dependencies:
   - drupal:taxonomy
   - drupal:rest
   - inline_entity_form:inline_entity_form
+  - joinup:interoperable_europe
   - joinup:joinup_api
   - joinup:joinup_notification
   - joinup:joinup_rdf
