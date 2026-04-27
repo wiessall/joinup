@@ -133,18 +133,18 @@ content:
       info_label: ''
       parent_selection: 0
     third_party_settings: {  }
-  function_of_administration:
+  field_user_work_location:
     type: tagify_select_widget
-    weight: 9
+    weight: 7
     region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       placeholder: ''
     third_party_settings: {  }
-  field_user_work_location:
+  function_of_administration:
     type: tagify_select_widget
-    weight: 7
+    weight: 9
     region: content
     settings:
       match_operator: CONTAINS

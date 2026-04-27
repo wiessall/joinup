@@ -70,12 +70,13 @@ hidden:
   field_social_media: true
   field_user_business_title: true
   field_user_content: true
+  field_user_country_of_residence: true
   field_user_frequency: true
   field_user_nationality: true
   field_user_organisation: true
   field_user_professional_domain: true
-  function_of_administration: true
   field_user_work_location: true
+  function_of_administration: true
   langcode: true
   linked_username: true
   masquerade: true
