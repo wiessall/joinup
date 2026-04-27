@@ -124,7 +124,7 @@ function assessments_field_widget_complete_form_alter(array &$element, FormState
   /** @see \Drupal\inline_entity_form\Plugin\Field\FieldWidget\InlineEntityFormComplex::formElement */
   $ief_state = $form_state->get(['inline_entity_form', $ief_id, 'form']);
 
-  if ($ief_state === NULL) {
+  if (isset($widget['actions']) && $ief_state === NULL) {
     // Add description before the buttons.
     $widget['description'] = [
       '#markup' => t('Identify the interoperability solutions mandatory to use for the implementation of the assessed binding requirement'),
