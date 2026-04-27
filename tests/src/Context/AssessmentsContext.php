@@ -108,8 +108,9 @@ class AssessmentsContext extends RawDrupalContext {
         }
       }
 
+      // Strip columns that are not real entity fields.
+      unset($assessment['identifier']);
       $assessment = (object) $assessment;
-
       $assessment->type = $type;
       $this->parseEntityFields('assessment', $assessment);
       $this->getDriver()->createEntity('assessment', $assessment);

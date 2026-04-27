@@ -605,6 +605,30 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Stores non-field node properties stripped before Drupal field validation.
+   *
+   * Keyed by spl_object_id() of the Behat node stub. AfterNodeCreate hooks
+   * that need to act on these values should call getStrippedNodeProperty().
+   */
+  private static array $strippedNodeProperties = [];
+
+  /**
+   * Returns a property stripped from the node stub before field validation.
+   *
+   * @param object $node
+   *   The Behat node stub (the same object passed to BeforeNodeCreate and
+   *   AfterNodeCreate scopes via $scope->getEntity()).
+   * @param string $key
+   *   The original property name (before stripping).
+   *
+   * @return mixed
+   *   The stored value, or NULL if the property was not stripped.
+   */
+  public static function getStrippedNodeProperty(object $node, string $key): mixed {
+    return self::$strippedNodeProperties[spl_object_id($node)][$key] ?? NULL;
+  }
+
+  /**
    * Replaces human readable labels and values with their real counterparts.
    *
    * This allows us to:
@@ -808,6 +832,29 @@ class JoinupContext extends RawDrupalContext {
     // Handle file URL fields.
     if (!empty($node->resources)) {
       $this->createResourceFileParagraph($node);
+    }
+
+    // Strip node properties that are not real Drupal entity fields. These were
+    // silently ignored by older driver versions. Storing them here allows
+    // AfterNodeCreate hooks to access them via self::getStrippedNodeProperty().
+    // Note: this list must only include properties not processed by any other
+    // BeforeNodeCreate hook (e.g. group_moderation is handled by
+    // JoinupGroupContext::beforeNodeCreateMetaEntity and must NOT be listed).
+    $metaProperties = [
+      // Solution: applied via flag API in AfterNodeCreate.
+      'interoperable',
+      // Community content: applied via PinnableGroupContentInterface.
+      'pinned',
+      // Solution: applied via PinnableGroupContentInterface.
+      'pinned_in_collection',
+      'unpinned_in_collection',
+    ];
+    $objectId = spl_object_id($node);
+    foreach ($metaProperties as $property) {
+      if (isset($node->$property)) {
+        self::$strippedNodeProperties[$objectId][$property] = $node->$property;
+        unset($node->$property);
+      }
     }
   }
 

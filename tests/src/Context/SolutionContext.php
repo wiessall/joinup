@@ -158,13 +158,15 @@ class SolutionContext extends RawDrupalContext {
       return;
     }
 
-    if (!isset($node->pinned_in_collection) && !isset($node->unpinned_in_collection)) {
+    $pinnedIn = JoinupContext::getStrippedNodeProperty($node, 'pinned_in_collection');
+    $unpinnedIn = JoinupContext::getStrippedNodeProperty($node, 'unpinned_in_collection');
+
+    if ($pinnedIn === NULL && $unpinnedIn === NULL) {
       return;
     }
 
     if (($entity = Node::load((int) $node->nid)) && $entity instanceof PinnableGroupContentInterface) {
-      // Pin solution in collection where needed.
-      foreach (explode(',', $node->pinned_in_collection ?? '') as $groupLabel) {
+      foreach (explode(',', $pinnedIn ?? '') as $groupLabel) {
         if (!($groupLabel = trim($groupLabel))) {
           continue;
         }
@@ -175,8 +177,7 @@ class SolutionContext extends RawDrupalContext {
     }
 
     if (($entity = Node::load((int) $node->nid)) && $entity instanceof PinnableGroupContentInterface) {
-      // Pin solution in collection where needed.
-      foreach (explode(',', $node->unpinned_in_collection ?? '') as $groupLabel) {
+      foreach (explode(',', $unpinnedIn ?? '') as $groupLabel) {
         if (!($groupLabel = trim($groupLabel))) {
           continue;
         }
@@ -189,25 +190,15 @@ class SolutionContext extends RawDrupalContext {
 
   /**
    * Flags newly created solutions as interoperable.
-   *
-   * This checks if the "interoperable" property is set for a newly created
-   * solution node, and flags it accordingly. This is not done as part of
-   * regular node creation since this data is stored as a flag entity, not a
-   * node field.
-   *
-   * @param \Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope $scope
-   *   The Behat hook scope object containing the metadata of the node that was
-   *   created.
-   *
-   * @AfterNodeCreate
    */
+  #[AfterNodeCreate]
   public function flagSolutionAsInteroperable(AfterNodeCreateScope $scope): void {
     $node = $scope->getEntity();
     if ($node->type !== 'solution') {
       return;
     }
 
-    $is_interoperable = in_array(strtolower((string) ($node->interoperable ?? '')), [
+    $is_interoperable = in_array(strtolower((string) (JoinupContext::getStrippedNodeProperty($node, 'interoperable') ?? '')), [
       'y',
       'yes',
     ]);
