@@ -2219,6 +2219,25 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts that an element with the given tag exists in the given region.
+   *
+   * @param string $tag
+   *   The HTML tag that is being checked.
+   * @param string $region
+   *   The region to which to confine the search for the HTML tag.
+   *
+   * @throws \Exception
+   *   Thrown when the given tag was not found in the given region.
+   */
+  #[Then('I( should) see a(n) :tag element in the :region( region)')]
+  public function assertRegionElement(string $tag, string $region): void {
+    $regionObj = $this->getRegion($region);
+    if (empty($regionObj->findAll('css', $tag))) {
+      throw new \Exception(sprintf('The element "%s" was not found in the "%s" region on the page %s', $tag, $region, $this->getSession()->getCurrentUrl()));
+    }
+  }
+
+  /**
    * Asserts that a tour is available on the current page.
    */
   #[Then('a tour should be available')]
