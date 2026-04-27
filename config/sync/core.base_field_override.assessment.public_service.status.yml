@@ -1,0 +1,22 @@
+uuid: c27ef879-ede4-424a-82ac-7f661635d3c5
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.public_service
+id: assessment.public_service.status
+field_name: status
+entity_type: assessment
+bundle: public_service
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

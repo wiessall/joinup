@@ -1,0 +1,20 @@
+uuid: 0e03a32d-7c5e-4f86-9f2c-baffb52fbb55
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.participation
+id: assessment.participation.uid
+field_name: uid
+entity_type: assessment
+bundle: participation
+label: Author
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: 'Drupal\assessments\Entity\Assessment::getDefaultEntityOwner'
+settings:
+  handler: default
+  handler_settings: {  }
+field_type: entity_reference

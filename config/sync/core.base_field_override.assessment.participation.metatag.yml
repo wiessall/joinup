@@ -1,0 +1,20 @@
+uuid: dea5d883-195d-411e-b69f-7a0e8686d200
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.participation
+  module:
+    - metatag
+id: assessment.participation.metatag
+field_name: metatag
+entity_type: assessment
+bundle: participation
+label: 'Metatags (Hidden field for JSON support)'
+description: 'The computed meta tags for the entity.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: metatag_computed

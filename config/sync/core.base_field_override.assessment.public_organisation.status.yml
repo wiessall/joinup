@@ -1,0 +1,22 @@
+uuid: d634835a-3b0f-4d4c-90ab-567a506d514d
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.public_organisation
+id: assessment.public_organisation.status
+field_name: status
+entity_type: assessment
+bundle: public_organisation
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean
