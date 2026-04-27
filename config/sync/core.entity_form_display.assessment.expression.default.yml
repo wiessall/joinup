@@ -65,8 +65,13 @@ content:
     weight: 0
     region: content
     settings:
-      include_locked: true
-    third_party_settings: {  }
+      include_locked: false
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+        new_description: ''
+        rewrite_description: 0
   translation:
     weight: 4
     region: content

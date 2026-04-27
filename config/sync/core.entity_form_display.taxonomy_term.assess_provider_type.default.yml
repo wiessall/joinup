@@ -6,6 +6,7 @@ dependencies:
     - field.field.taxonomy_term.assess_provider_type.id
     - taxonomy.vocabulary.assess_provider_type
   module:
+    - entity_form_field_label
     - path
     - text
 id: taxonomy_term.assess_provider_type.default
@@ -26,8 +27,13 @@ content:
     weight: 0
     region: content
     settings:
-      include_locked: true
-    third_party_settings: {  }
+      include_locked: false
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+        new_description: ''
+        rewrite_description: 0
   name:
     type: string_textfield
     weight: 1
