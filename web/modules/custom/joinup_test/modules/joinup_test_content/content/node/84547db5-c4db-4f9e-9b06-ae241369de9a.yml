@@ -5,7 +5,7 @@ _meta:
   bundle: news
   default_langcode: en
   depends:
-    b7af08b1-c271-4d58-a5a7-ec3db533c3d2: taxonomy_term
+    ee3076fa-ee59-41b8-997e-b8e0fab5559f: taxonomy_term
     df34e3a2-207b-4910-a804-344931654e20: node
 default:
   status:
@@ -83,7 +83,7 @@ default:
       value: published
   field_topic:
     -
-      entity: b7af08b1-c271-4d58-a5a7-ec3db533c3d2
+      entity: ee3076fa-ee59-41b8-997e-b8e0fab5559f
   og_audience:
     -
       entity: df34e3a2-207b-4910-a804-344931654e20

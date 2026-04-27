@@ -8,11 +8,74 @@
 declare(strict_types=1);
 
 use Drupal\joinup_test_content\DefaultContentManager;
+use Drupal\paragraphs\Entity\Paragraph;
+
+/**
+ * Implements hook_install().
+ */
+function joinup_test_content_install(): void {
+  // Add a configurable listing paragraph to the eGov topic meta entity.
+  $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  $terms = $term_storage->loadByProperties([
+    'uuid' => 'ee3076fa-ee59-41b8-997e-b8e0fab5559f',
+  ]);
+  if (!$term = reset($terms)) {
+    return;
+  }
+  $storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
+  $entities = $storage->loadByProperties([
+    'type' => 'topic',
+    'target' => $term->id(),
+  ]);
+  if ($entity = reset($entities)) {
+    $paragraph = Paragraph::create([
+      'type' => 'configurable_listing',
+      'status' => TRUE,
+      'paragraph_heading' => 'Solutions and resources',
+      'list_style' => 'grid',
+      'content_listing' => [
+        'value' => [
+          'enabled' => 1,
+          'query_presets' => '',
+          'limit' => 10,
+          'global_search' => FALSE,
+          'show_shared' => FALSE,
+        ],
+      ],
+    ]);
+    $paragraph->save();
+    $entity->get('topics_paragraph')->appendItem($paragraph);
+    $entity->save();
+  }
+}
 
 /**
  * Implements hook_uninstall().
  */
 function joinup_test_content_uninstall(): void {
+  // Remove the configurable listing paragraph from the eGov topic meta entity.
+  $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  $terms = $term_storage->loadByProperties([
+    'uuid' => 'ee3076fa-ee59-41b8-997e-b8e0fab5559f',
+  ]);
+  if ($term = reset($terms)) {
+    $storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
+    $entities = $storage->loadByProperties([
+      'type' => 'topic',
+      'target' => $term->id(),
+    ]);
+  }
+  if (!empty($entities) && $entity = reset($entities)) {
+    $paragraphs = $entity->get('topics_paragraph');
+    foreach ($paragraphs as $delta => $item) {
+      if ($item->entity && $item->entity->bundle() === 'configurable_listing') {
+        $item->entity->delete();
+        $paragraphs->removeItem($delta);
+      }
+    }
+    $entity->save();
+  }
+
   /** @var \Drupal\joinup_test_content\DefaultContentManager $service */
   $service = \Drupal::service(DefaultContentManager::class);
   $service->deleteDefaultContent('joinup_test_content');
