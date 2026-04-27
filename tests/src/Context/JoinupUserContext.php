@@ -326,6 +326,15 @@ class JoinupUserContext extends RawDrupalContext {
     \Drupal::database()->delete(JoinupUserDeletedInterface::TABLE_USER)
       ->condition('uid', $this->latestDeletedUserUid, '>')
       ->execute();
+
+    // Release any User entities still held in the pending-deletion stack.
+    // destruct() is never called in Behat (no kernel terminate), so without
+    // this the stack accumulates User objects for the entire suite run.
+    // For @deletedUser scenarios runUserDeletedDestruct() already drained the
+    // stack after each step, so this is a no-op there.
+    $service = \Drupal::service('joinup_user.deleted');
+    $prop = new \ReflectionProperty($service, 'stack');
+    $prop->setValue($service, []);
   }
 
   /**

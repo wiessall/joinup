@@ -21,7 +21,6 @@ use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\user\UserInterface;
 
@@ -34,7 +33,6 @@ class AssessmentsContext extends RawDrupalContext {
   use EntityTrait;
   use FileTrait;
   use UtilityTrait;
-  use TestingEntitiesTrait;
 
   /**
    * Programmatically creates assessment contents.
@@ -110,8 +108,9 @@ class AssessmentsContext extends RawDrupalContext {
         }
       }
 
+      // Strip columns that are not real entity fields.
+      unset($assessment['identifier']);
       $assessment = (object) $assessment;
-
       $assessment->type = $type;
       $this->parseEntityFields('assessment', $assessment);
       $this->getDriver()->createEntity('assessment', $assessment);
@@ -186,8 +185,6 @@ class AssessmentsContext extends RawDrupalContext {
       ->getStorage('paragraph')
       ->create($values);
     $paragraph->save();
-
-    $this->entities['paragraph'][$paragraph->id()] = $paragraph;
 
     $report->set('binding_requirement', [
       [
@@ -398,7 +395,6 @@ class AssessmentsContext extends RawDrupalContext {
       $type = $row['type'];
       $statement = AssessmentStatement::create(['type' => $type]);
       $statement->save();
-      $this->entities['assessment_statement'][$statement->id()] = $statement;
       $report->get($type)->setValue(['target_id' => $statement->id()]);
     }
     $report->save();

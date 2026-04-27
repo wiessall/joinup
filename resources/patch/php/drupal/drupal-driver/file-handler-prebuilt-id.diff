@@ -1,0 +1,48 @@
+--- a/src/Drupal/Driver/Fields/Drupal8/FileHandler.php
++++ b/src/Drupal/Driver/Fields/Drupal8/FileHandler.php
+@@ -14,22 +14,34 @@
+     $return = [];
+     foreach ((array) $values as $value) {
+       $file_path = is_array($value) ? $value['target_id'] ?? $value[0] : $value;
+-      $file_extension = pathinfo($file_path, PATHINFO_EXTENSION);
+-      $data = file_get_contents($file_path);
+
+-      if ($data === FALSE) {
+-        throw new \Exception(sprintf('Error reading file %s.', $file_path));
++      // If target_id is already a numeric entity ID, the file entity was
++      // pre-created (e.g. by a BeforeNodeCreate hook). Reuse it directly
++      // instead of uploading the file again under a new UUID-based name.
++      if (is_numeric($file_path)) {
++        $file = \Drupal::entityTypeManager()->getStorage('file')->load((int) $file_path);
++        if (!$file) {
++          throw new \Exception(sprintf('File entity %s not found.', $file_path));
++        }
+       }
++      else {
++        $file_extension = pathinfo($file_path, PATHINFO_EXTENSION);
++        $data = file_get_contents($file_path);
+
+-      /** @var \Drupal\file\FileInterface $file */
+-      $file = \Drupal::service('file.repository')
+-        ->writeData($data, 'public://' . uniqid() . '.' . $file_extension);
++        if ($data === FALSE) {
++          throw new \Exception(sprintf('Error reading file %s.', $file_path));
++        }
+
+-      if ($file === FALSE) {
+-        throw new \Exception('Error saving file.');
+-      }
++        /** @var \Drupal\file\FileInterface $file */
++        $file = \Drupal::service('file.repository')
++          ->writeData($data, 'public://' . uniqid() . '.' . $file_extension);
++
++        if ($file === FALSE) {
++          throw new \Exception('Error saving file.');
++        }
+
+-      $file->save();
++        $file->save();
++      }
+
+       $return[] = [
+         'target_id' => $file->id(),

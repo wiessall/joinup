@@ -16,7 +16,6 @@ use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\RandomGeneratorTrait;
 use Drupal\joinup\Traits\SearchTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\meta_entity\Entity\MetaEntity;
 
@@ -29,7 +28,6 @@ class EifContext extends RawDrupalContext {
   use EntityTrait;
   use SearchTrait;
   use StringTranslationTrait;
-  use TestingEntitiesTrait;
   use UtilityTrait;
   use RandomGeneratorTrait;
 
@@ -160,7 +158,6 @@ class EifContext extends RawDrupalContext {
       'target' => $solution,
     ] + $fields);
     $eif_perspective->save();
-    $this->entities['meta_entity'][$eif_perspective->id()] = $eif_perspective;
   }
 
   /**

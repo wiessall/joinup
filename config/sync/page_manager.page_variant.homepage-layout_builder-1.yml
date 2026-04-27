@@ -10,7 +10,7 @@ dependencies:
     - views.view.upcoming_event
   module:
     - joinup_front_page
-    - joinup_layout
+    - layout_builder
     - layout_discovery
     - user
     - views

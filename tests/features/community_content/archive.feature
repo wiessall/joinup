@@ -8,8 +8,8 @@ Feature: Content archival.
       | title           | moderation |
       | Some collection | yes        |
     Given discussion content:
-      | title           | collection      | body | content | headline        | changed          |
-      | Test discussion | Some collection | Test | Test    | Test discussion | 2017-11-17 20:00 |
+      | title           | collection      | body | content | changed          |
+      | Test discussion | Some collection | Test | Test    | 2017-11-17 20:00 |
     When I am logged in as a moderator
     And I go to the edit form of the "Test discussion" discussion
     Then I should see the button "Archive"
@@ -92,8 +92,8 @@ Feature: Content archival.
       | title      | moderation |
       | Some group | yes        |
     Given discussion content:
-      | title           | <group type> | body | content | headline        |
-      | Test discussion | Some group   | Test | Test    | Test discussion |
+      | title           | <group type> | body | content |
+      | Test discussion | Some group   | Test | Test    |
     When I am logged in as a facilitator of the "Some group" <group type>
     And I go to the edit form of the "Test discussion" discussion
     Then I should see the button "Archive"

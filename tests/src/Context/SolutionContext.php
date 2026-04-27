@@ -21,7 +21,6 @@ use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\SearchTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -44,7 +43,6 @@ class SolutionContext extends RawDrupalContext {
   use FileTrait;
   use FormTrait;
   use OgTrait;
-  use TestingEntitiesTrait;
   use SearchTrait;
   use TraversingTrait;
   use UserTrait;
@@ -160,13 +158,15 @@ class SolutionContext extends RawDrupalContext {
       return;
     }
 
-    if (!isset($node->pinned_in_collection) && !isset($node->unpinned_in_collection)) {
+    $pinnedIn = JoinupContext::getStrippedNodeProperty($node, 'pinned_in_collection');
+    $unpinnedIn = JoinupContext::getStrippedNodeProperty($node, 'unpinned_in_collection');
+
+    if ($pinnedIn === NULL && $unpinnedIn === NULL) {
       return;
     }
 
     if (($entity = Node::load((int) $node->nid)) && $entity instanceof PinnableGroupContentInterface) {
-      // Pin solution in collection where needed.
-      foreach (explode(',', $node->pinned_in_collection ?? '') as $groupLabel) {
+      foreach (explode(',', $pinnedIn ?? '') as $groupLabel) {
         if (!($groupLabel = trim($groupLabel))) {
           continue;
         }
@@ -177,14 +177,39 @@ class SolutionContext extends RawDrupalContext {
     }
 
     if (($entity = Node::load((int) $node->nid)) && $entity instanceof PinnableGroupContentInterface) {
-      // Pin solution in collection where needed.
-      foreach (explode(',', $node->unpinned_in_collection ?? '') as $groupLabel) {
+      foreach (explode(',', $unpinnedIn ?? '') as $groupLabel) {
         if (!($groupLabel = trim($groupLabel))) {
           continue;
         }
         $group = $this->getEntityByLabel('node', $groupLabel);
         $this->assertCondition($group instanceof GroupInterface, "Cannot pin solution {$entity->label()} in $groupLabel since it does not exist or is not a group.");
         $entity->unpin($group);
+      }
+    }
+  }
+
+  /**
+   * Flags newly created solutions as interoperable.
+   */
+  #[AfterNodeCreate]
+  public function flagSolutionAsInteroperable(AfterNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'solution') {
+      return;
+    }
+
+    $is_interoperable = in_array(strtolower((string) (JoinupContext::getStrippedNodeProperty($node, 'interoperable') ?? '')), [
+      'y',
+      'yes',
+    ]);
+    $nid = $node->nid ?? NULL;
+    if ($is_interoperable && $nid) {
+      if ($entity = Node::load((int) $nid)) {
+        $flag_service = \Drupal::service('flag');
+        $flag = $flag_service->getFlagById('interoperability');
+        if ($flag) {
+          $flag_service->flag($flag, $entity);
+        }
       }
     }
   }

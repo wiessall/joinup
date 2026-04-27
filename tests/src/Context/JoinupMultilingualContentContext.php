@@ -45,11 +45,12 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
       $node = (object) $nodeHash;
       $node->type = $type;
 
+      // Read and strip the step-routing column before Drupal field validation.
+      $isDefaultTranslation = !isset($node->default_translation) || !empty($node->default_translation);
+      unset($node->default_translation);
+
       // This must be a new node.
-      if (
-        !isset($node->default_translation)
-        || !empty($node->default_translation)
-      ) {
+      if ($isDefaultTranslation) {
         $this->nodeCreate($node);
         $lastId = $node->nid;
 

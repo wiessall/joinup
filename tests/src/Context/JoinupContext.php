@@ -23,6 +23,7 @@ use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\comment\CommentInterface;
 use Drupal\comment\Entity\Comment;
+use Drupal\file_visibility\FileVisibilityInterface;
 use Drupal\joinup\Traits\BootstrapTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
@@ -34,7 +35,6 @@ use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\RandomGeneratorTrait;
 use Drupal\joinup\Traits\TabledragTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -69,7 +69,6 @@ class JoinupContext extends RawDrupalContext {
   use RandomGeneratorTrait;
   use StringTranslationTrait;
   use TabledragTrait;
-  use TestingEntitiesTrait;
   use TraversingTrait;
   use UserTrait;
   use UtilityTrait;
@@ -606,6 +605,30 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Stores non-field node properties stripped before Drupal field validation.
+   *
+   * Keyed by spl_object_id() of the Behat node stub. AfterNodeCreate hooks
+   * that need to act on these values should call getStrippedNodeProperty().
+   */
+  private static array $strippedNodeProperties = [];
+
+  /**
+   * Returns a property stripped from the node stub before field validation.
+   *
+   * @param object $node
+   *   The Behat node stub (the same object passed to BeforeNodeCreate and
+   *   AfterNodeCreate scopes via $scope->getEntity()).
+   * @param string $key
+   *   The original property name (before stripping).
+   *
+   * @return mixed
+   *   The stored value, or NULL if the property was not stripped.
+   */
+  public static function getStrippedNodeProperty(object $node, string $key): mixed {
+    return self::$strippedNodeProperties[spl_object_id($node)][$key] ?? NULL;
+  }
+
+  /**
    * Replaces human readable labels and values with their real counterparts.
    *
    * This allows us to:
@@ -787,7 +810,7 @@ class JoinupContext extends RawDrupalContext {
       $node->abstract = 'default abstract';
     }
 
-    if (!empty($field_definitions['description']) && empty($node->descritpion)) {
+    if (!empty($field_definitions['description']) && empty($node->description)) {
       $node->description = 'default description';
     }
     if (!empty($field_definitions['solution_type']) && empty($node->solution_type)) {
@@ -809,6 +832,29 @@ class JoinupContext extends RawDrupalContext {
     // Handle file URL fields.
     if (!empty($node->resources)) {
       $this->createResourceFileParagraph($node);
+    }
+
+    // Strip node properties that are not real Drupal entity fields. These were
+    // silently ignored by older driver versions. Storing them here allows
+    // AfterNodeCreate hooks to access them via self::getStrippedNodeProperty().
+    // Note: this list must only include properties not processed by any other
+    // BeforeNodeCreate hook (e.g. group_moderation is handled by
+    // JoinupGroupContext::beforeNodeCreateMetaEntity and must NOT be listed).
+    $metaProperties = [
+      // Solution: applied via flag API in AfterNodeCreate.
+      'interoperable',
+      // Community content: applied via PinnableGroupContentInterface.
+      'pinned',
+      // Solution: applied via PinnableGroupContentInterface.
+      'pinned_in_collection',
+      'unpinned_in_collection',
+    ];
+    $objectId = spl_object_id($node);
+    foreach ($metaProperties as $property) {
+      if (isset($node->$property)) {
+        self::$strippedNodeProperties[$objectId][$property] = $node->$property;
+        unset($node->$property);
+      }
     }
   }
 
@@ -1694,7 +1740,6 @@ class JoinupContext extends RawDrupalContext {
 
       $comment->skip_notification = TRUE;
       $comment->save();
-      $this->entities['comment'][$comment->id()] = $comment;
     }
   }
 
@@ -2900,6 +2945,9 @@ class JoinupContext extends RawDrupalContext {
         $storage = \Drupal::entityTypeManager()->getStorage($entity_type->id());
         $storage->resetCache($ids);
         $entities = $storage->loadMultiple($ids);
+        array_walk($entities, function (FieldableEntityInterface $entity): void {
+          $entity->skip_notification = TRUE;
+        });
         @$storage->delete($entities);
       }
     }
@@ -2913,6 +2961,14 @@ class JoinupContext extends RawDrupalContext {
 
     // Also, clean the media click counter.
     \Drupal::state()->delete('image_library_widget.clicks');
+
+    // FileVisibility::$entities queues entity objects for end-of-request
+    // processing, which never fires in Behat. The queue grows indefinitely
+    // across scenarios, so discard it here. File visibility is covered in
+    // PHPUnit, not Behat, so dropping the queue has no impact here.
+    $service = \Drupal::service(FileVisibilityInterface::class);
+    $prop = new \ReflectionProperty($service, 'entities');
+    $prop->setValue($service, []);
   }
 
   /**
