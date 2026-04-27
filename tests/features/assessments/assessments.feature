@@ -71,25 +71,23 @@ Feature: Assessment Report Entity Management
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
 
     When I click "Interoperability solution" in the "Modal content" region
-    And I should see "Browse the solutions recommended by the Interoperable Europe Board."
-    Then I press "Select an Interoperability solution" in the "Modal content" region
-    And I type "Test" in the "asset[form][0][entity_id]" autocomplete field
-    And I pick "Test solution" from the autocomplete suggestions
-    And I press "Add Interoperability solution" in the "Modal content" region
-    And I should see the text "Identify the interoperability solutions mandatory to use for the implementation of the assessed binding requirement" in the "Modal content" region
-    And I should see "Browse the solutions recommended by the Interoperable Europe Board."
-    And I should see the button "Select an Interoperability solution" in the "Modal content" region
-    And I press "Add a new Interoperability solution" in the "Modal content" region
+    # Select an existing solution via entity browser.
+    And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
+    And I select "Test solution" in the entity browser
+    And I press "Select solutions" to close the entity browser
+    And I should see "Test solution" in the "Modal content" region
+    And I should see the button "Add Interoperability Solution" in the "Modal content" region
+    # Create a new solution via entity browser.
+    And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
+    And I click "New solution"
+    And I wait until ".ck-editor__editable" element exists
     When I press "Add Interoperability solution" in the "Modal content" region
     Then I should see the error message "Title of Solution field is required. 3 errors have been found: Title of Solution Description Relevant website"
-    When I fill in "Title of Solution" with "European Interoperability Framework (EIF)" in the "Modal content" region
-    And I enter "Description of EIF" in the "asset[form][1][description][0][value]" wysiwyg editor
-    And I fill in "Relevant website" with "http://no-abstract.com" in the "Modal content" region
-    Then I press "Add Interoperability solution" in the "Modal content" region
-    Then the "IEF table" table should contain the following columns:
-      | Title                                     | Relevant website       | Description        |
-      | Test solution                             | http://www.example.com | default abstract   |
-      | European Interoperability Framework (EIF) | http://no-abstract.com | Description of EIF |
+    And I fill in "Title of Solution" with "European Interoperability Framework (EIF)"
+    And I enter "Description of EIF" in the "Description" wysiwyg editor
+    And I fill in "Relevant website" with "http://no-abstract.com"
+    And I press "Create" to close the entity browser
+    And I should see "European Interoperability Framework (EIF)" in the "Modal content" region
 
     When I click "Concerned public services" in the "Modal content" region
     And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
@@ -258,21 +256,197 @@ Feature: Assessment Report Entity Management
 
   Scenario: User can browse only published solutions in binding requirement
     Given solution content:
-      | title                     | state       |
-      | Test solution published   | published   |
-      | Test solution archived    | archived    |
-      | Test solution proposed    | proposed    |
-      | Test solution draft       | draft       |
-      | Test solution unpublished | unpublished |
+      | title                          | state       | interoperable |
+      | Test solution published        | published   |               |
+      | Test solution archived         | archived    |               |
+      | Test solution proposed         | proposed    |               |
+      | Test solution draft            | draft       |               |
+      | Test solution unpublished      | unpublished |               |
+      | Test interoperable solution    | published   | yes           |
 
     Given I am logged in as an "authenticated user"
     And I go to "/collection/assessments/report/create"
     And I click "New binding requirement"
-    Then I click "Interoperability solution" in the "Modal content" region
-    Then I press "Select an Interoperability solution" in the "Modal content" region
-    When I type "Test" in the "asset[form][0][entity_id]" autocomplete field
-    Then I should see "Test solution published"
+    When I click "Interoperability solution" in the "Modal content" region
+    And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
+    Then I should not see the text "Interoperability Solutions Browser"
+    And I should see "Test solution published"
+    And I should see "Test interoperable solution"
     And I should not see "Test solution archived"
     And I should not see "Test solution proposed"
     And I should not see "Test solution draft"
     And I should not see "Test solution unpublished"
+
+  Scenario: Entity browser exposed filters: name, domain and interoperable filters
+    Given solution content:
+      | title              | state     | domain           | interoperable | description                             | keywords           |
+      | Alpha Framework    | published | Defense          | yes           | A robust integration tool               | games              |
+      | Beta Platform      | published | Economic affairs |               | A platform for data exchange             | nintendo64 licences |
+      | Gamma Service      | published | Defense          | yes           | Service for robust identity verification | games              |
+      | Delta Application  | published | Economic affairs |               | Application for document management      | nintendo64 licences |
+      | Robust Engine      | published | Defense          |               | A simple computation engine              | games              |
+
+    Given I am logged in as an "authenticated user"
+    And I go to "/collection/assessments/report/create"
+    And I click "New binding requirement"
+    When I click "Interoperability solution" in the "Modal content" region
+    And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
+
+    Then I should see "Alpha Framework"
+    And I should see "Beta Platform"
+    And I should see "Gamma Service"
+    And I should see "Delta Application"
+    And I should see "Robust Engine"
+
+    When I fill in "Name" with "Alpha"
+    And I press "Search"
+    And I wait for AJAX to finish
+    Then I should see "Alpha Framework"
+    And I should not see "Beta Platform"
+    And I should not see "Gamma Service"
+    And I should not see "Delta Application"
+    And I should not see "Robust Engine"
+
+    When I fill in "Name" with "robust"
+    And I press "Search"
+    And I wait for AJAX to finish
+    Then I should see "Alpha Framework"
+    And I should not see "Beta Platform"
+    And I should see "Gamma Service"
+    And I should not see "Delta Application"
+    And I should see "Robust Engine"
+
+    When I fill in "Name" with "nintendo64"
+    And I press "Search"
+    And I wait for AJAX to finish
+    Then I should not see "Alpha Framework"
+    And I should see "Beta Platform"
+    And I should not see "Gamma Service"
+    And I should see "Delta Application"
+    And I should not see "Robust Engine"
+
+    When I fill in "Name" with ""
+    And I press "Search"
+    And I wait for AJAX to finish
+    And I select "Defense" from "Domain"
+    And I wait for AJAX to finish
+    Then I should see "Alpha Framework"
+    And I should see "Gamma Service"
+    And I should see "Robust Engine"
+    And I should not see "Beta Platform"
+    And I should not see "Delta Application"
+    And the "Domain" field should contain the "- Any domain -" option
+
+    When I select "- Any domain -" from "Domain"
+    And I wait for AJAX to finish
+    And I check "Interoperable Europe solutions"
+    And I wait for AJAX to finish
+    Then I should see "Alpha Framework"
+    And I should see "Gamma Service"
+    And I should not see "Beta Platform"
+    And I should not see "Delta Application"
+    And I should not see "Robust Engine"
+
+    When I uncheck "Interoperable Europe solutions"
+    And I wait for AJAX to finish
+    Then I should see "Alpha Framework"
+    And I should see "Beta Platform"
+    And I should see "Gamma Service"
+    And I should see "Delta Application"
+    And I should see "Robust Engine"
+
+  Scenario: Entity browser: add existing asset, create new asset, and remove asset
+    Given solution content:
+      | title                | landing page           |
+      | Asset to be removed  | http://www.example.com |
+
+    Given I am logged in as an "authenticated user"
+    And I go to "/collection/assessments/report/create"
+    Then I should see the heading "Create assessment report"
+
+    When I fill in "Short title" with "Test Entity Browser Remove Asset"
+    And I select "Local public sector body" from "Type of public sector body"
+    And I wait for AJAX to finish
+    And I select "Belgium" from "Country"
+    And I wait for AJAX to finish
+    And I fill in "New organisation name" with "Test Organisation"
+
+    When I click "New binding requirement"
+    And a modal should open
+
+    When I click "Initiative" in the "Modal content" region
+    And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Test Initiative for EB" in the "Modal content" region
+    And I fill in "expression[0][inline_entity_form][description][0][value]" with "Some description" in the "Modal content" region
+
+    When I click "Requirements" in the "Modal content" region
+    And I fill in "description[0][value]" with "Test requirement description" in the "Modal content" region
+
+    When I click "Concerned public services" in the "Modal content" region
+    And I fill in "affects[0][inline_entity_form][name][0][value]" with "Test Service" in the "Modal content" region
+
+    When I click "Interoperability solution" in the "Modal content" region
+    And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
+    And I select "Asset to be removed" in the entity browser
+    And I press "Select solutions" to close the entity browser
+    And I should see "Asset to be removed" in the "Modal content" region
+
+    And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
+    And I click "New solution"
+    And I wait until ".ck-editor__editable" element exists
+    And I press "Create" in the entity browser
+    And I should see the error message "This value should not be null."
+    And I wait until ".ck-editor__editable" element exists
+    And I fill in "Title of Solution" with "Asset that should remain"
+    And I enter "Description of the asset" in the "Description" wysiwyg editor
+    And I fill in "Relevant website" with "http://remaining-asset.com"
+    And I press "Create" to close the entity browser
+    And I should see "Asset that should remain" in the "Modal content" region
+
+    Then I press "Save" in the "Modal buttons" region
+    And the modal should be closed
+    When I press "Save as draft"
+    Then I should see the success message containing "New assessment Test Entity Browser Remove Asset has been created."
+    And I should see the text "Asset to be removed"
+    And I should see the text "Asset that should remain"
+
+    When I go to the edit form of the "Test Entity Browser Remove Asset" assessment
+    And I click on element ".lpb-edit"
+    And a modal should open
+
+    When I click "Interoperability solution" in the "Modal content" region
+    And I should see "Asset to be removed" in the "Modal content" region
+    And I should see "Asset that should remain" in the "Modal content" region
+
+    # Verify the new solution appears in the entity browser table.
+    And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
+    Then I should see the text "Asset that should remain"
+    And I press "Select solutions" to close the entity browser
+
+    When I remove "Asset to be removed" from the entity browser widget
+    And I wait for AJAX to finish
+    Then I should not see "Asset to be removed" in the "Modal content" region
+    And I should see "Asset that should remain" in the "Modal content" region
+
+    Then I press "Save" in the "Modal buttons" region
+    And the modal should be closed
+    When I press "Update"
+    Then I should see the success message containing "The assessment Test Entity Browser Remove Asset has been updated."
+    And I should see the text "Asset that should remain"
+    And I should not see the text "Asset to be removed"
+
+  Scenario: Description is shown as fallback when solution abstract is empty in entity browser
+    Given solution content:
+      | title                     | state     | abstract        | description        |
+      | Solution with abstract    | published | Abstract text   | Hidden description |
+      | Solution without abstract | published |                 | Fallback shown     |
+
+    Given I am logged in as an "authenticated user"
+    And I go to "/collection/assessments/report/create"
+    And I click "New binding requirement"
+    When I click "Interoperability solution" in the "Modal content" region
+    And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
+    # Solution with abstract: abstract is shown, description is not.
+    Then I should see "Abstract text"
+    And I should not see "Hidden description"
+    # Solution without abstract: description is shown as fallback.
+    And I should see "Fallback shown"
