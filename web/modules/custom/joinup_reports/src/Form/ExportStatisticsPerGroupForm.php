@@ -207,7 +207,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
    * Retrieves the sum of bookmarks for the provided group entity IDs.
    *
    * @param array $entity_ids
-   *   An array of group entity IDs for calculating the sum of likes.
+   *   An array of group entity IDs for calculating the sum of bookmarks.
    *
    * @return string
    *   The sum of bookmarks as a string value.
@@ -217,7 +217,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
       return '0';
     }
     $query = $this->mysql->select('node__og_audience', 'noa');
-    $query->innerJoin('flag_counts', 'fc', 'fc.entity_id = noa.entity_id');
+    $query->innerJoin('flag_counts', 'fc', 'fc.entity_id = noa.entity_id AND fc.entity_type = :type', [':type' => 'node']);
     $query->addExpression('IFNULL(SUM(fc.count), 0)', 'total_bookmarks');
     $query->condition('noa.og_audience_target_id', $entity_ids, 'IN');
     $query->condition('fc.flag_id', 'bookmark');
