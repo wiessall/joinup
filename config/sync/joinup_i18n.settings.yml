@@ -1,4 +1,15 @@
 tmgmt_content:
+  assessment:
+    - expression
+    - participation
+    - public_organisation
+    - public_service
+    - report
+  assessment_statement:
+    - legal
+    - organisational
+    - semantic
+    - technical
   node:
     - collection
     - contact_information
@@ -15,6 +26,7 @@ tmgmt_content:
   paragraph:
     - accordion
     - accordion_item
+    - binding_requirement
     - block
     - call_to_action
     - carousel
@@ -38,3 +50,10 @@ tmgmt_content:
     - poll
   poll_choice:
     - poll_choice
+  taxonomy_term:
+    - assess_participant_type
+    - assess_provider_type
+    - assess_public_service_area
+    - assess_statement_interpretation
+    - assess_statement_type
+
