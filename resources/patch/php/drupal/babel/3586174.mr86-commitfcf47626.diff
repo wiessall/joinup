@@ -1,0 +1,38 @@
+
+diff --git a/src/BabelStorage.php b/src/BabelStorage.php
+index cb92f9675a618d78e40e89d6baf0fa14f7190c57..3251e2eba679993690dadbb2c2bf4e4e237691cc 100644
+--- a/src/BabelStorage.php
++++ b/src/BabelStorage.php
+@@ -130,11 +130,17 @@ class BabelStorage implements BabelStorageInterface {
+       $delete->condition('id', $ids, 'IN');
+     }
+ 
++    $hashes = $select->execute()->fetchCol();
++    if (!$hashes) {
++      return;
++    }
++
+     // Invalidate the strings cache of existing hashes being deleted.
+-    $this->collectorFactory->invalidateHashes($select->execute()->fetchCol());
++    $this->collectorFactory->invalidateHashes($hashes);
+ 
+     $delete->execute();
+-    $this->updateSourceTables();
++    $this->db->query("DELETE bs FROM {babel_source} bs LEFT JOIN {babel_source_instance} bsi ON bs.hash = bsi.hash WHERE bsi.hash IS NULL AND bs.hash IN (:hashes[])", [':hashes[]' => $hashes]);
++    $this->db->query("DELETE bsl FROM {babel_source_lock} bsl LEFT JOIN {babel_source_instance} bsi ON bsl.hash = bsi.hash WHERE bsi.hash IS NULL AND bsl.hash IN (:hashes[])", [':hashes[]' => $hashes]);
+   }
+ 
+   /**
+@@ -242,12 +248,4 @@ class BabelStorage implements BabelStorageInterface {
+     return $query;
+   }
+ 
+-  /**
+-   * Updates {babel_source} and {babel_source_lock} tables.
+-   */
+-  protected function updateSourceTables(): void {
+-    $this->db->query("DELETE bs FROM {babel_source} bs LEFT JOIN {babel_source_instance} bsi ON bs.hash = bsi.hash WHERE bsi.hash IS NULL");
+-    $this->db->query("DELETE bsl FROM {babel_source_lock} bsl LEFT JOIN {babel_source_instance} bsi ON bsl.hash = bsi.hash WHERE bsi.hash IS NULL");
+-  }
+-
+ }
