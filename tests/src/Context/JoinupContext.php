@@ -848,6 +848,11 @@ class JoinupContext extends RawDrupalContext {
       // Solution: applied via PinnableGroupContentInterface.
       'pinned_in_collection',
       'unpinned_in_collection',
+      // Community content: applied via ShareableContentInterface in
+      // JoinupCommunityContentContext::afterNodeCreateShare. These live on the
+      // Sharing meta entity, not on the node itself.
+      'field_shared_in',
+      'field_shared_in__at',
     ];
     $objectId = spl_object_id($node);
     foreach ($metaProperties as $property) {

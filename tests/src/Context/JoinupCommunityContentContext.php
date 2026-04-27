@@ -271,7 +271,8 @@ class JoinupCommunityContentContext extends RawDrupalContext {
   public function afterNodeCreateShare(AfterNodeCreateScope $scope): void {
     $node = $scope->getEntity();
 
-    if (!isset($node->field_shared_in) || empty($node->field_shared_in)) {
+    $sharedIn = JoinupContext::getStrippedNodeProperty($node, 'field_shared_in');
+    if (empty($sharedIn)) {
       return;
     }
 
@@ -279,9 +280,9 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     \assert($content instanceof NodeInterface);
     $groupLabels = array_map(
       fn (string $groupLabel): string => trim($groupLabel),
-      explode(',', $node->field_shared_in),
+      explode(',', $sharedIn),
     );
-    $sharedInAtString = $node->field_shared_in__at ?? '';
+    $sharedInAtString = JoinupContext::getStrippedNodeProperty($node, 'field_shared_in__at') ?? '';
     $groupSharingExpireTime = array_map(
       function (string $relativeSharingTime): ?int {
         $relativeSharingTime = trim($relativeSharingTime) ?: NULL;

@@ -37,8 +37,8 @@ Feature: Content archival.
       | title           | moderation |
       | Some collection | yes        |
     And <type> content:
-      | title       | collection      | abstract | content | headline    | changed          | field_paragraphs_body |
-      | Test <type> | Some collection | Test     | Test    | Test <type> | 2019-11-12 20:00 | Some text             |
+      | title       | collection      | abstract | body | headline    | changed          | field_paragraphs_body |
+      | Test <type> | Some collection | Test     | Test | Test <type> | 2019-11-12 20:00 | Some text             |
 
     When I am logged in as a moderator
     And I go to the edit form of the "Test <type>" <type>
@@ -116,8 +116,8 @@ Feature: Content archival.
       | title      | moderation |
       | Some group | yes        |
     Given <type> content:
-      | title       | <group type> | abstract | content | headline    | field_paragraphs_body |
-      | Test <type> | Some group   | Test     | Test    | Test <type> | Test paragraph        |
+      | title       | <group type> | abstract | body | headline    | field_paragraphs_body |
+      | Test <type> | Some group   | Test     | Test | Test <type> | Test paragraph        |
     When I am logged in as a facilitator of the "Some group" <group type>
     And I go to the edit form of the "Test <type>" <type>
     Then I should see the button "Archive"
