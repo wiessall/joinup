@@ -520,3 +520,19 @@ Feature: Collection membership administration
     And I press "Add members"
     Then I should see the success message "Successfully added the role Member to the selected users."
     And Log entry with the message "Turkey Ham added as member to Medical diagnosis by Daniel Moder." should exist.
+
+  Scenario: Invitation messages could be customized
+    Given I am logged in as "Daniel Moder"
+    When I go to the "Medical diagnosis" collection
+    And I click "Settings" in the "Entity actions" region
+    And the following field should be present "Post approval email message"
+    And I fill in "Post approval email message" with "<p>This is custom approval message for @entity:bundle @entity:title by @actor:full_name</p>"
+    And I press "Save"
+    When I am on the members page of "Medical diagnosis"
+    And I check the box "Update the member Kathie Cumbershot"
+    Then I select "Approve the pending membership(s)" from "Action"
+    And I press "Apply to selected items"
+    And the email sent to "Kathie Cumbershot" with subject "Interoperable Europe Portal: Your request to join the collection Medical diagnosis was approved" contains the following lines of text:
+      | This is custom approval message for collection Medical diagnosis by Daniel Moder |
+    But the email sent to "Kathie Cumbershot" with subject "Interoperable Europe Portal: Your request to join the collection Medical diagnosis was approved" should not contain the following lines of text:
+      | Daniel Moder has approved your request to join the "Medical diagnosis" collection |

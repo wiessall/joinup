@@ -48,14 +48,6 @@ tips:
     position: left-start
     selector: '#myTab'
     body: "Explore the platform's published content items per type."
-  about:
-    id: about
-    plugin: text
-    label: 'About Interoperable Europe Portal'
-    weight: 7
-    position: left-start
-    selector: .about-what
-    body: 'Learn more about the platform.'
   contact:
     id: contact
     plugin: text
