@@ -42,6 +42,7 @@
   - Drupal\joinup\Context\DistributionContext
   - Drupal\joinup\Context\DrupalContext
   - Drupal\joinup\Context\EifContext
+  - Drupal\joinup\Context\EntityBrowserContext
   - Drupal\joinup\Context\EntityQueueContext
   - Drupal\joinup\Context\EuplContext
   - Drupal\joinup\Context\FaviconContext

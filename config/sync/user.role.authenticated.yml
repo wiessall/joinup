@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - entity_browser.browser.assessment_solutions
     - entity_legal.document.legal_notice
     - filter.format.basic_html
     - filter.format.content_editor
@@ -35,6 +36,7 @@ dependencies:
     - content_translation
     - contextual
     - email_confirmer
+    - entity_browser
     - entity_legal
     - entity_print
     - field_permissions
@@ -64,6 +66,7 @@ label: 'Authenticated user'
 weight: -8
 is_admin: false
 permissions:
+  - 'access assessment_solutions entity browser pages'
   - 'access comments'
   - 'access content'
   - 'access contextual links'
