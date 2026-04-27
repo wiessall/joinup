@@ -21,20 +21,22 @@
 ]
 %}
 <div{{ attributes.addClass(classes) }}>
-  <div class="col-12 col-md-5 offset-xl-1 col-xl-5 ps-xl-5 ps-xxl-4">
-    <p><img src="{{ file_url('themes/ventuno/assets/images/portal.svg') }}" alt="{{ 'Portal'|t }}" width="180" height="50" class="ms-xl-2 ms-xxl-3" /></p>
+  <div class="col-12 col-lg-6 text-white">
+    <p class="iop-header"><span class="iop-header--gradient">Interoperable</span> Europe portal</p>
+    <p>{{ 'Interoperable Europe is a European Commission initiative that helps public administrations across the EU to cooperate more effectively. Supported by the Interoperable Europe Act, it provides a common framework for collaboration across the European public sector.'}}</p>
+    <p>{{ 'The Interoperable Europe Portal is the online hub for this initiative. It brings together tools, reusable IT solutions, good practices, news, and events to foster interoperability and digital government.'|t }}</p>
   </div>
-  <div class="col-12 col-md-7 col-xl-6 ps-xl-5">
-    <div class="search-bar pe-2">
+  <div class="col-12 col-lg-6 ps-xl-5 d-flex flex-column justify-content-center">
+    <div class="search-bar">
       {% block content %}
         {{ content }}
       {% endblock %}
     </div>
     <div class="col-12">
-      <p class="text-light">
+      <p class="text-white text-end">
         {% trans %}
           <span class="d-block d-sm-inline">Need more search options?</span>
-          <span class="d-block d-sm-inline">Use our <a class="text-light text-decoration-underline fw-bold" href="{{ search_url }}">advanced search</a></span>
+          <span class="d-block d-sm-inline">Use our <a class="text-white text-decoration-underline fw-bold" href="{{ search_url }}">advanced search</a></span>
         {% endtrans %}
       </p>
     </div>
