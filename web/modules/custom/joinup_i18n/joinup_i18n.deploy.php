@@ -7,6 +7,9 @@
 
 declare(strict_types=1);
 
+use Drupal\babel\BabelStorageInterface;
+use Drupal\babel\Model\Source;
+
 /**
  * Locale source strings with duplicates.
  */
@@ -37,4 +40,78 @@ function joinup_i18n_deploy_201200(): void {
       ->condition('id', $delete, 'IN')
       ->execute();
   }
+}
+
+/**
+ * Limit language translation to EU languages.
+ */
+function joinup_i18n_deploy_201201(array &$sandbox): string {
+  $storage = \Drupal::service(BabelStorageInterface::class);
+
+  if (empty($sandbox['hashes'])) {
+    $euLanguages = [
+      'Bulgarian',
+      'Czech',
+      'Danish',
+      'German',
+      'Greek',
+      'English',
+      'Spanish',
+      'Estonian',
+      'Finnish',
+      'French',
+      'Irish',
+      'Croatian',
+      'Hungarian',
+      'Italian',
+      'Lithuanian',
+      'Latvian',
+      'Maltese',
+      'Dutch',
+      'Polish',
+      'Portuguese',
+      'Romanian',
+      'Slovak',
+      'Slovenian',
+      'Swedish',
+    ];
+
+    $names = \Drupal::entityQueryAggregate('taxonomy_term')->accessCheck(FALSE)
+      ->condition('vid', 'language')
+      ->condition('name', $euLanguages, 'NOT IN')
+      ->groupBy('name')
+      ->execute();
+    if (!$names) {
+      $sandbox['#finished'] = 1;
+      return 'No language terms to process';
+    }
+
+    // Get hashes out of names.
+    $sandbox['hashes'] = array_map(
+      fn(string $name): string => (new Source($name, ''))->getHash(),
+      array_column($names, 'name'),
+    );
+    $sandbox['total'] = count($sandbox['hashes']);
+    $sandbox['progress'] = 0;
+  }
+
+  $hashes = array_splice($sandbox['hashes'], 0, 10);
+  $sandbox['progress'] += count($hashes);
+  foreach ($hashes as $hash) {
+    $instances = $storage->getSourceStringInstances($hash);
+    if (!isset($instances['content_entity:taxonomy_term'])) {
+      // Should not happen, but skip defensively if it does.
+      continue;
+    }
+    if (count($instances) > 1 || count(reset($instances)) > 1) {
+      // This source string is handled by more than one plugin, or other
+      // vocabularies are using this source string.
+      continue;
+    }
+    $storage->updateStatusForHash($hash, FALSE);
+  }
+
+  $sandbox['#finished'] = (int) empty($sandbox['hashes']);
+
+  return "Processed {$sandbox['progress']} out of {$sandbox['total']} hashes";
 }

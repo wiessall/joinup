@@ -1,0 +1,2774 @@
+diff --git a/config/schema/entity_browser.schema.yml b/config/schema/entity_browser.schema.yml
+index 67a1d79cc7c9a07dd5db72908cfefb46584d9a9a..7a33fecc54d4f516b38e01722d896e354abb2ef2 100644
+--- a/config/schema/entity_browser.schema.yml
++++ b/config/schema/entity_browser.schema.yml
+@@ -191,6 +191,50 @@ field.widget.settings.entity_browser_entity_reference:
+       type: string
+       label: 'Selection mode'
+ 
++field.widget.settings.entity_browser_table:
++  type: mapping
++  label: 'Entity browser entity reference widget with table layout'
++  mapping:
++    entity_browser:
++      type: string
++      label: 'Entity Browser'
++    field_widget_display:
++      type: string
++      label: 'Field widget display'
++    table_settings:
++      type: entity_browser.table_settings
++    field_widget_edit:
++      type: boolean
++      label: 'Field widget edit'
++    field_widget_remove:
++      type: boolean
++      label: 'Field widget remove'
++    field_widget_replace:
++      type: boolean
++      label: 'Field widget replace'
++    open:
++      type: boolean
++      label: 'Open'
++    field_widget_display_settings:
++      type: entity_browser.field_widget_display.[%parent.field_widget_display]
++    selection_mode:
++      type: string
++      label: 'Selection mode'
++
++entity_browser.table_settings:
++  type: mapping
++  label: 'Table'
++  mapping:
++    status_column:
++      type: boolean
++      label: 'Show publication status'
++    bundle_column:
++      type: boolean
++      label: 'Show bundle in table view'
++    label_column:
++      type: boolean
++      label: 'Display label column in table'
++
+ entity_browser.field_widget_display.label:
+   type: mapping
+   label: 'Entity label display config'
+diff --git a/css/entity_browser.entity_list.css b/css/entity_browser.entity_list.css
+index 94fb4df2ca24d62aed084ac5f65ba57c22ccde3c..3cd13d2722a3b5d46f0d6e2f8a45b3b631139c17 100644
+--- a/css/entity_browser.entity_list.css
++++ b/css/entity_browser.entity_list.css
+@@ -8,7 +8,7 @@
+  * These styles are compatible with Bartik, Seven, and Classy themes.
+  */
+ 
+-.entities-list .item-container {
++.entities-list div.item-container {
+   display: inline-block;
+   margin: 10px 10px 15px;
+   vertical-align: text-bottom;
+@@ -33,3 +33,8 @@
+ .entities-list.hidden {
+   display: none;
+ }
++
++td.entity-browser--field-widget--tabledrag,
++th.entity-browser--field-widget--tabledrag {
++  width: 30px;
++}
+diff --git a/entity_browser.libraries.yml b/entity_browser.libraries.yml
+index bf75563c18c5392d1833498ebfd9b5a140723c27..02ea383bb97fd4fb778424097da3cb39717ce456 100644
+--- a/entity_browser.libraries.yml
++++ b/entity_browser.libraries.yml
+@@ -44,6 +44,7 @@ entity_reference:
+   dependencies:
+     - entity_browser/common
+     - entity_browser/entity_list
++    - core/once
+     - core/sortable
+ 
+ file_browser:
+diff --git a/js/entity_browser.entity_reference.js b/js/entity_browser.entity_reference.js
+index 93ee783e11756f2a0318e8030f46e6c73bbc3b89..a05f1e4df25903ab4a4e9f7a25cedaf0418ac179 100644
+--- a/js/entity_browser.entity_reference.js
++++ b/js/entity_browser.entity_reference.js
+@@ -5,7 +5,7 @@
+  * browser.
+  */
+ 
+-(function ($, Drupal, Sortable) {
++(function ($, Drupal, Sortable, once) {
+ 
+   'use strict';
+ 
+@@ -13,50 +13,142 @@
+    * Registers behaviours related to entity reference field widget.
+    */
+   Drupal.behaviors.entityBrowserEntityReference = {
+-    attach: function (context) {
+-      var sortableSelector = context.querySelectorAll('.field--widget-entity-browser-entity-reference .entities-list.sortable');
+-      sortableSelector.forEach(function (widget) {
++    attach(context) {
++      once(
++        'entity-browser-sortable',
++        '.field--widget-entity-browser-entity-reference .entities-list.sortable',
++        context,
++      ).forEach((widget) => {
+         Sortable.create(widget, {
+           draggable: '.item-container',
+-          onEnd: function onEnd() {
+-            return Drupal.entityBrowserEntityReference.entitiesReordered(widget);
+-          }
++          onEnd() {
++            return Drupal.entityBrowserEntityReference.entitiesReordered(
++              widget,
++            );
++          },
+         });
+       });
++
++      once(
++        'entity-browser-table-widget-drag',
++        '.field--widget-entity-browser-table',
++        context,
++      ).forEach((el) => {
++        const $el = $(el);
++        const $entitiesList = $el.find('.entities-list');
++        $el
++          .find('table.entities-list .tabledrag-handle')
++          .on('mouseup pointerup', () => {
++            Drupal.entityBrowserEntityReference.updateTargetId($entitiesList);
++          });
++      });
++
++      once(
++        'entity-browser-remove',
++        '[data-entity-browser-entities-list] .remove-button',
++        context,
++      ).forEach((el) => {
++        $(el).on('mousedown', function () {
++          const $btn = $(this);
++          const $currentItems = $btn.parents(
++            '[data-entity-browser-entities-list]:first',
++          );
++          const $itemContainer = $btn.parents('.item-container:first');
++
++          // Remove DOM element immediately (no animation delay) so the hidden
++          // field is updated before any subsequent form submission.
++          $itemContainer.remove();
++          Drupal.entityBrowserEntityReference.updateTargetId($currentItems);
++        });
++        // Prevent remove button from triggering a form submit.
++        $(el).on('click', (e) => {
++          e.preventDefault();
++        });
++      });
++
+       // The AJAX callback will give us a flag when we need to re-open the
+       // browser, most likely due to a "Replace" button being clicked.
+-      if (typeof drupalSettings.entity_browser_reopen_browser !== 'undefined' &&  drupalSettings.entity_browser_reopen_browser) {
+-        var data_drupal_selector = '[data-drupal-selector^="edit-' + drupalSettings.entity_browser_reopen_browser.replace(/_/g, '-') + '-entity-browser-entity-browser-' + '"][data-uuid]';
+-        var $launch_browser_element = $(context).find(data_drupal_selector);
+-        if ($launch_browser_element.attr('data-uuid') in drupalSettings.entity_browser && !drupalSettings.entity_browser[$launch_browser_element.attr('data-uuid')].auto_open) {
+-          $launch_browser_element.click();
++      if (
++        typeof drupalSettings.entity_browser_reopen_browser !== 'undefined' &&
++        drupalSettings.entity_browser_reopen_browser
++      ) {
++        const dataDrupalSelector = `[data-drupal-selector^="edit-${drupalSettings.entity_browser_reopen_browser.replace(/_/g, '-')}-entity-browser-entity-browser-"][data-uuid]`;
++        const $launchBrowserElement = $(context).find(dataDrupalSelector);
++        if (
++          $launchBrowserElement.attr('data-uuid') in
++            drupalSettings.entity_browser &&
++          !drupalSettings.entity_browser[
++            $launchBrowserElement.attr('data-uuid')
++          ].auto_open
++        ) {
++          $launchBrowserElement.click();
+         }
+         // In case this is inside a fieldset closed by default, open it so the
+         // user doesn't need to guess the browser is open but hidden there.
+-        var $fieldset_summary = $launch_browser_element.closest('details').find('summary');
+-        if ($fieldset_summary.length && $fieldset_summary.attr('aria-expanded') === 'false') {
+-          $fieldset_summary.click();
++        const $fieldsetSummary = $launchBrowserElement
++          .closest('details')
++          .find('summary');
++        if (
++          $fieldsetSummary.length &&
++          $fieldsetSummary.attr('aria-expanded') === 'false'
++        ) {
++          $fieldsetSummary.click();
+         }
+       }
+-    }
++    },
+   };
+ 
+   Drupal.entityBrowserEntityReference = {};
+ 
+   /**
+    * Reacts on sorting of the entities.
++   */
++  Drupal.entityBrowserEntityReference.entitiesReordered = function () {
++    Drupal.entityBrowserEntityReference.updateTargetId($(this));
++  };
++
++  /**
++   * Updates the 'target_id' element.
+    *
+-   * @param {object} widget
+-   *   Object with the sortable area.
++   * @param {object} $currentItems
++   *   Object with '.entities-list.sortable' element.
+    */
+-  Drupal.entityBrowserEntityReference.entitiesReordered = function (widget) {
+-    var items = $(widget).find('.item-container');
+-    var ids = [];
+-    for (var i = 0; i < items.length; i++) {
++  Drupal.entityBrowserEntityReference.updateTargetId = function (
++    $currentItems,
++  ) {
++    const items = $currentItems.find('.item-container');
++    const ids = [];
++    for (let i = 0; i < items.length; i++) {
+       ids[i] = $(items[i]).attr('data-entity-id');
++      // If using weight field, update it.
++      const weightInput = $(items[i]).find('input[name*="[_weight]"]')[0];
++      if (weightInput) {
++        weightInput.value = i;
++      }
+     }
++    let $targetIdElement = $currentItems
++      .parent()
++      .find('input[type*=hidden][name*="[target_id]"]');
++    if ($targetIdElement.length === 0) {
++      // Fallback: search up through parent elements in case of extra wrappers.
++      $targetIdElement = $currentItems
++        .closest(
++          '.field--widget-entity-browser-entity-reference, .field--widget-entity-browser-table',
++        )
++        .find('input[type*=hidden][name*="[target_id]"]');
++    }
++    if ($targetIdElement.length === 0) {
++      return;
++    }
++    $targetIdElement[0].value = ids.join(' ');
+ 
+-    $(widget).parent().find('input[type*=hidden][name*="[target_id]"]').val(ids.join(' '));
++    // Trigger ajax submission to restore entity browser form element.
++    const cardinality = parseInt($targetIdElement.attr('data-cardinality'), 10);
++    if (
++      ids.length < cardinality &&
++      $targetIdElement.attr('data-entity-browser-visible') === '0'
++    ) {
++      $targetIdElement.trigger('entity_browser_value_updated');
++    }
+   };
+-
+-}(jQuery, Drupal, Sortable));
++})(jQuery, Drupal, Sortable, once);
+diff --git a/src/FieldWidgetDisplayBase.php b/src/FieldWidgetDisplayBase.php
+index 5295737695452a839b3a445825f894294a7ef6b2..5854f85497745bdd6296ec405c1ef8bb35fb0a2c 100644
+--- a/src/FieldWidgetDisplayBase.php
++++ b/src/FieldWidgetDisplayBase.php
+@@ -70,4 +70,11 @@ abstract class FieldWidgetDisplayBase extends PluginBase implements FieldWidgetD
+     return [];
+   }
+ 
++  /**
++   * {@inheritdoc}
++   */
++  public function getColumnHeader(EntityTypeInterface $entity_type) {
++    return $this->t('Label');
++  }
++
+ }
+diff --git a/src/FieldWidgetDisplayInterface.php b/src/FieldWidgetDisplayInterface.php
+index cda9785a974715d4f6f7fadd480f6af4ea6ad106..a077e93255dd2a92d04eef978d099b7ecd4c01cc 100644
+--- a/src/FieldWidgetDisplayInterface.php
++++ b/src/FieldWidgetDisplayInterface.php
+@@ -49,4 +49,15 @@ interface FieldWidgetDisplayInterface extends PluginInspectionInterface, Configu
+    */
+   public function isApplicable(EntityTypeInterface $entity_type);
+ 
++  /**
++   * Get the column header label for this plugin.
++   *
++   * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
++   *   The entity type that should be checked.
++   *
++   * @return \Drupal\Core\StringTranslation\TranslatableMarkup
++   *   The label to be displayed.
++   */
++  public function getColumnHeader(EntityTypeInterface $entity_type);
++
+ }
+diff --git a/src/Plugin/EntityBrowser/FieldWidgetDisplay/EntityLabel.php b/src/Plugin/EntityBrowser/FieldWidgetDisplay/EntityLabel.php
+index bfd24d810b8b9f9df7a66cd4134c7e520ed34495..f5536485f61b83e09581ee86533ceb341eb54430 100644
+--- a/src/Plugin/EntityBrowser/FieldWidgetDisplay/EntityLabel.php
++++ b/src/Plugin/EntityBrowser/FieldWidgetDisplay/EntityLabel.php
+@@ -4,6 +4,7 @@ namespace Drupal\entity_browser\Plugin\EntityBrowser\FieldWidgetDisplay;
+ 
+ use Drupal\Component\Render\FormattableMarkup;
+ use Drupal\Core\Entity\EntityInterface;
++use Drupal\Core\Entity\EntityTypeInterface;
+ use Drupal\Core\Form\FormStateInterface;
+ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+ use Drupal\entity_browser\FieldWidgetDisplayBase;
+@@ -53,14 +54,23 @@ class EntityLabel extends FieldWidgetDisplayBase implements ContainerFactoryPlug
+     return ['#markup' => $translation->label()];
+   }
+ 
++  /**
++   * {@inheritdoc}
++   */
++  public function getColumnHeader(EntityTypeInterface $entity_type) {
++    return $this->t('Label');
++  }
++
+   /**
+    * {@inheritdoc}
+    */
+   public function settingsForm(array $form, FormStateInterface $form_state) {
+     return [
+-      '#prefix' => '<p>',
+-      '#suffix' => '</p>',
+-      '#markup' => $this->t('This plugin has no configuration options.'),
++      'notice' => [
++        '#prefix' => '<p>',
++        '#suffix' => '</p>',
++        '#markup' => $this->t('This plugin has no configuration options.'),
++      ],
+     ];
+   }
+ 
+diff --git a/src/Plugin/EntityBrowser/FieldWidgetDisplay/ImageThumbnail.php b/src/Plugin/EntityBrowser/FieldWidgetDisplay/ImageThumbnail.php
+index 938d8fd451f87cd1e6546afb8932b16e3574fd2d..b123ef4e60c6cd605c2cf10143b713b1c397166b 100644
+--- a/src/Plugin/EntityBrowser/FieldWidgetDisplay/ImageThumbnail.php
++++ b/src/Plugin/EntityBrowser/FieldWidgetDisplay/ImageThumbnail.php
+@@ -55,6 +55,10 @@ class ImageThumbnail extends FieldWidgetDisplayBase implements ContainerFactoryP
+       return ['#markup' => $restricted_access_label];
+     }
+ 
++    if (empty($this->configuration['image_style'])) {
++      return ['#markup' => $entity->label()];
++    }
++
+     return [
+       '#theme' => 'image_style',
+       '#style_name' => $this->configuration['image_style'],
+@@ -111,4 +115,11 @@ class ImageThumbnail extends FieldWidgetDisplayBase implements ContainerFactoryP
+     return $dependencies;
+   }
+ 
++  /**
++   * {@inheritdoc}
++   */
++  public function getColumnHeader(EntityTypeInterface $entity_type) {
++    return $this->t('Thumbnail');
++  }
++
+ }
+diff --git a/src/Plugin/EntityBrowser/FieldWidgetDisplay/RenderedEntity.php b/src/Plugin/EntityBrowser/FieldWidgetDisplay/RenderedEntity.php
+index 8bedf09eb8adb4093968b15e33259c8adc842822..8955cf330204d820dd91648ccc06ece2a1708ec5 100644
+--- a/src/Plugin/EntityBrowser/FieldWidgetDisplay/RenderedEntity.php
++++ b/src/Plugin/EntityBrowser/FieldWidgetDisplay/RenderedEntity.php
+@@ -4,6 +4,7 @@ namespace Drupal\entity_browser\Plugin\EntityBrowser\FieldWidgetDisplay;
+ 
+ use Drupal\Component\Render\FormattableMarkup;
+ use Drupal\Core\Entity\EntityInterface;
++use Drupal\Core\Entity\EntityTypeInterface;
+ use Drupal\Core\Form\FormStateInterface;
+ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+ use Drupal\entity_browser\FieldWidgetDisplayBase;
+@@ -60,6 +61,10 @@ class RenderedEntity extends FieldWidgetDisplayBase implements ContainerFactoryP
+       return ['#markup' => $restricted_access_label];
+     }
+ 
++    if (empty($this->configuration['view_mode'])) {
++      return ['#markup' => $entity->label()];
++    }
++
+     $build = $this->entityTypeManager->getViewBuilder($this->configuration['entity_type'])
+       ->view($entity, $this->configuration['view_mode']);
+ 
+@@ -83,12 +88,22 @@ class RenderedEntity extends FieldWidgetDisplayBase implements ContainerFactoryP
+   public function getViewModeLabel() {
+     if (!empty($this->configuration['entity_type']) && !empty($this->configuration['view_mode'])) {
+       $view_modes = $this->entityDisplayRepository->getViewModeOptions($this->configuration['entity_type']);
+-      return $view_modes[$this->configuration['view_mode']];
++
++      if (!empty($view_modes[$this->configuration['view_mode']])) {
++        return $view_modes[$this->configuration['view_mode']];
++      }
+     }
+ 
+     return $this->t('Default');
+   }
+ 
++  /**
++   * {@inheritdoc}
++   */
++  public function getColumnHeader(EntityTypeInterface $entity_type) {
++    return $this->t('Preview');
++  }
++
+   /**
+    * {@inheritdoc}
+    */
+diff --git a/src/Plugin/EntityBrowser/Widget/View.php b/src/Plugin/EntityBrowser/Widget/View.php
+index ba8b5c0f1bacb3ebefb7f056765db12b5ba31a0b..031e38ff55f4a983610e8269556f312047199bae 100644
+--- a/src/Plugin/EntityBrowser/Widget/View.php
++++ b/src/Plugin/EntityBrowser/Widget/View.php
+@@ -349,7 +349,7 @@ class View extends WidgetBase {
+     // from the REFERER.
+     if (!empty($original_path) && strpos($original_path, '/entity-embed/dialog') === 0) {
+       $headers = $current_request->server->getHeaders();
+-      $referer = isset($headers['REFERER']) ? $headers['REFERER'] : '';
++      $referer = $headers['REFERER'] ?? '';
+       if (!empty($referer)) {
+         $request = Request::create($referer);
+         $original_path = $request->getPathInfo();
+diff --git a/src/Plugin/Field/FieldWidget/EntityReferenceBrowserWidget.php b/src/Plugin/Field/FieldWidget/EntityReferenceBrowserWidget.php
+index fff1b320d6eaaf39c06df43eee611d4778c94057..a946a532ca0f0be31663d05d0baa2281697cd651 100644
+--- a/src/Plugin/Field/FieldWidget/EntityReferenceBrowserWidget.php
++++ b/src/Plugin/Field/FieldWidget/EntityReferenceBrowserWidget.php
+@@ -16,7 +16,6 @@ use Drupal\entity_browser\Element\EntityBrowserElement;
+ use Drupal\entity_browser\Entity\EntityBrowser;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+ use Symfony\Component\Validator\ConstraintViolation;
+-use Symfony\Component\Validator\ConstraintViolationInterface;
+ use Symfony\Component\Validator\ConstraintViolationListInterface;
+ 
+ /**
+@@ -71,6 +70,13 @@ class EntityReferenceBrowserWidget extends WidgetBase {
+    */
+   protected $currentUser;
+ 
++  /**
++   * If triggering element was hidden target_id element.
++   *
++   * @var bool
++   */
++  protected $entityBrowserValueUpdated;
++
+   /**
+    * The entity display repository.
+    *
+@@ -337,30 +343,21 @@ class EntityReferenceBrowserWidget extends WidgetBase {
+   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
+ 
+     $entities = $this->formElementEntities($items, $element, $form_state);
+-
+-    // Get correct ordered list of entity IDs.
+-    $ids = array_map(
+-      function (EntityInterface $entity) {
+-        return $entity->id();
+-      },
+-      $entities
+-    );
+-
+-    // We store current entity IDs as we might need them in future requests. If
+-    // some other part of the form triggers an AJAX request with
+-    // #limit_validation_errors we won't have access to the value of the
+-    // target_id element and won't be able to build the form as a result of
+-    // that. This will cause missing submit (Remove, Edit, ...) elements, which
+-    // might result in unpredictable results.
+-    $form_state->set(['entity_browser_widget', $this->getFormStateKey($items)], $ids);
++    $items->setValue($entities);
+ 
+     $hidden_id = Html::getUniqueId('edit-' . $this->fieldDefinition->getName() . '-target-id');
+     $details_id = Html::getUniqueId('edit-' . $this->fieldDefinition->getName());
+ 
++    // Get configuration required to check entity browser availability.
++    $cardinality = $this->fieldDefinition->getFieldStorageDefinition()->getCardinality();
++    $selection_mode = $this->getSetting('selection_mode');
++
++    $display_entity_browser = EntityBrowserElement::isEntityBrowserAvailable($selection_mode, $cardinality, count($entities));
++
+     $element += [
+       '#id' => $details_id,
+       '#type' => 'details',
+-      '#open' => !empty($entities) || $this->getSetting('open'),
++      '#open' => !empty($entities) || $this->getSetting('open') || $this->entityBrowserValueUpdated,
+       '#required' => $this->fieldDefinition->isRequired(),
+       // We are not using Entity browser's hidden element since we maintain
+       // selected entities in it during entire process.
+@@ -371,7 +368,12 @@ class EntityReferenceBrowserWidget extends WidgetBase {
+         // And need to add attribute 'autocomplete'='off' for Firefox browser,
+         // because it will remember the user input every time, and it will break
+         // entity item list.
+-        '#attributes' => ['id' => $hidden_id, 'autocomplete' => 'off'],
++        '#attributes' => [
++          'id' => $hidden_id,
++          'autocomplete' => 'off',
++          'data-cardinality' => $cardinality,
++          'data-entity-browser-visible' => $display_entity_browser,
++        ],
+         '#default_value' => implode(' ', array_map(
+             function (EntityInterface $item) {
+               return $item->getEntityTypeId() . ':' . $item->id();
+@@ -385,15 +387,14 @@ class EntityReferenceBrowserWidget extends WidgetBase {
+           'wrapper' => $details_id,
+           'event' => 'entity_browser_value_updated',
+         ],
++        '#submit' => [[get_class($this), 'entityBrowserValueUpdated']],
++        '#limit_validation_errors' => [array_merge($element['#field_parents'], [$this->fieldDefinition->getName()])],
++        '#executes_submit_callback' => TRUE,
+       ],
+     ];
+ 
+-    // Get configuration required to check entity browser availability.
+-    $cardinality = $this->fieldDefinition->getFieldStorageDefinition()->getCardinality();
+-    $selection_mode = $this->getSetting('selection_mode');
+-
+     // Enable entity browser if requirements for that are fulfilled.
+-    if (EntityBrowserElement::isEntityBrowserAvailable($selection_mode, $cardinality, count($ids))) {
++    if ($display_entity_browser) {
+       $persistentData = $this->getPersistentData();
+ 
+       $element['entity_browser'] = [
+@@ -410,6 +411,13 @@ class EntityReferenceBrowserWidget extends WidgetBase {
+           [get_called_class(), 'processEntityBrowser'],
+         ],
+       ];
++
++      $element['target_id']['#attributes']['data-entity-browser-available'] = 1;
++    }
++    else {
++      // Allow non-ajax remove button to trigger ajax refresh when
++      // cardinality.
++      $element['target_id']['#attributes']['data-entity-browser-visible'] = 0;
+     }
+ 
+     $element['#attached']['library'][] = 'entity_browser/entity_reference';
+@@ -459,37 +467,26 @@ class EntityReferenceBrowserWidget extends WidgetBase {
+     if (!empty($trigger['#ajax']['event']) && $trigger['#ajax']['event'] == 'entity_browser_value_updated') {
+       $parents = array_slice($trigger['#array_parents'], 0, -1);
+     }
+-    elseif ($trigger['#type'] == 'submit' && strpos($trigger['#name'], '_remove_')) {
+-      $parents = array_slice($trigger['#array_parents'], 0, -static::$deleteDepth);
+-    }
+-    elseif ($trigger['#type'] == 'submit' && strpos($trigger['#name'], '_replace_')) {
++    elseif ($trigger['#type'] == 'submit' && strpos($trigger['#name'], '_replace_') !== FALSE) {
+       $parents = array_slice($trigger['#array_parents'], 0, -static::$deleteDepth);
+       // We need to re-open the browser. Instead of just passing "TRUE", send
+       // to the JS the unique part of the button's name that needs to be clicked
+       // on to relaunch the browser.
+       $reopen_browser = implode("-", array_slice($trigger['#parents'], 0, -static::$deleteDepth));
+     }
++    elseif ($trigger['#type'] == 'submit' && strpos($trigger['#name'], '_remove_') !== FALSE) {
++      $parents = array_slice($trigger['#array_parents'], 0, -static::$deleteDepth);
++    }
+ 
+     $parents = NestedArray::getValue($form, $parents);
+     $parents['#attached']['drupalSettings']['entity_browser_reopen_browser'] = $reopen_browser;
+     return $parents;
+   }
+ 
+-  /**
+-   * {@inheritdoc}
+-   */
+-  public function errorElement(array $element, ConstraintViolationInterface $violation, array $form, FormStateInterface $form_state) {
+-    if (($trigger = $form_state->getTriggeringElement())) {
+-      // Can be triggered by "Remove" button.
+-      if (end($trigger['#parents']) === 'remove_button') {
+-        return FALSE;
+-      }
+-    }
+-    return parent::errorElement($element, $violation, $form, $form_state);
+-  }
+-
+   /**
+    * Submit callback for remove buttons.
++   *
++   * @deprecated Handled in javascript.  See entity_browser.entity_reference.js.
+    */
+   public static function removeItemSubmit(&$form, FormStateInterface $form_state) {
+     $triggering_element = $form_state->getTriggeringElement();
+@@ -505,7 +502,6 @@ class EntityReferenceBrowserWidget extends WidgetBase {
+         // @todo add weight field.
+         if ($item == $id) {
+           array_splice($values, $index, 1);
+-
+           break;
+         }
+       }
+@@ -521,6 +517,30 @@ class EntityReferenceBrowserWidget extends WidgetBase {
+     }
+   }
+ 
++  /**
++   * Submit callback.
++   */
++  public static function entityBrowserValueUpdated(&$form, FormStateInterface $form_state) {
++    $triggering_element = $form_state->getTriggeringElement();
++    $parents = array_slice($triggering_element['#parents'], 0, -1);
++    $array_parents = array_slice($triggering_element['#array_parents'], 0, -1);
++
++    $values = $form_state->getValue($parents);
++
++    $entities = empty($values['target_id']) ? [] : explode(' ', trim($values['target_id']));
++    $values = [];
++    foreach ($entities as $entity) {
++      $values[]['target_id'] = explode(':', $entity)[1];
++    }
++
++    // Set new value for this widget in the form_state.
++    $element = &NestedArray::getValue($form, $array_parents);
++    $form_state->setValueForElement($element, $values);
++
++    // Rebuild form.
++    $form_state->setRebuild();
++  }
++
+   /**
+    * Builds the render array for displaying the current results.
+    *
+@@ -557,7 +577,10 @@ class EntityReferenceBrowserWidget extends WidgetBase {
+ 
+     return [
+       '#theme_wrappers' => ['container'],
+-      '#attributes' => ['class' => $classes],
++      '#attributes' => [
++        'class' => $classes,
++        'data-entity-browser-entities-list' => 1,
++      ],
+       '#prefix' => '<p>' . $this->getCardinalityMessage($entities) . '</p>',
+       'items' => array_map(
+         function (ContentEntityInterface $entity, $row_id) use ($field_widget_display, $details_id, $field_parents, $replace_button_access) {
+@@ -761,13 +784,25 @@ class EntityReferenceBrowserWidget extends WidgetBase {
+    */
+   protected function formElementEntities(FieldItemListInterface $items, array $element, FormStateInterface $form_state) {
+     $entities = [];
+-    $entity_type = $this->fieldDefinition->getFieldStorageDefinition()->getSetting('target_type');
+-    $entity_storage = $this->entityTypeManager->getStorage($entity_type);
+ 
+     // Find IDs from target_id element (it stores selected entities in form).
+     // This was added to help solve a really edge casey bug in IEF.
+-    if (($target_id_entities = $this->getEntitiesByTargetId($element, $form_state)) !== FALSE) {
+-      return $target_id_entities;
++    if (empty($form_state->getValues()) && $form_state->isMethodType('POST')) {
++      $element_path = array_merge($element['#field_parents'], [$this->fieldDefinition->getName()]);
++      $key_exists = NestedArray::keyExists($form_state->getUserInput(), $element_path);
++
++      if ($key_exists) {
++        $input_value = NestedArray::getValue($form_state->getUserInput(), $element_path);
++        if (!empty($input_value) && isset($input_value['target_id'])) {
++          $data = empty($input_value['target_id']) ? [] : explode(' ', trim($input_value['target_id']));
++          $values = [];
++          foreach ($data as $data_item) {
++            $values[]['target_id'] = explode(':', $data_item)[1];
++          }
++          $items->setValue($values);
++          return $items->referencedEntities();
++        }
++      }
+     }
+ 
+     // Determine if we're submitting and if submit came from this widget.
+@@ -793,56 +828,21 @@ class EntityReferenceBrowserWidget extends WidgetBase {
+       // Submit was triggered by hidden "target_id" element when entities were
+       // added via entity browser.
+       if (!empty($trigger['#ajax']['event']) && $trigger['#ajax']['event'] == 'entity_browser_value_updated') {
+-        $parents = $trigger['#parents'];
+-      }
+-      // Submit was triggered by one of the "Remove" buttons. We need to walk
+-      // few levels up to read value of "target_id" element.
+-      elseif ($trigger['#type'] == 'submit' && strpos($trigger['#name'], $this->fieldDefinition->getName() . '_remove_') === 0) {
+-        $parents = array_merge(array_slice($trigger['#parents'], 0, -static::$deleteDepth), ['target_id']);
++        $parents = array_slice($trigger['#parents'], 0, -1);
++        $this->entityBrowserValueUpdated = TRUE;
+       }
+ 
+       if (isset($parents) && $value = $form_state->getValue($parents)) {
+-        $entities = EntityBrowserElement::processEntityIds($value);
+-        return $entities;
+-      }
+-      return $entities;
+-    }
+-    // IDs from a previous request might be saved in the form state.
+-    elseif ($form_state->has([
+-      'entity_browser_widget',
+-      $this->getFormStateKey($items),
+-    ])
+-    ) {
+-      $stored_ids = $form_state->get([
+-        'entity_browser_widget',
+-        $this->getFormStateKey($items),
+-      ]);
+-      $indexed_entities = $entity_storage->loadMultiple($stored_ids);
+-
+-      // Selection can contain same entity multiple times. Since loadMultiple()
+-      // returns unique list of entities, it's necessary to recreate list of
+-      // entities in order to preserve selection of duplicated entities.
+-      foreach ($stored_ids as $entity_id) {
+-        if (isset($indexed_entities[$entity_id])) {
+-          $entities[] = $indexed_entities[$entity_id];
+-        }
++        $items->setValue($value);
++        $entities = $items->referencedEntities();
+       }
+       return $entities;
+     }
++
+     // We are loading for for the first time so we need to load any existing
+     // values that might already exist on the entity. Also, remove any leftover
+     // data from removed entity references.
+-    else {
+-      foreach ($items as $item) {
+-        if (isset($item->target_id)) {
+-          $entity = $entity_storage->load($item->target_id);
+-          if (!empty($entity)) {
+-            $entities[] = $entity;
+-          }
+-        }
+-      }
+-      return $entities;
+-    }
++    return $items->referencedEntities();
+   }
+ 
+   /**
+diff --git a/src/Plugin/Field/FieldWidget/FileBrowserWidget.php b/src/Plugin/Field/FieldWidget/FileBrowserWidget.php
+index c12bacc16a54d48e6d3eedef90b8a6c896f6c802..0890779c2d0d0d5cb4fa6a0898d64257f34867ae 100644
+--- a/src/Plugin/Field/FieldWidget/FileBrowserWidget.php
++++ b/src/Plugin/Field/FieldWidget/FileBrowserWidget.php
+@@ -165,7 +165,10 @@ class FileBrowserWidget extends EntityReferenceBrowserWidget {
+     $current = [
+       '#type' => 'table',
+       '#empty' => $this->t('No files yet'),
+-      '#attributes' => ['class' => ['entities-list']],
++      '#attributes' => [
++        'class' => ['entities-list'],
++        'data-entity-browser-entities-list' => 1,
++      ],
+       '#tabledrag' => [
+         [
+           'action' => 'order',
+@@ -231,9 +234,9 @@ class FileBrowserWidget extends EntityReferenceBrowserWidget {
+         }
+       }
+ 
+-      $current[$entity_id] = [
++      $current[$delta] = [
+         '#attributes' => [
+-          'class' => ['draggable'],
++          'class' => ['item-container', 'draggable'],
+           'data-entity-id' => $entity->getEntityTypeId() . ':' . $entity_id,
+           'data-row-id' => $delta,
+         ],
+@@ -241,12 +244,12 @@ class FileBrowserWidget extends EntityReferenceBrowserWidget {
+ 
+       // Provide a rendered entity if a view builder is available.
+       if ($has_file_entity) {
+-        $current[$entity_id]['display'] = $this->entityTypeManager->getViewBuilder('file')->view($entity, $view_mode);
++        $current[$delta]['display'] = $this->entityTypeManager->getViewBuilder('file')->view($entity, $view_mode);
+       }
+       // For images, support a preview image style as an alternative.
+       elseif ($field_type == 'image' && !empty($widget_settings['preview_image_style'])) {
+         $uri = $entity->getFileUri();
+-        $current[$entity_id]['display'] = [
++        $current[$delta]['display'] = [
+           '#weight' => -10,
+           '#theme' => 'image_style',
+           '#width' => $width,
+@@ -258,9 +261,9 @@ class FileBrowserWidget extends EntityReferenceBrowserWidget {
+       // Assume that the file name is part of the preview output if
+       // file entity is installed, do not show this column in that case.
+       if (!$has_file_entity) {
+-        $current[$entity_id]['filename'] = ['#markup' => $entity->label()];
++        $current[$delta]['filename'] = ['#markup' => $entity->label()];
+       }
+-      $current[$entity_id] += [
++      $current[$delta] += [
+         'meta' => [
+           'display_field' => [
+             '#type' => 'checkbox',
+@@ -371,27 +374,27 @@ class FileBrowserWidget extends EntityReferenceBrowserWidget {
+   public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
+     $ids = empty($values['target_id']) ? [] : explode(' ', trim($values['target_id']));
+     $return = [];
+-    foreach ($ids as $id) {
++    foreach ($ids as $delta => $id) {
+       $id = explode(':', $id)[1];
+-      if (is_array($values['current']) && isset($values['current'][$id])) {
++      if (is_array($values['current']) && isset($values['current'][$delta])) {
+         $item_values = [
+           'target_id' => $id,
+-          '_weight' => $values['current'][$id]['_weight'],
++          '_weight' => $values['current'][$delta]['_weight'],
+         ];
+         if ($this->fieldDefinition->getType() == 'file') {
+-          if (isset($values['current'][$id]['meta']['description'])) {
+-            $item_values['description'] = $values['current'][$id]['meta']['description'];
++          if (isset($values['current'][$delta]['meta']['description'])) {
++            $item_values['description'] = $values['current'][$delta]['meta']['description'];
+           }
+-          if ($this->fieldDefinition->getSetting('display_field') && isset($values['current'][$id]['meta']['display_field'])) {
+-            $item_values['display'] = $values['current'][$id]['meta']['display_field'];
++          if ($this->fieldDefinition->getSetting('display_field') && isset($values['current'][$delta]['meta']['display_field'])) {
++            $item_values['display'] = $values['current'][$delta]['meta']['display_field'];
+           }
+         }
+         if ($this->fieldDefinition->getType() == 'image') {
+-          if (isset($values['current'][$id]['meta']['alt'])) {
+-            $item_values['alt'] = $values['current'][$id]['meta']['alt'];
++          if (isset($values['current'][$delta]['meta']['alt'])) {
++            $item_values['alt'] = $values['current'][$delta]['meta']['alt'];
+           }
+-          if (isset($values['current'][$id]['meta']['title'])) {
+-            $item_values['title'] = $values['current'][$id]['meta']['title'];
++          if (isset($values['current'][$delta]['meta']['title'])) {
++            $item_values['title'] = $values['current'][$delta]['meta']['title'];
+           }
+         }
+         $return[] = $item_values;
+diff --git a/src/Plugin/Field/FieldWidget/ListBuilder/TableListBuilder.php b/src/Plugin/Field/FieldWidget/ListBuilder/TableListBuilder.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..e70a8eda24a1a19f83e3232e0c759ad0552819a0
+--- /dev/null
++++ b/src/Plugin/Field/FieldWidget/ListBuilder/TableListBuilder.php
+@@ -0,0 +1,443 @@
++<?php
++
++namespace Drupal\entity_browser\Plugin\Field\FieldWidget\ListBuilder;
++
++use Drupal\Core\Entity\EntityListBuilder;
++use Drupal\Core\Entity\EntityTypeInterface;
++use Drupal\Core\Entity\EntityStorageInterface;
++use Drupal\Core\Field\FieldDefinitionInterface;
++use Drupal\Core\Field\FieldItemListInterface;
++use Drupal\entity_browser\Plugin\Field\FieldWidget\EntityReferenceBrowserWidget;
++use Drupal\Core\Url;
++use Drupal\entity_browser\FieldWidgetDisplayInterface;
++use Drupal\Core\Entity\EntityInterface;
++
++/**
++ * Defines a class to build a listing of selected entities.
++ *
++ * @ingroup entity_browser
++ */
++class TableListBuilder extends EntityListBuilder {
++
++  /**
++   * The current user.
++   *
++   * @var \Drupal\Core\Session\AccountProxyInterface
++   */
++  protected $account;
++
++  /**
++   * Field item list of entities to display.
++   *
++   * Stores data such as alt and title text not available on the entity.
++   *
++   * @var \Drupal\Core\Field\FieldItemListInterface
++   */
++  protected $items;
++
++  /**
++   * An array of entities to display.
++   *
++   * @var \Drupal\Core\Entity\EntityInterface[]
++   */
++  protected $entities;
++
++  /**
++   * The FieldWidgetDisplay plugin.
++   *
++   * @var \Drupal\entity_browser\FieldWidgetDisplayInterface
++   */
++  protected $display;
++
++  /**
++   * The current delta.
++   *
++   * @var int
++   */
++  protected $delta;
++
++  /**
++   * The ID of the current details DOM element.
++   *
++   * @var string
++   */
++  protected $ajaxWrapper;
++
++  /**
++   * The EntityReferenceBrowserWidget settings.
++   *
++   * @var array
++   */
++  protected $widgetSettings;
++
++  /**
++   * The field parents array.
++   *
++   * @var array
++   */
++  protected $fieldParents;
++
++  /**
++   * Field definition.
++   *
++   * @var \Drupal\Core\Field\FieldDefinitionInterface
++   */
++  protected $fieldDefinition;
++
++  /**
++   * The current field machine name.
++   *
++   * @var string
++   */
++  protected $fieldName;
++
++  /**
++   * The current field cardinality.
++   *
++   * @var int
++   */
++  protected $cardinality;
++
++  /**
++   * The field type.
++   *
++   * @var string
++   */
++  protected $fieldType;
++
++  /**
++   * Edit button access.
++   *
++   * @var bool
++   */
++  protected $editButtonAccess;
++
++  /**
++   * Replace button access.
++   *
++   * @var bool
++   */
++  protected $replaceButtonAccess;
++
++  /**
++   * The target entity type.
++   *
++   * @var \Drupal\Core\Entity\EntityTypeInterface
++   */
++  protected $entityType;
++
++  /**
++   * Entity Field Manager.
++   *
++   * @var \Drupal\Core\Entity\EntityFieldManager
++   */
++  protected $entityFieldManager;
++
++  /**
++   * Constructs a new EntityListBuilder object.
++   *
++   * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
++   *   The entity type definition.
++   * @param \Drupal\Core\Entity\EntityStorageInterface $storage
++   *   The entity storage class.
++   * @param \Drupal\Core\Field\FieldItemListInterface $items
++   *   The current field item list entity.
++   * @param array $entities
++   *   An array of entities to display.
++   * @param \Drupal\entity_browser\FieldWidgetDisplayInterface $display
++   *   A field Widget display plugin.
++   * @param string $wrapper
++   *   The ajax wrapper.
++   * @param array $settings
++   *   The EntityReferenceBrowserWidget settings.
++   * @param array $parents
++   *   The element's field parents array.
++   * @param \Drupal\Core\Field\FieldDefinitionInterface
++   *   The field definition interface.
++   */
++  public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage, FieldItemListInterface $items, array $entities, ?FieldWidgetDisplayInterface $display, $wrapper, array $settings, array $parents, FieldDefinitionInterface $field_definition) {
++    $this->storage = $storage;
++    $this->entityType = $entity_type;
++    $this->items = $items;
++    $this->entities = $entities;
++    $this->display = $display;
++    $this->ajaxWrapper = $wrapper;
++    $this->widgetSettings = $settings;
++    $this->fieldParents = $parents;
++    $this->fieldDefinition = $field_definition;
++    $this->fieldName = $this->fieldDefinition->getName();
++    $this->cardinality = $this->fieldDefinition->getFieldStorageDefinition()->getCardinality();
++    $this->fieldType = $this->fieldDefinition->getType();
++    $this->entityFieldManager = \Drupal::service('entity_field.manager');
++
++    // The "Replace" button will only be shown if this setting is enabled in the
++    // widget, and there is only one entity in the current selection.
++    $this->replaceButtonAccess = $this->widgetSettings['field_widget_replace'] && (count($this->entities) === 1);
++
++    $this->editButtonAccess = $this->widgetSettings['field_widget_edit'] && $this->entityTypeHasForm($entity_type);
++
++  }
++
++  /**
++   * Returns True if Target Entity Type has an Edit Form class.
++   *
++   * @param \Drupal\Core\Entity\EntityTypeInterface $entityType
++   *
++   * @return bool
++   *
++   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
++   */
++  protected function entityTypeHasForm(EntityTypeInterface $entityType) {
++    if ($entityType->getFormClass('edit') || $entityType->getFormClass('default')) {
++      return TRUE;
++    }
++    return FALSE;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function buildHeader() {
++    $header = [];
++
++    $header['tabledrag'] = [
++      'class' => ['entity-browser--field-widget--tabledrag'],
++    ];
++
++    $header['display'] = $this->display
++      ->getColumnHeader($this->entityType);
++
++    if (!empty($this->widgetSettings['table_settings']['label_column']) && $this->display->getPluginId() != 'label') {
++      // Load the label for the entity 'label' field.
++      $label_key = $this->entityType->getKey('label');
++      $label = $this->entityFieldManager
++        ->getFieldStorageDefinitions($this->entityType->id())[$label_key]
++        ->getLabel();
++      $header['label'] = $label;
++    }
++    elseif ($this->display->getPluginId() == 'label') {
++      // Load the label for the entity 'label' field.
++      $label_key = $this->entityType->getKey('label');
++      $label = $this->entityFieldManager
++        ->getFieldStorageDefinitions($this->entityType->id())[$label_key]
++        ->getLabel();
++      $header['display'] = $label;
++    }
++
++    if (!empty($this->widgetSettings['table_settings']['status_column']) && $this->entityType->hasKey('published')) {
++      $header['publication_status'] = $this->entityFieldManager
++        ->getFieldStorageDefinitions($this->entityType->id())[$this->entityType->getKey('published')]
++        ->getLabel();
++    }
++
++    if (!empty($this->widgetSettings['table_settings']['bundle_column']) && $this->entityType->get('bundle_entity_type')) {
++      $header['bundle'] = $this->entityType->getBundleLabel();
++    }
++
++    $header['_weight'] = [
++      'data' => $this->t('Weight'),
++      'class' => ['tabledrag-hide'],
++    ];
++    $header['operations'] = $this->t('Operations');
++    return $header;
++  }
++
++  /**
++   * Get entity's publication status as renderable markup.
++   *
++   * @param \Drupal\Core\Entity\EntityInterface $entity
++   *   An entity object.
++   *
++   * @return \Drupal\Core\StringTranslation\TranslatableMarkup
++   *   The entity's publication status.
++   */
++  protected function getPublicationStatus(EntityInterface $entity) {
++
++    $published = $entity->get($this->entityType->getKey('published'));
++
++    $label = $this->entityFieldManager
++      ->getFieldStorageDefinitions($this->entityType->id())[$this->entityType->getKey('published')]
++      ->getLabel();
++
++    if ((string) $label === (string) $this->t('Published')) {
++      $output = $published ? $this->t('Published') : $this->t('Unpublished');
++    }
++    else {
++      $output = $published ? $this->t('True') : $this->t('False');
++    }
++
++    return $output;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function buildRow(EntityInterface $entity) {
++
++    $hash = md5(json_encode($this->fieldParents));
++    $data_entity_id = $entity->getEntityTypeId() . ':' . $entity->id();
++    $limit_validation_errors = [array_merge($this->fieldParents, [$this->fieldName])];
++
++    $row = [
++      '#attributes' => [
++        'class' => [
++          'item-container',
++          'draggable',
++        ],
++        'data-entity-id' => $entity->getEntityTypeId() . ':' . $entity->id(),
++        'data-row-id' => $this->delta,
++      ],
++    ];
++
++    $row['#weight'] = $this->delta;
++
++    $row['tabledrag'] = [
++      '#wrapper_attributes' => ['class' => ['entity-browser--field-widget--tabledrag']],
++    ];
++
++    $row['display'] = $this->display->view($entity);
++    $row['display']['#wrapper_attributes'] = [
++      'class' => ['entity-browser--field-widget--display'],
++    ];
++
++    if (!empty($this->widgetSettings['table_settings']['label_column']) && $this->display->getPluginId() != 'label') {
++      $row['label'] = ['#markup' => $entity->label()];
++    }
++
++    if (!empty($this->widgetSettings['table_settings']['status_column']) && $this->entityType->hasKey('published')) {
++
++      $row['publication_status'] = [
++        '#markup' => $this->getPublicationStatus($entity),
++        '#wrapper_attributes' => ['class' => ['entity-browser--field-widget--publication-status']],
++      ];
++    }
++
++    if (!empty($this->widgetSettings['table_settings']['bundle_column']) && $this->entityType->get('bundle_entity_type')) {
++      $bundle_label = \Drupal::entityTypeManager()
++        ->getStorage($this->entityType->get('bundle_entity_type'))
++        ->load($entity->bundle())
++        ->label();
++
++      $row['bundle'] = [
++        '#markup' => $bundle_label,
++        '#wrapper_attributes' => ['class' => ['entity-browser--field-widget--bundle']],
++      ];
++    }
++
++    $row['weight'] = [
++      '#type' => 'weight',
++      '#title' => t('Weight for @title', ['@title' => $entity->label()]),
++      '#title_display' => 'invisible',
++      '#default_value' => $this->delta,
++      '#attributes' => ['class' => ['weight']],
++      '#wrapper_attributes' => ['class' => ['entity-browser--field-widget--weight']],
++    ];
++
++    $row['operations'] = [
++      '#wrapper_attributes' => ['class' => ['entity-browser--field-widget--operations']],
++    ];
++
++    $row['operations']['remove_button'] = [
++      '#type' => 'submit',
++      '#value' => $this->t('Remove'),
++      '#name' => $this->fieldName . '_remove_' . $entity->id() . '_' . $this->delta . '_' . $hash,
++      '#attributes' => [
++        'data-entity-id' => $data_entity_id,
++        'data-row-id' => $this->delta,
++        'class' => ['remove-button'],
++      ],
++      '#access' => (bool) $this->widgetSettings['field_widget_remove'],
++    ];
++
++    $row['operations']['replace_button'] = [
++      '#type' => 'submit',
++      '#value' => $this->t('Replace'),
++      '#ajax' => [
++        'callback' => [EntityReferenceBrowserWidget::class, 'updateWidgetCallback'],
++        'wrapper' => $this->ajaxWrapper,
++      ],
++      '#submit' => [[EntityReferenceBrowserWidget::class, 'removeItemSubmit']],
++      '#name' => $this->fieldName . '_replace_' . $entity->id() . '_' . $this->delta . '_' . $hash,
++      '#limit_validation_errors' => $limit_validation_errors,
++      '#attributes' => [
++        'data-entity-id' => $data_entity_id,
++        'data-row-id' => $this->delta,
++        'class' => ['replace-button'],
++      ],
++      '#access' => $this->replaceButtonAccess,
++    ];
++
++    $row['operations']['edit_button'] = [
++      '#type' => 'submit',
++      '#value' => $this->t('Edit'),
++      '#ajax' => [
++        'url' => Url::fromRoute(
++          'entity_browser.edit_form', [
++            'entity_type' => $entity->getEntityTypeId(),
++            'entity' => $entity->id(),
++          ]
++        ),
++        'options' => [
++          'query' => [
++            'details_id' => $this->ajaxWrapper,
++          ],
++        ],
++      ],
++      '#attributes' => [
++        'class' => ['edit-button'],
++      ],
++      '#access' => $this->editButtonAccess && $entity->access('update'),
++    ];
++
++    return $row;
++  }
++
++  /**
++   * {@inheritdoc}
++   *
++   * Builds the entity listing as renderable array for table.html.twig.
++   */
++  public function render() {
++
++    $build = [
++      '#type' => 'table',
++      '#header' => $this->buildHeader(),
++      '#title' => $this->getTitle(),
++      '#rows' => [],
++      '#attributes' => [
++        'class' => ['entities-list'],
++        'data-entity-browser-entities-list' => 1,
++      ],
++      '#empty' => $this->t('There are no @label yet.', ['@label' => $this->entityType->getPluralLabel()]),
++      '#tabledrag' => [
++        [
++          'action' => 'order',
++          'relationship' => 'sibling',
++          'group' => 'weight',
++        ],
++      ],
++      '#attached' => ['library' => ['entity_browser/entity_list']],
++    ];
++
++    $this->delta = 0;
++    $delta = 10;
++    // Change the delta of the weight field if have more than 20 entities.
++    if (!empty($this->weightKey)) {
++      $count = count($this->entities);
++      if ($count > 20) {
++        $delta = ceil($count / 2);
++      }
++    }
++    foreach ($this->entities as $entity) {
++      $row = $this->buildRow($entity);
++      if (isset($row['weight'])) {
++        $row['weight']['#delta'] = $delta;
++      }
++      $build[$this->delta] = $row;
++      $this->delta++;
++    }
++
++    return $build;
++  }
++
++}
+diff --git a/src/Plugin/Field/FieldWidget/TableWidget.php b/src/Plugin/Field/FieldWidget/TableWidget.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..e6ced44fcd626e9e1dbc11bde8ed8727c9fcd55d
+--- /dev/null
++++ b/src/Plugin/Field/FieldWidget/TableWidget.php
+@@ -0,0 +1,186 @@
++<?php
++
++namespace Drupal\entity_browser\Plugin\Field\FieldWidget;
++
++use Drupal\entity_browser\Plugin\Field\FieldWidget\ListBuilder\TableListBuilder;
++use Drupal\Core\Field\FieldItemListInterface;
++use Drupal\Core\Form\FormStateInterface;
++use Symfony\Component\DependencyInjection\ContainerInterface;
++
++/**
++ * Plugin implementation of the 'entity_reference' widget for entity browser.
++ *
++ * @FieldWidget(
++ *   id = "entity_browser_table",
++ *   label = @Translation("Entity browser with table layout"),
++ *   description = @Translation("Uses entity browser to select entities."),
++ *   multiple_values = TRUE,
++ *   field_types = {
++ *     "entity_reference"
++ *   }
++ * )
++ */
++class TableWidget extends EntityReferenceBrowserWidget {
++
++  /**
++   * The target entity type for this entity reference field.
++   *
++   * @var \Drupal\Core\Entity\EntityTypeInterface
++   */
++  protected $targetEntityType;
++
++  /**
++   * The current field item list.
++   *
++   * @var \Drupal\Core\Field\FieldItemListInterface
++   */
++  protected $currentItems;
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
++    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
++    $target_entity_type_id = $configuration['field_definition']
++      ->getFieldStorageDefinition()
++      ->getSetting('target_type');
++    $instance->targetEntityType = $instance->entityTypeManager->getDefinition($target_entity_type_id);
++    return $instance;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function defaultSettings() {
++    return [
++      'table_settings' => [
++        'status_column' => FALSE,
++        'bundle_column' => FALSE,
++        'label_column' => FALSE,
++      ],
++    ] + parent::defaultSettings();
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function settingsForm(array $form, FormStateInterface $form_state) {
++    $element = parent::settingsForm($form, $form_state);
++
++    $element['table_settings'] = [
++      '#type' => 'details',
++      '#title' => $this->t('Table column configuration'),
++      '#open' => TRUE,
++      '#tree' => TRUE,
++    ];
++
++    $table_settings = $this->getSetting('table_settings');
++
++    if ($this->targetEntityType->hasKey('published')) {
++      $element['table_settings']['status_column'] = [
++        '#title' => $this->t('Show Publication status'),
++        '#description' => $this->t('Display publication status in separate column.'),
++        '#type' => 'checkbox',
++        '#default_value' => !empty($table_settings['status_column']) ? $table_settings['status_column'] : 0,
++      ];
++    }
++
++    if ($this->targetEntityType->get('bundle_entity_type')) {
++      $element['table_settings']['bundle_column'] = [
++        '#title' => $this->t('Show @label', ['@label' => $this->targetEntityType->getBundleLabel()]),
++        '#description' => $this->t('Display @label in separate column.', ['@label' => strtolower($this->targetEntityType->getBundleLabel())]),
++        '#type' => 'checkbox',
++        '#default_value' => !empty($table_settings['bundle_column']) ? $table_settings['bundle_column'] : 0,
++      ];
++    }
++
++    $element['table_settings']['label_column'] = [
++      '#type' => 'checkbox',
++      '#title' => $this->t('Display Label'),
++      '#description' => $this->t('Display label in separate column if not using label display.'),
++      '#default_value' => !empty($table_settings['label_column']) ? $table_settings['label_column'] : 0,
++    ];
++
++    return $element;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function settingsSummary() {
++    $summary = parent::settingsSummary();
++
++    $table_settings = $this->getSetting('table_settings');
++
++    if (!empty($table_settings['status_column'])) {
++      $summary[] = $this->t('Status column enabled');
++    }
++
++    if (!empty($table_settings['bundle_column'])) {
++      $summary[] = $this->t('Bundle column enabled');
++    }
++
++    if (!empty($table_settings['label_column']) && $this->getSetting('field_widget_display') == 'rendered_entity') {
++      $summary[] = $this->t('Label column enabled');
++    }
++
++    return $summary;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
++    $this->currentItems = $items;
++    return parent::formElement($items, $delta, $element, $form, $form_state);
++  }
++
++  /**
++   * Builds the render array for displaying the current results.
++   *
++   * @param string $details_id
++   *   The ID for the details element.
++   * @param string[] $field_parents
++   *   Field parents.
++   * @param \Drupal\Core\Entity\ContentEntityInterface[] $entities
++   *   An array of referenced entities to be displayed.
++   *
++   * @return array
++   *   The render array for the current selection.
++   */
++  protected function displayCurrentSelection($details_id, array $field_parents, array $entities) {
++    $entity_type_id = $this->fieldDefinition->getSettings()['target_type'];
++    $field_widget_display = $this->fieldDisplayManager
++      ->createInstance($this->getSetting('field_widget_display'), $this->getSetting('field_widget_display_settings'));
++
++    $params = [
++      $this->entityTypeManager->getDefinition($entity_type_id),
++      $this->entityTypeManager->getStorage($entity_type_id),
++      $this->currentItems,
++      $entities,
++      $field_widget_display,
++      $details_id,
++      $this->getSettings(),
++      $field_parents,
++      $this->fieldDefinition,
++    ];
++
++    $listBuilder = new TableListBuilder(...$params);
++
++    return $listBuilder->render();
++  }
++
++  /**
++   * Check if entity type has an edit form.
++   *
++   * @return bool
++   *   Returns TRUE if entity type has an edit form.
++   */
++  protected function targetEntityTypeHasEditForm() {
++    if ($this->targetEntityType->getFormClass('edit') || $this->targetEntityType->getFormClass('default')) {
++      return TRUE;
++    }
++    return FALSE;
++  }
++
++}
+diff --git a/tests/src/FunctionalJavascript/EntityBrowserViewsWidgetTest.php b/tests/src/FunctionalJavascript/EntityBrowserViewsWidgetTest.php
+index ae1dab6ade41f4f5f3729ebf10621b47360bf907..3bd84855b54af5433d701fe29dcea4a420d2c1cc 100644
+--- a/tests/src/FunctionalJavascript/EntityBrowserViewsWidgetTest.php
++++ b/tests/src/FunctionalJavascript/EntityBrowserViewsWidgetTest.php
+@@ -45,11 +45,14 @@ class EntityBrowserViewsWidgetTest extends EntityBrowserWebDriverTestBase {
+    * Tests Entity Browser views widget.
+    */
+   public function testViewsWidget() {
++    $current_user = \Drupal::currentUser();
++
+     // Create a file so that our test View isn't empty.
+     \Drupal::service('file_system')->copy(\Drupal::root() . '/core/misc/druplicon.png', 'public://example.jpg');
+     /** @var \Drupal\file\FileInterface $file */
+     $file = File::create([
+       'uri' => 'public://example.jpg',
++      'uid' => $current_user->id(),
+     ]);
+     $file->save();
+ 
+diff --git a/tests/src/FunctionalJavascript/EntityBrowserWebDriverTestBase.php b/tests/src/FunctionalJavascript/EntityBrowserWebDriverTestBase.php
+index d17a65b83ef3245337f661e7295bf20f8b386004..8b9bad0f8adde0234e2acd940910ac7b0ef7a488 100644
+--- a/tests/src/FunctionalJavascript/EntityBrowserWebDriverTestBase.php
++++ b/tests/src/FunctionalJavascript/EntityBrowserWebDriverTestBase.php
+@@ -222,17 +222,46 @@ abstract class EntityBrowserWebDriverTestBase extends WebDriverTestBase {
+       var xOffset = {$offsetX};
+       var yOffset = {$offsetY};
+       var moves = 3;
+-	    for (i = 0 ; i < moves ; i++ ) {
+-			  centerX += xOffset / moves;
+-			  centerY += yOffset / moves;
+-		    fireMouseEvent('mousemove', dragElement, Math.round(centerX), Math.round(centerY));
+-		  }
++      for (i = 0 ; i < moves ; i++ ) {
++        centerX += xOffset / moves;
++        centerY += yOffset / moves;
++        fireMouseEvent('mousemove', dragElement, Math.round(centerX), Math.round(centerY));
++      }
+       fireMouseEvent('mouseup', dragElement, centerX, centerY);
+     })();";
+ 
+     $this->getSession()->executeScript($jsCode);
+   }
+ 
++  /**
++   * Click the remove button for an .item-container at a given position.
++   *
++   * @param int $position
++   *   The xpath position of the item to remove.
++   */
++  protected function removeItemAtPosition($position) {
++    $this->assertSession()
++      ->elementExists('xpath', '(//input[contains(@class, "remove-button")])[' . $position . ']')
++      ->press();
++    // Wait for fadeout on table.
++    sleep(1);
++  }
++
++  /**
++   * Check the order of .item-container elements.
++   *
++   * @param array $expected
++   *   The expected order of .item-container elements.  Each key
++   *   represents the order using xpath.  Each value some text contained
++   *   within the item.
++   */
++  protected function assertItemOrder(array $expected) {
++    foreach ($expected as $key => $value) {
++      $this->assertSession()
++        ->elementContains('xpath', "(//*[contains(@class, 'item-container')])[" . $key . "]", $value);
++    }
++  }
++
+   /**
+    * Checks that a specific radio input element exists on the current page.
+    *
+diff --git a/tests/src/FunctionalJavascript/EntityReferenceWidgetTest.php b/tests/src/FunctionalJavascript/EntityReferenceWidgetTest.php
+index a3dfb269b22452132d51d2b965b137134931b15a..41858e679c69fe72bc381b6ee21804d84855e6ec 100644
+--- a/tests/src/FunctionalJavascript/EntityReferenceWidgetTest.php
++++ b/tests/src/FunctionalJavascript/EntityReferenceWidgetTest.php
+@@ -6,6 +6,7 @@ use Drupal\Core\Field\FieldStorageDefinitionInterface;
+ use Drupal\entity_browser\Element\EntityBrowserElement;
+ use Drupal\field\Entity\FieldConfig;
+ use Drupal\field\Entity\FieldStorageConfig;
++use Drupal\file\Entity\File;
+ use Drupal\FunctionalJavascriptTests\SortableTestTrait;
+ use Drupal\node\Entity\Node;
+ use Drupal\user\Entity\Role;
+@@ -127,6 +128,7 @@ class EntityReferenceWidgetTest extends EntityBrowserWebDriverTestBase {
+     $title = $title_field->getValue();
+     $this->assertEquals('Walrus', $title);
+     $title_field->setValue('Alpaca');
++    $this->getSession()->switchToIFrame();
+     $this->assertSession()
+       ->elementExists('css', '.ui-dialog-buttonset.form-actions .form-submit')
+       ->press();
+@@ -501,15 +503,11 @@ class EntityReferenceWidgetTest extends EntityBrowserWebDriverTestBase {
+       $this->assertSession()->assertWaitOnAjaxRequest();
+     }
+ 
+-    $correct_order = [
++    $this->assertItemOrder([
+       1 => 'Gatsby',
+       2 => 'Daisy',
+       3 => 'Nick',
+-    ];
+-    foreach ($correct_order as $key => $value) {
+-      $this->assertSession()
+-        ->elementContains('xpath', "(//div[contains(@class, 'item-container')])[" . $key . "]", $value);
+-    }
++    ]);
+ 
+     // Close details 1.
+     $this->assertSession()->elementExists('xpath', '(//summary)[1]')->click();
+@@ -550,18 +548,14 @@ class EntityReferenceWidgetTest extends EntityBrowserWebDriverTestBase {
+ 
+     $this->drupalGet('node/7/edit');
+ 
+-    $correct_order = [
+-      1 => 'Daisy',
+-      2 => 'Gatsby',
++    $this->assertItemOrder([
++      1 => 'Gatsby',
++      2 => 'Daisy',
+       3 => 'Nick',
+       4 => 'Santa Claus',
+       5 => 'Easter Bunny',
+       6 => 'Pumpkin King',
+-    ];
+-    foreach ($correct_order as $key => $value) {
+-      $this->assertSession()
+-        ->elementContains('xpath', "(//div[contains(@class, 'item-container')])[" . $key . "]", $value);
+-    }
++    ]);
+ 
+     // In the second set of selections, drag the first item into the second
+     // position.
+@@ -570,32 +564,277 @@ class EntityReferenceWidgetTest extends EntityBrowserWebDriverTestBase {
+     $assert_session->elementsCount('css', $item_selector, 3);
+     $this->sortableAfter("$item_selector:first-child", "$item_selector:nth-child(2)", $list_selector);
+ 
+-    $correct_order = [
++    $this->assertItemOrder([
+       4 => 'Easter Bunny',
+       5 => 'Santa Claus',
+       6 => 'Pumpkin King',
+-    ];
+-    foreach ($correct_order as $key => $value) {
+-      $this->assertSession()
+-        ->elementContains('xpath', "(//div[contains(@class, 'item-container')])[" . $key . "]", $value);
+-    }
++    ]);
+ 
+     // Test that order is preserved after removing item.
+-    $this->assertSession()
+-      ->elementExists('xpath', '(//input[contains(@class, "remove-button")])[5]')
+-      ->press();
++    $this->removeItemAtPosition(5);
+ 
+     $this->waitForAjaxToFinish();
+ 
+-    $correct_order = [
++    $this->assertItemOrder([
+       4 => 'Easter Bunny',
+       5 => 'Pumpkin King',
+-    ];
++    ]);
++  }
+ 
+-    foreach ($correct_order as $key => $value) {
+-      $this->assertSession()
+-        ->elementContains('xpath', "(//div[contains(@class, 'item-container')])[" . $key . "]", $value);
++  /**
++   * Tests that reorder plus remove functions properly.
++   */
++  public function testDragAndDropAndRemove() {
++
++    // Test reorder plus remove.
++    $current_user = \Drupal::currentUser();
++
++    $file_system = \Drupal::service('file_system');
++
++    $files = [
++      1 => 'file1',
++      2 => 'file2',
++      3 => 'file3',
++      4 => 'file4',
++      5 => 'file5',
++      6 => 'file6',
++      7 => 'file7',
++      8 => 'file8',
++    ];
++    $values = [];
++    foreach ($files as $key => $filename) {
++      $file_system->copy(\Drupal::root() . '/core/misc/druplicon.png', 'public://' . $filename . '.jpg');
++      /** @var \Drupal\file\FileInterface $file */
++      $file = File::create([
++        'uri' => 'public://' . $filename . '.jpg',
++        'uid' => $current_user->id(),
++      ]);
++      $file->save();
++      $values[] = ['target_id' => $file->id()];
+     }
++
++    $node = Node::create(
++        [
++          'title' => 'Testing file sort and remove',
++          'type' => 'article',
++          'field_reference' => $values,
++        ]
++      );
++
++    $node->save();
++    $edit_link = $node->toUrl('edit-form')->toString();
++    $this->drupalGet($edit_link);
++
++    $this->assertItemOrder([
++      1 => 'file1.jpg',
++      2 => 'file2.jpg',
++      3 => 'file3.jpg',
++      4 => 'file4.jpg',
++      5 => 'file5.jpg',
++      6 => 'file6.jpg',
++      7 => 'file7.jpg',
++      8 => 'file8.jpg',
++    ]);
++
++    $file1 = $this->assertSession()
++      ->elementExists('xpath', "(//div[contains(@class, 'item-container')])[1]");
++    $this->dragDropElement($file1, 160, 0);
++
++    $this->assertItemOrder([
++      1 => 'file2.jpg',
++      2 => 'file1.jpg',
++    ]);
++
++    // Test that order is preserved after removing item.
++    $this->removeItemAtPosition(2);
++
++    $this->assertItemOrder([
++      1 => 'file2.jpg',
++      2 => 'file3.jpg',
++    ]);
++
++    $file3 = $this->assertSession()
++      ->elementExists('xpath', "(//div[contains(@class, 'item-container')])[2]");
++    $this->dragDropElement($file3, 160, 0);
++
++    $this->assertItemOrder([
++      2 => 'file4.jpg',
++      3 => 'file3.jpg',
++    ]);
++
++    // Test that order is preserved after removing item.
++    $this->removeItemAtPosition(3);
++
++    $this->assertItemOrder([
++      2 => 'file4.jpg',
++      3 => 'file5.jpg',
++    ]);
++
++    $file5 = $this->assertSession()
++      ->elementExists('xpath', "(//div[contains(@class, 'item-container')])[3]");
++    $this->dragDropElement($file5, 160, 0);
++
++    $this->assertItemOrder([
++      3 => 'file6.jpg',
++      4 => 'file5.jpg',
++    ]);
++
++    // Test that order is preserved after removing item.
++    $this->removeItemAtPosition(4);
++
++    $this->assertItemOrder([
++      3 => 'file6.jpg',
++      4 => 'file7.jpg',
++    ]);
++
++    $file2 = $this->assertSession()
++      ->elementExists('xpath', "(//div[contains(@class, 'item-container')])[1]");
++    $this->dragDropElement($file2, 320, 0);
++
++    $this->assertItemOrder([
++      1 => 'file4.jpg',
++      2 => 'file6.jpg',
++      3 => 'file7.jpg',
++      4 => 'file2.jpg',
++      5 => 'file8.jpg',
++    ]);
++
++    // Test that order is preserved after removing two items.
++    $this->removeItemAtPosition(3);
++    $this->removeItemAtPosition(3);
++
++    $this->assertItemOrder([
++      1 => 'file4.jpg',
++      2 => 'file6.jpg',
++      3 => 'file8.jpg',
++    ]);
++
++    // Test that remove with duplicate items removes the one at the correct
++    // delta.  If you remove file 1 at position 3, it should remove that one,
++    // not the same entity at position 1.
++    $values = [
++        ['target_id' => 1],
++        ['target_id' => 2],
++        ['target_id' => 1],
++        ['target_id' => 3],
++        ['target_id' => 4],
++        ['target_id' => 5],
++    ];
++    $node->field_reference->setValue($values);
++    $node->save();
++
++    $edit_link = $node->toUrl('edit-form')->toString();
++    $this->drupalGet($edit_link);
++
++    $this->assertItemOrder([
++      1 => 'file1.jpg',
++      2 => 'file2.jpg',
++      3 => 'file1.jpg',
++      4 => 'file3.jpg',
++      5 => 'file4.jpg',
++      6 => 'file5.jpg',
++    ]);
++
++    $this->removeItemAtPosition(3);
++
++    $this->assertItemOrder([
++      1 => 'file1.jpg',
++      2 => 'file2.jpg',
++      3 => 'file3.jpg',
++      4 => 'file4.jpg',
++      5 => 'file5.jpg',
++    ]);
++
++    $this->drupalGet($edit_link);
++
++    $this->assertItemOrder([
++      1 => 'file1.jpg',
++      2 => 'file2.jpg',
++      3 => 'file1.jpg',
++      4 => 'file3.jpg',
++      5 => 'file4.jpg',
++      6 => 'file5.jpg',
++    ]);
++
++    $this->removeItemAtPosition(1);
++
++    $this->assertItemOrder([
++      1 => 'file2.jpg',
++      2 => 'file1.jpg',
++      3 => 'file3.jpg',
++      4 => 'file4.jpg',
++      5 => 'file5.jpg',
++    ]);
++
++    // Test that removing item that reduces selection count to less than
++    // cardinality number restores entity browser element.
++    FieldStorageConfig::load('node.field_reference')
++      ->setCardinality(1)
++      ->save();
++
++    $values = [
++        ['target_id' => 1],
++    ];
++    $node->field_reference->setValue($values);
++    $node->save();
++
++    $this->assertSession()->buttonExists('Save')->press();
++
++    // Reopen the form.
++    $edit_link = $node->toUrl('edit-form')->toString();
++    $this->drupalGet($edit_link);
++
++    $this->assertItemOrder([
++      1 => 'file1.jpg',
++    ]);
++    // The entity browser element should not be visible with cardinality 1 and
++    // 1 currently selected item.
++    $this->assertSession()->linkNotExists('Select entities');
++    $this->assertSession()->buttonExists('Remove')->press();
++    $this->waitForAjaxToFinish();
++    // There should be no current selection.
++    $this->assertSession()
++      ->elementNotExists('xpath', "//*[contains(@class, 'item-container')]");
++    // The entity browser element should be visible with cardinality 1 and
++    // no current selection.
++    $this->assertSession()->linkExists('Select entities');
++
++    FieldStorageConfig::load('node.field_reference')
++      ->setCardinality(2)
++      ->save();
++
++    $values = [
++        ['target_id' => 1],
++        ['target_id' => 2],
++    ];
++    $node->field_reference->setValue($values);
++    $node->save();
++
++    // Reopen the form.
++    $edit_link = $node->toUrl('edit-form')->toString();
++    $this->drupalGet($edit_link);
++
++    $this->assertItemOrder([
++      1 => 'file1.jpg',
++      2 => 'file2.jpg',
++    ]);
++    // The entity browser element should not be visible with
++    // cardinality 2 and 2 selections.
++    $this->assertSession()->linkNotExists('Select entities');
++    $this->assertSession()
++      ->elementExists('xpath', "(//*[contains(@class, 'item-container')])[2]")
++      ->findButton('Remove')
++      ->press();
++    $this->waitForAjaxToFinish();
++
++    $this->assertItemOrder([
++      1 => 'file1.jpg',
++    ]);
++
++    // The entity browser element should be visible with cardinality 2 and
++    // and a selection count of 1.
++    $this->assertSession()->linkExists('Select entities');
++
+   }
+ 
+   /**
+diff --git a/tests/src/FunctionalJavascript/ImageFieldTest.php b/tests/src/FunctionalJavascript/ImageFieldTest.php
+index a9ed2b967175cfdca9c4875b0b1272ad12edd5e8..49166d5f314930241bbf8ec508c60a6598625246 100644
+--- a/tests/src/FunctionalJavascript/ImageFieldTest.php
++++ b/tests/src/FunctionalJavascript/ImageFieldTest.php
+@@ -3,6 +3,8 @@
+ namespace Drupal\Tests\entity_browser\FunctionalJavascript;
+ 
+ use Drupal\Core\Field\FieldStorageDefinitionInterface;
++use Drupal\Core\File\Exception\FileException;
++use Drupal\Core\File\FileSystemInterface;
+ use Drupal\entity_browser\Element\EntityBrowserElement;
+ use Drupal\field\Entity\FieldConfig;
+ use Drupal\field\Entity\FieldStorageConfig;
+@@ -140,14 +142,14 @@ class ImageFieldTest extends EntityBrowserWebDriverTestBase {
+     $this->getSession()->switchToIFrame();
+     // Check if the image thumbnail exists.
+     $this->assertSession()
+-      ->waitForElementVisible('xpath', '//tr[@data-drupal-selector="edit-field-image-current-1"]');
++      ->waitForElementVisible('xpath', '//tr[@data-drupal-selector="edit-field-image-current-0"]');
+     // Test if the image filename is present.
+     $this->assertSession()->pageTextContains('example.jpg');
+     // Test specifying Alt and Title texts and saving the node.
+     $alt_text = 'Test alt text.';
+     $title_text = 'Test title text.';
+-    $this->getSession()->getPage()->fillField('field_image[current][1][meta][alt]', $alt_text);
+-    $this->getSession()->getPage()->fillField('field_image[current][1][meta][title]', $title_text);
++    $this->getSession()->getPage()->fillField('field_image[current][0][meta][alt]', $alt_text);
++    $this->getSession()->getPage()->fillField('field_image[current][0][meta][title]', $title_text);
+     $this->getSession()->getPage()->fillField('title[0][value]', 'Node 1');
+     $this->getSession()->getPage()->pressButton('Save');
+     $this->assertSession()->pageTextContains('Article Node 1 has been created.');
+@@ -256,4 +258,207 @@ class ImageFieldTest extends EntityBrowserWebDriverTestBase {
+     $this->assertStringContainsString('entity-browser-test', $file->getFileUri());
+   }
+ 
++  /**
++   * Tests that reorder plus remove functions properly.
++   */
++  public function testDragAndDropAndRemove() {
++
++    // Test reorder plus remove.
++    $current_user = \Drupal::currentUser();
++
++    $files = [
++      1 => 'file1',
++      2 => 'file2',
++      3 => 'file3',
++      4 => 'file4',
++      5 => 'file5',
++      6 => 'file6',
++      7 => 'file7',
++      8 => 'file8',
++    ];
++    $values = [];
++    foreach ($files as $key => $filename) {
++      $source = \Drupal::root() . '/core/misc/druplicon.png';
++      $destination = 'public://' . $filename . '.jpg';
++      try {
++        $file_system = \Drupal::service('file_system');
++
++        // Build a destination URI if necessary.
++        if (!isset($destination)) {
++          $destination = file_build_uri($file_system->basename($source));
++        }
++        $file_system->copy($source, $destination, FileSystemInterface::EXISTS_RENAME);
++      }
++      catch (FileException $e) {
++        continue;
++      }
++      /** @var \Drupal\file\FileInterface $file */
++      $file = File::create([
++        'uri' => 'public://' . $filename . '.jpg',
++        'uid' => $current_user->id(),
++      ]);
++      $file->save();
++      $values[] = ['target_id' => $file->id()];
++    }
++
++    $node = Node::create(
++      [
++        'title' => 'Testing file sort and remove',
++        'type' => 'article',
++        'field_image' => $values,
++      ]
++    );
++
++    $node->save();
++    $edit_link = $node->toUrl('edit-form')->toString();
++    $this->drupalGet($edit_link);
++
++    $this->assertItemOrder([
++      1 => 'file1.jpg',
++      2 => 'file2.jpg',
++      3 => 'file3.jpg',
++      4 => 'file4.jpg',
++      5 => 'file5.jpg',
++      6 => 'file6.jpg',
++      7 => 'file7.jpg',
++      8 => 'file8.jpg',
++    ]);
++
++    $file1_handle = $this->assertSession()->elementExists('xpath', "(//a[contains(@class, 'tabledrag-handle')])[1]");
++    $file2 = $this->assertSession()->elementExists('xpath', "(//tr[contains(@class, 'item-container')])[2]");
++    $file1_handle->dragTo($file2);
++
++    $this->assertItemOrder([
++      1 => 'file2.jpg',
++      2 => 'file1.jpg',
++    ]);
++
++    // Test that order is preserved after removing item.
++    $this->removeItemAtPosition(2);
++
++    $this->assertItemOrder([
++      1 => 'file2.jpg',
++      2 => 'file3.jpg',
++    ]);
++
++    $file3 = $this->assertSession()->elementExists('xpath', "(//tr[contains(@class, 'item-container')])[2]");
++    $this->dragDropElement($file3, 160, 0);
++
++    $file3_handle = $this->assertSession()->elementExists('xpath', "(//a[contains(@class, 'tabledrag-handle')])[2]");
++    $file4 = $this->assertSession()->elementExists('xpath', "(//tr[contains(@class, 'item-container')])[3]");
++    $file3_handle->dragTo($file4);
++
++    $this->assertItemOrder([
++      2 => 'file4.jpg',
++      3 => 'file3.jpg',
++    ]);
++
++    // Test that order is preserved after removing item.
++    $this->removeItemAtPosition(3);
++
++    $this->assertItemOrder([
++      2 => 'file4.jpg',
++      3 => 'file5.jpg',
++    ]);
++
++    $file5 = $this->assertSession()->elementExists('xpath', "(//tr[contains(@class, 'item-container')])[3]");
++    $this->dragDropElement($file5, 160, 0);
++
++    $file5_handle = $this->assertSession()->elementExists('xpath', "(//a[contains(@class, 'tabledrag-handle')])[3]");
++    $file6 = $this->assertSession()->elementExists('xpath', "(//tr[contains(@class, 'item-container')])[4]");
++    $file5_handle->dragTo($file6);
++
++    $this->assertItemOrder([
++      3 => 'file6.jpg',
++      4 => 'file5.jpg',
++    ]);
++
++    // Test that order is preserved after removing item.
++    $this->removeItemAtPosition(4);
++
++    $this->assertItemOrder([
++      3 => 'file6.jpg',
++      4 => 'file7.jpg',
++    ]);
++
++    $file2_handle = $this->assertSession()->elementExists('xpath', "(//a[contains(@class, 'tabledrag-handle')])[1]");
++    $file8 = $this->assertSession()->elementExists('xpath', "(//tr[contains(@class, 'item-container')])[5]");
++    $file2_handle->dragTo($file8);
++
++    $this->assertItemOrder([
++      1 => 'file4.jpg',
++      2 => 'file6.jpg',
++      3 => 'file7.jpg',
++      4 => 'file8.jpg',
++      5 => 'file2.jpg',
++    ]);
++
++    // Test that order is preserved after removing two items.
++    $this->removeItemAtPosition(3);
++    $this->removeItemAtPosition(4);
++
++    $this->assertItemOrder([
++      1 => 'file4.jpg',
++      2 => 'file6.jpg',
++      3 => 'file8.jpg',
++    ]);
++
++    // Test that remove with duplicate items removes the one at the
++    // correct delta.  If you remove file 1 at position 3, it should
++    // remove that one, not the same entity at position 1.
++    $values = [
++      ['target_id' => 2],
++      ['target_id' => 3],
++      ['target_id' => 2],
++      ['target_id' => 4],
++      ['target_id' => 5],
++      ['target_id' => 6],
++    ];
++    $node->field_image->setValue($values);
++    $node->save();
++    $edit_link = $node->toUrl('edit-form')->toString();
++    $this->drupalGet($edit_link);
++
++    $this->assertItemOrder([
++      1 => 'file1.jpg',
++      2 => 'file2.jpg',
++      3 => 'file1.jpg',
++      4 => 'file3.jpg',
++      5 => 'file4.jpg',
++      6 => 'file5.jpg',
++    ]);
++
++    $this->removeItemAtPosition(3);
++
++    $this->assertItemOrder([
++      1 => 'file1.jpg',
++      2 => 'file2.jpg',
++      3 => 'file3.jpg',
++      4 => 'file4.jpg',
++      5 => 'file5.jpg',
++    ]);
++
++    $this->drupalGet($edit_link);
++
++    $this->assertItemOrder([
++      1 => 'file1.jpg',
++      2 => 'file2.jpg',
++      3 => 'file1.jpg',
++      4 => 'file3.jpg',
++      5 => 'file4.jpg',
++      6 => 'file5.jpg',
++    ]);
++
++    $this->removeItemAtPosition(1);
++
++    $this->assertItemOrder([
++      1 => 'file2.jpg',
++      2 => 'file1.jpg',
++      3 => 'file3.jpg',
++      4 => 'file4.jpg',
++      5 => 'file5.jpg',
++    ]);
++
++  }
++
+ }
+diff --git a/tests/src/FunctionalJavascript/TableFieldWidgetTest.php b/tests/src/FunctionalJavascript/TableFieldWidgetTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..0dc8774bbe178f570258a2ecaa21a6cc0a7e2d9d
+--- /dev/null
++++ b/tests/src/FunctionalJavascript/TableFieldWidgetTest.php
+@@ -0,0 +1,634 @@
++<?php
++
++namespace Drupal\Tests\entity_browser\FunctionalJavascript;
++
++use Drupal\Core\Field\FieldStorageDefinitionInterface;
++use Drupal\entity_browser\Element\EntityBrowserElement;
++use Drupal\field\Entity\FieldConfig;
++use Drupal\field\Entity\FieldStorageConfig;
++use Drupal\node\Entity\Node;
++use Drupal\user\Entity\Role;
++
++/**
++ * Tests the Table Field Widget.
++ *
++ * @group entity_browser
++ */
++class TableFieldWidgetTest extends EntityBrowserWebDriverTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  public function setUp(): void {
++    parent::setUp();
++
++    /** @var \Drupal\user\RoleInterface $role */
++    $role = Role::load('authenticated');
++    $this->grantPermissions($role, [
++      'access test_entity_browser_iframe_node_view entity browser pages',
++      'bypass node access',
++      'administer node form display',
++      'create article content',
++      'access content',
++    ]);
++  }
++
++  /**
++   * Tests Table Field Widget.
++   */
++  public function testTableWidget() {
++    $session = $this->getSession();
++    $page = $session->getPage();
++    $assert_session = $this->assertSession();
++
++    // Create an entity_reference field to test the widget.
++    $field_storage = FieldStorageConfig::create([
++      'field_name' => 'field_mad_scientist',
++      'type' => 'entity_reference',
++      'entity_type' => 'node',
++      'cardinality' => FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED,
++      'settings' => [
++        'target_type' => 'node',
++      ],
++    ]);
++    $field_storage->save();
++
++    $field = FieldConfig::create([
++      'field_name' => 'field_mad_scientist',
++      'entity_type' => 'node',
++      'bundle' => 'article',
++      'label' => 'Referenced articles',
++      'settings' => [],
++    ]);
++    $field->save();
++
++    /** @var \Drupal\Core\Entity\Display\EntityFormDisplayInterface $form_display */
++    $form_display = $this->container->get('entity_type.manager')
++      ->getStorage('entity_form_display')
++      ->load('node.article.default');
++
++    $form_display->setComponent('field_mad_scientist', [
++      'type' => 'entity_browser_table',
++      'settings' => [
++        'entity_browser' => 'test_entity_browser_iframe_node_view',
++        'table_settings' => [
++          'status_column' => TRUE,
++          'bundle_column' => TRUE,
++          'label_column' => FALSE,
++        ],
++        'open' => TRUE,
++        'field_widget_edit' => TRUE,
++        'field_widget_remove' => TRUE,
++        'field_widget_replace' => FALSE,
++        'selection_mode' => EntityBrowserElement::SELECTION_MODE_APPEND,
++        'field_widget_display' => 'label',
++        'field_widget_display_settings' => [],
++      ],
++    ])->save();
++
++    // Create a dummy node that will be used as target.
++    $target_node = Node::create([
++      'title' => 'Victor Frankenstein',
++      'type' => 'article',
++    ]);
++    $target_node->save();
++
++    $this->drupalGet('/node/add/article');
++    $page->fillField('title[0][value]', 'Doctor Moreau');
++    $session->switchToIFrame('entity_browser_iframe_test_entity_browser_iframe_node_view');
++    $this->waitForAjaxToFinish();
++    $page->checkField('edit-entity-browser-select-node1');
++    $page->pressButton('Select entities');
++    $session->switchToIFrame();
++    $this->waitForAjaxToFinish();
++    $page->pressButton('Save');
++
++    $assert_session->pageTextContains('Article Doctor Moreau has been created.');
++    $nid = $this->container
++      ->get('entity_type.manager')
++      ->getStorage('node')
++      ->getQuery()
++      ->accessCheck(FALSE)
++      ->condition('title', 'Doctor Moreau')
++      ->execute();
++    $nid = reset($nid);
++
++    $this->drupalGet('node/' . $nid . '/edit');
++
++    $tr = $assert_session
++      ->elementExists('xpath', "//tr[contains(., 'Victor Frankenstein')]");
++    // Make sure both "Edit" and "Remove" buttons are visible.
++    $this->assertTrue($tr->hasButton('Remove'));
++    $this->assertTrue($tr->hasButton('Edit'));
++    $tr_text = $tr->getText();
++    $this->assertContains('Published', $tr_text);
++    $this->assertContains('Article', $tr_text);
++
++    // Assert table headers are present.
++    $assert_session->elementExists('xpath', "//th[contains(., 'Published')]");
++    $assert_session->elementExists('xpath', "//th[contains(., 'Content type')]");
++    $assert_session->elementExists('xpath', "//th[contains(., 'Operations')]");
++
++    // Test whether changing these definitions on the browser config effectively
++    // change the visibility of the buttons.
++    $form_display->setComponent('field_mad_scientist', [
++      'type' => 'entity_browser_table',
++      'settings' => [
++        'entity_browser' => 'test_entity_browser_iframe_node_view',
++        'table_settings' => [
++          'status_column' => FALSE,
++          'bundle_column' => FALSE,
++          'label_column' => FALSE,
++        ],
++        'open' => TRUE,
++        'field_widget_edit' => FALSE,
++        'field_widget_remove' => FALSE,
++        'field_widget_replace' => FALSE,
++        'selection_mode' => EntityBrowserElement::SELECTION_MODE_APPEND,
++        'field_widget_display' => 'label',
++        'field_widget_display_settings' => [],
++      ],
++    ])->save();
++    $this->drupalGet('node/' . $nid . '/edit');
++
++    $tr = $assert_session
++      ->elementExists('xpath', "//tr[contains(., 'Victor Frankenstein')]");
++    // Make sure both "Edit" and "Remove" buttons are visible.
++    $this->assertNotTrue($tr->hasButton('Remove'));
++    $this->assertNotTrue($tr->hasButton('Edit'));
++    $tr_text = $tr->getText();
++    $this->assertNotContains('Published', $tr_text);
++    $this->assertNotContains('Article', $tr_text);
++
++    // Assert table headers are present.
++    $assert_session->elementNotExists('xpath', "//th[contains(., 'Published')]");
++    $assert_session->elementNotExists('xpath', "//th[contains(., 'Content type')]");
++
++    // Set buttons to visible again.
++    $form_display->setComponent('field_mad_scientist', [
++      'type' => 'entity_browser_table',
++      'settings' => [
++        'entity_browser' => 'test_entity_browser_iframe_node_view',
++        'open' => TRUE,
++        'field_widget_edit' => TRUE,
++        'field_widget_remove' => TRUE,
++        'field_widget_replace' => FALSE,
++        'selection_mode' => EntityBrowserElement::SELECTION_MODE_APPEND,
++        'field_widget_display' => 'label',
++        'field_widget_display_settings' => [],
++      ],
++    ])->save();
++    $this->drupalGet('node/' . $nid . '/edit');
++
++    $tr = $assert_session
++      ->elementExists('xpath', "//tr[contains(., 'Victor Frankenstein')]");
++    // Make sure both "Edit" and "Remove" buttons are visible.
++    $this->assertTrue($tr->hasButton('Remove'));
++    $this->assertTrue($tr->hasButton('Edit'));
++    // Make sure the "Replace" button is not there.
++    $this->assertFalse($tr->hasButton('Replace'));
++
++    // Test the "Remove" button on the widget works.
++    $page->pressButton('Remove');
++    $this->waitForAjaxToFinish();
++    $assert_session->pageTextNotContains('Victor Frankenstein');
++
++    // Test the "Replace" button functionality.
++    $form_display->setComponent('field_mad_scientist', [
++      'type' => 'entity_browser_table',
++      'settings' => [
++        'entity_browser' => 'test_entity_browser_iframe_node_view',
++        'open' => TRUE,
++        'field_widget_edit' => TRUE,
++        'field_widget_remove' => TRUE,
++        'field_widget_replace' => TRUE,
++        'selection_mode' => EntityBrowserElement::SELECTION_MODE_APPEND,
++        'field_widget_display' => 'label',
++        'field_widget_display_settings' => [],
++      ],
++    ])->save();
++    // In order to ensure the replace button opens the browser, it needs to be
++    // closed.
++    /** @var \Drupal\entity_browser\EntityBrowserInterface $browser */
++    $browser = $this->container->get('entity_type.manager')
++      ->getStorage('entity_browser')
++      ->load('test_entity_browser_iframe_node_view');
++    $browser->getDisplay()
++      ->setConfiguration([
++        'width' => 650,
++        'height' => 500,
++        'link_text' => 'Select entities',
++        'auto_open' => FALSE,
++      ]);
++    $browser->save();
++
++    // We'll need a third node to be able to make a new selection.
++    $target_node2 = Node::create([
++      'title' => 'Henry Jekyll',
++      'type' => 'article',
++    ]);
++    $target_node2->save();
++    $this->drupalGet('node/' . $nid . '/edit');
++    // If there is only one entity in the current selection the button should
++    // show up.
++    $replace_button = $assert_session->buttonExists('Replace');
++    $this->assertEquals('Replace', $replace_button->getValue());
++    $this->assertTrue($replace_button->hasClass('replace-button'));
++    // Clicking on the button should empty the selection and automatically
++    // open the browser again.
++    $replace_button->click();
++    $this->waitForAjaxToFinish();
++    $session->switchToIFrame('entity_browser_iframe_test_entity_browser_iframe_node_view');
++    $this->waitForAjaxToFinish();
++    $page->checkField('edit-entity-browser-select-node3');
++    $page->pressButton('Select entities');
++    $this->waitForAjaxToFinish();
++    $session->switchToIFrame();
++    $this->waitForAjaxToFinish();
++    // Even in the AJAX-built markup for the newly selected element, the replace
++    // button should be there.
++    $tr = $assert_session
++      ->elementExists('xpath', "//tr[contains(., 'Henry Jekyll')]");
++    // Make sure both "Edit" and "Remove" buttons are visible.
++    $this->assertTrue($tr->hasButton('Remove'));
++    $this->assertTrue($tr->hasButton('Replace'));
++    $this->assertTrue($tr->hasButton('Edit'));
++
++    // Adding a new node to the selection, however, should make it disappear.
++    $open_iframe_link = $assert_session->elementExists('css', 'a[data-drupal-selector="edit-field-mad-scientist-entity-browser-entity-browser-link"]');
++    $open_iframe_link->click();
++    $this->waitForAjaxToFinish();
++    $session->switchToIFrame('entity_browser_iframe_test_entity_browser_iframe_node_view');
++    $this->waitForAjaxToFinish();
++    $page->checkField('edit-entity-browser-select-node1');
++    $page->pressButton('Select entities');
++    $this->waitForAjaxToFinish();
++    $session->switchToIFrame();
++    $this->waitForAjaxToFinish();
++    $assert_session->buttonNotExists('Replace');
++    $page->pressButton('Save');
++    $assert_session->pageTextContains('Article Doctor Moreau has been updated.');
++
++    // Test the replace button again with different field cardinalities.
++    FieldStorageConfig::load('node.field_mad_scientist')->setCardinality(1)->save();
++    $this->drupalGet('/node/add/article');
++    $page->fillField('title[0][value]', 'R. M. Renfield');
++    $open_iframe_link = $assert_session->elementExists('css', 'a[data-drupal-selector="edit-field-mad-scientist-entity-browser-entity-browser-link"]');
++    $open_iframe_link->click();
++    $this->waitForAjaxToFinish();
++    $session->switchToIFrame('entity_browser_iframe_test_entity_browser_iframe_node_view');
++    $this->waitForAjaxToFinish();
++    $page->checkField('edit-entity-browser-select-node1');
++    $page->pressButton('Select entities');
++    $this->waitForAjaxToFinish();
++    $session->switchToIFrame();
++    $this->waitForAjaxToFinish();
++
++    $tr = $assert_session
++      ->elementExists('xpath', "//tr[contains(., 'Victor Frankenstein')]");
++    // All three buttons should be visible.
++    $this->assertTrue($tr->hasButton('Remove'));
++    $this->assertTrue($tr->hasButton('Edit'));
++    $this->assertTrue($tr->hasButton('Replace'));
++
++    // Clicking on the button should empty the selection and automatically
++    // open the browser again.
++    $replace_button->click();
++    $this->waitForAjaxToFinish();
++    $session->switchToIFrame('entity_browser_iframe_test_entity_browser_iframe_node_view');
++    $this->waitForAjaxToFinish();
++    $page->checkField('edit-entity-browser-select-node2');
++    $page->pressButton('Select entities');
++    $this->waitForAjaxToFinish();
++    $session->switchToIFrame();
++    $this->waitForAjaxToFinish();
++    $assert_session->elementExists('xpath', "//tr[contains(., 'Doctor Moreau')]");
++
++    // Do the same as above but now with cardinality 2.
++    FieldStorageConfig::load('node.field_mad_scientist')->setCardinality(2)->save();
++    $this->drupalGet('/node/add/article');
++    $page->fillField('title[0][value]', 'Referencing node 3');
++    $open_iframe_link = $assert_session->elementExists('css', 'a[data-drupal-selector="edit-field-mad-scientist-entity-browser-entity-browser-link"]');
++    $open_iframe_link->click();
++    $this->waitForAjaxToFinish();
++    $session->switchToIFrame('entity_browser_iframe_test_entity_browser_iframe_node_view');
++    $this->waitForAjaxToFinish();
++    $page->checkField('edit-entity-browser-select-node1');
++    $page->pressButton('Select entities');
++    $this->waitForAjaxToFinish();
++    $session->switchToIFrame();
++    $this->waitForAjaxToFinish();
++
++    $tr = $assert_session
++      ->elementExists('xpath', "//tr[contains(., 'Victor Frankenstein')]");
++    // All three buttons should be visible.
++    $this->assertTrue($tr->hasButton('Remove'));
++    $this->assertTrue($tr->hasButton('Edit'));
++    $this->assertTrue($tr->hasButton('Replace'));
++
++    // Clicking on the button should empty the selection and automatically
++    // open the browser again.
++    $this->assertSession()->buttonExists('Replace')->click();
++    $this->waitForAjaxToFinish();
++    $session->switchToIFrame('entity_browser_iframe_test_entity_browser_iframe_node_view');
++    $this->waitForAjaxToFinish();
++    $page->checkField('edit-entity-browser-select-node2');
++    $page->pressButton('Select entities');
++    $this->waitForAjaxToFinish();
++    $session->switchToIFrame();
++    $this->waitForAjaxToFinish();
++    $assert_session->elementExists('xpath', "//tr[contains(., 'Doctor Moreau')]");
++
++    // Verify that if the user cannot edit the entity, the "Edit" button does
++    // not show up, even if configured to.
++    /** @var \Drupal\user\RoleInterface $role */
++    $role = Role::load('authenticated');
++    $role->revokePermission('bypass node access')->trustData()->save();
++    $this->drupalGet('node/add/article');
++    $open_iframe_link = $assert_session->elementExists('css', 'a[data-drupal-selector="edit-field-mad-scientist-entity-browser-entity-browser-link"]');
++    $open_iframe_link->click();
++    $this->waitForAjaxToFinish();
++    $session->switchToIFrame('entity_browser_iframe_test_entity_browser_iframe_node_view');
++    $this->waitForAjaxToFinish();
++    $page->checkField('edit-entity-browser-select-node1');
++    $page->pressButton('Select entities');
++    $session->switchToIFrame();
++    $this->waitForAjaxToFinish();
++
++    $tr = $assert_session
++      ->elementExists('xpath', "//tr[contains(., 'Victor Frankenstein')]");
++
++    // Edit field should not exist.
++    $this->assertTrue($tr->hasButton('Remove'));
++    $this->assertTrue($tr->hasButton('Replace'));
++    $this->assertFalse($tr->hasButton('Edit'));
++
++    FieldStorageConfig::load('node.field_mad_scientist')->setCardinality(-1)->save();
++    $this->drupalGet('/node/add/article');
++
++  }
++
++  /**
++   * Tests Table Field Widget form config.
++   */
++  public function testFieldWidgetSettings() {
++
++    // Create an entity_reference field to test the widget.
++    $field_storage = FieldStorageConfig::create([
++      'field_name' => 'field_lycanthrope',
++      'type' => 'entity_reference',
++      'entity_type' => 'node',
++      'cardinality' => FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED,
++      'settings' => [
++        'target_type' => 'node',
++      ],
++    ]);
++    $field_storage->save();
++
++    $field = FieldConfig::create([
++      'field_name' => 'field_lycanthrope',
++      'entity_type' => 'node',
++      'bundle' => 'article',
++      'label' => 'Loup Garou',
++      'settings' => [],
++    ]);
++    $field->save();
++
++    $this->drupalGet('/admin/structure/types/manage/article/form-display');
++    // Drag to enabled.
++    $target = $this->assertSession()
++      ->elementExists('css', '#title');
++    $this->assertSession()
++      ->elementExists('css', '#field-lycanthrope')
++      ->find('css', '.handle')
++      ->dragTo($target);
++    $this->assertSession()->assertWaitOnAjaxRequest();
++    // Set to Entity Browser Widget.
++    $this->assertSession()->selectExists('fields[field_lycanthrope][type]')->selectOption('entity_browser_table');
++    $this->assertSession()->assertWaitOnAjaxRequest();
++    // Open settings form.
++    $this->assertSession()->waitforButton('field_lycanthrope_settings_edit')->press();
++    $this->assertSession()->assertWaitOnAjaxRequest();
++
++    $form_prefix = 'fields[field_lycanthrope][settings_edit_form][settings]';
++
++    // Select entity browser with "no_selection" selection display.
++    $this->assertSession()->selectExists($form_prefix . '[entity_browser]')->selectOption('test_entity_browser_iframe_node_view');
++
++    $status_column = $this->assertSession()->fieldExists($form_prefix . '[table_settings][status_column]');
++    $bundle_column = $this->assertSession()->fieldExists($form_prefix . '[table_settings][bundle_column]');
++    $label_column = $this->assertSession()->fieldExists($form_prefix . '[table_settings][label_column]');
++
++    $this->assertFalse($status_column->isChecked());
++    $this->assertFalse($bundle_column->isChecked());
++    $this->assertFalse($label_column->isChecked());
++
++    $status_column->check();
++    $bundle_column->check();
++    $label_column->check();
++
++    $this->assertSession()->buttonExists('field_lycanthrope_plugin_settings_update')->press();
++    $this->assertSession()->assertWaitOnAjaxRequest();
++
++    $this->assertSession()->pageTextContains('Status column enabled');
++    $this->assertSession()->pageTextContains('Bundle column enabled');
++
++    // This doesn't shows unless using rendered_entity field_widget_display.
++    $this->assertSession()->pageTextNotContains('Label column enabled');
++
++    // Open settings form.
++    $this->assertSession()->waitforButton('field_lycanthrope_settings_edit')->press();
++    $this->assertSession()->assertWaitOnAjaxRequest();
++
++    $status_column = $this->assertSession()->fieldExists($form_prefix . '[table_settings][status_column]');
++    $bundle_column = $this->assertSession()->fieldExists($form_prefix . '[table_settings][bundle_column]');
++    $label_column = $this->assertSession()->fieldExists($form_prefix . '[table_settings][label_column]');
++
++    $this->assertTrue($status_column->isChecked());
++    $this->assertTrue($bundle_column->isChecked());
++    $this->assertTrue($label_column->isChecked());
++
++    // Test that changing field_widget_display to rendered entity
++    // causes 'Label column enabled' to display on summary.
++    $this->assertSession()->fieldExists($form_prefix . '[field_widget_display]')->setValue('rendered_entity');
++    $this->assertSession()->assertWaitOnAjaxRequest();
++    $this->assertSession()->buttonExists('field_lycanthrope_plugin_settings_update')->press();
++    $this->assertSession()->assertWaitOnAjaxRequest();
++    $this->assertSession()->pageTextContains('Label column enabled');
++
++  }
++
++  /**
++   * Tests that drag and drop functions properly.
++   */
++  public function testTableDrag() {
++
++    $luke = $this->createNode(['type' => 'shark', 'title' => 'Luke']);
++    $leia = $this->createNode(['type' => 'jet', 'title' => 'Leia']);
++    $darth = $this->createNode(['type' => 'article', 'title' => 'Darth']);
++
++    // Create an entity_reference field to test the widget.
++    $field_storage = FieldStorageConfig::create([
++      'field_name' => 'field_force',
++      'type' => 'entity_reference',
++      'entity_type' => 'node',
++      'cardinality' => FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED,
++      'settings' => [
++        'target_type' => 'node',
++      ],
++    ]);
++    $field_storage->save();
++
++    $field = FieldConfig::create([
++      'field_name' => 'field_force',
++      'entity_type' => 'node',
++      'bundle' => 'article',
++      'label' => 'Force sensitive people',
++      'settings' => [
++        'handler_settings' => [
++          'target_bundles' => [
++            'shark' => 'shark',
++            'jet' => 'jet',
++            'article' => 'article',
++          ],
++        ],
++      ],
++    ]);
++    $field->save();
++
++    /** @var \Drupal\Core\Entity\Display\EntityFormDisplayInterface $form_display */
++    $form_display = $this->container->get('entity_type.manager')
++      ->getStorage('entity_form_display')
++      ->load('node.article.default');
++
++    $form_display->removeComponent('field_reference');
++
++    $form_display->setComponent('field_force', [
++      'type' => 'entity_browser_table',
++      'settings' => [
++        'entity_browser' => 'widget_context_default_value',
++        'table_settings' => [
++          'status_column' => TRUE,
++          'bundle_column' => TRUE,
++          'label_column' => FALSE,
++        ],
++        'open' => TRUE,
++        'field_widget_edit' => TRUE,
++        'field_widget_remove' => TRUE,
++        'field_widget_replace' => FALSE,
++        'selection_mode' => EntityBrowserElement::SELECTION_MODE_APPEND,
++        'field_widget_display' => 'label',
++        'field_widget_display_settings' => [],
++      ],
++    ])->save();
++
++    // Set auto open to false on the entity browser.
++    $entity_browser = $this->container->get('entity_type.manager')
++      ->getStorage('entity_browser')
++      ->load('widget_context_default_value');
++
++    $display_configuration = $entity_browser->get('display_configuration');
++    $display_configuration['auto_open'] = FALSE;
++    $entity_browser->set('display_configuration', $display_configuration);
++    $entity_browser->save();
++
++    $account = $this->drupalCreateUser([
++      'access widget_context_default_value entity browser pages',
++      'create article content',
++      'access content',
++    ]);
++    $this->drupalLogin($account);
++
++    $this->drupalGet('node/add/article');
++
++    // Open the entity browser widget form.
++    $this->getSession()->getPage()->clickLink('Select entities');
++    $this->getSession()->switchToIFrame('entity_browser_iframe_widget_context_default_value');
++
++    $page = $this->getSession()->getPage();
++
++    $page->checkField('edit-entity-browser-select-node' . $luke->id());
++    $page->checkField('edit-entity-browser-select-node' . $leia->id());
++    $page->checkField('edit-entity-browser-select-node' . $darth->id());
++    $page->pressButton('Select entities');
++    $this->waitForAjaxToFinish();
++    $page->pressButton('Use selected');
++    $this->waitForAjaxToFinish();
++    $this->getSession()->switchToIFrame();
++    $this->waitForAjaxToFinish();
++
++    $this->assertItemOrder([
++      1 => 'Luke',
++      2 => 'Leia',
++      3 => 'Darth',
++    ]);
++
++    $first_handle = $this->assertSession()->elementExists('xpath', '(//td[contains(@class, "entity-browser--field-widget--tabledrag")])[1]');
++    $second_row = $this->assertSession()->elementExists('xpath', '(//tr[contains(@class, "draggable")])[2]');
++    $first_handle->dragTo($second_row);
++    // Trigger "mouseup" event, as driver's dragTo method doesn't trigger it.
++    $first_handle->click();
++
++    $this->assertItemOrder([
++      1 => 'Leia',
++      2 => 'Luke',
++      3 => 'Darth',
++    ]);
++
++    $this->assertSession()->fieldExists('title[0][value]')->setValue('The Skywalkers');
++
++    $this->assertSession()->buttonExists('Save')->press();
++
++    $this->drupalGet('node/4/edit');
++
++    $this->assertItemOrder([
++      1 => 'Leia',
++      2 => 'Luke',
++      3 => 'Darth',
++    ]);
++
++    $first_handle = $this->assertSession()->elementExists('xpath', '(//td[contains(@class, "entity-browser--field-widget--tabledrag")])[1]');
++    $second_row = $this->assertSession()->elementExists('xpath', '(//tr[contains(@class, "draggable")])[2]');
++    $first_handle->dragTo($second_row);
++    // Trigger "mouseup" event, as driver's dragTo method doesn't trigger it.
++    $first_handle->click();
++
++    $this->assertItemOrder([
++      1 => 'Luke',
++      2 => 'Leia',
++      3 => 'Darth',
++    ]);
++
++    // Test that order is preserved after removing item.
++    $this->removeItemAtPosition(2);
++
++    $this->assertItemOrder([
++      1 => 'Luke',
++      2 => 'Darth',
++    ]);
++
++    $first_handle = $this->assertSession()->elementExists('xpath', '(//td[contains(@class, "entity-browser--field-widget--tabledrag")])[1]');
++    $second_row = $this->assertSession()->elementExists('xpath', '(//tr[contains(@class, "draggable")])[2]');
++    $first_handle->dragTo($second_row);
++    // Trigger "mouseup" event, as driver's dragTo method doesn't trigger it.
++    $first_handle->click();
++
++    $this->assertItemOrder([
++      1 => 'Darth',
++      2 => 'Luke',
++    ]);
++
++    $this->assertSession()->buttonExists('Save')->press();
++
++    $node = Node::load(4);
++
++    $expected = [
++      0 => ['target_id' => $darth->id()],
++      1 => ['target_id' => $luke->id()],
++    ];
++
++    $this->assertEquals($expected, $node->field_force->getValue());
++
++  }
++
++}
