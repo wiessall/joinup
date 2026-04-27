@@ -136,6 +136,6 @@ Feature: Featuring content site-wide
     Then I should see the success message "<label> <unfeatured> has been set as featured content."
 
     Examples:
-      | featured                      | unfeatured                  | extra entities                                                                           | label      | content type |
-      | Tidy Neutron                  | Reborn Eternal Gamma        | Solutions mentioned in an assessment, Interoperability assessments space, Portal support | Collection | collection   |
-      | Opensource neutron generators | Gamma-sensible spectroscopy |                                                                                          | Solution   | solution     |
+      | featured                      | unfeatured                  | extra entities                                     | label      | content type |
+      | Tidy Neutron                  | Reborn Eternal Gamma        | Interoperability assessments space, Portal support | Collection | collection   |
+      | Opensource neutron generators | Gamma-sensible spectroscopy |                                                    | Solution   | solution     |

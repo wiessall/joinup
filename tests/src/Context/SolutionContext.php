@@ -21,7 +21,6 @@ use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\SearchTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -44,7 +43,6 @@ class SolutionContext extends RawDrupalContext {
   use FileTrait;
   use FormTrait;
   use OgTrait;
-  use TestingEntitiesTrait;
   use SearchTrait;
   use TraversingTrait;
   use UserTrait;
@@ -185,6 +183,42 @@ class SolutionContext extends RawDrupalContext {
         $group = $this->getEntityByLabel('node', $groupLabel);
         $this->assertCondition($group instanceof GroupInterface, "Cannot pin solution {$entity->label()} in $groupLabel since it does not exist or is not a group.");
         $entity->unpin($group);
+      }
+    }
+  }
+
+  /**
+   * Flags newly created solutions as interoperable.
+   *
+   * This checks if the "interoperable" property is set for a newly created
+   * solution node, and flags it accordingly. This is not done as part of
+   * regular node creation since this data is stored as a flag entity, not a
+   * node field.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope $scope
+   *   The Behat hook scope object containing the metadata of the node that was
+   *   created.
+   *
+   * @AfterNodeCreate
+   */
+  public function flagSolutionAsInteroperable(AfterNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'solution') {
+      return;
+    }
+
+    $is_interoperable = in_array(strtolower((string) ($node->interoperable ?? '')), [
+      'y',
+      'yes',
+    ]);
+    $nid = $node->nid ?? NULL;
+    if ($is_interoperable && $nid) {
+      if ($entity = Node::load((int) $nid)) {
+        $flag_service = \Drupal::service('flag');
+        $flag = $flag_service->getFlagById('interoperability');
+        if ($flag) {
+          $flag_service->flag($flag, $entity);
+        }
       }
     }
   }

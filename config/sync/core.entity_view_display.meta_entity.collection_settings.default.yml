@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.meta_entity.collection_settings.announcements_enabled
+    - field.field.meta_entity.collection_settings.approval_message
     - field.field.meta_entity.collection_settings.code_of_conduct
     - field.field.meta_entity.collection_settings.content_creation
     - field.field.meta_entity.collection_settings.glossary_link_only_first
@@ -17,6 +18,7 @@ dependencies:
   module:
     - options
     - search_api_field
+    - text
 id: meta_entity.collection_settings.default
 targetEntityType: meta_entity
 bundle: collection_settings
@@ -31,6 +33,13 @@ content:
       format_custom_true: ''
     third_party_settings: {  }
     weight: 24
+    region: content
+  approval_message:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 26
     region: content
   changed:
     type: timestamp
@@ -127,6 +136,7 @@ hidden:
   label_join: true
   label_leave: true
   landing_page: true
+  langcode: true
   meta_entity_collection_settings_listing_content_inline_facets: true
   meta_entity_collection_settings_listing_content_top: true
   search_api_excerpt: true

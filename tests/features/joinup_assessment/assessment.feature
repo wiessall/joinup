@@ -7,6 +7,7 @@ Feature: Assessments
     And I see h1 span element with title "Assessment reports"
     And I should see the link "New assessment"
     And I should not see the link "My assessments"
+    And I should not see the link "Search assessments"
     And I should see the text "There are no published assessment reports yet. You can add one by filling this questionnaire"
     And assessment_report content:
       | title         | state     | created              | organization         | collection                         |
@@ -27,6 +28,7 @@ Feature: Assessments
     And I see h1 span element with title "Assessment reports"
     And I should see the link "New assessment"
     And I should not see the link "My assessments"
+    And I should not see the link "Search assessments"
     And I should not see the text "There are no published assessment reports yet. You can add one by filling this questionnaire"
     # Reports are shown in creation descending order in a 10 pager listing.
     And I should see the following tiles in the correct order:
@@ -67,6 +69,7 @@ Feature: Assessments
     And I see h1 span element with title "Assessment reports"
     And I should see the link "New assessment"
     And I should see the link "My assessments"
+    And I should not see the link "Search assessments"
     And I should not see the text "There are no published assessment reports yet. You can add one by filling this questionnaire"
     Then I set "short_title" as "Short title" for "Assessment 12" assessment_report submission
     Then I go to "/collection/assessments/assessment-reports"

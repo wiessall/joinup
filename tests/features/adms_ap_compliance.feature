@@ -24,8 +24,8 @@ Feature: Interoperable Europe Portal should be ADMS-AP compliant.
       | Early Omega  | Morbid Scattered Microphone | Andre Munson     | <p>content</p> | logo.png | Teddy Bass | Jocelyn Bass        | 2017-11-01T8:00 | 2017-12-01T8:43   | text.pdf  | registered users | Alphabet, games | http://www.example.com/landing1 | Bulgarian | http://www.example.org/metrics1 | no               | EU and European Policies |                   | Networking Infrastructure Enablers | Completed | published | no       |
       | Snake Timely | Morbid Scattered Microphone | Branson Winthrop | <p>content</p> | logo.png | Teddy Bass | Jocelyn Bass        | 2015-03-03T8:00 | 2018-02-14T18:43  | text.pdf  | registered users |                 | http://www.example.com/landing2 | English   | http://www.example.org/metrics2 | yes              | Demography               | Early Omega       | Networking Infrastructure Enablers | Completed | published | no       |
     And release content:
-      | title  | resources | release number | release notes | creation date    | is version of | state     | status    | spatial coverage | keywords | language |
-      | Omega3 | text.pdf  | 3.0.0          | New 3.0       | 2017-11-11T11:11 | Early Omega   | published | Completed | Belgium          | Alphabet | English  |
+      | title  | resources | release number | release notes | creation date    | is version of | state     | status    | spatial coverage | keywords |
+      | Omega3 | text.pdf  | 3.0.0          | New 3.0       | 2017-11-11T11:11 | Early Omega   | published | Completed | Belgium          | Alphabet |
     # The two cases cover the two possible access URL types extracted.
     # @see \Drupal\joinup_distribution\EventSubscriber\DistributionParentRdfSyncSubscriber::addDistributionParentRelation().
     And distribution content:

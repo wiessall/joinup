@@ -6,7 +6,6 @@ dependencies:
     - field.field.node.release.description
     - field.field.node.release.field_state
     - field.field.node.release.keywords
-    - field.field.node.release.language
     - field.field.node.release.og_audience
     - field.field.node.release.process_status
     - field.field.node.release.release_number
@@ -67,20 +66,6 @@ content:
       match_operator: CONTAINS
       match_limit: 10
       placeholder: 'Start typing to select or add a keyword...'
-      suggestions_dropdown: 1
-      show_entity_id: 0
-      show_info_label: 0
-      info_label: ''
-      parent_selection: 1
-    third_party_settings: {  }
-  language:
-    type: tagify_entity_reference_autocomplete_widget
-    weight: 7
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 0
-      placeholder: 'Select or start typing...'
       suggestions_dropdown: 1
       show_entity_id: 0
       show_info_label: 0

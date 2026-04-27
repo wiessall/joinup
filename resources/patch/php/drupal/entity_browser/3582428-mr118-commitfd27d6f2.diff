@@ -1,0 +1,35 @@
+diff --git a/js/entity_browser.view.js b/js/entity_browser.view.js
+index 2ad64d84da92df8e27fe9c0ad0d693321045d197..ca557ac4b32616dbfa7a255d6f49829393575706 100644
+--- a/js/entity_browser.view.js
++++ b/js/entity_browser.view.js
+@@ -20,6 +20,30 @@
+       var views_instance = Drupal.views.instances[Object.keys(Drupal.views.instances)[0]];
+       if (views_instance) {
+         views_instance.$exposed_form = $('.js-view-dom-id-' + views_instance.settings.view_dom_id + ' .views-exposed-form');
++
++        // Override removeExposedFiltersQueryParameters() to handle the
++        // exposed form <div> wrapper. See https://www.drupal.org/i/3582428.
++        if (views_instance.removeExposedFiltersQueryParameters) {
++          var originalRemove = views_instance.removeExposedFiltersQueryParameters;
++          views_instance.removeExposedFiltersQueryParameters = function (url, $exposedForm) {
++            if ($exposedForm && $exposedForm.length && !($exposedForm.get(0) instanceof HTMLFormElement)) {
++              var urlObj = new URL(url, window.location.origin);
++              var urlObjCopy = new URL(url, window.location.origin);
++              var cleanKeys = {};
++              $exposedForm.find(':input[name]').each(function () {
++                cleanKeys[this.name.split('[')[0]] = true;
++              });
++              urlObjCopy.searchParams.forEach(function (value, key) {
++                if (cleanKeys[key.split('[')[0]]) {
++                  urlObj.searchParams.delete(key);
++                }
++              });
++              return urlObj.pathname + urlObj.search;
++            }
++            return originalRemove.call(this, url, $exposedForm);
++          };
++        }
++
+         $(once('exposed-form', views_instance.$exposed_form)).each(jQuery.proxy(views_instance.attachExposedFormAjax, views_instance));
+ 
+         // The form values form_id, form_token, and form_build_id will break

@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxy;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_notification\Event\NotificationEvent;
@@ -267,6 +268,10 @@ abstract class NotificationSubscriberBase implements EventSubscriberInterface {
 
     $arguments['@site:legal_notice_url'] = Url::fromRoute('entity.entity_legal_document.canonical', ['entity_legal_document' => 'legal_notice'], ['absolute' => TRUE])
       ->toString();
+
+    if ($this->entity instanceof CollectionInterface && !$this->entity->getSetting('approval_message')->isEmpty()) {
+      $arguments['custom_approval_message'] = $this->entity->getSetting('approval_message')->value;
+    }
 
     return $arguments;
   }

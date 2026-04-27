@@ -7,3 +7,8 @@ inline-items:
   css:
     component:
       css/inline-items.css: {}
+
+entity_browser:
+  css:
+    component:
+      css/entity-browser.css: {}
