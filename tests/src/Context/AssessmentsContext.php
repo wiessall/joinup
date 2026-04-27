@@ -287,6 +287,20 @@ class AssessmentsContext extends RawDrupalContext {
   }
 
   /**
+   * Navigates to the translation overview form of an assessment.
+   *
+   * @param string $title
+   *   The title of the entity.
+   * @param string $bundle
+   *   The assessment bundle.
+   */
+  #[When('I visit the translation overview form of the :title :bundle assessment')]
+  public function visitEntityTranslationOverviewForm(string $title, string $bundle): void {
+    $entity = $this->getEntityByLabel('assessment', $title, $bundle);
+    $this->visitPath($entity->toUrl('drupal:content-translation-overview')->toString());
+  }
+
+  /**
    * Checks if an assessment entity with a specific name exists.
    *
    * @param string $type
