@@ -24,7 +24,7 @@ settings:
   handler: views
   handler_settings:
     view:
-      view_name: eu_countries
-      display_name: eu_complete
+      view_name: countries
+      display_name: entity_reference_eu_countries
       arguments: {  }
 field_type: entity_reference

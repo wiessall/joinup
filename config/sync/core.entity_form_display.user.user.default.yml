@@ -7,6 +7,7 @@ dependencies:
     - field.field.user.user.field_social_media
     - field.field.user.user.field_user_business_title
     - field.field.user.user.field_user_content
+    - field.field.user.user.field_user_country_of_residence
     - field.field.user.user.field_user_family_name
     - field.field.user.user.field_user_first_name
     - field.field.user.user.field_user_frequency
@@ -17,6 +18,7 @@ dependencies:
     - field.field.user.user.function_of_administration
     - image.style.thumbnail
   module:
+    - entity_form_field_label
     - path
     - search_api_field
     - social_media_links_field
@@ -47,7 +49,7 @@ content:
     third_party_settings: {  }
   field_user_business_title:
     type: string_textfield
-    weight: 7
+    weight: 8
     region: content
     settings:
       size: 60
@@ -59,6 +61,15 @@ content:
     region: content
     settings:
       query_builder: false
+    third_party_settings: {  }
+  field_user_country_of_residence:
+    type: tagify_select_widget
+    weight: 6
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      placeholder: ''
     third_party_settings: {  }
   field_user_family_name:
     type: string_textfield
@@ -85,10 +96,15 @@ content:
       match_limit: 10
       size: 60
       placeholder: ''
-    third_party_settings: {  }
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+        new_description: ''
+        rewrite_description: 0
   field_user_organisation:
     type: string_textfield
-    weight: 8
+    weight: 9
     region: content
     settings:
       size: 60
@@ -104,7 +120,7 @@ content:
     third_party_settings: {  }
   field_user_professional_domain:
     type: tagify_entity_reference_autocomplete_widget
-    weight: 6
+    weight: 7
     region: content
     settings:
       match_operator: CONTAINS

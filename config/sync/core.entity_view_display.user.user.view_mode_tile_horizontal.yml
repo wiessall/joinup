@@ -8,6 +8,7 @@ dependencies:
     - field.field.user.user.field_social_media
     - field.field.user.user.field_user_business_title
     - field.field.user.user.field_user_content
+    - field.field.user.user.field_user_country_of_residence
     - field.field.user.user.field_user_family_name
     - field.field.user.user.field_user_first_name
     - field.field.user.user.field_user_frequency
@@ -102,6 +103,7 @@ hidden:
   blocked_reason: true
   field_social_media: true
   field_user_content: true
+  field_user_country_of_residence: true
   field_user_frequency: true
   function_of_administration: true
   langcode: true
