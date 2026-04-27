@@ -778,7 +778,7 @@ class JoinupContext extends RawDrupalContext {
       $node->abstract = 'default abstract';
     }
 
-    if (!empty($field_definitions['description']) && empty($node->descritpion)) {
+    if (!empty($field_definitions['description']) && empty($node->description)) {
       $node->description = 'default description';
     }
     if (!empty($field_definitions['solution_type']) && empty($node->solution_type)) {

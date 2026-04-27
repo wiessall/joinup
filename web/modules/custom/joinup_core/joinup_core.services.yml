@@ -46,3 +46,7 @@ services:
   Drupal\joinup_core\Routing\AssetControllerRouteSubscriber: { }
 
   Drupal\joinup_core\Routing\NodeCreationAccessRouteSubscriber: { }
+
+  Drupal\joinup_core\Update\BackendModerator: { }
+
+  Drupal\joinup_core\Update\BackendModeratorRunner: { }
