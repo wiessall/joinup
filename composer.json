@@ -349,9 +349,6 @@
                 "Weekly view doesn't show first week of new year @see https://www.drupal.org/i/3484325": "resources/patch/php/drupal/calendar_view/3484325.comment16152620.patch",
                 "PHP 8.4 @see https://www.drupal.org/i/3547610": "resources/patch/php/drupal/calendar_view/3547610.mr46.commit-5b06a367.diff"
             },
-            "drupal/config_ignore": {
-                "Missing schema on nested elements @see https://www.drupal.org/i/3578849": "resources/patch/php/drupal/config_ignore/3578849-3.diff"
-            },
             "drupal/config_inspector": {
                 "Missing schema on nested elements @see https://www.drupal.org/i/3548299": "resources/patch/php/drupal/config_inspector/3548299.diff"
             },
@@ -385,8 +382,7 @@
                 "REST views: Add pagination information and total count result @see https://www.drupal.org/i/2982729": "resources/patch/php/drupal/core/2982729-mr6558.commit290eabb1.diff",
                 "Slow admin/config page load. @see https://www.drupal.org/i/3336621": "resources/patch/php/drupal/core/3336621.mr15137-commit7b9c8c6a.patch",
                 "Exposed filters get values from url when ajax is on @see https://www.drupal.org/i/3121172": "resources/patch/php/drupal/core/3121172-mr10230-commit41ded0c5.diff",
-                "[PHP 8.5] ViewsViewsHooks::viewsData() should not add Bulk Update fields for entity types without base table @see https://www.drupal.org/i/3581679": "resources/patch/php/drupal/core/3581679.mr15223.commit-a002f9ff.diff",
-                "[PHP 8.5] FieldViewsDataProvider::defaultFieldImplementation() should be aware of missing data table @see https://www.drupal.org/i/3582171": "resources/patch/php/drupal/core/3582171.mr15279.commit-75675d54.diff"
+                "[PHP 8.5] ViewsViewsHooks::viewsData() should not add Bulk Update fields for entity types without base table @see https://www.drupal.org/i/3581679": "resources/patch/php/drupal/core/3581679.mr15223.commit-a002f9ff.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
@@ -521,7 +517,7 @@
                 "Users are deleted without prior notification when \"Notification User Before Deletion\" is enabled @see https://www.drupal.org/i/3521201": "resources/patch/php/drupal/purge_users/3521201.mr51.commit-bf5fb23d.diff"
             },
             "drupal/rdf_sync": {
-                "Ensure a non-null plugin ID @see https://www.drupal.org/i/3581647": "resources/patch/php/drupal/rdf_sync/3581647.mr47.commit-495a3deb.diff"
+                "Ensure a non-null plugin ID @see https://www.drupal.org/i/3581647": "resources/patch/php/drupal/rdf_sync/3581647.mr47.commit-110fdf0c.diff"
             },
             "drupal/search_api": {
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199-42e0e284.diff",
@@ -581,9 +577,6 @@
             },
             "openeuropa/oe_webtools": {
                 "PHP 8.5 compatibility @see https://github.com/openeuropa/oe_webtools/pull/311": "resources/patch/php/openeuropa/oe_webtools/pr311.commit-d4a22bb.diff"
-            },
-            "phpro/grumphp-shim": {
-                "Temporarily disable box checks @see https://github.com/phpro/grumphp-shim/issues/30": "resources/patch/php/phpro/grumphp-shim/box.diff"
             },
             "solarium/solarium": {
                 "PHP 8.5 support @see https://github.com/solariumphp/solarium/pull/1178": "resources/patch/php/solarium/solarium/pr1178.commit-8f11b58.diff"
