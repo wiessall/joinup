@@ -293,7 +293,7 @@ display:
           admin_label: ''
           plugin_id: text_custom
           empty: true
-          content: "<p>\r\nThe interoperability assessments repository gathers all assessments that have been either conducted via the online tool or uploaded on the Interoperable Europe Portal.<br>\r\nCheck them out to discover what binding requirements have already been assessed or search for particular reports <a href=\"/search?f%5B0%5D=type%3Areport\">here</a>.</p>"
+          content: "<p>\r\nThe interoperability assessments repository gathers all assessments that have been either conducted via the online tool or uploaded on the Interoperable Europe Portal.\r\n</p>"
           tokenize: false
         assessments_reports_links:
           id: assessments_reports_links
