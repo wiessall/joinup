@@ -601,7 +601,6 @@ display:
           search_fields:
             name: name
       defaults:
-        fields: false
         filters: false
         filter_groups: false
       display_description: ''
