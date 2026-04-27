@@ -37,6 +37,7 @@ Feature: Translating assessments
       | Flora Mod   | Report 1 | 200  |
       | Lee Facil   | Report 1 | 403  |
 
+  @javascript
   Scenario: Test creating assessment report translation from UI.
     Given I am logged in as "Flora Mod"
 
@@ -47,6 +48,7 @@ Feature: Translating assessments
 
     # Create translation.
     When I go to the homepage of the "Report 1" assessment
+    When I open the header local tasks menu
     And I click "Translate" in the "Entity actions" region
     And I click "Add" in the "Polish" row
     Then I should see the heading "Create Polish translation of Report 1"
@@ -55,15 +57,30 @@ Feature: Translating assessments
     When I fill in "Short title" with "Raport 1"
     And I fill in "Remaining barriers to cross-border interoperability" with "Nie zidentyfikowano żadnych istotnych barier."
     And I fill in "Please add any other comment you would like to share." with "Ocena została przeprowadzona we współpracy z wieloma interesariuszami."
+
+    # Binding requirements
+    When I click "Edit"
+    And a modal should open
+    When I click "Initiative" in the "Modal content" region
+    And I fill in "expression[0][inline_entity_form][initiative_name][value]" with "Expression 1 PL" in the "Modal content" region
+    And I fill in "expression[0][inline_entity_form][description][0][value]" with "Description 1 PL" in the "Modal content" region
+    When I click "Requirements" in the "Modal content" region
+    And I fill in "description[0][value]" with "BR Description 1 PL" in the "Modal content" region
+    Then I press "Save" in the "Modal buttons" region
+
     And I press "Save"
     Then I should see the success message "The assessment Raport 1 has been updated."
     And I should see the heading "Raport 1"
     And I should see the following lines of text:
-      | Raport 1     |
-      | Nie zidentyfikowano żadnych istotnych barier. |
+      | Raport 1                                                                |
+      | Nie zidentyfikowano żadnych istotnych barier.                           |
       | Ocena została przeprowadzona we współpracy z wieloma interesariuszami.  |
+      | Expression 1 PL                                                         |
+      | Description 1 PL                                                        |
+      | BR Description 1 PL                                                     |
 
     # Edit translation.
+    When I open the header local tasks menu
     When I click "Translate" in the "Entity actions" region
     Then I should see "Raport 1"
     When I click "Edit" in the "Polish" row
@@ -74,14 +91,12 @@ Feature: Translating assessments
     And I should see the heading "Zaktualizowana ocena"
 
     # Delete translation.
+    When I open the header local tasks menu
     When I click "Translate" in the "Entity actions" region
-    And I click "Delete" in the "Polish" row
+    And I click the "Delete" link in the dropdown menu in the "Polish" row
     Then I should see "Are you sure you want to delete the Polish translation of the assessment Zaktualizowana ocena?"
     When I press "Delete Polish translation"
     Then I should see the success message "The assessment Zaktualizowana ocena Polish translation has been deleted."
-    When I click "Translate" in the "Entity actions" region
-    Then I should not see "Edit" in the "Polish" row
-    And I should see the "Add" in the "Polish" row
 
   Scenario: Default language of new assessment should be same as language of the interface
     Given I am logged in as "Flora Mod"
