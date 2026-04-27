@@ -1,9 +1,0 @@
---- a/grumphp
-+++ b/grumphp
-@@ -9,5 +9,5 @@ $phar = __DIR__ . '/grumphp.phar';
- 
- $phar = __DIR__ . '/grumphp.phar';
- 
--require "phar://$phar/.box/bin/check-requirements.php";
-+// require "phar://$phar/.box/bin/check-requirements.php";
- require "phar://$phar/bin/grumphp";
