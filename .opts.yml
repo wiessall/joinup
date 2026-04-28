@@ -5,20 +5,20 @@
 # See \EcEuropa\Toolkit\TaskRunner\Commands\CloneCommands::runDeploy().
 upgrade_commands:
   default:
-    - vendor/bin/drush deploy --yes
-    - vendor/bin/drush search-api:reset-tracker --yes
-    - vendor/bin/drush joinup:node-access-rebuild
-    - vendor/bin/drush joinup:search-api-tasks
-    - vendor/bin/drush joinup:unpublish-alert --category
-    - vendor/bin/drush joinup:generate-oauth-keys
-    - scripts/check_status_report.php
+    - ./vendor/bin/drush deploy --yes
+    - ./vendor/bin/drush search-api:reset-tracker --yes
+    - ./vendor/bin/drush joinup:node-access-rebuild
+    - ./vendor/bin/drush joinup:search-api-tasks
+    - ./vendor/bin/drush joinup:unpublish-alert --category
+    - ./vendor/bin/drush joinup:generate-oauth-keys
+    - ./scripts/check_status_report.php
   append:
     acceptance:
-      - vendor/bin/drush joinup:acc
-      - vendor/bin/drush cache:rebuild
+      - ./vendor/bin/drush joinup:acc
+      - ./vendor/bin/drush cache:rebuild
     ephemeral:
-      - vendor/bin/drush joinup:acc
-      - vendor/bin/drush cache:rebuild
+      - ./vendor/bin/drush joinup:acc
+      - ./vendor/bin/drush cache:rebuild
 php_version: 8.3
 extra_pkgs:
   - php8.3-apcu

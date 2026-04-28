@@ -39,7 +39,7 @@
         "drupal/diff": "^2.0",
         "drupal/digital_size_formatter": "~2.0",
         "drupal/dropsolid_purge": "^1.0@beta",
-        "drupal/dynamic_entity_reference": "^4.0",
+        "drupal/dynamic_entity_reference": "^3",
         "drupal/editor_file": "^2.1",
         "drupal/email_confirmer": "^1.0",
         "drupal/email_contact": "^2.0.4",
@@ -345,6 +345,8 @@
         "patches": {
             "drupal/babel": {
                 "Babel TMGMT form alter makes form state non-serializable, prevents using Form API batch @see https://drupal.org/i/3583826": "resources/patch/php/drupal/babel/3583826-mr81-commit67cb60ed.diff",
+                "babel_content_entity: fatal error on fresh install @see https://www.drupal.org/i/3582168": "resources/patch/php/drupal/babel/3582168.mr80.commit539af713.diff",
+                "Text format gets copied into the translation value @see https://www.drupal.org/i/3585377": "resources/patch/php/drupal/babel/3585377-mr84-commit91011132.diff",
                 "Save translation also when is matching the source @see https://www.drupal.org/i/3583929": "resources/patch/php/drupal/babel/3583929.mr82.commit-50146377.diff",
                 "ConfigSubscriber::destruct() crashes when config is renamed or deleted during import @see https://www.drupal.org/i/3585127": "resources/patch/php/drupal/babel/3585127.mr83.commit82e426db.diff",
                 "BabelStorage::updateSourceTables() performs unnecessary full-table-scan DELETEs @see https://www.drupal.org/i/3586174": "resources/patch/php/drupal/babel/3586174.mr86-commitfcf47626.diff"
@@ -403,7 +405,8 @@
                 "Do not process empty batches. @see https://github.com/jhedstrom/DrupalDriver/pull/284": "resources/patch/php/drupal/drupal-driver/284.diff"
             },
             "drupal/dynamic_entity_reference": {
-                "Undefined array key on dependency removal @see https://www.drupal.org/i/3099176": "resources/patch/php/drupal/dynamic_entity_reference/3099176-3.x-16.diff"
+                "Undefined array key on dependency removal @see https://www.drupal.org/i/3099176": "resources/patch/php/drupal/dynamic_entity_reference/3099176-3.x-16.diff",
+                "Declaration of variable problem @see https://www.drupal.org/i/3538270": "resources/patch/php/drupal/dynamic_entity_reference/3538270-mr42-commit9732eea1d.diff"
             },
             "drupal/entity_browser": {
                 "TypeError in removeExposedFiltersQueryParameters: exposed form in a div, not a form element @see https://www.drupal.org/i/3582428": "resources/patch/php/drupal/entity_browser/3582428-mr118-commitfd27d6f2.diff",
@@ -486,7 +489,6 @@
                 "Renderer::renderPlain() is deprecated @see https://www.drupal.org/i/3511648": "resources/patch/php/drupal/message_digest/3511648.diff"
             },
             "drupal/meta_entity": {
-                "Allow $bundle to be nullable @see https://www.drupal.org/i/3529976": "resources/patch/php/drupal/meta_entity/3529976.diff",
                 "hook_entity_insert() auto-creates duplicate @see https://www.drupal.org/i/3583434": "resources/patch/php/drupal/meta_entity/3583434.mr20-commitf3ef1e53.diff"
             },
             "drupal/oauth_client": {
