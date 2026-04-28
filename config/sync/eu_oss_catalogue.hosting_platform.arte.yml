@@ -1,0 +1,18 @@
+uuid: e6708fe6-1bc3-415c-a935-80bc04aa1aa7
+langcode: en
+status: true
+dependencies: {  }
+id: arte
+label: ARTE
+type: national
+country: PT
+weblinks:
+  -
+    url: 'https://www.arte.gov.pt'
+    title: null
+description: 'ARTE (AGÊNCIA PARA A REFORMA TECNOLÓGICA DO ESTADO) promotes administrative modernisation and simplification, ensuring the interoperability of systems and data, implementing cybersecurity and data policies, integrating emerging technologies, coordinating the omnichannel and face-to-face service network, and strengthening the digital empowerment of Portuguese society, acting in close coordination with all entities of the Public Administration .'
+platformId: github
+platformSettings:
+  baseUrl: 'https://github.com'
+  projects:
+    amagovpt: null
