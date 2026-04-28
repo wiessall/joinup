@@ -17,10 +17,10 @@ default:
       value: 'How can we improve cross-border interoperability between national health information systems while maintaining strict data privacy compliance across all twenty-seven member states?'
   created:
     -
-      value: 1713534900
+      value: 1713534860
   published_at:
     -
-      value: 1713534900
+      value: 1713534860
   body:
     -
       value: '<p>This discussion explores strategies to enhance interoperability between national health information systems across the EU, with a focus on GDPR compliance and patient data portability. Share your experiences and recommendations for overcoming technical and legal barriers.</p>'

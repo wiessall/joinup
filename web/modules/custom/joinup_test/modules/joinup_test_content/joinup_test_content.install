@@ -14,7 +14,8 @@ use Drupal\paragraphs\Entity\Paragraph;
  * Implements hook_install().
  */
 function joinup_test_content_install(): void {
-  // Add a configurable listing paragraph to the eGov topic meta entity.
+  // Add paragraphs to the eGov topic meta entity, mirroring the production
+  // topic page structure (layout + configurable listings).
   $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
   $terms = $term_storage->loadByProperties([
     'uuid' => 'ee3076fa-ee59-41b8-997e-b8e0fab5559f',
@@ -27,26 +28,83 @@ function joinup_test_content_install(): void {
     'type' => 'topic',
     'target' => $term->id(),
   ]);
-  if ($entity = reset($entities)) {
-    $paragraph = Paragraph::create([
-      'type' => 'configurable_listing',
-      'status' => TRUE,
-      'paragraph_heading' => 'Solutions and resources',
-      'list_style' => 'grid',
-      'content_listing' => [
-        'value' => [
-          'enabled' => 1,
-          'query_presets' => '',
-          'limit' => 10,
-          'global_search' => FALSE,
-          'show_shared' => FALSE,
-        ],
-      ],
-    ]);
-    $paragraph->save();
-    $entity->get('topics_paragraph')->appendItem($paragraph);
-    $entity->save();
+  if (!$entity = reset($entities)) {
+    return;
   }
+
+  $topic_name = $term->label();
+  $field = $entity->get('topics_paragraph');
+
+  // Layout 1 (one-column): Featured Content grid.
+  $layout1 = Paragraph::create(['type' => 'layout', 'status' => TRUE]);
+  $layout1->setBehaviorSettings('layout_paragraphs', ['layout' => 'layout_onecol', 'config' => ['label' => '']]);
+  $layout1->save();
+  $field->appendItem($layout1);
+
+  $featured = Paragraph::create([
+    'type' => 'configurable_listing',
+    'status' => TRUE,
+    'paragraph_heading' => 'Featured Content',
+    'list_style' => 'grid',
+    'content_listing' => [
+      'value' => [
+        'enabled' => 1,
+        'query_presets' => '',
+        'limit' => 6,
+        'global_search' => FALSE,
+        'show_shared' => FALSE,
+      ],
+    ],
+  ]);
+  $featured->setBehaviorSettings('layout_paragraphs', ['parent_uuid' => $layout1->uuid(), 'region' => 'content']);
+  $featured->save();
+  $field->appendItem($featured);
+
+  // Layout 2 (two-column): In the spotlight + Latest News.
+  $layout2 = Paragraph::create(['type' => 'layout', 'status' => TRUE]);
+  $layout2->setBehaviorSettings('layout_paragraphs', ['layout' => 'layout_twocol_section', 'config' => ['label' => '']]);
+  $layout2->save();
+  $field->appendItem($layout2);
+
+  $spotlight = Paragraph::create([
+    'type' => 'configurable_listing',
+    'status' => TRUE,
+    'paragraph_heading' => 'In the spotlight',
+    'list_style' => 'list',
+    'content_listing' => [
+      'value' => [
+        'enabled' => 1,
+        'query_presets' => '',
+        'limit' => 3,
+        'global_search' => FALSE,
+        'show_shared' => FALSE,
+      ],
+    ],
+  ]);
+  $spotlight->setBehaviorSettings('layout_paragraphs', ['parent_uuid' => $layout2->uuid(), 'region' => 'first']);
+  $spotlight->save();
+  $field->appendItem($spotlight);
+
+  $news = Paragraph::create([
+    'type' => 'configurable_listing',
+    'status' => TRUE,
+    'paragraph_heading' => 'Latest News',
+    'list_style' => 'list',
+    'content_listing' => [
+      'value' => [
+        'enabled' => 1,
+        'query_presets' => "entity_bundle|news|IN\ntopic|$topic_name|IN",
+        'limit' => 3,
+        'global_search' => FALSE,
+        'show_shared' => FALSE,
+      ],
+    ],
+  ]);
+  $news->setBehaviorSettings('layout_paragraphs', ['parent_uuid' => $layout2->uuid(), 'region' => 'second']);
+  $news->save();
+  $field->appendItem($news);
+
+  $entity->save();
 }
 
 /**
@@ -67,11 +125,16 @@ function joinup_test_content_uninstall(): void {
   }
   if (!empty($entities) && $entity = reset($entities)) {
     $paragraphs = $entity->get('topics_paragraph');
+    $to_remove = [];
     foreach ($paragraphs as $delta => $item) {
-      if ($item->entity && $item->entity->bundle() === 'configurable_listing') {
-        $item->entity->delete();
-        $paragraphs->removeItem($delta);
+      if ($item->entity && in_array($item->entity->bundle(), ['configurable_listing', 'layout'], TRUE)) {
+        $to_remove[] = $delta;
       }
+    }
+    // Remove in reverse order to preserve deltas.
+    foreach (array_reverse($to_remove) as $delta) {
+      $paragraphs->get($delta)->entity->delete();
+      $paragraphs->removeItem($delta);
     }
     $entity->save();
   }
