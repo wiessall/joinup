@@ -7,13 +7,13 @@ Feature: Archived content on content listings - groups and paragraphs.
       | Some collection | Test        | Supplier exchange |
       | Poly screens    | Test        | Supplier exchange |
     And news content:
-      | title          | headline       | collection      | abstract | field_paragraphs_body | content | created         |
-      | Archived news  | Archived news  | Some collection | Abstract | Test                  | Test    | 2016-01-03T4:00 |
-      | Published news | Published news | Some collection | Abstract | Test                  | Test    | 2016-02-04T5:00 |
-      | Poly news 1    | Poly news 1    | Poly screens    | Abstract | Test                  | Test    | 2016-03-05T6:00 |
-      | Poly news 2    | Poly news 2    | Poly screens    | Abstract | Test                  | Test    | 2016-04-06T7:00 |
-      | Poly news 3    | Poly news 3    | Poly screens    | Abstract | Test                  | Test    | 2016-05-07T8:00 |
-      | Poly news 4    | Poly news 4    | Poly screens    | Abstract | Test                  | Test    | 2016-06-08T9:00 |
+      | title          | headline       | collection      | abstract | body | created         |
+      | Archived news  | Archived news  | Some collection | Abstract | Test | 2016-01-03T4:00 |
+      | Published news | Published news | Some collection | Abstract | Test | 2016-02-04T5:00 |
+      | Poly news 1    | Poly news 1    | Poly screens    | Abstract | Test | 2016-03-05T6:00 |
+      | Poly news 2    | Poly news 2    | Poly screens    | Abstract | Test | 2016-04-06T7:00 |
+      | Poly news 3    | Poly news 3    | Poly screens    | Abstract | Test | 2016-05-07T8:00 |
+      | Poly news 4    | Poly news 4    | Poly screens    | Abstract | Test | 2016-06-08T9:00 |
     # We need the "Archived news" content to be archived by altering its state
     # because "Unarchiving" it restored the previous revision and thus, needs
     # to have a previous revision (created as published).
@@ -113,9 +113,9 @@ Feature: Archived content on content listings - groups and paragraphs.
       | uri                                                            | title                |
       | http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c | Interoperable Europe |
     And news content:
-      | title              | headline           | state     | collection           | body | content |
-      | IOP archived news  | IOP archived news  | archived  | Interoperable Europe | Test | Test    |
-      | IOP published news | IOP published news | published | Interoperable Europe | Test | Test    |
+      | title              | headline           | state     | collection           | body |
+      | IOP archived news  | IOP archived news  | archived  | Interoperable Europe | Test |
+      | IOP published news | IOP published news | published | Interoperable Europe | Test |
     And custom_page content:
       | title    | abstract          | collection           |
       | IOP page | IOP page abstract | Interoperable Europe |
