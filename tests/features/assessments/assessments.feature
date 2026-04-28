@@ -157,10 +157,24 @@ Feature: Assessment Report Entity Management
     Then I should see the success message containing "New assessment Test Assessment Report 2025 has been created."
     And I should see the heading "Test Assessment Report 2025"
     And I should see the following lines of text:
+      # General information
       | Status: Draft                                                                                      |
       | Austrian Ministry of Digital Affairs, a Local public sector body from Belgium                      |
       | The report has been connected to the following previous/relevant reports                           |
       | https://interoperable-europe.ec.europa.eu/report                                                   |
+      # Binding requirements
+      | Digital Transformation Initiative                                                                  |
+      | This is the general binding requirement description                                                |
+      | eIDAS Authentication Service                                                                       |
+      | Local public sector body                                                                           |
+      | Test solution                                                                                      |
+      # Results
+      | Complies with GDPR and eIDAS regulations                                                           |
+      | Requires coordination between authorities                                                          |
+      | Uses standardized Core Vocabularies                                                                |
+      | Implements REST APIs and OpenAPI specs                                                             |
+      | No significant barriers identified.                                                                |
+      # Supporting documents and general comments
       | This assessment was conducted in collaboration with multiple stakeholders across EU member states. |
 
     # Edit test.
