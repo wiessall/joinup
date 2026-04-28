@@ -117,7 +117,6 @@ trait NameMappingsTrait {
       ],
       'news' => [
         'body' => 'field_paragraphs_body',
-        'content' => 'field_paragraphs_body',
         'headline' => 'field_news_headline',
         'keywords' => 'keywords',
         'logo' => 'field_news_logo',
