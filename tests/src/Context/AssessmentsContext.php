@@ -80,7 +80,7 @@ class AssessmentsContext extends RawDrupalContext {
 
       if (isset($assessment['results_in'])) {
         $statement = $this->getEntityById('assessment_statement', $assessment['results_in']);
-        $assessment[$statement->bundle() . ':target_id'] = $statement->id();
+        $assessment[$statement->bundle()] = $statement->id();
         unset($assessment['results_in']);
       }
 
