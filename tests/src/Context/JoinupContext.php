@@ -691,7 +691,8 @@ class JoinupContext extends RawDrupalContext {
       $environment = $scope->getEnvironment();
       /** @var \Drupal\joinup\Context\CustomPageContext $context */
       $context = $environment->getContext(self::class);
-      foreach ($context->explodeDelimitedSeparatedStepArgument($node->field_attachment) as $delta => $piece) {
+      $value = [];
+      foreach ($context->explodeDelimitedSeparatedStepArgument($node->field_attachment) as $piece) {
         if (strpos($piece, ':')) {
           preg_match('/target_id:\s*(?<filename>[^ -]*)/', $piece, $matches);
           if (empty($matches['filename'])) {
@@ -703,9 +704,9 @@ class JoinupContext extends RawDrupalContext {
         else {
           $file = $context->createFile($piece);
         }
-        $node->{"field_attachment:{$delta}:target_id"} = $file->id();
+        $value[] = "target_id: {$file->getFileUri()} - filename: {$file->getFilename()}";
       }
-      unset($node->field_attachment);
+      $node->field_attachment = implode(', ', $value);
     }
 
     // Replace collection and solution group references that use titles with the

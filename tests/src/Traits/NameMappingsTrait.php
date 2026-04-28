@@ -62,6 +62,7 @@ trait NameMappingsTrait {
         'creation date' => 'created',
         'keywords' => 'keywords',
         'logo' => 'field_custom_page_logo',
+        'published at' => 'published_at',
         'state' => 'field_state',
       ],
       'discussion' => [
