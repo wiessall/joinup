@@ -812,7 +812,7 @@ trait TraversingTrait {
   /**
    * Runs the given callback, retrying on Selenium stale element errors.
    *
-   * jQuery-driven widgets (autocomplete, AJAX-rendered lists) may rebuild the
+   * JQuery-driven widgets (autocomplete, AJAX-rendered lists) may rebuild the
    * DOM between fetching an element handle and using it, invalidating the
    * handle mid-call. Re-running the operation with a freshly-fetched handle
    * resolves the race.
