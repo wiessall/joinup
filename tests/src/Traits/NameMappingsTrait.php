@@ -117,6 +117,7 @@ trait NameMappingsTrait {
         'legal type' => 'legal_type',
       ],
       'news' => [
+        'attachments' => 'field_attachment',
         'body' => 'field_paragraphs_body',
         'headline' => 'field_news_headline',
         'keywords' => 'keywords',

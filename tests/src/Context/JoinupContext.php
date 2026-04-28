@@ -683,30 +683,10 @@ class JoinupContext extends RawDrupalContext {
     }
 
     if (!empty($node->field_attachment)) {
-      // We want to copy it from the fixtures into the file system and register
-      // it in the CustomPageContext so it can be cleaned up after the scenario
-      // ends. Perform a small dance to get access to the context class from
-      // inside this static callback.
-      /** @var \Behat\Behat\Context\Environment\InitializedContextEnvironment $environment */
       $environment = $scope->getEnvironment();
-      /** @var \Drupal\joinup\Context\CustomPageContext $context */
+      /** @var self $context */
       $context = $environment->getContext(self::class);
-      $value = [];
-      foreach ($context->explodeDelimitedSeparatedStepArgument($node->field_attachment) as $piece) {
-        if (strpos($piece, ':')) {
-          preg_match('/target_id:\s*(?<filename>[^ -]*)/', $piece, $matches);
-          if (empty($matches['filename'])) {
-            throw new \Exception("Could not extract filename from '$piece'");
-          }
-          $filename = $matches['filename'];
-          $file = $context->createFile($filename);
-        }
-        else {
-          $file = $context->createFile($piece);
-        }
-        $value[] = "target_id: {$file->getFileUri()} - filename: {$file->getFilename()}";
-      }
-      $node->field_attachment = implode(', ', $value);
+      $node->field_attachment = $context->parseFileBehatValue($node->field_attachment);
     }
 
     // Replace collection and solution group references that use titles with the
@@ -770,8 +750,7 @@ class JoinupContext extends RawDrupalContext {
     ];
     foreach ($image_fields as $image_field) {
       if (!empty($node->$image_field)) {
-        $file = $this->createFile($node->$image_field);
-        $node->$image_field = $file->getFileUri();
+        $node->$image_field = $this->parseFileBehatValue($node->$image_field);
       }
     }
 
