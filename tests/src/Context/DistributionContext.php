@@ -52,8 +52,8 @@ class DistributionContext extends RawDrupalContext {
         'type' => 'download_count',
         'count' => (int) $node->downloads,
       ]);
-      unset($node->downloads);
     }
+    unset($node->downloads);
   }
 
   /**

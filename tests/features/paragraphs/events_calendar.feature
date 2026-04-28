@@ -80,7 +80,7 @@ Feature:
 
   Scenario: Test upcoming events page and paragraph.
     Given custom_page content:
-      | title                  | Abstract                        | collection        |
+      | title                  | abstract                        | collection        |
       | Future events calendar | Abstract future events calendar | Le Event Heureux  |
       | Upcoming events        | Upcoming events page            |                   |
     And event content:
