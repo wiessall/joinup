@@ -81,6 +81,8 @@ Feature: Assessment Report Entity Management
     And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
     And I click "New solution"
     And I wait until ".ck-editor__editable" element exists
+    When I press "Create" in the entity browser
+    Then I should see the error message "This value should not be null."
     And I fill in "Title of Solution" with "European Interoperability Framework (EIF)"
     And I enter "Description of EIF" in the "Description" wysiwyg editor
     And I fill in "Relevant website" with "http://no-abstract.com"
