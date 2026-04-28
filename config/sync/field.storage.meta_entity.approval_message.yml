@@ -1,0 +1,23 @@
+uuid: 7c43b2f8-010e-446f-8a8d-f764d2b75203
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - meta_entity
+    - text
+third_party_settings:
+  field_permissions:
+    permission_type: custom
+id: meta_entity.approval_message
+field_name: approval_message
+entity_type: meta_entity
+type: text_long
+settings: {  }
+module: text
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

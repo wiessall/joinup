@@ -254,12 +254,13 @@ Feature: Assessment Report Entity Management
 
   Scenario: User can browse only published solutions in binding requirement
     Given solution content:
-      | title                     | state       |
-      | Test solution published   | published   |
-      | Test solution archived    | archived    |
-      | Test solution proposed    | proposed    |
-      | Test solution draft       | draft       |
-      | Test solution unpublished | unpublished |
+      | title                          | state       | interoperable |
+      | Test solution published        | published   |               |
+      | Test solution archived         | archived    |               |
+      | Test solution proposed         | proposed    |               |
+      | Test solution draft            | draft       |               |
+      | Test solution unpublished      | unpublished |               |
+      | Test interoperable solution    | published   | yes           |
 
     Given I am logged in as an "authenticated user"
     And I go to "/collection/assessments/report/create"
@@ -268,6 +269,7 @@ Feature: Assessment Report Entity Management
     And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
     Then I should not see the text "Interoperability Solutions Browser"
     And I should see "Test solution published"
+    And I should see "Test interoperable solution"
     And I should not see "Test solution archived"
     And I should not see "Test solution proposed"
     And I should not see "Test solution draft"
@@ -275,12 +277,12 @@ Feature: Assessment Report Entity Management
 
   Scenario: Entity browser exposed filters: name, domain and interoperable filters
     Given solution content:
-      | title              | state     | domain           | interoperable | description                             |
-      | Alpha Framework    | published | Defense          | yes           | A robust integration tool               |
-      | Beta Platform      | published | Economic affairs |               | A platform for data exchange             |
-      | Gamma Service      | published | Defense          | yes           | Service for robust identity verification |
-      | Delta Application  | published | Economic affairs |               | Application for document management      |
-      | Robust Engine      | published | Defense          |               | A simple computation engine              |
+      | title              | state     | domain           | interoperable | description                             | keywords           |
+      | Alpha Framework    | published | Defense          | yes           | A robust integration tool               | games              |
+      | Beta Platform      | published | Economic affairs |               | A platform for data exchange             | nintendo64 licences |
+      | Gamma Service      | published | Defense          | yes           | Service for robust identity verification | games              |
+      | Delta Application  | published | Economic affairs |               | Application for document management      | nintendo64 licences |
+      | Robust Engine      | published | Defense          |               | A simple computation engine              | games              |
 
     Given I am logged in as an "authenticated user"
     And I go to "/collection/assessments/report/create"
@@ -312,9 +314,19 @@ Feature: Assessment Report Entity Management
     And I should not see "Delta Application"
     And I should see "Robust Engine"
 
-    When I fill in "Name" with ""
-    And I select "Defense" from "Domain"
+    When I fill in "Name" with "nintendo64"
     And I press "Search"
+    And I wait for AJAX to finish
+    Then I should not see "Alpha Framework"
+    And I should see "Beta Platform"
+    And I should not see "Gamma Service"
+    And I should see "Delta Application"
+    And I should not see "Robust Engine"
+
+    When I fill in "Name" with ""
+    And I press "Search"
+    And I wait for AJAX to finish
+    And I select "Defense" from "Domain"
     And I wait for AJAX to finish
     Then I should see "Alpha Framework"
     And I should see "Gamma Service"
@@ -324,8 +336,8 @@ Feature: Assessment Report Entity Management
     And the "Domain" field should contain the "- Any domain -" option
 
     When I select "- Any domain -" from "Domain"
+    And I wait for AJAX to finish
     And I check "Interoperable Europe solutions"
-    And I press "Search"
     And I wait for AJAX to finish
     Then I should see "Alpha Framework"
     And I should see "Gamma Service"
@@ -334,7 +346,6 @@ Feature: Assessment Report Entity Management
     And I should not see "Robust Engine"
 
     When I uncheck "Interoperable Europe solutions"
-    And I press "Search"
     And I wait for AJAX to finish
     Then I should see "Alpha Framework"
     And I should see "Beta Platform"
@@ -403,6 +414,11 @@ Feature: Assessment Report Entity Management
     When I click "Interoperability solution" in the "Modal content" region
     And I should see "Asset to be removed" in the "Modal content" region
     And I should see "Asset that should remain" in the "Modal content" region
+
+    # Verify the new solution appears in the entity browser table.
+    And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
+    Then I should see the text "Asset that should remain"
+    And I press "Select solutions" to close the entity browser
 
     When I remove "Asset to be removed" from the entity browser widget
     And I wait for AJAX to finish

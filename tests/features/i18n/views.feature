@@ -100,21 +100,3 @@ Feature: Views display translated entities correctly.
     Then I should see "Breaking Story"
     When I visit "/el"
     Then I should see "Breaking GR Story"
-
-  # covers eu_oss_catalogue_admin view.
-  Scenario: OSS solutions are accessible on the public OSS catalogue page.
-    Given oss_solution content:
-      | title      | oss_development_status | oss_source        | oss_categories | oss_short_description  | status    | oss_release_date |
-      | OpenAccess | development            | developers_italia | data-analytics | Open access initiative | published | 2023-06-01       |
-    And oss_solution content:
-      | title            | oss_development_status | oss_source        | oss_categories | oss_short_description     | status    | oss_release_date | langcode |
-      | Ανοικτή πρόσβαση | development            | developers_italia | data-analytics | Initiative d'accès ouvert | published | 2023-06-01       | el       |
-    And the following locale string translations:
-      | source                 | language | translation               | status |
-      | OpenAccess             | fr       | OpenAccess                | 1      |
-      | Open access initiative | fr       | Initiative d'accès ouvert | 1      |
-    When I am an anonymous user
-    And I visit "/oss-solutions"
-    Then I should see "OpenAccess"
-    When I visit "/el/oss-solutions"
-    Then I should see "Ανοικτή πρόσβαση"

@@ -550,3 +550,14 @@ function assessments_query_explore_block_solution_alter(AlterableInterface $quer
     $query->condition('og_audience_target_id', $collector->id(), '<>');
   }
 }
+
+/**
+ * Implements hook_ajax_render_alter().
+ */
+function assessments_ajax_render_alter(array &$commands): void {
+  foreach ($commands as &$command) {
+    if ($command['command'] === 'openDialog' && !empty($command['dialogOptions']['modal']) && isset($command['dialogOptions']['classes']['ui-dialog']) && str_contains($command['dialogOptions']['classes']['ui-dialog'], 'entity-browser-modal')) {
+      $command['dialogOptions']['draggable'] = FALSE;
+    }
+  }
+}

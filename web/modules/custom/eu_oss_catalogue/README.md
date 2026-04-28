@@ -131,6 +131,7 @@ The module currently supports the following providers:
 - **Avoinkoodi.fi** (FI) - Finnish OSS Catalogue
 - **Department of Information Technology Services** (CY) - Cyprus national department promoting open-source solutions for public sector IT
 - **OGCIO Building Blocks** (IE) - Reusable open source digital components for Irish public services, delivered under the Office of the Government Chief Information Officer
+- **ARTE** (PT) - Portuguese Agency for the Technological Reform of the State, promoting administrative modernisation and digital transformation
 
 - Developers Italia: Italian National OSS Catalogue,
 by https://developers.italia.it website
@@ -350,6 +351,12 @@ Run the following, to fetch from
 [OGCIO Building Blocks (Ireland)](https://www.gov.ie/en/govie-team/campaigns/building-blocks/)
 ```bash
 ./vendor/bin/drush eu-oss:fetch hosting_platform:ogcio
+```
+
+Run the following, to fetch from
+[ARTE (Portuguese Agency for the Technological Reform of the State)](https://www.arte.gov.pt)
+```bash
+./vendor/bin/drush eu-oss:fetch hosting_platform:arte
 ```
 
 Run the following, to fetch from Other (custom solutions not part of any catalogue):
