@@ -65,13 +65,12 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
 
       $original = $storage->load($lastId);
       \assert($original instanceof NodeInterface);
+      $node = (object) array_filter((array) $node, fn (mixed $value): bool => $value !== '~~~' && $value !== ['~~~']);
+
       // This will eventually translate field aliases before expanding fields.
       // @see \Drupal\joinup\Context\JoinupContext::massageFieldsBeforeNodeCreate
       $this->dispatchHooks(BeforeNodeCreateScope::class, $node);
-      $translation = array_filter(
-        array_filter((array) $node) + $original->toArray(),
-        fn (mixed $value): bool => $value !== '~~~' && $value !== ['~~~']
-      );
+      $translation = array_filter((array) $node) + $original->toArray();
       $original->addTranslation($node->langcode, $translation)->save();
     }
   }
