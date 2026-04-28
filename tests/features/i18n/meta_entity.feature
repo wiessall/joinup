@@ -52,9 +52,9 @@ Feature: The moderator is able to translate meta entity strings.
     And I check "Show inactive"
     And I press "Filter"
 
-    When I fill in the 2nd occurrence of the "Singular form" field with "Dobra perspektywa., content_editor" in the "A great interoperability perspective." row
+    When I fill in the 2nd occurrence of the "Singular form" field with "Dobra perspektywa." in the "A great interoperability perspective." row
     And I press the 2nd button in the "A great interoperability perspective." row
-    Then I should see the success message 'Translation of source string "A great interoperability perspective., content_editor" in language Polish was updated.'
+    Then I should see the success message 'Translation of source string "A great interoperability perspective." in language Polish was updated.'
 
     And I go to the EIF perspective page of the "EIF Test Machine" solution
     When I click "Polish"
@@ -76,7 +76,7 @@ Feature: The moderator is able to translate meta entity strings.
 
     When I fill in the 2nd occurrence of the "Singular form" field with "Krótki opis sądowy." in the "A cross-border e-justice description." row
     And I press the 2nd button in the "A cross-border e-justice description." row
-    Then I should see the success message 'Translation of source string "A cross-border e-justice description., basic_html" in language Polish was updated.'
+    Then I should see the success message 'Translation of source string "A cross-border e-justice description." in language Polish was updated.'
 
     And I go to the canonical path of the "topic" meta entity of the "E-justice" topic "taxonomy term"
     When I click "Polish"

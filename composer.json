@@ -349,7 +349,6 @@
                 "Text format gets copied into the translation value @see https://www.drupal.org/i/3585377": "resources/patch/php/drupal/babel/3585377-mr84-commit91011132.diff",
                 "Save translation also when is matching the source @see https://www.drupal.org/i/3583929": "resources/patch/php/drupal/babel/3583929.mr82.commit-50146377.diff",
                 "ConfigSubscriber::destruct() crashes when config is renamed or deleted during import @see https://www.drupal.org/i/3585127": "resources/patch/php/drupal/babel/3585127.mr83.commit82e426db.diff",
-                "babel_content_entity: fatal error on fresh install @see https://www.drupal.org/i/3582168": "resources/patch/php/drupal/babel/3582168.mr80.commit539af713.diff",
                 "BabelStorage::updateSourceTables() performs unnecessary full-table-scan DELETEs @see https://www.drupal.org/i/3586174": "resources/patch/php/drupal/babel/3586174.mr86-commitfcf47626.diff"
             },
             "drupal/better_exposed_filters": {
