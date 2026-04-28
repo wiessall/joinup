@@ -43,6 +43,7 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\RequestOptions;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -68,6 +69,9 @@ class AssessmentReportResource extends ResourceBase {
   use FileUploadLocationTrait;
   use FileValidatorSettingsTrait;
   use ProvidedByHelperTrait;
+
+  // 50 MB ceiling applied before writing to disk (Content-Length pre-check).
+  private const MAX_DOCUMENT_SIZE = 52_428_800;
 
   /**
    * Assessment storage static cache.
@@ -593,15 +597,31 @@ class AssessmentReportResource extends ResourceBase {
    * @see https://docs.guzzlephp.org/en/stable/quickstart.html#concurrent-requests
    */
   protected function uploadDocuments(AssessmentReport $report, array $data): void {
-    $requests = function (array $data) {
+    $safeRequestOptions = [
+      RequestOptions::TIMEOUT => 30,
+      RequestOptions::CONNECT_TIMEOUT => 10,
+      // Redirects are disabled: a redirect target cannot be re-validated for
+      // private/reserved IPs, which would re-open the SSRF window.
+      RequestOptions::ALLOW_REDIRECTS => FALSE,
+    ];
+
+    $requests = function (array $data) use ($safeRequestOptions) {
       foreach ($data['documents'] ?? [] as $i => $url) {
-        $key = "/documents/$i:assessment.report.documents:$url";
-        yield $key => fn() => $this->httpClient->getAsync($url);
+        $path = "/documents/$i";
+        if (!$this->validateDocumentUrl($url, $path)) {
+          continue;
+        }
+        $key = "$path:assessment.report.documents:$url";
+        yield $key => fn() => $this->httpClient->getAsync($url, $safeRequestOptions);
       }
       foreach ($data['binding_requirement'] as $i => $requirement) {
         foreach ($requirement['documents'] ?? [] as $j => $url) {
-          $key = "/binding_requirement/$i/documents/$j:paragraph.binding_requirement.requirement_documents:$url";
-          yield $key => fn() => $this->httpClient->getAsync($url);
+          $path = "/binding_requirement/$i/documents/$j";
+          if (!$this->validateDocumentUrl($url, $path)) {
+            continue;
+          }
+          $key = "$path:paragraph.binding_requirement.requirement_documents:$url";
+          yield $key => fn() => $this->httpClient->getAsync($url, $safeRequestOptions);
         }
       }
     };
@@ -639,6 +659,12 @@ class AssessmentReportResource extends ResourceBase {
   protected function uploadFile(Response $response, string $key, AssessmentReport $report): void {
     // Unpack context information from the request key.
     [$path, $fieldInfo, $url] = explode(':', $key, 3);
+
+    $contentLength = (int) $response->getHeaderLine('Content-Length');
+    if ($contentLength > self::MAX_DOCUMENT_SIZE) {
+      $this->addError($path, 'Document exceeds the maximum allowed download size');
+      return;
+    }
     [$entityTypeId, $bundle, $fieldName] = explode('.', $fieldInfo);
 
     // Prepare the destination directory.
@@ -720,6 +746,82 @@ class AssessmentReportResource extends ResourceBase {
         $bindingRequirements[$delta]->entity->get($fieldName)->appendItem($file);
       }
     }
+  }
+
+  /**
+   * Validates a document URL against SSRF-unsafe schemes and IP ranges.
+   *
+   * Only http/https are allowed. The hostname is resolved to its IP addresses
+   * and any private, loopback, or link-local address is rejected to prevent
+   * Server-Side Request Forgery.
+   *
+   * @param string $url
+   *   The URL to validate.
+   * @param string $path
+   *   The payload path used for error reporting.
+   *
+   * @return bool
+   *   TRUE if the URL is safe to fetch, FALSE otherwise (error is recorded).
+   */
+  protected function validateDocumentUrl(string $url, string $path): bool {
+    $parsed = parse_url($url);
+
+    if (empty($parsed['scheme']) || !in_array($parsed['scheme'], ['http', 'https'], TRUE)) {
+      $this->addError($path, 'Document URL must use the http or https scheme');
+      return FALSE;
+    }
+
+    $host = $parsed['host'] ?? '';
+    if ($host === '') {
+      $this->addError($path, 'Document URL has no host');
+      return FALSE;
+    }
+
+    // Strip IPv6 bracket notation before lookup.
+    $lookupHost = trim($host, '[]');
+
+    $ips = $this->resolveDocumentHost($lookupHost);
+    if (empty($ips)) {
+      $this->addError($path, 'Could not resolve document URL host');
+      return FALSE;
+    }
+
+    foreach ($ips as $ip) {
+      // FILTER_FLAG_NO_PRIV_RANGE blocks RFC1918 IPv4 and IPv6 ULA/link-local.
+      // FILTER_FLAG_NO_RES_RANGE blocks loopback, 169.254.x.x, and reserved.
+      if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+        $this->addError($path, 'Document URL must not point to a private or reserved IP address');
+        return FALSE;
+      }
+    }
+
+    return TRUE;
+  }
+
+  /**
+   * Resolves a hostname to all its IPv4 and IPv6 addresses.
+   *
+   * @param string $host
+   *   A hostname or bare IP address (without brackets).
+   *
+   * @return list<string>
+   *   Resolved IP addresses, or the input itself when it is already an IP.
+   */
+  protected function resolveDocumentHost(string $host): array {
+    if (filter_var($host, FILTER_VALIDATE_IP)) {
+      return [$host];
+    }
+
+    $ips = gethostbynamel($host) ?: [];
+
+    $records = @dns_get_record($host, DNS_AAAA) ?: [];
+    foreach ($records as $record) {
+      if (isset($record['ipv6'])) {
+        $ips[] = $record['ipv6'];
+      }
+    }
+
+    return $ips;
   }
 
   /**
