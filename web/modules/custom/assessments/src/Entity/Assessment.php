@@ -171,7 +171,7 @@ class Assessment extends ContentEntityBase implements AssessmentInterface {
   public function label(): string {
     return $this->get('name')?->value ?? $this->t('@bundle #@id', [
       '@bundle' => $this->type->entity->label(),
-      '@id' => $this->id(),
+      '@id' => $this->id() ?? '',
     ])->render();
   }
 
