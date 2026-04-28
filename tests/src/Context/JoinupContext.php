@@ -75,6 +75,14 @@ class JoinupContext extends RawDrupalContext {
   use WorkflowTrait;
 
   /**
+   * Stores non-field node properties stripped before Drupal field validation.
+   *
+   * Keyed by spl_object_id() of the Behat node stub. AfterNodeCreate hooks
+   * that need to act on these values should call getStrippedNodeProperty().
+   */
+  private static array $strippedNodeProperties = [];
+
+  /**
    * Creates a user with data provided in a table.
    *
    * Table format:
@@ -603,14 +611,6 @@ class JoinupContext extends RawDrupalContext {
 
     $this->assertSameValues((int) $count, (int) $revision_count);
   }
-
-  /**
-   * Stores non-field node properties stripped before Drupal field validation.
-   *
-   * Keyed by spl_object_id() of the Behat node stub. AfterNodeCreate hooks
-   * that need to act on these values should call getStrippedNodeProperty().
-   */
-  private static array $strippedNodeProperties = [];
 
   /**
    * Returns a property stripped from the node stub before field validation.
