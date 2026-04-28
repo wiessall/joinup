@@ -47,6 +47,7 @@ use Drush\TestTraits\DrushTestTrait;
 use LoversOfBehat\TableExtension\Hook\Scope\AfterTableFetchScope;
 
 use Symfony\Component\Process\Process;
+use WebDriver\Exception\StaleElementReference;
 
 /**
  * Defines generic step definitions.
@@ -1590,10 +1591,25 @@ class FeatureContext extends RawDrupalContext {
   public function fillAutoCompleteField(string $field, string $value): void {
     $this->assertJavaScriptEnabledBrowser();
 
-    $element = $this->assertSession()->fieldExists($field);
-    $element->setValue($value);
-    $this->getSession()->getDriver()->keyDown($element->getXpath(), ' ');
-    $this->waitForAutocomplete();
+    // jQuery UI autocomplete tears down and rebuilds DOM around the input
+    // between consecutive interactions, so a freshly-fetched element handle
+    // can still go stale mid-call. Re-fetch and retry on stale.
+    $attempts = 3;
+    while (TRUE) {
+      try {
+        $element = $this->assertSession()->fieldExists($field);
+        $element->setValue($value);
+        $this->getSession()->getDriver()->keyDown($element->getXpath(), ' ');
+        $this->waitForAutocomplete();
+        return;
+      }
+      catch (StaleElementReference $e) {
+        if (--$attempts === 0) {
+          throw $e;
+        }
+        usleep(150000);
+      }
+    }
   }
 
   /**
