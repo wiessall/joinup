@@ -182,6 +182,8 @@ class CollectionContext extends RawDrupalContext {
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope $scope
    *   The after node create scope.
+   *
+   * @AfterNodeCreate
    */
   public function afterCollectionCreate(AfterNodeCreateScope $scope): void {
     $node = $scope->getEntity();

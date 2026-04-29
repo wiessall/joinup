@@ -33,11 +33,7 @@ index 74a71424736eab114f8fae45c5baf1c19475166e..c6a140dc5e750be2b0d61c1feb1f0676
    }
  
 diff --git a/src/Form/EntityInlineForm.php b/src/Form/EntityInlineForm.php
-<<<<<<<< HEAD:resources/patch/php/drupal/inline_entity_form/3099844-mr136-commit15cd2e8a.diff
-index 9d193c95773ac170a06fe5ca2f710813b5db7ff0..d595ac6ac36124d4fc9a6e7367a08066139d4bb0 100644
-========
 index 9d193c95773ac170a06fe5ca2f710813b5db7ff0..57a5c0f896ddaaf98f5b993d1bcd4d9a9c7d63fd 100644
->>>>>>>> reference/master:resources/patch/php/drupal/inline_entity_form/3099844-mr136-commit19b50b6e.diff
 --- a/src/Form/EntityInlineForm.php
 +++ b/src/Form/EntityInlineForm.php
 @@ -10,12 +10,14 @@ use Drupal\Core\Entity\EntityInterface;
@@ -63,11 +59,7 @@ index 9d193c95773ac170a06fe5ca2f710813b5db7ff0..57a5c0f896ddaaf98f5b993d1bcd4d9a
      $entity_form['#ief_element_submit'][] = [
        get_class($this),
        'submitCleanFormState',
-<<<<<<<< HEAD:resources/patch/php/drupal/inline_entity_form/3099844-mr136-commit15cd2e8a.diff
-@@ -261,26 +264,90 @@ class EntityInlineForm implements InlineFormInterface {
-========
 @@ -261,26 +264,91 @@ class EntityInlineForm implements InlineFormInterface {
->>>>>>>> reference/master:resources/patch/php/drupal/inline_entity_form/3099844-mr136-commit19b50b6e.diff
     * {@inheritdoc}
     */
    public function entityFormValidate(array &$entity_form, FormStateInterface $form_state) {
@@ -167,11 +159,7 @@ index 9d193c95773ac170a06fe5ca2f710813b5db7ff0..57a5c0f896ddaaf98f5b993d1bcd4d9a
    /**
     * {@inheritdoc}
     */
-<<<<<<<< HEAD:resources/patch/php/drupal/inline_entity_form/3099844-mr136-commit15cd2e8a.diff
-@@ -307,6 +374,41 @@ class EntityInlineForm implements InlineFormInterface {
-========
 @@ -307,6 +375,41 @@ class EntityInlineForm implements InlineFormInterface {
->>>>>>>> reference/master:resources/patch/php/drupal/inline_entity_form/3099844-mr136-commit19b50b6e.diff
      $storage_handler->delete($entities);
    }
  

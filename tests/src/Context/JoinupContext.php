@@ -19,6 +19,7 @@ use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\comment\CommentInterface;
 use Drupal\comment\Entity\Comment;
@@ -800,6 +801,27 @@ class JoinupContext extends RawDrupalContext {
     // Handle file URL fields.
     if (!empty($node->resources)) {
       $this->createResourceFileParagraph($node);
+    }
+  }
+
+  /**
+   * Sets default alt text on the logo field after node creation.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope $scope
+   *   The after node create scope.
+   *
+   * @AfterNodeCreate
+   */
+  public function ensureLogoAltText(AfterNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if (!in_array($node->type, ['collection', 'solution'], TRUE)) {
+      return;
+    }
+
+    $entity = \Drupal::entityTypeManager()->getStorage('node')->load($node->nid);
+    if ($entity && !$entity->get('logo')->isEmpty() && empty($entity->get('logo')->alt)) {
+      $entity->get('logo')->alt = $entity->label();
+      $entity->save();
     }
   }
 
