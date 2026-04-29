@@ -151,8 +151,8 @@ Feature: "Add custom page" visibility options.
     # Create custom pages with 5 and 6 attachments.
     # 5 is the limit before adding the "Show more" functionality.
     And custom_page content:
-      | title          | body                 | collection        | attachments                                                                                                                                        |
-      | Rubber bands   | The aggressive ones. | Aggressive Rubber | empty.rdf - display: 1 - description: empty.rdf, empty_pdf.pdf - display: 1 - description: empty_pdf.pdf, invalid_adms.rdf - display: 1 - description: invalid_adms.rdf, test.zip - display: 1 - description: test.zip, text.pdf - display: 1 - description: text.pdf                                                |
+      | title          | body                 | collection        | attachments                                                                                                                                                                                                                                                                                                  |
+      | Rubber bands   | The aggressive ones. | Aggressive Rubber | empty.rdf - display: 1 - description: empty.rdf, empty_pdf.pdf - display: 1 - description: empty_pdf.pdf, invalid_adms.rdf - display: 1 - description: invalid_adms.rdf, test.zip - display: 1 - description: test.zip, text.pdf - display: 1 - description: text.pdf                                        |
       | Elastic rubber | Also aggressive.     | Aggressive Rubber | ada.png - display: 1 - description: ada.png, alan.jpg - display: 1 - description: alan.jpg, blaise.jpg - display: 1 - description: blaise.jpg, charles.jpg - display: 1 - description: charles.jpg, leonardo.jpg - display: 1 - description: leonardo.jpg, linus.jpeg - display: 1 - description: linus.jpeg |
 
     When I go to the "Rubber bands" custom_page
