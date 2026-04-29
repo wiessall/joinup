@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\joinup_like\Plugin\ActionLink;
 
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\flag\ActionLink\ActionLinkTypePluginInterface;
 use Drupal\flag\FlagInterface;
 use Drupal\flag_count\Plugin\ActionLink\CountLink as OriginalCountLink;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
