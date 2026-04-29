@@ -11,41 +11,19 @@ index 8ff35bf8775bc0e40d5f6fce2c4177bd50f4a1ec..816df6f285094c8b85bc3845ff01cf8e
              break;
  
            case 'url-brief':
-diff --git a/core/modules/system/tests/src/Kernel/Token/TokenReplaceSiteUrlLanguageTest.php b/core/modules/system/tests/src/Kernel/Token/TokenReplaceSiteUrlLanguageTest.php
-new file mode 100644
-index 0000000000000000000000000000000000000000..9982fb5d2d4f47fd6c85e51386c400a83f1c3053
---- /dev/null
-+++ b/core/modules/system/tests/src/Kernel/Token/TokenReplaceSiteUrlLanguageTest.php
-@@ -0,0 +1,60 @@
-+<?php
-+
-+declare(strict_types=1);
-+
-+namespace Drupal\Tests\system\Kernel\Token;
-+
-+use Drupal\Core\Url;
-+use PHPUnit\Framework\Attributes\Group;
-+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
-+
-+/**
-+ * Tests that [site:url] token includes a trailing slash in all languages.
-+ */
-+#[Group('system')]
-+#[Group('language')]
-+#[RunTestsInSeparateProcesses]
-+class TokenReplaceSiteUrlLanguageTest extends TokenReplaceKernelTestBase {
-+
+diff --git a/core/modules/system/tests/src/Kernel/Token/TokenReplaceKernelTest.php b/core/modules/system/tests/src/Kernel/Token/TokenReplaceKernelTest.php
+index d90052b95aa140213ae7eb85de3b7e7541e84a58..59aa5dc3a2da57d7d0ae34debd72e1239a210801 100644
+--- a/core/modules/system/tests/src/Kernel/Token/TokenReplaceKernelTest.php
++++ b/core/modules/system/tests/src/Kernel/Token/TokenReplaceKernelTest.php
+@@ -187,4 +187,34 @@ public function testSystemDateTokenReplacement(): void {
+     }
+   }
+ 
 +  /**
-+   * {@inheritdoc}
++   * Tests that [site:url] includes a trailing slash with language path prefix.
 +   */
-+  protected static $modules = ['language', 'language_test'];
-+
-+  /**
-+   * {@inheritdoc}
-+   */
-+  protected function setUp(): void {
-+    parent::setUp();
-+
++  public function testSiteUrlTokenTrailingSlash(): void {
++    $this->enableModules(['language', 'language_test']);
 +    $this->installConfig(['language']);
 +    $this->installEntitySchema('configurable_language');
 +
@@ -59,12 +37,7 @@ index 0000000000000000000000000000000000000000..9982fb5d2d4f47fd6c85e51386c400a8
 +      ->save();
 +
 +    $this->container->get('kernel')->rebuildContainer();
-+  }
 +
-+  /**
-+   * Tests that [site:url] always ends with a trailing slash.
-+   */
-+  public function testSiteUrlTokenTrailingSlash(): void {
 +    $url_options = ['absolute' => TRUE, 'language' => $this->interfaceLanguage];
 +
 +    $en_replaced = $this->tokenService->replace('[site:url]user/points', [], ['langcode' => 'en']);
@@ -76,4 +49,4 @@ index 0000000000000000000000000000000000000000..9982fb5d2d4f47fd6c85e51386c400a8
 +    $this->assertEquals(Url::fromRoute('<front>', [], $french_url_options)->toString() . '/user/points', $fr_replaced);
 +  }
 +
-+}
+ }
