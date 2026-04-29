@@ -18,6 +18,9 @@ default:
   created:
     -
       value: 1713534900
+  changed:
+    -
+      value: 1713779100
   published_at:
     -
       value: 1713534900
