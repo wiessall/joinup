@@ -34,8 +34,8 @@ class JoinupConfigSyncTest extends KernelTestBase {
     'file',
     'media',
     // This module alters the schema of layout_plugin.settings.*.
-    // @see layout_custom_section_classes_config_schema_info_alter()
-    'layout_custom_section_classes',
+    // @see joinup_layout_config_schema_info_alter()
+    'joinup_layout',
     // This module alters the schema of facet.widget.default_config.
     // @see search_api_arbitrary_facet_config_schema_info_alter()
     'search_api_arbitrary_facet',

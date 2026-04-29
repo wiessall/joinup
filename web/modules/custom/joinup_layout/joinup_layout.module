@@ -1,0 +1,76 @@
+<?php
+
+/**
+ * @file
+ * Contains hook implementations for the Joinup layout module.
+ */
+
+declare(strict_types=1);
+
+/**
+ * Implements hook_config_schema_info_alter().
+ */
+function joinup_layout_config_schema_info_alter(array &$definitions): void {
+  if (isset($definitions['layout_plugin.settings.*'])) {
+    $definitions['layout_plugin.settings.*']['mapping']['custom_id'] = [
+      'type' => 'string',
+      'label' => 'ID',
+    ];
+    $definitions['layout_plugin.settings.*']['mapping']['custom_classes'] = [
+      'type' => 'string',
+      'label' => 'Class(es)',
+    ];
+    $definitions['layout_plugin.settings.*']['mapping']['custom_class_choose'] = [
+      'type' => 'sequence',
+      'nullable' => TRUE,
+      'label' => 'CSS classes to choose from',
+      'sequence' => [
+        'type' => 'string',
+        'label' => 'CSS class',
+      ],
+    ];
+    $definitions['layout_plugin.settings.*']['mapping']['custom_styles'] = [
+      'type' => 'string',
+      'label' => 'Styles',
+    ];
+    $definitions['layout_plugin.settings.*']['mapping']['custom_data_attributes'] = [
+      'type' => 'string',
+      'label' => 'Data-* attributes',
+    ];
+    $definitions['layout_plugin.settings.*']['mapping']['regions'] = [
+      'type' => 'sequence',
+      'label' => 'Regions',
+      'sequence' => [
+        'type' => 'mapping',
+        'label' => 'Region settings',
+        'mapping' => [
+          'region_id' => [
+            'type' => 'string',
+            'label' => 'ID',
+          ],
+          'region_class_choose' => [
+            'type' => 'sequence',
+            'nullable' => TRUE,
+            'label' => 'CSS classes to choose from',
+            'sequence' => [
+              'type' => 'string',
+              'label' => 'CSS class',
+            ],
+          ],
+          'region_classes' => [
+            'type' => 'string',
+            'label' => 'Class(es)',
+          ],
+          'region_styles' => [
+            'type' => 'string',
+            'label' => 'Styles',
+          ],
+          'region_data' => [
+            'type' => 'string',
+            'label' => 'Data-* attributes',
+          ],
+        ],
+      ],
+    ];
+  }
+}
