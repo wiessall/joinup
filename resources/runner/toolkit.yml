@@ -38,8 +38,10 @@ toolkit:
     phpunit:
       commands:
         after:
+          # Delete any leftover nodes from PHPUnit ExistingSite tests whose
+          # tearDown() did not complete (e.g. due to fatal errors).
           - task: exec
-            command: ${drush.bin} pmu joinup_test_content -y
+            command: ${drush.bin} joinup-test:cleanup-nodes
           - task: exec
             command: ${drush.bin} en default_content joinup_test_content -y
           - task: exec
