@@ -1618,10 +1618,10 @@ display:
       automatic_download: false
       export_method: standard
       export_batch_size: 1000
+      export_filesystem: private
       custom_redirect_path: false
       redirect_to_display: none
       include_query_params: false
-      export_filesystem: private
     cache_metadata:
       max-age: -1
       contexts:
@@ -2611,10 +2611,10 @@ display:
       automatic_download: true
       export_method: batch
       export_batch_size: 1000
+      export_filesystem: private
       custom_redirect_path: false
       redirect_to_display: site_wide
       include_query_params: false
-      export_filesystem: private
     cache_metadata:
       max-age: -1
       contexts:
