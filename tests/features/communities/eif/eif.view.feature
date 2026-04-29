@@ -33,7 +33,7 @@ Feature:
     When I go to the EIF perspective page of the "EIF solution" solution
     Then I should see the heading "EIF Perspective attributes of EIF solution"
     And I should see the text "Name of the solution: EIF solution"
-    And I should see a "picture" element in the "Content" region
+    And I should see the "picture" element in the "Content" region
     And I should see the heading "General information"
 
     And I should see the text "Description:"
