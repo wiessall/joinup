@@ -116,4 +116,19 @@ readonly class EntityMessageHelper implements EntityMessageHelperInterface {
     return $storage;
   }
 
+  /**
+   * Replaces placeholders in message text.
+   *
+   * @param string $text
+   *   Text with placeholders.
+   * @param array $replacements
+   *   Array of replacements.
+   */
+  public function replaceMessagePlaceholders(string $text, array $replacements): string {
+    return preg_replace_callback('/@([a-zA-Z0-9_]+):([a-zA-Z0-9_]+)/', function ($matches) use ($replacements) {
+      $key = '@' . $matches[1] . ':' . $matches[2];
+      return $replacements[$key] ?? $matches[0];
+    }, $text);
+  }
+
 }

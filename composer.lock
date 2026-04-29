@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7fc9f2aba30a969e68b135d16fdb7076",
+    "content-hash": "8dcfa271fab5e51917828e81df7d4d13",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2142,31 +2142,33 @@
         },
         {
             "name": "drupal/babel",
-            "version": "1.0.0-alpha9",
+            "version": "1.0.0-alpha10",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/babel.git",
-                "reference": "1.0.0-alpha9"
+                "reference": "1.0.0-alpha10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/babel-1.0.0-alpha9.zip",
-                "reference": "1.0.0-alpha9",
-                "shasum": "9595f504d12f9d09d6077edeab42be899f427c91"
+                "url": "https://ftp.drupal.org/files/projects/babel-1.0.0-alpha10.zip",
+                "reference": "1.0.0-alpha10",
+                "shasum": "bf452d752b3b29110546a7ed00b04c5c1deb118a"
             },
             "require": {
-                "drupal/core": "^10.4 || ^11.1",
+                "drupal/core": "^10.4 || ^11.1 || ^12",
                 "ext-pdo": "*",
                 "phpoffice/phpspreadsheet": "^5.0"
             },
             "require-dev": {
+                "drupal/l10n_pconfig": "*",
+                "drupal/tmgmt": "^1.17",
                 "drush/drush": "^12 || ^13"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.0-alpha9",
-                    "datestamp": "1769428158",
+                    "version": "1.0.0-alpha10",
+                    "datestamp": "1775742573",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -3809,17 +3811,17 @@
         },
         {
             "name": "drupal/dynamic_entity_reference",
-            "version": "4.0.0-alpha6",
+            "version": "3.2.1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/dynamic_entity_reference.git",
-                "reference": "4.0.0-alpha6"
+                "reference": "3.2.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/dynamic_entity_reference-4.0.0-alpha6.zip",
-                "reference": "4.0.0-alpha6",
-                "shasum": "83bed95048e1b0f1fbfc4bfef6a91a3be9e06c0c"
+                "url": "https://ftp.drupal.org/files/projects/dynamic_entity_reference-3.2.1.zip",
+                "reference": "3.2.1",
+                "shasum": "051c565f6580f512cbc7ddc3f49fdd6ba8d406af"
             },
             "require": {
                 "drupal/core": "^10 || ^11",
@@ -3827,18 +3829,18 @@
             },
             "require-dev": {
                 "drupal/diff": "*",
-                "mglaman/phpstan-drupal": "^1.1 || ^2.0",
-                "phpstan/phpstan": "^1.1 || ^2.1",
-                "phpstan/phpstan-deprecation-rules": "^1.0 || ^2.0"
+                "mglaman/phpstan-drupal": "^1.1",
+                "phpstan/phpstan": "^1.1",
+                "phpstan/phpstan-deprecation-rules": "^1.0"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "4.0.0-alpha6",
-                    "datestamp": "1770003560",
+                    "version": "3.2.1",
+                    "datestamp": "1740521060",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
@@ -4017,6 +4019,108 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/email_contact",
                 "issues": "https://www.drupal.org/project/issues/email_contact"
+            }
+        },
+        {
+            "name": "drupal/entity_browser",
+            "version": "2.15.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/entity_browser.git",
+                "reference": "8.x-2.15"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/entity_browser-8.x-2.15.zip",
+                "reference": "8.x-2.15",
+                "shasum": "86265fadf12f8c2eb4bc0dc813589efe8fa180a2"
+            },
+            "require": {
+                "drupal/core": "^10.2 || ^11"
+            },
+            "conflict": {
+                "drupal/media_entity": "1.*"
+            },
+            "require-dev": {
+                "drupal/embed": "^1.0",
+                "drupal/entity_embed": "^1.0",
+                "drupal/entity_reference_revisions": "^1.0",
+                "drupal/entityqueue": "^1.0",
+                "drupal/inline_entity_form": "^1 || ^3",
+                "drupal/paragraphs": "^1.0",
+                "drupal/search_api": "^1.0",
+                "drupal/token": "^1.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-2.15",
+                    "datestamp": "1756969160",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Janez Urevc",
+                    "homepage": "https://github.com/slashrsm",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Primoz Hmeljak",
+                    "homepage": "https://github.com/primsi",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "See other contributors",
+                    "homepage": "https://www.drupal.org/node/1943336/committers",
+                    "role": "contributor"
+                },
+                {
+                    "name": "devin carlson",
+                    "homepage": "https://www.drupal.org/user/290182"
+                },
+                {
+                    "name": "Drupal Media Team",
+                    "homepage": "https://www.drupal.org/user/3260690"
+                },
+                {
+                    "name": "grevil",
+                    "homepage": "https://www.drupal.org/user/3668491"
+                },
+                {
+                    "name": "marcingy",
+                    "homepage": "https://www.drupal.org/user/77320"
+                },
+                {
+                    "name": "oknate",
+                    "homepage": "https://www.drupal.org/user/471638"
+                },
+                {
+                    "name": "primsi",
+                    "homepage": "https://www.drupal.org/user/282629"
+                },
+                {
+                    "name": "samuel.mortenson",
+                    "homepage": "https://www.drupal.org/user/2582268"
+                },
+                {
+                    "name": "slashrsm",
+                    "homepage": "https://www.drupal.org/user/744628"
+                }
+            ],
+            "description": "Entity browsing and selecting component.",
+            "homepage": "https://drupal.org/project/entity_browser",
+            "support": {
+                "source": "https://git.drupalcode.org/project/entity_browser",
+                "issues": "https://www.drupal.org/project/issues/entity_browser",
+                "irc": "irc://irc.freenode.org/drupal-contribute"
             }
         },
         {
@@ -6808,17 +6912,17 @@
         },
         {
             "name": "drupal/meta_entity",
-            "version": "1.5.0",
+            "version": "1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/meta_entity.git",
-                "reference": "8.x-1.5"
+                "reference": "8.x-1.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/meta_entity-8.x-1.5.zip",
-                "reference": "8.x-1.5",
-                "shasum": "e5ab7224d98c0a61a32ab2db56243cab2a2b4e46"
+                "url": "https://ftp.drupal.org/files/projects/meta_entity-8.x-1.6.zip",
+                "reference": "8.x-1.6",
+                "shasum": "52ed5b43c7061227fd38e6bbd44ebd1b19ac8608"
             },
             "require": {
                 "drupal/core": "^10 || ^11",
@@ -6827,8 +6931,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.5",
-                    "datestamp": "1719567509",
+                    "version": "8.x-1.6",
+                    "datestamp": "1774522547",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6849,12 +6953,12 @@
                     "homepage": "https://www.drupal.org/user/56348"
                 },
                 {
-                    "name": "huzooka",
-                    "homepage": "https://www.drupal.org/user/281301"
+                    "name": "dimilias",
+                    "homepage": "https://www.drupal.org/user/2578708"
                 },
                 {
-                    "name": "idimopoulos",
-                    "homepage": "https://www.drupal.org/user/2578708"
+                    "name": "huzooka",
+                    "homepage": "https://www.drupal.org/user/281301"
                 },
                 {
                     "name": "pfrenssen",

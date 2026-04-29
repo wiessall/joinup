@@ -1,0 +1,15 @@
+diff --git a/modules/babel_content_entity/src/BabelContentEntityService.php b/modules/babel_content_entity/src/BabelContentEntityService.php
+index 7c962c91272a82dcd253e5f755b7dfb6d2e61659..fe2030f606bfbd7d842d9d2a87f65dbdd0cff826 100644
+--- a/modules/babel_content_entity/src/BabelContentEntityService.php
++++ b/modules/babel_content_entity/src/BabelContentEntityService.php
+@@ -145,6 +145,10 @@ class BabelContentEntityService {
+    *   (optional) Bundles to be processed. If omitted all bundles are processed.
+    */
+   public function batchAddSources(string $entityTypeId, array $bundles = []): void {
++    if (!$this->entityTypeManager->hasDefinition($entityTypeId)) {
++      return;
++    }
++    
+     $query = $this->entityTypeManager->getStorage($entityTypeId)
+       ->getQuery()
+       ->accessCheck(FALSE);

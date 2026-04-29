@@ -30,3 +30,4 @@ services:
   Drupal\assessments\Access\AssessmentAddFormAccessCheck:
     tags:
       - { name: access_check, applies_to: _assessment_add_form_access}
+
