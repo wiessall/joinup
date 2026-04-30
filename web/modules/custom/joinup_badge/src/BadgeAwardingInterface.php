@@ -7,9 +7,9 @@ namespace Drupal\joinup_badge;
 use Drupal\flag\FlaggingInterface;
 
 /**
- * Interface for Flagging bundle classes that represent badges.
+ * Interface for flagging bundle classes that representing awarding badges.
  */
-interface BadgeFlagInterface extends FlaggingInterface {
+interface BadgeAwardingInterface extends FlaggingInterface {
 
   /**
    * Returns the human-readable label for this badge.

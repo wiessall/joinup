@@ -1,0 +1,10 @@
+flag.flag.*:third_party.joinup_badge:
+  type: mapping
+  label: 'Joinup Badge settings'
+  mapping:
+    icon:
+      type: string
+      label: 'Icon'
+    description:
+      type: text
+      label: 'Description'

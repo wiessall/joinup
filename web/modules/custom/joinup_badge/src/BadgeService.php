@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_badge;
 
+use Drupal\flag\FlagInterface;
 use Drupal\flag\FlagServiceInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -22,24 +23,6 @@ class BadgeService {
   public const IEC_COMMUNITY = 'ba527094-00bc-45de-98fb-c732c6c66fec';
 
   /**
-   * Metadata for each badge flag.
-   *
-   * Keys are flag machine names. Each entry contains:
-   * - icon: A Ventuno sprite icon ID (see the theme's icons.svg).
-   * - description: Short tooltip text shown on the user profile.
-   */
-  public const BADGES = [
-    'iec_member' => [
-      'icon' => 'patch-check',
-      'description' => 'This user is a verified member of the Interoperable Europe Community.',
-    ],
-    'portal_contributor' => [
-      'icon' => 'award',
-      'description' => 'This user has actively contributed to the Interoperable Europe Portal.',
-    ],
-  ];
-
-  /**
    * Constructs a BadgeService object.
    */
   public function __construct(
@@ -54,33 +37,10 @@ class BadgeService {
    *   Ordered list of flag machine names.
    */
   public function getBadgeFlagIds(): array {
-    return array_keys(self::BADGES);
-  }
-
-  /**
-   * Returns the Ventuno sprite icon ID for a given badge flag.
-   *
-   * @param string $flagId
-   *   The badge flag machine name.
-   *
-   * @return string
-   *   An icon ID from the Ventuno theme sprite, or empty string if unknown.
-   */
-  public function getIcon(string $flagId): string {
-    return self::BADGES[$flagId]['icon'] ?? '';
-  }
-
-  /**
-   * Returns the tooltip description for a given badge flag.
-   *
-   * @param string $flagId
-   *   The badge flag machine name.
-   *
-   * @return string
-   *   A short description of what the badge represents, or empty string.
-   */
-  public function getDescription(string $flagId): string {
-    return self::BADGES[$flagId]['description'] ?? '';
+    return array_filter(
+      $this->flagService->getAllFlags('user'),
+      fn(FlagInterface $flag): bool => (bool) $flag->getThirdPartySetting('joinup_badge', 'icon'),
+    );
   }
 
   /**
