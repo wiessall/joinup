@@ -19,7 +19,6 @@ use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\comment\CommentInterface;
 use Drupal\comment\Entity\Comment;
@@ -735,16 +734,23 @@ class JoinupContext extends RawDrupalContext {
     }
 
     $image_fields = [
+      'field_custom_page_logo',
       'field_discussion_logo',
       'field_document_logo',
       'field_event_logo',
       'field_news_logo',
       'logo',
+      'oss_logo',
     ];
     foreach ($image_fields as $image_field) {
       if (!empty($node->$image_field)) {
         $file = $this->createFile($node->$image_field);
         $node->$image_field = $file->getFileUri();
+        // Set alt text to the file name if not explicitly provided.
+        $alt_key = "{$image_field}:alt";
+        if (empty($node->$alt_key)) {
+          $node->$alt_key = $file->getFilename();
+        }
       }
     }
 
@@ -801,27 +807,6 @@ class JoinupContext extends RawDrupalContext {
     // Handle file URL fields.
     if (!empty($node->resources)) {
       $this->createResourceFileParagraph($node);
-    }
-  }
-
-  /**
-   * Sets default alt text on the logo field after node creation.
-   *
-   * @param \Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope $scope
-   *   The after node create scope.
-   *
-   * @AfterNodeCreate
-   */
-  public function ensureLogoAltText(AfterNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
-    if (!in_array($node->type, ['collection', 'solution'], TRUE)) {
-      return;
-    }
-
-    $entity = \Drupal::entityTypeManager()->getStorage('node')->load($node->nid);
-    if ($entity && !$entity->get('logo')->isEmpty() && empty($entity->get('logo')->alt)) {
-      $entity->get('logo')->alt = $entity->label();
-      $entity->save();
     }
   }
 
