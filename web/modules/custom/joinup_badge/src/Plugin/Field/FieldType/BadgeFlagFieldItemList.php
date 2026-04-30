@@ -10,10 +10,6 @@ use Drupal\joinup_badge\BadgeService;
 
 /**
  * Computed field item list for the user badge flags field.
- *
- * Populates the field with Flagging entities that represent badges
- * awarded to the parent user, sorted alphabetically by flag ID for a
- * consistent display order across all profiles.
  */
 class BadgeFlagFieldItemList extends EntityReferenceFieldItemList {
 
@@ -30,7 +26,7 @@ class BadgeFlagFieldItemList extends EntityReferenceFieldItemList {
 
     $flags = \Drupal::service(BadgeService::class)->getBadgeFlags();
 
-    $flagging_ids = \Drupal::entityQuery('flagging')
+    $flaggingIds = \Drupal::entityQuery('flagging')
       ->accessCheck(FALSE)
       ->condition('entity_type', 'user')
       ->condition('entity_id', $user->id())
@@ -38,15 +34,15 @@ class BadgeFlagFieldItemList extends EntityReferenceFieldItemList {
       ->sort('flag_id')
       ->execute();
 
-    if (empty($flagging_ids)) {
+    if (empty($flaggingIds)) {
       return;
     }
 
-    $flaggings = \Drupal::entityTypeManager()
+    $badges = \Drupal::entityTypeManager()
       ->getStorage('flagging')
-      ->loadMultiple($flagging_ids);
+      ->loadMultiple($flaggingIds);
 
-    foreach (array_values($flaggings) as $delta => $flagging) {
+    foreach (array_values($badges) as $delta => $flagging) {
       $this->list[$delta] = $this->createItem($delta, ['target_id' => $flagging->id()]);
     }
   }
