@@ -30,6 +30,7 @@ content:
     weight: 0
     region: content
 hidden:
+  badges: true
   block_user: true
   blocked_reason: true
   field_social_media: true
@@ -42,7 +43,6 @@ hidden:
   field_user_organisation: true
   field_user_photo: true
   field_user_professional_domain: true
-  joinup_badges: true
   langcode: true
   masquerade: true
   member_for: true
