@@ -741,7 +741,6 @@ class JoinupContext extends RawDrupalContext {
       'field_event_logo',
       'field_news_logo',
       'logo',
-      'oss_logo',
     ];
     foreach ($image_fields as $image_field) {
       if (!empty($node->$image_field)) {
@@ -825,7 +824,6 @@ class JoinupContext extends RawDrupalContext {
       'document' => 'field_document_logo',
       'event' => 'field_event_logo',
       'news' => 'field_news_logo',
-      'oss_solution' => 'oss_logo',
     ];
 
     $field_name = $logo_fields[$node->type] ?? NULL;
