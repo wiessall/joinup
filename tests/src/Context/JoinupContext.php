@@ -19,6 +19,7 @@ use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\comment\CommentInterface;
 use Drupal\comment\Entity\Comment;
@@ -746,11 +747,6 @@ class JoinupContext extends RawDrupalContext {
       if (!empty($node->$image_field)) {
         $file = $this->createFile($node->$image_field);
         $node->$image_field = $file->getFileUri();
-        // Set alt text to the file name if not explicitly provided.
-        $alt_key = "{$image_field}:alt";
-        if (empty($node->$alt_key)) {
-          $node->$alt_key = $file->getFilename();
-        }
       }
     }
 
@@ -807,6 +803,40 @@ class JoinupContext extends RawDrupalContext {
     // Handle file URL fields.
     if (!empty($node->resources)) {
       $this->createResourceFileParagraph($node);
+    }
+  }
+
+  /**
+   * Sets default alt text on logo fields after node creation.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope $scope
+   *   The after node create scope.
+   *
+   * @AfterNodeCreate
+   */
+  public function ensureLogoAltText(AfterNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+
+    $logo_fields = [
+      'collection' => 'logo',
+      'solution' => 'logo',
+      'custom_page' => 'field_custom_page_logo',
+      'discussion' => 'field_discussion_logo',
+      'document' => 'field_document_logo',
+      'event' => 'field_event_logo',
+      'news' => 'field_news_logo',
+      'oss_solution' => 'oss_logo',
+    ];
+
+    $field_name = $logo_fields[$node->type] ?? NULL;
+    if (!$field_name) {
+      return;
+    }
+
+    $entity = \Drupal::entityTypeManager()->getStorage('node')->load($node->nid);
+    if ($entity && $entity->hasField($field_name) && !$entity->get($field_name)->isEmpty() && empty($entity->get($field_name)->alt)) {
+      $entity->get($field_name)->alt = $entity->label();
+      $entity->save();
     }
   }
 
