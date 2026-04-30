@@ -11,8 +11,6 @@ use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_badge\BadgeService;
 use Drupal\joinup_badge\Entity\BadgeAwarding;
-use Drupal\joinup_badge\Entity\BadgeFlagging;
-use Drupal\joinup_badge\InteroperableEuropeCommunityMembership;
 use Drupal\joinup_badge\Plugin\Field\FieldType\BadgeFlagFieldItemList;
 use Drupal\og\OgMembershipInterface;
 

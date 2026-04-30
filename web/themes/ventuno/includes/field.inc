@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Template\Attribute;
-use Drupal\joinup_badge\BadgeService;
 use Drupal\joinup_badge\Entity\BadgeAwardingInterface;
 
 /**
