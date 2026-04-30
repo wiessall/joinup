@@ -21,6 +21,11 @@ use Drupal\og\OgMembershipInterface;
  */
 readonly class BadgeHooks {
 
+  /**
+   * The UUID of the Interoperable Europe Community group.
+   */
+  protected const string IEC_UUID = 'ba527094-00bc-45de-98fb-c732c6c66fec';
+
   public function __construct(protected BadgeService $badgeService) {}
 
   /**
@@ -70,7 +75,7 @@ readonly class BadgeHooks {
   #[Hook('og_membership_insert')]
   public function ogMembershipInsert(OgMembershipInterface $entity): void {
     $group = $entity->getGroup();
-    if ($group->uuid() === InteroperableEuropeCommunityMembership::UUID) {
+    if ($group->uuid() === static::IEC_UUID) {
       $this->badgeService->award('iec_member', $entity->getOwner());
     }
   }
