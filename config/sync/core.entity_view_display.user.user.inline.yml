@@ -72,7 +72,7 @@ hidden:
   field_user_nationality: true
   field_user_organisation: true
   field_user_professional_domain: true
-  joinup_achievements: true
+  joinup_badges: true
   langcode: true
   linked_username: true
   masquerade: true

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_achievement;
+namespace Drupal\joinup_badge;
 
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\flag\FlagServiceInterface;
@@ -10,12 +10,12 @@ use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
- * Awards and revokes flag-backed achievements on user entities.
+ * Awards and revokes flag-backed badges on user entities.
  *
- * This class is the single source of truth for which flags are achievements
+ * This class is the single source of truth for which flags are badges
  * and for their display metadata (icon ID and description).
  */
-class AchievementService {
+class BadgeService {
 
   use AutowireTrait;
 
@@ -25,13 +25,13 @@ class AchievementService {
   public const IEC_COMMUNITY = 'ba527094-00bc-45de-98fb-c732c6c66fec';
 
   /**
-   * Metadata for each achievement flag.
+   * Metadata for each badge flag.
    *
    * Keys are flag machine names. Each entry contains:
    * - icon: A Ventuno sprite icon ID (see the theme's icons.svg).
    * - description: Short tooltip text shown on the user profile.
    */
-  public const ACHIEVEMENTS = [
+  public const BADGES = [
     'iec_member' => [
       'icon' => 'patch-check',
       'description' => 'This user is a verified member of the Interoperable Europe Community.',
@@ -43,7 +43,7 @@ class AchievementService {
   ];
 
   /**
-   * Constructs an AchievementService object.
+   * Constructs a BadgeService object.
    */
   public function __construct(
     #[Autowire(service: 'flag')]
@@ -51,50 +51,50 @@ class AchievementService {
   ) {}
 
   /**
-   * Returns the flag IDs that represent achievement badges.
+   * Returns the flag IDs that represent badges.
    *
    * @return string[]
    *   Ordered list of flag machine names.
    */
-  public function getAchievementFlagIds(): array {
-    return array_keys(self::ACHIEVEMENTS);
+  public function getBadgeFlagIds(): array {
+    return array_keys(self::BADGES);
   }
 
   /**
-   * Returns the Ventuno sprite icon ID for a given achievement flag.
+   * Returns the Ventuno sprite icon ID for a given badge flag.
    *
    * @param string $flagId
-   *   The achievement flag machine name.
+   *   The badge flag machine name.
    *
    * @return string
    *   An icon ID from the Ventuno theme sprite, or empty string if unknown.
    */
   public function getIcon(string $flagId): string {
-    return self::ACHIEVEMENTS[$flagId]['icon'] ?? '';
+    return self::BADGES[$flagId]['icon'] ?? '';
   }
 
   /**
-   * Returns the tooltip description for a given achievement flag.
+   * Returns the tooltip description for a given badge flag.
    *
    * @param string $flagId
-   *   The achievement flag machine name.
+   *   The badge flag machine name.
    *
    * @return string
-   *   A short description of what the achievement represents, or empty string.
+   *   A short description of what the badge represents, or empty string.
    */
   public function getDescription(string $flagId): string {
-    return self::ACHIEVEMENTS[$flagId]['description'] ?? '';
+    return self::BADGES[$flagId]['description'] ?? '';
   }
 
   /**
-   * Awards an achievement to a user by flagging the user entity.
+   * Awards a badge to a user by flagging the user entity.
    *
-   * If the user already holds the achievement, this is a no-op.
+   * If the user already holds the badge, this is a no-op.
    *
    * @param string $flagId
-   *   The machine name of the achievement flag (e.g. 'iec_member').
+   *   The machine name of the badge flag (e.g. 'iec_member').
    * @param \Drupal\user\UserInterface $user
-   *   The user to award the achievement to.
+   *   The user to award the badge to.
    */
   public function award(string $flagId, UserInterface $user): void {
     $flag = $this->flagService->getFlagById($flagId);
@@ -105,14 +105,14 @@ class AchievementService {
   }
 
   /**
-   * Revokes an achievement from a user by unflagging the user entity.
+   * Revokes a badge from a user by unflagging the user entity.
    *
-   * If the user does not hold the achievement, this is a no-op.
+   * If the user does not hold the badge, this is a no-op.
    *
    * @param string $flagId
-   *   The machine name of the achievement flag (e.g. 'iec_member').
+   *   The machine name of the badge flag (e.g. 'iec_member').
    * @param \Drupal\user\UserInterface $user
-   *   The user to revoke the achievement from.
+   *   The user to revoke the badge from.
    */
   public function revoke(string $flagId, UserInterface $user): void {
     $flag = $this->flagService->getFlagById($flagId);
@@ -123,17 +123,17 @@ class AchievementService {
   }
 
   /**
-   * Checks whether a user currently holds a given achievement.
+   * Checks whether a user currently holds a given badge.
    *
    * @param string $flagId
-   *   The machine name of the achievement flag (e.g. 'iec_member').
+   *   The machine name of the badge flag (e.g. 'iec_member').
    * @param \Drupal\user\UserInterface $user
    *   The user to check.
    *
    * @return bool
-   *   TRUE if the user holds the achievement, FALSE otherwise.
+   *   TRUE if the user holds the badge, FALSE otherwise.
    */
-  public function hasAchievement(string $flagId, UserInterface $user): bool {
+  public function hasBadge(string $flagId, UserInterface $user): bool {
     $flag = $this->flagService->getFlagById($flagId);
     return $flag !== NULL && (bool) $flag->isFlagged($user);
   }

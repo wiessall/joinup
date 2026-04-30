@@ -24,7 +24,7 @@ function ventuno_theme(array $existing, string $type, string $theme, string $pat
       'variables' => ['entity' => NULL],
       'path' => $path . '/templates/parts',
     ],
-    'joinup_achievement' => [
+    'joinup_badge' => [
       'variables' => [
         'icon_id' => '',
         'label' => '',

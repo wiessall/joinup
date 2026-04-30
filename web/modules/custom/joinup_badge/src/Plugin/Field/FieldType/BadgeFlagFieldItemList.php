@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_achievement\Plugin\Field\FieldType;
+namespace Drupal\joinup_badge\Plugin\Field\FieldType;
 
 use Drupal\Core\Field\EntityReferenceFieldItemList;
 use Drupal\Core\TypedData\ComputedItemListTrait;
-use Drupal\joinup_achievement\AchievementService;
+use Drupal\joinup_badge\BadgeService;
 
 /**
- * Computed field item list for the user achievement flags field.
+ * Computed field item list for the user badge flags field.
  *
- * Populates the field with Flagging entities that represent achievements
+ * Populates the field with Flagging entities that represent badges
  * awarded to the parent user, sorted alphabetically by flag ID for a
  * consistent display order across all profiles.
  */
-class AchievementFlagFieldItemList extends EntityReferenceFieldItemList {
+class BadgeFlagFieldItemList extends EntityReferenceFieldItemList {
 
   use ComputedItemListTrait;
 
@@ -28,8 +28,8 @@ class AchievementFlagFieldItemList extends EntityReferenceFieldItemList {
       return;
     }
 
-    $flagIds = \Drupal::service(AchievementService::class)
-      ->getAchievementFlagIds();
+    $flagIds = \Drupal::service(BadgeService::class)
+      ->getBadgeFlagIds();
 
     $flagging_ids = \Drupal::entityQuery('flagging')
       ->accessCheck(FALSE)
