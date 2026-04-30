@@ -258,7 +258,7 @@ function collection_node_view(array &$build, EntityInterface $entity, EntityView
 
   // Solution count.
   if ($display->getComponent('solutions')) {
-    $solution_count = count($entity->getSolutionIds(TRUE));
+    $solution_count = count($entity->getSolutionIds(TRUE, TRUE));
     $tags = Cache::buildTags('og-group-content', $entity->getCacheTagsToInvalidate());
     $tags = Cache::mergeTags($tags, ['node_list']);
     $build['solutions'] = [
