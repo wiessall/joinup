@@ -54,6 +54,14 @@ Feature: Collection content
     Then I see the text "2 Solution" in the "Header" region
     And I should see the link "2 Solutions"
 
+    # Create an archived solution to verify that counters are not affected.
+    When solution content:
+      | title                       | collection                | state    |
+      | Archived Solution For Count | Turin Egyptian Collection | archived |
+    And I go to the homepage of the "Turin Egyptian Collection" collection
+    Then I see the text "2 Solution" in the "Header" region
+    And I should see the link "2 Solutions"
+
   @javascript
   Scenario: When I subscribe to a collection, the corresponding tile is shown in my profile
     Given I am logged in as a moderator
