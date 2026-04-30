@@ -570,6 +570,7 @@ display:
         default: default
         page_1: page_1
       filename: legal_notice_export.csv
+      export_filesystem: private
     cache_metadata:
       max-age: -1
       contexts:
