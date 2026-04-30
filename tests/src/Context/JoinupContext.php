@@ -834,6 +834,8 @@ class JoinupContext extends RawDrupalContext {
     $entity = \Drupal::entityTypeManager()->getStorage('node')->load($node->nid);
     if ($entity && $entity->hasField($field_name) && !$entity->get($field_name)->isEmpty() && empty($entity->get($field_name)->alt)) {
       $entity->get($field_name)->alt = $entity->label();
+      // Preserve the original changed timestamp.
+      $entity->setSyncing(TRUE);
       $entity->save();
     }
   }
