@@ -24,43 +24,25 @@ Feature: Collection content
       | title                          | body                                                           | collection                | changed    | topic             |
       | Turin Egyptian Museum Reopened | <p>After <em>more than</em> <a href="#link">two years</a>.</p> | Turin Egyptian Collection | 2019-11-19 | Supplier exchange |
 
-  Scenario: Publishing new solutions should result in counters being properly updated.
-    Given owner content:
-      | name             | owner type |
-      | Particle sweeper | Company    |
+  Scenario: Solution counters exclude archived solutions and link to the solutions listing.
+    Given I go to the homepage of the "Turin Egyptian Collection" collection
+    Then I should see the link "1 Solution" in the "Header" region
 
-    Given I am logged in as a moderator
-    And I go to the homepage of the "Turin Egyptian Collection" collection
-
-    Then I should see the link "1 Solution" in the "Content" region
-    And I see the text "1 Solution" in the "Header" region
-
-    When solution content:
-      | title                            | collection                | status |
-      | Solution from draft to published | Turin Egyptian Collection | published |
-    And I go to the homepage of the "Turin Egyptian Collection" collection
-    Then I see the text "2 Solutions" in the "Header" region
-    And I should see the link "2 Solutions"
-
-    # Create a draft version of the solution to verify that counters are not affected.
-    When I go to the edit form of the "Solution from draft to published" solution
-    And I fill in "Title" with "Solution from draft to published but draft"
-    And I select "Bulgarian" options from "Language availability"
-    And I press "Confirm"
-    And I press "Save as draft"
-    Then I should see the heading "Solution from draft to published"
-
+    Given solution content:
+      | title              | collection                | state     |
+      | Published Solution | Turin Egyptian Collection | published |
+      | Archived Solution  | Turin Egyptian Collection | archived  |
+      | Draft Solution     | Turin Egyptian Collection | draft     |
     When I go to the homepage of the "Turin Egyptian Collection" collection
-    Then I see the text "2 Solution" in the "Header" region
-    And I should see the link "2 Solutions"
+    Then I should see the link "2 Solutions" in the "Header" region
 
-    # Create an archived solution to verify that counters are not affected.
-    When solution content:
-      | title                       | collection                | state    |
-      | Archived Solution For Count | Turin Egyptian Collection | archived |
-    And I go to the homepage of the "Turin Egyptian Collection" collection
-    Then I see the text "2 Solution" in the "Header" region
-    And I should see the link "2 Solutions"
+    When I click "2 Solutions" in the "Header" region
+    Then I should see the heading "Turin Egyptian Collection" in the "Header" region
+    And I should see the heading "Solutions" in the "Page title"
+    And I should see the "Tomb Of Unknown Restoration" tile
+    And I should see the "Published Solution" tile
+    But I should not see the "Archived Solution" tile
+    And I should not see the "Draft Solution" tile
 
   @javascript
   Scenario: When I subscribe to a collection, the corresponding tile is shown in my profile
