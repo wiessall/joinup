@@ -1,0 +1,30 @@
+uuid: fd51ddc1-440e-4e3e-b706-4943595238e5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_launch_year
+    - node.type.dah_annotation
+  module:
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://purl.org/dc/terms/created'
+      type: 'xsd:date'
+id: node.dah_annotation.field_launch_year
+field_name: field_launch_year
+entity_type: node
+bundle: dah_annotation
+label: 'Launch year'
+description: 'Year DAH recorded as launch year.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 1900
+  max: 2100
+  prefix: ''
+  suffix: ''
+field_type: integer

@@ -1,0 +1,23 @@
+uuid: 7fe6fdcd-5b21-402d-b549-282624872567
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_dah_id
+    - node.type.dah_annotation
+id: node.dah_annotation.field_dah_id
+field_name: field_dah_id
+entity_type: node
+bundle: dah_annotation
+label: 'DAH ID'
+description: 'Original DAH record ID.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

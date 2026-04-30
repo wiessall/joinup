@@ -1,0 +1,21 @@
+uuid: 80ae51bb-6bb9-4e12-ba91-3aea21596c56
+langcode: en
+status: true
+dependencies:
+  module:
+    - rdf_sync
+    - sti_rdf
+third_party_settings:
+  rdf_sync:
+    type: 'http://www.w3.org/2004/02/skos/core#Concept'
+    uri_plugin: sti_namespace
+    fields:
+      name:
+        value:
+          predicate: 'http://www.w3.org/2004/02/skos/core#prefLabel'
+          type: null
+name: 'DAH Use Case'
+vid: dah_use_case
+description: 'Use cases as defined by Digital Agri Hub.'
+weight: 0
+new_revision: false

@@ -1,0 +1,37 @@
+uuid: 505707b3-90bf-4a72-9aa0-589b50d49d5d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_dah_use_cases
+    - node.type.dah_annotation
+    - taxonomy.vocabulary.dah_use_case
+  module:
+    - rdf_sync
+    - taxonomy
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://purl.org/dc/terms/subject'
+      type: resource
+id: node.dah_annotation.field_dah_use_cases
+field_name: field_dah_use_cases
+entity_type: node
+bundle: dah_annotation
+label: 'Use cases (DAH)'
+description: 'Use cases as classified by DAH.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      dah_use_case: dah_use_case
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: true
+    auto_create_bundle: dah_use_case
+field_type: entity_reference

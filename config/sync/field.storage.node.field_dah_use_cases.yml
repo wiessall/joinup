@@ -1,0 +1,20 @@
+uuid: 25d90ac3-895b-42f3-a7aa-3f1e71e7946c
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - taxonomy
+id: node.field_dah_use_cases
+field_name: field_dah_use_cases
+entity_type: node
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: -1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

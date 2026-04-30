@@ -1,0 +1,30 @@
+uuid: b41ea600-6ef8-472d-b7c3-7c52bda31b56
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_solution
+    - node.type.dah_annotation
+  module:
+    - node
+id: node.dah_annotation.field_solution
+field_name: field_solution
+entity_type: node
+bundle: dah_annotation
+label: Solution
+description: 'The solution this annotation describes.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      solution: solution
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

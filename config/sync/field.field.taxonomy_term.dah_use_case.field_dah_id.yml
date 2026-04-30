@@ -1,0 +1,23 @@
+uuid: 0bc32229-1a77-4efa-8b3a-cebb5c9c1aad
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_dah_id
+    - taxonomy.vocabulary.dah_use_case
+id: taxonomy_term.dah_use_case.field_dah_id
+field_name: field_dah_id
+entity_type: taxonomy_term
+bundle: dah_use_case
+label: 'DAH ID'
+description: 'Original DAH use case ID.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

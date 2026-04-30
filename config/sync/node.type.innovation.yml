@@ -1,0 +1,42 @@
+uuid: 4b48109c-4167-4adf-be17-0ca119811b74
+langcode: en
+status: true
+dependencies:
+  module:
+    - rdf_sync
+    - sti_rdf
+third_party_settings:
+  rdf_sync:
+    type: 'https://sti-portal.fao.org/ontology#Innovation'
+    uri_plugin: sti_namespace
+    fields:
+      title:
+        value:
+          predicate: 'http://purl.org/dc/terms/title'
+          type: null
+      body:
+        value:
+          predicate: 'http://purl.org/dc/terms/description'
+          type: null
+      field_country_origin:
+        target_id:
+          predicate: 'http://purl.org/dc/terms/spatial'
+          type: resource
+      field_start_year:
+        value:
+          predicate: 'http://purl.org/dc/terms/created'
+          type: 'xsd:date'
+      field_owner:
+        target_id:
+          predicate: 'http://purl.org/dc/terms/creator'
+          type: resource
+label_singular: null
+label_plural: null
+label_count: null
+name: Innovation
+type: innovation
+description: 'A curated record describing an agricultural technology or innovation, derived from one or more external sources and annotated for the ATIO Knowledge Base.'
+help: null
+new_revision: true
+preview_mode: 0
+display_submitted: false

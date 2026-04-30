@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ## Description: Downloads MySQL dump, Solr and Virtuoso snapshots
 ## Usage: download-databases

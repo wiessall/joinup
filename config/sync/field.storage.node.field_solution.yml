@@ -1,0 +1,19 @@
+uuid: 3c2ea89f-ec96-449f-918b-a7ee367a3d2f
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_solution
+field_name: field_solution
+entity_type: node
+type: entity_reference
+settings:
+  target_type: node
+module: core
+locked: false
+cardinality: 1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
