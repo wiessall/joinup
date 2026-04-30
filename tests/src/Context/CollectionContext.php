@@ -14,7 +14,6 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
-use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
@@ -174,30 +173,6 @@ class CollectionContext extends RawDrupalContext {
       if (isset($node->{$field}) && isset($values[$node->{$field}])) {
         $node->{$field} = $values[$node->{$field}];
       }
-    }
-  }
-
-  /**
-   * Actions to be performed after creating a collection.
-   *
-   * @param \Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope $scope
-   *   The after node create scope.
-   */
-  public function afterCollectionCreate(AfterNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
-    if ($node->type !== 'collection') {
-      return;
-    }
-
-    // If the collection is featured we need to create the meta entity that
-    // stores this information after creating the collection.
-    $is_featured = in_array(strtolower((string) ($node->feature ?? '')), [
-      'y',
-      'yes',
-    ]);
-
-    if ($is_featured) {
-      $node->feature();
     }
   }
 
