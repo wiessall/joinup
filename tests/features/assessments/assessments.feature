@@ -159,10 +159,24 @@ Feature: Assessment Report Entity Management
     Then I should see the success message containing "New assessment Test Assessment Report 2025 has been created."
     And I should see the heading "Test Assessment Report 2025"
     And I should see the following lines of text:
+      # General information
       | Status: Draft                                                                                      |
       | Austrian Ministry of Digital Affairs, a Local public sector body from Belgium                      |
       | The report has been connected to the following previous/relevant reports                           |
       | https://interoperable-europe.ec.europa.eu/report                                                   |
+      # Binding requirements
+      | Digital Transformation Initiative                                                                  |
+      | This is the general binding requirement description                                                |
+      | eIDAS Authentication Service                                                                       |
+      | Local public sector body                                                                           |
+      | Test solution                                                                                      |
+      # Results
+      | Complies with GDPR and eIDAS regulations                                                           |
+      | Requires coordination between authorities                                                          |
+      | Uses standardized Core Vocabularies                                                                |
+      | Implements REST APIs and OpenAPI specs                                                             |
+      | No significant barriers identified.                                                                |
+      # Supporting documents and general comments
       | This assessment was conducted in collaboration with multiple stakeholders across EU member states. |
 
     # Edit test.
@@ -450,3 +464,37 @@ Feature: Assessment Report Entity Management
     And I should not see "Hidden description"
     # Solution without abstract: description is shown as fallback.
     And I should see "Fallback shown"
+
+  # Regression test for the empty ID after duplication.
+  # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-11248
+  Scenario: Duplicating a binding requirement and editing the copy opens the modal
+    Given I am logged in as a moderator
+    And I go to "/collection/assessments/report/create"
+
+    When I click "New binding requirement"
+    And a modal should open
+
+    When I click "Initiative" in the "Modal content" region
+    And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Duplicate Test Initiative" in the "Modal content" region
+    And I fill in "expression[0][inline_entity_form][description][0][value]" with "Some description" in the "Modal content" region
+
+    When I click "Concerned public services" in the "Modal content" region
+    And I fill in "affects[0][inline_entity_form][name][0][value]" with "Test Service" in the "Modal content" region
+
+    When I click "Requirements" in the "Modal content" region
+    And I fill in "description[0][value]" with "Test binding requirement description" in the "Modal content" region
+
+    When I click "Affected stakeholders" in the "Modal content" region
+    And I select "Local public sector body" from "has_participation[0][inline_entity_form][participant_type][]" in the "Modal content" region
+    And I select "Belgium" from "has_participation[0][inline_entity_form][stakeholder_country][]" in the "Modal content" region
+
+    Then I press "Save" in the "Modal buttons" region
+    And the modal should be closed
+
+    When I click on element ".lpb-duplicate"
+    And I wait for AJAX to finish
+
+    # Click the second edit link by finding the first component and then
+    # getting the first sibling which is the duplicated component.
+    When I click on element ".js-lpb-component ~ .js-lpb-component .lpb-edit"
+    Then a modal should open

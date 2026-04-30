@@ -9,10 +9,8 @@ use Behat\Step\When;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -25,48 +23,11 @@ use Drupal\og_menu\Tests\Traits\OgMenuTrait;
 class CustomPageContext extends RawDrupalContext {
 
   use AssertTrait;
-  use FileTrait;
   use EntityTrait;
   use OgMenuTrait;
   use OgTrait;
   use UtilityTrait;
   use TraversingTrait;
-
-  /**
-   * Handles the attachment field for custom page nodes.
-   *
-   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
-   *   An object containing the entity properties and fields that are to be used
-   *   for creating the node as properties on the object.
-   *
-   * @throws \Exception
-   *   Thrown when a file being attached is not found.
-   *
-   * @BeforeNodeCreate
-   */
-  public static function massageCustomPageFieldsBeforeNodeCreate(BeforeNodeCreateScope $scope): void {
-    /** @var \stdClass $node */
-    $node = $scope->getEntity();
-
-    if ($node->type !== 'custom_page') {
-      return;
-    }
-
-    if (!empty($node->logo)) {
-      // We want to copy it from the fixtures into the file system and register
-      // it in the CustomPageSubContext so it can be cleaned up after the
-      // scenario ends. Perform a small dance to get access to the context class
-      // from inside this static callback.
-      /** @var \Behat\Behat\Context\Environment\InitializedContextEnvironment $environment */
-      $environment = $scope->getEnvironment();
-      /** @var \Drupal\joinup\Context\CustomPageContext $context */
-      $context = $environment->getContext(self::class);
-
-      /** @var \Drupal\file\FileInterface $file */
-      $file = $context->createFile($node->logo);
-      $node->logo = $file->getFileUri();
-    }
-  }
 
   /**
    * Checks the number of custom pages a collection or solution has.
