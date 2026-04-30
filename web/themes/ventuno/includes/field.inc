@@ -10,6 +10,7 @@ declare(strict_types=1);
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Template\Attribute;
 use Drupal\joinup_badge\BadgeService;
+use Drupal\joinup_badge\Entity\BadgeAwardingInterface;
 
 /**
  * Implements hook_theme_suggestions_HOOK_alter().
@@ -191,17 +192,17 @@ function ventuno_preprocess_field(array &$variables): void {
     }
   }
 
-  // Render badges for the badges computed field.
+  // Renders the badges computed field.
   if ($element['#field_name'] === 'badges') {
-    $badgeService = \Drupal::service(BadgeService::class);
     foreach ($variables['items'] as $delta => &$item) {
-      /** @var \Drupal\joinup_badge\Entity\BadgeAwardingInterface $flagging */
       $flagging = $variables['element']['#items'][$delta]->entity;
+      assert($flagging instanceof BadgeAwardingInterface);
+
       $item['content'] = [
         '#theme' => 'joinup_badge',
-        '#icon_id' => $badgeService->getIcon($flagging->bundle()),
+        '#icon_id' => $flagging->getIcon(),
         '#label' => $flagging->getLabel(),
-        '#description' => $badgeService->getDescription($flagging->bundle()),
+        '#description' => $flagging->getDescription(),
       ];
     }
   }

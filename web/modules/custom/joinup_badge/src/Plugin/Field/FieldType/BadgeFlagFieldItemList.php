@@ -7,6 +7,7 @@ namespace Drupal\joinup_badge\Plugin\Field\FieldType;
 use Drupal\Core\Field\EntityReferenceFieldItemList;
 use Drupal\Core\TypedData\ComputedItemListTrait;
 use Drupal\joinup_badge\BadgeService;
+use Drupal\joinup_badge\Entity\BadgeAwardingInterface;
 
 /**
  * Computed field item list for the user badge flags field.
@@ -26,23 +27,27 @@ class BadgeFlagFieldItemList extends EntityReferenceFieldItemList {
 
     $flags = \Drupal::service(BadgeService::class)->getBadgeFlags();
 
-    $flaggingIds = \Drupal::entityQuery('flagging')
+    $storage = \Drupal::entityTypeManager()->getStorage('flagging');
+
+    $ids = $storage->getQuery()
       ->accessCheck(FALSE)
       ->condition('entity_type', 'user')
       ->condition('entity_id', $user->id())
       ->condition('flag_id', array_keys($flags), 'IN')
-      ->sort('flag_id')
       ->execute();
 
-    if (empty($flaggingIds)) {
+    if (empty($ids)) {
       return;
     }
 
-    $badges = \Drupal::entityTypeManager()
-      ->getStorage('flagging')
-      ->loadMultiple($flaggingIds);
+    $badges = array_values($storage->loadMultiple($ids));
 
-    foreach (array_values($badges) as $delta => $flagging) {
+    // Sort by the flag weight.
+    usort($badges, function (BadgeAwardingInterface $a, BadgeAwardingInterface $b): int {
+      return $a->getFlag()->getWeight() <=> $b->getFlag()->getWeight();
+    });
+
+    foreach ($badges as $delta => $flagging) {
       $this->list[$delta] = $this->createItem($delta, ['target_id' => $flagging->id()]);
     }
   }
