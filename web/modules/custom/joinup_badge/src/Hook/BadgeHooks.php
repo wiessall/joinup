@@ -49,7 +49,7 @@ readonly class BadgeHooks {
       return [];
     }
 
-    $fields['joinup_badges'] = BaseFieldDefinition::create('entity_reference')
+    $fields['badges'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(new TranslatableMarkup('Badges'))
       ->setDescription(new TranslatableMarkup('Badges awarded to this user.'))
       ->setSetting('target_type', 'flagging')
