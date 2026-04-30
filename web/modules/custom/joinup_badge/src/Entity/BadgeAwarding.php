@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace Drupal\joinup_badge\Entity;
 
 use Drupal\flag\Entity\Flagging;
-use Drupal\joinup_badge\BadgeFlagInterface;
-use Drupal\joinup_badge\BadgeService;
+use Drupal\joinup_badge\BadgeAwardingInterface;
 
 /**
- * Bundle class for Flagging entities that represent badges.
+ * Bundle class for flagging entities that represent badges.
  */
-class BadgeFlagging extends Flagging implements BadgeFlagInterface {
+class BadgeAwarding extends Flagging implements BadgeAwardingInterface {
 
   /**
    * {@inheritdoc}
@@ -24,14 +23,14 @@ class BadgeFlagging extends Flagging implements BadgeFlagInterface {
    * {@inheritdoc}
    */
   public function getDescription(): string {
-    return BadgeService::BADGES[$this->bundle()]['description'] ?? '';
+    return $this->getFlag()->getThirdPartySetting('joinup_badge', 'icon');
   }
 
   /**
    * {@inheritdoc}
    */
   public function getIcon(): string {
-    return BadgeService::BADGES[$this->bundle()]['icon'] ?? '';
+    return $this->getFlag()->getThirdPartySetting('joinup_badge', 'description');
   }
 
 }

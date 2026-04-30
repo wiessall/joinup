@@ -196,7 +196,7 @@ function ventuno_preprocess_field(array &$variables): void {
     /** @var \Drupal\joinup_badge\BadgeServiceInterface $badgeService */
     $badgeService = \Drupal::service(BadgeService::class);
     foreach ($variables['items'] as $delta => &$item) {
-      /** @var \Drupal\joinup_badge\BadgeFlagInterface $flagging */
+      /** @var \Drupal\joinup_badge\BadgeAwardingInterface $flagging */
       $flagging = $variables['element']['#items'][$delta]->entity;
       $item['content'] = [
         '#theme' => 'joinup_badge',
