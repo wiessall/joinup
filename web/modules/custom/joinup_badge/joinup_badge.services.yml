@@ -5,5 +5,3 @@ services:
 
   Drupal\joinup_badge\BadgeServiceInterface:
     class: Drupal\joinup_badge\BadgeService
-
-  Drupal\joinup_badge\Hook\BadgeHooks: ~
