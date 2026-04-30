@@ -10,6 +10,7 @@ use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_badge\BadgeService;
+use Drupal\joinup_badge\Entity\BadgeAwarding;
 use Drupal\joinup_badge\Entity\BadgeFlagging;
 use Drupal\joinup_badge\InteroperableEuropeCommunityMembership;
 use Drupal\joinup_badge\Plugin\Field\FieldType\BadgeFlagFieldItemList;
@@ -18,23 +19,18 @@ use Drupal\og\OgMembershipInterface;
 /**
  * Hooks for the joinup_badge module.
  */
-class BadgeHooks {
+readonly class BadgeHooks {
 
-  /**
-   * Constructs a BadgeHooks object.
-   */
-  public function __construct(
-    protected readonly BadgeService $badgeService,
-  ) {}
+  public function __construct(protected BadgeService $badgeService) {}
 
   /**
    * Implements hook_entity_bundle_info_alter().
    */
   #[Hook('entity_bundle_info_alter')]
   public function entityBundleInfoAlter(array &$bundles): void {
-    foreach ($this->badgeService->getBadgeFlagIds() as $flagId) {
+    foreach ($this->badgeService->getBadgeFlags() as $flagId => $flag) {
       if (!empty($bundles['flagging'][$flagId])) {
-        $bundles['flagging'][$flagId]['class'] = BadgeFlagging::class;
+        $bundles['flagging'][$flagId]['class'] = BadgeAwarding::class;
       }
     }
   }

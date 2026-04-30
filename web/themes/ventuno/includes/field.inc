@@ -193,7 +193,6 @@ function ventuno_preprocess_field(array &$variables): void {
 
   // Render badges for the joinup_badges computed field.
   if ($element['#field_name'] === 'joinup_badges') {
-    /** @var \Drupal\joinup_badge\BadgeServiceInterface $badgeService */
     $badgeService = \Drupal::service(BadgeService::class);
     foreach ($variables['items'] as $delta => &$item) {
       /** @var \Drupal\joinup_badge\BadgeAwardingInterface $flagging */
