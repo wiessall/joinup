@@ -2,7 +2,7 @@ name: 'Joinup Badge'
 type: module
 description: 'Provides badges via the flag module, recognising user engagement on the Portal.'
 package: Joinup
-core_version_requirement: ^10 || ^11
+core_version_requirement: '*'
 
 dependencies:
   - drupal:user
