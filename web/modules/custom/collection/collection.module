@@ -23,6 +23,7 @@ use Drupal\collection\Entity\Collection;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Entity\GlossaryTerm;
 use Drupal\collection\Entity\GroupMembership;
+use Drupal\Core\Url;
 use Drupal\collection\Plugin\Field\FieldType\LastUpdatedFieldItemList;
 use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
 use Drupal\node\Entity\Node;
@@ -261,12 +262,13 @@ function collection_node_view(array &$build, EntityInterface $entity, EntityView
     $solution_count = count($entity->getSolutionIds(TRUE, TRUE));
     $tags = Cache::buildTags('og-group-content', $entity->getCacheTagsToInvalidate());
     $tags = Cache::mergeTags($tags, ['node_list']);
+    $label = \Drupal::translation()
+      ->formatPlural($solution_count, '@solution_count Solution', '@solution_count Solutions', ['@solution_count' => $solution_count]);
     $build['solutions'] = [
-      '#markup' => \Drupal::translation()->formatPlural($solution_count, '@solution_count Solution', '@solution_count Solutions', ['@solution_count' => $solution_count]),
-      '#cache' => [
-        // Invalidate when community content is saved.
-        'tags' => $tags,
-      ],
+      '#type' => 'link',
+      '#title' => $label,
+      '#url' => Url::fromRoute('view.all_solutions_in_a_collection.listing', ['node' => $entity->id()]),
+      '#cache' => ['tags' => $tags],
     ];
   }
 
