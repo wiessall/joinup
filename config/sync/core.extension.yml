@@ -98,9 +98,9 @@ module:
   inline_form_errors: 0
   interoperable_europe: 0
   isa2_analytics: 0
-  joinup_achievement: 0
   joinup_api: 0
   joinup_assessment: 0
+  joinup_badge: 0
   joinup_bookmark: 0
   joinup_bundle_class: 0
   joinup_collection: 0

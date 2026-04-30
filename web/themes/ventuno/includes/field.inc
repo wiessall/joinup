@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Template\Attribute;
-use Drupal\joinup_achievement\AchievementService;
+use Drupal\joinup_badge\BadgeService;
 
 /**
  * Implements hook_theme_suggestions_HOOK_alter().
@@ -191,18 +191,18 @@ function ventuno_preprocess_field(array &$variables): void {
     }
   }
 
-  // Render achievement badges for the joinup_achievements computed field.
-  if ($element['#field_name'] === 'joinup_achievements') {
-    /** @var \Drupal\joinup_achievement\AchievementServiceInterface $achievementService */
-    $achievementService = \Drupal::service(AchievementService::class);
+  // Render badges for the joinup_badges computed field.
+  if ($element['#field_name'] === 'joinup_badges') {
+    /** @var \Drupal\joinup_badge\BadgeServiceInterface $badgeService */
+    $badgeService = \Drupal::service(BadgeService::class);
     foreach ($variables['items'] as $delta => &$item) {
-      /** @var \Drupal\joinup_achievement\AchievementFlagInterface $flagging */
+      /** @var \Drupal\joinup_badge\BadgeFlagInterface $flagging */
       $flagging = $variables['element']['#items'][$delta]->entity;
       $item['content'] = [
-        '#theme' => 'joinup_achievement',
-        '#icon_id' => $achievementService->getIcon($flagging->bundle()),
+        '#theme' => 'joinup_badge',
+        '#icon_id' => $badgeService->getIcon($flagging->bundle()),
         '#label' => $flagging->getLabel(),
-        '#description' => $achievementService->getDescription($flagging->bundle()),
+        '#description' => $badgeService->getDescription($flagging->bundle()),
       ];
     }
   }
