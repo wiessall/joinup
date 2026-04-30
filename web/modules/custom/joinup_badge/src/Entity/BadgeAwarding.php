@@ -23,14 +23,14 @@ class BadgeAwarding extends Flagging implements BadgeAwardingInterface {
    * {@inheritdoc}
    */
   public function getDescription(): string {
-    return $this->getFlag()->getThirdPartySetting('joinup_badge', 'icon');
+    return $this->getFlag()->getThirdPartySetting('joinup_badge', 'description');
   }
 
   /**
    * {@inheritdoc}
    */
   public function getIcon(): string {
-    return $this->getFlag()->getThirdPartySetting('joinup_badge', 'description');
+    return $this->getFlag()->getThirdPartySetting('joinup_badge', 'icon');
   }
 
 }
