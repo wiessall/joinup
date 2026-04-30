@@ -5,18 +5,6 @@
 import { Page } from "@playwright/test";
 
 /**
- * Wait until Webtools finishes processing.
- *
- * @param {Page} page - Playwright page instance.
- */
-async function waitForWebtools(page: Page): Promise<void> {
-  await page.waitForFunction(
-    // @ts-expect-error $wt is injected by Webtools.
-    () => typeof window.$wt === "undefined" || window.$wt.inProgress === false,
-  );
-}
-
-/**
  * Neutralize overlaying elements.
  *
  * @param {Page} page - Playwright page instance.
@@ -43,16 +31,10 @@ async function neutralizeOverlayElements(page: Page): Promise<void> {
  * @param {Page} page - Playwright page instance.
  */
 async function prepareForScreenshot(page: Page): Promise<void> {
-  await Promise.all([
-    // Some elements on the page (i.a. translate page button) rely on webtools to be done processing.
-    waitForWebtools(page),
-    // Prevent overlaying elements from being part of snapshots.
-    neutralizeOverlayElements(page),
-  ]);
+  await neutralizeOverlayElements(page);
 }
 
 export default {
-  waitForWebtools,
   neutralizeOverlayElements,
   prepareForScreenshot,
 };
