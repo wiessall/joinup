@@ -20,9 +20,8 @@ test.describe("Collection homepage", () => {
     await expect(
       page.locator(".collection__collection-settings .row"),
     ).toHaveScreenshot("collection-content-tiles.png");
-    // @todo ISAICP-11181: webtools.europa.eu DNS blocked on CI.
-    // await expect(page.locator(".content .region-content-top")).toHaveScreenshot(
-    //   "action-buttons-on-top.png",
-    // );
+    await expect(page.locator(".content .region-content-top")).toHaveScreenshot(
+      "action-buttons-on-top.png",
+    );
   });
 });

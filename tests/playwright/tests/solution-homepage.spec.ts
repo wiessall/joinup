@@ -19,10 +19,9 @@ test.describe("Solution homepage components", () => {
       `group-header-${user}.png`,
     );
 
-    // @todo ISAICP-11181: webtools.europa.eu DNS blocked on CI.
-    // await expect(page.locator(".content .region-content-top")).toHaveScreenshot(
-    //   `action-buttons-on-top.png`,
-    // );
+    await expect(page.locator(".content .region-content-top")).toHaveScreenshot(
+      `action-buttons-on-top.png`,
+    );
   }
 
   test("Anonymous", async ({ page }) => {
