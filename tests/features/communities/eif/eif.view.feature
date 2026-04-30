@@ -37,7 +37,7 @@ Feature:
     # the way, responsive images, are placed in the page. Since we cannot
     # predict the title, we are looking for the alt text, which is placed if
     # the field is placed and shown.
-    And the page should contain the html text 'alt="Behat test image"'
+    And the page should contain the html text 'alt="EIF solution"'
     And I should see the heading "General information"
 
     And I should see the text "Description:"
