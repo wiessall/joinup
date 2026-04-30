@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_badge;
 
-use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\flag\FlagServiceInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -16,8 +15,6 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  * and for their display metadata (icon ID and description).
  */
 class BadgeService {
-
-  use AutowireTrait;
 
   /**
    * The UUID of the Interoperable Europe Community group.
