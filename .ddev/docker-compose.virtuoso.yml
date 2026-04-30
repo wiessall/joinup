@@ -9,6 +9,8 @@ services:
     expose:
       - 1111
       - 8890
+    ports:
+      - "8890:8890"
     environment:
       VIRTUAL_HOST: ${DDEV_HOSTNAME}
       HTTP_EXPOSE: '8890:8890'

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ## Description: Enable Python 2 service (needed for build-publiccode)
 ## Usage: python2-enable

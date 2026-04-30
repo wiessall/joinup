@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ## Description: Disable Python 2 service
 ## Usage: python2-disable

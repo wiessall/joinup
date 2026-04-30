@@ -8,6 +8,8 @@ services:
         com.ddev.approot: ${DDEV_APPROOT}
     expose:
       - 8983
+    ports:
+      - "8983:8983"
     environment:
       VIRTUAL_HOST: ${DDEV_HOSTNAME}
       HTTP_EXPOSE: '8983:8983'

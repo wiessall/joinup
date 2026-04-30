@@ -1,0 +1,20 @@
+uuid: 8fd6373f-a934-4abf-a220-aa3407773925
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_launch_year
+field_name: field_launch_year
+entity_type: node
+type: integer
+settings:
+  unsigned: true
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

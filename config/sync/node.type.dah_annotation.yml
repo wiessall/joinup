@@ -1,0 +1,22 @@
+uuid: e6958827-a67b-4ef8-9b92-512f42533092
+langcode: en
+status: true
+dependencies:
+  module:
+    - rdf_sync
+    - sti_rdf
+third_party_settings:
+  rdf_sync:
+    type: 'https://sti-portal.fao.org/ontology#DahAnnotation'
+    uri_plugin: sti_namespace
+    fields: {  }
+label_singular: null
+label_plural: null
+label_count: null
+name: 'DAH Annotation'
+type: dah_annotation
+description: 'Claims made by Digital Agri Hub about a solution.'
+help: null
+new_revision: false
+preview_mode: 0
+display_submitted: false
