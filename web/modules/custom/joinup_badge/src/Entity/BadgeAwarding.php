@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\joinup_badge\Entity;
 
 use Drupal\flag\Entity\Flagging;
-use Drupal\joinup_badge\BadgeAwardingInterface;
 
 /**
  * Bundle class for flagging entities that represent badges.

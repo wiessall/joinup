@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_badge;
+namespace Drupal\joinup_badge\Entity;
 
 use Drupal\flag\FlaggingInterface;
 
