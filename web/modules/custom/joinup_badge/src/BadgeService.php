@@ -18,11 +18,6 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 class BadgeService {
 
   /**
-   * The UUID of the Interoperable Europe Community group.
-   */
-  public const IEC_COMMUNITY = 'ba527094-00bc-45de-98fb-c732c6c66fec';
-
-  /**
    * Constructs a BadgeService object.
    */
   public function __construct(

@@ -11,6 +11,7 @@ use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_badge\BadgeService;
 use Drupal\joinup_badge\Entity\BadgeFlagging;
+use Drupal\joinup_badge\InteroperableEuropeCommunityMembership;
 use Drupal\joinup_badge\Plugin\Field\FieldType\BadgeFlagFieldItemList;
 use Drupal\og\OgMembershipInterface;
 
@@ -73,7 +74,7 @@ class BadgeHooks {
   #[Hook('og_membership_insert')]
   public function ogMembershipInsert(OgMembershipInterface $entity): void {
     $group = $entity->getGroup();
-    if ($group->uuid() === BadgeService::IEC_COMMUNITY) {
+    if ($group->uuid() === InteroperableEuropeCommunityMembership::UUID) {
       $this->badgeService->award('iec_member', $entity->getOwner());
     }
   }

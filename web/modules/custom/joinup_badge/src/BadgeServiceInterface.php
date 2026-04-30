@@ -15,11 +15,6 @@ use Drupal\user\UserInterface;
 interface BadgeServiceInterface {
 
   /**
-   * The UUID of the Interoperable Europe Community group.
-   */
-  const IEC_COMMUNITY = 'ba527094-00bc-45de-98fb-c732c6c66fec';
-
-  /**
    * Metadata for each badge flag.
    *
    * Keys are flag machine names. Each entry contains:
