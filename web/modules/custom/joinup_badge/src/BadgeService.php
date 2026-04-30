@@ -11,30 +11,24 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Awards and revokes flag-backed badges on user entities.
- *
- * This class is the single source of truth for which flags are badges
- * and for their display metadata (icon ID and description).
  */
-class BadgeService {
+readonly class BadgeService {
 
-  /**
-   * Constructs a BadgeService object.
-   */
   public function __construct(
     #[Autowire(service: 'flag')]
-    protected readonly FlagServiceInterface $flagService,
+    protected FlagServiceInterface $flagService,
   ) {}
 
   /**
-   * Returns the flag IDs that represent badges.
+   * Returns the badge flag entities.
    *
-   * @return string[]
-   *   Ordered list of flag machine names.
+   * @return array<string, \Drupal\flag\FlagInterface>
+   *   List of badge flag entities, keyed by their ID.
    */
-  public function getBadgeFlagIds(): array {
+  public function getBadgeFlags(): array {
     return array_filter(
       $this->flagService->getAllFlags('user'),
-      fn(FlagInterface $flag): bool => (bool) $flag->getThirdPartySetting('joinup_badge', 'icon'),
+      fn(FlagInterface $flag): bool => $flag->getThirdPartySetting('joinup_badge', 'icon') && $flag->getThirdPartySetting('joinup_badge', 'description'),
     );
   }
 

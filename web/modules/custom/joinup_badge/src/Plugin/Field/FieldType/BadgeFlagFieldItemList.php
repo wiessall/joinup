@@ -28,14 +28,13 @@ class BadgeFlagFieldItemList extends EntityReferenceFieldItemList {
       return;
     }
 
-    $flagIds = \Drupal::service(BadgeService::class)
-      ->getBadgeFlagIds();
+    $flags = \Drupal::service(BadgeService::class)->getBadgeFlags();
 
     $flagging_ids = \Drupal::entityQuery('flagging')
       ->accessCheck(FALSE)
       ->condition('entity_type', 'user')
       ->condition('entity_id', $user->id())
-      ->condition('flag_id', $flagIds, 'IN')
+      ->condition('flag_id', array_keys($flags), 'IN')
       ->sort('flag_id')
       ->execute();
 
