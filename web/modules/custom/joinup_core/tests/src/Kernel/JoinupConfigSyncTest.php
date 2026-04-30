@@ -33,9 +33,6 @@ class JoinupConfigSyncTest extends KernelTestBase {
     // Blazy depends on media and file.
     'file',
     'media',
-    // This module alters the schema of layout_plugin.settings.*.
-    // @see joinup_layout_config_schema_info_alter()
-    'joinup_layout',
     // This module alters the schema of facet.widget.default_config.
     // @see search_api_arbitrary_facet_config_schema_info_alter()
     'search_api_arbitrary_facet',
