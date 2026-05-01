@@ -4,7 +4,6 @@ status: true
 dependencies:
   module:
     - assessments
-    - paragraphs_type_permissions
 id: assessment_moderator
 label: 'Assessment moderator'
 weight: 1
