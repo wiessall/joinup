@@ -20,16 +20,19 @@ readonly class BadgeService {
   ) {}
 
   /**
-   * Returns the badge flag entities.
+   * Returns the badge flag entities ordered by their weight.
    *
    * @return array<string, \Drupal\flag\FlagInterface>
-   *   List of badge flag entities, keyed by their ID.
+   *   List of badge flag entities, keyed by ID and ordered by weight.
    */
   public function getBadgeFlags(): array {
-    return array_filter(
+    $badges = array_filter(
       $this->flagService->getAllFlags('user'),
       fn(FlagInterface $flag): bool => $flag->getThirdPartySetting('joinup_badge', 'icon') && $flag->getThirdPartySetting('joinup_badge', 'description'),
     );
+    uasort($badges, fn(FlagInterface $a, FlagInterface $b): int => $a->getWeight() <=> $b->getWeight());
+
+    return $badges;
   }
 
   /**

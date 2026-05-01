@@ -29,26 +29,24 @@ class BadgeFlagFieldItemList extends EntityReferenceFieldItemList {
 
     $storage = \Drupal::entityTypeManager()->getStorage('flagging');
 
-    $ids = $storage->getQuery()
+    $flaggingIds = $storage->getQuery()
       ->accessCheck(FALSE)
       ->condition('entity_type', 'user')
       ->condition('entity_id', $user->id())
       ->condition('flag_id', array_keys($flags), 'IN')
       ->execute();
 
-    if (empty($ids)) {
-      return;
+    $badges = [];
+
+    // Map flagging flag ID to flagging ID.
+    foreach ($storage->loadMultiple($flaggingIds) as $flaggingId => $flagging) {
+      $badges[$flagging->bundle()] = $flaggingId;
     }
 
-    $badges = array_values($storage->loadMultiple($ids));
-
-    // Sort by the flag weight.
-    usort($badges, function (BadgeAwardingInterface $a, BadgeAwardingInterface $b): int {
-      return $a->getFlag()->getWeight() <=> $b->getFlag()->getWeight();
-    });
-
-    foreach ($badges as $delta => $flagging) {
-      $this->list[$delta] = $this->createItem($delta, ['target_id' => $flagging->id()]);
+    foreach (array_values($flags) as $delta => $flag) {
+      $this->list[$delta] = $this->createItem($delta, [
+        'target_id' => $badges[$flag->id()] ?? NULL,
+      ]);
     }
   }
 
