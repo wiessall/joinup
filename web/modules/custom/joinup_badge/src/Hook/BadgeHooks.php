@@ -11,7 +11,7 @@ use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_badge\BadgeService;
 use Drupal\joinup_badge\Entity\BadgeAwarding;
-use Drupal\joinup_badge\Plugin\Field\FieldType\BadgeFlagFieldItemList;
+use Drupal\joinup_badge\Plugin\Field\FieldType\BadgesFieldItemList;
 use Drupal\og\OgMembershipInterface;
 
 /**
@@ -53,7 +53,7 @@ readonly class BadgeHooks {
       ->setSetting('target_type', 'flagging')
       ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
       ->setComputed(TRUE)
-      ->setClass(BadgeFlagFieldItemList::class)
+      ->setClass(BadgesFieldItemList::class)
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', FALSE)
       ->setDisplayOptions('view', [
