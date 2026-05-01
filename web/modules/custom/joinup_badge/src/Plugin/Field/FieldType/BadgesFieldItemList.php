@@ -7,12 +7,11 @@ namespace Drupal\joinup_badge\Plugin\Field\FieldType;
 use Drupal\Core\Field\EntityReferenceFieldItemList;
 use Drupal\Core\TypedData\ComputedItemListTrait;
 use Drupal\joinup_badge\BadgeService;
-use Drupal\joinup_badge\Entity\BadgeAwardingInterface;
 
 /**
  * Computed field item list for the user badge flags field.
  */
-class BadgeFlagFieldItemList extends EntityReferenceFieldItemList {
+class BadgesFieldItemList extends EntityReferenceFieldItemList {
 
   use ComputedItemListTrait;
 
@@ -26,9 +25,11 @@ class BadgeFlagFieldItemList extends EntityReferenceFieldItemList {
     }
 
     $flags = \Drupal::service(BadgeService::class)->getBadgeFlags();
+    if ($flags) {
+      return;
+    }
 
     $storage = \Drupal::entityTypeManager()->getStorage('flagging');
-
     $flaggingIds = $storage->getQuery()
       ->accessCheck(FALSE)
       ->condition('entity_type', 'user')
@@ -36,9 +37,10 @@ class BadgeFlagFieldItemList extends EntityReferenceFieldItemList {
       ->condition('flag_id', array_keys($flags), 'IN')
       ->execute();
 
+    // Map flagging flag ID to flagging ID. Note that a user can only have one
+    // flagging of a given type, so we can safely use the first one.
+    // @see \Drupal\joinup_badge\BadgeService::award()
     $badges = [];
-
-    // Map flagging flag ID to flagging ID.
     foreach ($storage->loadMultiple($flaggingIds) as $flaggingId => $flagging) {
       $badges[$flagging->bundle()] = $flaggingId;
     }
