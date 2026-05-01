@@ -69,7 +69,7 @@ readonly class BadgeHooks {
       ->setLabel(new TranslatableMarkup('Badges'))
       ->setDescription(new TranslatableMarkup('Badges awarded to this user.'))
       ->setSetting('target_type', 'flagging')
-      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+      ->setCardinality(3)
       ->setComputed(TRUE)
       ->setClass(BadgeFieldItemList::class)
       ->setDisplayConfigurable('view', TRUE)
