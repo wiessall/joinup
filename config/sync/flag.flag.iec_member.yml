@@ -6,7 +6,7 @@ dependencies:
     - user
 third_party_settings:
   joinup_badge:
-    icon: 'patch-check'
+    icon: patch-check
     description: 'This user is a verified member of the Interoperable Europe Community.'
 id: iec_member
 label: 'Interoperable Europe Community member'

@@ -1,13 +1,6 @@
 @import "../partials/core";
 
-.achievement-badges {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  vertical-align: middle;
-}
-
-.user-achievements {
+.user-badges {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
@@ -16,7 +9,7 @@
   list-style: none;
 }
 
-.user-achievement {
+.user-badge {
   display: inline-flex;
   align-items: center;
   cursor: default;
