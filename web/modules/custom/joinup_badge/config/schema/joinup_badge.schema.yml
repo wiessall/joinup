@@ -1,4 +1,4 @@
-flag.flag.*:third_party.joinup_badge:
+flag.flag.*.third_party.joinup_badge:
   type: mapping
   label: 'Joinup Badge settings'
   mapping:
