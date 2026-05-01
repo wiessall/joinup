@@ -11,9 +11,11 @@ use Drupal\joinup_badge\BadgeService;
 /**
  * Computed field item list for the user badge flags field.
  */
-class BadgesFieldItemList extends EntityReferenceFieldItemList {
+class BadgeFieldItemList extends EntityReferenceFieldItemList {
 
   use ComputedItemListTrait;
+
+  public const string NOT_AWARDED = '0';
 
   /**
    * {@inheritdoc}
@@ -24,8 +26,7 @@ class BadgesFieldItemList extends EntityReferenceFieldItemList {
       return;
     }
 
-    $flags = \Drupal::service(BadgeService::class)->getBadgeFlags();
-    if ($flags) {
+    if (!$flags = \Drupal::service(BadgeService::class)->getBadgeFlags()) {
       return;
     }
 
@@ -47,7 +48,9 @@ class BadgesFieldItemList extends EntityReferenceFieldItemList {
 
     foreach (array_values($flags) as $delta => $flag) {
       $this->list[$delta] = $this->createItem($delta, [
-        'target_id' => $badges[$flag->id()] ?? NULL,
+        // '0' is a valid entity reference target ID. We use it to indicate that
+        // the user has not yet been awarded with that type of badge.
+        'target_id' => $badges[$flag->id()] ?? self::NOT_AWARDED,
       ]);
     }
   }
