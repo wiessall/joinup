@@ -69,19 +69,4 @@ readonly class BadgeService {
     }
   }
 
-  /**
-   * Checks whether a user currently holds a given badge.
-   *
-   * @param string $flagId
-   *   The machine name of the badge flag (e.g. 'iec_member').
-   * @param \Drupal\user\UserInterface $user
-   *   The user to check.
-   *
-   * @return bool
-   *   TRUE if the user holds the badge, FALSE otherwise.
-   */
-  public function hasBadge(string $flagId, UserInterface $user): bool {
-    return (bool) $this->flagService->getFlagById($flagId)?->isFlagged($user);
-  }
-
 }
