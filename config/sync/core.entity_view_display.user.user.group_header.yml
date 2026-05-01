@@ -17,6 +17,7 @@ dependencies:
     - field.field.user.user.field_user_professional_domain
     - image.style.profile_icon_big
   module:
+    - joinup_badge
     - options
     - social_media_links_field
     - svg_image
@@ -27,11 +28,10 @@ targetEntityType: user
 bundle: user
 mode: group_header
 content:
-  achievements:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
+  badges:
+    type: joinup_badge
+    label: visually_hidden
+    settings: {  }
     third_party_settings: {  }
     weight: 11
     region: content
