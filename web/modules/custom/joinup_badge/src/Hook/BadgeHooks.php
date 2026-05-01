@@ -6,7 +6,6 @@ namespace Drupal\joinup_badge\Hook;
 
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_badge\BadgeService;
@@ -84,10 +83,15 @@ readonly class BadgeHooks {
    * Implements hook_og_membership_insert().
    */
   #[Hook('og_membership_insert')]
-  public function ogMembershipInsert(OgMembershipInterface $entity): void {
-    $group = $entity->getGroup();
-    if ($group->uuid() === static::IEC_UUID) {
-      $this->badgeService->award('iec_member', $entity->getOwner());
+  #[Hook('og_membership_update')]
+  public function awardInteroperableEuropeCommunityMembership(OgMembershipInterface $membership): void {
+    if (
+      $membership->getGroup()->uuid() === static::IEC_UUID
+      // Only award the badge if the membership is approved.
+      && $membership->getState() === OgMembershipInterface::STATE_ACTIVE
+      && $membership->getOriginal()?->getState() !== OgMembershipInterface::STATE_ACTIVE
+    ) {
+      $this->badgeService->award('iec_member', $membership->getOwner());
     }
   }
 
