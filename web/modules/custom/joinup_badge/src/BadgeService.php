@@ -47,10 +47,9 @@ readonly class BadgeService {
    */
   public function award(string $flagId, UserInterface $user): void {
     $flag = $this->flagService->getFlagById($flagId);
-    if ($flag === NULL || $flag->isFlagged($user)) {
-      return;
+    if ($flag && !$flag->isFlagged($user)) {
+      $this->flagService->flag($flag, $user);
     }
-    $this->flagService->flag($flag, $user);
   }
 
   /**
@@ -65,10 +64,9 @@ readonly class BadgeService {
    */
   public function revoke(string $flagId, UserInterface $user): void {
     $flag = $this->flagService->getFlagById($flagId);
-    if ($flag === NULL || !$flag->isFlagged($user)) {
-      return;
+    if ($flag?->isFlagged($user)) {
+      $this->flagService->unflag($flag, $user);
     }
-    $this->flagService->unflag($flag, $user);
   }
 
   /**
@@ -83,8 +81,7 @@ readonly class BadgeService {
    *   TRUE if the user holds the badge, FALSE otherwise.
    */
   public function hasBadge(string $flagId, UserInterface $user): bool {
-    $flag = $this->flagService->getFlagById($flagId);
-    return $flag !== NULL && (bool) $flag->isFlagged($user);
+    return (bool) $this->flagService->getFlagById($flagId)?->isFlagged($user);
   }
 
 }
