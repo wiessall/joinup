@@ -60,8 +60,8 @@ readonly class BadgeHooks {
    * Implements hook_entity_base_field_info().
    */
   #[Hook('entity_base_field_info')]
-  public function entityBaseFieldInfo(EntityTypeInterface $entity_type): array {
-    if ($entity_type->id() !== 'user') {
+  public function entityBaseFieldInfo(EntityTypeInterface $entityType): array {
+    if ($entityType->id() !== 'user') {
       return [];
     }
 
