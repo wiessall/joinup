@@ -6,7 +6,7 @@ dependencies:
     - user
 third_party_settings:
   joinup_badge:
-    icon: 'award'
+    icon: award
     description: 'This user has actively contributed to the Interoperable Europe Portal.'
 id: portal_contributor
 label: 'Portal contributor'

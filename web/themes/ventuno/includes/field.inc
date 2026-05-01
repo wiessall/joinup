@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Template\Attribute;
-use Drupal\joinup_badge\Entity\BadgeAwardingInterface;
 
 /**
  * Implements hook_theme_suggestions_HOOK_alter().
@@ -188,21 +187,6 @@ function ventuno_preprocess_field(array &$variables): void {
     $items = $variables['items'];
     foreach ($items as $key => $item) {
       $variables['items'][$key]['content']['#attributes'] += ['target' => '_blank'];
-    }
-  }
-
-  // Renders the badges computed field.
-  if ($element['#field_name'] === 'badges') {
-    foreach ($variables['items'] as $delta => &$item) {
-      $flagging = $variables['element']['#items'][$delta]->entity;
-      assert($flagging instanceof BadgeAwardingInterface);
-
-      $item['content'] = [
-        '#theme' => 'joinup_badge',
-        '#icon_id' => $flagging->getIcon(),
-        '#label' => $flagging->getLabel(),
-        '#description' => $flagging->getDescription(),
-      ];
     }
   }
 }

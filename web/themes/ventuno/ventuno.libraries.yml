@@ -557,10 +557,10 @@ user--group-header:
     theme:
       assets/css/user--group-header.min.css: { minified: true }
 
-user-achievement:
+user-badge:
   css:
     theme:
-      assets/css/user-achievement.min.css: { minified: true }
+      assets/css/user-badge.min.css: { minified: true }
 
 layout-paragraphs--builder:
   css:

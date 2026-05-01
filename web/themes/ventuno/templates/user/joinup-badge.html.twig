@@ -1,24 +1,25 @@
 {#
 /**
  * @file
- * Template for a single joinup badge.
+ * Ventuno implementation of user badge.
  *
  * Available variables:
- * - icon_id: The Ventuno sprite icon ID (e.g. "award", "check-circle").
+ * - badge_type: The badge flag identifier.
  * - label: The human-readable badge name.
  * - description: The tooltip description for this badge.
+ * - icon: The icon ID (e.g., "award", "check-circle"). Can be used by themes to
+ *   identify an icon inside a sprite.
  * - attributes: HTML attributes for the containing element.
- * - bcl_icon_path: Path to the Ventuno SVG sprite file (set globally by the
  *   theme's preprocess).
  *
  * @ingroup themeable
  */
 #}
-<span{{ attributes.addClass('user-achievement') }} title="{{ description }}">
-  {% if icon_id %}
+<span{{ attributes.addClass('user-badge').addClass("user-badge--#{badge_type}") }} title="{{ description }}">
+  {% if icon %}
     <svg class="bi icon--s" aria-hidden="true" focusable="false">
-      <use xlink:href="{{ bcl_icon_path }}#{{ icon_id }}"></use>
+      <use xlink:href="{{ bcl_icon_path }}#{{ icon }}"></use>
     </svg>
   {% endif %}
-  <span class="user-achievement__label visually-hidden">{{ label }}</span>
+  <span class="joinup-badge__label visually-hidden">{{ label }}</span>
 </span>

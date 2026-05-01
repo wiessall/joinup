@@ -27,6 +27,24 @@ readonly class BadgeHooks {
   public function __construct(protected BadgeService $badgeService) {}
 
   /**
+   * Implements hook_theme().
+   */
+  #[Hook('theme')]
+  public function theme(): array {
+    return [
+      'joinup_badge' => [
+        'variables' => [
+          'badge_type' => NULL,
+          'label' => NULL,
+          'description' => NULL,
+          'icon' => NULL,
+          'attributes' => [],
+        ],
+      ],
+    ];
+  }
+
+  /**
    * Implements hook_entity_bundle_info_alter().
    */
   #[Hook('entity_bundle_info_alter')]

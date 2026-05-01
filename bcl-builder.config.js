@@ -421,8 +421,8 @@ module.exports = {
           dest: "user--group-header.min.css",
         },
         {
-          entry: "components/user-achievement.scss",
-          dest: "user-achievement.min.css",
+          entry: "components/user-badge.scss",
+          dest: "user-badge.min.css",
         },
         // Layout Paragraphs - buidler UI.
         {
