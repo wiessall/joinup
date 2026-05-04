@@ -121,9 +121,6 @@ Feature: Test the visibility of the quick links menu.
       | Custom page 3 | Some collection |
       | Custom page 4 | Some collection |
       | Custom page 5 | Some collection |
-    And collection content:
-      | title   | Custom page 1 | Custom page 2 | Custom page 3 | Custom page 4 | Custom page 5 |
-      | enabled | yes           | yes           | yes           | yes           | yes           |
     When I am logged in as a facilitator of the "Some collection" collection
     And I go to the "Some collection" collection
     And I click the contextual link "Edit menu" in the "Quick links" region

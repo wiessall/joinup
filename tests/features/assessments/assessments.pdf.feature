@@ -7,9 +7,9 @@ Feature: Assessment report PDF download
       | Username       |
       | TestReportUser |
     And report assessments:
-      | name                    | state     | uid            |
-      | Infrastructure Review   | published | TestReportUser |
-      | Security Assessment     | review    | TestReportUser |
+      | name                  | state     | uid            |
+      | Infrastructure Review | published | TestReportUser |
+      | Security Assessment   | review    | TestReportUser |
 
     When I am logged in as "TestReportUser"
     And I visit "user/assessments"
@@ -47,8 +47,8 @@ Feature: Assessment report PDF download
       | name            |
       | PDF Test Partic |
     And report assessments:
-      | name            | state     | provider          | remaining_barriers                   | other_comment          | document | relevant_report             |
-      | PDF View Report | published | PDF Test Provider | Some barriers remain to be addressed | This is a test comment | text.pdf | https://example.com/related |
+      | name            | state     | provider          | remaining_barriers                   | other_comment          | documents | relevant_report             |
+      | PDF View Report | published | PDF Test Provider | Some barriers remain to be addressed | This is a test comment | text.pdf  | https://example.com/related |
     And the "PDF View Report" report has assessment statements of types:
       | type           |
       | legal          |
@@ -56,14 +56,14 @@ Feature: Assessment report PDF download
       | semantic       |
       | technical      |
     And the following report has binding requirement:
-      | report                 | PDF View Report            |
-      | expression             | PDF Test Expr              |
-      | service                | PDF Test Svc               |
-      | participation          | PDF Test Partic            |
-      | description            | PDF test BR                |
-      | documented_in          | https://example.com/br-doc |
-      | asset                  | Test Solution              |
-      | requirement_documents  | text.pdf                   |
+      | report                | PDF View Report            |
+      | expression            | PDF Test Expr              |
+      | service               | PDF Test Svc               |
+      | participation         | PDF Test Partic            |
+      | description           | PDF test BR                |
+      | documented_in         | https://example.com/br-doc |
+      | asset                 | Test Solution              |
+      | requirement_documents | text.pdf                   |
     # Report field group labels, report field labels, and binding requirement
     # paragraph labels.
     Then the PDF HTML for the "PDF View Report" report should contain:

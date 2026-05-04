@@ -36,7 +36,7 @@ Feature: Collection content
     And I see the text "1 Solution" in the "Header" region
 
     When solution content:
-      | title                            | collection                | status |
+      | title                            | collection                | state     |
       | Solution from draft to published | Turin Egyptian Collection | published |
     And I go to the homepage of the "Turin Egyptian Collection" collection
     Then I see the text "2 Solutions" in the "Header" region

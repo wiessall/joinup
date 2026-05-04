@@ -13,6 +13,7 @@ use Behat\Step\When;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
@@ -138,9 +139,8 @@ class CollectionContext extends RawDrupalContext {
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
    *   The before node create scope.
-   *
-   * @BeforeNodeCreate
    */
+  #[BeforeNodeCreate]
   public function defaultCollectionValues(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
     if ($node->type !== 'collection') {
@@ -484,9 +484,8 @@ class CollectionContext extends RawDrupalContext {
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
    *   An object containing the entity properties and fields that are to be used
    *   for creating the node as properties on the object.
-   *
-   * @BeforeNodeCreate
    */
+  #[BeforeNodeCreate]
   public function provideCollection(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
 
