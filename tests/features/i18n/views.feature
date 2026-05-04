@@ -44,8 +44,8 @@ Feature: Views display translated entities correctly.
       | title             | state     |
       | A World of Things | published |
     And glossary content:
-      | title    | synonyms | summary             | definition                       | collection        | state     |
-      | Alphabet | ABC      | Summary of Alphabet | Long, long body definition field | A World of Things | published |
+      | title    | synonyms | summary             | definition                       | collection        |
+      | Alphabet | ABC      | Summary of Alphabet | Long, long body definition field | A World of Things |
     And the following glossary entity translations:
       | source   | language | title     | field_glossary_definition | summary            |
       | Alphabet | fr       | Alphabète | Définition détaillée      | Résumé de l'entrée |
@@ -64,11 +64,11 @@ Feature: Views display translated entities correctly.
       | title          |
       | Assessment Hub |
     And assessment_report content:
-      | title         | state     | organization         | collection     |
-      | Annual Report | published | default organization | Assessment Hub |
+      | title         | organization         | collection     |
+      | Annual Report | default organization | Assessment Hub |
     And assessment_report content:
-      | title          | state     | organization         | collection     | langcode |
-      | Rapport annuel | published | default organization | Assessment Hub | fr       |
+      | title          | organization         | collection     | langcode |
+      | Rapport annuel | default organization | Assessment Hub | fr       |
     And the following locale string translations:
       | source         | language | translation     | status |
       | Assessment Hub | fr       | Pôle évaluation | 1      |
