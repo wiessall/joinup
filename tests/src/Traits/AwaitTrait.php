@@ -14,6 +14,10 @@ use Drupal\DrupalExtension\Context\MinkContext;
 
 /**
  * Wait helper methods.
+ *
+ * @method mixed getContext($class)
+ *   Provided by RawDrupalContext on all Behat context classes using this trait.
+ *   @see \Drupal\DrupalExtension\Context\RawDrupalContext::getContext()
  */
 trait AwaitTrait {
 

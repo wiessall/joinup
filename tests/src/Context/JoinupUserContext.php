@@ -16,6 +16,7 @@ use Behat\Step\When;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\BeforeUserCreate;
 use Drupal\DrupalExtension\Hook\Scope\BeforeUserCreateScope;
 use Drupal\DrupalExtension\TagTrait;
 use Drupal\joinup\Traits\AssertTrait;
@@ -159,9 +160,8 @@ class JoinupUserContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   Thrown when some of the values are not one of the expected ones.
-   *
-   * @BeforeUserCreate
    */
+  #[BeforeUserCreate]
   public static function massageFieldsBeforeUserCreate(BeforeUserCreateScope $scope): void {
     $user = $scope->getEntity();
 
@@ -326,6 +326,15 @@ class JoinupUserContext extends RawDrupalContext {
     \Drupal::database()->delete(JoinupUserDeletedInterface::TABLE_USER)
       ->condition('uid', $this->latestDeletedUserUid, '>')
       ->execute();
+
+    // Release any User entities still held in the pending-deletion stack.
+    // destruct() is never called in Behat (no kernel terminate), so without
+    // this the stack accumulates User objects for the entire suite run.
+    // For @deletedUser scenarios runUserDeletedDestruct() already drained the
+    // stack after each step, so this is a no-op there.
+    $service = \Drupal::service('joinup_user.deleted');
+    $prop = new \ReflectionProperty($service, 'stack');
+    $prop->setValue($service, []);
   }
 
   /**

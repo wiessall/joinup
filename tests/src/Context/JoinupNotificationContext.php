@@ -60,16 +60,17 @@ class JoinupNotificationContext extends RawDrupalContext {
    */
   #[Then('the following email should have been sent:')]
   public function assertEmailSent(TableNode $table): void {
-    /** @var string $template */
-    /** @var string $recipient */
-    /** @var string $recipient_mail */
-    /** @var string $bcc */
-    /** @var string $from */
-    /** @var string $body */
-    /** @var string $subject */
-    /** @var string $signature_required */
-    /** @var string $recipient_list_contains */
-    extract($table->getRowsHash());
+    $data = $table->getRowsHash();
+    $template = $data['template'] ?? NULL;
+    $recipient = $data['recipient'] ?? NULL;
+    $recipient_mail = $data['recipient_mail'] ?? NULL;
+    $bcc = $data['bcc'] ?? NULL;
+    $from = $data['from'] ?? NULL;
+    $body = $data['body'] ?? NULL;
+    $subject = $data['subject'] ?? NULL;
+    $html = $data['html'] ?? NULL;
+    $signature_required = $data['signature_required'] ?? NULL;
+    $recipient_list_contains = $data['recipient_list_contains'] ?? NULL;
 
     if (empty($recipient) && !empty($recipient_list_contains)) {
       $recipient = $recipient_list_contains;
@@ -101,7 +102,7 @@ class JoinupNotificationContext extends RawDrupalContext {
     }
 
     $mails = $this->getEmailsBySubjectAndMail($subject, $recipient, FALSE, !empty($recipient_list_contains));
-    $email_found = FALSE;
+    $mail_found = NULL;
     foreach ($mails as $mail) {
       // Check the sender email if it is set.
       if (!empty($from) && $mail['from'] !== $from) {
@@ -165,21 +166,20 @@ class JoinupNotificationContext extends RawDrupalContext {
       }
 
       // We found a match. Stop searching.
-      $email_found = TRUE;
+      $mail_found = $mail;
       break;
     }
 
-    $this->assertCondition($email_found, "Did not find expected email to '$recipient' with subject '$subject'.");
+    if ($mail_found === NULL) {
+      throw new \Exception("Did not find expected email to '$recipient' with subject '$subject'.");
+    }
 
-    // If the previous assertion passed, the $mail variable contains the correct
-    // mail.
-    /** @var array $mail */
     $expected = $html ? MailContentTypeHeader::TextHtml : MailContentTypeHeader::TextPlain;
     if ($html) {
-      $this->assertCondition(str_contains($mail['headers']['Content-Type'], $expected->value), 'The mail is not sent as HTML.');
+      $this->assertCondition(str_contains($mail_found['headers']['Content-Type'], $expected->value), 'The mail is not sent as HTML.');
     }
     else {
-      $this->assertCondition(str_contains($mail['headers']['Content-Type'], $expected->value), 'The mail is not sent as plain text.');
+      $this->assertCondition(str_contains($mail_found['headers']['Content-Type'], $expected->value), 'The mail is not sent as plain text.');
     }
   }
 
@@ -327,25 +327,31 @@ class JoinupNotificationContext extends RawDrupalContext {
     else {
       throw new \InvalidArgumentException("'$username_or_email' is neither a valid username, nor a valid email.");
     }
+
     $mails = $this->getEmailsBySubjectAndMail($subject, $recipient);
+    if ($match && empty($mails)) {
+      throw new ExpectationException("No email with subject '$subject' was sent to '$recipient'.", $this->getSession()->getDriver());
+    }
 
     foreach ($mails as $mail) {
       $body = ($mail['body'] instanceof MarkupInterface) ? $this->formatMailBodyMarkup($mail['body']) : $this->formatMailBodyText($mail['body']);
+      $missing = [];
       foreach ($lines_of_text as $text) {
-        $pos = strpos($body, $text);
-        if ($match && $pos === FALSE) {
-          continue 2;
+        if (strpos($body, $text) === FALSE) {
+          $missing[] = $text;
         }
-        if (!$match && $pos !== FALSE) {
+        elseif (!$match) {
           throw new ExpectationException("Email with subject '$subject' sent to '$recipient' contains the text '$text'.", $this->getSession()->getDriver());
         }
       }
-      if ($match) {
+      if ($match && empty($missing)) {
         return;
       }
     }
+
     if ($match) {
-      throw new ExpectationException("Did not find expected email to '$recipient' with subject '$subject'.", $this->getSession()->getDriver());
+      $missing_quoted = implode("', '", $missing);
+      throw new ExpectationException("Email with subject '$subject' sent to '$recipient' was found but did not contain: '$missing_quoted'.\nActual body:\n$body", $this->getSession()->getDriver());
     }
   }
 
@@ -403,16 +409,12 @@ class JoinupNotificationContext extends RawDrupalContext {
    *   Thrown when a user is not found.
    */
   #[When('I click the delete confirmation link for (the user ):user from the last email')]
-  public function clickDeleteConfirmationLink($user): void {
-    $user = $this->getUserByName($user);
-    if (empty($user)) {
-      throw new \Exception("User {$user->getAccountName()} was not found.");
-    }
-
-    $mail = $user->getEmail();
+  public function clickDeleteConfirmationLink(string $user): void {
+    $user_entity = $this->getUserByName($user);
+    $mail = $user_entity->getEmail();
     // In plain text, the urls are encapsulated in "[]" or are plain into the
     // text. The end character is either the "]" or a space.
-    $pattern = '#https?://[^/].*/' . $user->id() . '/cancel/confirm/\d+[^\s\[\]]*#';
+    $pattern = '#https?://[^/].*/' . $user_entity->id() . '/cancel/confirm/\d+[^\s\[\]]*#';
     $no_mail_message = "No email was sent to $mail containing the delete confirmation link.";
     $no_match_message = "The email sent to $mail did not contain a valid delete confirmation link.";
     $this->assertMailLinkMatchingPattern($pattern, $mail, $no_mail_message, $no_match_message, NULL);
@@ -428,13 +430,9 @@ class JoinupNotificationContext extends RawDrupalContext {
    *   Thrown when a user is not found.
    */
   #[When('I click the comment link from the last email sent to :user')]
-  public function clickCommentLinkInEmail($user): void {
-    $user = $this->getUserByName($user);
-    if (empty($user)) {
-      throw new \Exception("User {$user->getAccountName()} was not found.");
-    }
-
-    $mail = $user->getEmail();
+  public function clickCommentLinkInEmail(string $user): void {
+    $user_entity = $this->getUserByName($user);
+    $mail = $user_entity->getEmail();
     $pattern = '!https?://[^ \"\]]*?#comment-\d+[^ \"\]]*?!';
     $no_mail_message = "No email was sent to $mail containing a comment anchored link.";
     $no_match_message = "The email sent to $mail did not contain a valid comment anchored link.";

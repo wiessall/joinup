@@ -33,11 +33,7 @@ Feature:
     When I go to the EIF perspective page of the "EIF solution" solution
     Then I should see the heading "EIF Perspective attributes of EIF solution"
     And I should see the text "Name of the solution: EIF solution"
-    # The image is placed as a list of images with a hash for a title due to
-    # the way, responsive images, are placed in the page. Since we cannot
-    # predict the title, we are looking for the alt text, which is placed if
-    # the field is placed and shown.
-    And the page should contain the html text 'alt="Behat test image"'
+    And I should see the "picture" element in the "Content" region
     And I should see the heading "General information"
 
     And I should see the text "Description:"

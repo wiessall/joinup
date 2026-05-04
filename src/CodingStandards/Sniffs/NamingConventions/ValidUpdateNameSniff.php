@@ -103,27 +103,20 @@ class ValidUpdateNameSniff extends ValidFunctionNameSniff {
       return;
     }
 
-    $match = FALSE;
-    foreach (static::getEnabledExtensions() as $extension) {
-      if (preg_match("#^{$extension}_((post_)?update|deploy)_(.*)$#", $functionName, $found)) {
-        $match = TRUE;
-        $name = $found[3];
-        $updateType = !empty($found[2]) ? 'post update' : $found[1];
-        break;
-      }
-    }
-
-    // Not a (post)update or deploy.
-    if (!$match) {
+    $match = static::matchUpdateHook($functionName);
+    if ($match === NULL) {
       return;
     }
 
+    $name = $match['name'];
+    $updateType = $match['updateType'];
     if ($name === 'dependencies') {
       // Exception for hook_update_dependencies() case.
       return;
     }
 
     $error = NULL;
+    $data = [];
     if (!ctype_digit($name) || !in_array(strlen($name), [6, 7])) {
       $error = "Invalid '%s' identifier. Expected 6 or 7 digits:\n- 1-2 digits: Interoperable Europe Portal major version\n- 3 digits: Interoperable Europe Portal minor version\n- 2 digits: The %s weight";
       $data = [$name, $updateType];
@@ -239,6 +232,27 @@ class ValidUpdateNameSniff extends ValidFunctionNameSniff {
       ];
     }
     return self::$nextVersionCandidates;
+  }
+
+  /**
+   * Matches a function name against enabled extensions' update hook patterns.
+   *
+   * @param string $functionName
+   *   The function name to match.
+   *
+   * @return array{name: string, updateType: string}|null
+   *   An array with 'name' and 'updateType' keys, or NULL if no match.
+   */
+  protected static function matchUpdateHook(string $functionName): ?array {
+    foreach (static::getEnabledExtensions() as $extension) {
+      if (preg_match("#^{$extension}_((post_)?update|deploy)_(.*)$#", $functionName, $found)) {
+        return [
+          'name' => $found[3],
+          'updateType' => !empty($found[2]) ? 'post update' : $found[1],
+        ];
+      }
+    }
+    return NULL;
   }
 
   /**

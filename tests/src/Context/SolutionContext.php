@@ -11,6 +11,8 @@ use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\AfterNodeCreate;
+use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\EntityReferenceTrait;
@@ -19,7 +21,6 @@ use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\SearchTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -42,7 +43,6 @@ class SolutionContext extends RawDrupalContext {
   use FileTrait;
   use FormTrait;
   use OgTrait;
-  use TestingEntitiesTrait;
   use SearchTrait;
   use TraversingTrait;
   use UserTrait;
@@ -150,22 +150,23 @@ class SolutionContext extends RawDrupalContext {
    * @param \Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope $scope
    *   The Behat hook scope object containing the metadata of the node that was
    *   created.
-   *
-   * @AfterNodeCreate
    */
+  #[AfterNodeCreate]
   public function afterNodeCreateHandlePinning(AfterNodeCreateScope $scope): void {
     $node = $scope->getEntity();
     if ($node->type !== 'solution') {
       return;
     }
 
-    if (!isset($node->pinned_in_collection) && !isset($node->unpinned_in_collection)) {
+    $pinnedIn = JoinupContext::getStrippedNodeProperty($node, 'pinned_in_collection');
+    $unpinnedIn = JoinupContext::getStrippedNodeProperty($node, 'unpinned_in_collection');
+
+    if ($pinnedIn === NULL && $unpinnedIn === NULL) {
       return;
     }
 
     if (($entity = Node::load((int) $node->nid)) && $entity instanceof PinnableGroupContentInterface) {
-      // Pin solution in collection where needed.
-      foreach (explode(',', $node->pinned_in_collection ?? '') as $groupLabel) {
+      foreach (explode(',', $pinnedIn ?? '') as $groupLabel) {
         if (!($groupLabel = trim($groupLabel))) {
           continue;
         }
@@ -176,14 +177,39 @@ class SolutionContext extends RawDrupalContext {
     }
 
     if (($entity = Node::load((int) $node->nid)) && $entity instanceof PinnableGroupContentInterface) {
-      // Pin solution in collection where needed.
-      foreach (explode(',', $node->unpinned_in_collection ?? '') as $groupLabel) {
+      foreach (explode(',', $unpinnedIn ?? '') as $groupLabel) {
         if (!($groupLabel = trim($groupLabel))) {
           continue;
         }
         $group = $this->getEntityByLabel('node', $groupLabel);
         $this->assertCondition($group instanceof GroupInterface, "Cannot pin solution {$entity->label()} in $groupLabel since it does not exist or is not a group.");
         $entity->unpin($group);
+      }
+    }
+  }
+
+  /**
+   * Flags newly created solutions as interoperable.
+   */
+  #[AfterNodeCreate]
+  public function flagSolutionAsInteroperable(AfterNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'solution') {
+      return;
+    }
+
+    $is_interoperable = in_array(strtolower((string) (JoinupContext::getStrippedNodeProperty($node, 'interoperable') ?? '')), [
+      'y',
+      'yes',
+    ]);
+    $nid = $node->nid ?? NULL;
+    if ($is_interoperable && $nid) {
+      if ($entity = Node::load((int) $nid)) {
+        $flag_service = \Drupal::service('flag');
+        $flag = $flag_service->getFlagById('interoperability');
+        if ($flag) {
+          $flag_service->flag($flag, $entity);
+        }
       }
     }
   }
@@ -257,7 +283,8 @@ class SolutionContext extends RawDrupalContext {
       }
 
       // Go to the edit form and check that the expected buttons are visible.
-      $this->visitEntityForm('edit', $values['solution'], 'solution');
+      $entity = $this->getEntityByLabel('node', $values['solution'], 'solution');
+      $this->visitPath($entity->toUrl('edit-form')->toString());
     }
   }
 
@@ -350,9 +377,8 @@ class SolutionContext extends RawDrupalContext {
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
    *   The before node create scope.
-   *
-   * @BeforeNodeCreate
    */
+  #[BeforeNodeCreate]
   public function convertSolutionValueAliases(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
     if ($node->type !== 'solution') {
@@ -387,9 +413,8 @@ class SolutionContext extends RawDrupalContext {
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
    *   The before node create scope.
-   *
-   * @BeforeNodeCreate
    */
+  #[BeforeNodeCreate]
   public function ensureSolutionParentCollection(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
     if ($node->type !== 'solution') {

@@ -17,7 +17,7 @@ Feature: Export collection metadata
       | title      |
       | Solution 1 |
     Given distribution content:
-      | title          | description   | access_url        | solution   |
+      | title          | description   | resources         | solution   |
       | Distribution 1 | Description 1 | http://access.url | Solution 1 |
     When I go to the "Distribution 1" distribution
     When I click "Metadata"
@@ -30,3 +30,4 @@ Feature: Export collection metadata
     When I click "JSON-LD"
     Then the response should contain "http://www.w3.org/ns/dcat#Distribution"
     And the response should contain "\"http://purl.org/dc/terms/title\":[{\"@value\":\"Distribution 1\""
+    And the response should contain "\"http://www.w3.org/ns/dcat#accessURL\":[{\"@id\":\"http://access.url\""

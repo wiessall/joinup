@@ -8,6 +8,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use WebDriver\Exception\StaleElementReference;
 
 /**
  * Helper methods to deal with traversing of page elements.
@@ -318,6 +319,8 @@ trait TraversingTrait {
         return $element;
       }
     }
+
+    throw new ElementNotFoundException($this->getSession()->getDriver(), "'$heading' tile.");
   }
 
   /**
@@ -515,7 +518,7 @@ trait TraversingTrait {
     $session = $this->getSession();
     $element = $region->find('named', [$element, $locator]);
     if (!$element) {
-      throw new \Exception(sprintf('No element with locator "%s" found in the "%s" region on the page %s.', $locator, $region, $session->getCurrentUrl()));
+      throw new \Exception(sprintf('No element with locator "%s" found in the "%s" region on the page %s.', $locator, $region->getXpath(), $session->getCurrentUrl()));
     }
     return $element;
   }
@@ -804,6 +807,36 @@ trait TraversingTrait {
       throw new \Exception("No such region configured: $label");
     }
     return $region_map[$label];
+  }
+
+  /**
+   * Runs the given callback, retrying on Selenium stale element errors.
+   *
+   * JQuery-driven widgets (autocomplete, AJAX-rendered lists) may rebuild the
+   * DOM between fetching an element handle and using it, invalidating the
+   * handle mid-call. Re-running the operation with a freshly-fetched handle
+   * resolves the race.
+   *
+   * @param callable $operation
+   *   The operation to run. Must throw StaleElementReference on a stale handle
+   *   so that this helper can retry it.
+   *
+   * @return mixed
+   *   The return value of $operation.
+   */
+  protected function retryOnStaleElement(callable $operation): mixed {
+    $attempts = 3;
+    while (TRUE) {
+      try {
+        return $operation();
+      }
+      catch (StaleElementReference $e) {
+        if (--$attempts === 0) {
+          throw $e;
+        }
+        usleep(150000);
+      }
+    }
   }
 
 }

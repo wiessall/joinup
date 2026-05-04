@@ -1,0 +1,207 @@
+uuid: 1e016273-9bc6-419d-962c-85ed6a8b6e2b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.abstract
+    - field.storage.node.description
+    - field.storage.node.domain
+    - field.storage.node.field_state
+    - field.storage.node.keywords
+    - search_api.server.joinup
+  module:
+    - flag
+    - joinup_flag
+    - joinup_solution
+    - node
+    - search_api_solr
+    - taxonomy
+third_party_settings:
+  search_api_solr:
+    finalize: false
+    commit_before_finalize: false
+    commit_after_finalize: false
+    debug_finalize: false
+    highlighter:
+      maxAnalyzedChars: 51200
+      fragmenter: gap
+      usePhraseHighlighter: true
+      highlightMultiTerm: true
+      preserveMulti: false
+      regex:
+        slop: 0.5
+        pattern: blank
+        maxAnalyzedChars: 10000
+      highlight:
+        mergeContiguous: false
+        requireFieldMatch: false
+        snippets: 3
+        fragsize: 0
+    mlt:
+      mintf: 1
+      mindf: 1
+      maxdf: 0
+      maxdfpct: 0
+      minwl: 0
+      maxwl: 0
+      maxqt: 100
+      maxntp: 2000
+      boost: false
+      interestingTerms: none
+    term_modifiers:
+      slop: 3
+      fuzzy: 1
+      fuzzy_analyzer: true
+    advanced:
+      index_prefix: ''
+      collection: ''
+      timezone: ''
+    multilingual:
+      limit_to_content_language: false
+      include_language_independent: true
+      use_language_undefined_as_fallback_language: false
+      specific_languages:
+        en: '0'
+        bg: '0'
+        hr: '0'
+        cs: '0'
+        da: '0'
+        nl: '0'
+        et: '0'
+        fi: '0'
+        fr: '0'
+        de: '0'
+        el: '0'
+        hu: '0'
+        ga: '0'
+        it: '0'
+        lv: '0'
+        lt: '0'
+        mt: '0'
+        pl: '0'
+        pt: '0'
+        ro: '0'
+        sk: '0'
+        sl: '0'
+        es: '0'
+        sv: '0'
+      use_universal_collation: false
+id: entity_browser
+name: 'Entity Browser'
+description: ''
+read_only: false
+field_settings:
+  abstract:
+    label: Abstract
+    datasource_id: 'entity:node'
+    property_path: abstract
+    type: 'solr_text_custom:ngram'
+    dependencies:
+      config:
+        - field.storage.node.abstract
+  aggregated_field:
+    label: 'Aggregated field'
+    property_path: aggregated_field
+    type: string
+    configuration:
+      type: concat
+      separator: |+
+      fields:
+        - 'entity:node/title'
+  description:
+    label: Description
+    datasource_id: 'entity:node'
+    property_path: 'description:processed'
+    type: 'solr_text_custom:ngram'
+    dependencies:
+      config:
+        - field.storage.node.description
+  domain:
+    label: Domain
+    datasource_id: 'entity:node'
+    property_path: domain
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.domain
+  entity_bundle:
+    label: 'Entity bundle'
+    datasource_id: 'entity:node'
+    property_path: type
+    type: string
+    dependencies:
+      module:
+        - node
+  entity_status:
+    label: Status
+    datasource_id: 'entity:node'
+    property_path: field_state
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_state
+  interoperable_flag:
+    label: 'Interoperable flag'
+    datasource_id: 'entity:node'
+    property_path: interoperable_flag
+    type: boolean
+  keywords:
+    label: Keywords
+    datasource_id: 'entity:node'
+    property_path: 'keywords:entity:name'
+    type: 'solr_text_custom:ngram'
+    dependencies:
+      config:
+        - field.storage.node.keywords
+      module:
+        - taxonomy
+  status:
+    label: Published
+    datasource_id: 'entity:node'
+    property_path: status
+    type: boolean
+    dependencies:
+      module:
+        - node
+  title:
+    label: Title
+    datasource_id: 'entity:node'
+    property_path: title
+    type: 'solr_text_custom:ngram'
+    dependencies:
+      module:
+        - node
+datasource_settings:
+  'entity:flagging':
+    bundles:
+      default: true
+      selected:
+        - interoperability
+  'entity:node':
+    bundles:
+      default: false
+      selected:
+        - solution
+    languages:
+      default: true
+      selected: {  }
+processor_settings:
+  add_url: {  }
+  aggregated_field: {  }
+  auto_aggregated_fulltext_field: {  }
+  custom_value: {  }
+  entity_type: {  }
+  interoperable_flag: {  }
+  joinup_entity_bundle: {  }
+  language_with_fallback: {  }
+  rendered_item: {  }
+  solr_date_range: {  }
+tracker_settings:
+  default:
+    indexing_order: fifo
+options:
+  cron_limit: 50
+  delete_on_fail: true
+  index_directly: true
+  track_changes_in_references: true
+server: joinup

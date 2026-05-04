@@ -16,7 +16,6 @@ use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\RandomGeneratorTrait;
 use Drupal\joinup\Traits\SearchTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\meta_entity\Entity\MetaEntity;
 
@@ -29,7 +28,6 @@ class EifContext extends RawDrupalContext {
   use EntityTrait;
   use SearchTrait;
   use StringTranslationTrait;
-  use TestingEntitiesTrait;
   use UtilityTrait;
   use RandomGeneratorTrait;
 
@@ -60,7 +58,7 @@ class EifContext extends RawDrupalContext {
       'field_state' => 'published',
       'field_topic' => $topic_label,
       'owner' => $owner->title,
-      'contact_information' => $contact->title,
+      'contact' => $contact->title,
     ]);
 
     // Create the EIF Toolbox solution.
@@ -72,7 +70,7 @@ class EifContext extends RawDrupalContext {
       'field_state' => 'published',
       'field_topic' => $topic_label,
       'owner' => $owner->title,
-      'contact_information' => $contact->title,
+      'contact' => $contact->title,
     ]);
 
     $this->nodeCreate((object) [
@@ -122,6 +120,7 @@ class EifContext extends RawDrupalContext {
       }
       $field_name = 'eif_' . str_replace(' ', '_', strtolower($row[0]));
       $fields[$field_name] ??= [];
+      $value = [];
       switch ($row[0]) {
         case 'Description':
           $value = [['value' => trim($row[1]), 'format' => 'content_editor']];
@@ -141,7 +140,6 @@ class EifContext extends RawDrupalContext {
           // @endcode
           // The part from the comma symbol on (the description) is optional.
           preg_match('/name:(\s*?)(?<name>[^,]*)(?:,(\s*?)description:(\s*?)(?<description>.*$))?/', $row[1], $matches);
-          $value = NULL;
           if (isset($matches['name'])) {
             $value = [['entity' => $this->getEntityByLabel('taxonomy_term', trim($matches['name']), 'eif_recommendation')]];
             if (isset($matches['description'])) {
@@ -160,7 +158,6 @@ class EifContext extends RawDrupalContext {
       'target' => $solution,
     ] + $fields);
     $eif_perspective->save();
-    $this->entities['meta_entity'][$eif_perspective->id()] = $eif_perspective;
   }
 
   /**

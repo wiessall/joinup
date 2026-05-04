@@ -19,10 +19,13 @@ use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\AfterNodeCreate;
+use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
+use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
-use Drupal\User\Entity\User;
 use Drupal\comment\CommentInterface;
 use Drupal\comment\Entity\Comment;
+use Drupal\file_visibility\FileVisibilityInterface;
 use Drupal\joinup\Traits\BootstrapTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
@@ -34,7 +37,6 @@ use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\RandomGeneratorTrait;
 use Drupal\joinup\Traits\TabledragTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -49,6 +51,7 @@ use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\user\Entity\User;
 use GuzzleHttp\Client;
 
 /**
@@ -68,11 +71,18 @@ class JoinupContext extends RawDrupalContext {
   use RandomGeneratorTrait;
   use StringTranslationTrait;
   use TabledragTrait;
-  use TestingEntitiesTrait;
   use TraversingTrait;
   use UserTrait;
   use UtilityTrait;
   use WorkflowTrait;
+
+  /**
+   * Stores non-field node properties stripped before Drupal field validation.
+   *
+   * Keyed by spl_object_id() of the Behat node stub. AfterNodeCreate hooks
+   * that need to act on these values should call getStrippedNodeProperty().
+   */
+  private static array $strippedNodeProperties = [];
 
   /**
    * Creates a user with data provided in a table.
@@ -482,14 +492,20 @@ class JoinupContext extends RawDrupalContext {
    */
   #[When('I go to the :action form of the :title :bundle')]
   public function goToEntityForm(string $action, string $title, string $bundle): void {
-    if (!in_array($action, ['edit', 'delete'])) {
-      /** @var \Drupal\node\Entity\Node $node */
-      $node = $this->getEntityByLabel('node', $title, $bundle);
-      $this->visitPath($node->toUrl($action)->toString());
+    $entity_type_id = $this->translateEntityTypeAlias($bundle);
+    $bundle = $this->translateBundle($bundle);
+    $entity = $this->getEntityByLabel($entity_type_id, $title, $bundle);
+
+    $rel = match ($action) {
+      'edit' => 'edit-form',
+      'delete' => 'delete-form',
+      default => $action,
+    };
+    if (!$entity->hasLinkTemplate($rel)) {
+      throw new \Exception("No link template '$rel' found for the '{$entity->getEntityTypeId()}' entity type.");
     }
-    else {
-      $this->visitEntityForm($action, $title, $bundle);
-    }
+
+    $this->visitPath($entity->toUrl($rel)->toString());
   }
 
   /**
@@ -599,6 +615,22 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Returns a property stripped from the node stub before field validation.
+   *
+   * @param object $node
+   *   The Behat node stub (the same object passed to BeforeNodeCreate and
+   *   AfterNodeCreate scopes via $scope->getEntity()).
+   * @param string $key
+   *   The original property name (before stripping).
+   *
+   * @return mixed
+   *   The stored value, or NULL if the property was not stripped.
+   */
+  public static function getStrippedNodeProperty(object $node, string $key): mixed {
+    return self::$strippedNodeProperties[spl_object_id($node)][$key] ?? NULL;
+  }
+
+  /**
    * Replaces human readable labels and values with their real counterparts.
    *
    * This allows us to:
@@ -614,9 +646,8 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when a logo could not be uploaded, e.g. because the file could not
    *   be found.
-   *
-   * @BeforeNodeCreate
    */
+  #[BeforeNodeCreate]
   public function massageFieldsBeforeNodeCreate(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
     $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', $node->type);
@@ -654,26 +685,10 @@ class JoinupContext extends RawDrupalContext {
     }
 
     if (!empty($node->field_attachment)) {
-      // We want to copy it from the fixtures into the file system and register
-      // it in the CustomPageContext so it can be cleaned up after the scenario
-      // ends. Perform a small dance to get access to the context class from
-      // inside this static callback.
-      /** @var \Behat\Behat\Context\Environment\InitializedContextEnvironment $environment */
       $environment = $scope->getEnvironment();
-      /** @var \Drupal\joinup\Context\CustomPageContext $context */
+      /** @var self $context */
       $context = $environment->getContext(self::class);
-      foreach ($context->explodeDelimitedSeparatedStepArgument($node->field_attachment) as $filename) {
-        if (strpos($filename, ':')) {
-          preg_match('/target_id:\s*(?<filename>[^ -]*)/', $filename, $matches);
-          if (empty($matches['filename'])) {
-            throw new \Exception("Could not extract filename from '$filename'");
-          }
-          $filename = $matches['filename'];
-        }
-        // The file is tracked by its filename so the value still remains to be
-        // the filenames instead of the url.
-        $context->createFile($filename);
-      }
+      $node->field_attachment = $context->parseFileBehatValue($node->field_attachment);
     }
 
     // Replace collection and solution group references that use titles with the
@@ -729,6 +744,7 @@ class JoinupContext extends RawDrupalContext {
     }
 
     $image_fields = [
+      'field_custom_page_logo',
       'field_discussion_logo',
       'field_document_logo',
       'field_event_logo',
@@ -737,8 +753,7 @@ class JoinupContext extends RawDrupalContext {
     ];
     foreach ($image_fields as $image_field) {
       if (!empty($node->$image_field)) {
-        $file = $this->createFile($node->$image_field);
-        $node->$image_field = $file->getFileUri();
+        $node->$image_field = $this->parseFileBehatValue($node->$image_field);
       }
     }
 
@@ -773,7 +788,7 @@ class JoinupContext extends RawDrupalContext {
       $node->abstract = 'default abstract';
     }
 
-    if (!empty($field_definitions['description']) && empty($node->descritpion)) {
+    if (!empty($field_definitions['description']) && empty($node->description)) {
       $node->description = 'default description';
     }
     if (!empty($field_definitions['solution_type']) && empty($node->solution_type)) {
@@ -795,6 +810,68 @@ class JoinupContext extends RawDrupalContext {
     // Handle file URL fields.
     if (!empty($node->resources)) {
       $this->createResourceFileParagraph($node);
+    }
+
+    // Strip node properties that are not real Drupal entity fields. These were
+    // silently ignored by older driver versions. Storing them here allows
+    // AfterNodeCreate hooks to access them via self::getStrippedNodeProperty().
+    // Note: this list must only include properties not processed by any other
+    // BeforeNodeCreate hook (e.g. group_moderation is handled by
+    // JoinupGroupContext::beforeNodeCreateMetaEntity and must NOT be listed).
+    $metaProperties = [
+      // Solution: applied via flag API in AfterNodeCreate.
+      'interoperable',
+      // Community content: applied via PinnableGroupContentInterface.
+      'pinned',
+      // Solution: applied via PinnableGroupContentInterface.
+      'pinned_in_collection',
+      'unpinned_in_collection',
+      // Community content: applied via ShareableContentInterface in
+      // JoinupCommunityContentContext::afterNodeCreateShare. These live on the
+      // Sharing meta entity, not on the node itself.
+      'field_shared_in',
+      'field_shared_in__at',
+    ];
+    $objectId = spl_object_id($node);
+    foreach ($metaProperties as $property) {
+      if (isset($node->$property)) {
+        self::$strippedNodeProperties[$objectId][$property] = $node->$property;
+        unset($node->$property);
+      }
+    }
+  }
+
+  /**
+   * Sets default alt text on logo fields after node creation.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope $scope
+   *   The after node create scope.
+   */
+  #[AfterNodeCreate]
+  public function ensureLogoAltText(AfterNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+
+    $logo_fields = [
+      'collection' => 'logo',
+      'solution' => 'logo',
+      'custom_page' => 'field_custom_page_logo',
+      'discussion' => 'field_discussion_logo',
+      'document' => 'field_document_logo',
+      'event' => 'field_event_logo',
+      'news' => 'field_news_logo',
+    ];
+
+    $field_name = $logo_fields[$node->type] ?? NULL;
+    if (!$field_name) {
+      return;
+    }
+
+    $entity = \Drupal::entityTypeManager()->getStorage('node')->load($node->nid);
+    if ($entity && $entity->hasField($field_name) && !$entity->get($field_name)->isEmpty() && empty($entity->get($field_name)->alt)) {
+      $entity->get($field_name)->alt = $entity->label();
+      // Preserve the original changed timestamp.
+      $entity->setSyncing(TRUE);
+      $entity->save();
     }
   }
 
@@ -1680,7 +1757,6 @@ class JoinupContext extends RawDrupalContext {
 
       $comment->skip_notification = TRUE;
       $comment->save();
-      $this->entities['comment'][$comment->id()] = $comment;
     }
   }
 
@@ -1806,7 +1882,7 @@ class JoinupContext extends RawDrupalContext {
         }
       }
 
-      $this->dispatchHooks('BeforeNodeCreateScope', $fake_node);
+      $this->dispatchHooks(BeforeNodeCreateScope::class, $fake_node);
       // Correction to topic field.
       if (!empty($fake_node->field_topic) && ($topic = $this->getEntityByLabel('taxonomy_term', $fake_node->field_topic, 'topic'))) {
         $fake_node->field_topic = $topic->id();
@@ -2886,6 +2962,9 @@ class JoinupContext extends RawDrupalContext {
         $storage = \Drupal::entityTypeManager()->getStorage($entity_type->id());
         $storage->resetCache($ids);
         $entities = $storage->loadMultiple($ids);
+        array_walk($entities, function (FieldableEntityInterface $entity): void {
+          $entity->skip_notification = TRUE;
+        });
         @$storage->delete($entities);
       }
     }
@@ -2899,6 +2978,14 @@ class JoinupContext extends RawDrupalContext {
 
     // Also, clean the media click counter.
     \Drupal::state()->delete('image_library_widget.clicks');
+
+    // FileVisibility::$entities queues entity objects for end-of-request
+    // processing, which never fires in Behat. The queue grows indefinitely
+    // across scenarios, so discard it here. File visibility is covered in
+    // PHPUnit, not Behat, so dropping the queue has no impact here.
+    $service = \Drupal::service(FileVisibilityInterface::class);
+    $prop = new \ReflectionProperty($service, 'entities');
+    $prop->setValue($service, []);
   }
 
   /**

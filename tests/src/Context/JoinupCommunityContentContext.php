@@ -11,10 +11,10 @@ use Behat\Mink\Exception\ExpectationException;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\AfterNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\NodeTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
@@ -31,7 +31,6 @@ class JoinupCommunityContentContext extends RawDrupalContext {
 
   use EntityTrait;
   use NodeTrait;
-  use TestingEntitiesTrait;
   use TraversingTrait;
 
   /**
@@ -236,13 +235,11 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the node is marked to be pinned but is not associated with a
    *   group.
-   *
-   * @AfterNodeCreate
    */
+  #[AfterNodeCreate]
   public function pinCommunityContentInGroup(AfterNodeCreateScope $scope): void {
     $node = $scope->getEntity();
-
-    $is_pinned = in_array(strtolower((string) ($node->pinned ?? '')), [
+    $is_pinned = in_array(strtolower((string) (JoinupContext::getStrippedNodeProperty($node, 'pinned') ?? '')), [
       'y',
       'yes',
     ]);
@@ -269,13 +266,13 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    * @param \Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope $scope
    *   The Behat hook scope object containing the metadata of the node that was
    *   created.
-   *
-   * @AfterNodeCreate
    */
+  #[AfterNodeCreate]
   public function afterNodeCreateShare(AfterNodeCreateScope $scope): void {
     $node = $scope->getEntity();
 
-    if (!isset($node->field_shared_in) || empty($node->field_shared_in)) {
+    $sharedIn = JoinupContext::getStrippedNodeProperty($node, 'field_shared_in');
+    if (empty($sharedIn)) {
       return;
     }
 
@@ -283,9 +280,9 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     \assert($content instanceof NodeInterface);
     $groupLabels = array_map(
       fn (string $groupLabel): string => trim($groupLabel),
-      explode(',', $node->field_shared_in),
+      explode(',', $sharedIn),
     );
-    $sharedInAtString = $node->field_shared_in__at ?? '';
+    $sharedInAtString = JoinupContext::getStrippedNodeProperty($node, 'field_shared_in__at') ?? '';
     $groupSharingExpireTime = array_map(
       function (string $relativeSharingTime): ?int {
         $relativeSharingTime = trim($relativeSharingTime) ?: NULL;

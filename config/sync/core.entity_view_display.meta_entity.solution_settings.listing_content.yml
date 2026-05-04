@@ -49,6 +49,7 @@ hidden:
   group_moderation: true
   label: true
   landing_page: true
+  langcode: true
   list_related_entities: true
   metadata_banner_disabled: true
   search_api_excerpt: true

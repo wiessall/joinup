@@ -14,7 +14,6 @@ use Drupal\paragraphs\Entity\Paragraph;
 trait FileTrait {
 
   use AssertTrait;
-  use TestingEntitiesTrait;
 
   /**
    * Saves a file for an entity and returns the file entity.
@@ -49,9 +48,36 @@ trait FileTrait {
       'filename' => $filename,
     ]);
     $file->save();
-    $this->entities['file'][$file->id()] = $file;
 
     return $file;
+  }
+
+  /**
+   * Resolves filenames in a raw Behat file field value to absolute paths.
+   *
+   * Handles CSV multi-value, positional columns separated by ' - ', and the
+   * named 'target_id: filename' column form understood by
+   * FileHandler::expand().
+   *
+   * @param string $value
+   *   The raw Behat field value, e.g. "text.pdf, other.pdf - display: 1".
+   *
+   * @return string
+   *   The same string with each filename replaced by its absolute fixture path.
+   */
+  public function parseFileBehatValue(string $value): string {
+    $result = [];
+    foreach (str_getcsv($value, escape: "\\") as $entry) {
+      $parts = explode(' - ', trim($entry));
+      foreach ($parts as $i => $part) {
+        $part = trim($part);
+        if (!str_contains($part, ': ')) {
+          $parts[$i] = $this->getFileSourcePath($part);
+        }
+      }
+      $result[] = implode(' - ', $parts);
+    }
+    return implode(', ', $result);
   }
 
   /**

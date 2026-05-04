@@ -25,8 +25,8 @@ Feature: Notifications are muted when entity is archived/unarchived.
 
   Scenario Outline: Updates to archive and unarchive state does not trigger notifications.
     Given <type> content:
-      | title            | collection | body | content | headline    |
-      | Milky Way <type> | Milky Way  | Test | Test    | Test <type> |
+      | title            | collection | body | headline    |
+      | Milky Way <type> | Milky Way  | Test | Test <type> |
     And I mark all emails as read
     When I am logged in as "bisera"
     And I go to the edit form of the "Milky Way <type>" <type>

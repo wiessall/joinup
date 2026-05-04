@@ -9,7 +9,6 @@ use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_assessment\AssessmentInterface as LegacyAssessmentInterface;
 use Drupal\paragraphs\Entity\Paragraph;
@@ -23,7 +22,6 @@ use Drupal\webform\WebformSubmissionInterface;
 class JoinupAssessmentContext extends RawDrupalContext {
 
   use EntityTrait;
-  use TestingEntitiesTrait;
   use UtilityTrait;
 
   /**
@@ -47,7 +45,6 @@ class JoinupAssessmentContext extends RawDrupalContext {
       ],
     ]);
     $paragraph->save();
-    $this->entities['paragraph'][$paragraph->id()] = $paragraph;
     $this->nodeCreate((object) [
       'type' => 'custom_page',
       'title' => 'Assessment reports',

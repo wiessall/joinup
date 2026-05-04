@@ -22,7 +22,7 @@
     color: inherit; // Resets
     border: 0; // Resets
     background: none; // Resets
-    font-size: 0.875rem; // 14px
+    font-size: $font-size-sm; // 14px
     &:hover {
       cursor: help;
       text-decoration: underline;

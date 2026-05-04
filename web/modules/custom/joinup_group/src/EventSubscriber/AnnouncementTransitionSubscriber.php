@@ -83,7 +83,8 @@ class AnnouncementTransitionSubscriber implements EventSubscriberInterface {
     // For smaller groups we send the announcements instantly.
     if ($recipients_count <= 50) {
       $recipients = $announcement->getRecipients(0, 50);
-      $this->messageDelivery->sendMessageToEmailAddresses($announcement, $recipients);
+      $accounts = $this->entityTypeManager->getStorage('user')->loadMultiple($recipients);
+      $this->messageDelivery->sendMessageToMultipleUsers($announcement, $accounts);
       return;
     }
 

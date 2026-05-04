@@ -1,0 +1,200 @@
+diff --git a/core/modules/views/js/ajax_view.js b/core/modules/views/js/ajax_view.js
+index 1fbb7d1282deccad4062ae83517cb1620f27df9d..bf4fd564e5707c2fcef0cc23b60b34aa617e898d 100644
+--- a/core/modules/views/js/ajax_view.js
++++ b/core/modules/views/js/ajax_view.js
+@@ -166,10 +166,45 @@
+           base: $(this).attr('id'),
+           element: this,
+         });
++
++        selfSettings.url = that.removeExposedFiltersQueryParameters(
++          selfSettings.url,
++          that.$exposed_form,
++        );
+         that.exposedFormAjax[index] = Drupal.ajax(selfSettings);
+       });
+   };
+ 
++  /**
++   * Sanitizes the AJAX URL removing the parameters existing in the exposed form.
++   *
++   * @param {string} url
++   *   The AJAX URL.
++   * @param {jQuery} $exposedForm
++   *   The exposed form element.
++   *
++   * @return {string}
++   *   The modified AJAX URL without the query parameters existing in the exposed form.
++   */
++  Drupal.views.ajaxView.prototype.removeExposedFiltersQueryParameters =
++    function (url, $exposedForm) {
++      const urlObj = new URL(url, window.location.origin);
++      // Use copy to keep the iterator consistent.
++      const urlObjCopy = new URL(url, window.location.origin);
++      const cleanKeys = {};
++      const formData = new FormData($exposedForm.get(0));
++      Array.from(formData.keys()).forEach((key) => {
++        cleanKeys[key.split('[')[0]] = true;
++      });
++      urlObjCopy.searchParams.forEach((value, key) => {
++        if (cleanKeys[key.split('[')[0]]) {
++          urlObj.searchParams.delete(key);
++        }
++      });
++
++      return urlObj.pathname + urlObj.search;
++    };
++
+   /**
+    * @return {boolean}
+    *   If there is at least one parent with a view class return false.
+@@ -219,6 +254,10 @@
+       element: link,
+       httpMethod: 'GET',
+     });
++    selfSettings.url = this.removeExposedFiltersQueryParameters(
++      selfSettings.url,
++      this.$exposed_form,
++    );
+     this.pagerAjax = Drupal.ajax(selfSettings);
+   };
+ 
+diff --git a/core/modules/views/tests/src/FunctionalJavascript/ExposedFilterAJAXTest.php b/core/modules/views/tests/src/FunctionalJavascript/ExposedFilterAJAXTest.php
+index 5e465d33150f1ec4fbc9512ec8af3015df660714..52d3cc6362c2ab22247bb800f9b4b9185fdce14b 100644
+--- a/core/modules/views/tests/src/FunctionalJavascript/ExposedFilterAJAXTest.php
++++ b/core/modules/views/tests/src/FunctionalJavascript/ExposedFilterAJAXTest.php
+@@ -117,7 +117,7 @@ public function testExposedFiltering(): void {
+     $html = $session->getPage()->getHtml();
+     $this->assertStringContainsString('Page Two', $html);
+     $this->assertStringNotContainsString('Page One', $html);
+-    $this->assertSession()->addressEquals('admin/content?type=All&status=All&title=Page%20Two');
++    $this->assertSession()->addressEquals('admin/content?title=Page%20Two&type=All&status=All');
+ 
+     // Submit bulk actions form to ensure that the previous AJAX submit does not
+     // break it.
+@@ -128,7 +128,7 @@ public function testExposedFiltering(): void {
+ 
+     // Verify that the action was performed.
+     $this->assertSession()->pageTextContains('Make content sticky was applied to 1 item.');
+-    $this->assertSession()->addressEquals('admin/content?type=All&status=All&title=Page%20Two');
++    $this->assertSession()->addressEquals('admin/content?title=Page%20Two&type=All&status=All');
+ 
+     // Reset the form.
+     $this->submitForm([], 'Reset');
+diff --git a/core/modules/views/tests/src/FunctionalJavascript/PaginationAJAXTest.php b/core/modules/views/tests/src/FunctionalJavascript/PaginationAJAXTest.php
+index 8c563930d376dad57b2f6ba8344e612b26a85b85..7299d0042ed579c79e33c5fecd6c459f83350936 100644
+--- a/core/modules/views/tests/src/FunctionalJavascript/PaginationAJAXTest.php
++++ b/core/modules/views/tests/src/FunctionalJavascript/PaginationAJAXTest.php
+@@ -116,7 +116,7 @@ public function testBasicPagination(): void {
+     $this->assertNoDuplicateAssetsOnPage();
+ 
+     // Test that no unwanted parameters are added to the URL.
+-    $this->assertEquals('?status=All&type=All&items_per_page=5&title=&order=changed&sort=asc&page=2', $link->getAttribute('href'));
++    $this->assertEquals('?status=All&type=All&title=&items_per_page=5&order=changed&sort=asc&page=2', $link->getAttribute('href'));
+ 
+     $this->clickLink('Go to page 3');
+     $session_assert->assertWaitOnAjaxRequest();
+@@ -200,7 +200,7 @@ public function testDefaultFilterPagination(): void {
+     $this->assertNoDuplicateAssetsOnPage();
+ 
+     // Test that no unwanted parameters are added to the URL.
+-    $this->assertEquals('?status=All&type=All&items_per_page=5&title=default_value&order=changed&sort=asc&page=0', $link->getAttribute('href'));
++    $this->assertEquals('?status=All&type=All&title=default_value&items_per_page=5&order=changed&sort=asc&page=0', $link->getAttribute('href'));
+ 
+     // Set the title filter to empty string using the exposed pager.
+     $page->fillField('title', '');
+@@ -220,7 +220,7 @@ public function testDefaultFilterPagination(): void {
+     $this->assertNoDuplicateAssetsOnPage();
+ 
+     // Test that no unwanted parameters are added to the URL.
+-    $this->assertEquals('?status=All&type=All&items_per_page=5&title=&page=0', $link->getAttribute('href'));
++    $this->assertEquals('?status=All&type=All&title=&items_per_page=5&page=0', $link->getAttribute('href'));
+ 
+     // Navigate back to the first page.
+     $this->clickLink('Go to first page');
+diff --git a/core/tests/Drupal/Nightwatch/Tests/ajaxGetParametersTest.js b/core/tests/Drupal/Nightwatch/Tests/ajaxGetParametersTest.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..706b5f971ddaedf1ec3743d57214b9cc2f49e14f
+--- /dev/null
++++ b/core/tests/Drupal/Nightwatch/Tests/ajaxGetParametersTest.js
+@@ -0,0 +1,44 @@
++module.exports = {
++  '@tags': ['core', 'ajax'],
++  before(browser) {
++    browser.drupalInstall({
++      setupFile:
++        'core/tests/Drupal/TestSite/TestSiteViewAjaxInstallTestScript.php',
++      installProfile: 'minimal',
++    });
++  },
++  after(browser) {
++    browser.drupalUninstall();
++  },
++  'Test View AJAX GET parameters': (browser) => {
++    browser.drupalLoginAsAdmin(() => {
++      browser
++        .drupalRelativeURL('/admin/content?title=&type=All&status=All')
++        .waitForElementVisible('body', 1000)
++        .captureNetworkRequests((requestParams) => {
++          if (
++            requestParams.request.headers['X-Requested-With'] ===
++            'XMLHttpRequest'
++          ) {
++            const url = new URL(requestParams.request.url);
++            browser.assert.strictEqual(
++              url.searchParams.getAll('title').length,
++              1,
++              'Duplicate title parameter',
++            );
++            browser.assert.strictEqual(
++              url.searchParams.getAll('type').length,
++              1,
++              'Duplicate type parameter',
++            );
++            browser.assert.strictEqual(
++              url.searchParams.getAll('status').length,
++              1,
++              'Duplicate status parameter',
++            );
++          }
++        })
++        .click('#edit-submit-content');
++    });
++  },
++};
+diff --git a/core/tests/Drupal/TestSite/TestSiteViewAjaxInstallTestScript.php b/core/tests/Drupal/TestSite/TestSiteViewAjaxInstallTestScript.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..c77ed9f98f0575c444bd696b1c091af016044caf
+--- /dev/null
++++ b/core/tests/Drupal/TestSite/TestSiteViewAjaxInstallTestScript.php
+@@ -0,0 +1,30 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\TestSite;
++
++use Drupal\Core\Extension\ModuleInstallerInterface;
++
++/**
++ * Setup file used by ajaxGetParametersTest.js.
++ *
++ * @see \Drupal\KernelTests\Scripts\TestSiteApplicationTest
++ */
++class TestSiteViewAjaxInstallTestScript implements TestSetupInterface {
++
++  /**
++   * {@inheritdoc}
++   */
++  public function setup(): void {
++    $module_installer = \Drupal::service('module_installer');
++    assert($module_installer instanceof ModuleInstallerInterface);
++    $module_installer->install(['views', 'node']);
++
++    // Enable AJAX on the /admin/content View.
++    \Drupal::configFactory()->getEditable('views.view.content')
++      ->set('display.default.display_options.use_ajax', TRUE)
++      ->save();
++  }
++
++}

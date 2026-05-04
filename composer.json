@@ -21,7 +21,6 @@
         "drupal/addtocal": "^3.0",
         "drupal/allowed_formats": "^3.0",
         "drupal/antibot": "^2.0",
-        "drupal/autologout": "^2.0",
         "drupal/babel": "^1.0",
         "drupal/better_exposed_filters": "^7.0",
         "drupal/block_field": "^1.0@RC",
@@ -32,23 +31,24 @@
         "drupal/changed_fields": "^3.2",
         "drupal/colorbox": "^2.0",
         "drupal/config_ignore": "^3.0",
-        "drupal/core-composer-scaffold": "^11.3.2",
-        "drupal/core-recommended": "^11.3.2",
+        "drupal/core-composer-scaffold": "^11.3.7",
+        "drupal/core-recommended": "^11.3.7",
         "drupal/custom_markup_block": "^1.2",
         "drupal/default_content": "^2.0",
         "drupal/diff": "^2.0",
         "drupal/digital_size_formatter": "~2.0",
         "drupal/dropsolid_purge": "^1.0@beta",
-        "drupal/dynamic_entity_reference": "^4.0",
+        "drupal/dynamic_entity_reference": "^3",
         "drupal/editor_file": "^2.1",
         "drupal/email_confirmer": "^1.0",
         "drupal/email_contact": "^2.0.4",
+        "drupal/entity_browser": "^2.15",
         "drupal/entity_form_field_label": "^2.1",
         "drupal/entity_legal": "^4.0",
         "drupal/entity_print": "^2.15",
         "drupal/entityqueue": "^1.2",
         "drupal/error_page": "^2.1@beta",
-        "drupal/facets": "^3.0",
+        "drupal/facets": "3.0.2",
         "drupal/facets_block": "^2.0@beta",
         "drupal/facets_date_range": "^1.0@beta",
         "drupal/field_delimiter": "^2.0",
@@ -154,7 +154,7 @@
         "oomphinc/composer-installers-extender": "^2.0",
         "openeuropa/composer-artifacts": "^1.0",
         "openeuropa/oe_authentication": "^1.20",
-        "openeuropa/oe_bootstrap_theme": "^1.21",
+        "openeuropa/oe_bootstrap_theme": "1.34.0",
         "openeuropa/oe_dashboard_agent": "^1.0",
         "openeuropa/oe_webtools": "^1.40",
         "psr/http-factory-implementation": "^1.0",
@@ -175,7 +175,7 @@
         "drupal/config_inspector": "^2.1",
         "drupal/config_update": "^2.0",
         "drupal/devel": "^5.1",
-        "drupal/drupal-extension": "5.1.0",
+        "drupal/drupal-extension": "^5.0",
         "drupal/filecache": "^1.1",
         "drupal/http_request_mock": "^1.1",
         "drupal/masquerade": "^2.0@RC",
@@ -186,13 +186,13 @@
         "ec-europa/toolkit": "^10.5",
         "lovers-of-behat/table-extension": "^1.4",
         "lullabot/mink-selenium2-driver": "^1.7",
+        "mglaman/phpstan-drupal": "^2.0",
         "mikey179/vfsstream": "~1.6",
         "ml/json-ld": "^1.2",
         "nicwortel/behat-unused-step-definitions-extension": "^1.2",
-        "palantirnet/drupal-rector": "^0.20.1",
         "phpro/grumphp-shim": "2.17",
         "phpspec/prophecy-phpunit": "^2",
-        "phpstan/extension-installer": "^1.3",
+        "phpstan/extension-installer": "^1.4",
         "phpunit/phpunit": "^11",
         "vincentlanglet/twig-cs-fixer": "^2.10",
         "vlucas/phpdotenv": "~5",
@@ -342,12 +342,8 @@
             "drupal/core": "-p2"
         },
         "patches": {
-            "drupal/babel": {
-                "TMGMT @see https://www.drupal.org/i/3554005": "resources/patch/php/drupal/babel/3554005.mr71-note706700.diff",
-                "Babel TMGMT form alter makes form state non-serializable, prevents using Form API batch @see https://drupal.org/i/3583826": "resources/patch/php/drupal/babel/3583826-mr81-commit67cb60ed.diff",
-                "Menu Link Content plugin creates invalid entity translations when Babel string translations are deleted @see https://drupal.org/i/3578415": "resources/patch/php/drupal/babel/3578415.mr77-commit6da4c667.diff",
-                "ContentEntity plugin can trigger exception if string translation is deleted @see https://drupal.org/i/3580045": "resources/patch/php/drupal/babel/3580045-mr79-commit0f379a78.diff",
-                "Strengthen the creation of continuous job items @see https://www.drupal.org/i/3578471": "resources/patch/php/drupal/babel/3578471.mr76.commit333eff4d.diff"
+            "drupal/better_exposed_filters": {
+                "Single on/off checkbox option not working as expected @see https://www.drupal.org/i/3569639": "resources/patch/php/drupal/better_exposed_filters/3569639-mr230.diff"
             },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff",
@@ -372,7 +368,7 @@
                 "PHP deprecation error in PhpMail::mail @see https://www.drupal.org/i/3418098": "resources/patch/php/drupal/core/3418098.diff",
                 "Set the toolbar to position fixed on mobile (for group banner positioning and toolbar on mobile) @see https://www.drupal.org/i/2516938": "resources/patch/php/drupal/core/3809.diff",
                 "This error occurs when we click on 'Insert Selected' button from the media library without selecting or uploading a media @see https://www.drupal.org/i/3303889": "resources/patch/php/drupal/core/3303889.mr9413-commitd500fff6.diff",
-                "Allow contrib extensions to be installed by Drupal when core branch is 11.x @see https://www.drupal.org/i/3387322": "resources/patch/php/drupal/core/3387322.mr8615-note353552.diff",
+                "Allow contrib extensions to be installed by Drupal when core branch is 11.x @see https://www.drupal.org/i/3387322": "resources/patch/php/drupal/core/3387322.other_view_filter.diff",
                 "JS errors from Drupal.dialog.resetSize when rapidly closing dialogs @see https://www.drupal.org/i/3472624": "resources/patch/php/drupal/core/3472624-4d97ff80.diff",
                 "Can only intentionally re-render an entity with references 20 times @see https://www.drupal.org/i/2940605": "resources/patch/php/drupal/core/2940605-committed4d11c55d.diff",
                 "Deprecated function: preg_match(): Passing null to parameter #2 ($subject) of type string is deprecated in Drupal\\Core\\Routing\\UrlGenerator->doGenerate() @see https://drupal.org/i/3338057": "resources/patch/php/drupal/core/3338057.mr6989-commit386ed857.diff",
@@ -384,19 +380,24 @@
                 "Configs for untranslatable bundles @see https://www.drupal.org/i/3570351": "resources/patch/php/drupal/core/3570351.mr14561-commitd9636386.diff",
                 "Fix for pagination inside Media library @see https://www.drupal.org/i/3567237": "resources/patch/php/drupal/core/3567237.mr14654-commit0edaf95a.diff",
                 "REST views: Add pagination information and total count result @see https://www.drupal.org/i/2982729": "resources/patch/php/drupal/core/2982729-mr6558.commit290eabb1.diff",
-                "Slow admin/config page load. @see https://www.drupal.org/i/3336621": "resources/patch/php/drupal/core/3336621.mr15137-commit7b9c8c6a.patch"
+                "Slow admin/config page load. @see https://www.drupal.org/i/3336621": "resources/patch/php/drupal/core/3336621.mr15137-commit7b9c8c6a.patch",
+                "Exposed filters get values from url when ajax is on @see https://www.drupal.org/i/3121172": "resources/patch/php/drupal/core/3121172-mr10230-commit41ded0c5.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
             },
             "drupal/drupal-driver": {
-                "Allow multi-property references. @see https://github.com/jhedstrom/DrupalDriver/pull/252": "resources/patch/php/drupal/drupal-driver/252.diff",
-                "Populate link fields only with URI if value is a string @see https://github.com/jhedstrom/DrupalDriver/pull/267": "resources/patch/php/drupal/drupal-driver/267.diff",
-                "Update Datetime field handler to support both date and datetime fields @see https://github.com/jhedstrom/DrupalDriver/pull/235": "resources/patch/php/drupal/drupal-driver/235.patch",
-                "Do not process empty batches. @see https://github.com/jhedstrom/DrupalDriver/pull/284": "resources/patch/php/drupal/drupal-driver/284.diff"
+                "Make isBaseField() recognise bundle fields (hook_entity_bundle_field_info) @see https://github.com/jhedstrom/DrupalDriver/pull/356": "resources/patch/php/drupal/drupal-driver/356.diff",
+                "ImageHandler: default alt text to filename when not provided https://github.com/jhedstrom/DrupalDriver/pull/347": "resources/patch/php/drupal/drupal-driver/347.diff"
             },
             "drupal/dynamic_entity_reference": {
-                "Undefined array key on dependency removal @see https://www.drupal.org/i/3099176": "resources/patch/php/drupal/dynamic_entity_reference/3099176-3.x-16.diff"
+                "Undefined array key on dependency removal @see https://www.drupal.org/i/3099176": "resources/patch/php/drupal/dynamic_entity_reference/3099176-3.x-16.diff",
+                "Declaration of variable problem @see https://www.drupal.org/i/3538270": "resources/patch/php/drupal/dynamic_entity_reference/3538270-mr42-commit9732eea1d.diff"
+            },
+            "drupal/entity_browser": {
+                "TypeError in removeExposedFiltersQueryParameters: exposed form in a div, not a form element @see https://www.drupal.org/i/3582428": "resources/patch/php/drupal/entity_browser/3582428-mr118-commitfd27d6f2.diff",
+                "EntityForm widget missing entity-level validation before save. @see https://www.drupal.org/i/3583922": "resources/patch/php/drupal/entity_browser/3583922.m122.commit8291fb8c.diff",
+                "Add option for field widget to display as table @see https://www.drupal.org/i/2973457": "resources/patch/php/drupal/entity_browser/2973457.mr15.commit49824a77.diff"
             },
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.mr3-note490206.diff"
@@ -446,7 +447,7 @@
             "drupal/inline_entity_form": {
                 "Autocomplete field doesn't allow to reference entities with long titles @see https://www.drupal.org/node/2895663": "resources/patch/php/drupal/inline_entity_form/2895663.patch",
                 "Undefined array key \"delete\". @see https://www.drupal.org/i/3416328": "resources/patch/php/drupal/inline_entity_form/3416328.patch",
-                "Required fields make an optional IEF (erroneously) required. @see https://www.drupal.org/i/3099844": "resources/patch/php/drupal/inline_entity_form/3099844-mr136-commitda7958a6.diff",
+                "Required fields make an optional IEF (erroneously) required. @see https://www.drupal.org/i/3099844": "resources/patch/php/drupal/inline_entity_form/3099844-mr136-commit19b50b6e.diff",
                 "Pass context to canAddNew()ssa and getCreateBundles(). @see https://www.drupal.org/i/3043511": "resources/patch/php/drupal/inline_entity_form/3043511-mr154-commit2d80c52d.diff",
                 "Foreach expects array|object, null given @see https://www.drupal.org/i/3516478": "resources/patch/php/drupal/inline_entity_form/3516478.diff"
             },
@@ -463,7 +464,8 @@
                 "Integrity constraint violation @see https://www.drupal.org/project/layout_paragraphs/issues/3528058": "resources/patch/php/drupal/layout_paragraphs/3528058.patch"
             },
             "drupal/memcache": {
-                "Use Drupal core time service with fallback @see https://drupal.org/i/2999614": "resources/patch/php/drupal/memcache/2999614-mr41-20f8103bd2.diff"
+                "Use Drupal core time service with fallback @see https://drupal.org/i/2999614": "resources/patch/php/drupal/memcache/2999614-mr41-20f8103bd2.diff",
+                "Memory leak during long running processes @see https://www.drupal.org/i/3503083": "resources/patch/php/drupal/memcache/3503083-mr40-ec9f9526.diff"
             },
             "drupal/message": {
                 "Renderer service can only accept array @see https://www.drupal.org/i/3531949": "resources/patch/php/drupal/message/3531949.mr56-commit24333e61.diff"
@@ -472,7 +474,6 @@
                 "Renderer::renderPlain() is deprecated @see https://www.drupal.org/i/3511648": "resources/patch/php/drupal/message_digest/3511648.diff"
             },
             "drupal/meta_entity": {
-                "Allow $bundle to be nullable @see https://www.drupal.org/i/3529976": "resources/patch/php/drupal/meta_entity/3529976.diff",
                 "hook_entity_insert() auto-creates duplicate @see https://www.drupal.org/i/3583434": "resources/patch/php/drupal/meta_entity/3583434.mr20-commitf3ef1e53.diff"
             },
             "drupal/oauth_client": {
@@ -499,14 +500,6 @@
                 "Users are deleted without prior notification when \"Notification User Before Deletion\" is enabled @see https://www.drupal.org/i/3521201": "resources/patch/php/drupal/purge_users/3521201.diff",
                 "Missing langcode in purge_users.settings and config/install missing @see https://www.drupal.org/i/3542620": "resources/patch/php/drupal/purge_users/3542620.diff"
             },
-            "drupal/rdf_sync": {
-                "Pass the context to the normalize subscribers @see https://www.drupal.org/i/3560752": "resources/patch/php/drupal/rdf_sync/3560752.mr43-note632794.diff",
-                "Configure namaspaces @see https://www.drupal.org/i/3560781": "resources/patch/php/drupal/rdf_sync/3560781.mr44-note633150.diff",
-                "View support @see https://www.drupal.org/project/i/3473743": "resources/patch/php/drupal/rdf_sync/3560781.mr45-commitf08c1b33.diff",
-                "Add support for deriver in RdfUriGenerator @see https://www.drupal.org/project/rdf_sync/issues/3567259": "resources/patch/php/drupal/rdf_sync/3567259.diff",
-                "Incorrect type hint in rdf_sync_entity_bundle_field_info() hook implementation - https://www.drupal.org/i/3529979": "resources/patch/php/drupal/rdf_sync/3529979-mr39-commit307d5e52.diff",
-                "Integrity constraint violation when duplicating an entity with an RDF URI - https://www.drupal.org/project/rdf_sync/issues/3582431": "resources/patch/php/drupal/rdf_sync/3582431.mr49-commit61a13f12.diff"
-            },
             "drupal/search_api": {
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199-42e0e284.diff",
                 "View recalculated with wrong data from cache @see https://drupal.org/i/3327645": "resources/patch/php/drupal/search_api/3327645-d510c98e.diff"
@@ -516,9 +509,6 @@
             },
             "drupal/simple_oauth": {
                 "Allow BasicAuth to co-exist with oAuth @see https://www.drupal.org/i/3256312": "resources/patch/php/drupal/simple_oauth/3256312-1.patch"
-            },
-            "drupal/sitewide_alert": {
-                "Followup: Generate UUID @see https://www.drupal.org/i/3561256": "resources/patch/php/drupal/sitewide_alert/3561256.mr103.commit-62c42f85.diff"
             },
             "drupal/social_media_links": {
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "resources/patch/php/drupal/social_media_links/2898680.patch",
@@ -537,9 +527,6 @@
             "drupal/tour": {
                 "Support page manager variants on front page @see https://www.drupal.org/i/3568815": "resources/patch/php/drupal/tour/3568815.patch"
             },
-            "drupal/tmgmt_ec_etranslation": {
-                "Preserve placeholders @see https://www.drupal.org/i/3577084": "resources/patch/php/drupal/tmgmt_ec_etranslation/3577084.mr28.commit18b2ff6d.diff"
-            },
             "drupal/views_block_area": {
                 "Render logic not working @see https://www.drupal.org/i/3499861": "resources/patch/php/drupal/views_block_area/3499861.patch"
             },
@@ -552,7 +539,7 @@
                 "Add support for prefixed URIs on base path @see https://github.com/GitLabPHP/Client/issues/726": "resources/patch/php/m4tthumphrey/php-gitlab-api/726.diff"
             },
             "lullabot/mink-selenium2-driver": {
-                "Add missing mouseover before clicking on radio/select elements - https://github.com/Lullabot/MinkSelenium2Driver/pull/14": "resources/patch/php/lullabot/mink-selenium2-driver/selenium2-mouseover-fixes.patch"
+                "Add missing mouseover before clicking on radio/select elements - https://github.com/Lullabot/MinkSelenium2Driver/pull/14": "resources/patch/php/lullabot/mink-selenium2-driver/selenium2-mouseover-fixes.diff"
             },
             "sweetrdf/easyrdf": {
                 "Add a method to remove resources from graph @see https://github.com/sweetrdf/easyrdf/pull/44": "resources/patch/php/sweetrdf/easyrdf/44.diff"

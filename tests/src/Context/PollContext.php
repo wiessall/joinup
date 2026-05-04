@@ -7,7 +7,6 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Given;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\poll\PollChoiceInterface;
 
@@ -17,7 +16,6 @@ use Drupal\poll\PollChoiceInterface;
 class PollContext extends RawDrupalContext {
 
   use UtilityTrait;
-  use TestingEntitiesTrait;
 
   /**
    * Creates a set of polls.
@@ -36,8 +34,6 @@ class PollContext extends RawDrupalContext {
       /** @var \Drupal\poll\PollInterface $poll */
       $poll = $storage->create($values);
       $poll->save();
-
-      $this->entities['poll'][$poll->id()] = $poll;
     }
   }
 
@@ -76,8 +72,6 @@ class PollContext extends RawDrupalContext {
     /** @var \Drupal\poll\PollChoiceInterface $pollChoice */
     $pollChoice = $storage->create(['choice' => $choice]);
     $pollChoice->save();
-
-    $this->entities['poll_choice'][$pollChoice->id()] = $pollChoice;
 
     return $pollChoice;
   }
