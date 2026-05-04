@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Drupal\assessments\Plugin\rest\resource;
 
 use Drupal\Component\Render\PlainTextOutput;
+use Drupal\Component\Utility\Bytes;
+use Drupal\Component\Utility\Environment;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\ContentEntityStorageInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
@@ -27,6 +29,8 @@ use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\AssessmentStatement;
 use Drupal\assessments\Entity\PublicOrganisation;
 use Drupal\assessments\ErrorMessage;
+use Drupal\assessments\Http\CappedStream;
+use Drupal\assessments\Http\MaxDownloadSizeExceededException;
 use Drupal\assessments\ProvidedByHelperTrait;
 use Drupal\file\FileInterface;
 use Drupal\file\Plugin\Field\FieldType\FileFieldItemList;
@@ -44,8 +48,8 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Utils;
 use GuzzleHttp\RequestOptions;
-use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -71,9 +75,6 @@ class AssessmentReportResource extends ResourceBase {
   use FileUploadLocationTrait;
   use FileValidatorSettingsTrait;
   use ProvidedByHelperTrait;
-
-  // 50 MB ceiling applied before writing to disk (Content-Length pre-check).
-  private const MAX_DOCUMENT_SIZE = 52_428_800;
 
   /**
    * Assessment storage static cache.
@@ -611,18 +612,22 @@ class AssessmentReportResource extends ResourceBase {
       RequestOptions::ALLOW_REDIRECTS => FALSE,
     ];
 
-    $requests = function (array $data) use ($safeRequestOptions, $report) {
-      $items = [];
-      foreach ($data['documents'] ?? [] as $i => $url) {
-        $items[] = ["/documents/$i", 'assessment.report.documents', $url];
-      }
-      foreach ($data['binding_requirement'] as $i => $requirement) {
-        foreach ($requirement['documents'] ?? [] as $j => $url) {
-          $items[] = ["/binding_requirement/$i/documents/$j", 'paragraph.binding_requirement.requirement_documents', $url];
-        }
-      }
+    // Collect all documents across the payload, applying the per-field
+    // cardinality cap up-front. Anything beyond the cap is rejected with a
+    // payload-path error rather than fetched.
+    $items = $this->collectDocumentItems($data);
+
+    // Per-key map of sink temp file paths, populated during request iteration
+    // and consumed by the fulfilled/rejected handlers so they can find the
+    // streamed download (or clean it up on failure).
+    $tempPaths = [];
+
+    $requests = function (array $items) use ($safeRequestOptions, $report, &$tempPaths) {
       foreach ($items as [$path, $fieldInfo, $url]) {
         if (!$this->validateDocumentUrl($url, $path)) {
+          continue;
+        }
+        if (!$this->validateDocumentExtension($url, $fieldInfo, $path)) {
           continue;
         }
         $key = "$path:$fieldInfo:$url";
@@ -630,17 +635,42 @@ class AssessmentReportResource extends ResourceBase {
           $this->uploadLocalFile($localUri, $key, $report);
           continue;
         }
-        yield $key => fn() => $this->httpClient->getAsync($url, $safeRequestOptions);
+        // Per-request capped sink: streams the body to a temp file and aborts
+        // the transfer once the field's max_filesize is exceeded.
+        $tempPath = $this->fileSystem->tempnam('temporary://', 'doc_');
+        $tempPaths[$key] = $tempPath;
+        $maxBytes = $this->getMaxFilesizeForFieldInfo($fieldInfo);
+        $sinkResource = fopen($this->fileSystem->realpath($tempPath), 'wb');
+        $sink = new CappedStream(Utils::streamFor($sinkResource), $maxBytes);
+        yield $key => fn() => $this->httpClient->getAsync($url, [
+          ...$safeRequestOptions,
+          RequestOptions::SINK => $sink,
+        ]);
       }
     };
 
-    $pool = new Pool($this->httpClient, $requests($data), [
+    $pool = new Pool($this->httpClient, $requests($items), [
       'concurrency' => 10,
-      'fulfilled' => function (Response $response, string $key) use ($report): void {
-        $this->uploadFile($response, $key, $report);
+      'fulfilled' => function (Response $response, string $key) use ($report, &$tempPaths): void {
+        $tempPath = $tempPaths[$key] ?? NULL;
+        unset($tempPaths[$key]);
+        $this->uploadFile($response, $key, $report, $tempPath);
       },
-      'rejected' => function (ClientExceptionInterface $reason, string $key): void {
+      'rejected' => function (\Throwable $reason, string $key) use (&$tempPaths): void {
         [$path] = explode(':', $key, 2);
+        if (isset($tempPaths[$key])) {
+          try {
+            $this->fileSystem->unlink($tempPaths[$key]);
+          }
+          catch (\Throwable) {
+            // Best-effort cleanup; the temp dir is purged periodically.
+          }
+          unset($tempPaths[$key]);
+        }
+        if ($reason instanceof MaxDownloadSizeExceededException) {
+          $this->addError($path, $reason->getMessage());
+          return;
+        }
         if ($reason instanceof ClientException) {
           // Use a more simple but meaningful message for client exceptions.
           $this->addError($path, "Error downloading file: {$reason->getCode()} {$reason->getResponse()->getReasonPhrase()}");
@@ -650,8 +680,39 @@ class AssessmentReportResource extends ResourceBase {
       },
     ]);
 
-    $promise = $pool->promise();
-    $promise->wait();
+    $pool->promise()->wait();
+  }
+
+  /**
+   * Collects flat document items from the payload, enforcing cardinality.
+   *
+   * @return list<array{0:string,1:string,2:string}>
+   *   List of [payload_path, field_info, url] tuples.
+   */
+  protected function collectDocumentItems(array $data): array {
+    $items = [];
+
+    $documentsCap = $this->getCardinalityForFieldInfo('assessment.report.documents');
+    foreach ($data['documents'] ?? [] as $i => $url) {
+      if ($documentsCap !== -1 && $i >= $documentsCap) {
+        $this->addError("/documents/$i", "Exceeds field cardinality (max $documentsCap documents)");
+        continue;
+      }
+      $items[] = ["/documents/$i", 'assessment.report.documents', $url];
+    }
+
+    $reqCap = $this->getCardinalityForFieldInfo('paragraph.binding_requirement.requirement_documents');
+    foreach ($data['binding_requirement'] ?? [] as $i => $requirement) {
+      foreach ($requirement['documents'] ?? [] as $j => $url) {
+        if ($reqCap !== -1 && $j >= $reqCap) {
+          $this->addError("/binding_requirement/$i/documents/$j", "Exceeds field cardinality (max $reqCap documents)");
+          continue;
+        }
+        $items[] = ["/binding_requirement/$i/documents/$j", 'paragraph.binding_requirement.requirement_documents', $url];
+      }
+    }
+
+    return $items;
   }
 
   /**
@@ -663,16 +724,13 @@ class AssessmentReportResource extends ResourceBase {
    *   The request key. We've packed in this string useful context information.
    * @param \Drupal\assessments\Entity\AssessmentReport $report
    *   The assessment report entity being created.
+   * @param string|null $tempPath
+   *   The path to the temp file already populated by the streaming sink. When
+   *   omitted (legacy callers), the response body is materialised here.
    */
-  protected function uploadFile(Response $response, string $key, AssessmentReport $report): void {
+  protected function uploadFile(Response $response, string $key, AssessmentReport $report, ?string $tempPath = NULL): void {
     // Unpack context information from the request key.
     [$path, $fieldInfo, $url] = explode(':', $key, 3);
-
-    $contentLength = (int) $response->getHeaderLine('Content-Length');
-    if ($contentLength > self::MAX_DOCUMENT_SIZE) {
-      $this->addError($path, 'Document exceeds the maximum allowed download size');
-      return;
-    }
     [$entityTypeId, $bundle, $fieldName] = explode('.', $fieldInfo);
 
     // Prepare the destination directory.
@@ -688,8 +746,10 @@ class AssessmentReportResource extends ResourceBase {
       $validators = $this->getFileUploadValidators($settings);
 
       $filename = basename(parse_url($url, PHP_URL_PATH));
-      $tempPath = $this->fileSystem->tempnam('temporary://', 'file');
-      file_put_contents($tempPath, $response->getBody()->getContents());
+      if ($tempPath === NULL) {
+        $tempPath = $this->fileSystem->tempnam('temporary://', 'file');
+        file_put_contents($tempPath, $response->getBody()->getContents());
+      }
       $uploadedFile = new InputStreamUploadedFile($filename, $filename, $tempPath, @filesize($tempPath));
 
       $result = $this->uploadHandler->handleFileUpload($uploadedFile, $validators, $destination, FileExists::Rename, FALSE);
@@ -839,6 +899,57 @@ class AssessmentReportResource extends ResourceBase {
     }
 
     return $ips;
+  }
+
+  /**
+   * Returns the cardinality of the field referred to by a packed fieldInfo.
+   */
+  protected function getCardinalityForFieldInfo(string $fieldInfo): int {
+    [$entityTypeId, , $fieldName] = explode('.', $fieldInfo);
+    $storage = $this->fieldManager->getFieldStorageDefinitions($entityTypeId)[$fieldName] ?? NULL;
+    return $storage ? $storage->getCardinality() : -1;
+  }
+
+  /**
+   * Returns the per-file max byte cap configured on the target field.
+   *
+   * Falls back to the system upload ceiling
+   * (min(upload_max_filesize, post_max_size)) when the field has no explicit
+   * setting, mirroring how Drupal's own file widgets behave.
+   */
+  protected function getMaxFilesizeForFieldInfo(string $fieldInfo): int {
+    [$entityTypeId, $bundle, $fieldName] = explode('.', $fieldInfo);
+    $definition = $this->fieldManager->getFieldDefinitions($entityTypeId, $bundle)[$fieldName] ?? NULL;
+    $configured = $definition ? (string) $definition->getSetting('max_filesize') : '';
+    if ($configured !== '') {
+      return (int) Bytes::toNumber($configured);
+    }
+    return (int) Environment::getUploadMaxSize();
+  }
+
+  /**
+   * Validates the URL's filename extension against the field's allowlist.
+   *
+   * The remote response is also re-validated against the same allowlist after
+   * download, but checking the URL up-front lets us reject obviously invalid
+   * extensions before spending bandwidth on the fetch.
+   */
+  protected function validateDocumentExtension(string $url, string $fieldInfo, string $path): bool {
+    [$entityTypeId, $bundle, $fieldName] = explode('.', $fieldInfo);
+    $definition = $this->fieldManager->getFieldDefinitions($entityTypeId, $bundle)[$fieldName] ?? NULL;
+    $rawExtensions = $definition ? (string) $definition->getSetting('file_extensions') : '';
+    $allowed = preg_split('/\s+/', $rawExtensions, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+    if (empty($allowed)) {
+      return TRUE;
+    }
+    $urlPath = parse_url($url, PHP_URL_PATH) ?? '';
+    $ext = strtolower(pathinfo($urlPath, PATHINFO_EXTENSION));
+    $allowedLower = array_map('strtolower', $allowed);
+    if ($ext === '' || !in_array($ext, $allowedLower, TRUE)) {
+      $this->addError($path, "Document URL extension '$ext' is not allowed (expected: " . implode(', ', $allowed) . ')');
+      return FALSE;
+    }
+    return TRUE;
   }
 
   /**
