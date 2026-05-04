@@ -13,6 +13,7 @@ use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Url;
+use Drupal\Driver\Entity\EntityStub;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\AssessmentVocabularyHelper;
@@ -195,13 +196,12 @@ class AssessmentsContext extends RawDrupalContext {
   public function createAssessmentsCollection(): void {
     $collection = \Drupal::service('entity.repository')->loadEntityByUuid('node', AssessmentInterface::GROUP_UUID);
     if (!$collection instanceof CollectionInterface) {
-      $this->nodeCreate((object) [
-        'type' => 'collection',
+      $this->nodeCreate(new EntityStub('node', 'collection', [
         'uuid' => AssessmentInterface::GROUP_UUID,
         'title' => 'Interoperability assessments space',
         'short_id' => 'assessments',
         'field_state' => 'published',
-      ]);
+      ]));
     }
   }
 

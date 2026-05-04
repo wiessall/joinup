@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Traits;
 
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\Driver\Entity\EntityStubInterface;
 use Drupal\file\FileInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 
@@ -178,10 +179,10 @@ trait FileTrait {
    *   Whether to create a random file paragraph or not. This can be used when
    *   the goal is to create a random file paragraph for testing purposes.
    *
-   * @return \Drupal\paragraphs\Entity\Paragraph
+   * @return \Drupal\paragraphs\Entity\Paragraph|null
    *   The created paragraph.
    */
-  protected function createResourceFileParagraph(\Drupal\Driver\Entity\EntityStubInterface $node, string $fieldName = 'resources', bool $random = FALSE): ?Paragraph {
+  protected function createResourceFileParagraph(EntityStubInterface $node, string $fieldName = 'resources', bool $random = FALSE): ?Paragraph {
     $fieldValue = $node->getValue($fieldName);
     // Ensure that the value is not empty or a random value is requested.
     assert(!empty($fieldValue) || $random);

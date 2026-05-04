@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Traits;
 
 use Behat\Mink\Element\NodeElement;
+use Drupal\Driver\Entity\EntityStubInterface;
 
 /**
  * Contains utility methods.
@@ -135,7 +136,7 @@ trait UtilityTrait {
   }
 
   /**
-   * Converts property values of an entity stub to the ones defined in a mapping.
+   * Converts property values of an entity to the ones defined in a mapping.
    *
    * Useful to convert human-readable strings used in tests to machine-readable
    * ones.
@@ -147,7 +148,7 @@ trait UtilityTrait {
    * @param array $mapping
    *   An array of mapped values, where keys are the human-readable strings.
    */
-  protected static function convertObjectPropertyValues(\Drupal\Driver\Entity\EntityStubInterface $stub, string $property, array $mapping): void {
+  protected static function convertObjectPropertyValues(EntityStubInterface $stub, string $property, array $mapping): void {
     if (!$stub->hasValue($property)) {
       return;
     }

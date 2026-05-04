@@ -18,6 +18,7 @@ use Behat\Step\When;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Driver\Entity\EntityStub;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Attribute\AfterNodeCreate;
 use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
@@ -162,16 +163,16 @@ class JoinupContext extends RawDrupalContext {
     // Check if a user with this role is already logged in.
     if (!$this->loggedInWithOgRoles($roles, $entity)) {
       $random = $this->getRandom()->name(8);
-      // Create user (and project)
-      $user = (object) [
+      // Create user (and project).
+      $user = new EntityStub('user', NULL, [
         'name' => $random,
         'pass' => $random,
-      ];
-      $user->mail = "{$user->name}@example.com";
+        'mail' => "$random@example.com",
+      ]);
       $this->userCreate($user);
 
       // Load the actual user account.
-      $account = User::load($user->uid);
+      $account = User::load($user->getValue('uid'));
       $this->subscribeUserToGroup($account, $entity, $roles);
 
       // Login.

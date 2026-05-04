@@ -11,6 +11,7 @@ use Behat\Mink\Element\NodeElement;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
+use Drupal\Driver\Entity\EntityStub;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\HtmlManipulator;
 use Drupal\joinup\Traits\AssertTrait;
@@ -37,31 +38,28 @@ class EuplContext extends RawDrupalContext {
    */
   #[BeforeScenario('@eupl&&@api')]
   public function setupEuplData(): void {
-    $solution = $this->nodeCreate((object) [
-      'type' => 'solution',
+    $solution = $this->nodeCreate(new EntityStub('node', 'solution', [
       'title' => 'Joinup Licensing Assistant',
       'field_state' => 'published',
-    ]);
+    ]));
 
     // The 'Joinup Licensing Assistant' standard custom page.
-    $this->nodeCreate((object) [
+    $this->nodeCreate(new EntityStub('node', 'custom_page', [
       'nid' => 701805,
-      'type' => 'custom_page',
       'uuid' => '3bee8b04-75fd-46a8-94b3-af0d8f5a4c41',
       'title' => 'Portal Licensing Assistant',
-      'solution' => $solution->title,
+      'solution' => $solution->getValue('title'),
       'field_state' => 'published',
-    ]);
+    ]));
 
     // The 'Joinup Licensing Compatibility Check' standard custom page.
-    $this->nodeCreate((object) [
+    $this->nodeCreate(new EntityStub('node', 'custom_page', [
       'nid' => 703242,
-      'type' => 'custom_page',
       'uuid' => '431f631f-e973-4fae-8368-c31f346a9616',
       'title' => 'JLC',
-      'solution' => $solution->title,
+      'solution' => $solution->getValue('title'),
       'field_state' => 'published',
-    ]);
+    ]));
 
     // Populate the compatibility documents.
     CompatibilityDocument::populate();

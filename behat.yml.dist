@@ -245,11 +245,12 @@ default:
       drush:
         root: ${joinup.site_dir}
       selectors:
-        message_selector: '.alert, .messages'
-        error_message_selector: '.alert.alert--error, .messages.messages--error, .alert.alert-danger'
-        success_message_selector: '.alert.alert--status, .messages.messages--status, .alert.alert-success'
-        warning_message_selector: '.alert.alert--warning, .messages.messages--warning, .alert.alert-warning'
         login_form_selector: '#user-login-form'
+        messages:
+          default: '.alert, .messages'
+          error: '.alert.alert--error, .messages.messages--error, .alert.alert-danger'
+          success: '.alert.alert--status, .messages.messages--status, .alert.alert-success'
+          warning: '.alert.alert--warning, .messages.messages--warning, .alert.alert-warning'
       text:
         log_in: 'Sign in'
         log_out: 'Sign out'
