@@ -18,6 +18,14 @@ final class CappedStream implements StreamInterface {
 
   use StreamDecoratorTrait;
 
+  /**
+   * The wrapped stream. Required by StreamDecoratorTrait.
+   */
+  private StreamInterface $stream;
+
+  /**
+   * Cumulative number of bytes written through this decorator.
+   */
   private int $written = 0;
 
   public function __construct(

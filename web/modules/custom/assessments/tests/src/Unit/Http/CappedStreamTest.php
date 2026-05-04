@@ -10,6 +10,7 @@ use Drupal\assessments\Http\MaxDownloadSizeExceededException;
 use GuzzleHttp\Psr7\Utils;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * Tests the streaming sink that enforces a hard byte cap.
@@ -21,7 +22,7 @@ class CappedStreamTest extends UnitTestCase {
   /**
    * Returns a fresh in-memory inner stream.
    */
-  private function inner(): \Psr\Http\Message\StreamInterface {
+  private function inner(): StreamInterface {
     return Utils::streamFor(fopen('php://memory', 'wb+'));
   }
 

@@ -124,15 +124,15 @@ Invalid references:
       /binding_requirements/0/asset/0:
         - "An asset (interoperability solution) with ID '3b1548db-0f29-42f4-a23c-2ee43ed20ba9' does not exist"
       /documents/0:
-        - 'Error downloading file: cURL error 6: Could not resolve host: files.example.com (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://files.example.com/documents/req-1.pdf'
+        - 'Could not resolve document URL host'
       /documents/1:
-        - 'Error saving file evil.exe: Only files with the following extensions are allowed: txt doc docx pdf ppt pptx zip rar xls xlsx.'
+        - "Document URL extension 'exe' is not allowed (expected: txt, doc, docx, pdf, ppt, pptx, zip, rar, xls, xlsx)"
       /documents/2:
         - 'Error saving file fat.docx: The file is 10.49 MB exceeding the maximum file size of 10 MB.'
       /documents/3:
         - "Error saving file very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_long_name.pdf: The file's name exceeds the 240 characters limit. Rename the file and try again."
       /documents/4:
-        - 'Error downloading file: 404 Not Found'
+        - 'Error downloading file: 302 Found'
       /provider:
         - "A public organisation with ID 'f2f6bdae-7767-4230-9570-309b42392d1b' does not exist"
 
@@ -501,3 +501,91 @@ UniqueItems violations:
         - There are no duplicates allowed in the array
       /relevant_report:
         - There are no duplicates allowed in the array
+
+Cardinality exceeded:
+  payload:
+    name: "Legislation waste management"
+    provider: 'f2f6bdae-7767-4230-9570-309b42392d1b'
+    binding_requirement:
+      - expression:
+          - name: "Legal Act 2024"
+            description: "Reference to an EU legal expression"
+            documented_in: "https://example.com/eli/act"
+        description: "Article 5"
+        affects:
+          - name: "Digital Monitoring Unit"
+            thematic_area:
+              - "general_public_services"
+        asset:
+          - "3b1548db-0f29-42f4-a23c-2ee43ed20ba9"
+        # Cardinality is 5; the 6th is rejected up-front. URLs are made
+        # unique via query strings to satisfy the uniqueItems schema rule.
+        documents:
+          - '__base_url__/sites/default/files/assessment-test/report.pdf?b=1'
+          - '__base_url__/sites/default/files/assessment-test/report.pdf?b=2'
+          - '__base_url__/sites/default/files/assessment-test/report.pdf?b=3'
+          - '__base_url__/sites/default/files/assessment-test/report.pdf?b=4'
+          - '__base_url__/sites/default/files/assessment-test/report.pdf?b=5'
+          - '__base_url__/sites/default/files/assessment-test/report.pdf?b=6'
+    # Top-level documents: 6 unique URLs, 6th rejected by cardinality.
+    documents:
+      - '__base_url__/sites/default/files/assessment-test/report.pdf?d=1'
+      - '__base_url__/sites/default/files/assessment-test/report.pdf?d=2'
+      - '__base_url__/sites/default/files/assessment-test/report.pdf?d=3'
+      - '__base_url__/sites/default/files/assessment-test/report.pdf?d=4'
+      - '__base_url__/sites/default/files/assessment-test/report.pdf?d=5'
+      - '__base_url__/sites/default/files/assessment-test/report.pdf?d=6'
+  expect:
+    errors:
+      /binding_requirement/0/documents/5:
+        - 'Exceeds field cardinality (max 5 documents)'
+      /binding_requirements/0/asset/0:
+        - "An asset (interoperability solution) with ID '3b1548db-0f29-42f4-a23c-2ee43ed20ba9' does not exist"
+      /documents/5:
+        - 'Exceeds field cardinality (max 5 documents)'
+      /provider:
+        - "A public organisation with ID 'f2f6bdae-7767-4230-9570-309b42392d1b' does not exist"
+
+SSRF private addresses:
+  payload:
+    name: "Legislation waste management"
+    provider: 'f2f6bdae-7767-4230-9570-309b42392d1b'
+    binding_requirement:
+      - expression:
+          - name: "Legal Act 2024"
+            description: "Reference to an EU legal expression"
+            documented_in: "https://example.com/eli/act"
+        description: "Article 5"
+        affects:
+          - name: "Digital Monitoring Unit"
+            thematic_area:
+              - "general_public_services"
+        asset:
+          - "3b1548db-0f29-42f4-a23c-2ee43ed20ba9"
+    documents:
+      # Loopback.
+      - 'http://127.0.0.1/foo.pdf'
+      # RFC 1918.
+      - 'https://10.0.0.1/foo.pdf'
+      # Link-local (cloud metadata services).
+      - 'http://169.254.169.254/latest/meta-data/iam/foo.pdf'
+      # RFC 1918.
+      - 'https://192.168.1.1/foo.pdf'
+      # Disallowed scheme.
+      - 'file:///etc/passwd'
+  expect:
+    errors:
+      /binding_requirements/0/asset/0:
+        - "An asset (interoperability solution) with ID '3b1548db-0f29-42f4-a23c-2ee43ed20ba9' does not exist"
+      /documents/0:
+        - 'Document URL must not point to a private or reserved IP address'
+      /documents/1:
+        - 'Document URL must not point to a private or reserved IP address'
+      /documents/2:
+        - 'Document URL must not point to a private or reserved IP address'
+      /documents/3:
+        - 'Document URL must not point to a private or reserved IP address'
+      /documents/4:
+        - 'Document URL must use the http or https scheme'
+      /provider:
+        - "A public organisation with ID 'f2f6bdae-7767-4230-9570-309b42392d1b' does not exist"

@@ -64,6 +64,8 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     file_put_contents("public://assessment-test/evil.exe", "qux");
     file_put_contents("public://assessment-test/fat.docx", str_repeat("x", 11000000));
     file_put_contents("public://assessment-test/" . str_repeat('very_', 48) . 'long_name.pdf', 'quxx');
+    // Used by the "Cardinality exceeded" scenario.
+    file_put_contents("public://assessment-test/report.pdf", "foo");
 
     ['payload' => $payload, 'expect' => $expect] = $this->getTestCase($scenario);
     $response = $this->post($payload);
@@ -86,6 +88,8 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
       'Missing country for a non-EU organisation',
       'Trying to create an EU organisation',
       'UniqueItems violations',
+      'Cardinality exceeded',
+      'SSRF private addresses',
     ];
 
     foreach ($scenarios as $scenario) {

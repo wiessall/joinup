@@ -654,6 +654,20 @@ class AssessmentReportResource extends ResourceBase {
       'fulfilled' => function (Response $response, string $key) use ($report, &$tempPaths): void {
         $tempPath = $tempPaths[$key] ?? NULL;
         unset($tempPaths[$key]);
+        // Redirects are disabled (SSRF-safety); treat any non-2xx response as
+        // an error so a 3xx body doesn't get attached as the document itself.
+        if ($response->getStatusCode() >= 300) {
+          if ($tempPath !== NULL) {
+            try {
+              $this->fileSystem->unlink($tempPath);
+            }
+            catch (\Throwable) {
+            }
+          }
+          [$path] = explode(':', $key, 2);
+          $this->addError($path, "Error downloading file: {$response->getStatusCode()} {$response->getReasonPhrase()}");
+          return;
+        }
         $this->uploadFile($response, $key, $report, $tempPath);
       },
       'rejected' => function (\Throwable $reason, string $key) use (&$tempPaths): void {
