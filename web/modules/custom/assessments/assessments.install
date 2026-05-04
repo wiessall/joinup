@@ -48,7 +48,7 @@ function assessments_schema(): array {
 /**
  * Enable translation for Assessment Statement entities.
  */
-function assessments_update_201200(array &$sandbox): void {
+function assessments_update_201300(array &$sandbox): void {
   $updateManager = \Drupal::entityDefinitionUpdateManager();
   $entityTypeId = 'assessment_statement';
   $entityType = $updateManager->getEntityType($entityTypeId);
