@@ -40,22 +40,22 @@ class JoinupEventContext extends RawDrupalContext {
    */
   #[BeforeNodeCreate]
   public static function massageEventFieldsBeforeNodeCreate(BeforeNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
-    if ($node->type !== 'event') {
+    $node = $scope->getStub();
+    if ($node->getBundle() !== 'event') {
       return;
     }
 
     foreach (['field_event_date:value', 'field_event_date:end_value'] as $field) {
-      if (isset($node->$field)) {
-        $node->$field = date(DateTimeItemInterface::DATETIME_STORAGE_FORMAT, strtotime($node->$field));
+      if ($node->hasValue($field)) {
+        $node->setValue($field, date(DateTimeItemInterface::DATETIME_STORAGE_FORMAT, strtotime($node->getValue($field))));
       }
     }
 
     // In normal usage an event cannot be created without either a physical or
     // virtual location. If the scenario doesn't specify either of those,
     // provide a default value so that we don't run into unspecified behaviour.
-    if (empty($node->field_location) && empty($node->field_event_online_location)) {
-      $node->field_event_online_location = "0: No man's land - 1: http://www.no-mans-land-meetup.com";
+    if (empty($node->getValue('field_location')) && empty($node->getValue('field_event_online_location'))) {
+      $node->setValue('field_event_online_location', "0: No man's land - 1: http://www.no-mans-land-meetup.com");
     }
   }
 

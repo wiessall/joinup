@@ -33,16 +33,16 @@ class JoinupDocumentContext extends RawDrupalContext {
    */
   #[BeforeNodeCreate]
   public function massageDocumentFieldsBeforeNodeCreate(BeforeNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
+    $node = $scope->getStub();
 
-    if ($node->type !== 'document') {
+    if ($node->getBundle() !== 'document') {
       return;
     }
 
     // The document type is a required field and in normal usage a document
     // cannot be created without it. If the scenario doesn't specify a type,
     // default to 'document'.
-    $node->field_type = $node->field_type ?? 'document';
+    $node->setValue('field_type', $node->getValue('field_type') ?? 'document');
   }
 
 }

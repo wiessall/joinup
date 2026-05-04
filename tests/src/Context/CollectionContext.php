@@ -142,8 +142,8 @@ class CollectionContext extends RawDrupalContext {
    */
   #[BeforeNodeCreate]
   public function defaultCollectionValues(BeforeNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
-    if ($node->type !== 'collection') {
+    $node = $scope->getStub();
+    if ($node->getBundle() !== 'collection') {
       return;
     }
 
@@ -153,8 +153,8 @@ class CollectionContext extends RawDrupalContext {
     ];
 
     foreach ($default_values as $field => $default_value) {
-      if (!isset($node->{$field})) {
-        $node->{$field} = $default_value;
+      if (!$node->hasValue($field)) {
+        $node->setValue($field, $default_value);
       }
     }
 
@@ -170,8 +170,8 @@ class CollectionContext extends RawDrupalContext {
     ];
 
     foreach ($mapping as $field => $values) {
-      if (isset($node->{$field}) && isset($values[$node->{$field}])) {
-        $node->{$field} = $values[$node->{$field}];
+      if ($node->hasValue($field) && isset($values[$node->getValue($field)])) {
+        $node->setValue($field, $values[$node->getValue($field)]);
       }
     }
   }
@@ -487,10 +487,10 @@ class CollectionContext extends RawDrupalContext {
    */
   #[BeforeNodeCreate]
   public function provideCollection(BeforeNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
+    $node = $scope->getStub();
 
     // Skip if a collection or solution has been assigned.
-    if (!empty($node->collection) || !empty($node->solution) || !empty($node->{OgGroupAudienceHelper::DEFAULT_FIELD})) {
+    if (!empty($node->getValue('collection')) || !empty($node->getValue('solution')) || !empty($node->getValue(OgGroupAudienceHelper::DEFAULT_FIELD))) {
       return;
     }
 
@@ -502,8 +502,8 @@ class CollectionContext extends RawDrupalContext {
     ];
 
     // Only deal with collection content.
-    if (in_array($node->type, $collection_content_bundles, TRUE)) {
-      $node->collection = $this->getJoinupCollection()->label();
+    if (in_array($node->getBundle(), $collection_content_bundles, TRUE)) {
+      $node->setValue('collection', $this->getJoinupCollection()->label());
     }
   }
 

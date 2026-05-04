@@ -466,9 +466,10 @@ class JoinupGroupContext extends RawDrupalContext {
    */
   #[BeforeNodeCreate]
   public function beforeNodeCreateMetaEntity(BeforeNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
-    if ($node->type === 'collection' || $node->type === 'solution') {
-      $meta_entity_type = $node->type . '_settings';
+    $node = $scope->getStub();
+    $type = $node->getBundle();
+    if ($type === 'collection' || $type === 'solution') {
+      $meta_entity_type = $type . '_settings';
       $meta_entity = MetaEntity::create([
         'type' => $meta_entity_type,
       ]);
@@ -491,12 +492,13 @@ class JoinupGroupContext extends RawDrupalContext {
       ];
 
       foreach ($meta_fields as $field) {
-        if (property_exists($node, $field)) {
-          $meta_entity->set($field, $fieldMapping[$field][$node->$field] ?? $node->$field);
-          unset($node->$field);
+        if ($node->hasValue($field)) {
+          $value = $node->getValue($field);
+          $meta_entity->set($field, $fieldMapping[$field][$value] ?? $value);
+          $node->removeValue($field);
         }
       }
-      $node->$meta_entity_type = $meta_entity;
+      $node->setValue($meta_entity_type, $meta_entity);
     }
   }
 

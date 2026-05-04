@@ -163,7 +163,7 @@ class JoinupUserContext extends RawDrupalContext {
    */
   #[BeforeUserCreate]
   public static function massageFieldsBeforeUserCreate(BeforeUserCreateScope $scope): void {
-    $user = $scope->getEntity();
+    $user = $scope->getStub();
 
     self::convertObjectPropertyValues($user, 'status', [
       'blocked' => 0,
@@ -176,17 +176,18 @@ class JoinupUserContext extends RawDrupalContext {
       'access',
     ];
     foreach ($date_fields as $field) {
-      if (property_exists($user, $field) && !empty($user->{$field})) {
+      if ($user->hasValue($field) && !empty($user->getValue($field))) {
+        $value = $user->getValue($field);
         // If the entry is not numeric, then it means that the scenario is
         // using a human readable version of the timestamp.
         // Example: Sun, 01 Dec 2019 13:00:00 +0100.
         // This will allow dynamic tests as well. `strtotime` will also be
         // able to receive entries like "1 day ago" or "+1 month".
-        if (!is_numeric($user->{$field})) {
+        if (!is_numeric($value)) {
           // The strtotime() PHP function is using the default timezone when
           // doing the conversion. But we want to stick to UTC in order
           // to avoid timezone and DST issue.
-          $user->{$field} = date('U', strtotime($user->{$field}));
+          $user->setValue($field, date('U', strtotime($value)));
         }
       }
     }

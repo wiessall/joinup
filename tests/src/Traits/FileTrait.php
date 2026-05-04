@@ -169,8 +169,8 @@ trait FileTrait {
   /**
    * Creates a paragraph for as a resource paragraph.
    *
-   * @param \stdClass $node
-   *   The node object containing the resource information.
+   * @param \Drupal\Driver\Entity\EntityStubInterface $node
+   *   The entity stub containing the resource information.
    * @param string $fieldName
    *   The name of the field to create the paragraph for, defaults to
    *   'resources'.
@@ -181,9 +181,10 @@ trait FileTrait {
    * @return \Drupal\paragraphs\Entity\Paragraph
    *   The created paragraph.
    */
-  protected function createResourceFileParagraph(\stdClass $node, string $fieldName = 'resources', bool $random = FALSE): ?Paragraph {
+  protected function createResourceFileParagraph(\Drupal\Driver\Entity\EntityStubInterface $node, string $fieldName = 'resources', bool $random = FALSE): ?Paragraph {
+    $fieldValue = $node->getValue($fieldName);
     // Ensure that the value is not empty or a random value is requested.
-    assert(!empty($node->{$fieldName}) || $random);
+    assert(!empty($fieldValue) || $random);
 
     $availableFiles = $this->listFilesInFixtures();
     $type = 'remote';
@@ -192,9 +193,9 @@ trait FileTrait {
       $fileName = $availableFiles[array_rand($availableFiles)];
       $type = 'local';
     }
-    elseif (!empty($node->{$fieldName}) && in_array($node->{$fieldName}, $availableFiles)) {
+    elseif (!empty($fieldValue) && in_array($fieldValue, $availableFiles)) {
       // If the field is not empty, use the provided value.
-      $fileName = $node->{$fieldName};
+      $fileName = $fieldValue;
       $type = 'local';
     }
 
@@ -212,13 +213,13 @@ trait FileTrait {
     else {
       $paragraph = Paragraph::create([
         'type' => 'resource_link',
-        'remote_file_url' => $node->resources,
+        'remote_file_url' => $node->getValue('resources'),
       ]);
     }
     $paragraph->save();
-    $node->{"resources:target_id"} = $paragraph->id();
-    $node->{"resources:target_revision_id"} = $paragraph->getRevisionId();
-    unset($node->resources);
+    $node->setValue('resources:target_id', $paragraph->id());
+    $node->setValue('resources:target_revision_id', $paragraph->getRevisionId());
+    $node->removeValue('resources');
 
     return $paragraph;
   }

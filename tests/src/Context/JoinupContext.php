@@ -619,7 +619,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * @param object $node
    *   The Behat node stub (the same object passed to BeforeNodeCreate and
-   *   AfterNodeCreate scopes via $scope->getEntity()).
+   *   AfterNodeCreate scopes via $scope->getStub()).
    * @param string $key
    *   The original property name (before stripping).
    *
@@ -649,27 +649,26 @@ class JoinupContext extends RawDrupalContext {
    */
   #[BeforeNodeCreate]
   public function massageFieldsBeforeNodeCreate(BeforeNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
-    $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', $node->type);
+    $node = $scope->getStub();
+    $type = $node->getBundle();
+    $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', $type);
     // Replace field label aliases with the actual field names.
-    foreach (get_object_vars($node) as $alias => $value) {
-      $name = $this->getNodeFieldNameFromAlias($node->type, $alias);
+    foreach ($node->getValues() as $alias => $value) {
+      $name = $this->getNodeFieldNameFromAlias($type, $alias);
       if ($name !== $alias) {
-        unset($node->$alias);
+        $node->removeValue($alias);
         // Don't set empty values, since we can have multiple aliases that point
         // to the same field (e.g. 'collection' and 'solution' both use the same
         // 'og_audience' field).
         if (!empty($value)) {
-          $node->$name = $value;
+          $node->setValue($name, $value);
         }
       }
       // Add the body field format.
       if ($name === 'body' || $name === 'description') {
-        $value_key = "{$name}:value";
-        $format_key = "{$name}:format";
-        $node->{$value_key} = $value;
-        $node->{$format_key} = 'content_editor';
-        unset($node->{$name});
+        $node->setValue("{$name}:value", $value);
+        $node->setValue("{$name}:format", 'content_editor');
+        $node->removeValue($name);
       }
       if ($name === 'webpage' && filter_var($value, FILTER_VALIDATE_URL)) {
         // \Drupal\Driver\Fields\Drupal8\LinkHandler::expand() expects the
@@ -680,24 +679,25 @@ class JoinupContext extends RawDrupalContext {
         // the data into an array and the LinkHandler will handle it correctly.
         // @see \Drupal\Driver\Fields\Drupal8\LinkHandler::expand()
         // @see \Drupal\DrupalExtension\Context\RawDrupalContext::parseEntityFields()
-        $node->webpage = "$value - $value";
+        $node->setValue('webpage', "$value - $value");
       }
     }
 
-    if (!empty($node->field_attachment)) {
+    if (!empty($node->getValue('field_attachment'))) {
       $environment = $scope->getEnvironment();
       /** @var self $context */
       $context = $environment->getContext(self::class);
-      $node->field_attachment = $context->parseFileBehatValue($node->field_attachment);
+      $node->setValue('field_attachment', $context->parseFileBehatValue($node->getValue('field_attachment')));
     }
 
     // Replace collection and solution group references that use titles with the
     // actual URI. Note that this fails if a URI is supplied for a collection or
     // solution in a Behat test. This is by design, the URIs are not exposed to
     // end users of the site so they should not be used in BDD scenarios.
-    if (!empty($node->{OgGroupAudienceHelperInterface::DEFAULT_FIELD})) {
-      $entity = $this->getEntityByLabel('node', $node->{OgGroupAudienceHelperInterface::DEFAULT_FIELD});
-      $node->{OgGroupAudienceHelperInterface::DEFAULT_FIELD} = $entity->id();
+    $audienceField = OgGroupAudienceHelperInterface::DEFAULT_FIELD;
+    if (!empty($node->getValue($audienceField))) {
+      $entity = $this->getEntityByLabel('node', $node->getValue($audienceField));
+      $node->setValue($audienceField, $entity->id());
     }
 
     // Replace the human readable publication statuses with the boolean values
@@ -708,38 +708,39 @@ class JoinupContext extends RawDrupalContext {
     ]);
 
     // Replace human readable workflow states with machine names.
-    if (!empty($node->field_state)) {
-      $node->field_state = self::translateWorkflowStateAlias($node->field_state);
+    if (!empty($node->getValue('field_state'))) {
+      $node->setValue('field_state', self::translateWorkflowStateAlias($node->getValue('field_state')));
     }
-    elseif (!empty($field_definitions['field_state']) && empty($node->field_state) && $node->type != 'contact_information') {
-      $node->field_state = 'published';
+    elseif (!empty($field_definitions['field_state']) && empty($node->getValue('field_state')) && $type != 'contact_information') {
+      $node->setValue('field_state', 'published');
     }
 
-    if (property_exists($node, 'visit_count')) {
-      $node->visit_count = MetaEntity::create([
+    if ($node->hasValue('visit_count')) {
+      $node->setValue('visit_count', MetaEntity::create([
         'type' => 'visit_count',
-        'count' => (int) $node->visit_count,
-      ]);
+        'count' => (int) $node->getValue('visit_count'),
+      ]));
     }
 
-    if (property_exists($node, 'published_at') && !empty($node->published_at)) {
+    if ($node->hasValue('published_at') && !empty($node->getValue('published_at'))) {
+      $published_at = $node->getValue('published_at');
       // If the entry is not numeric, then it means that the scenario is using a
       // human readable version of the timestamp.
       // Example: Sun, 01 Dec 2019 13:00:00 +0100.
       // This will allow dynamic tests as well. `strtotime` will also be able to
       // receive entries like "1 day ago" or "+1 month".
-      if (!is_numeric($node->published_at)) {
+      if (!is_numeric($published_at)) {
         // The strtotime() PHP function is using the default timezone when doing
         // the conversion. But we want to stick to UTC in order to avoid
         // timezone and DST issue.
-        $node->published_at = date('U', strtotime($node->published_at));
+        $node->setValue('published_at', date('U', strtotime($published_at)));
       }
     }
 
-    if (property_exists($node, 'uid') && !empty($node->uid) && !is_numeric($node->uid)) {
-      $user = user_load_by_name($node->uid);
+    if ($node->hasValue('uid') && !empty($node->getValue('uid')) && !is_numeric($node->getValue('uid'))) {
+      $user = user_load_by_name($node->getValue('uid'));
       if ($user) {
-        $node->uid = $user->id();
+        $node->setValue('uid', $user->id());
       }
     }
 
@@ -752,63 +753,63 @@ class JoinupContext extends RawDrupalContext {
       'logo',
     ];
     foreach ($image_fields as $image_field) {
-      if (!empty($node->$image_field)) {
-        $node->$image_field = $this->parseFileBehatValue($node->$image_field);
+      if (!empty($node->getValue($image_field))) {
+        $node->setValue($image_field, $this->parseFileBehatValue($node->getValue($image_field)));
       }
     }
 
-    if (isset($node->field_paragraphs_body)) {
+    if ($node->hasValue('field_paragraphs_body')) {
       $paragraph = Paragraph::create([
         'type' => 'simple_paragraph',
         'field_body' => [
-          'value' => $node->field_paragraphs_body,
+          'value' => $node->getValue('field_paragraphs_body'),
           'format' => 'content_editor',
         ],
       ]);
       $paragraph->save();
-      $node->{"field_paragraphs_body:target_id"} = $paragraph->id();
-      $node->{"field_paragraphs_body:target_revision_id"} = $paragraph->getRevisionId();
-      unset($node->field_paragraphs_body);
+      $node->setValue('field_paragraphs_body:target_id', $paragraph->id());
+      $node->setValue('field_paragraphs_body:target_revision_id', $paragraph->getRevisionId());
+      $node->removeValue('field_paragraphs_body');
     }
 
-    if (!empty($field_definitions['field_topic']) && empty($node->field_topic)) {
+    if (!empty($field_definitions['field_topic']) && empty($node->getValue('field_topic'))) {
       // For some tests, the node's topic has no relevance. Such tests are
       // allowed to omit an explicit topic. We're assigning a random topic term,
       // to satisfy data integrity and prevent form validation errors.
-      $node->field_topic = $this->getRandomTerm('topic', TRUE)->label();
+      $node->setValue('field_topic', $this->getRandomTerm('topic', TRUE)->label());
     }
 
-    if (!empty($field_definitions['contact']) && !isset($node->contact)) {
-      $node->contact = $this->getDefaultContact()->label();
+    if (!empty($field_definitions['contact']) && !$node->hasValue('contact')) {
+      $node->setValue('contact', $this->getDefaultContact()->label());
     }
-    if (!empty($field_definitions['owner']) && !isset($node->owner)) {
-      $node->owner = $this->getDefaultOwner()->label();
+    if (!empty($field_definitions['owner']) && !$node->hasValue('owner')) {
+      $node->setValue('owner', $this->getDefaultOwner()->label());
     }
-    if (!empty($field_definitions['abstract']) && !isset($node->abstract)) {
-      $node->abstract = 'default abstract';
+    if (!empty($field_definitions['abstract']) && !$node->hasValue('abstract')) {
+      $node->setValue('abstract', 'default abstract');
     }
 
-    if (!empty($field_definitions['description']) && empty($node->description)) {
-      $node->description = 'default description';
+    if (!empty($field_definitions['description']) && empty($node->getValue('description'))) {
+      $node->setValue('description', 'default description');
     }
-    if (!empty($field_definitions['solution_type']) && empty($node->solution_type)) {
-      $node->solution_type = $this->getRandomTerm('solution_type', TRUE)->label();
+    if (!empty($field_definitions['solution_type']) && empty($node->getValue('solution_type'))) {
+      $node->setValue('solution_type', $this->getRandomTerm('solution_type', TRUE)->label());
     }
-    if (!empty($field_definitions['keywords']) && empty($node->keywords)) {
-      $node->keywords = $this->getRandomTerm('tags')->label();
+    if (!empty($field_definitions['keywords']) && empty($node->getValue('keywords'))) {
+      $node->setValue('keywords', $this->getRandomTerm('tags')->label());
     }
-    if (!empty($field_definitions['classification']) && empty($node->classification)) {
-      $node->classification = $this->getRandomTerm('solution_classification')->label();
+    if (!empty($field_definitions['classification']) && empty($node->getValue('classification'))) {
+      $node->setValue('classification', $this->getRandomTerm('solution_classification')->label());
     }
-    if (!empty($field_definitions['domain']) && empty($node->domain)) {
-      $node->domain = $this->getRandomTerm('domain')->label();
+    if (!empty($field_definitions['domain']) && empty($node->getValue('domain'))) {
+      $node->setValue('domain', $this->getRandomTerm('domain')->label());
     }
-    if (!empty($field_definitions['language']) && empty($node->language)) {
-      $node->language = 'Bulgarian';
+    if (!empty($field_definitions['language']) && empty($node->getValue('language'))) {
+      $node->setValue('language', 'Bulgarian');
     }
 
     // Handle file URL fields.
-    if (!empty($node->resources)) {
+    if (!empty($node->getValue('resources'))) {
       $this->createResourceFileParagraph($node);
     }
 
@@ -834,9 +835,9 @@ class JoinupContext extends RawDrupalContext {
     ];
     $objectId = spl_object_id($node);
     foreach ($metaProperties as $property) {
-      if (isset($node->$property)) {
-        self::$strippedNodeProperties[$objectId][$property] = $node->$property;
-        unset($node->$property);
+      if ($node->hasValue($property)) {
+        self::$strippedNodeProperties[$objectId][$property] = $node->getValue($property);
+        $node->removeValue($property);
       }
     }
   }
@@ -849,7 +850,7 @@ class JoinupContext extends RawDrupalContext {
    */
   #[AfterNodeCreate]
   public function ensureLogoAltText(AfterNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
+    $node = $scope->getStub();
 
     $logo_fields = [
       'collection' => 'logo',
@@ -861,12 +862,12 @@ class JoinupContext extends RawDrupalContext {
       'news' => 'field_news_logo',
     ];
 
-    $field_name = $logo_fields[$node->type] ?? NULL;
+    $field_name = $logo_fields[$node->getBundle()] ?? NULL;
     if (!$field_name) {
       return;
     }
 
-    $entity = \Drupal::entityTypeManager()->getStorage('node')->load($node->nid);
+    $entity = \Drupal::entityTypeManager()->getStorage('node')->load($node->getValue('nid'));
     if ($entity && $entity->hasField($field_name) && !$entity->get($field_name)->isEmpty() && empty($entity->get($field_name)->alt)) {
       $entity->get($field_name)->alt = $entity->label();
       // Preserve the original changed timestamp.
