@@ -420,10 +420,6 @@ module.exports = {
           entry: "components/user--group-header.scss",
           dest: "user--group-header.min.css",
         },
-        {
-          entry: "components/user-badge.scss",
-          dest: "user-badge.min.css",
-        },
         // Layout Paragraphs - buidler UI.
         {
           entry: "components/layout-paragraphs--builder.scss",

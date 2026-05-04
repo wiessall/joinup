@@ -17,8 +17,8 @@ dependencies:
     - field.field.user.user.field_user_professional_domain
     - responsive_image.styles.tile
   module:
+    - responsive_image
     - smart_trim
-    - svg_image_responsive
     - template_suggestion
     - user
 id: user.user.view_mode_tile
@@ -94,7 +94,6 @@ content:
     weight: 5
     region: content
 hidden:
-  badges: true
   block_user: true
   blocked_reason: true
   field_social_media: true
