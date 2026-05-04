@@ -8,7 +8,7 @@ Feature:
     Given the following "collection" content:
       | title                        |
       | Gravitational wave detectors |
-    And <type> content:
+    And the following "<type>" content:
       | title | created                   | <publication field name>  | changed                   | collection                   |
       | LIGO  | Wed, 25 Dec 2019 13:00:00 | Wed, 25 Dec 2019 14:00:00 | Wed, 25 Dec 2019 15:00:00 | Gravitational wave detectors |
 

@@ -9,13 +9,13 @@ Feature:
 
     When I click Topics
     Then I should see the heading "Topics"
-    And I should see "eGov" in the "Supplier exchange" row
-    And I should see "Economy and Welfare" in the "Finance in EU" row
-    And I should see "E-health Dpt." in the "E-health" row
-    And I should see "HR Dpt." in the "Employment and Support Allowance" row
-    And I should see "HR Dpt." in the "HR" row
+    And I should see the text "eGov" in the "Supplier exchange" row
+    And I should see the text "Economy and Welfare" in the "Finance in EU" row
+    And I should see the text "E-health Dpt." in the "E-health" row
+    And I should see the text "HR Dpt." in the "Employment and Support Allowance" row
+    And I should see the text "HR Dpt." in the "HR" row
     # The meta entity is unpublished by default.
-    And I should see "No" in the "E-justice" row
+    And I should see the text "No" in the "E-justice" row
     # Sorting by parent not allowed.
     And I should not see the link "Parent topic"
 
@@ -26,12 +26,12 @@ Feature:
     And I press "Save"
 
     # The meta entity is now marked as published.
-    And I should see "Yes" in the "E-justice" row
+    And I should see the text "Yes" in the "E-justice" row
     And I should see the heading "Topics"
 
     # The following is not reproducible in the UI but is a backend test for
     # future changes in the topic vocabulary.
-    Given "topic" terms:
+    Given the following "topic" terms:
       | tid                          | name        | description  |
       | http://some.topic/BlueParent | Blue parent | Hello there. |
     When I reload the page
@@ -420,7 +420,7 @@ Feature:
 
   @javascript
   Scenario Outline: Images should be shown for tile-two view modes.
-    Given <type> content:
+    Given the following "<type>" content:
       | title       | headline    | short title | logo       |
       | Custom tile | Custom tile | Custom tile | linus.jpeg |
     And the following topics are enabled in the homepage:

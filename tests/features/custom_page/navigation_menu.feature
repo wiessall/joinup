@@ -5,7 +5,7 @@ Feature: Navigation menu for custom pages
   I need to be able to manage the navigation menu
 
   Scenario Outline: Access the navigation menu through the contextual link
-    Given <group> content:
+    Given the following "<group>" content:
       | title          |
       | Rainbow tables |
     When I am logged in as a facilitator of the "Rainbow tables" <group>

@@ -15,15 +15,15 @@ Feature: Assessment listing tests.
 
     Given I am logged in as a user with the "Assessment moderator" role
     When I visit "/admin/content/assessment"
-    Then I should see "Moderate" in the "Review Report" row
-    And I should not see "Moderate" in the "Draft Report" row
-    And I should not see "Moderate" in the "Published Report" row
+    Then I should see the text "Moderate" in the "Review Report" row
+    And I should not see the text "Moderate" in the "Draft Report" row
+    And I should not see the text "Moderate" in the "Published Report" row
 
     Given I am logged in as a user with the "Moderator" role
     When I visit "/admin/content/assessment"
-    Then I should not see "Moderate" in the "Review Report" row
-    And I should not see "Moderate" in the "Draft Report" row
-    And I should not see "Moderate" in the "Published Report" row
+    Then I should not see the text "Moderate" in the "Review Report" row
+    And I should not see the text "Moderate" in the "Draft Report" row
+    And I should not see the text "Moderate" in the "Published Report" row
 
   Scenario: ID links on admin listing page navigate to correct assessment page
     Given report assessments:

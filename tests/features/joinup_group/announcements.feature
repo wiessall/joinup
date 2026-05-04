@@ -5,7 +5,7 @@ Feature: Messaging group announcements
   @group-e
   Scenario Outline: Announcement creation and transitions
 
-    Given <group> content:
+    Given the following "<group>" content:
       | title        | state     |
       | Fail pension | published |
       | Hidden gems  | draft     |
@@ -127,7 +127,7 @@ Feature: Messaging group announcements
     And I should see the link "Add announcement"
     # The facilitator has exhausted all operations they can perform, so they
     # cannot edit the announcement anymore.
-    And I should not see "edit" in the "The Big Opening is postponed" row
+    And I should not see the text "edit" in the "The Big Opening is postponed" row
     # ...but they can still see the message in read-only mode.
     When I click "The Big Opening is postponed"
     Then I should see the warning message "This announcement is in read-only mode because is pending for moderators approval."
@@ -260,7 +260,7 @@ Feature: Messaging group announcements
 
     And I should see the link "Add announcement"
     # The announcement cannot be edited anymore...
-    But I should not see "edit" in the "The Big Opening is postponed" row
+    But I should not see the text "edit" in the "The Big Opening is postponed" row
     # ...but it can be visualized in read-only mode.
     When I click "The Big Opening is postponed"
     Then I should see the warning message "This announcement is in read-only mode because it has been already delivered."

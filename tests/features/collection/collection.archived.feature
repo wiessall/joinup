@@ -21,7 +21,7 @@ Feature: Creating content and commenting on archived collection
       | The Willing Consort | Karl Fields | owner, facilitator |
 
   Scenario Outline: 'Comment form' should not be accessible on an archived collection content.
-    Given <content_type> content:
+    Given the following "<content_type>" content:
       | title            | collection   | solution   |
       | Commented entity | <collection> | <solution> |
     When I am logged in as "Lee Reeves"

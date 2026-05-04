@@ -11,7 +11,7 @@ Feature: Freeze comments on archived content
       | Sons of anarchy | sons-of-anarchy@example.com |       | Sons       | Anarchy     |
 
   Scenario Outline: Comment in 'View Only' state.
-    Given <type> content:
+    Given the following "<type>" content:
       | title                              | body      | collection        | state    |
       | Test freeze of comments for <type> | body test | Gossip collection | archived |
     And comments:

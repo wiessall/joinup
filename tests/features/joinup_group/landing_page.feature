@@ -11,7 +11,7 @@ Feature: Tests the group landing page customization.
   - As a group facilitator, when I visit my group, I cannot set a landing page.
   """
 
-    Given <group> content:
+    Given the following "<group>" content:
       | title               | description                         |
       | <group> group       | The <group> arbitrary description   |
       | other <group> group | Other <group> arbitrary description |

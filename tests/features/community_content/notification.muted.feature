@@ -24,7 +24,7 @@ Feature: Notifications are muted when entity is archived/unarchived.
       | Milky Way  | kalin  | document, event                               |
 
   Scenario Outline: Updates to archive and unarchive state does not trigger notifications.
-    Given <type> content:
+    Given the following "<type>" content:
       | title            | collection | body | headline    |
       | Milky Way <type> | Milky Way  | Test | Test <type> |
     And I mark all emails as read

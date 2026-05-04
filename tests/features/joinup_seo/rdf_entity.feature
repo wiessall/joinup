@@ -5,7 +5,7 @@ Feature: SEO for RDF entities.
   I need proper meta information to be encapsulated in the html code.
 
   Scenario Outline: Basic JSON meta information for collections and solutions.
-    Given <type> content:
+    Given the following "<type>" content:
       | title      |
       | SEO entity |
 

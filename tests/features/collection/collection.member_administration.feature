@@ -177,7 +177,7 @@ Feature: Collection membership administration
     Then I should see the success message "The following members were removed from the 'Medical diagnosis' collection: Gregory House, Turkey Ham"
     And Log entry with the message "Membership for Kathie Cumbershot in Medical diagnosis has been deleted by Lisa Cuddy." should exist.
     And Log entry with the message "Membership for Turkey Ham in Medical diagnosis has been deleted by Lisa Cuddy." should exist.
-    And I should see "Lisa Cuddy" in the "Lisa Cuddy" row
+    And I should see the text "Lisa Cuddy" in the "Lisa Cuddy" row
 
     # Check new privileges.
     When I am logged in as "Kathie Cumbershot"

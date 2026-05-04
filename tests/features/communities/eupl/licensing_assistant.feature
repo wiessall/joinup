@@ -85,7 +85,7 @@ Feature:
     And I should see the link "Edit tooltip descriptions"
     When I click "Edit tooltip descriptions"
     Then I should see the heading "Legal type"
-    And I should not see "View draft" in the "Use/reproduce" row
+    And I should not see the text "View draft" in the "Use/reproduce" row
     When I click "Edit" in the "Use/reproduce" row
     Then I should see the heading "Edit term"
     And the following fields should not be disabled "Name"
