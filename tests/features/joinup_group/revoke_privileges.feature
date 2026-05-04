@@ -8,13 +8,13 @@ Feature: Revoke privileges from former and blocked members
     Given users:
       | Username  |
       | Lord Hong |
-    And collection content:
+    And the following "collection" content:
       | title             |
       | Interesting times |
     And the following collection user memberships:
       | collection        | user      |
       | Interesting times | Lord Hong |
-    And news content:
+    And the following "news" content:
       | title             | body               | author    | collection        |
       | Join the Red Army | Free the prisoners | Lord Hong | Interesting times |
 

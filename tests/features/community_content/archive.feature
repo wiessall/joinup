@@ -2,12 +2,12 @@
 Feature: Content archival.
 
   Scenario: All community content can be archived any time.
-    Given collection content:
+    Given the following "collection" content:
       # Set the moderation to yes to be able to access all states. Deletion
       # request is not available in a post moderation workflow.
       | title           | moderation |
       | Some collection | yes        |
-    Given discussion content:
+    Given the following "discussion" content:
       | title           | collection      | body | content | changed          |
       | Test discussion | Some collection | Test | Test    | 2017-11-17 20:00 |
     When I am logged in as a moderator
@@ -31,7 +31,7 @@ Feature: Content archival.
     And the current workflow state should be "Published"
 
   Scenario Outline: All community content using layout paragraphs can be archived any time.
-    Given collection content:
+    Given the following "collection" content:
       # Set the moderation to yes to be able to access all states. Deletion
       # request is not available in a post moderation workflow.
       | title           | moderation |
@@ -67,7 +67,7 @@ Feature: Content archival.
       | news     | News       |
 
   Scenario Outline: User should not be allowed unarchiving content of an archived solution.
-    Given solution content:
+    Given the following "solution" content:
       | title             | state    |
       | Cartridge cleaner | archived |
     Given <type> content:
@@ -91,7 +91,7 @@ Feature: Content archival.
       # request is not available in a post moderation workflow.
       | title      | moderation |
       | Some group | yes        |
-    Given discussion content:
+    Given the following "discussion" content:
       | title           | <group type> | body | content |
       | Test discussion | Some group   | Test | Test    |
     When I am logged in as a facilitator of the "Some group" <group type>

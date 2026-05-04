@@ -5,7 +5,7 @@ Feature: SEO for news articles.
   I need proper metatag to be encapsulated in the html code.
 
   Scenario Outline: Basic metatags are attached as JSON schema on the page.
-    Given collection content:
+    Given the following "collection" content:
       | title                       |
       | Joinup SEO event collection |
     And users:
@@ -88,7 +88,7 @@ Feature: SEO for news articles.
       | 0: Some url - 1: http://some-random-event-url | http://some-random-event-url                                               | Rue Belliard 28, Brussels, Belgium | Rue Belliard 28   |
 
   Scenario: Events without physical address but with online location should still show the online location.
-    Given collection content:
+    Given the following "collection" content:
       | title                       |
       | Joinup SEO event collection |
     And users:

@@ -37,7 +37,7 @@ Feature: Solutions message overview
     Given users:
       | Username   | Roles     |
       | Weinberger | moderator |
-    And owner content:
+    And the following "owner" content:
       | name                 | owner type |
       | Organisation example | Company    |
     And I am logged in as an "authenticated user"

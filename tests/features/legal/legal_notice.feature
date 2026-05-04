@@ -175,7 +175,7 @@ Feature:
     And CAS users:
       | Username        | E-mail                  | Password | Local username  |
       | Sergeant Pepper | pepper@royalnavy.mod.uk | p3pp3r   | Sergeant Pepper |
-    And collection content:
+    And the following "collection" content:
       | title              |
       | Land of submarines |
 

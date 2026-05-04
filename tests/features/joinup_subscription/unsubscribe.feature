@@ -8,7 +8,7 @@ Feature: Unsubscribe from collections
     Given user:
       | Username | Eric Cartman             |
       | E-mail   | eric.cartman@example.com |
-    And collection content:
+    And the following "collection" content:
       | title                | state     |
       | Southpark elementary | published |
       | Kenny's house        | draft     |
@@ -22,7 +22,7 @@ Feature: Unsubscribe from collections
       | Kenny's house        | Eric Cartman | discussion, document, event, news |
 
   Scenario: Unsubscribe from all groups
-    Given collection content:
+    Given the following "collection" content:
       | title          | state    |
       | Koon's hideout | proposed |
     And the following collection user memberships:
@@ -31,7 +31,7 @@ Feature: Unsubscribe from collections
     And the following collection content subscriptions:
       | collection     | user         | subscriptions                     |
       | Koon's hideout | Eric Cartman | discussion, document, event, news |
-    Given solution content:
+    Given the following "solution" content:
       | title              | state     |
       | Poor man's Shelter | published |
       | Anna's house       | draft     |
@@ -112,7 +112,7 @@ Feature: Unsubscribe from collections
       | Greg's foxhole       |  |
 
   Scenario: Unsubscribe from a specific group.
-    Given solution content:
+    Given the following "solution" content:
       | title                  | state     |
       | Not member in this one | published |
 

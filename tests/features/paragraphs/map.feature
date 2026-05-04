@@ -4,7 +4,7 @@ Feature:
   I need to be able to use "map" paragraphs for content.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                 | topic |
       | Paragraphs collection | HR    |
 
@@ -16,7 +16,7 @@ Feature:
     And the following collection user membership:
       | collection            | user  |
       | Paragraphs collection | Zohan |
-    And custom_page content:
+    And the following "custom_page" content:
       | title                     | abstract | body        | collection            | author | state     | topic |
       | Don't Mess with the Zohan | Wanna    | Wanna mess? | Paragraphs collection | Zohan  | published | HR    |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Don't Mess with the Zohan" title:

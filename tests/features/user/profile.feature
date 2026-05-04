@@ -103,25 +103,25 @@ Feature: User profile
       | Anise Edwardson   | anise.edwardson@example.com   |            |             |
       | Jayson Granger    | jayson.granger@example.com    |            |             |
       | Clarette Fairburn | clarette.fairburn@example.com | Clarette   | Fairburn    |
-    And collection content:
+    And the following "collection" content:
       | title                 | description                           | logo     | creation date    |
       | Botanic E.D.E.N.      | European Deep Earth Nurturing project | logo.png | 2017-02-23 10:00 |
       | Ethic flower handling | Because even flowers have feelings.   | logo.png | 2017-02-23 12:00 |
-    Given solution content:
+    Given the following "solution" content:
       | title              | collection            | description                                     | logo     | creation date    |
       | E.C.O. fertilizers | Botanic E.D.E.N.      | Ecologic cool organic fertilizers production.   | logo.png | 2017-02-23 13:00 |
       | SOUND project      | Ethic flower handling | Music playlist for growing flowers with rhythm. | logo.png | 2017-02-23 14:01 |
-    And discussion content:
+    And the following "discussion" content:
       | title                          | author          | collection            | created          |
       | Repopulating blue iris         | Corwin Robert   | Botanic E.D.E.N.      | 2018-06-15 16:00 |
       | Best topsoil for plant comfort | Anise Edwardson | Ethic flower handling | 2018-09-01 19:30 |
-    And document content:
+    And the following "document" content:
       | title                    | author        | collection       | created          |
       | Cherry blossoms schedule | Corwin Robert | Botanic E.D.E.N. | 2017-05-13 16:00 |
-    And event content:
+    And the following "event" content:
       | title                | author        | collection       | created          |
       | Spring blossom party | Corwin Robert | Botanic E.D.E.N. | 2018-06-27 18:00 |
-    And news content:
+    And the following "news" content:
       | title                         | author        | collection       | created         |
       | Discovered new flower species | Corwin Robert | Botanic E.D.E.N. | 2018-11-15 9:01 |
     And the following collection user membership:
@@ -172,7 +172,7 @@ Feature: User profile
     Given users:
       | Username      | E-mail                           |
       | Korben Dallas | k.dallas@cabs.services.zorg.corp |
-    And collection content:
+    And the following "collection" content:
       | title                   | state     |
       | Federated Army Veterans | published |
     # Visit the user profile page for the first time. It should not yet be
@@ -230,24 +230,24 @@ Feature: User profile
       | Username          | E-mail                        |
       | Janny Robert      | janny.robert@example.com      |
       | Clarise Edwardson | clarise.edwardson@example.com |
-    And collection content:
+    And the following "collection" content:
       | title         | description                           | logo     | state     | creation date    | author            |
       | Lake E.D.E.N. | European Deep Earth Nurturing project | logo.png | published | 2017-02-23 10:00 | Janny Robert      |
       | Rose is red   | Better descriptions ever              | logo.png | published | 2017-02-23 10:00 | Clarise Edwardson |
       | Lone handling | Because even flowers have feelings.   | logo.png | archived  | 2017-02-23 12:00 | Janny Robert      |
-    Given solution content:
+    Given the following "solution" content:
       | title          | collection    | state     | creation date   | author       |
       | Sugar is sweet | Lake E.D.E.N. | archived  | 2015-03-03T8:00 | Janny Robert |
       | Salt is salty  | Lake E.D.E.N. | published | 2015-02-03T7:00 | Janny Robert |
-    And discussion content:
+    And the following "discussion" content:
       | title                   | author       | collection    | state     | created          |
       | Repopulating green iris | Janny Robert | Lake E.D.E.N. | published | 2018-06-15 16:00 |
       | Best plant comfort      | Janny Robert | Lone handling | published | 2018-09-01 19:30 |
-    And document content:
+    And the following "document" content:
       | title           | author       | collection    | state     | created          |
       | Cherry schedule | Janny Robert | Lake E.D.E.N. | published | 2017-05-13 16:00 |
       | Cherry arch     | Janny Robert | Lake E.D.E.N. | archived  | 2017-05-13 16:00 |
-    And news content:
+    And the following "news" content:
       | title             | author       | collection    | state     | created         |
       | Discovered flower | Janny Robert | Lake E.D.E.N. | published | 2018-11-15 9:01 |
       | Purple flower     | Janny Robert | Lake E.D.E.N. | published | 2018-11-15 9:01 |

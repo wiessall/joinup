@@ -8,7 +8,7 @@ Feature: Github feed paragraph tests.
     Given <group> content:
       | title              |
       | Paragraphs <group> |
-    And custom_page content:
+    And the following "custom_page" content:
       | title                   | <group>            | topic                   | abstract                |
       | Catalogue of paragraphs | Paragraphs <group> | Statistics and Analysis | Catalogue page abstract |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Catalogue of paragraphs" title:
@@ -81,7 +81,7 @@ Feature: Github feed paragraph tests.
     Given <group> content:
       | title              | state     |
       | Paragraphs <group> | published |
-    And custom_page content:
+    And the following "custom_page" content:
       | title                   | <group>            | state     | topic                   |
       | Catalogue of paragraphs | Paragraphs <group> | published | Statistics and Analysis |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Catalogue of paragraphs" title:

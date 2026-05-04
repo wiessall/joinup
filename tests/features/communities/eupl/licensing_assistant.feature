@@ -10,7 +10,7 @@ Feature:
       | uri                       | title            | ID       |
       | http://joinup.eu/spdx/foo | SPDX licence foo | SPDX_FOO |
       | http://joinup.eu/spdx/bar | SPDX licence bar | SPDX_BAR |
-    And licence content:
+    And the following "licence" content:
       | uri                             | title          | description                             | spdx licence     | legal type                                                            |
       | http://joinup.eu/licence/foo    | Foo Licence    | Licence details for the foo licence.    | SPDX licence foo | Strong Community, Royalty free, Modify, Governments/EU, Use/reproduce |
       | http://joinup.eu/licence/bar    | Bar Licence    | Licence details for the bar licence.    | SPDX licence bar | Distribute                                                            |
@@ -73,7 +73,7 @@ Feature:
       | uri                       | title            | ID       |
       | http://joinup.eu/spdx/foo | SPDX licence foo | SPDX_FOO |
       | http://joinup.eu/spdx/bar | SPDX licence bar | SPDX_BAR |
-    And licence content:
+    And the following "licence" content:
       | uri                             | title          | description                             | spdx licence     | legal type                                                            |
       | http://joinup.eu/licence/foo    | Foo Licence    | Licence details for the foo licence.    | SPDX licence foo | Strong Community, Royalty free, Modify, Governments/EU, Use/reproduce |
       | http://joinup.eu/licence/bar    | Bar Licence    | Licence details for the bar licence.    | SPDX licence bar | Distribute                                                            |
@@ -99,7 +99,7 @@ Feature:
       | uri                       | title            | ID       |
       | http://joinup.eu/spdx/foo | SPDX licence foo | SPDX_FOO |
       | http://joinup.eu/spdx/bar | SPDX licence bar | SPDX_BAR |
-    And licence content:
+    And the following "licence" content:
       | uri                             | title          | description                             | spdx licence     | legal type                                                            |
       | http://joinup.eu/licence/foo    | Foo Licence    | Licence details for the foo licence.    | SPDX licence foo | Strong Community, Royalty free, Modify, Governments/EU, Use/reproduce |
       | http://joinup.eu/licence/bar    | Bar Licence    | Licence details for the bar licence.    | SPDX licence bar | Distribute                                                            |
@@ -123,7 +123,7 @@ Feature:
       | http://joinup.eu/spdx/0BSD       | 0BSD       | 0BSD       |
       | http://joinup.eu/spdx/UPL-1.0    | UPL-1.0    | UPL-1.0    |
       | http://joinup.eu/spdx/LGPL-2.1   | LGPL-2.1   | LGPL-2.1   |
-    And licence content:
+    And the following "licence" content:
       | uri                               | title             | spdx licence | legal type                                                            |
       | http://joinup.eu/licence/apache20 | Interoperable Europe Portal Apache-2.0 | Apache-2.0   | Strong Community, Royalty free, Modify, Governments/EU, Use/reproduce |
       | http://joinup.eu/licence/gpl2plus | Interoperable Europe Portal GPL-2.0+   | GPL-2.0+     | Distribute                                                            |
@@ -180,7 +180,7 @@ Feature:
       | http://joinup.eu/spdx/0BSD       | 0BSD       | 0BSD       |
       | http://joinup.eu/spdx/UPL-1.0    | UPL-1.0    | UPL-1.0    |
       | http://joinup.eu/spdx/LGPL-2.1   | LGPL-2.1   | LGPL-2.1   |
-    And licence content:
+    And the following "licence" content:
       | uri                               | title                                    | spdx licence | legal type                                                            | description      |
       | http://joinup.eu/licence/apache20 | Apache License, Version 2.0              | Apache-2.0   | Strong Community, Royalty free, Modify, Governments/EU, Use/reproduce | Apache-2.0 descr |
       | http://joinup.eu/licence/gpl2plus | GNU General Public License v2.0 or later | GPL-2.0+     | Distribute                                                            | GPL-2.0+ descr   |
@@ -409,7 +409,7 @@ Feature:
       | http://joinup.eu/spdx/Apache-2.0 | Apache-2.0 | Apache-2.0 |
       | http://joinup.eu/spdx/GPL-2.0+   | GPL-2.0+   | GPL-2.0+   |
       | http://joinup.eu/spdx/BSL-1.0    | BSL-1.0    | BSL-1.0    |
-    And licence content:
+    And the following "licence" content:
       | uri                               | title             | spdx licence | legal type                                                            |
       | http://joinup.eu/licence/apache20 | Interoperable Europe Portal Apache-2.0 | Apache-2.0   | Strong Community, Royalty free, Modify, Governments/EU, Use/reproduce |
       | http://joinup.eu/licence/gpl2plus | Interoperable Europe Portal GPL-2.0+   | GPL-2.0+     | Distribute                                                            |
@@ -452,7 +452,7 @@ Feature:
       | uri                       | title            | ID       |
       | http://joinup.eu/spdx/foo | SPDX licence foo | SPDX-FOO |
       | http://joinup.eu/spdx/bar | SPDX licence bar | SPDX-BAR |
-    And licence content:
+    And the following "licence" content:
       | uri                          | title       | description                          | spdx licence     | legal type                                                            |
       | http://joinup.eu/licence/foo | Foo Licence | Licence details for the foo licence. | SPDX licence foo | Strong Community, Royalty free, Modify, Governments/EU, Use/reproduce |
       | http://joinup.eu/licence/bar | Bar Licence | Licence details for the bar licence. | SPDX licence bar | Distribute                                                            |

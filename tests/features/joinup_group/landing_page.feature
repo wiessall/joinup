@@ -111,7 +111,7 @@ Feature: Tests the group landing page customization.
       | solution   |
 
   Scenario: Do not allow to unpublish or delete a custom page set as landing page
-    Given collection content:
+    Given the following "collection" content:
       | title          |
       | Rally fanatics |
       | My own book    |
@@ -143,7 +143,7 @@ Feature: Tests the group landing page customization.
     And I should not see "This page acts as landing page for the collection. In order to delete it should be first unset as landing page."
 
   Scenario: Landing custom page redirects to group page.
-    Given collection content:
+    Given the following "collection" content:
       | title         |
       | United States |
     And "custom_page" content:
@@ -163,10 +163,10 @@ Feature: Tests the group landing page customization.
     Then I should be on "/collection/united-states"
 
   Scenario: Active navigation link is correct on flat group navigation when visiting a nested custom page
-    Given collection content:
+    Given the following "collection" content:
       | title         |
       | Space Weavers |
-    And custom_page content:
+    And the following "custom_page" content:
       | title     | collection    |
       | Andromeda | Space Weavers |
       | Orion     | Space Weavers |

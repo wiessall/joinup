@@ -5,10 +5,10 @@ Feature: Subscribing to community content in collections and solutions
   So that I can stay informed about everything
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title              |
       | Black hole imaging |
-    Given solution content:
+    Given the following "solution" content:
       | title                 | collection         |
       | Null geodesics        | Black hole imaging |
       | Bolometric appearance | Black hole imaging |
@@ -34,20 +34,20 @@ Feature: Subscribing to community content in collections and solutions
     And all message digests have been delivered
 
   Scenario: Receive a digest of community content that is published
-    Given discussion content:
+    Given the following "discussion" content:
       | title                  | body                               | collection         | solution       | state     | author   |
       | Active galactic nuclei | A thin relativistic accretion disk | Black hole imaging |                | published | junfukue |
       | Light diffusion        | Photons emitted at constant radius |                    | Null geodesics | archived  | junfukue |
-    And document content:
+    And the following "document" content:
       | title               | abstract         | field_paragraphs_body           | collection         | solution              | author   |
       | Doppler's effect    |                  | Caused by disk rotation         | Black hole imaging |                       | junfukue |
       | Distant observers   | Distant abstract | Distribution of bolometric flux |                    | Bolometric appearance | junfukue |
       | Close observers     |                  | Close observers body            |                    | Bolometric appearance | junfukue |
-    And event content:
+    And the following "event" content:
       | title               | field_paragraphs_body | collection         | solution       | author   | start date          | end date            | abstract |
       | Effective potential | Schwarzschild metric  | Black hole imaging |                | junfukue | 2019-11-28T11:12:13 | 2019-11-28T11:12:13 |          |
       | Deflected rays      | Marginally trapped    |                    | Null geodesics | junfukue | 2019-12-05T12:00:00 | 2019-12-15T12:00:00 |          |
-    And news content:
+    And the following "news" content:
       | title             | field_paragraphs_body      | collection         | solution              | state     | author | abstract |
       | The periastron    | Jacobian elliptic integral | Black hole imaging |                       | published | bisera |          |
       | Newtonian context | Projecting ellipses        |                    | Bolometric appearance | archived  | hristo |          |

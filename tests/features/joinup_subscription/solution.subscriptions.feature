@@ -5,10 +5,10 @@ Feature: Subscribing to a solution
   I want to persuade new members to subscribe to my solution
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                  | abstract | description | closed |
       | Some parent collection | Abstract | Description | yes    |
-    And solution content:
+    And the following "solution" content:
       | title                      | collection             |
       | Some solution to subscribe | Some parent collection |
     And users:
@@ -16,7 +16,7 @@ Feature: Subscribing to a solution
       | Cornilius Darcias |
 
   Scenario: Subscribe functionality is disabled for archived content.
-    Given solution content:
+    Given the following "solution" content:
       | title            | state    | collection             |
       | Plovdiv old town | archived | Some parent collection |
 

@@ -10,13 +10,13 @@ Feature: Submit the contact form
       | Report moderator | moderator | report_moderator@test.com | Frank      | Sinatra     |
       | Report user      |           | report_user@test.com      | Rudi       | Sinatra     |
       | Report owner     |           | report_owner@test.com     | Clark      | The machine |
-    And collection content:
+    And the following "collection" content:
       | title                                 | abstract     | description   |
       | Collection with inappropriate content | No one cares | No one cares. |
     And the following collection user memberships:
       | collection                            | user         | roles              |
       | Collection with inappropriate content | Report owner | owner, facilitator |
-    And event content:
+    And the following "event" content:
       | title           | author      | field_paragraphs_body | location  | collection                            | field_state |
       | Event to report | Report user | body                  | Somewhere | Collection with inappropriate content | published   |
 

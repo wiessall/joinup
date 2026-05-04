@@ -11,7 +11,7 @@ Feature: Notification test for the news transitions on a post moderated parent.
       | CC owner         |           | notify_owner@test.com       | CC         | Owner       |
       | CC facilitator   |           | notify_facilitator@test.com | CC         | Facilitator |
       | CC member        |           | notify_member@test.com      | CC         | Member      |
-    And collection content:
+    And the following "collection" content:
       | title              | content_creation | group_moderation |
       | CC post collection | members          | <moderation>     |
     And the following collection user memberships:
@@ -19,7 +19,7 @@ Feature: Notification test for the news transitions on a post moderated parent.
       | CC post collection | CC owner       | owner       |
       | CC post collection | CC facilitator | facilitator |
       | CC post collection | CC member      | <roles>     |
-    And news content:
+    And the following "news" content:
       | title                          | author    | field_paragraphs_body | headline                       | collection         | field_state  | abstract      | created    |
       | CCN post publish               | CC member | body                  | CCN post publish               | CC post collection | draft        | Some abstract | now -2 day |
       | CCN post request changes       | CC member | body                  | CCN post request changes       | CC post collection | published    | Some abstract | now -2 day |

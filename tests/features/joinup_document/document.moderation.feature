@@ -10,7 +10,7 @@ Feature: Document moderation
       | Crab y Patties  |
       | Gretchen Greene |
       | Kirk Collier    |
-    And collection content:
+    And the following "collection" content:
       | title           | content_creation | group_moderation |
       | The Naked Ashes | registered users | no               |
     And the following collection user membership:

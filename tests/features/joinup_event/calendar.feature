@@ -14,7 +14,7 @@ Feature:
       | Innovate & Elevate Conference | 2020-02-15 12:00:00 | 2020-02-15 13:00:00 | 1        |
 
   Scenario Outline: User can navigate through events
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title           | collection     | abstract        |
       | Events calendar | Portal support | events calendar |
     And I append "events_calendar" to "field_paragraphs_body" field in "node" entity with following "Events calendar" title:
@@ -42,7 +42,7 @@ Feature:
       | views_block:calendar-by_month | Future Horizons Expo | Innovate & Elevate Conference |
 
   Scenario Outline: User can navigate through EC events
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title           | collection     | abstract        |
       | Events calendar | Portal support | events calendar |
     And I append "events_calendar" to "field_paragraphs_body" field in "node" entity with following "Events calendar" title:

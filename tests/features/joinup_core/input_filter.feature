@@ -5,7 +5,7 @@ Feature: Input filter
   The HTML I can use in the WYSIWYG editor gets filtered
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title         | logo     |
       | Netflix group | logo.png |
 
@@ -13,7 +13,7 @@ Feature: Input filter
     Given the following "Image" media:
       | name         | image    | alt                  | group         | uuid          |
       | Inline image | logo.png | Image media alt text | Netflix group | whatever uuid |
-    And discussion content:
+    And the following "discussion" content:
       | title                              | body                                                                                                                                                                                                                                                                                | collection    |
       | Jessica Jones returns              | <iframe width="560" height="315" src="https://www.youtube.com/embed/nWHUjuJ8zxE" frameborder="0" allowfullscreen></iframe>                                                                                                                                                          | Netflix group |
       | Luke cage                          | <iframe width="50" height="50" src="https://www.example.com" ></iframe>                                                                                                                                                                                                             | Netflix group |
@@ -57,7 +57,7 @@ Feature: Input filter
 
   @javascript
   Scenario: Tags h1, h5, h6 can exist in a formatted text but the user does not have these options on the editor.
-    Given discussion content:
+    Given the following "discussion" content:
       | title         | body                                                                                                  | collection    |
       | Ragged Crying | <h1>test h1</h1> <h2>test h2</h2> <h3>test h3</h3> <h4>test h4</h4> <h5>test h5</h5> <h6>test h6</h6> | Netflix group |
 
@@ -77,7 +77,7 @@ Feature: Input filter
 
   @backtrackLimit
   Scenario: Ensure really long HTML tag (e.g. < img > with src:data/image...) does not generate a fatal error.
-    Given discussion content:
+    Given the following "discussion" content:
       | title         | body                        | collection    |
       | Famous actors | Article about famous actors | Netflix group |
     And I set long body of "Famous actors" discussion

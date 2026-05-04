@@ -6,13 +6,13 @@ Feature: Global search with archive content
       | title             | description | state     |
       | Some <group type> | Description | published |
       | Rare <group type> | Description | published |
-    And event content:
+    And the following "event" content:
       | title   | short title | field_paragraphs_body | spatial coverage | agenda      | location   | organisation        | scope         | <group type>      |
       | Event 1 | Event 1     | Some body             | Greece           | Some agenta | Some place | European Commission | International | Some <group type> |
       | Event 2 | Event 2     | Some body             | Greece           | Some agenta | Some place | European Commission | International | Rare <group type> |
       | Event 3 | Event 3     | Some body             | Greece           | Some agenta | Some place | European Commission | International | Rare <group type> |
       | Event 4 | Event 4     | Some body             | Greece           | Some agenta | Some place | European Commission | International | Rare <group type> |
-    And document content:
+    And the following "document" content:
       | title           | document type | short title     | field_paragraphs_body | spatial coverage | <group type>      | state     |
       | Some document 1 | Document      | Some document 1 | Some body             | Luxembourg       | Some <group type> | published |
 
@@ -29,10 +29,10 @@ Feature: Global search with archive content
     When I go to the homepage of the "Rare <group type>" <group type>
     Then I should not see the "<group type> content archived toggle" facet
 
-    Given event content:
+    Given the following "event" content:
       | title   | short title | field_paragraphs_body | spatial coverage | agenda      | location   | organisation        | scope         | <group type>      | state    |
       | Event 2 | Event 2     | Some body             | Greece           | Some agenta | Some place | European Commission | International | Some <group type> | archived |
-    And document content:
+    And the following "document" content:
       | title           | document type | short title     | field_paragraphs_body | spatial coverage | <group type>      | state    |
       | Some document 2 | Document      | Some document 2 | Some body             | Luxembourg       | Some <group type> | archived |
     When I go to the homepage of the "Some <group type>" <group type>
@@ -56,10 +56,10 @@ Feature: Global search with archive content
     And I should not see the "Event 1" tile
     And I should not see the "Some document 1" tile
 
-    Given discussion content:
+    Given the following "discussion" content:
       | title               | body           | state    | <group type>      | topic         | created          | changed                   |
       | Archived discussion | No body needed | archived | Some <group type> | Finance in EU | 2017-11-11T11:11 | Wed, 25 Dec 2019 15:00:00 |
-    And news content:
+    And the following "news" content:
       | title         | body           | state    | <group type>      | changed    | topic             |
       | Archived news | No body needed | archived | Some <group type> | 2019-11-19 | Supplier exchange |
 
@@ -84,16 +84,16 @@ Feature: Global search with archive content
       | Solution     | solution   |
 
   Scenario: Content listing for archived group should always display archived content.
-    Given collection content:
+    Given the following "collection" content:
       | title                | state    |
       | Filtration equipment | archived |
-    Given solution content:
+    Given the following "solution" content:
       | title            | state    | collection           |
       | Filter cartridge | archived | Filtration equipment |
-    And news content:
+    And the following "news" content:
       | title               | state    | solution         |
       | TPolypropylene Spun | archived | Filter cartridge |
-    And event content:
+    And the following "event" content:
       | title        | state    | solution         |
       | PTFE pleated | archived | Filter cartridge |
 
@@ -103,10 +103,10 @@ Feature: Global search with archive content
     And I should see the "PTFE pleated" tile
 
   Scenario: Distributions directly under a solution respect the state.
-    Given solution content:
+    Given the following "solution" content:
       | title         | description | state     |
       | Some solution | Description | published |
-    And distribution content:
+    And the following "distribution" content:
       | title                 | description | state     | solution      |
       | Some zip distribution | Description | published | Some solution |
       | Some rar distribution | Description | archived  | Some solution |
@@ -122,11 +122,11 @@ Feature: Global search with archive content
     And I should not see the "Some zip distribution" tile
 
   Scenario: Group content supports archived solutions.
-    Given collection content:
+    Given the following "collection" content:
       | title      |
       | Rubik Cube |
       | Speed cube |
-    Given solution content:
+    Given the following "solution" content:
       | title    | state     | collection | shared on  |
       | Megaminx | published | Rubik Cube | Speed cube |
       | 4x4 cube | archived  | Rubik Cube | Speed cube |

@@ -7,7 +7,7 @@ Feature: Administer media.
       | Username | Roles     |
       | joe      |           |
       | theOne   | moderator |
-    And collection content:
+    And the following "collection" content:
       | title |
       | Mars  |
       | Venus |
@@ -165,13 +165,13 @@ Feature: Administer media.
     Given the following "Image" media:
       | name                               | image      | alt            | group      | revision         | uuid        |
       | The Image in Shaping of disruption | simple.svg | A simple image | Portal support | 2016-07-10T13:00 | abcde-12345 |
-    And solution content:
+    And the following "solution" content:
       | title         | description |
       | Some solution | Meh...      |
-    And release content:
+    And the following "release" content:
       | title        | release number | release notes                                                                               | is version of |
       | Some release | 0.1            | <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media> | Some solution |
-    And distribution content:
+    And the following "distribution" content:
       | title             | description                                                                                 | release      |
       | Some distribution | <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media> | Some release |
 

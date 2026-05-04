@@ -25,7 +25,7 @@ Feature: Collection membership overview
       | Law Atteberry         | Law        | Atteberry   | linus.jpeg   | Comptroller                     |
       | Aniruddha Kováts      | Aniruddha  | Kováts      | blaise.jpg   | Chief Communications Officer    |
       | Aali Dalton           | Aali       | Dalton      | richard.jpg  | Founder                         |
-    And collection content:
+    And the following "collection" content:
       | title           | state     |
       | Jubilant Robots | published |
       | Jubilant Rabits | draft     |

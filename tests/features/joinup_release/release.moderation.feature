@@ -11,7 +11,7 @@ Feature: Asset release moderation
       | Felix Russell   | Felix.Russell@example.com   | Felix      | Russell     |           |
       | Wilson Mendoza  | Wilson.Mendoza@example.com  | Wilson     | Mendoza     | moderator |
       | Patric Sereira  | Patric.Sereira@example.com  | Patric     | Sereira     | moderator |
-    And solution content:
+    And the following "solution" content:
       | title     | description |
       | Dark Ship | Dark ship   |
     And the following solution user membership:

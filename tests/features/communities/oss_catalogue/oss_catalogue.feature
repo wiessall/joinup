@@ -5,7 +5,7 @@ Feature:
   I want to view a dedicated collection and landing page
 
   Scenario: User sees short description on OSS Solution page.
-    Given oss_solution content:
+    Given the following "oss_solution" content:
       | title | oss_development_status | oss_source        | oss_categories | oss_short_description   | oss_git_description   | status    | oss_release_date |
       | Foo   | development            | developers_italia | data-analytics | Foo's short description | Foo's GIT description | published | 2014-11-19       |
     When I visit the "Foo" "oss_solution"
@@ -13,13 +13,13 @@ Feature:
     But I should not see the text "Foo's GIT description"
 
   Scenario: User can see the OSS header.
-    Given oss_solution content:
+    Given the following "oss_solution" content:
       | title   | oss_development_status | oss_source        | oss_categories | oss_short_description   | oss_git_description   | status    | oss_release_date |
       | Olympus | development            | developers_italia | data-analytics | Foo's short description | Foo's GIT description | published | 2014-11-19       |
     When I visit the "Olympus" "oss_solution"
 
   Scenario: User can see GIT repo indicators.
-    Given oss_solution content:
+    Given the following "oss_solution" content:
       | title              | oss_source        | oss_git_stars | oss_git_open_issues | oss_git_open_pull_requests | oss_git_forks | status    |
       | Olympus indicators | developers_italia | 1111          | 2222                | 3333                       | 4444          | published |
     When I visit the "Olympus indicators" "oss_solution"
@@ -30,7 +30,7 @@ Feature:
       | 4444 |
 
   Scenario: OSS Catalogue Manager can see unpublished OSS solutions.
-    Given oss_solution content:
+    Given the following "oss_solution" content:
       | title   | oss_development_status | oss_source        | oss_categories | oss_short_description   | oss_git_description   | status      | oss_release_date |
       | Olympus | development            | developers_italia | data-analytics | Foo's short description | Foo's GIT description | unpublished | 2014-11-19       |
 
@@ -47,7 +47,7 @@ Feature:
     When I visit "/admin/content/eu-oss-catalogue/log"
 
   Scenario: User sees GIT description on OSS Solution page if short description is missing.
-    Given oss_solution content:
+    Given the following "oss_solution" content:
       | title | oss_development_status | oss_source        | oss_categories | oss_short_description | oss_git_description   | status    | oss_release_date |
       | Foo   | stable                 | developers_italia | data-analytics |                       | Foo's GIT description | published | 2014-11-19       |
     When I visit the "Foo" "oss_solution"
@@ -55,10 +55,10 @@ Feature:
 
   @loggedErrors
   Scenario: All necessary OSS Solution fields are visible on node page.
-    Given oss_contact content:
+    Given the following "oss_contact" content:
       | title           |
       | FOSS Conference |
-    Given oss_contractor content:
+    Given the following "oss_contractor" content:
       | title     |
       | ACME Ltd. |
     Given oss_used_by terms:
@@ -69,7 +69,7 @@ Feature:
     Given oss_platform terms:
       | name  |
       | macOs |
-    Given oss_solution content:
+    Given the following "oss_solution" content:
       | title                  | oss_available_languages | oss_development_status | oss_source        | oss_categories                    | oss_long_description                                                                             | oss_short_description | oss_git_description | status    | oss_release_date | oss_documentation   | oss_features         | oss_git_url         | oss_landing_url     | oss_license      | oss_logo                         | oss_maintenance_contacts | oss_maintenance_contractors | oss_maintenance_type | oss_owner       | oss_platforms | oss_publiccode_yml_version | oss_scope                       | oss_screenshots                                                                                    | oss_software_type  | oss_software_version | oss_vitality_index | oss_vitality_index_range               | oss_used_by                                        | oss_validation_status |
       | Super Awesome Software | it,en,de,error,pt       | stable                 | developers_italia | document-management,collaboration | The long description. A patient developer can make this long enough to be at least 5 lines long. | The short description | The GIT description | published | 2014-11-19       | https://example.com | Feature A, Feature B | https://example.com | https://example.com | GPL-2.0-or-later | https://placehold.co/200x200.png | FOSS Conference          | ACME Ltd.                   | community            | FOSS Conference | macOs         | 0.4                        | science-and-technology,security | https://placehold.co/600x400.png,https://placehold.co/400x400.png,https://placehold.co/800x400.jpg | standalone/desktop | 3.17.143             | 0.419              | "[12,45,56,7,90,29,34,20,47,48,50,80]" | Administration 1,Administration 2,Administration 3 | valid                 |
     When I visit the "Super Awesome Software" "oss_solution"
@@ -178,7 +178,7 @@ Feature:
       | Administration 5 |
       | Administration 6 |
       | Administration 7 |
-    And oss_solution content:
+    And the following "oss_solution" content:
       | title      | status    | oss_release_date | oss_available_languages                | oss_used_by                                                                                                            |
       | With modal | published | 2014-11-19       | it,en,de,pt,eo,fr,he,ja,lt,pl,ro,gd,si | Administration 1,Administration 2,Administration 3,Administration 4,Administration 5,Administration 6,Administration 7 |
     And the "With modal" oss_solution has the following validation issues:
@@ -248,7 +248,7 @@ Feature:
 
   @javascript
   Scenario: Screenshot carousel with 4 items works as expected.
-    Given oss_solution content:
+    Given the following "oss_solution" content:
       | title | oss_screenshots                                                                                                                     | oss_development_status | oss_source        | oss_categories | status    | oss_release_date |
       | Four  | https://placehold.co/800x400.jpg,https://placehold.co/500x400.png,https://placehold.co/700x400.png,https://placehold.co/600x400.png | stable                 | developers_italia | data-analytics | published | 2014-11-19       |
     When I visit the "Four" "oss_solution"
@@ -312,7 +312,7 @@ Feature:
 
   @javascript
   Scenario: User can click on info icon for source catalogue.
-    Given oss_solution content:
+    Given the following "oss_solution" content:
       | title | oss_source                      | status    |
       | macOS | hosting_platform:code_europa_eu | published |
 

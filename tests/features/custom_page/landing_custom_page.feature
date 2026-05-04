@@ -5,10 +5,10 @@ Feature: Landing custom page.
   I need to be able to manage "Landing Custom Page" content through UI.
 
   Scenario: Manage custom landing pages
-    Given collection content:
+    Given the following "collection" content:
       | title     |
       | Roman law |
-    And custom_page content:
+    And the following "custom_page" content:
       | title                       | collection |
       | Early law and jurisprudence | Roman law  |
 

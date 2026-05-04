@@ -9,7 +9,7 @@ Feature:
       | title           | state     |
       | Drafty things   | draft     |
       | Published tools | published |
-    And custom_page content:
+    And the following "custom_page" content:
       | title        | body         | collection      | logo     |
       | About means  | Sample text. | Drafty things   | logo.png |
       | About places | Sample text. | Published tools | logo.png |

@@ -2,14 +2,14 @@
 Feature: When a solution is archived then its sub-content also should be archived.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title      |
       | Collection |
-    And contact_information content:
+    And the following "contact_information" content:
       | name                 | email                      |
       | Liam Smith           | liam.smith@example.com     |
       | Jennifer Unconfirmed | jennifer.smith@example.com |
-    And solution content:
+    And the following "solution" content:
       | title    | collection | creation date    | modification date | contact information              |
       | Solution | Collection | 2018-11-19T10:00 | 2018-12-19T10:00  | Jennifer Unconfirmed, Liam Smith |
     And users:
@@ -47,10 +47,10 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Solution Custom page 2 | Solution | draft     |
       | Solution Custom page 3 | Solution | published |
     And the workflow state of the "Solution Custom page 3" content is changed to "archived"
-    And distribution content:
+    And the following "distribution" content:
       | title                 | solution |
       | Solution Distribution | Solution |
-    And release content:
+    And the following "release" content:
       | title              | is version of | state     |
       | Solution Release 1 | Solution      | published |
       | Solution Release 2 | Solution      | draft     |

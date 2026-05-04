@@ -5,7 +5,7 @@ Feature: Sharing content on social networks
   So that useful information has more visibility
 
   Scenario Outline: Sharing content on Facebook, X and Linkedin.
-    Given collection content:
+    Given the following "collection" content:
       | title           |
       | Social networks |
     And <content type> content:
@@ -32,10 +32,10 @@ Feature: Sharing content on social networks
       | custom_page  |
 
   Scenario: Sharing solutions on social media.
-    Given collection content:
+    Given the following "collection" content:
       | title           |
       | Social networks |
-    Given solution content:
+    Given the following "solution" content:
       | title              | collection      |
       | Important solution | Social networks |
 

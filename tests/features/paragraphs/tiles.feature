@@ -4,11 +4,11 @@ Feature:
   I need to be able to use "Tiles" paragraph for content.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                 | state     |
       | Paragraphs collection | published |
   Scenario: Add tiles paragraph to one column layout.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title                   | collection            | state     | abstract            |
       | Tiles paragraph example | Paragraphs collection | published | Tiles page abstract |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Tiles paragraph example" title:
@@ -30,7 +30,7 @@ Feature:
     And I see the text "This is some text within a card body."
 
   Scenario: Tiles paragraph is restricted.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title                   | collection            | state     |
       | Tiles paragraph example | Paragraphs collection | published |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Tiles paragraph example" title:
@@ -44,7 +44,7 @@ Feature:
     When I should not see the link "Tiles" in the "Modal content" region
 
   Scenario: Regression test - System not able to recognise the apostrophe on a text.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title                    | collection            | state     | abstract                       |
       | Tiles regression example | Paragraphs collection | published | Tiles regression page abstract |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Tiles regression example" title:

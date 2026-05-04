@@ -6,7 +6,7 @@ Feature: Group administrators report
 
   # Lower case entries in the scenario ensure case insensitive comparison.
   Scenario: Show a list of people with administrative roles in collections
-    Given collection content:
+    Given the following "collection" content:
       | title              |
       | Large living birds |
       | bony fishes        |

@@ -10,10 +10,10 @@ Feature: Creating content and commenting on archived collection
       | Flora Hunt  | moderator |
       | Lee Reeves  |           |
       | Karl Fields |           |
-    And collection content:
+    And the following "collection" content:
       | title               | abstract            | description         | logo     | topic                   |
       | The Willing Consort | The Willing Consort | The Willing Consort | logo.png | Statistics and Analysis |
-    Given solution content:
+    Given the following "solution" content:
       | title               | collection          |
       | The Loyal Companion | The Willing Consort |
     And the following collection user memberships:

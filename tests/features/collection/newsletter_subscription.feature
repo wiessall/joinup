@@ -10,7 +10,7 @@ Feature: Subscribing to collection newsletters
       | Filippos Demetriou | filippos.demetriou@example.com |           |
       | Tatiana Andreas    | tatiandri@example.com          |           |
       | Magdalini Kokinos  | m.kokinos@example.com          | moderator |
-    And collection content:
+    And the following "collection" content:
       | title    |
       | Volkor X |
     And "news" content:

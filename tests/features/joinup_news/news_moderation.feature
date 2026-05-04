@@ -24,7 +24,7 @@ Feature: News moderation.
       | Superman | dailyPlanetEmployee@example.com |       |
       | Eagle    | WorldWarVeteran@example.com     |       |
       | Metallo  | kryptoniteEverywhere@example.com |      |
-    Given collection content:
+    Given the following "collection" content:
       | title          | group_moderation | state     | content_creation |
       | Justice League | no               | published | members          |
       | Legion of Doom | yes              | published | members          |

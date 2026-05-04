@@ -11,7 +11,7 @@ Feature: Notification test for the document transitions on a post moderated pare
       | CC owner         |           | notify_owner@test.com       | CC         | Owner       |
       | CC facilitator   |           | notify_facilitator@test.com | CC         | Facilitator |
       | CC member        |           | notify_member@test.com      | CC         | Member      |
-    And collection content:
+    And the following "collection" content:
       | title         | content_creation | group_moderation |
       | CC collection | members          | <moderation>     |
     And the following collection user memberships:
@@ -19,7 +19,7 @@ Feature: Notification test for the document transitions on a post moderated pare
       | CC collection | CC owner       | owner       |
       | CC collection | CC facilitator | facilitator |
       | CC collection | CC member      | <roles>     |
-    And document content:
+    And the following "document" content:
       | title                                | author    | abstract | field_paragraphs_body | document type | collection    | field_state  | created    |
       | CC notify post publish               | CC member | abstract | body                  | Document      | CC collection | draft        | now -2 day |
       | CC notify post request changes       | CC member | abstract | body                  | Document      | CC collection | published    | now -2 day |

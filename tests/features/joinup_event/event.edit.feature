@@ -5,7 +5,7 @@ Feature: "Event page" editing.
   I need to be able to edit it.
 
   Scenario: Add and remove map
-    Given collection content:
+    Given the following "collection" content:
       | title  | logo     |
       | Heroes | logo.png |
     And I am logged in as a facilitator of the "Heroes" collection
@@ -34,7 +34,7 @@ Feature: "Event page" editing.
     Given users:
       | Username |
       | <user>   |
-    And collection content:
+    And the following "collection" content:
       | title        | description        | moderation |
       | <collection> | Sample description | yes        |
     And the following collection user memberships:
@@ -60,7 +60,7 @@ Feature: "Event page" editing.
     Given users:
       | Username       |
       | Krista Garrett |
-    Given solution content:
+    Given the following "solution" content:
       | title                | description        | moderation |
       | Dreamer in the Snake | Sample description | no         |
     And the following solution user memberships:

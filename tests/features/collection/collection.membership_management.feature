@@ -2,7 +2,7 @@
 Feature: Tests membership to Interoperable Europe Portal collection.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                   |
       | An arbitrary collection |
 

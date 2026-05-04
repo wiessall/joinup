@@ -5,14 +5,14 @@ Feature: Pinning entities inside collections
   So that important entities has more visibility
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title         | creation date | modification date |
       | Orange Wrench | 2018-10-15    | 2019-10-15T23:03  |
       | Green Wrench  | 2018-11-05    | 2019-11-05T23:03  |
-    And solution content:
+    And the following "solution" content:
       | title            | collection    | pinned in     | creation date | shared on     |
       | Wrench catalogue | Orange Wrench | Orange Wrench | 2017-10-12    |               |
-    And discussion content:
+    And the following "discussion" content:
       | title                        | collection    | pinned | created    | changed    |
       | What kind of wrench is this? | Orange Wrench | no     | 2017-11-20 | 2018-11-20 |
     And users:

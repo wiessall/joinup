@@ -11,7 +11,7 @@ Feature: Homepage
     Then the page should be cached
 
   Scenario: Latest news is shown on the homepage
-    Given news content:
+    Given the following "news" content:
       | title                       | headline                 | topic                                                 | published at         | abstract                    | field_paragraphs_body                                                                                                                                                                                                                                         |
       | Current biodiversity crisis | Preserve habitats        | Finance in EU, Supplier exchange, E-health, E-justice | 2021-04-26T19:09:00Z | We have some abstract here. | Here we combine global maps of human populations and land use over the past 12000 y with current biodiversity data to show that nearly <em>three quarters of nature has long been shaped by histories of human habitation</em> and use by indigenous peoples. |
       | Environmental stewardship   | Transformative practices | Employment and Support Allowance                      | 2021-01-27T16:12:00Z |                             | With rare exceptions current biodiversity losses are caused not by human conversion or degradation of untouched ecosystems but rather by the appropriation colonization and intensification of use in lands inhabited and used by prior societies.            |
@@ -30,19 +30,19 @@ Feature: Homepage
     And the page should show the tiles "Current biodiversity crisis, Environmental stewardship"
 
   Scenario Outline: Community content can be placed "In the spotlight" on the homepage
-    Given collection content:
+    Given the following "collection" content:
       | title         |
       | Mice in space |
-    And news content:
+    And the following "news" content:
       | title       | headline       | collection    | topic                                                 | logo       | field_paragraphs_body |
       | New muscles | Muscle atrophy | Mice in space | Finance in EU, Supplier exchange, E-health, E-justice | blaise.jpg | <news body>           |
-    And discussion content:
+    And the following "discussion" content:
       | title     | collection    | topic                            | logo    | body                                                                                                                                                                                       |
       | Influence | Mice in space | Employment and Support Allowance | ada.png | Space exploration has brought about many scientific and technological advances, yet manned spaceflights come at a cost to astronauts, including reduced skeletal muscle mass and strength. |
-    And document content:
+    And the following "document" content:
       | title        | collection    | topic                                  | logo     | abstract                                                                                                                                                                                        |
       | Microgravity | Mice in space | HR, Statistics and Analysis, E-justice | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
-    And event content:
+    And the following "event" content:
       | title           | collection    | topic                    | logo        | abstract                                                                                                                                                                                        | field_paragraphs_body                                                                                                                                                                 |
       | Stay at the ISS | Mice in space | EU and European Policies | charles.jpg | Abstract: Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. | Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. |
     And the "In the spotlight" content listing contains:
@@ -69,7 +69,7 @@ Feature: Homepage
       | News abstract | Researchers from the University of Tsukuba... | News abstract                                 |
 
   Scenario: Upcoming event is shown on the homepage
-    Given event content:
+    Given the following "event" content:
       | title               | created    | start date | end date       |
       | CodeCraft Summit    | 2 day ago  | +5 days    | + 5days 1 hour |
       | Future Forward Tech | 3 days ago | +8 days    | + 8days 1 hour |
@@ -100,7 +100,7 @@ Feature: Homepage
       | v1.57.0-177-g0123456abcdef | https://gitlab.dhs.tech.ec.europa.eu/ec-europa/digit-joinup-reference/-/commit/0123456abcdef |
 
   Scenario: Search box is shown in the main content
-    Given collection content:
+    Given the following "collection" content:
       | title        |
       | RNA vaccines |
     And I am on the homepage
@@ -114,7 +114,7 @@ Feature: Homepage
       | Username     | E-mail                   |
       | Quim Roscas  | quim.roscas@example.com  |
       | Josse Malhoa | josse.malhoa@example.com |
-    And collection content:
+    And the following "collection" content:
       | title           | state     | description                                                                                                                                                                                                                                                                           | creation date    | modification date |
       | Clash of jonnys | published | Supports <a href="#">health-related</a> fields                                                                                                                                                                                                                                        | 2019-12-18 08:00 | 2019-12-18 08:00  |
       | Clash of alex   | published | Lorem Ipsum is simply dummy                                                                                                                                                                                                                                                           | 2018-11-18 08:00 | 2019-11-18 08:00  |
@@ -128,7 +128,7 @@ Feature: Homepage
       | Sunset stream   | published | There are many passages                                                                                                                                                                                                                                                               | 2019-02-18 08:00 | 2019-02-18 08:00  |
       | Iceland crown   | proposed  | Lorem Ipsum is therefore                                                                                                                                                                                                                                                              | 2019-11-18 08:00 | 2019-11-18 08:00  |
       | Jupiter sun     | published | Sum is therefore                                                                                                                                                                                                                                                                      | 2018-12-18 08:00 | 2018-12-18 08:00  |
-    Given solution content:
+    Given the following "solution" content:
       | title                 | state     | author       | creation date    | modification date | collection                           | description                                                                                                                                                                                                                                                                                                                                |
       | Lantern International | published | Quim Roscas  | 2018-12-18 08:00 | 2022-12-18 08:00  | Clash of jonnys                      | Lantern International Group has started deploying personnel <em>in focused areas</em>. In this quest we have decided to consolidate our private businesses into one entity as a significant step towards realizing our company's long-term plan.                                                                                           |
       | Proton Global         | published | Josse Malhoa | 2019-07-05 10:00 | 2019-07-05 10:00  | Clash of jonnys                      | <p>An inlined image:</p><img alt="Something interesting" data-align="center" data-caption="The image caption" data-entity-type="file" data-entity-uuid="81e91d97-a273-43c6-8f2f-2f5beb38fbf7" data-image-style="wysiwyg_full_width" height="640" src="/sites/default/files/inline-images/image.jpg" width="480" /><p>Text after image.</p> |
@@ -145,7 +145,7 @@ Feature: Homepage
       | Cities of Italy       | published | Quim Roscas  | 2020-01-01 17:36 | 2020-01-01 17:36  | Clash of jonnys                      | <p>Download our report <a data-entity-type="file" data-entity-uuid="fb6d58c0-4618-4f18-ba8c-31dc9edbd597" href="/sites/default/files/inline-files/report-2021-09-16.xlsx">report-2021-09-16.xls</a> for more information.</p>                                                                                                              |
       | Products of German    | proposed  | Quim Roscas  | 2020-01-14 17:36 | 2020-01-14 17:36  | Sarah desert                         | Sum is therefore                                                                                                                                                                                                                                                                                                                           |
       | Should not be shown   | published | Quim Roscas  | 2020-01-15 08:00 | 2020-01-15 17:36  | Solutions mentioned in an assessment | Lantern International Group has started deploying personnel <em>in focused areas</em>. In this quest we have decided to consolidate our private businesses into one entity as a significant step towards realizing our company's long-term plan.                                                                                           |
-    And news content:
+    And the following "news" content:
       | title                         | headline                    | collection      | topic                                      | state            | created              | changed              | published_at         | field_paragraphs_body                                                                                                                                                                                                                                                | abstract                    |
       | Current biodiversity adapt    | Adapt habitats              | Clash of jonnys | Finance in EU, Supplier exchange, E-health | published        | 2021-04-30T19:09:00Z | 2021-04-30T19:09:00Z | 2021-04-30T19:09:00Z | Here we combine global <a href="#">maps</a> of human populations and land use over the past 12000 y with current biodiversity data to show that nearly three quarters of nature has long been shaped by histories of human habitation and use by indigenous peoples. | Biodiversity adapt abstract |
       | Environmental tests           | Test practices              | Nature area     | Employment and Support Allowance           | published        | 2021-01-27T16:12:00Z | 2021-01-27T16:12:00Z | 2021-01-27T16:12:00Z | With rare exceptions current biodiversity losses are caused not by human conversion or degradation of untouched ecosystems but rather by the <em>appropriation colonization and intensification of use in lands inhabited and used by prior societies</em>.          |                             |
@@ -161,7 +161,7 @@ Feature: Homepage
       | The Tarantula massive binary  | SB2 orbital solution        | Sunset ball     | E-health                                   | proposed         | 2021-02-29T10:18:00Z | 2021-02-29T10:18:00Z | 2021-02-29T10:18:00Z | SB2 orbital solution                                                                                                                                                                                                                                                 |                             |
       | H-rich Wolf-Rayet star        | Polarimetric analysis       | Clash of jonnys | E-health                                   | published        | 2021-03-29T10:18:00Z | 2021-03-29T10:18:00Z | 2021-03-29T10:18:00Z | <p>Polarimetric analysis</p><p><drupal-media data-entity-type="media" data-entity-uuid="1e3cbd19-30a3-4ba0-a125-b9f4a0e3921a" data-caption="&lt;strong&gt;Embedded Video (Responsive).&lt;/strong&gt;">&nbsp;</drupal-media></p><p>Watch our video</p>               |                             |
       | Quasi-homogeneous evolution   | Mass-transfer was avoided   | Sunset ball     | Finance in EU, Supplier exchange, E-health | deletion request | 2021-03-29T10:18:00Z | 2021-03-29T10:18:00Z | 2021-03-29T10:18:00Z | Mass-transfer was avoided                                                                                                                                                                                                                                            |                             |
-    And event content:
+    And the following "event" content:
       | title                       | abstract              | field_paragraphs_body                                                                                                                                                                                                                                                                                      | collection      | solution              | state     | created              | changed              | published_at         | start date           | end date             |
       | Thick-target news           | Abstract: Evaporation | Evaporation                                                                                                                                                                                                                                                                                                | Clash of jonnys | Lantern International | published | 2021-04-26T19:05:00Z | 2021-04-26T19:05:00Z | 2021-04-26T19:05:00Z | 2021-04-27T19:05:00Z | 2021-05-10T19:05:00Z |
       | Conductive cooling losses   |                       | Single-loop                                                                                                                                                                                                                                                                                                | Sunset ball     | Proton Global         | draft     | 2021-01-27T16:12:00Z | 2021-01-27T16:12:00Z | 2021-01-27T16:12:00Z | 2021-01-28T16:12:00Z | 2021-02-03T16:12:00Z |
@@ -220,11 +220,11 @@ Feature: Homepage
     And I should see the following facet summary "Collections"
 
     # Check archived items.
-    Given collection content:
+    Given the following "collection" content:
       | title          | state    | description                                    | creation date    |
       | Clash of lords | archived | Supports <a href="#">health-related</a> fields | 2022-12-18 08:00 |
       | Clash of ruins | archived | Lorem Ipsum is simply dummy                    | 2022-11-18 08:00 |
-    And news content:
+    And the following "news" content:
       | title                    | headline       | collection      | topic                                      | state    | created              | changed              | published_at         | body                                                                                                                                                                                                                                                                 |
       | World biodiversity adapt | World habitats | Clash of jonnys | Finance in EU, Supplier exchange, E-health | archived | 2022-04-30T19:09:00Z | 2022-04-30T19:09:00Z | 2022-04-30T19:09:00Z | Here we combine global <a href="#">maps</a> of human populations and land use over the past 12000 y with current biodiversity data to show that nearly three quarters of nature has long been shaped by histories of human habitation and use by indigenous peoples. |
       | Environmental laws       | Best practices | Nature area     | Employment and Support Allowance           | archived | 2022-01-27T16:12:00Z | 2022-01-27T16:12:00Z | 2022-01-27T16:12:00Z | With rare exceptions current biodiversity losses are caused not by human conversion or degradation of untouched ecosystems but rather by the <em>appropriation colonization and intensification of use in lands inhabited and used by prior societies</em>.          |

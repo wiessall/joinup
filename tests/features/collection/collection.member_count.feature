@@ -12,7 +12,7 @@ Feature: Collection homepage
       | Kili        | active  |
       | Bilbo       | blocked |
       | Some goblin | active  |
-    And collection content:
+    And the following "collection" content:
       | title                                   | moderation | closed |
       | Under the mountain                      | yes        | no     |
       | Exactly the same collection, but closed | yes        | yes    |

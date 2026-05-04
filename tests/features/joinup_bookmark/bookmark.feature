@@ -9,10 +9,10 @@ Feature: Bookmark/Unbookmark feature.
       | Username         | E-mail               | Password        | First name | Family name |
       | Lisa Bookmark    | lisa@bookmark.com    | bookmark123!#$l | Lisa       | Bookmark    |
       | Gregory Bookmark | gregory@bookmark.com | bookmark123!#$g | Gregory    | Bookmark    |
-    Given collection content:
+    Given the following "collection" content:
       | title  |
       | Batman |
-    Given solution content:
+    Given the following "solution" content:
       | title         | collection |
       | Batman Begins | Batman     |
 
@@ -76,7 +76,7 @@ Feature: Bookmark/Unbookmark feature.
     Then I should see the heading "Batman Begins"
 
   Scenario: User bookmark page.
-    And news content:
+    And the following "news" content:
       | title               | solution      |
       | Bookmark news one   | Batman Begins |
       | Bookmark news two   | Batman Begins |

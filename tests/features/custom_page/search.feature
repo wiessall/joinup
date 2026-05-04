@@ -15,7 +15,7 @@ Feature: Custom pages enhance search results for their collections/solutions
     Then I enter "memory" in the search bar and press enter
     Then I should see "No content found for your search."
 
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title                          | <group>         | body                         | state       |
       | Splitting and coalescing       | Buddy system    | Memory split in blocks       | published   |
       | Reduces memory fragmentation   | Buddy system    | Binary tree                  | unpublished |

@@ -4,7 +4,7 @@ Feature: Notifications are muted when entity is archived/unarchived.
   I dont want to receive a notification when an entity is archived or unarchived.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title     |
       | Milky Way |
     And users:

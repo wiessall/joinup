@@ -10,7 +10,7 @@ Feature: Event moderation
       | Salvador Thomas |
       | Rosa Vaughn     |
       | Patricia Lynch  |
-    And collection content:
+    And the following "collection" content:
       | title     | description           | logo     | content_creation | group_moderation | topic       |
       | Wet Lords | The Forgotten Female. | logo.png | registered users | no               | E-inclusion |
     And the following collection user membership:

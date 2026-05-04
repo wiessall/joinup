@@ -5,7 +5,7 @@ Feature: Subscribing to community content in collections
   So that I can stay informed
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                | state     |
       | Products of Bulgaria | published |
       | Cities of Bulgaria   | published |
@@ -39,25 +39,25 @@ Feature: Subscribing to community content in collections
     # Start on clean.
     Given I mark all emails as read
 
-    And discussion content:
+    And the following "discussion" content:
       | title      | body                      | collection           | state     | author |
       | Duck liver | Rich buttery and delicate | Products of Bulgaria | published | hristo |
       | Sofia      | Grows without aging       | Cities of Bulgaria   | published | kalin  |
       | Ruse       | Little Vienna             | Cities of Bulgaria   | proposed  | kalin  |
-    And document content:
+    And the following "document" content:
       | title           | field_paragraphs_body  | collection           | state     | author |
       | Canned cherries | Sour cherries for pies | Products of Bulgaria | published | bisera |
       | Plovdiv         | Seven hills            | Cities of Bulgaria   | published | hristo |
-    And event content:
+    And the following "event" content:
       | title           | field_paragraphs_body | collection           | state     | author | start date          | end date            |
       | Sunflower seeds | A tasty snack         | Products of Bulgaria | published | bisera | 2019-11-28T11:12:13 | 2019-11-28T11:12:13 |
       | Varna           | Summer capital        | Cities of Bulgaria   | draft     | kalin  | 2019-12-05T12:00:00 | 2019-12-15T12:00:00 |
       | Stara Zagora    | Historic              | Cities of Bulgaria   | published | hristo | 2020-01-18T18:30:00 | 2020-01-19T00:00:00 |
-    And news content:
+    And the following "news" content:
       | title    | body                        | collection           | state     | author |
       | Rose oil | A widely used essential oil | Products of Bulgaria | published | bisera |
       | Burgas   | City of dreams              | Cities of Bulgaria   | published | hristo |
-    Given solution content:
+    Given the following "solution" content:
       | title          | description                      | collection           | state     | author |
       | Double seaming | The rolls roll around the chuck  | Products of Bulgaria | proposed  | kalin  |
       | Belt conveyors | As troughed belts gently slope   | Products of Bulgaria | published | bisera |

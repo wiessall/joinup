@@ -9,7 +9,7 @@ Feature: Owner moderation
     Given users:
       | Username        |
       | Raeburn Hibbert |
-    And owner content:
+    And the following "owner" content:
       | name             | owner type |
       | Good food eaters | Company    |
 

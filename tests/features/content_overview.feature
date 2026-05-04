@@ -7,7 +7,7 @@ Feature: Content Overview
       | batbull      | Simba      | Hobson      | simba3000@hotmail.de |
       | welshbuzzard | Titus      | Nicotera    | nicotito@example.org |
       | hatchingegg  | Korinna    | Morin       | korimor@example.com  |
-    And collection content:
+    And the following "collection" content:
       | title             | description        | moderation |
       | Rumble collection | Sample description | yes        |
     And "event" content:
@@ -87,7 +87,7 @@ Feature: Content Overview
       | Username        | E-mail                       |
       | michaelanewport | michaela.newport@example.com |
       | nenaroberts     | nena.roberts@example.com     |
-    And collection content:
+    And the following "collection" content:
       | title            |
       | Timely Xylophone |
     And "event" content:
@@ -171,20 +171,20 @@ Feature: Content Overview
       | Username        | E-mail                       |
       | claricemitchell | clarice.mitchell@example.com |
       | jeffreypayne    | jeffrey.payne@example.com    |
-    And collection content:
+    And the following "collection" content:
       | title           |
       | Barbaric Avenue |
-    And event content:
+    And the following "event" content:
       | title                | collection      | start date   | end date            | created    | author          |
       | Bitter Finger        | Barbaric Avenue | now -1 years | now -1 years +1 day | now -4 day | claricemitchell |
       | Frozen Barbershop    | Barbaric Avenue | now -1 day   | now +1 day          | now -3 day | claricemitchell |
       | Frozen Breeze        | Barbaric Avenue | now +2 day   | now +4 day          | now -2 day | claricemitchell |
       | Flying Official Fish | Barbaric Avenue | now -3 day   | now -1 day          | now        | jeffreypayne    |
     # Technical: use a separate step to create an event associated to the anonymous user.
-    And event content:
+    And the following "event" content:
       | title          | collection      | start date  | end date    | created    |
       | Autumn Boiling | Barbaric Avenue | now +1 week | now +1 week | now -5 day |
-    And discussion content:
+    And the following "discussion" content:
       | title           | collection      | created   |
       | Purple Poseidon | Barbaric Avenue | yesterday |
 

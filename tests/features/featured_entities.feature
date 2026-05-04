@@ -5,11 +5,11 @@ Feature: Featuring content site-wide
   So that important content has more visibility
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                | featured |
       | Tidy Neutron         | yes      |
       | Reborn Eternal Gamma | no       |
-    Given solution content:
+    Given the following "solution" content:
       | title                         | collection           | featured |
       | Opensource neutron generators | Tidy Neutron         | yes      |
       | Gamma-sensible spectroscopy   | Reborn Eternal Gamma | no       |

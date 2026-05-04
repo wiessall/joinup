@@ -5,7 +5,7 @@ Feature: Topic terms are redirected to search page.
     Given "topic" terms:
       | tid  | name     |
       | 5000 | Foo term |
-    And collection content:
+    And the following "collection" content:
       | title          | topic    |
       | Bar collection | Foo term |
 

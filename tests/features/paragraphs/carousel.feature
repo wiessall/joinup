@@ -3,16 +3,16 @@ Feature:
   Access and functionality checks for carousel paragraphs in custom pages.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title       | state     | topic |
       | Roman ruins | published | HR    |
 
   @javascript
   Scenario: Test that carousels with specific content is working correctly.
-    Given collection content:
+    Given the following "collection" content:
       | title  | state     |
       | Sparta | published |
-    And custom_page content:
+    And the following "custom_page" content:
       | title       | collection  | content       | state     | abstract             |
       | Some page 1 | Roman ruins | Some content. | published | Some page 1 abstract |
       | Some page 2 | Sparta      | Some content. | published | Some page 2 abstract |
@@ -69,15 +69,15 @@ Feature:
 
   @javascript
   Scenario: Carousel's control buttons should be visible if there is more content to show.
-    Given collection content:
+    Given the following "collection" content:
       | title  | state     |
       | Sparta | published |
-    And news content:
+    And the following "news" content:
       | title       | headline    | collection | body          | state     |
       | News page 1 | Some page 1 | Sparta     | Some content. | published |
       | News page 2 | Some page 2 | Sparta     | Some content. | published |
       | News page 3 | Some page 3 | Sparta     | Some content. | published |
-    And custom_page content:
+    And the following "custom_page" content:
       | title             | collection | state     |
       | Carousel controls | Sparta     | published |
     And I append "carousel" to "field_paragraphs_body" field in "node" entity with following "Carousel controls" title:

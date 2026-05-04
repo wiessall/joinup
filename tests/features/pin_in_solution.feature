@@ -5,7 +5,7 @@ Feature: Pinning content entities inside solutions
   So that important content has more visibility
 
   Background:
-    Given solution content:
+    Given the following "solution" content:
       | title       |
       | Blue Wrench |
       | Sunny Beam  |
@@ -24,7 +24,7 @@ Feature: Pinning content entities inside solutions
       | Sunny Beam  | Melahrini Gilbert |             |
 
   Scenario Outline: Facilitators can pin and unpin community content inside their solutions.
-    Given news content:
+    Given the following "news" content:
       | title                      | solution    | created    |
       | What is the HEX for lemon? | Blue Wrench | 2018-12-13 |
     And <content type> content:

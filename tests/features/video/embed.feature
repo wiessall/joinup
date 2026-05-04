@@ -5,7 +5,7 @@ Feature: Embed of videos into the page.
   I should be able to embed a restricted set of videos in the page.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                    | description                          |
       | Beer brewing corporation | Beer is the real nectar of the gods. |
 

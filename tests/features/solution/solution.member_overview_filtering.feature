@@ -14,10 +14,10 @@ Feature: Type something to filter the listing the member list
       | rightone     | Wright     | Jackson     |           |
       | brighty      | Lavonne    | Atkins      |           |
       | scanner      | Pucky      | Muck        |           |
-    And collection content:
+    And the following "collection" content:
       | title         |
       | Coffee lovers |
-    And solution content:
+    And the following "solution" content:
       | title           | collection    |
       | Coffee grinders | Coffee lovers |
     And the following solution user memberships:

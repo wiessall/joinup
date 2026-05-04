@@ -18,7 +18,7 @@ Feature: Collection membership administration
       | Ben Dover         |           | bendover@example.com          | Ben        | Dover       |
       # Moderator.
       | Daniel Moder      | moderator | daniel_moder@example.com      | Daniel     | Moder       |
-    And collection content:
+    And the following "collection" content:
       | title             | closed |
       | Medical diagnosis | yes    |
     And the following collection user memberships:
@@ -188,7 +188,7 @@ Feature: Collection membership administration
 
   Scenario: Block a membership
     # With CoC, an email should be sent.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title                 | collection        | state     |
       | Medical diagnosis CoC | Medical diagnosis | published |
     And the "Code of Conduct" setting of the "Medical diagnosis" collection is set to "Medical diagnosis CoC" "custom page"
@@ -446,7 +446,7 @@ Feature: Collection membership administration
     Then I should see the link "Invite members"
 
   Scenario: User needs to accept Code of Conduct on the confirmation form.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title                 | collection        |
       | Medical diagnosis CoC | Medical diagnosis |
     And the "Code of Conduct" setting of the "Medical diagnosis" collection is set to "Medical diagnosis CoC" "custom page"

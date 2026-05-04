@@ -26,13 +26,13 @@ Feature: SEO for RDF entities.
       | solution   | http://www.w3.org/ns/dcat#Dataset |
 
   Scenario: Basic JSON meta information for releases and distributions.
-    Given solution content:
+    Given the following "solution" content:
       | title        |
       | SEO solution |
-    And release content:
+    And the following "release" content:
       | title       | is version of |
       | SEO release | SEO solution  |
-    And distribution content:
+    And the following "distribution" content:
       | title            | release     |
       | SEO distribution | SEO release |
 
@@ -43,7 +43,7 @@ Feature: SEO for RDF entities.
     Then the metatag graph of the item with title "SEO distribution" should be present
 
   Scenario: Basic JSON meta information for licences.
-    Given licence content:
+    Given the following "licence" content:
       | title       | description            | licence type  |
       | SEO licence | Licence to perform SEO | Public domain |
     When I go to the "SEO licence" licence
@@ -63,7 +63,7 @@ Feature: SEO for RDF entities.
       | type                                       | http://purl.org/adms/licence/PD          |
 
   Scenario: Keywords are converted to literals in the normalization.
-    Given solution content:
+    Given the following "solution" content:
       | title        | keywords |
       | SEO solution | games    |
     When I go to the "SEO solution" solution

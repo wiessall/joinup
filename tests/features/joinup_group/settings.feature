@@ -5,15 +5,15 @@ Feature: Collections/Solutions settings
   Moderator need to be able to edit collections/solutions settings through the UI
 
   Background:
-    Given owner content:
+    Given the following "owner" content:
       | name       | owner type |
       | Jonny inc. | Company    |
 
   Scenario: Edit settings in a collection and solution
-    Given collection content:
+    Given the following "collection" content:
       | title             |
       | Jillian Land Eels |
-    And solution content:
+    And the following "solution" content:
       | title         | collection        |
       | Solution Beta | Jillian Land Eels |
     When I am logged in as a owner of the "Jillian Land Eels" collection
@@ -50,10 +50,10 @@ Feature: Collections/Solutions settings
     And the "Announcements enabled" checkbox should be checked
 
   Scenario: Testing group settings permissions
-    Given collection content:
+    Given the following "collection" content:
       | title          |
       | Rally fanatics |
-    And solution content:
+    And the following "solution" content:
       | title        | collection     |
       | Klop mirubes | Rally fanatics |
     And users:
@@ -109,7 +109,7 @@ Feature: Collections/Solutions settings
       | John Author      |           |
       | John Owner       |           |
       | John Member      |           |
-    Given solution content:
+    Given the following "solution" content:
       | title           |
       | Custom solution |
     And the following solution user memberships:

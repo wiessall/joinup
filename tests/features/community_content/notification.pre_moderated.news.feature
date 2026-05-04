@@ -11,7 +11,7 @@ Feature: Notification test for the news transitions on a pre moderated parent.
       | CC owner         |           | notify_owner@test.com       | CC         | Owner       |
       | CC facilitator   |           | notify_facilitator@test.com | CC         | Facilitator |
       | CC member        |           | notify_member@test.com      | CC         | Member      |
-    And collection content:
+    And the following "collection" content:
       | title             | content_creation | group_moderation |
       | CC pre collection | members          | yes              |
     And the following collection user memberships:
@@ -19,7 +19,7 @@ Feature: Notification test for the news transitions on a pre moderated parent.
       | CC pre collection | CC owner       | owner       |
       | CC pre collection | CC facilitator | facilitator |
       | CC pre collection | CC member      |             |
-    And news content:
+    And the following "news" content:
       | title                         | author         | field_paragraphs_body | headline                      | collection        | field_state      | abstract      | created    |
       # The next one belongs to a facilitator because there is no published version for that and thus,
       # the facilitator would not have access to the entity.

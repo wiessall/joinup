@@ -8,7 +8,7 @@ Feature: "Document page" editing.
     Given users:
       | Username |
       | <user>   |
-    And collection content:
+    And the following "collection" content:
       | title        | description        |
       | <collection> | Sample description |
     And the following collection user memberships:
@@ -33,7 +33,7 @@ Feature: "Document page" editing.
     Given users:
       | Username    |
       | Peter Floyd |
-    Given solution content:
+    Given the following "solution" content:
       | title                  | description        |
       | Predator in the Future | Sample description |
     And the following solution user memberships:

@@ -43,10 +43,10 @@ Feature: Fill Page URL field in Technical problem / Bug report / Inappropriate
     Given users:
       | Username      | E-mail                    |
       | Julian Munson | julian.munson@example.com |
-    And collection content:
+    And the following "collection" content:
       | title |
       | Rumba |
-    And news content:
+    And the following "news" content:
       | title         | headline | body | collection | field_state |
       | Tumba spatial | headline | body | Rumba      | published   |
     And the following collection user memberships:

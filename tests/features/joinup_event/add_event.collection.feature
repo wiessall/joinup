@@ -5,7 +5,7 @@ Feature: "Add event" visibility options.
   I need to be able to add "Event" content through UI.
 
   Scenario: "Add event" button should not be shown to normal members, authenticated users and anonymous users.
-    Given collection content:
+    Given the following "collection" content:
       | title               | logo     |
       | The Stripped Stream | logo.png |
       | Years in the Nobody | logo.png |
@@ -34,7 +34,7 @@ Feature: "Add event" visibility options.
     Then I should see the link "Add event"
 
   Scenario: Add event as a facilitator.
-    Given collection content:
+    Given the following "collection" content:
       | title            | logo     |
       | Stream of Dreams | logo.png |
     And I am logged in as a facilitator of the "Stream of Dreams" collection
@@ -122,10 +122,10 @@ Feature: "Add event" visibility options.
 
   @javascript @generateMedia @generateMediaTypes:event_logo
   Scenario: Test the image library widget.
-    Given collection content:
+    Given the following "collection" content:
       | title            |
       | Stream of Dreams |
-    And event content:
+    And the following "event" content:
       | title             | abstract | collection       | field_paragraphs_body | online location              |
       | The Great Opening | abstract | Stream of Dreams | It opens!             | webinar - http://example.com |
 

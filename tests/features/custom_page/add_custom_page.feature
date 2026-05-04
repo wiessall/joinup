@@ -5,11 +5,11 @@ Feature: "Add custom page" visibility options.
   I need to be able to add "Custom page" content through UI.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title           | logo     | topic      |
       | Open Collective | logo.png | Demography |
       | Code Camp       | logo.png | Demography |
-    Given solution content:
+    Given the following "solution" content:
       | title     | logo     | topic      |
       | Parachute | logo.png | Demography |
       | Skydiving | logo.png | Demography |
@@ -118,10 +118,10 @@ Feature: "Add custom page" visibility options.
       | Parachute   | Skydiving       | solution   |
 
   Scenario: Title can be visually hidden.
-    Given collection content:
+    Given the following "collection" content:
       | title             |
       | Aggressive Rubber |
-    And custom_page content:
+    And the following "custom_page" content:
       | title          | collection        | field_hide_title |
       | Rubber's bands | Aggressive Rubber | 1                |
 
@@ -145,12 +145,12 @@ Feature: "Add custom page" visibility options.
 
   @javascript
   Scenario: Long list of attachments should be collapsed.
-    Given collection content:
+    Given the following "collection" content:
       | title             |
       | Aggressive Rubber |
     # Create custom pages with 5 and 6 attachments.
     # 5 is the limit before adding the "Show more" functionality.
-    And custom_page content:
+    And the following "custom_page" content:
       | title          | body                 | collection        | attachments                                                                                                                                                                                                                                                                                                  |
       | Rubber bands   | The aggressive ones. | Aggressive Rubber | empty.rdf - display: 1 - description: empty.rdf, empty_pdf.pdf - display: 1 - description: empty_pdf.pdf, invalid_adms.rdf - display: 1 - description: invalid_adms.rdf, test.zip - display: 1 - description: test.zip, text.pdf - display: 1 - description: text.pdf                                        |
       | Elastic rubber | Also aggressive.     | Aggressive Rubber | ada.png - display: 1 - description: ada.png, alan.jpg - display: 1 - description: alan.jpg, blaise.jpg - display: 1 - description: blaise.jpg, charles.jpg - display: 1 - description: charles.jpg, leonardo.jpg - display: 1 - description: leonardo.jpg, linus.jpeg - display: 1 - description: linus.jpeg |
@@ -188,7 +188,7 @@ Feature: "Add custom page" visibility options.
     But I should not see the button "Show less" in the Content region
 
   Scenario Outline: Creating a custom page with a title that already exists.
-    And custom_page content:
+    And the following "custom_page" content:
       | title        | body        | <group>       | creation date       |
       | Rubber boots | For outside | <first title> | 2014-08-30 23:59:00 |
 
@@ -232,7 +232,7 @@ Feature: "Add custom page" visibility options.
 
   Scenario Outline: Regression test for auto generated aliases.
     # Regression test for ISAICP-8886.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title   | body        | <type>  | creation date       |
       | <title> | For outside | <group> | 2014-08-30 23:59:00 |
 

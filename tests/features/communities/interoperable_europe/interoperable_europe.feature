@@ -75,7 +75,7 @@ Feature:
       | Subscribe to the interoperable europe newsletter |
 
   Scenario: User should see error message if he does not fill out all required fields.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title               | collection           |
       | IOP validation page | Interoperable Europe |
 

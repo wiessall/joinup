@@ -5,7 +5,7 @@ Feature: Sharing content between collections
   So that useful information has more visibility
 
   Scenario: Sharing of event and news expires by time
-    Given collection content:
+    Given the following "collection" content:
       | title        |
       | Target group |
     And "news" content:
@@ -35,7 +35,7 @@ Feature: Sharing content between collections
       | Hip-Hop      |
       | Power ballad |
       | Drum'n'Bass  |
-    And document content:
+    And the following "document" content:
       | title                       | <group type> |
       | Rockabilly is still rocking | Classic Rock |
     And the following <group type> user memberships:
@@ -252,7 +252,7 @@ Feature: Sharing content between collections
       | news         | solution   | Please note: You must be subscribed to the target space to share your content. Your news item will be shared on that space for one month. After that, it will be considered obsolete and will be automatically removed from that space. |
 
   Scenario: Shared pinned content is erroneously shown first.
-    Given collection content:
+    Given the following "collection" content:
       | title         |
       | Chocolate Way |
     And "document" content:
@@ -266,12 +266,12 @@ Feature: Sharing content between collections
 
   @javascript
   Scenario: Carousel tiles should show the "Shared from" visual cue.
-    Given collection content:
+    Given the following "collection" content:
       | title |
       | Earth |
       | Mars  |
       | Venus |
-    And news content:
+    And the following "news" content:
       | title         | collection | shared on   |
       | Earth content | Earth      | Mars        |
       | Mars content  | Mars       |             |

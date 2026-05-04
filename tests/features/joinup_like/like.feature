@@ -9,15 +9,15 @@ Feature: Like/unlike feature.
       | Username     | Roles | E-mail           | First name | Family name |
       | Lisa Like    |       | lisa@like.com    | Lisa       | Like        |
       | Gregory Like |       | gregory@like.com | Gregory    | Like        |
-    Given collection content:
+    Given the following "collection" content:
       | title    | state     |
       | Bulgaria | published |
-    Given solution content:
+    Given the following "solution" content:
       | title               | state     | collection |
       | Very liked solution | published | Bulgaria   |
 
   Scenario: Like functionality is disabled for archived content.
-    Given solution content:
+    Given the following "solution" content:
       | title         | state    | collection |
       | Mount Vitosha | archived | Bulgaria   |
 
@@ -136,7 +136,7 @@ Feature: Like/unlike feature.
       | news         |
 
   Scenario: Logged-in user can see and hit like button in custom page, discussion and solution tiles
-    Given solution content:
+    Given the following "solution" content:
       | title             | state     | collection |
       | Likeable solution | published | Bulgaria   |
     And "custom_page" content:
@@ -196,19 +196,19 @@ Feature: Like/unlike feature.
 
   @terms
   Scenario: Tiles in the carousel should also give possibility to like content.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title                | collection | author    | state     |
       | Likeable custom page | Bulgaria   | Lisa Like | published |
-    And document content:
+    And the following "document" content:
       | title             | collection | state     |
       | Likeable document | Bulgaria   | published |
-    And discussion content:
+    And the following "discussion" content:
       | title               | collection | state     |
       | Likeable discussion | Bulgaria   | published |
-    And news content:
+    And the following "news" content:
       | title         | headline      | collection | state     |
       | Likeable news | Likeable news | Bulgaria   | published |
-    And event content:
+    And the following "event" content:
       | title          | collection | state     |
       | Likeable event | Bulgaria   | published |
     And the following collection user memberships:

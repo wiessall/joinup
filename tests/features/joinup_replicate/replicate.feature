@@ -2,7 +2,7 @@
 Feature: Cloning of entities
 
   Background:
-    Given solution content:
+    Given the following "solution" content:
       | title    | collection     | published at     |
       | Solution | Portal support | 2015-07-13T13:00 |
     And "custom_page" content:

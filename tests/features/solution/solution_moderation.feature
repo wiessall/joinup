@@ -7,7 +7,7 @@ Feature: Solution moderation
   @javascript
   # Access checks are not being made here. They are run in the solution add feature.
   Scenario: 'Save as draft' and 'Propose' states are available but moderators should also see 'Publish' state.
-    Given collection content:
+    Given the following "collection" content:
       | title                         |
       | Collection propose state test |
 
@@ -103,7 +103,7 @@ Feature: Solution moderation
       | Franklin Walker  |           |
       # Facilitator of all the solutions.
       | William Curtis   |           |
-    Given solution content:
+    Given the following "solution" content:
       | title                      | description                | state                 |
       | Azure Ship                 | Azure ship                 | draft                 |
       | The Last Illusion          | The Last Illusion          | proposed              |

@@ -9,20 +9,20 @@ Feature: Asset distribution editing.
       | Username     | E-mail                   | First name | Family name | Roles |
       | Gregg Hill   | Gregg.Hill@example.com   | Gregg      | Hill        |       |
       | Pedro Torres | Pedro.Torres@example.com | Pedro      | Torres      |       |
-    And collection content:
+    And the following "collection" content:
       | title              |
       | Collection example |
-    Given solution content:
+    Given the following "solution" content:
       | title      | collection         | description        |
       | Solution A | Collection example | Sample description |
       | Solution B | Collection example | Sample description |
-    And licence content:
+    And the following "licence" content:
       | title | description                         | deprecated |
       | LGPL  | The LGPL more permisssive than GPL. | yes        |
-    And release content:
+    And the following "release" content:
       | title                 | release number | release notes       | is version of |
       | Asset release example | C3PO           | Release description | Solution A    |
-    And distribution content:
+    And the following "distribution" content:
       | title                      | description        | licence | resources  | release               | published at | modification date |
       | Asset distribution example | Sample description | LGPL    | test.zip   | Asset release example | 2019-11-19   | 2021-11-19        |
     And the following solution user membership:
@@ -50,7 +50,7 @@ Feature: Asset distribution editing.
     And I should see the text "Last update: 19/11/2021"
 
   Scenario: Edit a distribution as a solution facilitator.
-    Given licence content:
+    Given the following "licence" content:
       | title           | description                         | deprecated |
       | The same LGPL   | The LGPL more permisssive than GPL. | yes        |
       | Another LGPL    | The LGPL more permisssive than GPL. | yes        |

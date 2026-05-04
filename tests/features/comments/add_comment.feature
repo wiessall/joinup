@@ -3,24 +3,24 @@ Feature: Add comments
   As a visitor of the website I can leave a comment on community content.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title             | closed |
       | Gossip collection | no     |
       | Show collection   | yes    |
-    And solution content:
+    And the following "solution" content:
       | title                | collection        |
       | Gossip girl solution | Gossip collection |
-    And news content:
+    And the following "news" content:
       | title             | collection        | solution             | author        | body                                                |
       | Scandalous news   | Gossip collection |                      | Layonel Sarok | How could this ever happen? Moral panic on its way! |
       | Scandalous news 2 |                   | Gossip girl solution | Layonel Sarok | How could this ever happen? Moral panic on its way! |
-    And discussion content:
+    And the following "discussion" content:
       | title          | collection        | author        | body                                                |
       | Is gossip bad? | Gossip collection | Layonel Sarok | How could this ever happen? Moral panic on its way! |
-    And document content:
+    And the following "document" content:
       | title     | collection        | author        | body                                                |
       | Wikileaks | Gossip collection | Layonel Sarok | How could this ever happen? Moral panic on its way! |
-    And event content:
+    And the following "event" content:
       | title             | collection        | author        | body                                                |
       | Wikileaks         | Gossip collection | Layonel Sarok | How could this ever happen? Moral panic on its way! |
       | Quantum Echo Fest | Gossip collection | Layonel Sarok | How could this ever happen? Moral panic on its way! |
@@ -155,13 +155,13 @@ Feature: Add comments
       | event        | Quantum Echo Fest |
 
   Scenario: Anonymized comments
-    Given news content:
+    Given the following "news" content:
       | title                     | body                                                | collection      |
       | Bosinga wears pope outfit | How could this ever happen? Moral panic on its way! | Show collection |
-    And discussion content:
+    And the following "discussion" content:
       | title                  | body                                           | collection      |
       | Is gossip good or not? | How could this ever happen? Moral panic on its | Show collection |
-    And document content:
+    And the following "document" content:
       | title                   | body                                                | collection      |
       | Celebrity scandals 2022 | How could this ever happen? Moral panic on its way! | Show collection |
 
@@ -271,7 +271,7 @@ Feature: Add comments
   # Regression test: Verify that the comment form is not displayed to anonymous users.
   # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-10945
   Scenario: Anonymous users can't see and submit the comment form on community content.
-    Given news content:
+    Given the following "news" content:
       | title           | body                   | collection        |
       | Comment Bosinga | Node with comments.    | Gossip collection |
       | Comment Roseta  | Node without comments. | Gossip collection |

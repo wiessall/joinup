@@ -4,11 +4,11 @@ Feature: Last Activity feature
   I want to be able to see last activity inside a tile.
 
   Scenario: The discussion tile should show the last activity box.
-    Given collection content:
+    Given the following "collection" content:
       | title                         | description       |
       | Development through bricolage | Bricolage 101.    |
       | Carrots love tomatoes         | Truth is out now. |
-    And discussion content:
+    And the following "discussion" content:
       | title         | collection                    | shared on             | created    | changed    |
       | Tools cabinet | Development through bricolage | Carrots love tomatoes | 01-01-2023 | 01-01-2023 |
     And users:

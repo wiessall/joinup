@@ -15,11 +15,11 @@ Feature:
       | tsubasa  |       | Tsubasa    | Akiyama     |
       | hoshiko  |       | Hoshiko    | Watanabe    |
       | takehiko |       | Takehiko   | Moto        |
-    And collection content:
+    And the following "collection" content:
       | title                    |
       | Muscle tissue formation  |
       | Cultured meat technology |
-    Given solution content:
+    Given the following "solution" content:
       | title                         | collection               |
       | Aligning myotubes             | Muscle tissue formation  |
       | Increasing global meat demand | Cultured meat technology |

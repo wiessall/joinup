@@ -25,10 +25,10 @@ Feature: Solution membership overview
       | Glædwine Ruskin     | Glædwine   | Ruskin      | linus.jpeg   | Comptroller                     |
       | Pocahontas Mathieu  | Pocahontas | Mathieu     | blaise.jpg   | Chief Communications Officer    |
       | Callista Wronski    | Callista   | Wronski     | richard.jpg  | Founder                         |
-    And collection content:
+    And the following "collection" content:
       | title              |
       | Growing collection |
-    And solution content:
+    And the following "solution" content:
       | title        | collection         |
       | Growing zone | Growing collection |
     And the following solution user memberships:

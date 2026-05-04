@@ -6,7 +6,7 @@ Feature: Subscribing to a collection after joining
 
   @javascript
   Scenario: Show a modal dialog asking a user to subscribe after joining
-    Given collection content:
+    Given the following "collection" content:
       | title            | abstract                       | closed | description                          |
       | Sapient Pearwood | Grows in magic-polluted areas  | no     | This tree is impervious to magic.    |
       | Drop bears       | Predator from the koala family | no     | Drops from a tree onto its prey.     |

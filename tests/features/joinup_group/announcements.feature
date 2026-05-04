@@ -312,11 +312,11 @@ Feature: Messaging group announcements
 
   @javascript @group-e
   Scenario: Announcement moderation
-    Given collection content:
+    Given the following "collection" content:
       | title       |
       | Collection1 |
       | Collection2 |
-    And solution content:
+    And the following "solution" content:
       | title                 | collection  |
       | Collection1 Solution1 | Collection1 |
       | Collection1 Solution2 | Collection1 |
@@ -424,7 +424,7 @@ Feature: Messaging group announcements
 
   @group-e
   Scenario: Wrong recipient's name in announcements.
-    Given collection content:
+    Given the following "collection" content:
       | title         | state     |
       | Wrong pension | published |
     And users:

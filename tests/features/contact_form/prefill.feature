@@ -5,10 +5,10 @@ Feature: Prefill contact form fields
   I want to be able to prefill some fields of the contact form
 
   Scenario: The subject field can be prefilled through links.
-    Given collection content:
+    Given the following "collection" content:
       | title                | topic |
       | CAMSS test community | HR    |
-    And custom_page content:
+    And the following "custom_page" content:
       | title                | collection           |
       | IOP page custom page | CAMSS test community |
     And I append "simple_paragraph" to "field_paragraphs_body" field in "node" entity with following "IOP page custom page" title:

@@ -5,10 +5,10 @@ Feature: Actions log
   I want to have access the actions log report
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title         |
       | Tilt and Turn |
-    Given solution content:
+    Given the following "solution" content:
       | title    | collection    |
       | Skylight | Tilt and Turn |
     Given users:

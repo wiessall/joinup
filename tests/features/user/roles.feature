@@ -91,7 +91,7 @@ Feature: User role management
     And 0 e-mails should have been sent
 
   Scenario: A moderator can assign and remove the Licence manager role.
-    Given licence content:
+    Given the following "licence" content:
       | title        | description               | licence type  |
       | Open licence | Licence agreement details | Public domain |
 

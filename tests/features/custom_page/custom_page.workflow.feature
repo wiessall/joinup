@@ -11,7 +11,7 @@ Feature: Custom page workflow transitions.
     And the following collection user memberships:
       | collection | user         | roles       |
       | Portal support | Mickey Mouse | facilitator |
-    And custom_page content:
+    And the following "custom_page" content:
       | title          | collection | state     |
       | Silent Echo v2 | Portal support | published |
 
@@ -33,7 +33,7 @@ Feature: Custom page workflow transitions.
     And I see h1 span element with title "Silent Echo Extended"
 
   Scenario: Test unpublish transition makes page unavailable to end users
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title       | collection | state     |
       | Help Center | Portal support | published |
 

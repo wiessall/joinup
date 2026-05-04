@@ -158,7 +158,7 @@ Feature:
     And I should not see the heading "Hello world"
 
   Scenario: Description and summary are displayed accordingly.
-    Given news content:
+    Given the following "news" content:
       | title  | headline |
       | News 1 | News 1   |
     And the following topics are enabled in the homepage:
@@ -192,10 +192,10 @@ Feature:
 
   @javascript
   Scenario: Lists of configurable content can be added in the page of the topic meta entity.
-    Given news content:
+    Given the following "news" content:
       | title  | headline | collection |
       | News 1 | News 1   | Portal support |
-    And custom_page content:
+    And the following "custom_page" content:
       | title          | collection |
       | Popular quotes | Portal support |
     And I append "text" to "field_paragraphs_body" field in "node" entity with following "Popular Quotes" title:
@@ -299,13 +299,13 @@ Feature:
 
   @javascript
   Scenario: Regression test to ensure order of entities.
-    Given news content:
+    Given the following "news" content:
       | title  | headline | body              | created    | changed    | topic     |
       | News 1 | News 1   | Test              | 01-01-2023 | 03-02-2023 | E-justice |
       | News 2 | News 2   | Test              | 02-01-2023 | 02-02-2023 | E-justice |
       | News 3 | News 3   | Test              | 03-01-2023 | 01-02-2023 | E-justice |
       | News 4 | News 4   | Should not appear | 04-01-2023 | 01-01-2023 | E-health  |
-    And event content:
+    And the following "event" content:
       | title   | field_paragraphs_body | start date   | end date    | created    | topic     |
       | Event 1 | Test                  | now -8 days  | now -9 days | now -4 day | E-justice |
       | Event 2 | Test                  | now -9 days  | now -8 days | now -3 day | E-justice |
@@ -460,7 +460,7 @@ Feature:
 
   @javascript
   Scenario: Configurable listing for solutions
-    Given solution content:
+    Given the following "solution" content:
       | title                   | description              | collection | abstract                          | topic                                                                    | created    | changed    |
       | Another rough day       | Lorem description issum  | Portal support |                                   | E-justice, Finance in EU, Supplier exchange, HR, Statistics and Analysis | 01-01-2023 | 03-02-2023 |
       | Just another day & solt | Second description issum | Portal support | This is an solution with abstract | E-justice                                                                | 02-01-2023 | 03-02-2023 |

@@ -5,7 +5,7 @@ Feature: Solutions Overview
   I should see a list of all solutions
 
   Scenario: Solution overview paging
-    Given solution content:
+    Given the following "solution" content:
       | title      | creation date     |
       | Arctic fox | 2018-10-04 8:21am |
       | Alpaca     | 2018-10-04 8:31am |
@@ -57,10 +57,10 @@ Feature: Solutions Overview
     Given users:
       | Username      | E-mail                            |
       | Madam Shirley | i.dont.see.the.future@example.com |
-    And collection content:
+    And the following "collection" content:
       | title                 | logo     |
       | Pikachu, I choose you | logo.png |
-    And solution content:
+    And the following "solution" content:
     # As of ISAICP-3618 descriptions should not be visible in regular tiles.
       | title                 | description                    | state     |
       | Non electronic health | Supports health-related fields | published |
@@ -155,10 +155,10 @@ Feature: Solutions Overview
       | Marjorie Parker | marjorie.parker@example.com |
       | Ryker Brandon   | ryker.brandon@example.com   |
       | Joann Womack    | joann.womack@example.com    |
-    And collection content:
+    And the following "collection" content:
       | title                 |
       | Insane Wooden Crystal |
-    Given solution content:
+    Given the following "solution" content:
       | title                        | collection            | featured | author          |
       | Subdivision Morbid           | Insane Wooden Crystal | yes      | Marjorie Parker |
       | Long Tungsten                | Insane Wooden Crystal | no       | Ryker Brandon   |
@@ -167,7 +167,7 @@ Feature: Solutions Overview
       | Lost Scattered Fish          | Insane Wooden Crystal | no       | Joann Womack    |
       | Silver Gravel                | Insane Wooden Crystal | no       | Joann Womack    |
     # Technical: use a separate step to create a collection associated to the anonymous user.
-    And solution content:
+    And the following "solution" content:
       | title      | collection            | featured |
       | Flag Rough | Insane Wooden Crystal | no       |
 

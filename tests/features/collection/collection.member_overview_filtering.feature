@@ -14,7 +14,7 @@ Feature: Type something to filter the listing the member list
       | brookebeau | Brooke     | Kingsley    |           | brookebeau@example.com |
       | iambroke   | Nell       | Gibb        |           | iambroke@example.com   |
       | queenson   | Queen      | Emerson     |           | queenson@example.com   |
-    And collection content:
+    And the following "collection" content:
       | title         | creation date |
       | Coffee makers | 01-01-2018    |
     And the following collection user memberships:

@@ -15,11 +15,11 @@ Feature: Subscribers report
       | dope     |       | Dope       | Ice         |
       | young    |       | Young      | G           |
       | lil      |       | Lil        | Mama        |
-    And collection content:
+    And the following "collection" content:
       | title             |
       | Marine ecosystems |
       | Plant science     |
-    Given solution content:
+    Given the following "solution" content:
       | title                 | collection        |
       | Seagrass meadows      | Marine ecosystems |
       | Intertidal seagrasses | Plant science     |

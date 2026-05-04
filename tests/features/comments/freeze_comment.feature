@@ -3,7 +3,7 @@ Feature: Freeze comments on archived content
   As a visitor of the website I can only view comment on archived community content.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title             |
       | Gossip collection |
     And users:

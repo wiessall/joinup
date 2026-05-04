@@ -8,7 +8,7 @@ Feature:
   Scenario: The 'View' local action does not show in the canonical path.
     Given I am logged in as a developer
 
-    Given collection content:
+    Given the following "collection" content:
       | title           |
       | Test collection |
     When I go to the "Test collection" collection
@@ -16,7 +16,7 @@ Feature:
     When I click "Metadata" in the "Entity actions" region
     Then I should see the link "View" in the "Entity actions" region
 
-    Given solution content:
+    Given the following "solution" content:
       | title         | collection      |
       | Test solution | Test collection |
     When I go to the "Test solution" solution
@@ -24,7 +24,7 @@ Feature:
     When I click "Metadata" in the "Entity actions" region
     Then I should see the link "View" in the "Entity actions" region
 
-    Given release content:
+    Given the following "release" content:
       | title        | is version of |
       | Test release | Test solution |
     When I go to the "Test release" release
@@ -34,7 +34,7 @@ Feature:
     When I click "Metadata" in the "Entity actions" region
     Then I should see the link "View" in the "Entity actions" region
 
-    Given distribution content:
+    Given the following "distribution" content:
       | title             | release      |
       | Test distribution | Test release |
     When I go to the "Test distribution" distribution
@@ -54,7 +54,7 @@ Feature:
     # When I click "Metadata" in the "Entity actions" region
     # Then I should see the link "View" in the "Entity actions" region
 
-    Given discussion content:
+    Given the following "discussion" content:
       | title           | collection      |
       | Test discussion | Test collection |
     When I go to the "Test discussion" discussion
@@ -62,7 +62,7 @@ Feature:
     When I click "Delete" in the "Entity actions" region
     Then I should see the link "View" in the "Entity actions" region
 
-    Given document content:
+    Given the following "document" content:
       | title         | collection      |
       | Test document | Test collection |
     When I go to the "Test document" document
@@ -70,7 +70,7 @@ Feature:
     When I click "Delete" in the "Entity actions" region
     Then I should see the link "View" in the "Entity actions" region
 
-    Given event content:
+    Given the following "event" content:
       | title      | collection      |
       | Test event | Test collection |
     When I go to the "Test event" event
@@ -78,7 +78,7 @@ Feature:
     When I click "Delete" in the "Entity actions" region
     Then I should see the link "View" in the "Entity actions" region
 
-    Given news content:
+    Given the following "news" content:
       | title     | collection      |
       | Test news | Test collection |
     When I go to the "Test news" news

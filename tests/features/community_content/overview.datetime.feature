@@ -5,7 +5,7 @@ Feature:
   I want to have publication and update dates presented in the overview of my content.
 
   Scenario Outline: Last update date shown for specific content bundles.
-    Given collection content:
+    Given the following "collection" content:
       | title                        |
       | Gravitational wave detectors |
     And <type> content:
@@ -62,7 +62,7 @@ Feature:
       | news     | published at              |
 
   Scenario: Documents without a publication date should show the published_at property.
-    Given collection content:
+    Given the following "collection" content:
       | title                        |
       | Gravitational pull detectors |
     When I am logged in as a facilitator of the "Gravitational pull detectors" collection
@@ -86,7 +86,7 @@ Feature:
     And I should not see the text "Last update:" in the "Content" region
 
   Scenario: Draft documents without a publication date should only show the last updated time.
-    Given collection content:
+    Given the following "collection" content:
       | title                        |
       | Gravitational pull detectors |
     When I am logged in as a facilitator of the "Gravitational pull detectors" collection

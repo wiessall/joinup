@@ -10,7 +10,7 @@ Feature: Solution membership administration
       # Authenticated user.
       | Guadalupe Norman | guadalupe_norman@example.com | Guadalupe  | Norman      |
       | Marcia Garcia    | marcia_garcia@example.com    | Marcia     | Garcia      |
-    And solution content:
+    And the following "solution" content:
       | title            | moderation |
       | The Missing Sons | no         |
     And the following solution user memberships:
