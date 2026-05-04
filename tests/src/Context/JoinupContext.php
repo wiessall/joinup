@@ -19,6 +19,7 @@ use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\AfterNodeCreate;
 use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
@@ -845,9 +846,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope $scope
    *   The after node create scope.
-   *
-   * @AfterNodeCreate
    */
+  #[AfterNodeCreate]
   public function ensureLogoAltText(AfterNodeCreateScope $scope): void {
     $node = $scope->getEntity();
 
