@@ -536,6 +536,7 @@ display:
         page_1: page_1
         default: '0'
       filename: solution-by-type.csv
+      export_filesystem: private
     cache_metadata:
       max-age: -1
       contexts:

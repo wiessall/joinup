@@ -13,10 +13,10 @@ Feature:
       | title  | state     |
       | Sparta | published |
     And custom_page content:
-      | title       | headline    | collection  | content       | state     | abstract             |
-      | Some page 1 | Some page 1 | Roman ruins | Some content. | published | Some page 1 abstract |
-      | Some page 2 | Some page 2 | Sparta      | Some content. | published | Some page 2 abstract |
-      | Some page 3 | Some page 3 | Sparta      | Some content. | published | Some page 3 abstract |
+      | title       | collection  | content       | state     | abstract             |
+      | Some page 1 | Roman ruins | Some content. | published | Some page 1 abstract |
+      | Some page 2 | Sparta      | Some content. | published | Some page 2 abstract |
+      | Some page 3 | Sparta      | Some content. | published | Some page 3 abstract |
 
     When I am logged in as a moderator
     And I go to the homepage
