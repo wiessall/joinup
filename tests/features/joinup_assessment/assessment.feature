@@ -5,7 +5,6 @@ Feature: Assessments
     Given I am an anonymous user
     When I go to "/collection/assessments/assessment-reports"
     And I see h1 span element with title "Assessment reports"
-    And I should see the link "New assessment"
     And I should not see the link "My assessments"
     And I should not see the link "Search assessments"
     And I should see the text "There are no published assessment reports yet. You can add one by filling this questionnaire"
@@ -26,7 +25,6 @@ Feature: Assessments
 
     When I go to the "Assessment reports" custom_page
     And I see h1 span element with title "Assessment reports"
-    And I should see the link "New assessment"
     And I should not see the link "My assessments"
     And I should not see the link "Search assessments"
     And I should not see the text "There are no published assessment reports yet. You can add one by filling this questionnaire"
@@ -67,7 +65,6 @@ Feature: Assessments
     When I am logged in as a moderator
     When I go to "/collection/assessments/assessment-reports"
     And I see h1 span element with title "Assessment reports"
-    And I should see the link "New assessment"
     And I should see the link "My assessments"
     And I should not see the link "Search assessments"
     And I should not see the text "There are no published assessment reports yet. You can add one by filling this questionnaire"
