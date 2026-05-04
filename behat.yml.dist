@@ -123,7 +123,6 @@ default:
   extensions:
     Drupal\MinkExtension:
       base_url: ${env.DRUPAL_BASE_URL}
-      ajax_timeout: 10
       files_path: ${joinup.dir}/tests/fixtures/files
       browserkit_http:
         guzzle_request_options:
@@ -185,9 +184,10 @@ default:
         'Users': 'table'
         'IEF table': '.ief-entity-table'
     Drupal\DrupalExtension:
+      ajax_timeout: 10
       api_driver: 'drupal'
       blackbox: ~
-      region_map:
+      regions:
         Administration toolbar: '#toolbar-administration'
         Bookmark block: '#block-ventuno-bookmark'
         Comment: 'section.comments'
@@ -250,9 +250,6 @@ default:
         success_message_selector: '.alert.alert--status, .messages.messages--status, .alert.alert-success'
         warning_message_selector: '.alert.alert--warning, .messages.messages--warning, .alert.alert-warning'
         login_form_selector: '#user-login-form'
-      subcontexts:
-        autoload: false
-        paths: []
       text:
         log_in: 'Sign in'
         log_out: 'Sign out'
