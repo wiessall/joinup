@@ -9,7 +9,7 @@ open: null
 close: null
 uid: null
 template: false
-archive: true
+archive: false
 id: assessment
 title: 'Online form for Assessments'
 description: '<p>Interoperable Europe Solution Assessment form</p>'
