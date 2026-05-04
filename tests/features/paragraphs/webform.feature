@@ -7,7 +7,7 @@ Feature:
     Given the following "collection" content:
       | title              |
       | Webform collection |
-    And users:
+    And the following users:
       | Username   | E-mail                 | First name | Family name |
       | john.smith | john.smith@example.com | John       | Smith       |
 

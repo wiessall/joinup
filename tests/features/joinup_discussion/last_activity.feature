@@ -11,7 +11,7 @@ Feature: Last Activity feature
     And the following "discussion" content:
       | title         | collection                    | shared on             | created    | changed    |
       | Tools cabinet | Development through bricolage | Carrots love tomatoes | 01-01-2023 | 01-01-2023 |
-    And users:
+    And the following users:
       | Username     | Roles | E-mail                   | First name | Family name |
       | alicia__1997 |       | AliciaPotter@example.com | Alicia     | Potter      |
     When I go to the "Development through bricolage" collection

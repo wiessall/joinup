@@ -5,7 +5,7 @@ Feature: Discussion moderation
   I need to be able to transit the discussions from one state to another.
 
   Scenario: Publish, request changes, propose, publish again and archive a discussion.
-    Given users:
+    Given the following users:
       | Username        |
       | Gabe Rogers     |
       | Brigham Salvage |
@@ -81,7 +81,7 @@ Feature: Discussion moderation
     Then I should not see the link "Edit" in the "Entity actions" region
 
   Scenario: Disabling a discussion prevents additional comments to be created.
-    Given users:
+    Given the following users:
       | Username      | E-mail                    |
       | Vince Rome    | vince.rome@example.com    |
       | Lance Rustici | lance.rustici@example.com |

@@ -148,7 +148,7 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when a collection or solution with the given label doesn't exist.
    *
-   * @see \Drupal\DrupalExtension\Context\DrupalContext::assertAuthenticatedByRole()
+   * @see \Drupal\DrupalExtension\Context\DrupalContext::iAmLoggedInAsUserWithRole()
    */
   #[Given('I am logged in as a user with the :role role(s) of the :group_label :group_bundle')]
   #[Given('I am logged in as a/an :role of the :group_label :group_bundle')]
@@ -206,7 +206,7 @@ class JoinupContext extends RawDrupalContext {
     $roles = $this->getOgRoles($roles, $entity);
 
     $current_user = $this->getUserManager()->getCurrentUser();
-    $account = User::load($current_user->uid);
+    $account = User::load($current_user->getValue('uid'));
 
     $this->subscribeUserToGroup($account, $entity, $roles);
   }
@@ -234,7 +234,7 @@ class JoinupContext extends RawDrupalContext {
     }
 
     $current_user = $this->getUserManager()->getCurrentUser();
-    $account = User::load($current_user->uid);
+    $account = User::load($current_user->getValue('uid'));
 
     $this->subscribeUserToGroup($account, $entity, [], $state);
   }
@@ -261,7 +261,7 @@ class JoinupContext extends RawDrupalContext {
       return FALSE;
     }
     $current_user = $this->getUserManager()->getCurrentUser();
-    $user = \Drupal::entityTypeManager()->getStorage('user')->loadUnchanged($current_user->uid);
+    $user = \Drupal::entityTypeManager()->getStorage('user')->loadUnchanged($current_user->getValue('uid'));
     $membership = $group->getMembership($user->id());
     if (empty($membership)) {
       return FALSE;

@@ -3,7 +3,7 @@ Feature: User role management
   As a moderator I must be able to assign roles to users.
 
   Background:
-    Given users:
+    Given the following users:
       | Username        | Roles           | E-mail                    |
       | Administrator   | Administrator   | product.owner@example.com |
       | Rick Rolls      | Moderator       | rick.rolls@example.com    |

@@ -10,7 +10,7 @@ Feature: Joining a collection as an anonymous user
       | Reannual plants | no     |
       | Vul nuts        | yes    |
       | CoC collection  | yes    |
-    And users:
+    And the following users:
       | Username         |
       | Hepzibah Whitlow |
     And collection user membership:
@@ -182,7 +182,7 @@ Feature: Joining a collection as an anonymous user
 
   @javascript
   Scenario: Logged out users can join a collection after logging in
-    Given users:
+    Given the following users:
       | Username       |
       | Daniel Trooper |
     And CAS users:

@@ -8,10 +8,10 @@ Feature: SEO for news articles.
     Given the following "collection" content:
       | title                       |
       | Joinup SEO event collection |
-    And users:
+    And the following users:
       | Username          | E-mail                 | First name | Family name |
       | Joinup SEO author | joinup.seo@example.com | Patrick    | Stewart     |
-    And "event" content:
+    And the following "event" content:
       | title            | short title   | web url   | start date                | end date                  | body           | logo     | agenda        | location   | online location                                          | organisation        | scope         | keywords | collection                  | abstract |
       | Joinup SEO event | JOINUPSEO2020 | <web url> | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | Body of event. | logo.png | Event agenda. | <location> | 0: Some title - 1: http://example.com/some-online-meetup | European Commission | International | Alphabet | Joinup SEO event collection |          |
     When I visit the "Joinup SEO event" event
@@ -91,10 +91,10 @@ Feature: SEO for news articles.
     Given the following "collection" content:
       | title                       |
       | Joinup SEO event collection |
-    And users:
+    And the following users:
       | Username          | E-mail                 | First name | Family name |
       | Joinup SEO author | joinup.seo@example.com | Patrick    | Stewart     |
-    And "event" content:
+    And the following "event" content:
       | title            | short title   | online location                                          | collection                  |
       | Joinup SEO event | JOINUPSEO2021 | 0: Some title - 1: http://example.com/some-online-meetup | Joinup SEO event collection |
 

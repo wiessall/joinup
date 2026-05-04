@@ -5,7 +5,7 @@ Feature: Custom page workflow transitions.
   I need to test workflow buttons functionality.
 
   Scenario: Test save new draft, save as draft, and publish buttons
-    Given users:
+    Given the following users:
       | Username     | E-mail                   |
       | Mickey Mouse | mickey.mouse@example.com |
     And the following collection user memberships:

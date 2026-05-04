@@ -4,7 +4,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
   links to their definition page.
 
   Scenario Outline: Manage a glossary.
-    Given users:
+    Given the following users:
       | Username | Roles  |
       | <user>   | <role> |
     And the following "collection" content:
@@ -236,7 +236,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     And I should see the link "aBC"
 
   Scenario: Limiting replacements to the first occurrence.
-    Given users:
+    Given the following users:
       | Username | Roles     |
       | regular  |           |
       | fac      |           |
@@ -317,7 +317,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     Then I should see the heading "Collection With Glossary collection settings"
 
   Scenario: Test glossary term name and synonyms collision.
-    Given users:
+    Given the following users:
       | Username |
       | ben      |
     And the following "collection" content:
@@ -413,7 +413,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     Then I should see the success message "Glossary term XRatings has been created."
 
   Scenario: Allow rich text in Glossary contains bold, italic, underline and list.
-    Given users:
+    Given the following users:
       | Username | Roles     |
       | mod      | moderator |
     And the following "collection" content:
@@ -435,7 +435,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     And the page should contain the html text "Definition <strong>bold</strong> <em>italic</em> <u>underline</u> <ul><li>list 1</li><li>list 2</li></ul>"
 
   Scenario: Let only allowed users to download the glossary in CSV format.
-    Given users:
+    Given the following users:
       | Username | Roles     |
       | regular  |           |
       | auth     |           |

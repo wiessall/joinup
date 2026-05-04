@@ -93,7 +93,7 @@ Feature: Solution moderation
     And I should not see the link "Delete" in the "Content buttons"
 
   Scenario: Test the moderation workflow available states.
-    Given users:
+    Given the following users:
       | Username         | Roles     |
       # Authenticated user.
       | Isabel Banks     |           |

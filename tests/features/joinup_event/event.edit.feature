@@ -31,7 +31,7 @@ Feature: "Event page" editing.
     And I should not see a map on the page
 
   Scenario Outline: Owners and moderators should be able to view the Edit link.
-    Given users:
+    Given the following users:
       | Username |
       | <user>   |
     And the following "collection" content:
@@ -40,7 +40,7 @@ Feature: "Event page" editing.
     And the following collection user memberships:
       | collection   | user   | roles  |
       | <collection> | <user> | <role> |
-    And "event" content:
+    And the following "event" content:
       | title   | author | collection   |
       | <event> | <user> | <collection> |
     When I am logged in as "<user>"
@@ -57,7 +57,7 @@ Feature: "Event page" editing.
       | Emilio Garcia  | The Final Bridges | The Dreaming of the Game | facilitator |
 
   Scenario: A solution facilitator can edit his content.
-    Given users:
+    Given the following users:
       | Username       |
       | Krista Garrett |
     Given the following "solution" content:
@@ -66,7 +66,7 @@ Feature: "Event page" editing.
     And the following solution user memberships:
       | solution             | user           | roles       |
       | Dreamer in the Snake | Krista Garrett | facilitator |
-    And "event" content:
+    And the following "event" content:
       | title       | author         | solution             | state    |
       | Silver Snow | Krista Garrett | Dreamer in the Snake | proposed |
     When I am logged in as "Krista Garrett"

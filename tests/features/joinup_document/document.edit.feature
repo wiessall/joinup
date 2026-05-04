@@ -5,7 +5,7 @@ Feature: "Document page" editing.
   I need to be able to edit it.
 
   Scenario Outline: Owners and moderators should be able to view the Edit link.
-    Given users:
+    Given the following users:
       | Username |
       | <user>   |
     And the following "collection" content:
@@ -14,7 +14,7 @@ Feature: "Document page" editing.
     And the following collection user memberships:
       | collection   | user   | roles  |
       | <collection> | <user> | <role> |
-    And "document" content:
+    And the following "document" content:
       | title      | author | collection   |
       | <document> | <user> | <collection> |
     When I am logged in as "<user>"
@@ -30,7 +30,7 @@ Feature: "Document page" editing.
       | Tamara Kelley  | The Bold Stones | The Tales of the Twins | facilitator |
 
   Scenario: A solution facilitator can edit his content.
-    Given users:
+    Given the following users:
       | Username    |
       | Peter Floyd |
     Given the following "solution" content:
@@ -39,7 +39,7 @@ Feature: "Document page" editing.
     And the following solution user memberships:
       | solution               | user        | roles       |
       | Predator in the Future | Peter Floyd | facilitator |
-    And "document" content:
+    And the following "document" content:
       | title        | author      | solution               |
       | Prized Cloud | Peter Floyd | Predator in the Future |
     When I am logged in as "Peter Floyd"

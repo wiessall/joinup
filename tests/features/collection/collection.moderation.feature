@@ -19,7 +19,7 @@ Feature: Collection moderation
     And I should not see the link "Delete"
 
   Scenario: Test the available buttons in every stage of the editorial workflow
-    Given users:
+    Given the following users:
       | Username        | Roles     |
       # Authenticated user.
       | Velma Smith     |           |

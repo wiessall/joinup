@@ -3,7 +3,7 @@ Feature: Administer media.
 
   @javascript
   Scenario: Moderators are able to administer media.
-    Given users:
+    Given the following users:
       | Username | Roles     |
       | joe      |           |
       | theOne   | moderator |

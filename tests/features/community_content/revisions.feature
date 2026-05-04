@@ -9,7 +9,7 @@ Feature:
     Given <group type> content:
       | title        | description                               | group_moderation |
       | Hellow world | Because I do not know how to spell Hello. | <moderation>     |
-    And users:
+    And the following users:
       | Username          | E-mail                    | Roles     |
       | Clumsy Bounce     | clumsy.bounce@example.com |           |
       | Grumpy Author     | grumpy@auth.com           |           |

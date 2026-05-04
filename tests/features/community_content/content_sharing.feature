@@ -8,10 +8,10 @@ Feature: Sharing content between collections
     Given the following "collection" content:
       | title        |
       | Target group |
-    And "news" content:
+    And the following "news" content:
       | title       | collection     | shared on    | shared at |
       | Shared news | Portal support | Target group | - 32 days |
-    And "event" content:
+    And the following "event" content:
       | title        | collection     | shared on    | shared at |
       | Shared event | Portal support | Target group | -7 months |
 
@@ -26,7 +26,7 @@ Feature: Sharing content between collections
 
   @javascript
   Scenario Outline: Users can share content in the groups they are member of.
-    Given users:
+    Given the following users:
       | Username    | E-mail                  |
       | Sara Barber | sara.barber@example.com |
     And <group type> content:
@@ -189,7 +189,7 @@ Feature: Sharing content between collections
     And "<content type>" content:
       | title       | <group type> |
       | Iron throne | Westeros     |
-    Given users:
+    Given the following users:
       | Username       | E-mail                     | Roles     |
       | Jamie Lanister | jamie.lanister@example.com | moderator |
       | John Snow      | john.snow@example.com      |           |
@@ -255,7 +255,7 @@ Feature: Sharing content between collections
     Given the following "collection" content:
       | title         |
       | Chocolate Way |
-    And "document" content:
+    And the following "document" content:
       | title                 | collection     | shared on     | created    | pinned |
       | Milky Way content     | Portal support | Chocolate Way | 2017-06-04 | yes    |
       | Chocolate Way content | Chocolate Way  |               | 2017-06-05 | no     |

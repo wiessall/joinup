@@ -4,7 +4,7 @@ Feature: As a group (collection or solution) owner or site moderator
   I should be able to transfer the group ownership.
 
   Background:
-    Given users:
+    Given the following users:
       | Username | Roles                   | First name | Family name   |
       | loner    |                         | Freyja     | Stefánsdóttir |
       | happy    | administrator,moderator | Saga       | Þórirsdóttir  |

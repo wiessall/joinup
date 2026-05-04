@@ -5,7 +5,7 @@ Feature: Group member permissions table
   I need to be able to see which permissions I have
 
   Scenario:
-    Given users:
+    Given the following users:
       | Username         |
       | Horace Worblehat |
       | Ponder Stibbons  |

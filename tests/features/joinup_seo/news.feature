@@ -8,7 +8,7 @@ Feature: SEO for news articles.
     Given the following "collection" content:
       | title                                           |
       | Interoperable Europe Portal SEO news collection |
-    And users:
+    And the following users:
       | Username                               | E-mail                 | First name | Family name |
       | Interoperable Europe Portal SEO author | joinup.seo@example.com | Kurk       | Smith       |
     And the following "news" content:

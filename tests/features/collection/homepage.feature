@@ -5,7 +5,7 @@ Feature: Collection homepage
   I need to be able see all content related to a collection on the collection homepage
 
   Background:
-    Given users:
+    Given the following users:
       | Username | Status | Roles     |
       | Frodo    | active |           |
       | Boromir  | active |           |
@@ -168,7 +168,7 @@ Feature: Collection homepage
   # Regression test for OE Webtools e-translate service.
   @javascript
   Scenario: The applied etranslate selectors correspond to the collection's landing page
-    Given "custom_page" content:
+    Given the following "custom_page" content:
       | title               | collection         |
       | Custom Landing Page | Middle earth daily |
     Given I am not logged in

@@ -5,7 +5,7 @@ Feature: Revoke privileges from former and blocked members
   I need to be able to block or remove members while keeping their content
 
   Background:
-    Given users:
+    Given the following users:
       | Username  |
       | Lord Hong |
     And the following "collection" content:

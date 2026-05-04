@@ -2,7 +2,7 @@
 Feature: Interoperable Europe Portal should be ADMS-AP compliant.
 
   Scenario: Validate the entities in the published graph.
-    Given users:
+    Given the following users:
       | Username         | E-mail                       |
       | Andre Munson     | andre.munson@example.com     |
       | Branson Winthrop | branson.winthrop@example.com |

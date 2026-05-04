@@ -2,7 +2,7 @@
 Feature: Collections Overview
 
   Scenario: View collection overview as an anonymous user
-    Given users:
+    Given the following users:
       | Username      | E-mail                       |
       | Madam Shirley | i.see.the.future@example.com |
     And the following "collection" content:
@@ -107,7 +107,7 @@ Feature: Collections Overview
     But the "Trello" "news" tile should not be marked as featured
 
   Scenario: Users are able to filter collections they have created or that are featured site-wide.
-    Given users:
+    Given the following users:
       | Username          |
       | Carolina Mercedes |
       | Luigi Plant       |

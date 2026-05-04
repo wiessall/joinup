@@ -5,7 +5,7 @@ Feature: Solution RSS feed.
   I want to subscribe to RSS feeds for each solution
 
   Scenario: Solution RSS feed.
-    Given users:
+    Given the following users:
       | Username | First name | Family name |
       | scorlan  | Sartin     | Corlan      |
     And the following "collection" content:

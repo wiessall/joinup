@@ -129,7 +129,7 @@ Feature: "Add custom page" visibility options.
     Then I see the text "Rubber's bands" in the "Visually hidden title" region
 
   Scenario: Moderators can access the "Add custom page" menu item.
-    Given users:
+    Given the following users:
       | Username | Roles     |
       | Falstad  | moderator |
 

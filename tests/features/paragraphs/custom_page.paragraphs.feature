@@ -50,7 +50,7 @@ Feature:
     Given <group type> content:
       | title                 |
       | Paragraphs group type |
-    And users:
+    And the following users:
       | Username |
       | Zohan    |
       | Gilfoyle |

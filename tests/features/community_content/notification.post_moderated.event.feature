@@ -5,7 +5,7 @@ Feature: Notification test for the event transitions on a post moderated parent.
   I want to receive a notification when an entity is proposed.
 
   Scenario Outline: Notifications should be sent whenever a event is going through a relevant transition.
-    Given users:
+    Given the following users:
       | Username         | Roles     | E-mail                      | First name | Family name |
       | Notify moderator | moderator | notify_moderator@test.com   | Notify     | Moderator   |
       | CC owner         |           | notify_owner@test.com       | CC         | Owner       |

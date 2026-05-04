@@ -5,7 +5,7 @@ Feature:
   I want to have access to a page listing group reports
 
   Background:
-    Given users:
+    Given the following users:
       | Username | Roles | First name | Family name |
       | keiko    |       | Keiko      | Kuroki      |
       | juro     |       | Juro       | Yamasaki    |

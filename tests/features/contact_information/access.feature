@@ -14,7 +14,7 @@ Feature: Contact information access
     Then I should see the heading "Sign in to continue"
 
   Scenario: Facilitator can edit contact information
-    Given users:
+    Given the following users:
       | Username      | Roles | E-mail                      | First name | Family name |
       | Michiel Lucas |       | michiel.lucas@one-agency.be | Michiel    | Lucas       |
     And the following "contact_information" content:

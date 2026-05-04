@@ -10,7 +10,7 @@ Feature:
 
   @javascript
   Scenario: Moderator can manage map.
-    Given users:
+    Given the following users:
       | Username |
       | Zohan    |
     And the following collection user membership:

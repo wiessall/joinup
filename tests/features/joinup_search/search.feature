@@ -153,7 +153,7 @@ Feature: Global search
     And the following "news" content:
       | title      | headline            | field_paragraphs_body     | keywords | collection       | state     |
       | News omega | News headline delta | The epsilon news content. | Alphabet | Collection alpha | published |
-    And users:
+    And the following users:
       | Username | E-mail                      | First name | Family name |
       | jenlyle  | jenessa.carlyle@example.com | Jenessa    | Carlyle     |
 
@@ -407,7 +407,7 @@ Feature: Global search
 
   @javascript
   Scenario: Check topics filter for users.
-    Given users:
+    Given the following users:
       | Username | E-mail             | First name | Family name | Professional domain |
       | lyleu    | lyle.u@example.com | Lyle       | Uname       | Demography          |
       | kyleu    | kyle.u@example.com | Kyle       | Freeman     | E-inclusion         |

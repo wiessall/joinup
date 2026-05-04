@@ -13,7 +13,7 @@ Feature:
     Given the following "custom_page" content:
       | title              | collection     | status    |
       | Agreement of usage | Knowledge Hive | published |
-    And users:
+    And the following users:
       | Username         | E-mail                       | First name | Family name |
       | Some facilitator | some.facilitator@example.com | Some       | facilitator |
       | Cedric Hawthorne | cedric.hawthorne@example.com | Cedric     | Hawthorne   |

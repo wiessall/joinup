@@ -9,7 +9,7 @@ Feature: Pinning content entities inside solutions
       | title       |
       | Blue Wrench |
       | Sunny Beam  |
-    And users:
+    And the following users:
       | Username          | E-mail                        |
       | Sara Jessica      | sara.jessica@example.com      |
       | Tyron Lannister   | tyron.lannister@example.com   |

@@ -6,7 +6,7 @@ Feature: Invite members to subscribe to discussions
 
   @javascript
   Scenario: Invite members to a discussion
-    Given users:
+    Given the following users:
       | Username         | E-mail                           | First name | Family name |
       | Lynwood Crawford | lcrawford@example.com            | Lynwood    | Crawford    |
       | Glory Ruskin     | gloruskin.hr@example.com         | Glory      | Ruskin      |

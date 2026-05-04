@@ -5,7 +5,7 @@ Feature: Subscribers report
   I want to have access to a subscribers report
 
   Scenario: View a report on the number of subscribers
-    Given users:
+    Given the following users:
       | Username | Roles | First name | Family name |
       | busta    |       | Busta      | Dog         |
       | method   |       | Method     | Funk        |

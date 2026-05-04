@@ -7,7 +7,7 @@ Feature: Edit a comment
     Given the following "collection" content:
       | title              | closed |
       | Structural pension | no     |
-    And users:
+    And the following users:
       | Username               | E-mail                             | Roles     | First name | Family name |
       | Sons of anarchy        | sonsofanarchy@example.com          |           | Sons       | Anarchy     |
       | Comment edit moderator | comment.edit.moderator@example.com | moderator | Steeve     | Roberts     |

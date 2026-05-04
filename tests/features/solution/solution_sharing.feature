@@ -5,7 +5,7 @@ Feature: As a privileged user
 
   @javascript
   Scenario: Share link is visible for privileged users.
-    Given users:
+    Given the following users:
       | Username    | E-mail                  | First name | Family name | Roles     |
       | joe_dare    | joe_dare@example.com    | Joe        | Dare        |           |
       | kleev_elant | kleev_elant@example.com | Kleev      | Elant       |           |

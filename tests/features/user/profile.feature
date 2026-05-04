@@ -4,7 +4,7 @@ Feature: User profile
   A moderator must be able to edit any user account.
 
   Scenario: A logged-in user can navigate to his own profile and edit it.
-    Given users:
+    Given the following users:
       | Username             | E-mail              |
       | Leonardo Da Vinci    | foo@bar.com         |
       | Domenico Ghirlandaio | domedome@firenze.it |
@@ -67,7 +67,7 @@ Feature: User profile
     Then I should see the text "Country of origin: Belgium" in the "Header" region
 
   Scenario: A moderator can navigate to any user's profile and edit it.
-    Given users:
+    Given the following users:
       | Username          | E-mail                | Roles     |
       | Leonardo Da Vinci | leonardo@example.com  |           |
       | Mighty mod        | moderator@example.com | moderator |
@@ -97,7 +97,7 @@ Feature: User profile
       | body      | A moderator has edited your user profile on Interoperable Europe Portal. Please check your profile to verify the changes done. |
 
   Scenario: The user public profile page shows the content he's author of or is member of.
-    Given users:
+    Given the following users:
       | Username          | E-mail                        | First name | Family name |
       | Corwin Robert     | corwin.robert@example.com     |            |             |
       | Anise Edwardson   | anise.edwardson@example.com   |            |             |
@@ -148,7 +148,7 @@ Feature: User profile
     And I should see the following facet items "Collections, Discussion, Document, Event, News, Solution" in this order
 
   Scenario: The user profile page title should show the full name of the user.
-    Given users:
+    Given the following users:
       | Username   | E-mail                       | First name | Family name |
       | cgarnett67 | callista.garnett@example.com | Callista   | Garnett     |
       | delwin999  | deforest.elwin@example.com   |            |             |
@@ -169,7 +169,7 @@ Feature: User profile
     And I should not see the "Page title" region
 
   Scenario: The user profile page is updated when the user joins or leaves a collection
-    Given users:
+    Given the following users:
       | Username      | E-mail                           |
       | Korben Dallas | k.dallas@cabs.services.zorg.corp |
     And the following "collection" content:
@@ -226,7 +226,7 @@ Feature: User profile
     And I should not see the link "Persistent Logins"
 
   Scenario: See archived content in user profile.
-    Given users:
+    Given the following users:
       | Username          | E-mail                        |
       | Janny Robert      | janny.robert@example.com      |
       | Clarise Edwardson | clarise.edwardson@example.com |
@@ -290,7 +290,7 @@ Feature: User profile
   @javascript
   # Regression test for ticket ISAICP-9586.
   Scenario: Search widget does not save facet settings.
-    Given users:
+    Given the following users:
       | Username         | E-mail                       | First name | Family name |
       | Lion Robert      | lion.robert@example.com      | Lion       | Robert      |
     When I am logged in as a moderator
@@ -329,7 +329,7 @@ Feature: User profile
     Given spatial terms:
       | name    |
       | Valeron |
-    Given users:
+    Given the following users:
       | Username      | E-mail                    | First name | Family name | Business title      | Nationality |
       | Jane Doe      | jane.doe@example.com      | Jane       | Doe         | Software Engineer   | Valeron     |
     # Delete the term we just created, leaving a stale reference in the user.

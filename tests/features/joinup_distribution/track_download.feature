@@ -23,7 +23,7 @@ Feature: Asset distribution editing.
       | i386           | The i386 version            |          | Winter of 95 | https://mirrors.evowise.com/pub/OpenBSD/6.1/i386/random.iso | Postcard licence |
       | Changelog      | Detailed Changelog          |          | Winter of 95 | text.pdf                                                    | Postcard licence |
       | OpenBSD images | Images for logos and flyers | OpenBSD  |              | test.zip                                                    | Postcard licence |
-    And users:
+    And the following users:
       | Username       | E-mail                     |
       | Bradley Emmett | bradley.emmett@example.com |
 
@@ -84,7 +84,7 @@ Feature: Asset distribution editing.
       | Bradley Emmett           | bradley.emmett@example.com | OpenBSD images |
 
   Scenario: Download a CSV export of the distributions download report.
-    Given users:
+    Given the following users:
       | Username | E-mail            |
       | user1    | user1@example.com |
       | user2    | user2@example.com |

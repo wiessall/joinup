@@ -5,7 +5,7 @@ Feature: Notification test for the discussion transitions on a post moderated pa
   I want to receive a notification when an entity is proposed.
 
   Scenario Outline: Notifications should be sent whenever a discussion is going through a relevant transition.
-    Given users:
+    Given the following users:
       | Username         | Roles     | E-mail                      | First name | Family name | Notification frequency |
       | Notify moderator | moderator | notify_moderator@test.com   | Notify     | Moderator   | immediate              |
       | CC owner         |           | notify_owner@test.com       | CC         | Owner       | immediate              |
@@ -110,7 +110,7 @@ Feature: Notification test for the discussion transitions on a post moderated pa
     And the following "discussion" content:
       | title                            | collection              | state     |
       | How do the jets fire into space? | Event Horizon Telescope | published |
-    And users:
+    And the following users:
       | Username         |
       | Lindsey McCray   |
       | Cambria Falconer |

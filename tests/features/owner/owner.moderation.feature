@@ -6,7 +6,7 @@ Feature: Owner moderation
 
   Scenario: Publish, update, request changes, publish again and ask to delete an owner.
 
-    Given users:
+    Given the following users:
       | Username        |
       | Raeburn Hibbert |
     And the following "owner" content:

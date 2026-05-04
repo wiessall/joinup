@@ -6,7 +6,7 @@ Feature: As a user of the website
   # @covers \Drupal\joinup_search\EventSubscriber\SearchApiFieldListingOrder::queryAlter()
   # @covers \_joinup_search_search_api_has_condition()
   Scenario: Events should be filterable by future/past/my filters.
-    Given users:
+    Given the following users:
       | Username       | E-mail                      |
       | katerpillar    | kater.pillar@example.com    |
       | trustysidekick | trusty.sidekick@example.com |

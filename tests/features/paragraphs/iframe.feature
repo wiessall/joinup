@@ -10,7 +10,7 @@ Feature:
 
   @javascript
   Scenario: Moderator can manage iframe paragraph.
-    Given users:
+    Given the following users:
       | Username |
       | Zohan    |
     And the following collection user membership:

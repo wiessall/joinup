@@ -110,7 +110,7 @@ Feature: Homepage
     And I should see the "RNA vaccines" tile
 
   Scenario: Explore block shows a selection of news, events, collections and solutions
-    Given users:
+    Given the following users:
       | Username     | E-mail                   |
       | Quim Roscas  | quim.roscas@example.com  |
       | Josse Malhoa | josse.malhoa@example.com |

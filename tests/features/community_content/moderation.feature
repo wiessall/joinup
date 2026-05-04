@@ -11,7 +11,7 @@ Feature: Moderate community content
     And the following "solution" content:
       | title                 | collection          |
       | Survey For Supernovae | Black hole research |
-    And users:
+    And the following users:
       | Username       | E-mail                   | First name | Family name |
       | Marco Farfarer | marco.farfar@example.com | Marco      | Farfarer    |
 

@@ -3,7 +3,7 @@ Feature:
   Accounts of group owners cannot be cancelled.
 
   Scenario: Canceling users that are the sole owners of groups cannot be done.
-    Given users:
+    Given the following users:
       | Username      | Roles | E-mail                   | First name | Family name |
       | Hazel Olson   |       | HazelOlson@example.com   | Hazel      | Olson       |
       | Amelia Barker |       | AmeliaBarker@example.com | Amelia     | Barker      |

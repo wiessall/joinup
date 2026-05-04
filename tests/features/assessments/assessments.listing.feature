@@ -61,7 +61,7 @@ Feature: Assessment listing tests.
     Then I should see the heading "Sign in to continue"
 
     # Test as logged in user.
-    Given users:
+    Given the following users:
       | Username         |
       | Lorian Nightfall |
     And I am logged in as "Lorian Nightfall"

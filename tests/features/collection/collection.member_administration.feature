@@ -5,7 +5,7 @@ Feature: Collection membership administration
   I need to be able to manage collection members
 
   Background:
-    And users:
+    And the following users:
       | Username          | Roles     | E-mail                        | First name | Family name |
       # Authenticated user.
       | Lisa Cuddy        |           | lisa_cuddy@example.com        | Lisa       | Cuddy       |
@@ -341,7 +341,7 @@ Feature: Collection membership administration
     Then I should see the link "Invite members"
 
   Scenario: Sort member administration bulk form by full user name
-    Given users:
+    Given the following users:
       | Username | Roles | E-mail                   | First name | Family name |
       | qux98765 |       | eric_foreman@example.com | Eric       | Foreman     |
       | xyzzy123 |       | eric_drexler@example.com | Eric       | Drexler     |
@@ -373,7 +373,7 @@ Feature: Collection membership administration
       | Eric Drexler      |
 
   Scenario: Privileged members should be allowed to invite users to a collection.
-    Given users:
+    Given the following users:
       | Username  | E-mail                 | First name | Family name |
       | jbelanger | j.belanger@example.com | Jeannette  | Belanger    |
       | dwightone | dwight1@example.com    | Christian  | Dwight      |
@@ -470,7 +470,7 @@ Feature: Collection membership administration
     Then I should see the text "You have been promoted to member."
 
   Scenario: Invitations can not be sent for pending users.
-    Given users:
+    Given the following users:
       | Username       | E-mail                     | First name | Family name |
       | pending_member | pending_member@example.com | Pending    | Member      |
     And the following collection user membership:

@@ -10,7 +10,7 @@ Feature: Solution notifications
     Given the following "collection" content:
       | title                          |
       | Collection of random solutions |
-    And users:
+    And the following users:
       | Username     | Roles     | First name | Family name | E-mail                   |
       | Pat Harper   | moderator | Pat        | Harper      | pat.harper@example.com   |
       | Jack Harper  | moderator | Jack       | Harper      | jack.harper@example.com  |

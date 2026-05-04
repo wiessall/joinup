@@ -5,7 +5,7 @@ Feature: Collection RSS feed.
   I want to subscribe to RSS feeds for each collection
 
   Scenario: Collection RSS feed.
-    Given users:
+    Given the following users:
       | Username | First name | Family name |
       | alejake  | Aleta      | Jakeman     |
       | forest   | Forest     | Robinson    |

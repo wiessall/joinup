@@ -6,7 +6,7 @@ Feature: Content creation rate limit
     Given the following "collection" content:
       | title |
       | Test  |
-    And users:
+    And the following users:
       | Username         | Roles     | E-mail         |
       | John Moderator   | moderator |                |
       | John Facilitator |           |                |

@@ -5,7 +5,7 @@ Feature: Event moderation
   I need to be able to transit the events from one state to another.
 
   Background:
-    Given users:
+    Given the following users:
       | Username        |
       | Salvador Thomas |
       | Rosa Vaughn     |

@@ -7,7 +7,7 @@ Feature: Notifications are muted when entity is archived/unarchived.
     Given the following "collection" content:
       | title     |
       | Milky Way |
-    And users:
+    And the following users:
       | Username | E-mail            | First name | Family name  | Notification frequency |
       | hristo   | hristo@example.bg | Hristo     | Draganov     | daily                  |
       | bisera   | bisera@example.bg | Bisera     | Kaloyancheva | weekly                 |

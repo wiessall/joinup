@@ -11,7 +11,7 @@ Feature: SEO for document content.
     And the following "licence" content:
       | uri                          | title        | licence type  |
       | https://example.com/license1 | Some license | Public domain |
-    And users:
+    And the following users:
       | Username                               | E-mail                 | First name | Family name |
       | Interoperable Europe Portal SEO author | portal.seo@example.com | Scrapper   | Jedi        |
 

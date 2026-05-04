@@ -5,23 +5,23 @@ Feature: Cloning of entities
     Given the following "solution" content:
       | title    | collection     | published at     |
       | Solution | Portal support | 2015-07-13T13:00 |
-    And "custom_page" content:
+    And the following "custom_page" content:
       | title                  | collection     | field_paragraphs_body          | published at     |
       | Collection custom page | Portal support | Collection custom page content | 2016-07-13T13:00 |
       | Solution custom page   | Solution       | Solution custom page content   | 2016-05-13T13:00 |
-    And "event" content:
+    And the following "event" content:
       | title            | collection     | published at     |
       | Collection event | Portal support | 2017-07-13T13:00 |
       | Solution event   | Solution       | 2018-07-13T13:00 |
-    And "news" content:
+    And the following "news" content:
       | title           | collection     | published at     |
       | Collection news | Portal support | 2016-01-13T13:00 |
       | Solution news   | Solution       | 2016-02-13T13:00 |
-    And "document" content:
+    And the following "document" content:
       | title               | collection     | published at     |
       | Collection document | Portal support | 2017-10-13T13:00 |
       | Solution document   | Solution       | 2017-09-13T13:00 |
-    Given users:
+    Given the following users:
       | Username         | Roles |
       | Collection Owner |       |
       | Solution Owner   |       |
@@ -59,10 +59,10 @@ Feature: Cloning of entities
       | logged in as a "member" of the "Solution" solution         |
 
   Scenario: Only custom page, document, event and news nodes should have the "Clone content" link
-    Given "discussion" content:
+    Given the following "discussion" content:
       | title           | collection     |
       | Test discussion | Portal support |
-    And "licence" content:
+    And the following "licence" content:
       | title        |
       | Test licence |
     When I am logged in as a moderator

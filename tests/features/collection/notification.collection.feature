@@ -8,7 +8,7 @@ Feature: Notification test for the collection transitions.
     Given the following "owner" content:
       | name       | owner type |
       | NC for all | Company    |
-    And users:
+    And the following users:
       | Username       | Roles     | E-mail                  | First name | Family name |
       | NC moderator   | moderator | nc_moderator@test.com   | NC         | Moderator   |
       | NC user        |           | nc_user@test.com        | NC         | User        |

@@ -92,7 +92,7 @@ Feature: Test adding solutions.
     And the following "owner" content:
       | name                 | owner type                   |
       | Organisation example | Company, Industry consortium |
-    Given users:
+    Given the following users:
       | Username      | Roles     | E-mail                 | First name | Family name |
       | Ruth Lee      | moderator | Ruth.Lee@test.com      | Ruth       | Lee         |
       | Wendell Silva |           | Wendell.Silva@test.com | Wendell    | Silva       |

@@ -8,7 +8,7 @@ Feature: Proposing a collection
   # the user will be aware that collections can be added by the public, even
   # though you need to sign in to do so.
   Scenario: Anonymous user needs to sign in before creating a collection
-    Given users:
+    Given the following users:
       | Username      | E-mail           |
       | Cecil Clapman | cecil@example.eu |
     Given CAS users:

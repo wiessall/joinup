@@ -5,7 +5,7 @@ Feature: RDF synchronization of contents.
   I need my RDF entities to be properly synchronized with the site contents.
 
   Scenario: ADMS basic classes are properly exported.
-    Given users:
+    Given the following users:
       | Username     | E-mail           |
       | Owner of all | blah@example.com |
     And the following "contact_information" content:

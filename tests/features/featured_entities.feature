@@ -13,7 +13,7 @@ Feature: Featuring content site-wide
       | title                         | collection           | featured |
       | Opensource neutron generators | Tidy Neutron         | yes      |
       | Gamma-sensible spectroscopy   | Reborn Eternal Gamma | no       |
-    And users:
+    And the following users:
       | Username        | E-mail                   | Roles     |
       | Niles Turner    | niles.turner@example.com |           |
       | Modston Modster | modston@example.org      | moderator |

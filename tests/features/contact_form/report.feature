@@ -5,7 +5,7 @@ Feature: Submit the contact form
   I need to receive email when the content is reported
 
   Scenario: Receive email when content is reported
-    Given users:
+    Given the following users:
       | Username         | Roles     | E-mail                    | First name | Family name |
       | Report moderator | moderator | report_moderator@test.com | Frank      | Sinatra     |
       | Report user      |           | report_user@test.com      | Rudi       | Sinatra     |

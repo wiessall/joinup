@@ -5,7 +5,7 @@ Feature: Bookmark/Unbookmark feature.
   I need to be able to Bookmark or Unbookmark content.
 
   Background:
-    Given users:
+    Given the following users:
       | Username         | E-mail               | Password        | First name | Family name |
       | Lisa Bookmark    | lisa@bookmark.com    | bookmark123!#$l | Lisa       | Bookmark    |
       | Gregory Bookmark | gregory@bookmark.com | bookmark123!#$g | Gregory    | Bookmark    |

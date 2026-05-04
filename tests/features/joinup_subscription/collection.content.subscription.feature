@@ -9,7 +9,7 @@ Feature: Subscribing to community content in collections
       | title                | state     |
       | Products of Bulgaria | published |
       | Cities of Bulgaria   | published |
-    And users:
+    And the following users:
       | Username | E-mail            | First name | Family name  | Notification frequency | Status    |
       | hristo   | hristo@example.bg | Hristo     | Draganov     | daily                  | active    |
       | bisera   | bisera@example.bg | Bisera     | Kaloyancheva | weekly                 | active    |

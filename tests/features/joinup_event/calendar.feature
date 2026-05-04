@@ -5,7 +5,7 @@ Feature:
   so that users of the portal can see forthcoming events.
 
   Background:
-    Given "event" content:
+    Given the following "event" content:
       | title                         | start date          | end date            | EC event |
       | TechWizards Summit            | 2020-01-15 12:00:00 | 2020-01-15 13:00:00 | 1        |
       | Creative Fusion Fest          | 2020-01-08 12:00:00 | 2020-01-08 13:00:00 | 0        |

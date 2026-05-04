@@ -40,7 +40,7 @@ Feature: Fill Page URL field in Technical problem / Bug report / Inappropriate
   Scenario: Regression test for ISAICP-8398
   See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8398
 
-    Given users:
+    Given the following users:
       | Username      | E-mail                    |
       | Julian Munson | julian.munson@example.com |
     And the following "collection" content:

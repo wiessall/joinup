@@ -5,7 +5,7 @@ Feature: Asset release moderation
   I need to be able to transit the releases from one state to another.
 
   Scenario: Publish, Update, request changes, publish again and delete a release.
-    Given users:
+    Given the following users:
       | Username        | E-mail                      | First name | Family name | Roles     |
       | Bonnie Holloway | bonnie.holloway@example.com | Bonnie     | Holloway    |           |
       | Felix Russell   | Felix.Russell@example.com   | Felix      | Russell     |           |

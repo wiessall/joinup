@@ -5,7 +5,7 @@ Feature: Document moderation
   I need to be able to transit the documents from one state to another.
 
   Background:
-    Given users:
+    Given the following users:
       | Username        |
       | Crab y Patties  |
       | Gretchen Greene |

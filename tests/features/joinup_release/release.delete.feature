@@ -16,7 +16,7 @@ Feature: Asset release "delete" functionality.
       | Yet another release | A sample release | text.pdf  | 1              | Changed release | Yet another solution |
       | No release          | A sample release | text.pdf  | 1.2            | Changed release | Yet another solution |
       | Jinks               | A sample release | text.pdf  | 3              | Changed release | Yet another solution |
-    And users:
+    And the following users:
       | Username        | E-mail                      | First name | Family name |
       | Ronnie Holloway | Ronnie.holloway@example.com | Ronnie     | Holloway    |
       | Felix Rusevelt  | Felix.Rusevelt@example.com  | Felix      | Rusevelt    |

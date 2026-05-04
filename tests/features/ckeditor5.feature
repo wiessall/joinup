@@ -256,7 +256,7 @@ Feature: CKEditor5
     And the following "solution" content:
       | title                    | abstract                        | description                     | topic                   | solution type                      | collection           | contact information |
       | One exclusion advantages | Separating molecules by height. | Separating molecules by weight. | Demography, E-inclusion | Non-binding Instrument, Data Owner | Antiruin development | Klim Smith          |
-    And users:
+    And the following users:
       | Username    | E-mail         | First name | Family name |
       | jmacc_local | jodine@ankh.am | John       | Maccalariat |
     And CAS users:

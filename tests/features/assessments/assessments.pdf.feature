@@ -3,7 +3,7 @@ Feature: Assessment report PDF download
   Test PDF download functionality for assessment reports
 
   Scenario: Users can download PDF version of their assessments
-    Given users:
+    Given the following users:
       | Username       |
       | TestReportUser |
     And report assessments:

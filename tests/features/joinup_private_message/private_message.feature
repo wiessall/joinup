@@ -5,7 +5,7 @@ Feature: Private messages
   So that I can communicate with them privately
 
   Background:
-    Given users:
+    Given the following users:
       | Username  | First name | Family name | E-mail                | Roles     |
       | alice_m   | Alice      | Miller      | alice.m@example.com   |           |
       | bob_rolls | Bob        | Rolls       | bob.rolls@example.com | moderator |

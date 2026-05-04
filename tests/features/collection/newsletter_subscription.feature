@@ -5,7 +5,7 @@ Feature: Subscribing to collection newsletters
   I want to be allow members to subscribe to my newsletter
 
   Background:
-    Given users:
+    Given the following users:
       | Username           | E-mail                         | Roles     |
       | Filippos Demetriou | filippos.demetriou@example.com |           |
       | Tatiana Andreas    | tatiandri@example.com          |           |
@@ -13,7 +13,7 @@ Feature: Subscribing to collection newsletters
     And the following "collection" content:
       | title    |
       | Volkor X |
-    And "news" content:
+    And the following "news" content:
       | title      | collection | author          |
       | Hypersleep | Volkor X   | Tatiana Andreas |
     And the following collection user memberships:

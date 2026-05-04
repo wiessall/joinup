@@ -18,7 +18,7 @@ Feature: News moderation.
   Background:
     # The complete permission matrix is stored in configuration.
     # @see: modules/custom/joinup_news/config/install/joinup_news.settings.yml.
-    Given users:
+    Given the following users:
       | Username | E-mail                      | Roles     |
       | Batman   | adminOfWayneINC@example.com | moderator |
       | Superman | dailyPlanetEmployee@example.com |       |
@@ -33,7 +33,7 @@ Feature: News moderation.
       | Justice League | Superman | owner       |
       | Justice League | Eagle    | member      |
       | Legion of Doom | Metallo  | facilitator |
-    And "news" content:
+    And the following "news" content:
       | title                   | headline                 | field_paragraphs_body | state     | author   | collection     | abstract | created    |
       | Creating Justice League | 6 Members to start with | TBD                   | draft     | Eagle    | Justice League | Abstract | now -2 day |
       | News in Proposed State  | Test news                | Test body             | proposed  | Eagle    | Justice League | Abstract | now -2 day |

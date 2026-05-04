@@ -24,7 +24,7 @@ Feature: Add comments
       | title             | collection        | author        | body                                                |
       | Wikileaks         | Gossip collection | Layonel Sarok | How could this ever happen? Moral panic on its way! |
       | Quantum Echo Fest | Gossip collection | Layonel Sarok | How could this ever happen? Moral panic on its way! |
-    And users:
+    And the following users:
       | Username           | E-mail                    | Roles | First name | Family name |
       | Layonel Sarok      | layonel.sarok@example.com |       | Layonel    | Sarok       |
       | Korma Salya        | korma.salya@example.com   |       | Korma      | Salya       |

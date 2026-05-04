@@ -5,7 +5,7 @@ Feature: Deletion of collection and solution owners
   I should be able to prevent moderators from deleting all owners of a group.
 
   Scenario Outline: A privileged user cannot remove all owners of a group.
-    Given users:
+    Given the following users:
       | Username       | Roles     | First name | Family name |
       | Group owner 1  |           | Group      | owner 1     |
       | Group owner 2  |           | Group      | owner 2     |

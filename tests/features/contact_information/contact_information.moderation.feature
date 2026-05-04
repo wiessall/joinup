@@ -5,7 +5,7 @@ Feature: Contact Information moderation
   I need to be able to transit the contact information from one state to another
 
   Scenario: Publish, update, request changes, publish again and ask to delete contact information.
-    Given users:
+    Given the following users:
       | Username              |
       | Sæwine Cynebald       |
       | Secondary facilitator |
@@ -100,7 +100,7 @@ Feature: Contact Information moderation
     Given the following "owner" content:
       | name        | owner type |
       | Saint Louis | Company    |
-    Given users:
+    Given the following users:
       | Username        | First name | Family name |
       | Sown Carnberry  | Sown       | Carnberry   |
       | Saint Louis CEO | George     | McLouis     |

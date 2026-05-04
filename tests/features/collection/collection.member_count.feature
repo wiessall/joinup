@@ -5,7 +5,7 @@ Feature: Collection homepage
   I need to be able see the amount of users that are members of a collection
 
   Background:
-    Given users:
+    Given the following users:
       | Username    | Status  |
       | Thorin      | active  |
       | Fili        | active  |

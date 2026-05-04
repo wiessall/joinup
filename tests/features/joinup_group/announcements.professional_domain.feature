@@ -5,7 +5,7 @@ Feature: Filter announcements by professional domain
     Given <group> content:
       | title         |
       | Pension funds |
-    And users:
+    And the following users:
       | Username | E-mail              | Professional domain                     | Status  |
       | Mogul    | mogul@example.com   | Demography, E-health, E-justice, HR, HR | active  |
       | Greedy   | greedy@example.com  | Demography, E-health, E-justice         | active  |

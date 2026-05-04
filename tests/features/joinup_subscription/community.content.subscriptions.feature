@@ -12,7 +12,7 @@ Feature: Subscribing to community content in collections and solutions
       | title                 | collection         |
       | Null geodesics        | Black hole imaging |
       | Bolometric appearance | Black hole imaging |
-    And users:
+    And the following users:
       | Username  | E-mail               | First name  | Family name | Notification frequency |
       | jpluminet | jpluminet@example.fr | Jean-Pierre | Luminet     | daily                  |
       | junfukue  | jun.fukue@example.jp | Jun         | Fukue       | weekly                 |

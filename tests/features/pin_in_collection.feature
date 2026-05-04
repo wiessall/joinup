@@ -15,7 +15,7 @@ Feature: Pinning entities inside collections
     And the following "discussion" content:
       | title                        | collection    | pinned | created    | changed    |
       | What kind of wrench is this? | Orange Wrench | no     | 2017-11-20 | 2018-11-20 |
-    And users:
+    And the following users:
       | Username       | E-mail                     |
       | Rozanne Minett | rozanne.minett@example.com |
       | Tyron Ingram   | tyron.ingram@example.com   |

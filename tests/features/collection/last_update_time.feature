@@ -5,7 +5,7 @@ Feature: Tests the collection last update time.
   update time as the maximum changed time of the collection itself, its
   affiliate solutions, community content and custom pages.
 
-    Given users:
+    Given the following users:
       | Username    | Roles     |
       | The Cleaner | moderator |
     And the following "collection" content:

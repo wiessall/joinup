@@ -56,7 +56,7 @@ Feature: Collections/Solutions settings
     And the following "solution" content:
       | title        | collection     |
       | Klop mirubes | Rally fanatics |
-    And users:
+    And the following users:
       | Username         | E-mail                     | First name | Family name |
       | Ferners Lee      | ferners-lee@example.com    | Ferners    | Lee         |
       | Plot user        | plot.user@example.com      | Plot       | user        |
@@ -101,7 +101,7 @@ Feature: Collections/Solutions settings
     And the "Announcements enabled" checkbox should be checked
 
   Scenario Outline: Only moderators and owners have access to collection/solution meta entity canonical page
-    Given users:
+    Given the following users:
       | Username         | Roles     |
       | John User        |           |
       | John Moderator   | moderator |

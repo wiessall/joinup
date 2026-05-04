@@ -11,7 +11,7 @@ Feature: Resend validation email from collection/solution about page
     And the following "solution" content:
       | title        | collection     |
       | Klop mirubes | Rally fanatics |
-    And users:
+    And the following users:
       | Username         | E-mail                     | First name | Family name |
       | Ferners Lee      | ferners-lee@example.com    | Ferners    | Lee         |
       | Plot user        | plot.user@example.com      | Plot       | user        |

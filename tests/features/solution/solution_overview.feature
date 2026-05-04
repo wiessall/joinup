@@ -54,7 +54,7 @@ Feature: Solutions Overview
     And I should not see the link "Last page"
 
   Scenario: View solution overview as an anonymous user
-    Given users:
+    Given the following users:
       | Username      | E-mail                            |
       | Madam Shirley | i.dont.see.the.future@example.com |
     And the following "collection" content:
@@ -150,7 +150,7 @@ Feature: Solutions Overview
     And the page should be cacheable
 
   Scenario: Users are able to filter solutions they have created or that are featured site-wide.
-    Given users:
+    Given the following users:
       | Username        | E-mail                      |
       | Marjorie Parker | marjorie.parker@example.com |
       | Ryker Brandon   | ryker.brandon@example.com   |

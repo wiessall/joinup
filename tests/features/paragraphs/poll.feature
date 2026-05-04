@@ -7,7 +7,7 @@ Feature: Pool paragraph tests.
       | Poll collection | published |
 
   Scenario: Anonymous user is asked to log in if they attempt to vote
-    Given users:
+    Given the following users:
       | Username   | E-mail           |
       | Cecil Poll | cpoll@example.eu |
     Given CAS users:

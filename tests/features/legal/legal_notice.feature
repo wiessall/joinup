@@ -169,7 +169,7 @@ Feature:
     And I should see "Before you submit your request check our FAQ section in case it covers your query/issue."
 
   Scenario: Legal notice redirect takes precedence over other redirects.
-    Given users:
+    Given the following users:
       | Username        |
       | Sergeant Pepper |
     And CAS users:

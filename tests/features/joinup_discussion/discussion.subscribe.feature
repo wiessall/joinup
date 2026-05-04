@@ -56,7 +56,7 @@ Feature: Following discussions
     And the "Rare butter" discussion should have 0 subscribers
 
   Scenario: Receive E-mail notifications when actions are taken in discussions.
-    Given users:
+    Given the following users:
       | Username    | E-mail            | First name | Family name | Notification frequency |
       | follower    | dale@example.com  | Dale       | Arden       | monthly                |
       | debater     | flash@example.com | Flash      | Gordon      | daily                  |

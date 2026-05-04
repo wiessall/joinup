@@ -5,7 +5,7 @@ Feature: Creating content and commenting on archived collection
   I want to be able to archive old collections
 
   Background: Check access to the Post comment form
-    Given users:
+    Given the following users:
       | Username    | Roles     |
       | Flora Hunt  | moderator |
       | Lee Reeves  |           |

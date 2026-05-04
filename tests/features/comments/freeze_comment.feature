@@ -6,7 +6,7 @@ Feature: Freeze comments on archived content
     Given the following "collection" content:
       | title             |
       | Gossip collection |
-    And users:
+    And the following users:
       | Username        | E-mail                      | Roles | First name | Family name |
       | Sons of anarchy | sons-of-anarchy@example.com |       | Sons       | Anarchy     |
 

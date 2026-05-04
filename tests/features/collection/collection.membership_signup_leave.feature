@@ -107,7 +107,7 @@ Feature: Joining and leaving collections through the web interface
       | uncheck         | should not be subscribed to any                                                      | You will get a notification once your membership at Closed collection with public CoC is approved.                                    |
 
   Scenario: A collection owner leaving the collection cannot administer users anymore. Joining and leaving labels could be changed.
-    Given users:
+    Given the following users:
       | Username         |
       | Collection owner |
       | Stewe Griffin    |

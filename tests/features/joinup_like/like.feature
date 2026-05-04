@@ -5,7 +5,7 @@ Feature: Like/unlike feature.
   I need to be able to like or unlike content.
 
   Background:
-    Given users:
+    Given the following users:
       | Username     | Roles | E-mail           | First name | Family name |
       | Lisa Like    |       | lisa@like.com    | Lisa       | Like        |
       | Gregory Like |       | gregory@like.com | Gregory    | Like        |
@@ -58,7 +58,7 @@ Feature: Like/unlike feature.
     Then I should see the statistics "1" in the "Very liked solution" tile
 
   Scenario: Anonymous user is asked to sign in if they attempt to Like
-    Given users:
+    Given the following users:
       | Username   | E-mail           |
       | Cecil Like | clike@example.eu |
     And CAS users:
@@ -139,10 +139,10 @@ Feature: Like/unlike feature.
     Given the following "solution" content:
       | title             | state     | collection |
       | Likeable solution | published | Bulgaria   |
-    And "custom_page" content:
+    And the following "custom_page" content:
       | title                | collection | author    | state     |
       | Likeable custom page | Bulgaria   | Lisa Like | published |
-    And "discussion" content:
+    And the following "discussion" content:
       | title               | collection | state     |
       | Likeable discussion | Bulgaria   | published |
 

@@ -29,7 +29,7 @@ Feature:
     And the following "licence" content:
       | title           | description |
       | Sitemap licence | Not allowed |
-    And "custom_page" content:
+    And the following "custom_page" content:
       | title                                           | collection                   | body | logo     | langcode |
       | Sitemap custom page of draft                    | Sitemap collection draft     | N/A  | logo.png | en       |
       | Sitemap custom page of published                | Sitemap collection published | N/A  | logo.png | en       |

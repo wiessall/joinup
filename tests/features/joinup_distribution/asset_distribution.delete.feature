@@ -8,7 +8,7 @@ Feature: Asset distribution deleting.
     Given the following "solution" content:
       | title                 | description        |
       | Rough valentine's day | Sample description |
-    And users:
+    And the following users:
       | Username   | E-mail                |
       | Papa Roach | paparoach@example.com |
     And the following solution user memberships:

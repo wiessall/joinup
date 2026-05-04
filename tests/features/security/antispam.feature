@@ -13,7 +13,7 @@ Feature: As a visitor or logged-in user, when I want to post content, the form
       | /contact |
 
   Scenario: Authenticated users.
-    Given users:
+    Given the following users:
       | Username |
       | Günther  |
     And the following "contact_information" content:
@@ -76,7 +76,7 @@ Feature: As a visitor or logged-in user, when I want to post content, the form
     And the form is protected by Honeypot
 
   Scenario Outline: Extend Honeypot & Antibot to all forms.
-    Given users:
+    Given the following users:
       | Username   |
       | Ransomware |
     And the following "contact_information" content:

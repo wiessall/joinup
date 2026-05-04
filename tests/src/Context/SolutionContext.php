@@ -279,7 +279,8 @@ class SolutionContext extends RawDrupalContext {
       $user = $this->userManager->getUser($username);
 
       // Check if we are already logged in as the user to test.
-      $current_username = $this->userManager->getCurrentUser()->name ?? NULL;
+      $currentUserStub = $this->userManager->getCurrentUser();
+      $current_username = $currentUserStub ? $currentUserStub->getValue('name') : NULL;
       if ($username !== $current_username) {
         $this->authenticationManager->logIn($user);
       }

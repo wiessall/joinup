@@ -5,7 +5,7 @@ Feature: Type something to filter the listing the member list
   I need to be able to filter the member list
 
   Background:
-    Given users:
+    Given the following users:
       | Username   | First name | Family name | Roles     | E-mail                 |
       | séamusline | Séamus     | Kingsbrooke | moderator | seamusline@example.com |
       | emeritous  | King       | Seabrooke   |           | emeritous@example.com  |

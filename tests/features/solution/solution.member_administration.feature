@@ -5,7 +5,7 @@ Feature: Solution membership administration
   I need to be able to manage solution members
 
   Background:
-    Given users:
+    Given the following users:
       | Username         | E-mail                       | First name | Family name |
       # Authenticated user.
       | Guadalupe Norman | guadalupe_norman@example.com | Guadalupe  | Norman      |
@@ -36,7 +36,7 @@ Feature: Solution membership administration
     Then I should not see the link "Add members"
 
   Scenario: Moderators should be allowed to add users to a solution.
-    Given users:
+    Given the following users:
       | Username     | Roles     | E-mail                   | First name | Family name |
       | Daniel Moder | moderator | daniel_moder@example.com | Daniel     | Moder       |
     When I am logged in as "Daniel Moder"
@@ -86,7 +86,7 @@ Feature: Solution membership administration
       | body      | Guadalupe Norman has changed your role in solution "The Missing Sons" to member. |
 
   Scenario: Privileged members should be allowed to invite users to a solution.
-    Given users:
+    Given the following users:
       | Username  | E-mail                 | First name | Family name |
       | jbelanger | j.belanger@example.com | Jeannette  | Belanger    |
       | dwightone | dwight1@example.com    | Christian  | Dwight      |

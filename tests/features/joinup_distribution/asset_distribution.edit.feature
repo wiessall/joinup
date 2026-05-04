@@ -5,7 +5,7 @@ Feature: Asset distribution editing.
   I need to be able to edit distributions through UI.
 
   Background:
-    Given users:
+    Given the following users:
       | Username     | E-mail                   | First name | Family name | Roles |
       | Gregg Hill   | Gregg.Hill@example.com   | Gregg      | Hill        |       |
       | Pedro Torres | Pedro.Torres@example.com | Pedro      | Torres      |       |

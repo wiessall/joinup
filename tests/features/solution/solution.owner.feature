@@ -32,7 +32,7 @@ Feature:
     Given the following "owner" content:
       | name      | owner type |
       | Leechidna | Company    |
-    And users:
+    And the following users:
       | Username          |
       | Solution API user |
     And the following "collection" content:

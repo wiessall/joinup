@@ -6,7 +6,7 @@ Feature: Delete comments
     Given the following "collection" content:
       | title                 | logo     |
       | Semantic web fanatics | logo.png |
-    And users:
+    And the following users:
       | Username             | E-mail                        | First name  | Family name |
       | Tim Berners Lee      | tim.berners-lee@example.com   | Tim Berners | Lee         |
       | Vicky visitor        | vicky.visitor@example.com     | Vicky       | visitor     |

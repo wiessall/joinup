@@ -8,7 +8,7 @@ Feature: "Custom page" editing.
     Given the following "solution" content:
       | title             | state    |
       | Cartridge cleaner | archived |
-    And "custom_page" content:
+    And the following "custom_page" content:
       | title          | solution          | state    |
       | Cyclone filter | Cartridge cleaner | archived |
 
@@ -17,7 +17,7 @@ Feature: "Custom page" editing.
     Then I should not see the button "Unarchive"
 
   Scenario Outline: Privileged users can edit custom pages.
-    Given users:
+    Given the following users:
       | Username     | E-mail                   |
       | Mickey Mouse | mickey.mouse@example.com |
       | Pluto        | pluto@example.com        |
@@ -28,7 +28,7 @@ Feature: "Custom page" editing.
       | <group>          | user         | roles       |
       | Dumbo Collective | Mickey Mouse | facilitator |
       | Dumbo Collective | Pluto        | member      |
-    And "custom_page" content:
+    And the following "custom_page" content:
       | title                            | <group>          | abstract | body | logo     |
       | Buena Vista Distribution Company | Dumbo Collective | N/A      | N/A  | logo.png |
 

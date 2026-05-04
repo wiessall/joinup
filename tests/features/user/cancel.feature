@@ -6,7 +6,7 @@ Feature:
 
   Background:
 
-    Given users:
+    Given the following users:
       | Username     | Roles | E-mail                   | First name | Family name |
       | alicia__1997 |       | AliciaPotter@example.com | Alicia     | Potter      |
 
@@ -133,7 +133,7 @@ Feature:
     Given <content type> content:
       | title                 | author       | collection     |
       | Canada hit by tariffs | alicia__1997 | Macroeconomics |
-    And users:
+    And the following users:
       | Username | E-mail          | First name | Family name |
       | viviene  | viv@example.com | Viviene    | De Québec   |
     And comments:

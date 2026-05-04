@@ -11,7 +11,7 @@ Feature: Group administrators report
       | Large living birds |
       | bony fishes        |
 
-    And users:
+    And the following users:
       | Username | First name  | Family name | E-mail                       |
       | najib    | Najib       | Randall     | randall@najib-industries.com |
       | melor    | Melor       | Vescovi     | melor1998@hotmail.com        |

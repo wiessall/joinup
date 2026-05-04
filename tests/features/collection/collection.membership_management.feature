@@ -24,7 +24,7 @@ Feature: Tests membership to Interoperable Europe Portal collection.
   Scenario: As a moderator I am able to revoke the membership of a user to any
     arbitrary collection except 'Interoperable Europe Portal'.
 
-    Given users:
+    Given the following users:
       | Username | E-mail           |
       | joe      | joe@example.com  |
       | jane     | jane@example.com |

@@ -531,13 +531,11 @@ class JoinupGroupContext extends RawDrupalContext {
     unset(self::$pendingMetaEntitySettings[$key]);
 
     $saved = $node->getSavedEntity();
-    $meta_entity = MetaEntity::create([
-      'type' => $pending['type'],
-      'target' => [
-        'target_type' => $saved->getEntityTypeId(),
-        'target_id' => $saved->id(),
-      ],
-    ] + $pending['values']);
+    \assert($saved instanceof \Drupal\Core\Entity\ContentEntityInterface);
+    $meta_entity = MetaEntity::loadOrCreate($pending['type'], $saved);
+    foreach ($pending['values'] as $field => $value) {
+      $meta_entity->set($field, $value);
+    }
     $meta_entity->save();
   }
 
