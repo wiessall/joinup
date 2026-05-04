@@ -1590,10 +1590,12 @@ class FeatureContext extends RawDrupalContext {
   public function fillAutoCompleteField(string $field, string $value): void {
     $this->assertJavaScriptEnabledBrowser();
 
-    $element = $this->assertSession()->fieldExists($field);
-    $element->setValue($value);
-    $this->getSession()->getDriver()->keyDown($element->getXpath(), ' ');
-    $this->waitForAutocomplete();
+    $this->retryOnStaleElement(function () use ($field, $value): void {
+      $element = $this->assertSession()->fieldExists($field);
+      $element->setValue($value);
+      $this->getSession()->getDriver()->keyDown($element->getXpath(), ' ');
+      $this->waitForAutocomplete();
+    });
   }
 
   /**
@@ -2027,8 +2029,8 @@ class FeatureContext extends RawDrupalContext {
   public function disableCookieConsent(): void {
     $config_context = $this->getContext(ConfigContext::class);
     $name = 'oe_webtools_cookie_consent.settings';
-    $config_context->setConfig($name, 'banner_popup', FALSE);
-    $config_context->setConfig($name, 'video_popup', FALSE);
+    $config_context->setBasicConfig($name, 'banner_popup', 'false');
+    $config_context->setBasicConfig($name, 'video_popup', 'false');
   }
 
   /**

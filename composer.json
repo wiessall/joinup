@@ -175,7 +175,7 @@
         "drupal/config_inspector": "^2.1",
         "drupal/config_update": "^2.0",
         "drupal/devel": "^5.1",
-        "drupal/drupal-extension": "5.1.0",
+        "drupal/drupal-extension": "^5.0",
         "drupal/filecache": "^1.1",
         "drupal/http_request_mock": "^1.1",
         "drupal/masquerade": "^2.0@RC",
@@ -387,6 +387,10 @@
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
+            },
+            "drupal/drupal-driver": {
+                "Make isBaseField() recognise bundle fields (hook_entity_bundle_field_info) @see https://github.com/jhedstrom/DrupalDriver/pull/356": "resources/patch/php/drupal/drupal-driver/356.diff",
+                "ImageHandler: default alt text to filename when not provided https://github.com/jhedstrom/DrupalDriver/pull/347": "resources/patch/php/drupal/drupal-driver/347.diff"
             },
             "drupal/dynamic_entity_reference": {
                 "Undefined array key on dependency removal @see https://www.drupal.org/i/3099176": "resources/patch/php/drupal/dynamic_entity_reference/3099176-3.x-16.diff",

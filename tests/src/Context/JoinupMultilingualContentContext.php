@@ -11,6 +11,7 @@ use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\TranslatableInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\babel\BabelStorageInterface;
 use Drupal\babel\Model\Source;
@@ -51,11 +52,12 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
       $node = (object) $nodeHash;
       $node->type = $type;
 
+      // Read and strip the step-routing column before Drupal field validation.
+      $isDefaultTranslation = !isset($node->default_translation) || !empty($node->default_translation);
+      unset($node->default_translation);
+
       // This must be a new node.
-      if (
-        !isset($node->default_translation)
-        || !empty($node->default_translation)
-      ) {
+      if ($isDefaultTranslation) {
         $this->nodeCreate($node);
         $lastId = $node->nid;
 
@@ -70,11 +72,12 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
 
       $original = $storage->load($lastId);
       \assert($original instanceof NodeInterface);
-      $this->parseEntityFields('node', $node);
-      $translation = array_filter(
-        array_filter((array) $node) + $original->toArray(),
-        fn (string|array $value): bool => $value !== '~~~' && $value !== ['~~~']
-      );
+      $node = (object) array_filter((array) $node, fn (mixed $value): bool => $value !== '~~~' && $value !== ['~~~']);
+
+      // This will eventually translate field aliases before expanding fields.
+      // @see \Drupal\joinup\Context\JoinupContext::massageFieldsBeforeNodeCreate
+      $this->dispatchHooks(BeforeNodeCreateScope::class, $node);
+      $translation = array_filter((array) $node) + $original->toArray();
       $original->addTranslation($node->langcode, $translation)->save();
     }
   }
@@ -286,9 +289,8 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
    *   bar:
    *     0: Baz
    * @encode
-   *
-   * @BeforeNodeCreate
    */
+  #[BeforeNodeCreate]
   public function multilinePrepare(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
 
