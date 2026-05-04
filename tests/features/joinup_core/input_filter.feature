@@ -28,26 +28,26 @@ Feature: Input filter
 
     # 'src' attributes are the url encoded version of the URLs that were inputted prepended by the ec cck url.
     When I go to the "Jessica Jones returns" discussion
-    Then I see the "iframe" element with the "src" attribute set to "https://webtools.europa.eu/crs/iframe/?oriurl=https%3A//www.youtube.com/embed/nWHUjuJ8zxE&lang=en" in the "Content" region
+    Then I should see the "iframe" element with the "src" attribute set to "https://webtools.europa.eu/crs/iframe/?oriurl=https%3A//www.youtube.com/embed/nWHUjuJ8zxE&lang=en" in the "Content" region
     When I go to the "Slideshare presentation" discussion
-    Then I see the "iframe" element with the "src" attribute set to "https://webtools.europa.eu/crs/iframe/?oriurl=//www.slideshare.net/slideshow/embed_code/key/hJ3x3pTrtGaatQ&lang=en" in the "Content" region
+    Then I should see the "iframe" element with the "src" attribute set to "https://webtools.europa.eu/crs/iframe/?oriurl=//www.slideshare.net/slideshow/embed_code/key/hJ3x3pTrtGaatQ&lang=en" in the "Content" region
     When I go to the "Google docs" discussion
-    Then I see the "iframe" element with the "src" attribute set to "https://webtools.europa.eu/crs/iframe/?oriurl=https%3A//docs.google.com/forms/d/1dBGzMp9whY2Ibxf4pUQNadpE2C3ywxdDefSSM3BdwJ4/viewform%3Fembedded%3Dtrue&lang=en" in the "Content" region
+    Then I should see the "iframe" element with the "src" attribute set to "https://webtools.europa.eu/crs/iframe/?oriurl=https%3A//docs.google.com/forms/d/1dBGzMp9whY2Ibxf4pUQNadpE2C3ywxdDefSSM3BdwJ4/viewform%3Fembedded%3Dtrue&lang=en" in the "Content" region
     When I go to the "Interoperable Europe Portal iframe" discussion
     # Local urls are not prone to the external cookie consent check.
-    Then I see the "iframe" element with the "src" attribute set to "/homepage" in the "Content" region
+    Then I should see the "iframe" element with the "src" attribute set to "/homepage" in the "Content" region
     When I go to the "Luke cage" discussion
     Then I should not see the "iframe" element with the "src" attribute set to "https://www.example.com" in the "Content" region
     When I go to the "Quoted texts" discussion
     Then the response should contain "<q>This is a famous quote.</q> ~ Interoperable Europe Portal developer."
     When I go to the "Image map" discussion
-    Then I see the "map" element with the "name" attribute set to "imagemap" in the "Content" region
-    And I see the "img" element with the "usemap" attribute set to "imagemap" in the "Content" region
+    Then I should see the "map" element with the "name" attribute set to "imagemap" in the "Content" region
+    And I should see the "img" element with the "usemap" attribute set to "imagemap" in the "Content" region
     And the response should contain "<area shape=\"circle\" coords=\"50,50,25\" href=\"/\" alt=\"Homepage\">"
     When I go to the "Accessibility planning" discussion
     Then I see the "img" element with empty "alt" attribute in the "Content" region
     When I go to the "Accessibility rating" discussion
-    Then I see the "img" element with the "alt" attribute set to "Image media alt text" in the "Content" region
+    Then I should see the "img" element with the "alt" attribute set to "Image media alt text" in the "Content" region
 
     Given I am logged in as an authenticated
     When I go to the "Jessica Jones returns" discussion

@@ -6,7 +6,7 @@ Feature: View a comment
     Given the following "collection" content:
       | title                      |
       | Hashrate, shares & workers |
-    And <content type> content:
+    And the following "<content type>" content:
       | title                      | body                                  | collection                 |
       | Current effective hashrate | Ethash is the proof of work algorithm | Hashrate, shares & workers |
     And user:

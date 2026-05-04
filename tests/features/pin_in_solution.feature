@@ -27,7 +27,7 @@ Feature: Pinning content entities inside solutions
     Given the following "news" content:
       | title                      | solution    | created    |
       | What is the HEX for lemon? | Blue Wrench | 2018-12-13 |
-    And <content type> content:
+    And the following "<content type>" content:
       | title              | headline           | solution    | pinned | created    |
       | Very important     | Very important     | Blue Wrench | yes    | 2018-11-03 |
       | Useful information | Useful information | Blue Wrench | no     | 2018-12-03 |
@@ -101,7 +101,7 @@ Feature: Pinning content entities inside solutions
 
   @javascript
   Scenario Outline: Pinned content tiles should show a visual cue only in their solution homepage.
-    Given <content type> content:
+    Given the following "<content type>" content:
       | title       | headline    | solution    | pinned |
       | Lantern FAQ | Lantern FAQ | Blue Wrench | yes    |
       | Lantern TCA | Lantern TCA | Blue Wrench | no     |

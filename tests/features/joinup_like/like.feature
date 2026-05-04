@@ -84,7 +84,7 @@ Feature: Like/unlike feature.
     Then I should see the heading "Very liked solution"
 
   Scenario Outline: User can like/unlike solution's content
-    Given <content type> content:
+    Given the following "<content type>" content:
       | title                        | solution            | state   |
       | Liked <content type> content | Very liked solution | <state> |
 
@@ -109,7 +109,7 @@ Feature: Like/unlike feature.
       | custom_page  | published |
 
   Scenario Outline: Logged-in user can see and hit like button in document, discussion, events and news tiles
-    Given <content type> content:
+    Given the following "<content type>" content:
       | title                   | collection | state     | author    |
       | Likeable <content type> | Bulgaria   | published | lisa Like |
 

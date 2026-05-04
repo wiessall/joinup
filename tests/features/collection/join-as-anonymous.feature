@@ -287,7 +287,7 @@ Feature: Joining a collection as an anonymous user
     And the following "solution" content:
       | title            | collection     |
       | Stellar solution | Stellar plants |
-    And <content type> content:
+    And the following "<content type>" content:
       | title                  | solution         |
       | Stellar <content type> | Stellar solution |
     And I am an anonymous user

@@ -130,7 +130,7 @@ Feature:
     Given the following "collection" content:
       | title          |
       | Macroeconomics |
-    Given <content type> content:
+    Given the following "<content type>" content:
       | title                 | author       | collection     |
       | Canada hit by tariffs | alicia__1997 | Macroeconomics |
     And the following users:

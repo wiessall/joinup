@@ -27,7 +27,7 @@ Feature: Featuring content site-wide
       | Gamma-sensible spectroscopy   | Niles Turner | facilitator |
 
   Scenario Outline: Moderators can feature and unfeature content site-wide.
-    Given <content type> content:
+    Given the following "<content type>" content:
       | title                               | collection   | featured |
       | Ionizing radiation types            | Tidy Neutron | no       |
       | Elementary particles standard model | Tidy Neutron | yes      |

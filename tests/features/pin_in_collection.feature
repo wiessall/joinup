@@ -29,7 +29,7 @@ Feature: Pinning entities inside collections
       | Green Wrench  | Tyron Ingram   |             |
 
   Scenario Outline: Facilitators can pin and unpin community content inside their collections.
-    And <content type> content:
+    And the following "<content type>" content:
       | title              | collection    | pinned |
       | Very important     | Orange Wrench | yes    |
       | Useful information | Orange Wrench | no     |
@@ -144,7 +144,7 @@ Feature: Pinning entities inside collections
 
   @javascript
   Scenario Outline: Pinned content tiles should show a visual cue only in their collection homepage.
-    Given <content type> content:
+    Given the following "<content type>" content:
       | title         | headline      | collection    | pinned | shared on    |
       | Lantern FAQs  | Lantern FAQs  | Orange Wrench | yes    | Green Wrench |
       | Lantern terms | Lantern terms | Orange Wrench | no     |              |

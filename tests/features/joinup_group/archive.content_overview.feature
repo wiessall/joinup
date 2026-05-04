@@ -2,7 +2,7 @@
 Feature: Global search with archive content
 
   Scenario Outline: Group content has an 'Show archived' facet.
-    Given <group type> content:
+    Given the following "<group type>" content:
       | title             | description | state     |
       | Some <group type> | Description | published |
       | Rare <group type> | Description | published |

@@ -8,7 +8,7 @@ Feature: Sharing content on social networks
     Given the following "collection" content:
       | title           |
       | Social networks |
-    And <content type> content:
+    And the following "<content type>" content:
       | title                 | collection      |
       | Important information | Social networks |
 

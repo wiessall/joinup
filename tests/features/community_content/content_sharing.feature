@@ -29,7 +29,7 @@ Feature: Sharing content between collections
     Given the following users:
       | Username    | E-mail                  |
       | Sara Barber | sara.barber@example.com |
-    And <group type> content:
+    And the following "<group type>" content:
       | title        |
       | Classic Rock |
       | Hip-Hop      |
@@ -43,7 +43,7 @@ Feature: Sharing content between collections
       | Classic Rock | Sara Barber |       |
       | Hip-Hop      | Sara Barber |       |
       | Drum'n'Bass  | Sara Barber |       |
-    And <content type> content:
+    And the following "<content type>" content:
       | title               | <group type> |
       | Interesting content | Hip-Hop      |
 
@@ -182,7 +182,7 @@ Feature: Sharing content between collections
 
   @javascript
   Scenario Outline: Share/Unshare should be visible according to the group permissions.
-    Given <group type> content:
+    Given the following "<group type>" content:
       | title      |
       | Westeros   |
       | Essos city |

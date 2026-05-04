@@ -186,7 +186,7 @@ Feature: Add community content
     Given the following "collection" content:
       | title           |
       | The night watch |
-    And <content type> content:
+    And the following "<content type>" content:
       | title                   | collection      |
       | The glorious revolution | The night watch |
     When I visit the "The glorious revolution" "<content type>"

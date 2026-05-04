@@ -37,7 +37,7 @@ Feature: Bookmark/Unbookmark feature.
       | solution   | Batman Begins |
 
   Scenario Outline: User can bookmark content.
-    And <content type> content:
+    And the following "<content type>" content:
       | title            | solution      |
       | Bookmark content | Batman Begins |
 

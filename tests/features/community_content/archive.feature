@@ -86,7 +86,7 @@ Feature: Content archival.
       | news       |
 
   Scenario Outline: Group facilitators can not unarchived community content
-    Given <group type> content:
+    Given the following "<group type>" content:
       # Set the moderation to yes to be able to access all states. Deletion
       # request is not available in a post moderation workflow.
       | title      | moderation |
@@ -110,7 +110,7 @@ Feature: Content archival.
       | solution   |
 
   Scenario Outline: Group facilitators can not unarchived community content which is usgin layout paragraphs
-    Given <group type> content:
+    Given the following "<group type>" content:
       # Set the moderation to yes to be able to access all states. Deletion
       # request is not available in a post moderation workflow.
       | title      | moderation |
