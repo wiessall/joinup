@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f7ea8f027a0a2887622e805803008f71",
+    "content-hash": "8a53f1f8d0937a5e60f4c0e8683d8a26",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -23484,46 +23484,124 @@
         },
         {
             "name": "drupal/drupal-extension",
-            "version": "v5.1.0",
+            "version": "v5.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jhedstrom/drupalextension.git",
-                "reference": "454a3ce03f59b26dc3f0b739d778afebe0e35cb9"
+                "reference": "cb02e8acf9ba95f0f9853e36a6f1852f2b91cd31"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jhedstrom/drupalextension/zipball/454a3ce03f59b26dc3f0b739d778afebe0e35cb9",
-                "reference": "454a3ce03f59b26dc3f0b739d778afebe0e35cb9",
+                "url": "https://api.github.com/repos/jhedstrom/drupalextension/zipball/cb02e8acf9ba95f0f9853e36a6f1852f2b91cd31",
+                "reference": "cb02e8acf9ba95f0f9853e36a6f1852f2b91cd31",
                 "shasum": ""
             },
             "require": {
-                "behat/behat": "~3.2",
+                "behat/behat": "^3.22",
+                "behat/gherkin": "^4.13",
+                "behat/mink": "^1.12",
                 "behat/mink-browserkit-driver": "^2.1.0",
-                "behat/mink-selenium2-driver": "~1.1",
-                "drupal/drupal-driver": "^2.2.1 || dev-master",
+                "drupal/drupal-driver": "^2.4.3",
                 "friends-of-behat/mink-extension": "^2.7.1",
-                "symfony/http-client": "~4.4 || ^5 || ^6",
-                "webflo/drupal-finder": "^1.2"
+                "lullabot/mink-selenium2-driver": "^1.7.4",
+                "php": ">=8.2",
+                "symfony/css-selector": "^6.4.3 || ^7",
+                "symfony/dom-crawler": "^6.4.3 || ^7",
+                "symfony/http-client": "^6.4.3 || ^7",
+                "webflo/drupal-finder": "^1.3.1"
             },
             "require-dev": {
-                "composer/installers": "^2",
-                "drupal/coder": "^8.3",
-                "drupal/core": "^10",
-                "drupal/core-composer-scaffold": "^10",
-                "drush/drush": "^11.6.0 || ^12.4 || ^13",
-                "php-parallel-lint/php-parallel-lint": "^1.3",
-                "phpspec/phpspec": "^4.0 || ^6.0 || ^7.0"
+                "composer/installers": "^2.3",
+                "dantleech/gherkin-lint": "^0.2.3",
+                "dflydev/dot-access-data": "^3.0.3",
+                "drevops/behat-screenshot": "^2.2",
+                "drevops/phpcs-standard": "^0.6.2",
+                "drupal/coder": "^8.3.27",
+                "drupal/core": "^11",
+                "drupal/core-composer-scaffold": "^11",
+                "drush/drush": "^12.5.2 || ^13.7",
+                "dvdoug/behat-code-coverage": "^5.3.7",
+                "ergebnis/composer-normalize": "^2.50",
+                "grasmash/yaml-cli": "^3.2.1",
+                "guzzlehttp/guzzle": "^7.8.2",
+                "guzzlehttp/promises": "^2.0.3",
+                "guzzlehttp/psr7": "^2.6.3",
+                "justinrainbow/json-schema": "^5.3",
+                "league/container": "^4.2",
+                "masterminds/html5": "^2.8",
+                "php-parallel-lint/php-parallel-lint": "^1.4",
+                "phpspec/phpspec": "^7.0 || ^8.0",
+                "phpstan/phpstan": "^2.1",
+                "phpunit/php-code-coverage": "^11.0 || ^12.0",
+                "phpunit/phpunit": "^10.5 || ^11.0",
+                "rector/rector": "^2.0",
+                "symfony/browser-kit": "^6.4.3 || ^7",
+                "symfony/config": "^6.4.3 || ^7",
+                "symfony/console": "^6.4.3 || ^7",
+                "symfony/dependency-injection": "^6.4.3 || ^7",
+                "symfony/event-dispatcher": "^6.4.3 || ^7",
+                "symfony/event-dispatcher-contracts": "^3.4.2",
+                "symfony/filesystem": "^6.4.3 || ^7",
+                "symfony/http-kernel": "^6.4.3 || ^7",
+                "symfony/mime": "^6.4.3 || ^7",
+                "symfony/routing": "^6.4.3 || ^7",
+                "symfony/translation-contracts": "^3.4.2",
+                "symfony/var-dumper": "^6.4.3 || ^7",
+                "symfony/var-exporter": "^6.4.3 || ^7",
+                "symfony/yaml": "^6.4.3 || ^7",
+                "webmozart/assert": "^2"
             },
             "type": "behat-extension",
             "extra": {
+                "branch-alias": {
+                    "dev-master": "5.1.x-dev"
+                },
                 "drupal-scaffold": {
                     "locations": {
-                        "web-root": "drupal/"
+                        "web-root": "build/web"
+                    },
+                    "file-mapping": {
+                        "[web-root]/.htaccess": false,
+                        "[web-root]/README.md": false,
+                        "[web-root]/.csslintrc": false,
+                        "[web-root]/README.txt": false,
+                        "[web-root]/robots.txt": false,
+                        "[web-root]/update.php": false,
+                        "[web-root]/web.config": false,
+                        "[web-root]/INSTALL.txt": false,
+                        "[web-root]/.editorconfig": false,
+                        "[web-root]/.eslintignore": false,
+                        "[web-root]/.eslintrc.json": false,
+                        "[web-root]/.gitattributes": false,
+                        "[web-root]/.ht.router.php": false,
+                        "[project-root]/.editorconfig": false,
+                        "[web-root]/example.gitignore": false,
+                        "[project-root]/.gitattributes": false,
+                        "[web-root]/sites/example.sites.php": false,
+                        "[web-root]/sites/example.settings.local.php": false
                     }
                 },
                 "installer-paths": {
-                    "drupal/core": [
+                    "build/web/core": [
                         "type:drupal-core"
+                    ],
+                    "build/recipes/{$name}": [
+                        "type:drupal-recipe"
+                    ],
+                    "build/web/libraries/{$name}": [
+                        "type:drupal-library"
+                    ],
+                    "build/web/themes/contrib/{$name}": [
+                        "type:drupal-theme"
+                    ],
+                    "build/web/modules/contrib/{$name}": [
+                        "type:drupal-module"
+                    ],
+                    "build/web/profiles/contrib/{$name}": [
+                        "type:drupal-profile"
+                    ],
+                    "build/drush/Commands/contrib/{$name}": [
+                        "type:drupal-drush"
                     ]
                 }
             },
@@ -23551,6 +23629,16 @@
                 {
                     "name": "Pieter Frenssen",
                     "homepage": "https://github.com/pfrenssen"
+                },
+                {
+                    "name": "Alex Skrypnyk",
+                    "email": "alex@drevops.com",
+                    "role": "maintainer"
+                },
+                {
+                    "name": "Ricardo Sanz",
+                    "homepage": "https://github.com/rsanzante",
+                    "role": "maintainer"
                 }
             ],
             "description": "Drupal extension for Behat",
@@ -23562,7 +23650,7 @@
             ],
             "support": {
                 "issues": "https://github.com/jhedstrom/drupalextension/issues",
-                "source": "https://github.com/jhedstrom/drupalextension/tree/v5.1.0"
+                "source": "https://github.com/jhedstrom/drupalextension/tree/v5.4.0"
             },
             "funding": [
                 {
@@ -23570,7 +23658,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-10-21T21:00:55+00:00"
+            "time": "2026-04-16T08:25:19+00:00"
         },
         {
             "name": "drupal/filecache",

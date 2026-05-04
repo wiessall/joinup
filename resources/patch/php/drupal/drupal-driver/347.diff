@@ -1,0 +1,13 @@
+--- a/src/Drupal/Driver/Fields/Drupal8/ImageHandler.php
++++ b/src/Drupal/Driver/Fields/Drupal8/ImageHandler.php
+@@ -29,8 +29,8 @@ class ImageHandler extends AbstractHandler {
+
+     return [
+       'target_id' => $file->id(),
+-      'alt' => $values['alt'] ?? NULL,
+-      'title' => $values['title'] ?? NULL,
++      'alt' => $values['alt'] ?? pathinfo($file_path, PATHINFO_BASENAME),
++      'title' => $values['title'] ?? NULL,
+     ];
+   }
+

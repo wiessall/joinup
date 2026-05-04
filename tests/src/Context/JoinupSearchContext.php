@@ -298,21 +298,23 @@ class JoinupSearchContext extends RawDrupalContext {
    */
   #[Then('I should see the (following ) :input suggestion(s):')]
   public function iShouldSeeTheSuggestions(string $input, TableNode $table): void {
-    $session = $this->getSession();
-    $element = $this->getSearchBarElement($input);
-    $session->getDriver()->keyDown($element->getXpath(), '', NULL);
-    $this->waitForAjax();
-    $this->waitForElementVisible('css', '.ui-autocomplete a');
-    $allResults = $this->getSession()->getPage()->findAll('css', 'ul.ui-autocomplete a');
-    $found = array_map(function ($item) {
-      /** @var \Behat\Mink\Element\NodeElement $item */
-      return $item->getText();
-    }, $allResults);
-    $missing_suggestions = array_diff($table->getColumn(0), $found);
-    if (!empty($missing_suggestions)) {
-      $missing_suggestions = implode(', ', $missing_suggestions);
-      throw new \RuntimeException("The expected suggestions '$missing_suggestions' were not found in autocomplete.");
-    }
+    $this->retryOnStaleElement(function () use ($input, $table): void {
+      $session = $this->getSession();
+      $element = $this->getSearchBarElement($input);
+      $session->getDriver()->keyDown($element->getXpath(), '', NULL);
+      $this->waitForAjax();
+      $this->waitForElementVisible('css', '.ui-autocomplete a');
+      $allResults = $this->getSession()->getPage()->findAll('css', 'ul.ui-autocomplete a');
+      $found = array_map(function ($item) {
+        /** @var \Behat\Mink\Element\NodeElement $item */
+        return $item->getText();
+      }, $allResults);
+      $missing_suggestions = array_diff($table->getColumn(0), $found);
+      if (!empty($missing_suggestions)) {
+        $missing_suggestions = implode(', ', $missing_suggestions);
+        throw new \RuntimeException("The expected suggestions '$missing_suggestions' were not found in autocomplete.");
+      }
+    });
   }
 
   /**

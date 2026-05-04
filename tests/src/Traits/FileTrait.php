@@ -53,6 +53,34 @@ trait FileTrait {
   }
 
   /**
+   * Resolves filenames in a raw Behat file field value to absolute paths.
+   *
+   * Handles CSV multi-value, positional columns separated by ' - ', and the
+   * named 'target_id: filename' column form understood by
+   * FileHandler::expand().
+   *
+   * @param string $value
+   *   The raw Behat field value, e.g. "text.pdf, other.pdf - display: 1".
+   *
+   * @return string
+   *   The same string with each filename replaced by its absolute fixture path.
+   */
+  public function parseFileBehatValue(string $value): string {
+    $result = [];
+    foreach (str_getcsv($value, escape: "\\") as $entry) {
+      $parts = explode(' - ', trim($entry));
+      foreach ($parts as $i => $part) {
+        $part = trim($part);
+        if (!str_contains($part, ': ')) {
+          $parts[$i] = $this->getFileSourcePath($part);
+        }
+      }
+      $result[] = implode(' - ', $parts);
+    }
+    return implode(', ', $result);
+  }
+
+  /**
    * Returns the absolute path to the given file name from the fixture folder.
    *
    * @param string $filename
