@@ -324,3 +324,18 @@ Feature:
     When I go to the manage content page of "Solution 2"
     Then I should see the link "Release 1 1.0"
     And I should see the link "Distribution 1"
+
+  Scenario: Leading and trailing whitespace is trimmed from node titles on save.
+    Given collection content:
+      | title             |
+      | Trimming Test Hub |
+    And I am logged in as a moderator
+    When I go to the homepage of the "Trimming Test Hub" collection
+    And I click "Add discussion" in the plus button menu
+    And I fill in "Title" with "  Untrimmed Discussion Title  "
+    And I fill in "Content" with "Content body."
+    And I select "EU and European Policies" options from "Topic"
+    And I press "Publish"
+    Then I should see the heading "Untrimmed Discussion Title"
+    When I go to the edit form of the "Untrimmed Discussion Title" discussion
+    Then the "Title" field should contain "Untrimmed Discussion Title"
