@@ -16,6 +16,7 @@ use Drupal\Core\File\Exception\FileException;
 use Drupal\Core\File\Exception\FileExistsException;
 use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\Lock\LockAcquiringException;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -51,6 +52,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\CannotWriteFileException;
 use Symfony\Component\HttpFoundation\File\Exception\NoFileException;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
@@ -100,6 +102,8 @@ class AssessmentReportResource extends ResourceBase {
     protected readonly EntityFieldManagerInterface $fieldManager,
     protected readonly ClientInterface $httpClient,
     protected readonly FileSystemInterface $fileSystem,
+    protected readonly FileUrlGeneratorInterface $fileUrlGenerator,
+    protected readonly RequestStack $requestStack,
     protected readonly FileUploadHandler $uploadHandler,
     protected readonly AccountProxyInterface $currentUser,
     #[Autowire(AssessmentVocabularyHelper::class)]
@@ -124,6 +128,8 @@ class AssessmentReportResource extends ResourceBase {
       $container->get('entity_field.manager'),
       $container->get('http_client'),
       $container->get('file_system'),
+      $container->get('file_url_generator'),
+      $container->get('request_stack'),
       $container->get('file.upload_handler'),
       $container->get('current_user'),
       $container->get(AssessmentVocabularyHelper::class),
@@ -605,24 +611,26 @@ class AssessmentReportResource extends ResourceBase {
       RequestOptions::ALLOW_REDIRECTS => FALSE,
     ];
 
-    $requests = function (array $data) use ($safeRequestOptions) {
+    $requests = function (array $data) use ($safeRequestOptions, $report) {
+      $items = [];
       foreach ($data['documents'] ?? [] as $i => $url) {
-        $path = "/documents/$i";
-        if (!$this->validateDocumentUrl($url, $path)) {
-          continue;
-        }
-        $key = "$path:assessment.report.documents:$url";
-        yield $key => fn() => $this->httpClient->getAsync($url, $safeRequestOptions);
+        $items[] = ["/documents/$i", 'assessment.report.documents', $url];
       }
       foreach ($data['binding_requirement'] as $i => $requirement) {
         foreach ($requirement['documents'] ?? [] as $j => $url) {
-          $path = "/binding_requirement/$i/documents/$j";
-          if (!$this->validateDocumentUrl($url, $path)) {
-            continue;
-          }
-          $key = "$path:paragraph.binding_requirement.requirement_documents:$url";
-          yield $key => fn() => $this->httpClient->getAsync($url, $safeRequestOptions);
+          $items[] = ["/binding_requirement/$i/documents/$j", 'paragraph.binding_requirement.requirement_documents', $url];
         }
+      }
+      foreach ($items as [$path, $fieldInfo, $url]) {
+        if (!$this->validateDocumentUrl($url, $path)) {
+          continue;
+        }
+        $key = "$path:$fieldInfo:$url";
+        if ($localUri = $this->resolveLocalPath($url)) {
+          $this->uploadLocalFile($localUri, $key, $report);
+          continue;
+        }
+        yield $key => fn() => $this->httpClient->getAsync($url, $safeRequestOptions);
       }
     };
 
@@ -777,6 +785,15 @@ class AssessmentReportResource extends ResourceBase {
       return FALSE;
     }
 
+    // Own-site URLs bypass the private/reserved IP check. Inside containers
+    // the site's hostname commonly resolves to RFC1918/loopback, which the IP
+    // filter would otherwise reject for legitimate references back to our own
+    // files. Local files are short-circuited to the filesystem in
+    // uploadDocuments(); any non-file own-site URL still goes through Guzzle.
+    if ($this->isOwnSiteHost($host)) {
+      return TRUE;
+    }
+
     // Strip IPv6 bracket notation before lookup.
     $lookupHost = trim($host, '[]');
 
@@ -822,6 +839,102 @@ class AssessmentReportResource extends ResourceBase {
     }
 
     return $ips;
+  }
+
+  /**
+   * Whether the host belongs to this site.
+   */
+  protected function isOwnSiteHost(string $host): bool {
+    $request = $this->requestStack->getCurrentRequest();
+    $candidates = array_filter([
+      $request?->getHost(),
+      parse_url((string) $this->fileUrlGenerator->generateAbsoluteString('public://'), PHP_URL_HOST),
+    ]);
+    $host = strtolower(trim($host, '[]'));
+    return in_array($host, array_map('strtolower', $candidates), TRUE);
+  }
+
+  /**
+   * Maps an own-site URL to a public:// stream URI, or NULL if it doesn't map.
+   *
+   * Only files under public:// are eligible. Path traversal is blocked by
+   * comparing the resolved real path to the public files real path.
+   */
+  protected function resolveLocalPath(string $url): ?string {
+    $parsed = parse_url($url);
+    if (empty($parsed['path']) || empty($parsed['host']) || !$this->isOwnSiteHost($parsed['host'])) {
+      return NULL;
+    }
+    $publicAbs = (string) $this->fileUrlGenerator->generateAbsoluteString('public://');
+    $publicPrefix = parse_url($publicAbs, PHP_URL_PATH) ?? '';
+    if ($publicPrefix === '' || !str_starts_with($parsed['path'], $publicPrefix)) {
+      return NULL;
+    }
+    $relative = ltrim(rawurldecode(substr($parsed['path'], strlen($publicPrefix))), '/');
+    if ($relative === '') {
+      return NULL;
+    }
+    $candidate = 'public://' . $relative;
+    $realPublic = realpath($this->fileSystem->realpath('public://'));
+    $realFile = realpath($this->fileSystem->realpath($candidate));
+    if ($realPublic === FALSE || $realFile === FALSE) {
+      return NULL;
+    }
+    if (!str_starts_with($realFile . DIRECTORY_SEPARATOR, $realPublic . DIRECTORY_SEPARATOR)) {
+      return NULL;
+    }
+    return is_file($realFile) ? $candidate : NULL;
+  }
+
+  /**
+   * Copies an own-site file into the report, mirroring uploadFile().
+   *
+   * @param string $localUri
+   *   A public:// stream URI verified by resolveLocalPath().
+   * @param string $key
+   *   The packed request key: "$path:$entityType.$bundle.$fieldName:$url".
+   * @param \Drupal\assessments\Entity\AssessmentReport $report
+   *   The assessment report entity being created.
+   */
+  protected function uploadLocalFile(string $localUri, string $key, AssessmentReport $report): void {
+    [$path, $fieldInfo, $url] = explode(':', $key, 3);
+    [$entityTypeId, $bundle, $fieldName] = explode('.', $fieldInfo);
+
+    $definition = $this->fieldManager->getFieldDefinitions($entityTypeId, $bundle)[$fieldName];
+    $destination = $this->getUploadLocation($definition);
+    if (!$this->fileSystem->prepareDirectory($destination, FileSystemInterface::CREATE_DIRECTORY)) {
+      throw new HttpException(500, 'Destination file path is not writable');
+    }
+
+    try {
+      $validators = $this->getFileUploadValidators($definition->getSettings());
+      $filename = basename(parse_url($url, PHP_URL_PATH));
+      $tempPath = $this->fileSystem->tempnam('temporary://', 'file');
+      // copy() handles stream wrappers; size and extension are checked by the
+      // file upload validators below, the same as for remote downloads.
+      $this->fileSystem->copy($localUri, $tempPath, FileExists::Replace);
+      $uploadedFile = new InputStreamUploadedFile($filename, $filename, $tempPath, @filesize($tempPath));
+      $result = $this->uploadHandler->handleFileUpload($uploadedFile, $validators, $destination, FileExists::Rename, FALSE);
+    }
+    catch (LockAcquiringException $e) {
+      throw new HttpException(503, $e->getMessage(), NULL, ['Retry-After' => 1]);
+    }
+    catch (FileException $e) {
+      throw new HttpException(500, 'Local file could not be copied', $e);
+    }
+
+    if ($result->hasViolations()) {
+      foreach ($result->getViolations() as $violation) {
+        $this->addError($path, "Error saving file $filename: " . PlainTextOutput::renderFromHtml($violation->getMessage()));
+      }
+      return;
+    }
+
+    $file = $result->getFile();
+    match ($entityTypeId) {
+      'assessment' => $report->get('documents')->appendItem($file),
+      'paragraph' => $this->attachFileToParagraph($report, $path, $fieldName, $file),
+    };
   }
 
   /**
