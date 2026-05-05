@@ -108,7 +108,7 @@ Feature: Administer media.
   Scenario: Ensure that multiple media are rendered without logging any errors.
     Given there are no preexisting log records on the site
     And the following "Image" media:
-      | name                               | image      | alt            | group      | revision         | uuid        |
+      | name                               | image      | alt            | group          | revision         | uuid        |
       | The Image in Shaping of disruption | simple.svg | A simple image | Portal support | 2016-07-10T13:00 | abcde-12345 |
 
     When I am logged in as a "facilitator" of the "Portal support" collection
@@ -163,17 +163,17 @@ Feature: Administer media.
   # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9874
   Scenario: Media are rendered correctly for releases and distributions.
     Given the following "Image" media:
-      | name                               | image      | alt            | group      | revision         | uuid        |
+      | name                               | image      | alt            | group          | revision         | uuid        |
       | The Image in Shaping of disruption | simple.svg | A simple image | Portal support | 2016-07-10T13:00 | abcde-12345 |
     And the following "solution" content:
       | title         | description |
       | Some solution | Meh...      |
     And the following "release" content:
-      | title        | release number | release notes                                                                               | is version of |
-      | Some release | 0.1            | <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media> | Some solution |
+      | title        | release number | release notes                                                                                     | is version of |
+      | Some release | 0.1            | "<drupal-media data-entity-type=\"media\" data-entity-uuid=\"abcde-12345\">&nbsp;</drupal-media>" | Some solution |
     And the following "distribution" content:
-      | title             | description                                                                                 | release      |
-      | Some distribution | <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media> | Some release |
+      | title             | description                                                                                       | release      |
+      | Some distribution | "<drupal-media data-entity-type=\"media\" data-entity-uuid=\"abcde-12345\">&nbsp;</drupal-media>" | Some release |
 
     When I go to the "Some release" release
     Then the response should contain "/sites/default/files/file-visibility/media/image/simple.svg"
