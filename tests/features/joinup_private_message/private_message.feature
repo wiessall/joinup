@@ -29,7 +29,7 @@ Feature: Private messages
     And I should see the heading "Private Messages"
     And I should see 1 private message
     And a message containing the text "A private message from Alice to Bob." should be present
-    And I see the text "Conversation with Bob Rolls"
+    And I should see the text "Conversation with Bob Rolls"
 
     When I am logged in as "bob_rolls"
     And I am on the homepage

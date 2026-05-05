@@ -79,7 +79,7 @@ Feature: "Add discussion" visibility options.
     # Check that an anonymous user can see the information.
     Given I am an anonymous user
     When I go to the "Flight of Girlfriend" discussion
-    Then I see the text "Emerald in the Luck"
+    Then I should see the text "Emerald in the Luck" in the "Header" region
     And I should see the heading "Flight of Girlfriend"
     And I should see the following lines of text:
       | This is going to be an amazing discussion. |

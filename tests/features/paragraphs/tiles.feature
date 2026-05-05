@@ -27,7 +27,7 @@ Feature:
     And I press "Update"
 
     When I should see the heading "Card title"
-    And I see the text "This is some text within a card body."
+    And I should see the text "This is some text within a card body."
 
   Scenario: Tiles paragraph is restricted.
     Given the following "custom_page" content:
@@ -63,5 +63,5 @@ Feature:
     And I press "Update"
 
     When I should see the heading "Board"
-    And I see the text "Explore the roles and decisions of the Governance Board's."
+    And I should see the text "Explore the roles and decisions of the Governance Board's."
     And I should not see the text "Explore the roles and decisions of the Governance Board&#039;s."

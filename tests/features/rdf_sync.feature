@@ -11,7 +11,7 @@ Feature: RDF synchronization of contents.
     And the following "contact_information" content:
       | uri                         | name            | email                       | website url        |
       | http://example.com/contact1 | Syncing contact | syncing.contact@example.com | http://example.com |
-    And owner_type terms:
+    And the following "owner_type" terms:
       | uri                            | name       |
       | http://example.com/owner-type1 | University |
     And the following "owner" content:
@@ -20,17 +20,17 @@ Feature: RDF synchronization of contents.
     And the following "licence" content:
       | uri                         | title           | description       | licence type  |
       | http://example.com/licence1 | Syncing licence | Some nice licence | Public domain |
-    And spatial terms:
+    And the following "spatial" terms:
       | uri                         | name     |
       | http://example.com/country1 | Atlantis |
-    And language terms:
+    And the following "language" terms:
       | uri                          | name     |
       | http://example.com/language1 | Atlantic |
       | http://example.com/language2 | Aramaic  |
-    And file_type terms:
+    And the following "file_type" terms:
       | uri                      | name    |
       | http://example.com/type1 | Archive |
-    And representation_technique terms:
+    And the following "representation_technique" terms:
       | uri                      | name   |
       | http://example.com/tech1 | Schema |
     And the following "collection" content:
@@ -560,7 +560,7 @@ Feature: RDF synchronization of contents.
       | http://example.com/license2 | http://joinup.eu/licence/deprecated             | 0                                        |
 
   Scenario: RDF entities for Owners and Owner types are correctly created.
-    Given owner_type terms:
+    Given the following "owner_type" terms:
       | uri                          | name       |
       | http://joinup.eu/owner-type1 | University |
     And the following "owner" content:

@@ -326,7 +326,7 @@ Feature: User profile
 
   # Regression test for ticket ISAICP-10510.
   Scenario: User profile with orphaned nationality reference does not cause errors
-    Given spatial terms:
+    Given the following "spatial" terms:
       | name    |
       | Valeron |
     Given the following users:

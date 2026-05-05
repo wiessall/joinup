@@ -61,12 +61,12 @@ Feature:
     Given the following "oss_contractor" content:
       | title     |
       | ACME Ltd. |
-    Given oss_used_by terms:
+    Given the following "oss_used_by" terms:
       | name             |
       | Administration 1 |
       | Administration 2 |
       | Administration 3 |
-    Given oss_platform terms:
+    Given the following "oss_platform" terms:
       | name  |
       | macOs |
     Given the following "oss_solution" content:
@@ -169,7 +169,7 @@ Feature:
 
   @javascript
   Scenario: Modal link should be displayed and must show all field values.
-    Given oss_used_by terms:
+    Given the following "oss_used_by" terms:
       | name             |
       | Administration 1 |
       | Administration 2 |

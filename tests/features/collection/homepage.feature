@@ -205,7 +205,7 @@ Feature: Collection homepage
     Then the following fields should be present "Landing page"
     When I select "Custom Landing Page" from "Landing page"
     And I press "Save"
-    Then I see the heading "Custom Landing Page"
+    Then I should see the heading "Custom Landing Page"
     # And I should see "The custom page 3 content"
     Given I am not logged in
     When I go to the homepage of the "Middle earth daily" collection

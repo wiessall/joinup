@@ -8,7 +8,7 @@ Feature: Report inappropriate content
     Given the following "collection" content:
       | title            |
       | Deployment tools |
-    And "<type>" content:
+    And the following "<type>" content:
       | title   | body   | collection       |
       | <title> | <body> | Deployment tools |
     Given I am not logged in

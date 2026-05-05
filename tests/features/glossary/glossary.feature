@@ -178,19 +178,19 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
 
     When I go to the "Collection With Glossary" collection
     And I click "Alphabet"
-    Then I see the heading "Alphabet"
+    Then I should see the heading "Alphabet"
 
     When I move backward one page
     And I click "Colors"
-    Then I see the heading "Colors"
+    Then I should see the heading "Colors"
 
     When I move backward one page
     And I click "CLR"
-    Then I see the heading "Colors"
+    Then I should see the heading "Colors"
 
     When I move backward one page
     And I click "s/ashy"
-    Then I see the heading "S/ashy"
+    Then I should see the heading "S/ashy"
 
     # A glossary term inside a link text remains untouched.
     When I move backward one page

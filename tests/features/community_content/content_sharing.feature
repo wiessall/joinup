@@ -186,7 +186,7 @@ Feature: Sharing content between collections
       | title      |
       | Westeros   |
       | Essos city |
-    And "<content type>" content:
+    And the following "<content type>" content:
       | title       | <group type> |
       | Iron throne | Westeros     |
     Given the following users:

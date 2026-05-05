@@ -87,7 +87,7 @@ Feature:
     When the "Previous item" button in the Content region should not be visible
     And the "Next item" button in the Content region should not be visible
 
-    Then news content:
+    And the following "news" content:
       | title       | headline    | collection | body          | state     |
       | News page 4 | Some page 1 | Sparta     | Some content. | published |
       | News page 5 | Some page 2 | Sparta     | Some content. | published |
