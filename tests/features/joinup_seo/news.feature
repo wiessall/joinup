@@ -56,8 +56,8 @@ Feature: SEO for news articles.
       | og:site_name           | Interoperable Europe Portal                                                                                       |
       | og:title               | Interoperable Europe Portal SEO news                                                                              |
       | og:description         | Body of news.                                                                                                     |
-      | og:image               | __base_url__/sites/default/files/__random_text__.jpg                                                              |
-      | og:image:type          | image/jpeg                                                                                                        |
+      | og:image               | __base_url__/sites/default/files/__random_text__.png                                                              |
+      | og:image:type          | image/png                                                                                                         |
       | og:image:width         | 377                                                                                                               |
       | og:image:height        | 139                                                                                                               |
       | article:author         | Kurk Smith                                                                                                        |

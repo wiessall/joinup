@@ -12,8 +12,8 @@ Feature: SEO for news articles.
       | Username          | E-mail                 | First name | Family name |
       | Joinup SEO author | joinup.seo@example.com | Patrick    | Stewart     |
     And the following "event" content:
-      | title            | short title   | web url   | start date                | end date                  | body           | logo     | agenda        | location   | online location                                          | organisation        | scope         | keywords | collection                  | abstract |
-      | Joinup SEO event | JOINUPSEO2020 | <web url> | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | Body of event. | logo.png | Event agenda. | <location> | 0: Some title - 1: http://example.com/some-online-meetup | European Commission | International | Alphabet | Joinup SEO event collection |          |
+      | title            | short title   | web url   | start date                | end date                  | body           | logo     | agenda        | location   | online location                                                                       | organisation        | scope         | keywords | collection                  | abstract |
+      | Joinup SEO event | JOINUPSEO2020 | <web url> | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | Body of event. | logo.png | Event agenda. | <location> | title: "Some title", uri: "http://example.com/some-online-meetup"                     | European Commission | International | Alphabet | Joinup SEO event collection |          |
     When I visit the "Joinup SEO event" event
     Then the metatag JSON should be attached in the page
     And 1 metatag graph of type "http://schema.org/Event" should exist in the page
@@ -40,7 +40,7 @@ Feature: SEO for news articles.
       | representativeOfPage | True                                                 |
       # __random_text__ can be any string that is appointed by the system and we
       # cannot predict. In this case it is the random file name of the image.
-      | url                  | __base_url__/sites/default/files/__random_text__.jpg |
+      | url                  | __base_url__/sites/default/files/__random_text__.png |
       | width                | 377                                                  |
       | height               | 139                                                  |
     And the metatag graph of the item with "name" "Joinup SEO event" should have the following "location" properties:
@@ -67,8 +67,8 @@ Feature: SEO for news articles.
       | og:site_name    | Interoperable Europe Portal                                                |
       | og:title        | Joinup SEO event                                                           |
       | og:description  | Body of event.                                                             |
-      | og:image        | __base_url__/sites/default/files/__random_text__.jpg                       |
-      | og:image:type   | image/jpeg                                                                 |
+      | og:image        | __base_url__/sites/default/files/__random_text__.png                       |
+      | og:image:type   | image/png                                                                  |
       | og:image:width  | 377                                                                        |
       | og:image:height | 139                                                                        |
 
@@ -80,12 +80,12 @@ Feature: SEO for news articles.
     And the metatag JSON should not be attached in the page
 
     Examples:
-      | web url                                       | expected url                                                               | location                           | expected location |
-      |                                               | __base_url__/collection/joinup-seo-event-collection/event/joinup-seo-event | Rue Belliard 28, Brussels, Belgium | Rue Belliard 28   |
-      # Urls need a title value in the 0 index and a url in the 1 index of the
-      # value to work, otherwise it is parsed wrongly.
-      # @see: \Drupal\Driver\Fields\Drupal8\LinkHandler::expand
-      | 0: Some url - 1: http://some-random-event-url | http://some-random-event-url                                               | Rue Belliard 28, Brussels, Belgium | Rue Belliard 28   |
+      | web url                                                       | expected url                                                               | location                           | expected location |
+      |                                                               | __base_url__/collection/joinup-seo-event-collection/event/joinup-seo-event | Rue Belliard 28, Brussels, Belgium | Rue Belliard 28   |
+      # Link cells must use named keys ('title' and 'uri') so the v6 entity
+      # field parser recognises them; bare positional values are rejected.
+      # @see: \Drupal\Driver\Core\Field\LinkHandler::expand
+      | title: "Some url", uri: "http://some-random-event-url"        | http://some-random-event-url                                               | Rue Belliard 28, Brussels, Belgium | Rue Belliard 28   |
 
   Scenario: Events without physical address but with online location should still show the online location.
     Given the following "collection" content:
@@ -95,8 +95,8 @@ Feature: SEO for news articles.
       | Username          | E-mail                 | First name | Family name |
       | Joinup SEO author | joinup.seo@example.com | Patrick    | Stewart     |
     And the following "event" content:
-      | title            | short title   | online location                                          | collection                  |
-      | Joinup SEO event | JOINUPSEO2021 | 0: Some title - 1: http://example.com/some-online-meetup | Joinup SEO event collection |
+      | title            | short title   | online location                                                   | collection                  |
+      | Joinup SEO event | JOINUPSEO2021 | title: "Some title", uri: "http://example.com/some-online-meetup" | Joinup SEO event collection |
 
     When I visit the "Joinup SEO event" event
     Then the metatag JSON should be attached in the page
