@@ -24083,12 +24083,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/idimopoulos/behat-one-time-login.git",
-                "reference": "0658dedbae41c9d1c8c724e34fa9b5e61333f851"
+                "reference": "8d1cf716597ba3f28d706ee5a657a79609be5639"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/idimopoulos/behat-one-time-login/zipball/0658dedbae41c9d1c8c724e34fa9b5e61333f851",
-                "reference": "0658dedbae41c9d1c8c724e34fa9b5e61333f851",
+                "url": "https://api.github.com/repos/idimopoulos/behat-one-time-login/zipball/8d1cf716597ba3f28d706ee5a657a79609be5639",
+                "reference": "8d1cf716597ba3f28d706ee5a657a79609be5639",
                 "shasum": ""
             },
             "require": {
@@ -24137,7 +24137,7 @@
             "support": {
                 "source": "https://github.com/idimopoulos/behat-one-time-login/tree/master"
             },
-            "time": "2026-05-04T18:46:14+00:00"
+            "time": "2026-05-05T13:47:22+00:00"
         },
         {
             "name": "ec-europa/qa-automation",
