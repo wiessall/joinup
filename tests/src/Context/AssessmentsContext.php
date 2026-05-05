@@ -104,10 +104,9 @@ class AssessmentsContext extends RawDrupalContext {
 
       // Strip columns that are not real entity fields.
       unset($assessment['identifier']);
-      $assessment = (object) $assessment;
-      $assessment->type = $type;
-      $this->parseEntityFields('assessment', $assessment);
-      $this->getDriver()->createEntity('assessment', $assessment);
+      $stub = new EntityStub('assessment', $type, $assessment);
+      $this->parseEntityFields($stub);
+      $this->getDriver()->entityCreate($stub);
     }
   }
 
@@ -215,31 +214,33 @@ class AssessmentsContext extends RawDrupalContext {
   public function createAssessmentStatements(TableNode $table): void {
     foreach ($table->getColumnsHash() as $values) {
       assert(in_array($values['statement_type'], ['legal', 'organisational', 'semantic', 'technical'], TRUE), 'Invalid assessment statement type provided.');
-      $values['type'] = $values['statement_type'];
-      $values = (object) $values;
+      $bundle = $values['statement_type'];
+      unset($values['statement_type']);
+      $values['type'] = $bundle;
 
-      if (!empty($values->interpretation)) {
+      if (!empty($values['interpretation'])) {
         $tids = \Drupal::entityQuery('taxonomy_term')->accessCheck(FALSE)
           ->condition('vid', 'assess_statement_interpretation')
-          ->condition('id', $values->interpretation)
+          ->condition('id', $values['interpretation'])
           ->execute();
         assert(count($tids) === 1);
-        $values->interpretation = reset($tids);
+        $values['interpretation'] = reset($tids);
       }
 
-      if (!empty($values->landing_page)) {
+      if (!empty($values['landing_page'])) {
         $fileValues = [];
-        foreach ($this->explodeDelimitedSeparatedStepArgument($values->landing_page) as $filename) {
+        foreach ($this->explodeDelimitedSeparatedStepArgument($values['landing_page']) as $filename) {
           $file = $this->createFile($filename);
           $fileValues[] = [
             'target_id' => $file->id(),
           ];
         }
-        $values->landing_page = $fileValues;
+        $values['landing_page'] = $fileValues;
       }
 
-      $this->parseEntityFields('assessment_statement', $values);
-      $this->getDriver()->createEntity('assessment_statement', $values);
+      $stub = new EntityStub('assessment_statement', $bundle, $values);
+      $this->parseEntityFields($stub);
+      $this->getDriver()->entityCreate($stub);
     }
   }
 
