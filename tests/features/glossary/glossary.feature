@@ -140,8 +140,8 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
 
   Scenario: Glossary terms should be shown as links in collection content
     Given the following "collection" content:
-      | title                    | description                                                                                       | abstract                              |
-      | Collection With Glossary | Colors of Paradise. Abbreviated as CLR. <a href="../contact"><strong>Colors of Dream</strong></a> | The Alphabet is back and it's s/ashy. |
+      | title                    | description                                                                                             | abstract                              |
+      | Collection With Glossary | "Colors of Paradise. Abbreviated as CLR. <a href=\"../contact\"><strong>Colors of Dream</strong></a>"   | The Alphabet is back and it's s/ashy. |
     And the following "solution" content:
       | title            | description | collection               |
       | Under The Bridge | No Colors   | Collection With Glossary |
