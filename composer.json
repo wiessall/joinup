@@ -464,7 +464,8 @@
             "drupal/layout_paragraphs": {
                 "Utilize layout preview mode https://drupal.org/i/3392735": "resources/patch/php/drupal/layout_paragraphs/layout_paragraphs-utilize_layout_preview-3392735-5--fix-only.patch",
                 "Allow to drag and drop nested paragraphs @see https://www.drupal.org/project/layout_paragraphs/issues/3401176": "resources/patch/php/drupal/layout_paragraphs/3401176.patch",
-                "Integrity constraint violation @see https://www.drupal.org/project/layout_paragraphs/issues/3528058": "resources/patch/php/drupal/layout_paragraphs/3528058.patch"
+                "Integrity constraint violation @see https://www.drupal.org/project/layout_paragraphs/issues/3528058": "resources/patch/php/drupal/layout_paragraphs/3528058.patch",
+                "Prevent moving components on Translate edit page @see https://drupal.org/i/3540040": "resources/patch/php/drupal/layout_paragraphs/3540040-mr234-commit086c8bf2.diff"
             },
             "drupal/memcache": {
                 "Use Drupal core time service with fallback @see https://drupal.org/i/2999614": "resources/patch/php/drupal/memcache/2999614-mr41-20f8103bd2.diff",
