@@ -105,6 +105,12 @@ class AssessmentsContext extends RawDrupalContext {
       // Strip columns that are not real entity fields.
       unset($assessment['identifier']);
       $stub = new EntityStub('assessment', $type, $assessment);
+      // Replace human readable publication statuses with the boolean values
+      // expected by the entity's published key.
+      self::convertObjectPropertyValues($stub, 'status', [
+        'unpublished' => 0,
+        'published' => 1,
+      ]);
       $this->parseEntityFields($stub);
       $this->getDriver()->entityCreate($stub);
     }
