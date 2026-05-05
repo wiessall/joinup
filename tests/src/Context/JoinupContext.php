@@ -1872,39 +1872,36 @@ class JoinupContext extends RawDrupalContext {
 
       // Crete a fake node object to be able to reuse hooks that help with
       // preparing the field values.
-      $fake_node = (object) $data;
+      $fake_node = new EntityStub('node', $bundle, $data);
 
       // Retain data which is relied on by the node creation hooks.
-      $fake_node->type = $bundle;
       if ($node instanceof GroupContentInterface) {
         $group = $node->getGroup();
         $group_bundle = $group->bundle();
-        if (!isset($fake_node->$group_bundle)) {
-          $fake_node->$group_bundle = $group->label();
+        if (!$fake_node->hasValue($group_bundle)) {
+          $fake_node->setValue($group_bundle, $group->label());
         }
       }
 
       $this->dispatchHooks(BeforeNodeCreateScope::class, $fake_node);
       // Correction to topic field.
-      if (!empty($fake_node->field_topic) && ($topic = $this->getEntityByLabel('taxonomy_term', $fake_node->field_topic, 'topic'))) {
-        $fake_node->field_topic = $topic->id();
+      if (!empty($fake_node->getValue('field_topic')) && ($topic = $this->getEntityByLabel('taxonomy_term', $fake_node->getValue('field_topic'), 'topic'))) {
+        $fake_node->setValue('field_topic', $topic->id());
       }
-      $this->parseEntityFields('node', $fake_node);
-      // Remove the type property as we cannot change that.
-      unset($fake_node->type);
+      $this->parseEntityFields($fake_node);
 
       // The author is handled in \Drupal\Driver\Cores\Drupal8::nodeCreate(),
       // so we have to do it manually.
-      if (isset($fake_node->author)) {
-        $user = user_load_by_name($fake_node->author);
+      if ($fake_node->hasValue('author')) {
+        $user = user_load_by_name($fake_node->getValue('author'));
         if ($user) {
           $node->set('uid', $user->id());
         }
-        unset($fake_node->author);
+        $fake_node->removeValue('author');
       }
 
       // Update all fields. Magic setters will take care of everything.
-      foreach (get_object_vars($fake_node) as $name => $value) {
+      foreach ($fake_node->getValues() as $name => $value) {
         $node->{$name} = $value;
       }
 
