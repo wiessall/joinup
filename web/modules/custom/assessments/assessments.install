@@ -79,6 +79,7 @@ function assessments_update_201300(array &$sandbox): void {
     ->setLabel(t('Default translation'))
     ->setName('default_langcode')
     ->setDescription(t('A flag indicating whether this is the default translation.'))
+    ->setRevisionable(TRUE)
     ->setTargetEntityTypeId($entityTypeId)
     ->setTargetBundle(NULL)
     ->setTranslatable(TRUE)
