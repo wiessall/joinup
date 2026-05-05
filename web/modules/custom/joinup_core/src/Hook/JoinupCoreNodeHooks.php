@@ -30,7 +30,7 @@ final class JoinupCoreNodeHooks {
   }
 
   /**
-   * Element validate callback: trims leading/trailing whitespace from title.
+   * Trims leading/trailing whitespace from an element value.
    */
   public static function trimTitleElement(array &$element, FormStateInterface $form_state): void {
     $form_state->setValueForElement($element, trim((string) $element['#value']));
