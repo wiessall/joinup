@@ -387,9 +387,6 @@
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
             },
-            "drupal/drupal-driver": {
-                "ImageHandler: default alt text to filename when not provided https://github.com/jhedstrom/DrupalDriver/pull/347": "resources/patch/php/drupal/drupal-driver/347.diff"
-            },
             "drupal/drupal-extension": {
                 "Recognise bundle-scoped fields @see https://github.com/jhedstrom/drupalextension/pull/851": "resources/patch/php/drupal/drupal-extension/851.diff"
             },
