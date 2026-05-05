@@ -10,6 +10,7 @@ use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementHtmlException;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
+use WebDriver\Exception\StaleElementReference;
 use Drupal\DrupalExtension\Context\MinkContext;
 
 /**
@@ -186,9 +187,18 @@ trait AwaitTrait {
    * Waits for autocomplete results to appear.
    */
   protected function waitForAutocomplete(): void {
-    $this->getSession()->getPage()->waitFor(3, static fn(DocumentElement $page): bool =>
-      $page->find('css', '.ui-autocomplete li')?->isVisible() === TRUE
-    );
+    $result = $this->getSession()->getPage()->waitFor(3, static function (DocumentElement $page): bool {
+      try {
+        return $page->find('css', '.ui-autocomplete li')?->isVisible() === TRUE;
+      }
+      catch (StaleElementReference) {
+        return FALSE;
+      }
+    });
+
+    if (!$result) {
+      throw new \RuntimeException('Autocomplete results did not appear within 3 seconds.');
+    }
   }
 
 }
