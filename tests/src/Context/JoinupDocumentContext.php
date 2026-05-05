@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
@@ -26,12 +27,11 @@ class JoinupDocumentContext extends RawDrupalContext {
    *   An object containing the entity properties and fields that are to be used
    *   for creating the node as properties on the object.
    *
-   * @BeforeNodeCreate
-   *
    * @throws \Exception
    *   Thrown when an attached file cannot be found or cannot be saved in the
    *   Drupal public files folder.
    */
+  #[BeforeNodeCreate]
   public function massageDocumentFieldsBeforeNodeCreate(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
 

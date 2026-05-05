@@ -30,9 +30,9 @@ Feature: Pinning entities inside collections
 
   Scenario Outline: Facilitators can pin and unpin community content inside their collections.
     And <content type> content:
-      | title              | headline           | collection    | pinned |
-      | Very important     | Important very     | Orange Wrench | yes    |
-      | Useful information | Information useful | Orange Wrench | no     |
+      | title              | collection    | pinned |
+      | Very important     | Orange Wrench | yes    |
+      | Useful information | Orange Wrench | no     |
 
     When I am an anonymous user
     And I go to the homepage of the "Orange Wrench" collection
