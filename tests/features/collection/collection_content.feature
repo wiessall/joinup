@@ -12,17 +12,17 @@ Feature: Collection content
       | title                       | collection                | creation date    | modification date | topic |
       | Tomb Of Unknown Restoration | Turin Egyptian Collection | 2017-11-11T11:11 | 2017-11-30T11:11  | HR    |
     And the following "discussion" content:
-      | title                                 | body                                                                    | collection                | topic                                                 | created          | changed                   |
-      | Bigger than Egyptian Museum of Cairo? | <p><a href="#link">Link to the museum</a> web<strong>site</strong>.</p> | Turin Egyptian Collection | Finance in EU, Supplier exchange, E-health, E-justice | 2017-11-11T11:11 | Wed, 25 Dec 2019 15:00:00 |
+      | title                                 | body                                                                        | collection                | topic                                                 | created          | changed                   |
+      | Bigger than Egyptian Museum of Cairo? | "<p><a href=\"#link\">Link to the museum</a> web<strong>site</strong>.</p>" | Turin Egyptian Collection | Finance in EU, Supplier exchange, E-health, E-justice | 2017-11-11T11:11 | Wed, 25 Dec 2019 15:00:00 |
     And the following "document" content:
-      | title           | field_paragraphs_body                            | collection                | creation date    | changed          | topic    |
-      | Upper Floor Map | <p>A sample <a href="#link">map</a> example.</p> | Turin Egyptian Collection | 2017-11-11T11:11 | 2017-11-30T11:11 | E-health |
+      | title           | field_paragraphs_body                                | collection                | creation date    | changed          | topic    |
+      | Upper Floor Map | "<p>A sample <a href=\"#link\">map</a> example.</p>" | Turin Egyptian Collection | 2017-11-11T11:11 | 2017-11-30T11:11 | E-health |
     And the following "event" content:
       | title                                     | collection                | start date          | end date            | topic             |
       | Opening of the Hellenistic Period Section | Turin Egyptian Collection | 2016-03-15T11:12:12 | 2016-03-15T11:12:12 | Supplier exchange |
     And the following "news" content:
-      | title                          | body                                                           | collection                | changed    | topic             |
-      | Turin Egyptian Museum Reopened | <p>After <em>more than</em> <a href="#link">two years</a>.</p> | Turin Egyptian Collection | 2019-11-19 | Supplier exchange |
+      | title                          | body                                                               | collection                | changed    | topic             |
+      | Turin Egyptian Museum Reopened | "<p>After <em>more than</em> <a href=\"#link\">two years</a>.</p>" | Turin Egyptian Collection | 2019-11-19 | Supplier exchange |
 
   Scenario: Publishing new solutions should result in counters being properly updated.
     Given the following "owner" content:
