@@ -391,7 +391,7 @@
                 "ImageHandler: default alt text to filename when not provided https://github.com/jhedstrom/DrupalDriver/pull/347": "resources/patch/php/drupal/drupal-driver/347.diff"
             },
             "drupal/drupal-extension": {
-                "Recognise bundle-scoped fields (hook_entity_bundle_field_info) in EntityFieldParser, mirrors removed jhedstrom/DrupalDriver#356": "resources/patch/php/drupal/drupal-extension/356.diff"
+                "Recognise bundle-scoped fields @see https://github.com/jhedstrom/drupalextension/pull/851": "resources/patch/php/drupal/drupal-extension/851.diff"
             },
             "drupal/dynamic_entity_reference": {
                 "Undefined array key on dependency removal @see https://www.drupal.org/i/3099176": "resources/patch/php/drupal/dynamic_entity_reference/3099176-3.x-16.diff",
