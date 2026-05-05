@@ -5,7 +5,7 @@
      do {
        $this->expireMessageDigestNotifiers();
 -      $this->getDriver()->runCron();
-+      \Drupal::service('cron')->run();
++      $this->getDriver()->cronRun();
      } while ($this->countAllUndeliveredDigestMessages());
    }
 

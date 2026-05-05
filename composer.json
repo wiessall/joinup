@@ -475,7 +475,7 @@
             },
             "drupal/message_digest": {
                 "Renderer::renderPlain() is deprecated @see https://www.drupal.org/i/3511648": "resources/patch/php/drupal/message_digest/3511648.diff",
-                "deliverAllDigests() uses removed DrupalDriver::runCron(); call \\Drupal::service('cron')->run() instead": "resources/patch/php/drupal/message_digest/runcron.diff"
+                "deliverAllDigests() calls renamed DrupalDriver::runCron(); use cronRun() instead": "resources/patch/php/drupal/message_digest/runcron.diff"
             },
             "drupal/meta_entity": {
                 "hook_entity_insert() auto-creates duplicate @see https://www.drupal.org/i/3583434": "resources/patch/php/drupal/meta_entity/3583434.mr20-commitf3ef1e53.diff"

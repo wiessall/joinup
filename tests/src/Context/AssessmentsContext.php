@@ -228,14 +228,17 @@ class AssessmentsContext extends RawDrupalContext {
       }
 
       if (!empty($values['landing_page'])) {
-        $fileValues = [];
+        // Pre-stage the file in 'public://' under its original filename so
+        // FileHandler::resolveExistingFile() finds it by basename and skips
+        // the uniqid-renamed re-upload path. Necessary so downstream
+        // assertions that expect a stable URL like
+        // '/sites/default/files/<name>' keep matching.
+        $filenames = [];
         foreach ($this->explodeDelimitedSeparatedStepArgument($values['landing_page']) as $filename) {
-          $file = $this->createFile($filename);
-          $fileValues[] = [
-            'target_id' => $file->id(),
-          ];
+          $this->createFile($filename);
+          $filenames[] = $filename;
         }
-        $values['landing_page'] = $fileValues;
+        $values['landing_page'] = implode(', ', $filenames);
       }
 
       $stub = new EntityStub('assessment_statement', $bundle, $values);
