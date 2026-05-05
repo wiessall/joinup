@@ -10,8 +10,8 @@ use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementHtmlException;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
-use WebDriver\Exception\StaleElementReference;
 use Drupal\DrupalExtension\Context\MinkContext;
+use WebDriver\Exception\StaleElementReference;
 
 /**
  * Wait helper methods.
