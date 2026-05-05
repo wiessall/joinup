@@ -12,12 +12,12 @@ Feature:
       | title  | state     |
       | Sparta | published |
     And news content:
-      | title       | headline    | collection  | content       | state     | abstract             | topic |
+      | title       | headline    | collection  | body          | state     | abstract             | topic |
       | Some news 1 | Some news 1 | Roman ruins | Some content. | published | Some news 1 abstract | HR    |
       | Some news 2 | Some news 2 | Sparta      | Come content. | published | Some news 2 abstract | HR    |
       | Some news 3 | Some news 3 | Roman ruins | Come content. | published | Some news 3 abstract | info  |
     Given event content:
-      | title        | headline     | collection  | content       | state     | start date | end date  | topic |
+      | title        | headline     | collection  | body          | state     | start date | end date  | topic |
       | Some event 1 | Some event 1 | Roman ruins | Some content. | published | 5 day ago  | 4 day ago | HR    |
     And custom_page content:
       | title         | collection  | state     |
@@ -36,7 +36,7 @@ topic|hr";s:13:"show_archived";s:10:"unarchived";s:5:"limit";s:2:"12";s:11:"show
 
   Scenario: Content listing should be ordered by creation date by default.
     Given news content:
-      | title       | headline    | collection  | content       | state     | created    |
+      | title       | headline    | collection  | body          | state     | created    |
       | Some news 1 | Some news 1 | Roman ruins | Some content. | published | 2 day ago  |
       | Some news 2 | Some news 2 | Roman ruins | Some content. | published | 3 days ago |
       | Some news 3 | Some news 3 | Roman ruins | Some content. | published | 1 days ago |
@@ -54,7 +54,7 @@ topic|hr";s:13:"show_archived";s:10:"unarchived";s:5:"limit";s:2:"12";s:11:"show
 
   Scenario: Test also that events, when listed alone, are sorted by event date.
     Given event content:
-      | title        | headline     | collection  | content       | state     | created    | start date | end date   |
+      | title        | headline     | collection  | body          | state     | created    | start date | end date   |
       | Some event 1 | Some event 1 | Roman ruins | Some content. | published | 2 day ago  | 5 day ago  | 4 day ago  |
       | Some event 2 | Some event 2 | Roman ruins | Some content. | published | 3 days ago | 6 days ago | 5 days ago |
       | Some event 3 | Some event 3 | Roman ruins | Some content. | published | 1 days ago | 7 days ago | 6 days ago |
@@ -93,7 +93,7 @@ topic|hr";s:13:"show_archived";s:10:"unarchived";s:5:"limit";s:2:"12";s:11:"show
 
   Scenario: Regression test - Content listing with corrupt query_builder filters does not crash on render.
     Given news content:
-      | title          | headline       | collection  | content       | state     |
+      | title          | headline       | collection  | body          | state     |
       | Corrupt news 1 | Corrupt news 1 | Roman ruins | Some content. | published |
     And custom_page content:
       | title              | collection  | state     |
@@ -130,10 +130,10 @@ topic|hr";s:13:"show_archived";s:10:"unarchived";s:5:"limit";s:2:"12";s:11:"show
   Scenario: Content can be filtered by keywords.
     Given event content:
       | title                         | collection  | start date          | end date            | keywords |
-      | Quantum Horizons Conference   | Roman ruins | 2025-01-12 12:00:00 | 2025-01-12 13:00:00 | games   |
-      | Lumina Night Festival         | Roman ruins | 2025-02-15 12:00:00 | 2025-02-15 13:00:00 | Alphabet     |
-      | Stardust Gala Evening         | Roman ruins | 2025-02-16 12:00:00 | 2025-02-16 13:00:00 | games   |
-      | Global Tech Innovators Summit | Roman ruins | 2025-03-18 12:00:00 | 2025-03-18 13:00:00 | Alphabet     |
+      | Quantum Horizons Conference   | Roman ruins | 2025-01-12 12:00:00 | 2025-01-12 13:00:00 | games    |
+      | Lumina Night Festival         | Roman ruins | 2025-02-15 12:00:00 | 2025-02-15 13:00:00 | Alphabet |
+      | Stardust Gala Evening         | Roman ruins | 2025-02-16 12:00:00 | 2025-02-16 13:00:00 | games    |
+      | Global Tech Innovators Summit | Roman ruins | 2025-03-18 12:00:00 | 2025-03-18 13:00:00 | Alphabet |
     And custom_page content:
       | title           | collection  |
       | February events | Roman ruins |
