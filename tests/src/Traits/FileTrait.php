@@ -56,29 +56,36 @@ trait FileTrait {
   /**
    * Resolves filenames in a raw Behat file field value to absolute paths.
    *
-   * Handles CSV multi-value, positional columns separated by ' - ', and the
-   * named 'target_id: filename' column form understood by
-   * FileHandler::expand().
+   * Supports the two drupal-extension v6 cell shapes for file fields:
+   *
+   *  - Compound:
+   *    'target_id: "file"[, key: "value"] [; target_id: "other_file", ...]'.
+   *    Each 'target_id: "..."' occurrence has its filename rewritten to the
+   *    absolute fixture path.
+   *  - Scalar list: a single bare filename or a comma-separated list of
+   *    bare filenames (one delta per item). Each filename is rewritten to
+   *    the absolute fixture path.
    *
    * @param string $value
-   *   The raw Behat field value, e.g. "text.pdf, other.pdf - display: 1".
+   *   The raw Behat field value.
    *
    * @return string
    *   The same string with each filename replaced by its absolute fixture path.
    */
   public function parseFileBehatValue(string $value): string {
-    $result = [];
-    foreach (str_getcsv($value, escape: "\\") as $entry) {
-      $parts = explode(' - ', trim($entry));
-      foreach ($parts as $i => $part) {
-        $part = trim($part);
-        if (!str_contains($part, ': ')) {
-          $parts[$i] = $this->getFileSourcePath($part);
-        }
-      }
-      $result[] = implode(' - ', $parts);
+    if (preg_match('/\b[a-z_]+\s*:\s*"/i', $value) === 1) {
+      return preg_replace_callback(
+        '/(\btarget_id\s*:\s*")([^"]+)(")/i',
+        fn(array $match): string => $match[1] . $this->getFileSourcePath($match[2]) . $match[3],
+        $value,
+      );
     }
-    return implode(', ', $result);
+
+    $items = array_map(
+      fn(string $item): string => $this->getFileSourcePath(trim($item)),
+      str_getcsv($value, escape: "\\"),
+    );
+    return implode(', ', $items);
   }
 
   /**
