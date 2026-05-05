@@ -498,3 +498,29 @@ Feature:
     But I should not see the text "Supplier exchange" in the "Another rough day" tile
     And I should not see the text "HR" in the "Another rough day" tile
     And I should see the text "+3 topics" in the "Another rough day" tile
+
+  # Regression test for ISAICP-11115.
+  Scenario: Help text links on topics administration pages work correctly across languages.
+    Given I am logged in as a moderator
+
+    # The Topics admin page has links built using [site:url] token.
+    # Verify that the links work in English.
+    When I go to "/admin/homepage-topics"
+    And I click "Curated content listings"
+    Then I should be on "/admin/curated-content-listings"
+
+    # Verify that the links include the language prefix for French.
+    When I go to "/fr/admin/homepage-topics"
+    And I click "Curated content listings"
+    Then I should be on "/fr/admin/curated-content-listings"
+
+    # The entityqueue form has links built using Url::fromRoute().
+    # Verify that the links work in English.
+    When I go to "/admin/structure/entityqueue/homepage_topics/homepage_topics"
+    And I click "Topics"
+    Then I should be on "/admin/homepage-topics"
+
+    # Verify that the links include the language prefix for French.
+    When I go to "/fr/admin/structure/entityqueue/homepage_topics/homepage_topics"
+    And I click "Topics"
+    Then I should be on "/fr/admin/homepage-topics"
