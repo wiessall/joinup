@@ -143,6 +143,7 @@ Feature:
 
     # Unset the value and check again.
     When I am logged in as a moderator
+    And I am on the homepage
     And I click "Dashboard"
     And I click "Curated content listings"
     And I click "Homepage topics"

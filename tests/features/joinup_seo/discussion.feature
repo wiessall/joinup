@@ -47,17 +47,17 @@ Feature: SEO for discussion forum posts.
       | @type    | http://schema.org/MediaObject                            |
       # __random_text__ can be any string that is appointed by the system and we
       # cannot predict. In this case it is the random file name suffix before the file extension.
-      | @id      | __base_url__/sites/default/files/test__random_text__.zip |
-      | name     | test.zip                                                 |
-      | url      | __base_url__/sites/default/files/test__random_text__.zip |
+      | @id      | __base_url__/sites/default/files/__random_text__.zip |
+      | name     | __random_text__.zip                                                 |
+      | url      | __base_url__/sites/default/files/__random_text__.zip |
     And the metatag graph of the item with "name" "Discussions are now forum posts" should have the following "sharedContent" properties in index 1:
       | property | value                                                    |
       | @type    | http://schema.org/MediaObject                            |
       # __random_text__ can be any string that is appointed by the system and we
       # cannot predict. In this case it is the random file name suffix before the file extension.
-      | @id      | __base_url__/sites/default/files/test__random_text__.zip |
-      | name     | test1.zip                                                |
-      | url      | __base_url__/sites/default/files/test__random_text__.zip |
+      | @id      | __base_url__/sites/default/files/__random_text__.zip |
+      | name     | __random_text__.zip                                                |
+      | url      | __base_url__/sites/default/files/__random_text__.zip |
     And the metatag graph of the item with "name" "Discussions are now forum posts" should have the following "author" properties:
       | property | value                             |
       | @type    | http://schema.org/Person          |

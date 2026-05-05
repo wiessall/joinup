@@ -58,8 +58,8 @@ Feature: Input filter
   @javascript
   Scenario: Tags h1, h5, h6 can exist in a formatted text but the user does not have these options on the editor.
     Given discussion content:
-      | title         | headline      | body                                                                                                  | collection    |
-      | Ragged Crying | Ragged Crying | <h1>test h1</h1> <h2>test h2</h2> <h3>test h3</h3> <h4>test h4</h4> <h5>test h5</h5> <h6>test h6</h6> | Netflix group |
+      | title         | body                                                                                                  | collection    |
+      | Ragged Crying | <h1>test h1</h1> <h2>test h2</h2> <h3>test h3</h3> <h4>test h4</h4> <h5>test h5</h5> <h6>test h6</h6> | Netflix group |
 
     When I am logged in as a moderator
     And I go to the "Ragged Crying" discussion
@@ -78,8 +78,8 @@ Feature: Input filter
   @backtrackLimit
   Scenario: Ensure really long HTML tag (e.g. < img > with src:data/image...) does not generate a fatal error.
     Given discussion content:
-      | title         | headline       | body                        | collection    |
-      | Famous actors | Famous peoples | Article about famous actors | Netflix group |
+      | title         | body                        | collection    |
+      | Famous actors | Article about famous actors | Netflix group |
     And I set long body of "Famous actors" discussion
 
     When I go to the "Famous actors" discussion
