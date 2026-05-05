@@ -10,8 +10,8 @@ Feature: Discussion moderation
       | Gabe Rogers     |
       | Brigham Salvage |
     And the following "collection" content:
-      | title          | description                              | logo     | content_creation | state     | group_moderation |
-      | DIY collection | Collection of "Do it yourself" projects. | logo.png | members          | published | no               |
+      | title          | description                                  | logo     | content_creation | state     | group_moderation |
+      | DIY collection | "Collection of \"Do it yourself\" projects." | logo.png | members          | published | no               |
     And the following collection user membership:
       | collection     | user            | roles       |
       | DIY collection | Gabe Rogers     | member      |

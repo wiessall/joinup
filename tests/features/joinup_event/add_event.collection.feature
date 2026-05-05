@@ -126,8 +126,8 @@ Feature: "Add event" visibility options.
       | title            |
       | Stream of Dreams |
     And the following "event" content:
-      | title             | abstract | collection       | field_paragraphs_body | online location              |
-      | The Great Opening | abstract | Stream of Dreams | It opens!             | webinar - http://example.com |
+      | title             | abstract | collection       | field_paragraphs_body | online location                                |
+      | The Great Opening | abstract | Stream of Dreams | It opens!             | title: "webinar", uri: "http://example.com"    |
 
     And I am logged in as a moderator
 
