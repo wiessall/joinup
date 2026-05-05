@@ -10,6 +10,7 @@ use Behat\Mink\Exception\ExpectationException;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Attribute\AfterNodeCreate;
@@ -531,7 +532,7 @@ class JoinupGroupContext extends RawDrupalContext {
     unset(self::$pendingMetaEntitySettings[$key]);
 
     $saved = $node->getSavedEntity();
-    \assert($saved instanceof \Drupal\Core\Entity\ContentEntityInterface);
+    \assert($saved instanceof ContentEntityInterface);
     $meta_entity = MetaEntity::loadOrCreate($pending['type'], $saved);
     foreach ($pending['values'] as $field => $value) {
       $meta_entity->set($field, $value);
