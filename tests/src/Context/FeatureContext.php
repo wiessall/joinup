@@ -1590,13 +1590,14 @@ class FeatureContext extends RawDrupalContext {
   public function fillAutoCompleteField(string $field, string $value): void {
     $this->assertJavaScriptEnabledBrowser();
 
-    // Wait for page-load AJAX to settle before grabbing the element.
-    $this->waitForAjax();
-
-    $element = $this->assertSession()->fieldExists($field);
-    $element->setValue($value);
-    $this->getSession()->getDriver()->keyDown($element->getXpath(), ' ');
-    $this->waitForAutocomplete();
+    $this->retryOnStaleElement(function () use ($field, $value): void {
+      // Wait for page-load AJAX to settle before grabbing the element.
+      $this->waitForAjax();
+      $element = $this->assertSession()->fieldExists($field);
+      $element->setValue($value);
+      $this->getSession()->getDriver()->keyDown($element->getXpath(), ' ');
+      $this->waitForAutocomplete();
+    });
   }
 
   /**
