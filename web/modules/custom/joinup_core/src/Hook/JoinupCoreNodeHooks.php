@@ -6,6 +6,7 @@ namespace Drupal\joinup_core\Hook;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Hook\Attribute\Hook;
+use Drupal\node\NodeInterface;
 
 /**
  * Hook implementations for node entities.
@@ -34,6 +35,18 @@ final class JoinupCoreNodeHooks {
    */
   public static function trimTitleElement(array &$element, FormStateInterface $form_state): void {
     $form_state->setValueForElement($element, trim((string) $element['#value']));
+  }
+
+  /**
+   * Implements hook_node_presave().
+   *
+   * Ensures the title is trimmed for all save paths, including API.
+   */
+  #[Hook('node_presave')]
+  public function nodePresave(NodeInterface $node): void {
+    if ($node->getTitle() !== NULL) {
+      $node->setTitle(trim($node->getTitle()));
+    }
   }
 
 }
