@@ -396,11 +396,29 @@ class EuplContext extends RawDrupalContext {
   /**
    * Clears the content created for the purpose of this test.
    *
+   * Because this context is loaded before JoinupContext, entities are created
+   * before being marked for deletion in
+   * 'JoinupContext::beforeScenarioPrepareEntityCleanup()'. Ensure the entities
+   * are deleted as well.
+   *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   #[AfterScenario('@eupl&&@api')]
   public function cleanEuplData(): void {
     $this->cleanCompatibilityDocuments();
+
+    $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+
+    if ($pages = $node_storage->loadMultiple([701805, 703242])) {
+      $node_storage->delete($pages);
+    }
+
+    if ($solutions = $node_storage->loadByProperties([
+      'type' => 'solution',
+      'title' => 'Joinup Licensing Assistant',
+    ])) {
+      $node_storage->delete($solutions);
+    }
   }
 
   /**
