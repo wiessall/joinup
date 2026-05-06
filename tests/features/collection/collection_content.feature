@@ -24,6 +24,26 @@ Feature: Collection content
       | title                          | body                                                               | collection                | changed    | topic             |
       | Turin Egyptian Museum Reopened | "<p>After <em>more than</em> <a href=\"#link\">two years</a>.</p>" | Turin Egyptian Collection | 2019-11-19 | Supplier exchange |
 
+  Scenario: Solution counters exclude archived solutions and link to the solutions listing.
+    Given I go to the homepage of the "Turin Egyptian Collection" collection
+    Then I should see the link "1 Solution" in the "Header" region
+
+    Given the following solution content:
+      | title              | collection                | state     |
+      | Published Solution | Turin Egyptian Collection | published |
+      | Archived Solution  | Turin Egyptian Collection | archived  |
+      | Draft Solution     | Turin Egyptian Collection | draft     |
+    When I go to the homepage of the "Turin Egyptian Collection" collection
+    Then I should see the link "2 Solutions" in the "Header" region
+
+    When I click "2 Solutions" in the "Header" region
+    Then I should see the heading "Turin Egyptian Collection" in the "Header" region
+    And I should see the heading "Solutions" in the "Page title"
+    And I should see the "Tomb Of Unknown Restoration" tile
+    And I should see the "Published Solution" tile
+    But I should not see the "Archived Solution" tile
+    And I should not see the "Draft Solution" tile
+
   Scenario: Publishing new solutions should result in counters being properly updated.
     Given the following "owner" content:
       | name             | owner type |
