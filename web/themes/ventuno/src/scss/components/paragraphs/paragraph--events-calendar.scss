@@ -60,14 +60,6 @@
     .views-field-title {
       margin-bottom: $spacer * 0.5;
     }
-    .views-field-field-event-date .field-content:not(:empty) {
-      font-size: $font-size-sm;
-      &::before {
-        @include get-bootstrap-icon("calendar-event", currentColor);
-
-        margin-right: $spacer * 0.5;
-      }
-    }
     .views-field-location-label .field-content:not(:empty) {
       font-size: $font-size-sm;
       &::before {
