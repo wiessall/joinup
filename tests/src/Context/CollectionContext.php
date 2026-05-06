@@ -297,7 +297,7 @@ class CollectionContext extends RawDrupalContext {
     if (!$current_user = $this->userManager->getCurrentUser()) {
       throw new \Exception("No current user.");
     }
-    $this->assertCollectionOwnership($current_user->name, $entity);
+    $this->assertCollectionOwnership($current_user->getValue('name'), $entity);
   }
 
   /**

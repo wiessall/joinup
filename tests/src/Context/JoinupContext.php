@@ -2901,6 +2901,13 @@ class JoinupContext extends RawDrupalContext {
    */
   #[BeforeScenario]
   public function beforeScenarioPrepareEntityCleanup(BeforeScenarioScope $scope): void {
+    // \Drupal\DrupalExtension\Context\RawDrupalContext::cleanEntities is now
+    // cleaning up entities by default. However, due to the complexity of
+    // relations, we want to have a more granular control over the sequence of
+    // cleanup (e.g. landing pages, or parents and children). Disable the
+    // parent cleanup.
+    putenv('BEHAT_DRUPALEXTENSION_DISABLE_CLEANUP=1');
+
     $behat_cleanup_data = \Drupal::state()->get('behat_cleanup_data', []);
     foreach (\Drupal::entityTypeManager()->getDefinitions() as $entity_type_id => $entity_type) {
       if ($entity_type_id === 'ogmenu_instance') {
