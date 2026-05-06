@@ -21,9 +21,34 @@ Feature: User profile
 
     When I click "Edit"
     Then the following fields should be present "Email, First name"
-    And the following fields should be present "Family name, Photo, Country of origin, Professional domain, Business title"
+    And the following fields should be present "Family name, Photo, Country of origin, Site language, Professional domain, Business title"
     And the following fields should be present "Facebook, X, LinkedIn, GitHub, SlideShare, Youtube, Vimeo"
     And the following fields should not be present "Time zone"
+    And the "Site language" select should contain the following options:
+      | English    |
+      | Bulgarian  |
+      | Croatian   |
+      | Czech      |
+      | Danish     |
+      | Dutch      |
+      | Estonian   |
+      | Finnish    |
+      | French     |
+      | German     |
+      | Greek      |
+      | Hungarian  |
+      | Irish      |
+      | Italian    |
+      | Latvian    |
+      | Lithuanian |
+      | Maltese    |
+      | Polish     |
+      | Portuguese |
+      | Romanian   |
+      | Slovak     |
+      | Slovenian  |
+      | Spanish    |
+      | Swedish    |
     And I should see the text "Username"
     And I should see the text "Leonardo Da Vinci"
     And I fill in "First name" with "Leoke"
@@ -344,3 +369,23 @@ Feature: User profile
     And I should see the text "Software Engineer"
     # The nationality should not be displayed since the referenced entity is gone
     But I should not see the text "Country of origin:"
+
+  Scenario: The URL determines the interface language and login redirects to the user preferred language.
+    Given users:
+      | Username      | E-mail             | First name | Family name |
+      | Pierre Martin | pierre@example.com | Pierre     | Martin      |
+    When I am logged in as "Pierre Martin"
+    And I visit "/user/edit"
+    Then the "lang" attribute of the page should be "en"
+    And I select "French" from "Site language"
+    And I press "Save"
+
+    When I am an anonymous user
+    Then the "lang" attribute of the page should be "en"
+
+    # After login, the user is redirected to their preferred language.
+    When I am logged in as "Pierre Martin"
+    Then the "lang" attribute of the page should be "fr"
+
+    When I visit "/pt/user"
+    Then the "lang" attribute of the page should be "pt"

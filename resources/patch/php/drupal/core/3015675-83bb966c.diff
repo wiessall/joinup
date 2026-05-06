@@ -1,0 +1,141 @@
+diff --git a/core/.phpstan-baseline.php b/core/.phpstan-baseline.php
+index 51fbc125accaa68efb421198d1b8f05b9160600f..467c765b81a89a4a7df9dc38977e3155ae1a44a0 100644
+--- a/core/.phpstan-baseline.php
++++ b/core/.phpstan-baseline.php
+@@ -12373,6 +12373,12 @@
+ 	'count' => 1,
+ 	'path' => __DIR__ . '/modules/comment/comment.module',
+ ];
++$ignoreErrors[] = [
++	'message' => '#^Access to an undefined property Drupal\\\\comment\\\\CommentFieldItemList\\:\\:\\$status\\.$#',
++	'identifier' => 'property.notFound',
++	'count' => 1,
++	'path' => __DIR__ . '/modules/comment/src/CommentFieldItemList.php',
++];
+ $ignoreErrors[] = [
+ 	'message' => '#^Method Drupal\\\\comment\\\\CommentForm\\:\\:create\\(\\) has no return type specified\\.$#',
+ 	'identifier' => 'missingType.return',
+diff --git a/core/modules/comment/src/CommentFieldItemList.php b/core/modules/comment/src/CommentFieldItemList.php
+index ab257a008aff2b59cb85b693f0086b76071c572a..91179728b77a4c536399105d2083f94f085a50dd 100644
+--- a/core/modules/comment/src/CommentFieldItemList.php
++++ b/core/modules/comment/src/CommentFieldItemList.php
+@@ -4,6 +4,7 @@
+ 
+ use Drupal\Core\Access\AccessResult;
+ use Drupal\Core\Field\FieldItemList;
++use Drupal\Core\Field\FieldItemListInterface;
+ use Drupal\Core\Session\AccountInterface;
+ 
+ /**
+@@ -63,4 +64,11 @@ public function access($operation = 'view', ?AccountInterface $account = NULL, $
+     return parent::access($operation, $account, $return_as_object);
+   }
+ 
++  /**
++   * {@inheritdoc}
++   */
++  public function hasAffectingChanges(FieldItemListInterface $original_items, $langcode): bool {
++    return $this->status !== $original_items->status;
++  }
++
+ }
+diff --git a/core/modules/comment/tests/src/Functional/CommentTranslationUITest.php b/core/modules/comment/tests/src/Functional/CommentTranslationUITest.php
+index 06dcd7eec9be218dcf97c39cdebd52cc8b9f2628..9aace583670f87ba7024c58a52e6bece44f69291 100644
+--- a/core/modules/comment/tests/src/Functional/CommentTranslationUITest.php
++++ b/core/modules/comment/tests/src/Functional/CommentTranslationUITest.php
+@@ -240,4 +240,38 @@ protected function doTestTranslationEdit(): void {
+     }
+   }
+ 
++  /**
++   * Tests making changes on entity with hidden non-translatable comment field.
++   */
++  public function testNonTranslatableCommentFieldHasAffectingChanges(): void {
++    // Make comment field non-translatable and hide on translation forms.
++    $this->drupalLogin($this->administrator);
++    $edit = [
++      'entity_types[node]' => 1,
++      'settings[node][article][translatable]' => 1,
++      'settings[node][article][settings][content_translation][untranslatable_fields_hide]' => 1,
++      'settings[node][article][fields][comment_article]' => 0,
++    ];
++    $this->drupalGet('/admin/config/regional/content-language');
++    $this->submitForm($edit, 'Save configuration');
++    // Create article translator.
++    $user = $this->createUser([
++      'create content translations',
++      'translate article node',
++    ]);
++    $this->drupalLogin($user);
++    // Create a node.
++    $node = $this->drupalCreateNode([
++      'title' => 'Node with non-translatable comment field',
++      'type' => 'article',
++    ]);
++    $nid = $node->id();
++    // Create translation on entity with hidden non-translatable comment field.
++    $this->drupalGet("/node/$nid/translations/add/en/fr");
++    $this->submitForm([], 'Save (this translation)');
++    $assert_session = $this->assertSession();
++    $assert_session->pageTextNotContains('Non-translatable fields can only be changed when updating the original language.');
++    $assert_session->pageTextContains('Article Node with non-translatable comment field has been updated.');
++  }
++
+ }
+diff --git a/core/modules/comment/tests/src/Kernel/CommentItemTest.php b/core/modules/comment/tests/src/Kernel/CommentItemTest.php
+index 62a8fd4432bb8c4193afd974aa50bb02579d775e..869926eb38a08830521d1fb124dc16be004b8a53 100644
+--- a/core/modules/comment/tests/src/Kernel/CommentItemTest.php
++++ b/core/modules/comment/tests/src/Kernel/CommentItemTest.php
+@@ -127,4 +127,52 @@ public function testCommentAuthorName(): void {
+     $this->assertNull($comment_anonymous->mail->value);
+   }
+ 
++  /**
++   * Tests ::hasAffectingChanges.
++   *
++   * @legacy-covers \Drupal\comment\CommentFieldItemList::hasAffectingChanges
++   */
++  public function testCommentHasAffectingChanges(): void {
++    $this->addDefaultCommentField('entity_test', 'entity_test', 'comment');
++
++    // Create a host entity.
++    $entity = EntityTest::create(['name' => $this->randomMachineName()]);
++    $entity->save();
++    /** @var \Drupal\comment\CommentFieldItemList $field */
++    $field = $entity->comment;
++
++    // Set original values on a cloned list for comparison.
++    $original_list = clone $field;
++    $original_list->setValue([
++      'status' => CommentItemInterface::OPEN,
++      'cid' => 99,
++      'last_comment_timestamp' => 1766149999,
++      'last_comment_name' => 'FooBar',
++      'last_comment_uid' => 1,
++      'comment_count' => 10,
++    ]);
++
++    // Same status, different other fields → not affecting.
++    $field->setValue([
++      'status' => CommentItemInterface::OPEN,
++      'cid' => 0,
++      'last_comment_timestamp' => 1766146139,
++      'last_comment_name' => NULL,
++      'last_comment_uid' => 714574,
++      'comment_count' => 0,
++    ]);
++    $this->assertFalse($field->hasAffectingChanges($original_list, ''));
++
++    // Different status → affecting.
++    $field->setValue([
++      'status' => CommentItemInterface::CLOSED,
++      'cid' => 0,
++      'last_comment_timestamp' => 1766146139,
++      'last_comment_name' => NULL,
++      'last_comment_uid' => 714574,
++      'comment_count' => 0,
++    ]);
++    $this->assertTrue($field->hasAffectingChanges($original_list, ''));
++  }
++
+ }

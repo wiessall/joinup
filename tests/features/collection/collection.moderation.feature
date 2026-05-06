@@ -153,7 +153,7 @@ Feature: Collection moderation
     And I go to the "Person of Wizards" collection
     When I click "Edit"
     And I click "Delete"
-    Then I should see the heading "Are you sure you want to delete collection Person of Wizards?"
+    Then I should see the heading "Are you sure you want to delete the content item Person of Wizards?"
     And I should see "This action cannot be undone."
     When I press "Delete"
     Then I should be on the homepage

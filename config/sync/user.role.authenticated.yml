@@ -33,6 +33,7 @@ dependencies:
   module:
     - assessments
     - comment
+    - content_translation
     - contextual
     - email_confirmer
     - entity_browser
@@ -51,6 +52,7 @@ dependencies:
     - paragraphs_type_permissions
     - poll
     - private_message
+    - rabbit_hole
     - rest
     - search_api_autocomplete
     - sitewide_alert
@@ -171,11 +173,13 @@ permissions:
   - 'perform owner_workflow workflow update_needs_changes transition on own entity'
   - 'perform owner_workflow workflow validate transition on own entity'
   - 'post comments'
+  - 'rabbit hole bypass node'
   - 'request assessments oauth2 client'
   - 'restful get assessment_report'
   - 'revert all revisions'
   - 'skip comment approval'
   - 'sparql endpoint query'
+  - 'translate editable entities'
   - 'unflag bookmark'
   - 'unflag like'
   - 'unflag subscribe_discussions'

@@ -1,0 +1,26 @@
+diff --git a/field_group.module b/field_group.module
+index 855057b64dfa5ac81d86fa390e2c67b14b8fedab..338f7b4c83fd5e2656f32cc91d9e378b4862abed 100644
+--- a/field_group.module
++++ b/field_group.module
+@@ -1061,6 +1061,12 @@ function field_group_remove_empty_form_groups(array &$element, array $groups, $e
+       // If the element is not empty, and it has a group. Mark the group as not
+       // empty.
+       if (!$empty_element && isset($element[$child_name]['#group']) && (!isset($element[$child_name]['#access']) || $element[$child_name]['#access'])) {
++        // If the element type is "container", it may still be empty.
++        if (in_array($element[$child_name]['#type'], ['container', 'fieldset']) && empty(Element::getVisibleChildren($element[$child_name]))) {
++          // The container is configured to not be rendered if it has no visible
++          // children.
++          continue;
++        }
+         $name_prefix = implode('][', $element['#array_parents']) . '][';
+         $group_name = str_replace($name_prefix, '', $element[$child_name]['#group']);
+         $empty_groups_indication[$group_name] = FALSE;
+@@ -1084,7 +1090,7 @@ function field_group_remove_empty_form_groups(array &$element, array $groups, $e
+   $is_add_translation_route = $route_name === 'entity.node.content_translation_add';
+   if ($is_add_translation_route) {
+     foreach ($groups as $group_name) {
+-      if ($element[$group_name]['#type'] == 'details' && isset($element[$group_name]['#group'])) {
++      if (isset($element[$group_name]['#type']) && $element[$group_name]['#type'] == 'details' && isset($element[$group_name]['#group'])) {
+         if (isset($element['advanced']) && isset($element['advanced']['#access']) && !$element['advanced']['#access']) {
+           $element['advanced']['#access'] = TRUE;
+           // Show meta element as well.

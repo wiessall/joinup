@@ -29,6 +29,7 @@ dependencies:
     - collection
     - comment
     - contact_form
+    - content_translation
     - custom_page
     - dashboard
     - entity_legal
@@ -54,8 +55,10 @@ dependencies:
     - joinup_solution
     - joinup_subscription
     - joinup_webform
+    - locale
     - media
     - menu_admin_per_menu
+    - menu_link_content
     - meta_entity
     - moderation
     - node
@@ -117,7 +120,6 @@ permissions:
   - 'assign assessment_reporter role'
   - 'assign licence_manager role'
   - 'assign oss_catalogue_manager role'
-  - 'assign translator role'
   - 'bypass code of conduct'
   - 'bypass entity legal acceptance'
   - 'bypass node creation limit'
@@ -129,6 +131,7 @@ permissions:
   - 'create content for any_user option'
   - 'create content for facilitators_and_authors option'
   - 'create content for only_members option'
+  - 'create content translations'
   - 'create custom_page content'
   - 'create discussion content'
   - 'create discussion_logo media'
@@ -175,6 +178,7 @@ permissions:
   - 'delete any release content'
   - 'delete any solution_logo media'
   - 'delete assessment report'
+  - 'delete content translations'
   - 'delete paragraph content block'
   - 'delete paragraph content call_to_action'
   - 'delete paragraph content carousel'
@@ -303,10 +307,14 @@ permissions:
   - 'rebuild node access permissions'
   - 'replicate entities'
   - 'revert all sitewide alert revisions'
+  - 'translate any entity'
+  - 'translate interface'
+  - 'translate menu_link_content'
   - 'unarchived community content'
   - 'unfeature entity'
   - 'unflag interoperability'
   - 'update collection_settings meta-entity'
+  - 'update content translations'
   - 'update eif_perspective meta-entity'
   - 'update homepage_topics entityqueue'
   - 'update paragraph content block'

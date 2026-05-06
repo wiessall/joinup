@@ -14,7 +14,6 @@ use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldDefinitionInterface;
@@ -62,31 +61,6 @@ function contact_information_entity_bundle_field_info_alter(array &$fields, Enti
       ->setComputed(TRUE)
       ->setClass(ParentGroupFieldItemList::class);
   }
-}
-
-/**
- * Revoke access to canonical route for anonymous users for contact information.
- *
- * Implements hook_ENTITY_TYPE_access().
- */
-function contact_information_node_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
-  $route_match = \Drupal::routeMatch();
-  $route_entity = $route_match->getParameter('node');
-
-  if (
-    $entity instanceof ContactInformationInterface &&
-    $account->isAnonymous() &&
-    $operation === 'view' &&
-    $route_match->getRouteName() === 'entity.node.canonical' &&
-    $route_entity instanceof ContactInformationInterface &&
-    $route_entity->id() === $entity->id()
-  ) {
-    return AccessResult::forbidden('Anonymous users should not see the contact information canonical route.')
-      ->addCacheContexts(['user.roles:anonymous', 'route'])
-      ->addCacheableDependency($entity);
-  }
-
-  return AccessResult::neutral();
 }
 
 /**

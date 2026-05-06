@@ -60,7 +60,6 @@
   - Drupal\joinup\Context\JoinupCoreContext
   - Drupal\joinup\Context\JoinupDiscussionContext
   - Drupal\joinup\Context\JoinupDocumentContext
-  - Drupal\joinup\Context\JoinupEtransContext
   - Drupal\joinup\Context\JoinupEventContext
   - Drupal\joinup\Context\JoinupFeaturedContext
   - Drupal\joinup\Context\JoinupGroupContext
@@ -107,7 +106,6 @@
         firstName: First name
         lastName: Last name
   - Drupal\Tests\message_digest\Behat\MessageDigestContext
-  - Drupal\Tests\oe_webtools\Behat\WebtoolsETransContext
   - Drupal\Tests\oe_webtools\Behat\WebtoolsMapsContext
   - Drupal\joinup\Context\FeatureContext
   - LoversOfBehat\TableExtension\Context\TableContext
@@ -328,8 +326,13 @@ clean:
       paths: *paths
       filters:
         tags: '~@wip&&@group-i'
+    group_j:
+      contexts: *contexts
+      paths: *paths
+      filters:
+        tags: '~@wip&&@group-j'
     group_other:
       contexts: *contexts
       paths: *paths
       filters:
-        tags: '~@wip&&~@group-a&&~@group-b&&~@group-c&&~@group-d&&~@group-e&&~@group-f&&~@group-g&&~@group-h&&~@group-i&&~@group-clone'
+        tags: '~@wip&&~@group-a&&~@group-b&&~@group-c&&~@group-d&&~@group-e&&~@group-f&&~@group-g&&~@group-h&&~@group-i&&~@group-j&&~@group-clone'

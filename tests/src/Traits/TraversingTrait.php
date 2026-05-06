@@ -148,6 +148,7 @@ trait TraversingTrait {
    *   The options as a structured array keyed by option value, with the
    *   following elements:
    *   - text: The option text.
+   *   - value: The option value.
    *   - indentation: The indentation level.
    */
   protected function getSelectOptions(NodeElement $select): array {
@@ -156,6 +157,7 @@ trait TraversingTrait {
       /** @var \Behat\Mink\Element\NodeElement $element */
       $options[] = [
         'text' => trim($element->getText()),
+        'value' => $element->getValue(),
         'indentation' => substr_count($element->getHtml(), '&nbsp;'),
       ];
     }

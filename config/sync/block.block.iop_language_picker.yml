@@ -4,7 +4,6 @@ status: true
 dependencies:
   module:
     - language
-    - user
   theme:
     - iop
 id: iop_language_picker
@@ -18,11 +17,4 @@ settings:
   label: 'Language switcher'
   label_display: '0'
   provider: language
-visibility:
-  user_role:
-    id: user_role
-    negate: false
-    context_mapping:
-      user: '@user.current_user_context:current_user'
-    roles:
-      translator: translator
+visibility: {  }

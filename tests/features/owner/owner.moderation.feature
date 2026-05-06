@@ -76,7 +76,7 @@ Feature: Owner moderation
     And the current workflow state should be "Needs update"
     And I should not see the link "Delete"
     # Do the changes.
-    When I check "Company"
+    When I check "Industry consortium"
     And I press "Update"
     Then I should see the heading "EU healthy group"
 

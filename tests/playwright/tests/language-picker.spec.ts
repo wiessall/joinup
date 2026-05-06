@@ -10,7 +10,7 @@ import { projectConfig } from "../config/project.config";
 
 test.describe("Language picker", () => {
   test("Testing the language picker", async ({ page }) => {
-    await authUtils.login(projectConfig.users.translator, page);
+    await authUtils.login(projectConfig.users.user, page);
     await page.goto("/");
     await pageUtils.prepareForScreenshot(page);
 

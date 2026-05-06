@@ -7,7 +7,11 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
+use Drupal\search_api\Query\ConditionGroup;
+use Drupal\search_api\Query\QueryInterface;
 
 /**
  * Implements hook_module_implements_alter().
@@ -36,6 +40,20 @@ function joinup_i18n_language_switch_links_alter(array &$links, string $type, Ur
 }
 
 /**
+ * Implements hook_entity_insert().
+ */
+function joinup_i18n_entity_insert(EntityInterface $entity): void {
+  if (!$entity instanceof ContentEntityInterface || !$entity->isTranslatable()) {
+    return;
+  }
+
+  \Drupal::queue('joinup_i18n:translation_alias')->createItem([
+    'entity_type_id' => $entity->getEntityTypeId(),
+    'entity_id' => $entity->id(),
+  ]);
+}
+
+/**
  * Implements hook_babel_translation_type_info_alter().
  */
 function joinup_i18n_babel_translation_type_info_alter(array &$definitions): void {
@@ -48,5 +66,41 @@ function joinup_i18n_babel_translation_type_info_alter(array &$definitions): voi
       continue;
     }
     $definitions[$pluginId]['status'] = FALSE;
+  }
+}
+
+/**
+ * Implements hook_search_api_query_alter().
+ *
+ * During re-indexing the language_with_fallback field will have no values thus
+ * we need to add a condition which covers this scenario.
+ *
+ * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-11121
+ */
+function joinup_i18n_search_api_query_alter(QueryInterface $query): void {
+  if (!in_array($query->getIndex()->id(), ['published', 'oss_catalogue'])) {
+    return;
+  }
+
+  $group = $query->getConditionGroup();
+  $groupConditions = $group->getConditions();
+
+  foreach ($groupConditions as &$item) {
+    if (!$item instanceof ConditionGroup) {
+      continue;
+    }
+
+    $conditions = &$item->getConditions();
+
+    foreach ($conditions as $key => $condition) {
+      if ($condition->getField() !== 'language_with_fallback') {
+        continue;
+      }
+
+      $or_group = $query->createConditionGroup('OR');
+      $or_group->addCondition('language_with_fallback', $condition->getValue(), $condition->getOperator());
+      $or_group->addCondition('language_with_fallback', NULL);
+      $conditions[$key] = $or_group;
+    }
   }
 }

@@ -7,6 +7,7 @@ dependencies:
     - filter.format.content_editor
     - node.type.distribution
   module:
+    - rdf_sync
     - text
 third_party_settings:
   rdf_sync:
@@ -20,7 +21,7 @@ bundle: distribution
 label: Description
 description: ''
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:

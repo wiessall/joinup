@@ -33,4 +33,5 @@ content:
 hidden:
   created: true
   status: true
+  translation: true
   uuid: true

@@ -1,0 +1,13 @@
+uuid: 59dc519a-c406-49dc-abe0-d1c00d5a67b9
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.oss_solution
+id: node.oss_solution
+targetEntityType: node
+bundle: oss_solution
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

@@ -25,7 +25,6 @@ dependencies:
     - field.field.node.solution.short_id
     - field.field.node.solution.site_featured
     - field.field.node.solution.solution_type
-    - field.field.node.solution.translation
     - image.style.thumbnail
     - node.type.solution
   module:
@@ -84,7 +83,6 @@ third_party_settings:
       children:
         - logo
         - short_id
-        - documentation
         - resources
         - related_solutions
         - process_status
@@ -348,6 +346,5 @@ hidden:
   site_featured: true
   solution_settings: true
   solution_subscribe: true
-  translation: true
   uri: true
   uuid: true

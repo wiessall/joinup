@@ -1,0 +1,22 @@
+uuid: 0b2db25f-88f6-418b-a3b2-d15f6a94c5b8
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.owner
+id: node.owner.status
+field_name: status
+entity_type: node
+bundle: owner
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

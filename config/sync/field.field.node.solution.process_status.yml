@@ -13,7 +13,7 @@ bundle: solution
 label: Status
 description: ''
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: _joinup_solution_status_default_value
 settings:
@@ -23,6 +23,7 @@ settings:
       status: status
     sort:
       field: _none
+      direction: asc
     auto_create: false
     auto_create_bundle: ''
 field_type: entity_reference

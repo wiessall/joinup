@@ -24,7 +24,6 @@ Feature: User role management
       | Interoperability validator |
       | Licence manager            |
       | Moderator                  |
-      | Translator                 |
       | OSS Catalogue Manager      |
 
     Given I am logged in as "Rick Rolls"
@@ -35,7 +34,6 @@ Feature: User role management
       | Assessment moderator  |
       | Licence manager       |
       | OSS Catalogue Manager |
-      | Translator            |
 
     Given I am logged in as "Awesome dev"
     And I go to "/admin/people"
@@ -49,7 +47,6 @@ Feature: User role management
       | Licence manager            |
       | Moderator                  |
       | OSS Catalogue Manager      |
-      | Translator                 |
       | Interoperability validator |
 
   Scenario: Verify options available to the moderator.

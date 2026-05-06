@@ -277,6 +277,33 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts that the selected option(s) in matches the expected value(s).
+   *
+   * @param string $select
+   *   The select field name, id or label.
+   * @param string $value
+   *   The expected selected value(s), comma-separated for multiselect.
+   */
+  #[Then('the selected option(s) in the :select select should be :value')]
+  public function checkSelectSelectedOption(string $select, string $value): void {
+    $field = $this->findSelect($select);
+    $selectedOptions = [];
+    foreach ($field->findAll('css', 'option') as $option) {
+      if ($option->isSelected()) {
+        $selectedOptions[] = $option->getValue();
+      }
+    }
+
+    $values = $this->explodeDelimitedSeparatedStepArgument($value);
+    sort($selectedOptions);
+    sort($values);
+
+    if ($selectedOptions !== $values) {
+      throw new \Exception("The '$select' selected options don't match the expected ones. Expected: " . implode(', ', $values) . ". Got: " . implode(', ', $selectedOptions) . ".");
+    }
+  }
+
+  /**
    * Checks that the given select field has the given options.
    *
    * @param string $select
@@ -379,6 +406,23 @@ class JoinupContext extends RawDrupalContext {
     // The PHPUnit assertion will allow to understand easily which values are
     // missing and which one are extra.
     $this->assertSameValues($options, $availableOptions, "The '$select' select options don't match the wanted ones.");
+  }
+
+  /**
+   * Ensures the given select contains all site languages.
+   *
+   * @param string $select
+   *   The select field name, id or label.
+   */
+  #[Then('the available options in the :select select should match the site languages')]
+  public function assertSelectMatchesSiteLanguages(string $select): void {
+    $field = $this->findSelect($select);
+    $availableOptions = array_map(static fn(array $option): string => $option['value'], $this->getSelectOptions($field));
+
+    $languages = \Drupal::languageManager()->getLanguages();
+    $expectedOptions = array_keys($languages);
+
+    $this->assertSameValues($expectedOptions, $availableOptions, "The '$select' select options don't match the site languages.");
   }
 
   /**
@@ -506,6 +550,21 @@ class JoinupContext extends RawDrupalContext {
     }
 
     $this->visitPath($entity->toUrl($rel)->toString());
+  }
+
+  /**
+   * Navigates to the translation overview form of an entity.
+   *
+   * @param string $title
+   *   The title of the entity.
+   * @param string $bundle
+   *   An alias of a bundle as defined in the
+   *   \Drupal\joinup\Traits\NameMappingsTrait::bundleAliases method.
+   */
+  #[When('I visit the translation overview form of the :title :bundle')]
+  public function visitEntityTranslationOverviewForm(string $title, string $bundle): void {
+    $node = $this->getEntityByLabel('node', $title, $bundle);
+    $this->visitPath($node->toUrl('drupal:content-translation-overview')->toString());
   }
 
   /**
