@@ -5,13 +5,13 @@ Feature: Tests the collection last update time.
   update time as the maximum changed time of the collection itself, its
   affiliate solutions, community content and custom pages.
 
-    Given users:
+    Given the following users:
       | Username    | Roles     |
       | The Cleaner | moderator |
-    And collection content:
+    And the following "collection" content:
       | title            | modification date | creation date | author      |
       | Household Wizard | 2011-05-06T21:56  | 2001-01-03    | The Cleaner |
-    Given solution content:
+    Given the following "solution" content:
       | title           | collection       | state     | modification date | creation date | author      |
       | Roof Hole Cover | Household Wizard | published | 2010-07-05T23:03  | 2001-01-01    | The Cleaner |
       | Mosquito Killer | Household Wizard | proposed  | 2017-05-03T11:45  | 2001-01-02    | The Cleaner |
@@ -23,7 +23,7 @@ Feature: Tests the collection last update time.
     # newer than 'Roof Hole Cover' solution.
     Then the response should contain "2011-05-06T21:56"
 
-    Given document content:
+    Given the following "document" content:
       | title           | document type | changed          | created    | collection       | field_paragraphs_body |
       | Get Rid of Rats | Document      | 2012-01-17T07:38 | 2001-01-04 | Household Wizard | Rats everywhere...    |
 
@@ -31,7 +31,7 @@ Feature: Tests the collection last update time.
     # The document is the newest thus will give the collection updated time.
     Then the response should contain "2012-01-17T07:38"
 
-    Given discussion content:
+    Given the following "discussion" content:
       | title           | changed          | created    | collection       |
       | Household Forum | 2013-04-19T15:18 | 2001-01-05 | Household Wizard |
 
@@ -39,7 +39,7 @@ Feature: Tests the collection last update time.
     # The discussion is the newest thus will give the collection updated time.
     Then the response should contain "2013-04-19T15:18"
 
-    Given event content:
+    Given the following "event" content:
       | title        | changed          | created    | collection       |
       | Cleaning Day | 2014-06-06T22:46 | 2001-01-06 | Household Wizard |
 
@@ -47,7 +47,7 @@ Feature: Tests the collection last update time.
     # The event is the newest thus will give the collection updated time.
     Then the response should contain "2014-06-06T22:46"
 
-    Given news content:
+    Given the following "news" content:
       | title                 | state | changed          | created    | collection       |
       | The New Grass Trimmer | draft | 2015-11-08T01:05 | 2001-01-07 | Household Wizard |
 
@@ -57,7 +57,7 @@ Feature: Tests the collection last update time.
     Then the response should not contain "2015-11-08T01:05"
     But the response should contain "2014-06-06T22:46"
 
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title          | changed          | created    | collection       |
       | The Kids Space | 2016-05-06T05:29 | 2001-01-07 | Household Wizard |
 

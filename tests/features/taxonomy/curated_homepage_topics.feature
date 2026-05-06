@@ -9,13 +9,13 @@ Feature:
 
     When I click Topics
     Then I should see the heading "Topics"
-    And I should see "eGov" in the "Supplier exchange" row
-    And I should see "Economy and Welfare" in the "Finance in EU" row
-    And I should see "E-health Dpt." in the "E-health" row
-    And I should see "HR Dpt." in the "Employment and Support Allowance" row
-    And I should see "HR Dpt." in the "HR" row
+    And I should see the text "eGov" in the "Supplier exchange" row
+    And I should see the text "Economy and Welfare" in the "Finance in EU" row
+    And I should see the text "E-health Dpt." in the "E-health" row
+    And I should see the text "HR Dpt." in the "Employment and Support Allowance" row
+    And I should see the text "HR Dpt." in the "HR" row
     # The meta entity is unpublished by default.
-    And I should see "No" in the "E-justice" row
+    And I should see the text "No" in the "E-justice" row
     # Sorting by parent not allowed.
     And I should not see the link "Parent topic"
 
@@ -26,12 +26,12 @@ Feature:
     And I press "Save"
 
     # The meta entity is now marked as published.
-    And I should see "Yes" in the "E-justice" row
+    And I should see the text "Yes" in the "E-justice" row
     And I should see the heading "Topics"
 
     # The following is not reproducible in the UI but is a backend test for
     # future changes in the topic vocabulary.
-    Given "topic" terms:
+    Given the following "topic" terms:
       | tid                          | name        | description  |
       | http://some.topic/BlueParent | Blue parent | Hello there. |
     When I reload the page
@@ -158,7 +158,7 @@ Feature:
     And I should not see the heading "Hello world"
 
   Scenario: Description and summary are displayed accordingly.
-    Given news content:
+    Given the following "news" content:
       | title  | headline |
       | News 1 | News 1   |
     And the following topics are enabled in the homepage:
@@ -192,10 +192,10 @@ Feature:
 
   @javascript
   Scenario: Lists of configurable content can be added in the page of the topic meta entity.
-    Given news content:
+    Given the following "news" content:
       | title  | headline | collection |
       | News 1 | News 1   | Portal support |
-    And custom_page content:
+    And the following "custom_page" content:
       | title          | collection |
       | Popular quotes | Portal support |
     And I append "text" to "field_paragraphs_body" field in "node" entity with following "Popular Quotes" title:
@@ -299,13 +299,13 @@ Feature:
 
   @javascript
   Scenario: Regression test to ensure order of entities.
-    Given news content:
+    Given the following "news" content:
       | title  | headline | body              | created    | changed    | topic     |
       | News 1 | News 1   | Test              | 01-01-2023 | 03-02-2023 | E-justice |
       | News 2 | News 2   | Test              | 02-01-2023 | 02-02-2023 | E-justice |
       | News 3 | News 3   | Test              | 03-01-2023 | 01-02-2023 | E-justice |
       | News 4 | News 4   | Should not appear | 04-01-2023 | 01-01-2023 | E-health  |
-    And event content:
+    And the following "event" content:
       | title   | field_paragraphs_body | start date   | end date    | created    | topic     |
       | Event 1 | Test                  | now -8 days  | now -9 days | now -4 day | E-justice |
       | Event 2 | Test                  | now -9 days  | now -8 days | now -3 day | E-justice |
@@ -420,7 +420,7 @@ Feature:
 
   @javascript
   Scenario Outline: Images should be shown for tile-two view modes.
-    Given <type> content:
+    Given the following "<type>" content:
       | title       | headline    | short title | logo       |
       | Custom tile | Custom tile | Custom tile | linus.jpeg |
     And the following topics are enabled in the homepage:
@@ -460,7 +460,7 @@ Feature:
 
   @javascript
   Scenario: Configurable listing for solutions
-    Given solution content:
+    Given the following "solution" content:
       | title                   | description              | collection | abstract                          | topic                                                                    | created    | changed    |
       | Another rough day       | Lorem description issum  | Portal support |                                   | E-justice, Finance in EU, Supplier exchange, HR, Statistics and Analysis | 01-01-2023 | 03-02-2023 |
       | Just another day & solt | Second description issum | Portal support | This is an solution with abstract | E-justice                                                                | 02-01-2023 | 03-02-2023 |

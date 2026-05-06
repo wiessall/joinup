@@ -5,7 +5,7 @@ Feature: Contact information access
   I don't want to see the contact information full page
 
   Scenario: Anonymous user contact information access
-    Given contact_information content:
+    Given the following "contact_information" content:
       | name         | email                   | website url       |
       | Phil Coulson | phil.coulson@shield.gov | http://shield.gov |
 
@@ -14,13 +14,13 @@ Feature: Contact information access
     Then I should see the heading "Sign in to continue"
 
   Scenario: Facilitator can edit contact information
-    Given users:
+    Given the following users:
       | Username      | Roles | E-mail                      | First name | Family name |
       | Michiel Lucas |       | michiel.lucas@one-agency.be | Michiel    | Lucas       |
-    And contact_information content:
+    And the following "contact_information" content:
       | name | email            | author        |
       | info | info@dataflow.be | Michiel Lucas |
-    And collection content:
+    And the following "collection" content:
       | title                   | contact information |
       | Ausy software solutions | info                |
     And the following collection user memberships:

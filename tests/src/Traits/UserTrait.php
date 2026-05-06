@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Traits;
 
+use Drupal\Driver\Entity\EntityStub;
 use Drupal\user\UserInterface;
 
 /**
@@ -98,7 +99,7 @@ trait UserTrait {
       $values['mail'] = str_replace(' ', '', $values['name']) . '@example.com';
     }
 
-    $user = (object) $values;
+    $user = new EntityStub('user', NULL, $values);
     $this->userCreate($user);
 
     // Assign roles.

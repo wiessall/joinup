@@ -5,7 +5,7 @@ Feature: Edit licence through UI
   I need to be able to edit licences through the UI.
 
   Scenario Outline: Moderators and Licence Managers must be able to view created licences and edit them.
-    Given licence content:
+    Given the following "licence" content:
       | title     | description            |
       | Licence 1 | Some dummy description |
     When I am logged in as a "<role>"
@@ -33,7 +33,7 @@ Feature: Edit licence through UI
 
   @javascript
   Scenario: Check if licence legal type displays all option groups.
-    Given licence content:
+    Given the following "licence" content:
       | title            | description                | uri                   | licence type  |
       | Creative commons | <p>This is so creative</p> | http://i-am-creative/ | Public domain |
     When I am logged in as a moderator
