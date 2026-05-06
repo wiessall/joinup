@@ -78,6 +78,22 @@ Feature:
     And I click "Upcoming week Event"
     Then I should be on the "Upcoming week Event" content page
 
+  Scenario: Test that location type labels are shown correctly in the calendar.
+    Given custom_page content:
+      | title                | abstract                       | collection       |
+      | Location labels page | Abstract pages Events calendar | Le Event Heureux |
+    And event content:
+      | title               | collection       | start date | end date    | location          | online location                           |
+      | Physical label test | Le Event Heureux | now        | now +1 day  | Brussels, Belgium |                                           |
+      | Virtual label test  | Le Event Heureux | now        | now +1 day  |                   | 0: Online meeting - 1: http://example.com |
+      | Hybrid label test   | Le Event Heureux | now        | now +1 day  | Brussels, Belgium | 0: Online meeting - 1: http://example.com |
+    And I append "events_calendar" to "field_paragraphs_body" field in "node" entity with following "Location labels page" title:
+      | paragraph_block | views_block:calendar-by_month |
+    And I visit the "Location labels page" "custom page"
+    Then the "Physical label test" event in the Calendar contains the text "Physical event"
+    And the "Virtual label test" event in the Calendar contains the text "Virtual event"
+    And the "Hybrid label test" event in the Calendar contains the text "Hybrid event"
+
   Scenario: Test upcoming events page and paragraph.
     Given custom_page content:
       | title                  | abstract                        | collection        |

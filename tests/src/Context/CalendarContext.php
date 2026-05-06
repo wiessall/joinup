@@ -233,13 +233,47 @@ class CalendarContext extends RawDrupalContext implements Context {
    */
   #[Then('I see the :event showing in the Calendar')]
   public function iSeeTheEventShowingInTheCalendar(string $event): void {
-    $page = $this->getSession()->getPage();
-    $elements = $page->findAll('css', '.calendar-view-day');
+    $this->findCalendarEvent($event);
+  }
+
+  /**
+   * Verifies that a calendar event row contains the given text.
+   *
+   * @param string $event
+   *   The name of the event.
+   * @param string $text
+   *   The text expected to appear anywhere in the event row.
+   */
+  #[Then('the :event event in the Calendar contains the text :text')]
+  public function theEventInCalendarContainsText(string $event, string $text): void {
+    $eventElement = $this->findCalendarEvent($event);
+
+    if (!str_contains($eventElement->getText(), $text)) {
+      throw new \Exception(sprintf("Event '%s' does not contain the text '%s'.", $event, $text));
+    }
+  }
+
+  /**
+   * Finds a calendar day element containing the given event title.
+   *
+   * @param string $event
+   *   The name of the event.
+   *
+   * @return \Behat\Mink\Element\NodeElement
+   *   The calendar day element containing the event.
+   *
+   * @throws \Exception
+   *   When the event is not visible in the calendar.
+   */
+  protected function findCalendarEvent(string $event): \Behat\Mink\Element\NodeElement {
+    $elements = $this->getSession()->getPage()->findAll('css', '.calendar-view-day');
     $eventElement = current(array_filter($elements, fn($element) => str_contains($element->getText(), $event))) ?: NULL;
 
     if (!$eventElement) {
-      throw new \Exception(sprintf("Event '%s' is NOT visible in the calendar as expected.", $event));
+      throw new \Exception(sprintf("Event '%s' is NOT visible in the calendar.", $event));
     }
+
+    return $eventElement;
   }
 
 }
