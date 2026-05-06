@@ -26,7 +26,7 @@ Feature:
     And I fill in "Password" with "secretz"
     And I press "Log in"
 
-    Then I should see "I have read and accept the Legal notice"
+    Then I should see the text "I have read and accept the Legal notice"
     And I should see the warning message "You must accept this agreement before continuing."
 
     # Submit without accepting the 'Legal notice'.
@@ -63,8 +63,8 @@ Feature:
     When I go to homepage
     Then I should see the warning message "You must accept this agreement before continuing."
     And I should see the heading "Legal notice"
-    And I should see "Version 2.0 content"
-    And I should see "Accept Version 2.0!"
+    And I should see the text "Version 2.0 content"
+    And I should see the text "Accept Version 2.0!"
 
     # Try to navigate.
     When I click "My account"
@@ -83,7 +83,7 @@ Feature:
 
     Then I should see the warning message "You must accept this agreement before continuing."
     And I should see the heading "Legal notice"
-    And I should see "Version 2.0 content"
+    And I should see the text "Version 2.0 content"
 
     When I check "Accept Version 2.0!"
     And I press "Submit"
@@ -106,7 +106,7 @@ Feature:
     And I fill in "Acceptance label" with "Accept!"
 
     When I press "Save"
-    Then I should see "1.1.1"
+    Then I should see the text "1.1.1"
     And the row "1.1.1" is selected
 
     Given I click "New version"
@@ -126,7 +126,7 @@ Feature:
 
     When I am on "/portal/legal-notice"
     Then I should see the heading "Legal notice"
-    And I should see "New rules..."
+    And I should see the text "New rules..."
 
     # As this version has been created via UI it should be manually deleted.
     And I delete the version "v2.0" of document "Legal notice"
@@ -143,8 +143,8 @@ Feature:
 
     Given I am an anonymous user
     When I am on "/contact"
-    Then I should see "I have read and accept the Legal notice"
-    And I should see "Before you submit your request check our FAQ section in case it covers your query/issue."
+    Then I should see the text "I have read and accept the Legal notice"
+    And I should see the text "Before you submit your request check our FAQ section in case it covers your query/issue."
 
     Given I fill in "First name" with "Eleanor"
     And I fill in "Last name" with "Rigby"
@@ -165,8 +165,8 @@ Feature:
     And I accept the "Legal notice" agreement
 
     When I am on "/contact"
-    Then I should not see "I have read and accept the Legal notice"
-    And I should see "Before you submit your request check our FAQ section in case it covers your query/issue."
+    Then I should not see the text "I have read and accept the Legal notice"
+    And I should see the text "Before you submit your request check our FAQ section in case it covers your query/issue."
 
   Scenario: Legal notice redirect takes precedence over other redirects.
     Given the following users:

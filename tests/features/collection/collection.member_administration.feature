@@ -139,8 +139,8 @@ Feature: Collection membership administration
 
     When I press "Apply to selected items"
     Then I should see the heading "Are you sure you want to delete the selected membership from the 'Medical diagnosis' collection?"
-    And I should see "The member Kathie Cumbershot will be deleted from the 'Medical diagnosis' collection."
-    And I should see "This action cannot be undone."
+    And I should see the text "The member Kathie Cumbershot will be deleted from the 'Medical diagnosis' collection."
+    And I should see the text "This action cannot be undone."
 
     Given I click "Cancel"
     Then I should see the heading "Members"
@@ -167,11 +167,11 @@ Feature: Collection membership administration
     When I select "Delete the selected membership(s)" from "Action"
     And I press "Apply to selected items"
     Then I should see the heading "Are you sure you want to delete the selected memberships from the 'Medical diagnosis' collection?"
-    And I should see "The following members:"
-    And I should see "Gregory House"
-    And I should see "Turkey Ham"
-    And I should see "will be deleted from the 'Medical diagnosis' collection."
-    And I should see "This action cannot be undone."
+    And I should see the text "The following members:"
+    And I should see the text "Gregory House"
+    And I should see the text "Turkey Ham"
+    And I should see the text "will be deleted from the 'Medical diagnosis' collection."
+    And I should see the text "This action cannot be undone."
 
     Given I press "Confirm"
     Then I should see the success message "The following members were removed from the 'Medical diagnosis' collection: Gregory House, Turkey Ham"

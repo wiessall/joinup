@@ -49,7 +49,7 @@ Feature:
     # Discussion is prone to be outdated.
     When I go to the "Recent published discussion" discussion
     Then I should see the heading "Recent published discussion"
-    But I should not see "This discussion is more than"
+    But I should not see the text "This discussion is more than"
 
     When I go to the "Outdated published discussion" discussion
     Then I should see the heading "Outdated published discussion"
@@ -58,12 +58,12 @@ Feature:
     # A document is not prone to be outdated.
     When I go to the "Very old document" document
     Then I should see the heading "Very old document"
-    But I should not see "This document is more than"
+    But I should not see the text "This document is more than"
 
     # Event is prone to be outdated.
     When I go to the "Recent published event" event
     Then I should see the heading "Recent published event"
-    But I should not see "This event is more than"
+    But I should not see the text "This event is more than"
 
     When I go to the "Outdated published event" event
     Then I should see the heading "Outdated published event"
@@ -72,7 +72,7 @@ Feature:
     # News item is prone to be outdated.
     When I go to the "Recent published news" news
     Then I should see the heading "Recent published news"
-    But I should not see "This news is more than"
+    But I should not see the text "This news is more than"
 
     When I go to the "Outdated published news" news
     Then I should see the heading "Outdated published news"
@@ -88,15 +88,15 @@ Feature:
     # Content never published is not prone to be outdated.
     When I go to the "Not published discussion" discussion
     Then I should see the heading "Not published discussion"
-    But I should not see "This discussion is more than"
+    But I should not see the text "This discussion is more than"
 
     When I go to the "Not published event" event
     Then I should see the heading "Not published event"
-    But I should not see "This event is more than"
+    But I should not see the text "This event is more than"
 
     When I go to the "Not published news" news
     Then I should see the heading "Not published news"
-    But I should not see "This news is more than"
+    But I should not see the text "This news is more than"
 
     # Cleanup configuration.
     When I click "Outdated content thresholds"

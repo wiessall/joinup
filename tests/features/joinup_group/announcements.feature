@@ -72,7 +72,7 @@ Feature: Messaging group announcements
     And Log entry with the message "The announcement The Big Opening has been created by Sons of tweets for Fail pension." should exist.
     And the "Subject" field should contain "The Big Opening"
     And the "Body" field should contain "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-    And I should see "Announcement state: Draft"
+    And I should see the text "Announcement state: Draft"
     And I should see the button "Send for approval"
     And I should see the button "Preview"
     But I should not see the button "Approve"
@@ -102,7 +102,7 @@ Feature: Messaging group announcements
 
     When I press "Update"
     Then I should see the success message "The announcement has been updated but it's still in Draft state. Review the announcement and, when is ready to be sent, use the 'Send' button."
-    And I should see "Announcement state: Draft"
+    And I should see the text "Announcement state: Draft"
 
     When I press "Preview"
     Then I should see the success message "A sample announcement has been delivered to sonsoftweets@example.com."
@@ -149,7 +149,7 @@ Feature: Messaging group announcements
     When I go to the announcements page of "Hidden gems" <group>
     Then the response status code should be 403
     And I click the link from email sent to "Check edit moderator" with subject "Interoperable Europe Portal: A new announcement 'The Big Opening is postponed' has been created"
-    Then I should see "Announcement state: Pending approval"
+    Then I should see the text "Announcement state: Pending approval"
     And I should see the button "Update"
     And I should see the button "Approve"
     And I should see the button "Preview"
@@ -159,7 +159,7 @@ Feature: Messaging group announcements
 
     When I press "Reject"
     Then I should see the success message "The announcement has been rejected. Press the 'Undo reject' button to restore the announcement."
-    Then I should see "Announcement state: Rejected"
+    Then I should see the text "Announcement state: Rejected"
     And I should see the button "Update"
     And I should see the button "Preview"
     But I should not see the button "Approve"
@@ -196,7 +196,7 @@ Feature: Messaging group announcements
     When I go to the "The Big Opening is postponed" announcement of "Fail pension" <group>
     And  I press "Undo reject"
     Then I should see the success message "The announcement has been restored."
-    Then I should see "Announcement state: Pending approval"
+    Then I should see the text "Announcement state: Pending approval"
     And I should see the button "Update"
     And I should see the button "Approve"
     And I should see the button "Preview"

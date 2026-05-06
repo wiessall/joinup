@@ -33,7 +33,7 @@ Feature: Creation of owners through UI
     And I select "Company" options from "Type"
     And I select "Belgium" from "Country"
     And I press "Create owner"
-    Then I should see "Acme"
+    Then I should see the text "Acme"
     And I should see the link "Company"
 
     And I fill in "Alternative text" with "Alternative logo text"
@@ -44,13 +44,13 @@ Feature: Creation of owners through UI
     And I select "Industry consortium" options from "Type"
     And I select "Luxembourg" from "Country"
     Then I press "Update owner"
-    Then I should see "Acme Inc."
+    Then I should see the text "Acme Inc."
     And I should see the link "Industry consortium"
     And I should see the link "Company"
 
     When I press "Remove" at the "Owner" field
     And I press "Remove" at the "Owner" field
-    Then I should not see "Acme Inc."
+    Then I should not see the text "Acme Inc."
     And I should not see the link "Industry consortium"
 
     # Create a person owner as well.
@@ -59,13 +59,13 @@ Feature: Creation of owners through UI
     And I select "Company" options from "Type"
     And I select "Belgium" from "Country"
     And I press "Create owner"
-    Then I should see "John Doe"
+    Then I should see the text "John Doe"
     And I should see the link "Company"
 
     When I press "Remove" at the "Owner" field
     # Press 'Remove' also on confirmation dialog.
     And I press "Remove" at the "Owner" field
-    Then I should not see "John Doe"
+    Then I should not see the text "John Doe"
     And I should not see the link "Company"
 
     # Click the button to select an existing owner.
@@ -94,5 +94,5 @@ Feature: Creation of owners through UI
     Then I go to the edit form of the "Jump Mak" collection
     When I press "Remove" at the "Owner" field
     And I press "Remove" at the "Owner" field
-    Then I should not see "Makinator"
+    Then I should not see the text "Makinator"
     Then the site should not have log records with level lower than "notice" for "php" errors

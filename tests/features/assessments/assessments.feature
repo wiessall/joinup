@@ -17,9 +17,9 @@ Feature: Assessment Report Entity Management
     Then I should see the error message "3 errors have been found: Short title Type of public sector body Identification of binding requirement(s) assessed"
 
     When I fill in "Short title" with "Test Assessment Report 2025"
-    And I should see "This will be used as the title of the published report. Maximum 255 characters."
+    And I should see the text "This will be used as the title of the published report. Maximum 255 characters."
 
-    And I should see "Union entity or public sector body which is providing the report"
+    And I should see the text "Union entity or public sector body which is providing the report"
     And I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
     Then I should not see the text "New organisation name"
@@ -75,7 +75,7 @@ Feature: Assessment Report Entity Management
     And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
     And I select "Test solution" in the entity browser
     And I press "Select solutions" to close the entity browser
-    And I should see "Test solution" in the "Modal content" region
+    And I should see the text "Test solution" in the "Modal content" region
     And I should see the button "Add Interoperability Solution" in the "Modal content" region
     # Create a new solution via entity browser.
     And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
@@ -87,70 +87,70 @@ Feature: Assessment Report Entity Management
     And I enter "Description of EIF" in the "Description" wysiwyg editor
     And I fill in "Relevant website" with "http://no-abstract.com"
     And I press "Create" to close the entity browser
-    And I should see "European Interoperability Framework (EIF)" in the "Modal content" region
+    And I should see the text "European Interoperability Framework (EIF)" in the "Modal content" region
 
     When I click "Concerned public services" in the "Modal content" region
     And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
     And I select "General public services" from "affects[0][inline_entity_form][thematic_area][]" in the "Modal content" region
 
     When I click "Affected stakeholders" in the "Modal content" region
-    And I should see "Check this box to select all European Union countries" in the "Modal content" region
+    And I should see the text "Check this box to select all European Union countries" in the "Modal content" region
     And I select "Local public sector body" from "has_participation[0][inline_entity_form][participant_type][]" in the "Modal content" region
     And I check "Check this box to select all European Union countries"
-    Then I should not see "has_participation[0][inline_entity_form][stakeholder_country][]" in the "Modal content" region
+    Then I should not see the text "has_participation[0][inline_entity_form][stakeholder_country][]" in the "Modal content" region
     Then I uncheck "Check this box to select all European Union countries"
     And I select "Belgium" from "has_participation[0][inline_entity_form][stakeholder_country][]" in the "Modal content" region
 
     When I click "Supporting document" in the "Modal content" region
     And I attach the file "text.pdf" to "Add a new file"
-    And I should see "Maximum 5 files. 10 MB limit. Allowed types: txt doc docx pdf ppt pptx zip rar xls xlsx." in the "Modal content" region
+    And I should see the text "Maximum 5 files. 10 MB limit. Allowed types: txt doc docx pdf ppt pptx zip rar xls xlsx." in the "Modal content" region
     Then I press "Save" in the "Modal buttons" region
 
     # Identified effects on cross-border interoperability
     When I click "Legal" in the "Content" region
-    Then I should not see "Provide a justification"
+    Then I should not see the text "Provide a justification"
     And the response should contain "<span class=\"visually-hidden fieldset-legend fw-bold\">Identified effects on cross-border legal interoperability</span>"
     When I select the radio button "N/A" with the name "legal[0][inline_entity_form][interpretation]"
-    Then I should not see "Provide a justification"
+    Then I should not see the text "Provide a justification"
     When I select the radio button "Beneficial" with the name "legal[0][inline_entity_form][interpretation]"
-    Then I should see "Provide a justification"
+    Then I should see the text "Provide a justification"
     And I fill in "legal[0][inline_entity_form][judgement][0][value]" with "Complies with GDPR and eIDAS regulations"
 
     When I click "Organisational" in the "Content" region
-    Then I should not see "Provide a justification"
+    Then I should not see the text "Provide a justification"
     And the response should contain "<span class=\"visually-hidden fieldset-legend fw-bold\">Identified effects on cross-border organisational interoperability</span>"
     When I select the radio button "Negligible" with the name "organisational[0][inline_entity_form][interpretation]"
-    Then I should see "Provide a justification"
+    Then I should see the text "Provide a justification"
     And I fill in "organisational[0][inline_entity_form][judgement][0][value]" with "Requires coordination between authorities"
 
     When I click "Semantic" in the "Content" region
-    Then I should not see "Provide a justification"
+    Then I should not see the text "Provide a justification"
     And the response should contain "<span class=\"visually-hidden fieldset-legend fw-bold\">Identified effects on cross-border semantic interoperability</span>"
     When I select the radio button "Beneficial" with the name "semantic[0][inline_entity_form][interpretation]"
-    Then I should see "Provide a justification"
+    Then I should see the text "Provide a justification"
     And I fill in "semantic[0][inline_entity_form][judgement][0][value]" with "Uses standardized Core Vocabularies"
 
     When I click "Technical" in the "Content" region
-    Then I should not see "Provide a justification"
+    Then I should not see the text "Provide a justification"
     And the response should contain "<span class=\"visually-hidden fieldset-legend fw-bold\">Identified effects on cross-border technical interoperability</span>"
     # Fill in a judgement value to verify it gets cleared on N/A.
     When I select the radio button "Beneficial" with the name "technical[0][inline_entity_form][interpretation]"
-    Then I should see "Provide a justification"
+    Then I should see the text "Provide a justification"
     And I fill in "technical[0][inline_entity_form][judgement][0][value]" with "Implements REST APIs and OpenAPI specs"
     # Selecting N/A should hide and clear the judgement field.
     When I select the radio button "N/A" with the name "technical[0][inline_entity_form][interpretation]"
-    Then I should not see "Provide a justification"
+    Then I should not see the text "Provide a justification"
     # Switching back to Beneficial should show the preserved judgement value.
     When I select the radio button "Beneficial" with the name "technical[0][inline_entity_form][interpretation]"
-    Then I should see "Provide a justification"
+    Then I should see the text "Provide a justification"
     And the "technical[0][inline_entity_form][judgement][0][value]" field should contain "Implements REST APIs and OpenAPI specs"
 
-    And I should see "Describe any remaining barriers to cross-border interoperability discovered."
+    And I should see the text "Describe any remaining barriers to cross-border interoperability discovered."
     And I fill in "Remaining barriers to cross-border interoperability" with "No significant barriers identified."
 
     # Assessment supporting documents
     And I attach the file "text.pdf" to "Add a new file"
-    And I should see "Maximum 5 files. 10 MB limit. Allowed types: txt doc docx pdf ppt pptx zip rar xls xlsx."
+    And I should see the text "Maximum 5 files. 10 MB limit. Allowed types: txt doc docx pdf ppt pptx zip rar xls xlsx."
 
     # Add comment
     And I fill in "Please add any other comment you would like to share." with "This assessment was conducted in collaboration with multiple stakeholders across EU member states."
@@ -284,12 +284,12 @@ Feature: Assessment Report Entity Management
     When I click "Interoperability solution" in the "Modal content" region
     And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
     Then I should not see the text "Interoperability Solutions Browser"
-    And I should see "Test solution published"
-    And I should see "Test interoperable solution"
-    And I should not see "Test solution archived"
-    And I should not see "Test solution proposed"
-    And I should not see "Test solution draft"
-    And I should not see "Test solution unpublished"
+    And I should see the text "Test solution published"
+    And I should see the text "Test interoperable solution"
+    And I should not see the text "Test solution archived"
+    And I should not see the text "Test solution proposed"
+    And I should not see the text "Test solution draft"
+    And I should not see the text "Test solution unpublished"
 
   Scenario: Entity browser exposed filters: name, domain and interoperable filters
     Given the following "solution" content:
@@ -306,68 +306,68 @@ Feature: Assessment Report Entity Management
     When I click "Interoperability solution" in the "Modal content" region
     And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
 
-    Then I should see "Alpha Framework"
-    And I should see "Beta Platform"
-    And I should see "Gamma Service"
-    And I should see "Delta Application"
-    And I should see "Robust Engine"
+    Then I should see the text "Alpha Framework"
+    And I should see the text "Beta Platform"
+    And I should see the text "Gamma Service"
+    And I should see the text "Delta Application"
+    And I should see the text "Robust Engine"
 
     When I fill in "Name" with "Alpha"
     And I press "Search"
     And I wait for AJAX to finish
-    Then I should see "Alpha Framework"
-    And I should not see "Beta Platform"
-    And I should not see "Gamma Service"
-    And I should not see "Delta Application"
-    And I should not see "Robust Engine"
+    Then I should see the text "Alpha Framework"
+    And I should not see the text "Beta Platform"
+    And I should not see the text "Gamma Service"
+    And I should not see the text "Delta Application"
+    And I should not see the text "Robust Engine"
 
     When I fill in "Name" with "robust"
     And I press "Search"
     And I wait for AJAX to finish
-    Then I should see "Alpha Framework"
-    And I should not see "Beta Platform"
-    And I should see "Gamma Service"
-    And I should not see "Delta Application"
-    And I should see "Robust Engine"
+    Then I should see the text "Alpha Framework"
+    And I should not see the text "Beta Platform"
+    And I should see the text "Gamma Service"
+    And I should not see the text "Delta Application"
+    And I should see the text "Robust Engine"
 
     When I fill in "Name" with "nintendo64"
     And I press "Search"
     And I wait for AJAX to finish
-    Then I should not see "Alpha Framework"
-    And I should see "Beta Platform"
-    And I should not see "Gamma Service"
-    And I should see "Delta Application"
-    And I should not see "Robust Engine"
+    Then I should not see the text "Alpha Framework"
+    And I should see the text "Beta Platform"
+    And I should not see the text "Gamma Service"
+    And I should see the text "Delta Application"
+    And I should not see the text "Robust Engine"
 
     When I fill in "Name" with ""
     And I press "Search"
     And I wait for AJAX to finish
     And I select "Defense" from "Domain"
     And I wait for AJAX to finish
-    Then I should see "Alpha Framework"
-    And I should see "Gamma Service"
-    And I should see "Robust Engine"
-    And I should not see "Beta Platform"
-    And I should not see "Delta Application"
+    Then I should see the text "Alpha Framework"
+    And I should see the text "Gamma Service"
+    And I should see the text "Robust Engine"
+    And I should not see the text "Beta Platform"
+    And I should not see the text "Delta Application"
     And the "Domain" field should contain the "- Any domain -" option
 
     When I select "- Any domain -" from "Domain"
     And I wait for AJAX to finish
     And I check "Interoperable Europe solutions"
     And I wait for AJAX to finish
-    Then I should see "Alpha Framework"
-    And I should see "Gamma Service"
-    And I should not see "Beta Platform"
-    And I should not see "Delta Application"
-    And I should not see "Robust Engine"
+    Then I should see the text "Alpha Framework"
+    And I should see the text "Gamma Service"
+    And I should not see the text "Beta Platform"
+    And I should not see the text "Delta Application"
+    And I should not see the text "Robust Engine"
 
     When I uncheck "Interoperable Europe solutions"
     And I wait for AJAX to finish
-    Then I should see "Alpha Framework"
-    And I should see "Beta Platform"
-    And I should see "Gamma Service"
-    And I should see "Delta Application"
-    And I should see "Robust Engine"
+    Then I should see the text "Alpha Framework"
+    And I should see the text "Beta Platform"
+    And I should see the text "Gamma Service"
+    And I should see the text "Delta Application"
+    And I should see the text "Robust Engine"
 
   Scenario: Entity browser: add existing asset, create new asset, and remove asset
     Given the following "solution" content:
@@ -402,7 +402,7 @@ Feature: Assessment Report Entity Management
     And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
     And I select "Asset to be removed" in the entity browser
     And I press "Select solutions" to close the entity browser
-    And I should see "Asset to be removed" in the "Modal content" region
+    And I should see the text "Asset to be removed" in the "Modal content" region
 
     And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
     And I click "New solution"
@@ -414,7 +414,7 @@ Feature: Assessment Report Entity Management
     And I enter "Description of the asset" in the "Description" wysiwyg editor
     And I fill in "Relevant website" with "http://remaining-asset.com"
     And I press "Create" to close the entity browser
-    And I should see "Asset that should remain" in the "Modal content" region
+    And I should see the text "Asset that should remain" in the "Modal content" region
 
     Then I press "Save" in the "Modal buttons" region
     And the modal should be closed
@@ -428,8 +428,8 @@ Feature: Assessment Report Entity Management
     And a modal should open
 
     When I click "Interoperability solution" in the "Modal content" region
-    And I should see "Asset to be removed" in the "Modal content" region
-    And I should see "Asset that should remain" in the "Modal content" region
+    And I should see the text "Asset to be removed" in the "Modal content" region
+    And I should see the text "Asset that should remain" in the "Modal content" region
 
     # Verify the new solution appears in the entity browser table.
     And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
@@ -438,8 +438,8 @@ Feature: Assessment Report Entity Management
 
     When I remove "Asset to be removed" from the entity browser widget
     And I wait for AJAX to finish
-    Then I should not see "Asset to be removed" in the "Modal content" region
-    And I should see "Asset that should remain" in the "Modal content" region
+    Then I should not see the text "Asset to be removed" in the "Modal content" region
+    And I should see the text "Asset that should remain" in the "Modal content" region
 
     Then I press "Save" in the "Modal buttons" region
     And the modal should be closed
@@ -460,10 +460,10 @@ Feature: Assessment Report Entity Management
     When I click "Interoperability solution" in the "Modal content" region
     And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
     # Solution with abstract: abstract is shown, description is not.
-    Then I should see "Abstract text"
-    And I should not see "Hidden description"
+    Then I should see the text "Abstract text"
+    And I should not see the text "Hidden description"
     # Solution without abstract: description is shown as fallback.
-    And I should see "Fallback shown"
+    And I should see the text "Fallback shown"
 
   # Regression test for the empty ID after duplication.
   # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-11248

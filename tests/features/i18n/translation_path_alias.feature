@@ -5,7 +5,7 @@ Feature: Translated group content should have proper path aliases.
   I should see a proper aliased URL instead of a node ID.
 
   Scenario: Translated collections and subpages have aliased URLs.
-    Given collection content:
+    Given the following "collection" content:
       | title                 | logo     |
       | Alias test collection | logo.png |
     And custom_page multilingual content:

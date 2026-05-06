@@ -120,7 +120,7 @@ Feature: Unsubscribe from collections
 
     When I visit the unsubscribe from "Southpark elementary" collection form
     Then I should see the heading "Unsubscribe from Southpark elementary collection?"
-    And I should see "Are you sure you want to unsubscribe from Southpark elementary collection? You will stop receiving news and updates, including the pending memberships, from this collection."
+    And I should see the text "Are you sure you want to unsubscribe from Southpark elementary collection? You will stop receiving news and updates, including the pending memberships, from this collection."
 
     When I press "Confirm"
     Then I should see the success message "You will no longer receive notifications from Southpark elementary collection."

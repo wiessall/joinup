@@ -30,7 +30,7 @@ Feature: Oauth client
     Given I am logged in as "Flora Admin"
     And I visit "/admin/config/services/consumer/oauth-client-request"
     When I click "Delete" in the "Super duper API" row
-    And I should see "Are you sure you want to delete the OAuth client request Super duper API?"
+    And I should see the text "Are you sure you want to delete the OAuth client request Super duper API?"
     When I press "Delete"
 
   Scenario: Moderation action triggers a notification.

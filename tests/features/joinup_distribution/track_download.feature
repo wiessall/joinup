@@ -31,7 +31,7 @@ Feature: Asset distribution editing.
     And I go to the "Berkeley Software Distributions" collection
     And I click "OpenBSD"
     And I click "Release history"
-    Then I should see "Releases for OpenBSD solution"
+    Then I should see the text "Releases for OpenBSD solution"
 
     And I should see the download link in the "OpenBSD images" distribution
     And I should see the download link in the "Changelog" distribution
@@ -44,7 +44,7 @@ Feature: Asset distribution editing.
     When I am an anonymous user
     And I go to the "OpenBSD" solution
     And I click "Release history"
-    Then I should see "Releases for OpenBSD solution"
+    Then I should see the text "Releases for OpenBSD solution"
 
     # The same download links are shown to anonymous users.
     And I should see the download link in the "OpenBSD images" distribution

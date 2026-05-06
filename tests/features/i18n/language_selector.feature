@@ -14,16 +14,16 @@ Feature: Language selector block and popover functionality
     Given I am <login_state>
 
     When I am on the homepage
-    Then I should see "EN" in the "Top Bar" region
+    Then I should see the text "EN" in the "Top Bar" region
 
     When I press "EN" in the "Top Bar" region
-    And I should see "FR" in the "Language picker" region
-    And I should see "DE" in the "Language picker" region
-    And I should see "ES" in the "Language picker" region
+    And I should see the text "FR" in the "Language picker" region
+    And I should see the text "DE" in the "Language picker" region
+    And I should see the text "ES" in the "Language picker" region
 
     When I click "French" in the "Language picker" region
     Then I should be on "/fr"
-    And I should see "FR" in the "Top Bar" region
+    And I should see the text "FR" in the "Top Bar" region
 
     Examples:
       | login_state                                            |

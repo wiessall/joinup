@@ -49,7 +49,7 @@ Feature: Following discussions
 
     When I click "Unfollow"
     Then a modal should open
-    And I should see "Stop following this discussion?" in the "Modal title" region
+    And I should see the text "Stop following this discussion?" in the "Modal title" region
     When I press "Unfollow" in the "Modal buttons" region
     Then I should see the heading "Rare Butter"
     And I should see the link "Follow"

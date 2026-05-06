@@ -52,7 +52,7 @@ Feature:
     When I check the box "I agree to the Legal notice document"
     And I press "Submit"
     When I go to the "Interoperable Europe" collection
-    Then I should see "IOP landing page"
+    Then I should see the text "IOP landing page"
     # Check that we are on the expected URL for the landing page.
     And I should be on "/interoperable-europe"
     And I should not see the "Entity actions" region

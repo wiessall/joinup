@@ -35,8 +35,8 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | Definition         | This is the term definition. It can be a very long, long text content body |
     And I press "Save"
     Then I should see the success message "Glossary term XFiles has been created."
-    And I should see "This is the term definition. It can be a very long, long text content body"
-    But I should not see "Summary of the main glossary term definition"
+    And I should see the text "This is the term definition. It can be a very long, long text content body"
+    But I should not see the text "Summary of the main glossary term definition"
 
     When I click "A World of Things" in the Header region
 
@@ -47,8 +47,8 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     When I click "Glossary"
     Then I should see the heading "A World of Things glossary"
     And I should see the link "XFiles"
-    And I should see "Summary of the main glossary term definition"
-    But I should not see "This is the term definition. It can be a very long, long text content body"
+    And I should see the text "Summary of the main glossary term definition"
+    But I should not see the text "This is the term definition. It can be a very long, long text content body"
     # When there's only one entry (i.e. one prefix letter) the glossary
     # navigator won't show.
     And I should not see the glossary navigator
@@ -60,14 +60,14 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     When I go to the "A World of Things" collection
     And I click "Glossary"
     And I should see the link "XFiles"
-    And I should see "Summary of the main glossary term definition"
-    But I should not see "This is the term definition. It can be a very long, long text content body"
+    And I should see the text "Summary of the main glossary term definition"
+    But I should not see the text "This is the term definition. It can be a very long, long text content body"
     And I should see the link "XRatings"
     And I should see the link "XRT"
     And I should see the link "X.R.T."
     And I should see the link "extraratings"
-    And I should see "Summary of XRatings"
-    But I should not see "Long, long body definition field"
+    And I should see the text "Summary of XRatings"
+    But I should not see the text "Long, long body definition field"
     # Both glossary entries start with the same letter. No navigator is shown.
     And I should not see the glossary navigator
 
@@ -84,23 +84,23 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     And I should see the link "ABC"
     And I should see the link "alphabeta"
     And I should see the link "alfabet"
-    And I should see "Summary of Alphabet"
-    But I should not see "Long, long definition field"
+    And I should see the text "Summary of Alphabet"
+    But I should not see the text "Long, long definition field"
     And I should see the link "Colors"
     And I should see the link "CLR"
-    And I should see "Summary of Colors"
-    But I should not see "Colors definition field"
+    And I should see the text "Summary of Colors"
+    But I should not see the text "Colors definition field"
     And I should see the link "Smells"
     And I should see the link "SML"
-    And I should see "Smells Like Teen Spirit"
-    But I should not see "With the lights out, it's less dangerous..."
+    And I should see the text "Smells Like Teen Spirit"
+    But I should not see the text "With the lights out, it's less dangerous..."
     And I should see the link "XFiles"
-    And I should see "Summary of the main glossary term definition"
-    But I should not see "This is the term definition. It can be a very long, long text content body"
+    And I should see the text "Summary of the main glossary term definition"
+    But I should not see the text "This is the term definition. It can be a very long, long text content body"
     And I should see the link "XRatings"
     And I should see the link "XRT"
-    And I should see "Summary of XRatings"
-    But I should not see "Long, long body definition field"
+    And I should see the text "Summary of XRatings"
+    But I should not see the text "Long, long body definition field"
     And I should see the glossary navigator "A C S X"
 
     When I click "A"
@@ -113,7 +113,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
 
     # Test multi-synonyms display.
     When I click "Alphabet"
-    And I should see "ABC, alphabeta, alfabet"
+    And I should see the text "ABC, alphabeta, alfabet"
 
     When I go to the "Things To Come" solution
     Then I should see the following navigation menu items in the specified order:

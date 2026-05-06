@@ -40,7 +40,7 @@ Feature: Contact form for solution
 
     When I press "Cancel" in the "Modal buttons" region
     Then the modal should be closed
-    And I should not see "Only signed in users can send a message. Please sign in or register an account on EU Login." in the "Content" region
+    And I should not see the text "Only signed in users can send a message. Please sign in or register an account on EU Login." in the "Content" region
 
     # Delete contact info.
     Given I reload the page

@@ -144,7 +144,7 @@ Feature: Test adding solutions.
     Then the email sent to "Ruth Lee" with subject "Interoperable Europe Portal: A new solution has been proposed" contains the following lines of text:
       | Wendell Silva has proposed a new Interoperability solution: "Espresso is the solution" on Interoperable Europe Portal. |
       | If you think this action is not clear or not due, please contact Portal Support at                                     |
-    And I should see "Thank you for proposing a solution. Your request is currently pending approval by the site administrator."
+    And I should see the text "Thank you for proposing a solution. Your request is currently pending approval by the site administrator."
     And Log entry with the message "A new solution entity titled Espresso is the solution has been created by Wendell Silva in Belgian barista's." should exist.
 
     # Regression test for the non required field, 'Logo'.
@@ -214,11 +214,11 @@ Feature: Test adding solutions.
     And I fill in "Link text" with "My remote file"
     And I press "Confirm"
     And I press "Propose"
-    And I should see "Documentation"
-    And I should not see "text.pdf"
-    And I should not see "logo.png"
-    And I should see "My uploaded file"
-    And I should see "My remote file"
+    And I should see the text "Documentation"
+    And I should not see the text "text.pdf"
+    And I should not see the text "logo.png"
+    And I should see the text "My uploaded file"
+    And I should see the text "My remote file"
 
     # The name of the solution should exist in the block of the relative content in a collection.
     When I go to the homepage of the "Belgian barista's" collection

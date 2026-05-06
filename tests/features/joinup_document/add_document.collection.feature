@@ -82,11 +82,11 @@ Feature: "Add document" visibility options.
     But I should not see the link "napcheese" in the "Content" region
     When I click "Edit"
     And I press "Edit"
-    And I should see "Description"
+    And I should see the text "Description"
     And I fill in "Description" with "My document"
     And I press "Save as draft"
-    And I should not see "test.zip"
-    And I should see "My document"
+    And I should not see the text "test.zip"
+    And I should see the text "My document"
 
   # Regression test to ensure that no critical errors are thrown when a new
   # revision is created for a document that has a remote file attached.
@@ -108,11 +108,11 @@ Feature: "Add document" visibility options.
     Then I should see the success message "Document Laser types has been updated"
     And I go to the edit form of the "Laser types" document
     And I press "Edit"
-    And I should see "Link text"
+    And I should see the text "Link text"
     And I fill in "Link text" with "My document"
     And I press "Update"
-    And I should not see "http://www.example.com "
-    And I should see "My document"
+    And I should not see the text "http://www.example.com "
+    And I should see the text "My document"
 
   Scenario: Increase attachment file size limit in Documents.
     Given the following "collection" content:

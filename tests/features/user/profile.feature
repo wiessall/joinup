@@ -371,7 +371,7 @@ Feature: User profile
     But I should not see the text "Country of origin:"
 
   Scenario: The URL determines the interface language and login redirects to the user preferred language.
-    Given users:
+    Given the following users:
       | Username      | E-mail             | First name | Family name |
       | Pierre Martin | pierre@example.com | Pierre     | Martin      |
     When I am logged in as "Pierre Martin"

@@ -53,8 +53,8 @@ Feature: Pool paragraph tests.
     When I should see the heading "What was the best series?"
     And I should see the button "View results"
     And the following fields should be present "Game of Thrones,Breaking Bad,The Wire,The Sopranos,Mad Men"
-    And I should see "0 votes"
-    And I should see "1 week 6 days left to vote"
+    And I should see the text "0 votes"
+    And I should see the text "1 week 6 days left to vote"
 
     Then I press "View results"
     When I should not see the button "View results"
@@ -62,7 +62,7 @@ Feature: Pool paragraph tests.
     When I should not see the button "Hide results"
 
     Then I click on label "Game of Thrones"
-    When I should see "1 vote"
+    When I should see the text "1 vote"
 
   Scenario: Use who voted can cancel own vote
     Given the following polls:
@@ -78,8 +78,8 @@ Feature: Pool paragraph tests.
     When I should see the heading "Whats the best pizza topping?"
     And I should not see the button "View results"
     And the following fields should be present "Pepperoni,Pineapple,Just cheese,Mushrooms"
-    And I should not see "0 votes"
-    And I should see "4 days 23 hours left to vote"
+    And I should not see the text "0 votes"
+    And I should see the text "4 days 23 hours left to vote"
 
     Then I click on label "Just cheese"
     When the following fields should not be present "Pepperoni,Pineapple,Just cheese,Mushrooms"

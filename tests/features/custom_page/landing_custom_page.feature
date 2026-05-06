@@ -18,7 +18,7 @@ Feature: Landing custom page.
     And I click "Custom landing pages"
     And I should see the heading "Custom landing pages"
     And I should see the link "Add custom landing page"
-    But I should not see "Early law and jurisprudence"
+    But I should not see the text "Early law and jurisprudence"
 
     When I click "Add custom landing page"
     And the following field should be present "URL alias"

@@ -89,7 +89,7 @@ Feature: Joining a collection as an anonymous user
     When I click "Join this collection"
     And a modal should open
     Then I should see the text "Sign in to join"
-    And I should see "Only signed in users can join this collection. Please sign in or register an account on EU Login."
+    And I should see the text "Only signed in users can join this collection. Please sign in or register an account on EU Login."
     But the cookie that tracks which group I want to join should not be set
     When I press "Sign in / Register" in the "Modal buttons" region
     Then I should see the heading "Sign in to continue"
@@ -147,7 +147,7 @@ Feature: Joining a collection as an anonymous user
     When I click "Join this collection"
     Then a modal should open
     And I should see the text "Sign in to join"
-    And I should see "Only signed in users can join this collection. Please sign in or register an account on EU Login."
+    And I should see the text "Only signed in users can join this collection. Please sign in or register an account on EU Login."
     But the cookie that tracks which group I want to join should not be set
     When I press "Sign in / Register" in the "Modal buttons" region
     Then I should see the heading "Sign in to continue"
@@ -199,7 +199,7 @@ Feature: Joining a collection as an anonymous user
     When I click "Join this collection"
     Then a modal should open
     And I should see the text "Sign in to join"
-    And I should see "Only signed in users can join this collection. Please sign in or register an account on EU Login."
+    And I should see the text "Only signed in users can join this collection. Please sign in or register an account on EU Login."
     But the cookie that tracks which group I want to join should not be set
     When I press "Sign in / Register" in the "Modal buttons" region
     Then I should see the heading "Sign in to continue"
@@ -237,7 +237,7 @@ Feature: Joining a collection as an anonymous user
     When I click "Join this collection"
     Then a modal should open
     And I should see the text "Sign in to join"
-    And I should see "Only signed in users can join this collection. Please sign in or register an account on EU Login."
+    And I should see the text "Only signed in users can join this collection. Please sign in or register an account on EU Login."
     But the cookie that tracks which group I want to join should not be set
     When I press "Sign in / Register" in the "Modal buttons" region
     Then I should see the heading "Sign in to continue"

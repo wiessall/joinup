@@ -2,7 +2,7 @@
 Feature: Translating owners
 
   Background:
-    Given owner content:
+    Given the following "owner" content:
       | name       |
       | Test owner |
 
@@ -28,7 +28,7 @@ Feature: Translating owners
 
     # Edit translation.
     When I click "Translate" in the "Entity actions" region
-    Then I should see "Testowy właściciel"
+    Then I should see the text "Testowy właściciel"
     When I click "Edit" in the "Polish" row
     And I fill in "Name" with "Zaktualizowany właściciel"
     And I press "Save (all translations)"
@@ -39,11 +39,11 @@ Feature: Translating owners
     # Delete translation.
     When I click "Translate" in the "Entity actions" region
     And I click "Delete" in the "Polish" row
-    Then I should see "Are you sure you want to delete the Polish translation of the content item Zaktualizowany właściciel?"
+    Then I should see the text "Are you sure you want to delete the Polish translation of the content item Zaktualizowany właściciel?"
     When I press "Delete Polish translation"
     Then I should see the success message "Polish translation of the Owner Zaktualizowany właściciel has been deleted."
     When I click "Translate" in the "Entity actions" region
-    Then I should not see "Edit" in the "Polish" row
+    Then I should not see the text "Edit" in the "Polish" row
     And I should see the "Add" in the "Polish" row
 
   Scenario: Users who do not have edit access cannot manage translations.

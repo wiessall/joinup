@@ -2,16 +2,16 @@
 Feature: Translating custom pages
 
   Background:
-    Given users:
+    Given the following users:
       | Username    | Roles     |
       | Flora Mod   | moderator |
       | Lee Facil   |           |
       | John Member |           |
       | Ross Auth   |           |
-    And collection content:
+    And the following "collection" content:
       | title           |
       | Test collection |
-    And solution content:
+    And the following "solution" content:
       | title         | collection      |
       | Test solution | Test collection |
     And the following collection user memberships:
@@ -22,7 +22,7 @@ Feature: Translating custom pages
       | solution      | user        | roles       |
       | Test solution | Lee Facil   | facilitator |
       | Test solution | John Member |             |
-    And custom_page content:
+    And the following "custom_page" content:
       | title                       | collection      | solution      | field_paragraphs_body            | field_hide_title |
       | Test collection custom page | Test collection |               | This is test custom page content | 0                |
       | Test solution custom page   |                 | Test solution | This is test custom page content | 0                |
@@ -69,12 +69,12 @@ Feature: Translating custom pages
     And I press "Save (all translations)"
     Then I should see the success message "Custom page Testowa strona niestandardowa has been updated."
     And I should see the heading "Testowa strona niestandardowa"
-    And I should see "To jest polskie tłumaczenie strony"
-    And I should see "Plik testowy"
+    And I should see the text "To jest polskie tłumaczenie strony"
+    And I should see the text "Plik testowy"
 
     # Edit translation.
     When I click "Translate" in the "Entity actions" region
-    Then I should see "Testowa strona niestandardowa"
+    Then I should see the text "Testowa strona niestandardowa"
     When I click "Edit" in the "Polish" row
     And I fill in "Title" with "Zaktualizowana strona"
     And I press "Save (all translations)"
@@ -85,11 +85,11 @@ Feature: Translating custom pages
     # Delete translation.
     When I click "Translate" in the "Entity actions" region
     And I click "Delete" in the "Polish" row
-    Then I should see "Are you sure you want to delete the Polish translation of the content item Zaktualizowana strona?"
+    Then I should see the text "Are you sure you want to delete the Polish translation of the content item Zaktualizowana strona?"
     When I press "Delete Polish translation"
     Then I should see the success message "Polish translation of the Custom page Zaktualizowana strona has been deleted."
     When I click "Translate" in the "Entity actions" region
-    Then I should not see "Edit" in the "Polish" row
+    Then I should not see the text "Edit" in the "Polish" row
     And I should see the "Add" in the "Polish" row
 
     Examples:

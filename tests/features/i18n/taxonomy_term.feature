@@ -18,7 +18,7 @@ Feature:  The moderator is able to translate taxonomy terms.
 
     And I go to the "Complete Solution" solution_classification term page
     Then I should see the heading "Complete Solution"
-    And I should see "Artifact (product, tool, or digital service)."
+    And I should see the text "Artifact (product, tool, or digital service)."
     When I click "Swedish"
     Then I should see the heading "Komplett lösning"
-    And I should see "Artifact (product, tool, or digital service)."
+    And I should see the text "Artifact (product, tool, or digital service)."

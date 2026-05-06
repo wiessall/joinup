@@ -17,14 +17,14 @@ Feature: Content archival.
     When I press "Archive"
     Then I should see the message "Discussion Test discussion has been updated."
     And I should see the text "Archive" in the "Page title" region
-    And I should see "Last update: 17/11/2017"
+    And I should see the text "Last update: 17/11/2017"
     When I go to the edit form of the "Test discussion" discussion
     Then I should not see the button "Archive"
     And I should see the button "Unarchive"
 
     When I press "Unarchive"
     Then I should see the message 'Discussion "Test discussion" has been unarchived.'
-    And I should see "Last update: 17/11/2017"
+    And I should see the text "Last update: 17/11/2017"
     And I should not see the text "Archive" in the "Page title" region
     When I go to the edit form of the "Test discussion" discussion
     Then I should see the button "Archive"
@@ -47,14 +47,14 @@ Feature: Content archival.
     When I press "Archive"
     Then I should see the message "<type label> Test <type> has been updated."
     And I should see the text "Archive" in the "Page title" region
-    And I should see "Last update: 12/11/2019"
+    And I should see the text "Last update: 12/11/2019"
     When I go to the edit form of the "Test <type>" <type>
     Then I should not see the button "Archive"
     And I should see the button "Unarchive"
 
     When I press "Unarchive"
     Then I should see the message '<type label> "Test <type>" has been unarchived.'
-    And I should see "Last update: 12/11/2019"
+    And I should see the text "Last update: 12/11/2019"
     And I should not see the text "Archive" in the "Page title" region
     When I go to the edit form of the "Test <type>" <type>
     Then I should see the button "Archive"

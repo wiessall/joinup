@@ -136,7 +136,7 @@ Feature: Joining and leaving collections through the web interface
     And I select "Transfer the ownership of the collection to the selected member" from "Action"
     And I press "Apply to selected items"
     And I press "Confirm"
-    Then I should see "Ownership of Open collection 2 collection transferred from user Collection owner to Stewe Griffin."
+    Then I should see the text "Ownership of Open collection 2 collection transferred from user Collection owner to Stewe Griffin."
 
     When I go to the homepage of the "Open collection 2" collection
     And I click "Leave this community"

@@ -33,7 +33,7 @@ Feature: Owner moderation
     And I select "Company" options from "Type"
     And I select "Belgium" from "Country"
     When I press "Create owner"
-    Then I should see "EU healthy movement"
+    Then I should see the text "EU healthy movement"
 
     And I fill in "Alternative text" with "Alternative logo text"
 
@@ -112,7 +112,7 @@ Feature: Owner moderation
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Good food eaters"
     And I press "Add owner"
-    Then I should see "Good food eaters"
+    Then I should see the text "Good food eaters"
     # Keep the collection as proposed.
     And I press "Propose"
     Then I should see the heading "The healthy food European project"

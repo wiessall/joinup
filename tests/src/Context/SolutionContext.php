@@ -395,7 +395,7 @@ class SolutionContext extends RawDrupalContext {
       ->load('interoperability');
 
     $user = $this->getUserManager()->getCurrentUser();
-    $account = User::load($user->uid);
+    $account = User::load($user->getValue('uid'));
     if ($account->isAnonymous()) {
       throw new \Exception("No current logged in user.");
     }

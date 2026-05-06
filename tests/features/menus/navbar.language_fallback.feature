@@ -5,8 +5,8 @@ Feature: The first content language fallback should be English.
 
   Scenario: Menu link content uses English language as first fallback.
     Given the following users:
-      | Username    | Roles                 |
-      | John de Mod | moderator, translator |
+      | Username    | Roles     |
+      | John de Mod | moderator |
     Given I am logged in as "John de Mod"
     When I go to "/admin/structure/menu/manage/navbar"
     And I click "Add link"

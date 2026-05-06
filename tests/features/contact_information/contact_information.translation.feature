@@ -2,7 +2,7 @@
 Feature: Translating contact information
 
   Background:
-    Given contact_information content:
+    Given the following "contact_information" content:
       | name                     |
       | Test contact information |
 
@@ -26,11 +26,11 @@ Feature: Translating contact information
     When I press "Save (all translations)"
     Then I should see the success message "Contact information Dane kontaktowe has been updated."
     And I should see the heading "Dane kontaktowe"
-    And I should see "https://dame-kontaktowe.pl"
+    And I should see the text "https://dame-kontaktowe.pl"
 
     # Edit translation.
     When I click "Translate" in the "Entity actions" region
-    Then I should see "Dane kontaktowe"
+    Then I should see the text "Dane kontaktowe"
     When I click "Edit" in the "Polish" row
     And I fill in "Name" with "Zaktualizowane dane"
     And I press "Save (all translations)"
@@ -41,11 +41,11 @@ Feature: Translating contact information
     # Delete translation.
     When I click "Translate" in the "Entity actions" region
     And I click "Delete" in the "Polish" row
-    Then I should see "Are you sure you want to delete the Polish translation of the content item Zaktualizowane dane?"
+    Then I should see the text "Are you sure you want to delete the Polish translation of the content item Zaktualizowane dane?"
     When I press "Delete Polish translation"
     Then I should see the success message "Polish translation of the Contact information Zaktualizowane dane has been deleted."
     When I click "Translate" in the "Entity actions" region
-    Then I should not see "Edit" in the "Polish" row
+    Then I should not see the text "Edit" in the "Polish" row
     And I should see the "Add" in the "Polish" row
 
   Scenario: Users who do not have edit access cannot manage translations.

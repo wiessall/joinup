@@ -2,13 +2,13 @@
 Feature: Translating collections
 
   Background:
-    Given users:
+    Given the following users:
       | Username    | Roles     |
       | Flora Mod   | moderator |
       | Lee Facil   |           |
       | John Member |           |
       | Ross Auth   |           |
-    And collection content:
+    And the following "collection" content:
       | title           | abstract                        | description                    |
       | Test collection | short description of collection | long description of collection |
     And the following collection user memberships:
@@ -56,7 +56,7 @@ Feature: Translating collections
 
     # Edit translation.
     When I click "Translate" in the "Entity actions" region
-    Then I should see "Testowa kolekcja"
+    Then I should see the text "Testowa kolekcja"
     When I click "Edit" in the "Polish" row
     And I fill in "Title" with "Zaktualizowana kolekcja"
     And I press "Save (all translations)"
@@ -67,11 +67,11 @@ Feature: Translating collections
     # Delete translation.
     When I click "Translate" in the "Entity actions" region
     And I click "Delete" in the "Polish" row
-    Then I should see "Are you sure you want to delete the Polish translation of the content item Zaktualizowana kolekcja?"
+    Then I should see the text "Are you sure you want to delete the Polish translation of the content item Zaktualizowana kolekcja?"
     When I press "Delete Polish translation"
     Then I should see the success message "<delete message>"
     When I click "Translate" in the "Entity actions" region
-    Then I should not see "Edit" in the "Polish" row
+    Then I should not see the text "Edit" in the "Polish" row
     And I should see the "Add" in the "Polish" row
 
     Examples:

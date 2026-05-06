@@ -51,4 +51,4 @@ Feature: Solution TCA agreement
     When I am logged in as a facilitator of the "Solution B" solution
     And I go to the edit form of the "Solution B" solution
     And I press "Confirm"
-    And I should not see "I have read and agreed"
+    And I should not see the text "I have read and agreed"

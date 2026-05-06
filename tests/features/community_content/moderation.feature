@@ -170,7 +170,7 @@ Feature: Moderate community content
     When I move backward one page
     And I click the "Edit" link in the "Black-body spectrum radiation" moderation preview
     Then I should see the heading "Edit Discussion Black-body spectrum radiation"
-    And I should see "Before submitting your contribution, please ensure it adheres to the Portal’s contribution rules."
+    And I should see the text "Before submitting your contribution, please ensure it adheres to the Portal’s contribution rules."
 
     # Approve the content, and check that it no longer shows up in the moderation overview.
     When I press "Publish"
@@ -278,7 +278,7 @@ Feature: Moderate community content
     When I move backward one page
     And I click the "Edit" link in the "Cataclysmic variables" moderation preview
     Then I should see the heading "Edit Discussion Cataclysmic variables"
-    And I should see "Before submitting your contribution, please ensure it adheres to the Portal’s contribution rules."
+    And I should see the text "Before submitting your contribution, please ensure it adheres to the Portal’s contribution rules."
 
     # Approve the content, and check that it no longer shows up in the moderation overview.
     When I press "Publish"

@@ -142,5 +142,5 @@ Feature:
     And I press "Save" in the "Modal buttons" region
     And I press "Publish"
 
-    Then I should see "Super"
-    And I should see "Duper"
+    Then I should see the text "Super"
+    And I should see the text "Duper"

@@ -13,7 +13,7 @@ Feature: Custom pages enhance search results for their collections/solutions
     # Initially I get no results. This is intended to warm up any caches.
     When I go to the homepage
     Then I enter "memory" in the search bar and press enter
-    Then I should see "No content found for your search."
+    Then I should see the text "No content found for your search."
 
     Given the following "custom_page" content:
       | title                          | <group>         | body                         | state       |
@@ -71,7 +71,7 @@ Feature: Custom pages enhance search results for their collections/solutions
 
     # An unpublished custom page doesn't show up in any results.
     When I enter "Binary tree" in the search bar and press enter
-    Then I should see "No content found for your search."
+    Then I should see the text "No content found for your search."
 
     Examples:
       | group      |

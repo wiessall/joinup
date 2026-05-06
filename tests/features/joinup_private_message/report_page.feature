@@ -20,7 +20,7 @@ Feature: Private message report page
   Scenario: Display, unreport and delete reported private messages
     When I am logged in as "alice_m"
     And I am on "/dashboard"
-    Then I should see "Private messages reports"
+    Then I should see the text "Private messages reports"
     When I click "Private messages reports"
     Then I should see the following lines of text:
       | This is message from bob |
@@ -37,20 +37,20 @@ Feature: Private message report page
     When I am on "/dashboard/private-message-report"
     And I click "Flag as OK" in the "This is message from bob" row
     Then a modal should open
-    And I should see "Flag message as OK?"
+    And I should see the text "Flag message as OK?"
     And I press "Confirm" in the "Modal buttons" region
     Then the modal should be closed
     When I am on "/dashboard/private-message-report"
-    Then I should not see "This is message from bob"
+    Then I should not see the text "This is message from bob"
 
     # "Delete" functionality
     When I am on "/dashboard/private-message-report"
     And I press the button "Toggle Dropdown" in the "This is message from ken" row
     Then I click "Delete" in the "This is message from ken" row
     And a modal should open
-    And I should see "Are you sure you want to delete the private"
+    And I should see the text "Are you sure you want to delete the private"
     And I press "Delete" in the "Modal buttons" region
     And the modal should be closed
-    And I should not see "This is message from ken"
+    And I should not see the text "This is message from ken"
     When I go to "/user/messages"
-    Then I should not see "This is message from ken"
+    Then I should not see the text "This is message from ken"

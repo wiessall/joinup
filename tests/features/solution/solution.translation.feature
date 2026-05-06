@@ -2,16 +2,16 @@
 Feature: Translating solutions
 
   Background:
-    Given users:
+    Given the following users:
       | Username    | Roles     |
       | Flora Mod   | moderator |
       | Lee Facil   |           |
       | John Member |           |
       | Ross Auth   |           |
-    And collection content:
+    And the following "collection" content:
       | title           | abstract                        | description                    |
       | Test collection | short description of collection | long description of collection |
-    And solution content:
+    And the following "solution" content:
       | title         | collection      | abstract                      | description                  |
       | Test solution | Test collection | short description of solution | long description of solution |
     And the following solution user memberships:
@@ -60,7 +60,7 @@ Feature: Translating solutions
 
     # Edit translation.
     When I click "Translate" in the "Entity actions" region
-    Then I should see "Testowa solucja"
+    Then I should see the text "Testowa solucja"
     When I click "Edit" in the "Polish" row
     And I fill in "Title" with "Zaktualizowana solucja"
     And I press "Confirm"
@@ -72,11 +72,11 @@ Feature: Translating solutions
     # Delete translation.
     When I click "Translate" in the "Entity actions" region
     And I click "Delete" in the "Polish" row
-    Then I should see "Are you sure you want to delete the Polish translation of the content item Zaktualizowana solucja?"
+    Then I should see the text "Are you sure you want to delete the Polish translation of the content item Zaktualizowana solucja?"
     When I press "Delete Polish translation"
     Then I should see the success message "<delete message>"
     When I click "Translate" in the "Entity actions" region
-    Then I should not see "Edit" in the "Polish" row
+    Then I should not see the text "Edit" in the "Polish" row
     And I should see the "Add" in the "Polish" row
 
     Examples:

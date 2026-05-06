@@ -33,7 +33,7 @@ Feature: Private message report.
     Then a modal should open
     And I should see the text "Report and block sender" in the "Modal title"
     And I press "Send" in the "Modal content" region
-    Then I should see "Report field is required."
+    Then I should see the text "Report field is required."
     When I fill in "Report" with "I want to report this message."
     And I check "Also block this sender"
     And I press "Send" in the "Modal content" region
