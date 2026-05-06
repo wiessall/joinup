@@ -5,7 +5,7 @@ Feature:
   I need to be able to access a page where I can configure them.
 
   Background:
-    Given solution content:
+    Given the following "solution" content:
       | title             |
       | Some EIF solution |
 
@@ -29,7 +29,7 @@ Feature:
     Then I should see the heading "Some EIF solution EIF perspective"
     And the following fields should be present "Description, Type of solution"
     And the following field widgets should be present "Principle, Layer, Model"
-    And I should see "Recommendation"
+    And I should see the text "Recommendation"
 
     When I press "Save"
     Then I should see the following inline form error messages:

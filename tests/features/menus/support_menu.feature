@@ -34,7 +34,7 @@ Feature:
 
   Scenario Outline: Test user support menu usage.
 
-    Given collection content:
+    Given the following "collection" content:
       | title            |
       | Hotel California |
 
@@ -129,7 +129,7 @@ Feature:
     Given I am an anonymous user
     And I am on the homepage
     Then I should see the link "Contact Portal Support"
-    And I should see "Arbitrary support menu link"
+    And I should see the text "Arbitrary support menu link"
     # Tour has been disabled.
     But I should not see the link "Take a tour"
 
@@ -157,6 +157,6 @@ Feature:
     When I am on the homepage
     Then I should see the link "Contact Portal Support"
     # The custom link has been deleted.
-    But I should not see "Arbitrary support menu link"
+    But I should not see the text "Arbitrary support menu link"
     # Tour has been re-enabled.
     And I should see the link "Take a tour"

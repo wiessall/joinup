@@ -4,7 +4,7 @@ Feature: User profile
   A moderator must be able to edit any user account.
 
   Scenario: A logged-in user can navigate to his own profile and edit it.
-    Given users:
+    Given the following users:
       | Username             | E-mail              |
       | Leonardo Da Vinci    | foo@bar.com         |
       | Domenico Ghirlandaio | domedome@firenze.it |
@@ -92,7 +92,7 @@ Feature: User profile
     Then I should see the text "Country of origin: Belgium" in the "Header" region
 
   Scenario: A moderator can navigate to any user's profile and edit it.
-    Given users:
+    Given the following users:
       | Username          | E-mail                | Roles     |
       | Leonardo Da Vinci | leonardo@example.com  |           |
       | Mighty mod        | moderator@example.com | moderator |
@@ -122,31 +122,31 @@ Feature: User profile
       | body      | A moderator has edited your user profile on Interoperable Europe Portal. Please check your profile to verify the changes done. |
 
   Scenario: The user public profile page shows the content he's author of or is member of.
-    Given users:
+    Given the following users:
       | Username          | E-mail                        | First name | Family name |
       | Corwin Robert     | corwin.robert@example.com     |            |             |
       | Anise Edwardson   | anise.edwardson@example.com   |            |             |
       | Jayson Granger    | jayson.granger@example.com    |            |             |
       | Clarette Fairburn | clarette.fairburn@example.com | Clarette   | Fairburn    |
-    And collection content:
+    And the following "collection" content:
       | title                 | description                           | logo     | creation date    |
       | Botanic E.D.E.N.      | European Deep Earth Nurturing project | logo.png | 2017-02-23 10:00 |
       | Ethic flower handling | Because even flowers have feelings.   | logo.png | 2017-02-23 12:00 |
-    Given solution content:
+    Given the following "solution" content:
       | title              | collection            | description                                     | logo     | creation date    |
       | E.C.O. fertilizers | Botanic E.D.E.N.      | Ecologic cool organic fertilizers production.   | logo.png | 2017-02-23 13:00 |
       | SOUND project      | Ethic flower handling | Music playlist for growing flowers with rhythm. | logo.png | 2017-02-23 14:01 |
-    And discussion content:
+    And the following "discussion" content:
       | title                          | author          | collection            | created          |
       | Repopulating blue iris         | Corwin Robert   | Botanic E.D.E.N.      | 2018-06-15 16:00 |
       | Best topsoil for plant comfort | Anise Edwardson | Ethic flower handling | 2018-09-01 19:30 |
-    And document content:
+    And the following "document" content:
       | title                    | author        | collection       | created          |
       | Cherry blossoms schedule | Corwin Robert | Botanic E.D.E.N. | 2017-05-13 16:00 |
-    And event content:
+    And the following "event" content:
       | title                | author        | collection       | created          |
       | Spring blossom party | Corwin Robert | Botanic E.D.E.N. | 2018-06-27 18:00 |
-    And news content:
+    And the following "news" content:
       | title                         | author        | collection       | created         |
       | Discovered new flower species | Corwin Robert | Botanic E.D.E.N. | 2018-11-15 9:01 |
     And the following collection user membership:
@@ -173,7 +173,7 @@ Feature: User profile
     And I should see the following facet items "Collections, Discussion, Document, Event, News, Solution" in this order
 
   Scenario: The user profile page title should show the full name of the user.
-    Given users:
+    Given the following users:
       | Username   | E-mail                       | First name | Family name |
       | cgarnett67 | callista.garnett@example.com | Callista   | Garnett     |
       | delwin999  | deforest.elwin@example.com   |            |             |
@@ -194,10 +194,10 @@ Feature: User profile
     And I should not see the "Page title" region
 
   Scenario: The user profile page is updated when the user joins or leaves a collection
-    Given users:
+    Given the following users:
       | Username      | E-mail                           |
       | Korben Dallas | k.dallas@cabs.services.zorg.corp |
-    And collection content:
+    And the following "collection" content:
       | title                   | state     |
       | Federated Army Veterans | published |
     # Visit the user profile page for the first time. It should not yet be
@@ -251,28 +251,28 @@ Feature: User profile
     And I should not see the link "Persistent Logins"
 
   Scenario: See archived content in user profile.
-    Given users:
+    Given the following users:
       | Username          | E-mail                        |
       | Janny Robert      | janny.robert@example.com      |
       | Clarise Edwardson | clarise.edwardson@example.com |
-    And collection content:
+    And the following "collection" content:
       | title         | description                           | logo     | state     | creation date    | author            |
       | Lake E.D.E.N. | European Deep Earth Nurturing project | logo.png | published | 2017-02-23 10:00 | Janny Robert      |
       | Rose is red   | Better descriptions ever              | logo.png | published | 2017-02-23 10:00 | Clarise Edwardson |
       | Lone handling | Because even flowers have feelings.   | logo.png | archived  | 2017-02-23 12:00 | Janny Robert      |
-    Given solution content:
+    Given the following "solution" content:
       | title          | collection    | state     | creation date   | author       |
       | Sugar is sweet | Lake E.D.E.N. | archived  | 2015-03-03T8:00 | Janny Robert |
       | Salt is salty  | Lake E.D.E.N. | published | 2015-02-03T7:00 | Janny Robert |
-    And discussion content:
+    And the following "discussion" content:
       | title                   | author       | collection    | state     | created          |
       | Repopulating green iris | Janny Robert | Lake E.D.E.N. | published | 2018-06-15 16:00 |
       | Best plant comfort      | Janny Robert | Lone handling | published | 2018-09-01 19:30 |
-    And document content:
+    And the following "document" content:
       | title           | author       | collection    | state     | created          |
       | Cherry schedule | Janny Robert | Lake E.D.E.N. | published | 2017-05-13 16:00 |
       | Cherry arch     | Janny Robert | Lake E.D.E.N. | archived  | 2017-05-13 16:00 |
-    And news content:
+    And the following "news" content:
       | title             | author       | collection    | state     | created         |
       | Discovered flower | Janny Robert | Lake E.D.E.N. | published | 2018-11-15 9:01 |
       | Purple flower     | Janny Robert | Lake E.D.E.N. | published | 2018-11-15 9:01 |
@@ -315,7 +315,7 @@ Feature: User profile
   @javascript
   # Regression test for ticket ISAICP-9586.
   Scenario: Search widget does not save facet settings.
-    Given users:
+    Given the following users:
       | Username         | E-mail                       | First name | Family name |
       | Lion Robert      | lion.robert@example.com      | Lion       | Robert      |
     When I am logged in as a moderator
@@ -351,10 +351,10 @@ Feature: User profile
 
   # Regression test for ticket ISAICP-10510.
   Scenario: User profile with orphaned nationality reference does not cause errors
-    Given spatial terms:
+    Given the following "spatial" terms:
       | name    |
       | Valeron |
-    Given users:
+    Given the following users:
       | Username      | E-mail                    | First name | Family name | Business title      | Nationality |
       | Jane Doe      | jane.doe@example.com      | Jane       | Doe         | Software Engineer   | Valeron     |
     # Delete the term we just created, leaving a stale reference in the user.
@@ -371,7 +371,7 @@ Feature: User profile
     But I should not see the text "Country of origin:"
 
   Scenario: The URL determines the interface language and login redirects to the user preferred language.
-    Given users:
+    Given the following users:
       | Username      | E-mail             | First name | Family name |
       | Pierre Martin | pierre@example.com | Pierre     | Martin      |
     When I am logged in as "Pierre Martin"

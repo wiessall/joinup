@@ -4,29 +4,29 @@ Feature:
   I need to be able to move content between groups
 
   Scenario: Use the content management UI
-    Given collection content:
+    Given the following "collection" content:
       | title        |
       | Vintage Art  |
       | Decadent Art |
     And user:
       | Username | Vasundhara Commentator |
-    And document content:
+    And the following "document" content:
       | title             | document type | collection  | state     | changed          |
       | The Panama Papers | Document      | Vintage Art | published | 2019-11-19 20:00 |
       | The Area 51 File  | Document      | Vintage Art | draft     | 2018-11-19 21:00 |
-    And discussion content:
+    And the following "discussion" content:
       | title               | collection  | created    | published at | changed    |
       | The Ultimate Debate | Vintage Art | 2016-11-19 | 2016-11-19   | 2016-11-19 |
     And comments:
       | message             | author                 | parent              | created          | changed    |
       | Conducting a Debate | Vasundhara Commentator | The Ultimate Debate | 2017-06-12 19:00 | 1497294000 |
-    And event content:
+    And the following "event" content:
       | title                    | collection  |
       | Version 2.0 Launch Party | Vintage Art |
-    And news content:
+    And the following "news" content:
       | title                              | collection  |
       | Exports Leap Despite Currency Gain | Vintage Art |
-    And custom_page content:
+    And the following "custom_page" content:
       | title                | collection  | changed          |
       | HOWTOs               | Vintage Art | 2016-11-19 20:00 |
       | Looking for Support? | Vintage Art | 2015-11-19 20:00 |
@@ -58,11 +58,11 @@ Feature:
     And I select "Archive content" from "Action"
     And I press "Apply to selected items"
     And I wait for the batch process to finish
-    Then I should see "Proceeded updates to 1 entities"
-    And I should see "19/11/2019 - 20:00"
+    Then I should see the text "Proceeded updates to 1 entities"
+    And I should see the text "19/11/2019 - 20:00"
 
     # Last activity for discussion.
-    And I should see "12/06/2017 - 19:00"
+    And I should see the text "12/06/2017 - 19:00"
 
     Given I am logged in as a moderator
 
@@ -103,8 +103,8 @@ Feature:
     And I select "Archive content" from "Action"
     And I press "Apply to selected items"
     And I wait for the batch process to finish
-    Then I should see "Proceeded updates to 1 entities"
-    And I should see "12/06/2017 - 19:00"
+    Then I should see the text "Proceeded updates to 1 entities"
+    And I should see the text "12/06/2017 - 19:00"
     And the string value of the "revision_log" field in "The Ultimate Debate" content should be "Updated state to 'archived' by VBO action, from revision ID '<placeholder>' with state 'published'."
 
     # Check archived state.
@@ -119,15 +119,15 @@ Feature:
     And I select "Unarchive content" from "Action"
     And I press "Apply to selected items"
     And I wait for the batch process to finish
-    Then I should see "Proceeded updates to 2 entities"
+    Then I should see the text "Proceeded updates to 2 entities"
 
     # Check published state.
     Given I select "published" from "State"
     And I press "Apply"
     Then I should see the link "The Panama Papers"
     And I should see the link "The Ultimate Debate"
-    And I should see "19/11/2019 - 20:00"
-    And I should see "12/06/2017 - 19:00"
+    And I should see the text "19/11/2019 - 20:00"
+    And I should see the text "12/06/2017 - 19:00"
     And the string value of the "revision_log" field in "The Ultimate Debate" content should be "Updated state to 'published' by VBO action, from revision ID '<placeholder>' with state 'archived'."
 
     # Check warning message.
@@ -136,8 +136,8 @@ Feature:
     And I select "Archive content" from "Action"
     And I press "Apply to selected items"
     And I wait for the batch process to finish
-    Then I should see "Proceeded updates to 1 entities"
-    And I should see "19/11/2016 - 20:00"
+    Then I should see the text "Proceeded updates to 1 entities"
+    And I should see the text "19/11/2016 - 20:00"
 
     # Select rows.
     Given I select the "The Panama Papers" row
@@ -156,26 +156,26 @@ Feature:
     When I press "Apply"
     And I wait for the batch process to finish
 
-    Then I should see "Document The Panama Papers group was changed to Decadent Art."
+    Then I should see the text "Document The Panama Papers group was changed to Decadent Art."
     And the "Decadent Art" collection should have a community content titled "The Panama Papers"
 
-    Then I should see "News Exports Leap Despite Currency Gain group was changed to Decadent Art."
+    Then I should see the text "News Exports Leap Despite Currency Gain group was changed to Decadent Art."
     And the "Decadent Art" collection should have a community content titled "Exports Leap Despite Currency Gain"
 
-    And I should see "Discussion The Ultimate Debate group was changed to Decadent Art."
+    And I should see the text "Discussion The Ultimate Debate group was changed to Decadent Art."
     And the "Decadent Art" collection should have a community content titled "The Ultimate Debate"
 
-    And I should see "Event Version 2.0 Launch Party group was changed to Decadent Art."
+    And I should see the text "Event Version 2.0 Launch Party group was changed to Decadent Art."
     And the "Decadent Art" collection should have a community content titled "Version 2.0 Launch Party"
 
-    And I should see "Custom page HOWTOs group was changed to Decadent Art."
+    And I should see the text "Custom page HOWTOs group was changed to Decadent Art."
     And the "Decadent Art" collection should have a custom page titled "HOWTOs"
 
     # The child page was moved too, even only its parent has been selected.
-    And I should see "Child Custom page Looking for Support? group was changed too."
+    And I should see the text "Child Custom page Looking for Support? group was changed too."
     And the "Decadent Art" collection should have a custom page titled "Looking for Support?"
 
-    And I should see "Action processing results: Move to other group (5)."
+    And I should see the text "Action processing results: Move to other group (5)."
 
     # Visit the source collection.
     Given I go to the "Vintage Art" collection
@@ -207,8 +207,8 @@ Feature:
     And I fill in "Select the destination collection or solution" with "Vintage Art"
     And I press "Apply"
     And I wait for the batch process to finish
-    Then I should see "Custom page Looking for Support? group was changed to Vintage Art."
-    And I should see "Action processing results: Move to other group (1)."
+    Then I should see the text "Custom page Looking for Support? group was changed to Vintage Art."
+    And I should see the text "Action processing results: Move to other group (1)."
     And the "Vintage Art" collection should have a custom page titled "Looking for Support?"
 
     Given I go to the "Vintage Art" collection
@@ -217,13 +217,13 @@ Feature:
     Then I should not see the "Looking for Support?" tile
 
   Scenario: Move a custom page to a solution
-    Given collection content:
+    Given the following "collection" content:
       | title       |
       | Vintage Art |
-    Given solution content:
+    Given the following "solution" content:
       | title                |
       | Vintage Solution Art |
-    And custom_page content:
+    And the following "custom_page" content:
       | title                       | collection  | changed          |
       | Will be moved to a solution | Vintage Art | 2015-11-19 20:00 |
 
@@ -236,15 +236,15 @@ Feature:
     And I fill in "Select the destination collection or solution" with "Vintage Solution Art"
     When I press "Apply"
     And I wait for the batch process to finish
-    Then I should see "Custom page Will be moved to a solution group was changed to Vintage Solution Art."
+    Then I should see the text "Custom page Will be moved to a solution group was changed to Vintage Solution Art."
     Then the "Vintage Solution Art" solution should have a community content titled "Will be moved to a solution"
 
   @javascript
   Scenario Outline: Able to select all items on the content management UI
-    Given collection content:
+    Given the following "collection" content:
       | title       |
       | Vintage Art |
-    And event content:
+    And the following "event" content:
       | title                   | collection  |
       | The Panama Papers Party | Vintage Art |
       | The Area 51 Party       | Vintage Art |
@@ -265,21 +265,21 @@ Feature:
       | logged in as a user with the moderator role                | -- Select action -- , Move to other group, Archive content, Unarchive content |
 
   Scenario: Releases can only be transferred to solutions.
-    Given collection content:
+    Given the following "collection" content:
       | title        |
       | Collection 1 |
       | Collection 2 |
-    Given solution content:
+    Given the following "solution" content:
       | title      | collection   |
       | Solution 1 | Collection 1 |
       | Solution 2 | Collection 2 |
-    And event content:
+    And the following "event" content:
       | title   | solution   |
       | Event 1 | Solution 1 |
-    And release content:
+    And the following "release" content:
       | title     | release number | release notes | is version of |
       | Release 1 | 1.0            | Release notes | Solution 1    |
-    And distribution content:
+    And the following "distribution" content:
       | title          | description | release   | resources          |
       | Distribution 1 | Description | Release 1 | http://example.com |
 
@@ -297,9 +297,9 @@ Feature:
     And I fill in "Select the destination collection or solution" with "Collection 1"
     And I press "Apply"
 
-    Then I should see "Release Release 1 was not moved as Collection 1 is a collection. Releases can only be moved to a different solution."
-    Then I should see "Distribution Distribution 1 was not moved in Collection 1 as it is not a standalone distribution. Please, move the parent release instead."
-    And I should see "Event Event 1 group was changed to Collection 1."
+    Then I should see the text "Release Release 1 was not moved as Collection 1 is a collection. Releases can only be moved to a different solution."
+    Then I should see the text "Distribution Distribution 1 was not moved in Collection 1 as it is not a standalone distribution. Please, move the parent release instead."
+    And I should see the text "Event Event 1 group was changed to Collection 1."
 
     When I select the "Release 1 1.0" row
     And I select "Move to other group" from "Action"
@@ -307,9 +307,9 @@ Feature:
     And I fill in "Select the destination collection or solution" with "Solution 2"
     And I press "Apply"
 
-    Then I should see "Release Release 1 group was changed to Solution 2."
+    Then I should see the text "Release Release 1 group was changed to Solution 2."
     # The child distribution should have been moved too.
-    And I should see "Distribution Distribution 1 group was changed to Solution 2."
+    And I should see the text "Distribution Distribution 1 group was changed to Solution 2."
 
     # Revisit the page to get rid of the messages.
     When I go to the manage content page of "Solution 1"

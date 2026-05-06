@@ -5,10 +5,10 @@ Feature: Report inappropriate content
   I want to provide a "Report" button on community content
 
   Scenario Outline: Report inappropriate community content
-    Given collection content:
+    Given the following "collection" content:
       | title            |
       | Deployment tools |
-    And "<type>" content:
+    And the following "<type>" content:
       | title   | body   | collection       |
       | <title> | <body> | Deployment tools |
     Given I am not logged in
@@ -27,7 +27,7 @@ Feature: Report inappropriate content
       | Subject        | Invalid content |
       | Message        | Spam            |
     When I press "Submit"
-    And I should see "<title>"
+    And I should see the text "<title>"
 
     Examples:
       | type        | title                        | body                    |

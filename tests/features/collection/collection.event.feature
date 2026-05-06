@@ -6,14 +6,14 @@ Feature: As a user of the website
   # @covers \Drupal\joinup_search\EventSubscriber\SearchApiFieldListingOrder::queryAlter()
   # @covers \_joinup_search_search_api_has_condition()
   Scenario: Events should be filterable by future/past/my filters.
-    Given users:
+    Given the following users:
       | Username       | E-mail                      |
       | katerpillar    | kater.pillar@example.com    |
       | trustysidekick | trusty.sidekick@example.com |
-    And collection content:
+    And the following "collection" content:
       | title      |
       | Fairy Tail |
-    And event content:
+    And the following "event" content:
       | title                     | collection | start date   | end date            | created    | author         |
       | Sweet Palm                | Fairy Tail | now -1 years | now -1 years +1 day | now -5 day | katerpillar    |
       | Melted Hairdresser        | Fairy Tail | now -2 day   | now +2 day          | now -4 day | katerpillar    |
@@ -21,7 +21,7 @@ Feature: As a user of the website
       | Walking Unofficial Humans | Fairy Tail | now -4 day   | now -2 day          | now        | trustysidekick |
       # The "Spring Freezing" event is associated with the anonymous user.
       | Spring Freezing           | Fairy Tail | now +1 week  | now +1 week         | now -6 day |                |
-    And document content:
+    And the following "document" content:
       | title       | collection | created   |
       | Yellow Zeus | Fairy Tail | yesterday |
 

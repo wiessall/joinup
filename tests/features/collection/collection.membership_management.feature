@@ -2,7 +2,7 @@
 Feature: Tests membership to Interoperable Europe Portal collection.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                   |
       | An arbitrary collection |
 
@@ -24,7 +24,7 @@ Feature: Tests membership to Interoperable Europe Portal collection.
   Scenario: As a moderator I am able to revoke the membership of a user to any
     arbitrary collection except 'Interoperable Europe Portal'.
 
-    Given users:
+    Given the following users:
       | Username | E-mail           |
       | joe      | joe@example.com  |
       | jane     | jane@example.com |
@@ -41,8 +41,8 @@ Feature: Tests membership to Interoperable Europe Portal collection.
 
     And I press "Apply to selected items"
     Then I should see the heading "Are you sure you want to delete the selected membership from the 'An arbitrary collection' collection?"
-    And I should see "The member joe will be deleted from the 'An arbitrary collection' collection."
-    And I should see "This action cannot be undone."
+    And I should see the text "The member joe will be deleted from the 'An arbitrary collection' collection."
+    And I should see the text "This action cannot be undone."
 
     When I press "Confirm"
     Then I should see the success message "The member joe has been deleted from the 'An arbitrary collection' collection."

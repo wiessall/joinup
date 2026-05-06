@@ -5,11 +5,11 @@ Feature: Contact Information moderation
   I need to be able to transit the contact information from one state to another
 
   Scenario: Publish, update, request changes, publish again and ask to delete contact information.
-    Given users:
+    Given the following users:
       | Username              |
       | Sæwine Cynebald       |
       | Secondary facilitator |
-    And collection content:
+    And the following "collection" content:
       | title                        | description                                   | logo     | topic       | state |
       | Games of the Anglo-Saxon age | There were many different board games played. | logo.png | E-inclusion | draft |
     And collection user membership:
@@ -24,7 +24,7 @@ Feature: Contact Information moderation
     And I fill in "Name" with "Mildþryð Mildgyð"
     And I fill in "E-mail address" with "mildred@anglo-saxon-museum.co.uk"
     And I press "Create contact information"
-    Then I should see "Mildþryð Mildgyð"
+    Then I should see the text "Mildþryð Mildgyð"
     When I press "Save as draft"
     Then I should see the heading "Games of the Anglo-Saxon age"
 
@@ -97,17 +97,17 @@ Feature: Contact Information moderation
     Then I should not see the link "EU healthy group"
 
   Scenario: Owners can request deletion when they are not facilitators and facilitators can delete.
-    Given owner content:
+    Given the following "owner" content:
       | name        | owner type |
       | Saint Louis | Company    |
-    Given users:
+    Given the following users:
       | Username        | First name | Family name |
       | Sown Carnberry  | Sown       | Carnberry   |
       | Saint Louis CEO | George     | McLouis     |
-    And contact_information content:
+    And the following "contact_information" content:
       | name        | email            | author         | state     |
       | Secreteriat | info@example.com | Sown Carnberry | validated |
-    And collection content:
+    And the following "collection" content:
       | title                 | description        | logo     | owner       | contact information |
       | Saint Louis solutions | A software company | logo.png | Saint Louis | Secreteriat         |
     And the following collection user memberships:

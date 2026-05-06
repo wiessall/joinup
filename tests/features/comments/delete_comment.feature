@@ -3,15 +3,15 @@ Feature: Delete comments
   As a visitor of the website I can leave a comment on community content.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                 | logo     |
       | Semantic web fanatics | logo.png |
-    And users:
+    And the following users:
       | Username             | E-mail                        | First name  | Family name |
       | Tim Berners Lee      | tim.berners-lee@example.com   | Tim Berners | Lee         |
       | Vicky visitor        | vicky.visitor@example.com     | Vicky       | visitor     |
       | Do Re Mi Facilitator | doremifacilitator@example.com | Do Re Mi    | Facilitator |
-    And news content:
+    And the following "news" content:
       | title                          | body                              | collection            |
       | RDF Schemas for government use | Home for DCAT, ADMS, and the like | Semantic web fanatics |
     And comments:
@@ -26,7 +26,7 @@ Feature: Delete comments
     Given I am logged in as "Tim Berners Lee"
     When I go to the "RDF Schemas for government use" news
     And I click "Delete" in comment #1
-    Then I should see "Are you sure you want to delete the comment ADMS is awesome?"
+    Then I should see the text "Are you sure you want to delete the comment ADMS is awesome?"
 
     # As another user I don't have access.
     Given I am logged in as "Vicky visitor"
@@ -37,13 +37,13 @@ Feature: Delete comments
     Given I am logged in as a user with the "moderator" role
     When I go to the "RDF Schemas for government use" news
     And I click "Delete" in comment #1
-    Then I should see "Are you sure you want to delete the comment ADMS is awesome?"
+    Then I should see the text "Are you sure you want to delete the comment ADMS is awesome?"
 
     # As collection facilitator of the comment I can delete the comment.
     Given I am logged in as "Do Re Mi Facilitator"
     When I go to the "RDF Schemas for government use" news
     And I click "Delete" in comment #1
-    Then I should see "Are you sure you want to delete the comment ADMS is awesome?"
+    Then I should see the text "Are you sure you want to delete the comment ADMS is awesome?"
     Then I press "Delete"
     Then the following email should have been sent:
       | recipient | Tim Berners Lee                                                                                                                                                   |

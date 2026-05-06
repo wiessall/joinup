@@ -5,11 +5,11 @@ Feature: Share discussion
   In order to have an overview of its content
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                         | description       | state     |
       | Development through bricolage | Bricolage 101.    | published |
       | Carrots love tomatoes         | Truth is out now. | published |
-    And discussion content:
+    And the following "discussion" content:
       | title        | state     | collection                    | shared on             |
       | Tool cabinet | published | Development through bricolage | Carrots love tomatoes |
 
@@ -23,7 +23,7 @@ Feature: Share discussion
     Then I should see the "Tool cabinet" tile
 
   Scenario: Single shared archived discussion should be displayed in listing.
-    And discussion content:
+    And the following "discussion" content:
       | title       | state    | collection            | shared on                     |
       | Chest combo | archived | Carrots love tomatoes | Development through bricolage |
 

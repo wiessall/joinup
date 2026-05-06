@@ -5,7 +5,7 @@ Feature: Collection membership administration
   I need to be able to manage collection members
 
   Background:
-    And users:
+    And the following users:
       | Username          | Roles     | E-mail                        | First name | Family name |
       # Authenticated user.
       | Lisa Cuddy        |           | lisa_cuddy@example.com        | Lisa       | Cuddy       |
@@ -18,7 +18,7 @@ Feature: Collection membership administration
       | Ben Dover         |           | bendover@example.com          | Ben        | Dover       |
       # Moderator.
       | Daniel Moder      | moderator | daniel_moder@example.com      | Daniel     | Moder       |
-    And collection content:
+    And the following "collection" content:
       | title             | closed |
       | Medical diagnosis | yes    |
     And the following collection user memberships:
@@ -139,8 +139,8 @@ Feature: Collection membership administration
 
     When I press "Apply to selected items"
     Then I should see the heading "Are you sure you want to delete the selected membership from the 'Medical diagnosis' collection?"
-    And I should see "The member Kathie Cumbershot will be deleted from the 'Medical diagnosis' collection."
-    And I should see "This action cannot be undone."
+    And I should see the text "The member Kathie Cumbershot will be deleted from the 'Medical diagnosis' collection."
+    And I should see the text "This action cannot be undone."
 
     Given I click "Cancel"
     Then I should see the heading "Members"
@@ -167,17 +167,17 @@ Feature: Collection membership administration
     When I select "Delete the selected membership(s)" from "Action"
     And I press "Apply to selected items"
     Then I should see the heading "Are you sure you want to delete the selected memberships from the 'Medical diagnosis' collection?"
-    And I should see "The following members:"
-    And I should see "Gregory House"
-    And I should see "Turkey Ham"
-    And I should see "will be deleted from the 'Medical diagnosis' collection."
-    And I should see "This action cannot be undone."
+    And I should see the text "The following members:"
+    And I should see the text "Gregory House"
+    And I should see the text "Turkey Ham"
+    And I should see the text "will be deleted from the 'Medical diagnosis' collection."
+    And I should see the text "This action cannot be undone."
 
     Given I press "Confirm"
     Then I should see the success message "The following members were removed from the 'Medical diagnosis' collection: Gregory House, Turkey Ham"
     And Log entry with the message "Membership for Kathie Cumbershot in Medical diagnosis has been deleted by Lisa Cuddy." should exist.
     And Log entry with the message "Membership for Turkey Ham in Medical diagnosis has been deleted by Lisa Cuddy." should exist.
-    And I should see "Lisa Cuddy" in the "Lisa Cuddy" row
+    And I should see the text "Lisa Cuddy" in the "Lisa Cuddy" row
 
     # Check new privileges.
     When I am logged in as "Kathie Cumbershot"
@@ -188,7 +188,7 @@ Feature: Collection membership administration
 
   Scenario: Block a membership
     # With CoC, an email should be sent.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title                 | collection        | state     |
       | Medical diagnosis CoC | Medical diagnosis | published |
     And the "Code of Conduct" setting of the "Medical diagnosis" collection is set to "Medical diagnosis CoC" "custom page"
@@ -341,7 +341,7 @@ Feature: Collection membership administration
     Then I should see the link "Invite members"
 
   Scenario: Sort member administration bulk form by full user name
-    Given users:
+    Given the following users:
       | Username | Roles | E-mail                   | First name | Family name |
       | qux98765 |       | eric_foreman@example.com | Eric       | Foreman     |
       | xyzzy123 |       | eric_drexler@example.com | Eric       | Drexler     |
@@ -373,7 +373,7 @@ Feature: Collection membership administration
       | Eric Drexler      |
 
   Scenario: Privileged members should be allowed to invite users to a collection.
-    Given users:
+    Given the following users:
       | Username  | E-mail                 | First name | Family name |
       | jbelanger | j.belanger@example.com | Jeannette  | Belanger    |
       | dwightone | dwight1@example.com    | Christian  | Dwight      |
@@ -446,7 +446,7 @@ Feature: Collection membership administration
     Then I should see the link "Invite members"
 
   Scenario: User needs to accept Code of Conduct on the confirmation form.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title                 | collection        |
       | Medical diagnosis CoC | Medical diagnosis |
     And the "Code of Conduct" setting of the "Medical diagnosis" collection is set to "Medical diagnosis CoC" "custom page"
@@ -470,7 +470,7 @@ Feature: Collection membership administration
     Then I should see the text "You have been promoted to member."
 
   Scenario: Invitations can not be sent for pending users.
-    Given users:
+    Given the following users:
       | Username       | E-mail                     | First name | Family name |
       | pending_member | pending_member@example.com | Pending    | Member      |
     And the following collection user membership:

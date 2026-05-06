@@ -2,16 +2,16 @@
 Feature: Translating news
 
   Background:
-    Given users:
+    Given the following users:
       | Username    | Roles     |
       | Flora Mod   | moderator |
       | Lee Facil   |           |
       | John Member |           |
       | Ross Auth   |           |
-    And collection content:
+    And the following "collection" content:
       | title           |
       | Test collection |
-    And solution content:
+    And the following "solution" content:
       | title         | collection      |
       | Test solution | Test collection |
     And the following collection user memberships:
@@ -22,7 +22,7 @@ Feature: Translating news
       | solution      | user        | roles       |
       | Test solution | Lee Facil   | facilitator |
       | Test solution | John Member |             |
-    And news content:
+    And the following "news" content:
       | title                | collection      | solution      | field_paragraphs_body     |
       | Test collection news | Test collection |               | This is test news content |
       | Test solution news   |                 | Test solution | This is test news content |
@@ -68,14 +68,14 @@ Feature: Translating news
     And I fill in "File description" with "Plik testowy"
     And I press "Save (all translations)"
     Then I should see the success message "News Krótki tytuł newsa has been updated."
-    And I should see "Krótki tytuł newsa"
+    And I should see the text "Krótki tytuł newsa"
     And I should see the heading "Testowy news"
-    And I should see "To jest polskie tłumaczenie newsa"
-    And I should see "Plik testowy"
+    And I should see the text "To jest polskie tłumaczenie newsa"
+    And I should see the text "Plik testowy"
 
     # Edit translation.
     When I click "Translate" in the "Entity actions" region
-    Then I should see "Krótki tytuł newsa"
+    Then I should see the text "Krótki tytuł newsa"
     When I click "Edit" in the "Polish" row
     And I fill in "Headline" with "Zaktualizowany news"
     And I fill in "Short title" with "Zakt. news"
@@ -87,11 +87,11 @@ Feature: Translating news
     # Delete translation.
     When I click "Translate" in the "Entity actions" region
     And I click "Delete" in the "Polish" row
-    Then I should see "Are you sure you want to delete the Polish translation of the content item Zakt. news?"
+    Then I should see the text "Are you sure you want to delete the Polish translation of the content item Zakt. news?"
     When I press "Delete Polish translation"
     Then I should see the success message "Polish translation of the News Zakt. news has been deleted."
     When I click "Translate" in the "Entity actions" region
-    Then I should not see "Edit" in the "Polish" row
+    Then I should not see the text "Edit" in the "Polish" row
     And I should see the "Add" in the "Polish" row
 
     Examples:

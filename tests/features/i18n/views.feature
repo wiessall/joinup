@@ -11,19 +11,19 @@ Feature: Views display translated entities correctly.
       | Complete Solution | el       | Πλήρης λύση         |
     When I am an anonymous user
     And I visit "/solution-classification"
-    Then I should see "Complete Solution"
+    Then I should see the text "Complete Solution"
     When I visit "/el/solution-classification"
-    Then I should see "Πλήρης λύση"
+    Then I should see the text "Πλήρης λύση"
 
   # covers custom_pages view.
   Scenario: EU language terms and custom pages are prepared for entity reference views.
-    Given collection content:
+    Given the following "collection" content:
       | title          |
       | Views Test Hub |
-    And solution content:
+    And the following "solution" content:
       | title               | collection     |
       | Views Test Solution | Views Test Hub |
-    And custom_page content:
+    And the following "custom_page" content:
       | title                         | collection     | solution            | state     |
       | Collection page with EN title | Views Test Hub |                     | published |
       | Solution page with EN title   |                | Views Test Solution | published |
@@ -40,10 +40,10 @@ Feature: Views display translated entities correctly.
 
   # covers glossary view.
   Scenario: Glossary terms are translated and correctly listed.
-    Given collection content:
+    Given the following "collection" content:
       | title             | state     |
       | A World of Things | published |
-    And glossary content:
+    And the following "glossary" content:
       | title    | synonyms | summary             | definition                       | collection        |
       | Alphabet | ABC      | Summary of Alphabet | Long, long body definition field | A World of Things |
     And the following glossary entity translations:
@@ -55,18 +55,18 @@ Feature: Views display translated entities correctly.
     Then I should see the link "Alphabet"
     And I go to the "fr" version of the "A World of Things" collection
     And I click "Glossary"
-    Then I should see "Alphabète"
+    Then I should see the text "Alphabète"
 
   # covers assessment_reports view.
   @demoAssessment
   Scenario: Assessment report nodes are prepared for the assessment reports block view.
-    Given collection content:
+    Given the following "collection" content:
       | title          |
       | Assessment Hub |
-    And assessment_report content:
+    And the following "assessment_report" content:
       | title         | organization         | collection     |
       | Annual Report | default organization | Assessment Hub |
-    And assessment_report content:
+    And the following "assessment_report" content:
       | title          | organization         | collection     | langcode |
       | Rapport annuel | default organization | Assessment Hub | fr       |
     And the following locale string translations:
@@ -76,18 +76,18 @@ Feature: Views display translated entities correctly.
     When I am an anonymous user
     And I go to the "Interoperability assessments space" collection
     And I click "Assessment reports"
-    Then I should see "Annual Report"
+    Then I should see the text "Annual Report"
     When I go to the "fr" version of the "Interoperability assessments space" collection
     And I click "Assessment reports"
-    Then I should see "Rapport annuel"
+    Then I should see the text "Rapport annuel"
 
   # covers latest_news view.
   # covers in_the_spotlight view.
   Scenario: News content is prepared for the latest news and in the spotlight blocks.
-    Given collection content:
+    Given the following "collection" content:
       | title        |
       | News Central |
-    And news content:
+    And the following "news" content:
       | title          | headline       | collection   | state     |
       | Breaking Story | Latest updates | News Central | published |
     And the following news entity translations:
@@ -97,6 +97,6 @@ Feature: Views display translated entities correctly.
       | type    | label          |
       | content | Breaking Story |
     When I am on the homepage
-    Then I should see "Breaking Story"
+    Then I should see the text "Breaking Story"
     When I visit "/el"
-    Then I should see "Breaking GR Story"
+    Then I should see the text "Breaking GR Story"

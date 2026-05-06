@@ -5,13 +5,13 @@ Feature: Moderate community content
   I need to be able to see a list of content that requires moderation
 
   Scenario: Content moderation overview
-    Given collection content:
+    Given the following "collection" content:
       | title               | content_creation | group_moderation |
       | Black hole research | members          | yes              |
-    And solution content:
+    And the following "solution" content:
       | title                 | collection          |
       | Survey For Supernovae | Black hole research |
-    And users:
+    And the following users:
       | Username       | E-mail                   | First name | Family name |
       | Marco Farfarer | marco.farfar@example.com | Marco      | Farfarer    |
 
@@ -27,7 +27,7 @@ Feature: Moderate community content
 
     # Add community content of all possible types in all possible states, to
     # both the collection and solution.
-    Given discussion content:
+    Given the following "discussion" content:
       | title                         | body                 | collection          | solution              | state        | author         |
       | The information paradox       | Info Paradox         | Black hole research |                       | needs update | Marco Farfarer |
       | Black-body spectrum radiation | Hawking radiation    | Black hole research |                       | proposed     | Marco Farfarer |
@@ -37,7 +37,7 @@ Feature: Moderate community content
       | Cataclysmic variables         | Irregular brightness |                     | Survey For Supernovae | proposed     | Marco Farfarer |
       | Stellar flares                | Dim red dwarfs       |                     | Survey For Supernovae | published    | Marco Farfarer |
       | Upgrading CCD cameras         | Liquid cooled        |                     | Survey For Supernovae | archived     | Marco Farfarer |
-    And document content:
+    And the following "document" content:
       | title                         | abstract                      | collection          | solution              | state            |
       | A multiwavelength study       | Optical and infrared          | Black hole research |                       | draft            |
       | X-Ray Transient V616          | Weak ¹²CO absorption          | Black hole research |                       | needs update     |
@@ -49,7 +49,7 @@ Feature: Moderate community content
       | A spotted, nonspherical star  | Ellipsoidal variations        |                     | Survey For Supernovae | proposed         |
       | J-band light curves           | Wilson-Devinney modeling      |                     | Survey For Supernovae | published        |
       | Physics of the Neupert effect | Observed temporal correlation |                     | Survey For Supernovae | deletion request |
-    And event content:
+    And the following "event" content:
       | title                                   | abstract                     | field_paragraphs_body        | collection          | solution              | state            |
       | Thick-target collisional bremsstrahlung | Chromospheric evaporation    | Chromospheric evaporation    | Black hole research |                       | draft            |
       | Conductive cooling losses               | Single-loop geometry         | Single-loop geometry         | Black hole research |                       | needs update     |
@@ -61,7 +61,7 @@ Feature: Moderate community content
       | Cosmic-infrared background radiation    | Coming from all directions   | Coming from all directions   |                     | Survey For Supernovae | proposed         |
       | Evolution of dust-to-metals ratio       | Dust at high redshift        | Dust at high redshift        |                     | Survey For Supernovae | published        |
       | Total V-band extinction                 | Fitting the afterglow SED    | Fitting the afterglow SED    |                     | Survey For Supernovae | deletion request |
-    And news content:
+    And the following "news" content:
       | title                         | abstract                    | field_paragraphs_body | collection          | solution              | state            |
       | Magnetosphere boundary        |                             | Gas shock             | Black hole research |                       | draft            |
       | Ambient magnetized medium     | Dust depletion level        |                       | Black hole research |                       | needs update     |
@@ -170,7 +170,7 @@ Feature: Moderate community content
     When I move backward one page
     And I click the "Edit" link in the "Black-body spectrum radiation" moderation preview
     Then I should see the heading "Edit Discussion Black-body spectrum radiation"
-    And I should see "Before submitting your contribution, please ensure it adheres to the Portal’s contribution rules."
+    And I should see the text "Before submitting your contribution, please ensure it adheres to the Portal’s contribution rules."
 
     # Approve the content, and check that it no longer shows up in the moderation overview.
     When I press "Publish"
@@ -278,7 +278,7 @@ Feature: Moderate community content
     When I move backward one page
     And I click the "Edit" link in the "Cataclysmic variables" moderation preview
     Then I should see the heading "Edit Discussion Cataclysmic variables"
-    And I should see "Before submitting your contribution, please ensure it adheres to the Portal’s contribution rules."
+    And I should see the text "Before submitting your contribution, please ensure it adheres to the Portal’s contribution rules."
 
     # Approve the content, and check that it no longer shows up in the moderation overview.
     When I press "Publish"
@@ -303,23 +303,23 @@ Feature: Moderate community content
   @javascript
   Scenario: Filtering the content moderation overview
 
-    Given collection content:
+    Given the following "collection" content:
       | title         |
       | Neutron stars |
 
-    And discussion content:
+    And the following "discussion" content:
       | title                       | body                  | collection    | state    |
       | Rotation-powered pulsations | Millisecond pulsars   | Neutron stars | proposed |
       | The Recycling concept       | An epoch of accretion | Neutron stars | proposed |
-    And document content:
+    And the following "document" content:
       | title          | field_paragraphs_body         | collection    | state            |
       | Donor star     | Spun up to millisecond period | Neutron stars | proposed         |
       | High frequency | Slow 1.2 second spin          | Neutron stars | deletion request |
       | Cluster        | Eddington luminosity          | Neutron stars | deletion request |
-    And event content:
+    And the following "event" content:
       | title      | field_paragraphs_body | collection    | state    |
       | Accelerate | Wide binary           | Neutron stars | proposed |
-    And news content:
+    And the following "news" content:
       | title                   | body                             | collection    | state            |
       | Metal-rich star cluster | Standard pulsar recycling theory | Neutron stars | deletion request |
 
@@ -376,7 +376,7 @@ Feature: Moderate community content
 
     Given user:
       | Username | leo |
-    And collection content:
+    And the following "collection" content:
       | title               | group_moderation |
       | Black hole research | yes              |
     And the following collection user membership:

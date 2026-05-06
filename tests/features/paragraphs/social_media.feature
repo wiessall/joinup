@@ -4,13 +4,13 @@ Feature:
   I need to be able to use "Social media" paragraphs for content.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                 |
       | Paragraphs collection |
 
   @javascript
   Scenario: Call to action(s) has alignment setting.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title             | collection            | abstract             |
       | Social media page | Paragraphs collection | Social page abstract |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Social media page" title:
@@ -33,7 +33,7 @@ Feature:
 
   @javascript
   Scenario Outline: A paragraph of social media links is available.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title        | collection            |
       | Social media | Paragraphs collection |
     And I append "social_media" to "field_paragraphs_body" field in "node" entity with following "Social media" title:

@@ -6,7 +6,7 @@ Feature: Private message settings page management.
 
   @javascript
   Scenario: Testing setting page
-    Given users:
+    Given the following users:
       | Username     | E-mail           | First name | Family name |
       | Lisa_Like    | lisa@like.com    | Lisa       | Like        |
       | Gregory_Like | gregory@like.com | Gregory    | Like        |
@@ -25,7 +25,7 @@ Feature: Private message settings page management.
     Given I am logged in as "Lisa_Like"
     When I go to "/user/messages/settings"
     Then I should see the heading "Private Messages"
-    And I should see " There are no blocked users."
+    And I should see the text " There are no blocked users."
 
     # Test changing the settings.
     And the "Receive email notification of private messages" checkbox should be checked

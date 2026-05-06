@@ -1,0 +1,17 @@
+uuid: 0a139b1a-eb13-456b-bdf0-a6aa1c0873f1
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+    bundle_settings:
+      untranslatable_fields_hide: '1'
+id: assessment_statement.technical
+target_entity_type_id: assessment_statement
+target_bundle: technical
+default_langcode: current_interface
+language_alterable: true

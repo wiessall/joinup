@@ -2,20 +2,20 @@
 Feature: Translating distributions
 
   Background:
-    Given users:
+    Given the following users:
       | Username    | Roles     |
       | Flora Mod   | moderator |
       | Lee Facil   |           |
       | John Member |           |
       | Ross Auth   |           |
-    Given solution content:
+    Given the following "solution" content:
       | title         |
       | Test solution |
     And the following solution user memberships:
       | solution      | user        | roles       |
       | Test solution | Lee Facil   | facilitator |
       | Test solution | John Member |             |
-    And distribution content:
+    And the following "distribution" content:
       | title             | solution      |
       | Test distribution | Test solution |
 
@@ -50,11 +50,11 @@ Feature: Translating distributions
     When I press "Save (all translations)"
     Then I should see the success message "Distribution Testowa dystrybucja has been updated."
     And I should see the heading "Testowa dystrybucja"
-    And I should see "Opis dystrybucji"
+    And I should see the text "Opis dystrybucji"
 
     # Edit translation.
     When I click "Translate" in the "Entity actions" region
-    Then I should see "Testowa dystrybucja"
+    Then I should see the text "Testowa dystrybucja"
     When I click "Edit" in the "Polish" row
     And I fill in "Title" with "Zaktualizowana dystrybucja"
     And I press "Save (all translations)"
@@ -65,11 +65,11 @@ Feature: Translating distributions
     # Delete translation.
     When I click "Translate" in the "Entity actions" region
     And I click "Delete" in the "Polish" row
-    Then I should see "Are you sure you want to delete the Polish translation of the content item Zaktualizowana dystrybucja?"
+    Then I should see the text "Are you sure you want to delete the Polish translation of the content item Zaktualizowana dystrybucja?"
     When I press "Delete Polish translation"
     Then I should see the success message "Polish translation of the Distribution Zaktualizowana dystrybucja has been deleted."
     When I click "Translate" in the "Entity actions" region
-    Then I should not see "Edit" in the "Polish" row
+    Then I should not see the text "Edit" in the "Polish" row
     And I should see the "Add" in the "Polish" row
 
     Examples:

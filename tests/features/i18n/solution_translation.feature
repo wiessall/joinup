@@ -5,7 +5,7 @@ Feature: Translating a solution should not cause field group errors.
   I need to be able to translate solution nodes without encountering errors
 
   Scenario: Translating a solution does not trigger PHP warnings from field groups.
-    Given solution content:
+    Given the following "solution" content:
       | title                     | state     |
       | Translation Test Solution | published |
 

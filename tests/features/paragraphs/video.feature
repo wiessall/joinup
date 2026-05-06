@@ -2,13 +2,13 @@
 Feature: Video paragraph tests.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                 | state     | topic |
       | Paragraphs collection | published | HR    |
 
   @javascript
   Scenario: Collection facilitators can add video paragraphs.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title      | collection            | state     | abstract            |
       | Video page | Paragraphs collection | published | Video page abstract |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Video page" title:

@@ -1,0 +1,141 @@
+diff --git a/src/Drupal/DrupalExtension/Parser/EntityFieldParser.php b/src/Drupal/DrupalExtension/Parser/EntityFieldParser.php
+--- a/src/Drupal/DrupalExtension/Parser/EntityFieldParser.php
++++ b/src/Drupal/DrupalExtension/Parser/EntityFieldParser.php
+@@ -44,11 +44,23 @@
+   protected array $ignoredProperties = [];
+ 
+   /**
+-   * Constructs the parser for one entity-type / classifier pairing.
++   * Constructs the parser for one entity-type / bundle / classifier pairing.
++   *
++   * @param string $entityType
++   *   The entity type ID.
++   * @param \Drupal\Driver\Core\Field\FieldClassifierInterface $fieldClassifier
++   *   The field classifier.
++   * @param string|null $bundle
++   *   The bundle for the stub being parsed, or NULL for entity types
++   *   without bundles. When provided, bundle-scoped fields (F6-F9) are
++   *   accepted as known fields rather than triggering the unknown-field
++   *   guard - their values flow to the entity unchanged so the bundle's
++   *   field item-list class can take over at save.
+    */
+   public function __construct(
+     protected readonly string $entityType,
+     protected readonly FieldClassifierInterface $fieldClassifier,
++    protected readonly ?string $bundle = null,
+   ) {
+   }
+ 
+@@ -113,12 +125,21 @@
+         }
+       }
+       else {
+-        $is_base_field = $this->fieldClassifier->fieldIsBaseStandard($this->entityType, $field_name)
++        $is_known = $this->fieldClassifier->fieldIsBaseStandard($this->entityType, $field_name)
+           || $this->fieldClassifier->fieldIsBaseComputedReadOnly($this->entityType, $field_name)
+           || $this->fieldClassifier->fieldIsBaseComputedWritable($this->entityType, $field_name)
+-          || $this->fieldClassifier->fieldIsBaseCustomStorage($this->entityType, $field_name);
++          || $this->fieldClassifier->fieldIsBaseCustomStorage($this->entityType, $field_name)
++          || (
++            $this->bundle !== null
++            && (
++              $this->fieldClassifier->fieldIsBundleComputedReadOnly($this->entityType, $field_name, $this->bundle)
++              || $this->fieldClassifier->fieldIsBundleComputedWritable($this->entityType, $field_name, $this->bundle)
++              || $this->fieldClassifier->fieldIsBundleCustomStorage($this->entityType, $field_name, $this->bundle)
++              || $this->fieldClassifier->fieldIsBundleStorageBacked($this->entityType, $field_name, $this->bundle)
++            )
++          );
+ 
+-        if (!$is_base_field && !in_array($field_name, $this->ignoredProperties, TRUE)) {
++        if (!$is_known && !in_array($field_name, $this->ignoredProperties, TRUE)) {
+           throw new \RuntimeException(sprintf('Field "%s" does not exist on entity type "%s".', $field_name, $this->entityType));
+         }
+ 
+diff --git a/src/Drupal/DrupalExtension/Parser/LegacyEntityFieldParser.php b/src/Drupal/DrupalExtension/Parser/LegacyEntityFieldParser.php
+--- a/src/Drupal/DrupalExtension/Parser/LegacyEntityFieldParser.php
++++ b/src/Drupal/DrupalExtension/Parser/LegacyEntityFieldParser.php
+@@ -86,11 +86,21 @@
+   protected array $ignoredProperties = [];
+ 
+   /**
+-   * Constructs the parser for one entity-type / classifier pairing.
++   * Constructs the parser for one entity-type / bundle / classifier pairing.
++   *
++   * @param string $entityType
++   *   The entity type ID.
++   * @param \Drupal\Driver\Core\Field\FieldClassifierInterface $fieldClassifier
++   *   The field classifier.
++   * @param string|null $bundle
++   *   The bundle for the stub being parsed, or NULL when the entity type
++   *   has no bundles. When provided, bundle-scoped fields (F6-F9) are
++   *   accepted as known fields.
+    */
+   public function __construct(
+     protected readonly string $entityType,
+     protected readonly FieldClassifierInterface $fieldClassifier,
++    protected readonly ?string $bundle = null,
+   ) {
+   }
+ 
+@@ -188,13 +198,25 @@
+         // The classifier splits base fields across F1-F4 (standard, computed
+         // read-only, computed writable, custom storage). All four predicates
+         // must be checked so computed and custom-storage base fields like
+-        // 'moderation_state' do not trip the unknown-field guard.
+-        $is_base_field = $this->fieldClassifier->fieldIsBaseStandard($this->entityType, $field_name)
++        // 'moderation_state' do not trip the unknown-field guard. When the
++        // bundle is known, also accept F6-F9 (bundle-scoped fields) so that
++        // fields contributed via 'hook_entity_bundle_field_info()' such as
++        // rdf_sync's 'uri' are recognised.
++        $is_known = $this->fieldClassifier->fieldIsBaseStandard($this->entityType, $field_name)
+           || $this->fieldClassifier->fieldIsBaseComputedReadOnly($this->entityType, $field_name)
+           || $this->fieldClassifier->fieldIsBaseComputedWritable($this->entityType, $field_name)
+-          || $this->fieldClassifier->fieldIsBaseCustomStorage($this->entityType, $field_name);
++          || $this->fieldClassifier->fieldIsBaseCustomStorage($this->entityType, $field_name)
++          || (
++            $this->bundle !== null
++            && (
++              $this->fieldClassifier->fieldIsBundleComputedReadOnly($this->entityType, $field_name, $this->bundle)
++              || $this->fieldClassifier->fieldIsBundleComputedWritable($this->entityType, $field_name, $this->bundle)
++              || $this->fieldClassifier->fieldIsBundleCustomStorage($this->entityType, $field_name, $this->bundle)
++              || $this->fieldClassifier->fieldIsBundleStorageBacked($this->entityType, $field_name, $this->bundle)
++            )
++          );
+ 
+-        if (!$is_base_field && !in_array($field_name, $this->ignoredProperties, TRUE)) {
++        if (!$is_known && !in_array($field_name, $this->ignoredProperties, TRUE)) {
+           throw new \RuntimeException(sprintf('Field "%s" does not exist on entity type "%s".', $field_name, $this->entityType));
+         }
+ 
+diff --git a/src/Drupal/DrupalExtension/Context/RawDrupalContext.php b/src/Drupal/DrupalExtension/Context/RawDrupalContext.php
+--- a/src/Drupal/DrupalExtension/Context/RawDrupalContext.php
++++ b/src/Drupal/DrupalExtension/Context/RawDrupalContext.php
+@@ -424,7 +424,7 @@
+       throw new \RuntimeException(sprintf('The active Drupal driver "%s" does not support field inspection.', $driver::class));
+     }
+ 
+-    $parser = $this->getFieldParser($stub->getEntityType(), $driver->getCore()->getFieldClassifier());
++    $parser = $this->getFieldParser($stub->getEntityType(), $driver->getCore()->getFieldClassifier(), $stub->getBundle());
+     $parser->ignoring($ignored_properties);
+ 
+     $parsed = $parser->parse($stub->getValues());
+@@ -440,16 +440,16 @@
+    * that will be removed in 6.1). Override in a subclass to swap in a
+    * custom implementation.
+    */
+-  protected function getFieldParser(string $entity_type, FieldClassifierInterface $classifier): EntityFieldParserInterface {
++  protected function getFieldParser(string $entity_type, FieldClassifierInterface $classifier, ?string $bundle = null): EntityFieldParserInterface {
+     $mode = $this->getParameter('field_parser') ?? 'default';
+ 
+     if ($mode === 'legacy') {
+       $this->triggerDeprecation('The legacy field parser is deprecated in drupal-extension:6.0.0 and is removed from drupal-extension:6.1.0. Remove "field_parser: legacy" from your behat.yml to migrate. See https://github.com/jhedstrom/drupalextension/blob/main/UPGRADING.md');
+ 
+-      return new LegacyEntityFieldParser($entity_type, $classifier);
++      return new LegacyEntityFieldParser($entity_type, $classifier, $bundle);
+     }
+ 
+-    return new EntityFieldParser($entity_type, $classifier);
++    return new EntityFieldParser($entity_type, $classifier, $bundle);
+   }
+ 
+   /**
