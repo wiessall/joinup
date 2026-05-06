@@ -3,10 +3,10 @@ Feature: View a comment
   As a visitor of the website I can view a comment on community content.
 
   Scenario Outline: View comments on community content
-    Given collection content:
+    Given the following "collection" content:
       | title                      |
       | Hashrate, shares & workers |
-    And <content type> content:
+    And the following "<content type>" content:
       | title                      | body                                  | collection                 |
       | Current effective hashrate | Ethash is the proof of work algorithm | Hashrate, shares & workers |
     And user:

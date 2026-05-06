@@ -5,42 +5,42 @@ Feature: RDF synchronization of contents.
   I need my RDF entities to be properly synchronized with the site contents.
 
   Scenario: ADMS basic classes are properly exported.
-    Given users:
+    Given the following users:
       | Username     | E-mail           |
       | Owner of all | blah@example.com |
-    And contact_information content:
+    And the following "contact_information" content:
       | uri                         | name            | email                       | website url        |
       | http://example.com/contact1 | Syncing contact | syncing.contact@example.com | http://example.com |
-    And owner_type terms:
+    And the following "owner_type" terms:
       | uri                            | name       |
       | http://example.com/owner-type1 | University |
-    And owner content:
+    And the following "owner" content:
       | uri                       | name          | owner type |
       | http://example.com/owner1 | Syncing owner | University |
-    And licence content:
+    And the following "licence" content:
       | uri                         | title           | description       | licence type  |
       | http://example.com/licence1 | Syncing licence | Some nice licence | Public domain |
-    And spatial terms:
+    And the following "spatial" terms:
       | uri                         | name     |
       | http://example.com/country1 | Atlantis |
-    And language terms:
+    And the following "language" terms:
       | uri                          | name     |
       | http://example.com/language1 | Atlantic |
       | http://example.com/language2 | Aramaic  |
-    And file_type terms:
+    And the following "file_type" terms:
       | uri                      | name    |
       | http://example.com/type1 | Archive |
-    And representation_technique terms:
+    And the following "representation_technique" terms:
       | uri                      | name   |
       | http://example.com/tech1 | Schema |
-    And collection content:
+    And the following "collection" content:
       | uri                            | title              | author       | abstract  | description                    | access url                  | logo     | contact information | owner         | creation date    | published at     | modification date | closed | content_creation         | group_moderation | topic      | spatial coverage | state     | featured |
       | http://example.com/collection1 | Syncing collection | Owner of all | Abstract. | Description of the collection. | http://www.example.com/msm/ | logo.png | Syncing contact     | Syncing owner | 2016-06-13T13:00 | 2016-07-13T13:00 | 2017-06-30T11:27  | no     | facilitators and authors | no               | Demography | Atlantis         | published | no       |
       | http://example.com/collection2 | Syncing collection | Owner of all | Abstract. | Description of the collection. | http://www.example.com/msm/ | logo.png | Syncing contact     | Syncing owner | 2016-06-13T13:00 | 2016-07-13T13:00 | 2017-06-30T11:27  | no     | facilitators and authors | no               | Demography | Atlantis         | draft     | no       |
-    Given solution content:
+    Given the following "solution" content:
       | uri                          | title            | collection         | author       | description    | logo     | owner         | contact information | creation date   | published at    | modification date | resources | content_creation | keywords        | landing page                    | language | metrics page                    | group_moderation | topic                    | related solutions | solution type                      | status    | featured |
       | http://example.com/solution1 | Syncing solution | Syncing collection | Owner of all | <p>content</p> | logo.png | Syncing owner | Syncing contact     | 2017-10-01T8:00 | 2017-11-01T8:00 | 2017-12-01T8:43   | text.pdf  | registered users | Alphabet, games | http://www.example.com/landing1 | Atlantic | http://www.example.org/metrics1 | no               | EU and European Policies |                   | Networking Infrastructure Enablers | Completed | no       |
-    And release content:
+    And the following "release" content:
       | uri                         | title           | resources | release number | release notes | creation date    | published at     | changed          | is version of    | state     | status    | spatial coverage | keywords |
       | http://example.com/release1 | Syncing release | text.pdf  | 3.0.0          | New 3.0       | 2017-11-10T11:11 | 2017-11-11T11:11 | 2017-11-12T11:11 | Syncing solution | published | Completed | Atlantis         | Alphabet |
       # Draft release should not be synced.
@@ -48,7 +48,7 @@ Feature: RDF synchronization of contents.
 
     # The two cases cover the two possible access URL types extracted.
     # @see \Drupal\joinup_distribution\EventSubscriber\DistributionParentRdfSyncSubscriber::addDistributionParentRelation().
-    And distribution content:
+    And the following "distribution" content:
       | uri                              | title                   | description                            | creation date    | published at     | changed          | resources                             | release         | solution         | downloads | licence         | format  | status    | representation technique | state     |
       | http://example.com/distribution1 | SyncingDistribution.zip | The zipped version of Syncing release. | 2017-01-11T11:20 | 2017-02-11T11:20 | 2017-03-11T11:20 | http://www.example.org/release.zip    | Syncing release |                  | 232       | Syncing licence | Archive | Completed | Schema                   | published |
       | http://example.com/distribution2 | SyncingDistribution.rdf | The RDF version of Syncing release.    | 2017-04-11T11:20 | 2017-05-11T11:20 | 2017-06-11T11:20 | http://www.example.org/some_other.zip | Syncing release |                  | 232       | Syncing licence | Archive | Completed | Schema                   | published |
@@ -415,7 +415,7 @@ Feature: RDF synchronization of contents.
     And there should not be any triples with the object "http://example.com/collection1" in the "http://data" graph
 
   Scenario: RDF entities for EIF perspective are correctly created.
-    Given solution content:
+    Given the following "solution" content:
       | title        | description                                      | state     | uri                          |
       | EIF solution | Some description not to be shown in the EIF page | published | http://example.com/solution1 |
     And the following EIF perspective data for the "EIF solution" solution:
@@ -471,7 +471,7 @@ Feature: RDF synchronization of contents.
       | http://example.com/eif-perspective1 | http://data.europa.eu/eif/Principle             | http://data.europa.eu/UP3                           |
 
   Scenario: RDF entities for Contact information are correctly created.
-    Given contact_information content:
+    Given the following "contact_information" content:
       | uri                         | name            | email                    | website url            |
       | http://example.com/contact1 | Syncing contact | jocelyn.bass@example.com | http://www.example.org |
       | http://example.com/contact2 | Geoffrey Bryce  | geoffrey.bryce@exam.com  |                        |
@@ -495,13 +495,13 @@ Feature: RDF synchronization of contents.
       | http://example.com/contact1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/2006/vcard/ns#Kind |
 
   Scenario: RDF entities for Distribution are correctly created.
-    Given solution content:
+    Given the following "solution" content:
       | title         | state     |
       | Test solution | published |
-    And release content:
+    And the following "release" content:
       | title        | is version of | state     |
       | Test release | Test solution | published |
-    And distribution content:
+    And the following "distribution" content:
       | uri                              | title          | description                  | release      | resources                       | created              | published at         | changed              | state     |
       | http://example.com/distribution1 | Some Distro    | Übermensch foot size         | Test release | http://example.com/some-distro1 | 2024-07-31T10:19:33Z | 2024-07-31T10:19:33Z | 2024-07-31T10:19:33Z | published |
       | http://example.com/distribution2 | Another distro | Description for other distro | Test release | http://example.com/some-distro2 | 2024-08-01T10:19:33Z | 2024-08-01T10:19:33Z | 2024-08-01T10:19:33Z | published |
@@ -533,7 +533,7 @@ Feature: RDF synchronization of contents.
       | http://example.com/distribution1 | http://purl.org/dc/terms/modified               | 2024-07-31T15:20:00Z                   |
 
   Scenario: RDF entities for Licences are correctly created.
-    Given licence content:
+    Given the following "licence" content:
       | uri                         | title              | description    | licence type  | deprecated |
       | http://example.com/license1 | Some license       |                | Public domain | no         |
       | http://example.com/license2 | Some other license | A new licence. | Public domain | yes        |
@@ -560,10 +560,10 @@ Feature: RDF synchronization of contents.
       | http://example.com/license2 | http://joinup.eu/licence/deprecated             | 0                                        |
 
   Scenario: RDF entities for Owners and Owner types are correctly created.
-    Given owner_type terms:
+    Given the following "owner_type" terms:
       | uri                          | name       |
       | http://joinup.eu/owner-type1 | University |
-    And owner content:
+    And the following "owner" content:
       | uri                       | name          | state     | owner type |
       | http://example.com/owner1 | Syncing owner | published | University |
       | http://example.com/owner2 | Johnny Guitar | published | University |
@@ -587,10 +587,10 @@ Feature: RDF synchronization of contents.
       | http://example.com/owner1 | http://purl.org/dc/terms/type                   | http://joinup.eu/owner-type1    |
 
   Scenario: RDF entities for Releases are correctly created.
-    Given solution content:
+    Given the following "solution" content:
       | title       | state     | uri                          |
       | Early Omega | published | http://example.com/solution1 |
-    And release content:
+    And the following "release" content:
       | uri                         | title    | resources | release number | release notes | published_at         | changed              | is version of | state     | status    | keywords       |
       | http://example.com/release1 | Omega3   | text.pdf  | 3.0.0          | New 3.0       | 2024-07-31T10:19:33Z | 2024-07-31T10:19:33Z | Early Omega   | published | Completed | Alphabet       |
       | http://example.com/release2 | Omega3.1 | text.pdf  | 3.1.0          | New 3.1       | 2024-08-01T10:19:33Z | 2024-08-01T10:19:33Z | Early Omega   | published | Completed | Alphabet,games |

@@ -5,10 +5,10 @@ Feature:
   environment will be included.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title         |
       | Plaster molds |
-    And custom_page content:
+    And the following "custom_page" content:
       | title                  | collection    | abstract             | state       |
       | Layout paragraphs test | Plaster molds | Layout page abstract | unpublished |
     And I am logged in as a moderator

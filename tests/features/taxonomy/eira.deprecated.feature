@@ -5,7 +5,7 @@ Feature:
   I want to be able to see if a term is deprecated.
 
   Scenario: Show deprecated terms without replacement.
-    Given eira terms:
+    Given the following "eira" terms:
       | uri                                        | name       | description        | field_taxonomy_deprecated |
       | http://joinup.eu/eira/term/only-deprecated | Deprecated | This is deprecated | 1                         |
 
@@ -25,7 +25,7 @@ Feature:
     But I should not see the warning message containing "Consider using"
 
   Scenario: Show deprecated terms with a replacement.
-    Given eira terms:
+    Given the following "eira" terms:
       | uri                                                 | name            | description           | field_taxonomy_deprecated | field_taxonomy_replaces |
       | http://joinup.eu/eira/term/deprecated-w-replacement | DeprecatedTerm  | This is deprecated    | 1                         |                         |
       | http://joinup.eu/eira/term/replacement              | ReplacementTerm | This is a replacement | 0                         | DeprecatedTerm          |

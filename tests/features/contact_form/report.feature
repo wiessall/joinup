@@ -5,18 +5,18 @@ Feature: Submit the contact form
   I need to receive email when the content is reported
 
   Scenario: Receive email when content is reported
-    Given users:
+    Given the following users:
       | Username         | Roles     | E-mail                    | First name | Family name |
       | Report moderator | moderator | report_moderator@test.com | Frank      | Sinatra     |
       | Report user      |           | report_user@test.com      | Rudi       | Sinatra     |
       | Report owner     |           | report_owner@test.com     | Clark      | The machine |
-    And collection content:
+    And the following "collection" content:
       | title                                 | abstract     | description   |
       | Collection with inappropriate content | No one cares | No one cares. |
     And the following collection user memberships:
       | collection                            | user         | roles              |
       | Collection with inappropriate content | Report owner | owner, facilitator |
-    And event content:
+    And the following "event" content:
       | title           | author      | field_paragraphs_body | location  | collection                            | field_state |
       | Event to report | Report user | body                  | Somewhere | Collection with inappropriate content | published   |
 

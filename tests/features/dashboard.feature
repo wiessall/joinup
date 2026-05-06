@@ -22,7 +22,7 @@ Feature: Dashboard
 
   Scenario Outline: Moderators should see proposed collections and solutions.
     Given I am logged in as a "moderator"
-    And <group type> content:
+    And the following "<group type>" content:
       | title           | state     |
       | Some berry pie  | published |
       | Some cherry pie | proposed  |

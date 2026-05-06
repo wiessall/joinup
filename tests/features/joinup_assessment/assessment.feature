@@ -9,7 +9,7 @@ Feature: Assessments
     And I should not see the link "My assessments"
     And I should not see the link "Search assessments"
     And I should see the text "There are no published assessment reports yet. You can add one by filling this questionnaire"
-    And assessment_report content:
+    And the following "assessment_report" content:
       | title         | created              | organization         | collection                         |
       | Assessment 1  | 2020-01-01T00:00:00Z | default organization | Portal support                        |
       | Assessment 2  | 2020-01-02T00:00:00Z | default organization | Portal support                        |
@@ -45,7 +45,7 @@ Feature: Assessments
     # Hidden away in the second page.
     And I should not see the "Assessment 1" tile
 
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title              | state     | collection                         |
       | Custom assessments | published | Interoperability assessments space |
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Custom assessments" title:
