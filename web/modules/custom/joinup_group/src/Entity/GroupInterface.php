@@ -306,6 +306,8 @@ interface GroupInterface extends
    *
    * @param string $field_name
    *   The field name.
+   * @param string|null $langcode
+   *   (optional) The language code. Defaults to the current context language.
    *
    * @return \Drupal\Core\Field\FieldItemListInterface
    *   The setting field item list.
@@ -313,7 +315,7 @@ interface GroupInterface extends
    * @throws \InvalidArgumentException
    *   When $field_name is not a valid field.
    */
-  public function getSetting(string $field_name): FieldItemListInterface;
+  public function getSetting(string $field_name, ?string $langcode = NULL): FieldItemListInterface;
 
   /**
    * Returns a list of group members, optionally filtered by role and state.

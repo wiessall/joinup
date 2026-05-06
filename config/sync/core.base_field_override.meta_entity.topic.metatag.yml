@@ -1,0 +1,20 @@
+uuid: 35bfe1df-dadf-49b6-9278-cdfdfcc2c163
+langcode: en
+status: true
+dependencies:
+  config:
+    - meta_entity.type.topic
+  module:
+    - metatag
+id: meta_entity.topic.metatag
+field_name: metatag
+entity_type: meta_entity
+bundle: topic
+label: 'Metatags (Hidden field for JSON support)'
+description: 'The computed meta tags for the entity.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: metatag_computed
