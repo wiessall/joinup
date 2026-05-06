@@ -2985,6 +2985,15 @@ class JoinupContext extends RawDrupalContext {
     $service = \Drupal::service(FileVisibilityInterface::class);
     $prop = new \ReflectionProperty($service, 'entities');
     $prop->setValue($service, []);
+
+    // The putenv() in beforeScenarioPrepareEntityCleanup() disables
+    // RawDrupalContext::cleanUsers(), which normally clears userManager
+    // state and logs the session out.
+    // @see \Drupal\DrupalExtension\Context\RawDrupalContext::cleanUsers
+    $this->getUserManager()->clearUsers();
+    if (!$this->getUserManager()->currentUserIsAnonymous()) {
+      $this->logout();
+    }
   }
 
   /**
