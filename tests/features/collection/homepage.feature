@@ -5,20 +5,20 @@ Feature: Collection homepage
   I need to be able see all content related to a collection on the collection homepage
 
   Background:
-    Given users:
+    Given the following users:
       | Username | Status | Roles     |
       | Frodo    | active |           |
       | Boromir  | active |           |
       | Legolas  | active |           |
       | Gimli    | active |           |
       | Samwise  | active | moderator |
-    And owner content:
+    And the following "owner" content:
       | name          |
       | Bilbo Baggins |
-    And collection content:
+    And the following "collection" content:
       | title              | description        | owner         | contact information | logo     | group_moderation | content_creation | topic                            | published at      | modification date |
       | Middle earth daily | Middle earth daily | Bilbo Baggins | Contact name        | logo.png | yes              | members          | Employment and Support Allowance | 2012-12-01 9:00am | 2017-12-01 9:00am |
-    And solution content:
+    And the following "solution" content:
       | title        | collection         | description           | content_creation | creation date     | topic |
       | Bilbo's book | Middle earth daily | Bilbo's autobiography | registered users | 2014-10-17 8:32am | Info  |
     And the following collection user memberships:
@@ -26,11 +26,11 @@ Feature: Collection homepage
       | Middle earth daily | Frodo   | facilitator |
       | Middle earth daily | Boromir |             |
       | Middle earth daily | Legolas |             |
-    And news content:
+    And the following "news" content:
       | title                                             | body                | topic             | collection         | created           | changed  |
       | Rohirrim make extraordinary deal                  | Horse prices drops  | Finance in EU     | Middle earth daily | 2014-10-17 8:34am | 2017-7-5 |
       | Breaking: Gandalf supposedly plans his retirement | A new white wizard? | Supplier exchange | Middle earth daily | 2014-10-17 8:31am | 2017-7-5 |
-    And event content:
+    And the following "event" content:
       | title                                    | short title      | field_paragraphs_body                     | collection         | created           | start date          | end date            | topic             | changed  |
       | Big hobbit feast - fireworks at midnight | Big hobbit feast | Barbecue followed by dance and fireworks. | Middle earth daily | 2014-10-17 8:33am | 2016-03-15T11:12:12 | 2016-03-15T11:12:12 | Supplier exchange | 2017-7-5 |
 

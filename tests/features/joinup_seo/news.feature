@@ -5,13 +5,13 @@ Feature: SEO for news articles.
   I need proper metatag to be encapsulated in the html code.
 
   Scenario: Basic metatags are attached as JSON schema on the page.
-    Given collection content:
+    Given the following "collection" content:
       | title                                           |
       | Interoperable Europe Portal SEO news collection |
-    And users:
+    And the following users:
       | Username                               | E-mail                 | First name | Family name |
       | Interoperable Europe Portal SEO author | joinup.seo@example.com | Kurk       | Smith       |
-    And news content:
+    And the following "news" content:
       | title                                | headline                                         | logo     | field_paragraphs_body | created                   | published at              | changed                   | author                                 | collection                                      | abstract |
       | Interoperable Europe Portal SEO news | Headline of Interoperable Europe Portal SEO news | logo.png | Body of news.         | Sun, 01 Dec 2019 13:00:00 | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | Interoperable Europe Portal SEO author | Interoperable Europe Portal SEO news collection |          |
 
@@ -56,8 +56,8 @@ Feature: SEO for news articles.
       | og:site_name           | Interoperable Europe Portal                                                                                       |
       | og:title               | Interoperable Europe Portal SEO news                                                                              |
       | og:description         | Body of news.                                                                                                     |
-      | og:image               | __base_url__/sites/default/files/__random_text__.jpg                                                              |
-      | og:image:type          | image/jpeg                                                                                                        |
+      | og:image               | __base_url__/sites/default/files/__random_text__.png                                                              |
+      | og:image:type          | image/png                                                                                                         |
       | og:image:width         | 377                                                                                                               |
       | og:image:height        | 139                                                                                                               |
       | article:author         | Kurk Smith                                                                                                        |

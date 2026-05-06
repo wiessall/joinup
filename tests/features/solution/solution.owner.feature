@@ -5,10 +5,10 @@ Feature:
   I need to be able to give extra permissions to authors.
 
   Scenario Outline: Authors can add content regardless of group settings.
-    Given collection content:
+    Given the following "collection" content:
       | title             |
       | Author collection |
-    And solution content:
+    And the following "solution" content:
       | title           | group_moderation | content_creation   | collection        |
       | Author solution | <moderation>     | <content creation> | Author collection |
 
@@ -29,13 +29,13 @@ Feature:
 
   @javascript
   Scenario: Assign ownership during creation of solutions through UI
-    Given owner content:
+    Given the following "owner" content:
       | name      | owner type |
       | Leechidna | Company    |
-    And users:
+    And the following users:
       | Username          |
       | Solution API user |
-    And collection content:
+    And the following "collection" content:
       | title                    | logo     | group_moderation | content_creation         |
       | This is a klm collection | logo.png | no               | facilitators and authors |
     And the following collection user memberships:

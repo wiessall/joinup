@@ -168,7 +168,7 @@ class JoinupLegalContext extends RawDrupalContext {
 
     $acceptance = EntityLegalDocumentAcceptance::create([
       'vid' => $published_version->id(),
-      'uid' => $this->getUserManager()->getCurrentUser()->uid,
+      'uid' => $this->getUserManager()->getCurrentUser()->getValue('uid'),
     ]);
     $acceptance->save();
   }

@@ -6,7 +6,7 @@ Feature: Private message settings page management.
 
   @javascript
   Scenario: Testing setting page
-    Given users:
+    Given the following users:
       | Username     | E-mail           | First name | Family name |
       | Lisa_Like    | lisa@like.com    | Lisa       | Like        |
       | Gregory_Like | gregory@like.com | Gregory    | Like        |

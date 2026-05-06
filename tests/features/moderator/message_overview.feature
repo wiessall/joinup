@@ -34,10 +34,10 @@ Feature: Solutions message overview
       | Do you have 1 euro to buy a cheese pie? |
 
   Scenario: Workflow messages are available in the message overview.
-    Given users:
+    Given the following users:
       | Username   | Roles     |
       | Weinberger | moderator |
-    And owner content:
+    And the following "owner" content:
       | name                 | owner type |
       | Organisation example | Company    |
     And I am logged in as an "authenticated user"

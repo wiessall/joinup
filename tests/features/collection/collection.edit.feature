@@ -5,7 +5,7 @@ Feature: Editing collections
   I need to be able to edit collections through the UI
 
   Scenario: Edit a collection
-    Given collection content:
+    Given the following "collection" content:
       | title                 | access url                             | closed | creation date    | content_creation         | group_moderation | state |
       | Überwaldean Land Eels | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | facilitators and authors | yes              | draft |
 
@@ -30,7 +30,7 @@ Feature: Editing collections
   @javascript
   Scenario: Edit a collection wysiwyg modal should close.
     # Regression test for ticket ISAICP-7181 and ISAICP-8355.
-    Given collection content:
+    Given the following "collection" content:
       | title           | access url                             | closed | creation date    | content_creation         | group_moderation | state |
       | Rhyme Land Eels | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | facilitators and authors | yes              | draft |
     When I am logged in as a facilitator of the "Rhyme Land Eels" collection
@@ -52,7 +52,7 @@ Feature: Editing collections
   @javascript
   Scenario: Regression test wysiwyg add file shows a 0 bytes limit.
     # Regression test for ticket ISAICP-7177.
-    Given collection content:
+    Given the following "collection" content:
       | title                   | access url                             | closed | creation date    | content_creation         | group_moderation | state |
       | Rhyme Land wysiwyg Eels | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | facilitators and authors | yes              | draft |
     When I am logged in as a facilitator of the "Rhyme Land wysiwyg Eels" collection

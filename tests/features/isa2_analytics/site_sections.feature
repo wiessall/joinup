@@ -5,16 +5,16 @@ Feature: Site sections
   So that I can better understand the needs of our users
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | uri                                              | title                |
       | http://joinup.eu/collection/the-polygone-project | The Polygone Project |
-    And solution content:
+    And the following "solution" content:
       | title            | collection           |
       | Miss Fashionista | The Polygone Project |
-    And discussion content:
+    And the following "discussion" content:
       | title         | body       | collection           |
       | Deep Carnival | Now online | The Polygone Project |
-    And event content:
+    And the following "event" content:
       | title                      | solution         |
       | Flat Beat 20th Anniversary | Miss Fashionista |
 

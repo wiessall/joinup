@@ -5,18 +5,18 @@ Feature: "Custom page" deleteing.
   I need to be able to delete "Custom Page" content through UI.
 
   Scenario Outline: Check visibility of delete button.
-    Given users:
+    Given the following users:
       | Username     | E-mail                   |
       | Mickey Mouse | mickey.mouse@example.com |
       | Pluto        | pluto@example.com        |
-    And <group> content:
-      | title            | description                                                                 | logo     |
-      | Dumbo Collective | Featuring a semi-anthropomorphic elephant who is cruelly nicknamed "Dumbo". | logo.png |
+    And the following "<group>" content:
+      | title            | description                                                                     | logo     |
+      | Dumbo Collective | "Featuring a semi-anthropomorphic elephant who is cruelly nicknamed \"Dumbo\"." | logo.png |
     And the following <group> user memberships:
       | <group>          | user         | roles       |
       | Dumbo Collective | Mickey Mouse | facilitator |
       | Dumbo Collective | Pluto        | member      |
-    And "custom_page" content:
+    And the following "custom_page" content:
       | title                            | <group>          | body                                                                                                                      |
       | Buena Vista Distribution Company | Dumbo Collective | Established in 1953, the unit handles distribution, marketing and promotion for films produced by the Walt Disney Studios |
 

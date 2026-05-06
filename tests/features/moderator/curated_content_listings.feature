@@ -40,19 +40,19 @@ Feature: Curated content listings
   Scenario: Tests whether queue can be populated
   Also a regression test for ISAICP-6658
 
-    Given collection content:
+    Given the following "collection" content:
       | title           |
       | Spacex in space |
-    And news content:
+    And the following "news" content:
       | title          | collection      | topic                                      |
       | Cardio atrophy | Spacex in space | Finance in EU, Supplier exchange, E-health |
-    And discussion content:
+    And the following "discussion" content:
       | title                | collection      | topic                            |
       | Reference of gravity | Spacex in space | Employment and Support Allowance |
-    And document content:
+    And the following "document" content:
       | title        | collection      | topic                                  |
       | Licrogravity | Spacex in space | HR, Statistics and Analysis, E-justice |
-    And event content:
+    And the following "event" content:
       | title           | collection      | topic                    |
       | Stay at the CSS | Spacex in space | EU and European Policies |
 

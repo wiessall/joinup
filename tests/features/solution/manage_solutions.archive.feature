@@ -2,17 +2,17 @@
 Feature: When a solution is archived then its sub-content also should be archived.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title      |
       | Collection |
-    And contact_information content:
+    And the following "contact_information" content:
       | name                 | email                      |
       | Liam Smith           | liam.smith@example.com     |
       | Jennifer Unconfirmed | jennifer.smith@example.com |
-    And solution content:
+    And the following "solution" content:
       | title    | collection | creation date    | modification date | contact information              |
       | Solution | Collection | 2018-11-19T10:00 | 2018-12-19T10:00  | Jennifer Unconfirmed, Liam Smith |
-    And users:
+    And the following users:
       | Username           | E-mail                     | First name | Family name | Roles     |
       | Anne Group Admin   | anne.smith@example.com     | Anne       | Smith       |           |
       | Andrew Facilitator | andrew.smith@example.com   | Andrew     | Smith       |           |
@@ -22,10 +22,10 @@ Feature: When a solution is archived then its sub-content also should be archive
       | solution | user               | roles       |
       | Solution | Anne Group Admin   | owner       |
       | Solution | Andrew Facilitator | facilitator |
-    And "event" content:
+    And the following "event" content:
       | title          | solution |
       | Solution Event | Solution |
-    And "news" content:
+    And the following "news" content:
       | title           | solution | state     |
       | Solution News 1 | Solution | published |
       | Solution News 2 | Solution | draft     |
@@ -33,24 +33,24 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Solution News 4 | Solution | published |
     And the workflow state of the "Solution News 3" content is changed to "needs_update"
     And the workflow state of the "Solution News 4" content is changed to "archived"
-    And "document" content:
+    And the following "document" content:
       | title                   | collection | state     | nid |
       | Solution Document       | Solution   | published |     |
       | Weird Solution Document | Solution   | draft     | 200 |
     And the workflow state of the "Weird Solution Document" content is changed to "archived"
-    And "discussion" content:
+    And the following "discussion" content:
       | title               | collection |
       | Solution Discussion | Solution   |
-    And "custom_page" content:
+    And the following "custom_page" content:
       | title                  | solution | state     |
       | Solution Custom page 1 | Solution | published |
       | Solution Custom page 2 | Solution | draft     |
       | Solution Custom page 3 | Solution | published |
     And the workflow state of the "Solution Custom page 3" content is changed to "archived"
-    And distribution content:
+    And the following "distribution" content:
       | title                 | solution |
       | Solution Distribution | Solution |
-    And release content:
+    And the following "release" content:
       | title              | is version of | state     |
       | Solution Release 1 | Solution      | published |
       | Solution Release 2 | Solution      | draft     |

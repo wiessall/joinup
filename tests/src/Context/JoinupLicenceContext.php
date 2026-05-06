@@ -44,13 +44,14 @@ class JoinupLicenceContext extends RawDrupalContext {
    */
   #[BeforeNodeCreate]
   public function convertToBoolean(BeforeNodeCreateScope $event): void {
-    $node = $event->getEntity();
-    if ($node->type === 'licence' && !empty($node->deprecated)) {
-      $value = ['yes' => TRUE, 'no' => FALSE][$node->deprecated] ?? NULL;
+    $node = $event->getStub();
+    $deprecated = $node->getValue('deprecated');
+    if ($node->getBundle() === 'licence' && !empty($deprecated)) {
+      $value = ['yes' => TRUE, 'no' => FALSE][$deprecated] ?? NULL;
       if ($value === NULL) {
-        throw new \InvalidArgumentException("Invalid licence deprecated value: '$node->deprecated'");
+        throw new \InvalidArgumentException("Invalid licence deprecated value: '$deprecated'");
       }
-      $node->deprecated = $value;
+      $node->setValue('deprecated', $value);
     }
   }
 

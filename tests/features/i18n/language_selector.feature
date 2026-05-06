@@ -4,6 +4,12 @@ Feature: Language selector block and popover functionality
   As any user
   I want to be able to see and use the language selector
 
+  Background:
+    Given the following users:
+      | Username        | Roles      | E-mail                   |
+      | Regular User    |            | regular.user@example.com |
+      | Translator User | Translator | translator@example.com   |
+
   Scenario Outline: All users can see and use the language selector
     Given I am <login_state>
 

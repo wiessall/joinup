@@ -3,10 +3,10 @@ Feature: View discussion API
   As a visitor of the website I can view a discussion content.
 
   Scenario: User view view Event entity
-    Given collection content:
+    Given the following "collection" content:
       | title            |
       | Le Event Heureux |
-    And event content:
+    And the following "event" content:
       | title       | short title | field_paragraphs_body                    | collection       | start date          | end date            | field_event_contact_email |
       | Dummy Event | Short       | This is some dummy content like foo:bar. | Le Event Heureux | 2016-03-15T11:12:12 | 2016-03-15T11:12:12 | reach.me@example.com      |
 

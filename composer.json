@@ -175,14 +175,15 @@
         "drupal/config_inspector": "^2.1",
         "drupal/config_update": "^2.0",
         "drupal/devel": "^5.1",
-        "drupal/drupal-extension": "^5.0",
+        "drupal/drupal-driver": "^3",
+        "drupal/drupal-extension": "^6",
         "drupal/filecache": "^1.1",
         "drupal/http_request_mock": "^1.1",
         "drupal/masquerade": "^2.0@RC",
         "drupal/restui": "^1.22",
         "drupal/stage_file_proxy": "^3.1",
         "drupal/upgrade_status": "^4.0",
-        "drupaltest/behat-one-time-login": "^1.0",
+        "drupaltest/behat-one-time-login": "dev-master",
         "ec-europa/toolkit": "^10.5",
         "lovers-of-behat/table-extension": "^1.4",
         "lullabot/mink-selenium2-driver": "^1.7",
@@ -238,7 +239,6 @@
     },
     "autoload-dev": {
         "classmap": [
-            "web/core/tests/Drupal/FunctionalJavascriptTests/WebDriverCurlService.php",
             "web/modules/contrib/message_digest/src/Traits/MessageDigestContextTrait.php",
             "web/modules/contrib/message_digest/src/Traits/MessageDigestTrait.php",
             "web/modules/contrib/og_menu/src/Tests/Traits/OgMenuTrait.php",
@@ -389,9 +389,8 @@
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
             },
-            "drupal/drupal-driver": {
-                "Make isBaseField() recognise bundle fields (hook_entity_bundle_field_info) @see https://github.com/jhedstrom/DrupalDriver/pull/356": "resources/patch/php/drupal/drupal-driver/356.diff",
-                "ImageHandler: default alt text to filename when not provided https://github.com/jhedstrom/DrupalDriver/pull/347": "resources/patch/php/drupal/drupal-driver/347.diff"
+            "drupal/drupal-extension": {
+                "Recognise bundle-scoped fields @see https://github.com/jhedstrom/drupalextension/pull/851": "resources/patch/php/drupal/drupal-extension/851.diff"
             },
             "drupal/dynamic_entity_reference": {
                 "Undefined array key on dependency removal @see https://www.drupal.org/i/3099176": "resources/patch/php/drupal/dynamic_entity_reference/3099176-3.x-16.diff",
@@ -475,7 +474,8 @@
                 "Renderer service can only accept array @see https://www.drupal.org/i/3531949": "resources/patch/php/drupal/message/3531949.mr56-commit24333e61.diff"
             },
             "drupal/message_digest": {
-                "Renderer::renderPlain() is deprecated @see https://www.drupal.org/i/3511648": "resources/patch/php/drupal/message_digest/3511648.diff"
+                "Renderer::renderPlain() is deprecated @see https://www.drupal.org/i/3511648": "resources/patch/php/drupal/message_digest/3511648.diff",
+                "deliverAllDigests() calls renamed DrupalDriver::runCron(); use cronRun() instead @see https://www.drupal.org/i/3588548": "resources/patch/php/drupal/message_digest/3588548.diff"
             },
             "drupal/meta_entity": {
                 "hook_entity_insert() auto-creates duplicate @see https://www.drupal.org/i/3583434": "resources/patch/php/drupal/meta_entity/3583434.mr20-commitf3ef1e53.diff"
@@ -566,6 +566,10 @@
         }
     },
     "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/idimopoulos/behat-one-time-login.git"
+        },
         {
             "type": "vcs",
             "url": "https://github.com/openeuropa/oe_dashboard_agent.git"

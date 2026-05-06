@@ -5,7 +5,7 @@ Feature: Embed of videos into the page.
   I should be able to embed a restricted set of videos in the page.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                    | description                          |
       | Beer brewing corporation | Beer is the real nectar of the gods. |
 
@@ -65,8 +65,8 @@ Feature: Embed of videos into the page.
     And I press "Insert selected" in the "Modal buttons" region
     Then the modal should be closed
     And I press "Save as draft"
-    And I see the "iframe" element with the "src" attribute set to "<embed url>" in the "Content" region
-    And I see the "iframe" element with the "title" attribute set to "<title attribute>" in the "Content" region
+    And I should see the "iframe" element with the "src" attribute set to "<embed url>" in the "Content" region
+    And I should see the "iframe" element with the "title" attribute set to "<title attribute>" in the "Content" region
 
     Examples:
       | url                                         | embed url                                                           | title attribute                 |
