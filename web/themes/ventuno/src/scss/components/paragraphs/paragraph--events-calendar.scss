@@ -68,18 +68,10 @@
         margin-right: $spacer * 0.5;
       }
     }
-    .views-field-field-location .field-content:not(:empty) {
+    .views-field-location-label .field-content:not(:empty) {
       font-size: $font-size-sm;
       &::before {
         @include get-bootstrap-icon("geo-alt", currentColor);
-
-        margin-right: $spacer * 0.5;
-      }
-    }
-    .views-field-field-event-online-location .field-content:not(:empty) {
-      font-size: $font-size-sm;
-      &::before {
-        @include get-bootstrap-icon("globe", currentColor);
 
         margin-right: $spacer * 0.5;
       }
