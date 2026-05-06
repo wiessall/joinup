@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Behat\Context\Context;
+use Behat\Mink\Element\NodeElement;
 use Behat\Step\Then;
 use Behat\Step\When;
 use DateInterval;
@@ -265,7 +266,7 @@ class CalendarContext extends RawDrupalContext implements Context {
    * @throws \Exception
    *   When the event is not visible in the calendar.
    */
-  protected function findCalendarEvent(string $event): \Behat\Mink\Element\NodeElement {
+  protected function findCalendarEvent(string $event): NodeElement {
     $elements = $this->getSession()->getPage()->findAll('css', '.calendar-view-day');
     $eventElement = current(array_filter($elements, fn($element) => str_contains($element->getText(), $event))) ?: NULL;
 
