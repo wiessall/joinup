@@ -387,3 +387,23 @@ function _ventuno_terms_to_badges(array $terms, TranslatableMarkup $extraLabel, 
 
   return $badges;
 }
+
+/**
+ * Implements hook_preprocess_views_view_fields__calendar().
+ */
+function ventuno_preprocess_views_view_fields__calendar(array &$variables): void {
+  $view = $variables['view'];
+  $row = $variables['row'];
+  $has_location = !empty($view->field['field_location']->getValue($row));
+  $has_online = !empty($view->field['field_event_online_location']->getValue($row));
+
+  if ($has_location && $has_online) {
+    $variables['location_label'] = t('Hybrid event');
+  }
+  elseif (!$has_location) {
+    $variables['location_label'] = t('Virtual event');
+  }
+  else {
+    $variables['location_label'] = t('Physical event');
+  }
+}
