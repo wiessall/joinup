@@ -2,7 +2,7 @@
 Feature: The moderator is able to translate meta entity strings.
 
   Scenario: The moderator is able to translate collection settings strings.
-    Given collection content:
+    Given the following "collection" content:
       | title          |
       | Dragon Keepers |
     And I am logged in as a moderator
@@ -35,7 +35,7 @@ Feature: The moderator is able to translate meta entity strings.
     And I should see the text "Opuść smoki"
 
   Scenario: The moderator is able to translate EIF perspective strings.
-    Given solution content:
+    Given the following "solution" content:
       | title            |
       | EIF Test Machine |
     And the following EIF perspective data for the "EIF Test Machine" solution:
