@@ -227,6 +227,21 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     $this->assertArrayNotHasKey('errors', $data);
     $data = $this->normalizeAssessmentResponse($data);
 
+    // Register all created entities for cleanup before any assertion runs:
+    // a failing assertion otherwise leaks files into public:// and the next
+    // run trips on collision-renamed filenames (report_1.pdf, _2.pdf, ...).
+    $entityRepository = \Drupal::service('entity.repository');
+    $report = $entityRepository->loadEntityByUuid('assessment', $data['id']);
+    foreach ($report->get('documents') as $item) {
+      $this->markEntityForCleanup($item->entity);
+    }
+    foreach ($report->get('binding_requirement') as $requirement) {
+      foreach ($requirement->entity->get('requirement_documents') as $item) {
+        $this->markEntityForCleanup($item->entity);
+      }
+    }
+    $this->markEntityForCleanup($report);
+
     // Update the expectation with generated UUIDs and URIs.
     $uuid = $data['id'];
     $uri = 'http://data.europa.eu/s2k/' . $uuid;
@@ -243,11 +258,7 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     $expect['binding_requirement'][0]['asset'][1]['uri'] = 'http://data.europa.eu/w21/' . $expect['binding_requirement'][0]['asset'][1]['id'];
     $this->assertEquals($expect, $data);
 
-    // Verify all entities created through the API are published.
-    $entityRepository = \Drupal::service('entity.repository');
-
-    // Load the report and verify it's published.
-    $report = $entityRepository->loadEntityByUuid('assessment', $data['id']);
+    // Verify the report is published (entity already loaded above).
     $this->assertTrue($report->isPublished(), 'Assessment report should be published');
 
     // Verify provider (public organisation) is published.
@@ -301,18 +312,6 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     // The response is retrieved from cache.
     $assert->responseHeaderEquals('X-Drupal-Cache', 'HIT');
     $this->assertEquals($expect, $actual);
-
-    // Cleanup.
-    $report = \Drupal::service('entity.repository')->loadEntityByUuid('assessment', $data['id']);
-    foreach ($report->get('documents') as $item) {
-      $this->markEntityForCleanup($item->entity);
-    }
-    foreach ($report->get('binding_requirement') as $requirement) {
-      foreach ($requirement->entity->get('requirement_documents') as $item) {
-        $this->markEntityForCleanup($item->entity);
-      }
-    }
-    $this->markEntityForCleanup($report);
   }
 
   /**
