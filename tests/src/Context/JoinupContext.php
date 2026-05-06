@@ -19,6 +19,8 @@ use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\AfterNodeCreate;
+use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\comment\CommentInterface;
@@ -73,6 +75,14 @@ class JoinupContext extends RawDrupalContext {
   use UserTrait;
   use UtilityTrait;
   use WorkflowTrait;
+
+  /**
+   * Stores non-field node properties stripped before Drupal field validation.
+   *
+   * Keyed by spl_object_id() of the Behat node stub. AfterNodeCreate hooks
+   * that need to act on these values should call getStrippedNodeProperty().
+   */
+  private static array $strippedNodeProperties = [];
 
   /**
    * Creates a user with data provided in a table.
@@ -605,6 +615,22 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Returns a property stripped from the node stub before field validation.
+   *
+   * @param object $node
+   *   The Behat node stub (the same object passed to BeforeNodeCreate and
+   *   AfterNodeCreate scopes via $scope->getEntity()).
+   * @param string $key
+   *   The original property name (before stripping).
+   *
+   * @return mixed
+   *   The stored value, or NULL if the property was not stripped.
+   */
+  public static function getStrippedNodeProperty(object $node, string $key): mixed {
+    return self::$strippedNodeProperties[spl_object_id($node)][$key] ?? NULL;
+  }
+
+  /**
    * Replaces human readable labels and values with their real counterparts.
    *
    * This allows us to:
@@ -620,9 +646,8 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when a logo could not be uploaded, e.g. because the file could not
    *   be found.
-   *
-   * @BeforeNodeCreate
    */
+  #[BeforeNodeCreate]
   public function massageFieldsBeforeNodeCreate(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
     $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', $node->type);
@@ -660,26 +685,10 @@ class JoinupContext extends RawDrupalContext {
     }
 
     if (!empty($node->field_attachment)) {
-      // We want to copy it from the fixtures into the file system and register
-      // it in the CustomPageContext so it can be cleaned up after the scenario
-      // ends. Perform a small dance to get access to the context class from
-      // inside this static callback.
-      /** @var \Behat\Behat\Context\Environment\InitializedContextEnvironment $environment */
       $environment = $scope->getEnvironment();
-      /** @var \Drupal\joinup\Context\CustomPageContext $context */
+      /** @var self $context */
       $context = $environment->getContext(self::class);
-      foreach ($context->explodeDelimitedSeparatedStepArgument($node->field_attachment) as $filename) {
-        if (strpos($filename, ':')) {
-          preg_match('/target_id:\s*(?<filename>[^ -]*)/', $filename, $matches);
-          if (empty($matches['filename'])) {
-            throw new \Exception("Could not extract filename from '$filename'");
-          }
-          $filename = $matches['filename'];
-        }
-        // The file is tracked by its filename so the value still remains to be
-        // the filenames instead of the url.
-        $context->createFile($filename);
-      }
+      $node->field_attachment = $context->parseFileBehatValue($node->field_attachment);
     }
 
     // Replace collection and solution group references that use titles with the
@@ -744,8 +753,7 @@ class JoinupContext extends RawDrupalContext {
     ];
     foreach ($image_fields as $image_field) {
       if (!empty($node->$image_field)) {
-        $file = $this->createFile($node->$image_field);
-        $node->$image_field = $file->getFileUri();
+        $node->$image_field = $this->parseFileBehatValue($node->$image_field);
       }
     }
 
@@ -803,6 +811,34 @@ class JoinupContext extends RawDrupalContext {
     if (!empty($node->resources)) {
       $this->createResourceFileParagraph($node);
     }
+
+    // Strip node properties that are not real Drupal entity fields. These were
+    // silently ignored by older driver versions. Storing them here allows
+    // AfterNodeCreate hooks to access them via self::getStrippedNodeProperty().
+    // Note: this list must only include properties not processed by any other
+    // BeforeNodeCreate hook (e.g. group_moderation is handled by
+    // JoinupGroupContext::beforeNodeCreateMetaEntity and must NOT be listed).
+    $metaProperties = [
+      // Solution: applied via flag API in AfterNodeCreate.
+      'interoperable',
+      // Community content: applied via PinnableGroupContentInterface.
+      'pinned',
+      // Solution: applied via PinnableGroupContentInterface.
+      'pinned_in_collection',
+      'unpinned_in_collection',
+      // Community content: applied via ShareableContentInterface in
+      // JoinupCommunityContentContext::afterNodeCreateShare. These live on the
+      // Sharing meta entity, not on the node itself.
+      'field_shared_in',
+      'field_shared_in__at',
+    ];
+    $objectId = spl_object_id($node);
+    foreach ($metaProperties as $property) {
+      if (isset($node->$property)) {
+        self::$strippedNodeProperties[$objectId][$property] = $node->$property;
+        unset($node->$property);
+      }
+    }
   }
 
   /**
@@ -810,9 +846,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope $scope
    *   The after node create scope.
-   *
-   * @AfterNodeCreate
    */
+  #[AfterNodeCreate]
   public function ensureLogoAltText(AfterNodeCreateScope $scope): void {
     $node = $scope->getEntity();
 
@@ -1847,7 +1882,7 @@ class JoinupContext extends RawDrupalContext {
         }
       }
 
-      $this->dispatchHooks('BeforeNodeCreateScope', $fake_node);
+      $this->dispatchHooks(BeforeNodeCreateScope::class, $fake_node);
       // Correction to topic field.
       if (!empty($fake_node->field_topic) && ($topic = $this->getEntityByLabel('taxonomy_term', $fake_node->field_topic, 'topic'))) {
         $fake_node->field_topic = $topic->id();

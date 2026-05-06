@@ -77,9 +77,11 @@ class JoinupDiscussionContext extends RawDrupalContext {
     $session->getPage()->fillField('Create comment', $commentMessage);
     $session->getPage()->pressButton('Post comment');
     $userManager->setCurrentUser($userBeforeCommenting);
-    $authenticationManager->logOut();
     if ($userBeforeCommenting) {
       $authenticationManager->logIn($userBeforeCommenting);
+    }
+    else {
+      $authenticationManager->fastLogout();
     }
     $this->visitPath($originalUrl);
   }

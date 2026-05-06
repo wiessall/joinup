@@ -25,8 +25,8 @@ Feature: Machine translation
       | title                      | collection |
       | Increased credit card fees | Brexit     |
     And glossary content:
-      | title               | abbreviation | summary                 | definition                | collection |
-      | Digital portability | DP           | Availability of content | Across streaming services | Brexit     |
+      | title               | summary                 | definition                | collection |
+      | Digital portability | Availability of content | Across streaming services | Brexit     |
     And solution content:
       | title         | collection |
       | Rejoin the EU | Brexit     |

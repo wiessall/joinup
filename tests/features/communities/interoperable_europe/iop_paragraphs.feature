@@ -13,7 +13,7 @@ Feature:
       | title       |
       | Carousel c1 |
     And news content:
-      | title       | collection           | content       |
+      | title       | collection           | body          |
       | Some news 1 | Interoperable Europe | Some content. |
       | Some news 2 | Carousel c1          | Come content. |
     And custom_page content:
@@ -33,7 +33,7 @@ Feature:
       | title       |
       | Carousel c1 |
     And custom_page content:
-      | title       | collection           | content       |
+      | title       | collection           | body          |
       | Some page 1 | Interoperable Europe | Some content. |
       | Some page 2 | Carousel c1          | Some content. |
       | Some page 3 | Carousel c1          | Some content. |
@@ -88,7 +88,7 @@ Feature:
 
   Scenario: Carousels should be ordered by creation date by default.
     Given news content:
-      | title       | collection           | content       | created    |
+      | title       | collection           | body          | created    |
       | Some news 1 | Interoperable Europe | Some content. | 2 day ago  |
       | Some news 2 | Interoperable Europe | Some content. | 3 days ago |
       | Some news 3 | Interoperable Europe | Some content. | 1 days ago |
@@ -106,10 +106,10 @@ Feature:
 
   Scenario: Test also that events, when listed alone, are sorted by event date.
     Given event content:
-      | title        | collection           | field_paragraphs_body | created    | start date | end date   |
-      | Some event 1 | Interoperable Europe | Some content.         | 2 day ago  | 5 day ago  | 4 day ago  |
-      | Some event 2 | Interoperable Europe | Some content.         | 3 days ago | 6 days ago | 5 days ago |
-      | Some event 3 | Interoperable Europe | Some content.         | 1 days ago | 7 days ago | 6 days ago |
+      | title        | collection           | body          | created    | start date | end date   |
+      | Some event 1 | Interoperable Europe | Some content. | 2 day ago  | 5 day ago  | 4 day ago  |
+      | Some event 2 | Interoperable Europe | Some content. | 3 days ago | 6 days ago | 5 days ago |
+      | Some event 3 | Interoperable Europe | Some content. | 1 days ago | 7 days ago | 6 days ago |
     And custom_page content:
       | title           | collection           |
       | Events carousel | Interoperable Europe |

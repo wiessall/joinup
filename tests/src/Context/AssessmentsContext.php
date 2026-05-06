@@ -84,15 +84,8 @@ class AssessmentsContext extends RawDrupalContext {
         unset($assessment['results_in']);
       }
 
-      if (!empty($assessment['document'])) {
-        $fileValues = [];
-        foreach ($this->explodeDelimitedSeparatedStepArgument($assessment['document']) as $filename) {
-          $file = $this->createFile($filename);
-          $fileValues[] = [
-            'target_id' => $file->id(),
-          ];
-        }
-        $assessment['document'] = $fileValues;
+      if (!empty($assessment['documents'])) {
+        $assessment['documents'] = $this->parseFileBehatValue($assessment['documents']);
       }
 
       // Resolve provider by name if provided (skip for report type).
@@ -108,8 +101,9 @@ class AssessmentsContext extends RawDrupalContext {
         }
       }
 
+      // Strip columns that are not real entity fields.
+      unset($assessment['identifier']);
       $assessment = (object) $assessment;
-
       $assessment->type = $type;
       $this->parseEntityFields('assessment', $assessment);
       $this->getDriver()->createEntity('assessment', $assessment);
