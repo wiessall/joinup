@@ -8,7 +8,7 @@ Feature: Language selector block and popover functionality
     Given the following users:
       | Username        | Roles      | E-mail                   |
       | Regular User    |            | regular.user@example.com |
-      | Translator User | Translator | translator@example.com   |
+      | Translator User | moderator  | translator@example.com   |
 
   Scenario Outline: All users can see and use the language selector
     Given I am <login_state>
