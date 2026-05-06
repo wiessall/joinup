@@ -83,10 +83,10 @@ Feature:
       | title                | abstract                       | collection       |
       | Location labels page | Abstract pages Events calendar | Le Event Heureux |
     And event content:
-      | title               | collection       | start date | end date    | location          | online location                           |
-      | Physical label test | Le Event Heureux | now        | now +1 day  | Brussels, Belgium |                                           |
-      | Virtual label test  | Le Event Heureux | now        | now +1 day  |                   | 0: Online meeting - 1: http://example.com |
-      | Hybrid label test   | Le Event Heureux | now        | now +1 day  | Brussels, Belgium | 0: Online meeting - 1: http://example.com |
+      | title               | collection       | start date | end date | location          | online location                           |
+      | Physical label test | Le Event Heureux | now        | now      | Brussels, Belgium |                                           |
+      | Virtual label test  | Le Event Heureux | now        | now      |                   | 0: Online meeting - 1: http://example.com |
+      | Hybrid label test   | Le Event Heureux | now        | now      | Brussels, Belgium | 0: Online meeting - 1: http://example.com |
     And I append "events_calendar" to "field_paragraphs_body" field in "node" entity with following "Location labels page" title:
       | paragraph_block | views_block:calendar-by_month |
     And I visit the "Location labels page" "custom page"
