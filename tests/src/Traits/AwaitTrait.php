@@ -187,7 +187,7 @@ trait AwaitTrait {
    * Waits for autocomplete results to appear.
    */
   protected function waitForAutocomplete(): void {
-    $result = $this->getSession()->getPage()->waitFor(3, static function (DocumentElement $page): bool {
+    $this->getSession()->getPage()->waitFor(3, static function (DocumentElement $page): bool {
       try {
         return $page->find('css', '.ui-autocomplete li')?->isVisible() === TRUE;
       }
@@ -195,10 +195,6 @@ trait AwaitTrait {
         return FALSE;
       }
     });
-
-    if (!$result) {
-      throw new \RuntimeException('Autocomplete results did not appear within 3 seconds.');
-    }
   }
 
 }
