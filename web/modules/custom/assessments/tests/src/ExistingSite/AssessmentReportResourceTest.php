@@ -240,6 +240,9 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
         $this->markEntityForCleanup($item->entity);
       }
     }
+    if ($provider = $report->get('provider')->entity) {
+      $this->markEntityForCleanup($provider);
+    }
     $this->markEntityForCleanup($report);
 
     // Update the expectation with generated UUIDs and URIs.
@@ -365,11 +368,15 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
       );
     }
 
-    // Cleanup.
+    // Cleanup. Mark providers too so leaked orgs do not poison the count
+    // assertion on a subsequent run (notably the "different name" data set).
     $entityRepository = \Drupal::service('entity.repository');
     foreach ([$firstReportId, $secondReportId] as $reportId) {
       $report = $entityRepository->loadEntityByUuid('assessment', $reportId);
       if ($report) {
+        if ($provider = $report->get('provider')->entity) {
+          $this->markEntityForCleanup($provider);
+        }
         $this->markEntityForCleanup($report);
       }
     }
@@ -422,6 +429,9 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
 
     // Cleanup.
     $report = \Drupal::service('entity.repository')->loadEntityByUuid('assessment', $data['id']);
+    if ($provider = $report->get('provider')->entity) {
+      $this->markEntityForCleanup($provider);
+    }
     $this->markEntityForCleanup($report);
   }
 

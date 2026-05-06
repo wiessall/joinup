@@ -176,6 +176,11 @@ class AssessmentReportResource extends ResourceBase {
     $report = $this->createReport($data);
 
     if ($this->errors) {
+      // Files that downloaded successfully are saved as managed file entities
+      // by the upload handler. When the overall request fails (provider/asset
+      // errors, cardinality, etc.) the report is never saved, so those files
+      // would orphan on disk. Delete them before returning the 422.
+      $this->deleteOrphanFiles($report);
       ksort($this->errors);
       return new ResourceResponse(['errors' => $this->errors], 422);
     }
@@ -635,6 +640,14 @@ class AssessmentReportResource extends ResourceBase {
           $this->uploadLocalFile($localUri, $key, $report);
           continue;
         }
+        // Own-site URL pointing at the public files prefix but the file does
+        // not exist (or fails the safety checks). Surface a clean error
+        // rather than chasing it through HTTP, where the response (302/404)
+        // varies per web-server config and would be non-deterministic.
+        if ($this->isOwnSitePublicUrl($url)) {
+          $this->addError($path, 'Document URL points to a missing file');
+          continue;
+        }
         // Per-request capped sink: streams the body to a temp file and aborts
         // the transfer once the field's max_filesize is exceeded.
         $tempPath = $this->fileSystem->tempnam('temporary://', 'doc_');
@@ -980,6 +993,23 @@ class AssessmentReportResource extends ResourceBase {
   }
 
   /**
+   * Whether the URL is an own-site URL pointing at the public files prefix.
+   *
+   * Used to short-circuit URLs that look like our own public files but cannot
+   * be resolved to an existing file: making an HTTP call in that case yields
+   * a response (302/404/etc.) that varies per web-server config.
+   */
+  protected function isOwnSitePublicUrl(string $url): bool {
+    $parsed = parse_url($url);
+    if (empty($parsed['path']) || empty($parsed['host']) || !$this->isOwnSiteHost($parsed['host'])) {
+      return FALSE;
+    }
+    $publicAbs = (string) $this->fileUrlGenerator->generateAbsoluteString('public://');
+    $publicPrefix = parse_url($publicAbs, PHP_URL_PATH) ?? '';
+    return $publicPrefix !== '' && str_starts_with($parsed['path'], $publicPrefix);
+  }
+
+  /**
    * Maps an own-site URL to a public:// stream URI, or NULL if it doesn't map.
    *
    * Only files under public:// are eligible. Path traversal is blocked by
@@ -1197,6 +1227,28 @@ class AssessmentReportResource extends ResourceBase {
    */
   protected function getProvidedByAssessmentStorage(): ContentEntityStorageInterface {
     return $this->getAssessmentStorage();
+  }
+
+  /**
+   * Deletes file entities attached to an unsaved report and its paragraphs.
+   */
+  protected function deleteOrphanFiles(AssessmentReport $report): void {
+    foreach ($report->get('documents') as $item) {
+      if ($item->entity instanceof FileInterface) {
+        $item->entity->delete();
+      }
+    }
+    foreach ($report->get('binding_requirement') as $requirementItem) {
+      $paragraph = $requirementItem->entity;
+      if (!$paragraph instanceof ParagraphInterface) {
+        continue;
+      }
+      foreach ($paragraph->get('requirement_documents') as $item) {
+        if ($item->entity instanceof FileInterface) {
+          $item->entity->delete();
+        }
+      }
+    }
   }
 
   /**

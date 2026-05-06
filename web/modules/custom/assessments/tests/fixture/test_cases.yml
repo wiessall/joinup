@@ -132,7 +132,7 @@ Invalid references:
       /documents/3:
         - "Error saving file very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_long_name.pdf: The file's name exceeds the 240 characters limit. Rename the file and try again."
       /documents/4:
-        - 'Error downloading file: 302 Found'
+        - 'Document URL points to a missing file'
       /provider:
         - "A public organisation with ID 'f2f6bdae-7767-4230-9570-309b42392d1b' does not exist"
 
