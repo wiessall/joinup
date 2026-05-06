@@ -1,4 +1,4 @@
-@api @group-c
+@api @group-j
 Feature: Translating assessments
 
   Background:
