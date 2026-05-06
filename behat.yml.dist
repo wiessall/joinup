@@ -139,8 +139,8 @@ default:
           version: '*'
           extra_capabilities:
             loggingPrefs:
-              performance: ALL
-              browser: ALL
+              performance: OFF
+              browser: OFF
             "goog:chromeOptions":
               w3c: true
               args:
