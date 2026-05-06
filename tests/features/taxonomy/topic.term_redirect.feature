@@ -2,10 +2,10 @@
 Feature: Topic terms are redirected to search page.
 
   Background:
-    Given "topic" terms:
+    Given the following "topic" terms:
       | tid  | name     |
       | 5000 | Foo term |
-    And collection content:
+    And the following "collection" content:
       | title          | topic    |
       | Bar collection | Foo term |
 

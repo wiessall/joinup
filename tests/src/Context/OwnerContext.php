@@ -34,17 +34,17 @@ class OwnerContext extends RawDrupalContext {
    */
   #[BeforeNodeCreate]
   public function massageFieldsBeforeNodeCreate(BeforeNodeCreateScope $scope): void {
-    $fake_node = $scope->getEntity();
-    if ($fake_node->type !== 'owner') {
+    $fake_node = $scope->getStub();
+    if ($fake_node->getBundle() !== 'owner') {
       return;
     }
 
-    if (!isset($fake_node->owner_type)) {
-      $fake_node->owner_type = $this->getRandomTerm('owner_type')->label();
+    if (!$fake_node->hasValue('owner_type')) {
+      $fake_node->setValue('owner_type', $this->getRandomTerm('owner_type')->label());
     }
 
-    if (!isset($fake_node->country)) {
-      $fake_node->country = $this->getRandomTerm('spatial')->label();
+    if (!$fake_node->hasValue('country')) {
+      $fake_node->setValue('country', $this->getRandomTerm('spatial')->label());
     }
   }
 

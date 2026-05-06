@@ -5,7 +5,7 @@ Feature: Navigation menu for custom pages
   I need to be able to manage the navigation menu
 
   Scenario Outline: Access the navigation menu through the contextual link
-    Given <group> content:
+    Given the following "<group>" content:
       | title          |
       | Rainbow tables |
     When I am logged in as a facilitator of the "Rainbow tables" <group>
@@ -70,10 +70,10 @@ Feature: Navigation menu for custom pages
 
   @javascript
   Scenario: Menus with items that do not fit in available space should be wrapped in a dropdown
-    Given collection content:
+    Given the following "collection" content:
       | title         |
       | Plaster molds |
-    And custom_page content:
+    And the following "custom_page" content:
       | title              | collection    | topic |
       | Molds for candles  | Plaster molds | HR    |
       | Molds for walls    | Plaster molds | HR    |
@@ -84,7 +84,7 @@ Feature: Navigation menu for custom pages
     When I go to the "Plaster molds" collection
     Then I should see the link "Molds for pottery" in the "Navigation menu"
     But I should not see the text "See more" in the "Navigation menu"
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title           | collection    | topic |
       | Vintage molds   | Plaster molds | HR    |
       | Plaster casting | Plaster molds | HR    |
@@ -96,10 +96,10 @@ Feature: Navigation menu for custom pages
 
   @javascript
   Scenario: The contextual links button in the navigation menu should be always visible
-    Given collection content:
+    Given the following "collection" content:
       | title        |
       | Prism Gazers |
-    And custom_page content:
+    And the following "custom_page" content:
       | title           | collection   | topic |
       | Mists of dreams | Prism Gazers | HR    |
     When I am logged in as a facilitator of the "Prism Gazers" collection
@@ -112,10 +112,10 @@ Feature: Navigation menu for custom pages
     Then the "Edit menu" link in the "Navigation menu" should not be visible
 
   Scenario: Synchronize titles of custom pages and menu links
-    Given collection content:
+    Given the following "collection" content:
       | title         |
       | Alphabeavers  |
-    And custom_page content:
+    And the following "custom_page" content:
       | title       | collection   | topic |
       | Tree eaters | Alphabeavers | HR    |
     When I am logged in as a facilitator of the "Alphabeavers" "collection"
@@ -129,10 +129,10 @@ Feature: Navigation menu for custom pages
     Then I should see the link "Furry machines" in the "Navigation menu"
 
   Scenario: Only the links below the topmost page are rendered in TOC.
-    Given collection content:
+    Given the following "collection" content:
       | title     |
       | TOC Group |
-    And custom_page content:
+    And the following "custom_page" content:
       | title       | collection | topic |
       | Page 1      | TOC Group  | HR    |
       | Page 2      | TOC Group  | HR    |
@@ -155,10 +155,10 @@ Feature: Navigation menu for custom pages
 
   @javascript
   Scenario: Only custom page entries can be nested in the navigation menu.
-    Given collection content:
+    Given the following "collection" content:
       | title     |
       | Backpacks |
-    And custom_page content:
+    And the following "custom_page" content:
       | title      | collection | topic |
       | Types      | Backpacks  | HR    |
       | Frameless  | Backpacks  | HR    |
@@ -191,10 +191,10 @@ Feature: Navigation menu for custom pages
       | Frameless   |        |
 
   Scenario: Show appropriate menu entries in the table of contents outline.
-    Given collection content:
+    Given the following "collection" content:
       | title        |
       | TOC Outline  |
-    And custom_page content:
+    And the following "custom_page" content:
       | title    | collection  | state     | topic |
       | TOCO 1   | TOC Outline | published | HR    |
       | TOCO 1-1 | TOC Outline | published | HR    |
@@ -214,10 +214,10 @@ Feature: Navigation menu for custom pages
 
   @javascript
   Scenario: Assert cache invalidation of the TOC outline.
-    Given collection content:
+    Given the following "collection" content:
       | title       |
       | TOC Cached  |
-    And custom_page content:
+    And the following "custom_page" content:
       | title           | collection | topic |
       | TOCO cached 1   | TOC Cached | HR    |
       | TOCO cached 1-1 | TOC Cached | HR    |
@@ -237,10 +237,10 @@ Feature: Navigation menu for custom pages
 
   @javascript
   Scenario: Facilitator sees and uses edit links for custom pages in group menu
-    Given collection content:
+    Given the following "collection" content:
       | title         |
       | Autumn Leaves |
-    And custom_page content:
+    And the following "custom_page" content:
       | title      | collection    |
       | Typewriter | Autumn Leaves |
     When I am logged in as a facilitator of the "Autumn Leaves" collection

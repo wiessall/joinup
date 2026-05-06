@@ -6,28 +6,28 @@ Feature: Machine translation
 
   @javascript
   Scenario: Translation link is only visible on content focused pages
-    Given collection content:
+    Given the following "collection" content:
       | title  |
       | Brexit |
-    And event content:
+    And the following "event" content:
       | title                      | collection |
       | Confiscating of sandwiches | Brexit     |
-    And news content:
+    And the following "news" content:
       | title                   | collection |
       | Supply chain disruption | Brexit     |
-    And document content:
+    And the following "document" content:
       | title                           | collection |
       | Increased postal delivery costs | Brexit     |
-    And discussion content:
+    And the following "discussion" content:
       | title                                    | collection |
       | Restriction on animal-based food imports | Brexit     |
-    And custom_page content:
+    And the following "custom_page" content:
       | title                      | collection |
       | Increased credit card fees | Brexit     |
-    And glossary content:
+    And the following "glossary" content:
       | title               | summary                 | definition                | collection |
       | Digital portability | Availability of content | Across streaming services | Brexit     |
-    And solution content:
+    And the following "solution" content:
       | title         | collection |
       | Rejoin the EU | Brexit     |
 

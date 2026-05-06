@@ -4,7 +4,7 @@ Feature: As a group (collection or solution) owner or site moderator
   I should be able to transfer the group ownership.
 
   Background:
-    Given users:
+    Given the following users:
       | Username | Roles                   | First name | Family name   |
       | loner    |                         | Freyja     | Stefánsdóttir |
       | happy    | administrator,moderator | Saga       | Þórirsdóttir  |
@@ -12,7 +12,7 @@ Feature: As a group (collection or solution) owner or site moderator
       | shy      |                         | Ásdís      | Sigurðsdóttir |
       | light    | moderator               | Bjartur    | Jóhannsson    |
       | frozen   |                         | Edda       | Agnarsdóttir  |
-    And collection content:
+    And the following "collection" content:
       | title                       |
       | Intensive Language Learning |
     And the following collection user memberships:
@@ -21,7 +21,7 @@ Feature: As a group (collection or solution) owner or site moderator
       | Intensive Language Learning | cruel  | owner       |
       | Intensive Language Learning | shy    | facilitator |
       | Intensive Language Learning | frozen | owner       |
-    And solution content:
+    And the following "solution" content:
       | title                   |
       | Learn German in 1 Month |
     And the following solution user memberships:
@@ -105,10 +105,10 @@ Feature: As a group (collection or solution) owner or site moderator
       | solution   | Learn German in 1 Month     |
 
   Scenario: Collection owner cannot transfer ownership of a child solution, neither viceversa.
-    Given collection content:
+    Given the following "collection" content:
       | title   |
       | Babylon |
-    And solution content:
+    And the following "solution" content:
       | title             | collection |
       | Rivers Of Babylon | Babylon    |
     And collection user membership:

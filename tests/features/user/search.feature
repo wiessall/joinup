@@ -6,7 +6,7 @@ Feature: User management
     # Trusty user created at 05/01/2014
     # Newkid user created at 03/05/2016
     # Old guy user was created at 06/05/2012
-    Given users:
+    Given the following users:
       | Username           | E-mail                   | Roles         | Created    | Status  |
       | Jolly user manager | jolly.bambo@example.com  | Moderator     |            | active  |
       | Trusty user        | trusty.bambo@example.com |               | 1388880000 | blocked |

@@ -5,22 +5,22 @@ Feature:
   have them listed in the canonical path.
 
   Scenario: Unpublished content are visible in the "Unpublished content" tab for IOPE.
-    Given collection content:
+    Given the following "collection" content:
       | uri                                                            | title                | state     |
       | http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c | Interoperable Europe | published |
-    And news content:
+    And the following "news" content:
       | title      | collection           | state    |
       | IOP news 1 | Interoperable Europe | draft    |
       | IOP news 2 | Interoperable Europe | proposed |
-    And event content:
+    And the following "event" content:
       | title       | collection           | state    |
       | IOP event 1 | Interoperable Europe | draft    |
       | IOP event 2 | Interoperable Europe | proposed |
-    And document content:
+    And the following "document" content:
       | title          | collection           | state    |
       | IOP document 1 | Interoperable Europe | draft    |
       | IOP document 2 | Interoperable Europe | proposed |
-    And custom_page content:
+    And the following "custom_page" content:
       | title             | collection           | state       |
       | IOP custom page 1 | Interoperable Europe | unpublished |
 
@@ -42,22 +42,22 @@ Feature:
       | IOP custom page 1 |
 
   Scenario: Unpublished content are visible in the "Unpublished content" tab for any group.
-    Given collection content:
+    Given the following "collection" content:
       | title      | state     |
       | Some group | published |
-    And news content:
+    And the following "news" content:
       | title             | collection | state    |
       | Some group news 1 | Some group | draft    |
       | Some group news 2 | Some group | proposed |
-    And event content:
+    And the following "event" content:
       | title              | collection | state    |
       | Some group event 1 | Some group | draft    |
       | Some group event 2 | Some group | proposed |
-    And document content:
+    And the following "document" content:
       | title                 | collection | state    |
       | Some group document 1 | Some group | draft    |
       | Some group document 2 | Some group | proposed |
-    And custom_page content:
+    And the following "custom_page" content:
       | title                    | collection | state       |
       | Some group custom page 1 | Some group | unpublished |
 
