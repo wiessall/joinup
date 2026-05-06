@@ -82,9 +82,6 @@ Feature: SEO for news articles.
     Examples:
       | web url                                                       | expected url                                                               | location                           | expected location |
       |                                                               | __base_url__/collection/joinup-seo-event-collection/event/joinup-seo-event | Rue Belliard 28, Brussels, Belgium | Rue Belliard 28   |
-      # Link cells must use named keys ('title' and 'uri') so the v6 entity
-      # field parser recognises them; bare positional values are rejected.
-      # @see: \Drupal\Driver\Core\Field\LinkHandler::expand
       | title: "Some url", uri: "http://some-random-event-url"        | http://some-random-event-url                                               | Rue Belliard 28, Brussels, Belgium | Rue Belliard 28   |
 
   Scenario: Events without physical address but with online location should still show the online location.
