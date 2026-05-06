@@ -454,6 +454,16 @@ function assessments_inline_entity_form_entity_form_alter(array &$entity_form, F
         [$selector => ['checked' => FALSE]],
       ],
     ];
+
+    // As untranslatable fields are hidden and the entity reference field is
+    // untranslatable IEF thinks that it should hide the entire
+    // assessment_statement form even though we have translatable fields inside.
+    $entityForm['#access'] = TRUE;
+    $bundleName = $solution->bundle();
+    $completeForm = $formState->getCompleteForm();
+    $completeForm[$bundleName]['#access'] = TRUE;
+    $completeForm[$bundleName]['widget']['#access'] = TRUE;
+    $completeForm[$bundleName]['widget'][0]['#access'] = TRUE;
   }
 }
 
