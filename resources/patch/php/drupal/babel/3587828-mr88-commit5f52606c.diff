@@ -1,0 +1,1975 @@
+diff --git a/.cspell-project-words.txt b/.cspell-project-words.txt
+index 4eed21fe5491c4dfd44cb50d6a56ff6918e65e63..bb33814b4f4cb01ba106631c690c81037a88fbe8 100644
+--- a/.cspell-project-words.txt
++++ b/.cspell-project-words.txt
+@@ -13,3 +13,6 @@ tmgmt
+ valuems
+ webform
+ webforms
++
++# Organic Group Menu support
++ogmenu
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 5c7c738cb69f5a889b3683be437f4cac3b1ee16e..a19a530b39adeb4e7ed6b53e544ddef8fcd5352a 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -38,7 +38,7 @@ variables:
+ 
+ composer (next major):
+   variables:
+-    _LENIENT_ALLOW_LIST: tmgmt,l10n_pconfig
++    _LENIENT_ALLOW_LIST: l10n_pconfig,og,og_menu,tmgmt
+   after_script:
+     # Don't check for core compatibility.
+     - patch -p1 web/core/lib/Drupal/Core/Extension/InfoParserDynamic.php < d12.diff
+diff --git a/babel.module b/babel.module
+index 389512e115b6b36efd2c52b4005db369fdfa00b8..7c27b06449b6c866b7183540fb9431c036f09ee8 100644
+--- a/babel.module
++++ b/babel.module
+@@ -29,8 +29,6 @@ function babel_module_implements_alter(array &$implementations, string $hook): v
+ 
+ /**
+  * Implements hook_js_alter().
+- *
+- * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\LegacyHook does not exist.
+  */
+ #[LegacyHook]
+ function babel_js_alter(array &$javascript, AttachedAssetsInterface $assets, LanguageInterface $language): void {
+@@ -39,8 +37,6 @@ function babel_js_alter(array &$javascript, AttachedAssetsInterface $assets, Lan
+ 
+ /**
+  * Implements hook_toolbar().
+- *
+- * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\LegacyHook does not exist.
+  */
+ #[LegacyHook]
+ function babel_toolbar(): array {
+@@ -49,8 +45,6 @@ function babel_toolbar(): array {
+ 
+ /**
+  * Implements hook_theme().
+- *
+- * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\LegacyHook does not exist.
+  */
+ #[LegacyHook]
+ function babel_theme(): array {
+diff --git a/composer.json b/composer.json
+index a6f01f74d4a92145588b38b59a0b1b9cea5ce8f4..b5e608afca9cc36e370efdeeccc76864742e59ed 100644
+--- a/composer.json
++++ b/composer.json
+@@ -16,6 +16,7 @@
+     "require-dev": {
+         "drupal/tmgmt": "^1.17",
+         "drupal/l10n_pconfig": "*",
++        "drupal/og_menu": "^2.0@alpha",
+         "drush/drush": "^12 || ^13 || ^14"
+     },
+     "minimum-stability": "dev",
+diff --git a/modules/babel_content_entity/babel_content_entity.module b/modules/babel_content_entity/babel_content_entity.module
+index ee069f20387b4edc0d80465b615e300c4e31cb3b..e65e54c14f75cabd8df9b6729729f4caf89eacc7 100644
+--- a/modules/babel_content_entity/babel_content_entity.module
++++ b/modules/babel_content_entity/babel_content_entity.module
+@@ -13,8 +13,6 @@ use Drupal\Core\Hook\Attribute\LegacyHook;
+ 
+ /**
+  * Implements hook_entity_insert().
+- *
+- * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\LegacyHook does not exist.
+  */
+ #[LegacyHook]
+ function babel_content_entity_entity_insert(EntityInterface $entity): void {
+@@ -23,8 +21,6 @@ function babel_content_entity_entity_insert(EntityInterface $entity): void {
+ 
+ /**
+  * Implements hook_entity_update().
+- *
+- * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\LegacyHook does not exist.
+  */
+ #[LegacyHook]
+ function babel_content_entity_entity_update(EntityInterface $entity): void {
+@@ -33,8 +29,6 @@ function babel_content_entity_entity_update(EntityInterface $entity): void {
+ 
+ /**
+  * Implements hook_entity_delete().
+- *
+- * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\LegacyHook does not exist.
+  */
+ #[LegacyHook]
+ function babel_content_entity_entity_delete(EntityInterface $entity): void {
+@@ -43,8 +37,6 @@ function babel_content_entity_entity_delete(EntityInterface $entity): void {
+ 
+ /**
+  * Implements hook_entity_bundle_delete().
+- *
+- * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\LegacyHook does not exist.
+  */
+ #[LegacyHook]
+ function babel_content_entity_entity_bundle_delete(string $entityTypeId, string $bundle): void {
+diff --git a/modules/babel_content_entity/src/Hook/BabelContentEntityHook.php b/modules/babel_content_entity/src/Hook/BabelContentEntityHook.php
+index 8701a3a6ac182974b4f88ff7eedae35d5c20e237..2403a00db5313ba4fb2c15c7206ce479316e2b89 100644
+--- a/modules/babel_content_entity/src/Hook/BabelContentEntityHook.php
++++ b/modules/babel_content_entity/src/Hook/BabelContentEntityHook.php
+@@ -24,8 +24,6 @@ class BabelContentEntityHook {
+ 
+   /**
+    * Implements hook_entity_insert().
+-   *
+-   * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\Hook does not exist.
+    */
+   #[Hook('entity_insert')]
+   public function onEntityInsert(EntityInterface $entity): void {
+@@ -34,8 +32,6 @@ class BabelContentEntityHook {
+ 
+   /**
+    * Implements hook_entity_update()
+-   *
+-   * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\Hook does not exist.
+    */
+   #[Hook('entity_update')]
+   public function onEntityUpdate(EntityInterface $entity): void {
+@@ -44,8 +40,6 @@ class BabelContentEntityHook {
+ 
+   /**
+    * Implements hook_entity_delete().
+-   *
+-   * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\Hook does not exist.
+    */
+   #[Hook('entity_delete')]
+   public function onEntityDelete(EntityInterface $entity): void {
+@@ -54,8 +48,6 @@ class BabelContentEntityHook {
+ 
+   /**
+    * Implements hook_entity_bundle_delete().
+-   *
+-   * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\Hook does not exist.
+    */
+   #[Hook('entity_bundle_delete')]
+   public function onBundleDelete(string $entityTypeId, string $bundle): void {
+diff --git a/modules/babel_menu_link_content/babel_menu_link_content.module b/modules/babel_menu_link_content/babel_menu_link_content.module
+index 1a81b71474b1e8947d17217f290b988d31649e77..c7bcfab94d40ddd2ba8184880975ae851b71fcfa 100644
+--- a/modules/babel_menu_link_content/babel_menu_link_content.module
++++ b/modules/babel_menu_link_content/babel_menu_link_content.module
+@@ -14,8 +14,6 @@ use Drupal\system\MenuInterface;
+ 
+ /**
+  * Implements hook_ENTITY_TYPE_insert() for menu_link_content entity type.
+- *
+- * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\LegacyHook does not exist.
+  */
+ #[LegacyHook]
+ function babel_menu_link_content_menu_link_content_insert(MenuLinkContentInterface $link): void {
+@@ -24,8 +22,6 @@ function babel_menu_link_content_menu_link_content_insert(MenuLinkContentInterfa
+ 
+ /**
+  * Implements hook_ENTITY_TYPE_update() for menu_link_content entity type.
+- *
+- * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\LegacyHook does not exist.
+  */
+ #[LegacyHook]
+ function babel_menu_link_content_menu_link_content_update(MenuLinkContentInterface $link): void {
+@@ -34,8 +30,6 @@ function babel_menu_link_content_menu_link_content_update(MenuLinkContentInterfa
+ 
+ /**
+  * Implements hook_ENTITY_TYPE_delete() for menu_link_content entity type.
+- *
+- * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\LegacyHook does not exist.
+  */
+ #[LegacyHook]
+ function babel_menu_link_content_menu_link_content_delete(MenuLinkContentInterface $link): void {
+@@ -44,8 +38,6 @@ function babel_menu_link_content_menu_link_content_delete(MenuLinkContentInterfa
+ 
+ /**
+  * Implements hook_ENTITY_TYPE_delete() for menu entity type.
+- *
+- * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\LegacyHook does not exist.
+  */
+ #[LegacyHook]
+ function babel_menu_link_content_menu_delete(MenuInterface $menu): void {
+diff --git a/modules/babel_menu_link_content/src/Hook/BabelMenuLinkContentHook.php b/modules/babel_menu_link_content/src/Hook/BabelMenuLinkContentHook.php
+index 7dd8274f5cb941e0d7bfc27207d1897d40ee2c8f..fe554c8ad50446c85800f9c9dba6200cf8131166 100644
+--- a/modules/babel_menu_link_content/src/Hook/BabelMenuLinkContentHook.php
++++ b/modules/babel_menu_link_content/src/Hook/BabelMenuLinkContentHook.php
+@@ -24,8 +24,6 @@ class BabelMenuLinkContentHook {
+ 
+   /**
+    * Implements hook_ENTITY_TYPE_insert() for menu_link_content entity type.
+-   *
+-   * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\Hook does not exist.
+    */
+   #[Hook('menu_link_content_insert')]
+   public function insertMenuLinkContent(MenuLinkContentInterface $link): void {
+@@ -34,8 +32,6 @@ class BabelMenuLinkContentHook {
+ 
+   /**
+    * Implements hook_ENTITY_HOOK_update() for menu_link_content entity type.
+-   *
+-   * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\Hook does not exist.
+    */
+   #[Hook('menu_link_content_update')]
+   public function updateMenuLinkContent(MenuLinkContentInterface $link): void {
+@@ -51,18 +47,14 @@ class BabelMenuLinkContentHook {
+ 
+   /**
+    * Implements hook_ENTITY_TYPE_delete() for menu_link_content entity type.
+-   *
+-   * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\Hook does not exist.
+    */
+   #[Hook('menu_link_content_delete')]
+   public function deleteMenuLinkContent(MenuLinkContentInterface $link): void {
+-    $this->babelStorage->delete('menu_link_content', "{$link->getMenuName()}:{$link->id()}");
++    $this->babelStorage->delete('menu_link_content', "{$link->getMenuName()}:{$link->id()}:");
+   }
+ 
+   /**
+    * Implements hook_ENTITY_TYPE_delete() for menu_link_content entity type.
+-   *
+-   * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\Hook does not exist.
+    */
+   #[Hook('menu_delete')]
+   public function deleteMenuContent(MenuInterface $menu): void {
+diff --git a/modules/babel_og_menu_link/babel_og_menu_link.info.yml b/modules/babel_og_menu_link/babel_og_menu_link.info.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..cd5495bec53f002790076de0d6de0c40fd81047b
+--- /dev/null
++++ b/modules/babel_og_menu_link/babel_og_menu_link.info.yml
+@@ -0,0 +1,8 @@
++type: module
++name: Babel Organic Group Menu Links
++description: Support for Organic Group menu links
++core_version_requirement: "^10.4 || ^11.1 || ^12"
++dependencies:
++  - babel:babel
++  - drupal:menu_link_content
++  - og_menu:og_menu
+diff --git a/modules/babel_og_menu_link/babel_og_menu_link.install b/modules/babel_og_menu_link/babel_og_menu_link.install
+new file mode 100644
+index 0000000000000000000000000000000000000000..3e2441cde207af743ff0eadd677c3d7b9714dec7
+--- /dev/null
++++ b/modules/babel_og_menu_link/babel_og_menu_link.install
+@@ -0,0 +1,27 @@
++<?php
++
++/**
++ * @file
++ * Uninstall functions of Babel OG Menu Link.
++ */
++
++declare(strict_types=1);
++
++use Drupal\babel_og_menu_link\BabelOgMenuLinkManager;
++
++/**
++ * Implements hook_uninstall().
++ */
++function babel_og_menu_link_uninstall($is_syncing): void {
++  // Delete sources.
++  \Drupal::service(BabelOgMenuLinkManager::class)->deleteSources();
++
++  // If not a sync, we have to remove our section from babel.settings.
++  if (!$is_syncing) {
++    // Remove the babel_og_menu_link settings from the editable config.
++    $config = \Drupal::configFactory()->getEditable('babel.settings');
++    $pluginSettings = $config->get('translation_type.plugin');
++    unset($pluginSettings['babel_og_menu_link']);
++    $config->set('translation_type.plugin', $pluginSettings)->save(TRUE);
++  }
++}
+diff --git a/modules/babel_og_menu_link/babel_og_menu_link.module b/modules/babel_og_menu_link/babel_og_menu_link.module
+new file mode 100644
+index 0000000000000000000000000000000000000000..26dc9098332411f21150824eefe04742a096c3eb
+--- /dev/null
++++ b/modules/babel_og_menu_link/babel_og_menu_link.module
+@@ -0,0 +1,53 @@
++<?php
++
++/**
++ * @file
++ * Hook implementations for Babel OG Menu Links module.
++ */
++
++declare(strict_types=1);
++
++use Drupal\babel_og_menu_link\Hook\BabelOgMenuLinkContentHook;
++use Drupal\Core\Hook\Attribute\LegacyHook;
++use Drupal\menu_link_content\MenuLinkContentInterface;
++use Drupal\og_menu\OgMenuInterface;
++
++/**
++ * Implements hook_ENTITY_TYPE_insert() for menu_link_content entity type.
++ */
++#[LegacyHook]
++function babel_og_menu_link_menu_link_content_insert(MenuLinkContentInterface $link): void {
++  \Drupal::service(BabelOgMenuLinkContentHook::class)->insertMenuLinkContent($link);
++}
++
++/**
++ * Implements hook_ENTITY_TYPE_presave() for menu_link_content entity type.
++ */
++#[LegacyHook]
++function babel_og_menu_link_menu_link_content_presave(MenuLinkContentInterface $link): void {
++  \Drupal::service(BabelOgMenuLinkContentHook::class)->presaveMenuLinkContent($link);
++}
++
++/**
++ * Implements hook_ENTITY_TYPE_update() for menu_link_content entity type.
++ */
++#[LegacyHook]
++function babel_og_menu_link_menu_link_content_update(MenuLinkContentInterface $link): void {
++  \Drupal::service(BabelOgMenuLinkContentHook::class)->updateMenuLinkContent($link);
++}
++
++/**
++ * Implements hook_ENTITY_TYPE_delete() for menu_link_content entity type.
++ */
++#[LegacyHook]
++function babel_og_menu_link_menu_link_content_delete(MenuLinkContentInterface $link): void {
++  \Drupal::service(BabelOgMenuLinkContentHook::class)->deleteMenuLinkContent($link);
++}
++
++/**
++ * Implements hook_ENTITY_TYPE_delete() for menu entity type.
++ */
++#[LegacyHook]
++function babel_og_menu_link_ogmenu_delete(OgMenuInterface $ogMenuType): void {
++  \Drupal::service(BabelOgMenuLinkContentHook::class)->deleteOgMenuType($ogMenuType);
++}
+diff --git a/modules/babel_og_menu_link/babel_og_menu_link.services.yml b/modules/babel_og_menu_link/babel_og_menu_link.services.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..cccf01b526d09ba63e8c677d4c3ae10b5d1076e9
+--- /dev/null
++++ b/modules/babel_og_menu_link/babel_og_menu_link.services.yml
+@@ -0,0 +1,12 @@
++services:
++  _defaults:
++    autowire: true
++    autoconfigure: true
++
++  Drupal\babel_og_menu_link\BabelOgMenuLinkManager:
++    calls:
++      - [setContentTranslationManager, ['@?content_translation.manager']]
++
++  Drupal\babel_og_menu_link\EventSubscriber\ConfigSubscriber: {  }
++
++  Drupal\babel_og_menu_link\Hook\BabelOgMenuLinkContentHook: {  }
+diff --git a/modules/babel_og_menu_link/config/schema/babel_og_menu_link.schema.yml b/modules/babel_og_menu_link/config/schema/babel_og_menu_link.schema.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..0c20e1b9a7c568394ccff356a0bc92e57603497e
+--- /dev/null
++++ b/modules/babel_og_menu_link/config/schema/babel_og_menu_link.schema.yml
+@@ -0,0 +1,10 @@
++translation_type.babel_og_menu_link:
++  type: translation_type_default
++  mapping:
++    og_menu:
++      type: sequence
++      sequence:
++        type: string
++        label: OG Menu config ID
++        constraints:
++          ConfigExists: { prefix: "og_menu.ogmenu." }
+diff --git a/modules/babel_og_menu_link/src/BabelOgMenuLinkManager.php b/modules/babel_og_menu_link/src/BabelOgMenuLinkManager.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..779d5da81344c8e985bd47dba4de66a638ae9500
+--- /dev/null
++++ b/modules/babel_og_menu_link/src/BabelOgMenuLinkManager.php
+@@ -0,0 +1,396 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\babel_og_menu_link;
++
++use Drupal\Component\Plugin\PluginBase;
++use Drupal\Component\Utility\DeprecationHelper;
++use Drupal\content_translation\ContentTranslationManagerInterface;
++use Drupal\Core\Batch\BatchBuilder;
++use Drupal\Core\Config\ConfigFactoryInterface;
++use Drupal\Core\Entity\EntityTypeManagerInterface;
++use Drupal\Core\Language\Language;
++use Drupal\Core\Language\LanguageManagerInterface;
++use Drupal\babel\BabelStorageInterface;
++use Drupal\babel\Model\Source;
++use Drupal\babel\StringsCollectorFactory;
++use Drupal\menu_link_content\MenuLinkContentInterface;
++
++/**
++ * Babel translation manager for Organic Group menu links.
++ */
++final class BabelOgMenuLinkManager {
++
++  /**
++   * List of the menu link entity properties which aren't translated.
++   *
++   * @const string[]
++   */
++  public const EXCLUDED_FIELDS = [
++    'changed',
++    'created',
++    'langcode',
++    'content_translation_changed',
++    'content_translation_created',
++    'content_translation_outdated',
++    'content_translation_source',
++    'content_translation_status',
++    'content_translation_uid',
++    'default_langcode',
++    'revision_translation_affected',
++  ];
++
++  /**
++   * The content translation manager, if available.
++   *
++   * @var \Drupal\content_translation\ContentTranslationManagerInterface|null
++   */
++  protected ?ContentTranslationManagerInterface $contentTranslationManager = NULL;
++
++  /**
++   * Static cache of System menu names per OG menu ID.
++   *
++   * @var string[][]
++   */
++  protected array $menuNamesPerOgMenuId;
++
++  public function __construct(
++    protected readonly EntityTypeManagerInterface $entityTypeManager,
++    protected readonly BabelStorageInterface $babelStorage,
++    protected readonly LanguageManagerInterface $languageManager,
++    protected readonly StringsCollectorFactory $collectorFactory,
++    protected readonly ConfigFactoryInterface $configFactory,
++  ) {}
++
++  /**
++   * Sets the content translation manager.
++   *
++   * @param \Drupal\content_translation\ContentTranslationManagerInterface $contentTranslationManager
++   *   The content translation manager.
++   */
++  public function setContentTranslationManager(ContentTranslationManagerInterface $contentTranslationManager): void {
++    $this->contentTranslationManager = $contentTranslationManager;
++  }
++
++  /**
++   * Updates the source objects of the given menu link entity.
++   *
++   * @param \Drupal\menu_link_content\MenuLinkContentInterface $link
++   *   The menu link content entity to process.
++   */
++  public function updateSourcesForLink(MenuLinkContentInterface $link): void {
++    if (!$this->isLinkAllowed($link)) {
++      return;
++    }
++
++    $ogMenuType = $this->getOgMenuIdFromLink($link);
++
++    // Invalidate the cache if a translation was changed.
++    if (!$link->isDefaultTranslation()) {
++      $query = $this->babelStorage->getBaseQuery(
++        pluginId: 'babel_og_menu_link',
++        fields: ['hash']
++      );
++      $hashes = $query
++        ->condition('id', $query->escapeLike("$ogMenuType:{$link->id()}:") . '%', 'LIKE')
++        ->execute()
++        ->fetchCol();
++      $this->collectorFactory->invalidateHashes($hashes, $link->language()->getId());
++      return;
++    }
++
++    $this->babelStorage->delete('babel_og_menu_link', "$ogMenuType:{$link->id()}:");
++    $this->babelStorage->update('babel_og_menu_link', $this->getSourcesForLink($link));
++  }
++
++  /**
++   * Performs the necessary operations if a translatable link prop was changed.
++   *
++   * Right now this means the deletion of translations.
++   *
++   * @param \Drupal\menu_link_content\MenuLinkContentInterface $link
++   *   The link which was changed.
++   */
++  public function handleTranslatablePropertyChange(MenuLinkContentInterface $link): void {
++    if (!$this->isLinkAllowed($link)) {
++      return;
++    }
++    if (!$this->contentTranslationManager instanceof ContentTranslationManagerInterface) {
++      return;
++    }
++    if ($link->isNew() || $link->isNewTranslation()) {
++      return;
++    }
++    if (!$link->isDefaultTranslation()) {
++      return;
++    }
++    $translationLanguageCodes = array_keys($link->getTranslationLanguages(FALSE));
++    if (!$translationLanguageCodes) {
++      return;
++    }
++
++    $translatableFieldsUnfiltered = $link->getTranslatableFields(FALSE);
++    // Ignore language property and fields which are provided by
++    // content_translation.
++    $translatableFields = array_diff_key(
++      $translatableFieldsUnfiltered,
++      array_combine(static::EXCLUDED_FIELDS, static::EXCLUDED_FIELDS)
++    );
++    $originalLink = DeprecationHelper::backwardsCompatibleCall(
++      \Drupal::VERSION,
++      '11.2.0',
++      fn() => $link->getOriginal(),
++      fn() => $link->original,
++    );
++    $originalTranslatableValues = array_intersect_key($originalLink->toArray(), $translatableFields);
++    $newTranslatableValues = array_intersect_key($link->toArray(), $translatableFields);
++    $changedProperties = array_filter(
++      array_keys(array_merge($originalTranslatableValues, $newTranslatableValues)),
++      function (string $prop) use ($originalTranslatableValues, $newTranslatableValues): bool {
++        $original = $originalTranslatableValues[$prop] ?? NULL;
++        $new = $newTranslatableValues[$prop] ?? NULL;
++        return $original !== $new;
++      }
++    );
++    if (!$changedProperties) {
++      return;
++    }
++    foreach ($translationLanguageCodes as $langcode) {
++      $this->contentTranslationManager->getTranslationMetadata($link->getTranslation($langcode))->setOutdated(TRUE);
++    }
++  }
++
++  /**
++   * Instantiates source objects from the properties of the given menu link.
++   *
++   * @param \Drupal\menu_link_content\MenuLinkContentInterface $link
++   *   The menu link content entity to process.
++   *
++   * @return list<\Drupal\babel\Model\Source>
++   *   List of source objects.
++   */
++  public function getSourcesForLink(MenuLinkContentInterface $link): array {
++    $sources = [];
++    $ogMenuId = $this->getOgMenuIdFromLink($link);
++    if (!$ogMenuId) {
++      return $sources;
++    }
++
++    if (!$this->isOgMenuIdAllowed($ogMenuId)) {
++      return $sources;
++    }
++
++    foreach ($link->getTranslatableFields(FALSE) as $field) {
++      if (in_array($field->getName(), static::EXCLUDED_FIELDS, TRUE)) {
++        continue;
++      }
++
++      foreach ($field as $delta => $item) {
++        $id = implode(PluginBase::DERIVATIVE_SEPARATOR, [
++          $ogMenuId,
++          $link->id(),
++          $field->getName(),
++          $delta,
++        ]);
++        $sources[$id] = new Source(string: (string) $item->value, context: '');
++      }
++    }
++
++    return $sources;
++  }
++
++  /**
++   * Deletes the OG menu link sources matching the OG menu link IDs.
++   *
++   * @param array $ogMenuIds
++   *   ID of the Organic Group menus which menu link entities must be processed.
++   *   All Babel OG menu link sources are removed if omitted or empty.
++   */
++  public function deleteSources(array $ogMenuIds = []): void {
++    if (empty($ogMenuIds)) {
++      $this->babelStorage->delete('babel_og_menu_link');
++      return;
++    }
++    foreach ($ogMenuIds as $ogMenuId) {
++      $this->babelStorage->delete('babel_og_menu_link', startsWith: "$ogMenuId:");
++    }
++  }
++
++  /**
++   * Creates a batch process to process preexisting OG menu links.
++   *
++   * @param array $ogMenuIds
++   *   ID of the Organic Group menus which menu link entities must be processed.
++   */
++  public function batchAddSources(array $ogMenuIds = []): void {
++    $menuLinkIdQuery = $this->entityTypeManager->getStorage('menu_link_content')
++      ->getQuery()
++      ->accessCheck(FALSE);
++
++    $menuIds = $this->getOgMenuNames($ogMenuIds);
++    if (!$menuIds) {
++      return;
++    }
++    $menuLinkIdQuery->condition('menu_name', $menuIds, 'IN');
++
++    $menuLinkIds = $menuLinkIdQuery->execute();
++    if (!$menuLinkIds) {
++      return;
++    }
++    $total = count($menuLinkIds);
++
++    $batch = new BatchBuilder();
++    foreach (array_chunk($menuLinkIds, 10) as $chunk) {
++      $batch->addOperation([BabelOgMenuLinkManager::class, 'processMenuLinks'], [$chunk, $total]);
++    }
++
++    $batchArray = $batch->toArray();
++    batch_set($batchArray);
++  }
++
++  /**
++   * Returns a list of allowed OG menu names.
++   *
++   * @return string[][]
++   *   A list of allowed OG menu names.
++   */
++  protected function getOgMenuNames(array $ogMenuIds = [], bool $limitToConfigured = TRUE): array {
++    if (!isset($this->menuNamesPerOgMenuId)) {
++      $ogMenuNames = array_values($this->entityTypeManager->getStorage('ogmenu')->getQuery()->accessCheck(FALSE)->execute());
++
++      // Limit menus to the configured menu names.
++      if ($limitToConfigured) {
++        $ogMenuNames = array_intersect($this->getEnabledOgMenuIds(), $ogMenuNames);
++      }
++
++      if (empty($ogMenuNames)) {
++        return $this->menuNamesPerOgMenuId = [];
++      }
++
++      foreach ($ogMenuNames as $menuName) {
++        $ogMenuInstanceIds = $this->entityTypeManager->getStorage('ogmenu_instance')->getQuery()->accessCheck(FALSE)->condition('type', $menuName)->execute();
++        $this->menuNamesPerOgMenuId[$menuName] = array_map(
++          fn (string|int $ogMenuInstanceId): string => "ogmenu-$ogMenuInstanceId",
++          $ogMenuInstanceIds,
++        );
++      }
++    }
++
++    if ($ogMenuIds) {
++      return array_unique(array_merge(...array_values(array_intersect_key(
++        $this->menuNamesPerOgMenuId,
++        array_combine($ogMenuIds, $ogMenuIds),
++      ))));
++    }
++
++    return array_unique(array_merge(...array_values($this->menuNamesPerOgMenuId)));
++  }
++
++  /**
++   * Check whether the passed link is handled by the OG menu link plugin.
++   *
++   * @param \Drupal\menu_link_content\MenuLinkContentInterface $link
++   *   The menu link content entity.
++   *
++   * @return bool
++   *   Whether the passed link is handled by Babel.
++   */
++  public function isLinkAllowed(MenuLinkContentInterface $link): bool {
++    // Link must be the default translation and the default language must be
++    // English.
++    if (
++      !$link->isDefaultTranslation() ||
++      $link->language()->getId() !== Language::$defaultValues['id']
++    ) {
++      return FALSE;
++    }
++    $menuName = $link->getMenuName();
++    if (!preg_match('/^ogmenu-(\d+)$/', $menuName, $matches)) {
++      return FALSE;
++    }
++    $ogmenuInstanceId = end($matches);
++
++    return in_array(
++      $this->entityTypeManager->getStorage('ogmenu_instance')->load($ogmenuInstanceId)?->bundle(),
++      $this->getEnabledOgMenuIds(),
++      TRUE
++    );
++  }
++
++  /**
++   * Batch callback to process menu link content entities.
++   *
++   * @param array<string|int> $lids
++   *   ID of menu link content entities.
++   * @param int $total
++   *   Total number of items to process. Only used to construct the interactive
++   *   message.
++   * @param array $context
++   *   The batch context.
++   */
++  public static function processMenuLinks(array $lids, int $total, array &$context): void {
++    $context['results']['progress'] ??= 0;
++    $context['results']['last_message_time'] ??= 0;
++    $linkStorage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
++    $linkSourceManager = \Drupal::service(BabelOgMenuLinkManager::class);
++
++    $sources = [];
++    foreach ($linkStorage->loadMultiple($lids) as $link) {
++      assert($link instanceof MenuLinkContentInterface);
++      $sources = array_merge($sources, $linkSourceManager->getSourcesForLink($link));
++    }
++    \Drupal::service(BabelStorageInterface::class)->update('babel_og_menu_link', $sources);
++
++    $context['results']['progress'] += count($lids);
++    // On CLI, report progress only once per second.
++    $now = \Drupal::time()->getCurrentTime();
++    if (PHP_SAPI !== 'cli' || $context['results']['last_message_time'] <> $now || $context['results']['progress'] === $total) {
++      $context['message'] = t('Babel OG menu links module processed @progress out of @total OG menu links', [
++        '@progress' => $context['results']['progress'],
++        '@total' => $total,
++      ]);
++      $context['results']['last_message_time'] = $now;
++    }
++  }
++
++  /**
++   * Returns the IDs of the actually configured OG menus.
++   *
++   * @return string[]
++   *   The IDs of the actually configured OG menus.
++   */
++  protected function getEnabledOgMenuIds(): array {
++    $babelSettings = $this->configFactory->get('babel.settings');
++    return $babelSettings->get('translation_type.plugin.babel_og_menu_link.og_menu') ?? [];
++  }
++
++  /**
++   * Returns the OG menu ID of a menu link.
++   *
++   * @return string|null
++   *   The OG menu ID of a menu link, or NULL if the menu link doesn't belong to
++   *   an Organic Group menu.
++   */
++  public function getOgMenuIdFromLink(MenuLinkContentInterface $link): ?string {
++    $menuName = $link->getMenuName();
++    if (!preg_match('/^ogmenu-(\d+)$/', $menuName, $matches)) {
++      return NULL;
++    }
++    $ogmenuId = $matches[1];
++
++    return $this->entityTypeManager->getStorage('ogmenu_instance')->load($ogmenuId)?->bundle();
++  }
++
++  /**
++   * Determines if the given OG menu ID is on the allowed list.
++   */
++  protected function isOgMenuIdAllowed(string $ogMenuId): bool {
++    return in_array(
++      $ogMenuId,
++      $this->getEnabledOgMenuIds(),
++      TRUE
++    );
++  }
++
++}
+diff --git a/modules/babel_og_menu_link/src/EventSubscriber/ConfigSubscriber.php b/modules/babel_og_menu_link/src/EventSubscriber/ConfigSubscriber.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..286e1fd0e421a32090cf42a6ce9c05775df58410
+--- /dev/null
++++ b/modules/babel_og_menu_link/src/EventSubscriber/ConfigSubscriber.php
+@@ -0,0 +1,56 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\babel_og_menu_link\EventSubscriber;
++
++use Drupal\Core\Config\ConfigCrudEvent;
++use Drupal\Core\Config\ConfigEvents;
++use Drupal\babel_og_menu_link\BabelOgMenuLinkManager;
++use Symfony\Component\EventDispatcher\EventSubscriberInterface;
++
++/**
++ * Event subscriber for acting on configuration events.
++ */
++class ConfigSubscriber implements EventSubscriberInterface {
++
++  public function __construct(
++    protected readonly BabelOgMenuLinkManager $ogLinkManager,
++  ) {}
++
++  /**
++   * Reacts to Babel's config changes.
++   *
++   * @param \Drupal\Core\Config\ConfigCrudEvent $event
++   *   The configuration event.
++   */
++  public function onConfigChange(ConfigCrudEvent $event): void {
++    $config = $event->getConfig();
++    if ($config->getName() !== 'babel.settings') {
++      return;
++    }
++    if (!$event->isChanged('translation_type.plugin.babel_og_menu_link')) {
++      return;
++    }
++    $original = $config->getOriginal()['translation_type']['plugin']['babel_og_menu_link']['og_menu'] ?? [];
++    $current = $config->get()['translation_type']['plugin']['babel_og_menu_link']['og_menu'] ?? [];
++    $added = array_diff($current, $original);
++    $removed = array_diff($original, $current);
++    if ($added) {
++      $this->ogLinkManager->batchAddSources($added);
++    }
++    if ($removed) {
++      $this->ogLinkManager->deleteSources($removed);
++    }
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function getSubscribedEvents(): array {
++    $events[ConfigEvents::SAVE][] = ['onConfigChange'];
++    $events[ConfigEvents::DELETE][] = ['onConfigChange'];
++    return $events;
++  }
++
++}
+diff --git a/modules/babel_og_menu_link/src/Hook/BabelOgMenuLinkContentHook.php b/modules/babel_og_menu_link/src/Hook/BabelOgMenuLinkContentHook.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..4e98805958e07fa9e64796564ed2dd6167f00f40
+--- /dev/null
++++ b/modules/babel_og_menu_link/src/Hook/BabelOgMenuLinkContentHook.php
+@@ -0,0 +1,75 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\babel_og_menu_link\Hook;
++
++use Drupal\Core\Hook\Attribute\Hook;
++use Drupal\babel\BabelStorageInterface;
++use Drupal\babel\Plugin\Babel\TranslationTypePluginManager;
++use Drupal\babel_og_menu_link\BabelOgMenuLinkManager;
++use Drupal\menu_link_content\MenuLinkContentInterface;
++use Drupal\og_menu\OgMenuInterface;
++
++/**
++ * Babel Organic Group menu link content CRUD operations hooks.
++ */
++class BabelOgMenuLinkContentHook {
++
++  public function __construct(
++    protected readonly TranslationTypePluginManager $translationTypePluginManager,
++    protected readonly BabelOgMenuLinkManager $ogLinkManager,
++    protected readonly BabelStorageInterface $babelStorage,
++  ) {}
++
++  /**
++   * Implements hook_ENTITY_TYPE_insert() for menu_link_content entity type.
++   */
++  #[Hook('menu_link_content_insert')]
++  public function insertMenuLinkContent(MenuLinkContentInterface $link): void {
++    $this->ogLinkManager->updateSourcesForLink($link);
++  }
++
++  /**
++   * Implements hook_ENTITY_HOOK_presave() for menu_link_content entity type.
++   */
++  #[Hook('menu_link_content_presave')]
++  public function presaveMenuLinkContent(MenuLinkContentInterface $link): void {
++    $this->ogLinkManager->handleTranslatablePropertyChange($link);
++  }
++
++  /**
++   * Implements hook_ENTITY_HOOK_update() for menu_link_content entity type.
++   */
++  #[Hook('menu_link_content_update')]
++  public function updateMenuLinkContent(MenuLinkContentInterface $link): void {
++    $this->ogLinkManager->updateSourcesForLink($link);
++  }
++
++  /**
++   * Implements hook_ENTITY_TYPE_delete() for menu_link_content entity type.
++   */
++  #[Hook('menu_link_content_delete')]
++  public function deleteMenuLinkContent(MenuLinkContentInterface $link): void {
++    if (!$link->isDefaultTranslation()) {
++      return;
++    }
++    $ogMenuType = $this->ogLinkManager->getOgMenuIdFromLink($link);
++    if (!$ogMenuType) {
++      return;
++    }
++    $this->babelStorage->delete('babel_og_menu_link', "$ogMenuType:{$link->id()}:");
++  }
++
++  /**
++   * Implements hook_ENTITY_TYPE_delete() for an OG menu entity type.
++   *
++   * This config entity is the bundle entity type of ogmenu instance content
++   * entities.
++   */
++  #[Hook('ogmenu_delete')]
++  public function deleteOgMenuType(OgMenuInterface $ogMenuType): void {
++    $this->babelStorage->delete('babel_og_menu_link', "{$ogMenuType->id()}:");
++  }
++
++}
+diff --git a/modules/babel_og_menu_link/src/Plugin/Babel/TranslationType/BabelOgMenuLink.php b/modules/babel_og_menu_link/src/Plugin/Babel/TranslationType/BabelOgMenuLink.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..8ab74d576a6d29d96f94c6e40ed9a04e78fa6e14
+--- /dev/null
++++ b/modules/babel_og_menu_link/src/Plugin/Babel/TranslationType/BabelOgMenuLink.php
+@@ -0,0 +1,429 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\babel_og_menu_link\Plugin\Babel\TranslationType;
++
++use Drupal\Component\Datetime\TimeInterface;
++use Drupal\Component\Plugin\PluginBase;
++use Drupal\Core\Database\Connection;
++use Drupal\Core\DependencyInjection\DependencySerializationTrait;
++use Drupal\Core\Entity\ContentEntityStorageInterface;
++use Drupal\Core\Entity\EntityTypeManagerInterface;
++use Drupal\Core\Entity\Sql\SqlEntityStorageInterface;
++use Drupal\Core\Form\FormStateInterface;
++use Drupal\Core\Logger\LoggerChannelInterface;
++use Drupal\Core\Plugin\PluginFormInterface;
++use Drupal\Core\Session\AccountProxyInterface;
++use Drupal\Core\StringTranslation\TranslatableMarkup;
++use Drupal\babel\BabelStorageInterface;
++use Drupal\babel\Model\Source;
++use Drupal\babel\Model\StringTranslation;
++use Drupal\babel\Model\Translation;
++use Drupal\babel\Plugin\Babel\TranslationType;
++use Drupal\babel\Plugin\Babel\TranslationTypePluginBase;
++use Drupal\babel\StringsCollectorFactory;
++use Drupal\babel_og_menu_link\BabelOgMenuLinkManager;
++use Drupal\content_translation\ContentTranslationManagerInterface;
++use Drupal\menu_link_content\MenuLinkContentInterface;
++use Drupal\mysql\Driver\Database\mysql\Connection as MysqlConnection;
++use Drupal\og_menu\OgMenuInterface;
++use Drupal\pgsql\Driver\Database\pgsql\Connection as PostgresqlConnection;
++use Drupal\sqlite\Driver\Database\sqlite\Connection as SqliteConnection;
++use Drupal\user\UserInterface;
++use Symfony\Component\DependencyInjection\ContainerInterface;
++
++/**
++ * Translation type plugin for menu links of Organic Group menus.
++ */
++#[TranslationType(
++  id: 'babel_og_menu_link',
++  label: new TranslatableMarkup('Organic Group menu links'),
++  status: TRUE,
++)]
++class BabelOgMenuLink extends TranslationTypePluginBase implements PluginFormInterface {
++
++  use DependencySerializationTrait;
++
++  public function __construct(
++    array $configuration,
++    string $pluginId,
++    array $pluginDefinition,
++    BabelStorageInterface $babelStorage,
++    StringsCollectorFactory $collectorFactory,
++    protected readonly EntityTypeManagerInterface $entityTypeManager,
++    protected readonly BabelOgMenuLinkManager $ogLinkManager,
++    protected readonly AccountProxyInterface $currentUser,
++    protected readonly TimeInterface $time,
++    protected readonly LoggerChannelInterface $logger,
++    protected readonly Connection $database,
++    protected readonly ?ContentTranslationManagerInterface $contentTranslationManager,
++  ) {
++    parent::__construct($configuration, $pluginId, $pluginDefinition, $babelStorage, $collectorFactory);
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
++    return new static(
++      $configuration,
++      $plugin_id,
++      $plugin_definition,
++      $container->get(BabelStorageInterface::class),
++      $container->get(StringsCollectorFactory::class),
++      $container->get('entity_type.manager'),
++      $container->get(BabelOgMenuLinkManager::class),
++      $container->get('current_user'),
++      $container->get('datetime.time'),
++      $container->get('logger.channel.babel'),
++      $container->get('database'),
++      $container->get('content_translation.manager', ContainerInterface::NULL_ON_INVALID_REFERENCE),
++    );
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function defaultConfiguration(): array {
++    return [
++      'og_menu' => [],
++    ];
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getStrings(string $langcode, array $ids = []): array {
++    $storage = $this->getMenuLinkStorage();
++    if ($storage instanceof SqlEntityStorageInterface) {
++      return $this->getStringsSql($langcode, $ids);
++    }
++
++    foreach ($this->getStringsFromDatabase($ids)->execute() as $row) {
++      [, $lid, $fieldName, $delta] = explode(PluginBase::DERIVATIVE_SEPARATOR, $row->id);
++      $lids[$lid][] = [
++        'fieldName' => $fieldName,
++        'delta' => $delta,
++        'babelId' => $row->id,
++        'status' => (bool) $row->status,
++      ];
++    }
++    if (!$lids) {
++      return [];
++    }
++
++    $strings = [];
++    foreach ($storage->loadMultiple(array_keys($lids)) as $lid => $link) {
++      assert($link instanceof MenuLinkContentInterface);
++      $hasTranslation = $link->hasTranslation($langcode);
++      if ($hasTranslation) {
++        $translated = $link->getTranslation($langcode);
++      }
++
++      foreach ($lids[$lid] as $sourceData) {
++        [
++          'fieldName' => $fieldName,
++          'delta' => $delta,
++          'babelId' => $id,
++          'status' => $status,
++        ] = $sourceData;
++        $source = $link->get($fieldName)?->get($delta)->getString();
++
++        if (!$source) {
++          continue;
++        }
++
++        $translatedString = $hasTranslation
++          ? $translated?->get($fieldName)?->get($delta)?->getString()
++          : NULL;
++        $translation = $translatedString ? new Translation(
++          language: $langcode,
++          string: $translatedString,
++        ) : NULL;
++        $strings[$id] = new StringTranslation(
++          source: new Source(string: $source, context: '', status: $status),
++          translation: $translation,
++        );
++      }
++    }
++
++    return $strings;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function updateTranslation(StringTranslation $string, string $id, string $langcode, string $translation): void {
++    if (!$this->contentTranslationManager) {
++      return;
++    }
++    parent::updateTranslation($string, $id, $langcode, $translation);
++
++    [, $lid, $fieldName, $delta] = explode(':', $id);
++    $storage = $this->getMenuLinkStorage();
++    $link = $storage->load($lid);
++    if (!$link instanceof MenuLinkContentInterface) {
++      return;
++    }
++    if (!$this->contentTranslationManager->isEnabled($link->getEntityTypeId(), $link->bundle())) {
++      return;
++    }
++
++    $translatableFields = $this->getTranslatableFields();
++
++    $translated = $link->hasTranslation($langcode)
++      ? $link->getTranslation($langcode)
++      : $link->addTranslation($langcode, $link->toArray());
++    $metadata = $this->contentTranslationManager->getTranslationMetadata($translated);
++
++    if ($translated->isNewTranslation()) {
++      // Update the translation creation time and source.
++      $metadata->setCreatedTime($this->time->getRequestTime());
++      $metadata->setSource($link->getUntranslated()->language()->getId());
++    }
++
++    $user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
++    \assert($user instanceof UserInterface);
++    $metadata->setAuthor($user);
++    $metadata->setChangedTime($this->time->getRequestTime());
++
++    $translated->get($fieldName)->set($delta, $translation ?: $link->get($fieldName)->getValue()[$delta]);
++
++    // Translation must validate to be saved.
++    $violations = $translated->validate();
++    if (!$violations->count()) {
++      $source = array_intersect_key($link->toArray(), $translatableFields);
++      $trans = array_intersect_key($translated->toArray(), $translatableFields);
++      if ($source !== $trans) {
++        $translated->save();
++        return;
++      }
++    }
++    else {
++      $message = $translated->isNewTranslation()
++        ? "New translation wasn't saved."
++        : "Translation was deleted.";
++      $this->logger->warning(
++        $message . ' The automatically created translation of @label @type_label_singular does not validate after @property value was changed to "@value".',
++        [
++          '@label' => $link->getLabel(),
++          '@type_label_singular' => $link->getEntityType()->getSingularLabel(),
++          '@property' => $fieldName,
++          '@value' => $translation,
++        ],
++      );
++    }
++
++    if (!$translated->isNewTranslation()) {
++      $link->removeTranslation($langcode);
++      $link->save();
++    }
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
++    $form['og_menu'] = [
++      '#type' => 'checkboxes',
++      '#title' => $this->t('Limit to specific Organic Group menus'),
++      '#options' => array_map(
++        fn (OgMenuInterface $ogMenuType): string => $ogMenuType->label(),
++        $this->entityTypeManager->getStorage('ogmenu')->loadMultiple(),
++      ),
++      '#default_value' => $this->getConfiguration()['og_menu'],
++    ];
++
++    return $form;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function validateConfigurationForm(array &$form, FormStateInterface $form_state): void {}
++
++  /**
++   * {@inheritdoc}
++   */
++  public function submitConfigurationForm(array &$form, FormStateInterface $form_state): void {
++    $configuration['og_menu'] = array_keys(array_filter($form_state->getValues()['og_menu']));
++    $this->setConfiguration($configuration);
++  }
++
++  /**
++   * Returns the specified (or all) strings of the plugin with one SQL query.
++   *
++   * @param string $langcode
++   *   The language code of the translations to include.
++   * @param array $ids
++   *   The string identifiers to filter for. All strings are returned if this
++   *   parameter is an empty array.
++   *
++   * @return array<string, \Drupal\babel\Model\StringTranslation>
++   *   List of strings keyed by the source ID.
++   */
++  protected function getStringsSql(string $langcode, array $ids): array {
++    $translatableFields = $this->getTranslatableFields();
++    $query = $this->database->select('babel_source_instance', 'bsi')
++      ->fields('bsi', ['id'])
++      ->condition('bsi.plugin', $this->getPluginId());
++    if ($ids) {
++      $query->condition('bsi.id', $ids, 'IN');
++    }
++    $query->innerJoin('babel_source', 'bs', 'bsi.hash = bs.hash');
++    $query->addField('bs', 'status');
++    $query->leftJoin('babel_source_lock', 'bl', 'bsi.hash = bl.hash AND bl.langcode = :langcode', [':langcode' => $langcode]);
++    $query->addField('bl', 'langcode', 'locked');
++    $query->innerJoin(
++      'menu_link_content_data', 'md', $this->getMenuLinkDataJoinConditions('md', 'bsi'));
++    $query->fields('md', $translatableFields);
++    $query->leftJoin('menu_link_content_data', 'mdt', 'mdt.id = md.id AND mdt.langcode = :langcode', [':langcode' => $langcode]);
++    foreach ($translatableFields as $field) {
++      $query->addField('mdt', $field, "{$field}_trans");
++    }
++
++    $strings = [];
++    foreach ($query->execute()->fetchAll() as $record) {
++      [, , $property] = explode(PluginBase::DERIVATIVE_SEPARATOR, $record->id);
++      $transProperty = "{$property}_trans";
++      $translation = is_string($record->$transProperty)
++        ? new Translation($langcode, $record->$transProperty)
++        : NULL;
++      $strings[$record->id] = new StringTranslation(
++        source: new Source(string: $record->$property, context: '', status: (bool) $record->status),
++        translation: $translation,
++        locked: (bool) $record->locked,
++      );
++    }
++    return $strings;
++  }
++
++  /**
++   * Returns the menu_link_content storage.
++   *
++   * @return \Drupal\Core\Entity\ContentEntityStorageInterface
++   *   The current storage object of menu_link_content entities.
++   */
++  protected function getMenuLinkStorage(): ContentEntityStorageInterface {
++    static $storage;
++    if (!$storage instanceof ContentEntityStorageInterface) {
++      $storage = $this->entityTypeManager->getStorage('menu_link_content');
++      assert($storage instanceof ContentEntityStorageInterface);
++    }
++    return $storage;
++  }
++
++  /**
++   * Returns the list of the translatable fields.
++   *
++   * @return array<string, string>
++   *   The list of the translatable fields, keys and values both.
++   */
++  protected function getTranslatableFields(): array {
++    static $translatableFields;
++    if (!isset($translatableFields)) {
++      $link = $this->getMenuLinkStorage()->createWithSampleValues('menu_link_content');
++      $translatableFieldsUnfiltered = $link->getTranslatableFields(FALSE);
++      // Ignore language property and fields which are provided by
++      // content_translation.
++      $translatableFields = array_diff_key(
++        $translatableFieldsUnfiltered,
++        array_combine(
++          BabelOgMenuLinkManager::EXCLUDED_FIELDS,
++          BabelOgMenuLinkManager::EXCLUDED_FIELDS,
++        )
++      );
++
++      return $translatableFields = array_combine(
++        array_keys($translatableFields),
++        array_keys($translatableFields),
++      );
++    }
++
++    return $translatableFields;
++  }
++
++  /**
++   * Returns the join conditions between babel_source_instance and menu data.
++   *
++   * This method acts as a wrapper around "doGetMenuLinkDataJoinCondition".
++   * If this triggered a type error, it means Menu Link Content entities are
++   * using a SQL backend which is not yet supported. In this case you probably
++   * want to decorate this service, and develop the missing join condition which
++   * allows to connect records in "babel_source_instance" to the records in
++   * "menu_link_content_data". In the decorator, you can override this method,
++   * and you can also support the other SQL backends by calling
++   * ::doGetMenuLinkDataJoinCondition.
++   * We, Babel developers, are waiting for your patch!
++   *
++   * @param string $mdAlias
++   *   The alias to use for the "menu_link_content_data" table.
++   * @param string $bsiAlias
++   *   The alias to use for the "babel_source_instance" table.
++   *
++   * @return string
++   *   The join conditions between "babel_source_instance" and
++   *   "menu_link_content_data" tables.
++   */
++  protected function getMenuLinkDataJoinConditions(string $mdAlias, string $bsiAlias): string {
++    // If you made it this far it means you hit a type error. You're using a
++    // DB backend which is not supported by default by Drupal core. You probably
++    // want to decorate this service, and develop the missing join condition
++    // which allows to connect records in "babel_source_instance" to the records
++    // in "menu_link_content_data".
++    // We, Babel developers, are waiting for your patch!
++    return implode(' AND ', [
++      $this->doGetMenuLinkDataJoinCondition($mdAlias, $bsiAlias),
++      "$mdAlias.default_langcode = 1",
++    ]);
++  }
++
++  /**
++   * Returns the join conditions between babel_source_instance and menu data.
++   *
++   * @param string $mdAlias
++   *   The alias to use for the "menu_link_content_data" table.
++   * @param string $bsiAlias
++   *   The alias to use for the "babel_source_instance" table.
++   *
++   * @return string
++   *   The join conditions between "babel_source_instance" and
++   *    "menu_link_content_data" tables.
++   *
++   * @throws \Exception
++   *    When the current SQL database backend is not supported.
++   */
++  protected function doGetMenuLinkDataJoinCondition(string $mdAlias, string $bsiAlias): string {
++    if ($this->database instanceof MysqlConnection) {
++      return sprintf(
++        "CONCAT('-', %s.id) = REPLACE(SUBSTRING(SUBSTRING_INDEX(%s.id, ':', 2),CHAR_LENGTH(SUBSTRING_INDEX(%s.id,':',1))+1),':','-')",
++        $mdAlias,
++        $bsiAlias,
++        $bsiAlias,
++      );
++    }
++
++    if ($this->database instanceof PostgresqlConnection) {
++      return sprintf(
++        "%s.id = CAST(SPLIT_PART(%s.id, ':', 2) as int)",
++        $mdAlias,
++        $bsiAlias,
++      );
++    }
++
++    if ($this->database instanceof SqliteConnection) {
++      return sprintf(
++        "%s.id = SUBSTR(SUBSTR(%s.id, INSTR(%s.id, ':')+1), 0, INSTR(SUBSTR(%s.id, INSTR(%s.id, ':')+1), ':'))",
++        $mdAlias,
++        $bsiAlias,
++        $bsiAlias,
++        $bsiAlias,
++        $bsiAlias,
++      );
++    }
++
++    throw new \Exception('Current SQL storage backend of menu link content entities is not supported.');
++  }
++
++}
+diff --git a/modules/babel_og_menu_link/tests/src/Functional/BabelOgMenuLinkTranslationTest.php b/modules/babel_og_menu_link/tests/src/Functional/BabelOgMenuLinkTranslationTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..e26166da2d3be9a6ff690254cef328c2d14629e1
+--- /dev/null
++++ b/modules/babel_og_menu_link/tests/src/Functional/BabelOgMenuLinkTranslationTest.php
+@@ -0,0 +1,161 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\babel_og_menu_link\Functional;
++
++use Drupal\babel\Model\StringTranslation;
++use Drupal\babel\Model\Translation;
++use Drupal\babel\Plugin\Babel\TranslationTypePluginManager;
++use Drupal\babel_og_menu_link\Plugin\Babel\TranslationType\BabelOgMenuLink;
++use Drupal\content_translation\ContentTranslationManagerInterface;
++use Drupal\language\Entity\ConfigurableLanguage;
++use Drupal\menu_link_content\MenuLinkContentInterface;
++use Drupal\Tests\babel\Traits\ModuleInstallHelperTrait;
++use Drupal\Tests\babel\Traits\TranslationAssertionTrait;
++use Drupal\Tests\babel_og_menu_link\Traits\OgMenuLinkTestSetupTrait;
++use Drupal\Tests\BrowserTestBase;
++use Drupal\Tests\content_translation\Traits\ContentTranslationTestTrait;
++use Drupal\user\UserInterface;
++use PHPUnit\Framework\Attributes\Group;
++use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
++
++/**
++ * Test OG Menu Link translation functionality.
++ *
++ * @group babel
++ * @group babel_og_menu_link
++ */
++#[Group('babel')]
++#[Group('babel_og_menu_link')]
++#[RunTestsInSeparateProcesses]
++class BabelOgMenuLinkTranslationTest extends BrowserTestBase {
++
++  use ContentTranslationTestTrait;
++  use OgMenuLinkTestSetupTrait;
++  use ModuleInstallHelperTrait;
++  use TranslationAssertionTrait;
++
++  /**
++   * {@inheritdoc}
++   */
++  protected $defaultTheme = 'stark';
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = [
++    'babel_og_menu_link',
++    'entity_test',
++    'og_menu',
++    'user',
++    'content_translation',
++  ];
++
++  /**
++   * The user account being able to use Babel UI.
++   *
++   * @var \Drupal\user\UserInterface
++   */
++  protected UserInterface $translator;
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
++
++    $this->setupOgMenuLinkTest();
++
++    $this->enableContentTranslation('menu_link_content', 'menu_link_content');
++
++    $this->config('babel.settings')
++      ->set(
++        'translation_type.plugin.babel_og_menu_link.og_menu',
++        [$this->ogMenuId],
++      )
++      ->save();
++
++    $this->runInstallBatchOperations();
++
++    $this->translator = $this->createUser(['translate interface']);
++    $this->translator->save();
++
++    ConfigurableLanguage::createFromLangcode('is')->save();
++  }
++
++  /**
++   * Tests how OG Menu Link translations work with Babel.
++   */
++  public function testSourceAndTranslationUpdate(): void {
++    $menuLinkStorage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
++    $menuLinkContent = $menuLinkStorage->create([
++      'title' => 'Babel OG Menu Link',
++      'description' => 'This is the description of the test OG Menu Link',
++      'link' => ['uri' => 'route:<front>'],
++      'menu_name' => "ogmenu-{$this->ogMenuInstance->id()}",
++    ]);
++    $this->assertInstanceOf(MenuLinkContentInterface::class, $menuLinkContent);
++    $menuLinkContent->save();
++    // Create another menu link.
++    $otherLink = $menuLinkStorage->create([
++      'title' => 'Other',
++      'link' => ['uri' => 'route:<front>'],
++      'menu_name' => "ogmenu-{$this->ogMenuInstance->id()}",
++    ]);
++    $otherLink->save();
++
++    // There must be one babel_og_menu_link source discovered.
++    $plugin = $this->container->get(TranslationTypePluginManager::class)->createInstance('babel_og_menu_link');
++    $this->assertInstanceOf(BabelOgMenuLink::class, $plugin);
++    $strings = $plugin->getStrings('is');
++    $titleStringKey = "{$this->ogMenuId}:{$menuLinkContent->id()}:title:0";
++    $this->assertArrayHasKey($titleStringKey, $strings);
++
++    $assertSession = $this->assertSession();
++    $this->drupalLogin($this->translator);
++    $this->drupalGet('/admin/config/regional/babel/is');
++    $assertSession->statusCodeEquals(200);
++
++    $this->submitForm([
++      'edit-search' => 'Babel OG Menu Link',
++    ], 'Filter');
++    $assertSession->pageTextContains('One item matches the criteria');
++    // Let's find the save button of the row containing the link's source text.
++    $this->translateSourceStringTo('Babel OG Menu Link', '[IS] Babel OG Menu Link');
++
++    // Translation is saved.
++    $menuLinkContent = $menuLinkStorage->loadUnchanged($menuLinkContent->id());
++    $this->assertTrue($menuLinkContent->hasTranslation('is'));
++    $this->assertSame($menuLinkContent->getTranslation('is')->label(), '[IS] Babel OG Menu Link');
++
++    $string = current($plugin->getStrings('is', [$titleStringKey])) ?: NULL;
++    $this->assertInstanceOf(StringTranslation::class, $string);
++    $this->assertInstanceOf(Translation::class, $string->getTranslation());
++
++    // If the label is changed the translation of the menu link must be flagged
++    // as outdated.
++    $menuLinkContent->set('title', 'New Babel OG Menu Link label')->save();
++    $menuLinkContent = $menuLinkStorage->loadUnchanged($menuLinkContent->id());
++    // All translation must be marked as outdated.
++    $this->assertTrue($menuLinkContent->hasTranslation('is'));
++    $contentTranslationManager = \Drupal::service('content_translation.manager');
++    $this->assertInstanceOf(ContentTranslationManagerInterface::class, $contentTranslationManager);
++    $this->assertTrue($contentTranslationManager->getTranslationMetadata($menuLinkContent->getTranslation('is'))->isOutDated());
++
++    // If the link is deleted the source must be cleared from Babel.
++    $menuLinkContent->delete();
++    $strings = $plugin->getStrings('is');
++    $this->assertArrayNotHasKey($titleStringKey, $strings);
++    // But the source of the other menu link must be present.
++    $otherKey = "{$this->ogMenuId}:{$otherLink->id()}:title:0";
++    $this->assertArrayHasKey($otherKey, $strings);
++
++    // If the Og menu Link instance is deleted, the leftover source (along with
++    // the other menu link) must be removed.
++    $this->ogMenuInstance->delete();
++    $strings = $plugin->getStrings('is');
++    $this->assertArrayNotHasKey($otherKey, $strings);
++  }
++
++}
+diff --git a/modules/babel_og_menu_link/tests/src/Kernel/BabelOgMenuLinkInstallUninstallTest.php b/modules/babel_og_menu_link/tests/src/Kernel/BabelOgMenuLinkInstallUninstallTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..6358e6687e52a5e53a59a6dbdd2c7d6d2d115531
+--- /dev/null
++++ b/modules/babel_og_menu_link/tests/src/Kernel/BabelOgMenuLinkInstallUninstallTest.php
+@@ -0,0 +1,152 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\babel_og_menu_link\Kernel;
++
++use Drupal\babel\Plugin\Babel\TranslationTypePluginManager;
++use Drupal\babel_og_menu_link\Plugin\Babel\TranslationType\BabelOgMenuLink;
++use Drupal\Core\Extension\ModuleInstallerInterface;
++use Drupal\KernelTests\KernelTestBase;
++use Drupal\language\Entity\ConfigurableLanguage;
++use Drupal\menu_link_content\Entity\MenuLinkContent;
++use Drupal\Tests\babel\Traits\ModuleInstallHelperTrait;
++use Drupal\Tests\babel_og_menu_link\Traits\OgMenuLinkTestSetupTrait;
++use Drupal\Tests\content_translation\Traits\ContentTranslationTestTrait;
++use PHPUnit\Framework\Attributes\Group;
++use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
++
++/**
++ * Tests translation related functions of OG Menu links.
++ *
++ * @group babel
++ * @group babel_og_menu_link
++ */
++#[Group('babel')]
++#[Group('babel_og_menu_link')]
++#[RunTestsInSeparateProcesses]
++class BabelOgMenuLinkInstallUninstallTest extends KernelTestBase {
++
++  use ContentTranslationTestTrait;
++  use ModuleInstallHelperTrait;
++  use OgMenuLinkTestSetupTrait;
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = [
++    'babel',
++    'babel_og_menu_link',
++    'content_translation',
++    'entity_test',
++    'field',
++    'language',
++    'link',
++    'locale',
++    'menu_link_content',
++    'og',
++    'og_menu',
++    'options',
++    'system',
++    'user',
++  ];
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
++
++    $this->installConfig(['language']);
++    $this->installConfig(['og']);
++    $this->installEntitySchema('entity_test');
++    $this->installEntitySchema('menu_link_content');
++    $this->installEntitySchema('og_membership');
++    $this->installEntitySchema('ogmenu');
++    $this->installEntitySchema('ogmenu_instance');
++    $this->installEntitySchema('user');
++    $this->installSchema('system', 'sequences');
++    $this->installSchema('user', 'users_data');
++    $this->installSchema('babel', [
++      'babel_source_instance',
++      'babel_source',
++      'babel_source_lock',
++    ]);
++
++    $this->setupOgMenuLinkTest();
++
++    $this->runInstallBatchOperations();
++
++    $this->enableContentTranslation('menu_link_content', 'menu_link_content');
++
++    // Create some menu link in the OG Menu Instance.
++    foreach (range(1, 3) as $i) {
++      MenuLinkContent::create([
++        'title' => "Link $i",
++        'description' => "Link description $i",
++        'link' => ['uri' => 'route:<front>'],
++        'menu_name' => "ogmenu-{$this->ogMenuInstance->id()}",
++      ])->save();
++    }
++
++    ConfigurableLanguage::createFromLangcode('is')->save();
++
++    $this->container->get('kernel')->rebuildContainer();
++  }
++
++  /**
++   * Tests how Babel OG Menu Link is (un)installed with Config Manager.
++   *
++   * When a module is installed by a config sync process, the module is
++   * installed first, then comes the configuration synchronization process, and
++   * last, the created batch processes are executed.
++   *
++   * This test mimics this operation without the need for a dedicated
++   * configuration export.
++   */
++  public function testInstallUninstall(): void {
++    // Babel OG Menu Link module is already installed, next step is changing the
++    // configuration.
++    $this->config('babel.settings')
++      ->set(
++        'translation_type.plugin.babel_og_menu_link.og_menu',
++        [$this->ogMenuId],
++      )
++      ->save();
++
++    // The batch set because of the config change is executed.
++    $this->runInstallBatchOperations();
++
++    // There must be three babel_og_menu_link source discovered.
++    $plugin = $this->container->get(TranslationTypePluginManager::class)->createInstance('babel_og_menu_link');
++    $this->assertInstanceOf(BabelOgMenuLink::class, $plugin);
++    $strings = $plugin->getStrings('is');
++    $this->assertCount(6, $plugin->getStrings('is'));
++
++    // Update the translation of the first link's description.
++    $plugin->updateTranslation(
++      $strings['test_og_menu:1:description:0'],
++      'test_og_menu:1:description:0',
++      'is',
++      '[IS] Link description 1',
++    );
++
++    // Translation must be saved.
++    $this->assertTrue(MenuLinkContent::load(1)->hasTranslation('is'));
++
++    // After uninstall, no source instance is expected.
++    $moduleInstaller = $this->container->get('module_installer');
++    $this->assertInstanceOf(ModuleInstallerInterface::class, $moduleInstaller);
++    $this->assertTrue($moduleInstaller->uninstall(['babel_og_menu_link']));
++
++    // This only can be done in a kernel test: plugin is loaded and is still
++    // available in this PHP process, we can check how many OG links left in the
++    // Babel tables.
++    $this->assertCount(0, $plugin->getStrings('is'));
++
++    // Menu link must still have its Icelandic translation.
++    \Drupal::entityTypeManager()->getStorage('menu_link_content')->resetCache([1]);
++    $this->assertTrue(MenuLinkContent::load(1)->hasTranslation('is'));
++  }
++
++}
+diff --git a/modules/babel_og_menu_link/tests/src/Traits/OgMenuLinkTestSetupTrait.php b/modules/babel_og_menu_link/tests/src/Traits/OgMenuLinkTestSetupTrait.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..37828f4a5a0b760a03e58adab1434dc1e4b972de
+--- /dev/null
++++ b/modules/babel_og_menu_link/tests/src/Traits/OgMenuLinkTestSetupTrait.php
+@@ -0,0 +1,123 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\babel_og_menu_link\Traits;
++
++use Drupal\entity_test\Entity\EntityTest;
++use Drupal\og\Entity\OgMembership;
++use Drupal\og\Og;
++use Drupal\og\OgGroupAudienceHelperInterface;
++use Drupal\og\OgMembershipInterface;
++use Drupal\og_menu\Entity\OgMenu;
++use Drupal\og_menu\Entity\OgMenuInstance;
++use Drupal\user\Entity\Role;
++use Drupal\user\Entity\User;
++
++/**
++ * Trait for setting up an OG Menu test environment.
++ */
++trait OgMenuLinkTestSetupTrait {
++
++  /**
++   * ID of the OG Menu entity created in the ::setupOgMenuLinkTest method.
++   *
++   * @var string
++   */
++  protected string $ogMenuId = 'test_og_menu';
++
++  /**
++   * A test OG Menu instance.
++   *
++   * @var \Drupal\og_menu\Entity\OgMenuInstance
++   */
++  protected OgMenuInstance $ogMenuInstance;
++
++  /**
++   * Creates an OG Menu link test environment with OG group, users, OG menu.
++   */
++  protected function setupOgMenuLinkTest(): void {
++    if (!User::load(1)) {
++      \Drupal::moduleHandler()->loadInclude('user', 'install');
++      user_install();
++    }
++
++    // Create an 'OG administrator' user who has the global
++    // 'administer organic groups' permission.
++    // This user should be able to access everything related to any group.
++    $ogAdminRole = Role::create(['id' => 'og_admin', 'label' => 'og_admin']);
++    $ogAdminRole->grantPermission('administer organic groups')->save();
++    $ogAdmin = User::create([
++      'name' => $this->randomString(),
++      'roles' => [$ogAdminRole->id()],
++    ]);
++    $ogAdmin->save();
++
++    // Create an 'OG Menu administrator' user who will get the global
++    // permissions to manage any OG menu.
++    $ogMenuAdminRole = Role::create([
++      'id' => 'og_menu_admin',
++      'label' => 'og_menu_admin',
++    ]);
++    $ogMenuAdminRole
++      ->grantPermission('administer og menu')
++      ->save();
++
++    $ogMenuAdmin = User::create([
++      'name' => $this->randomString(),
++      'roles' => [$ogMenuAdminRole->id()],
++    ]);
++    $ogMenuAdmin->save();
++
++    // Create a 'group administrator' user who is a normal authenticated user
++    // but has the administrator role within a particular group. By default this
++    // user should be able to access everything related to their own group.
++    $groupAdmin = User::create(['name' => $this->randomString()]);
++    $groupAdmin->save();
++
++    // Create a 'group member' user who is a normal authenticated user and a
++    // member of a particular group. This user should only be able to access
++    // operations for which permission has been explicitly granted.
++    $groupMember = User::create(['name' => $this->randomString()]);
++    $groupMember->save();
++
++    // Create an 'authenticated' user who does not have any special permissions.
++    $user = User::create(['name' => $this->randomString()]);
++    $user->save();
++
++    Og::groupTypeManager()->addGroup('entity_test', 'entity_test_group_type');
++
++    // Create a group and associate with the group administrator. This user will
++    // be subscribed to the group and inherit the administrator role
++    // automatically.
++    $group = EntityTest::create([
++      'type' => 'entity_test_group_type',
++      'name' => $this->randomString(),
++      'user_id' => $groupAdmin->id(),
++    ]);
++    $group->save();
++
++    // Subscribe the group member to the group.
++    $membership = OgMembership::create(['type' => OgMembershipInterface::TYPE_DEFAULT]);
++    $membership
++      ->setOwner($groupMember)
++      ->setGroup($group)
++      ->save();
++
++    // Add an OG Menu.
++    $ogMenu = OgMenu::create([
++      'label' => $this->randomString(),
++      'id' => $this->ogMenuId,
++    ]);
++    $ogMenu->save();
++
++    // Add an OG Menu Instance.
++    $this->ogMenuInstance = OgMenuInstance::create([
++      'id' => $this->randomMachineName(),
++      'type' => $this->ogMenuId,
++      OgGroupAudienceHelperInterface::DEFAULT_FIELD => $group->id(),
++    ]);
++    $this->ogMenuInstance->save();
++  }
++
++}
+diff --git a/modules/babel_tmgmt/babel_tmgmt.module b/modules/babel_tmgmt/babel_tmgmt.module
+index b4c9dd01093ce5b0f416916d89e1e2dcb0bb998d..a00a784316ac4ef77cad63946a0dca09fbdfbb76 100644
+--- a/modules/babel_tmgmt/babel_tmgmt.module
++++ b/modules/babel_tmgmt/babel_tmgmt.module
+@@ -13,8 +13,6 @@ use Drupal\Core\Hook\Attribute\LegacyHook;
+ 
+ /**
+  * Implements hook_form_FORM_ID_alter() for 'babel_settings_form' form.
+- *
+- * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\LegacyHook does not exist.
+  */
+ #[LegacyHook]
+ function babel_tmgmt_form_babel_settings_form_alter(array &$form, FormStateInterface $formState): void {
+@@ -23,8 +21,6 @@ function babel_tmgmt_form_babel_settings_form_alter(array &$form, FormStateInter
+ 
+ /**
+  * Implements hook_cron().
+- *
+- * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\LegacyHook does not exist.
+  */
+ #[LegacyHook]
+ function babel_tmgmt_cron(): void {
+diff --git a/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php b/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
+index 7749c7c944563d08c1ace50f64f4bae048c0c4ec..568d9be1ba001e091508fa2318285a58ea070d90 100644
+--- a/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
++++ b/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
+@@ -37,8 +37,6 @@ class BabelTmgmtHooks {
+ 
+   /**
+    * Implements hook_form_FORM_ID_alter() for 'babel_settings_form' form.
+-   *
+-   * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\Hook does not exist.
+    */
+   #[Hook('form_babel_settings_form_alter')]
+   public function babelTmgmtSettings(array &$form, FormStateInterface $formState): void {
+@@ -102,8 +100,6 @@ class BabelTmgmtHooks {
+ 
+   /**
+    * Creates items for continuous jobs.
+-   *
+-   * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\Hook does not exist.
+    */
+   #[Hook('cron')]
+   public function cron(): void {
+diff --git a/phpstan-baseline.neon b/phpstan-baseline.neon
+index a2ac98646620aab6118e7ca04ef9eb9eb297dfcf..4930d0f682ca8e712e4f9d45dda36ce9654eab5f 100644
+--- a/phpstan-baseline.neon
++++ b/phpstan-baseline.neon
+@@ -1,5 +1,9 @@
+ parameters:
+ 	ignoreErrors:
++	    # Remove next two lines after versions of Drupal core 11.1 and below
++	    # are not supported anymore.
++		-  "#^Attribute class Drupal\\\\Core\\\\Hook\\\\Attribute\\\\Hook does not exist\\.$#"
++		-  "#^Attribute class Drupal\\\\Core\\\\Hook\\\\Attribute\\\\LegacyHook does not exist\\.$#"
+ 		-  "#^Attribute class PHPUnit\\\\Framework\\\\Attributes\\\\Group does not exist\\.$#"
+ 		-  "#^Attribute class PHPUnit\\\\Framework\\\\Attributes\\\\RunTestsInSeparateProcesses does not exist\\.$#"
+ 		-  "#^Attribute class PHPUnit\\\\Framework\\\\Attributes\\\\DataProvider does not exist\\.$#"
+diff --git a/src/Hook/BabelHooks.php b/src/Hook/BabelHooks.php
+index 52c2debeb3dcb649190eb5e253d62cef275e04c0..41b7e0e52d189a99089df19b0d19ed0121ed3fa4 100644
+--- a/src/Hook/BabelHooks.php
++++ b/src/Hook/BabelHooks.php
+@@ -46,8 +46,6 @@ class BabelHooks {
+    *   The assets attached to the current response.
+    * @param \Drupal\Core\Language\LanguageInterface $language
+    *   The language for the page request that the assets will be rendered for.
+-   *
+-   * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\Hook does not exist.
+    */
+   #[Hook('js_alter')]
+   public function jsAlter(array &$javascript, AttachedAssetsInterface $assets, LanguageInterface $language): void {
+@@ -81,8 +79,6 @@ class BabelHooks {
+    *
+    * @return array
+    *   Array of tabs.
+-   *
+-   * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\Hook does not exist.
+    */
+   #[Hook('toolbar')]
+   public function toolbar(): array {
+@@ -135,8 +131,6 @@ class BabelHooks {
+ 
+   /**
+    * Implements hook_theme().
+-   *
+-   * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\Hook does not exist.
+    */
+   #[Hook('theme')]
+   public function theme(): array {
+@@ -151,8 +145,6 @@ class BabelHooks {
+ 
+   /**
+    * Implements hook_modules_installed().
+-   *
+-   * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\Hook does not exist.
+    */
+   #[Hook('modules_installed')]
+   public function onModulesInstalled(): void {
+@@ -163,8 +155,6 @@ class BabelHooks {
+ 
+   /**
+    * Implements hook_modules_uninstalled().
+-   *
+-   * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\Hook does not exist.
+    */
+   #[Hook('modules_uninstalled')]
+   public function onModulesUninstalled(): void {
+diff --git a/tests/modules/babel_test/babel_test.module b/tests/modules/babel_test/babel_test.module
+index 338089649462d8fa27af1307e7fef3ede6eeec5a..dfdab0ca8b1ffe19069eb0e46e40f8fa7e43fb61 100644
+--- a/tests/modules/babel_test/babel_test.module
++++ b/tests/modules/babel_test/babel_test.module
+@@ -12,8 +12,6 @@ use Drupal\Core\Hook\Attribute\LegacyHook;
+ 
+ /**
+  * Implements hook_babel_translation_type_info_alter().
+- *
+- * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\LegacyHook does not exist.
+  */
+ #[LegacyHook]
+ function babel_test_babel_translation_type_info_alter(array &$definitions): void {
+diff --git a/tests/modules/babel_test/src/Hook/BabelTestHooks.php b/tests/modules/babel_test/src/Hook/BabelTestHooks.php
+index 91ae28f4c10368cb582814d2f0b6b3680ef82df9..4499b0b8edf7e7b9340554fd2799b40e662bdf9c 100644
+--- a/tests/modules/babel_test/src/Hook/BabelTestHooks.php
++++ b/tests/modules/babel_test/src/Hook/BabelTestHooks.php
+@@ -13,8 +13,6 @@ class BabelTestHooks {
+ 
+   /**
+    * Sets the 'locale' plugin status to FALSE.
+-   *
+-   * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\Hook does not exist.
+    */
+   #[Hook('babel_translation_type_info_alter')]
+   public function alterTranslationTypeInfo(array &$definitions): void {
+diff --git a/tests/src/Traits/ModuleInstallHelperTrait.php b/tests/src/Traits/ModuleInstallHelperTrait.php
+index 39067ef0993960c2482bf7dff0102a20b58eb663..97496b24c6ff6ccda7c783cbe3149f28c1eb1bbb 100644
+--- a/tests/src/Traits/ModuleInstallHelperTrait.php
++++ b/tests/src/Traits/ModuleInstallHelperTrait.php
+@@ -4,25 +4,26 @@ declare(strict_types=1);
+ 
+ namespace Drupal\Tests\babel\Traits;
+ 
+-use Drupal\babel\EventSubscriber\ConfigSubscriber;
+-
+ /**
+  * Trait for fully installing modules in Kernel tests.
+  */
+ trait ModuleInstallHelperTrait {
+ 
++  use BatchTrait;
++
+   /**
+    * Runs batches created as part of modules install.
+    */
+   protected function runInstallBatchOperations(): void {
+     // Run batches if there are any.
+-    while ($batch = &batch_get()) {
+-      $batch['progressive'] = FALSE;
+-      batch_process();
+-    }
++    $this->runPendingBatches();
+ 
+-    \Drupal::service('string_translator.locale.lookup')->destruct();
+-    \Drupal::service(ConfigSubscriber::class)->destruct();
++    foreach ($this->container->getParameter('kernel.destructable_services') as $id) {
++      if ($this->container->initialized($id)) {
++        $service = $this->container->get($id);
++        $service->destruct();
++      }
++    }
+   }
+ 
+ }
