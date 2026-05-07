@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_i18n\Hook;
 
+use Drupal\babel_og_menu_link\BabelOgMenuLinkManager;
+use Drupal\babel_og_menu_link\Hook\BabelOgMenuLinkContentHook;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ConfigInstallerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\language\ConfigurableLanguageInterface;
+use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\tmgmt\JobInterface;
 use Drupal\tmgmt_ec_etranslation\Plugin\tmgmt\Translator\ETranslationTranslator;
 
@@ -23,6 +26,7 @@ final readonly class JoinupI18nHooks {
     protected LanguageManagerInterface $languageManager,
     protected ConfigInstallerInterface $configInstaller,
     protected ConfigFactoryInterface $configFactory,
+    protected BabelOgMenuLinkManager $babelOgMenuLinkManager,
   ) {}
 
   /**
@@ -104,6 +108,27 @@ final readonly class JoinupI18nHooks {
     }
 
     return $continuousSettings;
+  }
+
+  /**
+   * Implements hook_ENTITY_HOOK_update() for menu_link_content entity type.
+   */
+  #[Hook('menu_link_content_update')]
+  public function updateMenuLinkContent(MenuLinkContentInterface $link): void {
+    if (!$this->babelOgMenuLinkManager->isLinkAllowed($link)) {
+      return;
+    }
+    if ($link->isDefaultTranslation() || $link->language()->getId() !== 'en') {
+      return;
+    }
+    $translationLangcodes = array_keys($link->getTranslationLanguages(FALSE));
+    if (!$translationLangcodes) {
+      return;
+    }
+    foreach ($translationLangcodes as $langcode) {
+      $link->removeTranslation($langcode);
+    }
+    $link->save();
   }
 
 }
