@@ -79,10 +79,10 @@ Feature:
     Then I should be on the "Upcoming week Event" content page
 
   Scenario: Test that location type labels are shown correctly in the calendar.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title                | abstract                       | collection       |
       | Location labels page | Abstract pages Events calendar | Le Event Heureux |
-    And event content:
+    And the following "event" content:
       | title               | collection       | start date | end date | location          | online location                           |
       | Physical label test | Le Event Heureux | now        | now      | Brussels, Belgium |                                           |
       | Virtual label test  | Le Event Heureux | now        | now      |                   | 0: Online meeting - 1: http://example.com |
