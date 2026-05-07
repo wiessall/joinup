@@ -246,13 +246,14 @@ index f18841a8287491b879ef4047b4a31eef909e009e..99768205c218f65e957267c8ae6d986a
     */
    public function doRender(array $render_array) {
 diff --git a/src/LayoutParagraphsLayout.php b/src/LayoutParagraphsLayout.php
-index fdadf197e1c388d95d11eae697177c4ec7de5371..a35219f8a5d6e7ce536ea0c78ccde28d5798e87c 100644
+index fdadf197e1c388d95d11eae697177c4ec7de5371..28163a4b809b4eeb00e66b5327b1aae1cdeebd63 100644
 --- a/src/LayoutParagraphsLayout.php
 +++ b/src/LayoutParagraphsLayout.php
-@@ -2,10 +2,14 @@
+@@ -2,10 +2,15 @@
  
  namespace Drupal\layout_paragraphs;
  
++use Drupal\Core\Access\AccessResult;
 +use Drupal\Core\Access\AccessResultAllowed;
 +use Drupal\Core\Access\AccessResultForbidden;
 +use Drupal\Core\Cache\CacheableDependencyInterface;
@@ -264,7 +265,7 @@ index fdadf197e1c388d95d11eae697177c4ec7de5371..a35219f8a5d6e7ce536ea0c78ccde28d
  use Drupal\paragraphs\ParagraphInterface;
  
  /**
-@@ -66,6 +70,100 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
+@@ -66,6 +71,96 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
     */
    protected $entity;
  
@@ -319,10 +320,6 @@ index fdadf197e1c388d95d11eae697177c4ec7de5371..a35219f8a5d6e7ce536ea0c78ccde28d
 +   *   if $returnObject was FALSE;
 +   */
 +  public function layoutChangeAccess(bool $returnObject = TRUE): AccessResultAllowed|AccessResultForbidden|bool {
-+    static $accessResult;
-+    if (isset($accessResult)) {
-+      return $returnObject ? $accessResult : $accessResult->isAllowed();
-+    }
 +    $host = $this->getEntity();
 +    $contentLanguageSettings = class_exists(ContentLanguageSettings::class)
 +      ? ContentLanguageSettings::loadByEntityTypeBundle($host->getEntityTypeId(), $host->bundle())
@@ -333,7 +330,7 @@ index fdadf197e1c388d95d11eae697177c4ec7de5371..a35219f8a5d6e7ce536ea0c78ccde28d
 +      $this->supportsAsymmetricTranslations() ||
 +      !$hostHidesUntranslatableFields;
 +
-+    $accessResult = $accessAllowed ? new AccessResultAllowed() : new AccessResultForbidden();
++    $accessResult = $accessAllowed ? AccessResult::allowed() : AccessResult::forbidden();
 +    if ($contentLanguageSettings instanceof CacheableDependencyInterface) {
 +      $accessResult->addCacheableDependency($contentLanguageSettings);
 +    }
