@@ -5,7 +5,7 @@ Feature: Assessment Report Entity Management
   I need to be able to create, edit, and delete assessment report entities
 
   Scenario: Create a new assessment report with required fields
-    Given solution content:
+    Given the following "solution" content:
       | title         | landing page           |
       | Test solution | http://www.example.com |
 
@@ -269,7 +269,7 @@ Feature: Assessment Report Entity Management
     Then no participation entities should exist for the "Test Empty Participation ISAICP-10806" assessment report
 
   Scenario: User can browse only published solutions in binding requirement
-    Given solution content:
+    Given the following "solution" content:
       | title                          | state       | interoperable |
       | Test solution published        | published   |               |
       | Test solution archived         | archived    |               |
@@ -292,7 +292,7 @@ Feature: Assessment Report Entity Management
     And I should not see "Test solution unpublished"
 
   Scenario: Entity browser exposed filters: name, domain and interoperable filters
-    Given solution content:
+    Given the following "solution" content:
       | title              | state     | domain           | interoperable | description                             | keywords           |
       | Alpha Framework    | published | Defense          | yes           | A robust integration tool               | games              |
       | Beta Platform      | published | Economic affairs |               | A platform for data exchange             | nintendo64 licences |
@@ -370,7 +370,7 @@ Feature: Assessment Report Entity Management
     And I should see "Robust Engine"
 
   Scenario: Entity browser: add existing asset, create new asset, and remove asset
-    Given solution content:
+    Given the following "solution" content:
       | title                | landing page           |
       | Asset to be removed  | http://www.example.com |
 
@@ -449,7 +449,7 @@ Feature: Assessment Report Entity Management
     And I should not see the text "Asset to be removed"
 
   Scenario: Description is shown as fallback when solution abstract is empty in entity browser
-    Given solution content:
+    Given the following "solution" content:
       | title                     | state     | abstract        | description        |
       | Solution with abstract    | published | Abstract text   | Hidden description |
       | Solution without abstract | published |                 | Fallback shown     |

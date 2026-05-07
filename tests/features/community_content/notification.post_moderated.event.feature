@@ -5,13 +5,13 @@ Feature: Notification test for the event transitions on a post moderated parent.
   I want to receive a notification when an entity is proposed.
 
   Scenario Outline: Notifications should be sent whenever a event is going through a relevant transition.
-    Given users:
+    Given the following users:
       | Username         | Roles     | E-mail                      | First name | Family name |
       | Notify moderator | moderator | notify_moderator@test.com   | Notify     | Moderator   |
       | CC owner         |           | notify_owner@test.com       | CC         | Owner       |
       | CC facilitator   |           | notify_facilitator@test.com | CC         | Facilitator |
       | CC member        |           | notify_member@test.com      | CC         | Member      |
-    And collection content:
+    And the following "collection" content:
       | title              | content_creation | group_moderation |
       | CC post collection | members          | <moderation>     |
     And the following collection user memberships:
@@ -19,7 +19,7 @@ Feature: Notification test for the event transitions on a post moderated parent.
       | CC post collection | CC owner       | owner       |
       | CC post collection | CC facilitator | facilitator |
       | CC post collection | CC member      | <roles>     |
-    And event content:
+    And the following "event" content:
       | title                                | author    | abstract | field_paragraphs_body | location                       | collection         | field_state  | created    |
       | CC notify post publish               | CC member | abstract | body                  | Half Moon Street, London       | CC post collection | draft        | now -2 day |
       | CC notify post request changes       | CC member | abstract | body                  | Quai d'Orleans, Paris          | CC post collection | published    | now -2 day |

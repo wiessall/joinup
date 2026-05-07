@@ -2,7 +2,7 @@
 Feature: Editing a collection with a missing logo file does not cause a fatal error.
 
   Scenario: Submitting a collection edit form with a missing logo file shows a validation error, not a crash.
-    Given collection content:
+    Given the following "collection" content:
       | title             | state     |
       | Broken Collection | published |
     And the "Broken Collection" collection has a logo with a missing physical file

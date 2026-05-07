@@ -5,15 +5,15 @@ Feature: Featuring content site-wide
   So that important content has more visibility
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                | featured |
       | Tidy Neutron         | yes      |
       | Reborn Eternal Gamma | no       |
-    Given solution content:
+    Given the following "solution" content:
       | title                         | collection           | featured |
       | Opensource neutron generators | Tidy Neutron         | yes      |
       | Gamma-sensible spectroscopy   | Reborn Eternal Gamma | no       |
-    And users:
+    And the following users:
       | Username        | E-mail                   | Roles     |
       | Niles Turner    | niles.turner@example.com |           |
       | Modston Modster | modston@example.org      | moderator |
@@ -27,7 +27,7 @@ Feature: Featuring content site-wide
       | Gamma-sensible spectroscopy   | Niles Turner | facilitator |
 
   Scenario Outline: Moderators can feature and unfeature content site-wide.
-    Given <content type> content:
+    Given the following "<content type>" content:
       | title                               | collection   | featured |
       | Ionizing radiation types            | Tidy Neutron | no       |
       | Elementary particles standard model | Tidy Neutron | yes      |
