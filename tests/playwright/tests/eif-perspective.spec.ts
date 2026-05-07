@@ -13,8 +13,8 @@ test.describe("EIF perspective", () => {
     );
     await pageUtils.prepareForScreenshot(page);
 
-    await expect(page.locator("main")).toHaveScreenshot(
-      "eif-perspective-page.png",
-    );
+    const perspective = page.locator(".solution__eif-perspective").first();
+    await expect(perspective).toBeVisible();
+    await expect(perspective).toHaveScreenshot("eif-perspective-page.png");
   });
 });

@@ -30,6 +30,9 @@ default_content:
     - 8a9fa71a-28fa-488f-ae16-33a1e4b0673c
   meta_entity:
     - 501120ce-502c-4ed1-89d0-c61a6daaae78
+    - 7a30c7c1-a812-4b8a-8e41-100000000001
+  taxonomy_term:
+    - 7a30c7c1-a812-4b8a-8e41-300000000001
   user:
     - 822d66ba-0910-414e-9330-bd702632eb5d
     - 5064d97b-0f69-4ebc-af02-3c7bd6e29691

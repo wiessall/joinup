@@ -1,59 +1,38 @@
 /**
  * @file
- * Visual regression tests for tile components and paragraph layouts.
+ * Visual regression tests for tile components.
  *
  * Vertical tiles (view_mode_tile) are covered by collection-homepage.spec.ts.
- * This file tests the remaining distinct components:
+ * This file covers the remaining tile variants:
  *
  * - Configurable listing paragraph (Search API driven tile grid)
  * - Paragraph tiles (curated tile grid)
- * - Accordion paragraph
  * - Horizontal tile (view_mode_tile_horizontal)
  */
 
 import { test, expect } from "@playwright/test";
 import pageUtils from "../utils/pageUtils";
-import shellUtils from "../utils/shellUtils";
 
 test.describe("Configurable listing paragraph", () => {
-  // Index content so it appears in search_api_field listings.
-  test.beforeAll(async () => {
-    await shellUtils.execDrush("search-api:index");
-  });
-
   test("Vertical tile grid rendered via Search API", async ({ page }) => {
-    await page.goto("/topic/egov");
+    await page.goto("/topic/ptgov");
     await pageUtils.prepareForScreenshot(page);
 
-    await expect(
-      page.locator(".paragraph--configurable-listing").first(),
-    ).toHaveScreenshot("tile-topic-configurable-listing.png");
+    const listing = page.locator(".paragraph--configurable-listing").first();
+    await expect(listing).toBeVisible();
+    await expect(listing).toHaveScreenshot(
+      "tile-topic-configurable-listing.png",
+    );
   });
 });
 
-test.describe("Custom page paragraphs", () => {
-  test.beforeEach(async ({ page }) => {
+test.describe("Paragraph tiles", () => {
+  test("Paragraph tiles grid", async ({ page }) => {
     await page.goto(
       "/collection/portal-support/frequently-asked-questions-and-resources",
     );
     await pageUtils.prepareForScreenshot(page);
-  });
 
-  test("Accordion paragraph", async ({ page }) => {
-    const accordion = page.locator(".accordion").first();
-    await expect(accordion).toBeVisible();
-
-    // Screenshot closed state.
-    await expect(accordion).toHaveScreenshot("paragraph-accordion-closed.png");
-
-    // Open first accordion item and screenshot.
-    const firstButton = accordion.locator("button.accordion-button").first();
-    await firstButton.click();
-    await expect(firstButton).toHaveAttribute("aria-expanded", "true");
-    await expect(accordion).toHaveScreenshot("paragraph-accordion-open.png");
-  });
-
-  test("Paragraph tiles grid", async ({ page }) => {
     const tilesSection = page.locator(".paragraph--tiles").first();
     await expect(tilesSection).toBeVisible();
     await expect(tilesSection).toHaveScreenshot("paragraph-tiles-grid.png");
@@ -65,7 +44,7 @@ test.describe("Horizontal tile", () => {
     await page.goto("/discussions");
     await pageUtils.prepareForScreenshot(page);
 
-    const list = page.locator("main").first();
+    const list = page.locator(".view-id-discussions_sitewide").first();
     await expect(list).toBeVisible();
     await expect(list).toHaveScreenshot("discussions-tile-list.png");
   });

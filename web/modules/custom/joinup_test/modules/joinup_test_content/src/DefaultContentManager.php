@@ -64,4 +64,20 @@ class DefaultContentManager {
     $this->messenger()->addStatus($this->t('Deleted all default content entities from @module.', ['@module' => $module_name]));
   }
 
+  /**
+   * Sets meta_entity.type.topic mapping.taxonomy_term.topic.auto_create.
+   */
+  public function setTopicAutoCreate(bool $auto_create): void {
+    $type = $this->entityTypeManager
+      ->getStorage('meta_entity_type')
+      ->load('topic');
+    if (!$type) {
+      return;
+    }
+    $mapping = $type->get('mapping');
+    $mapping['taxonomy_term']['topic']['auto_create'] = $auto_create;
+    $type->set('mapping', $mapping);
+    $type->save();
+  }
+
 }
