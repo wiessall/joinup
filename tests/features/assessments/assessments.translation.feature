@@ -55,6 +55,7 @@ Feature: Translating assessments
     Then the following fields should be present "Short title, Identification of binding requirement(s) assessed, Remaining barriers to cross-border interoperability, Please add any other comment you would like to share."
     Then the following fields should not be present "Language, Union entity or public sector body which is providing the report, Assessment supporting documents"
     When I fill in "Short title" with "Raport 1"
+    And I fill in "legal[0][inline_entity_form][judgement][0][value]" with "Wymaga dalszej oceny"
     And I fill in "Remaining barriers to cross-border interoperability" with "Nie zidentyfikowano żadnych istotnych barier."
     And I fill in "Please add any other comment you would like to share." with "Ocena została przeprowadzona we współpracy z wieloma interesariuszami."
 
@@ -78,6 +79,7 @@ Feature: Translating assessments
       | Expression 1 PL                                                         |
       | Description 1 PL                                                        |
       | BR Description 1 PL                                                     |
+      | Wymaga dalszej oceny                                                    |
 
     # Edit translation.
     When I open the header local tasks menu
