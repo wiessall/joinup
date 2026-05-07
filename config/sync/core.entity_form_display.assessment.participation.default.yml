@@ -17,31 +17,21 @@ mode: default
 content:
   eu_countries:
     type: boolean_checkbox
-    weight: 2
+    weight: 1
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
-  langcode:
-    type: language_select
-    weight: 0
-    region: content
-    settings:
-      include_locked: false
-    third_party_settings:
-      entity_form_field_label:
-        new_label: ''
-        rewrite_label: 0
-        new_description: ''
-        rewrite_description: 0
   participant_type:
     type: tagify_select_widget
-    weight: 1
+    weight: 0
     region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       placeholder: 'Select or start typing...'
+      show_entity_id: 0
+      parent_selection: 1
     third_party_settings:
       entity_form_field_label:
         new_label: 'Public and/or private stakeholders affected'
@@ -50,12 +40,14 @@ content:
         rewrite_description: 0
   stakeholder_country:
     type: tagify_select_widget
-    weight: 3
+    weight: 2
     region: content
     settings:
       match_operator: CONTAINS
       match_limit: 100
       placeholder: 'Select or start typing...'
+      show_entity_id: 0
+      parent_selection: 1
     third_party_settings:
       entity_form_field_label:
         new_label: ''
@@ -63,12 +55,13 @@ content:
         new_description: ''
         rewrite_description: 0
   translation:
-    weight: 4
+    weight: 3
     region: content
     settings: {  }
     third_party_settings: {  }
 hidden:
   created: true
+  langcode: true
   name: true
   status: true
   uid: true
