@@ -47,7 +47,7 @@ Feature: Assessment Report Entity Management
       | Supporting document       |
 
     When I click "Initiative" in the "Modal content" region
-    And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Digital Transformation Initiative" in the "Modal content" region
+    And I fill in "expression[0][inline_entity_form][initiative_name][value]" with "Digital Transformation Initiative" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][documented_in][0][uri]" with "https://interoperable-europe.ec.europa.eu/initiatives" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][description][0][value]" with "Some description" in the "Modal content" region
 
@@ -211,7 +211,7 @@ Feature: Assessment Report Entity Management
 
     When I click "Initiative" in the "Modal content" region
     # This is a 323-character string to test that initiative_name accepts more than 255 characters
-    And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Comprehensive Overview and Strategic Analysis of System Architecture, Functional Requirements, Operational Constraints, Governance Models, Security and Compliance Requirements, Performance Optimization, and Long-Term Maintainability Considerations for Scalable Digital Platforms in Enterprise and Public-Sector Environments" in the "Modal content" region
+    And I fill in "expression[0][inline_entity_form][initiative_name][value]" with "Comprehensive Overview and Strategic Analysis of System Architecture, Functional Requirements, Operational Constraints, Governance Models, Security and Compliance Requirements, Performance Optimization, and Long-Term Maintainability Considerations for Scalable Digital Platforms in Enterprise and Public-Sector Environments" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][description][0][value]" with "Some description" in the "Modal content" region
 
     When I click "Requirements" in the "Modal content" region
@@ -248,7 +248,7 @@ Feature: Assessment Report Entity Management
     And a modal should open
 
     When I click "Initiative" in the "Modal content" region
-    And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Test Initiative" in the "Modal content" region
+    And I fill in "expression[0][inline_entity_form][initiative_name][value]" with "Test Initiative" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][description][0][value]" with "Some description" in the "Modal content" region
 
     When I click "Concerned public services" in the "Modal content" region
@@ -389,7 +389,7 @@ Feature: Assessment Report Entity Management
     And a modal should open
 
     When I click "Initiative" in the "Modal content" region
-    And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Test Initiative for EB" in the "Modal content" region
+    And I fill in "expression[0][inline_entity_form][initiative_name][value]" with "Test Initiative for EB" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][description][0][value]" with "Some description" in the "Modal content" region
 
     When I click "Requirements" in the "Modal content" region
@@ -475,7 +475,7 @@ Feature: Assessment Report Entity Management
     And a modal should open
 
     When I click "Initiative" in the "Modal content" region
-    And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Duplicate Test Initiative" in the "Modal content" region
+    And I fill in "expression[0][inline_entity_form][initiative_name][value]" with "Duplicate Test Initiative" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][description][0][value]" with "Some description" in the "Modal content" region
 
     When I click "Concerned public services" in the "Modal content" region
