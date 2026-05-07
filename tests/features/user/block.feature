@@ -4,7 +4,7 @@ Feature: Block users
 
   @javascript
   Scenario: A moderator can block a user.
-    Given users:
+    Given the following users:
       | Username     | Roles     | E-mail                   | First name | Family name |
       | Mod Murielle | Moderator | mod.murielle@example.com |            |             |
       | Liam Lego    |           | liam.lego@example.com    | Liam       | Lego        |
@@ -79,7 +79,7 @@ Feature: Block users
     # Unblock by using the user edit form
     When I click "Edit" in the "Liam Lego" row
     And I select the radio button "Active"
-    And I should not see "Blocked reason"
+    And I should not see the text "Blocked reason"
     And I press "Save"
     Then 1 e-mail should have been sent
     And the following email should have been sent:
@@ -95,7 +95,7 @@ Feature: Block users
     When I click "People"
     When I click "Edit" in the "Liam Lego" row
     And I select the radio button "Blocked"
-    And I should see "Blocked reason"
+    And I should see the text "Blocked reason"
     And no option from select "Blocked reason" is selected
     And I select "Spam" from "Blocked reason"
     And I press "Save"
@@ -106,11 +106,11 @@ Feature: Block users
       | body      | Your Interoperable Europe Portal account was recently blocked by our moderators. For more information about blocked accounts, please visit our |
 
     When I click "Liam Lego"
-    Then I should see "Blocked reason"
-    And I should see "Spam"
+    Then I should see the text "Blocked reason"
+    And I should see the text "Spam"
 
   Scenario: A non-moderator can not block a user.
-    Given users:
+    Given the following users:
       | Username     | Roles         | E-mail                   | First name | Family name |
       | Mod Murielle | administrator | mod.murielle@example.com |            |             |
       | Liam Lego    |               | liam.lego@example.com    | Liam       | Lego        |

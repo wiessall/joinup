@@ -2,16 +2,16 @@
 Feature: Translating releases
 
   Background:
-    Given users:
+    Given the following users:
       | Username    | Roles     |
       | Flora Mod   | moderator |
       | Lee Facil   |           |
       | John Member |           |
       | Ross Auth   |           |
-    And solution content:
+    And the following "solution" content:
       | title         |
       | Test solution |
-    And release content:
+    And the following "release" content:
       | title        | is version of |
       | Test release | Test solution |
     And the following solution user memberships:
@@ -56,22 +56,22 @@ Feature: Translating releases
 
     # Edit translation.
     When I click "Translate" in the "Entity actions" region
-    Then I should see "Testowe wydanie"
+    Then I should see the text "Testowe wydanie"
     When I click "Edit" in the "Polish" row
     And I fill in "Name" with "Zaktualizowane wydanie"
     And I press "Save (all translations)"
     Then I should see the success message "Release Zaktualizowane wydanie has been updated."
-    And I should not see "Testowe wydanie"
-    And I should see "Zaktualizowane wydanie"
+    And I should not see the text "Testowe wydanie"
+    And I should see the text "Zaktualizowane wydanie"
 
     # Delete translation.
     When I click "Translate" in the "Entity actions" region
     And I click "Delete" in the "Polish" row
-    Then I should see "Are you sure you want to delete the Polish translation of the content item Zaktualizowane wydanie?"
+    Then I should see the text "Are you sure you want to delete the Polish translation of the content item Zaktualizowane wydanie?"
     When I press "Delete Polish translation"
     Then I should see the success message "<delete message>"
     When I click "Translate" in the "Entity actions" region
-    Then I should not see "Edit" in the "Polish" row
+    Then I should not see the text "Edit" in the "Polish" row
     And I should see the "Add" in the "Polish" row
 
     Examples:
@@ -80,7 +80,7 @@ Feature: Translating releases
       | Lee Facil | The content item Zaktualizowane wydanie Polish translation has been deleted. |
 
   Scenario: Default language of new node should be same as language of the interface
-    Given solution content:
+    Given the following "solution" content:
       | title           |
       | Test solution 2 |
     Given I am logged in as "Flora Mod"

@@ -15,15 +15,15 @@ Feature: Assessment listing tests.
 
     Given I am logged in as a user with the "Assessment moderator" role
     When I visit "/admin/content/assessment"
-    Then I should see "Moderate" in the "Review Report" row
-    And I should not see "Moderate" in the "Draft Report" row
-    And I should not see "Moderate" in the "Published Report" row
+    Then I should see the text "Moderate" in the "Review Report" row
+    And I should not see the text "Moderate" in the "Draft Report" row
+    And I should not see the text "Moderate" in the "Published Report" row
 
     Given I am logged in as a user with the "Moderator" role
     When I visit "/admin/content/assessment"
-    Then I should not see "Moderate" in the "Review Report" row
-    And I should not see "Moderate" in the "Draft Report" row
-    And I should not see "Moderate" in the "Published Report" row
+    Then I should not see the text "Moderate" in the "Review Report" row
+    And I should not see the text "Moderate" in the "Draft Report" row
+    And I should not see the text "Moderate" in the "Published Report" row
 
   Scenario: ID links on admin listing page navigate to correct assessment page
     Given report assessments:
@@ -48,6 +48,7 @@ Feature: Assessment listing tests.
     Then I should see the heading "Assessment reports"
     And I should not see the link "New assessment"
     And I should not see the link "My assessments"
+    And I should see the link "Search assessments"
     And I should see the text "There are no published assessment reports yet."
     Given report assessments:
       | name                        | state     |
@@ -60,7 +61,7 @@ Feature: Assessment listing tests.
     Then I should see the heading "Sign in to continue"
 
     # Test as logged in user.
-    Given users:
+    Given the following users:
       | Username         |
       | Lorian Nightfall |
     And I am logged in as "Lorian Nightfall"
@@ -68,12 +69,14 @@ Feature: Assessment listing tests.
     Then I should see the heading "Assessment reports"
     And I should see the link "New assessment"
     And I should see the link "My assessments"
+    And I should see the link "Search assessments"
     And the page should show only the tiles "Weekly Health Check"
     When I follow "My assessments"
     Then I should be on "/user/assessments"
     Then I should see the heading "My assessment reports"
     And I should see the link "New assessment"
     And I should not see the link "My assessments"
+    And I should see the link "Search assessments"
     And I should see the text "There are no assessment reports yet for the current user."
     Given report assessments:
       | name                       | state     | uid              |

@@ -6,13 +6,13 @@ Feature: Joining and leaving collections through the web interface
 
   @javascript
   Scenario Outline: As a user I can join collections without published Code of Conduct, and are also able to leave it
-    Given collection content:
+    Given the following "collection" content:
       | title                                 | closed |
       | Open collection                       | no     |
       | Open collection with public CoC       | no     |
       | Closed collection                     | yes    |
       | Closed collection with non-public CoC | yes    |
-    And custom_page content:
+    And the following "custom_page" content:
       | title                          | collection                            | state     |
       | Public CoC of Open collection  | Open collection with public CoC       | published |
       | Draft CoC of Closed collection | Closed collection with non-public CoC | draft     |
@@ -62,10 +62,10 @@ Feature: Joining and leaving collections through the web interface
 
   @javascript
   Scenario Outline: As a user I can ask for a membership in a closed collection with a Code of Conduct document. I have to accept CoC.
-    Given collection content:
+    Given the following "collection" content:
       | title                             | closed |
       | Closed collection with public CoC | yes    |
-    And custom_page content:
+    And the following "custom_page" content:
       | title                           | collection                        |
       | Public CoC of Closed collection | Closed collection with public CoC |
     And the "Code of Conduct" setting of the "Closed collection with public CoC" collection is set to "Public CoC of Closed collection" "custom page"
@@ -107,11 +107,11 @@ Feature: Joining and leaving collections through the web interface
       | uncheck         | should not be subscribed to any                                                      | You will get a notification once your membership at Closed collection with public CoC is approved.                                    |
 
   Scenario: A collection owner leaving the collection cannot administer users anymore. Joining and leaving labels could be changed.
-    Given users:
+    Given the following users:
       | Username         |
       | Collection owner |
       | Stewe Griffin    |
-    Given collection content:
+    Given the following "collection" content:
       | title             | closed | author           |
       | Open collection 2 | no     | Collection owner |
     And the following collection user memberships:
@@ -136,7 +136,7 @@ Feature: Joining and leaving collections through the web interface
     And I select "Transfer the ownership of the collection to the selected member" from "Action"
     And I press "Apply to selected items"
     And I press "Confirm"
-    Then I should see "Ownership of Open collection 2 collection transferred from user Collection owner to Stewe Griffin."
+    Then I should see the text "Ownership of Open collection 2 collection transferred from user Collection owner to Stewe Griffin."
 
     When I go to the homepage of the "Open collection 2" collection
     And I click "Leave this community"

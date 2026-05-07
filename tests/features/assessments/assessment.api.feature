@@ -2,7 +2,7 @@
 Feature: Assessments API
 
   Scenario: Use API for assessment.
-    Given solution content:
+    Given the following "solution" content:
       | title           | uuid                                 |
       | Citizen's Forum | 993958d5-2892-413c-a239-3d7a66daa0a8 |
     Then a GET request to "/api/assessments/v1/asset" should return the following JSON:
@@ -71,6 +71,47 @@ Feature: Assessments API
       uri: http://data.europa.eu/s2k/e4893580-f468-4c11-921d-1fe68b8540a2
       name: Report 2
       country: LU
+    pager:
+      current_page: 0
+      items_per_page: 200
+      total_items: 2
+      total_pages: 1
+    """
+    # Adding a translation to the Luxembourg country term must not cause
+    # duplicate rows in the API responses.
+    Given pl translation for the taxonomy_term entity with label "Luxembourg":
+      | field | value       |
+      | name  | Luksemburg  |
+    Then a GET request to "/api/assessments/v1/assessment" should return the following JSON:
+    """
+    rows:
+    - id: 5d8be6b1-8038-429e-b84e-6ca8c35fd9b1
+      uri: http://data.europa.eu/s2k/5d8be6b1-8038-429e-b84e-6ca8c35fd9b1
+      name: Report 1
+      country: null
+    - id: e4893580-f468-4c11-921d-1fe68b8540a2
+      uri: http://data.europa.eu/s2k/e4893580-f468-4c11-921d-1fe68b8540a2
+      name: Report 2
+      country: LU
+    pager:
+      current_page: 0
+      items_per_page: 200
+      total_items: 2
+      total_pages: 1
+    """
+    Then a GET request to "/api/assessments/v1/organisation" should return the following JSON:
+    """
+    rows:
+      - id: 5d8be6b1-8038-429e-b84e-6ca8c35fd9b0
+        uri: http://data.europa.eu/s2k/5d8be6b1-8038-429e-b84e-6ca8c35fd9b0
+        name: ACME
+        organisation_type: european_union_institution
+        country: null
+      - id: e4893580-f468-4c11-921d-1fe68b8540ae
+        uri: http://data.europa.eu/s2k/e4893580-f468-4c11-921d-1fe68b8540ae
+        name: Bad Company
+        organisation_type: local_public_sector_body
+        country: LU
     pager:
       current_page: 0
       items_per_page: 200

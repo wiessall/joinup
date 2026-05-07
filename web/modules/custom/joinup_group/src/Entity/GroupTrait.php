@@ -217,12 +217,13 @@ trait GroupTrait {
   /**
    * {@inheritdoc}
    */
-  public function getSetting(string $field_name): FieldItemListInterface {
+  public function getSetting(string $field_name, ?string $langcode = NULL): FieldItemListInterface {
     $meta_entity_bundle = "{$this->bundle()}_settings";
     $meta_entity = MetaEntity::loadOrCreate($meta_entity_bundle, $this);
     if (!$meta_entity->hasField($field_name)) {
       throw new \InvalidArgumentException("Field $field_name doesn't exist");
     }
+    $meta_entity = \Drupal::service('entity.repository')->getTranslationFromContext($meta_entity, $langcode);
     return $meta_entity->get($field_name);
   }
 

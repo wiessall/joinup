@@ -5,7 +5,7 @@ Feature:
   I need to be able to give extra permissions to authors.
 
   Scenario Outline: Authors can add content regardless of group settings.
-    Given collection content:
+    Given the following "collection" content:
       | title             | group_moderation | content_creation   |
       | Author collection | <moderation>     | <content creation> |
 

@@ -6,7 +6,7 @@ Feature:
 
   Background:
 
-    Given users:
+    Given the following users:
       | Username     | Roles | E-mail                   | First name | Family name |
       | alicia__1997 |       | AliciaPotter@example.com | Alicia     | Potter      |
 
@@ -28,10 +28,10 @@ Feature:
 
   @deletedUser
   Scenario: A moderator deletes a user using the administrative UI.
-    Given collection content:
+    Given the following "collection" content:
       | title           |
       | Test collection |
-    And news content:
+    And the following "news" content:
       | title     | author       | collection      |
       | News item | alicia__1997 | Test collection |
 
@@ -43,7 +43,7 @@ Feature:
     And I press "Apply to selected items"
 
     Then I should see the heading "Are you sure you want to cancel these user accounts?"
-    And I should see "Alicia Potter"
+    And I should see the text "Alicia Potter"
 
     When I press "Confirm"
     And I wait for the batch process to finish
@@ -67,20 +67,20 @@ Feature:
     # of the author, but the author should not be clickable.
     When I go to "/collection/test-collection/news/news-item"
     Then the response status code should be 200
-    And I should see "Alicia Potter"
+    And I should see the text "Alicia Potter"
     But I should not see the link "Alicia Potter"
 
   Scenario: Cancel own account.
-    Given collection content:
+    Given the following "collection" content:
       | title           |
       | Test collection |
-    And news content:
+    And the following "news" content:
       | title     | author       | collection      |
       | News item | alicia__1997 | Test collection |
-    And document content:
+    And the following "document" content:
       | title | author       | collection      |
       | Docky | alicia__1997 | Test collection |
-    And discussion content:
+    And the following "discussion" content:
       | title  | collection      |
       | Disqus | Test collection |
     And comments:
@@ -116,24 +116,24 @@ Feature:
 
     # The content author is no more clickable.
     When I visit the "News item" news
-    Then I should see "Alicia Potter"
+    Then I should see the text "Alicia Potter"
     Then I should not see the link "Alicia Potter"
     When I visit the "Docky" document
-    Then I should see "Alicia Potter"
+    Then I should see the text "Alicia Potter"
     Then I should not see the link "Alicia Potter"
     When I visit the "Disqus" discussion
-    Then I should see "Alicia Potter"
+    Then I should see the text "Alicia Potter"
     Then I should not see the link "Alicia Potter"
 
   @deletedUser
   Scenario Outline:
-    Given collection content:
+    Given the following "collection" content:
       | title          |
       | Macroeconomics |
-    Given <content type> content:
+    Given the following "<content type>" content:
       | title                 | author       | collection     |
       | Canada hit by tariffs | alicia__1997 | Macroeconomics |
-    And users:
+    And the following users:
       | Username | E-mail          | First name | Family name |
       | viviene  | viv@example.com | Viviene    | De Québec   |
     And comments:
@@ -148,15 +148,15 @@ Feature:
     # Author of comment lacks a link because the account has been deleted.
     When I delete the "viviene" user
     And I reload the page
-    Then I should see "Viviene De Québec"
+    Then I should see the text "Viviene De Québec"
     But I should not see the link "Viviene De Québec"
 
     # Authors of node & comment lack links because their accounts were deleted.
     When I delete the "alicia__1997" user
     And I reload the page
-    Then I should see "Alicia Potter"
+    Then I should see the text "Alicia Potter"
     But I should not see the link "Alicia Potter"
-    And I should see "Viviene De Québec"
+    And I should see the text "Viviene De Québec"
     But I should not see the link "Viviene De Québec"
 
     Examples:

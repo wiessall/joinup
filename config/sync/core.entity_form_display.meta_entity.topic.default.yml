@@ -30,7 +30,7 @@ content:
     third_party_settings: {  }
   image:
     type: image_image
-    weight: 0
+    weight: 1
     region: content
     settings:
       progress_indicator: throbber
@@ -48,13 +48,17 @@ content:
     weight: 2
     region: content
     settings:
+      view_mode: default
       preview_view_mode: default
+      form_display_mode: default
       nesting_depth: 0
       require_layouts: 1
       empty_message: ''
     third_party_settings: {  }
 hidden:
   label: true
+  langcode: true
   path: true
   target: true
+  translation: true
   uuid: true

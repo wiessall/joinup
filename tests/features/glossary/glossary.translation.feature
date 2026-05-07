@@ -2,10 +2,10 @@
 Feature: Translating glossary
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                    | abstract                                       |
       | Collection With Glossary | This is a simple test for glossary translation |
-    And glossary content:
+    And the following "glossary" content:
       | title  | synonyms | summary      | definition                  | collection               |
       | Simple | Easy     | Some summary | Long, long definition field | Collection With Glossary |
 
@@ -45,11 +45,11 @@ Feature: Translating glossary
     When I go to the homepage of the "Simple" glossary
     When I click "Translate" in the "Entity actions" region
     And I click "Delete" in the "Polish" row
-    Then I should see "Are you sure you want to delete the Polish translation of the content item Prosty?"
+    Then I should see the text "Are you sure you want to delete the Polish translation of the content item Prosty?"
     When I press "Delete Polish translation"
     Then I should see the success message "Polish translation of the Glossary term Prosty has been deleted."
     When I click "Translate" in the "Entity actions" region
-    Then I should not see "Edit" in the "Polish" row
+    Then I should not see the text "Edit" in the "Polish" row
     And I should see the "Add" in the "Polish" row
     # Check if the glossary was properly processed in collection_glossary
     When I go to the homepage of the "Collection With Glossary" collection

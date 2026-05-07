@@ -42,6 +42,7 @@
   - Drupal\joinup\Context\DistributionContext
   - Drupal\joinup\Context\DrupalContext
   - Drupal\joinup\Context\EifContext
+  - Drupal\joinup\Context\EntityBrowserContext
   - Drupal\joinup\Context\EntityQueueContext
   - Drupal\joinup\Context\EuplContext
   - Drupal\joinup\Context\FaviconContext
@@ -105,7 +106,6 @@
         firstName: First name
         lastName: Last name
   - Drupal\Tests\message_digest\Behat\MessageDigestContext
-  - Drupal\Tests\oe_webtools\Behat\WebtoolsETransContext
   - Drupal\Tests\oe_webtools\Behat\WebtoolsMapsContext
   - Drupal\joinup\Context\FeatureContext
   - LoversOfBehat\TableExtension\Context\TableContext
@@ -121,7 +121,6 @@ default:
   extensions:
     Drupal\MinkExtension:
       base_url: ${env.DRUPAL_BASE_URL}
-      ajax_timeout: 10
       files_path: ${joinup.dir}/tests/fixtures/files
       browserkit_http:
         guzzle_request_options:
@@ -138,8 +137,8 @@ default:
           version: '*'
           extra_capabilities:
             loggingPrefs:
-              performance: ALL
-              browser: ALL
+              performance: OFF
+              browser: OFF
             "goog:chromeOptions":
               w3c: true
               args:
@@ -183,9 +182,10 @@ default:
         'Users': 'table'
         'IEF table': '.ief-entity-table'
     Drupal\DrupalExtension:
+      ajax_timeout: 10
       api_driver: 'drupal'
       blackbox: ~
-      region_map:
+      regions:
         Administration toolbar: '#toolbar-administration'
         Bookmark block: '#block-ventuno-bookmark'
         Comment: 'section.comments'
@@ -243,14 +243,12 @@ default:
       drush:
         root: ${joinup.site_dir}
       selectors:
-        message_selector: '.alert, .messages'
-        error_message_selector: '.alert.alert--error, .messages.messages--error, .alert.alert-danger'
-        success_message_selector: '.alert.alert--status, .messages.messages--status, .alert.alert-success'
-        warning_message_selector: '.alert.alert--warning, .messages.messages--warning, .alert.alert-warning'
         login_form_selector: '#user-login-form'
-      subcontexts:
-        autoload: false
-        paths: []
+        messages:
+          default: '.alert, .messages'
+          error: '.alert.alert--error, .messages.messages--error, .alert.alert-danger'
+          success: '.alert.alert--status, .messages.messages--status, .alert.alert-success'
+          warning: '.alert.alert--warning, .messages.messages--warning, .alert.alert-warning'
       text:
         log_in: 'Sign in'
         log_out: 'Sign out'

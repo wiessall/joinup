@@ -5,14 +5,14 @@ Feature: Collections/Solutions settings Metadata Banner disabled
   Moderator need to be able to disabled and enabled metadata from banner in collections/solutions
 
   Scenario: Moderator or collection/solution owner is able to disable or enable metadata from banner in collections/solutions
-    Given collection content:
+    Given the following "collection" content:
       | title          |
       | Rally fanatics |
       | Legion of Doom |
-    And solution content:
+    And the following "solution" content:
       | title        | collection     |
       | Klop mirubes | Rally fanatics |
-    And users:
+    And the following users:
       | Username         | E-mail                     | First name | Family name |
       | Ferners Lee      | ferners-lee@example.com    | Ferners    | Lee         |
       | Plot user        | plot.user@example.com      | Plot       | user        |
@@ -25,10 +25,10 @@ Feature: Collections/Solutions settings Metadata Banner disabled
     And the following solution user memberships:
       | solution     | user      | roles |
       | Klop mirubes | Plot user | owner |
-    And "news" content:
+    And the following "news" content:
       | title                   | headline                | body | author | collection     |
       | Creating Justice League | 6 Members to start with | TBD  | Eagle  | Rally fanatics |
-    And "news" content:
+    And the following "news" content:
       | title             | headline                                    | body                                                              | author | solution     |
       | Hawkgirl is a spy | Her race lies in another part of the galaxy | Hawkgirl has been giving information about Earth to Thanagarians. | Eagle  | Klop mirubes |
 

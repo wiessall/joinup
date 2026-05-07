@@ -7,6 +7,7 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\EntityTrait;
@@ -77,20 +78,19 @@ class JoinupNewsContext extends RawDrupalContext {
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
    *   An object containing the entity properties and fields that are to be used
    *   for creating the node as properties on the object.
-   *
-   * @BeforeNodeCreate
    */
+  #[BeforeNodeCreate]
   public static function massageNewsFieldsBeforeNodeCreate(BeforeNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
+    $node = $scope->getStub();
 
-    if ($node->type !== 'news') {
+    if ($node->getBundle() !== 'news') {
       return;
     }
 
     // The Headline field is required, and in normal usage a news article cannot
     // be created without one. Provide a default value if the scenario omits it.
-    if (empty($node->field_news_headline)) {
-      $node->field_news_headline = sprintf('Top %d interoperability tips. You will never believe what is on number %d!', rand(0, 100000), rand(0, 10));
+    if (empty($node->getValue('field_news_headline'))) {
+      $node->setValue('field_news_headline', sprintf('Top %d interoperability tips. You will never believe what is on number %d!', rand(0, 100000), rand(0, 10)));
     }
   }
 

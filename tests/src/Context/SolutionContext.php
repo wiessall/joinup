@@ -10,7 +10,10 @@ use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Core\Url;
+use Drupal\Driver\Entity\EntityStub;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\AfterNodeCreate;
+use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\EntityReferenceTrait;
@@ -149,22 +152,24 @@ class SolutionContext extends RawDrupalContext {
    * @param \Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope $scope
    *   The Behat hook scope object containing the metadata of the node that was
    *   created.
-   *
-   * @AfterNodeCreate
    */
+  #[AfterNodeCreate]
   public function afterNodeCreateHandlePinning(AfterNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
-    if ($node->type !== 'solution') {
+    $node = $scope->getStub();
+    if ($node->getBundle() !== 'solution') {
       return;
     }
 
-    if (!isset($node->pinned_in_collection) && !isset($node->unpinned_in_collection)) {
+    $pinnedIn = JoinupContext::getStrippedNodeProperty($node, 'pinned_in_collection');
+    $unpinnedIn = JoinupContext::getStrippedNodeProperty($node, 'unpinned_in_collection');
+
+    if ($pinnedIn === NULL && $unpinnedIn === NULL) {
       return;
     }
 
-    if (($entity = Node::load((int) $node->nid)) && $entity instanceof PinnableGroupContentInterface) {
-      // Pin solution in collection where needed.
-      foreach (explode(',', $node->pinned_in_collection ?? '') as $groupLabel) {
+    $nid = (int) $node->getValue('nid');
+    if (($entity = Node::load($nid)) && $entity instanceof PinnableGroupContentInterface) {
+      foreach (explode(',', $pinnedIn ?? '') as $groupLabel) {
         if (!($groupLabel = trim($groupLabel))) {
           continue;
         }
@@ -174,15 +179,40 @@ class SolutionContext extends RawDrupalContext {
       }
     }
 
-    if (($entity = Node::load((int) $node->nid)) && $entity instanceof PinnableGroupContentInterface) {
-      // Pin solution in collection where needed.
-      foreach (explode(',', $node->unpinned_in_collection ?? '') as $groupLabel) {
+    if (($entity = Node::load($nid)) && $entity instanceof PinnableGroupContentInterface) {
+      foreach (explode(',', $unpinnedIn ?? '') as $groupLabel) {
         if (!($groupLabel = trim($groupLabel))) {
           continue;
         }
         $group = $this->getEntityByLabel('node', $groupLabel);
         $this->assertCondition($group instanceof GroupInterface, "Cannot pin solution {$entity->label()} in $groupLabel since it does not exist or is not a group.");
         $entity->unpin($group);
+      }
+    }
+  }
+
+  /**
+   * Flags newly created solutions as interoperable.
+   */
+  #[AfterNodeCreate]
+  public function flagSolutionAsInteroperable(AfterNodeCreateScope $scope): void {
+    $node = $scope->getStub();
+    if ($node->getBundle() !== 'solution') {
+      return;
+    }
+
+    $is_interoperable = in_array(strtolower((string) (JoinupContext::getStrippedNodeProperty($node, 'interoperable') ?? '')), [
+      'y',
+      'yes',
+    ]);
+    $nid = $node->getValue('nid');
+    if ($is_interoperable && $nid) {
+      if ($entity = Node::load((int) $nid)) {
+        $flag_service = \Drupal::service('flag');
+        $flag = $flag_service->getFlagById('interoperability');
+        if ($flag) {
+          $flag_service->flag($flag, $entity);
+        }
       }
     }
   }
@@ -250,7 +280,8 @@ class SolutionContext extends RawDrupalContext {
       $user = $this->userManager->getUser($username);
 
       // Check if we are already logged in as the user to test.
-      $current_username = $this->userManager->getCurrentUser()->name ?? NULL;
+      $currentUserStub = $this->userManager->getCurrentUser();
+      $current_username = $currentUserStub ? $currentUserStub->getValue('name') : NULL;
       if ($username !== $current_username) {
         $this->authenticationManager->logIn($user);
       }
@@ -364,7 +395,7 @@ class SolutionContext extends RawDrupalContext {
       ->load('interoperability');
 
     $user = $this->getUserManager()->getCurrentUser();
-    $account = User::load($user->uid);
+    $account = User::load($user->getValue('uid'));
     if ($account->isAnonymous()) {
       throw new \Exception("No current logged in user.");
     }
@@ -377,12 +408,11 @@ class SolutionContext extends RawDrupalContext {
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
    *   The before node create scope.
-   *
-   * @BeforeNodeCreate
    */
+  #[BeforeNodeCreate]
   public function convertSolutionValueAliases(BeforeNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
-    if ($node->type !== 'solution') {
+    $node = $scope->getStub();
+    if ($node->getBundle() !== 'solution') {
       return;
     }
 
@@ -396,7 +426,7 @@ class SolutionContext extends RawDrupalContext {
       'list_related_entities' => ['no' => 0, 'yes' => 1],
     ];
 
-    foreach ((array) $node as $field => $value) {
+    foreach ($node->getValues() as $field => $value) {
       if (!isset($value_mapping[$field])) {
         continue;
       }
@@ -405,7 +435,7 @@ class SolutionContext extends RawDrupalContext {
         sprintf("Value '%s' is not an acceptable value for solution field %s.", $value, $field),
       );
 
-      $node->$field = $value_mapping[$field][$value];
+      $node->setValue($field, $value_mapping[$field][$value]);
     }
   }
 
@@ -414,15 +444,14 @@ class SolutionContext extends RawDrupalContext {
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
    *   The before node create scope.
-   *
-   * @BeforeNodeCreate
    */
+  #[BeforeNodeCreate]
   public function ensureSolutionParentCollection(BeforeNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
-    if ($node->type !== 'solution') {
+    $node = $scope->getStub();
+    if ($node->getBundle() !== 'solution') {
       return;
     }
-    if (empty($node->og_audience)) {
+    if (empty($node->getValue('og_audience'))) {
       $label = $this->getRandom()->sentences(3);
       // We must use \Drupal\joinup\Context\DrupalContext to create the
       // missing collection, since entities are removed per context class. If
@@ -431,8 +460,7 @@ class SolutionContext extends RawDrupalContext {
       $environment = $scope->getEnvironment();
       $context = $environment->getContext(DrupalContext::class);
       \assert($context instanceof DrupalContext);
-      $collection = $context->nodeCreate((object) [
-        'type' => 'collection',
+      $collection = $context->nodeCreate(new EntityStub('node', 'collection', [
         'title' => $label,
         // Collection context will ensure that there is a state property set to
         // draft. We set the state here to allow joinup context to convert it
@@ -440,8 +468,9 @@ class SolutionContext extends RawDrupalContext {
         // @see \Drupal\joinup\Context\CollectionContext::defaultCollectionValues
         // @see \Drupal\joinup\Context\JoinupContext::massageFieldsBeforeNodeCreate
         'state' => 'published',
-      ]);
-      $node->og_audience = $collection->nid;
+      ]));
+      $collection_nid = $collection->getValue('nid') ?? $collection->getId();
+      $node->setValue('og_audience', $collection_nid);
 
       // Remove any links created by this collection because they might produce
       // name collisions with the solution. E.g. the left sidebar link 'About'.
@@ -452,7 +481,7 @@ class SolutionContext extends RawDrupalContext {
       $storage = $entity_type_manager->getStorage('ogmenu_instance');
       $og_menu_instance_ids = $storage->getQuery()->accessCheck(FALSE)
         ->condition('type', 'navigation')
-        ->condition(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $collection->nid)
+        ->condition(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $collection_nid)
         ->execute();
       $storage->delete($storage->loadMultiple($og_menu_instance_ids));
     }

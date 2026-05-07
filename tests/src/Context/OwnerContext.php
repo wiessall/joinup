@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\NodeTrait;
@@ -30,21 +31,20 @@ class OwnerContext extends RawDrupalContext {
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
    *   The scope object.
-   *
-   * @BeforeNodeCreate
    */
+  #[BeforeNodeCreate]
   public function massageFieldsBeforeNodeCreate(BeforeNodeCreateScope $scope): void {
-    $fake_node = $scope->getEntity();
-    if ($fake_node->type !== 'owner') {
+    $fake_node = $scope->getStub();
+    if ($fake_node->getBundle() !== 'owner') {
       return;
     }
 
-    if (!isset($fake_node->owner_type)) {
-      $fake_node->owner_type = $this->getRandomTerm('owner_type')->label();
+    if (!$fake_node->hasValue('owner_type')) {
+      $fake_node->setValue('owner_type', $this->getRandomTerm('owner_type')->label());
     }
 
-    if (!isset($fake_node->country)) {
-      $fake_node->country = $this->getRandomTerm('spatial')->label();
+    if (!$fake_node->hasValue('country')) {
+      $fake_node->setValue('country', $this->getRandomTerm('spatial')->label());
     }
   }
 

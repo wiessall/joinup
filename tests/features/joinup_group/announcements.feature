@@ -5,11 +5,11 @@ Feature: Messaging group announcements
   @group-e
   Scenario Outline: Announcement creation and transitions
 
-    Given <group> content:
+    Given the following "<group>" content:
       | title        | state     |
       | Fail pension | published |
       | Hidden gems  | draft     |
-    And users:
+    And the following users:
       | Username             | E-mail                           | Roles     |
       | Sons of tweets       | sonsoftweets@example.com         |           |
       | Check edit moderator | check.edit.moderator@example.com | moderator |
@@ -72,7 +72,7 @@ Feature: Messaging group announcements
     And Log entry with the message "The announcement The Big Opening has been created by Sons of tweets for Fail pension." should exist.
     And the "Subject" field should contain "The Big Opening"
     And the "Body" field should contain "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-    And I should see "Announcement state: Draft"
+    And I should see the text "Announcement state: Draft"
     And I should see the button "Send for approval"
     And I should see the button "Preview"
     But I should not see the button "Approve"
@@ -102,7 +102,7 @@ Feature: Messaging group announcements
 
     When I press "Update"
     Then I should see the success message "The announcement has been updated but it's still in Draft state. Review the announcement and, when is ready to be sent, use the 'Send' button."
-    And I should see "Announcement state: Draft"
+    And I should see the text "Announcement state: Draft"
 
     When I press "Preview"
     Then I should see the success message "A sample announcement has been delivered to sonsoftweets@example.com."
@@ -127,7 +127,7 @@ Feature: Messaging group announcements
     And I should see the link "Add announcement"
     # The facilitator has exhausted all operations they can perform, so they
     # cannot edit the announcement anymore.
-    And I should not see "edit" in the "The Big Opening is postponed" row
+    And I should not see the text "edit" in the "The Big Opening is postponed" row
     # ...but they can still see the message in read-only mode.
     When I click "The Big Opening is postponed"
     Then I should see the warning message "This announcement is in read-only mode because is pending for moderators approval."
@@ -149,7 +149,7 @@ Feature: Messaging group announcements
     When I go to the announcements page of "Hidden gems" <group>
     Then the response status code should be 403
     And I click the link from email sent to "Check edit moderator" with subject "Interoperable Europe Portal: A new announcement 'The Big Opening is postponed' has been created"
-    Then I should see "Announcement state: Pending approval"
+    Then I should see the text "Announcement state: Pending approval"
     And I should see the button "Update"
     And I should see the button "Approve"
     And I should see the button "Preview"
@@ -159,7 +159,7 @@ Feature: Messaging group announcements
 
     When I press "Reject"
     Then I should see the success message "The announcement has been rejected. Press the 'Undo reject' button to restore the announcement."
-    Then I should see "Announcement state: Rejected"
+    Then I should see the text "Announcement state: Rejected"
     And I should see the button "Update"
     And I should see the button "Preview"
     But I should not see the button "Approve"
@@ -196,7 +196,7 @@ Feature: Messaging group announcements
     When I go to the "The Big Opening is postponed" announcement of "Fail pension" <group>
     And  I press "Undo reject"
     Then I should see the success message "The announcement has been restored."
-    Then I should see "Announcement state: Pending approval"
+    Then I should see the text "Announcement state: Pending approval"
     And I should see the button "Update"
     And I should see the button "Approve"
     And I should see the button "Preview"
@@ -260,7 +260,7 @@ Feature: Messaging group announcements
 
     And I should see the link "Add announcement"
     # The announcement cannot be edited anymore...
-    But I should not see "edit" in the "The Big Opening is postponed" row
+    But I should not see the text "edit" in the "The Big Opening is postponed" row
     # ...but it can be visualized in read-only mode.
     When I click "The Big Opening is postponed"
     Then I should see the warning message "This announcement is in read-only mode because it has been already delivered."
@@ -312,16 +312,16 @@ Feature: Messaging group announcements
 
   @javascript @group-e
   Scenario: Announcement moderation
-    Given collection content:
+    Given the following "collection" content:
       | title       |
       | Collection1 |
       | Collection2 |
-    And solution content:
+    And the following "solution" content:
       | title                 | collection  |
       | Collection1 Solution1 | Collection1 |
       | Collection1 Solution2 | Collection1 |
       | Collection2 Solution1 | Collection2 |
-    And users:
+    And the following users:
       | Username         | E-mail                      | Roles     |
       | Rian Lee         | rian-lee@example.com        |           |
       | Miau user        | miau.user@example.com       |           |
@@ -424,10 +424,10 @@ Feature: Messaging group announcements
 
   @group-e
   Scenario: Wrong recipient's name in announcements.
-    Given collection content:
+    Given the following "collection" content:
       | title         | state     |
       | Wrong pension | published |
-    And users:
+    And the following users:
       | Username   | E-mail                       | First name | Family name |
       | cgarnett67 | callista.garnett@example.com | Callista   | Garnett     |
       | cbarnett68 | callista.barnett@example.com | Callista   | Barnett     |
@@ -477,7 +477,7 @@ Feature: Messaging group announcements
       | The recipient's full name: Joana Barnett |
 
     # Check mass-mails.
-    Given users:
+    Given the following users:
       | Username   | E-mail                       | First name | Family name |
       | sgarnett69 | samuel.garnett@example.com   | Samuel     | Garnett     |
       | sbrown70   | sally.brown@example.com      | Sally      | Brown       |

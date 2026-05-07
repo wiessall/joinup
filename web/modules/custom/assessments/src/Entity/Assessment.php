@@ -168,7 +168,7 @@ class Assessment extends ContentEntityBase implements AssessmentInterface {
   /**
    * {@inheritdoc}
    */
-  public function label(): string {
+  public function label(): string|\Stringable {
     if ($this->isTranslatable()) {
       $langcode = $this->language()->getId();
       if (!$this->hasTranslation($langcode)) {
@@ -178,10 +178,14 @@ class Assessment extends ContentEntityBase implements AssessmentInterface {
 
     $name = $name ?? $this->get('name');
 
-    return $name?->value ?? $this->t('@bundle #@id', [
-      '@bundle' => $this->type->entity->label(),
-      '@id' => $this->id(),
-    ])->render();
+    return $name?->value ?? (
+      !$this->isNew() ?
+      $this->t('@bundle #@id', [
+        '@bundle' => $this->type->entity->label(),
+        '@id' => $this->id(),
+      ]) :
+      $this->type->entity->label()
+    );
   }
 
   /**

@@ -5,7 +5,7 @@ Feature: "Add document" visibility options.
   I need to be able to add "Document" content through UI.
 
   Scenario: "Add document" button should not be shown to normal members, authenticated users and anonymous users.
-    Given collection content:
+    Given the following "collection" content:
       | title                   | logo     |
       | Ring of Truth           | logo.png |
       | The Storms of the Waves | logo.png |
@@ -39,7 +39,7 @@ Feature: "Add document" visibility options.
       | First name  | Eirik             |
       | Family name | Andries           |
       | E-mail      | eandr@example.com |
-    And collection content:
+    And the following "collection" content:
       | title                | logo     |
       | Hunter in the Swords | logo.png |
     And the following collection user membership:
@@ -82,23 +82,23 @@ Feature: "Add document" visibility options.
     But I should not see the link "napcheese" in the "Content" region
     When I click "Edit"
     And I press "Edit"
-    And I should see "Description"
+    And I should see the text "Description"
     And I fill in "Description" with "My document"
     And I press "Save as draft"
-    And I should not see "test.zip"
-    And I should see "My document"
+    And I should not see the text "test.zip"
+    And I should see the text "My document"
 
   # Regression test to ensure that no critical errors are thrown when a new
   # revision is created for a document that has a remote file attached.
   # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3670
   Scenario: Remote URLs can be used in documents.
-    Given collection content:
+    Given the following "collection" content:
       | title         |
       | Strong Lasers |
-    And licence content:
+    And the following "licence" content:
       | title                 | description                                                         | licence type  |
       | Creative Commons Zero | CC0 is a legal tool for waiving as many rights as legally possible. | Public domain |
-    And document content:
+    And the following "document" content:
       | title       | document type | short title | resources              | abstract | field_paragraphs_body | licence               | collection    |
       | Laser types | document      | L-Types     | http://www.example.com | Abstract | List of laser types.  | Creative Commons Zero | Strong Lasers |
 
@@ -108,20 +108,20 @@ Feature: "Add document" visibility options.
     Then I should see the success message "Document Laser types has been updated"
     And I go to the edit form of the "Laser types" document
     And I press "Edit"
-    And I should see "Link text"
+    And I should see the text "Link text"
     And I fill in "Link text" with "My document"
     And I press "Update"
-    And I should not see "http://www.example.com "
-    And I should see "My document"
+    And I should not see the text "http://www.example.com "
+    And I should see the text "My document"
 
   Scenario: Increase attachment file size limit in Documents.
-    Given collection content:
+    Given the following "collection" content:
       | title      |
       | Red blaser |
-    And licence content:
+    And the following "licence" content:
       | title                 | description                                                         | licence type  |
       | Creative Commons Zero | CC0 is a legal tool for waiving as many rights as legally possible. | Public domain |
-    And document content:
+    And the following "document" content:
       | title            | document type | short title | abstract | field_paragraphs_body | licence               | collection |
       | Red blaser types | document      | RL-Types    | Abstract | List of laser types.  | Creative Commons Zero | Red blaser |
 

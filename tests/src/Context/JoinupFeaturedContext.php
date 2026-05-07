@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\AfterNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\joinup_featured\FeaturedContentInterface;
 use Drupal\node\Entity\Node;
@@ -25,17 +26,16 @@ class JoinupFeaturedContext extends RawDrupalContext {
    * @param \Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope $scope
    *   The Behat hook scope object containing the metadata of the node that was
    *   created.
-   *
-   * @AfterNodeCreate
    */
+  #[AfterNodeCreate]
   public function featureNodeAfterCreation(AfterNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
+    $node = $scope->getStub();
 
-    $is_featured = in_array(strtolower((string) ($node->featured ?? '')), [
+    $is_featured = in_array(strtolower((string) ($node->getValue('featured') ?? '')), [
       'y',
       'yes',
     ]);
-    $nid = $node->nid ?? NULL;
+    $nid = $node->getValue('nid');
     if ($is_featured && $nid) {
       /** @var \Drupal\node\NodeInterface $entity */
       if ($entity = Node::load((int) $nid)) {

@@ -5,7 +5,7 @@ Feature: Subscribers report
   I want to have access to a subscribers report
 
   Scenario: View a report on the number of subscribers
-    Given users:
+    Given the following users:
       | Username | Roles | First name | Family name |
       | busta    |       | Busta      | Dog         |
       | method   |       | Method     | Funk        |
@@ -15,11 +15,11 @@ Feature: Subscribers report
       | dope     |       | Dope       | Ice         |
       | young    |       | Young      | G           |
       | lil      |       | Lil        | Mama        |
-    And collection content:
+    And the following "collection" content:
       | title             |
       | Marine ecosystems |
       | Plant science     |
-    Given solution content:
+    Given the following "solution" content:
       | title                 | collection        |
       | Seagrass meadows      | Marine ecosystems |
       | Intertidal seagrasses | Plant science     |

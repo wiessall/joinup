@@ -4,19 +4,19 @@ Feature:
 
   Background:
     # Mimic the "Interoperable Europe" collection.
-    Given collection content:
+    Given the following "collection" content:
       | uri                                                            | title                | topic      |
       | http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c | Interoperable Europe | Demography |
 
   Scenario: Test that carousels content listing options are working correctly.
-    Given collection content:
+    Given the following "collection" content:
       | title       |
       | Carousel c1 |
-    And news content:
-      | title       | collection           | content       |
+    And the following "news" content:
+      | title       | collection           | body          |
       | Some news 1 | Interoperable Europe | Some content. |
       | Some news 2 | Carousel c1          | Come content. |
-    And custom_page content:
+    And the following "custom_page" content:
       | title         | collection           |
       | News carousel | Interoperable Europe |
     And I append "carousel" to "field_paragraphs_body" field in "node" entity with following "News carousel" title:
@@ -29,11 +29,11 @@ Feature:
 
   @javascript
   Scenario: Test that carousels with specific content is working correctly.
-    Given collection content:
+    Given the following "collection" content:
       | title       |
       | Carousel c1 |
-    And custom_page content:
-      | title       | collection           | content       |
+    And the following "custom_page" content:
+      | title       | collection           | body          |
       | Some page 1 | Interoperable Europe | Some content. |
       | Some page 2 | Carousel c1          | Some content. |
       | Some page 3 | Carousel c1          | Some content. |
@@ -87,12 +87,12 @@ Feature:
     And I should not see the "Some page 2" tile
 
   Scenario: Carousels should be ordered by creation date by default.
-    Given news content:
-      | title       | collection           | content       | created    |
+    Given the following "news" content:
+      | title       | collection           | body          | created    |
       | Some news 1 | Interoperable Europe | Some content. | 2 day ago  |
       | Some news 2 | Interoperable Europe | Some content. | 3 days ago |
       | Some news 3 | Interoperable Europe | Some content. | 1 days ago |
-    And custom_page content:
+    And the following "custom_page" content:
       | title                | collection           |
       | A carousel with news | Interoperable Europe |
     And I append "carousel" to "field_paragraphs_body" field in "node" entity with following "A carousel with news" title:
@@ -105,12 +105,12 @@ Feature:
       | Some news 2 |
 
   Scenario: Test also that events, when listed alone, are sorted by event date.
-    Given event content:
-      | title        | collection           | field_paragraphs_body | created    | start date | end date   |
-      | Some event 1 | Interoperable Europe | Some content.         | 2 day ago  | 5 day ago  | 4 day ago  |
-      | Some event 2 | Interoperable Europe | Some content.         | 3 days ago | 6 days ago | 5 days ago |
-      | Some event 3 | Interoperable Europe | Some content.         | 1 days ago | 7 days ago | 6 days ago |
-    And custom_page content:
+    Given the following "event" content:
+      | title        | collection           | body          | created    | start date | end date   |
+      | Some event 1 | Interoperable Europe | Some content. | 2 day ago  | 5 day ago  | 4 day ago  |
+      | Some event 2 | Interoperable Europe | Some content. | 3 days ago | 6 days ago | 5 days ago |
+      | Some event 3 | Interoperable Europe | Some content. | 1 days ago | 7 days ago | 6 days ago |
+    And the following "custom_page" content:
       | title           | collection           |
       | Events carousel | Interoperable Europe |
     And I append "carousel" to "field_paragraphs_body" field in "node" entity with following "Events carousel" title:

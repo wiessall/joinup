@@ -2,16 +2,16 @@
 Feature: Translating documents
 
   Background:
-    Given users:
+    Given the following users:
       | Username    | Roles     |
       | Flora Mod   | moderator |
       | Lee Facil   |           |
       | John Member |           |
       | Ross Auth   |           |
-    And collection content:
+    And the following "collection" content:
       | title           |
       | Test collection |
-    And solution content:
+    And the following "solution" content:
       | title         | collection      |
       | Test solution | Test collection |
     And the following collection user memberships:
@@ -22,7 +22,7 @@ Feature: Translating documents
       | solution      | user        | roles       |
       | Test solution | Lee Facil   | facilitator |
       | Test solution | John Member |             |
-    And document content:
+    And the following "document" content:
       | title                    | collection      | solution      | field_paragraphs_body         | resources |
       | Test collection document | Test collection |               | This is test document content | test.zip  |
       | Test solution document   |                 | Test solution | This is test document content | test.zip  |
@@ -73,7 +73,7 @@ Feature: Translating documents
 
     # Edit translation.
     When I click "Translate" in the "Entity actions" region
-    Then I should see "Testowy dokument"
+    Then I should see the text "Testowy dokument"
     When I click "Edit" in the "Polish" row
     And I fill in "Title" with "Zaktualizowany dokument"
     And I press "Save (all translations)"
@@ -84,11 +84,11 @@ Feature: Translating documents
     # Delete translation.
     When I click "Translate" in the "Entity actions" region
     And I click "Delete" in the "Polish" row
-    Then I should see "Are you sure you want to delete the Polish translation of the content item Zaktualizowany dokument?"
+    Then I should see the text "Are you sure you want to delete the Polish translation of the content item Zaktualizowany dokument?"
     When I press "Delete Polish translation"
     Then I should see the success message "Polish translation of the Document Zaktualizowany dokument has been deleted."
     When I click "Translate" in the "Entity actions" region
-    Then I should not see "Edit" in the "Polish" row
+    Then I should not see the text "Edit" in the "Polish" row
     And I should see the "Add" in the "Polish" row
 
     Examples:

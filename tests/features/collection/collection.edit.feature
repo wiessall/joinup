@@ -5,7 +5,7 @@ Feature: Editing collections
   I need to be able to edit collections through the UI
 
   Scenario: Edit a collection
-    Given collection content:
+    Given the following "collection" content:
       | title                 | access url                             | closed | creation date    | content_creation         | group_moderation | state |
       | Überwaldean Land Eels | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | facilitators and authors | yes              | draft |
 
@@ -15,8 +15,8 @@ Feature: Editing collections
     Then the following fields should be present "Title, Description, Abstract, Topic, Geographical coverage, Search keywords, Motivation"
     And the following field widgets should be present "Contact information, Owner"
     And the following fields should not be present "Langcode, Translation, Affiliates, Enable the search field, Query presets, Limit"
-    And I should see "Short description text of the collection. Appears on the Overview page."
-    And I should see "Add a country name relevant to the content of this collection."
+    And I should see the text "Short description text of the collection. Appears on the Overview page."
+    And I should see the text "Add a country name relevant to the content of this collection."
     And the "Description" wysiwyg editor should have the buttons "Heading,Style,Bold,Italic,Remove Format,Link,Contact us,Bulleted list,Numbered list,Outdent,Indent,Block quote,File,Drupal media,table,Undo,Redo,Source,Code,Code Block"
 
     # Query builder is disabled in collections.
@@ -30,7 +30,7 @@ Feature: Editing collections
   @javascript
   Scenario: Edit a collection wysiwyg modal should close.
     # Regression test for ticket ISAICP-7181 and ISAICP-8355.
-    Given collection content:
+    Given the following "collection" content:
       | title           | access url                             | closed | creation date    | content_creation         | group_moderation | state |
       | Rhyme Land Eels | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | facilitators and authors | yes              | draft |
     When I am logged in as a facilitator of the "Rhyme Land Eels" collection
@@ -52,7 +52,7 @@ Feature: Editing collections
   @javascript
   Scenario: Regression test wysiwyg add file shows a 0 bytes limit.
     # Regression test for ticket ISAICP-7177.
-    Given collection content:
+    Given the following "collection" content:
       | title                   | access url                             | closed | creation date    | content_creation         | group_moderation | state |
       | Rhyme Land wysiwyg Eels | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | facilitators and authors | yes              | draft |
     When I am logged in as a facilitator of the "Rhyme Land wysiwyg Eels" collection

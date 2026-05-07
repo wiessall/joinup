@@ -7,16 +7,16 @@ Feature: Solution homepage
   # @covers \Drupal\joinup_release\Plugin\search_api\processor\ReleaseSolutionData::preprocessIndexItems
   # @covers \Drupal\joinup_search\Plugin\search_api\processor\AddAggregatedTopicHierarchy::preprocessIndexItems
   Scenario: The solution homepage shows related content.
-    Given solution content:
+    Given the following "solution" content:
       | title                        | abstract                              | description                           | logo     | status | related by type | solution type | topic       |
       | Information sharing protocol | Handling information sharing securely | Handling information sharing securely | logo.png |        | yes             | Business      | E-inclusion |
       | Security audit tools         | Automated test of security            | Automated test of security            | logo.png |        | yes             | Business      | E-inclusion |
-    And release content:
+    And the following "release" content:
       | title                | release number | creation date     | release notes                               | is version of                | state     | spatial coverage |
       | IS protocol paper    | 1              | 2018-10-04 8:01am | First stable version.                       | Information sharing protocol | published | Belgium          |
       | IS protocol archived | 0.1-rc         | 2018-10-04 8:06am | Release candidate.                          | Information sharing protocol | archived  | Belgium          |
       | Fireproof            | 0.1            | 2018-10-04 8:06am | First release for the firewall bypass tool. | Security audit tools         | published |                  |
-    And distribution content:
+    And the following "distribution" content:
       | title               | description                                        | creation date     | resources        | solution                     | release           | downloads | state     |
       | PDF version         | Pdf version of the paper.                          | 2018-10-04 8:07am | text.pdf         |                              | IS protocol paper | 589       | published |
       | ZIP version         | Zip version of the paper.                          | 2018-10-04 8:04am | test.zip         |                              | IS protocol paper | 514       | published |
@@ -26,11 +26,11 @@ Feature: Solution homepage
       | Source code         | Source code for the Fireproof tool.                | 2018-10-04 8:03am | test.zip         |                              | Fireproof         | 432       | published |
       # One distribution directly attached to the "Security audit tools" solution.
       | Code of Conduct     | Code of Conduct for contributing to this software. | 2018-10-04 8:14am | http://a.b/c.zip | Security audit tools         |                   | 740       | published |
-    And news content:
+    And the following "news" content:
       | title                       | body                                | created           | topic                   | spatial coverage | solution                     | state     |
       | IS protocol meet-up         | Discussion about the next standard. | 2018-10-04 8:02am | Statistics and Analysis | European Union   | Information sharing protocol | published |
       | Archiving some distribution | Old ZIP version archived.           | 2018-10-04 8:02am | Statistics and Analysis | European Union   | Information sharing protocol | archived  |
-    And document content:
+    And the following "document" content:
       | title               | document type | short title | created           | field_paragraphs_body   | spatial coverage | topic       | solution                     |
       | IS protocol draft 2 | Document      | IS draft 2  | 2018-10-04 8:08am | Next proposition draft. | European Union   | E-inclusion | Information sharing protocol |
 

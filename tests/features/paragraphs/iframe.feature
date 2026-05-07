@@ -4,19 +4,19 @@ Feature:
   I need to be able to use "iframe" paragraphs for content.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                 | state     | topic |
       | Paragraphs collection | published | HR    |
 
   @javascript
   Scenario: Moderator can manage iframe paragraph.
-    Given users:
+    Given the following users:
       | Username |
       | Zohan    |
     And the following collection user membership:
       | collection            | user  |
       | Paragraphs collection | Zohan |
-    And custom_page content:
+    And the following "custom_page" content:
       | title                     | abstract             | body        | collection            | author | state     | topic |
       | Don't Mess with the Zohan | Wanna mess abstract? | Wanna mess? | Paragraphs collection | Zohan  | published | HR    |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Don't Mess with the Zohan" title:
@@ -54,7 +54,7 @@ Feature:
     And the response should contain "{\"foo\":\"bar\"}"
 
   Scenario: Consent declaration should be displayed for PowerBI.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title               | collection            | state     |
       | Iframe page example | Paragraphs collection | published |
     And I append "iframe" to "field_paragraphs_body" field in "node" entity with following "Iframe page example" title:

@@ -5,18 +5,18 @@ Feature: Subscribing to a solution
   I want to persuade new members to subscribe to my solution
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                  | abstract | description | closed |
       | Some parent collection | Abstract | Description | yes    |
-    And solution content:
+    And the following "solution" content:
       | title                      | collection             |
       | Some solution to subscribe | Some parent collection |
-    And users:
+    And the following users:
       | Username          |
       | Cornilius Darcias |
 
   Scenario: Subscribe functionality is disabled for archived content.
-    Given solution content:
+    Given the following "solution" content:
       | title            | state    | collection             |
       | Plovdiv old town | archived | Some parent collection |
 
@@ -45,7 +45,7 @@ Feature: Subscribing to a solution
     When I click "Subscribe to this solution"
     Then a modal should open
     And I should see the text "Sign in to subscribe"
-    And I should see "Only signed in users can subscribe to this solution. Please sign in or register an account on EU Login."
+    And I should see the text "Only signed in users can subscribe to this solution. Please sign in or register an account on EU Login."
     But the cookie that tracks which group I want to join should not be set
     When I press "Sign in / Register" in the "Modal buttons" region
     And I should see the heading "Sign in to continue"
@@ -82,7 +82,7 @@ Feature: Subscribing to a solution
 
   @javascript
   Scenario: Logged out users can subscribe to a solution after logging in
-    Given users:
+    Given the following users:
       | Username                  |
       | Bergholt Stuttley Johnson |
     Given CAS users:
@@ -98,7 +98,7 @@ Feature: Subscribing to a solution
     When I click "Subscribe to this solution"
     Then a modal should open
     And I should see the text "Sign in to subscribe"
-    And I should see "Only signed in users can subscribe to this solution. Please sign in or register an account on EU Login."
+    And I should see the text "Only signed in users can subscribe to this solution. Please sign in or register an account on EU Login."
     But the cookie that tracks which group I want to join should not be set
     When I press "Sign in / Register" in the "Modal buttons" region
     Then I should see the heading "Sign in to continue"
@@ -116,7 +116,7 @@ Feature: Subscribing to a solution
     And the "Some solution to subscribe" solution should have 1 active member
 
   Scenario: Show relevant message to a blocked user that tries to resubscribe as anonymous
-    Given users:
+    Given the following users:
       | Username     |
       | Cosmo Lavish |
     And CAS users:
@@ -206,7 +206,7 @@ Feature: Subscribing to a solution
   @javascript
   Scenario: Logged users can subscribe to a solution without receiving notifications
     # Regression test for ISAICP-9624.
-    Given users:
+    Given the following users:
       | Username    |
       | Rita Lavish |
     When I am logged in as "Rita Lavish"

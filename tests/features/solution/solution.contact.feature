@@ -4,7 +4,7 @@ Feature: Contact form for solution
 
   @javascript @email @loggedErrors
   Scenario: User can use "Contact us" form
-    Given contact_information content:
+    Given the following "contact_information" content:
       | name         | email                    | website url            | nid  |
       | Jocelyn Bass | jocelyn.bass@example.com | http://www.example.org | 1001 |
       | John Revoked | john@example.com         | http://www.example.org | 1002 |
@@ -14,10 +14,10 @@ Feature: Contact form for solution
       | jocelyn.bass@example.com | confirmed |
       | john@example.com         | confirmed |
       | deleted@example.com      | confirmed |
-    And collection content:
+    And the following "collection" content:
       | title                |
       | Antibody development |
-    And solution content:
+    And the following "solution" content:
       | title                    | contact information | collection           |
       | Six exclusion advantages | John Revoked        | Antibody development |
     And user:
@@ -40,7 +40,7 @@ Feature: Contact form for solution
 
     When I press "Cancel" in the "Modal buttons" region
     Then the modal should be closed
-    And I should not see "Only signed in users can send a message. Please sign in or register an account on EU Login." in the "Content" region
+    And I should not see the text "Only signed in users can send a message. Please sign in or register an account on EU Login." in the "Content" region
 
     # Delete contact info.
     Given I reload the page

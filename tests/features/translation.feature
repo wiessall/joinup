@@ -23,6 +23,6 @@ Feature: Creating nodes in foreign language
     And I select "Polish" from "Language"
     And I press "Publish"
     When I click "Translate" in the "Entity actions" region
-    Then I should see "Polish (Original language)"
-    And I should see "Kolekcja" in the "Polish (Original language)" row
-    And I should see "Source" in the "Polish (Original language)" row
+    Then I should see the text "Polish (Original language)"
+    And I should see the text "Kolekcja" in the "Polish (Original language)" row
+    And I should see the text "Source" in the "Polish (Original language)" row

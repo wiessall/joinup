@@ -5,14 +5,14 @@ Feature: Sharing content between collections
   So that useful information has more visibility
 
   Scenario: Sharing of event and news expires by time
-    Given collection content:
+    Given the following "collection" content:
       | title        |
       | Target group |
-    And "news" content:
-      | title       | collection | shared on    | shared at |
+    And the following "news" content:
+      | title       | collection     | shared on    | shared at |
       | Shared news | Portal support | Target group | - 32 days |
-    And "event" content:
-      | title        | collection | shared on    | shared at |
+    And the following "event" content:
+      | title        | collection     | shared on    | shared at |
       | Shared event | Portal support | Target group | -7 months |
 
     When I go to the "Target group" collection
@@ -26,16 +26,16 @@ Feature: Sharing content between collections
 
   @javascript
   Scenario Outline: Users can share content in the groups they are member of.
-    Given users:
+    Given the following users:
       | Username    | E-mail                  |
       | Sara Barber | sara.barber@example.com |
-    And <group type> content:
+    And the following "<group type>" content:
       | title        |
       | Classic Rock |
       | Hip-Hop      |
       | Power ballad |
       | Drum'n'Bass  |
-    And document content:
+    And the following "document" content:
       | title                       | <group type> |
       | Rockabilly is still rocking | Classic Rock |
     And the following <group type> user memberships:
@@ -43,7 +43,7 @@ Feature: Sharing content between collections
       | Classic Rock | Sara Barber |       |
       | Hip-Hop      | Sara Barber |       |
       | Drum'n'Bass  | Sara Barber |       |
-    And <content type> content:
+    And the following "<content type>" content:
       | title               | <group type> |
       | Interesting content | Hip-Hop      |
 
@@ -182,14 +182,14 @@ Feature: Sharing content between collections
 
   @javascript
   Scenario Outline: Share/Unshare should be visible according to the group permissions.
-    Given <group type> content:
+    Given the following "<group type>" content:
       | title      |
       | Westeros   |
       | Essos city |
-    And "<content type>" content:
+    And the following "<content type>" content:
       | title       | <group type> |
       | Iron throne | Westeros     |
-    Given users:
+    Given the following users:
       | Username       | E-mail                     | Roles     |
       | Jamie Lanister | jamie.lanister@example.com | moderator |
       | John Snow      | john.snow@example.com      |           |
@@ -213,7 +213,7 @@ Feature: Sharing content between collections
     When I click the contextual link "Share" in the "Iron throne" tile
     Then a modal should open
     And the following fields should be present "Essos city"
-    And I should see "<notification>"
+    And I should see the text "<notification>"
     When I check "Essos city"
     And I press "Share" in the "Modal buttons" region
     Then I should see the success message "Item was shared on the following groups: Essos city."
@@ -252,13 +252,13 @@ Feature: Sharing content between collections
       | news         | solution   | Please note: You must be subscribed to the target space to share your content. Your news item will be shared on that space for one month. After that, it will be considered obsolete and will be automatically removed from that space. |
 
   Scenario: Shared pinned content is erroneously shown first.
-    Given collection content:
+    Given the following "collection" content:
       | title         |
       | Chocolate Way |
-    And "document" content:
-      | title                 | collection    | shared on     | created    | pinned |
-      | Milky Way content     | Portal support   | Chocolate Way | 2017-06-04 | yes    |
-      | Chocolate Way content | Chocolate Way |               | 2017-06-05 | no     |
+    And the following "document" content:
+      | title                 | collection     | shared on     | created    | pinned |
+      | Milky Way content     | Portal support | Chocolate Way | 2017-06-04 | yes    |
+      | Chocolate Way content | Chocolate Way  |               | 2017-06-05 | no     |
     When I go to the homepage of the "Chocolate Way" collection
     Then I should see the following tiles in the correct order:
       | Chocolate Way content |
@@ -266,12 +266,12 @@ Feature: Sharing content between collections
 
   @javascript
   Scenario: Carousel tiles should show the "Shared from" visual cue.
-    Given collection content:
+    Given the following "collection" content:
       | title |
       | Earth |
       | Mars  |
       | Venus |
-    And news content:
+    And the following "news" content:
       | title         | collection | shared on   |
       | Earth content | Earth      | Mars        |
       | Mars content  | Mars       |             |
