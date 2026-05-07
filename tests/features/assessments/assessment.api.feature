@@ -2,7 +2,7 @@
 Feature: Assessments API
 
   Scenario: Use API for assessment.
-    Given solution content:
+    Given the following "solution" content:
       | title           | uuid                                 |
       | Citizen's Forum | 993958d5-2892-413c-a239-3d7a66daa0a8 |
     Then a GET request to "/api/assessments/v1/asset" should return the following JSON:

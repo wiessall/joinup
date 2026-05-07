@@ -4,13 +4,13 @@ Feature:
   I need to be able to use "entity_reference" paragraphs for content.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                 | state     |
       | Paragraphs collection | published |
 
   @javascript
   Scenario: Entity reference displays related content.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title                 | collection            | state     | abstract              |
       | Entity reference page | Paragraphs collection | published | Entity page abstract  |
       | Related content       | Paragraphs collection | published | Related page abstract |

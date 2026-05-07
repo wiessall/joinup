@@ -2,7 +2,7 @@
 Feature: Oauth client
 
   Scenario: User can request oauth2 clients.
-    Given users:
+    Given the following users:
       | Username      | Roles     |
       | Flora Admin   | moderator |
       | Lee Requester |           |
@@ -34,7 +34,7 @@ Feature: Oauth client
     When I press "Delete"
 
   Scenario: Moderation action triggers a notification.
-    Given users:
+    Given the following users:
       | Username       | Roles     |
       | Test Requester | moderator |
       | Lee Requester  |           |

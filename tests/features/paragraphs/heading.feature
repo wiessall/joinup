@@ -4,12 +4,12 @@ Feature:
   I need to be able to use "heading" paragraphs for content.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                 | state     |
       | Paragraphs collection | published |
 
   Scenario: Heading paragraph is displayed as heading element.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title                | collection            | state     | abstract              |
       | Heading example page | Paragraphs collection | published | Heading page abstract |
     And I append "heading" to "field_paragraphs_body" field in "node" entity with following "Heading example page" title:
@@ -33,7 +33,7 @@ Feature:
 
   @javascript
   Scenario: User should be able to edit behaviour settings.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title                  | collection            | state     | abstract |
       | Behaviour example page | Paragraphs collection | published | N/A      |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Behaviour example page" title:

@@ -5,11 +5,11 @@ Feature:
   so that users of the portal can see forthcoming events.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title            |
       | Le Event Heureux |
       | Collection two   |
-    And event content:
+    And the following "event" content:
       | title                       | collection       | start date           | end date             |
       | Old month event             | Le Event Heureux | now -2 month         | now -2 month +1 day  |
       | Upcoming month event        | Le Event Heureux | now +1 month         | now +1 month +2 day  |
@@ -95,11 +95,11 @@ Feature:
     And the "Hybrid label test" event in the Calendar contains the text "Hybrid event"
 
   Scenario: Test upcoming events page and paragraph.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title                  | abstract                        | collection        |
       | Future events calendar | Abstract future events calendar | Le Event Heureux  |
       | Upcoming events        | Upcoming events page            |                   |
-    And event content:
+    And the following "event" content:
       | title            | collection       | start date         | end date           |
       | Upcoming Event 1 | Le Event Heureux | now +1 day         | now +5 day         |
       | Upcoming Event 3 | Le Event Heureux | now -12 day        | now -14 day        |

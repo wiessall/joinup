@@ -79,9 +79,7 @@ Feature: Publication status of keywords depends on the status of the parent.
     And I select "gam" options from "Search keywords"
     And I wait for AJAX to finish
     Then I should see the text "games"
-    When I type "some" in the "Search keywords" autocomplete field
-    And I wait for AJAX to finish
-    Then I should not see the text "some unpublished tag"
+    And the "Search keywords" tagify should not contain the following option "some unpublished tag"
 
   Scenario: Access to unpublished keywords are available to privileged users.
     Given I go to the "some unpublished tag" keyword
