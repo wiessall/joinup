@@ -1,0 +1,18 @@
+uuid: 944c2851-6d27-442e-937e-881cf450e6f8
+langcode: en
+status: true
+dependencies:
+  config:
+    - meta_entity.type.collection_settings
+id: meta_entity.collection_settings.changed
+field_name: changed
+entity_type: meta_entity
+bundle: collection_settings
+label: Changed
+description: 'The time that the meta entity was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

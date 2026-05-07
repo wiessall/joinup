@@ -5,10 +5,10 @@ Feature: Github feed paragraph tests.
 
   @javascript
   Scenario Outline: Test the Github feed paragraph.
-    Given <group> content:
+    Given the following "<group>" content:
       | title              |
       | Paragraphs <group> |
-    And custom_page content:
+    And the following "custom_page" content:
       | title                   | <group>            | topic                   | abstract                |
       | Catalogue of paragraphs | Paragraphs <group> | Statistics and Analysis | Catalogue page abstract |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Catalogue of paragraphs" title:
@@ -78,10 +78,10 @@ Feature: Github feed paragraph tests.
 
   @javascript
   Scenario Outline: Facilitators can also access paragraphs.
-    Given <group> content:
+    Given the following "<group>" content:
       | title              | state     |
       | Paragraphs <group> | published |
-    And custom_page content:
+    And the following "custom_page" content:
       | title                   | <group>            | state     | topic                   |
       | Catalogue of paragraphs | Paragraphs <group> | published | Statistics and Analysis |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Catalogue of paragraphs" title:

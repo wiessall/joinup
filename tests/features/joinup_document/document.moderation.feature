@@ -5,12 +5,12 @@ Feature: Document moderation
   I need to be able to transit the documents from one state to another.
 
   Background:
-    Given users:
+    Given the following users:
       | Username        |
       | Crab y Patties  |
       | Gretchen Greene |
       | Kirk Collier    |
-    And collection content:
+    And the following "collection" content:
       | title           | content_creation | group_moderation |
       | The Naked Ashes | registered users | no               |
     And the following collection user membership:

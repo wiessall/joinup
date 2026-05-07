@@ -5,16 +5,16 @@ Feature: Add distribution through the UI
   I need to be able to add "Distribution" RDF entities through the UI.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                   | logo     |
       | Asset Distribution Test | logo.png |
-    And solution content:
+    And the following "solution" content:
       | title                  | collection              | description                      |
       | Solution random x name | Asset Distribution Test | Some reusable random description |
-    And release content:
+    And the following "release" content:
       | title                | release notes        | release number | creation date    | is version of          | status    |
       | Authoritarian Alpaca | First public release | 1.0.0          | 2019-11-19 20:45 | Solution random x name | Completed |
-    And licence content:
+    And the following "licence" content:
       | title              | description                                              | deprecated |
       | WTFPL              | The WTFPL is a rather permissive licence                 | no         |
       | Deprecated licence | The deprecated licence should not be available to select | yes        |
@@ -106,13 +106,13 @@ Feature: Add distribution through the UI
     And I select "WTFPL" from "Licence"
     And I select "Datalog" from "Representation technique"
     And I press "Publish"
-    And I should see "Download test.zip"
+    And I should see the text "Download test.zip"
     And I go to the edit form of the "Source tarball" distribution
     And I press "Edit"
     And I fill in "resources[0][subform][resource_file][0][description]" with "My uploaded file"
     And I press "Update"
-    And I should not see "Download test.zip"
-    And I should see "Download My uploaded file"
+    And I should not see the text "Download test.zip"
+    And I should see the text "Download My uploaded file"
 
     # Debug step since the default view of the distribution, does not have the access URL shown.
     And the "Source tarball" distribution should have the link of the "test.zip" in the access URL field
@@ -140,13 +140,13 @@ Feature: Add distribution through the UI
     And I click "Add distribution" in the plus button menu
     Then I should see the heading "Add Distribution"
 
-    Then I should see "One file only. 64 MB limit. Allowed types: azw css csv dbf doc docx dtd.sgml dtd.xml e00 eps epub fmx2 fmx3 fmx4 gif gml gzip indd jpeg jpg json jsonld kml kmz mdb mobi mop mxd odf ods odt op.datpro owl pdf pdfa1a pdfa1b pdfx png pps ppsx ppt pptx ps psd rdf rdf.turtle rdf.xml rss rtf schema.xml sgml skos.xml sparqlq sparqlqres tar tar.gz tar.xz tiff tsv ttl txt xls xlsx xml xslfo xslt zip."
+    Then I should see the text "One file only. 64 MB limit. Allowed types: azw css csv dbf doc docx dtd.sgml dtd.xml e00 eps epub fmx2 fmx3 fmx4 gif gml gzip indd jpeg jpg json jsonld kml kmz mdb mobi mop mxd odf ods odt op.datpro owl pdf pdfa1a pdfa1b pdfx png pps ppsx ppt pptx ps psd rdf rdf.turtle rdf.xml rss rtf schema.xml sgml skos.xml sparqlq sparqlqres tar tar.gz tar.xz tiff tsv ttl txt xls xlsx xml xslfo xslt zip."
 
   Scenario: Adding a distribution with a duplicate title
-    Given solution content:
+    Given the following "solution" content:
       | title               | description             |
       | Solubility of gases | Affected by temperature |
-    And release content:
+    And the following "release" content:
       | title                | release notes        | is version of       |
       | 1.0.0 Adolf Sieverts | First public release | Solubility of gases |
 
@@ -173,7 +173,7 @@ Feature: Add distribution through the UI
     And I press "Publish"
 
   Scenario: Distributions with the same name should not be allowed within the same solution.
-    Given distribution content:
+    Given the following "distribution" content:
       | title            | description        | resources  | solution               |
       | Windows - source | Sample description | test.zip   | Solution random x name |
     And I am logged in as a facilitator of the "Solution random x name" solution
@@ -185,10 +185,10 @@ Feature: Add distribution through the UI
     Then I should see the inline form error message "A distribution with title Windows - source already exists in this solution. Please choose a different title."
 
   Scenario: Licences are not shown in the solution header.
-    Given licence content:
+    Given the following "licence" content:
       | title                  | description                                                                    |
       | Boost Software License | It is a permissive license in the style of the BSD license and the MIT license |
-    And distribution content:
+    And the following "distribution" content:
       | title        | licence                | solution               | creation date    | modification date |
       | Hot Snake    | WTFPL                  | Solution random x name | 2019-11-19 20:45 | 2021-11-19 20:45  |
       | Quality Yard | Boost Software License | Solution random x name | 2019-12-19 20:45 | 2021-12-19 20:45  |
@@ -209,7 +209,7 @@ Feature: Add distribution through the UI
 
   # Regression test for ticket ISAICP-9239
   Scenario Outline: Check distribution cannot be serialized to JsonLD object.
-    Given distribution content:
+    Given the following "distribution" content:
       | title   | description        | resources    | solution               |
       | <title> | Sample description | <access url> | Solution random x name |
     When I go to the "<title>" distribution

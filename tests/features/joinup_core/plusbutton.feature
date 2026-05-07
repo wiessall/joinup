@@ -5,7 +5,7 @@ Feature: Plus button
   I need to be able see the plus button only when it has actions available.
 
   Scenario: Plus button shown when actions are available.
-    Given solution content:
+    Given the following "solution" content:
       | title            | description                              |
       | Simple solutions | Conplex problems call for easy solutions |
 

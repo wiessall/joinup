@@ -2,16 +2,16 @@
 Feature: Translating events
 
   Background:
-    Given users:
+    Given the following users:
       | Username    | Roles     |
       | Flora Mod   | moderator |
       | Lee Facil   |           |
       | John Member |           |
       | Ross Auth   |           |
-    And collection content:
+    And the following "collection" content:
       | title           |
       | Test collection |
-    And solution content:
+    And the following "solution" content:
       | title         | collection      |
       | Test solution | Test collection |
     And the following collection user memberships:
@@ -22,7 +22,7 @@ Feature: Translating events
       | solution      | user        | roles       |
       | Test solution | Lee Facil   | facilitator |
       | Test solution | John Member |             |
-    And event content:
+    And the following "event" content:
       | title                 | collection      | solution      | field_paragraphs_body      | european_commission_digit_event |
       | Test collection event | Test collection |               | This is test event content | false                           |
       | Test solution event   |                 | Test solution | This is test event content | false                           |
@@ -68,13 +68,13 @@ Feature: Translating events
     When I press "Save (all translations)"
     Then I should see the success message "Event Testowe wydarzenie has been updated."
     And I should see the heading "Testowe wydarzenie"
-    And I should see "Plan wydarzenia"
-    And I should see "To jest polskie tłumaczenie wydarzenia"
-    And I should see "Plik testowy"
+    And I should see the text "Plan wydarzenia"
+    And I should see the text "To jest polskie tłumaczenie wydarzenia"
+    And I should see the text "Plik testowy"
 
     # Edit translation.
     When I click "Translate" in the "Entity actions" region
-    Then I should see "Testowe wydarzenie"
+    Then I should see the text "Testowe wydarzenie"
     When I click "Edit" in the "Polish" row
     And I fill in "Title" with "Zaktualizowane wydarzenie"
     And I press "Save (all translations)"
@@ -85,11 +85,11 @@ Feature: Translating events
     # Delete translation.
     When I click "Translate" in the "Entity actions" region
     And I click "Delete" in the "Polish" row
-    Then I should see "Are you sure you want to delete the Polish translation of the content item Zaktualizowane wydarzenie?"
+    Then I should see the text "Are you sure you want to delete the Polish translation of the content item Zaktualizowane wydarzenie?"
     When I press "Delete Polish translation"
     Then I should see the success message "Polish translation of the Event Zaktualizowane wydarzenie has been deleted."
     When I click "Translate" in the "Entity actions" region
-    Then I should not see "Edit" in the "Polish" row
+    Then I should not see the text "Edit" in the "Polish" row
     And I should see the "Add" in the "Polish" row
 
     Examples:

@@ -1,0 +1,18 @@
+uuid: 0540669a-2232-4961-8134-3d7c401358ff
+langcode: en
+status: true
+dependencies:
+  config:
+    - meta_entity.type.shared_in
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: meta_entity.shared_in
+target_entity_type_id: meta_entity
+target_bundle: shared_in
+default_langcode: site_default
+language_alterable: false

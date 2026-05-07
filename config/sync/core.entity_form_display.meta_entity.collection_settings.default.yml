@@ -49,7 +49,7 @@ content:
     third_party_settings: {  }
   approval_message:
     type: text_textarea
-    weight: 6
+    weight: 7
     region: content
     settings:
       rows: 5
@@ -91,7 +91,7 @@ content:
     third_party_settings: {  }
   label_leave:
     type: string_textfield
-    weight: 7
+    weight: 6
     region: content
     settings:
       size: 60
@@ -122,4 +122,5 @@ hidden:
   langcode: true
   path: true
   target: true
+  translation: true
   uuid: true

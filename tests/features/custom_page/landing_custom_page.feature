@@ -5,10 +5,10 @@ Feature: Landing custom page.
   I need to be able to manage "Landing Custom Page" content through UI.
 
   Scenario: Manage custom landing pages
-    Given collection content:
+    Given the following "collection" content:
       | title     |
       | Roman law |
-    And custom_page content:
+    And the following "custom_page" content:
       | title                       | collection |
       | Early law and jurisprudence | Roman law  |
 
@@ -18,7 +18,7 @@ Feature: Landing custom page.
     And I click "Custom landing pages"
     And I should see the heading "Custom landing pages"
     And I should see the link "Add custom landing page"
-    But I should not see "Early law and jurisprudence"
+    But I should not see the text "Early law and jurisprudence"
 
     When I click "Add custom landing page"
     And the following field should be present "URL alias"

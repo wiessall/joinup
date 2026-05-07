@@ -5,27 +5,47 @@ Feature: Collection content
   So that I can find the information I'm looking for.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                     |
       | Turin Egyptian Collection |
-    And solution content:
+    And the following "solution" content:
       | title                       | collection                | creation date    | modification date | topic |
       | Tomb Of Unknown Restoration | Turin Egyptian Collection | 2017-11-11T11:11 | 2017-11-30T11:11  | HR    |
-    And discussion content:
-      | title                                 | body                                                                    | collection                | topic                                                 | created          | changed                   |
-      | Bigger than Egyptian Museum of Cairo? | <p><a href="#link">Link to the museum</a> web<strong>site</strong>.</p> | Turin Egyptian Collection | Finance in EU, Supplier exchange, E-health, E-justice | 2017-11-11T11:11 | Wed, 25 Dec 2019 15:00:00 |
-    And document content:
-      | title           | field_paragraphs_body                            | collection                | creation date    | changed          | topic    |
-      | Upper Floor Map | <p>A sample <a href="#link">map</a> example.</p> | Turin Egyptian Collection | 2017-11-11T11:11 | 2017-11-30T11:11 | E-health |
-    And event content:
+    And the following "discussion" content:
+      | title                                 | body                                                                        | collection                | topic                                                 | created          | changed                   |
+      | Bigger than Egyptian Museum of Cairo? | "<p><a href=\"#link\">Link to the museum</a> web<strong>site</strong>.</p>" | Turin Egyptian Collection | Finance in EU, Supplier exchange, E-health, E-justice | 2017-11-11T11:11 | Wed, 25 Dec 2019 15:00:00 |
+    And the following "document" content:
+      | title           | field_paragraphs_body                                | collection                | creation date    | changed          | topic    |
+      | Upper Floor Map | "<p>A sample <a href=\"#link\">map</a> example.</p>" | Turin Egyptian Collection | 2017-11-11T11:11 | 2017-11-30T11:11 | E-health |
+    And the following "event" content:
       | title                                     | collection                | start date          | end date            | topic             |
       | Opening of the Hellenistic Period Section | Turin Egyptian Collection | 2016-03-15T11:12:12 | 2016-03-15T11:12:12 | Supplier exchange |
-    And news content:
-      | title                          | body                                                           | collection                | changed    | topic             |
-      | Turin Egyptian Museum Reopened | <p>After <em>more than</em> <a href="#link">two years</a>.</p> | Turin Egyptian Collection | 2019-11-19 | Supplier exchange |
+    And the following "news" content:
+      | title                          | body                                                               | collection                | changed    | topic             |
+      | Turin Egyptian Museum Reopened | "<p>After <em>more than</em> <a href=\"#link\">two years</a>.</p>" | Turin Egyptian Collection | 2019-11-19 | Supplier exchange |
+
+  Scenario: Solution counters exclude archived solutions and link to the solutions listing.
+    Given I go to the homepage of the "Turin Egyptian Collection" collection
+    Then I should see the link "1 Solution" in the "Header" region
+
+    Given the following "solution" content:
+      | title              | collection                | state     |
+      | Published Solution | Turin Egyptian Collection | published |
+      | Archived Solution  | Turin Egyptian Collection | archived  |
+      | Draft Solution     | Turin Egyptian Collection | draft     |
+    When I go to the homepage of the "Turin Egyptian Collection" collection
+    Then I should see the link "2 Solutions" in the "Header" region
+
+    When I click "2 Solutions" in the "Header" region
+    Then I should see the heading "Turin Egyptian Collection" in the "Header" region
+    And I should see the heading "Solutions" in the "Page title"
+    And I should see the "Tomb Of Unknown Restoration" tile
+    And I should see the "Published Solution" tile
+    But I should not see the "Archived Solution" tile
+    And I should not see the "Draft Solution" tile
 
   Scenario: Publishing new solutions should result in counters being properly updated.
-    Given owner content:
+    Given the following "owner" content:
       | name             | owner type |
       | Particle sweeper | Company    |
 
@@ -35,7 +55,7 @@ Feature: Collection content
     Then I should see the link "1 Solution" in the "Content" region
     And I see the text "1 Solution" in the "Header" region
 
-    When solution content:
+    When the following "solution" content:
       | title                            | collection                | state     |
       | Solution from draft to published | Turin Egyptian Collection | published |
     And I go to the homepage of the "Turin Egyptian Collection" collection
@@ -75,19 +95,19 @@ Feature: Collection content
     And I should see the link "1 News"
     And I should see the link "1 Solution"
 
-    Given solution content:
+    Given the following "solution" content:
       | title                | collection                |
       | Protecting Artifacts | Turin Egyptian Collection |
-    And discussion content:
+    And the following "discussion" content:
       | title                              | collection                |
       | Is the entrance free for children? | Turin Egyptian Collection |
-    And document content:
+    And the following "document" content:
       | title                   | collection                |
       | Fire Safety Regulations | Turin Egyptian Collection |
-    And event content:
+    And the following "event" content:
       | title                        | collection                |
       | Cleopatra Jewelry Exhibition | Turin Egyptian Collection |
-    And news content:
+    And the following "news" content:
       | title                                  | collection                |
       | Museum Temporary Closed Next Wednesday | Turin Egyptian Collection |
 

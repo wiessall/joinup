@@ -3,13 +3,13 @@ Feature: Send email to contact information
   Authenticated user should send email to contact information
 
   Scenario: Send email to contact information
-    Given collection content:
+    Given the following "collection" content:
       | title          |
       | Rally fanatics |
-    Given contact_information content:
+    Given the following "contact_information" content:
       | name        | email                   |
       | Some Resend | some.resend@example.com |
-    Given solution content:
+    Given the following "solution" content:
       | title         | contact information | collection     |
       | Some solution | Some Resend         | Rally fanatics |
     And the following email confirmation request:

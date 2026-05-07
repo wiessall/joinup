@@ -28,17 +28,17 @@ Feature: Log in through EU Login
     # The user has been redirected to its user account edit form.
     Then the following fields should be present "Email, First name, Family name, Photo, Country of origin, Professional domain, Business title"
     And the following fields should be present "Facebook, X, LinkedIn, GitHub, SlideShare, Youtube, Vimeo"
-    But I should not see "Fail - Password length must be at least 8 characters."
-    And I should not see "Password character length of at least 8"
-    And I should not see "Fail - Password must contain at least 3 types of characters from the following character types: lowercase letters, uppercase letters, digits, special characters."
-    And I should not see "Minimum password character types: 3"
+    But I should not see the text "Fail - Password length must be at least 8 characters."
+    And I should not see the text "Password character length of at least 8"
+    And I should not see the text "Fail - Password must contain at least 3 types of characters from the following character types: lowercase letters, uppercase letters, digits, special characters."
+    And I should not see the text "Minimum password character types: 3"
 
     And the user chucknorris should have the following data in their user profile:
       | First name  | Chuck  |
       | Family name | Norris |
 
   Scenario: An existing user can log in through EU Login
-    Given users:
+    Given the following users:
       | Username    | E-mail           | First name | Family name |
       | jb007_local | 007-local@mi6.eu | JJaammeess | BBoonndd    |
     Given CAS users:
@@ -70,7 +70,7 @@ Feature: Log in through EU Login
     # We want to test the case when a user is changing their email upstream, on
     # EU Login, with one that collides with other user's email. These are very
     # rare and unlikely edge cases where we only throw an exception.
-    And users:
+    And the following users:
       | Username   | E-mail             |
       | other_user | 007.changed@mi6.eu |
 
@@ -102,7 +102,7 @@ Feature: Log in through EU Login
       | Family name | Bond             |
 
   Scenario: Fields imported from EU Login cannot be edited locally.
-    Given users:
+    Given the following users:
       | Username            | E-mail        |
       | full_cas_profile    | f@example.com |
       | partial_cas_profile | p@example.com |
@@ -127,8 +127,8 @@ Feature: Log in through EU Login
     Then the "First name" field should contain "Joe"
     And the "Family name" field should contain "Doe"
     And the following fields should be disabled "First name,Family name"
-    But I should not see "Username"
-    And I should not see "full_cas_profile"
+    But I should not see the text "Username"
+    And I should not see the text "full_cas_profile"
     And I should see the following lines of text:
       | Account information                                                                                                                                                                                                       |
       | Your name and E-mail are inherited from EU Login. To update this information, you can visit your EU Login account page. Synchronisation will take a few minutes and it will be visible the next time you login on Interoperable Europe Portal. |
@@ -153,13 +153,13 @@ Feature: Log in through EU Login
     And the "Family name" field should contain "Roe"
     And the following fields should not be disabled "First name"
     And the following fields should be disabled "Family name"
-    But I should not see "Username"
-    And I should not see "partial_cas_profile"
-    And I should see "Your name and E-mail are inherited from EU Login. To update this information, you can visit your EU Login account page. Synchronisation will take a few minutes and it will be visible the next time you login on Interoperable Europe Portal."
-    But I should not see "Fail - Password length must be at least 8 characters."
-    And I should not see "Password character length of at least 8"
-    And I should not see "Fail - Password must contain at least 3 types of characters from the following character types: lowercase letters, uppercase letters, digits, special characters."
-    And I should not see "Minimum password character types: 3"
+    But I should not see the text "Username"
+    And I should not see the text "partial_cas_profile"
+    And I should see the text "Your name and E-mail are inherited from EU Login. To update this information, you can visit your EU Login account page. Synchronisation will take a few minutes and it will be visible the next time you login on Interoperable Europe Portal."
+    But I should not see the text "Fail - Password length must be at least 8 characters."
+    And I should not see the text "Password character length of at least 8"
+    And I should not see the text "Fail - Password must contain at least 3 types of characters from the following character types: lowercase letters, uppercase letters, digits, special characters."
+    And I should not see the text "Minimum password character types: 3"
 
     When I press "Save"
     Then I should see the inline form error message "First name field is required."
@@ -178,14 +178,14 @@ Feature: Log in through EU Login
     Then the "First name" field should contain ""
     And the "Family name" field should contain ""
     And the following fields should not be disabled "First name,Family name"
-    But I should not see "Username"
+    But I should not see the text "Username"
     # The username appears in the page header because this use has no first and
     # last name. But we check the absence of "Username" and this is enough.
-    And I should see "Your name and E-mail are inherited from EU Login. To update this information, you can visit your EU Login account page. Synchronisation will take a few minutes and it will be visible the next time you login on Interoperable Europe Portal."
-    But I should not see "Fail - Password length must be at least 8 characters."
-    And I should not see "Password character length of at least 8"
-    And I should not see "Fail - Password must contain at least 3 types of characters from the following character types: lowercase letters, uppercase letters, digits, special characters."
-    And I should not see "Minimum password character types: 3"
+    And I should see the text "Your name and E-mail are inherited from EU Login. To update this information, you can visit your EU Login account page. Synchronisation will take a few minutes and it will be visible the next time you login on Interoperable Europe Portal."
+    But I should not see the text "Fail - Password length must be at least 8 characters."
+    And I should not see the text "Password character length of at least 8"
+    And I should not see the text "Fail - Password must contain at least 3 types of characters from the following character types: lowercase letters, uppercase letters, digits, special characters."
+    And I should not see the text "Minimum password character types: 3"
 
     When I press "Save"
     Then I should see the inline form error message "First name field is required."
@@ -199,16 +199,16 @@ Feature: Log in through EU Login
     Then the "First name" field should contain ""
     And the "Family name" field should contain ""
     And the following fields should not be disabled "First name,Family name"
-    And I should see "Username"
-    And I should see "without_cas"
-    And I should see "The email address is not made public. It will only be used if you need to be contacted about your account or for opted-in notifications."
+    And I should see the text "Username"
+    And I should see the text "without_cas"
+    And I should see the text "The email address is not made public. It will only be used if you need to be contacted about your account or for opted-in notifications."
 
     When I press "Save"
     Then I should see the inline form error message "First name field is required."
     And I should see the inline form error message "Family name field is required."
 
   Scenario: A new user tries to register with an existing Email.
-    Given users:
+    Given the following users:
       | Username | E-mail          |
       | joe      | joe@example.com |
 
@@ -227,7 +227,7 @@ Feature: Log in through EU Login
       | While trying to register your account with Interoperable Europe Portal, we found that your EU Login email address joe@example.com is already in use on our site. Either change your EU Login email address or contact the Interoperable Europe Portal support if you feel that something is wrong. |
 
   Scenario: A new user tries to register with an existing username.
-    Given users:
+    Given the following users:
       | Username | E-mail          |
       | joe      | joe@example.com |
 
@@ -298,7 +298,7 @@ Feature: Log in through EU Login
       | E-mail | Joe_Case_Insensitive@example.com |
 
   Scenario: Anonymous user is asked to log in when accessing a protected page
-    Given users:
+    Given the following users:
       | Username | E-mail         | First name | Family name | Roles     |
       | jonbon   | jon@example.eu | Jon        | Bon         | moderator |
     Given CAS users:
@@ -333,7 +333,7 @@ Feature: Log in through EU Login
     Given CAS users:
       | Username | E-mail          | Password |
       | joe_doe  | joe@example.com | 123      |
-    And users:
+    And the following users:
       | Username | Roles     |
       | dev      | developer |
 

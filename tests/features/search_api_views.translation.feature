@@ -38,12 +38,12 @@ Feature: Search API views show translated content with english as fallback
     And I should see the following headings:
       | Jordan 1 |
       | Jordan 2 |
-    And I should not see "Jordan BG"
+    And I should not see the text "Jordan BG"
     When I click "Bulgarian"
     And I should see the following headings:
       | Jordan 1  |
       | Jordan BG |
-    And I should not see "Jordan 2"
+    And I should not see the text "Jordan 2"
 
   Scenario: Test "group_feed" view shows translated content
     Given I go to the homepage of the "Test collection" collection
@@ -72,9 +72,9 @@ Feature: Search API views show translated content with english as fallback
     And I append "block" to "field_paragraphs_body" field in "node" entity with following "Test custom page" title:
       | paragraph_block | views_block:oss_solutions_listing-most_recent |
     When I visit the "Test custom page" "custom page"
-    Then I should see "Test oss catalogue"
+    Then I should see the text "Test oss catalogue"
     When I click "Bulgarian"
-    Then I should see "BG oss catalogue"
+    Then I should see the text "BG oss catalogue"
 
   Scenario: Test "recommended_solutions" view shows translated content
     Given I am logged in as a user with the "interoperability_validator" role
@@ -82,27 +82,27 @@ Feature: Search API views show translated content with english as fallback
     And I append "block" to "field_paragraphs_body" field in "node" entity with following "Test custom page" title:
       | paragraph_block | views_block:recommended_solutions-recommended |
     When I visit the "Test custom page" "custom page"
-    Then I should see "Bilingual Solution"
+    Then I should see the text "Bilingual Solution"
     When I click "Bulgarian"
-    Then I should see "BG Solution"
+    Then I should see the text "BG Solution"
 
   Scenario: Test "search_oss_catalogue" view shows translated content
     Given I visit the OSS search page
-    Then I should see "Test oss catalogue"
+    Then I should see the text "Test oss catalogue"
     When I click "Bulgarian"
-    Then I should see "BG oss catalogue"
+    Then I should see the text "BG oss catalogue"
 
   Scenario: Test "solutions" view shows translated content
     When I visit the solution overview page
     Then I should see the following lines of text:
       | English Solution    |
       | Bilingual Solution  |
-    And I should not see "BG Solution"
+    And I should not see the text "BG Solution"
     When I click "Bulgarian"
     Then I should see the following lines of text:
       | English Solution    |
       | BG Solution         |
-    And I should not see "Bilingual Solution"
+    And I should not see the text "Bilingual Solution"
 
   Scenario: Test "content_overview" view shows translated content
     Given news multilingual content:
@@ -114,12 +114,12 @@ Feature: Search API views show translated content with english as fallback
     Then I should see the following lines of text:
       | Test news       |
       | Bilingual news  |
-    And I should not see "BG news"
+    And I should not see the text "BG news"
     When I click "Bulgarian"
     Then I should see the following lines of text:
       | Test news    |
       | BG news      |
-    And I should not see "Bilingual news"
+    And I should not see the text "Bilingual news"
 
   Scenario: Test "collections" view shows translated content
     Given I visit the collection overview page

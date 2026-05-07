@@ -52,7 +52,7 @@ Feature:
     When I check the box "I agree to the Legal notice document"
     And I press "Submit"
     When I go to the "Interoperable Europe" collection
-    Then I should see "IOP landing page"
+    Then I should see the text "IOP landing page"
     # Check that we are on the expected URL for the landing page.
     And I should be on "/interoperable-europe"
     And I should not see the "Entity actions" region
@@ -75,7 +75,7 @@ Feature:
       | Subscribe to the interoperable europe newsletter |
 
   Scenario: User should see error message if he does not fill out all required fields.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title               | collection           |
       | IOP validation page | Interoperable Europe |
 
@@ -86,7 +86,7 @@ Feature:
     Then I should see the inline form error message "Title field is required."
 
   Scenario Outline: Visibility of Report link.
-    Given <type> content:
+    Given the following "<type>" content:
       | title      | collection           |
       | IOP <type> | Interoperable Europe |
 

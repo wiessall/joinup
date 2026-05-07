@@ -63,5 +63,6 @@ hidden:
   langcode: true
   path: true
   target: true
+  translation: true
   uri: true
   uuid: true

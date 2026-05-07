@@ -142,8 +142,8 @@ class CollectionContext extends RawDrupalContext {
    */
   #[BeforeNodeCreate]
   public function defaultCollectionValues(BeforeNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
-    if ($node->type !== 'collection') {
+    $node = $scope->getStub();
+    if ($node->getBundle() !== 'collection') {
       return;
     }
 
@@ -153,8 +153,8 @@ class CollectionContext extends RawDrupalContext {
     ];
 
     foreach ($default_values as $field => $default_value) {
-      if (!isset($node->{$field})) {
-        $node->{$field} = $default_value;
+      if (!$node->hasValue($field)) {
+        $node->setValue($field, $default_value);
       }
     }
 
@@ -170,8 +170,8 @@ class CollectionContext extends RawDrupalContext {
     ];
 
     foreach ($mapping as $field => $values) {
-      if (isset($node->{$field}) && isset($values[$node->{$field}])) {
-        $node->{$field} = $values[$node->{$field}];
+      if ($node->hasValue($field) && isset($values[$node->getValue($field)])) {
+        $node->setValue($field, $values[$node->getValue($field)]);
       }
     }
   }
@@ -297,7 +297,7 @@ class CollectionContext extends RawDrupalContext {
     if (!$current_user = $this->userManager->getCurrentUser()) {
       throw new \Exception("No current user.");
     }
-    $this->assertCollectionOwnership($current_user->name, $entity);
+    $this->assertCollectionOwnership($current_user->getValue('name'), $entity);
   }
 
   /**
@@ -329,7 +329,8 @@ class CollectionContext extends RawDrupalContext {
       $user = $this->userManager->getUser($username);
 
       // Check if we are already logged in as the user to test.
-      $current_username = $this->userManager->getCurrentUser()->name ?? NULL;
+      $currentUserStub = $this->userManager->getCurrentUser();
+      $current_username = $currentUserStub ? $currentUserStub->getValue('name') : NULL;
       if ($username !== $current_username) {
         $this->authenticationManager->logIn($user);
       }
@@ -400,7 +401,7 @@ class CollectionContext extends RawDrupalContext {
     /** @var \Drupal\user\UserInterface $account */
     if (!$user_name) {
       $user = $this->getUserManager()->getCurrentUser();
-      $account = User::load($user->uid);
+      $account = User::load($user->getValue('uid'));
       if ($account->isAnonymous()) {
         throw new \Exception("No current logged in user.");
       }
@@ -487,10 +488,10 @@ class CollectionContext extends RawDrupalContext {
    */
   #[BeforeNodeCreate]
   public function provideCollection(BeforeNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
+    $node = $scope->getStub();
 
     // Skip if a collection or solution has been assigned.
-    if (!empty($node->collection) || !empty($node->solution) || !empty($node->{OgGroupAudienceHelper::DEFAULT_FIELD})) {
+    if (!empty($node->getValue('collection')) || !empty($node->getValue('solution')) || !empty($node->getValue(OgGroupAudienceHelper::DEFAULT_FIELD))) {
       return;
     }
 
@@ -502,8 +503,8 @@ class CollectionContext extends RawDrupalContext {
     ];
 
     // Only deal with collection content.
-    if (in_array($node->type, $collection_content_bundles, TRUE)) {
-      $node->collection = $this->getJoinupCollection()->label();
+    if (in_array($node->getBundle(), $collection_content_bundles, TRUE)) {
+      $node->setValue('collection', $this->getJoinupCollection()->label());
     }
   }
 

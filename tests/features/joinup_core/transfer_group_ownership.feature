@@ -4,7 +4,7 @@ Feature: As a group (collection or solution) owner or site moderator
   I should be able to transfer the group ownership.
 
   Background:
-    Given users:
+    Given the following users:
       | Username | Roles                   | First name | Family name   |
       | loner    |                         | Freyja     | Stefánsdóttir |
       | happy    | administrator,moderator | Saga       | Þórirsdóttir  |
@@ -12,7 +12,7 @@ Feature: As a group (collection or solution) owner or site moderator
       | shy      |                         | Ásdís      | Sigurðsdóttir |
       | light    | moderator               | Bjartur    | Jóhannsson    |
       | frozen   |                         | Edda       | Agnarsdóttir  |
-    And collection content:
+    And the following "collection" content:
       | title                       |
       | Intensive Language Learning |
     And the following collection user memberships:
@@ -21,7 +21,7 @@ Feature: As a group (collection or solution) owner or site moderator
       | Intensive Language Learning | cruel  | owner       |
       | Intensive Language Learning | shy    | facilitator |
       | Intensive Language Learning | frozen | owner       |
-    And solution content:
+    And the following "solution" content:
       | title                   |
       | Learn German in 1 Month |
     And the following solution user memberships:
@@ -39,22 +39,22 @@ Feature: As a group (collection or solution) owner or site moderator
     Given I select the "cruel" row
     And I select "Transfer the ownership of the <type> to the selected member" from "Action"
     When I press "Apply to selected items"
-    Then I should see "Member Finnur Robertsson is already the owner of <title> <type>. Please select other user."
+    Then I should see the text "Member Finnur Robertsson is already the owner of <title> <type>. Please select other user."
 
     # Try to transfer the ownership to multiple users.
     Given I select the "loner" row
     And I select the "shy" row
     And I select "Transfer the ownership of the <type> to the selected member" from "Action"
     When I press "Apply to selected items"
-    Then I should see "You cannot transfer the <type> ownership to more than one user. Please select a single user."
+    Then I should see the text "You cannot transfer the <type> ownership to more than one user. Please select a single user."
 
     Given I select the "shy" row
     And I select "Transfer the ownership of the <type> to the selected member" from "Action"
     When I press "Apply to selected items"
-    Then I should see "Are you sure you want to transfer the ownership of <title> <type> to Ásdís Sigurðsdóttir?"
+    Then I should see the text "Are you sure you want to transfer the ownership of <title> <type> to Ásdís Sigurðsdóttir?"
 
     When I press "Confirm"
-    Then I should see "Ownership of <title> <type> transferred from users Finnur Robertsson, Edda Agnarsdóttir to Ásdís Sigurðsdóttir."
+    Then I should see the text "Ownership of <title> <type> transferred from users Finnur Robertsson, Edda Agnarsdóttir to Ásdís Sigurðsdóttir."
     And Log entry with the message "Ownership granted to Ásdís Sigurðsdóttir for <title> by <user name>." should exist.
     And I should see the text "<type capitalized> owner" in the "shy" row
     # Because the 'happy' user is granted with the site-wide permission
@@ -105,10 +105,10 @@ Feature: As a group (collection or solution) owner or site moderator
       | solution   | Learn German in 1 Month     |
 
   Scenario: Collection owner cannot transfer ownership of a child solution, neither viceversa.
-    Given collection content:
+    Given the following "collection" content:
       | title   |
       | Babylon |
-    And solution content:
+    And the following "solution" content:
       | title             | collection |
       | Rivers Of Babylon | Babylon    |
     And collection user membership:
@@ -136,9 +136,9 @@ Feature: As a group (collection or solution) owner or site moderator
     When I select the "loner" row
     And I select "Transfer the ownership of the <group type> to the selected member" from "Action"
     And I press "Apply to selected items"
-    Then I should see "Are you sure you want to transfer the ownership of <title> <group type> to Freyja Stefánsdóttir?"
+    Then I should see the text "Are you sure you want to transfer the ownership of <title> <group type> to Freyja Stefánsdóttir?"
     When I press "Confirm"
-    Then I should see "Ownership of <title> <group type> transferred from users Finnur Robertsson, Edda Agnarsdóttir to Freyja Stefánsdóttir."
+    Then I should see the text "Ownership of <title> <group type> transferred from users Finnur Robertsson, Edda Agnarsdóttir to Freyja Stefánsdóttir."
     And Log entry with the message "Ownership granted to Freyja Stefánsdóttir for <title> by Bjartur Jóhannsson." should exist.
     And I should see the text "<type capitalized> owner, <type capitalized> facilitator" in the "loner" row
 

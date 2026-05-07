@@ -11,11 +11,11 @@ Feature: Tests the group landing page customization.
   - As a group facilitator, when I visit my group, I cannot set a landing page.
   """
 
-    Given <group> content:
+    Given the following "<group>" content:
       | title               | description                         |
       | <group> group       | The <group> arbitrary description   |
       | other <group> group | Other <group> arbitrary description |
-    And "custom_page" content:
+    And the following "custom_page" content:
       | title         | <group>       | body                      |
       | Custom Page 1 | <group> group | The custom page 1 content |
       | Custom Page 2 | <group> group | The custom page 2 content |
@@ -49,7 +49,7 @@ Feature: Tests the group landing page customization.
     Given I am logged in as a facilitator of the "<group> group" <group>
     When I go to the homepage of the "<group> group" <group>
     Then I should see the heading "<group> group"
-    And I should see "The <group> arbitrary description"
+    And I should see the text "The <group> arbitrary description"
     Then I should see the link "Settings"
     When I click "Settings"
     Then the following fields should not be present "Landing page"
@@ -69,11 +69,11 @@ Feature: Tests the group landing page customization.
     When I select "Custom Page 3" from "Landing page"
     And I fill in "Overview label" with "Welcome"
     And I press "Save"
-    Then I should see "<group> group"
+    Then I should see the text "<group> group"
     And I should see the heading "Custom Page 3"
-    And I should see "The custom page 3 content"
-    But I should not see "The <group> arbitrary description"
-    And I should not see "The custom page 2 content"
+    And I should see the text "The custom page 3 content"
+    But I should not see the text "The <group> arbitrary description"
+    And I should not see the text "The custom page 2 content"
     And I should see the link "Edit landing page"
     And I should see the following navigation menu items in the specified order:
       | text          |
@@ -93,16 +93,16 @@ Feature: Tests the group landing page customization.
     And I press "Update"
     Then I go to the homepage of the "<group> group" <group>
     And the response should contain "page-title__title visually-hidden"
-    Then I should see "<group> group"
+    Then I should see the text "<group> group"
 
     When I click "Settings"
     When I select "- Standard landing page -" from "Landing page"
     And I press "Save"
     Then I should see the heading "<group> group"
-    And I should see "The <group> arbitrary description"
+    And I should see the text "The <group> arbitrary description"
     And I should not see the heading "Custom Page 3"
-    And I should not see "The custom page 2 content"
-    And I should not see "The custom page 3 content"
+    And I should not see the text "The custom page 2 content"
+    And I should not see the text "The custom page 3 content"
     And I should not see the link "Edit landing page"
 
     Examples:
@@ -111,11 +111,11 @@ Feature: Tests the group landing page customization.
       | solution   |
 
   Scenario: Do not allow to unpublish or delete a custom page set as landing page
-    Given collection content:
+    Given the following "collection" content:
       | title          |
       | Rally fanatics |
       | My own book    |
-    And "custom_page" content:
+    And the following "custom_page" content:
       | title         | collection     | body                      |
       | Custom Page 1 | Rally fanatics | The custom page 1 content |
       | Custom Page 2 | My own book    | The custom page 2 content |
@@ -126,11 +126,11 @@ Feature: Tests the group landing page customization.
     And I press "Save"
     And I go to the edit form of the "Custom Page 1" "custom page"
     And I click "Delete" in the "Entity actions" region
-    Then I should see "You can not delete this landing page!"
-    And I should see "This page acts as landing page for the collection. In order to delete it should be first unset as landing page."
+    Then I should see the text "You can not delete this landing page!"
+    And I should see the text "This page acts as landing page for the collection. In order to delete it should be first unset as landing page."
     When I go to the "Custom Page 2" custom_page
     When I click "Delete" in the "Entity actions" region
-    Then I should see "Are you sure you want to delete the content item Custom Page 2?"
+    Then I should see the text "Are you sure you want to delete the content item Custom Page 2?"
     When I go to the edit form of the "Custom Page 1" "custom page"
     Then I should not see the button "Unpublish"
     When I go to the homepage of the "Rally fanatics" collection
@@ -139,14 +139,14 @@ Feature: Tests the group landing page customization.
     And I press "Save"
     And I go to the "Custom Page 1" custom_page
     And I click "Delete" in the "Entity actions" region
-    Then I should not see "You can not delete this landing page!"
-    And I should not see "This page acts as landing page for the collection. In order to delete it should be first unset as landing page."
+    Then I should not see the text "You can not delete this landing page!"
+    And I should not see the text "This page acts as landing page for the collection. In order to delete it should be first unset as landing page."
 
   Scenario: Landing custom page redirects to group page.
-    Given collection content:
+    Given the following "collection" content:
       | title         |
       | United States |
-    And "custom_page" content:
+    And the following "custom_page" content:
       | title    | collection    | body                                                                                 |
       | Michigan | United States | Michigan is a state in the Great Lakes region of the Upper Midwestern United States. |
 
@@ -163,10 +163,10 @@ Feature: Tests the group landing page customization.
     Then I should be on "/collection/united-states"
 
   Scenario: Active navigation link is correct on flat group navigation when visiting a nested custom page
-    Given collection content:
+    Given the following "collection" content:
       | title         |
       | Space Weavers |
-    And custom_page content:
+    And the following "custom_page" content:
       | title     | collection    |
       | Andromeda | Space Weavers |
       | Orion     | Space Weavers |

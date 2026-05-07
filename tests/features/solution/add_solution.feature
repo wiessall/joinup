@@ -61,7 +61,7 @@ Feature: Test adding solutions.
     Then I should see the inline form error message "You must accept the Terms of Agreement."
 
   Scenario: "Add solution" button should only be shown to moderators and facilitators.
-    Given collection content:
+    Given the following "collection" content:
       | title                    |
       | Collection solution test |
 
@@ -86,13 +86,13 @@ Feature: Test adding solutions.
 
   @javascript
   Scenario: Add solution as a collection facilitator.
-    Given collection content:
+    Given the following "collection" content:
       | title             | logo     |
       | Belgian barista's | logo.png |
-    And owner content:
+    And the following "owner" content:
       | name                 | owner type                   |
       | Organisation example | Company, Industry consortium |
-    Given users:
+    Given the following users:
       | Username      | Roles     | E-mail                 | First name | Family name |
       | Ruth Lee      | moderator | Ruth.Lee@test.com      | Ruth       | Lee         |
       | Wendell Silva |           | Wendell.Silva@test.com | Wendell    | Silva       |
@@ -144,7 +144,7 @@ Feature: Test adding solutions.
     Then the email sent to "Ruth Lee" with subject "Interoperable Europe Portal: A new solution has been proposed" contains the following lines of text:
       | Wendell Silva has proposed a new Interoperability solution: "Espresso is the solution" on Interoperable Europe Portal. |
       | If you think this action is not clear or not due, please contact Portal Support at                                     |
-    And I should see "Thank you for proposing a solution. Your request is currently pending approval by the site administrator."
+    And I should see the text "Thank you for proposing a solution. Your request is currently pending approval by the site administrator."
     And Log entry with the message "A new solution entity titled Espresso is the solution has been created by Wendell Silva in Belgian barista's." should exist.
 
     # Regression test for the non required field, 'Logo'.
@@ -214,11 +214,11 @@ Feature: Test adding solutions.
     And I fill in "Link text" with "My remote file"
     And I press "Confirm"
     And I press "Propose"
-    And I should see "Documentation"
-    And I should not see "text.pdf"
-    And I should not see "logo.png"
-    And I should see "My uploaded file"
-    And I should see "My remote file"
+    And I should see the text "Documentation"
+    And I should not see the text "text.pdf"
+    And I should not see the text "logo.png"
+    And I should see the text "My uploaded file"
+    And I should see the text "My remote file"
 
     # The name of the solution should exist in the block of the relative content in a collection.
     When I go to the homepage of the "Belgian barista's" collection
@@ -232,14 +232,14 @@ Feature: Test adding solutions.
 
   @javascript
   Scenario: Create a solution with a name that already exists
-    Given collection content:
+    Given the following "collection" content:
       | title              |
       | Ocean studies      |
       | Glacier monitoring |
-    And solution content:
+    And the following "solution" content:
       | title                  | abstract              | description                                       | collection    |
       | Climate change tracker | Tracks climate change | Atlantic salmon arrived after the Little Ice Age. | Ocean studies |
-    And owner content:
+    And the following "owner" content:
       | name                | owner type          |
       | University of Basel | Industry consortium |
 
@@ -296,10 +296,10 @@ Feature: Test adding solutions.
 
   @javascript @generateMedia @generateMediaTypes:solution_logo
   Scenario: Tests the image library widget.
-    Given collection content:
+    Given the following "collection" content:
       | title         |
       | Ocean studies |
-    And solution content:
+    And the following "solution" content:
       | title             | collection    |
       | Cleaning solution | Ocean studies |
     And I am logged in as a moderator
@@ -362,7 +362,7 @@ Feature: Test adding solutions.
 
   @javascript
   Scenario: Custom constraints point to the correct field.
-    Given solution content:
+    Given the following "solution" content:
       | title | short ID | state     | collection |
       | Test  | qwerty   | published | Portal support |
     Given I am logged in as a moderator

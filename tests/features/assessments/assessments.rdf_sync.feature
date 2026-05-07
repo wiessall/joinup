@@ -2,7 +2,7 @@
 Feature: RDF Sync integration for assessments.
 
   Scenario: Test that an entire chain of entities is exported properly.
-    Given solution content:
+    Given the following "solution" content:
       | title           | uri                                        |
       | Citizen's Forum | http://example.com/solution/citizens-forum |
     And "participation" assessment:
@@ -81,7 +81,7 @@ Feature: RDF Sync integration for assessments.
       | dc:type <http://example.com/taxonomy-term/assess-participant-type/b8c59bef-e579-440a-91f0-8c7983524336> .                                                                                                        |
       | <http://data.europa.eu/s2k/e35d0e39-31c5-4090-b16d-c35d79695361>                                                                                                                                                 |
       | a cav:Statement ;                                                                                                                                                                                                |
-      | cav:judgement "Compliant" ;                                                                                                                                                                                      |
+      | cav:judgement "Compliant"@en ;                                                                                                                                                                                      |
       | cav:type <http://example.com/taxonomy-term/assess-statement-type/219d8117-fd8e-4455-830d-9a0c6e81ab47> ;                                                                                                         |
       | foaf:page <__base_url__/sites/default/files/text.pdf> .                                                                                                                                                          |
       | <__base_url__/sites/default/files/text.pdf> a foaf:Document                                                                                                                                                      |

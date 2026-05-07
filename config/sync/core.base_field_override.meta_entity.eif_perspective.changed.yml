@@ -1,0 +1,18 @@
+uuid: 48902f0a-494a-4919-99e3-2277182c2fc6
+langcode: en
+status: true
+dependencies:
+  config:
+    - meta_entity.type.eif_perspective
+id: meta_entity.eif_perspective.changed
+field_name: changed
+entity_type: meta_entity
+bundle: eif_perspective
+label: Changed
+description: 'The time that the meta entity was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

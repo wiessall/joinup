@@ -10,6 +10,7 @@ use Behat\Step\When;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\TranslatableInterface;
+use Drupal\Driver\Entity\EntityStub;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
@@ -49,17 +50,16 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
     $storage = \Drupal::entityTypeManager()->getStorage('node');
 
     foreach ($nodesTable->getHash() as $nodeHash) {
-      $node = (object) $nodeHash;
-      $node->type = $type;
+      $node = new EntityStub('node', $type, $nodeHash);
 
       // Read and strip the step-routing column before Drupal field validation.
-      $isDefaultTranslation = !isset($node->default_translation) || !empty($node->default_translation);
-      unset($node->default_translation);
+      $isDefaultTranslation = !$node->hasValue('default_translation') || !empty($node->getValue('default_translation'));
+      $node->removeValue('default_translation');
 
       // This must be a new node.
       if ($isDefaultTranslation) {
         $this->nodeCreate($node);
-        $lastId = $node->nid;
+        $lastId = $node->getValue('nid') ?? $node->getId();
 
         continue;
       }
@@ -67,18 +67,19 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
       // If we made it here, then we will add a new translation to the
       // previously created node.
       \assert(isset($lastId));
-      \assert(isset($node->langcode));
-      \assert(isset($availableLanguages[$node->langcode]));
+      \assert($node->hasValue('langcode'));
+      $langcode = $node->getValue('langcode');
+      \assert(isset($availableLanguages[$langcode]));
 
       $original = $storage->load($lastId);
       \assert($original instanceof NodeInterface);
-      $node = (object) array_filter((array) $node, fn (mixed $value): bool => $value !== '~~~' && $value !== ['~~~']);
+      $node->setValues(array_filter($node->getValues(), fn (mixed $value): bool => $value !== '~~~' && $value !== ['~~~']));
 
       // This will eventually translate field aliases before expanding fields.
       // @see \Drupal\joinup\Context\JoinupContext::massageFieldsBeforeNodeCreate
       $this->dispatchHooks(BeforeNodeCreateScope::class, $node);
-      $translation = array_filter((array) $node) + $original->toArray();
-      $original->addTranslation($node->langcode, $translation)->save();
+      $translation = array_filter($node->getValues()) + $original->toArray();
+      $original->addTranslation($node->getValue('langcode'), $translation)->save();
     }
   }
 
@@ -270,6 +271,30 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
   }
 
   /**
+   * Deletes a specific translation for an entity.
+   *
+   * @param string $langcode
+   *   The language code of the translation to delete.
+   * @param string $entityTypeId
+   *   The entity type ID of the entity.
+   * @param string $label
+   *   The label of the entity whose translation is to be deleted.
+   */
+  #[Given('I delete the :langcode translation for the :entityTypeId entity with label :label')]
+  public function deleteTranslationForEntity(string $langcode, string $entityTypeId, string $label): void {
+    $entity = $this->getEntityByLabel($entityTypeId, $label);
+    if (!$entity instanceof TranslatableInterface) {
+      throw new \RuntimeException(sprintf('The entity with label "%s" is not translatable.', $label));
+    }
+
+    if (!$entity->hasTranslation($langcode)) {
+      throw new \RuntimeException(sprintf('The entity with label "%s" does not have a "%s" translation.', $label, $langcode));
+    }
+
+    $entity->removeTranslation($langcode);
+  }
+
+  /**
    * Transforms string field values with "!multiline!" notation to be multiline.
    *
    * Kinda useful if we want to put a YAML file content into a text field, but
@@ -292,14 +317,14 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
    */
   #[BeforeNodeCreate]
   public function multilinePrepare(BeforeNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
+    $node = $scope->getStub();
 
-    foreach ($node as $key => $value) {
+    foreach ($node->getValues() as $key => $value) {
       if (!is_string($value) || !str_starts_with($value, '!multiline!')) {
         continue;
       }
       $multiline = preg_replace('#\\\\n#', PHP_EOL, substr($value, 11));
-      $node->$key = $multiline;
+      $node->setValue($key, $multiline);
     }
   }
 

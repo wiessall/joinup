@@ -5,27 +5,27 @@ Feature:
 
   Scenario: Test moderator and anonymous user perspectives.
 
-    Given collection content:
+    Given the following "collection" content:
       | title            |
       | Outdated content |
-    Given solution content:
+    Given the following "solution" content:
       | title             | collection       |
       | Recent solution   | Outdated content |
       | Outdated solution | Outdated content |
-    And discussion content:
+    And the following "discussion" content:
       | title                         | collection       | published at | created   | state     |
       | Recent published discussion   | Outdated content | -2 years     | -2 years  | published |
       | Outdated published discussion | Outdated content | -11 years    | -11 years | published |
       | Not published discussion      | Outdated content |              | -12 years | draft     |
-    And document content:
+    And the following "document" content:
       | title             | collection       | published at |
       | Very old document | Outdated content | 1985-03-04   |
-    And event content:
+    And the following "event" content:
       | title                    | collection       | published at     | created          | state     |
       | Recent published event   | Outdated content | -3 months        | -3 months        | published |
       | Outdated published event | Outdated content | -1 year -1 month | -1 year -1 month | published |
       | Not published event      | Outdated content |                  | -31 years        | draft     |
-    And news content:
+    And the following "news" content:
       | title                            | collection       | published at      | created           | state     |
       | Recent published news            | Outdated content | -7 months         | -7 months         | published |
       | Outdated published news          | Outdated content | -3 years -1 month | -3 years -1 month | published |
@@ -49,7 +49,7 @@ Feature:
     # Discussion is prone to be outdated.
     When I go to the "Recent published discussion" discussion
     Then I should see the heading "Recent published discussion"
-    But I should not see "This discussion is more than"
+    But I should not see the text "This discussion is more than"
 
     When I go to the "Outdated published discussion" discussion
     Then I should see the heading "Outdated published discussion"
@@ -58,12 +58,12 @@ Feature:
     # A document is not prone to be outdated.
     When I go to the "Very old document" document
     Then I should see the heading "Very old document"
-    But I should not see "This document is more than"
+    But I should not see the text "This document is more than"
 
     # Event is prone to be outdated.
     When I go to the "Recent published event" event
     Then I should see the heading "Recent published event"
-    But I should not see "This event is more than"
+    But I should not see the text "This event is more than"
 
     When I go to the "Outdated published event" event
     Then I should see the heading "Outdated published event"
@@ -72,7 +72,7 @@ Feature:
     # News item is prone to be outdated.
     When I go to the "Recent published news" news
     Then I should see the heading "Recent published news"
-    But I should not see "This news is more than"
+    But I should not see the text "This news is more than"
 
     When I go to the "Outdated published news" news
     Then I should see the heading "Outdated published news"
@@ -88,15 +88,15 @@ Feature:
     # Content never published is not prone to be outdated.
     When I go to the "Not published discussion" discussion
     Then I should see the heading "Not published discussion"
-    But I should not see "This discussion is more than"
+    But I should not see the text "This discussion is more than"
 
     When I go to the "Not published event" event
     Then I should see the heading "Not published event"
-    But I should not see "This event is more than"
+    But I should not see the text "This event is more than"
 
     When I go to the "Not published news" news
     Then I should see the heading "Not published news"
-    But I should not see "This news is more than"
+    But I should not see the text "This news is more than"
 
     # Cleanup configuration.
     When I click "Outdated content thresholds"
