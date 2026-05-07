@@ -2,7 +2,7 @@
 Feature: Translating assessments
 
   Background:
-    Given users:
+    Given the following users:
       | Username    | Roles     |
       | Flora Mod   | moderator |
       | Lee Facil   |           |
