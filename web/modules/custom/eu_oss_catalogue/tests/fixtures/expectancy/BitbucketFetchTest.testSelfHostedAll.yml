@@ -1,7 +1,7 @@
 Bar Project:
   it:
     langcode: it
-    default_langcode: '0'
+    default_langcode: '1'
     status: '1'
     oss_available_languages:
       - en
@@ -44,5 +44,5 @@ Bar Project:
     oss_source_hash: jShze33t0T7Ci2aCDocDB1jwjrVIhTBiv7CH1JIkZNA
   en:
     langcode: en
-    default_langcode: '1'
+    default_langcode: '0'
     status: '1'

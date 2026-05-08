@@ -85,7 +85,7 @@ GitHub solution 1:
 Project 1.1:
   it:
     langcode: it
-    default_langcode: '0'
+    default_langcode: '1'
     oss_categories:
       - data-collection
     oss_git_url: https://limited.self-hosted.gitlab.example.com/group1/project-1-1
@@ -121,7 +121,7 @@ Project 1.1:
 Project 1.2:
   de:
     langcode: de
-    default_langcode: '0'
+    default_langcode: '1'
     oss_categories:
       - data-collection
       - data-analytics
@@ -154,7 +154,7 @@ Project 1.2:
     oss_short_description: '[IT] Group1: Project 2: Short description'
   en:
     langcode: en
-    default_langcode: '1'
+    default_langcode: '0'
     oss_documentation: https://example.com/group1/project-1-2/en/docs.md
     oss_features:
       - '[EN] feat 1'
@@ -171,7 +171,7 @@ Project 1.2:
 Project 1.4:
   de:
     langcode: de
-    default_langcode: '0'
+    default_langcode: '1'
     oss_categories:
       - data-collection
       - data-analytics

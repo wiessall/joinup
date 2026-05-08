@@ -91,6 +91,7 @@ abstract class FetchTestBase extends BrowserTestBase {
   protected function assertOssSolution(string $title, string $expectedRelevantLangCode): void {
     $solution = $this->getNode($title, OssSolutionInterface::class);
     $this->assertSame($expectedRelevantLangCode, $solution->getRelevantLangCode());
+    $this->assertSame($expectedRelevantLangCode, $solution->language()->getId());
   }
 
   /**
