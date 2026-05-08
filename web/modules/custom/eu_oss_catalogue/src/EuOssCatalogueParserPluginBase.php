@@ -96,6 +96,8 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
 
     $this->doParse($solution, $project, $metadata, $provider);
 
+    $this->setLangcode($solution);
+
     return $solution;
   }
 
@@ -112,6 +114,46 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
    *   The provider plugin instance.
    */
   abstract protected function doParse(OssSolutionInterface $solution, Project $project, array $metadata, EuOssCatalogueProviderInterface $provider): void;
+
+  /**
+   * Sets the entity langcode to the relevant language, if needed.
+   *
+   * @param \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $solution
+   *   The OSS solution entity.
+   */
+  protected function setLangcode(OssSolutionInterface $solution): void {
+    $relevantLang = $solution->getRelevantLangCode();
+    $currentLang = $solution->language()->getId();
+
+    if ($relevantLang === $currentLang) {
+      return;
+    }
+
+    // Save the current default translation's field values.
+    $currentDefaultValues = array_map(
+      fn(FieldItemListInterface $fieldItemList) => $fieldItemList->getValue(),
+      $solution->getTranslatableFields(FALSE),
+    );
+
+    if ($solution->hasTranslation($relevantLang)) {
+      // Copy the relevant language translation's content to the default.
+      $relevantTranslation = $solution->getTranslation($relevantLang);
+      foreach ($solution->getTranslatableFields(FALSE) as $fieldName => $fieldItemList) {
+        $solution->set($fieldName, $relevantTranslation->get($fieldName)->getValue());
+      }
+      $solution->removeTranslation($relevantLang);
+    }
+
+    // Change the default translation's langcode to the relevant language.
+    $solution->set('langcode', $relevantLang);
+
+    // Restore the old default content as a translation for the original
+    // language, unless that translation already exists (e.g., from a prior
+    // TMGMT job).
+    if (!$solution->hasTranslation($currentLang)) {
+      $solution->addTranslation($currentLang, $currentDefaultValues);
+    }
+  }
 
   /**
    * Configures and returns a resolver given its plugin ID and configuration.

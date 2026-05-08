@@ -7,6 +7,7 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Parser;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -125,8 +126,18 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
         }
       }
       elseif ($override !== FieldOverridingPolicy::ResolvedNotEmpty || $resolved) {
+        $defaultLangCode = $this->languageManager->getDefaultLanguage()->getId();
+
         // Populate the node field.
         foreach ($resolved as $langcode => $values) {
+          // Resolvers use x-default, but we store it as an explicit language
+          // code so that reparsing a solution whose langcode has been changed
+          // to a non-default language does not overwrite the relevant-language
+          // default translation with the site-default language's content.
+          if ($langcode === LanguageInterface::LANGCODE_DEFAULT) {
+            $langcode = $defaultLangCode;
+          }
+
           // Create a new translation on demand.
           if (!$solution->hasTranslation($langcode)) {
             $solution->addTranslation($langcode, $solution->toArray());
