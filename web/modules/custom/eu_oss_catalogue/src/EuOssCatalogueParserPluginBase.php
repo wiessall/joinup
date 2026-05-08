@@ -68,8 +68,8 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
     $solution = $solutions ? reset($solutions) : $nodeStorage->create(['type' => 'oss_solution']);
     \assert($solution instanceof OssSolutionInterface);
 
-    // Populate project metadata array. This array is used by some parsers to
-    // add metadata to the final stored node via resolvers.
+    // Populate the project metadata array. This array is used by some parsers
+    // to add metadata to the final stored node via resolvers.
     $metadata = $this->getMetadata($project);
 
     $latestReleaseDate = $project->latestReleaseDate ?
