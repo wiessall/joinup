@@ -1,0 +1,30 @@
+uuid: 309ebaca-fc9e-483d-8fff-f1ddd7147e9c
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.assessment_report_published_mem
+  module:
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: message.assessment_report_published_mem.default
+targetEntityType: message
+bundle: assessment_report_published_mem
+mode: default
+content:
+  partial_0:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  partial_1:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  search_api_excerpt: true
+  uuid: true
