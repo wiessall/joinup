@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Post-update functions for the Joinup Badge module.
+ * Deployment hooks for the Joinup Badge module.
  */
 
 declare(strict_types=1);
@@ -12,7 +12,7 @@ use Drupal\joinup_badge\PortalContributorBadgeEvaluator;
 /**
  * Award the 'portal_contributor' badge to currently eligible users.
  */
-function joinup_badge_post_update_201301(array &$sandbox): string {
+function joinup_badge_deploy_201301(array &$sandbox): string {
   $bundles = [
     'solution',
     'collection',
