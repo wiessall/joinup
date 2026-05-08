@@ -15,14 +15,13 @@ test.describe("Solution homepage components", () => {
     );
     await pageUtils.prepareForScreenshot(page);
 
-    await expect(page.locator(".region-header")).toHaveScreenshot(
-      `group-header-${user}.png`,
-    );
+    const groupHeader = page.locator(".region-header");
+    await expect(groupHeader).toBeVisible();
+    await expect(groupHeader).toHaveScreenshot(`group-header-${user}.png`);
 
-    // @todo ISAICP-11181: webtools.europa.eu DNS blocked on CI.
-    // await expect(page.locator(".content .region-content-top")).toHaveScreenshot(
-    //   `action-buttons-on-top.png`,
-    // );
+    const actionButtons = page.locator(".content .region-content-top");
+    await expect(actionButtons).toBeVisible();
+    await expect(actionButtons).toHaveScreenshot("action-buttons-on-top.png");
   }
 
   test("Anonymous", async ({ page }) => {
