@@ -47,7 +47,7 @@ class JoinupInviteContext extends RawDrupalContext {
 
     $entity = $this->getEntityByLabel('node', $title, $bundle);
     $user = $this->userManager->getCurrentUser();
-    $user = $this->getUserByName($user->name);
+    $user = $this->getUserByName($user->getValue('name'));
 
     $invitation_info = $this->getInvitationInfo($bundle);
     $invitation = Invitation::loadByEntityAndUser($entity, $user, $invitation_info['invitation_bundle']);

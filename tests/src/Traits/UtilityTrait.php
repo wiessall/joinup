@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Traits;
 
 use Behat\Mink\Element\NodeElement;
+use Drupal\Driver\Entity\EntityStubInterface;
 
 /**
  * Contains utility methods.
@@ -135,32 +136,34 @@ trait UtilityTrait {
   }
 
   /**
-   * Converts property values of an object to the ones defined in a mapping.
+   * Converts property values of an entity to the ones defined in a mapping.
    *
    * Useful to convert human-readable strings used in tests to machine-readable
    * ones.
    *
-   * @param object $object
-   *   The object itself.
+   * @param \Drupal\Driver\Entity\EntityStubInterface $stub
+   *   The entity stub.
    * @param string $property
    *   The property name.
    * @param array $mapping
    *   An array of mapped values, where keys are the human-readable strings.
    */
-  protected static function convertObjectPropertyValues($object, string $property, array $mapping): void {
-    if (!property_exists($object, $property)) {
+  protected static function convertObjectPropertyValues(EntityStubInterface $stub, string $property, array $mapping): void {
+    if (!$stub->hasValue($property)) {
       return;
     }
 
+    $value = $stub->getValue($property);
+
     // Force the use of human readable values in Behat test scenarios, throw
     // an exception if the numeric values are used.
-    if (!array_key_exists($object->$property, $mapping)) {
+    if (!array_key_exists($value, $mapping)) {
       $supported_values = implode(', ', array_keys($mapping));
-      throw new \UnexpectedValueException("Unexpected value for {$property} '{$object->$property}'. Supported values are: $supported_values.");
+      throw new \UnexpectedValueException("Unexpected value for {$property} '{$value}'. Supported values are: $supported_values.");
     }
 
     // Replace the human readable value with the expected boolean.
-    $object->$property = $mapping[$object->$property];
+    $stub->setValue($property, $mapping[$value]);
   }
 
   /**

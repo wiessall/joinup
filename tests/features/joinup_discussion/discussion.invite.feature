@@ -6,20 +6,20 @@ Feature: Invite members to subscribe to discussions
 
   @javascript
   Scenario: Invite members to a discussion
-    Given users:
+    Given the following users:
       | Username         | E-mail                           | First name | Family name |
       | Lynwood Crawford | lcrawford@example.com            | Lynwood    | Crawford    |
       | Glory Ruskin     | gloruskin.hr@example.com         | Glory      | Ruskin      |
       | paternoster      | shaquila.paternoster@example.com | Shaquila   | Paternoster |
       | theacuteone      | hargrave.hr@example.com          | Shannon    | Hargrave    |
-    And solution content:
+    And the following "solution" content:
       | title                   | description       | state     |
       | Stainless Steel Siphons | Will last forever | published |
     And the following solution user membership:
       | solution                | user         | roles       |
       | Stainless Steel Siphons | theacuteone  | member      |
       | Stainless Steel Siphons | Glory Ruskin | facilitator |
-    And collection content:
+    And the following "collection" content:
       | title                | description          | state     |
       | The Siphon Community | We just love siphons | published |
     And the following collection user membership:
@@ -27,7 +27,7 @@ Feature: Invite members to subscribe to discussions
       | The Siphon Community | Lynwood Crawford | member      |
       | The Siphon Community | theacuteone      | member      |
       | The Siphon Community | Glory Ruskin     | facilitator |
-    And discussion content:
+    And the following "discussion" content:
       | title                            | content                            | author           | state     | collection           | solution                |
       | For your lifetime                | Are you kidding?                   | Lynwood Crawford | published |                      | Stainless Steel Siphons |
       | Concerned about dissolved gases? | Gas might get trapped in a siphon. | Lynwood Crawford | published | The Siphon Community |                         |

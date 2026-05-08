@@ -6,10 +6,10 @@ Feature:
 
   @group-c
   Scenario Outline: Community content revisions
-    Given <group type> content:
+    Given the following "<group type>" content:
       | title        | description                               | group_moderation |
       | Hellow world | Because I do not know how to spell Hello. | <moderation>     |
-    And users:
+    And the following users:
       | Username          | E-mail                    | Roles     |
       | Clumsy Bounce     | clumsy.bounce@example.com |           |
       | Grumpy Author     | grumpy@auth.com           |           |
@@ -20,7 +20,7 @@ Feature:
       | Hellow world | Clumsy Bounce     |             |
       | Hellow world | Grumpy author     | author      |
       | Hellow world | Jelly Facilitator | facilitator |
-    And <content type> content:
+    And the following "<content type>" content:
       | title                | body                                   | author        | <group type> |
       | Goodbi world         | Because I cannot spell Goodbye either. | Clumsy Bounce | Hellow world |
       | Careful with that ax | Someone needs to ax these questions.   | Grumpy Author | Hellow world |

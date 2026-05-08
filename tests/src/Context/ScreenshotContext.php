@@ -57,7 +57,7 @@ class ScreenshotContext extends RawMinkContext {
       // Only check if the session is started.
       if ($context->getMink()->isSessionStarted()) {
         try {
-          $context->assertNotWarningMessage('Notice:');
+          $context->warningMessageAssertIsNotVisible('Notice:');
         }
         catch (ExpectationException) {
           $message = "{$this->getStepLine($event)} screenshot(s):";

@@ -3,15 +3,15 @@ Feature: Freeze comments on archived content
   As a visitor of the website I can only view comment on archived community content.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title             |
       | Gossip collection |
-    And users:
+    And the following users:
       | Username        | E-mail                      | Roles | First name | Family name |
       | Sons of anarchy | sons-of-anarchy@example.com |       | Sons       | Anarchy     |
 
   Scenario Outline: Comment in 'View Only' state.
-    Given <type> content:
+    Given the following "<type>" content:
       | title                              | body      | collection        | state    |
       | Test freeze of comments for <type> | body test | Gossip collection | archived |
     And comments:

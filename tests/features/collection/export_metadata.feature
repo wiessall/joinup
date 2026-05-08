@@ -13,10 +13,10 @@ Feature: Export collection metadata
     And I should see the link "Turtle Terse RDF Triple Language"
 
   Scenario: Distribution nodes can be exported as RDF.
-    Given solution content:
+    Given the following "solution" content:
       | title      |
       | Solution 1 |
-    Given distribution content:
+    Given the following "distribution" content:
       | title          | description   | resources         | solution   |
       | Distribution 1 | Description 1 | http://access.url | Solution 1 |
     When I go to the "Distribution 1" distribution

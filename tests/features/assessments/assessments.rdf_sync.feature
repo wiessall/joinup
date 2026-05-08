@@ -2,7 +2,7 @@
 Feature: RDF Sync integration for assessments.
 
   Scenario: Test that an entire chain of entities is exported properly.
-    Given solution content:
+    Given the following "solution" content:
       | title           | uri                                        |
       | Citizen's Forum | http://example.com/solution/citizens-forum |
     And "participation" assessment:

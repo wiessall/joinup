@@ -5,13 +5,13 @@ Feature:
   I need to be able to place paragraphs for content.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                 | topic |
       | Paragraphs collection | HR    |
 
   @javascript
   Scenario: Paragraph sections are multivalue and sort-able.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title           | collection            | topic | abstract                 |
       | Paragraphs page | Paragraphs collection | HR    | Paragraphs page abstract |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Paragraphs page" title:
@@ -47,10 +47,10 @@ Feature:
 
   @javascript
   Scenario Outline: Privileged users can add paragraphs.
-    Given <group type> content:
+    Given the following "<group type>" content:
       | title                 |
       | Paragraphs group type |
-    And users:
+    And the following users:
       | Username |
       | Zohan    |
       | Gilfoyle |
@@ -58,7 +58,7 @@ Feature:
       | <group type>          | user     | roles       |
       | Paragraphs group type | Zohan    | author      |
       | Paragraphs group type | Gilfoyle | facilitator |
-    And custom_page content:
+    And the following "custom_page" content:
       | title                     | body        | <group type>          | author | state     |
       | Don't Mess with the Zohan | Wanna mess? | Paragraphs group type | Zohan  | published |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Don't Mess with the Zohan" title:
