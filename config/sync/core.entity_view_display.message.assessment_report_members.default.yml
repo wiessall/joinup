@@ -3,16 +3,16 @@ langcode: en
 status: true
 dependencies:
   config:
-    - message.template.assessment_report_published_mem
+    - message.template.assessment_report_members
   module:
     - layout_builder
 third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
-id: message.assessment_report_published_mem.default
+id: message.assessment_report_members.default
 targetEntityType: message
-bundle: assessment_report_published_mem
+bundle: assessment_report_members
 mode: default
 content:
   partial_0:

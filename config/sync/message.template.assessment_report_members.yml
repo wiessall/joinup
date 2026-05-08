@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - filter.format.full_html
-template: assessment_report_published_mem
+template: assessment_report_members
 label: 'Assessment Reports: published (members)'
 description: 'Notifies subscribed collection members when an assessment report is published'
 text:

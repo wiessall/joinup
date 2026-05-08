@@ -1,0 +1,13 @@
+uuid: 26cea33a-4a69-4a6b-87b4-c694f0662547
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.assessment_report_members
+id: message.assessment_report_members.default
+targetEntityType: message
+bundle: assessment_report_members
+mode: default
+content: {  }
+hidden:
+  uuid: true
