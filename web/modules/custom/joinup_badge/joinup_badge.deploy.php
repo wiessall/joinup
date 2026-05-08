@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Post-update functions for the Joinup Badge module.
+ * Deployment hooks for the Joinup Badge module.
  */
 
 declare(strict_types=1);
@@ -13,7 +13,7 @@ use Drupal\og\OgMembershipInterface;
 /**
  * Award the 'iec_member' badge to existing active members of the IEC.
  */
-function joinup_badge_post_update_201300(array &$sandbox): string {
+function joinup_badge_deploy_201300(array &$sandbox): string {
   // The UUID of the Interoperable Europe Community group node.
   // @see \Drupal\joinup_badge\Hook\BadgeHooks
   $iecUuid = 'ba527094-00bc-45de-98fb-c732c6c66fec';
