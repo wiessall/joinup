@@ -30,6 +30,7 @@
         # Third-party code injected in page with Javascript.
         - '.wt-globan--container'
   - Drupal\joinup\Context\AssessmentsContext
+  - Drupal\joinup\Context\BadgeContext
   - Drupal\joinup\Context\BootstrapContext
   - Drupal\joinup\Context\PrivateMessageContext
   - Drupal\joinup\Context\CalendarContext

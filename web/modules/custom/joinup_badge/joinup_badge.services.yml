@@ -4,3 +4,4 @@ services:
     autowire: true
 
   Drupal\joinup_badge\BadgeService: ~
+  Drupal\joinup_badge\PortalContributorBadgeEvaluator: ~
