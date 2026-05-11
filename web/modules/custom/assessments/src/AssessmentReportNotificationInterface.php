@@ -21,12 +21,12 @@ interface AssessmentReportNotificationInterface {
   public function notifyReportSubmitted(AssessmentReportEvent $event): void;
 
   /**
-   * Sends notification when a report is published.
+   * Sends a published notification to the report owner.
    *
    * @param \Drupal\assessments\Event\AssessmentReportEvent $event
    *   The assessment report event.
    */
-  public function notifyReportPublished(AssessmentReportEvent $event): void;
+  public function notifyReportOwnerPublished(AssessmentReportEvent $event): void;
 
   /**
    * Sends notification when a report requires updates.
@@ -37,12 +37,12 @@ interface AssessmentReportNotificationInterface {
   public function notifyReportRequiresUpdates(AssessmentReportEvent $event): void;
 
   /**
-   * Queues a members notification for the given assessment report.
+   * Queues a published notification for subscribed collection members.
    *
-   * @param \Drupal\assessments\AssessmentInterface $entity
-   *   The published assessment report entity.
+   * @param \Drupal\assessments\Event\AssessmentReportEvent $event
+   *   The assessment report event.
    */
-  public function queueMembersNotification(AssessmentInterface $entity): void;
+  public function queueMembersPublishedNotification(AssessmentReportEvent $event): void;
 
   /**
    * Sends the assessment_report_members notification to subscribed members.
