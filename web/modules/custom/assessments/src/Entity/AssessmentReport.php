@@ -59,7 +59,7 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
       }
       $statement = $this->get($fieldName)->first()->entity;
       if ($statement instanceof AssessmentStatementInterface && $statement->get('interpretation')
-          ->isEmpty()) {
+        ->isEmpty()) {
         $this->set($fieldName, NULL);
       }
     }
