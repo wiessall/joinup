@@ -24,7 +24,8 @@ final readonly class AssessmentReportNotificationSubscriber implements EventSubs
   public static function getSubscribedEvents(): array {
     return [
       NotificationEvents::ASSESSMENT_REPORT_SUBMITTED_FOR_REVIEW => ['onReportSubmitted'],
-      NotificationEvents::ASSESSMENT_REPORT_PUBLISHED => ['onReportPublished'],
+      NotificationEvents::ASSESSMENT_REPORT_MODERATION_PUBLISHED => ['onReportModerationPublished'],
+      NotificationEvents::ASSESSMENT_REPORT_STATE_PUBLISHED => ['onReportStatePublished'],
       NotificationEvents::ASSESSMENT_REPORT_REQUIRE_UPDATES => ['onReportRequireUpdates'],
     ];
   }
@@ -40,13 +41,22 @@ final readonly class AssessmentReportNotificationSubscriber implements EventSubs
   }
 
   /**
-   * Sends notification when a report is published.
+   * Sends notification when a report is published via the moderation form.
    *
    * @param \Drupal\assessments\Event\AssessmentReportEvent $event
    *   The assessment report event.
    */
-  public function onReportPublished(AssessmentReportEvent $event): void {
+  public function onReportModerationPublished(AssessmentReportEvent $event): void {
     $this->notificationService->notifyReportOwnerPublished($event);
+  }
+
+  /**
+   * Queues members notification when a report transitions to published state.
+   *
+   * @param \Drupal\assessments\Event\AssessmentReportEvent $event
+   *   The assessment report event.
+   */
+  public function onReportStatePublished(AssessmentReportEvent $event): void {
     $this->notificationService->queueMembersPublishedNotification($event);
   }
 

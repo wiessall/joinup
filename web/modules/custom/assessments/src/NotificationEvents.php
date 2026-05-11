@@ -21,15 +21,26 @@ final class NotificationEvents {
   const string ASSESSMENT_REPORT_SUBMITTED_FOR_REVIEW = 'assessments.report.submitted_for_review';
 
   /**
-   * Event for assessment report published.
+   * Event for assessment report published via the moderation form.
    *
-   * Dispatched when an assessment report is published by a moderator.
+   * Dispatched from the moderation form when a moderator publishes a report.
    *
    * @Event
    *
    * @var string
    */
-  const string ASSESSMENT_REPORT_PUBLISHED = 'assessments.report.published';
+  const string ASSESSMENT_REPORT_MODERATION_PUBLISHED = 'assessments.report.moderation_published';
+
+  /**
+   * Event for assessment report state transition to published.
+   *
+   * Dispatched on any publish path (moderation form, API, direct creation).
+   *
+   * @Event
+   *
+   * @var string
+   */
+  const string ASSESSMENT_REPORT_STATE_PUBLISHED = 'assessments.report.state_published';
 
   /**
    * Event for assessment report requiring updates.

@@ -144,7 +144,7 @@ final class AssessmentModerationForm extends FormBase {
         $this->messenger()
           ->addStatus($this->t('The assessment report has been published.'));
         $event = new AssessmentReportEvent($assessment);
-        $this->eventDispatcher->dispatch($event, NotificationEvents::ASSESSMENT_REPORT_PUBLISHED);
+        $this->eventDispatcher->dispatch($event, NotificationEvents::ASSESSMENT_REPORT_MODERATION_PUBLISHED);
         break;
 
       case 'draft':

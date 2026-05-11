@@ -485,11 +485,15 @@ function _assessments_handle_report_state_notification(AssessmentInterface $enti
 
   $originalState = $entity->original instanceof AssessmentReport ? $entity->original->getWorkflowState() : NULL;
   $currentState = $entity->getWorkflowState();
+  $event = new AssessmentReportEvent($entity);
+  $eventDispatcher = \Drupal::service('event_dispatcher');
 
   if ($currentState === 'review' && $originalState !== 'review') {
-    $event = new AssessmentReportEvent($entity);
-    \Drupal::service('event_dispatcher')
-      ->dispatch($event, NotificationEvents::ASSESSMENT_REPORT_SUBMITTED_FOR_REVIEW);
+    $eventDispatcher->dispatch($event, NotificationEvents::ASSESSMENT_REPORT_SUBMITTED_FOR_REVIEW);
+  }
+
+  if ($currentState === 'published' && $originalState !== 'published') {
+    $eventDispatcher->dispatch($event, NotificationEvents::ASSESSMENT_REPORT_STATE_PUBLISHED);
   }
 }
 
