@@ -56,7 +56,11 @@ class OssSolution extends Node implements OssSolutionInterface {
   /**
    * {@inheritdoc}
    */
-  public function getRelevantLangCode(): string {
+  public function getRelevantLangCode(bool $reset = FALSE): string {
+    $field = $this->get(RelevantLanguageCode::FIELD_NAME);
+    if ($reset) {
+      $field->reset();
+    }
     return $this->get(RelevantLanguageCode::FIELD_NAME)->first()->getString();
   }
 

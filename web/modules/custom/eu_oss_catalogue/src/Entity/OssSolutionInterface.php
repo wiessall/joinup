@@ -57,10 +57,13 @@ interface OssSolutionInterface extends NodeInterface {
   /**
    * Returns the language code of the richest translation.
    *
+   * @param bool $reset
+   *   (optional) Whether to force a new computation . Defaults to FALSE.
+   *
    * @return string
    *   The language code of the richest translation.
    */
-  public function getRelevantLangCode(): string;
+  public function getRelevantLangCode(bool $reset = FALSE): string;
 
   /**
    * Checks whether the entity is archived.

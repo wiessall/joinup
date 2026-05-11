@@ -134,4 +134,15 @@ class RelevantLanguageCode extends FieldItemList {
     return parent::postSave($update);
   }
 
+  /**
+   * Resets the field computed value.
+   *
+   * @return $this
+   */
+  public function reset(): self {
+    $this->list = [];
+    $this->valueComputed = FALSE;
+    return $this;
+  }
+
 }

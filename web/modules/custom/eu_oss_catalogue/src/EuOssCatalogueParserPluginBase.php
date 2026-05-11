@@ -122,7 +122,9 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
    *   The OSS solution entity.
    */
   protected function setLangcode(OssSolutionInterface $solution): void {
-    $relevantLang = $solution->getRelevantLangCode();
+    // Upstream code might have already set the relevant langcode before all
+    // the resolvers got executed. Make sure we use a fresh field value.
+    $relevantLang = $solution->getRelevantLangCode(TRUE);
     $currentLang = $solution->language()->getId();
 
     if ($relevantLang === $currentLang) {
@@ -139,7 +141,9 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
       // Copy the relevant language translation's content to the default.
       $relevantTranslation = $solution->getTranslation($relevantLang);
       foreach ($solution->getTranslatableFields(FALSE) as $fieldName => $fieldItemList) {
-        $solution->set($fieldName, $relevantTranslation->get($fieldName)->getValue());
+        if ($fieldName !== 'langcode') {
+          $solution->set($fieldName, $relevantTranslation->get($fieldName)->getValue());
+        }
       }
       $solution->removeTranslation($relevantLang);
     }
