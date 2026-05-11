@@ -20,7 +20,18 @@ Feature: Assessment report email notifications
       | Test Service |
 
   Scenario: Email notification: Your assessment report has been published
-    Given report assessments:
+    Given the following users:
+      | Username               | E-mail                     | First name     | Family name |
+      | Subscribed Member 1    | subscribed1@example.com    | Subscribed1    | Member      |
+      | Subscribed Member 2    | subscribed2@example.com    | Subscribed2    | Member      |
+      | Non-subscribed Member  | notsubscribed@example.com  | Notsubscribed  | Member      |
+    And the following collection user memberships:
+      | collection                         | user                  |
+      | Interoperability assessments space | Subscribed Member 1   |
+      | Interoperability assessments space | Subscribed Member 2   |
+      | Interoperability assessments space | Non-subscribed Member |
+    And the "Non-subscribed Member" user unsubscribes from "Interoperability assessments space" collection announcements
+    And report assessments:
       | name                 | state  | provider          | uid          | created    |
       | Moderatable Report 1 | review | Test Organization | Regular User | 1770235600 |
     And the following report has binding requirement:
@@ -38,12 +49,26 @@ Feature: Assessment report email notifications
       | Binding requirements                                                                    |
     When I press "Publish"
     Then I should see the success message containing "The assessment report has been published"
-
     And 1 e-mail should have been sent
     And the following email should have been sent:
       | recipient | Regular User                                                             |
       | subject   | Your assessment report has been published                                |
       | body      | Your submitted assessment report has been approved and is now published. |
+
+    When I mark all emails as read
+    And I run the "assessment_report_notify_members" queue worker
+    Then 2 e-mails should have been sent
+    And the following email should have been sent:
+      | recipient | Subscribed Member 1                                                                   |
+      | subject   | IOPEU Assessment report has been published                                            |
+      | body      | Assessment Moderator has published the new assessment report - "Moderatable Report 1" |
+    And the following email should have been sent:
+      | recipient | Subscribed Member 2                                                                   |
+      | subject   | IOPEU Assessment report has been published                                            |
+      | body      | Assessment Moderator has published the new assessment report - "Moderatable Report 1" |
+    And the following email should not have been sent:
+      | recipient | Non-subscribed Member                      |
+      | subject   | IOPEU Assessment report has been published |
 
   Scenario: Email notification: New assessment report to be reviewed
     Given report assessments:
