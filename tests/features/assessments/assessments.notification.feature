@@ -70,6 +70,14 @@ Feature: Assessment report email notifications
       | recipient | Non-subscribed Member                      |
       | subject   | IOPEU Assessment report has been published |
 
+    # Verify queue is also triggered when a report is published directly via API.
+    Given report assessments:
+      | name                 | state     | provider          | uid                  |
+      | API Published Report | published | Test Organization | Assessment Moderator |
+    And I mark all emails as read
+    When I run the "assessment_report_notify_members" queue worker
+    Then 2 e-mails should have been sent
+
   Scenario: Email notification: New assessment report to be reviewed
     Given report assessments:
       | name                 | state | provider          | uid          |
