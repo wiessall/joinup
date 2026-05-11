@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Drupal\eu_oss_catalogue;
 
 use Drupal\Component\Plugin\PluginBase;
+use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
+use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Config\Entity\ThirdPartySettingsInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -124,7 +126,7 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
   protected function setLangcode(OssSolutionInterface $solution): void {
     // Upstream code might have already set the relevant langcode before all
     // the resolvers got executed. Make sure we use a fresh field value.
-    $relevantLang = $solution->getRelevantLangCode(TRUE);
+    $relevantLang = $this->getRelevantLangCode($solution);
     $currentLang = $solution->language()->getId();
 
     if ($relevantLang === $currentLang) {
@@ -263,6 +265,87 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
     if ($invalidValues = array_keys(array_diff_key($resolved, $validValues))) {
       throw new \Exception('The $value["' . implode('"], $value["', $invalidValues) . '"] array element(s), returned by ' . $resolver::class . '::resolve(), should be array(s)');
     }
+  }
+
+  /**
+   * Returns the language code of the richest entity translation.
+   *
+   * @return string
+   *   The language code of the richest entity translation.
+   *
+   * @todo Make this method protected in ISAICP-11133.
+   */
+  public function getRelevantLangCode(OssSolutionInterface $ossSolution): string {
+    $translationLanguages = $ossSolution->getTranslationLanguages();
+    if (count($translationLanguages) === 1) {
+      return key($translationLanguages);
+    }
+
+    // If publiccode.yml field does not contain any language codes, then we
+    // continue with the existing entity translations. But if we have
+    // publiccode.yml language codes, then we use the union of the pc.yml
+    // language codes and the entity translation language codes.
+    $translationLanguageCodes = empty($publicCodeLanguageCodes = $this->getLanguageCodesFromPublicCodeYaml($ossSolution))
+      ? array_keys($translationLanguages)
+      : array_intersect($publicCodeLanguageCodes, array_keys($translationLanguages));
+
+    // Only one translation left, no need to perform the "richest" check.
+    if (count($translationLanguageCodes) === 1) {
+      return reset($translationLanguageCodes);
+    }
+
+    $flagshipFieldItemCounts = array_reduce(
+      $translationLanguageCodes ?: array_keys($translationLanguages),
+      function (array $carry, string $languageCode) use ($ossSolution): array {
+        $translation = $ossSolution->getTranslation($languageCode);
+        $field = $translation->get('oss_features');
+        $carry[$languageCode] = !$field->isEmpty() ? $field->count() : 0;
+        return $carry;
+      },
+      [],
+    );
+
+    // We have 2 translation language keys at least, so we won't return FALSE.
+    return array_search(max($flagshipFieldItemCounts), $flagshipFieldItemCounts, TRUE);
+  }
+
+  /**
+   * Returns language codes used in publiccode.yml.
+   *
+   * @param \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $ossSolution
+   *   The OSS solution entity.
+   *
+   * @return string[]
+   *   The language codes used at the description property. Returns empty array
+   *   if:
+   *   - The solution has no field data at the field.
+   *   - The data is not a valid YAML string (so it cannot be decoded).
+   *   - The decoded content is not an array.
+   *   - The decoded content lacks the description key, or its value is not an
+   *     array, or if it is empty.
+   */
+  protected function getLanguageCodesFromPublicCodeYaml(OssSolutionInterface $ossSolution): array {
+    $publicCodeYamlContent = $ossSolution->getPublicCodeYaml();
+    if (is_null($publicCodeYamlContent)) {
+      return [];
+    }
+
+    try {
+      $publicCodeYaml = Yaml::decode($publicCodeYamlContent);
+    }
+    catch (InvalidDataTypeException) {
+      return [];
+    }
+
+    if (
+      !is_array($publicCodeYaml)
+      || empty($publicCodeYaml['description'])
+      || !is_array($publicCodeYaml['description'])
+    ) {
+      return [];
+    }
+
+    return array_keys($publicCodeYaml['description']);
   }
 
 }

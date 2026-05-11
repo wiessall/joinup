@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup_oss_catalogue\ExistingSite;
 
 use Drupal\Component\Serialization\Yaml;
+use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\Model\Project;
-use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
@@ -32,7 +32,6 @@ class LanguageTest extends JoinupExistingSiteTestBase {
     assert($solution instanceof OssSolutionInterface);
     $this->markEntityForCleanup($solution);
 
-    $this->assertSame($langcode, $solution->getRelevantLangCode());
     $this->assertSame($langcode, $solution->language()->getId());
   }
 

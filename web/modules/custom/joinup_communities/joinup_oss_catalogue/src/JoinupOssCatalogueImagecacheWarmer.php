@@ -62,12 +62,12 @@ final readonly class JoinupOssCatalogueImagecacheWarmer {
    */
   protected function getChangedFileValues(OssSolutionInterface $ossSolution): array {
     $fileUrisToFetch = [];
-    $relevantTranslation = $ossSolution->getTranslation($ossSolution->getRelevantLangCode());
+    $defaultTranslation = $ossSolution->getUntranslated();
     foreach (self::FIELDS as $fieldName) {
       $fileUrisToFetch = array_unique(
         array_merge(
           $fileUrisToFetch,
-          $this->getChangedValuesFromField($relevantTranslation, $fieldName)
+          $this->getChangedValuesFromField($defaultTranslation, $fieldName)
         )
       );
     }
@@ -146,7 +146,7 @@ final readonly class JoinupOssCatalogueImagecacheWarmer {
   protected function getOriginal(OssSolutionInterface $ossSolution): ?OssSolutionInterface {
     $original = $ossSolution->getOriginal();
     if ($original instanceof OssSolutionInterface) {
-      $languageCode = $original->getRelevantLangCode();
+      $languageCode = $original->language()->getId();
       return $original->getTranslation($languageCode);
     }
     return NULL;

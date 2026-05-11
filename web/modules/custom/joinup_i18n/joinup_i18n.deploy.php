@@ -105,6 +105,7 @@ function joinup_i18n_deploy_201301(array &$sandbox): string {
 function joinup_i18n_deploy_201302(array &$sandbox): string {
   $storage = \Drupal::entityTypeManager()->getStorage('node');
   $db = \Drupal::database();
+  $parser = \Drupal::service('plugin.manager.eu_oss_catalogue.parser')->createInstance('publiccode_yml');
 
   if (!isset($sandbox['nids'])) {
     $sandbox['nids'] = array_values($storage->getQuery()
@@ -138,7 +139,7 @@ function joinup_i18n_deploy_201302(array &$sandbox): string {
   foreach ($storage->loadMultiple($nids) as $nid => $ossSolution) {
     assert($ossSolution instanceof OssSolutionInterface);
 
-    $relevantLang = $ossSolution->getRelevantLangCode();
+    $relevantLang = $parser->getRelevantLangCode($ossSolution);
     $defaultLang = $ossSolution->language()->getId();
     if ($relevantLang === $defaultLang) {
       continue;

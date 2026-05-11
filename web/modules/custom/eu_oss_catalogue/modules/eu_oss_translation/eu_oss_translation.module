@@ -19,7 +19,7 @@ function eu_oss_translation_tmgmt_translatable_fields_alter(ContentEntityInterfa
     return;
   }
 
-  $source = $entity->getTranslation($entity->getRelevantLangCode());
+  $source = $entity->getTranslation($entity->language()->getId());
   $target = $entity->getTranslation(JobBuilder::TARGET_LANGUAGE);
 
   // Skip already translated data.
