@@ -12,7 +12,7 @@ text:
     value: 'IOPEU Assessment report has been published'
     format: full_html
   -
-    value: "<p>@actor:full_name has published the new assessment report - \"@entity:title\" in the collection: <a href=\"@group:url\">Interoperability assessments space</a>.</p>\r\n<p>You can access the new content at the following link: <a href=\"@entity:url\">Assessments repository</a></p>"
+    value: "<p>@actor:full_name has published the new assessment report - \"@assessment:title\" in the collection: <a href=\"@group:url\">Interoperability assessments space</a>.</p>\r\n<p>You can access the new content at the following link: <a href=\"@assessment:report_url\">Assessments repository</a></p>"
     format: full_html
 settings:
   'token options':
