@@ -46,7 +46,8 @@ final readonly class AssessmentReportNotificationSubscriber implements EventSubs
    *   The assessment report event.
    */
   public function onReportPublished(AssessmentReportEvent $event): void {
-    $this->notificationService->notifyReportPublished($event);
+    $this->notificationService->notifyReportOwnerPublished($event);
+    $this->notificationService->queueMembersPublishedNotification($event);
   }
 
   /**
