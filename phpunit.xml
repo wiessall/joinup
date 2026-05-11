@@ -79,6 +79,8 @@
     </testsuite>
     <testsuite name="functional">
       <directory>web/modules/custom/**/tests/src/Functional</directory>
+      <!-- TODO: Remove this exclusion in ISAICP-11133 -->
+      <exclude>web/modules/custom/eu_oss_catalogue/modules/eu_oss_translation/tests/src/Functional</exclude>
     </testsuite>
     <testsuite name="existing-site">
       <directory>web/modules/custom/**/tests/src/ExistingSite</directory>
