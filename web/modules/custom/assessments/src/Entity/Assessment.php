@@ -169,6 +169,7 @@ class Assessment extends ContentEntityBase implements AssessmentInterface {
    * {@inheritdoc}
    */
   public function label(): string|\Stringable {
+    // Get name is called on a deleted translation when confirming the delete.
     if ($this->isTranslatable()) {
       $langcode = $this->language()->getId();
       if (!$this->hasTranslation($langcode)) {
