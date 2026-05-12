@@ -10,7 +10,7 @@ Feature: OSS catalogue search
     And I should see the button "Clear filters"
 
   Scenario: Archived solution is not displayed in search results
-    Given oss_solution content:
+    Given the following "oss_solution" content:
       | title   | oss_development_status | oss_source        | status    | oss_archived |
       | Linux   | stable                 | developers_italia | published | 1            |
       | macOS   | development            | developers_italia | published | 0            |
@@ -21,7 +21,7 @@ Feature: OSS catalogue search
     And I should not see the "Linux" tile
 
   Scenario: User can see GIT repo indicators in tile.
-    Given oss_solution content:
+    Given the following "oss_solution" content:
       | title              | oss_source        | oss_git_stars | oss_git_open_issues | oss_git_open_pull_requests | oss_git_forks | status    |
       | Olympus indicators | developers_italia | 1111          | 2222                | 3333                       | 4444          | published |
 
@@ -34,7 +34,7 @@ Feature: OSS catalogue search
 
   Scenario: User is able to search.
     # Mimic the "EU OSSC" collection.
-    Given collection content:
+    Given the following "collection" content:
       | uri                                                            | uuid                                 | title                              |
       | http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd | 6d621a47-71ce-4f1a-90e2-8859403d3ecd | EU Open Source Solutions Catalogue |
 
@@ -42,7 +42,7 @@ Feature: OSS catalogue search
     Then I see the text "EU Open Source Solutions Catalogue" in the "Header" region
     And I see the text "Solutions created by and for European Public Services" in the "Header" region
 
-    Given oss_solution content:
+    Given the following "oss_solution" content:
       | title                           | oss_development_status | oss_source        | oss_scope              | oss_categories                                                  | oss_short_description                                                                                                                         | oss_git_description                                                               | status    | oss_release_date | oss_logo                                      | oss_software_version | oss_software_type  |
       | Django-MDQ                      | stable                 | developers_italia | agriculture, culture   | content-management                                              | A lightweight SAML2 MDQ server that implements draft-young-md-query implementation.                                                           |                                                                                   | published | 2022-04-02       | https://placehold.co/200x200.png              | 1.0-beta             | standalone/backend |
       | INGV - QuakeML to NonLinLoc PHS | stable                 | developers_italia | culture                | data-analytics,data-collection                                  | Docker image to convert QuakeML format to NonLinLoc PHS format.                                                                               |                                                                                   | published | 2000-07-13       |                                               |                      | standalone/desktop |
@@ -173,7 +173,7 @@ Feature: OSS catalogue search
 
   @javascript
   Scenario: User is able to use autocomplete.
-    Given oss_solution content:
+    Given the following "oss_solution" content:
       | title                    | oss_development_status | oss_source        | oss_categories                                                  | oss_short_description                                                                 | status      | oss_release_date | oss_vitality_index |
       | Another Open Source App  | alpha                  | developers_italia | data-analytics,data-collection                                  | A new open-source application that simplifies data management and analysis.           | published   | 2023-01-15       | 0.56               |
       | Magic Data Converter     | stable                 | developers_italia | application-development,it-development                          | A reliable tool to convert various data formats into more usable ones.                | published   | 2022-11-30       | 0.51               |
@@ -284,7 +284,7 @@ Feature: OSS catalogue search
 
   @javascript
   Scenario: User can click on info icon for source catalogue.
-    Given oss_solution content:
+    Given the following "oss_solution" content:
       | title | oss_development_status | oss_source        | status    |
       | macOS | development            | developers_italia | published |
 

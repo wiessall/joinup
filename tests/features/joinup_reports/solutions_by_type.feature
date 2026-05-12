@@ -6,11 +6,11 @@ Feature: Solutions by type report
 
    # This scenario is a light test to avoid regressions.
   Scenario: Moderators can access the list of published solutions and filter them by dates and type.
-    Given collection content:
+    Given the following "collection" content:
       | title               |
       | Monday's Artificial |
       | Restless Burst      |
-    Given solution content:
+    Given the following "solution" content:
       | title           | collection          | creation date    | modification date | solution type                                   |
       | Worthy Puppet   | Monday's Artificial | 2003-01-31T23:00 | 2015-12-07T13:57  | Interoperability Specification, Logging Service |
       | Long Artificial | Restless Burst      | 2012-09-14T00:00 | 2012-12-04T16:19  | Networking Infrastructure Enablers              |

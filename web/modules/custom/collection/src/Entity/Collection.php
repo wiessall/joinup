@@ -64,8 +64,8 @@ class Collection extends Node implements CollectionInterface {
   /**
    * {@inheritdoc}
    */
-  public function getSolutions(bool $onlyPublished = FALSE): array {
-    $ids = $this->getSolutionIds($onlyPublished);
+  public function getSolutions(bool $onlyPublished = FALSE, bool $excludeArchived = FALSE): array {
+    $ids = $this->getSolutionIds($onlyPublished, $excludeArchived);
     if (empty($ids)) {
       return $ids;
     }
@@ -78,7 +78,7 @@ class Collection extends Node implements CollectionInterface {
   /**
    * {@inheritdoc}
    */
-  public function getSolutionIds(bool $onlyPublished = FALSE): array {
+  public function getSolutionIds(bool $onlyPublished = FALSE, bool $excludeArchived = FALSE): array {
     $idsQuery = $this->entityTypeManager()->getStorage('node')
       ->getQuery()
       ->accessCheck(FALSE)
@@ -89,6 +89,10 @@ class Collection extends Node implements CollectionInterface {
       $idsQuery
         ->accessCheck()
         ->condition('status', 1);
+    }
+
+    if ($excludeArchived) {
+      $idsQuery->condition('field_state', 'archived', '<>');
     }
 
     return array_values($idsQuery->execute());

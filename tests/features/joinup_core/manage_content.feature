@@ -4,29 +4,29 @@ Feature:
   I need to be able to move content between groups
 
   Scenario: Use the content management UI
-    Given collection content:
+    Given the following "collection" content:
       | title        |
       | Vintage Art  |
       | Decadent Art |
     And user:
       | Username | Vasundhara Commentator |
-    And document content:
+    And the following "document" content:
       | title             | document type | collection  | state     | changed          |
       | The Panama Papers | Document      | Vintage Art | published | 2019-11-19 20:00 |
       | The Area 51 File  | Document      | Vintage Art | draft     | 2018-11-19 21:00 |
-    And discussion content:
+    And the following "discussion" content:
       | title               | collection  | created    | published at | changed    |
       | The Ultimate Debate | Vintage Art | 2016-11-19 | 2016-11-19   | 2016-11-19 |
     And comments:
       | message             | author                 | parent              | created          | changed    |
       | Conducting a Debate | Vasundhara Commentator | The Ultimate Debate | 2017-06-12 19:00 | 1497294000 |
-    And event content:
+    And the following "event" content:
       | title                    | collection  |
       | Version 2.0 Launch Party | Vintage Art |
-    And news content:
+    And the following "news" content:
       | title                              | collection  |
       | Exports Leap Despite Currency Gain | Vintage Art |
-    And custom_page content:
+    And the following "custom_page" content:
       | title                | collection  | changed          |
       | HOWTOs               | Vintage Art | 2016-11-19 20:00 |
       | Looking for Support? | Vintage Art | 2015-11-19 20:00 |
@@ -217,13 +217,13 @@ Feature:
     Then I should not see the "Looking for Support?" tile
 
   Scenario: Move a custom page to a solution
-    Given collection content:
+    Given the following "collection" content:
       | title       |
       | Vintage Art |
-    Given solution content:
+    Given the following "solution" content:
       | title                |
       | Vintage Solution Art |
-    And custom_page content:
+    And the following "custom_page" content:
       | title                       | collection  | changed          |
       | Will be moved to a solution | Vintage Art | 2015-11-19 20:00 |
 
@@ -241,10 +241,10 @@ Feature:
 
   @javascript
   Scenario Outline: Able to select all items on the content management UI
-    Given collection content:
+    Given the following "collection" content:
       | title       |
       | Vintage Art |
-    And event content:
+    And the following "event" content:
       | title                   | collection  |
       | The Panama Papers Party | Vintage Art |
       | The Area 51 Party       | Vintage Art |
@@ -265,21 +265,21 @@ Feature:
       | logged in as a user with the moderator role                | -- Select action -- , Move to other group, Archive content, Unarchive content |
 
   Scenario: Releases can only be transferred to solutions.
-    Given collection content:
+    Given the following "collection" content:
       | title        |
       | Collection 1 |
       | Collection 2 |
-    Given solution content:
+    Given the following "solution" content:
       | title      | collection   |
       | Solution 1 | Collection 1 |
       | Solution 2 | Collection 2 |
-    And event content:
+    And the following "event" content:
       | title   | solution   |
       | Event 1 | Solution 1 |
-    And release content:
+    And the following "release" content:
       | title     | release number | release notes | is version of |
       | Release 1 | 1.0            | Release notes | Solution 1    |
-    And distribution content:
+    And the following "distribution" content:
       | title          | description | release   | resources          |
       | Distribution 1 | Description | Release 1 | http://example.com |
 

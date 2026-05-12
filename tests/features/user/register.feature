@@ -4,7 +4,7 @@ Feature: User registration
   and receive appropriate notifications.
 
   Scenario: A moderator can register a user
-    Given users:
+    Given the following users:
       | Username      | Roles     |
       | Mr. Moderator | Moderator |
     And I am logged in as "Mr. Moderator"

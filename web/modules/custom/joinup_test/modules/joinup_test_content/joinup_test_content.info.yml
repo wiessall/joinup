@@ -11,11 +11,28 @@ dependencies:
 default_content:
   file:
     - d97f57af-1e14-4f58-9825-eb33c7e1bb31
+    - a737fdb3-1c3d-4802-84f6-21af056a3844
+    - 83c208a4-6354-4e08-95dc-f4e123e2597f
   node:
     - 3ca6b44e-a7ed-4fc5-869d-cc98c7dbcd8c
     - 84547db5-c4db-4f9e-9b06-ae241369de9a
     - b21e753e-5708-4923-b554-a66af649eccf
     - fc99c508-84dc-4646-a112-5b37bff6f2a7
+    - ce8f452f-66d7-43c6-a7d7-ea6489a120a9
+    - 8a53633f-b519-4902-8ddc-40f278841887
+    - 6aaa7ca3-58d2-4511-87e2-ef953c97f17e
+    - 6aaa7ca3-58d2-4511-87e2-ef953c97a16e
+    - bbfb4130-e5b9-46df-8230-10cf3524277d
+    - 0066b4ea-07f1-4dbc-a7f3-471033af895f
+    - 7f36fb2b-d329-4d79-8ddf-0deab4379e5c
+    - fb9b35ca-8156-41a8-bd0e-6ec2c714dc45
+    - b2b8122b-5c0e-4991-93f6-7c66d4ba1534
+    - 8a9fa71a-28fa-488f-ae16-33a1e4b0673c
+  meta_entity:
+    - 501120ce-502c-4ed1-89d0-c61a6daaae78
+    - 7a30c7c1-a812-4b8a-8e41-100000000001
+  taxonomy_term:
+    - 7a30c7c1-a812-4b8a-8e41-300000000001
   user:
     - 822d66ba-0910-414e-9330-bd702632eb5d
     - 5064d97b-0f69-4ebc-af02-3c7bd6e29691

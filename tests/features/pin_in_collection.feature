@@ -5,17 +5,17 @@ Feature: Pinning entities inside collections
   So that important entities has more visibility
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title         | creation date | modification date |
       | Orange Wrench | 2018-10-15    | 2019-10-15T23:03  |
       | Green Wrench  | 2018-11-05    | 2019-11-05T23:03  |
-    And solution content:
+    And the following "solution" content:
       | title            | collection    | pinned in     | creation date | shared on     |
       | Wrench catalogue | Orange Wrench | Orange Wrench | 2017-10-12    |               |
-    And discussion content:
+    And the following "discussion" content:
       | title                        | collection    | pinned | created    | changed    |
       | What kind of wrench is this? | Orange Wrench | no     | 2017-11-20 | 2018-11-20 |
-    And users:
+    And the following users:
       | Username       | E-mail                     |
       | Rozanne Minett | rozanne.minett@example.com |
       | Tyron Ingram   | tyron.ingram@example.com   |
@@ -29,7 +29,7 @@ Feature: Pinning entities inside collections
       | Green Wrench  | Tyron Ingram   |             |
 
   Scenario Outline: Facilitators can pin and unpin community content inside their collections.
-    And <content type> content:
+    And the following "<content type>" content:
       | title              | collection    | pinned |
       | Very important     | Orange Wrench | yes    |
       | Useful information | Orange Wrench | no     |
@@ -144,7 +144,7 @@ Feature: Pinning entities inside collections
 
   @javascript
   Scenario Outline: Pinned content tiles should show a visual cue only in their collection homepage.
-    Given <content type> content:
+    Given the following "<content type>" content:
       | title         | headline      | collection    | pinned | shared on    |
       | Lantern FAQs  | Lantern FAQs  | Orange Wrench | yes    | Green Wrench |
       | Lantern terms | Lantern terms | Orange Wrench | no     |              |
