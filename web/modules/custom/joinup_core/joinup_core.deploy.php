@@ -8,11 +8,35 @@
 declare(strict_types=1);
 
 use Drupal\Core\Database\Query\Merge;
+use EasyRdf\Graph;
+
+/**
+ * Refresh the spdx_licence vocabulary from resources/vocab/licenses.rdf.
+ */
+function joinup_core_deploy_201300(): string {
+  $file = DRUPAL_ROOT . '/../resources/vocab/licenses.rdf';
+  if (!is_readable($file)) {
+    throw new \RuntimeException("SPDX RDF source not readable: $file");
+  }
+
+  $graph = new Graph();
+  $graph->parseFile($file);
+
+  $stats = \Drupal::service('joinup_taxonomy.vocabulary_updater')
+    ->registerGraph('http://spdx_licence', $graph)
+    ->registerVocabulary('spdx_licence', 'http://spdx.org/rdf/terms#License', 'http://spdx_licence')
+    ->update();
+
+  return sprintf(
+    'spdx_licence refreshed: inserted=%d, updated=%d, deleted=%d.',
+    $stats['spdx_licence']['inserted'], $stats['spdx_licence']['updated'], $stats['spdx_licence']['deleted'],
+  );
+}
 
 /**
  * Fix 16 release nodes that have bare /release path aliases with no version.
  */
-function joinup_core_deploy_201302(): string {
+function joinup_core_deploy_201301(): string {
   $fixes = [
     721271 => [
       'alias' => '/collection/are3na/solution/re3gistry/release/1.3',
@@ -181,7 +205,7 @@ function joinup_core_deploy_201302(): string {
 /**
  * Fix aliases mangled by pathauto and delete stale redirect records.
  */
-function joinup_core_deploy_201303(): string {
+function joinup_core_deploy_201302(): string {
   $database = \Drupal::database();
 
   // Reset aliases.
