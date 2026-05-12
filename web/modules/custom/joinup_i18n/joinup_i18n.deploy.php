@@ -8,6 +8,9 @@
 declare(strict_types=1);
 
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
+use Drupal\eu_oss_catalogue\Model\GitUri;
+use Drupal\eu_oss_catalogue\Model\Project;
+use Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Parser\PublicCodeYml;
 use Drupal\joinup_i18n\Hook\JoinupI18nHooks;
 use Drupal\tmgmt\JobInterface;
 use Drupal\tmgmt_ec_etranslation\Plugin\tmgmt\Translator\ETranslationTranslator;
@@ -106,6 +109,7 @@ function joinup_i18n_deploy_201302(array &$sandbox): string {
   $storage = \Drupal::entityTypeManager()->getStorage('node');
   $db = \Drupal::database();
   $parser = \Drupal::service('plugin.manager.eu_oss_catalogue.parser')->createInstance('publiccode_yml');
+  assert($parser instanceof PublicCodeYml);
 
   if (!isset($sandbox['nids'])) {
     $sandbox['nids'] = array_values($storage->getQuery()
@@ -136,11 +140,25 @@ function joinup_i18n_deploy_201302(array &$sandbox): string {
   $nids = array_splice($sandbox['nids'], 0, 20);
   $sandbox['progress'] += count($nids);
 
-  foreach ($storage->loadMultiple($nids) as $nid => $ossSolution) {
-    assert($ossSolution instanceof OssSolutionInterface);
+  foreach ($storage->loadMultiple($nids) as $nid => $solution) {
+    assert($solution instanceof OssSolutionInterface);
 
-    $relevantLang = $parser->getRelevantLangCode($ossSolution);
-    $defaultLang = $ossSolution->language()->getId();
+    $url = $solution->getUrl();
+    if (!$uri = GitUri::fromUriString($url)) {
+      // Avoid malformed solutions. See ISAICP-11318.
+      continue;
+    }
+
+    $project = new Project(
+      namespace: $uri->namespace,
+      name: $uri->name,
+      url: $url,
+      platform: $solution->get('oss_hosting_platform')->plugin_id,
+      defaultBranch: $solution->get('oss_default_branch')->value,
+    );
+
+    $relevantLang = $parser->getRelevantLangCode($project);
+    $defaultLang = $solution->language()->getId();
     if ($relevantLang === $defaultLang) {
       continue;
     }
@@ -165,7 +183,7 @@ function joinup_i18n_deploy_201302(array &$sandbox): string {
       ]);
     }
 
-    tmgmt_content_create_continuous_job_items($ossSolution);
+    tmgmt_content_create_continuous_job_items($solution);
   }
 
   $sandbox['#finished'] = empty($sandbox['nids']) ? 1 : ($sandbox['progress'] / $sandbox['total']);
