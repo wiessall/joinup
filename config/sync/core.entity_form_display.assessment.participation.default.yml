@@ -30,6 +30,8 @@ content:
       match_operator: CONTAINS
       match_limit: 10
       placeholder: 'Select or start typing...'
+      parent_selection: '1'
+      show_entity_id: 0
     third_party_settings:
       entity_form_field_label:
         new_label: 'Public and/or private stakeholders affected'
@@ -44,6 +46,8 @@ content:
       match_operator: CONTAINS
       match_limit: 100
       placeholder: 'Select or start typing...'
+      show_entity_id: 0
+      parent_selection: 1
     third_party_settings:
       entity_form_field_label:
         new_label: ''
