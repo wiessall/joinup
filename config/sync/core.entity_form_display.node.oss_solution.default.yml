@@ -210,11 +210,11 @@ content:
       placeholder_title: ''
     third_party_settings: {  }
   oss_features:
-    type: string_textfield
+    type: string_textarea
     weight: 50
     region: content
     settings:
-      size: 60
+      rows: 5
       placeholder: ''
     third_party_settings: {  }
   oss_git_description:
