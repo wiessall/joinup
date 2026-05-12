@@ -1,0 +1,537 @@
+diff --git a/css/builder.css b/css/builder.css
+index e1f60b6ff0b8ddab0e899a6816a6613ccd25eff3..9ce7cdf0b3e787d3feeef29d9f96d9bae5e4ebbd 100644
+--- a/css/builder.css
++++ b/css/builder.css
+@@ -34,6 +34,7 @@
+ }
+ .js-lpb-component {
+   position: relative;
++  user-select: none;
+   transition: all 0.15s linear;
+   outline: 1px solid blue;
+   outline-color: transparent;
+@@ -45,7 +46,7 @@
+ .js-lpb-component.is-navigating {
+   outline: 3px solid blue;
+ }
+-.js-lpb-component {
++.js-lpb-component--draggable {
+   cursor: grab;
+ }
+ .js-lpb-component:hover .js-lpb-region,
+diff --git a/js/builder.js b/js/builder.js
+index 440e9fe5b9a9d74ba1667658bb3fbd5374df913c..9d35ddb8b32d0eb1696ec3eebcafda908b26b905 100644
+--- a/js/builder.js
++++ b/js/builder.js
+@@ -426,6 +426,10 @@
+   }
+ 
+   function initDragAndDrop($element, settings) {
++    const layoutChangeAllowed = settings.layout_change_access ?? true;
++    if (!layoutChangeAllowed) {
++      return null;
++    }
+     const containers = once(
+       'is-dragula-enabled',
+       '.js-lpb-component-list, .js-lpb-region',
+@@ -601,7 +605,9 @@
+       once('is-dragula-enabled', '.js-lpb-region').forEach((c) => {
+         const builderElement = c.closest('[data-lpb-id]');
+         const drake = $(builderElement).data('drake');
+-        drake.containers.push(c);
++        if (drake) {
++          drake.containers.push(c);
++        }
+       });
+ 
+       // If UI elements have been attached to the DOM, we need to attach behaviors.
+diff --git a/layout_paragraphs.module b/layout_paragraphs.module
+index 0d2ae300f10667dc83e4146cbca0929537f79b99..9c9579448a3d312138108348fe11682d37a6a0f3 100644
+--- a/layout_paragraphs.module
++++ b/layout_paragraphs.module
+@@ -72,6 +72,7 @@ function layout_paragraphs_theme() {
+         'edit_access' => FALSE,
+         'duplicate_access' => FALSE,
+         'delete_access' => FALSE,
++        'move_access' => FALSE,
+       ],
+     ],
+     'layout_paragraphs_insert_component_btn' => [
+@@ -163,6 +164,7 @@ function layout_paragraphs_preprocess_layout_paragraphs_builder_controls(&$varia
+         'aria-describedby' => $id . '--tip',
+       ],
+       '#weight' => 10,
++      '#access' => $variables['move_access'],
+     ],
+     'nav_tooltip' => [
+       '#type' => 'html_tag',
+@@ -175,6 +177,7 @@ function layout_paragraphs_preprocess_layout_paragraphs_builder_controls(&$varia
+       ],
+       '#value' => t('Drag or click and use arrow keys to move. <br />Press Return or Tab when finished.'),
+       '#weight' => 20,
++      '#access' => $variables['move_access'],
+     ],
+     'label' => [
+       '#type' => 'html_tag',
+@@ -194,6 +197,7 @@ function layout_paragraphs_preprocess_layout_paragraphs_builder_controls(&$varia
+         'title' => t('Move up'),
+       ],
+       '#weight' => 40,
++      '#access' => $variables['move_access'],
+     ],
+     'move_down' => [
+       '#type' => 'link',
+@@ -204,6 +208,7 @@ function layout_paragraphs_preprocess_layout_paragraphs_builder_controls(&$varia
+         'title' => t('Move down'),
+       ],
+       '#weight' => 50,
++      '#access' => $variables['move_access'],
+     ],
+     'edit_link' => [
+       '#type' => 'link',
+diff --git a/src/Access/LayoutParagraphsBuilderAccess.php b/src/Access/LayoutParagraphsBuilderAccess.php
+index 4d64a92b854326bd954b63669347097ffdd7d000..e535bfc006c8231f881fe41dc155565e005d17e8 100644
+--- a/src/Access/LayoutParagraphsBuilderAccess.php
++++ b/src/Access/LayoutParagraphsBuilderAccess.php
+@@ -79,6 +79,10 @@ class LayoutParagraphsBuilderAccess implements AccessInterface {
+       $access = $access->andIf($access_handler->createAccess($paragraph_type->id(), $account, [], TRUE));
+     }
+ 
++    if ($operation === 'reorder') {
++      $access = $access->andIf($layout_paragraphs_layout->layoutChangeAccess());
++    }
++
+     return $access;
+   }
+ 
+diff --git a/src/Element/LayoutParagraphsBuilder.php b/src/Element/LayoutParagraphsBuilder.php
+index f18841a8287491b879ef4047b4a31eef909e009e..99768205c218f65e957267c8ae6d986a90b10490 100644
+--- a/src/Element/LayoutParagraphsBuilder.php
++++ b/src/Element/LayoutParagraphsBuilder.php
+@@ -65,13 +65,6 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
+    */
+   protected $entityTypeBundleInfo;
+ 
+-  /**
+-   * Indicates whether the element is in translation mode.
+-   *
+-   * @var bool
+-   */
+-  protected $isTranslating;
+-
+   /**
+    * The layout paragraphs layout object.
+    *
+@@ -144,7 +137,6 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
+    */
+   public function preRender($element) {
+     $this->layoutParagraphsLayout = $this->tempstore->get($element['#layout_paragraphs_layout']);
+-    $this->isTranslating = $element['#is_translating'] ?? FALSE;
+     $element_uuid = $element['#uuid'];
+     $preview_view_mode = $this->layoutParagraphsLayout->getSetting('preview_view_mode', 'default');
+ 
+@@ -197,7 +189,7 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
+       'data-lpb-id' => $this->layoutParagraphsLayout->id(),
+     ] + ($element['#attributes'] ?? []);
+     $element['#attached']['library'] = ['layout_paragraphs/builder'];
+-    $element['#attached']['drupalSettings']['lpBuilder'][$this->layoutParagraphsLayout->id()] = $this->layoutParagraphsLayout->getSettings();
++    $element['#attached']['drupalSettings']['lpBuilder'][$this->layoutParagraphsLayout->id()] = $this->layoutParagraphsLayout->getSettings() + ['layout_change_access' => $this->layoutParagraphsLayout->layoutChangeAccess(FALSE)];
+     $element['#is_empty'] = $this->layoutParagraphsLayout->isEmpty();
+     $element['#empty_message'] = $this->layoutParagraphsLayout->getSetting('empty_message', $this->t('Start adding content.'));
+     $element['#root_components'] = [];
+@@ -251,6 +243,11 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
+     $build['#attributes']['data-type'] = $entity->bundle();
+     $build['#attributes']['data-lpb-ui-id'] = $entity->uuid() ?? 'new-' . $entity->bundle();
+     $build['#attributes']['class'][] = 'js-lpb-component';
++    // Only allow dragging if layout change is allowed.
++    $layoutChangeIsAllowed = $this->layoutParagraphsLayout->layoutChangeAccess(FALSE);
++    if ($layoutChangeIsAllowed) {
++      $build['#attributes']['class'][] = 'js-lpb-component--draggable';
++    }
+     $build['#layout_paragraphs_component'] = TRUE;
+     if ($entity->isNew()) {
+       $build['#attributes']['class'][] = 'is_new';
+@@ -281,8 +278,14 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
+       '#edit_access' => $this->editAccess($entity),
+       '#duplicate_access' => $this->duplicateAccess($entity) && $this->checkCardinality(),
+       '#delete_access' => $this->deleteAccess($entity),
++      '#move_access' => $layoutChangeIsAllowed,
+     ];
+     $build['#attached']['drupalSettings']['lpBuilder']['uiElements'][$entity->uuid()] = [];
++    if ($component->isLayout()) {
++      foreach (['#edit_access', '#duplicate_access', '#delete_access'] as $k) {
++        $controls[$k] = $controls[$k] && $layoutChangeIsAllowed;
++      }
++    }
+     $this->addJsUiElement($build, $this->doRender($controls), 'controls', 'prepend');
+ 
+     if ($this->createAccess() && $this->checkCardinality()) {
+@@ -422,6 +425,7 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
+         ]),
+       ],
+       '#url' => Url::fromRoute('layout_paragraphs.builder.choose_component', $route_params, ['query' => $query_params]),
++      '#access' => $this->layoutParagraphsLayout->layoutChangeAccess(),
+     ];
+   }
+ 
+@@ -452,6 +456,7 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
+         'dialogClass' => 'lpb-dialog',
+       ],
+       '#url' => Url::fromRoute('layout_paragraphs.builder.choose_component', $route_params, ['query' => $query_params]),
++      '#access' => $this->layoutParagraphsLayout->layoutChangeAccess(),
+     ];
+   }
+ 
+@@ -472,14 +477,19 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
+    *   The translation warning.
+    */
+   protected function translationWarning() {
+-    if ($this->isTranslating()) {
+-      if ($this->supportsAsymmetricTranslations()) {
+-        return $this->t('You are in translation mode. Changes will only affect the current language.');
+-      }
+-      else {
+-        return $this->t('You are in translation mode. You cannot add or remove items while translating. Reordering items will affect all languages.');
+-      }
++    if (!$this->isTranslating()) {
++      return NULL;
++    }
++
++    if ($this->supportsAsymmetricTranslations()) {
++      return $this->t('You are in translation mode. Changes will only affect the current language.');
++    }
++
++    if ($this->layoutParagraphsLayout->layoutChangeAccess(FALSE)) {
++      return $this->t('You are in translation mode. You cannot add or remove items while translating. Reordering items will affect all languages.');
+     }
++
++    return $this->t('You are in translation mode. You cannot add, remove or reorder items while translating.');
+   }
+ 
+   /**
+@@ -564,7 +574,7 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
+    *   TRUE if translating.
+    */
+   protected function isTranslating() {
+-    return $this->isTranslating;
++    return $this->layoutParagraphsLayout->isTranslating();
+   }
+ 
+   /**
+@@ -578,7 +588,7 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
+    *   True if asymmetric translation is supported.
+    */
+   protected function supportsAsymmetricTranslations() {
+-    return $this->layoutParagraphsLayout->getParagraphsReferenceField()->getFieldDefinition()->isTranslatable();
++    return $this->layoutParagraphsLayout->supportsAsymmetricTranslations();
+   }
+ 
+   /**
+@@ -598,7 +608,7 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
+    * @param string $method
+    *   The javascript method to use to attach $element to its container.
+    */
+-  public function addJsUiElement(array &$build, Markup $element, string $key, string $method = 'append') {
++  public function addJsUiElement(array &$build, Markup|string $element, string $key, string $method = 'append') {
+     $id = $build['#attributes']['data-lpb-ui-id'];
+     $build['#attributes']['data-has-js-ui-element'] = TRUE;
+     $build['#attached']['drupalSettings']['lpBuilder']['uiElements'][$id][$key] = [
+@@ -613,7 +623,7 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
+    * @param array $render_array
+    *   The render array to process.
+    *
+-   * @return \Drupal\Core\Render\Markup
++   * @return \Drupal\Core\Render\Markup|string
+    *   The markup object.
+    */
+   public function doRender(array $render_array) {
+diff --git a/src/LayoutParagraphsLayout.php b/src/LayoutParagraphsLayout.php
+index fdadf197e1c388d95d11eae697177c4ec7de5371..28163a4b809b4eeb00e66b5327b1aae1cdeebd63 100644
+--- a/src/LayoutParagraphsLayout.php
++++ b/src/LayoutParagraphsLayout.php
+@@ -2,10 +2,15 @@
+ 
+ namespace Drupal\layout_paragraphs;
+ 
++use Drupal\Core\Access\AccessResult;
++use Drupal\Core\Access\AccessResultAllowed;
++use Drupal\Core\Access\AccessResultForbidden;
++use Drupal\Core\Cache\CacheableDependencyInterface;
+ use Drupal\Core\Entity\EntityInterface;
+ use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
+ use Drupal\Core\DependencyInjection\DependencySerializationTrait;
+ use Drupal\Core\Config\Entity\ThirdPartySettingsInterface;
++use Drupal\language\Entity\ContentLanguageSettings;
+ use Drupal\paragraphs\ParagraphInterface;
+ 
+ /**
+@@ -66,6 +71,96 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
+    */
+   protected $entity;
+ 
++  /**
++   * Whether host entity is a translation.
++   *
++   * @var bool
++   */
++  protected $isTranslating = FALSE;
++
++  /**
++   * If host entity is a translation.
++   *
++   * @return bool
++   *   If host entity is a translation.
++   */
++  public function isTranslating(): bool {
++    return $this->isTranslating;
++  }
++
++  /**
++   * Setter for translation mode.
++   *
++   * @param bool $translating
++   *   Whether host entity is a translation.
++   */
++  public function setTranslating(bool $translating): void {
++    $this->isTranslating = $translating;
++  }
++
++  /**
++   * Whether user have access to change the layout of the paragraphs.
++   *
++   * In general, layout can be changed. But when users create or edit a
++   * translation, we might want to prevent layout to be changed.
++   * 1. Default translation -> access allowed.
++   * 2. Translation, paragraphs field is translatable -> access allowed.
++   * 3. Translation, paragraphs field untranslatable, untranslatable fields of
++   *    host entity aren't hidden -> access allowed.
++   * 4. Translation, paragraphs field untranslatable, untranslatable fields of
++   *    host entity are hidden -> access denied.
++   * For being compatible with both front-end rendering and also with access
++   * checker services used in routes, this method returns explicit allowed or
++   * forbidden result.
++   *
++   * @param bool $returnObject
++   *   Set to TRUE to return an access result object, FALSE to signal a boolean
++   *   result whether access should be granted. Defaults to TRUE.
++   *
++   * @return \Drupal\Core\Access\AccessResultAllowed|\Drupal\Core\Access\AccessResultForbidden|bool
++   *   Allowed or forbidden access result object, or TRUE or FALSE respectively,
++   *   if $returnObject was FALSE;
++   */
++  public function layoutChangeAccess(bool $returnObject = TRUE): AccessResultAllowed|AccessResultForbidden|bool {
++    $host = $this->getEntity();
++    $contentLanguageSettings = class_exists(ContentLanguageSettings::class)
++      ? ContentLanguageSettings::loadByEntityTypeBundle($host->getEntityTypeId(), $host->bundle())
++      : NULL;
++    $hostHidesUntranslatableFields = $contentLanguageSettings?->getThirdPartySettings('content_translation')['bundle_settings']['untranslatable_fields_hide'] ?? FALSE;
++
++    $accessAllowed = !$this->isTranslating() ||
++      $this->supportsAsymmetricTranslations() ||
++      !$hostHidesUntranslatableFields;
++
++    $accessResult = $accessAllowed ? AccessResult::allowed() : AccessResult::forbidden();
++    if ($contentLanguageSettings instanceof CacheableDependencyInterface) {
++      $accessResult->addCacheableDependency($contentLanguageSettings);
++    }
++    // Method ::supportsAsymmetricTranslations uses the paragraph field
++    // definition. So if the field definition has cacheability metadata we add
++    // it to the access result object.
++    $paragraphsFieldDefinition = $this->getParagraphsReferenceField()->getFieldDefinition();
++    if ($paragraphsFieldDefinition instanceof CacheableDependencyInterface) {
++      $accessResult->addCacheableDependency($paragraphsFieldDefinition);
++    }
++
++    return $returnObject ? $accessResult : $accessResult->isAllowed();
++  }
++
++  /**
++   * Whether or not to support asymmetric translations.
++   *
++   * @see https://www.drupal.org/project/paragraphs/issues/2461695
++   * @see https://www.drupal.org/project/paragraphs/issues/2904705
++   * @see https://www.drupal.org/project/paragraphs_asymmetric_translation_widgets
++   *
++   * @return bool
++   *   True if asymmetric translation is supported.
++   */
++  public function supportsAsymmetricTranslations() {
++    return $this->getParagraphsReferenceField()->getFieldDefinition()->isTranslatable();
++  }
++
+   /**
+    * Class constructor.
+    *
+diff --git a/src/Plugin/Field/FieldWidget/LayoutParagraphsWidget.php b/src/Plugin/Field/FieldWidget/LayoutParagraphsWidget.php
+index 52b04f2b27ee2d91278a55b3caab3a0d8f27e234..1ce5c90c3144619ddd64f227470fd15587e13b92 100644
+--- a/src/Plugin/Field/FieldWidget/LayoutParagraphsWidget.php
++++ b/src/Plugin/Field/FieldWidget/LayoutParagraphsWidget.php
+@@ -190,7 +190,6 @@ class LayoutParagraphsWidget extends WidgetBase implements ContainerFactoryPlugi
+     // Paragraphs Layout instance, save it to tempstore, and store the key.
+     if (empty($layout_paragraphs_storage_key)) {
+       $this->layoutParagraphsLayout = new LayoutParagraphsLayout($items, $this->getSettings());
+-      $this->tempstore->set($this->layoutParagraphsLayout);
+       $layout_paragraphs_storage_key = $this->tempstore->getStorageKey($this->layoutParagraphsLayout);
+     }
+     // On subsequent form renders, this loads the correct Layout Paragraphs
+@@ -216,6 +215,8 @@ class LayoutParagraphsWidget extends WidgetBase implements ContainerFactoryPlugi
+     if ($source = $form_state->get(['content_translation', 'source'])) {
+       $element['layout_paragraphs_builder']['#source_langcode'] = $source->getId();
+     }
++    $this->layoutParagraphsLayout->setTranslating($this->isTranslating($form_state));
++    $this->tempstore->set($this->layoutParagraphsLayout);
+     return $element;
+   }
+ 
+diff --git a/tests/src/FunctionalJavascript/BuilderTestBase.php b/tests/src/FunctionalJavascript/BuilderTestBase.php
+index 68f7487c6e9f6b5ffcf5f4511b234b344ab67a97..d491190d8613742a31358202dfc308ca602c1a9a 100644
+--- a/tests/src/FunctionalJavascript/BuilderTestBase.php
++++ b/tests/src/FunctionalJavascript/BuilderTestBase.php
+@@ -80,7 +80,7 @@ abstract class BuilderTestBase extends WebDriverTestBase {
+         'layout_threecol_33_34_33',
+       ],
+     ], 'Save');
+-    $this->assertSession()->pageTextContains('Saved the section Paragraphs type.');
++    $this->assertTrue($this->assertSession()->waitForText('Saved the section Paragraphs type.'));
+     $this->addLayoutParagraphedContentType('page', 'field_content');
+     $this->drupalGet('admin/structure/paragraphs_type/section');
+     $this->drupalLogout();
+diff --git a/tests/src/FunctionalJavascript/ReorderFormElementsTest.php b/tests/src/FunctionalJavascript/ReorderFormElementsTest.php
+index 9f4f71457958910f1fd819a9fb3a6d7de068d01b..c001ac6a21c3c707cd9fce6d3e9de4ea175a14db 100644
+--- a/tests/src/FunctionalJavascript/ReorderFormElementsTest.php
++++ b/tests/src/FunctionalJavascript/ReorderFormElementsTest.php
+@@ -28,7 +28,9 @@ class ReorderFormElementsTest extends BuilderTestBase {
+     $page = $this->getSession()->getPage();
+     $published_field = $page->find('css', 'tr#status a.tabledrag-handle');
+     $published_field->dragTo($page->find('css', 'tr#layout-paragraphs-fields td'));
++    $this->assertSession()->assertWaitOnAjaxRequest();
+     $this->submitForm([], 'Save');
++    $this->assertSession()->statusMessageContainsAfterWait('Your settings have been saved.');
+     $this->drupalLogout();
+ 
+     // Test correct order when adding a section.
+diff --git a/tests/src/FunctionalJavascript/TranslationTest.php b/tests/src/FunctionalJavascript/TranslationTest.php
+index 1fb6b5919d927c348913dcfd111056523b0e55bd..35a779253c237bcc432563fa18d068b76b118247 100644
+--- a/tests/src/FunctionalJavascript/TranslationTest.php
++++ b/tests/src/FunctionalJavascript/TranslationTest.php
+@@ -5,8 +5,10 @@ declare(strict_types=1);
+ namespace Drupal\Tests\layout_paragraphs\FunctionalJavascript;
+ 
+ use Behat\Mink\Exception\ExpectationException;
++use Drupal\content_translation\ContentTranslationManagerInterface;
+ use Drupal\language\Entity\ConfigurableLanguage;
+ use Drupal\language\Entity\ContentLanguageSettings;
++use Drupal\node\NodeInterface;
+ 
+ /**
+  * Tests various translation contexts for Layout Paragraphs.
+@@ -36,19 +38,19 @@ class TranslationTest extends BuilderTestBase {
+    * Tests symmetric translations.
+    */
+   public function testSymmetricTranslations() {
+-    $this->testContentTranslations(FALSE);
++    $this->testContentTranslations(FALSE, FALSE);
+   }
+ 
+   /**
+    * Tests asymmetric translations.
+    */
+   public function testAsymmetricTranslations() {
+-    $this->testContentTranslations(TRUE);
++    $this->testContentTranslations(TRUE, FALSE);
+ 
+-    /** @var Drupal\node\Entity\Node $node */
+     $node = \Drupal::entityTypeManager()
+       ->getStorage('node')
+       ->load(1);
++    $this->assertInstanceOf(NodeInterface::class, $node);
+ 
+     $paragraphs = $node->field_content->referencedEntities();
+     $src_paragraph_ids = array_map(function ($paragraph) {
+@@ -81,11 +83,18 @@ class TranslationTest extends BuilderTestBase {
+     }
+   }
+ 
++  /**
++   * Tests that reordering is impossible when untranslatable fields are hidden.
++   */
++  public function testSymmetricTranslationsWithoutLayoutChange(): void {
++    $this->testContentTranslations(FALSE, TRUE);
++  }
++
+   /**
+    * Tests switching the host entity language.
+    */
+   public function testSwitchLanguage() {
+-    $this->enableTranslations();
++    $this->enableTranslations(FALSE, FALSE);
+     $this->createTestContent();
+     $this->drupalGet('node/1/edit');
+     $this->submitForm([
+@@ -116,16 +125,25 @@ class TranslationTest extends BuilderTestBase {
+    *
+    * @param bool $asymmetric
+    *   Whether to support asymmetric translations.
++   * @param bool $host_hide_non_translatable
++   *   If non-translatable fields must be configured to be hidden for the host
++   *   entity.
+    */
+-  protected function enableTranslations($asymmetric = FALSE) {
++  protected function enableTranslations(bool $asymmetric, bool $host_hide_non_translatable): void {
+     // Add a second language.
+     ConfigurableLanguage::create(['id' => 'de'])->save();
+ 
+     // Configure content translation.
+-    \Drupal::service('content_translation.manager')->setEnabled('node', 'page', TRUE);
++    $content_translation_manager = \Drupal::service(ContentTranslationManagerInterface::class);
++    $content_translation_manager->setEnabled('node', 'page', TRUE);
+     ContentLanguageSettings::loadByEntityTypeBundle('node', 'page')
+       ->setLanguageAlterable(TRUE)
+       ->save();
++    if ($host_hide_non_translatable) {
++      $content_translation_manager->setBundleTranslationSettings('node', 'page', [
++        'untranslatable_fields_hide' => TRUE,
++      ]);
++    }
+     if ($asymmetric) {
+       // Reference field IS translatable for asymmetrical translations.
+       \Drupal::service('entity_field.manager')->getFieldDefinitions('node', 'page')['field_content']->setTranslatable(TRUE)->save();
+@@ -173,9 +191,8 @@ class TranslationTest extends BuilderTestBase {
+   /**
+    * Tests symmetric or asymmetric translations.
+    */
+-  protected function testContentTranslations($asymmetric = FALSE) {
+-
+-    $this->enableTranslations($asymmetric);
++  protected function testContentTranslations(bool $asymmetric, bool $host_hide_non_translatable): void {
++    $this->enableTranslations($asymmetric, $host_hide_non_translatable);
+     $this->createTestContent();
+ 
+     // Translate the node into German.
+@@ -190,11 +207,25 @@ class TranslationTest extends BuilderTestBase {
+       $this->assertSession()->pageTextContains('You are in translation mode. Changes will only affect the current language.');
+       $this->assertSession()->elementExists('css', '.lpb-duplicate');
+       $this->assertSession()->elementExists('css', '.lpb-delete');
++      $this->assertSession()->elementExists('css', '.lpb-up');
++      $this->assertSession()->elementExists('css', '.lpb-down');
++      $this->assertSession()->elementExists('css', '.lpb-drag');
+     }
+-    else {
++    elseif (!$host_hide_non_translatable) {
+       $this->assertSession()->pageTextContains('You are in translation mode. You cannot add or remove items while translating. Reordering items will affect all languages.');
+       $this->assertSession()->elementNotExists('css', '.lpb-duplicate');
+       $this->assertSession()->elementNotExists('css', '.lpb-delete');
++      $this->assertSession()->elementExists('css', '.lpb-up');
++      $this->assertSession()->elementExists('css', '.lpb-down');
++      $this->assertSession()->elementExists('css', '.lpb-drag');
++    }
++    else {
++      $this->assertSession()->pageTextContains('You are in translation mode. You cannot add, remove or reorder items while translating.');
++      $this->assertSession()->elementNotExists('css', '.lpb-duplicate');
++      $this->assertSession()->elementNotExists('css', '.lpb-delete');
++      $this->assertSession()->elementNotExists('css', '.lpb-up');
++      $this->assertSession()->elementNotExists('css', '.lpb-down');
++      $this->assertSession()->elementNotExists('css', '.lpb-drag');
+     }
+ 
+     // Change the text of the German-language components and save the node.
