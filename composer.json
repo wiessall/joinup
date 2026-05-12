@@ -342,6 +342,9 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "drupal/babel": {
+                "OG menu link translation @see https://drupal.org/i/3585681 and https://drupal.org/i/3587828": "resources/patch/php/drupal/babel/3587828-mr88-commit5f52606c.diff"
+            },
             "drupal/better_exposed_filters": {
                 "Single on/off checkbox option not working as expected @see https://www.drupal.org/i/3569639": "resources/patch/php/drupal/better_exposed_filters/3569639-mr230.diff"
             },
