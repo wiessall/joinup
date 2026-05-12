@@ -2,17 +2,17 @@
 Feature: Block paragraph tests.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title            |
       | Block collection |
 
   @javascript
   Scenario: Recommended solutions
-    Given solution content:
+    Given the following "solution" content:
       | title        | collection       |
       | Early Omega  | Block collection |
       | Snake Timely | Block collection |
-    And custom_page content:
+    And the following "custom_page" content:
       | title                 | collection       | abstract             |
       | Recommended solutions | Block collection | Recommended abstract |
     And I append "block" to "field_paragraphs_body" field in "node" entity with following "Recommended solutions" title:
@@ -31,7 +31,7 @@ Feature: Block paragraph tests.
     But I should not see the "Snake Timely" tile
 
   Scenario: Oss catalogue sources
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title                 | collection       |
       | Oss catalogue sources | Block collection |
     And I append "block" to "field_paragraphs_body" field in "node" entity with following "Oss catalogue sources" title:

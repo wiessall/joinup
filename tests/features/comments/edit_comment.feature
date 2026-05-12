@@ -4,14 +4,14 @@ Feature: Edit a comment
   I should receive notifications when someone edits a comment.
 
   Scenario: Edit a comment.
-    Given collection content:
+    Given the following "collection" content:
       | title              | closed |
       | Structural pension | no     |
-    And users:
+    And the following users:
       | Username               | E-mail                             | Roles     | First name | Family name |
       | Sons of anarchy        | sonsofanarchy@example.com          |           | Sons       | Anarchy     |
       | Comment edit moderator | comment.edit.moderator@example.com | moderator | Steeve     | Roberts     |
-    And news content:
+    And the following "news" content:
       | title            | body                                                | collection         |
       | Paying with cash | How could this ever happen? Moral panic on its way! | Structural pension |
     And comments:

@@ -2,15 +2,15 @@
 Feature: Publication date works as expected on RDF entities
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                 | state     |
       | Collection to publish | draft     |
       | Published collection  | published |
-    Given solution content:
+    Given the following "solution" content:
       | title               | state     | collection           |
       | Solution to publish | draft     | Published collection |
       | Published solution  | published | Published collection |
-    And release content:
+    And the following "release" content:
       | title              | state | release number | release notes              | is version of      |
       | Release to publish | draft | 1.0.0          | Only works on flat ground. | Published solution |
 
@@ -41,7 +41,7 @@ Feature: Publication date works as expected on RDF entities
     Then the published_at field in "Published at test for solution" solution should not be empty
 
   Scenario: Publication date works as expected on distributions
-    Given licence content:
+    Given the following "licence" content:
       | title   | description | deprecated |
       | Licence | Description | no         |
     When I am logged in as a "facilitator" of the "Published solution" solution

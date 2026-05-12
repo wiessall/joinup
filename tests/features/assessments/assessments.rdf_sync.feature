@@ -2,14 +2,14 @@
 Feature: RDF Sync integration for assessments.
 
   Scenario: Test that an entire chain of entities is exported properly.
-    Given solution content:
+    Given the following "solution" content:
       | title           | uri                                        |
       | Citizen's Forum | http://example.com/solution/citizens-forum |
     And "participation" assessment:
       | uri                                                            | name          | stakeholder_country | participant_type         |
       | http://data.europa.eu/s2k/f5379633-58af-49bd-ab71-22d8ab77d59a | Stakeholder 1 | Belgium             | local_public_sector_body |
     And "public_service" assessment:
-      | uri                                                            | name             | identifier | thematic_area                      |
+      | uri                                                            | name             | identifier | thematic_area           |
       | http://data.europa.eu/s2k/d4a2ecb3-c0c8-4a13-9dd0-8dddb23c40af | Public Service 1 | PS-001     | general_public_services |
     And "public_organisation" assessment:
       | uri                                                            | name                  | organisation_type          | country |
@@ -29,8 +29,8 @@ Feature: RDF Sync integration for assessments.
       | uri                                                            | id  | statement_type | interpretation | judgement | landing_page |
       | http://data.europa.eu/s2k/e35d0e39-31c5-4090-b16d-c35d79695361 | 999 | legal          | positive       | Compliant | text.pdf     |
     And "report" assessment:
-      | uri                                                            | name     | binding_requirement | results_in | provider              | document |
-      | http://data.europa.eu/s2k/8a7b9a07-5408-4cec-9e3b-dc9df4e783ae | Report 1 | 999                 | 999        | Public Organisation 1 | text.pdf |
+      | uri                                                            | name     | binding_requirement | results_in | provider              | documents |
+      | http://data.europa.eu/s2k/8a7b9a07-5408-4cec-9e3b-dc9df4e783ae | Report 1 | 999                 | 999        | Public Organisation 1 | text.pdf  |
     And I am logged in as a moderator
 
     When I visit the export page of the entity having "http://data.europa.eu/s2k/8a7b9a07-5408-4cec-9e3b-dc9df4e783ae" as RDF resource in "turtle" format
@@ -45,41 +45,41 @@ Feature: RDF Sync integration for assessments.
       | @prefix dcat: <http://www.w3.org/ns/dcat#> .                                                                                                                                                                     |
       | @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .                                                                                                                                                               |
       # Assessment Report is exported.
-      | <http://data.europa.eu/s2k/8a7b9a07-5408-4cec-9e3b-dc9df4e783ae>                                                                                                                                      |
+      | <http://data.europa.eu/s2k/8a7b9a07-5408-4cec-9e3b-dc9df4e783ae>                                                                                                                                                 |
       | a cav:Assessment ;                                                                                                                                                                                               |
-      | cav:assesses <http://data.europa.eu/s2k/a478fe88-c240-4769-8952-7d129f4ef449> ;                                                                                                           |
-      | cav:resultsIn <http://data.europa.eu/s2k/e35d0e39-31c5-4090-b16d-c35d79695361> ;                                                                                                             |
-      | cv:isProvidedBy <http://data.europa.eu/s2k/542770eb-a1e8-44fe-be6d-d48c33837018> .                                                                                                       |
-      | <http://data.europa.eu/s2k/542770eb-a1e8-44fe-be6d-d48c33837018>                                                                                                                         |
+      | cav:assesses <http://data.europa.eu/s2k/a478fe88-c240-4769-8952-7d129f4ef449> ;                                                                                                                                  |
+      | cav:resultsIn <http://data.europa.eu/s2k/e35d0e39-31c5-4090-b16d-c35d79695361> ;                                                                                                                                 |
+      | cv:isProvidedBy <http://data.europa.eu/s2k/542770eb-a1e8-44fe-be6d-d48c33837018> .                                                                                                                               |
+      | <http://data.europa.eu/s2k/542770eb-a1e8-44fe-be6d-d48c33837018>                                                                                                                                                 |
       # Public Organisations (providers) are exported.
       | a cv:PublicOrganisation ;                                                                                                                                                                                        |
       | skos:prefLabel "Public Organisation 1"@en ;                                                                                                                                                                      |
       | dc:spatial <http://example.com/taxonomy-term/spatial/dfa6aecc-1a7d-4bee-83b7-363b0db1ba66> ;                                                                                                                     |
       | org:classification <http://example.com/taxonomy-term/assess-provider-type/5870cf04-2d28-472d-9486-39b1e4670b25> .                                                                                                |
       # Binding Requirements are exported.
-      | <http://data.europa.eu/s2k/a478fe88-c240-4769-8952-7d129f4ef449>                                                                                                                          |
+      | <http://data.europa.eu/s2k/a478fe88-c240-4769-8952-7d129f4ef449>                                                                                                                                                 |
       | a iopa:BindingRequirement ;                                                                                                                                                                                      |
-      | iopa:affects <http://data.europa.eu/s2k/d4a2ecb3-c0c8-4a13-9dd0-8dddb23c40af> ;                                                                                                               |
+      | iopa:affects <http://data.europa.eu/s2k/d4a2ecb3-c0c8-4a13-9dd0-8dddb23c40af> ;                                                                                                                                  |
       | dc:relation <http://example.com/solution/citizens-forum> ;                                                                                                                                                       |
       | cav:valueDescription "BR Description 1"@en ;                                                                                                                                                                     |
-      | dc:isPartOf <http://data.europa.eu/s2k/048caacf-52d6-4215-a867-a485ff4baf47> ;                                                                                                                    |
-      | cv:hasParticipation <http://data.europa.eu/s2k/f5379633-58af-49bd-ab71-22d8ab77d59a> .                                                                                                         |
+      | dc:isPartOf <http://data.europa.eu/s2k/048caacf-52d6-4215-a867-a485ff4baf47> ;                                                                                                                                   |
+      | cv:hasParticipation <http://data.europa.eu/s2k/f5379633-58af-49bd-ab71-22d8ab77d59a> .                                                                                                                           |
       # Initiatives (Expressions) are exported.
-      | <http://data.europa.eu/s2k/048caacf-52d6-4215-a867-a485ff4baf47>                                                                                                                                  |
+      | <http://data.europa.eu/s2k/048caacf-52d6-4215-a867-a485ff4baf47>                                                                                                                                                 |
       | a <http://purl.org/vocab/frbr/core#Expression> ;                                                                                                                                                                 |
       | dc:description "Description 1" ;                                                                                                                                                                                 |
       | cav:documentedIn <https://example.com> ;                                                                                                                                                                         |
       | dc:title "Expression 1"@en .                                                                                                                                                                                     |
       # Affected services are exported.
-      | <http://data.europa.eu/s2k/d4a2ecb3-c0c8-4a13-9dd0-8dddb23c40af>                                                                                                                              |
+      | <http://data.europa.eu/s2k/d4a2ecb3-c0c8-4a13-9dd0-8dddb23c40af>                                                                                                                                                 |
       | a <http://purl.org/vocab/cpsv#PublicService> ;                                                                                                                                                                   |
       | dc:title "Public Service 1"@en ;                                                                                                                                                                                 |
       | cv:thematicArea <http://example.com/taxonomy-term/assess-public-service-area/34229fe8-14ac-40f8-9434-765e441eae3b> .                                                                                             |
       # Participation is exported.
-      | <http://data.europa.eu/s2k/f5379633-58af-49bd-ab71-22d8ab77d59a>                                                                                                                               |
+      | <http://data.europa.eu/s2k/f5379633-58af-49bd-ab71-22d8ab77d59a>                                                                                                                                                 |
       | a cv:Participation ;                                                                                                                                                                                             |
       | dc:type <http://example.com/taxonomy-term/assess-participant-type/b8c59bef-e579-440a-91f0-8c7983524336> .                                                                                                        |
-      | <http://data.europa.eu/s2k/e35d0e39-31c5-4090-b16d-c35d79695361>                                                                                                                             |
+      | <http://data.europa.eu/s2k/e35d0e39-31c5-4090-b16d-c35d79695361>                                                                                                                                                 |
       | a cav:Statement ;                                                                                                                                                                                                |
       | cav:judgement "Compliant" ;                                                                                                                                                                                      |
       | cav:type <http://example.com/taxonomy-term/assess-statement-type/219d8117-fd8e-4455-830d-9a0c6e81ab47> ;                                                                                                         |
@@ -104,7 +104,7 @@ Feature: RDF Sync integration for assessments.
       | <http://example.com/taxonomy-term/assess-public-service-area/34229fe8-14ac-40f8-9434-765e441eae3b>                                                                                                               |
       | skos:inScheme iopa:Code ;                                                                                                                                                                                        |
       | skos:prefLabel "General public services"@en ;                                                                                                                                                                    |
-      | skos:altLabel "general_public_services"^^xsd:string ;                                                                                                                                                              |
+      | skos:altLabel "general_public_services"^^xsd:string ;                                                                                                                                                            |
       | a skos:Concept .                                                                                                                                                                                                 |
       | <http://example.com/taxonomy-term/assess-participant-type/b8c59bef-e579-440a-91f0-8c7983524336>                                                                                                                  |
       | skos:inScheme iopa:Code ;                                                                                                                                                                                        |

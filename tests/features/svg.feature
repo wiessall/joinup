@@ -2,7 +2,7 @@
 Feature: Test SVG attachments.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title | content_creation         | group_moderation |
       | SVG   | facilitators and authors | yes              |
 

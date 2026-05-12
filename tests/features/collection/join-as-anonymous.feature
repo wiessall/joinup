@@ -5,12 +5,12 @@ Feature: Joining a collection as an anonymous user
   I need to be able to join a collection after authenticating
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title           | closed |
       | Reannual plants | no     |
       | Vul nuts        | yes    |
       | CoC collection  | yes    |
-    And users:
+    And the following users:
       | Username         |
       | Hepzibah Whitlow |
     And collection user membership:
@@ -22,7 +22,7 @@ Feature: Joining a collection as an anonymous user
     And CAS users:
       | Username           | E-mail         | Password |
       | Iodine Maccalariat | iodine@ankh.am | 10d1ne   |
-    And custom_page content:
+    And the following "custom_page" content:
       | title                 | collection     |
       | CoC of CoC collection | CoC collection |
     And the "Code of Conduct" setting of the "CoC collection" collection is set to "CoC of CoC collection" "custom page"
@@ -182,7 +182,7 @@ Feature: Joining a collection as an anonymous user
 
   @javascript
   Scenario: Logged out users can join a collection after logging in
-    Given users:
+    Given the following users:
       | Username       |
       | Daniel Trooper |
     And CAS users:
@@ -281,13 +281,13 @@ Feature: Joining a collection as an anonymous user
     And I should not see the success message "You cannot join Reannual plants because your account has been blocked."
 
   Scenario Outline: Anonymous users can browse community content under a group without triggering a server error.
-    Given collection content:
+    Given the following "collection" content:
       | title          |
       | Stellar plants |
-    And solution content:
+    And the following "solution" content:
       | title            | collection     |
       | Stellar solution | Stellar plants |
-    And <content type> content:
+    And the following "<content type>" content:
       | title                  | solution         |
       | Stellar <content type> | Stellar solution |
     And I am an anonymous user

@@ -6,12 +6,12 @@ Feature:
 
   @javascript
   Scenario: Present and search the solutions.
-    And collection content:
+    And the following "collection" content:
       | title   | state     |
       | Killjoy | published |
       | Sage    | published |
       | Phoenix | draft     |
-    Given solution content:
+    Given the following "solution" content:
       | title    | collection | state     |
       | Jordan 1 | Killjoy    | published |
       | Jordan 2 | Sage       | published |
@@ -19,7 +19,7 @@ Feature:
       | Jordan 4 | Killjoy    | published |
       | Jordan 5 | Phoenix    | draft     |
       | Jordan 6 | Killjoy    | published |
-    And glossary content:
+    And the following "glossary" content:
       | title      | synonyms | definition  | collection      |
       | amazing    | SMASS    | amazing def | NIFO collection |
       | It will be |          | survival    | Killjoy         |

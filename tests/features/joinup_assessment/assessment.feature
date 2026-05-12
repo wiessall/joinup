@@ -9,20 +9,20 @@ Feature: Assessments
     And I should not see the link "My assessments"
     And I should not see the link "Search assessments"
     And I should see the text "There are no published assessment reports yet. You can add one by filling this questionnaire"
-    And assessment_report content:
-      | title         | state     | created              | organization         | collection                         |
-      | Assessment 1  | published | 2020-01-01T00:00:00Z | default organization | Portal support                        |
-      | Assessment 2  | published | 2020-01-02T00:00:00Z | default organization | Portal support                        |
-      | Assessment 3  | published | 2020-01-03T00:00:00Z | default organization | Interoperability assessments space |
-      | Assessment 4  | published | 2020-01-04T00:00:00Z | default organization | Interoperability assessments space |
-      | Assessment 5  | published | 2020-01-05T00:00:00Z | default organization | Interoperability assessments space |
-      | Assessment 6  | published | 2020-01-06T00:00:00Z | default organization | Interoperability assessments space |
-      | Assessment 7  | published | 2020-01-07T00:00:00Z | default organization | Interoperability assessments space |
-      | Assessment 8  | published | 2020-01-08T00:00:00Z | default organization | Interoperability assessments space |
-      | Assessment 9  | published | 2020-01-09T00:00:00Z | default organization | Interoperability assessments space |
-      | Assessment 10 | published | 2020-01-10T00:00:00Z | default organization | Interoperability assessments space |
-      | Assessment 11 | published | 2020-01-11T00:00:00Z | default organization | Interoperability assessments space |
-      | Assessment 12 | published | 2020-01-12T00:00:00Z | default organization | Interoperability assessments space |
+    And the following "assessment_report" content:
+      | title         | created              | organization         | collection                         |
+      | Assessment 1  | 2020-01-01T00:00:00Z | default organization | Portal support                        |
+      | Assessment 2  | 2020-01-02T00:00:00Z | default organization | Portal support                        |
+      | Assessment 3  | 2020-01-03T00:00:00Z | default organization | Interoperability assessments space |
+      | Assessment 4  | 2020-01-04T00:00:00Z | default organization | Interoperability assessments space |
+      | Assessment 5  | 2020-01-05T00:00:00Z | default organization | Interoperability assessments space |
+      | Assessment 6  | 2020-01-06T00:00:00Z | default organization | Interoperability assessments space |
+      | Assessment 7  | 2020-01-07T00:00:00Z | default organization | Interoperability assessments space |
+      | Assessment 8  | 2020-01-08T00:00:00Z | default organization | Interoperability assessments space |
+      | Assessment 9  | 2020-01-09T00:00:00Z | default organization | Interoperability assessments space |
+      | Assessment 10 | 2020-01-10T00:00:00Z | default organization | Interoperability assessments space |
+      | Assessment 11 | 2020-01-11T00:00:00Z | default organization | Interoperability assessments space |
+      | Assessment 12 | 2020-01-12T00:00:00Z | default organization | Interoperability assessments space |
 
     When I go to the "Assessment reports" custom_page
     And I see h1 span element with title "Assessment reports"
@@ -45,7 +45,7 @@ Feature: Assessments
     # Hidden away in the second page.
     And I should not see the "Assessment 1" tile
 
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title              | state     | collection                         |
       | Custom assessments | published | Interoperability assessments space |
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Custom assessments" title:

@@ -4,7 +4,7 @@ Feature:
   I need to be able to use "Accordion" paragraph for content.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                 | topic |
       | Paragraphs collection | HR    |
 
@@ -61,7 +61,7 @@ Feature:
   Scenario: User should be able to click on "Complete drag & drop".
     # Regression test for ticket #ISAICP-8233.
 
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title             | collection            | abstract             |
       | Nested paragraphs | Paragraphs collection | Nested page abstract |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Nested paragraphs" title:

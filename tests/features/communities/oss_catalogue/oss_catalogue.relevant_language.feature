@@ -9,7 +9,7 @@ Feature:
     Given oss_solution multilingual content:
       | title    | status    | changed    | oss_source        | oss_release_date | langcode | default_translation | oss_features              | oss_long_description | oss_short_description | oss_screenshots | oss_git_url        | oss_publiccode_yml_content                                                                                                                 |
       | EN Title | published | 1690000000 | developers_italia | 2142-01-01       | en       | 1                   | EN Feature 1              | EN Long description  | EN Short description  |                 | https://github.com | !multiline!description:\n  en:\n    features:\n      0: EN Feature 1\n  it:\n    features:\n      0: IT Feature 1\n      1: IT Feature 2\n |
-      |          |           | 1690000000 |                   |                  | it       | 0                   | IT Feature 1,IT Feature 2 | ~~~                  | IT Short description  | IT file 1.jpg   | ~~~                | ~~~                                                                                                                                        |
+      | ~~~      | ~~~       | 1690000000 | ~~~               | ~~~              | it       | 0                   | IT Feature 1,IT Feature 2 | ~~~                  | IT Short description  | IT file 1.jpg   | ~~~                | ~~~                                                                                                                                        |
     When I visit the "EN Title" "oss_solution"
     Then I should see the heading "EN Title"
     And I should see the following lines of text:

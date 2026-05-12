@@ -10,6 +10,7 @@ use Behat\Hook\BeforeScenario;
 use Behat\Step\Given;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
+use Drupal\Driver\Entity\EntityStub;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\eif\EifInterface;
 use Drupal\joinup\Traits\EntityReferenceTrait;
@@ -37,49 +38,44 @@ class EifContext extends RawDrupalContext {
   #[BeforeScenario('@eif_community&&@api')]
   public function setupEifData(BeforeScenarioScope $scope): void {
     // Create an owner.
-    $owner = $this->nodeCreate((object) [
-      'type' => 'owner',
+    $owner = $this->nodeCreate(new EntityStub('node', 'owner', [
       'title' => 'Owner',
-    ]);
+    ]));
 
-    $contact = $this->nodeCreate((object) [
-      'type' => 'contact_information',
+    $contact = $this->nodeCreate(new EntityStub('node', 'contact_information', [
       'title' => 'Contact name',
       'email' => 'contact.email@example.com',
-    ]);
+    ]));
 
     // Random topic.
     $topic_label = $this->getRandomTerm('topic', TRUE)->label();
     // Create the NIFO sample collection.
-    $collection = $this->nodeCreate((object) [
-      'type' => 'collection',
+    $collection = $this->nodeCreate(new EntityStub('node', 'collection', [
       'uri' => 'http://nifo.collection',
       'title' => 'NIFO collection',
       'field_state' => 'published',
       'field_topic' => $topic_label,
-      'owner' => $owner->title,
-      'contact_information' => $contact->title,
-    ]);
+      'owner' => $owner->getValue('title'),
+      'contact' => $contact->getValue('title'),
+    ]));
 
     // Create the EIF Toolbox solution.
-    $solution = $this->nodeCreate((object) [
-      'type' => 'solution',
+    $solution = $this->nodeCreate(new EntityStub('node', 'solution', [
       'uri' => EifInterface::EIF_ID,
       'title' => 'EIF Toolbox',
-      'og_audience' => $collection->title,
+      'og_audience' => $collection->getValue('title'),
       'field_state' => 'published',
       'field_topic' => $topic_label,
-      'owner' => $owner->title,
-      'contact_information' => $contact->title,
-    ]);
+      'owner' => $owner->getValue('title'),
+      'contact' => $contact->getValue('title'),
+    ]));
 
-    $this->nodeCreate((object) [
-      'type' => 'custom_page',
+    $this->nodeCreate(new EntityStub('node', 'custom_page', [
       'nid' => EifInterface::EIF_ONLINE_ASSISTANT,
       'title' => 'Online Assistant',
-      'og_audience' => $solution->title,
+      'og_audience' => $solution->getValue('title'),
       'field_state' => 'published',
-    ]);
+    ]));
 
     // Ensure the taxonomy terms are indexed.
     $vids = [

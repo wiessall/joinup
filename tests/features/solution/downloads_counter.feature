@@ -4,13 +4,13 @@ Feature:
 
   Scenario: Check solution downloads counter
     # Create the dummy data to work with.
-    Given collection content:
+    Given the following "collection" content:
       | title         |
       | Ocean studies |
-    Given solution content:
+    Given the following "solution" content:
       | title                  | collection    |
       | Climate change tracker | Ocean studies |
-    Given distribution content:
+    Given the following "distribution" content:
       | title                 | solution               | downloads |
       | Sample distribution   | Climate change tracker | 10        |
       | Sample distribution 2 | Climate change tracker | 0         |
@@ -28,7 +28,7 @@ Feature:
     # Go back to the solution tiles page and check downloads are disappeared.
     When I visit the solution overview page
     Then the download icon should not be shown in the "Climate change tracker" tile
-    Given distribution content:
+    Given the following "distribution" content:
       | title                 | solution               | downloads |
       | Sample distribution 3 | Climate change tracker | 20        |
     When I reload the page

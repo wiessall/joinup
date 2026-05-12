@@ -5,11 +5,11 @@ Feature: Messaging group announcements
   @group-e
   Scenario Outline: Announcement creation and transitions
 
-    Given <group> content:
+    Given the following "<group>" content:
       | title        | state     |
       | Fail pension | published |
       | Hidden gems  | draft     |
-    And users:
+    And the following users:
       | Username             | E-mail                           | Roles     |
       | Sons of tweets       | sonsoftweets@example.com         |           |
       | Check edit moderator | check.edit.moderator@example.com | moderator |
@@ -127,7 +127,7 @@ Feature: Messaging group announcements
     And I should see the link "Add announcement"
     # The facilitator has exhausted all operations they can perform, so they
     # cannot edit the announcement anymore.
-    And I should not see "edit" in the "The Big Opening is postponed" row
+    And I should not see the text "edit" in the "The Big Opening is postponed" row
     # ...but they can still see the message in read-only mode.
     When I click "The Big Opening is postponed"
     Then I should see the warning message "This announcement is in read-only mode because is pending for moderators approval."
@@ -260,7 +260,7 @@ Feature: Messaging group announcements
 
     And I should see the link "Add announcement"
     # The announcement cannot be edited anymore...
-    But I should not see "edit" in the "The Big Opening is postponed" row
+    But I should not see the text "edit" in the "The Big Opening is postponed" row
     # ...but it can be visualized in read-only mode.
     When I click "The Big Opening is postponed"
     Then I should see the warning message "This announcement is in read-only mode because it has been already delivered."
@@ -312,16 +312,16 @@ Feature: Messaging group announcements
 
   @javascript @group-e
   Scenario: Announcement moderation
-    Given collection content:
+    Given the following "collection" content:
       | title       |
       | Collection1 |
       | Collection2 |
-    And solution content:
+    And the following "solution" content:
       | title                 | collection  |
       | Collection1 Solution1 | Collection1 |
       | Collection1 Solution2 | Collection1 |
       | Collection2 Solution1 | Collection2 |
-    And users:
+    And the following users:
       | Username         | E-mail                      | Roles     |
       | Rian Lee         | rian-lee@example.com        |           |
       | Miau user        | miau.user@example.com       |           |
@@ -424,10 +424,10 @@ Feature: Messaging group announcements
 
   @group-e
   Scenario: Wrong recipient's name in announcements.
-    Given collection content:
+    Given the following "collection" content:
       | title         | state     |
       | Wrong pension | published |
-    And users:
+    And the following users:
       | Username   | E-mail                       | First name | Family name |
       | cgarnett67 | callista.garnett@example.com | Callista   | Garnett     |
       | cbarnett68 | callista.barnett@example.com | Callista   | Barnett     |
@@ -477,7 +477,7 @@ Feature: Messaging group announcements
       | The recipient's full name: Joana Barnett |
 
     # Check mass-mails.
-    Given users:
+    Given the following users:
       | Username   | E-mail                       | First name | Family name |
       | sgarnett69 | samuel.garnett@example.com   | Samuel     | Garnett     |
       | sbrown70   | sally.brown@example.com      | Sally      | Brown       |
