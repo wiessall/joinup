@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Drupal\eu_oss_catalogue;
 
 use Drupal\Component\Plugin\PluginBase;
-use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
-use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Config\Entity\ThirdPartySettingsInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -96,70 +94,25 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
       ->set('oss_git_open_pull_requests', $project->numberOfPullRequests)
       ->addProvider($provider);
 
-    $this->doParse($solution, $project, $metadata, $provider);
-
-    $this->setLangcode($solution);
-
-    return $solution;
+    return $this->getProcessedSolution($solution, $project, $metadata, $provider);
   }
 
   /**
-   * Parses project data into the OSS Solution node.
+   * Populates the OSS solution with data from the project value object.
    *
    * @param \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $solution
-   *   The OSS Solution node.
+   *   The initial OSS solution node.
    * @param \Drupal\eu_oss_catalogue\Model\Project $project
    *   The project value object.
    * @param array $metadata
    *   The project's metadata.
    * @param \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider
    *   The provider plugin instance.
-   */
-  abstract protected function doParse(OssSolutionInterface $solution, Project $project, array $metadata, EuOssCatalogueProviderInterface $provider): void;
-
-  /**
-   * Sets the entity langcode to the relevant language, if needed.
    *
-   * @param \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $solution
-   *   The OSS solution entity.
+   * @return \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface
+   *   The processed OSS solution node.
    */
-  protected function setLangcode(OssSolutionInterface $solution): void {
-    // Upstream code might have already set the relevant langcode before all
-    // the resolvers got executed. Make sure we use a fresh field value.
-    $relevantLang = $this->getRelevantLangCode($solution);
-    $currentLang = $solution->language()->getId();
-
-    if ($relevantLang === $currentLang) {
-      return;
-    }
-
-    // Save the current default translation's field values.
-    $currentDefaultValues = array_map(
-      fn(FieldItemListInterface $fieldItemList) => $fieldItemList->getValue(),
-      $solution->getTranslatableFields(FALSE),
-    );
-
-    if ($solution->hasTranslation($relevantLang)) {
-      // Copy the relevant language translation's content to the default.
-      $relevantTranslation = $solution->getTranslation($relevantLang);
-      foreach ($solution->getTranslatableFields(FALSE) as $fieldName => $fieldItemList) {
-        if ($fieldName !== 'langcode') {
-          $solution->set($fieldName, $relevantTranslation->get($fieldName)->getValue());
-        }
-      }
-      $solution->removeTranslation($relevantLang);
-    }
-
-    // Change the default translation's langcode to the relevant language.
-    $solution->set('langcode', $relevantLang);
-
-    // Restore the old default content as a translation for the original
-    // language, unless that translation already exists (e.g., from a prior
-    // TMGMT job).
-    if (!$solution->hasTranslation($currentLang)) {
-      $solution->addTranslation($currentLang, $currentDefaultValues);
-    }
-  }
+  abstract protected function getProcessedSolution(OssSolutionInterface $solution, Project $project, array $metadata, EuOssCatalogueProviderInterface $provider): OssSolutionInterface;
 
   /**
    * Configures and returns a resolver given its plugin ID and configuration.
@@ -236,11 +189,14 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
    *   The resolved value.
    * @param \Drupal\eu_oss_catalogue\EuOssCatalogueResolverInterface $resolver
    *   The resolver plugin instance.
+   * @param \Drupal\Core\Field\FieldItemListInterface $fieldItemList
+   *   The Drupal field item list instance. The method might need information
+   *   extracted form the field.
    *
    * @throws \Exception
    *   When the resolved value doesn't have a proper structure.
    */
-  protected function checkResolved(?array $resolved, EuOssCatalogueResolverInterface $resolver): void {
+  protected function checkResolved(?array $resolved, EuOssCatalogueResolverInterface $resolver, FieldItemListInterface $fieldItemList): void {
     if ($resolved === NULL) {
       // NULL is allowed.
       return;
@@ -248,7 +204,8 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
 
     // Check $resolved array structure.
     $allowedLanguages = array_keys($this->languageManager->getLanguages());
-    $defaultLanguage = $this->languageManager->getDefaultLanguage()->getId();
+    $defaultLanguage = $fieldItemList->getEntity()->language()->getId();
+
     // Replace default language with 'x-default'.
     $allowedLanguages = [
       ...array_diff($allowedLanguages, [$defaultLanguage]),
@@ -265,87 +222,6 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
     if ($invalidValues = array_keys(array_diff_key($resolved, $validValues))) {
       throw new \Exception('The $value["' . implode('"], $value["', $invalidValues) . '"] array element(s), returned by ' . $resolver::class . '::resolve(), should be array(s)');
     }
-  }
-
-  /**
-   * Returns the language code of the richest entity translation.
-   *
-   * @return string
-   *   The language code of the richest entity translation.
-   *
-   * @todo Make this method protected in ISAICP-11133.
-   */
-  public function getRelevantLangCode(OssSolutionInterface $ossSolution): string {
-    $translationLanguages = $ossSolution->getTranslationLanguages();
-    if (count($translationLanguages) === 1) {
-      return key($translationLanguages);
-    }
-
-    // If publiccode.yml field does not contain any language codes, then we
-    // continue with the existing entity translations. But if we have
-    // publiccode.yml language codes, then we use the union of the pc.yml
-    // language codes and the entity translation language codes.
-    $translationLanguageCodes = empty($publicCodeLanguageCodes = $this->getLanguageCodesFromPublicCodeYaml($ossSolution))
-      ? array_keys($translationLanguages)
-      : array_intersect($publicCodeLanguageCodes, array_keys($translationLanguages));
-
-    // Only one translation left, no need to perform the "richest" check.
-    if (count($translationLanguageCodes) === 1) {
-      return reset($translationLanguageCodes);
-    }
-
-    $flagshipFieldItemCounts = array_reduce(
-      $translationLanguageCodes ?: array_keys($translationLanguages),
-      function (array $carry, string $languageCode) use ($ossSolution): array {
-        $translation = $ossSolution->getTranslation($languageCode);
-        $field = $translation->get('oss_features');
-        $carry[$languageCode] = !$field->isEmpty() ? $field->count() : 0;
-        return $carry;
-      },
-      [],
-    );
-
-    // We have 2 translation language keys at least, so we won't return FALSE.
-    return array_search(max($flagshipFieldItemCounts), $flagshipFieldItemCounts, TRUE);
-  }
-
-  /**
-   * Returns language codes used in publiccode.yml.
-   *
-   * @param \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $ossSolution
-   *   The OSS solution entity.
-   *
-   * @return string[]
-   *   The language codes used at the description property. Returns empty array
-   *   if:
-   *   - The solution has no field data at the field.
-   *   - The data is not a valid YAML string (so it cannot be decoded).
-   *   - The decoded content is not an array.
-   *   - The decoded content lacks the description key, or its value is not an
-   *     array, or if it is empty.
-   */
-  protected function getLanguageCodesFromPublicCodeYaml(OssSolutionInterface $ossSolution): array {
-    $publicCodeYamlContent = $ossSolution->getPublicCodeYaml();
-    if (is_null($publicCodeYamlContent)) {
-      return [];
-    }
-
-    try {
-      $publicCodeYaml = Yaml::decode($publicCodeYamlContent);
-    }
-    catch (InvalidDataTypeException) {
-      return [];
-    }
-
-    if (
-      !is_array($publicCodeYaml)
-      || empty($publicCodeYaml['description'])
-      || !is_array($publicCodeYaml['description'])
-    ) {
-      return [];
-    }
-
-    return array_keys($publicCodeYaml['description']);
   }
 
 }

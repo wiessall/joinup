@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Parser;
 
+use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -77,7 +77,21 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
   /**
    * {@inheritdoc}
    */
-  protected function doParse(OssSolutionInterface $solution, Project $project, array $metadata, EuOssCatalogueProviderInterface $provider): void {
+  protected function getProcessedSolution(OssSolutionInterface $solution, Project $project, array $metadata, EuOssCatalogueProviderInterface $provider): OssSolutionInterface {
+    $relevantLang = $this->getRelevantLangCode($project);
+    if ($relevantLang !== $solution->language()->getId()) {
+      if (!$solution->isNew()) {
+        // Drupal forbids changing the entity langcode during an update. We are
+        // completely recreating the node, including its `nid`, `vid`, `uuid`.
+        // @see https://www.drupal.org/node/2443989
+        $duplicate = $this->entityTypeManager->getStorage('node')->create($solution->toArray());
+        $solution->delete();
+        $solution = $duplicate;
+      }
+
+      $solution->set('langcode', $relevantLang)->set('default_langcode', TRUE);
+    }
+
     foreach ($solution->getFields(FALSE) as $fieldName => $fieldItemList) {
       // It's a convention that all fields are prefixed with oss_*.
       if (!str_starts_with($fieldName, 'oss_')) {
@@ -110,7 +124,7 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
         $resolver = $this->getResolver($pluginId, $config);
         try {
           $resolver->resolve($resolved, $project, $metadata, $fieldItemListCopy);
-          $this->checkResolved($resolved, $resolver);
+          $this->checkResolved($resolved, $resolver, $fieldItemListCopy);
         }
         catch (UnresolvableValueException $exception) {
           Error::logException($this->logger, $exception);
@@ -126,18 +140,8 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
         }
       }
       elseif ($override !== FieldOverridingPolicy::ResolvedNotEmpty || $resolved) {
-        $defaultLangCode = $this->languageManager->getDefaultLanguage()->getId();
-
         // Populate the node field.
         foreach ($resolved as $langcode => $values) {
-          // Resolvers use x-default, but we store it as an explicit language
-          // code so that reparsing a solution whose langcode has been changed
-          // to a non-default language does not overwrite the relevant-language
-          // default translation with the site-default language's content.
-          if ($langcode === LanguageInterface::LANGCODE_DEFAULT) {
-            $langcode = $defaultLangCode;
-          }
-
           // Create a new translation on demand.
           if (!$solution->hasTranslation($langcode)) {
             $solution->addTranslation($langcode, $solution->toArray());
@@ -147,6 +151,8 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
         }
       }
     }
+
+    return $solution;
   }
 
   /**
@@ -164,6 +170,76 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
     // Eliminate multiple spaces.
     $title = preg_replace('/\s+/', ' ', $title);
     return trim($title);
+  }
+
+  /**
+   * Returns the language code of the richest entity translation.
+   *
+   * @param \Drupal\eu_oss_catalogue\Model\Project $project
+   *   The project value object.
+   *
+   * @return string
+   *   The language code of the richest entity translation.
+   *
+   * @todo Make this method protected in ISAICP-11133.
+   */
+  public function getRelevantLangCode(Project $project): string {
+    $siteLangcodes = array_keys($this->languageManager->getLanguages());
+
+    if (count($siteLangcodes) === 1) {
+      return reset($siteLangcodes);
+    }
+
+    if (!$description = $this->getDescription($project)) {
+      // Use site's default language if the publiccode.yml doesn't contain any.
+      return $this->languageManager->getDefaultLanguage()->getId();
+    }
+
+    $langcodes = array_intersect(array_keys($description), $siteLangcodes);
+    if (count($langcodes) === 1) {
+      // Only one langcode left, no need to perform more checks.
+      return reset($langcodes);
+    }
+
+    $featuresPerLang = array_reduce(
+      $langcodes,
+      function (array $counts, string $langcode) use ($description): array {
+        $counts[$langcode] = count($description[$langcode]['features'] ?? []);
+        return $counts;
+      },
+      [],
+    );
+
+    // The langcode exposing most features wins.
+    return array_search(max($featuresPerLang), $featuresPerLang, TRUE);
+  }
+
+  /**
+   * Returns the `description` section of the publiccode.yml file, if any.
+   *
+   * @param \Drupal\eu_oss_catalogue\Model\Project $project
+   *   The project value object.
+   *
+   * @return array<string, array{features?: string[], genericName?: string, longDescription?: string, shortDescription?: string, screenshots?: string[]}>
+   *   The `description` section of the publiccode.yml file.
+   */
+  protected function getDescription(Project $project): array {
+    if (!$project->getPubliccodeYml()) {
+      return [];
+    }
+
+    try {
+      $publicCode = Yaml::decode($project->getPubliccodeYml());
+    }
+    catch (InvalidDataTypeException) {
+      return [];
+    }
+
+    if (!is_array($publicCode)) {
+      return [];
+    }
+
+    return $publicCode['description'] ?? [];
   }
 
 }

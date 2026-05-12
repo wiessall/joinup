@@ -272,7 +272,7 @@ GitHub solution 2:
     oss_source_hash: 'WWiM57kppAUvDQdo2IiW1C9qh_Jdfzm8daYXeeS9IzU'
 
 Project 1:
-  en:
+  de:
     oss_git_url: https://limited.self-hosted.gitlab.example.com/user1/project-1
     oss_git_description: 'User 1: Project 1: description'
     oss_default_branch: branch-project-1

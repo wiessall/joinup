@@ -11,7 +11,7 @@ Project 1:
     oss_git_open_pull_requests: 1
 
 Project 2:
-  en:
+  de:
     oss_git_url: https://all.self-hosted.gitlab.example.com/group2/group2_2/group2_3/project2
     oss_git_description: Description of Project2
     oss_default_branch: branch-project-2

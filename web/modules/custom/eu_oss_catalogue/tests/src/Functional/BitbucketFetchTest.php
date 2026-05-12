@@ -27,7 +27,7 @@ class BitbucketFetchTest extends FetchTestBase {
     $this->fetchSolutions('hosting_platform:bitbucket_test', 1);
     $this->assertOssSolution('Bar Project', 'it');
 
-    // Check file not found log entires.
+    // Check the "file not found" log entries.
     $notFoundLogEntries = array_map(
       function (object $log) {
         $logArray = (array) $log;

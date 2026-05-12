@@ -26,7 +26,7 @@ Pirate Initiative:
     oss_contact_affiliation: On The Sea
 
 GitHub solution 2:
-  en:
+  it:
     oss_git_url: https://github.com/subdirectory/dummy-namespace-2/dummy-name-2
     oss_git_description: Description of GitHub solution 2
     oss_default_branch: default-branch-of-GitHub-solution-2

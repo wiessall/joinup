@@ -85,12 +85,12 @@ abstract class FetchTestBase extends BrowserTestBase {
    *
    * @param string $title
    *   The OSS Solution title. This used also to retrieve the expectancy data.
-   * @param string $expectedRelevantLangCode
-   *   The code of the relevant language.
+   * @param string $expectedLangcode
+   *   The solution's default langcode.
    */
-  protected function assertOssSolution(string $title, string $expectedRelevantLangCode): void {
+  protected function assertOssSolution(string $title, string $expectedLangcode): void {
     $solution = $this->getNode($title, OssSolutionInterface::class);
-    $this->assertSame($expectedRelevantLangCode, $solution->language()->getId());
+    $this->assertSame($expectedLangcode, $solution->language()->getId());
   }
 
   /**
