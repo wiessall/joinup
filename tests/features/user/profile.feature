@@ -21,7 +21,7 @@ Feature: User profile
 
     When I click "Edit"
     Then the following fields should be present "Email, First name"
-    And the following fields should be present "Family name, Photo, Country of origin, Function of administration, Work location, Professional domain, Business title"
+    And the following fields should be present "Family name, Photo, Country of origin, Country of residence, Function of administration, Work location, Professional domain, Business title"
     And the following fields should be present "Facebook, X, LinkedIn, GitHub, SlideShare, Youtube, Vimeo"
     And the following fields should not be present "Time zone"
     And the available options in the "Country of residence" select should not include the "European Union"
