@@ -1,0 +1,145 @@
+diff --git a/config/schema/tagify.schema.yml b/config/schema/tagify.schema.yml
+index bf07f737676254d08aaac880bc59b3145e99ded1..b62bb0403d3f3bfc52cd4c06e300fde6832d90e6 100644
+--- a/config/schema/tagify.schema.yml
++++ b/config/schema/tagify.schema.yml
+@@ -1,6 +1,5 @@
+-field.widget.settings.tagify_entity_reference_autocomplete_widget:
+-  type: field.widget.settings.tagify
+-  label: 'Tagify entity reference widget'
++field.widget.settings.tagify:
++  type: mapping
+   mapping:
+     match_operator:
+       type: string
+@@ -11,58 +10,35 @@ field.widget.settings.tagify_entity_reference_autocomplete_widget:
+     placeholder:
+       type: label
+       label: 'Placeholder'
++    show_entity_id:
++      type: boolean
++      label: 'Include entity Id'
++    parent_selection:
++      type: boolean
++      label: 'Parent selection'
++
++field.widget.settings.tagify_select_widget:
++  type: field.widget.settings.tagify
++  label: 'Tagify select widget'
++
++field.widget.settings.tagify_entity_reference_autocomplete_widget:
++  type: field.widget.settings.tagify
++  label: 'Tagify entity reference widget'
++  mapping:
+     suggestions_dropdown:
+       type: integer
+       label: 'Suggestions dropdown'
+-    show_entity_id:
+-      type: integer
+-      label: 'Include entity Id'
+     show_info_label:
+-      type: integer
++      type: boolean
+       label: 'Include info label'
+-    cardinality:
+-      type: integer
+-      label: 'Field cardinality'
+     info_label:
+-      type: string
++      type: label
+       label: 'Info label content'
+-    identifier:
+-      type: string
+-      label: 'Field name'
+-    parent_selection:
+-      type: integer
+-      label: 'Parent selection'
+ 
+ better_exposed_filters.filter.bef_tagify:
+   label: 'Tagify'
+   type: better_exposed_filters_filter_widget
+ 
+-field.widget.settings.tagify_select_widget:
+-  type: field.widget.settings.tagify_select
+-  label: 'Tagify select widget'
+-  mapping:
+-    match_operator:
+-      type: string
+-      label: 'Autocomplete matching'
+-    match_limit:
+-      type: integer
+-      label: 'Maximum number of autocomplete suggestions'
+-    placeholder:
+-      type: label
+-      label: 'Placeholder'
+-    show_entity_id:
+-      type: integer
+-      label: 'Include entity Id'
+-    parent_selection:
+-      type: integer
+-      label: 'Parent selection'
+-    cardinality:
+-      type: integer
+-      label: 'Field cardinality'
+-    identifier:
+-      type: string
+-      label: 'Field name'
+-
+ tagify.settings:
+   type: config_entity
+   label: 'Tagify settings'
+diff --git a/src/Plugin/Field/FieldWidget/TagifyEntityReferenceAutocompleteWidget.php b/src/Plugin/Field/FieldWidget/TagifyEntityReferenceAutocompleteWidget.php
+index 566a6722fbacd195f6212fca6ff890b8cafd226c..d90956d478ffdf0213e431e22041af81fc74ffcf 100644
+--- a/src/Plugin/Field/FieldWidget/TagifyEntityReferenceAutocompleteWidget.php
++++ b/src/Plugin/Field/FieldWidget/TagifyEntityReferenceAutocompleteWidget.php
+@@ -129,12 +129,12 @@ class TagifyEntityReferenceAutocompleteWidget extends WidgetBase {
+     return [
+       'match_operator' => 'CONTAINS',
+       'match_limit' => 10,
+-      'suggestions_dropdown' => 1,
+       'placeholder' => '',
+-      'show_entity_id' => 0,
+-      'show_info_label' => 0,
++      'show_entity_id' => FALSE,
++      'parent_selection' => TRUE,
++      'suggestions_dropdown' => 1,
++      'show_info_label' => FALSE,
+       'info_label' => '',
+-      'parent_selection' => 1,
+     ] + parent::defaultSettings();
+   }
+ 
+@@ -265,7 +265,7 @@ class TagifyEntityReferenceAutocompleteWidget extends WidgetBase {
+       'cardinality' => $this->fieldDefinition
+         ->getFieldStorageDefinition()
+         ->getCardinality(),
+-      'show_entity_id' => (bool) $this->getSetting('show_entity_id'),
++      'show_entity_id' => $this->getSetting('show_entity_id'),
+     ];
+     if ($this->getSetting('show_info_label')) {
+       $selection_settings['info_label'] = $this->getSetting('info_label');
+diff --git a/src/Plugin/Field/FieldWidget/TagifySelectWidget.php b/src/Plugin/Field/FieldWidget/TagifySelectWidget.php
+index 7144792483fd8dd6ec0678a4284312b2b393bc93..40556bd28c1a03ee1f881e80350b915e4d519bb3 100644
+--- a/src/Plugin/Field/FieldWidget/TagifySelectWidget.php
++++ b/src/Plugin/Field/FieldWidget/TagifySelectWidget.php
+@@ -94,8 +94,8 @@ class TagifySelectWidget extends OptionsWidgetBase {
+       'match_operator' => 'CONTAINS',
+       'match_limit' => 0,
+       'placeholder' => '',
+-      'show_entity_id' => 0,
+-      'parent_selection' => 1,
++      'show_entity_id' => FALSE,
++      'parent_selection' => TRUE,
+     ] + parent::defaultSettings();
+   }
+ 
+@@ -192,8 +192,8 @@ class TagifySelectWidget extends OptionsWidgetBase {
+       'cardinality' => $this->fieldDefinition
+         ->getFieldStorageDefinition()
+         ->getCardinality(),
+-      'show_entity_id' => (bool) $this->getSetting('show_entity_id'),
+-      'parent_selection' => (bool) $this->getSetting('parent_selection'),
++      'show_entity_id' => $this->getSetting('show_entity_id'),
++      'parent_selection' => $this->getSetting('parent_selection'),
+     ];
+ 
+     $element += [
