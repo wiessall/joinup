@@ -5,10 +5,9 @@ Feature: Assessments
     Given I am an anonymous user
     When I go to "/collection/assessments/assessment-reports"
     And I see h1 span element with title "Assessment reports"
-    And I should see the link "New assessment"
     And I should not see the link "My assessments"
     And I should not see the link "Search assessments"
-    And I should see the text "There are no published assessment reports yet. You can add one by filling this questionnaire"
+    And I should see the text "There are no published assessment reports yet."
     And the following "assessment_report" content:
       | title         | created              | organization         | collection                         |
       | Assessment 1  | 2020-01-01T00:00:00Z | default organization | Portal support                        |
@@ -26,10 +25,9 @@ Feature: Assessments
 
     When I go to the "Assessment reports" custom_page
     And I see h1 span element with title "Assessment reports"
-    And I should see the link "New assessment"
     And I should not see the link "My assessments"
     And I should not see the link "Search assessments"
-    And I should not see the text "There are no published assessment reports yet. You can add one by filling this questionnaire"
+    And I should not see the text "There are no published assessment reports yet."
     # Reports are shown in creation descending order in a 10 pager listing.
     And I should see the following tiles in the correct order:
       | Assessment 12 |
@@ -67,10 +65,9 @@ Feature: Assessments
     When I am logged in as a moderator
     When I go to "/collection/assessments/assessment-reports"
     And I see h1 span element with title "Assessment reports"
-    And I should see the link "New assessment"
     And I should see the link "My assessments"
     And I should not see the link "Search assessments"
-    And I should not see the text "There are no published assessment reports yet. You can add one by filling this questionnaire"
+    And I should not see the text "There are no published assessment reports yet."
     Then I set "short_title" as "Short title" for "Assessment 12" assessment_report submission
     Then I go to "/collection/assessments/assessment-reports"
     And I should not see the text "Assessment 12"
