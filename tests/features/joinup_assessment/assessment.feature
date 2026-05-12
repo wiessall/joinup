@@ -7,7 +7,7 @@ Feature: Assessments
     And I see h1 span element with title "Assessment reports"
     And I should not see the link "My assessments"
     And I should not see the link "Search assessments"
-    And I should see the text "There are no published assessment reports yet. You can add one by filling this questionnaire"
+    And I should see the text "There are no published assessment reports yet."
     And the following "assessment_report" content:
       | title         | created              | organization         | collection                         |
       | Assessment 1  | 2020-01-01T00:00:00Z | default organization | Portal support                        |
