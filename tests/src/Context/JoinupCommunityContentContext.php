@@ -11,10 +11,10 @@ use Behat\Mink\Exception\ExpectationException;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\AfterNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\NodeTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
@@ -31,7 +31,6 @@ class JoinupCommunityContentContext extends RawDrupalContext {
 
   use EntityTrait;
   use NodeTrait;
-  use TestingEntitiesTrait;
   use TraversingTrait;
 
   /**
@@ -236,17 +235,15 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the node is marked to be pinned but is not associated with a
    *   group.
-   *
-   * @AfterNodeCreate
    */
+  #[AfterNodeCreate]
   public function pinCommunityContentInGroup(AfterNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
-
-    $is_pinned = in_array(strtolower((string) ($node->pinned ?? '')), [
+    $node = $scope->getStub();
+    $is_pinned = in_array(strtolower((string) (JoinupContext::getStrippedNodeProperty($node, 'pinned') ?? '')), [
       'y',
       'yes',
     ]);
-    $nid = $node->nid ?? NULL;
+    $nid = $node->getValue('nid');
     if ($is_pinned && $nid) {
       /** @var \Drupal\node\NodeInterface $entity */
       if ($entity = Node::load((int) $nid)) {
@@ -256,7 +253,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
             $entity->pin($group);
           }
           catch (MissingGroupException $e) {
-            throw new \Exception("The '{$node->title}' community content cannot be pinned since it does not belong to a group.");
+            throw new \Exception("The '{$node->getValue('title')}' community content cannot be pinned since it does not belong to a group.");
           }
         }
       }
@@ -269,23 +266,23 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    * @param \Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope $scope
    *   The Behat hook scope object containing the metadata of the node that was
    *   created.
-   *
-   * @AfterNodeCreate
    */
+  #[AfterNodeCreate]
   public function afterNodeCreateShare(AfterNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
+    $node = $scope->getStub();
 
-    if (!isset($node->field_shared_in) || empty($node->field_shared_in)) {
+    $sharedIn = JoinupContext::getStrippedNodeProperty($node, 'field_shared_in');
+    if (empty($sharedIn)) {
       return;
     }
 
-    $content = Node::load($node->nid);
+    $content = Node::load($node->getValue('nid'));
     \assert($content instanceof NodeInterface);
     $groupLabels = array_map(
       fn (string $groupLabel): string => trim($groupLabel),
-      explode(',', $node->field_shared_in),
+      explode(',', $sharedIn),
     );
-    $sharedInAtString = $node->field_shared_in__at ?? '';
+    $sharedInAtString = JoinupContext::getStrippedNodeProperty($node, 'field_shared_in__at') ?? '';
     $groupSharingExpireTime = array_map(
       function (string $relativeSharingTime): ?int {
         $relativeSharingTime = trim($relativeSharingTime) ?: NULL;

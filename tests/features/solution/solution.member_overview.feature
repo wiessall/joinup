@@ -5,7 +5,7 @@ Feature: Solution membership overview
   I need to be able to see an overview of my fellow members
 
   Scenario: Show the solution members as a list of tiles
-    Given users:
+    Given the following users:
       # We're adding enough users so we can test the different roles and states
       # as well as the pager. 12 users are shown per page.
       | Username            | First name | Family name | Photo        | Business title                  |
@@ -25,10 +25,10 @@ Feature: Solution membership overview
       | Glædwine Ruskin     | Glædwine   | Ruskin      | linus.jpeg   | Comptroller                     |
       | Pocahontas Mathieu  | Pocahontas | Mathieu     | blaise.jpg   | Chief Communications Officer    |
       | Callista Wronski    | Callista   | Wronski     | richard.jpg  | Founder                         |
-    And collection content:
+    And the following "collection" content:
       | title              |
       | Growing collection |
-    And solution content:
+    And the following "solution" content:
       | title        | collection         |
       | Growing zone | Growing collection |
     And the following solution user memberships:

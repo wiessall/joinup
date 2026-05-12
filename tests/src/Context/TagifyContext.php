@@ -195,11 +195,34 @@ class TagifyContext extends RawDrupalContext {
     foreach ($table->getRows() as $row) {
       $option = reset($row);
       $tagifyInput->setValue($option);
-      $dropdownItem = $this->waitForElementVisible('css', '.tagify__dropdown__item:contains("' . $option . '")');
-      if (empty($dropdownItem)) {
-        throw new \Exception('Option "' . $option . '" not found');
-      }
+      $this->waitForElementVisible('css', '.tagify__dropdown__item:contains("' . $option . '")');
     }
+  }
+
+  /**
+   * Checks if options are visible in tagify dropdown options.
+   *
+   * @param string $fieldName
+   *   Field name.
+   * @param string $option
+   *   Option that should be present in the dropdown.
+   *
+   * @throws \Exception
+   *   Thrown when the tagify option is not found.
+   */
+  #[When('the :fieldName tagify should contain the following option :option')]
+  public function checkTagifyOptionsArePresent(string $fieldName, string $option): void {
+    if (!$this->hasJavascriptSupport()) {
+      throw new \Exception('This step requires JavaScript to run.');
+    }
+    $tagifyInput = $this->getTagifyInput($fieldName);
+    $element = $this->getSession()->getDriver()->getWebDriverSession()?->element('xpath', $tagifyInput->getXpath());
+    // Because we want to assert the presence of an option without selecting it
+    // we use the postValue that sends keystrokes one by one.
+    // @see \WebDriver\Element::postValue.
+    $element->postValue(['text' => $option]);
+    $this->waitForElementVisible('css', '.tagify__dropdown__item:contains("' . $option . '")');
+    $this->getSession()->getDriver()->blur($tagifyInput->getXpath());
   }
 
   /**
@@ -220,10 +243,7 @@ class TagifyContext extends RawDrupalContext {
     }
     $tagifyInput = $this->getTagifyInput($fieldName);
     $tagifyInput->setValue($option);
-    $dropdownItem = $this->waitForElementVisible('css', '.tagify--dropdown-item-no-match:contains("' . $option . '")');
-    if (empty($dropdownItem)) {
-      throw new \Exception('Option "' . $option . '" found');
-    }
+    $this->waitForElementVisible('css', '.tagify--dropdown-item-no-match:contains("' . $option . '")');
   }
 
   /**

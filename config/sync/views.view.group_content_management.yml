@@ -1416,6 +1416,7 @@ display:
         manage: manage
         default: '0'
       filename: content.csv
+      export_filesystem: private
     cache_metadata:
       max-age: -1
       contexts:

@@ -72,14 +72,13 @@ class SendGroupAnnouncementsQueueWorker extends QueueWorkerBase implements Conta
    */
   public function processItem($data): void {
     /** @var \Drupal\joinup_group\Entity\AnnouncementInterface $announcement */
-    if (!$announcement = $this->getMessageStorage()
-      ->load($data['announcement'])) {
+    if (!$announcement = $this->getMessageStorage()->load($data['announcement'])) {
       // The entity might have been deleted in the meantime.
       return;
     }
 
-    // Entry created in AnnouncementsSubscriber::onAnnouncementApproved().
-    // @see \Drupal\joinup_group\EventSubscriber\AnnouncementsSubscriber::onAnnouncementApproved()
+    // Entry created in AnnouncementTransitionSubscriber.
+    /* @see \Drupal\joinup_group\EventSubscriber\AnnouncementTransitionSubscriber::onAnnouncementApproved() */
     if (!isset($data['recipients'])) {
       try {
         // Requeue this announcement after fetching the recipients.
@@ -104,9 +103,10 @@ class SendGroupAnnouncementsQueueWorker extends QueueWorkerBase implements Conta
     }
 
     // This is a queue entry with recipients already fetched and having up to
-    // 250 emails, so it's safe to deliver the announcement.
+    // 250 user IDs, so it's safe to deliver the announcement.
     if (!empty($data['recipients'])) {
-      $this->messageDelivery->sendMessageToEmailAddresses($announcement, $data['recipients']);
+      $accounts = $this->entityTypeManager->getStorage('user')->loadMultiple($data['recipients']);
+      $this->messageDelivery->sendMessageToMultipleUsers($announcement, $accounts);
     }
   }
 

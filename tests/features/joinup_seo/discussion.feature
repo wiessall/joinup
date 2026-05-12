@@ -5,13 +5,13 @@ Feature: SEO for discussion forum posts.
   I need proper metatag to be encapsulated in the html code.
 
   Scenario: Basic metatags are attached as JSON schema on the page.
-    Given collection content:
+    Given the following "collection" content:
       | title                                                 |
       | Interoperable Europe Portal SEO discussion collection |
-    And users:
+    And the following users:
       | Username                               | E-mail                 | First name | Family name |
       | Interoperable Europe Portal SEO author | joinup.seo@example.com | Kindle     | eReader     |
-    And "discussion" content:
+    And the following "discussion" content:
       | title                           | published at              | changed                   | content                                                      | author                                 | attachments         | keywords                                                 | collection                                            |
       | Discussions are now forum posts | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | This discussion is to ensure that SEO tags are set properly. | Interoperable Europe Portal SEO author | test.zip, test1.zip | nintendo64 manuals, Alphabet, nintendo64 licences, games | Interoperable Europe Portal SEO discussion collection |
 
@@ -47,17 +47,17 @@ Feature: SEO for discussion forum posts.
       | @type    | http://schema.org/MediaObject                            |
       # __random_text__ can be any string that is appointed by the system and we
       # cannot predict. In this case it is the random file name suffix before the file extension.
-      | @id      | __base_url__/sites/default/files/test__random_text__.zip |
-      | name     | test.zip                                                 |
-      | url      | __base_url__/sites/default/files/test__random_text__.zip |
+      | @id      | __base_url__/sites/default/files/__random_text__.zip |
+      | name     | __random_text__.zip                                                 |
+      | url      | __base_url__/sites/default/files/__random_text__.zip |
     And the metatag graph of the item with "name" "Discussions are now forum posts" should have the following "sharedContent" properties in index 1:
       | property | value                                                    |
       | @type    | http://schema.org/MediaObject                            |
       # __random_text__ can be any string that is appointed by the system and we
       # cannot predict. In this case it is the random file name suffix before the file extension.
-      | @id      | __base_url__/sites/default/files/test__random_text__.zip |
-      | name     | test1.zip                                                |
-      | url      | __base_url__/sites/default/files/test__random_text__.zip |
+      | @id      | __base_url__/sites/default/files/__random_text__.zip |
+      | name     | __random_text__.zip                                                |
+      | url      | __base_url__/sites/default/files/__random_text__.zip |
     And the metatag graph of the item with "name" "Discussions are now forum posts" should have the following "author" properties:
       | property | value                             |
       | @type    | http://schema.org/Person          |

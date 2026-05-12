@@ -7,9 +7,9 @@ namespace Drupal\joinup\Context;
 use Behat\Hook\BeforeScenario;
 use Behat\Step\Then;
 use Behat\Step\When;
+use Drupal\Driver\Entity\EntityStub;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_assessment\AssessmentInterface as LegacyAssessmentInterface;
 use Drupal\paragraphs\Entity\Paragraph;
@@ -23,7 +23,6 @@ use Drupal\webform\WebformSubmissionInterface;
 class JoinupAssessmentContext extends RawDrupalContext {
 
   use EntityTrait;
-  use TestingEntitiesTrait;
   use UtilityTrait;
 
   /**
@@ -47,16 +46,14 @@ class JoinupAssessmentContext extends RawDrupalContext {
       ],
     ]);
     $paragraph->save();
-    $this->entities['paragraph'][$paragraph->id()] = $paragraph;
-    $this->nodeCreate((object) [
-      'type' => 'custom_page',
+    $this->nodeCreate(new EntityStub('node', 'custom_page', [
       'title' => 'Assessment reports',
       'og_audience' => $collection->label(),
       'field_state' => 'published',
       'uuid' => LegacyAssessmentInterface::ASSESSMENT_REPORTS_UUID,
       'field_paragraphs_body:target_id' => $paragraph->id(),
       'field_paragraphs_body:target_revision_id' => $paragraph->getRevisionId(),
-    ]);
+    ]));
   }
 
   /**

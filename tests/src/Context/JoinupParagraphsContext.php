@@ -17,11 +17,11 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Layout\LayoutPluginManagerInterface;
 use Drupal\Core\Session\AccountSwitcherInterface;
+use Drupal\Driver\Entity\EntityStub;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Exception\WysiwygEditorNotFoundException;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup\Traits\WysiwygTrait;
 use Drupal\layout_paragraphs\LayoutParagraphsLayout;
@@ -39,7 +39,6 @@ class JoinupParagraphsContext extends RawDrupalContext {
   use WysiwygTrait;
   use UtilityTrait;
   use EntityTrait;
-  use TestingEntitiesTrait;
 
   /**
    * A copycat of Behat's internal region mapping.
@@ -492,10 +491,10 @@ class JoinupParagraphsContext extends RawDrupalContext {
   public function iCreateParagraphWith(string $type, TableNode $values): void {
     $values = $values->getRowsHash();
     $values['type'] = $type;
-    $values = (object) $values;
 
-    $this->parseEntityFields('paragraph', $values);
-    $this->getDriver()->createEntity('paragraph', $values);
+    $stub = new EntityStub('paragraph', $type, $values);
+    $this->parseEntityFields($stub);
+    $this->getDriver()->entityCreate($stub);
   }
 
   /**
@@ -528,7 +527,6 @@ class JoinupParagraphsContext extends RawDrupalContext {
     $paragraph = Paragraph::create($rawArray);
     if ($save) {
       $paragraph->save();
-      $this->entities['paragraph'][$paragraph->id()] = $paragraph;
     }
     return $paragraph;
   }

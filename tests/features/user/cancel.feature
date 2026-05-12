@@ -6,7 +6,7 @@ Feature:
 
   Background:
 
-    Given users:
+    Given the following users:
       | Username     | Roles | E-mail                   | First name | Family name |
       | alicia__1997 |       | AliciaPotter@example.com | Alicia     | Potter      |
 
@@ -28,10 +28,10 @@ Feature:
 
   @deletedUser
   Scenario: A moderator deletes a user using the administrative UI.
-    Given collection content:
+    Given the following "collection" content:
       | title           |
       | Test collection |
-    And news content:
+    And the following "news" content:
       | title     | author       | collection      |
       | News item | alicia__1997 | Test collection |
 
@@ -71,16 +71,16 @@ Feature:
     But I should not see the link "Alicia Potter"
 
   Scenario: Cancel own account.
-    Given collection content:
+    Given the following "collection" content:
       | title           |
       | Test collection |
-    And news content:
+    And the following "news" content:
       | title     | author       | collection      |
       | News item | alicia__1997 | Test collection |
-    And document content:
+    And the following "document" content:
       | title | author       | collection      |
       | Docky | alicia__1997 | Test collection |
-    And discussion content:
+    And the following "discussion" content:
       | title  | collection      |
       | Disqus | Test collection |
     And comments:
@@ -127,13 +127,13 @@ Feature:
 
   @deletedUser
   Scenario Outline:
-    Given collection content:
+    Given the following "collection" content:
       | title          |
       | Macroeconomics |
-    Given <content type> content:
+    Given the following "<content type>" content:
       | title                 | author       | collection     |
       | Canada hit by tariffs | alicia__1997 | Macroeconomics |
-    And users:
+    And the following users:
       | Username | E-mail          | First name | Family name |
       | viviene  | viv@example.com | Viviene    | De Québec   |
     And comments:

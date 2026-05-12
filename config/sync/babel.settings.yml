@@ -15,6 +15,7 @@ translation_type:
     'content_entity:taxonomy_term':
       bundle:
         - domain
+        - language
         - owner_type
         - solution_classification
         - spatial

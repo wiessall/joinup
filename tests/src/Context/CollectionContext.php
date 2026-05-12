@@ -13,7 +13,7 @@ use Behat\Step\When;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
+use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
@@ -139,12 +139,11 @@ class CollectionContext extends RawDrupalContext {
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
    *   The before node create scope.
-   *
-   * @BeforeNodeCreate
    */
+  #[BeforeNodeCreate]
   public function defaultCollectionValues(BeforeNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
-    if ($node->type !== 'collection') {
+    $node = $scope->getStub();
+    if ($node->getBundle() !== 'collection') {
       return;
     }
 
@@ -154,8 +153,8 @@ class CollectionContext extends RawDrupalContext {
     ];
 
     foreach ($default_values as $field => $default_value) {
-      if (!isset($node->{$field})) {
-        $node->{$field} = $default_value;
+      if (!$node->hasValue($field)) {
+        $node->setValue($field, $default_value);
       }
     }
 
@@ -171,33 +170,9 @@ class CollectionContext extends RawDrupalContext {
     ];
 
     foreach ($mapping as $field => $values) {
-      if (isset($node->{$field}) && isset($values[$node->{$field}])) {
-        $node->{$field} = $values[$node->{$field}];
+      if ($node->hasValue($field) && isset($values[$node->getValue($field)])) {
+        $node->setValue($field, $values[$node->getValue($field)]);
       }
-    }
-  }
-
-  /**
-   * Actions to be performed after creating a collection.
-   *
-   * @param \Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope $scope
-   *   The after node create scope.
-   */
-  public function afterCollectionCreate(AfterNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
-    if ($node->type !== 'collection') {
-      return;
-    }
-
-    // If the collection is featured we need to create the meta entity that
-    // stores this information after creating the collection.
-    $is_featured = in_array(strtolower((string) ($node->feature ?? '')), [
-      'y',
-      'yes',
-    ]);
-
-    if ($is_featured) {
-      $node->feature();
     }
   }
 
@@ -322,7 +297,7 @@ class CollectionContext extends RawDrupalContext {
     if (!$current_user = $this->userManager->getCurrentUser()) {
       throw new \Exception("No current user.");
     }
-    $this->assertCollectionOwnership($current_user->name, $entity);
+    $this->assertCollectionOwnership($current_user->getValue('name'), $entity);
   }
 
   /**
@@ -354,13 +329,15 @@ class CollectionContext extends RawDrupalContext {
       $user = $this->userManager->getUser($username);
 
       // Check if we are already logged in as the user to test.
-      $current_username = $this->userManager->getCurrentUser()->name ?? NULL;
+      $currentUserStub = $this->userManager->getCurrentUser();
+      $current_username = $currentUserStub ? $currentUserStub->getValue('name') : NULL;
       if ($username !== $current_username) {
         $this->authenticationManager->logIn($user);
       }
 
       // Go to the edit form and check that the expected buttons are visible.
-      $this->visitEntityForm('edit', $values['collection'], 'collection');
+      $entity = $this->getEntityByLabel('node', $values['collection'], 'collection');
+      $this->visitPath($entity->toUrl('edit-form')->toString());
       $buttons = $this->explodeDelimitedSeparatedStepArgument($values['buttons']);
       $this->assertSubmitButtonsVisible($buttons);
     }
@@ -424,7 +401,7 @@ class CollectionContext extends RawDrupalContext {
     /** @var \Drupal\user\UserInterface $account */
     if (!$user_name) {
       $user = $this->getUserManager()->getCurrentUser();
-      $account = User::load($user->uid);
+      $account = User::load($user->getValue('uid'));
       if ($account->isAnonymous()) {
         throw new \Exception("No current logged in user.");
       }
@@ -508,14 +485,13 @@ class CollectionContext extends RawDrupalContext {
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
    *   An object containing the entity properties and fields that are to be used
    *   for creating the node as properties on the object.
-   *
-   * @BeforeNodeCreate
    */
+  #[BeforeNodeCreate]
   public function provideCollection(BeforeNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
+    $node = $scope->getStub();
 
     // Skip if a collection or solution has been assigned.
-    if (!empty($node->collection) || !empty($node->solution) || !empty($node->{OgGroupAudienceHelper::DEFAULT_FIELD})) {
+    if (!empty($node->getValue('collection')) || !empty($node->getValue('solution')) || !empty($node->getValue(OgGroupAudienceHelper::DEFAULT_FIELD))) {
       return;
     }
 
@@ -527,8 +503,8 @@ class CollectionContext extends RawDrupalContext {
     ];
 
     // Only deal with collection content.
-    if (in_array($node->type, $collection_content_bundles, TRUE)) {
-      $node->collection = $this->getJoinupCollection()->label();
+    if (in_array($node->getBundle(), $collection_content_bundles, TRUE)) {
+      $node->setValue('collection', $this->getJoinupCollection()->label());
     }
   }
 

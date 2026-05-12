@@ -2,16 +2,16 @@
 Feature: Collections Overview
 
   Scenario: View collection overview as an anonymous user
-    Given users:
+    Given the following users:
       | Username      | E-mail                       |
       | Madam Shirley | i.see.the.future@example.com |
-    And collection content:
+    And the following "collection" content:
     # As of ISAICP-3618 descriptions should not be visible in regular tiles.
       | title             | description                    | creation date     |
       | E-health          | Supports health-related fields | 2018-10-04 8:31am |
       | Open Data         | Facilitate access to data sets | 2018-10-04 8:33am |
       | Connecting Europe | Reusable tools and services    | 2018-10-04 8:32am |
-    And owner content:
+    And the following "owner" content:
       | name                 | owner type |
       | Organisation example | Company    |
     # Check that visiting as an anonymous does not create cache for all users.
@@ -30,8 +30,6 @@ Feature: Collections Overview
       | Connecting Europe                    |
       # Created in 8:31am.
       | E-health                             |
-      # Created 2015-01-01 08:00-01-02am.
-      | Solutions mentioned in an assessment |
       | Interoperability assessments space   |
       | Portal support                       |
 
@@ -82,13 +80,13 @@ Feature: Collections Overview
     Then I should see the link "Colonies in space"
 
   Scenario: Custom pages should not be visible on the overview page
-    Given collection content:
+    Given the following "collection" content:
       | title | logo     | moderation |
       | Jira  | logo.png | no         |
-    And news content:
+    And the following "news" content:
       | title                             | body                             | collection |
       | Jira will be down for maintenance | As always, during business hours | Jira       |
-    And custom_page content:
+    And the following "custom_page" content:
       | title            | body                                       | collection |
       | Maintenance page | Jira is re-indexing. Go and drink a coffee | Jira       |
     When I go to the homepage of the "Jira" collection
@@ -97,10 +95,10 @@ Feature: Collections Overview
 
   @javascript
   Scenario: Feature icon should be visible for collection's content.
-    Given collection content:
+    Given the following "collection" content:
       | title                   |
       | Service Management apps |
-    And news content:
+    And the following "news" content:
       | title  | collection              | featured |
       | Jira   | Service Management apps | yes      |
       | Trello | Service Management apps | no       |
@@ -109,12 +107,12 @@ Feature: Collections Overview
     But the "Trello" "news" tile should not be marked as featured
 
   Scenario: Users are able to filter collections they have created or that are featured site-wide.
-    Given users:
+    Given the following users:
       | Username          |
       | Carolina Mercedes |
       | Luigi Plant       |
       | Yiannis Parios    |
-    And collection content:
+    And the following "collection" content:
       | title                       | featured | author            |
       | Enemies of the state        | yes      | Luigi Plant       |
       | Fed up meatlovers           | no       | Carolina Mercedes |
@@ -123,7 +121,7 @@ Feature: Collections Overview
       | Yiannis Parios collection 2 | no       | Yiannis Parios    |
       | Yiannis Parios collection 3 | no       | Yiannis Parios    |
     # Technical: use a separate step to create a collection associated to the anonymous user.
-    And collection content:
+    And the following "collection" content:
       | title              | featured |
       | Biologic meatballs | no       |
 

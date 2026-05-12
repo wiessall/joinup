@@ -52,6 +52,8 @@ module:
   eira: 0
   email_confirmer: 0
   email_contact: 0
+  entity_browser: 0
+  entity_browser_entity_form: 0
   entity_form_field_label: 0
   entity_legal: 0
   entity_print: 0
@@ -98,6 +100,7 @@ module:
   isa2_analytics: 0
   joinup_api: 0
   joinup_assessment: 0
+  joinup_badge: 0
   joinup_bookmark: 0
   joinup_bundle_class: 0
   joinup_collection: 0

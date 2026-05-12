@@ -7,6 +7,7 @@ namespace Drupal\joinup\Context;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\EntityTrait;
@@ -40,17 +41,17 @@ class JoinupLicenceContext extends RawDrupalContext {
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $event
    *   The before node create event.
-   *
-   * @BeforeNodeCreate
    */
+  #[BeforeNodeCreate]
   public function convertToBoolean(BeforeNodeCreateScope $event): void {
-    $node = $event->getEntity();
-    if ($node->type === 'licence' && !empty($node->deprecated)) {
-      $value = ['yes' => TRUE, 'no' => FALSE][$node->deprecated] ?? NULL;
+    $node = $event->getStub();
+    $deprecated = $node->getValue('deprecated');
+    if ($node->getBundle() === 'licence' && !empty($deprecated)) {
+      $value = ['yes' => TRUE, 'no' => FALSE][$deprecated] ?? NULL;
       if ($value === NULL) {
-        throw new \InvalidArgumentException("Invalid licence deprecated value: '$node->deprecated'");
+        throw new \InvalidArgumentException("Invalid licence deprecated value: '$deprecated'");
       }
-      $node->deprecated = $value;
+      $node->setValue('deprecated', $value);
     }
   }
 

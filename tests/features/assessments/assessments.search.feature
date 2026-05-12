@@ -39,10 +39,14 @@ Feature: Assessment report search functionality
     Then the page should show only the tiles "Transmission Summary, Acme Report"
     And I should see the following facet summary "Assessment reports, European Union"
 
-  Scenario: Solutions tied to assessments are not searchable.
-    Given solution content:
+  Scenario: Solutions tied to assessments and the collection are not searchable.
+    Given the following "solution" content:
       | title                                   | state     | collection                           |
       | some random text to search architecture | published | Solutions mentioned in an assessment |
     When I visit the advanced search page
     And I enter "architecture" in the search bar and press enter
     Then I should not see the "some random text to search architecture" tile
+
+    When I visit the advanced search page
+    And I enter "Solutions mentioned in an assessment" in the search bar and press enter
+    Then I should not see the "Solutions mentioned in an assessment" tile

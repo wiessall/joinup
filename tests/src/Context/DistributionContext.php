@@ -11,13 +11,13 @@ use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\file\FileInterface;
 use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_distribution\Entity\DownloadEvent;
 use Drupal\link\LinkItemInterface;
@@ -31,7 +31,6 @@ class DistributionContext extends RawDrupalContext {
   use EntityReferenceTrait;
   use EntityTrait;
   use FileTrait;
-  use TestingEntitiesTrait;
   use JavascriptTrait;
 
   /**
@@ -39,23 +38,23 @@ class DistributionContext extends RawDrupalContext {
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $event
    *   The before node create event.
-   *
-   * @BeforeNodeCreate
    */
+  #[BeforeNodeCreate]
   public function beforeNodeCreateDistributionFields(BeforeNodeCreateScope $event): void {
-    $node = $event->getEntity();
-    if ($node->type !== 'distribution') {
+    $node = $event->getStub();
+    if ($node->getBundle() !== 'distribution') {
       return;
     }
 
     // Downloads are stored in a meta entity.
-    if (!empty($node->downloads)) {
-      $node->download_count = MetaEntity::create([
+    $downloads = $node->getValue('downloads');
+    if (!empty($downloads)) {
+      $node->setValue('download_count', MetaEntity::create([
         'type' => 'download_count',
-        'count' => (int) $node->downloads,
-      ]);
-      unset($node->downloads);
+        'count' => (int) $downloads,
+      ]));
     }
+    $node->removeValue('downloads');
   }
 
   /**
@@ -80,7 +79,7 @@ class DistributionContext extends RawDrupalContext {
     if (!in_array($link_type, ['download', 'external'])) {
       throw new \InvalidArgumentException('Only "download" and "external" values are allowed for $link_type.');
     }
-    $link_type = ucfirst($link_type);
+
     $distribution = $this->getEntityByLabel('node', $distribution);
     if (!$distribution instanceof DistributionInterface) {
       return;
@@ -91,12 +90,11 @@ class DistributionContext extends RawDrupalContext {
       throw new \Exception(sprintf('Distribution "%s" does not contain any download links.', $distribution->label()));
     }
 
-    if ($resource instanceof FileInterface) {
-      $link = \Drupal::service('file_url_generator')->generateAbsoluteString($resource->getFileUri());
-    }
-    elseif ($resource instanceof LinkItemInterface) {
-      $link = \Drupal::service('file_url_generator')->generateAbsoluteString($resource->uri);
-    }
+    $link = match (TRUE) {
+      $resource instanceof FileInterface => \Drupal::service('file_url_generator')->generateAbsoluteString($resource->getFileUri()),
+      $resource instanceof LinkItemInterface => \Drupal::service('file_url_generator')->generateAbsoluteString($resource->uri),
+    };
+
     $result = $this->getSession()
       ->getPage()
       ->find('xpath', "//a[contains(., '{$distribution->label()}')]/ancestor::li[contains(concat(' ', @class, ' '), ' releases__item ')]//a[@href='{$link}']");
@@ -214,7 +212,6 @@ class DistributionContext extends RawDrupalContext {
         'parent_entity_id' => $parent->id(),
       ]);
       $entity->save();
-      $this->entities['download_event'][$entity->id()] = $entity;
     }
   }
 

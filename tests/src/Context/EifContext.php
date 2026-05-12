@@ -10,13 +10,13 @@ use Behat\Hook\BeforeScenario;
 use Behat\Step\Given;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
+use Drupal\Driver\Entity\EntityStub;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\eif\EifInterface;
 use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\RandomGeneratorTrait;
 use Drupal\joinup\Traits\SearchTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\meta_entity\Entity\MetaEntity;
 
@@ -29,7 +29,6 @@ class EifContext extends RawDrupalContext {
   use EntityTrait;
   use SearchTrait;
   use StringTranslationTrait;
-  use TestingEntitiesTrait;
   use UtilityTrait;
   use RandomGeneratorTrait;
 
@@ -39,49 +38,44 @@ class EifContext extends RawDrupalContext {
   #[BeforeScenario('@eif_community&&@api')]
   public function setupEifData(BeforeScenarioScope $scope): void {
     // Create an owner.
-    $owner = $this->nodeCreate((object) [
-      'type' => 'owner',
+    $owner = $this->nodeCreate(new EntityStub('node', 'owner', [
       'title' => 'Owner',
-    ]);
+    ]));
 
-    $contact = $this->nodeCreate((object) [
-      'type' => 'contact_information',
+    $contact = $this->nodeCreate(new EntityStub('node', 'contact_information', [
       'title' => 'Contact name',
       'email' => 'contact.email@example.com',
-    ]);
+    ]));
 
     // Random topic.
     $topic_label = $this->getRandomTerm('topic', TRUE)->label();
     // Create the NIFO sample collection.
-    $collection = $this->nodeCreate((object) [
-      'type' => 'collection',
+    $collection = $this->nodeCreate(new EntityStub('node', 'collection', [
       'uri' => 'http://nifo.collection',
       'title' => 'NIFO collection',
       'field_state' => 'published',
       'field_topic' => $topic_label,
-      'owner' => $owner->title,
-      'contact_information' => $contact->title,
-    ]);
+      'owner' => $owner->getValue('title'),
+      'contact' => $contact->getValue('title'),
+    ]));
 
     // Create the EIF Toolbox solution.
-    $solution = $this->nodeCreate((object) [
-      'type' => 'solution',
+    $solution = $this->nodeCreate(new EntityStub('node', 'solution', [
       'uri' => EifInterface::EIF_ID,
       'title' => 'EIF Toolbox',
-      'og_audience' => $collection->title,
+      'og_audience' => $collection->getValue('title'),
       'field_state' => 'published',
       'field_topic' => $topic_label,
-      'owner' => $owner->title,
-      'contact_information' => $contact->title,
-    ]);
+      'owner' => $owner->getValue('title'),
+      'contact' => $contact->getValue('title'),
+    ]));
 
-    $this->nodeCreate((object) [
-      'type' => 'custom_page',
+    $this->nodeCreate(new EntityStub('node', 'custom_page', [
       'nid' => EifInterface::EIF_ONLINE_ASSISTANT,
       'title' => 'Online Assistant',
-      'og_audience' => $solution->title,
+      'og_audience' => $solution->getValue('title'),
       'field_state' => 'published',
-    ]);
+    ]));
 
     // Ensure the taxonomy terms are indexed.
     $vids = [
@@ -122,6 +116,7 @@ class EifContext extends RawDrupalContext {
       }
       $field_name = 'eif_' . str_replace(' ', '_', strtolower($row[0]));
       $fields[$field_name] ??= [];
+      $value = [];
       switch ($row[0]) {
         case 'Description':
           $value = [['value' => trim($row[1]), 'format' => 'content_editor']];
@@ -141,7 +136,6 @@ class EifContext extends RawDrupalContext {
           // @endcode
           // The part from the comma symbol on (the description) is optional.
           preg_match('/name:(\s*?)(?<name>[^,]*)(?:,(\s*?)description:(\s*?)(?<description>.*$))?/', $row[1], $matches);
-          $value = NULL;
           if (isset($matches['name'])) {
             $value = [['entity' => $this->getEntityByLabel('taxonomy_term', trim($matches['name']), 'eif_recommendation')]];
             if (isset($matches['description'])) {
@@ -160,7 +154,6 @@ class EifContext extends RawDrupalContext {
       'target' => $solution,
     ] + $fields);
     $eif_perspective->save();
-    $this->entities['meta_entity'][$eif_perspective->id()] = $eif_perspective;
   }
 
   /**

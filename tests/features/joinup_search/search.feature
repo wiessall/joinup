@@ -4,14 +4,14 @@ Feature: Global search
 
   @javascript
   Scenario: Anonymous user can find items
-    Given collection content:
+    Given the following "collection" content:
       | title                        | moderation | topic      | spatial coverage | state     |
       | Molecular cooking collection | no         | Demography | Belgium          | published |
-    Given solution content:
+    Given the following "solution" content:
       | title          | collection                   | description                                                | topic      | domain           | state     |
       | Spherification | Molecular cooking collection | Spherification is the culinary process of shaping a liquid | Demography | Defense          | published |
       | Foam           | Molecular cooking collection | The use of foam in cuisine has been used in many forms     | eGov       | Economic affairs | published |
-    And news content:
+    And the following "news" content:
       | title                | headline              | field_paragraphs_body | collection                   | topic       | spatial coverage | state     |
       | El Tuba de Los Lobos | El Celler de Can Roca | The best in town      | Molecular cooking collection | E-inclusion | Luxembourg       | published |
       | Dummy news 1         | Dummy title 1         | Dummy body            | Molecular cooking collection | E-inclusion | Luxembourg       | published |
@@ -20,10 +20,10 @@ Feature: Global search
     Then the response should not contain "data-drupal-facet-id=\"status\""
 
     # Create some archived content too.
-    Given news content:
+    Given the following "news" content:
       | title      | headline    | field_paragraphs_body | collection                   | topic       | spatial coverage | state    |
       | Rummy news | Rummy title | Dummy body            | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
-    And solution content:
+    And the following "solution" content:
       | title         | collection                   | description                            | state    | topic             |
       | Spring device | Molecular cooking collection | A mechanical device that stores energy | archived | Supplier exchange |
 
@@ -90,7 +90,7 @@ Feature: Global search
     And I should see the text "Archived" in the "Spring device" tile
 
     # Test date filtering.
-    Given news content:
+    Given the following "news" content:
       | title           | field_paragraphs_body    | collection                   | topic       | spatial coverage | state     | created    | changed    | published_at |
       | Muscle atrophy  | Researchers from Tsukuba | Molecular cooking collection | Demography  | Luxembourg       | published | 01/01/2019 | 01/01/2019 | 01/01/2019   |
       | El Cabo da Roca | The best in town         | Molecular cooking collection | E-inclusion | Luxembourg       | published | 01/12/2020 | 01/12/2020 | 01/12/2020   |
@@ -105,18 +105,18 @@ Feature: Global search
 
   @javascript
   Scenario: Alphabetical order for the spatial coverage and organisation country in the search page.
-    Given owner content:
+    Given the following "owner" content:
       | name           | country        |
       | Search owner   | Greece         |
       | European owner | European Union |
-    And collection content:
+    And the following "collection" content:
       | title            | description                  | abstract                       | state     | owner        |
       | Collection alpha | collection beta description. | The collection gamma abstract. | published | Search owner |
-    And solution content:
+    And the following "solution" content:
       | title            | description                  | abstract                       | owner          |
       | Solution alpha | collection beta description. | The collection gamma abstract. | Search owner   |
       | Solution beta  | collection beta description. | The collection gamma abstract. | European owner |
-    And event content:
+    And the following "event" content:
       | title       | field_paragraphs_body | spatial coverage | collection       | state     |
       | Event Omega | The epsilon event.    | Greece           | Collection alpha | published |
       | Alt event   | Background event.     | Luxembourg       | Collection alpha | published |
@@ -132,7 +132,7 @@ Feature: Global search
 
     Given I click "Clear filters"
     When I check the "Solutions (2)" checkbox from the "Content types" facet
-    And I check the "Collections (4)" checkbox from the "Content types" facet
+    And I check the "Collections (3)" checkbox from the "Content types" facet
     And I should see the "Organisation country" facet
     And the "Organisation country" checkbox facet should allow selecting the following values "European Union (1), Greece (2)"
     And I check the "European Union (1)" checkbox from the "Organisation country" facet
@@ -144,16 +144,16 @@ Feature: Global search
     Then I should see the "Solution alpha" tile
 
   Scenario: Content can be found with a full-text search.
-    Given collection content:
+    Given the following "collection" content:
       | title            | description                  | abstract                       | keywords | state     |
       | Collection alpha | collection beta description. | The collection gamma abstract. | Alphabet | published |
-    Given solution content:
+    Given the following "solution" content:
       | title          | description                | keywords | collection       | state     |
       | Solution alpha | solution beta description. | Alphabet | Collection alpha | published |
-    And news content:
+    And the following "news" content:
       | title      | headline            | field_paragraphs_body     | keywords | collection       | state     |
       | News omega | News headline delta | The epsilon news content. | Alphabet | Collection alpha | published |
-    And users:
+    And the following users:
       | Username | E-mail                      | First name | Family name |
       | jenlyle  | jenessa.carlyle@example.com | Jenessa    | Carlyle     |
 
@@ -211,10 +211,10 @@ Feature: Global search
     And I should see search bar in navbar
 
   Scenario: Solutions are found by their distribution keyword.
-    Given licence content:
+    Given the following "licence" content:
       | title      |
       | Apache-2.0 |
-    And solution content:
+    And the following "solution" content:
       | title     | state     |
       | Zzolution | published |
 
@@ -222,7 +222,7 @@ Feature: Global search
     Then I should see "No content found for your search."
 
     # Add distribution, child of solution.
-    Given distribution content:
+    Given the following "distribution" content:
       | title       | solution  | description          | resources                       | licence    | format | state     |
       | ZzoluDistro | Zzolution | Übermensch foot size | http://example.com/zzolu-distro | Apache-2.0 | ZIP    | published |
 
@@ -264,7 +264,7 @@ Feature: Global search
     Then the page should show only the tiles "Zzolution"
 
   Scenario: Collections are found by their keywords.
-    Given collection content:
+    Given the following "collection" content:
       | title             | keywords                      | state     |
       | Collection sample | Alphabet, nintendo64 licences | published |
 
@@ -276,14 +276,14 @@ Feature: Global search
 
   @javascript
   Scenario: Users are able to select the sort order.
-    Given collection content:
+    Given the following "collection" content:
       | title             | description       | state     |
       | Custom collection | Some custom data. | published |
-    And news content:
+    And the following "news" content:
       | title               | headline                           | field_paragraphs_body                   | collection        | state     | created    | changed    |
       | Quantum information | Relativity is the word             | No one cares about the body.            | Custom collection | published | 01/01/2019 | 03/08/2019 |
       | The uneven universe | Relativity news: Relativity theory | I do care about the relativity keyword. | Custom collection | published | 02/01/2019 | 02/08/2019 |
-    And event content:
+    And the following "event" content:
       | title           | collection        | state     | start date   | end date            | created      |
       | Blue revolution | Custom collection | published | now +1 years | now +1 years +1 day | now -2 years |
 
@@ -304,13 +304,13 @@ Feature: Global search
 
   @javascript
   Scenario: Anonymous user can find facets summary
-    Given collection content:
+    Given the following "collection" content:
       | title                    | moderation | topic      | spatial coverage | state     |
       | Radio cooking collection | no         | Demography | Belgium          | published |
-    Given solution content:
+    Given the following "solution" content:
       | title   | collection               | description             | topic      | state     |
       | Spheres | Radio cooking collection | Spherification process. | Demography | published |
-    And news content:
+    And the following "news" content:
       | title        | field_paragraphs_body | collection               | topic       | spatial coverage | state     |
       | El Cabo Roca | The best in town.     | Radio cooking collection | E-inclusion | Luxembourg       | published |
 
@@ -344,7 +344,7 @@ Feature: Global search
 
     # Filter content from 01-01-2020 to 30-06-2020.
   Scenario: Max 2 topic terms appear in each search result with a suffix for the rest.
-    Given collection content:
+    Given the following "collection" content:
       | title                  | moderation | topic                                                                              | state     |
       | Max 2 topic collection | no         | Finance in EU, Supplier exchange, Demography, E-inclusion, Statistics and Analysis | published |
     When I visit the advanced search page
@@ -352,10 +352,10 @@ Feature: Global search
     And I should see the text "+3 topics" in the "Max 2 topic collection" card
 
   Scenario: In search result I can see updated date label.
-    Given collection content:
+    Given the following "collection" content:
       | title             | description       | state     |
       | Custom collection | Some custom data. | published |
-    And news content:
+    And the following "news" content:
       | title               | headline               | body                     | collection        | state     | created    | changed    |
       | Quantum information | Relativity is the word | No one cares about body. | Custom collection | published | 01/01/2019 | 03/08/2019 |
     When I visit the advanced search page
@@ -380,11 +380,11 @@ Feature: Global search
 
   @javascript
   Scenario: Search page - Show the abstract or description in the search results.
-    Given collection content:
+    Given the following "collection" content:
       | title      | description                  | abstract                      | state     |
       | Pull alpha | collection pull description. | The collection pull abstract. | published |
       | Roll alpha | collection roll description. | The collection roll abstract. | archived  |
-    Given solution content:
+    Given the following "solution" content:
       | title         | description                | abstract                    | collection | state     |
       | Solution pull | solution pull description. | The solution pull abstract. | Pull alpha | published |
       | Solution roll | solution roll description. | The solution roll abstract. | Roll alpha | published |
@@ -407,13 +407,13 @@ Feature: Global search
 
   @javascript
   Scenario: Check topics filter for users.
-    Given users:
+    Given the following users:
       | Username | E-mail             | First name | Family name | Professional domain |
       | lyleu    | lyle.u@example.com | Lyle       | Uname       | Demography          |
       | kyleu    | kyle.u@example.com | Kyle       | Freeman     | E-inclusion         |
 
     When I visit the advanced search page
-    Then I should see the text "SEARCH RESULTS (6)"
+    Then I should see the text "SEARCH RESULTS (5)"
     When I check the "User profiles (3)" checkbox from the "Content types" facet
     And I should see the "Lyle Uname" tile
     And I should see the "Kyle Freeman" tile

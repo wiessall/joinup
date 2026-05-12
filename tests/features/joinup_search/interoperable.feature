@@ -4,10 +4,10 @@ Feature: Global Interoperable search
 
   @javascript
   Scenario: User can find Interoperable items
-    Given collection content:
+    Given the following "collection" content:
       | title          |
       | Open standards |
-    Given solution content:
+    Given the following "solution" content:
       | title           | collection     | description                                                                  |
       | eGovernment     | Open standards | It refers to the collaboration ability of cross-border services for citizens |
       | Military forces | Open standards | the ability of the forces of two or more nations to train                    |
@@ -30,5 +30,5 @@ Feature: Global Interoperable search
     When I visit the advanced search page
     # 3 demo collections are installed by default.
     # @see joinup_test.install
-    And I check the "Collections (4)" checkbox from the "Content types" facet
+    And I check the "Collections (3)" checkbox from the "Content types" facet
     Then I should not see the text "Interoperable Europe Solutions"

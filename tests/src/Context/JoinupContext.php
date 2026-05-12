@@ -18,11 +18,15 @@ use Behat\Step\When;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Driver\Entity\EntityStub;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\AfterNodeCreate;
+use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
+use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
-use Drupal\User\Entity\User;
 use Drupal\comment\CommentInterface;
 use Drupal\comment\Entity\Comment;
+use Drupal\file_visibility\FileVisibilityInterface;
 use Drupal\joinup\Traits\BootstrapTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
@@ -34,7 +38,6 @@ use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\RandomGeneratorTrait;
 use Drupal\joinup\Traits\TabledragTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -49,6 +52,7 @@ use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\user\Entity\User;
 use GuzzleHttp\Client;
 
 /**
@@ -68,11 +72,18 @@ class JoinupContext extends RawDrupalContext {
   use RandomGeneratorTrait;
   use StringTranslationTrait;
   use TabledragTrait;
-  use TestingEntitiesTrait;
   use TraversingTrait;
   use UserTrait;
   use UtilityTrait;
   use WorkflowTrait;
+
+  /**
+   * Stores non-field node properties stripped before Drupal field validation.
+   *
+   * Keyed by spl_object_id() of the Behat node stub. AfterNodeCreate hooks
+   * that need to act on these values should call getStrippedNodeProperty().
+   */
+  private static array $strippedNodeProperties = [];
 
   /**
    * Creates a user with data provided in a table.
@@ -137,7 +148,7 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when a collection or solution with the given label doesn't exist.
    *
-   * @see \Drupal\DrupalExtension\Context\DrupalContext::assertAuthenticatedByRole()
+   * @see \Drupal\DrupalExtension\Context\DrupalContext::iAmLoggedInAsUserWithRole()
    */
   #[Given('I am logged in as a user with the :role role(s) of the :group_label :group_bundle')]
   #[Given('I am logged in as a/an :role of the :group_label :group_bundle')]
@@ -152,16 +163,16 @@ class JoinupContext extends RawDrupalContext {
     // Check if a user with this role is already logged in.
     if (!$this->loggedInWithOgRoles($roles, $entity)) {
       $random = $this->getRandom()->name(8);
-      // Create user (and project)
-      $user = (object) [
+      // Create user (and project).
+      $user = new EntityStub('user', NULL, [
         'name' => $random,
         'pass' => $random,
-      ];
-      $user->mail = "{$user->name}@example.com";
+        'mail' => "$random@example.com",
+      ]);
       $this->userCreate($user);
 
       // Load the actual user account.
-      $account = User::load($user->uid);
+      $account = User::load($user->getValue('uid'));
       $this->subscribeUserToGroup($account, $entity, $roles);
 
       // Login.
@@ -195,7 +206,7 @@ class JoinupContext extends RawDrupalContext {
     $roles = $this->getOgRoles($roles, $entity);
 
     $current_user = $this->getUserManager()->getCurrentUser();
-    $account = User::load($current_user->uid);
+    $account = User::load($current_user->getValue('uid'));
 
     $this->subscribeUserToGroup($account, $entity, $roles);
   }
@@ -223,7 +234,7 @@ class JoinupContext extends RawDrupalContext {
     }
 
     $current_user = $this->getUserManager()->getCurrentUser();
-    $account = User::load($current_user->uid);
+    $account = User::load($current_user->getValue('uid'));
 
     $this->subscribeUserToGroup($account, $entity, [], $state);
   }
@@ -250,7 +261,7 @@ class JoinupContext extends RawDrupalContext {
       return FALSE;
     }
     $current_user = $this->getUserManager()->getCurrentUser();
-    $user = \Drupal::entityTypeManager()->getStorage('user')->loadUnchanged($current_user->uid);
+    $user = \Drupal::entityTypeManager()->getStorage('user')->loadUnchanged($current_user->getValue('uid'));
     $membership = $group->getMembership($user->id());
     if (empty($membership)) {
       return FALSE;
@@ -482,14 +493,20 @@ class JoinupContext extends RawDrupalContext {
    */
   #[When('I go to the :action form of the :title :bundle')]
   public function goToEntityForm(string $action, string $title, string $bundle): void {
-    if (!in_array($action, ['edit', 'delete'])) {
-      /** @var \Drupal\node\Entity\Node $node */
-      $node = $this->getEntityByLabel('node', $title, $bundle);
-      $this->visitPath($node->toUrl($action)->toString());
+    $entity_type_id = $this->translateEntityTypeAlias($bundle);
+    $bundle = $this->translateBundle($bundle);
+    $entity = $this->getEntityByLabel($entity_type_id, $title, $bundle);
+
+    $rel = match ($action) {
+      'edit' => 'edit-form',
+      'delete' => 'delete-form',
+      default => $action,
+    };
+    if (!$entity->hasLinkTemplate($rel)) {
+      throw new \Exception("No link template '$rel' found for the '{$entity->getEntityTypeId()}' entity type.");
     }
-    else {
-      $this->visitEntityForm($action, $title, $bundle);
-    }
+
+    $this->visitPath($entity->toUrl($rel)->toString());
   }
 
   /**
@@ -599,6 +616,22 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Returns a property stripped from the node stub before field validation.
+   *
+   * @param object $node
+   *   The Behat node stub (the same object passed to BeforeNodeCreate and
+   *   AfterNodeCreate scopes via $scope->getStub()).
+   * @param string $key
+   *   The original property name (before stripping).
+   *
+   * @return mixed
+   *   The stored value, or NULL if the property was not stripped.
+   */
+  public static function getStrippedNodeProperty(object $node, string $key): mixed {
+    return self::$strippedNodeProperties[spl_object_id($node)][$key] ?? NULL;
+  }
+
+  /**
    * Replaces human readable labels and values with their real counterparts.
    *
    * This allows us to:
@@ -614,31 +647,29 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when a logo could not be uploaded, e.g. because the file could not
    *   be found.
-   *
-   * @BeforeNodeCreate
    */
+  #[BeforeNodeCreate]
   public function massageFieldsBeforeNodeCreate(BeforeNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
-    $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', $node->type);
+    $node = $scope->getStub();
+    $type = $node->getBundle();
+    $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', $type);
     // Replace field label aliases with the actual field names.
-    foreach (get_object_vars($node) as $alias => $value) {
-      $name = $this->getNodeFieldNameFromAlias($node->type, $alias);
+    foreach ($node->getValues() as $alias => $value) {
+      $name = $this->getNodeFieldNameFromAlias($type, $alias);
       if ($name !== $alias) {
-        unset($node->$alias);
+        $node->removeValue($alias);
         // Don't set empty values, since we can have multiple aliases that point
         // to the same field (e.g. 'collection' and 'solution' both use the same
         // 'og_audience' field).
         if (!empty($value)) {
-          $node->$name = $value;
+          $node->setValue($name, $value);
         }
       }
       // Add the body field format.
       if ($name === 'body' || $name === 'description') {
-        $value_key = "{$name}:value";
-        $format_key = "{$name}:format";
-        $node->{$value_key} = $value;
-        $node->{$format_key} = 'content_editor';
-        unset($node->{$name});
+        $node->setValue("{$name}:value", $value);
+        $node->setValue("{$name}:format", 'content_editor');
+        $node->removeValue($name);
       }
       if ($name === 'webpage' && filter_var($value, FILTER_VALIDATE_URL)) {
         // \Drupal\Driver\Fields\Drupal8\LinkHandler::expand() expects the
@@ -649,40 +680,25 @@ class JoinupContext extends RawDrupalContext {
         // the data into an array and the LinkHandler will handle it correctly.
         // @see \Drupal\Driver\Fields\Drupal8\LinkHandler::expand()
         // @see \Drupal\DrupalExtension\Context\RawDrupalContext::parseEntityFields()
-        $node->webpage = "$value - $value";
+        $node->setValue('webpage', "$value - $value");
       }
     }
 
-    if (!empty($node->field_attachment)) {
-      // We want to copy it from the fixtures into the file system and register
-      // it in the CustomPageContext so it can be cleaned up after the scenario
-      // ends. Perform a small dance to get access to the context class from
-      // inside this static callback.
-      /** @var \Behat\Behat\Context\Environment\InitializedContextEnvironment $environment */
+    if (!empty($node->getValue('field_attachment'))) {
       $environment = $scope->getEnvironment();
-      /** @var \Drupal\joinup\Context\CustomPageContext $context */
+      /** @var self $context */
       $context = $environment->getContext(self::class);
-      foreach ($context->explodeDelimitedSeparatedStepArgument($node->field_attachment) as $filename) {
-        if (strpos($filename, ':')) {
-          preg_match('/target_id:\s*(?<filename>[^ -]*)/', $filename, $matches);
-          if (empty($matches['filename'])) {
-            throw new \Exception("Could not extract filename from '$filename'");
-          }
-          $filename = $matches['filename'];
-        }
-        // The file is tracked by its filename so the value still remains to be
-        // the filenames instead of the url.
-        $context->createFile($filename);
-      }
+      $node->setValue('field_attachment', $context->parseFileBehatValue($node->getValue('field_attachment')));
     }
 
     // Replace collection and solution group references that use titles with the
     // actual URI. Note that this fails if a URI is supplied for a collection or
     // solution in a Behat test. This is by design, the URIs are not exposed to
     // end users of the site so they should not be used in BDD scenarios.
-    if (!empty($node->{OgGroupAudienceHelperInterface::DEFAULT_FIELD})) {
-      $entity = $this->getEntityByLabel('node', $node->{OgGroupAudienceHelperInterface::DEFAULT_FIELD});
-      $node->{OgGroupAudienceHelperInterface::DEFAULT_FIELD} = $entity->id();
+    $audienceField = OgGroupAudienceHelperInterface::DEFAULT_FIELD;
+    if (!empty($node->getValue($audienceField))) {
+      $entity = $this->getEntityByLabel('node', $node->getValue($audienceField));
+      $node->setValue($audienceField, $entity->id());
     }
 
     // Replace the human readable publication statuses with the boolean values
@@ -693,42 +709,44 @@ class JoinupContext extends RawDrupalContext {
     ]);
 
     // Replace human readable workflow states with machine names.
-    if (!empty($node->field_state)) {
-      $node->field_state = self::translateWorkflowStateAlias($node->field_state);
+    if (!empty($node->getValue('field_state'))) {
+      $node->setValue('field_state', self::translateWorkflowStateAlias($node->getValue('field_state')));
     }
-    elseif (!empty($field_definitions['field_state']) && empty($node->field_state) && $node->type != 'contact_information') {
-      $node->field_state = 'published';
+    elseif (!empty($field_definitions['field_state']) && empty($node->getValue('field_state')) && $type != 'contact_information') {
+      $node->setValue('field_state', 'published');
     }
 
-    if (property_exists($node, 'visit_count')) {
-      $node->visit_count = MetaEntity::create([
+    if ($node->hasValue('visit_count')) {
+      $node->setValue('visit_count', MetaEntity::create([
         'type' => 'visit_count',
-        'count' => (int) $node->visit_count,
-      ]);
+        'count' => (int) $node->getValue('visit_count'),
+      ]));
     }
 
-    if (property_exists($node, 'published_at') && !empty($node->published_at)) {
+    if ($node->hasValue('published_at') && !empty($node->getValue('published_at'))) {
+      $published_at = $node->getValue('published_at');
       // If the entry is not numeric, then it means that the scenario is using a
       // human readable version of the timestamp.
       // Example: Sun, 01 Dec 2019 13:00:00 +0100.
       // This will allow dynamic tests as well. `strtotime` will also be able to
       // receive entries like "1 day ago" or "+1 month".
-      if (!is_numeric($node->published_at)) {
+      if (!is_numeric($published_at)) {
         // The strtotime() PHP function is using the default timezone when doing
         // the conversion. But we want to stick to UTC in order to avoid
         // timezone and DST issue.
-        $node->published_at = date('U', strtotime($node->published_at));
+        $node->setValue('published_at', date('U', strtotime($published_at)));
       }
     }
 
-    if (property_exists($node, 'uid') && !empty($node->uid) && !is_numeric($node->uid)) {
-      $user = user_load_by_name($node->uid);
+    if ($node->hasValue('uid') && !empty($node->getValue('uid')) && !is_numeric($node->getValue('uid'))) {
+      $user = user_load_by_name($node->getValue('uid'));
       if ($user) {
-        $node->uid = $user->id();
+        $node->setValue('uid', $user->id());
       }
     }
 
     $image_fields = [
+      'field_custom_page_logo',
       'field_discussion_logo',
       'field_document_logo',
       'field_event_logo',
@@ -736,65 +754,126 @@ class JoinupContext extends RawDrupalContext {
       'logo',
     ];
     foreach ($image_fields as $image_field) {
-      if (!empty($node->$image_field)) {
-        $file = $this->createFile($node->$image_field);
-        $node->$image_field = $file->getFileUri();
+      if (!empty($node->getValue($image_field))) {
+        $node->setValue($image_field, $this->parseFileBehatValue($node->getValue($image_field)));
       }
     }
 
-    if (isset($node->field_paragraphs_body)) {
+    if ($node->hasValue('field_paragraphs_body')) {
       $paragraph = Paragraph::create([
         'type' => 'simple_paragraph',
         'field_body' => [
-          'value' => $node->field_paragraphs_body,
+          'value' => $node->getValue('field_paragraphs_body'),
           'format' => 'content_editor',
         ],
       ]);
       $paragraph->save();
-      $node->{"field_paragraphs_body:target_id"} = $paragraph->id();
-      $node->{"field_paragraphs_body:target_revision_id"} = $paragraph->getRevisionId();
-      unset($node->field_paragraphs_body);
+      $node->setValue('field_paragraphs_body:target_id', $paragraph->id());
+      $node->setValue('field_paragraphs_body:target_revision_id', $paragraph->getRevisionId());
+      $node->removeValue('field_paragraphs_body');
     }
 
-    if (!empty($field_definitions['field_topic']) && empty($node->field_topic)) {
+    if (!empty($field_definitions['field_topic']) && empty($node->getValue('field_topic'))) {
       // For some tests, the node's topic has no relevance. Such tests are
       // allowed to omit an explicit topic. We're assigning a random topic term,
       // to satisfy data integrity and prevent form validation errors.
-      $node->field_topic = $this->getRandomTerm('topic', TRUE)->label();
+      $node->setValue('field_topic', $this->getRandomTerm('topic', TRUE)->label());
     }
 
-    if (!empty($field_definitions['contact']) && !isset($node->contact)) {
-      $node->contact = $this->getDefaultContact()->label();
+    if (!empty($field_definitions['contact']) && !$node->hasValue('contact')) {
+      $node->setValue('contact', $this->getDefaultContact()->label());
     }
-    if (!empty($field_definitions['owner']) && !isset($node->owner)) {
-      $node->owner = $this->getDefaultOwner()->label();
+    if (!empty($field_definitions['owner']) && !$node->hasValue('owner')) {
+      $node->setValue('owner', $this->getDefaultOwner()->label());
     }
-    if (!empty($field_definitions['abstract']) && !isset($node->abstract)) {
-      $node->abstract = 'default abstract';
+    if (!empty($field_definitions['abstract']) && !$node->hasValue('abstract')) {
+      $node->setValue('abstract', 'default abstract');
     }
 
-    if (!empty($field_definitions['description']) && empty($node->descritpion)) {
-      $node->description = 'default description';
+    if (!empty($field_definitions['description']) && empty($node->getValue('description'))) {
+      $node->setValue('description', 'default description');
     }
-    if (!empty($field_definitions['solution_type']) && empty($node->solution_type)) {
-      $node->solution_type = $this->getRandomTerm('solution_type', TRUE)->label();
+    if (!empty($field_definitions['solution_type']) && empty($node->getValue('solution_type'))) {
+      $node->setValue('solution_type', $this->getRandomTerm('solution_type', TRUE)->label());
     }
-    if (!empty($field_definitions['keywords']) && empty($node->keywords)) {
-      $node->keywords = $this->getRandomTerm('tags')->label();
+    if (!empty($field_definitions['keywords']) && empty($node->getValue('keywords'))) {
+      $node->setValue('keywords', $this->getRandomTerm('tags')->label());
     }
-    if (!empty($field_definitions['classification']) && empty($node->classification)) {
-      $node->classification = $this->getRandomTerm('solution_classification')->label();
+    if (!empty($field_definitions['classification']) && empty($node->getValue('classification'))) {
+      $node->setValue('classification', $this->getRandomTerm('solution_classification')->label());
     }
-    if (!empty($field_definitions['domain']) && empty($node->domain)) {
-      $node->domain = $this->getRandomTerm('domain')->label();
+    if (!empty($field_definitions['domain']) && empty($node->getValue('domain'))) {
+      $node->setValue('domain', $this->getRandomTerm('domain')->label());
     }
-    if (!empty($field_definitions['language']) && empty($node->language)) {
-      $node->language = 'Bulgarian';
+    if (!empty($field_definitions['language']) && empty($node->getValue('language'))) {
+      $node->setValue('language', 'Bulgarian');
     }
 
     // Handle file URL fields.
-    if (!empty($node->resources)) {
+    if (!empty($node->getValue('resources'))) {
       $this->createResourceFileParagraph($node);
+    }
+
+    // Strip node properties that are not real Drupal entity fields. These were
+    // silently ignored by older driver versions. Storing them here allows
+    // AfterNodeCreate hooks to access them via self::getStrippedNodeProperty().
+    // Note: this list must only include properties not processed by any other
+    // BeforeNodeCreate hook (e.g. group_moderation is handled by
+    // JoinupGroupContext::beforeNodeCreateMetaEntity and must NOT be listed).
+    $metaProperties = [
+      // Solution: applied via flag API in AfterNodeCreate.
+      'interoperable',
+      // Community content: applied via PinnableGroupContentInterface.
+      'pinned',
+      // Solution: applied via PinnableGroupContentInterface.
+      'pinned_in_collection',
+      'unpinned_in_collection',
+      // Community content: applied via ShareableContentInterface in
+      // JoinupCommunityContentContext::afterNodeCreateShare. These live on the
+      // Sharing meta entity, not on the node itself.
+      'field_shared_in',
+      'field_shared_in__at',
+    ];
+    $objectId = spl_object_id($node);
+    foreach ($metaProperties as $property) {
+      if ($node->hasValue($property)) {
+        self::$strippedNodeProperties[$objectId][$property] = $node->getValue($property);
+        $node->removeValue($property);
+      }
+    }
+  }
+
+  /**
+   * Sets default alt text on logo fields after node creation.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope $scope
+   *   The after node create scope.
+   */
+  #[AfterNodeCreate]
+  public function ensureLogoAltText(AfterNodeCreateScope $scope): void {
+    $node = $scope->getStub();
+
+    $logo_fields = [
+      'collection' => 'logo',
+      'solution' => 'logo',
+      'custom_page' => 'field_custom_page_logo',
+      'discussion' => 'field_discussion_logo',
+      'document' => 'field_document_logo',
+      'event' => 'field_event_logo',
+      'news' => 'field_news_logo',
+    ];
+
+    $field_name = $logo_fields[$node->getBundle()] ?? NULL;
+    if (!$field_name) {
+      return;
+    }
+
+    $entity = \Drupal::entityTypeManager()->getStorage('node')->load($node->getValue('nid'));
+    if ($entity && $entity->hasField($field_name) && !$entity->get($field_name)->isEmpty() && empty($entity->get($field_name)->alt)) {
+      $entity->get($field_name)->alt = $entity->label();
+      // Preserve the original changed timestamp.
+      $entity->setSyncing(TRUE);
+      $entity->save();
     }
   }
 
@@ -1680,7 +1759,6 @@ class JoinupContext extends RawDrupalContext {
 
       $comment->skip_notification = TRUE;
       $comment->save();
-      $this->entities['comment'][$comment->id()] = $comment;
     }
   }
 
@@ -1794,39 +1872,36 @@ class JoinupContext extends RawDrupalContext {
 
       // Crete a fake node object to be able to reuse hooks that help with
       // preparing the field values.
-      $fake_node = (object) $data;
+      $fake_node = new EntityStub('node', $bundle, $data);
 
       // Retain data which is relied on by the node creation hooks.
-      $fake_node->type = $bundle;
       if ($node instanceof GroupContentInterface) {
         $group = $node->getGroup();
         $group_bundle = $group->bundle();
-        if (!isset($fake_node->$group_bundle)) {
-          $fake_node->$group_bundle = $group->label();
+        if (!$fake_node->hasValue($group_bundle)) {
+          $fake_node->setValue($group_bundle, $group->label());
         }
       }
 
-      $this->dispatchHooks('BeforeNodeCreateScope', $fake_node);
+      $this->dispatchHooks(BeforeNodeCreateScope::class, $fake_node);
       // Correction to topic field.
-      if (!empty($fake_node->field_topic) && ($topic = $this->getEntityByLabel('taxonomy_term', $fake_node->field_topic, 'topic'))) {
-        $fake_node->field_topic = $topic->id();
+      if (!empty($fake_node->getValue('field_topic')) && ($topic = $this->getEntityByLabel('taxonomy_term', $fake_node->getValue('field_topic'), 'topic'))) {
+        $fake_node->setValue('field_topic', $topic->id());
       }
-      $this->parseEntityFields('node', $fake_node);
-      // Remove the type property as we cannot change that.
-      unset($fake_node->type);
+      $this->parseEntityFields($fake_node);
 
       // The author is handled in \Drupal\Driver\Cores\Drupal8::nodeCreate(),
       // so we have to do it manually.
-      if (isset($fake_node->author)) {
-        $user = user_load_by_name($fake_node->author);
+      if ($fake_node->hasValue('author')) {
+        $user = user_load_by_name($fake_node->getValue('author'));
         if ($user) {
           $node->set('uid', $user->id());
         }
-        unset($fake_node->author);
+        $fake_node->removeValue('author');
       }
 
       // Update all fields. Magic setters will take care of everything.
-      foreach (get_object_vars($fake_node) as $name => $value) {
+      foreach ($fake_node->getValues() as $name => $value) {
         $node->{$name} = $value;
       }
 
@@ -2826,6 +2901,13 @@ class JoinupContext extends RawDrupalContext {
    */
   #[BeforeScenario]
   public function beforeScenarioPrepareEntityCleanup(BeforeScenarioScope $scope): void {
+    // \Drupal\DrupalExtension\Context\RawDrupalContext::cleanEntities is now
+    // cleaning up entities by default. However, due to the complexity of
+    // relations, we want to have a more granular control over the sequence of
+    // cleanup (e.g. landing pages, or parents and children). Disable the
+    // parent cleanup.
+    putenv('BEHAT_DRUPALEXTENSION_DISABLE_CLEANUP=1');
+
     $behat_cleanup_data = \Drupal::state()->get('behat_cleanup_data', []);
     foreach (\Drupal::entityTypeManager()->getDefinitions() as $entity_type_id => $entity_type) {
       if ($entity_type_id === 'ogmenu_instance') {
@@ -2886,6 +2968,9 @@ class JoinupContext extends RawDrupalContext {
         $storage = \Drupal::entityTypeManager()->getStorage($entity_type->id());
         $storage->resetCache($ids);
         $entities = $storage->loadMultiple($ids);
+        array_walk($entities, function (FieldableEntityInterface $entity): void {
+          $entity->skip_notification = TRUE;
+        });
         @$storage->delete($entities);
       }
     }
@@ -2899,6 +2984,23 @@ class JoinupContext extends RawDrupalContext {
 
     // Also, clean the media click counter.
     \Drupal::state()->delete('image_library_widget.clicks');
+
+    // FileVisibility::$entities queues entity objects for end-of-request
+    // processing, which never fires in Behat. The queue grows indefinitely
+    // across scenarios, so discard it here. File visibility is covered in
+    // PHPUnit, not Behat, so dropping the queue has no impact here.
+    $service = \Drupal::service(FileVisibilityInterface::class);
+    $prop = new \ReflectionProperty($service, 'entities');
+    $prop->setValue($service, []);
+
+    // The putenv() in beforeScenarioPrepareEntityCleanup() disables
+    // RawDrupalContext::cleanUsers(), which normally clears userManager
+    // state and logs the session out.
+    // @see \Drupal\DrupalExtension\Context\RawDrupalContext::cleanUsers
+    $this->getUserManager()->clearUsers();
+    if (!$this->getUserManager()->currentUserIsAnonymous()) {
+      $this->logout();
+    }
   }
 
   /**

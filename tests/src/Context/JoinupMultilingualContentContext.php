@@ -6,14 +6,20 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Given;
+use Drupal\Core\Entity\TranslatableInterface;
+use Drupal\Driver\Entity\EntityStub;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
+use Drupal\joinup\Traits\EntityTrait;
 use Drupal\node\NodeInterface;
 
 /**
  * Creates multilingual content.
  */
 class JoinupMultilingualContentContext extends RawDrupalContext {
+
+  use EntityTrait;
 
   /**
    * Creates content and also adds translations if any.
@@ -37,16 +43,16 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
     $storage = \Drupal::entityTypeManager()->getStorage('node');
 
     foreach ($nodesTable->getHash() as $nodeHash) {
-      $node = (object) $nodeHash;
-      $node->type = $type;
+      $node = new EntityStub('node', $type, $nodeHash);
+
+      // Read and strip the step-routing column before Drupal field validation.
+      $isDefaultTranslation = !$node->hasValue('default_translation') || !empty($node->getValue('default_translation'));
+      $node->removeValue('default_translation');
 
       // This must be a new node.
-      if (
-        !isset($node->default_translation)
-        || !empty($node->default_translation)
-      ) {
+      if ($isDefaultTranslation) {
         $this->nodeCreate($node);
-        $lastId = $node->nid;
+        $lastId = $node->getValue('nid') ?? $node->getId();
 
         continue;
       }
@@ -54,18 +60,46 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
       // If we made it here, then we will add a new translation to the
       // previously created node.
       \assert(isset($lastId));
-      \assert(isset($node->langcode));
-      \assert(isset($availableLanguages[$node->langcode]));
+      \assert($node->hasValue('langcode'));
+      $langcode = $node->getValue('langcode');
+      \assert(isset($availableLanguages[$langcode]));
 
       $original = $storage->load($lastId);
       \assert($original instanceof NodeInterface);
-      $this->parseEntityFields('node', $node);
-      $translation = array_filter(
-        array_filter((array) $node) + $original->toArray(),
-        fn (string|array $value): bool => $value !== '~~~' && $value !== ['~~~']
-      );
-      $original->addTranslation($node->langcode, $translation)->save();
+      $node->setValues(array_filter($node->getValues(), fn (mixed $value): bool => $value !== '~~~' && $value !== ['~~~']));
+
+      // This will eventually translate field aliases before expanding fields.
+      // @see \Drupal\joinup\Context\JoinupContext::massageFieldsBeforeNodeCreate
+      $this->dispatchHooks(BeforeNodeCreateScope::class, $node);
+      $translation = array_filter($node->getValues()) + $original->toArray();
+      $original->addTranslation($node->getValue('langcode'), $translation)->save();
     }
+  }
+
+  /**
+   * Creates a translation for an arbitrary entity.
+   *
+   * @param string $langcode
+   *   The language of the translation.
+   * @param string $entityTypeId
+   *   The entity type ID of the entity translated.
+   * @param string $label
+   *   The untranslated label of the entity translated.
+   * @param \Behat\Gherkin\Node\TableNode $fields
+   *   An arbitrary list of fields to pass to the translation.
+   */
+  #[Given(':langcode translation for the :entityTypeId entity with label :label:')]
+  public function createTranslationForEntity(string $langcode, string $entityTypeId, string $label, TableNode $fields): void {
+    $entity = $this->getEntityByLabel($entityTypeId, $label);
+    if (!$entity instanceof TranslatableInterface) {
+      throw new \RuntimeException(sprintf('The entity with label "%s" is not translatable.', $label));
+    }
+
+    $translation = $entity->hasTranslation($langcode) ? $entity->getTranslation($langcode) : $entity->addTranslation($langcode);
+    foreach ($fields->getHash() as $field) {
+      $translation->set($field['field'], $field['value']);
+    }
+    $translation->save();
   }
 
   /**
@@ -88,18 +122,17 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
    *   bar:
    *     0: Baz
    * @encode
-   *
-   * @BeforeNodeCreate
    */
+  #[BeforeNodeCreate]
   public function multilinePrepare(BeforeNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
+    $node = $scope->getStub();
 
-    foreach ($node as $key => $value) {
+    foreach ($node->getValues() as $key => $value) {
       if (!is_string($value) || !str_starts_with($value, '!multiline!')) {
         continue;
       }
       $multiline = preg_replace('#\\\\n#', PHP_EOL, substr($value, 11));
-      $node->$key = $multiline;
+      $node->setValue($key, $multiline);
     }
   }
 

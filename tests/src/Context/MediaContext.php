@@ -6,10 +6,10 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Given;
+use Drupal\Driver\Entity\EntityStub;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\FileTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 
 /**
  * Behat step definitions for testing media.
@@ -18,7 +18,6 @@ class MediaContext extends RawDrupalContext {
 
   use EntityReferenceTrait;
   use FileTrait;
-  use TestingEntitiesTrait;
 
   /**
    * Creates media entities.
@@ -75,7 +74,6 @@ class MediaContext extends RawDrupalContext {
       $media->setChangedTime($revision);
       $media->setRevisionCreationTime($revision);
       $media->save();
-      $this->entities['media'][$media->id()] = $media;
     }
   }
 
@@ -107,7 +105,7 @@ class MediaContext extends RawDrupalContext {
     // Special treatment for image's 'alt' attribute.
     if (isset($values['image']) && isset($values['alt'])) {
       // @see \Drupal\DrupalExtension\Context\RawDrupalContext::parseEntityFields()
-      $values['image'] = "target_id: {$values['image']} - alt: {$values['alt']}";
+      $values['image'] = "target_id:\"{$values['image']}\", alt:\"{$values['alt']}\"";
       unset($values['alt']);
     }
 
@@ -122,10 +120,12 @@ class MediaContext extends RawDrupalContext {
       }
     }
 
-    // Temporary convert to \stdClass.
-    $values = (object) $values;
-    $this->parseEntityFields('media', $values);
-    $values = (array) $values;
+    $bundle = $values['bundle'];
+    unset($values['bundle']);
+    $stub = new EntityStub('media', $bundle, $values);
+    $this->parseEntityFields($stub);
+    $values = $stub->getValues();
+    $values['bundle'] = $bundle;
 
     $values = $this->convertEntityReferencesValues('media', $values['bundle'], $values);
   }

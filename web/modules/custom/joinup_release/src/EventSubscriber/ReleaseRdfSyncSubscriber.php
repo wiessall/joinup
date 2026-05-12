@@ -67,7 +67,7 @@ final readonly class ReleaseRdfSyncSubscriber implements EventSubscriberInterfac
 
     $normalizedArray = $event->getNormalizedArray();
 
-    $fields = ['owner', 'contact', 'description', 'solution_type'];
+    $fields = ['owner', 'contact', 'description', 'solution_type', 'language'];
     foreach ($fields as $field) {
       $fieldItemList = $solution->get($field);
       if ($fieldItemList->isEmpty()) {
