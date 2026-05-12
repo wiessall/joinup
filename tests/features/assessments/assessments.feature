@@ -498,3 +498,27 @@ Feature: Assessment Report Entity Management
     # getting the first sibling which is the duplicated component.
     When I click on element ".js-lpb-component ~ .js-lpb-component .lpb-edit"
     Then a modal should open
+
+  Scenario: Entity browser shows only solutions in the current interface language
+    Given solution multilingual content:
+      | title               | collection                         | abstract         | langcode | default_translation |
+      | English Solution    | Interoperability assessments space | Only in English  | en       | 1                   |
+      | Bilingual Solution  | Interoperability assessments space | Original English | en       | 1                   |
+      | BG Solution         | ~~~                                | BG Translation   | bg       | 0                   |
+
+    Given I am logged in as an "authenticated user"
+    And I go to "/collection/assessments/report/create"
+    And I click "New binding requirement"
+    When I click "Interoperability solution" in the "Modal content" region
+    And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
+    Then I should see "English Solution"
+    And I should see "Bilingual Solution"
+    And I should not see "BG Solution"
+
+    When I go to "/bg/collection/assessments/report/create"
+    And I click "New binding requirement"
+    When I click "Interoperability solution" in the "Modal content" region
+    And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
+    Then I should see "English Solution"
+    And I should see "BG Solution"
+    And I should not see "Bilingual Solution"

@@ -9,21 +9,40 @@ use Drupal\Core\Config\ConfigInstallerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\babel_og_menu_link\BabelOgMenuLinkManager;
 use Drupal\language\ConfigurableLanguageInterface;
+use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\tmgmt\JobInterface;
 use Drupal\tmgmt_ec_etranslation\Plugin\tmgmt\Translator\ETranslationTranslator;
 
 /**
  * Hook implementations for joinup_i18n.
  */
-final readonly class JoinupI18nHooks {
+final class JoinupI18nHooks {
+
+  /**
+   * The Babel OG Menu Link manager.
+   *
+   * @var \Drupal\babel_og_menu_link\BabelOgMenuLinkManager|null
+   */
+  protected ?BabelOgMenuLinkManager $babelOgMenuLinkManager = NULL;
 
   public function __construct(
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected LanguageManagerInterface $languageManager,
-    protected ConfigInstallerInterface $configInstaller,
-    protected ConfigFactoryInterface $configFactory,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly LanguageManagerInterface $languageManager,
+    protected readonly ConfigInstallerInterface $configInstaller,
+    protected readonly ConfigFactoryInterface $configFactory,
   ) {}
+
+  /**
+   * Injects the Babel OG Menu Link manager.
+   *
+   * @param \Drupal\babel_og_menu_link\BabelOgMenuLinkManager $babelOgMenuLinkManager
+   *   The Babel OG Menu Link manager.
+   */
+  public function setBabelOgMenuLinkManager(BabelOgMenuLinkManager $babelOgMenuLinkManager): void {
+    $this->babelOgMenuLinkManager = $babelOgMenuLinkManager;
+  }
 
   /**
    * Creates a continuous job when a new language is created.
@@ -104,6 +123,27 @@ final readonly class JoinupI18nHooks {
     }
 
     return $continuousSettings;
+  }
+
+  /**
+   * Implements hook_ENTITY_HOOK_update() for menu_link_content entity type.
+   */
+  #[Hook('menu_link_content_update')]
+  public function updateMenuLinkContent(MenuLinkContentInterface $link): void {
+    if (!$this->babelOgMenuLinkManager?->isLinkAllowed($link)) {
+      return;
+    }
+    if ($link->isDefaultTranslation() || $link->language()->getId() !== 'en') {
+      return;
+    }
+    $translationLangcodes = array_keys($link->getTranslationLanguages(FALSE));
+    if (!$translationLangcodes) {
+      return;
+    }
+    foreach ($translationLangcodes as $langcode) {
+      $link->removeTranslation($langcode);
+    }
+    $link->save();
   }
 
 }
