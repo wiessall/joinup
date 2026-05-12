@@ -7,7 +7,6 @@ namespace Drupal\Tests\joinup_release\ExistingSite;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Tests\joinup_workflow\ExistingSite\JoinupWorkflowExistingSiteTestBase;
-use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\OgRoleInterface;
@@ -161,13 +160,12 @@ class ReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
       $parent = $this->createDefaultParent('published');
 
       foreach ($workflow_data as $user_var => $expected_target_states) {
-        $content = Node::create([
+        $content = $this->createNode([
           'type' => 'release',
           'title' => $this->randomMachineName(),
           'field_state' => $entity_state,
           'og_audience' => $parent->id(),
         ]);
-        $content->save();
 
         // Override the user to be checked for the allowed transitions.
         $actual_target_states = $this->workflowHelper->getAvailableTargetStates($content, $this->$user_var);

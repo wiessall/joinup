@@ -289,17 +289,16 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
       // Avoid recursions when an entity contains another search field.
       $entity->search_api_field_do_not_recurse = TRUE;
 
-      // Use the view mode configured in the field type settings or fallback
-      // to default view mode.
+      // Use the view mode configured in the field type settings. Skip
+      // entities whose bundle is not configured in the view modes settings
+      // since they are not intended to appear in the listing.
       $entity_type = $entity->getEntityTypeId();
       $entity_bundle = $entity->bundle();
       $datasource_id = 'entity:' . $entity_type;
-      if (!empty($view_mode_settings[$datasource_id][$entity_bundle])) {
-        $view_mode = $view_mode_settings[$datasource_id][$entity_bundle];
+      if (empty($view_mode_settings[$datasource_id][$entity_bundle])) {
+        continue;
       }
-      else {
-        $view_mode = 'default';
-      }
+      $view_mode = $view_mode_settings[$datasource_id][$entity_bundle];
 
       $results[] = [
         '#theme' => 'search_api_field_result',

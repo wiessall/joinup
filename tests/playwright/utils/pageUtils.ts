@@ -10,19 +10,30 @@ import { Page } from "@playwright/test";
  * @param {Page} page - Playwright page instance.
  */
 async function neutralizeOverlayElements(page: Page): Promise<void> {
-  await page.addStyleTag({
-    content: `
-      .joinup-navbar,
-      .region-header__inner {
-        position: initial !important;
-      }
-      .actions-menu {
-        position: relative;
-        left: calc(100% - 3rem);
-        bottom: 1.5rem;
-      }
-    `,
-  });
+  await Promise.all([
+    // Detach the sticky group header behavior to reset position:fixed and
+    // inline height it sets on page load, which would corrupt screenshots.
+    page.evaluate(() => {
+      Drupal.behaviors.stickyGroupHeader?.detach(
+        document,
+        drupalSettings,
+        "unload",
+      );
+    }),
+    page.addStyleTag({
+      content: `
+        .joinup-navbar,
+        .region-header__inner {
+          position: initial !important;
+        }
+        .actions-menu {
+          position: relative;
+          left: calc(100% - 3rem);
+          bottom: 1.5rem;
+        }
+      `,
+    }),
+  ]);
 }
 
 /**
