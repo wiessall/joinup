@@ -178,7 +178,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
    * Gets the flag count of selected type for the provided group entity IDs.
    *
    * @param array $entity_ids
-   *   An array of group entity IDs for calculating the sum of likes.
+   *   An array of group entity IDs for calculating the flag count.
    * @param string $type
    *   Flag type.
    *
