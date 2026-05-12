@@ -216,12 +216,17 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
     if (empty($entity_ids)) {
       return '0';
     }
-    $query = $this->mysql->select('node__og_audience', 'noa');
-    $query->innerJoin('flag_counts', 'fc', 'fc.entity_id = noa.entity_id AND fc.entity_type = :type', [':type' => 'node']);
-    $query->addExpression('IFNULL(SUM(fc.count), 0)', 'total_bookmarks');
-    $query->condition('noa.og_audience_target_id', $entity_ids, 'IN');
+
+    $query = $this->mysql->select('flag_counts', 'fc');
+    $query->leftJoin('node__og_audience', 'noa', 'fc.entity_id = noa.entity_id');
+    $or = $query->orConditionGroup();
+    $or->condition('noa.og_audience_target_id', $entity_ids, 'IN');
+    $or->condition('fc.entity_id', $entity_ids, 'IN');
+    $query->condition($or);
+    $query->condition('fc.entity_type', 'node');
     $query->condition('fc.flag_id', 'bookmark');
-    return $query->execute()->fetchField();
+    $query->addExpression('COALESCE(SUM(fc.count), 0)', 'total_bookmarks');
+    return (string) $query->execute()->fetchField();
   }
 
   /**
