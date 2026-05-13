@@ -82,6 +82,7 @@ third_party_settings:
       children:
         - submitted_by
         - state
+        - published_at
         - relevant_report
       label: 'General info content'
       parent_name: group_general_info
@@ -254,6 +255,25 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
+  published_at:
+    type: timestamp
+    label: inline
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: long
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    weight: 2
+    region: content
   relevant_report:
     type: link
     label: above
@@ -278,7 +298,7 @@ content:
         field_label: true
       template_suggestion:
         template_suggestion: assessment__report__item_list
-    weight: 2
+    weight: 3
     region: content
   remaining_barriers:
     type: text_default
@@ -329,7 +349,6 @@ hidden:
   entity_print_view_word_docx: true
   langcode: true
   provider: true
-  published_at: true
   search_api_excerpt: true
   status: true
   uid: true
