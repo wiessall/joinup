@@ -65,5 +65,5 @@ function joinup_core_deploy_201301(array &$sandbox): string {
 
   $sandbox['#finished'] = ($sandbox['total'] == 0) ? 1 : ($sandbox['current'] / $sandbox['total']);
 
-  return sprintf('Processed %d of %d assessments.',$sandbox['current'], $sandbox['total']);
+  return sprintf('Processed %d of %d assessments.', $sandbox['current'], $sandbox['total']);
 }
