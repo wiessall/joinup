@@ -428,6 +428,7 @@ trait NameMappingsTrait {
       'EIF recommendations' => 'category',
       'Entity bundle' => 'bookmark_entity_bundle',
       'Event date' => 'event_date',
+      'Functions' => 'functions',
       'Interoperable' => 'interoperable_flag',
       'My collections content' => 'collection_my_content',
       'My content' => 'content_my_content',
