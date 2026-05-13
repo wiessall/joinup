@@ -40,11 +40,11 @@ index 370ca6c..c4f5955 100644
  
    // Default scheme, directory and optional subdirectories.
 -  $default_scheme = \Drupal::config('system.file')->get('default_scheme');
-+  $systemFileConfig = \Drupal::config('system.file');
++  $system_file_config = \Drupal::config('system.file');
 +  if ($cacheable_metadata) {
-+    $cacheable_metadata->addCacheableDependency($systemFileConfig);
++    $cacheable_metadata->addCacheableDependency($system_file_config);
 +  }
-+  $default_scheme = $systemFileConfig->get('default_scheme');
++  $default_scheme = $system_file_config->get('default_scheme');
    $imagecache_external_directory = $config->get('imagecache_directory');
    if ($config->get('imagecache_subdirectories')) {
      $imagecache_external_directory .= '/' . $hash[0] . '/' . $hash[1];

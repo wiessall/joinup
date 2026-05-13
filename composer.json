@@ -443,7 +443,7 @@
                 "Support SVG @see https://www.drupal.org/i/3390948": "resources/patch/php/drupal/imagecache_external/3390948.diff",
                 "Add option to override the inherited HTTP client configuration @see https://drupal.org/i/3396502": "resources/patch/php/drupal/imagecache_external/3396502-7.diff",
                 "Do not try to download failed URLs repeatedly: attempt next time only after the local cache is rebuilt @see https://drupal.org/i/3398665": "resources/patch/php/drupal/imagecache_external/3398665.diff",
-                "Inject relevant cache tags into formatter output @see https://drupal.org/i/3589453": "resources/patch/php/drupal/imagecache_external/3589453-mr23-commit18082499-aligned.diff"
+                "Inject relevant cache tags into formatter output @see https://drupal.org/i/3589453": "resources/patch/php/drupal/imagecache_external/3589453-mr23-commit1a49fa9f-aligned.diff"
             },
             "drupal/inline_entity_form": {
                 "Autocomplete field doesn't allow to reference entities with long titles @see https://www.drupal.org/node/2895663": "resources/patch/php/drupal/inline_entity_form/2895663.patch",
