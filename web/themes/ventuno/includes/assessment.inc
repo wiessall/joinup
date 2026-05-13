@@ -45,10 +45,10 @@ function _ventuno_preprocess_assessment_tile(array &$variables): void {
 
   // Info (above the title).
   $variables['info']['icon'] = 'calendar-event';
-  if ($changed_time = $entity->getChangedTime()) {
+  if ($publishedAt = $entity->get('published_at')->value) {
     /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
     $date_formatter = \Drupal::service('date.formatter');
-    $variables['info']['label'] = t('Published: @date', ['@date' => $date_formatter->format($changed_time, 'date_only')]);
+    $variables['info']['label'] = t('Published: @date', ['@date' => $date_formatter->format($publishedAt, 'date_only')]);
   }
 
   // Extra data.
