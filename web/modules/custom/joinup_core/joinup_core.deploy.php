@@ -35,7 +35,7 @@ function joinup_core_deploy_201300(): string {
 /**
  * Populates the new published_at field.
  */
-function joinup_core_deploy_201301(array &$sandbox) {
+function joinup_core_deploy_201301(array &$sandbox): string {
   $storage = \Drupal::entityTypeManager()->getStorage('assessment');
 
   if (!isset($sandbox['total'])) {
@@ -65,8 +65,5 @@ function joinup_core_deploy_201301(array &$sandbox) {
 
   $sandbox['#finished'] = ($sandbox['total'] == 0) ? 1 : ($sandbox['current'] / $sandbox['total']);
 
-  return t('Processed @current of @total assessments.', [
-    '@current' => $sandbox['current'],
-    '@total' => $sandbox['total'],
-  ]);
+  return sprintf('Processed %d of %d assessments.',$sandbox['current'], $sandbox['total']);
 }
