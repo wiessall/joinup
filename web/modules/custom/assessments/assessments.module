@@ -561,3 +561,20 @@ function assessments_ajax_render_alter(array &$commands): void {
     }
   }
 }
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function assessments_preprocess_page(array &$variables): void {
+  $route_match = \Drupal::routeMatch();
+  $assessment = $route_match->getParameter('assessment');
+  if ($assessment && $assessment->bundle() === 'report') {
+    $collection = \Drupal::service('entity.repository')
+      ->loadEntityByUuid('node', AssessmentInterface::GROUP_UUID);
+    assert($collection instanceof CollectionInterface);
+    $variables['page']['header'] = \Drupal::service('plugin.manager.block')
+      ->createInstance('group_header_block')
+      ->setContextValue('og', $collection)
+      ->build();
+  }
+}
