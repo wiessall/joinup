@@ -153,8 +153,8 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
       'Total number of archived items' => $total_archived,
       'Number of members' => $group->getActiveMemberCount(),
       'Description word count' => $description_word_count,
-      'Total number of likes' => $this->getCountFlag($content_ids, 'like'),
-      'Total number of bookmarks' => $this->getCountFlag($content_ids, 'bookmark'),
+      'Total number of likes' => self::getCountFlag($content_ids, 'like'),
+      'Total number of bookmarks' => self::getCountFlag($content_ids, 'bookmark'),
     ];
   }
 
@@ -169,8 +169,8 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
    * @return string
    *   The flag count as a string value.
    */
-  private function getCountFlag(array $entity_ids, string $type): string {
-    $query = $this->mysql->select('flag_counts', 'fc');
+  private static function getCountFlag(array $entity_ids, string $type): string {
+    $query = \Drupal::database()->select('flag_counts', 'fc');
     $query->addExpression('IFNULL(SUM(count), 0)', 'sum');
     $query->condition('flag_id', $type);
     $query->condition('entity_id', $entity_ids, 'IN');
