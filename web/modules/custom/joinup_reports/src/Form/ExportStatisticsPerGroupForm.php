@@ -153,23 +153,26 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
       'Total number of archived items' => $total_archived,
       'Number of members' => $group->getActiveMemberCount(),
       'Description word count' => $description_word_count,
-      'Total number of likes' => static::getLikesCount($content_ids),
+      'Total number of likes' => $this->getCountFlag($content_ids, 'like'),
+      'Total number of bookmarks' => $this->getCountFlag($content_ids, 'bookmark'),
     ];
   }
 
   /**
-   * Retrieves the sum of likes for the provided group entity IDs.
+   * Gets the flag count of selected type for the provided group entity IDs.
    *
    * @param array $entity_ids
-   *   An array of group entity IDs for calculating the sum of likes.
+   *   An array of group entity IDs for calculating the flag count.
+   * @param string $type
+   *   Flag type.
    *
    * @return string
-   *   The sum of likes as a string value.
+   *   The flag count as a string value.
    */
-  private static function getLikesCount(array $entity_ids): string {
-    $query = \Drupal::database()->select('flag_counts', 'fc');
+  private function getCountFlag(array $entity_ids, string $type): string {
+    $query = $this->mysql->select('flag_counts', 'fc');
     $query->addExpression('IFNULL(SUM(count), 0)', 'sum');
-    $query->condition('flag_id', 'like');
+    $query->condition('flag_id', $type);
     $query->condition('entity_id', $entity_ids, 'IN');
     return $query->execute()->fetchField();
   }
