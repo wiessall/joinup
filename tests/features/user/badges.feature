@@ -42,3 +42,13 @@ Feature: User badges
     When I am an anonymous user
     And I go to the public profile of "Celia Mae"
     Then I should see the text "Interoperable Europe Community member" in the "Header" region
+
+#    # User losses badge if his membership in IEC is blocked
+    When I am logged in as a moderator
+    And I am on the members page of "Interoperable Europe Community"
+    And I check the box "Update the member Celia Mae"
+    And I select "Block the selected membership(s) " from "Action"
+    And I press "Apply to selected items"
+    Then I should see the success message " Block the selected membership(s)  was applied to 1 item."
+    When I go to the public profile of "Celia Mae"
+    Then I should not see the text "Interoperable Europe Community member" in the "Header" region
