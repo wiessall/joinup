@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\ExistingSite;
 
+use Drupal\taxonomy\Entity\Term;
 use Drupal\Tests\assessments\Traits\AssessmentEntityCreationTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\assessments\AssessmentInterface;
@@ -224,6 +225,63 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
     $this->assertTrue($newExpression->isPublished(), 'New expression should be published after adding to published report.');
     $this->assertTrue($newPublicService->isPublished(), 'New public service should be published after adding to published report.');
     $this->assertTrue($newParticipation->isPublished(), 'New participation should be published after adding to published report.');
+  }
+
+  /**
+   * Tests that publishing a Report creates a timestamp.
+   */
+  public function testPublishingReportSetsPublishedAtDate(): void {
+    $user = $this->createUser([], 'testuser', TRUE);
+    $this->drupalLogin($user);
+    $this->markEntityForCleanup($user);
+
+    $bindingRequirement = $this->createParagraphBindingRequirement();
+    $storage = $this->container
+      ->get('entity_type.manager')
+      ->getStorage('taxonomy_term');
+
+    $terms = $storage->loadByProperties([
+      'name' => 'Belgium',
+      'vid'  => 'spatial',
+    ]);
+    $country = reset($terms);
+
+    $organisation_type = Term::create([
+      'vid' => 'assess_provider_type',
+      'name' => 'Assessment Organisation Type',
+    ]);
+    $this->markEntityForCleanup($organisation_type);
+
+    $organisation = Assessment::create([
+      'type' => 'public_organisation',
+      'name' => 'Test Organisation',
+      'organisation_type' => ['entity' => $organisation_type],
+      'country' => ['entity' => $country],
+    ]);
+    $this->markEntityForCleanup($organisation);
+
+    /** @var \Drupal\assessments\Entity\AssessmentReport $report */
+    $report = Assessment::create([
+      'type' => 'report',
+      'name' => 'Assessment Workflow Test Report',
+      'binding_requirement' => ['entity' => $bindingRequirement],
+      'provider' => ['entity' => $organisation],
+      'state' => 'review',
+      'status' => FALSE,
+    ]);
+    $this->markEntityForCleanup($report);
+    $report->save();
+
+    $this->assertFalse($report->isPublished());
+    $this->assertEmpty($report->get('published_at'));
+
+    // Publish the report.
+    $this->drupalGet("/collection/assessments/report/{$report->id()}/moderate");
+    $this->getSession()->getPage()->pressButton('Publish');
+
+    $report = Assessment::load($report->id());
+    $this->assertTrue($report->isPublished());
+    $this->assertNotEmpty($report->get('published_at')->value);
   }
 
 }
