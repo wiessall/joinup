@@ -199,6 +199,23 @@ Feature: When a solution is archived then its sub-content also should be archive
     When I go to the homepage of the "Solution" solution
     Then I should not see the text "Archived" in the "Header"
 
+  Scenario: Archiving a release without a release number does not create an invalid URL alias.
+    # Releases without a release number would generate a pathauto alias ending
+    # in '/release', colliding with the solution's own release listing page.
+    # joinup_core_pathauto_alias_alter must append '-0' in that case.
+    Given the following "collection" content:
+      | title            |
+      | Alias Collection |
+    And the following "solution" content:
+      | title          | collection       |
+      | Alias Solution | Alias Collection |
+    And the following "release" content:
+      | title         | is version of  | state     |
+      | Alias Release | Alias Solution | published |
+    When the workflow state of the "Alias Release" content is changed to "archived"
+    And I go to the "Alias Release" release
+    Then the url should match "alias-solution/release-0$"
+
   # @covers \state_machine_permissions_node_access.
   Scenario Outline: Users must not be able to edit the sub-content of an archived solution
     Given the workflow state of the "Solution" "content" is changed to "archived"
