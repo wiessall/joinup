@@ -96,3 +96,26 @@ Feature: Publication status of keywords depends on the status of the parent.
     When I am logged in as a moderator
     And I go to the "some unpublished tag" keyword
     Then I should get an access denied error
+
+  @javascript
+  # Regression test for ticket ISAICP-11237
+  Scenario: Re-editing a draft news item shows the labels of its auto-created keywords, not "- Restricted access -".
+    Given I am logged in as a moderator
+    And I go to the homepage of the "Portal support" collection
+    And I click "Add news" in the plus button menu
+    And I fill in the following:
+      | Short title | Restricted access regression |
+      | Headline    | Restricted access regression |
+      | Abstract    | Dummy text                   |
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | Blah           |
+      | field_body:format | content_editor |
+    And I select "Demography" option from "Topic"
+    And I select "Ytterbium" options from "Search keywords"
+    And I press "Save as draft"
+    Then I should see the heading "Restricted access regression"
+    And the publication state of the "Ytterbium" "taxonomy_term" should be "unpublished"
+
+    When I go to the edit form of the "Restricted access regression" news
+    Then I should see the text "Ytterbium"
+    And I should not see the text "- Restricted access -"
