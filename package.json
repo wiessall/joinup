@@ -41,6 +41,7 @@
     "@yaireo/tagify": "^4.35.4",
     "chart.js": "^4.5",
     "dompurify": "^3.0.9",
+    "jquery-colorbox": "github:turbojettechnologies/colorbox#1.7.0",
     "jquery-jsonview": "^1.2",
     "js-cookie": "^3.0.5",
     "mmenu-light": "^3.2.2",
@@ -57,7 +58,8 @@
     "build:styles": "cross-env bcl-builder styles",
     "build:copy": "cross-env bcl-builder copy",
     "build:sprite": "cross-env bcl-builder sprite",
-    "postinstall": "patch-package --patch-dir=resources/patch/node",
+    "build:third-party-libraries": "cross-env bcl-builder copy --config bcl-builder.third-party-libraries.config.js",
+    "postinstall": "patch-package --patch-dir=resources/patch/node && npm run build:third-party-libraries",
     "clean:js": "find web/themes/ventuno/assets/js -type f -name '*.js' ! -name '*.min.js' -delete && find web/themes/iop/assets/js -type f -name '*.js' ! -name '*.min.js' -delete"
   },
   "watch": {
