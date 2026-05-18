@@ -8,7 +8,6 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\Tests\joinup_test\Traits\ParagraphTrait;
-use Drupal\Tests\node\Traits\NodeCreationTrait;
 use Drupal\joinup_test\Plugin\ServiceMock\GitHubCom;
 use Drupal\joinup_test\Traits\GitHubApiMockTrait;
 use Drupal\joinup_test_time\Traits\TestTimeTrait;
@@ -25,7 +24,6 @@ use PHPUnit\Framework\Attributes\Group;
 #[Group('github_feed')]
 class GithubFeedCacheTest extends JoinupExistingSiteTestBase {
 
-  use NodeCreationTrait;
   use GitHubApiMockTrait;
   use TestTimeTrait;
   use ParagraphTrait;

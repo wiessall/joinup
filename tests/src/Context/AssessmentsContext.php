@@ -394,9 +394,14 @@ class AssessmentsContext extends RawDrupalContext {
   #[Given('the :name report has assessment statements of types:')]
   public function addAssessmentStatementsToReport(string $name, TableNode $table): void {
     $report = $this->getEntityByLabel('assessment', $name, 'report');
+    $vocabHelper = \Drupal::service(AssessmentVocabularyHelper::class);
+    $interpretation = $vocabHelper->getTermFromIdentifier('assess_statement_interpretation', 'positive');
     foreach ($table->getHash() as $row) {
       $type = $row['type'];
-      $statement = AssessmentStatement::create(['type' => $type]);
+      $statement = AssessmentStatement::create([
+        'type' => $type,
+        'interpretation' => ['entity' => $interpretation],
+      ]);
       $statement->save();
       $report->get($type)->setValue(['target_id' => $statement->id()]);
     }
