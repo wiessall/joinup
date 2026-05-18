@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\ExistingSite;
 
-use Drupal\taxonomy\Entity\Term;
 use Drupal\Tests\assessments\Traits\AssessmentEntityCreationTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\assessments\AssessmentInterface;
@@ -12,6 +11,7 @@ use Drupal\assessments\Entity\Assessment;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\ParagraphInterface;
+use Drupal\taxonomy\Entity\Term;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 
