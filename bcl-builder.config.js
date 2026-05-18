@@ -628,35 +628,39 @@ module.exports = {
       to: path.resolve(paths.themes.ventuno, "assets/lib/mmenu-light"),
       options: { up: true },
     },
-    // Third party libraries deployed under web/libraries to satisfy contrib
-    // module library definitions (e.g. /libraries/<name>/...).
+    // Third party libraries to be copied over to the drupal libraries path.
+    // Mainly, most modules look at specific paths within the library like
+    // libraries/tagify/tagify.js. Not all libraries come with the same
+    // structure as the Drupal modules require (or are not downloaded in the
+    // appropriate format).
     {
-      from: [path.resolve(paths.nodeModules, "chart.js/dist/**/*")],
+      from: ["node_modules/chart.js/dist/**/*"],
       to: path.resolve(__dirname, "web/libraries/chart.js/dist"),
+      // Chunks of path segments to skip on copy.
       options: { up: 3 },
     },
     {
-      from: [path.resolve(paths.nodeModules, "dompurify/dist/**/*")],
+      from: ["node_modules/dompurify/dist/**/*"],
       to: path.resolve(__dirname, "web/libraries/dompurify/dist"),
       options: { up: 3 },
     },
     {
-      from: [path.resolve(paths.nodeModules, "jquery-jsonview/dist/**/*")],
+      from: ["node_modules/jquery-jsonview/dist/**/*"],
       to: path.resolve(__dirname, "web/libraries/jquery-jsonview/dist"),
       options: { up: 3 },
     },
     {
-      from: [path.resolve(paths.nodeModules, "js-cookie/dist/**/*")],
+      from: ["node_modules/js-cookie/dist/**/*"],
       to: path.resolve(__dirname, "web/libraries/js-cookie/dist"),
       options: { up: 3 },
     },
     {
-      from: [path.resolve(paths.nodeModules, "slick-carousel/slick/**/*")],
+      from: ["node_modules/slick-carousel/slick/**/*"],
       to: path.resolve(__dirname, "web/libraries/slick/slick"),
       options: { up: 3 },
     },
     {
-      from: [path.resolve(paths.nodeModules, "@yaireo/tagify/dist/**/*")],
+      from: ["node_modules/@yaireo/tagify/dist/**/*"],
       to: path.resolve(__dirname, "web/libraries/tagify/dist"),
       options: { up: 4 },
     },
