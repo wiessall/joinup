@@ -159,28 +159,28 @@ function joinup_i18n_deploy_201302(array &$sandbox): string {
 
     $relevantLang = $parser->getRelevantLangCode($project);
     $defaultLang = $solution->language()->getId();
-    if ($relevantLang === $defaultLang) {
-      continue;
-    }
+    if ($relevantLang !== $defaultLang) {
+      // Changing the default language is not supported. Perform direct queries.
+      // @see \Drupal\Core\Entity\ContentEntityBase::onChange
+      // @see https://www.drupal.org/node/2443989
+      foreach (['node_field_data', 'node_field_revision'] as $table) {
+        $db->query("UPDATE {{$table}} SET default_langcode = 0 WHERE nid = :nid AND langcode = :langcode", [
+          ':nid' => $nid,
+          ':langcode' => $defaultLang,
+        ]);
+        $db->query("UPDATE {{$table}} SET default_langcode = 1 WHERE nid = :nid AND langcode = :langcode", [
+          ':nid' => $nid,
+          ':langcode' => $relevantLang,
+        ]);
+      }
+      foreach (['node', 'node_revision'] as $table) {
+        $db->query("UPDATE {{$table}} SET langcode = :langcode WHERE nid = :nid", [
+          ':langcode' => $relevantLang,
+          ':nid' => $nid,
+        ]);
+      }
 
-    // Perform direct queries as changing the default language is not supported.
-    // @see \Drupal\Core\Entity\ContentEntityBase::onChange
-    // @see https://www.drupal.org/node/2443989
-    foreach (['node_field_data', 'node_field_revision'] as $table) {
-      $db->query("UPDATE {{$table}} SET default_langcode = 0 WHERE nid = :nid AND langcode = :langcode", [
-        ':nid' => $nid,
-        ':langcode' => $defaultLang,
-      ]);
-      $db->query("UPDATE {{$table}} SET default_langcode = 1 WHERE nid = :nid AND langcode = :langcode", [
-        ':nid' => $nid,
-        ':langcode' => $relevantLang,
-      ]);
-    }
-    foreach (['node', 'node_revision'] as $table) {
-      $db->query("UPDATE {{$table}} SET langcode = :langcode WHERE nid = :nid", [
-        ':langcode' => $relevantLang,
-        ':nid' => $nid,
-      ]);
+      $storage->resetCache([$nid]);
     }
 
     tmgmt_content_create_continuous_job_items($solution);
