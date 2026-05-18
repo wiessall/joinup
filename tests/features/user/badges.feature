@@ -20,6 +20,7 @@ Feature: User badges
     And the following collection user memberships:
       | collection                     | user          | state   |
       | Interoperable Europe Community | Celia Mae     | pending |
+      | Interoperable Europe Community | Randall Boggs | pending |
       | Scarers United                 | Randall Boggs | active  |
 
     # A pending membership in the Interoperable Europe community does not award the badge.
@@ -34,21 +35,35 @@ Feature: User badges
     Given I am logged in as a moderator
     And I am on the members page of "Interoperable Europe Community"
     And I check the box "Update the member Celia Mae"
+    And I check the box "Update the member Randall Boggs"
     And I select "Approve the pending membership(s)" from "Action"
     And I press "Apply to selected items"
-    Then I should see the success message "Approve the pending membership(s) was applied to 1 item."
+    Then I should see the success message "Approve the pending membership(s) was applied to 2 items."
 
     # Once approved, the badge appears on the user profile.
     When I am an anonymous user
     And I go to the public profile of "Celia Mae"
     Then I should see the text "Interoperable Europe Community member" in the "Header" region
+    And I go to the public profile of "Randall Boggs"
+    Then I should see the text "Interoperable Europe Community member" in the "Header" region
 
-#    # User losses badge if his membership in IEC is blocked
+    # User losses badge if his membership in IEC is blocked
     When I am logged in as a moderator
     And I am on the members page of "Interoperable Europe Community"
     And I check the box "Update the member Celia Mae"
-    And I select "Block the selected membership(s) " from "Action"
+    And I select "Block the selected membership(s)" from "Action"
     And I press "Apply to selected items"
-    Then I should see the success message " Block the selected membership(s)  was applied to 1 item."
+    Then I should see the success message "Block the selected membership(s) was applied to 1 item."
+    When I go to the public profile of "Celia Mae"
+    Then I should not see the text "Interoperable Europe Community member" in the "Header" region
+
+    # User losses badge if his membership in IEC is deleted
+    When I am on the members page of "Interoperable Europe Community"
+    And I check the box "Update the member Randall Boggs"
+    And I select "Delete the selected membership(s)" from "Action"
+    And I press "Apply to selected items"
+    Then I should see the heading "Are you sure you want to delete the selected membership from the 'Interoperable Europe Community' collection?"
+    Then I press "Confirm"
+    Then I should see the success message "The member Randall Boggs has been deleted from the 'Interoperable Europe Community' collection."
     When I go to the public profile of "Celia Mae"
     Then I should not see the text "Interoperable Europe Community member" in the "Header" region

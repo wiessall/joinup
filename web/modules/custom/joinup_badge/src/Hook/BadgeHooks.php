@@ -118,7 +118,7 @@ readonly class BadgeHooks {
    */
   #[Hook('og_membership_update')]
   public function revokeBadgesForBlockedMembership(OgMembershipInterface $membership): void {
-    if ($membership->getGroup()->uuid() === static::IEC_UUID
+    if ($membership->getGroup()?->uuid() === static::IEC_UUID
     && $membership->getState() === OgMembershipInterface::STATE_BLOCKED) {
       $this->badgeService->revoke('iec_member', $membership->getOwner());
     }
@@ -129,7 +129,7 @@ readonly class BadgeHooks {
    */
   #[Hook('og_membership_delete')]
   public function revokeBadgesForDeletedMembership(OgMembershipInterface $membership): void {
-    if ($membership->getGroup()->uuid() === static::IEC_UUID) {
+    if ($membership->getGroup()?->uuid() === static::IEC_UUID) {
       $this->badgeService->revoke('iec_member', $membership->getOwner());
     }
   }
