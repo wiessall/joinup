@@ -628,6 +628,38 @@ module.exports = {
       to: path.resolve(paths.themes.ventuno, "assets/lib/mmenu-light"),
       options: { up: true },
     },
+    // Third party libraries deployed under web/libraries to satisfy contrib
+    // module library definitions (e.g. /libraries/<name>/...).
+    {
+      from: [path.resolve(paths.nodeModules, "chart.js/dist/**/*")],
+      to: path.resolve(__dirname, "web/libraries/chart.js/dist"),
+      options: { up: 3 },
+    },
+    {
+      from: [path.resolve(paths.nodeModules, "dompurify/dist/**/*")],
+      to: path.resolve(__dirname, "web/libraries/dompurify/dist"),
+      options: { up: 3 },
+    },
+    {
+      from: [path.resolve(paths.nodeModules, "jquery-jsonview/dist/**/*")],
+      to: path.resolve(__dirname, "web/libraries/jquery-jsonview/dist"),
+      options: { up: 3 },
+    },
+    {
+      from: [path.resolve(paths.nodeModules, "js-cookie/dist/**/*")],
+      to: path.resolve(__dirname, "web/libraries/js-cookie/dist"),
+      options: { up: 3 },
+    },
+    {
+      from: [path.resolve(paths.nodeModules, "slick-carousel/slick/**/*")],
+      to: path.resolve(__dirname, "web/libraries/slick/slick"),
+      options: { up: 3 },
+    },
+    {
+      from: [path.resolve(paths.nodeModules, "@yaireo/tagify/dist/**/*")],
+      to: path.resolve(__dirname, "web/libraries/tagify/dist"),
+      options: { up: 4 },
+    },
   ],
   sprite: [
     {
