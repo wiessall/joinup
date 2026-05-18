@@ -141,15 +141,10 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       $variables['highlighted']['text'] = $variables['content']['field_event_date'];
       $variables['info']['icon'] = 'geo-alt';
       $node = $variables['elements']['#node'];
-      if (!$node->get('field_location')->isEmpty() && !$node->get('field_event_online_location')->isEmpty()) {
-        $variables['info']['label'] = t('Hybrid event');
-      }
-      elseif ($node->get('field_location')->isEmpty()) {
-        $variables['info']['label'] = t('Virtual event');
-      }
-      else {
-        $variables['info']['label'] = t('Physical event');
-      }
+      $variables['info']['label'] = _ventuno_get_event_location_label(
+        !$node->get('field_location')->isEmpty(),
+        !$node->get('field_event_online_location')->isEmpty(),
+      );
       break;
 
     case 'oss_solution':
@@ -352,6 +347,27 @@ function _ventuno_get_author(CommunityContentInterface $node): array {
 }
 
 /**
+ * Returns the translated location type label for an event.
+ *
+ * @param bool $hasLocation
+ *   Whether the event has a physical location.
+ * @param bool $hasOnline
+ *   Whether the event has an online location.
+ *
+ * @return \Drupal\Core\StringTranslation\TranslatableMarkup
+ *   One of "Hybrid event", "Virtual event", or "Physical event".
+ */
+function _ventuno_get_event_location_label(bool $hasLocation, bool $hasOnline): TranslatableMarkup {
+  if ($hasLocation && $hasOnline) {
+    return t('Hybrid event');
+  }
+  if (!$hasLocation) {
+    return t('Virtual event');
+  }
+  return t('Physical event');
+}
+
+/**
  * Converts terms to badges.
  *
  * @param \Drupal\taxonomy\TermInterface[] $terms
@@ -386,4 +402,16 @@ function _ventuno_terms_to_badges(array $terms, TranslatableMarkup $extraLabel, 
   }
 
   return $badges;
+}
+
+/**
+ * Implements hook_preprocess_views_view_fields__calendar().
+ */
+function ventuno_preprocess_views_view_fields__calendar(array &$variables): void {
+  $view = $variables['view'];
+  $row = $variables['row'];
+  $has_location = !empty($view->field['field_location']->getValue($row));
+  $has_online = !empty($view->field['field_event_online_location']->getValue($row));
+
+  $variables['location_label'] = _ventuno_get_event_location_label($has_location, $has_online);
 }
