@@ -31,9 +31,6 @@
     // Set max-height on SVG files, see ISAICP-10617.
     img[src$=".svg"] {
       @include media-breakpoint-up(sm) {
-        max-height: 125px;
-      }
-      @include media-breakpoint-up(md) {
         max-height: 140px;
       }
       @include media-breakpoint-up(lg) {
