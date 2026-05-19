@@ -165,3 +165,4 @@ Feature:
     And I press "Update"
     Then I should see the text "Upcoming EC events" in the "Page title" region
     Then the page should show only the tiles "Upcoming Event 1"
+    And I should not see "Upcoming Event 3"
