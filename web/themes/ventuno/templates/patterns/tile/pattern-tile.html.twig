@@ -68,9 +68,6 @@
     {{- _title_prefix -}}
     {{- _title_suffix -}}
     <a class="tile__link position-absolute top-0 end-0 bottom-0 start-0" href="{{ _url }}" title="{{ _label|render|striptags|trim|raw }}"></a>
-    {%- if _user_badges is not empty -%}
-      <span class="user-badges">{{ _user_badges }}</span>
-    {%- endif -%}
     <figure class="tile__figure mb-0">
       {{- _image -}}
     </figure>
@@ -96,6 +93,9 @@
         {%- endif -%}
         <h3 class="tile__title h5 text-primary fw-bold my-0">
           {{- _label -}}
+          {%- if _user_badges is not empty -%}
+            <span class="user-badges ms-1">{{ _user_badges }}</span>
+          {%- endif -%}
         </h3>
         {%- if _text is not empty -%}
           <div class="tile__text text-dark fs-sm my-1">{{- _text -}}</div>
