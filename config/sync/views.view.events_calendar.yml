@@ -259,7 +259,7 @@ display:
       tags: {  }
   upcoming_ec_events_block:
     id: upcoming_ec_events_block
-    display_title: Block
+    display_title: 'EC events'
     display_plugin: block
     position: 2
     display_options:
@@ -376,6 +376,7 @@ display:
         arguments: false
         filters: false
         filter_groups: false
+      display_description: ''
       display_extenders:
         metatag_display_extender:
           metatags: {  }
@@ -392,13 +393,14 @@ display:
       tags: {  }
   upcoming_events_block:
     id: upcoming_events_block
-    display_title: Block
+    display_title: 'All events'
     display_plugin: block
     position: 2
     display_options:
       arguments: {  }
       defaults:
         arguments: false
+      display_description: ''
       display_extenders:
         metatag_display_extender:
           metatags: {  }
@@ -415,7 +417,7 @@ display:
       tags: {  }
   upcoming_events_block_group:
     id: upcoming_events_block_group
-    display_title: Block
+    display_title: 'All events (group view)'
     display_plugin: block
     position: 2
     display_options:
@@ -455,6 +457,7 @@ display:
           not: false
       defaults:
         arguments: false
+      display_description: ''
       display_extenders:
         metatag_display_extender:
           metatags: {  }
