@@ -11,6 +11,7 @@ use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\file\FileInterface;
 use Drupal\joinup\Traits\EntityReferenceTrait;
@@ -37,23 +38,23 @@ class DistributionContext extends RawDrupalContext {
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $event
    *   The before node create event.
-   *
-   * @BeforeNodeCreate
    */
+  #[BeforeNodeCreate]
   public function beforeNodeCreateDistributionFields(BeforeNodeCreateScope $event): void {
-    $node = $event->getEntity();
-    if ($node->type !== 'distribution') {
+    $node = $event->getStub();
+    if ($node->getBundle() !== 'distribution') {
       return;
     }
 
     // Downloads are stored in a meta entity.
-    if (!empty($node->downloads)) {
-      $node->download_count = MetaEntity::create([
+    $downloads = $node->getValue('downloads');
+    if (!empty($downloads)) {
+      $node->setValue('download_count', MetaEntity::create([
         'type' => 'download_count',
-        'count' => (int) $node->downloads,
-      ]);
-      unset($node->downloads);
+        'count' => (int) $downloads,
+      ]));
     }
+    $node->removeValue('downloads');
   }
 
   /**

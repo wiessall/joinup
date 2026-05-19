@@ -5,7 +5,7 @@ Feature: Assessment Report Entity Management
   I need to be able to create, edit, and delete assessment report entities
 
   Scenario: Create a new assessment report with required fields
-    Given solution content:
+    Given the following "solution" content:
       | title         | landing page           |
       | Test solution | http://www.example.com |
 
@@ -81,6 +81,8 @@ Feature: Assessment Report Entity Management
     And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
     And I click "New solution"
     And I wait until ".ck-editor__editable" element exists
+    When I press "Create" in the entity browser
+    Then I should see the error message "This value should not be null."
     And I fill in "Title of Solution" with "European Interoperability Framework (EIF)"
     And I enter "Description of EIF" in the "Description" wysiwyg editor
     And I fill in "Relevant website" with "http://no-abstract.com"
@@ -177,6 +179,13 @@ Feature: Assessment Report Entity Management
       # Supporting documents and general comments
       | This assessment was conducted in collaboration with multiple stakeholders across EU member states. |
 
+    # ISAICP-11258: a statement cleared by selecting N/A must not appear in the view after saving.
+    When I go to the edit form of the "Test Assessment Report 2025" assessment
+    And I click "Legal" in the "Content" region
+    And I select the radio button "N/A" with the name "legal[0][inline_entity_form][interpretation]"
+    And I press "Update"
+    Then I should not see "Complies with GDPR and eIDAS regulations"
+
     # Edit test.
     When I go to the edit form of the "Test Assessment Report 2025" assessment
     And I fill in "Short title" with "Test Assessment Report 2025 v2"
@@ -267,7 +276,7 @@ Feature: Assessment Report Entity Management
     Then no participation entities should exist for the "Test Empty Participation ISAICP-10806" assessment report
 
   Scenario: User can browse only published solutions in binding requirement
-    Given solution content:
+    Given the following "solution" content:
       | title                          | state       | interoperable |
       | Test solution published        | published   |               |
       | Test solution archived         | archived    |               |
@@ -290,7 +299,7 @@ Feature: Assessment Report Entity Management
     And I should not see "Test solution unpublished"
 
   Scenario: Entity browser exposed filters: name, domain and interoperable filters
-    Given solution content:
+    Given the following "solution" content:
       | title              | state     | domain           | interoperable | description                             | keywords           |
       | Alpha Framework    | published | Defense          | yes           | A robust integration tool               | games              |
       | Beta Platform      | published | Economic affairs |               | A platform for data exchange             | nintendo64 licences |
@@ -368,7 +377,7 @@ Feature: Assessment Report Entity Management
     And I should see "Robust Engine"
 
   Scenario: Entity browser: add existing asset, create new asset, and remove asset
-    Given solution content:
+    Given the following "solution" content:
       | title                | landing page           |
       | Asset to be removed  | http://www.example.com |
 
@@ -447,7 +456,7 @@ Feature: Assessment Report Entity Management
     And I should not see the text "Asset to be removed"
 
   Scenario: Description is shown as fallback when solution abstract is empty in entity browser
-    Given solution content:
+    Given the following "solution" content:
       | title                     | state     | abstract        | description        |
       | Solution with abstract    | published | Abstract text   | Hidden description |
       | Solution without abstract | published |                 | Fallback shown     |

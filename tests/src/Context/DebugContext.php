@@ -17,7 +17,7 @@ class DebugContext extends RawDrupalContext {
    */
   #[Then('/^print messages$/')]
   public function printMessages(): void {
-    $selector = $this->getDrupalSelector('message_selector');
+    $selector = $this->getParameter('selectors')['messages']['default'];
     /** @var \Behat\Mink\Element\NodeElement $message */
     foreach ($this->getSession()->getPage()->findAll("css", $selector) as $message) {
       echo $message->getText() . "\n\n";

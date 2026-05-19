@@ -2,7 +2,7 @@
 Feature: Test the visibility of the quick links menu.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title           | content_creation         | group_moderation |
       | Some collection | facilitators and authors | yes              |
 
@@ -54,10 +54,10 @@ Feature: Test the visibility of the quick links menu.
 
   @javascript
   Scenario: Test visibility for solutions.
-    Given collection content:
+    Given the following "collection" content:
       | title           | content_creation         | group_moderation |
       | Some collection | facilitators and authors | yes              |
-    Given solution content:
+    Given the following "solution" content:
       | title         | collection      |
       | Some solution | Some collection |
     When I am not logged in
@@ -77,7 +77,7 @@ Feature: Test the visibility of the quick links menu.
     But I should see the text "There are not any links to show. You can manage the quick links items through the Edit menu or you can add your links through the Edit page."
 
     # Lets not test all links in a separate list of steps to save time.
-    Given release content:
+    Given the following "release" content:
       | title        | is version of |
       | Some release | Some solution |
     And I go to the edit form of the "Some solution" solution
@@ -111,19 +111,16 @@ Feature: Test the visibility of the quick links menu.
 
   @javascript
   Scenario: Test quick links menu structure.
-    Given collection content:
+    Given the following "collection" content:
       | title           |
       | Some collection |
-    And custom_page content:
+    And the following "custom_page" content:
       | title         | collection      |
       | Custom page 1 | Some collection |
       | Custom page 2 | Some collection |
       | Custom page 3 | Some collection |
       | Custom page 4 | Some collection |
       | Custom page 5 | Some collection |
-    And collection content:
-      | title   | Custom page 1 | Custom page 2 | Custom page 3 | Custom page 4 | Custom page 5 |
-      | enabled | yes           | yes           | yes           | yes           | yes           |
     When I am logged in as a facilitator of the "Some collection" collection
     And I go to the "Some collection" collection
     And I click the contextual link "Edit menu" in the "Quick links" region

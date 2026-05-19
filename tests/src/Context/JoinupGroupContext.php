@@ -10,8 +10,12 @@ use Behat\Mink\Exception\ExpectationException;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Attribute\AfterNodeCreate;
+use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
+use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\EntityTrait;
@@ -461,43 +465,79 @@ class JoinupGroupContext extends RawDrupalContext {
   }
 
   /**
-   * Stores settings fields in meta_entity.
+   * Pending settings to apply to the meta entity after node creation.
    *
-   * @BeforeNodeCreate
+   * Keyed by spl_object_id of the stub.
+   *
+   * @var array<int, array{type: string, values: array<string, mixed>}>
    */
+  private static array $pendingMetaEntitySettings = [];
+
+  /**
+   * Strips settings fields from the stub for later meta entity creation.
+   */
+  #[BeforeNodeCreate]
   public function beforeNodeCreateMetaEntity(BeforeNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
-    if ($node->type === 'collection' || $node->type === 'solution') {
-      $meta_entity_type = $node->type . '_settings';
-      $meta_entity = MetaEntity::create([
-        'type' => $meta_entity_type,
-      ]);
-
-      $meta_fields = [
-        'group_moderation',
-        'content_creation',
-        'list_related_entities',
-        'listing_content',
-      ];
-
-      $fieldMapping = [
-        'group_moderation' => ['yes' => 1, 'no' => 0],
-        'list_related_entities' => ['yes' => 1, 'no' => 0],
-        'content_creation' => [
-          'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
-          'registered users' => ContentCreationOptions::REGISTERED_USERS,
-          'members' => ContentCreationOptions::MEMBERS,
-        ],
-      ];
-
-      foreach ($meta_fields as $field) {
-        if (property_exists($node, $field)) {
-          $meta_entity->set($field, $fieldMapping[$field][$node->$field] ?? $node->$field);
-          unset($node->$field);
-        }
-      }
-      $node->$meta_entity_type = $meta_entity;
+    $node = $scope->getStub();
+    $type = $node->getBundle();
+    if ($type !== 'collection' && $type !== 'solution') {
+      return;
     }
+
+    $meta_fields = [
+      'group_moderation',
+      'content_creation',
+      'list_related_entities',
+      'listing_content',
+    ];
+
+    $fieldMapping = [
+      'group_moderation' => ['yes' => 1, 'no' => 0],
+      'list_related_entities' => ['yes' => 1, 'no' => 0],
+      'content_creation' => [
+        'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
+        'registered users' => ContentCreationOptions::REGISTERED_USERS,
+        'members' => ContentCreationOptions::MEMBERS,
+      ],
+    ];
+
+    $values = [];
+    foreach ($meta_fields as $field) {
+      if ($node->hasValue($field)) {
+        $value = $node->getValue($field);
+        $values[$field] = $fieldMapping[$field][$value] ?? $value;
+        $node->removeValue($field);
+      }
+    }
+
+    if (!empty($values)) {
+      self::$pendingMetaEntitySettings[spl_object_id($node)] = [
+        'type' => $type . '_settings',
+        'values' => $values,
+      ];
+    }
+  }
+
+  /**
+   * Creates and saves the meta entity once the node has been saved.
+   */
+  #[AfterNodeCreate]
+  public function afterNodeCreateMetaEntity(AfterNodeCreateScope $scope): void {
+    $node = $scope->getStub();
+    $key = spl_object_id($node);
+    if (!isset(self::$pendingMetaEntitySettings[$key])) {
+      return;
+    }
+    $pending = self::$pendingMetaEntitySettings[$key];
+    unset(self::$pendingMetaEntitySettings[$key]);
+
+    $saved = $node->getSavedEntity();
+    \assert($saved instanceof ContentEntityInterface);
+    $meta_entity = MetaEntity::loadOrCreate($pending['type'], $saved);
+    foreach ($pending['values'] as $field => $value) {
+      $meta_entity->set($field, $value);
+    }
+    $meta_entity->save();
   }
 
   /**

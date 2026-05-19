@@ -5,7 +5,7 @@ Feature:
   I need to be able to inform users whether the licence is deprecated or not.
 
   Scenario Outline: Show a deprecation warning depending on the deprecation flag.
-    Given licence content:
+    Given the following "licence" content:
       | title                    | description               | licence type  | deprecated    |
       | Maybe deprecated licence | Licence agreement details | Public domain | <deprecation> |
     When I visit the "Maybe deprecated licence" licence

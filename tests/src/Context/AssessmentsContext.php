@@ -13,6 +13,7 @@ use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Url;
+use Drupal\Driver\Entity\EntityStub;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\AssessmentVocabularyHelper;
@@ -80,19 +81,12 @@ class AssessmentsContext extends RawDrupalContext {
 
       if (isset($assessment['results_in'])) {
         $statement = $this->getEntityById('assessment_statement', $assessment['results_in']);
-        $assessment[$statement->bundle() . ':target_id'] = $statement->id();
+        $assessment[$statement->bundle()] = $statement->id();
         unset($assessment['results_in']);
       }
 
-      if (!empty($assessment['document'])) {
-        $fileValues = [];
-        foreach ($this->explodeDelimitedSeparatedStepArgument($assessment['document']) as $filename) {
-          $file = $this->createFile($filename);
-          $fileValues[] = [
-            'target_id' => $file->id(),
-          ];
-        }
-        $assessment['document'] = $fileValues;
+      if (!empty($assessment['documents'])) {
+        $assessment['documents'] = $this->parseFileBehatValue($assessment['documents']);
       }
 
       // Resolve provider by name if provided (skip for report type).
@@ -108,11 +102,17 @@ class AssessmentsContext extends RawDrupalContext {
         }
       }
 
-      $assessment = (object) $assessment;
-
-      $assessment->type = $type;
-      $this->parseEntityFields('assessment', $assessment);
-      $this->getDriver()->createEntity('assessment', $assessment);
+      // Strip columns that are not real entity fields.
+      unset($assessment['identifier']);
+      $stub = new EntityStub('assessment', $type, $assessment);
+      // Replace human readable publication statuses with the boolean values
+      // expected by the entity's published key.
+      self::convertObjectPropertyValues($stub, 'status', [
+        'unpublished' => 0,
+        'published' => 1,
+      ]);
+      $this->parseEntityFields($stub);
+      $this->getDriver()->entityCreate($stub);
     }
   }
 
@@ -201,13 +201,12 @@ class AssessmentsContext extends RawDrupalContext {
   public function createAssessmentsCollection(): void {
     $collection = \Drupal::service('entity.repository')->loadEntityByUuid('node', AssessmentInterface::GROUP_UUID);
     if (!$collection instanceof CollectionInterface) {
-      $this->nodeCreate((object) [
-        'type' => 'collection',
+      $this->nodeCreate(new EntityStub('node', 'collection', [
         'uuid' => AssessmentInterface::GROUP_UUID,
         'title' => 'Interoperability assessments space',
         'short_id' => 'assessments',
         'field_state' => 'published',
-      ]);
+      ]));
     }
   }
 
@@ -221,31 +220,36 @@ class AssessmentsContext extends RawDrupalContext {
   public function createAssessmentStatements(TableNode $table): void {
     foreach ($table->getColumnsHash() as $values) {
       assert(in_array($values['statement_type'], ['legal', 'organisational', 'semantic', 'technical'], TRUE), 'Invalid assessment statement type provided.');
-      $values['type'] = $values['statement_type'];
-      $values = (object) $values;
+      $bundle = $values['statement_type'];
+      unset($values['statement_type']);
+      $values['type'] = $bundle;
 
-      if (!empty($values->interpretation)) {
+      if (!empty($values['interpretation'])) {
         $tids = \Drupal::entityQuery('taxonomy_term')->accessCheck(FALSE)
           ->condition('vid', 'assess_statement_interpretation')
-          ->condition('id', $values->interpretation)
+          ->condition('id', $values['interpretation'])
           ->execute();
         assert(count($tids) === 1);
-        $values->interpretation = reset($tids);
+        $values['interpretation'] = reset($tids);
       }
 
-      if (!empty($values->landing_page)) {
-        $fileValues = [];
-        foreach ($this->explodeDelimitedSeparatedStepArgument($values->landing_page) as $filename) {
-          $file = $this->createFile($filename);
-          $fileValues[] = [
-            'target_id' => $file->id(),
-          ];
+      if (!empty($values['landing_page'])) {
+        // Pre-stage the file in 'public://' under its original filename so
+        // FileHandler::resolveExistingFile() finds it by basename and skips
+        // the uniqid-renamed re-upload path. Necessary so downstream
+        // assertions that expect a stable URL like
+        // '/sites/default/files/<name>' keep matching.
+        $filenames = [];
+        foreach ($this->explodeDelimitedSeparatedStepArgument($values['landing_page']) as $filename) {
+          $this->createFile($filename);
+          $filenames[] = $filename;
         }
-        $values->landing_page = $fileValues;
+        $values['landing_page'] = implode(', ', $filenames);
       }
 
-      $this->parseEntityFields('assessment_statement', $values);
-      $this->getDriver()->createEntity('assessment_statement', $values);
+      $stub = new EntityStub('assessment_statement', $bundle, $values);
+      $this->parseEntityFields($stub);
+      $this->getDriver()->entityCreate($stub);
     }
   }
 
@@ -390,9 +394,14 @@ class AssessmentsContext extends RawDrupalContext {
   #[Given('the :name report has assessment statements of types:')]
   public function addAssessmentStatementsToReport(string $name, TableNode $table): void {
     $report = $this->getEntityByLabel('assessment', $name, 'report');
+    $vocabHelper = \Drupal::service(AssessmentVocabularyHelper::class);
+    $interpretation = $vocabHelper->getTermFromIdentifier('assess_statement_interpretation', 'positive');
     foreach ($table->getHash() as $row) {
       $type = $row['type'];
-      $statement = AssessmentStatement::create(['type' => $type]);
+      $statement = AssessmentStatement::create([
+        'type' => $type,
+        'interpretation' => ['entity' => $interpretation],
+      ]);
       $statement->save();
       $report->get($type)->setValue(['target_id' => $statement->id()]);
     }

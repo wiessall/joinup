@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Traits;
 
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\Driver\Entity\EntityStubInterface;
 use Drupal\file\FileInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 
@@ -50,6 +51,41 @@ trait FileTrait {
     $file->save();
 
     return $file;
+  }
+
+  /**
+   * Resolves filenames in a raw Behat file field value to absolute paths.
+   *
+   * Supports the two drupal-extension v6 cell shapes for file fields:
+   *
+   *  - Compound:
+   *    'target_id: "file"[, key: "value"] [; target_id: "other_file", ...]'.
+   *    Each 'target_id: "..."' occurrence has its filename rewritten to the
+   *    absolute fixture path.
+   *  - Scalar list: a single bare filename or a comma-separated list of
+   *    bare filenames (one delta per item). Each filename is rewritten to
+   *    the absolute fixture path.
+   *
+   * @param string $value
+   *   The raw Behat field value.
+   *
+   * @return string
+   *   The same string with each filename replaced by its absolute fixture path.
+   */
+  public function parseFileBehatValue(string $value): string {
+    if (preg_match('/\b[a-z_]+\s*:\s*"/i', $value) === 1) {
+      return preg_replace_callback(
+        '/(\btarget_id\s*:\s*")([^"]+)(")/i',
+        fn(array $match): string => $match[1] . $this->getFileSourcePath($match[2]) . $match[3],
+        $value,
+      );
+    }
+
+    $items = array_map(
+      fn(string $item): string => $this->getFileSourcePath(trim($item)),
+      str_getcsv($value, escape: "\\"),
+    );
+    return implode(', ', $items);
   }
 
   /**
@@ -141,8 +177,8 @@ trait FileTrait {
   /**
    * Creates a paragraph for as a resource paragraph.
    *
-   * @param \stdClass $node
-   *   The node object containing the resource information.
+   * @param \Drupal\Driver\Entity\EntityStubInterface $node
+   *   The entity stub containing the resource information.
    * @param string $fieldName
    *   The name of the field to create the paragraph for, defaults to
    *   'resources'.
@@ -150,12 +186,13 @@ trait FileTrait {
    *   Whether to create a random file paragraph or not. This can be used when
    *   the goal is to create a random file paragraph for testing purposes.
    *
-   * @return \Drupal\paragraphs\Entity\Paragraph
+   * @return \Drupal\paragraphs\Entity\Paragraph|null
    *   The created paragraph.
    */
-  protected function createResourceFileParagraph(\stdClass $node, string $fieldName = 'resources', bool $random = FALSE): ?Paragraph {
+  protected function createResourceFileParagraph(EntityStubInterface $node, string $fieldName = 'resources', bool $random = FALSE): ?Paragraph {
+    $fieldValue = $node->getValue($fieldName);
     // Ensure that the value is not empty or a random value is requested.
-    assert(!empty($node->{$fieldName}) || $random);
+    assert(!empty($fieldValue) || $random);
 
     $availableFiles = $this->listFilesInFixtures();
     $type = 'remote';
@@ -164,9 +201,9 @@ trait FileTrait {
       $fileName = $availableFiles[array_rand($availableFiles)];
       $type = 'local';
     }
-    elseif (!empty($node->{$fieldName}) && in_array($node->{$fieldName}, $availableFiles)) {
+    elseif (!empty($fieldValue) && in_array($fieldValue, $availableFiles)) {
       // If the field is not empty, use the provided value.
-      $fileName = $node->{$fieldName};
+      $fileName = $fieldValue;
       $type = 'local';
     }
 
@@ -184,13 +221,13 @@ trait FileTrait {
     else {
       $paragraph = Paragraph::create([
         'type' => 'resource_link',
-        'remote_file_url' => $node->resources,
+        'remote_file_url' => $node->getValue('resources'),
       ]);
     }
     $paragraph->save();
-    $node->{"resources:target_id"} = $paragraph->id();
-    $node->{"resources:target_revision_id"} = $paragraph->getRevisionId();
-    unset($node->resources);
+    $node->setValue('resources:target_id', $paragraph->id());
+    $node->setValue('resources:target_revision_id', $paragraph->getRevisionId());
+    $node->removeValue('resources');
 
     return $paragraph;
   }

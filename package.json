@@ -3,7 +3,7 @@
   "author": "European Commission",
   "license": "EUPL-1.2",
   "devDependencies": {
-    "@openeuropa/bcl-bootstrap": "^1.10.0",
+    "@openeuropa/bcl-bootstrap": "1.10.11",
     "@openeuropa/bcl-builder": "^1.10.0",
     "@openeuropa/bcl-theme-default": "^1.10.0",
     "@openeuropa/bcl-theme-joinup": "^1.10.0",

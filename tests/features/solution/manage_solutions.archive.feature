@@ -2,17 +2,17 @@
 Feature: When a solution is archived then its sub-content also should be archived.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title      |
       | Collection |
-    And contact_information content:
+    And the following "contact_information" content:
       | name                 | email                      |
       | Liam Smith           | liam.smith@example.com     |
       | Jennifer Unconfirmed | jennifer.smith@example.com |
-    And solution content:
+    And the following "solution" content:
       | title    | collection | creation date    | modification date | contact information              |
       | Solution | Collection | 2018-11-19T10:00 | 2018-12-19T10:00  | Jennifer Unconfirmed, Liam Smith |
-    And users:
+    And the following users:
       | Username           | E-mail                     | First name | Family name | Roles     |
       | Anne Group Admin   | anne.smith@example.com     | Anne       | Smith       |           |
       | Andrew Facilitator | andrew.smith@example.com   | Andrew     | Smith       |           |
@@ -22,10 +22,10 @@ Feature: When a solution is archived then its sub-content also should be archive
       | solution | user               | roles       |
       | Solution | Anne Group Admin   | owner       |
       | Solution | Andrew Facilitator | facilitator |
-    And "event" content:
+    And the following "event" content:
       | title          | solution |
       | Solution Event | Solution |
-    And "news" content:
+    And the following "news" content:
       | title           | solution | state     |
       | Solution News 1 | Solution | published |
       | Solution News 2 | Solution | draft     |
@@ -33,24 +33,24 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Solution News 4 | Solution | published |
     And the workflow state of the "Solution News 3" content is changed to "needs_update"
     And the workflow state of the "Solution News 4" content is changed to "archived"
-    And "document" content:
+    And the following "document" content:
       | title                   | collection | state     | nid |
       | Solution Document       | Solution   | published |     |
       | Weird Solution Document | Solution   | draft     | 200 |
     And the workflow state of the "Weird Solution Document" content is changed to "archived"
-    And "discussion" content:
+    And the following "discussion" content:
       | title               | collection |
       | Solution Discussion | Solution   |
-    And "custom_page" content:
+    And the following "custom_page" content:
       | title                  | solution | state     |
       | Solution Custom page 1 | Solution | published |
       | Solution Custom page 2 | Solution | draft     |
       | Solution Custom page 3 | Solution | published |
     And the workflow state of the "Solution Custom page 3" content is changed to "archived"
-    And distribution content:
+    And the following "distribution" content:
       | title                 | solution |
       | Solution Distribution | Solution |
-    And release content:
+    And the following "release" content:
       | title              | is version of | state     |
       | Solution Release 1 | Solution      | published |
       | Solution Release 2 | Solution      | draft     |
@@ -198,6 +198,23 @@ Feature: When a solution is archived then its sub-content also should be archive
 
     When I go to the homepage of the "Solution" solution
     Then I should not see the text "Archived" in the "Header"
+
+  Scenario: Archiving a release without a release number does not create an invalid URL alias.
+    # Releases without a release number would generate a pathauto alias ending
+    # in '/release', colliding with the solution's own release listing page.
+    # joinup_core_pathauto_alias_alter must append '-0' in that case.
+    Given the following "collection" content:
+      | title            |
+      | Alias Collection |
+    And the following "solution" content:
+      | title          | collection       |
+      | Alias Solution | Alias Collection |
+    And the following "release" content:
+      | title         | is version of  | state     |
+      | Alias Release | Alias Solution | published |
+    When the workflow state of the "Alias Release" content is changed to "archived"
+    And I go to the "Alias Release" release
+    Then the url should match "alias-solution/release-0$"
 
   # @covers \state_machine_permissions_node_access.
   Scenario Outline: Users must not be able to edit the sub-content of an archived solution

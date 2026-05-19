@@ -8,8 +8,10 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Hook\BeforeScenario;
 use Behat\Step\Given;
 use Behat\Step\When;
+use Drupal\Driver\DrupalDriver;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
+use Drupal\joinup\Driver\Field\PluginReferenceHandler;
 use Drupal\joinup\Traits\EntityTrait;
 
 /**
@@ -55,6 +57,21 @@ class JoinupOSSSolutionContext extends RawDrupalContext {
   public static function disableOssCron(): void {
     $state = \Drupal::state();
     $state->set('eu_oss_catalogue.last_check', strtotime('- 1 hour'));
+  }
+
+  /**
+   * Registers the 'plugin_reference' field handler with the driver.
+   *
+   * The drupal-driver v3 'DefaultHandler' only supports single-column scalar
+   * fields; 'plugin_reference' has two columns ('plugin_id', 'configuration')
+   * and so requires a dedicated handler.
+   */
+  #[BeforeScenario('@api')]
+  public function registerPluginReferenceHandler(): void {
+    $driver = $this->getDriver();
+    if ($driver instanceof DrupalDriver) {
+      $driver->getCore()->registerFieldHandler('plugin_reference', PluginReferenceHandler::class);
+    }
   }
 
 }

@@ -13,7 +13,6 @@
         "ext-simplexml": "*",
         "bitbucket/client": "^4.5",
         "cfpinto/graphql": "^2.0",
-        "claudiu-cristea/drupal-cache-adapter": "^1.0",
         "composer/installers": "^2",
         "composer/spdx-licenses": "^1.5",
         "cweagans/composer-patches": "^1.7",
@@ -21,7 +20,6 @@
         "drupal/addtocal": "^3.0",
         "drupal/allowed_formats": "^3.0",
         "drupal/antibot": "^2.0",
-        "drupal/autologout": "^2.0",
         "drupal/babel": "^1.0",
         "drupal/better_exposed_filters": "^7.0",
         "drupal/block_field": "^1.0@RC",
@@ -49,7 +47,7 @@
         "drupal/entity_print": "^2.15",
         "drupal/entityqueue": "^1.2",
         "drupal/error_page": "^2.1@beta",
-        "drupal/facets": "^3.0",
+        "drupal/facets": "3.0.2",
         "drupal/facets_block": "^2.0@beta",
         "drupal/facets_date_range": "^1.0@beta",
         "drupal/field_delimiter": "^2.0",
@@ -94,6 +92,7 @@
         "drupal/page_manager": "^4.0",
         "drupal/paragraphs": "^1.12",
         "drupal/pathauto": "~1.8",
+        "drupal/php_cache_adapter": "^1.0",
         "drupal/pluginreference": "^3.0",
         "drupal/poll": "^2.0@alpha",
         "drupal/private_message": "^4.0@alpha",
@@ -148,7 +147,7 @@
         "mnsami/composer-custom-directory-installer": "^2.0",
         "openeuropa/composer-artifacts": "^1.0",
         "openeuropa/oe_authentication": "^1.20",
-        "openeuropa/oe_bootstrap_theme": "^1.21",
+        "openeuropa/oe_bootstrap_theme": "1.34.0",
         "openeuropa/oe_dashboard_agent": "^1.0",
         "openeuropa/oe_webtools": "^1.40",
         "psr/http-factory-implementation": "^1.0",
@@ -169,14 +168,15 @@
         "drupal/config_inspector": "^2.1",
         "drupal/config_update": "^2.0",
         "drupal/devel": "^5.1",
-        "drupal/drupal-extension": "5.1.0",
+        "drupal/drupal-driver": "^3",
+        "drupal/drupal-extension": "^6",
         "drupal/filecache": "^1.1",
         "drupal/http_request_mock": "^1.1",
         "drupal/masquerade": "^2.0@RC",
         "drupal/restui": "^1.22",
         "drupal/stage_file_proxy": "^3.1",
         "drupal/upgrade_status": "^4.0",
-        "drupaltest/behat-one-time-login": "^1.0",
+        "drupaltest/behat-one-time-login": "dev-master",
         "ec-europa/toolkit": "^10.5",
         "lovers-of-behat/table-extension": "^1.4",
         "lullabot/mink-selenium2-driver": "^1.7",
@@ -231,7 +231,6 @@
     },
     "autoload-dev": {
         "classmap": [
-            "web/core/tests/Drupal/FunctionalJavascriptTests/WebDriverCurlService.php",
             "web/modules/contrib/message_digest/src/Traits/MessageDigestContextTrait.php",
             "web/modules/contrib/message_digest/src/Traits/MessageDigestTrait.php",
             "web/modules/contrib/og_menu/src/Tests/Traits/OgMenuTrait.php",
@@ -323,13 +322,6 @@
             "drupal/core": "-p2"
         },
         "patches": {
-            "drupal/babel": {
-                "Babel TMGMT form alter makes form state non-serializable, prevents using Form API batch @see https://drupal.org/i/3583826": "resources/patch/php/drupal/babel/3583826-mr81-commit67cb60ed.diff",
-                "babel_content_entity: fatal error on fresh install @see https://www.drupal.org/i/3582168": "resources/patch/php/drupal/babel/3582168.mr80.commit539af713.diff",
-                "BabelStorage::updateSourceTables() performs unnecessary full-table-scan DELETEs @see https://www.drupal.org/i/3586174": "resources/patch/php/drupal/babel/3586174.mr86-commitfcf47626.diff",
-                "Text format gets copied into the translation value @see https://www.drupal.org/i/3585377": "resources/patch/php/drupal/babel/3585377-mr84-commit91011132.diff",
-                "Save translation also when is matching the source @see https://www.drupal.org/i/3583929": "resources/patch/php/drupal/babel/3583929.mr82.commit-50146377.diff"
-            },
             "drupal/better_exposed_filters": {
                 "Single on/off checkbox option not working as expected @see https://www.drupal.org/i/3569639": "resources/patch/php/drupal/better_exposed_filters/3569639-mr230.diff"
             },
@@ -369,17 +361,14 @@
                 "Fix for pagination inside Media library @see https://www.drupal.org/i/3567237": "resources/patch/php/drupal/core/3567237.mr14654-commit0edaf95a.diff",
                 "REST views: Add pagination information and total count result @see https://www.drupal.org/i/2982729": "resources/patch/php/drupal/core/2982729-mr6558.commit290eabb1.diff",
                 "Slow admin/config page load. @see https://www.drupal.org/i/3336621": "resources/patch/php/drupal/core/3336621.mr15137-commit7b9c8c6a.patch",
-                "ConfigInstaller isSyncing does not persist to hook_modules_installed() when multiple modules are installed @see https://www.drupal.org/i/3584812": "resources/patch/php/drupal/core/3584812.comment-7.diff",
-                "Exposed filters get values from url when ajax is on @see https://www.drupal.org/i/3121172": "resources/patch/php/drupal/core/3121172-mr10230-commit41ded0c5.diff"
+                "Exposed filters get values from url when ajax is on @see https://www.drupal.org/i/3121172": "resources/patch/php/drupal/core/3121172-mr10230-commit41ded0c5.diff",
+                "[site:url] token omits trailing slash in other languages @see https://www.drupal.org/i/2163913": "resources/patch/php/drupal/core/2163913.mr15511.commit58a97130.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
             },
-            "drupal/drupal-driver": {
-                "Allow multi-property references. @see https://github.com/jhedstrom/DrupalDriver/pull/252": "resources/patch/php/drupal/drupal-driver/252.diff",
-                "Populate link fields only with URI if value is a string @see https://github.com/jhedstrom/DrupalDriver/pull/267": "resources/patch/php/drupal/drupal-driver/267.diff",
-                "Update Datetime field handler to support both date and datetime fields @see https://github.com/jhedstrom/DrupalDriver/pull/235": "resources/patch/php/drupal/drupal-driver/235.patch",
-                "Do not process empty batches. @see https://github.com/jhedstrom/DrupalDriver/pull/284": "resources/patch/php/drupal/drupal-driver/284.diff"
+            "drupal/drupal-extension": {
+                "Recognise bundle-scoped fields @see https://github.com/jhedstrom/drupalextension/pull/851": "resources/patch/php/drupal/drupal-extension/851.diff"
             },
             "drupal/dynamic_entity_reference": {
                 "Undefined array key on dependency removal @see https://www.drupal.org/i/3099176": "resources/patch/php/drupal/dynamic_entity_reference/3099176-3.x-16.diff",
@@ -433,7 +422,8 @@
             "drupal/imagecache_external": {
                 "Support SVG @see https://www.drupal.org/i/3390948": "resources/patch/php/drupal/imagecache_external/3390948.diff",
                 "Add option to override the inherited HTTP client configuration @see https://drupal.org/i/3396502": "resources/patch/php/drupal/imagecache_external/3396502-7.diff",
-                "Do not try to download failed URLs repeatedly: attempt next time only after the local cache is rebuilt @see https://drupal.org/i/3398665": "resources/patch/php/drupal/imagecache_external/3398665.diff"
+                "Do not try to download failed URLs repeatedly: attempt next time only after the local cache is rebuilt @see https://drupal.org/i/3398665": "resources/patch/php/drupal/imagecache_external/3398665.diff",
+                "Inject relevant cache tags into formatter output @see https://drupal.org/i/3589453": "resources/patch/php/drupal/imagecache_external/3589453-mr23-commit1a49fa9f-aligned.diff"
             },
             "drupal/inline_entity_form": {
                 "Autocomplete field doesn't allow to reference entities with long titles @see https://www.drupal.org/node/2895663": "resources/patch/php/drupal/inline_entity_form/2895663.patch",
@@ -462,7 +452,8 @@
                 "Renderer service can only accept array @see https://www.drupal.org/i/3531949": "resources/patch/php/drupal/message/3531949.mr56-commit24333e61.diff"
             },
             "drupal/message_digest": {
-                "Renderer::renderPlain() is deprecated @see https://www.drupal.org/i/3511648": "resources/patch/php/drupal/message_digest/3511648.diff"
+                "Renderer::renderPlain() is deprecated @see https://www.drupal.org/i/3511648": "resources/patch/php/drupal/message_digest/3511648.diff",
+                "deliverAllDigests() calls renamed DrupalDriver::runCron(); use cronRun() instead @see https://www.drupal.org/i/3588548": "resources/patch/php/drupal/message_digest/3588548.diff"
             },
             "drupal/meta_entity": {
                 "hook_entity_insert() auto-creates duplicate @see https://www.drupal.org/i/3583434": "resources/patch/php/drupal/meta_entity/3583434.mr20-commitf3ef1e53.diff"
@@ -491,14 +482,6 @@
                 "Users are deleted without prior notification when \"Notification User Before Deletion\" is enabled @see https://www.drupal.org/i/3521201": "resources/patch/php/drupal/purge_users/3521201.diff",
                 "Missing langcode in purge_users.settings and config/install missing @see https://www.drupal.org/i/3542620": "resources/patch/php/drupal/purge_users/3542620.diff"
             },
-            "drupal/rdf_sync": {
-                "Pass the context to the normalize subscribers @see https://www.drupal.org/i/3560752": "resources/patch/php/drupal/rdf_sync/3560752.mr43-note632794.diff",
-                "Configure namaspaces @see https://www.drupal.org/i/3560781": "resources/patch/php/drupal/rdf_sync/3560781.mr44-note633150.diff",
-                "View support @see https://www.drupal.org/project/i/3473743": "resources/patch/php/drupal/rdf_sync/3560781.mr45-commitf08c1b33.diff",
-                "Add support for deriver in RdfUriGenerator @see https://www.drupal.org/project/rdf_sync/issues/3567259": "resources/patch/php/drupal/rdf_sync/3567259.diff",
-                "Incorrect type hint in rdf_sync_entity_bundle_field_info() hook implementation - https://www.drupal.org/i/3529979": "resources/patch/php/drupal/rdf_sync/3529979-mr39-commit307d5e52.diff",
-                "Integrity constraint violation when duplicating an entity with an RDF URI - https://www.drupal.org/project/rdf_sync/issues/3582431": "resources/patch/php/drupal/rdf_sync/3582431.mr49-commit61a13f12.diff"
-            },
             "drupal/search_api": {
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199-42e0e284.diff",
                 "View recalculated with wrong data from cache @see https://drupal.org/i/3327645": "resources/patch/php/drupal/search_api/3327645-d510c98e.diff"
@@ -508,9 +491,6 @@
             },
             "drupal/simple_oauth": {
                 "Allow BasicAuth to co-exist with oAuth @see https://www.drupal.org/i/3256312": "resources/patch/php/drupal/simple_oauth/3256312-1.patch"
-            },
-            "drupal/sitewide_alert": {
-                "Followup: Generate UUID @see https://www.drupal.org/i/3561256": "resources/patch/php/drupal/sitewide_alert/3561256.mr103.commit-62c42f85.diff"
             },
             "drupal/social_media_links": {
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "resources/patch/php/drupal/social_media_links/2898680.patch",
@@ -528,9 +508,6 @@
             },
             "drupal/tour": {
                 "Support page manager variants on front page @see https://www.drupal.org/i/3568815": "resources/patch/php/drupal/tour/3568815.patch"
-            },
-            "drupal/tmgmt_ec_etranslation": {
-                "Preserve placeholders @see https://www.drupal.org/i/3577084": "resources/patch/php/drupal/tmgmt_ec_etranslation/3577084.mr28.commit18b2ff6d.diff"
             },
             "drupal/views_block_area": {
                 "Render logic not working @see https://www.drupal.org/i/3499861": "resources/patch/php/drupal/views_block_area/3499861.patch"
@@ -566,6 +543,10 @@
         }
     },
     "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/idimopoulos/behat-one-time-login.git"
+        },
         {
             "type": "vcs",
             "url": "https://github.com/openeuropa/oe_dashboard_agent.git"

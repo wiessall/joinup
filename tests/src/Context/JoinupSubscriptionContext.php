@@ -366,7 +366,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    */
   #[Then('I should be subscribed to( the) :bundlesCommaSeparated bundle(s) from the :groupLabel collection')]
   public function assertGroupContentSubscription(string $groupLabel, string $bundlesCommaSeparated): void {
-    $account = User::load($this->getUserManager()->getCurrentUser()->uid);
+    $account = User::load($this->getUserManager()->getCurrentUser()->getValue('uid'));
     assert($account instanceof AccountInterface);
 
     $group = $this->getEntityByLabel('node', $groupLabel);
@@ -405,7 +405,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
   #[Then('I should not be subscribed to any bundle(s) from the :label :bundle')]
   public function assertNoGroupContentSubscriptions(string $label, string $bundle): void {
     $user = $this->getUserManager()->getCurrentUser();
-    $account = User::load($user->uid);
+    $account = User::load($user->getValue('uid'));
     $group = $this->getEntityByLabel('node', $label, $bundle);
     assert($group instanceof GroupInterface);
     $membership = $this->getMembershipByGroupAndUser($group, $account, OgMembershipInterface::ALL_STATES);
@@ -739,7 +739,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
     assert(isset(JoinupGroupHelper::GROUP_BUNDLES[$group_type]));
     $group = $this->getEntityByLabel('node', $group_label, $group_type);
     $url = Url::fromRoute('joinup_subscription.unsubscribe', [
-      'user' => $this->userManager->getCurrentUser()->uid,
+      'user' => $this->userManager->getCurrentUser()->getValue('uid'),
       'group' => $group->id(),
     ]);
 

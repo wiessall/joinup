@@ -4,10 +4,10 @@ Feature: Notifications are muted when entity is archived/unarchived.
   I dont want to receive a notification when an entity is archived or unarchived.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title     |
       | Milky Way |
-    And users:
+    And the following users:
       | Username | E-mail            | First name | Family name  | Notification frequency |
       | hristo   | hristo@example.bg | Hristo     | Draganov     | daily                  |
       | bisera   | bisera@example.bg | Bisera     | Kaloyancheva | weekly                 |
@@ -24,9 +24,9 @@ Feature: Notifications are muted when entity is archived/unarchived.
       | Milky Way  | kalin  | document, event                               |
 
   Scenario Outline: Updates to archive and unarchive state does not trigger notifications.
-    Given <type> content:
-      | title            | collection | body | content | headline    |
-      | Milky Way <type> | Milky Way  | Test | Test    | Test <type> |
+    Given the following "<type>" content:
+      | title            | collection | body | headline    |
+      | Milky Way <type> | Milky Way  | Test | Test <type> |
     And I mark all emails as read
     When I am logged in as "bisera"
     And I go to the edit form of the "Milky Way <type>" <type>

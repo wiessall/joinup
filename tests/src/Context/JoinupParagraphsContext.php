@@ -17,6 +17,7 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Layout\LayoutPluginManagerInterface;
 use Drupal\Core\Session\AccountSwitcherInterface;
+use Drupal\Driver\Entity\EntityStub;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Exception\WysiwygEditorNotFoundException;
 use Drupal\joinup\Traits\EntityTrait;
@@ -490,10 +491,10 @@ class JoinupParagraphsContext extends RawDrupalContext {
   public function iCreateParagraphWith(string $type, TableNode $values): void {
     $values = $values->getRowsHash();
     $values['type'] = $type;
-    $values = (object) $values;
 
-    $this->parseEntityFields('paragraph', $values);
-    $this->getDriver()->createEntity('paragraph', $values);
+    $stub = new EntityStub('paragraph', $type, $values);
+    $this->parseEntityFields($stub);
+    $this->getDriver()->entityCreate($stub);
   }
 
   /**
