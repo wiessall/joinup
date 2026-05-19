@@ -119,3 +119,6 @@ Feature: Publication status of keywords depends on the status of the parent.
     When I go to the edit form of the "Restricted access regression" news
     Then I should see the text "Ytterbium"
     And I should not see the text "- Restricted access -"
+
+    Then I go to the "Ytterbium" keyword
+    And I should see the heading "Access denied"

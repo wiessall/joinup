@@ -12,6 +12,7 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
+use Drupal\joinup_taxonomy\JoinupTermAccessControlHandler;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\taxonomy\TermInterface;
 
@@ -21,6 +22,11 @@ use Drupal\taxonomy\TermInterface;
 function joinup_taxonomy_taxonomy_term_access(TermInterface $term, string $operation, AccountInterface $account): AccessResultInterface {
   if ($operation === 'view') {
     return AccessResult::neutral();
+  }
+
+  // Auto-created tag terms inherit their parent’s unpublished status.
+  if ($operation === 'view label' && $term->bundle() === 'tags' && !$term->isPublished()) {
+    return AccessResult::allowed()->addCacheableDependency($term);
   }
 
   /** @var \Drupal\taxonomy\VocabularyInterface $vocabulary */
@@ -54,6 +60,15 @@ function joinup_taxonomy_field_info_alter(array &$info): void {
 function joinup_taxonomy_entity_bundle_info_alter(array &$bundles): void {
   if (!empty($bundles['taxonomy_term']['spatial'])) {
     $bundles['taxonomy_term']['spatial']['class'] = MappedTerm::class;
+  }
+}
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function joinup_taxonomy_entity_type_alter(array &$entity_types): void {
+  if (isset($entity_types['taxonomy_term'])) {
+    $entity_types['taxonomy_term']->setAccessClass(JoinupTermAccessControlHandler::class);
   }
 }
 
