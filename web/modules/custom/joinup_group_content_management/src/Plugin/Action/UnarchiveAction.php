@@ -7,7 +7,6 @@ namespace Drupal\joinup_group_content_management\Plugin\Action;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Action\Attribute\Action;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -70,31 +69,10 @@ class UnarchiveAction extends StateActionBase {
       throw new ActionException('Parent entity is archived');
     }
 
-    $previous = $this->getPreviousRevision($node);
-    if (!$previous) {
-      throw new ActionException('Previous revision has not been found');
+    $previousPublishedRevId = $this->getPreviousRevisionId($node);
+    if (!$previousPublishedRevId && !$node->isTargetWorkflowStateAllowed('published')) {
+      throw new ActionException('Unarchive action is not allowed.');
     }
-  }
-
-  /**
-   * Gets previous revision.
-   *
-   * @param \Drupal\node\NodeInterface $node
-   *   Node entity.
-   *
-   * @return \Drupal\Core\Entity\RevisionableInterface|null
-   *   Revisionable entity.
-   */
-  protected function getPreviousRevision(NodeInterface $node): ?RevisionableInterface {
-    $previousRevisionId = $this->getPreviousRevisionId($node);
-    if (!$previousRevisionId) {
-      return NULL;
-    }
-
-    /** @var \Drupal\node\NodeStorageInterface $storage */
-    $storage = $this->entityTypeManager->getStorage($node->getEntityTypeId());
-
-    return $storage->loadRevision($previousRevisionId);
   }
 
   /**

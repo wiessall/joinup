@@ -15,7 +15,7 @@ trait WorkflowStateChangeMessageTrait {
   /**
    * Constructs the revision log message for the newly saved entity version.
    *
-   * @param \Drupal\joinup_workflow\ArchivableEntityInterface $entity
+   * @param \Drupal\joinup_workflow\EntityWorkflowStateInterface $entity
    *   The entity.
    * @param string $newState
    *   The new workflow state ID of the entity.
@@ -23,15 +23,15 @@ trait WorkflowStateChangeMessageTrait {
    *   The performer (a queue worker, action plugin) to be referred in the
    *   log message. The current class is used if this parameter is omitted.
    *
-   * @return \Drupal\Core\StringTranslation\TranslatableMarkup|null
+   * @return string|null
    *   The revision log message for the newly saved entity version, or NULL if
    *   the provided entity is not revisionable.
    */
   protected function workflowStateChangeRevisionLogMessage(
-    ArchivableEntityInterface $entity,
+    EntityWorkflowStateInterface $entity,
     string $newState,
     string|TranslatableMarkup|null $performer = NULL,
-  ): ?TranslatableMarkup {
+  ): ?string {
     if (
       !$entity instanceof RevisionableInterface ||
       !$entity->getEntityType()->isRevisionable()
@@ -39,7 +39,8 @@ trait WorkflowStateChangeMessageTrait {
       return NULL;
     }
 
-    return $this->t(
+    // Log message must be in English.
+    return strtr(
       "Updated state to '@state-new' by @performer, from revision ID '@revision-id-original' with state '@state-original'.",
       [
         '@performer' => $performer ?? __CLASS__,

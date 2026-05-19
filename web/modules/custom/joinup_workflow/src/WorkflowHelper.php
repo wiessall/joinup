@@ -234,35 +234,43 @@ class WorkflowHelper implements WorkflowHelperInterface {
       $revisionIdsQuery->condition($defaultRevisionKey, TRUE);
     }
 
-    $revisionIds = array_keys($revisionIdsQuery->execute());
-    $revisionId = reset($revisionIds);
-    if (!$revisionId) {
+    $prevPublishedRevisionId = current(array_keys($revisionIdsQuery->execute()));
+    // There are some content which were migrated from RDF to node as
+    // archived. In this case there are no previous revisions at all. But, if
+    // the current workflow allows the transition for the current user then this
+    // helper must also perform the operation.
+    if (!$prevPublishedRevisionId && !$entity->isTargetWorkflowStateAllowed('published')) {
       throw new \Exception(sprintf(
-        "The %s entity with id '%s' cannot be unarchived: cannot find the previous revision it was archived from.",
+        "The %s entity with id '%s' cannot be unarchived: cannot find the previous revision it was archived from, and unarchival is not allowed from the current version.",
         $entity->getEntityType()->getLabel(),
         $entity->id(),
       ));
     }
 
-    // Load the previous revision.
-    $previousRevision = $entityStorage->loadRevision(reset($revisionIds));
-    \assert($previousRevision instanceof RevisionableInterface);
-    $previousRevision->setNewRevision();
-    $previousRevision->isDefaultRevision(TRUE);
-    if ($previousRevision instanceof RevisionLogInterface) {
-      $revisionLogMessage = $revisionLogMessage ?? $this->t('Unarchived by @user', [
-        '@user' => $this->currentUser->getAccountName(),
-      ]);
+    // Load the corresponding revision. This might be the previous published, or
+    // the current one if the prior doesn't exist.
+    $nextRevision = $prevPublishedRevisionId
+      ? $entityStorage->loadRevision($prevPublishedRevisionId)
+      : $entity;
+    \assert($nextRevision instanceof RevisionableInterface);
+    $nextRevision->setNewRevision();
+    $nextRevision->isDefaultRevision(TRUE);
+    if ($nextRevision instanceof RevisionLogInterface) {
+      // We don't use translatable markup; we keep log messages in English.
+      $revisionLogMessage = $revisionLogMessage ?? sprintf(
+        'Unarchived by %s',
+        $this->currentUser->getAccountName(),
+      );
       if ($revisionLogMessage) {
-        $previousRevision->setRevisionLogMessage((string) $revisionLogMessage);
+        $nextRevision->setRevisionLogMessage((string) $revisionLogMessage);
       }
-      $previousRevision->setRevisionCreationTime($this->time->getRequestTime());
-      $previousRevision->setRevisionUserId($this->currentUser->id());
+      $nextRevision->setRevisionCreationTime($this->time->getRequestTime());
+      $nextRevision->setRevisionUserId($this->currentUser->id());
     }
-    $previousRevision->skip_notification = TRUE;
-    $previousRevision->save();
+    $nextRevision->skip_notification = TRUE;
+    $nextRevision->setWorkflowState('published')->save();
 
-    return $previousRevision;
+    return $nextRevision;
   }
 
   /**
