@@ -85,8 +85,12 @@ abstract class StateActionBase extends ViewsBulkOperationsActionBase implements 
       $this->execute($entity);
     }
 
-    $this->messenger()
-      ->addMessage($this->t('Proceeded updates to @count entities', ['@count' => count($objects)]));
+    $this->messenger()->addMessage($this->formatPlural(
+      count($objects),
+      'Proceeded updates to 1 entity',
+      'Proceeded updates to @count entities',
+      ['@count' => count($objects)]
+    ));
 
     return [
       'message' => $this->t('Action processing results: @operation (@count).', [
