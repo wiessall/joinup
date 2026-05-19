@@ -8,6 +8,7 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -223,18 +224,7 @@ class WorkflowHelper implements WorkflowHelperInterface {
     $entityStorage = $this->entityTypeManager->getStorage($entityType->id());
     assert($entityStorage instanceof RevisionableStorageInterface);
 
-    // Load the previous published revision's IDs.
-    $revisionIdsQuery = $entityStorage->getQuery()
-      ->accessCheck(FALSE)
-      ->allRevisions()
-      ->condition($entityType->getKey('id'), $entity->id())
-      ->condition($entity->getWorkflowStateFieldName(), 'published')
-      ->sort($entityType->getKey('revision'), 'DESC');
-    if ($defaultRevisionKey = $entityType->getRevisionMetadataKey('revision_default')) {
-      $revisionIdsQuery->condition($defaultRevisionKey, TRUE);
-    }
-
-    $prevPublishedRevisionId = current(array_keys($revisionIdsQuery->execute()));
+    $prevPublishedRevisionId = $this->getLastPublishedRevisionId($entity);
     // There are some content which were migrated from RDF to node as
     // archived. In this case there are no previous revisions at all. But, if
     // the current workflow allows the transition for the current user then this
@@ -271,6 +261,31 @@ class WorkflowHelper implements WorkflowHelperInterface {
     $nextRevision->setWorkflowState('published')->save();
 
     return $nextRevision;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getLastPublishedRevisionId(ContentEntityInterface $entity): ?int {
+    $entityStorage = $this->entityTypeManager->getStorage($entity->getEntityTypeId());
+    if (!$entityStorage instanceof RevisionableStorageInterface) {
+      return NULL;
+    }
+    $entityType = $entity->getEntityType();
+
+    // Load the previous published revision's IDs.
+    $revisionIdsQuery = $entityStorage->getQuery()
+      ->accessCheck(FALSE)
+      ->allRevisions()
+      ->condition($entityType->getKey('id'), $entity->id())
+      ->condition($entity->getWorkflowStateFieldName(), 'published')
+      ->range(0, 1)
+      ->sort($entityType->getKey('revision'), 'DESC');
+    if ($defaultRevisionKey = $entityType->getRevisionMetadataKey('revision_default')) {
+      $revisionIdsQuery->condition($defaultRevisionKey, TRUE);
+    }
+
+    return current(array_keys($revisionIdsQuery->execute())) ?: NULL;
   }
 
   /**

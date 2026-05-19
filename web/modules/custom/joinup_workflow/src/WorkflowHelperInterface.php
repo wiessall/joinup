@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_workflow;
 
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
@@ -180,5 +181,17 @@ interface WorkflowHelperInterface {
    *   Whether the user can not un-archive content.
    */
   public function accountCanNotUnarchive(EntityInterface $entity, AccountInterface $account): bool;
+
+  /**
+   * Returns the revision ID of the last published entity revision.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+   *   The content entity.
+   *
+   * @return int|null
+   *   The revision ID of the last published version, or NULL if no such version
+   *   can be found or if the entity is not revisionable.
+   */
+  public function getLastPublishedRevisionId(ContentEntityInterface $entity): ?int;
 
 }

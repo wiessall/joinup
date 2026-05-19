@@ -69,42 +69,10 @@ class UnarchiveAction extends StateActionBase {
       throw new ActionException('Parent entity is archived');
     }
 
-    $previousPublishedRevId = $this->getPreviousRevisionId($node);
-    if (!$previousPublishedRevId && !$node->isTargetWorkflowStateAllowed('published')) {
+    $lastPublishedRevId = $this->workflowHelper->getLastPublishedRevisionId($node);
+    if (!$lastPublishedRevId && !$node->isTargetWorkflowStateAllowed('published')) {
       throw new ActionException('Unarchive action is not allowed.');
     }
-  }
-
-  /**
-   * Get previous revision.
-   *
-   * @param \Drupal\node\NodeInterface $node
-   *   Node entity.
-   *
-   * @return int|null
-   *   Previous revision.
-   */
-  protected function getPreviousRevisionId(NodeInterface $node): ?int {
-    $entityTypeId = $node->getEntityTypeId();
-
-    if (!$storage = $this->entityTypeManager->getStorage($entityTypeId)) {
-      return NULL;
-    }
-
-    $revisionIds = $storage->getQuery()
-      ->accessCheck(FALSE)
-      ->allRevisions()
-      ->condition($this->entityTypeManager->getDefinition($entityTypeId)
-        ->getKey('id'), $node->id())
-      ->sort($this->entityTypeManager->getDefinition($entityTypeId)
-        ->getKey('revision'), 'DESC')
-      ->range(1, 1)
-      ->execute();
-    if ($revisionIds) {
-      return array_keys($revisionIds)[0];
-    }
-
-    return NULL;
   }
 
   /**
