@@ -17,7 +17,7 @@ use Drupal\og\OgRouteGroupResolverBase;
 #[OgGroupResolver(
   id: 'assessments_group',
   label: new TranslatableMarkup('Assessments group'),
-  description: new TranslatableMarkup('Resolves the group for assessments routes.')
+  description: new TranslatableMarkup('Resolves the group for assessments routes.'),
 )]
 class AssessmentsGroupResolver extends OgRouteGroupResolverBase {
 
@@ -27,7 +27,8 @@ class AssessmentsGroupResolver extends OgRouteGroupResolverBase {
   public function resolve(OgResolvedGroupCollectionInterface $collection): void {
     match ($this->routeMatch->getRouteName()) {
       'view.assessments_reports.reports' => $this->resolveReportsRoute($collection),
-      'assessments.moderate' => $this->resolveAssessmentsCollection($collection),
+      'assessments.moderate',
+      'entity.assessment.canonical' => $this->resolveAssessmentsCollection($collection),
       default => NULL,
     };
   }
@@ -45,7 +46,6 @@ class AssessmentsGroupResolver extends OgRouteGroupResolverBase {
     if (!$group instanceof GroupInterface || $group->uuid() !== AssessmentInterface::GROUP_UUID) {
       return;
     }
-
     $collection->addGroup($group, ['route']);
     $this->stopPropagation();
   }
@@ -57,6 +57,10 @@ class AssessmentsGroupResolver extends OgRouteGroupResolverBase {
    *   Collection entity.
    */
   private function resolveAssessmentsCollection(OgResolvedGroupCollectionInterface $collection): void {
+    $assessment = $this->routeMatch->getParameter('assessment');
+    if ($assessment->bundle() !== 'report') {
+      return;
+    }
     $group = $this->entityTypeManager
       ->getStorage('node')
       ->loadByProperties(['uuid' => AssessmentInterface::GROUP_UUID]);
@@ -69,7 +73,6 @@ class AssessmentsGroupResolver extends OgRouteGroupResolverBase {
     if (!$group instanceof GroupInterface) {
       return;
     }
-
     $collection->addGroup($group, ['route']);
     $this->stopPropagation();
   }
