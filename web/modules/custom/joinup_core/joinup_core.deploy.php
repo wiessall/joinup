@@ -284,6 +284,21 @@ function joinup_core_deploy_201303(array &$sandbox): string {
   $storage = \Drupal::entityTypeManager()->getStorage('assessment');
 
   if (!isset($sandbox['total'])) {
+    /** @var \Drupal\Core\Extension\ExtensionPathResolver $path_resolver */
+    $pathResolver = \Drupal::service('extension.path.resolver');
+    $modulePath = $pathResolver->getPath('module', 'joinup_core');
+    $filePath = DRUPAL_ROOT . '/' . $modulePath . '/fixtures/assessment_migration_2026-02-11_14-45-23.csv';
+
+    $sandbox['csv'] = [];
+    if (($handle = fopen($filePath, 'r')) !== FALSE) {
+      while (($data = fgetcsv($handle, 0, ',')) !== FALSE) {
+        // Report Name, Webform ID.
+        $reportName = trim($data[5]);
+        $sandbox['csv'][$reportName] = $data[0];
+      }
+      fclose($handle);
+    }
+
     $ids = $storage->getQuery()
       ->accessCheck(FALSE)
       ->condition('type', 'report')
@@ -296,16 +311,43 @@ function joinup_core_deploy_201303(array &$sandbox): string {
   $items = array_slice($sandbox['ids'], $sandbox['current'], 50);
 
   foreach ($items as $id) {
+    $sandbox['current']++;
     $entity = $storage->load($id);
 
     if (!$entity) {
       continue;
     }
 
+    $reportName = $entity->get('name')->value;
+    if (!empty($sandbox['csv'][$reportName])) {
+      $webformId = $sandbox['csv'][$reportName];
+      $nodeData = \Drupal::database()->select('node__submission', 'ns')
+        ->fields('ns', ['entity_id', 'revision_id'])
+        ->condition('ns.submission_target_id', $webformId)
+        ->execute()
+        ->fetchAssoc();
+
+      if ($nodeData) {
+        $publishedAt = \Drupal::database()->select('node_field_revision', 'nfr')
+          ->fields('nfr', ['published_at'])
+          ->condition('nfr.nid', $nodeData['entity_id'])
+          ->condition('nfr.vid', $nodeData['revision_id'])
+          // It needs to be published.
+          ->condition('nfr.status', 1)
+          ->execute()
+          ->fetchField();
+
+        if ($publishedAt) {
+          $entity->set('published_at', $publishedAt);
+          $entity->save();
+          continue;
+        }
+      }
+    }
+
     $changedTime = $entity->get('changed')->value;
     $entity->set('published_at', $changedTime);
     $entity->save();
-    $sandbox['current']++;
   }
 
   $sandbox['#finished'] = ($sandbox['total'] == 0) ? 1 : ($sandbox['current'] / $sandbox['total']);
