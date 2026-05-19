@@ -146,13 +146,6 @@
         "m4tthumphrey/php-gitlab-api": "^11.12",
         "mglaman/composer-drupal-lenient": "^1.0",
         "mnsami/composer-custom-directory-installer": "^2.0",
-        "npm-asset/chart.js": "^4.5",
-        "npm-asset/dompurify": "^3.0.9",
-        "npm-asset/jquery-jsonview": "^1.2",
-        "npm-asset/js-cookie": "^3.0.5",
-        "npm-asset/slick-carousel": ">1.6.0 <1.8.1",
-        "npm-asset/yaireo--tagify": "^4.35.4",
-        "oomphinc/composer-installers-extender": "^2.0",
         "openeuropa/composer-artifacts": "^1.0",
         "openeuropa/oe_authentication": "^1.20",
         "openeuropa/oe_bootstrap_theme": "^1.21",
@@ -219,7 +212,6 @@
             "ec-europa/toolkit-composer-plugin": true,
             "mglaman/composer-drupal-lenient": true,
             "mnsami/composer-custom-directory-installer": true,
-            "oomphinc/composer-installers-extender": true,
             "openeuropa/composer-artifacts": true,
             "php-http/discovery": true,
             "phpro/grumphp-shim": true,
@@ -273,19 +265,9 @@
                 "drupal/other_view_filter"
             ]
         },
-        "installer-types": [
-            "bower-asset",
-            "npm-asset"
-        ],
         "installer-paths": {
-            "web/libraries/slick": [
-                "npm-asset/slick-carousel"
-            ],
             "web/libraries/colorbox": [
                 "turbojettechnologies/colorbox"
-            ],
-            "web/libraries/tagify": [
-                "npm-asset/yaireo--tagify"
             ],
             "drush/Commands/{$name}": [
                 "type:drupal-drush"
@@ -298,9 +280,7 @@
             ],
             "web/libraries/{$name}": [
                 "swagger-api/swagger-ui",
-                "type:drupal-library",
-                "type:bower-asset",
-                "type:npm-asset"
+                "type:drupal-library"
             ],
             "web/modules/contrib/{$name}": [
                 "type:drupal-module"
@@ -593,10 +573,6 @@
         {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
-        },
-        {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
         },
         {
             "type": "package",
