@@ -324,3 +324,19 @@ Feature:
     When I go to the manage content page of "Solution 2"
     Then I should see the link "Release 1 1.0"
     And I should see the link "Distribution 1"
+
+  Scenario: When the transition is allowed, unarchive action should also work.
+    Given the following solution content:
+      | title            |
+      | Vintage Solution |
+    And the following release content:
+      | title                      | is version of     | state    |
+      | Initially Archived Release | Vintage Solution  | archived |
+
+    When I am logged in as a moderator
+    And I go to the manage content page of "Vintage Solution"
+    And I select the "Initially Archived Release" row
+    And I select "Unarchive content" from "Action"
+    And I press "Apply to selected items"
+    And I wait for the batch process to finish
+    Then I should see "Proceeded updates to 1 entity"
