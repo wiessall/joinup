@@ -33,11 +33,7 @@ Feature: OSS catalogue search
     And I should see the text "4444" in the "Olympus indicators" tile
 
   Scenario: User is able to search.
-    # Mimic the "EU OSSC" collection.
-    Given the following "collection" content:
-      | uri                                                            | uuid                                 | title                              |
-      | http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd | 6d621a47-71ce-4f1a-90e2-8859403d3ecd | EU Open Source Solutions Catalogue |
-
+    Given the OSS catalogue collection exists
     When I visit the OSS search page
     Then I see the text "EU Open Source Solutions Catalogue" in the "Header" region
     And I see the text "Solutions created by and for European Public Services" in the "Header" region
