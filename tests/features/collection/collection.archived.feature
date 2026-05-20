@@ -14,8 +14,8 @@ Feature: Creating content and commenting on archived collection
       | title               | abstract            | description         | logo     | topic                   |
       | The Willing Consort | The Willing Consort | The Willing Consort | logo.png | Statistics and Analysis |
     Given the following "solution" content:
-      | title               | collection          |
-      | The Loyal Companion | The Willing Consort |
+      | title               | collection          | state     |
+      | The Loyal Companion | The Willing Consort | published |
     And the following collection user memberships:
       | collection          | user        | roles              |
       | The Willing Consort | Karl Fields | owner, facilitator |
@@ -24,6 +24,11 @@ Feature: Creating content and commenting on archived collection
     Given the following "<content_type>" content:
       | title            | collection   | solution   |
       | Commented entity | <collection> | <solution> |
+    When I am logged in as "Flora Hunt"
+    Then I go to the edit form of the "The Loyal Companion" solution
+    Then I press "Confirm"
+    And I press "Archive"
+
     When I am logged in as "Lee Reeves"
     And I visit the "Commented entity" <content_type>
     And I should see a ".comment-form" element
