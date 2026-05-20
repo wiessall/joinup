@@ -1,6 +1,6 @@
 uuid: d11bb8a4-7fb0-4180-89bb-c9f22a49753a
 langcode: en
-status: open
+status: closed
 dependencies:
   module:
     - joinup_assessment
