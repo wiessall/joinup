@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e10d70b54ac21ff4cc79ea4fbfe6f0f3",
+    "content-hash": "fd82a3b8b02b066400e7aa1345bca844",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -319,75 +319,6 @@
                 "source": "https://github.com/Chi-teck/drupal-code-generator/tree/4.2.0"
             },
             "time": "2025-06-01T13:48:30+00:00"
-        },
-        {
-            "name": "claudiu-cristea/drupal-cache-adapter",
-            "version": "1.0.0-alpha1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/claudiu-cristea/drupal-cache-adapter.git",
-                "reference": "618fa5499b055bf115c78145deaf34b55aa5349c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/claudiu-cristea/drupal-cache-adapter/zipball/618fa5499b055bf115c78145deaf34b55aa5349c",
-                "reference": "618fa5499b055bf115c78145deaf34b55aa5349c",
-                "shasum": ""
-            },
-            "require": {
-                "symfony/cache": "^6"
-            },
-            "require-dev": {
-                "behat/mink": "^1.10",
-                "composer/installers": "^2",
-                "drupal/core-composer-scaffold": ">=10.1",
-                "drupal/core-recommended": ">=10.1",
-                "drush/drush": "^12.1",
-                "mikey179/vfsstream": "~1.6",
-                "phpspec/prophecy-phpunit": "^2",
-                "phpunit/phpunit": "^9.6",
-                "squizlabs/php_codesniffer": "^3.7",
-                "symfony/phpunit-bridge": "^6.3"
-            },
-            "type": "library",
-            "extra": {
-                "drupal-scaffold": {
-                    "locations": {
-                        "web-root": "build/"
-                    },
-                    "file-mapping": {
-                        "[project-root]/.gitignore": false,
-                        "[project-root]/.editorconfig": false,
-                        "[project-root]/.gitattributes": false
-                    }
-                },
-                "installer-paths": {
-                    "build/core": [
-                        "type:drupal-core"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Drupal\\Cache\\Adapter\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Claudiu Cristea",
-                    "email": "clau.cristea@gmail.com"
-                }
-            ],
-            "description": "Drupal cache adapter",
-            "support": {
-                "issues": "https://github.com/claudiu-cristea/drupal-cache-adapter/issues",
-                "source": "https://github.com/claudiu-cristea/drupal-cache-adapter/tree/1.0.0-alpha1"
-            },
-            "time": "2023-08-10T09:56:09+00:00"
         },
         {
             "name": "clue/stream-filter",
@@ -7880,6 +7811,83 @@
             }
         },
         {
+            "name": "drupal/php_cache_adapter",
+            "version": "1.0.0-alpha4",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/php_cache_adapter.git",
+                "reference": "bc5a183afc710180dfee6b0aff5e638af42ad2bb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fphp_cache_adapter/repository/archive.zip?sha=bc5a183afc710180dfee6b0aff5e638af42ad2bb",
+                "reference": "bc5a183afc710180dfee6b0aff5e638af42ad2bb",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/cache": "^6 || ^7 || ^8"
+            },
+            "provide": {
+                "psr/cache-implementation": "3.0",
+                "symfony/cache-implementation": "3.0"
+            },
+            "require-dev": {
+                "behat/mink": "^1.10",
+                "composer/installers": "^2",
+                "drupal/core-composer-scaffold": "^11",
+                "drupal/core-recommended": "^11",
+                "drush/drush": "^13 || ^14",
+                "mglaman/phpstan-drupal": "^2.0",
+                "mikey179/vfsstream": "~1.6",
+                "phpspec/prophecy-phpunit": "^2",
+                "phpunit/phpunit": "^9.6 || ^10 || ^11",
+                "squizlabs/php_codesniffer": "^3.7",
+                "symfony/phpunit-bridge": "^6.3"
+            },
+            "type": "library",
+            "extra": {
+                "drupal-scaffold": {
+                    "locations": {
+                        "web-root": "build/"
+                    },
+                    "file-mapping": {
+                        "[project-root]/.gitignore": false,
+                        "[project-root]/.editorconfig": false,
+                        "[project-root]/.gitattributes": false,
+                        "[web-root]/core/.deprecation-ignore.txt": {
+                            "append": "tests/fixtures/deprecation-ignore.txt.append",
+                            "force-append": true
+                        }
+                    }
+                },
+                "installer-paths": {
+                    "build/core": [
+                        "type:drupal-core"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Drupal\\SymfonyCacheAdapter\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Claudiu Cristea",
+                    "email": "clau.cristea@gmail.com"
+                }
+            ],
+            "description": "Provides a Symfony Cache adapter to using Drupal cache backend",
+            "support": {
+                "source": "https://git.drupalcode.org/project/php_cache_adapter/-/tree/1.0.0-alpha4"
+            },
+            "time": "2026-05-15T12:03:09+00:00"
+        },
+        {
             "name": "drupal/pluginreference",
             "version": "3.0.5",
             "source": {
@@ -14585,150 +14593,6 @@
                 "source": "https://github.com/nikic/PHP-Parser/tree/v5.7.0"
             },
             "time": "2025-12-06T11:56:16+00:00"
-        },
-        {
-            "name": "npm-asset/chart.js",
-            "version": "4.5.1",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/chart.js/-/chart.js-4.5.1.tgz"
-            },
-            "require": {
-                "npm-asset/kurkle--color": ">=0.3.0,<0.4.0"
-            },
-            "type": "npm-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
-            "name": "npm-asset/dompurify",
-            "version": "3.4.1",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/dompurify/-/dompurify-3.4.1.tgz"
-            },
-            "type": "npm-asset",
-            "license": [
-                "(MPL-2.0 OR Apache-2.0)"
-            ]
-        },
-        {
-            "name": "npm-asset/jquery-jsonview",
-            "version": "1.2.3",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/jquery-jsonview/-/jquery-jsonview-1.2.3.tgz"
-            },
-            "type": "npm-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
-            "name": "npm-asset/js-cookie",
-            "version": "3.0.5",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/js-cookie/-/js-cookie-3.0.5.tgz"
-            },
-            "type": "npm-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
-            "name": "npm-asset/kurkle--color",
-            "version": "0.3.4",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/@kurkle/color/-/color-0.3.4.tgz"
-            },
-            "type": "npm-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
-            "name": "npm-asset/slick-carousel",
-            "version": "1.8.0",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/slick-carousel/-/slick-carousel-1.8.0.tgz"
-            },
-            "type": "npm-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
-            "name": "npm-asset/yaireo--tagify",
-            "version": "4.37.1",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/@yaireo/tagify/-/tagify-4.37.1.tgz"
-            },
-            "type": "npm-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
-            "name": "oomphinc/composer-installers-extender",
-            "version": "2.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/oomphinc/composer-installers-extender.git",
-                "reference": "cbf4b6f9a24153b785d09eee755b995ba87bd5f9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/oomphinc/composer-installers-extender/zipball/cbf4b6f9a24153b785d09eee755b995ba87bd5f9",
-                "reference": "cbf4b6f9a24153b785d09eee755b995ba87bd5f9",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": "^1.1 || ^2.0",
-                "composer/installers": "^1.0 || ^2.0",
-                "php": ">=7.1"
-            },
-            "require-dev": {
-                "composer/composer": "^2.0",
-                "phpunit/phpunit": "^7.2",
-                "squizlabs/php_codesniffer": "^3.3"
-            },
-            "type": "composer-plugin",
-            "extra": {
-                "class": "OomphInc\\ComposerInstallersExtender\\Plugin"
-            },
-            "autoload": {
-                "psr-4": {
-                    "OomphInc\\ComposerInstallersExtender\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Stephen Beemsterboer",
-                    "email": "stephen@oomphinc.com",
-                    "homepage": "https://github.com/balbuf"
-                },
-                {
-                    "name": "Nathan Dentzau",
-                    "email": "nate@oomphinc.com",
-                    "homepage": "http://oomph.is/ndentzau"
-                }
-            ],
-            "description": "Extend the composer/installers plugin to accept any arbitrary package type.",
-            "homepage": "http://www.oomphinc.com/",
-            "support": {
-                "issues": "https://github.com/oomphinc/composer-installers-extender/issues",
-                "source": "https://github.com/oomphinc/composer-installers-extender/tree/2.0.1"
-            },
-            "time": "2021-12-15T12:32:42+00:00"
         },
         {
             "name": "openeuropa/composer-artifacts",
