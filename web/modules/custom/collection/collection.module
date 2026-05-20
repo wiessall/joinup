@@ -382,3 +382,26 @@ function collection_entity_field_access(string $operation, FieldDefinitionInterf
 
   return AccessResult::neutral();
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function collection_form_node_collection_edit_form_alter(array &$form, FormStateInterface $form_state, $form_id): void {
+  $form['#validate'][] = 'collection_validate_archive';
+}
+
+/**
+ * Validate collection archive action.
+ */
+function collection_validate_archive(array &$form, FormStateInterface $form_state): void {
+  $collection = $form_state->getFormObject()->getEntity();
+  $trigger = $form_state->getTriggeringElement();
+
+  if (($trigger['#value'] ?? '') !== 'Archive') {
+    return;
+  }
+
+  if ($collection->hasPublishedSolutions()) {
+    $form_state->setError($form, t('Collection has at least one published solution. Please, archive all active solutions first.'));
+  }
+}

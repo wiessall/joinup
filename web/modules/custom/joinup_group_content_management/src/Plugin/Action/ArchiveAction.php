@@ -9,7 +9,6 @@ use Drupal\Core\Action\Attribute\Action;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_group_content_management\Exception\ActionException;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\joinup_workflow\WorkflowHelperInterface;
@@ -86,10 +85,6 @@ class ArchiveAction extends StateActionBase {
 
     if (!$node->isTargetWorkflowStateAllowed(self::ARCHIVE_STATE)) {
       throw new ActionException('It is not allowed to move ' . $actual . ' to ' . self::ARCHIVE_STATE);
-    }
-
-    if ($node instanceof CollectionInterface && !empty($node->hasPublishedSolutions())) {
-      throw new ActionException('Collection has at least one published solution. Please, archive all active solutions first.');
     }
   }
 
