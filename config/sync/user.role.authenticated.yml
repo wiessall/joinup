@@ -38,7 +38,6 @@ dependencies:
     - entity_browser
     - entity_legal
     - entity_print
-    - field_permissions
     - filter
     - flag
     - joinup_community_content
@@ -223,6 +222,7 @@ permissions:
   - 'view paragraph content accordion'
   - 'view paragraph content accordion_item'
   - 'view paragraph content accordion_item'
+  - 'view paragraph content binding_requirement'
   - 'view paragraph content block'
   - 'view paragraph content call_to_action'
   - 'view paragraph content carousel'
