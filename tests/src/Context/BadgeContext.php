@@ -8,6 +8,7 @@ use Behat\Mink\Exception\ExpectationException;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup_badge\PortalContributorBadgeEvaluator;
 
@@ -17,6 +18,7 @@ use Drupal\joinup_badge\PortalContributorBadgeEvaluator;
 class BadgeContext extends RawDrupalContext {
 
   use UserTrait;
+  use TraversingTrait;
 
   /**
    * Asserts that a user has been awarded a given badge.
@@ -93,6 +95,36 @@ class BadgeContext extends RawDrupalContext {
     while ($item = $queue->claimItem()) {
       $worker->processItem($item->data);
       $queue->deleteItem($item);
+    }
+  }
+
+  /**
+   * Asserts that badges are present in tile.
+   *
+   * @param string $badges
+   *   A comma separated list of badges.
+   * @param string $heading
+   *   The heading of the tile.
+   *
+   * @throws \Exception
+   *   Thrown when the expected badges are not found in the tile.
+   */
+  #[Then('I (should )see badge(s) :badges in the :heading tile')]
+  public function assertBadgesInTile(string $badges, string $heading): void {
+    $badges = array_map('trim', explode(',', $badges));
+
+    $element = $this->getTileByHeading($heading);
+
+    foreach ($badges as $badge) {
+      $badgeClass = '.user-badge--' . $badge;
+
+      if (!$element->find('css', $badgeClass)) {
+        throw new \Exception(sprintf(
+          'Badge "%s" was not found in the "%s" tile.',
+          $badge,
+          $heading
+        ));
+      }
     }
   }
 

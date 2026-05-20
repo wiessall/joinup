@@ -42,3 +42,7 @@ Feature: User badges
     When I am an anonymous user
     And I go to the public profile of "Celia Mae"
     Then I should see the text "Interoperable Europe Community member" in the "Header" region
+
+    # Badge is visible on search page
+    When I visit the advanced search page
+    Then I should see badges 'iec_member' in the "Celia Mae Badges Interoperable Europe Community member" tile
