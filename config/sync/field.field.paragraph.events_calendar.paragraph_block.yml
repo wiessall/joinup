@@ -26,9 +26,10 @@ settings:
   selection_settings:
     plugin_ids:
       'views_block:calendar-by_month': 'views_block:calendar-by_month'
-      'views_block:calendar-ec_event_month': 'views_block:calendar-ec_event_month'
       'views_block:calendar-by_week': 'views_block:calendar-by_week'
+      'views_block:calendar-ec_event_month': 'views_block:calendar-ec_event_month'
       'views_block:calendar-ec_event_week': 'views_block:calendar-ec_event_week'
+      'views_block:events_calendar-upcoming_ec_events_block': 'views_block:events_calendar-upcoming_ec_events_block'
       'views_block:events_calendar-upcoming_events_block': 'views_block:events_calendar-upcoming_events_block'
       'views_block:events_calendar-upcoming_events_block_group': 'views_block:events_calendar-upcoming_events_block_group'
 field_type: block_field
