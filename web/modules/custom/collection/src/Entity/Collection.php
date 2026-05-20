@@ -225,4 +225,16 @@ class Collection extends Node implements CollectionInterface {
     $this->set('last_content_deletion', $timestamp);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function hasPublishedSolutions(): bool {
+    foreach ($this->getSolutions() as $solution) {
+      if ($solution->isPublished() && $solution->getWorkflowState() !== 'archived') {
+        return TRUE;
+      }
+    }
+    return FALSE;
+  }
+
 }
