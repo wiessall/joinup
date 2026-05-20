@@ -122,7 +122,7 @@ display:
           admin_label: ''
           plugin_id: text_custom
           empty: true
-          content: '<div class="page__content">There are currently no active solutions in this collection..</div>'
+          content: '<div class="page__content">There are currently no active solutions in this collection.</div>'
           tokenize: false
       sorts:
         published_at:
