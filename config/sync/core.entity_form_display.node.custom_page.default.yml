@@ -11,6 +11,7 @@ dependencies:
     - field.field.node.custom_page.field_state
     - field.field.node.custom_page.field_topic
     - field.field.node.custom_page.keywords
+    - field.field.node.custom_page.menu_settings
     - field.field.node.custom_page.og_audience
     - image.style.thumbnail
     - node.type.custom_page
@@ -145,6 +146,7 @@ content:
 hidden:
   created: true
   current_workflow_state: true
+  menu_settings: true
   og_audience: true
   promote: true
   published_at: true

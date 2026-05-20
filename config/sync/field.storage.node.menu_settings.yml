@@ -1,0 +1,18 @@
+uuid: cb19fec8-f47f-4962-a8ba-72f6dcba2493
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.menu_settings
+field_name: menu_settings
+entity_type: node
+type: map
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

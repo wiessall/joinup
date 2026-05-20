@@ -12,6 +12,7 @@ dependencies:
     - field.field.node.custom_page.field_state
     - field.field.node.custom_page.field_topic
     - field.field.node.custom_page.keywords
+    - field.field.node.custom_page.menu_settings
     - field.field.node.custom_page.og_audience
     - node.type.custom_page
     - responsive_image.styles.tile
@@ -20,7 +21,7 @@ dependencies:
     - field_fallback_formatter
     - field_formatter_range
     - joinup_core
-    - responsive_image
+    - svg_image_responsive
     - template_suggestion
     - user
 _core:
@@ -97,6 +98,7 @@ hidden:
   keywords: true
   langcode: true
   links: true
+  menu_settings: true
   og_audience: true
   private_message_link: true
   published_at: true
