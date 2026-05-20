@@ -317,18 +317,18 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        name:
-          id: name
-          table: taxonomy_term_field_data
-          field: name
+        uuid:
+          id: uuid
+          table: taxonomy_term_data
+          field: uuid
           relationship: none
           group_type: group
           admin_label: ''
           entity_type: taxonomy_term
-          entity_field: name
+          entity_field: uuid
           plugin_id: string
           operator: '!='
-          value: 'European Union'
+          value: 0e15426a-db00-4869-9ef1-7dac0caf1aeb
           group: 1
           exposed: false
           expose:
