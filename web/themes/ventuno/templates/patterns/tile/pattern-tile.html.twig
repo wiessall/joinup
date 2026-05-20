@@ -17,6 +17,7 @@
     - text (string) (default: '')
     - action (object) (default: {})
     - badges (array) (default: [])
+    - user_badges (array) (default: [])
     - extra_data (array of objects) (default: [])
     - bundle (object) (default: {})
     - indicators (array) (default: [])
@@ -34,6 +35,7 @@
 {% set _text = text|default({}) %}
 {% set _action = action|default({}) %}
 {% set _badges = badges|default([]) %}
+{% set _user_badges = user_badges|default([]) %}
 {% set _extra_data = extra_data|default([]) %}
 {% set _bundle = bundle|default({}) %}
 {% set _indicators = indicators|default([]) %}
@@ -91,6 +93,9 @@
         {%- endif -%}
         <h3 class="tile__title h5 text-primary fw-bold my-0">
           {{- _label -}}
+          {%- if _user_badges is not empty -%}
+            <span class="user-badges ms-1">{{ _user_badges }}</span>
+          {%- endif -%}
         </h3>
         {%- if _text is not empty -%}
           <div class="tile__text text-dark fs-sm my-1">{{- _text -}}</div>
