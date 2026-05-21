@@ -313,6 +313,28 @@ class AssessmentsContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts that an assessment with the given name and type does not exist.
+   *
+   * @param string $type
+   *   The type of the assessment.
+   * @param string $name
+   *   The name of the assessment.
+   *
+   * @throws \Exception
+   *   When an assessment with the given name and type exists.
+   */
+  #[Then('the :type assessment :name should not exist')]
+  public function assertAssessmentNotExists(string $type, string $name): void {
+    try {
+      $this->getEntityByLabel('assessment', $name, $type);
+      throw new \Exception(sprintf('A %s assessment with name "%s" exists but should not.', $type, $name));
+    }
+    catch (\RuntimeException) {
+      // Expected: entity not found.
+    }
+  }
+
+  /**
    * Clicks on the ID link for a specific assessment in the admin listing.
    *
    * @param string $name
