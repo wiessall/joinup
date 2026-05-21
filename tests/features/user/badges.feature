@@ -57,6 +57,10 @@ Feature: User badges
     When I go to the public profile of "Celia Mae"
     Then I should not see the text "Interoperable Europe Community member" in the "Header" region
 
+        # Badge is visible on search page
+    When I visit the advanced search page
+    Then I should see badges 'iec_member' in the "Celia Mae Badges Interoperable Europe Community member" tile
+
     # User losses badge if his membership in IEC is deleted
     When I am on the members page of "Interoperable Europe Community"
     And I check the box "Update the member Randall Boggs"
@@ -65,5 +69,5 @@ Feature: User badges
     Then I should see the heading "Are you sure you want to delete the selected membership from the 'Interoperable Europe Community' collection?"
     Then I press "Confirm"
     Then I should see the success message "The member Randall Boggs has been deleted from the 'Interoperable Europe Community' collection."
-    When I go to the public profile of "Celia Mae"
+    When I go to the public profile of "Randall Boggs"
     Then I should not see the text "Interoperable Europe Community member" in the "Header" region

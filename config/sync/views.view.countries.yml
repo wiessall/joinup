@@ -277,44 +277,6 @@ display:
           value:
             spatial: spatial
           group: 1
-        eu_member_value:
-          id: eu_member_value
-          table: taxonomy_term__eu_member
-          field: eu_member_value
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: boolean
-          operator: '='
-          value: '1'
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
         default_langcode:
           id: default_langcode
           table: taxonomy_term_field_data
@@ -355,18 +317,18 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        name:
-          id: name
-          table: taxonomy_term_field_data
-          field: name
+        uuid:
+          id: uuid
+          table: taxonomy_term_data
+          field: uuid
           relationship: none
           group_type: group
           admin_label: ''
           entity_type: taxonomy_term
-          entity_field: name
+          entity_field: uuid
           plugin_id: string
           operator: '!='
-          value: 'European Union'
+          value: 0e15426a-db00-4869-9ef1-7dac0caf1aeb
           group: 1
           exposed: false
           expose:
