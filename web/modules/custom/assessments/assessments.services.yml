@@ -15,8 +15,6 @@ services:
 
   Drupal\assessments\EventSubscriber\AssessmentReportNotificationSubscriber: { }
 
-  Drupal\assessments\EventSubscriber\AssessmentPublicationDateSubscriber: { }
-
   Drupal\assessments\PageCache\AllowPublicResources:
     tags:
       - { name: page_cache_request_policy }
