@@ -99,8 +99,7 @@ final readonly class AssessmentReportNotification implements AssessmentReportNot
     }
 
     $arguments = MessageArgumentGenerator::getActorArguments($publisher)
-      + $this->buildEntityArguments($entity)
-      + MessageArgumentGenerator::getGroupArguments($collection);
+      + $this->buildEntityArguments($entity);
 
     foreach ($users as $user) {
       $this->messageDelivery->sendMessageTemplateToUser(
@@ -166,6 +165,8 @@ final readonly class AssessmentReportNotification implements AssessmentReportNot
    *   Entity arguments array for the message template.
    */
   protected function buildEntityArguments(AssessmentInterface $entity): array {
+    $collection = $this->loadCollection();
+
     return [
       '@assessment:title' => $entity->label(),
       '@assessment:id' => $entity->id(),
@@ -178,6 +179,7 @@ final readonly class AssessmentReportNotification implements AssessmentReportNot
         'assessment' => $entity->id(),
       ])->setAbsolute()->toString(),
       '@assessment:edit_url' => $entity->toUrl('edit-form')->setAbsolute()->toString(),
+      '@assessment:repository_url' => $collection ? Url::fromRoute('view.assessments_reports.reports', ['node' => $collection->id()], ['absolute' => TRUE])->toString() : '',
     ];
   }
 
