@@ -178,7 +178,7 @@ Feature: When a solution is archived then its sub-content also should be archive
     Given I run the "solution_archive_related_content" queue worker
     Then 0 e-mails should have been sent
     And the number of items in the "solution_archive_related_content" queue should be 0
-    And there should be a record of severity warning in the log with description "The Content entity with id '200' cannot be unarchived: cannot find the previous revision it was archived from."
+    And there should be a record of severity warning in the log with description "The Content entity with id '200' cannot be unarchived: cannot find the previous revision it was archived from, and unarchival is not allowed from the current version."
     And the workflow state of the "Solution Event" content should be "published"
     And the workflow state of the "Solution News 1" content should be "published"
     And the workflow state of the "Solution News 2" content should be "draft"
