@@ -47,6 +47,10 @@ Feature: User badges
     And I go to the public profile of "Randall Boggs"
     Then I should see the text "Interoperable Europe Community member" in the "Header" region
 
+    # Badge is visible on search page
+    When I visit the advanced search page
+    Then I should see badges 'iec_member' in the "Celia Mae Badges Interoperable Europe Community member" tile
+
     # User losses badge if his membership in IEC is blocked
     When I am logged in as a moderator
     And I am on the members page of "Interoperable Europe Community"
@@ -56,10 +60,6 @@ Feature: User badges
     Then I should see the success message "Block the selected membership(s) was applied to 1 item."
     When I go to the public profile of "Celia Mae"
     Then I should not see the text "Interoperable Europe Community member" in the "Header" region
-
-        # Badge is visible on search page
-    When I visit the advanced search page
-    Then I should see badges 'iec_member' in the "Celia Mae Badges Interoperable Europe Community member" tile
 
     # User losses badge if his membership in IEC is deleted
     When I am on the members page of "Interoperable Europe Community"
