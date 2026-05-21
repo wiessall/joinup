@@ -90,7 +90,7 @@ final readonly class JoinupOssCatalogueImagecacheWarmer {
       return [];
     }
 
-    $original = $this->getOriginal($ossSolution);
+    $original = $ossSolution->getOriginal();
     $originalFieldIsEmpty = !isset($original) || $original->get($fieldName)
       ->isEmpty();
     $originalField = $original?->get($fieldName);
@@ -131,25 +131,6 @@ final readonly class JoinupOssCatalogueImagecacheWarmer {
       $values[] = $mainValue;
     }
     return $values;
-  }
-
-  /**
-   * Returns the previous version of the OSS Solution object.
-   *
-   * @param \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $ossSolution
-   *   The OSS solution.
-   *
-   * @return \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface|null
-   *   The previous translation of the OSS solution object with the same
-   *   language code; NULL otherwise.
-   */
-  protected function getOriginal(OssSolutionInterface $ossSolution): ?OssSolutionInterface {
-    $original = $ossSolution->getOriginal();
-    if ($original instanceof OssSolutionInterface) {
-      $languageCode = $original->language()->getId();
-      return $original->getTranslation($languageCode);
-    }
-    return NULL;
   }
 
 }
