@@ -239,7 +239,11 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
       return [];
     }
 
-    return $publicCode['description'] ?? [];
+    if (!isset($publicCode['description']) || !is_array($publicCode['description'])) {
+      return [];
+    }
+
+    return $publicCode['description'];
   }
 
 }
