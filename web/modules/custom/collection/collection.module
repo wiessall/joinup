@@ -110,10 +110,12 @@ function collection_entity_bundle_info_alter(&$bundles): void {
  */
 function collection_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle): void {
   if ($entity_type->id() === 'node' && $bundle === 'glossary') {
-    $fields['title']->addConstraint('UniqueFieldValueInGroupAndBundle', [
-      'groupAudienceField' => 'og_audience',
-    ]);
-    $fields['title']->addConstraint('GlossaryTermName');
+    if (isset($fields['title'])) {
+      $fields['title']->addConstraint('UniqueFieldValueInGroupAndBundle', [
+        'groupAudienceField' => 'og_audience',
+      ]);
+      $fields['title']->addConstraint('GlossaryTermName');
+    }
     if (isset($fields['field_glossary_synonyms'])) {
       $fields['field_glossary_synonyms']->addConstraint('GlossaryTermSynonyms');
     }
