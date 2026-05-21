@@ -835,6 +835,8 @@ class JoinupContext extends RawDrupalContext {
       'field_shared_in__at',
     ];
     $objectId = spl_object_id($node);
+    // Clear stale data in case PHP reused this object ID.
+    unset(self::$strippedNodeProperties[$objectId]);
     foreach ($metaProperties as $property) {
       if ($node->hasValue($property)) {
         self::$strippedNodeProperties[$objectId][$property] = $node->getValue($property);
