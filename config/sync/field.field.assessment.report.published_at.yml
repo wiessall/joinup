@@ -1,0 +1,24 @@
+uuid: a06b01bb-0774-4ea8-9b10-afaa154f101a
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.report
+    - field.storage.assessment.published_at
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: assessment.report.published_at
+field_name: published_at
+entity_type: assessment
+bundle: report
+label: 'Published date'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: timestamp
