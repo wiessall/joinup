@@ -15,6 +15,12 @@ class PublishedAtHook {
 
   public function __construct(protected readonly TimeInterface $time) {}
 
+  /**
+   * Sets the publication date when a report is published.
+   *
+   * @param \Drupal\assessments\AssessmentInterface $report
+   *   The report.
+   */
   #[Hook('assessment_insert')]
   #[Hook('assessment_update')]
   public function setPublicationDate(AssessmentInterface $report): void {
