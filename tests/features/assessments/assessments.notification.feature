@@ -59,13 +59,13 @@ Feature: Assessment report email notifications
     And I run the "assessment_report_notify_members" queue worker
     Then 2 e-mails should have been sent
     And the following email should have been sent:
-      | recipient | Subscribed Member 1                                                                   |
-      | subject   | IOPEU Assessment report has been published                                            |
-      | body      | Assessment Moderator has published the new assessment report - "Moderatable Report 1" |
+      | recipient | Subscribed Member 1                                                                                                          |
+      | subject   | IOPEU Assessment report has been published                                                                                   |
+      | body      | Assessment Moderator has published the new assessment report - "Moderatable Report 1" in the Portal's Assessments repository |
     And the following email should have been sent:
-      | recipient | Subscribed Member 2                                                                   |
-      | subject   | IOPEU Assessment report has been published                                            |
-      | body      | Assessment Moderator has published the new assessment report - "Moderatable Report 1" |
+      | recipient | Subscribed Member 2                                                                                                          |
+      | subject   | IOPEU Assessment report has been published                                                                                   |
+      | body      | Assessment Moderator has published the new assessment report - "Moderatable Report 1" in the Portal's Assessments repository |
     And the following email should not have been sent:
       | recipient | Non-subscribed Member                      |
       | subject   | IOPEU Assessment report has been published |
