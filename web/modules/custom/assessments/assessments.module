@@ -24,7 +24,6 @@ use Drupal\assessments\Entity\AssessmentSubEntity;
 use Drupal\assessments\Entity\BindingRequirementParagraph;
 use Drupal\assessments\Entity\PublicOrganisation;
 use Drupal\assessments\Event\AssessmentReportEvent;
-use Drupal\assessments\Hook\PublishedAtHook;
 use Drupal\assessments\NotificationEvents;
 use Drupal\assessments\Plugin\EntityBrowser\Widget\OgAwareEntityForm;
 use Drupal\assessments\Plugin\Field\FieldWidget\ProvidedByWidget;
@@ -464,7 +463,6 @@ function assessments_assessment_presave(AssessmentInterface $entity): void {
  */
 function assessments_assessment_insert(AssessmentInterface $entity): void {
   _assessments_handle_report_state_notification($entity);
-  \Drupal::service(PublishedAtHook::class)->setPublicationDate($entity);
 }
 
 /**
@@ -472,7 +470,6 @@ function assessments_assessment_insert(AssessmentInterface $entity): void {
  */
 function assessments_assessment_update(AssessmentInterface $entity): void {
   _assessments_handle_report_state_notification($entity);
-  \Drupal::service(PublishedAtHook::class)->setPublicationDate($entity);
 }
 
 /**
