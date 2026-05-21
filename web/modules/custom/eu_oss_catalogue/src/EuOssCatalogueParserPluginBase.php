@@ -204,7 +204,7 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
 
     // Check $resolved array structure.
     $allowedLanguages = array_keys($this->languageManager->getLanguages());
-    $defaultLanguage = $fieldItemList->getEntity()->language()->getId();
+    $defaultLanguage = $fieldItemList->getEntity()->getUntranslated()->language()->getId();
 
     // Replace default language with 'x-default'.
     $allowedLanguages = [

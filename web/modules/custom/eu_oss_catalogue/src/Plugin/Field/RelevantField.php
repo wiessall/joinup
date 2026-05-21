@@ -102,7 +102,7 @@ class RelevantField extends FieldItemList {
    *   The language code of the richest entity translation.
    */
   protected function getRichestLanguageCode(): string {
-    return $this->getEntity()->language()->getId();
+    return $this->getEntity()->getUntranslated()->language()->getId();
   }
 
   /**

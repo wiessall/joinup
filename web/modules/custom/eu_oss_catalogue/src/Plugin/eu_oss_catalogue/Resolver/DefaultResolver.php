@@ -70,7 +70,7 @@ class DefaultResolver extends PluginBase implements EuOssCatalogueResolverInterf
       $fieldDefinition->isTranslatable();
 
     $langcodes = $isTranslatable ? array_keys($this->languageManger->getLanguages()) : [LanguageInterface::LANGCODE_DEFAULT];
-    $defaultLangcode = $fieldItemList->getEntity()->language()->getId();
+    $defaultLangcode = $fieldItemList->getEntity()->getUntranslated()->language()->getId();
 
     $value = [];
     foreach ($langcodes as $langcode) {
