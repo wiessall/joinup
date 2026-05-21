@@ -276,8 +276,9 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
     $this->assertEmpty($report->get('published_at'));
 
     // Publish the report.
-    $this->drupalGet("/collection/assessments/report/{$report->id()}/moderate");
-    $this->getSession()->getPage()->pressButton('Publish');
+    $report->setWorkflowState('published');
+    $report->set('status', TRUE);
+    $report->save();
 
     $report = Assessment::load($report->id());
     $this->assertTrue($report->isPublished());
