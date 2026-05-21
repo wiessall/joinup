@@ -157,7 +157,7 @@ function joinup_i18n_deploy_201302(array &$sandbox): string {
       defaultBranch: $solution->get('oss_default_branch')->value,
     );
 
-    $relevantLang = $parser->getRelevantLangCode($project);
+    $relevantLang = $parser->getRelevantLangcode($project);
     $defaultLang = $solution->language()->getId();
     if ($relevantLang !== $defaultLang) {
       // Changing the default language is not supported. Perform direct queries.

@@ -78,7 +78,7 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
    * {@inheritdoc}
    */
   protected function getProcessedSolution(OssSolutionInterface $solution, Project $project, array $metadata, EuOssCatalogueProviderInterface $provider): OssSolutionInterface {
-    $relevantLang = $this->getRelevantLangCode($project);
+    $relevantLang = $this->getRelevantLangcode($project);
     if ($relevantLang !== $solution->language()->getId()) {
       if (!$solution->isNew()) {
         // Drupal forbids changing the entity langcode during an update. We are
@@ -183,7 +183,7 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
    *
    * @todo Make this method protected in ISAICP-11133.
    */
-  public function getRelevantLangCode(Project $project): string {
+  public function getRelevantLangcode(Project $project): string {
     $siteLangcodes = array_keys($this->languageManager->getLanguages());
 
     if (count($siteLangcodes) === 1) {
