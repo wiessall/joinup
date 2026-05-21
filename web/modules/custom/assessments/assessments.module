@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\assessments\Hook\PublishedAtHook;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Database\Query\AlterableInterface;
@@ -463,6 +464,7 @@ function assessments_assessment_presave(AssessmentInterface $entity): void {
  */
 function assessments_assessment_insert(AssessmentInterface $entity): void {
   _assessments_handle_report_state_notification($entity);
+  \Drupal::service(PublishedAtHook::class)->setPublicationDate($entity);
 }
 
 /**
@@ -470,6 +472,7 @@ function assessments_assessment_insert(AssessmentInterface $entity): void {
  */
 function assessments_assessment_update(AssessmentInterface $entity): void {
   _assessments_handle_report_state_notification($entity);
+  \Drupal::service(PublishedAtHook::class)->setPublicationDate($entity);
 }
 
 /**
