@@ -34,6 +34,13 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
    */
   public function preSave(EntityStorageInterface $storage): void {
     parent::preSave($storage);
+
+    $field = $this->get('published_at');
+
+    if ($field->isEmpty() && $this->isPublished()) {
+      $field->set(0, ['value' => \Drupal::time()->getRequestTime()]);
+    }
+
     $this->clearEmptyStatements();
   }
 
