@@ -83,7 +83,7 @@ Feature: Translating releases
     Given the following "solution" content:
       | title           |
       | Test solution 2 |
-    Given I am logged in as "Flora Mod"
+    Given I am logged in as a moderator
     When I go to the "Test solution 2" solution
     And I click "Add release" in the plus button menu
     Then the available options in the "Language" select should match the site languages

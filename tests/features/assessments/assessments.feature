@@ -513,7 +513,7 @@ Feature: Assessment Report Entity Management
       | Bilingual Solution  | Interoperability assessments space | Original English | en       | 1                   |
       | BG Solution         | ~~~                                | BG Translation   | bg       | 0                   |
 
-    Given I am logged in as an "authenticated user"
+    Given I am logged in as an "developer"
     And I go to "/collection/assessments/report/create"
     And I click "New binding requirement"
     When I click "Interoperability solution" in the "Modal content" region

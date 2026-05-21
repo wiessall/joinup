@@ -33,7 +33,6 @@ dependencies:
   module:
     - assessments
     - comment
-    - content_translation
     - contextual
     - email_confirmer
     - entity_browser
@@ -179,7 +178,6 @@ permissions:
   - 'revert all revisions'
   - 'skip comment approval'
   - 'sparql endpoint query'
-  - 'translate editable entities'
   - 'unflag bookmark'
   - 'unflag like'
   - 'unflag subscribe_discussions'
