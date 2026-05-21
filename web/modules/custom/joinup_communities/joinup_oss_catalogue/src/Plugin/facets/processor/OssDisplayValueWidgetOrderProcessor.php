@@ -17,7 +17,7 @@ use Drupal\facets\Result\Result;
  *   id = "oss_display_value_widget_order",
  *   label = @Translation("Sort oss sources by display value"),
  *   description = @Translation("Sorts the widget oss sources by display value."),
- *   default_enabled = TRUE,
+ *   default_enabled = FALSE,
  *   stages = {
  *     "sort" = 40
  *   }
