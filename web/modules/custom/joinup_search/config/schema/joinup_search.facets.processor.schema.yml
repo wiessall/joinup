@@ -29,7 +29,7 @@ plugin.plugin_configuration.facets_processor.joinup_search_content_type_fixed_or
 
 plugin.plugin_configuration.facets_processor.oss_display_value_widget_order:
   type: mapping
-  label: 'Sort oss sources by display value"'
+  label: 'Sort oss sources by display value'
   mapping:
     sort:
       type: string

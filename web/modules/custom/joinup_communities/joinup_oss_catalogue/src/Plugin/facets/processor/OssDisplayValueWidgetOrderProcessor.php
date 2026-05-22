@@ -28,7 +28,7 @@ class OssDisplayValueWidgetOrderProcessor extends DisplayValueWidgetOrderProcess
   /**
    * {@inheritdoc}
    */
-  public function sortResults(Result $a, Result $b) {
+  public function sortResults(Result $a, Result $b): int {
     // Get the transliterate values only once.
     if (!$a->get('transliterateDisplayValue')) {
       $a->set('transliterateDisplayValue', $this->transliteration->removeDiacritics($a->getDisplayValue()));
@@ -56,8 +56,6 @@ class OssDisplayValueWidgetOrderProcessor extends DisplayValueWidgetOrderProcess
    * {@inheritdoc}
    */
   public function supportsFacet(FacetInterface $facet): bool {
-    // This is tailor made to the 'Source catalogue' facet, it does not support
-    // anything else.
     return $facet->id() === 'oss_source';
   }
 

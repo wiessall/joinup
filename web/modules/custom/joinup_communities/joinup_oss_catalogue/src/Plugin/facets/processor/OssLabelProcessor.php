@@ -57,8 +57,9 @@ class OssLabelProcessor extends ProcessorPluginBase implements BuildProcessorInt
 
     foreach ($results as $result) {
       if ($result instanceof ResultInterface && isset($labels[$result->getDisplayValue()])) {
-        $new_label = (!empty($countries[$result->getDisplayValue()])) ? $countries[$result->getDisplayValue()] . ' - ' . $labels[$result->getDisplayValue()] : $labels[$result->getDisplayValue()];
-        $result->setDisplayValue($new_label);
+        $id = $result->getDisplayValue();
+        $country = $countries[$id] ?? '';
+        $result->setDisplayValue($country ? "$country - " . $labels[$id] : $labels[$id]);
       }
     }
 
