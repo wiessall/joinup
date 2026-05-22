@@ -38,6 +38,7 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
       $this->onUpdateEntityReferenceFieldsOwned();
     }
     $this->onSaveReflectPublicationStatus();
+    $this->onSaveReflectLanguageToReferencedEntities();
   }
 
   /**
@@ -139,6 +140,30 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
   }
 
   /**
+   * Sets the language of the referenced entities same as the report's.
+   */
+  protected function onSaveReflectLanguageToReferencedEntities(): void {
+    $entities = [];
+
+    foreach ($this->get('binding_requirement')->referencedEntities() as $bindingRequirement) {
+      $entities += $this->collectEntities($bindingRequirement->get('expression')->referencedEntities());
+      $entities += $this->collectEntities(array_filter($bindingRequirement->get('asset')->referencedEntities(), static fn(SolutionInterface $entity) => $entity->getGroup()->uuid() === AssessmentInterface::SOLUTION_COLLECTOR));
+      $entities += $this->collectEntities($bindingRequirement->get('affects')->referencedEntities());
+      $entities += $this->collectEntities($bindingRequirement->get('has_participation')->referencedEntities());
+    }
+
+    foreach (['legal', 'organisational', 'semantic', 'technical'] as $assessmentReportField) {
+      $entities += $this->collectEntities($this->get($assessmentReportField)->referencedEntities());
+    }
+
+    foreach ($entities as $entity) {
+      $entity->set('langcode', $this->language()->getId());
+      $entity->skip_notification = TRUE;
+      $entity->save();
+    }
+  }
+
+  /**
    * Collect unpublished entities, keyed by UUID.
    */
   protected function collectUnpublishedEntities(array $entities): array {
@@ -147,6 +172,17 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
       if (!$entity->isPublished()) {
         $result[$entity->uuid()] = $entity;
       }
+    }
+    return $result;
+  }
+
+  /**
+   * Collect entities, keyed by UUID.
+   */
+  protected function collectEntities(array $entities): array {
+    $result = [];
+    foreach ($entities as $entity) {
+      $result[$entity->uuid()] = $entity;
     }
     return $result;
   }
