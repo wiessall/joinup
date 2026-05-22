@@ -30,7 +30,7 @@ final class CollectionFormHooks {
     $collection = $form_state->getFormObject()->getEntity();
     $trigger = $form_state->getTriggeringElement();
 
-    if (($trigger['#state_id'] ?? '') !== 'archived') {
+    if (!isset($trigger['#state_id']) || $trigger['#state_id'] !== 'archived') {
       return;
     }
 
