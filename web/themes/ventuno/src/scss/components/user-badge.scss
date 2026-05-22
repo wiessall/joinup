@@ -4,11 +4,11 @@
   position: relative;
   z-index: 3;
   display: inline-flex;
-  align-items: center;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  gap: 0.25rem;
+  .field__items {
+    display: inline-flex;
+    align-items: center;
+    column-gap: $spacer * 0.5;
+  }
 }
 
 .user-badge {

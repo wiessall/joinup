@@ -1,2 +1,2 @@
-.user-badges{gap:.25rem;list-style:none;margin:0;padding:0;position:relative;z-index:3}.user-badge,.user-badges{align-items:center;display:inline-flex}.user-badge{cursor:default;opacity:.9}.user-badge:hover{opacity:1}
+.user-badges{display:inline-flex;position:relative;z-index:3}.user-badges .field__items{align-items:center;-moz-column-gap:.5rem;column-gap:.5rem;display:inline-flex}.user-badge{align-items:center;cursor:default;display:inline-flex;opacity:.9}.user-badge:hover{opacity:1}
 /*# sourceMappingURL=user-badge.min.css.map */
