@@ -101,9 +101,4 @@ interface CollectionInterface extends GroupInterface {
    */
   public function setLastContentDeletion(int $timestamp): void;
 
-  /**
-   * Checks, if collection contain published, non-archived solutions.
-   */
-  public function hasPublishedSolutions(): bool;
-
 }
