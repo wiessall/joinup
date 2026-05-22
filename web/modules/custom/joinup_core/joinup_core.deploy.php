@@ -467,3 +467,11 @@ function joinup_core_deploy_201303(array &$sandbox): string {
 
   return sprintf('Processed %d of %d assessments.', $sandbox['current'], $sandbox['total']);
 }
+
+/**
+ * Trim leading and trailing whitespace from all node titles.
+ */
+function joinup_core_deploy_201304(): void {
+  \Drupal::database()->query('UPDATE {node_field_data} SET title = TRIM(title) WHERE title != TRIM(title)');
+  \Drupal::database()->query('UPDATE {node_field_revision} SET title = TRIM(title) WHERE title != TRIM(title)');
+}
