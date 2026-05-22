@@ -1,5 +1,5 @@
 diff --git a/src/Plugin/facets/url_processor/QueryString.php b/src/Plugin/facets/url_processor/QueryString.php
-index 64c6cad2703244f9a18e5ee32dd8c7fd576e6ea7..d485deed88bc94c686e8900136299192dfed9e6d 100644
+index ced422f1b184ca1b87c84a3dafcfec7db2f3e107..2982e4f57c0e7dc4ab05a958b1cf570c3d927516 100644
 --- a/src/Plugin/facets/url_processor/QueryString.php
 +++ b/src/Plugin/facets/url_processor/QueryString.php
 @@ -9,6 +9,7 @@ use Drupal\facets\Event\ActiveFiltersParsed;
@@ -35,7 +35,7 @@ index 64c6cad2703244f9a18e5ee32dd8c7fd576e6ea7..d485deed88bc94c686e8900136299192
  
    /**
 @@ -70,7 +79,8 @@ class QueryString extends UrlProcessorPluginBase {
-       $container->get('request_stack')->getCurrentRequest(),
+       $container->get('request_stack')->getMainRequest(),
        $container->get('entity_type.manager'),
        $container->get('event_dispatcher'),
 -      $container->get('facets.utility.url_generator')
@@ -57,7 +57,7 @@ index 64c6cad2703244f9a18e5ee32dd8c7fd576e6ea7..d485deed88bc94c686e8900136299192
 +      if (empty($config['dependent_processor']['settings'][$facet->id()]['enable'])) {
 +        continue;
 +      }
-+      /* @var \Drupal\facets\Plugin\facets\processor\DependentFacetProcessor $dependent_processor */
++      /** @var \Drupal\facets\Plugin\facets\processor\DependentFacetProcessor $dependent_processor */
 +      $dependent_processor = $other_facet->getProcessors()['dependent_processor'];
 +      if ($dependent_processor->isConditionMet($config['dependent_processor']['settings'][$facet->id()], $facet)) {
 +        $dependent_facets_aliases[] = $other_facet->getUrlAlias();
@@ -132,7 +132,7 @@ index d8887539330d522b83cd26ae4df95c669c991571..586ee3162be0284c100c09e8e2fa5edf
  
    /**
 diff --git a/tests/src/Functional/IntegrationTest.php b/tests/src/Functional/IntegrationTest.php
-index df2cb7e73da8508250759023bbc8f67c4f192bad..0981a264d43dba829b9e6034db3e7d80f8731db9 100644
+index 4cb65f8a36e1ab4b29e94c02646a3887e4a3576e..e59a95f64d0c7a550e0be8bef4d07132fccf2a0c 100644
 --- a/tests/src/Functional/IntegrationTest.php
 +++ b/tests/src/Functional/IntegrationTest.php
 @@ -265,6 +265,13 @@ class IntegrationTest extends FacetsTestBase {
