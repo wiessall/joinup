@@ -27,20 +27,6 @@ interface CustomPageOgMenuLinksManagerInterface {
   public function getChildren(NodeInterface $customPage, string $menuType): array;
 
   /**
-   * Adds a OG menu link pointing to a custom page.
-   *
-   * @param \Drupal\node\NodeInterface $customPage
-   *   The custom page entity.
-   * @param string $menuType
-   *   The type of the OG menu instance. Whether 'navigation' or 'quick_links'.
-   * @param array $properties
-   *   (optional) The properties of the menu link. Defaults to an empty array.
-   *
-   * @return $this
-   */
-  public function addLink(NodeInterface $customPage, string $menuType, array $properties): CustomPageOgMenuLinksManagerInterface;
-
-  /**
    * Move the OG menu links of a custom page to a new group OG menu instance.
    *
    * @param \Drupal\node\NodeInterface $customPage

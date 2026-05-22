@@ -84,26 +84,6 @@ readonly class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksMana
   /**
    * {@inheritdoc}
    */
-  public function addLink(NodeInterface $customPage, string $menuType, array $properties = []): CustomPageOgMenuLinksManagerInterface {
-    $menuLinkContentStorage = $this->entityTypeManager->getStorage('menu_link_content');
-    $this->verifyCustomPage($customPage);
-    if ($ogMenuInstance = $this->getOgMenuInstanceByCustomPage($customPage, $menuType)) {
-      $properties = $properties + [
-        'title' => $customPage->label(),
-        'langcode' => $customPage->language()->getId(),
-        'menu_name' => 'ogmenu-' . $ogMenuInstance->id(),
-        'link' => ['uri' => 'entity:node/' . $customPage->id()],
-        'enabled' => TRUE,
-      ];
-
-      $menuLinkContentStorage->create($properties)->save();
-    }
-    return $this;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function moveLinks(NodeInterface $customPage, $groupId): CustomPageOgMenuLinksManagerInterface {
     $menuLinkContentStorage = $this->entityTypeManager->getStorage('menu_link_content');
     $this->verifyCustomPage($customPage);
