@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Drupal\assessments\Plugin\rest\resource;
 
 use Drupal\Component\Render\PlainTextOutput;
+use Drupal\Component\Utility\Bytes;
+use Drupal\Component\Utility\Environment;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\ContentEntityStorageInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
@@ -16,6 +18,7 @@ use Drupal\Core\File\Exception\FileException;
 use Drupal\Core\File\Exception\FileExistsException;
 use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\Lock\LockAcquiringException;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -26,6 +29,8 @@ use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\AssessmentStatement;
 use Drupal\assessments\Entity\PublicOrganisation;
 use Drupal\assessments\ErrorMessage;
+use Drupal\assessments\Http\CappedStream;
+use Drupal\assessments\Http\MaxDownloadSizeExceededException;
 use Drupal\assessments\ProvidedByHelperTrait;
 use Drupal\file\FileInterface;
 use Drupal\file\Plugin\Field\FieldType\FileFieldItemList;
@@ -43,13 +48,15 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Response;
-use Psr\Http\Client\ClientExceptionInterface;
+use GuzzleHttp\Psr7\Utils;
+use GuzzleHttp\RequestOptions;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\CannotWriteFileException;
 use Symfony\Component\HttpFoundation\File\Exception\NoFileException;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
@@ -96,6 +103,8 @@ class AssessmentReportResource extends ResourceBase {
     protected readonly EntityFieldManagerInterface $fieldManager,
     protected readonly ClientInterface $httpClient,
     protected readonly FileSystemInterface $fileSystem,
+    protected readonly FileUrlGeneratorInterface $fileUrlGenerator,
+    protected readonly RequestStack $requestStack,
     protected readonly FileUploadHandler $uploadHandler,
     protected readonly AccountProxyInterface $currentUser,
     #[Autowire(AssessmentVocabularyHelper::class)]
@@ -120,6 +129,8 @@ class AssessmentReportResource extends ResourceBase {
       $container->get('entity_field.manager'),
       $container->get('http_client'),
       $container->get('file_system'),
+      $container->get('file_url_generator'),
+      $container->get('request_stack'),
       $container->get('file.upload_handler'),
       $container->get('current_user'),
       $container->get(AssessmentVocabularyHelper::class),
@@ -165,6 +176,11 @@ class AssessmentReportResource extends ResourceBase {
     $report = $this->createReport($data);
 
     if ($this->errors) {
+      // Files that downloaded successfully are saved as managed file entities
+      // by the upload handler. When the overall request fails (provider/asset
+      // errors, cardinality, etc.) the report is never saved, so those files
+      // would orphan on disk. Delete them before returning the 422.
+      $this->deleteOrphanFiles($report);
       ksort($this->errors);
       return new ResourceResponse(['errors' => $this->errors], 422);
     }
@@ -593,26 +609,95 @@ class AssessmentReportResource extends ResourceBase {
    * @see https://docs.guzzlephp.org/en/stable/quickstart.html#concurrent-requests
    */
   protected function uploadDocuments(AssessmentReport $report, array $data): void {
-    $requests = function (array $data) {
-      foreach ($data['documents'] ?? [] as $i => $url) {
-        $key = "/documents/$i:assessment.report.documents:$url";
-        yield $key => fn() => $this->httpClient->getAsync($url);
-      }
-      foreach ($data['binding_requirement'] as $i => $requirement) {
-        foreach ($requirement['documents'] ?? [] as $j => $url) {
-          $key = "/binding_requirement/$i/documents/$j:paragraph.binding_requirement.requirement_documents:$url";
-          yield $key => fn() => $this->httpClient->getAsync($url);
+    $safeRequestOptions = [
+      RequestOptions::TIMEOUT => 30,
+      RequestOptions::CONNECT_TIMEOUT => 10,
+      // Redirects are disabled: a redirect target cannot be re-validated for
+      // private/reserved IPs, which would re-open the SSRF window.
+      RequestOptions::ALLOW_REDIRECTS => FALSE,
+    ];
+
+    // Collect all documents across the payload, applying the per-field
+    // cardinality cap up-front. Anything beyond the cap is rejected with a
+    // payload-path error rather than fetched.
+    $items = $this->collectDocumentItems($data);
+
+    // Per-key map of sink temp file paths, populated during request iteration
+    // and consumed by the fulfilled/rejected handlers so they can find the
+    // streamed download (or clean it up on failure).
+    $tempPaths = [];
+
+    $requests = function (array $items) use ($safeRequestOptions, $report, &$tempPaths) {
+      foreach ($items as [$path, $fieldInfo, $url]) {
+        if (!$this->validateDocumentUrl($url, $path)) {
+          continue;
         }
+        if (!$this->validateDocumentExtension($url, $fieldInfo, $path)) {
+          continue;
+        }
+        $key = "$path:$fieldInfo:$url";
+        if ($localUri = $this->resolveLocalPath($url)) {
+          $this->uploadLocalFile($localUri, $key, $report);
+          continue;
+        }
+        // Own-site URL pointing at the public files prefix but the file does
+        // not exist (or fails the safety checks). Surface a clean error
+        // rather than chasing it through HTTP, where the response (302/404)
+        // varies per web-server config and would be non-deterministic.
+        if ($this->isOwnSitePublicUrl($url)) {
+          $this->addError($path, 'Document URL points to a missing file');
+          continue;
+        }
+        // Per-request capped sink: streams the body to a temp file and aborts
+        // the transfer once the field's max_filesize is exceeded.
+        $tempPath = $this->fileSystem->tempnam('temporary://', 'doc_');
+        $tempPaths[$key] = $tempPath;
+        $maxBytes = $this->getMaxFilesizeForFieldInfo($fieldInfo);
+        $sinkResource = fopen($this->fileSystem->realpath($tempPath), 'wb');
+        $sink = new CappedStream(Utils::streamFor($sinkResource), $maxBytes);
+        yield $key => fn() => $this->httpClient->getAsync($url, [
+          ...$safeRequestOptions,
+          RequestOptions::SINK => $sink,
+        ]);
       }
     };
 
-    $pool = new Pool($this->httpClient, $requests($data), [
+    $pool = new Pool($this->httpClient, $requests($items), [
       'concurrency' => 10,
-      'fulfilled' => function (Response $response, string $key) use ($report): void {
-        $this->uploadFile($response, $key, $report);
+      'fulfilled' => function (Response $response, string $key) use ($report, &$tempPaths): void {
+        $tempPath = $tempPaths[$key] ?? NULL;
+        unset($tempPaths[$key]);
+        // Redirects are disabled (SSRF-safety); treat any non-2xx response as
+        // an error so a 3xx body doesn't get attached as the document itself.
+        if ($response->getStatusCode() >= 300) {
+          if ($tempPath !== NULL) {
+            try {
+              $this->fileSystem->unlink($tempPath);
+            }
+            catch (\Throwable) {
+            }
+          }
+          [$path] = explode(':', $key, 2);
+          $this->addError($path, "Error downloading file: {$response->getStatusCode()} {$response->getReasonPhrase()}");
+          return;
+        }
+        $this->uploadFile($response, $key, $report, $tempPath);
       },
-      'rejected' => function (ClientExceptionInterface $reason, string $key): void {
+      'rejected' => function (\Throwable $reason, string $key) use (&$tempPaths): void {
         [$path] = explode(':', $key, 2);
+        if (isset($tempPaths[$key])) {
+          try {
+            $this->fileSystem->unlink($tempPaths[$key]);
+          }
+          catch (\Throwable) {
+            // Best-effort cleanup; the temp dir is purged periodically.
+          }
+          unset($tempPaths[$key]);
+        }
+        if ($reason instanceof MaxDownloadSizeExceededException) {
+          $this->addError($path, $reason->getMessage());
+          return;
+        }
         if ($reason instanceof ClientException) {
           // Use a more simple but meaningful message for client exceptions.
           $this->addError($path, "Error downloading file: {$reason->getCode()} {$reason->getResponse()->getReasonPhrase()}");
@@ -622,8 +707,39 @@ class AssessmentReportResource extends ResourceBase {
       },
     ]);
 
-    $promise = $pool->promise();
-    $promise->wait();
+    $pool->promise()->wait();
+  }
+
+  /**
+   * Collects flat document items from the payload, enforcing cardinality.
+   *
+   * @return list<array{0:string,1:string,2:string}>
+   *   List of [payload_path, field_info, url] tuples.
+   */
+  protected function collectDocumentItems(array $data): array {
+    $items = [];
+
+    $documentsCap = $this->getCardinalityForFieldInfo('assessment.report.documents');
+    foreach ($data['documents'] ?? [] as $i => $url) {
+      if ($documentsCap !== -1 && $i >= $documentsCap) {
+        $this->addError("/documents/$i", "Exceeds field cardinality (max $documentsCap documents)");
+        continue;
+      }
+      $items[] = ["/documents/$i", 'assessment.report.documents', $url];
+    }
+
+    $reqCap = $this->getCardinalityForFieldInfo('paragraph.binding_requirement.requirement_documents');
+    foreach ($data['binding_requirement'] ?? [] as $i => $requirement) {
+      foreach ($requirement['documents'] ?? [] as $j => $url) {
+        if ($reqCap !== -1 && $j >= $reqCap) {
+          $this->addError("/binding_requirement/$i/documents/$j", "Exceeds field cardinality (max $reqCap documents)");
+          continue;
+        }
+        $items[] = ["/binding_requirement/$i/documents/$j", 'paragraph.binding_requirement.requirement_documents', $url];
+      }
+    }
+
+    return $items;
   }
 
   /**
@@ -635,8 +751,11 @@ class AssessmentReportResource extends ResourceBase {
    *   The request key. We've packed in this string useful context information.
    * @param \Drupal\assessments\Entity\AssessmentReport $report
    *   The assessment report entity being created.
+   * @param string|null $tempPath
+   *   The path to the temp file already populated by the streaming sink. When
+   *   omitted (legacy callers), the response body is materialised here.
    */
-  protected function uploadFile(Response $response, string $key, AssessmentReport $report): void {
+  protected function uploadFile(Response $response, string $key, AssessmentReport $report, ?string $tempPath = NULL): void {
     // Unpack context information from the request key.
     [$path, $fieldInfo, $url] = explode(':', $key, 3);
     [$entityTypeId, $bundle, $fieldName] = explode('.', $fieldInfo);
@@ -654,8 +773,10 @@ class AssessmentReportResource extends ResourceBase {
       $validators = $this->getFileUploadValidators($settings);
 
       $filename = basename(parse_url($url, PHP_URL_PATH));
-      $tempPath = $this->fileSystem->tempnam('temporary://', 'file');
-      file_put_contents($tempPath, $response->getBody()->getContents());
+      if ($tempPath === NULL) {
+        $tempPath = $this->fileSystem->tempnam('temporary://', 'file');
+        file_put_contents($tempPath, $response->getBody()->getContents());
+      }
       $uploadedFile = new InputStreamUploadedFile($filename, $filename, $tempPath, @filesize($tempPath));
 
       $result = $this->uploadHandler->handleFileUpload($uploadedFile, $validators, $destination, FileExists::Rename, FALSE);
@@ -720,6 +841,255 @@ class AssessmentReportResource extends ResourceBase {
         $bindingRequirements[$delta]->entity->get($fieldName)->appendItem($file);
       }
     }
+  }
+
+  /**
+   * Validates a document URL against SSRF-unsafe schemes and IP ranges.
+   *
+   * Only http/https are allowed. The hostname is resolved to its IP addresses
+   * and any private, loopback, or link-local address is rejected to prevent
+   * Server-Side Request Forgery.
+   *
+   * @param string $url
+   *   The URL to validate.
+   * @param string $path
+   *   The payload path used for error reporting.
+   *
+   * @return bool
+   *   TRUE if the URL is safe to fetch, FALSE otherwise (error is recorded).
+   */
+  protected function validateDocumentUrl(string $url, string $path): bool {
+    $parsed = parse_url($url);
+
+    if (empty($parsed['scheme']) || !in_array($parsed['scheme'], ['http', 'https'], TRUE)) {
+      $this->addError($path, 'Document URL must use the http or https scheme');
+      return FALSE;
+    }
+
+    $host = $parsed['host'] ?? '';
+    if ($host === '') {
+      $this->addError($path, 'Document URL has no host');
+      return FALSE;
+    }
+
+    // Own-site URLs bypass the private/reserved IP check. Inside containers
+    // the site's hostname commonly resolves to RFC1918/loopback, which the IP
+    // filter would otherwise reject for legitimate references back to our own
+    // files. Local files are short-circuited to the filesystem in
+    // uploadDocuments(); any non-file own-site URL still goes through Guzzle.
+    if ($this->isOwnSiteHost($host)) {
+      return TRUE;
+    }
+
+    // Strip IPv6 bracket notation before lookup.
+    $lookupHost = trim($host, '[]');
+
+    $ips = $this->resolveDocumentHost($lookupHost);
+    if (empty($ips)) {
+      $this->addError($path, 'Could not resolve document URL host');
+      return FALSE;
+    }
+
+    foreach ($ips as $ip) {
+      // FILTER_FLAG_NO_PRIV_RANGE blocks RFC1918 IPv4 and IPv6 ULA/link-local.
+      // FILTER_FLAG_NO_RES_RANGE blocks loopback, 169.254.x.x, and reserved.
+      if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+        $this->addError($path, 'Document URL must not point to a private or reserved IP address');
+        return FALSE;
+      }
+    }
+
+    return TRUE;
+  }
+
+  /**
+   * Resolves a hostname to all its IPv4 and IPv6 addresses.
+   *
+   * @param string $host
+   *   A hostname or bare IP address (without brackets).
+   *
+   * @return list<string>
+   *   Resolved IP addresses, or the input itself when it is already an IP.
+   */
+  protected function resolveDocumentHost(string $host): array {
+    if (filter_var($host, FILTER_VALIDATE_IP)) {
+      return [$host];
+    }
+
+    $ips = gethostbynamel($host) ?: [];
+
+    $records = @dns_get_record($host, DNS_AAAA) ?: [];
+    foreach ($records as $record) {
+      if (isset($record['ipv6'])) {
+        $ips[] = $record['ipv6'];
+      }
+    }
+
+    return $ips;
+  }
+
+  /**
+   * Returns the cardinality of the field referred to by a packed fieldInfo.
+   */
+  protected function getCardinalityForFieldInfo(string $fieldInfo): int {
+    [$entityTypeId, , $fieldName] = explode('.', $fieldInfo);
+    $storage = $this->fieldManager->getFieldStorageDefinitions($entityTypeId)[$fieldName] ?? NULL;
+    return $storage ? $storage->getCardinality() : -1;
+  }
+
+  /**
+   * Returns the per-file max byte cap configured on the target field.
+   *
+   * Falls back to the system upload ceiling
+   * (min(upload_max_filesize, post_max_size)) when the field has no explicit
+   * setting, mirroring how Drupal's own file widgets behave.
+   */
+  protected function getMaxFilesizeForFieldInfo(string $fieldInfo): int {
+    [$entityTypeId, $bundle, $fieldName] = explode('.', $fieldInfo);
+    $definition = $this->fieldManager->getFieldDefinitions($entityTypeId, $bundle)[$fieldName] ?? NULL;
+    $configured = $definition ? (string) $definition->getSetting('max_filesize') : '';
+    if ($configured !== '') {
+      return (int) Bytes::toNumber($configured);
+    }
+    return (int) Environment::getUploadMaxSize();
+  }
+
+  /**
+   * Validates the URL's filename extension against the field's allowlist.
+   *
+   * The remote response is also re-validated against the same allowlist after
+   * download, but checking the URL up-front lets us reject obviously invalid
+   * extensions before spending bandwidth on the fetch.
+   */
+  protected function validateDocumentExtension(string $url, string $fieldInfo, string $path): bool {
+    [$entityTypeId, $bundle, $fieldName] = explode('.', $fieldInfo);
+    $definition = $this->fieldManager->getFieldDefinitions($entityTypeId, $bundle)[$fieldName] ?? NULL;
+    $rawExtensions = $definition ? (string) $definition->getSetting('file_extensions') : '';
+    $allowed = preg_split('/\s+/', $rawExtensions, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+    if (empty($allowed)) {
+      return TRUE;
+    }
+    $urlPath = parse_url($url, PHP_URL_PATH) ?? '';
+    $ext = strtolower(pathinfo($urlPath, PATHINFO_EXTENSION));
+    $allowedLower = array_map('strtolower', $allowed);
+    if ($ext === '' || !in_array($ext, $allowedLower, TRUE)) {
+      $this->addError($path, "Document URL extension '$ext' is not allowed (expected: " . implode(', ', $allowed) . ')');
+      return FALSE;
+    }
+    return TRUE;
+  }
+
+  /**
+   * Whether the host belongs to this site.
+   */
+  protected function isOwnSiteHost(string $host): bool {
+    $request = $this->requestStack->getCurrentRequest();
+    $candidates = array_filter([
+      $request?->getHost(),
+      parse_url((string) $this->fileUrlGenerator->generateAbsoluteString('public://'), PHP_URL_HOST),
+    ]);
+    $host = strtolower(trim($host, '[]'));
+    return in_array($host, array_map('strtolower', $candidates), TRUE);
+  }
+
+  /**
+   * Whether the URL is an own-site URL pointing at the public files prefix.
+   *
+   * Used to short-circuit URLs that look like our own public files but cannot
+   * be resolved to an existing file: making an HTTP call in that case yields
+   * a response (302/404/etc.) that varies per web-server config.
+   */
+  protected function isOwnSitePublicUrl(string $url): bool {
+    $parsed = parse_url($url);
+    if (empty($parsed['path']) || empty($parsed['host']) || !$this->isOwnSiteHost($parsed['host'])) {
+      return FALSE;
+    }
+    $publicAbs = (string) $this->fileUrlGenerator->generateAbsoluteString('public://');
+    $publicPrefix = parse_url($publicAbs, PHP_URL_PATH) ?? '';
+    return $publicPrefix !== '' && str_starts_with($parsed['path'], $publicPrefix);
+  }
+
+  /**
+   * Maps an own-site URL to a public:// stream URI, or NULL if it doesn't map.
+   *
+   * Only files under public:// are eligible. Path traversal is blocked by
+   * comparing the resolved real path to the public files real path.
+   */
+  protected function resolveLocalPath(string $url): ?string {
+    $parsed = parse_url($url);
+    if (empty($parsed['path']) || empty($parsed['host']) || !$this->isOwnSiteHost($parsed['host'])) {
+      return NULL;
+    }
+    $publicAbs = (string) $this->fileUrlGenerator->generateAbsoluteString('public://');
+    $publicPrefix = parse_url($publicAbs, PHP_URL_PATH) ?? '';
+    if ($publicPrefix === '' || !str_starts_with($parsed['path'], $publicPrefix)) {
+      return NULL;
+    }
+    $relative = ltrim(rawurldecode(substr($parsed['path'], strlen($publicPrefix))), '/');
+    if ($relative === '') {
+      return NULL;
+    }
+    $candidate = 'public://' . $relative;
+    $realPublic = realpath($this->fileSystem->realpath('public://'));
+    $realFile = realpath($this->fileSystem->realpath($candidate));
+    if ($realPublic === FALSE || $realFile === FALSE) {
+      return NULL;
+    }
+    if (!str_starts_with($realFile . DIRECTORY_SEPARATOR, $realPublic . DIRECTORY_SEPARATOR)) {
+      return NULL;
+    }
+    return is_file($realFile) ? $candidate : NULL;
+  }
+
+  /**
+   * Copies an own-site file into the report, mirroring uploadFile().
+   *
+   * @param string $localUri
+   *   A public:// stream URI verified by resolveLocalPath().
+   * @param string $key
+   *   The packed request key: "$path:$entityType.$bundle.$fieldName:$url".
+   * @param \Drupal\assessments\Entity\AssessmentReport $report
+   *   The assessment report entity being created.
+   */
+  protected function uploadLocalFile(string $localUri, string $key, AssessmentReport $report): void {
+    [$path, $fieldInfo, $url] = explode(':', $key, 3);
+    [$entityTypeId, $bundle, $fieldName] = explode('.', $fieldInfo);
+
+    $definition = $this->fieldManager->getFieldDefinitions($entityTypeId, $bundle)[$fieldName];
+    $destination = $this->getUploadLocation($definition);
+    if (!$this->fileSystem->prepareDirectory($destination, FileSystemInterface::CREATE_DIRECTORY)) {
+      throw new HttpException(500, 'Destination file path is not writable');
+    }
+
+    try {
+      $validators = $this->getFileUploadValidators($definition->getSettings());
+      $filename = basename(parse_url($url, PHP_URL_PATH));
+      $tempPath = $this->fileSystem->tempnam('temporary://', 'file');
+      // copy() handles stream wrappers; size and extension are checked by the
+      // file upload validators below, the same as for remote downloads.
+      $this->fileSystem->copy($localUri, $tempPath, FileExists::Replace);
+      $uploadedFile = new InputStreamUploadedFile($filename, $filename, $tempPath, @filesize($tempPath));
+      $result = $this->uploadHandler->handleFileUpload($uploadedFile, $validators, $destination, FileExists::Rename, FALSE);
+    }
+    catch (LockAcquiringException $e) {
+      throw new HttpException(503, $e->getMessage(), NULL, ['Retry-After' => 1]);
+    }
+    catch (FileException $e) {
+      throw new HttpException(500, 'Local file could not be copied', $e);
+    }
+
+    if ($result->hasViolations()) {
+      foreach ($result->getViolations() as $violation) {
+        $this->addError($path, "Error saving file $filename: " . PlainTextOutput::renderFromHtml($violation->getMessage()));
+      }
+      return;
+    }
+
+    $file = $result->getFile();
+    match ($entityTypeId) {
+      'assessment' => $report->get('documents')->appendItem($file),
+      'paragraph' => $this->attachFileToParagraph($report, $path, $fieldName, $file),
+    };
   }
 
   /**
@@ -857,6 +1227,28 @@ class AssessmentReportResource extends ResourceBase {
    */
   protected function getProvidedByAssessmentStorage(): ContentEntityStorageInterface {
     return $this->getAssessmentStorage();
+  }
+
+  /**
+   * Deletes file entities attached to an unsaved report and its paragraphs.
+   */
+  protected function deleteOrphanFiles(AssessmentReport $report): void {
+    foreach ($report->get('documents') as $item) {
+      if ($item->entity instanceof FileInterface) {
+        $item->entity->delete();
+      }
+    }
+    foreach ($report->get('binding_requirement') as $requirementItem) {
+      $paragraph = $requirementItem->entity;
+      if (!$paragraph instanceof ParagraphInterface) {
+        continue;
+      }
+      foreach ($paragraph->get('requirement_documents') as $item) {
+        if ($item->entity instanceof FileInterface) {
+          $item->entity->delete();
+        }
+      }
+    }
   }
 
   /**
