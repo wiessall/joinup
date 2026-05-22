@@ -129,7 +129,7 @@ The module currently supports the following providers:
 - **Awesome CodeGouvFr** (FR) - French National Catalogue
 - **Developer Overheid** (NL) - Dutch National OSS Catalogue
 - **Avoinkoodi.fi** (FI) - Finnish OSS Catalogue
-- **Department of Information Technology Services** (CY) - Cyprus national department promoting open-source solutions for public sector IT
+- **Dept. of IT Services** (CY) - Cyprus national department promoting open-source solutions for public sector IT
 - **OGCIO Building Blocks** (IE) - Reusable open source digital components for Irish public services, delivered under the Office of the Government Chief Information Officer
 - **ARTE** (PT) - Portuguese Agency for the Technological Reform of the State, promoting administrative modernisation and digital transformation
 
@@ -342,7 +342,7 @@ Run the following, to fetch from
 ```
 
 Run the following, to fetch from
-[Department of Information Technology Services (Cyprus)](https://www.gov.cy/dmrid-dits/)
+[Dept. of IT Services (Cyprus)](https://www.gov.cy/dmrid-dits/)
 ```bash
 ./vendor/bin/drush eu-oss:fetch hosting_platform:dmrid_dits
 ```
