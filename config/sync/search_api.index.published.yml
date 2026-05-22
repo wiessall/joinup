@@ -212,7 +212,7 @@ field_settings:
     configuration:
       type: union
       fields:
-        - 'entity:assessment/created'
+        - 'entity:assessment/published_at'
         - 'entity:node/field_event_date'
         - 'entity:node/published_at'
   description:
