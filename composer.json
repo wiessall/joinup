@@ -396,8 +396,8 @@
                 "Restrict the dynamic fields in bundles @see https://www.drupal.org/i/3468563": "resources/patch/php/drupal/entity_print/3468563.mr66-note523124.diff"
             },
             "drupal/facets": {
-                "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/i/2873480": "resources/patch/php/drupal/facets/2873480.mr128.note886275.diff",
-                "Add 0 option in 'Soft limit'. @see https://www.drupal.org/i/3307082": "resources/patch/php/drupal/facets/3307082.mr127.note886282.diff"
+                "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/i/2873480": "resources/patch/php/drupal/facets/2873480.mr128.note886300.diff",
+                "Add 0 option in 'Soft limit'. @see https://www.drupal.org/i/3307082": "resources/patch/php/drupal/facets/3307082.mr127.note901669.diff"
             },
             "drupal/field_delimiter": {
                 "Doesn't work in layout builder. @see https://www.drupal.org/i/3099580": "resources/patch/php/drupal/field_delimiter/3099580.patch"

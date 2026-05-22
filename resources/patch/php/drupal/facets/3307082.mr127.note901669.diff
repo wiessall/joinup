@@ -22,7 +22,7 @@ index fdc83553edb0dede400fb8601b54715c775cd0f1..52bab5789f629a04b4a4dc9c6e73d708
 +  }
 +}
 diff --git a/js/soft-limit.js b/js/soft-limit.js
-index 9424b3a38c5cb0a6d2f0de783ff26c2f273e21a4..45856bb7435480a760c996a2ef2f152850e3f13e 100644
+index 9424b3a38c5cb0a6d2f0de783ff26c2f273e21a4..34b29f0175d4d66c465dc50b1fb6c9ee9fdc8227 100644
 --- a/js/soft-limit.js
 +++ b/js/soft-limit.js
 @@ -27,7 +27,7 @@
@@ -34,25 +34,36 @@ index 9424b3a38c5cb0a6d2f0de783ff26c2f273e21a4..45856bb7435480a760c996a2ef2f1528
      const facetId = facet;
      const facetsList = $(`ul[data-drupal-facet-id="${facetId}"]`);
  
-@@ -41,7 +41,13 @@
+@@ -40,8 +40,13 @@
+ 
      // Hide facets over the limit.
      facetsList.each(function () {
-       const allLiElements = $(this).find('li');
+-      const allLiElements = $(this).find('li');
 -      $(once('applysoftlimit', allLiElements.slice(zeroBasedLimit + 1))).hide();
 +      if (limit === 0) {
-+        $(once('applysoftlimit', allLiElements)).hide();
++        $(once('applysoftlimit', $(this).children('li'))).hide();
 +      } else {
 +        $(
-+          once('applysoftlimit', allLiElements.slice(zeroBasedLimit + 1)),
++          once('applysoftlimit', $(this).children(`li:gt(${zeroBasedLimit})`)),
 +        ).hide();
 +      }
      });
  
      // Add "Show more" / "Show less" links.
-@@ -63,17 +69,26 @@
+@@ -49,7 +54,7 @@
+       once(
+         'applysoftlimit',
+         facetsList.filter(function () {
+-          return $(this).find('> li').length > limit;
++          return $(this).find('li').length > limit;
+         }),
+       ),
+     ).each(function () {
+@@ -62,18 +67,27 @@
+       $link[0].textContent = showMoreLabel;
        $link
          .on('click', function () {
-           if (facet.find('> li:hidden').length > 0) {
+-          if (facet.find('> li:hidden').length > 0) {
 -            facet.find(`> li:gt(${zeroBasedLimit})`).slideDown();
 -            facet
 -              .find(
@@ -61,6 +72,7 @@ index 9424b3a38c5cb0a6d2f0de783ff26c2f273e21a4..45856bb7435480a760c996a2ef2f1528
 -                }) input`,
 -              )
 -              .focus();
++          if (facet.find('li:hidden').length > 0) {
 +            if (limit === 0) {
 +              facet.find('> li').slideDown();
 +              facet.find(`> li:lt(${zeroBasedLimit + 1}) input`).focus();
