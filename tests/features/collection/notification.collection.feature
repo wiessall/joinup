@@ -30,9 +30,9 @@ Feature: Notification test for the collection transitions.
       | NC to delete           | published        | No one cares | No one cares. | NC for all |
       | NC to delete by mod    | published        | No one cares | No one cares. | NC for all |
     Given the following "solution" content:
-      | title        | collection    |
-      | NC Solution1 | NC to archive |
-      | NC Solution2 | NC to archive |
+      | title        | collection    | state    |
+      | NC Solution1 | NC to archive | archived |
+      | NC Solution2 | NC to archive | archived |
     And the following solution user memberships:
       | solution     | user      | roles |
       | NC Solution1 | NCS owner | owner |
@@ -155,15 +155,7 @@ Feature: Notification test for the collection transitions.
     # Test the 'archive' operation.
     And I go to the edit form of the "NC to archive" collection
     And I press "Archive"
-    Then I should see the error message "Collection has at least one published solution. Please, archive all active solutions first."
     Then I should see the inline form error message "This action requires you to fill in the motivation field"
-    Then I go to the edit form of the "NC Solution1" solution
-    Then I press "Confirm"
-    And I press "Archive"
-    Then I go to the edit form of the "NC Solution2" solution
-    Then I press "Confirm"
-    And I press "Archive"
-    And I go to the edit form of the "NC to archive" collection
     When I fill in "Motivation" with "As you wish."
     And I press "Archive"
     Then the following email should have been sent:

@@ -14,8 +14,8 @@ Feature: Creating content and commenting on archived collection
       | title               | abstract            | description         | logo     | topic                   |
       | The Willing Consort | The Willing Consort | The Willing Consort | logo.png | Statistics and Analysis |
     Given the following "solution" content:
-      | title               | collection          | state     |
-      | The Loyal Companion | The Willing Consort | published |
+      | title               | collection          |
+      | The Loyal Companion | The Willing Consort |
     And the following collection user memberships:
       | collection          | user        | roles              |
       | The Willing Consort | Karl Fields | owner, facilitator |
@@ -69,10 +69,22 @@ Feature: Creating content and commenting on archived collection
     And I click "Edit"
     When I fill in "Motivation" with "As you wish."
     And I press "Archive"
-    # Collection could not be archived if contains at least 1 published solution
-    Then I should see the error message "Collection has at least one published solution. Please, archive all active solutions first."
 
     # We only need to check that privileged users do not have access anymore.
     And I am logged in as a facilitator of the "The Willing Consort" collection
     And I go to the "The Willing Consort" collection
     Then I should not see the plus button menu
+
+  Scenario: Collection could not be archived if contains at least 1 published solution
+    And I am logged in as a moderator
+    And I go to the edit form of the "The Willing Consort" collection
+    When I fill in "Motivation" with "As you wish."
+    And I press "Archive"
+    Then I should see the error message "Collection has at least one published solution. Please archive all active solutions first."
+    And I go to the edit form of the "The Loyal Companion" solution
+    And I press "Confirm"
+    And I press "Archive"
+    And I go to the edit form of the "The Willing Consort" collection
+    When I fill in "Motivation" with "As you wish."
+    And I press "Archive"
+    Then I should not see the error message "Collection has at least one published solution. Please archive all active solutions first."
