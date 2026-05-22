@@ -4,6 +4,7 @@
   "license": "EUPL-1.2",
   "devDependencies": {
     "@openeuropa/bcl-bootstrap": "^1.10.11",
+    "bootstrap-icons": "^1.13.1",
     "@openeuropa/bcl-builder": "^1.10.0",
     "@openeuropa/bcl-theme-default": "^1.10.0",
     "@openeuropa/bcl-theme-joinup": "^1.10.0",

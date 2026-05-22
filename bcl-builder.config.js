@@ -549,10 +549,8 @@ module.exports = {
     // Bootstrap: icons
     {
       from: [
-        path.resolve(
-          paths.nodeModules,
-          "@openeuropa/bcl-bootstrap/icons/*.svg",
-        ),
+        path.resolve(paths.nodeModules, "bootstrap-icons/icons/*.svg"),
+        path.resolve(paths.nodeModules, "@openeuropa/bcl-bootstrap/replace-icons/*.svg"),
       ],
       to: path.resolve(paths.themes.ventuno, "assets/icons"),
       options: { up: true },
@@ -631,10 +629,7 @@ module.exports = {
   ],
   sprite: [
     {
-      entry: path.resolve(
-        paths.nodeModules,
-        "@openeuropa/bcl-bootstrap/icons/",
-      ),
+      entry: path.resolve(paths.nodeModules, "bootstrap-icons/icons/"),
       dest: path.resolve(paths.themes.ventuno, "assets/icons"),
       options: {
         file: "icons.svg",
