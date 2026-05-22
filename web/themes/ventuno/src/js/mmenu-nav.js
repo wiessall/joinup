@@ -1,4 +1,6 @@
 /**
+ * @param Drupal
+ * @param once
  * @file
  * Ventuno mobile menu.
  */
@@ -21,7 +23,10 @@
         // Create the drawer and open/close click listener.
         const drawer = mmenu.offcanvas();
         drawer.wrapper.setAttribute("role", "navigation");
-        drawer.wrapper.setAttribute("aria-label", Drupal.t("Mobile navigation"));
+        drawer.wrapper.setAttribute(
+          "aria-label",
+          Drupal.t("Mobile navigation"),
+        );
         button.addEventListener("click", (e) => {
           e.preventDefault();
           e.stopImmediatePropagation();
