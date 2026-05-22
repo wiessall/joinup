@@ -79,7 +79,7 @@ readonly class JoinupGroupMenuLinkHooks {
 
     $instances = $this->entityTypeManager->getStorage('ogmenu_instance')->loadMultiple($ids);
     foreach ($instances as $id => $instance) {
-      $pluginId = GroupMenuLink::BASE_ID . ":$id-{$entity->id()}";
+      $pluginId = GroupMenuLink::id("$id-{$entity->id()}");
       $definition = $this->buildPluginDefinition($entity, $id, $instance->bundle());
       if ($this->menuLinkManager->getDefinition($pluginId, FALSE)) {
         if (!$entity->isInsidePlugin()) {
@@ -106,7 +106,7 @@ readonly class JoinupGroupMenuLinkHooks {
     }
 
     foreach ($entity->get('menu_settings')->value as $id => $settings) {
-      $pluginId = GroupMenuLink::BASE_ID . ":$id-{$entity->id()}";
+      $pluginId = GroupMenuLink::id("$id-{$entity->id()}");
 
       if ($definition = $this->menuLinkManager->getDefinition($pluginId, FALSE)) {
         $parent = $definition['parent'] ?? '';
@@ -169,7 +169,7 @@ readonly class JoinupGroupMenuLinkHooks {
   public function buildPluginDefinition(GroupMenuLinkInterface $entity, int|string $ogmenuInstanceId, string $ogmenuType): array {
     $menuSettings = $entity->get('menu_settings')->value;
     return [
-      'id' => GroupMenuLink::BASE_ID . ":$ogmenuInstanceId-{$entity->id()}",
+      'id' => GroupMenuLink::id("$ogmenuInstanceId-{$entity->id()}"),
       'class' => GroupMenuLink::class,
       'deriver' => GroupMenuLinkDeriver::class,
       'provider' => 'joinup_group',

@@ -125,4 +125,17 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
     return $this->entity;
   }
 
+  /**
+   * Provides a convenient way to generate a group menu link plugin ID.
+   *
+   * @param string $derivative
+   *   The plugin derivative ID.
+   *
+   * @return string
+   *   The plugin ID.
+   */
+  public static function id(string $derivative): string {
+    return self::BASE_ID . ':' . $derivative;
+  }
+
 }
