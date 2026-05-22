@@ -4,16 +4,16 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
   links to their definition page.
 
   Scenario Outline: Manage a glossary.
-    Given users:
+    Given the following users:
       | Username | Roles  |
       | <user>   | <role> |
-    And collection content:
+    And the following "collection" content:
       | title             |
       | A World of Things |
     And the following collection user membership:
       | collection        | user   | roles     |
       | A World of Things | <user> | <og role> |
-    And solution content:
+    And the following "solution" content:
       | title          | collection        |
       | Things To Come | A World of Things |
 
@@ -53,7 +53,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     # navigator won't show.
     And I should not see the glossary navigator
 
-    Given glossary content:
+    Given the following "glossary" content:
       | title    | synonyms                | summary             | definition                       | collection        |
       | XRatings | XRT,X.R.T.,extraratings | Summary of XRatings | Long, long body definition field | A World of Things |
 
@@ -71,7 +71,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     # Both glossary entries start with the same letter. No navigator is shown.
     And I should not see the glossary navigator
 
-    Given glossary content:
+    Given the following "glossary" content:
       | title    | synonyms              | summary                 | definition                                  | collection        |
       | Alphabet | ABC,alphabeta,alfabet | Summary of Alphabet     | Long, long definition field                 | A World of Things |
       | Colors   | CLR                   | Summary of Colors       | Colors definition field                     | A World of Things |
@@ -139,38 +139,38 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | wade |           | facilitator | should not see  |
 
   Scenario: Glossary terms should be shown as links in collection content
-    Given collection content:
-      | title                    | description                                                                                       | abstract                              |
-      | Collection With Glossary | Colors of Paradise. Abbreviated as CLR. <a href="../contact"><strong>Colors of Dream</strong></a> | The Alphabet is back and it's s/ashy. |
-    And solution content:
+    Given the following "collection" content:
+      | title                    | description                                                                                             | abstract                              |
+      | Collection With Glossary | "Colors of Paradise. Abbreviated as CLR. <a href=\"../contact\"><strong>Colors of Dream</strong></a>"   | The Alphabet is back and it's s/ashy. |
+    And the following "solution" content:
       | title            | description | collection               |
       | Under The Bridge | No Colors   | Collection With Glossary |
-    And release content:
+    And the following "release" content:
       | title        | release number | release notes         | is version of    |
       | Summer of 69 | 6.22           | Everything was Colors | Under The Bridge |
-    And distribution content:
+    And the following "distribution" content:
       | title   | description          | solution         | release      | resources          |
       | Distro1 | Alphabet & CLR       | Under The Bridge |              | http://example.com |
       | Distro2 | Colors & ABC & colrs |                  | Summer of 69 | http://example.com |
-    And custom_page content:
+    And the following "custom_page" content:
       | title    | body              | solution         |
       | Schedule | Colors everywhere | Under The Bridge |
-    And discussion content:
+    And the following "discussion" content:
       | title        | content                   | collection               |
       | The Big Talk | The Alphabet. Call it ABC | Collection With Glossary |
-    And document content:
+    And the following "document" content:
       | title             | abstract           | collection               |
       | Authentic Papyrus | Authentic abstract | Collection With Glossary |
     And I append "simple_paragraph" to "field_paragraphs_body" field in "node" entity with following "Authentic Papyrus" title:
       | field_body:value  | Alphabet is back |
       | field_body:format | content_editor   |
-    And event content:
+    And the following "event" content:
       | title      | field_paragraphs_body             | solution         |
       | Soho Night | Any cOLOrs You Like. Maybe colrs? | Under The Bridge |
-    And news content:
+    And the following "news" content:
       | title         | field_paragraphs_body                      | solution         |
       | Won at Bingo! | aBC is for ALPHABET what CLR is for Colors | Under The Bridge |
-    And glossary content:
+    And the following "glossary" content:
       | title    | synonyms  | summary                  | definition                  | collection               |
       | Alphabet | ABC       | Summary of Alphabet      | Long, long definition field | Collection With Glossary |
       | Colors   | CLR,colrs | Summary of Colors        | Colors definition field     | Collection With Glossary |
@@ -178,19 +178,19 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
 
     When I go to the "Collection With Glossary" collection
     And I click "Alphabet"
-    Then I see the heading "Alphabet"
+    Then I should see the heading "Alphabet"
 
     When I move backward one page
     And I click "Colors"
-    Then I see the heading "Colors"
+    Then I should see the heading "Colors"
 
     When I move backward one page
     And I click "CLR"
-    Then I see the heading "Colors"
+    Then I should see the heading "Colors"
 
     When I move backward one page
     And I click "s/ashy"
-    Then I see the heading "S/ashy"
+    Then I should see the heading "S/ashy"
 
     # A glossary term inside a link text remains untouched.
     When I move backward one page
@@ -236,13 +236,13 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     And I should see the link "aBC"
 
   Scenario: Limiting replacements to the first occurrence.
-    Given users:
+    Given the following users:
       | Username | Roles     |
       | regular  |           |
       | fac      |           |
       | mod      | moderator |
       | fac1     |           |
-    And collection content:
+    And the following "collection" content:
       | title                    | description                                                                                           | abstract                                                                                              |
       | Collection With Glossary | The Battle of Evermore of the batTle and the BATTLE. Call it everMore or EVERmore. Also battle again. | The Battle of Evermore of the batTle and the BATTLE. Call it everMore or EVERmore. Also battle again. |
       | The Other Collection     | desc                                                                                                  | desc                                                                                                  |
@@ -250,7 +250,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | collection               | user | roles       |
       | Collection With Glossary | fac  | facilitator |
       | The Other Collection     | fac1 | facilitator |
-    And glossary content:
+    And the following "glossary" content:
       | title        | synonyms | definition                                | collection               |
       | battle       | evermore | def                                       | Collection With Glossary |
       | battle again |          | Not to be confused with a battle of sheep | Collection With Glossary |
@@ -317,10 +317,10 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     Then I should see the heading "Collection With Glossary collection settings"
 
   Scenario: Test glossary term name and synonyms collision.
-    Given users:
+    Given the following users:
       | Username |
       | ben      |
-    And collection content:
+    And the following "collection" content:
       | title             |
       | A World of Things |
       | Other collection  |
@@ -355,7 +355,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     Then I should see the success message "Glossary term XFiles has been created."
 
     # Test glossary term name and synonyms overlapping.
-    And glossary content:
+    And the following "glossary" content:
       | title     | synonyms                | definition                  | collection        |
       | Alphabet  | ABC, XYZ, whatever      | Long, long definition field | A World of Things |
       | Colors    | CLR,colrs               | Colors definition field     | A World of Things |
@@ -413,16 +413,16 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     Then I should see the success message "Glossary term XRatings has been created."
 
   Scenario: Allow rich text in Glossary contains bold, italic, underline and list.
-    Given users:
+    Given the following users:
       | Username | Roles     |
       | mod      | moderator |
-    And collection content:
+    And the following "collection" content:
       | title                    | description                                                                                                             |
       | Collection With Glossary | The Battle of Evermore of the <strong>batTle</strong> and the BATTLE. Call it everMore or EVERmore. Also, battle again. |
     And the following collection user membership:
       | collection               | user | roles       |
       | Collection With Glossary | mod  | facilitator |
-    Given glossary content:
+    Given the following "glossary" content:
       | title  | synonyms | definition                                                                                                | collection               |
       | battle | evermore | Definition <strong>bold</strong> <em>italic</em> <u>underline</u> <ul><li>list 1</li><li>list 2</li></ul> | Collection With Glossary |
     When I am logged in as a moderator
@@ -435,19 +435,19 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     And the page should contain the html text "Definition <strong>bold</strong> <em>italic</em> <u>underline</u> <ul><li>list 1</li><li>list 2</li></ul>"
 
   Scenario: Let only allowed users to download the glossary in CSV format.
-    Given users:
+    Given the following users:
       | Username | Roles     |
       | regular  |           |
       | auth     |           |
       | fac      |           |
       | mod      | moderator |
-    And collection content:
+    And the following "collection" content:
       | title                    | description                   | abstract                         | author | uri                      |
       | Collection With Glossary | The Battle of Evermore again. | The Battle of Evermore abstract. | auth   | http://collection-battle |
     And the following collection user membership:
       | collection               | user | roles       |
       | Collection With Glossary | fac  | facilitator |
-    And glossary content:
+    And the following "glossary" content:
       | title          | synonyms | summary          | definition | collection               |
       | battle         | evermore | battle summary   | def        | Collection With Glossary |
       | another battle |          | battle 2 summary | def        | Collection With Glossary |

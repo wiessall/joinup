@@ -61,7 +61,7 @@ Feature: Test adding solutions.
     Then I should see the inline form error message "You must accept the Terms of Agreement."
 
   Scenario: "Add solution" button should only be shown to moderators and facilitators.
-    Given collection content:
+    Given the following "collection" content:
       | title                    |
       | Collection solution test |
 
@@ -86,13 +86,13 @@ Feature: Test adding solutions.
 
   @javascript
   Scenario: Add solution as a collection facilitator.
-    Given collection content:
+    Given the following "collection" content:
       | title             | logo     |
       | Belgian barista's | logo.png |
-    And owner content:
+    And the following "owner" content:
       | name                 | owner type                   |
       | Organisation example | Company, Industry consortium |
-    Given users:
+    Given the following users:
       | Username      | Roles     | E-mail                 | First name | Family name |
       | Ruth Lee      | moderator | Ruth.Lee@test.com      | Ruth       | Lee         |
       | Wendell Silva |           | Wendell.Silva@test.com | Wendell    | Silva       |
@@ -232,14 +232,14 @@ Feature: Test adding solutions.
 
   @javascript
   Scenario: Create a solution with a name that already exists
-    Given collection content:
+    Given the following "collection" content:
       | title              |
       | Ocean studies      |
       | Glacier monitoring |
-    And solution content:
+    And the following "solution" content:
       | title                  | abstract              | description                                       | collection    |
       | Climate change tracker | Tracks climate change | Atlantic salmon arrived after the Little Ice Age. | Ocean studies |
-    And owner content:
+    And the following "owner" content:
       | name                | owner type          |
       | University of Basel | Industry consortium |
 
@@ -296,10 +296,10 @@ Feature: Test adding solutions.
 
   @javascript @generateMedia @generateMediaTypes:solution_logo
   Scenario: Tests the image library widget.
-    Given collection content:
+    Given the following "collection" content:
       | title         |
       | Ocean studies |
-    And solution content:
+    And the following "solution" content:
       | title             | collection    |
       | Cleaning solution | Ocean studies |
     And I am logged in as a moderator
@@ -362,7 +362,7 @@ Feature: Test adding solutions.
 
   @javascript
   Scenario: Custom constraints point to the correct field.
-    Given solution content:
+    Given the following "solution" content:
       | title | short ID | state     | collection |
       | Test  | qwerty   | published | Portal support |
     Given I am logged in as a moderator

@@ -6,13 +6,13 @@ Feature: Subscribing to a collection after joining
 
   @javascript
   Scenario: Show a modal dialog asking a user to subscribe after joining
-    Given collection content:
+    Given the following "collection" content:
       | title            | abstract                       | closed | description                          |
       | Sapient Pearwood | Grows in magic-polluted areas  | no     | This tree is impervious to magic.    |
       | Drop bears       | Predator from the koala family | no     | Drops from a tree onto its prey.     |
       | Troll ducks      | Stone ducks don't float        | yes    | They sink to the bottom and walk.    |
       | Swamp dragons    | Explode when overexcited       | yes    | Bred for the hotness of their flame. |
-    And users:
+    And the following users:
       | Username          |
       | Echinoid Blacksly |
 

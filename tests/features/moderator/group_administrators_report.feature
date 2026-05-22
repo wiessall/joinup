@@ -6,12 +6,12 @@ Feature: Group administrators report
 
   # Lower case entries in the scenario ensure case insensitive comparison.
   Scenario: Show a list of people with administrative roles in collections
-    Given collection content:
+    Given the following "collection" content:
       | title              |
       | Large living birds |
       | bony fishes        |
 
-    And users:
+    And the following users:
       | Username | First name  | Family name | E-mail                       |
       | najib    | Najib       | Randall     | randall@najib-industries.com |
       | melor    | Melor       | Vescovi     | melor1998@hotmail.com        |

@@ -5,13 +5,13 @@ Feature: Resend validation email from collection/solution about page
 
   @javascript
   Scenario: Scenario for Collection and Solution
-    Given collection content:
+    Given the following "collection" content:
       | title          |
       | Rally fanatics |
-    And solution content:
+    And the following "solution" content:
       | title        | collection     |
       | Klop mirubes | Rally fanatics |
-    And users:
+    And the following users:
       | Username         | E-mail                     | First name | Family name |
       | Ferners Lee      | ferners-lee@example.com    | Ferners    | Lee         |
       | Plot user        | plot.user@example.com      | Plot       | user        |
@@ -115,13 +115,13 @@ Feature: Resend validation email from collection/solution about page
     Then I should not see the text "Please confirm your contact information to enable users to contact you"
 
   Scenario: Test the resend functionality for a contact created through API.
-    Given collection content:
+    Given the following "collection" content:
       | title          |
       | Rally fanatics |
-    Given contact_information content:
+    Given the following "contact_information" content:
       | name               | email               |
       | Existing to resend | existing@resend.com |
-    Given solution content:
+    Given the following "solution" content:
       | title                       | contact information | collection     |
       | Existing to resend solution | Existing to resend  | Rally fanatics |
 
@@ -149,13 +149,13 @@ Feature: Resend validation email from collection/solution about page
     Then I should not see the text "Please confirm your contact information to enable users to contact you"
 
   Scenario: Regression test to verify permissions into multiple edge cases.
-    Given collection content:
+    Given the following "collection" content:
       | title          |
       | Rally fanatics |
-    Given contact_information content:
+    Given the following "contact_information" content:
       | name        | email                   |
       | Some Resend | some.resend@example.com |
-    Given solution content:
+    Given the following "solution" content:
       | title                       | contact information | collection     |
       | Existing to resend solution | Some Resend         | Rally fanatics |
     And the following email confirmation requests:

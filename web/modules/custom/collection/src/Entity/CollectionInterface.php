@@ -17,22 +17,26 @@ interface CollectionInterface extends GroupInterface {
    *
    * @param bool $onlyPublished
    *   (optional) Whether to return only published solutions. Defaults to FALSE.
+   * @param bool $excludeArchived
+   *   (optional) Whether to exclude archived solutions. Defaults to FALSE.
    *
    * @return \Drupal\joinup_solution\Entity\SolutionInterface[]
    *   The solutions.
    */
-  public function getSolutions(bool $onlyPublished = FALSE): array;
+  public function getSolutions(bool $onlyPublished = FALSE, bool $excludeArchived = FALSE): array;
 
   /**
    * Returns the IDs of the solutions that are affiliated with this collection.
    *
    * @param bool $onlyPublished
    *   (optional) Whether to return only published solutions. Defaults to FALSE.
+   * @param bool $excludeArchived
+   *   (optional) Whether to exclude archived solutions. Defaults to FALSE.
    *
    * @return string[]
    *   The solutions.
    */
-  public function getSolutionIds(bool $onlyPublished = FALSE): array;
+  public function getSolutionIds(bool $onlyPublished = FALSE, bool $excludeArchived = FALSE): array;
 
   /**
    * Returns the collection glossary settings.

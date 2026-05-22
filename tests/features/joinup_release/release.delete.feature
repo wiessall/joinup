@@ -5,18 +5,18 @@ Feature: Asset release "delete" functionality.
   I need to be able to delete "Release" rdf entities through UI.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                  |
       | Yet another collection |
-    And solution content:
+    And the following "solution" content:
       | title                | description                | resources | collection             |
       | Yet another solution | Bored of finding new texts | text.pdf  | Yet another collection |
-    And release content:
+    And the following "release" content:
       | title               | release notes    | resources | release number | release notes   | is version of        |
       | Yet another release | A sample release | text.pdf  | 1              | Changed release | Yet another solution |
       | No release          | A sample release | text.pdf  | 1.2            | Changed release | Yet another solution |
       | Jinks               | A sample release | text.pdf  | 3              | Changed release | Yet another solution |
-    And users:
+    And the following users:
       | Username        | E-mail                      | First name | Family name |
       | Ronnie Holloway | Ronnie.holloway@example.com | Ronnie     | Holloway    |
       | Felix Rusevelt  | Felix.Rusevelt@example.com  | Felix      | Rusevelt    |

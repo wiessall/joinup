@@ -2,10 +2,10 @@
 Feature: Saving a draft after content deletion
 
   Scenario: Saving a collection draft after deleting published news should not show a conflict error
-    Given collection content:
+    Given the following "collection" content:
       | title              |
       | Evergreen Archives |
-    And news content:
+    And the following "news" content:
       | title        | collection         |
       | Summer Recap | Evergreen Archives |
 
@@ -28,10 +28,10 @@ Feature: Saving a draft after content deletion
     And I should see the success message "Collection Evergreen Archives has been updated."
 
   Scenario: Saving a collection draft after deleting a published solution should not show a conflict error
-    Given collection content:
+    Given the following "collection" content:
       | title           |
       | Silver Archives |
-    And solution content:
+    And the following "solution" content:
       | title       | collection      |
       | Blue Wrench | Silver Archives |
 

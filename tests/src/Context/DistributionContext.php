@@ -41,19 +41,20 @@ class DistributionContext extends RawDrupalContext {
    */
   #[BeforeNodeCreate]
   public function beforeNodeCreateDistributionFields(BeforeNodeCreateScope $event): void {
-    $node = $event->getEntity();
-    if ($node->type !== 'distribution') {
+    $node = $event->getStub();
+    if ($node->getBundle() !== 'distribution') {
       return;
     }
 
     // Downloads are stored in a meta entity.
-    if (!empty($node->downloads)) {
-      $node->download_count = MetaEntity::create([
+    $downloads = $node->getValue('downloads');
+    if (!empty($downloads)) {
+      $node->setValue('download_count', MetaEntity::create([
         'type' => 'download_count',
-        'count' => (int) $node->downloads,
-      ]);
+        'count' => (int) $downloads,
+      ]));
     }
-    unset($node->downloads);
+    $node->removeValue('downloads');
   }
 
   /**

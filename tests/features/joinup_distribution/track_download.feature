@@ -6,24 +6,24 @@ Feature: Asset distribution editing.
 
   @javascript
   Scenario: Downloads made by authenticated users are logged.
-    Given licence content:
+    Given the following "licence" content:
       | title            | description                          | licence type  |
       | Postcard licence | Send a postcard from where you live. | Public domain |
-    And collection content:
+    And the following "collection" content:
       | title                           |
       | Berkeley Software Distributions |
-    And solution content:
+    And the following "solution" content:
       | title   | collection                      |
       | OpenBSD | Berkeley Software Distributions |
-    And release content:
+    And the following "release" content:
       | title        | release number | is version of |
       | Winter of 95 | 6.1            | OpenBSD       |
-    And distribution content:
+    And the following "distribution" content:
       | title          | description                 | solution | release      | resources                                                   | licence          |
       | i386           | The i386 version            |          | Winter of 95 | https://mirrors.evowise.com/pub/OpenBSD/6.1/i386/random.iso | Postcard licence |
       | Changelog      | Detailed Changelog          |          | Winter of 95 | text.pdf                                                    | Postcard licence |
       | OpenBSD images | Images for logos and flyers | OpenBSD  |              | test.zip                                                    | Postcard licence |
-    And users:
+    And the following users:
       | Username       | E-mail                     |
       | Bradley Emmett | bradley.emmett@example.com |
 
@@ -84,17 +84,17 @@ Feature: Asset distribution editing.
       | Bradley Emmett           | bradley.emmett@example.com | OpenBSD images |
 
   Scenario: Download a CSV export of the distributions download report.
-    Given users:
+    Given the following users:
       | Username | E-mail            |
       | user1    | user1@example.com |
       | user2    | user2@example.com |
-    And solution content:
+    And the following "solution" content:
       | title    |
       | Solution |
-    And release content:
+    And the following "release" content:
       | title     | is version of |
       | Release 1 | Solution      |
-    And distribution content:
+    And the following "distribution" content:
       | title          | solution | release   | resources  |
       | Distribution 1 |          | Release 1 | text.pdf   |
       | Distribution 2 | Solution |           | test.zip   |

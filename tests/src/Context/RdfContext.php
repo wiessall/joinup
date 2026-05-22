@@ -10,6 +10,7 @@ use Behat\Mink\Exception\ExpectationException;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
+use Drupal\Driver\Entity\EntityStub;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -287,24 +288,25 @@ class RdfContext extends RawDrupalContext {
     if (!$entity = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri($uri)) {
       throw new \InvalidArgumentException("No entity found for URI $uri");
     }
-    $updated = (object) $fieldsTable->getRowsHash();
-    $updated->type = $entity->bundle();
-    $this->parseEntityFields($entity->getEntityTypeId(), $updated);
+    $values = $fieldsTable->getRowsHash();
+    $values['type'] = $entity->bundle();
+    $stub = new EntityStub($entity->getEntityTypeId(), $entity->bundle(), $values);
+    $this->parseEntityFields($stub);
     foreach (array_keys($fieldsTable->getRowsHash()) as $key) {
-      if ($key === 'changed' && !is_numeric($updated->$key)) {
-        $updated->$key = strtotime($updated->$key);
+      $value = $stub->getValue($key);
+      if ($key === 'changed' && !is_numeric($value)) {
+        $value = strtotime($value);
       }
       if ($entity->getFieldDefinition($key)->getType() === 'entity_reference') {
         $targetEntityType = $entity->getFieldDefinition($key)->getSetting('target_type');
-        foreach ($updated->$key as $delta => $value) {
-          $targetEntity = \Drupal::entityTypeManager()->getStorage($targetEntityType)->loadByProperties(['name' => $value]);
-          \assert($targetEntity, "No entity found for $key = $value");
+        foreach ($value as $delta => $entry) {
+          $targetEntity = \Drupal::entityTypeManager()->getStorage($targetEntityType)->loadByProperties(['name' => $entry]);
+          \assert($targetEntity, "No entity found for $key = $entry");
           $targetEntity = reset($targetEntity);
-          $updated->$key[$delta] = ['target_id' => $targetEntity->id()];
+          $value[$delta] = ['target_id' => $targetEntity->id()];
         }
-
       }
-      $entity->set($key, $updated->$key);
+      $entity->set($key, $value);
     }
     $entity->save();
   }

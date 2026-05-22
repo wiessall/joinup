@@ -5,7 +5,7 @@ Feature: Add community content
   I need to be able to add community content
 
   Scenario Outline: Advanced content and group administration should not be accessible for group members
-    Given collection content:
+    Given the following "collection" content:
       | title           |
       | The night shift |
 
@@ -37,7 +37,7 @@ Feature: Add community content
       | member      | news         |
 
   Scenario Outline: Advanced content and group administration should not be accessible for moderators
-    Given collection content:
+    Given the following "collection" content:
       | title           |
       | The night shift |
 
@@ -68,19 +68,19 @@ Feature: Add community content
       | news         | should               | should                         | azw css csv dbf doc docx dtd.sgml dtd.xml e00 eps epub fmx2 fmx3 fmx4 gif gml gzip indd jpeg jpg json jsonld kml kmz mdb mobi mop mxd odf ods odt op.datpro owl pdf pdfa1a pdfa1b pdfx png pps ppsx ppt pptx ps psd rdf rdf.turtle rdf.xml rss rtf schema.xml sgml skos.xml sparqlq sparqlqres tar tar.gz tar.xz tiff tsv ttl txt xls xlsx xml xslfo xslt zip     |
 
   Scenario Outline: Publishing community content for the first time sets the publication date
-    Given users:
+    Given the following users:
       | Username  | E-mail                     | First name | Family name    | Roles     |
       | Publisher | publisher-example@test.com | Publisher  | Georgakopoulos | moderator |
-    And collection content:
+    And the following "collection" content:
       | title               |
       | The afternoon shift |
-    And discussion content:
+    And the following "discussion" content:
       | title             | content         | author    | state | collection          | created    |
       | Sample discussion | Sample content. | Publisher | draft | The afternoon shift | 01-01-2010 |
-    And event content:
+    And the following "event" content:
       | title        | abstract | field_paragraphs_body | location          | author    | collection          | state | created    |
       | Sample event | abstract | Sample content.       | Buckingham Palace | Publisher | The afternoon shift | draft | 01-01-2010 |
-    And news content:
+    And the following "news" content:
       | title       | headline    | abstract | field_paragraphs_body | state | author    | collection          | created    |
       | Sample news | Sample news | abstract | Sample content.       | draft | Publisher | The afternoon shift | 01-01-2010 |
 
@@ -113,7 +113,7 @@ Feature: Add community content
       | news         |
 
   Scenario: Directly publishing community content sets the correct publication date.
-    Given collection content:
+    Given the following "collection" content:
       | title        | description                  | logo     |
       | CC container | Community content container. | logo.png |
     And I am logged in as a "facilitator" of the "CC container" collection
@@ -183,10 +183,10 @@ Feature: Add community content
     And the publication date of the "Published community news" news should be equal to the created date
 
   Scenario Outline: Community content type is indicated on the byline
-    Given collection content:
+    Given the following "collection" content:
       | title           |
       | The night watch |
-    And <content type> content:
+    And the following "<content type>" content:
       | title                   | collection      |
       | The glorious revolution | The night watch |
     When I visit the "The glorious revolution" "<content type>"
@@ -199,10 +199,10 @@ Feature: Add community content
       | news         | News       |
 
   Scenario: Event content type is not indicated on the byline
-    Given collection content:
+    Given the following "collection" content:
       | title           |
       | The night batch |
-    And event content:
+    And the following "event" content:
       | title                    | collection      | start date   | end date            |
       | Red glorious revolution  | The night batch | now +1 years | now +1 years +1 day |
       | Blue glorious revolution | The night batch | now -1 years | now -1 years +1 day |
@@ -224,7 +224,7 @@ Feature: Add community content
 
   @javascript @loggedErrors
   Scenario: Editor File dialog form does not trigger warning
-    Given collection content:
+    Given the following "collection" content:
       | title                        |
       | The editor tester collection |
     And the site error reporting verbosity is "verbose"

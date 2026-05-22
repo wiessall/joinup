@@ -2,11 +2,11 @@
 Feature: Releases should inherit data from their parent.
 
   Scenario: Releases should inherit the topics of their parent.
-    Given solution content:
+    Given the following "solution" content:
       | title      | topic                            | state     |
       | Solution 1 | Finance in EU, Supplier exchange | published |
       | Solution 2 | E-health, Demography             | published |
-    And release content:
+    And the following "release" content:
       | title     | solution   | state     |
       | Release 1 | Solution 1 | published |
       | Release 2 | Solution 2 | published |

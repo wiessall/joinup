@@ -11,11 +11,11 @@ Feature: Tests the group landing page customization.
   - As a group facilitator, when I visit my group, I cannot set a landing page.
   """
 
-    Given <group> content:
+    Given the following "<group>" content:
       | title               | description                         |
       | <group> group       | The <group> arbitrary description   |
       | other <group> group | Other <group> arbitrary description |
-    And "custom_page" content:
+    And the following "custom_page" content:
       | title         | <group>       | body                      |
       | Custom Page 1 | <group> group | The custom page 1 content |
       | Custom Page 2 | <group> group | The custom page 2 content |
@@ -111,11 +111,11 @@ Feature: Tests the group landing page customization.
       | solution   |
 
   Scenario: Do not allow to unpublish or delete a custom page set as landing page
-    Given collection content:
+    Given the following "collection" content:
       | title          |
       | Rally fanatics |
       | My own book    |
-    And "custom_page" content:
+    And the following "custom_page" content:
       | title         | collection     | body                      |
       | Custom Page 1 | Rally fanatics | The custom page 1 content |
       | Custom Page 2 | My own book    | The custom page 2 content |
@@ -143,10 +143,10 @@ Feature: Tests the group landing page customization.
     And I should not see "This page acts as landing page for the collection. In order to delete it should be first unset as landing page."
 
   Scenario: Landing custom page redirects to group page.
-    Given collection content:
+    Given the following "collection" content:
       | title         |
       | United States |
-    And "custom_page" content:
+    And the following "custom_page" content:
       | title    | collection    | body                                                                                 |
       | Michigan | United States | Michigan is a state in the Great Lakes region of the Upper Midwestern United States. |
 
@@ -163,10 +163,10 @@ Feature: Tests the group landing page customization.
     Then I should be on "/collection/united-states"
 
   Scenario: Active navigation link is correct on flat group navigation when visiting a nested custom page
-    Given collection content:
+    Given the following "collection" content:
       | title         |
       | Space Weavers |
-    And custom_page content:
+    And the following "custom_page" content:
       | title     | collection    |
       | Andromeda | Space Weavers |
       | Orion     | Space Weavers |

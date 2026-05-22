@@ -5,7 +5,7 @@ Feature: Private message report page
   I need to be able to see report page
 
   Background:
-    Given users:
+    Given the following users:
       | Username   | First name | Family name | E-mail                 | Roles     |
       | alice_m    | Alice      | Miller      | alice.m@example.com    | moderator |
       | bob_rolls  | Bob        | Rolls       | bob.rolls@example.com  |           |

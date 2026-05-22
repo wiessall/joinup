@@ -5,38 +5,38 @@ Feature:
   I need to have url aliases generated automatically.
 
   Scenario: Entities should have distinct pathauto aliases.
-    Given collection content:
+    Given the following "collection" content:
       | title               | logo     |
       | Pathauto collection | logo.png |
-    And solution content:
+    And the following "solution" content:
       | title             | description       | collection          |
       | Pathauto solution | Pathauto solution | Pathauto collection |
-    And release content:
+    And the following "release" content:
       | title            | release number | release notes    | is version of     |
       | Pathauto release | 23             | Pathauto release | Pathauto solution |
-    And distribution content:
+    And the following "distribution" content:
       | title                 | description           | solution          |
       | Pathauto distribution | Pathauto distribution | Pathauto solution |
-    And licence content:
+    And the following "licence" content:
       | title            | description      |
       | Pathauto licence | Pathauto licence |
-    And discussion content:
+    And the following "discussion" content:
       | title                 | body                  | collection          | solution          |
       | Pathauto discussion   | Pathauto discussion   | Pathauto collection |                   |
       | Pathauto discussion 2 | Pathauto discussion 2 |                     | Pathauto solution |
-    And document content:
+    And the following "document" content:
       | title               | field_paragraphs_body | collection          | solution          |
       | Pathauto document   | Pathauto document     | Pathauto collection |                   |
       | Pathauto document 2 | Pathauto document 2   |                     | Pathauto solution |
-    And event content:
+    And the following "event" content:
       | title            | field_paragraphs_body | collection          | solution          |
       | Pathauto event   | Pathauto event        | Pathauto collection |                   |
       | Pathauto event 2 | Pathauto event 2      |                     | Pathauto solution |
-    And news content:
+    And the following "news" content:
       | title           | body            | collection          | solution          |
       | Pathauto news   | Pathauto news   | Pathauto collection |                   |
       | Pathauto news 2 | Pathauto news 2 |                     | Pathauto solution |
-    And custom_page content:
+    And the following "custom_page" content:
       | title                    | body          | collection          | solution          |
       | Pathauto collection page | Pathauto page | Pathauto collection |                   |
       | Pathauto solution page   | Pathauto page |                     | Pathauto solution |

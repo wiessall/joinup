@@ -5,7 +5,7 @@ Feature: Custom pages enhance search results for their collections/solutions
   I want search results for keywords that match content in my custom pages to include my group
 
   Scenario Outline: Collections and solutions are found when searching for keywords in custom pages
-    Given <group> content:
+    Given the following "<group>" content:
       | title           | state     |
       | Buddy system    | draft     |
       | Slab allocation | published |
@@ -15,7 +15,7 @@ Feature: Custom pages enhance search results for their collections/solutions
     Then I enter "memory" in the search bar and press enter
     Then I should see "No content found for your search."
 
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title                          | <group>         | body                         | state       |
       | Splitting and coalescing       | Buddy system    | Memory split in blocks       | published   |
       | Reduces memory fragmentation   | Buddy system    | Binary tree                  | unpublished |

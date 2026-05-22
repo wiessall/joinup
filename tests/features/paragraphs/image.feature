@@ -4,13 +4,13 @@ Feature:
   I need to be able to use "image" paragraphs for content.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                 |
       | Paragraphs collection |
 
   @javascript
   Scenario: User should be able to add image paragraph.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title                | collection            | abstract            |
       | Image paragraph page | Paragraphs collection | Image page abstract |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Image paragraph page" title:

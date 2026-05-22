@@ -5,12 +5,12 @@ Feature: Event moderation
   I need to be able to transit the events from one state to another.
 
   Background:
-    Given users:
+    Given the following users:
       | Username        |
       | Salvador Thomas |
       | Rosa Vaughn     |
       | Patricia Lynch  |
-    And collection content:
+    And the following "collection" content:
       | title     | description           | logo     | content_creation | group_moderation | topic       |
       | Wet Lords | The Forgotten Female. | logo.png | registered users | no               | E-inclusion |
     And the following collection user membership:

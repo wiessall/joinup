@@ -27,12 +27,6 @@ default:
   created:
     -
       value: 1735686000
-  access:
-    -
-      value: 0
-  login:
-    -
-      value: 0
   roles:
     -
       target_id: translator
@@ -42,14 +36,6 @@ default:
   type:
     -
       value: user
-  role_change:
-    -
-      target_id: __role_delegation_empty_field_value__
-  path:
-    -
-      alias: ''
-      langcode: en
-      pathauto: 1
   field_user_content:
     -
       value:

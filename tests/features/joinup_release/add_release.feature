@@ -5,7 +5,7 @@ Feature: "Add release" visibility options.
   I need to be able to add "Release" rdf entities through UI.
 
   Scenario: "Add release" button should only be shown to solution facilitators.
-    Given solution content:
+    Given the following "solution" content:
       | title                 | description         | resources |
       | Release solution test | My awesome solution | text.pdf  |
 
@@ -25,10 +25,10 @@ Feature: "Add release" visibility options.
 
   Scenario: Add release as a solution facilitator.
 
-    Given solution content:
+    Given the following "solution" content:
       | title          | description        | resources |
       | Release Test 1 | test description 1 | text.pdf  |
-    And release content:
+    And the following "release" content:
       | title           | is version of  | release number | status    | creation date       | published at        |
       | Chasing shadows | Release Test 1 | 1.0            | Completed | 2014-08-30 23:59:00 | 2014-08-30 23:59:00 |
 
@@ -108,7 +108,7 @@ Feature: "Add release" visibility options.
 #    And I click "resources_1_edit"
 
   Scenario: Do not allow access to the page if the parent is not a solution.
-    Given collection content:
+    Given the following "collection" content:
       | uri                       | title               |
       | http://example1regression | The Stripped Stream |
 
@@ -121,7 +121,7 @@ Feature: "Add release" visibility options.
     Then I should see the heading "Page not found"
 
   Scenario: Check publish time release is present time and past.
-    Given solution content:
+    Given the following "solution" content:
       | title          | description        | resources |
       | Release Test 2 | test description 2 | text.pdf  |
     When I am logged in as a "facilitator" of the "Release Test 2" solution

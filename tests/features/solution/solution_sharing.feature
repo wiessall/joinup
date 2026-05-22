@@ -5,17 +5,17 @@ Feature: As a privileged user
 
   @javascript
   Scenario: Share link is visible for privileged users.
-    Given users:
+    Given the following users:
       | Username    | E-mail                  | First name | Family name | Roles     |
       | joe_dare    | joe_dare@example.com    | Joe        | Dare        |           |
       | kleev_elant | kleev_elant@example.com | Kleev      | Elant       |           |
       | sand_beach  | sand_beach@example.com  | Sand       | Beach       | moderator |
-    And collection content:
+    And the following "collection" content:
       | title                        |
       | Collection share original    |
       | Collection share candidate 1 |
       | Collection share candidate 2 |
-    Given solution content:
+    Given the following "solution" content:
       | title                 | collection                |
       | Solution to be shared | Collection share original |
     And the following solution user memberships:

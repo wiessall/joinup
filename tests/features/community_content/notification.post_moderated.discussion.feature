@@ -5,13 +5,13 @@ Feature: Notification test for the discussion transitions on a post moderated pa
   I want to receive a notification when an entity is proposed.
 
   Scenario Outline: Notifications should be sent whenever a discussion is going through a relevant transition.
-    Given users:
+    Given the following users:
       | Username         | Roles     | E-mail                      | First name | Family name | Notification frequency |
       | Notify moderator | moderator | notify_moderator@test.com   | Notify     | Moderator   | immediate              |
       | CC owner         |           | notify_owner@test.com       | CC         | Owner       | immediate              |
       | CC facilitator   |           | notify_facilitator@test.com | CC         | Facilitator | immediate              |
       | CC member        |           | notify_member@test.com      | CC         | Member      | immediate              |
-    And collection content:
+    And the following "collection" content:
       | title              | content_creation | group_moderation |
       | CC post collection | members          | <moderation>     |
     And the following collection user memberships:
@@ -19,7 +19,7 @@ Feature: Notification test for the discussion transitions on a post moderated pa
       | CC post collection | CC owner       | owner       |
       | CC post collection | CC facilitator | facilitator |
       | CC post collection | CC member      | <roles>     |
-    And discussion content:
+    And the following "discussion" content:
       | title                                | author    | body | collection         | field_state  | created    |
       | CC notify post publish               | CC member | body | CC post collection | draft        | now -2 day |
       | CC notify post request changes       | CC member | body | CC post collection | published    | now -2 day |
@@ -104,13 +104,13 @@ Feature: Notification test for the discussion transitions on a post moderated pa
       | yes        | author |
 
   Scenario: No notifications should be sent when a discussion is orphaned
-    Given collection content:
+    Given the following "collection" content:
       | title                   | state     |
       | Event Horizon Telescope | published |
-    And discussion content:
+    And the following "discussion" content:
       | title                            | collection              | state     |
       | How do the jets fire into space? | Event Horizon Telescope | published |
-    And users:
+    And the following users:
       | Username         |
       | Lindsey McCray   |
       | Cambria Falconer |

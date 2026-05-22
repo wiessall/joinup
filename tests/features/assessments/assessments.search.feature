@@ -40,7 +40,7 @@ Feature: Assessment report search functionality
     And I should see the following facet summary "Assessment reports, European Union"
 
   Scenario: Solutions tied to assessments and the collection are not searchable.
-    Given solution content:
+    Given the following "solution" content:
       | title                                   | state     | collection                           |
       | some random text to search architecture | published | Solutions mentioned in an assessment |
     When I visit the advanced search page

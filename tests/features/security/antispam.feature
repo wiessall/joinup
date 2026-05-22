@@ -13,25 +13,25 @@ Feature: As a visitor or logged-in user, when I want to post content, the form
       | /contact |
 
   Scenario: Authenticated users.
-    Given users:
+    Given the following users:
       | Username |
       | Günther  |
-    And contact_information content:
+    And the following "contact_information" content:
       | name      | email                | state     |
       | ACME Inc. | acme.inc@example.com | validated |
     And the following email confirmation request:
       | email                | status    |
       | acme.inc@example.com | confirmed |
-    And collection content:
+    And the following "collection" content:
       | title         | contact information |
       | Family photos | ACME Inc.           |
-    And discussion content:
+    And the following "discussion" content:
       | title      | collection    |
       | Let's talk | Family photos |
-    And event content:
+    And the following "event" content:
       | title    | collection    |
       | Birthday | Family photos |
-    And news content:
+    And the following "news" content:
       | title       | collection    |
       | Got married | Family photos |
     And the following contact information emails are validated:
@@ -76,16 +76,16 @@ Feature: As a visitor or logged-in user, when I want to post content, the form
     And the form is protected by Honeypot
 
   Scenario Outline: Extend Honeypot & Antibot to all forms.
-    Given users:
+    Given the following users:
       | Username   |
       | Ransomware |
-    And contact_information content:
+    And the following "contact_information" content:
       | name      | email                |
       | Anti Inc. | anti.inc@example.com |
-    And collection content:
+    And the following "collection" content:
       | title    | state | contact information | author     |
       | Ware cat | draft | Anti Inc.           | Ransomware |
-    And solution content:
+    And the following "solution" content:
       | title    | collection | state | author     |
       | Ware cat | Ware cat   | draft | Ransomware |
     And the following contact information emails are validated:

@@ -5,10 +5,10 @@ Feature:
   I need to be unable to delete collections that have children entities.
 
   Scenario Outline: Delete a collection with a child solution
-    Given collection content:
+    Given the following "collection" content:
       | title                 | state              |
       | Collection with child | <collection state> |
-    And solution content:
+    And the following "solution" content:
       | title                          | state            | collection            |
       | Child of collection with child | <solution state> | Collection with child |
 

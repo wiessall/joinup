@@ -4,13 +4,13 @@ Feature:
   I need to be able to use "image gallery" paragraphs for content.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                    | state     |
       | Paragraphs IG collection | published |
 
   @javascript
   Scenario: User should be able to add image gallery paragraph.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title                        | collection               | state     | abstract            |
       | Image gallery paragraph page | Paragraphs IG collection | published | Image page abstract |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Image gallery paragraph page" title:

@@ -3,10 +3,10 @@ Feature: Interoperable solution flag
 
   @javascript
   Scenario: Flag/un-flag solution as interoperable.
-    Given collection content:
+    Given the following "collection" content:
       | title        |
       | Derby County |
-    Given solution content:
+    Given the following "solution" content:
       | title            | collection   |
       | Crest identity   | Derby County |
       | Colours identity | Derby County |

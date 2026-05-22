@@ -5,13 +5,13 @@ Feature: Actions log
   I want to have access the actions log report
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title         |
       | Tilt and Turn |
-    Given solution content:
+    Given the following "solution" content:
       | title    | collection    |
       | Skylight | Tilt and Turn |
-    Given users:
+    Given the following users:
       | Username         | E-mail                       | First name | Family name |
       | Andre Munson     | andre.munson@example.com     | Andre      | Munson      |
       | Branson Winthrop | branson.winthrop@example.com | Branson    | Winthrop    |
@@ -61,7 +61,7 @@ Feature: Actions log
     Then I should see the text "Access denied"
 
   Scenario Outline: System wide role actions.
-    Given users:
+    Given the following users:
       | Username       | First name | Family name | E-mail                     | Roles     |
       | Charles <role> | Charles    | <role>      | charles.darwin@example.com | Developer |
 

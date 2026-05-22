@@ -6,10 +6,10 @@ Feature: Owner moderation
 
   Scenario: Publish, update, request changes, publish again and ask to delete an owner.
 
-    Given users:
+    Given the following users:
       | Username        |
       | Raeburn Hibbert |
-    And owner content:
+    And the following "owner" content:
       | name             | owner type |
       | Good food eaters | Company    |
 

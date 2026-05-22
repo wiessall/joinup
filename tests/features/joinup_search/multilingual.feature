@@ -3,7 +3,7 @@ Feature: Multilingual search
   As a user of the site I should only see English content
 
   Scenario: Anonymous user sees English version only
-    Given collection content:
+    Given the following "collection" content:
       | title                        | logo     | moderation | topic      | spatial coverage |
       | Molecular cooking collection | logo.png | no         | Demography | Belgium          |
     And solution multilingual content:

@@ -38,7 +38,7 @@ Feature: Log in through EU Login
       | Family name | Norris |
 
   Scenario: An existing user can log in through EU Login
-    Given users:
+    Given the following users:
       | Username    | E-mail           | First name | Family name |
       | jb007_local | 007-local@mi6.eu | JJaammeess | BBoonndd    |
     Given CAS users:
@@ -70,7 +70,7 @@ Feature: Log in through EU Login
     # We want to test the case when a user is changing their email upstream, on
     # EU Login, with one that collides with other user's email. These are very
     # rare and unlikely edge cases where we only throw an exception.
-    And users:
+    And the following users:
       | Username   | E-mail             |
       | other_user | 007.changed@mi6.eu |
 
@@ -102,7 +102,7 @@ Feature: Log in through EU Login
       | Family name | Bond             |
 
   Scenario: Fields imported from EU Login cannot be edited locally.
-    Given users:
+    Given the following users:
       | Username            | E-mail        |
       | full_cas_profile    | f@example.com |
       | partial_cas_profile | p@example.com |
@@ -208,7 +208,7 @@ Feature: Log in through EU Login
     And I should see the inline form error message "Family name field is required."
 
   Scenario: A new user tries to register with an existing Email.
-    Given users:
+    Given the following users:
       | Username | E-mail          |
       | joe      | joe@example.com |
 
@@ -227,7 +227,7 @@ Feature: Log in through EU Login
       | While trying to register your account with Interoperable Europe Portal, we found that your EU Login email address joe@example.com is already in use on our site. Either change your EU Login email address or contact the Interoperable Europe Portal support if you feel that something is wrong. |
 
   Scenario: A new user tries to register with an existing username.
-    Given users:
+    Given the following users:
       | Username | E-mail          |
       | joe      | joe@example.com |
 
@@ -298,7 +298,7 @@ Feature: Log in through EU Login
       | E-mail | Joe_Case_Insensitive@example.com |
 
   Scenario: Anonymous user is asked to log in when accessing a protected page
-    Given users:
+    Given the following users:
       | Username | E-mail         | First name | Family name | Roles     |
       | jonbon   | jon@example.eu | Jon        | Bon         | moderator |
     Given CAS users:
@@ -333,7 +333,7 @@ Feature: Log in through EU Login
     Given CAS users:
       | Username | E-mail          | Password |
       | joe_doe  | joe@example.com | 123      |
-    And users:
+    And the following users:
       | Username | Roles     |
       | dev      | developer |
 

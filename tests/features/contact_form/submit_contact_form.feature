@@ -5,7 +5,7 @@ Feature: Submit the contact form
   I want to collect wishes and grievances through a contact form
 
   Scenario: Submit a message as an anonymous user
-    Given users:
+    Given the following users:
       | Username                | Roles     |
       | Valentína Řezník        | moderator |
       | Oluwakanyinsola Opeyemi | moderator |

@@ -5,13 +5,13 @@ Feature: Custom page workflow transitions.
   I need to test workflow buttons functionality.
 
   Scenario: Test save new draft, save as draft, and publish buttons
-    Given users:
+    Given the following users:
       | Username     | E-mail                   |
       | Mickey Mouse | mickey.mouse@example.com |
     And the following collection user memberships:
       | collection | user         | roles       |
       | Portal support | Mickey Mouse | facilitator |
-    And custom_page content:
+    And the following "custom_page" content:
       | title          | collection | state     |
       | Silent Echo v2 | Portal support | published |
 
@@ -33,7 +33,7 @@ Feature: Custom page workflow transitions.
     And I see h1 span element with title "Silent Echo Extended"
 
   Scenario: Test unpublish transition makes page unavailable to end users
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title       | collection | state     |
       | Help Center | Portal support | published |
 

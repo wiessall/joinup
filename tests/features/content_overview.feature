@@ -2,26 +2,26 @@
 Feature: Content Overview
 
   Scenario: View content overview as an anonymous user
-    Given users:
+    Given the following users:
       | Username     | First name | Family name | E-mail               |
       | batbull      | Simba      | Hobson      | simba3000@hotmail.de |
       | welshbuzzard | Titus      | Nicotera    | nicotito@example.org |
       | hatchingegg  | Korinna    | Morin       | korimor@example.com  |
-    And collection content:
+    And the following "collection" content:
       | title             | description        | moderation |
       | Rumble collection | Sample description | yes        |
-    And "event" content:
+    And the following "event" content:
       | title                | collection        | created           |
       | Seventh Windows      | Rumble collection | 2018-10-03 4:21am |
       | A Night at the Opera | Rumble collection | 2018-10-03 4:17am |
-    And "news" content:
+    And the following "news" content:
       | title            | collection        | state     | author       | created           |
       | The Playful Tale | Rumble collection | published | batbull      | 2018-10-03 4:26am |
       | Night of Shadow  | Rumble collection | proposed  | welshbuzzard | 2018-10-03 4:26am |
-    And "document" content:
+    And the following "document" content:
       | title             | collection        | created           |
       | History of Flight | Rumble collection | 2018-10-03 4:19am |
-    And "discussion" content:
+    And the following "discussion" content:
       | title            | collection        | author      | created           |
       | The Men's Female | Rumble collection | hatchingegg | 2018-10-03 4:18am |
 
@@ -83,24 +83,24 @@ Feature: Content Overview
     And the page should be cacheable
 
   Scenario: Users are able to filter content they have created or that is featured site-wide.
-    Given users:
+    Given the following users:
       | Username        | E-mail                       |
       | michaelanewport | michaela.newport@example.com |
       | nenaroberts     | nena.roberts@example.com     |
-    And collection content:
+    And the following "collection" content:
       | title            |
       | Timely Xylophone |
-    And "event" content:
+    And the following "event" content:
       | title            | collection       |
       | Sticky Vegetable | Timely Xylophone |
-    And "news" content:
+    And the following "news" content:
       | title            | collection       | author          | featured |
       | Early Avenue     | Timely Xylophone | michaelanewport | yes      |
       | Itchy Artificial | Timely Xylophone | nenaroberts     | no       |
-    And "document" content:
+    And the following "document" content:
       | title             | collection       |
       | Limousine Scarlet | Timely Xylophone |
-    And "discussion" content:
+    And the following "discussion" content:
       | title                  | collection       | author          | featured |
       | Hideous Dreaded Monkey | Timely Xylophone | michaelanewport | yes      |
 
@@ -167,24 +167,24 @@ Feature: Content Overview
       | All content |
 
   Scenario: Users should be able to use additional filters on events.
-    Given users:
+    Given the following users:
       | Username        | E-mail                       |
       | claricemitchell | clarice.mitchell@example.com |
       | jeffreypayne    | jeffrey.payne@example.com    |
-    And collection content:
+    And the following "collection" content:
       | title           |
       | Barbaric Avenue |
-    And event content:
+    And the following "event" content:
       | title                | collection      | start date   | end date            | created    | author          |
       | Bitter Finger        | Barbaric Avenue | now -1 years | now -1 years +1 day | now -4 day | claricemitchell |
       | Frozen Barbershop    | Barbaric Avenue | now -1 day   | now +1 day          | now -3 day | claricemitchell |
       | Frozen Breeze        | Barbaric Avenue | now +2 day   | now +4 day          | now -2 day | claricemitchell |
       | Flying Official Fish | Barbaric Avenue | now -3 day   | now -1 day          | now        | jeffreypayne    |
     # Technical: use a separate step to create an event associated to the anonymous user.
-    And event content:
+    And the following "event" content:
       | title          | collection      | start date  | end date    | created    |
       | Autumn Boiling | Barbaric Avenue | now +1 week | now +1 week | now -5 day |
-    And discussion content:
+    And the following "discussion" content:
       | title           | collection      | created   |
       | Purple Poseidon | Barbaric Avenue | yesterday |
 

@@ -2,12 +2,12 @@
 Feature: Pool paragraph tests.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title           | state     |
       | Poll collection | published |
 
   Scenario: Anonymous user is asked to log in if they attempt to vote
-    Given users:
+    Given the following users:
       | Username   | E-mail           |
       | Cecil Poll | cpoll@example.eu |
     Given CAS users:
@@ -16,7 +16,7 @@ Feature: Pool paragraph tests.
     And the following polls:
       | question                  | runtime | cancel_vote_allow | show_number_of_results | choice                                                     | state     |
       | What was the best series? | 1209600 | 0                 | 1                      | Game of Thrones,Breaking Bad,The Wire,The Sopranos,Mad Men | published |
-    And custom_page content:
+    And the following "custom_page" content:
       | title     | body                                                         | collection      | state     |
       | TV series | We've rounded up our picks for the best shows to binge-watch | Poll collection | published |
     And I append poll "What was the best series?" to "field_paragraphs_body" field in "node" entity with following "TV series" title
@@ -43,7 +43,7 @@ Feature: Pool paragraph tests.
     Given the following polls:
       | question                  | runtime | cancel_vote_allow | show_number_of_results | result_vote_allow | choice                                                     | state     |
       | What was the best series? | 1209599 | 0                 | 1                      | 1                 | Game of Thrones,Breaking Bad,The Wire,The Sopranos,Mad Men | published |
-    And custom_page content:
+    And the following "custom_page" content:
       | title     | body                                                         | collection      | state     |
       | TV series | We've rounded up our picks for the best shows to binge-watch | Poll collection | published |
     And I append poll "What was the best series?" to "field_paragraphs_body" field in "node" entity with following "TV series" title
@@ -68,7 +68,7 @@ Feature: Pool paragraph tests.
     Given the following polls:
       | question                      | runtime | cancel_vote_allow | show_number_of_results | choice                                    | state     |
       | Whats the best pizza topping? | 431999  | 1                 | 0                      | Pepperoni,Pineapple,Just cheese,Mushrooms | published |
-    And custom_page content:
+    And the following "custom_page" content:
       | title       | body                                              | collection      | state     |
       | Pizza types | 10 Most Popular Types of Pizza Around the Country | Poll collection | published |
     And I append poll "Whats the best pizza topping?" to "field_paragraphs_body" field in "node" entity with following "Pizza types" title
@@ -87,7 +87,7 @@ Feature: Pool paragraph tests.
     And the following fields should be present "Pepperoni,Pineapple,Just cheese,Mushrooms"
 
   Scenario: Poll paragraph can be added
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title           | collection      | state     | abstract                 |
       | Scariest things | Poll collection | published | Scariest things abstract |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Scariest things" title:

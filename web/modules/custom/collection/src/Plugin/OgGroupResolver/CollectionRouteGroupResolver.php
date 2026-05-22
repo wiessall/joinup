@@ -26,6 +26,7 @@ class CollectionRouteGroupResolver extends RouteGroupResolver {
   protected function getContentEntityPaths(): array {
     return [
       '/node/{node}/glossary/{letter}' => 'node',
+      '/node/{node}/solutions' => 'node',
     ];
   }
 

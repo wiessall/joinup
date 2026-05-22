@@ -2,11 +2,11 @@
 Feature: As a moderator I want to be able to move solutions to other collection.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | uri                            | title       |
       | http://example.com/source      | Source      |
       | http://example.com/destination | Destination |
-    Given solution content:
+    Given the following "solution" content:
       | title      | collection | state     | creation date    | modification date |
       | Solution 1 | Source     | published | 2017-11-18T10:00 | 2017-12-18T10:00  |
       | Solution 2 | Source     | published | 2018-11-19T10:00 | 2018-12-19T10:00  |

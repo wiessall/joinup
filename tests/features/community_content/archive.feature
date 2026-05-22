@@ -2,12 +2,12 @@
 Feature: Content archival.
 
   Scenario: All community content can be archived any time.
-    Given collection content:
+    Given the following "collection" content:
       # Set the moderation to yes to be able to access all states. Deletion
       # request is not available in a post moderation workflow.
       | title           | moderation |
       | Some collection | yes        |
-    Given discussion content:
+    Given the following "discussion" content:
       | title           | collection      | body | content | changed          |
       | Test discussion | Some collection | Test | Test    | 2017-11-17 20:00 |
     When I am logged in as a moderator
@@ -31,12 +31,12 @@ Feature: Content archival.
     And the current workflow state should be "Published"
 
   Scenario Outline: All community content using layout paragraphs can be archived any time.
-    Given collection content:
+    Given the following "collection" content:
       # Set the moderation to yes to be able to access all states. Deletion
       # request is not available in a post moderation workflow.
       | title           | moderation |
       | Some collection | yes        |
-    And <type> content:
+    And the following "<type>" content:
       | title       | collection      | abstract | body | headline    | changed          | field_paragraphs_body |
       | Test <type> | Some collection | Test     | Test | Test <type> | 2019-11-12 20:00 | Some text             |
 
@@ -67,10 +67,10 @@ Feature: Content archival.
       | news     | News       |
 
   Scenario Outline: User should not be allowed unarchiving content of an archived solution.
-    Given solution content:
+    Given the following "solution" content:
       | title             | state    |
       | Cartridge cleaner | archived |
-    Given <type> content:
+    Given the following "<type>" content:
       | title                | state    | solution          |
       | Test archived <type> | archived | Cartridge cleaner |
 
@@ -86,12 +86,12 @@ Feature: Content archival.
       | news       |
 
   Scenario Outline: Group facilitators can not unarchived community content
-    Given <group type> content:
+    Given the following "<group type>" content:
       # Set the moderation to yes to be able to access all states. Deletion
       # request is not available in a post moderation workflow.
       | title      | moderation |
       | Some group | yes        |
-    Given discussion content:
+    Given the following "discussion" content:
       | title           | <group type> | body | content |
       | Test discussion | Some group   | Test | Test    |
     When I am logged in as a facilitator of the "Some group" <group type>
@@ -110,12 +110,12 @@ Feature: Content archival.
       | solution   |
 
   Scenario Outline: Group facilitators can not unarchived community content which is usgin layout paragraphs
-    Given <group type> content:
+    Given the following "<group type>" content:
       # Set the moderation to yes to be able to access all states. Deletion
       # request is not available in a post moderation workflow.
       | title      | moderation |
       | Some group | yes        |
-    Given <type> content:
+    Given the following "<type>" content:
       | title       | <group type> | abstract | body | headline    | field_paragraphs_body |
       | Test <type> | Some group   | Test     | Test | Test <type> | Test paragraph        |
     When I am logged in as a facilitator of the "Some group" <group type>

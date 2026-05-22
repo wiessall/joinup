@@ -5,27 +5,27 @@ Feature:
 
   Scenario: Test moderator and anonymous user perspectives.
 
-    Given collection content:
+    Given the following "collection" content:
       | title            |
       | Outdated content |
-    Given solution content:
+    Given the following "solution" content:
       | title             | collection       |
       | Recent solution   | Outdated content |
       | Outdated solution | Outdated content |
-    And discussion content:
+    And the following "discussion" content:
       | title                         | collection       | published at | created   | state     |
       | Recent published discussion   | Outdated content | -2 years     | -2 years  | published |
       | Outdated published discussion | Outdated content | -11 years    | -11 years | published |
       | Not published discussion      | Outdated content |              | -12 years | draft     |
-    And document content:
+    And the following "document" content:
       | title             | collection       | published at |
       | Very old document | Outdated content | 1985-03-04   |
-    And event content:
+    And the following "event" content:
       | title                    | collection       | published at     | created          | state     |
       | Recent published event   | Outdated content | -3 months        | -3 months        | published |
       | Outdated published event | Outdated content | -1 year -1 month | -1 year -1 month | published |
       | Not published event      | Outdated content |                  | -31 years        | draft     |
-    And news content:
+    And the following "news" content:
       | title                            | collection       | published at      | created           | state     |
       | Recent published news            | Outdated content | -7 months         | -7 months         | published |
       | Outdated published news          | Outdated content | -3 years -1 month | -3 years -1 month | published |

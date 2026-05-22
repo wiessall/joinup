@@ -2,11 +2,11 @@
 Feature: Archived content on content listings - groups and paragraphs.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title           | description | topic             |
       | Some collection | Test        | Supplier exchange |
       | Poly screens    | Test        | Supplier exchange |
-    And news content:
+    And the following "news" content:
       | title          | headline       | collection      | abstract | body | created         |
       | Archived news  | Archived news  | Some collection | Abstract | Test | 2016-01-03T4:00 |
       | Published news | Published news | Some collection | Abstract | Test | 2016-02-04T5:00 |
@@ -20,7 +20,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And the workflow state of the "Archived news" content is changed to "archived"
 
   Scenario: Collection content listing can control archived content visibility.
-    Given solution content:
+    Given the following "solution" content:
       | title         | collection      | state     | creation date   |
       | Skewb cube    | Some collection | archived  | 2015-03-03T8:00 |
       | Pyraminx cube | Some collection | published | 2015-02-03T8:00 |
@@ -61,7 +61,7 @@ Feature: Archived content on content listings - groups and paragraphs.
 
   @javascript
   Scenario: Content listing paragraph can control visibility of archived items.
-    And custom_page content:
+    And the following "custom_page" content:
       | title     | abstract           | collection      | topic             |
       | Some page | Some page abstract | Some collection | Supplier exchange |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Some page" title:
@@ -109,14 +109,14 @@ Feature: Archived content on content listings - groups and paragraphs.
 
   @javascript
   Scenario: Carousel listings can also control archived items visibility.
-    Given collection content:
+    Given the following "collection" content:
       | uri                                                            | title                |
       | http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c | Interoperable Europe |
-    And news content:
+    And the following "news" content:
       | title              | headline           | state     | collection           | body |
       | IOP archived news  | IOP archived news  | archived  | Interoperable Europe | Test |
       | IOP published news | IOP published news | published | Interoperable Europe | Test |
-    And custom_page content:
+    And the following "custom_page" content:
       | title    | abstract          | collection           |
       | IOP page | IOP page abstract | Interoperable Europe |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "IOP page" title:
@@ -179,10 +179,10 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I should see the "collection content archived toggle" facet
 
   Scenario: "Show archived" facet on Discussions page content listing.
-    Given collection content:
+    Given the following "collection" content:
       | title                      | description | topic             |
       | Some discussion collection | Test        | Supplier exchange |
-    And discussion content:
+    And the following "discussion" content:
       | title           | collection                 | state     |
       | Rand discussion | Some discussion collection | published |
       | Pest discussion | Some discussion collection | archived  |

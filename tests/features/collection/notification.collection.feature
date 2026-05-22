@@ -5,10 +5,10 @@ Feature: Notification test for the collection transitions.
   I want to receive a notification when an event occurs
 
   Scenario: Notifications should be sent whenever an event is occurring related to a collection.
-    Given owner content:
+    Given the following "owner" content:
       | name       | owner type |
       | NC for all | Company    |
-    And users:
+    And the following users:
       | Username       | Roles     | E-mail                  | First name | Family name |
       | NC moderator   | moderator | nc_moderator@test.com   | NC         | Moderator   |
       | NC user        |           | nc_user@test.com        | NC         | User        |
@@ -17,7 +17,7 @@ Feature: Notification test for the collection transitions.
       | NC member1     |           | nc_member1@test.com     | NC         | Member1     |
       | NC member2     |           | nc_member2@test.com     | NC         | Member2     |
       | NCS owner      |           | ncs_owner@test.com      | NC         | Owner       |
-    And collection content:
+    And the following "collection" content:
       | title                  | state            | abstract     | description   | owner      |
       | NC to propose          | draft            | No one cares | No one cares. | NC for all |
       | NC to publish          | proposed         | No one cares | No one cares. | NC for all |
@@ -29,7 +29,7 @@ Feature: Notification test for the collection transitions.
       | NC to archive          | archival request | No one cares | No one cares. | NC for all |
       | NC to delete           | published        | No one cares | No one cares. | NC for all |
       | NC to delete by mod    | published        | No one cares | No one cares. | NC for all |
-    Given solution content:
+    Given the following "solution" content:
       | title        | collection    |
       | NC Solution1 | NC to archive |
       | NC Solution2 | NC to archive |

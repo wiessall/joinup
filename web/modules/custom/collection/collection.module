@@ -19,6 +19,7 @@ use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
 use Drupal\collection\Entity\Collection;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Entity\GlossaryTerm;
@@ -109,10 +110,12 @@ function collection_entity_bundle_info_alter(&$bundles): void {
  */
 function collection_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle): void {
   if ($entity_type->id() === 'node' && $bundle === 'glossary') {
-    $fields['title']->addConstraint('UniqueFieldValueInGroupAndBundle', [
-      'groupAudienceField' => 'og_audience',
-    ]);
-    $fields['title']->addConstraint('GlossaryTermName');
+    if (isset($fields['title'])) {
+      $fields['title']->addConstraint('UniqueFieldValueInGroupAndBundle', [
+        'groupAudienceField' => 'og_audience',
+      ]);
+      $fields['title']->addConstraint('GlossaryTermName');
+    }
     if (isset($fields['field_glossary_synonyms'])) {
       $fields['field_glossary_synonyms']->addConstraint('GlossaryTermSynonyms');
     }
@@ -258,15 +261,16 @@ function collection_node_view(array &$build, EntityInterface $entity, EntityView
 
   // Solution count.
   if ($display->getComponent('solutions')) {
-    $solution_count = count($entity->getSolutionIds(TRUE));
+    $solution_count = count($entity->getSolutionIds(TRUE, TRUE));
     $tags = Cache::buildTags('og-group-content', $entity->getCacheTagsToInvalidate());
     $tags = Cache::mergeTags($tags, ['node_list']);
+    $label = \Drupal::translation()
+      ->formatPlural($solution_count, '@solution_count Solution', '@solution_count Solutions', ['@solution_count' => $solution_count]);
     $build['solutions'] = [
-      '#markup' => \Drupal::translation()->formatPlural($solution_count, '@solution_count Solution', '@solution_count Solutions', ['@solution_count' => $solution_count]),
-      '#cache' => [
-        // Invalidate when community content is saved.
-        'tags' => $tags,
-      ],
+      '#type' => 'link',
+      '#title' => $label,
+      '#url' => Url::fromRoute('view.all_solutions_in_a_collection.listing', ['node' => $entity->id()]),
+      '#cache' => ['tags' => $tags],
     ];
   }
 

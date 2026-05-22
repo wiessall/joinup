@@ -5,7 +5,7 @@ Feature: Password management
   So that I can access my account
 
   Background:
-    Given users:
+    Given the following users:
       | Username       | E-mail                     | Password | First name | Family name |
       | Charlie Change | charlie.change@example.com | changeme | Charlie    | Change      |
 

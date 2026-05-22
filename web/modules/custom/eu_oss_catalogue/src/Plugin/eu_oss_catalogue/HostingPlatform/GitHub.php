@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 
-use Drupal\Cache\Adapter\DrupalAdapter;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Utility\Error;
+use Drupal\SymfonyCacheAdapter\DrupalPhpCacheAdapter;
 use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueHostingPlatform;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
 use Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException;
@@ -159,7 +159,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
       $this->client->authenticate($token, NULL, AuthMethod::ACCESS_TOKEN);
 
       // Cache requests to GitHub in 'cache.eu_oss_catalogue' bin.
-      $adapter = new DrupalAdapter($this->cache, 'github');
+      $adapter = new DrupalPhpCacheAdapter($this->cache);
       // Results are cached for 1 day (60 x 60 x 24 = 86400).
       $this->client->addCache($adapter, ['default_ttl' => 86400]);
     }

@@ -5,7 +5,7 @@ Feature: Following discussions
   So that I can stay up to date with its evolvement
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title          | state     | group_moderation |
       | Dairy products | published | no               |
     And user:
@@ -14,7 +14,7 @@ Feature: Following discussions
     And the following collection user membership:
       | collection     | user            |
       | Dairy products | Dr. Hans Zarkov |
-    And discussion content:
+    And the following "discussion" content:
       | title       | body                                                             | collection     | state     | author          |
       | Rare Butter | I think that the rarest butter out there is the milky way butter | Dairy products | published | Dr. Hans Zarkov |
       | Rare Whey   | Whey is the liquid remaining after milk has been curdled.        | Dairy products | draft     | Dr. Hans Zarkov |
@@ -56,7 +56,7 @@ Feature: Following discussions
     And the "Rare butter" discussion should have 0 subscribers
 
   Scenario: Receive E-mail notifications when actions are taken in discussions.
-    Given users:
+    Given the following users:
       | Username    | E-mail            | First name | Family name | Notification frequency |
       | follower    | dale@example.com  | Dale       | Arden       | monthly                |
       | debater     | flash@example.com | Flash      | Gordon      | daily                  |
@@ -171,7 +171,7 @@ Feature: Following discussions
       | body           | for your information, the discussion "Rare Butter" was deleted from the "Dairy products" collection.   |
 
     # Now check the notifications sent for a published discussion.
-    Given discussion content:
+    Given the following "discussion" content:
       | title     | body                                                   | collection     | state     | author          |
       | Rare feta | Made from milk from the exclusive Manx Loaghtan sheep. | Dairy products | published | Dr. Hans Zarkov |
     And discussion subscriptions:

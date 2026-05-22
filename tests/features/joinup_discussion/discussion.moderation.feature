@@ -5,13 +5,13 @@ Feature: Discussion moderation
   I need to be able to transit the discussions from one state to another.
 
   Scenario: Publish, request changes, propose, publish again and archive a discussion.
-    Given users:
+    Given the following users:
       | Username        |
       | Gabe Rogers     |
       | Brigham Salvage |
-    And collection content:
-      | title          | description                              | logo     | content_creation | state     | group_moderation |
-      | DIY collection | Collection of "Do it yourself" projects. | logo.png | members          | published | no               |
+    And the following "collection" content:
+      | title          | description                                  | logo     | content_creation | state     | group_moderation |
+      | DIY collection | "Collection of \"Do it yourself\" projects." | logo.png | members          | published | no               |
     And the following collection user membership:
       | collection     | user            | roles       |
       | DIY collection | Gabe Rogers     | member      |
@@ -81,19 +81,19 @@ Feature: Discussion moderation
     Then I should not see the link "Edit" in the "Entity actions" region
 
   Scenario: Disabling a discussion prevents additional comments to be created.
-    Given users:
+    Given the following users:
       | Username      | E-mail                    |
       | Vince Rome    | vince.rome@example.com    |
       | Lance Rustici | lance.rustici@example.com |
       | Denny Winslow | denny.winslow@example.com |
-    And collection content:
+    And the following "collection" content:
       | title                        | description                                    | logo     | content_creation | state     |
       | Valentine's day survival kit | How to survive the most scary day of the year. | logo.png | members          | published |
     And the following collection user membership:
       | collection                   | user          | roles       |
       | Valentine's day survival kit | Vince Rome    | member      |
       | Valentine's day survival kit | Lance Rustici | facilitator |
-    And discussion content:
+    And the following "discussion" content:
       | title                        | content                    | author     | state     | collection                   |
       | What's the best escape gift? | Buying chocolate is risky. | Vince Rome | published | Valentine's day survival kit |
     And comments:

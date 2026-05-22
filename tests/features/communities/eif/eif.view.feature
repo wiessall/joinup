@@ -3,7 +3,7 @@ Feature:
   Basic test steps for the EIF perspective meta entity.
 
   Scenario: Create an EIF perspective and view the data.
-    Given solution content:
+    Given the following "solution" content:
       | title         | description                                      | logo     |
       | EIF solution  | Some description not to be shown in the EIF page | logo.png |
       | EIF only type | Some description not to be shown in the EIF page | logo.png |

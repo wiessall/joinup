@@ -16,26 +16,26 @@ Feature: Solutions by licence report
     Then the response status code should be 200
 
   Scenario: List licences and their solutions.
-    Given licence content:
+    Given the following "licence" content:
       | title          |
       | Open source    |
       | Free for all   |
       | Commercial     |
       | Not applicable |
-    Given solution content:
+    Given the following "solution" content:
       | title                 |
       | Solution by licence 1 |
       | Solution by licence 2 |
-    And release content:
+    And the following "release" content:
       | title                         | release number | is version of         |
       | Solution by licence 2 release | 1              | Solution by licence 2 |
     # Distribution linked to the solution directly.
-    And distribution content:
+    And the following "distribution" content:
       | title                     | licence      | solution              |
       | Solution_by_licence_1.tar | Open source  | Solution by licence 1 |
       | Solution_by_licence_1.exe | Free for all | Solution by licence 1 |
     # Distribution that belongs to the release of a solution.
-    And distribution content:
+    And the following "distribution" content:
       | title                     | licence    | release                       |
       | Solution_by_licence_2.tar | Commercial | Solution by licence 2 release |
 

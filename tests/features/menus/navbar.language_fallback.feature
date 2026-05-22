@@ -4,7 +4,7 @@ Feature: The first content language fallback should be English.
   where we noticed an issue.
 
   Scenario: Menu link content uses English language as first fallback.
-    Given users:
+    Given the following users:
       | Username    | Roles                 |
       | John de Mod | moderator, translator |
     Given I am logged in as "John de Mod"

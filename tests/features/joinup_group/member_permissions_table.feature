@@ -5,7 +5,7 @@ Feature: Group member permissions table
   I need to be able to see which permissions I have
 
   Scenario:
-    Given users:
+    Given the following users:
       | Username         |
       | Horace Worblehat |
       | Ponder Stibbons  |
@@ -14,7 +14,7 @@ Feature: Group member permissions table
       | Dr. John Hicks   |
       | Hex              |
       | Mustrum Ridcully |
-    Given collection content:
+    Given the following "collection" content:
       | title                                       | content_creation         | group_moderation |
       | Applied astrology                           | facilitators and authors | yes        |
       | Illiberal studies                           | facilitators and authors | no         |
@@ -22,7 +22,7 @@ Feature: Group member permissions table
       | Dust, miscellaneous particles and filaments | members                  | no         |
       | Creative uncertainty                        | registered users         | yes        |
       | Woolly thinking                             | registered users         | no         |
-    Given solution content:
+    Given the following "solution" content:
       | title                         | content_creation         | group_moderation |
       | Applied anthropics            | facilitators and authors | yes        |
       | Extreme horticulture          | facilitators and authors | no         |
@@ -77,7 +77,7 @@ Feature: Group member permissions table
     And I should not see the link "Add document"
     And I should not see the link "Add event"
     And I should not see the link "Add news"
-    Given event content:
+    Given the following "event" content:
       | title             | state | collection        | author           |
       | The Poor Scholars | draft | Applied astrology | Mustrum Ridcully |
     When I visit the "The Poor Scholars" event
@@ -107,7 +107,7 @@ Feature: Group member permissions table
     And I should not see the link "Add document"
     And I should not see the link "Add event"
     And I should not see the link "Add news"
-    Given event content:
+    Given the following "event" content:
       | title    | state | collection        | author           |
       | Rag Week | draft | Illiberal studies | Mustrum Ridcully |
     When I visit the "Rag Week" event
@@ -151,7 +151,7 @@ Feature: Group member permissions table
     When I click "Add news"
     Then I should see the button "Propose"
     But I should not see the button "Publish"
-    Given event content:
+    Given the following "event" content:
       | title                          | state     | collection           | author           |
       | Election of Boy Archchancellor | published | Approximate accuracy | Horace Worblehat |
       | The Wizards' Excuse Me         | draft     | Approximate accuracy | Mustrum Ridcully |
@@ -195,7 +195,7 @@ Feature: Group member permissions table
     When I click "Add news"
     Then I should see the button "Publish"
     But I should not see the button "Propose"
-    Given event content:
+    Given the following "event" content:
       | title                                               | state     | collection                                  | author           |
       | Beating the bounds                                  | published | Dust, miscellaneous particles and filaments | Ponder Stibbons  |
       | Archchancellor Bowell's Remembrance's Bun and Penny | draft     | Dust, miscellaneous particles and filaments | Mustrum Ridcully |
@@ -245,7 +245,7 @@ Feature: Group member permissions table
     When I click "Add news"
     Then I should see the button "Propose"
     But I should not see the button "Publish"
-    Given event content:
+    Given the following "event" content:
       | title                       | state     | collection           | author           |
       | The Convivium               | published | Creative uncertainty | Henry Porter     |
       | The Hunting of the Megapode | draft     | Creative uncertainty | Mustrum Ridcully |
@@ -289,7 +289,7 @@ Feature: Group member permissions table
     When I click "Add news"
     Then I should see the button "Publish"
     But I should not see the button "Propose"
-    Given event content:
+    Given the following "event" content:
       | title                                     | state     | collection      | author           |
       | Gaudy night                               | published | Woolly thinking | Rincewind        |
       | Archchancellor Preserved Bigger's Bequest | draft     | Woolly thinking | Mustrum Ridcully |
@@ -325,7 +325,7 @@ Feature: Group member permissions table
     And I should not see the link "Add document"
     And I should not see the link "Add event"
     And I should not see the link "Add news"
-    Given event content:
+    Given the following "event" content:
       | title        | state | solution           | author           |
       | Scrawn Money | draft | Applied anthropics | Mustrum Ridcully |
     When I visit the "Scrawn Money" event
@@ -355,7 +355,7 @@ Feature: Group member permissions table
     And I should not see the link "Add document"
     And I should not see the link "Add event"
     And I should not see the link "Add news"
-    Given event content:
+    Given the following "event" content:
       | title            | state | solution             | author           |
       | 'Sity and Guilds | draft | Extreme horticulture | Mustrum Ridcully |
     When I visit the "'Sity and Guilds" event
@@ -399,7 +399,7 @@ Feature: Group member permissions table
     When I click "Add news"
     Then I should see the button "Propose"
     But I should not see the button "Publish"
-    Given event content:
+    Given the following "event" content:
       | title             | state     | solution                     | author           |
       | Head of the River | published | Prehumous morbid bibliomancy | Dr. John Hicks   |
       | Poore Boys Funne  | draft     | Prehumous morbid bibliomancy | Mustrum Ridcully |
@@ -443,7 +443,7 @@ Feature: Group member permissions table
     When I click "Add news"
     Then I should see the button "Publish"
     But I should not see the button "Propose"
-    Given event content:
+    Given the following "event" content:
       | title                         | state     | collection                    | author           |
       | May Morning                   | published | Posthumous morbid bibliomancy | Hex              |
       | A veritable heyhoe-rumbledown | draft     | Posthumous morbid bibliomancy | Mustrum Ridcully |
@@ -457,12 +457,12 @@ Feature: Group member permissions table
 
   # The permissions table should not be accessible for non-public groups.
   Scenario: Access the membership permissions information table
-    Given collection content:
+    Given the following "collection" content:
       | title                | state     |
       | Valid Bibliomancy    | published |
       | Draft Bibliomancy    | draft     |
       | Proposed Bibliomancy | proposed  |
-    Given solution content:
+    Given the following "solution" content:
       | title             | state       |
       | Valid Dynamics    | published   |
       | Draft Dynamics    | draft       |

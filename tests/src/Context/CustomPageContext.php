@@ -114,7 +114,7 @@ class CustomPageContext extends RawDrupalContext {
 
     // Check if the currently logged in user has access to these routes.
     $current_user = $this->getUserManager()->getCurrentUser();
-    $user = $current_user ? \Drupal::entityTypeManager()->getStorage('user')->loadUnchanged($current_user->uid) : new AnonymousUserSession();
+    $user = $current_user ? \Drupal::entityTypeManager()->getStorage('user')->loadUnchanged($current_user->getValue('uid')) : new AnonymousUserSession();
     foreach ($routes as $route => $parameters) {
       $url = Url::fromRoute($route, $parameters);
       if ($url->access($user)) {

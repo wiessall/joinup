@@ -3,7 +3,7 @@ Feature: Assessment report PDF download
   Test PDF download functionality for assessment reports
 
   Scenario: Users can download PDF version of their assessments
-    Given users:
+    Given the following users:
       | Username       |
       | TestReportUser |
     And report assessments:
@@ -31,7 +31,7 @@ Feature: Assessment report PDF download
     Then I should not see the link "Download PDF"
 
   Scenario: PDF view display contains the same field labels as the default view
-    Given solution content:
+    Given the following "solution" content:
       | title         |
       | Test Solution |
     And public_organisation assessments:

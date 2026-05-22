@@ -32,7 +32,7 @@ class JoinupMessageContext extends RawDrupalContext {
   #[Then('I should see the inline form error( message) :message')]
   public function assertInlineFormError(string $message): void {
     // There must be also a "regular" error message on the page.
-    $errorSelector = $this->getDrupalSelector('error_message_selector');
+    $errorSelector = $this->getParameter('selectors')['messages']['error'];
     $errorElements = $this->getSession()->getPage()->findAll('css', $errorSelector);
     if (empty($errorElements)) {
       throw new ExpectationException(

@@ -7,16 +7,16 @@ Feature: Solution notifications
   I need to receive email that inform me regarding solution transitions.
 
   Scenario: Notifications are sent every time a related transition is applied to a solution.
-    Given collection content:
+    Given the following "collection" content:
       | title                          |
       | Collection of random solutions |
-    And users:
+    And the following users:
       | Username     | Roles     | First name | Family name | E-mail                   |
       | Pat Harper   | moderator | Pat        | Harper      | pat.harper@example.com   |
       | Jack Harper  | moderator | Jack       | Harper      | jack.harper@example.com  |
       | Ramiro Myers |           | Ramiro     | Myers       | ramiro.myers@example.com |
       | Edith Poole  |           | Edith      | Poole       | edith.poole@example.com  |
-    Given solution content:
+    Given the following "solution" content:
       | title                                                 | author       | collection                     | state        |
       | Solution notification to propose changes              | Ramiro Myers | Collection of random solutions | published    |
       | Solution notification to blacklist                    | Ramiro Myers | Collection of random solutions | published    |

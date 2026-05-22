@@ -5,13 +5,13 @@ Feature:
   I need to be able to configure community content listing
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title      | logo     |
       | Nintendo64 | logo.png |
-    And news content:
+    And the following "news" content:
       | title                                 | collection | field_paragraphs_body       |
       | Rare Nintendo64 disk drive discovered | Nintendo64 | Magnetic drive called 64DD. |
-    And discussion content:
+    And the following "discussion" content:
       | title                           | collection | content                 |
       | What's your favourite N64 game? | Nintendo64 | Post title and reasons. |
 
@@ -87,10 +87,10 @@ Feature:
     And I should not see the heading "What's your favourite N64 game?"
 
   Scenario: Test listing by keywords
-    Given document content:
+    Given the following "document" content:
       | title        | keywords           | field_paragraphs_body | collection |
       | User's Guide | nintendo64 manuals | User manual           | Nintendo64 |
-    And custom_page content:
+    And the following "custom_page" content:
       | title   | collection |
       | Manuals | Nintendo64 |
     And I append content listing to "field_paragraphs_body" field in "node" entity with following "Manuals" title with:
@@ -119,11 +119,11 @@ Feature:
 
   @javascript
   Scenario: Regression test for ISAICP-7040 - Multiple content listing paragraphs maintain separate state
-    Given solution content:
+    Given the following "solution" content:
       | title                | collection |
       | Save the Planet      | Nintendo64 |
       | Fight Global Warming | Nintendo64 |
-    And custom_page content:
+    And the following "custom_page" content:
       | title   | collection |
       | Forests | Nintendo64 |
     And I am logged in as a facilitator of the "Nintendo64" collection
@@ -158,11 +158,11 @@ Feature:
 
   @javascript
   Scenario: Regression test for ISAICP-7183 - Remove filter updates listing correctly
-    Given solution content:
+    Given the following "solution" content:
       | title              | collection |
       | Fight battery mode | Nintendo64 |
       | Black Noise        | Nintendo64 |
-    And custom_page content:
+    And the following "custom_page" content:
       | title | collection | abstract |
       | Bikes | Nintendo64 | N/A      |
     And I am logged in as a facilitator of the "Nintendo64" collection
@@ -191,18 +191,18 @@ Feature:
     Then the 1st filter of the 1st content listing paragraph value is "Black Noise"
 
   Scenario: Regression test for ISAICP-7819 - Pagination with multiple content listing paragraphs
-    Given event content:
+    Given the following "event" content:
       | title              | collection | start date | end date   |
       | Event pagination 1 | Nintendo64 | now +8 day | now +9 day |
       | Event pagination 2 | Nintendo64 | now +7 day | now +8 day |
       | Event pagination 3 | Nintendo64 | now +6 day | now +7 day |
-    And news content:
+    And the following "news" content:
       | title             | collection |
       | News pagination 1 | Nintendo64 |
       | News pagination 2 | Nintendo64 |
       | News pagination 3 | Nintendo64 |
       | News pagination 4 | Nintendo64 |
-    And custom_page content:
+    And the following "custom_page" content:
       | title          | collection |
       | Pagination bug | Nintendo64 |
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Pagination bug" title:
@@ -220,7 +220,7 @@ Feature:
 
   @javascript
   Scenario: Facets are hidden with multiple content listing paragraphs
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title                  | collection |
       | Multi paragraph facets | Nintendo64 |
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Multi paragraph facets" title:

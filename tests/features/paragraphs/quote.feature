@@ -2,12 +2,12 @@
 Feature: Quote paragraph tests.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                 | topic |
       | Paragraphs collection | HR    |
 
   Scenario: View quote paragraph in the custom page.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title          | collection            | abstract             |
       | Popular quotes | Paragraphs collection | quotes page abstract |
     And I append "quote" to "field_paragraphs_body" field in "node" entity with following "Popular Quotes" title:

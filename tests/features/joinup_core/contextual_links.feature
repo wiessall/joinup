@@ -5,7 +5,7 @@ Feature:
   I need to be able to access operations directly through the contextual links.
 
   Scenario: Revisions link availability.
-    Given collection content:
+    Given the following "collection" content:
       | title                |
       | Revisions collection |
     When I am logged in as a moderator
@@ -39,10 +39,10 @@ Feature:
     Then I should not see the link "Revisions" in the "Entity actions" region
 
   Scenario: Only solutions should have the share contextual link available.
-    Given collection content:
+    Given the following "collection" content:
       | title            |
       | Share collection |
-    And solution content:
+    And the following "solution" content:
       | title          | collection       |
       | Share solution | Share collection |
 

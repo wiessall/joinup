@@ -5,13 +5,13 @@ Feature: Solution editing.
   I need to be able to edit solutions through UI.
 
   Background:
-    Given users:
+    Given the following users:
       | Username     | E-mail                   |
       | Yancy Burton | yancy.burton@example.com |
-    And owner content:
+    And the following "owner" content:
       | name      | owner type |
       | Acme inc. | Company    |
-    And collection content:
+    And the following "collection" content:
       | title              |
       | Collection example |
     # Assign facilitator role in order to allow creation of a solution.
@@ -20,7 +20,7 @@ Feature: Solution editing.
     And the following collection user memberships:
       | collection         | user         | roles       |
       | Collection example | Yancy Burton | facilitator |
-    And solution content:
+    And the following "solution" content:
       | title            | logo     |
       | Another solution | logo.png |
 
@@ -95,10 +95,10 @@ Feature: Solution editing.
     Then I should see the heading "Access denied"
 
   Scenario: A solution facilitator can edit only the solutions he's associated with.
-    Given collection content:
+    Given the following "collection" content:
       | title              |
       | Collection example |
-    Given solution content:
+    Given the following "solution" content:
       | title      | collection         |
       | Solution B | Collection example |
     When I am logged in as a facilitator of the "Solution B" solution

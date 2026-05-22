@@ -5,15 +5,15 @@ Feature: Creating content and commenting on archived collection
   I want to be able to archive old collections
 
   Background: Check access to the Post comment form
-    Given users:
+    Given the following users:
       | Username    | Roles     |
       | Flora Hunt  | moderator |
       | Lee Reeves  |           |
       | Karl Fields |           |
-    And collection content:
+    And the following "collection" content:
       | title               | abstract            | description         | logo     | topic                   |
       | The Willing Consort | The Willing Consort | The Willing Consort | logo.png | Statistics and Analysis |
-    Given solution content:
+    Given the following "solution" content:
       | title               | collection          |
       | The Loyal Companion | The Willing Consort |
     And the following collection user memberships:
@@ -21,7 +21,7 @@ Feature: Creating content and commenting on archived collection
       | The Willing Consort | Karl Fields | owner, facilitator |
 
   Scenario Outline: 'Comment form' should not be accessible on an archived collection content.
-    Given <content_type> content:
+    Given the following "<content_type>" content:
       | title            | collection   | solution   |
       | Commented entity | <collection> | <solution> |
     When I am logged in as "Lee Reeves"

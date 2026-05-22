@@ -29,13 +29,13 @@ class JoinupFeaturedContext extends RawDrupalContext {
    */
   #[AfterNodeCreate]
   public function featureNodeAfterCreation(AfterNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
+    $node = $scope->getStub();
 
-    $is_featured = in_array(strtolower((string) ($node->featured ?? '')), [
+    $is_featured = in_array(strtolower((string) ($node->getValue('featured') ?? '')), [
       'y',
       'yes',
     ]);
-    $nid = $node->nid ?? NULL;
+    $nid = $node->getValue('nid');
     if ($is_featured && $nid) {
       /** @var \Drupal\node\NodeInterface $entity */
       if ($entity = Node::load((int) $nid)) {

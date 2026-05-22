@@ -5,7 +5,7 @@ Feature:
 
   @javascript
   Scenario:  Add Table of Contents to the custom page.
-    And custom_page content:
+    And the following "custom_page" content:
       | title                      | abstract                   |
       | Increase Your Productivity | Increase Your Productivity |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Increase Your Productivity" title:

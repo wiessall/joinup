@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Given;
+use Drupal\Driver\Entity\EntityStub;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
 
@@ -40,7 +41,7 @@ class SpdxContext extends RawDrupalContext {
   public function givenSpdxLicences(TableNode $data): void {
     $aliases = $this->getTaxonomyFieldMappings(self::TAXONOMY_NAME);
     foreach ($data->getColumnsHash() as $licence_data) {
-      $values = (object) ['vocabulary_machine_name' => self::TAXONOMY_NAME];
+      $values = ['vocabulary_machine_name' => self::TAXONOMY_NAME];
 
       // Replace the human-readable aliases with the field machine names.
       foreach ($licence_data as $key => $value) {
@@ -53,10 +54,10 @@ class SpdxContext extends RawDrupalContext {
             'format' => 'content_editor',
           ];
         }
-        $values->{$aliases[$key]} = $value;
+        $values[$aliases[$key]] = $value;
       }
 
-      $this->termCreate($values);
+      $this->termCreate(new EntityStub('taxonomy_term', self::TAXONOMY_NAME, $values));
     }
   }
 

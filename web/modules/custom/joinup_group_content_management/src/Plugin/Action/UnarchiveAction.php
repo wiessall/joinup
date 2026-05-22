@@ -7,7 +7,6 @@ namespace Drupal\joinup_group_content_management\Plugin\Action;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Action\Attribute\Action;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -70,63 +69,10 @@ class UnarchiveAction extends StateActionBase {
       throw new ActionException('Parent entity is archived');
     }
 
-    $previous = $this->getPreviousRevision($node);
-    if (!$previous) {
-      throw new ActionException('Previous revision has not been found');
+    $lastPublishedRevId = $this->workflowHelper->getLastPublishedRevisionId($node);
+    if (!$lastPublishedRevId && !$node->isTargetWorkflowStateAllowed('published')) {
+      throw new ActionException('Unarchive action is not allowed.');
     }
-  }
-
-  /**
-   * Gets previous revision.
-   *
-   * @param \Drupal\node\NodeInterface $node
-   *   Node entity.
-   *
-   * @return \Drupal\Core\Entity\RevisionableInterface|null
-   *   Revisionable entity.
-   */
-  protected function getPreviousRevision(NodeInterface $node): ?RevisionableInterface {
-    $previousRevisionId = $this->getPreviousRevisionId($node);
-    if (!$previousRevisionId) {
-      return NULL;
-    }
-
-    /** @var \Drupal\node\NodeStorageInterface $storage */
-    $storage = $this->entityTypeManager->getStorage($node->getEntityTypeId());
-
-    return $storage->loadRevision($previousRevisionId);
-  }
-
-  /**
-   * Get previous revision.
-   *
-   * @param \Drupal\node\NodeInterface $node
-   *   Node entity.
-   *
-   * @return int|null
-   *   Previous revision.
-   */
-  protected function getPreviousRevisionId(NodeInterface $node): ?int {
-    $entityTypeId = $node->getEntityTypeId();
-
-    if (!$storage = $this->entityTypeManager->getStorage($entityTypeId)) {
-      return NULL;
-    }
-
-    $revisionIds = $storage->getQuery()
-      ->accessCheck(FALSE)
-      ->allRevisions()
-      ->condition($this->entityTypeManager->getDefinition($entityTypeId)
-        ->getKey('id'), $node->id())
-      ->sort($this->entityTypeManager->getDefinition($entityTypeId)
-        ->getKey('revision'), 'DESC')
-      ->range(1, 1)
-      ->execute();
-    if ($revisionIds) {
-      return array_keys($revisionIds)[0];
-    }
-
-    return NULL;
   }
 
   /**

@@ -5,14 +5,14 @@ Feature: Collection homepage
   I need to be able see the amount of users that are members of a collection
 
   Background:
-    Given users:
+    Given the following users:
       | Username    | Status  |
       | Thorin      | active  |
       | Fili        | active  |
       | Kili        | active  |
       | Bilbo       | blocked |
       | Some goblin | active  |
-    And collection content:
+    And the following "collection" content:
       | title                                   | moderation | closed |
       | Under the mountain                      | yes        | no     |
       | Exactly the same collection, but closed | yes        | yes    |

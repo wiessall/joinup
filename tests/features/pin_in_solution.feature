@@ -5,11 +5,11 @@ Feature: Pinning content entities inside solutions
   So that important content has more visibility
 
   Background:
-    Given solution content:
+    Given the following "solution" content:
       | title       |
       | Blue Wrench |
       | Sunny Beam  |
-    And users:
+    And the following users:
       | Username          | E-mail                        |
       | Sara Jessica      | sara.jessica@example.com      |
       | Tyron Lannister   | tyron.lannister@example.com   |
@@ -24,10 +24,10 @@ Feature: Pinning content entities inside solutions
       | Sunny Beam  | Melahrini Gilbert |             |
 
   Scenario Outline: Facilitators can pin and unpin community content inside their solutions.
-    Given news content:
+    Given the following "news" content:
       | title                      | solution    | created    |
       | What is the HEX for lemon? | Blue Wrench | 2018-12-13 |
-    And <content type> content:
+    And the following "<content type>" content:
       | title              | headline           | solution    | pinned | created    |
       | Very important     | Very important     | Blue Wrench | yes    | 2018-11-03 |
       | Useful information | Useful information | Blue Wrench | no     | 2018-12-03 |
@@ -101,7 +101,7 @@ Feature: Pinning content entities inside solutions
 
   @javascript
   Scenario Outline: Pinned content tiles should show a visual cue only in their solution homepage.
-    Given <content type> content:
+    Given the following "<content type>" content:
       | title       | headline    | solution    | pinned |
       | Lantern FAQ | Lantern FAQ | Blue Wrench | yes    |
       | Lantern TCA | Lantern TCA | Blue Wrench | no     |

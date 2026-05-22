@@ -1,0 +1,11 @@
+--- a/src/Traits/MessageDigestContextTrait.php
++++ b/src/Traits/MessageDigestContextTrait.php
+@@ -152,7 +152,7 @@
+     $this->expireDigestMessages();
+     do {
+       $this->expireMessageDigestNotifiers();
+-      $this->getDriver()->runCron();
++      $this->getDriver()->cronRun();
+     } while ($this->countAllUndeliveredDigestMessages());
+   }
+

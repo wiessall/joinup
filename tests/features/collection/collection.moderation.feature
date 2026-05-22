@@ -19,7 +19,7 @@ Feature: Collection moderation
     And I should not see the link "Delete"
 
   Scenario: Test the available buttons in every stage of the editorial workflow
-    Given users:
+    Given the following users:
       | Username        | Roles     |
       # Authenticated user.
       | Velma Smith     |           |
@@ -29,7 +29,7 @@ Feature: Collection moderation
       | Erika Reid      |           |
       # Facilitator of all the collections.
       | Carole James    |           |
-    And collection content:
+    And the following "collection" content:
       | title               | state            |
       | Deep Past           | draft            |
       | The Licking Silence | proposed         |
@@ -163,7 +163,7 @@ Feature: Collection moderation
   # for collections.
   Scenario: Published collections should be shown in the collections overview page.
     # Regression test for ticket ISAICP-2889.
-    And collection content:
+    And the following "collection" content:
       | title          | logo     | topic             | state    |
       | Some berry pie | logo.png | Supplier exchange | proposed |
     When I visit the collection overview page

@@ -5,7 +5,7 @@ Feature: Language selector block and popover functionality
   I want to be able to see and use the language selector
 
   Background:
-    Given users:
+    Given the following users:
       | Username        | Roles      | E-mail                   |
       | Regular User    |            | regular.user@example.com |
       | Translator User | Translator | translator@example.com   |

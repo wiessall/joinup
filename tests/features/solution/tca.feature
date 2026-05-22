@@ -5,7 +5,7 @@ Feature: Solution TCA agreement
   I want users to sign the TCA agreement before creating a solution.
 
   Scenario: Authenticated users can access the solution TCA agreement page.
-    Given collection content:
+    Given the following "collection" content:
       | title             |
       | Agreed collection |
 
@@ -44,7 +44,7 @@ Feature: Solution TCA agreement
     And I should see the text "The eligibility criteria of Interoperable Europe Portal's interoperability solutions have been redefined." in the "Modal content" region
 
   Scenario: Users do not see TCA agreement during editing.
-    Given solution content:
+    Given the following "solution" content:
       | title      |
       | Solution B |
 

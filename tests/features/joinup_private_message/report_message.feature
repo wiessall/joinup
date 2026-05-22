@@ -5,7 +5,7 @@ Feature: Private message report.
   I need to be able to report a message.
 
   Background:
-    Given users:
+    Given the following users:
       | ID   | Username  | First name | Family name | E-mail                | Roles     |
       | 900  | alice_m   | Alice      | Miller      | alice.m@example.com   | Moderator |
       | 9001 | bob_rolls | Bob        | Rolls       | bob.rolls@example.com |           |
@@ -79,7 +79,7 @@ Feature: Private message report.
 
   @javascript
   Scenario: Validation works for blocked users.
-    Given users:
+    Given the following users:
       | Username  | First name | Family name | E-mail                |
       | joan_tiff | Joan       | Tiff        | joan.tiff@example.com |
     And the following private messages:

@@ -5,7 +5,7 @@ Feature: Type something to filter the listing the member list
   I need to be able to filter the member list
 
   Background:
-    Given users:
+    Given the following users:
       | Username     | First name | Family name | Roles     |
       | sludge       | Slurry     | Mud         | moderator |
       | ledge        | Jack       | Cartwright  |           |
@@ -14,10 +14,10 @@ Feature: Type something to filter the listing the member list
       | rightone     | Wright     | Jackson     |           |
       | brighty      | Lavonne    | Atkins      |           |
       | scanner      | Pucky      | Muck        |           |
-    And collection content:
+    And the following "collection" content:
       | title         |
       | Coffee lovers |
-    And solution content:
+    And the following "solution" content:
       | title           | collection    |
       | Coffee grinders | Coffee lovers |
     And the following solution user memberships:

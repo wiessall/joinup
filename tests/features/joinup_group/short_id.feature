@@ -5,10 +5,10 @@ Feature:
   I need to be able to provide a short ID to my group.
 
   Scenario: Short IDs are unique in collections.
-    Given collection content:
+    Given the following "collection" content:
       | title              | short ID |
       | Scientific Studies | sst-2020 |
-    And owner content:
+    And the following "owner" content:
       | name                 | owner type |
       | Organisation example | Company    |
 
@@ -65,10 +65,10 @@ Feature:
 
   @javascript
   Scenario: Custom URL Identifiers are unique in solutions.
-    Given collection content:
+    Given the following "collection" content:
       | title              | short ID |
       | Scientific Studies | sst-2020 |
-    And solution content:
+    And the following "solution" content:
       | title                         | short ID | collection         |
       | Who knows what a solution is? | wkwasi   | Scientific Studies |
 

@@ -238,12 +238,12 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    */
   #[AfterNodeCreate]
   public function pinCommunityContentInGroup(AfterNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
+    $node = $scope->getStub();
     $is_pinned = in_array(strtolower((string) (JoinupContext::getStrippedNodeProperty($node, 'pinned') ?? '')), [
       'y',
       'yes',
     ]);
-    $nid = $node->nid ?? NULL;
+    $nid = $node->getValue('nid');
     if ($is_pinned && $nid) {
       /** @var \Drupal\node\NodeInterface $entity */
       if ($entity = Node::load((int) $nid)) {
@@ -253,7 +253,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
             $entity->pin($group);
           }
           catch (MissingGroupException $e) {
-            throw new \Exception("The '{$node->title}' community content cannot be pinned since it does not belong to a group.");
+            throw new \Exception("The '{$node->getValue('title')}' community content cannot be pinned since it does not belong to a group.");
           }
         }
       }
@@ -269,14 +269,14 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    */
   #[AfterNodeCreate]
   public function afterNodeCreateShare(AfterNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
+    $node = $scope->getStub();
 
     $sharedIn = JoinupContext::getStrippedNodeProperty($node, 'field_shared_in');
     if (empty($sharedIn)) {
       return;
     }
 
-    $content = Node::load($node->nid);
+    $content = Node::load($node->getValue('nid'));
     \assert($content instanceof NodeInterface);
     $groupLabels = array_map(
       fn (string $groupLabel): string => trim($groupLabel),

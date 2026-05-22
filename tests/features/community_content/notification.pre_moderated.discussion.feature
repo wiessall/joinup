@@ -5,13 +5,13 @@ Feature: Notification test for the discussion transitions on a pre moderated par
   I want to receive a notification when an entity is proposed.
 
   Scenario: Notifications should be sent whenever a discussion is going through a relevant transition.
-    Given users:
+    Given the following users:
       | Username         | Roles     | E-mail                      | First name | Family name |
       | Notify moderator | moderator | notify_moderator@test.com   | Notify     | Moderator   |
       | CC owner         |           | notify_owner@test.com       | CC         | Owner       |
       | CC facilitator   |           | notify_facilitator@test.com | CC         | Facilitator |
       | CC member        |           | notify_member@test.com      | CC         | Member      |
-    And collection content:
+    And the following "collection" content:
       | title             | content_creation | group_moderation |
       | CC pre collection | members          | yes              |
     And the following collection user memberships:
@@ -19,7 +19,7 @@ Feature: Notification test for the discussion transitions on a pre moderated par
       | CC pre collection | CC owner       | owner       |
       | CC pre collection | CC facilitator | facilitator |
       | CC pre collection | CC member      |             |
-    And discussion content:
+    And the following "discussion" content:
       | title                               | author         | body | collection        | field_state      | created    |
       # The next one belongs to a facilitator because there is no published version for that and thus,
       # the facilitator would not have access to the entity.

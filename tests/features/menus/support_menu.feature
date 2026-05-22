@@ -34,7 +34,7 @@ Feature:
 
   Scenario Outline: Test user support menu usage.
 
-    Given collection content:
+    Given the following "collection" content:
       | title            |
       | Hotel California |
 

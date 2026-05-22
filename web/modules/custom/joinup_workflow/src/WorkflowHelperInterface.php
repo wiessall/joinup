@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Drupal\joinup_workflow;
 
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
 use Stringable;
 
@@ -138,7 +138,7 @@ interface WorkflowHelperInterface {
    *
    * @param \Drupal\joinup_workflow\EntityWorkflowStateInterface $entity
    *   The node to archive.
-   * @param string|\Stringable|\Drupal\Core\StringTranslation\TranslatableMarkup|null $revisionLogMessage
+   * @param string|\Stringable|null $revisionLogMessage
    *   An optional message for the new revision. A default "Archived by user N"
    *   message is used if omitted. Use empty string to not set any revision log
    *   message.
@@ -149,14 +149,14 @@ interface WorkflowHelperInterface {
    * @throws \Exception
    *     If the entity cannot be archived.
    */
-  public function archiveEntity(EntityWorkflowStateInterface $entity, null|string|Stringable|TranslatableMarkup $revisionLogMessage = NULL): EntityWorkflowStateInterface;
+  public function archiveEntity(EntityWorkflowStateInterface $entity, null|string|Stringable $revisionLogMessage = NULL): EntityWorkflowStateInterface;
 
   /**
    * Un-archives an entity.
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   The entity to un-archive.
-   * @param string|\Stringable|\Drupal\Core\StringTranslation\TranslatableMarkup|null $revisionLogMessage
+   * @param string|\Stringable|null $revisionLogMessage
    *   An optional message for the new revision. A default "Unrchived by user N"
    *   message is used if omitted. Use empty string to not set any revision log
    *   message.
@@ -167,7 +167,7 @@ interface WorkflowHelperInterface {
    * @throws \Exception
    *   If the entity cannot be unarchived.
    */
-  public function unarchiveEntity(EntityInterface $entity, string|Stringable|TranslatableMarkup|null $revisionLogMessage = NULL): EntityInterface;
+  public function unarchiveEntity(EntityInterface $entity, string|Stringable|null $revisionLogMessage = NULL): EntityInterface;
 
   /**
    * Checks whether the user can not un-archive content.
@@ -181,5 +181,17 @@ interface WorkflowHelperInterface {
    *   Whether the user can not un-archive content.
    */
   public function accountCanNotUnarchive(EntityInterface $entity, AccountInterface $account): bool;
+
+  /**
+   * Returns the revision ID of the last published entity revision.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+   *   The content entity.
+   *
+   * @return int|null
+   *   The revision ID of the last published version, or NULL if no such version
+   *   can be found or if the entity is not revisionable.
+   */
+  public function getLastPublishedRevisionId(ContentEntityInterface $entity): ?int;
 
 }

@@ -6,7 +6,7 @@ Feature: Collection TCA agreement
 
   Background:
     # The 'Create collection' button is not shown if there is no collection available.
-    Given collection content:
+    Given the following "collection" content:
       | title                    |
       | TCA Agreement collection |
 

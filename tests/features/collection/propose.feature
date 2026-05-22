@@ -8,7 +8,7 @@ Feature: Proposing a collection
   # the user will be aware that collections can be added by the public, even
   # though you need to sign in to do so.
   Scenario: Anonymous user needs to sign in before creating a collection
-    Given users:
+    Given the following users:
       | Username      | E-mail           |
       | Cecil Clapman | cecil@example.eu |
     Given CAS users:
@@ -24,7 +24,7 @@ Feature: Proposing a collection
     Then I should see the heading "Propose collection"
 
   Scenario: Propose a collection
-    Given owner content:
+    Given the following "owner" content:
       | name                 | owner type |
       | Organisation example | Company    |
     And I am logged in as an "authenticated user"
@@ -88,7 +88,7 @@ Feature: Proposing a collection
     Then I should see the success message "Custom page About this group has been created."
 
   Scenario: Propose a collection with a duplicate name
-    Given collection content:
+    Given the following "collection" content:
       | title                  |
       | The Ratcatcher's Guild |
     Given I am logged in as a user with the "authenticated" role
@@ -105,7 +105,7 @@ Feature: Proposing a collection
 
   @javascript @generateMedia @generateMediaTypes:collection_logo
   Scenario: Propose collection form fields should be organized in tabs.
-    Given owner content:
+    Given the following "owner" content:
       | name                 | owner type |
       | Organisation example | Company    |
 
@@ -190,7 +190,7 @@ Feature: Proposing a collection
 
   @email @javascript
   Scenario: Email validator after submit a Collection/Solution.
-    Given owner content:
+    Given the following "owner" content:
       | name               | owner type |
       | Organisation valid | Company    |
 
@@ -278,7 +278,7 @@ Feature: Proposing a collection
 
   @javascript
   Scenario: Allowing users to upload SVGs.
-    Given owner content:
+    Given the following "owner" content:
       | name    | owner type |
       | Svinish | Company    |
     And I am logged in as an "authenticated user"

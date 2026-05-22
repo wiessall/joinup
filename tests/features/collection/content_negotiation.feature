@@ -3,7 +3,7 @@ Feature: Export collection metadata
   As a user of Interoperable Europe Portal I am able to retrieve the content of entities in a machine readable format.
 
   Scenario Outline: Export node data
-    Given licence content:
+    Given the following "licence" content:
       | title            | description                | uri                   | licence type | deprecated |
       | Creative commons | <p>This is so creative</p> | http://i-am-creative/ | Nominal cost | yes        |
     When I go to the homepage of the "Creative commons" licence in the <format> serialisation

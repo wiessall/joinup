@@ -3,7 +3,7 @@ Feature: Assessment report email notifications
   Tests email notifications sent during assessment report moderation workflow.
 
   Background:
-    Given users:
+    Given the following users:
       | Username             | Roles                | E-mail                  | First name | Family name |
       | Regular User         |                      | regular@example.com     | Regular    | User        |
       | Assessment Reporter  | assessment_reporter  | a.reporter@example.com  | Assessment | Reporter    |

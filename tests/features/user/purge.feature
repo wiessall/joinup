@@ -2,7 +2,7 @@
 Feature: Automated approach for identifying and deleting inactive users
 
   Background:
-    Given users:
+    Given the following users:
       | Username       | Roles           | E-mail                     | Login     | Created   | Status  |
       | Cosmic Admin   | Administrator   | cosmic.admin@example.com   | 0         | -4 years  | active  |
       | Pixel Panda    | Moderator       | pixel.panda@example.com    | 0         | -4 years  | active  |

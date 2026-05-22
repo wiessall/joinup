@@ -5,19 +5,19 @@ Feature: Like/unlike feature.
   I need to be able to like or unlike content.
 
   Background:
-    Given users:
+    Given the following users:
       | Username     | Roles | E-mail           | First name | Family name |
       | Lisa Like    |       | lisa@like.com    | Lisa       | Like        |
       | Gregory Like |       | gregory@like.com | Gregory    | Like        |
-    Given collection content:
+    Given the following "collection" content:
       | title    | state     |
       | Bulgaria | published |
-    Given solution content:
+    Given the following "solution" content:
       | title               | state     | collection |
       | Very liked solution | published | Bulgaria   |
 
   Scenario: Like functionality is disabled for archived content.
-    Given solution content:
+    Given the following "solution" content:
       | title         | state    | collection |
       | Mount Vitosha | archived | Bulgaria   |
 
@@ -58,7 +58,7 @@ Feature: Like/unlike feature.
     Then I should see the statistics "1" in the "Very liked solution" tile
 
   Scenario: Anonymous user is asked to sign in if they attempt to Like
-    Given users:
+    Given the following users:
       | Username   | E-mail           |
       | Cecil Like | clike@example.eu |
     And CAS users:
@@ -84,7 +84,7 @@ Feature: Like/unlike feature.
     Then I should see the heading "Very liked solution"
 
   Scenario Outline: User can like/unlike solution's content
-    Given <content type> content:
+    Given the following "<content type>" content:
       | title                        | solution            | state   |
       | Liked <content type> content | Very liked solution | <state> |
 
@@ -109,7 +109,7 @@ Feature: Like/unlike feature.
       | custom_page  | published |
 
   Scenario Outline: Logged-in user can see and hit like button in document, discussion, events and news tiles
-    Given <content type> content:
+    Given the following "<content type>" content:
       | title                   | collection | state     | author    |
       | Likeable <content type> | Bulgaria   | published | lisa Like |
 
@@ -136,13 +136,13 @@ Feature: Like/unlike feature.
       | news         |
 
   Scenario: Logged-in user can see and hit like button in custom page, discussion and solution tiles
-    Given solution content:
+    Given the following "solution" content:
       | title             | state     | collection |
       | Likeable solution | published | Bulgaria   |
-    And "custom_page" content:
+    And the following "custom_page" content:
       | title                | collection | author    | state     |
       | Likeable custom page | Bulgaria   | Lisa Like | published |
-    And "discussion" content:
+    And the following "discussion" content:
       | title               | collection | state     |
       | Likeable discussion | Bulgaria   | published |
 
@@ -196,19 +196,19 @@ Feature: Like/unlike feature.
 
   @terms
   Scenario: Tiles in the carousel should also give possibility to like content.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title                | collection | author    | state     |
       | Likeable custom page | Bulgaria   | Lisa Like | published |
-    And document content:
+    And the following "document" content:
       | title             | collection | state     |
       | Likeable document | Bulgaria   | published |
-    And discussion content:
+    And the following "discussion" content:
       | title               | collection | state     |
       | Likeable discussion | Bulgaria   | published |
-    And news content:
+    And the following "news" content:
       | title         | headline      | collection | state     |
       | Likeable news | Likeable news | Bulgaria   | published |
-    And event content:
+    And the following "event" content:
       | title          | collection | state     |
       | Likeable event | Bulgaria   | published |
     And the following collection user memberships:

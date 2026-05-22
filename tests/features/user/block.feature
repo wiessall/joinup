@@ -4,7 +4,7 @@ Feature: Block users
 
   @javascript
   Scenario: A moderator can block a user.
-    Given users:
+    Given the following users:
       | Username     | Roles     | E-mail                   | First name | Family name |
       | Mod Murielle | Moderator | mod.murielle@example.com |            |             |
       | Liam Lego    |           | liam.lego@example.com    | Liam       | Lego        |
@@ -110,7 +110,7 @@ Feature: Block users
     And I should see "Spam"
 
   Scenario: A non-moderator can not block a user.
-    Given users:
+    Given the following users:
       | Username     | Roles         | E-mail                   | First name | Family name |
       | Mod Murielle | administrator | mod.murielle@example.com |            |             |
       | Liam Lego    |               | liam.lego@example.com    | Liam       | Lego        |

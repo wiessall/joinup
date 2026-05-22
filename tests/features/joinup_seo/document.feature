@@ -5,18 +5,18 @@ Feature: SEO for document content.
   I need proper metatag to be encapsulated in the html code.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                                               |
       | Interoperable Europe Portal SEO document collection |
-    And licence content:
+    And the following "licence" content:
       | uri                          | title        | licence type  |
       | https://example.com/license1 | Some license | Public domain |
-    And users:
+    And the following users:
       | Username                               | E-mail                 | First name | Family name |
       | Interoperable Europe Portal SEO author | portal.seo@example.com | Scrapper   | Jedi        |
 
   Scenario: Basic metatags are attached as JSON schema on the page.
-    Given document content:
+    Given the following "document" content:
       | title        | author                                 | document type | published at              | changed                   | keywords                                          | short title | resources | field_paragraphs_body | licence      | collection                                          | abstract |
       | SEO document | Interoperable Europe Portal SEO author | document      | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | nintendo64 manuals, Alphabet, nintendo64 licences | SEO         | test.zip  | Document test1.zip    | Some license | Interoperable Europe Portal SEO document collection |          |
 
@@ -74,7 +74,7 @@ Feature: SEO for document content.
     And the metatag JSON should not be attached in the page
 
   Scenario: Metatags for remote URL in documents.
-    Given document content:
+    Given the following "document" content:
       | title        | author                                 | published at              | changed                   | resources                                  | abstract                    | field_paragraphs_body   | collection                                          |
       | SEO document | Interoperable Europe Portal SEO author | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | http://example.com/some-file-url.extension | Remote url example abstract | Remote url example body | Interoperable Europe Portal SEO document collection |
 

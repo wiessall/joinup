@@ -5,36 +5,36 @@ Feature: Search inside groups
   I want to be able to launch a search limited to my current collection or solution
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title               | moderation |
       | Chalet construction | no         |
-    And solution content:
+    And the following "solution" content:
       | title                | collection          |
       | Inclined foundations | Chalet construction |
-    And discussion content:
+    And the following "discussion" content:
       | title      | collection          | solution             |
       | Room sizes | Chalet construction |                      |
       | Terrace?   |                     | Inclined foundations |
-    And document content:
+    And the following "document" content:
       | title       | field_paragraphs_body | collection          | solution             |
       | Ground plan | A classic design      | Chalet construction |                      |
       | Rock types  | Ranked by hardness    |                     | Inclined foundations |
-    And event content:
+    And the following "event" content:
       | title                        | field_paragraphs_body             | collection          | solution             |
       | Opening of the winter season | Ski resorts will open in December | Chalet construction |                      |
       | Presenting DrillMaster X88   | Our most finely ground drill bit  |                     | Inclined foundations |
-    And news content:
+    And the following "news" content:
       | title             | headline          | field_paragraphs_body | collection          | solution             |
       | Natural materials | Materials natural | Ground feel           | Chalet construction |                      |
       | Still frozen      | Frozen still      | Maybe next week       |                     | Inclined foundations |
-    And custom_page content:
+    And the following "custom_page" content:
       | title     | body                             | collection          | solution             |
       | Resources | Here are some interesting links. | Chalet construction |                      |
       | Geography | A collection of height maps.     |                     | Inclined foundations |
-    And release content:
+    And the following "release" content:
       | title     | release number | release notes              | is version of        |
       | Pre-alpha | 0.0-alpha0     | Only works on flat ground. | Inclined foundations |
-    And distribution content:
+    And the following "distribution" content:
       | title       | release   | resources  |
       | Zip archive | Pre-alpha | test.zip   |
 

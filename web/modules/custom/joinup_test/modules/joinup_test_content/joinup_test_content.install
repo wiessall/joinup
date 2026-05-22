@@ -10,10 +10,24 @@ declare(strict_types=1);
 use Drupal\joinup_test_content\DefaultContentManager;
 
 /**
+ * Implements hook_install().
+ *
+ * Disables auto-creation of topic meta entities for the duration of this
+ * test module. Default_content imports the dedicated test topic term and
+ * its meta entity.
+ */
+function joinup_test_content_install(): void {
+  /** @var \Drupal\joinup_test_content\DefaultContentManager $service */
+  $service = \Drupal::service(DefaultContentManager::class);
+  $service->setTopicAutoCreate(FALSE);
+}
+
+/**
  * Implements hook_uninstall().
  */
 function joinup_test_content_uninstall(): void {
   /** @var \Drupal\joinup_test_content\DefaultContentManager $service */
   $service = \Drupal::service(DefaultContentManager::class);
+  $service->setTopicAutoCreate(TRUE);
   $service->deleteDefaultContent('joinup_test_content');
 }

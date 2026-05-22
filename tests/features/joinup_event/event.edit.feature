@@ -5,7 +5,7 @@ Feature: "Event page" editing.
   I need to be able to edit it.
 
   Scenario: Add and remove map
-    Given collection content:
+    Given the following "collection" content:
       | title  | logo     |
       | Heroes | logo.png |
     And I am logged in as a facilitator of the "Heroes" collection
@@ -31,16 +31,16 @@ Feature: "Event page" editing.
     And I should not see a map on the page
 
   Scenario Outline: Owners and moderators should be able to view the Edit link.
-    Given users:
+    Given the following users:
       | Username |
       | <user>   |
-    And collection content:
+    And the following "collection" content:
       | title        | description        | moderation |
       | <collection> | Sample description | yes        |
     And the following collection user memberships:
       | collection   | user   | roles  |
       | <collection> | <user> | <role> |
-    And "event" content:
+    And the following "event" content:
       | title   | author | collection   |
       | <event> | <user> | <collection> |
     When I am logged in as "<user>"
@@ -57,16 +57,16 @@ Feature: "Event page" editing.
       | Emilio Garcia  | The Final Bridges | The Dreaming of the Game | facilitator |
 
   Scenario: A solution facilitator can edit his content.
-    Given users:
+    Given the following users:
       | Username       |
       | Krista Garrett |
-    Given solution content:
+    Given the following "solution" content:
       | title                | description        | moderation |
       | Dreamer in the Snake | Sample description | no         |
     And the following solution user memberships:
       | solution             | user           | roles       |
       | Dreamer in the Snake | Krista Garrett | facilitator |
-    And "event" content:
+    And the following "event" content:
       | title       | author         | solution             | state    |
       | Silver Snow | Krista Garrett | Dreamer in the Snake | proposed |
     When I am logged in as "Krista Garrett"

@@ -4,7 +4,7 @@ Feature: Related solution
   solutions and present the related solutions to the users.
 
   Background:
-    Given solution content:
+    Given the following "solution" content:
       | title      | related solutions | abstract                         | description                         | resources | related by type | moderation | logo     | topic      | state     | solution type |
       | C          |                   | Blazing fast segmentation faults | Blazing fast segmentation faults.   | text.pdf  | yes             | no         | logo.png | Demography | published | Business      |
       | Java       | C                 | Because inheritance is cool      | Because inheritance is cool.        | text.pdf  | yes             | no         | logo.png | Demography | published | Citizen       |

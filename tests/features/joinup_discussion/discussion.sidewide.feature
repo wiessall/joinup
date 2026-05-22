@@ -2,7 +2,7 @@
 Feature: Sitewide forum
 
   Background:
-    Given discussion content:
+    Given the following "discussion" content:
       | title                    | state     | created    | changed    | published_at |
       | Blast from the past      | published | 1971-01-01 | 1971-01-01 | 1971-01-01   |
       | Old discussion           | published | 2012-12-12 | 2012-12-12 | 2012-12-12   |
@@ -38,7 +38,7 @@ Feature: Sitewide forum
       | Not that old discussion |
     # A new discussion should push "Not that old discussion" out from the most
     # recent list, but draft discussion shouldn't affect it.
-    Given discussion content:
+    Given the following "discussion" content:
       | title                      | state     |
       | Brand new discussion       | published |
       | Brand new draft discussion | draft     |
@@ -70,7 +70,7 @@ Feature: Sitewide forum
       | Old discussion       |
     # A new discussion getting enough comments is able to land in the most
     # active list.
-    Given discussion content:
+    Given the following "discussion" content:
       | title         | state     |
       | Supa-dupa-new | published |
     Given comments:
@@ -92,7 +92,7 @@ Feature: Sitewide forum
       | Quite new discussion |
       | Old discussion       |
     # We only display four discussions per list.
-    Given discussion content:
+    Given the following "discussion" content:
       | title              | state     |
       | This is the newest | published |
       | Another newest     | published |

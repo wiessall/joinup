@@ -3,10 +3,10 @@ Feature: View discussion API
   As a visitor of the website I can view a discussion content.
 
   Scenario: Programmatically create a discussion
-    And collection content:
+    And the following "collection" content:
       | title                |
       | Parallel programming |
-    Given discussion content:
+    Given the following "discussion" content:
       | title                | content                  | collection           |
       | Fearless concurrency | Let us have a discussion | Parallel programming |
     Then I should have a "Discussion" page titled "Fearless concurrency"

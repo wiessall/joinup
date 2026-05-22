@@ -5,13 +5,13 @@ Feature:
   I need to be able to place paragraphs for content.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                 | state     | topic |
       | Paragraphs collection | published | HR    |
 
   @javascript
   Scenario: Custom page content is trimmed properly.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title          | collection            | state     | abstract            |
       | Popular quotes | Paragraphs collection | published | Tiles page abstract |
     And I append "text" to "field_paragraphs_body" field in "node" entity with following "Popular Quotes" title:
@@ -25,7 +25,7 @@ Feature:
     Then the response should contain "Tiles page abstract"
 
   Scenario: Table is visible.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title              | collection            | state     |
       | Table page example | Paragraphs collection | published |
     And I append "text" to "field_paragraphs_body" field in "node" entity with following "Table page example" title:
@@ -37,7 +37,7 @@ Feature:
 
   @javascript
   Scenario: Editor can add table.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title            | collection            | state     |
       | Table icon check | Paragraphs collection | published |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Table icon check" title:
@@ -54,7 +54,7 @@ Feature:
     And I press "Update"
 
   Scenario: Create a link with id only.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title       | collection            | state     |
       | Anchor link | Paragraphs collection | published |
     And I append "text" to "field_paragraphs_body" field in "node" entity with following "Anchor link" title:

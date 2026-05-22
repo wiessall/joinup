@@ -802,11 +802,11 @@ trait TraversingTrait {
    *   When the region with passed label doesn't exist.
    */
   protected function getRegionSelector(string $label): string {
-    $region_map = $this->getDrupalParameter('region_map');
-    if (!isset($region_map[$label])) {
+    $regions = $this->getParameter('regions');
+    if (!isset($regions[$label])) {
       throw new \Exception("No such region configured: $label");
     }
-    return $region_map[$label];
+    return $regions[$label];
   }
 
   /**

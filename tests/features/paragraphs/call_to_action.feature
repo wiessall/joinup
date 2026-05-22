@@ -4,13 +4,13 @@ Feature:
   I need to be able to use "Call to action(s)" paragraphs for content.
 
   Background:
-    Given collection content:
+    Given the following "collection" content:
       | title                 |
       | Paragraphs collection |
 
   @javascript
   Scenario: Call to action(s) has alignment setting.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title               | collection            | abstract          |
       | Call to action page | Paragraphs collection | CTA page abstract |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Call to action page" title:
@@ -33,7 +33,7 @@ Feature:
 
   @javascript
   Scenario: Call to action(s) has pill setting.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title                 | collection            | state     |
       | Pilled call to action | Paragraphs collection | published |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Pilled call to action" title:

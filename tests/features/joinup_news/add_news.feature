@@ -10,12 +10,12 @@ Feature: Creation of news through the UI.
       | First name  | Milana             |
       | Family name | Laninga            |
       | E-mail      | milana@example.com |
-    And collection content:
+    And the following "collection" content:
       | title            | description                                 | logo     | state     |
       | Metal fans       | "Share the love for nickel, tungsten & co." | logo.png | published |
       | Hardcore diggers | We dig up stuff hidden beneath the earth.   | logo.png | published |
       | Cool blacksmiths | Keeping it cool while working on hot stuff. | logo.png | published |
-    Given solution content:
+    Given the following "solution" content:
       | title                     | description                               | logo     | state     |
       | Density catalogue project | Catalog density on metals with ease.      | logo.png | published |
       | Dig do's and don'ts       | How to dig up stuff with style.           | logo.png | published |
@@ -99,10 +99,10 @@ Feature: Creation of news through the UI.
 
   @javascript @generateMedia @generateMediaTypes:news_logo
   Scenario: Test the image library widget.
-    Given collection content:
+    Given the following "collection" content:
       | title            | state     |
       | Stream of Dreams | published |
-    And news content:
+    And the following "news" content:
       | title             | collection       | headline      | abstract           | field_paragraphs_body | state     |
       | The Great Opening | Stream of Dreams | Here we go... | Image library test | It opens!             | published |
 

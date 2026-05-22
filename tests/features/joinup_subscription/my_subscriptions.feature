@@ -54,7 +54,7 @@ Feature: My subscriptions
 
   @javascript
   Scenario: Manage my subscriptions
-    Given collection content:
+    Given the following "collection" content:
       | title          | state     | abstract                                                       |
       | Alpha Centauri | published | A triple star system at a distance of 4.3 light years.         |
       | Barnard's Star | draft     | A low mass red dwarf at around 6 light years distance.         |
@@ -186,7 +186,7 @@ Feature: My subscriptions
 
   @javascript
   Scenario Outline: Change the notification frequency of my digests
-    Given collection content:
+    Given the following "collection" content:
       | title           |
       | Malicious plans |
     And the following collection user memberships:
@@ -195,7 +195,7 @@ Feature: My subscriptions
     And the following collection content subscriptions:
       | collection      | user             | subscriptions |
       | Malicious plans | Auric Goldfinger | discussion    |
-    And discussion content:
+    And the following "discussion" content:
       | title        | body                   | collection      | state | author           |
       | Water supply | Contaminate it with GB | Malicious plans | draft | Auric Goldfinger |
 
@@ -240,7 +240,7 @@ Feature: My subscriptions
   # checked after save.
   Scenario: Regression test "My subscriptions"
 
-    Given collection content:
+    Given the following "collection" content:
       | title     |
       | Fireblade |
       | Lopitopes |

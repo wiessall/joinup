@@ -3,7 +3,7 @@ Feature: Dark blue background accessibility
 
   @javascript
   Scenario: Test Dark blue.
-    Given custom_page content:
+    Given the following "custom_page" content:
       | title                | abstract | topic             | state     |
       | Dark blue background | N/A      | Supplier exchange | published |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Dark blue background" title:

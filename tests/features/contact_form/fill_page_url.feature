@@ -40,13 +40,13 @@ Feature: Fill Page URL field in Technical problem / Bug report / Inappropriate
   Scenario: Regression test for ISAICP-8398
   See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8398
 
-    Given users:
+    Given the following users:
       | Username      | E-mail                    |
       | Julian Munson | julian.munson@example.com |
-    And collection content:
+    And the following "collection" content:
       | title |
       | Rumba |
-    And news content:
+    And the following "news" content:
       | title         | headline | body | collection | field_state |
       | Tumba spatial | headline | body | Rumba      | published   |
     And the following collection user memberships:

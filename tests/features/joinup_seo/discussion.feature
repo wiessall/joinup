@@ -5,13 +5,13 @@ Feature: SEO for discussion forum posts.
   I need proper metatag to be encapsulated in the html code.
 
   Scenario: Basic metatags are attached as JSON schema on the page.
-    Given collection content:
+    Given the following "collection" content:
       | title                                                 |
       | Interoperable Europe Portal SEO discussion collection |
-    And users:
+    And the following users:
       | Username                               | E-mail                 | First name | Family name |
       | Interoperable Europe Portal SEO author | joinup.seo@example.com | Kindle     | eReader     |
-    And "discussion" content:
+    And the following "discussion" content:
       | title                           | published at              | changed                   | content                                                      | author                                 | attachments         | keywords                                                 | collection                                            |
       | Discussions are now forum posts | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | This discussion is to ensure that SEO tags are set properly. | Interoperable Europe Portal SEO author | test.zip, test1.zip | nintendo64 manuals, Alphabet, nintendo64 licences, games | Interoperable Europe Portal SEO discussion collection |
 
