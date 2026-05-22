@@ -1,6 +1,8 @@
 @import "../partials/core";
 
 .user-badges {
+  position: relative;
+  z-index: 3;
   display: inline-flex;
   .field__items {
     display: inline-flex;
