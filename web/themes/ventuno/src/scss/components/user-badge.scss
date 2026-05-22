@@ -2,11 +2,11 @@
 
 .user-badges {
   display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  .field__items {
+    display: inline-flex;
+    align-items: center;
+    column-gap: $spacer * 0.5;
+  }
 }
 
 .user-badge {
