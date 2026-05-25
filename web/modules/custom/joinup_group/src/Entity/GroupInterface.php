@@ -20,6 +20,7 @@ use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og\OgRoleInterface;
+use Drupal\og_menu\OgMenuInstanceInterface;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
 
 /**
@@ -409,9 +410,12 @@ interface GroupInterface extends
    * @param string $type
    *   A specific bundle to retrieve.
    *
-   * @return \Drupal\og\OgMembershipInterface|null
+   * @return \Drupal\og_menu\OgMenuInstanceInterface
    *   Organic group menu instance or NULL if none exists.
+   *
+   * @thorws \LogicException
+   *   If there are zero or more than one OG menu instances of the given type.
    */
-  public function getGroupOgMenuInstance(string $type): ?OgMembershipInterface;
+  public function getGroupOgMenuInstance(string $type): OgMenuInstanceInterface;
 
 }

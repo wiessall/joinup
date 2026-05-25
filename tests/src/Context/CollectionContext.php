@@ -24,6 +24,8 @@ use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_community_content\CommunityContentHelper;
+use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_group\Plugin\Menu\GroupMenuLink;
 use Drupal\og\OgGroupAudienceHelper;
 use Drupal\og\OgRoleInterface;
 use Drupal\user\Entity\User;
@@ -235,19 +237,19 @@ class CollectionContext extends RawDrupalContext {
   #[Given('(the following )custom page(s) :menu_type menu structure for the :group_label :group_bundle:')]
   public function givenCollectionMenuStructure(TableNode $menu_table, string $menu_type, string $group_label, string $group_bundle): void {
     $group = $this->getEntityByLabel('node', $group_label, $group_bundle);
-    $menu_link_manager = \Drupal::getContainer()->get('plugin.manager.menu.link');
+    assert($group instanceof GroupInterface);
+    $og_menu_instance = $group->getGroupOgMenuInstance($menu_type);
+
     foreach ($menu_table->getColumnsHash() as $values) {
-      if (!empty($values['parent'])) {
-        $parent_link = $this->getMenuLinkByTitle($values['parent'], $group->id(), $menu_type);
-        $values['parent'] = $parent_link->getPluginId();
-      }
-
-      if (!empty($values['enabled'])) {
-        $values['enabled'] = (int) ($values['enabled'] === 'yes');
-      }
-
-      $child_link = $this->getMenuLinkByTitle($values['title'], $group->id(), $menu_type);
-      $menu_link_manager->updateDefinition($child_link->getPluginId(), $values);
+      $page = $this->getEntityByLabel('node', $values['title'], 'custom_page');
+      $menu_settings = $page->get('menu_settings')->value ?? [];
+      $parent = !empty($values['parent']) ? $this->getEntityByLabel('node', $values['parent'], 'custom_page') : NULL;
+      $menu_settings[$og_menu_instance->id()] = [
+        'enabled' => ($values['enabled'] ??= 'yes') === 'yes',
+        'weight' => (int) ($values['weight'] ?? 0),
+        'parent' => $parent ? GroupMenuLink::id("{$og_menu_instance->id()}-{$parent->id()}") : '',
+      ];
+      $page->set('menu_settings', ['value' => $menu_settings])->save();
     }
   }
 

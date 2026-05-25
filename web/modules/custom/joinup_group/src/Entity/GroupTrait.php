@@ -277,9 +277,13 @@ trait GroupTrait {
   /**
    * {@inheritdoc}
    */
-  public function getGroupOgMenuInstance(string $type): ?OgMenuInstanceInterface {
+  public function getGroupOgMenuInstance(string $type): OgMenuInstanceInterface {
     $og_menu_instances = $this->getGroupOgMenuInstances([$type]);
-    return $og_menu_instances ? reset($og_menu_instances) : NULL;
+    $count = count($og_menu_instances);
+    if ($count !== 1) {
+      throw new \LogicException("Expected exactly one ogmenu_instance of type $type, got $count");
+    }
+    return reset($og_menu_instances);
   }
 
   /**
