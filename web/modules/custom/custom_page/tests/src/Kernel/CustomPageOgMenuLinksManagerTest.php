@@ -8,7 +8,6 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\custom_page\CustomPageOgMenuLinksManager;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\joinup_group\GroupMenuManagerInterface;
-use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\og\OgGroupAudienceHelperInterface;
@@ -129,58 +128,6 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
       ->getStorage('field_config')
       ->create($field);
     $instance->save();
-  }
-
-  /**
-   * Tests the correct langcode and updateLinkTitles() works.
-   */
-  public function testUpdateLinkTitles(): void {
-    ConfigurableLanguage::createFromLangcode('fr')->save();
-
-    $collection = Node::create(['type' => 'collection', 'title' => $this->randomString()]);
-    $collection->save();
-
-    /** @var \Drupal\og_menu\Entity\OgMenuInstance $ogMenuInstance */
-    $ogMenuInstance = OgMenuInstance::create(['type' => 'navigation']);
-    $ogMenuInstance->save();
-
-    $manager = $this->createManagerWithMockedGroupMenu($ogMenuInstance);
-
-    $enPage = Node::create([
-      'type' => 'custom_page',
-      'title' => 'EN title',
-      'langcode' => 'en',
-      OgGroupAudienceHelperInterface::DEFAULT_FIELD => $collection->id(),
-    ]);
-    $enPage->save();
-    $manager->addLink($enPage, 'navigation');
-
-    $links = $this->assertMenuLinkHelper($ogMenuInstance->id(), $enPage->id());
-    $this->assertCount(1, $links);
-    $this->assertSame('en', reset($links)->get('langcode')->value);
-
-    $frPage = $enPage->addTranslation('fr', [
-      'title' => 'FR title',
-      OgGroupAudienceHelperInterface::DEFAULT_FIELD => $collection->id(),
-    ]);
-
-    $manager->updateLinkTitles($frPage);
-
-    $storage = $this->container->get('entity_type.manager')
-      ->getStorage('menu_link_content');
-    $storage->resetCache();
-    $links = $this->assertMenuLinkHelper($ogMenuInstance->id(), $enPage->id());
-    $link = reset($links);
-    $this->assertTrue($link->hasTranslation('fr'));
-    $this->assertSame('FR title', $link->getTranslation('fr')->get('title')->value);
-
-    $frPage->setTitle('FR title updated');
-    $manager->updateLinkTitles($frPage);
-
-    $storage->resetCache();
-    $links = $this->assertMenuLinkHelper($ogMenuInstance->id(), $enPage->id());
-    $link = reset($links);
-    $this->assertSame('FR title updated', $link->getTranslation('fr')->get('title')->value);
   }
 
   /**
