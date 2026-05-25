@@ -46,6 +46,7 @@ use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
+use Drupal\joinup_group\Plugin\Menu\GroupMenuLink;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\node\Entity\Node;
@@ -2398,6 +2399,9 @@ class JoinupContext extends RawDrupalContext {
     $this->assertJavaScriptEnabledBrowser();
 
     $group = $this->getEntityByLabel('node', $group_label, $group_bundle);
+    assert($group instanceof GroupInterface);
+    $og_menu_instance = $group->getGroupOgMenuInstance('navigation');
+
     /** @var \Behat\Mink\Element\NodeElement[] $rows */
     $rows = $this->getSession()->getPage()->findAll('css', '#menu-overview tbody tr.draggable');
     $expected = $table->getColumnsHash();
@@ -2407,9 +2411,10 @@ class JoinupContext extends RawDrupalContext {
       $current_row = $rows[$delta];
       $title_element = $current_row->find('css', 'td:first-of-type a:not(.tabledrag-handle)');
       $this->assertSameValues($data['title'], trim($title_element->getText()));
+      $page = $this->getEntityByLabel('node', $data['title'], 'custom_page');
+      $plugin_id = GroupMenuLink::id($og_menu_instance->id() . '-' . $page->id());
 
-      $menu_link = $this->getMenuLinkByTitle($data['title'], $group->id(), 'navigation');
-      $parent_input = $current_row->find('css', 'input[name="links[menu_plugin_id:' . $menu_link->getPluginId() . '][parent]"]');
+      $parent_input = $current_row->find('css', 'input[name="links[menu_plugin_id:' . $plugin_id . '][parent]"]');
 
       // When a parent is available, the line should be indented. Find all
       // indentation elements to assert later on based on the parent value.
@@ -2426,8 +2431,9 @@ class JoinupContext extends RawDrupalContext {
           throw new \Exception('Cannot find parent input field.');
         }
 
-        $parent_link = $this->getMenuLinkByTitle($data['parent'], $group->id(), 'navigation');
-        $this->assertSameValues($parent_link->getPluginId(), $parent_input->getValue());
+        $parent = $this->getEntityByLabel('node', $data['parent'], 'custom_page');
+        $parent_plugin_id = GroupMenuLink::id("{$og_menu_instance->id()}-{$parent->id()}");
+        $this->assertSameValues($parent_plugin_id, $parent_input->getValue());
         $this->assertCondition(count($indentation) !== 0, "The menu link '{$data['title']}' should be indented but it's not.");
       }
     }
