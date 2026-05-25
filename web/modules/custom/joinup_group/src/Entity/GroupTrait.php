@@ -254,6 +254,26 @@ trait GroupTrait {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function getGroupOgMenuInstances(?array $types = NULL): iterable {
+    $storage = \Drupal::entityTypeManager()->getStorage('ogmenu_instance');
+
+    $query = $storage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $this->id());
+    if ($types) {
+      $query->condition('type', $types, 'IN');
+    }
+
+    if ($ids = $query->execute()) {
+      foreach ($storage->loadMultiple($ids) as $id => $ogmenuInstance) {
+        yield $id => $ogmenuInstance;
+      }
+    }
+  }
+
+  /**
    * Processes and returns a list of group content entities.
    *
    * @return array

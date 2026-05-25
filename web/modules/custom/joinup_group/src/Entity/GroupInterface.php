@@ -391,4 +391,16 @@ interface GroupInterface extends
    */
   public function getActiveMemberCount(): int;
 
+  /**
+   * Returns OG menu instance for this group.
+   *
+   * @param string[]|null $types
+   *   (optional) An array of bundles to filter by. If omitted, all bundles will
+   *   be returned.
+   *
+   * @return iterable<int|string, \Drupal\og\OgMembershipInterface>
+   *   Organic group menu instances for this group.
+   */
+  public function getGroupOgMenuInstances(?array $types = NULL): iterable;
+
 }
