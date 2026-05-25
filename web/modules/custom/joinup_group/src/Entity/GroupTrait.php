@@ -17,6 +17,7 @@ use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og\OgRoleInterface;
+use Drupal\og_menu\OgMenuInstanceInterface;
 use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
 
@@ -256,7 +257,7 @@ trait GroupTrait {
   /**
    * {@inheritdoc}
    */
-  public function getGroupOgMenuInstances(?array $types = NULL): iterable {
+  public function getGroupOgMenuInstances(?array $types = NULL): array {
     $storage = \Drupal::entityTypeManager()->getStorage('ogmenu_instance');
 
     $query = $storage->getQuery()
@@ -267,10 +268,18 @@ trait GroupTrait {
     }
 
     if ($ids = $query->execute()) {
-      foreach ($storage->loadMultiple($ids) as $id => $ogmenuInstance) {
-        yield $id => $ogmenuInstance;
-      }
+      return $storage->loadMultiple($ids);
     }
+
+    return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getGroupOgMenuInstance(string $type): ?OgMenuInstanceInterface {
+    $og_menu_instances = $this->getGroupOgMenuInstances([$type]);
+    return $og_menu_instances ? reset($og_menu_instances) : NULL;
   }
 
   /**

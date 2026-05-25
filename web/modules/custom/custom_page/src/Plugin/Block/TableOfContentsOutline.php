@@ -200,8 +200,7 @@ class TableOfContentsOutline extends BlockBase implements ContainerFactoryPlugin
     if (empty($this->ogMenuInstance)) {
       $custom_page = $this->getContext('node')->getContextData()->getValue();
       assert($custom_page instanceof CustomPageInterface);
-      $ogMenuInstances = $custom_page->getGroup()->getGroupOgMenuInstances(['navigation']);
-      $this->ogMenuInstance = reset($ogMenuInstances);
+      $this->ogMenuInstance = $custom_page->getGroup()->getGroupOgMenuInstance('navigation');
     }
     return $this->ogMenuInstance;
   }
