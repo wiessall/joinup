@@ -123,12 +123,6 @@ function custom_page_node_update(NodeInterface $entity): void {
 
   $original = $entity->getOriginal();
 
-  // Update all links that point to this custom page if the title has changed,
-  // or if the entity becomes (un)published.
-  if ($entity->isPublished() !== $original->isPublished() || $entity->getTitle() !== $original->getTitle()) {
-    \Drupal::service('custom_page.og_menu_links_manager')->updateLinkTitles($entity);
-  }
-
   // Update the OG menu link only if the group has changed.
   if ($entity->og_audience->target_id !== $original->og_audience->target_id) {
     \Drupal::service('custom_page.og_menu_links_manager')
