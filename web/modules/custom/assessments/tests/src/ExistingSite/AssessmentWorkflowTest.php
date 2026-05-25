@@ -226,4 +226,51 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
     $this->assertTrue($newParticipation->isPublished(), 'New participation should be published after adding to published report.');
   }
 
+  /**
+   * Tests that child entities follow the report's language.
+   */
+  public function testChildEntitiesFollowParentLanguage(): void {
+    $asset = $this->createSolutionAsset(AssessmentInterface::SOLUTION_COLLECTOR);
+    $bindingRequirement = $this->createParagraphBindingRequirement($asset);
+    $organisation = $this->createAssessmentOrganisation();
+
+    /** @var \Drupal\assessments\Entity\AssessmentReport $report */
+    $report = Assessment::create([
+      'type' => 'report',
+      'name' => 'Assessment Workflow Test Report',
+      'state' => 'review',
+      'binding_requirement' => ['entity' => $bindingRequirement],
+      'provider' => ['entity' => $organisation],
+      'status' => TRUE,
+      'langcode' => 'fr',
+    ]);
+    $this->markEntityForCleanup($report);
+    $report->save();
+
+    $expression = $bindingRequirement->get('expression')->entity;
+    $publicService = $bindingRequirement->get('affects')->entity;
+    $participation = $bindingRequirement->get('has_participation')->entity;
+    $organisation = $report->get('provider')->entity;
+    $asset = $bindingRequirement->get('asset')->entity;
+
+    $this->assertEquals('fr', $report->language()->getId());
+    $this->assertEquals('fr', $expression->language()->getId());
+    $this->assertEquals('fr', $publicService->language()->getId());
+    $this->assertEquals('fr', $participation->language()->getId());
+    $this->assertEquals('fr', $asset->language()->getId());
+    // Organisation is independent of this pov.
+    $this->assertEquals('en', $organisation->language()->getId());
+
+    // Now change the language.
+    $report->set('langcode', 'de');
+    $report->save();
+
+    $this->assertEquals('de', $report->language()->getId());
+    $this->assertEquals('de', $expression->language()->getId());
+    $this->assertEquals('de', $publicService->language()->getId());
+    $this->assertEquals('de', $participation->language()->getId());
+    $this->assertEquals('de', $asset->language()->getId());
+    $this->assertEquals('en', $organisation->language()->getId());
+  }
+
 }
