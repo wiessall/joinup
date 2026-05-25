@@ -11,8 +11,6 @@ use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_group\GroupMenuManagerInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
-use Drupal\og\OgGroupAudienceHelperInterface;
-use Drupal\og_menu\OgMenuInstanceInterface;
 use Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
@@ -38,7 +36,8 @@ readonly class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksMana
 
     $this->verifyCustomPage($customPage);
     $children = [];
-    if ($ogMenuInstance = $this->getOgMenuInstanceByCustomPage($customPage, $menuType)) {
+    $ogMenuInstances = $customPage->getGroup()->getGroupOgMenuInstances([$menuType]);
+    if ($ogMenuInstance = reset($ogMenuInstances)) {
       $menuName = "ogmenu-{$ogMenuInstance->id()}";
       // Collect the IDs of links to the custom page.
       $mids = $menuLinkContentStorage->getQuery()->accessCheck(FALSE)
@@ -87,23 +86,22 @@ readonly class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksMana
   public function moveLinks(NodeInterface $customPage, $groupId): CustomPageOgMenuLinksManagerInterface {
     $menuLinkContentStorage = $this->entityTypeManager->getStorage('menu_link_content');
     $this->verifyCustomPage($customPage);
-    foreach (['navigation', 'quick_links'] as $ogMenuInstanceId) {
-      if ($sourceOgMenuInstance = $this->getOgMenuInstanceByCustomPage($customPage, $ogMenuInstanceId)) {
-        if ($targetOgMenuInstance = $this->groupMenuManager->getMenuByGroupId($groupId, $ogMenuInstanceId)) {
-          $sourceMenuName = "ogmenu-{$sourceOgMenuInstance->id()}";
-          // Collect the IDs of links to the custom page.
-          $mids = $menuLinkContentStorage->getQuery()->accessCheck(FALSE)
-            ->condition('bundle', 'menu_link_content')
-            ->condition('menu_name', $sourceMenuName)
-            ->condition('link.uri', "entity:node/{$customPage->id()}")
-            ->execute();
-          if ($mids) {
-            $targetMenuName = "ogmenu-{$targetOgMenuInstance->id()}";
-            /** @var \Drupal\menu_link_content\MenuLinkContentInterface $menuLink */
-            foreach ($menuLinkContentStorage->loadMultiple($mids) as $menuLink) {
-              // Change the OG menu instance of each link.
-              $menuLink->set('menu_name', $targetMenuName)->save();
-            }
+    assert($customPage instanceof CustomPageInterface);
+    foreach ($customPage->getGroup()->getGroupOgMenuInstances() as $sourceOgMenuInstance) {
+      if ($targetOgMenuInstance = $this->groupMenuManager->getMenuByGroupId($groupId, $sourceOgMenuInstance->bundle())) {
+        $sourceMenuName = "ogmenu-{$sourceOgMenuInstance->id()}";
+        // Collect the IDs of links to the custom page.
+        $mids = $menuLinkContentStorage->getQuery()->accessCheck(FALSE)
+          ->condition('bundle', 'menu_link_content')
+          ->condition('menu_name', $sourceMenuName)
+          ->condition('link.uri', "entity:node/{$customPage->id()}")
+          ->execute();
+        if ($mids) {
+          $targetMenuName = "ogmenu-{$targetOgMenuInstance->id()}";
+          /** @var \Drupal\menu_link_content\MenuLinkContentInterface $menuLink */
+          foreach ($menuLinkContentStorage->loadMultiple($mids) as $menuLink) {
+            // Change the OG menu instance of each link.
+            $menuLink->set('menu_name', $targetMenuName)->save();
           }
         }
       }
@@ -137,17 +135,6 @@ readonly class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksMana
         }
       }
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getOgMenuInstanceByCustomPage(NodeInterface $customPage, string $menuType): ?OgMenuInstanceInterface {
-    $this->verifyCustomPage($customPage);
-    if ($groupId = $customPage->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->target_id) {
-      return $this->groupMenuManager->getMenuByGroupId($groupId, $menuType);
-    }
-    return NULL;
   }
 
   /**

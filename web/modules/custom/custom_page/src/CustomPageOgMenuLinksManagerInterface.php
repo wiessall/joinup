@@ -6,7 +6,6 @@ namespace Drupal\custom_page;
 
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
-use Drupal\og_menu\OgMenuInstanceInterface;
 
 /**
  * Provides an interface for the custom page OG menu links manager.
@@ -50,18 +49,5 @@ interface CustomPageOgMenuLinksManagerInterface {
    *   The menu link content.
    */
   public function updateLink(MenuLinkContentInterface $menuLink): void;
-
-  /**
-   * Gets the OG menu instance, given a custom page.
-   *
-   * @param \Drupal\node\NodeInterface $customPage
-   *   The custom page entity.
-   * @param string $menuType
-   *   The type of the OG menu instance. Whether 'navigation' or 'quick_links'.
-   *
-   * @return \Drupal\og_menu\OgMenuInstanceInterface|null
-   *   The OG menu instance or NULL if none can be determined.
-   */
-  public function getOgMenuInstanceByCustomPage(NodeInterface $customPage, string $menuType): ?OgMenuInstanceInterface;
 
 }

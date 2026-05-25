@@ -17,6 +17,7 @@ use Drupal\Core\Plugin\Context\ContextDefinition;
 use Drupal\Core\Plugin\Context\EntityContextDefinition;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\custom_page\CustomPageOgMenuLinksManagerInterface;
+use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\og_menu\OgMenuInstanceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -197,9 +198,10 @@ class TableOfContentsOutline extends BlockBase implements ContainerFactoryPlugin
    */
   protected function getOgMenuInstance(): ?OgMenuInstanceInterface {
     if (empty($this->ogMenuInstance)) {
-      /** @var \Drupal\node\NodeInterface $custom_page */
       $custom_page = $this->getContext('node')->getContextData()->getValue();
-      $this->ogMenuInstance = $this->ogMenuManager->getOgMenuInstanceByCustomPage($custom_page, 'navigation');
+      assert($custom_page instanceof CustomPageInterface);
+      $ogMenuInstances = $custom_page->getGroup()->getGroupOgMenuInstances(['navigation']);
+      $this->ogMenuInstance = reset($ogMenuInstances);
     }
     return $this->ogMenuInstance;
   }
