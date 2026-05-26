@@ -1,10 +1,12 @@
-uuid: 7fe6fdcd-5b21-402d-b549-282624872567
+uuid: d054f60f-30e2-446c-8129-260d02540265
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.field_dah_id
     - node.type.dah_annotation
+_core:
+  default_config_hash: 4-Prm4-DY2mZE2GPx19WI_udfzQGQ_ez0_GzKO8flFI
 id: node.dah_annotation.field_dah_id
 field_name: field_dah_id
 entity_type: node

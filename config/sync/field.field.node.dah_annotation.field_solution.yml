@@ -1,12 +1,13 @@
-uuid: b41ea600-6ef8-472d-b7c3-7c52bda31b56
+uuid: 4f161016-0240-49db-ac9b-f50e1bb921ff
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.field_solution
     - node.type.dah_annotation
-  module:
-    - node
+    - node.type.solution
+_core:
+  default_config_hash: t6Xz3Jikkm_KUjl9AWlWqUxhx0nweQb6bB9rLieV9p0
 id: node.dah_annotation.field_solution
 field_name: field_solution
 entity_type: node

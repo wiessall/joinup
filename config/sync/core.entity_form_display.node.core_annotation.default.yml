@@ -1,0 +1,140 @@
+uuid: 2d8c23f2-0b04-4cb5-b022-5aa06f33131f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.core_annotation.annotated_innovation
+    - field.field.node.core_annotation.field_core_adoption_level
+    - field.field.node.core_annotation.field_core_ai_automator_status
+    - field.field.node.core_annotation.field_core_body
+    - field.field.node.core_annotation.field_core_extracted_original_in
+    - field.field.node.core_annotation.field_core_impact_sdgs
+    - field.field.node.core_annotation.field_core_innovation_identified
+    - field.field.node.core_annotation.field_core_intro
+    - field.field.node.core_annotation.field_core_intro_related_origina
+    - field.field.node.core_annotation.field_core_last_ingestion_dateti
+    - field.field.node.core_annotation.field_core_publication_identifie
+    - field.field.node.core_annotation.field_core_readiness_level
+    - field.field.node.core_annotation.field_core_shorter_description
+    - field.field.node.core_annotation.field_core_stop_generating_innov
+    - field.field.node.core_annotation.field_core_type_of_information_m
+    - field.field.node.core_annotation.field_innovation
+    - field.field.node.core_annotation.og_audience
+    - field.field.node.core_annotation.quality_assessment
+    - node.type.core_annotation
+  module:
+    - joinup_group
+    - path
+    - publication_date
+id: node.core_annotation.default
+targetEntityType: node
+bundle: core_annotation
+mode: default
+content:
+  annotated_innovation:
+    type: joinup_group_reference_with_timestamp
+    weight: 1
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  created:
+    type: datetime_timestamp
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  og_audience:
+    type: options_select
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 7
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  published_at:
+    type: publication_date_timestamp
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  quality_assessment:
+    type: entity_reference_autocomplete
+    weight: 11
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  simple_sitemap:
+    weight: 6
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 9
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  uid:
+    type: entity_reference_autocomplete
+    weight: 3
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  url_redirects:
+    weight: 8
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  current_workflow_state: true
+  field_core_adoption_level: true
+  field_core_ai_automator_status: true
+  field_core_body: true
+  field_core_extracted_original_in: true
+  field_core_impact_sdgs: true
+  field_core_innovation_identified: true
+  field_core_intro: true
+  field_core_intro_related_origina: true
+  field_core_last_ingestion_dateti: true
+  field_core_publication_identifie: true
+  field_core_readiness_level: true
+  field_core_shorter_description: true
+  field_core_stop_generating_innov: true
+  field_core_type_of_information_m: true
+  field_innovation: true
+  promote: true
+  sticky: true
+  uri: true
+  uuid: true

@@ -1,0 +1,19 @@
+uuid: 46ac3883-d0ce-4a50-8d4a-aba0f515bcc7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_digital_green_type_of_info
+    - node.type.digital_green_annotation
+id: node.digital_green_annotation.field_digital_green_type_of_info
+field_name: field_digital_green_type_of_info
+entity_type: node
+bundle: digital_green_annotation
+label: field_type_of_information_manage
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

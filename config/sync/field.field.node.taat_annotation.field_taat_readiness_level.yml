@@ -1,0 +1,19 @@
+uuid: 8e543f3b-ff96-41f1-bb98-aa784169d543
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_taat_readiness_level
+    - node.type.taat_annotation
+id: node.taat_annotation.field_taat_readiness_level
+field_name: field_taat_readiness_level
+entity_type: node
+bundle: taat_annotation
+label: field_readiness_level
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

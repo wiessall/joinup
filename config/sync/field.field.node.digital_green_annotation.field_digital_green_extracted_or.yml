@@ -1,0 +1,19 @@
+uuid: e24a9008-0127-40e4-be77-05308a618616
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_digital_green_extracted_or
+    - node.type.digital_green_annotation
+id: node.digital_green_annotation.field_digital_green_extracted_or
+field_name: field_digital_green_extracted_or
+entity_type: node
+bundle: digital_green_annotation
+label: field_extracted_original_innovat
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

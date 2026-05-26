@@ -1,0 +1,63 @@
+uuid: 928aa70b-83bb-4c26-9d14-b5681eae0838
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.quality_assessment.field_qa_value
+    - field.field.taxonomy_term.quality_assessment.field_tax_hierarchical_depth
+    - field.field.taxonomy_term.quality_assessment.field_tax_hierarchical_weight
+    - taxonomy.vocabulary.quality_assessment
+  module:
+    - path
+    - text
+id: taxonomy_term.quality_assessment.default
+targetEntityType: taxonomy_term
+bundle: quality_assessment
+mode: default
+content:
+  description:
+    type: text_textarea
+    weight: 1
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_qa_value:
+    type: options_select
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 3
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 5
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+hidden:
+  field_tax_hierarchical_depth: true
+  field_tax_hierarchical_weight: true
+  uuid: true

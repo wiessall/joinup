@@ -1,0 +1,10 @@
+uuid: d03f8c76-bc91-47bb-902c-b5d590ae8297
+langcode: en
+status: true
+dependencies: {  }
+id: quality_check
+label: 'Quality check'
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

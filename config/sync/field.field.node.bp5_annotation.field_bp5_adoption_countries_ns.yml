@@ -1,0 +1,19 @@
+uuid: 2ec615d7-38ae-4310-a1d2-cab76844fffd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_bp5_adoption_countries_ns
+    - node.type.bp5_annotation
+id: node.bp5_annotation.field_bp5_adoption_countries_ns
+field_name: field_bp5_adoption_countries_ns
+entity_type: node
+bundle: bp5_annotation
+label: field_adoption_countries_ns
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

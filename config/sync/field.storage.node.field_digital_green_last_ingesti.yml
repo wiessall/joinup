@@ -1,0 +1,19 @@
+uuid: 1759db1c-537d-456a-a26b-2a83a2a63d43
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_digital_green_last_ingesti
+field_name: field_digital_green_last_ingesti
+entity_type: node
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

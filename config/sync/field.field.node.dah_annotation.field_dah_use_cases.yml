@@ -1,4 +1,4 @@
-uuid: 505707b3-90bf-4a72-9aa0-589b50d49d5d
+uuid: 23194949-c582-4e11-88f7-fee7a1c6043a
 langcode: en
 status: true
 dependencies:
@@ -8,12 +8,13 @@ dependencies:
     - taxonomy.vocabulary.dah_use_case
   module:
     - rdf_sync
-    - taxonomy
 third_party_settings:
   rdf_sync:
     target_id:
       predicate: 'http://purl.org/dc/terms/subject'
       type: resource
+_core:
+  default_config_hash: MZZGUPNCRUAwcDgH6w6pWciKyShemDKiz-C_7mYrB_s
 id: node.dah_annotation.field_dah_use_cases
 field_name: field_dah_use_cases
 entity_type: node

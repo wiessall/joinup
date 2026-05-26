@@ -1,0 +1,19 @@
+uuid: a8d0e8be-8b01-4687-934f-faa4028aa263
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_taat_stop_generating_innov
+    - node.type.taat_annotation
+id: node.taat_annotation.field_taat_stop_generating_innov
+field_name: field_taat_stop_generating_innov
+entity_type: node
+bundle: taat_annotation
+label: field_stop_generating_innovation
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

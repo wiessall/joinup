@@ -1,0 +1,19 @@
+uuid: 6b2d98b9-c47c-45a9-8a23-6ef38ed9502a
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_agritech_observatory_busin
+field_name: field_agritech_observatory_busin
+entity_type: node
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

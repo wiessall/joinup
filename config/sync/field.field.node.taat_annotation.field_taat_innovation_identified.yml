@@ -1,0 +1,19 @@
+uuid: 8e9ca02c-f0e5-491f-aeaf-043f8fb2e180
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_taat_innovation_identified
+    - node.type.taat_annotation
+id: node.taat_annotation.field_taat_innovation_identified
+field_name: field_taat_innovation_identified
+entity_type: node
+bundle: taat_annotation
+label: field_innovation_identified
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

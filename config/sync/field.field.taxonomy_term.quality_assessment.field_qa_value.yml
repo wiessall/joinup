@@ -1,0 +1,21 @@
+uuid: 56809528-0461-4cf5-bc96-376c0bb19b22
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_qa_value
+    - taxonomy.vocabulary.quality_assessment
+  module:
+    - options
+id: taxonomy_term.quality_assessment.field_qa_value
+field_name: field_qa_value
+entity_type: taxonomy_term
+bundle: quality_assessment
+label: 'QA Value'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_integer

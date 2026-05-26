@@ -1,0 +1,22 @@
+uuid: dba6d512-4a4c-4067-b3f1-a225815ab2ef
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.quality_check
+id: paragraph.quality_check.status
+field_name: status
+entity_type: paragraph
+bundle: quality_check
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

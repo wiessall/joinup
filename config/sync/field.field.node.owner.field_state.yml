@@ -1,4 +1,4 @@
-uuid: 4e60738a-c903-49aa-8b0c-f8af3946439d
+uuid: afd6f9ad-76b0-468d-aafe-8939d43935ee
 langcode: en
 status: true
 dependencies:
@@ -7,6 +7,10 @@ dependencies:
     - node.type.owner
   module:
     - state_machine
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
 id: node.owner.field_state
 field_name: field_state
 entity_type: node
@@ -15,9 +19,7 @@ label: State
 description: ''
 required: true
 translatable: false
-default_value:
-  -
-    value: published
+default_value: {  }
 default_value_callback: ''
 settings:
   workflow: owner_workflow

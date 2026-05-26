@@ -1,0 +1,19 @@
+uuid: 74fbda60-4917-4fcc-9a67-a3a3fe1c95f0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_digital_green_intro_relate
+    - node.type.digital_green_annotation
+id: node.digital_green_annotation.field_digital_green_intro_relate
+field_name: field_digital_green_intro_relate
+entity_type: node
+bundle: digital_green_annotation
+label: field_intro_related_original_rec
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

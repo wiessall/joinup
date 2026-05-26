@@ -1,0 +1,19 @@
+uuid: 2b20e56d-6cc4-44ff-ac81-10dad0046c0f
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_digital_green_type_of_info
+field_name: field_digital_green_type_of_info
+entity_type: node
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,19 @@
+uuid: 21459823-6e66-4b87-83ce-4210841d2171
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_agritech_observatory_matur
+    - node.type.agritech_observatory_annotation
+id: node.agritech_observatory_annotation.field_agritech_observatory_matur
+field_name: field_agritech_observatory_matur
+entity_type: node
+bundle: agritech_observatory_annotation
+label: Maturity
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

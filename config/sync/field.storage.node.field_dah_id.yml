@@ -1,9 +1,11 @@
-uuid: 3ab5e50a-ddcb-4be7-893d-21291c5ef9c9
+uuid: ee7bac6b-60f2-4937-b8e1-06902e6166ea
 langcode: en
 status: true
 dependencies:
   module:
     - node
+_core:
+  default_config_hash: YoOTclS-Pjpe4i33BWjBzgZ74Kac7dDkvOvvg3Y7MpA
 id: node.field_dah_id
 field_name: field_dah_id
 entity_type: node

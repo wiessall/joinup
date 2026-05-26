@@ -1,0 +1,14 @@
+forbidden_pattern_map:
+  ai:
+    - 'AI:'
+    - 'AI -'
+  pronouns:
+    - I
+    - my
+    - me
+  appears:
+    - 'appears to be'
+  no_response:
+    - 'No response'
+url_check_timeout: 30
+url_check_method: HEAD

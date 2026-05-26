@@ -1,0 +1,19 @@
+uuid: 0b1f2ad9-a229-47ca-8881-054c40cd6753
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_agritech_observatory_websi
+    - node.type.agritech_observatory_annotation
+id: node.agritech_observatory_annotation.field_agritech_observatory_websi
+field_name: field_agritech_observatory_websi
+entity_type: node
+bundle: agritech_observatory_annotation
+label: Website
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

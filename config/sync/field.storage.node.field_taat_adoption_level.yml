@@ -1,0 +1,19 @@
+uuid: cee10a8c-e05b-447a-b084-43e25f33262c
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_taat_adoption_level
+field_name: field_taat_adoption_level
+entity_type: node
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

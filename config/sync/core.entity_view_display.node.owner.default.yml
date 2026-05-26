@@ -3,21 +3,30 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.owner.acronym
     - field.field.node.owner.country
     - field.field.node.owner.field_state
+    - field.field.node.owner.link
     - field.field.node.owner.owner_type
+    - field.field.node.owner.related_content
     - node.type.owner
   module:
-    - field_delimiter
-    - field_formatter_range
-    - joinup_slick
-    - template_suggestion
+    - link
+    - options
     - user
 id: node.owner.default
 targetEntityType: node
 bundle: owner
 mode: default
 content:
+  acronym:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 5
+    region: content
   country:
     type: entity_reference_label
     label: above
@@ -25,6 +34,25 @@ content:
       link: true
     third_party_settings: {  }
     weight: 3
+    region: content
+  field_state:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  link:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 4
     region: content
   owner_type:
     type: entity_reference_label
@@ -45,8 +73,15 @@ content:
         template_suggestion: ''
     weight: 1
     region: content
+  related_content:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 6
+    region: content
 hidden:
-  field_state: true
   langcode: true
   links: true
   private_message_link: true

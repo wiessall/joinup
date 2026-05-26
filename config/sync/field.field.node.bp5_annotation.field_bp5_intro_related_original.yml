@@ -1,0 +1,19 @@
+uuid: bf1d3b81-f3a5-4df9-a8be-3d28d7bc922f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_bp5_intro_related_original
+    - node.type.bp5_annotation
+id: node.bp5_annotation.field_bp5_intro_related_original
+field_name: field_bp5_intro_related_original
+entity_type: node
+bundle: bp5_annotation
+label: field_intro_related_original_rec
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

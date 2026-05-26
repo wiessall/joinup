@@ -1,0 +1,19 @@
+uuid: 7fadfe13-7a00-4460-9638-a0d1ed1c47ae
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_taat_last_ingestion_dateti
+    - node.type.taat_annotation
+id: node.taat_annotation.field_taat_last_ingestion_dateti
+field_name: field_taat_last_ingestion_dateti
+entity_type: node
+bundle: taat_annotation
+label: field_last_ingestion_datetime
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

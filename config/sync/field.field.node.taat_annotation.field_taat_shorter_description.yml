@@ -1,0 +1,19 @@
+uuid: e23dd9cf-4f91-463d-8657-8b7d033e5c3a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_taat_shorter_description
+    - node.type.taat_annotation
+id: node.taat_annotation.field_taat_shorter_description
+field_name: field_taat_shorter_description
+entity_type: node
+bundle: taat_annotation
+label: field_shorter_description
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

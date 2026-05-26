@@ -1,9 +1,11 @@
-uuid: a6906a57-776e-4ca2-983f-0a049a6e484c
+uuid: a86257d7-4dde-4cf6-ab4f-461bf9e1bfb2
 langcode: en
 status: true
 dependencies:
   module:
     - taxonomy
+_core:
+  default_config_hash: XNQGWaqIVLN9nCsyggscPZu-zT61It6FTqUtSrpWm5I
 id: taxonomy_term.field_dah_id
 field_name: field_dah_id
 entity_type: taxonomy_term

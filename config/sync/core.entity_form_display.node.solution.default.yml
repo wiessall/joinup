@@ -9,6 +9,8 @@ dependencies:
     - field.field.node.solution.contact
     - field.field.node.solution.description
     - field.field.node.solution.domain
+    - field.field.node.solution.field_machine_record
+    - field.field.node.solution.field_original_internal_id
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
     - field.field.node.solution.keywords
@@ -65,7 +67,6 @@ third_party_settings:
         - title
         - abstract
         - description
-        - classification
         - domain
         - field_topic
         - language
@@ -189,20 +190,6 @@ content:
     settings:
       size: 60
       placeholder: ''
-    third_party_settings: {  }
-  classification:
-    type: tagify_entity_reference_autocomplete_widget
-    weight: 4
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      placeholder: 'Select or start typing...'
-      suggestions_dropdown: 0
-      show_entity_id: 0
-      show_info_label: 0
-      info_label: ''
-      parent_selection: 1
     third_party_settings: {  }
   contact:
     type: inline_entity_form_complex
@@ -432,7 +419,10 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
+  classification: true
   created: true
+  field_machine_record: true
+  field_original_internal_id: true
   field_shared_in: true
   langcode: true
   metrics_page: true

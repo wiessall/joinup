@@ -1,0 +1,19 @@
+uuid: edb48cba-8aa6-450d-880c-ce951e60c579
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_taat_innovation_identified
+field_name: field_taat_innovation_identified
+entity_type: node
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

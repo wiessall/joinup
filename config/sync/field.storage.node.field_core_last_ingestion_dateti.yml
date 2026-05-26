@@ -1,0 +1,19 @@
+uuid: 0056e3b9-2afc-4521-a51e-0d0fe57d4e54
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_core_last_ingestion_dateti
+field_name: field_core_last_ingestion_dateti
+entity_type: node
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
