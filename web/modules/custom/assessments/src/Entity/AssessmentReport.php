@@ -144,6 +144,7 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
    */
   protected function onSaveReflectLanguageToReferencedEntities(): void {
     $entities = [];
+    $targetLangcode = $this->language()->getId();
 
     foreach ($this->get('binding_requirement')->referencedEntities() as $bindingRequirement) {
       $entities += $this->collectEntities($bindingRequirement->get('expression')->referencedEntities());
@@ -156,8 +157,6 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
       $entities += $this->collectEntities($this->get($assessmentReportField)->referencedEntities());
     }
 
-    $targetLangcode = $this->language()->getId();
-
     foreach ($entities as $entity) {
       // If the original language is the same or the translation exists do
       // nothing.
@@ -168,7 +167,7 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
         continue;
       }
 
-      $entity->set('langcode', $this->language()->getId());
+      $entity->set('langcode', $targetLangcode);
       $entity->skip_notification = TRUE;
       $entity->save();
     }
