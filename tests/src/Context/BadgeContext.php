@@ -10,7 +10,7 @@ use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
-use Drupal\joinup_badge\PortalContributorBadgeEvaluator;
+use Drupal\joinup_badge\Hook\BadgeHooks;
 
 /**
  * Behat step definitions for the Joinup badges feature.
@@ -53,16 +53,16 @@ class BadgeContext extends RawDrupalContext {
   }
 
   /**
-   * Forces the asynchronous pipeline of a given badge to run synchronously.
+   * Runs pending badge evaluations that fire on kernel.terminate.
    *
    * @throws \InvalidArgumentException
-   *   When the given badge has no eligibility pipeline registered.
+   *   When the given badge has no evaluator registered.
    */
-  #[Given('the eligibility queue of :badge badge is processed')]
-  public function processBadgeEligibilityQueue(string $badge): void {
+  #[Given('pending :badge badge evaluations are run')]
+  public function runPendingBadgeEvaluations(string $badge): void {
     match ($badge) {
-      PortalContributorBadgeEvaluator::FLAG_ID => $this->processPortalContributorWork(),
-      default => throw new \InvalidArgumentException(sprintf('No eligibility pipeline is registered for the "%s" badge.', $badge)),
+      'portal_contributor' => \Drupal::service(BadgeHooks::class)->destruct(),
+      default => throw new \InvalidArgumentException(sprintf('Unknown badge "%s"; add a match arm to %s::runPendingBadgeEvaluations() to teach Behat how to evaluate it.', $badge, self::class)),
     };
   }
 
@@ -78,24 +78,6 @@ class BadgeContext extends RawDrupalContext {
       throw new \InvalidArgumentException(sprintf('The "%s" badge flag does not exist.', $badge));
     }
     return $flag->isFlagged($user);
-  }
-
-  /**
-   * Per-badge handler for the 'portal_contributor' badge.
-   */
-  private function processPortalContributorWork(): void {
-    // Pass 0 to scan all content regardless of age, so test fixtures
-    // created with arbitrary `created` timestamps are picked up.
-    \Drupal::service(PortalContributorBadgeEvaluator::class)->enqueueRecentAuthors(0);
-
-    $queueId = PortalContributorBadgeEvaluator::QUEUE_ID;
-    $queue = \Drupal::queue($queueId);
-    /** @var \Drupal\Core\Queue\QueueWorkerInterface $worker */
-    $worker = \Drupal::service('plugin.manager.queue_worker')->createInstance($queueId);
-    while ($item = $queue->claimItem()) {
-      $worker->processItem($item->data);
-      $queue->deleteItem($item);
-    }
   }
 
   /**

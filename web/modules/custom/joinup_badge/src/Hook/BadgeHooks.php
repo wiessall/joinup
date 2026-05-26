@@ -5,21 +5,25 @@ declare(strict_types=1);
 namespace Drupal\joinup_badge\Hook;
 
 use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\DestructableInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Hook\Attribute\Hook;
-use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\assessments\AssessmentInterface;
+use Drupal\comment\CommentInterface;
 use Drupal\joinup_badge\BadgeService;
 use Drupal\joinup_badge\Entity\BadgeAwarding;
 use Drupal\joinup_badge\Plugin\Field\FieldType\BadgeFieldItemList;
-use Drupal\joinup_badge\PortalContributorBadgeEvaluator;
+use Drupal\node\NodeInterface;
 use Drupal\og\OgMembershipInterface;
+use Drupal\user\UserInterface;
 
 /**
  * Hooks for the joinup_badge module.
  */
-readonly class BadgeHooks {
+class BadgeHooks implements DestructableInterface {
 
   /**
    * The UUID of the Interoperable Europe Community group.
@@ -27,20 +31,42 @@ readonly class BadgeHooks {
   protected const string IEC_UUID = 'ba527094-00bc-45de-98fb-c732c6c66fec';
 
   /**
-   * State key tracking the last 'portal_contributor' scan timestamp.
+   * Machine name of the Portal contributor badge flag.
    */
-  protected const string PORTAL_CONTRIBUTOR_LAST_SCAN_KEY = 'joinup_badge.portal_contributor.last_scan';
+  protected const string PORTAL_CONTRIBUTOR_FLAG_ID = 'portal_contributor';
 
   /**
-   * Minimum interval between two 'portal_contributor' scans, in seconds.
+   * Minimum number of eligible contributions to qualify.
    */
-  protected const int PORTAL_CONTRIBUTOR_SCAN_INTERVAL = 86400;
+  protected const int PORTAL_CONTRIBUTOR_THRESHOLD = 5;
+
+  /**
+   * Trailing window over which contributions are counted.
+   */
+  protected const string PORTAL_CONTRIBUTOR_PERIOD = '-2 months';
+
+  /**
+   * Entity types and bundles that count toward the badge.
+   */
+  protected const array PORTAL_CONTRIBUTOR_TARGETS = [
+    'assessment' => ['report'],
+    'comment' => ['comment', 'reply'],
+    'node' => ['collection', 'solution', 'event', 'news', 'discussion', 'document'],
+  ];
+
+  /**
+   * UIDs whose Portal contributor eligibility should be re-evaluated.
+   *
+   * Populated by presave hooks during the request, drained by destruct().
+   *
+   * @var array<int, int>
+   */
+  protected array $portalContributorAuthors = [];
 
   public function __construct(
-    protected BadgeService $badgeService,
-    protected PortalContributorBadgeEvaluator $portalContributorEvaluator,
-    protected StateInterface $state,
-    protected TimeInterface $time,
+    protected readonly BadgeService $badgeService,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly TimeInterface $time,
   ) {}
 
   /**
@@ -135,22 +161,81 @@ readonly class BadgeHooks {
   }
 
   /**
-   * Implements hook_cron().
-   *
-   * Once per day, finds the authors of any content (eligible nodes or
-   * comments) published since the previous scan and queues each of them for
-   * 'portal_contributor' badge evaluation.
+   * Implements hook_ENTITY_TYPE_presave().
    */
-  #[Hook('cron')]
-  public function scanRecentPortalContributors(): void {
-    $now = $this->time->getCurrentTime();
-    $lastScan = (int) $this->state->get(static::PORTAL_CONTRIBUTOR_LAST_SCAN_KEY, 0);
-    if ($now - $lastScan < static::PORTAL_CONTRIBUTOR_SCAN_INTERVAL) {
+  #[Hook('node_presave')]
+  #[Hook('comment_presave')]
+  #[Hook('assessment_presave')]
+  public function trackPortalContributor(NodeInterface|CommentInterface|AssessmentInterface $entity): void {
+    $entityTypeId = $entity->getEntityTypeId();
+    $bundles = static::PORTAL_CONTRIBUTOR_TARGETS[$entityTypeId] ?? [];
+    if (!in_array($entity->bundle(), $bundles, TRUE)) {
       return;
     }
-    $since = $lastScan > 0 ? $lastScan : $now - static::PORTAL_CONTRIBUTOR_SCAN_INTERVAL;
-    $this->portalContributorEvaluator->enqueueRecentAuthors($since);
-    $this->state->set(static::PORTAL_CONTRIBUTOR_LAST_SCAN_KEY, $now);
+
+    // Comments have no publication date — first appearance equals publication.
+    $field = $entity instanceof CommentInterface ? 'created' : 'published_at';
+    if ($entity->get($field)->value !== $entity->getOriginal()?->get($field)->value) {
+      $uid = (int) $entity->getOwnerId();
+      $this->portalContributorAuthors[$uid] = $uid;
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   *
+   * Drains the set of authors marked during the request and awards the
+   * Portal contributor badge to any that now meet the threshold.
+   */
+  public function destruct(): void {
+    if (!$this->portalContributorAuthors) {
+      return;
+    }
+
+    $authors = $this->portalContributorAuthors;
+    $this->portalContributorAuthors = [];
+
+    $cutoff = (new \DateTimeImmutable())
+      ->setTimestamp($this->time->getRequestTime())
+      ->modify(static::PORTAL_CONTRIBUTOR_PERIOD)
+      ->getTimestamp();
+
+    $userStorage = $this->entityTypeManager->getStorage('user');
+    foreach ($authors as $uid) {
+      if ($this->countPortalContributions($uid, $cutoff) < static::PORTAL_CONTRIBUTOR_THRESHOLD) {
+        continue;
+      }
+      $user = $userStorage->load($uid);
+      if ($user instanceof UserInterface) {
+        $this->badgeService->award(static::PORTAL_CONTRIBUTOR_FLAG_ID, $user);
+      }
+    }
+  }
+
+  /**
+   * Counts eligible contributions across all target entity types.
+   *
+   * Short-circuits as soon as the running total reaches the threshold.
+   */
+  protected function countPortalContributions(int $uid, int $cutoff): int {
+    $total = 0;
+    foreach (static::PORTAL_CONTRIBUTOR_TARGETS as $entityTypeId => $bundles) {
+      $entityType = $this->entityTypeManager->getDefinition($entityTypeId);
+      $dateField = $entityTypeId === 'comment' ? 'created' : 'published_at';
+      $total += (int) $this->entityTypeManager->getStorage($entityTypeId)
+        ->getQuery()
+        ->accessCheck(FALSE)
+        ->condition($entityType->getKey('owner'), $uid)
+        ->condition($entityType->getKey('published'), TRUE)
+        ->condition($entityType->getKey('bundle'), $bundles, 'IN')
+        ->condition($dateField, $cutoff, '>=')
+        ->count()
+        ->execute();
+      if ($total >= static::PORTAL_CONTRIBUTOR_THRESHOLD) {
+        return $total;
+      }
+    }
+    return $total;
   }
 
 }
