@@ -1,0 +1,61 @@
+ai_enhancement.settings:
+  type: config_object
+  label: 'AI Enhancement settings'
+  mapping:
+    ollama_base_url:
+      type: string
+      label: 'Ollama base URL'
+    request_timeout:
+      type: integer
+      label: 'Request timeout (seconds)'
+    max_tool_loop_iterations:
+      type: integer
+      label: 'Maximum tool-call loop iterations'
+
+ai_enhancement.enhancement_profile.*:
+  type: config_entity
+  label: 'Enhancement profile'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
+    entity_type:
+      type: string
+      label: 'Entity type'
+    bundle:
+      type: string
+      label: 'Bundle'
+    source_fields:
+      type: sequence
+      label: 'Source fields'
+      sequence:
+        type: string
+    target_field:
+      type: string
+      label: 'Target annotation field'
+    generator_model:
+      type: string
+      label: 'Generator model'
+    judge_model:
+      type: string
+      label: 'Judge model'
+    generator_system_prompt:
+      type: text
+      label: 'Generator system prompt'
+    judge_system_prompt:
+      type: text
+      label: 'Judge system prompt'
+    refinement_prompt_template:
+      type: text
+      label: 'Refinement prompt template'
+    max_iterations:
+      type: integer
+      label: 'Max iterations'
+    enabled_tools:
+      type: sequence
+      label: 'Enabled tools'
+      sequence:
+        type: string

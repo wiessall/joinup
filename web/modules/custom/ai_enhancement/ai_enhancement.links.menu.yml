@@ -1,0 +1,15 @@
+ai_enhancement.admin:
+  title: 'AI Enhancement'
+  description: 'Configure AI Enhancement profiles and settings.'
+  parent: system.admin_config_system
+  route_name: entity.enhancement_profile.collection
+
+ai_enhancement.settings:
+  title: 'Settings'
+  parent: ai_enhancement.admin
+  route_name: ai_enhancement.settings
+
+ai_enhancement.profiles:
+  title: 'Profiles'
+  parent: ai_enhancement.admin
+  route_name: entity.enhancement_profile.collection

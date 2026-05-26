@@ -1,0 +1,41 @@
+<?php
+
+/**
+ * @file
+ * Module hook implementations.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
+
+/**
+ * Implements hook_entity_insert().
+ */
+function ai_enhancement_entity_insert(EntityInterface $entity): void {
+  _ai_enhancement_maybe_enqueue($entity);
+}
+
+/**
+ * Implements hook_entity_update().
+ */
+function ai_enhancement_entity_update(EntityInterface $entity): void {
+  _ai_enhancement_maybe_enqueue($entity);
+}
+
+/**
+ * Internal: route the entity to the save subscriber if it's fieldable.
+ *
+ * Keeping this lean so the synchronous request path stays fast — the actual
+ * enhancement runs asynchronously via the queue worker on the next cron run
+ * (or via `drush queue:run ai_enhancement_worker` for immediate processing).
+ */
+function _ai_enhancement_maybe_enqueue(EntityInterface $entity): void {
+  if (!$entity instanceof FieldableEntityInterface) {
+    return;
+  }
+  /** @var \Drupal\ai_enhancement\EventSubscriber\EntitySaveSubscriber $subscriber */
+  $subscriber = \Drupal::service('ai_enhancement.entity_save_subscriber');
+  $subscriber->onEntitySave($entity);
+}
