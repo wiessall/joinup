@@ -1,0 +1,24 @@
+uuid: ad8b7672-b14f-497a-9308-3def14c9c79b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_innovation
+    - node.type.digital_green_annotation
+    - node.type.solution
+id: node.digital_green_annotation.field_innovation
+field_name: field_innovation
+entity_type: node
+bundle: digital_green_annotation
+label: Innovation
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      solution: solution
+field_type: entity_reference

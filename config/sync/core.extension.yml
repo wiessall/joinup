@@ -1,8 +1,12 @@
 _core:
   default_config_hash: 4GIX5Esnc_umpXUBj4IIocRX7Mt5fPhm4AgXfE3E56E
 module:
+  action: 0
   addtocal: 0
+  admin_toolbar: 0
   adms_validator: 0
+  ai_enhancement: 0
+  ai_output_checks: 0
   allowed_formats: 0
   antibot: 0
   assessments: 0
@@ -19,15 +23,19 @@ module:
   calendar_view: 0
   cas: 0
   cas_attributes: 0
+  cas_mock_server: 0
   changed_fields: 0
   ckeditor5: 0
   code_of_conduct: 0
   collection: 0
   colorbox: 0
   comment: 0
+  composer_deploy: 0
   config: 0
   config_ignore: 0
+  config_inspector: 0
   config_translation: 0
+  config_update: 0
   consumers: 0
   contact_form: 0
   contact_information: 0
@@ -40,6 +48,8 @@ module:
   dashboard: 0
   datetime: 0
   datetime_range: 0
+  dblog: 0
+  devel: 0
   diff: 0
   digital_size_formatter: 0
   dropsolid_purge: 0
@@ -78,6 +88,7 @@ module:
   file: 0
   file_visibility: 0
   file_visibility_track_usage: 0
+  filecache: 0
   filter: 0
   flag: 0
   flag_count: 0
@@ -88,10 +99,12 @@ module:
   github_feed: 0
   help: 0
   honeypot: 0
+  http_request_mock: 0
   iframe: 0
   image: 0
   image_library_widget: 0
   imagecache_external: 0
+  import_IRD_jsons: 0
   inline_entity_form: 0
   inline_form_errors: 0
   interoperable_europe: 0
@@ -100,6 +113,7 @@ module:
   joinup_assessment: 0
   joinup_bookmark: 0
   joinup_bundle_class: 0
+  joinup_cas_mock_server: 0
   joinup_collection: 0
   joinup_community_content: 0
   joinup_core: 0
@@ -147,6 +161,7 @@ module:
   joinup_stats: 0
   joinup_subscription: 0
   joinup_taxonomy: 0
+  joinup_test: 0
   joinup_tiles: 0
   joinup_tour: 0
   joinup_user: 0
@@ -169,9 +184,11 @@ module:
   locale: 0
   mailsystem: 0
   markdown_easy: 0
+  masquerade: 0
   media: 0
   media_library: 0
   memcache: 0
+  memcache_admin: 0
   menu_link_content: 0
   menu_link_destination: 0
   menu_ui: 0
@@ -182,6 +199,8 @@ module:
   metatag: 0
   metatag_open_graph: 0
   metatag_views: 0
+  migrate: 0
+  migrate_plus: 0
   mimemail: 0
   moderation: 0
   monolog: 0
@@ -191,6 +210,7 @@ module:
   node_revision_delete: 0
   oauth_client: 0
   oe_authentication: 0
+  oe_authentication_eulogin_mock: 0
   oe_bootstrap_theme_helper: 0
   oe_dashboard_agent: 0
   oe_newsroom_newsletter: 0
@@ -202,6 +222,7 @@ module:
   oe_webtools_maps: 0
   og: 0
   og_menu: 0
+  og_ui: 0
   openapi_ui: 0
   openapi_ui_swagger: 0
   options: 0
@@ -209,6 +230,7 @@ module:
   owner: 0
   page_cache: 0
   page_manager: 0
+  page_manager_ui: 0
   paragraphs_type_permissions: 0
   path: 0
   path_alias: 0
@@ -233,6 +255,7 @@ module:
   replicate_ui: 0
   responsive_image: 0
   rest: 0
+  restui: 0
   role_delegation: 0
   schema_article: 0
   schema_digital_document: 0
@@ -259,9 +282,11 @@ module:
   social_media_links_field: 0
   sparql_endpoint: 0
   sparql_endpoint_piwik: 0
+  stage_file_proxy: 0
   state_machine: 0
   state_machine_permissions: 0
   state_machine_revisions: 0
+  sti_rdf: 0
   subpathauto: 0
   svg_image: 0
   svg_image_responsive: 0
@@ -292,6 +317,7 @@ module:
   views_bulk_operations: 0
   views_data_export: 0
   views_multiple_permissions: 0
+  views_ui: 0
   webform: 0
   webform_attachment: 0
   webform_entity_print: 0

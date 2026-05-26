@@ -1,0 +1,19 @@
+uuid: cd35ee2d-f374-41c8-8b45-fdf6676dfaa9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_content_type_machine_name
+    - paragraphs.paragraphs_type.quality_check
+id: paragraph.quality_check.field_content_type_machine_name
+field_name: field_content_type_machine_name
+entity_type: paragraph
+bundle: quality_check
+label: 'Field machine name'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

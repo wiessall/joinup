@@ -1,0 +1,55 @@
+uuid: 292ba0c0-1ed4-4b5d-98b4-82314d4e2254
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.quality_check.field_ai_check_allowed
+    - field.field.paragraph.quality_check.field_ai_generated
+    - field.field.paragraph.quality_check.field_content_type_machine_name
+    - field.field.paragraph.quality_check.field_quality_assessment
+    - paragraphs.paragraphs_type.quality_check
+id: paragraph.quality_check.default
+targetEntityType: paragraph
+bundle: quality_check
+mode: default
+content:
+  field_ai_check_allowed:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_ai_generated:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_content_type_machine_name:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_quality_assessment:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  search_api_excerpt: true
+  synonyms: true
+  uuid: true

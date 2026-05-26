@@ -1,4 +1,4 @@
-uuid: fd51ddc1-440e-4e3e-b706-4943595238e5
+uuid: 0f69ddbf-ef63-4b7d-a8ff-d808c0b922dd
 langcode: en
 status: true
 dependencies:
@@ -12,6 +12,8 @@ third_party_settings:
     value:
       predicate: 'http://purl.org/dc/terms/created'
       type: 'xsd:date'
+_core:
+  default_config_hash: _BrLhfELrA40l3lMCeB4vY36vr3hysfbK9mnHKYcRIQ
 id: node.dah_annotation.field_launch_year
 field_name: field_launch_year
 entity_type: node

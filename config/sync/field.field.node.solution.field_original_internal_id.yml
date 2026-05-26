@@ -1,0 +1,19 @@
+uuid: e172856a-801d-4689-802d-a740ea282921
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_original_internal_id
+    - node.type.solution
+id: node.solution.field_original_internal_id
+field_name: field_original_internal_id
+entity_type: node
+bundle: solution
+label: 'Original internal ID'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

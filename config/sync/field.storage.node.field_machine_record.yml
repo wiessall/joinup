@@ -1,0 +1,19 @@
+uuid: 7eee763e-3f4d-428b-863e-aad1f1e05c91
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_machine_record
+field_name: field_machine_record
+entity_type: node
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

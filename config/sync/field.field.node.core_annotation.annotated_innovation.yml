@@ -1,0 +1,35 @@
+uuid: b7656676-5422-41e0-8cdf-ad488336b24b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.annotated_innovation
+    - node.type.core_annotation
+    - node.type.solution
+  module:
+    - joinup_group
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: node.core_annotation.annotated_innovation
+field_name: annotated_innovation
+entity_type: node
+bundle: core_annotation
+label: 'Annotated Innovation'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      solution: solution
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: joinup_group_reference_with_timestamp

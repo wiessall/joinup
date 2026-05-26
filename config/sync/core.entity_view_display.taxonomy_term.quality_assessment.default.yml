@@ -1,0 +1,38 @@
+uuid: c5535014-81dc-4fdf-ab02-da38953b3f5b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.quality_assessment.field_qa_value
+    - field.field.taxonomy_term.quality_assessment.field_tax_hierarchical_depth
+    - field.field.taxonomy_term.quality_assessment.field_tax_hierarchical_weight
+    - taxonomy.vocabulary.quality_assessment
+  module:
+    - options
+    - text
+id: taxonomy_term.quality_assessment.default
+targetEntityType: taxonomy_term
+bundle: quality_assessment
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_qa_value:
+    type: list_key
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  field_tax_hierarchical_depth: true
+  field_tax_hierarchical_weight: true
+  langcode: true
+  search_api_excerpt: true
+  synonyms: true
+  uuid: true

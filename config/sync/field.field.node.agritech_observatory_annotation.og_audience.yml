@@ -1,0 +1,23 @@
+uuid: c60f4dc7-8b1c-406d-9c14-bc4bf794b81a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.og_audience
+    - node.type.agritech_observatory_annotation
+  module:
+    - og
+id: node.agritech_observatory_annotation.og_audience
+field_name: og_audience
+entity_type: node
+bundle: agritech_observatory_annotation
+label: 'Groups audience'
+description: 'OG group audience reference field.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'og:default'
+  handler_settings: {  }
+field_type: og_standard_reference

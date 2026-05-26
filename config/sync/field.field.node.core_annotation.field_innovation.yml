@@ -1,0 +1,24 @@
+uuid: cd3b3226-9a1b-4487-9e51-5f99fb092757
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_innovation
+    - node.type.solution
+    - node.type.core_annotation
+id: node.core_annotation.field_innovation
+field_name: field_innovation
+entity_type: node
+bundle: core_annotation
+label: Innovation
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      solution: solution
+field_type: entity_reference

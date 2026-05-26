@@ -1,0 +1,19 @@
+uuid: 0b191038-8ec4-498e-93b1-bd26b88836e6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_agritech_observatory_sdgs
+    - node.type.agritech_observatory_annotation
+id: node.agritech_observatory_annotation.field_agritech_observatory_sdgs
+field_name: field_agritech_observatory_sdgs
+entity_type: node
+bundle: agritech_observatory_annotation
+label: SDGs
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

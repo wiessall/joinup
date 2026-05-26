@@ -1,0 +1,19 @@
+uuid: 8556e674-52d3-4172-aedf-c9adfc83529e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_agritech_observatory_sourc
+    - node.type.agritech_observatory_annotation
+id: node.agritech_observatory_annotation.field_agritech_observatory_sourc
+field_name: field_agritech_observatory_sourc
+entity_type: node
+bundle: agritech_observatory_annotation
+label: Source
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

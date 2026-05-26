@@ -1,0 +1,5 @@
+_core:
+  default_config_hash: krJgZIwjHwifuVjuQSIKsf4gyKOwN4VeH4JO-Y6s3lo
+ollama_base_url: 'http://ollama:11434'
+request_timeout: 600
+max_tool_loop_iterations: 1

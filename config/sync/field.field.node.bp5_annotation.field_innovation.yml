@@ -1,0 +1,24 @@
+uuid: 05925177-ee99-405e-a009-36bdf723fc51
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_innovation
+    - node.type.bp5_annotation
+    - node.type.solution
+id: node.bp5_annotation.field_innovation
+field_name: field_innovation
+entity_type: node
+bundle: bp5_annotation
+label: Innovation
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      solution: solution
+field_type: entity_reference

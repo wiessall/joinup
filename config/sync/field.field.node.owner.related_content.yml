@@ -1,0 +1,40 @@
+uuid: 05df2e90-a8f4-4f11-8f54-7a59d0e51a76
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.related_content
+    - node.type.distribution
+    - node.type.owner
+    - node.type.solution
+  module:
+    - rdf_sync
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+  rdf_sync:
+    target_id:
+      predicate: 'http://www.w3.org/ns/prov#wasDerivedFrom'
+      type: resource
+id: node.owner.related_content
+field_name: related_content
+entity_type: node
+bundle: owner
+label: 'Related content'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      distribution: distribution
+      solution: solution
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+field_type: entity_reference

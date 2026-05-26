@@ -1,0 +1,19 @@
+uuid: df4d8330-0478-4400-9753-b179a96b3007
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_agritech_observatory_organ
+    - node.type.agritech_observatory_annotation
+id: node.agritech_observatory_annotation.field_agritech_observatory_organ
+field_name: field_agritech_observatory_organ
+entity_type: node
+bundle: agritech_observatory_annotation
+label: 'Organization type'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

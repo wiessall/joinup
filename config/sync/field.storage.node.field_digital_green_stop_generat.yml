@@ -1,0 +1,19 @@
+uuid: 168d9926-24cf-466e-a3ac-0f0bc67713d6
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_digital_green_stop_generat
+field_name: field_digital_green_stop_generat
+entity_type: node
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

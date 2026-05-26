@@ -1,0 +1,19 @@
+uuid: 0deaba26-9289-4491-8816-87dd09979305
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_core_publication_identifie
+    - node.type.core_annotation
+id: node.core_annotation.field_core_publication_identifie
+field_name: field_core_publication_identifie
+entity_type: node
+bundle: core_annotation
+label: field_publication_identified
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

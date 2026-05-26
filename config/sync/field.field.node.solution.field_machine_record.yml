@@ -1,0 +1,19 @@
+uuid: 592379a1-b276-4e52-ab44-180af6e1cf93
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_machine_record
+    - node.type.solution
+id: node.solution.field_machine_record
+field_name: field_machine_record
+entity_type: node
+bundle: solution
+label: 'Machine record'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

@@ -1,0 +1,24 @@
+uuid: 34a87d91-2301-40ea-a5bb-0df1f86501b4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_innovation
+    - node.type.agritech_observatory_annotation
+    - node.type.solution
+id: node.agritech_observatory_annotation.field_innovation
+field_name: field_innovation
+entity_type: node
+bundle: agritech_observatory_annotation
+label: Innovation
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      solution: solution
+field_type: entity_reference

@@ -1,0 +1,21 @@
+uuid: 139c0e51-f4c5-426f-a310-bae7633fc469
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_bp5_intro_related_original
+field_name: field_bp5_intro_related_original
+entity_type: node
+type: string
+settings:
+  max_length: 1024
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,151 @@
+uuid: d13b9ba2-cbd2-4583-bab8-752da568eb27
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.core_annotation.annotated_innovation
+    - field.field.node.core_annotation.field_core_adoption_level
+    - field.field.node.core_annotation.field_core_ai_automator_status
+    - field.field.node.core_annotation.field_core_body
+    - field.field.node.core_annotation.field_core_extracted_original_in
+    - field.field.node.core_annotation.field_core_impact_sdgs
+    - field.field.node.core_annotation.field_core_innovation_identified
+    - field.field.node.core_annotation.field_core_intro
+    - field.field.node.core_annotation.field_core_intro_related_origina
+    - field.field.node.core_annotation.field_core_last_ingestion_dateti
+    - field.field.node.core_annotation.field_core_publication_identifie
+    - field.field.node.core_annotation.field_core_readiness_level
+    - field.field.node.core_annotation.field_core_shorter_description
+    - field.field.node.core_annotation.field_core_stop_generating_innov
+    - field.field.node.core_annotation.field_core_type_of_information_m
+    - field.field.node.core_annotation.field_innovation
+    - field.field.node.core_annotation.og_audience
+    - field.field.node.core_annotation.quality_assessment
+    - node.type.core_annotation
+  module:
+    - joinup_group
+    - link
+    - user
+id: node.core_annotation.default
+targetEntityType: node
+bundle: core_annotation
+mode: default
+content:
+  annotated_innovation:
+    type: joinup_group_reference_with_timestamp
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 13
+    region: content
+  field_core_adoption_level:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_core_ai_automator_status:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 9
+    region: content
+  field_core_extracted_original_in:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 11
+    region: content
+  field_core_impact_sdgs:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_core_innovation_identified:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_core_intro_related_origina:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  field_core_shorter_description:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_innovation:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  og_audience:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  quality_assessment:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 8
+    region: content
+  report:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  uri:
+    type: uri_link
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 12
+    region: content
+hidden:
+  field_core_body: true
+  field_core_intro: true
+  field_core_last_ingestion_dateti: true
+  field_core_publication_identifie: true
+  field_core_readiness_level: true
+  field_core_stop_generating_innov: true
+  field_core_type_of_information_m: true
+  langcode: true
+  private_message_link: true
+  published_at: true
+  search_api_excerpt: true
+  uuid: true

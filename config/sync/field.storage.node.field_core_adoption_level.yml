@@ -1,0 +1,19 @@
+uuid: b5ddc9ef-7ad5-45e7-ba5e-19071109ec39
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_core_adoption_level
+field_name: field_core_adoption_level
+entity_type: node
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

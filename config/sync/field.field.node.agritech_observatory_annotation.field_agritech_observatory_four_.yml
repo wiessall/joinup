@@ -1,0 +1,19 @@
+uuid: f2134941-89f8-4929-8ccd-4d091529f63c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_agritech_observatory_four_
+    - node.type.agritech_observatory_annotation
+id: node.agritech_observatory_annotation.field_agritech_observatory_four_
+field_name: field_agritech_observatory_four_
+entity_type: node
+bundle: agritech_observatory_annotation
+label: 'Four betters'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

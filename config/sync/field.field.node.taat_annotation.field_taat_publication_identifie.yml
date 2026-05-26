@@ -1,0 +1,19 @@
+uuid: 12361c23-d8d2-4448-9b53-6f1b33ccae70
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_taat_publication_identifie
+    - node.type.taat_annotation
+id: node.taat_annotation.field_taat_publication_identifie
+field_name: field_taat_publication_identifie
+entity_type: node
+bundle: taat_annotation
+label: field_publication_identified
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

@@ -1,0 +1,20 @@
+uuid: 182b007e-7389-46a2-858c-d937e1962b79
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - paragraphs
+id: node.quality_assessment
+field_name: quality_assessment
+entity_type: node
+type: entity_reference
+settings:
+  target_type: paragraph
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

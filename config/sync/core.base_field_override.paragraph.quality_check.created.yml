@@ -1,0 +1,18 @@
+uuid: 7262ca42-6a07-4006-9236-20cb72661cc2
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.quality_check
+id: paragraph.quality_check.created
+field_name: created
+entity_type: paragraph
+bundle: quality_check
+label: 'Authored on'
+description: 'The time that the Paragraph was created.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: created

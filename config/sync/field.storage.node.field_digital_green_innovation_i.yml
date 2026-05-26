@@ -1,0 +1,19 @@
+uuid: 112c250e-8721-42db-b122-ab3243ac6d71
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_digital_green_innovation_i
+field_name: field_digital_green_innovation_i
+entity_type: node
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
