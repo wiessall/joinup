@@ -115,14 +115,14 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
     }
 
     // Collect unpublished child entities that need to be published.
-    $entitiesToPublish = $this->collectUnpublishedEntities($this->get('provider')->referencedEntities());
+    $entitiesToPublish = $this->collectEntities($this->get('provider')->referencedEntities(), onlyUnpublished: TRUE);
 
     // Collect from binding requirements.
     foreach ($this->get('binding_requirement')->referencedEntities() as $bindingRequirement) {
-      $entitiesToPublish += $this->collectUnpublishedEntities($bindingRequirement->get('expression')->referencedEntities());
-      $entitiesToPublish += $this->collectUnpublishedEntities(array_filter($bindingRequirement->get('asset')->referencedEntities(), static fn(SolutionInterface $entity) => $entity->getGroup()->uuid() === AssessmentInterface::SOLUTION_COLLECTOR));
-      $entitiesToPublish += $this->collectUnpublishedEntities($bindingRequirement->get('affects')->referencedEntities());
-      $entitiesToPublish += $this->collectUnpublishedEntities($bindingRequirement->get('has_participation')->referencedEntities());
+      $entitiesToPublish += $this->collectEntities($bindingRequirement->get('expression')->referencedEntities(), onlyUnpublished: TRUE);
+      $entitiesToPublish += $this->collectEntities(array_filter($bindingRequirement->get('asset')->referencedEntities(), static fn(SolutionInterface $entity) => $entity->getGroup()->uuid() === AssessmentInterface::SOLUTION_COLLECTOR), onlyUnpublished: TRUE);
+      $entitiesToPublish += $this->collectEntities($bindingRequirement->get('affects')->referencedEntities(), onlyUnpublished: TRUE);
+      $entitiesToPublish += $this->collectEntities($bindingRequirement->get('has_participation')->referencedEntities(), onlyUnpublished: TRUE);
     }
 
     // Publish all collected entities.
@@ -174,24 +174,23 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
   }
 
   /**
-   * Collect unpublished entities, keyed by UUID.
-   */
-  protected function collectUnpublishedEntities(array $entities): array {
-    $result = [];
-    foreach ($entities as $entity) {
-      if (!$entity->isPublished()) {
-        $result[$entity->uuid()] = $entity;
-      }
-    }
-    return $result;
-  }
-
-  /**
    * Collect entities, keyed by UUID.
+   *
+   * @param array $entities
+   *   The entities to parse.
+   * @param bool $onlyUnpublished
+   *   Filter out published entities.
+   *
+   * @return array
+   *   The processed list of entities.
    */
-  protected function collectEntities(array $entities): array {
+  protected function collectEntities(array $entities, bool $onlyUnpublished = FALSE): array {
     $result = [];
     foreach ($entities as $entity) {
+      if ($onlyUnpublished && $entity->isPublished()) {
+        continue;
+      }
+
       $result[$entity->uuid()] = $entity;
     }
     return $result;
