@@ -1,0 +1,65 @@
+collection_id:    stf
+collection_label: Seeding the Future
+owner_id_prefix:  stf
+required:         [title]
+
+core:
+  id:           { column: ID }
+  title:        { column: "Project Title" }
+  description:  { column: "Innovation Description" }
+  abstract:     { column: "Executive Summary" }
+  url:          { column: Website, type: url }
+  date:         { column: "Created date" }
+  owner_name:   { column: "Submitting Organization" }
+  country:      { column: Country }
+  domain_names:
+    column:       "Innovation Domains Addressed"
+    separator:    "|"
+    strip_prefix: '^\d+\.\s*'
+  contact_name: { column: "Network Contact Names" }
+
+owner_fields:
+  country:    { column: Country }
+  link:       { column: Website, type: url }
+  owner_type: { column: "Organization Type", as_list: true }
+
+annotations:
+  "Benefitting Country":
+    separator: "|"
+  "SDGs Addressed":
+    separator: "|"
+    strip_prefix: '^\d+\.\s*'
+  "Domain":
+    separator: "|"
+    group_as: thematic_area
+  "Areas_of_Focus":
+    separator: "|"
+    group_as: thematic_area
+  "Areas_of_Need":
+    separator: "|"
+  "Areas_of_Expertise":
+    separator: "|"
+  "Inclusion and Representation":
+    separator: "|"
+  "Prior Awards or Recognitions":
+    separator: "|"
+  "Network Contact Emails or LinkedIN Profiles":
+    separator: "|"
+  "human_impact_in_1-5_years":
+    separator: "|"
+  "human_impact_in_6-10_years":
+    separator: "|"
+  "human_impact_in_11-15_years":
+    separator: "|"
+  "Greenhouse Gasses_impact":
+    separator: "|"
+  "Water Use_impact":
+    separator: "|"
+  "Land Use_impact":
+    separator: "|"
+  "Biodiversity_impact":
+    separator: "|"
+  "Phosphorus Use_impact":
+    separator: "|"
+  "Nitrogen Use_impact":
+    separator: "|"

@@ -1,0 +1,37 @@
+collection_id: dv_solutions
+collection_label: ''
+owner_id_prefix: dv_solutions
+required:
+- title
+core:
+  id:
+    column: ID
+  title:
+    column: Name of Digital Solution (DS) - (Enter text - Mandatory)
+  description:
+    column: Brief Description
+  abstract: null
+  date: null
+  url:
+    column: Online resource links (Web-page links, links to videos, links to reports,
+      etc) (Category-Dropdown) - Mandatory
+    type: url
+  classification_name:
+    column: Type
+  domain_names:
+    column: List country
+    separator: '::'
+  topic_names:
+    column: Copyright text
+  language_names: null
+  owner_name:
+    column: Type of entity (ICT developer-supplier) - Mandatory
+  contact_name:
+    column: Value chain tags
+owner_fields:
+  owner_type:
+    column: Type of entity (ICT developer-supplier) - Mandatory
+    as_list: true
+annotations:
+  Name of Digital village(s), districts, communes where DS is used/ deployed (Enter text).:
+    separator: ','
