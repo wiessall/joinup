@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\assessments;
 
 use Drupal\assessments\Event\AssessmentReportEvent;
+use Drupal\user\UserInterface;
 
 /**
  * Interface for assessment report notification services.
@@ -20,12 +21,12 @@ interface AssessmentReportNotificationInterface {
   public function notifyReportSubmitted(AssessmentReportEvent $event): void;
 
   /**
-   * Sends notification when a report is published.
+   * Sends a published notification to the report owner.
    *
    * @param \Drupal\assessments\Event\AssessmentReportEvent $event
    *   The assessment report event.
    */
-  public function notifyReportPublished(AssessmentReportEvent $event): void;
+  public function notifyReportOwnerPublished(AssessmentReportEvent $event): void;
 
   /**
    * Sends notification when a report requires updates.
@@ -34,5 +35,23 @@ interface AssessmentReportNotificationInterface {
    *   The assessment report event.
    */
   public function notifyReportRequiresUpdates(AssessmentReportEvent $event): void;
+
+  /**
+   * Queues a published notification for subscribed collection members.
+   *
+   * @param \Drupal\assessments\Event\AssessmentReportEvent $event
+   *   The assessment report event.
+   */
+  public function queueMembersPublishedNotification(AssessmentReportEvent $event): void;
+
+  /**
+   * Sends the assessment_report_members notification to subscribed members.
+   *
+   * @param \Drupal\assessments\AssessmentInterface $entity
+   *   The published assessment report entity.
+   * @param \Drupal\user\UserInterface $publisher
+   *   The moderator who published the report.
+   */
+  public function notifySubscribedMembers(AssessmentInterface $entity, UserInterface $publisher): void;
 
 }
