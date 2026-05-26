@@ -55,28 +55,30 @@ class EifFilterBlock extends BlockBase implements ContainerFactoryPluginInterfac
 
     $vocabularies = [
       'eif_solution_type' => [
+        'id' => 'solution-category',
         'name' => $this->t('Solution category'),
         'nid'  => EifInterface::EIF_SOLUTION_CATEGORY_FILTER_TARGET_ID,
       ],
       'eif_principle' => [
+        'id' => 'underlying-principles',
         'name' => $this->t('Underlying principles'),
         'nid'  => EifInterface::EIF_PRINCIPLE_FILTER_TARGET_ID,
       ],
       'eif_interoperability_layer' => [
+        'id' => 'interoperability-layers',
         'name' => $this->t('Interoperability layers'),
         'nid'  => EifInterface::EIF_LAYER_FILTER_TARGET_ID,
       ],
       'eif_conceptual_model' => [
+        'id' => 'conceptual-model',
         'name' => $this->t('Conceptual model'),
         'nid'  => EifInterface::EIF_MODEL_FILTER_TARGET_ID,
       ],
     ];
     foreach ($vocabularies as $machine_name => $vocabulary) {
       $principle_terms = $term_storage->loadTree($machine_name);
-      $id = htmlentities(str_replace([' ', '/', ':'], ['-', '-', ''], strtolower((string) $vocabulary['name'])));
-
       foreach ($principle_terms as $term) {
-        $tree = $this->getTree($id, (string) $vocabulary['name'], $tree, $term, $term_storage, $vocabulary['nid']);
+        $tree = $this->getTree($vocabulary['id'], (string) $vocabulary['name'], $tree, $term, $term_storage, $vocabulary['nid']);
       }
     }
 
@@ -124,8 +126,6 @@ class EifFilterBlock extends BlockBase implements ContainerFactoryPluginInterfac
     $tree[$id]['title'] = $nid ? Link::createFromRoute($name, 'entity.node.canonical', ['node' => $nid]) : $name;
     $tree[$id]['class'] = 'eif-filter--' . $id;
 
-    // @todo Use an alternative title instead of dynamically splitting it.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7110.
     $parts = explode(':', $term->name);
     $name = empty($parts[1]) ? $term->name : trim($parts[1]);
 
