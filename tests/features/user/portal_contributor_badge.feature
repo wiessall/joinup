@@ -72,3 +72,14 @@ Feature: Portal contributor badge
     And user "Carol Cold" should not have the "portal_contributor" badge
     And user "Dora Drafter" should not have the "portal_contributor" badge
     And user "Felix Custom" should not have the "portal_contributor" badge
+
+  Scenario: Awarding a badge refreshes the user profile without a manual cache clear
+    Given the following users:
+      | Username     | E-mail            |
+      | Paula Primed | paula@example.com |
+    And I am an anonymous user
+    When I go to the public profile of "Paula Primed"
+    Then I should not see the text "Portal contributor" in the "Header" region
+    Given the "portal_contributor" badge is awarded to "Paula Primed"
+    When I go to the public profile of "Paula Primed"
+    Then I should see the text "Portal contributor" in the "Header" region

@@ -49,6 +49,9 @@ class BadgeFormatter extends FormatterBase {
           '#label' => $badge->getLabel(),
           '#description' => $badge->getDescription(),
           '#icon' => $badge->getIcon(),
+          '#cache' => [
+            'tags' => $badge->getCacheTags(),
+          ],
         ];
       }
     }

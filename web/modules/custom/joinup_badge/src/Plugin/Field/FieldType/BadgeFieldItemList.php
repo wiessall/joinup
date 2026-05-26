@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_badge\Plugin\Field\FieldType;
 
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheableDependencyInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemList;
 use Drupal\Core\TypedData\ComputedItemListTrait;
 use Drupal\joinup_badge\BadgeService;
@@ -11,7 +13,7 @@ use Drupal\joinup_badge\BadgeService;
 /**
  * Computed field item list for the user badge flags field.
  */
-class BadgeFieldItemList extends EntityReferenceFieldItemList {
+class BadgeFieldItemList extends EntityReferenceFieldItemList implements CacheableDependencyInterface {
 
   use ComputedItemListTrait;
 
@@ -53,6 +55,27 @@ class BadgeFieldItemList extends EntityReferenceFieldItemList {
         'target_id' => $badges[$flag->id()] ?? self::NOT_AWARDED,
       ]);
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags(): array {
+    return ['flagging_list'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheContexts(): array {
+    return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheMaxAge(): int {
+    return Cache::PERMANENT;
   }
 
 }

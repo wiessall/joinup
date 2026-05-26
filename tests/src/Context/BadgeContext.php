@@ -10,6 +10,7 @@ use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
+use Drupal\joinup_badge\BadgeService;
 use Drupal\joinup_badge\Hook\BadgeHooks;
 
 /**
@@ -50,6 +51,14 @@ class BadgeContext extends RawDrupalContext {
         $this->getSession()->getDriver(),
       );
     }
+  }
+
+  /**
+   * Awards a badge to a user.
+   */
+  #[Given('the :badge badge is awarded to :name')]
+  public function awardBadgeToUser(string $badge, string $name): void {
+    \Drupal::service(BadgeService::class)->award($badge, $this->getUserByName($name));
   }
 
   /**
