@@ -1,0 +1,6 @@
+services:
+  import_ird_jsons.ird_annotate_commands:
+    class: Drupal\import_IRD_jsons\Commands\IrdAnnotateCommands
+    arguments: ['@entity_type.manager']
+    tags:
+      - { name: drush.command }

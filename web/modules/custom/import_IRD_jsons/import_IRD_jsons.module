@@ -1,0 +1,55 @@
+<?php
+
+function import_IRD_jsons_node_view(array &$build, $node, $display, $view_mode) {
+  if ($node->bundle() !== 'solution' || $view_mode !== 'full') {
+    return;
+  }
+
+  $annotations = \Drupal::entityTypeManager()->getStorage('node')
+    ->loadByProperties(['field_innovation' => $node->id()]);
+
+  if (empty($annotations)) {
+    return;
+  }
+
+  $skip = ['field_innovation', 'og_audience'];
+  $rows = [];
+
+  foreach ($annotations as $annotation) {
+    $collection = $annotation->get('og_audience')->entity?->label()
+               ?? $annotation->bundle();
+    foreach ($annotation->getFields() as $name => $field) {
+      if (!($field->getFieldDefinition() instanceof \Drupal\field\FieldConfigInterface)) {
+        continue;
+      }
+      if (in_array($name, $skip, TRUE) || $field->isEmpty()) {
+        continue;
+      }
+      $type = $field->getFieldDefinition()->getType();
+      $values = [];
+      foreach ($field as $item) {
+        $values[] = match ($type) {
+          'entity_reference' => $item->entity?->label() ?? '',
+          'link'             => $item->uri ?? '',
+          'boolean'          => $item->value ? 'Yes' : 'No',
+          default            => (string) ($item->value ?? ''),
+        };
+      }
+      $rows[] = [
+        $collection,
+        $field->getFieldDefinition()->getLabel(),
+        implode(', ', array_filter($values)),
+      ];
+    }
+  }
+
+  if ($rows) {
+    $build['ird_annotations'] = [
+      '#theme'      => 'table',
+      '#header'     => ['Collection', 'Annotation', 'Value'],
+      '#rows'       => $rows,
+      '#attributes' => ['class' => ['ird-annotation-table']],
+      '#weight'     => 100,
+    ];
+  }
+}
