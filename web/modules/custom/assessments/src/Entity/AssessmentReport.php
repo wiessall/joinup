@@ -156,7 +156,18 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
       $entities += $this->collectEntities($this->get($assessmentReportField)->referencedEntities());
     }
 
+    $targetLangcode = $this->language()->getId();
+
     foreach ($entities as $entity) {
+      // If the original language is the same or the translation exists do
+      // nothing.
+      if (
+        $entity->language()->getId() === $targetLangcode ||
+      $entity->hasTranslation($targetLangcode)
+      ) {
+        continue;
+      }
+
       $entity->set('langcode', $this->language()->getId());
       $entity->skip_notification = TRUE;
       $entity->save();
