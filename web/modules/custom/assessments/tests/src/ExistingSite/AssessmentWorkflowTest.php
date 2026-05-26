@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\ExistingSite;
 
+use Drupal\Tests\EntityTrait;
 use Drupal\Tests\assessments\Traits\AssessmentEntityCreationTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\assessments\AssessmentInterface;
@@ -22,6 +23,7 @@ use PHPUnit\Framework\Attributes\Group;
 class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
 
   use AssessmentEntityCreationTrait;
+  use EntityTrait;
 
   /**
    * Tests that publishing a report also publishes all related entities.
@@ -264,6 +266,12 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
     // Now change the language.
     $report->set('langcode', 'de');
     $report->save();
+
+    $expression = $this->reloadEntity($expression);
+    $publicService = $this->reloadEntity($publicService);
+    $participation = $this->reloadEntity($participation);
+    $asset = $this->reloadEntity($asset);
+    $organisation = $this->reloadEntity($organisation);
 
     $this->assertEquals('de', $report->language()->getId());
     $this->assertEquals('de', $expression->language()->getId());
