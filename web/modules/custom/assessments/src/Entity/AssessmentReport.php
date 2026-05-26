@@ -37,7 +37,12 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
 
     $field = $this->get('published_at');
 
-    if ($field->isEmpty() && $this->isPublished()) {
+    if ($field->isEmpty() && \Drupal::getContainer()
+      ->get('joinup_workflow.workflow_helper')
+      ->isWorkflowStatePublished(
+        $this->getWorkflowState(),
+        $this->getWorkflow()
+      )) {
       $field->set(0, ['value' => \Drupal::time()->getRequestTime()]);
     }
 
