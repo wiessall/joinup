@@ -18,6 +18,7 @@ use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_oss_catalogue\CatalogueSourceProcessor;
 use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
+use Drupal\joinup_oss_catalogue\JoinupOssCatalogueImagecacheWarmer;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 use Drupal\node\NodeInterface;
 
@@ -211,7 +212,7 @@ function joinup_oss_catalogue_preprocess_image_style(array &$variables): void {
  */
 function joinup_oss_catalogue_node_insert(NodeInterface $node): void {
   if ($node instanceof OssSolutionInterface) {
-    \Drupal::service('joinup_oss_catalogue.oss_solution.imagecache_warmer')
+    \Drupal::service(JoinupOssCatalogueImagecacheWarmer::class)
       ->queueImageUrls($node);
   }
 }
@@ -221,7 +222,7 @@ function joinup_oss_catalogue_node_insert(NodeInterface $node): void {
  */
 function joinup_oss_catalogue_node_update(NodeInterface $node): void {
   if ($node instanceof OssSolutionInterface) {
-    \Drupal::service('joinup_oss_catalogue.oss_solution.imagecache_warmer')
+    \Drupal::service(JoinupOssCatalogueImagecacheWarmer::class)
       ->queueImageUrls($node);
   }
 }
