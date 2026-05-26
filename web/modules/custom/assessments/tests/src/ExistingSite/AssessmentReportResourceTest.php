@@ -64,6 +64,8 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     file_put_contents("public://assessment-test/evil.exe", "qux");
     file_put_contents("public://assessment-test/fat.docx", str_repeat("x", 11000000));
     file_put_contents("public://assessment-test/" . str_repeat('very_', 48) . 'long_name.pdf', 'quxx');
+    // Used by the "Cardinality exceeded" scenario.
+    file_put_contents("public://assessment-test/report.pdf", "foo");
 
     ['payload' => $payload, 'expect' => $expect] = $this->getTestCase($scenario);
     $response = $this->post($payload);
@@ -86,6 +88,8 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
       'Missing country for a non-EU organisation',
       'Trying to create an EU organisation',
       'UniqueItems violations',
+      'Cardinality exceeded',
+      'SSRF private addresses',
     ];
 
     foreach ($scenarios as $scenario) {
@@ -223,6 +227,24 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     $this->assertArrayNotHasKey('errors', $data);
     $data = $this->normalizeAssessmentResponse($data);
 
+    // Register all created entities for cleanup before any assertion runs:
+    // a failing assertion otherwise leaks files into public:// and the next
+    // run trips on collision-renamed filenames (report_1.pdf, _2.pdf, ...).
+    $entityRepository = \Drupal::service('entity.repository');
+    $report = $entityRepository->loadEntityByUuid('assessment', $data['id']);
+    foreach ($report->get('documents') as $item) {
+      $this->markEntityForCleanup($item->entity);
+    }
+    foreach ($report->get('binding_requirement') as $requirement) {
+      foreach ($requirement->entity->get('requirement_documents') as $item) {
+        $this->markEntityForCleanup($item->entity);
+      }
+    }
+    if ($provider = $report->get('provider')->entity) {
+      $this->markEntityForCleanup($provider);
+    }
+    $this->markEntityForCleanup($report);
+
     // Update the expectation with generated UUIDs and URIs.
     $uuid = $data['id'];
     $uri = 'http://data.europa.eu/s2k/' . $uuid;
@@ -239,11 +261,7 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     $expect['binding_requirement'][0]['asset'][1]['uri'] = 'http://data.europa.eu/w21/' . $expect['binding_requirement'][0]['asset'][1]['id'];
     $this->assertEquals($expect, $data);
 
-    // Verify all entities created through the API are published.
-    $entityRepository = \Drupal::service('entity.repository');
-
-    // Load the report and verify it's published.
-    $report = $entityRepository->loadEntityByUuid('assessment', $data['id']);
+    // Verify the report is published (entity already loaded above).
     $this->assertTrue($report->isPublished(), 'Assessment report should be published');
 
     // Verify provider (public organisation) is published.
@@ -297,18 +315,6 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
     // The response is retrieved from cache.
     $assert->responseHeaderEquals('X-Drupal-Cache', 'HIT');
     $this->assertEquals($expect, $actual);
-
-    // Cleanup.
-    $report = \Drupal::service('entity.repository')->loadEntityByUuid('assessment', $data['id']);
-    foreach ($report->get('documents') as $item) {
-      $this->markEntityForCleanup($item->entity);
-    }
-    foreach ($report->get('binding_requirement') as $requirement) {
-      foreach ($requirement->entity->get('requirement_documents') as $item) {
-        $this->markEntityForCleanup($item->entity);
-      }
-    }
-    $this->markEntityForCleanup($report);
   }
 
   /**
@@ -362,11 +368,15 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
       );
     }
 
-    // Cleanup.
+    // Cleanup. Mark providers too so leaked orgs do not poison the count
+    // assertion on a subsequent run (notably the "different name" data set).
     $entityRepository = \Drupal::service('entity.repository');
     foreach ([$firstReportId, $secondReportId] as $reportId) {
       $report = $entityRepository->loadEntityByUuid('assessment', $reportId);
       if ($report) {
+        if ($provider = $report->get('provider')->entity) {
+          $this->markEntityForCleanup($provider);
+        }
         $this->markEntityForCleanup($report);
       }
     }
@@ -419,6 +429,9 @@ class AssessmentReportResourceTest extends JoinupExistingSiteTestBase {
 
     // Cleanup.
     $report = \Drupal::service('entity.repository')->loadEntityByUuid('assessment', $data['id']);
+    if ($provider = $report->get('provider')->entity) {
+      $this->markEntityForCleanup($provider);
+    }
     $this->markEntityForCleanup($report);
   }
 

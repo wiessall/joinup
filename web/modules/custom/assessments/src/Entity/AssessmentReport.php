@@ -34,6 +34,18 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
    */
   public function preSave(EntityStorageInterface $storage): void {
     parent::preSave($storage);
+
+    $field = $this->get('published_at');
+
+    if ($field->isEmpty() && \Drupal::getContainer()
+      ->get('joinup_workflow.workflow_helper')
+      ->isWorkflowStatePublished(
+        $this->getWorkflowState(),
+        $this->getWorkflow()
+      )) {
+      $field->set(0, ['value' => \Drupal::time()->getRequestTime()]);
+    }
+
     $this->clearEmptyStatements();
   }
 
