@@ -1,0 +1,39 @@
+entity.enhancement_profile.collection:
+  path: '/admin/config/ai-enhancement/profiles'
+  defaults:
+    _entity_list: 'enhancement_profile'
+    _title: 'AI Enhancement Profiles'
+  requirements:
+    _permission: 'administer ai enhancement'
+
+entity.enhancement_profile.add_form:
+  path: '/admin/config/ai-enhancement/profiles/add'
+  defaults:
+    _entity_form: 'enhancement_profile.add'
+    _title: 'Add Enhancement Profile'
+  requirements:
+    _permission: 'administer ai enhancement'
+
+entity.enhancement_profile.edit_form:
+  path: '/admin/config/ai-enhancement/profiles/{enhancement_profile}/edit'
+  defaults:
+    _entity_form: 'enhancement_profile.edit'
+    _title: 'Edit Enhancement Profile'
+  requirements:
+    _permission: 'administer ai enhancement'
+
+entity.enhancement_profile.delete_form:
+  path: '/admin/config/ai-enhancement/profiles/{enhancement_profile}/delete'
+  defaults:
+    _entity_form: 'enhancement_profile.delete'
+    _title: 'Delete Enhancement Profile'
+  requirements:
+    _permission: 'administer ai enhancement'
+
+ai_enhancement.settings:
+  path: '/admin/config/ai-enhancement/settings'
+  defaults:
+    _form: 'Drupal\ai_enhancement\Form\SettingsForm'
+    _title: 'AI Enhancement Settings'
+  requirements:
+    _permission: 'administer ai enhancement'

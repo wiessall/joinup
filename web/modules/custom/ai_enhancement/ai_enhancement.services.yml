@@ -1,0 +1,41 @@
+services:
+  ai_enhancement.ollama_client:
+    class: Drupal\ai_enhancement\Service\OllamaClient
+    arguments:
+      - '@http_client'
+      - '@config.factory'
+      - '@logger.channel.ai_enhancement'
+      - '@ai_enhancement.tool_registry'
+
+  ai_enhancement.tool_registry:
+    class: Drupal\ai_enhancement\Service\ToolRegistry
+    arguments: ['@logger.channel.ai_enhancement']
+    tags:
+      - { name: service_collector, tag: ai_enhancement.tool, call: addTool }
+
+  ai_enhancement.pipeline:
+    class: Drupal\ai_enhancement\Service\EnhancementPipeline
+    arguments:
+      - '@ai_enhancement.ollama_client'
+      - '@ai_enhancement.tool_registry'
+      - '@ai_output_checks.check_runner'
+      - '@ai_output_checks.node_audit'
+      - '@entity_type.manager'
+      - '@logger.channel.ai_enhancement'
+
+  ai_enhancement.entity_save_subscriber:
+    class: Drupal\ai_enhancement\EventSubscriber\EntitySaveSubscriber
+    arguments: ['@queue', '@entity_type.manager', '@config.factory']
+
+  logger.channel.ai_enhancement:
+    parent: logger.channel_base
+    arguments: ['ai_enhancement']
+
+  # Tools (function-calling) available to the generator model.
+  # The deterministic check is NOT a tool here — it runs as a separate
+  # pipeline step via ai_output_checks.check_runner.
+  ai_enhancement.tool.taxonomy_lookup:
+    class: Drupal\ai_enhancement\Tool\TaxonomyLookupTool
+    arguments: ['@entity_type.manager']
+    tags:
+      - { name: ai_enhancement.tool }

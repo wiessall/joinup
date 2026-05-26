@@ -1,0 +1,10 @@
+name: 'AI Enhancement'
+type: module
+description: 'Multi-step AI enhancement pipeline using a local Ollama instance, with deterministic checks (via ai_output_checks) and an LLM-judge feedback loop.'
+package: 'STI Portal'
+core_version_requirement: ^10.2 || ^11
+configure: entity.enhancement_profile.collection
+dependencies:
+  - drupal:system
+  - drupal:taxonomy
+  - ai_output_checks:ai_output_checks

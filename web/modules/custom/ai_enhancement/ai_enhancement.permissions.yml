@@ -1,0 +1,4 @@
+administer ai enhancement:
+  title: 'Administer AI Enhancement'
+  description: 'Manage AI enhancement profiles and module settings.'
+  restrict access: true

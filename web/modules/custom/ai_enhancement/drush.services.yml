@@ -1,0 +1,9 @@
+services:
+  ai_enhancement.commands:
+    class: Drupal\ai_enhancement\Commands\EnhancementCommands
+    arguments:
+      - '@ai_enhancement.pipeline'
+      - '@entity_type.manager'
+      - '@ai_output_checks.qa_paragraph_manager'
+    tags:
+      - { name: drush.command }
