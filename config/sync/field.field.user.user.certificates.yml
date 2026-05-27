@@ -1,0 +1,34 @@
+uuid: 4eec6455-efda-404b-bc31-775b11f7aef9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.certificates
+    - node.type.certificate
+  module:
+    - tmgmt_content
+    - user
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: user.user.certificates
+field_name: certificates
+entity_type: user
+bundle: user
+label: Certificates
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      certificate: certificate
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
