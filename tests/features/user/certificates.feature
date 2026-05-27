@@ -5,10 +5,7 @@ Feature: User certificates
   on my profile on the Portal
 
   Background:
-    Given the following collection content:
-      | uuid                                 | title                        |
-      | 1cc1b2c4-f65a-49cb-9a31-d5a49f283ea3 | Interoperable Europe Academy |
-    And the following solution content:
+    Given the following solution content:
       | title                    | collection                   | state     |
       | Published IOPEU Solution | Interoperable Europe Academy | published |
       | Archived IOPEU Solution  | Interoperable Europe Academy | archived  |
