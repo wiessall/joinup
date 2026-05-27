@@ -19,6 +19,7 @@ trait GroupMenuLinkTrait {
    */
   public function setInsidePlugin(): static {
     assert($this instanceof GroupMenuLinkInterface);
+    assert($this->hasField('menu_settings') && $this->getFieldDefinition('menu_settings')->getType() === 'map');
     $this->insidePlugin = TRUE;
     return $this;
   }
@@ -28,6 +29,7 @@ trait GroupMenuLinkTrait {
    */
   public function isInsidePlugin(): bool {
     assert($this instanceof GroupMenuLinkInterface);
+    assert($this->hasField('menu_settings') && $this->getFieldDefinition('menu_settings')->getType() === 'map');
     return $this->insidePlugin;
   }
 
