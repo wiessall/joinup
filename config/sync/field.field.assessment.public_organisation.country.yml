@@ -5,18 +5,16 @@ dependencies:
   config:
     - assessments.type.public_organisation
     - field.storage.assessment.country
-    - taxonomy.vocabulary.spatial
-    - views.view.eu_countries
   module:
     - rdf_sync
     - tmgmt_content
 third_party_settings:
+  tmgmt_content:
+    excluded: false
   rdf_sync:
     target_id:
       predicate: 'http://purl.org/dc/terms/spatial'
       type: resource
-  tmgmt_content:
-    excluded: false
 id: assessment.public_organisation.country
 field_name: country
 entity_type: assessment
@@ -31,7 +29,7 @@ settings:
   handler: views
   handler_settings:
     view:
-      view_name: eu_countries
+      view_name: countries
       display_name: entity_reference_eu_countries
       arguments: {  }
 field_type: entity_reference
