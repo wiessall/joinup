@@ -157,7 +157,7 @@ Feature:
     When I visit the "Super Awesome Software" "oss_solution"
     And I click "Developers Italia"
     Then I should be on "/eu-oss-catalogue/solutions"
-    And I should see the following facet summary "Developers Italia"
+    And I should see the following facet summary "IT - Developers Italia"
     When I visit the "Super Awesome Software" "oss_solution"
     And I click "science-and-technology"
     Then I should be on "/eu-oss-catalogue/solutions"

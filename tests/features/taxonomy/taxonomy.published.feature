@@ -122,3 +122,27 @@ Feature: Publication status of keywords depends on the status of the parent.
 
     Then I go to the "Ytterbium" keyword
     And I should see the heading "Access denied"
+
+  @javascript
+  # Regression test for ticket ISAICP-11336
+  Scenario: Saving a draft that references an existing unpublished keyword does not cause a reference error.
+    Given the following "tags" terms:
+      | name    | status |
+      | Iridium | 0      |
+
+    When I am logged in as a moderator
+    And I go to the homepage of the "Portal support" collection
+    And I click "Add news" in the plus button menu
+    And I fill in the following:
+      | Short title | Iridium draft news |
+      | Headline    | Iridium draft news |
+      | Abstract    | Dummy text         |
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | Blah           |
+      | field_body:format | content_editor |
+    And I select "Demography" option from "Topic"
+    And I select "Iridium" options from "Search keywords"
+    And I press "Save as draft"
+    Then I should see the heading "Iridium draft news"
+    And the publication state of the "Iridium" "taxonomy_term" should be "unpublished"
+    And there should be 1 "taxonomy_term" with the name "Iridium"

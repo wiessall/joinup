@@ -5,6 +5,7 @@ dependencies:
   config:
     - facets.facet.date
     - facets.facet.domain
+    - facets.facet.functions
     - facets.facet.group
     - facets.facet.interoperable_flag
     - facets.facet.organisation_country
@@ -87,6 +88,12 @@ facets:
   status:
     checked: true
     label: Status
+    separator: ', '
+    show_count: false
+    weight: 0
+  functions:
+    checked: true
+    label: Functions
     separator: ', '
     show_count: false
     weight: 0

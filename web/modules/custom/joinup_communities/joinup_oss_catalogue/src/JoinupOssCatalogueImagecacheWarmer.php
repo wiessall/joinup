@@ -40,7 +40,7 @@ final readonly class JoinupOssCatalogueImagecacheWarmer {
     $queue = $this->queueFactory->get('joinup_oss_catalogue_imagecache_warmer');
     $queue->createQueue();
 
-    foreach ($this->getChangedFileValues($ossSolution) as $url) {
+    foreach ($this->getFileValues($ossSolution) as $url) {
       if (!imagecache_external_validate_host($url)) {
         continue;
       }
@@ -60,54 +60,18 @@ final readonly class JoinupOssCatalogueImagecacheWarmer {
    *   The new main values of the fields in static::FIELDS, fetched from the
    *   relevant translation.
    */
-  protected function getChangedFileValues(OssSolutionInterface $ossSolution): array {
+  protected function getFileValues(OssSolutionInterface $ossSolution): array {
     $fileUrisToFetch = [];
     $relevantTranslation = $ossSolution->getTranslation($ossSolution->getRelevantLangCode());
     foreach (self::FIELDS as $fieldName) {
       $fileUrisToFetch = array_unique(
         array_merge(
           $fileUrisToFetch,
-          $this->getChangedValuesFromField($relevantTranslation, $fieldName)
+          $this->getMainItemValuesFromField($relevantTranslation->get($fieldName)),
         )
       );
     }
     return $fileUrisToFetch;
-  }
-
-  /**
-   * Returns the main values of a changed field items of a field.
-   *
-   * @param \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $ossSolution
-   *   The host entity of the field.
-   * @param string $fieldName
-   *   The name of the field.
-   *
-   * @return string[]
-   *   The new main values of the field.
-   */
-  protected function getChangedValuesFromField(OssSolutionInterface $ossSolution, string $fieldName): array {
-    if (!$ossSolution->hasField($fieldName) || ($field = $ossSolution->get($fieldName))->isEmpty()) {
-      return [];
-    }
-
-    $original = $this->getOriginal($ossSolution);
-    $originalFieldIsEmpty = !isset($original) || $original->get($fieldName)
-      ->isEmpty();
-    $originalField = $original?->get($fieldName);
-
-    if (
-      $originalFieldIsEmpty ||
-      $field->hasAffectingChanges($originalField, $ossSolution->language()
-        ->getId())
-    ) {
-      $originalValues = $originalFieldIsEmpty
-        ? []
-        : $this->getMainItemValuesFromField($originalField);
-      $newValues = $this->getMainItemValuesFromField($field);
-      return array_diff($newValues, $originalValues);
-    }
-
-    return [];
   }
 
   /**
@@ -131,25 +95,6 @@ final readonly class JoinupOssCatalogueImagecacheWarmer {
       $values[] = $mainValue;
     }
     return $values;
-  }
-
-  /**
-   * Returns the previous version of the OSS Solution object.
-   *
-   * @param \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $ossSolution
-   *   The OSS solution.
-   *
-   * @return \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface|null
-   *   The previous translation of the OSS solution object with the same
-   *   language code; NULL otherwise.
-   */
-  protected function getOriginal(OssSolutionInterface $ossSolution): ?OssSolutionInterface {
-    $original = $ossSolution->getOriginal();
-    if ($original instanceof OssSolutionInterface) {
-      $languageCode = $original->getRelevantLangCode();
-      return $original->getTranslation($languageCode);
-    }
-    return NULL;
   }
 
 }
