@@ -10,7 +10,6 @@ element_name: user_homepage
 time_limit: 5
 expire: 300
 form_settings:
-  adms_validator_form: true
   comment_comment_form: true
   comment_reply_form: true
   message_contact_form_submission_form: true
