@@ -15,6 +15,7 @@ use Drupal\assessments\AssessmentInterface;
 use Drupal\comment\CommentInterface;
 use Drupal\joinup_badge\BadgeService;
 use Drupal\joinup_badge\Entity\BadgeAwarding;
+use Drupal\joinup_badge\Entity\Certificate;
 use Drupal\joinup_badge\Plugin\Field\FieldType\BadgeFieldItemList;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgMembershipInterface;
@@ -97,6 +98,8 @@ class BadgeHooks implements DestructableInterface {
         $bundles['flagging'][$flagId]['class'] = BadgeAwarding::class;
       }
     }
+
+    $bundles['node']['certificate']['class'] = Certificate::class;
   }
 
   /**
