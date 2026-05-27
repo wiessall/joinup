@@ -22,6 +22,7 @@ function joinup_group_deploy_201300(array &$sandbox): string {
     $query = $db->select('menu_link_content', 'm')
       ->fields('md', ['enabled', 'weight', 'parent', 'id'])
       ->fields('n', ['nid', 'vid', 'title'])
+      ->fields('oa', ['bundle'])
       // Only links from OG menus.
       ->condition('md.menu_name', 'ogmenu-%', 'LIKE')
       // Only links to custom pages.
@@ -31,6 +32,7 @@ function joinup_group_deploy_201300(array &$sandbox): string {
       ->orderBy('md.parent');
     $query->innerJoin('menu_link_content_data', 'md', 'md.id = m.id');
     $query->innerJoin('node_field_data', 'n', 'SUBSTRING(md.link__uri, 13) = n.nid');
+    $query->innerJoin('ogmenu_instance__og_audience', 'oa', 'SUBSTRING(md.menu_name, 8) = oa.entity_id');
     // Plugin ID (e.g., menu_link_content:016c320a-b88a-4737-8d12-e0c89a2d14bc).
     $query->addExpression('CONCAT(:base, m.uuid)', 'plugin', [':base' => 'menu_link_content:']);
     // The OG menu instance ID.
@@ -46,7 +48,8 @@ function joinup_group_deploy_201300(array &$sandbox): string {
       }
 
       // Build custom page menu settings.
-      $sandbox['menu_settings'][$link->nid][$link->ogmenu] = [
+      $sandbox['menu_settings'][$link->nid][$link->bundle] = [
+        'ogmenu' => $link->ogmenu,
         'parent' => (string) $sandbox['links'][$link->plugin]->parent,
         'weight' => (int) $link->weight,
         'enabled' => (bool) $link->enabled,
@@ -111,6 +114,7 @@ function joinup_group_deploy_201300(array &$sandbox): string {
     $db->delete('menu_tree')
       ->condition('id', array_values($sandbox['menu_link_content_processed']), 'IN')
       ->execute();
+    // @todo REMOVE BABEL ENTRIES?
     return 'Cleaned up legacy menu link content links';
   }
 

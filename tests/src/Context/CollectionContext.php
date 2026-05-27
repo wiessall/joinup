@@ -244,7 +244,8 @@ class CollectionContext extends RawDrupalContext {
       $page = $this->getEntityByLabel('node', $values['title'], 'custom_page');
       $menu_settings = $page->get('menu_settings')->value ?? [];
       $parent = !empty($values['parent']) ? $this->getEntityByLabel('node', $values['parent'], 'custom_page') : NULL;
-      $menu_settings[$og_menu_instance->id()] = [
+      $menu_settings[$menu_type] = [
+        'ogmenu' => $og_menu_instance->id(),
         'enabled' => ($values['enabled'] ??= 'yes') === 'yes',
         'weight' => (int) ($values['weight'] ?? 0),
         'parent' => $parent ? GroupMenuLink::id("{$og_menu_instance->id()}-{$parent->id()}") : '',
