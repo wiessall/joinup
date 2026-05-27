@@ -52,9 +52,14 @@ class OssLabelProcessor extends ProcessorPluginBase implements BuildProcessorInt
    */
   public function build(FacetInterface $facet, array $results): array {
     $labels = $this->providerPluginManager->getDefinitionsAsOptions('label');
+    $countries = $this->providerPluginManager->getDefinitionsAsOptions('country');
+    $countries['hosting_platform:code_europa_eu'] = 'EU';
+
     foreach ($results as $result) {
       if ($result instanceof ResultInterface && isset($labels[$result->getDisplayValue()])) {
-        $result->setDisplayValue($labels[$result->getDisplayValue()]);
+        $id = $result->getDisplayValue();
+        $country = $countries[$id] ?? '';
+        $result->setDisplayValue($country ? "$country - " . $labels[$id] : $labels[$id]);
       }
     }
 

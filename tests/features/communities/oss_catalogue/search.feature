@@ -75,7 +75,7 @@ Feature: OSS catalogue search
       | Development status |
 
     # Check facets.
-    And the "OSS catalog" checkbox facet should allow selecting the following values "Developers Italia (5)"
+    And the "OSS catalog" checkbox facet should allow selecting the following values "IT - Developers Italia (5)"
     And the "OSS category" checkbox facet should allow selecting the following values "application-development (1),content-management (1),data-analytics (1),data-collection (2),digital-asset-management (2),it-development (1)"
     And the "OSS intended audience" checkbox facet should allow selecting the following values "agriculture (2),culture (2),defence (1),education (2)"
     And the "OSS software type" checkbox facet should allow selecting the following values "standalone/mobile (1), standalone/desktop (2), standalone/backend (1), standalone/other (1)"
@@ -285,7 +285,7 @@ Feature: OSS catalogue search
       | macOS | development            | developers_italia | published |
 
     When I visit the OSS search page
-    And I click "Get more details on Developers Italia"
+    And I click "Get more details on IT - Developers Italia"
     Then a modal should open
     And I should see the text "Source Catalogue Info" in the "Modal title"
     And I should see the text "Developers Italia" in the "Modal content"
