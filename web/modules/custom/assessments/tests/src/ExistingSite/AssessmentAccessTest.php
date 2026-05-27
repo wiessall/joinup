@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\ExistingSite;
 
+use Drupal\Tests\assessments\Traits\AssessmentEntityCreationTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\assessments\AssessmentAccessControlHandler;
 use Drupal\assessments\AssessmentStatementAccessControlHandler;
@@ -31,6 +32,8 @@ use PHPUnit\Framework\Attributes\Group;
 #[CoversClass(AssessmentSubEntity::class)]
 #[Group('assessments')]
 class AssessmentAccessTest extends JoinupExistingSiteTestBase {
+
+  use AssessmentEntityCreationTrait;
 
   /**
    * The assessment access control handler.
@@ -326,8 +329,13 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
     $report->save();
     $this->markEntityForCleanup($report);
 
-    // Create a statement and link it to the report.
-    $statement = AssessmentStatement::create(['type' => 'legal']);
+    $statement = AssessmentStatement::create([
+      'type' => 'legal',
+      'interpretation' => [
+        'entity' => $this->getAssessmentVocabularyHelper()
+          ->getTermFromIdentifier('assess_statement_interpretation', 'positive'),
+      ],
+    ]);
     $statement->save();
     $this->markEntityForCleanup($statement);
     $report->set('legal', $statement->id())->save();

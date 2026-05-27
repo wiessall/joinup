@@ -1,0 +1,20 @@
+uuid: 584ec252-3019-498f-9135-fa09a4c559f6
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+    - user
+id: user.function_of_administration
+field_name: function_of_administration
+entity_type: user
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

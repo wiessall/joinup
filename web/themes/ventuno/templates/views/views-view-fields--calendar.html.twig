@@ -1,0 +1,31 @@
+{#
+/**
+ * @file
+ * Template for calendar view event rows.
+ *
+ * Available variables:
+ * - fields: A list of fields keyed by field ID.
+ * - location_label: Translated location type label.
+ *
+ * @see ventuno_preprocess_views_view_fields__calendar()
+ */
+#}
+<div class="calendar-event">
+  {% for field in fields -%}
+    {{ field.separator }}
+    {%- if field.wrapper_element -%}
+      <{{ field.wrapper_element }}{{ field.wrapper_attributes }}>
+    {%- endif %}
+    {%- if field.element_type -%}
+      <{{ field.element_type }}{{ field.element_attributes }}>{{ field.content }}</{{ field.element_type }}>
+    {%- else -%}
+      {{ field.content }}
+    {%- endif %}
+    {%- if field.wrapper_element -%}
+      </{{ field.wrapper_element }}>
+    {%- endif %}
+  {%- endfor %}
+  <div class="views-field views-field-location-label">
+    <span class="field-content">{{ location_label }}</span>
+  </div>
+</div>

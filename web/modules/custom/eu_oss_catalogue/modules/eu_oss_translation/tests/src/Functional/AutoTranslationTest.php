@@ -107,8 +107,8 @@ class AutoTranslationTest extends FetchTestBase {
 
     $this->fetchSolutions('developers_italia', 7);
 
-    $this->assertEquals(5, $jobBuilderQueue->numberOfItems());
-    $this->processQueue($jobBuilderWorker, $jobBuilderQueue, 5);
+    $this->assertEquals(6, $jobBuilderQueue->numberOfItems());
+    $this->processQueue($jobBuilderWorker, $jobBuilderQueue, 6);
     $this->assertEquals(0, $jobBuilderQueue->numberOfItems());
 
     $this->assertEquals(11, $tmgProviderQueue->numberOfItems());

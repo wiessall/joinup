@@ -8,6 +8,7 @@ dependencies:
     - field.field.user.user.field_social_media
     - field.field.user.user.field_user_business_title
     - field.field.user.user.field_user_content
+    - field.field.user.user.field_user_country_of_residence
     - field.field.user.user.field_user_family_name
     - field.field.user.user.field_user_first_name
     - field.field.user.user.field_user_frequency
@@ -15,6 +16,8 @@ dependencies:
     - field.field.user.user.field_user_organisation
     - field.field.user.user.field_user_photo
     - field.field.user.user.field_user_professional_domain
+    - field.field.user.user.function_of_administration
+    - field.field.user.user.field_user_work_location
   module:
     - user
 _core:
@@ -30,11 +33,13 @@ content:
     weight: 0
     region: content
 hidden:
+  badges: true
   block_user: true
   blocked_reason: true
   field_social_media: true
   field_user_business_title: true
   field_user_content: true
+  field_user_country_of_residence: true
   field_user_family_name: true
   field_user_first_name: true
   field_user_frequency: true
@@ -42,6 +47,8 @@ hidden:
   field_user_organisation: true
   field_user_photo: true
   field_user_professional_domain: true
+  field_user_work_location: true
+  function_of_administration: true
   langcode: true
   masquerade: true
   member_for: true

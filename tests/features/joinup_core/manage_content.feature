@@ -58,7 +58,7 @@ Feature:
     And I select "Archive content" from "Action"
     And I press "Apply to selected items"
     And I wait for the batch process to finish
-    Then I should see "Proceeded updates to 1 entities"
+    Then I should see "Proceeded updates to 1 entity"
     And I should see "19/11/2019 - 20:00"
 
     # Last activity for discussion.
@@ -103,7 +103,7 @@ Feature:
     And I select "Archive content" from "Action"
     And I press "Apply to selected items"
     And I wait for the batch process to finish
-    Then I should see "Proceeded updates to 1 entities"
+    Then I should see "Proceeded updates to 1 entity"
     And I should see "12/06/2017 - 19:00"
     And the string value of the "revision_log" field in "The Ultimate Debate" content should be "Updated state to 'archived' by VBO action, from revision ID '<placeholder>' with state 'published'."
 
@@ -136,7 +136,7 @@ Feature:
     And I select "Archive content" from "Action"
     And I press "Apply to selected items"
     And I wait for the batch process to finish
-    Then I should see "Proceeded updates to 1 entities"
+    Then I should see "Proceeded updates to 1 entity"
     And I should see "19/11/2016 - 20:00"
 
     # Select rows.
@@ -324,3 +324,34 @@ Feature:
     When I go to the manage content page of "Solution 2"
     Then I should see the link "Release 1 1.0"
     And I should see the link "Distribution 1"
+
+  Scenario: Leading and trailing whitespace is trimmed from node titles on save.
+    Given the following collection content:
+      | title             |
+      | Trimming Test Hub |
+    And I am logged in as a moderator
+    When I go to the homepage of the "Trimming Test Hub" collection
+    And I click "Add discussion" in the plus button menu
+    And I fill in "Title" with "  Untrimmed Discussion Title  "
+    And I fill in "Content" with "Content body."
+    And I select "EU and European Policies" options from "Topic"
+    And I press "Publish"
+    Then I should see the heading "Untrimmed Discussion Title"
+    When I go to the edit form of the "Untrimmed Discussion Title" discussion
+    Then the "Title" field should contain "Untrimmed Discussion Title"
+
+  Scenario: When the transition is allowed, unarchive action should also work.
+    Given the following solution content:
+      | title            |
+      | Vintage Solution |
+    And the following release content:
+      | title                      | is version of     | state    |
+      | Initially Archived Release | Vintage Solution  | archived |
+
+    When I am logged in as a moderator
+    And I go to the manage content page of "Vintage Solution"
+    And I select the "Initially Archived Release" row
+    And I select "Unarchive content" from "Action"
+    And I press "Apply to selected items"
+    And I wait for the batch process to finish
+    Then I should see "Proceeded updates to 1 entity"

@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies: {  }
 id: dmrid_dits
-label: 'Department of Information Technology Services'
+label: 'Dept. of IT Services'
 type: national
 country: CY
 weblinks:

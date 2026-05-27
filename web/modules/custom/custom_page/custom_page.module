@@ -398,36 +398,3 @@ function custom_page_preprocess_menu__og__navigation(array &$variables): void {
     }
   }
 }
-
-/**
- * Implements hook_pathauto_alias_alter().
- *
- * Aliases are generated automatic, but some words are prohibited.
- */
-function custom_page_pathauto_alias_alter(&$alias, array $context): void {
-  if ($context['module'] !== 'node' || $context['bundle'] !== 'custom_page') {
-    return;
-  }
-
-  $node = $context['data']['node'] ?? NULL;
-  if (!$node instanceof CustomPageInterface || !$node->hasGroup()) {
-    return;
-  }
-
-  $prohibited_suffixes = [
-    '/distribution',
-    '/news',
-    '/discussion',
-    '/document',
-    '/event',
-    '/solution',
-    '/release',
-  ];
-  foreach ($prohibited_suffixes as $prohibited) {
-    if (str_ends_with($alias, $prohibited)) {
-      // Append an incrementing numeric suffix, treat it as already taken.
-      $alias = $alias . '-0';
-      return;
-    }
-  }
-}

@@ -7,6 +7,7 @@ namespace Drupal\assessments\Entity;
 use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\assessments\AssessmentInterface;
+use Drupal\assessments\AssessmentStatementInterface;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
@@ -31,6 +32,26 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
   /**
    * {@inheritdoc}
    */
+  public function preSave(EntityStorageInterface $storage): void {
+    parent::preSave($storage);
+
+    $field = $this->get('published_at');
+
+    if ($field->isEmpty() && \Drupal::getContainer()
+      ->get('joinup_workflow.workflow_helper')
+      ->isWorkflowStatePublished(
+        $this->getWorkflowState(),
+        $this->getWorkflow()
+      )) {
+      $field->set(0, ['value' => \Drupal::time()->getRequestTime()]);
+    }
+
+    $this->clearEmptyStatements();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function postSave(EntityStorageInterface $storage, $update = TRUE): void {
     parent::postSave($storage, $update);
 
@@ -38,6 +59,22 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
       $this->onUpdateEntityReferenceFieldsOwned();
     }
     $this->onSaveReflectPublicationStatus();
+  }
+
+  /**
+   * Clears statement field references where no interpretation has been set.
+   */
+  protected function clearEmptyStatements(): void {
+    foreach (['legal', 'organisational', 'semantic', 'technical'] as $fieldName) {
+      if (!$this->hasField($fieldName) || $this->get($fieldName)->isEmpty()) {
+        continue;
+      }
+      $statement = $this->get($fieldName)->first()->entity;
+      if ($statement instanceof AssessmentStatementInterface && $statement->get('interpretation')
+        ->isEmpty()) {
+        $this->set($fieldName, NULL);
+      }
+    }
   }
 
   /**

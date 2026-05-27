@@ -134,6 +134,17 @@ class OssSolutionListingPageTest extends FetchTestBase {
           'View',
         ],
         [
+          'Long used by',
+          'Long used by',
+          'https://limited.self-hosted.gitlab.example.com/group1/long-feature',
+          'Long feature',
+          'Developers Italia',
+          'EN',
+          'Yes',
+          'No',
+          'View',
+        ],
+        [
           'Project 1',
           'Project 1',
           'https://limited.self-hosted.gitlab.example.com/user1/project-1',

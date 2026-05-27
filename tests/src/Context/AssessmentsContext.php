@@ -313,6 +313,28 @@ class AssessmentsContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts that an assessment with the given name and type does not exist.
+   *
+   * @param string $type
+   *   The type of the assessment.
+   * @param string $name
+   *   The name of the assessment.
+   *
+   * @throws \Exception
+   *   When an assessment with the given name and type exists.
+   */
+  #[Then('the :type assessment :name should not exist')]
+  public function assertAssessmentNotExists(string $type, string $name): void {
+    try {
+      $this->getEntityByLabel('assessment', $name, $type);
+      throw new \Exception(sprintf('A %s assessment with name "%s" exists but should not.', $type, $name));
+    }
+    catch (\RuntimeException) {
+      // Expected: entity not found.
+    }
+  }
+
+  /**
    * Clicks on the ID link for a specific assessment in the admin listing.
    *
    * @param string $name
@@ -394,9 +416,14 @@ class AssessmentsContext extends RawDrupalContext {
   #[Given('the :name report has assessment statements of types:')]
   public function addAssessmentStatementsToReport(string $name, TableNode $table): void {
     $report = $this->getEntityByLabel('assessment', $name, 'report');
+    $vocabHelper = \Drupal::service(AssessmentVocabularyHelper::class);
+    $interpretation = $vocabHelper->getTermFromIdentifier('assess_statement_interpretation', 'positive');
     foreach ($table->getHash() as $row) {
       $type = $row['type'];
-      $statement = AssessmentStatement::create(['type' => $type]);
+      $statement = AssessmentStatement::create([
+        'type' => $type,
+        'interpretation' => ['entity' => $interpretation],
+      ]);
       $statement->save();
       $report->get($type)->setValue(['target_id' => $statement->id()]);
     }
