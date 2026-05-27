@@ -132,18 +132,26 @@ class IrdAnnotateCommands extends DrushCommands {
     foreach ($keys as $key => $values) {
       $field_name = $this->fieldName($collection_id, $key);
 
-      if ($use_terms) {
-        //? Automatic vocabulary collection; need to check what can go wrong
+      if ($use_terms && !$this->keyLooksLikeFreeText($values)) {
+        // Only create a vocabulary when values look like a controlled list.
+        // Keys whose values are typically long free-text paragraphs are silently
+        // downgraded to string_long fields — see keyLooksLikeFreeText().
         $vid = substr($collection_id . '_' . $this->slug($key), 0, 32);
         $this->ensureVocabulary($vid, "$collection_id: $key");
         $flat_values = [];
-        array_walk_recursive($values, function ($v) use (&$flat_values) { $flat_values[] = $v; });
+        $arr = (array) $values;
+        array_walk_recursive($arr, function ($v) use (&$flat_values) { $flat_values[] = $v; });
         foreach (array_unique($flat_values) as $v) {
           $this->ensureTerm($vid, (string) $v);
         }
         $this->ensureTermRefField($bundle, $field_name, $vid, $key);
       }
       else {
+        if ($use_terms) {
+          $this->logger()->notice(
+            "Key '$key' looks like free text — stored as string_long instead of taxonomy terms."
+          );
+        }
         $this->ensureStringField($bundle, $field_name, $key);
       }
     }
@@ -505,7 +513,61 @@ class IrdAnnotateCommands extends DrushCommands {
     }
   }
 
+  /**
+   * Maximum length for taxonomy term names.
+   *
+   * taxonomy_term_field_data.name is varchar(255).  We cap at 240 to leave a
+   * safety margin for multi-byte UTF-8: mb_substr counts codepoints, but MySQL
+   * varchar(255) counts bytes.  Without this guard, free-text annotation values
+   * longer than 255 bytes crash with SQLSTATE[22001] String data right truncated.
+   */
+  /**
+   * Heuristic: would treating these values as taxonomy terms make sense?
+   *
+   * A key is considered "free text" — and therefore unsuitable for a vocabulary
+   * — when any of its values across ALL records exceeds TERM_NAME_MAX characters,
+   * OR when the average value length exceeds 80 characters (typical of sentence-
+   * or paragraph-length annotations like "measurable_positive_outcomes").
+   *
+   * This avoids both the varchar(255) crash AND polluting vocabularies with
+   * unique long strings that provide no filtering value.
+   *
+   * @param mixed $values  The raw value(s) for this key across all records.
+   */
+  private function keyLooksLikeFreeText(mixed $values): bool {
+    $flat = [];
+    $arr = (array) $values;
+    array_walk_recursive($arr, function ($v) use (&$flat) {
+      $flat[] = (string) $v;
+    });
+    if (empty($flat)) {
+      return FALSE;
+    }
+    $total_len  = 0;
+    $count      = 0;
+    foreach ($flat as $v) {
+      $len = mb_strlen($v);
+      if ($len > self::TERM_NAME_MAX) {
+        return TRUE;   // any single value over the hard limit → free text
+      }
+      $total_len += $len;
+      $count++;
+    }
+    $avg = $count > 0 ? $total_len / $count : 0;
+    return $avg > 80;  // average sentence-length → free text
+  }
+
+  private const TERM_NAME_MAX = 240;
+
   private function ensureTerm(string $vid, string $name): int {
+    if (mb_strlen($name) > self::TERM_NAME_MAX) {
+      $this->logger()->warning(
+        "Term name truncated in vocab '$vid' ("
+        . mb_strlen($name) . " chars): " . mb_substr($name, 0, 80) . '...'
+      );
+      $name = mb_substr($name, 0, self::TERM_NAME_MAX);
+    }
+
     $existing = $this->entityTypeManager->getStorage('taxonomy_term')
       ->loadByProperties(['vid' => $vid, 'name' => $name]);
     if ($existing) {

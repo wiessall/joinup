@@ -53,3 +53,58 @@ function import_IRD_jsons_node_view(array &$build, $node, $display, $view_mode) 
     ];
   }
 }
+/**
+ * Implements hook_views_data_alter().
+ *
+ * Patches two gaps that cause HandlerBase::getEntityType() to crash with
+ * "Undefined array key 'relationship'" (line 829) → "Trying to access array
+ * offset on null" → InvalidArgumentException: A valid cache entry key required.
+ *
+ * Crash chain in getEntityType():
+ *   1. Checks $views_data->get('node_field_data')['table']['entity type'].
+ *      On RDF-enhanced platforms (joinup_rdf / sti_rdf) this key can be absent
+ *      because the node ViewsData is altered or replaced.
+ *   2. Falls through to the relationship branch (~line 829):
+ *        $base = $data[$relationship_field]['relationship']['base'];
+ *      For programmatically-created fields (field_innovation is created by
+ *      ird:annotate, not via UI), views_field_default_views_data() sometimes
+ *      omits the 'relationship' sub-key from the target_id column entry.
+ *      Accessing ['relationship'] on the missing key gives the PHP Warning;
+ *      accessing ['base'] on the resulting null gives the second Warning; and
+ *      finally $views_data->get(null) throws the InvalidArgumentException.
+ *
+ * Both fixes are strictly additive (only fill in missing data).
+ */
+function import_IRD_jsons_views_data_alter(array &$data): void {
+
+  // ---- Fix 1: node_field_data entity type ---------------------------------
+  // Standard Drupal always sets this, but joinup_rdf / sti_rdf may remove it
+  // when altering node storage to use a triple store for RDF export.
+  // EntityField::getEntityType() must find 'node' here to return early and
+  // never reach the relationship-traversal code below.
+  if (isset($data['node_field_data']['table'])
+    && empty($data['node_field_data']['table']['entity type'])
+  ) {
+    $data['node_field_data']['table']['entity type'] = 'node';
+    $data['node_field_data']['table']['entity revision'] = FALSE;
+  }
+
+  // ---- Fix 2: field_innovation relationship entry --------------------------
+  // Ensures the Views data for node__field_innovation.field_innovation_target_id
+  // contains the 'relationship' key that getEntityType() traverses when it
+  // cannot find the entity type from the base table (Fix 1 fallback).
+  // views_field_default_views_data() should generate this automatically for
+  // FieldStorageConfig entities, but for programmatically-provisioned fields
+  // it is occasionally absent, especially on platforms with custom Views hooks.
+  if (isset($data['node__field_innovation']['field_innovation_target_id'])
+    && empty($data['node__field_innovation']['field_innovation_target_id']['relationship'])
+  ) {
+    $data['node__field_innovation']['field_innovation_target_id']['relationship'] = [
+      'title'      => t('Solution node referenced by field_innovation'),
+      'base'       => 'node_field_data',
+      'base field' => 'nid',
+      'id'         => 'standard',
+      'label'      => t('Solution'),
+    ];
+  }
+}
