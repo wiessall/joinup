@@ -98,7 +98,7 @@ third_party_settings:
     multilingual:
       limit_to_content_language: false
       include_language_independent: true
-      use_language_undefined_as_fallback_language: false
+      use_language_undefined_as_fallback_language: true
       specific_languages:
         bg: '0'
         hr: '0'
@@ -155,6 +155,18 @@ field_settings:
     dependencies:
       module:
         - assessments
+  binding_requirement_affects_name:
+    label: 'Identification of binding requirement(s) assessed » Paragraph » Affected service » Assessment » Name'
+    datasource_id: 'entity:assessment'
+    property_path: 'binding_requirement:entity:affects:entity:name'
+    type: text
+    dependencies:
+      config:
+        - field.storage.assessment.binding_requirement
+        - field.storage.paragraph.affects
+      module:
+        - assessments
+        - paragraphs
   body:
     label: 'Body » Processed text'
     datasource_id: 'entity:node'
@@ -668,61 +680,6 @@ field_settings:
     dependencies:
       module:
         - publication_date
-  rendered_assessment:
-    label: 'Rendered Assessment'
-    property_path: rendered_item
-    type: text
-    configuration:
-      roles:
-        - anonymous
-      view_mode:
-        'entity:assessment':
-          ':default': default
-          report: ':default'
-        'entity:node':
-          ':default': ''
-          assessment_report: ':default'
-          collection: ':default'
-          custom_page: ':default'
-          discussion: ':default'
-          distribution: ':default'
-          document: ':default'
-          event: ':default'
-          licence: ':default'
-          news: ':default'
-          release: ':default'
-          solution: ':default'
-        'entity:taxonomy_term':
-          ':default': ''
-          eif_conceptual_model: ':default'
-          eif_interoperability_layer: ':default'
-          eif_principle: ':default'
-          eif_recommendation: ':default'
-          oss_category: ':default'
-          topic: ':default'
-        'entity:user':
-          ':default': ''
-          user: ':default'
-  reverse_eif_related_term_tid:
-    label: 'Reverse » Related term » Term ID'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: 'search_api_reverse_entity_references_taxonomy_term__field_eif_related_term:tid'
-    type: text
-  reverse_eif_related_term_tid_spellcheck:
-    label: 'Reverse » Related term » Term ID - Spellcheck'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: 'search_api_reverse_entity_references_taxonomy_term__field_eif_related_term:tid'
-    type: solr_text_spellcheck
-  reverse_field_eif_identifier:
-    label: 'Reverse » Related term » Identifier'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: 'search_api_reverse_entity_references_taxonomy_term__field_eif_related_term:field_eif_identifier'
-    type: text
-  reverse_field_eif_identifier_spellcheck:
-    label: 'Reverse » Related term » Identifier - Spellcheck'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: 'search_api_reverse_entity_references_taxonomy_term__field_eif_related_term:field_eif_identifier'
-    type: solr_text_spellcheck
   shared_in:
     label: 'Shared on'
     datasource_id: 'entity:node'
@@ -937,7 +894,8 @@ processor_settings:
       - description_processed_spellcheck
       - field_event_agenda
       - field_event_agenda_spellcheck
-      - rendered_assessment
+      - processed
+      - processed_spellcheck
     title: true
     alt: true
     tags:
@@ -961,8 +919,6 @@ processor_settings:
   release_solution_data:
     weights:
       preprocess_index: -60
-  rendered_item: {  }
-  reverse_entity_references: {  }
   solr_date_range:
     weights:
       preprocess_index: 0

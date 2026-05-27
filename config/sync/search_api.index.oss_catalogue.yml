@@ -65,7 +65,7 @@ third_party_settings:
     multilingual:
       limit_to_content_language: false
       include_language_independent: true
-      use_language_undefined_as_fallback_language: false
+      use_language_undefined_as_fallback_language: true
       specific_languages:
         cs: '0'
         da: '0'
@@ -171,10 +171,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.oss_software_type
-  oss_solution_rendered_item:
-    label: 'Oss Solution rendered item'
-    property_path: oss_solution_rendered_item
-    type: text
   oss_source:
     label: 'Source catalogue'
     datasource_id: 'entity:node'
@@ -256,7 +252,6 @@ processor_settings:
     fields:
       - oss_git_description
       - oss_short_description
-      - oss_solution_rendered_item
     title: true
     alt: true
     tags:
@@ -267,8 +262,6 @@ processor_settings:
       strong: 2.0
   joinup_entity_bundle: {  }
   language_with_fallback: {  }
-  oss_solution_rendered_item: {  }
-  rendered_item: {  }
   solr_date_range:
     weights:
       preprocess_index: 0

@@ -356,6 +356,8 @@ drupal:
         $config['github_feed.settings']['token'] = getenv('JOINUP_GITHUB_TOKEN') ?: '';
       Development: |
         $settings['extension_discovery_scan_tests'] = TRUE;
+        // Fast Solr commits for dev/test; prod keeps the committed value.
+        $config['search_api.server.joinup']['backend_config']['connector_config']['commit_within'] = 1000;
       Verbose error logging: |
         $config['system.logging']['error_level'] = 'verbose';
       Monolog: |
