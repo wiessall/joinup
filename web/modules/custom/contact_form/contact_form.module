@@ -67,23 +67,22 @@ function contact_form_form_message_contact_form_submission_form_alter(&$form, Fo
     $form['field_contact_email']['widget'][0]['value']['#default_value'] = $user->getEmail();
   }
 
-  // Update the category options to be grouped by anything that comes before
-  // the '-' character. If the category does not contain a '-', it will be
-  // grouped under 'Other'.
+  // Update the category options. "_none" category is kept as it is. Categories
+  // "legal", "question_feature", "bug", "report" will be grouped as "Other",
+  // every other category as "Interoperable Europe".
   $options = [];
-  foreach ($form['field_contact_category']['widget']['#options'] as $key => $value) {
+  $otherValues = ['legal', 'question_feature', 'bug', 'report'];
+  $ie_group = (string) t('Interoperable Europe');
+  $other = (string) t('Other');
+  foreach ($form['field_contact_category']['widget']['#options'] as $key => $humanLabel) {
     if ($key === '_none') {
-      $options[$key] = $value;
+      $options[$key] = $humanLabel;
     }
-    elseif (str_contains($value, '-')) {
-      $values = explode('-', $value);
-      assert(count($values) === 2);
-      $group = trim($values[0]);
-      $value = trim($values[1]);
-      $options[$group][$key] = $value;
+    elseif (in_array($key, $otherValues)) {
+      $options[$other][$key] = $humanLabel;
     }
     else {
-      $options['Other'][$key] = $value;
+      $options[$ie_group][$key] = $humanLabel;
     }
   }
 
