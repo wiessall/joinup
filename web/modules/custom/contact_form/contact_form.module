@@ -67,22 +67,33 @@ function contact_form_form_message_contact_form_submission_form_alter(&$form, Fo
     $form['field_contact_email']['widget'][0]['value']['#default_value'] = $user->getEmail();
   }
 
-  // Update the category options. "_none" category is kept as it is. Categories
-  // "legal", "question_feature", "bug", "report" will be grouped as "Other",
-  // every other category as "Interoperable Europe".
+  // Update the category options. "_none" category is kept as it is. Most of the
+  // remaining categories will be grouped as "Interoperable Europe" and finally,
+  // "legal" "question_feature", "bug", "report" as "Other".
   $options = [];
-  $otherValues = ['legal', 'question_feature', 'bug', 'report'];
   $ie_group = (string) t('Interoperable Europe');
-  $other = (string) t('Other');
-  foreach ($form['field_contact_category']['widget']['#options'] as $key => $humanLabel) {
+  $other_group = (string) t('Other');
+  $ie_options = [
+    'academy',
+    'architecture',
+    'assessments',
+    'community',
+    'eu_oss_catalogue',
+    'governance',
+    'govtech',
+    'monitoring',
+    'open_source',
+    'semantics',
+  ];
+  foreach ($form['field_contact_category']['widget']['#options'] as $key => $human_label) {
     if ($key === '_none') {
-      $options[$key] = $humanLabel;
+      $options[$key] = $human_label;
     }
-    elseif (in_array($key, $otherValues)) {
-      $options[$other][$key] = $humanLabel;
+    elseif (in_array($key, $ie_options, TRUE)) {
+      $options[$ie_group][$key] = $human_label;
     }
     else {
-      $options[$ie_group][$key] = $humanLabel;
+      $options[$other_group][$key] = $human_label;
     }
   }
 
