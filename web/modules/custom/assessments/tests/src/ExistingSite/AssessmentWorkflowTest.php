@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\ExistingSite;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Tests\EntityTrait;
 use Drupal\Tests\assessments\Traits\AssessmentEntityCreationTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
@@ -24,6 +25,22 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
 
   use AssessmentEntityCreationTrait;
   use EntityTrait;
+
+  /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected EntityTypeManagerInterface $entityTypeManager;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp(): void {
+    parent::setUp();
+
+    $this->entityTypeManager = \Drupal::entityTypeManager();
+  }
 
   /**
    * Tests that publishing a report also publishes all related entities.
