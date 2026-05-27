@@ -1,0 +1,20 @@
+uuid: 1a575cef-e72b-4700-b03f-9168fa571904
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+label_singular: null
+label_plural: null
+label_count: null
+name: Certificate
+type: certificate
+description: 'Provides content type representing certifications of users'
+help: null
+new_revision: true
+preview_mode: 1
+display_submitted: false
