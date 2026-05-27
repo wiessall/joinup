@@ -21,7 +21,7 @@ Feature: User profile
 
     When I click "Edit"
     Then the following fields should be present "Email, First name"
-    And the following fields should be present "Family name, Photo, Country of origin, Site language, Professional domain, Business title"
+    And the following fields should be present "Family name, Photo, Country of origin, Site language, Country of residence, Function of administration, Work location, Professional domain, Business title"
     And the following fields should be present "Facebook, X, LinkedIn, GitHub, SlideShare, Youtube, Vimeo"
     And the following fields should not be present "Time zone"
     And the "Site language" select should contain the following options:
@@ -49,12 +49,17 @@ Feature: User profile
       | Slovenian  |
       | Spanish    |
       | Swedish    |
+    And the available options in the "Country of residence" select should not include the "European Union"
+    And the available options in the "Work location" select should not include the "European Union"
     And I should see the text "Username"
     And I should see the text "Leonardo Da Vinci"
     And I fill in "First name" with "Leoke"
     And I fill in "Family name" with "di ser Piero da Vinci"
+    And I select "Italy" from "Work location"
     And I select "Supplier exchange" options from "Professional domain"
     And I fill in "Country of origin" with "Belgium"
+    And I select "Netherlands" from "Country of residence"
+    And I select "Defense" from "Function of administration"
     And I fill in "Facebook" with "leodavinci"
     And I fill in "X" with "therealdavinci"
     And I fill in "LinkedIn" with "leonardo.davinci"
@@ -70,6 +75,7 @@ Feature: User profile
     And I press "Save"
     Then I should see the success message "The changes have been saved."
     And I should see the heading "Leoke di ser Piero da Vinci" in the "Header" region
+    And I see the text "Work location: Italy" in the "Header" region
     And I see the text "Italian Renaissance polymath" in the "Header" region
     And I should see the text "Supplier exchange"
     And I should see the link "Edit"
@@ -90,6 +96,9 @@ Feature: User profile
     # Verify that the user's "Country of origin" field is visible on its profile.
     When I go to the public profile of "Leonardo Da Vinci"
     Then I should see the text "Country of origin: Belgium" in the "Header" region
+    Then I should see the text "Country of residence: Netherlands" in the "Header" region
+    Then I should see the text "Work location: Italy" in the "Header" region
+    Then I should see the text "Function of administration: Defense" in the "Header" region
 
   Scenario: A moderator can navigate to any user's profile and edit it.
     Given the following users:
@@ -106,7 +115,8 @@ Feature: User profile
     Then I click "Edit"
     Then the following fields should be present "Email, Username"
     And the following fields should be present "First name, Family name, Add a new file, Professional domain, Business title"
-    And the following fields should be present "Country of origin, Organisation"
+    And the following fields should be present "Country of origin, Function of administration, Organisation"
+    And the following fields should be present "Country of origin, Function of administration, Work location, Organisation"
     And the following fields should not be present "Time zone"
     And I should not see the text "Username: Leonardo Da Vinci"
     And I fill in "First name" with "Leo"

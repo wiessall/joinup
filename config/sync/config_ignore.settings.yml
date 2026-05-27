@@ -3,6 +3,7 @@ ignored_config_entities:
   - cas_mock_server.settings
   - composer_deploy.settings
   - core.menu.static_menu_link_overrides
+  - imagecache_external.settings:imagecache_directory
   - joinup_core.outdated_content_threshold
   - 'language.*|*'
   - update.settings
