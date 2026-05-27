@@ -1,0 +1,77 @@
+_meta:
+  version: '1.0'
+  entity_type: node
+  uuid: b2b8122b-5c0e-4991-93f6-7c66d4ba1534
+  bundle: document
+  default_langcode: en
+  depends:
+    83c208a4-6354-4e08-95dc-f4e123e2597f: file
+    b7af08b1-c271-4d58-a5a7-ec3db533c3d2: taxonomy_term
+    fc99c508-84dc-4646-a112-5b37bff6f2a7: node
+default:
+  status:
+    -
+      value: true
+  title:
+    -
+      value: 'Metadata exchange protocol specification'
+  created:
+    -
+      value: 1713536120
+  changed:
+    -
+      value: 1714230600
+  published_at:
+    -
+      value: 1713536120
+  abstract:
+    -
+      value: 'Technical specification for the metadata exchange protocol enabling standardized information sharing between European public services.'
+  field_document_logo:
+    -
+      entity: 83c208a4-6354-4e08-95dc-f4e123e2597f
+      alt: 'SVG image test for solution content tile'
+      title: ''
+      width: 200
+      height: 100
+  field_paragraphs_body:
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 58ea4ab2-c41b-4c9a-84ee-4b1fef88e9a3
+          bundle: simple_paragraph
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1713536120
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  parent_uuid: null
+                  region: null
+          field_body:
+            -
+              value: 'This document defines the technical specifications for metadata exchange between public service systems.'
+              format: content_editor
+  field_short_title:
+    -
+      value: 'Metadata Protocol Spec'
+  field_state:
+    -
+      value: published
+  field_topic:
+    -
+      entity: b7af08b1-c271-4d58-a5a7-ec3db533c3d2
+  field_type:
+    -
+      value: document
+  og_audience:
+    -
+      entity: fc99c508-84dc-4646-a112-5b37bff6f2a7

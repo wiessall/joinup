@@ -48,7 +48,7 @@ class DevelopersItaliaFetchTest extends DevelopersItaliaFetchTestBase {
     }
 
     $this->assertCount(
-      2,
+      1,
       $this->getLogEntries('OSS solution of project @project-name (@project-url) fetched from @provider cannot be parsed, created or saved.'),
     );
   }

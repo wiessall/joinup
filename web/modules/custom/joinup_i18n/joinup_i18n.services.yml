@@ -5,4 +5,9 @@ services:
     autowire: true
 
   Drupal\joinup_i18n\EventSubscriber\ScheduleJobItemSubscriber: {}
+
   Drupal\joinup_i18n\EventSubscriber\ConfigSubscriber: {}
+
+  Drupal\joinup_i18n\Hook\JoinupI18nHooks:
+    calls:
+      - [setBabelOgMenuLinkManager, ['@?Drupal\babel_og_menu_link\BabelOgMenuLinkManager']]

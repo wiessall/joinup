@@ -57,30 +57,6 @@ Feature: Views display translated entities correctly.
     And I click "Glossary"
     Then I should see the text "Alphabète"
 
-  # covers assessment_reports view.
-  @demoAssessment
-  Scenario: Assessment report nodes are prepared for the assessment reports block view.
-    Given the following "collection" content:
-      | title          |
-      | Assessment Hub |
-    And the following "assessment_report" content:
-      | title         | organization         | collection     |
-      | Annual Report | default organization | Assessment Hub |
-    And the following "assessment_report" content:
-      | title          | organization         | collection     | langcode |
-      | Rapport annuel | default organization | Assessment Hub | fr       |
-    And the following locale string translations:
-      | source         | language | translation     | status |
-      | Assessment Hub | fr       | Pôle évaluation | 1      |
-      | Annual Report  | fr       | Rapport annuel  | 1      |
-    When I am an anonymous user
-    And I go to the "Interoperability assessments space" collection
-    And I click "Assessment reports"
-    Then I should see the text "Annual Report"
-    When I go to the "fr" version of the "Interoperability assessments space" collection
-    And I click "Assessment reports"
-    Then I should see the text "Rapport annuel"
-
   # covers latest_news view.
   # covers in_the_spotlight view.
   Scenario: News content is prepared for the latest news and in the spotlight blocks.

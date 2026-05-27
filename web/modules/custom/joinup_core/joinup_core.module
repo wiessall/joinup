@@ -20,6 +20,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\StreamWrapper\StreamWrapperManager;
 use Drupal\Core\Template\Attribute;
+use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_core\Element\Datetime;
 use Drupal\joinup_core\Entity\OutdatedContentInterface;
 use Drupal\joinup_core\Plugin\Field\FieldType\OutdatedContentFieldItemList;
@@ -144,6 +145,7 @@ function joinup_core_element_info_alter(array &$info): void {
  *
  * File entities might have file system redirects coming from previous platform
  * versions, following this pattern (relative to files directory):
+ *
  * @code
  * legacy/path/to/image.png -> actual/path/to/image.png
  * @endcode
@@ -508,5 +510,49 @@ function joinup_core_theme_suggestions_field_alter(array &$suggestions, array $v
       continue;
     }
     $suggestions[] = "{$suggestion}__with_modal_link";
+  }
+}
+
+/**
+ * Implements hook_pathauto_alias_alter().
+ *
+ * Aliases are generated automatically, but some words are prohibited.
+ */
+function joinup_core_pathauto_alias_alter(&$alias, array $context): void {
+  $prohibited_suffixes = [
+    'custom_page' => [
+      '/distribution',
+      '/news',
+      '/discussion',
+      '/document',
+      '/event',
+      '/solution',
+      '/release',
+    ],
+    'release' => [
+      '/release',
+    ],
+  ];
+
+  $bundle = $context['bundle'];
+  if ($context['module'] !== 'node' || !isset($prohibited_suffixes[$bundle])) {
+    return;
+  }
+
+  // For custom pages the collision is only possible when the page lives inside
+  // a group (collection / solution), so skip standalone pages.
+  if ($bundle === 'custom_page') {
+    $node = $context['data']['node'] ?? NULL;
+    if (!$node instanceof CustomPageInterface || !$node->hasGroup()) {
+      return;
+    }
+  }
+
+  foreach ($prohibited_suffixes[$bundle] as $suffix) {
+    if (str_ends_with($alias, $suffix)) {
+      // Append an incrementing numeric suffix, treating it as already taken.
+      $alias .= '-0';
+      return;
+    }
   }
 }

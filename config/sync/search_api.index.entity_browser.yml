@@ -155,6 +155,10 @@ field_settings:
         - field.storage.node.keywords
       module:
         - taxonomy
+  language_with_fallback:
+    label: 'Language (with fallback)'
+    property_path: language_with_fallback
+    type: string
   status:
     label: Published
     datasource_id: 'entity:node'

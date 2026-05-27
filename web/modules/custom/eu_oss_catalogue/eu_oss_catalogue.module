@@ -18,7 +18,6 @@ use Drupal\eu_oss_catalogue\Entity\OssContractor;
 use Drupal\eu_oss_catalogue\Entity\OssSolution;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\Plugin\Field\RelevantField;
-use Drupal\eu_oss_catalogue\Plugin\Field\RelevantLanguageCode;
 use Drupal\node\NodeInterface;
 
 /**
@@ -87,16 +86,6 @@ function eu_oss_catalogue_entity_bundle_field_info_alter(array &$fields, EntityT
   if ($entityType->id() !== 'node' || $bundle !== 'oss_solution') {
     return;
   }
-
-  // If there are field candidates, also add the richest language code computed
-  // field.
-  $fields[RelevantLanguageCode::FIELD_NAME] = BaseFieldDefinition::create('language')
-    ->setName(RelevantLanguageCode::FIELD_NAME)
-    ->setTargetEntityTypeId($entityType->id())
-    ->setTargetBundle($bundle)
-    ->setLabel(t('Relevant language code'))
-    ->setComputed(TRUE)
-    ->setClass(RelevantLanguageCode::class);
 
   // During module installation, configurable fields may not be available yet
   // when this hook is called, as the EntityFieldManager cache hasn't been

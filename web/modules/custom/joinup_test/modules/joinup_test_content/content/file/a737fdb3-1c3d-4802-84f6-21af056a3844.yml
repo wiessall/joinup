@@ -1,0 +1,27 @@
+_meta:
+  version: '1.0'
+  entity_type: file
+  uuid: a737fdb3-1c3d-4802-84f6-21af056a3844
+  default_langcode: en
+default:
+  uid:
+    -
+      target_id: 0
+  filename:
+    -
+      value: tile-test-raster.png
+  uri:
+    -
+      value: 'public://joinup_test_content/tile-test-raster.png'
+  filemime:
+    -
+      value: image/png
+  filesize:
+    -
+      value: 385
+  status:
+    -
+      value: true
+  created:
+    -
+      value: 1734685491

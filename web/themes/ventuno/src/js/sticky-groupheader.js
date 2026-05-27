@@ -121,16 +121,49 @@
       // Apply to root element
       this.html.style.scrollPaddingTop = `${offset}px`;
     }
+
+    /**
+     * Tears down the sticky behavior and resets all modified state.
+     */
+    destroy() {
+      if (this.observer) {
+        this.observer.disconnect();
+        this.observer = null;
+      }
+      if (this.header) {
+        this.header.style.height = null;
+      }
+      if (this.headerInner) {
+        this.headerInner.classList.remove("fixed-top");
+      }
+      if (this.html) {
+        this.html.style.scrollPaddingTop = null;
+      }
+      this.isSticky = false;
+    }
   }
 
   Drupal.behaviors.stickyGroupHeader = {
     attach(context) {
       once("sticky-group-header", SELECTORS.GROUP_HEADER, context).forEach(
-        () => {
+        (el) => {
           const stickyHeader = new StickyGroupHeader(context);
           stickyHeader.init();
+          // Store instance on element so detach() can reach it.
+          el.stickyGroupHeader = stickyHeader;
         },
       );
+    },
+    detach(context, settings, trigger) {
+      if (trigger !== "unload") {
+        return;
+      }
+      once
+        .remove("sticky-group-header", SELECTORS.GROUP_HEADER, context)
+        .forEach((el) => {
+          el.stickyGroupHeader?.destroy();
+          el.stickyGroupHeader = null;
+        });
     },
   };
 })(Drupal, Drupal.displace, once, jQuery);
