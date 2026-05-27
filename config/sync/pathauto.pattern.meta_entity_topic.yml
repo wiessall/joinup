@@ -7,7 +7,7 @@ dependencies:
 id: meta_entity_topic
 label: 'Meta Entity: Topics'
 type: 'canonical_entities:meta_entity'
-pattern: 'topic/[meta_entity:parent_topic]/[meta_entity:label]'
+pattern: '/topic/[meta_entity:parent_topic]/[meta_entity:label]'
 selection_criteria:
   af573398-c50f-484c-b4dc-1e503b58541a:
     id: 'entity_bundle:meta_entity'

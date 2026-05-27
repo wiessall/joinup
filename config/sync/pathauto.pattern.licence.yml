@@ -9,7 +9,7 @@ _core:
 id: licence
 label: Licence
 type: 'canonical_entities:node'
-pattern: '[node:content-type]/[node:title]'
+pattern: '/[node:content-type]/[node:title]'
 selection_criteria:
   4c81222f-ee57-451d-8a48-10d11d813719:
     id: 'entity_bundle:node'

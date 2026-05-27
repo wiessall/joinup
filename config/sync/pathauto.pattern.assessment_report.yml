@@ -7,7 +7,7 @@ dependencies:
 id: assessment_report
 label: 'Assessment report'
 type: 'canonical_entities:node'
-pattern: '[node:og_audience:entity:url:path]/assessment-reports/[node:submission:target_id]'
+pattern: '/[node:og_audience:entity:url:path]/assessment-reports/[node:submission:target_id]'
 selection_criteria:
   f9725a62-c942-40d4-9906-ec57b4dc564b:
     id: 'entity_bundle:node'

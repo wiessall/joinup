@@ -731,10 +731,10 @@ display:
       automatic_download: true
       export_method: batch
       export_batch_size: 500
+      export_filesystem: private
       custom_redirect_path: false
       redirect_to_display: page
       include_query_params: true
-      export_filesystem: private
     cache_metadata:
       max-age: -1
       contexts:

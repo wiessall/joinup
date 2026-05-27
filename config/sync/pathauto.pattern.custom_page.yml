@@ -7,7 +7,7 @@ dependencies:
 id: custom_page
 label: 'Custom page'
 type: 'canonical_entities:node'
-pattern: '[node:og_audience:entity:url:path]/[node:title]'
+pattern: '/[node:og_audience:entity:url:path]/[node:title]'
 selection_criteria:
   52c869c9-1196-4960-84d9-063aaec721dd:
     id: 'entity_bundle:node'

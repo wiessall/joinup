@@ -416,7 +416,8 @@
             "drupal/flag": {
                 "TypeError: Argument 1 passed to FlagCount::count() must implement interface @see https://www.drupal.org/project/flag/issues/3168014": "resources/patch/php/drupal/flag/3168014.diff",
                 "AJAX link broken if flaggable entity id is string @see https://www.drupal.org/project/flag/issues/3359007": "resources/patch/php/drupal/flag/3359007-47.patch",
-                "Flag cache tags result in Purge module exception @see https://www.drupal.org/project/flag/issues/3557145": "resources/patch/php/drupal/flag/3557145.71mr-commitf248789c.diff"
+                "Flag cache tags result in Purge module exception @see https://www.drupal.org/project/flag/issues/3557145": "resources/patch/php/drupal/flag/3557145.71mr-commitf248789c.diff",
+                "PHP 8.5: using null as an array offset is deprecated @see https://www.drupal.org/project/flag/issues/3584450": "resources/patch/php/drupal/flag/3584450.mr217.diff"
             },
             "drupal/geofield": {
                 "Wrong placeholders @see https://www.drupal.org/i/3581484": "resources/patch/php/drupal/geofield/3581484.mr46.commit-36a20a21.diff"
@@ -489,6 +490,9 @@
             },
             "drupal/page_manager": {
                 "Some mandatory parameters are missing to generate a URL for route 'entity.page.devel_load' @see https://www.drupal.org/i/3438993": "resources/patch/php/drupal/page_manager/3438993.diff"
+            },
+            "drupal/pathauto": {
+                "PHP 8.5: deprecated error on entity forms without pathauto patterns (null as array offset) @see https://www.drupal.org/project/pathauto/issues/3579655": "resources/patch/php/drupal/pathauto/3579655.mr173.diff"
             },
             "drupal/private_message": {
                 "Missing langcode in private_message.settings @see https://www.drupal.org/i/3542616": "resources/patch/php/drupal/private_message/3542616.diff",
