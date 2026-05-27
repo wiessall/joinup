@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Hook\Attribute\Hook;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\comment\CommentInterface;
@@ -25,6 +26,8 @@ use Drupal\user\UserInterface;
  * Hooks for the joinup_badge module.
  */
 class BadgeHooks implements DestructableInterface {
+
+  use StringTranslationTrait;
 
   /**
    * The UUID of the Interoperable Europe Community group.
@@ -99,7 +102,9 @@ class BadgeHooks implements DestructableInterface {
       }
     }
 
-    $bundles['node']['certificate']['class'] = Certificate::class;
+    if (!empty($bundles['node']['certificate'])) {
+      $bundles['node']['certificate']['class'] = Certificate::class;
+    }
   }
 
   /**
@@ -182,6 +187,30 @@ class BadgeHooks implements DestructableInterface {
       $uid = (int) $entity->getOwnerId();
       $this->portalContributorAuthors[$uid] = $uid;
     }
+  }
+
+  /**
+   * Implements hook_inline_entity_form_table_fields_alter().
+   */
+  #[Hook('inline_entity_form_table_fields_alter')]
+  public function userCertificateIefTable(array &$fields, array $context): void {
+    if (
+      $context['parent_entity_type'] !== 'user' ||
+      $context['field_name'] !== 'certificates' ||
+      $context['entity_type'] !== 'node' ||
+      $context['allowed_bundles'] !== ['certificate']
+    ) {
+      return;
+    }
+
+    // Add course field column.
+    // @todo Consider removing the title.
+    $fields['course'] = [
+      'type' => 'field',
+      'label' => $this->t('Course'),
+      'weight' => 10,
+      'display_options' => ['type' => 'entity_reference_label'],
+    ];
   }
 
   /**
