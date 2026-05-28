@@ -13,7 +13,6 @@ services:
       HTTP_EXPOSE: '8983:8983'
       HTTPS_EXPOSE: '8983:8983'
       SEARCH_API_SERVER_SS_SOLR_CORE: digit-joinup
-      SOLR_HEAP: 2g
     volumes:
       - solr:/var/solr/data
       - ./solr-standalone/snapshot:/var/solr/data/snapshot
