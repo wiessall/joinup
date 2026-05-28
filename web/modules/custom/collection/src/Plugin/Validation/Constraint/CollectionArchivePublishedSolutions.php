@@ -17,6 +17,11 @@ use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 )]
 class CollectionArchivePublishedSolutions extends SymfonyConstraint {
 
+  /**
+   * The violation message.
+   *
+   * @var string
+   */
   public string $message = 'Collection has at least one published solution. Please archive all active solutions first.';
 
 }
