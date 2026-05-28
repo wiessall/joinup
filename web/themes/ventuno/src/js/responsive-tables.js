@@ -1,4 +1,6 @@
 /**
+ * @param Drupal
+ * @param once
  * @file
  * Adds a wrapper around the table to prevent it overflowing to the right on
  * small screens.

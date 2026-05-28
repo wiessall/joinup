@@ -1,4 +1,6 @@
 /**
+ * @param Drupal
+ * @param once
  * @file
  * Attaches the behaviours to show visual cues on pinned community content.
  */

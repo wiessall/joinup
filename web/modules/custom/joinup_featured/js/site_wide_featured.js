@@ -1,4 +1,6 @@
 /**
+ * @param Drupal
+ * @param once
  * @file
  * Attaches the behaviours to mark tiles as featured site-wide.
  */
