@@ -258,6 +258,7 @@ trait GroupTrait {
    * {@inheritdoc}
    */
   public function getGroupOgMenuInstances(?array $types = NULL): array {
+    // @todo Need a way to cache in memory
     $storage = \Drupal::entityTypeManager()->getStorage('ogmenu_instance');
 
     $query = $storage->getQuery()

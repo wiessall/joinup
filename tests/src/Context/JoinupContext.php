@@ -2400,7 +2400,6 @@ class JoinupContext extends RawDrupalContext {
 
     $group = $this->getEntityByLabel('node', $group_label, $group_bundle);
     assert($group instanceof GroupInterface);
-    $og_menu_instance = $group->getGroupOgMenuInstance('navigation');
 
     /** @var \Behat\Mink\Element\NodeElement[] $rows */
     $rows = $this->getSession()->getPage()->findAll('css', '#menu-overview tbody tr.draggable');
@@ -2412,7 +2411,7 @@ class JoinupContext extends RawDrupalContext {
       $title_element = $current_row->find('css', 'td:first-of-type a:not(.tabledrag-handle)');
       $this->assertSameValues($data['title'], trim($title_element->getText()));
       $page = $this->getEntityByLabel('node', $data['title'], 'custom_page');
-      $plugin_id = GroupMenuLink::id($og_menu_instance->id() . '-' . $page->id());
+      $plugin_id = GroupMenuLink::buildPluginId($page->id(), 'navigation');
 
       $parent_input = $current_row->find('css', 'input[name="links[menu_plugin_id:' . $plugin_id . '][parent]"]');
 
@@ -2432,7 +2431,7 @@ class JoinupContext extends RawDrupalContext {
         }
 
         $parent = $this->getEntityByLabel('node', $data['parent'], 'custom_page');
-        $parent_plugin_id = GroupMenuLink::id("{$og_menu_instance->id()}-{$parent->id()}");
+        $parent_plugin_id = GroupMenuLink::buildPluginId($parent->id(), 'navigation');
         $this->assertSameValues($parent_plugin_id, $parent_input->getValue());
         $this->assertCondition(count($indentation) !== 0, "The menu link '{$data['title']}' should be indented but it's not.");
       }

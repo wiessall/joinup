@@ -309,7 +309,7 @@ Feature:
 
     Then I should see the text "Release Release 1 group was changed to Solution 2."
     # The child distribution should have been moved too.
-    And I should see the text "Distribution Distribution 1 group was changed to Solution 2."
+    And I should see the text "Child Distribution Distribution 1 group was changed too."
 
     # Revisit the page to get rid of the messages.
     When I go to the manage content page of "Solution 1"

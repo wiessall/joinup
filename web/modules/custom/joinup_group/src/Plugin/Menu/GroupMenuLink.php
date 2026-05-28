@@ -26,7 +26,13 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
   /**
    * {@inheritdoc}
    */
-  protected $overrideAllowed = ['weight', 'parent', 'enabled'];
+  protected $overrideAllowed = [
+    'menu_name' => TRUE,
+    'title' => TRUE,
+    'weight' => TRUE,
+    'parent' => TRUE,
+    'enabled' => TRUE,
+  ];
 
   /**
    * Static cache of the entity associated with this menu link, if any.
@@ -62,14 +68,14 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
    */
   public function updateLink(array $new_definition_values, $persist): array {
     // Filter the list of updates to only those that are allowed.
-    $overrides = array_intersect_key($new_definition_values, array_flip($this->overrideAllowed));
+    $overrides = array_intersect_key($new_definition_values, $this->overrideAllowed);
     // Update the definition.
     $this->pluginDefinition = $overrides + $this->getPluginDefinition();
     if ($persist) {
-      [$ogmenuInstanceId] = explode('-', $this->getDerivativeId());
+      [, $ogMenuType] = explode('-', $this->getDerivativeId());
 
       $settings = $this->getEntity()->get('menu_settings')->value;
-      $settings[$ogmenuInstanceId] = [
+      $settings[$ogMenuType] = [
         'weight' => $this->getWeight(),
         'enabled' => $this->isEnabled(),
         'parent' => $this->getParent(),
@@ -108,7 +114,7 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
   protected function getEntity(): GroupMenuLinkInterface {
     if (!isset($this->entity)) {
       $storage = $this->entityTypeManager->getStorage('node');
-      [, $nid] = explode('-', $this->getDerivativeId());
+      [$nid] = explode('-', $this->getDerivativeId(), 2);
       $entity = $storage->load($nid);
 
       if (!$entity instanceof GroupMenuLinkInterface) {
@@ -128,14 +134,34 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
   /**
    * Provides a convenient way to generate a group menu link plugin ID.
    *
-   * @param string $derivative
-   *   The plugin derivative ID.
+   * @param int|string $id
+   *   The ID.
+   * @param string $ogMenuType
+   *   The OG menu instance type.
    *
    * @return string
    *   The plugin ID.
    */
-  public static function id(string $derivative): string {
-    return self::BASE_ID . ':' . $derivative;
+  public static function buildPluginId(int|string $id, string $ogMenuType): string {
+    return self::BASE_ID . ':' . $id . '-' . $ogMenuType;
+  }
+
+  /**
+   * Extracts the ID from a group menu link plugin ID.
+   *
+   * @param string $pluginId
+   *   The plugin ID.
+   *
+   * @return string|null
+   *   The ID, or NULL if the plugin is not a group menu link.
+   */
+  public static function extractId(string $pluginId): ?string {
+    if (str_starts_with($pluginId, self::BASE_ID . ':')) {
+      [, $derivativeId] = explode(':', $pluginId, 2);
+      [$id] = explode('-', $derivativeId, 2);
+      return $id;
+    }
+    return NULL;
   }
 
 }

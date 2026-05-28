@@ -44,12 +44,11 @@ function joinup_group_deploy_201300(array &$sandbox): string {
       // Convert also the parent if it points to another group menu link.
       if ($link->parent && isset($sandbox['links'][$link->parent])) {
         $parentLink = $sandbox['links'][$link->parent];
-        $sandbox['links'][$link->plugin]->parent = GroupMenuLink::id($parentLink->ogmenu . '-' . $parentLink->nid);
+        $sandbox['links'][$link->plugin]->parent = GroupMenuLink::buildPluginId($parentLink->nid, $link->bundle);
       }
 
       // Build custom page menu settings.
       $sandbox['menu_settings'][$link->nid][$link->bundle] = [
-        'ogmenu' => $link->ogmenu,
         'parent' => (string) $sandbox['links'][$link->plugin]->parent,
         'weight' => (int) $link->weight,
         'enabled' => (bool) $link->enabled,
@@ -72,7 +71,7 @@ function joinup_group_deploy_201300(array &$sandbox): string {
       'class' => GroupMenuLink::class,
       'derivative' => GroupMenuLinkDeriver::class,
       'menu_name' => "ogmenu-$link->ogmenu",
-      'id' => GroupMenuLink::id("$link->ogmenu-$link->nid"),
+      'id' => GroupMenuLink::buildPluginId($link->nid, $link->bundle),
       'title' => $link->title,
       'route_name' => 'entity.node.canonical',
       'route_parameters' => ['node' => $link->nid],

@@ -16,7 +16,7 @@ use Drupal\og_menu\OgMenuInstanceInterface;
 /**
  * Hook implementations related to group menu links.
  *
- * @todo what if og menu deletes?
+ * @todo What if an OG menu instance bundle is deleted?
  */
 readonly class JoinupGroupMenuLinkHooks {
 
@@ -29,35 +29,20 @@ readonly class JoinupGroupMenuLinkHooks {
    * Ensures sane defaults for each OG menu instance setting.
    */
   #[Hook('node_presave')]
-  public function ensureMenuSettingsDefaults(NodeInterface $entity): void {
-    if (!$this->isGroupMenuLinkEntity($entity)) {
+  public function ensureMenuSettingsDefaults(NodeInterface $node): void {
+    if (!$this->isGroupMenuLinkEntity($node)) {
       return;
     }
-    assert($entity instanceof GroupMenuLinkInterface);
+    assert($node instanceof GroupMenuLinkInterface);
 
-    $menuSettings = $entity->get('menu_settings')->value ?? [];
-    $originalMenuSettings = $entity->getOriginal()?->get('menu_settings')->value ?? [];
-
-    foreach ($entity->getGroup()->getGroupOgMenuInstances() as $ogMenuInstanceId => $ogMenuInstance) {
+    $menuSettings = $node->get('menu_settings')->value ?? [];
+    foreach ($node->getGroup()->getGroupOgMenuInstances() as $ogMenuInstance) {
       $ogMenuType = $ogMenuInstance->bundle();
-
-      $menuSettings[$ogMenuType] ??= [];
-      if (isset($originalMenuSettings[$ogMenuType])) {
-        $originalOgMenuInstanceId = $originalMenuSettings[$ogMenuType]['ogmenu'] ?? NULL;
-        if ($ogMenuInstanceId !== $originalOgMenuInstanceId) {
-          // We are here because, as part of the save process, the OG menu
-          // instance has changed. This occurs when a node is moved from one
-          // group to another. Transfer the settings from the previous OG menu
-          // group to the new one but preserve any property already set.
-          $menuSettings[$ogMenuType] += $originalMenuSettings[$ogMenuType];
-        }
-      }
-
       // Ensure sane defaults.
+      $menuSettings[$ogMenuType] ??= [];
       $menuSettings[$ogMenuType] += $this->getMenuSettingsDefaults($ogMenuInstance);
     }
-
-    $entity->set('menu_settings', ['value' => $menuSettings]);
+    $node->set('menu_settings', ['value' => $menuSettings]);
   }
 
   /**
@@ -65,41 +50,20 @@ readonly class JoinupGroupMenuLinkHooks {
    */
   #[Hook('node_update')]
   #[Hook('node_insert')]
-  public function updateGroupMenuLinkPluginDefinition(NodeInterface $entity): void {
-    if (!$this->isGroupMenuLinkEntity($entity)) {
+  public function updateGroupMenuLinkPluginDefinition(NodeInterface $node): void {
+    if (!$this->isGroupMenuLinkEntity($node)) {
       return;
     }
-    assert($entity instanceof GroupMenuLinkInterface);
+    assert($node instanceof GroupMenuLinkInterface);
 
-    $menuSettings = $entity->get('menu_settings')->value;
-    $original = $entity->getOriginal();
-    $originalMenuSettings = $original?->get('menu_settings')->value ?? [];
+    foreach ($node->getGroup()->getGroupOgMenuInstances() as $ogMenuInstance) {
+      $pluginId = GroupMenuLink::buildPluginId($node->id(), $ogMenuInstance->bundle());
+      $definition = $this->buildPluginDefinition($node, $ogMenuInstance);
 
-    $ogMenuInstanceIds = [];
-    foreach ($menuSettings as $menuType => $settings) {
-      foreach ($settings as $key => $value) {
-        $originalValue = $originalMenuSettings[$menuType][$key] ?? NULL;
-        if ($value !== $originalValue) {
-          $ogMenuInstanceIds[] = $settings['ogmenu'];
-          // Jump to next OG menu instance.
-          break;
-        }
-      }
-    }
-
-    if (!$ogMenuInstanceIds) {
-      // No changes detected to menu settings.
-      return;
-    }
-
-    $ogMenuInstances = $this->entityTypeManager->getStorage('ogmenu_instance')->loadMultiple($ogMenuInstanceIds);
-    foreach ($ogMenuInstances as $ogMenuInstanceId => $ogMenuInstance) {
-      $pluginId = GroupMenuLink::id("$ogMenuInstanceId-{$entity->id()}");
-      $definition = $this->buildPluginDefinition($entity, $ogMenuInstanceId, $ogMenuInstance->bundle());
       if ($this->menuLinkManager->getDefinition($pluginId, FALSE)) {
-        if (!$entity->isInsidePlugin()) {
-          // When the entity is saved via a plugin instance, we should not call
-          // the menu tree manager to update the definition a second time.
+        if (!$node->isInsidePlugin()) {
+          // The entity is saved via a plugin instance, don't call the menu
+          // tree manager to update the definition a second time.
           $this->menuLinkManager->updateDefinition($pluginId, $definition, FALSE);
         }
       }
@@ -115,20 +79,21 @@ readonly class JoinupGroupMenuLinkHooks {
    * Orphan links are moved to the parent of the deleted menu item.
    */
   #[Hook('node_predelete')]
-  public function deleteGroupMenuLinkPluginDefinition(NodeInterface $entity): void {
-    if (!$this->isGroupMenuLinkEntity($entity)) {
+  public function deleteGroupMenuLinkPluginDefinition(NodeInterface $node): void {
+    if (!$this->isGroupMenuLinkEntity($node)) {
       return;
     }
+    assert($node instanceof GroupMenuLinkInterface);
 
-    foreach ($entity->get('menu_settings')->value as $id => $settings) {
-      $pluginId = GroupMenuLink::id("$id-{$entity->id()}");
-
+    foreach ($node->getGroup()->getGroupOgMenuInstances() as $ogMenuInstance) {
+      $ogMenuType = $ogMenuInstance->bundle();
+      $pluginId = GroupMenuLink::buildPluginId($node->id(), $ogMenuType);
       if ($definition = $this->menuLinkManager->getDefinition($pluginId, FALSE)) {
         $parent = $definition['parent'] ?? '';
         $nids = [];
         foreach ($this->menuLinkManager->getChildIds($pluginId) as $childPluginId) {
-          if (preg_match('/^' . GroupMenuLink::BASE_ID . ':\d+-(\d+)$/', $childPluginId, $matches)) {
-            $nids[] = $matches[1];
+          if ($nid = GroupMenuLink::extractId($childPluginId)) {
+            $nids[] = $nid;
           }
         }
 
@@ -136,7 +101,7 @@ readonly class JoinupGroupMenuLinkHooks {
           // Move the child links to the parent of the deleted menu item.
           foreach ($this->entityTypeManager->getStorage('node')->loadMultiple($nids) as $childPage) {
             $childMenuSettings = $childPage->get('menu_settings')->value;
-            $childMenuSettings[$id]['parent'] = $parent;
+            $childMenuSettings[$ogMenuType]['parent'] = $parent;
             $childPage->set('menu_settings', ['value' => $childMenuSettings])->save();
           }
         }
@@ -157,7 +122,7 @@ readonly class JoinupGroupMenuLinkHooks {
    */
   protected function isGroupMenuLinkEntity(NodeInterface $entity): bool {
     if (
-      // Only check for group menu link entities.
+      // Only allow group menu link entities.
       !$entity instanceof GroupMenuLinkInterface
       // Don't update the menu tree if a pending revision was saved.
       || !$entity->isDefaultRevision()
@@ -171,30 +136,31 @@ readonly class JoinupGroupMenuLinkHooks {
   /**
    * Builds the plugin definition for a group menu link entity.
    *
-   * @param \Drupal\joinup_group\Entity\GroupMenuLinkInterface $entity
+   * @param \Drupal\joinup_group\Entity\GroupMenuLinkInterface $node
    *   The entity.
-   * @param int|string $ogmenuInstanceId
-   *   The OG menu instance ID.
-   * @param string $ogmenuType
-   *   The OG menu instance bundle.
+   * @param \Drupal\og_menu\OgMenuInstanceInterface $ogMenuInstance
+   *   The OG menu instance.
    *
    * @return array{id: string, class: string, deriver: string, menu_name: string, title: string, route_name: string, route_parameters: array{node: int|string}, parent: string, weight: int, enabled: bool}
    *   The plugin definition.
    */
-  public function buildPluginDefinition(GroupMenuLinkInterface $entity, int|string $ogmenuInstanceId, string $ogmenuType): array {
-    $menuSettings = $entity->get('menu_settings')->value;
+  public function buildPluginDefinition(GroupMenuLinkInterface $node, OgMenuInstanceInterface $ogMenuInstance): array {
+    $menuSettings = $node->get('menu_settings')->value;
+    $ogMenuType = $ogMenuInstance->bundle();
+    $nid = $node->id();
+
     return [
-      'id' => GroupMenuLink::id("$ogmenuInstanceId-{$entity->id()}"),
+      'id' => GroupMenuLink::buildPluginId($nid, $ogMenuType),
       'class' => GroupMenuLink::class,
       'deriver' => GroupMenuLinkDeriver::class,
       'provider' => 'joinup_group',
-      'menu_name' => "ogmenu-$ogmenuInstanceId",
-      'title' => $entity->label(),
+      'menu_name' => "ogmenu-{$ogMenuInstance->id()}",
+      'title' => $node->label(),
       'route_name' => 'entity.node.canonical',
-      'route_parameters' => ['node' => $entity->id()],
-      'parent' => $menuSettings[$ogmenuInstanceId]['parent'] ?? '',
-      'weight' => $menuSettings[$ogmenuInstanceId]['weight'] ?? 0,
-      'enabled' => $menuSettings[$ogmenuInstanceId]['enabled'] ?? $ogmenuType === 'navigation',
+      'route_parameters' => ['node' => $nid],
+      'parent' => $menuSettings[$ogMenuType]['parent'],
+      'weight' => $menuSettings[$ogMenuType]['weight'],
+      'enabled' => $menuSettings[$ogMenuType]['enabled'],
     ];
   }
 
@@ -209,7 +175,6 @@ readonly class JoinupGroupMenuLinkHooks {
    */
   protected function getMenuSettingsDefaults(OgMenuInstanceInterface $ogMenuInstance): array {
     return [
-      'ogmenu' => $ogMenuInstance->id(),
       'parent' => '',
       'weight' => 0,
       'enabled' => $ogMenuInstance->bundle() === 'navigation',

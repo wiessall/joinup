@@ -238,17 +238,15 @@ class CollectionContext extends RawDrupalContext {
   public function givenCollectionMenuStructure(TableNode $menu_table, string $menu_type, string $group_label, string $group_bundle): void {
     $group = $this->getEntityByLabel('node', $group_label, $group_bundle);
     assert($group instanceof GroupInterface);
-    $og_menu_instance = $group->getGroupOgMenuInstance($menu_type);
 
     foreach ($menu_table->getColumnsHash() as $values) {
       $page = $this->getEntityByLabel('node', $values['title'], 'custom_page');
       $menu_settings = $page->get('menu_settings')->value ?? [];
       $parent = !empty($values['parent']) ? $this->getEntityByLabel('node', $values['parent'], 'custom_page') : NULL;
       $menu_settings[$menu_type] = [
-        'ogmenu' => $og_menu_instance->id(),
         'enabled' => ($values['enabled'] ??= 'yes') === 'yes',
         'weight' => (int) ($values['weight'] ?? 0),
-        'parent' => $parent ? GroupMenuLink::id("{$og_menu_instance->id()}-{$parent->id()}") : '',
+        'parent' => $parent ? GroupMenuLink::buildPluginId($parent->id(), $menu_type) : '',
       ];
       $page->set('menu_settings', ['value' => $menu_settings])->save();
     }
