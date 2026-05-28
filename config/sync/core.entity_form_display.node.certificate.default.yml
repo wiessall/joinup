@@ -1,0 +1,54 @@
+uuid: 471b8824-2cd2-42e3-9c4e-01d10bf9bad7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.certificate.certificate
+    - field.field.node.certificate.course
+    - field.field.node.certificate.issuing_date
+    - node.type.certificate
+  module:
+    - datetime
+    - file
+id: node.certificate.default
+targetEntityType: node
+bundle: certificate
+mode: default
+content:
+  certificate:
+    type: file_generic
+    weight: 3
+    region: content
+    settings:
+      progress_indicator: throbber
+    third_party_settings: {  }
+  course:
+    type: entity_reference_autocomplete
+    weight: 1
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  issuing_date:
+    type: datetime_default
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  current_workflow_state: true
+  langcode: true
+  path: true
+  promote: true
+  published_at: true
+  simple_sitemap: true
+  status: true
+  sticky: true
+  title: true
+  uid: true
+  url_redirects: true
+  uuid: true

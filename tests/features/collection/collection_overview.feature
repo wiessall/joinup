@@ -24,6 +24,7 @@ Feature: Collections Overview
     When I am logged in as "Madam Shirley"
     And I visit the collection overview page
     Then I should see the following tiles in the correct order:
+      | Interoperable Europe Academy         |
       # Created in 8:33am.
       | Open Data                            |
       # Created in 8:32am.

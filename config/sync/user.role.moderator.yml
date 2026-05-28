@@ -11,6 +11,7 @@ dependencies:
     - media.type.event_logo
     - media.type.news_logo
     - media.type.solution_logo
+    - node.type.certificate
     - node.type.collection
     - node.type.contact_information
     - node.type.custom_page
@@ -161,6 +162,7 @@ permissions:
   - 'create solution_logo media'
   - 'create webform'
   - 'delete all sitewide alert revisions'
+  - 'delete any certificate content'
   - 'delete any collection_logo media'
   - 'delete any contact_information content'
   - 'delete any custom_page content'
@@ -196,6 +198,7 @@ permissions:
   - 'delete sitewide alert entities'
   - 'delete terms in tags'
   - 'download subscribers report'
+  - 'edit any certificate content'
   - 'edit any collection content'
   - 'edit any collection_logo media'
   - 'edit any contact_information content'
