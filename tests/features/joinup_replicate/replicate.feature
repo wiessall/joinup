@@ -104,3 +104,18 @@ Feature: Cloning of entities
       | logged in as a moderator                                      | Collection document    | document     |
       | logged in as a facilitator of the "Portal support" collection | Collection document    | document     |
       | logged in as "Collection Owner"                               | Collection document    | document     |
+
+  Scenario Outline: Cloning is not allowed when the parent group is archived.
+    Given the workflow state of the "<group title>" <group type> is changed to "archived"
+    And I am <role>
+    When I go to the replicate form of the "<node title>" <content type>
+    Then I should get an access denied error
+
+    Examples:
+      | group title    | group type | role                                                          | node title             | content type |
+      | Portal support | collection | logged in as a moderator                                      | Collection custom page | custom_page  |
+      | Portal support | collection | logged in as a facilitator of the "Portal support" collection | Collection custom page | custom_page  |
+      | Portal support | collection | logged in as "Collection Owner"                               | Collection custom page | custom_page  |
+      | Solution       | solution   | logged in as a moderator                                      | Solution custom page   | custom_page  |
+      | Solution       | solution   | logged in as a facilitator of the "Solution" solution         | Solution custom page   | custom_page  |
+      | Solution       | solution   | logged in as "Solution Owner"                                 | Solution custom page   | custom_page  |
