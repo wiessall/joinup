@@ -20,7 +20,6 @@ class GroupSettingsFormAlter implements GroupSettingsFormAlterInterface {
 
   public function __construct(
     protected readonly EntityTypeManagerInterface $entityTypeManager,
-    protected readonly GroupMenuManagerInterface $groupMenuManager,
   ) {}
 
   /**
@@ -58,8 +57,10 @@ class GroupSettingsFormAlter implements GroupSettingsFormAlterInterface {
       return NULL;
     }
 
-    $menu = $this->groupMenuManager->getMenuByGroupId($group->id(), 'navigation');
-    if (!$menu) {
+    try {
+      $menu = $group->getGroupOgMenuInstance('navigation');
+    }
+    catch (\LogicException) {
       return NULL;
     }
 

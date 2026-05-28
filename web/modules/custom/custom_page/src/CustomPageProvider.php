@@ -6,9 +6,8 @@ namespace Drupal\custom_page;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Menu\MenuLinkManagerInterface;
-use Drupal\joinup_group\GroupMenuManagerInterface;
-use Drupal\menu_link_content\MenuLinkContentInterface;
-use Drupal\menu_link_content\Plugin\Menu\MenuLinkContent;
+use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_group\Plugin\Menu\GroupMenuLink;
 use Drupal\og\OgGroupAudienceHelperInterface;
 
 /**
@@ -19,22 +18,18 @@ readonly class CustomPageProvider implements CustomPageProviderInterface {
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected MenuLinkManagerInterface $menuLinkManager,
-    protected GroupMenuManagerInterface $groupMenuManager,
   ) {}
 
   /**
    * {@inheritdoc}
    */
-  public function getCustomPagesByGroupId(string $group_id, bool $exclude_disabled = TRUE): array {
+  public function getCustomPagesByGroup(GroupInterface $group, bool $exclude_disabled = TRUE): array {
     // Get a list of all custom pages belonging to the group.
-    $custom_page_ids = $this->getCustomPageIds($group_id);
+    $custom_page_ids = $this->getCustomPageIds($group->id());
 
     if (!empty($custom_page_ids) && $exclude_disabled) {
       // Filter out all pages that are disabled in the group's menu instance.
-      $ogmenu_instance = $this->groupMenuManager->getMenuByGroupId($group_id, 'navigation');
-      if (empty($ogmenu_instance)) {
-        return [];
-      }
+      $ogmenu_instance = $group->getGroupOgMenuInstance('navigation');
 
       $custom_page_ids = array_filter($custom_page_ids, function (string $custom_page_id) use ($ogmenu_instance) {
         $menu_links = $this->menuLinkManager->loadLinksByRoute(
@@ -42,16 +37,9 @@ readonly class CustomPageProvider implements CustomPageProviderInterface {
           ['node' => $custom_page_id],
           'ogmenu-' . $ogmenu_instance->id()
         );
-        /** @var \Drupal\menu_link_content\Plugin\Menu\MenuLinkContent $menu_link */
         $menu_link = reset($menu_links);
 
-        // Sanity check that our data is valid.
-        if (!$menu_link instanceof MenuLinkContent || empty($entity_id = $menu_link->getPluginDefinition()['metadata']['entity_id'])) {
-          return FALSE;
-        }
-
-        $menu_link_entity = $this->entityTypeManager->getStorage('menu_link_content')->load($entity_id);
-        return !empty($menu_link_entity) && $menu_link_entity instanceof MenuLinkContentInterface && $menu_link_entity->isEnabled();
+        return $menu_link instanceof GroupMenuLink && $menu_link->isEnabled();
       });
     }
 
