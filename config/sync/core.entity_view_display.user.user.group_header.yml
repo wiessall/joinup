@@ -8,6 +8,7 @@ dependencies:
     - field.field.user.user.field_social_media
     - field.field.user.user.field_user_business_title
     - field.field.user.user.field_user_content
+    - field.field.user.user.field_user_country_of_residence
     - field.field.user.user.field_user_family_name
     - field.field.user.user.field_user_first_name
     - field.field.user.user.field_user_frequency
@@ -15,8 +16,12 @@ dependencies:
     - field.field.user.user.field_user_organisation
     - field.field.user.user.field_user_photo
     - field.field.user.user.field_user_professional_domain
+    - field.field.user.user.field_user_work_location
+    - field.field.user.user.function_of_administration
     - image.style.profile_icon_big
   module:
+    - entity_form_field_label
+    - joinup_badge
     - options
     - social_media_links_field
     - svg_image
@@ -27,12 +32,19 @@ targetEntityType: user
 bundle: user
 mode: group_header
 content:
+  badges:
+    type: joinup_badge
+    label: visually_hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 11
+    region: content
   blocked_reason:
     type: list_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 2
+    weight: 3
     region: content
   field_social_media:
     type: social_media_links_field_default
@@ -47,7 +59,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 9
+    weight: 12
     region: content
   field_user_business_title:
     type: string
@@ -55,7 +67,20 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 6
+    weight: 8
+    region: content
+  field_user_country_of_residence:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+      template_suggestion:
+        template_suggestion: ''
+    weight: 5
     region: content
   field_user_family_name:
     type: string
@@ -65,7 +90,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
-    weight: 1
+    weight: 2
     region: content
   field_user_first_name:
     type: string
@@ -75,7 +100,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
-    weight: 0
+    weight: 1
     region: content
   field_user_nationality:
     type: entity_reference_label
@@ -85,7 +110,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 4
+    weight: 5
     region: content
   field_user_organisation:
     type: string
@@ -93,7 +118,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 7
+    weight: 10
     region: content
   field_user_photo:
     type: image
@@ -110,7 +135,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
-    weight: 3
+    weight: 4
     region: content
   field_user_professional_domain:
     type: entity_reference_label
@@ -120,12 +145,38 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 5
+    weight: 6
+    region: content
+  field_user_work_location:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+      template_suggestion:
+        template_suggestion: ''
+    weight: 7
+    region: content
+  function_of_administration:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+      template_suggestion:
+        template_suggestion: ''
+    weight: 9
     region: content
   member_for:
     settings: {  }
     third_party_settings: {  }
-    weight: 8
+    weight: 11
     region: content
 hidden:
   block_user: true

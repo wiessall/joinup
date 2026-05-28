@@ -1,0 +1,22 @@
+uuid: 5fcf3958-024c-4aad-a865-c89782c35613
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.full_html
+template: assessment_report_members
+label: 'Assessment Reports: published (members)'
+description: 'Notifies subscribed collection members when an assessment report is published'
+text:
+  -
+    value: 'IOPEU Assessment report has been published'
+    format: full_html
+  -
+    value: "<p>@actor:full_name has published the new assessment report - \"<a href=\"@assessment:report_url\">@assessment:title</a>\" in the Portal's <a href=\"@assessment:repository_url\">Assessments repository</a>.</p>"
+    format: full_html
+settings:
+  'token options':
+    clear: false
+    'token replace': false
+  purge_override: false
+  purge_methods: {  }

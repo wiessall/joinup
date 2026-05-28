@@ -51,17 +51,17 @@ processor_configs:
     settings:
       minimum_items: 1
       maximum_items: null
-  display_value_widget_order:
-    processor_id: display_value_widget_order
-    weights:
-      sort: 40
-    settings:
-      sort: ASC
   hierarchy_processor:
     processor_id: hierarchy_processor
     weights:
       build: -10
     settings: {  }
+  oss_display_value_widget_order:
+    processor_id: oss_display_value_widget_order
+    weights:
+      sort: 40
+    settings:
+      sort: ASC
   oss_label_processor:
     processor_id: oss_label_processor
     weights:

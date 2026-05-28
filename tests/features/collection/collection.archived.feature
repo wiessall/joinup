@@ -13,17 +13,18 @@ Feature: Creating content and commenting on archived collection
     And the following "collection" content:
       | title               | abstract            | description         | logo     | topic                   |
       | The Willing Consort | The Willing Consort | The Willing Consort | logo.png | Statistics and Analysis |
-    Given the following "solution" content:
-      | title               | collection          |
-      | The Loyal Companion | The Willing Consort |
     And the following collection user memberships:
       | collection          | user        | roles              |
       | The Willing Consort | Karl Fields | owner, facilitator |
 
   Scenario Outline: 'Comment form' should not be accessible on an archived collection content.
-    Given the following "<content_type>" content:
+    Given the following "solution" content:
+      | title               | collection          | state    |
+      | The Loyal Companion | The Willing Consort | archived |
+    And the following "<content_type>" content:
       | title            | collection   | solution   |
       | Commented entity | <collection> | <solution> |
+
     When I am logged in as "Lee Reeves"
     And I visit the "Commented entity" <content_type>
     And I should see a ".comment-form" element
@@ -70,3 +71,18 @@ Feature: Creating content and commenting on archived collection
     And I am logged in as a facilitator of the "The Willing Consort" collection
     And I go to the "The Willing Consort" collection
     Then I should not see the plus button menu
+
+  Scenario Outline: Collection could not be archived if contains at least 1 published solution
+    Given the following "solution" content:
+      | title               | collection          | state   |
+      | The Loyal Companion | The Willing Consort | <state> |
+    And I am logged in as a moderator
+    And I go to the edit form of the "The Willing Consort" collection
+    When I fill in "Motivation" with "As you wish."
+    And I press "Archive"
+    Then I <action> see the error message "Collection has at least one published solution. Please archive all active solutions first."
+
+    Examples:
+      | state     | action     |
+      | published | should     |
+      | archived  | should not |
