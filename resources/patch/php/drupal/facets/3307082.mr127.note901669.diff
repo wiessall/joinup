@@ -1,5 +1,5 @@
 diff --git a/facets.install b/facets.install
-index fdc8355..52bab57 100644
+index fdc83553edb0dede400fb8601b54715c775cd0f1..52bab5789f629a04b4a4dc9c6e73d708ac9b8103 100644
 --- a/facets.install
 +++ b/facets.install
 @@ -249,3 +249,18 @@ function facets_update_8012() {
@@ -22,71 +22,86 @@ index fdc8355..52bab57 100644
 +  }
 +}
 diff --git a/js/soft-limit.js b/js/soft-limit.js
-index a203352..4de623b 100644
+index 9424b3a38c5cb0a6d2f0de783ff26c2f273e21a4..34b29f0175d4d66c465dc50b1fb6c9ee9fdc8227 100644
 --- a/js/soft-limit.js
 +++ b/js/soft-limit.js
-@@ -30,7 +30,7 @@
+@@ -27,7 +27,7 @@
     *   Settings.
     */
    Drupal.facets.applySoftLimit = function (facet, limit, settings) {
--    var zero_based_limit = (limit - 1);
-+    var zero_based_limit = ((limit < 0) ? limit : (limit - 1));
-     var facet_id = facet;
-     var facetsList = $('ul[data-drupal-facet-id="' + facet_id + '"]');
+-    const zeroBasedLimit = limit - 1;
++    const zeroBasedLimit = limit < 0 ? limit : limit - 1;
+     const facetId = facet;
+     const facetsList = $(`ul[data-drupal-facet-id="${facetId}"]`);
  
-@@ -43,13 +43,17 @@
+@@ -40,8 +40,13 @@
  
      // Hide facets over the limit.
      facetsList.each(function () {
--      var allLiElements = $(this).find('li');
--      $(once('applysoftlimit', allLiElements.slice(zero_based_limit + 1))).hide();
+-      const allLiElements = $(this).find('li');
+-      $(once('applysoftlimit', allLiElements.slice(zeroBasedLimit + 1))).hide();
 +      if (limit === 0) {
 +        $(once('applysoftlimit', $(this).children('li'))).hide();
-+      }
-+      else {
-+        $(once('applysoftlimit', $(this).children('li:gt(' + zero_based_limit + ')'))).hide();
++      } else {
++        $(
++          once('applysoftlimit', $(this).children(`li:gt(${zeroBasedLimit})`)),
++        ).hide();
 +      }
      });
  
      // Add "Show more" / "Show less" links.
-     $(once('applysoftlimit', facetsList.filter(function () {
--      return $(this).find('li').length > limit;
-+      return $(this).find('> li').length > limit;
-     }))).each(function () {
-       var facet = $(this);
-       var showLessLabel = settings.facets.softLimitSettings[facet_id].showLessLabel;
-@@ -58,12 +62,23 @@
-         .text(showMoreLabel)
+@@ -49,7 +54,7 @@
+       once(
+         'applysoftlimit',
+         facetsList.filter(function () {
+-          return $(this).find('> li').length > limit;
++          return $(this).find('li').length > limit;
+         }),
+       ),
+     ).each(function () {
+@@ -62,18 +67,27 @@
+       $link[0].textContent = showMoreLabel;
+       $link
          .on('click', function () {
-           if (facet.find('li:hidden').length > 0) {
--            facet.find('li:gt(' + zero_based_limit + ')').slideDown();
--            facet.find('li:lt(' + (zero_based_limit + 2) + ') a, li:lt(' + (zero_based_limit + 2) + ') input').focus();
+-          if (facet.find('> li:hidden').length > 0) {
+-            facet.find(`> li:gt(${zeroBasedLimit})`).slideDown();
+-            facet
+-              .find(
+-                `> li:lt(${zeroBasedLimit + 2}) a, li:lt(${
+-                  zeroBasedLimit + 2
+-                }) input`,
+-              )
+-              .focus();
++          if (facet.find('li:hidden').length > 0) {
 +            if (limit === 0) {
 +              facet.find('> li').slideDown();
-+              facet.find('> li:lt(' + (zero_based_limit + 1) + ') input').focus();
++              facet.find(`> li:lt(${zeroBasedLimit + 1}) input`).focus();
++            } else {
++              facet.find(`> li:gt(${zeroBasedLimit})`).slideDown();
++              facet
++                .find(
++                  `> li:lt(${zeroBasedLimit + 2}) a, li:lt(${
++                    zeroBasedLimit + 2
++                  }) input`,
++                )
++                .focus();
 +            }
-+            else {
-+              facet.find('> li:gt(' + zero_based_limit + ')').slideDown();
-+              facet.find('> li:lt(' + (zero_based_limit + 2) + ') a, li:lt(' + (zero_based_limit + 2) + ') input').focus();
-+            }
-             $(this).addClass('open').text(showLessLabel);
-           }
-           else {
--            facet.find('li:gt(' + zero_based_limit + ')').slideUp();
+             $(this).addClass('open')[0].textContent = showLessLabel;
+           } else {
+-            facet.find(`> li:gt(${zeroBasedLimit})`).slideUp();
 +            if (limit === 0) {
 +              facet.find('> li').slideUp();
++            } else {
++              facet.find(`> li:gt(${zeroBasedLimit})`).slideUp();
 +            }
-+            else {
-+              facet.find('> li:gt(' + zero_based_limit + ')').slideUp();
-+            }
-             $(this).removeClass('open').text(showMoreLabel);
+             $(this).removeClass('open')[0].textContent = showMoreLabel;
            }
            return false;
 diff --git a/modules/facets_searchbox_widget/tests/src/Unit/Plugin/widget/SearchboxCheckboxWidgetTest.php b/modules/facets_searchbox_widget/tests/src/Unit/Plugin/widget/SearchboxCheckboxWidgetTest.php
-index 854f53b..0400cfa 100644
+index c486a158436838e8799436158f0955cdfd682f4d..c3bff69598f925dadee21770403b6ba0e6935039 100644
 --- a/modules/facets_searchbox_widget/tests/src/Unit/Plugin/widget/SearchboxCheckboxWidgetTest.php
 +++ b/modules/facets_searchbox_widget/tests/src/Unit/Plugin/widget/SearchboxCheckboxWidgetTest.php
-@@ -64,7 +64,7 @@ public function testDefaultConfiguration() {
+@@ -64,7 +64,7 @@ class SearchboxCheckboxWidgetTest extends CheckboxWidgetTest {
      $this->assertArrayHasKey('show_more_label', $default_config['soft_limit_settings']);
  
      $this->assertEquals(FALSE, $default_config['show_numbers']);
@@ -96,10 +111,10 @@ index 854f53b..0400cfa 100644
    }
  
 diff --git a/modules/facets_searchbox_widget/tests/src/Unit/Plugin/widget/SearchboxLinksWidgetTest.php b/modules/facets_searchbox_widget/tests/src/Unit/Plugin/widget/SearchboxLinksWidgetTest.php
-index bae4219..31bbb29 100644
+index 38bb7683b14cb55eff960c2251fd146f00d1171b..902216b41fe33b9e3826faf009ffbc92c9c2869a 100644
 --- a/modules/facets_searchbox_widget/tests/src/Unit/Plugin/widget/SearchboxLinksWidgetTest.php
 +++ b/modules/facets_searchbox_widget/tests/src/Unit/Plugin/widget/SearchboxLinksWidgetTest.php
-@@ -238,7 +238,7 @@ public function testDefaultConfiguration() {
+@@ -238,7 +238,7 @@ class SearchboxLinksWidgetTest extends LinksWidgetTest {
      $this->assertArrayHasKey('show_more_label', $default_config['soft_limit_settings']);
  
      $this->assertEquals(FALSE, $default_config['show_numbers']);
@@ -109,10 +124,10 @@ index bae4219..31bbb29 100644
    }
  
 diff --git a/src/Plugin/facets/widget/LinksWidget.php b/src/Plugin/facets/widget/LinksWidget.php
-index 89879d8..cf5500e 100644
+index 1e1c6dfaf3150f5db872e730bf282ae6099ece6f..d67c5ce62a1898b6593427d3f85c4d9d0e664f07 100644
 --- a/src/Plugin/facets/widget/LinksWidget.php
 +++ b/src/Plugin/facets/widget/LinksWidget.php
-@@ -24,7 +24,7 @@ class LinksWidget extends WidgetPluginBase {
+@@ -64,7 +64,7 @@ class LinksWidget extends WidgetPluginBase {
     */
    public function defaultConfiguration() {
      return [
@@ -121,7 +136,7 @@ index 89879d8..cf5500e 100644
        'soft_limit_settings' => [
          'show_less_label' => 'Show less',
          'show_more_label' => 'Show more',
-@@ -42,7 +42,7 @@ public function build(FacetInterface $facet) {
+@@ -82,7 +82,7 @@ class LinksWidget extends WidgetPluginBase {
      $build = parent::build($facet);
      $this->appendWidgetLibrary($build);
      $soft_limit = (int) $this->getConfiguration()['soft_limit'];
@@ -130,7 +145,7 @@ index 89879d8..cf5500e 100644
        $show_less_label = $this->getConfiguration()['soft_limit_settings']['show_less_label'];
        $show_more_label = $this->getConfiguration()['soft_limit_settings']['show_more_label'];
        $build['#attached']['library'][] = 'facets/soft-limit';
-@@ -143,19 +143,19 @@ protected function appendWidgetLibrary(array &$build) {
+@@ -181,19 +181,19 @@ class LinksWidget extends WidgetPluginBase {
    public function buildConfigurationForm(array $form, FormStateInterface $form_state, FacetInterface $facet) {
      $form = parent::buildConfigurationForm($form, $form_state, $facet);
  
@@ -153,7 +168,7 @@ index 89879d8..cf5500e 100644
        ],
      ];
      $form['soft_limit_settings']['show_less_label'] = [
-@@ -164,7 +164,7 @@ public function buildConfigurationForm(array $form, FormStateInterface $form_sta
+@@ -202,7 +202,7 @@ class LinksWidget extends WidgetPluginBase {
        '#description' => $this->t('This text will be used for "Show less" link.'),
        '#default_value' => $this->getConfiguration()['soft_limit_settings']['show_less_label'],
        '#states' => [
@@ -162,7 +177,7 @@ index 89879d8..cf5500e 100644
        ],
      ];
      $form['soft_limit_settings']['show_more_label'] = [
-@@ -173,7 +173,7 @@ public function buildConfigurationForm(array $form, FormStateInterface $form_sta
+@@ -211,7 +211,7 @@ class LinksWidget extends WidgetPluginBase {
        '#description' => $this->t('This text will be used for "Show more" link.'),
        '#default_value' => $this->getConfiguration()['soft_limit_settings']['show_more_label'],
        '#states' => [
@@ -172,10 +187,10 @@ index 89879d8..cf5500e 100644
      ];
  
 diff --git a/tests/src/Kernel/Entity/FacetTest.php b/tests/src/Kernel/Entity/FacetTest.php
-index 819ec2c..2464aa1 100644
+index 8cb37e14280d98a3314fa466d5212e20cf52ed1e..48f9326e9a5507b7e9a06c2708abb5736961eccb 100644
 --- a/tests/src/Kernel/Entity/FacetTest.php
 +++ b/tests/src/Kernel/Entity/FacetTest.php
-@@ -70,7 +70,7 @@ public function testWidget() {
+@@ -72,7 +72,7 @@ class FacetTest extends KernelTestBase {
      $this->assertInstanceOf(WidgetPluginManager::class, $manager);
  
      $config = [
@@ -185,10 +200,10 @@ index 819ec2c..2464aa1 100644
        'soft_limit_settings' => [
          'show_less_label' => 'Show less',
 diff --git a/tests/src/Unit/Plugin/widget/CheckboxWidgetTest.php b/tests/src/Unit/Plugin/widget/CheckboxWidgetTest.php
-index 157fd19..fc50ec8 100644
+index 5f6e18bc52a3fa6bcd0d0c1122326922227ba18e..7a540c519fd44edf5ff4ba5dfdd86862bd7dff63 100644
 --- a/tests/src/Unit/Plugin/widget/CheckboxWidgetTest.php
 +++ b/tests/src/Unit/Plugin/widget/CheckboxWidgetTest.php
-@@ -63,7 +63,7 @@ public function testDefaultConfiguration() {
+@@ -63,7 +63,7 @@ class CheckboxWidgetTest extends WidgetTestBase {
      $this->assertArrayHasKey('show_more_label', $default_config['soft_limit_settings']);
  
      $this->assertEquals(FALSE, $default_config['show_numbers']);
@@ -198,10 +213,10 @@ index 157fd19..fc50ec8 100644
    }
  
 diff --git a/tests/src/Unit/Plugin/widget/LinksWidgetTest.php b/tests/src/Unit/Plugin/widget/LinksWidgetTest.php
-index 30479fc..84df05e 100644
+index 4616a87b04827bcdcd0db0f85d6e46324f412d0f..748a485c5640f485d4a1acce48f6bbc7f998f6ca 100644
 --- a/tests/src/Unit/Plugin/widget/LinksWidgetTest.php
 +++ b/tests/src/Unit/Plugin/widget/LinksWidgetTest.php
-@@ -237,7 +237,7 @@ public function testDefaultConfiguration() {
+@@ -237,7 +237,7 @@ class LinksWidgetTest extends WidgetTestBase {
      $this->assertArrayHasKey('show_more_label', $default_config['soft_limit_settings']);
  
      $this->assertEquals(FALSE, $default_config['show_numbers']);
@@ -211,10 +226,10 @@ index 30479fc..84df05e 100644
    }
  
 diff --git a/tests/src/Unit/Plugin/widget/WidgetTestBase.php b/tests/src/Unit/Plugin/widget/WidgetTestBase.php
-index 68cf88b..2af8fbe 100644
+index 7b47c094dd98be5f6ccae7450b131bcce2dadbeb..4ef4ac788f0b69b01440ceb850d58fc8361b9ace 100644
 --- a/tests/src/Unit/Plugin/widget/WidgetTestBase.php
 +++ b/tests/src/Unit/Plugin/widget/WidgetTestBase.php
-@@ -87,7 +87,7 @@ protected function setUp(): void {
+@@ -120,7 +120,7 @@ abstract class WidgetTestBase extends Drupal10CompatibilityUnitTestCase {
     */
    public function testDefaultConfiguration() {
      $default_config = $this->widget->defaultConfiguration();

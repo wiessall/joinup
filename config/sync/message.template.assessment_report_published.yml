@@ -5,8 +5,8 @@ dependencies:
   config:
     - filter.format.full_html
 template: assessment_report_published
-label: 'Assessment Reports: published'
-description: 'The assessment report has been published after moderation'
+label: 'Assessment Reports: published (owner)'
+description: 'Sent to the report owner when the assessment report has been published after moderation'
 text:
   -
     value: 'Your assessment report has been published'

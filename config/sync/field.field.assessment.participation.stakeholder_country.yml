@@ -5,8 +5,6 @@ dependencies:
   config:
     - assessments.type.participation
     - field.storage.assessment.stakeholder_country
-    - taxonomy.vocabulary.spatial
-    - views.view.eu_countries
   module:
     - tmgmt_content
 third_party_settings:
@@ -26,7 +24,7 @@ settings:
   handler: views
   handler_settings:
     view:
-      view_name: eu_countries
+      view_name: countries
       display_name: entity_reference_eu_countries
       arguments: {  }
 field_type: entity_reference

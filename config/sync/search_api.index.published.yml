@@ -3,6 +3,8 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.storage.assessment.binding_requirement
+    - field.storage.assessment.thematic_area
     - field.storage.meta_entity.count
     - field.storage.meta_entity.field_featured
     - field.storage.meta_entity.field_pinned_in
@@ -30,6 +32,7 @@ dependencies:
     - field.storage.node.spatial_coverage
     - field.storage.node.spdx_licence
     - field.storage.node.submission
+    - field.storage.paragraph.affects
     - field.storage.paragraph.field_body
     - field.storage.taxonomy_term.field_eif_identifier
     - field.storage.taxonomy_term.field_eif_related_term
@@ -785,6 +788,19 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.submission
+  thematic_area:
+    label: 'Identification of binding requirement(s) assessed » Paragraph » Affected service » Assessment » Functions'
+    datasource_id: 'entity:assessment'
+    property_path: 'binding_requirement:entity:affects:entity:thematic_area'
+    type: integer
+    dependencies:
+      config:
+        - field.storage.assessment.binding_requirement
+        - field.storage.assessment.thematic_area
+        - field.storage.paragraph.affects
+      module:
+        - assessments
+        - paragraphs
   tid:
     label: 'Term ID'
     datasource_id: 'entity:taxonomy_term'

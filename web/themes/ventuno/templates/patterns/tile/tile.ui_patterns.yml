@@ -65,6 +65,10 @@ tile:
       preview:
         - label: 'Open Source'
         - label: 'eGovernment'
+    user_badges:
+      type: array
+      label: 'User badges'
+      description: 'User badges of the tile.'
     extra_data:
       type: array
       label: 'Extra data'
