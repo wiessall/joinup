@@ -127,6 +127,9 @@ function ventuno_preprocess_group_header_node(array &$variables, string $expecte
     $landing_page = $node->getSetting('landing_page');
     $variables['has_no_landing_page'] = empty($landing_page->entity);
   }
+  if ($node instanceof ArchivableEntityInterface) {
+    $variables['is_archived'] = $node->isArchived();
+  }
 }
 
 /**

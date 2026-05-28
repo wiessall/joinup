@@ -64,6 +64,7 @@ Feature: Creating content and commenting on archived collection
     And I click "Edit"
     When I fill in "Motivation" with "As you wish."
     And I press "Archive"
+    Then I should see the text "Archived" in the "Header"
 
     # We only need to check that privileged users do not have access anymore.
     And I am logged in as a facilitator of the "The Willing Consort" collection
