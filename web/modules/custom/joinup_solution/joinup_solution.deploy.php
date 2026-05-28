@@ -20,7 +20,7 @@ function joinup_solution_deploy_201300(): void {
     ->fetchAll();
 
   foreach ($rows as $row) {
-    $data = unserialize($row->data);
+    $data = unserialize($row->data, ['allowed_classes' => FALSE]);
     if (!is_array($data) || !isset($data['solution']) || isset($data['group'])) {
       continue;
     }
