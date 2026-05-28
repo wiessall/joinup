@@ -28,12 +28,12 @@ Feature: Cloning of entities
       | Username         | Roles |
       | Collection Owner |       |
       | Solution Owner   |       |
-    And the following collection user memberships:
-      | collection           | user             | roles |
-      | Replicate collection | Collection Owner | owner |
     And the following solution user memberships:
       | solution | user           | roles |
       | Solution | Solution Owner | owner |
+    And the following collection user memberships:
+      | collection           | user             | roles |
+      | Replicate collection | Collection Owner | owner |
 
   Scenario Outline: Only moderators, owners and facilitators can clone content.
     Given I am <user>
