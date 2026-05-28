@@ -110,15 +110,17 @@ Feature: Cloning of entities
 
   Scenario Outline: Cloning is not allowed when the parent group is archived.
     Given the workflow state of the "<group title>" <group type> is changed to "archived"
-    And I am <role>
-    When I go to the replicate form of the "<node title>" <content type>
+    When I am logged in as a moderator
+    And I go to the replicate form of the "<node title>" <content type>
+    Then I should get an access denied error
+    When I am logged in as a facilitator of the "<group title>" <group type>
+    And I go to the replicate form of the "<node title>" <content type>
+    Then I should get an access denied error
+    When I am logged in as "<owner>"
+    And I go to the replicate form of the "<node title>" <content type>
     Then I should get an access denied error
 
     Examples:
-      | group title          | group type | role                                                                | node title             | content type |
-      | Replicate collection | collection | logged in as a moderator                                            | Collection custom page | custom_page  |
-      | Replicate collection | collection | logged in as a facilitator of the "Replicate collection" collection | Collection custom page | custom_page  |
-      | Replicate collection | collection | logged in as "Collection Owner"                                     | Collection custom page | custom_page  |
-      | Solution             | solution   | logged in as a moderator                                            | Solution custom page   | custom_page  |
-      | Solution             | solution   | logged in as a facilitator of the "Solution" solution               | Solution custom page   | custom_page  |
-      | Solution             | solution   | logged in as "Solution Owner"                                       | Solution custom page   | custom_page  |
+      | group title          | group type | node title             | content type | owner            |
+      | Replicate collection | collection | Collection custom page | custom_page  | Collection Owner |
+      | Solution             | solution   | Solution custom page   | custom_page  | Solution Owner   |
