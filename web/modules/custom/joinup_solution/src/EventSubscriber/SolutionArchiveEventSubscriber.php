@@ -9,7 +9,7 @@ use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\joinup_solution\Entity\SolutionInterface;
-use Drupal\joinup_solution\Transition;
+use Drupal\joinup_group\Transition;
 use Drupal\state_machine\Event\WorkflowTransitionEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -81,7 +81,7 @@ class SolutionArchiveEventSubscriber implements EventSubscriberInterface {
    *
    * @param \Drupal\state_machine\Event\WorkflowTransitionEvent $event
    *   The workflow transition event.
-   * @param \Drupal\joinup_solution\Transition $transition
+   * @param \Drupal\joinup_group\Transition $transition
    *   The transition to apply on sub content of a solution if it was
    *   (un)archived.
    *

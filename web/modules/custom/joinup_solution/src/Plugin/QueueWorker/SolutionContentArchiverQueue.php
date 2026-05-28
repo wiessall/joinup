@@ -22,7 +22,7 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
-use Drupal\joinup_solution\Transition;
+use Drupal\joinup_group\Transition;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\joinup_workflow\WorkflowHelperInterface;
 use Drupal\joinup_workflow\WorkflowStateChangeMessageTrait;
@@ -145,7 +145,7 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
    *
    * @param \Drupal\joinup_solution\Entity\SolutionInterface $solution
    *   The solution whose sub-contents we want to archive.
-   * @param \Drupal\joinup_solution\Transition $transition
+   * @param \Drupal\joinup_group\Transition $transition
    *   The transition to apply.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
@@ -221,7 +221,7 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
    *   - The item is an array.
    *   - It has a "user" key with integer or string value.
    *   - It has a "solution" key with string value.
-   *   - It has a "transition" key with \Drupal\joinup_solution\Transition
+   *   - It has a "transition" key with \Drupal\joinup_group\Transition
    *   value.
    */
   protected function queueItemIsValid(mixed $data): bool {
