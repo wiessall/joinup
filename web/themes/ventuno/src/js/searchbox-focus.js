@@ -1,4 +1,6 @@
 /**
+ * @param Drupal
+ * @param once
  * @file
  * Focus on the search box input when opening the dropdown.
  */

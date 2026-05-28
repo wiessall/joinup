@@ -1,4 +1,7 @@
 /**
+ * @param Drupal
+ * @param window
+ * @param $
  * @file
  * Horizontal tabs navigation behavior.
  *
