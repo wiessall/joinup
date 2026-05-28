@@ -1,0 +1,34 @@
+uuid: fb868542-8bf1-462d-8f10-f69fe1d79a27
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+third_party_settings:
+  joinup_badge:
+    icon: patch-check
+    description: 'This user is a verified member of the Interoperable Europe Community.'
+id: iec_member
+label: 'Interoperable Europe Community member'
+bundles: {  }
+entity_type: user
+global: true
+flag_short: 'Flag this item'
+flag_long: ''
+flag_message: ''
+unflag_short: 'Unflag this item'
+unflag_long: ''
+unflag_message: ''
+unflag_denied_text: ''
+weight: 20
+flag_type: 'entity:user'
+link_type: ajax_link
+flagTypeConfig:
+  show_in_links: {  }
+  show_as_field: false
+  show_on_form: false
+  show_contextual_link: false
+  extra_permissions:
+    owner: '0'
+  show_on_profile: false
+linkTypeConfig: {  }
