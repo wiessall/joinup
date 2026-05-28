@@ -6,7 +6,6 @@ namespace Drupal\joinup\Traits;
 
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\menu_link_content\MenuLinkContentInterface;
 
 /**
  * Helper methods to deal with entities.
@@ -112,47 +111,6 @@ trait EntityTrait {
       $bundle = $aliases[$bundle];
     }
     return $bundle;
-  }
-
-  /**
-   * Returns a MenuLinkContent entity from the database.
-   *
-   * The function assumes that there are not duplicate entries with the same
-   * title so it returns the first of the results.
-   *
-   * @param string $title
-   *   The label of the menu item.
-   * @param string $group_id
-   *   The group ID of the menu item.
-   * @param string $menu_type
-   *   The bundle of the OG menu instance.
-   *
-   * @return \Drupal\menu_link_content\MenuLinkContentInterface
-   *   The MenuLinkContent entity.
-   *
-   * @throws \Exception
-   *    Thrown when the menu item is not found.
-   */
-  public function getMenuLinkByTitle(string $title, string $group_id, string $menu_type): MenuLinkContentInterface {
-    $entity_type_manager = \Drupal::getContainer()->get('entity_type.manager');
-    $menu_helper = \Drupal::getContainer()->get('joinup_menu.menu_helper');
-    $navigation_menu = $menu_helper->getOgMenuByGroup($menu_type, $group_id);
-    $menu_links = $entity_type_manager->getStorage('menu_link_content')->loadByProperties(
-      [
-        'title' => $title,
-        'menu_name' => 'ogmenu-' . $navigation_menu->id(),
-      ]
-    );
-    if (empty($menu_links)) {
-      throw new \Exception("The menu link with title '{$title}' was not found.");
-    }
-    // If there are more that one results, we pick up the newest in order to
-    // avoid leftovers produced by previous tests.
-    krsort($menu_links);
-    /** @var \Drupal\menu_link_content\MenuLinkContentInterface $menu_link */
-    $menu_link = reset($menu_links);
-
-    return $menu_link;
   }
 
   /**

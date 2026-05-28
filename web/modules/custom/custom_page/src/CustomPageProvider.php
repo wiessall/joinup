@@ -19,7 +19,6 @@ readonly class CustomPageProvider implements CustomPageProviderInterface {
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected MenuLinkManagerInterface $menuLinkManager,
-    protected CustomPageOgMenuLinksManagerInterface $customPageOgMenuLinksManager,
     protected GroupMenuManagerInterface $groupMenuManager,
   ) {}
 

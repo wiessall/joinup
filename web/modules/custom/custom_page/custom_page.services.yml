@@ -4,10 +4,6 @@ services:
     autoconfigure: true
     autowire: true
 
-  custom_page.og_menu_links_manager:
-    class: Drupal\custom_page\CustomPageOgMenuLinksManager
-  Drupal\custom_page\CustomPageOgMenuLinksManagerInterface: '@custom_page.og_menu_links_manager'
-
   custom_page.provider:
     class: Drupal\custom_page\CustomPageProvider
   Drupal\custom_page\CustomPageProviderInterface: '@custom_page.provider'

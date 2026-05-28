@@ -17,6 +17,8 @@ use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Menu\MenuLinkInterface;
+use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Driver\Entity\EntityStub;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -2410,10 +2412,9 @@ class JoinupContext extends RawDrupalContext {
       $current_row = $rows[$delta];
       $title_element = $current_row->find('css', 'td:first-of-type a:not(.tabledrag-handle)');
       $this->assertSameValues($data['title'], trim($title_element->getText()));
-      $page = $this->getEntityByLabel('node', $data['title'], 'custom_page');
-      $plugin_id = GroupMenuLink::buildPluginId($page->id(), 'navigation');
+      $menu_link = $this->getGroupMenuLinkByTitle($data['title'], $group, 'navigation');
 
-      $parent_input = $current_row->find('css', 'input[name="links[menu_plugin_id:' . $plugin_id . '][parent]"]');
+      $parent_input = $current_row->find('css', 'input[name="links[menu_plugin_id:' . $menu_link->getPluginId() . '][parent]"]');
 
       // When a parent is available, the line should be indented. Find all
       // indentation elements to assert later on based on the parent value.
@@ -3149,6 +3150,42 @@ class JoinupContext extends RawDrupalContext {
         'h1 span'
       );
     }
+  }
+
+  /**
+   * Returns a menu link plugin instance given its title.
+   *
+   * The method assumes that there are no duplicate entries with the same title,
+   * so it returns the first of the results.
+   *
+   * @param string $title
+   *   The label of the menu item.
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
+   *   The group entity.
+   * @param string $menu_type
+   *   The bundle of the OG menu instance.
+   *
+   * @return \Drupal\Core\Menu\MenuLinkInterface
+   *   The menu link instance.
+   *
+   * @throws \Exception
+   *   Thrown when the menu item is not found.
+   */
+  protected function getGroupMenuLinkByTitle(string $title, GroupInterface $group, string $menu_type): MenuLinkInterface {
+    $menu_link_tree = \Drupal::service('menu.link_tree');
+    $menu_name = 'ogmenu-' . $group->getGroupOgMenuInstance($menu_type)->id();
+
+    $tree = $menu_link_tree->load($menu_name, new MenuTreeParameters());
+    $manipulators = [['callable' => 'menu.default_tree_manipulators:flatten']];
+    $tree = $menu_link_tree->transform($tree, $manipulators);
+
+    foreach ($tree as $link) {
+      if ($link->link->getTitle() === $title) {
+        return $link->link;
+      }
+    }
+
+    throw new \Exception("Menu item with title '$title' not found.");
   }
 
 }

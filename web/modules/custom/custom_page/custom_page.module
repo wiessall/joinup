@@ -19,7 +19,6 @@ use Drupal\custom_page\Entity\CustomPage;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
-use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
 
 /**
@@ -121,14 +120,6 @@ function custom_page_node_update(NodeInterface $entity): void {
     return;
   }
 
-  $original = $entity->getOriginal();
-
-  // Update the OG menu link only if the group has changed.
-  if ($entity->og_audience->target_id !== $original->og_audience->target_id) {
-    \Drupal::service('custom_page.og_menu_links_manager')
-      ->moveLinks($original, $entity->og_audience->target_id);
-  }
-
   // The content of custom pages is included in the search index of their
   // collections and solutions, so that the parent group can be found when
   // searching for keywords contained in their custom pages. Make sure to
@@ -163,14 +154,6 @@ function custom_page_node_delete(NodeInterface $entity): void {
     $content_tracking_manager = \Drupal::service('search_api.entity_datasource.tracking_manager');
     $content_tracking_manager->trackEntityChange($entity->getGroup());
   }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_update().
- */
-function custom_page_menu_link_content_update(MenuLinkContentInterface $menu_link): void {
-  $og_menu_links_manager = \Drupal::service('custom_page.og_menu_links_manager');
-  $og_menu_links_manager->updateLink($menu_link);
 }
 
 /**
