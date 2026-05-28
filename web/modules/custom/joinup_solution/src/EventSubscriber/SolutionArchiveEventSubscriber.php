@@ -8,8 +8,8 @@ use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_group\Transition;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\state_machine\Event\WorkflowTransitionEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
