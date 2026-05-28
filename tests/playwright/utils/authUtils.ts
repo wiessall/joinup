@@ -35,7 +35,10 @@ async function logout(page: Page): Promise<void> {
  * concurrency issues when multiple tests log in as the same user.
  *
  * @param {{ name: string, email: string, password: string }} user - The user credentials (see `drupalConfig.users`).
+ * @param user.name
  * @param {Page} page - Playwright page instance.
+ * @param user.email
+ * @param user.password
  */
 async function login(
   user: { name: string; email: string; password: string },
