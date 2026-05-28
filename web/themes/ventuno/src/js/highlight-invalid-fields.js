@@ -1,4 +1,6 @@
 /**
+ * @param Drupal
+ * @param once
  * @file
  * Highlight the invalid required field(s) adding corresponding class.
  */

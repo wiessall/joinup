@@ -1,4 +1,7 @@
 /**
+ * @param Drupal
+ * @param once
+ * @param $
  * @file
  * Show the notification with counter in the link for private messages page.
  * Hides the inbox toggle button if the inbox container is empty.
