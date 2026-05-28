@@ -29,6 +29,4 @@ services:
 
   Drupal\joinup_solution\EventSubscriber\SolutionGroupMenuLinksSubscriber: { }
 
-  Drupal\joinup_solution\EventSubscriber\SolutionArchiveEventSubscriber: {  }
-
   Drupal\joinup_solution\EventSubscriber\InteroperableFlagSubscriber: { }

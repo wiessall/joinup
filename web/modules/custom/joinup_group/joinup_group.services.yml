@@ -73,5 +73,7 @@ services:
 
   Drupal\joinup_group\EventSubscriber\AdjustGroupContentSubscriber: { }
 
+  Drupal\joinup_group\EventSubscriber\GroupArchiveEventSubscriber: { }
+
   Drupal\joinup_group\JoinupGroupPermissionManagerInterface:
     class: Drupal\joinup_group\JoinupGroupPermissionManager
