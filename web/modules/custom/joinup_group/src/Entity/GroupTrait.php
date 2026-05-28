@@ -29,6 +29,13 @@ trait GroupTrait {
   use OutdatedContentTrait;
 
   /**
+   * Static cache for the group OG menu instances.
+   *
+   * @var array<int|string, \Drupal\og\OgMembershipInterface>
+   */
+  protected array $ogMenuInstances;
+
+  /**
    * {@inheritdoc}
    */
   public function getMembership(int|string|null $uid = NULL, array $states = [OgMembershipInterface::STATE_ACTIVE]): ?OgMembershipInterface {
@@ -258,21 +265,22 @@ trait GroupTrait {
    * {@inheritdoc}
    */
   public function getGroupOgMenuInstances(?array $types = NULL): array {
-    // @todo Need a way to cache in memory
-    $storage = \Drupal::entityTypeManager()->getStorage('ogmenu_instance');
+    if (!isset($this->ogMenuInstances)) {
+      $storage = \Drupal::entityTypeManager()->getStorage('ogmenu_instance');
+      $ids = $storage->getQuery()->accessCheck(FALSE)
+        ->condition(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $this->id())
+        ->execute();
+      $this->ogMenuInstances = $ids ? $storage->loadMultiple($ids) : [];
+    }
 
-    $query = $storage->getQuery()
-      ->accessCheck(FALSE)
-      ->condition(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $this->id());
     if ($types) {
-      $query->condition('type', $types, 'IN');
+      return array_filter(
+        $this->ogMenuInstances,
+        fn(OgMenuInstanceInterface $ogMenuInstance): bool => in_array($ogMenuInstance->bundle(), $types, TRUE),
+      );
     }
 
-    if ($ids = $query->execute()) {
-      return $storage->loadMultiple($ids);
-    }
-
-    return [];
+    return $this->ogMenuInstances;
   }
 
   /**
