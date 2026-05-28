@@ -115,7 +115,7 @@ class GroupContentArchiverQueue extends QueueWorkerBase implements ContainerFact
    *   Array of entity instances belonging to the group that should be changed.
    */
   protected function getGroupContent(GroupInterface $group): array {
-    $idsPerTypeAndBundle = $group->getGroupContentIds();
+    $idsPerTypeAndBundle = $group->getDirectGroupContentIds();
     $entities = [];
     foreach ($idsPerTypeAndBundle as $entityType => $idsPerBundle) {
       $entityIds = array_merge(...array_values($idsPerBundle));
@@ -125,8 +125,8 @@ class GroupContentArchiverQueue extends QueueWorkerBase implements ContainerFact
       );
     }
 
-    // Sub-groups (e.g. solutions inside a collection) are never archived here;
-    // each group manages its own sub-content independently.
+    // Sub-groups are never archived here; each group manages its own
+    // sub-content independently.
     return array_filter(
       $entities,
       function (EntityInterface $entity): bool {

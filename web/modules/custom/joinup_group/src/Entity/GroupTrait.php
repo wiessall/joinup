@@ -184,6 +184,10 @@ trait GroupTrait {
   /**
    * {@inheritdoc}
    */
+  public function getDirectGroupContentIds(): array {
+    return ['node' => $this->fetchNodeIdsByOgAudience([$this->id()])];
+  }
+
   public function getGroupContentIds(): array {
     $group_content = $this->doGetGroupContentIds();
     // Ensure that the results are sorted.
