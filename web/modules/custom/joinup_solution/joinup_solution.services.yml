@@ -32,8 +32,3 @@ services:
   Drupal\joinup_solution\EventSubscriber\SolutionArchiveEventSubscriber: {  }
 
   Drupal\joinup_solution\EventSubscriber\InteroperableFlagSubscriber: { }
-
-  logger.channel.solution:
-    parent: logger.channel_base
-    arguments:
-      - 'solution'

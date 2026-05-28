@@ -93,11 +93,11 @@ class SolutionArchiveEventSubscriber implements EventSubscriberInterface {
       return FALSE;
     }
 
-    $queue = $this->queueFactory->get('solution_archive_related_content');
+    $queue = $this->queueFactory->get('group_archive_related_content');
     $queue->createQueue();
     $queue->createItem([
       'user' => $this->currentUser->id(),
-      'solution' => $solution->id(),
+      'group' => $solution->id(),
       'transition' => $transition,
     ]);
     return TRUE;

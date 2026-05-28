@@ -8,6 +8,10 @@ services:
     parent: logger.channel_base
     arguments: [ 'group_membership' ]
 
+  logger.channel.joinup_group:
+    parent: logger.channel_base
+    arguments: [ 'joinup_group' ]
+
   cache_context.joinup_group_owner:
     class: 'Drupal\joinup_group\Cache\Context\GroupOwnerCacheContext'
     arguments: ['@current_user', '@entity_type.manager', '@og.membership_manager', '@database', '@private_key']
