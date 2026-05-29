@@ -70,7 +70,7 @@
         "drupal/layout_builder_component_attributes": "^2.1",
         "drupal/layout_custom_section_classes": "^2.0",
         "drupal/layout_paragraphs": "^2.0",
-        "drupal/linkit": "7.0.14",
+        "drupal/linkit": "^7.0",
         "drupal/markdown_easy": "^2.0",
         "drupal/memcache": "^2.5",
         "drupal/menu_admin_per_menu": "^1.3",
@@ -427,7 +427,7 @@
                 "Add missing plural formulae @see https://www.drupal.org/i/3312406": "resources/patch/php/drupal/l10n_pconfig/3312406.mr4.commit1a0a53cb.diff"
             },
             "drupal/linkit": {
-                "Link shown after the autocomplete selection is the bare node/xxx link, not the alias @see https://www.drupal.org/node/2877535": "resources/patch/php/drupal/linkit/2877535.diff",
+                "Link shown after the autocomplete selection is the bare node/xxx link, not the alias @see https://www.drupal.org/node/2877535": "resources/patch/php/drupal/linkit/linkit-2877535-62-revised-7.0.15.patch",
                 "Uri processing fails for websites running in a subdirectory @see https://www.drupal.org/i/3472501": "resources/patch/php/drupal/linkit/3472501.patch"
             },
             "drupal/layout_paragraphs": {
