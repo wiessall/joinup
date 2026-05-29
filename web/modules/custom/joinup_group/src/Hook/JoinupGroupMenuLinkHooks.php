@@ -29,7 +29,7 @@ readonly class JoinupGroupMenuLinkHooks {
    * Ensures sane defaults for each OG menu instance setting.
    */
   #[Hook('node_presave')]
-  public function ensureMenuSettingsDefaults(NodeInterface $node): void {
+  public function setEntityGroupMenuLinksDefaultSettings(NodeInterface $node): void {
     if (!$this->isGroupMenuLinkEntity($node)) {
       return;
     }
@@ -50,17 +50,26 @@ readonly class JoinupGroupMenuLinkHooks {
    */
   #[Hook('node_update')]
   #[Hook('node_insert')]
-  public function updateGroupMenuLinkPluginDefinition(NodeInterface $node): void {
+  public function updateEntityGroupMenuLinkPluginDefinition(NodeInterface $node): void {
     if (!$this->isGroupMenuLinkEntity($node)) {
       return;
     }
     assert($node instanceof GroupMenuLinkInterface);
 
+    $menuSettings = $node->get('menu_settings')->value;
     foreach ($node->getGroup()->getGroupOgMenuInstances() as $ogMenuInstance) {
-      $pluginId = GroupMenuLink::buildPluginId($node->id(), $ogMenuInstance->bundle());
-      $definition = $this->buildPluginDefinition($node, $ogMenuInstance);
+      $ogMenuType = $ogMenuInstance->bundle();
 
-      if ($this->menuLinkManager->getDefinition($pluginId, FALSE)) {
+      $definition = $this->buildPluginDefinition($node->id(), $ogMenuInstance, $node->label(), [
+        'route_name' => 'entity.node.canonical',
+        'route_parameters' => ['node' => $node->id()],
+        'parent' => $menuSettings[$ogMenuType]['parent'],
+        'weight' => $menuSettings[$ogMenuType]['weight'],
+        'enabled' => $menuSettings[$ogMenuType]['enabled'],
+      ]);
+      $pluginId = $definition['id'];
+
+      if ($this->menuLinkManager->hasDefinition($pluginId)) {
         if (!$node->isInsidePlugin()) {
           // The entity is saved via a plugin instance, don't call the menu
           // tree manager to update the definition a second time.
@@ -79,7 +88,7 @@ readonly class JoinupGroupMenuLinkHooks {
    * Orphan links are moved to the parent of the deleted menu item.
    */
   #[Hook('node_predelete')]
-  public function deleteGroupMenuLinkPluginDefinition(NodeInterface $node): void {
+  public function deleteEntityGroupMenuLinkPluginDefinition(NodeInterface $node): void {
     if (!$this->isGroupMenuLinkEntity($node)) {
       return;
     }
@@ -136,31 +145,26 @@ readonly class JoinupGroupMenuLinkHooks {
   /**
    * Builds the plugin definition for a group menu link entity.
    *
-   * @param \Drupal\joinup_group\Entity\GroupMenuLinkInterface $node
-   *   The entity.
+   * @param int|string $id
+   *   The identifier used when building the plugin ID.
    * @param \Drupal\og_menu\OgMenuInstanceInterface $ogMenuInstance
-   *   The OG menu instance.
+   *   The OG menu instance entity.
+   * @param string $title
+   *   The title of the menu item.
+   * @param array $customProperties
+   *   Other custom properties to be added to the plugin definition.
    *
    * @return array{id: string, class: string, deriver: string, menu_name: string, title: string, route_name: string, route_parameters: array{node: int|string}, parent: string, weight: int, enabled: bool}
    *   The plugin definition.
    */
-  public function buildPluginDefinition(GroupMenuLinkInterface $node, OgMenuInstanceInterface $ogMenuInstance): array {
-    $menuSettings = $node->get('menu_settings')->value;
-    $ogMenuType = $ogMenuInstance->bundle();
-    $nid = $node->id();
-
-    return [
-      'id' => GroupMenuLink::buildPluginId($nid, $ogMenuType),
+  public function buildPluginDefinition(int|string $id, OgMenuInstanceInterface $ogMenuInstance, string $title, array $customProperties): array {
+    return $customProperties + [
+      'id' => GroupMenuLink::buildPluginId($id, $ogMenuInstance->bundle()),
       'class' => GroupMenuLink::class,
       'deriver' => GroupMenuLinkDeriver::class,
       'provider' => 'joinup_group',
       'menu_name' => "ogmenu-{$ogMenuInstance->id()}",
-      'title' => $node->label(),
-      'route_name' => 'entity.node.canonical',
-      'route_parameters' => ['node' => $nid],
-      'parent' => $menuSettings[$ogMenuType]['parent'],
-      'weight' => $menuSettings[$ogMenuType]['weight'],
-      'enabled' => $menuSettings[$ogMenuType]['enabled'],
+      'title' => $title,
     ];
   }
 

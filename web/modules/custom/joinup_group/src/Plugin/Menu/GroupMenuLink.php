@@ -53,7 +53,10 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
    * {@inheritdoc}
    */
   public function getTitle(): string {
-    return $this->getEntity()->label();
+    if ($this->isGroupMenuLinkEntityBased()) {
+      return $this->getEntity()->label();
+    }
+    return $this->pluginDefinition['title'];
   }
 
   /**
@@ -71,7 +74,7 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
     $overrides = array_intersect_key($new_definition_values, $this->overrideAllowed);
     // Update the definition.
     $this->pluginDefinition = $overrides + $this->getPluginDefinition();
-    if ($persist) {
+    if ($persist && $this->isGroupMenuLinkEntityBased()) {
       [, $ogMenuType] = explode('-', $this->getDerivativeId());
 
       $settings = $this->getEntity()->get('menu_settings')->value;
@@ -90,7 +93,7 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
    * {@inheritdoc}
    */
   public function isTranslatable(): bool {
-    return $this->getEntity()->isTranslatable();
+    return TRUE;
   }
 
   /**
@@ -162,6 +165,20 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
       return $id;
     }
     return NULL;
+  }
+
+  /**
+   * Determines whether this menu link is based on an entity.
+   *
+   * Entity-based menu links are those that are generated one for each entity
+   * implementing GroupMenuLinkInterface interface.
+   *
+   * @return bool
+   *   TRUE if the menu link is based on an entity.
+   */
+  protected function isGroupMenuLinkEntityBased(): bool {
+    [$id] = explode('-', $this->getDerivativeId(), 2);
+    return is_numeric($id);
   }
 
 }
