@@ -10,7 +10,7 @@ declare(strict_types=1);
 /**
  * Migrate pending queue items from solution-specific to generic group queue.
  */
-function joinup_solution_deploy_201300(): void {
+function joinup_solution_deploy_201400(): void {
   $db = \Drupal::database();
 
   $rows = $db->select('queue', 'q')
