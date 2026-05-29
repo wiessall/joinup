@@ -16,6 +16,7 @@ Feature: Notification test for the collection transitions.
       | NC facilitator |           | nc_facilitator@test.com | NC         | Facilitator |
       | NC member1     |           | nc_member1@test.com     | NC         | Member1     |
       | NC member2     |           | nc_member2@test.com     | NC         | Member2     |
+      | NC member3     |           | nc_member3@test.com     | NC         | Member3     |
       | NCS owner      |           | ncs_owner@test.com      | NC         | Owner       |
     And the following "collection" content:
       | title                  | state            | abstract     | description   | owner      |
@@ -38,24 +39,25 @@ Feature: Notification test for the collection transitions.
       | NC Solution1 | NCS owner | owner |
       | NC Solution2 | NCS owner | owner |
     And the following collection user memberships:
-      | collection             | user           | roles              |
-      | NC to propose          | NC owner       | owner, facilitator |
-      | NC to publish          | NC owner       | owner, facilitator |
-      | NC to propose edit     | NC owner       | owner, facilitator |
+      | collection             | user           | roles              | announcements |
+      | NC to propose          | NC owner       | owner, facilitator | 1             |
+      | NC to publish          | NC owner       | owner, facilitator | 1             |
+      | NC to propose edit     | NC owner       | owner, facilitator | 1             |
       # A third person is needed to test notifications sent to both moderators and the owner.
-      | NC to propose edit     | NC facilitator | facilitator        |
-      | NC to publish edit     | NC owner       | owner, facilitator |
-      | NC to request archival | NC owner       | owner, facilitator |
-      | NC to reject archival  | NC owner       | owner, facilitator |
-      | NC to archive          | NC owner       | owner, facilitator |
-      | NC to archive          | NC member1     |                    |
-      | NC to archive          | NC member2     |                    |
-      | NC to delete           | NC owner       | owner, facilitator |
-      | NC to delete           | NC member1     |                    |
-      | NC to delete           | NC member2     |                    |
-      | NC to delete by mod    | NC owner       | owner, facilitator |
-      | NC to delete by mod    | NC member1     |                    |
-      | NC to delete by mod    | NC member2     |                    |
+      | NC to propose edit     | NC facilitator | facilitator        | 1             |
+      | NC to publish edit     | NC owner       | owner, facilitator | 1             |
+      | NC to request archival | NC owner       | owner, facilitator | 1             |
+      | NC to reject archival  | NC owner       | owner, facilitator | 1             |
+      | NC to archive          | NC owner       | owner, facilitator | 1             |
+      | NC to archive          | NC member1     |                    | 1             |
+      | NC to archive          | NC member2     |                    | 1             |
+      | NC to archive          | NC member3     |                    | 0             |
+      | NC to delete           | NC owner       | owner, facilitator | 1             |
+      | NC to delete           | NC member1     |                    | 1             |
+      | NC to delete           | NC member2     |                    | 1             |
+      | NC to delete by mod    | NC owner       | owner, facilitator | 1             |
+      | NC to delete by mod    | NC member1     |                    | 1             |
+      | NC to delete by mod    | NC member2     |                    | 1             |
 
     # Test 'create' operation.
     And I am logged in as "NC user"
@@ -176,6 +178,10 @@ Feature: Notification test for the collection transitions.
       | body      | The collection "NC to archive", of which you are a member, has been archived. The reason for being archived is: As you wish. |
     And the following email should have been sent:
       | recipient | NC member2                                                                                                                   |
+      | subject   | The collection NC to archive was archived.                                                                                   |
+      | body      | The collection "NC to archive", of which you are a member, has been archived. The reason for being archived is: As you wish. |
+    And the following email should not have been sent:
+      | recipient | NC member3                                                                                                                   |
       | subject   | The collection NC to archive was archived.                                                                                   |
       | body      | The collection "NC to archive", of which you are a member, has been archived. The reason for being archived is: As you wish. |
 

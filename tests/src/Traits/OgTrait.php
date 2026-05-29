@@ -39,7 +39,7 @@ trait OgTrait {
    *    Throws an exception when the user is anonymous or the entity is not a
    *    group.
    */
-  protected function subscribeUserToGroup(AccountInterface $user, GroupInterface $group, array $roles = [], ?string $state = NULL, ?int $created = NULL): void {
+  protected function subscribeUserToGroup(AccountInterface $user, GroupInterface $group, array $roles = [], ?string $state = NULL, ?int $created = NULL): OgMembershipInterface {
     // If a membership already exists, load it. Otherwise create a new one.
     $membership = $group->getMembership($user->id(), OgMembershipInterface::ALL_STATES);
     if (!$membership) {
@@ -56,6 +56,8 @@ trait OgTrait {
 
     $membership->setRoles($roles);
     $membership->save();
+
+    return $membership;
   }
 
   /**
@@ -249,7 +251,12 @@ trait OgTrait {
     $state = !empty($values['state']) ? $values['state'] : NULL;
     $timestamp = !empty($values['created']) ? strtotime($values['created']) : NULL;
 
-    $this->subscribeUserToGroup($member, $group, $roles, $state, $timestamp);
+    $membership = $this->subscribeUserToGroup($member, $group, $roles, $state, $timestamp);
+
+    if (isset($values['announcements'])) {
+      $membership->set('announcements', $values['announcements']);
+      $membership->save();
+    }
   }
 
   /**
