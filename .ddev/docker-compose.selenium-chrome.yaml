@@ -11,7 +11,7 @@ services:
     # Note ISAICP-9647: pinned since 4.29.0 (Chrome 134) has a bug causing Behat
     # to proceed before the page fully loads, especially after POST requests.
     # See https://issues.chromium.org/issues/402796660
-    image: selenium/standalone-chromium:4.28.1
+    image: selenium/standalone-chromium:4.44.0
     platform: linux/amd64  # Force AMD64 architecture
     container_name: ddev-${DDEV_SITENAME}-selenium-chrome
     expose:
