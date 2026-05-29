@@ -150,7 +150,6 @@ function ventuno_preprocess_node__6d621a47_71ce_4f1a_90e2_8859403d3ecd__group_he
  * Implements hook_preprocess_HOOK() for node__solution__group-header.
  */
 function ventuno_preprocess_node__solution__group_header(array &$variables): void {
-  $node = $variables['node'];
   ventuno_preprocess_group_header_node($variables, SolutionInterface::class);
   if (isset($variables['content']['releases_overview'])) {
     $variables['content']['releases_overview']['#attributes'] = [
@@ -159,9 +158,6 @@ function ventuno_preprocess_node__solution__group_header(array &$variables): voi
         'btn-secondary',
       ],
     ];
-  }
-  if ($node instanceof ArchivableEntityInterface) {
-    $variables['is_archived'] = $node->isArchived();
   }
 }
 
