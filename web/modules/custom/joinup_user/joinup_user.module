@@ -644,3 +644,10 @@ function joinup_user_entity_view(array &$build, EntityInterface $entity, $view_m
     }
   }
 }
+
+/**
+ * Implements hook_entity_update().
+ */
+function joinup_user_user_update(UserInterface $user): void {
+  \Drupal::getContainer()->get('Drupal\joinup_badge\CertificateService')->updateUserCertificatesStatus($user);
+}
