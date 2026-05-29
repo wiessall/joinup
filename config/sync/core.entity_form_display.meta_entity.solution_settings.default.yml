@@ -10,6 +10,7 @@ dependencies:
     - field.field.meta_entity.solution_settings.list_related_entities
     - field.field.meta_entity.solution_settings.listing_content
     - field.field.meta_entity.solution_settings.metadata_banner_disabled
+    - field.field.meta_entity.solution_settings.overview_label
     - meta_entity.type.solution_settings
   module:
     - search_api_field
@@ -64,6 +65,14 @@ content:
     region: content
     settings:
       display_label: true
+    third_party_settings: {  }
+  overview_label:
+    type: string_textfield
+    weight: 7
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
 hidden:
   label: true

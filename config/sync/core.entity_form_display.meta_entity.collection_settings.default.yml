@@ -14,6 +14,7 @@ dependencies:
     - field.field.meta_entity.collection_settings.landing_page
     - field.field.meta_entity.collection_settings.listing_content
     - field.field.meta_entity.collection_settings.metadata_banner_disabled
+    - field.field.meta_entity.collection_settings.overview_label
     - meta_entity.type.collection_settings
   module:
     - field_group
@@ -49,7 +50,7 @@ content:
     third_party_settings: {  }
   approval_message:
     type: text_textarea
-    weight: 7
+    weight: 8
     region: content
     settings:
       rows: 5
@@ -63,7 +64,7 @@ content:
     third_party_settings: {  }
   content_creation:
     type: options_select
-    weight: 9
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -76,7 +77,7 @@ content:
     third_party_settings: {  }
   group_moderation:
     type: boolean_checkbox
-    weight: 8
+    weight: 9
     region: content
     settings:
       display_label: true
@@ -105,7 +106,7 @@ content:
     third_party_settings: {  }
   listing_content:
     type: search_api_field_default
-    weight: 10
+    weight: 11
     region: content
     settings:
       query_builder: false
@@ -116,6 +117,14 @@ content:
     region: content
     settings:
       display_label: true
+    third_party_settings: {  }
+  overview_label:
+    type: string_textfield
+    weight: 7
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
 hidden:
   label: true

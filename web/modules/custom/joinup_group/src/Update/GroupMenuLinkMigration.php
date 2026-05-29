@@ -7,7 +7,11 @@ namespace Drupal\joinup_group\Update;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Menu\MenuLinkManagerInterface;
 use Drupal\Core\Menu\MenuTreeStorageInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_group\GroupMenuLinkHelperTrait;
 use Drupal\joinup_group\Plugin\Menu\GroupMenuLink;
 use Drupal\joinup_group\Plugin\Menu\GroupMenuLinkDeriver;
 
@@ -17,10 +21,13 @@ use Drupal\joinup_group\Plugin\Menu\GroupMenuLinkDeriver;
 final readonly class GroupMenuLinksMigration implements ContainerInjectionInterface {
 
   use AutowireTrait;
+  use GroupMenuLinkHelperTrait;
 
   public function __construct(
     protected Connection $db,
     protected MenuTreeStorageInterface $menuTreeStorage,
+    protected MenuLinkManagerInterface $menuLinkManager,
+    protected EntityTypeManagerInterface $entityTypeManager,
   ) {}
 
   public function buildSandboxData(array &$sandbox): void {
@@ -59,7 +66,7 @@ final readonly class GroupMenuLinksMigration implements ContainerInjectionInterf
       // Convert also the parent if it points to another group menu link.
       if ($link->parent && isset($sandbox['links'][$link->parent])) {
         $parentLink = $sandbox['links'][$link->parent];
-        $sandbox['links'][$link->legacyPluginId]->parent = GroupMenuLink::buildPluginId($parentLink->customPageNid, $link->ogMenuType);
+        $sandbox['links'][$link->legacyPluginId]->parent = GroupMenuLink::buildPluginId('node', $parentLink->customPageNid, $link->ogMenuType);
       }
 
       // Build custom page menu settings.
@@ -95,27 +102,12 @@ final readonly class GroupMenuLinksMigration implements ContainerInjectionInterf
   }
 
   protected function createMenuTreeEntry(\stdClass $link): void {
-    // Custom page links.
-    if (!empty($link->customPageNid)) {
-      $id = $link->customPageNid;
-      $title = $link->customPageTitle;
-    }
-//    // Discussions links.
-//    elseif ($link->routeName === 'view.discussions.overview') {
-//      $id = "discussions-$link->groupNid";
-//      $title = 'Discussions';
-//    }
-//    else {
-//      $a =1;
-//    }
-
-    // Create 'menu_tree' entry.
     $this->menuTreeStorage->save([
       'class' => GroupMenuLink::class,
       'derivative' => GroupMenuLinkDeriver::class,
       'menu_name' => $link->menuName,
-      'id' => GroupMenuLink::buildPluginId($id, $link->ogMenuType),
-      'title' => $title,
+      'id' => GroupMenuLink::buildPluginId('node', $link->customPageNid, $link->ogMenuType),
+      'title' => $link->customPageTitle,
       'route_name' => $link->routeName,
       'route_parameters' => unserialize($link->routeParameters, ['allowed_classes' => FALSE]),
       'parent' => (string) $link->parent,
@@ -142,4 +134,123 @@ final readonly class GroupMenuLinksMigration implements ContainerInjectionInterf
     }
     $sandbox['menu_settings_processed'][$link->customPageNid] = TRUE;
   }
+
+  public function processGroupContentLinks(
+    array &$sandbox,
+    string $linkType,
+    string $nodeType,
+    string $ogMenuType,
+    string $routeName,
+    string $title,
+    int $weight = 0,
+  ): string {
+    $storage = $this->entityTypeManager->getStorage('node');
+
+    if (!isset($sandbox['ids'])) {
+      // Get the relation between menu_tree.mlid and menu_link_content.id.
+      $sql = <<<SQL
+        SELECT mt.mlid, m.id
+        FROM {menu_tree} mt
+        INNER JOIN {menu_link_content} m ON SUBSTRING(mt.id, 19) = m.uuid
+        WHERE mt.menu_name LIKE 'ogmenu-%'
+        AND mt.route_name = :route
+        SQL;
+      $ids = $this->db->query($sql, [':route' => $routeName])->fetchAllKeyed();
+
+      // Clean up menu_link_content tables.
+      foreach (['', '_data', '_field_revision', '_revision'] as $table) {
+        $this->db->delete("menu_link_content$table")
+          ->condition('id', array_values($ids), 'IN')
+          ->execute();
+      }
+      // Clean up the menu tree table.
+      $this->db->delete('menu_tree')
+        ->condition('mlid', array_keys($ids), 'IN')
+        ->execute();
+
+      // Pick up the first group content ID from each group.
+      $sql = <<<SQL
+        SELECT MIN(entity_id)
+        FROM {node__og_audience}
+        WHERE bundle = :type
+        GROUP BY og_audience_target_id
+        SQL;
+      $sandbox['ids'] = $this->db->query($sql, [':type' => $nodeType])->fetchCol();
+      $sandbox['total'] = count($sandbox['ids']);
+      $sandbox['progress'] = 0;
+    }
+
+    $ids = array_splice($sandbox['ids'], 0, 10);
+    $sandbox['progress'] += count($ids);
+    foreach ($storage->loadMultiple($ids) as $node) {
+      $this->addGroupLink($linkType, $node, $ogMenuType, $routeName, $title, $weight);
+    }
+
+    $sandbox['#finished'] = (int) empty($sandbox['ids']);
+
+    return "Created $sandbox[progress] out of $sandbox[total] $nodeType links";
+  }
+
+  public function processGroupLinks(
+    array &$sandbox,
+    string $linkType,
+    string $sql,
+    string $ogMenuType,
+    string $routeName,
+    string $title,
+    int $weight = 0,
+  ): string {
+    $storage = $this->entityTypeManager->getStorage('node');
+
+    if (!isset($sandbox['ids'])) {
+      // Get the mapping menu_tree.mlid and menu_link_content.id.
+      $query = <<<SQL
+        SELECT mt.mlid, m.id
+        FROM {menu_tree} mt
+        INNER JOIN {menu_link_content} m ON SUBSTRING(mt.id, 19) = m.uuid
+        WHERE mt.menu_name LIKE 'ogmenu-%'
+        AND mt.route_name = :route
+        SQL;
+      $ids = $this->db->query($query, [':route' => $routeName])->fetchAllKeyed();
+
+      // Clean up menu_link_content tables.
+      foreach (['', '_data', '_field_revision', '_revision'] as $table) {
+        $this->db->delete("menu_link_content$table")
+          ->condition('id', array_values($ids), 'IN')
+          ->execute();
+      }
+      // Clean up the menu tree table.
+      $this->db->delete('menu_tree')
+        ->condition('mlid', array_keys($ids), 'IN')
+        ->execute();
+
+      $sandbox['ids'] = $this->db->query($sql)->fetchCol();
+      $sandbox['total'] = count($sandbox['ids']);
+      $sandbox['progress'] = 0;
+    }
+
+    $ids = array_splice($sandbox['ids'], 0, 10);
+    $sandbox['progress'] += count($ids);
+    foreach ($storage->loadMultiple($ids) as $nid => $node) {
+      assert($node instanceof GroupInterface);
+      $ogMenuInstance = $node->getGroupOgMenuInstance($ogMenuType);
+      $pluginId = GroupMenuLink::buildPluginId($linkType, $nid, $ogMenuType);
+      $this->menuLinkManager->addDefinition($pluginId, [
+        'class' => GroupMenuLink::class,
+        'deriver' => GroupMenuLinkDeriver::class,
+        'provider' => 'joinup_group',
+        'menu_name' => "ogmenu-{$ogMenuInstance->id()}",
+        'title' => $title,
+        'route_name' => $routeName,
+        'route_parameters' => ['node' => $nid],
+        'weight' => $weight,
+      ]);
+
+    }
+
+    $sandbox['#finished'] = (int) empty($sandbox['ids']);
+
+    return "Created $sandbox[progress] out of $sandbox[total] $linkType links";
+  }
+
 }
