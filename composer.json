@@ -70,7 +70,7 @@
         "drupal/layout_builder_component_attributes": "^2.1",
         "drupal/layout_custom_section_classes": "^2.0",
         "drupal/layout_paragraphs": "^2.0",
-        "drupal/linkit": "^7.0",
+        "drupal/linkit": "7.0.14",
         "drupal/markdown_easy": "^2.0",
         "drupal/memcache": "^2.5",
         "drupal/menu_admin_per_menu": "^1.3",
@@ -322,9 +322,6 @@
             "drupal/core": "-p2"
         },
         "patches": {
-            "drupal/better_exposed_filters": {
-                "Single on/off checkbox option not working as expected @see https://www.drupal.org/i/3569639": "resources/patch/php/drupal/better_exposed_filters/3569639-mr230.diff"
-            },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff",
                 "Weekly view doesn't show first week of new year @see https://www.drupal.org/i/3484325": "resources/patch/php/drupal/calendar_view/3484325.comment16152620.patch"
@@ -364,9 +361,6 @@
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
-            },
-            "drupal/drupal-extension": {
-                "Recognise bundle-scoped fields @see https://github.com/jhedstrom/drupalextension/pull/851": "resources/patch/php/drupal/drupal-extension/851.diff"
             },
             "drupal/dynamic_entity_reference": {
                 "Undefined array key on dependency removal @see https://www.drupal.org/i/3099176": "resources/patch/php/drupal/dynamic_entity_reference/3099176-3.x-16.diff",
