@@ -390,6 +390,22 @@ class CollectionSubscriber extends NotificationSubscriberBase {
       ],
     ];
     $user_data = $this->getUsersMessages($user_data);
+
+    foreach ($user_data[self::TEMPLATE_ARCHIVE_DELETE_MEMBERS] as $uid) {
+      $membership = $this->membershipManager->getMembership($this->entity, $uid);
+
+      if (!$membership) {
+        continue;
+      }
+
+      $announcements = (bool) $membership->get('announcements')->value;
+
+      if ($announcements) {
+        continue;
+      }
+
+      unset($user_data[self::TEMPLATE_ARCHIVE_DELETE_MEMBERS][$uid]);
+    }
     foreach ($uids_to_skip as $uid) {
       foreach ($user_data as $message_id => $user_ids) {
         unset($user_data[$message_id][$uid]);
