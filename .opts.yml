@@ -50,6 +50,6 @@ phpunit_clean: True
 
 # Keep this version in sync with .ddev/docker-compose.selenium-chrome.yaml.
 selenium_image: 'selenium/standalone-chromium'
-selenium_version: '4.44.0'
+selenium_version: '4.28.1'
 
 memcached: True
