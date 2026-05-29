@@ -7,115 +7,86 @@
 
 declare(strict_types=1);
 
-use Drupal\Core\Menu\MenuTreeStorageInterface;
-use Drupal\joinup_group\Plugin\Menu\GroupMenuLink;
-use Drupal\joinup_group\Plugin\Menu\GroupMenuLinkDeriver;
+use Drupal\joinup_discussion\Hook\JoinupDiscussionGroupMenuLinksHooks;
+use Drupal\joinup_group\Update\GroupMenuLinksMigration;
 
 /**
- * Convert links from OG menus to group menu links.
+ * Convert custom page links from menu link content to group menu links.
  */
-function joinup_group_deploy_201300(array &$sandbox): string {
-  $db = \Drupal::database();
-  $storage = \Drupal::service(MenuTreeStorageInterface::class);
+function joinup_group_deploy_201400(array &$sandbox): string {
+  $helper = \Drupal::classResolver()->getInstanceFromDefinition(GroupMenuLinksMigration::class);
 
-  if (!isset($sandbox['links'])) {
-    $query = $db->select('menu_link_content', 'm')
-      ->fields('md', ['enabled', 'weight', 'parent', 'id'])
-      ->fields('n', ['nid', 'vid', 'title'])
-      ->fields('oa', ['bundle'])
-      // Only links from OG menus.
-      ->condition('md.menu_name', 'ogmenu-%', 'LIKE')
-      // Only links to custom pages.
-      ->condition('md.link__uri', 'entity:node/%', 'LIKE')
-      ->condition('n.type', 'custom_page')
-      // Root menu items should come first to be able to solve relationships.
-      ->orderBy('md.parent');
-    $query->innerJoin('menu_link_content_data', 'md', 'md.id = m.id');
-    $query->innerJoin('node_field_data', 'n', 'SUBSTRING(md.link__uri, 13) = n.nid');
-    $query->innerJoin('ogmenu_instance__og_audience', 'oa', 'SUBSTRING(md.menu_name, 8) = oa.entity_id');
-    // Plugin ID (e.g., menu_link_content:016c320a-b88a-4737-8d12-e0c89a2d14bc).
-    $query->addExpression('CONCAT(:base, m.uuid)', 'plugin', [':base' => 'menu_link_content:']);
-    // The OG menu instance ID.
-    $query->addExpression('SUBSTRING(md.menu_name, 8)', 'ogmenu');
-    $sandbox['links'] = $query->execute()->fetchAllAssoc('plugin');
+  $helper->buildSandboxData($sandbox);
 
-    $sandbox['menu_settings'] = [];
-    foreach ($sandbox['links'] as $link) {
-      // Convert also the parent if it points to another group menu link.
-      if ($link->parent && isset($sandbox['links'][$link->parent])) {
-        $parentLink = $sandbox['links'][$link->parent];
-        $sandbox['links'][$link->plugin]->parent = GroupMenuLink::buildPluginId($parentLink->nid, $link->bundle);
-      }
-
-      // Build custom page menu settings.
-      $sandbox['menu_settings'][$link->nid][$link->bundle] = [
-        'parent' => (string) $sandbox['links'][$link->plugin]->parent,
-        'weight' => (int) $link->weight,
-        'enabled' => (bool) $link->enabled,
-      ];
-    }
-
-    $sandbox['links'] = array_values($sandbox['links']);
-    $sandbox['total'] = count($sandbox['links']);
-    $sandbox['progress'] = 0;
-    $sandbox['menu_settings_processed'] = [];
-    $sandbox['menu_link_content_processed'] = [];
-  }
-
-  $links = array_splice($sandbox['links'], 0, 100);
+  $links = array_splice($sandbox['links'], 0, 25);
   $sandbox['progress'] += count($links);
 
   foreach ($links as $link) {
-    // Create 'menu_tree' entry.
-    $storage->save([
-      'class' => GroupMenuLink::class,
-      'derivative' => GroupMenuLinkDeriver::class,
-      'menu_name' => "ogmenu-$link->ogmenu",
-      'id' => GroupMenuLink::buildPluginId($link->nid, $link->bundle),
-      'title' => $link->title,
-      'route_name' => 'entity.node.canonical',
-      'route_parameters' => ['node' => $link->nid],
-      'parent' => (string) $link->parent,
-      'enabled' => (bool) $link->enabled,
-      'weight' => (int) $link->weight,
-      'provider' => 'joinup_group',
-    ]);
-
-    // Store custom page menu settings.
-    if (!isset($sandbox['menu_settings_processed'][$link->nid])) {
-      foreach (['node__menu_settings', 'node_revision__menu_settings'] as $table) {
-        $db->insert($table)->fields([
-          'bundle' => 'custom_page',
-          'entity_id' => $link->nid,
-          'revision_id' => $link->vid,
-          'langcode' => 'en',
-          'delta' => 0,
-          'menu_settings_value' => serialize($sandbox['menu_settings'][$link->nid]),
-        ])->execute();
-      }
-      $sandbox['menu_settings_processed'][$link->nid][$link->nid] = TRUE;
-    }
-
-    // Collect menu link content IDs to delete.
-    $sandbox['menu_link_content_processed'][$link->id] = $link->plugin;
+    $helper->processOneLink($link, $sandbox);
   }
 
   $sandbox['#finished'] = (int) empty($sandbox['links']);
 
   if ($sandbox['#finished'] === 1) {
-    // Delete legacy menu link content links.
-    foreach (['', '_data', '_field_revision', '_revision'] as $table) {
-      $db->delete("menu_link_content$table")
-        ->condition('id', array_keys($sandbox['menu_link_content_processed']), 'IN')
-        ->execute();
-    }
-    // Update the menu tree table.
-    $db->delete('menu_tree')
-      ->condition('id', array_values($sandbox['menu_link_content_processed']), 'IN')
-      ->execute();
     // @todo REMOVE BABEL ENTRIES?
-    return 'Cleaned up legacy menu link content links';
+    $stop = new \DateTimeImmutable();
+    $diff = $stop->diff($sandbox['start']);
+    return "Finished converting $sandbox[total] menu links. Took {$diff->format('%im %ss')}";
   }
 
-  return "Converted $sandbox[progress] out of $sandbox[total] menu links";
+  return "Converted $sandbox[progress] out of $sandbox[total] menu links ";
+}
+
+/**
+ * Convert discussion links.
+ */
+function joinup_group_deploy_201401(array &$sandbox): string {
+  $storage = \Drupal::entityTypeManager()->getStorage('node');
+  $hookService = \Drupal::service(JoinupDiscussionGroupMenuLinksHooks::class);
+
+  if (!isset($sandbox['discussions'])) {
+    $db = \Drupal::database();
+
+    // Get the mapping menu_tree.mlid and menu_link_content.id.
+    $sql = <<<SQL
+        SELECT mt.mlid, m.id
+        FROM {menu_tree} mt
+        INNER JOIN {menu_link_content} m ON SUBSTRING(mt.id, 19) = m.uuid
+        WHERE mt.menu_name LIKE 'ogmenu-%'
+        AND mt.route_name = 'view.discussions.overview'
+        SQL;
+    $ids = $db->query($sql)->fetchAllKeyed();
+
+    // Clean up menu_link_content tables.
+    foreach (['', '_data', '_field_revision', '_revision'] as $table) {
+      $db->delete("menu_link_content$table")
+        ->condition('id', array_values($ids), 'IN')
+        ->execute();
+    }
+    // Clean up the menu tree table.
+    $db->delete('menu_tree')
+      ->condition('mlid', array_keys($ids), 'IN')
+      ->execute();
+
+    // Pick up the first discussion ID from each group.
+    $sql = <<<SQL
+      SELECT MIN(entity_id)
+      FROM {node__og_audience}
+      WHERE bundle = 'discussion'
+      GROUP BY og_audience_target_id
+      SQL;
+    $sandbox['discussions'] = $db->query($sql)->fetchCol();
+    $sandbox['total'] = count($sandbox['discussions']);
+    $sandbox['progress'] = 0;
+  }
+
+  $nids = array_splice($sandbox['discussions'], 0, 10);
+  $sandbox['progress'] += count($nids);
+  foreach ($storage->loadMultiple($nids) as $discussion) {
+    $hookService->addGroupDiscussionLink($discussion);
+  }
+
+  $sandbox['#finished'] = (int) empty($sandbox['discussions']);
+
+  return "Created $sandbox[progress] out of $sandbox[total] discussion links";
 }

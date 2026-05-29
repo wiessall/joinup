@@ -42,11 +42,7 @@ class GroupMenuLinksSubscriber implements EventSubscriberInterface {
     $group = $event->getGroup();
     $parameters = [$group->getEntityTypeId() => $group->id()];
     if ($menu->bundle() === 'navigation') {
-      $discussionUrl = Url::fromRoute('view.discussions.overview', $parameters);
-
-      $event
-        ->addMenuLink($group->toUrl(), 'Overview', -10)
-        ->addMenuLink($discussionUrl, 'Discussions', -8);
+      $event->addMenuLink($group->toUrl(), 'Overview', -10);
     }
 
     if ($menu->bundle() === 'quick_links') {
