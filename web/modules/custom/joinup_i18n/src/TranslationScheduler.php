@@ -8,6 +8,7 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\State\StateInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\node\NodeInterface;
@@ -18,6 +19,7 @@ use Drupal\node\NodeInterface;
 class TranslationScheduler {
 
   use AutowireTrait;
+  use StringTranslationTrait;
 
   const string STATE_KEY = 'joinup_i18n.scheduled_collections';
 
@@ -27,15 +29,6 @@ class TranslationScheduler {
     private readonly TimeInterface $time,
   ) {}
 
-  /**
-   * Builds batch operations for a collection and all its descendant content.
-   *
-   * @param \Drupal\collection\Entity\CollectionInterface $collection
-   *   The collection node.
-   *
-   * @return array
-   *   An array of [callable, args] pairs for use with batch_set().
-   */
   /**
    * Builds a complete batch definition for scheduling a collection.
    *
@@ -52,8 +45,8 @@ class TranslationScheduler {
         $this->buildBatchOperations($collection),
       ),
       'finished' => [static::class, 'batchFinished'],
-      'title' => t('Scheduling translation'),
-      'progress_message' => t('Processing batch @current of @total.'),
+      'title' => $this->t('Scheduling translation'),
+      'progress_message' => $this->t('Processing batch @current of @total.'),
     ];
   }
 
