@@ -35,6 +35,9 @@ trait OgTrait {
    * @param int|null $created
    *   (Optional) The created time of the membership.
    *
+   * @return \Drupal\og\OgMembershipInterface
+   *   The group membership.
+   *
    * @throws \Exception
    *    Throws an exception when the user is anonymous or the entity is not a
    *    group.
