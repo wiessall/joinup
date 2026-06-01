@@ -2,6 +2,8 @@ uuid: 8c233da2-3e58-4ce4-b57a-b9df4d42ac7c
 langcode: en
 status: true
 dependencies:
+  config:
+    - node.type.distribution
   module:
     - node
 id: distribution

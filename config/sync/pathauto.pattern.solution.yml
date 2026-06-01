@@ -2,6 +2,8 @@ uuid: e5e51fd2-e958-49f6-9ac3-cbd4f24fa84b
 langcode: en
 status: true
 dependencies:
+  config:
+    - node.type.solution
   module:
     - node
 id: solution

@@ -2,6 +2,8 @@ uuid: 106d4e81-9029-4f07-b74e-bf7b7a0889ff
 langcode: en
 status: true
 dependencies:
+  config:
+    - meta_entity.type.topic
   module:
     - meta_entity
 id: meta_entity_topic

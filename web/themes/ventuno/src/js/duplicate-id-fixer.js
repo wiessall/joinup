@@ -1,4 +1,6 @@
 /**
+ * @param Drupal
+ * @param once
  * @file
  * Duplicate ID fixer for cloned priority plus elements.
  *

@@ -2,6 +2,8 @@ uuid: 2d3133bc-d083-4db5-8834-b9af94684350
 langcode: en
 status: true
 dependencies:
+  config:
+    - node.type.glossary
   module:
     - node
 id: glossary_term

@@ -2,6 +2,8 @@ uuid: eecf0b49-e269-4ec8-8274-abfe4147d2a8
 langcode: en
 status: true
 dependencies:
+  config:
+    - node.type.assessment_report
   module:
     - node
 id: assessment_report

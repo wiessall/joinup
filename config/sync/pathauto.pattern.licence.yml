@@ -2,6 +2,8 @@ uuid: be737c16-a11a-4faf-8944-ec345a9f002f
 langcode: en
 status: true
 dependencies:
+  config:
+    - node.type.licence
   module:
     - node
 _core:

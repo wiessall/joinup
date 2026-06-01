@@ -2,6 +2,8 @@ uuid: d5f316d0-069d-40ef-88fd-7f0cbf5cdda3
 langcode: en
 status: true
 dependencies:
+  config:
+    - node.type.collection
   module:
     - node
 id: collection
