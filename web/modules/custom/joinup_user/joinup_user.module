@@ -614,6 +614,7 @@ function joinup_user_user_presave(UserInterface $account): void {
  */
 function joinup_user_user_delete(UserInterface $account): void {
   \Drupal::getContainer()->get('joinup_user.deleted')->onUserDelete($account);
+  \Drupal::getContainer()->get('Drupal\joinup_badge\CertificateService')->deleteUserCertificates($account);
 }
 
 /**
