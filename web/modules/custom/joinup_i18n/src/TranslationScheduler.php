@@ -36,7 +36,49 @@ class TranslationScheduler {
    * @return array
    *   An array of [callable, args] pairs for use with batch_set().
    */
-  public function buildBatchOperations(CollectionInterface $collection): array {
+  /**
+   * Builds a complete batch definition for scheduling a collection.
+   *
+   * @param \Drupal\collection\Entity\CollectionInterface $collection
+   *   The collection node.
+   *
+   * @return array
+   *   A batch definition array for batch_set().
+   */
+  public function buildBatch(CollectionInterface $collection): array {
+    return [
+      'operations' => array_merge(
+        [[[static::class, 'storeCollectionId'], [(string) $collection->id()]]],
+        $this->buildBatchOperations($collection),
+      ),
+      'finished' => [static::class, 'batchFinished'],
+      'title' => t('Scheduling translation'),
+      'progress_message' => t('Processing batch @current of @total.'),
+    ];
+  }
+
+  /**
+   * Stores the collection ID in batch context for the finished callback.
+   *
+   * @param string $collectionId
+   *   The collection node ID.
+   * @param array $context
+   *   The batch context.
+   */
+  public static function storeCollectionId(string $collectionId, array &$context): void {
+    $context['results']['collection_id'] = $collectionId;
+  }
+
+  /**
+   * Builds batch operations for a collection and all its descendant content.
+   *
+   * @param \Drupal\collection\Entity\CollectionInterface $collection
+   *   The collection node.
+   *
+   * @return array
+   *   An array of [callable, args] pairs for use with batch_set().
+   */
+  protected function buildBatchOperations(CollectionInterface $collection): array {
     $ids = array_merge([], ...array_values($collection->getGroupContentIds()['node'] ?? []));
     array_unshift($ids, (string) $collection->id());
 
@@ -79,6 +121,30 @@ class TranslationScheduler {
     $sent = $this->state->get(self::STATE_KEY, []);
     $sent[$collectionId] = $this->time->getRequestTime();
     $this->state->set(self::STATE_KEY, $sent);
+  }
+
+  /**
+   * Batch finished callback.
+   *
+   * @param bool $success
+   *   Whether the batch completed without errors.
+   * @param array $results
+   *   Results collected from batch operations.
+   * @param array $operations
+   *   Unprocessed operations, if any.
+   */
+  public static function batchFinished(bool $success, array $results, array $operations): void {
+    if ($success) {
+      \Drupal::service(static::class)->markAsSent($results['collection_id']);
+      \Drupal::messenger()
+        ->addStatus(t('Translation scheduled: @count item(s) queued.', [
+          '@count' => $results['count'] ?? 0,
+        ]));
+    }
+    else {
+      \Drupal::messenger()
+        ->addError(t('An error occurred while scheduling translation.'));
+    }
   }
 
   /**
