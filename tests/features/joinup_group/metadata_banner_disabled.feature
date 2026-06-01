@@ -26,11 +26,11 @@ Feature: Collections/Solutions settings Metadata Banner disabled
       | solution     | user      | roles |
       | Klop mirubes | Plot user | owner |
     And the following "news" content:
-      | title                   | headline                | body | author | collection     |
-      | Creating Justice League | 6 Members to start with | TBD  | Eagle  | Rally fanatics |
+      | title                   | headline                | body | collection     |
+      | Creating Justice League | 6 Members to start with | TBD  | Rally fanatics |
     And the following "news" content:
-      | title             | headline                                    | body                                                              | author | solution     |
-      | Hawkgirl is a spy | Her race lies in another part of the galaxy | Hawkgirl has been giving information about Earth to Thanagarians. | Eagle  | Klop mirubes |
+      | title             | headline                                    | body                                                              | solution     |
+      | Hawkgirl is a spy | Her race lies in another part of the galaxy | Hawkgirl has been giving information about Earth to Thanagarians. | Klop mirubes |
 
     Given I am logged in as "Ferners Lee"
     When I go to the "Rally fanatics" collection
