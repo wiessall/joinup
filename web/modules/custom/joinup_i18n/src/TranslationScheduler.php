@@ -37,26 +37,36 @@ class TranslationScheduler {
    *   An array of [callable, args] pairs for use with batch_set().
    */
   public function buildBatchOperations(CollectionInterface $collection): array {
-    $operations = [];
-    $operations[] = ['\tmgmt_content_create_continuous_job_items', [$collection]];
+    $ids = array_merge([], ...array_values($collection->getGroupContentIds()['node'] ?? []));
+    array_unshift($ids, (string) $collection->id());
 
-    $node_storage = $this->entityTypeManager->getStorage('node');
+    return array_map(
+      fn(array $chunk) => [[static::class, 'processBatchChunk'], [$chunk]],
+      array_chunk($ids, 20),
+    );
+  }
 
-    foreach ($collection->getGroupContentIds()['node'] ?? [] as $ids) {
-      foreach ($node_storage->loadMultiple($ids) as $entity) {
-        assert($entity instanceof NodeInterface);
-        if (!$entity->isPublished()) {
-          continue;
-        }
-        if ($entity instanceof ArchivableEntityInterface && $entity->isArchived()) {
-          continue;
-        }
-
-        $operations[] = ['\tmgmt_content_create_continuous_job_items', [$entity]];
+  /**
+   * Batch operation callback: processes a chunk of node IDs.
+   *
+   * @param string[] $ids
+   *   Node IDs to process.
+   * @param array $context
+   *   The batch context.
+   */
+  public static function processBatchChunk(array $ids, array &$context): void {
+    $storage = \Drupal::entityTypeManager()->getStorage('node');
+    foreach ($storage->loadMultiple($ids) as $entity) {
+      assert($entity instanceof NodeInterface);
+      if (!$entity->isPublished()) {
+        continue;
       }
+      if ($entity instanceof ArchivableEntityInterface && $entity->isArchived()) {
+        continue;
+      }
+      tmgmt_content_create_continuous_job_items($entity);
+      $context['results']['count'] = ($context['results']['count'] ?? 0) + 1;
     }
-
-    return $operations;
   }
 
   /**
