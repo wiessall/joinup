@@ -322,6 +322,9 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "drupal/babel": {
+                "Error in TranslationType\\MenuLinkContent when called from tmgmt BabelSource @see https://www.drupal.org/i/3592919": "resources/patch/php/drupal/babel/3592919.mr89-commit024dc285.diff"
+            },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff",
                 "Weekly view doesn't show first week of new year @see https://www.drupal.org/i/3484325": "resources/patch/php/drupal/calendar_view/3484325.comment16152620.patch"
