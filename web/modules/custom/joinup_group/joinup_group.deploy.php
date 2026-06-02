@@ -11,10 +11,26 @@ use Drupal\joinup_discussion\Hook\JoinupDiscussionGroupMenuLinksHooks;
 use Drupal\joinup_group\Update\GroupMenuLinksMigration;
 
 /**
+ * Cleans up leftovers from previous tasks.
+ */
+function joinup_group_deploy_201400(): void {
+  // In ISAICP-10031 the joinup_menu.documentation_file has been removed, but
+  // removal was incomplete and some data is still available in the database.
+  // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-10031
+  \Drupal::classResolver()
+    ->getInstanceFromDefinition(GroupMenuLinkMigration::class)
+    ->removeMenuLinkContentByRoute('joinup_menu.documentation_file');
+
+  // Remove malformed (orphan) releases.
+  $storage = \Drupal::entityTypeManager()->getStorage('node');
+  $storage->delete($storage->loadMultiple([722176, 722441, 722464]));
+}
+
+/**
  * Convert custom page links from menu link content to group menu links.
  */
-function joinup_group_deploy_201400(array &$sandbox): string {
-  $helper = \Drupal::classResolver()->getInstanceFromDefinition(GroupMenuLinksMigration::class);
+function joinup_group_deploy_201401(array &$sandbox): string {
+  $helper = \Drupal::classResolver()->getInstanceFromDefinition(GroupMenuLinkMigration::class);
 
   $helper->buildSandboxData($sandbox);
 
@@ -31,62 +47,134 @@ function joinup_group_deploy_201400(array &$sandbox): string {
     // @todo REMOVE BABEL ENTRIES?
     $stop = new \DateTimeImmutable();
     $diff = $stop->diff($sandbox['start']);
-    return "Finished converting $sandbox[total] menu links. Took {$diff->format('%im %ss')}";
+    return "Finished converting $sandbox[total] custom page menu links. Took {$diff->format('%im %ss')}";
   }
 
-  return "Converted $sandbox[progress] out of $sandbox[total] menu links ";
+  return "Converted $sandbox[progress] out of $sandbox[total] custom page menu links ";
 }
 
 /**
  * Convert discussion links.
  */
-function joinup_group_deploy_201401(array &$sandbox): string {
+function joinup_group_deploy_201402(array &$sandbox): string {
   $storage = \Drupal::entityTypeManager()->getStorage('node');
   $hookService = \Drupal::service(JoinupDiscussionGroupMenuLinksHooks::class);
 
   if (!isset($sandbox['discussions'])) {
     $db = \Drupal::database();
+/**
+ * Convert glossary links.
+ */
+function joinup_group_deploy_201403(array &$sandbox): string {
+  return \Drupal::classResolver()
+    ->getInstanceFromDefinition(GroupMenuLinkMigration::class)
+    ->processGroupContentLinks(
+      $sandbox,
+      'glossary',
+      'glossary',
+      'navigation',
+      'entity.node.glossary',
+      'Glossary',
+      -7,
+    );
+}
 
-    // Get the mapping menu_tree.mlid and menu_link_content.id.
+/**
+ * Add glossary links to solutions.
+ */
+function joinup_group_deploy_201404(array &$sandbox): string {
+  $storage = \Drupal::entityTypeManager()->getStorage('node');
+
+  if (!isset($sandbox['ids'])) {
     $sql = <<<SQL
-        SELECT mt.mlid, m.id
-        FROM {menu_tree} mt
-        INNER JOIN {menu_link_content} m ON SUBSTRING(mt.id, 19) = m.uuid
-        WHERE mt.menu_name LIKE 'ogmenu-%'
-        AND mt.route_name = 'view.discussions.overview'
-        SQL;
-    $ids = $db->query($sql)->fetchAllKeyed();
-
-    // Clean up menu_link_content tables.
-    foreach (['', '_data', '_field_revision', '_revision'] as $table) {
-      $db->delete("menu_link_content$table")
-        ->condition('id', array_values($ids), 'IN')
-        ->execute();
-    }
-    // Clean up the menu tree table.
-    $db->delete('menu_tree')
-      ->condition('mlid', array_keys($ids), 'IN')
-      ->execute();
-
-    // Pick up the first discussion ID from each group.
-    $sql = <<<SQL
-      SELECT MIN(entity_id)
+      SELECT DISTINCT(og_audience_target_id)
       FROM {node__og_audience}
-      WHERE bundle = 'discussion'
-      GROUP BY og_audience_target_id
+      WHERE bundle = 'glossary'
       SQL;
-    $sandbox['discussions'] = $db->query($sql)->fetchCol();
-    $sandbox['total'] = count($sandbox['discussions']);
+    $sandbox['ids'] = \Drupal::database()->query($sql)->fetchCol();
+    $sandbox['total'] = count($sandbox['ids']);
     $sandbox['progress'] = 0;
   }
 
-  $nids = array_splice($sandbox['discussions'], 0, 10);
-  $sandbox['progress'] += count($nids);
-  foreach ($storage->loadMultiple($nids) as $discussion) {
-    $hookService->addGroupDiscussionLink($discussion);
+  $id = array_shift($sandbox['ids']);
+  $sandbox['progress']++;
+  $solutions = $storage->loadByProperties(['og_audience' => $id, 'type' => 'solution']);
+  foreach ($solutions as $solution) {
+    assert($solution instanceof SolutionInterface);
+    \Drupal::service(GroupMenuLinkHooks::class)
+      ->addGroupLink('glossary', $solution, 'navigation', 'entity.node.glossary', 'Glossary', -7, [
+        'route_parameters' => ['node' => $id],
+        'enabled' => FALSE,
+      ]);
   }
+  $sandbox['#finished'] = (int) empty($sandbox['ids']);
 
-  $sandbox['#finished'] = (int) empty($sandbox['discussions']);
+  return "Converted $sandbox[progress] out of $sandbox[total] solution glossary links";
+}
 
-  return "Created $sandbox[progress] out of $sandbox[total] discussion links";
+/**
+ * Convert release history links.
+ */
+function joinup_group_deploy_201405(array &$sandbox): string {
+  return \Drupal::classResolver()
+    ->getInstanceFromDefinition(GroupMenuLinkMigration::class)
+    ->processGroupContentLinks(
+      $sandbox,
+      'release',
+      'release',
+      'quick_links',
+      'joinup_release.solution_release.overview',
+      'Release history',
+    );
+}
+
+/**
+ * Convert website_link links.
+ */
+function joinup_group_deploy_201406(array &$sandbox): string {
+  return \Drupal::classResolver()
+    ->getInstanceFromDefinition(GroupMenuLinkMigration::class)
+    ->processGroupLinks(
+      $sandbox,
+      'website_link',
+      'quick_links',
+      'joinup_menu.website_link',
+      'Website link',
+    );
+}
+
+/**
+ * Convert overview links.
+ */
+function joinup_group_deploy_201407(array &$sandbox): string {
+  return \Drupal::classResolver()
+    ->getInstanceFromDefinition(GroupMenuLinkMigration::class)
+    ->processGroupLinks(
+      $sandbox,
+      'overview',
+      'navigation',
+      'entity.node.canonical',
+      static fn(GroupInterface $group) => $group->getSetting('overview_label')->value ?? 'Overview',
+    );
+}
+
+/**
+ * Remove unused legacy members group links.
+ */
+function joinup_group_deploy_201408(): void {
+  // Since ISAICP-7858 the navigation doesn't receive a new 'Members' link, and
+  // existing links were disabled. The new modernized 'Members' link has been
+  // moved in the group header. As this is a legacy feature, we remove the
+  // unused links. We keep the 2 links still in use.
+  $helper = \Drupal::classResolver() ->getInstanceFromDefinition(GroupMenuLinkMigration::class);
+  $sql = <<<SQL
+    SELECT mt.mlid, m.id
+    FROM {menu_tree} mt
+    INNER JOIN {menu_link_content} m ON SUBSTRING(mt.id, 19) = m.uuid
+    WHERE mt.menu_name LIKE 'ogmenu-%'
+    AND mt.route_name = 'entity.node.member_overview'
+    AND mt.enabled = '0'
+    SQL;
+  $ids = \Drupal::database()->query($sql)->fetchAllKeyed();
+  $helper->removeMenuLinkContent(array_values($ids), array_keys($ids));
 }
