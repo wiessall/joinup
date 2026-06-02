@@ -4,7 +4,7 @@ status: true
 dependencies:
   module:
     - eu_oss_catalogue
-title: 'Default cron handler'
+title: 'Queue EU OSS Catalogue provider fetch jobs'
 id: eu_oss_catalogue_cron
 weight: 0
 module: eu_oss_catalogue

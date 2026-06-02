@@ -4,7 +4,7 @@ status: true
 dependencies:
   module:
     - joinup_oss_catalogue
-title: 'Default cron handler'
+title: 'Queue OSS Catalogue image URLs for import'
 id: joinup_oss_catalogue_cron
 weight: 0
 module: joinup_oss_catalogue

@@ -4,7 +4,7 @@ status: true
 dependencies:
   module:
     - message
-title: 'Default cron handler'
+title: 'Purge old messages per template limits'
 id: message_cron
 weight: 0
 module: message

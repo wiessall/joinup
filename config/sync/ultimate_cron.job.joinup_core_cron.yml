@@ -4,7 +4,7 @@ status: true
 dependencies:
   module:
     - joinup_core
-title: 'Default cron handler'
+title: 'Clean up stale batch operations'
 id: joinup_core_cron
 weight: 0
 module: joinup_core

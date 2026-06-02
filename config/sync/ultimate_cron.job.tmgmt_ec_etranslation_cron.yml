@@ -4,7 +4,7 @@ status: true
 dependencies:
   module:
     - tmgmt_ec_etranslation
-title: 'Default cron handler'
+title: 'Process eTranslation service callbacks'
 id: tmgmt_ec_etranslation_cron
 weight: 0
 module: tmgmt_ec_etranslation

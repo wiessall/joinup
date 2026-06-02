@@ -4,7 +4,7 @@ status: true
 dependencies:
   module:
     - imagecache_external
-title: 'Default cron handler'
+title: 'Flush periodically cached external images'
 id: imagecache_external_cron
 weight: 0
 module: imagecache_external

@@ -4,7 +4,7 @@ status: true
 dependencies:
   module:
     - tmgmt
-title: 'Default cron handler'
+title: 'Purge finished jobs and submit pending translations'
 id: tmgmt_cron
 weight: 0
 module: tmgmt

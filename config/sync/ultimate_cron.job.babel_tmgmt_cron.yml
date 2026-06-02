@@ -4,7 +4,7 @@ status: true
 dependencies:
   module:
     - babel_tmgmt
-title: 'Default cron handler'
+title: 'Process pending BABEL translations'
 id: babel_tmgmt_cron
 weight: 0
 module: babel_tmgmt

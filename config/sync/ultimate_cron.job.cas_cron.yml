@@ -4,7 +4,7 @@ status: true
 dependencies:
   module:
     - cas
-title: 'Default cron handler'
+title: 'Clean up stale CAS sessions and PGTs'
 id: cas_cron
 weight: 0
 module: cas

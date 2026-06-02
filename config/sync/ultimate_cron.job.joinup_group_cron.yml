@@ -4,7 +4,7 @@ status: true
 dependencies:
   module:
     - joinup_group
-title: 'Default cron handler'
+title: 'Queue expired content sharing for removal'
 id: joinup_group_cron
 weight: 0
 module: joinup_group

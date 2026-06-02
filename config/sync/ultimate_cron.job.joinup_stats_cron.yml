@@ -4,7 +4,7 @@ status: true
 dependencies:
   module:
     - joinup_stats
-title: 'Default cron handler'
+title: 'Process cached computed fields'
 id: joinup_stats_cron
 weight: 0
 module: joinup_stats

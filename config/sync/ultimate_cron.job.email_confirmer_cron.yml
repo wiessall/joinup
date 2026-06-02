@@ -4,7 +4,7 @@ status: true
 dependencies:
   module:
     - email_confirmer
-title: 'Default cron handler'
+title: 'Purge expired email confirmations'
 id: email_confirmer_cron
 weight: 0
 module: email_confirmer

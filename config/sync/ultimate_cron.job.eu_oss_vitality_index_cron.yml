@@ -4,7 +4,7 @@ status: true
 dependencies:
   module:
     - eu_oss_vitality_index
-title: 'Default cron handler'
+title: 'Queue EU OSS Vitality Index computation'
 id: eu_oss_vitality_index_cron
 weight: 0
 module: eu_oss_vitality_index
