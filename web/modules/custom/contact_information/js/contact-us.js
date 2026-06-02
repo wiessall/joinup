@@ -1,4 +1,7 @@
 /**
+ * @param Drupal
+ * @param once
+ * @param cookies
  * @file
  * Opens a contact form dialog for users re-routed to EU Login.
  */

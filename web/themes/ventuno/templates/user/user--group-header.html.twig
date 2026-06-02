@@ -45,7 +45,7 @@
       </div>
       <div class="col-12 col-md-9">
         <h1 class="mt-3 mt-md-0 fw-normal text-light text-center text-md-start">
-          {{ full_name }}
+          {{ full_name }} <span class="user-badges">{{ content.badges }}</span>
         </h1>
         {% if content.field_user_business_title|field_value %}
           <p class="mb-0 text-center text-md-start">
@@ -58,11 +58,29 @@
             {{ content.field_user_nationality }}
           </div>
         {% endif %}
+        {% if content.field_user_country_of_residence|field_value %}
+          <div class="mt-3 text-center text-md-start">
+            <p class="mb-0 fw-bold">{{ 'Country of residence'|t }}:</p>
+            {{ content.field_user_country_of_residence }}
+          </div>
+        {% endif %}
         <div class="row">
           {% if content.field_user_organisation|field_value %}
             <div class="col-12 col-md-5 col-lg-4 mt-3">
               <p class="mb-0 fw-bold">{{ 'Organisation'|t }}:</p>
               {{ content.field_user_organisation }}
+            </div>
+          {% endif %}
+          {% if content.field_user_work_location|field_value %}
+            <div class="col-12 col-md-7 col-lg-8 mt-3">
+              <p class="mb-0 fw-bold">{{ 'Work location'|t }}:</p>
+              {{ content.field_user_work_location }}
+            </div>
+          {% endif %}
+          {% if content.function_of_administration|field_value %}
+            <div class="col-12 col-md-7 col-lg-8 mt-3">
+              <p class="mb-0 fw-bold">{{ 'Function of administration'|t }}:</p>
+              {{ content.function_of_administration }}
             </div>
           {% endif %}
           {% if content.field_user_professional_domain|field_value %}

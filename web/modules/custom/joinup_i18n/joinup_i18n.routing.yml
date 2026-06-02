@@ -1,0 +1,7 @@
+joinup_i18n.schedule_translation:
+  path: '/dashboard/schedule-translation'
+  defaults:
+    _form: 'Drupal\joinup_i18n\Form\ScheduleTranslationForm'
+    _title: 'Schedule translation'
+  requirements:
+    _permission: 'schedule translation'
