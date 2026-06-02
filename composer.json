@@ -129,6 +129,7 @@
         "drupal/token": "~1.7",
         "drupal/tour": "^2.0",
         "drupal/twig_field_value": "^2.0",
+        "drupal/ultimate_cron": "^2.0@beta",
         "drupal/uuid_extra": "^2.0",
         "drupal/view_unpublished": "^1.0",
         "drupal/views_block_area": "^2.0",
