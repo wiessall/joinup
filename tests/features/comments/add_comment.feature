@@ -3,6 +3,11 @@ Feature: Add comments
   As a visitor of the website I can leave a comment on community content.
 
   Background:
+    And the following users:
+      | Username           | E-mail                    | Roles | First name | Family name |
+      | Layonel Sarok      | layonel.sarok@example.com |       | Layonel    | Sarok       |
+      | Korma Salya        | korma.salya@example.com   |       | Korma      | Salya       |
+      | Salma Hayek Coster | salma.coster@example.com  |       | Salma      | Coster      |
     Given the following "collection" content:
       | title             | closed |
       | Gossip collection | no     |
@@ -24,11 +29,6 @@ Feature: Add comments
       | title             | collection        | author        | body                                                |
       | Wikileaks         | Gossip collection | Layonel Sarok | How could this ever happen? Moral panic on its way! |
       | Quantum Echo Fest | Gossip collection | Layonel Sarok | How could this ever happen? Moral panic on its way! |
-    And the following users:
-      | Username           | E-mail                    | Roles | First name | Family name |
-      | Layonel Sarok      | layonel.sarok@example.com |       | Layonel    | Sarok       |
-      | Korma Salya        | korma.salya@example.com   |       | Korma      | Salya       |
-      | Salma Hayek Coster | salma.coster@example.com  |       | Salma      | Coster      |
     And the following collection user memberships:
       | collection        | user          | roles                      |
       | Gossip collection | Layonel Sarok | administrator, facilitator |

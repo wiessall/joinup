@@ -19,24 +19,19 @@ class PluginReferenceHandler extends AbstractHandler {
   /**
    * {@inheritdoc}
    */
-  public function expand(mixed $values): array {
-    $items = [];
-    foreach ((array) $values as $value) {
-      if (is_array($value)) {
-        $plugin_id = (string) ($value['plugin_id'] ?? '');
-        $configuration = $value['configuration'] ?? '';
-      }
-      else {
-        $plugin_id = (string) $value;
-        $configuration = '';
-      }
+  protected ?string $mainProperty = 'plugin_id';
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function doExpand(array $records): array {
+    $items = [];
+    foreach ($records as $record) {
       $items[] = [
-        'plugin_id' => $plugin_id,
-        'configuration' => $configuration,
+        'plugin_id' => (string) ($record['plugin_id'] ?? ''),
+        'configuration' => $record['configuration'] ?? '',
       ];
     }
-
     return $items;
   }
 
