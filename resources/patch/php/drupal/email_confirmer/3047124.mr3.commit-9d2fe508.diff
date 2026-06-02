@@ -1241,7 +1241,7 @@ index 0000000000000000000000000000000000000000..dc46df5a47086edfa5c58351c25ad3d0
 +  /**
 +   * {@inheritdoc}
 +   */
-+  public function sendMail(EmailConfirmerMessage $emailConfirmerMessage, EmailConfirmationInterface $emailConfirmation = NULL, $key = 'confirmation_request') {
++  public function sendMail(EmailConfirmerMessage $emailConfirmerMessage, ?EmailConfirmationInterface $emailConfirmation = NULL, $key = 'confirmation_request') {
 +    if ($emailConfirmerMessage->hasFromName()) {
 +      // Remove less than (<) and greater (>) than from name.
 +      // TODO: Figure out the proper way to encode special characters.
