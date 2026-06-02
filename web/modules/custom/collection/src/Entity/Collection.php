@@ -21,7 +21,6 @@ use Drupal\joinup_featured\FeaturedContentTrait;
 use Drupal\joinup_group\Entity\GroupTrait;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeFallbackTrait;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
-use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\meta_entity\Entity\MetaEntity;
@@ -210,10 +209,14 @@ class Collection extends Node implements CollectionInterface {
    * {@inheritdoc}
    */
   public function getArchivableContentEntityClasses(): array {
+    // A collection only (un)archives its own custom pages and community
+    // content. Solutions are deliberately excluded: a collection can only be
+    // archived once all its solutions are already archived, and unarchiving a
+    // collection must leave its solutions untouched. Their archive lifecycle is
+    // managed independently.
     return [
       CustomPageInterface::class,
       CommunityContentInterface::class,
-      SolutionInterface::class,
     ];
   }
 

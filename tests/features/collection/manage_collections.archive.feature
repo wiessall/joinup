@@ -65,10 +65,10 @@ Feature: When a collection is archived then its sub-content also should be archi
     And the workflow state of the "Cluster Document" content should be "published"
     And the workflow state of the "Cluster Page 1" content should be "published"
     And the workflow state of the "Cluster Page Drft" content should be "draft"
-    # The cascade unarchives the solutions of the collection too, which in turn
-    # triggers their own sub-content unarchive queue.
-    And the workflow state of the "Archived Soln 1" content should be "published"
-    And the workflow state of the "Archived Soln 2" content should be "published"
+    # Solutions are not touched when their collection is unarchived; their
+    # archive lifecycle is managed independently, so they remain archived.
+    And the workflow state of the "Archived Soln 1" content should be "archived"
+    And the workflow state of the "Archived Soln 2" content should be "archived"
 
     When I go to the homepage of the "Sample Cluster" collection
     Then I should not see the text "Archived" in the "Header"

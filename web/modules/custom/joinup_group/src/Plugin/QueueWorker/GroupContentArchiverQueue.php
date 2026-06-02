@@ -115,11 +115,9 @@ class GroupContentArchiverQueue extends QueueWorkerBase implements ContainerFact
     }
 
     // Only (un)archive the content types managed by this group type. Anything
-    // else - including sub-groups that the group type does not manage - is left
+    // else - including sub-groups such as a collection's solutions - is left
     // untouched: each group (un)archives its own sub-content independently
-    // through its workflow transition events. For a collection this means its
-    // solutions are queued here, and each solution then (un)archives its own
-    // sub-content when its transition event fires.
+    // through its workflow transition events.
     $classes = $group->getArchivableContentEntityClasses();
     return array_filter(
       $entities,
