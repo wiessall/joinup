@@ -1,0 +1,17 @@
+uuid: 607e65f9-0587-4233-aabb-f635723f7a39
+langcode: en
+status: true
+dependencies:
+  module:
+    - cas
+title: 'Default cron handler'
+id: cas_cron
+weight: 0
+module: cas
+callback: 'cas#cron'
+scheduler:
+  id: simple
+launcher:
+  id: serial
+logger:
+  id: database

@@ -1,0 +1,17 @@
+uuid: 545322a9-47e1-45ee-92eb-f85ca51b91ec
+langcode: en
+status: true
+dependencies:
+  module:
+    - email_confirmer
+title: 'Default cron handler'
+id: email_confirmer_cron
+weight: 0
+module: email_confirmer
+callback: 'email_confirmer#cron'
+scheduler:
+  id: simple
+launcher:
+  id: serial
+logger:
+  id: database

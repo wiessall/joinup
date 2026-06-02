@@ -1,0 +1,17 @@
+uuid: 306f800c-ba75-4f24-8dd7-8feeb27cfaf6
+langcode: en
+status: true
+dependencies:
+  module:
+    - tmgmt_ec_etranslation
+title: 'Default cron handler'
+id: tmgmt_ec_etranslation_cron
+weight: 0
+module: tmgmt_ec_etranslation
+callback: 'tmgmt_ec_etranslation#cron'
+scheduler:
+  id: simple
+launcher:
+  id: serial
+logger:
+  id: database

@@ -1,0 +1,17 @@
+uuid: d684ea3b-c980-441b-b242-a1a4671f0d56
+langcode: en
+status: true
+dependencies:
+  module:
+    - babel_tmgmt
+title: 'Default cron handler'
+id: babel_tmgmt_cron
+weight: 0
+module: babel_tmgmt
+callback: 'babel_tmgmt#cron'
+scheduler:
+  id: simple
+launcher:
+  id: serial
+logger:
+  id: database

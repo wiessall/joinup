@@ -1,0 +1,17 @@
+uuid: 4c9fe73d-d9ad-4a10-88ec-842d5e1f7b0d
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_stats
+title: 'Default cron handler'
+id: joinup_stats_cron
+weight: 0
+module: joinup_stats
+callback: 'joinup_stats#cron'
+scheduler:
+  id: simple
+launcher:
+  id: serial
+logger:
+  id: database

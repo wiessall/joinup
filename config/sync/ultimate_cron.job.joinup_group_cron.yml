@@ -1,0 +1,17 @@
+uuid: ea095ca2-f6c0-432d-959f-1f342bb421af
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_group
+title: 'Default cron handler'
+id: joinup_group_cron
+weight: 0
+module: joinup_group
+callback: 'joinup_group#cron'
+scheduler:
+  id: simple
+launcher:
+  id: serial
+logger:
+  id: database

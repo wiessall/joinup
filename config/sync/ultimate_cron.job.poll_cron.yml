@@ -1,0 +1,17 @@
+uuid: da855d15-9073-4026-88be-c1eca1b9a2ed
+langcode: en
+status: true
+dependencies:
+  module:
+    - poll
+title: 'Default cron handler'
+id: poll_cron
+weight: 0
+module: poll
+callback: 'poll#cron'
+scheduler:
+  id: simple
+launcher:
+  id: serial
+logger:
+  id: database

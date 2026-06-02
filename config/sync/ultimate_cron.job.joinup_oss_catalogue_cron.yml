@@ -1,0 +1,17 @@
+uuid: 6d807f9a-e5bf-4459-827a-db08c676cf7c
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_oss_catalogue
+title: 'Default cron handler'
+id: joinup_oss_catalogue_cron
+weight: 0
+module: joinup_oss_catalogue
+callback: 'joinup_oss_catalogue#cron'
+scheduler:
+  id: simple
+launcher:
+  id: serial
+logger:
+  id: database
