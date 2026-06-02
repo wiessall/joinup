@@ -1,4 +1,6 @@
 /**
+ * @param Drupal
+ * @param drupalSettings
  * @file
  * Message template overrides.
  */

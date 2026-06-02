@@ -1,4 +1,6 @@
 /**
+ * @param Drupal
+ * @param once
  * @file
  * Customize popper.js behavior for actions menu dropdowns.
  *

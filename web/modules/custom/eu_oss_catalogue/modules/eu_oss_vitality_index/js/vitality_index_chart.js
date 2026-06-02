@@ -1,4 +1,6 @@
 /**
+ * @param Drupal
+ * @param once
  * @file
  * Draws the OSS Solution vitality index chart.
  */
