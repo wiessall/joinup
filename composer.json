@@ -11,7 +11,7 @@
         "ext-memcached": "*",
         "ext-pdo": "*",
         "ext-simplexml": "*",
-        "bitbucket/client": "^4.5",
+        "bitbucket/client": "^5.1",
         "cfpinto/graphql": "^2.0",
         "composer/installers": "^2",
         "composer/spdx-licenses": "^1.5",
@@ -142,7 +142,7 @@
         "gitonomy/gitlib": "^1.4",
         "jakeasmith/http_build_url": "^1.0",
         "knplabs/github-api": "^3.13",
-        "m4tthumphrey/php-gitlab-api": "^11.12",
+        "m4tthumphrey/php-gitlab-api": "^12.1",
         "mglaman/composer-drupal-lenient": "^1.0",
         "mnsami/composer-custom-directory-installer": "^2.0",
         "openeuropa/composer-artifacts": "^1.0",
@@ -459,7 +459,8 @@
             "drupal/message_digest": {
                 "Renderer::renderPlain() is deprecated @see https://www.drupal.org/i/3511648": "resources/patch/php/drupal/message_digest/3511648.diff",
                 "PHP 8.4 @see https://www.drupal.org/i/3511077": "resources/patch/php/drupal/message_digest/3511077.commit-bd0f5776.diff",
-                "deliverAllDigests() calls renamed DrupalDriver::runCron(); use cronRun() instead @see https://www.drupal.org/i/3588548": "resources/patch/php/drupal/message_digest/3588548.diff"
+                "deliverAllDigests() calls renamed DrupalDriver::runCron(); use cronRun() instead @see https://www.drupal.org/i/3588548": "resources/patch/php/drupal/message_digest/3588548.diff",
+                "PHP Deprecated: Optional parameter declared before required parameter @see https://www.drupal.org/i/3511207": "resources/patch/php/drupal/message_digest/3511207.mr27.diff"
             },
             "drupal/meta_entity": {
                 "hook_entity_insert() auto-creates duplicate @see https://www.drupal.org/i/3583434": "resources/patch/php/drupal/meta_entity/3583434.mr20-commitf3ef1e53.diff"
