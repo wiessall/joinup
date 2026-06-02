@@ -273,6 +273,23 @@ interface GroupInterface extends
   public function getDirectGroupContentIds(): array;
 
   /**
+   * Returns the sub-content entity classes that follow this group's transition.
+   *
+   * When a group is archived or unarchived, the direct group content matching
+   * these classes is queued to receive the same transition. The list depends on
+   * the group type: a collection cascades to its custom pages, community
+   * content and solutions, while a solution cascades to its releases,
+   * distributions, custom pages and community content. Each (un)archived
+   * sub-group then manages its own sub-content through its own workflow
+   * transition events.
+   *
+   * @return array<class-string>
+   *   A list of entity interface names whose instances should be (un)archived
+   *   together with the group.
+   */
+  public function getArchivableContentEntityClasses(): array;
+
+  /**
    * Returns the message to show to a new member when they join the group.
    *
    * @param \Drupal\og\OgMembershipInterface $membership

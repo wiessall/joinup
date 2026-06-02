@@ -9,12 +9,15 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\contact_information\Traits\ContactInformationTrait;
+use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_bundle_class\AbstractTrait;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassMetaEntityTrait;
 use Drupal\joinup_bundle_class\LogoTrait;
 use Drupal\joinup_bundle_class\ShortIdTrait;
+use Drupal\joinup_community_content\Entity\CommunityContentInterface;
+use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_distribution\Entity\DistributionParentTrait;
 use Drupal\joinup_featured\FeaturedContentTrait;
 use Drupal\joinup_group\Entity\GroupContentTrait;
@@ -167,6 +170,18 @@ class Solution extends Node implements SolutionInterface {
    */
   public function doGetGroupContentIds(): array {
     return ['node' => $this->fetchNodeIdsByOgAudience([$this->id()])];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getArchivableContentEntityClasses(): array {
+    return [
+      ReleaseInterface::class,
+      DistributionInterface::class,
+      CustomPageInterface::class,
+      CommunityContentInterface::class,
+    ];
   }
 
   /**

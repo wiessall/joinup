@@ -34,6 +34,7 @@ class GroupArchiveEventSubscriber implements EventSubscriberInterface {
       'solution.archive.post_transition' => 'onGroupPostArchiveTransition',
       'solution.unarchive.post_transition' => 'onGroupPostUnarchiveTransition',
       'collection.archive.post_transition' => 'onGroupPostArchiveTransition',
+      'collection.unarchive.post_transition' => 'onGroupPostUnarchiveTransition',
     ];
   }
 
