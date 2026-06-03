@@ -248,14 +248,6 @@ class JoinupCoreContext extends RawDrupalContext {
   /**
    * Asserts the order of elements.
    */
-  #[Then('I should see the following quick links menu items in the specified order:')]
-  public function assertQuickMenuLinks(TableNode $table): void {
-    $this->assertGroupMenuItems($table, 'Quick links');
-  }
-
-  /**
-   * Asserts the order of elements.
-   */
   #[Then('I should see the following navigation menu items in the specified order:')]
   public function assertNavigationMenuLinks(TableNode $table): void {
     $this->assertGroupMenuItems($table, 'Navigation menu');

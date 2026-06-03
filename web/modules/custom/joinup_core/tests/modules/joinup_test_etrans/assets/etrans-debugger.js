@@ -1,4 +1,6 @@
 /**
+ * @param Drupal
+ * @param once
  * @file
  * Exposes an 'outdated content' notice if case.
  */

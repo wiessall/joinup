@@ -2,12 +2,17 @@ uuid: 491e50f0-7de7-4da2-9c51-2ad8b19a0bb4
 langcode: en
 status: true
 dependencies:
+  config:
+    - node.type.discussion
+    - node.type.document
+    - node.type.event
+    - node.type.news
   module:
     - node
 id: community_content
 label: 'Community content'
 type: 'canonical_entities:node'
-pattern: '[node:og_audience:entity:url:path]/[node:content-type]/[node:title]'
+pattern: '/[node:og_audience:entity:url:path]/[node:content-type]/[node:title]'
 selection_criteria:
   e81cba7c-6aff-40f9-a77f-ce6bf5fc9e25:
     id: 'entity_bundle:node'
