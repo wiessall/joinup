@@ -2158,6 +2158,19 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
+   * Runs a specific ultimate_cron job by machine name.
+   *
+   * @param string $jobId
+   *   The ultimate_cron job machine name.
+   */
+  #[Given('I run the :jobId ultimate_cron job')]
+  public function iRunUltimateCronJob(string $jobId): void {
+    $job = \Drupal::entityTypeManager()->getStorage('ultimate_cron_job')->load($jobId);
+    $this->assertCondition($job !== NULL, "The ultimate_cron job '{$jobId}' does not exist.");
+    $job->run('Launched from Behat');
+  }
+
+  /**
    * Check the items in a queue.
    *
    * @param string $queueName
