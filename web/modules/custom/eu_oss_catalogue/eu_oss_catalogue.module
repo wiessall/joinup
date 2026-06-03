@@ -159,14 +159,17 @@ function eu_oss_catalogue_theme(): array {
  * Implements hook_cron().
  */
 function eu_oss_catalogue_cron(): void {
-  $state = \Drupal::state();
-  $request_time = \Drupal::time()->getRequestTime();
-  $last_check = $state->get('eu_oss_catalogue.last_check', 0);
-  // 24Hours.
-  $interval = 86400;
-  if (($request_time - $last_check) < $interval) {
+  $lastCron = \Drupal::state()->get('eu_oss_catalogue.last_check', 0);
+  $cronFrequency = \Drupal::config('eu_oss_catalogue.settings')->get('cron_max_runs_per_day');
+  $requestTime = \Drupal::time()->getRequestTime();
+
+  if ($cronFrequency < 1 || ($requestTime - $lastCron) < (86400 / $cronFrequency)) {
     return;
   }
+
+  // Update last cron run.
+  \Drupal::state()->set('eu_oss_catalogue.last_check', $requestTime);
+
   $queue_fetcher = \Drupal::queue('eu_oss_catalogue_fetcher');
   $queue_fetcher->createQueue();
 
@@ -176,9 +179,5 @@ function eu_oss_catalogue_cron(): void {
     $queue_fetcher->createItem(['provider' => $provider]);
   }
 
-  // Establish the timestamp as 2 AM of the current day.
-  $datetime = new \DateTime('@' . $request_time);
-  $datetime->setTime(2, 0);
-  $state->set('eu_oss_catalogue.last_check', $datetime->getTimestamp());
   \Drupal::logger('eu_oss_catalogue')->info('Cron eu_oss_catalogue_cron ran successfully.');
 }
