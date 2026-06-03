@@ -11,6 +11,7 @@ Feature: Notification test for the collection transitions.
     And the following users:
       | Username       | Roles     | E-mail                  | First name | Family name |
       | NC moderator   | moderator | nc_moderator@test.com   | NC         | Moderator   |
+      | NC moderator2  | moderator | nc_moderator2@test.com  | NC         | Moderator2  |
       | NC user        |           | nc_user@test.com        | NC         | User        |
       | NC owner       |           | nc_owner@test.com       | NC         | Owner       |
       | NC facilitator |           | nc_facilitator@test.com | NC         | Facilitator |
@@ -105,7 +106,7 @@ Feature: Notification test for the collection transitions.
     And I go to the edit form of the "NC to delete" collection
     And I click "Delete"
     And I press "Delete"
-    Then 2 e-mails should have been sent
+    Then 4 e-mails should have been sent
     Then the following email should have been sent:
       | recipient | NC member1                                                                  |
       | subject   | The collection NC to delete was deleted.                                    |
@@ -172,6 +173,10 @@ Feature: Notification test for the collection transitions.
       | recipient | NC member2                                                                                                                   |
       | subject   | The collection NC to archive was archived.                                                                                   |
       | body      | The collection "NC to archive", of which you are a member, has been archived. The reason for being archived is: As you wish. |
+    And the following email should have been sent:
+      | recipient | NC moderator2                                                                                                                 |
+      | subject   | The collection NC to archive was archived.                                                                                   |
+      | body      | The collection "NC to archive", of which you are a member, has been archived. The reason for being archived is: As you wish. |
     And the following email should not have been sent:
       | recipient | NC member3                                                                                                                   |
       | subject   | The collection NC to archive was archived.                                                                                   |
@@ -183,7 +188,7 @@ Feature: Notification test for the collection transitions.
     And I go to the edit form of the "NC to delete by mod" collection
     And I click "Delete"
     And I press "Delete"
-    Then 3 e-mails should have been sent
+    Then 4 e-mails should have been sent
     Then the following email should have been sent:
       | recipient | NC member1                                                                         |
       | subject   | The collection NC to delete by mod was deleted.                                    |

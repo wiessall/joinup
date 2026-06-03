@@ -408,6 +408,19 @@ class CollectionSubscriber extends NotificationSubscriberBase {
     }
 
     $this->sendUserDataMessages($user_data);
+
+    // Send notification to moderators.
+    $template_id = self::TEMPLATE_ARCHIVE_DELETE_MEMBERS;
+    $user_data_array = ['roles' => ['moderator' => [$template_id]]];
+    $user_data = $this->getUsersMessages($user_data_array);
+
+    foreach ($uids_to_skip as $uid) {
+      foreach ($user_data as $message_id => $user_ids) {
+        unset($user_data[$message_id][$uid]);
+      }
+    }
+
+    $this->sendUserDataMessages($user_data);
   }
 
   /**
