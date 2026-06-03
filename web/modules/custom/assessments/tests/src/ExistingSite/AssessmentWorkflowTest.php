@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\ExistingSite;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Tests\EntityTrait;
 use Drupal\Tests\assessments\Traits\AssessmentEntityCreationTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\assessments\AssessmentInterface;
@@ -11,6 +13,7 @@ use Drupal\assessments\Entity\Assessment;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\ParagraphInterface;
+use Drupal\taxonomy\Entity\Term;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 
@@ -22,6 +25,23 @@ use PHPUnit\Framework\Attributes\Group;
 class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
 
   use AssessmentEntityCreationTrait;
+  use EntityTrait;
+
+  /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected EntityTypeManagerInterface $entityTypeManager;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp(): void {
+    parent::setUp();
+
+    $this->entityTypeManager = \Drupal::entityTypeManager();
+  }
 
   /**
    * Tests that publishing a report also publishes all related entities.
@@ -224,6 +244,117 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
     $this->assertTrue($newExpression->isPublished(), 'New expression should be published after adding to published report.');
     $this->assertTrue($newPublicService->isPublished(), 'New public service should be published after adding to published report.');
     $this->assertTrue($newParticipation->isPublished(), 'New participation should be published after adding to published report.');
+  }
+
+  /**
+   * Tests that publishing a Report creates a timestamp.
+   */
+  public function testPublishingReportSetsPublishedAtDate(): void {
+    $user = $this->createUser([], 'testuser', TRUE);
+    $this->drupalLogin($user);
+    $this->markEntityForCleanup($user);
+
+    $bindingRequirement = $this->createParagraphBindingRequirement();
+    $storage = $this->container
+      ->get('entity_type.manager')
+      ->getStorage('taxonomy_term');
+
+    $terms = $storage->loadByProperties([
+      'name' => 'Belgium',
+      'vid'  => 'spatial',
+    ]);
+    $country = reset($terms);
+
+    $organisation_type = Term::create([
+      'vid' => 'assess_provider_type',
+      'name' => 'Assessment Organisation Type',
+    ]);
+    $this->markEntityForCleanup($organisation_type);
+
+    $organisation = Assessment::create([
+      'type' => 'public_organisation',
+      'name' => 'Test Organisation',
+      'organisation_type' => ['entity' => $organisation_type],
+      'country' => ['entity' => $country],
+    ]);
+    $this->markEntityForCleanup($organisation);
+
+    /** @var \Drupal\assessments\Entity\AssessmentReport $report */
+    $report = Assessment::create([
+      'type' => 'report',
+      'name' => 'Assessment Workflow Test Report',
+      'binding_requirement' => ['entity' => $bindingRequirement],
+      'provider' => ['entity' => $organisation],
+      'state' => 'review',
+      'status' => FALSE,
+    ]);
+    $this->markEntityForCleanup($report);
+    $report->save();
+
+    $this->assertFalse($report->isPublished());
+    $this->assertEmpty($report->get('published_at'));
+
+    // Publish the report.
+    $report->setWorkflowState('published');
+    $report->set('status', TRUE);
+    $report->save();
+
+    $report = Assessment::load($report->id());
+    $this->assertTrue($report->isPublished());
+    $this->assertNotEmpty($report->get('published_at')->value);
+  }
+
+  /**
+   * Tests that child entities follow the report's language.
+   */
+  public function testChildEntitiesFollowParentLanguage(): void {
+    $asset = $this->createSolutionAsset(AssessmentInterface::SOLUTION_COLLECTOR);
+    $bindingRequirement = $this->createParagraphBindingRequirement($asset);
+    $organisation = $this->createAssessmentOrganisation();
+
+    /** @var \Drupal\assessments\Entity\AssessmentReport $report */
+    $report = Assessment::create([
+      'type' => 'report',
+      'name' => 'Assessment Workflow Test Report',
+      'state' => 'review',
+      'binding_requirement' => ['entity' => $bindingRequirement],
+      'provider' => ['entity' => $organisation],
+      'status' => TRUE,
+      'langcode' => 'fr',
+    ]);
+    $this->markEntityForCleanup($report);
+    $report->save();
+
+    $expression = $bindingRequirement->get('expression')->entity;
+    $publicService = $bindingRequirement->get('affects')->entity;
+    $participation = $bindingRequirement->get('has_participation')->entity;
+    $organisation = $report->get('provider')->entity;
+    $asset = $bindingRequirement->get('asset')->entity;
+
+    $this->assertEquals('fr', $report->language()->getId());
+    $this->assertEquals('fr', $expression->language()->getId());
+    $this->assertEquals('fr', $publicService->language()->getId());
+    $this->assertEquals('fr', $participation->language()->getId());
+    $this->assertEquals('fr', $asset->language()->getId());
+    // Organisation is independent of this pov.
+    $this->assertEquals('en', $organisation->language()->getId());
+
+    // Now change the language.
+    $report->set('langcode', 'de');
+    $report->save();
+
+    $expression = $this->reloadEntity($expression);
+    $publicService = $this->reloadEntity($publicService);
+    $participation = $this->reloadEntity($participation);
+    $asset = $this->reloadEntity($asset);
+    $organisation = $this->reloadEntity($organisation);
+
+    $this->assertEquals('de', $report->language()->getId());
+    $this->assertEquals('de', $expression->language()->getId());
+    $this->assertEquals('de', $publicService->language()->getId());
+    $this->assertEquals('de', $participation->language()->getId());
+    $this->assertEquals('de', $asset->language()->getId());
+    $this->assertEquals('en', $organisation->language()->getId());
   }
 
 }

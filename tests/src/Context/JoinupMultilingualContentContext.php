@@ -14,8 +14,6 @@ use Drupal\Driver\Entity\EntityStub;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
-use Drupal\babel\BabelStorageInterface;
-use Drupal\babel\Model\Source;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\node\NodeInterface;
@@ -81,76 +79,6 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
       $translation = array_filter($node->getValues()) + $original->toArray();
       $original->addTranslation($node->getValue('langcode'), $translation)->save();
     }
-  }
-
-  /**
-   * Adds locale string translations via Babel.
-   *
-   * Creates locale source strings and their translations programmatically,
-   * replicating what the Babel translate UI does. Accepts a table in the form:
-   * @code
-   * | source          | language | translation         | status |
-   * | My term         | fr       | Mon terme           | 1      |
-   * | Another string  | de       | Ein anderer Begriff |        |
-   * @endcode
-   *
-   * The "status" column is optional and defaults to 1 (active). A value of 0
-   * marks the string as inactive in the Babel UI.
-   */
-  #[Given('the following locale string translations:')]
-  public function addLocaleStringTranslations(TableNode $table): void {
-    $localeStorage = \Drupal::service('locale.storage');
-    $babelStorage = \Drupal::service(BabelStorageInterface::class);
-
-    $lidsToRefresh = [];
-    $langcodesToRefresh = [];
-    foreach ($table->getHash() as $row) {
-      $sourceText = $row['source'];
-      $langcode = $row['language'];
-      $translation = $row['translation'];
-      $status = isset($row['status']) && $row['status'] !== '' ? (bool) $row['status'] : TRUE;
-
-      // Find or create the source string in locales_source.
-      $localeString = $localeStorage->findString(['source' => $sourceText]);
-      if (!$localeString) {
-        $localeString = $localeStorage->createString(['source' => $sourceText, 'context' => '']);
-        $localeStorage->save($localeString);
-      }
-
-      $lid = $localeString->getId();
-
-      // Create or update the translation in locales_target.
-      $existing = $localeStorage->findTranslation(['lid' => $lid, 'language' => $langcode]);
-      if ($existing) {
-        $existing->setValues(['translation' => $translation, 'customized' => LOCALE_CUSTOMIZED, 'language' => $langcode]);
-        $localeStorage->save($existing);
-      }
-      else {
-        $localeStorage->createTranslation([
-          'lid' => $lid,
-          'language' => $langcode,
-          'translation' => $translation,
-          'customized' => LOCALE_CUSTOMIZED,
-        ])->save();
-      }
-
-      // Collect LIDs and language codes for cache refresh.
-      $lidsToRefresh[$lid] = $lid;
-      $langcodesToRefresh[$langcode] = $langcode;
-
-      // Register the string in Babel's tracking tables, then apply the
-      // requested status. BabelStorage::update() inserts with the plugin's
-      // default status (TRUE for locale), so we always call
-      // updateStatusForHash() afterwards to honour the requested value.
-      $source = new Source($sourceText, '');
-      $babelStorage->update('locale', [(string) $lid => $source]);
-      $babelStorage->updateStatusForHash($source->getHash(), $status);
-    }
-
-    // Refresh the Babel cache for the affected strings. This might try to
-    // refresh more than needed due to gathering LIDs and language codes in
-    // distinct groups, but it is simpler and the volume is still lower.
-    _locale_refresh_translations($langcodesToRefresh, $lidsToRefresh);
   }
 
   /**

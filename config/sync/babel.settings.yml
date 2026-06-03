@@ -26,6 +26,10 @@ translation_type:
         - collection_settings
         - eif_perspective
         - topic
+    babel_og_menu_link:
+      og_menu:
+        - navigation
+        - quick_links
 data_transfer:
   plugin:
     spreadsheet: {  }

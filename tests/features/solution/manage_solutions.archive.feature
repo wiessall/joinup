@@ -178,7 +178,7 @@ Feature: When a solution is archived then its sub-content also should be archive
     Given I run the "solution_archive_related_content" queue worker
     Then 0 e-mails should have been sent
     And the number of items in the "solution_archive_related_content" queue should be 0
-    And there should be a record of severity warning in the log with description "The Content entity with id '200' cannot be unarchived: cannot find the previous revision it was archived from."
+    And there should be a record of severity warning in the log with description "The Content entity with id '200' cannot be unarchived: cannot find the previous revision it was archived from, and unarchival is not allowed from the current version."
     And the workflow state of the "Solution Event" content should be "published"
     And the workflow state of the "Solution News 1" content should be "published"
     And the workflow state of the "Solution News 2" content should be "draft"
@@ -198,6 +198,23 @@ Feature: When a solution is archived then its sub-content also should be archive
 
     When I go to the homepage of the "Solution" solution
     Then I should not see the text "Archived" in the "Header"
+
+  Scenario: Archiving a release without a release number does not create an invalid URL alias.
+    # Releases without a release number would generate a pathauto alias ending
+    # in '/release', colliding with the solution's own release listing page.
+    # joinup_core_pathauto_alias_alter must append '-0' in that case.
+    Given the following "collection" content:
+      | title            |
+      | Alias Collection |
+    And the following "solution" content:
+      | title          | collection       |
+      | Alias Solution | Alias Collection |
+    And the following "release" content:
+      | title         | is version of  | state     |
+      | Alias Release | Alias Solution | published |
+    When the workflow state of the "Alias Release" content is changed to "archived"
+    And I go to the "Alias Release" release
+    Then the url should match "alias-solution/release-0$"
 
   # @covers \state_machine_permissions_node_access.
   Scenario Outline: Users must not be able to edit the sub-content of an archived solution

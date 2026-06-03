@@ -9,10 +9,13 @@ use Behat\Hook\BeforeScenario;
 use Behat\Step\Given;
 use Behat\Step\When;
 use Drupal\Driver\DrupalDriver;
+use Drupal\Driver\Entity\EntityStub;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\joinup\Driver\Field\PluginReferenceHandler;
 use Drupal\joinup\Traits\EntityTrait;
+use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
+use Drupal\pathauto\PathautoState;
 
 /**
  * Behat step definitions for testing OSS solution.
@@ -32,6 +35,23 @@ class JoinupOSSSolutionContext extends RawDrupalContext {
   #[When('I visit the OSS search page')]
   public function visitSearchPage(): void {
     $this->visitPath(self::SEARCH_PATH);
+  }
+
+  /**
+   * Creates the OSS catalogue collection with its canonical path alias.
+   */
+  #[Given('the OSS catalogue collection exists')]
+  public function createOssCatalogueCollection(): void {
+    $this->nodeCreate(new EntityStub('node', 'collection', [
+      'uuid' => OssCatalogueCollectionInterface::COLLECTION_UUID,
+      'uri' => 'http://data.europa.eu/w21/' . OssCatalogueCollectionInterface::COLLECTION_UUID,
+      'title' => 'EU Open Source Solutions Catalogue',
+      'field_state' => 'published',
+      'path' => [
+        'alias' => '/eu-oss-catalogue',
+        'pathauto' => PathautoState::SKIP,
+      ],
+    ]));
   }
 
   /**

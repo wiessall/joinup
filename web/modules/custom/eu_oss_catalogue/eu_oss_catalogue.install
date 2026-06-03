@@ -42,3 +42,46 @@ function eu_oss_catalogue_install(): void {
 
   batch_set($batchBuilder->toArray());
 }
+
+/**
+ * Migrate oss_features field from string (255) to string_long (longtext).
+ */
+function eu_oss_catalogue_update_201300(): void {
+  $new_spec = [
+    'type' => 'text',
+    'size' => 'big',
+    'not null' => TRUE,
+  ];
+  $schema = \Drupal::database()->schema();
+  foreach (['node__oss_features', 'node_revision__oss_features'] as $table) {
+    $schema->changeField($table, 'oss_features_value', 'oss_features_value', $new_spec);
+  }
+
+  // Sync tracked SQL schema.
+  $kv_schema = \Drupal::keyValue('entity.storage_schema.sql');
+  $field_schema = $kv_schema->get('node.field_schema_data.oss_features');
+  foreach (array_keys($field_schema) as $table) {
+    $field_schema[$table]['fields']['oss_features_value'] = $new_spec;
+  }
+  $kv_schema->set('node.field_schema_data.oss_features', $field_schema);
+
+  // Sync active config.
+  $config_factory = \Drupal::configFactory();
+  $config_factory->getEditable('field.storage.node.oss_features')
+    ->set('type', 'string_long')
+    ->set('module', 'core')
+    ->set('settings', ['case_sensitive' => FALSE])
+    ->save(TRUE);
+  $config_factory->getEditable('field.field.node.oss_solution.oss_features')
+    ->set('field_type', 'string_long')
+    ->save(TRUE);
+
+  // Sync installed field definitions.
+  /** @var \Drupal\Core\Entity\EntityFieldManagerInterface $field_manager */
+  $field_manager = \Drupal::service('entity_field.manager');
+  $field_manager->clearCachedFieldDefinitions();
+  $kv_definitions = \Drupal::keyValue('entity.definitions.installed');
+  $storage_definitions = $kv_definitions->get('node.field_storage_definitions');
+  $storage_definitions['oss_features'] = $field_manager->getFieldStorageDefinitions('node')['oss_features'];
+  $kv_definitions->set('node.field_storage_definitions', $storage_definitions);
+}

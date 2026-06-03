@@ -10,6 +10,7 @@ dependencies:
     - field.field.assessment.report.organisational
     - field.field.assessment.report.other_comment
     - field.field.assessment.report.provider
+    - field.field.assessment.report.published_at
     - field.field.assessment.report.relevant_report
     - field.field.assessment.report.remaining_barriers
     - field.field.assessment.report.semantic
@@ -289,6 +290,7 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
+  published_at: true
   status: true
   uid: true
   uri: true

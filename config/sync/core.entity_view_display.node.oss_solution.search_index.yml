@@ -76,10 +76,9 @@ content:
     weight: 5
     region: content
   oss_features:
-    type: string
+    type: basic_string
     label: hidden
-    settings:
-      link_to_entity: false
+    settings: {  }
     third_party_settings:
       field_delimiter:
         delimiter: ''

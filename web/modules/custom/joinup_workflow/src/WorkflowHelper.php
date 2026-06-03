@@ -8,6 +8,7 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -223,46 +224,68 @@ class WorkflowHelper implements WorkflowHelperInterface {
     $entityStorage = $this->entityTypeManager->getStorage($entityType->id());
     assert($entityStorage instanceof RevisionableStorageInterface);
 
+    $prevPublishedRevisionId = $this->getLastPublishedRevisionId($entity);
+    // There are some content which were migrated from RDF to node as
+    // archived. In this case there are no previous revisions at all. But, if
+    // the current workflow allows the transition for the current user then this
+    // helper must also perform the operation.
+    if (!$prevPublishedRevisionId && !$entity->isTargetWorkflowStateAllowed('published')) {
+      throw new \Exception(sprintf(
+        "The %s entity with id '%s' cannot be unarchived: cannot find the previous revision it was archived from, and unarchival is not allowed from the current version.",
+        $entity->getEntityType()->getLabel(),
+        $entity->id(),
+      ));
+    }
+
+    // Load the corresponding revision. This might be the previous published, or
+    // the current one if the prior doesn't exist.
+    $nextRevision = $prevPublishedRevisionId
+      ? $entityStorage->loadRevision($prevPublishedRevisionId)
+      : $entity;
+    \assert($nextRevision instanceof RevisionableInterface);
+    $nextRevision->setNewRevision();
+    $nextRevision->isDefaultRevision(TRUE);
+    if ($nextRevision instanceof RevisionLogInterface) {
+      // We don't use translatable markup; we keep log messages in English.
+      $revisionLogMessage = $revisionLogMessage ?? sprintf(
+        'Unarchived by %s',
+        $this->currentUser->getAccountName(),
+      );
+      if ($revisionLogMessage) {
+        $nextRevision->setRevisionLogMessage((string) $revisionLogMessage);
+      }
+      $nextRevision->setRevisionCreationTime($this->time->getRequestTime());
+      $nextRevision->setRevisionUserId($this->currentUser->id());
+    }
+    $nextRevision->skip_notification = TRUE;
+    $nextRevision->setWorkflowState('published')->save();
+
+    return $nextRevision;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getLastPublishedRevisionId(ContentEntityInterface $entity): ?int {
+    $entityStorage = $this->entityTypeManager->getStorage($entity->getEntityTypeId());
+    if (!$entityStorage instanceof RevisionableStorageInterface) {
+      return NULL;
+    }
+    $entityType = $entity->getEntityType();
+
     // Load the previous published revision's IDs.
     $revisionIdsQuery = $entityStorage->getQuery()
       ->accessCheck(FALSE)
       ->allRevisions()
       ->condition($entityType->getKey('id'), $entity->id())
       ->condition($entity->getWorkflowStateFieldName(), 'published')
+      ->range(0, 1)
       ->sort($entityType->getKey('revision'), 'DESC');
     if ($defaultRevisionKey = $entityType->getRevisionMetadataKey('revision_default')) {
       $revisionIdsQuery->condition($defaultRevisionKey, TRUE);
     }
 
-    $revisionIds = array_keys($revisionIdsQuery->execute());
-    $revisionId = reset($revisionIds);
-    if (!$revisionId) {
-      throw new \Exception(sprintf(
-        "The %s entity with id '%s' cannot be unarchived: cannot find the previous revision it was archived from.",
-        $entity->getEntityType()->getLabel(),
-        $entity->id(),
-      ));
-    }
-
-    // Load the previous revision.
-    $previousRevision = $entityStorage->loadRevision(reset($revisionIds));
-    \assert($previousRevision instanceof RevisionableInterface);
-    $previousRevision->setNewRevision();
-    $previousRevision->isDefaultRevision(TRUE);
-    if ($previousRevision instanceof RevisionLogInterface) {
-      $revisionLogMessage = $revisionLogMessage ?? $this->t('Unarchived by @user', [
-        '@user' => $this->currentUser->getAccountName(),
-      ]);
-      if ($revisionLogMessage) {
-        $previousRevision->setRevisionLogMessage((string) $revisionLogMessage);
-      }
-      $previousRevision->setRevisionCreationTime($this->time->getRequestTime());
-      $previousRevision->setRevisionUserId($this->currentUser->id());
-    }
-    $previousRevision->skip_notification = TRUE;
-    $previousRevision->save();
-
-    return $previousRevision;
+    return current(array_keys($revisionIdsQuery->execute())) ?: NULL;
   }
 
   /**

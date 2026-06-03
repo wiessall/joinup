@@ -1,0 +1,144 @@
+diff --git a/imagecache_external.module b/imagecache_external.module
+index 370ca6c..c4f5955 100644
+--- a/imagecache_external.module
++++ b/imagecache_external.module
+@@ -6,6 +6,7 @@
+  */
+ 
+ use Drupal\Component\Utility\UrlHelper;
++use Drupal\Core\Cache\CacheableMetadata;
+ use Drupal\Core\StreamWrapper\StreamWrapperManager;
+ use Drupal\Core\File\FileSystemInterface;
+ use Drupal\file\Entity\File;
+@@ -100,17 +101,23 @@ function template_preprocess_imagecache_external_responsive(&$variables) {
+  *
+  * @param string|null $url
+  *   The url to the image.
++ * @param \Drupal\Core\Cache\CacheableMetadata|null $cacheable_metadata
++ *   The cacheable metadata to merge into the process into the output where this
++ *   function is involved. Optional.
+  *
+  * @return bool|string
+  *   The URI to the image, or FALSE if the URL is empty or null.
+  * @throws \GuzzleHttp\Exception\GuzzleException
+  */
+-function imagecache_external_generate_path(?string $url) {
++function imagecache_external_generate_path(?string $url, ?CacheableMetadata $cacheable_metadata = NULL): bool|string {
+   if (empty($url) || \Drupal\imagecache_external\ImagecacheExternal::isUnavailableUrl($url)) {
+     return FALSE;
+   }
+   // Get configuration.
+   $config = imagecache_external_config();
++  if ($cacheable_metadata) {
++    $cacheable_metadata->addCacheableDependency($config);
++  }
+ 
+   // Create the external images directory and ensure it's writable.
+   $hash = md5($url);
+@@ -120,7 +127,11 @@ function imagecache_external_generate_path(?string $url) {
+   $file_system = \Drupal::service('file_system');
+ 
+   // Default scheme, directory and optional subdirectories.
+-  $default_scheme = \Drupal::config('system.file')->get('default_scheme');
++  $system_file_config = \Drupal::config('system.file');
++  if ($cacheable_metadata) {
++    $cacheable_metadata->addCacheableDependency($system_file_config);
++  }
++  $default_scheme = $system_file_config->get('default_scheme');
+   $imagecache_external_directory = $config->get('imagecache_directory');
+   if ($config->get('imagecache_subdirectories')) {
+     $imagecache_external_directory .= '/' . $hash[0] . '/' . $hash[1];
+diff --git a/src/Plugin/Field/FieldFormatter/ImagecacheExternalImage.php b/src/Plugin/Field/FieldFormatter/ImagecacheExternalImage.php
+index a4b30eb..e1d7932 100644
+--- a/src/Plugin/Field/FieldFormatter/ImagecacheExternalImage.php
++++ b/src/Plugin/Field/FieldFormatter/ImagecacheExternalImage.php
+@@ -2,6 +2,7 @@
+ 
+ namespace Drupal\imagecache_external\Plugin\Field\FieldFormatter;
+ 
++use Drupal\Core\Cache\CacheableMetadata;
+ use Drupal\Core\File\FileUrlGeneratorInterface;
+ use Drupal\Core\Link;
+ use Drupal\Core\Render\RendererInterface;
+@@ -168,6 +169,7 @@ class ImagecacheExternalImage extends FormatterBase implements ContainerFactoryP
+ 
+     $url = NULL;
+     $image_link_setting = $this->getSetting('imagecache_external_link');
++    $cacheable_metadata = new CacheableMetadata();
+     // Check if the formatter involves a link.
+     if ($image_link_setting == 'content') {
+       $entity = $items->getEntity();
+@@ -192,7 +194,7 @@ class ImagecacheExternalImage extends FormatterBase implements ContainerFactoryP
+ 
+       $image_alt = '';
+       if ($field->getType() == 'link') {
+-        $image_path = imagecache_external_generate_path($values['uri']);
++        $image_path = imagecache_external_generate_path($values['uri'], $cacheable_metadata);
+         // If present, use the Link field title to provide the alt text.
+         if (isset($field_title)) {
+           // The link field appends the url as title when the title is empty.
+@@ -203,7 +205,7 @@ class ImagecacheExternalImage extends FormatterBase implements ContainerFactoryP
+         }
+       }
+       else {
+-        $image_path = imagecache_external_generate_path($values['value']);
++        $image_path = imagecache_external_generate_path($values['value'], $cacheable_metadata);
+       }
+ 
+       // Skip rendering this item if there is no image_path.
+@@ -247,6 +249,8 @@ class ImagecacheExternalImage extends FormatterBase implements ContainerFactoryP
+       }
+ 
+     }
++
++    $cacheable_metadata->applyTo($elements);
+     return $elements;
+   }
+ 
+diff --git a/src/Plugin/Field/FieldFormatter/ImagecacheExternalResponsiveImage.php b/src/Plugin/Field/FieldFormatter/ImagecacheExternalResponsiveImage.php
+index 6f2e733..05956fd 100644
+--- a/src/Plugin/Field/FieldFormatter/ImagecacheExternalResponsiveImage.php
++++ b/src/Plugin/Field/FieldFormatter/ImagecacheExternalResponsiveImage.php
+@@ -2,6 +2,7 @@
+ 
+ namespace Drupal\imagecache_external\Plugin\Field\FieldFormatter;
+ 
++use Drupal\Core\Cache\CacheableMetadata;
+ use Drupal\Core\Entity\EntityStorageInterface;
+ use Drupal\Core\Field\FieldDefinitionInterface;
+ use Drupal\Core\File\FileUrlGeneratorInterface;
+@@ -232,6 +233,7 @@ class ImagecacheExternalResponsiveImage extends FormatterBase implements Contain
+ 
+     $url = NULL;
+     $image_link_setting = $this->getSetting('imagecache_external_link');
++    $cacheable_metadata = new CacheableMetadata();
+     // Check if the formatter involves a link.
+     if ($image_link_setting == 'content') {
+       $entity = $items->getEntity();
+@@ -256,7 +258,7 @@ class ImagecacheExternalResponsiveImage extends FormatterBase implements Contain
+ 
+       $image_alt = '';
+       if ($field->getType() == 'link') {
+-        $image_path = imagecache_external_generate_path($values['uri']);
++        $image_path = imagecache_external_generate_path($values['uri'], $cacheable_metadata);
+         // If present, use the Link field title to provide the alt text.
+         if (isset($field_title)) {
+           // The link field appends the url as title when the title is empty.
+@@ -267,7 +269,7 @@ class ImagecacheExternalResponsiveImage extends FormatterBase implements Contain
+         }
+       }
+       else {
+-        $image_path = imagecache_external_generate_path($values['value']);
++        $image_path = imagecache_external_generate_path($values['value'], $cacheable_metadata);
+       }
+ 
+       // Skip rendering this item if there is no image_path.
+@@ -311,6 +313,8 @@ class ImagecacheExternalResponsiveImage extends FormatterBase implements Contain
+       }
+ 
+     }
++
++    $cacheable_metadata->applyTo($elements);
+     return $elements;
+   }
+ 

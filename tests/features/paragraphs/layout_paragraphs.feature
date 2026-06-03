@@ -123,6 +123,22 @@ Feature:
       | second | text    |
       | third  | heading |
     And I press "Publish"
+    # When creating translation, move up, move down or drag handle button
+    # shouldn't be present.
+    When I open the header local tasks menu
+    And I click "Translate" in the "Entity actions" region
+    And I click "Add" in the "Hungarian" row
+    Then I should see "You are in translation mode. You cannot add, remove or reorder items while translating."
+    Then I should see an ".lpb-controls .lpb-controls-label" element
+    And I should see an ".lpb-controls .lpb-edit" element
+    But I should not see an ".lpb-controls .lpb-drag" element
+    And I should not see an ".lpb-controls .lpb-controls--tip" element
+    And I should not see an ".lpb-controls .lpb-up" element
+    And I should not see an ".lpb-controls .lpb-down" element
+    And I should not see an ".lpb-controls .lpb-duplicate" element
+    And I should not see an ".lpb-controls .lpb-delete" element
+    And I should not see the link "Add layout"
+    And I should not see the link "Choose component"
 
   Scenario: Test duplication of unsaved layout paragraph with nested paragraphs.
     Given I add a layout paragraph in the "Custom page body" form field with the following properties:

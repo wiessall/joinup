@@ -157,6 +157,7 @@ Feature: Assessment Report Entity Management
 
     When I press "Save as draft"
     Then I should see the success message containing "New assessment Test Assessment Report 2025 has been created."
+    And I should see the link "Interoperability assessments space"
     And I should see the heading "Test Assessment Report 2025"
     And I should see the following lines of text:
       # General information
@@ -178,6 +179,13 @@ Feature: Assessment Report Entity Management
       | No significant barriers identified.                                                                |
       # Supporting documents and general comments
       | This assessment was conducted in collaboration with multiple stakeholders across EU member states. |
+
+    # ISAICP-11258: a statement cleared by selecting N/A must not appear in the view after saving.
+    When I go to the edit form of the "Test Assessment Report 2025" assessment
+    And I click "Legal" in the "Content" region
+    And I select the radio button "N/A" with the name "legal[0][inline_entity_form][interpretation]"
+    And I press "Update"
+    Then I should not see "Complies with GDPR and eIDAS regulations"
 
     # Edit test.
     When I go to the edit form of the "Test Assessment Report 2025" assessment
@@ -498,3 +506,27 @@ Feature: Assessment Report Entity Management
     # getting the first sibling which is the duplicated component.
     When I click on element ".js-lpb-component ~ .js-lpb-component .lpb-edit"
     Then a modal should open
+
+  Scenario: Entity browser shows only solutions in the current interface language
+    Given solution multilingual content:
+      | title               | collection                         | abstract         | langcode | default_translation |
+      | English Solution    | Interoperability assessments space | Only in English  | en       | 1                   |
+      | Bilingual Solution  | Interoperability assessments space | Original English | en       | 1                   |
+      | BG Solution         | ~~~                                | BG Translation   | bg       | 0                   |
+
+    Given I am logged in as an "authenticated user"
+    And I go to "/collection/assessments/report/create"
+    And I click "New binding requirement"
+    When I click "Interoperability solution" in the "Modal content" region
+    And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
+    Then I should see "English Solution"
+    And I should see "Bilingual Solution"
+    And I should not see "BG Solution"
+
+    When I go to "/bg/collection/assessments/report/create"
+    And I click "New binding requirement"
+    When I click "Interoperability solution" in the "Modal content" region
+    And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
+    Then I should see "English Solution"
+    And I should see "BG Solution"
+    And I should not see "Bilingual Solution"

@@ -10,15 +10,9 @@ _meta:
     df34e3a2-207b-4910-a804-344931654e20: node
     ebbcc55f-51c9-40b4-8eb6-21c9ff0b565d: taxonomy_term
 default:
-  revision_uid:
-    -
-      target_id: 1
   status:
     -
       value: true
-  uid:
-    -
-      target_id: 0
   title:
     -
       value: 'Information sharing protocols'
@@ -27,33 +21,7 @@ default:
       value: 1420095600
   changed:
     -
-      value: 1420095600
-  promote:
-    -
-      value: false
-  sticky:
-    -
-      value: false
-  report:
-    -
-      uri: 'internal:/contact'
-      title: 'Report abusive content'
-      options:
-        query:
-          category: report
-          uri: /collection/isp-collection/solution/information-sharing-protocols
-          destination: collection/isp-collection/solution/information-sharing-protocols
-  path:
-    -
-      alias: /collection/isp-collection/solution/information-sharing-protocols
-      langcode: en
-      pathauto: 1
-  content_translation_source:
-    -
-      value: und
-  content_translation_outdated:
-    -
-      value: false
+      value: 1420453800
   published_at:
     -
       value: 1420095600

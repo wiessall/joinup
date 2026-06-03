@@ -1,3 +1,6 @@
+entity_reference_selection.joinup_taxonomy:
+  type: entity_reference_selection.default
+
 taxonomy.vocabulary.*.third_party.joinup_taxonomy:
   type: mapping
   label: 'Joinup Taxonomy third party settings'

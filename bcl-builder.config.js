@@ -31,6 +31,10 @@ const paths = {
  *     - {string} dest: Path to the destination file, from destFolder.
  *     - {Object} options: Optional object-specific options merged with defaults.
  *
+ * @param params.sourceFolder
+ * @param params.destFolder
+ * @param params.defaultOptions
+ * @param params.objects
  * @return {Array<Object>}
  *   Array of resolved objects.
  */
@@ -549,9 +553,10 @@ module.exports = {
     // Bootstrap: icons
     {
       from: [
+        path.resolve(paths.nodeModules, "bootstrap-icons/icons/*.svg"),
         path.resolve(
           paths.nodeModules,
-          "@openeuropa/bcl-bootstrap/icons/*.svg",
+          "@openeuropa/bcl-bootstrap/replace-icons/*.svg",
         ),
       ],
       to: path.resolve(paths.themes.ventuno, "assets/icons"),
@@ -631,10 +636,7 @@ module.exports = {
   ],
   sprite: [
     {
-      entry: path.resolve(
-        paths.nodeModules,
-        "@openeuropa/bcl-bootstrap/icons/",
-      ),
+      entry: path.resolve(paths.nodeModules, "bootstrap-icons/icons/"),
       dest: path.resolve(paths.themes.ventuno, "assets/icons"),
       options: {
         file: "icons.svg",

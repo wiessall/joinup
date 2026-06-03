@@ -1,0 +1,27 @@
+_meta:
+  version: '1.0'
+  entity_type: file
+  uuid: 83c208a4-6354-4e08-95dc-f4e123e2597f
+  default_langcode: en
+default:
+  uid:
+    -
+      target_id: 0
+  filename:
+    -
+      value: tile-test-vector.svg
+  uri:
+    -
+      value: 'public://joinup_test_content/tile-test-vector.svg'
+  filemime:
+    -
+      value: image/svg+xml
+  filesize:
+    -
+      value: 332
+  status:
+    -
+      value: true
+  created:
+    -
+      value: 1734685491
