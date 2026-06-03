@@ -2146,18 +2146,6 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Runs a specific cron hook implementation.
-   *
-   * @param string $module
-   *   The implementer module of the cron hook.
-   */
-  #[When('I run the :module cron')]
-  public function iRunSpecificCron(string $module): void {
-    $this->assertCondition(function_exists($cronFunction = "{$module}_cron"), "The cron function '{$module}_cron' does not exist.");
-    call_user_func($cronFunction);
-  }
-
-  /**
    * Runs a specific ultimate_cron job by machine name.
    *
    * @param string $jobId
