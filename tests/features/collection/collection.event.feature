@@ -19,8 +19,9 @@ Feature: As a user of the website
       | Melted Hairdresser        | Fairy Tail | now -2 day   | now +2 day          | now -4 day | katerpillar    |
       | Hot Air                   | Fairy Tail | now +3 day   | now +5 day          | now -3 day | katerpillar    |
       | Walking Unofficial Humans | Fairy Tail | now -4 day   | now -2 day          | now        | trustysidekick |
-      # The "Spring Freezing" event is associated with the anonymous user.
-      | Spring Freezing           | Fairy Tail | now +1 week  | now +1 week         | now -6 day |                |
+    And the following "event" content:
+      | title                     | collection | start date   | end date            | created    |
+      | Spring Freezing           | Fairy Tail | now +1 week  | now +1 week         | now -6 day |
     And the following "document" content:
       | title       | collection | created   |
       | Yellow Zeus | Fairy Tail | yesterday |
