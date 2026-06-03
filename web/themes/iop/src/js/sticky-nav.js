@@ -1,4 +1,7 @@
 /**
+ * @param Drupal
+ * @param displace
+ * @param once
  * @file
  * Adjust scroll-padding-top value with Drupal admin toolbal and .iop-navbar height.
  */

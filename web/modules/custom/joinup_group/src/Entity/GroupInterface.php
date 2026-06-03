@@ -265,6 +265,14 @@ interface GroupInterface extends
   public function getGroupContentIds(): array;
 
   /**
+   * Returns direct group content IDs, without recursing into child groups.
+   *
+   * @return array
+   *   Same structure as getGroupContentIds().
+   */
+  public function getDirectGroupContentIds(): array;
+
+  /**
    * Returns the message to show to a new member when they join the group.
    *
    * @param \Drupal\og\OgMembershipInterface $membership

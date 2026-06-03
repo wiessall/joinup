@@ -1,4 +1,7 @@
 /**
+ * @param Drupal
+ * @param once
+ * @param $
  * @file
  * Autocomplete additional behaviors for invite forms.
  */
