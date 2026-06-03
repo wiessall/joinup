@@ -1,4 +1,6 @@
 /**
+ * @param Drupal
+ * @param once
  * @file
  * Attaches the behaviors for the distribution download tracking module.
  */

@@ -1,4 +1,8 @@
 /**
+ * @param Drupal
+ * @param once
+ * @param cookies
+ * @param drupalSettings
  * @file
  * Shows subscription form to users logged in from trying to join a collection.
  */

@@ -1,4 +1,6 @@
 /**
+ * @param Drupal
+ * @param once
  * @file
  * Updates text content for "Show more" buttons depending on open/close state.
  */
