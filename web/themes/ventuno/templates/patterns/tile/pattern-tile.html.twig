@@ -39,6 +39,8 @@
 {% set _extra_data = extra_data|default([]) %}
 {% set _bundle = bundle|default({}) %}
 {% set _indicators = indicators|default([]) %}
+{% set _certificate_file = extra_data['certificate']['file']  %}
+{% set _certificate_logo = extra_data['certificate']['logo']  %}
 
 {{ attach_library('ventuno/tile') }}
 
@@ -53,13 +55,18 @@
   'd-flex',
   'mb-3',
 ] %}
+
 {% if _image is empty %}
   {% set _image %}
-    <div class="tile__default-img h-100 w-100 bg-secondary d-flex flex-column align-items-center justify-content-center position-relative">
-      <svg class="tile__default-icon position-relative bi img-fluid">
-        <use xlink:href="{{ bcl_icon_path }}#{{ _bundle.icon }}"></use>
-      </svg>
-    </div>
+    {% if _certificate_logo is not empty %}
+      <img src="{{ _certificate_logo }}">
+    {%  else %}
+        <div class="tile__default-img h-100 w-100 bg-secondary d-flex flex-column align-items-center justify-content-center position-relative">
+          <svg class="tile__default-icon position-relative bi img-fluid">
+            <use xlink:href="{{ bcl_icon_path }}#{{ _bundle.icon }}"></use>
+          </svg>
+        </div>
+    {% endif %}
   {% endset %}
 {% endif %}
 
@@ -67,7 +74,9 @@
   <article{{ _attributes.addClass(_classes) }}>
     {{- _title_prefix -}}
     {{- _title_suffix -}}
-    <a class="tile__link position-absolute top-0 end-0 bottom-0 start-0" href="{{ _url }}" title="{{ _label|render|striptags|trim|raw }}"></a>
+    {% if  _certificate_file is empty %}
+       <a class="tile__link position-absolute top-0 end-0 bottom-0 start-0" href="{{ _url }}" title="{{ _label|render|striptags|trim|raw }}"></a>
+    {%  endif %}
     <figure class="tile__figure mb-0">
       {{- _image -}}
     </figure>
@@ -91,12 +100,17 @@
             <span class="tile__info-text tile__action">{{- _info.label -}}</span>
           </div>
         {%- endif -%}
-        <h3 class="tile__title h5 text-primary fw-bold my-0">
-          {{- _label -}}
-          {%- if _user_badges is not empty -%}
-            <span class="user-badges ms-1">{{ _user_badges }}</span>
-          {%- endif -%}
-        </h3>
+            <h3 class="tile__title h5 text-primary fw-bold my-0">
+                {{- _label -}}
+              {%- if _user_badges is not empty -%}
+                <span class="user-badges ms-1">{{ _user_badges }}</span>
+              {%- endif -%}
+              {% if  _certificate_file is not empty %}
+              <div class="btn-info">
+                <a href="{{ _certificate_file }}" download>Download the certificate</a>
+              </div>
+              {%- endif -%}
+            </h3>
         {%- if _text is not empty -%}
           <div class="tile__text text-dark fs-sm my-1">{{- _text -}}</div>
         {%- endif -%}

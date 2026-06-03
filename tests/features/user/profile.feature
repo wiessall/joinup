@@ -155,6 +155,7 @@ Feature: User profile
       # Always present in all tests.
       # See joinup_test.install
       | Portal support                   |
+    Then break
     And I should see the following facet items "Collections, Discussion, Document, Event, News, Solution" in this order
 
   Scenario: The user profile page title should show the full name of the user.

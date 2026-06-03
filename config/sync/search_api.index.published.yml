@@ -11,8 +11,10 @@ dependencies:
     - field.storage.meta_entity.field_shared_in
     - field.storage.node.abstract
     - field.storage.node.body
+    - field.storage.node.certificate
     - field.storage.node.classification
     - field.storage.node.contact
+    - field.storage.node.course
     - field.storage.node.description
     - field.storage.node.domain
     - field.storage.node.field_event_agenda
@@ -100,12 +102,12 @@ third_party_settings:
       include_language_independent: true
       use_language_undefined_as_fallback_language: false
       specific_languages:
+        en: '0'
         bg: '0'
         hr: '0'
         cs: '0'
         da: '0'
         nl: '0'
-        en: '0'
         et: '0'
         fi: '0'
         fr: '0'
@@ -171,6 +173,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.body
+  certificate:
+    label: Certificate
+    datasource_id: 'entity:node'
+    property_path: certificate
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.certificate
   classification:
     label: 'Solution classification'
     datasource_id: 'entity:node'
@@ -208,6 +218,14 @@ field_settings:
       fields:
         - 'entity:assessment/provider:entity:country'
         - 'entity:node/owner:entity:country'
+  course:
+    label: Course
+    datasource_id: 'entity:node'
+    property_path: course
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.course
   date:
     label: Date
     property_path: aggregated_field
@@ -874,6 +892,7 @@ datasource_settings:
       default: false
       selected:
         - assessment_report
+        - certificate
         - collection
         - custom_page
         - discussion

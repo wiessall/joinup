@@ -44,7 +44,12 @@ Feature: User certificates
     And I attach the file "text.pdf" to "files[certificates_form_0_certificate_0]"
     And I press "Create certificate"
     And I press "Save"
+    Then break
     Then I should see the success message "The changes have been saved."
+    Then I go to the profile of "Sara the User"
+    Then I should see the following tiles in the correct order:
+      | Discovered new flower species |
+      | The Portal          |
     And I go to the edit form of the "Sara the User" user
     Then I should see the link "Archived IOPEU Solution"
     And I should see the text "Certificate of course"
