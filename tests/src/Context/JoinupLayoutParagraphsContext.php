@@ -500,19 +500,14 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    * Layout Paragraph buttons clickable.
    */
   #[BeforeStep]
-  public function revealLayoutParagraphsAddButtons(BeforeStepScope $scope): void {
-    if (!$this->hasJavascriptSupport()) {
-      return;
-    }
-    $text = $scope->getStep()->getText();
-    $matchesLpClick = preg_match('/(click|press).*\b(Choose component|Add layout)\b/i', $text);
-    $matchesParagraphAction = preg_match('/\b(add|edit|delete|move up|move down|duplicate)\b.*\b(paragraph|layout)\b/i', $text)
-      || preg_match('/from the .* field the (child|first|last|layout) /i', $text);
-    $maybeFormInteraction = preg_match('/\b(fill in|press|check|uncheck|select)\b/i', $text);
-    if (!$matchesLpClick && !$matchesParagraphAction && !$maybeFormInteraction) {
+  public function revealLayoutParagraphsButtons(BeforeStepScope $scope): void {
+    if (!$this->hasJavascriptSupport() || !$this->getSession()->getDriver()->isStarted()) {
       return;
     }
     $this->getSession()->executeScript(<<<'JS'
+      if (!document.querySelector('.js-lpb-component')) {
+        return;
+      }
       document.querySelectorAll('.js-lpb-component .js-lpb-ui.visually-hidden').forEach((b) => {
         b.classList.remove('visually-hidden');
       });
