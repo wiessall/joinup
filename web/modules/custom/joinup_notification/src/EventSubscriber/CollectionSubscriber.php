@@ -24,7 +24,6 @@ class CollectionSubscriber extends NotificationSubscriberBase {
   const string TEMPLATE_ARCHIVE_DELETE_MEMBERS = 'col_arc_del_members';
   const string TEMPLATE_ARCHIVE_DELETE_NO_REQUEST = 'col_arc_del_no_request';
   const string TEMPLATE_ARCHIVE_DELETE_REJECT = 'col_arc_del_rej';
-  const string TEMPLATE_ARCHIVE_DELETE_SOLUTIONS_ORPHANED = 'col_arc_del_sol_no_affiliates';
   const string TEMPLATE_DELETION_BY_MODERATOR = 'col_deletion_by_moderator';
   const string TEMPLATE_PROPOSE_EDIT_MODERATORS = 'col_propose_edit_mod';
   const string TEMPLATE_PROPOSE_EDIT_OWNER = 'col_propose_edit_own';
@@ -368,13 +367,6 @@ class CollectionSubscriber extends NotificationSubscriberBase {
     $user_data = $this->getUsersMessages($user_data);
     $this->sendUserDataMessages($user_data);
 
-    // Next, notify all owners of affiliated solutions.
-    foreach ($this->entity->get('solutions')->referencedEntities() as $solution) {
-      if (!empty($solution)) {
-        $this->notifySolutionOwners($solution);
-      }
-    }
-
     // Avoid sending again to the owner.
     $uids_to_skip = [];
     foreach ($user_data as $user_ids) {
@@ -416,33 +408,6 @@ class CollectionSubscriber extends NotificationSubscriberBase {
     }
 
     $this->sendUserDataMessages($user_data);
-  }
-
-  /**
-   * Sends a notification to solution owners affiliated with the collection.
-   *
-   * Notification id 11.
-   *
-   * Notification 11 is sent to the solution owners in which the collection that
-   * is archived/deleted is the only affiliate, prompting them to take action.
-   *
-   * @param \Drupal\Core\Entity\EntityInterface $solution
-   *   The solution entity.
-   */
-  protected function notifySolutionOwners(EntityInterface $solution): void {
-    $user_data = [
-      'og_roles' => [
-        'node-solution-administrator' => [
-          self::TEMPLATE_ARCHIVE_DELETE_SOLUTIONS_ORPHANED,
-        ],
-      ],
-    ];
-    $user_data = $this->getUsersMessages($user_data, $solution);
-    $arguments = [
-      '@affiliate:title' => $solution->label(),
-      '@affiliate:url' => $solution->toUrl('canonical', ['absolute' => TRUE])->toString(),
-    ];
-    $this->sendUserDataMessages($user_data, $arguments);
   }
 
   /**

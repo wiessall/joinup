@@ -1,4 +1,4 @@
-@api @group-a
+@api @group-x
 Feature: Notification test for the collection transitions.
   In order to manage my collections
   As an user that is related to the collection
@@ -164,14 +164,6 @@ Feature: Notification test for the collection transitions.
       | recipient | NC owner                                                              |
       | subject   | Your request to archive collection NC to archive has been approved.   |
       | body      | The collection "NC to archive" has been archived as per your request. |
-    And the following email should have been sent:
-      | recipient | NCS owner                                                                                                                                                                                                                                         |
-      | subject   | The collection NC to archive was archived. Your solution was affiliated only to the collection NC to archive, and as a consequence, your solution is not currently affiliated to any other collection. Please verify and take appropriate action. |
-      | body      | Since your solution "NC Solution1" was affiliated only with this archived collection, your solution is currently no longer affiliated to any other collection.                                                                                    |
-    And the following email should have been sent:
-      | recipient | NCS owner                                                                                                                                                                                                                                         |
-      | subject   | The collection NC to archive was archived. Your solution was affiliated only to the collection NC to archive, and as a consequence, your solution is not currently affiliated to any other collection. Please verify and take appropriate action. |
-      | body      | Since your solution "NC Solution2" was affiliated only with this archived collection, your solution is currently no longer affiliated to any other collection.                                                                                    |
     And the following email should have been sent:
       | recipient | NC member1                                                                                                                   |
       | subject   | The collection NC to archive was archived.                                                                                   |
