@@ -1,11 +1,11 @@
-uuid: 53ebadde-902d-432f-939c-5da7323e2714
+uuid: 1f99304f-d505-412f-8ffc-6814bc708ae8
 langcode: en
 status: true
 dependencies:
   module:
     - simple_sitemap
 title: 'Generate sitemaps'
-id: sitemap_cron
+id: simple_sitemap_cron
 weight: 0
 module: simple_sitemap
 callback: 'simple_sitemap#cron'
