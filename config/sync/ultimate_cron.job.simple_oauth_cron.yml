@@ -10,7 +10,7 @@ weight: 0
 module: simple_oauth
 callback: 'simple_oauth#cron'
 scheduler:
-  id: simple
+  id: crontab
   configuration:
     rules:
       - '0+@ */2 * * *'

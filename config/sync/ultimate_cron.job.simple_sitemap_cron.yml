@@ -10,7 +10,7 @@ weight: 0
 module: simple_sitemap
 callback: 'simple_sitemap#cron'
 scheduler:
-  id: simple
+  id: crontab
   configuration:
     rules:
       - '0+@ 3 * * *'
