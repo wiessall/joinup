@@ -6,11 +6,11 @@ Feature: User certificates
 
   Background:
     Given the following solution content:
-      | title                    | collection                   | state     |
-      | Published IOPEU Solution | Interoperable Europe Academy | published |
-      | Archived IOPEU Solution  | Interoperable Europe Academy | archived  |
-      | Draft IOPEU Solution     | Interoperable Europe Academy | draft     |
-      | Portal IOPEU Solution    | Portal support               | published |
+      | title                    | collection                   | state     | nid | logo     |
+      | Published IOPEU Solution | Interoperable Europe Academy | published |     |          |
+      | Archived IOPEU Solution  | Interoperable Europe Academy | archived  | 50  | logo.png |
+      | Draft IOPEU Solution     | Interoperable Europe Academy | draft     |     |          |
+      | Portal IOPEU Solution    | Portal support               | published |     |          |
     And the following news content:
       | title                     | collection                   | body         |
       | News about IOPEU Solution | Interoperable Europe Academy | Just a test! |
@@ -44,12 +44,14 @@ Feature: User certificates
     And I attach the file "text.pdf" to "files[certificates_form_0_certificate_0]"
     And I press "Create certificate"
     And I press "Save"
-    Then break
     Then I should see the success message "The changes have been saved."
     Then I go to the profile of "Sara the User"
+    And I should see the link "1 Certificate"
     Then I should see the following tiles in the correct order:
-      | Discovered new flower species |
-      | The Portal          |
+      | Certificate of course 50 |
+      | Portal support           |
+    Then the logo logo.png should be shown in the "Certificate of course 50" certificate tile
+    When I click "Certificate of course 50"
     And I go to the edit form of the "Sara the User" user
     Then I should see the link "Archived IOPEU Solution"
     And I should see the text "Certificate of course"

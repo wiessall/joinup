@@ -8,6 +8,7 @@ use Behat\Mink\Exception\ExpectationException;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup_badge\BadgeService;
@@ -20,6 +21,7 @@ class BadgeContext extends RawDrupalContext {
 
   use UserTrait;
   use TraversingTrait;
+  use EntityTrait;
 
   /**
    * Asserts that a user has been awarded a given badge.
@@ -117,6 +119,34 @@ class BadgeContext extends RawDrupalContext {
         ));
       }
     }
+  }
+
+  /**
+   * Asserts that certificate tile has the logo properly set.
+   *
+   * @param string $logo
+   *   The logo file to inspect.
+   * @param string $title
+   *   The title of tile to inspect.
+   *
+   * @throws \Exception
+   *   Thrown when the logo is not found or not correct.
+   */
+  #[Then('the logo :logo should be shown in the :title certificate tile')]
+  public function assertCertificateTileHasLogo(string $logo, string $title): void {
+    // Retrieve the URL of the logo in the tile.
+    $tile = $this->getTileByHeading($title);
+    $actual_url = $tile->find('xpath', '//img')->getAttribute('src');
+    if (!$actual_url) {
+      throw new \Exception("No logo link found in the '$title' tile.");
+    }
+
+    $certificate = $this->getEntityByLabel('node', $title, 'certificate');
+    $solution = $certificate->get('course')->entity;
+    $image = $solution->getLogoAsFile();
+    $expected_url = \Drupal::service('file_url_generator')->generateAbsoluteString($image->getFileUri());
+
+    $this->assertSameValues($expected_url, $actual_url, 'The logo shown is not the correct one.');
   }
 
 }
