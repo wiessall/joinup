@@ -37,6 +37,75 @@ class IopeuCommunityMonitoring extends BlockBase implements ContainerFactoryPlug
    */
   private const string CACHE_PREFIX = 'iopeu-community-monitoring:';
 
+  /**
+   * Cache tags relevant to the query of ::getPublicSolutionCount.
+   *
+   * @const string[]
+   *
+   * @see self::getPublicSolutionCount()
+   * @see self::getCacheTags()
+   */
+  private const array SOLUTION_COUNT_TAGS = ['node_list:solution'];
+
+  /**
+   * Cache tags relevant to the query of ::getInteroperableSolutionCount.
+   *
+   * @const string[]
+   *
+   * @see self::getInteroperableSolutionCount()
+   * @see self::getCacheTags()
+   */
+  private const array INTEROPERABLE_SOLUTION_COUNT_TAGS = [
+    'flagging_list:interoperability',
+    'node_list:solution',
+  ];
+
+  /**
+   * Cache tags relevant to the query of ::getPublicPortalReportSolutionsCount.
+   *
+   * @const string[]
+   *
+   * @see self::getPublicPortalReportSolutionsCount()
+   * @see self::getCacheTags()
+   */
+  private const array SOLUTIONS_IN_REPORTS_COUNT_TAGS = [
+    'paragraph_list:binding_requirement',
+    'assessment_list:report',
+    'node_list:solution',
+  ];
+
+  /**
+   * Cache tags relevant to the query of ::getPublishedReportCount.
+   *
+   * @const string[]
+   *
+   * @see self::getPublishedReportCount()
+   * @see self::getCacheTags()
+   */
+  private const array PUBLISHED_REPORT_COUNT_TAGS = ['assessment_list:report'];
+
+  /**
+   * Cache tags relevant to the query of ::getActiveIopeuMemberCount.
+   *
+   * @const string[]
+   *
+   * @see self::getActiveIopeuMemberCount()
+   * @see self::getCacheTags()
+   */
+  private const array IOPEU_COMMUNITY_MEMBER_COUNT_TAGS = [
+    'og_membership_list',
+  ];
+
+  /**
+   * Cache tags relevant to the query of ::getPublishedAcademySolutionCount.
+   *
+   * @const string[]
+   *
+   * @see self::getPublishedAcademySolutionCount()
+   * @see self::getCacheTags()
+   */
+  private const array ACADEMY_SOLUTION_COUNT_TAGS = ['node_list:solution'];
+
   public function __construct(
     array $configuration,
     $plugin_id,
@@ -53,45 +122,44 @@ class IopeuCommunityMonitoring extends BlockBase implements ContainerFactoryPlug
   /**
    * {@inheritdoc}
    */
-  public function build(?array &$cacheTagsUsed = []): array {
-    $cacheTagsUsed = [];
+  public function build(): array {
     $rows = [];
     $build['table'] = ['#type' => 'table', '#rows' => &$rows];
 
     // Number of public and currently published solutions.
     $rows['non-archived-sol'] = [
       $this->t('Total number of non-archived interoperability Solutions on the Portal'),
-      $this->getPublicSolutionCount('published', $cacheTagsUsed),
+      $this->getPublicSolutionCount('published'),
     ];
     // Number of public archived solutions.
     $rows['archived-sol'] = [
       $this->t('Total number of archived interoperability Solutions on the Portal'),
-      $this->getPublicSolutionCount('archived', $cacheTagsUsed),
+      $this->getPublicSolutionCount('archived'),
     ];
     // Number of Interoperable Europe Solutions.
     $rows['interop-sol'] = [
       $this->t('Number of Interoperable Europe Solutions'),
-      $this->getInteroperableSolutionCount($cacheTagsUsed),
+      $this->getInteroperableSolutionCount(),
     ];
     // Portal Solutions that have been mentioned in assessment reports.
     $rows['sols-mentioned-in-report'] = [
       $this->t('Number of Portal Solutions that have been mentioned in an assessment'),
-      $this->getPublicPortalReportSolutionsCount($cacheTagsUsed),
+      $this->getPublicPortalReportSolutionsCount(),
     ];
     // Number of published assessment reports.
     $rows['published-reports'] = [
       $this->t('Number of published interoperability assessment reports'),
-      $this->getNumberOfPublishedReports($cacheTagsUsed),
+      $this->getPublishedReportCount(),
     ];
     // Number of IOPEU Community members.
     $rows['active-iopeu-members'] = [
       $this->t('Number of IOPEU Community members'),
-      $this->getActiveIopeuMemberCount($cacheTagsUsed),
+      $this->getActiveIopeuMemberCount(),
     ];
     // Number of eLearning courses published on the Portal.
     $rows['elearning-courses'] = [
       $this->t('Number of eLearning courses published on the portal'),
-      $this->getPublishedAcademySolutionCount($cacheTagsUsed),
+      $this->getPublishedAcademySolutionCount(),
     ];
 
     return $build;
@@ -101,10 +169,14 @@ class IopeuCommunityMonitoring extends BlockBase implements ContainerFactoryPlug
    * {@inheritdoc}
    */
   public function getCacheTags(): array {
-    $this->build($tags);
     return Cache::mergeTags(
       parent::getCacheTags(),
-      $tags,
+      static::SOLUTION_COUNT_TAGS,
+      static::INTEROPERABLE_SOLUTION_COUNT_TAGS,
+      static::SOLUTIONS_IN_REPORTS_COUNT_TAGS,
+      static::PUBLISHED_REPORT_COUNT_TAGS,
+      static::IOPEU_COMMUNITY_MEMBER_COUNT_TAGS,
+      static::ACADEMY_SOLUTION_COUNT_TAGS,
     );
   }
 
@@ -165,7 +237,7 @@ class IopeuCommunityMonitoring extends BlockBase implements ContainerFactoryPlug
    * @throws \TypeError
    *   If the collector collection doesn't exist.
    */
-  protected function getAssessmentCollectorId(): string {
+  protected function getAssessmentAssetCollectorId(): string {
     static $collectorId;
 
     if (!isset($collectorId)) {
@@ -185,16 +257,11 @@ class IopeuCommunityMonitoring extends BlockBase implements ContainerFactoryPlug
    *
    * @param string $workflowState
    *   The workflow state to count.
-   * @param array $cacheTagsUsed
-   *   Optional array to add the cache tags which affect the calculation. Passed
-   *   by reference.
    *
    * @return int
    *   Number of the public collections with the specified state.
    */
-  protected function getPublicSolutionCount(string $workflowState, array &$cacheTagsUsed = []): int {
-    $relevantCacheTags = ['node_list:solution'];
-    $cacheTagsUsed = Cache::mergeTags($cacheTagsUsed, $relevantCacheTags);
+  protected function getPublicSolutionCount(string $workflowState): int {
     $cid = static::CACHE_PREFIX . __FUNCTION__ . $workflowState;
     $cachedData = $this->cacheGet($cid);
     if ($cachedData) {
@@ -206,28 +273,20 @@ class IopeuCommunityMonitoring extends BlockBase implements ContainerFactoryPlug
       ->condition('type', 'solution')
       ->condition('status', 1)
       ->condition('field_state', $workflowState)
-      ->condition('og_audience', $this->getAssessmentCollectorId(), '<>')
+      ->condition('og_audience', $this->getAssessmentAssetCollectorId(), '<>')
       ->count()
       ->execute();
-    $this->cacheSet(cid: $cid, data: $count, tags: $relevantCacheTags);
+    $this->cacheSet(cid: $cid, data: $count, tags: static::SOLUTION_COUNT_TAGS);
     return $count;
   }
 
   /**
    * Returns the number of the public collections having the interoperable flag.
    *
-   * @param array $cacheTagsUsed
-   *   Optional array to add the relevant cache tags to, passed by reference.
-   *
    * @return int
    *   Number of the public collections having the interoperable flag.
    */
-  protected function getInteroperableSolutionCount(array &$cacheTagsUsed = []): int {
-    $relevantCacheTags = [
-      'flagging_list:interoperability',
-      'node_list:solution',
-    ];
-    $cacheTagsUsed = Cache::mergeTags($cacheTagsUsed, $relevantCacheTags);
+  protected function getInteroperableSolutionCount(): int {
     $cid = static::CACHE_PREFIX . __FUNCTION__;
     $cachedData = $this->cacheGet($cid);
     if ($cachedData) {
@@ -244,27 +303,17 @@ class IopeuCommunityMonitoring extends BlockBase implements ContainerFactoryPlug
       ->condition('nfd.status', 1);
 
     $count = (int) $query->countQuery()->execute()->fetchField();
-    $this->cacheSet(cid: $cid, data: $count, tags: $relevantCacheTags);
+    $this->cacheSet(cid: $cid, data: $count, tags: static::INTEROPERABLE_SOLUTION_COUNT_TAGS);
     return $count;
   }
 
   /**
    * Returns the number of the public collections having the interoperable flag.
    *
-   * @param array $cacheTagsUsed
-   *   Optional array to add the cache tags which affect the calculation. Passed
-   *   by reference.
-   *
    * @return int
    *   Number of the public collections having the interoperable flag.
    */
-  protected function getPublicPortalReportSolutionsCount(array &$cacheTagsUsed = []): int {
-    $relevantCacheTags = [
-      'paragraph_list:binding_requirement',
-      'assessment_list:report',
-      'node_list:solution',
-    ];
-    $cacheTagsUsed = Cache::mergeTags($cacheTagsUsed, $relevantCacheTags);
+  protected function getPublicPortalReportSolutionsCount(): int {
     $cid = static::CACHE_PREFIX . __FUNCTION__;
     $cachedData = $this->cacheGet($cid);
     if ($cachedData) {
@@ -285,28 +334,22 @@ class IopeuCommunityMonitoring extends BlockBase implements ContainerFactoryPlug
       // Count only published state.
       ->condition('s.field_state_value', 'published')
       // Exclude solutions connected to the assessment solution collector group.
-      ->condition('a.og_audience_target_id', $this->getAssessmentCollectorId(), '<>')
+      ->condition('a.og_audience_target_id', $this->getAssessmentAssetCollectorId(), '<>')
       // Only published assessment repo.
       ->condition('ad.status', 1);
 
     $count = (int) $this->database->select($query)->countQuery()->execute()->fetchField();
-    $this->cacheSet(cid: $cid, data: $count, tags: $relevantCacheTags);
+    $this->cacheSet(cid: $cid, data: $count, tags: static::SOLUTIONS_IN_REPORTS_COUNT_TAGS);
     return $count;
   }
 
   /**
    * Returns the number of published assessment reports.
    *
-   * @param array $cacheTagsUsed
-   *   Optional array to add the cache tags which affect the calculation. Passed
-   *   by reference.
-   *
    * @return int
    *   The number of published assessment reports.
    */
-  protected function getNumberOfPublishedReports(array &$cacheTagsUsed = []): int {
-    $relevantCacheTags = ['assessment_list:report'];
-    $cacheTagsUsed = Cache::mergeTags($cacheTagsUsed, $relevantCacheTags);
+  protected function getPublishedReportCount(): int {
     $cid = static::CACHE_PREFIX . __FUNCTION__;
     $cachedData = $this->cacheGet($cid);
     if ($cachedData) {
@@ -319,23 +362,17 @@ class IopeuCommunityMonitoring extends BlockBase implements ContainerFactoryPlug
       ->condition('status', 1)
       ->count()
       ->execute();
-    $this->cacheSet(cid: $cid, data: $count, tags: $relevantCacheTags);
+    $this->cacheSet(cid: $cid, data: $count, tags: static::PUBLISHED_REPORT_COUNT_TAGS);
     return $count;
   }
 
   /**
    * Returns the number of members in the community collection.
    *
-   * @param array $cacheTagsUsed
-   *   Optional array to add the cache tags which affect the calculation. Passed
-   *   by reference.
-   *
    * @return int
    *   The number of members in the community collection.
    */
-  protected function getActiveIopeuMemberCount(array &$cacheTagsUsed = []): int {
-    $relevantCacheTags = ['og_membership_list'];
-    $cacheTagsUsed = Cache::mergeTags($cacheTagsUsed, $relevantCacheTags);
+  protected function getActiveIopeuMemberCount(): int {
     $cid = static::CACHE_PREFIX . __FUNCTION__;
     $cachedData = $this->cacheGet($cid);
     if ($cachedData) {
@@ -348,23 +385,17 @@ class IopeuCommunityMonitoring extends BlockBase implements ContainerFactoryPlug
       ->condition('state', 'active')
       ->count()
       ->execute();
-    $this->cacheSet(cid: $cid, data: $count, tags: $relevantCacheTags);
+    $this->cacheSet(cid: $cid, data: $count, tags: static::IOPEU_COMMUNITY_MEMBER_COUNT_TAGS);
     return $count;
   }
 
   /**
    * Returns the number of the published solutions in the academy collection.
    *
-   * @param array $cacheTagsUsed
-   *   Optional array to add the cache tags which affect the calculation. Passed
-   *   by reference.
-   *
    * @return int
    *   The number of the published solutions in the academy collection.
    */
-  protected function getPublishedAcademySolutionCount(array &$cacheTagsUsed = []): int {
-    $relevantCacheTags = ['node_list:solution'];
-    $cacheTagsUsed = Cache::mergeTags($cacheTagsUsed, $relevantCacheTags);
+  protected function getPublishedAcademySolutionCount(): int {
     $cid = static::CACHE_PREFIX . __FUNCTION__;
     $cachedData = $this->cacheGet($cid);
     if ($cachedData) {
@@ -379,7 +410,7 @@ class IopeuCommunityMonitoring extends BlockBase implements ContainerFactoryPlug
       ->condition('og_audience', $this->getAcademyCollectionId())
       ->count()
       ->execute();
-    $this->cacheSet(cid: $cid, data: $count, tags: $relevantCacheTags);
+    $this->cacheSet(cid: $cid, data: $count, tags: static::ACADEMY_SOLUTION_COUNT_TAGS);
     return $count;
   }
 
