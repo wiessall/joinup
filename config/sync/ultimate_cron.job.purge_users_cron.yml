@@ -10,7 +10,7 @@ weight: 0
 module: purge_users
 callback: 'purge_users#cron'
 scheduler:
-  id: simple
+  id: crontab
   configuration:
     rules:
       - '0+@ 3 * * *'

@@ -10,7 +10,7 @@ weight: 0
 module: babel_tmgmt
 callback: 'babel_tmgmt#cron'
 scheduler:
-  id: simple
+  id: crontab
   configuration:
     rules:
       - '0+@ 4 * * *'

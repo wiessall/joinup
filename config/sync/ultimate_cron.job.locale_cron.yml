@@ -10,7 +10,7 @@ weight: 0
 module: locale
 callback: 'locale#cron'
 scheduler:
-  id: simple
+  id: crontab
   configuration:
     rules:
       - '0+@ 3 * * *'

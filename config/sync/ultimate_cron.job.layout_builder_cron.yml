@@ -10,7 +10,7 @@ weight: 0
 module: layout_builder
 callback: 'layout_builder#cron'
 scheduler:
-  id: simple
+  id: crontab
   configuration:
     rules:
       - '0+@ 2 * * *'

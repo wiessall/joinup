@@ -10,7 +10,7 @@ weight: 0
 module: eu_oss_vitality_index
 callback: 'eu_oss_vitality_index#cron'
 scheduler:
-  id: simple
+  id: crontab
   configuration:
     rules:
       - '0+@ 4 * * *'

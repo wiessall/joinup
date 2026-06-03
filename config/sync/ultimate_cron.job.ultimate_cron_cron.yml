@@ -8,7 +8,7 @@ weight: 0
 module: ultimate_cron
 callback: 'ultimate_cron#cron'
 scheduler:
-  id: simple
+  id: crontab
   configuration:
     rules:
       - '0+@ */2 * * *'

@@ -10,7 +10,7 @@ weight: 0
 module: cas
 callback: 'cas#cron'
 scheduler:
-  id: simple
+  id: crontab
   configuration:
     rules:
       - '0+@ */2 * * *'
