@@ -101,6 +101,7 @@ module:
   isa2_analytics: 0
   joinup_api: 0
   joinup_assessment: 0
+  joinup_badge: 0
   joinup_bookmark: 0
   joinup_bundle_class: 0
   joinup_collection: 0
@@ -195,7 +196,6 @@ module:
   oauth_client: 0
   oe_authentication: 0
   oe_bootstrap_theme_helper: 0
-  oe_dashboard_agent: 0
   oe_newsroom_newsletter: 0
   oe_webtools: 0
   oe_webtools_analytics: 0

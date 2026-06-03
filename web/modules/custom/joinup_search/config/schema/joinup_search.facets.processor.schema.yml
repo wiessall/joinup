@@ -27,6 +27,14 @@ plugin.plugin_configuration.facets_processor.joinup_search_content_type_fixed_or
       type: string
       label: 'Sort order'
 
+plugin.plugin_configuration.facets_processor.oss_display_value_widget_order:
+  type: mapping
+  label: 'Sort oss sources by display value'
+  mapping:
+    sort:
+      type: string
+      label: 'Sort order'
+
 plugin.plugin_configuration.facets_processor.flag_entity_bundle_label:
   type: mapping
   label: 'Flag entity bundle label'

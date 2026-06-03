@@ -157,6 +157,7 @@ Feature: Assessment Report Entity Management
 
     When I press "Save as draft"
     Then I should see the success message containing "New assessment Test Assessment Report 2025 has been created."
+    And I should see the link "Interoperability assessments space"
     And I should see the heading "Test Assessment Report 2025"
     And I should see the following lines of text:
       # General information

@@ -43,7 +43,7 @@ Feature: Collection RSS feed.
     And the following "custom_page" content:
       | title             | body                                            | author | created          | collection        |
       | Indigo variations | The four major tones of indigo are listed here. | forest | 2017-10-15 18:30 | Indigo Monkey     |
-      | List of devices   | Available remote electrical devices.            |        | 2019-02-08 09:00 | Remote Electrical |
+      | List of devices   | Available remote electrical devices.            | forest | 2019-02-08 09:00 | Remote Electrical |
 
     When I am an anonymous user
     And I go to the homepage of the "Indigo Monkey" collection

@@ -47,7 +47,7 @@
         "drupal/entity_print": "^2.15",
         "drupal/entityqueue": "^1.2",
         "drupal/error_page": "^2.1@beta",
-        "drupal/facets": "3.0.2",
+        "drupal/facets": "^3.0",
         "drupal/facets_block": "^2.0@beta",
         "drupal/facets_date_range": "^1.0@beta",
         "drupal/field_delimiter": "^2.0",
@@ -147,7 +147,7 @@
         "mnsami/composer-custom-directory-installer": "^2.0",
         "openeuropa/composer-artifacts": "^1.0",
         "openeuropa/oe_authentication": "^1.20",
-        "openeuropa/oe_bootstrap_theme": "1.34.0",
+        "openeuropa/oe_bootstrap_theme": "^1.0",
         "openeuropa/oe_dashboard_agent": "^1.0",
         "openeuropa/oe_webtools": "^1.40",
         "psr/http-factory-implementation": "^1.0",
@@ -323,17 +323,11 @@
         },
         "patches": {
             "drupal/babel": {
-                "OG menu link translation @see https://drupal.org/i/3585681 and https://drupal.org/i/3587828": "resources/patch/php/drupal/babel/3587828-mr88-commit5f52606c.diff"
-            },
-            "drupal/better_exposed_filters": {
-                "Single on/off checkbox option not working as expected @see https://www.drupal.org/i/3569639": "resources/patch/php/drupal/better_exposed_filters/3569639-mr230.diff"
+                "Error in TranslationType\\MenuLinkContent when called from tmgmt BabelSource @see https://www.drupal.org/i/3592919": "resources/patch/php/drupal/babel/3592919.mr89-commit024dc285.diff"
             },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff",
                 "Weekly view doesn't show first week of new year @see https://www.drupal.org/i/3484325": "resources/patch/php/drupal/calendar_view/3484325.comment16152620.patch"
-            },
-            "drupal/config_inspector": {
-                "Missing schema on nested elements @see https://www.drupal.org/i/3548299": "resources/patch/php/drupal/config_inspector/3548299.diff"
             },
             "drupal/core": {
                 "Allow image style to be selected in text editor @see https://www.drupal.org/i/2061377": "resources/patch/php/drupal/core/2061377.mr10767-note521506.diff",
@@ -365,15 +359,11 @@
                 "REST views: Add pagination information and total count result @see https://www.drupal.org/i/2982729": "resources/patch/php/drupal/core/2982729-mr6558.commit290eabb1.diff",
                 "Slow admin/config page load. @see https://www.drupal.org/i/3336621": "resources/patch/php/drupal/core/3336621.mr15137-commit7b9c8c6a.patch",
                 "Exposed filters get values from url when ajax is on @see https://www.drupal.org/i/3121172": "resources/patch/php/drupal/core/3121172-mr10230-commit41ded0c5.diff",
-                "[site:url] token omits trailing slash in other languages @see https://www.drupal.org/i/2163913": "resources/patch/php/drupal/core/2163913.mr15511.commit58a97130.diff",
-                "Fatal error when saving translation configuration @see https://www.drupal.org/i/3549469": "resources/patch/php/drupal/core/3549469.diff",
-                "Translations of nodes with comment settings field set to non-translatable returns EntityUntranslatableFieldsConstraint @see https://www.drupal.org/i/3015675": "resources/patch/php/drupal/core/3015675-83bb966c.diff"
+                "Follow-up for #2663410: calling TypedConfigManager::getDefinition() causes cache pollution": "resources/patch/php/drupal/core/3400181.mr15886-commit53fc6f75.diff",
+                "[site:url] token omits trailing slash in other languages @see https://www.drupal.org/i/2163913": "resources/patch/php/drupal/core/2163913.mr15511.commit58a97130.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
-            },
-            "drupal/drupal-extension": {
-                "Recognise bundle-scoped fields @see https://github.com/jhedstrom/drupalextension/pull/851": "resources/patch/php/drupal/drupal-extension/851.diff"
             },
             "drupal/dynamic_entity_reference": {
                 "Undefined array key on dependency removal @see https://www.drupal.org/i/3099176": "resources/patch/php/drupal/dynamic_entity_reference/3099176-3.x-16.diff",
@@ -401,9 +391,8 @@
                 "Restrict the dynamic fields in bundles @see https://www.drupal.org/i/3468563": "resources/patch/php/drupal/entity_print/3468563.mr66-note523124.diff"
             },
             "drupal/facets": {
-                "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/i/2873480": "resources/patch/php/drupal/facets/2873480.mr128.note647733.diff",
-                "Add 0 option in 'Soft limit' and apply soft limit to facet root li tags and add. @see https://www.drupal.org/i/3208580 and https://www.drupal.org/i/3307082": "resources/patch/php/drupal/facets/3208580.mr126.commit39be3797-and-3307082.mr127-commitcc678f86.patch",
-                "Entity Reference convert Entity ID to Label issue @see https://www.drupal.org/i/3031821": "resources/patch/php/drupal/facets/3031821.mr357commit4e49bf3c.diff"
+                "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/i/2873480": "resources/patch/php/drupal/facets/2873480.mr128.note886300.diff",
+                "Add 0 option in 'Soft limit'. @see https://www.drupal.org/i/3307082": "resources/patch/php/drupal/facets/3307082.mr127.note901669.diff"
             },
             "drupal/field_delimiter": {
                 "Doesn't work in layout builder. @see https://www.drupal.org/i/3099580": "resources/patch/php/drupal/field_delimiter/3099580.patch"
@@ -413,8 +402,7 @@
             },
             "drupal/field_group": {
                 "Links from validation message don't point to proper fields under horizontal tabs @see https://www.drupal.org/i/3362124": "resources/patch/php/drupal/field_group/3362124-mr110-commit_6462709d7f.diff",
-                "Activate tab by link anchor is broken @see https://www.drupal.org/project/field_group/issues/3226844": "resources/patch/php/drupal/field_group/3226844.diff",
-                "Emptiness check in field_group_remove_empty_form_groups() does not account for empty containers @see https://www.drupal.org/i/3069365": "resources/patch/php/drupal/field_group/3069365-mr109.commit044666d7.diff"
+                "Activate tab by link anchor is broken @see https://www.drupal.org/project/field_group/issues/3226844": "resources/patch/php/drupal/field_group/3226844.diff"
             },
             "drupal/flag": {
                 "TypeError: Argument 1 passed to FlagCount::count() must implement interface @see https://www.drupal.org/project/flag/issues/3168014": "resources/patch/php/drupal/flag/3168014.diff",
@@ -442,14 +430,13 @@
                 "Add missing plural formulae @see https://www.drupal.org/i/3312406": "resources/patch/php/drupal/l10n_pconfig/3312406.mr4.commit1a0a53cb.diff"
             },
             "drupal/linkit": {
-                "Link shown after the autocomplete selection is the bare node/xxx link, not the alias @see https://www.drupal.org/node/2877535": "resources/patch/php/drupal/linkit/2877535.diff",
+                "Link shown after the autocomplete selection is the bare node/xxx link, not the alias @see https://www.drupal.org/node/2877535": "resources/patch/php/drupal/linkit/linkit-2877535-62-revised-7.0.15.patch",
                 "Uri processing fails for websites running in a subdirectory @see https://www.drupal.org/i/3472501": "resources/patch/php/drupal/linkit/3472501.patch"
             },
             "drupal/layout_paragraphs": {
                 "Utilize layout preview mode https://drupal.org/i/3392735": "resources/patch/php/drupal/layout_paragraphs/layout_paragraphs-utilize_layout_preview-3392735-5--fix-only.patch",
                 "Allow to drag and drop nested paragraphs @see https://www.drupal.org/project/layout_paragraphs/issues/3401176": "resources/patch/php/drupal/layout_paragraphs/3401176.patch",
-                "Integrity constraint violation @see https://www.drupal.org/project/layout_paragraphs/issues/3528058": "resources/patch/php/drupal/layout_paragraphs/3528058.patch",
-                "Prevent moving components on Translate edit page @see https://drupal.org/i/3540040": "resources/patch/php/drupal/layout_paragraphs/3540040-mr234-commit97ffc2d1.diff"
+                "Integrity constraint violation @see https://www.drupal.org/project/layout_paragraphs/issues/3528058": "resources/patch/php/drupal/layout_paragraphs/3528058.patch"
             },
             "drupal/memcache": {
                 "Use Drupal core time service with fallback @see https://drupal.org/i/2999614": "resources/patch/php/drupal/memcache/2999614-mr41-20f8103bd2.diff",
@@ -491,8 +478,7 @@
             },
             "drupal/search_api": {
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199-42e0e284.diff",
-                "View recalculated with wrong data from cache @see https://drupal.org/i/3327645": "resources/patch/php/drupal/search_api/3327645-d510c98e.diff",
-                "Error when trying to add bulk operations field to a Search API view listing translated content @see https://drupal.org/i/3490247": "resources/patch/php/drupal/search_api/3490247-mr320-commit8122a83a.diff"
+                "View recalculated with wrong data from cache @see https://drupal.org/i/3327645": "resources/patch/php/drupal/search_api/3327645-d510c98e.diff"
             },
             "drupal/search_api_spellcheck": {
                 "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372": "resources/patch/php/drupal/search_api_spellcheck/3280372.patch"

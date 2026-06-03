@@ -1,4 +1,7 @@
 /**
+ * @param Drupal
+ * @param once
+ * @param drupalSettings
  * @file
  * Toggles text inside the "See more" buttons.
  */

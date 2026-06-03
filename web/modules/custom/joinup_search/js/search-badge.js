@@ -1,4 +1,6 @@
 /**
+ * @param Drupal
+ * @param once
  * @file
  * JavaScript behaviors for the global search bar.
  */
