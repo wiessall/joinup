@@ -22,7 +22,7 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class JoinupOssCatalogueHooks {
 
-  protected const int OSS_REMOTE_IMAGE_CACHE_REFRESH_INTERVAL = 24 * 60 * 60;
+  protected const int OSS_REMOTE_IMAGE_CACHE_REFRESH_INTERVAL = 4 * 60 * 60;
 
   protected const string LAST_REFRESH_TIME_KEY = 'joinup_oss_catalogue.imagecache.last_refresh';
 
