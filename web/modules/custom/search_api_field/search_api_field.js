@@ -1,4 +1,8 @@
 /**
+ * @param $
+ * @param Drupal
+ * @param drupalSettings
+ * @param once
  * @file
  * Attaches the behaviors for the Search API field module.
  */
@@ -212,7 +216,7 @@
    *
    * This handler is used for both fields and 'extra fields' rows.
    *
-   * @constructor
+   * @class
    *
    * @param {HTMLTableRowElement} row
    *   The row DOM element.
@@ -239,7 +243,7 @@
    *
    * This handler is used for both fields and 'extra fields' rows.
    *
-   * @constructor
+   * @class
    *
    * @param {HTMLTableRowElement} row
    *   The row DOM element.

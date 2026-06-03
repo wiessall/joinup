@@ -1,4 +1,6 @@
 /**
+ * @param Drupal
+ * @param once
  * @file
  * Highlight the correct target for tour's first balloon considering user and
  * screen width.

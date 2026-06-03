@@ -1,0 +1,46 @@
+
+diff --git a/modules/babel_menu_link_content/src/Plugin/Babel/TranslationType/MenuLinkContent.php b/modules/babel_menu_link_content/src/Plugin/Babel/TranslationType/MenuLinkContent.php
+index 1e1c9924bcc9c7217a7eda0cea1cb71baac3bf4c..81f5d52671508de41fddf08bfabed206d99f8712 100644
+--- a/modules/babel_menu_link_content/src/Plugin/Babel/TranslationType/MenuLinkContent.php
++++ b/modules/babel_menu_link_content/src/Plugin/Babel/TranslationType/MenuLinkContent.php
+@@ -183,7 +183,7 @@ class MenuLinkContent extends TranslationTypePluginBase implements PluginFormInt
+     $this->logger->warning(
+       $message . ' The automatically created translation of @label @type_label_singular does not validate after @property value was changed to "@value".',
+         [
+-          '@label' => $link->getLabel(),
++          '@label' => $link->label(),
+           '@type_label_singular' => $link->getEntityType()->getSingularLabel(),
+           '@property' => $fieldName,
+           '@value' => $translation,
+diff --git a/modules/babel_menu_link_content/tests/src/Kernel/Plugin/Babel/TranslationType/MenuLinkContentTest.php b/modules/babel_menu_link_content/tests/src/Kernel/Plugin/Babel/TranslationType/MenuLinkContentTest.php
+index 0ff58f38f8522665b78c90377785f503f41c52af..2495ce8406bfad9995e163dd48356e550348b858 100644
+--- a/modules/babel_menu_link_content/tests/src/Kernel/Plugin/Babel/TranslationType/MenuLinkContentTest.php
++++ b/modules/babel_menu_link_content/tests/src/Kernel/Plugin/Babel/TranslationType/MenuLinkContentTest.php
+@@ -179,6 +179,27 @@ class MenuLinkContentTest extends TranslationTypePluginTestBase {
+     $this->assertTrue($storage->loadUnchanged($link->id())->hasTranslation($this->language->getId()));
+   }
+ 
++  /**
++   * Tests that a validation failure triggers the logger instead of a crash.
++   */
++  public function testUpdateTranslationValidationFailure(): void {
++    $link = $this->createRandomMenuLink('Valid Title', 'Valid Description');
++    $titleString = $this->plugin->getStrings(static::LANGCODE)['test:1:title:0'];
++    $invalidTitle = str_repeat('A', 256);
++
++    $this->plugin->updateTranslation(
++      $titleString,
++      'test:1:title:0',
++      static::LANGCODE,
++      $invalidTitle
++    );
++
++    // Assert that the translation was NOT saved due to validation failure.
++    $storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
++    $linkUnchanged = $storage->loadUnchanged($link->id());
++    $this->assertFalse($linkUnchanged->hasTranslation(static::LANGCODE));
++  }
++
+   /**
+    * Creates a random menu link.
+    *
