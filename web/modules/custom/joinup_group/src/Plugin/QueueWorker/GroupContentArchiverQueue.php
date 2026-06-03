@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_solution\Plugin\QueueWorker;
+namespace Drupal\joinup_group\Plugin\QueueWorker;
 
 use Drupal\Component\Utility\Variable;
 use Drupal\Core\Entity\EntityInterface;
@@ -19,10 +19,9 @@ use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_group\Transition;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\joinup_release\Entity\ReleaseInterface;
-use Drupal\joinup_solution\Entity\SolutionInterface;
-use Drupal\joinup_solution\Transition;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\joinup_workflow\WorkflowHelperInterface;
 use Drupal\joinup_workflow\WorkflowStateChangeMessageTrait;
@@ -30,14 +29,14 @@ use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Archives entities related to an archived solution.
+ * Archives entities related to an archived group.
  */
 #[QueueWorker(
-  id: 'solution_archive_related_content',
-  title: new TranslatableMarkup("Archive solution's related content"),
+  id: 'group_archive_related_content',
+  title: new TranslatableMarkup("Archive group's related content"),
   cron: ['time' => 60],
 )]
-class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerFactoryPluginInterface {
+class GroupContentArchiverQueue extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
   use StringTranslationTrait;
   use WorkflowStateChangeMessageTrait;
@@ -75,7 +74,7 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
       $plugin_id,
       $plugin_definition,
       $container->get('entity_type.manager'),
-      $container->get('logger.channel.solution'),
+      $container->get('logger.channel.joinup_group'),
       $container->get('account_switcher'),
       $container->get('joinup_workflow.workflow_helper')
     );
@@ -93,13 +92,13 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
       return;
     }
 
-    if (!$solution = $this->getParentSolutionFromItem($data)) {
+    if (!$group = $this->getParentGroupFromItem($data)) {
       return;
     }
 
     $this->accountSwitcher->switchTo($actor);
     try {
-      $this->performOperation($solution, $data['transition']);
+      $this->performOperation($group, $data['transition']);
     }
     finally {
       $this->accountSwitcher->switchBack();
@@ -107,16 +106,16 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
   }
 
   /**
-   * Returns group content of the solution which should be changed.
+   * Returns group content which should be archived or unarchived.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $solution
-   *   The solution.
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
+   *   The group.
    *
    * @return array<\Drupal\Core\Entity\ContentEntityInterface>
-   *   Array of entity instances to change belonging to the provided solution.
+   *   Array of entity instances belonging to the group that should be changed.
    */
-  protected function getSolutionGroupContent(GroupInterface $solution): array {
-    $idsPerTypeAndBundle = $solution->getGroupContentIds();
+  protected function getGroupContent(GroupInterface $group): array {
+    $idsPerTypeAndBundle = $group->getDirectGroupContentIds();
     $entities = [];
     foreach ($idsPerTypeAndBundle as $entityType => $idsPerBundle) {
       $entityIds = array_merge(...array_values($idsPerBundle));
@@ -126,10 +125,14 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
       );
     }
 
-    // Filter out content which shouldn't be changed.
+    // Sub-groups are never archived here; each group manages its own
+    // sub-content independently.
     return array_filter(
       $entities,
       function (EntityInterface $entity): bool {
+        if ($entity instanceof GroupInterface) {
+          return FALSE;
+        }
         foreach (static::ENTITY_CLASSES_TO_ARCHIVE as $class) {
           if (is_a($entity, $class)) {
             return TRUE;
@@ -141,19 +144,19 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
   }
 
   /**
-   * Performs the archive transition on the sub content of the solution.
+   * Performs the archive or unarchive transition on the group's sub-content.
    *
-   * @param \Drupal\joinup_solution\Entity\SolutionInterface $solution
-   *   The solution whose sub-contents we want to archive.
-   * @param \Drupal\joinup_solution\Transition $transition
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
+   *   The group whose sub-content should be (un)archived.
+   * @param \Drupal\joinup_group\Transition $transition
    *   The transition to apply.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  protected function performOperation(SolutionInterface $solution, Transition $transition): void {
-    foreach ($this->getSolutionGroupContent($solution) as $entity) {
+  protected function performOperation(GroupInterface $group, Transition $transition): void {
+    foreach ($this->getGroupContent($group) as $entity) {
       if (!$entity instanceof ArchivableEntityInterface) {
         // Continue silently.
         continue;
@@ -185,7 +188,7 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
       try {
         $newState = match ($transition) {
           Transition::Archive => 'archived',
-          Transition::Unarchive =>'published',
+          Transition::Unarchive => 'published',
         };
         $revisionLogMessage = $this->workflowStateChangeRevisionLogMessage(
           $entity,
@@ -195,7 +198,6 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
           ])
         );
         match ($transition) {
-          // '@plugin-id' queue
           Transition::Archive => $this->workflowHelper->archiveEntity($entity, $revisionLogMessage),
           Transition::Unarchive => $this->workflowHelper->unarchiveEntity($entity, $revisionLogMessage),
         };
@@ -206,7 +208,7 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
     }
 
     if ($transition === Transition::Archive) {
-      joinup_notification_dispatch_notification('update', NotificationEvents::GROUP_ENTITY_ARCHIVE_COMPLETED, $solution);
+      joinup_notification_dispatch_notification('update', NotificationEvents::GROUP_ENTITY_ARCHIVE_COMPLETED, $group);
     }
   }
 
@@ -220,15 +222,14 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
    *   Returns FALSE if the queue item is invalid, or TRUE if:
    *   - The item is an array.
    *   - It has a "user" key with integer or string value.
-   *   - It has a "solution" key with string value.
-   *   - It has a "transition" key with \Drupal\joinup_solution\Transition
-   *   value.
+   *   - It has a "group" key with string value.
+   *   - It has a "transition" key with \Drupal\joinup_group\Transition value.
    */
   protected function queueItemIsValid(mixed $data): bool {
     if (
       !is_array($data) ||
       !isset($data['user']) ||
-      !isset($data['solution']) ||
+      !isset($data['group']) ||
       !isset($data['transition'])
     ) {
       $this->logger->error(
@@ -240,15 +241,15 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
 
     [
       'user' => $uid,
-      'solution' => $solutionId,
+      'group' => $groupId,
       'transition' => $transition,
     ] = $data;
     if (
       (!is_int($uid) && !is_string($uid)) ||
-      (!is_string($solutionId))
+      (!is_string($groupId))
     ) {
       $this->logger->error(
-        "Queue item processing failed: user ID and solution ID must be string. Got '%item'",
+        "Queue item processing failed: user ID and group ID must be string. Got '%item'",
         ['%item' => Variable::export($data)],
       );
       return FALSE;
@@ -266,48 +267,45 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
   }
 
   /**
-   * Instantiates the solution instance from the provided queue item.
+   * Loads the group entity from the provided queue item.
    *
    * @param array $data
-   *   The queue item array with string value at the "solution" key.
+   *   The queue item array with string value at the "group" key.
    *
-   * @return \Drupal\joinup_solution\Entity\SolutionInterface|null
-   *   The solution entity if it exists.
+   * @return \Drupal\joinup_group\Entity\GroupInterface|null
+   *   The group entity if it exists, NULL otherwise.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  protected function getParentSolutionFromItem(array $data): ?SolutionInterface {
-    $context = ['%solutionId' => $data['solution']];
-    $solution = $this->entityTypeManager->getStorage('node')->load($data['solution']);
-    if (is_null($solution)) {
-      // Log and skip processing.
+  protected function getParentGroupFromItem(array $data): ?GroupInterface {
+    $context = ['%groupId' => $data['group']];
+    $group = $this->entityTypeManager->getStorage('node')->load($data['group']);
+    if (is_null($group)) {
       $this->logger->warning(
-        "Cannot archive entities of item with ID '%id': solution does not exist anymore.",
+        "Cannot archive entities of item with ID '%groupId': group does not exist anymore.",
         $context,
       );
       return NULL;
     }
-    if (!$solution instanceof SolutionInterface) {
-      // Log and skip processing.
+    if (!$group instanceof GroupInterface) {
       $this->logger->error(
-        "Cannot archive entities of item with ID '%id': item is not a solution.",
+        "Cannot archive entities of item with ID '%groupId': item is not a group.",
         $context,
       );
       return NULL;
     }
-    return $solution;
+    return $group;
   }
 
   /**
-   * Instantiates the solution instance from the provided queue item.
+   * Loads the actor user from the provided queue item.
    *
    * @param array $data
    *   The queue item array with string or integer value at the "user" key.
    *
    * @return \Drupal\user\UserInterface|null
-   *   The user account which will be used as the actor of the state transition,
-   *   or NULL if it does not exist anymore.
+   *   The user account to use as actor, or NULL if it no longer exists.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -315,11 +313,10 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
   protected function getActorFromItem(array $data): ?UserInterface {
     $actor = $this->entityTypeManager->getStorage('user')->load($data['user']);
     if (!$actor instanceof UserInterface) {
-      // Log and skip processing.
       $this->logger->error(
-        "Cannot archive entities of item with ID '%solutionId': actor account with ID '%actor' is missing.",
+        "Cannot archive entities of item with ID '%groupId': actor account with ID '%actor' is missing.",
         [
-          '%solutionId' => $data['solution'],
+          '%groupId' => $data['group'],
           '%actor' => $data['user'],
         ],
       );
