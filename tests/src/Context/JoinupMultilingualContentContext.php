@@ -82,6 +82,30 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
   }
 
   /**
+   * Adds configuration language overrides.
+   *
+   * Sets a translated value at a specific path of a configuration object for
+   * a given language. This is the mechanism Drupal uses to translate config
+   * strings such as view titles or block labels.
+   *
+   * Example:
+   * @code
+   * Given the following config translations:
+   *   | config                         | path                                  | language | translation           |
+   *   | views.view.assessments_reports | display.default.display_options.title | fr       | Rapports d'évaluation |
+   * @endcode
+   */
+  #[Given('the following config translations:')]
+  public function addConfigTranslations(TableNode $table): void {
+    $languageManager = \Drupal::languageManager();
+    foreach ($table->getHash() as $row) {
+      $override = $languageManager->getLanguageConfigOverride($row['language'], $row['config']);
+      $override->set($row['path'], $row['translation'])->save();
+    }
+    \Drupal::service('config.factory')->reset();
+  }
+
+  /**
    * Adds entity translations to existing entities.
    *
    * Looks up each entity by its label, then creates or updates an

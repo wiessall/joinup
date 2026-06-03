@@ -57,6 +57,34 @@ Feature: Views display translated entities correctly.
     And I click "Glossary"
     Then I should see the text "Alphabète"
 
+  # covers assessments_reports view.
+  Scenario: Assessment reports page lists translated assessment entities and falls back to the original language.
+    Given the assessments collection exists
+    And public_organisation assessments:
+      | name | organisation_type          |
+      | ACME | european_union_institution |
+    And report assessments:
+      | name              | provider | state     |
+      | Translated Report | ACME     | published |
+      | English Only      | ACME     | published |
+    And the following report entity translations:
+      | source            | language | name            |
+      | Translated Report | fr       | Rapport traduit |
+    And the following config translations:
+      | config                         | path                                  | language | translation           |
+      | views.view.assessments_reports | display.default.display_options.title | fr       | Rapports d'évaluation |
+    When I am an anonymous user
+    And I visit "collection/assessments/report/repository"
+    Then I should see the heading "Assessment reports"
+    And I should see the text "Translated Report"
+    And I should see the text "English Only"
+    When I click "French"
+    Then I should see the heading "Rapports d'évaluation"
+    And I should see the text "Rapport traduit"
+    # Reports without a translation fall back to the original language.
+    And I should see the text "English Only"
+    And I should not see the text "Translated Report"
+
   # covers latest_news view.
   # covers in_the_spotlight view.
   Scenario: News content is prepared for the latest news and in the spotlight blocks.
