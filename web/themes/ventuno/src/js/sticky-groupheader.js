@@ -1,4 +1,8 @@
 /**
+ * @param Drupal
+ * @param displace
+ * @param once
+ * @param $
  * @file
  * Makes group header sticky/fixed when scrolling.
  *

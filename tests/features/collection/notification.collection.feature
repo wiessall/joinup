@@ -30,9 +30,9 @@ Feature: Notification test for the collection transitions.
       | NC to delete           | published        | No one cares | No one cares. | NC for all |
       | NC to delete by mod    | published        | No one cares | No one cares. | NC for all |
     Given the following "solution" content:
-      | title        | collection    |
-      | NC Solution1 | NC to archive |
-      | NC Solution2 | NC to archive |
+      | title        | collection    | state    |
+      | NC Solution1 | NC to archive | archived |
+      | NC Solution2 | NC to archive | archived |
     And the following solution user memberships:
       | solution     | user      | roles |
       | NC Solution1 | NCS owner | owner |

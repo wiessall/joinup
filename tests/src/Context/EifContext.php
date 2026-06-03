@@ -172,20 +172,6 @@ class EifContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that there is an EIF perspective entity associated to the solution.
-   *
-   * @param string $solution
-   *   The solution label.
-   */
-  #[Given('there should be an EIF perspective associated with the :solution solution')]
-  public function assertSolutionWithPerspective(string $solution): void {
-    $solution = $this->getEntityByLabel('node', $solution, 'solution');
-    if (empty(\Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($solution, 'eif_perspective'))) {
-      throw new \Exception('No perspective was found for the solution');
-    }
-  }
-
-  /**
    * Deletes the EIF perspective of a solution.
    *
    * @param string $solution_label

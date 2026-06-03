@@ -1,4 +1,7 @@
 /**
+ * @param Drupal
+ * @param once
+ * @param $
  * @file
  * Modifies non-infinite Slick carousels with variable width enabled.
  */

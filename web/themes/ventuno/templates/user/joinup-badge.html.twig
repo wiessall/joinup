@@ -1,0 +1,25 @@
+{#
+/**
+ * @file
+ * Ventuno implementation of user badge.
+ *
+ * Available variables:
+ * - badge_type: The badge flag identifier.
+ * - label: The human-readable badge name.
+ * - description: The tooltip description for this badge.
+ * - icon: The icon ID (e.g., "award", "check-circle"). Can be used by themes to
+ *   identify an icon inside a sprite.
+ * - attributes: HTML attributes for the containing element.
+ *   theme's preprocess).
+ *
+ * @ingroup themeable
+ */
+#}
+<span{{ attributes.addClass('user-badge').addClass("user-badge--#{badge_type}") }} title="{{ description }}">
+  {% if icon %}
+    <svg class="bi icon--s" aria-hidden="true" focusable="false">
+      <use xlink:href="{{ bcl_icon_path }}#{{ icon }}"></use>
+    </svg>
+  {% endif %}
+  <span class="joinup-badge__label visually-hidden">{{ label }}</span>
+</span>

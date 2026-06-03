@@ -557,6 +557,11 @@ user--group-header:
     theme:
       assets/css/user--group-header.min.css: { minified: true }
 
+user-badge:
+  css:
+    theme:
+      assets/css/user-badge.min.css: { minified: true }
+
 layout-paragraphs--builder:
   css:
     theme:
