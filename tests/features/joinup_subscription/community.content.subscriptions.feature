@@ -48,9 +48,9 @@ Feature: Subscribing to community content in collections and solutions
       | Effective potential | Schwarzschild metric  | Black hole imaging |                | junfukue | 2019-11-28T11:12:13 | 2019-11-28T11:12:13 |          |
       | Deflected rays      | Marginally trapped    |                    | Null geodesics | junfukue | 2019-12-05T12:00:00 | 2019-12-15T12:00:00 |          |
     And the following "news" content:
-      | title             | field_paragraphs_body      | collection         | solution              | state     | author | abstract |
-      | The periastron    | Jacobian elliptic integral | Black hole imaging |                       | published | bisera |          |
-      | Newtonian context | Projecting ellipses        |                    | Bolometric appearance | archived  | hristo |          |
+      | title             | field_paragraphs_body      | collection         | solution              | state     | abstract |
+      | The periastron    | Jacobian elliptic integral | Black hole imaging |                       | published |          |
+      | Newtonian context | Projecting ellipses        |                    | Bolometric appearance | archived  |          |
 
     # The group content digest should contain the content posted in the
     # collection and the solution.
