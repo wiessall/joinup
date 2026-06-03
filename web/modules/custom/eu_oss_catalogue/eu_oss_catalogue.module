@@ -160,7 +160,7 @@ function eu_oss_catalogue_theme(): array {
  */
 function eu_oss_catalogue_cron(): void {
   $lastCron = \Drupal::state()->get('eu_oss_catalogue.last_check', 0);
-  $cronFrequency = \Drupal::config('eu_oss_catalogue.settings')->get('cron_max_runs_per_day');
+  $cronFrequency = \Drupal::config('eu_oss_catalogue.settings')->get('cron_max_runs_per_day') ?: 1;
   $requestTime = \Drupal::time()->getRequestTime();
 
   if ($cronFrequency < 1 || ($requestTime - $lastCron) < (86400 / $cronFrequency)) {
