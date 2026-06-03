@@ -614,7 +614,6 @@ function joinup_user_user_presave(UserInterface $account): void {
  */
 function joinup_user_user_delete(UserInterface $account): void {
   \Drupal::getContainer()->get('joinup_user.deleted')->onUserDelete($account);
-  \Drupal::getContainer()->get('Drupal\joinup_badge\CertificateService')->deleteUserCertificates($account);
 }
 
 /**
@@ -635,7 +634,7 @@ function joinup_user_user_access(UserInterface $account): AccessResultInterface 
 }
 
 /**
- * Implements hook_entity_view().
+ * Implements hoyesok_entity_view().
  */
 function joinup_user_entity_view(array &$build, EntityInterface $entity, $view_mode, $langcode): void {
   if ($entity instanceof UserInterface && $view_mode->getMode() === 'group_header') {
@@ -644,11 +643,4 @@ function joinup_user_entity_view(array &$build, EntityInterface $entity, $view_m
       unset($build['blocked_reason']);
     }
   }
-}
-
-/**
- * Implements hook_entity_update().
- */
-function joinup_user_user_update(UserInterface $user): void {
-  \Drupal::getContainer()->get('Drupal\joinup_badge\CertificateService')->updateUserCertificatesStatus($user);
 }

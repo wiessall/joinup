@@ -44,7 +44,6 @@ Feature: User certificates
     And I attach the file "text.pdf" to "files[certificates_form_0_certificate_0]"
     And I press "Create certificate"
     And I press "Save"
-    Then break
     Then I should see the success message "The changes have been saved."
     And I go to the edit form of the "Sara the User" user
     Then I should see the link "Archived IOPEU Solution"
