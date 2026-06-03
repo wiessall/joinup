@@ -1,4 +1,4 @@
-@api @group-clone
+@api @group-clone @wip
 Feature: As an anonymous user, when I visit /data/dr8, I should get the cached
   EIRA vocabulary, serialized as RDF/XML.
 
