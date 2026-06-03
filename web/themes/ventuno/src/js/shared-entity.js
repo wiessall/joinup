@@ -1,4 +1,6 @@
 /**
+ * @param Drupal
+ * @param drupalSettings
  * @file
  * Theme override for Drupal.theme.sharedContentCue.
  *
