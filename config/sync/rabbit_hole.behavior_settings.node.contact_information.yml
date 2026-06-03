@@ -1,0 +1,13 @@
+uuid: f708bc3f-d0db-4310-9f2c-55838b31916b
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.contact_information
+id: node.contact_information
+targetEntityType: node
+bundle: contact_information
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }
