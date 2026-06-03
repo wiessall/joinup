@@ -41,6 +41,10 @@
 {% set _indicators = indicators|default([]) %}
 {% set _certificate_file = extra_data['certificate']['file']  %}
 {% set _certificate_logo = extra_data['certificate']['logo']  %}
+{% if _certificate_file is not empty %}
+    {% set _url = _certificate_file %}
+{% endif %}
+
 
 {{ attach_library('ventuno/tile') }}
 
@@ -74,9 +78,7 @@
   <article{{ _attributes.addClass(_classes) }}>
     {{- _title_prefix -}}
     {{- _title_suffix -}}
-    {% if  _certificate_file is empty %}
-       <a class="tile__link position-absolute top-0 end-0 bottom-0 start-0" href="{{ _url }}" title="{{ _label|render|striptags|trim|raw }}"></a>
-    {%  endif %}
+    <a class="tile__link position-absolute top-0 end-0 bottom-0 start-0" href="{{ _url }}" title="{{ _label|render|striptags|trim|raw }}" {{ _certificate_file ? 'download' : '' }}></a>
     <figure class="tile__figure mb-0">
       {{- _image -}}
     </figure>
@@ -104,11 +106,6 @@
                 {{- _label -}}
               {%- if _user_badges is not empty -%}
                 <span class="user-badges ms-1">{{ _user_badges }}</span>
-              {%- endif -%}
-              {% if  _certificate_file is not empty %}
-              <div class="btn-info">
-                <a href="{{ _certificate_file }}" download>Download the certificate</a>
-              </div>
               {%- endif -%}
             </h3>
         {%- if _text is not empty -%}
