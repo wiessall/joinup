@@ -11,6 +11,9 @@ module: imagecache_external
 callback: 'imagecache_external#cron'
 scheduler:
   id: simple
+  configuration:
+    rules:
+      - '* * * * *'
 launcher:
   id: serial
 logger:

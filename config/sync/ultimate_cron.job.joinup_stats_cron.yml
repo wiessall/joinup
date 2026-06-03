@@ -11,6 +11,9 @@ module: joinup_stats
 callback: 'joinup_stats#cron'
 scheduler:
   id: simple
+  configuration:
+    rules:
+      - '* * * * *'
 launcher:
   id: serial
 logger:

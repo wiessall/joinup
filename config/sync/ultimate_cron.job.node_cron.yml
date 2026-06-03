@@ -11,6 +11,9 @@ module: node
 callback: 'node#cron'
 scheduler:
   id: simple
+  configuration:
+    rules:
+      - '* * * * *'
 launcher:
   id: serial
 logger:

@@ -11,6 +11,9 @@ module: simple_sitemap
 callback: 'simple_sitemap#cron'
 scheduler:
   id: simple
+  configuration:
+    rules:
+      - '* * * * *'
 launcher:
   id: serial
 logger:

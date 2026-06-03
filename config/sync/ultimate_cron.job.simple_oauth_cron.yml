@@ -11,6 +11,9 @@ module: simple_oauth
 callback: 'simple_oauth#cron'
 scheduler:
   id: simple
+  configuration:
+    rules:
+      - '* * * * *'
 launcher:
   id: serial
 logger:

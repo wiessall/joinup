@@ -11,6 +11,9 @@ module: file
 callback: 'file#cron'
 scheduler:
   id: simple
+  configuration:
+    rules:
+      - '* * * * *'
 launcher:
   id: serial
 logger:

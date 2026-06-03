@@ -11,6 +11,9 @@ module: babel_tmgmt
 callback: 'babel_tmgmt#cron'
 scheduler:
   id: simple
+  configuration:
+    rules:
+      - '* * * * *'
 launcher:
   id: serial
 logger:

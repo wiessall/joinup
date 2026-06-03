@@ -11,6 +11,9 @@ module: locale
 callback: 'locale#cron'
 scheduler:
   id: simple
+  configuration:
+    rules:
+      - '* * * * *'
 launcher:
   id: serial
 logger:

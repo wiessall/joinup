@@ -11,6 +11,9 @@ module: purge_users
 callback: 'purge_users#cron'
 scheduler:
   id: simple
+  configuration:
+    rules:
+      - '* * * * *'
 launcher:
   id: serial
 logger:

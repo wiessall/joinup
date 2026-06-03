@@ -11,6 +11,9 @@ module: search_api
 callback: 'search_api#cron'
 scheduler:
   id: simple
+  configuration:
+    rules:
+      - '* * * * *'
 launcher:
   id: serial
 logger:

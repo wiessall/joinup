@@ -11,6 +11,9 @@ module: message_digest
 callback: 'message_digest#cron'
 scheduler:
   id: simple
+  configuration:
+    rules:
+      - '* * * * *'
 launcher:
   id: serial
 logger:

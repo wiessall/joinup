@@ -11,6 +11,9 @@ module: poll
 callback: 'poll#cron'
 scheduler:
   id: simple
+  configuration:
+    rules:
+      - '* * * * *'
 launcher:
   id: serial
 logger:

@@ -11,6 +11,9 @@ module: eu_oss_vitality_index
 callback: 'eu_oss_vitality_index#cron'
 scheduler:
   id: simple
+  configuration:
+    rules:
+      - '* * * * *'
 launcher:
   id: serial
 logger:

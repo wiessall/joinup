@@ -11,6 +11,9 @@ module: joinup_oss_catalogue
 callback: 'joinup_oss_catalogue#cron'
 scheduler:
   id: simple
+  configuration:
+    rules:
+      - '* * * * *'
 launcher:
   id: serial
 logger:

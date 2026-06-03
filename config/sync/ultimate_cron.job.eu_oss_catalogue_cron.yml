@@ -11,6 +11,9 @@ module: eu_oss_catalogue
 callback: 'eu_oss_catalogue#cron'
 scheduler:
   id: simple
+  configuration:
+    rules:
+      - '* * * * *'
 launcher:
   id: serial
 logger:

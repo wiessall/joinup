@@ -11,6 +11,9 @@ module: email_confirmer
 callback: 'email_confirmer#cron'
 scheduler:
   id: simple
+  configuration:
+    rules:
+      - '* * * * *'
 launcher:
   id: serial
 logger:
