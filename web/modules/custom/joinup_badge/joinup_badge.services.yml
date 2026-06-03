@@ -10,3 +10,13 @@ services:
   Drupal\joinup_badge\Hook\BadgeHooks:
     tags:
       - { name: needs_destruction }
+
+  joinup_badge.certificate_access_check:
+    class: Drupal\joinup_badge\Access\CertificateAccessCheck
+    tags:
+      - { name: access_check, applies_to: _certificate_access }
+
+  joinup_badge.route_subscriber:
+    class: Drupal\joinup_badge\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }
