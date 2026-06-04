@@ -56,7 +56,7 @@ class BehatEnvironmentListener implements EventSubscriberInterface {
    */
   private function isDryRun(): bool {
     global $argv;
-    return in_array('--dry-run', $argv ?? [], TRUE);
+    return in_array('--dry-run', $argv, TRUE);
   }
 
 }

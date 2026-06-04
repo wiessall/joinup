@@ -1,4 +1,6 @@
 /**
+ * @param Drupal
+ * @param once
  * @file
  * Open accordions to allow user spot the invalid required field(s).
  */

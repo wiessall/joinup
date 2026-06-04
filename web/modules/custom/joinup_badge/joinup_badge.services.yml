@@ -5,8 +5,6 @@ services:
 
   Drupal\joinup_badge\BadgeService: ~
 
-  Drupal\joinup_badge\CertificateService: {}
-
   Drupal\joinup_badge\Hook\BadgeHooks:
     tags:
       - { name: needs_destruction }
