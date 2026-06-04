@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Hook\AfterScenario;
 use Behat\Step\Given;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Serialization\Yaml;
@@ -36,11 +38,17 @@ class WebformContext extends RawDrupalContext {
   #[Given('the following webforms:')]
   public function createWebforms(TableNode $table): void {
     $webformStorage = \Drupal::entityTypeManager()->getStorage('webform');
+    $ids = [];
     foreach ($table->getHash() as $values) {
       $this->prepareFields($values);
       $webform = $webformStorage->create($values);
       $webform->save();
+      $ids[] = $webform->id();
     }
+    $webformsToCleanup = \Drupal::state()->get('behat_cleanup_webform', []);
+    \Drupal::state()->set('behat_cleanup_webform', array_unique(
+      array_merge($webformsToCleanup, $ids)
+    ));
   }
 
   /**
@@ -58,6 +66,29 @@ class WebformContext extends RawDrupalContext {
       'status' => WebformInterface::STATUS_OPEN,
       'langcode' => 'en',
     ];
+  }
+
+  /**
+   * Cleans up webforms.
+   *
+   * @param \Behat\Behat\Hook\Scope\AfterScenarioScope $scope
+   *   The scenario scope.
+   */
+  #[AfterScenario]
+  public function afterScenarioCleanupEntities(AfterScenarioScope $scope): void {
+    $webformsToCleanup = \Drupal::state()->get('behat_cleanup_webform', []);
+    if (!$webformsToCleanup) {
+      return;
+    }
+
+    $storage = \Drupal::entityTypeManager()->getStorage('webform');
+    foreach ($webformsToCleanup as $id) {
+      $webform = $storage->load($id);
+      if (!$webform instanceof WebformInterface) {
+        continue;
+      }
+      $webform->delete();
+    }
   }
 
 }
