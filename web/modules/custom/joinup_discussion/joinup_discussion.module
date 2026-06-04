@@ -20,8 +20,18 @@ use Drupal\joinup_discussion\Event\DiscussionDeleteEvent;
 use Drupal\joinup_discussion\Event\DiscussionEvents;
 use Drupal\joinup_discussion\JoinupDiscussionGroupInspectorInterface;
 use Drupal\joinup_discussion\LatestUpdateTimeFieldItemList;
+use Drupal\joinup_discussion\Plugin\views\cache\CommentReplyTag;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_views_plugins_cache_alter().
+ */
+function joinup_discussion_views_plugins_cache_alter(array &$plugins): void {
+  if (isset($plugins['tag'])) {
+    $plugins['tag']['class'] = CommentReplyTag::class;
+  }
+}
 
 /**
  * Implements hook_ENTITY_TYPE_presave().
