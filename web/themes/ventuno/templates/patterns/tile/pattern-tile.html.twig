@@ -110,7 +110,8 @@
               {%- if _certificate_file is not empty -%}
                 {{ pattern('icon', {
                   name: 'file-pdf',
-                  size: 's'
+                  path: bcl_icon_path,
+                  size: 's',
                 }) }}
               {%- endif -%}
             </h3>
