@@ -1,0 +1,616 @@
+# ---------------------------------------------------------------------------
+#  L1.1  sti_atio:Innovation
+# ---------------------------------------------------------------------------
+
+sti_atio:Innovation
+    a owl:Class ;
+    rdfs:label "Innovation"@en ;
+    rdfs:comment """A specific real-world agrifood technology, practice, process,
+    policy instrument, or institutional arrangement that constitutes an innovation.
+    Represents one implementation -- not an abstract type (see sti_atio:InnovationFamily).
+    The central knowledge unit of the ATIO KB."""@en ;
+    rdfs:subClassOf schema:Thing ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# ---------------------------------------------------------------------------
+#  L1.2 Properties
+# ---------------------------------------------------------------------------
+
+
+sti_atio:isDescribedBy
+    a owl:ObjectProperty ;
+    rdfs:label "is described by"@en ;
+    rdfs:comment """Links a sti_atio:Innovation (real-world thing) to its
+    sti_atio:InnovationRecord (information object). Subproperty of
+    foaf:isPrimaryTopicOf. The innovation is the primary topic of its record.
+    One innovation may have multiple records before merge."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range  sti_atio:InnovationRecord ;
+    rdfs:subPropertyOf foaf:isPrimaryTopicOf ;
+    owl:inverseOf sti_atio:describes ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:describes
+    a owl:ObjectProperty ;
+    rdfs:label "describes"@en ;
+    rdfs:comment "Inverse of sti_atio:isDescribedBy. Links a record to its subject innovation."@en ;
+    rdfs:domain sti_atio:InnovationRecord ;
+    rdfs:range  sti_atio:Innovation ;
+    rdfs:subPropertyOf foaf:primaryTopic ;
+    owl:inverseOf sti_atio:isDescribedBy ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# --- L1.1.A  Identity & Core Description ---
+
+sti_atio:innovationName
+    a owl:DatatypeProperty ;
+    rdfs:label "innovation name"@en ;
+    rdfs:comment """The preferred name of the innovation. Note: many agrifood innovations
+    do not have a single canonical name; alternative names are captured via
+    schema:alternateName. AI-based duplicate detection addresses cases where
+    different source records use different names for the same innovation."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:alternativeName
+    a owl:DatatypeProperty ;
+    rdfs:label "alternative name"@en ;
+    rdfs:comment "Alternative or local name(s) under which the innovation is known."@en ;
+    rdfs:subPropertyOf schema:alternateName ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range rdf:langString ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:shortDescription
+    a owl:DatatypeProperty ;
+    rdfs:label "short description"@en ;
+    rdfs:comment "A concise summary (approx. 100–200 words) of the innovation."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range rdf:langString ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:longDescription #! Why do we need both long/short?
+    a owl:DatatypeProperty ;
+    rdfs:label "long description"@en ;
+    rdfs:comment """Full narrative description of the innovation, covering mechanism,
+    context, outcomes, and key dimensions. May be AI-generated if the source
+    record lacks one (with data provider agreement)."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range rdf:langString ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:aiGeneratedDescription #! Should be rds-star property
+    a owl:DatatypeProperty ;
+    rdfs:label "AI-generated description"@en ;
+    rdfs:comment """Internal AI-generated long description, used as a basis for
+    field enrichment and chatbot prompts. Not always identical to the published
+    long description. Stored in the internal named graph."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range rdf:langString ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:identifyingFeature
+    a owl:DatatypeProperty ;
+    rdfs:label "identifying feature"@en ;
+    rdfs:comment """Narrative description of what makes this innovation recognisable
+    and distinct from similar innovations -- used for deduplication and disambiguation."""@en ;
+    rdfs:domain sti_atio:Innovation ; #! How is this needed? Shouldn't the combination of all other fields make an innovation unique
+    rdfs:range rdf:langString ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:startYear
+    a owl:DatatypeProperty ;
+    rdfs:label "start year"@en ;
+    rdfs:comment "Year in which the innovation was first documented or implemented."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range xsd:gYear ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:startDate #! why both year/date? 
+    a owl:DatatypeProperty ;
+    rdfs:label "start date"@en ;
+    rdfs:comment "Precise start date of the innovation (when available)."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range xsd:date ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:sourceURL
+    a owl:DatatypeProperty ;
+    rdfs:label "source URL"@en ;
+    rdfs:comment "Canonical URL of the innovation record in its primary source system."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range xsd:anyURI ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# --- L1.1.B  Geography ---
+
+sti_atio:originCountry
+    a owl:ObjectProperty ;
+    rdfs:label "country of origin"@en ;
+    rdfs:comment "Country where the innovation was first developed or deployed."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range sti_atio:Country ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:adoptionCountry
+    a owl:ObjectProperty ;
+    rdfs:label "adoption country"@en ;
+    rdfs:comment """Country (or countries) where the innovation has been adopted
+    or is actively used. Multi-valued."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range sti_atio:Country ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:originRegion #! I would derive a taxonomy of countries, regions etc in the future
+    a owl:ObjectProperty ;
+    rdfs:label "region of origin"@en ;
+    rdfs:comment "UN M49 or FAO geographic region of origin."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range sti_atio:GeographicRegion ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:originCity
+    a owl:DatatypeProperty ;
+    rdfs:label "city of origin"@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:originState
+    a owl:DatatypeProperty ;
+    rdfs:label "state / province of origin"@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# --- L1.1.C  Classification & Taxonomy References ---
+#! Why are these not claims? Why do we need all these core fields?
+#! I don't understand the argument that they are part of the real thing
+sti_atio:innovationType #! The referenced taxonomy tries to be comprehensive but might be missing the mark
+    a owl:ObjectProperty ;
+    rdfs:label "innovation type"@en ;
+    rdfs:comment """Classification by functional domain and mechanism (e.g. precision
+    agriculture, biological pest control, financial inclusion instrument).
+    Multi-valued. References the ATIO innovation type taxonomy (SKOS)."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range sti_atio:InnovationType ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:innovationStage
+    a owl:ObjectProperty ;
+    rdfs:label "innovation stage"@en ;
+    rdfs:comment """Lifecycle stage of the innovation (pre-emergent / emergent /
+    mature / obsolete). References ATIO innovation stages taxonomy."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range sti_atio:InnovationStage ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:thematicArea
+    a owl:ObjectProperty ;
+    rdfs:label "thematic area"@en ;
+    rdfs:comment "FAO agrifood systems thematic area(s). Multi-valued."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range sti_atio:ThematicArea ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:challengeAddressed
+    a owl:ObjectProperty ;
+    rdfs:label "challenge addressed"@en ;
+    rdfs:comment "Agrifood systems challenge(s) the innovation responds to. Multi-valued."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range sti_atio:Challenge ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:useCase
+    a owl:ObjectProperty ;
+    rdfs:label "use case"@en ;
+    rdfs:comment "Intended use case(s) or need(s) addressed by the innovation. Multi-valued."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range sti_atio:UseCase ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:useCaseNarrative
+    a owl:DatatypeProperty ;
+    rdfs:label "use case narrative"@en ;
+    rdfs:comment "Free-text narrative describing the specific use case context."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range rdf:langString ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:mainUseCaseImage
+    a owl:ObjectProperty ;
+    rdfs:label "main use case (for image selection)"@en ;
+    rdfs:comment "The single use case selected as the primary label for image/icon display."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range sti_atio:UseCase ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:language
+    a owl:ObjectProperty ;
+    rdfs:label "language"@en ;
+    rdfs:comment "Language(s) in which the innovation documentation or interface is available."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range sti_atio:Language ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:farmingSystem
+    a owl:ObjectProperty ;
+    rdfs:label "farming system"@en ;
+    rdfs:comment "Farming system classification(s) relevant to the innovation. Multi-valued."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range sti_atio:FarmingSystem ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# --- L1.1.D  Innovative Dimensions ---
+
+sti_atio:innovativeFeature
+    a owl:ObjectProperty ;
+    rdfs:label "innovative dimension"@en ;
+    rdfs:comment """The specific dimension(s) of innovativeness: what makes it
+    novel relative to existing solutions. References ATIO innovative features
+    taxonomy (built from FAO S&I Strategy innovation criteria). Multi-valued."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range sti_atio:InnovativeFeature ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:innovativeFeaturesNarrative
+    a owl:DatatypeProperty ;
+    rdfs:label "innovative dimensions narrative"@en ;
+    rdfs:comment "Free-text narrative elaborating the innovation's key novel dimensions."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range rdf:langString ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+#! Shouldn't this be a subclass? Otherwise adding grassroots will sprout many other fields in the future
+sti_atio:isGrassroots
+    a owl:DatatypeProperty ;
+    rdfs:label "is grassroots innovation"@en ;
+    rdfs:comment """Boolean flag indicating that this innovation originates from
+    farmer-led, community-driven, or grassroots knowledge systems rather than
+    formal R&D. Triggers special handling for attribution, consent, and governance."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# --- L1.1.E  Readiness & Adoption ---
+
+sti_atio:readinessLevel
+    a owl:ObjectProperty ;
+    rdfs:label "readiness level"@en ;
+    rdfs:comment """CGIAR Scaling Readiness level (0–9). An intrinsic property of the
+    innovation reflecting evidence-based validation of its development stage.
+    References ATIO readiness levels taxonomy aligned to CGIAR CLARISA."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range skos:Concept ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:readinessNarrative
+    a owl:DatatypeProperty ;
+    rdfs:label "readiness narrative"@en ;
+    rdfs:comment "Free-text justification or description of the assessed readiness level."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range rdf:langString ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:adoptionLevel
+    a owl:ObjectProperty ;
+    rdfs:label "adoption level"@en ;
+    rdfs:comment """CGIAR 9-level adoption scale. Reflects the actual spread and uptake
+    of the innovation in real-world use. References ATIO adoption levels taxonomy."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range skos:Concept ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:adoptionNarrative
+    a owl:DatatypeProperty ;
+    rdfs:label "adoption narrative"@en ;
+    rdfs:comment "Free-text description of the adoption context, evidence, and trajectory."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range rdf:langString ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# sti_atio:scalingLevelIDIA -- v0.1 property, now deprecated.
+# The v0.3 declaration (deprecated sub-property of sti_atio:readinessLevel)
+# appears in the readiness/maturity property block above.
+# This stub is removed; see the merged property block for the full declaration.
+
+sti_atio:estimatedUsers
+    a owl:DatatypeProperty ;
+    rdfs:label "estimated number of users"@en ;
+    rdfs:comment "Best available estimate of actual current users or beneficiaries."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# --- L1.1.F  Adoptability Dimensions ---
+#  These are intrinsic properties of the innovation, not metadata.
+#  They reflect dimensions specifically designed for the ATIO KB to capture
+#  uptake-relevant information absent from most existing databases.
+
+sti_atio:accessibility
+    a owl:ObjectProperty ;
+    rdfs:label "accessibility"@en ;
+    rdfs:comment """Degree to which the innovation is accessible to target users
+    in terms of cost, availability, and infrastructure requirements."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range sti_atio:AdoptabilityLevel ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:accessibilityNarrative
+    a owl:DatatypeProperty ;
+    rdfs:label "accessibility narrative"@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range rdf:langString ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:acceptability
+    a owl:ObjectProperty ;
+    rdfs:label "acceptability"@en ;
+    rdfs:comment """Degree to which the innovation is culturally, socially, and
+    behaviourally acceptable to target users and communities."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range sti_atio:AdoptabilityLevel ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:acceptabilityNarrative
+    a owl:DatatypeProperty ;
+    rdfs:label "acceptability narrative"@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range rdf:langString ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:profitability
+    a owl:ObjectProperty ;
+    rdfs:label "profitability"@en ;
+    rdfs:comment """Degree to which the innovation is economically viable and
+    profitable for target users."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range sti_atio:AdoptabilityLevel ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:profitabilityNarrative
+    a owl:DatatypeProperty ;
+    rdfs:label "profitability narrative"@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range rdf:langString ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:sustainability
+    a owl:ObjectProperty ;
+    rdfs:label "sustainability"@en ;
+    rdfs:comment """Environmental and social sustainability of the innovation
+    over its full lifecycle."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range sti_atio:AdoptabilityLevel ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:sustainabilityNarrative
+    a owl:DatatypeProperty ;
+    rdfs:label "sustainability narrative"@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range rdf:langString ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:coDevelopment
+    a owl:ObjectProperty ;
+    rdfs:label "co-development"@en ;
+    rdfs:comment """Degree to which the innovation was co-developed with or by
+    its target users (a key dimension of inclusivity and grassroots relevance)."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range sti_atio:AdoptabilityLevel ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:coDevelopmentNarrative
+    a owl:DatatypeProperty ;
+    rdfs:label "co-development narrative"@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range rdf:langString ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# --- L1.1.G  Actors ---
+
+sti_atio:actualUser
+    a owl:ObjectProperty ;
+    rdfs:label "actual user"@en ;
+    rdfs:comment "Actor type(s) that are currently using the innovation. Multi-valued."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range sti_atio:ActorType ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:prospectiveUser
+    a owl:ObjectProperty ;
+    rdfs:label "prospective user"@en ;
+    rdfs:comment "Actor type(s) identified as potential future users. Multi-valued."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range sti_atio:ActorType ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:investmentType
+    a owl:ObjectProperty ;
+    rdfs:label "investment type"@en ;
+    rdfs:comment "Type(s) of investment required or involved in the innovation."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range sti_atio:InvestmentType ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# --- L1.1.H  Impact ---
+
+sti_atio:impactSDG
+    a owl:ObjectProperty ;
+    rdfs:label "impact: SDG"@en ;
+    rdfs:comment """UN Sustainable Development Goal(s) that this innovation contributes
+    to. References UN SDG URIs where available as dereferenceable LOD resources."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range sti_atio:SDGGoal ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:impactFourBetters
+    a owl:ObjectProperty ;
+    rdfs:label "impact: FAO Four Betters"@en ;
+    rdfs:comment """FAO Four Betters dimension(s) addressed: better production,
+    better nutrition, better environment, better life."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range sti_atio:FourBetter ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:impactNarrative
+    a owl:DatatypeProperty ;
+    rdfs:label "impact narrative"@en ;
+    rdfs:comment "Narrative description of the innovation's observed or expected impact."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range rdf:langString ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# --- L1.1.I  Grassroots-specific fields ---
+#  Only populated for innovations where sti_atio:isGrassroots = true
+
+sti_atio:communityOwner
+    a owl:ObjectProperty ;
+    rdfs:label "community owner"@en ;
+    rdfs:comment """The community or grassroots organisation that holds knowledge
+    rights over this innovation. Triggers attribution and consent requirements."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range org:Organization ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:communityConsent
+    a owl:DatatypeProperty ;
+    rdfs:label "community consent status"@en ;
+    rdfs:comment "Status of informed consent from the community for knowledge publication."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range sti_atio:ConsentStatus ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:grassrootsAssessment
+    a owl:DatatypeProperty ;
+    rdfs:label "grassroots assessment flag"@en ;
+    rdfs:comment """Indicates that the grassroots assessment was completed by an
+    authorised grassroots partner focal point (displayed as a flag in search results)."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:localResourceBased
+    a owl:DatatypeProperty ;
+    rdfs:label "relies on local resources"@en ;
+    rdfs:comment "Whether the innovation primarily uses locally available resources."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# --- L1.1.J  Organisational Relationships ---
+
+sti_atio:developedBy
+    a owl:ObjectProperty ;
+    rdfs:label "developed by"@en ;
+    rdfs:comment "Organisation(s) that developed the innovation."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range org:Organization ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:ownedBy
+    a owl:ObjectProperty ;
+    rdfs:label "owned by"@en ;
+    rdfs:comment """Organisation that claims intellectual property or management
+    rights over the innovation."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range org:Organization ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:implementedBy
+    a owl:ObjectProperty ;
+    rdfs:label "implemented by"@en ;
+    rdfs:comment "Organisation(s) currently implementing or deploying the innovation."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range org:Organization ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:fundedBy
+    a owl:ObjectProperty ;
+    rdfs:label "funded by"@en ;
+    rdfs:comment "Organisation(s) providing funding for the innovation's development or scaling."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range org:Organization ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# --- L1.1.K  Family & Bundle Relations ---
+
+sti_atio:memberOfFamily
+    a owl:ObjectProperty ;
+    rdfs:label "member of family"@en ;
+    rdfs:comment """The innovation family (or families) to which this innovation belongs.
+    Multi-valued: an innovation may belong to more than one family if it shares
+    defining feature dimensions with multiple family abstractions."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range sti_atio:InnovationFamily ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:participatesInBundle
+    a owl:ObjectProperty ;
+    rdfs:label "participates in bundle"@en ;
+    rdfs:comment "Bundle relation in which this innovation participates. Multi-valued."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range sti_atio:BundleRelation ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# --- L1.1.L  Provenance links (public subset) ---
+
+sti_atio:derivedFromSource
+    a owl:ObjectProperty ;
+    rdfs:label "derived from source record"@en ;
+    rdfs:comment """Shortcut provenance link to the original source record(s) from
+    which this innovation was synthesised. Full provenance chain is available
+    via the pipeline layer (sti_atio:derivedFromExtracted)."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range sti_atio:SourceRecord ;
+    rdfs:subPropertyOf prov:wasDerivedFrom ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:allowAIUpdate
+    a owl:DatatypeProperty ;
+    rdfs:label "allow AI update"@en ;
+    rdfs:comment """Flag indicating whether the AI enrichment pipeline may overwrite
+    fields in this record on future ingestion runs. When false, curated fields
+    are protected ('do not overwrite by AI')."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# Planned features: feedback / review loops
+# schema:review aligns to planned user/partner feedback on innovations
+sti_atio:innovationReview
+    a owl:ObjectProperty ;
+    rdfs:label "innovation review"@en ;
+    rdfs:comment """A review or evaluation of this innovation by a user, partner,
+    or expert. Planned feature supporting feedback loops in the KB.
+    Aligns to schema:review. Range: sti_atio:InnovationReview
+    (planned subclass of schema:Review)."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range  schema:Review ;
+    rdfs:subPropertyOf schema:review ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# Planned features: inter-innovation relations
+# Untyped loose relation (typed relations use sti_atio:BundleRelation)
+sti_atio:relatedInnovation
+    a owl:ObjectProperty ;
+    rdfs:label "related innovation"@en ;
+    rdfs:comment """A loosely related innovation (untyped). Use
+    sti_atio:BundleRelation for typed bundle relations. Planned feature
+    for 'related innovations' display. Aligns to schema:isRelatedTo."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range  sti_atio:Innovation ;
+    rdfs:subPropertyOf schema:isRelatedTo ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# Component / part-of relation
+sti_atio:componentOf
+    a owl:ObjectProperty ;
+    rdfs:label "component of"@en ;
+    rdfs:comment """This innovation is a component or prerequisite of a larger
+    innovation system or platform. Planned feature. Aligns to schema:isPartOf."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range  sti_atio:Innovation ;
+    rdfs:subPropertyOf schema:isPartOf ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .

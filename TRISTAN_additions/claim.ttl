@@ -1,0 +1,143 @@
+# ===========================================================================
+#  LAYER 5 -- MULTI-SOURCE DIVERGENCE
+#  Field claims (different source records giving different values for the same
+#  field) and taxonomy mapping divergence across source vocabularies.
+#  Named graph: sti_atio:graph/provenance  (internal / partner)
+# ===========================================================================
+
+# ---------------------------------------------------------------------------
+#  L5.1  sti_atio:FieldClaim
+# ---------------------------------------------------------------------------
+
+sti_atio:FieldClaim
+    a owl:Class ;
+    rdfs:label "Field Claim"@en ;
+    rdfs:comment """A claim about the value of a specific field of an innovation,
+    attributed to a specific source record. Allows multiple, potentially divergent
+    claims on the same field of the same innovation from different source records
+    to coexist. The canonical (published) value on sti_atio:Innovation is the
+    curator-selected synthesis; sti_atio:FieldClaim preserves the full divergence
+    for auditability, research, and re-ingestion.
+    Semantically: a reified statement (cf. RDF reification / named graph pattern)."""@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:hasFieldClaim
+    a owl:ObjectProperty ;
+    rdfs:label "has field claim"@en ;
+    rdfs:domain sti_atio:InnovationRecord ;
+    rdfs:range sti_atio:FieldClaim ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:claimSubject
+    a owl:ObjectProperty ;
+    rdfs:label "claim subject"@en ;
+    rdfs:domain sti_atio:FieldClaim ;
+    rdfs:range sti_atio:Innovation ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:claimSubject
+    a owl:ObjectProperty ;
+    rdfs:label "claim subject"@en ;
+    rdfs:comment """The real-world sti_atio:Innovation that this FieldClaim
+    is about. Explicitly separates the semantic subject (Innovation) from
+    the record that carries the claim (InnovationRecord).
+
+    Both of the following hold simultaneously and serve different purposes:
+
+      sti_atio:InnovationRecord --hasFieldClaim--> sti_atio:FieldClaim
+        (grouping/container: which record is associated with this claim)
+
+      sti_atio:FieldClaim --claimSubject--> sti_atio:Innovation
+        (semantic: which real-world thing this claim is about)
+
+    FieldClaims are reified property assertions: they sit in the data/
+    provenance layer but their subject is a real-world entity. After
+    curator resolution the canonical value is asserted directly on
+    sti_atio:Innovation. The FieldClaim provides the evidence trail."""@en ;
+    rdfs:domain sti_atio:FieldClaim ;
+    rdfs:range  sti_atio:Innovation ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:claimField
+    a owl:DatatypeProperty ;
+    rdfs:label "claim field"@en ;
+    rdfs:comment "The field name to which this claim applies (e.g. 'readinessLevel', 'originCountry')."@en ;
+    rdfs:domain sti_atio:FieldClaim ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:claimLiteralValue
+    a owl:DatatypeProperty ;
+    rdfs:label "claim value (literal)"@en ;
+    rdfs:comment "The claimed field value when it is a literal (string, integer, date, etc.)."@en ;
+    rdfs:domain sti_atio:FieldClaim ;
+    rdfs:range rdfs:Literal ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:claimRefValue
+    a owl:ObjectProperty ;
+    rdfs:label "claim value (reference)"@en ;
+    rdfs:comment "The claimed field value when it is an entity or concept reference (URI)."@en ;
+    rdfs:domain sti_atio:FieldClaim ;
+    rdfs:range rdfs:Resource ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:claimedBy
+    a owl:ObjectProperty ;
+    rdfs:label "claimed by"@en ;
+    rdfs:comment "The source record that asserts this field value."@en ;
+    rdfs:domain sti_atio:FieldClaim ;
+    rdfs:range sti_atio:SourceRecord ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:claimedAt
+    a owl:DatatypeProperty ;
+    rdfs:label "claimed at"@en ;
+    rdfs:comment "Timestamp at which this claim was extracted from the source record."@en ;
+    rdfs:domain sti_atio:FieldClaim ;
+    rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:curatorResolution
+    a owl:ObjectProperty ;
+    rdfs:label "curator resolution"@en ;
+    rdfs:comment "How the curator resolved this claim relative to others for the same field."@en ;
+    rdfs:domain sti_atio:FieldClaim ;
+    rdfs:range sti_atio:ClaimResolution ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:ClaimResolution    a owl:Class ; rdfs:subClassOf skos:Concept ;
+    rdfs:label "Claim Resolution"@en ;
+    rdfs:comment "authoritative | supplementary | rejected | pending-review"@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:claimResolutionNote
+    a owl:DatatypeProperty ;
+    rdfs:label "resolution note"@en ;
+    rdfs:comment "Curator note explaining the resolution decision."@en ;
+    rdfs:domain sti_atio:FieldClaim ;
+    rdfs:range rdf:langString ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:claimProperty
+    a owl:ObjectProperty ;
+    rdfs:label "claim property (URI)"@en ;
+    rdfs:comment """The RDF property to which this claim applies, expressed as a URI.
+    Preferred over sti_atio:claimField (string) in v0.4 because it enables clean
+    SPARQL inference without string matching. Both may be present for
+    backward compatibility with v0.1-v0.3 data."""@en ;
+    rdfs:domain sti_atio:FieldClaim ;
+    rdfs:range  rdf:Property ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:inferredScheme
+    a owl:ObjectProperty ;
+    rdfs:label "inferred scheme"@en ;
+    rdfs:comment """The vocabulary scheme inferred for this FieldClaim, derived
+    by the SPARQL CONSTRUCT rule from the DataSource's FieldSchemeUsage
+    declaration. Not asserted manually — populated by inference.
+    Once inferred, used by SHACL to validate scheme membership without
+    requiring explicit skos:inScheme on the concept value."""@en ;
+    rdfs:domain sti_atio:FieldClaim ;
+    rdfs:range  skos:ConceptScheme ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .

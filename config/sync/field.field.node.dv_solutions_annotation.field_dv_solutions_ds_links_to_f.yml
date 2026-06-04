@@ -1,0 +1,19 @@
+uuid: 45bf2cde-be4b-4cf3-9293-ed79ffbee94f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_dv_solutions_ds_links_to_f
+    - node.type.dv_solutions_annotation
+id: node.dv_solutions_annotation.field_dv_solutions_ds_links_to_f
+field_name: field_dv_solutions_ds_links_to_f
+entity_type: node
+bundle: dv_solutions_annotation
+label: 'DS Links to FAO, UN and other Development agencies projects, initiatives and programmes'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

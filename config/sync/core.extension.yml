@@ -76,6 +76,8 @@ module:
   facets: 0
   facets_block: 0
   facets_date_range: 0
+  facets_exposed_filters: 0
+  facets_searchbox_widget: 0
   facets_summary: 0
   field: 0
   field_delimiter: 0

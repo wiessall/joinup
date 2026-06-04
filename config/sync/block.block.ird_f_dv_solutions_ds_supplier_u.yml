@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.f_dv_solutions_ds_supplier_u
+  module:
+    - facets
+id: ird_f_dv_solutions_ds_supplier_u
+theme: ventuno
+region: content
+weight: 3
+provider: facets
+plugin: 'facet_block:f_dv_solutions_ds_supplier_u'
+settings:
+  id: 'facet_block:f_dv_solutions_ds_supplier_u'
+  label: 'DS Supplier-User category'
+  label_display: visible
+  provider: facets
+visibility: {  }

@@ -863,6 +863,7 @@ datasource_settings:
         - discussion
         - distribution
         - document
+        - dv_solutions_annotation
         - event
         - licence
         - news

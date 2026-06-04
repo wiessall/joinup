@@ -1,0 +1,24 @@
+uuid: 57e16ecd-5dee-4dbe-a159-985e59a30568
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_innovation
+    - node.type.dv_solutions_annotation
+    - node.type.solution
+id: node.dv_solutions_annotation.field_innovation
+field_name: field_innovation
+entity_type: node
+bundle: dv_solutions_annotation
+label: Innovation
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      solution: solution
+field_type: entity_reference

@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.f_dv_solutions_number_of_use
+  module:
+    - facets
+id: ird_f_dv_solutions_number_of_use
+theme: ventuno
+region: content
+weight: 8
+provider: facets
+plugin: 'facet_block:f_dv_solutions_number_of_use'
+settings:
+  id: 'facet_block:f_dv_solutions_number_of_use'
+  label: 'Number of users or subscribers of the Digital Solution (DS).'
+  label_display: visible
+  provider: facets
+visibility: {  }

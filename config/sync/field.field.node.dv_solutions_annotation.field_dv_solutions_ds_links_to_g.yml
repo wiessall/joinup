@@ -1,0 +1,19 @@
+uuid: 9c72a8ac-4ee7-45fa-ab54-82ac3741218d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_dv_solutions_ds_links_to_g
+    - node.type.dv_solutions_annotation
+id: node.dv_solutions_annotation.field_dv_solutions_ds_links_to_g
+field_name: field_dv_solutions_ds_links_to_g
+entity_type: node
+bundle: dv_solutions_annotation
+label: 'DS links to Government programmes, initiatives, and projects.'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

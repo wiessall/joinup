@@ -1,0 +1,19 @@
+uuid: 2b50dd97-60c1-4d4e-bb4d-35558cd2d864
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_dv_solutions_primary_users
+    - node.type.dv_solutions_annotation
+id: node.dv_solutions_annotation.field_dv_solutions_primary_users
+field_name: field_dv_solutions_primary_users
+entity_type: node
+bundle: dv_solutions_annotation
+label: 'Primary users'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long
