@@ -1,3 +1,2 @@
 group_menu_link:
   class: Drupal\joinup_group\Plugin\Menu\GroupMenuLink
-  deriver: Drupal\joinup_group\Plugin\Menu\GroupMenuLinkDeriver
