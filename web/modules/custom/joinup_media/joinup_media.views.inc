@@ -16,4 +16,7 @@ function joinup_media_views_data_alter(array &$data): void {
   // Enable entity_reference views filter plugin, used for exposed filter in
   // media view.
   $data['media__og_audience']['og_audience_target_id']['filter']['id'] = 'entity_reference';
+  // Override handler of Media OG audience argument.
+  //@todo Create separate definition
+  $data['media__og_audience']['og_audience_target_id']['argument']['id'] = 'joinup_group_or_null';
 }
