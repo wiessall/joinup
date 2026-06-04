@@ -167,7 +167,6 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
    * @param int|string $nid
    *   The node ID. It the node is either a group entity ID or a node
    *   implementing the GroupMenuLinkInterface interface.
-   *
    * @param string $ogMenuType
    *   The OG menu instance type.
    *
