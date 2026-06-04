@@ -1,0 +1,9 @@
+name: 'STI RDF'
+description: 'Integrates the RDF data model in the STI Portal.'
+type: module
+package: STI
+core_version_requirement: "^10.4 || ^11"
+
+dependencies:
+  - 'drupal:node'
+  - 'rdf_sync:rdf_sync'

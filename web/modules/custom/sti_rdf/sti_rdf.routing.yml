@@ -1,0 +1,34 @@
+sti_rdf.curate.skos:
+  path: '/admin/curate/skos'
+  defaults:
+    _title: 'Curate Skos'
+    _controller: '\Drupal\sti_rdf\Controller\StiRdfController::curate'
+  requirements:
+    _permission: 'access content'
+
+# Dynamic per-collection faceted search.
+#
+# IMPORTANT: if your site already has nodes/aliases at /collection/{slug},
+# this route will collide with them. Two options:
+#   (a) move this route to e.g. /collection/{collection}/search and link to
+#       it from the collection node template, OR
+#   (b) keep this path and ensure no node aliases use it (and remove the
+#       collection node entity, or move it elsewhere).
+sti_rdf.collection_search:
+  path: '/collection/{collection}'
+  defaults:
+    _controller: '\Drupal\sti_rdf\Controller\CollectionSearchController::page'
+    _title_callback: '\Drupal\sti_rdf\Controller\CollectionSearchController::title'
+  requirements:
+    _permission: 'access content'
+
+# One-shot rebuild of the annotation_value table from all annotation nodes.
+# Hit this once after enabling the module on an existing site, and any time
+# you change sti_rdf.settings (e.g. add a new annotation bundle).
+sti_rdf.reindex:
+  path: '/admin/sti-rdf/reindex'
+  defaults:
+    _title: 'Rebuild annotation index'
+    _controller: '\Drupal\sti_rdf\Controller\CollectionSearchController::reindex'
+  requirements:
+    _permission: 'administer site configuration'
