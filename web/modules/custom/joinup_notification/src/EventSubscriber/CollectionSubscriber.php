@@ -71,6 +71,7 @@ class CollectionSubscriber extends NotificationSubscriberBase {
       NotificationEvents::NODE_UPDATE => ['onUpdate'],
       // Notification ID 9, 12, 13, 14.
       NotificationEvents::NODE_DELETE => ['onDelete'],
+      NotificationEvents::GROUP_ENTITY_ARCHIVE_COMPLETED => ['onCompleteArchival'],
     ];
   }
 
@@ -169,10 +170,6 @@ class CollectionSubscriber extends NotificationSubscriberBase {
 
       case 'request_archival':
         $this->notificationRequestArchivalDeletion();
-        break;
-
-      case 'archive':
-        $this->notificationArchiveDelete();
         break;
 
     }
@@ -421,6 +418,17 @@ class CollectionSubscriber extends NotificationSubscriberBase {
     }
 
     $this->sendUserDataMessages($user_data);
+  }
+
+  public function onCompleteArchival(NotificationEvent $event): void {
+    $this->initialize($event);
+
+    // State already changed for the collection so we backtrack the transition.
+    $this->fromState = $this->entity->getOriginal()?->getWorkflowState() ?? 'published';
+    $to_state = $this->entity->getWorkflowState();
+    $this->transition = $this->workflow->findTransition($this->fromState, $to_state);
+
+    $this->notificationArchiveDelete();
   }
 
   /**
