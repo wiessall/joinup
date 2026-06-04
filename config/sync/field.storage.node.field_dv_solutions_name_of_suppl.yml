@@ -1,0 +1,19 @@
+uuid: d85d829c-5b66-498b-86de-7ab5ab1f6174
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_dv_solutions_name_of_suppl
+field_name: field_dv_solutions_name_of_suppl
+entity_type: node
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,9 @@
+uuid: abe9e365-77cd-4e85-9c49-603517cfb0b9
+langcode: en
+status: true
+dependencies: {  }
+name: 'dv_solutions: Digital Solution Geographic scope (Enter text).'
+vid: dv_solutions_digital_solution_ge
+description: null
+weight: 0
+new_revision: false

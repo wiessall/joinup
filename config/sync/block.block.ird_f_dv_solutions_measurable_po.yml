@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.f_dv_solutions_measurable_po
+  module:
+    - facets
+id: ird_f_dv_solutions_measurable_po
+theme: ventuno
+region: content
+weight: 5
+provider: facets
+plugin: 'facet_block:f_dv_solutions_measurable_po'
+settings:
+  id: 'facet_block:f_dv_solutions_measurable_po'
+  label: 'Measurable positive impact(s) by Digital Solution (DS) on target users and/or audience (Enter text).'
+  label_display: visible
+  provider: facets
+visibility: {  }

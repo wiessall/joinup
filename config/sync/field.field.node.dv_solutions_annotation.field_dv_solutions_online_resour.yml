@@ -1,0 +1,19 @@
+uuid: 500e3e96-a2ad-4de5-b356-e3b8e3618f9e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_dv_solutions_online_resour
+    - node.type.dv_solutions_annotation
+id: node.dv_solutions_annotation.field_dv_solutions_online_resour
+field_name: field_dv_solutions_online_resour
+entity_type: node
+bundle: dv_solutions_annotation
+label: 'Online resource links (Web-page links, links to videos, links to reports, etc) (URL)(Enter URL) -Mandatory'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

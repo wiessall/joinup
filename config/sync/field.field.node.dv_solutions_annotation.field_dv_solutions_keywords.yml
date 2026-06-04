@@ -1,0 +1,19 @@
+uuid: 3fe7f080-6e8f-48fb-b0c6-f9b113040603
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_dv_solutions_keywords
+    - node.type.dv_solutions_annotation
+id: node.dv_solutions_annotation.field_dv_solutions_keywords
+field_name: field_dv_solutions_keywords
+entity_type: node
+bundle: dv_solutions_annotation
+label: Keywords
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

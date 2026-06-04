@@ -1,0 +1,79 @@
+uuid: e0751cad-a49e-4949-a59c-79d28d183acb
+langcode: en
+status: true
+dependencies: {  }
+third_party_settings:
+  rdf_sync:
+    type: 'https://sti-portal.fao.org/ontology#Annotation'
+    uri_plugin: sti_namespace
+    fields:
+      title:
+        value:
+          predicate: 'http://purl.org/dc/terms/title'
+          type: null
+      field_innovation:
+        target_id:
+          predicate: 'https://sti-portal.fao.org/ontology#annotates'
+          type: resource
+      og_audience:
+        target_id:
+          predicate: 'https://sti-portal.fao.org/ontology#statedBy'
+          type: resource
+      field_dv_solutions_digital_solut:
+        value:
+          predicate: 'https://sti-portal.fao.org/collection/dv_solutions#digital_solution_geographic_scope__enter_text__'
+          type: null
+      field_dv_solutions_ds_supplier_u:
+        value:
+          predicate: 'https://sti-portal.fao.org/collection/dv_solutions#ds_supplier_user_category'
+          type: null
+      field_dv_solutions_name_of_suppl:
+        value:
+          predicate: 'https://sti-portal.fao.org/collection/dv_solutions#name_of_supplier_developer'
+          type: null
+      field_dv_solutions_primary_users:
+        value:
+          predicate: 'https://sti-portal.fao.org/collection/dv_solutions#primary_users'
+          type: null
+      field_dv_solutions_online_resour:
+        value:
+          predicate: 'https://sti-portal.fao.org/collection/dv_solutions#online_resource_links__web_page_links__links_to_videos__links_to_reports__etc___label_'
+          type: null
+      field_dv_solutions_keywords:
+        value:
+          predicate: 'https://sti-portal.fao.org/collection/dv_solutions#keywords'
+          type: null
+      field_dv_solutions_number_of_use:
+        value:
+          predicate: 'https://sti-portal.fao.org/collection/dv_solutions#number_of_users_or_subscribers_of_the_digital_solution__ds__'
+          type: null
+      field_dv_solutions_measurable_po:
+        value:
+          predicate: 'https://sti-portal.fao.org/collection/dv_solutions#measurable_positive_impact_s__by_digital_solution__ds__on_target_users_and_or_audience__enter_text__'
+          type: null
+      field_dv_solutions_name_of_digit:
+        value:
+          predicate: 'https://sti-portal.fao.org/collection/dv_solutions#name_of_digital_village_s___districts__communes_where_ds_is_used__deployed__enter_text__'
+          type: null
+      field_dv_solutions_ds_links_to_f:
+        value:
+          predicate: 'https://sti-portal.fao.org/collection/dv_solutions#ds_links_to_fao__un_and_other_development_agencies_projects__initiatives_and_programmes'
+          type: null
+      field_dv_solutions_ds_links_to_g:
+        value:
+          predicate: 'https://sti-portal.fao.org/collection/dv_solutions#ds_links_to_government_programmes__initiatives__and_projects_'
+          type: null
+      field_dv_solutions_other_relevan:
+        value:
+          predicate: 'https://sti-portal.fao.org/collection/dv_solutions#other_relevant_links_and_information_sources_on_ds'
+          type: null
+label_singular: null
+label_plural: null
+label_count: null
+name: 'Dv_solutions annotation'
+type: dv_solutions_annotation
+description: null
+help: null
+new_revision: true
+preview_mode: 1
+display_submitted: true

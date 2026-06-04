@@ -1,0 +1,23 @@
+uuid: fd3d8bfa-168c-4889-b170-af29c85a4cd6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.og_audience
+    - node.type.dv_solutions_annotation
+  module:
+    - og
+id: node.dv_solutions_annotation.og_audience
+field_name: og_audience
+entity_type: node
+bundle: dv_solutions_annotation
+label: 'Groups audience'
+description: 'OG group audience reference field.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'og:default'
+  handler_settings: {  }
+field_type: og_standard_reference

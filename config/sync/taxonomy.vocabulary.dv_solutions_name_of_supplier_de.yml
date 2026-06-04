@@ -1,0 +1,9 @@
+uuid: 105483f4-2070-4631-9ed9-d34b13e32784
+langcode: en
+status: true
+dependencies: {  }
+name: 'dv_solutions: Name of supplier/developer'
+vid: dv_solutions_name_of_supplier_de
+description: null
+weight: 0
+new_revision: false

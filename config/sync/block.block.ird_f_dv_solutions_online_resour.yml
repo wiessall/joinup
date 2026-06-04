@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.f_dv_solutions_online_resour
+  module:
+    - facets
+id: ird_f_dv_solutions_online_resour
+theme: ventuno
+region: content
+weight: 9
+provider: facets
+plugin: 'facet_block:f_dv_solutions_online_resour'
+settings:
+  id: 'facet_block:f_dv_solutions_online_resour'
+  label: 'Online resource links (Web-page links, links to videos, links to reports, etc) (URL)(Enter URL) -Mandatory'
+  label_display: visible
+  provider: facets
+visibility: {  }

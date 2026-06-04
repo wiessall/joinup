@@ -1,0 +1,19 @@
+uuid: c6d6f110-60dd-41e2-a2cd-c2b0f92f97b7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_dv_solutions_name_of_digit
+    - node.type.dv_solutions_annotation
+id: node.dv_solutions_annotation.field_dv_solutions_name_of_digit
+field_name: field_dv_solutions_name_of_digit
+entity_type: node
+bundle: dv_solutions_annotation
+label: 'Name of Digital village(s), districts, communes where DS is used/ deployed (Enter text).'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

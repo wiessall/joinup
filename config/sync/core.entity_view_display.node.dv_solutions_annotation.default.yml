@@ -1,0 +1,73 @@
+uuid: b221df0a-2e21-47fb-a9c4-5ebb767a6e28
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.dv_solutions_annotation.field_dv_solutions_digital_solut
+    - field.field.node.dv_solutions_annotation.field_dv_solutions_ds_links_to_f
+    - field.field.node.dv_solutions_annotation.field_dv_solutions_ds_links_to_g
+    - field.field.node.dv_solutions_annotation.field_dv_solutions_ds_supplier_u
+    - field.field.node.dv_solutions_annotation.field_dv_solutions_keywords
+    - field.field.node.dv_solutions_annotation.field_dv_solutions_measurable_po
+    - field.field.node.dv_solutions_annotation.field_dv_solutions_name_of_digit
+    - field.field.node.dv_solutions_annotation.field_dv_solutions_name_of_suppl
+    - field.field.node.dv_solutions_annotation.field_dv_solutions_number_of_use
+    - field.field.node.dv_solutions_annotation.field_dv_solutions_online_resour
+    - field.field.node.dv_solutions_annotation.field_dv_solutions_other_relevan
+    - field.field.node.dv_solutions_annotation.field_dv_solutions_primary_users
+    - field.field.node.dv_solutions_annotation.field_innovation
+    - field.field.node.dv_solutions_annotation.og_audience
+    - node.type.dv_solutions_annotation
+  module:
+    - link
+    - user
+id: node.dv_solutions_annotation.default
+targetEntityType: node
+bundle: dv_solutions_annotation
+mode: default
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+  og_audience:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  report:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 50
+    region: content
+hidden:
+  field_dv_solutions_digital_solut: true
+  field_dv_solutions_ds_links_to_f: true
+  field_dv_solutions_ds_links_to_g: true
+  field_dv_solutions_ds_supplier_u: true
+  field_dv_solutions_keywords: true
+  field_dv_solutions_measurable_po: true
+  field_dv_solutions_name_of_digit: true
+  field_dv_solutions_name_of_suppl: true
+  field_dv_solutions_number_of_use: true
+  field_dv_solutions_online_resour: true
+  field_dv_solutions_other_relevan: true
+  field_dv_solutions_primary_users: true
+  field_innovation: true
+  langcode: true
+  private_message_link: true
+  published_at: true
+  search_api_excerpt: true
+  uri: true
+  uuid: true

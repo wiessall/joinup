@@ -1,0 +1,19 @@
+uuid: ee3f7d17-a28a-4c0e-a96c-e25f4eedd320
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_dv_solutions_number_of_use
+    - node.type.dv_solutions_annotation
+id: node.dv_solutions_annotation.field_dv_solutions_number_of_use
+field_name: field_dv_solutions_number_of_use
+entity_type: node
+bundle: dv_solutions_annotation
+label: 'Number of users or subscribers of the Digital Solution (DS).'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long
