@@ -58,6 +58,8 @@ class JoinupSubscriptionContext extends RawDrupalContext {
   const MESSAGE_INTERVALS = ['Daily', 'Weekly', 'Monthly'];
 
   /**
+   * Delivers all pending message digest subscriptions.
+   *
    * @Given I deliver the message digest subscriptions
    */
   public function deliverMessageDigestSubscriptions(): void {
