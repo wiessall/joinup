@@ -634,7 +634,7 @@ function joinup_user_user_access(UserInterface $account): AccessResultInterface 
 }
 
 /**
- * Implements hoyesok_entity_view().
+ * Implements hook_entity_view().
  */
 function joinup_user_entity_view(array &$build, EntityInterface $entity, $view_mode, $langcode): void {
   if ($entity instanceof UserInterface && $view_mode->getMode() === 'group_header') {

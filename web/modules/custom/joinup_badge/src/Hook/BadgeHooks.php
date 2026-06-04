@@ -162,16 +162,26 @@ class BadgeHooks implements DestructableInterface {
    * Implements hook_ENTITY_TYPE_update() for user entities.
    */
   #[Hook('user_update')]
-  public function trackCertificate(UserInterface $user): void {
-    $this->updateUserCertificatesStatus($user);
+  public function updateUserCertificatesStatus(UserInterface $user): void {
+    $certificates = $this->getUserCertificates($user);
+    foreach ($certificates as $certificate) {
+      if ($user->isBlocked() && $certificate->isPublished()) {
+        $certificate->setUnpublished();
+      }
+      elseif ($user->isActive() && !$certificate->isPublished()) {
+        $certificate->setPublished();
+      }
+      $certificate->save();
+    }
   }
 
   /**
    * Implements hook_ENTITY_TYPE_delete() for user entities.
    */
   #[Hook('user_delete')]
-  public function deleteCertificate(UserInterface $user): void {
-    $this->deleteUserCertificates($user);
+  public function deleteUserCertificates(UserInterface $user): void {
+    $certificates = $this->getUserCertificates($user);
+    $this->entityTypeManager->getStorage('node')->delete($certificates);
   }
 
   /**
@@ -295,50 +305,13 @@ class BadgeHooks implements DestructableInterface {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function getUserCertificates(UserInterface $user): array {
+  protected function getUserCertificates(UserInterface $user): array {
     return $this->entityTypeManager
       ->getStorage('node')
       ->loadByProperties([
         'type' => 'certificate',
         'uid' => $user->id(),
       ]);
-  }
-
-  /**
-   * Deletes all user certificates.
-   *
-   * @param \Drupal\user\UserInterface $user
-   *   Certificates owner.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   */
-  public function deleteUserCertificates(UserInterface $user): void {
-    $certificates = $this->getUserCertificates($user);
-    $this->entityTypeManager->getStorage('node')->delete($certificates);
-  }
-
-  /**
-   * Update status for user certificates.
-   *
-   * @param \Drupal\user\UserInterface $user
-   *   Certificates owner.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   */
-  public function updateUserCertificatesStatus(UserInterface $user): void {
-    $certificates = $this->getUserCertificates($user);
-    foreach ($certificates as $certificate) {
-      if ($user->isBlocked() && $certificate->isPublished()) {
-        $certificate->setUnpublished();
-      }
-      elseif ($user->isActive() && !$certificate->isPublished()) {
-        $certificate->setPublished();
-      }
-      $certificate->save();
-    }
   }
 
 }
