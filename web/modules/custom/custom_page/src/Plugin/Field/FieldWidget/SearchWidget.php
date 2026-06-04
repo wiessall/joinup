@@ -79,10 +79,11 @@ class SearchWidget extends DefaultSearchWidget {
       $element['wrapper'][$key]['#access'] = $administrative_access;
     }
 
-    // If the custom query presets field is filled in, hide also the query
-    // builder as users with administrative access are taking care of the
-    // query shown in this page.
-    if (!$administrative_access && strlen($element['wrapper']['query_presets']['#default_value']) > 0) {
+    // Hide query_builder for non-admins when query_presets supplies the
+    // query — except on carousels, where facilitators must still see and
+    // edit existing filter rows.
+    $bundle = $this->fieldDefinition->getTargetBundle();
+    if (!$administrative_access && $bundle !== 'carousel' && strlen($element['wrapper']['query_presets']['#default_value']) > 0) {
       $element['wrapper']['query_builder']['#access'] = FALSE;
     }
 
