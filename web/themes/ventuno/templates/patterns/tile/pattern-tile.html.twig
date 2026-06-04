@@ -78,7 +78,7 @@
   <article{{ _attributes.addClass(_classes) }}>
     {{- _title_prefix -}}
     {{- _title_suffix -}}
-    <a class="tile__link position-absolute top-0 end-0 bottom-0 start-0" href="{{ _url }}" title="{{ _label|render|striptags|trim|raw }}" {{ _certificate_file ? 'download' : '' }}></a>
+    <a class="tile__link position-absolute top-0 end-0 bottom-0 start-0" href="{{ _url }}" title="{{ _certificate_file ? 'Open certificate (PDF)' : _label|render|striptags|trim|raw }}"></a>
     <figure class="tile__figure mb-0">
       {{- _image -}}
     </figure>
@@ -106,6 +106,12 @@
                 {{- _label -}}
               {%- if _user_badges is not empty -%}
                 <span class="user-badges ms-1">{{ _user_badges }}</span>
+              {%- endif -%}
+              {%- if _certificate_file is not empty -%}
+                {{ pattern('icon', {
+                  name: 'file-pdf',
+                  size: 's'
+                }) }}
               {%- endif -%}
             </h3>
         {%- if _text is not empty -%}
