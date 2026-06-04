@@ -15,7 +15,6 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\comment\CommentInterface;
 use Drupal\joinup_badge\BadgeService;
-use Drupal\joinup_badge\CertificateService;
 use Drupal\joinup_badge\Entity\BadgeAwarding;
 use Drupal\joinup_badge\Entity\Certificate;
 use Drupal\joinup_badge\Plugin\Field\FieldType\BadgeFieldItemList;
@@ -72,7 +71,6 @@ class BadgeHooks implements DestructableInterface {
     protected readonly BadgeService $badgeService,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly TimeInterface $time,
-    protected readonly CertificateService $certificateService,
   ) {}
 
   /**
@@ -155,7 +153,7 @@ class BadgeHooks implements DestructableInterface {
   #[Hook('og_membership_update')]
   public function revokeBadgesForBlockedMembership(OgMembershipInterface $membership): void {
     if ($membership->getGroup()?->uuid() === static::IEC_UUID
-    && $membership->getState() === OgMembershipInterface::STATE_BLOCKED) {
+      && $membership->getState() === OgMembershipInterface::STATE_BLOCKED) {
       $this->badgeService->revoke('iec_member', $membership->getOwner());
     }
   }
@@ -164,16 +162,14 @@ class BadgeHooks implements DestructableInterface {
    * Implements hook_ENTITY_TYPE_update() for user entities.
    */
   #[Hook('user_update')]
-  public function updateUserCertificatesStatus(UserInterface $user): void {
-    $certificates = $this->getUserCertificates($user);
-    foreach ($certificates as $certificate) {
-      if ($user->isBlocked() && $certificate->isPublished()) {
-        $certificate->setUnpublished();
-      }
-      elseif ($user->isActive() && !$certificate->isPublished()) {
-        $certificate->setPublished();
-      }
-      $certificate->save();
+  public function trackCertificate(UserInterface $user): void {
+    $this->updateUserCertificatesStatus($user);
+    $userCertificates = $this->getUserCertificates($user, '1');
+    if (!empty($userCertificates)) {
+      $this->badgeService->award('certificate', $user);
+    }
+    else {
+      $this->badgeService->revoke('certificate', $user);
     }
   }
 
@@ -214,21 +210,6 @@ class BadgeHooks implements DestructableInterface {
     if ($entity->get($field)->value !== $entity->getOriginal()?->get($field)->value) {
       $uid = (int) $entity->getOwnerId();
       $this->portalContributorAuthors[$uid] = $uid;
-    }
-  }
-
-  /**
-   * Implements hook_ENTITY_TYPE_update() for user entities.
-   */
-  #[Hook('user_update')]
-  public function trackCertificate(UserInterface $user): void {
-    $this->certificateService->updateUserCertificatesStatus($user);
-    $userCertificates = $this->certificateService->getUserCertificates($user, 1);
-    if (!empty($userCertificates)) {
-      $this->badgeService->award('certificate', $user);
-    }
-    else {
-      $this->badgeService->revoke('certificate', $user);
     }
   }
 
@@ -318,17 +299,47 @@ class BadgeHooks implements DestructableInterface {
    *
    * @param \Drupal\user\UserInterface $user
    *   Certificates owner.
+   * @param string $status
+   *   Status of certificates.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  protected function getUserCertificates(UserInterface $user): array {
+  protected function getUserCertificates(UserInterface $user, ?string $status = NULL): array {
+    $properties = [
+      'type' => 'certificate',
+      'uid' => $user->id(),
+    ];
+
+    if (!empty($status)) {
+      $properties['status'] = $status;
+    }
+
     return $this->entityTypeManager
       ->getStorage('node')
-      ->loadByProperties([
-        'type' => 'certificate',
-        'uid' => $user->id(),
-      ]);
+      ->loadByProperties($properties);
+  }
+
+  /**
+   * Publish/unpublish user certificates.
+   *
+   * @param \Drupal\user\UserInterface $user
+   *   Certificate owner.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  public function updateUserCertificatesStatus(UserInterface $user): void {
+    $certificates = $this->getUserCertificates($user);
+    foreach ($certificates as $certificate) {
+      if ($user->isBlocked() && $certificate->isPublished()) {
+        $certificate->setUnpublished();
+      }
+      elseif ($user->isActive() && !$certificate->isPublished()) {
+        $certificate->setPublished();
+      }
+      $certificate->save();
+    }
   }
 
 }

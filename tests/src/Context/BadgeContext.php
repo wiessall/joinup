@@ -86,6 +86,7 @@ class BadgeContext extends RawDrupalContext {
     if (!$flag) {
       throw new \InvalidArgumentException(sprintf('The "%s" badge flag does not exist.', $badge));
     }
+    \Drupal::entityTypeManager()->getStorage('flagging')->resetCache();
     return $flag->isFlagged($user);
   }
 
