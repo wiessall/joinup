@@ -9,15 +9,26 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Menu\MenuLinkBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\GroupMenuLinkInterface;
 
 /**
  * Defines a menu link for a group.
  *
  * This is heavily inspired by the 'menu_link_content' plugin, but instead of
- * deriving over the menu link content entities, it derives over entities whose
+ * deriving over the menu link content entities, it derives over nodes whose
  * bundle class are implementing the GroupMenuLinkInterface interface, such as
- * custom pages.
+ * the custom pages.
+ *
+ * Plugin ID pattern: group_menu_link:{link_type}-{identifier}-{og_menu_bundle}
+ * - link_type: There are 2 types of links: 'node' for menu links derived over
+ *   nodes. A typical example is the group custom page. A link is generated for
+ *   each custom page. The other types are link generated one per group, such as
+ *   'overview', 'glossary', etc.
+ * - identifier: The identifier of the node. For the 'node' link type it's the
+ *   ID of the node where the link points to. For the other types, it's the
+ *   group node ID.
+ * - og_menu_bundle: The OG menu bundle where the link is placed.
  */
 final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPluginInterface {
 
@@ -35,9 +46,14 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
   ];
 
   /**
-   * Static cache of the entity associated with this menu link, if any.
+   * Static cache of the node associated with this menu link, if any.
    */
-  protected GroupMenuLinkInterface $entity;
+  protected GroupMenuLinkInterface $node;
+
+  /**
+   * Static cache of the group overview link title.
+   */
+  protected string $overviewLabel;
 
   public function __construct(
     array $configuration,
@@ -53,8 +69,12 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
    * {@inheritdoc}
    */
   public function getTitle(): string {
-    if ($this->isGroupMenuLinkEntityBased()) {
-      return $this->getEntity()->label();
+    $type = $this->getGroupMenuLinkType();
+    if ($type === 'node') {
+      return $this->getNode()->label();
+    }
+    elseif ($type === 'overview') {
+      return $this->getOverviewLabel();
     }
     return $this->pluginDefinition['title'];
   }
@@ -74,16 +94,21 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
     $overrides = array_intersect_key($new_definition_values, $this->overrideAllowed);
     // Update the definition.
     $this->pluginDefinition = $overrides + $this->getPluginDefinition();
-    if ($persist && $this->isGroupMenuLinkEntityBased()) {
-      [, $ogMenuType] = explode('-', $this->getDerivativeId());
 
-      $settings = $this->getEntity()->get('menu_settings')->value;
+    $type = $this->getGroupMenuLinkType();
+    if ($persist && $type === 'node') {
+      [,, $ogMenuType] = explode('-', $this->getDerivativeId());
+
+      $settings = $this->getNode()->get('menu_settings')->value;
       $settings[$ogMenuType] = [
         'weight' => $this->getWeight(),
         'enabled' => $this->isEnabled(),
         'parent' => $this->getParent(),
       ];
-      $this->getEntity()->setInsidePlugin()->set('menu_settings', ['value' => $settings])->save();
+      $this->getNode()
+        ->setInsidePlugin()
+        ->set('menu_settings', ['value' => $settings])
+        ->save();
     }
 
     return $this->pluginDefinition;
@@ -100,7 +125,7 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
    * {@inheritdoc}
    */
   public function isDeletable(): bool {
-    return TRUE;
+    return FALSE;
   }
 
   /**
@@ -114,43 +139,55 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
    * @return \Drupal\joinup_group\Entity\GroupMenuLinkInterface
    *   The entity that makes up this menu link.
    */
-  protected function getEntity(): GroupMenuLinkInterface {
-    if (!isset($this->entity)) {
+  protected function getNode(): GroupMenuLinkInterface {
+    if (!isset($this->node)) {
       $storage = $this->entityTypeManager->getStorage('node');
-      [$nid] = explode('-', $this->getDerivativeId(), 2);
-      $entity = $storage->load($nid);
+      [, $nid] = explode('-', $this->getDerivativeId(), 3);
+      $node = $storage->load($nid);
 
-      if (!$entity instanceof GroupMenuLinkInterface) {
-        throw new PluginException("Entity with NID $nid doesn't exist.");
+      if (!$node instanceof GroupMenuLinkInterface) {
+        throw new PluginException("Node with NID $nid doesn't exist.");
       }
 
-      // Clone the entity object to avoid tampering with the static cache.
-      $this->entity = clone $entity;
-      $translation = $this->entityRepository->getTranslationFromContext($this->entity);
+      // Clone the node object to avoid tampering with the static cache.
+      $this->node = clone $node;
+      $translation = $this->entityRepository->getTranslationFromContext($this->node);
       assert($translation instanceof GroupMenuLinkInterface);
-      $this->entity = $translation;
+      $this->node = $translation;
     }
 
-    return $this->entity;
+    return $this->node;
   }
 
   /**
    * Provides a convenient way to generate a group menu link plugin ID.
    *
-   * @param int|string $id
-   *   The ID.
+   * @param string $type
+   *   The type of the group menu link.
+   * @param int|string $nid
+   *   The node ID. It the node is either a group entity ID or a node
+   *   implementing the GroupMenuLinkInterface interface.
+   *
    * @param string $ogMenuType
    *   The OG menu instance type.
    *
    * @return string
    *   The plugin ID.
+   *
+   * @throws \InvalidArgumentException
+   *   If the type is invalid.
    */
-  public static function buildPluginId(int|string $id, string $ogMenuType): string {
-    return self::BASE_ID . ':' . $id . '-' . $ogMenuType;
+  public static function buildPluginId(string $type, int|string $nid, string $ogMenuType): string {
+    return self::BASE_ID . ':' . $type . '-' . $nid . '-' . $ogMenuType;
   }
 
   /**
-   * Extracts the ID from a group menu link plugin ID.
+   * Extracts the node ID from a group menu link plugin ID.
+   *
+   * This is the ID of the entity that is deriving the plugin. It's a node ID
+   * for plugins implementing GroupMenuLinkInterface, such as custom pages; and
+   * a group ID for plugins derived by the group entity, such as 'overview',
+   * 'glossary', etc.
    *
    * @param string $pluginId
    *   The plugin ID.
@@ -158,27 +195,44 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
    * @return string|null
    *   The ID, or NULL if the plugin is not a group menu link.
    */
-  public static function extractId(string $pluginId): ?string {
+  public static function extractNodeId(string $pluginId): ?string {
     if (str_starts_with($pluginId, self::BASE_ID . ':')) {
       [, $derivativeId] = explode(':', $pluginId, 2);
-      [$id] = explode('-', $derivativeId, 2);
-      return $id;
+      [, $nid] = explode('-', $derivativeId, 3);
+      return $nid;
     }
     return NULL;
   }
 
   /**
-   * Determines whether this menu link is based on an entity.
+   * Returns the type of the menu link.
    *
-   * Entity-based menu links are those that are generated one for each entity
-   * implementing GroupMenuLinkInterface interface.
+   * @return string
+   *   The link type:
+   *   - 'node' for a node implementing the GroupMenuLinkInterface interface.
+   *   - a string such as 'overview', 'glossary', etc. for a group derived link.
    *
-   * @return bool
-   *   TRUE if the menu link is based on an entity.
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
+   *   If the type is invalid.
    */
-  protected function isGroupMenuLinkEntityBased(): bool {
-    [$id] = explode('-', $this->getDerivativeId(), 2);
-    return is_numeric($id);
+  protected function getGroupMenuLinkType(): string {
+    return explode('-', $this->getDerivativeId(), 3)[0];
+  }
+
+  /**
+   * Returns the label of the group overview page.
+   */
+  public function getOverviewLabel(): string {
+    if (!isset($this->overviewLabel)) {
+      $groupId = self::extractNodeId($this->getPluginId());
+      $group = $this->entityTypeManager->getStorage('node')->load($groupId);
+      if (!$group instanceof GroupInterface) {
+        throw new \LogicException("Node ID $groupId should refer a group");
+      }
+      $this->overviewLabel = $group->getSetting('overview_label')->value ?? $this->pluginDefinition['title'];
+    }
+
+    return $this->overviewLabel;
   }
 
 }

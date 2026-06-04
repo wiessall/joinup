@@ -306,7 +306,7 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
       while ($ancestors) {
         $parentPluginId = array_shift($ancestors);
 
-        if (!$parentNid = GroupMenuLink::extractId($parentPluginId)) {
+        if (!$parentNid = GroupMenuLink::extractNodeId($parentPluginId)) {
           // Parent is not a group menu link entity, such as a custom page; we
           // move up in the hierarchy.
           continue;
@@ -339,9 +339,9 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
   protected function getGroupMenuLinkEntityChildren(GroupMenuLinkInterface $entity): array {
     $nids = [];
     foreach ($entity->getGroup()->getGroupOgMenuInstances() as $ogMenuInstance) {
-      $ids = $this->menuLinkManager->getChildIds(GroupMenuLink::buildPluginId($entity->id(), $ogMenuInstance->bundle()));
+      $ids = $this->menuLinkManager->getChildIds(GroupMenuLink::buildPluginId('node', $entity->id(), $ogMenuInstance->bundle()));
       foreach ($ids as $id) {
-        if ($nid = GroupMenuLink::extractId($id)) {
+        if ($nid = GroupMenuLink::extractNodeId($id)) {
           $nids[] = $nid;
         }
       }
