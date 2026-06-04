@@ -246,7 +246,7 @@ class CollectionContext extends RawDrupalContext {
       $menu_settings[$menu_type] = [
         'enabled' => ($values['enabled'] ??= 'yes') === 'yes',
         'weight' => (int) ($values['weight'] ?? 0),
-        'parent' => $parent ? GroupMenuLink::buildPluginId($parent->id(), $menu_type) : '',
+        'parent' => $parent ? GroupMenuLink::buildPluginId('node', $parent->id(), $menu_type) : '',
       ];
       $page->set('menu_settings', ['value' => $menu_settings])->save();
     }

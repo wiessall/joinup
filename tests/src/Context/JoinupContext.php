@@ -2432,7 +2432,7 @@ class JoinupContext extends RawDrupalContext {
         }
 
         $parent = $this->getEntityByLabel('node', $data['parent'], 'custom_page');
-        $parent_plugin_id = GroupMenuLink::buildPluginId($parent->id(), 'navigation');
+        $parent_plugin_id = GroupMenuLink::buildPluginId('node', $parent->id(), 'navigation');
         $this->assertSameValues($parent_plugin_id, $parent_input->getValue());
         $this->assertCondition(count($indentation) !== 0, "The menu link '{$data['title']}' should be indented but it's not.");
       }
