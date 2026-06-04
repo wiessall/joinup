@@ -68,6 +68,26 @@ Feature:
     And I should not see the "Some page 2" tile
 
   @javascript
+  Scenario: Facilitators can see and edit the Content filter section of a carousel even when query_presets is set.
+    # Regression: facilitators saw an empty Edit Carousel modal when
+    # query_presets was set on the paragraph.
+    Given the following "custom_page" content:
+      | title              | collection  | state     |
+      | Facilitator edit C | Roman ruins | published |
+    And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Facilitator edit C" title:
+      | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
+    And I append "carousel" to "field_paragraphs_body" field in "node" entity with following "Facilitator edit C" title:
+      | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:18:"entity_bundle\|news";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:0;} |
+
+    When I am logged in as a facilitator of the "Roman ruins" collection
+    And I go to the edit form of the "Facilitator edit C" "custom page"
+    And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
+
+    Then I should see "Show related content"
+    And I should see "Content filter"
+    And I should see the button "Add and configure filter"
+
+  @javascript
   Scenario: Carousel's control buttons should be visible if there is more content to show.
     Given the following "collection" content:
       | title  | state     |
