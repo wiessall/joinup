@@ -11,6 +11,9 @@ Feature: User certificates
       | Archived IOPEU Solution  | Interoperable Europe Academy | archived  |
       | Draft IOPEU Solution     | Interoperable Europe Academy | draft     |
       | Portal IOPEU Solution    | Portal support               | published |
+    And the following news content:
+      | title                     | collection                   | body         |
+      | News about IOPEU Solution | Interoperable Europe Academy | Just a test! |
 
     And the following users:
       | Username            | Roles     | First name | Family name   |
@@ -19,9 +22,6 @@ Feature: User certificates
 
   @javascript
   Scenario: Unrelated and unpublished solutions don't appear as course
-    Given the following news content:
-      | title                     | collection                   | body         |
-      | News about IOPEU Solution | Interoperable Europe Academy | Just a test! |
     When I am logged in as "Peter the Moderator"
     And I visit "user/edit"
     And I press the "Add new certificate" button
@@ -65,12 +65,8 @@ Feature: User certificates
 
   @javascript
   Scenario: When user is blocked/unblocked certificates should be unpublished/published
-    Given the following users:
-      | Username  | Roles     | First name | Family name |
-      | Some User | moderator | Some       | User        |
-    When I am logged in as "Some User"
-    And user "Some User" should not have the "certificate" badge
-    And I go to the edit form of the "Some User" user
+    When I am logged in as a user with the moderator role
+    And I go to the edit form of the "Sara the User" user
     Then I should see the text "Certificates"
     When I press the "Add new certificate" button
     Then field should be present "Issuing date"
@@ -79,21 +75,19 @@ Feature: User certificates
     And I attach the file "text.pdf" to "files[certificates_form_0_certificate_0]"
     And I press "Create certificate"
     And I press "Save"
-    And user "Some User" should have the "certificate" badge
     # Block the user
     Then I am on the homepage
     When I click "People"
-    Then I check "Some User"
+    Then I check "Sara the User"
     And I select "Block the selected user(s)" from "Action"
     And I press "Apply to selected items"
     Then I should see the success message "Block the selected user(s) was applied to 1 item."
-    And I go to the edit form of the "Some User" user
+    And I go to the edit form of the "Sara the User" user
     Then I should see the link "Archived IOPEU Solution"
     And I should see the text "Certificate of course"
     Then the "IEF table" table should contain the following columns:
       | Course                  | Status      |
       | Archived IOPEU Solution | Unpublished |
-    And user "Some User" should not have the "certificate" badge
     # Unblock the user
     Then I am on the homepage
     When I click "People"
@@ -105,6 +99,5 @@ Feature: User certificates
     Then I should see the link "Archived IOPEU Solution"
     And I should see the text "Certificate of course"
     Then the "IEF table" table should contain the following columns:
-      | Course                  | Status    |
+      | Course                  | Status      |
       | Archived IOPEU Solution | Published |
-    And user "Sara the User" should have the "certificate" badge

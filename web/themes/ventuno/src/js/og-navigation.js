@@ -1,4 +1,7 @@
 /**
+ * @param Drupal
+ * @param once
+ * @param priorityPlus
  * @file
  * Add overflowing nav items into a dropdown menu
  */

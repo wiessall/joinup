@@ -161,6 +161,32 @@ class BadgeHooks implements DestructableInterface {
   }
 
   /**
+   * Implements hook_ENTITY_TYPE_update() for user entities.
+   */
+  #[Hook('user_update')]
+  public function updateUserCertificatesStatus(UserInterface $user): void {
+    $certificates = $this->getUserCertificates($user);
+    foreach ($certificates as $certificate) {
+      if ($user->isBlocked() && $certificate->isPublished()) {
+        $certificate->setUnpublished();
+      }
+      elseif ($user->isActive() && !$certificate->isPublished()) {
+        $certificate->setPublished();
+      }
+      $certificate->save();
+    }
+  }
+
+  /**
+   * Implements hook_ENTITY_TYPE_delete() for user entities.
+   */
+  #[Hook('user_delete')]
+  public function deleteUserCertificates(UserInterface $user): void {
+    $certificates = $this->getUserCertificates($user);
+    $this->entityTypeManager->getStorage('node')->delete($certificates);
+  }
+
+  /**
    * Implements hook_og_membership_delete().
    */
   #[Hook('og_membership_delete')]
@@ -285,6 +311,24 @@ class BadgeHooks implements DestructableInterface {
       }
     }
     return $total;
+  }
+
+  /**
+   * Gets all user certificates.
+   *
+   * @param \Drupal\user\UserInterface $user
+   *   Certificates owner.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  protected function getUserCertificates(UserInterface $user): array {
+    return $this->entityTypeManager
+      ->getStorage('node')
+      ->loadByProperties([
+        'type' => 'certificate',
+        'uid' => $user->id(),
+      ]);
   }
 
 }
