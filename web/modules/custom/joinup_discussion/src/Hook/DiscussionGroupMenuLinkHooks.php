@@ -8,16 +8,14 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Menu\MenuLinkManagerInterface;
 use Drupal\joinup_discussion\Entity\DiscussionInterface;
-use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\GroupMenuLinkHelperTrait;
 use Drupal\joinup_group\Plugin\Menu\GroupMenuLink;
-use Drupal\joinup_group\Plugin\Menu\GroupMenuLinkDeriver;
 use Drupal\node\NodeInterface;
 
 /**
  * Hooks concerning group menu links.
  */
-readonly class DiscussionGroupMenuLinksHooks {
+final readonly class DiscussionGroupMenuLinkHooks {
 
   use GroupMenuLinkHelperTrait;
 
@@ -27,24 +25,25 @@ readonly class DiscussionGroupMenuLinksHooks {
   ) {}
 
   /**
-   * Adds a 'Discussions' group menu link to the group if necessary.
+   * Adds a discussions menu link to a group.
    */
-  #[Hook('node_update')]
-  public function addGroupDiscussionLink(NodeInterface $discussion): void {
-    if ($discussion instanceof DiscussionInterface) {
-      $this->addGroupLink('discussion', $discussion, 'navigation', 'view.discussions.overview', 'Discussions', -8);
+  #[Hook('node_insert')]
+  public function addDiscussionGroupMenuLink(NodeInterface $discussion): void {
+    if ($discussion instanceof DiscussionInterface && $discussion->hasGroup()) {
+      $this->addLink('discussion', $discussion->getGroup(), 'navigation', 'Discussions', 'view.discussions.overview', weight: -8);
     }
   }
 
   /**
-   * Removes the 'Discussions' group menu link with the last discussion.
-   *
-   * Removal happens also when the group itself is deleted.
+   * Deletes a discussion menu link from the group.
    */
   #[Hook('node_delete')]
-  public function removeGroupDiscussionLink(NodeInterface $node): void {
-    if ($node instanceof DiscussionInterface || $node instanceof GroupInterface) {
-      $this->removeGroupLink('discussion', $node, 'navigation');
+  public function deleteDiscussionGroupMenuLink(NodeInterface $discussion): void {
+    if ($discussion instanceof DiscussionInterface && $discussion->hasGroup()) {
+      if (!$this->groupHasContent($discussion)) {
+        $pluginId = GroupMenuLink::buildPluginId('discussion', $discussion->getGroupId(), 'navigation');
+        $this->menuLinkManager->removeDefinition($pluginId, FALSE);
+      }
     }
   }
 
