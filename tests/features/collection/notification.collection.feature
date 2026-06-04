@@ -161,6 +161,9 @@ Feature: Notification test for the collection transitions.
     Then I should see the inline form error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "As you wish."
     And I press "Archive"
+    And the number of items in the "group_archive_related_content" queue should be 1
+    Then I run the "group_archive_related_content" queue worker
+    And the number of items in the "group_archive_related_content" queue should be 0
     Then the following email should have been sent:
       | recipient | NC owner                                                              |
       | subject   | Your request to archive collection NC to archive has been approved.   |
@@ -174,9 +177,8 @@ Feature: Notification test for the collection transitions.
       | subject   | The collection NC to archive was archived.                                                                                   |
       | body      | The collection "NC to archive", of which you are a member, has been archived. The reason for being archived is: As you wish. |
     And the following email should have been sent:
-      | recipient | NC moderator2                                                                                                                 |
-      | subject   | The collection NC to archive was archived.                                                                                   |
-      | body      | The collection "NC to archive", of which you are a member, has been archived. The reason for being archived is: As you wish. |
+      | recipient | NC moderator2                                       |
+      | body      | Your collection "NC to archive" has been archived.  |
     And the following email should not have been sent:
       | recipient | NC member3                                                                                                                   |
       | subject   | The collection NC to archive was archived.                                                                                   |
