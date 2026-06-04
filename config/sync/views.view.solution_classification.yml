@@ -308,7 +308,7 @@ display:
     display_plugin: page
     position: 1
     display_options:
-      rendering_language: '***LANGUAGE_entity_translation***'
+      rendering_language: '***LANGUAGE_language_interface***'
       display_extenders:
         metatag_display_extender:
           metatags: {  }
@@ -317,7 +317,6 @@ display:
     cache_metadata:
       max-age: -1
       contexts:
-        - 'languages:language_content'
         - 'languages:language_interface'
         - user.permissions
       tags: {  }
