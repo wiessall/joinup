@@ -233,3 +233,14 @@ Feature: Solution moderation
     Then I should see the heading "Access denied"
     When I go to the edit form of the "Flames in the Swords" solution
     Then I should see the heading "Access denied"
+
+  Scenario: A solution cannot be edited when its parent collection is archived
+    Given the following "collection" content:
+      | title             | state    |
+      | Locked collection | archived |
+    And the following "solution" content:
+      | title           | collection        | state    |
+      | Locked solution | Locked collection | archived |
+    And I am logged in as a moderator
+    When I go to the edit form of the "Locked solution" solution
+    Then I should see the heading "Access denied"
