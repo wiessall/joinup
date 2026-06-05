@@ -54,9 +54,6 @@ Feature: Test the visibility of the quick links menu.
 
   @javascript
   Scenario: Test visibility for solutions.
-    Given the following "collection" content:
-      | title           | content_creation         | group_moderation |
-      | Some collection | facilitators and authors | yes              |
     Given the following "solution" content:
       | title         | collection      |
       | Some solution | Some collection |
