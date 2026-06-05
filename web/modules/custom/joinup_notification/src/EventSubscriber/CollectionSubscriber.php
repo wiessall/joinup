@@ -416,6 +416,21 @@ class CollectionSubscriber extends NotificationSubscriberBase {
     }
 
     $this->sendUserDataMessages($user_data);
+
+    /** @var \Drupal\Core\Field\EntityReferenceFieldItemList $contact_infos */
+    $contact_infos = $this->entity->get('contact')->getValue();
+    $contact_mails = [];
+
+    foreach ($contact_infos as $contact_info) {
+      $node = $this->entityTypeManager->getStorage('node')->load($contact_info['target_id']);
+      $contact_mails[] = $node->get('email')->value;
+    }
+
+    if (!empty($contact_mails)) {
+      $arguments = $this->generateArguments($this->entity);
+      $arguments['@transition:archive:extra:members'] = $this->t('<p>Kind regards,</p><p>The Portal Support Team</p>');
+      $this->messageDelivery->sendMessageTemplateToEmailAddresses(self::TEMPLATE_ARCHIVE_DELETE_MEMBERS, $arguments, $contact_mails);
+    }
   }
 
   public function onCompleteArchival(NotificationEvent $event): void {

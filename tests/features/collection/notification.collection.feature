@@ -106,7 +106,7 @@ Feature: Notification test for the collection transitions.
     And I go to the edit form of the "NC to delete" collection
     And I click "Delete"
     And I press "Delete"
-    Then 4 e-mails should have been sent
+    Then 5 e-mails should have been sent
     Then the following email should have been sent:
       | recipient | NC member1                                                                  |
       | subject   | The collection NC to delete was deleted.                                    |
@@ -115,6 +115,10 @@ Feature: Notification test for the collection transitions.
       | recipient | NC member2                                                                  |
       | subject   | The collection NC to delete was deleted.                                    |
       | body      | The collection "NC to delete", of which you are a member, has been deleted. |
+    And the following email should have been sent:
+      | recipient_mail | contact.email@example.com                                                   |
+      | subject        | The collection NC to delete was deleted.                                    |
+      | body           | The collection "NC to delete", of which you are a member, has been deleted. |
 
     # Test 'propose edit' operation.
     And I am logged in as "NC facilitator"
@@ -177,6 +181,10 @@ Feature: Notification test for the collection transitions.
       | subject   | The collection NC to archive was archived.                                                                                   |
       | body      | The collection "NC to archive", of which you are a member, has been archived. The reason for being archived is: As you wish. |
     And the following email should have been sent:
+      | recipient_mail | contact.email@example.com                                                      |
+      | subject        | The collection NC to archive was archived.                                     |
+      | body           | The collection "NC to archive", of which you are a member, has been archived.  |
+    And the following email should have been sent:
       | recipient | NC moderator2                                       |
       | body      | Your collection "NC to archive" has been archived.  |
     And the following email should not have been sent:
@@ -190,7 +198,7 @@ Feature: Notification test for the collection transitions.
     And I go to the edit form of the "NC to delete by mod" collection
     And I click "Delete"
     And I press "Delete"
-    Then 4 e-mails should have been sent
+    Then 5 e-mails should have been sent
     Then the following email should have been sent:
       | recipient | NC member1                                                                         |
       | subject   | The collection NC to delete by mod was deleted.                                    |
@@ -203,3 +211,7 @@ Feature: Notification test for the collection transitions.
       | recipient | NC owner                                                                                   |
       | subject   | Interoperable Europe Portal: Your collection has been deleted by the moderation team       |
       | body      | The Interoperable Europe Portal moderation team deleted the collection NC to delete by mod |
+    And the following email should have been sent:
+      | recipient_mail | contact.email@example.com                                                     |
+      | subject   | The collection NC to delete by mod was deleted.                                    |
+      | body      | The collection "NC to delete by mod", of which you are a member, has been deleted. |
