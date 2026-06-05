@@ -210,6 +210,7 @@ class GroupContentArchiverQueue extends QueueWorkerBase implements ContainerFact
     }
 
     if ($transition === Transition::Archive) {
+      // Motivation is lost after unserialize so re add it back.
       $group->motivation = $motivation;
       joinup_notification_dispatch_notification('update', NotificationEvents::GROUP_ENTITY_ARCHIVE_COMPLETED, $group);
     }

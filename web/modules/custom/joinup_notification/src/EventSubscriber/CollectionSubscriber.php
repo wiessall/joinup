@@ -417,6 +417,7 @@ class CollectionSubscriber extends NotificationSubscriberBase {
 
     $this->sendUserDataMessages($user_data);
 
+    // Send notifications to the contact email accounts.
     /** @var \Drupal\Core\Field\EntityReferenceFieldItemList $contact_infos */
     $contact_infos = $this->entity->get('contact')->getValue();
     $contact_mails = [];
@@ -428,6 +429,8 @@ class CollectionSubscriber extends NotificationSubscriberBase {
 
     if (!empty($contact_mails)) {
       $arguments = $this->generateArguments($this->entity);
+      // This is usually injected in joinup_notification_mail_alter() is a user
+      // account is set.
       $arguments['@transition:archive:extra:members'] = $this->t('<p>Kind regards,</p><p>The Portal Support Team</p>');
       $this->messageDelivery->sendMessageTemplateToEmailAddresses(self::TEMPLATE_ARCHIVE_DELETE_MEMBERS, $arguments, $contact_mails);
     }
@@ -440,6 +443,8 @@ class CollectionSubscriber extends NotificationSubscriberBase {
    *   The event.
    */
   public function onCompleteArchival(NotificationEvent $event): void {
+    // Available data ex. getOriginal() is not available as for the other events
+    // so we have to make assumptions.
     $this->event = $event;
     $this->entity = $event->getEntity();
     $this->workflow = $this->entity->getWorkflow();
