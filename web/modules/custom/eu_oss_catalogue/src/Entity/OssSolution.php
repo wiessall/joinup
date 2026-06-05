@@ -8,7 +8,6 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
 use Drupal\eu_oss_catalogue\Model\Validation\ValidationIssue;
 use Drupal\eu_oss_catalogue\Model\Validation\ValidationResponseInterface;
-use Drupal\eu_oss_catalogue\Plugin\Field\RelevantLanguageCode;
 use Drupal\node\Entity\Node;
 use Drupal\pluginreference\Plugin\Field\FieldType\PluginReferenceItem;
 
@@ -51,13 +50,6 @@ class OssSolution extends Node implements OssSolutionInterface {
       return $value->plugin_id !== $provider->getPluginId();
     });
     return $this;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getRelevantLangCode(): string {
-    return $this->get(RelevantLanguageCode::FIELD_NAME)->first()->getString();
   }
 
   /**

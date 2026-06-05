@@ -1,0 +1,62 @@
+# See \Drupal\Tests\eu_oss_catalogue\Kernel\TranslationTest::testOssSolutionLanguage()
+
+cases:
+
+  No language in publiccode.yml:
+    publiccodeYml: {  }
+    langcode: en
+
+  Only one language in publiccode.yml:
+    publiccodeYml:
+      description:
+        it:
+          longDescription: 'baz'
+    langcode: it
+    # Update by removing Italian language and adding German.
+    publiccodeYmlUpdated:
+      description:
+        de:
+          longDescription: 'baz'
+    langcodeUpdated: de
+
+  Two languages with equal richness:
+    publiccodeYml:
+      description:
+        it:
+          longDescription: 'baz'
+        en:
+          longDescription: 'baz'
+    langcode: it
+    # Revert the language order.
+    publiccodeYmlUpdated:
+      description:
+        en:
+          longDescription: 'baz'
+        it:
+          longDescription: 'baz'
+    langcodeUpdated: en
+
+  The richest language wins:
+    publiccodeYml:
+      description:
+        ro:
+          longDescription: 'baz'
+        it:
+          longDescription: 'baz'
+          features:
+            - qux
+    langcode: it
+    # Update by making Romanian language richer.
+    publiccodeYmlUpdated:
+      description:
+        ro:
+          longDescription: 'baz'
+          features:
+            - more
+            - features
+            - here
+        it:
+          longDescription: 'baz'
+          features:
+            - qux
+    langcodeUpdated: ro

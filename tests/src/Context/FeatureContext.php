@@ -2184,4 +2184,19 @@ class FeatureContext extends RawDrupalContext {
     $this->assertSameValues(0, $queue->numberOfItems());
   }
 
+  /**
+   * Selects the radio button in a table row identified by its text content.
+   *
+   * @param string $rowText
+   *   Text contained in the row. Must be unique.
+   */
+  #[When('I click the radio button in the :rowText row')]
+  public function clickRadioButtonInRow(string $rowText): void {
+    $radio = $this->getRowByRowText($rowText)->find('css', 'input[type="radio"]');
+    if (!$radio) {
+      throw new \RuntimeException(sprintf('No radio button found in the "%s" row.', $rowText));
+    }
+    $radio->selectOption((string) $radio->getAttribute('value'));
+  }
+
 }

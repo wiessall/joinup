@@ -308,6 +308,7 @@ permissions:
   - 'rebuild node access permissions'
   - 'replicate entities'
   - 'revert all sitewide alert revisions'
+  - 'schedule translation'
   - 'translate any entity'
   - 'translate interface'
   - 'translate menu_link_content'

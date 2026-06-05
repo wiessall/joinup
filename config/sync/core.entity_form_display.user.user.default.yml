@@ -151,6 +151,11 @@ content:
       match_limit: 10
       placeholder: ''
     third_party_settings: {  }
+  language:
+    weight: 12
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   legal_legal_notice:
     weight: -4
     region: content
@@ -165,7 +170,6 @@ content:
 hidden:
   field_user_frequency: true
   langcode: true
-  language: true
   matomo: true
   private_messages: true
   timezone: true
