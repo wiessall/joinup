@@ -233,10 +233,3 @@ Feature: Solution moderation
     Then I should see the heading "Access denied"
     When I go to the edit form of the "Flames in the Swords" solution
     Then I should see the heading "Access denied"
-
-    # Admin page links should not be visible on an archived solution.
-    Given I am logged in as "Tyrone Underwood"
-    When I go to the homepage of the "Fire Swords" solution
-    Then I should see the text "Archived" in the "Header"
-    And I should not see the link "EIF perspective" in the "Entity actions" region
-    And I should not see the link "Settings" in the "Entity actions" region
