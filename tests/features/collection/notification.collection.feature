@@ -1,4 +1,4 @@
-@api @group-x
+@api @group-a
 Feature: Notification test for the collection transitions.
   In order to manage my collections
   As an user that is related to the collection
@@ -112,6 +112,12 @@ Feature: Notification test for the collection transitions.
       | subject   | The collection NC to delete was deleted.                                    |
       | body      | The collection "NC to delete", of which you are a member, has been deleted. |
     And the following email should have been sent:
+      | recipient | NC moderator                                                                |
+      | body      | Your collection "NC to delete" has been deleted.                            |
+    And the following email should have been sent:
+      | recipient | NC moderator2                                                               |
+      | body      | Your collection "NC to delete" has been deleted.                            |
+    And the following email should have been sent:
       | recipient | NC member2                                                                  |
       | subject   | The collection NC to delete was deleted.                                    |
       | body      | The collection "NC to delete", of which you are a member, has been deleted. |
@@ -212,6 +218,9 @@ Feature: Notification test for the collection transitions.
       | subject   | Interoperable Europe Portal: Your collection has been deleted by the moderation team       |
       | body      | The Interoperable Europe Portal moderation team deleted the collection NC to delete by mod |
     And the following email should have been sent:
-      | recipient_mail | contact.email@example.com                                                     |
-      | subject   | The collection NC to delete by mod was deleted.                                    |
-      | body      | The collection "NC to delete by mod", of which you are a member, has been deleted. |
+      | recipient | NC moderator2                                           |
+      | body      | Your collection "NC to delete by mod" has been deleted. |
+    And the following email should have been sent:
+      | recipient_mail | contact.email@example.com                                                          |
+      | subject        | The collection NC to delete by mod was deleted.                                    |
+      | body           | The collection "NC to delete by mod", of which you are a member, has been deleted. |
