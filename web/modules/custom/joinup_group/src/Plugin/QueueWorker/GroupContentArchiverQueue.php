@@ -150,12 +150,14 @@ class GroupContentArchiverQueue extends QueueWorkerBase implements ContainerFact
    *   The group whose sub-content should be (un)archived.
    * @param \Drupal\joinup_group\Transition $transition
    *   The transition to apply.
+   * @param string|null $motivation
+   *   The injected motivation if any.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  protected function performOperation(GroupInterface $group, Transition $transition, string $motivation = NULL): void {
+  protected function performOperation(GroupInterface $group, Transition $transition, ?string $motivation = NULL): void {
     foreach ($this->getGroupContent($group) as $entity) {
       if (!$entity instanceof ArchivableEntityInterface) {
         // Continue silently.

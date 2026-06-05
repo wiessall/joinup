@@ -433,6 +433,12 @@ class CollectionSubscriber extends NotificationSubscriberBase {
     }
   }
 
+  /**
+   * Notify of archival after the process completed.
+   *
+   * @param \Drupal\joinup_notification\Event\NotificationEvent $event
+   *   The event.
+   */
   public function onCompleteArchival(NotificationEvent $event): void {
     $this->event = $event;
     $this->entity = $event->getEntity();
