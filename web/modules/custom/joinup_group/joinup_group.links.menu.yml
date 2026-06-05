@@ -1,2 +1,2 @@
-group_menu_link:
+group_ink:
   class: Drupal\joinup_group\Plugin\Menu\GroupMenuLink

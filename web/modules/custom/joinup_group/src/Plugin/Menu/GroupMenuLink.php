@@ -20,7 +20,7 @@ use Drupal\joinup_group\Entity\GroupMenuLinkInterface;
  * bundle class are implementing the GroupMenuLinkInterface interface, such as
  * the custom pages.
  *
- * Plugin ID pattern: group_menu_link:{link_type}-{identifier}-{og_menu_bundle}
+ * Plugin ID pattern: group_link:{link_type}-{identifier}-{og_menu_bundle}
  * - link_type: There are 2 types of links: 'node' for menu links derived over
  *   nodes. A typical example is the group custom page. A link is generated for
  *   each custom page. The other types are link generated one per group, such as
@@ -32,7 +32,7 @@ use Drupal\joinup_group\Entity\GroupMenuLinkInterface;
  */
 final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPluginInterface {
 
-  public const string BASE_ID = 'group_menu_link';
+  public const string BASE_ID = 'group_link';
 
   /**
    * {@inheritdoc}
