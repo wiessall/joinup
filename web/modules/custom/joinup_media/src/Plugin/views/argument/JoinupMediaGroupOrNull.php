@@ -15,22 +15,6 @@ use Drupal\views\Plugin\views\argument\StringArgument;
 class JoinupMediaGroupOrNull extends StringArgument {
 
   /**
-   * @todo This should be done in an alternative query parameter plugin
-   */
-  public function getDefaultArgument(): mixed {
-    $defaultArgument = parent::getDefaultArgument();
-    if (
-      $defaultArgument === NULL &&
-      array_key_exists('default_argument_options', $this->options) &&
-      array_key_exists('fallback', $this->options['default_argument_options']) &&
-      $this->options['default_argument_options']['fallback'] !== ''
-    ) {
-      $defaultArgument = $this->options['default_argument_options']['fallback'];
-    }
-    return $defaultArgument;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function setArgument($arg): bool {
