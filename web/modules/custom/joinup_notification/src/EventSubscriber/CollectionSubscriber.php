@@ -443,10 +443,15 @@ class CollectionSubscriber extends NotificationSubscriberBase {
    *   The event.
    */
   public function onCompleteArchival(NotificationEvent $event): void {
+    $this->entity = $event->getEntity();
+
+    if (!$this->entity instanceof CollectionInterface) {
+      return;
+    }
+
     // Available data ex. getOriginal() is not available as for the other events
     // so we have to make assumptions.
     $this->event = $event;
-    $this->entity = $event->getEntity();
     $this->workflow = $this->entity->getWorkflow();
     $this->fromState = 'archival_request';
     $to_state = $this->entity->getWorkflowState();
