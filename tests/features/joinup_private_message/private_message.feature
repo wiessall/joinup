@@ -53,8 +53,10 @@ Feature: Private messages
     And I pick "Joan Tiff" from the "Member" autocomplete suggestions
     And I fill in "Message" with "A private message from Bob to Joan."
     And I press "Send" in the "Modal buttons" region
+    Then the modal should be closed
     And I wait for AJAX to finish
-    And I go to "/user/messages"
+    And I should be on "/user/messages"
+    And I wait until the page contains the text "A private message from Bob to Joan."
     And I see the following lines of text in the correct order in "Private messages inbox":
       | A private message from Bob to Joan.        |
       | Another private message from Bob to Alice. |
