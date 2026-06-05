@@ -51,8 +51,7 @@ Feature: User certificates
       | Certificate of course 50 |
       | Portal support           |
     Then the logo logo.png should be shown in the "Certificate of course 50" certificate tile
-    When I click "Certificate of course 50"
-    And I go to the edit form of the "Sara the User" user
+    When I go to the edit form of the "Sara the User" user
     Then I should see the link "Archived IOPEU Solution"
     And I should see the text "Certificate of course"
     Then the "IEF table" table should contain the following columns:
