@@ -1175,10 +1175,10 @@ display:
           path_case: none
           transform_dash: false
           break_phrase: false
-        og_audience_target_id:
-          id: og_audience_target_id
+        group_or_no_group:
+          id: group_or_no_group
           table: media__og_audience
-          field: og_audience_target_id
+          field: group_or_no_group
           relationship: none
           group_type: group
           admin_label: ''
