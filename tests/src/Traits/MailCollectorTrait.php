@@ -78,10 +78,10 @@ trait MailCollectorTrait {
   /**
    * Fetches the emails sent given criteria.
    *
-   * @param string|null $subject
-   *   The subject of the email sent.
    * @param string $recipient
    *   The email of the recipient.
+   * @param string|null $subject
+   *   The subject of the email sent.
    * @param bool $strict
    *   When set to TRUE will throw an exception if no mails are found with the
    *   given subject and mail. Defaults to TRUE.
@@ -94,7 +94,7 @@ trait MailCollectorTrait {
    * @throws \Behat\Mink\Exception\ExpectationException
    *   When no emails are found with the given subject and/or recipient.
    */
-  protected function getEmailsBySubjectAndMail(?string $subject = NULL, string $recipient, bool $strict = TRUE, bool $search_recipient_in_list = FALSE): array {
+  protected function getEmailsBySubjectAndMail(string $recipient, ?string $subject = NULL, bool $strict = TRUE, bool $search_recipient_in_list = FALSE): array {
     $emails_found = $this->getMails(['to' => $recipient, 'subject' => $subject], $search_recipient_in_list);
     if (empty($emails_found) && $strict) {
       throw new ExpectationException("No emails found sent to {$recipient} with subject '{$subject}'.", $this->getSession()->getDriver());

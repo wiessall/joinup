@@ -663,7 +663,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
     $emails = [];
 
     foreach (self::MESSAGE_INTERVALS as $interval) {
-      $emails = array_merge($emails, $this->getEmailsBySubjectAndMail("Interoperable Europe Portal: $interval digest message", $email_address, FALSE));
+      $emails = array_merge($emails, $this->getEmailsBySubjectAndMail($email_address, "Interoperable Europe Portal: $interval digest message", FALSE));
     }
 
     return $emails;
