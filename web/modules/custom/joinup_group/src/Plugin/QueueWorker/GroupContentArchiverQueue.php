@@ -98,7 +98,7 @@ class GroupContentArchiverQueue extends QueueWorkerBase implements ContainerFact
 
     $this->accountSwitcher->switchTo($actor);
     try {
-      $this->performOperation($group, $data['transition']);
+      $this->performOperation($group, $data['transition'], $data['motivation'] ?? NULL);
     }
     finally {
       $this->accountSwitcher->switchBack();
@@ -155,7 +155,7 @@ class GroupContentArchiverQueue extends QueueWorkerBase implements ContainerFact
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  protected function performOperation(GroupInterface $group, Transition $transition): void {
+  protected function performOperation(GroupInterface $group, Transition $transition, string $motivation = NULL): void {
     foreach ($this->getGroupContent($group) as $entity) {
       if (!$entity instanceof ArchivableEntityInterface) {
         // Continue silently.
@@ -208,6 +208,7 @@ class GroupContentArchiverQueue extends QueueWorkerBase implements ContainerFact
     }
 
     if ($transition === Transition::Archive) {
+      $group->motivation = $motivation;
       joinup_notification_dispatch_notification('update', NotificationEvents::GROUP_ENTITY_ARCHIVE_COMPLETED, $group);
     }
   }
