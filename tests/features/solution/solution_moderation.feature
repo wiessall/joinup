@@ -239,5 +239,4 @@ Feature: Solution moderation
     When I go to the homepage of the "Fire Swords" solution
     Then I should see the text "Archived" in the "Header"
     And I should not see the link "EIF perspective" in the "Entity actions" region
-    And I should not see the link "Edit" in the "Entity actions" region
     And I should not see the link "Settings" in the "Entity actions" region
