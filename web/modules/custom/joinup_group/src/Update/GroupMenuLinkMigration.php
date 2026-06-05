@@ -39,6 +39,7 @@ final readonly class GroupMenuLinkMigration implements ContainerInjectionInterfa
     }
 
     $sandbox['start'] = new \DateTimeImmutable();
+
     $query = $this->getBaseQuery('entity.node.canonical');
     $query->innerJoin('node_field_data', 'custom_page', "SUBSTRING(md.link__uri, 13) = custom_page.nid AND custom_page.type = 'custom_page' AND md.link__uri LIKE 'entity:node/%'");
     $query->addExpression('custom_page.nid', 'customPageNid');
@@ -170,9 +171,7 @@ final readonly class GroupMenuLinkMigration implements ContainerInjectionInterfa
     $sandbox['#finished'] = (int) empty($sandbox['items']);
 
     if ($sandbox['#finished'] === 1) {
-      $stop = new \DateTimeImmutable();
-      $diff = $stop->diff($sandbox['start']);
-      return "Finished converting $sandbox[total] $linkType links. Took {$diff->format('%im %s')}.{$diff->format('%F')}s";
+      return "Finished converting $sandbox[total] $linkType links. Took " . $this->formatInterval($sandbox['start']);
     }
 
     return "Converted $sandbox[progress] out of $sandbox[total] $linkType links";
@@ -242,6 +241,15 @@ final readonly class GroupMenuLinkMigration implements ContainerInjectionInterfa
     $query->orderBy('md.parent');
 
     return $query;
+  }
+
+  /**
+   * Returns the formatted time elapsed since a given start time.
+   */
+  public function formatInterval(\DateTimeImmutable $start): string {
+    $stop = new \DateTimeImmutable();
+    $diff = $stop->diff($start);
+    return $diff->format('%i min, %s.%F sec');
   }
 
   /**

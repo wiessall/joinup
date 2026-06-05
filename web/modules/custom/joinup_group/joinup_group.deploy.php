@@ -49,9 +49,7 @@ function joinup_group_deploy_201401(array &$sandbox): string {
   $sandbox['#finished'] = (int) empty($sandbox['links']);
 
   if ($sandbox['#finished'] === 1) {
-    $stop = new \DateTimeImmutable();
-    $diff = $stop->diff($sandbox['start']);
-    return "Finished converting $sandbox[total] custom page menu links. Took {$diff->format('%im %ss')}";
+    return "Finished converting $sandbox[total] custom page menu links. Took " . $helper->formatInterval($sandbox['start']);
   }
 
   return "Converted $sandbox[progress] out of $sandbox[total] custom page menu links ";
