@@ -79,6 +79,9 @@ Feature: Translating releases
       | Flora Mod | Polish translation of the Release Zaktualizowane wydanie has been deleted.   |
       | Lee Facil | The content item Zaktualizowane wydanie Polish translation has been deleted. |
 
+  # @wip: switches language via the Top Bar language selector, which is not yet
+  # functional on this branch. @see ISAICP-11330
+  @wip
   Scenario: Default language of new node should be same as language of the interface
     Given the following "solution" content:
       | title           |
