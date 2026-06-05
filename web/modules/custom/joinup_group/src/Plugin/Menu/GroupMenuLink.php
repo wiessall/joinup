@@ -125,7 +125,7 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
    * {@inheritdoc}
    */
   public function isDeletable(): bool {
-    return FALSE;
+    return TRUE;
   }
 
   /**

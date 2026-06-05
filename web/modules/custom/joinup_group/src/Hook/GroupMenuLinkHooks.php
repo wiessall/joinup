@@ -225,7 +225,7 @@ class GroupMenuLinkHooks {
         }
       }
 
-      $this->menuLinkManager->removeDefinition($pluginId, FALSE);
+      $this->menuLinkManager->removeDefinition($pluginId);
     }
   }
 
