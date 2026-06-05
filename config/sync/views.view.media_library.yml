@@ -6,7 +6,7 @@ dependencies:
     - core.entity_view_mode.media.media_library
     - image.style.media_library
   module:
-    - joinup_group
+    - joinup_media
     - media
     - media_library
     - svg_image
@@ -1182,7 +1182,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: joinup_group_or_null
+          plugin_id: joinup_media_group_or_null
           default_action: default
           exception:
             value: all

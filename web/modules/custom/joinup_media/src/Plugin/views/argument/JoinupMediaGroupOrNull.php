@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_group\Plugin\views\argument;
+namespace Drupal\joinup_media\Plugin\views\argument;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\views\Attribute\ViewsArgument;
@@ -11,8 +11,8 @@ use Drupal\views\Plugin\views\argument\StringArgument;
 /**
  * View argument plugin for Media library to show only group related media.
  */
-#[ViewsArgument("joinup_group_or_null")]
-class JoinupGroupOrNull extends StringArgument {
+#[ViewsArgument("joinup_media_group_or_null")]
+class JoinupMediaGroupOrNull extends StringArgument {
 
   /**
    * @todo This should be done in an alternative query parameter plugin

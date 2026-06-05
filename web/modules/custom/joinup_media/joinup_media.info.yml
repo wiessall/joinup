@@ -5,4 +5,3 @@ package: Joinup
 core_version_requirement: "^10.4 || ^11"
 dependencies:
   - drupal:media
-  - joinup_group:joinup_group

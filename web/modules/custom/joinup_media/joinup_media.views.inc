@@ -18,5 +18,5 @@ function joinup_media_views_data_alter(array &$data): void {
   $data['media__og_audience']['og_audience_target_id']['filter']['id'] = 'entity_reference';
   // Override handler of Media OG audience argument.
   //@todo Create separate definition
-  $data['media__og_audience']['og_audience_target_id']['argument']['id'] = 'joinup_group_or_null';
+  $data['media__og_audience']['og_audience_target_id']['argument']['id'] = 'joinup_media_group_or_null';
 }
