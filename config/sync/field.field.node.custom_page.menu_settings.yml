@@ -17,12 +17,12 @@ default_value:
   value:
     navigation:
       parent: ''
-      enabled: true
       weight: 0
+      enabled: true
     quick_links:
       parent: ''
-      enabled: false
       weight: 0
+      enabled: false
 default_value_callback: ''
 settings: {  }
 field_type: map
