@@ -72,7 +72,7 @@ Feature: Creating content and commenting on archived collection
     And I go to the "The Willing Consort" collection
     Then I should not see the plus button menu
 
-  Scenario Outline: Collection could not be archived if contains at least 1 published solution
+  Scenario Outline: Collection could not be archived if contains at least 1 non-archived solution
     Given the following "solution" content:
       | title               | collection          | state   |
       | The Loyal Companion | The Willing Consort | <state> |
@@ -80,9 +80,10 @@ Feature: Creating content and commenting on archived collection
     And I go to the edit form of the "The Willing Consort" collection
     When I fill in "Motivation" with "As you wish."
     And I press "Archive"
-    Then I <action> see the error message "Collection has at least one published solution. Please archive all active solutions first."
+    Then I <action> see the error message "Collection has at least one published or draft solution. Please archive all solutions first."
 
     Examples:
       | state     | action     |
       | published | should     |
+      | draft     | should     |
       | archived  | should not |
