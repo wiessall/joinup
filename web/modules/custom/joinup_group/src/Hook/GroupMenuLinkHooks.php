@@ -7,7 +7,6 @@ namespace Drupal\joinup_group\Hook;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Menu\MenuLinkManagerInterface;
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Entity\GlossaryTermInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\GroupMenuLinkInterface;
@@ -15,6 +14,7 @@ use Drupal\joinup_group\GroupMenuLinkHelperTrait;
 use Drupal\joinup_group\Plugin\Menu\GroupMenuLink;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\node\NodeInterface;
+use Drupal\og\OgGroupAudienceHelperInterface;
 
 /**
  * Hook implementations related to group menu links.
@@ -33,9 +33,23 @@ class GroupMenuLinkHooks {
    */
   #[Hook('node_insert')]
   public function addGroupOverviewMenuLink(NodeInterface $group): void {
-    if ($group instanceof CollectionInterface) {
-      $this->addLink('overview', $group, 'navigation', 'Overview', 'enitity.node.canonical', weight: -10);
+    if (!$group instanceof GroupInterface) {
+      return;
     }
+
+    // When a group is created, create two new navigation menus and associate
+    // them with the new collection or solution. These menus can be used to link
+    // to custom pages, overviews, etc., but come with a default set of links
+    // that can be used as a starting point.
+    $storage = $this->entityTypeManager->getStorage('ogmenu_instance');
+    foreach (['navigation', 'quick_links'] as $type) {
+      $storage->create([
+        'type' => $type,
+        OgGroupAudienceHelperInterface::DEFAULT_FIELD => $group->id(),
+      ])->save();
+    }
+
+    $this->addLink('overview', $group, 'navigation', 'Overview', 'entity.node.canonical', weight: -10);
   }
 
   /**
