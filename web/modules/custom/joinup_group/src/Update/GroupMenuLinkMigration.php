@@ -156,7 +156,7 @@ final readonly class GroupMenuLinkMigration implements ContainerInjectionInterfa
     $groups = $storage->loadMultiple(array_column($items, 'groupNid'));
 
     foreach ($items as $item) {
-      $this->addLink(
+      $this->addGroupLink(
         linkType: $linkType,
         group: $groups[$item['groupNid']],
         ogMenuType: $item['ogMenuType'],

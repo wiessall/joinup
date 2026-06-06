@@ -29,13 +29,22 @@ final readonly class EifPerspectiveGroupMenuLinkHooks {
    */
   #[Hook('meta_entity_insert')]
   public function addSolutionMenuLink(MetaEntityInterface $eifPerspective): void {
-    if ($eifPerspective instanceof EifPerspectiveInterface) {
-      foreach (['navigation', 'quick_links'] as $ogMenuType) {
-        $solution = $eifPerspective->getTargetEntity();
-        if ($solution instanceof SolutionInterface) {
-          $enabled = $ogMenuType === 'quick_links';
-          $this->addLink('eif_perspective', $solution, $ogMenuType, 'EIF Perspective', 'entity.node.eif_perspective', enabled: $enabled);
-        }
+    if (!$eifPerspective instanceof EifPerspectiveInterface) {
+      return;
+    }
+
+    foreach (['navigation', 'quick_links'] as $ogMenuType) {
+      $solution = $eifPerspective->getTargetEntity();
+      if ($solution instanceof SolutionInterface) {
+        $enabled = $ogMenuType === 'quick_links';
+        $this->addGroupLink(
+          linkType: 'eif_perspective',
+          group: $solution,
+          ogMenuType: $ogMenuType,
+          title: 'EIF Perspective',
+          routeName: 'entity.node.eif_perspective',
+          enabled: $enabled,
+        );
       }
     }
   }

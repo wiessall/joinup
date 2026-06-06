@@ -35,7 +35,7 @@ trait GroupMenuLinkHelperTrait {
    * @param array $overrides
    *   If passed, these values will override the defaults.
    */
-  protected function addLink(
+  protected function addGroupLink(
     string $linkType,
     GroupInterface $group,
     string $ogMenuType,

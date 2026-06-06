@@ -49,7 +49,14 @@ class GroupMenuLinkHooks {
       ])->save();
     }
 
-    $this->addLink('overview', $group, 'navigation', 'Overview', 'entity.node.canonical', weight: -10);
+    $this->addGroupLink(
+      linkType: 'overview',
+      group: $group,
+      ogMenuType: 'navigation',
+      title: 'Overview',
+      routeName: 'entity.node.canonical',
+      weight: -10,
+    );
   }
 
   /**
@@ -107,13 +114,28 @@ class GroupMenuLinkHooks {
   #[Hook('node_insert')]
   public function addGlossaryGroupMenuLink(NodeInterface $glossary): void {
     if ($glossary instanceof GlossaryTermInterface && $glossary->hasGroup()) {
-      $this->addLink('glossary', $glossary->getGroup(), 'navigation', 'Glossary', 'entity.node.glossary', weight: -7);
+      $this->addGroupLink(
+        linkType: 'glossary',
+        group: $glossary->getGroup(),
+        ogMenuType: 'navigation',
+        title: 'Glossary',
+        routeName: 'entity.node.glossary',
+        weight: -7,
+      );
 
       foreach ($glossary->getGroup()->getSolutions() as $solution) {
-        $this->addLink('glossary', $solution, 'navigation', 'Glossary', 'entity.node.glossary', weight: -7, overrides: [
-          // Point this link to the solution collection glossary page.
-          'route_parameters' => ['node' => $glossary->getGroupId()],
-        ]);
+        $this->addGroupLink(
+          linkType: 'glossary',
+          group: $solution,
+          ogMenuType: 'navigation',
+          title: 'Glossary',
+          routeName: 'entity.node.glossary',
+          enabled: FALSE,
+          weight: -7,
+          overrides: [
+            // Point this link to the solution collection glossary page.
+            'route_parameters' => ['node' => $glossary->getGroupId()],
+          ]);
       }
     }
   }
@@ -152,7 +174,13 @@ class GroupMenuLinkHooks {
     $originalUri = $group->getOriginal()?->get($group->getWebsiteLinkFieldName())->uri;
 
     if ($uri && !$originalUri) {
-      $this->addLink('website_link', $group, 'quick_links', 'Website link', 'joinup_menu.website_link');
+      $this->addGroupLink(
+        linkType: 'website_link',
+        group: $group,
+        ogMenuType: 'quick_links',
+        title: 'Website link',
+        routeName: 'joinup_menu.website_link',
+      );
     }
     elseif (!$uri && $originalUri) {
       $pluginId = GroupMenuLink::buildPluginId('website_link', $group->id(), 'quick_links');

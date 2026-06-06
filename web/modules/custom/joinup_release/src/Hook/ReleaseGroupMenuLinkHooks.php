@@ -29,9 +29,15 @@ final readonly class ReleaseGroupMenuLinkHooks {
    * Adds the release history menu link to a solution.
    */
   #[Hook('node_insert')]
-  public function addDiscussionGroupMenuLink(NodeInterface $release): void {
+  public function addReleaseHistorySolutionMenuLink(NodeInterface $release): void {
     if ($release instanceof ReleaseInterface && $release->hasGroup()) {
-      $this->addLink('release', $release->getGroup(), 'quick_links', 'Release history', 'joinup_release.solution_release.overview');
+      $this->addGroupLink(
+        linkType: 'release',
+        group: $release->getGroup(),
+        ogMenuType: 'quick_links',
+        title: 'Release history',
+        routeName: 'joinup_release.solution_release.overview',
+      );
     }
   }
 

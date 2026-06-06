@@ -30,7 +30,14 @@ final readonly class DiscussionGroupMenuLinkHooks {
   #[Hook('node_insert')]
   public function addDiscussionGroupMenuLink(NodeInterface $discussion): void {
     if ($discussion instanceof DiscussionInterface && $discussion->hasGroup()) {
-      $this->addLink('discussion', $discussion->getGroup(), 'navigation', 'Discussions', 'view.discussions.overview', weight: -8);
+      $this->addGroupLink(
+        linkType: 'discussion',
+        group: $discussion->getGroup(),
+        ogMenuType: 'navigation',
+        title: 'Discussions',
+        routeName: 'view.discussions.overview',
+        weight: -8,
+      );
     }
   }
 
