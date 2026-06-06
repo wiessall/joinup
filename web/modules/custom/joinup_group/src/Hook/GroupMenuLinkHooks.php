@@ -64,26 +64,41 @@ class GroupMenuLinkHooks {
    */
   #[Hook('meta_entity_insert')]
   #[Hook('meta_entity_update')]
-  public function updateCollectionOverviewMenuLinkTitle(MetaEntityInterface $settings): void {
-    if ($settings->bundle() === 'collection_settings') {
-      $title = $settings->get('overview_label')->value ?? 'Overview';
-      $originalTitle = $settings->getOriginal()?->get('overview_label')->value;
-      if ($title !== $originalTitle) {
-        // The title has been changed, update the menu link.
-        $this->updateOverviewTitle($settings, $title);
-      }
+  public function updateGroupOverviewMenuLinkTitle(MetaEntityInterface $settings): void {
+    if (!$this->isGroupSettings($settings)) {
+      return;
+    }
+
+    $title = $settings->get('overview_label')->value ?? 'Overview';
+    $originalTitle = $settings->getOriginal()?->get('overview_label')->value;
+    if ($title !== $originalTitle) {
+      // The title has been changed, update the menu link.
+      $this->updateOverviewTitle($settings, $title);
     }
   }
 
   /**
-   * Resets the overview menu link title on collection settings deletion.
+   * Resets the overview menu link title on group settings deletion.
    */
   #[Hook('meta_entity_delete')]
-  public function resetCollectionOverviewMenuLinkTitle(MetaEntityInterface $settings): void {
-    if ($settings->bundle() === 'collection_settings') {
-      // The collection settings entity us gone, reset the title to default.
+  public function resetGroupOverviewMenuLinkTitle(MetaEntityInterface $settings): void {
+    if ($this->isGroupSettings($settings)) {
+      // The group settings entity is gone, reset the title to default.
       $this->updateOverviewTitle($settings, 'Overview');
     }
+  }
+
+  /**
+   * Checks if the meta-entity is a collection or solution settings entity.
+   *
+   * @param \Drupal\meta_entity\Entity\MetaEntityInterface $settings
+   *   The meta-entity.
+   *
+   * @return bool
+   *   TRUE if the meta-entity is a collection or solution settings entity.
+   */
+  protected function isGroupSettings(MetaEntityInterface $settings): bool {
+    return in_array($settings->bundle(), ['collection_settings', 'solution_settings'], TRUE);
   }
 
   /**
@@ -95,13 +110,13 @@ class GroupMenuLinkHooks {
    *   The new title to be set.
    */
   protected function updateOverviewTitle(MetaEntityInterface $settings, string $title): void {
-    assert($settings->bundle() === 'collection_settings');
+    assert($this->isGroupSettings($settings));
 
-    if (!$collectionId = $settings->get('target')->first()->getValue()['target_id'] ?? NULL) {
+    if (!$groupId = $settings->get('target')->first()->getValue()['target_id'] ?? NULL) {
       return;
     }
 
-    $pluginId = GroupMenuLink::buildPluginId('overview', $collectionId, 'navigation');
+    $pluginId = GroupMenuLink::buildPluginId('overview', $groupId, 'navigation');
     if ($definition = $this->menuLinkManager->getDefinition($pluginId, FALSE)) {
       $definition['title'] = $title;
       $this->menuLinkManager->updateDefinition($pluginId, $definition, FALSE);
