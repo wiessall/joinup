@@ -86,9 +86,6 @@ Feature: Translating solutions
       | Flora Mod | Polish translation of the Solution Zaktualizowana solucja has been deleted.  |
       | Lee Facil | The content item Zaktualizowana solucja Polish translation has been deleted. |
 
-  # @wip: switches language via the Top Bar language selector, which is not yet
-  # functional on this branch. @see ISAICP-11330
-  @wip
   Scenario: Default language of new node should be same as language of the interface
     Given I am logged in as "Flora Mod"
     And I go to the homepage of the "Portal support" collection

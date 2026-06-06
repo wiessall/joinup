@@ -100,9 +100,6 @@ Feature: Translating documents
       | Flora Mod | Test solution document   |
       | Lee Facil | Test solution document   |
 
-  # @wip: switches language via the Top Bar language selector, which is not yet
-  # functional on this branch. @see ISAICP-11330
-  @wip
   Scenario: Default language of new node should be same as language of the interface
     Given I am logged in as "Flora Mod"
     When I go to the "Test collection" collection

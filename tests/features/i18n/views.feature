@@ -5,7 +5,6 @@ Feature: Views display translated entities correctly.
   I need view pages and blocks to load content appropriately.
 
   # covers solution_classification view.
-  @wip
   Scenario: Solution classification terms are listed on the public classification page.
     Given the following term entity translation:
       | source            | language | name                |
