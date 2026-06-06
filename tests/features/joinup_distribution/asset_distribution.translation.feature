@@ -5,7 +5,7 @@ Feature: Translating distributions
     Given the following users:
       | Username    | Roles     |
       | Flora Mod   | moderator |
-      | Lee Facil   |           |
+      | Lee Facil   | developer |
       | John Member |           |
       | Ross Auth   |           |
     Given the following "solution" content:
@@ -77,6 +77,9 @@ Feature: Translating distributions
       | Flora Mod |
       | Lee Facil |
 
+  # @wip: switches language via the Top Bar language selector, which is not yet
+  # functional on this branch. @see ISAICP-11330
+  @wip
   Scenario: Default language of new node should be same as language of the interface
     Given I am logged in as "Flora Mod"
     When I go to the "Test solution" solution

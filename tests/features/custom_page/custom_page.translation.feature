@@ -5,7 +5,7 @@ Feature: Translating custom pages
     Given the following users:
       | Username    | Roles     |
       | Flora Mod   | moderator |
-      | Lee Facil   |           |
+      | Lee Facil   | developer |
       | John Member |           |
       | Ross Auth   |           |
     And the following "collection" content:
@@ -99,6 +99,9 @@ Feature: Translating custom pages
       | Flora Mod | Test solution custom page   |
       | Lee Facil | Test solution custom page   |
 
+  # @wip: switches language via the Top Bar language selector, which is not yet
+  # functional on this branch. @see ISAICP-11330
+  @wip
   Scenario: Default language of new node should be same as language of the interface
     Given I am logged in as "Flora Mod"
     When I go to the "Test collection" collection

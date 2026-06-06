@@ -86,7 +86,7 @@ Feature: Collection moderation
       | Luck in the Abyss   | Velma Smith     |                                                   |
       | Deep Past           | Lena Richardson | Save as draft, Propose, Publish                   |
       | The Licking Silence | Lena Richardson | Propose, Save as draft, Publish                   |
-      | Person of Wizards   | Lena Richardson | Publish, Save as draft, Propose                   |
+      | Person of Wizards   | Lena Richardson | Publish, Save as draft, Propose, Archive          |
       | The Shard's Hunter  | Lena Richardson | Publish, Archive                                  |
       | Luck in the Abyss   | Lena Richardson |                                                   |
 

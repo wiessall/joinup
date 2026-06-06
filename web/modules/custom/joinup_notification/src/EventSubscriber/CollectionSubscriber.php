@@ -8,7 +8,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\NotificationEvents;
-use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\state_machine\Plugin\Workflow\Workflow;
 use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
@@ -510,9 +509,7 @@ class CollectionSubscriber extends NotificationSubscriberBase {
    *   by a moderator approving the requested archival of a collection.
    */
   protected function isTransitionRequested(): bool {
-    assert($this->entity instanceof EntityWorkflowStateInterface);
-    $state = $this->entity->getWorkflowState();
-    return $state === 'archived' && $this->transition && $this->transition->getId() === 'archive';
+    return $this->transition?->getId() === 'archive' && $this->fromState === 'archival_request';
   }
 
 }

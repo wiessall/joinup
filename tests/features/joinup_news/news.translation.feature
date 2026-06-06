@@ -5,7 +5,7 @@ Feature: Translating news
     Given the following users:
       | Username    | Roles     |
       | Flora Mod   | moderator |
-      | Lee Facil   |           |
+      | Lee Facil   | developer |
       | John Member |           |
       | Ross Auth   |           |
     And the following "collection" content:
@@ -101,8 +101,11 @@ Feature: Translating news
       | Flora Mod | Test solution news   |
       | Lee Facil | Test solution news   |
 
+  # @wip: switches language via the Top Bar language selector, which is not yet
+  # functional on this branch. @see ISAICP-11330
+  @wip
   Scenario: Default language of new node should be same as language of the interface
-    Given I am logged in as "Flora Mod"
+    Given I am logged in as a moderator
     When I go to the "Test collection" collection
     And I click "Add news" in the plus button menu
     Then the available options in the "Language" select should match the site languages

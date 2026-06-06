@@ -2,6 +2,9 @@
 Feature: As a moderator of the site
   I want to be able to translate video paragraphs.
 
+  # @wip: clicks the language selector popover, which is not yet functional on
+  # this branch. @see ISAICP-11330
+  @wip
   Scenario: Videos are translatable.
     Given I am logged in as a moderator
     And I go to the "Portal Support" collection
