@@ -41,6 +41,16 @@ final readonly class DiscussionGroupMenuLinkHooks {
   }
 
   /**
+   * Moves the discussion menu link to a new group.
+   */
+  #[Hook('node_update')]
+  public function moveDiscussionGroupMenuLink(NodeInterface $discussion): void {
+    if ($discussion instanceof DiscussionInterface && $discussion->hasGroup()) {
+      $this->moveGroupLink('discussion', $discussion, ['navigation']);
+    }
+  }
+
+  /**
    * Deletes a discussion menu link from the group.
    */
   #[Hook('node_delete')]

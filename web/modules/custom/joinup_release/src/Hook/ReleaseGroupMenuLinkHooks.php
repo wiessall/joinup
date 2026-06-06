@@ -40,6 +40,16 @@ final readonly class ReleaseGroupMenuLinkHooks {
   }
 
   /**
+   * Moves the release history menu link to a new group.
+   */
+  #[Hook('node_update')]
+  public function moveReleaseHistorySolutionMenuLink(NodeInterface $release): void {
+    if ($release instanceof ReleaseInterface && $release->hasGroup()) {
+      $this->moveGroupLink('release', $release, ['quick_links']);
+    }
+  }
+
+  /**
    * Deletes the discussion menu link from the solution.
    */
   #[Hook('node_delete')]
