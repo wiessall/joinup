@@ -25,7 +25,7 @@ Feature: Navigation menu for custom pages
     And the navigation menu of the "Rainbow tables" <group> should have <visible items 2> visible items
 
     When I click the contextual link "Edit menu" in the "Header" region
-    Then the navigation menu of the "Rainbow tables" <group> should have 4 items
+    Then the navigation menu of the "Rainbow tables" <group> should have 2 items
 
     # When all pages are disabled, a message should be shown.
     When I disable "Overview" in the navigation menu of the "Rainbow tables" <group>
@@ -65,8 +65,8 @@ Feature: Navigation menu for custom pages
 
     Examples:
       | group      | visible items 1 | visible items 2 |
-      | collection | 3               | 4               |
-      | solution   | 2               | 3               |
+      | collection | 1               | 2               |
+      | solution   | 1               | 2               |
 
   @javascript
   Scenario: Menus with items that do not fit in available space should be wrapped in a dropdown
@@ -174,8 +174,6 @@ Feature: Navigation menu for custom pages
     Then the draggable menu table of the "Backpacks" collection should be:
       | title       | parent |
       | Overview    |        |
-      | Discussions |        |
-      | Glossary    |        |
       | Bodypack    |        |
       | Types       |        |
       | Frameless   |        |
@@ -184,8 +182,6 @@ Feature: Navigation menu for custom pages
     Then the draggable menu table of the "Backpacks" collection should be:
       | title       | parent |
       | Overview    |        |
-      | Discussions |        |
-      | Glossary    |        |
       | Bodypack    |        |
       | Types       |        |
       | Frameless   |        |
@@ -235,7 +231,6 @@ Feature: Navigation menu for custom pages
     And I visit the "TOCO cached 1-1" "custom page"
     Then I should not see the link "Up" in the "Table of contents outline"
 
-  @javascript
   Scenario: Facilitator sees and uses edit links for custom pages in group menu
     Given the following "collection" content:
       | title         |
