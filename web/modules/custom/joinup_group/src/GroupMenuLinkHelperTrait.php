@@ -70,7 +70,7 @@ trait GroupMenuLinkHelperTrait {
    *   The type of the group menu link.
    * @param \Drupal\joinup_group\Entity\GroupContentInterface $content
    *   The group content entity.
-   * @param array|null $ogMenuTypes
+   * @param list<string>|null $ogMenuTypes
    *   The OG menu instance types. If omitted, all OG menu types are in play.
    */
   protected function moveGroupLink(string $linkType, GroupContentInterface $content, ?array $ogMenuTypes = NULL): void {
@@ -115,13 +115,13 @@ trait GroupMenuLinkHelperTrait {
    *   The type of the group menu link.
    * @param \Drupal\joinup_group\Entity\GroupContentInterface $content
    *   The group content entity.
-   * @param array|null $ogMenuTypes
+   * @param list<string>|null $ogMenuTypes
    *   The OG menu instance types. If omitted, all OG menu types are in play.
    */
   protected function removeGroupLink(string $linkType, GroupContentInterface $content, ?array $ogMenuTypes = NULL): void {
     if (!$this->groupHasContent($content)) {
       foreach ($ogMenuTypes ?? ['navigation', 'quick_links'] as $ogMenuType) {
-        $pluginId = GroupMenuLink::buildPluginId($linkType,$content->getGroupId(), $ogMenuType);
+        $pluginId = GroupMenuLink::buildPluginId($linkType, $content->getGroupId(), $ogMenuType);
         $this->menuLinkManager->removeDefinition($pluginId, FALSE);
       }
     }
