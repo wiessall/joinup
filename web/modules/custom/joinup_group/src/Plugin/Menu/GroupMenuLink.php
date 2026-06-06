@@ -40,6 +40,7 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
   protected $overrideAllowed = [
     'menu_name' => TRUE,
     'title' => TRUE,
+    'route_parameters' => TRUE,
     'weight' => TRUE,
     'parent' => TRUE,
     'enabled' => TRUE,

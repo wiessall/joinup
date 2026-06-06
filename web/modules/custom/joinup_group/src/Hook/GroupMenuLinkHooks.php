@@ -12,6 +12,7 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\GroupMenuLinkInterface;
 use Drupal\joinup_group\GroupMenuLinkHelperTrait;
 use Drupal\joinup_group\Plugin\Menu\GroupMenuLink;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
@@ -172,6 +173,44 @@ class GroupMenuLinkHooks {
     $this->removeGroupLink('glossary', $glossary, ['navigation']);
     foreach ($glossary->getGroup()->getSolutions() as $solution) {
       $this->removeGroupLink('glossary', $solution, ['navigation']);
+    }
+  }
+
+  /**
+   * Updates the solution glossary links when the solution in moved.
+   *
+   * Solution glossary links are pointing to the collection glossary page. If
+   * the solution is moved to another collection, we need to update the link but
+   * only if the target collection has glossary terms.
+   */
+  #[Hook('node_update')]
+  public function updateGlossaryGroupMenuLink(NodeInterface $solution): void {
+    if (!$solution instanceof SolutionInterface) {
+      return;
+    }
+
+    $originalCollectionId = $solution->getOriginal()->getGroupId();
+    $collectionId = $solution->getGroupId();
+
+    if ($collectionId == $originalCollectionId) {
+      // Parent collection hasn't changed, nothing to do.
+      return;
+    }
+
+    $collectionPluginId = GroupMenuLink::buildPluginId('glossary', $collectionId, 'navigation');
+    $solutionPluginId = GroupMenuLink::buildPluginId('glossary', $solution->id(), 'navigation');
+
+    if (!$this->menuLinkManager->hasDefinition($collectionPluginId)) {
+      // The destination collection doesn't have a glossary link, remove it also
+      // from the solution.
+      $this->menuLinkManager->removeDefinition($solutionPluginId);
+      return;
+    }
+
+    if ($solutionDefinition = $this->menuLinkManager->getDefinition($solutionPluginId, FALSE)) {
+      // Update the link to point to the destination collection glossary page.
+      $solutionDefinition['route_parameters'] = ['node' => $collectionId];
+      $this->menuLinkManager->updateDefinition($solutionPluginId, $solutionDefinition, FALSE);
     }
   }
 
