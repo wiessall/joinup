@@ -64,6 +64,70 @@ trait GroupMenuLinkHelperTrait {
   }
 
   /**
+   * Moves a group menu link from one group to another if the group changed.
+   *
+   * @param string $linkType
+   *   The type of the group menu link.
+   * @param \Drupal\joinup_group\Entity\GroupContentInterface $content
+   *   The group content entity.
+   * @param array|null $ogMenuTypes
+   *   The OG menu instance types. If omitted, all OG menu types are in play.
+   */
+  protected function moveGroupLink(string $linkType, GroupContentInterface $content, ?array $ogMenuTypes = NULL): void {
+    if (!$original = $content->getOriginal()) {
+      throw new \RuntimeException('No original');
+    }
+
+    $originalGroupId = $original->getGroupId();
+    $groupId = $content->getGroupId();
+    if ($groupId == $originalGroupId) {
+      return;
+    }
+
+    foreach ($ogMenuTypes ?? ['navigation', 'quick_links'] as $ogMenuType) {
+      $originalPluginId = GroupMenuLink::buildPluginId($linkType, $originalGroupId, $ogMenuType);
+      $pluginId = GroupMenuLink::buildPluginId($linkType, $groupId, $ogMenuType);
+
+      if (
+        // Target group might already have this type of link.
+        $this->menuLinkManager->hasDefinition($pluginId)
+        // Or there is no original link for this OG menu type.
+        || !($definition = $this->menuLinkManager->getDefinition($originalPluginId, FALSE))
+      ) {
+        continue;
+      }
+
+      $group = $content->getGroup();
+      $ogMenuInstance = $group->getGroupOgMenuInstance($ogMenuType);
+
+      $definition['menu_name'] = "ogmenu-{$ogMenuInstance->id()}";
+      $definition['route_parameters'] = ['node' => $group->id()];
+      $this->menuLinkManager->addDefinition($pluginId, $definition);
+
+      $this->removeGroupLink($linkType, $original, [$ogMenuType]);
+    }
+  }
+
+  /**
+   * Removes a menu link from a group.
+   *
+   * @param string $linkType
+   *   The type of the group menu link.
+   * @param \Drupal\joinup_group\Entity\GroupContentInterface $content
+   *   The group content entity.
+   * @param array|null $ogMenuTypes
+   *   The OG menu instance types. If omitted, all OG menu types are in play.
+   */
+  protected function removeGroupLink(string $linkType, GroupContentInterface $content, ?array $ogMenuTypes = NULL): void {
+    if (!$this->groupHasContent($content)) {
+      foreach ($ogMenuTypes ?? ['navigation', 'quick_links'] as $ogMenuType) {
+        $pluginId = GroupMenuLink::buildPluginId($linkType,$content->getGroupId(), $ogMenuType);
+        $this->menuLinkManager->removeDefinition($pluginId, FALSE);
+      }
+    }
+  }
+
+  /**
    * Checks if a group still has a certain type of group content.
    *
    * @param \Drupal\joinup_group\Entity\GroupContentInterface $content
