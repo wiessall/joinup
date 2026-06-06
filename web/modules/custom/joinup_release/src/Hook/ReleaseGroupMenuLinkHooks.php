@@ -7,9 +7,7 @@ namespace Drupal\joinup_release\Hook;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Menu\MenuLinkManagerInterface;
-use Drupal\collection\Entity\GlossaryTermInterface;
 use Drupal\joinup_group\GroupMenuLinkHelperTrait;
-use Drupal\joinup_group\Plugin\Menu\GroupMenuLink;
 use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\node\NodeInterface;
 
@@ -45,12 +43,9 @@ final readonly class ReleaseGroupMenuLinkHooks {
    * Deletes the discussion menu link from the solution.
    */
   #[Hook('node_delete')]
-  public function deleteDiscussionGroupMenuLink(NodeInterface $release): void {
-    if ($release instanceof GlossaryTermInterface && $release->hasGroup()) {
-      if (!$this->groupHasContent($release)) {
-        $pluginId = GroupMenuLink::buildPluginId('discussion', $release->getGroupId(), 'navigation');
-        $this->menuLinkManager->removeDefinition($pluginId, FALSE);
-      }
+  public function deleteReleaseHistorySolutionMenuLink(NodeInterface $release): void {
+    if ($release instanceof ReleaseInterface && $release->hasGroup()) {
+      $this->removeGroupLink('release', $release, ['quick_links']);
     }
   }
 

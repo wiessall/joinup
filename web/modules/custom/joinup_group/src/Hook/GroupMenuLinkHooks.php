@@ -145,18 +145,18 @@ class GroupMenuLinkHooks {
    */
   #[Hook('node_delete')]
   public function deleteGlossaryGroupMenuLink(NodeInterface $glossary): void {
-    if ($glossary instanceof GlossaryTermInterface && $glossary->hasGroup()) {
-      if ($this->groupHasContent($glossary)) {
-        // Keep the link as there are still glossary terms in this collection.
-        return;
-      }
+    if (!$glossary instanceof GlossaryTermInterface || !$glossary->hasGroup()) {
+      return;
+    }
 
-      $pluginId = GroupMenuLink::buildPluginId('glossary', $glossary->getGroupId(), 'navigation');
-      $this->menuLinkManager->removeDefinition($pluginId, FALSE);
-      foreach ($glossary->getGroup()->getSolutions() as $solution) {
-        $pluginId = GroupMenuLink::buildPluginId('glossary', $solution->id(), 'navigation');
-        $this->menuLinkManager->removeDefinition($pluginId, FALSE);
-      }
+    if ($this->groupHasContent($glossary)) {
+      // Keep the link as there are still glossary terms in this collection.
+      return;
+    }
+
+    $this->removeGroupLink('glossary', $glossary, ['navigation']);
+    foreach ($glossary->getGroup()->getSolutions() as $solution) {
+      $this->removeGroupLink('glossary', $solution, ['navigation']);
     }
   }
 

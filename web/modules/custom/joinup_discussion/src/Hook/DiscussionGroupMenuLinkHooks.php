@@ -9,7 +9,6 @@ use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Menu\MenuLinkManagerInterface;
 use Drupal\joinup_discussion\Entity\DiscussionInterface;
 use Drupal\joinup_group\GroupMenuLinkHelperTrait;
-use Drupal\joinup_group\Plugin\Menu\GroupMenuLink;
 use Drupal\node\NodeInterface;
 
 /**
@@ -47,10 +46,7 @@ final readonly class DiscussionGroupMenuLinkHooks {
   #[Hook('node_delete')]
   public function deleteDiscussionGroupMenuLink(NodeInterface $discussion): void {
     if ($discussion instanceof DiscussionInterface && $discussion->hasGroup()) {
-      if (!$this->groupHasContent($discussion)) {
-        $pluginId = GroupMenuLink::buildPluginId('discussion', $discussion->getGroupId(), 'navigation');
-        $this->menuLinkManager->removeDefinition($pluginId, FALSE);
-      }
+      $this->removeGroupLink('discussion', $discussion, ['navigation']);
     }
   }
 

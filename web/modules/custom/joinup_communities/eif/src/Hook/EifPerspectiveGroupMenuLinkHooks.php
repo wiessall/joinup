@@ -54,7 +54,14 @@ final readonly class EifPerspectiveGroupMenuLinkHooks {
    */
   #[Hook('meta_entity_delete')]
   public function deleteSolutionMenuLink(MetaEntityInterface $eifPerspective): void {
-    $this->menuLinkManager->removeDefinition('eif_perspective', FALSE);
+    if ($eifPerspective instanceof EifPerspectiveInterface) {
+      $solution = $eifPerspective->getTargetEntity();
+      if ($solution instanceof SolutionInterface) {
+        // We land here while deleting the EIF perspective meta-entity as an
+        // effect of deleting its targeted solution.
+        $this->removeGroupLink('eif_perspective', $solution);
+      }
+    }
   }
 
 }
