@@ -6,11 +6,11 @@ Feature: User certificates
 
   Background:
     Given the following solution content:
-      | title                    | collection                   | state     |
-      | Published IOPEU Solution | Interoperable Europe Academy | published |
-      | Archived IOPEU Solution  | Interoperable Europe Academy | archived  |
-      | Draft IOPEU Solution     | Interoperable Europe Academy | draft     |
-      | Portal IOPEU Solution    | Portal support               | published |
+      | title                    | collection                   | state     | nid |
+      | Published IOPEU Solution | Interoperable Europe Academy | published |     |
+      | Archived IOPEU Solution  | Interoperable Europe Academy | archived  | 50  |
+      | Draft IOPEU Solution     | Interoperable Europe Academy | draft     |     |
+      | Portal IOPEU Solution    | Portal support               | published |     |
     And the following news content:
       | title                     | collection                   | body         |
       | News about IOPEU Solution | Interoperable Europe Academy | Just a test! |
@@ -101,3 +101,22 @@ Feature: User certificates
     Then the "IEF table" table should contain the following columns:
       | Course                  | Status      |
       | Archived IOPEU Solution | Published |
+
+  @javascript
+  Scenario: Users have no access to certificate canonical, edit and delete page
+    When I am logged in as "Peter the Moderator"
+    And I go to the edit form of the "Sara the User" user
+    Then I should see the text "Certificates"
+    When I press the "Add new certificate" button
+    Then field should be present "Issuing date"
+    And I type "Archived IOPEU" in the Course autocomplete field
+    And I pick "Archived IOPEU Solution" from the Course autocomplete suggestions
+    And I attach the file "text.pdf" to "files[certificates_form_0_certificate_0]"
+    And I press "Create certificate"
+    And I press "Save"
+    Then I go to the "Certificate of course 50" certificate
+    Then I should see the heading "Page not found"
+    Then I go to the edit form of the "Certificate of course 50" certificate
+    Then I should see the heading "Page not found"
+    Then I go to the delete form of the "Certificate of course 50" certificate
+    Then I should see the heading "Page not found"

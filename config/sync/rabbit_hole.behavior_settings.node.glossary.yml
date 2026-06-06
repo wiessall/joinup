@@ -1,0 +1,13 @@
+uuid: 6f73f516-2214-4792-8c00-21c4ffd2d003
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.glossary
+id: node.glossary
+targetEntityType: node
+bundle: glossary
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

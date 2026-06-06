@@ -1,0 +1,13 @@
+uuid: ced7f9a9-f1fd-493e-994d-ac74ce5547da
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.collection
+id: node.collection
+targetEntityType: node
+bundle: collection
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

@@ -1,0 +1,13 @@
+uuid: 173cff48-f2eb-4e33-a7ee-e01ebb8846e4
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.news
+id: node.news
+targetEntityType: node
+bundle: news
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

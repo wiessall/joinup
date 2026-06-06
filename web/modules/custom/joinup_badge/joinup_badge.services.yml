@@ -8,3 +8,8 @@ services:
   Drupal\joinup_badge\Hook\BadgeHooks:
     tags:
       - { name: needs_destruction }
+
+  joinup_badge.certificate_subscriber:
+    class: Drupal\joinup_badge\EventSubscriber\CertificateSubscriber
+    tags:
+      - { name: event_subscriber }

@@ -1,0 +1,13 @@
+uuid: 358d2ffa-b27c-40e9-9946-53f3f1d42155
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.discussion
+id: node.discussion
+targetEntityType: node
+bundle: discussion
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

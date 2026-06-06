@@ -1,0 +1,13 @@
+uuid: 931a3aaf-b3da-47e1-a9e7-1d23a0e7fed0
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.owner
+id: node.owner
+targetEntityType: node
+bundle: owner
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }
