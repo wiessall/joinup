@@ -84,7 +84,8 @@ trait GroupMenuLinkHelperTrait {
       return;
     }
 
-    foreach ($ogMenuTypes ?? ['navigation', 'quick_links'] as $ogMenuType) {
+    $ogMenuTypes ??= ['navigation', 'quick_links'];
+    foreach ($ogMenuTypes as $ogMenuType) {
       $originalPluginId = GroupMenuLink::buildPluginId($linkType, $originalGroupId, $ogMenuType);
       $pluginId = GroupMenuLink::buildPluginId($linkType, $groupId, $ogMenuType);
 
@@ -103,9 +104,9 @@ trait GroupMenuLinkHelperTrait {
       $definition['menu_name'] = "ogmenu-{$ogMenuInstance->id()}";
       $definition['route_parameters'] = ['node' => $group->id()];
       $this->menuLinkManager->addDefinition($pluginId, $definition);
-
-      $this->removeGroupLink($linkType, $original, [$ogMenuType]);
     }
+
+    $this->removeGroupLink($linkType, $original, $ogMenuTypes);
   }
 
   /**
