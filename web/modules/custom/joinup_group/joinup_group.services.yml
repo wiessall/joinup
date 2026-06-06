@@ -26,9 +26,6 @@ services:
     class: Drupal\joinup_group\JoinupGroupManager
   Drupal\joinup_group\JoinupGroupManagerInterface: '@joinup_group.group_manager'
 
-  joinup_group.group_settings_form_alter:
-    class: Drupal\joinup_group\GroupSettingsFormAlter
-
   Drupal\joinup_group\EventSubscriber\JoinGroupSubscriber: { }
 
   Drupal\joinup_group\EventSubscriber\JoinupGroupOgSubscriber: { }
