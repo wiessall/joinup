@@ -122,7 +122,7 @@ final readonly class GroupMenuLinkMigration implements ContainerInjectionInterfa
   /**
    * Converts group content links, such as glossary, release, discussion.
    */
-  public function processGroupLinks(array &$sandbox, string $linkType): string {
+  public function processGroupLinks(array &$sandbox, string $linkType, ?callable $callback = NULL): string {
     $routeName = match ($linkType) {
       'discussion' => 'view.discussions.overview',
       'glossary' => 'entity.node.glossary',
@@ -166,6 +166,10 @@ final readonly class GroupMenuLinkMigration implements ContainerInjectionInterfa
         enabled: (bool) $item['enabled'],
         weight: (int) $item['weight'],
       );
+
+      if (is_callable($callback)) {
+        $callback($item, $groups[$item['groupNid']]);
+      }
     }
 
     $sandbox['#finished'] = (int) empty($sandbox['items']);

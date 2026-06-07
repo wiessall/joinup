@@ -7,7 +7,9 @@
 
 declare(strict_types=1);
 
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Update\GroupMenuLinkMigration;
+use Drupal\meta_entity\Entity\MetaEntity;
 
 /**
  * Cleans up leftovers from previous tasks.
@@ -92,7 +94,14 @@ function joinup_group_deploy_201405(array &$sandbox): string {
  */
 function joinup_group_deploy_201406(array &$sandbox): string {
   return \Drupal::classResolver(GroupMenuLinkMigration::class)
-    ->processGroupLinks($sandbox, 'overview');
+    ->processGroupLinks($sandbox, 'overview', static function (array $link, GroupInterface $group): void {
+      if ($link['linkTitle'] !== 'Overview') {
+        // Populate group settings with the customized overview label.
+        MetaEntity::loadOrCreate("{$group->bundle()}_settings", $group)
+          ->set('overview_label', $link['linkTitle'])
+          ->save();
+      }
+    });
 }
 
 /**
