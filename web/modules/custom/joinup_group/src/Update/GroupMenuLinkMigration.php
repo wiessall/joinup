@@ -216,6 +216,19 @@ final readonly class GroupMenuLinkMigration implements ContainerInjectionInterfa
     $this->db->delete('menu_tree')
       ->condition('mlid', $menuTreeLinkIds, 'IN')
       ->execute();
+
+    // Cleanup Babel-related data.
+    $ids = array_reduce($menuLinkContentIds, function (array $ids, int|string $id): array {
+      $suffix = "$id:title:0";
+      return [...$ids, "navigation:$suffix", "quick_links:$suffix"];
+    }, []);
+
+    $this->db->delete('babel_source_instance')
+      ->condition('plugin', 'babel_og_menu_link')
+      ->condition('id', $ids, 'IN')
+      ->execute();
+    $this->db->query("DELETE bs FROM {babel_source} bs LEFT JOIN {babel_source_instance} bsi ON bs.hash = bsi.hash WHERE bsi.hash IS NULL");
+    $this->db->query("DELETE bsl FROM {babel_source_lock} bsl LEFT JOIN {babel_source_instance} bsi ON bsl.hash = bsi.hash WHERE bsi.hash IS NULL");
   }
 
   /**
