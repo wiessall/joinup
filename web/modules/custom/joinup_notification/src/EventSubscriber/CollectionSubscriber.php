@@ -342,6 +342,9 @@ class CollectionSubscriber extends NotificationSubscriberBase {
    * Only one of both are sent depending on the current state of the collection.
    */
   protected function notificationArchiveDelete(): void {
+    // Avoid user ID duplication.
+    $uids_to_skip = [];
+
     // Template id 9. Notify the owner.
     $template_id = $this->isTransitionRequested() ? self::TEMPLATE_ARCHIVE_DELETE_APPROVE_OWNER : self::TEMPLATE_ARCHIVE_DELETE_NO_REQUEST;
 
@@ -362,14 +365,9 @@ class CollectionSubscriber extends NotificationSubscriberBase {
     ];
     $user_data = $this->getUsersMessages($user_data);
     $this->sendUserDataMessages($user_data);
+    $this->userIdsToSkip($user_data, $uids_to_skip);
 
-    // Avoid sending again to the owner.
-    $uids_to_skip = [];
-    foreach ($user_data as $user_ids) {
-      $uids_to_skip += array_values($user_ids);
-    }
-
-    // Last, send an email to all members of the collection.
+    // Send notification to all members of the collection.
     $user_data = [
       'og_roles' => [
         'node-collection-member' => [
@@ -378,43 +376,21 @@ class CollectionSubscriber extends NotificationSubscriberBase {
       ],
     ];
     $user_data = $this->getUsersMessages($user_data);
-
-    if (isset($user_data[self::TEMPLATE_ARCHIVE_DELETE_MEMBERS])) {
-      foreach ($user_data[self::TEMPLATE_ARCHIVE_DELETE_MEMBERS] as $uid) {
-        $membership = $this->membershipManager->getMembership($this->entity, $uid);
-
-        if (!$membership) {
-          continue;
-        }
-
-        $announcements = (bool) $membership->get('announcements')->value;
-
-        if ($announcements) {
-          continue;
-        }
-
-        unset($user_data[self::TEMPLATE_ARCHIVE_DELETE_MEMBERS][$uid]);
-      }
-    }
-
-    foreach ($uids_to_skip as $uid) {
-      foreach ($user_data as $message_id => $user_ids) {
-        unset($user_data[$message_id][$uid]);
-      }
-    }
-
+    $this->filterRecipients($user_data, $uids_to_skip);
+    $this->filterOutForAnnouncements($user_data);
     $this->sendUserDataMessages($user_data);
+    $this->userIdsToSkip($user_data, $uids_to_skip);
 
     // Send notification to moderators.
-    $user_data_array = ['roles' => ['moderator' => [self::TEMPLATE_ARCHIVE_DELETE_NO_REQUEST]]];
+    $user_data_array = [
+      'roles' => [
+        'moderator' => [
+          self::TEMPLATE_ARCHIVE_DELETE_NO_REQUEST,
+        ],
+      ],
+    ];
     $user_data = $this->getUsersMessages($user_data_array);
-
-    foreach ($uids_to_skip as $uid) {
-      foreach ($user_data as $message_id => $user_ids) {
-        unset($user_data[$message_id][$uid]);
-      }
-    }
-
+    $this->filterRecipients($user_data, $uids_to_skip);
     $this->sendUserDataMessages($user_data);
 
     // Send notifications to the contact email accounts.
@@ -445,7 +421,7 @@ class CollectionSubscriber extends NotificationSubscriberBase {
   public function onCompleteArchival(NotificationEvent $event): void {
     $this->entity = $event->getEntity();
 
-    if (!$this->entity instanceof CollectionInterface) {
+    if (!$this->appliesOnCollections()) {
       return;
     }
 
@@ -461,6 +437,62 @@ class CollectionSubscriber extends NotificationSubscriberBase {
     $this->operation = 'archive';
 
     $this->notificationArchiveDelete();
+  }
+
+  /**
+   * Adds user IDs to a list.
+   *
+   * @param array $user_data
+   *   The user data.
+   * @param array $uids_to_skip
+   *   The list of IDs to skip.
+   */
+  protected function userIdsToSkip(array $user_data, array &$uids_to_skip): void {
+    foreach ($user_data as $user_ids) {
+      $uids_to_skip += array_values($user_ids);
+    }
+  }
+
+  /**
+   * Filters out recipients fron the user data.
+   *
+   * @param array $user_data
+   *   The user data.
+   * @param array $uids_to_skip
+   *   The list of IDs to skip.
+   */
+  protected function filterRecipients(array &$user_data, array $uids_to_skip): void {
+    foreach ($uids_to_skip as $uid) {
+      foreach ($user_data as $message_id => $user_ids) {
+        unset($user_data[$message_id][$uid]);
+      }
+    }
+  }
+
+  /**
+   * Filters out recipients that do not want announcements.
+   *
+   * @param array $user_data
+   *   The user data.
+   */
+  protected function filterOutForAnnouncements(array &$user_data): void {
+    if (isset($user_data[self::TEMPLATE_ARCHIVE_DELETE_MEMBERS])) {
+      foreach ($user_data[self::TEMPLATE_ARCHIVE_DELETE_MEMBERS] as $uid) {
+        $membership = $this->membershipManager->getMembership($this->entity, $uid);
+
+        if (!$membership) {
+          continue;
+        }
+
+        $announcements = (bool) $membership->get('announcements')->value;
+
+        if ($announcements) {
+          continue;
+        }
+
+        unset($user_data[self::TEMPLATE_ARCHIVE_DELETE_MEMBERS][$uid]);
+      }
+    }
   }
 
   /**
