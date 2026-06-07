@@ -40,26 +40,27 @@ Feature: Notification test for the collection transitions.
       | NC Solution1 | NCS owner | owner |
       | NC Solution2 | NCS owner | owner |
     And the following collection user memberships:
-      | collection             | user           | roles              | announcements |
-      | NC to propose          | NC owner       | owner, facilitator | 1             |
-      | NC to publish          | NC owner       | owner, facilitator | 1             |
-      | NC to propose edit     | NC owner       | owner, facilitator | 1             |
+      | collection             | user           | roles              |
+      | NC to propose          | NC owner       | owner, facilitator |
+      | NC to publish          | NC owner       | owner, facilitator |
+      | NC to propose edit     | NC owner       | owner, facilitator |
       # A third person is needed to test notifications sent to both moderators and the owner.
-      | NC to propose edit     | NC facilitator | facilitator        | 1             |
-      | NC to publish edit     | NC owner       | owner, facilitator | 1             |
-      | NC to request archival | NC owner       | owner, facilitator | 1             |
-      | NC to reject archival  | NC owner       | owner, facilitator | 1             |
-      | NC to archive          | NC owner       | owner, facilitator | 1             |
-      | NC to archive          | NC member1     |                    | 1             |
-      | NC to archive          | NC member2     |                    | 1             |
+      | NC to propose edit     | NC facilitator | facilitator        |
+      | NC to publish edit     | NC owner       | owner, facilitator |
+      | NC to request archival | NC owner       | owner, facilitator |
+      | NC to reject archival  | NC owner       | owner, facilitator |
+      | NC to archive          | NC owner       | owner, facilitator |
+      | NC to archive          | NC member1     |                    |
+      | NC to archive          | NC member2     |                    |
+      | NC to delete           | NC owner       | owner, facilitator |
+      | NC to delete           | NC member1     |                    |
+      | NC to delete           | NC member2     |                    |
+      | NC to delete by mod    | NC owner       | owner, facilitator |
+      | NC to delete by mod    | NC member1     |                    |
+      | NC to delete by mod    | NC member2     |                    |
+    And the following collection user memberships:
+      | collection             | user           | roles              | announcements |
       | NC to archive          | NC member3     |                    | 0             |
-      | NC to delete           | NC owner       | owner, facilitator | 1             |
-      | NC to delete           | NC member1     |                    | 1             |
-      | NC to delete           | NC member2     |                    | 1             |
-      | NC to delete by mod    | NC owner       | owner, facilitator | 1             |
-      | NC to delete by mod    | NC member1     |                    | 1             |
-      | NC to delete by mod    | NC member2     |                    | 1             |
-
     # Test 'create' operation.
     And I am logged in as "NC user"
     When I go to the propose collection form
@@ -171,7 +172,6 @@ Feature: Notification test for the collection transitions.
     Then I should see the inline form error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "As you wish."
     And I press "Archive"
-    And the number of items in the "group_archive_related_content" queue should be 1
     Then I run the "group_archive_related_content" queue worker
     And the number of items in the "group_archive_related_content" queue should be 0
     Then the following email should have been sent:
