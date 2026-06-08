@@ -54,7 +54,7 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
   /**
    * Static cache of the group overview link title.
    */
-  protected string $overviewLabel;
+  protected string|\Stringable $overviewLabel;
 
   public function __construct(
     array $configuration,
@@ -69,15 +69,16 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
   /**
    * {@inheritdoc}
    */
-  public function getTitle(): string {
-    $type = $this->getGroupMenuLinkType();
-    if ($type === 'node') {
-      return $this->getNode()->label();
-    }
-    elseif ($type === 'overview') {
-      return $this->getOverviewLabel();
-    }
-    return $this->pluginDefinition['title'];
+  public function getTitle(): string|\Stringable {
+    return match($this->getGroupMenuLinkType()) {
+      'node' => $this->getNode()->label(),
+      'overview' => $this->getOverviewLabel(),
+      'glossary' => $this->t('Glossary'),
+      'website_link' => $this->t('Website link'),
+      'discussion' => $this->t('Discussions'),
+      'release' => $this->t('Release history'),
+      'eif_perspective' => $this->t('EIF Perspective'),
+    };
   }
 
   /**
@@ -222,14 +223,14 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
   /**
    * Returns the label of the group overview page.
    */
-  public function getOverviewLabel(): string {
+  public function getOverviewLabel(): string|\Stringable {
     if (!isset($this->overviewLabel)) {
       $groupId = self::extractNodeId($this->getPluginId());
       $group = $this->entityTypeManager->getStorage('node')->load($groupId);
       if (!$group instanceof GroupInterface) {
         throw new \LogicException("Node ID $groupId should refer a group");
       }
-      $this->overviewLabel = $group->getSetting('overview_label')->value ?? $this->pluginDefinition['title'];
+      $this->overviewLabel = $group->getSetting('overview_label')->value ?? $this->t('Overview');
     }
 
     return $this->overviewLabel;
