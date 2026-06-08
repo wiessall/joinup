@@ -110,6 +110,7 @@ class GroupMenuBlock extends OgMenuBlock {
    */
   protected function getCurrentRouteMenuTreeParameters(): MenuTreeParameters {
     $parameters = $this->menuTree->getCurrentRouteMenuTreeParameters($this->getMenuName());
+    $parameters->onlyEnabledLinks();
     $this->setMinDepth($parameters)->setMaxDepth($parameters);
 
     // For single-level rendering, only keep the exact active link in the trail.
