@@ -39,10 +39,12 @@
 {% set _extra_data = extra_data|default([]) %}
 {% set _bundle = bundle|default({}) %}
 {% set _indicators = indicators|default([]) %}
-{% set _certificate_file = extra_data['certificate']['file']  %}
-{% set _certificate_logo = extra_data['certificate']['logo']  %}
-{% if _certificate_file is not empty %}
-    {% set _url = _certificate_file %}
+{% set _certificate = extra_data['certificate'] %}
+{% if _certificate['file'] is not empty %}
+    {% set _url = _certificate['file'] %}
+{% endif %}
+{% if _certificate['title'] is not empty %}
+  {% set _label = _certificate['title'] %}
 {% endif %}
 
 
@@ -62,8 +64,8 @@
 
 {% if _image is empty %}
   {% set _image %}
-    {% if _certificate_logo is not empty %}
-      <img src="{{ _certificate_logo }}">
+    {% if _certificate['logo'] is not empty %}
+      <img src="{{ _certificate['logo'] }}">
     {%  else %}
         <div class="tile__default-img h-100 w-100 bg-secondary d-flex flex-column align-items-center justify-content-center position-relative">
           <svg class="tile__default-icon position-relative bi img-fluid">
@@ -78,7 +80,7 @@
   <article{{ _attributes.addClass(_classes) }}>
     {{- _title_prefix -}}
     {{- _title_suffix -}}
-    <a class="tile__link position-absolute top-0 end-0 bottom-0 start-0" href="{{ _url }}" title="{{ _certificate_file ? 'Open certificate (PDF)' : _label|render|striptags|trim|raw }}"></a>
+    <a class="tile__link position-absolute top-0 end-0 bottom-0 start-0" href="{{ _url }}" title="{{ _certificate['file'] ? 'Open certificate (PDF)' : _label|render|striptags|trim|raw }}"></a>
     <figure class="tile__figure mb-0">
       {{- _image -}}
     </figure>
@@ -107,7 +109,7 @@
               {%- if _user_badges is not empty -%}
                 <span class="user-badges ms-1">{{ _user_badges }}</span>
               {%- endif -%}
-              {%- if _certificate_file is not empty -%}
+              {%- if _certificate['file'] is not empty -%}
                 {{ pattern('icon', {
                   name: 'file-pdf',
                   path: bcl_icon_path,
@@ -117,6 +119,9 @@
             </h3>
         {%- if _text is not empty -%}
           <div class="tile__text text-dark fs-sm my-1">{{- _text -}}</div>
+        {%- endif -%}
+        {%-  if _certificate['issuing_date'] is not empty -%}
+          {{  _certificate['issuing_date'] }}
         {%- endif -%}
         {%- if _extra_data.submitter is not empty -%}
           <div class="tile__submitter">

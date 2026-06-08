@@ -141,8 +141,8 @@ class BadgeContext extends RawDrupalContext {
       throw new \Exception("No logo link found in the '$title' tile.");
     }
 
-    $certificate = $this->getEntityByLabel('node', $title, 'certificate');
-    $solution = $certificate->get('course')->entity;
+    $solution = $this->getEntityByLabel('node', $title, 'solution');
+
     $image = $solution->getLogoAsFile();
     $expected_url = \Drupal::service('file_url_generator')->generateAbsoluteString($image->getFileUri());
 

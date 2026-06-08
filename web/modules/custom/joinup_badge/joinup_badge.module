@@ -17,7 +17,12 @@ function joinup_badge_preprocess_node__view_mode_tile(array &$variables): void {
     $url_generator = \Drupal::service('file_url_generator');
     $file = $url_generator->generateAbsoluteString($certificate->get('certificate')->entity?->getFileUri());
     $logo = $url_generator->generateAbsoluteString($certificate->get('course')->entity?->get('logo')->entity?->getFileUri());
+    $title = $certificate->get('course')->entity?->getTitle();
+    $issuing_date = $certificate->get('issuing_date')->value;
     $variables['extra_data']['certificate']['file'] = $file;
     $variables['extra_data']['certificate']['logo'] = $logo;
+    $variables['extra_data']['certificate']['title'] = $title;
+    $variables['extra_data']['certificate']['issuing_date'] = "Issuing date: " . $issuing_date;
+
   }
 }

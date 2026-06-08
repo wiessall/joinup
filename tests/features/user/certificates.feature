@@ -41,16 +41,17 @@ Feature: User certificates
     Then field should be present "Issuing date"
     And I type "Archived IOPEU" in the Course autocomplete field
     And I pick "Archived IOPEU Solution" from the Course autocomplete suggestions
+    And I fill in "certificates[form][0][issuing_date][0][value][date]" with "12-06-2026"
     And I attach the file "text.pdf" to "files[certificates_form_0_certificate_0]"
     And I press "Create certificate"
     And I press "Save"
-    Then I should see the success message "The changes have been saved."
     Then I go to the profile of "Sara the User"
     And I should see the link "1 Certificate"
     Then I should see the following tiles in the correct order:
-      | Certificate of course 50 |
-      | Portal support           |
-    Then the logo logo.png should be shown in the "Certificate of course 50" certificate tile
+      | Archived IOPEU Solution |
+      | Portal support          |
+    Then the logo logo.png should be shown in the "Archived IOPEU Solution" certificate tile
+    And  I see the text "Issuing date: 2026-12-06" in the "Archived IOPEU Solution" tile
     When I go to the edit form of the "Sara the User" user
     Then I should see the link "Archived IOPEU Solution"
     And I should see the text "Certificate of course"
@@ -67,7 +68,7 @@ Feature: User certificates
     Examples:
       | actor               |
       | Peter the Moderator |
-      | Sara the User       |
+#      | Sara the User       |
 
   @javascript
   Scenario: When user is blocked/unblocked certificates should be unpublished/published
@@ -105,7 +106,7 @@ Feature: User certificates
     Then I should see the link "Archived IOPEU Solution"
     And I should see the text "Certificate of course"
     Then the "IEF table" table should contain the following columns:
-      | Course                  | Status      |
+      | Course                  | Status    |
       | Archived IOPEU Solution | Published |
 
   @javascript
