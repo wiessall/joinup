@@ -1,6 +1,6 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 
-<https://digit-joinup-dev.ddev.local/taxonomy-term/representation-technique/6d54f304-a36d-42bc-b6a5-ed623ca1e33e>
+<http://purl.org/adms/representationtechnique/HL>
   skos:inScheme <http://purl.org/adms/representationtechnique/1.0> ;
   skos:prefLabel "Human Language"@en ;
   skos:definition ""@en ;

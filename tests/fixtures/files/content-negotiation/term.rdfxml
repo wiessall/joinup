@@ -2,7 +2,7 @@
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
          xmlns:skos="http://www.w3.org/2004/02/skos/core#">
 
-  <skos:Concept rdf:about="https://digit-joinup-dev.ddev.local/taxonomy-term/representation-technique/6d54f304-a36d-42bc-b6a5-ed623ca1e33e">
+  <skos:Concept rdf:about="http://purl.org/adms/representationtechnique/HL">
     <skos:inScheme rdf:resource="http://purl.org/adms/representationtechnique/1.0"/>
     <skos:prefLabel xml:lang="en">Human Language</skos:prefLabel>
     <skos:definition xml:lang="en"></skos:definition>
