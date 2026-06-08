@@ -1,0 +1,30 @@
+uuid: 607e65f9-0587-4233-aabb-f635723f7a39
+langcode: en
+status: true
+dependencies:
+  module:
+    - cas
+title: 'Clean up stale CAS sessions and PGTs'
+id: cas_cron
+weight: 0
+module: cas
+callback: 'cas#cron'
+scheduler:
+  id: crontab
+  configuration:
+    rules:
+      - '0+@ */2 * * *'
+    catch_up: 0
+launcher:
+  id: serial
+  configuration:
+    timeouts:
+      lock_timeout: 3600
+    launcher:
+      thread: 0
+logger:
+  id: database
+  configuration:
+    method: '3'
+    expire: 1209600
+    retain: 1000

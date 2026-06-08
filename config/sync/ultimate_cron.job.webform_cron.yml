@@ -1,0 +1,30 @@
+uuid: 2d341770-70c3-4ef7-8c23-9346c8150a58
+langcode: en
+status: true
+dependencies:
+  module:
+    - webform
+title: 'Purge old submissions'
+id: webform_cron
+weight: 0
+module: webform
+callback: 'webform#cron'
+scheduler:
+  id: crontab
+  configuration:
+    rules:
+      - '0+@ 5 * * *'
+    catch_up: 0
+launcher:
+  id: serial
+  configuration:
+    timeouts:
+      lock_timeout: 3600
+    launcher:
+      thread: 0
+logger:
+  id: database
+  configuration:
+    method: '3'
+    expire: 1209600
+    retain: 1000

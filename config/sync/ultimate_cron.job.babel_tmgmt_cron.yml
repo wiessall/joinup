@@ -1,0 +1,30 @@
+uuid: d684ea3b-c980-441b-b242-a1a4671f0d56
+langcode: en
+status: true
+dependencies:
+  module:
+    - babel_tmgmt
+title: 'Process pending BABEL translations'
+id: babel_tmgmt_cron
+weight: 0
+module: babel_tmgmt
+callback: 'babel_tmgmt#cron'
+scheduler:
+  id: crontab
+  configuration:
+    rules:
+      - '0+@ 4 * * *'
+    catch_up: 0
+launcher:
+  id: serial
+  configuration:
+    timeouts:
+      lock_timeout: 3600
+    launcher:
+      thread: 0
+logger:
+  id: database
+  configuration:
+    method: '3'
+    expire: 1209600
+    retain: 1000
