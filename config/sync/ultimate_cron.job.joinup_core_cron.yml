@@ -1,0 +1,30 @@
+uuid: 244cdef6-dfa4-470b-a109-a55f6cea89f8
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+title: 'Clean up stale batch operations'
+id: joinup_core_cron
+weight: 0
+module: joinup_core
+callback: 'joinup_core#cron'
+scheduler:
+  id: crontab
+  configuration:
+    rules:
+      - '0+@ 1 * * *'
+    catch_up: 0
+launcher:
+  id: serial
+  configuration:
+    timeouts:
+      lock_timeout: 3600
+    launcher:
+      thread: 0
+logger:
+  id: database
+  configuration:
+    method: '3'
+    expire: 1209600
+    retain: 1000
