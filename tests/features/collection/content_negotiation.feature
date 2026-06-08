@@ -1,8 +1,7 @@
-@api
+@api @group-g
 Feature: Export collection metadata
   As a user of Interoperable Europe Portal I am able to retrieve the content of entities in a machine readable format.
 
-  @group-g
   Scenario Outline: Export node data
     Given the following "licence" content:
       | title            | description                | uri                   | licence type | deprecated |
@@ -19,9 +18,8 @@ Feature: Export collection metadata
       | turtle   | text/turtle; charset=UTF-8 | content-negotiation/fierce-content-exporters.ttl      |
       | jsonld   | application/ld+json        | content-negotiation/fierce-content-exporters.jsonld   |
 
-  @group-clone
   Scenario Outline: Export taxonomy terms
-    When I visit the "Representation Technique" term "Business Process Modeling Notation" page in the "<format>" serialisation
+    When I visit the "Representation Technique" term "Human Language" page in the "<format>" serialisation
     Then the output should match the file contents of "<fixture>"
     And the content type of the response should be "<Content-Type>"
 

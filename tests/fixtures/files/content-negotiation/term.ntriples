@@ -1,4 +1,4 @@
-<http://purl.org/adms/representationtechnique/BPMN> <http://www.w3.org/2004/02/skos/core#inScheme> <http://purl.org/adms/representationtechnique/1.0> .
-<http://purl.org/adms/representationtechnique/BPMN> <http://www.w3.org/2004/02/skos/core#prefLabel> "Business Process Modeling Notation"@en .
-<http://purl.org/adms/representationtechnique/BPMN> <http://www.w3.org/2004/02/skos/core#definition> ""@en .
-<http://purl.org/adms/representationtechnique/BPMN> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://digit-joinup-dev.ddev.local/taxonomy-term/representation-technique/6d54f304-a36d-42bc-b6a5-ed623ca1e33e> <http://www.w3.org/2004/02/skos/core#inScheme> <http://purl.org/adms/representationtechnique/1.0> .
+<https://digit-joinup-dev.ddev.local/taxonomy-term/representation-technique/6d54f304-a36d-42bc-b6a5-ed623ca1e33e> <http://www.w3.org/2004/02/skos/core#prefLabel> "Human Language"@en .
+<https://digit-joinup-dev.ddev.local/taxonomy-term/representation-technique/6d54f304-a36d-42bc-b6a5-ed623ca1e33e> <http://www.w3.org/2004/02/skos/core#definition> ""@en .
+<https://digit-joinup-dev.ddev.local/taxonomy-term/representation-technique/6d54f304-a36d-42bc-b6a5-ed623ca1e33e> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .

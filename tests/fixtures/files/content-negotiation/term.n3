@@ -1,7 +1,7 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 
-<http://purl.org/adms/representationtechnique/BPMN>
+<https://digit-joinup-dev.ddev.local/taxonomy-term/representation-technique/6d54f304-a36d-42bc-b6a5-ed623ca1e33e>
   skos:inScheme <http://purl.org/adms/representationtechnique/1.0> ;
-  skos:prefLabel "Business Process Modeling Notation"@en ;
+  skos:prefLabel "Human Language"@en ;
   skos:definition ""@en ;
   a skos:Concept .
