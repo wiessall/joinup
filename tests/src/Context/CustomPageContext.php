@@ -125,33 +125,6 @@ class CustomPageContext extends RawDrupalContext {
   }
 
   /**
-   * Checks the number of visible items in the given OG Menu.
-   *
-   * @param string $menu
-   *   The name of the OG Menu instance to check.
-   * @param string $label
-   *   The group label.
-   * @param string $type
-   *   The group type, either 'collection' or 'solution'.
-   * @param int $count
-   *   The expected number of visible menu items.
-   */
-  #[Then('the :menu menu of the :label :type should have :count visible item(s)')]
-  public function assertVisibleItemsInMenuCount(string $menu, string $label, string $type, int $count): void {
-    /** @var \Drupal\Core\Menu\MenuLinkTreeInterface $link_tree_service */
-    $link_tree_service = \Drupal::service('menu.link_tree');
-
-    $tree = $this->getOgMenuTreeByNameLabelAndType($menu, $label, $type);
-
-    // Build a render array of the tree to easily get a list of enabled
-    // (visible) items.
-    $build = $link_tree_service->build($tree);
-    $actual = !empty($build['#items']) ? count($build['#items']) : 0;
-
-    $this->assertSameValues($count, $actual);
-  }
-
-  /**
    * Checks the number of menu items in the given OG Menu instance.
    *
    * @param string $menu
