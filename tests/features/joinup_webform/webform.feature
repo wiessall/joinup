@@ -1,4 +1,4 @@
-@api @group-clone @wip
+@api @group-clone
 Feature: Webforms
 
   # @covers \joinup_webform_webform_access_rules_alter()

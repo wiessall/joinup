@@ -403,7 +403,7 @@ Feature: Messaging group announcements
     And I should not see the button "Undo reject"
     And I should not see the button "Preview"
 
-  @group-clone @wip
+  @group-clone
   Scenario: Sending mass-mailing announcements.
     Given I am logged in as a moderator
     When I go to the announcements page of "Open Source Observatory (OSOR)" collection
