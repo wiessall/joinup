@@ -9,6 +9,7 @@ use Drupal\Core\Field\Attribute\FieldWidget;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\search_api_field\Plugin\Field\FieldWidget\SearchWidget as DefaultSearchWidget;
@@ -140,9 +141,19 @@ class SearchWidget extends DefaultSearchWidget {
    *   The form state.
    */
   public function validateEmptyQuerys(array &$element, FormStateInterface $form_state): void {
+    $trigger_name = $form_state->getTriggeringElement()['#name'] ?? '';
+    if (str_starts_with($trigger_name, 'add_filter')
+      || str_starts_with($trigger_name, 'remove_filter_')) {
+      return;
+    }
 
-    if (empty($element['query_presets']['#value']) && empty($element['query_builder']['filters']['#value'])) {
-      $form_state->setError($element, $this->t('You need to add a filter in the Content listing block'));
+    $filters = $element['query_builder']['filters'] ?? [];
+    if (empty($element['query_presets']['#value']) && empty(Element::children($filters))) {
+      $error_target = $element['query_builder']['add_more']['field'] ?? $element;
+      $form_state->setError(
+        $error_target,
+        $this->t('You need to add a filter in the Content listing block'),
+      );
     }
   }
 
