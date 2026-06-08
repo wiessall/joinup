@@ -1,0 +1,30 @@
+uuid: 26106204-176f-4f45-9634-5b30d345efc3
+langcode: en
+status: true
+dependencies:
+  module:
+    - honeypot
+title: 'Clean up honeypot form submission data'
+id: honeypot_cron
+weight: 0
+module: honeypot
+callback: 'honeypot#cron'
+scheduler:
+  id: crontab
+  configuration:
+    rules:
+      - '0+@ 1 * * *'
+    catch_up: 0
+launcher:
+  id: serial
+  configuration:
+    timeouts:
+      lock_timeout: 3600
+    launcher:
+      thread: 0
+logger:
+  id: database
+  configuration:
+    method: '3'
+    expire: 1209600
+    retain: 1000

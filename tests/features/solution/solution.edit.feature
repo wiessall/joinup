@@ -114,6 +114,9 @@ Feature: Solution editing.
 
   @javascript
   Scenario: User can get more info about Solution classification
+    Given pl translation for the taxonomy_term entity with label "Complete Solution":
+      | field | value                 |
+      | name  | Kompletne rozwiazanie |
     When I am logged in as a facilitator of the "Another solution" solution
     And I go to the edit form of the "Another solution" solution
     And I click "More information about Solution classification"
@@ -121,6 +124,7 @@ Feature: Solution editing.
     And I should see the text "Solution classification" in the "Modal title"
     And I should see the text "Complete Solution" in the "Modal content" region
     And I should see the text "Artifact (product, tool, or digital service)." in the "Modal content" region
+    But I should not see the text "Kompletne rozwiazanie" in the "Modal content" region
 
   @javascript
   Scenario: User should not see fields from other steps
