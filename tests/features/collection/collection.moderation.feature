@@ -88,7 +88,7 @@ Feature: Collection moderation
       | The Licking Silence | Lena Richardson | Propose, Save as draft, Publish                   |
       | Person of Wizards   | Lena Richardson | Publish, Save as draft, Propose, Archive          |
       | The Shard's Hunter  | Lena Richardson | Publish, Archive                                  |
-      | Luck in the Abyss   | Lena Richardson |                                                   |
+      | Luck in the Abyss   | Lena Richardson | Unarchive                                         |
 
     # The 'Delete' action is not a button but a link leading to a confirmation
     # page that is styled as a button. It should only be available to the owner
