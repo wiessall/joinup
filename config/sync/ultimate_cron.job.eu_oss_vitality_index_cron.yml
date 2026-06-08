@@ -1,0 +1,30 @@
+uuid: 56ae661e-a3fa-4a04-8ba6-09064f05b173
+langcode: en
+status: true
+dependencies:
+  module:
+    - eu_oss_vitality_index
+title: 'Queue EU OSS Vitality Index computation'
+id: eu_oss_vitality_index_cron
+weight: 0
+module: eu_oss_vitality_index
+callback: 'eu_oss_vitality_index#cron'
+scheduler:
+  id: crontab
+  configuration:
+    rules:
+      - '0+@ 4 * * *'
+    catch_up: 0
+launcher:
+  id: serial
+  configuration:
+    timeouts:
+      lock_timeout: 3600
+    launcher:
+      thread: 0
+logger:
+  id: database
+  configuration:
+    method: '3'
+    expire: 1209600
+    retain: 1000

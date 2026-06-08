@@ -1,0 +1,30 @@
+uuid: b0c9013d-1858-40d3-ba06-4ae9664b1f4d
+langcode: en
+status: true
+dependencies:
+  module:
+    - eu_oss_catalogue
+title: 'Queue EU OSS Catalogue provider fetch jobs'
+id: eu_oss_catalogue_cron
+weight: 0
+module: eu_oss_catalogue
+callback: 'eu_oss_catalogue#cron'
+scheduler:
+  id: crontab
+  configuration:
+    rules:
+      - '0+@ 2 * * *'
+    catch_up: 0
+launcher:
+  id: serial
+  configuration:
+    timeouts:
+      lock_timeout: 3600
+    launcher:
+      thread: 0
+logger:
+  id: database
+  configuration:
+    method: '3'
+    expire: 1209600
+    retain: 1000
