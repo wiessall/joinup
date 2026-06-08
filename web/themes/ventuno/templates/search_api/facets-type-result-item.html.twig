@@ -34,6 +34,8 @@
   {% set icon = 'file-earmark-post' %}
 {% elseif type is same as 'solution' %}
   {% set icon = 'clipboard2-check' %}
+{% elseif type is same as 'certificate' %}
+  {% set icon = 'award' %}
 {% endif %}
   <svg class="bi icon--s">
     <use xlink:href="{{ bcl_icon_path }}#{{ icon }}"></use>
