@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup_group\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
+use Drupal\joinup\Traits\CommonTrait;
 use Drupal\joinup\Traits\RandomGeneratorTrait;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drush\TestTraits\DrushTestTrait;
@@ -17,6 +18,7 @@ use weitzman\LoginTrait\LoginTrait;
 #[Group('joinup_group')]
 class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
 
+  use CommonTrait;
   use DrushTestTrait;
   use LoginTrait;
   use RandomGeneratorTrait;

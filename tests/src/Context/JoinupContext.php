@@ -30,6 +30,7 @@ use Drupal\comment\CommentInterface;
 use Drupal\comment\Entity\Comment;
 use Drupal\file_visibility\FileVisibilityInterface;
 use Drupal\joinup\Traits\BootstrapTrait;
+use Drupal\joinup\Traits\CommonTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
@@ -65,6 +66,7 @@ use GuzzleHttp\Client;
 class JoinupContext extends RawDrupalContext {
 
   use BootstrapTrait;
+  use CommonTrait;
   use ContextualLinksTrait;
   use EntityTrait;
   use FileTrait;

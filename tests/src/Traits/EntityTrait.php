@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\joinup\Traits;
 
 use Behat\Gherkin\Node\TableNode;
-use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Driver\Entity\EntityStub;
