@@ -33,7 +33,6 @@ Feature: Subscribing to community content in collections
       | Cities of Bulgaria   | bisera | discussion, event, news              |
       | Cities of Bulgaria   | kalin  | discussion, document, news, solution |
       | Cities of Bulgaria   | aleks  | discussion, document, news             |
-    And all message digests have been delivered
 
   Scenario: Receive a digest of content that is published in my collections
     # Start on clean.
@@ -113,7 +112,7 @@ Feature: Subscribing to community content in collections
       | Ruse |
 
     # Check that the messages are formatted correctly.
-    Given all message digests have been delivered
+    Given I deliver the message digest subscriptions
     Then the group content subscription digest sent to hristo contains the following sections:
       | title                |
       | Cities of Bulgaria   |
@@ -179,7 +178,7 @@ Feature: Subscribing to community content in collections
       | Double seaming |
 
     # Check that the messages are formatted correctly.
-    Given all message digests have been delivered
+    Given I deliver the message digest subscriptions
     Then the group content subscription digest sent to hristo contains the following sections:
       | title          |
       | Double seaming |

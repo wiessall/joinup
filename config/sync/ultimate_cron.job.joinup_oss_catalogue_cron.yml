@@ -1,0 +1,30 @@
+uuid: 6d807f9a-e5bf-4459-827a-db08c676cf7c
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_oss_catalogue
+title: 'Queue OSS Catalogue image URLs for import'
+id: joinup_oss_catalogue_cron
+weight: 0
+module: joinup_oss_catalogue
+callback: 'joinup_oss_catalogue#cron'
+scheduler:
+  id: crontab
+  configuration:
+    rules:
+      - '0+@ 4 * * *'
+    catch_up: 0
+launcher:
+  id: serial
+  configuration:
+    timeouts:
+      lock_timeout: 3600
+    launcher:
+      thread: 0
+logger:
+  id: database
+  configuration:
+    method: '3'
+    expire: 1209600
+    retain: 1000
