@@ -10,9 +10,9 @@ use Behat\Mink\Exception\ExpectationException;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
-use Drupal\Driver\Entity\EntityStub;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\AssertTrait;
+use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\rdf_sync\Model\SyncMethod;
 
@@ -22,6 +22,7 @@ use Drupal\rdf_sync\Model\SyncMethod;
 class RdfContext extends RawDrupalContext {
 
   use AssertTrait;
+  use EntityTrait;
   use UtilityTrait;
 
   /**
@@ -288,27 +289,7 @@ class RdfContext extends RawDrupalContext {
     if (!$entity = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri($uri)) {
       throw new \InvalidArgumentException("No entity found for URI $uri");
     }
-    $values = $fieldsTable->getRowsHash();
-    $values['type'] = $entity->bundle();
-    $stub = new EntityStub($entity->getEntityTypeId(), $entity->bundle(), $values);
-    $this->parseEntityFields($stub);
-    foreach (array_keys($fieldsTable->getRowsHash()) as $key) {
-      $value = $stub->getValue($key);
-      if ($key === 'changed' && !is_numeric($value)) {
-        $value = strtotime($value);
-      }
-      if ($entity->getFieldDefinition($key)->getType() === 'entity_reference') {
-        $targetEntityType = $entity->getFieldDefinition($key)->getSetting('target_type');
-        foreach ($value as $delta => $entry) {
-          $targetEntity = \Drupal::entityTypeManager()->getStorage($targetEntityType)->loadByProperties(['name' => $entry]);
-          \assert($targetEntity, "No entity found for $key = $entry");
-          $targetEntity = reset($targetEntity);
-          $value[$delta] = ['target_id' => $targetEntity->id()];
-        }
-      }
-      $entity->set($key, $value);
-    }
-    $entity->save();
+    $this->doUpdateEntity($entity, $fieldsTable);
   }
 
   /**

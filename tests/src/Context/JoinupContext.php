@@ -52,6 +52,7 @@ use Drupal\joinup_group\Plugin\Menu\GroupMenuLink;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\paragraphs\Entity\Paragraph;
@@ -3150,6 +3151,30 @@ class JoinupContext extends RawDrupalContext {
         'h1 span'
       );
     }
+  }
+
+  /**
+   * Updates an entity by its title..
+   *
+   * @codingStandardsIgnoreStart
+   *  Table format:
+   *  | title               | Sample solution   |
+   *  | description         | A sample solution |
+   *  | ...                 | ...               |
+   * @codingStandardsIgnoreEnd
+   *
+   * @param string $title
+   *   The node title.
+   * @param string $type
+   *   The node type.
+   * @param \Behat\Gherkin\Node\TableNode $fieldsTable
+   *   The values of the fields to update.
+   */
+  #[When('I update :title :bundle:')]
+  public function updateEntityByLabel(string $title, string $type, TableNode $fieldsTable): void {
+    $node = $this->getEntityByLabel('node', $title, $type);
+    assert($node instanceof NodeInterface);
+    $this->doUpdateEntity($node, $fieldsTable);
   }
 
   /**

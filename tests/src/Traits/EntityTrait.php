@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Traits;
 
+use Behat\Gherkin\Node\TableNode;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Driver\Entity\EntityStub;
 
 /**
  * Helper methods to deal with entities.
@@ -159,6 +162,45 @@ trait EntityTrait {
   protected function getEntityUri(EntityInterface $entity, string $rel = 'canonical', array $options = []): string {
     $base_path = rtrim(base_path(), '/');
     return $base_path . $entity->toUrl($rel, $options)->toString();
+  }
+
+  /**
+   * Updates an entity.
+   *
+   * @codingStandardsIgnoreStart
+   *  Table format:
+   *  | title               | Sample solution   |
+   *  | description         | A sample solution |
+   *  | ...                 | ...               |
+   * @codingStandardsIgnoreEnd
+   *
+   * @param \Drupal\Core\Entity\FieldableEntityInterface $entity
+   *   The the entity to update.
+   * @param \Behat\Gherkin\Node\TableNode $fieldsTable
+   *   The values of the fields to update.
+   */
+  protected function doUpdateEntity(FieldableEntityInterface $entity, TableNode $fieldsTable): void {
+    $values = $fieldsTable->getRowsHash();
+    $values['type'] = $entity->bundle();
+    $stub = new EntityStub($entity->getEntityTypeId(), $entity->bundle(), $values);
+    $this->parseEntityFields($stub);
+    foreach (array_keys($fieldsTable->getRowsHash()) as $key) {
+      $value = $stub->getValue($key);
+      if ($key === 'changed' && !is_numeric($value)) {
+        $value = strtotime($value);
+      }
+      if ($entity->getFieldDefinition($key)->getType() === 'entity_reference') {
+        $targetEntityType = $entity->getFieldDefinition($key)->getSetting('target_type');
+        foreach ($value as $delta => $entry) {
+          $targetEntity = \Drupal::entityTypeManager()->getStorage($targetEntityType)->loadByProperties(['name' => $entry]);
+          \assert($targetEntity, "No entity found for $key = $entry");
+          $targetEntity = reset($targetEntity);
+          $value[$delta] = ['target_id' => $targetEntity->id()];
+        }
+      }
+      $entity->set($key, $value);
+    }
+    $entity->save();
   }
 
 }
