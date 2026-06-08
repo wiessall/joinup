@@ -2392,13 +2392,15 @@ class JoinupContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The menu data.
+   * @param string $og_menu_type
+   *   The OG menu type.
    * @param string $group_label
    *   The group label.
    * @param string $group_bundle
    *   The group bundle.
    */
-  #[Then('the draggable menu table of the :group_label :group_type should be:')]
-  public function assertDraggableMenuTable(TableNode $table, string $group_label, string $group_bundle): void {
+  #[Then('the draggable :og_menu_type menu table of the :group_label :group_type should be:')]
+  public function assertDraggableMenuTable(TableNode $table, string $og_menu_type, string $group_label, string $group_bundle): void {
     $this->assertJavaScriptEnabledBrowser();
 
     $group = $this->getEntityByLabel('node', $group_label, $group_bundle);
@@ -2413,7 +2415,7 @@ class JoinupContext extends RawDrupalContext {
       $current_row = $rows[$delta];
       $title_element = $current_row->find('css', 'td:first-of-type a:not(.tabledrag-handle)');
       $this->assertSameValues($data['title'], trim($title_element->getText()));
-      $menu_link = $this->getGroupMenuLinkByTitle($data['title'], $group, 'navigation');
+      $menu_link = $this->getGroupMenuLinkByTitle($data['title'], $group, $og_menu_type);
 
       $parent_input = $current_row->find('css', 'input[name="links[menu_plugin_id:' . $menu_link->getPluginId() . '][parent]"]');
 
@@ -3205,7 +3207,7 @@ class JoinupContext extends RawDrupalContext {
     $tree = $menu_link_tree->transform($tree, $manipulators);
 
     foreach ($tree as $link) {
-      if ($link->link->getTitle() === $title) {
+      if ((string) $link->link->getTitle() === $title) {
         return $link->link;
       }
     }

@@ -69,7 +69,7 @@ class CustomPageContext extends RawDrupalContext {
    *   Thrown when no OG Menu instance was found that matches the given
    *   arguments.
    */
-  #[Then('I should not have access to the menu link administration pages for the :menu menu of the :title :type')]
+  #[Then('I should not have access to the standard OG menu routes for the :menu menu of the :title :type')]
   public function assertNoAccessToOgMenuAdministration(string $menu, string $title, string $type): void {
     // Retrieve the OG Menu instance for the given menu and group.
     $group = $this->getEntityByLabel('node', $title, $type);
