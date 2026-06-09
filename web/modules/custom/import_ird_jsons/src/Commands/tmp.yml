@@ -1,0 +1,847 @@
+uuid: b1de742e-cd64-4123-afa0-ff411e66b34a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.abstract
+    - search_api.index.published
+  module:
+    - facets_exposed_filters
+    - search_api
+id: collection_fao_dvi_solutions
+label: 'Solutions: fao-dvi'
+module: views
+description: ''
+tag: ''
+base_table: search_api_index_published
+base_field: search_api_id
+display:
+  default:
+    id: default
+    display_title: Default
+    display_plugin: default
+    position: 0
+    display_options:
+      fields:
+        abstract:
+          id: abstract
+          table: search_api_index_published
+          field: abstract
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: null
+          entity_field: null
+          plugin_id: search_api_field
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings: {  }
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          field_rendering: true
+          fallback_handler: search_api
+          fallback_options:
+            link_to_item: false
+            use_highlighting: false
+            multi_type: separator
+            multi_separator: ', '
+      pager:
+        type: mini
+        options:
+          offset: 0
+          pagination_heading_level: h4
+          items_per_page: 10
+          total_pages: null
+          id: 0
+          tags:
+            next: ››
+            previous: ‹‹
+          expose:
+            items_per_page: false
+            items_per_page_label: 'Items per page'
+            items_per_page_options: '5, 10, 25, 50'
+            items_per_page_options_all: false
+            items_per_page_options_all_label: '- All -'
+            offset: false
+            offset_label: Offset
+      exposed_form:
+        type: basic
+        options:
+          submit_button: Apply
+          reset_button: false
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: true
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      access:
+        type: none
+        options: {  }
+      cache:
+        type: search_api_none
+        options: {  }
+      empty:
+        area_text_custom:
+          id: area_text_custom
+          table: views
+          field: area_text_custom
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text_custom
+          empty: true
+          content: 'NO results'
+          tokenize: false
+      sorts: {  }
+      arguments:
+        entity_groups:
+          id: entity_groups
+          table: search_api_index_published
+          field: entity_groups
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          default_action: ignore
+          exception:
+            value: all
+            title_enable: false
+            title: All
+          title_enable: false
+          title: ''
+          default_argument_type: fixed
+          default_argument_options:
+            argument: ''
+          summary_options: {  }
+          summary:
+            sort_order: asc
+            number_of_records: 0
+            format: default_summary
+          specify_validation: false
+          validate:
+            type: none
+            fail: 'not found'
+          validate_options: {  }
+          break_phrase: false
+          not: false
+      filters:
+        entity_bundle:
+          id: entity_bundle
+          table: search_api_index_published
+          field: entity_bundle
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_string
+          operator: '='
+          value:
+            min: ''
+            max: ''
+            value: solution
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+      style:
+        type: default
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: true
+          uses_fields: false
+      row:
+        type: search_api
+        options:
+          view_modes:
+            'entity:assessment':
+              ':default': default
+              report: ':default'
+            'entity:node':
+              ':default': view_mode_tile
+              assessment_report: ':default'
+              collection: ':default'
+              custom_page: ':default'
+              discussion: ':default'
+              distribution: ':default'
+              document: ':default'
+              event: ':default'
+              licence: ':default'
+              news: ':default'
+              owner: ':default'
+              release: ':default'
+              solution: view_mode_tile
+            'entity:taxonomy_term':
+              ':default': default
+              eif_conceptual_model: ':default'
+              eif_interoperability_layer: ':default'
+              eif_principle: ':default'
+              eif_recommendation: ':default'
+              oss_category: ':default'
+              topic: ':default'
+            'entity:user':
+              ':default': default
+              user: ':default'
+      query:
+        type: search_api_query
+        options:
+          bypass_access: false
+          skip_access: false
+          preserve_facet_query_args: false
+          query_tags: {  }
+      relationships: {  }
+      header: {  }
+      footer: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - 'user.node_grants:view'
+      tags:
+        - 'config:field.storage.node.abstract'
+        - 'config:search_api.index.published'
+        - 'search_api_list:published'
+  page_1:
+    id: page_1
+    display_title: Page
+    display_plugin: page
+    position: 1
+    display_options:
+      filters:
+        entity_bundle:
+          id: entity_bundle
+          table: search_api_index_published
+          field: entity_bundle
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_string
+          operator: '='
+          value:
+            min: ''
+            max: ''
+            value: solution
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        facets_claim_primary_users:
+          id: facets_claim_primary_users
+          table: search_api_index_published
+          field: facets_claim_primary_users
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: facets_filter
+          operator: '='
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: 'Primary users'
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: claim_primary_users
+            required: false
+            remember: false
+            multiple: true
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          hierarchy: false
+          label_display: visible
+          facet:
+            query_operator: or
+            hard_limit: 0
+            min_count: 1
+            show_numbers: false
+            processor_configs:
+              count_limit:
+                processor_id: count_limit
+                weights:
+                  build: 50
+                settings:
+                  minimum_items: 1
+                  maximum_items: null
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      defaults:
+        filters: false
+        filter_groups: false
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
+      path: test-this
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - 'user.node_grants:view'
+      tags:
+        - 'config:field.storage.node.abstract'
+        - 'config:search_api.index.published'
+        - 'search_api_list:published'
+filters:
+  -
+    claim_digital_solution_delivery_format_mandatory:
+      id: claim_digital_solution_delivery_format_mandatory
+      name: 'Digital Solution delivery format (Mandatory)'
+      url_alias: claim_digital_solution_delivery_format_mandatory
+      weight: 3
+      widget:
+        type: dropdown
+        config:
+          show_numbers: true
+      facet_source_id: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      field_identifier: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      only_visible_when_facet_source_is_visible: true
+      show_only_one_result: false
+      empty_behavior:
+        behavior: none
+      facet_settings: null
+      processor_configs: {  }
+  -
+    claim_digital_solution_development_stage:
+      id: claim_digital_solution_development_stage
+      name: 'Digital Solution Development Stage'
+      url_alias: claim_digital_solution_development_stage
+      weight: 7
+      widget:
+        type: dropdown
+        config:
+          show_numbers: true
+      facet_source_id: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      field_identifier: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      only_visible_when_facet_source_is_visible: true
+      show_only_one_result: false
+      empty_behavior:
+        behavior: none
+      facet_settings: null
+      processor_configs: {  }
+  -
+    claim_digital_solution_geographic_scope_enter_text:
+      id: claim_digital_solution_geographic_scope_enter_text
+      name: 'Digital Solution Geographic scope (Enter text).'
+      url_alias: claim_digital_solution_geographic_scope_enter_text
+      weight: 8
+      widget:
+        type: dropdown
+        config:
+          show_numbers: true
+      facet_source_id: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      field_identifier: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      only_visible_when_facet_source_is_visible: true
+      show_only_one_result: false
+      empty_behavior:
+        behavior: none
+      facet_settings: null
+      processor_configs: {  }
+  -
+    claim_digital_solution_type_category_sub_category:
+      id: claim_digital_solution_type_category_sub_category
+      name: 'Digital Solution Type (Category & sub-category)'
+      url_alias: claim_digital_solution_type_category_sub_category
+      weight: 2
+      widget:
+        type: dropdown
+        config:
+          show_numbers: true
+      facet_source_id: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      field_identifier: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      only_visible_when_facet_source_is_visible: true
+      show_only_one_result: false
+      empty_behavior:
+        behavior: none
+      facet_settings: null
+      processor_configs: {  }
+  -
+    claim_ds_links_to_government_programmes_initiatives_and_projects:
+      id: claim_ds_links_to_government_programmes_initiatives_and_projects
+      name: 'DS links to Government programmes, initiatives, and projects.'
+      url_alias: claim_ds_links_to_government_programmes_initiatives_and_projects
+      weight: 11
+      widget:
+        type: dropdown
+        config:
+          show_numbers: true
+      facet_source_id: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      field_identifier: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      only_visible_when_facet_source_is_visible: true
+      show_only_one_result: false
+      empty_behavior:
+        behavior: none
+      facet_settings: null
+      processor_configs: {  }
+  -
+    claim_ds_supplier_user_category:
+      id: claim_ds_supplier_user_category
+      name: 'DS Supplier-User category'
+      url_alias: claim_ds_supplier_user_category
+      weight: 4
+      widget:
+        type: dropdown
+        config:
+          show_numbers: true
+      facet_source_id: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      field_identifier: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      only_visible_when_facet_source_is_visible: true
+      show_only_one_result: false
+      empty_behavior:
+        behavior: none
+      facet_settings: null
+      processor_configs: {  }
+  -
+    claim_keywords:
+      id: claim_keywords
+      name: Keywords
+      url_alias: claim_keywords
+      weight: 9
+      widget:
+        type: dropdown
+        config:
+          show_numbers: true
+      facet_source_id: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      field_identifier: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      only_visible_when_facet_source_is_visible: true
+      show_only_one_result: false
+      empty_behavior:
+        behavior: none
+      facet_settings: null
+      processor_configs: {  }
+  -
+    claim_list_country:
+      id: claim_list_country
+      name: 'List country'
+      url_alias: claim_list_country
+      weight: 1
+      widget:
+        type: dropdown
+        config:
+          show_numbers: true
+      facet_source_id: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      field_identifier: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      only_visible_when_facet_source_is_visible: true
+      show_only_one_result: false
+      empty_behavior:
+        behavior: none
+      facet_settings: null
+      processor_configs: {  }
+  -
+    claim_primary_users:
+      id: claim_primary_users
+      name: 'Primary users'
+      url_alias: claim_primary_users
+      weight: 6
+      widget:
+        type: dropdown
+        config:
+          show_numbers: true
+      facet_source_id: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      field_identifier: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      only_visible_when_facet_source_is_visible: true
+      show_only_one_result: false
+      empty_behavior:
+        behavior: none
+      facet_settings: null
+      processor_configs: {  }
+  -
+    claim_type:
+      id: claim_type
+      name: Type
+      url_alias: claim_type
+      weight: 0
+      widget:
+        type: dropdown
+        config:
+          show_numbers: true
+      facet_source_id: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      field_identifier: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      only_visible_when_facet_source_is_visible: true
+      show_only_one_result: false
+      empty_behavior:
+        behavior: none
+      facet_settings: null
+      processor_configs: {  }
+  -
+    claim_type_of_entity_ict_developer_supplier_mandatory:
+      id: claim_type_of_entity_ict_developer_supplier_mandatory
+      name: 'Type of entity (ICT developer-supplier) - Mandatory'
+      url_alias: claim_type_of_entity_ict_developer_supplier_mandatory
+      weight: 5
+      widget:
+        type: dropdown
+        config:
+          show_numbers: true
+      facet_source_id: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      field_identifier: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      only_visible_when_facet_source_is_visible: true
+      show_only_one_result: false
+      empty_behavior:
+        behavior: none
+      facet_settings: null
+      processor_configs: {  }
+  -
+    claim_value_chain_tags:
+      id: claim_value_chain_tags
+      name: 'Value chain tags'
+      url_alias: claim_value_chain_tags
+      weight: 10
+      widget:
+        type: dropdown
+        config:
+          show_numbers: true
+      facet_source_id: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      field_identifier: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      only_visible_when_facet_source_is_visible: true
+      show_only_one_result: false
+      empty_behavior:
+        behavior: none
+      facet_settings: null
+      processor_configs: {  }
+  -
+    claim_digital_solution_delivery_format_mandatory:
+      id: claim_digital_solution_delivery_format_mandatory
+      name: 'Digital Solution delivery format (Mandatory)'
+      url_alias: claim_digital_solution_delivery_format_mandatory
+      weight: 3
+      widget:
+        type: dropdown
+        config:
+          show_numbers: true
+      facet_source_id: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      field_identifier: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      only_visible_when_facet_source_is_visible: true
+      show_only_one_result: false
+      empty_behavior:
+        behavior: none
+      facet_settings: null
+      processor_configs: {  }
+  -
+    claim_digital_solution_development_stage:
+      id: claim_digital_solution_development_stage
+      name: 'Digital Solution Development Stage'
+      url_alias: claim_digital_solution_development_stage
+      weight: 7
+      widget:
+        type: dropdown
+        config:
+          show_numbers: true
+      facet_source_id: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      field_identifier: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      only_visible_when_facet_source_is_visible: true
+      show_only_one_result: false
+      empty_behavior:
+        behavior: none
+      facet_settings: null
+      processor_configs: {  }
+  -
+    claim_digital_solution_geographic_scope_enter_text:
+      id: claim_digital_solution_geographic_scope_enter_text
+      name: 'Digital Solution Geographic scope (Enter text).'
+      url_alias: claim_digital_solution_geographic_scope_enter_text
+      weight: 8
+      widget:
+        type: dropdown
+        config:
+          show_numbers: true
+      facet_source_id: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      field_identifier: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      only_visible_when_facet_source_is_visible: true
+      show_only_one_result: false
+      empty_behavior:
+        behavior: none
+      facet_settings: null
+      processor_configs: {  }
+  -
+    claim_digital_solution_type_category_sub_category:
+      id: claim_digital_solution_type_category_sub_category
+      name: 'Digital Solution Type (Category & sub-category)'
+      url_alias: claim_digital_solution_type_category_sub_category
+      weight: 2
+      widget:
+        type: dropdown
+        config:
+          show_numbers: true
+      facet_source_id: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      field_identifier: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      only_visible_when_facet_source_is_visible: true
+      show_only_one_result: false
+      empty_behavior:
+        behavior: none
+      facet_settings: null
+      processor_configs: {  }
+  -
+    claim_ds_links_to_government_programmes_initiatives_and_projects:
+      id: claim_ds_links_to_government_programmes_initiatives_and_projects
+      name: 'DS links to Government programmes, initiatives, and projects.'
+      url_alias: claim_ds_links_to_government_programmes_initiatives_and_projects
+      weight: 11
+      widget:
+        type: dropdown
+        config:
+          show_numbers: true
+      facet_source_id: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      field_identifier: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      only_visible_when_facet_source_is_visible: true
+      show_only_one_result: false
+      empty_behavior:
+        behavior: none
+      facet_settings: null
+      processor_configs: {  }
+  -
+    claim_ds_supplier_user_category:
+      id: claim_ds_supplier_user_category
+      name: 'DS Supplier-User category'
+      url_alias: claim_ds_supplier_user_category
+      weight: 4
+      widget:
+        type: dropdown
+        config:
+          show_numbers: true
+      facet_source_id: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      field_identifier: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      only_visible_when_facet_source_is_visible: true
+      show_only_one_result: false
+      empty_behavior:
+        behavior: none
+      facet_settings: null
+      processor_configs: {  }
+  -
+    claim_keywords:
+      id: claim_keywords
+      name: Keywords
+      url_alias: claim_keywords
+      weight: 9
+      widget:
+        type: dropdown
+        config:
+          show_numbers: true
+      facet_source_id: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      field_identifier: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      only_visible_when_facet_source_is_visible: true
+      show_only_one_result: false
+      empty_behavior:
+        behavior: none
+      facet_settings: null
+      processor_configs: {  }
+  -
+    claim_list_country:
+      id: claim_list_country
+      name: 'List country'
+      url_alias: claim_list_country
+      weight: 1
+      widget:
+        type: dropdown
+        config:
+          show_numbers: true
+      facet_source_id: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      field_identifier: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      only_visible_when_facet_source_is_visible: true
+      show_only_one_result: false
+      empty_behavior:
+        behavior: none
+      facet_settings: null
+      processor_configs: {  }
+  -
+    claim_primary_users:
+      id: claim_primary_users
+      name: 'Primary users'
+      url_alias: claim_primary_users
+      weight: 6
+      widget:
+        type: dropdown
+        config:
+          show_numbers: true
+      facet_source_id: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      field_identifier: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      only_visible_when_facet_source_is_visible: true
+      show_only_one_result: false
+      empty_behavior:
+        behavior: none
+      facet_settings: null
+      processor_configs: {  }
+  -
+    claim_type:
+      id: claim_type
+      name: Type
+      url_alias: claim_type
+      weight: 0
+      widget:
+        type: dropdown
+        config:
+          show_numbers: true
+      facet_source_id: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      field_identifier: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      only_visible_when_facet_source_is_visible: true
+      show_only_one_result: false
+      empty_behavior:
+        behavior: none
+      facet_settings: null
+      processor_configs: {  }
+  -
+    claim_type_of_entity_ict_developer_supplier_mandatory:
+      id: claim_type_of_entity_ict_developer_supplier_mandatory
+      name: 'Type of entity (ICT developer-supplier) - Mandatory'
+      url_alias: claim_type_of_entity_ict_developer_supplier_mandatory
+      weight: 5
+      widget:
+        type: dropdown
+        config:
+          show_numbers: true
+      facet_source_id: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      field_identifier: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      only_visible_when_facet_source_is_visible: true
+      show_only_one_result: false
+      empty_behavior:
+        behavior: none
+      facet_settings: null
+      processor_configs: {  }
+  -
+    claim_value_chain_tags:
+      id: claim_value_chain_tags
+      name: 'Value chain tags'
+      url_alias: claim_value_chain_tags
+      weight: 10
+      widget:
+        type: dropdown
+        config:
+          show_numbers: true
+      facet_source_id: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      field_identifier: 'search_api:views_page__collection_fao_dvi_solutions__page_1'
+      only_visible_when_facet_source_is_visible: true
+      show_only_one_result: false
+      empty_behavior:
+        behavior: none
+      facet_settings: null
+      processor_configs: {  }
+
