@@ -22,9 +22,8 @@ Feature: Private message report.
     And I fill in "Message" with "This is a mean message to Bob."
     And I press "Send" in the "Modal buttons" region
     Then the modal should be closed
-    And I wait for AJAX to finish
     And I should be on "/user/messages"
-    And I reload the page
+    And I wait until the page contains the text "This is a mean message to Bob."
     And a message containing the text "This is a mean message to Bob." should be present
     And I should not see the link "Report message"
 

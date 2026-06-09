@@ -10,6 +10,7 @@ declare(strict_types=1);
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseModalDialogCommand;
+use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Database\Query\AlterableInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
@@ -190,8 +191,10 @@ function joinup_private_message_create_ajax_callback(array &$form, FormStateInte
   if ($form_state->hasAnyErrors()) {
     return $form;
   }
+  $url = Url::fromRoute('private_message.private_message_page');
   $response = new AjaxResponse();
   $response->addCommand(new CloseModalDialogCommand());
+  $response->addCommand(new RedirectCommand($url->toString()));
   return $response;
 }
 
