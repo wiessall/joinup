@@ -114,6 +114,7 @@ joinup_group.settings_form:
     _title_callback: Drupal\joinup_group\Controller\GroupSettingsController::title
   requirements:
     _custom_access: Drupal\joinup_group\Controller\GroupSettingsController::access
+    _archived_group: 'TRUE'
   options:
     parameters:
       node:

@@ -1,0 +1,29 @@
+uuid: 306f800c-ba75-4f24-8dd7-8feeb27cfaf6
+langcode: en
+status: true
+dependencies:
+  module:
+    - tmgmt_ec_etranslation
+title: 'Process eTranslation service callbacks'
+id: tmgmt_ec_etranslation_cron
+weight: 0
+module: tmgmt_ec_etranslation
+callback: 'tmgmt_ec_etranslation#cron'
+scheduler:
+  id: simple
+  configuration:
+    rules:
+      - '* * * * *'
+launcher:
+  id: serial
+  configuration:
+    timeouts:
+      lock_timeout: 3600
+    launcher:
+      thread: 0
+logger:
+  id: database
+  configuration:
+    method: '3'
+    expire: 1209600
+    retain: 1000

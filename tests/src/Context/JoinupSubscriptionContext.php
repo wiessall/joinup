@@ -58,6 +58,27 @@ class JoinupSubscriptionContext extends RawDrupalContext {
   const MESSAGE_INTERVALS = ['Daily', 'Weekly', 'Monthly'];
 
   /**
+   * Delivers all pending message digest subscriptions.
+   *
+   * @Given I deliver the message digest subscriptions
+   */
+  public function deliverMessageDigestSubscriptions(): void {
+    $this->expireDigestMessages();
+    $this->expireMessageDigestNotifiers();
+
+    $job = \Drupal::entityTypeManager()->getStorage('ultimate_cron_job')->load('message_digest_cron');
+    $this->assertCondition($job !== NULL, "The ultimate_cron job 'message_digest_cron' does not exist.");
+    $job->run('Launched from Behat');
+
+    $queue = \Drupal::queue('message_digest');
+    $worker = \Drupal::service('plugin.manager.queue_worker')->createInstance('message_digest');
+    while ($item = $queue->claimItem()) {
+      $worker->processItem($item->data);
+      $queue->deleteItem($item);
+    }
+  }
+
+  /**
    * Navigates to the My subscriptions form of the given user.
    *
    * @param string|null $username

@@ -1,0 +1,30 @@
+uuid: 9961ad46-6431-4d24-8bbc-e5bbce2447db
+langcode: en
+status: true
+dependencies:
+  module:
+    - purge_users
+title: 'Queue inactive users for deletion'
+id: purge_users_cron
+weight: 0
+module: purge_users
+callback: 'purge_users#cron'
+scheduler:
+  id: crontab
+  configuration:
+    rules:
+      - '0+@ 3 * * *'
+    catch_up: 0
+launcher:
+  id: serial
+  configuration:
+    timeouts:
+      lock_timeout: 3600
+    launcher:
+      thread: 0
+logger:
+  id: database
+  configuration:
+    method: '3'
+    expire: 1209600
+    retain: 1000
