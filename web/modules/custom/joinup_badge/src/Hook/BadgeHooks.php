@@ -299,7 +299,7 @@ class BadgeHooks implements DestructableInterface {
    *
    * @param \Drupal\user\UserInterface $user
    *   Certificates owner.
-   * @param string $status
+   * @param string|null $status
    *   Status of certificates.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
