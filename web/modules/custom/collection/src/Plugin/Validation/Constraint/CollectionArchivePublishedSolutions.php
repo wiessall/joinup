@@ -9,7 +9,7 @@ use Drupal\Core\Validation\Attribute\Constraint;
 use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 
 /**
- * Prevents archiving a collection that still has published solutions.
+ * Prevents archiving a collection that still has non-archived solutions.
  */
 #[Constraint(
   id: 'CollectionArchivePublishedSolutions',
@@ -22,6 +22,6 @@ class CollectionArchivePublishedSolutions extends SymfonyConstraint {
    *
    * @var string
    */
-  public string $message = 'Collection has at least one published solution. Please archive all active solutions first.';
+  public string $message = 'Collection has at least one published or draft solution. Please archive all solutions first.';
 
 }
