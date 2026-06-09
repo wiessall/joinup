@@ -2568,7 +2568,13 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Returns a SHA-256 hash of content.
+   * Returns a SHA-256 hash of the given content.
+   *
+   * @param string $content
+   *   The content to hash.
+   *
+   * @return string
+   *   The SHA-256 hex digest of the trimmed content.
    */
   private function contentHash(string $content): string {
     return hash('sha256', trim($content));
