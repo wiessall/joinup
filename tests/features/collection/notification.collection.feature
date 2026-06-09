@@ -11,11 +11,13 @@ Feature: Notification test for the collection transitions.
     And the following users:
       | Username       | Roles     | E-mail                  | First name | Family name |
       | NC moderator   | moderator | nc_moderator@test.com   | NC         | Moderator   |
+      | NC moderator2  | moderator | nc_moderator2@test.com  | NC         | Moderator2  |
       | NC user        |           | nc_user@test.com        | NC         | User        |
       | NC owner       |           | nc_owner@test.com       | NC         | Owner       |
       | NC facilitator |           | nc_facilitator@test.com | NC         | Facilitator |
       | NC member1     |           | nc_member1@test.com     | NC         | Member1     |
       | NC member2     |           | nc_member2@test.com     | NC         | Member2     |
+      | NC member3     |           | nc_member3@test.com     | NC         | Member3     |
       | NCS owner      |           | ncs_owner@test.com      | NC         | Owner       |
     And the following "collection" content:
       | title                  | state            | abstract     | description   | owner      |
@@ -56,7 +58,9 @@ Feature: Notification test for the collection transitions.
       | NC to delete by mod    | NC owner       | owner, facilitator |
       | NC to delete by mod    | NC member1     |                    |
       | NC to delete by mod    | NC member2     |                    |
-
+    And the following collection user memberships:
+      | collection             | user           | roles              | announcements |
+      | NC to archive          | NC member3     |                    | 0             |
     # Test 'create' operation.
     And I am logged in as "NC user"
     When I go to the propose collection form
@@ -103,15 +107,25 @@ Feature: Notification test for the collection transitions.
     And I go to the edit form of the "NC to delete" collection
     And I click "Delete"
     And I press "Delete"
-    Then 2 e-mails should have been sent
+    Then 5 e-mails should have been sent
     Then the following email should have been sent:
       | recipient | NC member1                                                                  |
       | subject   | The collection NC to delete was deleted.                                    |
       | body      | The collection "NC to delete", of which you are a member, has been deleted. |
     And the following email should have been sent:
+      | recipient | NC moderator                                                                |
+      | body      | Your collection "NC to delete" has been deleted.                            |
+    And the following email should have been sent:
+      | recipient | NC moderator2                                                               |
+      | body      | Your collection "NC to delete" has been deleted.                            |
+    And the following email should have been sent:
       | recipient | NC member2                                                                  |
       | subject   | The collection NC to delete was deleted.                                    |
       | body      | The collection "NC to delete", of which you are a member, has been deleted. |
+    And the following email should have been sent:
+      | recipient_mail | contact.email@example.com                                                   |
+      | subject        | The collection NC to delete was deleted.                                    |
+      | body           | The collection "NC to delete", of which you are a member, has been deleted. |
 
     # Test 'propose edit' operation.
     And I am logged in as "NC facilitator"
@@ -158,24 +172,29 @@ Feature: Notification test for the collection transitions.
     Then I should see the inline form error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "As you wish."
     And I press "Archive"
+    Then I run the "group_archive_related_content" queue worker
+    And the number of items in the "group_archive_related_content" queue should be 0
     Then the following email should have been sent:
       | recipient | NC owner                                                              |
       | subject   | Your request to archive collection NC to archive has been approved.   |
       | body      | The collection "NC to archive" has been archived as per your request. |
-    And the following email should have been sent:
-      | recipient | NCS owner                                                                                                                                                                                                                                         |
-      | subject   | The collection NC to archive was archived. Your solution was affiliated only to the collection NC to archive, and as a consequence, your solution is not currently affiliated to any other collection. Please verify and take appropriate action. |
-      | body      | Since your solution "NC Solution1" was affiliated only with this archived collection, your solution is currently no longer affiliated to any other collection.                                                                                    |
-    And the following email should have been sent:
-      | recipient | NCS owner                                                                                                                                                                                                                                         |
-      | subject   | The collection NC to archive was archived. Your solution was affiliated only to the collection NC to archive, and as a consequence, your solution is not currently affiliated to any other collection. Please verify and take appropriate action. |
-      | body      | Since your solution "NC Solution2" was affiliated only with this archived collection, your solution is currently no longer affiliated to any other collection.                                                                                    |
     And the following email should have been sent:
       | recipient | NC member1                                                                                                                   |
       | subject   | The collection NC to archive was archived.                                                                                   |
       | body      | The collection "NC to archive", of which you are a member, has been archived. The reason for being archived is: As you wish. |
     And the following email should have been sent:
       | recipient | NC member2                                                                                                                   |
+      | subject   | The collection NC to archive was archived.                                                                                   |
+      | body      | The collection "NC to archive", of which you are a member, has been archived. The reason for being archived is: As you wish. |
+    And the following email should have been sent:
+      | recipient_mail | contact.email@example.com                                                      |
+      | subject        | The collection NC to archive was archived.                                     |
+      | body           | The collection "NC to archive", of which you are a member, has been archived.  |
+    And the following email should have been sent:
+      | recipient | NC moderator2                                       |
+      | body      | Your collection "NC to archive" has been archived.  |
+    And the following email should not have been sent:
+      | recipient | NC member3                                                                                                                   |
       | subject   | The collection NC to archive was archived.                                                                                   |
       | body      | The collection "NC to archive", of which you are a member, has been archived. The reason for being archived is: As you wish. |
 
@@ -185,7 +204,7 @@ Feature: Notification test for the collection transitions.
     And I go to the edit form of the "NC to delete by mod" collection
     And I click "Delete"
     And I press "Delete"
-    Then 3 e-mails should have been sent
+    Then 5 e-mails should have been sent
     Then the following email should have been sent:
       | recipient | NC member1                                                                         |
       | subject   | The collection NC to delete by mod was deleted.                                    |
@@ -198,3 +217,10 @@ Feature: Notification test for the collection transitions.
       | recipient | NC owner                                                                                   |
       | subject   | Interoperable Europe Portal: Your collection has been deleted by the moderation team       |
       | body      | The Interoperable Europe Portal moderation team deleted the collection NC to delete by mod |
+    And the following email should have been sent:
+      | recipient | NC moderator2                                           |
+      | body      | Your collection "NC to delete by mod" has been deleted. |
+    And the following email should have been sent:
+      | recipient_mail | contact.email@example.com                                                          |
+      | subject        | The collection NC to delete by mod was deleted.                                    |
+      | body           | The collection "NC to delete by mod", of which you are a member, has been deleted. |

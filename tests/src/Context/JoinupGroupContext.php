@@ -363,7 +363,7 @@ class JoinupGroupContext extends RawDrupalContext {
       $users = $user_storage->loadMultiple($uids);
       foreach ($users as $user) {
         $body_processed = str_replace('@recipient_name', $user->getDisplayName(), $body);
-        $emails = $this->getEmailsBySubjectAndMail($announcement->getSubject(), $user->getEmail());
+        $emails = $this->getEmailsBySubjectAndMail($user->getEmail(), $announcement->getSubject());
         $email = reset($emails);
         $this->assertSameValues($user->getEmail(), $email['to'], "Expected recipient '{$user->getEmail()}' but got '{$email['to']}'.");
         $this->assertSameValues($subject, $email['subject'], "Expected subject '$subject' but got '{$email['subject']}'.");
