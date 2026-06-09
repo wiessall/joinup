@@ -1,0 +1,29 @@
+uuid: da855d15-9073-4026-88be-c1eca1b9a2ed
+langcode: en
+status: true
+dependencies:
+  module:
+    - poll
+title: 'Close expired polls'
+id: poll_cron
+weight: 0
+module: poll
+callback: 'poll#cron'
+scheduler:
+  id: simple
+  configuration:
+    rules:
+      - '0+@ * * * *'
+launcher:
+  id: serial
+  configuration:
+    timeouts:
+      lock_timeout: 3600
+    launcher:
+      thread: 0
+logger:
+  id: database
+  configuration:
+    method: '3'
+    expire: 1209600
+    retain: 1000

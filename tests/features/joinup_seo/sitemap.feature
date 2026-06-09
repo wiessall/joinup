@@ -60,7 +60,7 @@ Feature:
       | Sitemap discussion archived                    | Wanna discuss this??? | Sitemap solution published | archived  |
       | Sitemap discussion published but parent is not | Wanna discuss this??? | Sitemap solution draft     | published |
 
-    Given I run cron
+    Given I run the "simple_sitemap_cron" ultimate_cron job
     And I visit "/sitemap.xml"
     Then I should see the absolute urls of the following content entities:
       | Portal support                      |
@@ -137,7 +137,7 @@ Feature:
 
     # Simulate that 2 days have passed since last time the sitemaps have been created.
     When the publication date of the "Sitemap news published and recent" news content is changed to "3 days ago"
-    And I run cron
+    And I run the "simple_sitemap_cron" ultimate_cron job
     # Assert that the "Sitemap news published and recent" news article is no
     # longer considered as a hot topic and has moved to the standard sitemap.
     And I visit "/sitemap.xml"
