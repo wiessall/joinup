@@ -5,14 +5,20 @@ declare(strict_types=1);
 namespace Drupal\joinup_oss_catalogue\Hook;
 
 use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Queue\QueueFactory;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
+use Drupal\eu_oss_catalogue\Model\Validation\ValidationIssueType;
 use Drupal\joinup_oss_catalogue\JoinupOssCatalogueImagecacheWarmer;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Filesystem;
@@ -90,6 +96,39 @@ class JoinupOssCatalogueHooks {
       assert($ossSolution instanceof OssSolutionInterface);
       $this->imagecacheWarmer->queueImageUrls($ossSolution);
     }
+  }
+
+  /**
+   * Forbids access to oss_validation_issues when there are no errors.
+   */
+  #[Hook('entity_field_access')]
+  public function entityFieldAccess(
+    string $operation,
+    FieldDefinitionInterface $field_definition,
+    AccountInterface $account,
+    ?FieldItemListInterface $items = NULL,
+  ): AccessResultInterface {
+    if (
+      $operation !== 'view'
+      || $field_definition->getName() !== 'oss_validation_issues'
+      || $items === NULL
+    ) {
+      return AccessResult::neutral();
+    }
+    $entity = $items->getEntity();
+    if ($entity === NULL) {
+      return AccessResult::neutral();
+    }
+    foreach ($items as $item) {
+      if ($item->type === ValidationIssueType::Error->value) {
+        return AccessResult::neutral()
+          ->addCacheableDependency($entity)
+          ->addCacheableDependency($field_definition);
+      }
+    }
+    return AccessResult::forbidden('No validation errors.')
+      ->addCacheableDependency($entity)
+      ->addCacheableDependency($field_definition);
   }
 
   /**
