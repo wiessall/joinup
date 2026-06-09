@@ -12,6 +12,7 @@ use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Render\Element;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
@@ -125,6 +126,9 @@ readonly class ModalFormatterEntityViewController implements ContainerInjectionI
     // Field-only renders do not get cache tag by default. We add the entire
     // object in ::buildAjaxResponse.
     $build = $entity->get($fieldName)->view($viewMode);
+    if (!Element::children($build)) {
+      return ['#markup' => new TranslatableMarkup('No items to display.')];
+    }
     // Field title might be set to be displayed. Since it is the label of the
     // modal dialog, we set it to be hidden.
     $build['#label_display'] = 'hidden';
