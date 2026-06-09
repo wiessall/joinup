@@ -1,0 +1,13 @@
+uuid: 27cb017e-8537-4dc2-ad00-3f2649132263
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.licence
+id: node.licence
+targetEntityType: node
+bundle: licence
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

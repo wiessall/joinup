@@ -356,6 +356,7 @@ trait NameMappingsTrait {
     return [
       'announcement' => 'message',
       'assessment' => 'assessment',
+      'certificate' => 'node',
       'collection' => 'node',
       'contact information' => 'node',
       'contact_information' => 'node',
