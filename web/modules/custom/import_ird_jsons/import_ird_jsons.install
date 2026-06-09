@@ -1,0 +1,69 @@
+<?php
+
+declare(strict_types = 1);
+
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+
+/**
+ * @file
+ * Install, update, and uninstall functions for migrate_json_example.
+ */
+
+use Drupal\Core\File\FileSystemInterface;
+
+/**
+ * Copies the example file to the sites/default/files folder.
+ */
+function import_IRD_jsons_install(): void {
+  // Create the example file directory and ensure it's writable.
+  $directory = \Drupal::config('system.file')->get('default_scheme') . '://import_IRD_jsons';
+  \Drupal::service('file_system')->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
+
+  // Copy the example file to example directory.
+  // @todo Use \Drupal\Core\Extension\ExtensionPathResolver::getPath() when we
+  // require Drupal > 9.3.0.
+  $module_path = \Drupal::moduleHandler()->getModule('import_IRD_jsons')->getPath();
+  $file_source = $module_path . '/sources/car-sample.json';
+  \Drupal::service('file_system')->copy($file_source, $directory . '/car-sample.json', FileSystemInterface::EXISTS_REPLACE);
+//  $file_source = $module_path . '/sources/digital-green-sample.json';
+ // \Drupal::service('file_system')->copy($file_source, $directory . '/car.json', FileSystemInterface::EXISTS_REPLACE);
+
+  // field_original_internal_id
+  if (!FieldStorageConfig::loadByName('node', 'field_original_internal_id')) {
+    FieldStorageConfig::create([
+      'field_name'  => 'field_original_internal_id',
+      'entity_type' => 'node',
+      'type'        => 'string',
+      'settings'    => ['max_length' => 255],
+    ])->save();
+  }
+  if (!FieldConfig::loadByName('node', 'solution', 'field_original_internal_id')) {
+    FieldConfig::create([
+      'field_name'  => 'field_original_internal_id',
+      'entity_type' => 'node',
+      'bundle'      => 'solution',
+      'label'       => 'Original internal ID',
+      'required'    => FALSE,
+    ])->save();
+  }
+
+  // field_machine_record
+  if (!FieldStorageConfig::loadByName('node', 'field_machine_record')) {
+    FieldStorageConfig::create([
+      'field_name'  => 'field_machine_record',
+      'entity_type' => 'node',
+      'type'        => 'string_long',
+    ])->save();
+  }
+  if (!FieldConfig::loadByName('node', 'solution', 'field_machine_record')) {
+    FieldConfig::create([
+      'field_name'  => 'field_machine_record',
+      'entity_type' => 'node',
+      'bundle'      => 'solution',
+      'label'       => 'Machine record',
+      'required'    => FALSE,
+    ])->save();
+  }
+
+}
