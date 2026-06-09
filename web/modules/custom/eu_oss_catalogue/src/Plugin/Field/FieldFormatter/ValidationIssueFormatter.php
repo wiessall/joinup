@@ -27,24 +27,19 @@ class ValidationIssueFormatter extends FormatterBase {
    */
   public function viewElements(FieldItemListInterface $items, $langcode): array {
     $elements = [];
-    $hasErrors = FALSE;
 
     foreach ($items as $delta => $item) {
-      $isError = $item->type === ValidationIssueType::Error->value;
-      $hasErrors = $hasErrors || $isError;
+      if ($item->type !== ValidationIssueType::Error->value) {
+        continue;
+      }
       $elements[$delta] = [
         '#theme' => 'validation_issue',
-        '#access' => $isError,
         '#type' => $item->type,
         '#key' => Markup::create(Html::escape($item->key)),
         '#line' => (int) $item->line,
         '#column' => (int) $item->column,
         '#description' => Markup::create(Html::escape($item->description)),
       ];
-    }
-
-    if (!$hasErrors) {
-      $elements[] = ['#markup' => $this->t('No validation issues.')];
     }
 
     return $elements;
