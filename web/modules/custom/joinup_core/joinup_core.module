@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\block\BlockInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Block\BlockPluginInterface;
@@ -23,11 +24,10 @@ use Drupal\Core\Render\Markup;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperManager;
 use Drupal\Core\Template\Attribute;
-use Drupal\block\BlockInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
-use Drupal\joinup_core\ETransBlockConfiguration;
 use Drupal\joinup_core\Element\Datetime;
 use Drupal\joinup_core\Entity\OutdatedContentInterface;
+use Drupal\joinup_core\ETransBlockConfiguration;
 use Drupal\joinup_core\Plugin\Field\FieldType\OutdatedContentFieldItemList;
 use Drupal\joinup_core\Plugin\Field\FieldType\PermalinkFieldItemList;
 use Drupal\joinup_core\Plugin\Field\FieldWidget\ImageLibraryWidget;

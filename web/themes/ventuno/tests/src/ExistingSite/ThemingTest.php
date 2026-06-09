@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\ventuno\ExistingSite;
 
-use Drupal\Tests\TestFileCreationTrait;
+use Drupal\file\FileInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\Tests\joinup_test\Traits\ParagraphTrait;
-use Drupal\file\FileInterface;
+use Drupal\Tests\TestFileCreationTrait;
 use PHPUnit\Framework\Attributes\Group;
 
 /**

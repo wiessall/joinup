@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_i18n\ExistingSite;
 
-use Drupal\Tests\BrowserTestBase;
 use Drupal\language\Entity\ConfigurableLanguage;
+use Drupal\Tests\BrowserTestBase;
 use Drupal\user\UserInterface;
 use PHPUnit\Framework\Attributes\Group;
 
