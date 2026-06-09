@@ -98,6 +98,16 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.abstract
+  aggregated_field:
+    label: 'Aggregated field'
+    property_path: aggregated_field
+    type: string
+    configuration:
+      type: concat
+      separator: |
+
+      fields:
+        - 'entity:node/title'
   description:
     label: Description
     datasource_id: 'entity:node'

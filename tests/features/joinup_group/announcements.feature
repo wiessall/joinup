@@ -384,27 +384,8 @@ Feature: Messaging group announcements
     And I should not see the button "Undo reject"
     And I should not see the button "Preview"
 
-  @group-clone @wip
-  Scenario: Sending mass-mailing announcements.
-    Given I am logged in as a moderator
-    When I go to the announcements page of "Open Source Observatory (OSOR)" collection
-    And I click "Add announcement"
-    And I fill in "Subject" with "TEST: Mass-mailing announcement"
-    And I fill in "Body" with "This will gonna reach tens of thousands of Open Source Observatory (OSOR) group members."
-    And I press "Create"
-    Then I should see the success message "The announcement has been created as Draft. Review the announcement and, when is ready to be sent, use the 'Send' button."
-
-    When I press "Send for approval"
-    Then I should see the success message "Your announcement has been sent for validation by Interoperable Europe Portal moderators. Once approved, will reach the Open Source Observatory (OSOR) collection members."
-    When I click "edit" in the "TEST: Mass-mailing announcement" row
-    And I press "Approve"
-    Then I should see the success message "The announcement has been scheduled to be delivered to the Open Source Observatory (OSOR) collection members. Because the collection has a large amount of members the emails will be sent in several batches."
-
-    Given the delivery queue of "TEST: Mass-mailing announcement" announcement is processed
-    Then the "TEST: Mass-mailing announcement" announcement should have been delivered for each group member
-
   @group-e
-  Scenario: Wrong recipient's name in announcements.
+  Scenario: Announcements are personalised per recipient and support batch delivery for large collections.
     Given the following "collection" content:
       | title         | state     |
       | Wrong pension | published |
@@ -448,6 +429,7 @@ Feature: Messaging group announcements
     And I press "Approve"
     Then I should see the success message "The announcement has been delivered to the Wrong pension collection members."
 
+    # Verify @recipient_name is replaced with each user's full name.
     And the email sent to "cgarnett67" with subject "The recipient names" contains the following lines of text:
       | The recipient's full name: Callista Garnett |
     And the email sent to "cbarnett68" with subject "The recipient names" contains the following lines of text:
@@ -457,7 +439,6 @@ Feature: Messaging group announcements
     And the email sent to "jbarnett67" with subject "The recipient names" contains the following lines of text:
       | The recipient's full name: Joana Barnett |
 
-    # Check mass-mails.
     Given the following users:
       | Username   | E-mail                       | First name | Family name |
       | sgarnett69 | samuel.garnett@example.com   | Samuel     | Garnett     |
@@ -684,6 +665,7 @@ Feature: Messaging group announcements
     And I press "Send for approval"
     Then I click "edit" in the "The recipient names mass-email" row
     And I press "Approve"
+    # Verify batch delivery path triggers when the collection has a large member count.
     Then I should see the success message "The announcement has been scheduled to be delivered to the Wrong pension collection members. Because the collection has a large amount of members the emails will be sent in several batches."
 
     Given the delivery queue of "The recipient names mass-email" announcement is processed

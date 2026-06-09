@@ -85,7 +85,7 @@ Feature:
     And I press "Update"
     Then I should see the inline form error message "Title field is required."
 
-  Scenario Outline: Visibility of Report link.
+  Scenario Outline: Visibility of Report link and eTranslate button.
     Given the following "<type>" content:
       | title      | collection           |
       | IOP <type> | Interoperable Europe |
