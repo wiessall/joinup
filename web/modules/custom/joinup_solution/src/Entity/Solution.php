@@ -6,7 +6,6 @@ namespace Drupal\joinup_solution\Entity;
 
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\contact_information\Traits\ContactInformationTrait;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_bundle_class\AbstractTrait;
