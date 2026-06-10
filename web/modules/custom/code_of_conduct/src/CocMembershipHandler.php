@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\code_of_conduct;
 
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\OgMembershipInterface;
 

@@ -6,10 +6,10 @@ namespace Drupal\Tests\joinup_release\ExistingSite;
 
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AnonymousUserSession;
-use Drupal\Tests\joinup_workflow\ExistingSite\JoinupWorkflowExistingSiteTestBase;
 use Drupal\node\NodeInterface;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\OgRoleInterface;
+use Drupal\Tests\joinup_workflow\ExistingSite\JoinupWorkflowExistingSiteTestBase;
 use PHPUnit\Framework\Attributes\Group;
 
 /**

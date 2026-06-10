@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_eulogin\Event\Subscriber;
 
+use Drupal\cas\Event\CasPostLoginEvent;
+use Drupal\cas\Event\CasPostValidateEvent;
+use Drupal\cas\Event\CasPreLoginEvent;
+use Drupal\cas\Event\CasPreRedirectEvent;
+use Drupal\cas\Event\CasPreRegisterEvent;
+use Drupal\cas\Event\CasPreValidateEvent;
 use Drupal\Component\Utility\Random;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
@@ -12,12 +18,6 @@ use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
-use Drupal\cas\Event\CasPostLoginEvent;
-use Drupal\cas\Event\CasPostValidateEvent;
-use Drupal\cas\Event\CasPreLoginEvent;
-use Drupal\cas\Event\CasPreRedirectEvent;
-use Drupal\cas\Event\CasPreRegisterEvent;
-use Drupal\cas\Event\CasPreValidateEvent;
 use Drupal\externalauth\Authmap;
 use Drupal\user\UserDataInterface;
 use Drupal\user\UserInterface;

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_collection\Unit;
 
-use Drupal\Component\Utility\Html;
 use Drupal\collection\Plugin\Filter\Glossary;
+use Drupal\Component\Utility\Html;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;

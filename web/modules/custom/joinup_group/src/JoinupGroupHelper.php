@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group;
 
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\comment\CommentInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;

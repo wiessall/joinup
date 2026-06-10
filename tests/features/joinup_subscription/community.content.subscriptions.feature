@@ -31,8 +31,6 @@ Feature: Subscribing to community content in collections and solutions
       | Null geodesics        | jpluminet | discussion, document, event, news |
       | Bolometric appearance | jpluminet | discussion, document, event, news |
 
-    And all message digests have been delivered
-
   Scenario: Receive a digest of community content that is published
     Given the following "discussion" content:
       | title                  | body                               | collection         | solution       | state     | author   |
@@ -66,7 +64,7 @@ Feature: Subscribing to community content in collections and solutions
     # Check that the message is formatted correctly. It should contain the
     # groups in alphabetical order, underneath which the group content is shown,
     # also in alphabetical order.
-    Given all message digests have been delivered
+    Given I deliver the message digest subscriptions
     Then the group content subscription digest sent to jpluminet contains the following sections:
       | title                  |
       | Black hole imaging     |

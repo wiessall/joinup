@@ -1,0 +1,30 @@
+uuid: d7aa0a78-b8c9-431c-9ee5-d48a16cd06db
+langcode: en
+status: true
+dependencies:
+  module:
+    - message_digest
+title: 'Process and clean up message digests'
+id: message_digest_cron
+weight: 0
+module: message_digest
+callback: 'message_digest#cron'
+scheduler:
+  id: crontab
+  configuration:
+    rules:
+      - '0+@ 6 * * *'
+    catch_up: 0
+launcher:
+  id: serial
+  configuration:
+    timeouts:
+      lock_timeout: 3600
+    launcher:
+      thread: 0
+logger:
+  id: database
+  configuration:
+    method: '3'
+    expire: 1209600
+    retain: 1000

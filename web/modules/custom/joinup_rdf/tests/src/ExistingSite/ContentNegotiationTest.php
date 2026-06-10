@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup_rdf\ExistingSite;
 
 use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\rdf_sync\Encoder\RdfSyncEncoder;
+use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use EasyRdf\Format;
 use PHPUnit\Framework\Attributes\Group;
 
