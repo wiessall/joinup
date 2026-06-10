@@ -12,7 +12,6 @@ dependencies:
     - datetime
     - file
     - layout_builder
-    - link
     - user
 third_party_settings:
   layout_builder:
@@ -48,26 +47,11 @@ content:
     third_party_settings: {  }
     weight: 102
     region: content
-  links:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 100
-    region: content
-  report:
-    type: link
-    label: hidden
-    settings:
-      trim_length: 80
-      url_only: false
-      url_plain: false
-      rel: ''
-      target: ''
-    third_party_settings: {  }
-    weight: 50
-    region: content
 hidden:
   langcode: true
+  links: true
   private_message_link: true
   published_at: true
+  report: true
   search_api_excerpt: true
   uuid: true

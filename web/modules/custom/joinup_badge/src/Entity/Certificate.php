@@ -73,7 +73,7 @@ class Certificate extends Node implements CertificateInterface {
       $this->setOwner($userParam);
     }
 
-    $this->setTitle("Certificate of course {$course->id()}");
+    $this->setTitle("Certificate of course {$course->label()}");
   }
 
 }

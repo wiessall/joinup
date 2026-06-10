@@ -9,6 +9,7 @@ use Drupal\Core\DestructableInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -17,10 +18,12 @@ use Drupal\comment\CommentInterface;
 use Drupal\joinup_badge\BadgeService;
 use Drupal\joinup_badge\Entity\BadgeAwarding;
 use Drupal\joinup_badge\Entity\Certificate;
+use Drupal\joinup_badge\Entity\CertificateInterface;
 use Drupal\joinup_badge\Plugin\Field\FieldType\BadgeFieldItemList;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\user\UserInterface;
+use Drush\Commands\AutowireTrait;
 
 /**
  * Hooks for the joinup_badge module.
@@ -28,6 +31,7 @@ use Drupal\user\UserInterface;
 class BadgeHooks implements DestructableInterface {
 
   use StringTranslationTrait;
+  use AutowireTrait;
 
   /**
    * The UUID of the Interoperable Europe Community group.
@@ -71,6 +75,7 @@ class BadgeHooks implements DestructableInterface {
     protected readonly BadgeService $badgeService,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly TimeInterface $time,
+    protected readonly FileUrlGeneratorInterface $fileUrlGenerator,
   ) {}
 
   /**
@@ -237,6 +242,26 @@ class BadgeHooks implements DestructableInterface {
       'weight' => 10,
       'display_options' => ['type' => 'entity_reference_label'],
     ];
+  }
+
+  /**
+   * Implements hook_preprocess_HOOK().
+   */
+  #[Hook('preprocess_node__view_mode_tile')]
+  public function preprocessCertificateTile(array &$variables): void {
+    if (($certificate = $variables['elements']['#node']) instanceof CertificateInterface) {
+      $fileUrl = $this->fileUrlGenerator->generateAbsoluteString($certificate->get('certificate')->entity?->getFileUri() ?? '');
+      $logo = $certificate->get('course')->entity?->get('logo');
+      $logoUrl = $this->fileUrlGenerator->generateAbsoluteString($logo?->entity->getFileUri() ?? '');
+      $logoAlt = $logo->first()->get('alt')->getString() ?? '';
+      $title = $certificate->get('course')->entity?->getTitle();
+      $issuing_date = $certificate->get('issuing_date')->value;
+      $variables['extra_data']['certificate']['file'] = $fileUrl;
+      $variables['extra_data']['certificate']['logo']['src'] = $logoUrl;
+      $variables['extra_data']['certificate']['logo']['alt'] = $logoAlt;
+      $variables['extra_data']['certificate']['title'] = $title;
+      $variables['extra_data']['certificate']['issuing_date'] = $issuing_date;
+    }
   }
 
   /**

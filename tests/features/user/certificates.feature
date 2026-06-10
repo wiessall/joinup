@@ -6,11 +6,11 @@ Feature: User certificates
 
   Background:
     Given the following solution content:
-      | title                    | collection                   | state     | nid | logo     |
-      | Published IOPEU Solution | Interoperable Europe Academy | published |     |          |
-      | Archived IOPEU Solution  | Interoperable Europe Academy | archived  | 50  | logo.png |
-      | Draft IOPEU Solution     | Interoperable Europe Academy | draft     |     |          |
-      | Portal IOPEU Solution    | Portal support               | published |     |          |
+      | title                    | collection                   | state     | logo     |
+      | Published IOPEU Solution | Interoperable Europe Academy | published |          |
+      | Archived IOPEU Solution  | Interoperable Europe Academy | archived  | logo.png |
+      | Draft IOPEU Solution     | Interoperable Europe Academy | draft     |          |
+      | Portal IOPEU Solution    | Portal support               | published |          |
     And the following news content:
       | title                     | collection                   | body         |
       | News about IOPEU Solution | Interoperable Europe Academy | Just a test! |
@@ -41,7 +41,7 @@ Feature: User certificates
     Then field should be present "Issuing date"
     And I type "Archived IOPEU" in the Course autocomplete field
     And I pick "Archived IOPEU Solution" from the Course autocomplete suggestions
-    And I fill in "certificates[form][0][issuing_date][0][value][date]" with "12-06-2026"
+    And I fill in "certificates[form][0][issuing_date][0][value][date]" with "12/06/2026"
     And I attach the file "text.pdf" to "files[certificates_form_0_certificate_0]"
     And I press "Create certificate"
     And I press "Save"
@@ -51,7 +51,7 @@ Feature: User certificates
       | Archived IOPEU Solution |
       | Portal support          |
     Then the logo logo.png should be shown in the "Archived IOPEU Solution" certificate tile
-    And  I see the text "Issuing date: 2026-12-06" in the "Archived IOPEU Solution" tile
+    And  I see the text "Issuing date: 06/12/2026" in the "Archived IOPEU Solution" tile
     When I go to the edit form of the "Sara the User" user
     Then I should see the link "Archived IOPEU Solution"
     And I should see the text "Certificate of course"
@@ -68,7 +68,7 @@ Feature: User certificates
     Examples:
       | actor               |
       | Peter the Moderator |
-#      | Sara the User       |
+      | Sara the User       |
 
   @javascript
   Scenario: When user is blocked/unblocked certificates should be unpublished/published
@@ -121,9 +121,9 @@ Feature: User certificates
     And I attach the file "text.pdf" to "files[certificates_form_0_certificate_0]"
     And I press "Create certificate"
     And I press "Save"
-    Then I go to the "Certificate of course 50" certificate
+    Then I go to the "Certificate of course Archived IOPEU Solution" certificate
     Then I should see the heading "Page not found"
-    Then I go to the edit form of the "Certificate of course 50" certificate
+    Then I go to the edit form of the "Certificate of course Archived IOPEU Solution" certificate
     Then I should see the heading "Page not found"
-    Then I go to the delete form of the "Certificate of course 50" certificate
+    Then I go to the delete form of the "Certificate of course Archived IOPEU Solution" certificate
     Then I should see the heading "Page not found"
