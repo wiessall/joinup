@@ -1,4 +1,4 @@
-<http://purl.org/adms/representationtechnique/BPMN> <http://www.w3.org/2004/02/skos/core#inScheme> <http://purl.org/adms/representationtechnique/1.0> .
-<http://purl.org/adms/representationtechnique/BPMN> <http://www.w3.org/2004/02/skos/core#prefLabel> "Business Process Modeling Notation"@en .
-<http://purl.org/adms/representationtechnique/BPMN> <http://www.w3.org/2004/02/skos/core#definition> ""@en .
-<http://purl.org/adms/representationtechnique/BPMN> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<http://purl.org/adms/representationtechnique/HL> <http://www.w3.org/2004/02/skos/core#inScheme> <http://purl.org/adms/representationtechnique/1.0> .
+<http://purl.org/adms/representationtechnique/HL> <http://www.w3.org/2004/02/skos/core#prefLabel> "Human Language"@en .
+<http://purl.org/adms/representationtechnique/HL> <http://www.w3.org/2004/02/skos/core#definition> ""@en .
+<http://purl.org/adms/representationtechnique/HL> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .

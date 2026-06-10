@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_badge\Hook;
 
+use Drupal\assessments\AssessmentInterface;
+use Drupal\comment\CommentInterface;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\DestructableInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -11,8 +13,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\assessments\AssessmentInterface;
-use Drupal\comment\CommentInterface;
 use Drupal\joinup_badge\BadgeService;
 use Drupal\joinup_badge\Entity\BadgeAwarding;
 use Drupal\joinup_badge\Plugin\Field\FieldType\BadgeFieldItemList;

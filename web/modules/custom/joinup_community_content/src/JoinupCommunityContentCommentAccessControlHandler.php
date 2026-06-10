@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_community_content;
 
+use Drupal\comment\CommentAccessControlHandler;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityHandlerInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\comment\CommentAccessControlHandler;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\og\OgAccessInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;

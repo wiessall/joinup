@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Plugin\views\argument_validator;
 
+use Drupal\assessments\AssessmentInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\assessments\AssessmentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\views\Attribute\ViewsArgumentValidator;
 use Drupal\views\Plugin\views\argument_validator\ArgumentValidatorPluginBase;

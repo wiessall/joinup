@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\Kernel\Mail;
 
+use Drupal\joinup_test_time\Datetime\TestTime;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\joinup_core\Traits\ConfigInstallTestTrait;
 use Drupal\Tests\joinup_core\Traits\MailTestTrait;
 use Drupal\Tests\joinup_core\Traits\ModuleSetupTestTrait;
-use Drupal\joinup_test_time\Datetime\TestTime;
 use Drupal\user\Entity\User;
 
 /**

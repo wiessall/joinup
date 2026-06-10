@@ -6,10 +6,10 @@ namespace Drupal\Tests\eu_oss_catalogue\Kernel;
 
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Site\Settings;
-use Drupal\KernelTests\KernelTestBase;
-use Drupal\Tests\eu_oss_catalogue\Traits\LoggerTestTrait;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\Bitbucket;
+use Drupal\KernelTests\KernelTestBase;
+use Drupal\Tests\eu_oss_catalogue\Traits\LoggerTestTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;

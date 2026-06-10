@@ -7,6 +7,11 @@
 
 declare(strict_types=1);
 
+use Drupal\collection\Entity\Collection;
+use Drupal\collection\Entity\CollectionInterface;
+use Drupal\collection\Entity\GlossaryTerm;
+use Drupal\collection\Entity\GroupMembership;
+use Drupal\collection\Plugin\Field\FieldType\LastUpdatedFieldItemList;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
@@ -20,11 +25,6 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
-use Drupal\collection\Entity\Collection;
-use Drupal\collection\Entity\CollectionInterface;
-use Drupal\collection\Entity\GlossaryTerm;
-use Drupal\collection\Entity\GroupMembership;
-use Drupal\collection\Plugin\Field\FieldType\LastUpdatedFieldItemList;
 use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;

@@ -61,6 +61,10 @@ readonly class JoinupReplicatePermission implements AccessInterface {
       $accessResult->addCacheableDependency($group);
     }
 
+    if ($group instanceof GroupInterface && $group->isArchived()) {
+      return AccessResult::forbidden()->addCacheableDependency($accessResult);
+    }
+
     if ($membership instanceof OgMembershipInterface) {
       $accessResult->addCacheableDependency($membership);
       $ogPermissionAccessResult = AccessResult::allowedIf($membership->hasPermission($permission));
