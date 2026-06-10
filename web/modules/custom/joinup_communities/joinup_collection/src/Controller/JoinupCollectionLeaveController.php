@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_collection\Controller;
 
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_group\Form\LeaveGroupConfirmForm;
 use Drupal\node\NodeInterface;

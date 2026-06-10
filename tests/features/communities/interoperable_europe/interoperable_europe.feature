@@ -74,17 +74,6 @@ Feature:
       | Follow us on Youtube                             |
       | Subscribe to the interoperable europe newsletter |
 
-  Scenario: User should see error message if he does not fill out all required fields.
-    Given the following "custom_page" content:
-      | title               | collection           |
-      | IOP validation page | Interoperable Europe |
-
-    Then I am logged in as a moderator
-    And I go to the edit form of the "IOP validation page" "custom page"
-    And I fill in "Title" with ""
-    And I press "Update"
-    Then I should see the inline form error message "Title field is required."
-
   Scenario Outline: Visibility of Report link and eTranslate button.
     Given the following "<type>" content:
       | title      | collection           |

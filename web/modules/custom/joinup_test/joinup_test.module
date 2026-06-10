@@ -7,9 +7,9 @@
 
 declare(strict_types=1);
 
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Joinup\TestMode;
 use Joinup\TestModeManager;

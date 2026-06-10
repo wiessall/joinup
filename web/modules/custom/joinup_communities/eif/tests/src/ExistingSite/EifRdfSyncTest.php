@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Drupal\Tests\eif\ExistingSite;
 
 use Drupal\Component\Serialization\Yaml;
-use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\meta_entity\Entity\MetaEntity;
+use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 
 /**
  * Tests EIF perspective synchronization with the RDF backend.

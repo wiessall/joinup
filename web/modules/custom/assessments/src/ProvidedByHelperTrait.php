@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\assessments;
 
-use Drupal\Core\Entity\ContentEntityStorageInterface;
 use Drupal\assessments\Entity\PublicOrganisation;
+use Drupal\Core\Entity\ContentEntityStorageInterface;
 
 /**
  * Provides helper methods for working with public organisations.
