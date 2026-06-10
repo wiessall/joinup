@@ -26,3 +26,42 @@ function joinup_core_requirements($phase): array {
 
   return $requirements;
 }
+
+/**
+ * Delete visit_count and download_count meta entities before config sync.
+ */
+function joinup_core_update_201400(array &$sandbox): string {
+  $storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
+  $bundles = ['visit_count', 'download_count'];
+
+  if (!isset($sandbox['total'])) {
+    $sandbox['total'] = (int) $storage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', $bundles, 'IN')
+      ->count()
+      ->execute();
+    $sandbox['deleted'] = 0;
+  }
+
+  if ($sandbox['total'] === 0) {
+    $sandbox['#finished'] = 1;
+    return 'No visit_count/download_count meta entities to delete.';
+  }
+
+  $ids = $storage->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('type', $bundles, 'IN')
+    ->range(0, 50)
+    ->execute();
+
+  if ($ids) {
+    $storage->delete($storage->loadMultiple($ids));
+    $sandbox['deleted'] += count($ids);
+  }
+
+  $sandbox['#finished'] = (!$ids || $sandbox['deleted'] >= $sandbox['total'])
+    ? 1
+    : ($sandbox['deleted'] / $sandbox['total']);
+
+  return sprintf('Deleted %d/%d visit_count/download_count meta entities.', $sandbox['deleted'], $sandbox['total']);
+}
