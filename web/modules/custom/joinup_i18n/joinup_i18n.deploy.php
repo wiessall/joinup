@@ -190,3 +190,27 @@ function joinup_i18n_deploy_201402(array &$sandbox): string {
 
   return sprintf('Processed %.1f%% OSS solutions', $sandbox['#finished'] * 100);
 }
+
+/**
+ * Schedule translation of topic meta-entities.
+ */
+function joinup_i18n_deploy_201403(array &$sandbox): string {
+  $storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
+  if (!isset($sandbox['ids'])) {
+    $sandbox['ids'] = $storage->getQuery()->accessCheck(FALSE)
+      ->condition('type', 'topic')
+      ->execute();
+    $sandbox['total'] = count($sandbox['ids']);
+    $sandbox['processed'] = 0;
+  }
+
+  $ids = array_splice($sandbox['ids'], 0, 10);
+  $sandbox['processed'] += count($ids);
+  foreach ($storage->loadMultiple($ids) as $topic) {
+    tmgmt_content_create_continuous_job_items($topic);
+  }
+
+  $sandbox['#finished'] = (int) empty($sandbox['ids']);
+
+  return "Scheduled translation of $sandbox[processed] out of $sandbox[total] topic meta-entities";
+}
