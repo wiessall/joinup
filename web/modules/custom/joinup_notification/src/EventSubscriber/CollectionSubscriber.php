@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_notification\EventSubscriber;
 
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\collection\Entity\CollectionInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\og\OgRoleInterface;

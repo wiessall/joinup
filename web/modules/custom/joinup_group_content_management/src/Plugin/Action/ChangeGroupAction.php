@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group_content_management\Plugin\Action;
 
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Action\Attribute\Action;
@@ -14,7 +15,6 @@ use Drupal\Core\Menu\MenuLinkManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;

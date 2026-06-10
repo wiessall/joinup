@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_security\Services;
 
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_group\JoinupGroupPermissionManagerInterface;
 

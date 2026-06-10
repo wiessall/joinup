@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\custom_page\ExistingSite;
 
-use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\og\OgGroupAudienceHelperInterface;
+use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\RunClassInSeparateProcess;
 

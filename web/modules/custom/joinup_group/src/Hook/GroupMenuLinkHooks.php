@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Hook;
 
+use Drupal\collection\Entity\GlossaryTermInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Menu\MenuLinkManagerInterface;
-use Drupal\collection\Entity\GlossaryTermInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\GroupMenuLinkInterface;
 use Drupal\joinup_group\GroupMenuLinkHelperTrait;

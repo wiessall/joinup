@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Unit;
 
-use Drupal\Tests\UnitTestCase;
 use Drupal\eu_oss_catalogue\Model\GitUri;
+use Drupal\Tests\UnitTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;

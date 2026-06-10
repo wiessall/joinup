@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_api;
 
-use JsonSchema\Validator;
 use cebe\openapi\Reader;
+use JsonSchema\Validator;
 
 /**
  * Validates a scheme against an OpenAPI specification.

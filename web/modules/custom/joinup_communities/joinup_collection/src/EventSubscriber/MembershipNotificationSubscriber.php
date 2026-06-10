@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_collection\EventSubscriber;
 
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\EventSubscriber\NotificationSubscriberBase;
 use Drupal\joinup_notification\NotificationEvents;

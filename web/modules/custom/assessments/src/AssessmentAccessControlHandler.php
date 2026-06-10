@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\assessments;
 
+use Drupal\assessments\Entity\AssessmentReport;
+use Drupal\assessments\Entity\PublicOrganisation;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityAccessControlHandler;
@@ -11,8 +13,6 @@ use Drupal\Core\Entity\EntityHandlerInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\assessments\Entity\AssessmentReport;
-use Drupal\assessments\Entity\PublicOrganisation;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\joinup_workflow\WorkflowHelperInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;

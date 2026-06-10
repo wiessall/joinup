@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\collection\Plugin\Block;
 
+use Drupal\collection\Entity\CodeOfConductMembershipInterface;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Block\Attribute\Block;
@@ -15,8 +17,6 @@ use Drupal\Core\Security\Attribute\TrustedCallback;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
-use Drupal\collection\Entity\CodeOfConductMembershipInterface;
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 

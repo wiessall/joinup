@@ -7,12 +7,12 @@
 
 declare(strict_types=1);
 
+use Drupal\changed_fields\EntitySubject;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Url;
-use Drupal\changed_fields\EntitySubject;
 use Drupal\joinup_discussion\DiscussionObserver;
 use Drupal\joinup_discussion\Entity\Discussion;
 use Drupal\joinup_discussion\Entity\DiscussionInterface;

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\assessments;
 
-use Drupal\Core\Entity\TranslatableInterface;
 use Drupal\assessments\Entity\AssessmentReport;
+use Drupal\Core\Entity\TranslatableInterface;
 
 /**
  * Defines the interface for Assessment Statement entities.

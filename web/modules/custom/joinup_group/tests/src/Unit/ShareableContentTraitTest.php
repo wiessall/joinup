@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_group\Unit;
 
-use Drupal\Tests\UnitTestCase;
 use Drupal\joinup_group\Entity\ShareableContentTrait;
+use Drupal\Tests\UnitTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;

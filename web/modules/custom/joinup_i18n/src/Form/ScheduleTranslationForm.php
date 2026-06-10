@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_i18n\Form;
 
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_i18n\TranslationScheduler;
 
 /**
