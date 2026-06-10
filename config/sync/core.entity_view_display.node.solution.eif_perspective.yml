@@ -145,7 +145,6 @@ hidden:
   description: true
   distributions: true
   domain: true
-  download_total: true
   featured: true
   field_shared_in: true
   field_state: true
