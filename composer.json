@@ -129,6 +129,7 @@
         "drupal/token": "~1.7",
         "drupal/tour": "^2.0",
         "drupal/twig_field_value": "^2.0",
+        "drupal/ultimate_cron": "^2.0@beta",
         "drupal/uuid_extra": "^2.0",
         "drupal/view_unpublished": "^1.0",
         "drupal/views_block_area": "^2.0",
@@ -456,9 +457,6 @@
                 "Add post-update hook to install OAuth Client Minimal filter format. @see https://www.drupal.org/i/3555048": "resources/patch/php/drupal/oauth_client/3555048v2.diff",
                 "Notifications per request type. @see https://www.drupal.org/i/3567235": "resources/patch/php/drupal/oauth_client/3567235-c17f91608.diff"
             },
-            "drupal/og": {
-                "OgMembership does not define a label entity key @see https://www.drupal.org/i/3573327": "resources/patch/php/drupal/og/3573327.mr69-commit2dfadf17.diff"
-            },
             "drupal/og_menu": {
                 "Fix fatal error in OgMenuInstanceForm @see https://www.drupal.org/i/3528599": "resources/patch/php/drupal/og_menu/3528599.diff"
             },
@@ -501,7 +499,8 @@
             },
             "drupal/tmgmt": {
                 "Filtering job items crashes @see https://www.drupal.org/i/3578626": "resources/patch/php/drupal/tmgmt/3578626.mr159.commit3ee8064a.diff",
-                "Callers don't account the scenario in which JobItem::acceptTranslation() fails softly @see https://www.drupal.org/i/3580841": "resources/patch/php/drupal/tmgmt/3580841.mr161.commit-7baf8367.diff"
+                "Callers don't account the scenario in which JobItem::acceptTranslation() fails softly @see https://www.drupal.org/i/3580841": "resources/patch/php/drupal/tmgmt/3580841.mr161.commit-7baf8367.diff",
+                "Data too long for column 'message' - https://www.drupal.org/i/3552683": "resources/patch/php/drupal/tmgmt/3552683.mr135.commit597ae8cd.diff"
             },
             "drupal/tour": {
                 "Support page manager variants on front page @see https://www.drupal.org/i/3568815": "resources/patch/php/drupal/tour/3568815.patch"

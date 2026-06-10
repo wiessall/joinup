@@ -96,7 +96,11 @@ file_type:
     mime_type: 'text/csv'
 representation_technique:
   - name: 'Datalog'
+    uuid: '5b7e4f3a-9c2d-4e8b-b1f6-7a3e5d9c2f4b'
+    uri: 'http://purl.org/adms/representationtechnique/DL'
   - name: 'Human Language'
+    uuid: '6d54f304-a36d-42bc-b6a5-ed623ca1e33e'
+    uri: 'http://purl.org/adms/representationtechnique/HL'
 licence_type:
   - name: 'Public domain'
     uri: 'http://purl.org/adms/licence/PD'

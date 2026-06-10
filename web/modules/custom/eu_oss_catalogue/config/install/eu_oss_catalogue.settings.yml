@@ -1,1 +1,2 @@
 publiccode_api_url: 'https://publiccode-validator.example.com'
+cron_max_runs_per_day: 2

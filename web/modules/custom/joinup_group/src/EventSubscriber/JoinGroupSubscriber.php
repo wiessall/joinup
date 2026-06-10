@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\EventSubscriber;
 
+use Drupal\cas\Event\CasPostLoginEvent;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\cas\Event\CasPostLoginEvent;
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\OgMembershipInterface;
 use Symfony\Component\HttpFoundation\RequestStack;

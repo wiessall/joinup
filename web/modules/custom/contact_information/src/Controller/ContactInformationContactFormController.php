@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\contact_information\Controller;
 
+use Drupal\contact_information\Form\ContactInformationContactForm;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Mail\MailManagerInterface;
-use Drupal\contact_information\Form\ContactInformationContactForm;
 use Drupal\email_contact\Controller\ContactController;
 use Drupal\honeypot\HoneypotServiceInterface;
 use Psr\Log\LoggerInterface;

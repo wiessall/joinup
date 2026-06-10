@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_oss_catalogue\Functional;
 
-use Drupal\Tests\BrowserTestBase;
 use Drupal\node\Entity\NodeType;
+use Drupal\Tests\BrowserTestBase;
 use PHPUnit\Framework\Attributes\Group;
 
 /**

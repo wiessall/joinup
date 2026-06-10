@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Form;
 
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\assessments\Entity\PublicOrganisation;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Form controller for the assessment entity edit forms.

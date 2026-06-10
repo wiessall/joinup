@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\collection\EventSubscriber;
 
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\collection\Entity\CollectionInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\joinup_group\Event\GroupMenuLinksEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

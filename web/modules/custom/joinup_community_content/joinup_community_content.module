@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\comment\CommentInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\CacheableMetadata;
@@ -16,7 +17,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
-use Drupal\comment\CommentInterface;
 use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_community_content\Entity\JoinupCommunityContentComment;

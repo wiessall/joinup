@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup_subscription\Kernel;
 
 use Drupal\Core\Session\AccountInterface;
-use Drupal\KernelTests\KernelTestBase;
-use Drupal\Tests\user\Traits\UserCreationTrait;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\flag\Entity\Flag;
 use Drupal\joinup_subscription\JoinupDiscussionSubscription;
+use Drupal\KernelTests\KernelTestBase;
+use Drupal\Tests\user\Traits\UserCreationTrait;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;

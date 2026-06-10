@@ -7,9 +7,9 @@ namespace Drupal\Tests\joinup_log\Kernel;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\Core\Session\AnonymousUserSession;
-use Drupal\KernelTests\KernelTestBase;
 use Drupal\joinup_log\Entity\JoinupLog;
 use Drupal\joinup_log\Entity\JoinupLogInterface;
+use Drupal\KernelTests\KernelTestBase;
 
 /**
  * Test the Joinup log entity functionality.

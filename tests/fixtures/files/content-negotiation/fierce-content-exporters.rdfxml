@@ -8,7 +8,7 @@
     <rdfs:label xml:lang="en">Creative commons</rdfs:label>
     <ns0:deprecated rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</ns0:deprecated>
     <dc:description>&lt;p&gt;This is so creative&lt;/p&gt;</dc:description>
-    <dc:type rdf:resource="http://purl.org/adms/licencetype/NominalCost"/>
+    <dc:type rdf:resource="http://purl.org/adms/licence/PD"/>
   </dc:LicenseDocument>
 
 </rdf:RDF>

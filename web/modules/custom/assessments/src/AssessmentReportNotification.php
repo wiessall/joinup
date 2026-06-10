@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\assessments;
 
+use Drupal\assessments\Event\AssessmentReportEvent;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Url;
-use Drupal\assessments\Event\AssessmentReportEvent;
 use Drupal\joinup_notification\JoinupMessageDeliveryInterface;
 use Drupal\joinup_notification\MessageArgumentGenerator;
 use Drupal\og\OgMembershipInterface;

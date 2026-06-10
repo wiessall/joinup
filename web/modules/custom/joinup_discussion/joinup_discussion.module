@@ -7,12 +7,12 @@
 
 declare(strict_types=1);
 
+use Drupal\changed_fields\EntitySubject;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Url;
-use Drupal\changed_fields\EntitySubject;
 use Drupal\joinup_discussion\DiscussionObserver;
 use Drupal\joinup_discussion\Entity\Discussion;
 use Drupal\joinup_discussion\Entity\DiscussionInterface;
@@ -22,6 +22,26 @@ use Drupal\joinup_discussion\JoinupDiscussionGroupInspectorInterface;
 use Drupal\joinup_discussion\LatestUpdateTimeFieldItemList;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\node\NodeInterface;
+use Drupal\views\ViewExecutable;
+
+/**
+ * Implements hook_views_pre_execute().
+ *
+ * The comment_count and last_comment_timestamp fields from
+ * comment_entity_statistics use generic Views plugins (standard/date) that
+ * declare no cache tags. Without comment_list, the cached result is stale
+ * after a comment is posted: nodes may be missing from the result set entirely
+ * or appear in the wrong position.
+ *
+ * Injecting via $view->storage->addCacheTags() ensures the tag reaches
+ * CachePluginBase::getCacheTags(), which covers both the result cache
+ * (cacheSet('results')) and the render cache.
+ */
+function joinup_discussion_views_pre_execute(ViewExecutable $view): void {
+  if ($view->id() === 'discussions_sitewide') {
+    $view->storage->addCacheTags(['comment_list']);
+  }
+}
 
 /**
  * Implements hook_ENTITY_TYPE_presave().
