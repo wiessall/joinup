@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\ExistingSite;
 
+use Drupal\node\Entity\Node;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\Tests\token\Functional\TokenTestTrait;
-use Drupal\node\Entity\Node;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**

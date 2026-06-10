@@ -6,11 +6,11 @@ namespace Drupal\Tests\github_feed\ExistingSite;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\Tests\joinup_test\Traits\ParagraphTrait;
 use Drupal\joinup_test\Plugin\ServiceMock\GitHubCom;
 use Drupal\joinup_test\Traits\GitHubApiMockTrait;
 use Drupal\joinup_test_time\Traits\TestTimeTrait;
+use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
+use Drupal\Tests\joinup_test\Traits\ParagraphTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 

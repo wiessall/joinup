@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_licence\ExistingSite;
 
-use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\joinup_validation\Plugin\Validation\Constraint\UniqueFieldInBundleConstraint;
+use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use PHPUnit\Framework\Attributes\Group;
 
 /**

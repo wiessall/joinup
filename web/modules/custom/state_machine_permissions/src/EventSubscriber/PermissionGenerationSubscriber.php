@@ -9,8 +9,8 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\og\Event\PermissionEventInterface as OgPermissionEventInterface;
 use Drupal\og\GroupContentOperationPermission;
 use Drupal\og\GroupPermission;
-use Drupal\state_machine_permissions\StateMachinePermissionStringConstructor;
 use Drupal\state_machine_permissions\StateMachinePermissionsHelperInterface;
+use Drupal\state_machine_permissions\StateMachinePermissionStringConstructor;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

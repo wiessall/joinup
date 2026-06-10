@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Plugin\search_api\processor;
 
+use Drupal\assessments\AssessmentInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\assessments\AssessmentInterface;
 use Drupal\search_api\Attribute\SearchApiProcessor;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Item\FieldInterface;
