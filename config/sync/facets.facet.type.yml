@@ -64,7 +64,7 @@ processor_configs:
     weights:
       build: 50
     settings:
-      exclude: owner
+      exclude: 'owner,certificate'
       regex: false
       invert: false
   hierarchy_processor:
