@@ -7,11 +7,11 @@
 
 declare(strict_types=1);
 
+use Drupal\block\BlockInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\block\BlockInterface;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Form\JoinGroupFormInterface;

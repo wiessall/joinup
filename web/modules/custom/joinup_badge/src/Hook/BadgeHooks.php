@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_badge\Hook;
 
+use Drupal\assessments\AssessmentInterface;
+use Drupal\comment\CommentInterface;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\DestructableInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -13,8 +15,6 @@ use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\assessments\AssessmentInterface;
-use Drupal\comment\CommentInterface;
 use Drupal\joinup_badge\BadgeService;
 use Drupal\joinup_badge\Entity\BadgeAwarding;
 use Drupal\joinup_badge\Entity\Certificate;

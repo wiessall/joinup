@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\ExistingSite;
 
-use Drupal\Tests\assessments\Traits\AssessmentEntityCreationTrait;
-use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\file\FileInterface;
 use Drupal\file\FileRepositoryInterface;
 use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\Tests\assessments\Traits\AssessmentEntityCreationTrait;
+use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use PHPUnit\Framework\Attributes\Group;
 
 /**

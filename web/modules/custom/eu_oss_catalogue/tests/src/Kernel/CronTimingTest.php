@@ -32,7 +32,6 @@ class CronTimingTest extends KernelTestBase {
   protected function setUp(): void {
     parent::setUp();
     $this->installSchema('dblog', ['watchdog']);
-    date_default_timezone_set('UTC');
   }
 
   /**
@@ -41,7 +40,7 @@ class CronTimingTest extends KernelTestBase {
   public function testCronPeriodicalTask(): void {
     $state = \Drupal::state();
     $cron = \Drupal::service('cron');
-    $today = (new \DateTime('now'))->setTime(2, 0)->getTimestamp();
+    $requestTime = \Drupal::time()->getRequestTime();
 
     // Given the "eu_oss_catalogue_cron" job has run 0 times.
     $this->assertEquals(0, $this->getJobRunCount('eu_oss_catalogue_cron'));
@@ -52,14 +51,14 @@ class CronTimingTest extends KernelTestBase {
 
     // Then the "eu_oss_catalogue_cron" job has run 1 times.
     $this->assertEquals(1, $this->getJobRunCount('eu_oss_catalogue_cron'));
-    $this->assertEquals($today, $state->get('eu_oss_catalogue.last_check'));
+    $this->assertEquals($requestTime, $state->get('eu_oss_catalogue.last_check'));
 
     // When I run cron again.
     $cron->run();
 
     // Then the "eu_oss_catalogue_cron" job has still run only once.
     $this->assertEquals(1, $this->getJobRunCount('eu_oss_catalogue_cron'));
-    $this->assertEquals($today, $state->get('eu_oss_catalogue.last_check'));
+    $this->assertEquals($requestTime, $state->get('eu_oss_catalogue.last_check'));
 
     // Mock the DrupalDateTime class to return a fixed date in the future.
     $future_timestamp = new \DateTime('+2 days');
@@ -90,7 +89,7 @@ class CronTimingTest extends KernelTestBase {
     $cron->run();
 
     $this->assertEquals(
-      $future_timestamp->setTime(2, 0)->getTimestamp(),
+      $future_timestamp->getTimestamp(),
       $state->get('eu_oss_catalogue.last_check')
     );
     // Then the "eu_oss_catalogue_cron" job has run 2 times.

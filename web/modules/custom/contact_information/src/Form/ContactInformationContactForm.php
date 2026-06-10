@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\contact_information\Form;
 
-use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\contact_information\Entity\ContactInformation;
 use Drupal\contact_information\Traits\ContactInfoInaccessibleTrait;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Default class to build the Contact Form.

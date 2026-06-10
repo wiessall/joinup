@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\assessments;
 
+use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityChangedInterface;
 use Drupal\Core\Entity\EntityPublishedInterface;
-use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\user\EntityOwnerInterface;
 

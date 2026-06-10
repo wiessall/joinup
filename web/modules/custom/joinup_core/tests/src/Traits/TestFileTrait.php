@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\Traits;
 
-use Drupal\Tests\TestFileCreationTrait;
 use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
+use Drupal\Tests\TestFileCreationTrait;
 
 /**
  * Provides test files for the tests.

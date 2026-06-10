@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\contact_information\Plugin\CKEditor5Plugin;
 
+use Drupal\ckeditor5\Plugin\CKEditor5PluginDefault;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Url;
-use Drupal\ckeditor5\Plugin\CKEditor5PluginDefault;
 use Drupal\editor\EditorInterface;
 use Drupal\joinup_group\JoinupGroupManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
