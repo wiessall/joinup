@@ -49,7 +49,7 @@ Feature: Views display translated entities correctly.
     And the following glossary entity translations:
       | source   | language | title     | field_glossary_definition | summary            |
       | Alphabet | fr       | Alphabète | Définition détaillée      | Résumé de l'entrée |
-    When I am logged in as a moderator
+    When I am an anonymous user
     And I go to the "A World of Things" collection
     And I click "Glossary"
     Then I should see the link "Alphabet"
@@ -72,7 +72,6 @@ Feature: Views display translated entities correctly.
     And the "In the spotlight" content listing contains:
       | type    | label          |
       | content | Breaking Story |
-    When I am logged in as a moderator
     When I am on the homepage
     Then I should see the text "Breaking Story"
     When I visit "/el"

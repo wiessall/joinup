@@ -5,7 +5,7 @@ Feature: Translating custom pages
     Given the following users:
       | Username    | Roles     |
       | Flora Mod   | moderator |
-      | Lee Facil   | developer |
+      | Lee Facil   |           |
       | John Member |           |
       | Ross Auth   |           |
     And the following "collection" content:

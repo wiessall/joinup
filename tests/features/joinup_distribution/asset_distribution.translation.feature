@@ -5,7 +5,7 @@ Feature: Translating distributions
     Given the following users:
       | Username    | Roles     |
       | Flora Mod   | moderator |
-      | Lee Facil   | developer |
+      | Lee Facil   |           |
       | John Member |           |
       | Ross Auth   |           |
     Given the following "solution" content:

@@ -21,8 +21,7 @@ Feature: Search API views show translated content with english as fallback
       | BG oss catalogue    | ~~~       | ~~~               | bg       | 0                   |
 
   Scenario: Test "solutions_meta_entity_block" view shows translated content
-    Given I am logged in as an "developer"
-    Then custom_page multilingual content:
+    Given custom_page multilingual content:
       | title     | collection      | langcode | default_translation  | nid    |
       | Test page | Test collection | en       | 1                    | 705372 |
       | BG page   | ~~~             | bg       | 0                    |        |
@@ -47,8 +46,7 @@ Feature: Search API views show translated content with english as fallback
     And I should not see the text "Jordan 2"
 
   Scenario: Test "group_feed" view shows translated content
-    Given I am logged in as an "developer"
-    Then I go to the homepage of the "Test collection" collection
+    Given I go to the homepage of the "Test collection" collection
     When I click "RSS feed" in the "Entity actions" region
     Then I should see a valid RSS feed
     And the RSS feed items should be:
@@ -69,7 +67,6 @@ Feature: Search API views show translated content with english as fallback
       | Custom page: BG custom page           |
 
   Scenario: Test "oss_solutions_listing" view shows translated content
-    Given I am logged in as an "developer"
     And I append "block" to "field_paragraphs_body" field in "node" entity with following "Test custom page" title:
       | paragraph_block | views_block:oss_solutions_listing-most_active |
     And I append "block" to "field_paragraphs_body" field in "node" entity with following "Test custom page" title:
@@ -80,7 +77,7 @@ Feature: Search API views show translated content with english as fallback
     Then I should see the text "BG oss catalogue"
 
   Scenario: Test "recommended_solutions" view shows translated content
-    Given I am logged in as an "developer"
+    Given I am logged in as a user with the "interoperability_validator" role
     Then I set interoperable flag to "Bilingual Solution" solution
     And I append "block" to "field_paragraphs_body" field in "node" entity with following "Test custom page" title:
       | paragraph_block | views_block:recommended_solutions-recommended |
@@ -90,15 +87,13 @@ Feature: Search API views show translated content with english as fallback
     Then I should see the text "BG Solution"
 
   Scenario: Test "search_oss_catalogue" view shows translated content
-    Given I am logged in as an "developer"
-    Then I visit the OSS search page
+    Given I visit the OSS search page
     Then I should see the text "Test oss catalogue"
     When I click "Bulgarian"
     Then I should see the text "BG oss catalogue"
 
   Scenario: Test "solutions" view shows translated content
-    Given I am logged in as an "developer"
-    Then I visit the solution overview page
+    When I visit the solution overview page
     Then I should see the following lines of text:
       | English Solution    |
       | Bilingual Solution  |
@@ -110,8 +105,7 @@ Feature: Search API views show translated content with english as fallback
     And I should not see the text "Bilingual Solution"
 
   Scenario: Test "content_overview" view shows translated content
-    Given I am logged in as an "developer"
-    Then news multilingual content:
+    Given news multilingual content:
       | title            | collection      | langcode | default_translation  |
       | Test news        | Test collection | en       | 1                    |
       | Bilingual news   | Test collection | en       | 1                    |
@@ -128,8 +122,7 @@ Feature: Search API views show translated content with english as fallback
     And I should not see the text "Bilingual news"
 
   Scenario: Test "collections" view shows translated content
-    Given I am logged in as a moderator
-    And I visit the collection overview page
+    Given I visit the collection overview page
     Then I should see the following lines of text:
       | Interoperability assessments space    |
       | Portal support                        |
@@ -141,8 +134,7 @@ Feature: Search API views show translated content with english as fallback
       | BG collection                         |
 
   Scenario: Test "search" view shows translated content
-    Given I am logged in as a moderator
-    And I am on the advanced search page
+    Given I am on the advanced search page
     Then I should see the following lines of text:
       | Interoperability assessments space    |
       | Portal support                        |
