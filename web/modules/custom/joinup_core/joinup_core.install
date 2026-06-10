@@ -51,7 +51,7 @@ function joinup_core_update_201400(array &$sandbox): string {
   $ids = $storage->getQuery()
     ->accessCheck(FALSE)
     ->condition('type', $bundles, 'IN')
-    ->range(0, 500)
+    ->range(0, 1000)
     ->execute();
 
   if ($ids) {
