@@ -5,7 +5,6 @@
 }
 .tabs--content-type {
   overflow-y: auto;
-  width: 100%;
   .nav-tabs {
     flex-wrap: nowrap;
     border: none;
@@ -56,6 +55,7 @@
   // Create a visual hint to let user know menu is scrollable to the right
   &::after {
     position: absolute;
+    z-index: 0;
     top: 0;
     right: 0;
     width: $spacer * 7.5;
