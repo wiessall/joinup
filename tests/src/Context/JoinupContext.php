@@ -47,7 +47,6 @@ use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
-use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
@@ -714,13 +713,6 @@ class JoinupContext extends RawDrupalContext {
     }
     elseif (!empty($field_definitions['field_state']) && empty($node->getValue('field_state')) && $type != 'contact_information') {
       $node->setValue('field_state', 'published');
-    }
-
-    if ($node->hasValue('visit_count')) {
-      $node->setValue('visit_count', MetaEntity::create([
-        'type' => 'visit_count',
-        'count' => (int) $node->getValue('visit_count'),
-      ]));
     }
 
     if ($node->hasValue('published_at') && !empty($node->getValue('published_at'))) {
