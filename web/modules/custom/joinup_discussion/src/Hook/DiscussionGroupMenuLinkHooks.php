@@ -31,7 +31,7 @@ final readonly class DiscussionGroupMenuLinkHooks {
     if ($discussion instanceof DiscussionInterface && $discussion->hasGroup()) {
       $this->addGroupLink(
         linkType: 'discussion',
-        group: $discussion->getGroup(),
+        entity: $discussion->getGroup(),
         ogMenuType: 'navigation',
         title: 'Discussions',
         routeName: 'view.discussions.overview',

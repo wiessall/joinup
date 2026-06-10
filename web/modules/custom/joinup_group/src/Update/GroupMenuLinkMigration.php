@@ -50,40 +50,23 @@ final readonly class GroupMenuLinkMigration implements ContainerInjectionInterfa
 
     $this->removeMenuLinkContent(array_column($sandbox['links'], 'menuLinkContentId'), array_column($sandbox['links'], 'menuTreeLinkId'));
 
-    $sandbox['menu_settings'] = [];
     foreach ($sandbox['links'] as $link) {
       // Convert also the parent if it points to another group menu link.
       if ($link->parent && isset($sandbox['links'][$link->parent])) {
         $parentLink = $sandbox['links'][$link->parent];
         $sandbox['links'][$link->legacyPluginId]->parent = GroupMenuLink::buildPluginId('node', $parentLink->customPageNid, $link->ogMenuType);
       }
-
-      // Build custom page menu settings.
-      $sandbox['menu_settings'][$link->customPageNid][$link->ogMenuType] = [
-        'parent' => (string) $sandbox['links'][$link->legacyPluginId]->parent,
-        'weight' => (int) $link->weight,
-        'enabled' => (bool) $link->enabled,
-      ];
     }
 
     $sandbox['links'] = array_values($sandbox['links']);
     $sandbox['total'] = count($sandbox['links']);
     $sandbox['progress'] = 0;
-    $sandbox['menu_settings_processed'] = [];
   }
 
   /**
    * Processes one custom page group menu link.
    */
   public function processOneLink(\stdClass $link, array &$sandbox): void {
-    $this->createMenuTreeEntry($link);
-    $this->storeCustomPageMenuSettings($link, $sandbox);
-  }
-
-  /**
-   * Creates a new menu tree entry for the custom page group menu link.
-   */
-  protected function createMenuTreeEntry(\stdClass $link): void {
     $this->menuTreeStorage->save([
       'class' => GroupMenuLink::class,
       'menu_name' => $link->menuName,
@@ -96,27 +79,6 @@ final readonly class GroupMenuLinkMigration implements ContainerInjectionInterfa
       'weight' => (int) $link->weight,
       'provider' => 'joinup_group',
     ]);
-  }
-
-  /**
-   * Stores the custom page menu settings.
-   */
-  protected function storeCustomPageMenuSettings(\stdClass $link, array &$sandbox): void {
-    if (empty($link->customPageNid) || isset($sandbox['menu_settings_processed'][$link->customPageNid])) {
-      return;
-    }
-
-    foreach (['node__menu_settings', 'node_revision__menu_settings'] as $table) {
-      $this->db->insert($table)->fields([
-        'bundle' => 'custom_page',
-        'entity_id' => $link->customPageNid,
-        'revision_id' => $link->customPageVid,
-        'langcode' => 'en',
-        'delta' => 0,
-        'menu_settings_value' => serialize($sandbox['menu_settings'][$link->customPageNid]),
-      ])->execute();
-    }
-    $sandbox['menu_settings_processed'][$link->customPageNid] = TRUE;
   }
 
   /**
@@ -158,7 +120,7 @@ final readonly class GroupMenuLinkMigration implements ContainerInjectionInterfa
     foreach ($items as $item) {
       $this->addGroupLink(
         linkType: $linkType,
-        group: $groups[$item['groupNid']],
+        entity: $groups[$item['groupNid']],
         ogMenuType: $item['ogMenuType'],
         title: $item['linkTitle'],
         routeName: $routeName,

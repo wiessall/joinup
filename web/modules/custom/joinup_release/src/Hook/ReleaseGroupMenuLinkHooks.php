@@ -31,7 +31,7 @@ final readonly class ReleaseGroupMenuLinkHooks {
     if ($release instanceof ReleaseInterface && $release->hasGroup()) {
       $this->addGroupLink(
         linkType: 'release',
-        group: $release->getGroup(),
+        entity: $release->getGroup(),
         ogMenuType: 'quick_links',
         title: 'Release history',
         routeName: 'joinup_release.solution_release.overview',

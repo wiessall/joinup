@@ -11,7 +11,6 @@ use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_bundle_class\LogoTrait;
 use Drupal\joinup_core\Entity\PermalinkTrait;
-use Drupal\joinup_group\Entity\GroupMenuLinkTrait;
 use Drupal\joinup_group\GroupArchivableEntityTrait;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeTrait;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
@@ -35,7 +34,6 @@ class CustomPage extends Node implements CustomPageInterface {
   use NodeCollectionContentTrait;
   use TopicReferencingEntityTrait;
   use PermalinkTrait;
-  use GroupMenuLinkTrait;
 
   /**
    * {@inheritdoc}

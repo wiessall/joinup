@@ -90,27 +90,3 @@ field.formatter.settings.joinup_group_reference_with_timestamp:
 field.widget.settings.joinup_group_reference_with_timestamp:
   type: field.widget.settings.entity_reference_autocomplete
   label: 'Reference with timestamp field widget settings'
-
-joinup_group.menu_settings_defaults:
-  type: mapping
-  mapping:
-    parent:
-      type: string
-    weight:
-      type: integer
-    enabled:
-      type: boolean
-
-field.field.node.custom_page.menu_settings:
-  type: field_config_base
-  mapping:
-    default_value:
-      type: mapping
-      mapping:
-        value:
-          type: mapping
-          mapping:
-            navigation:
-              type: joinup_group.menu_settings_defaults
-            quick_links:
-              type: joinup_group.menu_settings_defaults

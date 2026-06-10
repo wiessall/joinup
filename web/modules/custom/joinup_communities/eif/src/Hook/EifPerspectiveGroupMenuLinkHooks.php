@@ -39,7 +39,7 @@ final readonly class EifPerspectiveGroupMenuLinkHooks {
         $enabled = $ogMenuType === 'quick_links';
         $this->addGroupLink(
           linkType: 'eif_perspective',
-          group: $solution,
+          entity: $solution,
           ogMenuType: $ogMenuType,
           title: 'EIF Perspective',
           routeName: 'entity.node.eif_perspective',

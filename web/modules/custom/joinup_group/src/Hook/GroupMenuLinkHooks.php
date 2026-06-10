@@ -52,7 +52,7 @@ class GroupMenuLinkHooks {
 
     $this->addGroupLink(
       linkType: 'overview',
-      group: $group,
+      entity: $group,
       ogMenuType: 'navigation',
       title: 'Overview',
       routeName: 'entity.node.canonical',
@@ -118,9 +118,8 @@ class GroupMenuLinkHooks {
     }
 
     $pluginId = GroupMenuLink::buildPluginId('overview', $groupId, 'navigation');
-    if ($definition = $this->menuLinkManager->getDefinition($pluginId, FALSE)) {
-      $definition['title'] = $title;
-      $this->menuLinkManager->updateDefinition($pluginId, $definition, FALSE);
+    if ($this->menuLinkManager->hasDefinition($pluginId)) {
+      $this->menuLinkManager->updateDefinition($pluginId, ['title' => $title], FALSE);
     }
   }
 
@@ -132,7 +131,7 @@ class GroupMenuLinkHooks {
     if ($glossary instanceof GlossaryTermInterface && $glossary->hasGroup()) {
       $this->addGroupLink(
         linkType: 'glossary',
-        group: $glossary->getGroup(),
+        entity: $glossary->getGroup(),
         ogMenuType: 'navigation',
         title: 'Glossary',
         routeName: 'entity.node.glossary',
@@ -142,7 +141,7 @@ class GroupMenuLinkHooks {
       foreach ($glossary->getGroup()->getSolutions() as $solution) {
         $this->addGroupLink(
           linkType: 'glossary',
-          group: $solution,
+          entity: $solution,
           ogMenuType: 'navigation',
           title: 'Glossary',
           routeName: 'entity.node.glossary',
@@ -230,7 +229,7 @@ class GroupMenuLinkHooks {
     if ($uri && !$originalUri) {
       $this->addGroupLink(
         linkType: 'website_link',
-        group: $group,
+        entity: $group,
         ogMenuType: 'quick_links',
         title: 'Website link',
         routeName: 'joinup_menu.website_link',
@@ -257,40 +256,31 @@ class GroupMenuLinkHooks {
     }
     assert($node instanceof GroupMenuLinkInterface);
 
-    $menuSettings = $node->get('menu_settings')->value;
     foreach ($node->getGroup()->getGroupOgMenuInstances() as $ogMenuInstance) {
       $ogMenuType = $ogMenuInstance->bundle();
-
-      $definition = [
-        'class' => GroupMenuLink::class,
-        'provider' => 'joinup_group',
-        'menu_name' => "ogmenu-{$ogMenuInstance->id()}",
-        'title' => $node->label(),
-        'route_name' => 'entity.node.canonical',
-        'route_parameters' => ['node' => $node->id()],
-        'parent' => $menuSettings[$ogMenuType]['parent'],
-        'weight' => $menuSettings[$ogMenuType]['weight'],
-        'enabled' => $menuSettings[$ogMenuType]['enabled'],
-      ];
-
       $pluginId = GroupMenuLink::buildPluginId('node', $node->id(), $ogMenuType);
+
       if ($this->menuLinkManager->hasDefinition($pluginId)) {
-        if (!$node->isInsidePlugin()) {
-          // The entity is saved via a plugin instance, don't call the menu
-          // tree manager to update the definition a second time.
-          $this->menuLinkManager->updateDefinition($pluginId, $definition, FALSE);
-        }
+        $this->menuLinkManager->updateDefinition($pluginId, [
+          'title' => $node->label(),
+          'menu_name' => "ogmenu-{$ogMenuInstance->id()}",
+        ], FALSE);
+        return;
       }
-      else {
-        $this->menuLinkManager->addDefinition($pluginId, $definition);
-      }
+
+      $this->addGroupLink(
+        linkType: 'node',
+        entity: $node,
+        ogMenuType: $ogMenuType,
+        title: $node->label(),
+        routeName: 'entity.node.canonical',
+        enabled: $ogMenuType === 'navigation',
+      );
     }
   }
 
   /**
    * Removes the group menu link plugin definition on entity delete.
-   *
-   * Orphan links are moved to the parent of the deleted menu item.
    */
   #[Hook('node_predelete')]
   public function deleteNodeGroupMenuLinkPluginDefinition(NodeInterface $node): void {
@@ -303,25 +293,15 @@ class GroupMenuLinkHooks {
       $ogMenuType = $ogMenuInstance->bundle();
       $pluginId = GroupMenuLink::buildPluginId('node', $node->id(), $ogMenuType);
       if ($definition = $this->menuLinkManager->getDefinition($pluginId, FALSE)) {
-        $parent = $definition['parent'] ?? '';
-        $nids = [];
         foreach ($this->menuLinkManager->getChildIds($pluginId) as $childPluginId) {
-          if ($nid = GroupMenuLink::extractNodeId($childPluginId)) {
-            $nids[] = $nid;
-          }
+          // Orphan links are moved to the parent of the deleted menu item.
+          $this->menuLinkManager->updateDefinition($childPluginId, [
+            'parent' => $definition['parent'] ?? NULL,
+          ], FALSE);
         }
 
-        if ($nids) {
-          // Move the child links to the parent of the deleted menu item.
-          foreach ($this->entityTypeManager->getStorage('node')->loadMultiple($nids) as $childPage) {
-            $childMenuSettings = $childPage->get('menu_settings')->value;
-            $childMenuSettings[$ogMenuType]['parent'] = $parent;
-            $childPage->set('menu_settings', ['value' => $childMenuSettings])->save();
-          }
-        }
+        $this->menuLinkManager->removeDefinition($pluginId);
       }
-
-      $this->menuLinkManager->removeDefinition($pluginId);
     }
   }
 

@@ -11,6 +11,8 @@ use Drupal\Core\Menu\MenuLinkBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\GroupMenuLinkInterface;
+use Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Defines a menu link for a group.
@@ -62,6 +64,8 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
     array $pluginDefinition,
     protected readonly EntityRepositoryInterface $entityRepository,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'search_api.entity_datasource.tracking_manager')]
+    protected readonly ContentEntityTrackingManager $contentEntityTrackingManager,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition);
   }
@@ -94,24 +98,19 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
   public function updateLink(array $new_definition_values, $persist): array {
     // Filter the list of updates to only those that are allowed.
     $overrides = array_intersect_key($new_definition_values, $this->overrideAllowed);
+
+    if ($this->getGroupMenuLinkType() === 'node') {
+      $enabled = (bool) ($new_definition_values['enabled'] ?? $this->pluginDefinition['enabled']);
+      $enabledOriginal = (bool) $this->pluginDefinition['enabled'];
+      if ($enabled !== $enabledOriginal) {
+        // The visibility of the link has changed, reindex the parent group.
+        // @see \Drupal\custom_page\Plugin\search_api\processor\IncludeCustomPageContent
+        $this->contentEntityTrackingManager->trackEntityChange($this->getNode()->getGroup());
+      }
+    }
+
     // Update the definition.
     $this->pluginDefinition = $overrides + $this->getPluginDefinition();
-
-    $type = $this->getGroupMenuLinkType();
-    if ($persist && $type === 'node') {
-      [,, $ogMenuType] = explode('-', $this->getDerivativeId());
-
-      $settings = $this->getNode()->get('menu_settings')->value;
-      $settings[$ogMenuType] = [
-        'weight' => $this->getWeight(),
-        'enabled' => $this->isEnabled(),
-        'parent' => $this->getParent(),
-      ];
-      $this->getNode()
-        ->setInsidePlugin()
-        ->set('menu_settings', ['value' => $settings])
-        ->save();
-    }
 
     return $this->pluginDefinition;
   }
@@ -212,9 +211,6 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
    *   The link type:
    *   - 'node' for a node implementing the GroupMenuLinkInterface interface.
    *   - a string such as 'overview', 'glossary', etc. for a group derived link.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\PluginException
-   *   If the type is invalid.
    */
   protected function getGroupMenuLinkType(): string {
     return explode('-', $this->getDerivativeId(), 3)[0];

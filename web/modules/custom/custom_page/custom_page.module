@@ -81,7 +81,6 @@ function custom_page_preprocess_page_title__node__custom_page(&$variables): void
 /**
  * Implements hook_ENTITY_TYPE_insert().
  *
- * - Creates a menu link whenever a new custom page is created.
  * - Reindexes the parent collection/solution so that they are searchable using
  *   the content of the new custom page.
  */

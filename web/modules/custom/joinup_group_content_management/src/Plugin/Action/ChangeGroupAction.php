@@ -288,15 +288,18 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
    *   The node.
    */
   protected function resolveParent(GroupMenuLinkInterface $node): void {
-    $menuSettings = $node->get('menu_settings')->value;
     foreach ($node->getGroup()->getGroupOgMenuInstances() as $ogMenuInstance) {
       $ogMenuType = $ogMenuInstance->bundle();
-      if (!$menuSettings[$ogMenuType]['parent']) {
+
+      $pluginId = GroupMenuLink::buildPluginId('node', $node->id(), $ogMenuType);
+      $definition = $this->menuLinkManager->getDefinition($pluginId);
+
+      if (empty($definition['parent'])) {
         // It's a top-level menu item. Nothing to do.
         continue;
       }
 
-      $ancestors = array_keys($this->menuLinkManager->getParentIds($menuSettings[$ogMenuType]['parent']));
+      $ancestors = array_keys($this->menuLinkManager->getParentIds($definition['parent']));
 
       // The first parent is the current node.
       array_shift($ancestors);
@@ -321,10 +324,9 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
         // The parent is the root ('').
       }
 
-      $menuSettings[$ogMenuType]['parent'] = $parentPluginId;
+      $definition['parent'] = $parentPluginId;
+      $this->menuLinkManager->updateDefinition($pluginId, $definition, FALSE);
     }
-
-    $node->set('menu_settings', ['value' => $menuSettings]);
   }
 
   /**

@@ -14,6 +14,7 @@ use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UtilityTrait;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og_menu\Tests\Traits\OgMenuTrait;
 
@@ -138,7 +139,10 @@ class CustomPageContext extends RawDrupalContext {
    */
   #[Then('the :menu menu of the :label :type should have :count item(s)')]
   public function assertItemsInMenuForm(string $menu, string $label, string $type, int $count): void {
-    $tree = $this->getOgMenuTreeByNameLabelAndType($menu, $label, $type);
+    $group = $this->getEntityByLabel('node', $label, $type);
+    assert($group instanceof GroupInterface);
+    $menu_instance = $group->getGroupOgMenuInstance($menu);
+    $tree = $this->getOgMenuTree($menu_instance);
     $this->assertSameValues($count, count($tree));
   }
 
@@ -158,66 +162,21 @@ class CustomPageContext extends RawDrupalContext {
    */
   #[When('I :operation :title in the :menu menu of the :label :type')]
   public function switchItemInMenu(string $operation, string $title, string $menu, string $label, string $type): void {
-    /** @var \Drupal\Core\Menu\MenuLinkManagerInterface $menu_link_manager_service */
-    $menu_link_manager_service = \Drupal::service('plugin.manager.menu.link');
-
-    // Retrieve the menu tree and transform it into a flat array of link items.
-    $tree = $this->getOgMenuTreeByNameLabelAndType($menu, $label, $type);
-    $tree = $this->flattenTree($tree);
-
+    $menu_link_manager = \Drupal::service('plugin.manager.menu.link');
+    $group = $this->getEntityByLabel('node', $label, $type);
+    $menu_instance = $group->getGroupOgMenuInstance($menu);
+    $tree = $this->getOgMenuTree($menu_instance);
     foreach ($tree as $item) {
-      /** @var \Drupal\menu_link_content\Plugin\Menu\MenuLinkContent $link */
       $link = $item->link;
-      if ((string) $link->getTitle() === $title) {
-        $menu_link_manager_service->updateDefinition($link->getPluginId(), [
-          'enabled' => (bool) ($operation === 'enable'),
+      if ($link->getTitle() == $title) {
+        $menu_link_manager->updateDefinition($link->getPluginId(), [
+          'enabled' => $operation === 'enable',
         ]);
         return;
       }
     }
 
     throw new \InvalidArgumentException("No menu link with title $title exists in the $menu menu for the $label $type.");
-  }
-
-  /**
-   * Flattens a menu tree.
-   *
-   * @param \Drupal\Core\Menu\MenuLinkTreeElement[] $tree
-   *   The hierarchical menu tree, as returned by MenuLinkTree::load().
-   *
-   * @return array
-   *   The tree, flat as a plank.
-   */
-  protected function flattenTree(array $tree): array {
-    $flattened = [];
-    foreach ($tree as $id => $item) {
-      if ($item->count() > 1) {
-        $flattened = array_merge($flattened, $this->flattenTree($item->subtree));
-      }
-      else {
-        $flattened[$id] = $item;
-      }
-    }
-    return $flattened;
-  }
-
-  /**
-   * Resolves the given group and returns the OG Menu tree for it.
-   *
-   * @param string $menu_name
-   *   The name of the OG Menu instance that contains the menu item.
-   * @param string $group_label
-   *   The group label.
-   * @param string $group_type
-   *   The group type, either 'collection' or 'solution'.
-   *
-   * @return \Drupal\Core\Menu\MenuLinkTreeElement[]
-   *   The menu tree.
-   */
-  protected function getOgMenuTreeByNameLabelAndType(string $menu_name, string $group_label, string $group_type): array {
-    $group = $this->getEntityByLabel('node', $group_label, $group_type);
-    $menu_instance = $this->getOgMenuInstance($group->id(), $menu_name);
-    return $this->getOgMenuTree($menu_instance);
   }
 
   /**

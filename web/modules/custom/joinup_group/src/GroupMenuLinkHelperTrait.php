@@ -6,6 +6,7 @@ namespace Drupal\joinup_group;
 
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_group\Entity\GroupMenuLinkInterface;
 use Drupal\joinup_group\Plugin\Menu\GroupMenuLink;
 
 /**
@@ -18,8 +19,8 @@ trait GroupMenuLinkHelperTrait {
    *
    * @param string $linkType
    *   The link type.
-   * @param \Drupal\joinup_group\Entity\GroupInterface $group
-   *   The group entity.
+   * @param \Drupal\joinup_group\Entity\GroupInterface|\Drupal\joinup_group\Entity\GroupContentInterface $entity
+   *   The group or the group content entity.
    * @param string $ogMenuType
    *   The OG menu instance type.
    * @param string $title
@@ -37,7 +38,7 @@ trait GroupMenuLinkHelperTrait {
    */
   protected function addGroupLink(
     string $linkType,
-    GroupInterface $group,
+    GroupInterface|GroupMenuLinkInterface $entity,
     string $ogMenuType,
     string $title,
     string $routeName,
@@ -46,16 +47,19 @@ trait GroupMenuLinkHelperTrait {
     int $weight = 0,
     array $overrides = [],
   ): void {
-    $pluginId = GroupMenuLink::buildPluginId($linkType, $group->id(), $ogMenuType);
+    $pluginId = GroupMenuLink::buildPluginId($linkType, $entity->id(), $ogMenuType);
+
     if (!$this->menuLinkManager->hasDefinition($pluginId)) {
+      $group = $entity instanceof GroupInterface ? $entity : $entity->getGroup();
       $ogMenuInstance = $group->getGroupOgMenuInstance($ogMenuType);
+
       $this->menuLinkManager->addDefinition($pluginId, $overrides + [
         'class' => GroupMenuLink::class,
         'provider' => 'joinup_group',
         'menu_name' => "ogmenu-{$ogMenuInstance->id()}",
         'title' => $title,
         'route_name' => $routeName,
-        'route_parameters' => ['node' => $group->id()],
+        'route_parameters' => ['node' => $entity->id()],
         'parent' => $parent,
         'enabled' => $enabled,
         'weight' => $weight,
