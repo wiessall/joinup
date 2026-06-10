@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\interoperable_europe\Plugin\Block;
 
+use Drupal\assessments\AssessmentInterface;
 use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
@@ -13,7 +14,6 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\assessments\AssessmentInterface;
 use Drupal\interoperable_europe\InteroperableEuropeAcademyInterface;
 use Drupal\interoperable_europe\InteroperableEuropeCommunityInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;

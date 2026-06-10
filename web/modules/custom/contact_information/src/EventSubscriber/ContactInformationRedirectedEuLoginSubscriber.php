@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\contact_information\EventSubscriber;
 
-use Drupal\Component\Datetime\TimeInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\cas\Event\CasPostLoginEvent;
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\contact_information\Entity\ContactInformationInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\joinup_group\EventSubscriber\RedirectedEuLoginAuthenticatedSubscriberBase;
 use Symfony\Component\HttpFoundation\RequestStack;
 

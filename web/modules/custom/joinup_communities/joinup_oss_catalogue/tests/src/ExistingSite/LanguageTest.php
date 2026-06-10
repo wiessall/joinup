@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup_oss_catalogue\ExistingSite;
 
 use Drupal\Component\Serialization\Yaml;
-use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Drupal\node\Entity\Node;
+use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;

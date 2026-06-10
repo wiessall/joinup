@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\Kernel;
 
-use Drupal\KernelTests\KernelTestBase;
 use Drupal\joinup_core\Plugin\Filter\FilterIframe;
+use Drupal\KernelTests\KernelTestBase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;

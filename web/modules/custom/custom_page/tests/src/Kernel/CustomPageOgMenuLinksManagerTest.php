@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\custom_page\Kernel;
 
-use Drupal\KernelTests\KernelTestBase;
 use Drupal\custom_page\CustomPageOgMenuLinksManager;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\joinup_group\GroupMenuManagerInterface;
+use Drupal\KernelTests\KernelTestBase;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;

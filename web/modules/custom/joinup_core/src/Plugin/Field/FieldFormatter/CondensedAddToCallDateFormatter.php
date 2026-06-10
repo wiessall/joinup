@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_core\Plugin\Field\FieldFormatter;
 
+use Drupal\addtocal\Plugin\Field\FieldFormatter\AddtocalView;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\addtocal\Plugin\Field\FieldFormatter\AddtocalView;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItem;
 
 /**

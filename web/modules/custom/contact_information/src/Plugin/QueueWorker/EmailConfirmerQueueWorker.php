@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\contact_information\Plugin\QueueWorker;
 
+use Drupal\contact_information\ContactInformationEmailConfirmInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\Attribute\QueueWorker;
 use Drupal\Core\Queue\QueueWorkerBase;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\contact_information\ContactInformationEmailConfirmInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

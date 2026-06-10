@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup_api\ExistingSite;
 
 use Drupal\Component\Serialization\Json;
-use Drupal\Core\Url;
-use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\consumers\Entity\Consumer;
+use Drupal\Core\Url;
 use Drupal\joinup_api\EventSubscriber\ApiExceptionSubscriber;
+use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use GuzzleHttp\RequestOptions;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Psr\Http\Message\ResponseInterface;

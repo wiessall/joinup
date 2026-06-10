@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\contact_form\Functional;
 
+use Drupal\joinup_notification\MailContentTypeHeader;
 use Drupal\Tests\joinup_core\Traits\MailTestTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\joinup_notification\MailContentTypeHeader;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**

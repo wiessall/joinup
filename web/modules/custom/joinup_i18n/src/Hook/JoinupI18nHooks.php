@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_i18n\Hook;
 
+use Drupal\babel_og_menu_link\BabelOgMenuLinkManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ConfigInstallerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\babel_og_menu_link\BabelOgMenuLinkManager;
 use Drupal\language\ConfigurableLanguageInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\tmgmt\JobInterface;

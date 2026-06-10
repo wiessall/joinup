@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Drupal\collection\Plugin\Filter;
 
+use Drupal\collection\Entity\CollectionContentInterface;
+use Drupal\collection\Entity\CollectionInterface;
+use Drupal\collection\Entity\GlossaryTermTrait;
+use Drupal\collection\Exception\MissingCollectionException;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\BackendChain;
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
-use Drupal\collection\Entity\CollectionContentInterface;
-use Drupal\collection\Entity\CollectionInterface;
-use Drupal\collection\Entity\GlossaryTermTrait;
-use Drupal\collection\Exception\MissingCollectionException;
 use Drupal\filter\Attribute\Filter;
 use Drupal\filter\FilterProcessResult;
 use Drupal\filter\Plugin\FilterBase;

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_core\Plugin\Field\FieldType;
 
+use Drupal\comment\CommentInterface;
 use Drupal\Core\Field\FieldItemList;
 use Drupal\Core\TypedData\ComputedItemListTrait;
 use Drupal\Core\Url;
-use Drupal\comment\CommentInterface;
 use Drupal\joinup_core\Controller\IdRedirect;
 use Drupal\joinup_core\Entity\PermalinkInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
