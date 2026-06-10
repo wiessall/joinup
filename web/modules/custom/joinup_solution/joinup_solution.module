@@ -230,11 +230,6 @@ function joinup_solution_entity_extra_field_info(): array {
       'description' => t('Solutions either explicitly or referenced through EIRA.'),
       'visible' => FALSE,
     ];
-    $display['download_total'] = [
-      'label' => t('Total distribution downloads'),
-      'description' => t('The total downloads of all distributions in this collection.'),
-      'visible' => FALSE,
-    ];
     $display['collections'] = [
       'label' => t('Collections'),
       'description' => t('The collections this solution is affiliated to.'),
