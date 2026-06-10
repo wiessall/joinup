@@ -195,14 +195,6 @@ class Solution extends Node implements SolutionInterface {
   /**
    * {@inheritdoc}
    */
-  public function getCacheTagsToInvalidate(): array {
-    $tags = $this->id() ? ['solution_download_count:' . md5($this->id())] : [];
-    return Cache::mergeTags(parent::getCacheTagsToInvalidate(), $tags);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getWebsiteLinkFieldName(): string {
     return 'landing_page';
   }
