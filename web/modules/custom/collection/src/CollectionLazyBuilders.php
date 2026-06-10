@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\collection;
 
+use Drupal\collection\Form\JoinCollectionForm;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Security\Attribute\TrustedCallback;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\collection\Form\JoinCollectionForm;
 
 /**
  * Defines a service for #lazy_builder callbacks for the Collection module.

@@ -18,7 +18,7 @@ Feature: Sharing content between collections
     When I go to the "Target group" collection
     Then I should see the "Shared event" tile
     And I should see the "Shared news" tile
-    Then I run the "joinup_group" cron
+    And I run the "joinup_group_cron" ultimate_cron job
     And I run the "joinup_group_expired_sharing" queue worker
     And I go to the "Target group" collection
     Then I should not see the "Shared event" tile

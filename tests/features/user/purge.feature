@@ -18,7 +18,7 @@ Feature: Automated approach for identifying and deleting inactive users
 
   Scenario: Verify users to be notified.
     Given I mark all emails as read
-    Then I run cron
+    Then I run the "purge_users_cron" ultimate_cron job
     And the "purge_users" queue is empty
     When I run the "notification_users" queue worker
     Then 4 e-mails should have been sent
@@ -29,7 +29,8 @@ Feature: Automated approach for identifying and deleting inactive users
     # Use custom configuration for purge_users in cron job.
     Given I reset the purge users notifications timestamp
     And I mark all emails as read
-    And I run cron
+    And I run the "purge_users_cron" ultimate_cron job
+    And I run the "purge_users" queue worker
     And the "Cosmic Admin" user exist
     And the "Pixel Panda" user exist
     And the "Licence Queen" user exist

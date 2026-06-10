@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_pin\Controller;
 
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;

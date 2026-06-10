@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_group\ExistingSite;
 
-use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\joinup\Traits\RandomGeneratorTrait;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
+use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drush\TestTraits\DrushTestTrait;
 use PHPUnit\Framework\Attributes\Group;
 use weitzman\LoginTrait\LoginTrait;

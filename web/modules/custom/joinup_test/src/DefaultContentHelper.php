@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_test;
 
+use Drupal\assessments\AssessmentInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\assessments\AssessmentInterface;
 use Drupal\interoperable_europe\InteroperableEuropeAcademyInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\pathauto\PathautoState;

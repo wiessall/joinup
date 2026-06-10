@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_test_content\EventSubscriber;
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\cas\Service\CasUserManager;
 use Drupal\cas_mock_server\UserManagerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\default_content\Event\DefaultContentEvents;
 use Drupal\default_content\Event\ImportEvent;
 use Drupal\user\UserInterface;

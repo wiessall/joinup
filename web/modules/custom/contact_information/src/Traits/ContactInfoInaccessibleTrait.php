@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\contact_information\Traits;
 
+use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\MessageCommand;
-use Drupal\contact_information\Entity\ContactInformationInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 

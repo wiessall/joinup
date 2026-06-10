@@ -100,3 +100,14 @@ Feature: "Custom page" editing.
       | group      |
       | collection |
       | solution   |
+
+  Scenario: Title field is required when editing a custom page.
+    Given the following "custom_page" content:
+      | title               | collection     |
+      | IOP validation page | Portal support |
+
+    Then I am logged in as a moderator
+    And I go to the edit form of the "IOP validation page" "custom page"
+    And I fill in "Title" with ""
+    And I press "Update"
+    Then I should see the inline form error message "Title field is required."

@@ -2,4 +2,4 @@
 <http://i-am-creative/> <http://www.w3.org/2000/01/rdf-schema#label> "Creative commons"@en .
 <http://i-am-creative/> <http://joinup.eu/licence/deprecated> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
 <http://i-am-creative/> <http://purl.org/dc/terms/description> "<p>This is so creative</p>" .
-<http://i-am-creative/> <http://purl.org/dc/terms/type> <http://purl.org/adms/licencetype/NominalCost> .
+<http://i-am-creative/> <http://purl.org/dc/terms/type> <http://purl.org/adms/licence/PD> .

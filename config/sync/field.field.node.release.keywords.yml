@@ -22,7 +22,7 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'joinup_taxonomy'
+  handler: joinup_taxonomy
   handler_settings:
     target_bundles:
       tags: tags

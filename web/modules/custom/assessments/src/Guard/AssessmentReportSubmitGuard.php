@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Guard;
 
+use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\joinup_workflow\TransitionGuardTrait;
 use Drupal\state_machine\Guard\GuardInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;

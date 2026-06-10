@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Form;
 
+use Drupal\assessments\Entity\AssessmentType;
 use Drupal\Core\Entity\BundleEntityFormBase;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\assessments\Entity\AssessmentType;
 
 /**
  * Form handler for assessment type forms.

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\EventSubscriber;
 
+use Drupal\assessments\AssessmentInterface;
+use Drupal\assessments\Entity\AssessmentReport;
+use Drupal\assessments\Entity\AssessmentStatement;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItemInterface;
 use Drupal\Core\Url;
-use Drupal\assessments\AssessmentInterface;
-use Drupal\assessments\Entity\AssessmentReport;
-use Drupal\assessments\Entity\AssessmentStatement;
 use Drupal\file\FileInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\paragraphs\ParagraphInterface;

@@ -22,7 +22,7 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class JoinupOssCatalogueHooks {
 
-  protected const int OSS_REMOTE_IMAGE_CACHE_REFRESH_INTERVAL = 24 * 60 * 60;
+  protected const int OSS_REMOTE_IMAGE_CACHE_REFRESH_INTERVAL = 4 * 60 * 60;
 
   protected const string LAST_REFRESH_TIME_KEY = 'joinup_oss_catalogue.imagecache.last_refresh';
 
@@ -59,11 +59,6 @@ class JoinupOssCatalogueHooks {
       return;
     }
 
-    // OSS refresh happens at 0200AM, so we stabilize this job at 0400AM.
-    $actualRefreshTimestamp = (new \DateTime('@' . $requestTime))
-      ->setTime(4, 0)
-      ->getTimestamp();
-
     if (($requestTime - $lastRefreshTimestamp) <= static::OSS_REMOTE_IMAGE_CACHE_REFRESH_INTERVAL) {
       return;
     }
@@ -84,7 +79,7 @@ class JoinupOssCatalogueHooks {
       // Exclude items updated in the last 4 hours.
       ->condition('changed', $requestTime - (4 * 60 * 60), '<')
       ->execute();
-    $this->state->set(static::LAST_REFRESH_TIME_KEY, $actualRefreshTimestamp);
+    $this->state->set(static::LAST_REFRESH_TIME_KEY, $requestTime);
     $this->state->set(static::LAST_REFRESH_FINISHED_KEY, FALSE);
 
     if (!$ossSolutionIds) {

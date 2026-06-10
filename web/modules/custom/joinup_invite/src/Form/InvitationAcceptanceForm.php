@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_invite\Form;
 
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
@@ -13,7 +14,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Site\Settings;
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_invite\Entity\InvitationInterface;
 use Drupal\joinup_invite\Event\InvitationEvent;

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_solution\Controller;
 
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_solution\Entity\Solution;
 use Drupal\joinup_solution\Entity\SolutionInterface;
