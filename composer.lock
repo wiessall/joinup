@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c132763a35b2d0c1ddd14806041b76fa",
+    "content-hash": "eddd7b01584d79bc92d2a6732a3435df",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -17121,16 +17121,6 @@
                 }
             ],
             "time": "2024-07-03T04:53:05+00:00"
-        },
-        {
-            "name": "semiceu/adms-ap_validator",
-            "version": "1.0.0-alpha1",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:SEMICeu/adms-ap_validator.git",
-                "reference": "master"
-            },
-            "type": "library"
         },
         {
             "name": "solarium/solarium",
