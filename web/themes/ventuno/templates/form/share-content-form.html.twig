@@ -13,20 +13,9 @@
 #}
 {{ attach_library('ventuno/share-content-form') }}
 {% if form.groups %}
-  <div class="d-flex col-gap-5">
-    <div>
-      <h3 class="fs-6">{{ 'Social networks'|t }}</h3>
-      {{ form.share }}
-    </div>
-    <div>
-      {{ form.notification }}
-      <h3 class="fs-6">{{ 'Other groups on Interoperable Europe Portal'|t }}</h3>
-      {{ form|without('share', 'notification') }}
-    </div>
-  </div>
-{% else %}
-  <h3 class="fs-6 text-center">{{ 'Social networks'|t }}</h3>
-  <div class="d-flex justify-content-center">
-    {{ form.share }}
+  <div>
+    {{ form.notification }}
+    <h3 class="fs-6">{{ 'Other groups on Interoperable Europe Portal'|t }}</h3>
+    {{ form|without('share', 'notification') }}
   </div>
 {% endif %}
