@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "285c31c3a56317cf04418dd18727e97a",
+    "content-hash": "86ba9c74da8abcecc80671f210cfb7a7",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -10145,17 +10145,17 @@
         },
         {
             "name": "drupal/tagify",
-            "version": "1.2.51",
+            "version": "1.2.52",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/tagify.git",
-                "reference": "1.2.51"
+                "reference": "1.2.52"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/tagify-1.2.51.zip",
-                "reference": "1.2.51",
-                "shasum": "db35b0f75f267070ecd35ba6db316e1b042bc828"
+                "url": "https://ftp.drupal.org/files/projects/tagify-1.2.52.zip",
+                "reference": "1.2.52",
+                "shasum": "eeb8ca3ff293c8262822e177b1c3c36604ef7741"
             },
             "require": {
                 "drupal/core": "^8.8 || ^9 || ^10 || ^11"
@@ -10171,8 +10171,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.2.51",
-                    "datestamp": "1777904081",
+                    "version": "1.2.52",
+                    "datestamp": "1781111191",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -17121,16 +17121,6 @@
                 }
             ],
             "time": "2024-07-03T04:53:05+00:00"
-        },
-        {
-            "name": "semiceu/adms-ap_validator",
-            "version": "1.0.0-alpha1",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:SEMICeu/adms-ap_validator.git",
-                "reference": "master"
-            },
-            "type": "library"
         },
         {
             "name": "solarium/solarium",
