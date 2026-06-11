@@ -24,6 +24,31 @@ function joinup_i18n_module_implements_alter(array &$implementations, string $ho
 }
 
 /**
+ * Implements hook_page_attachments_alter().
+ *
+ * The content_translation module adds, for every available translation of the
+ * entity being viewed, an alternate hreflang <link> tag in the page <head>
+ * pointing to the translated canonical URL. Joinup does not want to advertise
+ * those translation URLs, so strip them out.
+ *
+ * @see \Drupal\content_translation\Hook\ContentTranslationHooks::pageAttachments()
+ */
+function joinup_i18n_page_attachments_alter(array &$attachments): void {
+  if (empty($attachments['#attached']['html_head_link'])) {
+    return;
+  }
+
+  $attachments['#attached']['html_head_link'] = array_values(array_filter(
+    $attachments['#attached']['html_head_link'],
+    static function (array $link): bool {
+      $attributes = $link[0] ?? [];
+      // Keep every link except the alternate hreflang ones.
+      return ($attributes['rel'] ?? NULL) !== 'alternate' || !isset($attributes['hreflang']);
+    },
+  ));
+}
+
+/**
  * Implements hook_language_switch_links_alter().
  */
 function joinup_i18n_language_switch_links_alter(array &$links, string $type, Url $url): void {
