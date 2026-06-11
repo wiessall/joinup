@@ -104,7 +104,7 @@ class TranslationScheduler {
       tmgmt_content_create_continuous_job_items($entity);
 
       if ($entity instanceof GroupInterface) {
-        // Add also the corresponding group settings, if any
+        // Add also the corresponding group settings, if any.
         $fieldName = "{$entity->bundle()}_settings";
         if ($settings = $entity->get($fieldName)->entity) {
           tmgmt_content_create_continuous_job_items($settings);
