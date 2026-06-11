@@ -10,6 +10,7 @@ use Drupal\Core\Database\Statement\FetchAs;
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Menu\Form\MenuLinkDefaultForm;
 use Drupal\Core\Menu\MenuLinkManagerInterface;
 use Drupal\Core\Menu\MenuTreeStorageInterface;
 use Drupal\joinup_group\GroupMenuLinkHelperTrait;
@@ -72,12 +73,17 @@ final readonly class GroupMenuLinkMigration implements ContainerInjectionInterfa
       'menu_name' => $link->menuName,
       'id' => GroupMenuLink::buildPluginId('node', $link->customPageNid, $link->ogMenuType),
       'title' => $link->customPageTitle,
+      'description' => '',
       'route_name' => $link->routeName,
       'route_parameters' => unserialize($link->routeParameters, ['allowed_classes' => FALSE]),
       'parent' => (string) $link->parent,
       'enabled' => (bool) $link->enabled,
       'weight' => (int) $link->weight,
       'provider' => 'joinup_group',
+      'expanded' => FALSE,
+      'options' => [],
+      'metadata' => [],
+      'form_class' => MenuLinkDefaultForm::class,
     ]);
   }
 

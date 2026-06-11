@@ -88,13 +88,6 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
   /**
    * {@inheritdoc}
    */
-  public function getDescription(): ?string {
-    return NULL;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function updateLink(array $new_definition_values, $persist): array {
     // Filter the list of updates to only those that are allowed.
     $overrides = array_intersect_key($new_definition_values, $this->overrideAllowed);
@@ -118,6 +111,13 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
   /**
    * {@inheritdoc}
    */
+  public function getDescription(): ?string {
+    return '';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function isTranslatable(): bool {
     return TRUE;
   }
@@ -133,6 +133,20 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
    * {@inheritdoc}
    */
   public function deleteLink(): void {}
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getEditRoute(): null {
+    return NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getOperations(): array {
+    return [];
+  }
 
   /**
    * Returns the entity associated with this menu link.
