@@ -47,28 +47,31 @@ Feature: Sharing content between collections
       | title               | <group type> |
       | Interesting content | Hip-Hop      |
 
-    # Anonymous users can share only in social networks.
+    # Anonymous users can not share
     When I am an anonymous user
     And I visit the "Interesting content" "<content type>"
-    And I click "Share"
-    Then a modal should open
-    And the following fields should not be present "Classic Rock, Hip-Hop, Power ballad, Drum'n'Bass"
+    Then I should not see the link "Share"
 
-    # This "authenticated user" is not member of any collections or solution, so they can
-    # share only in social networks.
+    # This "authenticated user" is a member of The Portal nad he could share only there.
     When I am logged in as an "authenticated user"
     And I visit the "Interesting content" "<content type>"
-    And I click "Share"
+    When I click "Share"
     Then a modal should open
-    And the following fields should not be present "Classic Rock, Hip-Hop, Power ballad, Drum'n'Bass"
+    And I should see the following lines of text:
+      | Other groups on Interoperable Europe Portal |
+    # The groups the user is member of should be available.
+    And the following fields should be present "Portal support"
 
     # A member of a single collection or solution which is the one where the content was
-    # created can share on social networks only.
+    # created can not share
     When I am logged in as a member of the "Hip-Hop" <group type>
     And I visit the "Interesting content" "<content type>"
-    And I click "Share"
+    When I click "Share"
     Then a modal should open
-    And the following fields should not be present "Classic Rock, Hip-Hop, Power ballad, Drum'n'Bass"
+    And I should see the following lines of text:
+      | Other groups on Interoperable Europe Portal |
+    # The groups the user is member of should be available.
+    And the following fields should be present "Portal support"
 
     # A group member should see the link.
     When I am logged in as "Sara Barber"
@@ -77,10 +80,6 @@ Feature: Sharing content between collections
     When I click "Share"
     Then a modal should open
     And I should see the following lines of text:
-      | Share on                                    |
-      | Facebook                                    |
-      | X                                           |
-      | Linkedin                                    |
       | Other groups on Interoperable Europe Portal |
     # The groups the user is member of should be available.
     And the following fields should be present "Hip-Hop, Drum'n'Bass"
