@@ -42,7 +42,7 @@ interface GlossaryTermInterface extends NodeInterface, CollectionContentInterfac
    *   The uppercase index letter.
    *
    * @see \Drupal\collection\Controller\GlossaryController::getGlossaryTermLetters()
-   * @see \Drupal\collection\Plugin\views\field\GlossaryLetterField
+   * @see \Drupal\collection\Plugin\Field\FieldType\GlossaryLetterFieldItemList
    */
   public function getGlossaryLetter(): string;
 

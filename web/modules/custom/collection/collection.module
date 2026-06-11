@@ -11,6 +11,7 @@ use Drupal\collection\Entity\Collection;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Entity\GlossaryTerm;
 use Drupal\collection\Entity\GroupMembership;
+use Drupal\collection\Plugin\Field\FieldType\GlossaryLetterFieldItemList;
 use Drupal\collection\Plugin\Field\FieldType\LastUpdatedFieldItemList;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Access\AccessResult;
@@ -120,6 +121,16 @@ function collection_entity_bundle_field_info_alter(&$fields, EntityTypeInterface
     if (isset($fields['field_glossary_synonyms'])) {
       $fields['field_glossary_synonyms']->addConstraint('GlossaryTermSynonyms');
     }
+
+    $fields['glossary_letter'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Glossary letter'))
+      ->setName('glossary_letter')
+      ->setTargetEntityTypeId('node')
+      ->setTargetBundle('glossary')
+      ->setTranslatable(TRUE)
+      ->setComputed(TRUE)
+      ->setReadOnly(TRUE)
+      ->setClass(GlossaryLetterFieldItemList::class);
   }
 }
 
@@ -393,9 +404,10 @@ function collection_views_data_alter(array &$data): void {
   if (isset($data['node'])) {
     $data['node']['glossary_letter'] = [
       'title' => t('Glossary letter'),
-      'help' => t('The first letter of the title.'),
       'field' => [
-        'id' => 'glossary_letter',
+        'id' => 'field',
+        'default_formatter' => 'string',
+        'field_name' => 'glossary_letter',
       ],
     ];
   }

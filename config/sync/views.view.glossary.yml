@@ -8,7 +8,6 @@ dependencies:
     - node.type.collection
     - node.type.glossary
   module:
-    - collection
     - csv_serialization
     - joinup_group
     - joinup_i18n
@@ -41,7 +40,8 @@ display:
           group_type: group
           admin_label: ''
           entity_type: node
-          plugin_id: glossary_letter
+          entity_field: glossary_letter
+          plugin_id: field
           label: ''
           exclude: true
           alter:
@@ -83,6 +83,20 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: false
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
         view_node:
           id: view_node
           table: node
@@ -621,6 +635,7 @@ display:
     cache_metadata:
       max-age: -1
       contexts:
+        - 'languages:language_content'
         - 'languages:language_interface'
         - og_group_context
         - request_format
@@ -648,6 +663,7 @@ display:
     cache_metadata:
       max-age: -1
       contexts:
+        - 'languages:language_content'
         - 'languages:language_interface'
         - url
         - 'user.node_grants:view'
