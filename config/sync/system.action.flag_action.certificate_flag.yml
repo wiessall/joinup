@@ -1,0 +1,15 @@
+uuid: b6630259-a2d3-485e-9d05-9b22e194c9dc
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.certificate
+  module:
+    - flag
+id: flag_action.certificate_flag
+label: 'Flag this item'
+type: user
+plugin: 'flag_action:certificate_flag'
+configuration:
+  flag_id: certificate
+  flag_action: flag
