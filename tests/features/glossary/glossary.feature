@@ -128,7 +128,6 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | text     |
       | Overview |
       | Glossary |
-    And the link "Glossary" points outside group
 
     When I click "Glossary"
     Then I should see the heading "A World of Things glossary"

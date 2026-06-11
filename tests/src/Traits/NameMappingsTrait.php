@@ -47,6 +47,7 @@ trait NameMappingsTrait {
         'published at' => 'published_at',
         'spatial coverage' => 'spatial_coverage',
         'state' => 'field_state',
+        'website url' => 'website_url',
       ],
       'contact_information' => [
         'email' => 'email',

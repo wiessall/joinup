@@ -24,6 +24,7 @@ use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_community_content\CommunityContentHelper;
+use Drupal\joinup_group\Plugin\Menu\GroupMenuLink;
 use Drupal\og\OgGroupAudienceHelper;
 use Drupal\og\OgRoleInterface;
 use Drupal\user\Entity\User;
@@ -234,20 +235,18 @@ class CollectionContext extends RawDrupalContext {
    */
   #[Given('(the following )custom page(s) :menu_type menu structure for the :group_label :group_bundle:')]
   public function givenCollectionMenuStructure(TableNode $menu_table, string $menu_type, string $group_label, string $group_bundle): void {
-    $group = $this->getEntityByLabel('node', $group_label, $group_bundle);
-    $menu_link_manager = \Drupal::getContainer()->get('plugin.manager.menu.link');
+    $menu_link_manager = \Drupal::service('plugin.manager.menu.link');
     foreach ($menu_table->getColumnsHash() as $values) {
-      if (!empty($values['parent'])) {
-        $parent_link = $this->getMenuLinkByTitle($values['parent'], $group->id(), $menu_type);
-        $values['parent'] = $parent_link->getPluginId();
-      }
+      $page = $this->getEntityByLabel('node', $values['title'], 'custom_page');
 
-      if (!empty($values['enabled'])) {
-        $values['enabled'] = (int) ($values['enabled'] === 'yes');
-      }
+      $plugin_id = GroupMenuLink::buildPluginId('node', $page->id(), $menu_type);
+      $definition = $menu_link_manager->getDefinition($plugin_id);
 
-      $child_link = $this->getMenuLinkByTitle($values['title'], $group->id(), $menu_type);
-      $menu_link_manager->updateDefinition($child_link->getPluginId(), $values);
+      $definition['enabled'] = ($values['enabled'] ??= 'yes') === 'yes';
+      $definition['weight'] = (int) ($values['weight'] ?? 0);
+      $parent = !empty($values['parent']) ? $this->getEntityByLabel('node', $values['parent'], 'custom_page') : NULL;
+      $definition['parent'] = $parent ? GroupMenuLink::buildPluginId('node', $parent->id(), $menu_type) : '';
+      $menu_link_manager->updateDefinition($plugin_id, $definition, FALSE);
     }
   }
 

@@ -19,6 +19,8 @@ use Drupal\comment\CommentInterface;
 use Drupal\comment\Entity\Comment;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Menu\MenuLinkInterface;
+use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Driver\Entity\EntityStub;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -28,6 +30,7 @@ use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\file_visibility\FileVisibilityInterface;
 use Drupal\joinup\Traits\BootstrapTrait;
+use Drupal\joinup\Traits\CommonTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
@@ -46,9 +49,11 @@ use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
+use Drupal\joinup_group\Plugin\Menu\GroupMenuLink;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\paragraphs\Entity\Paragraph;
@@ -61,6 +66,7 @@ use GuzzleHttp\Client;
 class JoinupContext extends RawDrupalContext {
 
   use BootstrapTrait;
+  use CommonTrait;
   use ContextualLinksTrait;
   use EntityTrait;
   use FileTrait;
@@ -2388,16 +2394,20 @@ class JoinupContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The menu data.
+   * @param string $og_menu_type
+   *   The OG menu type.
    * @param string $group_label
    *   The group label.
    * @param string $group_bundle
    *   The group bundle.
    */
-  #[Then('the draggable menu table of the :group_label :group_type should be:')]
-  public function assertDraggableMenuTable(TableNode $table, string $group_label, string $group_bundle): void {
+  #[Then('the draggable :og_menu_type menu table of the :group_label :group_type should be:')]
+  public function assertDraggableMenuTable(TableNode $table, string $og_menu_type, string $group_label, string $group_bundle): void {
     $this->assertJavaScriptEnabledBrowser();
 
     $group = $this->getEntityByLabel('node', $group_label, $group_bundle);
+    assert($group instanceof GroupInterface);
+
     /** @var \Behat\Mink\Element\NodeElement[] $rows */
     $rows = $this->getSession()->getPage()->findAll('css', '#menu-overview tbody tr.draggable');
     $expected = $table->getColumnsHash();
@@ -2407,8 +2417,8 @@ class JoinupContext extends RawDrupalContext {
       $current_row = $rows[$delta];
       $title_element = $current_row->find('css', 'td:first-of-type a:not(.tabledrag-handle)');
       $this->assertSameValues($data['title'], trim($title_element->getText()));
+      $menu_link = $this->getGroupMenuLinkByTitle($data['title'], $group, $og_menu_type);
 
-      $menu_link = $this->getMenuLinkByTitle($data['title'], $group->id(), 'navigation');
       $parent_input = $current_row->find('css', 'input[name="links[menu_plugin_id:' . $menu_link->getPluginId() . '][parent]"]');
 
       // When a parent is available, the line should be indented. Find all
@@ -2426,8 +2436,9 @@ class JoinupContext extends RawDrupalContext {
           throw new \Exception('Cannot find parent input field.');
         }
 
-        $parent_link = $this->getMenuLinkByTitle($data['parent'], $group->id(), 'navigation');
-        $this->assertSameValues($parent_link->getPluginId(), $parent_input->getValue());
+        $parent = $this->getEntityByLabel('node', $data['parent'], 'custom_page');
+        $parent_plugin_id = GroupMenuLink::buildPluginId('node', $parent->id(), 'navigation');
+        $this->assertSameValues($parent_plugin_id, $parent_input->getValue());
         $this->assertCondition(count($indentation) !== 0, "The menu link '{$data['title']}' should be indented but it's not.");
       }
     }
@@ -3144,6 +3155,66 @@ class JoinupContext extends RawDrupalContext {
         'h1 span'
       );
     }
+  }
+
+  /**
+   * Updates an entity by its title..
+   *
+   * @codingStandardsIgnoreStart
+   *  Table format:
+   *  | title               | Sample solution   |
+   *  | description         | A sample solution |
+   *  | ...                 | ...               |
+   * @codingStandardsIgnoreEnd
+   *
+   * @param string $title
+   *   The node title.
+   * @param string $type
+   *   The node type.
+   * @param \Behat\Gherkin\Node\TableNode $fieldsTable
+   *   The values of the fields to update.
+   */
+  #[When('I update :title :bundle:')]
+  public function updateEntityByLabel(string $title, string $type, TableNode $fieldsTable): void {
+    $node = $this->getEntityByLabel('node', $title, $type);
+    assert($node instanceof NodeInterface);
+    $this->doUpdateEntity($node, $fieldsTable);
+  }
+
+  /**
+   * Returns a menu link plugin instance given its title.
+   *
+   * The method assumes that there are no duplicate entries with the same title,
+   * so it returns the first of the results.
+   *
+   * @param string $title
+   *   The label of the menu item.
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
+   *   The group entity.
+   * @param string $menu_type
+   *   The bundle of the OG menu instance.
+   *
+   * @return \Drupal\Core\Menu\MenuLinkInterface
+   *   The menu link instance.
+   *
+   * @throws \Exception
+   *   Thrown when the menu item is not found.
+   */
+  protected function getGroupMenuLinkByTitle(string $title, GroupInterface $group, string $menu_type): MenuLinkInterface {
+    $menu_link_tree = \Drupal::service('menu.link_tree');
+    $menu_name = 'ogmenu-' . $group->getGroupOgMenuInstance($menu_type)->id();
+
+    $tree = $menu_link_tree->load($menu_name, new MenuTreeParameters());
+    $manipulators = [['callable' => 'menu.default_tree_manipulators:flatten']];
+    $tree = $menu_link_tree->transform($tree, $manipulators);
+
+    foreach ($tree as $link) {
+      if ((string) $link->link->getTitle() === $title) {
+        return $link->link;
+      }
+    }
+
+    throw new \Exception("Menu item with title '$title' not found.");
   }
 
 }
