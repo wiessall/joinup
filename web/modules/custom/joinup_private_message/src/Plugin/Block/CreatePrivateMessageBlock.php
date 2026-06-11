@@ -47,7 +47,7 @@ class CreatePrivateMessageBlock extends BlockBase implements ContainerFactoryPlu
       $plugin_id,
       $plugin_definition,
       $container->get('current_user'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
     );
   }
 
@@ -62,12 +62,11 @@ class CreatePrivateMessageBlock extends BlockBase implements ContainerFactoryPlu
    * {@inheritdoc}
    */
   public function build(): array {
-    $url = Url::fromRoute('private_message.private_message_create');
     $block['links'][] = [
       '#type' => 'link',
       '#title' => $this->configFactory->get('private_message.settings')
         ->get('create_message_label'),
-      '#url' => $url,
+      '#url' => Url::fromRoute('private_message.private_message_create'),
       '#attributes' => _joinup_private_message_get_ajax_modal_attributes(),
       '#attached' => [
         'library' => [
