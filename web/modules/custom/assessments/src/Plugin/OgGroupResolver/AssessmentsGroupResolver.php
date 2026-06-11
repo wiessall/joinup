@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Plugin\OgGroupResolver;
 
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\assessments\AssessmentInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\Attribute\OgGroupResolver;
 use Drupal\og\OgResolvedGroupCollectionInterface;

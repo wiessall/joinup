@@ -15,6 +15,8 @@ use Behat\Mink\Exception\ExpectationException;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
+use Drupal\comment\CommentInterface;
+use Drupal\comment\Entity\Comment;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -24,8 +26,6 @@ use Drupal\DrupalExtension\Hook\Attribute\AfterNodeCreate;
 use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
-use Drupal\comment\CommentInterface;
-use Drupal\comment\Entity\Comment;
 use Drupal\file_visibility\FileVisibilityInterface;
 use Drupal\joinup\Traits\BootstrapTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
@@ -2553,18 +2553,31 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    */
   #[Then('the output should match the file contents of :file')]
-  public function theOutputShouldMatchTheFile($file_path): void {
+  public function theOutputShouldMatchTheFile(string $file_path): void {
     if ($this->getMinkParameter('files_path')) {
       $fullPath = rtrim(realpath($this->getMinkParameter('files_path')), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $file_path;
       if (is_file($fullPath)) {
         $file_path = $fullPath;
       }
     }
-    $expected_content = trim(file_get_contents($file_path));
-    $browser_content = trim($this->getSession()->getPage()->getContent());
-    if ($expected_content !== $browser_content) {
-      throw new \Exception(sprintf("The output didn't match the fixture. Expected %s, got %s.", $expected_content, $browser_content));
+    $expected_hash = $this->contentHash(file_get_contents($file_path));
+    $actual_hash = $this->contentHash($this->getSession()->getPage()->getContent());
+    if ($expected_hash !== $actual_hash) {
+      throw new \Exception(sprintf("The output didn't match the fixture '%s'.", basename($file_path)));
     }
+  }
+
+  /**
+   * Returns a SHA-256 hash of the given content.
+   *
+   * @param string $content
+   *   The content to hash.
+   *
+   * @return string
+   *   The SHA-256 hex digest of the trimmed content.
+   */
+  private function contentHash(string $content): string {
+    return hash('sha256', trim($content));
   }
 
   /**

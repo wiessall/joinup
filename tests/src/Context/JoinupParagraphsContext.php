@@ -15,6 +15,7 @@ use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\ContentEntityStorageInterface;
 use Drupal\Core\Layout\LayoutPluginManagerInterface;
 use Drupal\Core\Session\AccountSwitcherInterface;
 use Drupal\Driver\Entity\EntityStub;
@@ -431,14 +432,38 @@ class JoinupParagraphsContext extends RawDrupalContext {
    * @param mixed $value
    *   Field value.
    *
-   * @return array
+   * @return mixed
    *   Transformed value.
    */
   protected function transformParagraphValue(string $field, mixed $value): mixed {
-    return match ($field) {
-      'content_listing:value' => unserialize($value, ['allowed_classes' => FALSE]),
-      default => $value,
-    };
+    if ($field === 'content_listing:value') {
+      return unserialize($value, ['allowed_classes' => FALSE]);
+    }
+
+    // If there is a target_type config we assume the field is a reference field
+    // and we try to identify the referenced entities by title.
+    $definition = \Drupal::service('entity_field.manager')->getFieldStorageDefinitions('paragraph')[$field] ?? NULL;
+    $targetType = $definition?->getSetting('target_type');
+    if (!$targetType) {
+      return $value;
+    }
+
+    $targetStorage = \Drupal::service('entity_type.manager')->getStorage($targetType);
+    if (!$targetStorage instanceof ContentEntityStorageInterface) {
+      return $value;
+    }
+
+    $dataRaw = is_array($value) ? $value : explode(',', $value);
+    $data = [];
+    foreach ($dataRaw as $potentialLabel) {
+      $potentialLabel = trim($potentialLabel);
+      if ($targetStorage->load($potentialLabel)) {
+        $data[] = $potentialLabel;
+        continue;
+      }
+      $data[] = $this->getEntityByLabel($targetType, $potentialLabel);
+    }
+    return $data;
   }
 
   /**

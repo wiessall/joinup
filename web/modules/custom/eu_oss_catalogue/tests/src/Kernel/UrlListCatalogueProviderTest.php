@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\Tests\eu_oss_catalogue\Kernel;
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\KernelTests\KernelTestBase;
 use Drupal\eu_oss_catalogue\ApiGuesserInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
@@ -13,6 +12,7 @@ use Drupal\eu_oss_catalogue\Exception\ProviderFetchException;
 use Drupal\eu_oss_catalogue\Model\ApiGuess;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider\UrlListCatalogueProviderBase;
+use Drupal\KernelTests\KernelTestBase;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;

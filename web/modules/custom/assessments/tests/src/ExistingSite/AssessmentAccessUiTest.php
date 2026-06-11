@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\ExistingSite;
 
-use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\assessments\Entity\Assessment;
 use Drupal\taxonomy\Entity\Vocabulary;
+use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use PHPUnit\Framework\Attributes\Group;
 
 /**
