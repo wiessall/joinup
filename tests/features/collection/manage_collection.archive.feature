@@ -60,3 +60,14 @@ Feature: Archiving and unarchiving a collection cascades to its sub-content.
 
     When I go to the homepage of the "Collection" collection
     Then I should not see the text "Archived" in the "Header"
+
+  Scenario: A solution cannot be edited when its parent collection is archived.
+    Given the following "collection" content:
+      | title             | state    |
+      | Locked collection | archived |
+    And the following "solution" content:
+      | title           | collection        | state    |
+      | Locked solution | Locked collection | archived |
+    And I am logged in as a moderator
+    When I go to the edit form of the "Locked solution" solution
+    Then I should see the heading "Access denied"
