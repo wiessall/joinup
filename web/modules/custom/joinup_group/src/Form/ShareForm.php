@@ -60,13 +60,8 @@ class ShareForm extends ShareFormBase {
    */
   public function doBuildForm(array $form, FormStateInterface $form_state, ?FieldableEntityInterface $entity = NULL): array {
     $this->entity = $entity;
-
-    $form['share'] = [
-      '#theme' => 'social_share',
-      '#entity' => $this->entity,
-    ];
-
-    $groups = $this->getShareableGroups();
+    assert($entity instanceof ShareableContentInterface);
+    $groups = $this->shareableContentManager->getShareableGroups($entity);
     $notification = $entity instanceof ShareableContentInterface
       ? $this->entity->getSharingNotification()
       : NULL;
@@ -161,31 +156,6 @@ class ShareForm extends ShareFormBase {
     else {
       return $this->t('Share %title on', ['%title' => $entity->label()]);
     }
-  }
-
-  /**
-   * Retrieves a list of groups where the entity can be shared on.
-   *
-   * @return \Drupal\joinup_group\Entity\GroupInterface[]
-   *   A list of groups where the current entity can be shared on.
-   */
-  protected function getShareableGroups(): array {
-    // Being part also for the access check, do not allow the user to access
-    // this page for entities without a field to store groups it is shared in.
-    if (!$this->entity instanceof ShareableContentInterface) {
-      return [];
-    }
-
-    $user_groups = $this->getUserGroupsByPermission($this->getPermissionForAction('share'));
-    // Always show collections first.
-    uasort($user_groups, function (GroupInterface $group1, GroupInterface $group2): int {
-      return $group1->bundle() <=> $group2->bundle();
-    });
-    if ($parent = $this->getExcludedParent()) {
-      unset($user_groups[$parent->id()]);
-    }
-
-    return array_diff_key($user_groups, array_flip($this->getAlreadySharedGroupIds()));
   }
 
   /**
