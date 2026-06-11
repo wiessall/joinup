@@ -391,7 +391,7 @@ Feature: User profile
     And I press "Save"
 
     When I am an anonymous user
-    Then the "lang" attribute of the page should be "en"
+    Then the "lang" attribute of the page should be "fr"
 
     # After login, the user is redirected to their preferred language.
     When I am logged in as "Pierre Martin"
