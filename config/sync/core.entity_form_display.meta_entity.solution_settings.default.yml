@@ -79,4 +79,5 @@ hidden:
   langcode: true
   path: true
   target: true
+  translation: true
   uuid: true
