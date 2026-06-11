@@ -182,8 +182,6 @@ function joinup_i18n_deploy_201402(array &$sandbox): string {
 
       $storage->resetCache([$nid]);
     }
-
-    tmgmt_content_create_continuous_job_items($solution);
   }
 
   $sandbox['#finished'] = empty($sandbox['nids']) ? 1 : ($sandbox['progress'] / $sandbox['total']);
