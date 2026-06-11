@@ -81,3 +81,15 @@ function joinup_test_node_presave(EntityInterface $entity): void {
     $entity->setChangedTime($changedTime);
   }
 }
+
+/**
+ * Implements hook_ENTITY_TYPE_load() for block entities.
+ */
+function joinup_test_block_load(array $entities): void {
+  /** @var \Drupal\block\Entity\Block $block */
+  foreach ($entities as $block) {
+    if ($block->getPluginId() === 'language_block:language_interface') {
+      $block->set('visibility', []);
+    }
+  }
+}
