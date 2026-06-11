@@ -30,14 +30,6 @@ class LogRecordsContext extends RawDrupalContext {
   protected int $timeStamp = 0;
 
   /**
-   * Ensures that there are no log entries.
-   */
-  #[Given('the site should not have any log records')]
-  public function assertNoLogRecords(): void {
-    $this->failIfLogRecords();
-  }
-
-  /**
    * Checks the number of log records.
    */
   #[Given('there should be :count log record(s)')]

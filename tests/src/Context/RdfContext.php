@@ -226,24 +226,6 @@ class RdfContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that entities in the published graph are ADMS-AP compliant.
-   */
-  #[Then('the ADMS-AP data of the published entities in Interoperable Europe Portal is valid')]
-  public function assertValidPublishedGraph(): void {
-    $config = \Drupal::config('rdf_sync.settings');
-    $graphUri = $config->get('graph_uri');
-    /** @var \Drupal\rdf_sync\RdfSyncConnectionInterface $sparqlEndpoint */
-    $sparqlEndpoint = \Drupal::service('rdf_sync.connection');
-    // Copy the data to a new graph to avoid deleting the original data.
-    $sparqlEndpoint->query("ADD <$graphUri> TO GRAPH <http://adms-validation>");
-    /** @var \Drupal\adms_validator\AdmsValidatorInterface $validator */
-    $validator = \Drupal::service('adms_validator.validator');
-    $result = $validator->validateByGraphUri('http://adms-validation');
-    $sparqlEndpoint->query('CLEAR GRAPH <http://adms-validation>');
-    $this->assertCondition($result->isSuccessful(), 'The published graph is not ADMS-AP compliant.');
-  }
-
-  /**
    * Re-synchronizes terms.
    *
    * Used in Digit QA pipeline. The terms are installed and synchronized in
