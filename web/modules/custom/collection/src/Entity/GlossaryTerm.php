@@ -50,4 +50,16 @@ class GlossaryTerm extends Node implements GlossaryTermInterface {
     return $this->buildSummary($field_item->value, $field_item->summary, $field_item->format);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getGlossaryLetter(): string {
+    $char = mb_substr((string) $this->label(), 0, 1);
+    // Non-Latin scripts (e.g. Greek) keep their own letter.
+    if (preg_match('/\p{Latin}/u', $char)) {
+      $char = \Drupal::transliteration()->transliterate($char);
+    }
+    return mb_strtoupper($char);
+  }
+
 }

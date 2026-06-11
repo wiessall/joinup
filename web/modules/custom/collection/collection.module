@@ -385,3 +385,18 @@ function collection_entity_field_access(string $operation, FieldDefinitionInterf
 
   return AccessResult::neutral();
 }
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function collection_views_data_alter(array &$data): void {
+  if (isset($data['node'])) {
+    $data['node']['glossary_letter'] = [
+      'title' => t('Glossary letter'),
+      'help' => t('The first letter of the title.'),
+      'field' => [
+        'id' => 'glossary_letter',
+      ],
+    ];
+  }
+}

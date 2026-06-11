@@ -8,8 +8,10 @@ dependencies:
     - node.type.collection
     - node.type.glossary
   module:
+    - collection
     - csv_serialization
     - joinup_group
+    - joinup_i18n
     - node
     - rest
     - serialization
@@ -31,21 +33,20 @@ display:
     position: 0
     display_options:
       fields:
-        title:
-          id: title
-          table: node_field_data
-          field: title
+        glossary_letter:
+          id: glossary_letter
+          table: node
+          field: glossary_letter
           relationship: none
           group_type: group
-          admin_label: Grouping
+          admin_label: ''
           entity_type: node
-          entity_field: title
-          plugin_id: field
+          plugin_id: glossary_letter
           label: ''
           exclude: true
           alter:
-            alter_text: true
-            text: '{{ title__value|upper|upper }}'
+            alter_text: false
+            text: ''
             make_link: false
             path: ''
             absolute: false
@@ -60,14 +61,14 @@ display:
             suffix: ''
             target: ''
             nl2br: false
-            max_length: 1
-            word_boundary: false
-            ellipsis: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
             more_link: false
             more_link_text: ''
             more_link_path: ''
             strip_tags: false
-            trim: true
+            trim: false
             preserve_tags: ''
             html: false
           element_type: ''
@@ -77,25 +78,11 @@ display:
           element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
-          element_default_classes: false
+          element_default_classes: true
           empty: ''
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          click_sort_column: value
-          type: string
-          settings:
-            link_to_entity: false
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
         view_node:
           id: view_node
           table: node
@@ -487,18 +474,17 @@ display:
           expose:
             operator_limit_selection: false
             operator_list: {  }
-        default_langcode:
-          id: default_langcode
+        language_fallback:
+          id: language_fallback
           table: node_field_data
-          field: default_langcode
+          field: language_fallback
           relationship: none
           group_type: group
           admin_label: ''
           entity_type: node
-          entity_field: default_langcode
-          plugin_id: boolean
+          plugin_id: language_fallback
           operator: '='
-          value: '1'
+          value: ''
           group: 1
           exposed: false
           expose:
@@ -532,7 +518,7 @@ display:
         options:
           grouping:
             -
-              field: title
+              field: glossary_letter
               rendered: true
               rendered_strip: false
           columns: 2
@@ -561,7 +547,7 @@ display:
       css_class: view-glossary
       header: {  }
       footer: {  }
-      rendering_language: '***LANGUAGE_language_interface***'
+      rendering_language: '***LANGUAGE_entity_translation***'
       display_extenders:
         metatag_display_extender:
           metatags: {  }
@@ -569,6 +555,7 @@ display:
     cache_metadata:
       max-age: -1
       contexts:
+        - 'languages:language_content'
         - 'languages:language_interface'
         - url
         - 'user.node_grants:view'
@@ -616,7 +603,7 @@ display:
       defaults:
         access: false
         arguments: true
-      rendering_language: '***LANGUAGE_language_interface***'
+      rendering_language: '***LANGUAGE_entity_translation***'
       display_extenders:
         metatag_display_extender:
           metatags: {  }
@@ -653,7 +640,7 @@ display:
         header: false
       display_description: ''
       header: {  }
-      rendering_language: '***LANGUAGE_language_interface***'
+      rendering_language: '***LANGUAGE_entity_translation***'
       display_extenders:
         metatag_display_extender:
           metatags: {  }

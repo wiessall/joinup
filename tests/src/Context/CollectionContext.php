@@ -473,6 +473,36 @@ class CollectionContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts the letter groups and their terms in the glossary listing.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   A table with a 'letter' column and a comma-separated 'terms' column.
+   *
+   * @throws \Behat\Mink\Exception\ExpectationException
+   *   When a group is missing or contains unexpected terms.
+   */
+  #[Then('the glossary should be grouped as:')]
+  public function assertGlossaryGroups(TableNode $table): void {
+    $page = $this->getSession()->getPage();
+    foreach ($table->getHash() as $row) {
+      $expected = array_map('trim', explode(',', $row['terms']));
+      sort($expected);
+
+      // Term links in the grid that follows the group's letter heading.
+      $links = $page->findAll('xpath', "//*[contains(@class, 'view-glossary')]"
+        . "//h2[normalize-space() = '{$row['letter']}']"
+        . "/following-sibling::div[contains(@class, 'views-view-grid')][1]"
+        . "//*[contains(@class, 'views-field-title-1')]//a");
+      $actual = array_map(static fn($link): string => trim($link->getText()), $links);
+      sort($actual);
+
+      if ($actual !== $expected) {
+        throw new ExpectationException(sprintf("Glossary group '%s' contains [%s] but expected [%s].", $row['letter'], implode(', ', $actual), implode(', ', $expected)), $this->getSession()->getDriver());
+      }
+    }
+  }
+
+  /**
    * Sets a collection on content that requires one.
    *
    * Some tests deal with collection content but don't care about which
