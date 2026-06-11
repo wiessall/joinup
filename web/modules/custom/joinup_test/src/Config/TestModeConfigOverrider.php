@@ -27,6 +27,14 @@ class TestModeConfigOverrider implements ConfigFactoryOverrideInterface {
         'video_popup' => FALSE,
       ],
     ],
+    TestMode::Behat->value => [
+      'user.role.authenticated' => [
+        'dependencies' => [
+          'module' => ['content_translation'],
+        ],
+        'permissions' => ['translate editable entities'],
+      ],
+    ],
   ];
 
   /**
