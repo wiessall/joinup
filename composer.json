@@ -152,7 +152,6 @@
         "openeuropa/oe_dashboard_agent": "^1.0",
         "openeuropa/oe_webtools": "^1.40",
         "psr/http-factory-implementation": "^1.0",
-        "semiceu/adms-ap_validator": "^1.0",
         "sweetrdf/easyrdf": "^1.9",
         "symfony/http-client": "^6.4",
         "turbojettechnologies/colorbox": "^1.7.0"
@@ -551,18 +550,6 @@
         {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "semiceu/adms-ap_validator",
-                "version": "1.0.0-alpha1",
-                "source": {
-                    "url": "git@github.com:SEMICeu/adms-ap_validator.git",
-                    "type": "git",
-                    "reference": "master"
-                }
-            }
         },
         {
             "type": "package",
