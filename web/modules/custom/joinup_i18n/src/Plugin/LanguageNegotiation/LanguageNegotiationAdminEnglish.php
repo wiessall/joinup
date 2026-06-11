@@ -8,6 +8,7 @@ use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\language\Attribute\LanguageNegotiation;
 use Drupal\language\LanguageNegotiationMethodBase;
+use Joinup\TestModeManager;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -33,7 +34,15 @@ class LanguageNegotiationAdminEnglish extends LanguageNegotiationMethodBase {
    * {@inheritdoc}
    */
   public function getLangcode(?Request $request = NULL): ?string {
-    return $this->currentUser->hasPermission('view admin pages in preferred language') ? NULL : 'en';
+    $langcode = 'en';
+
+    if (
+      $this->currentUser->hasPermission('view admin pages in preferred language') ||
+      TestModeManager::isActive()
+    ) {
+      $langcode = NULL;
+    }
+    return $langcode;
   }
 
 }
