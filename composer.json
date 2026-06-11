@@ -152,7 +152,6 @@
         "openeuropa/oe_dashboard_agent": "^1.0",
         "openeuropa/oe_webtools": "^1.40",
         "psr/http-factory-implementation": "^1.0",
-        "semiceu/adms-ap_validator": "^1.0",
         "sweetrdf/easyrdf": "^1.9",
         "symfony/http-client": "^6.4",
         "turbojettechnologies/colorbox": "^1.7.0"
@@ -468,7 +467,8 @@
             },
             "drupal/private_message": {
                 "Missing langcode in private_message.settings @see https://www.drupal.org/i/3542616": "resources/patch/php/drupal/private_message/3542616.diff",
-                "Drupal 11 deprecation: Renderer::render(NULL) @see https://www.drupal.org/i/3565601": "resources/patch/php/drupal/private_message/3565601.mr210-commit4be8b7a9.diff"
+                "Drupal 11 deprecation: Renderer::render(NULL) @see https://www.drupal.org/i/3565601": "resources/patch/php/drupal/private_message/3565601.mr210-commit4be8b7a9.diff",
+                "Inbox thread ordering is non-deterministic when two threads share the same updated timestamp @see https://www.drupal.org/i/3593914": "resources/patch/php/drupal/private_message/3593914.mr212-commita1374a8a.diff"
             },
             "drupal/purge_users": {
                 "Users are deleted without prior notification when \"Notification User Before Deletion\" is enabled @see https://www.drupal.org/i/3521201": "resources/patch/php/drupal/purge_users/3521201.diff",
@@ -550,18 +550,6 @@
         {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "semiceu/adms-ap_validator",
-                "version": "1.0.0-alpha1",
-                "source": {
-                    "url": "git@github.com:SEMICeu/adms-ap_validator.git",
-                    "type": "git",
-                    "reference": "master"
-                }
-            }
         },
         {
             "type": "package",

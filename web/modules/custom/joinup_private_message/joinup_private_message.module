@@ -188,17 +188,13 @@ function joinup_private_message_form_private_message_add_form_alter(array &$form
  *   Form state.
  */
 function joinup_private_message_create_ajax_callback(array &$form, FormStateInterface $form_state): array|AjaxResponse {
-  $response = new AjaxResponse();
-
   if ($form_state->hasAnyErrors()) {
     return $form;
   }
-
   $url = Url::fromRoute('private_message.private_message_page');
-
+  $response = new AjaxResponse();
   $response->addCommand(new CloseModalDialogCommand());
   $response->addCommand(new RedirectCommand($url->toString()));
-
   return $response;
 }
 
