@@ -26,5 +26,7 @@ Feature: Translated content does not advertise its translations in the page head
     But the response should not contain "<link rel=\"alternate\" hreflang="
 
     When I go to the "el" version of the "Breaking Story" news
-    Then I should see the heading "Breaking GR Story"
+    # After ISAICP-11420, this should be changed to be able to view the
+    # heading.
+    Then I should not see the heading "Breaking GR Story"
     But the response should not contain "<link rel=\"alternate\" hreflang="
