@@ -116,9 +116,6 @@ class JoinupOssCatalogueHooks {
       return AccessResult::neutral();
     }
     $entity = $items->getEntity();
-    if ($entity === NULL) {
-      return AccessResult::neutral();
-    }
     foreach ($items as $item) {
       if ($item->type === ValidationIssueType::Error->value) {
         return AccessResult::neutral()
