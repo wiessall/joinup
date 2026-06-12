@@ -60,11 +60,12 @@ class ShareForm extends ShareFormBase {
    */
   public function doBuildForm(array $form, FormStateInterface $form_state, ?FieldableEntityInterface $entity = NULL): array {
     $this->entity = $entity;
-    assert($entity instanceof ShareableContentInterface);
-    $groups = $this->shareableContentManager->getShareableGroups($entity);
-    $notification = $entity instanceof ShareableContentInterface
-      ? $this->entity->getSharingNotification()
-      : NULL;
+    $groups = NULL;
+    $notification = NULL;
+    if ($entity instanceof ShareableContentInterface) {
+      $groups = $this->shareableContentManager->getShareableGroups($entity);
+      $notification = $this->entity->getSharingNotification();
+    }
     if ($groups && $notification) {
       $form['notification'] = [
         '#type' => 'html_tag',

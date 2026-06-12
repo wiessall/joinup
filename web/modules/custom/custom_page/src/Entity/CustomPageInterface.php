@@ -10,7 +10,6 @@ use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_core\Entity\PermalinkInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
-use Drupal\joinup_group\Entity\ShareableContentInterface;
 use Drupal\joinup_group\GroupArchivableEntityInterface;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
@@ -21,7 +20,7 @@ use Drupal\topic\Entity\TopicReferencingEntityInterface;
 /**
  * Interface for content page node entities.
  */
-interface CustomPageInterface extends NodeInterface, GroupContentInterface, CollectionContentInterface, EntityPublicationTimeInterface, LogoInterface, DescriptionInterface, EntityWorkflowStateInterface, ArchivableEntityInterface, GroupArchivableEntityInterface, TopicReferencingEntityInterface, PermalinkInterface, AbstractInterface, ShareableContentInterface {
+interface CustomPageInterface extends NodeInterface, GroupContentInterface, CollectionContentInterface, EntityPublicationTimeInterface, LogoInterface, DescriptionInterface, EntityWorkflowStateInterface, ArchivableEntityInterface, GroupArchivableEntityInterface, TopicReferencingEntityInterface, PermalinkInterface, AbstractInterface {
 
   /**
    * Checks if this custom page is set as a landing page of the group.
