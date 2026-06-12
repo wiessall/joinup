@@ -78,7 +78,7 @@ Feature: Translating glossary
       | Power  | fr       | Énergie |
     And I am logged in as a user with the "moderator" role
 
-    # English: each term is indexed by the first letter of its English title.
+    # Test glossary output in EN.
     When I go to the homepage of the "Data Glossary" collection
     And I click "Glossary"
     Then I should see the glossary navigator "3 E O P Σ"
@@ -90,9 +90,7 @@ Feature: Translating glossary
       | P      | Power       |
       | Σ      | Σύστημα     |
 
-    # French: the translated term moves to E (the accented É is transliterated
-    # to E) and merges with the untranslated "Eurostat" fallback; non-Latin,
-    # digit and other Latin terms keep their own letter.
+    # Test glossary output in FR.
     When I switch to the "fr" language
     Then I should see the glossary navigator "3 E O Σ"
     And the glossary should be grouped as:
@@ -102,8 +100,6 @@ Feature: Translating glossary
       | O      | Øresund           |
       | Σ      | Σύστημα           |
     But I should not see the link "Power"
-
-    # Clicking E matches both the accented title and the fallback term.
     When I click "E"
     Then I should see the link "Énergie"
     And I should see the link "Eurostat"

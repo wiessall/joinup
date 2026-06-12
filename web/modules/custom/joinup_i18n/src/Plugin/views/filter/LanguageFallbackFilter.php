@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_i18n\Plugin\views\filter;
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\views\Attribute\ViewsFilter;
@@ -31,7 +30,6 @@ class LanguageFallbackFilter extends FilterPluginBase {
     string $plugin_id,
     array $plugin_definition,
     protected readonly LanguageManagerInterface $languageManager,
-    protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
@@ -45,7 +43,6 @@ class LanguageFallbackFilter extends FilterPluginBase {
       $plugin_id,
       $plugin_definition,
       $container->get('language_manager'),
-      $container->get('entity_type.manager'),
     );
   }
 
@@ -72,9 +69,13 @@ class LanguageFallbackFilter extends FilterPluginBase {
       return;
     }
 
+    $entity_type = $this->view->getBaseEntityType();
+    if (!$entity_type) {
+      return;
+    }
+
     $this->ensureMyTable();
 
-    $entity_type = $this->entityTypeManager->getDefinition($this->getEntityType());
     $id = $entity_type->getKey('id');
     $langcode = $entity_type->getKey('langcode');
     $default_langcode = $entity_type->getKey('default_langcode');
