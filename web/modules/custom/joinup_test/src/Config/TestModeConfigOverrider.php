@@ -30,9 +30,9 @@ class TestModeConfigOverrider implements ConfigFactoryOverrideInterface {
     TestMode::Behat->value => [
       'user.role.authenticated' => [
         'dependencies' => [
-          'module' => ['content_translation'],
+          'module' => ['content_translation' => 'content_translation'],
         ],
-        'permissions' => ['translate editable entities'],
+        'permissions' => ['translate editable entities' => 'translate editable entities'],
       ],
     ],
   ];
