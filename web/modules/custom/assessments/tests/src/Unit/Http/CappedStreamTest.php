@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\Unit\Http;
 
-use Drupal\Tests\UnitTestCase;
 use Drupal\assessments\Http\CappedStream;
 use Drupal\assessments\Http\MaxDownloadSizeExceededException;
+use Drupal\Tests\UnitTestCase;
 use GuzzleHttp\Psr7\Utils;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;

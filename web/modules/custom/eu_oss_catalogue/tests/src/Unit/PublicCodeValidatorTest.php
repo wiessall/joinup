@@ -6,9 +6,9 @@ namespace Drupal\Tests\eu_oss_catalogue\Unit;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
-use Drupal\Tests\UnitTestCase;
-use Drupal\Tests\eu_oss_catalogue\Traits\SimpleResponseMockTrait;
 use Drupal\eu_oss_catalogue\Validator\PublicCodeValidator;
+use Drupal\Tests\eu_oss_catalogue\Traits\SimpleResponseMockTrait;
+use Drupal\Tests\UnitTestCase;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;

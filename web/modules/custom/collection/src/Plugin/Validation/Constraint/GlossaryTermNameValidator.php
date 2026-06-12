@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\collection\Plugin\Validation\Constraint;
 
+use Drupal\collection\Entity\GlossaryTermInterface;
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\collection\Entity\GlossaryTermInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 

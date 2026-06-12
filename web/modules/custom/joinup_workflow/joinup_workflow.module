@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityPublishedInterface;
@@ -15,7 +16,6 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
