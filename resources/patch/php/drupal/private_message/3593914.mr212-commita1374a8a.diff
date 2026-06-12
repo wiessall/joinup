@@ -1,0 +1,179 @@
+diff --git a/src/Service/PrivateMessageService.php b/src/Service/PrivateMessageService.php
+index a6e41a7646aa4052f2182adf30dcac09283b9c37..e69be32831962892d788f6f85d42901d3acf2670 100644
+--- a/src/Service/PrivateMessageService.php
++++ b/src/Service/PrivateMessageService.php
+@@ -445,6 +445,7 @@ class PrivateMessageService implements PrivateMessageServiceInterface {
+     $query->innerJoin('private_messages', 'messages', 'messages.id = thread_messages.private_messages_target_id AND thread_history.delete_timestamp <= messages.created');
+     $query->condition('thread.id', $bannedThreadsQuery, 'NOT IN');
+     $query->orderBy('thread.updated', 'desc');
++    $query->orderBy('thread.id', 'desc');
+     $query->range(0, 1);
+     $return = $query->execute()->fetchField();
+ 
+@@ -484,7 +485,7 @@ class PrivateMessageService implements PrivateMessageServiceInterface {
+ 
+     $query->groupBy('thread.id');
+     $query->orderBy('last_updated', 'desc');
+-    $query->orderBy('thread.id');
++    $query->orderBy('thread.id', 'desc');
+ 
+     if ($count > 0) {
+       $query->range(0, $count);
+@@ -562,6 +563,7 @@ class PrivateMessageService implements PrivateMessageServiceInterface {
+     $query->innerJoin('private_messages', 'messages', 'messages.id = thread_messages.private_messages_target_id AND thread_history.delete_timestamp <= messages.created');
+     $query->condition('thread.id', $bannedThreadsQuery, 'NOT IN');
+     $query->orderBy('thread.updated', 'desc');
++    $query->orderBy('thread.id', 'desc');
+     $query->groupBy('thread.id');
+ 
+     if (count($existingThreadIds)) {
+diff --git a/tests/src/Kernel/InboxThreadOrderTest.php b/tests/src/Kernel/InboxThreadOrderTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..e21f6143761eaf52ba8be9580a0ca49c320703a4
+--- /dev/null
++++ b/tests/src/Kernel/InboxThreadOrderTest.php
+@@ -0,0 +1,144 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\private_message\Kernel;
++
++use Drupal\KernelTests\KernelTestBase;
++use Drupal\Tests\private_message\Traits\PrivateMessageTestTrait;
++use Drupal\private_message\Entity\PrivateMessageThreadInterface;
++use Drupal\private_message\Service\PrivateMessageServiceInterface;
++
++/**
++ * Tests inbox thread ordering when two threads share the same updated second.
++ *
++ * @group private_message
++ */
++final class InboxThreadOrderTest extends KernelTestBase {
++
++  use PrivateMessageTestTrait;
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = [
++    'field',
++    'filter',
++    'message',
++    'message_notify',
++    'private_message',
++    'private_message_notify',
++    'system',
++    'text',
++    'user',
++  ];
++
++  /**
++   * The older thread, shared by users a and b.
++   */
++  protected PrivateMessageThreadInterface $threadAB;
++
++  /**
++   * The newer thread, shared by users a and c.
++   */
++  protected PrivateMessageThreadInterface $threadAC;
++
++  /**
++   * The private message service.
++   */
++  protected PrivateMessageServiceInterface $privateMessageService;
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
++
++    $this->installEntitySchema('user');
++    $this->installEntitySchema('message');
++    $this->installEntitySchema('private_message_ban');
++    $this->installEntitySchema('private_message_thread');
++    $this->installEntitySchema('private_message');
++    $this->installSchema('private_message', ['pm_thread_history']);
++
++    $this->installConfig([
++      'filter',
++      'message',
++      'message_notify',
++      'private_message_notify',
++    ]);
++
++    $this->createTestingUsers(3);
++    $this->setCurrentUser($this->users['a']);
++
++    $this->threadAB = $this->createThreadWithMessages(
++      [$this->users['a'], $this->users['b']],
++      $this->users['b'],
++    );
++    $this->threadAC = $this->createThreadWithMessages(
++      [$this->users['a'], $this->users['c']],
++      $this->users['c'],
++    );
++
++    $sharedUpdated = max(
++      (int) $this->threadAB->get('updated')->value,
++      (int) $this->threadAC->get('updated')->value,
++    );
++    \Drupal::database()->update('private_message_threads')
++      ->fields(['updated' => $sharedUpdated])
++      ->condition('id', [$this->threadAB->id(), $this->threadAC->id()], 'IN')
++      ->execute();
++
++    $this->privateMessageService = \Drupal::service('private_message.service');
++  }
++
++  /**
++   * Asserts getThreadsForUser() returns the newer thread first on a tie.
++   */
++  public function testGetThreadIdsForUserPrefersNewerThreadOnUpdatedTie(): void {
++    $threads = $this->privateMessageService->getThreadsForUser(0);
++
++    $this->assertSame(
++      [(int) $this->threadAC->id(), (int) $this->threadAB->id()],
++      array_keys($threads['threads']),
++      'When two threads share the same updated second, the newer thread (higher id) must be returned first.',
++    );
++  }
++
++  /**
++   * Asserts getFirstThreadForUser() returns the newer thread on a tie.
++   */
++  public function testGetFirstThreadForUserPrefersNewerThreadOnUpdatedTie(): void {
++    $thread = $this->privateMessageService->getFirstThreadForUser($this->users['a']);
++
++    $this->assertSame(
++      (int) $this->threadAC->id(),
++      (int) $thread->id(),
++      'getFirstThreadForUser() must return the newer thread (higher id) when updated timestamps tie.',
++    );
++  }
++
++  /**
++   * Asserts getUpdatedInboxThreads() returns the newer thread first on a tie.
++   */
++  public function testGetUpdatedInboxThreadsPrefersNewerThreadOnUpdatedTie(): void {
++    $initial = $this->privateMessageService->getUpdatedInboxThreads([], 10);
++    $this->assertSame(
++      [(int) $this->threadAC->id(), (int) $this->threadAB->id()],
++      array_map('intval', $initial['thread_ids']),
++      'Initial inbox load must return the newer thread (higher id) first when updated timestamps tie.',
++    );
++
++    $existing = [
++      (int) $this->threadAB->id() => (int) $this->threadAB->get('updated')->value,
++      (int) $this->threadAC->id() => (int) $this->threadAC->get('updated')->value,
++    ];
++    $poll = $this->privateMessageService->getUpdatedInboxThreads($existing);
++    $this->assertSame(
++      [(int) $this->threadAC->id(), (int) $this->threadAB->id()],
++      array_map('intval', $poll['thread_ids']),
++      'Inbox AJAX poll must return the newer thread (higher id) first when updated timestamps tie.',
++    );
++  }
++
++}
