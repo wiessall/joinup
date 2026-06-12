@@ -166,7 +166,6 @@ hidden:
   field_user_frequency: true
   langcode: true
   language: true
-  matomo: true
   private_messages: true
   timezone: true
   uuid: true

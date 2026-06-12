@@ -316,40 +316,6 @@ class SolutionContext extends RawDrupalContext {
   }
 
   /**
-   * Checks that the given tile contains the given number of downloads.
-   *
-   * @param string $heading
-   *   Heading of the tile.
-   * @param int $count
-   *   Number of the downloads.
-   *
-   * @throws \Behat\Mink\Exception\ElementNotFoundException
-   *   Thrown when the tile is not found in the page.
-   */
-  #[Then('the :heading tile should show :count downloads')]
-  public function assertTileContainsDownloadCount(string $heading, int $count): void {
-    $tile = $this->getTileByHeading($heading);
-    $elements = $tile->findAll('xpath', "//span[contains(text(), '$count')]");
-    $this->assertCount(1, $elements);
-  }
-
-  /**
-   * Checks that the given tile contains a download icon.
-   *
-   * @param string $heading
-   *   Heading of the tile.
-   *
-   * @throws \Behat\Mink\Exception\ElementNotFoundException
-   *   Thrown when the tile is not found in the page.
-   */
-  #[Then('the download icon should not be shown in the :heading tile')]
-  public function assertTileNotContainsDownloadIcon(string $heading): void {
-    $tile = $this->getTileByHeading($heading);
-    $elements = $tile->findAll('xpath', '//span[contains(concat(" ", normalize-space(@class), " "), " icon--download ")]');
-    $this->assertCondition(empty($elements), 'The download icon should not be shown but it was found.');
-  }
-
-  /**
    * Checks that the attribute value is the one expected.
    *
    * @param string $attribute

@@ -86,7 +86,6 @@ hidden:
   contact: true
   description: true
   domain: true
-  download_total: true
   eif_perspective: true
   featured: true
   field_shared_in: true
