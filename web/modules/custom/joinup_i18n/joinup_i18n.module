@@ -104,24 +104,3 @@ function joinup_i18n_search_api_query_alter(QueryInterface $query): void {
     }
   }
 }
-
-/**
- * Implements hook_views_data_alter().
- *
- * Exposes the "language fallback" filter on every translatable content entity
- * data table.
- *
- * @see \Drupal\joinup_i18n\Plugin\views\filter\LanguageFallbackFilter
- */
-function joinup_i18n_views_data_alter(array &$data): void {
-  foreach (\Drupal::entityTypeManager()->getDefinitions() as $entity_type) {
-    $data_table = $entity_type->isTranslatable() ? $entity_type->getDataTable() : NULL;
-    if ($data_table && isset($data[$data_table])) {
-      $data[$data_table]['language_fallback'] = [
-        'title' => t('Language fallback'),
-        'help' => t('Keeps the current-language row, falling back to the default translation.'),
-        'filter' => ['id' => 'language_fallback'],
-      ];
-    }
-  }
-}
