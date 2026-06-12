@@ -1,0 +1,54 @@
+diff --git a/core/modules/views/src/Plugin/views/argument_default/QueryParameter.php b/core/modules/views/src/Plugin/views/argument_default/QueryParameter.php
+index bd7df1cd7cbdf343ef9744ab7defca5cc363b99c..c05690f53637cef3cd8d67c0b6695dbdae536b44 100644
+--- a/core/modules/views/src/Plugin/views/argument_default/QueryParameter.php
++++ b/core/modules/views/src/Plugin/views/argument_default/QueryParameter.php
+@@ -69,9 +69,9 @@ public function getArgument() {
+     // Convert a[b][c][d] into ['a', 'b', 'c', 'd'].
+     $path = array_filter(preg_split('#(\[|\]\[|\])#', $this->options['query_param']));
+ 
+-    if ($current_request->query->has($path[0])) {
+-      $query = $current_request->query->all();
+-      $param = NestedArray::getValue($query, $path);
++    $query = $current_request->query->all();
++    $param = NestedArray::getValue($query, $path, $key_exists);
++    if ($key_exists) {
+       if (is_array($param)) {
+         $conjunction = ($this->options['multiple'] == 'and') ? ',' : '+';
+         $param = implode($conjunction, $param);
+@@ -79,10 +79,9 @@ public function getArgument() {
+ 
+       return $param;
+     }
+-    else {
+-      // Otherwise, use the fixed fallback value.
+-      return $this->options['fallback'];
+-    }
++
++    // Otherwise, use the fixed fallback value.
++    return $this->options['fallback'];
+   }
+ 
+   /**
+diff --git a/core/modules/views/tests/src/Unit/Plugin/argument_default/QueryParameterTest.php b/core/modules/views/tests/src/Unit/Plugin/argument_default/QueryParameterTest.php
+index a3faa0bae729ed0cb9e8680b04c431859c7d63df..aa01a48595d76c193034607c0ba86569f259509f 100644
+--- a/core/modules/views/tests/src/Unit/Plugin/argument_default/QueryParameterTest.php
++++ b/core/modules/views/tests/src/Unit/Plugin/argument_default/QueryParameterTest.php
+@@ -99,6 +99,18 @@ public static function providerGetArgument(): array {
+       NULL,
+     ];
+ 
++    $data[] = [
++      ['query_param' => 'test[tier1][tier2]', 'fallback' => 'baz'],
++      new Request(['test' => ['tier1' => 'foo']]),
++      'baz',
++    ];
++
++    $data[] = [
++      ['query_param' => 'test[tier1][tier2]', 'fallback' => 'baz'],
++      new Request(['test' => ['test2' => 'foo']]),
++      'baz',
++    ];
++
+     return $data;
+   }
+ 
