@@ -22,7 +22,7 @@ Feature:
       | IT Feature 2         |
 
     # Ensures only the default translation URL is exposed.
-    Then I should see a "link[rel='alternate'][hreflang='en']" element
+    Then I should not see a "link[rel='alternate'][hreflang='en']" element
     And I should not see a "link[rel='alternate'][hreflang='it']" element
 
     Given I am logged in as a user with the "moderator" role
