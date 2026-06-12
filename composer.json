@@ -152,7 +152,6 @@
         "openeuropa/oe_dashboard_agent": "^1.0",
         "openeuropa/oe_webtools": "^1.40",
         "psr/http-factory-implementation": "^1.0",
-        "semiceu/adms-ap_validator": "^1.0",
         "sweetrdf/easyrdf": "^1.9",
         "symfony/http-client": "^6.4",
         "turbojettechnologies/colorbox": "^1.7.0"
@@ -361,6 +360,7 @@
                 "Slow admin/config page load. @see https://www.drupal.org/i/3336621": "resources/patch/php/drupal/core/3336621.mr15137-commit7b9c8c6a.patch",
                 "Exposed filters get values from url when ajax is on @see https://www.drupal.org/i/3121172": "resources/patch/php/drupal/core/3121172-mr10230-commit41ded0c5.diff",
                 "Follow-up for #2663410: calling TypedConfigManager::getDefinition() causes cache pollution": "resources/patch/php/drupal/core/3400181.mr15886-commit53fc6f75.diff",
+                "Views QueryParameter should apply default value if any parameter key is missing @see https://drupal.org/i/3593838": "resources/patch/php/drupal/core/3593838.mr15996-commit511cb7d5.diff",
                 "[site:url] token omits trailing slash in other languages @see https://www.drupal.org/i/2163913": "resources/patch/php/drupal/core/2163913.mr15511.commit58a97130.diff"
             },
             "drupal/default_content": {
@@ -551,18 +551,6 @@
         {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "semiceu/adms-ap_validator",
-                "version": "1.0.0-alpha1",
-                "source": {
-                    "url": "git@github.com:SEMICeu/adms-ap_validator.git",
-                    "type": "git",
-                    "reference": "master"
-                }
-            }
         },
         {
             "type": "package",
