@@ -111,7 +111,7 @@ final class GroupMenuLink extends MenuLinkBase implements ContainerFactoryPlugin
   /**
    * {@inheritdoc}
    */
-  public function getDescription(): ?string {
+  public function getDescription(): string {
     return '';
   }
 
