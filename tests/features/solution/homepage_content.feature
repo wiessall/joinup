@@ -17,15 +17,15 @@ Feature: Solution homepage
       | IS protocol archived | 0.1-rc         | 2018-10-04 8:06am | Release candidate.                          | Information sharing protocol | archived  | Belgium          |
       | Fireproof            | 0.1            | 2018-10-04 8:06am | First release for the firewall bypass tool. | Security audit tools         | published |                  |
     And the following "distribution" content:
-      | title               | description                                        | creation date     | resources        | solution                     | release           | downloads | state     |
-      | PDF version         | Pdf version of the paper.                          | 2018-10-04 8:07am | text.pdf         |                              | IS protocol paper | 589       | published |
-      | ZIP version         | Zip version of the paper.                          | 2018-10-04 8:04am | test.zip         |                              | IS protocol paper | 514       | published |
+      | title               | description                                        | creation date     | resources        | solution                     | release           | state     |
+      | PDF version         | Pdf version of the paper.                          | 2018-10-04 8:07am | text.pdf         |                              | IS protocol paper | published |
+      | ZIP version         | Zip version of the paper.                          | 2018-10-04 8:04am | test.zip         |                              | IS protocol paper | published |
       # One distribution directly attached to the "Information sharing protocol" solution.
-      | Protocol draft      | Initial draft of the protocol.                     | 2018-10-04 7:59am | http://a.b.c.pdf | Information sharing protocol |                   | 564       | published |
-      | Some archived dist. | Initial draft of the protocol.                     | 2018-10-04 7:59am | http://a.b.c.pdf | Information sharing protocol |                   | 0         | archived  |
-      | Source code         | Source code for the Fireproof tool.                | 2018-10-04 8:03am | test.zip         |                              | Fireproof         | 432       | published |
+      | Protocol draft      | Initial draft of the protocol.                     | 2018-10-04 7:59am | http://a.b.c.pdf | Information sharing protocol |                   | published |
+      | Some archived dist. | Initial draft of the protocol.                     | 2018-10-04 7:59am | http://a.b.c.pdf | Information sharing protocol |                   | archived  |
+      | Source code         | Source code for the Fireproof tool.                | 2018-10-04 8:03am | test.zip         |                              | Fireproof         | published |
       # One distribution directly attached to the "Security audit tools" solution.
-      | Code of Conduct     | Code of Conduct for contributing to this software. | 2018-10-04 8:14am | http://a.b/c.zip | Security audit tools         |                   | 740       | published |
+      | Code of Conduct     | Code of Conduct for contributing to this software. | 2018-10-04 8:14am | http://a.b/c.zip | Security audit tools         |                   | published |
     And the following "news" content:
       | title                       | body                                | created           | topic                   | spatial coverage | solution                     | state     |
       | IS protocol meet-up         | Discussion about the next standard. | 2018-10-04 8:02am | Statistics and Analysis | European Union   | Information sharing protocol | published |
@@ -57,25 +57,6 @@ Feature: Solution homepage
     And I should not see the "Code of Conduct" tile
     # Nor the solution itself should be shown.
     And I should not see the "Information sharing protocol" tile
-    And I should not see the text "Downloads: 1667"
-
-    # Test that the solution download counter is updating.
-    Given the download count of "PDF version" is 1589
-    When I reload the page
-    Then I should not see the text "Downloads: 1667"
-    But I should not see the text "Downloads: 2667"
-    # Reset all compounded distribution download counters to 0.
-    Given the download count of "PDF version" is 0
-    And the download count of "ZIP version" is 0
-    And the download count of "Protocol draft" is 0
-    When I reload the page
-    Then I should not see the text "Downloads: 2667"
-    # Restore counters to their original values.
-    Given the download count of "PDF version" is 589
-    And the download count of "ZIP version" is 514
-    And the download count of "Protocol draft" is 564
-    When I reload the page
-    Then I should not see the text "Downloads: 1667"
 
     # Test the filtering on the content type facet.
     When I click the Distribution content tab
@@ -103,4 +84,3 @@ Feature: Solution homepage
     And I should see the "Code of Conduct" tile
     But I should not see the "IS protocol paper 1" tile
     And I should not see the "Protocol draft" tile
-    And I should not see the text "Downloads: 1172"

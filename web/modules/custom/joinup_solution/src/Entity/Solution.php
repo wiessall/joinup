@@ -6,7 +6,6 @@ namespace Drupal\joinup_solution\Entity;
 
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\contact_information\Traits\ContactInformationTrait;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_bundle_class\AbstractTrait;
@@ -190,14 +189,6 @@ class Solution extends Node implements SolutionInterface {
       default:
         return $this->t('You are already subscribed to %group.', $parameters);
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getCacheTagsToInvalidate(): array {
-    $tags = $this->id() ? ['solution_download_count:' . md5($this->id())] : [];
-    return Cache::mergeTags(parent::getCacheTagsToInvalidate(), $tags);
   }
 
   /**

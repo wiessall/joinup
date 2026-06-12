@@ -5,16 +5,9 @@ dependencies:
   config:
     - node.type.solution
   module:
-    - joinup_stats
     - node
     - rdf_sync
 third_party_settings:
-  joinup_stats:
-    matomo_method: ''
-    parameter_name: ''
-    parameter_method: ''
-    period: 7
-    type: null
   rdf_sync:
     type: 'http://data.europa.eu/eif/adms/PerspectiveEIF'
     uri_plugin: eif_perspective
