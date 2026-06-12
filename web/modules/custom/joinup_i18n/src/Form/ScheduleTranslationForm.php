@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_i18n\Form;
 
+use Drupal\assessments\AssessmentInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\DependencyInjection\AutowireTrait;
@@ -87,6 +88,8 @@ class ScheduleTranslationForm extends FormBase {
       ->condition('type', 'collection')
       ->condition('status', 1)
       ->condition('field_state', 'archived', '<>')
+      // Don't translate this special collection.
+      ->condition('uuid', AssessmentInterface::SOLUTION_COLLECTOR, '<>')
       ->sort('title')
       ->execute();
 
