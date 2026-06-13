@@ -7,8 +7,11 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\search_api\Query\ConditionGroup;
 use Drupal\search_api\Query\QueryInterface;
@@ -24,28 +27,29 @@ function joinup_i18n_module_implements_alter(array &$implementations, string $ho
 }
 
 /**
- * Implements hook_page_attachments_alter().
+ * Implements hook_entity_access().
  *
- * The content_translation module adds, for every available translation of the
- * entity being viewed, an alternate hreflang <link> tag in the page <head>
- * pointing to the translated canonical URL. Joinup does not want to advertise
- * those translation URLs, so strip them out.
+ * Restricts viewing of the non-default (translated) versions of content
+ * entities to users holding the "view content translations" permission. The
+ * default (original) translation - typically English - stays publicly
+ * accessible.
+ *
+ * As a side effect this keeps translated content from being advertised to
+ * anonymous users and crawlers: content_translation only renders an alternate
+ * hreflang <link> tag for translations the current user is allowed to view, so
+ * forbidding the translations here removes their hreflang links from the page
+ * head without having to strip them after the fact.
  *
  * @see \Drupal\content_translation\Hook\ContentTranslationHooks::pageAttachments()
  */
-function joinup_i18n_page_attachments_alter(array &$attachments): void {
-  if (empty($attachments['#attached']['html_head_link'])) {
-    return;
+function joinup_i18n_entity_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
+  if ($operation !== 'view' || !$entity instanceof ContentEntityInterface || $entity->isDefaultTranslation()) {
+    return AccessResult::neutral();
   }
 
-  $attachments['#attached']['html_head_link'] = array_values(array_filter(
-    $attachments['#attached']['html_head_link'],
-    static function (array $link): bool {
-      $attributes = $link[0] ?? [];
-      // Keep every link except the alternate hreflang ones.
-      return ($attributes['rel'] ?? NULL) !== 'alternate' || !isset($attributes['hreflang']);
-    },
-  ));
+  return AccessResult::forbiddenIf(!$account->hasPermission('view content translations'))
+    ->cachePerPermissions()
+    ->addCacheableDependency($entity);
 }
 
 /**

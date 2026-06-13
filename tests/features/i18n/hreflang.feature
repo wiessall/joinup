@@ -1,11 +1,11 @@
 @api @group-g
-Feature: Translated content does not advertise its translations in the page head.
+Feature: Translations are restricted and not advertised to anonymous users.
   In order to avoid exposing translation URLs to crawlers
   As the site owner
-  I do not want alternate hreflang <link> tags rendered in the page head for
-  translated content.
+  I do not want content translations to be viewable by - or advertised through
+  alternate hreflang <link> tags to - users without permission.
 
-  Scenario: A translated news page has no alternate hreflang links in the head.
+  Background:
     Given the following "collection" content:
       | title        |
       | News Central |
@@ -16,17 +16,26 @@ Feature: Translated content does not advertise its translations in the page head
       | source         | language | title             |
       | Breaking Story | el       | Breaking GR Story |
 
+  Scenario: Anonymous users are not exposed to the Greek translation.
     When I am an anonymous user
     And I go to the "Breaking Story" news
     Then I should see the heading "Breaking Story"
-    # The content_translation module would otherwise add, for each available
-    # translation, a <link rel="alternate" hreflang="..."> tag pointing to the
-    # translated canonical URL.
-    # @see joinup_i18n_page_attachments_alter()
-    But the response should not contain "<link rel=\"alternate\" hreflang="
+    # The Greek translation is not viewable by anonymous users, so
+    # content_translation does not render an alternate hreflang link for it.
+    # @see joinup_i18n_entity_access()
+    But the response should not contain "<link rel=\"alternate\" hreflang=\"el\""
 
+    # Visiting the Greek URL falls back to English for anonymous users; the
+    # translation is never served and its hreflang link is never advertised.
     When I go to the "el" version of the "Breaking Story" news
-    # After ISAICP-11420, this should be changed to be able to view the
-    # heading.
-    Then I should not see the heading "Breaking GR Story"
-    But the response should not contain "<link rel=\"alternate\" hreflang="
+    Then I should see the heading "Breaking Story"
+    But the response should not contain "<link rel=\"alternate\" hreflang=\"el\""
+
+  Scenario: Moderators can view the Greek translation and its hreflang link.
+    When I am logged in as a moderator
+    And I go to the "Breaking Story" news
+    # Moderators hold the "view content translations" permission, so the
+    # alternate hreflang link to the Greek translation is advertised to them.
+    Then the response should contain "<link rel=\"alternate\" hreflang=\"el\""
+    When I go to the "el" version of the "Breaking Story" news
+    Then I should see the heading "Breaking GR Story"

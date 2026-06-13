@@ -21,8 +21,11 @@ Feature:
       | IT Feature 1         |
       | IT Feature 2         |
 
-    # Ensures only the default translation URL is exposed.
-    Then I should not see a "link[rel='alternate'][hreflang='en']" element
+    # Only the default (English) translation is advertised via hreflang. The
+    # Italian translation is restricted for anonymous users, so its hreflang
+    # link - and thus its URL - is not exposed to crawlers.
+    # @see joinup_i18n_entity_access()
+    Then I should see a "link[rel='alternate'][hreflang='en']" element
     And I should not see a "link[rel='alternate'][hreflang='it']" element
 
     Given I am logged in as a user with the "moderator" role
