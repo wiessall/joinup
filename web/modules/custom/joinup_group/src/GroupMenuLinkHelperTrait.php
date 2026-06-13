@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group;
 
+use Drupal\Core\Menu\Form\MenuLinkDefaultForm;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\GroupMenuLinkInterface;
@@ -58,11 +59,16 @@ trait GroupMenuLinkHelperTrait {
         'provider' => 'joinup_group',
         'menu_name' => "ogmenu-{$ogMenuInstance->id()}",
         'title' => $title,
+        'description' => '',
         'route_name' => $routeName,
         'route_parameters' => ['node' => $entity->id()],
         'parent' => $parent,
         'enabled' => $enabled,
         'weight' => $weight,
+        'expanded' => FALSE,
+        'options' => [],
+        'metadata' => [],
+        'form_class' => MenuLinkDefaultForm::class,
       ]);
     }
   }
