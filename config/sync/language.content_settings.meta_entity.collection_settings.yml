@@ -15,4 +15,4 @@ id: meta_entity.collection_settings
 target_entity_type_id: meta_entity
 target_bundle: collection_settings
 default_langcode: site_default
-language_alterable: true
+language_alterable: false
