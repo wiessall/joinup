@@ -10,6 +10,7 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\DependencyInjection\AutowireTrait;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
@@ -18,6 +19,7 @@ use Drupal\Core\Form\SubformState;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_assessment\AssessmentInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupManagerInterface;
 use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
 use Drupal\joinup_subscription\Plugin\Field\FieldType\EntityBundlePairItem;
@@ -40,6 +42,7 @@ class SubscriptionsForm extends FormBase {
     protected readonly JoinupGroupManagerInterface $groupManager,
     #[Autowire(service: 'og.membership_manager')]
     protected readonly MembershipManagerInterface $membershipManager,
+    protected readonly EntityRepositoryInterface $entityRepository,
   ) {}
 
   /**
@@ -140,11 +143,12 @@ class SubscriptionsForm extends FormBase {
       // Keep track of the groups with subscriptions in order to properly show
       // or hide the 'Unsubscribe from all' button in the end of the page.
       foreach ($memberships as $membership) {
-        /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
         $group = $membership->getGroup();
-        if ($group === NULL) {
+        if (!$group instanceof GroupInterface) {
           continue;
         }
+
+        $group = $this->entityRepository->getTranslationFromContext($group);
         $form['groups'][$group->id()] = [
           '#type' => 'container',
           '#id' => 'group-' . $group->id(),
