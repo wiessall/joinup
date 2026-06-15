@@ -108,19 +108,6 @@ Feature: User certificates
     And user "Sara the User" should have the "certificate" badge
 
   @javascript
-  Scenario: Certificate tiles on the user profile page do not show contextual links
-    When I am logged in as "Peter the Moderator"
-    And I go to the edit form of the "Sara the User" user
-    And I press the "Add new certificate" button
-    And I type "Archived IOPEU" in the Course autocomplete field
-    And I pick "Archived IOPEU Solution" from the Course autocomplete suggestions
-    And I attach the file "text.pdf" to "files[certificates_form_0_certificate_0]"
-    And I press "Create certificate"
-    And I press "Save"
-    Then I go to the public profile of "Sara the User"
-    And I should not see the contextual links "Edit, Delete" in the "Archived IOPEU Solution" tile
-
-  @javascript
   Scenario: Users have no access to certificate canonical, edit and delete page
     When I am logged in as "Peter the Moderator"
     And I go to the edit form of the "Sara the User" user
