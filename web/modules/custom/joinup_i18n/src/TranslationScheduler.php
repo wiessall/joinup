@@ -117,7 +117,7 @@ class TranslationScheduler {
 
         if (
           $entity instanceof SolutionInterface
-          && ($eifPerspective = $entity->get('solution_type')->entity)
+          && ($eifPerspective = $entity->get('eif_perspective')->entity)
           && static::hasTranslatableFields($eifPerspective)
         ) {
           // Add also the corresponding EIF perspective.
