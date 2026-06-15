@@ -826,6 +826,9 @@ function joinup_group_generate_share_link(EntityInterface $entity): array {
         'height' => 'auto',
       ]),
     ],
+    '#cache' => [
+      'contexts' => ['user'],
+    ],
     '#access' => $url->access(),
     '#attached' => ['library' => ['core/drupal.dialog.ajax']],
   ];
