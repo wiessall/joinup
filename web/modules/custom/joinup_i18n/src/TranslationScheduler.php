@@ -7,6 +7,7 @@ namespace Drupal\joinup_i18n;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\DependencyInjection\AutowireTrait;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -14,6 +15,7 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\node\NodeInterface;
+use Drupal\tmgmt_content\Plugin\tmgmt\Source\ContentEntitySource;
 
 /**
  * Builds batch operations for scheduling translation of a collection hierarchy.
@@ -104,14 +106,21 @@ class TranslationScheduler {
       tmgmt_content_create_continuous_job_items($entity);
 
       if ($entity instanceof GroupInterface) {
-        // Add also the corresponding group settings, if any.
         $fieldName = "{$entity->bundle()}_settings";
-        if ($settings = $entity->get($fieldName)->entity) {
+        if (
+          ($settings = $entity->get($fieldName)->entity)
+          && static::hasTranslatableFields($settings)
+        ) {
+          // Add also the corresponding group settings.
           tmgmt_content_create_continuous_job_items($settings);
         }
 
-        if ($entity instanceof SolutionInterface && ($eifPerspective = $entity->get('solution_type')->entity)) {
-          // Add also the corresponding EIF perspective, if any.
+        if (
+          $entity instanceof SolutionInterface
+          && ($eifPerspective = $entity->get('solution_type')->entity)
+          && static::hasTranslatableFields($eifPerspective)
+        ) {
+          // Add also the corresponding EIF perspective.
           tmgmt_content_create_continuous_job_items($eifPerspective);
         }
       }
@@ -168,6 +177,22 @@ class TranslationScheduler {
   public function getSentTimestamp(string $collectionId): ?int {
     $sent = $this->state->get(self::STATE_KEY, []);
     return $sent[$collectionId] ?? NULL;
+  }
+
+  /**
+   * Checks whether an entity has translatable fields.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+   *   The entity.
+   *
+   * @return bool
+   *   Whether an entity has translatable fields.
+   */
+  protected static function hasTranslatableFields(ContentEntityInterface $entity): bool {
+    $plugin = \Drupal::service('plugin.manager.tmgmt.source')->createInstance('content');
+    assert($plugin instanceof ContentEntitySource);
+    $data = $plugin->extractTranslatableData($entity);
+    return !empty(\Drupal::service('tmgmt.data')->filterTranslatable($data));
   }
 
 }
