@@ -16,8 +16,8 @@ use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
+use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
-use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\smart_trim\TruncateHTML;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
 use Drupal\user\UserInterface;
@@ -230,9 +230,9 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     case 'solution':
       // Add attributes that will allow JS to mark this tile as "Shared from".
       $node = $variables['node'];
-      if (!$node->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->isEmpty()) {
-        /** @var \Drupal\node\NodeInterface|null $parent */
-        $parent = $node->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->first()->entity;
+      $parent = JoinupGroupHelper::getGroup($node);
+      if ($parent !== NULL) {
+        $parent = \Drupal::service('entity.repository')->getTranslationFromContext($parent);
         $variables['attributes']['data-joinup-parent-id'] = $parent->id();
         $variables['attributes']['data-joinup-parent-label'] = $parent->label();
       }
