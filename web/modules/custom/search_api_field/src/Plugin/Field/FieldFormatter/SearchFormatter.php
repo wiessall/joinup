@@ -230,6 +230,7 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
       'search_api_field archived' => TRUE,
     ];
     $query = $this->getSearchApiIndex()->query($options);
+    $query->addCondition('language_with_fallback', $this->languageManager->getCurrentLanguage()->getId());
     $query->setSearchId($field_definition->id() . '.archived');
     $query->setParseMode($this->parseModeManager->createInstance('direct'));
 
