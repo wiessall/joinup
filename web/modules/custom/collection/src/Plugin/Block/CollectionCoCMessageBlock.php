@@ -117,6 +117,10 @@ class CollectionCoCMessageBlock extends BlockBase {
       return $build;
     }
 
+    /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
+    $entity_repository = \Drupal::service('entity.repository');
+    $collection = $entity_repository->getTranslationFromContext($collection);
+
     return [
       '#theme' => 'status_messages',
       '#message_list' => [
