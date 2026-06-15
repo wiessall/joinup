@@ -267,6 +267,35 @@ Feature:
     Then the url should match "/admin/homepage-topics"
 
   @javascript
+  Scenario: A topic landing shows untranslated content in another language.
+    Given the following "news" content:
+      | title         | headline      | collection     |
+      | Fallback News | Fallback News | Portal support |
+    And the following topics are enabled in the homepage:
+      | E-justice |
+    When I am logged in as a moderator
+    And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
+    And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
+      | layout position | 1                                       |
+      | region          | content                                 |
+      | Heading         | type: text - value: E-justice heading   |
+      | Action link     | type: text - value: http://example.com  |
+      | Link text       | type: text - value: E-justice link text |
+      | List style      | type: select - value: List              |
+      | Query presets   | type: text - value: entity_bundle\|news |
+    And I press "Save"
+    Then the url should match "/topic/law-and-justice/e-justice"
+    And I should see the "Fallback News" tile
+
+    When I switch to the "fr" language
+    Then the url should match "/fr/topic/law-and-justice/e-justice"
+    And I should see the "Fallback News" tile
+
+  @javascript
   Scenario: Long descriptions in topic inner page should be partially hidden.
     Given the following topics are enabled in the homepage:
       | Info                    |
