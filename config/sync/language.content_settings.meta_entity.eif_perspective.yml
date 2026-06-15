@@ -15,4 +15,4 @@ id: meta_entity.eif_perspective
 target_entity_type_id: meta_entity
 target_bundle: eif_perspective
 default_langcode: site_default
-language_alterable: true
+language_alterable: false

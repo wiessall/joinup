@@ -15,4 +15,4 @@ id: meta_entity.solution_settings
 target_entity_type_id: meta_entity
 target_bundle: solution_settings
 default_langcode: site_default
-language_alterable: true
+language_alterable: false
