@@ -17,9 +17,16 @@ class JoinupMediaGroupOrNull extends StringArgument {
   /**
    * {@inheritdoc}
    */
+  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName
+  public bool $is_default = FALSE;
+
+  /**
+   * {@inheritdoc}
+   */
   public function setArgument($arg): bool {
     if ($arg === $this->options['exception']['value_to_filter_for_null']) {
       $this->argument = FALSE;
+      $this->is_default = TRUE;
       return TRUE;
     }
     return parent::setArgument($arg);
