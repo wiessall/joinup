@@ -58,6 +58,21 @@ Feature: Views display translated entities correctly.
     And I click "Glossary"
     Then I should see the text "Alphabète"
 
+  Scenario: A collection content listing shows untranslated content in another language.
+    Given the following "collection" content:
+      | title        |
+      | Fallback Hub |
+    And the following "news" content:
+      | title             | headline   | body      | topic | collection   |
+      | Untranslated News | Just facts | News body | Info  | Fallback Hub |
+
+    When I am logged in as a moderator
+    And I go to the homepage of the "Fallback Hub" collection
+    Then I should see the "Untranslated News" tile
+
+    When I go to the "fr" version of the "Fallback Hub" collection
+    Then I should see the "Untranslated News" tile
+
   # covers latest_news view.
   # covers in_the_spotlight view.
   Scenario: News content is prepared for the latest news and in the spotlight blocks.
