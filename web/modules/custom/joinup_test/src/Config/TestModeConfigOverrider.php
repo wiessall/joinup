@@ -44,6 +44,16 @@ class TestModeConfigOverrider implements ConfigFactoryOverrideInterface {
           ],
         ],
       ],
+      'block.block.iop_language_picker' => [
+        'visibility' => [
+          'user_role' => [
+            'roles' => [
+              'authenticated' => 'authenticated',
+              'anonymous' => 'anonymous',
+            ],
+          ],
+        ],
+      ],
     ],
   ];
 
