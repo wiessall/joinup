@@ -10,6 +10,7 @@ use Drupal\Core\Config\ConfigInstallerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\language\ConfigurableLanguageInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\tmgmt\JobInterface;
@@ -19,6 +20,8 @@ use Drupal\tmgmt_ec_etranslation\Plugin\tmgmt\Translator\ETranslationTranslator;
  * Hook implementations for joinup_i18n.
  */
 final class JoinupI18nHooks {
+
+  use StringTranslationTrait;
 
   /**
    * The Babel OG Menu Link manager.
@@ -139,6 +142,24 @@ final class JoinupI18nHooks {
       $link->removeTranslation($langcode);
     }
     $link->save();
+  }
+
+  /**
+   * Implements hook_views_data_alter().
+   */
+  #[Hook('views_data_alter')]
+  public function viewsDataAlter(array &$data): void {
+    foreach ($this->entityTypeManager->getDefinitions() as $entity_type) {
+      $data_table = $entity_type->isTranslatable() ? $entity_type->getDataTable() : NULL;
+      if ($data_table && isset($data[$data_table])) {
+        $data[$data_table]['language_fallback'] = [
+          'title' => $this->t('Language fallback'),
+          'help' => $this->t('Keeps the current-language row, falling back to the default translation.'),
+          /* @see \Drupal\joinup_i18n\Plugin\views\filter\LanguageFallbackFilter */
+          'filter' => ['id' => 'language_fallback'],
+        ];
+      }
+    }
   }
 
 }
