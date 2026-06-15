@@ -28,6 +28,9 @@ function ventuno_preprocess_meta_entity(array &$variables): void {
 
   /** @var \Drupal\joinup_solution\Entity\SolutionInterface $solution */
   $solution = $meta_entity->getTargetEntity();
+  /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
+  $entity_repository = \Drupal::service('entity.repository');
+  $solution = $entity_repository->getTranslationFromContext($solution);
   $variables['solution_label'] = $solution->label();
   $variables['solution_url'] = $solution->toUrl()->setAbsolute()->toString();
   $route_parameters = ['meta_entity' => $meta_entity->id()];
