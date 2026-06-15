@@ -383,7 +383,10 @@ function _ventuno_get_event_location_label(bool $hasLocation, bool $hasOnline): 
 function _ventuno_terms_to_badges(array $terms, TranslatableMarkup $extraLabel, int $maxNumberOfBadges = 2): array {
   $badges = [];
 
+  /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
+  $entity_repository = \Drupal::service('entity.repository');
   foreach ($terms as $term) {
+    $term = $entity_repository->getTranslationFromContext($term);
     $badges[] = [
       'label' => $term->label(),
       'topic_id' => $term->id(),
