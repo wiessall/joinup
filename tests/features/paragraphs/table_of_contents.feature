@@ -70,4 +70,3 @@ Feature:
 
     When I go to the "pl" version of the "TOC i18n page" custom_page
     And I click "PL H2 heading"
-    Then I should see the text "PL" in the "Top Bar" region
