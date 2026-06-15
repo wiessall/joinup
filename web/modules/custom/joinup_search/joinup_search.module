@@ -148,10 +148,10 @@ function joinup_search_theme_suggestions_joinup_search_global_search(array $vari
  * Implements hook_form_alter().
  */
 function joinup_search_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
-  if ($form_id == 'views_exposed_form') {
+  if ($form_id === 'views_exposed_form') {
     $route_name = \Drupal::routeMatch()->getRouteName();
     $view = $form_state->getStorage('view');
-    if ($view['view']->id() == 'search' && $view['view']->current_display == 'page_1' && $route_name == 'view.search.page_1') {
+    if ($view['view']->id() === 'search' && $view['view']->current_display === 'page_1' && $route_name === 'view.search.page_1') {
       $form['results_count'] = [
         '#type' => 'item',
         '#weight' => 0,
@@ -159,29 +159,29 @@ function joinup_search_form_alter(&$form, FormStateInterface $form_state, $form_
       ];
     }
 
-    if ($view['view']->id() == 'search' && $view['view']->current_display == 'page_1' && $route_name != 'view.search.page_1') {
+    if ($view['view']->id() === 'search' && $view['view']->current_display === 'page_1' && $route_name !== 'view.search.page_1') {
       $group = \Drupal::service('og.context')->getGroup();
-      if ($group) {
-        /** @var \Drupal\Core\Entity\ContentEntityInterface $group */
-        if (in_array($group->bundle(), ['collection', 'solution'])) {
-          $form['filters'] = [
-            '#type' => 'hidden',
-            '#name' => 'f[]',
-            '#value' => 'group:' . $group->id(),
-            '#attributes' => [
-              'class' => [
-                'search_bar_badge',
-              ],
-              'data-joinup-description' => $group->label(),
+      if ($group instanceof GroupInterface) {
+        /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
+        $entity_repository = \Drupal::service('entity.repository');
+        $group = $entity_repository->getTranslationFromContext($group);
+        $form['filters'] = [
+          '#type' => 'hidden',
+          '#name' => 'f[]',
+          '#value' => 'group:' . $group->id(),
+          '#attributes' => [
+            'class' => [
+              'search_bar_badge',
             ],
-          ];
-          $form['list'] = [
-            '#theme' => 'joinup_search_filter',
-            '#name' => $group->label(),
-            '#bcl_icon_path' => base_path() . \Drupal::service('extension.path.resolver')->getPath('theme', 'ventuno') . '/assets/icons/icons.svg',
-            '#weight' => -5,
-          ];
-        }
+            'data-joinup-description' => $group->label(),
+          ],
+        ];
+        $form['list'] = [
+          '#theme' => 'joinup_search_filter',
+          '#name' => $group->label(),
+          '#bcl_icon_path' => base_path() . \Drupal::service('extension.path.resolver')->getPath('theme', 'ventuno') . '/assets/icons/icons.svg',
+          '#weight' => -5,
+        ];
       }
     }
   }
