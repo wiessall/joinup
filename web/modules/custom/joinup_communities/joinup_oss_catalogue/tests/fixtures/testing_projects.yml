@@ -6,6 +6,23 @@ cases:
     publiccodeYml: {  }
     langcode: en
 
+  No valid language in publiccode.yml:
+    publiccodeYml:
+      description:
+        ja:
+          longDescription: 'いいね'
+        th:
+          longDescription: 'เย็น'
+    langcode: en
+    # Update by removing Thai language and adding Korean.
+    publiccodeYmlUpdated:
+      description:
+        ja:
+          longDescription: 'いいね'
+        ko:
+          longDescription: '시원한'
+    langcodeUpdated: en
+
   Only one language in publiccode.yml:
     publiccodeYml:
       description:
