@@ -30,4 +30,20 @@ interface GlossaryTermInterface extends NodeInterface, CollectionContentInterfac
    */
   public function getSummary(): string;
 
+  /**
+   * Returns the uppercase letter the term is indexed under.
+   *
+   * Latin letters are transliterated to their base (e.g. "Élément" returns
+   * "E"); other scripts, digits and symbols are returned as-is. This matches
+   * the accent-insensitive collation of the title column, so the navigator and
+   * the grid grouping agree with the glossary contextual filter.
+   *
+   * @return string
+   *   The uppercase index letter.
+   *
+   * @see \Drupal\collection\Controller\GlossaryController::getGlossaryTermLetters()
+   * @see \Drupal\collection\Plugin\Field\FieldType\GlossaryLetterFieldItemList
+   */
+  public function getGlossaryLetter(): string;
+
 }
