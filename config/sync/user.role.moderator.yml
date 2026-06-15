@@ -351,6 +351,7 @@ permissions:
   - 'view approval_message'
   - 'view assessment listing'
   - 'view blocked_reason'
+  - 'view content translations'
   - 'view licence overview page'
   - 'view newsletter'
   - 'view own approval_message'
