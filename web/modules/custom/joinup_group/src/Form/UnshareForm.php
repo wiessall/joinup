@@ -136,7 +136,6 @@ class UnshareForm extends ShareFormBase {
    *   shared.
    */
   protected function getGroups(): array {
-    assert($this->entity instanceof ShareableContentInterface);
     $groups = $this->shareableContentManager->getAlreadySharedGroupIds($this->entity);
     if (empty($groups)) {
       return $groups;

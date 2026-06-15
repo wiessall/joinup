@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Form;
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -60,12 +62,9 @@ class ShareForm extends ShareFormBase {
    */
   public function doBuildForm(array $form, FormStateInterface $form_state, ?FieldableEntityInterface $entity = NULL): array {
     $this->entity = $entity;
-    $groups = NULL;
-    $notification = NULL;
-    if ($entity instanceof ShareableContentInterface) {
-      $groups = $this->shareableContentManager->getShareableGroups($entity);
-      $notification = $this->entity->getSharingNotification();
-    }
+    $groups = $this->shareableContentManager->getShareableGroups($entity);
+    $notification = $this->entity->getSharingNotification();
+
     if ($groups && $notification) {
       $form['notification'] = [
         '#type' => 'html_tag',
@@ -168,6 +167,34 @@ class ShareForm extends ShareFormBase {
   protected function shareOnGroups(array $groups): void {
     assert($this->entity instanceof ShareableContentInterface);
     $this->entity->shareWith($groups);
+  }
+
+  /**
+   * Access callback for the unshare form.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   The node entity.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result.
+   */
+  public function access(NodeInterface $node): AccessResultInterface {
+    $this->entity = $node;
+
+    $accessResult = AccessResult::allowedIf(
+      $node instanceof ShareableContentInterface &&
+      !empty($this->shareableContentManager->getShareableGroups($node))
+    );
+
+    $accessResult->addCacheableDependency($node);
+
+    if ($node instanceof ShareableContentInterface) {
+      $sharingMeta = $node->getSharingMetaEntity();
+      if (!$sharingMeta->isNew()) {
+        $accessResult->addCacheableDependency($sharingMeta);
+      }
+    }
+    return $accessResult;
   }
 
 }
