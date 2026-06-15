@@ -146,3 +146,18 @@ Feature: Joining and leaving collections through the web interface
     Then I should not see the link "Add members"
     When I go to the homepage of the "Open collection 2" collection
     Then I should see the "Join this community" button
+
+  @javascript
+  Scenario: The collection join messages use the translated collection label
+    Given the following "collection" content:
+      | title      |
+      | Stargazers |
+    And the following "collection" entity translations:
+      | source     | language | title               |
+      | Stargazers | fr       | Astronomes amateurs |
+    Given I am logged in as an "authenticated user"
+    When I go to the "fr" version of the "Stargazers" collection
+    And I press "Join this collection" in the "Header" region
+    Then I should see the success message "You are now a member of Astronomes amateurs."
+    And a modal should open
+    And I should see the text "Welcome to Astronomes amateurs" in the "Modal title"
