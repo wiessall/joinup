@@ -247,19 +247,17 @@ class BadgeHooks implements DestructableInterface {
    */
   #[Hook('preprocess_node__view_mode_tile')]
   public function preprocessCertificateTile(array &$variables): void {
-    if (($certificate = $variables['elements']['#node']) instanceof CertificateInterface) {
-      $fileUrl = $this->fileUrlGenerator->generateAbsoluteString($certificate->get('certificate')->entity?->getFileUri() ?? '');
-      $logo = $certificate->get('course')->entity?->get('logo');
-      $logoUrl = $this->fileUrlGenerator->generateAbsoluteString($logo?->entity->getFileUri() ?? '');
-      $logoAlt = $logo->first()->get('alt')->getString() ?? '';
-      $title = $certificate->get('course')->entity?->getTitle();
-      $issuing_date = $certificate->get('issuing_date')->value;
-      $variables['extra_data']['certificate']['file'] = $fileUrl;
-      $variables['extra_data']['certificate']['logo']['src'] = $logoUrl;
-      $variables['extra_data']['certificate']['logo']['alt'] = $logoAlt;
-      $variables['extra_data']['certificate']['title'] = $title;
-      $variables['extra_data']['certificate']['issuing_date'] = $issuing_date;
+    if (!($certificate = $variables['elements']['#node']) instanceof CertificateInterface) {
+      return;
     }
+    $logo = $certificate->get('course')->entity?->get('logo');
+    $variables['url'] = $this->fileUrlGenerator->generateAbsoluteString($certificate->get('certificate')->entity?->getFileUri() ?? '');
+    $variables['label'] = $certificate->get('course')->entity?->getTitle();
+    $variables['extra_data']['issuing_date'] = $certificate->get('issuing_date')->value;
+    $variables['extra_data']['logo'] = [
+      'src' => $this->fileUrlGenerator->generateAbsoluteString($logo?->entity?->getFileUri() ?? ''),
+      'alt' => $logo?->first()?->get('alt')?->getString() ?? '',
+    ];
   }
 
   /**

@@ -50,7 +50,7 @@ Feature: User certificates
     Then I should see the following tiles in the correct order:
       | Archived IOPEU Solution |
       | Portal support          |
-    Then the logo logo.png should be shown in the "Archived IOPEU Solution" certificate tile
+    Then the logo should be shown in the "Archived IOPEU Solution" certificate tile
     And  I see the text "Issuing date: 06/12/2026" in the "Archived IOPEU Solution" tile
     When I go to the edit form of the "Sara the User" user
     Then I should see the link "Archived IOPEU Solution"

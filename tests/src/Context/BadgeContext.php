@@ -125,16 +125,14 @@ class BadgeContext extends RawDrupalContext {
   /**
    * Asserts that certificate tile has the logo properly set.
    *
-   * @param string $logo
-   *   The logo file to inspect.
    * @param string $title
    *   The title of tile to inspect.
    *
    * @throws \Exception
    *   Thrown when the logo is not found or not correct.
    */
-  #[Then('the logo :logo should be shown in the :title certificate tile')]
-  public function assertCertificateTileHasLogo(string $logo, string $title): void {
+  #[Then('the logo should be shown in the :title certificate tile')]
+  public function assertCertificateTileHasLogo(string $title): void {
     // Retrieve the URL of the logo in the tile.
     $tile = $this->getTileByHeading($title);
     $actual_url = $tile->find('xpath', '//img')->getAttribute('src');

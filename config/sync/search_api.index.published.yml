@@ -14,7 +14,6 @@ dependencies:
     - field.storage.node.certificate
     - field.storage.node.classification
     - field.storage.node.contact
-    - field.storage.node.course
     - field.storage.node.description
     - field.storage.node.domain
     - field.storage.node.field_event_agenda
@@ -218,14 +217,6 @@ field_settings:
       fields:
         - 'entity:assessment/provider:entity:country'
         - 'entity:node/owner:entity:country'
-  course:
-    label: Course
-    datasource_id: 'entity:node'
-    property_path: course
-    type: integer
-    dependencies:
-      config:
-        - field.storage.node.course
   date:
     label: Date
     property_path: aggregated_field

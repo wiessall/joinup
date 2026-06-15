@@ -39,13 +39,6 @@
 {% set _extra_data = extra_data|default([]) %}
 {% set _bundle = bundle|default({}) %}
 {% set _indicators = indicators|default([]) %}
-{% set _certificate = extra_data['certificate'] %}
-{% if _certificate['file'] is not empty %}
-    {% set _url = _certificate['file'] %}
-{% endif %}
-{% if _certificate['title'] is not empty %}
-  {% set _label = _certificate['title'] %}
-{% endif %}
 
 
 {{ attach_library('ventuno/tile') }}
@@ -64,19 +57,14 @@
 
 {% if _image is empty %}
   {% set _image %}
-    {% if _certificate['logo'] is not empty %}
-      <img src="{{ _certificate['logo']['src'] }}"
-    {% if _certificate['logo']['alt'] is not empty %}
-      alt='{{ _certificate['logo']['alt']}}'
+    {% if extra_data['logo'] is not empty %}
+      <img src="{{ extra_data['logo']['src'] }}" alt='{{ extra_data['logo']['alt']}}'>
     {% endif %}
-      >
-    {%  else %}
         <div class="tile__default-img h-100 w-100 bg-secondary d-flex flex-column align-items-center justify-content-center position-relative">
           <svg class="tile__default-icon position-relative bi img-fluid">
             <use xlink:href="{{ bcl_icon_path }}#{{ _bundle.icon }}"></use>
           </svg>
         </div>
-    {% endif %}
   {% endset %}
 {% endif %}
 
@@ -84,7 +72,7 @@
   <article{{ _attributes.addClass(_classes) }}>
     {{- _title_prefix -}}
     {{- _title_suffix -}}
-    <a class="tile__link position-absolute top-0 end-0 bottom-0 start-0" href="{{ _url }}" title="{{ _certificate['file'] ? 'Open certificate (PDF)' |t : _label|render|striptags|trim|raw }}"></a>
+    <a class="tile__link position-absolute top-0 end-0 bottom-0 start-0" href="{{ _url }}" title="{{  extra_data['logo'] ? 'Open certificate (PDF)' |t : _label|render|striptags|trim|raw }}"></a>
     <figure class="tile__figure mb-0">
       {{- _image -}}
     </figure>
@@ -124,8 +112,8 @@
         {%- if _text is not empty -%}
           <div class="tile__text text-dark fs-sm my-1">{{- _text -}}</div>
         {%- endif -%}
-        {%-  if _certificate['issuing_date'] is not empty -%}
-          Issuing date: {{  _certificate['issuing_date'] |date('d/m/Y') }}
+        {%-  if  extra_data['issuing_date'] is not empty -%}
+          {{ 'Issuing date:'|t }} {{  extra_data['issuing_date'] |date('d/m/Y') }}
         {%- endif -%}
         {%- if _extra_data.submitter is not empty -%}
           <div class="tile__submitter">
