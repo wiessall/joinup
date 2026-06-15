@@ -34,6 +34,16 @@ class TestModeConfigOverrider implements ConfigFactoryOverrideInterface {
         ],
         'permissions' => ['translate editable entities' => 'translate editable entities'],
       ],
+      'block.block.ventuno_language_picker' => [
+        'visibility' => [
+          'user_role' => [
+            'roles' => [
+              'authenticated' => 'authenticated',
+              'anonymous' => 'anonymous',
+            ],
+          ],
+        ],
+      ],
     ],
   ];
 
