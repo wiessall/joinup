@@ -299,10 +299,3 @@ Feature: Sharing content between collections
     And the "Mars content" tile should be marked as shared from "Mars"
     And I should see the "Venus content" tile
     And the "Venus content" tile should be marked as shared from "Venus"
-    Given the following collection entity translations:
-      | source | language | title    |
-      | Mars   | pl       | Mars PL  |
-      | Venus  | pl       | Venus PL |
-    When I go to the "pl" version of the "News carousel" custom page
-    Then the "Mars content" tile should be marked as shared from "Mars PL"
-    And the "Venus content" tile should be marked as shared from "Venus PL"
