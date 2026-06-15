@@ -110,6 +110,24 @@ Feature: Tests the group landing page customization.
       | collection |
       | solution   |
 
+  Scenario: The landing page heading shows the custom page title in the current language.
+    Given the following "collection" content:
+      | title      |
+      | Stargazers |
+    And the following "custom_page" content:
+      | title     | collection | body                    |
+      | Night Sky | Stargazers | Content about the stars |
+    And the following "custom page" entity translations:
+      | source    | language | title         |
+      | Night Sky | fr       | Ciel nocturne |
+    Given I am logged in as a moderator
+    When I go to the homepage of the "Stargazers" collection
+    And I click "Settings"
+    And I select "Night Sky" from "Landing page"
+    And I press "Save"
+    When I go to the "fr" version of the "Stargazers" collection
+    Then I should see the heading "Ciel nocturne"
+
   Scenario: Do not allow to unpublish or delete a custom page set as landing page
     Given the following "collection" content:
       | title          |
