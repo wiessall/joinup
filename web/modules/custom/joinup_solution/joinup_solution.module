@@ -12,6 +12,7 @@ use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityMalformedException;
@@ -319,9 +320,11 @@ function joinup_solution_node_view(array &$build, NodeInterface $solution, Entit
   if ($display->getComponent('collections') && !$solution->get(OgGroupAudienceHelper::DEFAULT_FIELD)->isEmpty()) {
     $collection = $solution->get(OgGroupAudienceHelper::DEFAULT_FIELD)->first()->entity;
     assert($collection instanceof CollectionInterface);
-    $build['collections'] = [
-      'link' => $collection->toLink($collection->label())->toRenderable(),
-    ];
+    /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
+    $entity_repository = \Drupal::service('entity.repository');
+    $collection = $entity_repository->getTranslationFromContext($collection);
+    $build['collections'] = ['link' => $collection->toLink()->toRenderable()];
+    CacheableMetadata::createFromObject($collection)->applyTo($build['collections']);
   }
 
   // Read more link to the about page.
