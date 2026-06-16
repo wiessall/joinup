@@ -70,7 +70,7 @@ Feature: Proposing a collection
     And I should not see the text "Search keywords" in the "Content" region
     And I should not see the text "Some keyword" in the "Content" region
     And I should not see a logo on the header
-    And I should see "Thank you for proposing a collection. Your request is currently pending approval by the site administrator."
+    And I should see the text "Thank you for proposing a collection. Your request is currently pending approval by the site administrator."
 
     # The user that proposed the collection should be auto-subscribed.
     And the "Ancient and Classical Mythology" collection should have 1 active member

@@ -25,6 +25,7 @@ function ventuno_preprocess_node__solution__eif_perspective(array &$variables): 
     return;
   }
 
+  $meta_entity = \Drupal::service('entity.repository')->getTranslationFromContext($meta_entity);
   $eif_description = \Drupal::entityTypeManager()->getViewBuilder('meta_entity')->viewField($meta_entity->get('eif_description'));
   $variables['content']['eif_perspective_fields']['eif_description'] = $eif_description;
 }
@@ -47,6 +48,8 @@ function ventuno_preprocess_node__solution__view_mode_search_list_item(array &$v
   if (empty($eif_perspective)) {
     return;
   }
+
+  $eif_perspective = \Drupal::service('entity.repository')->getTranslationFromContext($eif_perspective);
 
   // Provides variables needed for the search_list_item view mode of licences.
   // This is used on the Joinup Licence Assistant overview page.

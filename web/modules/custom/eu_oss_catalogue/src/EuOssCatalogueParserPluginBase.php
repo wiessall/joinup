@@ -68,8 +68,8 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
     $solution = $solutions ? reset($solutions) : $nodeStorage->create(['type' => 'oss_solution']);
     \assert($solution instanceof OssSolutionInterface);
 
-    // Populate project metadata array. This array is used by some parsers to
-    // add metadata to the final stored node via resolvers.
+    // Populate the project metadata array. This array is used by some parsers
+    // to add metadata to the final stored node via resolvers.
     $metadata = $this->getMetadata($project);
 
     $latestReleaseDate = $project->latestReleaseDate ?
@@ -94,24 +94,25 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
       ->set('oss_git_open_pull_requests', $project->numberOfPullRequests)
       ->addProvider($provider);
 
-    $this->doParse($solution, $project, $metadata, $provider);
-
-    return $solution;
+    return $this->getProcessedSolution($solution, $project, $metadata, $provider);
   }
 
   /**
-   * Parses project data into the OSS Solution node.
+   * Populates the OSS solution with data from the project value object.
    *
    * @param \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $solution
-   *   The OSS Solution node.
+   *   The initial OSS solution node.
    * @param \Drupal\eu_oss_catalogue\Model\Project $project
    *   The project value object.
    * @param array $metadata
    *   The project's metadata.
    * @param \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider
    *   The provider plugin instance.
+   *
+   * @return \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface
+   *   The processed OSS solution node.
    */
-  abstract protected function doParse(OssSolutionInterface $solution, Project $project, array $metadata, EuOssCatalogueProviderInterface $provider): void;
+  abstract protected function getProcessedSolution(OssSolutionInterface $solution, Project $project, array $metadata, EuOssCatalogueProviderInterface $provider): OssSolutionInterface;
 
   /**
    * Configures and returns a resolver given its plugin ID and configuration.
@@ -188,11 +189,14 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
    *   The resolved value.
    * @param \Drupal\eu_oss_catalogue\EuOssCatalogueResolverInterface $resolver
    *   The resolver plugin instance.
+   * @param \Drupal\Core\Field\FieldItemListInterface $fieldItemList
+   *   The Drupal field item list instance. The method might need information
+   *   extracted form the field.
    *
    * @throws \Exception
    *   When the resolved value doesn't have a proper structure.
    */
-  protected function checkResolved(?array $resolved, EuOssCatalogueResolverInterface $resolver): void {
+  protected function checkResolved(?array $resolved, EuOssCatalogueResolverInterface $resolver, FieldItemListInterface $fieldItemList): void {
     if ($resolved === NULL) {
       // NULL is allowed.
       return;
@@ -200,7 +204,8 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
 
     // Check $resolved array structure.
     $allowedLanguages = array_keys($this->languageManager->getLanguages());
-    $defaultLanguage = $this->languageManager->getDefaultLanguage()->getId();
+    $defaultLanguage = $fieldItemList->getEntity()->getUntranslated()->language()->getId();
+
     // Replace default language with 'x-default'.
     $allowedLanguages = [
       ...array_diff($allowedLanguages, [$defaultLanguage]),

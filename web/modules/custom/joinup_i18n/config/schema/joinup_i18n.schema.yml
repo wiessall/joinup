@@ -1,0 +1,13 @@
+joinup_i18n.settings:
+  type: config_object
+  label: Joinup i18n settings
+  mapping:
+    tmgmt_content:
+      type: sequence
+      label: Entity types
+      sequence:
+        type: sequence
+        label: Entity bundles
+        sequence:
+          type: string
+          label: Entity bundle

@@ -1,0 +1,13 @@
+uuid: 0e0c7b7b-baac-4407-b394-20116e8a6916
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.distribution
+id: node.distribution
+targetEntityType: node
+bundle: distribution
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

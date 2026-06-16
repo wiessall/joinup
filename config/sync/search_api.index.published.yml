@@ -97,7 +97,7 @@ third_party_settings:
     multilingual:
       limit_to_content_language: false
       include_language_independent: true
-      use_language_undefined_as_fallback_language: false
+      use_language_undefined_as_fallback_language: true
       specific_languages:
         bg: '0'
         hr: '0'
@@ -531,6 +531,10 @@ field_settings:
         - field.storage.node.keywords
       module:
         - taxonomy
+  language_with_fallback:
+    label: 'Language (with fallback)'
+    property_path: language_with_fallback
+    type: string
   name:
     label: Name
     datasource_id: 'entity:taxonomy_term'

@@ -16,7 +16,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\Context\ContextDefinition;
 use Drupal\Core\Plugin\Context\EntityContextDefinition;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\custom_page\CustomPageOgMenuLinksManagerInterface;
+use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\og_menu\OgMenuInstanceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -65,7 +65,6 @@ class TableOfContentsOutline extends BlockBase implements ContainerFactoryPlugin
     array $configuration,
     string $plugin_id,
     mixed $plugin_definition,
-    protected readonly CustomPageOgMenuLinksManagerInterface $ogMenuManager,
     protected readonly MenuLinkTreeInterface $menuLinkTree,
     protected readonly MenuActiveTrailInterface $activeTrail,
   ) {
@@ -80,7 +79,6 @@ class TableOfContentsOutline extends BlockBase implements ContainerFactoryPlugin
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('custom_page.og_menu_links_manager'),
       $container->get('menu.link_tree'),
       $container->get('menu.active_trail'),
     );
@@ -197,9 +195,9 @@ class TableOfContentsOutline extends BlockBase implements ContainerFactoryPlugin
    */
   protected function getOgMenuInstance(): ?OgMenuInstanceInterface {
     if (empty($this->ogMenuInstance)) {
-      /** @var \Drupal\node\NodeInterface $custom_page */
       $custom_page = $this->getContext('node')->getContextData()->getValue();
-      $this->ogMenuInstance = $this->ogMenuManager->getOgMenuInstanceByCustomPage($custom_page, 'navigation');
+      assert($custom_page instanceof CustomPageInterface);
+      $this->ogMenuInstance = $custom_page->getGroup()->getGroupOgMenuInstance('navigation');
     }
     return $this->ogMenuInstance;
   }

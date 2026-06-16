@@ -12,7 +12,7 @@ bundle: event
 label: Abstract
 description: 'Short description text of the event, displayed in content tiles and search results.'
 required: true
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings: {  }

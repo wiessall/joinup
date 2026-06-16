@@ -22,7 +22,7 @@ dependencies:
     - field_group
     - joinup_core
     - layout_builder
-    - responsive_image
+    - svg_image_responsive
     - template_suggestion
     - user
 third_party_settings:
