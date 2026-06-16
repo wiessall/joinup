@@ -79,6 +79,21 @@ Feature: Translating releases
       | Flora Mod | Polish translation of the Release Zaktualizowane wydanie has been deleted.   |
       | Lee Facil | The content item Zaktualizowane wydanie Polish translation has been deleted. |
 
+  Scenario: The "Switch to the latest release" link points to the current language version.
+    Given the following "solution" content:
+      | title      | state     |
+      | Copernicus | published |
+    And the following "release" content:
+      | title         | is version of | state     | creation date    | release number |
+      | Copernicus v1 | Copernicus    | published | 01-01-2023 10:00 | 1.0            |
+      | Copernicus v2 | Copernicus    | published | 01-06-2023 10:00 | 2.0            |
+    And the following "release" entity translations:
+      | source        | language | title            |
+      | Copernicus v2 | fr       | Copernicus v2 FR |
+    When I go to the "fr" version of the "Copernicus v1" release
+    And I click "Switch to the latest release"
+    Then I should see the text "Copernicus v2 FR" in the "Page title" region
+
   Scenario: Default language of new node should be same as language of the interface
     Given the following "solution" content:
       | title           |
