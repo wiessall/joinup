@@ -108,6 +108,22 @@ Feature: User certificates
     And user "Sara the User" should have the "certificate" badge
 
   @javascript
+  Scenario: Certificate title is safely truncated when the course title exceeds the title field limit
+    Given the following solution content:
+      | title                                                                                                                                                                                                                                                      | collection                   | state     |
+      | Long Running Solution Title That Will Trigger Truncation In The Certificate Entity Bundle Class Because It Exceeds The Two Hundred And Thirty Three Character Limit For Course Titles In This Context And Therefore Absolutely Needs To Be Shortened Here! | Interoperable Europe Academy | published |
+    When I am logged in as "Peter the Moderator"
+    And I go to the edit form of the "Sara the User" user
+    And I press the "Add new certificate" button
+    And I type "Long Running Solution Title" in the Course autocomplete field
+    And I pick "Long Running Solution Title That Will Trigger Truncation In The Certificate Entity Bundle Class Because It Exceeds The Two Hundred And Thirty Three Character Limit For Course Titles In This Context And Therefore Absolutely Needs To Be Shortened Here!" from the Course autocomplete suggestions
+    And I attach the file "text.pdf" to "files[certificates_form_0_certificate_0]"
+    And I press "Create certificate"
+    And I press "Save"
+    Then I go to the profile of "Sara the User"
+    And I should see the link "1 Certificate"
+
+  @javascript
   Scenario: Users have no access to certificate canonical, edit and delete page
     When I am logged in as "Peter the Moderator"
     And I go to the edit form of the "Sara the User" user
