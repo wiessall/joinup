@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Drupal\joinup_paragraphs\Plugin\paragraphs\Behavior;
 
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
@@ -15,6 +17,7 @@ use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\Entity\ParagraphsType;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\paragraphs\ParagraphsBehaviorBase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a paragraphs behavior plugin for ToC.
@@ -30,6 +33,29 @@ class TableOfContentsBehavior extends ParagraphsBehaviorBase {
    * Default max heading level.
    */
   const string DEFAULT_MAX_LEVEL = 'h5';
+
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    mixed $plugin_definition,
+    EntityFieldManagerInterface $entity_field_manager,
+    protected EntityRepositoryInterface $entityRepository,
+  ) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_field_manager);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): static {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('entity_field.manager'),
+      $container->get('entity.repository'),
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -113,6 +139,7 @@ class TableOfContentsBehavior extends ParagraphsBehaviorBase {
       $level = $this->getLevel(
         $paragraph->getBehaviorSetting('heading_behavior', 'level', self::DEFAULT_MAX_LEVEL)
       );
+      $paragraph = $this->entityRepository->getTranslationFromContext($paragraph);
 
       return [
         'level' => $level - 1,

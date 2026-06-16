@@ -33,6 +33,7 @@ use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
+use Drupal\user\Entity\User;
 
 /**
  * Behat step definitions for testing solutions.
@@ -316,40 +317,6 @@ class SolutionContext extends RawDrupalContext {
   }
 
   /**
-   * Checks that the given tile contains the given number of downloads.
-   *
-   * @param string $heading
-   *   Heading of the tile.
-   * @param int $count
-   *   Number of the downloads.
-   *
-   * @throws \Behat\Mink\Exception\ElementNotFoundException
-   *   Thrown when the tile is not found in the page.
-   */
-  #[Then('the :heading tile should show :count downloads')]
-  public function assertTileContainsDownloadCount(string $heading, int $count): void {
-    $tile = $this->getTileByHeading($heading);
-    $elements = $tile->findAll('xpath', "//span[contains(text(), '$count')]");
-    $this->assertCount(1, $elements);
-  }
-
-  /**
-   * Checks that the given tile contains a download icon.
-   *
-   * @param string $heading
-   *   Heading of the tile.
-   *
-   * @throws \Behat\Mink\Exception\ElementNotFoundException
-   *   Thrown when the tile is not found in the page.
-   */
-  #[Then('the download icon should not be shown in the :heading tile')]
-  public function assertTileNotContainsDownloadIcon(string $heading): void {
-    $tile = $this->getTileByHeading($heading);
-    $elements = $tile->findAll('xpath', '//span[contains(concat(" ", normalize-space(@class), " "), " icon--download ")]');
-    $this->assertCondition(empty($elements), 'The download icon should not be shown but it was found.');
-  }
-
-  /**
    * Checks that the attribute value is the one expected.
    *
    * @param string $attribute
@@ -373,6 +340,33 @@ class SolutionContext extends RawDrupalContext {
     $actual = $field->getAttribute($attribute);
 
     $this->assertSameValues($expected, $actual);
+  }
+
+  /**
+   * Sets the interoperability to a given solution.
+   *
+   * @param string $title
+   *   The solution title.
+   *
+   * @throws \Exception
+   *   Thrown if a logged-in user was not found.
+  */
+  #[Then('I set interoperable flag to :title solution')]
+  public function setInteroperableFlagToSolution(string $title): void {
+    $entity = $this->getEntityByLabel('node', $title, 'solution');
+    /** @var \Drupal\flag\FlagServiceInterface $flagService */
+    $flagService = \Drupal::service('flag');
+    $flag = \Drupal::entityTypeManager()
+      ->getStorage('flag')
+      ->load('interoperability');
+
+    $user = $this->getUserManager()->getCurrentUser();
+    $account = User::load($user->getValue('uid'));
+    if ($account->isAnonymous()) {
+      throw new \Exception("No current logged in user.");
+    }
+
+    $flagService->flag($flag, $entity, $account);
   }
 
   /**

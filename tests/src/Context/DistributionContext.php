@@ -11,8 +11,6 @@ use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
-use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\file\FileInterface;
 use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
@@ -21,7 +19,6 @@ use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_distribution\Entity\DownloadEvent;
 use Drupal\link\LinkItemInterface;
-use Drupal\meta_entity\Entity\MetaEntity;
 
 /**
  * Behat step definitions for testing distributions.
@@ -32,30 +29,6 @@ class DistributionContext extends RawDrupalContext {
   use EntityTrait;
   use FileTrait;
   use JavascriptTrait;
-
-  /**
-   * Distribution specific alterations before creation.
-   *
-   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $event
-   *   The before node create event.
-   */
-  #[BeforeNodeCreate]
-  public function beforeNodeCreateDistributionFields(BeforeNodeCreateScope $event): void {
-    $node = $event->getStub();
-    if ($node->getBundle() !== 'distribution') {
-      return;
-    }
-
-    // Downloads are stored in a meta entity.
-    $downloads = $node->getValue('downloads');
-    if (!empty($downloads)) {
-      $node->setValue('download_count', MetaEntity::create([
-        'type' => 'download_count',
-        'count' => (int) $downloads,
-      ]));
-    }
-    $node->removeValue('downloads');
-  }
 
   /**
    * Checks if a distribution in compact view contains download links.

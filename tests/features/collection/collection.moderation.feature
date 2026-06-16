@@ -86,7 +86,7 @@ Feature: Collection moderation
       | Luck in the Abyss   | Velma Smith     |                                                   |
       | Deep Past           | Lena Richardson | Save as draft, Propose, Publish                   |
       | The Licking Silence | Lena Richardson | Propose, Save as draft, Publish                   |
-      | Person of Wizards   | Lena Richardson | Publish, Save as draft, Propose                   |
+      | Person of Wizards   | Lena Richardson | Publish, Save as draft, Propose, Archive          |
       | The Shard's Hunter  | Lena Richardson | Publish, Archive                                  |
       | Luck in the Abyss   | Lena Richardson |                                                   |
 
@@ -153,8 +153,8 @@ Feature: Collection moderation
     And I go to the "Person of Wizards" collection
     When I click "Edit"
     And I click "Delete"
-    Then I should see the heading "Are you sure you want to delete collection Person of Wizards?"
-    And I should see "This action cannot be undone."
+    Then I should see the heading "Are you sure you want to delete the content item Person of Wizards?"
+    And I should see the text "This action cannot be undone."
     When I press "Delete"
     Then I should be on the homepage
 

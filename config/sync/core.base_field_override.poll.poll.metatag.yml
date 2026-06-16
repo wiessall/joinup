@@ -1,0 +1,19 @@
+uuid: 25ba4047-0c2c-46ee-b10e-d12fce7c41cc
+langcode: en
+status: true
+dependencies:
+  module:
+    - metatag
+    - poll
+id: poll.poll.metatag
+field_name: metatag
+entity_type: poll
+bundle: poll
+label: 'Metatags (Hidden field for JSON support)'
+description: 'The computed meta tags for the entity.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: metatag_computed

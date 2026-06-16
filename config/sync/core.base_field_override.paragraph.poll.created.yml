@@ -1,0 +1,18 @@
+uuid: 51602df7-fd80-42cf-8d48-8ddd7764997f
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.poll
+id: paragraph.poll.created
+field_name: created
+entity_type: paragraph
+bundle: poll
+label: 'Authored on'
+description: 'The time that the Paragraph was created.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: created

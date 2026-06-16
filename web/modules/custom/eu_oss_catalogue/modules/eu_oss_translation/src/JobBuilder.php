@@ -59,7 +59,7 @@ readonly class JobBuilder implements JobBuilderInterface {
    *   True if it is being processed.
    */
   protected function isBeingProcessed(OssSolutionInterface $entity): bool {
-    $sourceLangCode = $entity->getRelevantLangCode();
+    $sourceLangCode = $entity->language()->getId();
 
     return tmgmt_job_item_load_latest('content', $entity->getEntityTypeId(), $entity->id(), $sourceLangCode) !== FALSE;
   }
@@ -74,7 +74,7 @@ readonly class JobBuilder implements JobBuilderInterface {
    *   True if a node needs translation.
    */
   protected function needsTranslation(OssSolutionInterface $entity): bool {
-    $sourceLangCode = $entity->getRelevantLangCode();
+    $sourceLangCode = $entity->language()->getId();
 
     if ($sourceLangCode === self::TARGET_LANGUAGE) {
       return FALSE;
@@ -107,7 +107,7 @@ readonly class JobBuilder implements JobBuilderInterface {
       /** @var \Drupal\tmgmt\JobInterface $job */
       $job = $jobStorage->create(
         [
-          'source_language' => $entity->getRelevantLangCode(),
+          'source_language' => $entity->language()->getId(),
           'target_language' => self::TARGET_LANGUAGE,
           'uid' => $this->currentUser->id(),
           'translator' => $config->get('translator'),

@@ -168,6 +168,10 @@ class DashboardForm extends FormBase {
         '#title' => $this->t('OAuth2 Client Requests'),
         '#url' => Url::fromRoute('view.oauth_client_request.admin_page'),
       ],
+      [
+        '#title' => $this->t('Schedule translation'),
+        '#url' => Url::fromRoute('joinup_i18n.schedule_translation'),
+      ],
     ];
 
     $links = array_map(function (array $link): array {

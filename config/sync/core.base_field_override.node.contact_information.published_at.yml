@@ -1,0 +1,20 @@
+uuid: 32dcdc25-6b1e-4ad2-9a68-1f8faa606376
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.contact_information
+  module:
+    - publication_date
+id: node.contact_information.published_at
+field_name: published_at
+entity_type: node
+bundle: contact_information
+label: 'Published on'
+description: 'Keep the publication timestamp for each node.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: published_at

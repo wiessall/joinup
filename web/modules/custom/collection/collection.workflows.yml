@@ -41,5 +41,5 @@ collection_workflow:
       to: archival_request
     archive:
       label: Archive
-      from: [archival_request]
+      from: [archival_request, published]
       to: archived

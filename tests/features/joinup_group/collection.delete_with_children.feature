@@ -21,7 +21,7 @@ Feature:
 
     Given I delete the "Child of collection with child" solution
     And I go to the delete form of the "Collection with child" collection
-    Then I should see the heading "Are you sure you want to delete collection Collection with child?"
+    Then I should see the heading "Are you sure you want to delete the content item Collection with child?"
     And I should see the text "This action cannot be undone."
     When I press "Delete"
     Then I should be on the homepage
