@@ -58,7 +58,7 @@
 {% if _image is empty %}
   {% set _image %}
     {% if extra_data['logo'] is not empty %}
-      <img src="{{ extra_data['logo']['src'] }}" alt='{{ extra_data['logo']['alt']}}'>
+      <img src="{{ extra_data['logo']['src'] }}" alt="{{ extra_data['logo']['alt']}}">
     {% endif %}
         <div class="tile__default-img h-100 w-100 bg-secondary d-flex flex-column align-items-center justify-content-center position-relative">
           <svg class="tile__default-icon position-relative bi img-fluid">
@@ -111,9 +111,6 @@
             </h3>
         {%- if _text is not empty -%}
           <div class="tile__text text-dark fs-sm my-1">{{- _text -}}</div>
-        {%- endif -%}
-        {%-  if  extra_data['issuing_date'] is not empty -%}
-          {{ 'Issuing date:'|t }} {{  extra_data['issuing_date'] |date('d/m/Y') }}
         {%- endif -%}
         {%- if _extra_data.submitter is not empty -%}
           <div class="tile__submitter">
