@@ -267,7 +267,7 @@ class BadgeHooks implements DestructableInterface {
     $variables['url'] = $this->fileUrlGenerator->generateAbsoluteString($certificate->get('certificate')->entity?->getFileUri() ?? '');
     $variables['label'] = $certificate->get('course')->entity?->getTitle();
     if (!empty($issuing_date)) {
-      $variables['info']['label'] = $this->t('Issuing date:') . $issuing_date;
+      $variables['info']['label'] = $this->t('Issuing date:') . ' ' . $issuing_date;
     }
     else {
       unset($variables['info']);
