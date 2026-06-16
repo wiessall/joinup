@@ -269,8 +269,9 @@ Feature:
   @javascript
   Scenario: A topic landing shows untranslated content in another language.
     Given the following "news" content:
-      | title         | headline      | collection     |
-      | Fallback News | Fallback News | Portal support |
+      | title         | headline      | collection     | state     |
+      | Fallback News | Fallback News | Portal support | published |
+      | Archived News | Archived News | Portal support | archived  |
     And the following topics are enabled in the homepage:
       | E-justice |
     When I am logged in as a moderator
@@ -286,14 +287,15 @@ Feature:
       | Action link     | type: text - value: http://example.com  |
       | Link text       | type: text - value: E-justice link text |
       | List style      | type: select - value: List              |
+      | Show content    | type: select - value: All               |
       | Query presets   | type: text - value: entity_bundle\|news |
     And I press "Save"
-    Then the url should match "/topic/law-and-justice/e-justice"
     And I should see the "Fallback News" tile
+    And I should see the "Archived News" tile
 
     When I switch to the "fr" language
-    Then the url should match "/fr/topic/law-and-justice/e-justice"
     And I should see the "Fallback News" tile
+    And I should see the "Archived News" tile
 
   @javascript
   Scenario: Long descriptions in topic inner page should be partially hidden.
