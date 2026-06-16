@@ -24,6 +24,65 @@ class TestModeConfigOverrider implements ConfigFactoryOverrideInterface {
     'language_alterable' => TRUE,
   ];
 
+  protected const array LANGUAGE_PICKER_CONFIG = [
+    'user.role.authenticated' => [
+      'dependencies' => [
+        'module' => ['content_translation' => 'content_translation'],
+      ],
+      'permissions' => ['translate editable entities' => 'translate editable entities'],
+    ],
+    'block.block.ventuno_language_picker' => [
+      'visibility' => [
+        'user_role' => [
+          'roles' => [
+            'authenticated' => 'authenticated',
+            'anonymous' => 'anonymous',
+          ],
+        ],
+      ],
+    ],
+    'block.block.iop_language_picker' => [
+      'visibility' => [
+        'user_role' => [
+          'roles' => [
+            'authenticated' => 'authenticated',
+            'anonymous' => 'anonymous',
+          ],
+        ],
+      ],
+    ],
+    'language.content_settings.assessment_statement.legal' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.assessment_statement.organisational' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.assessment_statement.semantic' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.assessment_statement.technical' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.menu_link_content.menu_link_content' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.meta_entity.collection_settings' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.meta_entity.eif_perspective' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.meta_entity.solution_settings' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.meta_entity.topic' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.node.collection' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.node.contact_information' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.node.custom_page' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.node.distribution' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.node.document' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.node.event' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.node.glossary' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.node.news' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.node.owner' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.node.release' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.node.solution' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.poll.poll' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.poll_choice.poll_choice' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.redirect.redirect' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.taxonomy_term.domain' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.taxonomy_term.language' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.taxonomy_term.owner_type' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.taxonomy_term.solution_classification' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.taxonomy_term.spatial' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.taxonomy_term.status' => self::LANGUAGE_ALTERABLE,
+    'language.content_settings.taxonomy_term.topic' => self::LANGUAGE_ALTERABLE,
+  ];
+
   /**
    * Config overrides to apply per test mode.
    */
@@ -33,65 +92,9 @@ class TestModeConfigOverrider implements ConfigFactoryOverrideInterface {
         'banner_popup' => FALSE,
         'video_popup' => FALSE,
       ],
-    ],
-    TestMode::Behat->value => [
-      'user.role.authenticated' => [
-        'dependencies' => [
-          'module' => ['content_translation' => 'content_translation'],
-        ],
-        'permissions' => ['translate editable entities' => 'translate editable entities'],
-      ],
-      'block.block.ventuno_language_picker' => [
-        'visibility' => [
-          'user_role' => [
-            'roles' => [
-              'authenticated' => 'authenticated',
-              'anonymous' => 'anonymous',
-            ],
-          ],
-        ],
-      ],
-      'block.block.iop_language_picker' => [
-        'visibility' => [
-          'user_role' => [
-            'roles' => [
-              'authenticated' => 'authenticated',
-              'anonymous' => 'anonymous',
-            ],
-          ],
-        ],
-      ],
-      'language.content_settings.assessment_statement.legal' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.assessment_statement.organisational' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.assessment_statement.semantic' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.assessment_statement.technical' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.menu_link_content.menu_link_content' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.meta_entity.collection_settings' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.meta_entity.eif_perspective' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.meta_entity.solution_settings' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.meta_entity.topic' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.node.collection' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.node.contact_information' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.node.custom_page' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.node.distribution' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.node.document' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.node.event' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.node.glossary' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.node.news' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.node.owner' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.node.release' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.node.solution' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.poll.poll' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.poll_choice.poll_choice' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.redirect.redirect' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.taxonomy_term.domain' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.taxonomy_term.language' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.taxonomy_term.owner_type' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.taxonomy_term.solution_classification' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.taxonomy_term.spatial' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.taxonomy_term.status' => self::LANGUAGE_ALTERABLE,
-      'language.content_settings.taxonomy_term.topic' => self::LANGUAGE_ALTERABLE,
-    ],
+    ] + self::LANGUAGE_PICKER_CONFIG,
+    TestMode::Behat->value => self::LANGUAGE_PICKER_CONFIG,
+    TestMode::PhpUnit->value => self::LANGUAGE_PICKER_CONFIG,
   ];
 
   /**
