@@ -57,3 +57,14 @@ Feature: Test global search in multilingual context
       | Genome base v1 | fr       | Base génomique v1 |
     When I visit "/fr/search?keys=Assistance centrale"
     Then I should see the "Base génomique v1" tile
+
+  Scenario: The group label in the search bar badge uses the current language.
+    Given the following "collection" content:
+      | title             | state     |
+      | Nordic collection | published |
+    And the following "collection" entity translations:
+      | source            | language | title               |
+      | Nordic collection | fr       | Collection nordique |
+    When I go to the "fr" version of the "Nordic collection" collection
+    Then the page should show the chips:
+      | Collection nordique |
