@@ -34,6 +34,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
     'label' => 'id',
     'uuid' => 'uuid',
     'bundle' => 'type',
+    'langcode' => 'langcode',
   ],
   handlers: [
     'access' => AssessmentStatementAccessControlHandler::class,
@@ -48,9 +49,13 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
   admin_permission: 'administer assessment statements',
   base_table: 'assessment_statement',
   data_table: 'assessment_statement_field_data',
+  translatable: TRUE,
   label_count: [
     'singular' => '@count assessment statement',
     'plural' => '@count assessment statements',
+  ],
+  additional: [
+    'content_translation_ui_skip' => TRUE,
   ],
 )]
 final class AssessmentStatement extends ContentEntityBase implements AssessmentStatementInterface {

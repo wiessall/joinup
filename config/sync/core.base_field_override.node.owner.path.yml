@@ -1,0 +1,20 @@
+uuid: 5ca6cfb2-68e5-4875-92c5-87a89d08b5c7
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.owner
+  module:
+    - path
+id: node.owner.path
+field_name: path
+entity_type: node
+bundle: owner
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path

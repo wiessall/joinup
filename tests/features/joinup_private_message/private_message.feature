@@ -53,8 +53,9 @@ Feature: Private messages
     And I pick "Joan Tiff" from the "Member" autocomplete suggestions
     And I fill in "Message" with "A private message from Bob to Joan."
     And I press "Send" in the "Modal buttons" region
-    And I wait for AJAX to finish
-    And I go to "/user/messages"
+    Then the modal should be closed
+    And I should be on "/user/messages"
+    And I wait until the page contains the text "A private message from Bob to Joan."
     And I see the following lines of text in the correct order in "Private messages inbox":
       | A private message from Bob to Joan.        |
       | Another private message from Bob to Alice. |
@@ -77,12 +78,12 @@ Feature: Private messages
 
     Given the limit for messages or threads allowed is 2
     When I click "New message"
-    Then I should see "Sorry, you have reached your limit for posting. Please try again later."
+    Then I should see the text "Sorry, you have reached your limit for posting. Please try again later."
     When I am on "/user/messages"
-    Then I should not see "Sorry, you have reached your limit for posting. Please try again later."
+    Then I should not see the text "Sorry, you have reached your limit for posting. Please try again later."
     And I fill in "Reply" with "This is a fail."
     And I press "Send"
-    Then I should see "Sorry, you have reached your limit for posting. Please try again later."
+    Then I should see the text "Sorry, you have reached your limit for posting. Please try again later."
     Then I restore the limit for messages or threads allowed
 
     # Test the relevant links.
@@ -93,7 +94,7 @@ Feature: Private messages
     And I click "My messages (1)"
     Then a message containing the text "Another private message from Bob to Alice." should be present
     And I should not see the link "Delete thread"
-    And I should not see "Delete message"
+    And I should not see the text "Delete message"
     And I should not visibly see the link "Inbox"
     When I click "Delete for me"
     Then a modal should open
@@ -185,8 +186,8 @@ Feature: Private messages
     And I click "New message"
     Then a modal should open
     When I press "Send" in the "Modal buttons" region
-    Then I should see "Invalid user." in the "Modal content" region
-    And I should see "Message field is required." in the "Modal content" region
+    Then I should see the text "Invalid user." in the "Modal content" region
+    And I should see the text "Message field is required." in the "Modal content" region
 
   @javascript
   Scenario: User can view a selected thread.

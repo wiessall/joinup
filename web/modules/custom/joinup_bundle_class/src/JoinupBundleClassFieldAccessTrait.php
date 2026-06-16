@@ -96,7 +96,7 @@ trait JoinupBundleClassFieldAccessTrait {
             $ids[$target_type][] = $target_id;
           }
         }
-        catch (MissingDataException $e) {
+        catch (MissingDataException) {
         }
       }
     }

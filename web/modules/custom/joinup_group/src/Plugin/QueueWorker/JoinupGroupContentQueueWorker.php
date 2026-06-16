@@ -8,6 +8,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\Attribute\QueueWorker;
+use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\Queue\QueueWorkerBase;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\pathauto\PathautoGeneratorInterface;
@@ -29,6 +30,7 @@ class JoinupGroupContentQueueWorker extends QueueWorkerBase implements Container
     mixed $plugin_definition,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly PathautoGeneratorInterface $aliasGenerator,
+    protected readonly QueueFactory $queueFactory,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
@@ -42,7 +44,8 @@ class JoinupGroupContentQueueWorker extends QueueWorkerBase implements Container
       $plugin_id,
       $plugin_definition,
       $container->get('entity_type.manager'),
-      $container->get('pathauto.generator')
+      $container->get('pathauto.generator'),
+      $container->get('queue'),
     );
   }
 
@@ -63,6 +66,12 @@ class JoinupGroupContentQueueWorker extends QueueWorkerBase implements Container
 
     // Regenerate the group content alias.
     $this->aliasGenerator->updateEntityAlias($entity, 'bulkupdate');
+
+    // Queue alias generation for all other languages.
+    $this->queueFactory->get('joinup_i18n:translation_alias')->createItem([
+      'entity_type_id' => $data['entity_type_id'],
+      'entity_id' => $data['entity_id'],
+    ]);
   }
 
 }
