@@ -161,3 +161,6 @@ Feature: Joining and leaving collections through the web interface
     Then I should see the success message "You are now a member of Astronomes amateurs."
     And a modal should open
     And I should see the text "Welcome to Astronomes amateurs" in the "Modal title"
+    When I check "Notify me when content is published in Astronomes amateurs"
+    And I press "Confirm" in the "Modal buttons" region
+    Then I should see the success message "You have been subscribed to Astronomes amateurs and will receive weekly notifications. To manage your notifications go to My subscriptions in your user menu."
