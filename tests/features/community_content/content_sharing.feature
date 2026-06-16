@@ -251,6 +251,41 @@ Feature: Sharing content between collections
       | news         | collection | Please note: You must be subscribed to the target space to share your content. Your news item will be shared on that space for one month. After that, it will be considered obsolete and will be automatically removed from that space. |
       | news         | solution   | Please note: You must be subscribed to the target space to share your content. Your news item will be shared on that space for one month. After that, it will be considered obsolete and will be automatically removed from that space. |
 
+  @javascript
+  Scenario: The share and unshare forms use the translated group name.
+    Given the following users:
+      | Username    |
+      | Sara Barber |
+    And the following "collection" content:
+      | title      |
+      | Stargazers |
+      | Space Lab  |
+    And the following "collection" entity translations:
+      | source     | language | title               |
+      | Stargazers | fr       | Astronomes amateurs |
+    And the following "document" content:
+      | title           | collection |
+      | Black Holes 101 | Space Lab  |
+    And the following collection user memberships:
+      | collection | user        |
+      | Stargazers | Sara Barber |
+    Given I am logged in as "Sara Barber"
+    When I go to the "fr" version of the "Black Holes 101" document
+    And I click "Share"
+    Then a modal should open
+    And the following fields should be present "Astronomes amateurs"
+    When I check "Astronomes amateurs"
+    And I press "Share" in the "Modal buttons" region
+    Then I should see the success message "Item was shared on the following groups: Astronomes amateurs."
+    Given I am logged in as a moderator
+    When I go to the "fr" version of the "Stargazers" collection
+    And I click the contextual link "Unshare" in the "Black Holes 101" tile
+    Then a modal will open
+    And the following fields should be present "Astronomes amateurs"
+    When I check "Astronomes amateurs"
+    And I press "Submit" in the "Modal buttons" region
+    Then I should see the success message "Item was unshared from the following groups: Astronomes amateurs."
+
   Scenario: Shared pinned content is erroneously shown first.
     Given the following "collection" content:
       | title         |
