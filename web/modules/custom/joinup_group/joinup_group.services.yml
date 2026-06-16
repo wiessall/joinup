@@ -28,10 +28,6 @@ services:
     class: Drupal\joinup_group\GroupMenuManager
   Drupal\joinup_group\GroupMenuManagerInterface: '@joinup_group.group_menu_manager'
 
-  joinup_group.shareable_content_manager:
-    class: Drupal\joinup_group\ShareableContentManager
-  Drupal\joinup_group\ShareableContentManagerInterface: '@joinup_group.shareable_content_manager'
-
   joinup_group.group_settings_form_alter:
     class: Drupal\joinup_group\GroupSettingsFormAlter
 

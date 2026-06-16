@@ -136,7 +136,7 @@ class UnshareForm extends ShareFormBase {
    *   shared.
    */
   protected function getGroups(): array {
-    $groups = $this->shareableContentManager->getAlreadySharedGroupIds($this->entity);
+    $groups = $this->getAlreadySharedGroupIds();
     if (empty($groups)) {
       return $groups;
     }
@@ -144,7 +144,7 @@ class UnshareForm extends ShareFormBase {
     if ($this->currentUser->hasPermission('administer shared entities')) {
       return $this->entityTypeManager->getStorage('node')->loadMultiple($groups);
     }
-    return array_intersect_key($this->shareableContentManager->getUserGroupsByPermission($this->shareableContentManager->getPermissionForAction('unshare', $this->entity)), array_flip($groups));
+    return array_intersect_key($this->getUserGroupsByPermission($this->getPermissionForAction('unshare')), array_flip($groups));
   }
 
   /**

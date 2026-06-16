@@ -809,10 +809,6 @@ function joinup_group_extract_bulk_form_entity_id(string $bulk_form_key): string
  */
 function joinup_group_generate_share_link(EntityInterface $entity): array {
   $url = Url::fromRoute('joinup_group.share_content_form', [$entity->getEntityTypeId() => $entity->id()]);
-  $shareableContentManager = \Drupal::service('joinup_group.shareable_content_manager');
-  if (!$entity instanceof ShareableContentInterface || empty($shareableContentManager->getShareableGroups($entity))) {
-    return [];
-  }
 
   return [
     '#theme' => 'link_icon',
@@ -827,7 +823,9 @@ function joinup_group_generate_share_link(EntityInterface $entity): array {
       ]),
     ],
     '#cache' => [
-      'contexts' => ['user'],
+      'contexts' => [
+        'og_role',
+      ],
     ],
     '#access' => $url->access(),
     '#attached' => ['library' => ['core/drupal.dialog.ajax']],
