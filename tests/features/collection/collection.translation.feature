@@ -5,7 +5,7 @@ Feature: Translating collections
     Given the following users:
       | Username    | Roles     |
       | Flora Mod   | moderator |
-      | Lee Facil   | developer |
+      | Lee Facil   |           |
       | John Member |           |
       | Ross Auth   |           |
     And the following "collection" content:
@@ -33,10 +33,8 @@ Feature: Translating collections
 
     # Assert language select options/value.
     When I go to the edit form of the "Test collection" collection
-    # @wip: The node original language selector is not yet functional on this
-    # branch. @see ISAICP-11330
-    # Then the available options in the "Language" select should match the site languages
-    # And the selected option in the "Language" select should be "en"
+    Then the available options in the "Language" select should match the site languages
+    And the selected option in the "Language" select should be "en"
 
     # Create translation.
     When I go to the homepage of the "Test collection" collection
@@ -71,7 +69,7 @@ Feature: Translating collections
     And I click "Delete" in the "Polish" row
     Then I should see the text "Are you sure you want to delete the Polish translation of the content item Zaktualizowana kolekcja?"
     When I press "Delete Polish translation"
-    #Then I should see the success message "<delete message>"
+    Then I should see the success message "<delete message>"
     When I click "Translate" in the "Entity actions" region
     Then I should not see the text "Edit" in the "Polish" row
     And I should see the "Add" in the "Polish" row
@@ -81,9 +79,6 @@ Feature: Translating collections
       | Flora Mod | Polish translation of the Collection Zaktualizowana kolekcja has been deleted. |
       | Lee Facil | The content item Zaktualizowana kolekcja Polish translation has been deleted.  |
 
-  # @wip: switches language via the Top Bar language selector, which is not yet
-  # functional on this branch. @see ISAICP-11330
-  @wip
   Scenario: Default language of new node should be same as language of the interface
     Given I am logged in as "Flora Mod"
     When I go to the propose collection form

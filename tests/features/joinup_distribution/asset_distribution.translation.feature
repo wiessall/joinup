@@ -5,7 +5,7 @@ Feature: Translating distributions
     Given the following users:
       | Username    | Roles     |
       | Flora Mod   | moderator |
-      | Lee Facil   | developer |
+      | Lee Facil   |           |
       | John Member |           |
       | Ross Auth   |           |
     Given the following "solution" content:
@@ -36,10 +36,8 @@ Feature: Translating distributions
 
     # Assert language select options/value.
     When I go to the edit form of the "Test distribution" distribution
-    # @wip: The node original language selector is not yet functional on this
-    # branch. @see ISAICP-11330
-    # Then the available options in the "Language" select should match the site languages
-    # And the selected option in the "Language" select should be "en"
+    Then the available options in the "Language" select should match the site languages
+    And the selected option in the "Language" select should be "en"
     # Create translation.
     When I go to the homepage of the "Test distribution" distribution
     And I click "Translate" in the "Entity actions" region
@@ -79,9 +77,6 @@ Feature: Translating distributions
       | Flora Mod |
       | Lee Facil |
 
-  # @wip: switches language via the Top Bar language selector, which is not yet
-  # functional on this branch. @see ISAICP-11330
-  @wip
   Scenario: Default language of new node should be same as language of the interface
     Given I am logged in as "Flora Mod"
     When I go to the "Test solution" solution

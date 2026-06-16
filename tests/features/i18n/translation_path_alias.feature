@@ -4,9 +4,6 @@ Feature: Translated group content should have proper path aliases.
   When I navigate to a translated group page or its subpages
   I should see a proper aliased URL instead of a node ID.
 
-  # @wip: clicks the language selector popover, which is not yet functional on
-  # this branch. @see ISAICP-11330
-  @wip
   Scenario: Translated collections and subpages have aliased URLs.
     Given the following "collection" content:
       | title                 | logo     |

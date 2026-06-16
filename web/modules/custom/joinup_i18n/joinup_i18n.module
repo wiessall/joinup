@@ -15,6 +15,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\search_api\Query\ConditionGroup;
 use Drupal\search_api\Query\QueryInterface;
+use Joinup\TestModeManager;
 
 /**
  * Implements hook_module_implements_alter().
@@ -43,6 +44,9 @@ function joinup_i18n_module_implements_alter(array &$implementations, string $ho
  * @see \Drupal\content_translation\Hook\ContentTranslationHooks::pageAttachments()
  */
 function joinup_i18n_entity_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
+  if (TestModeManager::isActive()) {
+    return AccessResult::neutral();
+  }
   if ($operation !== 'view' || !$entity instanceof ContentEntityInterface || $entity->isDefaultTranslation()) {
     return AccessResult::neutral();
   }
