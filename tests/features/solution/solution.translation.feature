@@ -84,6 +84,13 @@ Feature: Translating solutions
       | Flora Mod | Polish translation of the Solution Zaktualizowana solucja has been deleted.  |
       | Lee Facil | The content item Zaktualizowana solucja Polish translation has been deleted. |
 
+  Scenario: The collection link on the solution page uses the current language.
+    Given the following "collection" entity translations:
+      | source          | language | title               |
+      | Test collection | fr       | Collection de tests |
+    When I go to the "fr" version of the "Test solution" solution
+    Then I should see the link "Collection de tests"
+
   Scenario: Default language of new node should be same as language of the interface
     Given I am logged in as "Flora Mod"
     And I go to the homepage of the "Portal support" collection
