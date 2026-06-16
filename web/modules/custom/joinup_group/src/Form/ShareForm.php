@@ -62,7 +62,7 @@ class ShareForm extends ShareFormBase {
    */
   public function doBuildForm(array $form, FormStateInterface $form_state, ?FieldableEntityInterface $entity = NULL): array {
     $this->entity = $entity;
-    $groups = $this->shareableContentManager->getShareableGroups($entity);
+    $groups = $this->getShareableGroups();
     $notification = $this->entity->getSharingNotification();
 
     if ($groups && $notification) {
@@ -159,6 +159,31 @@ class ShareForm extends ShareFormBase {
   }
 
   /**
+   * Retrieves a list of groups where the entity can be shared on.
+   *
+   * @return \Drupal\joinup_group\Entity\GroupInterface[]
+   *   A list of groups where the current entity can be shared on.
+   */
+  protected function getShareableGroups(): array {
+    // Being part also for the access check, do not allow the user to access
+    // this page for entities without a field to store groups it is shared in.
+    if (!$this->entity instanceof ShareableContentInterface) {
+      return [];
+    }
+
+    $user_groups = $this->getUserGroupsByPermission($this->getPermissionForAction('share'));
+    // Always show collections first.
+    uasort($user_groups, function (GroupInterface $group1, GroupInterface $group2): int {
+      return $group1->bundle() <=> $group2->bundle();
+    });
+    if ($parent = $this->getExcludedParent()) {
+      unset($user_groups[$parent->id()]);
+    }
+
+    return array_diff_key($user_groups, array_flip($this->getAlreadySharedGroupIds()));
+  }
+
+  /**
    * Shares the current entity inside a group.
    *
    * @param \Drupal\joinup_group\Entity\GroupInterface[] $groups
@@ -183,7 +208,7 @@ class ShareForm extends ShareFormBase {
 
     $accessResult = AccessResult::allowedIf(
       $node instanceof ShareableContentInterface &&
-      !empty($this->shareableContentManager->getShareableGroups($node))
+      !empty($this->getShareableGroups())
     );
 
     $accessResult->addCacheableDependency($node);
