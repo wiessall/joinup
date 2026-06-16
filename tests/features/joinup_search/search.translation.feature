@@ -58,6 +58,17 @@ Feature: Test global search in multilingual context
     When I visit "/fr/search?keys=Assistance centrale"
     Then I should see the "Base génomique v1" tile
 
+  Scenario: Topic badges on content tiles use the current language.
+    Given the following term entity translations:
+      | source     | language | name        |
+      | Demography | fr       | Démographie |
+    And the following "collection" content:
+      | title           | topic      | state     |
+      | Climate Project | Demography | published |
+    When I visit "/fr/collections"
+    Then I should see the text "Démographie" in the "Climate Project" tile
+    But I should not see the text "Demography" in the "Climate Project" tile
+
   Scenario: The group label in the search bar badge uses the current language.
     Given the following "collection" content:
       | title             | state     |
