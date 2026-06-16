@@ -188,6 +188,18 @@ class BadgeHooks implements DestructableInterface {
   }
 
   /**
+   * Implements hook_ENTITY_TYPE_view_alter() for node entities.
+   */
+  #[Hook('node_view_alter')]
+  public function nodeViewAlter(array &$build, NodeInterface $node): void {
+    if (!$node instanceof CertificateInterface) {
+      return;
+    }
+
+    unset($build['#contextual_links']);
+  }
+
+  /**
    * Implements hook_og_membership_delete().
    */
   #[Hook('og_membership_delete')]
