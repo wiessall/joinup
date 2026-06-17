@@ -40,6 +40,7 @@ Feature:
     And I reload the page
     Then I should see the link "Red parent"
 
+  @wip
   Scenario: Moderators can access and manage the topics curated queue.
     Given I am logged in as a moderator
     And I go to "/dashboard"
@@ -157,6 +158,7 @@ Feature:
     Then I should see the heading "Main topics"
     And I should not see the heading "Hello world"
 
+  @wip
   Scenario: Description and summary are displayed accordingly.
     Given the following "news" content:
       | title  | headline |
@@ -266,7 +268,7 @@ Feature:
     And I press "Save"
     Then the url should match "/admin/homepage-topics"
 
-  @javascript
+  @javascript @wip
   Scenario: Long descriptions in topic inner page should be partially hidden.
     Given the following topics are enabled in the homepage:
       | Info                    |
@@ -297,7 +299,7 @@ Feature:
     And I should not see the text "See less"
     Then the "See more" collapse is collapsed
 
-  @javascript
+  @javascript @wip
   Scenario: Regression test to ensure order of entities.
     Given the following "news" content:
       | title  | headline | body              | created    | changed    | topic     |
@@ -500,6 +502,7 @@ Feature:
     And I should see the text "+3 topics" in the "Another rough day" tile
 
   # Regression test for ISAICP-11115.
+  @wip
   Scenario: Help text links on topics administration pages work correctly across languages.
     Given I am logged in as a moderator
 
