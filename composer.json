@@ -141,6 +141,7 @@
         "drush/drush": "^13.3",
         "geocoder-php/photon-provider": "^0.10.0",
         "gitonomy/gitlib": "^1.4",
+        "guzzlehttp/psr7": "2.12.0 as 2.8.999",
         "jakeasmith/http_build_url": "^1.0",
         "knplabs/github-api": "^3.13",
         "m4tthumphrey/php-gitlab-api": "^12.1",
