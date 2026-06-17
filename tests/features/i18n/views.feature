@@ -69,16 +69,16 @@ Feature: Views display translated entities correctly.
       | source          | language | title              |
       | Translated News | fr       | Actualité traduite |
 
-    When I am logged in as a moderator
+    When I am an anonymous user
     And I go to the homepage of the "Fallback Hub" collection
     Then I should see the "Untranslated News" tile
     And I should see the "Translated News" tile
-    But I should not see the text "Actualité traduite"
+    But I should not see the "Actualité traduite" tile
 
     When I go to the "fr" version of the "Fallback Hub" collection
     Then I should see the "Untranslated News" tile
     And I should see the "Actualité traduite" tile
-    But I should not see the text "Translated News"
+    But I should not see the "Translated News" tile
 
   # covers latest_news view.
   # covers in_the_spotlight view.

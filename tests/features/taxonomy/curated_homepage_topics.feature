@@ -272,6 +272,9 @@ Feature:
       | title         | headline      | collection     | state     |
       | Fallback News | Fallback News | Portal support | published |
       | Archived News | Archived News | Portal support | archived  |
+    And the following news entity translations:
+      | source        | language | title                |
+      | Archived News | fr       | Actualités archivées |
     And the following topics are enabled in the homepage:
       | E-justice |
     When I am logged in as a moderator
@@ -292,10 +295,18 @@ Feature:
     And I press "Save"
     And I should see the "Fallback News" tile
     And I should see the "Archived News" tile
+    But I should not see the "Actualités archivées" tile
+
+    When I am an anonymous user
+    And I go to the canonical path of the topic meta entity of the "E-justice" topic "taxonomy term"
+    And I should see the "Fallback News" tile
+    And I should see the "Archived News" tile
+    But I should not see the "Actualités archivées" tile
 
     When I switch to the "fr" language
     And I should see the "Fallback News" tile
-    And I should see the "Archived News" tile
+    And I should see the "Actualités archivées" tile
+    But I should not see the "Archived News" tile
 
   @javascript
   Scenario: Long descriptions in topic inner page should be partially hidden.
