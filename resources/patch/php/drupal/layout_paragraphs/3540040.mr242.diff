@@ -328,7 +328,7 @@ index 1c528773903ccb36f80f68fe5ad10e260020be6f..2128232fa09168bc35c2f7ee1f30439c
     * Class constructor.
     *
 diff --git a/src/Plugin/Field/FieldWidget/LayoutParagraphsWidget.php b/src/Plugin/Field/FieldWidget/LayoutParagraphsWidget.php
-index 853dcd2812af4beedd229aca3fc79f05e2de012c..12092428df60de32180e939bb25edcaea50dd851 100644
+index 853dcd2812af4beedd229aca3fc79f05e2de012c..ead2bc10644096acc94b698c571fc08fe18d3400 100644
 --- a/src/Plugin/Field/FieldWidget/LayoutParagraphsWidget.php
 +++ b/src/Plugin/Field/FieldWidget/LayoutParagraphsWidget.php
 @@ -219,6 +219,8 @@ class LayoutParagraphsWidget extends WidgetBase implements ContainerFactoryPlugi
@@ -340,6 +340,86 @@ index 853dcd2812af4beedd229aca3fc79f05e2de012c..12092428df60de32180e939bb25edcae
      return $element;
    }
  
+@@ -360,33 +362,57 @@ class LayoutParagraphsWidget extends WidgetBase implements ContainerFactoryPlugi
+       $this->layoutParagraphsLayout = $this->tempstore->getWithStorageKey($layout_paragraphs_storage_key);
+       $values = [];
+       $seen_uuids = [];
+-      foreach ($this->layoutParagraphsLayout->getParagraphsReferenceField() as $item) {
+-        if ($item->entity) {
+-          $entity = $item->entity;
+-          // Skip duplicate paragraphs (same UUID) to prevent integrity
+-          // constraint violations during save.
+-          $uuid = $entity->uuid();
+-          if (isset($seen_uuids[$uuid])) {
+-            continue;
++      // When translating an untranslatable paragraphs field, the layout
++      // structure cannot be changed (see ::layoutChangeAccess()). Rebuild from
++      // the original components and order, reusing the edited paragraph values
++      // from the tempstore, so the untranslatable host field is left unchanged
++      // and EntityUntranslatableFieldsConstraint is not triggered on save.
++      $structure_locked = $this->isTranslating($form_state) && !$this->layoutParagraphsLayout->layoutChangeAccess(FALSE);
++      $components = [];
++      if ($structure_locked) {
++        $edited = [];
++        foreach ($this->layoutParagraphsLayout->getParagraphsReferenceField() as $item) {
++          if ($item->entity) {
++            $edited[$item->entity->uuid()] = $item->entity;
+           }
+-          $seen_uuids[$uuid] = TRUE;
+-          // Set each paragraph langcode if we are not translating.
+-          if (!$this->isTranslating($form_state)) {
+-            $langcode_key = $entity->getEntityType()->getKey('langcode');
+-            $entity->set($langcode_key, $items->getLangcode());
++        }
++        foreach ($items as $item) {
++          if ($item->entity) {
++            $components[] = $edited[$item->entity->uuid()] ?? $item->entity;
+           }
+-          // Ensure existing paragraphs are not treated as new during save.
+-          if ($entity->id()) {
+-            $entity->enforceIsNew(FALSE);
++        }
++      }
++      else {
++        foreach ($this->layoutParagraphsLayout->getParagraphsReferenceField() as $item) {
++          if ($item->entity) {
++            $components[] = $item->entity;
+           }
+-          $entity->setNeedsSave(TRUE);
+-          $values[] = [
+-            'entity' => $entity,
+-            'target_id' => $entity->id(),
+-            'target_revision_id' => $entity->getRevisionId(),
+-          ];
+         }
+       }
++      foreach ($components as $entity) {
++        // Skip duplicate paragraphs (same UUID) to prevent integrity
++        // constraint violations during save.
++        $uuid = $entity->uuid();
++        if (isset($seen_uuids[$uuid])) {
++          continue;
++        }
++        $seen_uuids[$uuid] = TRUE;
++        // Set each paragraph langcode if we are not translating.
++        if (!$this->isTranslating($form_state)) {
++          $langcode_key = $entity->getEntityType()->getKey('langcode');
++          $entity->set($langcode_key, $items->getLangcode());
++        }
++        // Ensure existing paragraphs are not treated as new during save.
++        if ($entity->id()) {
++          $entity->enforceIsNew(FALSE);
++        }
++        $entity->setNeedsSave(TRUE);
++        $values[] = [
++          'entity' => $entity,
++          'target_id' => $entity->id(),
++          'target_revision_id' => $entity->getRevisionId(),
++        ];
++      }
+       $form_state->setValue($path, $values);
+     }
+     return parent::extractFormValues($items, $form, $form_state);
 diff --git a/tests/src/FunctionalJavascript/BuilderTestBase.php b/tests/src/FunctionalJavascript/BuilderTestBase.php
 index 68e2cc5316508f9f5146a23711cc5d2c069ffe2f..5f60b74590c7f82106948d4f0fc4919cbb4fe038 100644
 --- a/tests/src/FunctionalJavascript/BuilderTestBase.php
