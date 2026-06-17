@@ -21,6 +21,10 @@ class TopicRouteSubscriber extends RouteSubscriberBase {
       $route->setOption('_admin_route', FALSE);
     }
 
+    if ($route = $collection->get('entity.taxonomy_term.edit_form')) {
+      $route->setOption('_admin_route', FALSE);
+    }
+
     if ($route = $collection->get('entity.taxonomy_term.canonical')) {
       $route->setOption(TopicPathProcessor::REDIRECT_TO_SEARCH_PAGE_OPTION, TRUE);
     }
