@@ -1,0 +1,128 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the topic module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+
+/**
+ * Install new taxonomy_term.topic field configs from config sync.
+ */
+function topic_update_201400(): void {
+  $sync_storage = \Drupal::service('config.storage.sync');
+
+  $storage_configs = [
+    'field.storage.taxonomy_term.abstract',
+    'field.storage.taxonomy_term.image',
+    'field.storage.taxonomy_term.topics_paragraph',
+  ];
+
+  foreach ($storage_configs as $name) {
+    $config_data = $sync_storage->read($name);
+    if ($config_data && !FieldStorageConfig::load($config_data['id'])) {
+      FieldStorageConfig::create($config_data)->save();
+    }
+  }
+
+  $field_configs = [
+    'field.field.taxonomy_term.topic.abstract',
+    'field.field.taxonomy_term.topic.image',
+    'field.field.taxonomy_term.topic.topics_paragraph',
+  ];
+
+  foreach ($field_configs as $name) {
+    $config_data = $sync_storage->read($name);
+    if ($config_data && !FieldConfig::load($config_data['id'])) {
+      FieldConfig::create($config_data)->save();
+    }
+  }
+}
+
+/**
+ * Migrate topic meta entity data to taxonomy term fields.
+ */
+function topic_update_201401(array &$sandbox): string {
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $meta_entity_storage = $entity_type_manager->getStorage('meta_entity');
+  $logger = \Drupal::logger('topic');
+
+  $or = $meta_entity_storage->getQuery()->orConditionGroup()
+    ->condition('description.value', NULL, 'IS NOT NULL')
+    ->condition('image.target_id', NULL, 'IS NOT NULL')
+    ->condition('topics_paragraph.target_id', NULL, 'IS NOT NULL');
+
+  $ids = $meta_entity_storage->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('type', 'topic')
+    ->condition($or)
+    ->execute();
+
+  if (empty($ids)) {
+    return 'No topic meta entities found to migrate.';
+  }
+
+  $meta_entities = $meta_entity_storage->loadMultiple($ids);
+  $migrated = 0;
+  $skipped = 0;
+
+  foreach ($meta_entities as $meta_entity) {
+    $term = $meta_entity->getTargetEntity();
+
+    if (!$term) {
+      $logger->warning('Topic meta entity @id has no linked taxonomy term, skipping.', ['@id' => $meta_entity->id()]);
+      $skipped++;
+      continue;
+    }
+
+    $description_item = $meta_entity->get('description')->first();
+    if ($description_item && $term->get('description')->isEmpty()) {
+      $term->set('description', [
+        'value' => $description_item->value,
+        'format' => $description_item->format,
+      ]);
+    }
+
+    if ($description_item && !empty($description_item->summary) &&
+      $term->get('abstract')->isEmpty()) {
+      $term->set('abstract', $description_item->summary);
+    }
+
+    if (!$meta_entity->get('image')->isEmpty() &&
+      $term->get('image')->isEmpty()) {
+      $term->set('image', $meta_entity->get('image')->getValue());
+    }
+
+    if (!$meta_entity->get('topics_paragraph')->isEmpty() &&
+      $term->get('topics_paragraph')->isEmpty()) {
+      $cloned_paragraphs = [];
+      foreach ($meta_entity->get('topics_paragraph') as $paragraph_item) {
+        $paragraph = $paragraph_item->entity;
+        if ($paragraph) {
+          $clone = $paragraph->createDuplicate();
+          $clone->save();
+          $cloned_paragraphs[] = [
+            'target_id' => $clone->id(),
+            'target_revision_id' => $clone->getRevisionId(),
+          ];
+        }
+      }
+      if ($cloned_paragraphs) {
+        $term->set('topics_paragraph', $cloned_paragraphs);
+      }
+    }
+
+    $term->save();
+    $logger->info('Migrated topic meta entity @id to taxonomy term @tid.', [
+      '@id' => $meta_entity->id(),
+      '@tid' => $term->id(),
+    ]);
+    $migrated++;
+  }
+
+  return sprintf('Migrated %d topic meta entities (%d without linked term).', $migrated, $skipped);
+}
