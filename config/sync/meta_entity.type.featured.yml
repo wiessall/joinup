@@ -10,15 +10,7 @@ dependencies:
     - node.type.news
     - node.type.solution
   module:
-    - joinup_stats
     - node
-third_party_settings:
-  joinup_stats:
-    matomo_method: ''
-    parameter_name: ''
-    parameter_method: ''
-    period: 7
-    type: null
 id: featured
 label: 'Featured site wide'
 description: 'A flag which indicates that the entity is flagged by a moderator to be featured site wide.'

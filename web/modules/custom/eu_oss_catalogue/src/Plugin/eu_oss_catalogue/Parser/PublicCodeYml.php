@@ -196,7 +196,10 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
     }
 
     $langcodes = array_intersect(array_keys($description), $siteLangcodes);
-    if (count($langcodes) === 1) {
+    if (!$langcodes) {
+      return reset($siteLangcodes);
+    }
+    elseif (count($langcodes) === 1) {
       // Only one langcode left, no need to perform more checks.
       return reset($langcodes);
     }

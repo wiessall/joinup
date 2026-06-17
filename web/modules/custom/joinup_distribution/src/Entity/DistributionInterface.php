@@ -11,7 +11,6 @@ use Drupal\joinup_paragraphs\ParagraphResourcesInterface;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_solution\Entity\SolutionContentInterface;
-use Drupal\joinup_stats\Entity\DownloadCountAwareInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\node\NodeInterface;
@@ -19,7 +18,7 @@ use Drupal\node\NodeInterface;
 /**
  * Interface for distributions.
  */
-interface DistributionInterface extends NodeInterface, RdfSyncEntityInterface, CollectionContentInterface, SolutionContentInterface, DownloadCountAwareInterface, DescriptionInterface, EntityPublicationTimeInterface, EntityWorkflowStateInterface, ArchivableEntityInterface, PermalinkInterface, ParagraphResourcesInterface {
+interface DistributionInterface extends NodeInterface, RdfSyncEntityInterface, CollectionContentInterface, SolutionContentInterface, DescriptionInterface, EntityPublicationTimeInterface, EntityWorkflowStateInterface, ArchivableEntityInterface, PermalinkInterface, ParagraphResourcesInterface {
 
   /**
    * Return the distribution's parent, either a release or a solution.
