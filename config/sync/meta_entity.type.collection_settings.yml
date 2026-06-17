@@ -5,15 +5,7 @@ dependencies:
   config:
     - node.type.collection
   module:
-    - joinup_stats
     - node
-third_party_settings:
-  joinup_stats:
-    matomo_method: ''
-    parameter_name: ''
-    parameter_method: ''
-    period: 7
-    type: null
 id: collection_settings
 label: 'Collection settings'
 description: 'Store data about collection.'
