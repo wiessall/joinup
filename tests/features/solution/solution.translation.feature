@@ -100,3 +100,23 @@ Feature: Translating solutions
     When I switch to the "pl" language
     Then the available options in the "Language" select should match the site languages
     And the selected option in the "Language" select should be "pl"
+
+  Scenario: Related solution tiles and confirmation titles use the current language.
+    Given the following "solution" content:
+      | title                      | collection      | abstract | description | state     | related solutions          |
+      | E-Procurement Platform     | Test collection | abstract | description | published |                            |
+      | Cross-Border Data Exchange | Test collection | abstract | description | published | E-Procurement Platform     |
+    And the following "solution" entity translations:
+      | source                 | language | title                                       |
+      | E-Procurement Platform | fr       | Plateforme d'approvisionnement électronique |
+    # Tiles (canonical page).
+    When I go to the "fr" version of the "Cross-Border Data Exchange" solution
+    Then I should see the "Plateforme d'approvisionnement électronique" tile
+    And I should not see the "E-Procurement Platform" tile
+    # Titles (confirmation view, form preview).
+    When I am logged in as "Flora Mod"
+    And I go to the "fr" version of the "Cross-Border Data Exchange" solution
+    And I click "Edit" in the "Entity actions" region
+    And I press "Confirm"
+    Then I should see the text "Plateforme d'approvisionnement électronique"
+    And I should not see the text "E-Procurement Platform"
