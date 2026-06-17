@@ -1,0 +1,18 @@
+uuid: 42e3c286-4f66-47af-abfc-a7e8da1022b3
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.contact_information
+id: node.contact_information.created
+field_name: created
+entity_type: node
+bundle: contact_information
+label: 'Authored on'
+description: 'The date and time that the content was created.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: created

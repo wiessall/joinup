@@ -7,14 +7,11 @@
 
 declare(strict_types=1);
 
-use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_licence\Entity\Licence;
 use Drupal\joinup_licence\Entity\LicenceInterface;
@@ -61,19 +58,6 @@ function joinup_licence_entity_bundle_info_alter(array &$bundles): void {
       }
     }
   }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_access().
- */
-function joinup_licence_taxonomy_term_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
-  if ($entity instanceof MappedTerm && $entity->bundle() === 'spdx_licence' && $operation === 'view') {
-    // Only deny access to the canonical route.
-    $route_match = \Drupal::routeMatch();
-    return AccessResult::forbiddenIf($route_match->getRouteName() === 'entity.taxonomy_term.canonical' && $route_match->getParameter('taxonomy_term')->bundle() === 'spdx_licence')
-      ->addCacheContexts(['route']);
-  }
-  return AccessResult::neutral();
 }
 
 /**

@@ -24,7 +24,7 @@ dependencies:
     - layout_builder
     - layout_paragraphs
     - link
-    - responsive_image
+    - svg_image_responsive
     - template_suggestion
     - user
 third_party_settings:

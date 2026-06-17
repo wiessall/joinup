@@ -1,0 +1,115 @@
+@api @group-j
+Feature: Translating custom pages
+
+  Background:
+    Given the following users:
+      | Username    | Roles     |
+      | Flora Mod   | moderator |
+      | Lee Facil   | developer |
+      | John Member |           |
+      | Ross Auth   |           |
+    And the following "collection" content:
+      | title           |
+      | Test collection |
+    And the following "solution" content:
+      | title         | collection      |
+      | Test solution | Test collection |
+    And the following collection user memberships:
+      | collection      | user        | roles       |
+      | Test collection | Lee Facil   | facilitator |
+      | Test collection | John Member |             |
+    And the following solution user memberships:
+      | solution      | user        | roles       |
+      | Test solution | Lee Facil   | facilitator |
+      | Test solution | John Member |             |
+    And the following "custom_page" content:
+      | title                       | collection      | solution      | field_paragraphs_body            | field_hide_title |
+      | Test collection custom page | Test collection |               | This is test custom page content | 0                |
+      | Test solution custom page   |                 | Test solution | This is test custom page content | 0                |
+
+  Scenario Outline: Test translation access.
+    Given I am logged in as "<user>"
+    When I visit the translation overview form of the "<custom page>" custom_page
+    Then the response status code should be <code>
+
+    Examples:
+      | user        | custom page                 | code |
+      | Flora Mod   | Test collection custom page | 200  |
+      | Lee Facil   | Test collection custom page | 200  |
+      | Flora Mod   | Test solution custom page   | 200  |
+      | Lee Facil   | Test solution custom page   | 200  |
+      | John Member | Test collection custom page | 403  |
+      | Ross Auth   | Test collection custom page | 403  |
+      | John Member | Test solution custom page   | 403  |
+      | Ross Auth   | Test solution custom page   | 403  |
+
+  Scenario Outline: Test creating node translation from UI.
+    Given I am logged in as "<user>"
+    # Assert language select options/value.
+    When I go to the edit form of the "<title>" custom_page
+    # @wip: The node original language selector is not yet functional on this
+    # branch. @see ISAICP-11330
+    # Then the available options in the "Language" select should match the site languages
+    # And the selected option in the "Language" select should be "en"
+
+    # Create translation.
+    When I go to the homepage of the "<title>" custom_page
+    And I click "Translate" in the "Entity actions" region
+    And I click "Add" in the "Polish" row
+    Then I should see the heading "Create Polish translation of <title>"
+    Then the following fields should be present "Title, Abstract, Add a new file"
+    Then the following fields should not be present "Group, Hide title, Logo, Search keywords, State, Topic"
+    When I fill in "Title" with "Testowa strona niestandardowa"
+    And I fill in "Abstract" with "Opis strony niestandardowej"
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value | To jest polskie tłumaczenie strony |
+    And I attach the file "test.zip" to "Add a new file"
+    And I press "Save (all translations)"
+    Then I should see the following lines of text:
+      | The Attachments field description is required. |
+    And I fill in "Description" with "Plik testowy"
+    And I press "Save (all translations)"
+    Then I should see the success message "Custom page Testowa strona niestandardowa has been updated."
+    And I should see the heading "Testowa strona niestandardowa"
+    And I should see the text "To jest polskie tłumaczenie strony"
+    And I should see the text "Plik testowy"
+
+    # Edit translation.
+    When I click "Translate" in the "Entity actions" region
+    Then I should see the text "Testowa strona niestandardowa"
+    When I click "Edit" in the "Polish" row
+    And I fill in "Title" with "Zaktualizowana strona"
+    And I press "Save (all translations)"
+    Then I should see the success message "Custom page Zaktualizowana strona has been updated."
+    And I should not see the heading "Testowa strona niestandardowa"
+    And I should see the heading "Zaktualizowana strona"
+
+    # Delete translation.
+    When I click "Translate" in the "Entity actions" region
+    And I click "Delete" in the "Polish" row
+    Then I should see the text "Are you sure you want to delete the Polish translation of the content item Zaktualizowana strona?"
+    When I press "Delete Polish translation"
+    Then I should see the success message "Polish translation of the Custom page Zaktualizowana strona has been deleted."
+    When I click "Translate" in the "Entity actions" region
+    Then I should not see the text "Edit" in the "Polish" row
+    And I should see the "Add" in the "Polish" row
+
+    Examples:
+      | user      | title                       |
+      | Flora Mod | Test collection custom page |
+      | Lee Facil | Test collection custom page |
+      | Flora Mod | Test solution custom page   |
+      | Lee Facil | Test solution custom page   |
+
+  # @wip: switches language via the Top Bar language selector, which is not yet
+  # functional on this branch. @see ISAICP-11330
+  @wip
+  Scenario: Default language of new node should be same as language of the interface
+    Given I am logged in as "Flora Mod"
+    When I go to the "Test collection" collection
+    And I click "Add custom page" in the plus button menu
+    Then the available options in the "Language" select should match the site languages
+    And the selected option in the "Language" select should be "en"
+    When I switch to the "pl" language
+    Then the available options in the "Language" select should match the site languages
+    And the selected option in the "Language" select should be "pl"

@@ -109,8 +109,6 @@ function ventuno_preprocess_menu__og__quick_links(&$variables): void {
       'entity.node.canonical' => 'file-earmark-text',
       // EIF Perspective.
       'entity.node.eif_perspective' => 'file-earmark-text',
-      // Documentation link.
-      'joinup_menu.documentation_file' => 'file-earmark-text',
       // Fallback.
       default => 'file-earmark-text',
     };

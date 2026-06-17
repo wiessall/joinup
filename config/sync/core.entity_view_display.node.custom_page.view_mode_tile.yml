@@ -20,7 +20,7 @@ dependencies:
     - field_fallback_formatter
     - field_formatter_range
     - joinup_core
-    - responsive_image
+    - svg_image_responsive
     - template_suggestion
     - user
 _core:
