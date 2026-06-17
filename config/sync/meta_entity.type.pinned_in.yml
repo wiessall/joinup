@@ -9,15 +9,7 @@ dependencies:
     - node.type.news
     - node.type.solution
   module:
-    - joinup_stats
     - node
-third_party_settings:
-  joinup_stats:
-    matomo_method: ''
-    parameter_name: ''
-    parameter_method: ''
-    period: 7
-    type: null
 id: pinned_in
 label: 'Pinned in'
 description: 'A list of groups that the entity is "pinned" in. The entity will be displayed prominently on the homepages of these groups.'

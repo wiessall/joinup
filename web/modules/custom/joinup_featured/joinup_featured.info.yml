@@ -3,3 +3,6 @@ description: Allows to feature content site wide. The content will appear at the
 type: module
 package: Joinup
 core_version_requirement: "^10.4 || ^11"
+
+dependencies:
+  - 'cached_computed_field:cached_computed_field'
