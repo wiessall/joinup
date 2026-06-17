@@ -21,10 +21,7 @@ Feature:
       | IT Feature 1         |
       | IT Feature 2         |
 
-    # Only the default (English) translation is advertised via hreflang. The
-    # Italian translation is restricted for anonymous users, so its hreflang
-    # link - and thus its URL - is not exposed to crawlers.
-    # @see joinup_i18n_entity_access()
+    # @todo ISAICP-11445 This is probably not the intended behavior, needs fixing.
     Then I should see a "link[rel='alternate'][hreflang='en']" element
     And I should not see a "link[rel='alternate'][hreflang='it']" element
 
