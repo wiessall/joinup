@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\Field;
 
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Field\FieldItemList;
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\TypedData\ComputedItemListTrait;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 
@@ -60,12 +62,7 @@ class RelevantField extends FieldItemList {
       return NULL;
     }
 
-    $entity = $this->getEntity();
-    if ($this->useRichestTranslation()) {
-      $entity = $entity->getTranslation($this->getRichestLanguageCode());
-    }
-
-    return $entity->get($fieldName);
+    return $this->getEntityForSource()->get($fieldName);
   }
 
   /**
@@ -79,11 +76,7 @@ class RelevantField extends FieldItemList {
    *   If an invalid field name is configured.
    */
   protected function getSourceFieldName(): ?string {
-    $ossSolution = $this->getEntity();
-    if ($this->useRichestTranslation()) {
-      $ossSolution = $ossSolution
-        ->getTranslation($this->getRichestLanguageCode());
-    }
+    $ossSolution = $this->getEntityForSource();
     \assert($ossSolution instanceof OssSolutionInterface);
     foreach ((array) $this->definition->getSetting(static::SOURCE_FIELDS_SETTING_KEY) as $fieldName) {
       if ($ossSolution->get($fieldName)->isEmpty()) {
@@ -96,13 +89,35 @@ class RelevantField extends FieldItemList {
   }
 
   /**
+   * Returns the entity translation appropriate for this field's rendering.
+   *
+   * For richest-translation fields the active translation's language is used.
+   * For plain fields the current content language is used, with the entity's
+   * own language as a fallback. This is needed because non-translatable
+   * computed base fields share one FieldItemList instance attached to the
+   * default translation, so getEntity() always returns the default translation
+   * regardless of the URL language.
+   *
+   * @return \Drupal\Core\Entity\ContentEntityInterface
+   *   The entity translation to read source fields from.
+   */
+  protected function getEntityForSource(): ContentEntityInterface {
+    $entity = $this->getEntity();
+    $langcode = $this->useRichestTranslation()
+      ? $this->getRichestLanguageCode()
+      : \Drupal::languageManager()->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
+
+    return $entity->hasTranslation($langcode) ? $entity->getTranslation($langcode) : $entity;
+  }
+
+  /**
    * Returns the language code of the richest entity translation.
    *
    * @return string
    *   The language code of the richest entity translation.
    */
   protected function getRichestLanguageCode(): string {
-    return $this->getEntity()->getUntranslated()->language()->getId();
+    return $this->getEntity()->language()->getId();
   }
 
   /**

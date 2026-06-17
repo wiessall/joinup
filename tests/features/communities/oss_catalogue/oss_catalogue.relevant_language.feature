@@ -5,11 +5,12 @@ Feature:
   display the field values from the most relevant translation (where the most
   features are listed).
 
-  Scenario: Translatable fields are displayed based on the richest OSS Solution translation
+  Scenario: OSS solution translations are accessible to all users
     Given oss_solution multilingual content:
       | title    | status    | changed    | oss_source        | oss_release_date | langcode | default_translation | oss_features              | oss_long_description | oss_short_description | oss_screenshots | oss_git_url        | oss_publiccode_yml_content                                                                                                                 |
       | EN Title | published | 1690000000 | developers_italia | 2142-01-01       | en       | 1                   | EN Feature 1              | EN Long description  | EN Short description  |                 | https://github.com | !multiline!description:\n  en:\n    features:\n      0: EN Feature 1\n  it:\n    features:\n      0: IT Feature 1\n      1: IT Feature 2\n |
-      | ~~~      | ~~~       | 1690000000 | ~~~               | ~~~              | it       | 0                   | IT Feature 1,IT Feature 2 | ~~~                  | IT Short description  | IT file 1.jpg   | ~~~                | ~~~                                                                                                                                        |
+      | IT Title | ~~~       | 1690000000 | ~~~               | ~~~              | it       | 0                   | IT Feature 1,IT Feature 2 | IT Long description  | IT Short description  | IT file 1.jpg   | ~~~                | ~~~                                                                                                                                        |
+
     When I visit the "EN Title" "oss_solution"
     Then I should see the heading "EN Title"
     And I should see the following lines of text:
@@ -17,16 +18,27 @@ Feature:
       | EN Short description |
       | EN Long description  |
     But I should not see the following lines of text:
-      | IT Short description |
       | IT Feature 1         |
       | IT Feature 2         |
+      | IT Short description |
+      | IT Long description  |
 
-    # Only the default (English) translation is advertised via hreflang. The
-    # Italian translation is restricted for anonymous users, so its hreflang
-    # link - and thus its URL - is not exposed to crawlers.
-    # @see joinup_i18n_entity_access()
+    # Both translations are advertised via hreflang and accessible to anonymous users.
     Then I should see a "link[rel='alternate'][hreflang='en']" element
-    And I should not see a "link[rel='alternate'][hreflang='it']" element
+    And I should see a "link[rel='alternate'][hreflang='it']" element
+
+    And I break
+    When I go to the "it" version of the "EN Title" oss_solution
+    Then I should see the heading "IT Title"
+    And I should see the following lines of text:
+      | IT Feature 1         |
+      | IT Feature 2         |
+      | IT Short description |
+      | IT Long description  |
+    But I should not see the following lines of text:
+      | En Feature 1         |
+      | EN Short description |
+      | EN Long description  |
 
     Given I am logged in as a user with the "moderator" role
     When I visit "/admin/content/eu-oss-catalogue/oss-solutions"
@@ -43,13 +55,17 @@ Feature:
     Then I should see the heading "Translations of EN Title"
     When I click "Edit" in the "English" row
     And I should see the heading "Edit Open Source Software Solution EN Title"
+    Then the "Title" field should contain "EN Title"
     Then the "Short description" field should contain "EN Short description"
+    Then the "Long description" field should contain "EN Long description"
     And I move backward one page
     When I click "Edit" in the "Italian" row
-    And I should see the heading "Edit Open Source Software Solution EN Title [Italian translation]"
+    And I should see the heading "Edit Open Source Software Solution IT Title [Italian translation]"
+    Then the "Title" field should contain "IT Title"
     Then the "Short description" field should contain "IT Short description"
+    Then the "Long description" field should contain "IT Long description"
 
-  Scenario: Translatable fields are displayed based on the richest OSS Solution translation
+  Scenario: Translatable fields are displayed based on the richest available translation
     Given oss_solution multilingual content:
       | title        | status    | changed    | oss_source        | oss_release_date | langcode | default_translation | oss_features              | oss_short_description | oss_publiccode_yml_content                                                                                                                                        |
       | ABC Solution | published | 1700000000 | developers_italia | 2025-10-19       | en       | 1                   |                           |                       | !multiline!description:\n  de:\n    features:\n      0: DE Feature 1\n      1: DE Feature 2\n  el:\n    features:\n      0: EL Feature 1\n      1: EL Feature 2\n |
