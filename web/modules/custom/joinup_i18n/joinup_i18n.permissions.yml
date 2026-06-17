@@ -1,9 +1,5 @@
 view admin pages in preferred language:
   title: 'View admin pages in user-preferred language'
   description: 'Allows admin pages to be shown in the user’s preferred interface language.'
-view content translations:
-  title: 'View content translations'
-  description: 'Allows viewing the non-default (translated) versions of content. Without this permission only the original (English) version is accessible.'
-  restrict access: true
 schedule translation:
   title: 'Schedule translation'
