@@ -8,7 +8,6 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\Attribute\QueueWorker;
-use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\Queue\QueueWorkerBase;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\pathauto\PathautoGeneratorInterface;
@@ -30,7 +29,6 @@ class JoinupGroupContentQueueWorker extends QueueWorkerBase implements Container
     mixed $plugin_definition,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly PathautoGeneratorInterface $aliasGenerator,
-    protected readonly QueueFactory $queueFactory,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
@@ -45,7 +43,6 @@ class JoinupGroupContentQueueWorker extends QueueWorkerBase implements Container
       $plugin_definition,
       $container->get('entity_type.manager'),
       $container->get('pathauto.generator'),
-      $container->get('queue'),
     );
   }
 
