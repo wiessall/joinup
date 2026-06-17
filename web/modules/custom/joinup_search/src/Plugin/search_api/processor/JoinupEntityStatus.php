@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\joinup_badge\Entity\Certificate;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
@@ -133,7 +134,7 @@ class JoinupEntityStatus extends ProcessorPluginBase implements PluginFormInterf
       elseif ($object instanceof UserInterface) {
         $enabled = $object->isActive();
       }
-      elseif ($object instanceof GroupInterface) {
+      elseif ($object instanceof GroupInterface || $object instanceof Certificate) {
         $enabled = $object->isPublished();
       }
 
