@@ -11,6 +11,7 @@ use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Logger\RfcLogLevel;
@@ -172,39 +173,11 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
    *   The prepared query.
    */
   protected function getSearchQuery(array $settings, SearchItemInterface $item, int $element): QueryInterface {
-    $field_definition = $this->fieldDefinition;
-    $entity = $item->getEntity();
-    if ($entity instanceof MetaEntityInterface) {
-      $entity = $entity->getTargetEntity();
-    }
     $options = [
       'limit' => !empty($settings['limit']) ? $settings['limit'] : 10,
       'offset' => $this->request->query->get('page') !== NULL ? $this->pagerManager->findPage($element) * (int) $settings['limit'] : 0,
-      'search_api_field entity' => $entity,
-      'search_api_field item' => $item,
     ];
-    $query = $this->getSearchApiIndex()->query($options);
-    $query->setLanguages([$this->languageManager->getCurrentLanguage()->getId()]);
-    $query->setSearchId($field_definition->id());
-    $query->setParseMode($this->parseModeManager->createInstance('direct'));
-
-    if (!empty($settings['query_presets'])) {
-      $this->applyPresets($query, $settings['query_presets']);
-    }
-
-    if (!empty($settings['query_builder'])) {
-      $this->applyQueryBuilderConfiguration($query, $settings['query_builder']);
-    }
-
-    $hooks = [
-      'search_api_field',
-      'search_api_field_' . $field_definition->getName(),
-    ];
-    foreach ($hooks as $hook) {
-      $query->addTag($hook);
-    }
-
-    return $query;
+    return $this->prepareQuery($settings, $item, $options);
   }
 
   /**
@@ -219,18 +192,41 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
    *   The prepared query.
    */
   protected function getArchivedQuery(array $settings, SearchItemInterface $item): QueryInterface {
+    $options = ['search_api_field archived' => TRUE];
+    $extra_hooks = ['search_api_field_' . $this->fieldDefinition->getName() . '_archived'];
+    return $this->prepareQuery($settings, $item, $options, '.archived', $extra_hooks);
+  }
+
+  /**
+   * Prepares a search query with the common configuration and tags.
+   *
+   * @param array $settings
+   *   The settings configured in the field.
+   * @param \Drupal\search_api_field\Plugin\Field\FieldType\SearchItemInterface $item
+   *   The field item.
+   * @param array $options
+   *   Additional query options to merge into the base ones.
+   * @param string $search_id_suffix
+   *   Optional suffix appended to the search ID.
+   * @param array $extra_hooks
+   *   Additional hook tags to add on top of the base ones.
+   *
+   * @return \Drupal\search_api\Query\QueryInterface
+   *   The prepared query.
+   */
+  protected function prepareQuery(array $settings, SearchItemInterface $item, array $options = [], string $search_id_suffix = '', array $extra_hooks = []): QueryInterface {
     $field_definition = $this->fieldDefinition;
     $entity = $item->getEntity();
     if ($entity instanceof MetaEntityInterface) {
       $entity = $entity->getTargetEntity();
     }
-    $options = [
+    $options += [
       'search_api_field entity' => $entity,
       'search_api_field item' => $item,
-      'search_api_field archived' => TRUE,
     ];
     $query = $this->getSearchApiIndex()->query($options);
-    $query->setSearchId($field_definition->id() . '.archived');
+    $query->addCondition('language_with_fallback', $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId());
+    $query->setSearchId($field_definition->id() . $search_id_suffix);
     $query->setParseMode($this->parseModeManager->createInstance('direct'));
 
     if (!empty($settings['query_presets'])) {
@@ -240,14 +236,15 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
     if (!empty($settings['query_builder'])) {
       $this->applyQueryBuilderConfiguration($query, $settings['query_builder']);
     }
-    $hooks = [
+
+    $hooks = array_merge([
       'search_api_field',
       'search_api_field_' . $field_definition->getName(),
-      'search_api_field_' . $field_definition->getName() . '_archived',
-    ];
+    ], $extra_hooks);
     foreach ($hooks as $hook) {
       $query->addTag($hook);
     }
+
     return $query;
   }
 
