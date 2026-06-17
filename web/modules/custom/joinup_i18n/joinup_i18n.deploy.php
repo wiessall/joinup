@@ -121,6 +121,7 @@ function joinup_i18n_deploy_201401(array &$sandbox): string {
       url: $url,
       platform: $solution->get('oss_hosting_platform')->plugin_id,
       defaultBranch: $solution->get('oss_default_branch')->value,
+      files: ['publiccodeYml' => $solution->getPublicCodeYaml()]
     );
 
     $relevantLang = $parser->getRelevantLangcode($project);
