@@ -6,7 +6,7 @@ dependencies:
     - user
 third_party_settings:
   joinup_badge:
-    icon: award
+    icon: mortarboard
     description: 'This user has uploaded certificates by the Interoperable Europe Academy.'
 id: certificate
 label: Certificate
