@@ -465,7 +465,7 @@ function joinup_solution_build_related_solutions_tiles(array $ids): array {
       continue;
     }
     $view_builder = Drupal::entityTypeManager()->getViewBuilder($referenced_solution->getEntityTypeId());
-    $element = $view_builder->view($referenced_solution, 'view_mode_tile', $referenced_solution->language()->getId());
+    $element = $view_builder->view($referenced_solution, 'view_mode_tile');
     $elements[$delta] = [
       '#type' => 'container',
       '#extra_suggestion' => 'container__grid_item',
@@ -498,30 +498,26 @@ function joinup_solution_build_related_solutions_tiles(array $ids): array {
  *   The render array of related solutions.
  */
 function joinup_solution_build_related_solutions_titles(array $ids): array {
-  $build = [];
-  $entities = array_values(Node::loadMultiple($ids));
-  $count = count($entities);
-  $elements = [];
-  for ($i = 0; $i < $count; $i++) {
-    $elements[] = [
-      '#markup' => $entities[$i]->get('title')->value . ($i === $count - 1 ?: ', '),
-    ];
+  /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
+  $entity_repository = \Drupal::service('entity.repository');
+  $labels = array_map(static fn($entity) => $entity_repository->getTranslationFromContext($entity)->label(), Node::loadMultiple($ids));
+  if (empty($labels)) {
+    return [];
   }
-  if ($elements) {
-    $build = [
-      '#theme' => 'field',
-      '#extra_suggestion' => 'field__inline',
-      '#title' => t('Related solutions'),
-      '#field_name' => 'related_solutions',
-      '#field_type' => 'entity_reference',
-      '#entity_type' => 'node',
-      '#bundle' => 'solution',
-      '#label_display' => 'inline',
-      '#is_multiple' => TRUE,
-      '#view_mode' => 'default',
-    ] + $elements;
-  }
-  return $build;
+
+  return [
+    '#theme' => 'field',
+    '#extra_suggestion' => 'field__inline',
+    '#title' => t('Related solutions'),
+    '#field_name' => 'related_solutions',
+    '#field_type' => 'entity_reference',
+    '#entity_type' => 'node',
+    '#bundle' => 'solution',
+    '#label_display' => 'inline',
+    '#is_multiple' => TRUE,
+    '#view_mode' => 'default',
+    ['#markup' => implode(', ', $labels)],
+  ];
 }
 
 /**
