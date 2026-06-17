@@ -7,10 +7,46 @@
 
 declare(strict_types=1);
 
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+
+/**
+ * Install new taxonomy_term.topic field configs from config sync.
+ */
+function topic_update_201400(): void {
+  $sync_storage = \Drupal::service('config.storage.sync');
+
+  $storage_configs = [
+    'field.storage.taxonomy_term.abstract',
+    'field.storage.taxonomy_term.image',
+    'field.storage.taxonomy_term.topics_paragraph',
+  ];
+
+  foreach ($storage_configs as $name) {
+    $config_data = $sync_storage->read($name);
+    if ($config_data && !FieldStorageConfig::load($config_data['id'])) {
+      FieldStorageConfig::create($config_data)->save();
+    }
+  }
+
+  $field_configs = [
+    'field.field.taxonomy_term.topic.abstract',
+    'field.field.taxonomy_term.topic.image',
+    'field.field.taxonomy_term.topic.topics_paragraph',
+  ];
+
+  foreach ($field_configs as $name) {
+    $config_data = $sync_storage->read($name);
+    if ($config_data && !FieldConfig::load($config_data['id'])) {
+      FieldConfig::create($config_data)->save();
+    }
+  }
+}
+
 /**
  * Migrate topic meta entity data to taxonomy term fields.
  */
-function topic_update_201400(array &$sandbox): string {
+function topic_update_201401(array &$sandbox): string {
   $entity_type_manager = \Drupal::entityTypeManager();
   $meta_entity_storage = $entity_type_manager->getStorage('meta_entity');
   $logger = \Drupal::logger('topic');
