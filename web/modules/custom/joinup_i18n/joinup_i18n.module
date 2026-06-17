@@ -69,20 +69,6 @@ function joinup_i18n_language_switch_links_alter(array &$links, string $type, Ur
 }
 
 /**
- * Implements hook_entity_insert().
- */
-function joinup_i18n_entity_insert(EntityInterface $entity): void {
-  if (!$entity instanceof ContentEntityInterface || !$entity->isTranslatable()) {
-    return;
-  }
-
-  \Drupal::queue('joinup_i18n:translation_alias')->createItem([
-    'entity_type_id' => $entity->getEntityTypeId(),
-    'entity_id' => $entity->id(),
-  ]);
-}
-
-/**
  * Implements hook_babel_translation_type_info_alter().
  */
 function joinup_i18n_babel_translation_type_info_alter(array &$definitions): void {
