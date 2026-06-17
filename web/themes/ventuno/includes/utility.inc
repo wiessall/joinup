@@ -293,6 +293,7 @@ function _ventuno_get_default_icon(string $entity_type_id, string $bundle): stri
       'release' => 'file-earmark-zip',
       'video' => 'file-earmark-play',
       'solution' => 'clipboard2-check',
+      'certificate' => 'award',
     ],
   ];
 

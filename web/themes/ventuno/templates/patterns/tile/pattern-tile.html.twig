@@ -59,12 +59,13 @@
   {% set _image %}
     {% if extra_data['logo'] is not empty %}
       <img src="{{ extra_data['logo']['src'] }}" alt="{{ extra_data['logo']['alt']}}">
-    {% endif %}
+    {% else %}
         <div class="tile__default-img h-100 w-100 bg-secondary d-flex flex-column align-items-center justify-content-center position-relative">
           <svg class="tile__default-icon position-relative bi img-fluid">
             <use xlink:href="{{ bcl_icon_path }}#{{ _bundle.icon }}"></use>
           </svg>
         </div>
+    {% endif %}
   {% endset %}
 {% endif %}
 
