@@ -115,7 +115,7 @@ class OssSolutionListingPageTest extends FetchTestBase {
           'Project 1.2',
           'Project 1.2',
           'https://limited.self-hosted.gitlab.example.com/group1/project-1-2',
-          '[DE] Group1: Project 2: Short description',
+          '[EN] Group1: Project 2: Short description',
           'Developers Italia',
           'EN, DE, IT',
           'Yes',

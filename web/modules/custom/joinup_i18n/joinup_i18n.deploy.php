@@ -16,43 +16,9 @@ use Drupal\tmgmt\JobInterface;
 use Drupal\tmgmt_ec_etranslation\Plugin\tmgmt\Translator\ETranslationTranslator;
 
 /**
- * Queue path alias creation for all enabled languages on existing nodes.
- */
-function joinup_i18n_deploy_201400(array &$sandbox): string {
-  if (!isset($sandbox['nids'])) {
-    $sandbox['nids'] = array_values(\Drupal::entityTypeManager()
-      ->getStorage('node')->getQuery()
-      ->accessCheck(FALSE)->execute());
-    $sandbox['total'] = count($sandbox['nids']);
-    $sandbox['processed'] = 0;
-  }
-
-  if (empty($sandbox['nids'])) {
-    $sandbox['#finished'] = 1;
-    return "No nodes to process.";
-  }
-
-  $batch_size = 500;
-  $nids = array_splice($sandbox['nids'], 0, $batch_size);
-  $queue = \Drupal::queue('joinup_i18n:translation_alias');
-
-  foreach ($nids as $nid) {
-    $queue->createItem([
-      'entity_type_id' => 'node',
-      'entity_id' => $nid,
-    ]);
-  }
-
-  $sandbox['processed'] += count($nids);
-  $sandbox['#finished'] = $sandbox['total'] ? $sandbox['processed'] / $sandbox['total'] : 1;
-
-  return "Queued {$sandbox['processed']}/{$sandbox['total']} nodes for alias generation.";
-}
-
-/**
  * Create continuous jobs for all enabled languages.
  */
-function joinup_i18n_deploy_201401(array &$sandbox): string {
+function joinup_i18n_deploy_201400(array &$sandbox): string {
   if (!isset($sandbox['pairs'])) {
     $langcodes = array_keys(\Drupal::languageManager()->getLanguages());
 
@@ -105,7 +71,7 @@ function joinup_i18n_deploy_201401(array &$sandbox): string {
 /**
  * Set OSS solution langcodes to their relevant language.
  */
-function joinup_i18n_deploy_201402(array &$sandbox): string {
+function joinup_i18n_deploy_201401(array &$sandbox): string {
   $storage = \Drupal::entityTypeManager()->getStorage('node');
   $db = \Drupal::database();
   $parser = \Drupal::service('plugin.manager.eu_oss_catalogue.parser')->createInstance('publiccode_yml');
@@ -155,6 +121,7 @@ function joinup_i18n_deploy_201402(array &$sandbox): string {
       url: $url,
       platform: $solution->get('oss_hosting_platform')->plugin_id,
       defaultBranch: $solution->get('oss_default_branch')->value,
+      files: ['publiccodeYml' => $solution->getPublicCodeYaml()]
     );
 
     $relevantLang = $parser->getRelevantLangcode($project);
@@ -173,11 +140,52 @@ function joinup_i18n_deploy_201402(array &$sandbox): string {
           ':langcode' => $relevantLang,
         ]);
       }
-      foreach (['node', 'node_revision'] as $table) {
-        $db->query("UPDATE {{$table}} SET langcode = :langcode WHERE nid = :nid", [
-          ':langcode' => $relevantLang,
-          ':nid' => $nid,
-        ]);
+
+      $suffixes = [
+        '',
+        'oss_archived',
+        'oss_available_languages',
+        'oss_categories',
+        'oss_default_branch',
+        'oss_development_status',
+        'oss_git_description',
+        'oss_git_forks',
+        'oss_git_open_issues',
+        'oss_git_open_pull_requests',
+        'oss_git_stars',
+        'oss_git_url',
+        'oss_hosting_platform',
+        'oss_landing_url',
+        'oss_license',
+        'oss_logo',
+        'oss_maintenance_contacts',
+        'oss_maintenance_contractors',
+        'oss_maintenance_type',
+        'oss_owner',
+        'oss_platform_reference',
+        'oss_platforms',
+        'oss_publiccode_yml_content',
+        'oss_publiccode_yml_version',
+        'oss_release_date',
+        'oss_scope',
+        'oss_software_type',
+        'oss_software_version',
+        'oss_source',
+        'oss_source_hash',
+        'oss_used_by',
+        'oss_validation_issues',
+        'oss_validation_status',
+        'oss_vitality_index',
+        'oss_vitality_index_range',
+      ];
+
+      $args = [':langcode' => $relevantLang, ':nid' => $nid];
+      foreach ($suffixes as $suffix) {
+        $field = $suffix ? 'entity_id' : 'nid';
+        foreach (['node', 'node_revision'] as $prefix) {
+          $table = rtrim("{$prefix}__$suffix", '_');
+          $db->query("UPDATE {{$table}} SET langcode = :langcode WHERE $field = :nid", $args);
+        }
       }
 
       $storage->resetCache([$nid]);
@@ -192,7 +200,7 @@ function joinup_i18n_deploy_201402(array &$sandbox): string {
 /**
  * Schedule translation of topic meta-entities.
  */
-function joinup_i18n_deploy_201403(array &$sandbox): string {
+function joinup_i18n_deploy_201402(array &$sandbox): string {
   $storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
   if (!isset($sandbox['ids'])) {
     $sandbox['ids'] = $storage->getQuery()->accessCheck(FALSE)
