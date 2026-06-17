@@ -3,20 +3,20 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.meta_entity.teaser
+    - core.entity_view_mode.taxonomy_term.teaser
     - entityqueue.entity_queue.homepage_topics
-    - meta_entity.type.topic
+    - taxonomy.vocabulary.topic
   module:
     - entityqueue
-    - meta_entity
+    - taxonomy
     - user
 id: homepage_topics
 label: 'Homepage topics'
 module: views
 description: ''
 tag: ''
-base_table: meta_entity_field_data
-base_field: id
+base_table: taxonomy_term_field_data
+base_field: tid
 display:
   default:
     id: default
@@ -28,12 +28,12 @@ display:
       fields:
         rendered_entity:
           id: rendered_entity
-          table: meta_entity
+          table: taxonomy_term
           field: rendered_entity
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: meta_entity
+          entity_type: taxonomy_term
           plugin_id: rendered_entity
           label: ''
           exclude: false
@@ -103,12 +103,12 @@ display:
       sorts:
         entityqueue_relationship:
           id: entityqueue_relationship
-          table: meta_entity_field_data
+          table: taxonomy_term_field_data
           field: entityqueue_relationship
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: meta_entity
+          entity_type: taxonomy_term
           plugin_id: entity_queue_position
           order: ASC
           expose:
@@ -117,25 +117,57 @@ display:
           exposed: false
       arguments: {  }
       filters:
-        type:
-          id: type
-          table: meta_entity_field_data
-          field: type
-          entity_type: meta_entity
-          entity_field: type
-          plugin_id: bundle
-          value:
-            topic: topic
-          expose:
-            operator_limit_selection: false
-            operator_list: {  }
-        published_value:
-          id: published_value
-          table: meta_entity__published
-          field: published_value
+        vid:
+          id: vid
+          table: taxonomy_term_field_data
+          field: vid
           relationship: none
           group_type: group
           admin_label: ''
+          entity_type: taxonomy_term
+          entity_field: vid
+          plugin_id: bundle
+          operator: in
+          value:
+            topic: topic
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        status:
+          id: status
+          table: taxonomy_term_field_data
+          field: status
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: taxonomy_term
+          entity_field: status
           plugin_id: boolean
           operator: '='
           value: '1'
@@ -169,12 +201,12 @@ display:
             group_items: {  }
         default_langcode:
           id: default_langcode
-          table: meta_entity_field_data
+          table: taxonomy_term_field_data
           field: default_langcode
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: meta_entity
+          entity_type: taxonomy_term
           entity_field: default_langcode
           plugin_id: boolean
           operator: '='
@@ -214,7 +246,7 @@ display:
           default_row_class: false
           uses_fields: false
       row:
-        type: 'entity:meta_entity'
+        type: 'entity:taxonomy_term'
         options:
           relationship: none
           view_mode: teaser
@@ -229,12 +261,12 @@ display:
       relationships:
         entityqueue_relationship:
           id: entityqueue_relationship
-          table: meta_entity_field_data
+          table: taxonomy_term_field_data
           field: entityqueue_relationship
           relationship: none
           group_type: group
-          admin_label: 'Meta entity queue'
-          entity_type: meta_entity
+          admin_label: 'Taxonomy term queue'
+          entity_type: taxonomy_term
           plugin_id: entity_queue
           required: true
           limit_queue: homepage_topics
