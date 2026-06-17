@@ -161,11 +161,11 @@ function topic_theme(): array {
     // Normally theme suggestion templates are only picked up when they are in
     // themes. We explicitly define a theme suggestion here so that our custom
     // template will be included.
-    'meta_entity__homepage_topics__configurable_listing__list' => [
+    'taxonomy_term__homepage_topics__configurable_listing__list' => [
       'render element' => 'elements',
       'base hook' => 'node',
     ],
-    'meta_entity__homepage_topics__configurable_listing__grid' => [
+    'taxonomy_term__homepage_topics__configurable_listing__grid' => [
       'render element' => 'elements',
       'base hook' => 'node',
     ],
