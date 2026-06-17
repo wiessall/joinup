@@ -14,4 +14,4 @@ id: assessment_statement.technical
 target_entity_type_id: assessment_statement
 target_bundle: technical
 default_langcode: current_interface
-language_alterable: false
+language_alterable: true
