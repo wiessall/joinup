@@ -6,11 +6,11 @@ Feature: User certificates
 
   Background:
     Given the following solution content:
-      | title                    | collection                   | state     | nid |
-      | Published IOPEU Solution | Interoperable Europe Academy | published |     |
-      | Archived IOPEU Solution  | Interoperable Europe Academy | archived  | 50  |
-      | Draft IOPEU Solution     | Interoperable Europe Academy | draft     |     |
-      | Portal IOPEU Solution    | Portal support               | published |     |
+      | title                    | collection                   | state     | logo     |
+      | Published IOPEU Solution | Interoperable Europe Academy | published |          |
+      | Archived IOPEU Solution  | Interoperable Europe Academy | archived  | logo.png |
+      | Draft IOPEU Solution     | Interoperable Europe Academy | draft     |          |
+      | Portal IOPEU Solution    | Portal support               | published |          |
     And the following news content:
       | title                     | collection                   | body         |
       | News about IOPEU Solution | Interoperable Europe Academy | Just a test! |
@@ -41,11 +41,18 @@ Feature: User certificates
     Then field should be present "Issuing date"
     And I type "Archived IOPEU" in the Course autocomplete field
     And I pick "Archived IOPEU Solution" from the Course autocomplete suggestions
+    And I fill in "certificates[form][0][issuing_date][0][value][date]" with "12/06/2026"
     And I attach the file "text.pdf" to "files[certificates_form_0_certificate_0]"
     And I press "Create certificate"
     And I press "Save"
-    Then I should see the success message "The changes have been saved."
-    And I go to the edit form of the "Sara the User" user
+    Then I go to the profile of "Sara the User"
+    And I should see the link "1 Certificate"
+    Then I should see the following tiles in the correct order:
+      | Archived IOPEU Solution |
+      | Portal support          |
+    Then the logo should be shown in the "Archived IOPEU Solution" certificate tile
+    And  I see the text "Issuing date: 06/12/2026" in the "Archived IOPEU Solution" tile
+    When I go to the edit form of the "Sara the User" user
     Then I should see the link "Archived IOPEU Solution"
     And I should see the text "Certificate of course"
     Then the "IEF table" table should contain the following columns:
@@ -96,9 +103,38 @@ Feature: User certificates
     Then I should see the link "Archived IOPEU Solution"
     And I should see the text "Certificate of course"
     Then the "IEF table" table should contain the following columns:
-      | Course                  | Status      |
+      | Course                  | Status    |
       | Archived IOPEU Solution | Published |
     And user "Sara the User" should have the "certificate" badge
+
+  @javascript
+  Scenario: Certificate tiles on the user profile page do not show contextual links
+    When I am logged in as "Peter the Moderator"
+    And I go to the edit form of the "Sara the User" user
+    And I press the "Add new certificate" button
+    And I type "Archived IOPEU" in the Course autocomplete field
+    And I pick "Archived IOPEU Solution" from the Course autocomplete suggestions
+    And I attach the file "text.pdf" to "files[certificates_form_0_certificate_0]"
+    And I press "Create certificate"
+    And I press "Save"
+    Then I go to the public profile of "Sara the User"
+    And I should not see the contextual links "Edit, Delete" in the "Archived IOPEU Solution" tile
+
+  @javascript
+  Scenario: Certificate title is safely truncated when the course title exceeds the title field limit
+    Given the following solution content:
+      | title                                                                                                                                                                                                                                                      | collection                   | state     |
+      | Long Running Solution Title That Will Trigger Truncation In The Certificate Entity Bundle Class Because It Exceeds The Two Hundred And Thirty Three Character Limit For Course Titles In This Context And Therefore Absolutely Needs To Be Shortened Here! | Interoperable Europe Academy | published |
+    When I am logged in as "Peter the Moderator"
+    And I go to the edit form of the "Sara the User" user
+    And I press the "Add new certificate" button
+    And I type "Long Running Solution Title" in the Course autocomplete field
+    And I pick "Long Running Solution Title That Will Trigger Truncation In The Certificate Entity Bundle Class Because It Exceeds The Two Hundred And Thirty Three Character Limit For Course Titles In This Context And Therefore Absolutely Needs To Be Shortened Here!" from the Course autocomplete suggestions
+    And I attach the file "text.pdf" to "files[certificates_form_0_certificate_0]"
+    And I press "Create certificate"
+    And I press "Save"
+    Then I go to the profile of "Sara the User"
+    And I should see the link "1 Certificate"
 
   @javascript
   Scenario: Users have no access to certificate canonical, edit and delete page
@@ -112,9 +148,9 @@ Feature: User certificates
     And I attach the file "text.pdf" to "files[certificates_form_0_certificate_0]"
     And I press "Create certificate"
     And I press "Save"
-    Then I go to the "Certificate of course 50" certificate
+    Then I go to the "Certificate of course Archived IOPEU Solution" certificate
     Then I should see the heading "Page not found"
-    Then I go to the edit form of the "Certificate of course 50" certificate
+    Then I go to the edit form of the "Certificate of course Archived IOPEU Solution" certificate
     Then I should see the heading "Page not found"
-    Then I go to the delete form of the "Certificate of course 50" certificate
+    Then I go to the delete form of the "Certificate of course Archived IOPEU Solution" certificate
     Then I should see the heading "Page not found"

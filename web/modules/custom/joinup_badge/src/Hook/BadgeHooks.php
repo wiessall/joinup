@@ -11,16 +11,19 @@ use Drupal\Core\DestructableInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_badge\BadgeService;
 use Drupal\joinup_badge\Entity\BadgeAwarding;
 use Drupal\joinup_badge\Entity\Certificate;
+use Drupal\joinup_badge\Entity\CertificateInterface;
 use Drupal\joinup_badge\Plugin\Field\FieldType\BadgeFieldItemList;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\user\UserInterface;
+use Drush\Commands\AutowireTrait;
 
 /**
  * Hooks for the joinup_badge module.
@@ -28,6 +31,7 @@ use Drupal\user\UserInterface;
 class BadgeHooks implements DestructableInterface {
 
   use StringTranslationTrait;
+  use AutowireTrait;
 
   /**
    * The UUID of the Interoperable Europe Community group.
@@ -71,6 +75,7 @@ class BadgeHooks implements DestructableInterface {
     protected readonly BadgeService $badgeService,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly TimeInterface $time,
+    protected readonly FileUrlGeneratorInterface $fileUrlGenerator,
   ) {}
 
   /**
@@ -183,6 +188,18 @@ class BadgeHooks implements DestructableInterface {
   }
 
   /**
+   * Implements hook_ENTITY_TYPE_view_alter() for node entities.
+   */
+  #[Hook('node_view_alter')]
+  public function nodeViewAlter(array &$build, NodeInterface $node): void {
+    if (!$node instanceof CertificateInterface) {
+      return;
+    }
+
+    unset($build['#contextual_links']);
+  }
+
+  /**
    * Implements hook_og_membership_delete().
    */
   #[Hook('og_membership_delete')]
@@ -234,6 +251,30 @@ class BadgeHooks implements DestructableInterface {
       'label' => $this->t('Course'),
       'weight' => 10,
       'display_options' => ['type' => 'entity_reference_label'],
+    ];
+  }
+
+  /**
+   * Implements hook_preprocess_HOOK().
+   */
+  #[Hook('preprocess_node__view_mode_tile')]
+  public function preprocessCertificateTile(array &$variables): void {
+    if (!($certificate = $variables['elements']['#node']) instanceof CertificateInterface) {
+      return;
+    }
+    $logo = $certificate->get('course')->entity?->get('logo');
+    $issuing_date = $certificate->get('issuing_date')->date?->format('d/m/Y');
+    $variables['url'] = $this->fileUrlGenerator->generateAbsoluteString($certificate->get('certificate')->entity?->getFileUri() ?? '');
+    $variables['label'] = $certificate->get('course')->entity?->getTitle();
+    if (!empty($issuing_date)) {
+      $variables['info']['label'] = $this->t('Issuing date:') . ' ' . $issuing_date;
+    }
+    else {
+      unset($variables['info']);
+    }
+    $variables['extra_data']['logo'] = [
+      'src' => $this->fileUrlGenerator->generateAbsoluteString($logo?->entity?->getFileUri() ?? ''),
+      'alt' => $logo?->first()?->get('alt')?->getString() ?? '',
     ];
   }
 

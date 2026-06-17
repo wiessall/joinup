@@ -691,6 +691,7 @@ module.exports = {
           "file-earmark-text.svg",
           "file-earmark-zip.svg",
           "file-font.svg",
+          "file-pdf.svg",
           "file-x.svg",
           "filter.svg",
           "folder2-open.svg",

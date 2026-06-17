@@ -73,7 +73,8 @@ class Certificate extends Node implements CertificateInterface {
       $this->setOwner($userParam);
     }
 
-    $this->setTitle("Certificate of course {$course->id()}");
+    $courseInEnglish = $course->hasTranslation('en') ? $course->getTranslation('en') : $course->getUntranslated();
+    $this->setTitle(mb_substr("Certificate of course {$courseInEnglish->label()}", 0, 255));
   }
 
 }
