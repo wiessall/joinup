@@ -7,7 +7,6 @@ namespace Drupal\joinup_oss_catalogue\Entity;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Url;
 use Drupal\eu_oss_catalogue\Entity\OssSolution;
 use Drupal\file\FileInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
@@ -15,7 +14,6 @@ use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_bundle_class\LogoTrait;
-use Drupal\joinup_oss_catalogue\Plugin\LanguageNegotiation\OssContentNegotiation;
 
 /**
  * Joinup OSS solution.
@@ -70,27 +68,6 @@ class JoinupOssSolution extends OssSolution implements DescriptionInterface, Log
     }
 
     return parent::access($operation, $account, $return_as_object);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function toUrl($rel = NULL, array $options = []): Url {
-    $url = parent::toUrl($rel, $options);
-
-    // Tell OssContentNegotiation to process edit-form and any content
-    // translation URLs during outbound.
-    /* @see \Drupal\joinup_oss_catalogue\Plugin\LanguageNegotiation\OssContentNegotiation::processOutbound */
-    if (in_array($rel, [
-      'edit-form',
-      'drupal:content-translation-add',
-      'drupal:content-translation-edit',
-      'drupal:content-translation-delete',
-    ], TRUE)) {
-      $url->setOption(OssContentNegotiation::METHOD_ID, TRUE);
-    }
-
-    return $url;
   }
 
 }

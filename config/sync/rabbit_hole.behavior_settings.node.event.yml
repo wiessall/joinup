@@ -1,0 +1,13 @@
+uuid: 912dfa08-b7ca-4c86-a5e0-883f33a881cf
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.event
+id: node.event
+targetEntityType: node
+bundle: event
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

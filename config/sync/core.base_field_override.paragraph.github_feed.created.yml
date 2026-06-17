@@ -1,0 +1,18 @@
+uuid: 4608d1a9-482f-4674-9432-9ce6de04a9b8
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.github_feed
+id: paragraph.github_feed.created
+field_name: created
+entity_type: paragraph
+bundle: github_feed
+label: 'Authored on'
+description: 'The time that the Paragraph was created.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: created

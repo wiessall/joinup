@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Hook\BeforeSuite;
+use Behat\Mink\Exception\ExpectationException;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
@@ -457,6 +458,34 @@ class JoinupCoreContext extends RawDrupalContext {
       $this->assertCondition(
         str_contains($response, $expectedLine),
         "The expected line '$expectedLine' was not found in the response body.",
+      );
+    }
+  }
+
+  /**
+   * Asserts that a field's form-item wrapper has no inline form error.
+   *
+   * @param string $field
+   *   The field locator (label, name or id) of the field to check.
+   */
+  #[Then('the :field field should not have an inline form error')]
+  public function assertNoInlineFormErrorOnField(string $field): void {
+    $element = $this->getSession()->getPage()->findField($field);
+    if (!$element) {
+      throw new ExpectationException(
+        sprintf('Field "%s" was not found on the page.', $field),
+        $this->getSession()->getDriver(),
+      );
+    }
+    $form_item = $element->find('xpath', "ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' form-item ')][1]");
+    if (!$form_item) {
+      return;
+    }
+    $error_message = $form_item->find('css', '.form-item--error-message, .form-item__error-message');
+    if ($error_message) {
+      throw new ExpectationException(
+        sprintf('Field "%s" has an inline form error "%s", but should not.', $field, trim($error_message->getText())),
+        $this->getSession()->getDriver(),
       );
     }
   }

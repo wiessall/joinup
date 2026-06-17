@@ -219,7 +219,7 @@ Feature: Global search
       | Zzolution | published |
 
     When I enter "ZzoluDistro" in the search bar and press enter
-    Then I should see "No content found for your search."
+    Then I should see the text "No content found for your search."
 
     # Add distribution, child of solution.
     Given the following "distribution" content:
@@ -249,9 +249,9 @@ Feature: Global search
     # Repeat the previous searches to prove that the initial keywords were removed.
     Given I am an anonymous user
     When I enter "zzoludistro" in the search bar and press enter
-    Then I should see "No content found for your search."
+    Then I should see the text "No content found for your search."
     When I enter "ubermensch" in the search bar and press enter
-    Then I should see "No content found for your search."
+    Then I should see the text "No content found for your search."
     When I enter "apache" in the search bar and press enter
     Then the page should show only the tiles "Apache-2.0, Zzolution"
 

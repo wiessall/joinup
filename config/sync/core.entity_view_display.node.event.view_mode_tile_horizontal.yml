@@ -134,4 +134,3 @@ hidden:
   shared_in: true
   spatial_coverage: true
   uuid: true
-  visit_count: true

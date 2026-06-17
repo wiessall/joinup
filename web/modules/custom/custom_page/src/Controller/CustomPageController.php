@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\custom_page\Controller;
 
-use Drupal\Component\Utility\Xss;
 use Drupal\Core\Cache\CacheableRedirectResponse;
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\NodeInterface;
-use Drupal\og_menu\OgMenuInstanceInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -26,31 +24,6 @@ class CustomPageController implements ContainerInjectionInterface {
   public function __construct(
     protected readonly FileUrlGeneratorInterface $urlGenerator,
   ) {}
-
-  /**
-   * Altered title callback for the navigation menu edit form.
-   *
-   * @param \Drupal\og_menu\OgMenuInstanceInterface $ogmenu_instance
-   *   The OG Menu instance that is being edited.
-   *
-   * @return array
-   *   The title as a render array.
-   *
-   * @see \Drupal\custom_page\Routing\RouteSubscriber::alterRoutes()
-   */
-  public function editFormTitle(OgMenuInstanceInterface $ogmenu_instance): array {
-    // Provide a custom title for the OG Menu instance edit form. The default
-    // menu is suitable for webmasters, but we need a simpler title since this
-    // form is exposed to regular visitors.
-    $group = $ogmenu_instance->og_audience->entity;
-    return [
-      '#markup' => $this->t('Edit navigation menu of the %group @type', [
-        '%group' => $ogmenu_instance->label(),
-        '@type' => $group->bundle(),
-      ]),
-      '#allowed_tags' => Xss::getHtmlTagList(),
-    ];
-  }
 
   /**
    * Serves a file of the custom page attachments in the given delta position.

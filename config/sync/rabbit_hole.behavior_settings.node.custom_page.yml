@@ -1,0 +1,13 @@
+uuid: c5720f85-39ad-4228-ac0c-421c69c6be04
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.custom_page
+id: node.custom_page
+targetEntityType: node
+bundle: custom_page
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

@@ -6,11 +6,17 @@ dependencies:
     - field.storage.paragraph.resource_file
     - paragraphs.paragraphs_type.resource_file
   module:
+    - content_translation
     - file
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
+  content_translation:
+    translation_sync:
+      target_id: target_id
+      display: display
+      description: description
 id: paragraph.resource_file.resource_file
 field_name: resource_file
 entity_type: paragraph
@@ -18,7 +24,7 @@ bundle: resource_file
 label: 'File upload'
 description: ''
 required: true
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:

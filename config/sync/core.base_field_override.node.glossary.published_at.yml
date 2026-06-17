@@ -1,0 +1,20 @@
+uuid: 1f42cd81-65e6-48bd-9fcd-807625c1e842
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.glossary
+  module:
+    - publication_date
+id: node.glossary.published_at
+field_name: published_at
+entity_type: node
+bundle: glossary
+label: 'Published on'
+description: 'Keep the publication timestamp for each node.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: published_at

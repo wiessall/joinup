@@ -9,12 +9,10 @@ declare(strict_types=1);
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
 use Drupal\eif\Entity\EifPerspective;
 use Drupal\eif\Entity\EifPerspectiveInterface;
 use Drupal\eif\Entity\EifRecommendation;
 use Drupal\field\FieldConfigInterface;
-use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\views\ViewExecutable;
@@ -111,7 +109,6 @@ function _eif_form_meta_entity_no_empty_field_validate(array &$form, FormStateIn
  */
 function eif_meta_entity_insert(MetaEntityInterface $entity): void {
   _eif_reindex_parent_solution($entity);
-  _eif_add_eif_link_to_group_menus($entity);
 }
 
 /**
@@ -167,40 +164,6 @@ function _eif_reindex_parent_solution(MetaEntityInterface $entity): void {
   $list_cache_tags = ["{$entity->getEntityTypeId()}_list:{$entity->bundle()}"];
   $tags_to_invalidate = Cache::mergeTags($solution->getCacheTagsToInvalidate(), $list_cache_tags, $entity->getCacheTagsToInvalidate());
   $cache_tags_invalidator->invalidateTags($tags_to_invalidate);
-}
-
-/**
- * Creates a Link to EIF perspective view from the solution's left-side menu.
- *
- * @param \Drupal\meta_entity\Entity\MetaEntityInterface $meta_entity
- *   The RDF meta entity.
- */
-function _eif_add_eif_link_to_group_menus(MetaEntityInterface $meta_entity): void {
-  if ($meta_entity->bundle() === 'eif_perspective') {
-    $solution = $meta_entity->getTargetEntity();
-    if ($solution instanceof SolutionInterface) {
-      foreach (['navigation', 'quick_links'] as $bundle) {
-        $og_menu = \Drupal::entityTypeManager()->getStorage('ogmenu_instance')->loadByProperties([
-          'og_audience' => $solution->id(),
-          'type' => $bundle,
-        ]);
-        if ($og_menu = reset($og_menu)) {
-          $menu_name = 'ogmenu-' . $og_menu->id();
-          $link = [
-            'uri' => Url::fromRoute('entity.node.eif_perspective', [
-              'node' => $solution->id(),
-            ])->toUriString(),
-          ];
-          \Drupal::entityTypeManager()->getStorage('menu_link_content')->create([
-            'title' => t('EIF Perspective'),
-            'menu_name' => $menu_name,
-            'link' => $link,
-            'enabled' => $bundle === 'quick_links',
-          ])->save();
-        }
-      }
-    }
-  }
 }
 
 /**

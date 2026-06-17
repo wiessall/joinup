@@ -9,6 +9,7 @@ dependencies:
     - node.type.glossary
   module:
     - allowed_formats
+    - entity_form_field_label
     - text
 id: node.glossary.default
 targetEntityType: node
@@ -30,14 +31,26 @@ content:
         hide_guidelines: '1'
   field_glossary_synonyms:
     type: string_textfield
-    weight: 26
+    weight: 6
     region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 0
+    region: content
+    settings:
+      include_locked: false
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+        new_description: ''
+        rewrite_description: 0
   simple_sitemap:
-    weight: 10
+    weight: 4
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -50,16 +63,20 @@ content:
     third_party_settings: {  }
   title:
     type: string_textfield
-    weight: 0
+    weight: 1
     region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  translation:
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
 hidden:
   created: true
   current_workflow_state: true
-  langcode: true
   og_audience: true
   path: true
   promote: true
