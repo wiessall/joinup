@@ -66,12 +66,6 @@ class JoinupGroupContentQueueWorker extends QueueWorkerBase implements Container
 
     // Regenerate the group content alias.
     $this->aliasGenerator->updateEntityAlias($entity, 'bulkupdate');
-
-    // Queue alias generation for all other languages.
-    $this->queueFactory->get('joinup_i18n:translation_alias')->createItem([
-      'entity_type_id' => $data['entity_type_id'],
-      'entity_id' => $data['entity_id'],
-    ]);
   }
 
 }
