@@ -11,7 +11,7 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 
 /**
- * Install new taxonomy_term.topic field configs from config sync.
+ * Install new taxonomy_term.topic field configs and topic_vocabulary view.
  */
 function topic_update_201400(): void {
   $sync_storage = \Drupal::service('config.storage.sync');
@@ -39,6 +39,14 @@ function topic_update_201400(): void {
     $config_data = $sync_storage->read($name);
     if ($config_data && !FieldConfig::load($config_data['id'])) {
       FieldConfig::create($config_data)->save();
+    }
+  }
+
+  $view_storage = \Drupal::entityTypeManager()->getStorage('view');
+  if (!$view_storage->load('topic_vocabulary')) {
+    $config_data = $sync_storage->read('views.view.topic_vocabulary');
+    if ($config_data) {
+      $view_storage->create($config_data)->save();
     }
   }
 }
@@ -125,4 +133,40 @@ function topic_update_201401(array &$sandbox): string {
   }
 
   return sprintf('Migrated %d topic meta entities (%d without linked term).', $migrated, $skipped);
+}
+
+/**
+ * Migrate homepage_topics entityqueue items from meta_entity to taxonomy_term.
+ */
+function topic_update_201402(): string {
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $subqueue = $entity_type_manager->getStorage('entity_subqueue')->load('homepage_topics');
+  if (!$subqueue) {
+    return 'Homepage topics subqueue not found.';
+  }
+
+  $meta_entity_storage = $entity_type_manager->getStorage('meta_entity');
+  $items = $subqueue->get('items');
+
+  if ($items->isEmpty()) {
+    return 'No items found in homepage_topics entityqueue.';
+  }
+
+  $term_ids = [];
+  foreach ($items as $item) {
+    $meta_entity = $meta_entity_storage->load($item->target_id);
+    if (!$meta_entity) {
+      continue;
+    }
+    $term = $meta_entity->getTargetEntity();
+    if (!$term) {
+      continue;
+    }
+    $term_ids[] = ['target_id' => $term->id()];
+  }
+
+  $subqueue->set('items', $term_ids);
+  $subqueue->save();
+
+  return sprintf('Migrated %d homepage_topics queue items.', count($term_ids));
 }
