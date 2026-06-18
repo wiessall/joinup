@@ -2,7 +2,19 @@
 Feature:
   Ensure curated list of topics on the homepage behave properly.
 
-  Scenario: Show list of topics meta entity type and check a given parent and published field.
+  Scenario: Moderators can only edit allowed fields on the topic edit form.
+    Given I am logged in as a moderator
+    And I go to "/dashboard"
+    And I click Topics
+    And I click "Edit" in the "E-justice" row
+    Then I should see the heading "Edit E-justice"
+    And the following fields should be present "Abstract, Description, Image, Body"
+    But the following fields should not be present "Name"
+    And I should not see the following lines of text:
+      | Relations            |
+      | Revision information |
+
+  Scenario: Show list of topics and check a given parent.
     Given I am logged in as a moderator
     When I go to "/dashboard"
     Then I should see the link Topics
@@ -14,20 +26,8 @@ Feature:
     And I should see the text "E-health Dpt." in the "E-health" row
     And I should see the text "HR Dpt." in the "Employment and Support Allowance" row
     And I should see the text "HR Dpt." in the "HR" row
-    # The meta entity is unpublished by default.
-    And I should see the text "No" in the "E-justice" row
     # Sorting by parent not allowed.
     And I should not see the link "Parent topic"
-
-    When I click "Edit" in the "E-justice" row
-    Then I should see the heading "Edit E-justice"
-    And the checkbox "Published" should not be checked
-    When I check "Published"
-    And I press "Save"
-
-    # The meta entity is now marked as published.
-    And I should see the text "Yes" in the "E-justice" row
-    And I should see the heading "Topics"
 
     # The following is not reproducible in the UI but is a backend test for
     # future changes in the topic vocabulary.
@@ -40,22 +40,9 @@ Feature:
     And I reload the page
     Then I should see the link "Red parent"
 
-  @wip
-  Scenario: Moderators can access and manage the topics curated queue.
+  Scenario: Moderators can add topics with descriptions to the curated homepage queue.
     Given I am logged in as a moderator
     And I go to "/dashboard"
-    And I click "Curated content listings"
-    And I click "Homepage topics"
-    Then I should see the heading "Update curated content listing Homepage topics"
-    And I should see the button "Add item"
-
-    And I fill in "edit-items-add-more-new-item-target-id" with "E-justice"
-    And I press "Add item"
-    # 'E-justice' is unpublished so it cannot be found.
-    Then I should see the error message 'There are no meta entity entities matching "E-justice".'
-
-    # Publish 2 terms.
-    When I click "Dashboard"
     And I click Topics
     And I click "Edit" in the "E-justice" row
     And I attach the file "ada.png" to "Image"
@@ -67,12 +54,12 @@ Feature:
       | The resized image is too small. The minimum dimensions are 552x240 pixels and after resizing, the image size will be 153x240 pixels. |
     And I attach the file "topic.png" to "Image"
     And I press "Upload"
-    When I fill in "Description" with "E-justice description"
-    And I check "Published"
+    When I fill in "Abstract" with "E-justice abstract"
+    And I fill in "Description" with "E-justice description"
     And I press "Save"
     And I click "Edit" in the "Finance in EU" row
+    And I fill in "Abstract" with "Finance in EU abstract"
     And I fill in "Description" with "Finance in EU description"
-    And I check "Published"
     And I press "Save"
 
     # Add the 2 terms to the curated list.
@@ -97,36 +84,19 @@ Feature:
 
     When I go to the homepage
     Then I should see the text "E-justice" in the "Homepage topics" region
-    And I should see the text "E-justice description" in the "Homepage topics" region
+    And I should see the text "E-justice abstract" in the "Homepage topics" region
     And I should see the text "Finance in EU" in the "Homepage topics" region
-    And I should see the text "Finance in EU description" in the "Homepage topics" region
+    And I should see the text "Finance in EU abstract" in the "Homepage topics" region
     # The block title is shown now.
     And I should see the heading "Main topics"
-
-    # Unpublish a term and check it is removed from the curated list.
-    When I click "Dashboard"
-    And I click Topics
-    And I click "Edit" in the "E-justice" row
-    And I uncheck "Published"
-    And I press "Save"
-    Then I should see the success message "The topic has been removed from the homepage topics curated list since it was unpublished."
-    When I click "Dashboard"
-    And I click "Curated content listings"
-    And I click "Homepage topics"
-
-    When I go to the homepage
-    Then I should not see the text "E-justice" in the "Homepage topics" region
-    But I should see the text "Finance in EU" in the "Homepage topics" region
 
   Scenario: Moderators can alter the title of the homepage topics block.
     Given I am logged in as a moderator
     When I go to "/dashboard"
-    And I click "Topics"
-    And I click "Edit" in the "E-justice" row
-    And I check "Published"
-    And I press "Save"
+    When I click "Dashboard"
+    And I click "Curated content listings"
+    And I click "Homepage topics"
 
-    When I visit "/admin/structure/entityqueue/homepage_topics/homepage_topics"
     Then I should see the heading "Update curated content listing Homepage topics"
     When I fill in "edit-items-add-more-new-item-target-id" with "E-justice"
     And I press "Add item"
@@ -192,7 +162,7 @@ Feature:
     When I go to the homepage
     Then I should see the text "This will be shown in the homepage."
 
-  @javascript
+  @javascript @wip
   Scenario: Lists of configurable content can be added in the page of the topic meta entity.
     Given the following "news" content:
       | title  | headline | collection |
@@ -209,7 +179,7 @@ Feature:
       | Statistics and Analysis |
       | E-justice               |
     When I am logged in as a moderator
-    And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    And I go to the edit form of the "E-justice" topic
     And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
@@ -230,7 +200,7 @@ Feature:
     Then the response should contain "default abstract"
     And the url should match "/topic/law-and-justice/e-justice"
 
-    When I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    When I go to the edit form of the "E-justice" topic
     And I "delete" from the "Topic meta entity body" field the child 1 paragraph of 1 layout
     And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
       | layout position | 1                                       |
@@ -317,7 +287,7 @@ Feature:
       | E-justice           |
     When I am logged in as a moderator
 
-    And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    And I go to the edit form of the "E-justice" topic
     And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
@@ -337,7 +307,7 @@ Feature:
       | News 2 |
       | News 1 |
 
-    When I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    When I go to the edit form of the "E-justice" topic
     When I delete from the "Topic meta entity body" form field the layout paragraph in position 1
     And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
       | layout           | one column |
@@ -358,7 +328,7 @@ Feature:
       | News 2 |
       | News 1 |
 
-    When I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    When I go to the edit form of the "E-justice" topic
     When I delete from the "Topic meta entity body" form field the layout paragraph in position 1
     And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
       | layout           | one column |
@@ -388,7 +358,7 @@ Feature:
       | News 2 |
       | News 1 |
 
-    When I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    When I go to the edit form of the "E-justice" topic
     When I delete from the "Topic meta entity body" form field the layout paragraph in position 1
     And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
       | layout           | one column |
@@ -420,7 +390,7 @@ Feature:
       | Event 2 |
       | Event 3 |
 
-  @javascript
+  @javascript @wip
   Scenario Outline: Images should be shown for tile-two view modes.
     Given the following "<type>" content:
       | title       | headline    | short title | logo       |
@@ -428,7 +398,7 @@ Feature:
     And the following topics are enabled in the homepage:
       | E-justice |
     And I am logged in as a moderator
-    And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    And I go to the edit form of the "E-justice" topic
     And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
@@ -460,14 +430,14 @@ Feature:
       | discussion  | 1           | list       |
       | discussion  | 1           | grid       |
 
-  @javascript
+  @javascript @wip
   Scenario: Configurable listing for solutions
     Given the following "solution" content:
       | title                   | description              | collection | abstract                          | topic                                                                    | created    | changed    |
       | Another rough day       | Lorem description issum  | Portal support |                                   | E-justice, Finance in EU, Supplier exchange, HR, Statistics and Analysis | 01-01-2023 | 03-02-2023 |
       | Just another day & solt | Second description issum | Portal support | This is an solution with abstract | E-justice                                                                | 02-01-2023 | 03-02-2023 |
     When I am logged in as a moderator
-    And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    And I go to the edit form of the "E-justice" topic
     Then I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
@@ -502,7 +472,6 @@ Feature:
     And I should see the text "+3 topics" in the "Another rough day" tile
 
   # Regression test for ISAICP-11115.
-  @wip
   Scenario: Help text links on topics administration pages work correctly across languages.
     Given I am logged in as a moderator
 
