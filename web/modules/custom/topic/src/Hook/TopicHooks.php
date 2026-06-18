@@ -43,6 +43,9 @@ final class TopicHooks {
       return;
     }
 
+    $term = $form_state->getFormObject()->getEntity();
+    $form['#title'] = t('Edit @name', ['@name' => $term->label()]);
+
     $restricted = ['name', 'relations', 'revision_information'];
     foreach ($restricted as $field) {
       if (isset($form[$field])) {
