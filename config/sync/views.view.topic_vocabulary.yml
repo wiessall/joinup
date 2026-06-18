@@ -575,7 +575,7 @@ display:
           plugin_id: text
           empty: false
           content:
-            value: "<ul>\r\n<li>In this page, you can publish/unpublish the meta entities of the topics shown in the homepage as well as edit the description and the image.</li>\r\n<li>The image must be <strong>552px wide and 240px high</strong> to ensure a good display across all devices.</li>\r\n<li>To edit the curated list, go to <a href=\"[site:url]dashboard\">Dashboard</a> > <a href=\"[site:url]admin/curated-content-listings\">Curated content listings</a> > <a href=\"[site:url]admin/structure/entityqueue/homepage_topics/homepage_topics\">Homepage topics</a>.</li>\r\n</ul>"
+            value: "<ul>\r\n<li>In this page, you can edit the description and the image of the topic terms.</li>\r\n<li>The image must be <strong>552px wide and 240px high</strong> to ensure a good display across all devices.</li>\r\n<li>To edit the curated list, go to <a href=\"[site:url]dashboard\">Dashboard</a> > <a href=\"[site:url]admin/curated-content-listings\">Curated content listings</a> > <a href=\"[site:url]admin/structure/entityqueue/homepage_topics/homepage_topics\">Homepage topics</a>.</li>\r\n</ul>"
             format: content_editor
           tokenize: false
       display_extenders:
