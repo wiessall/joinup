@@ -2,6 +2,18 @@
 Feature:
   Ensure curated list of topics on the homepage behave properly.
 
+  Scenario: Moderators can only edit allowed fields on the topic edit form.
+    Given I am logged in as a moderator
+    And I go to "/dashboard"
+    And I click Topics
+    And I click "Edit" in the "E-justice" row
+    Then I should see the heading "Edit E-justice"
+    And the following fields should be present "Abstract, Description, Image, Body"
+    But the following fields should not be present "Name"
+    And I should not see the following lines of text:
+      | Relations            |
+      | Revision information |
+
   Scenario: Show list of topics meta entity type and check a given parent and published field.
     Given I am logged in as a moderator
     When I go to "/dashboard"
