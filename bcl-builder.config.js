@@ -708,6 +708,7 @@ module.exports = {
           "link-45deg.svg",
           "linkedin.svg",
           "mastodon.svg",
+          "mortarboard.svg",
           "newspaper.svg",
           "patch-exclamation.svg",
           "patch-check.svg",
