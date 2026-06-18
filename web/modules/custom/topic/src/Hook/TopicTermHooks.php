@@ -11,12 +11,15 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\taxonomy\TermInterface;
 
 /**
  * Hook implementations related to topic taxonomy terms.
  */
 final class TopicTermHooks {
+
+  use StringTranslationTrait;
 
   public function __construct(
     private readonly AccountProxyInterface $currentUser,
@@ -44,7 +47,7 @@ final class TopicTermHooks {
     }
 
     $term = $form_state->getFormObject()->getEntity();
-    $form['#title'] = t('Edit @name', ['@name' => $term->label()]);
+    $form['#title'] = $this->t('Edit @name', ['@name' => $term->label()]);
 
     $restricted = ['name', 'relations', 'revision_information'];
     foreach ($restricted as $field) {
