@@ -13,7 +13,7 @@ use Drupal\field\Entity\FieldStorageConfig;
 /**
  * Install new taxonomy_term.topic field configs and topic_vocabulary view.
  */
-function topic_update_201400(): void {
+function topic_update_201500(): void {
   $sync_storage = \Drupal::service('config.storage.sync');
 
   $storage_configs = [
@@ -54,7 +54,7 @@ function topic_update_201400(): void {
 /**
  * Migrate topic meta entity data to taxonomy term fields.
  */
-function topic_update_201401(array &$sandbox): string {
+function topic_update_201501(array &$sandbox): string {
   $entity_type_manager = \Drupal::entityTypeManager();
   $meta_entity_storage = $entity_type_manager->getStorage('meta_entity');
   $logger = \Drupal::logger('topic');
@@ -138,7 +138,7 @@ function topic_update_201401(array &$sandbox): string {
 /**
  * Migrate homepage_topics entityqueue items from meta_entity to taxonomy_term.
  */
-function topic_update_201402(): string {
+function topic_update_201502(): string {
   $entity_type_manager = \Drupal::entityTypeManager();
   $subqueue = $entity_type_manager->getStorage('entity_subqueue')->load('homepage_topics');
   if (!$subqueue) {
@@ -169,4 +169,48 @@ function topic_update_201402(): string {
   $subqueue->save();
 
   return sprintf('Migrated %d homepage_topics queue items.', count($term_ids));
+}
+
+/**
+ * Transfer URL aliases from meta_entity topics to taxonomy term topics.
+ */
+function topic_update_201503(): string {
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $meta_entity_storage = $entity_type_manager->getStorage('meta_entity');
+  $db = \Drupal::database();
+
+  $ids = $meta_entity_storage->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('type', 'topic')
+    ->execute();
+
+  if (empty($ids)) {
+    return 'No topic meta entities found.';
+  }
+
+  $updated = 0;
+
+  foreach ($meta_entity_storage->loadMultiple($ids) as $meta_entity) {
+    $term = $meta_entity->getTargetEntity();
+    if (!$term) {
+      continue;
+    }
+
+    $meta_entity_path = '/meta-entity/' . $meta_entity->id();
+    $term_path = '/taxonomy/term/' . $term->id();
+
+    $db->update('path_alias')
+      ->fields(['path' => $term_path])
+      ->condition('path', $meta_entity_path)
+      ->execute();
+
+    $db->update('path_alias_revision')
+      ->fields(['path' => $term_path])
+      ->condition('path', $meta_entity_path)
+      ->execute();
+
+    $updated++;
+  }
+
+  return sprintf('Updated URL aliases for %d topic taxonomy terms.', $updated);
 }
