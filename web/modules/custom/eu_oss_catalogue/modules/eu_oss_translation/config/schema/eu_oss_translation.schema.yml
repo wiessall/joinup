@@ -1,9 +1,0 @@
-# Schema for the configuration files of the EU OSS Translation module.
-
-eu_oss_translation.settings:
-  type: config_object
-  label: 'Translation settings'
-  mapping:
-    translator:
-      type: string
-      label: 'Translator provider'

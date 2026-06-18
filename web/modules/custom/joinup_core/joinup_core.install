@@ -30,7 +30,7 @@ function joinup_core_requirements($phase): array {
 /**
  * Delete visit_count and download_count meta entities before config sync.
  */
-function joinup_core_update_201400(array &$sandbox): string {
+function joinup_core_update_201500(array &$sandbox): string {
   $database = \Drupal::database();
   $bundles = ['visit_count', 'download_count'];
 
