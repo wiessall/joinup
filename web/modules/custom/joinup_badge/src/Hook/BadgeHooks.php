@@ -8,6 +8,7 @@ use Drupal\assessments\AssessmentInterface;
 use Drupal\comment\CommentInterface;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\DestructableInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
@@ -15,7 +16,6 @@ use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\file\FileInterface;
 use Drupal\joinup_badge\BadgeService;
 use Drupal\joinup_badge\Entity\BadgeAwarding;
 use Drupal\joinup_badge\Entity\Certificate;
@@ -185,18 +185,21 @@ class BadgeHooks implements DestructableInterface {
   #[Hook('user_delete')]
   public function deleteUserCertificates(UserInterface $user): void {
     $certificates = $this->getUserCertificates($user);
-    $files = [];
-
-    foreach ($certificates as $certificate) {
-      foreach ($certificate->get('certificate')->referencedEntities() as $file) {
-        if ($file instanceof FileInterface) {
-          $files[$file->id()] = $file;
-        }
-      }
-    }
     $this->entityTypeManager->getStorage('node')->delete($certificates);
-    if ($files) {
-      $this->entityTypeManager->getStorage('file')->delete($files);
+  }
+
+  /**
+   * Implements hook_ENTITY_TYPE_delete() for certificate entities.
+   */
+  #[Hook('entity_delete')]
+  public function deleteCertificateFile(EntityInterface $entity): void {
+    if (!$entity instanceof Certificate) {
+      return;
+    }
+    if (!$entity->get('certificate')->isEmpty()) {
+      foreach ($entity->get('certificate')->referencedEntities() as $file) {
+        $file->delete();
+      }
     }
   }
 
