@@ -13,6 +13,7 @@ use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\search_api\Query\ConditionGroup;
 use Drupal\search_api\Query\QueryInterface;
 
@@ -43,6 +44,14 @@ function joinup_i18n_module_implements_alter(array &$implementations, string $ho
  * @see \Drupal\content_translation\Hook\ContentTranslationHooks::pageAttachments()
  */
 function joinup_i18n_entity_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
+  // This is a temporary exception for OSS solutions. The whole hook
+  // implementation will be removed in ISAICP-11420.
+  if ($entity instanceof OssSolutionInterface) {
+    if ($entity->isDefaultTranslation() || $entity->language()->getId() === 'en') {
+      return AccessResult::neutral();
+    }
+  }
+
   if ($operation !== 'view' || !$entity instanceof ContentEntityInterface || $entity->isDefaultTranslation()) {
     return AccessResult::neutral();
   }
@@ -66,20 +75,6 @@ function joinup_i18n_language_switch_links_alter(array &$links, string $type, Ur
 
   // Sort by langcode.
   ksort($links);
-}
-
-/**
- * Implements hook_entity_insert().
- */
-function joinup_i18n_entity_insert(EntityInterface $entity): void {
-  if (!$entity instanceof ContentEntityInterface || !$entity->isTranslatable()) {
-    return;
-  }
-
-  \Drupal::queue('joinup_i18n:translation_alias')->createItem([
-    'entity_type_id' => $entity->getEntityTypeId(),
-    'entity_id' => $entity->id(),
-  ]);
 }
 
 /**
