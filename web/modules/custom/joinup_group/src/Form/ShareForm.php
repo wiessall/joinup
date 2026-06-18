@@ -195,7 +195,7 @@ class ShareForm extends ShareFormBase {
   }
 
   /**
-   * Access callback for the unshare form.
+   * Access callback for the share form.
    *
    * @param \Drupal\node\NodeInterface $node
    *   The node entity.
