@@ -10,6 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 
 /**
@@ -18,6 +19,7 @@ use Drupal\Core\Url;
 final class HomepageTopicsQueueHooks {
 
   use DependencySerializationTrait;
+  use StringTranslationTrait;
 
   public function __construct(
     private readonly EntityTypeManagerInterface $entityTypeManager,
@@ -37,15 +39,15 @@ final class HomepageTopicsQueueHooks {
     $help = [
       '#theme' => 'item_list',
       '#items' => [
-        t('In this page you can add/remove/rearrange the topics that are displayed on the homepage.'),
-        t('Add topics by name from the autocomplete field below.'),
-        t('Only published topics can be added in the list.'),
-        t('To edit a topic, go to <a href=":dashboard">Dashboard</a> > <a href=":topics">Topics</a> and click on the "Edit" button of the topic you want to update.', [
+        $this->t('In this page you can add/remove/rearrange the topics that are displayed on the homepage.'),
+        $this->t('Add topics by name from the autocomplete field below.'),
+        $this->t('Only published topics can be added in the list.'),
+        $this->t('To edit a topic, go to <a href=":dashboard">Dashboard</a> > <a href=":topics">Topics</a> and click on the "Edit" button of the topic you want to update.', [
           ':dashboard' => Url::fromRoute('dashboard.page')->toString(),
           ':topics' => Url::fromRoute('view.topic_vocabulary.page')->toString(),
         ]),
-        t('Once you are done, come back here to add it to the list.'),
-        t('A maximum of 8 topics are allowed in the list.'),
+        $this->t('Once you are done, come back here to add it to the list.'),
+        $this->t('A maximum of 8 topics are allowed in the list.'),
       ],
     ];
     $form['help'] = [
@@ -72,7 +74,7 @@ final class HomepageTopicsQueueHooks {
     if (in_array($items['add_more']['new_item']['target_id'], $existing_items)) {
       $entity = $this->entityTypeManager->getStorage('taxonomy_term')
         ->load($items['add_more']['new_item']['target_id']);
-      $form_state->setErrorByName('items', t('The %topic topic is already in the list.', [
+      $form_state->setErrorByName('items', $this->t('The %topic topic is already in the list.', [
         '%topic' => $entity ? $entity->label() : $items['add_more']['new_item']['target_id'],
       ]));
     }
