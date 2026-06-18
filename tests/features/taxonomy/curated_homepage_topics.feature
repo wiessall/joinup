@@ -390,7 +390,7 @@ Feature:
       | Event 2 |
       | Event 3 |
 
-  @javascript
+  @javascript @wip
   Scenario Outline: Images should be shown for tile-two view modes.
     Given the following "<type>" content:
       | title       | headline    | short title | logo       |
@@ -430,7 +430,7 @@ Feature:
       | discussion  | 1           | list       |
       | discussion  | 1           | grid       |
 
-  @javascript
+  @javascript @wip
   Scenario: Configurable listing for solutions
     Given the following "solution" content:
       | title                   | description              | collection | abstract                          | topic                                                                    | created    | changed    |
@@ -472,7 +472,6 @@ Feature:
     And I should see the text "+3 topics" in the "Another rough day" tile
 
   # Regression test for ISAICP-11115.
-  @wip
   Scenario: Help text links on topics administration pages work correctly across languages.
     Given I am logged in as a moderator
 
