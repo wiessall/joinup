@@ -86,7 +86,7 @@ class Solution extends Node implements SolutionInterface {
   /**
    * {@inheritdoc}
    */
-  public function getGroupId(): string {
+  public function getGroupId(): int|string {
     $ids = $this->getReferencedEntityIds(OgGroupAudienceHelperInterface::DEFAULT_FIELD);
     if (empty($ids['node'])) {
       throw new MissingGroupException();

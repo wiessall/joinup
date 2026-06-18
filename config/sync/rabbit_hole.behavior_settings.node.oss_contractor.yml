@@ -1,0 +1,13 @@
+uuid: 396d9f3e-4978-43f0-8c03-ee0ec2eabe24
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.oss_contractor
+id: node.oss_contractor
+targetEntityType: node
+bundle: oss_contractor
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

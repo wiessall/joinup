@@ -10,6 +10,7 @@ dependencies:
     - field.field.meta_entity.solution_settings.list_related_entities
     - field.field.meta_entity.solution_settings.listing_content
     - field.field.meta_entity.solution_settings.metadata_banner_disabled
+    - field.field.meta_entity.solution_settings.overview_label
     - meta_entity.type.solution_settings
   module:
     - options
@@ -36,14 +37,14 @@ content:
         granularity: 2
         refresh: 60
     third_party_settings: {  }
-    weight: 22
+    weight: 2
     region: content
   content_creation:
     type: list_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 25
+    weight: 5
     region: content
   created:
     type: timestamp
@@ -62,7 +63,7 @@ content:
         granularity: 2
         refresh: 60
     third_party_settings: {  }
-    weight: 20
+    weight: 1
     region: content
   group_moderation:
     type: boolean
@@ -72,7 +73,7 @@ content:
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    weight: 24
+    weight: 4
     region: content
   label:
     type: string
@@ -80,7 +81,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: -5
+    weight: 0
     region: content
   list_related_entities:
     type: boolean
@@ -90,14 +91,14 @@ content:
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    weight: 27
+    weight: 7
     region: content
   listing_content:
     type: search_api_field
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 26
+    weight: 6
     region: content
   metadata_banner_disabled:
     type: boolean
@@ -107,7 +108,7 @@ content:
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    weight: 23
+    weight: 3
     region: content
 hidden:
   announcements_enabled: true
@@ -115,6 +116,7 @@ hidden:
   langcode: true
   meta_entity_solution_settings_listing_content_inline_facets: true
   meta_entity_solution_settings_listing_content_top: true
+  overview_label: true
   search_api_excerpt: true
   target: true
   uuid: true

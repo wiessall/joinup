@@ -6,6 +6,7 @@ namespace Drupal\joinup_group\Routing;
 
 use Drupal\Core\Routing\RouteSubscriberBase;
 use Drupal\joinup_group\Access\GroupSettingsViewAccessCheck;
+use Drupal\joinup_group\Controller\GroupMenuController;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
@@ -69,8 +70,15 @@ class RouteSubscriber extends RouteSubscriberBase {
         $route->setRequirement('_archived_group', 'TRUE');
       }
     }
+
     if ($route = $collection->get('entity.meta_entity.canonical')) {
       $route->setRequirement('_custom_access', GroupSettingsViewAccessCheck::class . '::access');
+    }
+
+    if ($route = $collection->get('entity.ogmenu_instance.edit_form')) {
+      $route->addDefaults([
+        '_title_callback' => GroupMenuController::class,
+      ])->setOption('_admin_route', FALSE);
     }
   }
 

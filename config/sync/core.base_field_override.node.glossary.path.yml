@@ -1,0 +1,20 @@
+uuid: 60e2523c-0068-4797-a85b-1704590f5bb2
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.glossary
+  module:
+    - path
+id: node.glossary.path
+field_name: path
+entity_type: node
+bundle: glossary
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path
