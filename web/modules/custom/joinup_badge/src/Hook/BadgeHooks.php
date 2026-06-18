@@ -245,13 +245,14 @@ class BadgeHooks implements DestructableInterface {
     }
 
     // Add course field column.
-    // @todo Consider removing the title.
     $fields['course'] = [
       'type' => 'field',
       'label' => $this->t('Course'),
       'weight' => 10,
       'display_options' => ['type' => 'entity_reference_label'],
     ];
+    unset($fields['label']);
+    unset($fields['status']);
   }
 
   /**

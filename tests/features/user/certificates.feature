@@ -54,10 +54,6 @@ Feature: User certificates
     And  I see the text "Issuing date: 06/12/2026" in the "Archived IOPEU Solution" tile
     When I go to the edit form of the "Sara the User" user
     Then I should see the link "Archived IOPEU Solution"
-    And I should see the text "Certificate of course"
-    Then the "IEF table" table should contain the following columns:
-      | Course                  | Status    |
-      | Archived IOPEU Solution | Published |
     When I press "Remove" in the "Archived IOPEU Solution" row
     And I press "Remove" in the "Are you sure you want to remove Certificate of course" row
     Then I should not see the text "Certificate of course"
@@ -88,23 +84,15 @@ Feature: User certificates
     When I go to the edit form of the "Sara the User" user
     And I select the radio button "Blocked"
     And I press "Save"
-    And I go to the edit form of the "Sara the User" user
-    Then I should see the link "Archived IOPEU Solution"
-    And I should see the text "Certificate of course"
-    Then the "IEF table" table should contain the following columns:
-      | Course                  | Status      |
-      | Archived IOPEU Solution | Unpublished |
+    When I go to the public profile of "Sara the User"
+    Then the page should show only the tiles "Portal support"
     And user "Sara the User" should not have the "certificate" badge
     # Unblock the user
     When I go to the edit form of the "Sara the User" user
     And I select the radio button "Active"
     And I press "Save"
-    When I go to the edit form of the "Sara the User" user
-    Then I should see the link "Archived IOPEU Solution"
-    And I should see the text "Certificate of course"
-    Then the "IEF table" table should contain the following columns:
-      | Course                  | Status    |
-      | Archived IOPEU Solution | Published |
+    When I go to the public profile of "Sara the User"
+    Then the page should show the tiles "Archived IOPEU Solution, Portal support"
     And user "Sara the User" should have the "certificate" badge
 
   @javascript
