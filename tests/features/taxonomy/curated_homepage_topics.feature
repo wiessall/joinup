@@ -179,7 +179,7 @@ Feature:
       | Statistics and Analysis |
       | E-justice               |
     When I am logged in as a moderator
-    And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    And I go to the edit form of the "E-justice" topic
     And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
