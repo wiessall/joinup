@@ -11,7 +11,6 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\taxonomy\TermInterface;
@@ -80,59 +79,6 @@ function topic_meta_entity_presave(MetaEntityInterface $meta_entity): void {
     $langcode = $meta_entity->language()->getId();
     $translation = $term->hasTranslation($langcode) ? $term->getTranslation($langcode) : $term;
     $meta_entity->getTranslation($langcode)->set('label', $translation->label());
-  }
-}
-
-/**
- * Implements hook_form_BASE_FORM_ID_alter().
- */
-function topic_form_entity_subqueue_homepage_topics_edit_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
-  $form['#validate'][] = 'topic_form_entity_subqueue_homepage_topics_validate';
-  foreach (Element::children($form['actions']) as $action) {
-    $form['actions'][$action]['#submit'][] = 'topic_form_entity_subqueue_homepage_topics_edit_form_alter_submit';
-  }
-
-  $help = [
-    '#theme' => 'item_list',
-    '#items' => [
-      t('In this page you can add/remove/rearrange the topics that are displayed on the homepage.'),
-      t('Add topics by name from the autocomplete field below.'),
-      t('Only published topics can be added in the list.'),
-      t('A maximum of 8 topics are allowed in the list.'),
-    ],
-  ];
-  $form['help'] = [
-    '#type' => 'html_tag',
-    '#tag' => 'p',
-    '#value' => \Drupal::service('renderer')->renderInIsolation($help),
-  ];
-}
-
-/**
- * Provides an additional form validator for the homepage_topics queue form.
- *
- * @param array $form
- *   The form render array.
- * @param \Drupal\Core\Form\FormStateInterface $form_state
- *   The form state.
- */
-function topic_form_entity_subqueue_homepage_topics_validate(array &$form, FormStateInterface $form_state): void {
-  $items = $form_state->getValue('items');
-  if (!isset($items['add_more']['new_item']['target_id'])) {
-    return;
-  }
-  $existing_items = [];
-  foreach ($items as $key => $item) {
-    if (is_numeric($key) && isset($item['target_id'])) {
-      $existing_items[] = $item['target_id'];
-    }
-  }
-  if (in_array($items['add_more']['new_item']['target_id'], $existing_items)) {
-    $form_state->setErrorByName('items', t('The %topic topic is already in the list.', [
-      '%topic' => \Drupal::entityTypeManager()->getStorage('meta_entity')
-        ->load($items['add_more']['new_item']['target_id'])
-        ->label(),
-    ]));
   }
 }
 

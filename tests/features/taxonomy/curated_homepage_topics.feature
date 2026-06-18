@@ -54,9 +54,11 @@ Feature:
       | The resized image is too small. The minimum dimensions are 552x240 pixels and after resizing, the image size will be 153x240 pixels. |
     And I attach the file "topic.png" to "Image"
     And I press "Upload"
-    When I fill in "Description" with "E-justice description"
+    When I fill in "Abstract" with "E-justice abstract"
+    And I fill in "Description" with "E-justice description"
     And I press "Save"
     And I click "Edit" in the "Finance in EU" row
+    And I fill in "Abstract" with "Finance in EU abstract"
     And I fill in "Description" with "Finance in EU description"
     And I press "Save"
 
@@ -82,9 +84,9 @@ Feature:
 
     When I go to the homepage
     Then I should see the text "E-justice" in the "Homepage topics" region
-    And I should see the text "E-justice description" in the "Homepage topics" region
+    And I should see the text "E-justice abstract" in the "Homepage topics" region
     And I should see the text "Finance in EU" in the "Homepage topics" region
-    And I should see the text "Finance in EU description" in the "Homepage topics" region
+    And I should see the text "Finance in EU abstract" in the "Homepage topics" region
     # The block title is shown now.
     And I should see the heading "Main topics"
 
