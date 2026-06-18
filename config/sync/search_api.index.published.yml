@@ -10,6 +10,7 @@ dependencies:
     - field.storage.meta_entity.field_shared_in
     - field.storage.node.abstract
     - field.storage.node.body
+    - field.storage.node.certificate
     - field.storage.node.classification
     - field.storage.node.contact
     - field.storage.node.description
@@ -99,12 +100,12 @@ third_party_settings:
       include_language_independent: true
       use_language_undefined_as_fallback_language: false
       specific_languages:
+        en: '0'
         bg: '0'
         hr: '0'
         cs: '0'
         da: '0'
         nl: '0'
-        en: '0'
         et: '0'
         fi: '0'
         fr: '0'
@@ -170,6 +171,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.body
+  certificate:
+    label: Certificate
+    datasource_id: 'entity:node'
+    property_path: certificate
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.certificate
   classification:
     label: 'Solution classification'
     datasource_id: 'entity:node'
@@ -863,6 +872,7 @@ datasource_settings:
       default: false
       selected:
         - assessment_report
+        - certificate
         - collection
         - custom_page
         - discussion

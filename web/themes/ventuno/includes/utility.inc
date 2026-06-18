@@ -11,6 +11,7 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_assessment\Entity\AssessmentReportInterface;
+use Drupal\joinup_badge\Entity\CertificateInterface;
 use Drupal\joinup_bundle_class\AbstractInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
@@ -99,7 +100,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   $variables['info']['icon'] = 'calendar-event';
   if ($changed_time = $entity->getChangedTime()) {
     $variables['info']['label'] = t('@label: @changed', [
-      '@label' => ($entity instanceof AssessmentReportInterface) ? t('Published') : t('Last update'),
+      '@label' => ($entity instanceof AssessmentReportInterface || $entity instanceof CertificateInterface) ? t('Published') : t('Last update'),
       '@changed' => \Drupal::service('date.formatter')->format($changed_time, 'date_only'),
     ]);
   }
@@ -292,6 +293,7 @@ function _ventuno_get_default_icon(string $entity_type_id, string $bundle): stri
       'release' => 'file-earmark-zip',
       'video' => 'file-earmark-play',
       'solution' => 'clipboard2-check',
+      'certificate' => 'mortarboard',
     ],
   ];
 
