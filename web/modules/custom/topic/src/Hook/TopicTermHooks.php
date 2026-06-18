@@ -14,9 +14,9 @@ use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\taxonomy\TermInterface;
 
 /**
- * Hook implementations for the Topic module.
+ * Hook implementations related to topic taxonomy terms.
  */
-final class TopicHooks {
+final class TopicTermHooks {
 
   public function __construct(
     private readonly AccountProxyInterface $currentUser,
