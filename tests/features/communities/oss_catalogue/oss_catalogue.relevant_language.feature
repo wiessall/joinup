@@ -23,22 +23,21 @@ Feature:
       | IT Short description |
       | IT Long description  |
 
-    # @todo ISAICP-11445 This is probably not the intended behavior, needs fixing.
+    # Both translations are advertised via hreflang and accessible to anonymous users.
     Then I should see a "link[rel='alternate'][hreflang='en']" element
+    And I should see a "link[rel='alternate'][hreflang='it']" element
 
-    # @wip: Anonymous still sees the English version. Adapt the test in
-    # ISAICP-11420. Anonymous should also be able to see translated content.
     When I go to the "it" version of the "EN Title" oss_solution
-    Then I should see the heading "EN Title"
+    Then I should see the heading "IT Title"
     And I should see the following lines of text:
-      | En Feature 1         |
-      | EN Short description |
-      | EN Long description  |
-    But I should not see the following lines of text:
       | IT Feature 1         |
       | IT Feature 2         |
       | IT Short description |
       | IT Long description  |
+    But I should not see the following lines of text:
+      | EN Feature 1         |
+      | EN Short description |
+      | EN Long description  |
 
     Given I am logged in as a user with the "moderator" role
     When I go to the "it" version of the "EN Title" oss_solution
