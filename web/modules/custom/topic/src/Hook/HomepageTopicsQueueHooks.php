@@ -10,6 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\Url;
 
 /**
  * Hook implementations for the homepage topics queue form.
@@ -39,6 +40,11 @@ final class HomepageTopicsQueueHooks {
         t('In this page you can add/remove/rearrange the topics that are displayed on the homepage.'),
         t('Add topics by name from the autocomplete field below.'),
         t('Only published topics can be added in the list.'),
+        t('To edit a topic, go to <a href=":dashboard">Dashboard</a> > <a href=":topics">Topics</a> and click on the "Edit" button of the topic you want to update.', [
+          ':dashboard' => Url::fromRoute('dashboard.page')->toString(),
+          ':topics' => Url::fromRoute('view.topic_vocabulary.page')->toString(),
+        ]),
+        t('Once you are done, come back here to add it to the list.'),
         t('A maximum of 8 topics are allowed in the list.'),
       ],
     ];
