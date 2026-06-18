@@ -24,7 +24,6 @@ dependencies:
     - node.type.solution
     - taxonomy.vocabulary.legal_type
     - taxonomy.vocabulary.tags
-    - taxonomy.vocabulary.topic
   module:
     - assessments
     - collection
@@ -75,6 +74,7 @@ dependencies:
     - system
     - taxonomy
     - toolbar
+    - topic
     - view_unpublished
     - webform
 id: moderator
@@ -228,7 +228,7 @@ permissions:
   - 'edit sitewide alert entities'
   - 'edit terms in legal_type'
   - 'edit terms in tags'
-  - 'edit terms in topic'
+  - 'edit topic term description'
   - 'feature entity'
   - 'flag interoperability'
   - 'manage custom landing pages'
