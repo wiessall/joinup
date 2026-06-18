@@ -200,7 +200,7 @@ Feature:
     Then the response should contain "default abstract"
     And the url should match "/topic/law-and-justice/e-justice"
 
-    When I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    When I go to the edit form of the "E-justice" topic
     And I "delete" from the "Topic meta entity body" field the child 1 paragraph of 1 layout
     And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
       | layout position | 1                                       |
@@ -287,7 +287,7 @@ Feature:
       | E-justice           |
     When I am logged in as a moderator
 
-    And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    And I go to the edit form of the "E-justice" topic
     And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
@@ -307,7 +307,7 @@ Feature:
       | News 2 |
       | News 1 |
 
-    When I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    When I go to the edit form of the "E-justice" topic
     When I delete from the "Topic meta entity body" form field the layout paragraph in position 1
     And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
       | layout           | one column |
@@ -328,7 +328,7 @@ Feature:
       | News 2 |
       | News 1 |
 
-    When I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    When I go to the edit form of the "E-justice" topic
     When I delete from the "Topic meta entity body" form field the layout paragraph in position 1
     And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
       | layout           | one column |
@@ -358,7 +358,7 @@ Feature:
       | News 2 |
       | News 1 |
 
-    When I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    When I go to the edit form of the "E-justice" topic
     When I delete from the "Topic meta entity body" form field the layout paragraph in position 1
     And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
       | layout           | one column |
@@ -398,7 +398,7 @@ Feature:
     And the following topics are enabled in the homepage:
       | E-justice |
     And I am logged in as a moderator
-    And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    And I go to the edit form of the "E-justice" topic
     And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
@@ -437,7 +437,7 @@ Feature:
       | Another rough day       | Lorem description issum  | Portal support |                                   | E-justice, Finance in EU, Supplier exchange, HR, Statistics and Analysis | 01-01-2023 | 03-02-2023 |
       | Just another day & solt | Second description issum | Portal support | This is an solution with abstract | E-justice                                                                | 02-01-2023 | 03-02-2023 |
     When I am logged in as a moderator
-    And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    And I go to the edit form of the "E-justice" topic
     Then I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
