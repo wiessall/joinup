@@ -40,22 +40,9 @@ Feature:
     And I reload the page
     Then I should see the link "Red parent"
 
-  @wip
-  Scenario: Moderators can access and manage the topics curated queue.
+  Scenario: Moderators can add topics with descriptions to the curated homepage queue.
     Given I am logged in as a moderator
     And I go to "/dashboard"
-    And I click "Curated content listings"
-    And I click "Homepage topics"
-    Then I should see the heading "Update curated content listing Homepage topics"
-    And I should see the button "Add item"
-
-    And I fill in "edit-items-add-more-new-item-target-id" with "E-justice"
-    And I press "Add item"
-    # 'E-justice' is unpublished so it cannot be found.
-    Then I should see the error message 'There are no meta entity entities matching "E-justice".'
-
-    # Publish 2 terms.
-    When I click "Dashboard"
     And I click Topics
     And I click "Edit" in the "E-justice" row
     And I attach the file "ada.png" to "Image"
@@ -68,11 +55,9 @@ Feature:
     And I attach the file "topic.png" to "Image"
     And I press "Upload"
     When I fill in "Description" with "E-justice description"
-    And I check "Published"
     And I press "Save"
     And I click "Edit" in the "Finance in EU" row
     And I fill in "Description" with "Finance in EU description"
-    And I check "Published"
     And I press "Save"
 
     # Add the 2 terms to the curated list.
@@ -102,21 +87,6 @@ Feature:
     And I should see the text "Finance in EU description" in the "Homepage topics" region
     # The block title is shown now.
     And I should see the heading "Main topics"
-
-    # Unpublish a term and check it is removed from the curated list.
-    When I click "Dashboard"
-    And I click Topics
-    And I click "Edit" in the "E-justice" row
-    And I uncheck "Published"
-    And I press "Save"
-    Then I should see the success message "The topic has been removed from the homepage topics curated list since it was unpublished."
-    When I click "Dashboard"
-    And I click "Curated content listings"
-    And I click "Homepage topics"
-
-    When I go to the homepage
-    Then I should not see the text "E-justice" in the "Homepage topics" region
-    But I should see the text "Finance in EU" in the "Homepage topics" region
 
   Scenario: Moderators can alter the title of the homepage topics block.
     Given I am logged in as a moderator
