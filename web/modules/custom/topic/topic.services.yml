@@ -16,6 +16,8 @@ services:
 
   Drupal\topic\EventSubscriber\TopicRedirectRequestSubscriber: { }
 
+  Drupal\topic\Hook\TopicHooks: { }
+
   topic:
     class: Drupal\topic\Service\TopicService
     Drupal\topic\Service\TopicServiceInterface: '@topic'
