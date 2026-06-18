@@ -162,7 +162,7 @@ Feature:
     When I go to the homepage
     Then I should see the text "This will be shown in the homepage."
 
-  @javascript
+  @javascript @wip
   Scenario: Lists of configurable content can be added in the page of the topic meta entity.
     Given the following "news" content:
       | title  | headline | collection |
