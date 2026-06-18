@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
-use Behat\Gherkin\Node\TableNode;
-use Behat\Step\Given;
 use Behat\Step\When;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\entityqueue\EntitySubqueueInterface;
 use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
@@ -20,25 +17,6 @@ class MetaEntityContext extends RawDrupalContext {
 
   use AssertTrait;
   use EntityTrait;
-
-  /**
-   * Enables the given topic meta entities on the homepage.
-   */
-  #[Given('/^the following topics are enabled in the homepage:$/')]
-  public function theFollowingTopicsAreEnabledInTheHomepage(TableNode $table): void {
-    $topics = $table->getColumn(0);
-    $repository = \Drupal::getContainer()->get('meta_entity.repository');
-    $entity_queue = \Drupal::entityTypeManager()->getStorage('entity_subqueue')->load('homepage_topics');
-    \assert($entity_queue instanceof EntitySubqueueInterface);
-    foreach ($topics as $topic) {
-      $topic = $this->getEntityByLabel('taxonomy_term', $topic);
-      $meta_entity = $repository->getMetaEntityForEntity($topic, 'topic');
-      $meta_entity->set('published', TRUE);
-      $meta_entity->save();
-      $entity_queue->addItem($meta_entity);
-    }
-    $entity_queue->save();
-  }
 
   /**
    * Navigates to the canonical page display of a meta entity.

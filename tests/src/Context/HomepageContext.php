@@ -6,8 +6,10 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
+use Behat\Step\Given;
 use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\entityqueue\EntitySubqueueInterface;
 use Drupal\joinup\Traits\AssertTrait;
 use Drupal\joinup\Traits\EntityTrait;
 
@@ -84,6 +86,20 @@ class HomepageContext extends RawDrupalContext {
       $xpath = '//a[@href = "' . $read_more_url . '" and contains(@class, "read-more")]';
       $this->assertCondition(!empty($actual_data->find('xpath', $xpath)), sprintf('%s "%s" does not have a "Read more" link which leads to the canonical page.', $type, $expected_data['title']));
     }
+  }
+
+  /**
+   * Adds the given topic terms to the homepage topics queue.
+   */
+  #[Given('/^the following topics are enabled in the homepage:$/')]
+  public function theFollowingTopicsAreEnabledInTheHomepage(TableNode $table): void {
+    $entity_queue = \Drupal::entityTypeManager()->getStorage('entity_subqueue')->load('homepage_topics');
+    \assert($entity_queue instanceof EntitySubqueueInterface);
+    foreach ($table->getColumn(0) as $label) {
+      $topic = $this->getEntityByLabel('taxonomy_term', $label);
+      $entity_queue->addItem($topic);
+    }
+    $entity_queue->save();
   }
 
 }
