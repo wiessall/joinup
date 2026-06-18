@@ -54,18 +54,6 @@ final class TopicHooks {
     if (isset($form['actions']['overview'])) {
       $form['actions']['overview']['#access'] = FALSE;
     }
-
-    $form['actions']['submit']['#submit'][] = [
-      self::class,
-      'redirectAfterSave',
-    ];
-  }
-
-  /**
-   * Redirects to the topic admin listing after saving.
-   */
-  public static function redirectAfterSave(array &$form, FormStateInterface $form_state): void {
-    $form_state->setRedirectUrl(Url::fromRoute('view.topic_vocabulary.page'));
   }
 
 }
