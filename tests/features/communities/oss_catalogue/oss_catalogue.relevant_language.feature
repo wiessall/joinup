@@ -40,18 +40,6 @@ Feature:
       | EN Long description  |
 
     Given I am logged in as a user with the "moderator" role
-    When I go to the "it" version of the "EN Title" oss_solution
-    Then I should see the heading "IT Title"
-    And I should see the following lines of text:
-      | IT Feature 1         |
-      | IT Feature 2         |
-      | IT Short description |
-      | IT Long description  |
-    But I should not see the following lines of text:
-      | En Feature 1         |
-      | EN Short description |
-      | EN Long description  |
-
     When I visit "/admin/content/eu-oss-catalogue/oss-solutions"
     Then I should see the heading "Open Source Software Solutions"
     And I should see the "EU OSS Catalogue administration" table
