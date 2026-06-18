@@ -16,10 +16,6 @@ services:
 
   Drupal\topic\EventSubscriber\TopicRedirectRequestSubscriber: { }
 
-  Drupal\topic\Hook\TopicTermHooks: { }
-
-  Drupal\topic\Hook\HomepageTopicsQueueHooks: { }
-
   topic:
     class: Drupal\topic\Service\TopicService
     Drupal\topic\Service\TopicServiceInterface: '@topic'
