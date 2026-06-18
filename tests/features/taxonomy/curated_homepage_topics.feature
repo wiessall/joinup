@@ -93,12 +93,10 @@ Feature:
   Scenario: Moderators can alter the title of the homepage topics block.
     Given I am logged in as a moderator
     When I go to "/dashboard"
-    And I click "Topics"
-    And I click "Edit" in the "E-justice" row
-    And I check "Published"
-    And I press "Save"
+    When I click "Dashboard"
+    And I click "Curated content listings"
+    And I click "Homepage topics"
 
-    When I visit "/admin/structure/entityqueue/homepage_topics/homepage_topics"
     Then I should see the heading "Update curated content listing Homepage topics"
     When I fill in "edit-items-add-more-new-item-target-id" with "E-justice"
     And I press "Add item"
