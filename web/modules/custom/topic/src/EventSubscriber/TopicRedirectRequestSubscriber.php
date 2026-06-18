@@ -9,6 +9,7 @@ use Drupal\Core\Routing\LocalRedirectResponse;
 use Drupal\Core\Url;
 use Drupal\topic\Entity\TopicInterface;
 use Drupal\topic\PathProcessor\TopicPathProcessor;
+use Drupal\topic\Service\HomepageTopicsQueueService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -21,6 +22,7 @@ readonly class TopicRedirectRequestSubscriber implements EventSubscriberInterfac
 
   public function __construct(
     protected AccessAwareRouterInterface $router,
+    protected HomepageTopicsQueueService $homepageTopicsQueue,
   ) {}
 
   /**
@@ -53,6 +55,10 @@ readonly class TopicRedirectRequestSubscriber implements EventSubscriberInterfac
       return;
     }
 
+    if ($this->homepageTopicsQueue->isInQueue($match['_entity']->id())) {
+      return;
+    }
+
     $searchUrl = Url::fromRoute(
       'view.search.page_1',
       [],
@@ -69,7 +75,9 @@ readonly class TopicRedirectRequestSubscriber implements EventSubscriberInterfac
       (new LocalRedirectResponse(
         $searchUrl->toString(),
         Response::HTTP_MOVED_PERMANENTLY
-      ))->addCacheableDependency($match['_entity'])
+      ))
+        ->addCacheableDependency($match['_entity'])
+        ->addCacheableDependency($this->homepageTopicsQueue->getQueue())
     );
   }
 
