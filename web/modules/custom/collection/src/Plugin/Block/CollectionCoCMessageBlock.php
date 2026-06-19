@@ -120,6 +120,7 @@ class CollectionCoCMessageBlock extends BlockBase {
     /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
     $entity_repository = \Drupal::service('entity.repository');
     $collection = $entity_repository->getTranslationFromContext($collection);
+    $coc = $entity_repository->getTranslationFromContext($collection->getCodeOfConduct());
 
     return [
       '#theme' => 'status_messages',
@@ -127,7 +128,7 @@ class CollectionCoCMessageBlock extends BlockBase {
         'warning' => [
           t('We updated our <a href=":coc_url" target="_blank">Code of Conduct</a> to ensure safe and respectful environment for all members of %collection.<br> You can accept or decline it <a href=":coc_form_url" target="_blank">here</a>.', [
             '%collection' => $collection->label(),
-            ':coc_url' => $collection->getCodeOfConduct()->toUrl()->toString(),
+            ':coc_url' => $coc->toUrl()->toString(),
             ':coc_form_url' => Url::fromRoute('collection.code_of_conduct_consent', ['node' => $collection->id()])->toString(),
           ]),
         ],
