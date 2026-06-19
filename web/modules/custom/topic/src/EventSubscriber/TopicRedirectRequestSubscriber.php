@@ -55,7 +55,7 @@ readonly class TopicRedirectRequestSubscriber implements EventSubscriberInterfac
       return;
     }
 
-    if ($this->homepageTopicsQueue->isInQueue($match['_entity']->id())) {
+    if ($this->homepageTopicsQueue->isInQueue($match['_entity'])) {
       return;
     }
 

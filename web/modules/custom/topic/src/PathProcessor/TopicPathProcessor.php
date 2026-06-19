@@ -38,7 +38,7 @@ class TopicPathProcessor implements OutboundPathProcessorInterface {
       $route instanceof Route
       && $route->getOption(static::REDIRECT_TO_SEARCH_PAGE_OPTION)
       && $topic instanceof TopicInterface
-      && !$this->homepageTopicsQueue->isInQueue($topic->id())
+      && !$this->homepageTopicsQueue->isInQueue($topic)
     ) {
       $options['query'] = ['f' => ['topic:' . $topic->id()]];
       return '/search';
