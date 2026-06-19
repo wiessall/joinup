@@ -333,6 +333,10 @@ Feature:
     Then I should see the warning message "We updated our Code of Conduct to ensure safe and respectful environment for all members of Ruche de savoir. You can accept or decline it here."
     When I click "here"
     Then the current relative url should match "#^/fr/.+/code-of-conduct-consent$#"
+    # The Code of Conduct link on the consent form resolves to the French page.
+    And I click "Code of Conduct"
+    Then I should see the heading "Accord d'utilisation"
+    # The Code of Conduct link in the collection warning message resolves too.
     When I go to the "fr" version of the "Knowledge Hive" collection
     And I click "Code of Conduct"
     Then I should see the heading "Accord d'utilisation"

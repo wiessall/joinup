@@ -164,3 +164,24 @@ Feature: Joining and leaving collections through the web interface
     When I check "Notify me when content is published in Astronomes amateurs"
     And I press "Confirm" in the "Modal buttons" region
     Then I should see the success message "You have been subscribed to Astronomes amateurs and will receive weekly notifications. To manage your notifications go to My subscriptions in your user menu."
+
+  @javascript
+  Scenario: The join form Code of Conduct link uses the current language.
+    Given the following "collection" content:
+      | title                 | closed |
+      | Closed CoC collection | yes    |
+    And the following "custom_page" content:
+      | title            | collection            |
+      | Internal charter | Closed CoC collection |
+    And the "Code of Conduct" setting of the "Closed CoC collection" collection is set to "Internal charter" "custom page"
+    And the following "collection" entity translations:
+      | source                | language | title             |
+      | Closed CoC collection | fr       | Collection fermee |
+    And the following "custom_page" entity translations:
+      | source           | language | title          |
+      | Internal charter | fr       | Charte interne |
+    Given I am logged in as an "authenticated user"
+    When I go to the "fr" version of the "Closed CoC collection" collection
+    And I press "Join this collection" in the "Header" region
+    Then a modal should open
+    And the link "Code of Conduct" in the "Modal content" region should point to "fr/collection/collection-fermee/charte-interne"
