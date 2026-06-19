@@ -180,10 +180,8 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
    *
    * @return string
    *   The language code of the richest entity translation.
-   *
-   * @todo Make this method protected in ISAICP-11133.
    */
-  public function getRelevantLangcode(Project $project): string {
+  protected function getRelevantLangcode(Project $project): string {
     $siteLangcodes = array_keys($this->languageManager->getLanguages());
 
     if (count($siteLangcodes) === 1) {

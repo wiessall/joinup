@@ -307,17 +307,19 @@ Feature: Sharing content between collections
       | Mars  |
       | Venus |
     And the following "news" content:
-      | title         | collection | shared on   |
-      | Earth content | Earth      | Mars        |
-      | Mars content  | Mars       |             |
-      | Venus content | Venus      | Earth, Mars |
+      | title         | collection | shared on   | topic             | abstract       |
+      | Earth content | Earth      | Mars        | Supplier exchange | Earth abstract |
+      | Mars content  | Mars       |             | Supplier exchange | Mars abstract  |
+      | Venus content | Venus      | Earth, Mars | Supplier exchange | Venus abstract |
 
     When I am logged in as a moderator
     And I go to the homepage of the "Earth" collection
     And I click "Add custom page" in the plus button menu
 
     Then I fill in the following:
-      | Title | News carousel |
+      | Title    | News carousel          |
+      | Abstract | News carousel abstract |
+    And I select "Supplier exchange" options from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout | one column |
     And I click "Choose component"
@@ -334,3 +336,11 @@ Feature: Sharing content between collections
     And the "Mars content" tile should be marked as shared from "Mars"
     And I should see the "Venus content" tile
     And the "Venus content" tile should be marked as shared from "Venus"
+
+    Given the following collection entity translations:
+      | source | language | title    |
+      | Mars   | pl       | Mars PL  |
+      | Venus  | pl       | Venus PL |
+    When I go to the "pl" version of the "News carousel" custom_page
+    Then the "Mars content" tile should be marked as shared from "Mars PL"
+    And the "Venus content" tile should be marked as shared from "Venus PL"
