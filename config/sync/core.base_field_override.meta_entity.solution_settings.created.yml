@@ -1,0 +1,18 @@
+uuid: 15a34f56-b878-47d4-9ef8-5d886c3990fd
+langcode: en
+status: true
+dependencies:
+  config:
+    - meta_entity.type.solution_settings
+id: meta_entity.solution_settings.created
+field_name: created
+entity_type: meta_entity
+bundle: solution_settings
+label: 'Created on'
+description: 'The time that the meta entity was created.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: created

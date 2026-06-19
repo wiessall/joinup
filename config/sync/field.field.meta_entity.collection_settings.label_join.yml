@@ -12,7 +12,7 @@ bundle: collection_settings
 label: 'Join label'
 description: 'It overwrites the default label for the "Join this collection" button'
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings: {  }

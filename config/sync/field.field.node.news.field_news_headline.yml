@@ -14,7 +14,7 @@ bundle: news
 label: Headline
 description: 'Add a title for the article, it will be shown on the news page.'
 required: true
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings: {  }

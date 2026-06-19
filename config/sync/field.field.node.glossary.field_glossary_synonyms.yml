@@ -12,7 +12,7 @@ bundle: glossary
 label: Synonym
 description: "Synonyms of the glossary term name. Click 'Add another item' to add multiple synonyms"
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings: {  }

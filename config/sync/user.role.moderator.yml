@@ -29,6 +29,7 @@ dependencies:
     - collection
     - comment
     - contact_form
+    - content_translation
     - custom_page
     - dashboard
     - entity_legal
@@ -43,6 +44,7 @@ dependencies:
     - joinup_featured
     - joinup_group
     - joinup_group_content_management
+    - joinup_i18n
     - joinup_legal
     - joinup_licence
     - joinup_log
@@ -54,8 +56,10 @@ dependencies:
     - joinup_solution
     - joinup_subscription
     - joinup_webform
+    - locale
     - media
     - menu_admin_per_menu
+    - menu_link_content
     - meta_entity
     - moderation
     - node
@@ -117,7 +121,6 @@ permissions:
   - 'assign assessment_reporter role'
   - 'assign licence_manager role'
   - 'assign oss_catalogue_manager role'
-  - 'assign translator role'
   - 'bypass code of conduct'
   - 'bypass entity legal acceptance'
   - 'bypass node creation limit'
@@ -129,6 +132,7 @@ permissions:
   - 'create content for any_user option'
   - 'create content for facilitators_and_authors option'
   - 'create content for only_members option'
+  - 'create content translations'
   - 'create custom_page content'
   - 'create discussion content'
   - 'create discussion_logo media'
@@ -175,6 +179,7 @@ permissions:
   - 'delete any release content'
   - 'delete any solution_logo media'
   - 'delete assessment report'
+  - 'delete content translations'
   - 'delete paragraph content block'
   - 'delete paragraph content call_to_action'
   - 'delete paragraph content carousel'
@@ -304,10 +309,15 @@ permissions:
   - 'rebuild node access permissions'
   - 'replicate entities'
   - 'revert all sitewide alert revisions'
+  - 'schedule translation'
+  - 'translate any entity'
+  - 'translate interface'
+  - 'translate menu_link_content'
   - 'unarchived community content'
   - 'unfeature entity'
   - 'unflag interoperability'
   - 'update collection_settings meta-entity'
+  - 'update content translations'
   - 'update eif_perspective meta-entity'
   - 'update homepage_topics entityqueue'
   - 'update paragraph content block'
@@ -334,6 +344,7 @@ permissions:
   - 'vbo joinup archive action'
   - 'vbo joinup change group action'
   - 'vbo joinup unarchive action'
+  - 'view admin pages in preferred language'
   - 'view all sitewide alert revisions'
   - 'view any unpublished assessment report'
   - 'view any unpublished content'
@@ -341,6 +352,7 @@ permissions:
   - 'view approval_message'
   - 'view assessment listing'
   - 'view blocked_reason'
+  - 'view content translations'
   - 'view licence overview page'
   - 'view newsletter'
   - 'view own approval_message'

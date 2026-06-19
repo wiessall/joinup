@@ -1,0 +1,18 @@
+uuid: 901dec6f-e587-4890-9a37-d64b0e3e99d9
+langcode: en
+status: true
+dependencies:
+  config:
+    - meta_entity.type.topic
+id: meta_entity.topic.changed
+field_name: changed
+entity_type: meta_entity
+bundle: topic
+label: Changed
+description: 'The time that the meta entity was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

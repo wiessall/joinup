@@ -15,6 +15,7 @@ dependencies:
     - field.field.meta_entity.collection_settings.landing_page
     - field.field.meta_entity.collection_settings.listing_content
     - field.field.meta_entity.collection_settings.metadata_banner_disabled
+    - field.field.meta_entity.collection_settings.overview_label
     - meta_entity.type.collection_settings
   module:
     - layout_builder
@@ -54,6 +55,7 @@ hidden:
   meta_entity_collection_settings_listing_content_inline_facets: true
   meta_entity_collection_settings_listing_content_top: true
   metadata_banner_disabled: true
+  overview_label: true
   search_api_excerpt: true
   target: true
   uuid: true

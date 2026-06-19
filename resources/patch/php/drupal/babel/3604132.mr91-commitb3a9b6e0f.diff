@@ -1,0 +1,47 @@
+
+diff --git a/modules/babel_tmgmt/src/Plugin/tmgmt/Source/BabelSource.php b/modules/babel_tmgmt/src/Plugin/tmgmt/Source/BabelSource.php
+index 8053bc6c5018226f37be0eed96e393543b8ece0d..e75d833fa749fef3da99d9f71e27ae5f0a72f0b3 100644
+--- a/modules/babel_tmgmt/src/Plugin/tmgmt/Source/BabelSource.php
++++ b/modules/babel_tmgmt/src/Plugin/tmgmt/Source/BabelSource.php
+@@ -11,6 +11,7 @@ use Drupal\babel\Utility;
+ use Drupal\Component\Gettext\PoItem;
+ use Drupal\Core\Database\Connection;
+ use Drupal\Core\Form\FormStateInterface;
++use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+ use Drupal\tmgmt\ContinuousSourceInterface;
+ use Drupal\tmgmt\Entity\Job;
+@@ -38,6 +39,7 @@ class BabelSource extends SourcePluginBase implements ContainerFactoryPluginInte
+     protected readonly BabelStringsRepositoryInterface $babelStringsRepository,
+     protected readonly BabelStorageInterface $babelStorage,
+     protected Connection $db,
++    protected readonly LoggerChannelFactoryInterface $loggerFactory,
+   ) {
+     parent::__construct($configuration, $pluginId, $pluginDefinition);
+   }
+@@ -54,6 +56,7 @@ class BabelSource extends SourcePluginBase implements ContainerFactoryPluginInte
+       $container->get(BabelStringsRepositoryInterface::class),
+       $container->get(BabelStorageInterface::class),
+       $container->get('database'),
++      $container->get('logger.factory'),
+     );
+   }
+ 
+@@ -74,6 +77,17 @@ class BabelSource extends SourcePluginBase implements ContainerFactoryPluginInte
+       ->execute()
+       ->fetchField();
+ 
++    if (empty($sortKey)) {
++      $this->loggerFactory->get('babel_tmgmt')->notice(
++        'Babel source record not found for Job Item ID: @id. Unable to retrieve sort key.',
++        [
++          '@id' => $job_item->getItemId(),
++        ]
++      );
++
++      return FALSE;
++    }
++
+     // Remove a potential trailing delimiter when the translation context is an
+     // empty string.
+     return rtrim($sortKey, ':');

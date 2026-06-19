@@ -85,11 +85,11 @@ Feature:
     # official data portal: "http://data.europa.eu/w21/{uuid}". The data portal
     # links back to the Interoperable Europe Portal servers.
     Given I am on "data/w21/ffb0ffc9-7704-45d3-95b3-42706b6320e5"
-    Then I should see "Persistent solution"
-    And I should see "Persistent solution description"
+    Then I should see the text "Persistent solution"
+    And I should see the text "Persistent solution description"
 
     Given I am on "data/w21/37b8103e-26e5-4c81-8ce5-43ced02ff7d0"
-    Then I should see "Persistent collection"
+    Then I should see the text "Persistent collection"
 
     Given I am on "data/w21/98004ec9-62f3-4734-a1b6-af7e4838b09c"
     Then I should see the text "Persistent release 23" in the "Page title" region

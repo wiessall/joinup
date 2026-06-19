@@ -26,3 +26,59 @@ function joinup_core_requirements($phase): array {
 
   return $requirements;
 }
+
+/**
+ * Delete visit_count and download_count meta entities before config sync.
+ */
+function joinup_core_update_201500(array &$sandbox): string {
+  $database = \Drupal::database();
+  $bundles = ['visit_count', 'download_count'];
+
+  if (!isset($sandbox['total'])) {
+    $sandbox['total'] = (int) $database->select('meta_entity', 'm')
+      ->condition('type', $bundles, 'IN')
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+    $sandbox['deleted'] = 0;
+  }
+
+  if ($sandbox['total'] === 0) {
+    $sandbox['#finished'] = 1;
+    return 'No visit_count/download_count meta entities to delete.';
+  }
+
+  $ids = $database->select('meta_entity', 'm')
+    ->fields('m', ['id'])
+    ->condition('type', $bundles, 'IN')
+    ->range(0, 5000)
+    ->execute()
+    ->fetchCol();
+
+  if ($ids) {
+    $schema = $database->schema();
+    if ($schema->tableExists('meta_entity__count')) {
+      $database->delete('meta_entity__count')
+        ->condition('entity_id', $ids, 'IN')
+        ->execute();
+    }
+    if ($schema->tableExists('meta_entity__target')) {
+      $database->delete('meta_entity__target')
+        ->condition('entity_id', $ids, 'IN')
+        ->execute();
+    }
+    $database->delete('meta_entity_field_data')
+      ->condition('id', $ids, 'IN')
+      ->execute();
+    $database->delete('meta_entity')
+      ->condition('id', $ids, 'IN')
+      ->execute();
+    $sandbox['deleted'] += count($ids);
+  }
+
+  $sandbox['#finished'] = (!$ids || $sandbox['deleted'] >= $sandbox['total'])
+    ? 1
+    : ($sandbox['deleted'] / $sandbox['total']);
+
+  return sprintf('Deleted %d/%d visit_count/download_count meta entities.', $sandbox['deleted'], $sandbox['total']);
+}

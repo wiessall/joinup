@@ -18,7 +18,7 @@ bundle: resource_link
 label: 'Remote file URL'
 description: ''
 required: true
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:

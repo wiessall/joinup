@@ -5,7 +5,6 @@ dependencies:
   config:
     - field.storage.assessment.binding_requirement
     - field.storage.assessment.thematic_area
-    - field.storage.meta_entity.count
     - field.storage.meta_entity.field_featured
     - field.storage.meta_entity.field_pinned_in
     - field.storage.meta_entity.field_shared_in
@@ -98,7 +97,7 @@ third_party_settings:
     multilingual:
       limit_to_content_language: false
       include_language_independent: true
-      use_language_undefined_as_fallback_language: false
+      use_language_undefined_as_fallback_language: true
       specific_languages:
         bg: '0'
         hr: '0'
@@ -507,16 +506,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.user.field_user_organisation
-  field_visit_count:
-    label: 'Visit count'
-    datasource_id: 'entity:node'
-    property_path: 'visit_count:entity:count'
-    type: integer
-    dependencies:
-      config:
-        - field.storage.meta_entity.count
-      module:
-        - meta_entity
   interoperable_flag:
     label: 'Interoperable flag'
     datasource_id: 'entity:node'
@@ -542,6 +531,10 @@ field_settings:
         - field.storage.node.keywords
       module:
         - taxonomy
+  language_with_fallback:
+    label: 'Language (with fallback)'
+    property_path: language_with_fallback
+    type: string
   name:
     label: Name
     datasource_id: 'entity:taxonomy_term'

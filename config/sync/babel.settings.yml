@@ -21,6 +21,10 @@ translation_type:
         - spatial
         - status
         - topic
+    babel_og_menu_link:
+      og_menu:
+        - navigation
+        - quick_links
 data_transfer:
   plugin:
     spreadsheet: {  }

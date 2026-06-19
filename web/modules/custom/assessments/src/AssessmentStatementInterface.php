@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Drupal\assessments;
 
 use Drupal\assessments\Entity\AssessmentReport;
+use Drupal\Core\Entity\TranslatableInterface;
 
 /**
  * Defines the interface for Assessment Statement entities.
  */
-interface AssessmentStatementInterface {
+interface AssessmentStatementInterface extends TranslatableInterface {
 
   /**
    * Returns the report that the statement is linked to.

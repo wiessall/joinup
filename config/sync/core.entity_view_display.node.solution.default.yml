@@ -24,7 +24,6 @@ dependencies:
     - field.field.node.solution.short_id
     - field.field.node.solution.site_featured
     - field.field.node.solution.solution_type
-    - field.field.node.solution.translation
     - node.type.solution
     - og_menu.ogmenu.quick_links
   module:
@@ -1395,7 +1394,6 @@ hidden:
   contact: true
   description: true
   domain: true
-  download_total: true
   eif_perspective: true
   featured: true
   field_is_description: true
@@ -1431,6 +1429,5 @@ hidden:
   solution_settings: true
   solution_subscribe: true
   solution_type: true
-  translation: true
   uri: true
   uuid: true
