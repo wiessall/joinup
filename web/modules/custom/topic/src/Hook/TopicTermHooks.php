@@ -9,10 +9,12 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Hook\Attribute\Hook;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\taxonomy\TermInterface;
+use Drupal\topic\Entity\TopicInterface;
 
 /**
  * Hook implementations related to topic taxonomy terms.
@@ -23,7 +25,51 @@ final class TopicTermHooks {
 
   public function __construct(
     private readonly AccountProxyInterface $currentUser,
+    private readonly RouteMatchInterface $routeMatch,
   ) {}
+
+  /**
+   * Implements hook_ENTITY_TYPE_create_access() for paragraphs.
+   *
+   * Allows creation of the configurable_listing paragraph only on topic
+   * vocabulary term edit forms, and denies other paragraph types there.
+   */
+  #[Hook('paragraph_create_access')]
+  public function paragraphCreateAccess(AccountInterface $account, array $context, string $entity_bundle): AccessResultInterface {
+    if ($this->routeMatch->getRouteName() !== 'entity.taxonomy_term.edit_form') {
+      return AccessResult::neutral()->addCacheContexts(['route']);
+    }
+
+    $term = $this->routeMatch->getParameter('taxonomy_term');
+    if (!$term instanceof TopicInterface) {
+      return AccessResult::neutral()->addCacheContexts(['route']);
+    }
+
+    if ($entity_bundle === 'configurable_listing') {
+      return AccessResult::allowed()
+        ->addCacheableDependency($term)
+        ->addCacheContexts(['route']);
+    }
+
+    $denied_paragraphs = [
+      'accordion',
+      'call_to_action',
+      'carousel',
+      'content_listing',
+      'iframe',
+      'image',
+      'json_map',
+      'testimony',
+    ];
+
+    if (in_array($entity_bundle, $denied_paragraphs, TRUE)) {
+      return AccessResult::forbidden()
+        ->addCacheableDependency($term)
+        ->addCacheContexts(['route']);
+    }
+
+    return AccessResult::neutral()->addCacheContexts(['route']);
+  }
 
   /**
    * Implements hook_entity_access().
