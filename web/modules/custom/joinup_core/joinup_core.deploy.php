@@ -13,15 +13,7 @@ use Drupal\meta_entity\Entity\MetaEntityInterface;
  * Resets, re-aliases and re-queues the curated homepage topic translations.
  */
 function joinup_core_deploy_201500(array &$sandbox): string {
-  if (!function_exists('tmgmt_content_create_continuous_job_items')) {
-    return 'The tmgmt_content module is not enabled; homepage topics were not re-queued.';
-  }
-
   $queue = \Drupal::entityTypeManager()->getStorage('entity_subqueue')->load('homepage_topics');
-  if (!$queue) {
-    return 'The "homepage_topics" subqueue was not found; nothing to do.';
-  }
-
   $alias_storage = \Drupal::entityTypeManager()->getStorage('path_alias');
   $pathauto_generator = \Drupal::hasService('pathauto.generator') ? \Drupal::service('pathauto.generator') : NULL;
 
