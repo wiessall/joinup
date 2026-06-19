@@ -65,6 +65,27 @@ class DefaultContentManager {
   }
 
   /**
+   * Adds or removes a topic term from the homepage_topics entityqueue.
+   *
+   * @param string $uuid
+   *   The UUID of the taxonomy_term to add or remove.
+   * @param bool $add
+   *   TRUE to add the term to the queue, FALSE to remove it.
+   */
+  public function updateHomepageTopicsQueue(string $uuid, bool $add): void {
+    $subqueue = $this->entityTypeManager->getStorage('entity_subqueue')
+      ->load('homepage_topics');
+    $terms = $this->entityTypeManager->getStorage('taxonomy_term')
+      ->loadByProperties(['uuid' => $uuid]);
+    $term = reset($terms);
+    if (!$subqueue || !$term) {
+      return;
+    }
+    $add ? $subqueue->addItem($term) : $subqueue->removeItem($term);
+    $subqueue->save();
+  }
+
+  /**
    * Sets meta_entity.type.topic mapping.taxonomy_term.topic.auto_create.
    */
   public function setTopicAutoCreate(bool $auto_create): void {
