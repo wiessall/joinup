@@ -8,6 +8,7 @@ module:
   babel: 0
   babel_content_entity: 0
   babel_menu_link_content: 0
+  babel_og_menu_link: 0
   babel_tmgmt: 0
   better_exposed_filters: 0
   blazy: 0
@@ -61,7 +62,6 @@ module:
   entityqueue_block: 0
   error_page: 0
   eu_oss_catalogue: 0
-  eu_oss_translation: 0
   eu_oss_vitality_index: 0
   eupl: 0
   facets: 0
@@ -146,7 +146,6 @@ module:
   joinup_sitewide_alert: 0
   joinup_slick: 0
   joinup_solution: 0
-  joinup_stats: 0
   joinup_subscription: 0
   joinup_taxonomy: 0
   joinup_tiles: 0
@@ -198,7 +197,6 @@ module:
   oe_webtools: 0
   oe_webtools_analytics: 0
   oe_webtools_cookie_consent: 0
-  oe_webtools_etrans: 0
   oe_webtools_globan: 0
   oe_webtools_maps: 0
   og: 0

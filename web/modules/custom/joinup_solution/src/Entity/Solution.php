@@ -6,7 +6,6 @@ namespace Drupal\joinup_solution\Entity;
 
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\contact_information\Traits\ContactInformationTrait;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\custom_page\Entity\CustomPageInterface;
@@ -90,7 +89,7 @@ class Solution extends Node implements SolutionInterface {
   /**
    * {@inheritdoc}
    */
-  public function getGroupId(): string {
+  public function getGroupId(): int|string {
     $ids = $this->getReferencedEntityIds(OgGroupAudienceHelperInterface::DEFAULT_FIELD);
     if (empty($ids['node'])) {
       throw new MissingGroupException();
@@ -205,14 +204,6 @@ class Solution extends Node implements SolutionInterface {
       default:
         return $this->t('You are already subscribed to %group.', $parameters);
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getCacheTagsToInvalidate(): array {
-    $tags = $this->id() ? ['solution_download_count:' . md5($this->id())] : [];
-    return Cache::mergeTags(parent::getCacheTagsToInvalidate(), $tags);
   }
 
   /**

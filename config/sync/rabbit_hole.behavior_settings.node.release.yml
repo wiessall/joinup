@@ -1,0 +1,13 @@
+uuid: a1c9bc14-a432-4982-a92b-b980dfb49857
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.release
+id: node.release
+targetEntityType: node
+bundle: release
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

@@ -79,7 +79,6 @@ content:
     weight: 0
     region: content
 hidden:
-  download_count: true
   field_licence: true
   field_state: true
   file_size: true
