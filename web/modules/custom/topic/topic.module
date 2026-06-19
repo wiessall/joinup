@@ -68,16 +68,6 @@ function topic_meta_entity_update(EntityInterface $entity): void {
   }
 }
 
-/**
- * Implements hook_ENTITY_TYPE_presave().
- */
-function topic_meta_entity_presave(MetaEntityInterface $meta_entity): void {
-  if ($meta_entity instanceof TopicMetaEntityInterface && $term = $meta_entity->getTargetEntity()) {
-    $langcode = $meta_entity->language()->getId();
-    $translation = $term->hasTranslation($langcode) ? $term->getTranslation($langcode) : $term;
-    $meta_entity->getTranslation($langcode)->set('label', $translation->label());
-  }
-}
 
 /**
  * Redirects to the same page after saving the form.
