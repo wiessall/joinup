@@ -114,9 +114,11 @@ Feature: Notification test for the collection transitions.
       | body      | The collection "NC to delete", of which you are a member, has been deleted. |
     And the following email should have been sent:
       | recipient | NC moderator                                                                |
+      | subject   | The collection NC to delete was deleted.                                    |
       | body      | Your collection "NC to delete" has been deleted.                            |
     And the following email should have been sent:
       | recipient | NC moderator2                                                               |
+      | subject   | The collection NC to delete was deleted.                                    |
       | body      | Your collection "NC to delete" has been deleted.                            |
     And the following email should have been sent:
       | recipient | NC member2                                                                  |
@@ -192,6 +194,7 @@ Feature: Notification test for the collection transitions.
       | body           | The collection "NC to archive", of which you are a member, has been archived.  |
     And the following email should have been sent:
       | recipient | NC moderator2                                       |
+      | subject   | The collection NC to archive was archived.          |
       | body      | Your collection "NC to archive" has been archived.  |
     And the following email should not have been sent:
       | recipient | NC member3                                                                                                                   |
@@ -219,6 +222,7 @@ Feature: Notification test for the collection transitions.
       | body      | The Interoperable Europe Portal moderation team deleted the collection NC to delete by mod |
     And the following email should have been sent:
       | recipient | NC moderator2                                           |
+      | subject   | The collection NC to delete by mod was deleted.         |
       | body      | Your collection "NC to delete by mod" has been deleted. |
     And the following email should have been sent:
       | recipient_mail | contact.email@example.com                                                          |
