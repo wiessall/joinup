@@ -1,27 +1,22 @@
 @api @group-i
 Feature: Topic terms are redirected to search page.
 
-  Background:
+  Scenario: Topic terms are redirected to search unless present in the homepage queue.
     Given the following "topic" terms:
-      | tid  | name      |
-      | 5000 | Foo term  |
-      | 5001 | Bar term  |
+      | name     |
+      | Foo term |
+      | Bar term |
     And the following "collection" content:
       | title          | topic    |
       | Bar collection | Foo term |
-    And the "Homepage topics" content listing contains:
-      | title    |
+    And the following topics are enabled in the homepage:
       | Bar term |
 
-  Scenario Outline: Topic terms not in the homepage queue are redirected to search page.
-    Given I go to "<inbound url>"
-    Then the relative url should be "<expected url>"
+    When I go to the "Foo term" topic term page
+    Then I should see the heading "Advanced search"
     And I should see the following facet summary "Foo term"
 
-    Examples:
-      | inbound url         | expected url                  |
-      | /taxonomy/term/5000 | /search?f%5B0%5D=topic%3A5000 |
-
-  Scenario: Topic terms present in the homepage queue are not redirected.
-    Given I go to "/taxonomy/term/5001"
-    Then the relative url should be "/taxonomy/term/5001"
+    When I go to the homepage
+    And I click "Bar term"
+    Then I should not see the heading "Advanced search"
+    And I should see the heading "Bar term"
