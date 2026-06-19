@@ -14,6 +14,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\taxonomy\TermInterface;
+use Drupal\topic\Entity\TopicTerm;
 use Drupal\topic\Entity\TopicTermInterface;
 
 /**
@@ -27,6 +28,16 @@ final class TopicTermHooks {
     private readonly AccountProxyInterface $currentUser,
     private readonly RouteMatchInterface $routeMatch,
   ) {}
+
+  /**
+   * Implements hook_entity_bundle_info_alter().
+   */
+  #[Hook('entity_bundle_info_alter')]
+  public function entityBundleInfoAlter(array &$bundles): void {
+    if (!empty($bundles['taxonomy_term']['topic'])) {
+      $bundles['taxonomy_term']['topic']['class'] = TopicTerm::class;
+    }
+  }
 
   /**
    * Implements hook_ENTITY_TYPE_create_access() for paragraphs.

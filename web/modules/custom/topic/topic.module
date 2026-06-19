@@ -8,16 +8,6 @@
 declare(strict_types=1);
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\topic\Entity\TopicTerm;
-
-/**
- * Implements hook_entity_bundle_info_alter().
- */
-function topic_entity_bundle_info_alter(&$bundles): void {
-  if (!empty($bundles['taxonomy_term']['topic'])) {
-    $bundles['taxonomy_term']['topic']['class'] = TopicTerm::class;
-  }
-}
 
 /**
  * Redirects to the same page after saving the form.
