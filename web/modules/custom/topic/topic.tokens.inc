@@ -8,8 +8,8 @@
 declare(strict_types=1);
 
 use Drupal\Core\Render\BubbleableMetadata;
-use Drupal\topic\Entity\TopicTermInterface;
 use Drupal\topic\Entity\TopicMetaEntityInterface;
+use Drupal\topic\Entity\TopicTermInterface;
 
 /**
  * Implements hook_token_info().

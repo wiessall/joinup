@@ -7,14 +7,9 @@
 
 declare(strict_types=1);
 
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\meta_entity\Entity\MetaEntityInterface;
-use Drupal\taxonomy\TermInterface;
-use Drupal\topic\Entity\TopicTerm;
-use Drupal\topic\Entity\TopicTermInterface;
 use Drupal\topic\Entity\TopicMetaEntity;
-use Drupal\topic\Entity\TopicMetaEntityInterface;
+use Drupal\topic\Entity\TopicTerm;
 
 /**
  * Implements hook_entity_bundle_info_alter().
@@ -27,9 +22,6 @@ function topic_entity_bundle_info_alter(&$bundles): void {
     $bundles['meta_entity']['topic']['class'] = TopicMetaEntity::class;
   }
 }
-
-
-
 
 /**
  * Redirects to the same page after saving the form.

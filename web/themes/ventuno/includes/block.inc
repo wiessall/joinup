@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
-use Drupal\topic\Entity\TopicTermInterface;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
+use Drupal\topic\Entity\TopicTermInterface;
 
 /**
  * Implements hook_preprocess_block().
