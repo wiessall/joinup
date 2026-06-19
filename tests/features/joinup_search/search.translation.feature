@@ -83,3 +83,19 @@ Feature: Test global search in multilingual context
     When I go to the "fr" version of the "Nordic collection" collection
     Then the page should show the chips:
       | Collection nordique |
+
+  @javascript
+  Scenario: The topic facet labels on the search page use the current language.
+    Given the following term entity translations:
+      | source     | language | name        |
+      | Demography | fr       | Démographie |
+    And the following "collection" content:
+      | title           | topic      | state     |
+      | Climate Project | Demography | published |
+    And the following "collection" entity translations:
+      | source          | language | title         |
+      | Climate Project | fr       | Projet climat |
+    When I visit "/fr/search"
+    # The topic facet option renders the translated term name, not the English one.
+    And I check the "Démographie (2)" checkbox from the "topic" facet
+    Then I should see the "Projet climat" tile
