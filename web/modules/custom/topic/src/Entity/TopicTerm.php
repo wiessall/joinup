@@ -9,4 +9,4 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Bundle class for topic terms.
  */
-class Topic extends Term implements TopicInterface {}
+class TopicTerm extends Term implements TopicTermInterface {}

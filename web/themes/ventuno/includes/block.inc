@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
-use Drupal\topic\Entity\TopicInterface;
+use Drupal\topic\Entity\TopicTermInterface;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
 
 /**
@@ -165,7 +165,7 @@ function ventuno_preprocess_block__entityqueue_block__highlighted_content(&$vari
     $topics = $node->getTopics();
     $topic = reset($topics);
 
-    if ($topic instanceof TopicInterface) {
+    if ($topic instanceof TopicTermInterface) {
       $options = [
         'query' => [
           'f' => [

@@ -14,7 +14,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\taxonomy\TermInterface;
-use Drupal\topic\Entity\TopicInterface;
+use Drupal\topic\Entity\TopicTermInterface;
 
 /**
  * Hook implementations related to topic taxonomy terms.
@@ -41,7 +41,7 @@ final class TopicTermHooks {
     }
 
     $term = $this->routeMatch->getParameter('taxonomy_term');
-    if (!$term instanceof TopicInterface) {
+    if (!$term instanceof TopicTermInterface) {
       return AccessResult::neutral()->addCacheContexts(['route']);
     }
 

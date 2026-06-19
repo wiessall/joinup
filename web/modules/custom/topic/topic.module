@@ -11,8 +11,8 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\taxonomy\TermInterface;
-use Drupal\topic\Entity\Topic;
-use Drupal\topic\Entity\TopicInterface;
+use Drupal\topic\Entity\TopicTerm;
+use Drupal\topic\Entity\TopicTermInterface;
 use Drupal\topic\Entity\TopicMetaEntity;
 use Drupal\topic\Entity\TopicMetaEntityInterface;
 
@@ -21,7 +21,7 @@ use Drupal\topic\Entity\TopicMetaEntityInterface;
  */
 function topic_entity_bundle_info_alter(&$bundles): void {
   if (!empty($bundles['taxonomy_term']['topic'])) {
-    $bundles['taxonomy_term']['topic']['class'] = Topic::class;
+    $bundles['taxonomy_term']['topic']['class'] = TopicTerm::class;
   }
   if (!empty($bundles['meta_entity']['topic'])) {
     $bundles['meta_entity']['topic']['class'] = TopicMetaEntity::class;
@@ -32,7 +32,7 @@ function topic_entity_bundle_info_alter(&$bundles): void {
  * Implements hook_ENTITY_TYPE_update().
  */
 function topic_taxonomy_term_update(TermInterface $term): void {
-  if (!$term instanceof TopicInterface) {
+  if (!$term instanceof TopicTermInterface) {
     return;
   }
 

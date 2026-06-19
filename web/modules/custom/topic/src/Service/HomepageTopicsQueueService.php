@@ -6,7 +6,7 @@ namespace Drupal\topic\Service;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\entityqueue\EntitySubqueueInterface;
-use Drupal\topic\Entity\TopicInterface;
+use Drupal\topic\Entity\TopicTermInterface;
 
 /**
  * Provides helpers for the homepage topics entityqueue.
@@ -31,10 +31,10 @@ class HomepageTopicsQueueService {
   /**
    * Checks whether a topic term is present in the homepage topics queue.
    *
-   * @param \Drupal\topic\Entity\TopicInterface $topic
+   * @param \Drupal\topic\Entity\TopicTermInterface $topic
    *   The topic term entity.
    */
-  public function isInQueue(TopicInterface $topic): bool {
+  public function isInQueue(TopicTermInterface $topic): bool {
     $subqueue = $this->getQueue();
 
     if (!$subqueue) {

@@ -9,4 +9,4 @@ use Drupal\taxonomy\TermInterface;
 /**
  * Interface for topic entities in Joinup.
  */
-interface TopicInterface extends TermInterface {}
+interface TopicTermInterface extends TermInterface {}

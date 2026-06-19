@@ -8,7 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\Core\Render\BubbleableMetadata;
-use Drupal\topic\Entity\TopicInterface;
+use Drupal\topic\Entity\TopicTermInterface;
 use Drupal\topic\Entity\TopicMetaEntityInterface;
 
 /**
@@ -46,7 +46,7 @@ function topic_tokens(string $type, array $tokens, array $data, array $options, 
           // The term will have a reference to root as '0' if it is a root term.
           if (!$term_parent->isEmpty() && (bool) $term_parent->target_id) {
             $parent_topic = $term_parent->entity;
-            if ($parent_topic instanceof TopicInterface) {
+            if ($parent_topic instanceof TopicTermInterface) {
               $bubbleable_metadata->addCacheableDependency($meta_entity);
               $replacements[$original] = $parent_topic->label();
             }
