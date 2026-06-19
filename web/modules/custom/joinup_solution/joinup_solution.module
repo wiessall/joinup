@@ -16,6 +16,7 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityMalformedException;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
@@ -320,8 +321,7 @@ function joinup_solution_node_view(array &$build, NodeInterface $solution, Entit
   if ($display->getComponent('collections') && !$solution->get(OgGroupAudienceHelper::DEFAULT_FIELD)->isEmpty()) {
     $collection = $solution->get(OgGroupAudienceHelper::DEFAULT_FIELD)->first()->entity;
     assert($collection instanceof CollectionInterface);
-    /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
-    $entity_repository = \Drupal::service('entity.repository');
+    $entity_repository = \Drupal::service(EntityRepositoryInterface::class);
     $collection = $entity_repository->getTranslationFromContext($collection);
     $build['collections'] = ['link' => $collection->toLink()->toRenderable()];
     CacheableMetadata::createFromObject($collection)->applyTo($build['collections']);
@@ -498,8 +498,7 @@ function joinup_solution_build_related_solutions_tiles(array $ids): array {
  *   The render array of related solutions.
  */
 function joinup_solution_build_related_solutions_titles(array $ids): array {
-  /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
-  $entity_repository = \Drupal::service('entity.repository');
+  $entity_repository = \Drupal::service(EntityRepositoryInterface::class);
   $labels = array_map(static fn($entity) => $entity_repository->getTranslationFromContext($entity)->label(), Node::loadMultiple($ids));
   if (empty($labels)) {
     return [];

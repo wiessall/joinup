@@ -11,6 +11,7 @@ use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -162,8 +163,7 @@ function joinup_search_form_alter(&$form, FormStateInterface $form_state, $form_
     if ($view['view']->id() === 'search' && $view['view']->current_display === 'page_1' && $route_name !== 'view.search.page_1') {
       $group = \Drupal::service('og.context')->getGroup();
       if ($group instanceof GroupInterface) {
-        /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
-        $entity_repository = \Drupal::service('entity.repository');
+        $entity_repository = \Drupal::service(EntityRepositoryInterface::class);
         $group = $entity_repository->getTranslationFromContext($group);
         $form['filters'] = [
           '#type' => 'hidden',

@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -383,8 +384,7 @@ function _ventuno_get_event_location_label(bool $hasLocation, bool $hasOnline): 
 function _ventuno_terms_to_badges(array $terms, TranslatableMarkup $extraLabel, int $maxNumberOfBadges = 2): array {
   $badges = [];
 
-  /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
-  $entity_repository = \Drupal::service('entity.repository');
+  $entity_repository = \Drupal::service(EntityRepositoryInterface::class);
   foreach ($terms as $term) {
     $term = $entity_repository->getTranslationFromContext($term);
     $badges[] = [

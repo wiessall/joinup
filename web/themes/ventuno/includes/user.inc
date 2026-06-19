@@ -7,6 +7,8 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Entity\EntityRepositoryInterface;
+
 /**
  * Implements hook_preprocess_user().
  */
@@ -21,8 +23,7 @@ function ventuno_preprocess_user(array &$variables): void {
   // Prepare data for the tiles.
   if (in_array($variables['view_mode'], $tile_view_modes, TRUE)) {
     $user = $variables['elements']['#user'];
-    /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
-    $entity_repository = \Drupal::service('entity.repository');
+    $entity_repository = \Drupal::service(EntityRepositoryInterface::class);
 
     // Text.
     $nationality = $business_title = NULL;

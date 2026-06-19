@@ -11,6 +11,7 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Plugin\Context\ContextDefinition;
 use Drupal\Core\Plugin\Context\EntityContextDefinition;
 use Drupal\Core\Security\Attribute\TrustedCallback;
@@ -117,8 +118,7 @@ class CollectionCoCMessageBlock extends BlockBase {
       return $build;
     }
 
-    /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
-    $entity_repository = \Drupal::service('entity.repository');
+    $entity_repository = \Drupal::service(EntityRepositoryInterface::class);
     $collection = $entity_repository->getTranslationFromContext($collection);
     $coc = $entity_repository->getTranslationFromContext($collection->getCodeOfConduct());
 
