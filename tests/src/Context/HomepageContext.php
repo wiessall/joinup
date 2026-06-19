@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Hook\AfterScenario;
 use Behat\Mink\Element\NodeElement;
 use Behat\Step\Given;
 use Behat\Step\Then;
@@ -100,6 +101,33 @@ class HomepageContext extends RawDrupalContext {
       $entity_queue->addItem($topic);
     }
     $entity_queue->save();
+  }
+
+  /**
+   * Cleans up the homepage topics queue and resets topic vocabulary terms.
+   */
+  #[AfterScenario('@topic&&@api')]
+  public function resetTopicVocabularyQueue(): void {
+    \Drupal::entityTypeManager()->getStorage('entity_subqueue')
+      ->load('homepage_topics')
+      ->clearItems()
+      ->save();
+
+    $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+    $ids = $term_storage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('vid', 'topic')
+      ->execute();
+    if ($ids) {
+      foreach ($term_storage->loadMultiple($ids) as $term) {
+        $term
+          ->set('topics_paragraph', NULL)
+          ->set('abstract', NULL)
+          ->set('image', NULL)
+          ->set('description', NULL)
+          ->save();
+      }
+    }
   }
 
 }

@@ -162,8 +162,8 @@ Feature:
     When I go to the homepage
     Then I should see the text "This will be shown in the homepage."
 
-  @javascript @wip
-  Scenario: Lists of configurable content can be added in the page of the topic meta entity.
+  @javascript
+  Scenario: Lists of configurable content can be added in the page of the topic vocabulary.
     Given the following "news" content:
       | title  | headline | collection |
       | News 1 | News 1   | Portal support |
@@ -180,11 +180,11 @@ Feature:
       | E-justice               |
     When I am logged in as a moderator
     And I go to the edit form of the "E-justice" topic
-    And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
+    And I add a layout paragraph in the "Topic term body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
       | Extra classes    | test-class |
-    And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
+    And I add a "Configurable listing" paragraph in the "Topic term body" form field:
       | layout position | 1                                                       |
       | region          | content                                                 |
       | Heading         | type: text - value: E-justice heading                   |
@@ -193,6 +193,7 @@ Feature:
       | List style      | type: select - value: List                              |
       | Query presets   | type: text - value: entity_bundle\|news,custom_page\|IN |
 
+    When I fill in "Abstract" with "E-justice abstract"
     And I press "Save"
     Then I should see the "News 1" tile
     And I should see the "Popular quotes" tile
@@ -201,8 +202,8 @@ Feature:
     And the url should match "/topic/law-and-justice/e-justice"
 
     When I go to the edit form of the "E-justice" topic
-    And I "delete" from the "Topic meta entity body" field the child 1 paragraph of 1 layout
-    And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
+    And I "delete" from the "Topic term body" field the child 1 paragraph of 1 layout
+    And I add a "Configurable listing" paragraph in the "Topic term body" form field:
       | layout position | 1                                       |
       | region          | content                                 |
       | Heading         | type: text - value: E-justice heading   |
@@ -215,13 +216,13 @@ Feature:
     And I should see the "News 1" tile
     And the url should match "/topic/law-and-justice/e-justice"
 
-    When I go to the canonical path of the "topic" meta entity of the "Economy and Welfare" topic "taxonomy term"
+    When I go to the "Economy and Welfare" topic term page
     And the url should match "/topic/economy-and-welfare"
 
-    When I go to the canonical path of the "topic" meta entity of the "Info" topic "taxonomy term"
+    When I go to the "Info" topic term page
     And the url should match "/topic/info"
 
-    When I go to the canonical path of the "topic" meta entity of the "Statistics and Analysis" topic "taxonomy term"
+    When I go to the "Statistics and Analysis" topic term page
     And the url should match "/topic/info/statistics-and-analysis"
 
     # Regression test: 3-dots is hidden for anonymous as only contains 'View'.
@@ -288,11 +289,11 @@ Feature:
     When I am logged in as a moderator
 
     And I go to the edit form of the "E-justice" topic
-    And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
+    And I add a layout paragraph in the "Topic term body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
       | Extra classes    | test-class |
-    And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
+    And I add a "Configurable listing" paragraph in the "Topic term body" form field:
       | layout position | 1                                       |
       | region          | content                                 |
       | Heading         | type: text - value: E-justice heading   |
@@ -308,12 +309,12 @@ Feature:
       | News 1 |
 
     When I go to the edit form of the "E-justice" topic
-    When I delete from the "Topic meta entity body" form field the layout paragraph in position 1
-    And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
+    When I delete from the "Topic term body" form field the layout paragraph in position 1
+    And I add a layout paragraph in the "Topic term body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
       | Extra classes    | test-class |
-    And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
+    And I add a "Configurable listing" paragraph in the "Topic term body" form field:
       | layout position | 1                                                                                                                                       |
       | region          | content                                                                                                                                 |
       | Heading         | type: text - value: E-justice heading                                                                                                   |
@@ -329,12 +330,12 @@ Feature:
       | News 1 |
 
     When I go to the edit form of the "E-justice" topic
-    When I delete from the "Topic meta entity body" form field the layout paragraph in position 1
-    And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
+    When I delete from the "Topic term body" form field the layout paragraph in position 1
+    And I add a layout paragraph in the "Topic term body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
       | Extra classes    | test-class |
-    And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
+    And I add a "Configurable listing" paragraph in the "Topic term body" form field:
       | layout position | 1                                                         |
       | region          | content                                                   |
       | Heading         | type: text - value: E-justice heading                     |
@@ -359,12 +360,12 @@ Feature:
       | News 1 |
 
     When I go to the edit form of the "E-justice" topic
-    When I delete from the "Topic meta entity body" form field the layout paragraph in position 1
-    And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
+    When I delete from the "Topic term body" form field the layout paragraph in position 1
+    And I add a layout paragraph in the "Topic term body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
       | Extra classes    | test-class |
-    And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
+    And I add a "Configurable listing" paragraph in the "Topic term body" form field:
       | layout position | 1                                        |
       | region          | content                                  |
       | Heading         | type: text - value: E-justice heading    |
@@ -399,11 +400,11 @@ Feature:
       | E-justice |
     And I am logged in as a moderator
     And I go to the edit form of the "E-justice" topic
-    And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
+    And I add a layout paragraph in the "Topic term body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
       | Extra classes    | test-class |
-    And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
+    And I add a "Configurable listing" paragraph in the "Topic term body" form field:
       | layout position | 1                                         |
       | region          | content                                   |
       | Heading         | type: text - value: E-justice heading     |
@@ -438,11 +439,11 @@ Feature:
       | Just another day & solt | Second description issum | Portal support | This is an solution with abstract | E-justice                                                                | 02-01-2023 | 03-02-2023 |
     When I am logged in as a moderator
     And I go to the edit form of the "E-justice" topic
-    Then I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
+    Then I add a layout paragraph in the "Topic term body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
       | Extra classes    | test-class |
-    And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
+    And I add a "Configurable listing" paragraph in the "Topic term body" form field:
       | layout position | 1                                                          |
       | region          | content                                                    |
       | Heading         | type: text - value: E-justice heading                      |
