@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
-use Behat\Mink\Element\NodeElement;
 use Behat\Hook\AfterScenario;
+use Behat\Mink\Element\NodeElement;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
