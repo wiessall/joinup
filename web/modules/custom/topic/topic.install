@@ -13,7 +13,7 @@ use Drupal\field\Entity\FieldStorageConfig;
 /**
  * Install new taxonomy_term.topic field configs and topic_vocabulary view.
  */
-function topic_update_201400(): void {
+function topic_update_201500(): void {
   $sync_storage = \Drupal::service('config.storage.sync');
 
   $storage_configs = [
@@ -54,7 +54,7 @@ function topic_update_201400(): void {
 /**
  * Migrate topic meta entity data to taxonomy term fields.
  */
-function topic_update_201401(array &$sandbox): string {
+function topic_update_201501(array &$sandbox): string {
   $entity_type_manager = \Drupal::entityTypeManager();
   $meta_entity_storage = $entity_type_manager->getStorage('meta_entity');
   $logger = \Drupal::logger('topic');
@@ -138,7 +138,7 @@ function topic_update_201401(array &$sandbox): string {
 /**
  * Migrate homepage_topics entityqueue items from meta_entity to taxonomy_term.
  */
-function topic_update_201402(): string {
+function topic_update_201502(): string {
   $entity_type_manager = \Drupal::entityTypeManager();
   $subqueue = $entity_type_manager->getStorage('entity_subqueue')->load('homepage_topics');
   if (!$subqueue) {
