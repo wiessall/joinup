@@ -320,14 +320,22 @@ Feature:
     When I visit the "Knowledge Hive" collection
     Then I should not see the warning message "We updated our Code of Conduct"
 
-  Scenario: The CoC warning message shows the collection name in the current language.
+  Scenario: The CoC warning message shows the collection name and links in the current language.
     Given the following "collection" entity translations:
       | source         | language | title           |
       | Knowledge Hive | fr       | Ruche de savoir |
+    And the following "custom_page" entity translations:
+      | source             | language | title                |
+      | Agreement of usage | fr       | Accord d'utilisation |
     And the Code of Conduct for "Knowledge Hive" collection is updated
     Given I am logged in as "Cedric Hawthorne"
     When I go to the "fr" version of the "Knowledge Hive" collection
     Then I should see the warning message "We updated our Code of Conduct to ensure safe and respectful environment for all members of Ruche de savoir. You can accept or decline it here."
+    When I click "here"
+    Then the current relative url should match "#^/fr/.+/code-of-conduct-consent$#"
+    When I go to the "fr" version of the "Knowledge Hive" collection
+    And I click "Code of Conduct"
+    Then I should see the heading "Accord d'utilisation"
 
   Scenario: Code of conduct pages cannot be moved to another group.
     Given I am logged in as a moderator
