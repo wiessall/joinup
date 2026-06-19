@@ -19,6 +19,10 @@ Feature: Test global search in multilingual context
       | Colour theory | yes     |
     When I visit "/fr/search?keys=Théorie des couleurs"
     Then I should see the "Roue des couleurs" tile
+    # The collection tile must link to the French translation, not the English page.
+    When I click the "Roue des couleurs" in the "Roue des couleurs" tile
+    Then the current relative url should match "#^/fr/collection/#"
+    And I should see the heading "Roue des couleurs"
 
   Scenario: The distribution title indexed for solution search uses the current language
     Given the following "solution" content:
