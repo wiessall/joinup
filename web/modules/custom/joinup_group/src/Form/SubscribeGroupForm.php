@@ -221,7 +221,7 @@ class SubscribeGroupForm extends FormBase {
       return NULL;
     }
 
-    $codeOfConduct = $collection->getCodeOfConduct();
+    $codeOfConduct = $this->entityRepository->getTranslationFromContext($collection->getCodeOfConduct());
     $codeOfConductArgs = [
       ':code-of-conduct-url' => $codeOfConduct->toUrl()->toString(),
       '@group-label' => $collection->label(),
