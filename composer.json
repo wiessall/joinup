@@ -539,6 +539,9 @@
                 "Render logic not working @see https://www.drupal.org/i/3499861": "resources/patch/php/drupal/views_block_area/3499861.patch",
                 "PHP 8.4 @see https://www.drupal.org/i/3541588": "resources/patch/php/drupal/views_block_area/3541588.mr13.commit-8108f239.diff"
             },
+            "drupal/views_bulk_operations": {
+                "PHP 8.5 \"Using null as an array offset\" in viewsFormSubmit @see https://www.drupal.org/i/3589897": "resources/patch/php/drupal/views_bulk_operations/3589897-php8.5-fix-only-commit-0ca438ec.diff"
+            },
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff",
                 "Webform referenced and rendered in paragraph @see https://www.drupal.org/i/3230135": "resources/patch/php/drupal/webform/3230135.diff"
