@@ -10,6 +10,7 @@ declare(strict_types=1);
 use Drupal\block\Entity\Block;
 use Drupal\Core\Template\Attribute;
 use Drupal\node\NodeInterface;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Implements hook_preprocess_page().
@@ -50,6 +51,12 @@ function ventuno_preprocess_page(array &$variables): void {
   $route_name = $route_match->getRouteName();
   if ($route_name == 'view.search.page_1') {
     $variables['hide_searchbar'] = TRUE;
+  }
+
+  $term = $route_match->getParameter('taxonomy_term');
+  if ($route_name === 'entity.taxonomy_term.canonical' && $term instanceof TermInterface) {
+    $variables['meta_title'] = $term->label();
+    $variables['meta_description']['#markup'] = $term->getDescription();
   }
 
   // Remove title on collection/solution canonical pages.
@@ -136,6 +143,11 @@ function ventuno_theme_suggestions_page_alter(array &$suggestions, array $variab
   if ($node instanceof NodeInterface) {
     $content_type = $node->bundle();
     $suggestions[] = 'page__' . $content_type;
+  }
+
+  $term = \Drupal::routeMatch()->getParameter('taxonomy_term');
+  if ($term instanceof TermInterface) {
+    $suggestions[] = 'page__taxonomy__' . $term->bundle();
   }
 
   // Reuse search template for OSS catalogue search page.
