@@ -63,6 +63,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   $routes_with_text = [
     'page_manager.page_view_homepage_homepage-layout_builder-0',
     'entity.meta_entity.canonical',
+    'entity.taxonomy_term.canonical',
   ];
   $is_oss_solution_tile = $variables['view_mode'] === 'view_mode_tile' && $entity instanceof JoinupOssSolution;
   if ((in_array($route_name, $routes_with_text) && $variables['view_mode'] === 'view_mode_tile') ||
