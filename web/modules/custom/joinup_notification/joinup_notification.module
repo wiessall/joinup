@@ -8,24 +8,23 @@
 declare(strict_types=1);
 
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\TranslatableInterface;
 use Drupal\Core\Render\Markup;
 use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\EventSubscriber\OgMembershipSubscriber;
 use Drupal\joinup_notification\MailContentTypeHeader;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_ENTITY_TYPE_insert().
  *
  * Sends notifications when community content is updated.
  */
-function joinup_notification_node_insert(EntityInterface $entity): void {
-  if (_joinup_notification_is_translation_save($entity)) {
-    return;
+function joinup_notification_node_insert(NodeInterface $node): void {
+  if ($node->isDefaultTranslation()) {
+    joinup_notification_dispatch_notification('create', NotificationEvents::NODE_CREATE, $node);
   }
-  joinup_notification_dispatch_notification('create', NotificationEvents::NODE_CREATE, $entity);
 }
 
 /**
@@ -46,11 +45,10 @@ function joinup_notification_node_presave(EntityInterface $entity): void {
  *
  * Sends notifications when community content is updated.
  */
-function joinup_notification_node_update(EntityInterface $entity): void {
-  if (_joinup_notification_is_translation_save($entity)) {
-    return;
+function joinup_notification_node_update(NodeInterface $node): void {
+  if ($node->isDefaultTranslation()) {
+    joinup_notification_dispatch_notification('update', NotificationEvents::NODE_UPDATE, $node);
   }
-  joinup_notification_dispatch_notification('update', NotificationEvents::NODE_UPDATE, $entity);
 }
 
 /**
@@ -84,20 +82,6 @@ function joinup_notification_comment_update(EntityInterface $entity): void {
  */
 function joinup_notification_comment_delete(EntityInterface $entity): void {
   joinup_notification_dispatch_notification('delete', NotificationEvents::COMMENT_CRUD, $entity);
-}
-
-/**
- * Determines whether a save concerns a non-default translation.
- *
- * @param \Drupal\Core\Entity\EntityInterface $entity
- *   The entity being saved.
- *
- * @return bool
- *   TRUE if the save concerns a non-default translation and notifications
- *   should be skipped.
- */
-function _joinup_notification_is_translation_save(EntityInterface $entity): bool {
-  return $entity instanceof TranslatableInterface && !$entity->isDefaultTranslation();
 }
 
 /**
