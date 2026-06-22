@@ -5,7 +5,6 @@ dependencies:
   module:
     - joinup_core
     - system
-    - taxonomy
   theme:
     - ventuno
 id: ventuno_pagetitle
@@ -36,10 +35,3 @@ visibility:
     negate: true
     context_mapping: {  }
     pages: "<front>\r\n/eu-oss-catalogue/solutions/*\r\n/api/assessments/v1"
-  'entity_bundle:taxonomy_term':
-    id: 'entity_bundle:taxonomy_term'
-    negate: true
-    context_mapping:
-      taxonomy_term: '@taxonomy_term.taxonomy_term_route_context:taxonomy_term'
-    bundles:
-      topic: topic
