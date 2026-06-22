@@ -1,0 +1,334 @@
+diff --git a/config/install/tmgmt.settings.yml b/config/install/tmgmt.settings.yml
+index c1a71e0a..0d878e3f 100644
+--- a/config/install/tmgmt.settings.yml
++++ b/config/install/tmgmt.settings.yml
+@@ -4,6 +4,7 @@ purge_finished: _never
+ word_count_exclude_tags: true
+ source_list_limit: 20
+ respect_text_format: true
++field_length_overflow_policy: needs_review
+ submit_job_item_on_cron: false
+ job_items_cron_limit: 50
+ allowed_formats: {}
+diff --git a/config/schema/tmgmt.schema.yml b/config/schema/tmgmt.schema.yml
+index 0c66742f..041db080 100644
+--- a/config/schema/tmgmt.schema.yml
++++ b/config/schema/tmgmt.schema.yml
+@@ -26,6 +26,9 @@ tmgmt.settings:
+     source_list_limit:
+       type: integer
+       label: 'Source list limit'
++    field_length_overflow_policy:
++      type: string
++      label: 'Field length overflow policy'
+     submit_job_item_on_cron:
+       type: boolean
+       label: 'Submit job item on cron'
+diff --git a/sources/content/tests/src/Kernel/ContentEntitySourceMaxLengthTest.php b/sources/content/tests/src/Kernel/ContentEntitySourceMaxLengthTest.php
+new file mode 100644
+index 00000000..54c57da4
+--- /dev/null
++++ b/sources/content/tests/src/Kernel/ContentEntitySourceMaxLengthTest.php
+@@ -0,0 +1,104 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\tmgmt_content\Kernel;
++
++use Drupal\Component\Utility\Unicode;
++use Drupal\entity_test\Entity\EntityTestMul;
++use Drupal\field\Entity\FieldConfig;
++use Drupal\field\Entity\FieldStorageConfig;
++use Drupal\tmgmt\JobItemInterface;
++
++/**
++ * Tests the configurable policy for translations longer than the field.
++ *
++ * @group tmgmt
++ */
++class ContentEntitySourceMaxLengthTest extends ContentEntityTestBase {
++
++  /**
++   * The max length of the test string field.
++   */
++  private const MAX_LENGTH = 30;
++
++  /**
++   * {@inheritdoc}
++   */
++  public function setUp(): void {
++    parent::setUp();
++
++    // A plain, fixed-length string field shorter than the returned translation.
++    FieldStorageConfig::create([
++      'entity_type' => $this->entityTypeId,
++      'field_name' => 'field_test_string',
++      'type' => 'string',
++      'cardinality' => 1,
++      'translatable' => TRUE,
++      'settings' => ['max_length' => self::MAX_LENGTH],
++    ])->save();
++    FieldConfig::create([
++      'entity_type' => $this->entityTypeId,
++      'field_name' => 'field_test_string',
++      'bundle' => $this->entityTypeId,
++      'label' => 'Test string-field',
++      'translatable' => TRUE,
++    ])->save();
++  }
++
++  /**
++   * Creates an English source entity and requests its translation.
++   *
++   * @return \Drupal\tmgmt\JobItemInterface
++   *   The job item, with the translation requested.
++   */
++  protected function requestTranslation(): JobItemInterface {
++    $entity = EntityTestMul::create([
++      'langcode' => 'en',
++      'user_id' => 1,
++      'name' => $this->randomMachineName(),
++      // A multi-word source whose prefixed translation overflows the field.
++      'field_test_string' => 'lorem ipsum dolor sit amet ww',
++    ]);
++    $entity->save();
++
++    $job = tmgmt_job_create('en', 'de');
++    $job->translator = 'test_translator';
++    $job->save();
++    $job->addItem('content', $this->entityTypeId, $entity->id());
++    // The test translator prefixes every string, so the returned translation is
++    // longer than the source and overflows the field limit.
++    $job->requestTranslation();
++
++    $items = $job->getItems();
++    return reset($items);
++  }
++
++  /**
++   * The 'truncate' policy shortens the translation to fit and accepts it.
++   */
++  public function testTruncatePolicy(): void {
++    $this->config('tmgmt.settings')->set('field_length_overflow_policy', 'truncate')->save();
++    $item = $this->requestTranslation();
++    $translation = $item->getData(['field_test_string', 0, 'value'])['#translation']['#text'];
++
++    $this->assertTrue($item->acceptTranslation());
++
++    $entity = EntityTestMul::load($item->getItemId());
++    $value = $entity->getTranslation('de')->field_test_string->value;
++    $this->assertSame(Unicode::truncate($translation, self::MAX_LENGTH, TRUE, TRUE), $value);
++  }
++
++  /**
++   * The 'needs_review' policy keeps the item for review.
++   */
++  public function testNeedsReviewPolicy(): void {
++    $this->config('tmgmt.settings')->set('field_length_overflow_policy', 'needs_review')->save();
++    $item = $this->requestTranslation();
++
++    $this->assertFalse($item->acceptTranslation());
++    $this->assertTrue($item->isNeedsReview());
++    $this->assertFalse(EntityTestMul::load($item->getItemId())->hasTranslation('de'));
++  }
++
++}
+diff --git a/src/Entity/JobItem.php b/src/Entity/JobItem.php
+index 519a6243..8783bf97 100644
+--- a/src/Entity/JobItem.php
++++ b/src/Entity/JobItem.php
+@@ -522,7 +522,10 @@ public function needsReview($message = NULL, $variables = array(), $type = 'stat
+     // Auto accept the translation if the translator is configured for it.
+     if ($this->getTranslator()->isAutoAccept() && !$this->isAborted()) {
+       try {
+-        $this->acceptTranslation();
++        if (!$this->acceptTranslation($rejection_reason)) {
++          $rejection_reason ??= 'Failed to automatically accept translation';
++          $this->addMessage($rejection_reason, [], 'error');
++        }
+       }
+       catch (\Exception $e) {
+         $this->addMessage('Failed to automatically accept translation, error: @error', ['@error' => $e->getMessage()], 'error');
+@@ -917,19 +920,83 @@ public function addTranslatedData(array $translation, $key = array(), $status =
+   /**
+    * {@inheritdoc}
+    */
+-  public function acceptTranslation() {
+-    if (!$this->isNeedsReview() || !$plugin = $this->getSourcePlugin()) {
++  public function acceptTranslation(?string &$rejection_reason = NULL) {
++    if (!$this->isNeedsReview()) {
++      $rejection_reason = "Job item {$this->id()} status is not 'needs review'";
++      return FALSE;
++    }
++
++    if (!$plugin = $this->getSourcePlugin()) {
++      $rejection_reason = "Invalid source plugin for job item {$this->id()}";
++      return FALSE;
++    }
++
++    if (!$this->applyFieldLengthOverflowPolicy()) {
+       return FALSE;
+     }
++
+     if (!$plugin->saveTranslation($this, $this->getJob()->getTargetLangcode())) {
++      $rejection_reason = "Unknown error while saving translation for job item {$this->id()}";
+       return FALSE;
+     }
++
+     // If the plugin could save the translation, we will set it
+     // to the 'accepted' state.
+     $this->accepted();
+     return TRUE;
+   }
+ 
++  /**
++   * Applies the configured policy for translations longer than their field.
++   *
++   * @return bool
++   *   TRUE if acceptance may proceed, FALSE if it must stop for review.
++   */
++  protected function applyFieldLengthOverflowPolicy(): bool {
++    /** @var \Drupal\tmgmt\Data $data_service */
++    $data_service = \Drupal::service('tmgmt.data');
++    $policy = \Drupal::config('tmgmt.settings')->get('field_length_overflow_policy');
++
++    $valid = TRUE;
++    $truncated = FALSE;
++    foreach ($data_service->filterTranslatable($this->getData()) as $key => $item) {
++      if (empty($item['#max_length']) || !isset($item['#translation']['#text'])) {
++        continue;
++      }
++      $max_length = $item['#max_length'];
++      $text = $item['#translation']['#text'];
++      if (mb_strlen($text) <= $max_length) {
++        continue;
++      }
++
++      if ($policy === 'truncate') {
++        // Shorten the translation at a word boundary to fit the column.
++        $this->updateData($key, ['#translation' => ['#text' => Unicode::truncate($text, $max_length, TRUE, TRUE)]]);
++        $this->addMessage('The translation for %field was longer than the maximum of @max characters allowed and has been truncated.', [
++          '%field' => $data_service->itemLabel($item),
++          '@max' => $max_length,
++        ], 'warning');
++        $truncated = TRUE;
++      }
++      else {
++        // Keep the item in review so the translation can be handled manually.
++        $review_url = $this->toUrl('canonical', ['query' => ['destination' => $this->getJob()->toUrl()->toString()]])->toString();
++        $this->addMessage('The translation for %field is longer than the maximum of @max characters allowed and cannot be accepted. Shorten it in the <a href=":review_url">review form</a>.', [
++          '%field' => $data_service->itemLabel($item),
++          '@max' => $max_length,
++          ':review_url' => $review_url,
++        ], 'error');
++        $valid = FALSE;
++      }
++    }
++
++    if ($truncated) {
++      $this->save();
++    }
++
++    return $valid;
++  }
++
+   /**
+    * {@inheritdoc}
+    */
+diff --git a/src/Form/SettingsForm.php b/src/Form/SettingsForm.php
+index 1712d5ca..08bcf716 100644
+--- a/src/Form/SettingsForm.php
++++ b/src/Form/SettingsForm.php
+@@ -40,6 +40,16 @@ public function buildForm(array $form, FormStateInterface $form_state) {
+       '#description' => t("Enabling this will skip the checkout form and instead directly process the translation request in cases where there is only one translator available which doesn't provide any additional configuration options."),
+       '#default_value' => $config->get('quick_checkout'),
+     );
++    $form['workflow']['field_length_overflow_policy'] = [
++      '#type' => 'select',
++      '#title' => $this->t('Field length overflow policy'),
++      '#description' => $this->t('What to do when an accepted translation is longer than the maximum length of its target field.'),
++      '#options' => [
++        'truncate' => $this->t('Truncate the translation to fit'),
++        'needs_review' => $this->t('Keep the item for review (do not shorten)'),
++      ],
++      '#default_value' => $config->get('field_length_overflow_policy'),
++    ];
+     $form['performance'] = array(
+       '#type' => 'details',
+       '#title' => t('Performance settings'),
+@@ -158,6 +168,7 @@ public function buildForm(array $form, FormStateInterface $form_state) {
+   public function submitForm(array &$form, FormStateInterface $form_state) {
+     $this->config('tmgmt.settings')
+       ->set('quick_checkout', $form_state->getValue('tmgmt_quick_checkout'))
++      ->set('field_length_overflow_policy', $form_state->getValue('field_length_overflow_policy'))
+       ->set('purge_finished', $form_state->getValue('tmgmt_purge_finished'))
+       ->set('anonymous_access', $form_state->getValue('tmgmt_anonymous_access'))
+       ->set('respect_text_format', $form_state->getValue('respect_text_format'))
+diff --git a/src/JobItemInterface.php b/src/JobItemInterface.php
+index 24b90643..50fe5b2a 100644
+--- a/src/JobItemInterface.php
++++ b/src/JobItemInterface.php
+@@ -464,11 +464,15 @@ public function addTranslatedData(array $translation, $key = array(), $status =
+   /**
+    * Propagates the returned job item translations to the sources.
+    *
++   * @param string|null $rejection_reason
++   *   The method can inform the caller about the reason why the translation was
++   *   not accepted by setting this variable.
++   *
+    * @return bool
+    *   TRUE if we were able to propagate the translated data and the item could
+    *   be saved, FALSE otherwise.
+    */
+-  public function acceptTranslation();
++  public function acceptTranslation(?string &$rejection_reason = NULL);
+ 
+   /**
+    * Returns all job item messages attached to this job item.
+diff --git a/tests/src/Functional/TMGMTUiTest.php b/tests/src/Functional/TMGMTUiTest.php
+index 2daf83f6..43809bb4 100644
+--- a/tests/src/Functional/TMGMTUiTest.php
++++ b/tests/src/Functional/TMGMTUiTest.php
+@@ -826,6 +826,7 @@ public function testSettings() {
+ 
+     $settings = \Drupal::config('tmgmt.settings');
+     $this->assertTrue($settings->get('quick_checkout'));
++    $this->assertEquals('needs_review', $settings->get('field_length_overflow_policy'));
+     $this->assertTrue($settings->get('anonymous_access'));
+     $this->assertEquals('_never', $settings->get('purge_finished'));
+     $this->assertTrue($settings->get('word_count_exclude_tags'));
+@@ -837,6 +838,7 @@ public function testSettings() {
+     $this->drupalGet('admin/tmgmt/settings');
+     $edit = [
+       'tmgmt_quick_checkout' => FALSE,
++      'field_length_overflow_policy' => 'truncate',
+       'tmgmt_anonymous_access' => FALSE,
+       'tmgmt_purge_finished' => 0,
+       'respect_text_format' => FALSE,
+@@ -846,6 +848,7 @@ public function testSettings() {
+ 
+     $settings = \Drupal::config('tmgmt.settings');
+     $this->assertFalse($settings->get('quick_checkout'));
++    $this->assertEquals('truncate', $settings->get('field_length_overflow_policy'));
+     $this->assertFalse($settings->get('anonymous_access'));
+     $this->assertEquals(0, $settings->get('purge_finished'));
+     $this->assertFalse($settings->get('respect_text_format'));
+diff --git a/tmgmt.install b/tmgmt.install
+index 6b926768..401d2ae6 100644
+--- a/tmgmt.install
++++ b/tmgmt.install
+@@ -156,3 +156,13 @@ function tmgmt_update_8011() {
+     ->setInitialValue(0);
+   \Drupal::entityDefinitionUpdateManager()->installFieldStorageDefinition('file_count', 'tmgmt_job_item', 'tmgmt', $storage_definition);
+ }
++
++/**
++ * Set the default for the new field_length_overflow_policy config.
++ */
++function tmgmt_update_8013(): void {
++  $config = \Drupal::configFactory()->getEditable('tmgmt.settings');
++  if ($config->get('field_length_overflow_policy') === NULL) {
++    $config->set('field_length_overflow_policy', 'needs_review')->save(TRUE);
++  }
++}
