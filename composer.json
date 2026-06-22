@@ -378,8 +378,7 @@
                 "PHP 8.4 @see https://www.drupal.org/i/3536331": "resources/patch/php/drupal/dropsolid_purge/3536331.mr5.commit-a9b672b9.diff"
             },
             "drupal/dynamic_entity_reference": {
-                "Undefined array key on dependency removal @see https://www.drupal.org/i/3099176": "resources/patch/php/drupal/dynamic_entity_reference/3099176-3.x-16.diff",
-                "Declaration of variable problem @see https://www.drupal.org/i/3538270": "resources/patch/php/drupal/dynamic_entity_reference/3538270-mr42-commit9732eea1d.diff"
+                "Undefined array key on dependency removal @see https://www.drupal.org/i/3099176": "resources/patch/php/drupal/dynamic_entity_reference/3099176-3.x-16.diff"
             },
             "drupal/entity_browser": {
                 "TypeError in removeExposedFiltersQueryParameters: exposed form in a div, not a form element @see https://www.drupal.org/i/3582428": "resources/patch/php/drupal/entity_browser/3582428-mr118-commitfd27d6f2.diff",
@@ -515,8 +514,7 @@
                 "Do not force default state in options. @see https://www.drupal.org/project/state_machine/issues/2746091": "resources/patch/php/drupal/state_machine/2746091.diff"
             },
             "drupal/svg_image": {
-                "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.mr20-note535548.diff",
-                "PHP 8.5 @see https://www.drupal.org/i/3565902": "resources/patch/php/drupal/svg_image/3565902.commit-eb75af2259.diff"
+                "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.mr20-note535548.diff"
             },
             "drupal/subpathauto": {
                 "Ignore specific paths @see https://www.drupal.org/i/2964786": "resources/patch/php/drupal/subpathauto/2964786.mr3-commit6174fa47.diff"
