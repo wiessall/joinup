@@ -12,6 +12,7 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
@@ -268,6 +269,8 @@ function joinup_release_preprocess_page_title__node__release(array &$variables):
   $is_latest_release = $release->isLatestRelease();
   $variables['additional_content']['is_latest_release'] = $is_latest_release;
   if (!$is_latest_release && ($latest_release = $release->getSolution()->getLatestRelease())) {
+    $entity_repository = \Drupal::service(EntityRepositoryInterface::class);
+    $latest_release = $entity_repository->getTranslationFromContext($latest_release);
     $variables['additional_content']['latest_release'] = $latest_release->toUrl()->toString();
   }
 }

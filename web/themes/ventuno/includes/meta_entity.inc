@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Url;
 
 /**
@@ -28,6 +29,8 @@ function ventuno_preprocess_meta_entity(array &$variables): void {
 
   /** @var \Drupal\joinup_solution\Entity\SolutionInterface $solution */
   $solution = $meta_entity->getTargetEntity();
+  $entity_repository = \Drupal::service(EntityRepositoryInterface::class);
+  $solution = $entity_repository->getTranslationFromContext($solution);
   $variables['solution_label'] = $solution->label();
   $variables['solution_url'] = $solution->toUrl()->setAbsolute()->toString();
   $route_parameters = ['meta_entity' => $meta_entity->id()];

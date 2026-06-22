@@ -111,6 +111,28 @@ Feature: Unsubscribe from collections
       | Anna's house         |  |
       | Greg's foxhole       |  |
 
+  Scenario: The unsubscribe form shows translated group names.
+    Given the following "collection" entity translations:
+      | source               | language | title                       |
+      | Southpark elementary | fr       | École primaire de Southpark |
+      | Kenny's house        | fr       | La maison de Kenny          |
+    Given I am logged in as "Eric Cartman"
+    When I click "My subscriptions"
+    And I switch to the "fr" language
+    And I click "Unsubscribe from all"
+    Then I should see the following lines of text:
+      | Collections                 |
+      | École primaire de Southpark |
+      | La maison de Kenny          |
+    When I press "Confirm"
+    And I wait for the batch process to finish
+    Then I should see the following success messages:
+      | success messages                                            |
+      | You will no longer receive notifications for the following: |
+      | Collections                                                 |
+      | École primaire de Southpark                                 |
+      | La maison de Kenny                                          |
+
   Scenario: Unsubscribe from a specific group.
     Given the following "solution" content:
       | title                  | state     |

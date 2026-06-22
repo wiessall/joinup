@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\custom_page\Plugin\search_api\processor;
 
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\TranslatableInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\custom_page\CustomPageProviderInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -90,7 +92,11 @@ class IncludeCustomPageContent extends ProcessorPluginBase {
         continue;
       }
 
+      $langcode = $entity->language()->getId();
+
       foreach ($this->customPageProvider->getCustomPagesByGroup($entity) as $custom_page) {
+        $custom_page = $this->getTranslation($custom_page, $langcode);
+
         // Index the title and body text of the custom page data inside the
         // collection or solution.
         $item->getField('title')->addValue($custom_page->label());
@@ -103,23 +109,25 @@ class IncludeCustomPageContent extends ProcessorPluginBase {
         // paragraph itself is referenced by the custom page through the
         // field_paragraphs_body field. Iterate through all items in the field
         // and add the markup to the group description.
-        if ($custom_page->hasField('field_paragraphs_body') && !$custom_page->get('field_paragraphs_body')->isEmpty()) {
-          /** @var \Drupal\paragraphs\ParagraphInterface $paragraph */
-          foreach ($custom_page->get('field_paragraphs_body')->referencedEntities() as $paragraph) {
-            if ($paragraph->hasField('field_body') && !$paragraph->get('field_body')->isEmpty()) {
-              $custom_page_paragraph_body_list = $paragraph->get('field_body');
-              foreach ($custom_page_paragraph_body_list as $list_item) {
-                if (!$list_item->isEmpty()) {
-                  if ($list_item->value) {
-                    $body_field->addValue(check_markup($list_item->value, $list_item->format));
-                  }
-                }
-              }
+        foreach ($custom_page->get('field_paragraphs_body')->referencedEntities() as $paragraph) {
+          if ($paragraph->hasField('field_body')) {
+            $paragraph = $this->getTranslation($paragraph, $langcode);
+            foreach ($paragraph->get('field_body') as $list_item) {
+              $body_field->addValue($list_item->processed);
             }
           }
         }
       }
     }
+  }
+
+  /**
+   * Returns the given entity's translation, if it exists.
+   */
+  private function getTranslation(EntityInterface $entity, string $langcode): EntityInterface {
+    return $entity instanceof TranslatableInterface && $entity->hasTranslation($langcode)
+      ? $entity->getTranslation($langcode)
+      : $entity;
   }
 
 }

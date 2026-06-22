@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_search\Plugin\facets\processor;
 
 use Drupal\Core\Entity\EntityDefinitionUpdateManagerInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -40,6 +41,7 @@ class AggregatedEntityReferenceLabel extends ProcessorPluginBase implements Buil
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly LoggerInterface $logger,
     protected readonly EntityDefinitionUpdateManagerInterface $entityDefinitionUpdateManager,
+    protected readonly EntityRepositoryInterface $entityRepository,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
@@ -54,7 +56,8 @@ class AggregatedEntityReferenceLabel extends ProcessorPluginBase implements Buil
       $plugin_definition,
       $container->get('entity_type.manager'),
       $container->get('logger.factory')->get('joinup_core'),
-      $container->get('entity.definition_update_manager')
+      $container->get('entity.definition_update_manager'),
+      $container->get('entity.repository')
     );
   }
 
@@ -134,9 +137,12 @@ class AggregatedEntityReferenceLabel extends ProcessorPluginBase implements Buil
       foreach ($ids as $delta => $raw_value) {
         try {
           $entity = $storage->load($raw_value);
-          if ($entity && !empty($entity->label())) {
-            $results[$delta]->setDisplayValue($entity->label());
-            unset($ids[$delta]);
+          if ($entity) {
+            $entity = $this->entityRepository->getTranslationFromContext($entity);
+            if (!empty($entity->label())) {
+              $results[$delta]->setDisplayValue($entity->label());
+              unset($ids[$delta]);
+            }
           }
         }
         catch (\Exception $exception) {

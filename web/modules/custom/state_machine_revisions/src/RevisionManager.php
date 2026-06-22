@@ -89,6 +89,13 @@ readonly class RevisionManager implements RevisionManagerInterface {
       assert($storage instanceof RevisionableStorageInterface);
       /** @var \Drupal\Core\Entity\ContentEntityInterface|NULL $revision */
       $revision = $storage->loadRevision($latest_revision_id);
+
+      // Return the same translation as the current entity, if it exists on the
+      // latest revision.
+      if ($revision instanceof TranslatableInterface && $revision->isTranslatable() && $revision->hasTranslation($entity->language()->getId())) {
+        $revision = $revision->getTranslation($entity->language()->getId());
+      }
+
       return $revision;
     }
 

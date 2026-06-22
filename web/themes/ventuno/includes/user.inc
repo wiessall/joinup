@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-use Drupal\taxonomy\TermInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 
 /**
  * Implements hook_preprocess_user().
@@ -21,18 +21,20 @@ function ventuno_preprocess_user(array &$variables): void {
     'view_mode_tile_horizontal',
   ];
   // Prepare data for the tiles.
-  if (in_array($variables['view_mode'], $tile_view_modes)) {
+  if (in_array($variables['view_mode'], $tile_view_modes, TRUE)) {
     $user = $variables['elements']['#user'];
+    $entity_repository = \Drupal::service(EntityRepositoryInterface::class);
+
     // Text.
     $nationality = $business_title = NULL;
     if (!$user->get('field_user_business_title')->isEmpty()) {
       $business_title = $user->get('field_user_business_title')->value;
     }
-    if (!$user->get('field_user_nationality')->isEmpty()) {
-      $nationality_entity = $user->get('field_user_nationality')->entity;
-      if ($nationality_entity instanceof TermInterface) {
-        $nationality = t('Country of origin: @country', ['@country' => $nationality_entity->label()]);
-      }
+
+    $nationality_entity = $user->get('field_user_nationality')->referencedEntities()[0] ?? NULL;
+    if ($nationality_entity) {
+      $nationality_entity = $entity_repository->getTranslationFromContext($nationality_entity);
+      $nationality = t('Country of origin: @country', ['@country' => $nationality_entity->label()]);
     }
 
     if ($business_title && $nationality) {
@@ -46,25 +48,23 @@ function ventuno_preprocess_user(array &$variables): void {
     }
 
     // Badges.
-    if (!$user->get('field_user_professional_domain')->isEmpty()) {
-      $domains = $user->get('field_user_professional_domain');
+    $domains = $user->get('field_user_professional_domain')->referencedEntities();
+    if ($domains) {
       $variables['badges'] = [];
       $max_domains = 2;
-      if (is_iterable($domains)) {
-        foreach ($domains as $domain) {
-          $domain_term = $domain->entity;
-          $variables['badges'][]['label'] = $domain_term instanceof TermInterface ? $domain_term->label() : NULL;
-        }
-        $num_of_items = count($domains);
-        // Display the actual domain instead of "+ 1 domain".
-        if ($num_of_items > $max_domains + 1) {
-          $extra_items = $num_of_items - $max_domains;
-          $variables['badges'] = array_splice($variables['badges'], 0, $max_domains);
-          $variables['badges'][] = [
-            'label' => '+' . $extra_items . ' ' . t('domains'),
-            'overflow' => TRUE,
-          ];
-        }
+      foreach ($domains as $domain_term) {
+        $domain_term = $entity_repository->getTranslationFromContext($domain_term);
+        $variables['badges'][]['label'] = $domain_term->label();
+      }
+      $num_of_items = count($domains);
+      // Display the actual domain instead of "+ 1 domain".
+      if ($num_of_items > $max_domains + 1) {
+        $extra_items = $num_of_items - $max_domains;
+        $variables['badges'] = array_splice($variables['badges'], 0, $max_domains);
+        $variables['badges'][] = [
+          'label' => '+' . $extra_items . ' ' . t('domains'),
+          'overflow' => TRUE,
+        ];
       }
     }
   }

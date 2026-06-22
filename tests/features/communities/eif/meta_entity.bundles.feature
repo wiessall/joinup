@@ -21,3 +21,13 @@ Feature:
       | logged in as a facilitator of the "Some EIF solution" solution | not see        |
       | logged in as a owner of the "Some EIF solution" solution       | not see        |
       | logged in as a user with the moderator role                    | see            |
+
+  Scenario: The EIF perspective page shows the solution label in the current language.
+    Given the following "solution" entity translations:
+      | source            | language | title             |
+      | Some EIF solution | fr       | Portail EIF       |
+    And the following EIF perspective data for the "Some EIF solution" solution:
+      | Description | An interoperability solution. |
+    When I go to the EIF perspective page of the "Some EIF solution" solution
+    And I switch to the "fr" language
+    Then I should see the text "The Portail EIF implements the following:"
