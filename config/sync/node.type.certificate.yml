@@ -8,9 +8,10 @@ third_party_settings:
   menu_ui:
     available_menus: {  }
     parent: ''
-label_singular: null
-label_plural: null
-label_count: null
+label_singular: certificate
+label_plural: certificates
+label_count:
+  no_count_capitalize: !!binary Q2VydGlmaWNhdGUDQ2VydGlmaWNhdGVz
 name: Certificate
 type: certificate
 description: 'Provides content type representing certifications of users'
