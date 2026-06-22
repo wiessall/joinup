@@ -1,0 +1,18 @@
+uuid: 6580b42c-1514-4858-8c8f-e3163e9bbdff
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.oss_solution
+id: node.oss_solution.changed
+field_name: changed
+entity_type: node
+bundle: oss_solution
+label: Changed
+description: 'The time that the node was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

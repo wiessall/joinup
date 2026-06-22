@@ -246,6 +246,17 @@ Feature:
     And I should see the text "[validation_error line:1 column:1] There is an error"
     And I should not see the text "[validation_warning line:2 column:2] There is an warning"
 
+  Scenario: Validation issues modal returns access denied when there are no errors.
+    Given the following "oss_solution" content:
+      | title         | status    | oss_release_date | oss_validation_status |
+      | Warnings only | published | 2014-11-19       | valid                 |
+    And the "Warnings only" oss_solution has the following validation issues:
+      | key             | description        | line | column | type    |
+      | validation_warn | There is a warning | 1    | 1      | warning |
+    When I am logged in as an "authenticated user"
+    And I visit the "oss_validation_issues" field modal for the "Warnings only" "oss_solution" "node" in the "modal" view mode
+    Then the response status code should be 403
+
   @javascript
   Scenario: Screenshot carousel with 4 items works as expected.
     Given the following "oss_solution" content:

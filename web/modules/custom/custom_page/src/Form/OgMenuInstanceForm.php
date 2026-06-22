@@ -22,6 +22,7 @@ use Drupal\Core\Routing\UrlGeneratorInterface;
 use Drupal\Core\Utility\LinkGeneratorInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_group\Plugin\Menu\GroupMenuLink;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgAccessInterface;
 use Drupal\og_menu\Form\OgMenuInstanceForm as OriginalOgMenuInstanceForm;
@@ -102,7 +103,7 @@ class OgMenuInstanceForm extends OriginalOgMenuInstanceForm {
 
     foreach ($build['links'] as $key => &$link) {
       // Adjust only links.
-      if (!str_starts_with($key, 'menu_plugin_id:menu_link_content:')) {
+      if (!str_starts_with($key, 'menu_plugin_id:' . GroupMenuLink::BASE_ID . ':')) {
         continue;
       }
 

@@ -1,0 +1,22 @@
+uuid: 71b0fd38-f2fe-4f7c-a7e3-4fcae0559234
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.glossary
+id: node.glossary.sticky
+field_name: sticky
+entity_type: node
+bundle: glossary
+label: 'Sticky at top of lists'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

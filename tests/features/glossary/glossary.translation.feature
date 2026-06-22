@@ -1,0 +1,108 @@
+@api @group-j
+Feature: Translating glossary
+
+  Background:
+    Given the following "collection" content:
+      | title                    | abstract                                       |
+      | Collection With Glossary | This is a simple test for glossary translation |
+    And the following "glossary" content:
+      | title  | synonyms | summary      | definition                  | collection               |
+      | Simple | Easy     | Some summary | Long, long definition field | Collection With Glossary |
+
+  Scenario: Test creating node translation from UI.
+    Given I am logged in as a user with the "moderator" role
+    # Assert language select options/value.
+    When I go to the edit form of the "Simple" glossary
+    # @wip: The node original language selector is not yet functional on this
+    # branch. @see ISAICP-11330
+    # Then the available options in the "Language" select should match the site languages
+    # And the selected option in the "Language" select should be "en"
+
+    # Create translation for glossary
+    When I go to the homepage of the "Simple" glossary
+    And I click "Translate" in the "Entity actions" region
+    And I click "Add" in the "Polish" row
+    And the following fields should be present "Glossary term nam, Synonym, Definition"
+    When I fill in "Glossary term nam" with "Prosty"
+    And I fill in "Definition" with "Definicja tłumaczenia"
+    And I fill in "Synonym" with "Łatwy"
+    When I press "Save (all translations)"
+
+    # Create translation for collection
+    When I go to the homepage of the "Collection With Glossary" collection
+    And I click "Translate" in the "Entity actions" region
+    And I click "Add" in the "Polish" row
+    When I fill in "Title" with "Kolekcja ze słownikiem"
+    And I fill in "Abstract" with "To prosty test tłumaczenia słownika"
+    And I press "Save (all translations)"
+    # Check if the glossary was properly processed in collection_glossary
+    And I should see the link "prosty"
+    Then I click "prosty"
+    Then I should see the following lines of text:
+      | Prosty                |
+      | Definicja tłumaczenia |
+      | Prosty                |
+
+    # Delete glossary translation
+    When I go to the homepage of the "Simple" glossary
+    When I click "Translate" in the "Entity actions" region
+    And I click "Delete" in the "Polish" row
+    Then I should see the text "Are you sure you want to delete the Polish translation of the content item Prosty?"
+    When I press "Delete Polish translation"
+    Then I should see the success message "Polish translation of the Glossary term Prosty has been deleted."
+    When I click "Translate" in the "Entity actions" region
+    Then I should not see the text "Edit" in the "Polish" row
+    And I should see the "Add" in the "Polish" row
+    # Check if the glossary was properly processed in collection_glossary
+    When I go to the homepage of the "Collection With Glossary" collection
+    And I click "Translate" in the "Entity actions" region
+    And I click "Kolekcja ze słownikiem"
+    Then I should not see the link "prosty"
+
+  Scenario: Users who do not have edit access cannot manage translations.
+    Given I am logged in as an authenticated
+    When I visit the translation overview form of the "Simple" glossary
+    Then the response status code should be 403
+
+  Scenario: The glossary index groups terms by their transliterated initial, per the active language.
+    Given the following "collection" content:
+      | title         |
+      | Data Glossary |
+    And the following "glossary" content:
+      | title       | definition                                           | collection    |
+      | Power       | The rate at which energy is transferred.             | Data Glossary |
+      | Eurostat    | The statistical office of the European Union.        | Data Glossary |
+      | Øresund     | The strait separating Denmark and Sweden.            | Data Glossary |
+      | Σύστημα     | The Greek word for system.                           | Data Glossary |
+      | 3D printing | Additive manufacturing of three-dimensional objects. | Data Glossary |
+    And the following glossary entity translations:
+      | source | language | title   |
+      | Power  | fr       | Énergie |
+    And I am logged in as a user with the "moderator" role
+
+    # Test glossary output in EN.
+    When I go to the homepage of the "Data Glossary" collection
+    And I click "Glossary"
+    Then I should see the glossary navigator "3 E O P Σ"
+    And the glossary should be grouped as:
+      | letter | terms       |
+      | 3      | 3D printing |
+      | E      | Eurostat    |
+      | O      | Øresund     |
+      | P      | Power       |
+      | Σ      | Σύστημα     |
+
+    # Test glossary output in FR.
+    When I switch to the "fr" language
+    Then I should see the glossary navigator "3 E O Σ"
+    And the glossary should be grouped as:
+      | letter | terms             |
+      | 3      | 3D printing       |
+      | E      | Énergie, Eurostat |
+      | O      | Øresund           |
+      | Σ      | Σύστημα           |
+    But I should not see the link "Power"
+    When I click "E"
+    Then I should see the link "Énergie"
+    And I should see the link "Eurostat"
+    But I should not see the link "Øresund"

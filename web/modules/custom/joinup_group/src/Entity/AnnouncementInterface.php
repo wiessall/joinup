@@ -44,10 +44,10 @@ interface AnnouncementInterface extends MessageInterface, GroupContentInterface,
   /**
    * Returns the announcement body.
    *
-   * @return string|null
+   * @return string
    *   The announcement body.
    */
-  public function getBody(): ?string;
+  public function getBody(): string;
 
   /**
    * Returns the body format.

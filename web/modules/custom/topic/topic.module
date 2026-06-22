@@ -45,7 +45,11 @@ function topic_taxonomy_term_update(TermInterface $term): void {
   if ($original && $term->label() != $original->label()) {
     /** @var \Drupal\topic\Entity\TopicMetaEntity $meta_entity */
     if ($meta_entity = $term->topic->entity) {
-      $meta_entity->set('label', $term->label())->save();
+      // Trigger the update of the label.
+      // @see \topic_meta_entity_presave.
+      $langcode = $term->language()->getId();
+      $translated = $meta_entity->hasTranslation($langcode) ? $meta_entity->getTranslation($langcode) : $meta_entity->addTranslation($langcode);
+      $translated->save();
     }
   }
 }
@@ -74,7 +78,9 @@ function topic_meta_entity_update(EntityInterface $entity): void {
  */
 function topic_meta_entity_presave(MetaEntityInterface $meta_entity): void {
   if ($meta_entity instanceof TopicMetaEntityInterface && $term = $meta_entity->getTargetEntity()) {
-    $meta_entity->set('label', $term->label());
+    $langcode = $meta_entity->language()->getId();
+    $translation = $term->hasTranslation($langcode) ? $term->getTranslation($langcode) : $term;
+    $meta_entity->getTranslation($langcode)->set('label', $translation->label());
   }
 }
 
