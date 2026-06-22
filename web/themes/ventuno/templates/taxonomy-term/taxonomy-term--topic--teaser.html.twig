@@ -1,0 +1,13 @@
+{#
+/**
+ * @file
+ * Themeing override for the teaser view mode of the topic taxonomy.
+ */
+#}
+
+{{ include('@ventuno/parts/tile-item.html.twig', {
+  title: content.label,
+  image: content.image,
+  url: url,
+  description: content.abstract
+}) }}
