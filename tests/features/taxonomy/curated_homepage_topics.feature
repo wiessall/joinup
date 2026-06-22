@@ -240,7 +240,7 @@ Feature:
     And I press "Save"
     Then the url should match "/admin/homepage-topics"
 
-  @javascript @wip
+  @javascript
   Scenario: Long descriptions in topic inner page should be partially hidden.
     Given the following topics are enabled in the homepage:
       | Info                    |
@@ -254,6 +254,7 @@ Feature:
     Then I should see the heading "Edit E-justice"
 
     When I enter "En un lugar de la Mancha, de cuyo nombre no quiero acordarme, no ha mucho tiempo que vivía un hidalgo de los de lanza en astillero, adarga antigua, rocín flaco y galgo corredor. Una olla de algo más vaca que carnero, salpicón las más noches, duelos y quebrantos los sábados, lantejas los viernes, algún palomino de añadidura los domingos, consumían las tres partes de su hacienda. El resto della concluían sayo de velarte, calzas de velludo para las fiestas, con sus pantuflos de lo mesmo, y los días de entresemana se honraba con su vellorí de lo más fino." in the "Description" wysiwyg editor
+    And I fill in "Abstract" with "E-justice abstract"
     And I press "Save"
     Then I should see the heading "E-justice"
     Then the "See more" collapse is collapsed
