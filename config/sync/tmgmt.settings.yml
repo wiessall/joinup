@@ -7,7 +7,7 @@ respect_text_format: true
 allowed_formats: {  }
 word_count_exclude_tags: true
 source_list_limit: 20
+field_length_overflow_policy: truncate
 submit_job_item_on_cron: true
 job_items_cron_limit: 50
 file_mimetypes: {  }
-field_length_overflow_policy: needs_review
