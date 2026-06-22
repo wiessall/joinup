@@ -435,12 +435,14 @@ Feature:
       | discussion  | 1           | list       |
       | discussion  | 1           | grid       |
 
-  @javascript @wip
+  @javascript
   Scenario: Configurable listing for solutions
     Given the following "solution" content:
       | title                   | description              | collection | abstract                          | topic                                                                    | created    | changed    |
       | Another rough day       | Lorem description issum  | Portal support |                                   | E-justice, Finance in EU, Supplier exchange, HR, Statistics and Analysis | 01-01-2023 | 03-02-2023 |
       | Just another day & solt | Second description issum | Portal support | This is an solution with abstract | E-justice                                                                | 02-01-2023 | 03-02-2023 |
+    And the following topics are enabled in the homepage:
+      | E-justice |
     When I am logged in as a moderator
     And I go to the edit form of the "E-justice" topic
     Then I add a layout paragraph in the "Topic term body" form field with the following properties:
@@ -456,6 +458,7 @@ Feature:
       | List style      | type: select - value: List                                 |
       | Show content    | type: select - value: All                                  |
       | Query presets   | type: text - value: entity_bundle\|solution,collection\|IN |
+    And I fill in "Abstract" with "E-justice abstract"
     And I press "Save"
     Then the url should match "/topic/law-and-justice/e-justice"
 
