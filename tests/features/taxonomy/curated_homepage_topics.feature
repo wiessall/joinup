@@ -394,7 +394,7 @@ Feature:
       | Event 2 |
       | Event 3 |
 
-  @javascript @wip
+  @javascript
   Scenario Outline: Images should be shown for tile-two view modes.
     Given the following "<type>" content:
       | title       | headline    | short title | logo       |
@@ -403,6 +403,7 @@ Feature:
       | E-justice |
     And I am logged in as a moderator
     And I go to the edit form of the "E-justice" topic
+    And I fill in "Abstract" with "E-justice abstract"
     And I add a layout paragraph in the "Topic term body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
