@@ -57,6 +57,7 @@ function ventuno_preprocess_page(array &$variables): void {
   if ($route_name === 'entity.taxonomy_term.canonical' && $term instanceof TermInterface) {
     $variables['meta_title'] = $term->label();
     $variables['meta_description'] = $term->get('description')->view(['label' => 'hidden']);
+    unset($variables['page']['content']['ventuno_pagetitle']);
   }
 
   // Remove title on collection/solution canonical pages.
