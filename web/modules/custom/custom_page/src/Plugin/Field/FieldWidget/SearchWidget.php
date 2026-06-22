@@ -9,6 +9,7 @@ use Drupal\Core\Field\Attribute\FieldWidget;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\search_api_field\Plugin\Field\FieldWidget\SearchWidget as DefaultSearchWidget;
@@ -79,10 +80,11 @@ class SearchWidget extends DefaultSearchWidget {
       $element['wrapper'][$key]['#access'] = $administrative_access;
     }
 
-    // If the custom query presets field is filled in, hide also the query
-    // builder as users with administrative access are taking care of the
-    // query shown in this page.
-    if (!$administrative_access && strlen($element['wrapper']['query_presets']['#default_value']) > 0) {
+    // Hide query_builder for non-admins when query_presets supplies the
+    // query — except on carousels, where facilitators must still see and
+    // edit existing filter rows.
+    $bundle = $this->fieldDefinition->getTargetBundle();
+    if (!$administrative_access && $bundle !== 'carousel' && strlen($element['wrapper']['query_presets']['#default_value']) > 0) {
       $element['wrapper']['query_builder']['#access'] = FALSE;
     }
 
@@ -139,9 +141,19 @@ class SearchWidget extends DefaultSearchWidget {
    *   The form state.
    */
   public function validateEmptyQuerys(array &$element, FormStateInterface $form_state): void {
+    $trigger_name = $form_state->getTriggeringElement()['#name'] ?? '';
+    if (str_starts_with($trigger_name, 'add_filter')
+      || str_starts_with($trigger_name, 'remove_filter_')) {
+      return;
+    }
 
-    if (empty($element['query_presets']['#value']) && empty($element['query_builder']['filters']['#value'])) {
-      $form_state->setError($element, $this->t('You need to add a filter in the Content listing block'));
+    $filters = $element['query_builder']['filters'] ?? [];
+    if (empty($element['query_presets']['#value']) && empty(Element::children($filters))) {
+      $error_target = $element['query_builder']['add_more']['field'] ?? $element;
+      $form_state->setError(
+        $error_target,
+        $this->t('You need to add a filter in the Content listing block'),
+      );
     }
   }
 

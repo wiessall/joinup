@@ -15,4 +15,4 @@ id: taxonomy_term.domain
 target_entity_type_id: taxonomy_term
 target_bundle: domain
 default_langcode: current_interface
-language_alterable: true
+language_alterable: false

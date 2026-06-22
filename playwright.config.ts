@@ -18,8 +18,6 @@ export default defineConfig({
   fullyParallel: true,
   // Fail the build on gitlab/CI if you accidentally left test.only in the source code.
   forbidOnly: !!process.env.GITLAB_CI,
-  // Retry on gitlab/CI only.
-  retries: process.env.GITLAB_CI ? 3 : 0,
   // Opt out of parallel tests on gitlab/CI.
   workers: process.env.GITLAB_CI ? 1 : undefined,
   // Reporter to use. See https://playwright.dev/docs/test-reporters
@@ -36,8 +34,6 @@ export default defineConfig({
   use: {
     // Base URL to use in actions like `await page.goto('/')`.
     baseURL: process.env.DRUPAL_BASE_URL,
-    // Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer
-    trace: "on-first-retry",
     // Ignore certificate errors (for ddev).
     ignoreHTTPSErrors: true,
     launchOptions: {

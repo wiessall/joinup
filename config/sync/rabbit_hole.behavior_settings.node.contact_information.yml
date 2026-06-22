@@ -1,4 +1,4 @@
-uuid: f708bc3f-d0db-4310-9f2c-55838b31916b
+uuid: 65e7b0a0-91b2-445c-8cea-590c86298418
 langcode: en
 status: true
 dependencies:
@@ -7,7 +7,7 @@ dependencies:
 id: node.contact_information
 targetEntityType: node
 bundle: contact_information
-action: display_page
+action: access_denied
 no_bypass: false
 bypass_message: false
 configuration: {  }

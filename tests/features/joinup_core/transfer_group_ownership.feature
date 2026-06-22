@@ -39,22 +39,22 @@ Feature: As a group (collection or solution) owner or site moderator
     Given I select the "cruel" row
     And I select "Transfer the ownership of the <type> to the selected member" from "Action"
     When I press "Apply to selected items"
-    Then I should see "Member Finnur Robertsson is already the owner of <title> <type>. Please select other user."
+    Then I should see the text "Member Finnur Robertsson is already the owner of <title> <type>. Please select other user."
 
     # Try to transfer the ownership to multiple users.
     Given I select the "loner" row
     And I select the "shy" row
     And I select "Transfer the ownership of the <type> to the selected member" from "Action"
     When I press "Apply to selected items"
-    Then I should see "You cannot transfer the <type> ownership to more than one user. Please select a single user."
+    Then I should see the text "You cannot transfer the <type> ownership to more than one user. Please select a single user."
 
     Given I select the "shy" row
     And I select "Transfer the ownership of the <type> to the selected member" from "Action"
     When I press "Apply to selected items"
-    Then I should see "Are you sure you want to transfer the ownership of <title> <type> to Ásdís Sigurðsdóttir?"
+    Then I should see the text "Are you sure you want to transfer the ownership of <title> <type> to Ásdís Sigurðsdóttir?"
 
     When I press "Confirm"
-    Then I should see "Ownership of <title> <type> transferred from users Finnur Robertsson, Edda Agnarsdóttir to Ásdís Sigurðsdóttir."
+    Then I should see the text "Ownership of <title> <type> transferred from users Finnur Robertsson, Edda Agnarsdóttir to Ásdís Sigurðsdóttir."
     And Log entry with the message "Ownership granted to Ásdís Sigurðsdóttir for <title> by <user name>." should exist.
     And I should see the text "<type capitalized> owner" in the "shy" row
     # Because the 'happy' user is granted with the site-wide permission
@@ -136,9 +136,9 @@ Feature: As a group (collection or solution) owner or site moderator
     When I select the "loner" row
     And I select "Transfer the ownership of the <group type> to the selected member" from "Action"
     And I press "Apply to selected items"
-    Then I should see "Are you sure you want to transfer the ownership of <title> <group type> to Freyja Stefánsdóttir?"
+    Then I should see the text "Are you sure you want to transfer the ownership of <title> <group type> to Freyja Stefánsdóttir?"
     When I press "Confirm"
-    Then I should see "Ownership of <title> <group type> transferred from users Finnur Robertsson, Edda Agnarsdóttir to Freyja Stefánsdóttir."
+    Then I should see the text "Ownership of <title> <group type> transferred from users Finnur Robertsson, Edda Agnarsdóttir to Freyja Stefánsdóttir."
     And Log entry with the message "Ownership granted to Freyja Stefánsdóttir for <title> by Bjartur Jóhannsson." should exist.
     And I should see the text "<type capitalized> owner, <type capitalized> facilitator" in the "loner" row
 

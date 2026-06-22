@@ -19,9 +19,4 @@ interface AssessmentInterface {
    */
   public const string WEBFORM_ID = 'assessment';
 
-  /**
-   * The assessment reports page UUID.
-   */
-  public const string ASSESSMENT_REPORTS_UUID = 'a9896322-f334-485c-be5d-673a106f68ad';
-
 }

@@ -14,14 +14,14 @@ Feature: On errors I want to see a friendly page and be able to report an
     Then the response status code should be 500
     And I should see the heading "There was an unexpected problem serving your request"
     And I should see text matching "Please try again and contact us if the problem persist including [0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12} in your message\."
-    And I should not see "Exception: donuts in Drupal\error_page_test\Controller\ErrorPageTestController->exception()"
+    And I should not see the text "Exception: donuts in Drupal\error_page_test\Controller\ErrorPageTestController->exception()"
     And the response should not contain "<pre class=\"backtrace\">"
 
     When I am on "/error_page_test/fatal_error"
     Then the response status code should be 500
     And I should see the heading "There was an unexpected problem serving your request"
     And should see text matching "Please try again and contact us if the problem persist including [0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12} in your message\."
-    And I should not see "Error: Call to undefined method Drupal\error_page_test\Controller\ErrorPageTestController::functionDoesNotExist() in Drupal\error_page_test\Controller\ErrorPageTestController->fatalError()"
+    And I should not see the text "Error: Call to undefined method Drupal\error_page_test\Controller\ErrorPageTestController::functionDoesNotExist() in Drupal\error_page_test\Controller\ErrorPageTestController->fatalError()"
     And the response should not contain "<pre class=\"backtrace\">"
 
     When I am on "/error_page_test/user_error"
@@ -31,7 +31,7 @@ Feature: On errors I want to see a friendly page and be able to report an
       | There was an unexpected problem serving your request.            |
       | Please try again and contact us if the problem persist including |
       | in your message.                                                 |
-    And I should not see "User error: donuts in Drupal\error_page_test\Controller\ErrorPageTestController->userError()"
+    And I should not see the text "User error: donuts in Drupal\error_page_test\Controller\ErrorPageTestController->userError()"
     And the response should not contain "<pre class=\"backtrace\">"
 
     When I am on "/error_page_test/php_notice"
@@ -41,7 +41,7 @@ Feature: On errors I want to see a friendly page and be able to report an
       | There was an unexpected problem serving your request.            |
       | Please try again and contact us if the problem persist including |
       | in your message.                                                 |
-    And I should not see "Notice: Undefined variable: not_initialised_variable in Drupal\error_page_test\Controller\ErrorPageTestController->notice()"
+    And I should not see the text "Notice: Undefined variable: not_initialised_variable in Drupal\error_page_test\Controller\ErrorPageTestController->notice()"
     And the response should not contain "<pre class=\"backtrace\">"
 
     # Error level: some.
@@ -51,14 +51,14 @@ Feature: On errors I want to see a friendly page and be able to report an
     Then the response status code should be 500
     And I should see the heading "There was an unexpected problem serving your request"
     And I should see text matching "Please try again and contact us if the problem persist including [0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12} in your message\."
-    And I should see "Exception: donuts in Drupal\error_page_test\Controller\ErrorPageTestController->exception()"
+    And I should see the text "Exception: donuts in Drupal\error_page_test\Controller\ErrorPageTestController->exception()"
     And the response should not contain "<pre class=\"backtrace\">"
 
     When I am on "/error_page_test/fatal_error"
     Then the response status code should be 500
     And I should see the heading "There was an unexpected problem serving your request"
     And should see text matching "Please try again and contact us if the problem persist including [0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12} in your message\."
-    And I should see "Error: Call to undefined method Drupal\error_page_test\Controller\ErrorPageTestController::functionDoesNotExist() in Drupal\error_page_test\Controller\ErrorPageTestController->fatalError()"
+    And I should see the text "Error: Call to undefined method Drupal\error_page_test\Controller\ErrorPageTestController::functionDoesNotExist() in Drupal\error_page_test\Controller\ErrorPageTestController->fatalError()"
     And the response should not contain "<pre class=\"backtrace\">"
 
     When I am on "/error_page_test/user_error"
@@ -68,7 +68,7 @@ Feature: On errors I want to see a friendly page and be able to report an
       | There was an unexpected problem serving your request.            |
       | Please try again and contact us if the problem persist including |
       | in your message.                                                 |
-    And I should see "User error: donuts in Drupal\error_page_test\Controller\ErrorPageTestController->userError()"
+    And I should see the text "User error: donuts in Drupal\error_page_test\Controller\ErrorPageTestController->userError()"
     And the response should not contain "<pre class=\"backtrace\">"
 
     When I am on "/error_page_test/php_notice"
@@ -78,7 +78,7 @@ Feature: On errors I want to see a friendly page and be able to report an
       | There was an unexpected problem serving your request.            |
       | Please try again and contact us if the problem persist including |
       | in your message.                                                 |
-    And I should not see "Notice: Undefined variable: not_initialised_variable in Drupal\error_page_test\Controller\ErrorPageTestController->notice()"
+    And I should not see the text "Notice: Undefined variable: not_initialised_variable in Drupal\error_page_test\Controller\ErrorPageTestController->notice()"
     And the response should not contain "<pre class=\"backtrace\">"
 
     # Error level: all.
@@ -88,14 +88,14 @@ Feature: On errors I want to see a friendly page and be able to report an
     Then the response status code should be 500
     And I should see the heading "There was an unexpected problem serving your request"
     And I should see text matching "Please try again and contact us if the problem persist including [0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12} in your message\."
-    And I should see "Exception: donuts in Drupal\error_page_test\Controller\ErrorPageTestController->exception()"
+    And I should see the text "Exception: donuts in Drupal\error_page_test\Controller\ErrorPageTestController->exception()"
     And the response should not contain "<pre class=\"backtrace\">"
 
     When I am on "/error_page_test/fatal_error"
     Then the response status code should be 500
     And I should see the heading "There was an unexpected problem serving your request"
     And should see text matching "Please try again and contact us if the problem persist including [0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12} in your message\."
-    And I should see "Error: Call to undefined method Drupal\error_page_test\Controller\ErrorPageTestController::functionDoesNotExist() in Drupal\error_page_test\Controller\ErrorPageTestController->fatalError()"
+    And I should see the text "Error: Call to undefined method Drupal\error_page_test\Controller\ErrorPageTestController::functionDoesNotExist() in Drupal\error_page_test\Controller\ErrorPageTestController->fatalError()"
     And the response should not contain "<pre class=\"backtrace\">"
 
     When I am on "/error_page_test/user_error"
@@ -105,7 +105,7 @@ Feature: On errors I want to see a friendly page and be able to report an
       | There was an unexpected problem serving your request.            |
       | Please try again and contact us if the problem persist including |
       | in your message.                                                 |
-    And I should see "User error: donuts in Drupal\error_page_test\Controller\ErrorPageTestController->userError()"
+    And I should see the text "User error: donuts in Drupal\error_page_test\Controller\ErrorPageTestController->userError()"
     And the response should not contain "<pre class=\"backtrace\">"
 
     When I am on "/error_page_test/php_notice"
@@ -115,7 +115,7 @@ Feature: On errors I want to see a friendly page and be able to report an
       | There was an unexpected problem serving your request.            |
       | Please try again and contact us if the problem persist including |
       | in your message.                                                 |
-    And I should see "Warning: Undefined variable $not_initialized_variable in Drupal\error_page_test\Controller\ErrorPageTestController->notice()"
+    And I should see the text "Warning: Undefined variable $not_initialized_variable in Drupal\error_page_test\Controller\ErrorPageTestController->notice()"
     And the response should not contain "<pre class=\"backtrace\">"
 
     # Error level: verbose.
@@ -125,14 +125,14 @@ Feature: On errors I want to see a friendly page and be able to report an
     Then the response status code should be 500
     And I should see the heading "There was an unexpected problem serving your request"
     And I should see text matching "Please try again and contact us if the problem persist including [0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12} in your message\."
-    And I should see "Exception: donuts in Drupal\error_page_test\Controller\ErrorPageTestController->exception()"
+    And I should see the text "Exception: donuts in Drupal\error_page_test\Controller\ErrorPageTestController->exception()"
     And the response should contain "<pre class=\"backtrace\">"
 
     When I am on "/error_page_test/fatal_error"
     Then the response status code should be 500
     And I should see the heading "There was an unexpected problem serving your request"
     And should see text matching "Please try again and contact us if the problem persist including [0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12} in your message\."
-    And I should see "Error: Call to undefined method Drupal\error_page_test\Controller\ErrorPageTestController::functionDoesNotExist() in Drupal\error_page_test\Controller\ErrorPageTestController->fatalError()"
+    And I should see the text "Error: Call to undefined method Drupal\error_page_test\Controller\ErrorPageTestController::functionDoesNotExist() in Drupal\error_page_test\Controller\ErrorPageTestController->fatalError()"
     And the response should contain "<pre class=\"backtrace\">"
 
     When I am on "/error_page_test/user_error"
@@ -142,7 +142,7 @@ Feature: On errors I want to see a friendly page and be able to report an
       | There was an unexpected problem serving your request.            |
       | Please try again and contact us if the problem persist including |
       | in your message.                                                 |
-    And I should see "User error: donuts in Drupal\error_page_test\Controller\ErrorPageTestController->userError()"
+    And I should see the text "User error: donuts in Drupal\error_page_test\Controller\ErrorPageTestController->userError()"
     And the response should contain "<pre class=\"backtrace\">"
 
     When I am on "/error_page_test/php_notice"
@@ -152,5 +152,5 @@ Feature: On errors I want to see a friendly page and be able to report an
       | There was an unexpected problem serving your request.            |
       | Please try again and contact us if the problem persist including |
       | in your message.                                                 |
-    And I should see "Warning: Undefined variable $not_initialized_variable in Drupal\error_page_test\Controller\ErrorPageTestController->notice()"
+    And I should see the text "Warning: Undefined variable $not_initialized_variable in Drupal\error_page_test\Controller\ErrorPageTestController->notice()"
     And the response should contain "<pre class=\"backtrace\">"

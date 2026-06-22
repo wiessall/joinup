@@ -12,7 +12,7 @@ bundle: solution_settings
 label: 'Landing page'
 description: 'If no custom page is selected, the standard solution overview page is used.'
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:

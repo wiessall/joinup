@@ -6,6 +6,8 @@ dependencies:
     - field.storage.node.spatial_coverage
     - node.type.collection
     - taxonomy.vocabulary.spatial
+  module:
+    - rdf_sync
 third_party_settings:
   rdf_sync:
     target_id:
@@ -18,7 +20,7 @@ bundle: collection
 label: 'Geographical coverage'
 description: 'Add a country name relevant to the content of this collection.'
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:

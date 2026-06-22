@@ -51,7 +51,7 @@ trait GroupContentTrait {
   /**
    * {@inheritdoc}
    */
-  public function getGroupId(): string {
+  public function getGroupId(): int|string {
     $ids = $this->getReferencedEntityIds($this->getGroupFieldName());
     if (empty($ids['node'])) {
       throw new MissingGroupException();

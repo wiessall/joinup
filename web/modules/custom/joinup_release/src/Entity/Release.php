@@ -81,7 +81,7 @@ class Release extends Node implements ReleaseInterface {
   /**
    * {@inheritdoc}
    */
-  public function getGroupId(): string {
+  public function getGroupId(): int|string {
     $ids = $this->getReferencedEntityIds('og_audience');
     if (empty($ids['node'])) {
       throw new MissingGroupException();
