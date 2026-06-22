@@ -11,6 +11,7 @@ use Drupal\block\Entity\Block;
 use Drupal\Core\Template\Attribute;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\TermInterface;
+use Drupal\topic\Entity\TopicTermInterface;
 
 /**
  * Implements hook_preprocess_page().
@@ -54,7 +55,7 @@ function ventuno_preprocess_page(array &$variables): void {
   }
 
   $term = $route_match->getParameter('taxonomy_term');
-  if ($route_name === 'entity.taxonomy_term.canonical' && $term instanceof TermInterface) {
+  if ($route_name === 'entity.taxonomy_term.canonical' && $term instanceof TopicTermInterface) {
     $variables['meta_title'] = $term->label();
     $variables['meta_description'] = $term->get('description')->view(['label' => 'hidden']);
     unset($variables['page']['content']['ventuno_pagetitle']);
