@@ -272,7 +272,7 @@ Feature:
     And I should not see the text "See less"
     Then the "See more" collapse is collapsed
 
-  @javascript @wip
+  @javascript
   Scenario: Regression test to ensure order of entities.
     Given the following "news" content:
       | title  | headline | body              | created    | changed    | topic     |
@@ -291,6 +291,7 @@ Feature:
     When I am logged in as a moderator
 
     And I go to the edit form of the "E-justice" topic
+    And I fill in "Abstract" with "E-justice abstract"
     And I add a layout paragraph in the "Topic term body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
