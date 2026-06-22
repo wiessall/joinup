@@ -145,6 +145,7 @@ Feature:
     Then I should see the heading "Edit E-justice"
 
     When I fill in "Description" with "This now has to be shown both in the inner page and in the homepage."
+    And I fill in "Abstract" with "E-justice abstract"
     And I press "Save"
     Then I should see the heading "E-justice"
     And I should see the text "This now has to be shown both in the inner page and in the homepage."
