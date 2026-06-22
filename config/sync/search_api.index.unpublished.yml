@@ -69,7 +69,7 @@ third_party_settings:
       collection: ''
       timezone: ''
     multilingual:
-      limit_to_content_language: false
+      limit_to_content_language: true
       include_language_independent: true
       use_language_undefined_as_fallback_language: false
       specific_languages:
@@ -344,7 +344,6 @@ processor_settings:
   joinup_entity_status:
     inverse: true
   language_with_fallback: {  }
-  rendered_item: {  }
   solr_date_range:
     weights:
       preprocess_index: 0

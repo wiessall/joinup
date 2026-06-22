@@ -6,6 +6,7 @@ namespace Drupal\search_api_field\Plugin;
 
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\search_api\Item\FieldInterface;
 use Drupal\search_api_field\Attribute\SearchApiFieldFilter;
@@ -32,16 +33,20 @@ class FilterPluginManager extends DefaultPluginManager implements FilterPluginMa
    *   Cache backend instance to use.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler to invoke the alter hook with.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager.
    */
   public function __construct(
     \Traversable $namespaces,
     CacheBackendInterface $cache_backend,
     ModuleHandlerInterface $module_handler,
+    LanguageManagerInterface $language_manager,
   ) {
     parent::__construct('Plugin/SearchApiField/Filter', $namespaces, $module_handler, FilterPluginInterface::class, SearchApiFieldFilter::class);
 
     $this->alterInfo('search_api_field_filter_info');
-    $this->setCacheBackend($cache_backend, 'search_api_field_filter_plugins', [
+    $cacheKey = 'search_api_field_filter_plugins:' . $language_manager->getCurrentLanguage()->getId();
+    $this->setCacheBackend($cache_backend, $cacheKey, [
       'search_api_field_filter_plugins',
     ]);
   }

@@ -47,6 +47,7 @@ trait NameMappingsTrait {
         'published at' => 'published_at',
         'spatial coverage' => 'spatial_coverage',
         'state' => 'field_state',
+        'website url' => 'website_url',
       ],
       'contact_information' => [
         'email' => 'email',
@@ -377,6 +378,7 @@ trait NameMappingsTrait {
       'report' => 'assessment',
       'solution' => 'node',
       'spdx licence' => 'taxonomy_term',
+      'term' => 'taxonomy_term',
       'topic' => 'taxonomy_term',
       'user' => 'user',
       'webform' => 'webform',

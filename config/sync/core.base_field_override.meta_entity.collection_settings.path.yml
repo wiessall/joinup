@@ -1,0 +1,20 @@
+uuid: 63910acb-a1a5-422c-bca7-6fb04795fcee
+langcode: en
+status: true
+dependencies:
+  config:
+    - meta_entity.type.collection_settings
+  module:
+    - path
+id: meta_entity.collection_settings.path
+field_name: path
+entity_type: meta_entity
+bundle: collection_settings
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path

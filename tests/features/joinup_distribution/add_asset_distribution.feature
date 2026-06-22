@@ -106,13 +106,13 @@ Feature: Add distribution through the UI
     And I select "WTFPL" from "Licence"
     And I select "Datalog" from "Representation technique"
     And I press "Publish"
-    And I should see "Download test.zip"
+    And I should see the text "Download test.zip"
     And I go to the edit form of the "Source tarball" distribution
     And I press "Edit"
     And I fill in "resources[0][subform][resource_file][0][description]" with "My uploaded file"
     And I press "Update"
-    And I should not see "Download test.zip"
-    And I should see "Download My uploaded file"
+    And I should not see the text "Download test.zip"
+    And I should see the text "Download My uploaded file"
 
     # Debug step since the default view of the distribution, does not have the access URL shown.
     And the "Source tarball" distribution should have the link of the "test.zip" in the access URL field
@@ -140,7 +140,7 @@ Feature: Add distribution through the UI
     And I click "Add distribution" in the plus button menu
     Then I should see the heading "Add Distribution"
 
-    Then I should see "One file only. 64 MB limit. Allowed types: azw css csv dbf doc docx dtd.sgml dtd.xml e00 eps epub fmx2 fmx3 fmx4 gif gml gzip indd jpeg jpg json jsonld kml kmz mdb mobi mop mxd odf ods odt op.datpro owl pdf pdfa1a pdfa1b pdfx png pps ppsx ppt pptx ps psd rdf rdf.turtle rdf.xml rss rtf schema.xml sgml skos.xml sparqlq sparqlqres tar tar.gz tar.xz tiff tsv ttl txt xls xlsx xml xslfo xslt zip."
+    Then I should see the text "One file only. 64 MB limit. Allowed types: azw css csv dbf doc docx dtd.sgml dtd.xml e00 eps epub fmx2 fmx3 fmx4 gif gml gzip indd jpeg jpg json jsonld kml kmz mdb mobi mop mxd odf ods odt op.datpro owl pdf pdfa1a pdfa1b pdfx png pps ppsx ppt pptx ps psd rdf rdf.turtle rdf.xml rss rtf schema.xml sgml skos.xml sparqlq sparqlqres tar tar.gz tar.xz tiff tsv ttl txt xls xlsx xml xslfo xslt zip."
 
   Scenario: Adding a distribution with a duplicate title
     Given the following "solution" content:

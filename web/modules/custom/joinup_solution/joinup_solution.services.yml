@@ -27,13 +27,4 @@ services:
   joinup_solution.lazy_builders:
     class: Drupal\joinup_solution\SolutionLazyBuilders
 
-  Drupal\joinup_solution\EventSubscriber\SolutionGroupMenuLinksSubscriber: { }
-
-  Drupal\joinup_solution\EventSubscriber\SolutionArchiveEventSubscriber: {  }
-
   Drupal\joinup_solution\EventSubscriber\InteroperableFlagSubscriber: { }
-
-  logger.channel.solution:
-    parent: logger.channel_base
-    arguments:
-      - 'solution'
