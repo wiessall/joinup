@@ -128,7 +128,6 @@ Feature:
     Then I should see the heading "Main topics"
     And I should not see the heading "Hello world"
 
-  @wip
   Scenario: Description and summary are displayed accordingly.
     Given the following "news" content:
       | title  | headline |
@@ -145,7 +144,6 @@ Feature:
     Then I should see the heading "Edit E-justice"
 
     When I fill in "Description" with "This now has to be shown both in the inner page and in the homepage."
-    And I fill in "Abstract" with "E-justice abstract"
     And I press "Save"
     Then I should see the heading "E-justice"
     And I should see the text "This now has to be shown both in the inner page and in the homepage."
@@ -155,7 +153,7 @@ Feature:
 
     When I click "E-justice"
     And I click "Edit"
-    And I fill in "Summary" with "This will be shown in the homepage."
+    And I fill in "Abstract" with "This will be shown in the homepage."
     And I fill in "Description" with "This will be shown in the inner page."
     And I press "Save"
     Then I should see the text "This will be shown in the inner page."
