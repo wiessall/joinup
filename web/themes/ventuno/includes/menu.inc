@@ -50,24 +50,23 @@ function ventuno_preprocess_menu_local_action(array &$variables): void {
  * Implements hook_preprocess_links().
  */
 function ventuno_preprocess_links(array &$variables): void {
-  $variables['attributes']['class'][] = 'navigation-bottom__links';
-  if (isset($variables['links'])) {
-    // Mark this list item as having only the 'next' link.
+  if (
+    isset($variables['attributes']['data-joinup-block-id']) &&
+    $variables['attributes']['data-joinup-block-id'] === 'ventuno_toc_outline'
+  ) {
+    $variables['attributes']['class'][] = 'toc-outline__links';
     if (count($variables['links']) === 1) {
-      $variables['attributes']['class'][] = 'navigation-bottom__links--only-next';
+      $variables['attributes']['class'][] = 'toc-outline__links--only-next';
     }
     // Add 'next', 'prev', 'up' classes to bottom navigation list items.
-    if (isset($variables['attributes']['data-joinup-block-id']) && $variables['attributes']['data-joinup-block-id'] === 'ventuno_toc_outline') {
-      foreach ($variables['links'] as $key => $link) {
-        if (in_array($key, ['next', 'prev', 'up'], TRUE)) {
-          /** @var \Drupal\Core\Template\Attribute $attributes */
-          $attributes = $link['attributes'];
-          $attributes->addClass([$key]);
-        }
+    foreach ($variables['links'] as $key => $link) {
+      if (in_array($key, ['next', 'prev', 'up'], TRUE)) {
+        /** @var \Drupal\Core\Template\Attribute $attributes */
+        $variables['links'][$key]['attributes']->addClass($key);
       }
-      // It makes no sense to keep this attribute.
-      unset($variables['attributes']['data-joinup-block-id']);
     }
+    // It makes no sense to keep this attribute.
+    unset($variables['attributes']['data-joinup-block-id']);
   }
 }
 
