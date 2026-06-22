@@ -26,10 +26,10 @@ visibility:
     routes:
       - entity.user.canonical
       - entity.user.edit_form
+      - entity.meta_entity.canonical
       - entity_browser.assessment_solutions
       - view.content_overview.page_1
       - view.discussions.overview
-      - entity.taxonomy_term.canonical
   request_path:
     id: request_path
     negate: true
