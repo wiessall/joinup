@@ -16,7 +16,7 @@ entity_type: taxonomy_term
 bundle: topic
 label: Abstract
 description: ''
-required: true
+required: false
 translatable: true
 default_value: {  }
 default_value_callback: ''
