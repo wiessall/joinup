@@ -14,19 +14,11 @@ dependencies:
     - joinup_slick
     - layout_paragraphs
     - template_suggestion
-    - text
 id: taxonomy_term.topic.default
 targetEntityType: taxonomy_term
 bundle: topic
 mode: default
 content:
-  description:
-    type: text_default
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    weight: 0
-    region: content
   topics_paragraph:
     type: layout_paragraphs
     label: hidden
@@ -48,10 +40,11 @@ content:
         field_label: true
       template_suggestion:
         template_suggestion: ''
-    weight: 1
+    weight: 0
     region: content
 hidden:
   abstract: true
+  description: true
   image: true
   langcode: true
   search_api_excerpt: true

@@ -14,7 +14,8 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\taxonomy\TermInterface;
-use Drupal\topic\Entity\TopicInterface;
+use Drupal\topic\Entity\TopicTerm;
+use Drupal\topic\Entity\TopicTermInterface;
 
 /**
  * Hook implementations related to topic taxonomy terms.
@@ -29,6 +30,16 @@ final class TopicTermHooks {
   ) {}
 
   /**
+   * Implements hook_entity_bundle_info_alter().
+   */
+  #[Hook('entity_bundle_info_alter')]
+  public function entityBundleInfoAlter(array &$bundles): void {
+    if (!empty($bundles['taxonomy_term']['topic'])) {
+      $bundles['taxonomy_term']['topic']['class'] = TopicTerm::class;
+    }
+  }
+
+  /**
    * Implements hook_ENTITY_TYPE_create_access() for paragraphs.
    *
    * Allows creation of the configurable_listing paragraph only on topic
@@ -41,7 +52,7 @@ final class TopicTermHooks {
     }
 
     $term = $this->routeMatch->getParameter('taxonomy_term');
-    if (!$term instanceof TopicInterface) {
+    if (!$term instanceof TopicTermInterface) {
       return AccessResult::neutral()->addCacheContexts(['route']);
     }
 

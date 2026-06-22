@@ -7,7 +7,7 @@ namespace Drupal\topic\EventSubscriber;
 use Drupal\Core\Routing\AccessAwareRouterInterface;
 use Drupal\Core\Routing\LocalRedirectResponse;
 use Drupal\Core\Url;
-use Drupal\topic\Entity\TopicInterface;
+use Drupal\topic\Entity\TopicTermInterface;
 use Drupal\topic\PathProcessor\TopicPathProcessor;
 use Drupal\topic\Service\HomepageTopicsQueueService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -49,7 +49,7 @@ readonly class TopicRedirectRequestSubscriber implements EventSubscriberInterfac
 
     if (
       $match['_route'] !== 'entity.taxonomy_term.canonical' ||
-      !$match['_entity'] instanceof TopicInterface ||
+      !$match['_entity'] instanceof TopicTermInterface ||
       !$match['_route_object']?->getOption(TopicPathProcessor::REDIRECT_TO_SEARCH_PAGE_OPTION)
     ) {
       return;

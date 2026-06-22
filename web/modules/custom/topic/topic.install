@@ -214,3 +214,23 @@ function topic_update_201503(): string {
 
   return sprintf('Updated URL aliases for %d topic taxonomy terms.', $updated);
 }
+
+/**
+ * Delete all topic meta entities.
+ */
+function topic_update_201504(): string {
+  $meta_entity_storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
+
+  $ids = $meta_entity_storage->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('type', 'topic')
+    ->execute();
+
+  if (empty($ids)) {
+    return 'No topic meta entities found to delete.';
+  }
+
+  $meta_entity_storage->delete($meta_entity_storage->loadMultiple($ids));
+
+  return sprintf('Deleted %d topic meta entities.', count($ids));
+}
