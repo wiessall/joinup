@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity;
 
+use Drupal\assessments\AssessmentAccessControlHandler;
+use Drupal\assessments\AssessmentInterface;
+use Drupal\assessments\AssessmentListBuilder;
+use Drupal\assessments\AssessmentViewBuilder;
+use Drupal\assessments\Form\AssessmentForm;
+use Drupal\assessments\Routing\AssessmentsHtmlRouteProvider;
 use Drupal\Core\Entity\Attribute\ContentEntityType;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\ContentEntityDeleteForm;
@@ -16,12 +22,6 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
-use Drupal\assessments\AssessmentAccessControlHandler;
-use Drupal\assessments\AssessmentInterface;
-use Drupal\assessments\AssessmentListBuilder;
-use Drupal\assessments\AssessmentViewBuilder;
-use Drupal\assessments\Form\AssessmentForm;
-use Drupal\assessments\Routing\AssessmentsHtmlRouteProvider;
 use Drupal\ctools\Testing\EntityCreationTrait;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 use Drupal\user\EntityOwnerTrait;

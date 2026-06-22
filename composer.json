@@ -129,6 +129,7 @@
         "drupal/token": "~1.7",
         "drupal/tour": "^2.0",
         "drupal/twig_field_value": "^2.0",
+        "drupal/ultimate_cron": "^2.0@beta",
         "drupal/uuid_extra": "^2.0",
         "drupal/view_unpublished": "^1.0",
         "drupal/views_block_area": "^2.0",
@@ -148,10 +149,8 @@
         "openeuropa/composer-artifacts": "^1.0",
         "openeuropa/oe_authentication": "^1.20",
         "openeuropa/oe_bootstrap_theme": "^1.0",
-        "openeuropa/oe_dashboard_agent": "^1.0",
         "openeuropa/oe_webtools": "^1.40",
         "psr/http-factory-implementation": "^1.0",
-        "semiceu/adms-ap_validator": "^1.0",
         "sweetrdf/easyrdf": "^1.9",
         "symfony/http-client": "^6.4",
         "turbojettechnologies/colorbox": "^1.7.0"
@@ -234,6 +233,7 @@
             "web/modules/contrib/message_digest/src/Traits/MessageDigestContextTrait.php",
             "web/modules/contrib/message_digest/src/Traits/MessageDigestTrait.php",
             "web/modules/contrib/og_menu/src/Tests/Traits/OgMenuTrait.php",
+            "web/modules/contrib/search_api_solr/src/Utility/SolrCommitTrait.php",
             "web/modules/custom/joinup_rdf/src/Entity/RdfSyncEntityTrait.php",
             "scripts/composer/ComposerPatches.php"
         ],
@@ -361,6 +361,7 @@
                 "Slow admin/config page load. @see https://www.drupal.org/i/3336621": "resources/patch/php/drupal/core/3336621.mr15137-commit7b9c8c6a.patch",
                 "Exposed filters get values from url when ajax is on @see https://www.drupal.org/i/3121172": "resources/patch/php/drupal/core/3121172-mr10230-commit41ded0c5.diff",
                 "Follow-up for #2663410: calling TypedConfigManager::getDefinition() causes cache pollution": "resources/patch/php/drupal/core/3400181.mr15886-commit53fc6f75.diff",
+                "Views QueryParameter should apply default value if any parameter key is missing @see https://drupal.org/i/3593838": "resources/patch/php/drupal/core/3593838.mr15996-commit511cb7d5.diff",
                 "[site:url] token omits trailing slash in other languages @see https://www.drupal.org/i/2163913": "resources/patch/php/drupal/core/2163913.mr15511.commit58a97130.diff",
                 "Fatal error when saving translation configuration @see https://www.drupal.org/i/3549469": "resources/patch/php/drupal/core/3549469.diff",
                 "Translations of nodes with comment settings field set to non-translatable returns EntityUntranslatableFieldsConstraint @see https://www.drupal.org/i/3015675": "resources/patch/php/drupal/core/3015675-83bb966c.diff"
@@ -383,9 +384,6 @@
             "drupal/entity_form_field_label": {
                 "Add possibility to alter field's description @see https://www.drupal.org/i/3420361": "resources/patch/php/drupal/entity_form_field_label/3420361.mr10-note563504.diff",
                 "Illegal argument NULL @see https://www.drupal.org/i/3558750": "resources/patch/php/drupal/entity_form_field_label/3558750.diff"
-            },
-            "drupal/email_contact": {
-                "Use AjaxHelperTrait::isAjax() to fix modal behavior for non-Ajax requests. @see https://www.drupal.org/i/3546736": "resources/patch/php/drupal/email_contact/3546736.diff"
             },
             "drupal/entity_legal": {
                 "Custom agree validation error message and submit button label @see https://www.drupal.org/project/entity_legal/issues/3293017": "resources/patch/php/drupal/entity_legal/3293017.patch"
@@ -425,7 +423,6 @@
             },
             "drupal/inline_entity_form": {
                 "Autocomplete field doesn't allow to reference entities with long titles @see https://www.drupal.org/node/2895663": "resources/patch/php/drupal/inline_entity_form/2895663.patch",
-                "Undefined array key \"delete\". @see https://www.drupal.org/i/3416328": "resources/patch/php/drupal/inline_entity_form/3416328.patch",
                 "Required fields make an optional IEF (erroneously) required. @see https://www.drupal.org/i/3099844": "resources/patch/php/drupal/inline_entity_form/3099844-mr136-commit19b50b6e.diff",
                 "Pass context to canAddNew()ssa and getCreateBundles(). @see https://www.drupal.org/i/3043511": "resources/patch/php/drupal/inline_entity_form/3043511-mr154-commit2d80c52d.diff",
                 "Foreach expects array|object, null given @see https://www.drupal.org/i/3516478": "resources/patch/php/drupal/inline_entity_form/3516478.diff"
@@ -461,9 +458,6 @@
                 "Add post-update hook to install OAuth Client Minimal filter format. @see https://www.drupal.org/i/3555048": "resources/patch/php/drupal/oauth_client/3555048v2.diff",
                 "Notifications per request type. @see https://www.drupal.org/i/3567235": "resources/patch/php/drupal/oauth_client/3567235-c17f91608.diff"
             },
-            "drupal/og": {
-                "OgMembership does not define a label entity key @see https://www.drupal.org/i/3573327": "resources/patch/php/drupal/og/3573327.mr69-commit2dfadf17.diff"
-            },
             "drupal/og_menu": {
                 "Fix fatal error in OgMenuInstanceForm @see https://www.drupal.org/i/3528599": "resources/patch/php/drupal/og_menu/3528599.diff"
             },
@@ -475,16 +469,15 @@
             },
             "drupal/private_message": {
                 "Missing langcode in private_message.settings @see https://www.drupal.org/i/3542616": "resources/patch/php/drupal/private_message/3542616.diff",
-                "Drupal 11 deprecation: Renderer::render(NULL) @see https://www.drupal.org/i/3565601": "resources/patch/php/drupal/private_message/3565601.mr210-commit4be8b7a9.diff"
+                "Drupal 11 deprecation: Renderer::render(NULL) @see https://www.drupal.org/i/3565601": "resources/patch/php/drupal/private_message/3565601.mr210-commit4be8b7a9.diff",
+                "Inbox thread ordering is non-deterministic when two threads share the same updated timestamp @see https://www.drupal.org/i/3593914": "resources/patch/php/drupal/private_message/3593914.mr212-commita1374a8a.diff"
             },
             "drupal/purge_users": {
                 "Users are deleted without prior notification when \"Notification User Before Deletion\" is enabled @see https://www.drupal.org/i/3521201": "resources/patch/php/drupal/purge_users/3521201.diff",
                 "Missing langcode in purge_users.settings and config/install missing @see https://www.drupal.org/i/3542620": "resources/patch/php/drupal/purge_users/3542620.diff"
             },
             "drupal/search_api": {
-                "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199-42e0e284.diff",
-                "View recalculated with wrong data from cache @see https://drupal.org/i/3327645": "resources/patch/php/drupal/search_api/3327645-d510c98e.diff",
-                "Error when trying to add bulk operations field to a Search API view listing translated content @see https://drupal.org/i/3490247": "resources/patch/php/drupal/search_api/3490247-mr320-commit8122a83a.diff"
+                "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199-42e0e284.diff"
             },
             "drupal/search_api_spellcheck": {
                 "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372": "resources/patch/php/drupal/search_api_spellcheck/3280372.patch"
@@ -507,7 +500,8 @@
             },
             "drupal/tmgmt": {
                 "Filtering job items crashes @see https://www.drupal.org/i/3578626": "resources/patch/php/drupal/tmgmt/3578626.mr159.commit3ee8064a.diff",
-                "Callers don't account the scenario in which JobItem::acceptTranslation() fails softly @see https://www.drupal.org/i/3580841": "resources/patch/php/drupal/tmgmt/3580841.mr161.commit-7baf8367.diff"
+                "Callers don't account the scenario in which JobItem::acceptTranslation() fails softly @see https://www.drupal.org/i/3580841": "resources/patch/php/drupal/tmgmt/3580841.mr161.commit-7baf8367.diff",
+                "Data too long for column 'message' - https://www.drupal.org/i/3552683": "resources/patch/php/drupal/tmgmt/3552683.mr135.commit597ae8cd.diff"
             },
             "drupal/tour": {
                 "Support page manager variants on front page @see https://www.drupal.org/i/3568815": "resources/patch/php/drupal/tour/3568815.patch"
@@ -557,18 +551,6 @@
         {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "semiceu/adms-ap_validator",
-                "version": "1.0.0-alpha1",
-                "source": {
-                    "url": "git@github.com:SEMICeu/adms-ap_validator.git",
-                    "type": "git",
-                    "reference": "master"
-                }
-            }
         },
         {
             "type": "package",

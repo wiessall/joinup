@@ -10,7 +10,6 @@ dependencies:
     - field.storage.node.keywords
     - search_api.server.joinup
   module:
-    - flag
     - joinup_flag
     - joinup_solution
     - node
@@ -59,7 +58,7 @@ third_party_settings:
     multilingual:
       limit_to_content_language: false
       include_language_independent: true
-      use_language_undefined_as_fallback_language: false
+      use_language_undefined_as_fallback_language: true
       specific_languages:
         en: '0'
         bg: '0'
@@ -105,7 +104,8 @@ field_settings:
     type: string
     configuration:
       type: concat
-      separator: |+
+      separator: |
+
       fields:
         - 'entity:node/title'
   description:
@@ -176,11 +176,6 @@ field_settings:
       module:
         - node
 datasource_settings:
-  'entity:flagging':
-    bundles:
-      default: true
-      selected:
-        - interoperability
   'entity:node':
     bundles:
       default: false

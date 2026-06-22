@@ -5,14 +5,20 @@ declare(strict_types=1);
 namespace Drupal\joinup_oss_catalogue\Hook;
 
 use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Queue\QueueFactory;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
+use Drupal\eu_oss_catalogue\Model\Validation\ValidationIssueType;
 use Drupal\joinup_oss_catalogue\JoinupOssCatalogueImagecacheWarmer;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Filesystem;
@@ -22,7 +28,7 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class JoinupOssCatalogueHooks {
 
-  protected const int OSS_REMOTE_IMAGE_CACHE_REFRESH_INTERVAL = 24 * 60 * 60;
+  protected const int OSS_REMOTE_IMAGE_CACHE_REFRESH_INTERVAL = 4 * 60 * 60;
 
   protected const string LAST_REFRESH_TIME_KEY = 'joinup_oss_catalogue.imagecache.last_refresh';
 
@@ -59,11 +65,6 @@ class JoinupOssCatalogueHooks {
       return;
     }
 
-    // OSS refresh happens at 0200AM, so we stabilize this job at 0400AM.
-    $actualRefreshTimestamp = (new \DateTime('@' . $requestTime))
-      ->setTime(4, 0)
-      ->getTimestamp();
-
     if (($requestTime - $lastRefreshTimestamp) <= static::OSS_REMOTE_IMAGE_CACHE_REFRESH_INTERVAL) {
       return;
     }
@@ -84,7 +85,7 @@ class JoinupOssCatalogueHooks {
       // Exclude items updated in the last 4 hours.
       ->condition('changed', $requestTime - (4 * 60 * 60), '<')
       ->execute();
-    $this->state->set(static::LAST_REFRESH_TIME_KEY, $actualRefreshTimestamp);
+    $this->state->set(static::LAST_REFRESH_TIME_KEY, $requestTime);
     $this->state->set(static::LAST_REFRESH_FINISHED_KEY, FALSE);
 
     if (!$ossSolutionIds) {
@@ -95,6 +96,36 @@ class JoinupOssCatalogueHooks {
       assert($ossSolution instanceof OssSolutionInterface);
       $this->imagecacheWarmer->queueImageUrls($ossSolution);
     }
+  }
+
+  /**
+   * Forbids access to oss_validation_issues when there are no errors.
+   */
+  #[Hook('entity_field_access')]
+  public function entityFieldAccess(
+    string $operation,
+    FieldDefinitionInterface $field_definition,
+    AccountInterface $account,
+    ?FieldItemListInterface $items = NULL,
+  ): AccessResultInterface {
+    if (
+      $operation !== 'view'
+      || $field_definition->getName() !== 'oss_validation_issues'
+      || $items === NULL
+    ) {
+      return AccessResult::neutral();
+    }
+    $entity = $items->getEntity();
+    foreach ($items as $item) {
+      if ($item->type === ValidationIssueType::Error->value) {
+        return AccessResult::neutral()
+          ->addCacheableDependency($entity)
+          ->addCacheableDependency($field_definition);
+      }
+    }
+    return AccessResult::forbidden('No validation errors.')
+      ->addCacheableDependency($entity)
+      ->addCacheableDependency($field_definition);
   }
 
   /**

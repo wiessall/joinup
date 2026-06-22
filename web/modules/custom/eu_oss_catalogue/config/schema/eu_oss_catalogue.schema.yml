@@ -5,6 +5,9 @@ eu_oss_catalogue.settings:
     publiccode_api_url:
       type: uri
       label: Base URL of the PublicCode validator API.
+    cron_max_runs_per_day:
+      type: integer
+      label: 'Maximum number of cron runs per day'
 
 field.field.*.*.*.third_party.eu_oss_catalogue:
   type: sequence
@@ -81,3 +84,7 @@ eu_oss_catalogue.resolver_schema.absolute_url:
     verify:
       type: boolean
       label: Whether to verify the URL
+
+views.filter.eu_oss_catalogue_translation_filter:
+  type: views.filter.in_operator
+  label: 'Displays only the results having translation in the selected language'

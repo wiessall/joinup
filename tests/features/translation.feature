@@ -1,4 +1,4 @@
-@api @group-a
+@api @group-j
 Feature: Creating nodes in foreign language
   This test covers some common translation features.
   Nodes are creating manually in different languages

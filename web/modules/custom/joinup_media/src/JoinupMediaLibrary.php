@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_media;
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Url;
 use Drupal\ckeditor5\Plugin\CKEditor5Plugin\MediaLibrary;
 use Drupal\ckeditor5\Plugin\CKEditor5PluginDefinition;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Url;
 use Drupal\editor\EditorInterface;
 use Drupal\joinup_group\JoinupGroupManagerInterface;
 use Drupal\media_library\MediaLibraryState;

@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_i18n\ExistingSite;
 
-use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_i18n\Hook\JoinupI18nHooks;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\language\Entity\ContentLanguageSettings;
 use Drupal\node\Entity\NodeType;
+use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\tmgmt\JobInterface;
-use Drupal\tmgmt\JobItemInterface;
 use Drupal\tmgmt_ec_etranslation\Plugin\tmgmt\Translator\ETranslationTranslator;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
@@ -117,15 +116,11 @@ final class JoinupI18nTest extends JoinupExistingSiteTestBase {
     $nodeType->save();
     $this->markEntityForCleanup($nodeType);
 
-    $queue = \Drupal::queue('joinup_i18n_create_job_items');
-    $queue->createQueue();
-    $worker = \Drupal::service('plugin.manager.queue_worker')
-      ->createInstance('joinup_i18n_create_job_items');
+    // No job items should exist yet.
+    $this->assertJobItems();
+
     $config = $this->getConfigFactory()->getEditable('joinup_i18n.settings');
     $settings = $config->get('tmgmt_content');
-
-    // Queue is empty.
-    $this->assertSame(0, $queue->numberOfItems());
 
     $node = $this->createNode([
       'type' => 'test_language_content_settings',
@@ -139,37 +134,14 @@ final class JoinupI18nTest extends JoinupExistingSiteTestBase {
       ->save();
 
     // A node has been created, but its bundle is not configured yet.
-    $this->assertSame(0, $queue->numberOfItems());
+    $this->assertJobItems();
 
     // Configure the bundle to be translated and re-save the node.
     $settings['node'][] = 'test_language_content_settings';
     $config->set('tmgmt_content', $settings)->save();
     $node->save();
 
-    // Inspect and process the queue.
-    $this->assertSame(3, $queue->numberOfItems());
-    foreach (self::TARGET_LANGCODES as $target) {
-      $item = $queue->claimItem();
-      $this->assertSame($this->jobs[$target]->id(), $item->data['job']);
-      $this->assertSame('node', $item->data['entity_type']);
-      $this->assertSame($node->id(), $item->data['entity_id']);
-      $worker->processItem($item->data);
-      $queue->deleteItem($item);
-    }
-    $this->assertSame(0, $queue->numberOfItems());
-
-    // Check that the job items were created.
-    foreach ($this->jobs as $job) {
-      assert($job instanceof JobInterface);
-      $jobItems = $job->getItems();
-      $this->assertCount(1, $jobItems);
-      $jobItem = reset($jobItems);
-      assert($jobItem instanceof JobItemInterface);
-      $this->assertSame('content', $jobItem->getPlugin());
-      $this->assertSame('node', $jobItem->getItemType());
-      $this->assertSame($node->id(), $jobItem->getItemId());
-      $this->assertSame('Test node', $jobItem->getData(['title', 0, 'value', '#text']));
-    }
+    $this->assertJobItems(array_fill_keys(self::TARGET_LANGCODES, $node->id()));
   }
 
   /**
@@ -178,9 +150,6 @@ final class JoinupI18nTest extends JoinupExistingSiteTestBase {
    * @legacy-covers \Drupal\joinup_i18n\EventSubscriber\ScheduleJobItemSubscriber::scheduleJobItemCreation
    */
   public function testNonTranslatableContent(): void {
-    $queue = \Drupal::queue('joinup_i18n_create_job_items');
-    $queue->createQueue();
-
     $node = $this->createNode([
       'type' => 'solution',
       'og_audience' => \Drupal::service('entity.repository')->loadEntityByUuid('node', JoinupCollectionHelper::JOINUP_COLLECTION_UUID),
@@ -189,27 +158,51 @@ final class JoinupI18nTest extends JoinupExistingSiteTestBase {
     ]);
 
     // Unpublished content is not scheduled for translation.
-    $this->assertSame(0, $queue->numberOfItems());
+    $this->assertJobItems();
 
     // Published content is scheduled for translation.
     $node->set('field_state', 'published')->save();
-    $this->assertSame(3, $queue->numberOfItems());
-
-    $queue->deleteQueue();
+    $this->assertJobItems(array_fill_keys(self::TARGET_LANGCODES, $node->id()));
 
     // Archived content is not scheduled for translation.
     $node->set('field_state', 'archived')->save();
-    $this->assertSame(0, $queue->numberOfItems());
+    $this->assertJobItems();
 
     // Unarchiving content it schedules it for translation.
     $node->set('field_state', 'published')->save();
-    $this->assertSame(3, $queue->numberOfItems());
-
-    $queue->deleteQueue();
+    $this->assertJobItems(array_fill_keys(self::TARGET_LANGCODES, $node->id()));
 
     // Unpublishing content, it doesn't schedule it for translation.
     $node->set('field_state', 'draft_after_published')->save();
-    $this->assertSame(0, $queue->numberOfItems());
+    $this->assertJobItems();
+  }
+
+  /**
+   * Asserts that job items exist for the expected node IDs.
+   *
+   * @param array $expectedNids
+   *   The expected node IDs.
+   */
+  protected function assertJobItems(array $expectedNids = []): void {
+    $query = \Drupal::database()->select('tmgmt_job_item', 'tji');
+    $query->innerJoin('tmgmt_job', 'tj', 'tj.tjid = tji.tjid');
+    $result = $query->condition('tj.source_language', 'en')
+      ->condition('tji.plugin', 'content')
+      ->condition('tji.item_type', 'node')
+      ->fields('tj', ['target_language'])
+      ->fields('tji', ['item_id'])
+      ->orderBy('tj.target_language')
+      ->execute()
+      ->fetchAllKeyed();
+
+    ksort($expectedNids);
+    $this->assertEquals($expectedNids, $result);
+
+    // Next assertion to start on clean.
+    if ($result) {
+      $storage = \Drupal::entityTypeManager()->getStorage('tmgmt_job_item');
+      $storage->delete($storage->loadMultiple());
+    }
   }
 
   /**

@@ -6,11 +6,14 @@ namespace Drupal\collection\Hook;
 
 use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Hook\Attribute\Hook;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Collection module hook implementations.
  */
 class CollectionHooks {
+
+  use StringTranslationTrait;
 
   /**
    * Makes the query for glossary terms language aware.
@@ -38,6 +41,23 @@ class CollectionHooks {
       $tables['node_field_data_2']['condition'] .= ' AND [node_field_data_2].[langcode] = [node_field_data].[langcode]';
       $tables['node__field_glossary_definition']['condition'] .= ' AND [node__field_glossary_definition].[langcode] = [node_field_data].[langcode]';
       $tables['node__field_glossary_synonyms']['condition'] .= ' AND [node__field_glossary_synonyms].[langcode] = [node_field_data].[langcode]';
+    }
+  }
+
+  /**
+   * Implements hook_views_data_alter().
+   */
+  #[Hook('views_data_alter')]
+  public function viewsDataAlter(array &$data): void {
+    if (isset($data['node'])) {
+      $data['node']['glossary_letter'] = [
+        'title' => $this->t('Glossary letter'),
+        'field' => [
+          'id' => 'field',
+          'default_formatter' => 'string',
+          'field_name' => 'glossary_letter',
+        ],
+      ];
     }
   }
 

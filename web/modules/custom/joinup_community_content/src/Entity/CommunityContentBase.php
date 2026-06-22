@@ -14,8 +14,6 @@ use Drupal\joinup_group\Entity\PinnableGroupContentTrait;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\joinup_group\GroupArchivableEntityTrait;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeTrait;
-use Drupal\joinup_stats\Entity\VisitCountAwareInterface;
-use Drupal\joinup_stats\Entity\VisitCountAwareTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\node\Entity\Node;
 use Drupal\topic\Entity\TopicReferencingEntityTrait;
@@ -36,17 +34,9 @@ abstract class CommunityContentBase extends Node implements CommunityContentInte
   use OutdatedContentTrait;
   use PinnableGroupContentTrait;
   use TopicReferencingEntityTrait;
-  use VisitCountAwareTrait;
   use GroupArchivableEntityTrait;
   use DescriptionTrait;
   use PermalinkTrait;
-
-  /**
-   * Fields populated with statistical information by the joinup_stats module.
-   */
-  const JOINUP_STATS_FIELDS = [
-    VisitCountAwareInterface::class => 'visit_count',
-  ];
 
   /**
    * {@inheritdoc}

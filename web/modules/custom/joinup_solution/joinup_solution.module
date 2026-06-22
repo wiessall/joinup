@@ -7,6 +7,8 @@
 
 declare(strict_types=1);
 
+use Drupal\collection\Entity\Collection;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;
@@ -20,8 +22,6 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
-use Drupal\collection\Entity\Collection;
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_solution\CollectionSolutionsFieldItemList;
 use Drupal\joinup_solution\Entity\Solution;
 use Drupal\joinup_solution\Entity\SolutionInterface;
@@ -230,11 +230,6 @@ function joinup_solution_entity_extra_field_info(): array {
       'description' => t('Solutions either explicitly or referenced through EIRA.'),
       'visible' => FALSE,
     ];
-    $display['download_total'] = [
-      'label' => t('Total distribution downloads'),
-      'description' => t('The total downloads of all distributions in this collection.'),
-      'visible' => FALSE,
-    ];
     $display['collections'] = [
       'label' => t('Collections'),
       'description' => t('The collections this solution is affiliated to.'),
@@ -316,44 +311,6 @@ function joinup_solution_node_view(array &$build, NodeInterface $solution, Entit
     $build['related_solutions'] = $view_mode !== 'confirmation' ?
       joinup_solution_build_related_solutions_tiles($ids) :
       joinup_solution_build_related_solutions_titles($ids);
-  }
-
-  // Attach the download total of all distributions in this solution.
-  // @todo Add the `og-group-content` cache tag because the downloads are
-  //   contained in the distribution entities which is group content.
-  // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5200
-  if ($display->getComponent('download_total')) {
-    $total = 0;
-    if (!$solution->isNew()) {
-      foreach ($solution->getDistributions() as $distribution) {
-        $total += $distribution->getDownloadCount();
-      }
-    }
-
-    // The '#stats_topic' property is used as the label for the statistic, and
-    // to set a template suggestion for the container.
-    // @see joinup_theme_theme_suggestions_alter()
-    // @see joinup_theme_preprocess_container__stats_topic()
-    $build['downloads'] = [
-      '#type' => 'container',
-      'count' => [
-        '#type' => 'container',
-        '#stats_topic' => t('Downloads'),
-        [
-          '#markup' => $total,
-        ],
-        // Hide the download stats when there are no downloads.
-        '#access' => $total > 0,
-      ],
-      '#cache' => [
-        // Allow clearing the render cache of this element. By using a dedicated
-        // cache tag, we avoid invalidating the solution tag as that would
-        // result in clearing of too many cache entries. We're applying the
-        // cache tag to an outer wrapper so that, when the inner element is not
-        // rendered ($total === 0), the cache tag also bubbles up to the page.
-        'tags' => ['solution_download_count:' . md5($solution->id())],
-      ],
-    ];
   }
 
   // Show the collection the solution belongs to. A solution can be affiliated

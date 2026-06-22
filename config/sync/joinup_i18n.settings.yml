@@ -1,4 +1,9 @@
 tmgmt_content:
+  meta_entity:
+    - collection_settings
+    - eif_perspective
+    - solution_settings
+    - topic
   assessment:
     - expression
     - participation

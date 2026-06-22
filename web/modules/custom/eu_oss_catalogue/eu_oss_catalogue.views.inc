@@ -7,7 +7,11 @@
 
 declare(strict_types=1);
 
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\Core\Entity\Sql\SqlContentEntityStorageException;
+use Drupal\Core\Entity\Sql\SqlEntityStorageInterface;
+use Drupal\Core\Entity\Sql\TableMappingInterface;
 use Drupal\Core\Field\FieldTypePluginManagerInterface;
 use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
 use Drupal\eu_oss_catalogue\Plugin\Field\RelevantField;
@@ -18,8 +22,8 @@ use Drupal\eu_oss_catalogue\Plugin\Field\RelevantField;
 function eu_oss_catalogue_views_data_alter(array &$data): void {
   $entityTypeManager = Drupal::entityTypeManager();
 
-  foreach ($entityTypeManager->getDefinitions() as $entityInfo) {
-    $data[$entityInfo->getBaseTable()]['translation_list'] = [
+  foreach ($entityTypeManager->getDefinitions() as $entityType) {
+    $data[$entityType->getBaseTable()]['translation_list'] = [
       'title' => 'Translation list',
       'help' => t('Displays all available translations.'),
       'field' => [
@@ -69,5 +73,57 @@ function eu_oss_catalogue_views_data(): array {
     ];
   }
 
+  $translationFilter = _eu_oss_catalogue_translation_filter();
+  if ($translationFilter) {
+    $viewsData = NestedArray::mergeDeep($viewsData, $translationFilter);
+  }
+
   return $viewsData;
+}
+
+/**
+ * Returns the Translation filter Views definition.
+ *
+ * @return array|null
+ *   Translation filter Views definition for node views, if node has the
+ *   expected schema.
+ */
+function _eu_oss_catalogue_translation_filter(): ?array {
+  // Only if the node definition has both default_langcode and langcode fields,
+  // and they're stored in the same table.
+  $entityType = \Drupal::entityTypeManager()->getDefinition('node');
+  $storage = \Drupal::entityTypeManager()->getStorage('node');
+  $tableMapping = $storage instanceof SqlEntityStorageInterface
+    ? $storage->getTableMapping()
+    : NULL;
+  if (!$tableMapping instanceof TableMappingInterface) {
+    return NULL;
+  }
+
+  $defaultLangcodeKey = $entityType->getKey('default_langcode');
+  $langcodeKey = $entityType->getKey('langcode');
+  if (!$defaultLangcodeKey || !$langcodeKey) {
+    return NULL;
+  }
+  try {
+    $defaultLangcodeTable = $tableMapping->getFieldTableName($defaultLangcodeKey);
+    $langcodeTable = $tableMapping->getFieldTableName($langcodeKey);
+  }
+  catch (SqlContentEntityStorageException) {
+    return NULL;
+  }
+  if (!$defaultLangcodeTable || $langcodeTable !== $defaultLangcodeTable) {
+    return NULL;
+  }
+
+  return [
+    $langcodeTable => [
+      'translated_to' => [
+        'title' => t('Has translation in'),
+        'help' => t('Displays only the results having translation in the selected language.'),
+        'real field' => $langcodeKey,
+        'filter' => ['id' => 'eu_oss_catalogue_translation_filter'],
+      ],
+    ],
+  ];
 }

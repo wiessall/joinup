@@ -4,44 +4,31 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group_content_management\Plugin\Action;
 
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Action\Attribute\Action;
 use Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Menu\MenuLinkManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Render\Renderer;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\collection\Entity\Collection;
-use Drupal\custom_page\CustomPageOgMenuLinksManagerInterface;
-use Drupal\joinup_distribution\Entity\Distribution;
-use Drupal\joinup_release\Entity\Release;
+use Drupal\custom_page\Entity\CustomPageInterface;
+use Drupal\joinup_distribution\Entity\DistributionInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_group\Entity\GroupMenuLinkInterface;
+use Drupal\joinup_group\Plugin\Menu\GroupMenuLink;
 use Drupal\joinup_release\Entity\ReleaseInterface;
-use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
-use Drupal\og_menu\OgMenuInstanceInterface;
+use Drupal\node\NodeStorageInterface;
 use Drupal\views_bulk_operations\Action\ViewsBulkOperationsActionBase;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a VBO action that changes the group for nodes.
  *
- * This will also move the node into the OG Menu for the 'navigation' menu.
- *
- * The business requirements for this action call for special handling of custom
- * pages which necessitated this action to be placed into a separate module,
- * since it would introduce a circular dependency between the `joinup_group` and
- * `custom_page` modules.
- *
- * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5969
- *
- * @todo Implement an event subscriber inside `ChangeGroupAction` that allows to
- *   alter the list of actions. This will allow us to move all the custom logic
- *   into a listener in the `custom_page` module and solve the circular
- *   dependency. The action can then be moved inside `joinup_group` and this
- *   module is no longer needed.
+ * This will also move the group menu links into the new group OG menus.
  */
 #[Action(
   id: "joinup_change_group",
@@ -51,47 +38,40 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ChangeGroupAction extends ViewsBulkOperationsActionBase implements ContainerFactoryPluginInterface {
 
   /**
-   * The corresponding OG menu instance.
-   */
-  protected OgMenuInstanceInterface $ogMenuInstance;
-
-  /**
-   * A list UUIDs of menu links of top-level custom pages.
-   */
-  protected array $topLevelCustomPages = [];
-
-  /**
-   * A list of menu links entities, keyed by custom page node ID.
+   * List of nodes to be processed.
    *
-   * @var \Drupal\menu_link_content\MenuLinkContentInterface[]
+   * @var array<int|string, \Drupal\node\NodeInterface>
    */
-  protected array $pageMenuLinks = [];
+  protected array $nodes;
+
+  /**
+   * List of child entities keyed by their parent ID.
+   *
+   * @var array<int|string, array<int|string, \Drupal\node\NodeInterface>>
+   */
+  protected array $children;
+
+  /**
+   * Messages collected during the execution.
+   *
+   * @var array{error: list<string>, warning: list<string>, status: list<string>}
+   */
+  protected array $message;
+
+  /**
+   * Node storage static cache.
+   */
+  protected NodeStorageInterface $nodeStorage;
 
   public function __construct(
     array $configuration,
     string $plugin_id,
     mixed $plugin_definition,
     protected readonly SelectionPluginManagerInterface $selectionPluginManager,
-    protected readonly Renderer $renderer,
-    protected readonly CustomPageOgMenuLinksManagerInterface $customPageOgMenuLinksManager,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly MenuLinkManagerInterface $menuLinkManager,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->get('plugin.manager.entity_reference_selection'),
-      $container->get('renderer'),
-      $container->get('custom_page.og_menu_links_manager'),
-      $container->get('entity_type.manager')
-    );
   }
 
   /**
@@ -105,152 +85,81 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
   /**
    * {@inheritdoc}
    */
-  public function executeMultiple(array $nodes): array {
-    $message = array_fill_keys(['error', 'warning', 'status'], []);
+  public function executeMultiple(array $objects): array {
+    $this->nodes = $objects;
+
+    // Reset internals to avoid stale data from a hypothetical previous run.
+    $this->children = [];
+    $this->message = ['error' => [], 'warning' => [], 'status' => []];
+
     $groupId = $this->getConfiguration()['group'];
-    if (!$group = $this->entityTypeManager->getStorage('node')->load($groupId)) {
+    if (!($group = $this->getNodeStorage()->load($groupId)) || !$group instanceof GroupInterface) {
       throw new \RuntimeException("Cannot load group entity with ID $groupId");
     }
 
-    // Order the nodes, so that the custom page parent nodes are first. This is
-    // important in order to check if the parent of the 2nd tier custom pages
-    // were moved too.
-    $this->reorder($nodes);
+    $count = count($this->nodes);
+    $this->prepareList($group);
 
-    $initialNids = array_map(function (NodeInterface $node) {
-      return $node->id();
-    }, $nodes);
+    foreach ($this->nodes as $nid => $node) {
+      if ($node->get('og_audience')->target_id == $groupId) {
+        // Avoid reassigning the group again.
+        continue;
+      }
 
-    foreach (['navigation', 'quick_links'] as $menuType) {
-      $nodesToProcess = $nodes;
-      /** @var \Drupal\node\NodeInterface[] $nodes */
-      while ($nodesToProcess) {
-        $node = array_shift($nodesToProcess);
-        $isCustomPage = $node->bundle() === 'custom_page';
-        $args = [
-          '@title' => $node->label(),
-          ':url' => $node->toUrl()->toString(),
-          '@type' => $node->type->entity->label(),
-          '@group' => $group->label(),
-          ':group_url' => $group->toUrl()->toString(),
+      $args = [
+        '@title' => $node->label(),
+        ':url' => $node->toUrl()->toString(),
+        '@type' => $node->type->entity->label(),
+        '@group' => $group->label(),
+        ':group_url' => $group->toUrl()->toString(),
+      ];
+
+      try {
+        // Prevent notification dispatching.
+        // @see joinup_notification_dispatch_notification()
+        $node->skip_notification = TRUE;
+        $node->set('og_audience', $groupId);
+
+        $message = [
+          [
+            '#markup' => $this->t('@type <a href=":url">@title</a> group was changed to <a href=":group_url">@group</a>.', $args),
+          ],
         ];
 
-        if ($isCustomPage && $node->isGroupCodeOfConductPage()) {
-          // Use the UUID to index the message, so that we it is shown only
-          // once.
-          $message['error'][$node->uuid()] = [
-            [
-              '#markup' => $this->t('@type <a href=":url">@title</a> was not moved because it is set as the code of conduct.', $args),
-            ],
+        // List also the children of the node, if any.
+        if (!empty($this->children[$nid])) {
+          $message[] = [
+            '#theme' => 'item_list',
+            '#items' => [],
           ];
-          continue;
-        }
-        // It might be a parent custom page.
-        elseif ($isCustomPage && $children = $this->customPageOgMenuLinksManager->getChildren($node, $menuType)) {
-          // Filter out child nodes that are already in the main set.
-          $children = array_diff_key($children, array_flip($initialNids));
-          array_walk($children, function (NodeInterface $child): void {
-            // Flag this as a child.
-            $child->isChild = TRUE;
-          });
-          // Add children in the flow, just after the parent which is currently
-          // being processed.
-          $nodesToProcess = array_merge($children, $nodesToProcess);
-        }
-        elseif ($node instanceof Release) {
-          if ($group instanceof Collection) {
-            $message['error'][] = [
-              [
-                '#markup' => $this->t('@type <a href=":url">@title</a> was not moved as <a href=":group_url">@group</a> is a collection. Releases can only be moved to a different solution.', $args),
-              ],
-            ];
-            continue;
+
+          foreach ($this->children[$nid] ?? [] as $child) {
+            $child->skip_notification = TRUE;
+            $child->set('og_audience', $groupId)->save();
+            $args['@child_type'] = $child->type->entity->label();
+            $args['@child_title'] = $child->label();
+            $message[1]['#items'][] = $this->t('Child @child_type <a href=":url">@child_title</a> group was changed too.', $args);
           }
-          else {
-            $distributions = $node->getDistributions();
-            array_walk($distributions, function (NodeInterface $distribution): void {
-              $distribution->isChildDistribution = TRUE;
-            });
-            $nodesToProcess = array_merge($distributions, $nodesToProcess);
-          }
-        }
-        elseif (($node instanceof Distribution) && empty($node->isChildDistribution)) {
-          $message['error'][] = [
-            [
-              '#markup' => $this->t('@type <a href=":url">@title</a> was not moved in <a href=":group_url">@group</a> as it is not a standalone distribution. Please, move the parent release instead.', $args),
-            ],
-          ];
-          continue;
         }
 
-        // Avoid trying to re-assign the group if the node is already in the
-        // group.
-        if ($node->get('og_audience')->target_id === $groupId) {
-          continue;
-        }
-
-        try {
-          // Prevent notification dispatching.
-          // @see joinup_notification_dispatch_notification()
-          $node->skip_notification = TRUE;
-          $node->set('og_audience', $groupId);
-          if ($node instanceof ReleaseInterface) {
-            $node->set('solution_data', $group);
-          }
-          $node->save();
-
-          if (empty($node->isChild)) {
-            $message['status'][] = [
-              [
-                '#markup' => $this->t('@type <a href=":url">@title</a> group was changed to <a href=":group_url">@group</a>.', $args),
-              ],
-            ];
-          }
-          else {
-            $lastMessage =& $message['status'][count($message['status']) - 1];
-            if (!isset($lastMessage[1])) {
-              $lastMessage[1] = [
-                '#theme' => 'item_list',
-                '#items' => [],
-              ];
-            }
-            $lastMessage[1]['#items'][] = $this->t('Child @type <a href=":url">@title</a> group was changed too.', $args);
-          }
-
-          // Check the user selected 2nd tier custom pages.
-          if ($isCustomPage && empty($node->isChild)) {
-            if ($parentId = $this->pageMenuLinks[$node->id()]->getParentId()) {
-              [, $uuid] = explode(':', $parentId, 2);
-              // If the custom page has a parent that wasn't selected by the
-              // user, the page will be moved as top-level page. This is
-              // accomplished by removing the corresponding OG menu link parent
-              // reference.
-              if (!in_array($uuid, $this->topLevelCustomPages)) {
-                $this->pageMenuLinks[$node->id()]->set('parent', NULL)->save();
-              }
-            }
-          }
-        }
-        catch (\Exception $e) {
-          $message['error'][] = $this->t("Error while trying to change the group for '@title'.", $args);
-        }
+        $node->save();
+        $this->message['status'][] = $message;
+      }
+      catch (\Exception) {
+        $this->message['error'][] = $this->t("Error while trying to change the group for '@title'.", $args);
       }
     }
 
-    foreach ($message as $type => $messageGroup) {
-      if ($messageGroup) {
-        $list = [
-          '#theme' => 'item_list',
-          '#items' => $messageGroup,
-        ];
-        $this->messenger()->addMessage($this->renderer->render($list), $type);
+    foreach (array_filter($this->message) as $type => $messages) {
+      foreach ($messages as $message) {
+        $this->messenger()->addMessage($message, $type);
       }
     }
 
     return [
       'message' => $this->t('Action processing results: @operation (@count).', [
         '@operation' => $this->getPluginDefinition()['label'],
-        '@count' => count($initialNids),
+        '@count' => $count,
       ]),
     ];
   }
@@ -265,7 +174,7 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
   /**
    * {@inheritdoc}
    */
-  public function buildConfigurationForm(array $form, FormStateInterface $formState): array {
+  public function buildConfigurationForm(array $form): array {
     /** @var \Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginBase $selection */
     $selection = $this->selectionPluginManager->createInstance('default:node', [
       'target_type' => 'node',
@@ -290,19 +199,18 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
   /**
    * {@inheritdoc}
    */
-  public function validateConfigurationForm(array &$form, FormStateInterface $formState): void {
+  public function validateConfigurationForm(array &$form, FormStateInterface $form_state): void {
     /** @var \Drupal\Core\Url $url */
-    $url = $formState->get('views_bulk_operations')['redirect_url'];
+    $url = $form_state->get('views_bulk_operations')['redirect_url'];
     if ($url->isRouted() && ($parameters = $url->getRouteParameters()) && !empty($parameters['node'])) {
-      /** @var \Drupal\node\NodeInterface $sourceEntity */
-      $sourceEntity = $this->entityTypeManager->getStorage('node')->load($parameters['node']);
-      if ($sourceEntity->id() === $formState->getValue('group')) {
-        $formState->setErrorByName('group', $this->t("The destination group is the same as the source group: %group. Please, select other destination group.", [
+      $sourceEntity = $this->getNodeStorage()->load($parameters['node']);
+      if ($sourceEntity->id() === $form_state->getValue('group')) {
+        $form_state->setErrorByName('group', $this->t("The destination group is the same as the source group: %group. Please, select other destination group.", [
           '%group' => $sourceEntity->label(),
         ]));
         return;
       }
-      $formState->setValue('source_entity', $sourceEntity);
+      $form_state->setValue('source_entity', $sourceEntity);
     }
     else {
       throw new \RuntimeException("The view bulk operation has been triggered from an invalid page.");
@@ -310,86 +218,155 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
   }
 
   /**
-   * Order the nodes, so that the custom page parent nodes are first.
+   * Prepares the list of nodes to be processed.
    *
-   * This is important in order to check if the parent of the 2nd tier custom
-   * pages were moved too. While we are iterating over all nodes, we are also
-   * collecting the UUIDs of 1st tier custom page OG menu links so that we can
-   * check later if each of the 2nd tier custom pages are linked to one of these
-   * parents. In this iteration we are also caching the relation between the
-   * custom page nodes and their corresponding OG menu link.
-   *
-   * @param \Drupal\node\NodeInterface[] $nodes
-   *   Nodes to be re-ordered.
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
+   *   The destination group.
    */
-  protected function reorder(array &$nodes): void {
-    $reordered = $others = [];
-    while ($nodes) {
-      $node = array_shift($nodes);
-      $nid = $node->id();
-      if ($node->bundle() === 'custom_page') {
-        /** @var \Drupal\menu_link_content\MenuLinkContentInterface $menu_link */
-        if ($menu_link = $this->getOgMenuLink($node)) {
-          if (!$menu_link->getParentId()) {
-            // It's a top custom page.
-            $this->topLevelCustomPages[] = $menu_link->uuid();
-            $reordered[$nid] = $node;
-          }
-          $this->pageMenuLinks[$nid] = $menu_link;
+  protected function prepareList(GroupInterface $group): void {
+    $args = [
+      '@group' => $group->label(),
+      ':group_url' => $group->toUrl()->toString(),
+    ];
+
+    foreach ($this->nodes as $nid => $node) {
+      $args = [
+        '@title' => $node->label(),
+        ':url' => $node->toUrl()->toString(),
+        '@type' => $node->get('type')->entity->label(),
+      ] + $args;
+
+      if ($node instanceof CustomPageInterface && $node->isGroupCodeOfConductPage()) {
+        $this->message['error'][] = [
+          [
+            '#markup' => $this->t('@type <a href=":url">@title</a> was not moved because it is set as the code of conduct.', $args),
+          ],
+        ];
+        unset($this->nodes[$nid]);
+      }
+      elseif ($node instanceof GroupMenuLinkInterface) {
+        foreach ($this->getGroupMenuLinkEntityChildren($node) as $child) {
+          $this->children[$nid][$child->id()] = $child;
+        }
+        $this->resolveParent($node);
+      }
+      elseif ($node instanceof ReleaseInterface) {
+        if ($group instanceof CollectionInterface) {
+          $this->message['error'][] = [
+            [
+              '#markup' => $this->t('@type <a href=":url">@title</a> was not moved as <a href=":group_url">@group</a> is a collection. Releases can only be moved to a different solution.', $args),
+            ],
+          ];
+          unset($this->nodes[$nid]);
+          continue;
+        }
+        $this->children[$nid] = $node->getDistributions();
+      }
+    }
+
+    // Check for release distributions whose release was not selected.
+    foreach ($this->nodes as $nid => $node) {
+      if ($node instanceof DistributionInterface && $node->getParent() instanceof ReleaseInterface && !isset($this->children[$nid])) {
+        $this->message['error'][] = [
+          [
+            '#markup' => $this->t('@type <a href=":url">@title</a> was not moved in <a href=":group_url">@group</a> as it is not a standalone distribution. Please, move the parent release instead.', $args),
+          ],
+        ];
+        unset($this->nodes[$nid]);
+      }
+    }
+  }
+
+  /**
+   * Recomputes parent menu links, if case.
+   *
+   * If the entity has a parent not selected by the user, the node link will be
+   * moved one level up, by assigning the parent of the parent as parent, until
+   * it reaches top-level or a node that is part of the user selection.
+   *
+   * @param \Drupal\joinup_group\Entity\GroupMenuLinkInterface $node
+   *   The node.
+   */
+  protected function resolveParent(GroupMenuLinkInterface $node): void {
+    foreach ($node->getGroup()->getGroupOgMenuInstances() as $ogMenuInstance) {
+      $ogMenuType = $ogMenuInstance->bundle();
+
+      $pluginId = GroupMenuLink::buildPluginId('node', $node->id(), $ogMenuType);
+      $definition = $this->menuLinkManager->getDefinition($pluginId);
+
+      if (empty($definition['parent'])) {
+        // It's a top-level menu item. Nothing to do.
+        continue;
+      }
+
+      $ancestors = array_keys($this->menuLinkManager->getParentIds($definition['parent']));
+
+      // The first parent is the current node.
+      array_shift($ancestors);
+      // Add the parent of the top-level menu item.
+      $ancestors[] = '';
+
+      while ($ancestors) {
+        $parentPluginId = array_shift($ancestors);
+
+        if (!$parentNid = GroupMenuLink::extractNodeId($parentPluginId)) {
+          // Parent is not a group menu link entity, such as a custom page; we
+          // move up in the hierarchy.
+          continue;
+        }
+
+        if (isset($this->nodes[$parentNid])) {
+          // The user selected this ancestor parent to be moved. This is the new
+          // parent of $node in the context of the current OG menu instance.
+          break;
+        }
+
+        // The parent is the root ('').
+      }
+
+      $definition['parent'] = $parentPluginId;
+      $this->menuLinkManager->updateDefinition($pluginId, $definition, FALSE);
+    }
+  }
+
+  /**
+   * Returns the list of child group menu links entities of the given entity.
+   *
+   * @param \Drupal\joinup_group\Entity\GroupMenuLinkInterface $entity
+   *   The entity for which to get the children.
+   *
+   * @return array<int|string, \Drupal\joinup_group\Entity\GroupMenuLinkInterface>
+   *   List of child entities.
+   */
+  protected function getGroupMenuLinkEntityChildren(GroupMenuLinkInterface $entity): array {
+    $nids = [];
+    foreach ($entity->getGroup()->getGroupOgMenuInstances() as $ogMenuInstance) {
+      $ids = $this->menuLinkManager->getChildIds(GroupMenuLink::buildPluginId('node', $entity->id(), $ogMenuInstance->bundle()));
+      foreach ($ids as $id) {
+        if ($nid = GroupMenuLink::extractNodeId($id)) {
+          $nids[] = $nid;
         }
       }
-      if (!isset($reordered[$nid])) {
-        $others[$nid] = $node;
-      }
     }
-    // Re-order the list.
-    $nodes = array_merge($reordered, $others);
+
+    if (!$nids) {
+      return [];
+    }
+
+    return $this->getNodeStorage()->loadMultiple(array_unique($nids));
   }
 
   /**
-   * Gets the OG menu link given a custom page.
+   * Returns the node storage.
    *
-   * @param \Drupal\node\NodeInterface $customPage
-   *   The custom page node.
-   *
-   * @return \Drupal\menu_link_content\MenuLinkContentInterface|null
-   *   The OG menu link.
+   * @return \Drupal\node\NodeStorageInterface
+   *   The node storage.
    */
-  protected function getOgMenuLink(NodeInterface $customPage): ?MenuLinkContentInterface {
-    $menuInstance = $this->getOgMenuInstance();
-    if (empty($menuInstance)) {
-      return NULL;
+  protected function getNodeStorage(): NodeStorageInterface {
+    if (!isset($this->nodeStorage)) {
+      $this->nodeStorage = $this->entityTypeManager->getStorage('node');
     }
-    $menuLinkStorage = $this->entityTypeManager->getStorage('menu_link_content');
-    $uri = 'entity:node/' . $customPage->id();
-    $mids = $menuLinkStorage->getQuery()->accessCheck(FALSE)
-      ->condition('bundle', 'menu_link_content')
-      ->condition('menu_name', "ogmenu-{$menuInstance->id()}")
-      ->condition('link.uri', $uri)
-      ->execute();
-    if ($mids) {
-      $mid = reset($mids);
-      return $menuLinkStorage->load($mid);
-    }
-    return NULL;
-  }
-
-  /**
-   * Gets the OG menu instance corresponding to the actual source entity.
-   *
-   * @return \Drupal\og_menu\OgMenuInstanceInterface|null
-   *   The OG menu instance.
-   */
-  protected function getOgMenuInstance(): ?OgMenuInstanceInterface {
-    if (!isset($this->ogMenuInstance)) {
-      $ogMenuStorage = $this->entityTypeManager->getStorage('ogmenu_instance');
-      $ogMenuInstances = $ogMenuStorage->loadByProperties([
-        'type' => 'navigation',
-        'og_audience' => $this->configuration['source_entity']->id(),
-      ]);
-      $this->ogMenuInstance = $ogMenuInstances ? reset($ogMenuInstances) : NULL;
-    }
-    return $this->ogMenuInstance;
+    return $this->nodeStorage;
   }
 
 }

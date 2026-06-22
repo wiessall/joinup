@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\contact_information\EventSubscriber;
 
+use Drupal\contact_information\Traits\ContactInfoInaccessibleTrait;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\EventSubscriber\HttpExceptionSubscriberBase;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\ParamConverter\ParamNotConvertedException;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\contact_information\Traits\ContactInfoInaccessibleTrait;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 

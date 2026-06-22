@@ -37,7 +37,6 @@ Feature: Subscribing to community content in solutions
       | Cities of Bulgaria   | bisera | discussion, event, news                |
       | Cities of Bulgaria   | kalin  | discussion, document, news             |
       | Cities of Bulgaria   | aleks  | discussion, document, news             |
-    And all message digests have been delivered
 
   Scenario: Receive a digest of content that is published in my solutions
     # Start on clean.
@@ -124,7 +123,7 @@ Feature: Subscribing to community content in solutions
       | Ruse |
 
     # Check that the messages are formatted correctly.
-    Given all message digests have been delivered
+    Given I deliver the message digest subscriptions
     And the group content subscription digest sent to hristo contains the following sections:
       | title                 |
       | Cities of Bulgaria    |

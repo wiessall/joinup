@@ -1,0 +1,20 @@
+uuid: 2f53c947-14fb-4491-955f-da7b0a97cf9d
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.oss_solution
+id: node.oss_solution.menu_link
+field_name: menu_link
+entity_type: node
+bundle: oss_solution
+label: 'Menu link'
+description: 'Computed menu link for the node (only available during node saving).'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: default
+  handler_settings: {  }
+field_type: entity_reference

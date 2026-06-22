@@ -5,15 +5,7 @@ dependencies:
   config:
     - node.type.solution
   module:
-    - joinup_stats
     - node
-third_party_settings:
-  joinup_stats:
-    matomo_method: ''
-    parameter_name: ''
-    parameter_method: ''
-    period: 7
-    type: null
 id: solution_settings
 label: 'Solution settings'
 description: ''

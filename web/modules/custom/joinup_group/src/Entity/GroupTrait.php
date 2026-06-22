@@ -17,6 +17,7 @@ use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og\OgRoleInterface;
+use Drupal\og_menu\OgMenuInstanceInterface;
 use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
 
@@ -26,6 +27,13 @@ use Drupal\user\UserInterface;
 trait GroupTrait {
 
   use OutdatedContentTrait;
+
+  /**
+   * Static cache for the group OG menu instances.
+   *
+   * @var array<int|string, \Drupal\og\OgMembershipInterface>
+   */
+  protected array $ogMenuInstances;
 
   /**
    * {@inheritdoc}
@@ -251,6 +259,40 @@ trait GroupTrait {
     }, $entity_type_manager->getStorage('og_membership')->loadMultiple($og_membership_ids)));
     sort($uids);
     return $entity_type_manager->getStorage('user')->loadMultiple($uids);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getGroupOgMenuInstances(?array $types = NULL): array {
+    if (!isset($this->ogMenuInstances)) {
+      $storage = \Drupal::entityTypeManager()->getStorage('ogmenu_instance');
+      $ids = $storage->getQuery()->accessCheck(FALSE)
+        ->condition(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $this->id())
+        ->execute();
+      $this->ogMenuInstances = $ids ? $storage->loadMultiple($ids) : [];
+    }
+
+    if ($types) {
+      return array_filter(
+        $this->ogMenuInstances,
+        fn(OgMenuInstanceInterface $ogMenuInstance): bool => in_array($ogMenuInstance->bundle(), $types, TRUE),
+      );
+    }
+
+    return $this->ogMenuInstances;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getGroupOgMenuInstance(string $type): OgMenuInstanceInterface {
+    $og_menu_instances = $this->getGroupOgMenuInstances([$type]);
+    $count = count($og_menu_instances);
+    if ($count !== 1) {
+      throw new \LogicException("Expected exactly one ogmenu_instance of type $type, got $count");
+    }
+    return reset($og_menu_instances);
   }
 
   /**

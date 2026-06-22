@@ -45,8 +45,8 @@ class Announcement extends Message implements AnnouncementInterface {
   /**
    * {@inheritdoc}
    */
-  public function getBody(): ?string {
-    return $this->get('body')->value;
+  public function getBody(): string {
+    return (string) $this->get('body')->value;
   }
 
   /**

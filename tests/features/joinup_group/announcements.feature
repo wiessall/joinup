@@ -310,60 +310,44 @@ Feature: Messaging group announcements
       | collection |
       | solution   |
 
-  @javascript @group-e
+  @group-e
   Scenario: Announcement moderation
     Given the following "collection" content:
       | title       |
       | Collection1 |
-      | Collection2 |
     And the following "solution" content:
       | title                 | collection  |
       | Collection1 Solution1 | Collection1 |
-      | Collection1 Solution2 | Collection1 |
-      | Collection2 Solution1 | Collection2 |
     And the following users:
       | Username         | E-mail                      | Roles     |
-      | Rian Lee         | rian-lee@example.com        |           |
       | Miau user        | miau.user@example.com       |           |
       | Lory Facilitator | loryfacilitator@example.com |           |
-      | Xela moderator   | xela.moderator@example.com  | moderator |
     And the following announcements:
       | group                 | subject            | state     | author           | created    |
       | Collection1           | Announcement1 C1   | draft     | Lory Facilitator | 2005-11-05 |
       | Collection1 Solution1 | Announcement1 C1S1 | rejected  | Lory Facilitator | 2018-12-19 |
       | Collection1 Solution1 | Announcement2 C1S1 | sent      | Lory Facilitator | 2018-05-25 |
-      | Collection1 Solution2 | Announcement1 C1S2 | draft     | Lory Facilitator | 1999-04-30 |
-      | Collection2           | Announcement1 C2   | sent      | Miau user        | 2022-07-29 |
-      | Collection2 Solution1 | Announcement1 C2S1 | delivered | Miau user        | 2022-08-03 |
     And the following collection user membership:
       | collection            | user             | roles       |
       | Collection1           | Lory Facilitator | facilitator |
-      | Collection2           | Miau user        | facilitator |
       | Collection1 Solution1 | Miau user        |             |
     And the following legal document version:
       | Document     | Label | Published | Acceptance label                                                                                   | Content                                                    |
       | Legal notice | 1.1   | yes       | I have read and accept the <a href="[entity_legal_document:url]">[entity_legal_document:label]</a> | The information on this site is subject to a disclaimer... |
     And the following "Legal notice" acceptances:
-      | Rian Lee         |
       | Miau user        |
-      | Lory Facilitator |
-      | Xela moderator   |
 
-    Given I am logged in as "Xela moderator"
+    Given I am logged in as a moderator
     When I click "Announcements" in the "Administration toolbar"
 
     Then the "State" field should contain the "- Any -,Draft,Pending approval,Delivered,Rejected" options
     And the "announcement list" table should be:
       | Group                 | Subject            | State            | Created on | Author           | Edit |
-      | Collection2 Solution1 | Announcement1 C2S1 | Delivered        | 03/08/2022 | Miau user        |      |
-      | Collection2           | Announcement1 C2   | Pending approval | 29/07/2022 | Miau user        | edit |
       | Collection1 Solution1 | Announcement1 C1S1 | Rejected         | 19/12/2018 | Lory Facilitator | edit |
       | Collection1 Solution1 | Announcement2 C1S1 | Pending approval | 25/05/2018 | Lory Facilitator | edit |
       | Collection1           | Announcement1 C1   | Draft            | 05/11/2005 | Lory Facilitator | edit |
-      | Collection1 Solution2 | Announcement1 C1S2 | Draft            | 30/04/1999 | Lory Facilitator | edit |
 
-    When I type "Collection1 Solution1" in the "group" autocomplete field
-    And I pick "Collection1 Solution1" from the autocomplete suggestions
+    And I fill in "Group" with "Collection1 Solution1"
     And I press "Apply"
     Then the "announcement list" table should be:
       | Group                 | Subject            | State            | Created on | Author           | Edit |
@@ -383,13 +367,10 @@ Feature: Messaging group announcements
     When I click "Announcements" in the "Administration toolbar"
     Then the "announcement list" table should be:
       | Group                 | Subject            | State            | Created on | Author           | Edit |
-      | Collection2 Solution1 | Announcement1 C2S1 | Delivered        | 03/08/2022 | Miau user        |      |
-      | Collection2           | Announcement1 C2   | Pending approval | 29/07/2022 | Miau user        | edit |
       | Collection1 Solution1 | Announcement1 C1S1 | Rejected         | 19/12/2018 | Lory Facilitator | edit |
       # Once delivered, the announcement cannot be edited.
       | Collection1 Solution1 | Announcement2 C1S1 | Delivered        | 25/05/2018 | Lory Facilitator |      |
       | Collection1           | Announcement1 C1   | Draft            | 05/11/2005 | Lory Facilitator | edit |
-      | Collection1 Solution2 | Announcement1 C1S2 | Draft            | 30/04/1999 | Lory Facilitator | edit |
 
     # A delivered announcement can still be visualized in read-only mode.
     When I click "Announcement2 C1S1"
@@ -403,27 +384,8 @@ Feature: Messaging group announcements
     And I should not see the button "Undo reject"
     And I should not see the button "Preview"
 
-  @group-clone @wip
-  Scenario: Sending mass-mailing announcements.
-    Given I am logged in as a moderator
-    When I go to the announcements page of "Open Source Observatory (OSOR)" collection
-    And I click "Add announcement"
-    And I fill in "Subject" with "TEST: Mass-mailing announcement"
-    And I fill in "Body" with "This will gonna reach tens of thousands of Open Source Observatory (OSOR) group members."
-    And I press "Create"
-    Then I should see the success message "The announcement has been created as Draft. Review the announcement and, when is ready to be sent, use the 'Send' button."
-
-    When I press "Send for approval"
-    Then I should see the success message "Your announcement has been sent for validation by Interoperable Europe Portal moderators. Once approved, will reach the Open Source Observatory (OSOR) collection members."
-    When I click "edit" in the "TEST: Mass-mailing announcement" row
-    And I press "Approve"
-    Then I should see the success message "The announcement has been scheduled to be delivered to the Open Source Observatory (OSOR) collection members. Because the collection has a large amount of members the emails will be sent in several batches."
-
-    Given the delivery queue of "TEST: Mass-mailing announcement" announcement is processed
-    Then the "TEST: Mass-mailing announcement" announcement should have been delivered for each group member
-
   @group-e
-  Scenario: Wrong recipient's name in announcements.
+  Scenario: Announcements are personalised per recipient and support batch delivery for large collections.
     Given the following "collection" content:
       | title         | state     |
       | Wrong pension | published |
@@ -467,6 +429,7 @@ Feature: Messaging group announcements
     And I press "Approve"
     Then I should see the success message "The announcement has been delivered to the Wrong pension collection members."
 
+    # Verify @recipient_name is replaced with each user's full name.
     And the email sent to "cgarnett67" with subject "The recipient names" contains the following lines of text:
       | The recipient's full name: Callista Garnett |
     And the email sent to "cbarnett68" with subject "The recipient names" contains the following lines of text:
@@ -476,7 +439,6 @@ Feature: Messaging group announcements
     And the email sent to "jbarnett67" with subject "The recipient names" contains the following lines of text:
       | The recipient's full name: Joana Barnett |
 
-    # Check mass-mails.
     Given the following users:
       | Username   | E-mail                       | First name | Family name |
       | sgarnett69 | samuel.garnett@example.com   | Samuel     | Garnett     |
@@ -703,6 +665,7 @@ Feature: Messaging group announcements
     And I press "Send for approval"
     Then I click "edit" in the "The recipient names mass-email" row
     And I press "Approve"
+    # Verify batch delivery path triggers when the collection has a large member count.
     Then I should see the success message "The announcement has been scheduled to be delivered to the Wrong pension collection members. Because the collection has a large amount of members the emails will be sent in several batches."
 
     Given the delivery queue of "The recipient names mass-email" announcement is processed

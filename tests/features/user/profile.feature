@@ -21,9 +21,34 @@ Feature: User profile
 
     When I click "Edit"
     Then the following fields should be present "Email, First name"
-    And the following fields should be present "Family name, Photo, Country of origin, Country of residence, Function of administration, Work location, Professional domain, Business title"
+    And the following fields should be present "Family name, Photo, Country of origin, Site language, Country of residence, Function of administration, Work location, Professional domain, Business title"
     And the following fields should be present "Facebook, X, LinkedIn, GitHub, SlideShare, Youtube, Vimeo"
     And the following fields should not be present "Time zone"
+    And the "Site language" select should contain the following options:
+      | English    |
+      | Bulgarian  |
+      | Croatian   |
+      | Czech      |
+      | Danish     |
+      | Dutch      |
+      | Estonian   |
+      | Finnish    |
+      | French     |
+      | German     |
+      | Greek      |
+      | Hungarian  |
+      | Irish      |
+      | Italian    |
+      | Latvian    |
+      | Lithuanian |
+      | Maltese    |
+      | Polish     |
+      | Portuguese |
+      | Romanian   |
+      | Slovak     |
+      | Slovenian  |
+      | Spanish    |
+      | Swedish    |
     And the available options in the "Country of residence" select should not include the "European Union"
     And the available options in the "Work location" select should not include the "European Union"
     And I should see the text "Username"
@@ -366,7 +391,7 @@ Feature: User profile
     And I press "Save"
 
     When I am an anonymous user
-    Then the "lang" attribute of the page should be "en"
+    Then the "lang" attribute of the page should be "fr"
 
     # After login, the user is redirected to their preferred language.
     When I am logged in as "Pierre Martin"

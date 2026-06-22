@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_security\ExistingSite;
 
+use Drupal\comment\Entity\Comment;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\comment\Entity\Comment;
 use Drupal\editor\Entity\Editor;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\file\Entity\File;
@@ -15,6 +14,7 @@ use Drupal\file\FileInterface;
 use Drupal\file_visibility\FileVisibility;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\og\Entity\OgRole;
+use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\track_usage\Recorder;
 use PHPUnit\Framework\Attributes\Group;
 

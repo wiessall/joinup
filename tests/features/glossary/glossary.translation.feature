@@ -61,3 +61,46 @@ Feature: Translating glossary
     Given I am logged in as an authenticated
     When I visit the translation overview form of the "Simple" glossary
     Then the response status code should be 403
+
+  Scenario: The glossary index groups terms by their transliterated initial, per the active language.
+    Given the following "collection" content:
+      | title         |
+      | Data Glossary |
+    And the following "glossary" content:
+      | title       | definition                                           | collection    |
+      | Power       | The rate at which energy is transferred.             | Data Glossary |
+      | Eurostat    | The statistical office of the European Union.        | Data Glossary |
+      | Øresund     | The strait separating Denmark and Sweden.            | Data Glossary |
+      | Σύστημα     | The Greek word for system.                           | Data Glossary |
+      | 3D printing | Additive manufacturing of three-dimensional objects. | Data Glossary |
+    And the following glossary entity translations:
+      | source | language | title   |
+      | Power  | fr       | Énergie |
+    And I am logged in as a user with the "moderator" role
+
+    # Test glossary output in EN.
+    When I go to the homepage of the "Data Glossary" collection
+    And I click "Glossary"
+    Then I should see the glossary navigator "3 E O P Σ"
+    And the glossary should be grouped as:
+      | letter | terms       |
+      | 3      | 3D printing |
+      | E      | Eurostat    |
+      | O      | Øresund     |
+      | P      | Power       |
+      | Σ      | Σύστημα     |
+
+    # Test glossary output in FR.
+    When I switch to the "fr" language
+    Then I should see the glossary navigator "3 E O Σ"
+    And the glossary should be grouped as:
+      | letter | terms             |
+      | 3      | 3D printing       |
+      | E      | Énergie, Eurostat |
+      | O      | Øresund           |
+      | Σ      | Σύστημα           |
+    But I should not see the link "Power"
+    When I click "E"
+    Then I should see the link "Énergie"
+    And I should see the link "Eurostat"
+    But I should not see the link "Øresund"

@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\ExistingSite;
 
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Tests\assessments\Traits\AssessmentEntityCreationTrait;
-use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\Entity\Assessment;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\AssessmentStatement;
 use Drupal\assessments\Entity\BindingRequirementParagraph;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
+use Drupal\Tests\assessments\Traits\AssessmentEntityCreationTrait;
+use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 

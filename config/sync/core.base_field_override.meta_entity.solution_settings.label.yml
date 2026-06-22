@@ -1,0 +1,18 @@
+uuid: 77054790-96c0-4252-a271-8a1698118c6a
+langcode: en
+status: true
+dependencies:
+  config:
+    - meta_entity.type.solution_settings
+id: meta_entity.solution_settings.label
+field_name: label
+entity_type: meta_entity
+bundle: solution_settings
+label: Title
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

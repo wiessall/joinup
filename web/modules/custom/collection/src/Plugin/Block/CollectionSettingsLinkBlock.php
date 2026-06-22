@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\collection\Plugin\Block;
 
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\og\OgContextInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 

@@ -2171,15 +2171,16 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Runs a specific cron hook implementation.
+   * Runs a specific ultimate_cron job by machine name.
    *
-   * @param string $module
-   *   The implementer module of the cron hook.
+   * @param string $jobId
+   *   The ultimate_cron job machine name.
    */
-  #[When('I run the :module cron')]
-  public function iRunSpecificCron(string $module): void {
-    $this->assertCondition(function_exists($cronFunction = "{$module}_cron"), "The cron function '{$module}_cron' does not exist.");
-    call_user_func($cronFunction);
+  #[Given('I run the :jobId ultimate_cron job')]
+  public function iRunUltimateCronJob(string $jobId): void {
+    $job = \Drupal::entityTypeManager()->getStorage('ultimate_cron_job')->load($jobId);
+    $this->assertCondition($job !== NULL, "The ultimate_cron job '{$jobId}' does not exist.");
+    $job->run('Launched from Behat');
   }
 
   /**
@@ -2207,6 +2208,21 @@ class FeatureContext extends RawDrupalContext {
     $queue = \Drupal::queue($queueName);
     $queue->deleteQueue();
     $this->assertSameValues(0, $queue->numberOfItems());
+  }
+
+  /**
+   * Selects the radio button in a table row identified by its text content.
+   *
+   * @param string $rowText
+   *   Text contained in the row. Must be unique.
+   */
+  #[When('I click the radio button in the :rowText row')]
+  public function clickRadioButtonInRow(string $rowText): void {
+    $radio = $this->getRowByRowText($rowText)->find('css', 'input[type="radio"]');
+    if (!$radio) {
+      throw new \RuntimeException(sprintf('No radio button found in the "%s" row.', $rowText));
+    }
+    $radio->selectOption((string) $radio->getAttribute('value'));
   }
 
 }

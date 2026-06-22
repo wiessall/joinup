@@ -57,6 +57,29 @@ Feature: Views display translated entities correctly.
     And I click "Glossary"
     Then I should see the text "Alphabète"
 
+  Scenario: A collection content listing falls back to untranslated content and shows translated titles when available.
+    Given the following "collection" content:
+      | title        |
+      | Fallback Hub |
+    And the following "news" content:
+      | title             | headline   | body      | topic | collection   |
+      | Untranslated News | Just facts | News body | Info  | Fallback Hub |
+      | Translated News   | Headlines  | News body | Info  | Fallback Hub |
+    And the following news entity translations:
+      | source          | language | title              |
+      | Translated News | fr       | Actualité traduite |
+
+    When I am an anonymous user
+    And I go to the homepage of the "Fallback Hub" collection
+    Then I should see the "Untranslated News" tile
+    And I should see the "Translated News" tile
+    But I should not see the "Actualité traduite" tile
+
+    When I go to the "fr" version of the "Fallback Hub" collection
+    Then I should see the "Untranslated News" tile
+    And I should see the "Actualité traduite" tile
+    But I should not see the "Translated News" tile
+
   # covers assessments_reports view.
   Scenario: Assessment reports page lists translated assessment entities and falls back to the original language.
     Given the assessments collection exists

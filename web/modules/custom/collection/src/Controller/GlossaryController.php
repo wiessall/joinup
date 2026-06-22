@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace Drupal\collection\Controller;
 
+use Drupal\collection\Entity\CollectionInterface;
+use Drupal\collection\Entity\GlossaryTermInterface;
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Url;
-use Drupal\collection\Entity\CollectionInterface;
-use Drupal\node\NodeInterface;
 use Drupal\views\Views;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides controllers for Joinup glossary functionality.
@@ -25,6 +27,19 @@ class GlossaryController extends ControllerBase {
    * @var string[]
    */
   protected array $letters;
+
+  public function __construct(
+    protected readonly EntityRepositoryInterface $entityRepository,
+  ) {}
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container): static {
+    return new static(
+      $container->get('entity.repository'),
+    );
+  }
 
   /**
    * Provides an access callback for the Glossary route.
@@ -134,8 +149,9 @@ class GlossaryController extends ControllerBase {
         $this->letters = array_values(
           array_unique(
             array_map(
-              function (NodeInterface $term): string {
-                return mb_strtoupper(substr(trim($term->label()), 0, 1));
+              function (GlossaryTermInterface $term): string {
+                $term = $this->entityRepository->getTranslationFromContext($term);
+                return $term->getGlossaryLetter();
               }, $storage->loadMultiple($nids)
             )
           )

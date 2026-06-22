@@ -10,13 +10,13 @@ use Behat\Mink\Exception\ExpectationException;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
-use Drupal\collection\Entity\CollectionInterface;
-use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\OgTrait;
@@ -24,6 +24,7 @@ use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_community_content\CommunityContentHelper;
+use Drupal\joinup_group\Plugin\Menu\GroupMenuLink;
 use Drupal\og\OgGroupAudienceHelper;
 use Drupal\og\OgRoleInterface;
 use Drupal\user\Entity\User;
@@ -234,20 +235,18 @@ class CollectionContext extends RawDrupalContext {
    */
   #[Given('(the following )custom page(s) :menu_type menu structure for the :group_label :group_bundle:')]
   public function givenCollectionMenuStructure(TableNode $menu_table, string $menu_type, string $group_label, string $group_bundle): void {
-    $group = $this->getEntityByLabel('node', $group_label, $group_bundle);
-    $menu_link_manager = \Drupal::getContainer()->get('plugin.manager.menu.link');
+    $menu_link_manager = \Drupal::service('plugin.manager.menu.link');
     foreach ($menu_table->getColumnsHash() as $values) {
-      if (!empty($values['parent'])) {
-        $parent_link = $this->getMenuLinkByTitle($values['parent'], $group->id(), $menu_type);
-        $values['parent'] = $parent_link->getPluginId();
-      }
+      $page = $this->getEntityByLabel('node', $values['title'], 'custom_page');
 
-      if (!empty($values['enabled'])) {
-        $values['enabled'] = (int) ($values['enabled'] === 'yes');
-      }
+      $plugin_id = GroupMenuLink::buildPluginId('node', $page->id(), $menu_type);
+      $definition = $menu_link_manager->getDefinition($plugin_id);
 
-      $child_link = $this->getMenuLinkByTitle($values['title'], $group->id(), $menu_type);
-      $menu_link_manager->updateDefinition($child_link->getPluginId(), $values);
+      $definition['enabled'] = ($values['enabled'] ??= 'yes') === 'yes';
+      $definition['weight'] = (int) ($values['weight'] ?? 0);
+      $parent = !empty($values['parent']) ? $this->getEntityByLabel('node', $values['parent'], 'custom_page') : NULL;
+      $definition['parent'] = $parent ? GroupMenuLink::buildPluginId('node', $parent->id(), $menu_type) : '';
+      $menu_link_manager->updateDefinition($plugin_id, $definition, FALSE);
     }
   }
 
@@ -470,6 +469,36 @@ class CollectionContext extends RawDrupalContext {
     $actual_navigator = $navigator_node->getText();
     if ($actual_navigator !== $expected_navigator) {
       throw new ExpectationException("Expected navigator '{$expected_navigator}' but found '{$actual_navigator}'.", $this->getSession()->getDriver());
+    }
+  }
+
+  /**
+   * Asserts the letter groups and their terms in the glossary listing.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   A table with a 'letter' column and a comma-separated 'terms' column.
+   *
+   * @throws \Behat\Mink\Exception\ExpectationException
+   *   When a group is missing or contains unexpected terms.
+   */
+  #[Then('the glossary should be grouped as:')]
+  public function assertGlossaryGroups(TableNode $table): void {
+    $page = $this->getSession()->getPage();
+    foreach ($table->getHash() as $row) {
+      $expected = array_map('trim', explode(',', $row['terms']));
+      sort($expected);
+
+      // Term links in the grid that follows the group's letter heading.
+      $links = $page->findAll('xpath', "//*[contains(@class, 'view-glossary')]"
+        . "//h2[normalize-space() = '{$row['letter']}']"
+        . "/following-sibling::div[contains(@class, 'views-view-grid')][1]"
+        . "//*[contains(@class, 'views-field-title-1')]//a");
+      $actual = array_map(static fn($link): string => trim($link->getText()), $links);
+      sort($actual);
+
+      if ($actual !== $expected) {
+        throw new ExpectationException(sprintf("Glossary group '%s' contains [%s] but expected [%s].", $row['letter'], implode(', ', $actual), implode(', ', $expected)), $this->getSession()->getDriver());
+      }
     }
   }
 

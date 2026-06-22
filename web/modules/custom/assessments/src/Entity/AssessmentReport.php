@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity;
 
-use Drupal\Core\Entity\EntityPublishedInterface;
-use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\AssessmentStatementInterface;
+use Drupal\Core\Entity\EntityPublishedInterface;
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;

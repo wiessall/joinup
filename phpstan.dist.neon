@@ -18,5 +18,3 @@ parameters:
         # Behat contexts are instantiated by Behat, not Drupal's container, so DI does not apply.
         - identifier: globalDrupalDependencyInjection.useDependencyInjection
           path: tests/src/Context/*
-    excludePaths:
-        - web/modules/custom/joinup_stats/src/Event/Subscriber/RefreshCachedFieldsEventSubscriber.php

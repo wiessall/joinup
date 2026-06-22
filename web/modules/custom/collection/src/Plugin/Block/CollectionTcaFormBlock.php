@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\collection\Plugin\Block;
 
+use Drupal\collection\Form\CollectionTcaForm;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
@@ -11,7 +12,6 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\collection\Form\CollectionTcaForm;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

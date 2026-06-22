@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup_private_message\Functional;
 
 use Drupal\Core\Url;
-use Drupal\Tests\BrowserTestBase;
 use Drupal\private_message\Entity\PrivateMessage;
+use Drupal\Tests\BrowserTestBase;
 use Drupal\user\UserInterface;
 use PHPUnit\Framework\Attributes\Group;
 

@@ -1,0 +1,29 @@
+uuid: 2cfbf3f2-57c0-4e27-9c32-ac1041a1bc38
+langcode: en
+status: true
+dependencies:
+  module:
+    - tmgmt
+title: 'Purge finished jobs and submit pending translations'
+id: tmgmt_cron
+weight: 0
+module: tmgmt
+callback: 'tmgmt#cron'
+scheduler:
+  id: simple
+  configuration:
+    rules:
+      - '* * * * *'
+launcher:
+  id: serial
+  configuration:
+    timeouts:
+      lock_timeout: 3600
+    launcher:
+      thread: 0
+logger:
+  id: database
+  configuration:
+    method: '3'
+    expire: 1209600
+    retain: 1000

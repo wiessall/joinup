@@ -9,13 +9,13 @@ use Drupal\Component\Utility\Variable;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
-use Drupal\Tests\BrowserTestBase;
-use Drupal\Tests\node\Traits\NodeCreationTrait;
 use Drupal\eu_oss_catalogue\Entity\OssContactInterface;
 use Drupal\eu_oss_catalogue\Entity\OssContractorInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\node\NodeInterface;
+use Drupal\Tests\BrowserTestBase;
+use Drupal\Tests\node\Traits\NodeCreationTrait;
 use Drush\TestTraits\DrushTestTrait;
 
 /**

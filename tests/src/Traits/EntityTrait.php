@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Traits;
 
-use Drupal\Core\Entity\ContentEntityInterface;
+use Behat\Gherkin\Node\TableNode;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\menu_link_content\MenuLinkContentInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Driver\Entity\EntityStub;
 
 /**
  * Helper methods to deal with entities.
@@ -115,67 +116,6 @@ trait EntityTrait {
   }
 
   /**
-   * Returns a MenuLinkContent entity from the database.
-   *
-   * The function assumes that there are not duplicate entries with the same
-   * title so it returns the first of the results.
-   *
-   * @param string $title
-   *   The label of the menu item.
-   * @param string $group_id
-   *   The group ID of the menu item.
-   * @param string $menu_type
-   *   The bundle of the OG menu instance.
-   *
-   * @return \Drupal\menu_link_content\MenuLinkContentInterface
-   *   The MenuLinkContent entity.
-   *
-   * @throws \Exception
-   *    Thrown when the menu item is not found.
-   */
-  public function getMenuLinkByTitle(string $title, string $group_id, string $menu_type): MenuLinkContentInterface {
-    $entity_type_manager = \Drupal::getContainer()->get('entity_type.manager');
-    $menu_helper = \Drupal::getContainer()->get('joinup_menu.menu_helper');
-    $navigation_menu = $menu_helper->getOgMenuByGroup($menu_type, $group_id);
-    $menu_links = $entity_type_manager->getStorage('menu_link_content')->loadByProperties(
-      [
-        'title' => $title,
-        'menu_name' => 'ogmenu-' . $navigation_menu->id(),
-      ]
-    );
-    if (empty($menu_links)) {
-      throw new \Exception("The menu link with title '{$title}' was not found.");
-    }
-    // If there are more that one results, we pick up the newest in order to
-    // avoid leftovers produced by previous tests.
-    krsort($menu_links);
-    /** @var \Drupal\menu_link_content\MenuLinkContentInterface $menu_link */
-    $menu_link = reset($menu_links);
-
-    return $menu_link;
-  }
-
-  /**
-   * Forces a reindex of the entity in search_api.
-   *
-   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
-   *   The entity to reindex.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   *   Thrown if the entity type doesn't exist.
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   *   Thrown when an entity with a non-existing storage is passed.
-   */
-  protected function forceSearchApiReindex(ContentEntityInterface $entity): void {
-    // Invalidate any static cache, so that all computed fields are calculated
-    // with updated values (e.g. the "collection" computed field of solutions).
-    \Drupal::entityTypeManager()->getStorage($entity->getEntityTypeId())->resetCache([$entity->id()]);
-    /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $content_tracking_manager */
-    $content_tracking_manager = \Drupal::service('search_api.entity_datasource.tracking_manager');
-    $content_tracking_manager->trackEntityChange($entity);
-  }
-
-  /**
    * Returns the URI of the given entity, prefixed with the base path.
    *
    * Since Behat tests are run from the CLI the base path (which is normally
@@ -201,6 +141,45 @@ trait EntityTrait {
   protected function getEntityUri(EntityInterface $entity, string $rel = 'canonical', array $options = []): string {
     $base_path = rtrim(base_path(), '/');
     return $base_path . $entity->toUrl($rel, $options)->toString();
+  }
+
+  /**
+   * Updates an entity.
+   *
+   * @codingStandardsIgnoreStart
+   *  Table format:
+   *  | title               | Sample solution   |
+   *  | description         | A sample solution |
+   *  | ...                 | ...               |
+   * @codingStandardsIgnoreEnd
+   *
+   * @param \Drupal\Core\Entity\FieldableEntityInterface $entity
+   *   The the entity to update.
+   * @param \Behat\Gherkin\Node\TableNode $fieldsTable
+   *   The values of the fields to update.
+   */
+  protected function doUpdateEntity(FieldableEntityInterface $entity, TableNode $fieldsTable): void {
+    $values = $fieldsTable->getRowsHash();
+    $values['type'] = $entity->bundle();
+    $stub = new EntityStub($entity->getEntityTypeId(), $entity->bundle(), $values);
+    $this->parseEntityFields($stub);
+    foreach (array_keys($fieldsTable->getRowsHash()) as $key) {
+      $value = $stub->getValue($key);
+      if ($key === 'changed' && !is_numeric($value)) {
+        $value = strtotime($value);
+      }
+      if ($entity->getFieldDefinition($key)->getType() === 'entity_reference') {
+        $targetEntityType = $entity->getFieldDefinition($key)->getSetting('target_type');
+        foreach ($value as $delta => $entry) {
+          $targetEntity = \Drupal::entityTypeManager()->getStorage($targetEntityType)->loadByProperties(['name' => $entry]);
+          \assert($targetEntity, "No entity found for $key = $entry");
+          $targetEntity = reset($targetEntity);
+          $value[$delta] = ['target_id' => $targetEntity->id()];
+        }
+      }
+      $entity->set($key, $value);
+    }
+    $entity->save();
   }
 
 }

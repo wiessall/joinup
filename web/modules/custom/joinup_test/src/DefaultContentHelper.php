@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_test;
 
+use Drupal\assessments\AssessmentInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\assessments\AssessmentInterface;
+use Drupal\interoperable_europe\InteroperableEuropeAcademyInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\pathauto\PathautoState;
 
@@ -119,6 +120,27 @@ final class DefaultContentHelper {
         ],
         'path' => [
           'alias' => '/collection/solutions-mentioned-assessment',
+          'pathauto' => PathautoState::SKIP,
+        ],
+      ],
+      // Interoperable Europe Academy collection, with the solution "courses".
+      InteroperableEuropeAcademyInterface::GROUP_UUID => [
+        'title' => 'Interoperable Europe Academy',
+        'uri' => 'http://data.europa.eu/w21/1cc1b2c4-f65a-49cb-9a31-d5a49f283ea3',
+        'field_state' => 'published',
+        // This was 1718968022.
+        'created' => strtotime('2024-06-21 11:07:02'),
+        // This was 1768213995.
+        'changed' => strtotime('2026-01-12 10:33:15'),
+        // This was 1732547158.
+        'published_at' => strtotime('2024-11-25 15:05:58'),
+        'abstract' => 'This collection is dedicated to Interoperable Europe Academy, which offers online courses in the subject of interoperability in the public sector.',
+        'description' => [
+          'value' => "<p><strong>The Interoperable Europe Academy (IOPEU Academy)</strong> is an educational initiative promoted by the European Commission. Its main objective is to boost public administrations' advanced digital skills in the interoperability field. To do so, it offers all online, self-paced Massive Open Online Courses (MOOCs). These courses are available to everyone interested in interoperability, but specially targeted to public servants engaged in digital transformation in order to support policy, service delivery and impact evaluation.</p>",
+          'format' => 'content_editor',
+        ],
+        'path' => [
+          'alias' => '/collection/interoperable-europe-academy',
           'pathauto' => PathautoState::SKIP,
         ],
       ],

@@ -44,6 +44,7 @@ dependencies:
     - joinup_featured
     - joinup_group
     - joinup_group_content_management
+    - joinup_i18n
     - joinup_legal
     - joinup_licence
     - joinup_log
@@ -307,6 +308,7 @@ permissions:
   - 'rebuild node access permissions'
   - 'replicate entities'
   - 'revert all sitewide alert revisions'
+  - 'schedule translation'
   - 'translate any entity'
   - 'translate interface'
   - 'translate menu_link_content'

@@ -7,8 +7,6 @@
 
 declare(strict_types=1);
 
-use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\search_api\Query\ConditionGroup;
 use Drupal\search_api\Query\QueryInterface;
@@ -37,20 +35,6 @@ function joinup_i18n_language_switch_links_alter(array &$links, string $type, Ur
 
   // Sort by langcode.
   ksort($links);
-}
-
-/**
- * Implements hook_entity_insert().
- */
-function joinup_i18n_entity_insert(EntityInterface $entity): void {
-  if (!$entity instanceof ContentEntityInterface || !$entity->isTranslatable()) {
-    return;
-  }
-
-  \Drupal::queue('joinup_i18n:translation_alias')->createItem([
-    'entity_type_id' => $entity->getEntityTypeId(),
-    'entity_id' => $entity->id(),
-  ]);
 }
 
 /**
