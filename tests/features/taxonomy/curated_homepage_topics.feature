@@ -13,6 +13,10 @@ Feature:
     And I should not see the following lines of text:
       | Relations            |
       | Revision information |
+    When I press "Save"
+    Then I should see the following inline form error messages:
+      | error messages                  |
+      | Abstract field is required.     |
 
   Scenario: Show list of topics and check a given parent.
     Given I am logged in as a moderator
