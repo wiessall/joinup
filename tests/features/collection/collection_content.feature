@@ -28,7 +28,7 @@ Feature: Collection content
     Given I go to the homepage of the "Turin Egyptian Collection" collection
     Then I should see the link "1 Solution" in the "Header" region
 
-    Given the following solution content:
+    Given the following "solution" content:
       | title              | collection                | state     |
       | Published Solution | Turin Egyptian Collection | published |
       | Archived Solution  | Turin Egyptian Collection | archived  |

@@ -6,11 +6,17 @@ dependencies:
     - field.storage.paragraph.paragraph_image
     - paragraphs.paragraphs_type.image
   module:
+    - content_translation
     - image
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
+  content_translation:
+    translation_sync:
+      file: file
+      alt: '0'
+      title: '0'
 id: paragraph.image.paragraph_image
 field_name: paragraph_image
 entity_type: paragraph
@@ -18,7 +24,7 @@ bundle: image
 label: Image
 description: ''
 required: true
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:

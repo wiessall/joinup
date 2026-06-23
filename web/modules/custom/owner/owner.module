@@ -10,7 +10,6 @@ declare(strict_types=1);
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -107,26 +106,6 @@ function owner_node_access(NodeInterface $entity, string $operation, AccountInte
     ]);
     return AccessResult::forbiddenIf($entity->isReferencedByGroups())
       ->addCacheTags($tags);
-  }
-
-  if ($operation === 'view') {
-    $cacheability = new CacheableMetadata();
-    $cacheability->addCacheContexts(['user.roles:anonymous']);
-
-    // For anonymous users, deny access to the canonical route.
-    if ($account->isAnonymous()) {
-      $route_match = \Drupal::routeMatch();
-      $cacheability->addCacheContexts(['route']);
-      if ($route_match->getRouteName() === 'entity.node.canonical') {
-        $route_entity = $route_match->getParameter('node');
-        if ($route_entity instanceof OwnerInterface && $route_entity->id() === $entity->id()) {
-          return AccessResult::forbidden('Anonymous users should not see the owner canonical route.')
-            ->addCacheableDependency($cacheability);
-        }
-      }
-    }
-
-    return AccessResult::neutral()->addCacheableDependency($cacheability);
   }
 
   return AccessResult::neutral();

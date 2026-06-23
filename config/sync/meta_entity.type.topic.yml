@@ -5,15 +5,7 @@ dependencies:
   config:
     - taxonomy.vocabulary.topic
   module:
-    - joinup_stats
     - taxonomy
-third_party_settings:
-  joinup_stats:
-    matomo_method: ''
-    parameter_name: ''
-    parameter_method: ''
-    period: 7
-    type: null
 id: topic
 label: Topic
 description: ''

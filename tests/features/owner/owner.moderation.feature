@@ -33,7 +33,7 @@ Feature: Owner moderation
     And I select "Company" options from "Type"
     And I select "Belgium" from "Country"
     When I press "Create owner"
-    Then I should see "EU healthy movement"
+    Then I should see the text "EU healthy movement"
 
     And I fill in "Alternative text" with "Alternative logo text"
 
@@ -76,7 +76,7 @@ Feature: Owner moderation
     And the current workflow state should be "Needs update"
     And I should not see the link "Delete"
     # Do the changes.
-    When I check "Company"
+    When I check "Industry consortium"
     And I press "Update"
     Then I should see the heading "EU healthy group"
 
@@ -112,7 +112,7 @@ Feature: Owner moderation
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Good food eaters"
     And I press "Add owner"
-    Then I should see "Good food eaters"
+    Then I should see the text "Good food eaters"
     # Keep the collection as proposed.
     And I press "Propose"
     Then I should see the heading "The healthy food European project"

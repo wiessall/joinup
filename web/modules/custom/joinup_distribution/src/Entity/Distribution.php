@@ -15,8 +15,6 @@ use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\joinup_solution\Entity\SolutionContentTrait;
 use Drupal\joinup_solution\Entity\SolutionInterface;
-use Drupal\joinup_stats\Entity\DownloadCountAwareInterface;
-use Drupal\joinup_stats\Entity\DownloadCountAwareTrait;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\node\Entity\Node;
@@ -29,7 +27,6 @@ class Distribution extends Node implements DistributionInterface {
 
   use ArchivableEntityTrait;
   use DescriptionTrait;
-  use DownloadCountAwareTrait;
   use EntityPublicationTimeFallbackTrait;
   use EntityWorkflowStateTrait;
   use GroupContentTrait;
@@ -37,13 +34,6 @@ class Distribution extends Node implements DistributionInterface {
   use RdfSyncEntityTrait;
   use SolutionContentTrait;
   use ParagraphResourcesTrait;
-
-  /**
-   * Fields populated with statistical information by the joinup_stats module.
-   */
-  const JOINUP_STATS_FIELDS = [
-    DownloadCountAwareInterface::class => 'download_count',
-  ];
 
   /**
    * {@inheritdoc}

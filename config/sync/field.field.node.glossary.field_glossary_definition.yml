@@ -15,7 +15,7 @@ bundle: glossary
 label: Definition
 description: 'The glossary term definition. A short summary is allowed. If not entered, a trimmed text will be shown as summary.'
 required: true
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:

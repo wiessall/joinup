@@ -15,4 +15,4 @@ id: taxonomy_term.topic
 target_entity_type_id: taxonomy_term
 target_bundle: topic
 default_langcode: current_interface
-language_alterable: true
+language_alterable: false

@@ -90,7 +90,7 @@ class IncludeCustomPageContent extends ProcessorPluginBase {
         continue;
       }
 
-      foreach ($this->customPageProvider->getCustomPagesByGroupId($entity->id()) as $custom_page) {
+      foreach ($this->customPageProvider->getCustomPagesByGroup($entity) as $custom_page) {
         // Index the title and body text of the custom page data inside the
         // collection or solution.
         $item->getField('title')->addValue($custom_page->label());

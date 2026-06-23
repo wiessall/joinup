@@ -10,8 +10,6 @@ services:
 
   Drupal\joinup_search\EventSubscriber\SearchApiFieldListingOrder: { }
 
-  Drupal\joinup_search\EventSubscriber\SearchApiIndexingItemsSubscriber: { }
-
   Drupal\joinup_search\EventSubscriber\SearchApiStatusSubscriber: { }
 
   Drupal\joinup_search\EventSubscriber\JoinupGlobalSearchApiAlter: { }

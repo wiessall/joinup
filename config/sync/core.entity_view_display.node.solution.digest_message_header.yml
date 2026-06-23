@@ -25,7 +25,6 @@ dependencies:
     - field.field.node.solution.short_id
     - field.field.node.solution.site_featured
     - field.field.node.solution.solution_type
-    - field.field.node.solution.translation
     - node.type.solution
   module:
     - user
@@ -42,7 +41,6 @@ hidden:
   description: true
   distributions: true
   domain: true
-  download_total: true
   eif_perspective: true
   featured: true
   field_shared_in: true
@@ -82,6 +80,5 @@ hidden:
   solution_settings: true
   solution_subscribe: true
   solution_type: true
-  translation: true
   uri: true
   uuid: true

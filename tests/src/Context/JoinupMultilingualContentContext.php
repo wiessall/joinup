@@ -6,12 +6,16 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Given;
+use Behat\Step\When;
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\TranslatableInterface;
 use Drupal\Driver\Entity\EntityStub;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Attribute\BeforeNodeCreate;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\EntityTrait;
+use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\node\NodeInterface;
 
 /**
@@ -20,6 +24,7 @@ use Drupal\node\NodeInterface;
 class JoinupMultilingualContentContext extends RawDrupalContext {
 
   use EntityTrait;
+  use TraversingTrait;
 
   /**
    * Creates content and also adds translations if any.
@@ -77,6 +82,97 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
   }
 
   /**
+   * Adds entity translations to existing entities.
+   *
+   * Looks up each entity by its label, then creates or updates an
+   * entity-level translation for the given language.
+   *
+   * Example:
+   *
+   * @code
+   * Given the following taxonomy term entity translations:
+   *   | source            | language | name              |
+   *   | Complete Solution | fr       | Solution complète |
+   * Given the following glossary entity translations:
+   *   | source   | language | title     | definition           |
+   *   | Alphabet | fr       | Alphabète | Définition détaillée |
+   * @endcode
+   *
+   * @param string $entityTypeAlias
+   *   The entity type alias (e.g. 'node', 'taxonomy term', 'glossary').
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The table of translations.
+   *
+   * @throws \Exception
+   *   If the source entity or its label key is not found.
+   */
+  #[Given('the following :entityTypeAlias entity translation(s):')]
+  public function addEntityTranslations(string $entityTypeAlias, TableNode $table): void {
+    $entityTypeId = $this->translateEntityTypeAlias($entityTypeAlias);
+    $storage = \Drupal::entityTypeManager()->getStorage($entityTypeId);
+    $entityType = $storage->getEntityType();
+    $labelKey = $entityType->getKey('label');
+
+    if (!$labelKey) {
+      throw new \Exception(sprintf("Entity type '%s' does not have a label key.", $entityType->id()));
+    }
+
+    foreach ($table->getHash() as $row) {
+      if (!isset($row['source']) || !isset($row['language'])) {
+        throw new \Exception("The 'source' and 'language' columns are mandatory.");
+      }
+
+      $entities = $storage->loadByProperties([$labelKey => $row['source']]);
+      if (!$entities) {
+        throw new \Exception(sprintf("Entity of type '%s' with label '%s' not found.", $entityType->id(), $row['source']));
+      }
+
+      $entity = reset($entities);
+      \assert($entity instanceof ContentEntityInterface);
+
+      if ($entity->hasTranslation($row['language'])) {
+        $translated = $entity->getTranslation($row['language']);
+      }
+      else {
+        $translated = $entity->addTranslation($row['language'], $entity->toArray());
+      }
+
+      $processedFields = ['source', 'language'];
+      foreach ($row as $field => $value) {
+        if (in_array($field, $processedFields)) {
+          continue;
+        }
+
+        $fieldDefinition = $translated->getFieldDefinition($field);
+
+        if (!$fieldDefinition) {
+          throw new \InvalidArgumentException(sprintf("Field '%s' is unknown on entity type '%s'.", $field, $entityType->id()));
+        }
+
+        if ($fieldDefinition->getType() === 'text_with_summary') {
+          $translated->set($field, [
+            'value' => $value,
+            'summary' => $row['summary'] ?? '',
+            'format' => 'content_editor',
+          ]);
+          $processedFields[] = 'summary';
+        }
+        else {
+          $translated->set($field, $value);
+        }
+      }
+
+      // Ensure the translation is published if the source is published and the
+      // entity type supports it.
+      if ($entity instanceof EntityPublishedInterface && $entity->isPublished()) {
+        $translated->setPublished();
+      }
+
+      $translated->save();
+    }
+  }
+
+  /**
    * Creates a translation for an arbitrary entity.
    *
    * @param string $langcode
@@ -100,6 +196,30 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
       $translation->set($field['field'], $field['value']);
     }
     $translation->save();
+  }
+
+  /**
+   * Deletes a specific translation for an entity.
+   *
+   * @param string $langcode
+   *   The language code of the translation to delete.
+   * @param string $entityTypeId
+   *   The entity type ID of the entity.
+   * @param string $label
+   *   The label of the entity whose translation is to be deleted.
+   */
+  #[Given('I delete the :langcode translation for the :entityTypeId entity with label :label')]
+  public function deleteTranslationForEntity(string $langcode, string $entityTypeId, string $label): void {
+    $entity = $this->getEntityByLabel($entityTypeId, $label);
+    if (!$entity instanceof TranslatableInterface) {
+      throw new \RuntimeException(sprintf('The entity with label "%s" is not translatable.', $label));
+    }
+
+    if (!$entity->hasTranslation($langcode)) {
+      throw new \RuntimeException(sprintf('The entity with label "%s" does not have a "%s" translation.', $label, $langcode));
+    }
+
+    $entity->removeTranslation($langcode);
   }
 
   /**
@@ -134,6 +254,44 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
       $multiline = preg_replace('#\\\\n#', PHP_EOL, substr($value, 11));
       $node->setValue($key, $multiline);
     }
+  }
+
+  /**
+   * Visits a version of an entity in a given language.
+   *
+   * @param string $language
+   *   The language name. Example: "el", "fr".
+   * @param string $label
+   *   The label of the entity.
+   * @param string $bundle
+   *   The entity bundle. Example: "collection", "solution".
+   *
+   * @throws \Exception
+   *   Thrown when the entity is not found.
+   */
+  #[Given('I go to the :language version of the :label :bundle')]
+  public function visitEntityInGivenLanguage(string $language, string $label, string $bundle): void {
+    $entityTypeId = $this->translateEntityTypeAlias($bundle);
+    $bundleId = $this->translateBundle($bundle);
+    $entity = $this->getEntityByLabel($entityTypeId, $label, $bundleId);
+
+    $url = $entity->toUrl();
+    $url->setOption('language', \Drupal::languageManager()->getLanguage($language));
+    $this->visitPath($url->toString());
+  }
+
+  /**
+   * Switch the page to a language, given its langcode.
+   */
+  #[When('I switch to the :langcode language')]
+  public function switchLanguage(string $langcode): void {
+    $region = $this->getRegion('Top Bar');
+    $link = $region->find('css', "a[hreflang='$langcode']");
+    if (!$link) {
+      throw new \RuntimeException("No language switch link found for '$langcode'.");
+    }
+
+    $this->visitPath($link->getAttribute('href'));
   }
 
 }
