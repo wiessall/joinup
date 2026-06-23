@@ -145,6 +145,7 @@ Feature:
     Then I should see the heading "Edit E-justice"
 
     When I fill in "Description" with "This now has to be shown both in the inner page and in the homepage."
+    And I fill in "Abstract" with "E-justice abstract"
     And I press "Save"
     Then I should see the heading "E-justice"
     And I should see the text "This now has to be shown both in the inner page and in the homepage."
@@ -239,7 +240,7 @@ Feature:
     And I press "Save"
     Then the url should match "/admin/homepage-topics"
 
-  @javascript @wip
+  @javascript
   Scenario: Long descriptions in topic inner page should be partially hidden.
     Given the following topics are enabled in the homepage:
       | Info                    |
@@ -253,6 +254,7 @@ Feature:
     Then I should see the heading "Edit E-justice"
 
     When I enter "En un lugar de la Mancha, de cuyo nombre no quiero acordarme, no ha mucho tiempo que vivía un hidalgo de los de lanza en astillero, adarga antigua, rocín flaco y galgo corredor. Una olla de algo más vaca que carnero, salpicón las más noches, duelos y quebrantos los sábados, lantejas los viernes, algún palomino de añadidura los domingos, consumían las tres partes de su hacienda. El resto della concluían sayo de velarte, calzas de velludo para las fiestas, con sus pantuflos de lo mesmo, y los días de entresemana se honraba con su vellorí de lo más fino." in the "Description" wysiwyg editor
+    And I fill in "Abstract" with "E-justice abstract"
     And I press "Save"
     Then I should see the heading "E-justice"
     Then the "See more" collapse is collapsed
@@ -270,7 +272,7 @@ Feature:
     And I should not see the text "See less"
     Then the "See more" collapse is collapsed
 
-  @javascript @wip
+  @javascript
   Scenario: Regression test to ensure order of entities.
     Given the following "news" content:
       | title  | headline | body              | created    | changed    | topic     |
@@ -289,6 +291,7 @@ Feature:
     When I am logged in as a moderator
 
     And I go to the edit form of the "E-justice" topic
+    And I fill in "Abstract" with "E-justice abstract"
     And I add a layout paragraph in the "Topic term body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
@@ -391,7 +394,7 @@ Feature:
       | Event 2 |
       | Event 3 |
 
-  @javascript @wip
+  @javascript
   Scenario Outline: Images should be shown for tile-two view modes.
     Given the following "<type>" content:
       | title       | headline    | short title | logo       |
@@ -400,6 +403,7 @@ Feature:
       | E-justice |
     And I am logged in as a moderator
     And I go to the edit form of the "E-justice" topic
+    And I fill in "Abstract" with "E-justice abstract"
     And I add a layout paragraph in the "Topic term body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
@@ -431,12 +435,14 @@ Feature:
       | discussion  | 1           | list       |
       | discussion  | 1           | grid       |
 
-  @javascript @wip
+  @javascript
   Scenario: Configurable listing for solutions
     Given the following "solution" content:
       | title                   | description              | collection | abstract                          | topic                                                                    | created    | changed    |
       | Another rough day       | Lorem description issum  | Portal support |                                   | E-justice, Finance in EU, Supplier exchange, HR, Statistics and Analysis | 01-01-2023 | 03-02-2023 |
       | Just another day & solt | Second description issum | Portal support | This is an solution with abstract | E-justice                                                                | 02-01-2023 | 03-02-2023 |
+    And the following topics are enabled in the homepage:
+      | E-justice |
     When I am logged in as a moderator
     And I go to the edit form of the "E-justice" topic
     Then I add a layout paragraph in the "Topic term body" form field with the following properties:
@@ -452,6 +458,7 @@ Feature:
       | List style      | type: select - value: List                                 |
       | Show content    | type: select - value: All                                  |
       | Query presets   | type: text - value: entity_bundle\|solution,collection\|IN |
+    And I fill in "Abstract" with "E-justice abstract"
     And I press "Save"
     Then the url should match "/topic/law-and-justice/e-justice"
 
