@@ -122,7 +122,7 @@ topic|hr";s:13:"show_archived";s:10:"unarchived";s:5:"limit";s:2:"12";s:11:"show
     And I go to the edit form of the "Corrupt edit check" "custom page"
     # Verify corrupt filters don't crash the edit form.
     And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
-    Then I should see "Show related content"
+    Then I should see the text "Show related content"
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
     Then I should see the text "Corrupt edit check"

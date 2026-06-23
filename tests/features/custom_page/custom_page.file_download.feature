@@ -14,7 +14,7 @@ Feature: Permalinks for custom page attachments.
       | Predictable NC1 | Predictable NC1 | Predictable name | empty.rdf   |
 
     When I go to "/collection/predictable-name/predictable-cp1"
-    Then I should see "Predictable CP1"
+    Then I should see the text "Predictable CP1"
     When I go to "/collection/predictable-name/predictable-cp1/f/0"
     # The first file is the delta 0 but in the URL, it is 1.
     Then I should see the heading "Page not found"

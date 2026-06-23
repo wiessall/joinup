@@ -1,0 +1,13 @@
+uuid: be850fac-75a1-441a-bc13-cd89213fa504
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.document
+id: node.document
+targetEntityType: node
+bundle: document
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

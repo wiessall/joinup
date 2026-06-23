@@ -6,12 +6,14 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Hook\BeforeSuite;
+use Behat\Mink\Exception\ExpectationException;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Chip;
 use Drupal\joinup\Traits\EntityTrait;
@@ -458,6 +460,60 @@ class JoinupCoreContext extends RawDrupalContext {
         "The expected line '$expectedLine' was not found in the response body.",
       );
     }
+  }
+
+  /**
+   * Asserts that a field's form-item wrapper has no inline form error.
+   *
+   * @param string $field
+   *   The field locator (label, name or id) of the field to check.
+   */
+  #[Then('the :field field should not have an inline form error')]
+  public function assertNoInlineFormErrorOnField(string $field): void {
+    $element = $this->getSession()->getPage()->findField($field);
+    if (!$element) {
+      throw new ExpectationException(
+        sprintf('Field "%s" was not found on the page.', $field),
+        $this->getSession()->getDriver(),
+      );
+    }
+    $form_item = $element->find('xpath', "ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' form-item ')][1]");
+    if (!$form_item) {
+      return;
+    }
+    $error_message = $form_item->find('css', '.form-item--error-message, .form-item__error-message');
+    if ($error_message) {
+      throw new ExpectationException(
+        sprintf('Field "%s" has an inline form error "%s", but should not.', $field, trim($error_message->getText())),
+        $this->getSession()->getDriver(),
+      );
+    }
+  }
+
+  /**
+   * Visits the "more in modal" page for a specific field on an entity.
+   *
+   * @param string $field
+   *   The machine name of the field.
+   * @param string $title
+   *   The entity title/label.
+   * @param string $bundle
+   *   The bundle machine name (e.g. "oss_solution").
+   * @param string $entityType
+   *   The entity type ID (e.g. "node").
+   * @param string $viewMode
+   *   The view mode to render the field in.
+   */
+  #[When('I visit the :field field modal for the :title :bundle :entityType in the :viewMode view mode')]
+  public function visitFieldModal(string $field, string $title, string $bundle, string $entityType, string $viewMode): void {
+    $entity = static::getEntityByLabel($entityType, $title, $bundle);
+    $url = Url::fromRoute('joinup_core.field_more_in_modal', [
+      'entityType' => $entity->getEntityTypeId(),
+      'entity' => $entity->id(),
+      'viewMode' => $viewMode,
+      'field' => $field,
+    ]);
+    $this->visitPath($url->getInternalPath());
   }
 
 }

@@ -1,0 +1,18 @@
+uuid: b1f00b91-d28f-484d-b827-8e21376ef652
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.release
+id: node.release.changed
+field_name: changed
+entity_type: node
+bundle: release
+label: Changed
+description: 'The time that the node was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

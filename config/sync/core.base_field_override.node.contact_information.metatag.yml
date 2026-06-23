@@ -1,0 +1,20 @@
+uuid: d5a577c2-eda2-41b2-9336-630401b80361
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.contact_information
+  module:
+    - metatag
+id: node.contact_information.metatag
+field_name: metatag
+entity_type: node
+bundle: contact_information
+label: 'Metatags (Hidden field for JSON support)'
+description: 'The computed meta tags for the entity.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: metatag_computed

@@ -213,7 +213,7 @@ Feature: Sharing content between collections
     When I click the contextual link "Share" in the "Iron throne" tile
     Then a modal should open
     And the following fields should be present "Essos city"
-    And I should see "<notification>"
+    And I should see the text "<notification>"
     When I check "Essos city"
     And I press "Share" in the "Modal buttons" region
     Then I should see the success message "Item was shared on the following groups: Essos city."

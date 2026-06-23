@@ -66,7 +66,7 @@ Feature: When a solution is archived then its sub-content also should be archive
   @loggedErrors
   Scenario: Archiving / unarchiving a solution must archive / unarchive its sub-content.
     Given I am logged in as "John Moderator"
-    And the "solution_archive_related_content" queue is empty
+    And the "group_archive_related_content" queue is empty
     When I go to the edit form of the "Solution" solution
     And I press "Confirm"
     Then I should see the button "Archive"
@@ -75,14 +75,14 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Success messages                                                            |
       | The archiving process of the Solution has been initiated.                   |
       | You will receive an email notification as soon as the process is completed. |
-    And the number of items in the "solution_archive_related_content" queue should be 1
+    And the number of items in the "group_archive_related_content" queue should be 1
 
     # Execute the queue.
     Given the following contact information emails are validated:
       | Liam Smith |
     And I mark all emails as read
-    Given I run the "solution_archive_related_content" queue worker
-    Then the number of items in the "solution_archive_related_content" queue should be 0
+    Given I run the "group_archive_related_content" queue worker
+    Then the number of items in the "group_archive_related_content" queue should be 0
     And the workflow state of the "Solution Event" content should be "archived"
     And the workflow state of the "Solution News 1" content should be "archived"
     And the workflow state of the "Solution News 2" content should be "draft"
@@ -97,7 +97,7 @@ Feature: When a solution is archived then its sub-content also should be archive
     And the workflow state of the "Solution Release 1" content should be "archived"
     And the workflow state of the "Solution Release 2" content should be "draft"
     And the workflow state of the "Solution Release 3" content should be "archived"
-    And the string value of the "revision_log" field in "Solution Discussion" content should be "Updated state to 'archived' by 'solution_archive_related_content' queue, from revision ID '<placeholder>' with state 'published'."
+    And the string value of the "revision_log" field in "Solution Discussion" content should be "Updated state to 'archived' by 'group_archive_related_content' queue, from revision ID '<placeholder>' with state 'published'."
     And 2 e-mails should have been sent
     And the following email should have been sent:
       | recipient | John Moderator                                          |
@@ -172,12 +172,12 @@ Feature: When a solution is archived then its sub-content also should be archive
     Then I should see the following success messages:
       | Success messages                                            |
       | The unarchiving process of the Solution has been initiated. |
-    And the number of items in the "solution_archive_related_content" queue should be 1
+    And the number of items in the "group_archive_related_content" queue should be 1
     # Execute the queue.
     Given there are no preexisting log records
-    Given I run the "solution_archive_related_content" queue worker
+    Given I run the "group_archive_related_content" queue worker
     Then 0 e-mails should have been sent
-    And the number of items in the "solution_archive_related_content" queue should be 0
+    And the number of items in the "group_archive_related_content" queue should be 0
     And there should be a record of severity warning in the log with description "The Content entity with id '200' cannot be unarchived: cannot find the previous revision it was archived from, and unarchival is not allowed from the current version."
     And the workflow state of the "Solution Event" content should be "published"
     And the workflow state of the "Solution News 1" content should be "published"
@@ -194,7 +194,7 @@ Feature: When a solution is archived then its sub-content also should be archive
     And the workflow state of the "Solution Release 1" content should be "published"
     And the workflow state of the "Solution Release 2" content should be "draft"
     And the workflow state of the "Solution Release 3" content should be "published"
-    And the string value of the "revision_log" field in "Solution Discussion" content should be "Updated state to 'published' by 'solution_archive_related_content' queue, from revision ID '<placeholder>' with state 'archived'."
+    And the string value of the "revision_log" field in "Solution Discussion" content should be "Updated state to 'published' by 'group_archive_related_content' queue, from revision ID '<placeholder>' with state 'archived'."
 
     When I go to the homepage of the "Solution" solution
     Then I should not see the text "Archived" in the "Header"

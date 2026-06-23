@@ -1,0 +1,13 @@
+uuid: 8be2776d-71c9-4b4f-a324-856d614481fd
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.solution
+id: node.solution
+targetEntityType: node
+bundle: solution
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }
