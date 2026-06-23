@@ -23,6 +23,10 @@ test.describe("Site-wide elements", () => {
       "homepage-joinup-navbar.png",
     );
 
+    await page.locator(".page__footer .joinup-version").evaluate((element) => {
+      element.textContent = "0.0.0";
+    });
+
     await expect(page.locator(".page__footer")).toHaveScreenshot(
       "homepage-footer.png",
     );
