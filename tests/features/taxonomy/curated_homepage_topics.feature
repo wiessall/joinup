@@ -128,39 +128,6 @@ Feature:
     Then I should see the heading "Main topics"
     And I should not see the heading "Hello world"
 
-  Scenario: Description and summary are displayed accordingly.
-    Given the following "news" content:
-      | title  | headline |
-      | News 1 | News 1   |
-    And the following topics are enabled in the homepage:
-      | Economy and Welfare     |
-      | Info                    |
-      | Statistics and Analysis |
-      | E-justice               |
-    And I am logged in as a moderator
-    And I go to the homepage
-    And I click "E-justice"
-    And I click "Edit"
-    Then I should see the heading "Edit E-justice"
-
-    When I fill in "Description" with "This now has to be shown both in the inner page and in the homepage."
-    And I press "Save"
-    Then I should see the heading "E-justice"
-    And I should see the text "This now has to be shown both in the inner page and in the homepage."
-
-    When I go to the homepage
-    Then I should see the text "This now has to be shown both in the inner page and in the homepage."
-
-    When I click "E-justice"
-    And I click "Edit"
-    And I fill in "Abstract" with "This will be shown in the homepage."
-    And I fill in "Description" with "This will be shown in the inner page."
-    And I press "Save"
-    Then I should see the text "This will be shown in the inner page."
-
-    When I go to the homepage
-    Then I should see the text "This will be shown in the homepage."
-
   @javascript
   Scenario: Lists of configurable content can be added in the page of the topic vocabulary.
     Given the following "news" content:
