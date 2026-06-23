@@ -137,7 +137,9 @@ Feature: User certificates
     And I press "Create certificate"
     And I press "Save"
     Then I go to the "Certificate of course Archived IOPEU Solution" certificate
-    Then I should see the heading "Page not found"
+    And I should see the following warning messages:
+      | Warning messages                                                                                               |
+      | This page is configured to apply "Page not found" Rabbit Hole action, but you have permission to see the page. |
     Then I go to the edit form of the "Certificate of course Archived IOPEU Solution" certificate
     Then I should see the heading "Page not found"
     Then I go to the delete form of the "Certificate of course Archived IOPEU Solution" certificate
