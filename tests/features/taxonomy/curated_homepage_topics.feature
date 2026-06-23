@@ -79,6 +79,10 @@ Feature:
     When I press "Save"
     Then I should see the inline form error message "The E-justice topic is already in the list."
 
+    When I fill in "edit-items-add-more-new-item-target-id" with "E-health"
+    And I press "Add item"
+    Then I should see the inline form error message "The E-health topic cannot be added to the list because its Abstract field is empty. Please edit the topic and fill in the Abstract field first."
+
     When I fill in "edit-items-add-more-new-item-target-id" with "Finance in EU"
     And I press "Add item"
     # With Javascript disabled this field is filled with the latest value, so we
