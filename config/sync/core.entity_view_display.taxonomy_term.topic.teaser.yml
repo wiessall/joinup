@@ -10,9 +10,7 @@ dependencies:
     - taxonomy.vocabulary.topic
   module:
     - entity_form_field_label
-    - field_fallback_formatter
     - layout_builder
-    - smart_trim
     - svg_image
     - template_suggestion
 third_party_settings:
@@ -25,32 +23,10 @@ bundle: topic
 mode: teaser
 content:
   abstract:
-    type: field_fallback_formatter
+    type: string
     label: hidden
     settings:
-      main_field_formatter_id: string
-      main_field_formatter_settings:
-        link_to_entity: false
-      fallback_field_id: description
-      fallback_field_formatter_id: smart_trim
-      fallback_field_formatter_settings:
-        trim_length: 200
-        trim_type: chars
-        trim_suffix: ''
-        wrap_output: false
-        wrap_class: trimmed
-        more:
-          display_link: false
-          target_blank: false
-          link_trim_only: false
-          class: more-link
-          text: More
-          aria_label: 'Read more about [node:title]'
-        trim_options:
-          text: false
-          trim_zero: false
-          replace_tokens: false
-      reset_theme: true
+      link_to_entity: false
     third_party_settings:
       entity_form_field_label:
         new_label: ''
