@@ -8,15 +8,18 @@ use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\tmgmt\Data;
 use Drupal\tmgmt\SourceManager;
 use Drupal\tmgmt_content\Plugin\tmgmt\Source\ContentEntitySource;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Provides translation helper methods.
  */
-class TranslationHelper {
+readonly class TranslationHelper {
 
   public function __construct(
-    protected readonly SourceManager $sourceManager,
-    protected readonly Data $dataHelper,
+    #[Autowire(service: 'plugin.manager.tmgmt.source')]
+    protected SourceManager $sourceManager,
+    #[Autowire(service: 'tmgmt.data')]
+    protected Data $dataHelper,
   ) {}
 
   /**

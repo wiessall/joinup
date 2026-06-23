@@ -7,9 +7,7 @@ namespace Drupal\joinup_i18n;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\DependencyInjection\AutowireTrait;
-use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -23,8 +21,6 @@ use Drupal\node\NodeInterface;
 class TranslationScheduler {
 
   use AutowireTrait;
-  use DependencySerializationTrait;
-  use MessengerTrait;
   use StringTranslationTrait;
 
   const string STATE_KEY = 'joinup_i18n.scheduled_collections';
@@ -33,7 +29,6 @@ class TranslationScheduler {
     private readonly EntityTypeManagerInterface $entityTypeManager,
     private readonly StateInterface $state,
     private readonly TimeInterface $time,
-    private readonly TranslationHelper $translationHelper,
   ) {}
 
   /**
@@ -48,10 +43,10 @@ class TranslationScheduler {
   public function buildBatch(CollectionInterface $collection): array {
     return [
       'operations' => array_merge(
-        [[[$this, 'storeCollectionId'], [(string) $collection->id()]]],
+        [[[static::class, 'storeCollectionId'], [(string) $collection->id()]]],
         $this->buildBatchOperations($collection),
       ),
-      'finished' => [$this, 'batchFinished'],
+      'finished' => [static::class, 'batchFinished'],
       'title' => $this->t('Scheduling translation'),
       'progress_message' => $this->t('Processing batch @current of @total.'),
     ];
@@ -65,7 +60,7 @@ class TranslationScheduler {
    * @param array $context
    *   The batch context.
    */
-  public function storeCollectionId(string $collectionId, array &$context): void {
+  public static function storeCollectionId(string $collectionId, array &$context): void {
     $context['results']['collection_id'] = $collectionId;
   }
 
@@ -83,7 +78,7 @@ class TranslationScheduler {
     array_unshift($ids, (string) $collection->id());
 
     return array_map(
-      fn(array $chunk) => [[$this, 'processBatchChunk'], [$chunk]],
+      fn(array $chunk) => [[static::class, 'processBatchChunk'], [$chunk]],
       array_chunk($ids, 20),
     );
   }
@@ -96,8 +91,9 @@ class TranslationScheduler {
    * @param array $context
    *   The batch context.
    */
-  public function processBatchChunk(array $ids, array &$context): void {
-    $storage = $this->entityTypeManager->getStorage('node');
+  public static function processBatchChunk(array $ids, array &$context): void {
+    $storage = \Drupal::entityTypeManager()->getStorage('node');
+    $translationHelper = \Drupal::service(TranslationHelper::class);
     foreach ($storage->loadMultiple($ids) as $entity) {
       assert($entity instanceof NodeInterface);
       if (!$entity->isPublished()) {
@@ -112,7 +108,7 @@ class TranslationScheduler {
         $fieldName = "{$entity->bundle()}_settings";
         if (
           ($settings = $entity->get($fieldName)->entity)
-          && $this->translationHelper->hasTranslatableFields($settings)
+          && $translationHelper->hasTranslatableFields($settings)
         ) {
           // Add also the corresponding group settings.
           tmgmt_content_create_continuous_job_items($settings);
@@ -121,7 +117,7 @@ class TranslationScheduler {
         if (
           $entity instanceof SolutionInterface
           && ($eifPerspective = $entity->get('eif_perspective')->entity)
-          && $this->translationHelper->hasTranslatableFields($eifPerspective)
+          && $translationHelper->hasTranslatableFields($eifPerspective)
         ) {
           // Add also the corresponding EIF perspective.
           tmgmt_content_create_continuous_job_items($eifPerspective);
@@ -154,17 +150,17 @@ class TranslationScheduler {
    * @param array $operations
    *   Unprocessed operations, if any.
    */
-  public function batchFinished(bool $success, array $results, array $operations): void {
+  public static function batchFinished(bool $success, array $results, array $operations): void {
     if ($success) {
-      $this->markAsSent($results['collection_id']);
-      $this->messenger()
-        ->addStatus($this->t('Translation scheduled: @count item(s) queued.', [
+      \Drupal::service(static::class)->markAsSent($results['collection_id']);
+      \Drupal::messenger()
+        ->addStatus(t('Translation scheduled: @count item(s) queued.', [
           '@count' => $results['count'] ?? 0,
         ]));
     }
     else {
-      $this->messenger()
-        ->addError($this->t('An error occurred while scheduling translation.'));
+      \Drupal::messenger()
+        ->addError(t('An error occurred while scheduling translation.'));
     }
   }
 
