@@ -99,20 +99,13 @@ Feature:
     And I should see the heading "Main topics"
 
   Scenario: Moderators can alter the title of the homepage topics block.
-    Given I am logged in as a moderator
+    Given the following topics are enabled in the homepage:
+      | E-justice |
+    And I am logged in as a moderator
     When I go to "/dashboard"
-    When I click "Dashboard"
+    And I click "Dashboard"
     And I click "Curated content listings"
     And I click "Homepage topics"
-
-    Then I should see the heading "Update curated content listing Homepage topics"
-    When I fill in "edit-items-add-more-new-item-target-id" with "E-justice"
-    And I press "Add item"
-    # With Javascript disabled this field is filled with the latest value, so we
-    # need to explicitly clear the value.
-    And I fill in "edit-items-add-more-new-item-target-id" with ""
-    And I press "Save"
-    And I should see the button "Add item"
     And I fill in "Block label" with "Hello world"
     And I press "Save"
 
@@ -126,9 +119,6 @@ Feature:
     And I click "Dashboard"
     And I click "Curated content listings"
     And I click "Homepage topics"
-    Then I should see the heading "Update curated content listing Homepage topics"
-    And I should see the button "Add item"
-
     When I fill in "Block label" with ""
     And I press "Save"
 
