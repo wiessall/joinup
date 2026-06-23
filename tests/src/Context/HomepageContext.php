@@ -111,6 +111,7 @@ class HomepageContext extends RawDrupalContext {
     \Drupal::entityTypeManager()->getStorage('entity_subqueue')
       ->load('homepage_topics')
       ->clearItems()
+      ->set('block_label', NULL)
       ->save();
 
     $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
