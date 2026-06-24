@@ -34,15 +34,69 @@ $wireframe-opacity: 0.5;
     outline: none;
   }
 
-  // Hide the region when the add button is visually hidden.
-  div.layout:has(a.lpb-btn--add.visually-hidden) {
-    overflow: hidden !important;
-    clip: rect(0, 0, 0, 0) !important;
-    width: 1px !important;
-    height: 1px !important;
-    margin: -1px !important;
-    padding: 0 !important;
-    white-space: nowrap !important;
-    border: 0 !important;
+  .lpb-controls > a {
+    position: relative !important;
+    z-index: 1 !important;
+  }
+
+  .lpb-controls {
+    --lp-controls-gap: 50px;
+    --lp-controls-bg-color: #e1e0e1;
+    --lp-controls-fg-color: #333;
+
+    top: auto;
+    right: 0;
+    bottom: 100%;
+    left: auto;
+    transform: none !important;
+    pointer-events: none !important;
+  }
+
+  .lpb-controls a {
+    pointer-events: auto !important;
+  }
+
+  .lpb-controls-label {
+    pointer-events: none !important;
+  }
+
+  .js-lpb-component {
+    overflow: visible !important;
+  }
+
+  .lpb-btn--add {
+    width: auto;
+    height: auto;
+    padding: 4px 12px;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
+    background-image: none;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25), 0 1px 3px rgba(0, 0, 0, 0.25);
+    z-index: 100 !important;
+
+    &::before {
+      display: none;
+    }
+
+    &:hover {
+      background-color: #e1e0e1;
+    }
+  }
+
+  .lpb-btn--tooltip {
+    position: static;
+    visibility: visible;
+    width: auto;
+    height: auto;
+    padding: 0;
+    pointer-events: none;
+    color: inherit;
+    background: none;
+    letter-spacing: normal;
+    transform: none;
+    opacity: 1;
+    z-index: auto;
   }
 }

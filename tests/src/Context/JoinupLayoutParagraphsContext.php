@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Behat\Hook\Scope\BeforeStepScope;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Hook\BeforeStep;
 use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Step\Given;
@@ -54,7 +56,6 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    * @var array
    */
   const LAYOUT_PROPERTIES_MAP = [
-    'layout' => 'layout',
     'column widths' => 'select',
     'administration label' => 'textfield',
     'background theme' => 'select',
@@ -270,7 +271,9 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
     $actions = ['delete', 'edit', 'move up', 'move down', 'duplicate'];
     $this->assertCondition(in_array($action, $actions), "The action '$action' is not defined in the context. Available actions are " . implode(', ', $actions));
 
-    $link->clickLink(ucfirst($action));
+    $action_link = $link->findLink(ucfirst($action));
+    $this->assertCondition($action_link !== NULL, "Action link '$action' not found.");
+    $action_link->click();
     $this->waitForAjax();
 
     switch ($action) {
@@ -388,33 +391,6 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   }
 
   /**
-   * Returns the paragraph field element item.
-   *
-   * @param string $field
-   *   The field designator.
-   * @param int $position
-   *   Paragraph field position.
-   *
-   * @return \Behat\Mink\Element\TraversableElement
-   *   The field element.
-   *
-   * @throws \Behat\Mink\Exception\ElementNotFoundException
-   */
-  protected function getParagraphsElementItem(string $field, int $position): TraversableElement {
-    assert(isset(self::FIELD_MAP[$field]));
-
-    $element = $this->getParagraphsElement($field);
-    $xpath = "(//div[contains(concat(' ', @class, ' '), ' paragraph ')])[$position]";
-
-    $paragraph = $element->find('xpath', $xpath);
-    if (empty($paragraph)) {
-      throw new \Exception("The $field field does not have an item at row $position.");
-    }
-
-    return $paragraph;
-  }
-
-  /**
    * Returns the paragraph field element.
    *
    * @param string $field
@@ -510,10 +486,47 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
     // The buttons available at that point, are the ones before and after each
     // paragraph.
     $links = array_filter($links, function (TraversableElement $link) {
-      return $link->getAttribute('style') !== 'display: none;';
+      $classes = explode(' ', $link->getAttribute('class') ?? '');
+      if (in_array('center', $classes, TRUE)) {
+        return $link->isVisible();
+      }
+      return TRUE;
     });
 
     return end($links);
+  }
+
+  /**
+   * Layout Paragraph buttons clickable.
+   */
+  #[BeforeStep]
+  public function revealLayoutParagraphsButtons(BeforeStepScope $scope): void {
+    if (!$this->hasJavascriptSupport() || !$this->getSession()->getDriver()->isStarted()) {
+      return;
+    }
+    $this->getSession()->executeScript(<<<'JS'
+      if (!document.querySelector('.js-lpb-component')) {
+        return;
+      }
+      if (!document.getElementById('behat-lpb-visibility')) {
+        const style = document.createElement('style');
+        style.id = 'behat-lpb-visibility';
+        style.textContent =
+          '.lp-builder .js-lpb-ui, .lp-builder .lpb-btn--add, .lp-builder .lpb-controls { opacity: 1 !important; }' +
+          '.lp-builder .lpb-btn--add { width: 24px !important; height: 24px !important; padding: 0 !important; }' +
+          '.lp-builder .lpb-btn--tooltip { display: none !important; }';
+        document.head.appendChild(style);
+      }
+      document.querySelectorAll('.js-lpb-component .js-lpb-ui.visually-hidden').forEach((b) => {
+        b.classList.remove('visually-hidden');
+      });
+      if (document.querySelector('.lpb-dialog, .ui-dialog')) {
+        document.querySelectorAll('.js-lpb-component[data-active="true"]').forEach((c) => {
+          c.removeAttribute('data-active');
+        });
+      }
+JS
+    );
   }
 
 }
