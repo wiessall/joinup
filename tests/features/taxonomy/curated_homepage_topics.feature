@@ -13,6 +13,10 @@ Feature:
     And I should not see the following lines of text:
       | Relations            |
       | Revision information |
+    When I press "Save"
+    Then I should see the following inline form error messages:
+      | error messages                  |
+      | Abstract field is required.     |
 
   Scenario: Show list of topics and check a given parent.
     Given I am logged in as a moderator
@@ -75,6 +79,10 @@ Feature:
     When I press "Save"
     Then I should see the inline form error message "The E-justice topic is already in the list."
 
+    When I fill in "edit-items-add-more-new-item-target-id" with "E-health"
+    And I press "Add item"
+    Then I should see the inline form error message "The E-health topic cannot be added to the list because its Abstract field is empty. Please edit the topic and fill in the Abstract field first."
+
     When I fill in "edit-items-add-more-new-item-target-id" with "Finance in EU"
     And I press "Add item"
     # With Javascript disabled this field is filled with the latest value, so we
@@ -91,20 +99,13 @@ Feature:
     And I should see the heading "Main topics"
 
   Scenario: Moderators can alter the title of the homepage topics block.
-    Given I am logged in as a moderator
+    Given the following topics are enabled in the homepage:
+      | E-justice |
+    And I am logged in as a moderator
     When I go to "/dashboard"
-    When I click "Dashboard"
+    And I click "Dashboard"
     And I click "Curated content listings"
     And I click "Homepage topics"
-
-    Then I should see the heading "Update curated content listing Homepage topics"
-    When I fill in "edit-items-add-more-new-item-target-id" with "E-justice"
-    And I press "Add item"
-    # With Javascript disabled this field is filled with the latest value, so we
-    # need to explicitly clear the value.
-    And I fill in "edit-items-add-more-new-item-target-id" with ""
-    And I press "Save"
-    And I should see the button "Add item"
     And I fill in "Block label" with "Hello world"
     And I press "Save"
 
@@ -118,50 +119,12 @@ Feature:
     And I click "Dashboard"
     And I click "Curated content listings"
     And I click "Homepage topics"
-    Then I should see the heading "Update curated content listing Homepage topics"
-    And I should see the button "Add item"
-
     When I fill in "Block label" with ""
     And I press "Save"
 
     When I go to the homepage
     Then I should see the heading "Main topics"
     And I should not see the heading "Hello world"
-
-  @wip
-  Scenario: Description and summary are displayed accordingly.
-    Given the following "news" content:
-      | title  | headline |
-      | News 1 | News 1   |
-    And the following topics are enabled in the homepage:
-      | Economy and Welfare     |
-      | Info                    |
-      | Statistics and Analysis |
-      | E-justice               |
-    And I am logged in as a moderator
-    And I go to the homepage
-    And I click "E-justice"
-    And I click "Edit"
-    Then I should see the heading "Edit E-justice"
-
-    When I fill in "Description" with "This now has to be shown both in the inner page and in the homepage."
-    And I fill in "Abstract" with "E-justice abstract"
-    And I press "Save"
-    Then I should see the heading "E-justice"
-    And I should see the text "This now has to be shown both in the inner page and in the homepage."
-
-    When I go to the homepage
-    Then I should see the text "This now has to be shown both in the inner page and in the homepage."
-
-    When I click "E-justice"
-    And I click "Edit"
-    And I fill in "Summary" with "This will be shown in the homepage."
-    And I fill in "Description" with "This will be shown in the inner page."
-    And I press "Save"
-    Then I should see the text "This will be shown in the inner page."
-
-    When I go to the homepage
-    Then I should see the text "This will be shown in the homepage."
 
   @javascript
   Scenario: Lists of configurable content can be added in the page of the topic vocabulary.

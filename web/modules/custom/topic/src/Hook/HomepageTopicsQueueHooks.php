@@ -13,6 +13,7 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
+use Drupal\topic\Entity\TopicTermInterface;
 
 /**
  * Hook implementations for the homepage topics queue form.
@@ -76,24 +77,38 @@ final class HomepageTopicsQueueHooks {
   }
 
   /**
-   * Validates that a topic is not already in the homepage topics queue.
+   * Validates that a topic can be added to the homepage topics queue.
    */
   public function validate(array &$form, FormStateInterface $form_state): void {
     $items = $form_state->getValue('items');
     if (!isset($items['add_more']['new_item']['target_id'])) {
       return;
     }
+
+    $new_item_id = $items['add_more']['new_item']['target_id'];
+    if (!is_numeric($new_item_id)) {
+      return;
+    }
+    $entity = $this->entityTypeManager->getStorage('taxonomy_term')->load($new_item_id);
+    if (!$entity instanceof TopicTermInterface) {
+      return;
+    }
+
     $existing_items = [];
     foreach ($items as $key => $item) {
       if (is_numeric($key) && isset($item['target_id'])) {
         $existing_items[] = $item['target_id'];
       }
     }
-    if (in_array($items['add_more']['new_item']['target_id'], $existing_items)) {
-      $entity = $this->entityTypeManager->getStorage('taxonomy_term')
-        ->load($items['add_more']['new_item']['target_id']);
+    if (in_array($new_item_id, $existing_items)) {
       $form_state->setErrorByName('items', $this->t('The %topic topic is already in the list.', [
-        '%topic' => $entity ? $entity->label() : $items['add_more']['new_item']['target_id'],
+        '%topic' => $entity->label(),
+      ]));
+    }
+
+    if ($entity->get('abstract')->isEmpty()) {
+      $form_state->setErrorByName('items', $this->t('The %topic topic cannot be added to the list because its Abstract field is empty. Please edit the topic and fill in the Abstract field first.', [
+        '%topic' => $entity->label(),
       ]));
     }
   }
