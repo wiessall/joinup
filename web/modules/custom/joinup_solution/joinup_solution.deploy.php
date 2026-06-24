@@ -8,7 +8,7 @@
 declare(strict_types=1);
 
 /**
- * Update the submit_your_interoperability_sol webform elements and access rules.
+ * Update the submit_your_interoperability_sol webform.
  */
 function joinup_solution_deploy_201500(): void {
   $webform_storage = \Drupal::entityTypeManager()->getStorage('webform');
