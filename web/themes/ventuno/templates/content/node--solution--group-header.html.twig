@@ -26,13 +26,16 @@
         {% endif %}
         {{ title_suffix }}
       </div>
-      {% if content.solution_subscribe or content.releases_overview %}
+      {% if content.solution_subscribe or content.releases_overview or content.solution_reuse_share %}
         <div class="group-banner__actions order-1 order-lg-0 d-flex flex-wrap justify-content-center align-items-start my-3 my-lg-0">
           {% if content.solution_subscribe %}
             {{ content.solution_subscribe }}
           {% endif %}
           {% if content.releases_overview %}
             {{ content.releases_overview }}
+          {% endif %}
+          {% if content.solution_reuse_share %}
+            {{ content.solution_reuse_share }}
           {% endif %}
         </div>
       {% endif %}
