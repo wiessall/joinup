@@ -108,22 +108,18 @@ class TranslationScheduler {
       }
 
       if ($entity instanceof GroupInterface) {
-        $fieldName = "{$entity->bundle()}_settings";
-        if (
-          ($settings = $entity->get($fieldName)->entity)
-          && $translationHelper->hasTranslatableFields($settings)
-        ) {
+        $settings = $entity->get("{$entity->bundle()}_settings")->entity;
+        if ($settings && $translationHelper->hasTranslatableFields($settings)) {
           // Add also the corresponding group settings.
           tmgmt_content_create_continuous_job_items($settings);
         }
 
-        if (
-          $entity instanceof SolutionInterface
-          && ($eifPerspective = $entity->get('eif_perspective')->entity)
-          && $translationHelper->hasTranslatableFields($eifPerspective)
-        ) {
-          // Add also the corresponding EIF perspective.
-          tmgmt_content_create_continuous_job_items($eifPerspective);
+        if ($entity instanceof SolutionInterface) {
+          $eifPerspective = $entity->get('eif_perspective')->entity;
+          if ($eifPerspective && $translationHelper->hasTranslatableFields($eifPerspective)) {
+            // Add also the corresponding EIF perspective.
+            tmgmt_content_create_continuous_job_items($eifPerspective);
+          }
         }
       }
 
