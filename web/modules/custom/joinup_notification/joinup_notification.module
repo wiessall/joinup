@@ -14,14 +14,17 @@ use Drupal\joinup_notification\EventSubscriber\OgMembershipSubscriber;
 use Drupal\joinup_notification\MailContentTypeHeader;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_ENTITY_TYPE_insert().
  *
  * Sends notifications when community content is updated.
  */
-function joinup_notification_node_insert(EntityInterface $entity): void {
-  joinup_notification_dispatch_notification('create', NotificationEvents::NODE_CREATE, $entity);
+function joinup_notification_node_insert(NodeInterface $node): void {
+  if ($node->isDefaultTranslation()) {
+    joinup_notification_dispatch_notification('create', NotificationEvents::NODE_CREATE, $node);
+  }
 }
 
 /**
@@ -42,8 +45,10 @@ function joinup_notification_node_presave(EntityInterface $entity): void {
  *
  * Sends notifications when community content is updated.
  */
-function joinup_notification_node_update(EntityInterface $entity): void {
-  joinup_notification_dispatch_notification('update', NotificationEvents::NODE_UPDATE, $entity);
+function joinup_notification_node_update(NodeInterface $node): void {
+  if ($node->isDefaultTranslation()) {
+    joinup_notification_dispatch_notification('update', NotificationEvents::NODE_UPDATE, $node);
+  }
 }
 
 /**
