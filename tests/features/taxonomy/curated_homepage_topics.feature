@@ -386,6 +386,35 @@ Feature:
     And I should not see the text "HR" in the "Another rough day" tile
     And I should see the text "+3 topics" in the "Another rough day" tile
 
+  # Regression test for ISAICP-11462: the configurable listing heading is
+  # translatable, while the listing query itself stays shared across languages.
+  # Only users allowed to view content in their preferred language (moderators)
+  # see the translation.
+  Scenario: The configurable listing heading is translatable on the topic page.
+    Given the following topic entity translations:
+      | source    | language | name            |
+      | E-justice | el       | E-justice Greek |
+    And the following topics are enabled in the homepage:
+      | E-justice |
+    And I append "layout" to "topics_paragraph" field in "meta_entity" entity with following "E-justice" title:
+      | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
+    And I append "configurable_listing" to "topics_paragraph" field in "meta_entity" entity with following "E-justice" title:
+      | paragraph_heading | English listing heading |
+    And the "el" translation of the configurable listing in the "E-justice" topic has:
+      | field             | value                 |
+      | paragraph_heading | Greek listing heading |
+    And I am logged in as a moderator
+
+    When I go to the canonical path of the "topic" meta entity of the "E-justice" topic "taxonomy term"
+    Then I should see the text "English listing heading"
+    But I should not see the text "Greek listing heading"
+
+    # The moderator reaches the Greek topic page from the Greek homepage.
+    When I go to "/el"
+    And I click "E-justice Greek"
+    Then I should see the text "Greek listing heading"
+    But I should not see the text "English listing heading"
+
   # Regression test for ISAICP-11115.
   Scenario: Help text links on topics administration pages work correctly across languages.
     Given I am logged in as a moderator
