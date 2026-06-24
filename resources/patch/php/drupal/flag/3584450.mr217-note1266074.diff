@@ -1,0 +1,79 @@
+diff --git a/src/Entity/Storage/FlaggingStorage.php b/src/Entity/Storage/FlaggingStorage.php
+index f65728f0d777cd72dbd84d3f944861027968d96d..de4b426ebd51cd053ccffc99e9b6db39f702adff 100644
+--- a/src/Entity/Storage/FlaggingStorage.php
++++ b/src/Entity/Storage/FlaggingStorage.php
+@@ -43,7 +43,7 @@ class FlaggingStorage extends SqlContentEntityStorage implements FlaggingStorage
+     }
+
+     $flag_ids = $this->loadIsFlaggedMultiple([$entity], $account, $session_id);
+-    return $flag_ids[$entity->id()];
++    return $flag_ids[$entity->id() ?? ''];
+   }
+
+   /**
+@@ -74,11 +74,12 @@ class FlaggingStorage extends SqlContentEntityStorage implements FlaggingStorage
+     // Loop over all requested entities, if they are already in the loaded list,
+     // get then from there, merge the global and per-user flags together.
+     foreach ($entities as $entity) {
+-      if (isset($this->flagIdsByEntity[$account->id()][$session_id][$entity_type_id][$entity->id()])) {
+-        $flag_ids_by_entity[$entity->id()] = array_merge($this->flagIdsByEntity[$account->id()][$session_id][$entity_type_id][$entity->id()], $this->globalFlagIdsByEntity[$entity_type_id][$entity->id()]);
++      $entity_id = $entity->id() ?? '';
++      if (isset($this->flagIdsByEntity[$account->id()][$session_id][$entity_type_id][$entity_id])) {
++        $flag_ids_by_entity[$entity_id] = array_merge($this->flagIdsByEntity[$account->id()][$session_id][$entity_type_id][$entity_id], $this->globalFlagIdsByEntity[$entity_type_id][$entity_id]);
+       }
+       else {
+-        $ids_to_load[$entity->id()] = [];
++        $ids_to_load[$entity_id] = [];
+       }
+     }
+
+@@ -147,18 +148,22 @@ class FlaggingStorage extends SqlContentEntityStorage implements FlaggingStorage
+     // After updating or creating a flagging, add it to the cached flagging by
+     // entity if already in static cache.
+     /** @var \Drupal\flag\Entity\Flagging $entity */
++    $entity_type = $entity->get('entity_type')->value ?? '';
++    $entity_id = $entity->get('entity_id')->value ?? '';
++    $flag_id = $entity->get('flag_id')->value ?? '';
+     if ($entity->get('global')->value) {
+       // If the global flags by entity for this entity have already been cached,
+       // then add the newly created flagging.
+-      if (isset($this->globalFlagIdsByEntity[$entity->get('entity_type')->value][$entity->get('entity_id')->value])) {
+-        $this->globalFlagIdsByEntity[$entity->get('entity_type')->value][$entity->get('entity_id')->value][$entity->get('flag_id')->value] = $entity->get('flag_id')->value;
++      if (isset($this->globalFlagIdsByEntity[$entity_type][$entity_id])) {
++        $this->globalFlagIdsByEntity[$entity_type][$entity_id][$flag_id] = $flag_id;
+       }
+     }
+     else {
+       // If the flags by entity for this entity/user have already been cached,
+       // then add the newly created flagging.
+-      if (isset($this->flagIdsByEntity[$entity->get('uid')->target_id][$entity->get('entity_type')->value][$entity->get('entity_id')->value])) {
+-        $this->flagIdsByEntity[$entity->get('uid')->target_id][$entity->get('entity_type')->value][$entity->get('entity_id')->value][$entity->get('flag_id')->value] = $entity->get('flag_id')->value;
++      $uid = $entity->get('uid')->target_id ?? '';
++      if (isset($this->flagIdsByEntity[$uid][$entity_type][$entity_id])) {
++        $this->flagIdsByEntity[$uid][$entity_type][$entity_id][$flag_id] = $flag_id;
+       }
+     }
+   }
+@@ -174,14 +179,18 @@ class FlaggingStorage extends SqlContentEntityStorage implements FlaggingStorage
+     foreach ($entities as $entity) {
+       // After deleting a flagging, remove it from the cached flagging by entity
+       // if already in static cache.
++      $entity_type = $entity->get('entity_type')->value ?? '';
++      $entity_id = $entity->get('entity_id')->value ?? '';
++      $flag_id = $entity->get('flag_id')->value ?? '';
+       if ($entity->get('global')->value) {
+-        if (isset($this->globalFlagIdsByEntity[$entity->get('entity_type')->value][$entity->get('entity_id')->value][$entity->get('flag_id')->value])) {
+-          unset($this->globalFlagIdsByEntity[$entity->get('entity_type')->value][$entity->get('entity_id')->value][$entity->get('flag_id')->value]);
++        if (isset($this->globalFlagIdsByEntity[$entity_type][$entity_id][$flag_id])) {
++          unset($this->globalFlagIdsByEntity[$entity_type][$entity_id][$flag_id]);
+         }
+       }
+       else {
+-        if (isset($this->flagIdsByEntity[$entity->get('uid')->target_id][$entity->get('entity_type')->value][$entity->get('entity_id')->value][$entity->get('flag_id')->value])) {
+-          unset($this->flagIdsByEntity[$entity->get('uid')->target_id][$entity->get('entity_type')->value][$entity->get('entity_id')->value][$entity->get('flag_id')->value]);
++        $uid = $entity->get('uid')->target_id ?? '';
++        if (isset($this->flagIdsByEntity[$uid][$entity_type][$entity_id][$flag_id])) {
++          unset($this->flagIdsByEntity[$uid][$entity_type][$entity_id][$flag_id]);
+         }
+       }
+     }

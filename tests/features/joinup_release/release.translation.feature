@@ -94,6 +94,57 @@ Feature: Translating releases
     And I click "Switch to the latest release"
     Then I should see the text "Copernicus v2 FR" in the "Page title" region
 
+  Scenario: Translating a published release does not trigger update notifications.
+    Given the following users:
+      | Username     | E-mail                   | First name | Family name | Roles     |
+      | Olivia Owner | olivia.owner@example.com | Olivia     | Owner       |           |
+      | Fred Facil   | fred.facil@example.com   | Fred       | Facil       |           |
+      | Morgan Mod   | morgan.mod@example.com   | Morgan     | Mod         | moderator |
+    And the following "solution" content:
+      | title    |
+      | Polyglot |
+    And the following "release" content:
+      | title        | is version of | release number | state     |
+      | Polyglot 1.0 | Polyglot      | 1.0            | published |
+    And the following solution user memberships:
+      | solution | user         | roles       |
+      | Polyglot | Olivia Owner | owner       |
+      | Polyglot | Fred Facil   | facilitator |
+
+    # A normal update of the source release does notify the other privileged
+    # members, proving the notification path is wired up and active.
+    Given I am logged in as "Fred Facil"
+    And I mark all emails as read
+    When I go to the edit form of the "Polyglot 1.0" release
+    And I fill in "Release notes" with "Updated release notes."
+    And I press "Update"
+    Then the following email should have been sent:
+      | recipient | Morgan Mod                                              |
+      | subject   | Interoperable Europe Portal: A release has been updated |
+
+    # Creating a translation of the same published release must not notify
+    # anyone, even though it is technically a save of the (published) release.
+    Given I am logged in as "Morgan Mod"
+    And I mark all emails as read
+    When I go to the homepage of the "Polyglot 1.0" release
+    And I click "Translate" in the "Entity actions" region
+    And I click "Add" in the "Polish" row
+    Then I should see the heading "Create Polish translation of Polyglot 1.0"
+    When I fill in "Name" with "Poliglota 1.0"
+    And I fill in "Release notes" with "Notatki do wydania."
+    And I press "Save (all translations)"
+    Then I should see the success message "Release Poliglota 1.0 has been updated."
+    And 0 e-mails should have been sent
+
+    # Editing the existing translation must not notify anyone either.
+    Given I mark all emails as read
+    When I click "Translate" in the "Entity actions" region
+    And I click "Edit" in the "Polish" row
+    And I fill in "Release notes" with "Zaktualizowane notatki."
+    And I press "Save (all translations)"
+    Then I should see the success message "Release Poliglota 1.0 has been updated."
+    And 0 e-mails should have been sent
+
   Scenario: Default language of new node should be same as language of the interface
     Given the following "solution" content:
       | title           |

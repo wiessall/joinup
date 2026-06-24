@@ -1,4 +1,6 @@
 tmgmt_content:
+  entity_subqueue:
+    - homepage_topics
   meta_entity:
     - collection_settings
     - eif_perspective
