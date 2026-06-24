@@ -56,6 +56,43 @@ Feature:
     # The block title is shown now.
     And I should see the heading "Main topics"
 
+  # Regression [ISAICP-11462]: enabling translations for the entity queues
+  # (curated content listings) creates multiple versions (translations) of the
+  # queue. These translations must not be treated as separate listings.
+  Scenario: A translated curated content listing is not duplicated in the administration view.
+    Given "el" translation for the "entity_subqueue" entity with label "Homepage topics":
+      | field       | value             |
+      | block_label | Greek block label |
+
+    # The curated content listings administration view should list the queue
+    # only once, regardless of how many translations it has.
+    Given I am logged in as a moderator
+    When I go to "/admin/curated-content-listings"
+    Then the text "Homepage topics" should appear 1 time
+
+    # Manually delete the translation because the queue persists after tests.
+    Then I delete the "el" translation for the "entity_subqueue" entity with label "Homepage topics"
+
+  # Regression [ISAICP-11462]: the queue translations duplicate the queue items
+  # on the homepage, because the "Main topics" view filters the meta entity to
+  # its default translation and the interface language, but does not do the
+  # same for the entity queue.
+  Scenario: A translated curated content listing does not duplicate its items on the homepage.
+    Given "el" translation for the "entity_subqueue" entity with label "Homepage topics":
+      | field       | value             |
+      | block_label | Greek block label |
+    # Add a topic to the (translated) queue.
+    And the following topics are enabled in the homepage:
+      | Data gathering and processing |
+
+    # The topic should be shown only once on the homepage, even though the queue
+    # has a translation.
+    When I go to the homepage
+    Then I should see the heading "Data gathering and processing" 1 time
+
+    # Manually delete the translation because the queue persists after tests.
+    Then I delete the "el" translation for the "entity_subqueue" entity with label "Homepage topics"
+
   Scenario: Moderators can alter the title of the homepage topics block.
     Given the following topics are enabled in the homepage:
       | E-justice |
