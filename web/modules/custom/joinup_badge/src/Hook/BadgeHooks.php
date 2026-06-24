@@ -8,6 +8,7 @@ use Drupal\assessments\AssessmentInterface;
 use Drupal\comment\CommentInterface;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\DestructableInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
@@ -185,6 +186,21 @@ class BadgeHooks implements DestructableInterface {
   public function deleteUserCertificates(UserInterface $user): void {
     $certificates = $this->getUserCertificates($user);
     $this->entityTypeManager->getStorage('node')->delete($certificates);
+  }
+
+  /**
+   * Implements hook_ENTITY_TYPE_delete() for certificate entities.
+   */
+  #[Hook('entity_delete')]
+  public function deleteCertificateFile(EntityInterface $entity): void {
+    if (!$entity instanceof Certificate) {
+      return;
+    }
+    if (!$entity->get('certificate')->isEmpty()) {
+      foreach ($entity->get('certificate')->referencedEntities() as $file) {
+        $file->delete();
+      }
+    }
   }
 
   /**

@@ -42,7 +42,7 @@ Feature: User certificates
     And I type "Archived IOPEU" in the Course autocomplete field
     And I pick "Archived IOPEU Solution" from the Course autocomplete suggestions
     And I fill in "certificates[form][0][issuing_date][0][value][date]" with "12/06/2026"
-    And I attach the file "text.pdf" to "files[certificates_form_0_certificate_0]"
+    And I attach the file "certificate_1.pdf" to "files[certificates_form_0_certificate_0]"
     And I press "Create certificate"
     And I press "Save"
     Then I go to the profile of "Sara the User"
@@ -57,7 +57,8 @@ Feature: User certificates
     When I press "Remove" in the "Archived IOPEU Solution" row
     And I press "Remove" in the "Are you sure you want to remove Certificate of course" row
     Then I should not see the text "Certificate of course"
-    When I press "Save"
+    And I press "Save"
+    When I am logged in as a user with the "administrator" role
     And I go to the edit form of the "Sara the User" user
     Then I should not see the link "Archived IOPEU Solution"
 
@@ -76,7 +77,7 @@ Feature: User certificates
     Then field should be present "Issuing date"
     And I type "Archived IOPEU" in the Course autocomplete field
     And I pick "Archived IOPEU Solution" from the Course autocomplete suggestions
-    And I attach the file "text.pdf" to "files[certificates_form_0_certificate_0]"
+    And I attach the file "certificate_1.pdf" to "files[certificates_form_0_certificate_0]"
     And I press "Create certificate"
     And I press "Save"
     And user "Sara the User" should have the "certificate" badge
@@ -102,7 +103,7 @@ Feature: User certificates
     And I press the "Add new certificate" button
     And I type "Archived IOPEU" in the Course autocomplete field
     And I pick "Archived IOPEU Solution" from the Course autocomplete suggestions
-    And I attach the file "text.pdf" to "files[certificates_form_0_certificate_0]"
+    And I attach the file "certificate_1.pdf" to "files[certificates_form_0_certificate_0]"
     And I press "Create certificate"
     And I press "Save"
     Then I go to the public profile of "Sara the User"
@@ -118,7 +119,7 @@ Feature: User certificates
     And I press the "Add new certificate" button
     And I type "Long Running Solution Title" in the Course autocomplete field
     And I pick "Long Running Solution Title That Will Trigger Truncation In The Certificate Entity Bundle Class Because It Exceeds The Two Hundred And Thirty Three Character Limit For Course Titles In This Context And Therefore Absolutely Needs To Be Shortened Here!" from the Course autocomplete suggestions
-    And I attach the file "text.pdf" to "files[certificates_form_0_certificate_0]"
+    And I attach the file "certificate_1.pdf" to "files[certificates_form_0_certificate_0]"
     And I press "Create certificate"
     And I press "Save"
     Then I go to the profile of "Sara the User"
@@ -133,7 +134,7 @@ Feature: User certificates
     Then field should be present "Issuing date"
     And I type "Archived IOPEU" in the Course autocomplete field
     And I pick "Archived IOPEU Solution" from the Course autocomplete suggestions
-    And I attach the file "text.pdf" to "files[certificates_form_0_certificate_0]"
+    And I attach the file "certificate_1.pdf" to "files[certificates_form_0_certificate_0]"
     And I press "Create certificate"
     And I press "Save"
     Then I go to the "Certificate of course Archived IOPEU Solution" certificate
@@ -144,3 +145,22 @@ Feature: User certificates
     Then I should see the heading "Page not found"
     Then I go to the delete form of the "Certificate of course Archived IOPEU Solution" certificate
     Then I should see the heading "Page not found"
+
+  @javascript
+  Scenario: Certificate file is deleted when certificate is deleted
+    Given I am logged in as a user with the "developer" role
+    And I go to the edit form of the "Sara the User" user
+    And I press the "Add new certificate" button
+    And I type "Archived IOPEU" in the Course autocomplete field
+    And I pick "Archived IOPEU Solution" from the Course autocomplete suggestions
+    And I attach the file "certificate_1.pdf" to "files[certificates_form_0_certificate_0]"
+    And I press "Create certificate"
+    And I press "Save"
+    And I go to "/admin/content/files"
+    Then I should see the link "certificate_1.pdf"
+    And I go to the edit form of the "Sara the User" user
+    When I press "Remove" in the "Archived IOPEU Solution" row
+    And I press "Remove" in the "Are you sure you want to remove Certificate of course" row
+    And I press "Save"
+    And I go to "/admin/content/files"
+    Then I should not see the link "certificate_1.pdf"
