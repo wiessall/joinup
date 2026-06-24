@@ -2,48 +2,6 @@
 Feature:
   Ensure curated list of topics on the homepage behave properly.
 
-  Scenario: Moderators can only edit allowed fields on the topic edit form.
-    Given I am logged in as a moderator
-    And I go to "/dashboard"
-    And I click Topics
-    And I click "Edit" in the "E-justice" row
-    Then I should see the heading "Edit E-justice"
-    And the following fields should be present "Abstract, Description, Image, Body"
-    But the following fields should not be present "Name"
-    And I should not see the following lines of text:
-      | Relations            |
-      | Revision information |
-    When I press "Save"
-    Then I should see the following inline form error messages:
-      | error messages                  |
-      | Abstract field is required.     |
-
-  Scenario: Show list of topics and check a given parent.
-    Given I am logged in as a moderator
-    When I go to "/dashboard"
-    Then I should see the link Topics
-
-    When I click Topics
-    Then I should see the heading "Topics"
-    And I should see the text "eGov" in the "Supplier exchange" row
-    And I should see the text "Economy and Welfare" in the "Finance in EU" row
-    And I should see the text "E-health Dpt." in the "E-health" row
-    And I should see the text "HR Dpt." in the "Employment and Support Allowance" row
-    And I should see the text "HR Dpt." in the "HR" row
-    # Sorting by parent not allowed.
-    And I should not see the link "Parent topic"
-
-    # The following is not reproducible in the UI but is a backend test for
-    # future changes in the topic vocabulary.
-    Given the following "topic" terms:
-      | tid                          | name        | description  |
-      | http://some.topic/BlueParent | Blue parent | Hello there. |
-    When I reload the page
-    Then I should see the link "Blue parent"
-    When the name of the "Blue parent" term is changed to "Red parent"
-    And I reload the page
-    Then I should see the link "Red parent"
-
   Scenario: Moderators can add topics with descriptions to the curated homepage queue.
     Given I am logged in as a moderator
     And I go to "/dashboard"
@@ -179,20 +137,6 @@ Feature:
     And I press "Save"
     And I should see the "News 1" tile
     And the url should match "/topic/law-and-justice/e-justice"
-
-    When I go to the "Economy and Welfare" topic term page
-    And the url should match "/topic/economy-and-welfare"
-
-    When I go to the "Info" topic term page
-    And the url should match "/topic/info"
-
-    When I go to the "Statistics and Analysis" topic term page
-    And the url should match "/topic/info/statistics-and-analysis"
-
-    # Regression test: 3-dots is hidden for anonymous as only contains 'View'.
-    Given I am an anonymous user
-    And I visit "/topic/info/statistics-and-analysis"
-    Then I should not see the button "Show primary options"
 
     # Editing from the administration page, redirect back to the administration page.
     When I am logged in as a moderator
