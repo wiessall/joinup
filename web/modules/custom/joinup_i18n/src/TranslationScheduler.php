@@ -102,7 +102,10 @@ class TranslationScheduler {
       if ($entity instanceof ArchivableEntityInterface && $entity->isArchived()) {
         continue;
       }
-      tmgmt_content_create_continuous_job_items($entity);
+
+      if ($translationHelper->hasTranslatableFields($entity)) {
+        tmgmt_content_create_continuous_job_items($entity);
+      }
 
       if ($entity instanceof GroupInterface) {
         $fieldName = "{$entity->bundle()}_settings";
