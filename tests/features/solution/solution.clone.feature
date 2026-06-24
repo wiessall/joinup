@@ -1,8 +1,22 @@
 @api @group-clone @javascript
-Feature: Test adding solutions with clone data.
-  In order to manage solutions
-  As a moderator
-  I need to be able to add "Solution" through UI.
+Feature: Solution clone features
+  In order to manage and share solutions
+  As a user
+  I want to interact with solution features available on the clone environment.
+
+  Scenario: Anonymous user is redirected to log in when clicking the share solution reuse button
+    Given I am not logged in
+    When I go to the homepage of the "Joinup source code" solution
+    Then I should see the link "Share Solution reuse"
+    When I click "Share Solution reuse"
+    Then I should see the heading "Sign in to continue"
+
+  Scenario: Authenticated user sees the solution pre-filled in the submission form
+    Given I am logged in as a user with the "moderator" role
+    When I go to the homepage of the "Joinup source code" solution
+    And I click "Share Solution reuse"
+    Then I should see the text "Solution"
+    And the "Solution" field should contain "Joinup source code (719986)"
 
   Scenario: Moderator can add a solution with the right language availabilities.
     Given I am logged in as a moderator
