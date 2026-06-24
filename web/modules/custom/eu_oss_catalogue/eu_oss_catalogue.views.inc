@@ -22,14 +22,16 @@ use Drupal\eu_oss_catalogue\Plugin\Field\RelevantField;
 function eu_oss_catalogue_views_data_alter(array &$data): void {
   $entityTypeManager = Drupal::entityTypeManager();
 
-  foreach ($entityTypeManager->getDefinitions() as $entityType) {
-    $data[$entityType->getBaseTable()]['translation_list'] = [
-      'title' => 'Translation list',
-      'help' => t('Displays all available translations.'),
-      'field' => [
-        'id' => 'translation_list',
-      ],
-    ];
+  foreach ($entityTypeManager->getDefinitions() as $entityInfo) {
+    if ($baseTable = $entityInfo->getBaseTable()) {
+      $data[$baseTable]['translation_list'] = [
+        'title' => 'Translation list',
+        'help' => t('Displays all available translations.'),
+        'field' => [
+          'id' => 'translation_list',
+        ],
+      ];
+    }
   }
 }
 
