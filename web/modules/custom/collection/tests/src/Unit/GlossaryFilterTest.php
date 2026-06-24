@@ -37,7 +37,6 @@ class GlossaryFilterTest extends TestCase {
 
     // Make ::isLinkText() accessible.
     $method = (new \ReflectionClass($filter))->getMethod('isLinkText');
-    $method->setAccessible(TRUE);
 
     $doc = Html::load($markup);
     $textNode = (new \DOMXPath($doc))->evaluate("//text()")[0];

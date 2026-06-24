@@ -1,0 +1,87 @@
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 34c288d9c3750f6725ec338559e9c844afed919c..3f15eba60c2b5181861385dceccf9beb431c5ef7 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -54,6 +54,34 @@ variables:
+   OPT_IN_TEST_MAX_PHP: 1
+ 
+ 
++composer (message dev):
++  extends: .composer-base
++  stage: build
++  after_script:
++    - composer require 'drupal/message:1.x-dev@dev'
++
++phpunit (message dev):
++  extends: phpunit
++  rules:
++    - when: on_success
++  needs:
++    - "composer (message dev)"
++
++
++composer (message subscribe dev):
++  extends: .composer-base
++  stage: build
++  after_script:
++    - composer require 'drupal/message_subscribe:1.x-dev@dev'
++
++phpunit (message subscribe dev):
++  extends: phpunit
++  rules:
++    - when: on_success
++  needs:
++    - "composer (message subscribe dev)"
++
++
+ ###################################################################################
+ #
+ #                                        *
+diff --git a/message_digest.module b/message_digest.module
+index 0eca43bf1e2056f41c67fe2ab5ae7735c917e9e5..df260c3c024b84cde157522de1ea245ad756ad26 100644
+--- a/message_digest.module
++++ b/message_digest.module
+@@ -134,7 +134,7 @@ function message_digest_entity_predelete(EntityInterface $entity) {
+ /**
+  * Implements callback_allowed_values_function().
+  */
+-function message_digest_allowed_values_callback(FieldStorageDefinitionInterface $definition, FieldableEntityInterface $entity = NULL, &$cacheable = NULL) {
++function message_digest_allowed_values_callback(FieldStorageDefinitionInterface $definition, ?FieldableEntityInterface $entity = NULL, &$cacheable = NULL) {
+   // Always add an 'immediate' option.
+   $values = [
+     t('Send immediately'),
+diff --git a/message_digest_ui/src/Plugin/Action/DigestInterval.php b/message_digest_ui/src/Plugin/Action/DigestInterval.php
+index 197334172f78c6fe8d05955aeb8a51251f0dd04b..5a3c09d70b05b060a4d0891b8598f8a306c43396 100644
+--- a/message_digest_ui/src/Plugin/Action/DigestInterval.php
++++ b/message_digest_ui/src/Plugin/Action/DigestInterval.php
+@@ -77,7 +77,7 @@ class DigestInterval extends ActionBase implements ContainerFactoryPluginInterfa
+   /**
+    * {@inheritdoc}
+    */
+-  public function access($object, AccountInterface $account = NULL, $return_as_object = FALSE) {
++  public function access($object, ?AccountInterface $account = NULL, $return_as_object = FALSE) {
+     $result = $this->flag->actionAccess('flag', $account, $object);
+     return $return_as_object ? $result : $result->isAllowed();
+   }
+diff --git a/src/Plugin/Notifier/DigestBase.php b/src/Plugin/Notifier/DigestBase.php
+index 753ad526b0791fd6a86757d2bcc74a3e71af87fc..6cb2a3bae5c2a9b49a912ad5bfed50106aae756a 100644
+--- a/src/Plugin/Notifier/DigestBase.php
++++ b/src/Plugin/Notifier/DigestBase.php
+@@ -73,7 +73,7 @@ abstract class DigestBase extends MessageNotifierBase implements ContainerFactor
+    * @param \Drupal\Component\Datetime\TimeInterface $time
+    *   The time service.
+    */
+-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerChannelInterface $logger, EntityTypeManagerInterface $entity_type_manager, RendererInterface $renderer, MessageInterface $message = NULL, StateInterface $state, Connection $connection, TimeInterface $time) {
++  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerChannelInterface $logger, EntityTypeManagerInterface $entity_type_manager, RendererInterface $renderer, ?MessageInterface $message = NULL, StateInterface $state, Connection $connection, TimeInterface $time) {
+     // Set some defaults.
+     $configuration += [
+       'entity_type' => '',
+@@ -90,7 +90,7 @@ abstract class DigestBase extends MessageNotifierBase implements ContainerFactor
+   /**
+    * {@inheritdoc}
+    */
+-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition, MessageInterface $message = NULL) {
++  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition, ?MessageInterface $message = NULL) {
+     return new static(
+       $configuration,
+       $plugin_id,
