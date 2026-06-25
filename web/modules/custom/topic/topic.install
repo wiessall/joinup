@@ -146,6 +146,28 @@ function topic_update_201502(array &$sandbox): string {
       }
     }
 
+    foreach ($meta_entity->getTranslationLanguages(FALSE) as $langcode => $language) {
+      $meta_translation = $meta_entity->getTranslation($langcode);
+      $translated_description = $meta_translation->get('description')->first();
+
+      if (!$term->hasTranslation($langcode)) {
+        $term->addTranslation($langcode);
+      }
+      $term_translation = $term->getTranslation($langcode);
+
+      if ($translated_description && $term_translation->get('description')->isEmpty()) {
+        $term_translation->set('description', [
+          'value' => $translated_description->value,
+          'format' => $translated_description->format,
+        ]);
+      }
+
+      if ($translated_description && !empty($translated_description->summary) &&
+        $term_translation->get('abstract')->isEmpty()) {
+        $term_translation->set('abstract', $translated_description->summary);
+      }
+    }
+
     $term->save();
     $logger->info('Migrated topic meta entity @id to taxonomy term @tid.', [
       '@id' => $meta_entity->id(),
