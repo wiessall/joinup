@@ -87,8 +87,9 @@
   .item-list__date_range {
     overflow-y: auto;
     max-height: 410px;
+    margin-right: -6px; // Compensate the 2px padding left and add room for the scroll bar.
     margin-bottom: 0;
-    padding: 3px 0 0 3px; // Add 3px margin left to allow the .facets-checkbox:focus-visible outline to be visible.
+    padding: 2px 0 0 2px; // Add 2px padding left to allow the .facets-checkbox:focus-visible outline to be visible.
     list-style: none;
   }
   .facets-widget- ul {
@@ -98,7 +99,7 @@
   .facets-checkbox {
     width: 1rem; // 16px
     height: 1rem; // 16px
-    margin-right: $spacer * 0.5; // 8px
+    margin-right: $spacer * 0.25; // 4px
     border: $form-check-input-border;
     border-radius: 0.25em;
     background-repeat: no-repeat;
