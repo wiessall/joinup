@@ -1,3 +1,22 @@
 field.widget.settings.joinup_media_video_url:
   type: field.widget.settings.inline_entity_form_simple
   label: 'Joinup Media video URL'
+
+views.argument.joinup_media_group_or_null:
+  type: views.argument.string
+  mapping:
+    exception:
+      type: mapping
+      mapping:
+        value:
+          type: string
+          label: 'Value'
+        title_enable:
+          type: boolean
+          label: 'Override title'
+        title:
+          type: label
+          label: 'Title'
+        value_to_filter_for_null:
+          type: string
+          label: 'Value triggering to filter for NULL values'
