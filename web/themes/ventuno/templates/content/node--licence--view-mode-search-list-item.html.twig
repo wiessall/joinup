@@ -14,6 +14,7 @@
 %}
 <article {{ attributes.addClass(classes) }} data-joinup-spdx="{{ spdx_licence_id_plain }}" data-joinup-licence-category="{{ legal_categories }}">
   {{ title_prefix }}
+  {% if spdx_licence_id_plain %}
     <h1 class="h4 ms-md-5 d-flex align-items-center flex-wrap">
       {{ spdx_licence_id_plain }}
       {{ pattern('badge', {
@@ -24,6 +25,7 @@
         dismissible: false,
       }) }}
     </h1>
+  {% endif %}
   {{ title_suffix }}
 
   <div class="row">
