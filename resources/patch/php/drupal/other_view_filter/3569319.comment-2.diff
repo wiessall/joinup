@@ -1,0 +1,13 @@
+diff --git a/src/Plugin/views/filter/OtherView.php b/src/Plugin/views/filter/OtherView.php
+index 3137ce5..37df04d 100644
+--- a/src/Plugin/views/filter/OtherView.php
++++ b/src/Plugin/views/filter/OtherView.php
+@@ -63,7 +63,7 @@ class OtherView extends InOperator {
+   /**
+    * {@inheritdoc}
+    */
+-  public function init(ViewExecutable $view, DisplayPluginBase $display, array &$options = NULL) {
++  public function init(ViewExecutable $view, DisplayPluginBase $display, ?array &$options = NULL) {
+     parent::init($view, $display, $options);
+     $this->defaultArgs = $view->args;
+     $this->valueTitle = $this->t('View: display');

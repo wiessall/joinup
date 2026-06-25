@@ -1,0 +1,23 @@
+diff --git a/src/Plugin/views/field/ViewsBulkOperationsBulkForm.php b/src/Plugin/views/field/ViewsBulkOperationsBulkForm.php
+index 95fada53b4bbf9ecc74521c6c3cd7787dff594a6..c37092ab425e320ea1007d3aabd235457e00cd69 100644
+--- a/src/Plugin/views/field/ViewsBulkOperationsBulkForm.php
++++ b/src/Plugin/views/field/ViewsBulkOperationsBulkForm.php
+@@ -919,8 +919,7 @@ class ViewsBulkOperationsBulkForm extends FieldPluginBase implements CacheableDe
+ 
+       // Update list data with the current page selection.
+       $selected_keys = [];
+-      $input = $form_state->getUserInput();
+-      foreach ($input[$this->options['id']] as $bulk_form_key) {
++      foreach (\array_filter($form_state->getUserInput()[$this->options['id']] ?? []) as $bulk_form_key) {
+         $selected_keys[$bulk_form_key] = $bulk_form_key;
+       }
+ 
+@@ -999,7 +998,7 @@ class ViewsBulkOperationsBulkForm extends FieldPluginBase implements CacheableDe
+       // results selected in other requests and validate if
+       // anything is selected.
+       $this->tempStoreData = $this->getTempstoreData();
+-      $selected = \array_filter($form_state->getValue($this->options['id']) ?? [], fn($item) => $item !== 0);
++      $selected = \array_filter($form_state->getValue($this->options['id']) ?? []);
+       if (\count($this->tempStoreData['list']) === 0 && \count($selected) === 0) {
+         $form_state->setErrorByName('', $this->t('No items selected.'));
+       }
