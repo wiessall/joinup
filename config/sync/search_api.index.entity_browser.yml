@@ -105,7 +105,6 @@ field_settings:
     configuration:
       type: concat
       separator: |
-
       fields:
         - 'entity:node/title'
   description:

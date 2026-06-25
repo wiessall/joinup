@@ -1,0 +1,13 @@
+diff --git a/src/ViewsBlockCreationHelper.php b/src/ViewsBlockCreationHelper.php
+index 4e0b20a33c90bb46cdefbea779c8c709e12e441f..68a304645e2f638746035ed60a1d50de200fae31 100644
+--- a/src/ViewsBlockCreationHelper.php
++++ b/src/ViewsBlockCreationHelper.php
+@@ -60,7 +60,7 @@ class ViewsBlockCreationHelper {
+     ModuleHandlerInterface $module_handler,
+     TranslationInterface $string_translation,
+     AccountInterface $current_user,
+-    EntityRepositoryInterface $entity_repository = NULL,
++    ?EntityRepositoryInterface $entity_repository = NULL,
+   ) {
+     $this->blockManager = $block_manager;
+     $this->renderer = $renderer;

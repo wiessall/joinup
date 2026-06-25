@@ -78,6 +78,7 @@ class ShareForm extends ShareFormBase {
       ];
     }
     foreach ($groups as $id => $group) {
+      $group = $this->entityRepository->getTranslationFromContext($group);
       $bundle = $group->bundle();
       $form['groups'][$bundle][$id] = [
         '#type' => 'container',
@@ -123,22 +124,19 @@ class ShareForm extends ShareFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    // Keep only the checked entries.
-    $groups = array_filter($form_state->getValue('groups'));
-    $group_labels = [];
-    // We can safely loop through these ids, as invalid options are handled
-    // already by Drupal.
-    foreach (array_keys($groups) as $id) {
-      $groups[$id] = $this->entityTypeManager->getStorage('node')->load($id);
-      assert($groups[$id] instanceof GroupInterface);
-      $group_labels[] = $groups[$id]->label();
+    $groupIds = array_keys(array_filter($form_state->getValue('groups')));
+    if (empty($groupIds)) {
+      return;
     }
-    $this->shareOnGroups($groups);
 
-    // Show a message if the content was shared on at least one group.
+    /** @var \Drupal\joinup_group\Entity\GroupInterface[] $groups */
+    $groups = $this->entityTypeManager->getStorage('node')->loadMultiple($groupIds);
     if (!empty($groups)) {
+      $this->shareOnGroups($groups);
+
+      $groupLabels = array_map(fn (GroupInterface $group): TranslatableMarkup|string => $this->entityRepository->getTranslationFromContext($group)->label(), $groups);
       $this->messenger()->addStatus(
-        $this->t('Item was shared on the following groups: @groups.', ['@groups' => implode(', ', $group_labels)])
+        $this->t('Item was shared on the following groups: @groups.', ['@groups' => implode(', ', $groupLabels)])
       );
     }
 

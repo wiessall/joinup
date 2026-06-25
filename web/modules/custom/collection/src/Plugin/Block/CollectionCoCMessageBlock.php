@@ -11,6 +11,7 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Plugin\Context\ContextDefinition;
 use Drupal\Core\Plugin\Context\EntityContextDefinition;
 use Drupal\Core\Security\Attribute\TrustedCallback;
@@ -117,13 +118,17 @@ class CollectionCoCMessageBlock extends BlockBase {
       return $build;
     }
 
+    $entity_repository = \Drupal::service(EntityRepositoryInterface::class);
+    $collection = $entity_repository->getTranslationFromContext($collection);
+    $coc = $entity_repository->getTranslationFromContext($collection->getCodeOfConduct());
+
     return [
       '#theme' => 'status_messages',
       '#message_list' => [
         'warning' => [
           t('We updated our <a href=":coc_url" target="_blank">Code of Conduct</a> to ensure safe and respectful environment for all members of %collection.<br> You can accept or decline it <a href=":coc_form_url" target="_blank">here</a>.', [
             '%collection' => $collection->label(),
-            ':coc_url' => $collection->getCodeOfConduct()->toUrl()->toString(),
+            ':coc_url' => $coc->toUrl()->toString(),
             ':coc_form_url' => Url::fromRoute('collection.code_of_conduct_consent', ['node' => $collection->id()])->toString(),
           ]),
         ],

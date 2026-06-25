@@ -17,6 +17,7 @@ use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\PrependCommand;
 use Drupal\Core\Ajax\RemoveCommand;
 use Drupal\Core\DependencyInjection\AutowireTrait;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Form\FormBase;
@@ -65,6 +66,7 @@ class SubscribeGroupForm extends FormBase {
     protected readonly TimeInterface $time,
     protected readonly EventDispatcherInterface $eventDispatcher,
     protected readonly PathValidatorInterface $pathValidator,
+    protected readonly EntityRepositoryInterface $entityRepository,
   ) {}
 
   /**
@@ -219,7 +221,7 @@ class SubscribeGroupForm extends FormBase {
       return NULL;
     }
 
-    $codeOfConduct = $collection->getCodeOfConduct();
+    $codeOfConduct = $this->entityRepository->getTranslationFromContext($collection->getCodeOfConduct());
     $codeOfConductArgs = [
       ':code-of-conduct-url' => $codeOfConduct->toUrl()->toString(),
       '@group-label' => $collection->label(),
@@ -276,6 +278,7 @@ class SubscribeGroupForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $group = $this->entityTypeManager->getStorage('node')->load($form_state->getValue('entity_id'));
+    $group = $this->entityRepository->getTranslationFromContext($group);
     $subscribe = (bool) $form_state->getValue('subscribe');
     if ($group instanceof CollectionInterface) {
       if (!$this->isAjax()) {

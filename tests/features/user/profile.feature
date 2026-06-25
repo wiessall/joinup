@@ -399,3 +399,21 @@ Feature: User profile
 
     When I visit "/pt/user"
     Then the "lang" attribute of the page should be "pt"
+
+  Scenario: User tile badges show taxonomy term labels in the current language.
+    Given the following term entity translations:
+      | source            | language | name                    |
+      | Supplier exchange | fr       | Échange de fournisseurs |
+    And the following users:
+      | Username       | Professional domain |
+      | Marie Beaumont | Supplier exchange   |
+    And the following "collection" content:
+      | title          |
+      | Portail commun |
+    And the following collection user memberships:
+      | collection     | user           |
+      | Portail commun | Marie Beaumont |
+    When I am on the members page of "Portail commun"
+    And I switch to the "fr" language
+    Then I should see the text "Échange de fournisseurs"
+    But I should not see the text "Supplier exchange"

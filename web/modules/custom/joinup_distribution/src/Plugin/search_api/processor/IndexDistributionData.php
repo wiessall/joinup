@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_distribution\Plugin\search_api\processor;
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\TranslatableInterface;
 use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\file\FileInterface;
@@ -40,7 +41,6 @@ class IndexDistributionData extends ProcessorPluginBase {
     string $plugin_id,
     mixed $plugin_definition,
     protected readonly FileUrlGeneratorInterface $fileUrlGenerator,
-    protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
@@ -54,7 +54,6 @@ class IndexDistributionData extends ProcessorPluginBase {
       $pluginId,
       $pluginDefinition,
       $container->get('file_url_generator'),
-      $container->get('entity_type.manager'),
     );
   }
 
@@ -99,65 +98,59 @@ class IndexDistributionData extends ProcessorPluginBase {
       return;
     }
 
-    $distributionIds = $entity->getDistributionIds();
-    if (empty($distributionIds)) {
-      return;
-    }
-
     // Get the parent Search API field.
     $sapiField = $item->getField('description');
-    if (empty($sapiField)) {
+    if ($sapiField === NULL) {
       return;
     }
 
     // Iterate over all distributions and append their data to Search API field.
-    foreach ($this->entityTypeManager->getStorage('node')->loadMultiple($distributionIds) as $distribution) {
-      assert($distribution instanceof DistributionInterface);
+    $langcode = $entity->language()->getId();
+    foreach ($entity->getDistributions() as $distribution) {
+      $distribution = $this->getTranslation($distribution, $langcode);
+      \assert($distribution instanceof DistributionInterface);
 
       // Add the distribution title.
       $sapiField->addValue($distribution->label());
 
       // Add the distribution description.
-      $distributionFieldItemList = $distribution->get('description');
-      if (!$distributionFieldItemList->isEmpty()) {
-        $sapiField->addValue(check_markup($distributionFieldItemList->value, $distributionFieldItemList->format));
+      foreach ($distribution->get('description') as $description) {
+        $sapiField->addValue($description->processed);
       }
 
-      if (!empty($distribution->getResources())) {
-        foreach ($distribution->getResources() as $resource) {
-          if ($resource instanceof LinkItemInterface) {
-            $sapiField->addValue($resource->uri);
-          }
-          elseif ($resource instanceof FileInterface) {
-            $sapiField->addValue($this->fileUrlGenerator->generateAbsoluteString($resource->getFileUri()));
-          }
+      foreach ($distribution->getResources() as $resource) {
+        if ($resource instanceof LinkItemInterface) {
+          $sapiField->addValue($resource->uri);
+        }
+        elseif ($resource instanceof FileInterface) {
+          $sapiField->addValue($this->fileUrlGenerator->generateAbsoluteString($resource->getFileUri()));
         }
       }
 
       // Add the distribution licence.
-      $distributionFieldItemList = $distribution->get('field_licence');
-      if (!$distributionFieldItemList->isEmpty()) {
-        foreach ($distributionFieldItemList->referencedEntities() as $licence) {
-          $sapiField->addValue($licence->label());
-        }
+      foreach ($distribution->get('field_licence')->referencedEntities() as $licence) {
+        $sapiField->addValue($this->getTranslation($licence, $langcode)->label());
       }
 
       // Add the distribution format.
-      $distributionFieldItemList = $distribution->get('format');
-      if (!$distributionFieldItemList->isEmpty()) {
-        foreach ($distributionFieldItemList->referencedEntities() as $format) {
-          $sapiField->addValue($format->label());
-        }
+      foreach ($distribution->get('format')->referencedEntities() as $format) {
+        $sapiField->addValue($this->getTranslation($format, $langcode)->label());
       }
 
       // Add the distribution representation technique.
-      $distributionFieldItemList = $distribution->get('representation_technique');
-      if (!$distributionFieldItemList->isEmpty()) {
-        foreach ($distributionFieldItemList->referencedEntities() as $technique) {
-          $sapiField->addValue($technique->label());
-        }
+      foreach ($distribution->get('representation_technique')->referencedEntities() as $technique) {
+        $sapiField->addValue($this->getTranslation($technique, $langcode)->label());
       }
     }
+  }
+
+  /**
+   * Returns the given entity's translation, if it exists.
+   */
+  private function getTranslation(EntityInterface $entity, string $langcode): EntityInterface {
+    return $entity instanceof TranslatableInterface && $entity->hasTranslation($langcode)
+      ? $entity->getTranslation($langcode)
+      : $entity;
   }
 
 }
