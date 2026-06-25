@@ -100,12 +100,7 @@ final class TopicTermHooks {
   #[Hook('form_taxonomy_term_topic_form_alter')]
   public function formTaxonomyTermTopicEditFormAlter(array &$form, FormStateInterface $form_state): void {
     $term = $form_state->getFormObject()->getEntity();
-    if (!$term instanceof TopicTermInterface) {
-      return;
-    }
-    $form['#title'] = $this->t('Edit @name', ['@name' => $term->label()]);
-
-    if ($this->currentUser->hasPermission('administer taxonomy')) {
+    if (!$term instanceof TopicTermInterface || $this->currentUser->hasPermission('administer taxonomy')) {
       return;
     }
 
