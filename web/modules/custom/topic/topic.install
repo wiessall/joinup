@@ -155,7 +155,8 @@ function topic_update_201502(array &$sandbox): string {
       }
       $term_translation = $term->getTranslation($langcode);
 
-      if ($translated_description && $term_translation->get('description')->isEmpty()) {
+      if ($translated_description && $term_translation->get('description')
+          ->isEmpty()) {
         $term_translation->set('description', [
           'value' => $translated_description->value,
           'format' => $translated_description->format,
@@ -184,7 +185,8 @@ function topic_update_201502(array &$sandbox): string {
  */
 function topic_update_201503(): string {
   $entity_type_manager = \Drupal::entityTypeManager();
-  $subqueue = $entity_type_manager->getStorage('entity_subqueue')->load('homepage_topics');
+  $subqueue = $entity_type_manager->getStorage('entity_subqueue')
+    ->load('homepage_topics');
   if (!$subqueue) {
     return 'Homepage topics subqueue not found.';
   }
@@ -264,7 +266,9 @@ function topic_update_201504(): string {
  */
 function topic_update_201505(array &$sandbox): string {
   if (!isset($sandbox['total'])) {
-    $sandbox['ids'] = \Drupal::entityTypeManager()->getStorage('meta_entity')->getQuery()
+    $sandbox['ids'] = \Drupal::entityTypeManager()
+      ->getStorage('meta_entity')
+      ->getQuery()
       ->accessCheck(FALSE)
       ->condition('type', 'topic')
       ->execute();
@@ -293,19 +297,29 @@ function topic_update_201505(array &$sandbox): string {
 /**
  * Delete all topic meta entities.
  */
-function topic_update_201506(): string {
-  $meta_entity_storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
+function topic_update_201506(array &$sandbox): string {
+  $storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
 
-  $ids = $meta_entity_storage->getQuery()
-    ->accessCheck(FALSE)
-    ->condition('type', 'topic')
-    ->execute();
-
-  if (empty($ids)) {
-    return 'No topic meta entities found to delete.';
+  if (!isset($sandbox['total'])) {
+    $sandbox['ids'] = $storage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', 'topic')
+      ->execute();
+    $sandbox['total'] = count($sandbox['ids']);
+    $sandbox['current'] = 0;
   }
 
-  $meta_entity_storage->delete($meta_entity_storage->loadMultiple($ids));
+  $items = array_slice($sandbox['ids'], $sandbox['current'], 10);
 
-  return sprintf('Deleted %d topic meta entities.', count($ids));
+  if ($items) {
+    $storage->delete($storage->loadMultiple($items));
+    $sandbox['current'] += count($items);
+  }
+
+  $sandbox['#finished'] = ($sandbox['total'] == 0) ? 1 : ($sandbox['current'] / $sandbox['total']);
+
+  return (string) t('Deleted @current of @total topic meta entities.', [
+    '@current' => $sandbox['current'],
+    '@total' => $sandbox['total'],
+  ]);
 }
