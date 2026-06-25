@@ -9,8 +9,6 @@ use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\DependencyInjection\AutowireTrait;
-use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -21,12 +19,6 @@ use Drupal\node\NodeInterface;
  * Form for accepting new Code of Conduct document.
  */
 class CodeOfConductConsentForm extends FormBase {
-
-  use AutowireTrait;
-
-  public function __construct(
-    protected readonly EntityRepositoryInterface $entityRepository,
-  ) {}
 
   /**
    * {@inheritdoc}
@@ -43,7 +35,6 @@ class CodeOfConductConsentForm extends FormBase {
     assert($collection instanceof CollectionInterface);
     $codeOfConduct = $collection->getCodeOfConduct();
     assert($codeOfConduct instanceof NodeInterface);
-    $codeOfConduct = $this->entityRepository->getTranslationFromContext($codeOfConduct);
 
     $args = [
       '@label' => $collection->label(),

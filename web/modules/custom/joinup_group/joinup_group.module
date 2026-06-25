@@ -196,12 +196,13 @@ function joinup_group_preprocess(array &$variables, string $hook): void {
   if (
     // It's group content (solution, news, discussion, etc)
     $group_content instanceof GroupContentInterface
+    // Content must have group.
+    && $group_content->hasGroup()
+    // And belongs to a group.
+    && ($parent = $group_content->getGroup())
     // And is shared.
     && $group_content instanceof ShareableContentInterface
-    // And belongs to a group.
-    && $group_content->hasGroup()
   ) {
-    $parent = \Drupal::service('entity.repository')->getTranslationFromContext($group_content->getGroup());
     $variables['#attached']['library'][] = 'joinup_group/shared_entity';
     $variables['attributes']['data-joinup-parent-id'] = $parent->id();
     $variables['attributes']['data-joinup-parent-label'] = $parent->label();

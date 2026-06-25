@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_release\Plugin\search_api\processor;
 
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\TranslatableInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_release\Entity\ReleaseInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\search_api\Attribute\SearchApiProcessor;
 use Drupal\search_api\Processor\ProcessorPluginBase;
 use Drupal\search_api\SearchApiException;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Attaches necessary data from the solution to the release.
@@ -40,47 +40,38 @@ class ReleaseSolutionData extends ProcessorPluginBase {
         $entity = $item->getOriginalObject()->getValue();
       }
       catch (SearchApiException) {
-        continue;
+        return;
       }
 
       if (!$entity instanceof ReleaseInterface) {
-        continue;
+        return;
       }
 
-      $langcode = $entity->language()->getId();
+      $solution = $entity->get('solution_data')->entity;
+      if ((!$solution instanceof SolutionInterface) || $solution->get('field_topic')->isEmpty()) {
+        return;
+      }
 
-      $solutions = $entity->get('solution_data')->referencedEntities();
-      foreach ($solutions as $solution) {
-        $solution = $this->getTranslation($solution, $langcode);
+      $field = $item->getField('topic');
+      $solutionTopicIds = array_map(
+        static fn (TermInterface $term) => $term->id(),
+        $solution->get('field_topic')->referencedEntities()
+      );
 
-        // Collect topics from solution.
-        $field = $item->getField('topic');
-        foreach ($solution->get('field_topic')->referencedEntities() as $term) {
-          $field->addValue($term->id());
-        }
+      // ::setValues does not override the existing values, so we need to clear
+      // them first.
+      $field->setValues([]);
+      $field->setValues($solutionTopicIds);
+      $item->setField('topic', $field);
 
-        // Include also the contact & owner labels of the parent solution.
-        $description = $item->getField('description');
-        foreach ($solution->get('contact')->referencedEntities() as $contact) {
-          $contact = $this->getTranslation($contact, $langcode);
-          $description->addValue($contact->label());
-        }
-
-        foreach ($solution->get('owner')->referencedEntities() as $owner) {
-          $owner = $this->getTranslation($owner, $langcode);
-          $description->addValue($owner->label());
-        }
+      // Include also the contact & owner labels of the parent solution.
+      if ($description = $item->getField('description')) {
+        $contactLabel = $solution->get('contact')->entity?->label() ?? '';
+        $ownerLabel = $solution->get('owner')->entity?->label() ?? '';
+        $description->addValue($contactLabel)->addValue($ownerLabel);
+        $item->setField('description', $description);
       }
     }
-  }
-
-  /**
-   * Returns the given entity's translation, if it exists.
-   */
-  private function getTranslation(EntityInterface $entity, string $langcode): EntityInterface {
-    return $entity instanceof TranslatableInterface && $entity->hasTranslation($langcode)
-      ? $entity->getTranslation($langcode)
-      : $entity;
   }
 
 }

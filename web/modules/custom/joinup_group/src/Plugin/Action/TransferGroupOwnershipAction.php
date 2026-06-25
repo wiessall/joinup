@@ -7,7 +7,6 @@ namespace Drupal\joinup_group\Plugin\Action;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Action\ActionBase;
 use Drupal\Core\Action\Attribute\Action;
-use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -44,7 +43,6 @@ class TransferGroupOwnershipAction extends ActionBase implements ContainerFactor
     array $plugin_definition,
     protected readonly PrivateTempStoreFactory $tempStoreFactory,
     protected readonly AccountInterface $currentUser,
-    protected readonly EntityRepositoryInterface $entityRepository,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
@@ -58,8 +56,7 @@ class TransferGroupOwnershipAction extends ActionBase implements ContainerFactor
       $plugin_id,
       $plugin_definition,
       $container->get('tempstore.private'),
-      $container->get('current_user'),
-      $container->get('entity.repository'),
+      $container->get('current_user')
     );
   }
 
@@ -72,7 +69,7 @@ class TransferGroupOwnershipAction extends ActionBase implements ContainerFactor
       $membership = reset($memberships);
       $this->messages['warning'][] = $this->t(
         'You cannot transfer the @label ownership to more than one user. Please select a single user.',
-        $this->getDefaultMessageArguments($membership),
+        static::getDefaultMessageArguments($membership),
       );
     }
     parent::executeMultiple($memberships);
@@ -90,7 +87,7 @@ class TransferGroupOwnershipAction extends ActionBase implements ContainerFactor
     if ($group->isGroupOwner((int) $user->id())) {
       $this->messages['warning'][] = $this->t(
         'Member %member is already the owner of %group @label. Please select other user.',
-        $this->getDefaultMessageArguments($membership),
+        static::getDefaultMessageArguments($membership),
       );
     }
 
@@ -150,8 +147,8 @@ class TransferGroupOwnershipAction extends ActionBase implements ContainerFactor
    *   - '@label': the group's singular label from its bundle entity.
    *   - '%member': the display name of the membership's owner.
    */
-  protected function getDefaultMessageArguments(OgMembershipInterface $membership): array {
-    $group = $this->entityRepository->getTranslationFromContext($membership->getGroup());
+  protected static function getDefaultMessageArguments(OgMembershipInterface $membership): array {
+    $group = $membership->getGroup();
     $bundleKey = $group->getEntityType()->getKey('bundle');
     return [
       '%member' => $membership->getOwner()->getDisplayName(),

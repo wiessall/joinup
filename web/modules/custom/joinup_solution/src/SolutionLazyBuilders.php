@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_solution;
 
-use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Security\Attribute\TrustedCallback;
@@ -20,7 +19,6 @@ readonly class SolutionLazyBuilders {
     protected EntityTypeManagerInterface $entityTypeManager,
     protected FormBuilderInterface $formBuilder,
     protected AccountInterface $currentUser,
-    protected EntityRepositoryInterface $entityRepository,
   ) {}
 
   /**
@@ -35,7 +33,6 @@ readonly class SolutionLazyBuilders {
   #[TrustedCallback]
   public function renderJoinSolutionForm(string $solution_id): array {
     $solution = $this->entityTypeManager->getStorage('node')->load($solution_id);
-    $solution = $this->entityRepository->getTranslationFromContext($solution);
     return $this->formBuilder->getForm(JoinSolutionForm::class, $this->currentUser, $solution);
   }
 

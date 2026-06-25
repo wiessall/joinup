@@ -4,6 +4,9 @@ Feature: Creating nodes in foreign language
   Nodes are creating manually in different languages
   (language select) and then the source is checked.
 
+  # @wip: Sets the original node language, which is not yet functional on this
+  # branch. @see ISAICP-11330
+  @wip
   Scenario: Create node in polish language
     Given I am logged in as a developer
     When I go to the propose collection form

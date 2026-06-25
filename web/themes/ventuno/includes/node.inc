@@ -76,7 +76,6 @@ function ventuno_preprocess_node(array &$variables): void {
   if (in_array($variables['view_mode'], ['carousel', 'view_mode_tile'])) {
     $parent = JoinupGroupHelper::getGroup($node);
     if ($parent) {
-      $parent = \Drupal::service('entity.repository')->getTranslationFromContext($parent);
       $variables['attributes']['data-joinup-parent-id'] = $parent->id();
       $variables['attributes']['data-joinup-parent-label'] = $parent->label();
     }

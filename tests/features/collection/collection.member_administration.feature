@@ -536,17 +536,3 @@ Feature: Collection membership administration
       | This is custom approval message for collection Medical diagnosis by Daniel Moder |
     But the email sent to "Kathie Cumbershot" with subject "Interoperable Europe Portal: Your request to join the collection Medical diagnosis was approved" should not contain the following lines of text:
       | Daniel Moder has approved your request to join the "Medical diagnosis" collection |
-
-  Scenario: The delete membership confirm form uses the translated collection name.
-    Given the following "collection" entity translations:
-      | source            | language | title              |
-      | Medical diagnosis | fr       | Diagnostic médical |
-    Given I am logged in as "Lisa Cuddy"
-    And I am on the members page of "Medical diagnosis"
-    And I switch to the "fr" language
-    And I check the box "Update the member Gregory House"
-    And I select "Delete the selected membership(s)" from "Action"
-    When I press "Apply to selected items"
-    Then I should see the heading "Are you sure you want to delete the selected membership from the 'Diagnostic médical' collection?"
-    When I press "Confirm"
-    Then I should see the success message "The member Gregory House has been deleted from the 'Diagnostic médical' collection."

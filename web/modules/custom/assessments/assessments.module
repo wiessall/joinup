@@ -23,7 +23,6 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Database\Query\AlterableInterface;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
@@ -379,16 +378,6 @@ function assessments_inline_entity_form_entity_form_alter(array &$entityForm, Fo
         [$selector => ['checked' => FALSE]],
       ],
     ];
-
-    // As untranslatable fields are hidden and the entity reference field is
-    // untranslatable IEF thinks that it should hide the entire
-    // assessment_statement form even though we have translatable fields inside.
-    $entityForm['#access'] = TRUE;
-    $bundleName = $solution->bundle();
-    $completeForm = $formState->getCompleteForm();
-    $completeForm[$bundleName]['#access'] = TRUE;
-    $completeForm[$bundleName]['widget']['#access'] = TRUE;
-    $completeForm[$bundleName]['widget'][0]['#access'] = TRUE;
   }
 }
 
@@ -557,7 +546,8 @@ function assessments_inline_entity_form_reference_form_alter(&$reference_form, F
  * Implements hook_query_TAG_alter().
  */
 function assessments_query_explore_block_solution_alter(AlterableInterface $query): void {
-  $entity_repository = \Drupal::service(EntityRepositoryInterface::class);
+  /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
+  $entity_repository = \Drupal::service('entity.repository');
   $collector = $entity_repository->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR);
   if ($collector) {
     $query->join('node__og_audience', 'oa', 'oa.entity_id = node_field_data.nid');

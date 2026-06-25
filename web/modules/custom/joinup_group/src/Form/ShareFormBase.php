@@ -6,7 +6,6 @@ namespace Drupal\joinup_group\Form;
 
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\DependencyInjection\AutowireTrait;
-use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
@@ -45,7 +44,6 @@ abstract class ShareFormBase extends FormBase {
     protected readonly AccountInterface $currentUser,
     protected readonly EntityTypeBundleInfoInterface $bundleInfo,
     protected readonly CacheTagsInvalidatorInterface $invalidator,
-    protected readonly EntityRepositoryInterface $entityRepository,
   ) {}
 
   /**
