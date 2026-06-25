@@ -20,6 +20,7 @@ use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og\OgRoleInterface;
+use Drupal\og_menu\OgMenuInstanceInterface;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
 
 /**
@@ -265,6 +266,14 @@ interface GroupInterface extends
   public function getGroupContentIds(): array;
 
   /**
+   * Returns direct group content IDs, without recursing into child groups.
+   *
+   * @return array
+   *   Same structure as getGroupContentIds().
+   */
+  public function getDirectGroupContentIds(): array;
+
+  /**
    * Returns the message to show to a new member when they join the group.
    *
    * @param \Drupal\og\OgMembershipInterface $membership
@@ -306,6 +315,8 @@ interface GroupInterface extends
    *
    * @param string $field_name
    *   The field name.
+   * @param string|null $langcode
+   *   (optional) The language code. Defaults to the current context language.
    *
    * @return \Drupal\Core\Field\FieldItemListInterface
    *   The setting field item list.
@@ -313,7 +324,7 @@ interface GroupInterface extends
    * @throws \InvalidArgumentException
    *   When $field_name is not a valid field.
    */
-  public function getSetting(string $field_name): FieldItemListInterface;
+  public function getSetting(string $field_name, ?string $langcode = NULL): FieldItemListInterface;
 
   /**
    * Returns a list of group members, optionally filtered by role and state.
@@ -380,5 +391,31 @@ interface GroupInterface extends
    *   The number of active members.
    */
   public function getActiveMemberCount(): int;
+
+  /**
+   * Returns the OG menu instances for this group.
+   *
+   * @param string[]|null $types
+   *   (optional) An array of bundles to filter by. If omitted, all bundles will
+   *   be returned.
+   *
+   * @return array<int|string, \Drupal\og\OgMembershipInterface>
+   *   Organic group menu instances for this group.
+   */
+  public function getGroupOgMenuInstances(?array $types = NULL): array;
+
+  /**
+   * Returns the OG menu instance of a given type for this group.
+   *
+   * @param string $type
+   *   A specific bundle to retrieve.
+   *
+   * @return \Drupal\og_menu\OgMenuInstanceInterface
+   *   Organic group menu instance or NULL if none exists.
+   *
+   * @thorws \LogicException
+   *   If there are zero or more than one OG menu instances of the given type.
+   */
+  public function getGroupOgMenuInstance(string $type): OgMenuInstanceInterface;
 
 }

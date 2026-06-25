@@ -84,3 +84,7 @@ eu_oss_catalogue.resolver_schema.absolute_url:
     verify:
       type: boolean
       label: Whether to verify the URL
+
+views.filter.eu_oss_catalogue_translation_filter:
+  type: views.filter.in_operator
+  label: 'Displays only the results having translation in the selected language'

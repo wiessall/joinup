@@ -15,34 +15,34 @@ settings:
   allowed_values:
     -
       value: academy
-      label: 'Interoperable Europe - Academy'
+      label: Academy
     -
       value: architecture
-      label: 'Interoperable Europe - Architecture'
+      label: Architecture
     -
       value: assessments
-      label: 'Interoperable Europe - Assessments'
+      label: Assessments
     -
       value: community
-      label: 'Interoperable Europe - Community'
+      label: Community
     -
       value: eu_oss_catalogue
-      label: 'Interoperable Europe - EU OSS Catalogue'
+      label: 'EU OSS Catalogue'
     -
       value: governance
-      label: 'Interoperable Europe - Governance'
+      label: Governance
     -
       value: govtech
-      label: 'Interoperable Europe - GovTech and Sandboxes'
+      label: 'GovTech and Sandboxes'
     -
       value: monitoring
-      label: 'Interoperable Europe - Monitoring'
+      label: Monitoring
     -
       value: open_source
-      label: 'Interoperable Europe - Open Source'
+      label: 'Open Source'
     -
       value: semantics
-      label: 'Interoperable Europe - Semantics'
+      label: Semantics
     -
       value: legal
       label: 'Legal / Licence / GDPR question'

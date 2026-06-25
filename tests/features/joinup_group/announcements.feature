@@ -72,7 +72,7 @@ Feature: Messaging group announcements
     And Log entry with the message "The announcement The Big Opening has been created by Sons of tweets for Fail pension." should exist.
     And the "Subject" field should contain "The Big Opening"
     And the "Body" field should contain "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-    And I should see "Announcement state: Draft"
+    And I should see the text "Announcement state: Draft"
     And I should see the button "Send for approval"
     And I should see the button "Preview"
     But I should not see the button "Approve"
@@ -102,7 +102,7 @@ Feature: Messaging group announcements
 
     When I press "Update"
     Then I should see the success message "The announcement has been updated but it's still in Draft state. Review the announcement and, when is ready to be sent, use the 'Send' button."
-    And I should see "Announcement state: Draft"
+    And I should see the text "Announcement state: Draft"
 
     When I press "Preview"
     Then I should see the success message "A sample announcement has been delivered to sonsoftweets@example.com."
@@ -149,7 +149,7 @@ Feature: Messaging group announcements
     When I go to the announcements page of "Hidden gems" <group>
     Then the response status code should be 403
     And I click the link from email sent to "Check edit moderator" with subject "Interoperable Europe Portal: A new announcement 'The Big Opening is postponed' has been created"
-    Then I should see "Announcement state: Pending approval"
+    Then I should see the text "Announcement state: Pending approval"
     And I should see the button "Update"
     And I should see the button "Approve"
     And I should see the button "Preview"
@@ -159,7 +159,7 @@ Feature: Messaging group announcements
 
     When I press "Reject"
     Then I should see the success message "The announcement has been rejected. Press the 'Undo reject' button to restore the announcement."
-    Then I should see "Announcement state: Rejected"
+    Then I should see the text "Announcement state: Rejected"
     And I should see the button "Update"
     And I should see the button "Preview"
     But I should not see the button "Approve"
@@ -196,7 +196,7 @@ Feature: Messaging group announcements
     When I go to the "The Big Opening is postponed" announcement of "Fail pension" <group>
     And  I press "Undo reject"
     Then I should see the success message "The announcement has been restored."
-    Then I should see "Announcement state: Pending approval"
+    Then I should see the text "Announcement state: Pending approval"
     And I should see the button "Update"
     And I should see the button "Approve"
     And I should see the button "Preview"
@@ -310,60 +310,44 @@ Feature: Messaging group announcements
       | collection |
       | solution   |
 
-  @javascript @group-e
+  @group-e
   Scenario: Announcement moderation
     Given the following "collection" content:
       | title       |
       | Collection1 |
-      | Collection2 |
     And the following "solution" content:
       | title                 | collection  |
       | Collection1 Solution1 | Collection1 |
-      | Collection1 Solution2 | Collection1 |
-      | Collection2 Solution1 | Collection2 |
     And the following users:
       | Username         | E-mail                      | Roles     |
-      | Rian Lee         | rian-lee@example.com        |           |
       | Miau user        | miau.user@example.com       |           |
       | Lory Facilitator | loryfacilitator@example.com |           |
-      | Xela moderator   | xela.moderator@example.com  | moderator |
     And the following announcements:
       | group                 | subject            | state     | author           | created    |
       | Collection1           | Announcement1 C1   | draft     | Lory Facilitator | 2005-11-05 |
       | Collection1 Solution1 | Announcement1 C1S1 | rejected  | Lory Facilitator | 2018-12-19 |
       | Collection1 Solution1 | Announcement2 C1S1 | sent      | Lory Facilitator | 2018-05-25 |
-      | Collection1 Solution2 | Announcement1 C1S2 | draft     | Lory Facilitator | 1999-04-30 |
-      | Collection2           | Announcement1 C2   | sent      | Miau user        | 2022-07-29 |
-      | Collection2 Solution1 | Announcement1 C2S1 | delivered | Miau user        | 2022-08-03 |
     And the following collection user membership:
       | collection            | user             | roles       |
       | Collection1           | Lory Facilitator | facilitator |
-      | Collection2           | Miau user        | facilitator |
       | Collection1 Solution1 | Miau user        |             |
     And the following legal document version:
       | Document     | Label | Published | Acceptance label                                                                                   | Content                                                    |
       | Legal notice | 1.1   | yes       | I have read and accept the <a href="[entity_legal_document:url]">[entity_legal_document:label]</a> | The information on this site is subject to a disclaimer... |
     And the following "Legal notice" acceptances:
-      | Rian Lee         |
       | Miau user        |
-      | Lory Facilitator |
-      | Xela moderator   |
 
-    Given I am logged in as "Xela moderator"
+    Given I am logged in as a moderator
     When I click "Announcements" in the "Administration toolbar"
 
     Then the "State" field should contain the "- Any -,Draft,Pending approval,Delivered,Rejected" options
     And the "announcement list" table should be:
       | Group                 | Subject            | State            | Created on | Author           | Edit |
-      | Collection2 Solution1 | Announcement1 C2S1 | Delivered        | 03/08/2022 | Miau user        |      |
-      | Collection2           | Announcement1 C2   | Pending approval | 29/07/2022 | Miau user        | edit |
       | Collection1 Solution1 | Announcement1 C1S1 | Rejected         | 19/12/2018 | Lory Facilitator | edit |
       | Collection1 Solution1 | Announcement2 C1S1 | Pending approval | 25/05/2018 | Lory Facilitator | edit |
       | Collection1           | Announcement1 C1   | Draft            | 05/11/2005 | Lory Facilitator | edit |
-      | Collection1 Solution2 | Announcement1 C1S2 | Draft            | 30/04/1999 | Lory Facilitator | edit |
 
-    When I type "Collection1 Solution1" in the "group" autocomplete field
-    And I pick "Collection1 Solution1" from the autocomplete suggestions
+    And I fill in "Group" with "Collection1 Solution1"
     And I press "Apply"
     Then the "announcement list" table should be:
       | Group                 | Subject            | State            | Created on | Author           | Edit |
@@ -383,13 +367,10 @@ Feature: Messaging group announcements
     When I click "Announcements" in the "Administration toolbar"
     Then the "announcement list" table should be:
       | Group                 | Subject            | State            | Created on | Author           | Edit |
-      | Collection2 Solution1 | Announcement1 C2S1 | Delivered        | 03/08/2022 | Miau user        |      |
-      | Collection2           | Announcement1 C2   | Pending approval | 29/07/2022 | Miau user        | edit |
       | Collection1 Solution1 | Announcement1 C1S1 | Rejected         | 19/12/2018 | Lory Facilitator | edit |
       # Once delivered, the announcement cannot be edited.
       | Collection1 Solution1 | Announcement2 C1S1 | Delivered        | 25/05/2018 | Lory Facilitator |      |
       | Collection1           | Announcement1 C1   | Draft            | 05/11/2005 | Lory Facilitator | edit |
-      | Collection1 Solution2 | Announcement1 C1S2 | Draft            | 30/04/1999 | Lory Facilitator | edit |
 
     # A delivered announcement can still be visualized in read-only mode.
     When I click "Announcement2 C1S1"

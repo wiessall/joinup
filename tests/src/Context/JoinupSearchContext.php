@@ -24,6 +24,8 @@ use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Entity\Server;
+use Drupal\search_api_solr\SolrBackendInterface;
+use Drupal\search_api_solr\Utility\SolrCommitTrait;
 
 /**
  * Behat step definitions for testing searches.
@@ -35,6 +37,7 @@ class JoinupSearchContext extends RawDrupalContext {
   use JavascriptTrait;
   use KeyboardInteractionTrait;
   use SearchTrait;
+  use SolrCommitTrait;
   use TraversingTrait;
   use UtilityTrait;
 
@@ -54,6 +57,11 @@ class JoinupSearchContext extends RawDrupalContext {
   #[AfterStep]
   public function afterStepIndexing(): void {
     \Drupal::service('search_api.post_request_indexing')->destruct();
+    foreach (Index::loadMultiple() as $index) {
+      if ($index->status() && $index->getServerInstance()?->getBackend() instanceof SolrBackendInterface) {
+        $this->ensureCommit($index);
+      }
+    }
   }
 
   /**

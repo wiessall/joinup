@@ -24,7 +24,7 @@ Feature: Contact Information moderation
     And I fill in "Name" with "Mildþryð Mildgyð"
     And I fill in "E-mail address" with "mildred@anglo-saxon-museum.co.uk"
     And I press "Create contact information"
-    Then I should see "Mildþryð Mildgyð"
+    Then I should see the text "Mildþryð Mildgyð"
     When I press "Save as draft"
     Then I should see the heading "Games of the Anglo-Saxon age"
 

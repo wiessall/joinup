@@ -1,0 +1,26 @@
+uuid: 4b8b0bfb-f678-461d-bc8e-ff8728652028
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.meta_entity.overview_label
+    - meta_entity.type.solution_settings
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: meta_entity.solution_settings.overview_label
+field_name: overview_label
+entity_type: meta_entity
+bundle: solution_settings
+label: 'Overview label'
+description: 'It overwrites the default label for the "Overview" tab'
+required: false
+translatable: true
+default_value:
+  -
+    value: Overview
+default_value_callback: ''
+settings: {  }
+field_type: string

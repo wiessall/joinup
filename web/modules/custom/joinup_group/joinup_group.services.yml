@@ -8,6 +8,10 @@ services:
     parent: logger.channel_base
     arguments: [ 'group_membership' ]
 
+  logger.channel.joinup_group:
+    parent: logger.channel_base
+    arguments: [ 'joinup_group' ]
+
   cache_context.joinup_group_owner:
     class: 'Drupal\joinup_group\Cache\Context\GroupOwnerCacheContext'
     arguments: ['@current_user', '@entity_type.manager', '@og.membership_manager', '@database', '@private_key']
@@ -21,15 +25,6 @@ services:
   joinup_group.group_manager:
     class: Drupal\joinup_group\JoinupGroupManager
   Drupal\joinup_group\JoinupGroupManagerInterface: '@joinup_group.group_manager'
-
-  Drupal\joinup_group\EventSubscriber\GroupMenuLinksSubscriber: { }
-
-  joinup_group.group_menu_manager:
-    class: Drupal\joinup_group\GroupMenuManager
-  Drupal\joinup_group\GroupMenuManagerInterface: '@joinup_group.group_menu_manager'
-
-  joinup_group.group_settings_form_alter:
-    class: Drupal\joinup_group\GroupSettingsFormAlter
 
   Drupal\joinup_group\EventSubscriber\JoinGroupSubscriber: { }
 
@@ -68,6 +63,8 @@ services:
       - { name: access_check, applies_to: _og_permission }
 
   Drupal\joinup_group\EventSubscriber\AdjustGroupContentSubscriber: { }
+
+  Drupal\joinup_group\EventSubscriber\GroupArchiveEventSubscriber: { }
 
   Drupal\joinup_group\JoinupGroupPermissionManagerInterface:
     class: Drupal\joinup_group\JoinupGroupPermissionManager
