@@ -52,9 +52,31 @@ function topic_update_201500(): void {
 }
 
 /**
+ * Add taxonomy_term.topic to all continuous TMGMT job settings.
+ */
+function topic_update_201501(): void {
+  /** @var \Drupal\tmgmt\JobInterface[] $jobs */
+  $jobs = \Drupal::entityTypeManager()
+    ->getStorage('tmgmt_job')
+    ->loadByProperties(['job_type' => 'continuous']);
+
+  foreach ($jobs as $job) {
+    $settings = $job->getContinuousSettings();
+    if (!isset($settings['content']['taxonomy_term'])) {
+      $settings['content']['taxonomy_term'] = [
+        'enabled' => TRUE,
+        'bundles' => ['topic' => TRUE],
+      ];
+      $job->set('continuous_settings', $settings);
+      $job->save();
+    }
+  }
+}
+
+/**
  * Migrate topic meta entity data to taxonomy term fields.
  */
-function topic_update_201501(array &$sandbox): string {
+function topic_update_201502(array &$sandbox): string {
   $entity_type_manager = \Drupal::entityTypeManager();
   $meta_entity_storage = $entity_type_manager->getStorage('meta_entity');
   $logger = \Drupal::logger('topic');
@@ -138,7 +160,7 @@ function topic_update_201501(array &$sandbox): string {
 /**
  * Migrate homepage_topics entityqueue items from meta_entity to taxonomy_term.
  */
-function topic_update_201502(): string {
+function topic_update_201503(): string {
   $entity_type_manager = \Drupal::entityTypeManager();
   $subqueue = $entity_type_manager->getStorage('entity_subqueue')->load('homepage_topics');
   if (!$subqueue) {
@@ -174,7 +196,7 @@ function topic_update_201502(): string {
 /**
  * Transfer URL aliases from meta_entity topics to taxonomy term topics.
  */
-function topic_update_201503(): string {
+function topic_update_201504(): string {
   $entity_type_manager = \Drupal::entityTypeManager();
   $meta_entity_storage = $entity_type_manager->getStorage('meta_entity');
   $db = \Drupal::database();
@@ -218,7 +240,7 @@ function topic_update_201503(): string {
 /**
  * Delete all topic meta entities.
  */
-function topic_update_201504(): string {
+function topic_update_201505(): string {
   $meta_entity_storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
 
   $ids = $meta_entity_storage->getQuery()
