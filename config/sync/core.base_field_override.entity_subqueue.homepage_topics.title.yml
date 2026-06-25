@@ -1,0 +1,18 @@
+uuid: 4f23daca-a0ca-4684-9071-d46222bd97da
+langcode: en
+status: true
+dependencies:
+  config:
+    - entityqueue.entity_queue.homepage_topics
+id: entity_subqueue.homepage_topics.title
+field_name: title
+entity_type: entity_subqueue
+bundle: homepage_topics
+label: Title
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
