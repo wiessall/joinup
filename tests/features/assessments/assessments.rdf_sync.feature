@@ -67,7 +67,7 @@ Feature: RDF Sync integration for assessments.
       # Initiatives (Expressions) are exported.
       | <http://data.europa.eu/s2k/048caacf-52d6-4215-a867-a485ff4baf47>                                                                                                                                                 |
       | a <http://purl.org/vocab/frbr/core#Expression> ;                                                                                                                                                                 |
-      | dc:description "Description 1" ;                                                                                                                                                                                 |
+      | dc:description "Description 1"                                                                                                                                                                                   |
       | cav:documentedIn <https://example.com> ;                                                                                                                                                                         |
       | dc:title "Expression 1"@en .                                                                                                                                                                                     |
       # Affected services are exported.

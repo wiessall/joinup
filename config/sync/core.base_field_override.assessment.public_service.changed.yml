@@ -1,0 +1,18 @@
+uuid: d42a876e-adfa-4a44-a621-e1901030a14e
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.public_service
+id: assessment.public_service.changed
+field_name: changed
+entity_type: assessment
+bundle: public_service
+label: Changed
+description: 'The time that the assessment was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

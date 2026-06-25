@@ -10,6 +10,7 @@ declare(strict_types=1);
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -67,8 +68,11 @@ function owner_form_alter_validate(array &$form, FormStateInterface $form_state)
   ) {
     // Compile a list of groups that are referencing the owner, to show in the
     // form validation error message.
-    $group_labels = array_map(function (GroupInterface $collection) {
-      return '"[' . ucfirst($collection->type->entity->getSingularLabel()) . '] ' . $collection->label() . '"';
+    $entity_repository = \Drupal::service(EntityRepositoryInterface::class);
+    $group_labels = array_map(function (GroupInterface $collection) use ($entity_repository) {
+      $bundle_label = ucfirst($collection->type->entity->getSingularLabel());
+      $collection = $entity_repository->getTranslationFromContext($collection);
+      return '"[' . $bundle_label . '] ' . $collection->label() . '"';
     }, $entity->getReferencingGroups());
 
     $form_state->setError($element, new TranslatableMarkup('The owner cannot be deleted since it owns the following groups: @groups. Please set a different owner for these groups before requesting deletion.', [

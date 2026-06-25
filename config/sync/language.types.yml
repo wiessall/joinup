@@ -10,11 +10,9 @@ configurable:
 negotiation:
   language_content:
     enabled:
-      joinup_admin_english: -10
       language-url: -8
       language-selected: 12
     method_weights:
-      joinup_admin_english: -10
       language-content-entity: -9
       language-url: -8
       language-session: -6
@@ -28,12 +26,10 @@ negotiation:
       language-url-fallback: 1
   language_interface:
     enabled:
-      joinup_admin_english: -21
       language-url: -20
       language-user: -19
       language-selected: -13
     method_weights:
-      joinup_admin_english: -21
       language-url: -20
       language-user: -19
       language-browser: -16

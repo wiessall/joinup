@@ -9,6 +9,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Action\ActionManager;
 use Drupal\Core\DependencyInjection\AutowireTrait;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\RendererInterface;
@@ -48,6 +49,7 @@ class TransferGroupOwnershipConfirmForm extends ConfirmFormBase {
     #[Autowire(service: 'og.membership_manager')]
     protected readonly MembershipManagerInterface $membershipManager,
     protected readonly PrivateTempStoreFactory $tempStoreFactory,
+    protected readonly EntityRepositoryInterface $entityRepository,
   ) {
     $this->tempStore = $tempStoreFactory->get('joinup_transfer_group_ownership');
 
@@ -219,7 +221,7 @@ class TransferGroupOwnershipConfirmForm extends ConfirmFormBase {
    *   - '%user': the display name of the membership's owner.
    */
   protected function getDefaultMessageArguments(): array {
-    $group = $this->membership->getGroup();
+    $group = $this->entityRepository->getTranslationFromContext($this->membership->getGroup());
     $bundleKey = $group->getEntityType()->getKey('bundle');
     return [
       '%group' => $group->label(),

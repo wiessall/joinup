@@ -1,4 +1,4 @@
-@wip @api @group-g @javascript
+@api @group-g @javascript
 Feature: Language selector block and popover functionality
   In order to switch between different languages
   As any user

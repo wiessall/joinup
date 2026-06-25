@@ -1,0 +1,18 @@
+uuid: a24a29e8-ce1b-4fa0-becb-867e7ec268b4
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.participation
+id: assessment.participation.changed
+field_name: changed
+entity_type: assessment
+bundle: participation
+label: Changed
+description: 'The time that the assessment was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

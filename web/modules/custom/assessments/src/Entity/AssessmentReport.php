@@ -59,6 +59,7 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
       $this->onUpdateEntityReferenceFieldsOwned();
     }
     $this->onSaveReflectPublicationStatus();
+    $this->onSaveReflectLanguageToReferencedEntities();
   }
 
   /**
@@ -151,14 +152,14 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
     }
 
     // Collect unpublished child entities that need to be published.
-    $entitiesToPublish = $this->collectUnpublishedEntities($this->get('provider')->referencedEntities());
+    $entitiesToPublish = $this->collectEntities($this->get('provider')->referencedEntities(), onlyUnpublished: TRUE);
 
     // Collect from binding requirements.
     foreach ($this->get('binding_requirement')->referencedEntities() as $bindingRequirement) {
-      $entitiesToPublish += $this->collectUnpublishedEntities($bindingRequirement->get('expression')->referencedEntities());
-      $entitiesToPublish += $this->collectUnpublishedEntities(array_filter($bindingRequirement->get('asset')->referencedEntities(), static fn(SolutionInterface $entity) => $entity->getGroup()->uuid() === AssessmentInterface::SOLUTION_COLLECTOR));
-      $entitiesToPublish += $this->collectUnpublishedEntities($bindingRequirement->get('affects')->referencedEntities());
-      $entitiesToPublish += $this->collectUnpublishedEntities($bindingRequirement->get('has_participation')->referencedEntities());
+      $entitiesToPublish += $this->collectEntities($bindingRequirement->get('expression')->referencedEntities(), onlyUnpublished: TRUE);
+      $entitiesToPublish += $this->collectEntities(array_filter($bindingRequirement->get('asset')->referencedEntities(), static fn(SolutionInterface $entity) => $entity->getGroup()->uuid() === AssessmentInterface::SOLUTION_COLLECTOR), onlyUnpublished: TRUE);
+      $entitiesToPublish += $this->collectEntities($bindingRequirement->get('affects')->referencedEntities(), onlyUnpublished: TRUE);
+      $entitiesToPublish += $this->collectEntities($bindingRequirement->get('has_participation')->referencedEntities(), onlyUnpublished: TRUE);
     }
 
     // Publish all collected entities.
@@ -176,14 +177,58 @@ class AssessmentReport extends Assessment implements AssessmentInterface, Entity
   }
 
   /**
-   * Collect unpublished entities, keyed by UUID.
+   * Sets the language of the referenced entities same as the report's.
    */
-  protected function collectUnpublishedEntities(array $entities): array {
+  protected function onSaveReflectLanguageToReferencedEntities(): void {
+    $entities = [];
+    $targetLangcode = $this->language()->getId();
+
+    foreach ($this->get('binding_requirement')->referencedEntities() as $bindingRequirement) {
+      $entities += $this->collectEntities($bindingRequirement->get('expression')->referencedEntities());
+      $entities += $this->collectEntities(array_filter($bindingRequirement->get('asset')->referencedEntities(), static fn(SolutionInterface $entity) => $entity->getGroup()->uuid() === AssessmentInterface::SOLUTION_COLLECTOR));
+      $entities += $this->collectEntities($bindingRequirement->get('affects')->referencedEntities());
+      $entities += $this->collectEntities($bindingRequirement->get('has_participation')->referencedEntities());
+    }
+
+    foreach (['legal', 'organisational', 'semantic', 'technical'] as $assessmentReportField) {
+      $entities += $this->collectEntities($this->get($assessmentReportField)->referencedEntities());
+    }
+
+    foreach ($entities as $entity) {
+      // If the original language is the same or the translation exists do
+      // nothing.
+      if (
+        $entity->language()->getId() === $targetLangcode ||
+      $entity->hasTranslation($targetLangcode)
+      ) {
+        continue;
+      }
+
+      $entity->set('langcode', $targetLangcode);
+      $entity->skip_notification = TRUE;
+      $entity->save();
+    }
+  }
+
+  /**
+   * Collect entities, keyed by UUID.
+   *
+   * @param array $entities
+   *   The entities to parse.
+   * @param bool $onlyUnpublished
+   *   Filter out published entities.
+   *
+   * @return array
+   *   The processed list of entities.
+   */
+  protected function collectEntities(array $entities, bool $onlyUnpublished = FALSE): array {
     $result = [];
     foreach ($entities as $entity) {
-      if (!$entity->isPublished()) {
-        $result[$entity->uuid()] = $entity;
+      if ($onlyUnpublished && $entity->isPublished()) {
+        continue;
       }
+
+      $result[$entity->uuid()] = $entity;
     }
     return $result;
   }

@@ -1,0 +1,20 @@
+uuid: b72a0979-a94a-44c6-81b9-06bcc2b68954
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.public_service
+id: assessment.public_service.uid
+field_name: uid
+entity_type: assessment
+bundle: public_service
+label: Author
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: 'Drupal\assessments\Entity\Assessment::getDefaultEntityOwner'
+settings:
+  handler: default
+  handler_settings: {  }
+field_type: entity_reference

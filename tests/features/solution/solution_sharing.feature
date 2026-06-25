@@ -126,3 +126,23 @@ Feature: As a privileged user
     # The content should obviously not shared on the other collection too.
     When I go to the homepage of the "Collection share candidate 2" collection
     Then I should not see the "Solution to be shared" tile
+
+  @javascript
+  Scenario: The "shared from" badge on solution tiles shows the translated parent collection name.
+    Given the following "collection" content:
+      | title                 |
+      | Solution Badge Source |
+      | Solution Badge Target |
+    And the following "solution" content:
+      | title          | collection            | shared on             |
+      | Badge solution | Solution Badge Source | Solution Badge Target |
+    And the following collection entity translations:
+      | source                | language | title                    |
+      | Solution Badge Source | pl       | Solution Badge Source PL |
+
+    When I am an anonymous user
+    And I go to the homepage of the "Solution Badge Target" collection
+    Then the "Badge solution" tile should be marked as shared from "Solution Badge Source"
+
+    When I go to the "pl" version of the "Solution Badge Target" collection
+    Then the "Badge solution" tile should be marked as shared from "Solution Badge Source PL"

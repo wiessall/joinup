@@ -1,0 +1,20 @@
+uuid: 64a4396d-d575-4958-886a-81c6cd1bbf27
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.assess_public_service_area
+  module:
+    - metatag
+id: taxonomy_term.assess_public_service_area.metatag
+field_name: metatag
+entity_type: taxonomy_term
+bundle: assess_public_service_area
+label: 'Metatags (Hidden field for JSON support)'
+description: 'The computed meta tags for the entity.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: metatag_computed

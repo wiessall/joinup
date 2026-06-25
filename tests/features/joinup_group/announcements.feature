@@ -1,8 +1,6 @@
-# Contains a scenario with @group-clone annotation.
-@api
+@api @group-e
 Feature: Messaging group announcements
 
-  @group-e
   Scenario Outline: Announcement creation and transitions
 
     Given the following "<group>" content:
@@ -310,7 +308,6 @@ Feature: Messaging group announcements
       | collection |
       | solution   |
 
-  @group-e
   Scenario: Announcement moderation
     Given the following "collection" content:
       | title       |
@@ -384,7 +381,6 @@ Feature: Messaging group announcements
     And I should not see the button "Undo reject"
     And I should not see the button "Preview"
 
-  @group-e
   Scenario: Announcements are personalised per recipient and support batch delivery for large collections.
     Given the following "collection" content:
       | title         | state     |
@@ -670,3 +666,34 @@ Feature: Messaging group announcements
 
     Given the delivery queue of "The recipient names mass-email" announcement is processed
     Then the "The recipient names mass-email" announcement should have been delivered for each group member
+
+  Scenario: The announcement form uses the translated group name.
+    Given the following "collection" content:
+      | title        | state     |
+      | Fail pension | published |
+    And the following "collection" entity translations:
+      | source       | language | title            |
+      | Fail pension | fr       | Retraite commune |
+    And the following users:
+      | Username | E-mail            |
+      | Mogul    | mogul@example.com |
+    And the following collection user membership:
+      | collection   | user  |
+      | Fail pension | Mogul |
+    And the following legal document version:
+      | Document     | Label | Published | Acceptance label                                                                                   | Content                                                    |
+      | Legal notice | 1.1   | yes       | I have read and accept the <a href="[entity_legal_document:url]">[entity_legal_document:label]</a> | The information on this site is subject to a disclaimer... |
+    And the following "Legal notice" acceptances:
+      | Mogul |
+    And the following announcements:
+      | group        | subject          | state |
+      | Fail pension | Important notice | sent  |
+    Given I am logged in as a moderator
+    When I go to the "Important notice" announcement of "Fail pension" collection
+    And I switch to the "fr" language
+    Given the "Mogul" user unsubscribes from "Fail pension" collection announcements
+    When I press "Approve"
+    Then I should see the error message "Cannot send this announcement to Retraite commune collection because none of its members are subscribed to receive announcements."
+    Given the "Mogul" user subscribes to "Fail pension" collection announcements
+    When I press "Approve"
+    Then I should see the success message "The announcement has been delivered to the Retraite commune collection members."

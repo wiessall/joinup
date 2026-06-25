@@ -1,0 +1,22 @@
+uuid: d6da9b31-5de3-4ba5-8780-07a2688a1a82
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.assess_participant_type
+id: taxonomy_term.assess_participant_type.status
+field_name: status
+entity_type: taxonomy_term
+bundle: assess_participant_type
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

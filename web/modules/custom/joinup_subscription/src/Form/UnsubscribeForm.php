@@ -8,6 +8,7 @@ use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\DependencyInjection\AutowireTrait;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfirmFormBase;
@@ -47,6 +48,7 @@ class UnsubscribeForm extends ConfirmFormBase {
     protected EntityTypeBundleInfoInterface $bundleInfo,
     #[Autowire(service: 'og.membership_manager')]
     protected MembershipManagerInterface $membershipManager,
+    protected EntityRepositoryInterface $entityRepository,
   ) {}
 
   /**
@@ -116,6 +118,7 @@ class UnsubscribeForm extends ConfirmFormBase {
       $labels = [];
       foreach ($memberships as $membership) {
         if ($group = $membership->getGroup()) {
+          $group = $this->entityRepository->getTranslationFromContext($group);
           $labels[$group->bundle()][] = $group->label();
         }
       }
@@ -196,6 +199,7 @@ class UnsubscribeForm extends ConfirmFormBase {
     $membership = \Drupal::entityTypeManager()->getStorage('og_membership')->load($membership_id);
     if ($group = $membership->getGroup()) {
       static::membershipUnsubscribeTypes($membership);
+      $group = \Drupal::service('entity.repository')->getTranslationFromContext($group);
       $context['results']['labels'][$group->bundle()][] = $group->label();
       $context['results']['user'] = $membership->getOwner();
     }

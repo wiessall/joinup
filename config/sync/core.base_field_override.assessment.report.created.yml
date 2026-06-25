@@ -1,0 +1,18 @@
+uuid: 0363308a-8289-471e-8070-8b0cbd3227d1
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.report
+id: assessment.report.created
+field_name: created
+entity_type: assessment
+bundle: report
+label: 'Authored on'
+description: 'The time that the assessment was created.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: created

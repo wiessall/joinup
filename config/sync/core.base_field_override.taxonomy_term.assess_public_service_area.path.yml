@@ -1,0 +1,20 @@
+uuid: 1fcc6360-146b-4f44-9b4d-fa2078164a0b
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.assess_public_service_area
+  module:
+    - path
+id: taxonomy_term.assess_public_service_area.path
+field_name: path
+entity_type: taxonomy_term
+bundle: assess_public_service_area
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path

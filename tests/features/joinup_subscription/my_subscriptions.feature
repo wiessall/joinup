@@ -286,3 +286,21 @@ Feature: My subscriptions
     And the following content subscriptions should be selected:
       | Fireblade |                     |
       | Lopitopes | News, Announcements |
+
+  Scenario: The subscriptions page uses the translated group label
+    Given the following "collection" content:
+      | title        |
+      | Birdwatchers |
+    And the following "collection" entity translations:
+      | source       | language | title                  |
+      | Birdwatchers | fr       | Observateurs d'oiseaux |
+    And the following users:
+      | Username      | Roles     |
+      | Iris Falconer | moderator |
+    And the following collection user membership:
+      | collection   | user          | state  |
+      | Birdwatchers | Iris Falconer | active |
+
+    When I am logged in as "Iris Falconer"
+    And I go to "/fr/user/subscriptions"
+    Then I should see the link "Observateurs d'oiseaux"

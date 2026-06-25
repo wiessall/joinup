@@ -16,7 +16,7 @@ mode: default
 content:
   countries:
     type: tagify_select_widget
-    weight: 3
+    weight: 2
     region: content
     settings:
       match_operator: CONTAINS
@@ -43,12 +43,17 @@ content:
         rewrite_description: 1
   thematic_area:
     type: tagify_select_widget
-    weight: 2
+    weight: 1
     region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       placeholder: 'Select or start typing...'
+    third_party_settings: {  }
+  translation:
+    weight: 3
+    region: content
+    settings: {  }
     third_party_settings: {  }
 hidden:
   created: true

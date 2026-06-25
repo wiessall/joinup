@@ -304,6 +304,48 @@ Feature:
     Then the url should match "/admin/homepage-topics"
 
   @javascript
+  Scenario: A topic landing shows untranslated content in another language.
+    Given the following "news" content:
+      | title         | headline      | collection     | state     |
+      | Fallback News | Fallback News | Portal support | published |
+      | Archived News | Archived News | Portal support | archived  |
+    And the following news entity translations:
+      | source        | language | title                |
+      | Archived News | fr       | Actualités archivées |
+    And the following topics are enabled in the homepage:
+      | E-justice |
+    When I am logged in as a moderator
+    And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
+    And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
+      | layout position | 1                                       |
+      | region          | content                                 |
+      | Heading         | type: text - value: E-justice heading   |
+      | Action link     | type: text - value: http://example.com  |
+      | Link text       | type: text - value: E-justice link text |
+      | List style      | type: select - value: List              |
+      | Show content    | type: select - value: All               |
+      | Query presets   | type: text - value: entity_bundle\|news |
+    And I press "Save"
+    And I should see the "Fallback News" tile
+    And I should see the "Archived News" tile
+    But I should not see the "Actualités archivées" tile
+
+    When I am an anonymous user
+    And I go to the canonical path of the topic meta entity of the "E-justice" topic "taxonomy term"
+    And I should see the "Fallback News" tile
+    And I should see the "Archived News" tile
+    But I should not see the "Actualités archivées" tile
+
+    When I switch to the "fr" language
+    And I should see the "Fallback News" tile
+    And I should see the "Actualités archivées" tile
+    But I should not see the "Archived News" tile
+
+  @javascript
   Scenario: Long descriptions in topic inner page should be partially hidden.
     Given the following topics are enabled in the homepage:
       | Info                    |

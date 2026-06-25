@@ -220,3 +220,17 @@ Feature: Subscribing to a solution
     And I wait for 1 second
     And I press "Confirm" in the "Modal buttons" region
     Then I should see the success message "You have subscribed to this solution and will receive notifications for it. To manage your subscriptions go to My subscriptions in your user menu."
+
+  @javascript
+  Scenario: The solution subscription dialog uses the translated solution label
+    Given the following "solution" content:
+      | title               | collection             |
+      | Woodworking Toolkit | Some parent collection |
+    And the following "solution" entity translations:
+      | source              | language | title                     |
+      | Woodworking Toolkit | fr       | Boîte à outils menuiserie |
+    Given I am logged in as an "authenticated user"
+    When I go to the "fr" version of the "Woodworking Toolkit" solution
+    And I press "Subscribe to this solution" in the "Header" region
+    Then a modal should open
+    And I should see the text "Welcome to Boîte à outils menuiserie" in the "Modal title"

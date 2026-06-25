@@ -1,0 +1,18 @@
+uuid: d3c831a1-922d-4ae7-bdf0-ed7720d287b5
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.assess_statement_type
+id: taxonomy_term.assess_statement_type.changed
+field_name: changed
+entity_type: taxonomy_term
+bundle: assess_statement_type
+label: Changed
+description: 'The time that the term was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

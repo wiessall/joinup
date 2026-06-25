@@ -7,6 +7,7 @@ namespace Drupal\joinup_group\EventSubscriber;
 use Drupal\cas\Event\CasPostLoginEvent;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -35,6 +36,7 @@ class JoinGroupSubscriber extends RedirectedEuLoginAuthenticatedSubscriberBase {
     RequestStack $request_stack,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly MessengerInterface $messenger,
+    protected readonly EntityRepositoryInterface $entityRepository,
   ) {
     parent::__construct($time, $request_stack);
   }
@@ -51,6 +53,7 @@ class JoinGroupSubscriber extends RedirectedEuLoginAuthenticatedSubscriberBase {
    */
   protected function getRedirectDestination(CasPostLoginEvent $event): ?string {
     if ($group = $this->getGroup()) {
+      $group = $this->entityRepository->getTranslationFromContext($group);
       $wasModal = $this->requestStack->getCurrentRequest()?->cookies->get(static::MODAL_SUBSCRIBE_COOKIE_NAME);
       setcookie(static::MODAL_SUBSCRIBE_COOKIE_NAME, '', $this->time->getRequestTime() - 86400, '/');
       // When a user is logged in through EU login and has previously expressed

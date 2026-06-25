@@ -19,7 +19,7 @@ bundle: report
 label: 'Remaining barriers to cross-border interoperability'
 description: 'Describe any remaining barriers to cross-border interoperability discovered.'
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:

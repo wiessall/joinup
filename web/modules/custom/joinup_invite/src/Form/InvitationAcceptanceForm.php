@@ -9,6 +9,7 @@ use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\DependencyInjection\AutowireTrait;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
@@ -59,6 +60,7 @@ class InvitationAcceptanceForm extends FormBase {
     protected readonly EventDispatcherInterface $eventDispatcher,
     #[Autowire(service: 'current_route_match')]
     protected readonly CurrentRouteMatch $currentRouteMatch,
+    protected readonly EntityRepositoryInterface $entityRepository,
   ) {}
 
   /**
@@ -93,6 +95,7 @@ class InvitationAcceptanceForm extends FormBase {
     if ($group instanceof CollectionInterface &&
       $group->hasCodeOfConductToAccept() &&
       $codeOfConduct = $group->getCodeOfConduct()) {
+      $codeOfConduct = $this->entityRepository->getTranslationFromContext($codeOfConduct);
       $args = [
         ':url' => $codeOfConduct->toUrl()->toString(),
       ];
