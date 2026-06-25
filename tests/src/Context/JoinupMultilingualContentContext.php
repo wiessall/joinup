@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Hook\AfterScenario;
 use Behat\Step\Given;
+use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityPublishedInterface;
@@ -25,6 +28,15 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
 
   use EntityTrait;
   use TraversingTrait;
+
+  /**
+   * The translations to remove when the scenario ends.
+   *
+   * Each item is an array: [entity type ID, entity ID, language code].
+   *
+   * @var array
+   */
+  protected array $addedEntityTranslations = [];
 
   /**
    * Creates content and also adds translations if any.
@@ -191,11 +203,35 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
       throw new \RuntimeException(sprintf('The entity with label "%s" is not translatable.', $label));
     }
 
-    $translation = $entity->hasTranslation($langcode) ? $entity->getTranslation($langcode) : $entity->addTranslation($langcode);
+    if ($entity->hasTranslation($langcode)) {
+      $translation = $entity->getTranslation($langcode);
+    }
+    else {
+      $translation = $entity->addTranslation($langcode);
+      $this->addedEntityTranslations[] = [$entityTypeId, $entity->id(), $langcode];
+    }
     foreach ($fields->getHash() as $field) {
       $translation->set($field['field'], $field['value']);
     }
     $translation->save();
+  }
+
+  /**
+   * Removes translations added to pre-existing entities during the scenario.
+   *
+   * @param \Behat\Behat\Hook\Scope\AfterScenarioScope $scope
+   *   The after scenario scope.
+   */
+  #[AfterScenario]
+  public function cleanUpAddedEntityTranslations(AfterScenarioScope $scope): void {
+    foreach ($this->addedEntityTranslations as [$entityTypeId, $entityId, $langcode]) {
+      $entity = \Drupal::entityTypeManager()->getStorage($entityTypeId)->load($entityId);
+      if ($entity instanceof TranslatableInterface && $entity->hasTranslation($langcode)) {
+        $entity->removeTranslation($langcode);
+        $entity->save();
+      }
+    }
+    $this->addedEntityTranslations = [];
   }
 
   /**
@@ -221,6 +257,42 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
 
     $entity->removeTranslation($langcode);
     $entity->save();
+  }
+
+  /**
+   * Asserts that an entity has a translation in a given language.
+   *
+   * @param string $entityTypeId
+   *   The entity type ID of the entity.
+   * @param string $label
+   *   The untranslated label of the entity.
+   * @param string $langcode
+   *   The language of the translation.
+   */
+  #[Then('the :entityTypeId entity with label :label should have a :langcode translation')]
+  public function assertEntityHasTranslation(string $entityTypeId, string $label, string $langcode): void {
+    $entity = $this->getEntityByLabel($entityTypeId, $label);
+    if (!$entity instanceof TranslatableInterface || !$entity->hasTranslation($langcode)) {
+      throw new \RuntimeException(sprintf('The "%s" entity with label "%s" does not have a "%s" translation.', $entityTypeId, $label, $langcode));
+    }
+  }
+
+  /**
+   * Asserts that an entity does not have a translation in a given language.
+   *
+   * @param string $entityTypeId
+   *   The entity type ID of the entity.
+   * @param string $label
+   *   The untranslated label of the entity.
+   * @param string $langcode
+   *   The language of the translation.
+   */
+  #[Then('the :entityTypeId entity with label :label should not have a :langcode translation')]
+  public function assertEntityHasNoTranslation(string $entityTypeId, string $label, string $langcode): void {
+    $entity = $this->getEntityByLabel($entityTypeId, $label);
+    if ($entity instanceof TranslatableInterface && $entity->hasTranslation($langcode)) {
+      throw new \RuntimeException(sprintf('The "%s" entity with label "%s" unexpectedly has a "%s" translation.', $entityTypeId, $label, $langcode));
+    }
   }
 
   /**
