@@ -180,7 +180,8 @@ Feature:
     And I go to "/dashboard"
     And I click "Topics"
     And I click "Edit" in the "E-justice" row
-    Then I should see the heading "Edit E-justice"
+    Then I should see the heading "E-justice"
+    And I fill in "Abstract" with "E-justice abstract"
     And I press "Save"
     Then the url should match "/admin/homepage-topics"
 
@@ -195,7 +196,7 @@ Feature:
     And I click "E-justice"
     And I open the header local tasks menu
     And I click "Edit"
-    Then I should see the heading "Edit E-justice"
+    Then I should see the heading "E-justice"
 
     When I enter "En un lugar de la Mancha, de cuyo nombre no quiero acordarme, no ha mucho tiempo que vivía un hidalgo de los de lanza en astillero, adarga antigua, rocín flaco y galgo corredor. Una olla de algo más vaca que carnero, salpicón las más noches, duelos y quebrantos los sábados, lantejas los viernes, algún palomino de añadidura los domingos, consumían las tres partes de su hacienda. El resto della concluían sayo de velarte, calzas de velludo para las fiestas, con sus pantuflos de lo mesmo, y los días de entresemana se honraba con su vellorí de lo más fino." in the "Description" wysiwyg editor
     And I fill in "Abstract" with "E-justice abstract"
@@ -433,16 +434,16 @@ Feature:
       | E-justice | el       | E-justice Greek |
     And the following topics are enabled in the homepage:
       | E-justice |
-    And I append "layout" to "topics_paragraph" field in "meta_entity" entity with following "E-justice" title:
+    And I append "layout" to "topics_paragraph" field in "taxonomy_term" entity with following "E-justice" title:
       | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
-    And I append "configurable_listing" to "topics_paragraph" field in "meta_entity" entity with following "E-justice" title:
+    And I append "configurable_listing" to "topics_paragraph" field in "taxonomy_term" entity with following "E-justice" title:
       | paragraph_heading | English listing heading |
     And the "el" translation of the configurable listing in the "E-justice" topic has:
       | field             | value                 |
       | paragraph_heading | Greek listing heading |
     And I am logged in as a moderator
 
-    When I go to the canonical path of the "topic" meta entity of the "E-justice" topic "taxonomy term"
+    When I go to the "E-justice" topic term page
     Then I should see the text "English listing heading"
     But I should not see the text "Greek listing heading"
 
