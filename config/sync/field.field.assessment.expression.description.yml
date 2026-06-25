@@ -24,7 +24,7 @@ bundle: expression
 label: Description
 description: ''
 required: true
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:

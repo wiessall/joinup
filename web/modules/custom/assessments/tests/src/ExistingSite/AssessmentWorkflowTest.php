@@ -7,10 +7,12 @@ namespace Drupal\Tests\assessments\ExistingSite;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\Entity\Assessment;
 use Drupal\assessments\Entity\AssessmentReport;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\Tests\assessments\Traits\AssessmentEntityCreationTrait;
+use Drupal\Tests\EntityTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
@@ -23,6 +25,23 @@ use PHPUnit\Framework\Attributes\Group;
 class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
 
   use AssessmentEntityCreationTrait;
+  use EntityTrait;
+
+  /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected EntityTypeManagerInterface $entityTypeManager;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp(): void {
+    parent::setUp();
+
+    $this->entityTypeManager = \Drupal::entityTypeManager();
+  }
 
   /**
    * Tests that publishing a report also publishes all related entities.
@@ -283,6 +302,59 @@ class AssessmentWorkflowTest extends JoinupExistingSiteTestBase {
     $report = Assessment::load($report->id());
     $this->assertTrue($report->isPublished());
     $this->assertNotEmpty($report->get('published_at')->value);
+  }
+
+  /**
+   * Tests that child entities follow the report's language.
+   */
+  public function testChildEntitiesFollowParentLanguage(): void {
+    $asset = $this->createSolutionAsset(AssessmentInterface::SOLUTION_COLLECTOR);
+    $bindingRequirement = $this->createParagraphBindingRequirement($asset);
+    $organisation = $this->createAssessmentOrganisation();
+
+    /** @var \Drupal\assessments\Entity\AssessmentReport $report */
+    $report = Assessment::create([
+      'type' => 'report',
+      'name' => 'Assessment Workflow Test Report',
+      'state' => 'review',
+      'binding_requirement' => ['entity' => $bindingRequirement],
+      'provider' => ['entity' => $organisation],
+      'status' => TRUE,
+      'langcode' => 'fr',
+    ]);
+    $this->markEntityForCleanup($report);
+    $report->save();
+
+    $expression = $bindingRequirement->get('expression')->entity;
+    $publicService = $bindingRequirement->get('affects')->entity;
+    $participation = $bindingRequirement->get('has_participation')->entity;
+    $organisation = $report->get('provider')->entity;
+    $asset = $bindingRequirement->get('asset')->entity;
+
+    $this->assertEquals('fr', $report->language()->getId());
+    $this->assertEquals('fr', $expression->language()->getId());
+    $this->assertEquals('fr', $publicService->language()->getId());
+    $this->assertEquals('fr', $participation->language()->getId());
+    $this->assertEquals('fr', $asset->language()->getId());
+    // Organisation is independent of this pov.
+    $this->assertEquals('en', $organisation->language()->getId());
+
+    // Now change the language.
+    $report->set('langcode', 'de');
+    $report->save();
+
+    $expression = $this->reloadEntity($expression);
+    $publicService = $this->reloadEntity($publicService);
+    $participation = $this->reloadEntity($participation);
+    $asset = $this->reloadEntity($asset);
+    $organisation = $this->reloadEntity($organisation);
+
+    $this->assertEquals('de', $report->language()->getId());
+    $this->assertEquals('de', $expression->language()->getId());
+    $this->assertEquals('de', $publicService->language()->getId());
+    $this->assertEquals('de', $participation->language()->getId());
+    $this->assertEquals('de', $asset->language()->getId());
+    $this->assertEquals('en', $organisation->language()->getId());
   }
 
 }

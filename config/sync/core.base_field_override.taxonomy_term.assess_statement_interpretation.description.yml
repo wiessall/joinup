@@ -1,0 +1,21 @@
+uuid: 83254d5a-6d69-40c2-b3f2-2cb5164e2f92
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.assess_statement_interpretation
+  module:
+    - text
+id: taxonomy_term.assess_statement_interpretation.description
+field_name: description
+entity_type: taxonomy_term
+bundle: assess_statement_interpretation
+label: Description
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

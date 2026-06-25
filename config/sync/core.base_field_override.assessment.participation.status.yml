@@ -1,0 +1,22 @@
+uuid: cee99fd1-2f7f-4004-a566-af16b29f1a02
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.participation
+id: assessment.participation.status
+field_name: status
+entity_type: assessment
+bundle: participation
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

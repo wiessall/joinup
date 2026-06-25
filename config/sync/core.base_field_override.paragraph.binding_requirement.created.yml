@@ -1,0 +1,18 @@
+uuid: 670e7d69-5df9-47d3-a715-4012becda913
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.binding_requirement
+id: paragraph.binding_requirement.created
+field_name: created
+entity_type: paragraph
+bundle: binding_requirement
+label: 'Authored on'
+description: 'The time that the Paragraph was created.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: created

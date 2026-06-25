@@ -1,0 +1,20 @@
+uuid: 37bb41c3-d415-437f-bf53-70ac0bc52777
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.assess_participant_type
+  module:
+    - path
+id: taxonomy_term.assess_participant_type.path
+field_name: path
+entity_type: taxonomy_term
+bundle: assess_participant_type
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path

@@ -1,0 +1,22 @@
+uuid: 765789f8-de6f-42f3-a26c-1196f8ec3668
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.assess_statement_interpretation
+id: taxonomy_term.assess_statement_interpretation.status
+field_name: status
+entity_type: taxonomy_term
+bundle: assess_statement_interpretation
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

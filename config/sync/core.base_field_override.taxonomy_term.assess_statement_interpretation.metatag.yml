@@ -1,0 +1,20 @@
+uuid: a2774f7e-1d2f-4e6c-b258-d1a96632914d
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.assess_statement_interpretation
+  module:
+    - metatag
+id: taxonomy_term.assess_statement_interpretation.metatag
+field_name: metatag
+entity_type: taxonomy_term
+bundle: assess_statement_interpretation
+label: 'Metatags (Hidden field for JSON support)'
+description: 'The computed meta tags for the entity.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: metatag_computed

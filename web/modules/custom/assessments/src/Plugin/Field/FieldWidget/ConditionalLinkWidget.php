@@ -120,7 +120,7 @@ final class ConditionalLinkWidget extends LinkWidget {
     // Retrieve the "add_link" checkbox from the full form state.
     $fieldInput = $form_state->getUserInput();
     // $fieldInput is expected to contain 'add_link' and 'widget'.
-    $allowLinks = $fieldInput['add_link'] === '1';
+    $allowLinks = isset($fieldInput['add_link']) && $fieldInput['add_link'] === '1';
     if (!$allowLinks) {
       foreach ($values as &$value) {
         $value['uri'] = NULL;

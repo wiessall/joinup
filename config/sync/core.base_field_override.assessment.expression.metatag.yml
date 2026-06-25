@@ -1,0 +1,20 @@
+uuid: efb0cd2d-41d1-4cba-b6c9-c35f228b6e8a
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.expression
+  module:
+    - metatag
+id: assessment.expression.metatag
+field_name: metatag
+entity_type: assessment
+bundle: expression
+label: 'Metatags (Hidden field for JSON support)'
+description: 'The computed meta tags for the entity.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: metatag_computed
