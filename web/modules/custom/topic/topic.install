@@ -277,7 +277,7 @@ function topic_update_201505(): string {
 
   $deleted_items = $db->delete('tmgmt_job_item')
     ->condition('item_type', 'meta_entity')
-    ->condition('item_id', $ids)
+    ->condition('item_id', $ids, 'IN')
     ->execute();
 
   return sprintf('Deleted %d orphaned TMGMT job items.', $deleted_items);
