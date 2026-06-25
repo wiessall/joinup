@@ -238,9 +238,33 @@ function topic_update_201504(): string {
 }
 
 /**
- * Delete all topic meta entities.
+ * Delete orphaned TMGMT job items for topic meta entities.
  */
 function topic_update_201505(): string {
+  $db = \Drupal::database();
+  $meta_entity_storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
+
+  $ids = $meta_entity_storage->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('type', 'topic')
+    ->execute();
+
+  if (empty($ids)) {
+    return 'No topic meta entities found, skipping TMGMT job item deletion.';
+  }
+
+  $deleted_items = $db->delete('tmgmt_job_item')
+    ->condition('item_type', 'meta_entity')
+    ->condition('item_id', $ids)
+    ->execute();
+
+  return sprintf('Deleted %d orphaned TMGMT job items.', $deleted_items);
+}
+
+/**
+ * Delete all topic meta entities.
+ */
+function topic_update_201506(): string {
   $meta_entity_storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
 
   $ids = $meta_entity_storage->getQuery()
