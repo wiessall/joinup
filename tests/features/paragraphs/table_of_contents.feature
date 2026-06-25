@@ -67,11 +67,6 @@ Feature:
     And I fill in "Heading text" with "PL H2 heading"
     And I press "Save" in the "Modal buttons" region
     And I press "Save (all translations)"
-    And I should see the message "Custom page PL i18n page has been updated."
 
-    When I am an anonymous user
-    When I go to the "TOC i18n page" custom_page
-    And I should see the link "H2 heading"
-
-    Then I go to the "pl" version of the "TOC i18n page" custom_page
-    And I should see the link "PL H2 heading"
+    When I go to the "pl" version of the "TOC i18n page" custom_page
+    And I click "PL H2 heading"

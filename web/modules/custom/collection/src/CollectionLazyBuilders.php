@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\collection;
 
 use Drupal\collection\Form\JoinCollectionForm;
-use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Security\Attribute\TrustedCallback;
@@ -20,7 +19,6 @@ class CollectionLazyBuilders {
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly FormBuilderInterface $formBuilder,
     protected readonly AccountInterface $account,
-    protected readonly EntityRepositoryInterface $entityRepository,
   ) {}
 
   /**
@@ -35,7 +33,6 @@ class CollectionLazyBuilders {
   #[TrustedCallback]
   public function renderJoinCollectionForm(string $collection_id): array {
     $collection = $this->entityTypeManager->getStorage('node')->load($collection_id);
-    $collection = $this->entityRepository->getTranslationFromContext($collection);
     return $this->formBuilder->getForm(JoinCollectionForm::class, $this->account, $collection);
   }
 

@@ -7,7 +7,6 @@
 
 declare(strict_types=1);
 
-use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -16,9 +15,9 @@ use Drupal\joinup_bundle_class\AbstractInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
-use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
+use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\smart_trim\TruncateHTML;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
 use Drupal\user\UserInterface;
@@ -231,9 +230,9 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     case 'solution':
       // Add attributes that will allow JS to mark this tile as "Shared from".
       $node = $variables['node'];
-      $parent = JoinupGroupHelper::getGroup($node);
-      if ($parent !== NULL) {
-        $parent = \Drupal::service('entity.repository')->getTranslationFromContext($parent);
+      if (!$node->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->isEmpty()) {
+        /** @var \Drupal\node\NodeInterface|null $parent */
+        $parent = $node->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->first()->entity;
         $variables['attributes']['data-joinup-parent-id'] = $parent->id();
         $variables['attributes']['data-joinup-parent-label'] = $parent->label();
       }
@@ -384,9 +383,7 @@ function _ventuno_get_event_location_label(bool $hasLocation, bool $hasOnline): 
 function _ventuno_terms_to_badges(array $terms, TranslatableMarkup $extraLabel, int $maxNumberOfBadges = 2): array {
   $badges = [];
 
-  $entity_repository = \Drupal::service(EntityRepositoryInterface::class);
   foreach ($terms as $term) {
-    $term = $entity_repository->getTranslationFromContext($term);
     $badges[] = [
       'label' => $term->label(),
       'topic_id' => $term->id(),

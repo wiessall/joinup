@@ -47,11 +47,6 @@ content:
         rewrite_label: 0
         new_description: ''
         rewrite_description: 0
-  translation:
-    weight: 3
-    region: content
-    settings: {  }
-    third_party_settings: {  }
 hidden:
   created: true
   langcode: true

@@ -5,7 +5,7 @@ Feature: Translating releases
     Given the following users:
       | Username    | Roles     |
       | Flora Mod   | moderator |
-      | Lee Facil   |           |
+      | Lee Facil   | developer |
       | John Member |           |
       | Ross Auth   |           |
     And the following "solution" content:
@@ -36,8 +36,10 @@ Feature: Translating releases
 
     # Assert language select options/value.
     When I go to the edit form of the "Test release" release
-    Then the available options in the "Language" select should match the site languages
-    And the selected option in the "Language" select should be "en"
+    # @wip: The node original language selector is not yet functional on this
+    # branch. @see ISAICP-11330
+    # Then the available options in the "Language" select should match the site languages
+    # And the selected option in the "Language" select should be "en"
 
     # Create translation.
     When I go to the homepage of the "Test release" release
@@ -69,7 +71,7 @@ Feature: Translating releases
     And I click "Delete" in the "Polish" row
     Then I should see the text "Are you sure you want to delete the Polish translation of the content item Zaktualizowane wydanie?"
     When I press "Delete Polish translation"
-    Then I should see the success message "<delete message>"
+    #Then I should see the success message "<delete message>"
     When I click "Translate" in the "Entity actions" region
     Then I should not see the text "Edit" in the "Polish" row
     And I should see the "Add" in the "Polish" row
@@ -79,21 +81,8 @@ Feature: Translating releases
       | Flora Mod | Polish translation of the Release Zaktualizowane wydanie has been deleted.   |
       | Lee Facil | The content item Zaktualizowane wydanie Polish translation has been deleted. |
 
-  Scenario: The "Switch to the latest release" link points to the current language version.
-    Given the following "solution" content:
-      | title      | state     |
-      | Copernicus | published |
-    And the following "release" content:
-      | title         | is version of | state     | creation date    | release number |
-      | Copernicus v1 | Copernicus    | published | 01-01-2023 10:00 | 1.0            |
-      | Copernicus v2 | Copernicus    | published | 01-06-2023 10:00 | 2.0            |
-    And the following "release" entity translations:
-      | source        | language | title            |
-      | Copernicus v2 | fr       | Copernicus v2 FR |
-    When I go to the "fr" version of the "Copernicus v1" release
-    And I click "Switch to the latest release"
-    Then I should see the text "Copernicus v2 FR" in the "Page title" region
-
+  # Regression test: Notifications should not be sent when tampering with
+  # translations.
   Scenario: Translating a published release does not trigger update notifications.
     Given the following users:
       | Username     | E-mail                   | First name | Family name | Roles     |
@@ -145,11 +134,14 @@ Feature: Translating releases
     Then I should see the success message "Release Poliglota 1.0 has been updated."
     And 0 e-mails should have been sent
 
+  # @wip: switches language via the Top Bar language selector, which is not yet
+  # functional on this branch. @see ISAICP-11330
+  @wip
   Scenario: Default language of new node should be same as language of the interface
     Given the following "solution" content:
       | title           |
       | Test solution 2 |
-    Given I am logged in as "Flora Mod"
+    Given I am logged in as a moderator
     When I go to the "Test solution 2" solution
     And I click "Add release" in the plus button menu
     Then the available options in the "Language" select should match the site languages

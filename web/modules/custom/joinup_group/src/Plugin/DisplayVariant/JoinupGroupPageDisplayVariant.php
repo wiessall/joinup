@@ -8,7 +8,6 @@ use Drupal\block\BlockRepositoryInterface;
 use Drupal\block\Plugin\DisplayVariant\BlockPageVariant;
 use Drupal\Core\Display\Attribute\PageDisplayVariant;
 use Drupal\Core\Display\PageVariantInterface;
-use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityViewBuilderInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -32,7 +31,6 @@ class JoinupGroupPageDisplayVariant extends BlockPageVariant {
     EntityViewBuilderInterface $block_view_builder,
     array $block_list_cache_tags,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
-    protected readonly EntityRepositoryInterface $entityRepository,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $block_repository, $block_view_builder, $block_list_cache_tags);
   }
@@ -48,8 +46,7 @@ class JoinupGroupPageDisplayVariant extends BlockPageVariant {
       $container->get('block.repository'),
       $container->get('entity_type.manager')->getViewBuilder('block'),
       $container->get('entity_type.manager')->getDefinition('block')->getListCacheTags(),
-      $container->get('entity_type.manager'),
-      $container->get('entity.repository'),
+      $container->get('entity_type.manager')
     );
   }
 
@@ -84,7 +81,7 @@ class JoinupGroupPageDisplayVariant extends BlockPageVariant {
    */
   public function setTitle($title): PageVariantInterface {
     if ($landing_page = $this->getCustomLandingPage()) {
-      $title = $this->entityRepository->getTranslationFromContext($landing_page)->label();
+      $title = $landing_page->label();
     }
     $this->title = $title;
     return $this;

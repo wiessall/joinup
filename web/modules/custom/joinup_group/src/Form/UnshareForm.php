@@ -85,7 +85,7 @@ class UnshareForm extends ShareFormBase {
     $this->entity = $entity;
 
     $options = array_map(
-      fn (GroupInterface $group): TranslatableMarkup|string => $this->entityRepository->getTranslationFromContext($group)->label(),
+      fn (GroupInterface $group) => $group->label(),
       $this->getGroups()
     );
 
@@ -113,13 +113,13 @@ class UnshareForm extends ShareFormBase {
     if (empty($groupIds)) {
       return;
     }
-
-    /** @var \Drupal\joinup_group\Entity\GroupInterface[] $groups */
     $groups = $this->entityTypeManager->getStorage('node')->loadMultiple($groupIds);
-    if (!empty($groups)) {
-      $this->removeFromGroups($groups);
-
-      $groupLabels = array_map(fn (GroupInterface $group): TranslatableMarkup|string => $this->entityRepository->getTranslationFromContext($group)->label(), $groups);
+    $groupLabels = array_map(
+      fn (GroupInterface $group): TranslatableMarkup|string => $group->label(),
+      $groups,
+    );
+    $this->removeFromGroups($groups);
+    if (!empty($groupLabels)) {
       $this->messenger()->addStatus(
         $this->t('Item was unshared from the following groups: @groups.', ['@groups' => implode(', ', $groupLabels)])
       );

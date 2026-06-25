@@ -7,7 +7,6 @@ namespace Drupal\joinup_group\Form;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\DependencyInjection\AutowireTrait;
-use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -42,7 +41,6 @@ class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
     protected readonly OgAccessInterface $ogAccess,
     protected readonly PrivateTempStoreFactory $privateTempStoreFactory,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
-    protected readonly EntityRepositoryInterface $entityRepository,
   ) {
   }
 
@@ -204,26 +202,21 @@ class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
    *   If the membership group is not a collection or a solution.
    */
   protected function getGroup(): GroupInterface {
-    if (isset($this->group)) {
-      return $this->group;
+    if (!isset($this->group)) {
+      /** @var \Drupal\og\OgMembershipInterface[] $memberships */
+      $memberships = $this->getMemberships();
+      // Pick-up the first membership. They're all belonging to the same group.
+      $membership = reset($memberships);
+
+      $this->group = $membership->getGroup();
+      if (!($this->group instanceof GroupInterface) || !in_array($this->group->bundle(), [
+        'collection',
+        'solution',
+      ])) {
+        throw new \LogicException("The group can only be a collections or a solutions.");
+      }
     }
 
-    /** @var \Drupal\og\OgMembershipInterface[] $memberships */
-    $memberships = $this->getMemberships();
-    // Pick-up the first membership. They're all belonging to the same group.
-    $membership = reset($memberships);
-
-    $group = $membership->getGroup();
-    if (!($group instanceof GroupInterface) || !in_array($group->bundle(), [
-      'collection',
-      'solution',
-    ])) {
-      throw new \LogicException("The group can only be a collections or a solutions.");
-    }
-
-    /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
-    $group = $this->entityRepository->getTranslationFromContext($group);
-    $this->group = $group;
     return $this->group;
   }
 

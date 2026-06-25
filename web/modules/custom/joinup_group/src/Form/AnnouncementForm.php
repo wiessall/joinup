@@ -9,7 +9,6 @@ use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\DependencyInjection\AutowireTrait;
-use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -40,7 +39,6 @@ class AnnouncementForm extends FormBase {
     protected readonly LoggerChannelInterface $logger,
     protected readonly Connection $connection,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
-    protected readonly EntityRepositoryInterface $entityRepository,
   ) {}
 
   /**
@@ -193,7 +191,7 @@ class AnnouncementForm extends FormBase {
     parent::validateForm($form, $form_state);
     $transition = $form_state->getTriggeringElement()['#state_machine_transition'] ?? NULL;
     if ($transition === 'approve') {
-      $group = $this->entityRepository->getTranslationFromContext($this->announcement->getGroup());
+      $group = $this->announcement->getGroup();
       if (!$this->announcement->getRecipientsCount()) {
         $form_state->setError($form, $this->t('Cannot send this announcement to %group @type because none of its members are subscribed to receive announcements.', [
           '%group' => $group->label(),
@@ -227,11 +225,10 @@ class AnnouncementForm extends FormBase {
       }, $this->getArguments())))
       ->save();
 
-    $group = $this->entityRepository->getTranslationFromContext($this->announcement->getGroup());
     $args = [
       '@to' => $this->announcement->getWorkflowStateInstance()->getLabel(),
-      '%group' => $group->label(),
-      '@type' => $group->get('type')->entity->getSingularLabel(),
+      '%group' => $this->announcement->getGroup()->label(),
+      '@type' => $this->announcement->getGroup()->get('type')->entity->getSingularLabel(),
     ];
 
     if ($is_new) {

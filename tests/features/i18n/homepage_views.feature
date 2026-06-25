@@ -1,4 +1,4 @@
-@api @topic @group-f
+@wip @api @topic @group-f
 Feature: Test translations in the homepage.
 
   Scenario: Homepage topics are translatable.

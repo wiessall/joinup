@@ -128,24 +128,6 @@ Feature: As a group (collection or solution) owner or site moderator
     And I am on the members page of "Babylon"
     Then the available options in the "Action" select should not include the "Transfer the ownership of the solution to the selected member" options
 
-  Scenario: The transfer ownership form uses the translated group name.
-    Given the following "collection" entity translations:
-      | source                      | language | title                  |
-      | Intensive Language Learning | fr       | Apprentissage Intensif |
-    Given I am logged in as "light"
-    And I am on the members page of "Intensive Language Learning"
-    And I switch to the "fr" language
-    And I select the "cruel" row
-    And I select "Transfer the ownership of the collection to the selected member" from "Action"
-    When I press "Apply to selected items"
-    Then I should see the text "Member Finnur Robertsson is already the owner of Apprentissage Intensif collection. Please select other user."
-    When I select the "shy" row
-    And I select "Transfer the ownership of the collection to the selected member" from "Action"
-    And I press "Apply to selected items"
-    Then I should see the text "Are you sure you want to transfer the ownership of Apprentissage Intensif collection to Ásdís Sigurðsdóttir?"
-    When I press "Confirm"
-    Then I should see the text "Ownership of Apprentissage Intensif collection transferred from users Finnur Robertsson, Edda Agnarsdóttir to Ásdís Sigurðsdóttir."
-
   # In Interoperable Europe Portal every owner is also a facilitator, so if a normal member is
   # promoted to owner, they should also become a facilitator.
   Scenario Outline: If ownership is transferred to a normal member, it should also include the facilitator role
