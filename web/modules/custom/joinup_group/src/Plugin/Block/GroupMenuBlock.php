@@ -223,8 +223,7 @@ class GroupMenuBlock extends OgMenuBlock {
    *   The block render array.
    */
   protected function addContextualLinks(array &$build): void {
-    // Show the "Edit menu" link only when at least one element is available.
-    if ($this->tree) {
+    if ($this->tree || $this->menuHasLinks()) {
       $build['#contextual_links']['ogmenu'] = [
         'route_parameters' => [
           'ogmenu_instance' => $this->getOgMenuInstance()->id(),
@@ -237,6 +236,19 @@ class GroupMenuBlock extends OgMenuBlock {
         'node_type' => 'custom_page',
       ],
     ];
+  }
+
+  /**
+   * Checks whether the group menu contains any links, enabled or disabled.
+   *
+   * @return bool
+   *   TRUE if the menu has at least one link.
+   */
+  protected function menuHasLinks(): bool {
+    if (!$this->getOgMenuInstance() instanceof OgMenuInstanceInterface) {
+      return FALSE;
+    }
+    return !empty($this->menuTree->load($this->getMenuName(), new MenuTreeParameters()));
   }
 
   /**
