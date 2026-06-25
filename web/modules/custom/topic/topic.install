@@ -262,32 +262,32 @@ function topic_update_201504(): string {
 /**
  * Delete orphaned TMGMT job items for topic meta entities.
  */
-function topic_update_201505(): string {
-  $meta_entity_storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
-
-  $ids = $meta_entity_storage->getQuery()
-    ->accessCheck(FALSE)
-    ->condition('type', 'topic')
-    ->execute();
-
-  if (empty($ids)) {
-    return 'No topic meta entities found, skipping TMGMT job item deletion.';
+function topic_update_201505(array &$sandbox): string {
+  if (!isset($sandbox['total'])) {
+    $sandbox['ids'] = \Drupal::entityTypeManager()->getStorage('meta_entity')->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', 'topic')
+      ->execute();
+    $sandbox['total'] = count($sandbox['ids']);
+    $sandbox['current'] = 0;
   }
 
-  $job_item_storage = \Drupal::entityTypeManager()->getStorage('tmgmt_job_item');
-  $job_item_ids = $job_item_storage->getQuery()
-    ->accessCheck(FALSE)
-    ->condition('item_type', 'meta_entity')
-    ->condition('item_id', $ids, 'IN')
-    ->execute();
+  $items = array_slice($sandbox['ids'], $sandbox['current'], 50);
 
-  if (empty($job_item_ids)) {
-    return 'No orphaned TMGMT job items found to delete.';
+  if ($items) {
+    \Drupal::database()->delete('tmgmt_job_item')
+      ->condition('item_type', 'meta_entity')
+      ->condition('item_id', $items, 'IN')
+      ->execute();
+    $sandbox['current'] += count($items);
   }
 
-  $job_item_storage->delete($job_item_storage->loadMultiple($job_item_ids));
+  $sandbox['#finished'] = ($sandbox['total'] == 0) ? 1 : ($sandbox['current'] / $sandbox['total']);
 
-  return sprintf('Deleted %d orphaned TMGMT job items.', count($job_item_ids));
+  return (string) t('Processed @current of @total topic meta entities TMGMT job items.', [
+    '@current' => $sandbox['current'],
+    '@total' => $sandbox['total'],
+  ]);
 }
 
 /**
