@@ -220,6 +220,7 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
     }
 
     $entity->removeTranslation($langcode);
+    $entity->save();
   }
 
   /**

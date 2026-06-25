@@ -1,0 +1,22 @@
+diff --git a/src/Plugin/views/style/CalendarViewBase.php b/src/Plugin/views/style/CalendarViewBase.php
+index 0e97076e749631c62ee0c43642ef645122ce7bb0..8a0ed081363667d465bf91442ef8289bea40cb3c 100644
+--- a/src/Plugin/views/style/CalendarViewBase.php
++++ b/src/Plugin/views/style/CalendarViewBase.php
+@@ -225,7 +225,7 @@ abstract class CalendarViewBase extends DefaultStyle implements CalendarViewInte
+    *
+    * @return string The timezone, as a string.
+    */
+-  public function getTimezone(FieldPluginBase $field = NULL) {
++  public function getTimezone(?FieldPluginBase $field = NULL) {
+     $timezone = $this->dateConfig->get('timezone')['default'];
+     // Get user's timezone, if enabled.
+     if ($this->dateConfig->get('timezone.user.configurable')) {
+@@ -307,7 +307,7 @@ abstract class CalendarViewBase extends DefaultStyle implements CalendarViewInte
+    * @return string
+    *   The caption with tokens replaced.
+    */
+-  public function getCalendarCaption(string $string = NULL, int $timestamp = NULL) {
++  public function getCalendarCaption(?string $string = NULL, ?int $timestamp = NULL) {
+     $langcode = $this->getCurrentLangcode();
+     $token_options = ['langcode' => $langcode, 'clear' => TRUE];
+ 

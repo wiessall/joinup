@@ -95,16 +95,33 @@ final class TopicTermHooks {
   }
 
   /**
+   * Implements hook_preprocess_page_title().
+   */
+  #[Hook('preprocess_page_title')]
+  public function preprocessPageTitle(array &$variables): void {
+    if ($this->routeMatch->getRouteName() !== 'entity.taxonomy_term.edit_form') {
+      return;
+    }
+    $term = $this->routeMatch->getParameter('taxonomy_term');
+    if (!$term instanceof TopicTermInterface) {
+      return;
+    }
+    $variables['title'] = $this->t('Edit @name', ['@name' => $term->label()]);
+  }
+
+  /**
    * Implements hook_form_taxonomy_term_topic_edit_form_alter().
    */
   #[Hook('form_taxonomy_term_topic_form_alter')]
   public function formTaxonomyTermTopicEditFormAlter(array &$form, FormStateInterface $form_state): void {
-    if ($this->currentUser->hasPermission('administer taxonomy')) {
+    $term = $form_state->getFormObject()->getEntity();
+    if (!$term instanceof TopicTermInterface) {
       return;
     }
 
-    $term = $form_state->getFormObject()->getEntity();
-    $form['#title'] = $this->t('Edit @name', ['@name' => $term->label()]);
+    if ($this->currentUser->hasPermission('administer taxonomy')) {
+      return;
+    }
 
     $restricted = ['name', 'relations', 'revision_information'];
     foreach ($restricted as $field) {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\topic\EventSubscriber;
 
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\layout_builder\Event\SectionComponentBuildRenderArrayEvent;
 use Drupal\layout_builder\LayoutBuilderEvents;
@@ -17,6 +18,7 @@ readonly class HomepageTopicsSectionSubscriber implements EventSubscriberInterfa
 
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
+    protected EntityRepositoryInterface $entityRepository,
   ) {}
 
   /**
@@ -46,6 +48,8 @@ readonly class HomepageTopicsSectionSubscriber implements EventSubscriberInterfa
     /** @var \Drupal\entityqueue\Entity\EntitySubqueue $entity_queue */
     $entity_queue = $this->entityTypeManager->getStorage('entity_subqueue')
       ->load('homepage_topics');
+    $entity_queue = $this->entityRepository->getTranslationFromContext($entity_queue);
+
     // If there are no topics, don't show any labels.
     if ($entity_queue->get('items')->isEmpty()) {
       $build['#configuration']['label_display'] = FALSE;
