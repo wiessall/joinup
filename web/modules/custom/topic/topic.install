@@ -156,7 +156,7 @@ function topic_update_201502(array &$sandbox): string {
       $term_translation = $term->getTranslation($langcode);
 
       if ($translated_description && $term_translation->get('description')
-          ->isEmpty()) {
+        ->isEmpty()) {
         $term_translation->set('description', [
           'value' => $translated_description->value,
           'format' => $translated_description->format,
