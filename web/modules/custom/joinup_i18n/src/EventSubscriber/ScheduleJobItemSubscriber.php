@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_i18n\EventSubscriber;
 
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\joinup_i18n\TranslationHelper;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\tmgmt\Events\ContinuousEvents;
 use Drupal\tmgmt\Events\ShouldCreateJobEvent;
@@ -20,6 +22,7 @@ final readonly class ScheduleJobItemSubscriber implements EventSubscriberInterfa
 
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
+    protected TranslationHelper $translationHelper,
   ) {}
 
   /**
@@ -57,7 +60,10 @@ final readonly class ScheduleJobItemSubscriber implements EventSubscriberInterfa
       // Only non-publishable or public entities are translated.
       && (!($entity instanceof EntityPublishedInterface) || $entity->isPublished())
       // Only non-archivable or non-archived entities are translated.
-      && (!($entity instanceof ArchivableEntityInterface) || !$entity->isArchived());
+      && (!($entity instanceof ArchivableEntityInterface) || !$entity->isArchived())
+      // The entity actually exposes translatable content.
+      && $entity instanceof ContentEntityInterface
+      && $this->translationHelper->hasTranslatableFields($entity);
 
     $event->setShouldCreateItem($shouldCreateItem);
   }

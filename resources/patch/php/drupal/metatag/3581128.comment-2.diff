@@ -1,0 +1,48 @@
+diff --git a/metatag_views/src/Plugin/views/display_extender/MetatagDisplayExtender.php b/metatag_views/src/Plugin/views/display_extender/MetatagDisplayExtender.php
+index cf5b7815..8271da47 100644
+--- a/metatag_views/src/Plugin/views/display_extender/MetatagDisplayExtender.php
++++ b/metatag_views/src/Plugin/views/display_extender/MetatagDisplayExtender.php
+@@ -312,7 +312,7 @@ class MetatagDisplayExtender extends DisplayExtenderPluginBase {
+   protected static function getFirstRowTokensReflection(StylePluginBase $style): \ReflectionProperty {
+     $r = new \ReflectionObject($style);
+     $p = $r->getProperty('rowTokens');
+-    $p->setAccessible(TRUE);
++    //$p->setAccessible(TRUE);
+     return $p;
+   }
+ 
+diff --git a/tests/src/Kernel/Form/MetatagSettingsFormTest.php b/tests/src/Kernel/Form/MetatagSettingsFormTest.php
+index 98bf3c22..e1149b99 100644
+--- a/tests/src/Kernel/Form/MetatagSettingsFormTest.php
++++ b/tests/src/Kernel/Form/MetatagSettingsFormTest.php
+@@ -62,7 +62,7 @@ class MetatagSettingsFormTest extends KernelTestBase {
+     $this->assertEquals('metatag_admin_settings', $this->metatagSettingsForm->getFormId());
+ 
+     $method = new \ReflectionMethod(MetatagSettingsForm::class, 'getEditableConfigNames');
+-    $method->setAccessible(TRUE);
++    //$method->setAccessible(TRUE);
+ 
+     $name = $method->invoke($this->metatagSettingsForm);
+     $this->assertEquals(['metatag.settings'], $name);
+diff --git a/tests/src/Unit/MetaNameBaseTest.php b/tests/src/Unit/MetaNameBaseTest.php
+index c55773e3..c6e80cc1 100644
+--- a/tests/src/Unit/MetaNameBaseTest.php
++++ b/tests/src/Unit/MetaNameBaseTest.php
+@@ -40,7 +40,7 @@ class MetaNameBaseTest extends UnitTestCase {
+     $class = new \ReflectionClass(get_class($this->metaNameBase));
+     $method = $class->getMethod($method);
+     // Set the protected method tidy to be accessible.
+-    $method->setAccessible(TRUE);
++    //$method->setAccessible(TRUE);
+ 
+     $filterResult1 = $method->invoke($this->metaNameBase, "  Test   123  ");
+     $this->assertEquals('Test 123', $filterResult1);
+@@ -75,7 +75,7 @@ class MetaNameBaseTest extends UnitTestCase {
+     $class = new \ReflectionClass(get_class($this->metaNameBase));
+     $method = $class->getMethod($method);
+     // Set the protected method tidy to be accessible.
+-    $method->setAccessible(TRUE);
++    //$method->setAccessible(TRUE);
+ 
+     // Test French accented characters
+     $filterResult1 = $method->invoke($this->metaNameBase, "  Café   à   Paris  ");
