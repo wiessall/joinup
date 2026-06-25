@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Plugin\QueueWorker;
 
-use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\Attribute\QueueWorker;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\Queue\QueueWorkerBase;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\joinup_group\Entity\GroupInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -29,7 +27,6 @@ class JoinupGroupQueueWorker extends QueueWorkerBase implements ContainerFactory
     string $plugin_id,
     mixed $plugin_definition,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
-    protected readonly EntityTypeBundleInfoInterface $bundleInfo,
     protected readonly QueueFactory $queueFactory,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -44,7 +41,6 @@ class JoinupGroupQueueWorker extends QueueWorkerBase implements ContainerFactory
       $plugin_id,
       $plugin_definition,
       $container->get('entity_type.manager'),
-      $container->get('entity_type.bundle.info'),
       $container->get('queue')
     );
   }
@@ -63,28 +59,10 @@ class JoinupGroupQueueWorker extends QueueWorkerBase implements ContainerFactory
     }
 
     // Push group content entities into joinup_group:group_content_update queue.
-    $group_content_ids = $group->getGroupContentIds();
-    foreach ($group_content_ids as $entity_type_id => $bundles) {
-      $bundle_info = $this->bundleInfo->getBundleInfo($entity_type_id);
-      foreach ($bundles as $bundle => $entity_ids) {
-        $bundle_class = $bundle_info[$bundle]['class'] ?? NULL;
-        // Group content that is also group itself has higher priority, because
-        // their group content aliases depend on the their alias. For example a
-        // solution event alias is prefixed by the solution alias, so the
-        // solution alias must come first.
-        if (is_subclass_of($bundle_class, GroupInterface::class)) {
-          $this->createQueueItems($data['entity_id'], $entity_type_id, $entity_ids);
-          // The subgroup is queued, remove it from the list.
-          $group_content_ids[$entity_type_id][$bundle];
-        }
-      }
-      // After removing subgroups, this entity type IDs list may became empty.
-      array_filter($group_content_ids[$entity_type_id]);
-    }
-
-    // Now that subgroups were queued, it's safe to queue the rest of content.
-    foreach ($group_content_ids as $entity_type_id => $bundles) {
-      foreach ($bundles as $bundle => $entity_ids) {
+    // Subgroups come first so their alias is regenerated before the content
+    // whose alias is prefixed by it.
+    foreach ($group->getGroupContentIdsInDependencyOrder() as $entity_type_id => $bundles) {
+      foreach ($bundles as $entity_ids) {
         $this->createQueueItems($data['entity_id'], $entity_type_id, $entity_ids);
       }
     }
