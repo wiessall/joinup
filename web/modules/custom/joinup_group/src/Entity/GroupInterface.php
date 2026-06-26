@@ -266,21 +266,6 @@ interface GroupInterface extends
   public function getGroupContentIds(): array;
 
   /**
-   * Returns all content IDs of this group in dependency order.
-   *
-   * Same as ::getGroupContentIds(), but bundles that are themselves groups
-   * (subgroups, e.g. solutions inside a collection) are returned before the
-   * rest of the content. The path alias of group content is prefixed by the
-   * alias of its parent group, so subgroups must be processed first.
-   *
-   * @return array
-   *   Same structure as ::getGroupContentIds().
-   *
-   * @see \Drupal\joinup_group\Entity\GroupInterface::getGroupContentIds()
-   */
-  public function getGroupContentIdsInDependencyOrder(): array;
-
-  /**
    * Returns direct group content IDs, without recursing into child groups.
    *
    * @return array

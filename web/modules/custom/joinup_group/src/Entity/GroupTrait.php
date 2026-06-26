@@ -219,28 +219,6 @@ trait GroupTrait {
   /**
    * {@inheritdoc}
    */
-  public function getGroupContentIdsInDependencyOrder(): array {
-    $bundle_info = \Drupal::service('entity_type.bundle.info');
-    $group_content = $this->getGroupContentIds();
-    foreach ($group_content as $entity_type_id => $bundles) {
-      $bundles_info = $bundle_info->getBundleInfo($entity_type_id);
-      $subgroups = $others = [];
-      foreach ($bundles as $bundle => $ids) {
-        if (is_subclass_of($bundles_info[$bundle]['class'] ?? '', GroupInterface::class)) {
-          $subgroups[$bundle] = $ids;
-        }
-        else {
-          $others[$bundle] = $ids;
-        }
-      }
-      $group_content[$entity_type_id] = $subgroups + $others;
-    }
-    return $group_content;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getMemberCount(array $states = [OgMembershipInterface::STATE_ACTIVE]): int {
     return \Drupal::entityQuery('og_membership')
       ->accessCheck(FALSE)
