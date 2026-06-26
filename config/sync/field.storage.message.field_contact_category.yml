@@ -15,34 +15,34 @@ settings:
   allowed_values:
     -
       value: academy
-      label: 'Academy'
+      label: Academy
     -
       value: architecture
-      label: 'Architecture'
+      label: Architecture
     -
       value: assessments
-      label: 'Assessments'
+      label: Assessments
     -
       value: community
-      label: 'Community'
+      label: Community
     -
       value: eu_oss_catalogue
       label: 'EU OSS Catalogue'
     -
       value: governance
-      label: 'Governance'
+      label: Governance
     -
       value: govtech
       label: 'GovTech and Sandboxes'
     -
       value: monitoring
-      label: 'Monitoring'
+      label: Monitoring
     -
       value: open_source
       label: 'Open Source'
     -
       value: semantics
-      label: 'Semantics'
+      label: Semantics
     -
       value: legal
       label: 'Legal / Licence / GDPR question'

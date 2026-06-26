@@ -1,0 +1,21 @@
+diff --git a/src/LayoutParagraphsLayoutTempstoreRepository.php b/src/LayoutParagraphsLayoutTempstoreRepository.php
+index 22f0dfbe52e101efa660ab58bfa3b20d026bf0c1..91a7493c93314e92bcb82842a0b9cd1e2e06eedc 100644
+--- a/src/LayoutParagraphsLayoutTempstoreRepository.php
++++ b/src/LayoutParagraphsLayoutTempstoreRepository.php
+@@ -63,6 +63,16 @@ class LayoutParagraphsLayoutTempstoreRepository {
+    */
+   public function set(LayoutParagraphsLayout $layout_paragraphs_layout) {
+     $key = $this->getStorageKey($layout_paragraphs_layout);
++
++    foreach ($layout_paragraphs_layout->getComponents() as $component) {
++      $paragraph = $component->getEntity();
++      if ($paragraph) {
++        if (isset($paragraph->_referringItem)) {
++          unset($paragraph->_referringItem);
++        }
++      }
++    }
++
+     $this->tempStoreFactory->get('layout_paragraphs')->set($key, $layout_paragraphs_layout);
+     return $layout_paragraphs_layout;
+   }

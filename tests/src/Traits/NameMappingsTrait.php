@@ -129,6 +129,7 @@ trait NameMappingsTrait {
         'logo' => 'field_news_logo',
         'published at' => 'published_at',
         'short title' => 'field_news_headline',
+        'source url' => 'field_news_source_url',
         'spatial coverage' => 'spatial_coverage',
         'state' => 'field_state',
       ],

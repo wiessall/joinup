@@ -19,9 +19,9 @@ upgrade_commands:
     ephemeral:
       - ./vendor/bin/drush joinup:acc
       - ./vendor/bin/drush cache:rebuild
-php_version: 8.3
+php_version: 8.5
 extra_pkgs:
-  - php8.3-apcu
+  - php8.5-apcu
   - git
 
 mysql_version: "8.0"

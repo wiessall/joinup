@@ -1,0 +1,24 @@
+diff --git a/src/Plugin/Notifier/DigestBase.php b/src/Plugin/Notifier/DigestBase.php
+index 6cb2a3bae5c2a9b49a912ad5bfed50106aae756a..3bdab7848a6188ff1a688190cd07d8150709da56 100644
+--- a/src/Plugin/Notifier/DigestBase.php
++++ b/src/Plugin/Notifier/DigestBase.php
+@@ -73,7 +73,18 @@ abstract class DigestBase extends MessageNotifierBase implements ContainerFactor
+    * @param \Drupal\Component\Datetime\TimeInterface $time
+    *   The time service.
+    */
+-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerChannelInterface $logger, EntityTypeManagerInterface $entity_type_manager, RendererInterface $renderer, ?MessageInterface $message = NULL, StateInterface $state, Connection $connection, TimeInterface $time) {
++  public function __construct(
++    array $configuration,
++    $plugin_id,
++    $plugin_definition,
++    LoggerChannelInterface $logger,
++    EntityTypeManagerInterface $entity_type_manager,
++    RendererInterface $renderer,
++    ?MessageInterface $message,
++    StateInterface $state,
++    Connection $connection,
++    TimeInterface $time,
++    ) {
+     // Set some defaults.
+     $configuration += [
+       'entity_type' => '',
