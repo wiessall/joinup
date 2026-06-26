@@ -74,7 +74,16 @@ class TranslationScheduler {
    *   An array of [callable, args] pairs for use with batch_set().
    */
   protected function buildBatchOperations(CollectionInterface $collection): array {
-    $ids = array_merge([], ...array_values($collection->getGroupContentIds()['node'] ?? []));
+    $idsByBundle = $collection->getGroupContentIds()['node'] ?? [];
+    if (!empty($idsByBundle['solution'])) {
+      // Solutions should take precedence over other content types to ensure
+      // correct processing of path aliases.
+      $solutionIds = $idsByBundle['solution'];
+      unset($idsByBundle['solution']);
+      $idsByBundle = ['solution' => $solutionIds] + $idsByBundle;
+    }
+    $ids = array_reduce([...$idsByBundle], fn(array $ids, array $bundleIds) => [...$ids, ...$bundleIds], []);
+
     array_unshift($ids, (string) $collection->id());
 
     return array_map(
