@@ -15,3 +15,12 @@ Feature: Reverting translations added to pre-existing entities
 
   Scenario: The translation added to a pre-existing entity is reverted afterwards
     Then the taxonomy_term entity with label "Belgium" should not have a fr translation
+
+  Scenario: Translations added in bulk to a pre-existing entity can be set
+    Given the following term entity translations:
+      | source  | language | name   |
+      | Belgium | nl       | België |
+    Then the taxonomy_term entity with label "Belgium" should have a nl translation
+
+  Scenario: The bulk translation added to a pre-existing entity is reverted afterwards
+    Then the taxonomy_term entity with label "Belgium" should not have a nl translation

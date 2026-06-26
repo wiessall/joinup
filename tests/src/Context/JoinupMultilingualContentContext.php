@@ -147,6 +147,7 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
       }
       else {
         $translated = $entity->addTranslation($row['language'], $entity->toArray());
+        $this->addedEntityTranslations[] = [$entityTypeId, $entity->id(), $row['language']];
       }
 
       $processedFields = ['source', 'language'];
