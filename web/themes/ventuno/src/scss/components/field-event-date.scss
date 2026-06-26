@@ -1,37 +1,49 @@
 @import "../partials/core";
 
-.event--highlighted-date .event__date {
+.event--highlighted-date {
+  overflow: hidden;
   border-top: 8px solid $joinup-info;
+  border-bottom: 1px solid $gray-300;
   border-radius: $border-radius-sm;
-  .joinup-date-tile {
+  .event__date {
     display: flex;
-    overflow: hidden;
-    flex-flow: column;
-    text-align: center;
-    color: $dark;
-    background: white;
-    & + .joinup-date-tile {
-      position: relative;
-      &::before {
-        position: absolute;
-        top: 27%;
-        left: -2px;
-        content: "-";
+    border-right: 1px solid $gray-300;
+    border-left: 1px solid $gray-300;
+    background: $white;
+    .joinup-date-tile {
+      flex: auto;
+      flex: 1;
+      text-align: center;
+      color: $dark;
+
+      & + .joinup-date-tile {
+        position: relative;
+        &::before {
+          position: absolute;
+          top: 18%;
+          left: -4px;
+          content: "-";
+          font-size: $h2-font-size;
+          font-weight: $font-weight-bold;
+        }
       }
-    }
-    .joinup-date-tile__month {
-      text-transform: uppercase;
-      line-height: 1;
-    }
-    .joinup-date-tile__day {
-      font-size: $h2-font-size;
-      font-weight: $font-weight-bold;
-      line-height: 1;
-    }
-    .joinup-date-tile__year {
-      border-top: 1px solid $gray-300;
-      background-color: $gray-100;
-      line-height: 1.4;
+
+      .joinup-date-tile__month {
+        text-transform: uppercase;
+        line-height: 1;
+      }
+
+      .joinup-date-tile__day {
+        font-size: $h2-font-size;
+        font-weight: $font-weight-bold;
+        line-height: 1;
+      }
+
+      .joinup-date-tile__year {
+        border-top: 1px solid $gray-300;
+        background-color: $gray-100;
+        line-height: 1.4;
+      }
     }
   }
 }
