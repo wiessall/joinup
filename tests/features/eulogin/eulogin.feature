@@ -366,3 +366,18 @@ Feature: Log in through EU Login
     When I fill in "Password" with "123"
     And I press "Log in"
     Then I should see the success message "Fill in the fields below to let the Interoperable Europe Portal community learn more about you!"
+
+  Scenario: An EU Login user can save their profile after visiting a one-time login link.
+    Given the following users:
+      | Username | E-mail              | First name | Family name |
+      | johndoe  | johndoe@example.com | John       | Doe         |
+    And CAS users:
+      | Username | E-mail              | Password  | First name | Last name | Local username |
+      | johndoe  | johndoe@example.com | abc123!#$ | John       | Doe       | johndoe        |
+
+    Given I am an anonymous user
+    When I visit the one-time login URL for "johndoe"
+    And I press "Log in"
+    And I press "Save"
+    Then I should not see the error message "Password field is required."
+    And I should see the success message "The changes have been saved."

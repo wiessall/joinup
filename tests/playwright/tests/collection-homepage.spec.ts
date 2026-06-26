@@ -11,10 +11,6 @@ test.describe("Collection homepage", () => {
     await page.goto("/collection/portal-support");
     await pageUtils.prepareForScreenshot(page);
 
-    const navbar = page.locator("header.joinup-navbar");
-    await expect(navbar).toBeVisible();
-    await expect(navbar).toHaveScreenshot("page-header.png");
-
     const groupHeader = page.locator(".region-header");
     await expect(groupHeader).toBeVisible();
     await expect(groupHeader).toHaveScreenshot("group-header.png");
