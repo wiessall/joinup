@@ -2008,35 +2008,6 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that a certain link contains the URL of an entity.
-   *
-   * @param string $link
-   *   The link text.
-   * @param string $title
-   *   The entity title.
-   *
-   * @throws \Exception
-   *   Thrown when the link is not in the page.
-   */
-  #[Then('/^the share link "(?P<link>[^"]+)" should point to the "(?P<title>[^"]+)" content(?:| entity)$/')]
-  public function assertLinkContainsEntityUrl(string $link, string $title): void {
-    /** @var \Drupal\Core\Entity\EntityInterface $entity */
-    $entity = $this->getEntityByLabel('node', $title);
-    $link_element = $this->getSession()->getPage()->findLink($link);
-
-    if (!$link_element) {
-      throw new \Exception("Link '{$link}' was not found in the page.");
-    }
-
-    $entity_url = $entity->toUrl('canonical', [
-      'base_url' => rtrim($this->getMinkParameter('base_url') ?? '', '/'),
-    ])->setAbsolute()->toString();
-    $href = $link_element->getAttribute('href');
-
-    $this->assertCondition(str_contains($href, urlencode($entity_url)), 'The entity URL is not present in the link href.');
-  }
-
-  /**
    * Asserts that a certain link points to the given URL.
    *
    * @param string $title

@@ -24,7 +24,10 @@ Feature: Collection content
       | title                          | body                                                               | collection                | changed    | topic             |
       | Turin Egyptian Museum Reopened | "<p>After <em>more than</em> <a href=\"#link\">two years</a>.</p>" | Turin Egyptian Collection | 2019-11-19 | Supplier exchange |
 
-  Scenario: Solution counters exclude archived solutions and link to the solutions listing.
+  Scenario: Solution counters exclude archived solutions and link to the
+    solutions listing. Also checks that the collection's solutions page is
+    language-aware.
+
     Given I go to the homepage of the "Turin Egyptian Collection" collection
     Then I should see the link "1 Solution" in the "Header" region
 
@@ -33,6 +36,10 @@ Feature: Collection content
       | Published Solution | Turin Egyptian Collection | published |
       | Archived Solution  | Turin Egyptian Collection | archived  |
       | Draft Solution     | Turin Egyptian Collection | draft     |
+    And fr translation for the node entity with label "Published Solution":
+      | field | value            |
+      | title | Solution publiée |
+
     When I go to the homepage of the "Turin Egyptian Collection" collection
     Then I should see the link "2 Solutions" in the "Header" region
 
@@ -41,7 +48,20 @@ Feature: Collection content
     And I should see the heading "Solutions" in the "Page title"
     And I should see the "Tomb Of Unknown Restoration" tile
     And I should see the "Published Solution" tile
-    But I should not see the "Archived Solution" tile
+    But I should not see the "Solution publiée" tile
+    And I should not see the "Archived Solution" tile
+    And I should not see the "Draft Solution" tile
+
+    # Remove these lines in ISAICP-11505 to test as anonymous.
+    Given I am logged in as a moderator
+    When I go to the homepage of the "Turin Egyptian Collection" collection
+    And I click "2 Solutions" in the "Header" region
+
+    When I switch to the "fr" language
+    Then I should see the "Tomb Of Unknown Restoration" tile
+    And I should see the "Solution publiée" tile
+    But I should not see the "Published Solution" tile
+    And I should not see the "Archived Solution" tile
     And I should not see the "Draft Solution" tile
 
   Scenario: Publishing new solutions should result in counters being properly updated.
