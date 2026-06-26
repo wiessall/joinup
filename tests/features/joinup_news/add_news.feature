@@ -1,8 +1,37 @@
 @api @group-f
-Feature: Creation of news through the UI.
-  In order to manage news
+Feature: Managing and viewing news.
+  In order to share news with the community
   As a user
-  I need to be able to create news through the UI.
+  I need to be able to create news through the UI and have its fields rendered.
+
+  Scenario: The fields of a news item are rendered on its canonical page.
+    Given user:
+      | Username    | newsroom_jane      |
+      | First name  | Jane               |
+      | Family name | Newsroom           |
+      | E-mail      | jane@example.com   |
+    And the following "collection" content:
+      | title             | state     |
+      | Source link tower | published |
+    And the following "news" content:
+      | title             | collection        | author        | headline                      | body                               | source url                         | state     |
+      | Sourced news item | Source link tower | newsroom_jane | The full headline of the news | The main body content of the news. | http://example.com/the-news-source | published |
+
+    When I go to the "Sourced news item" news
+    # The headline is the main heading (h1) and the title the sub heading (h2).
+    Then I should see the heading "The full headline of the news" in the "Page title" region
+    And I should see the heading "Sourced news item" in the "Page title" region
+    # The page title metadata shows the author (by full name), the
+    # publication date and the bundle label.
+    And I should see the link "Jane Newsroom" in the "Page title" region
+    But I should not see the link "newsroom_jane" in the "Page title" region
+    And I should see the text "Published on" in the "Page title" region
+    And I should see the text "News" in the "Page title" region
+    # The body and the source URL (under the "References" heading) render in the
+    # main content.
+    And I should see the text "The main body content of the news." in the "Content" region
+    And I should see the heading "References" in the "Content" region
+    And I should see the link "http://example.com/the-news-source" in the "Content" region
 
   Scenario: Share the news in other collections/solutions.
     Given user:
