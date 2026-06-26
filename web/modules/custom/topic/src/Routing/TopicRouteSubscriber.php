@@ -17,10 +17,6 @@ class TopicRouteSubscriber extends RouteSubscriberBase {
    * {@inheritdoc}
    */
   protected function alterRoutes(RouteCollection $collection): void {
-    if ($route = $collection->get('entity.meta_entity.edit_form')) {
-      $route->setOption('_admin_route', FALSE);
-    }
-
     if ($route = $collection->get('entity.taxonomy_term.edit_form')) {
       $route->setOption('_admin_route', FALSE);
     }
