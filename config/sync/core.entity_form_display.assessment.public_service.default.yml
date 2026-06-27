@@ -15,13 +15,18 @@ bundle: public_service
 mode: default
 content:
   countries:
-    type: tagify_select_widget
+    type: tagify_entity_reference_autocomplete_widget
     weight: 3
     region: content
     settings:
       match_operator: CONTAINS
       match_limit: 100
       placeholder: 'Select or start typing...'
+      suggestions_dropdown: 1
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 1
     third_party_settings:
       entity_form_field_label:
         new_label: ''
@@ -42,13 +47,18 @@ content:
         new_description: 'Specify the trans-European digital public service(s) concerned'
         rewrite_description: 1
   thematic_area:
-    type: tagify_select_widget
+    type: tagify_entity_reference_autocomplete_widget
     weight: 2
     region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       placeholder: 'Select or start typing...'
+      suggestions_dropdown: 1
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 1
     third_party_settings: {  }
 hidden:
   created: true
