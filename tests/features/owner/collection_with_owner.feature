@@ -31,7 +31,7 @@ Feature: Creation of owners through UI
     Then the following fields should not be present "Current workflow state, Langcode, Translation"
     And I fill in "Name" with "Acme"
     And I select "Company" options from "Type"
-    And I select "Belgium" from "Country"
+    And I select "Belgium" option from "Country"
     And I press "Create owner"
     Then I should see the text "Acme"
     And I should see the link "Company"
@@ -42,7 +42,7 @@ Feature: Creation of owners through UI
     When I press "Edit" at the "Owner" field
     And I fill in "Name" with "Acme Inc."
     And I select "Industry consortium" options from "Type"
-    And I select "Luxembourg" from "Country"
+    And I select "Luxembourg" option from "Country"
     Then I press "Update owner"
     Then I should see the text "Acme Inc."
     And I should see the link "Industry consortium"
@@ -57,7 +57,7 @@ Feature: Creation of owners through UI
     And I press "Add new" at the "Owner" field
     And I fill in "Name" with "John Doe"
     And I select "Company" options from "Type"
-    And I select "Belgium" from "Country"
+    And I select "Belgium" option from "Country"
     And I press "Create owner"
     Then I should see the text "John Doe"
     And I should see the link "Company"
