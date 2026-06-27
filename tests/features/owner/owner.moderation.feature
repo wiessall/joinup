@@ -31,7 +31,7 @@ Feature: Owner moderation
     And I press "Add new" at the "Owner" field
     And I fill in "Name" with "EU healthy movement"
     And I select "Company" options from "Type"
-    And I select "Belgium" from "Country"
+    And I select "Belgium" option from "Country"
     When I press "Create owner"
     Then I should see the text "EU healthy movement"
 
