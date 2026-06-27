@@ -42,6 +42,7 @@ Feature: Creation of owners through UI
     When I press "Edit" at the "Owner" field
     And I fill in "Name" with "Acme Inc."
     And I select "Industry consortium" options from "Type"
+    And I fill in "Country" with ""
     And I select "Luxembourg" option from "Country"
     Then I press "Update owner"
     Then I should see the text "Acme Inc."
