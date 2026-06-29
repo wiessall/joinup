@@ -82,3 +82,18 @@ Feature: Topic term routing and URL structure.
     When the name of the "Blue parent" term is changed to "Red parent"
     And I reload the page
     Then I should see the link "Red parent"
+
+  @javascript
+  Scenario: Topic-specific help text is displayed in the query presets field when editing a configurable listing paragraph.
+    Given the following topics are enabled in the homepage:
+      | E-justice |
+    And I append "layout" to "topics_paragraph" field in "taxonomy_term" entity with following "E-justice" title:
+      | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
+    And I append "configurable_listing" to "topics_paragraph" field in "taxonomy_term" entity with following "E-justice" title:
+      | paragraph_heading | E-justice heading |
+    And I am logged in as a moderator
+    When I go to the edit form of the "E-justice" topic
+    And I "edit" from the "Topic term body" field the child 1 paragraph of 1 layout
+    And I press "Help"
+    Then I should see the text "Extra examples"
+    And I should see the text "Current topic: E-justice"
