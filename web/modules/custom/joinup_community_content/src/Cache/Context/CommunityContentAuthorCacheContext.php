@@ -65,19 +65,17 @@ class CommunityContentAuthorCacheContext extends UserCacheContextBase implements
       return self::NO_CONTEXT;
     }
     $uid = $this->user->id();
+    // Normalize for use as a cache-array key; NULL is not a valid key.
+    $bundle ??= '';
 
-    // Since this might be called many times per request, only perform the query
-    // once and cache it.
     if (!isset($this->cachedContexts[$uid][$bundle])) {
-      $query = $this->entityTypeManager->getStorage('node')->getQuery()->accessCheck(FALSE);
-      $query
+      $query = $this->entityTypeManager->getStorage('node')->getQuery()
+        ->accessCheck(FALSE)
         ->condition('uid', $uid)
         ->range(0, 1);
-
       if (!empty($bundle)) {
         $query->condition('type', $bundle);
       }
-
       $this->cachedContexts[$uid][$bundle] = empty($query->execute()) ? self::NO_CONTEXT : (string) $uid;
     }
 

@@ -139,6 +139,26 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Checks that a heading with the given text appears a number of times.
+   *
+   * Useful to assert that an item rendered with a heading (such as a tile) is
+   * shown the expected number of times, without depending on secondary text
+   * nodes like visually-hidden labels that repeat the same text.
+   *
+   * @param string $heading
+   *   The heading text to match exactly.
+   * @param int $count
+   *   The expected number of matching headings.
+   */
+  #[Then('I (should )see the heading :heading :count time(s)')]
+  public function assertHeadingCount(string $heading, int $count): void {
+    $conditions = array_map(function (string $level) use ($heading): string {
+      return sprintf('//%s[normalize-space(string(.)) = "%s"]', $level, $heading);
+    }, ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']);
+    $this->assertSession()->elementsCount('xpath', implode(' | ', $conditions), $count);
+  }
+
+  /**
    * Creates and authenticates a user with the given og role(s).
    *
    * Multiple roles can be passed separated with comma.
@@ -1985,35 +2005,6 @@ class JoinupContext extends RawDrupalContext {
     $node = $this->getEntityByLabel('node', $title);
     $uri = $node->toUrl()->toString();
     $this->assertSession()->fieldValueEquals($field, $uri);
-  }
-
-  /**
-   * Asserts that a certain link contains the URL of an entity.
-   *
-   * @param string $link
-   *   The link text.
-   * @param string $title
-   *   The entity title.
-   *
-   * @throws \Exception
-   *   Thrown when the link is not in the page.
-   */
-  #[Then('/^the share link "(?P<link>[^"]+)" should point to the "(?P<title>[^"]+)" content(?:| entity)$/')]
-  public function assertLinkContainsEntityUrl(string $link, string $title): void {
-    /** @var \Drupal\Core\Entity\EntityInterface $entity */
-    $entity = $this->getEntityByLabel('node', $title);
-    $link_element = $this->getSession()->getPage()->findLink($link);
-
-    if (!$link_element) {
-      throw new \Exception("Link '{$link}' was not found in the page.");
-    }
-
-    $entity_url = $entity->toUrl('canonical', [
-      'base_url' => rtrim($this->getMinkParameter('base_url') ?? '', '/'),
-    ])->setAbsolute()->toString();
-    $href = $link_element->getAttribute('href');
-
-    $this->assertCondition(str_contains($href, urlencode($entity_url)), 'The entity URL is not present in the link href.');
   }
 
   /**

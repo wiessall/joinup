@@ -42,4 +42,5 @@ content:
     third_party_settings: {  }
 hidden:
   langcode: true
+  translation: true
   uuid: true

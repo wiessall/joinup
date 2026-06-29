@@ -353,11 +353,6 @@ function joinup_solution_node_view(array &$build, NodeInterface $solution, Entit
   // Share link configuration.
   if ($display->getComponent('share_link')) {
     $build['share_link'] = joinup_group_generate_share_link($solution);
-    $build['#cache'] = [
-      'contexts' => [
-        'og_role',
-      ],
-    ];
   }
 
   if ($display->getComponent('solution_subscribe')) {

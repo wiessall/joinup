@@ -8,6 +8,7 @@ use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_i18n\Hook\JoinupI18nHooks;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\language\Entity\ContentLanguageSettings;
+use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\node\Entity\NodeType;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\tmgmt\JobInterface;
@@ -175,6 +176,37 @@ final class JoinupI18nTest extends JoinupExistingSiteTestBase {
     // Unpublishing content, it doesn't schedule it for translation.
     $node->set('field_state', 'draft_after_published')->save();
     $this->assertJobItems();
+  }
+
+  /**
+   * Tests that entities without translatable content are not scheduled.
+   *
+   * @legacy-covers \Drupal\joinup_i18n\EventSubscriber\ScheduleJobItemSubscriber::scheduleJobItemCreation
+   */
+  public function testNonTranslatableFields(): void {
+    $collection = $this->createNode([
+      'type' => 'collection',
+      'field_state' => 'published',
+    ]);
+
+    $settings = MetaEntity::loadOrCreate('collection_settings', $collection);
+    $this->markEntityForCleanup($settings);
+
+    $jobItemStorage = \Drupal::entityTypeManager()->getStorage('tmgmt_job_item');
+    $jobItemStorage->delete($jobItemStorage->loadByProperties([
+      'plugin' => 'content',
+      'item_type' => 'meta_entity',
+      'item_id' => $settings->id(),
+    ]));
+
+    $settings->set('overview_label', '')->save();
+
+    $jobItemIds = \Drupal::entityQuery('tmgmt_job_item')->accessCheck(FALSE)
+      ->condition('plugin', 'content')
+      ->condition('item_type', 'meta_entity')
+      ->condition('item_id', $settings->id())
+      ->execute();
+    $this->assertEmpty($jobItemIds);
   }
 
   /**

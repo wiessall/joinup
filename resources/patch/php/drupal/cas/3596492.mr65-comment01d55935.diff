@@ -1,0 +1,65 @@
+diff --git a/cas.module b/cas.module
+index 69fcfba55a10dee69841f13dc719c7bafa8c143a..55ebd37d5ae48a2a9d750cd91b8a26df86cafdc8 100644
+--- a/cas.module
++++ b/cas.module
+@@ -121,6 +121,7 @@ function cas_form_user_form_alter(array &$form, FormStateInterface $form_state):
+       if (!\Drupal::currentUser()->hasPermission('administer users') || !$casConfig->get('user_accounts.admin_bypass_password_email_restrictions')) {
+         if ($casConfig->get('user_accounts.restrict_password_management')) {
+           $form['account']['pass']['#access'] = FALSE;
++          $form['account']['pass']['#required'] = FALSE;
+ 
+           // Users are normally required to enter their current password when
+           // changing their password or email address. Since we are disabling
+diff --git a/tests/src/Functional/CasUserFormFieldTest.php b/tests/src/Functional/CasUserFormFieldTest.php
+index 37f562af7eeefac825b2cb46c7be68c45989610e..7db41d615e79598bee54c1922b890fd7cde804d5 100644
+--- a/tests/src/Functional/CasUserFormFieldTest.php
++++ b/tests/src/Functional/CasUserFormFieldTest.php
+@@ -4,6 +4,8 @@ declare(strict_types=1);
+ 
+ namespace Drupal\Tests\cas\Functional;
+ 
++use Drupal\Core\Url;
++
+ /**
+  * Tests modifications to the account and registration forms.
+  *
+@@ -237,6 +239,39 @@ class CasUserFormFieldTest extends CasBrowserTestBase {
+     $this->assertSession()->responseContains('The changes have been saved.');
+   }
+ 
++  /**
++   * Tests that a CAS user can save their profile via a one-time login link.
++   */
++  public function testCasUserCanSaveProfileViaOneTimeLoginLink(): void {
++    $admin = $this->drupalCreateUser([
++      'administer account settings',
++      'administer users',
++    ]);
++    $cas_user = $this->drupalCreateUser([], 'cas_one_time_login_user');
++    $this->container->get('cas.user_manager')->setCasUsernameForAccount($cas_user, 'cas_one_time_login_user');
++
++    $this->drupalLogin($admin);
++    $this->drupalGet('/admin/config/people/cas');
++    $this->submitForm([
++      'user_accounts[restrict_password_management]' => TRUE,
++      'user_accounts[prevent_normal_login]' => FALSE,
++    ], 'Save configuration');
++    $this->drupalLogout();
++
++    $timestamp = \Drupal::time()->getRequestTime();
++    $reset_url = Url::fromRoute('user.reset', [
++      'uid' => $cas_user->id(),
++      'timestamp' => $timestamp,
++      'hash' => user_pass_rehash($cas_user, $timestamp),
++    ])->setAbsolute()->toString();
++
++    $this->drupalGet($reset_url);
++    $this->submitForm([], 'Log in');
++    $this->submitForm([], 'Save');
++    $this->assertSession()->pageTextNotContains('Password field is required.');
++    $this->assertSession()->pageTextContains('The changes have been saved.');
++  }
++
+   /**
+    * Tests the restricted email management feature.
+    */

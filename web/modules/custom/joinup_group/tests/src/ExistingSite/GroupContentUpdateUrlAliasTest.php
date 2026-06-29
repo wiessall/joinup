@@ -389,6 +389,43 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
   }
 
   /**
+   * Tests that group content is ordered subgroups-first and queued only once.
+   */
+  public function testGroupContentDependencyOrderAndQueueing(): void {
+    $this->createContent();
+    $collection = $this->node['collection']['1'];
+
+    $queue_factory = \Drupal::service('queue');
+    $update_queue = $queue_factory->get('joinup_group:group_update');
+    $content_queue = $queue_factory->get('joinup_group:group_content_update');
+    $update_queue->deleteQueue();
+    $content_queue->deleteQueue();
+
+    $update_queue->createItem([
+      'group_id' => $collection->id(),
+      'entity_id' => $collection->id(),
+    ]);
+    $worker = \Drupal::service('plugin.manager.queue_worker')->createInstance('joinup_group:group_update');
+    while ($item = $update_queue->claimItem()) {
+      $worker->processItem($item->data);
+      $update_queue->deleteItem($item);
+    }
+
+    $queued = [];
+    while ($item = $content_queue->claimItem()) {
+      $queued[] = (int) $item->data['entity_id'];
+      $content_queue->deleteItem($item);
+    }
+
+    $duplicates = array_filter(array_count_values($queued), fn(int $count): bool => $count > 1);
+    $this->assertSame([], $duplicates, 'Each group content entity is queued exactly once.');
+
+    $solution_position = array_search((int) $this->node['solution']['1']->id(), $queued, TRUE);
+    $news_position = array_search((int) $this->node['news']['1.1']->id(), $queued, TRUE);
+    $this->assertLessThan($news_position, $solution_position, 'The solution is queued before its community content.');
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function tearDown(): void {

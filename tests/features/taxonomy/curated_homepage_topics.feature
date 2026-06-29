@@ -117,6 +117,43 @@ Feature:
     Then I should not see the text "E-justice" in the "Homepage topics" region
     But I should see the text "Finance in EU" in the "Homepage topics" region
 
+  # Regression [ISAICP-11462]: enabling translations for the entity queues
+  # (curated content listings) creates multiple versions (translations) of the
+  # queue. These translations must not be treated as separate listings.
+  Scenario: A translated curated content listing is not duplicated in the administration view.
+    Given "el" translation for the "entity_subqueue" entity with label "Homepage topics":
+      | field       | value             |
+      | block_label | Greek block label |
+
+    # The curated content listings administration view should list the queue
+    # only once, regardless of how many translations it has.
+    Given I am logged in as a moderator
+    When I go to "/admin/curated-content-listings"
+    Then the text "Homepage topics" should appear 1 time
+
+    # Manually delete the translation because the queue persists after tests.
+    Then I delete the "el" translation for the "entity_subqueue" entity with label "Homepage topics"
+
+  # Regression [ISAICP-11462]: the queue translations duplicate the queue items
+  # on the homepage, because the "Main topics" view filters the meta entity to
+  # its default translation and the interface language, but does not do the
+  # same for the entity queue.
+  Scenario: A translated curated content listing does not duplicate its items on the homepage.
+    Given "el" translation for the "entity_subqueue" entity with label "Homepage topics":
+      | field       | value             |
+      | block_label | Greek block label |
+    # Add a topic to the (translated) queue.
+    And the following topics are enabled in the homepage:
+      | Data gathering and processing |
+
+    # The topic should be shown only once on the homepage, even though the queue
+    # has a translation.
+    When I go to the homepage
+    Then I should see the heading "Data gathering and processing" 1 time
+
+    # Manually delete the translation because the queue persists after tests.
+    Then I delete the "el" translation for the "entity_subqueue" entity with label "Homepage topics"
+
   Scenario: Moderators can alter the title of the homepage topics block.
     Given I am logged in as a moderator
     When I go to "/dashboard"
@@ -498,6 +535,35 @@ Feature:
     But I should not see the text "Supplier exchange" in the "Another rough day" tile
     And I should not see the text "HR" in the "Another rough day" tile
     And I should see the text "+3 topics" in the "Another rough day" tile
+
+  # Regression test for ISAICP-11462: the configurable listing heading is
+  # translatable, while the listing query itself stays shared across languages.
+  # Only users allowed to view content in their preferred language (moderators)
+  # see the translation.
+  Scenario: The configurable listing heading is translatable on the topic page.
+    Given the following topic entity translations:
+      | source    | language | name            |
+      | E-justice | el       | E-justice Greek |
+    And the following topics are enabled in the homepage:
+      | E-justice |
+    And I append "layout" to "topics_paragraph" field in "meta_entity" entity with following "E-justice" title:
+      | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
+    And I append "configurable_listing" to "topics_paragraph" field in "meta_entity" entity with following "E-justice" title:
+      | paragraph_heading | English listing heading |
+    And the "el" translation of the configurable listing in the "E-justice" topic has:
+      | field             | value                 |
+      | paragraph_heading | Greek listing heading |
+    And I am logged in as a moderator
+
+    When I go to the canonical path of the "topic" meta entity of the "E-justice" topic "taxonomy term"
+    Then I should see the text "English listing heading"
+    But I should not see the text "Greek listing heading"
+
+    # The moderator reaches the Greek topic page from the Greek homepage.
+    When I go to "/el"
+    And I click "E-justice Greek"
+    Then I should see the text "Greek listing heading"
+    But I should not see the text "English listing heading"
 
   # Regression test for ISAICP-11115.
   Scenario: Help text links on topics administration pages work correctly across languages.
