@@ -56,6 +56,7 @@ readonly class SolutionLazyBuilders {
     }
     $count = $this->assessmentCount($solution);
     $cache = [
+      'keys' => ['joinup_solution.solution_assessment_count', $solution_id],
       'tags' => ['assessment_list:report', 'paragraph_list:binding_requirement'],
     ];
     if ($count === 0) {
