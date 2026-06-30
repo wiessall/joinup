@@ -64,7 +64,14 @@ function joinup_core_deploy_201500(array &$sandbox): string {
  * Export to Virtuoso the {rdf_sync_uri} entities missing from the endpoint.
  */
 function joinup_core_deploy_201501(array &$sandbox): string {
+  $start = microtime(TRUE);
   $batchSize = 100;
+  // Number of entities to export per SPARQL INSERT. Each statement compiles to
+  // Virtuoso SQL and must stay under its SP031 limit ("the length of generated
+  // SQL text has exceeded 10000 lines of code"). Entities with many triples
+  // (datasets/solutions with large descriptions, many distributions/versions)
+  // overflow a 100-entity INSERT, so the inserts are sent in small chunks.
+  $insertChunkSize = 10;
   $database = \Drupal::database();
   $connection = \Drupal::service('rdf_sync.connection');
   $synchronizer = \Drupal::service('rdf_sync.synchronizer');
@@ -98,8 +105,11 @@ function joinup_core_deploy_201501(array &$sandbox): string {
       static fn(string $uri): string => $serializer->serialiseValue(['type' => 'uri', 'value' => $uri]),
       $uris,
     );
-    $inList = implode(', ', $serialized);
-    $result = $connection->query("SELECT DISTINCT ?s FROM <$graphUri> WHERE { ?s ?p ?o . FILTER (?s IN ($inList)) }");
+    // Use a VALUES clause rather than FILTER (?s IN (...)): Virtuoso resolves
+    // VALUES through the subject index, while FILTER IN forces a full scan of
+    // the graph on every batch, which degrades as the graph grows.
+    $values = implode(' ', $serialized);
+    $result = $connection->query("SELECT DISTINCT ?s FROM <$graphUri> WHERE { VALUES ?s { $values } ?s ?p ?o }");
     $present = [];
     foreach ($result as $row) {
       $present[(string) $row->s] = TRUE;
@@ -115,19 +125,35 @@ function joinup_core_deploy_201501(array &$sandbox): string {
 
     foreach ($missingByType as $entityTypeId => $entityIds) {
       $storage = $entityTypeManager->getStorage($entityTypeId);
-      $entities = $storage->loadMultiple($entityIds);
-      if ($entities) {
-        $synchronizer->synchronize(SyncMethod::UPDATE, $entities, TRUE);
-        $synchronizer->destruct();
-        $sandbox['exported'] += count($entities);
+      // Export in small chunks so each SPARQL INSERT stays under Virtuoso's
+      // SP031 generated-SQL limit.
+      foreach (array_chunk($entityIds, $insertChunkSize) as $chunk) {
+        $entities = $storage->loadMultiple($chunk);
+        if ($entities) {
+          // These entities are confirmed missing from the graph, so INSERT is
+          // enough. UPDATE would additionally run a full-graph delete scan for
+          // triples that don't exist.
+          $synchronizer->synchronize(SyncMethod::INSERT, $entities, TRUE);
+          $synchronizer->destruct();
+          $sandbox['exported'] += count($entities);
+        }
+        // Avoid memory build-up while iterating over many entities.
+        $storage->resetCache($chunk);
       }
-      // Avoid memory build-up while iterating over many entities.
-      $storage->resetCache($entityIds);
     }
 
     $sandbox['progress'] += count($rows);
   }
 
   $sandbox['#finished'] = empty($rows) || $sandbox['progress'] >= $sandbox['max'] ? 1 : ($sandbox['progress'] / $sandbox['max']);
-  return "Inspected {$sandbox['progress']} of {$sandbox['max']} {rdf_sync_uri} entries, re-exported {$sandbox['exported']} missing entities so far.";
+  $elapsed = microtime(TRUE) - $start;
+  $sandbox['elapsed'] = ($sandbox['elapsed'] ?? 0) + $elapsed;
+  return sprintf(
+    'Inspected %d of %d {rdf_sync_uri} entries, re-exported %d missing entities so far. Iteration took %.2fs (total %.2fs).',
+    $sandbox['progress'],
+    $sandbox['max'],
+    $sandbox['exported'],
+    $elapsed,
+    $sandbox['elapsed'],
+  );
 }
