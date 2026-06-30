@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_solution;
 
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
@@ -57,10 +56,7 @@ readonly class SolutionLazyBuilders {
     }
     $count = $this->assessmentCount($solution);
     $cache = [
-      'tags' => Cache::mergeTags(
-        $solution->getCacheTags(),
-        ['assessment_list:report', 'paragraph_list:binding_requirement'],
-      ),
+      'tags' => ['assessment_list:report', 'paragraph_list:binding_requirement'],
     ];
     if ($count === 0) {
       return ['#cache' => $cache];
