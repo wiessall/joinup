@@ -12,7 +12,7 @@
       {{ page.sidebar }}
     </div>
     <div class="layout-content col-lg-9">
-      {{ page.content|without(ventuno_pagetitle) }}
+      {{ page.content|without('ventuno_pagetitle') }}
     </div>
   </div>
 {% endblock %}
