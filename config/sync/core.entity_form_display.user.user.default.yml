@@ -170,12 +170,17 @@ content:
       match_operator: CONTAINS
       match_limit: 10
       placeholder: ''
-      suggestions_dropdown: 1
+      suggestions_dropdown: 0
       show_entity_id: 0
       show_info_label: 0
       info_label: ''
       parent_selection: 1
-    third_party_settings: {  }
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+        new_description: ''
+        rewrite_description: 0
   language:
     weight: 12
     region: content
