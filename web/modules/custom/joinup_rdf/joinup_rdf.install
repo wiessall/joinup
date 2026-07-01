@@ -11,13 +11,6 @@ use EasyRdf\Serialiser\Ntriples;
 
 /**
  * Implements hook_requirements().
- *
- * Reports on the {rdf_sync_uri} entities that are tracked as synchronised to
- * the Virtuoso triplestore but are missing from the graph. Data can go missing
- * when it is manipulated directly on the endpoint, bypassing the Drupal
- * synchronisation, so the status report surfaces the gap for a re-export. The
- * report is broken down per entity type: how many are present versus how many
- * should be there.
  */
 function joinup_rdf_requirements(string $phase): array {
   if ($phase !== 'runtime') {
@@ -25,6 +18,19 @@ function joinup_rdf_requirements(string $phase): array {
   }
 
   $requirements = [];
+
+  // Flag when the automatic RDF synchronization is switched off: while it is
+  // disabled, entity changes are no longer pushed to the triplestore, so the
+  // graph silently drifts out of sync with Drupal.
+  if (!\Drupal::service('rdf_sync.synchronizer')->isSynchronizationEnabled()) {
+    $requirements['joinup_rdf_synchronization'] = [
+      'title' => t('RDF synchronization'),
+      'value' => t('Disabled'),
+      'description' => t('Automatic synchronization to the SPARQL endpoint is turned off. Entity changes are not being exported to the triplestore. Re-enable it with <code>drush rdf_sync:enable</code>.'),
+      'severity' => REQUIREMENT_WARNING,
+    ];
+  }
+
   // Number of URIs verified per SPARQL query. A VALUES clause resolves through
   // the subject index, so batching keeps each query cheap while bounding the
   // number of round trips to the endpoint.
@@ -68,11 +74,6 @@ function joinup_rdf_requirements(string $phase): array {
           static fn(string $uri): string => $serializer->serialiseValue(['type' => 'uri', 'value' => $uri]),
           $uris,
         );
-        // Use a VALUES clause rather than FILTER (?s IN (...)): Virtuoso
-        // resolves VALUES through the subject index, while FILTER IN forces a
-        // full scan of the graph on every batch. Only the count of matching
-        // subjects is needed, so aggregate on the endpoint instead of pulling
-        // every subject back.
         $values = implode(' ', $serialized);
         $result = $connection->query("SELECT (COUNT(DISTINCT ?s) AS ?present) FROM <$graphUri> WHERE { VALUES ?s { $values } ?s ?p ?o }");
         foreach ($result as $row) {
