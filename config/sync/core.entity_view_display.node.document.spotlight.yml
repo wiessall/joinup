@@ -57,6 +57,7 @@ hidden:
   field_document_logo: true
   field_licence: true
   field_paragraphs_body: true
+  field_referenced_solution: true
   field_shared_in: true
   field_short_title: true
   field_site_featured: true
