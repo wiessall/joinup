@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\joinup_i18n;
 
 use Drupal\collection\Entity\CollectionInterface;
-use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\State\StateInterface;
@@ -28,7 +27,6 @@ class TranslationScheduler {
   public function __construct(
     private readonly EntityTypeManagerInterface $entityTypeManager,
     private readonly StateInterface $state,
-    private readonly TimeInterface $time,
   ) {}
 
   /**
@@ -74,8 +72,17 @@ class TranslationScheduler {
    *   An array of [callable, args] pairs for use with batch_set().
    */
   protected function buildBatchOperations(CollectionInterface $collection): array {
-    $ids = array_merge([], ...array_values($collection->getGroupContentIds()['node'] ?? []));
-    array_unshift($ids, (string) $collection->id());
+    $idsByBundle = $collection->getGroupContentIds()['node'] ?? [];
+    if (!empty($idsByBundle['solution'])) {
+      // Solutions should take precedence over other content types to ensure
+      // correct processing of path aliases.
+      $solutionIds = $idsByBundle['solution'];
+      unset($idsByBundle['solution']);
+      $idsByBundle = ['solution' => $solutionIds] + $idsByBundle;
+    }
+    $ids = array_reduce([...$idsByBundle], fn(array $ids, array $bundleIds) => [...$ids, ...$bundleIds], []);
+
+    array_unshift($ids, (int) $collection->id());
 
     return array_map(
       fn(array $chunk) => [[static::class, 'processBatchChunk'], [$chunk]],
@@ -128,15 +135,16 @@ class TranslationScheduler {
   }
 
   /**
-   * Records the current time as the send timestamp for a collection.
+   * Records the current time as the sent timestamp for a collection.
    *
    * @param string $collectionId
    *   The collection node ID.
    */
-  public function markAsSent(string $collectionId): void {
-    $sent = $this->state->get(self::STATE_KEY, []);
-    $sent[$collectionId] = $this->time->getRequestTime();
-    $this->state->set(self::STATE_KEY, $sent);
+  protected static function markAsSent(string $collectionId): void {
+    $state = \Drupal::state();
+    $sent = $state->get(self::STATE_KEY, []);
+    $sent[$collectionId] = \Drupal::time()->getRequestTime();
+    $state->set(self::STATE_KEY, $sent);
   }
 
   /**
@@ -151,7 +159,7 @@ class TranslationScheduler {
    */
   public static function batchFinished(bool $success, array $results, array $operations): void {
     if ($success) {
-      \Drupal::service(static::class)->markAsSent($results['collection_id']);
+      static::markAsSent($results['collection_id']);
       \Drupal::messenger()
         ->addStatus(t('Translation scheduled: @count item(s) queued.', [
           '@count' => $results['count'] ?? 0,

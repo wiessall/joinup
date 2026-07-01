@@ -565,6 +565,13 @@ Feature:
     Then I should see the text "Greek listing heading"
     But I should not see the text "English listing heading"
 
+    And the configurable listing of the "E-justice" topic should have a el translation
+
+  # Scenario order matters: this asserts the previous scenario's AfterScenario
+  # cleanup reverted the translation on the pre-existing "E-justice" topic.
+  Scenario: The configurable listing translation is reverted after the scenario.
+    Then the configurable listing of the "E-justice" topic should not have a el translation
+
   # Regression test for ISAICP-11115.
   Scenario: Help text links on topics administration pages work correctly across languages.
     Given I am logged in as a moderator

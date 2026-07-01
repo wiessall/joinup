@@ -176,6 +176,9 @@ trait WysiwygTrait {
 
     $label_elements = $region->findAll('named', ['field', $label]);
     if (empty($label_elements)) {
+      $label_elements = $region->findAll('named', ['fieldset', $label]);
+    }
+    if (empty($label_elements)) {
       throw new WysiwygEditorNotFoundException("Could not find the '$label' field label.");
     }
 
@@ -184,6 +187,11 @@ trait WysiwygTrait {
     }
 
     $label_element = reset($label_elements);
+
+    $show_more_button = $label_element->find('named', ['button', 'Show more items']);
+    if ($show_more_button) {
+      $show_more_button->press();
+    }
 
     $wysiwyg_elements = $label_element->findAll('xpath', '/ancestor::*[contains(concat(" ", normalize-space(@class), " "), " form-wrapper ")][position() = 1]');
     if (empty($wysiwyg_elements)) {

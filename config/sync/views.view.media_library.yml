@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_mode.media.media_library
     - image.style.media_library
   module:
+    - joinup_media
     - media
     - media_library
     - svg_image
@@ -1174,25 +1175,26 @@ display:
           path_case: none
           transform_dash: false
           break_phrase: false
-        og_audience_target_id:
-          id: og_audience_target_id
+        group_or_no_group:
+          id: group_or_no_group
           table: media__og_audience
-          field: og_audience_target_id
+          field: group_or_no_group
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: string
+          plugin_id: joinup_media_group_or_null
           default_action: default
           exception:
             value: all
             title_enable: false
             title: All
+            value_to_filter_for_null: filter_empty
           title_enable: false
           title: ''
           default_argument_type: query_parameter
           default_argument_options:
             query_param: 'media_library_opener_parameters[group_id]'
-            fallback: ''
+            fallback: filter_empty
             multiple: and
           summary_options:
             base_path: ''
