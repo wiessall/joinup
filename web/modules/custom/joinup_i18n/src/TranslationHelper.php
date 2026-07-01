@@ -35,7 +35,11 @@ readonly class TranslationHelper {
     $plugin = $this->sourceManager->createInstance('content');
     assert($plugin instanceof ContentEntitySource);
     $data = $plugin->extractTranslatableData($entity);
-    return !empty($this->dataHelper->filterTranslatable($data));
+
+    // TMGMT refuses to create a job item without any words.
+    return array_any($this->dataHelper->filterTranslatable($data),
+      fn($item) => $this->dataHelper->wordCount($item['#text']) > 0
+    );
   }
 
 }
