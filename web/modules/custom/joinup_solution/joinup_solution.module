@@ -395,6 +395,9 @@ function joinup_solution_node_view(array &$build, NodeInterface $solution, Entit
         [$solution->id()],
       ],
       '#create_placeholder' => TRUE,
+      '#cache' => [
+        'keys' => ['joinup_solution.solution_assessment_count', $solution->id()],
+      ],
     ];
   }
 }
