@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.document.field_document_logo
     - field.field.node.document.field_licence
     - field.field.node.document.field_paragraphs_body
+    - field.field.node.document.field_referenced_solution
     - field.field.node.document.field_short_title
     - field.field.node.document.field_site_featured
     - field.field.node.document.field_state
@@ -83,6 +84,20 @@ content:
       nesting_depth: 0
       require_layouts: 1
       empty_message: ''
+    third_party_settings: {  }
+  field_referenced_solution:
+    type: tagify_entity_reference_autocomplete_widget
+    weight: 5
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      placeholder: 'Start typing to select a solution...'
+      suggestions_dropdown: 1
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 0
     third_party_settings: {  }
   field_short_title:
     type: string_textfield

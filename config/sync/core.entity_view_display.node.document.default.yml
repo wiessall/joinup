@@ -9,6 +9,7 @@ dependencies:
     - field.field.node.document.field_document_logo
     - field.field.node.document.field_licence
     - field.field.node.document.field_paragraphs_body
+    - field.field.node.document.field_referenced_solution
     - field.field.node.document.field_short_title
     - field.field.node.document.field_site_featured
     - field.field.node.document.field_state
@@ -114,6 +115,16 @@ content:
       template_suggestion:
         template_suggestion: bare
     weight: 1
+    region: content
+  field_referenced_solution:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: fieldset
+    weight: 12
     region: content
   field_shared_in:
     type: entity_reference_entity_view
