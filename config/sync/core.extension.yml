@@ -149,6 +149,7 @@ module:
   joinup_subscription: 0
   joinup_taxonomy: 0
   joinup_tiles: 0
+  joinup_tmgmt: 0
   joinup_tour: 0
   joinup_user: 0
   joinup_validation: 0

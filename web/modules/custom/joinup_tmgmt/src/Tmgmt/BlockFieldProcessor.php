@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_i18n\Tmgmt;
+namespace Drupal\joinup_tmgmt\Tmgmt;
 
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Render\Element;

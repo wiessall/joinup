@@ -2,19 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_i18n\Tmgmt;
+namespace Drupal\joinup_tmgmt\Tmgmt;
 
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Render\Element;
 use Drupal\tmgmt_content\DefaultFieldProcessor;
 
 /**
- * Prevents tmgmt from translating social-media links.
- *
- * The field holds only machine values (a platform key and an account handle),
- * so nothing in it should be translated.
+ * Prevents tmgmt from translating iframe machine properties.
  */
-final class SocialMediaFieldProcessor extends DefaultFieldProcessor {
+final class IframeFieldProcessor extends DefaultFieldProcessor {
 
   /**
    * {@inheritdoc}
@@ -22,9 +19,11 @@ final class SocialMediaFieldProcessor extends DefaultFieldProcessor {
   public function extractTranslatableData(FieldItemListInterface $field): array {
     $data = parent::extractTranslatableData($field);
 
+    // Only the iframe title should be translated; machine names/settings are
+    // excluded.
     foreach (Element::children($data) as $delta) {
       foreach (Element::children($data[$delta]) as $property) {
-        if (isset($data[$delta][$property]['#translate'])) {
+        if ($property !== 'title' && isset($data[$delta][$property]['#translate'])) {
           $data[$delta][$property]['#translate'] = FALSE;
         }
       }

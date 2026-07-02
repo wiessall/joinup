@@ -11,9 +11,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\joinup_i18n\Tmgmt\BlockFieldProcessor;
-use Drupal\joinup_i18n\Tmgmt\IframeFieldProcessor;
-use Drupal\joinup_i18n\Tmgmt\SocialMediaFieldProcessor;
 use Drupal\language\ConfigurableLanguageInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\tmgmt\JobInterface;
@@ -145,24 +142,6 @@ final class JoinupI18nHooks {
       $link->removeTranslation($langcode);
     }
     $link->save();
-  }
-
-  /**
-   * Implements hook_field_info_alter().
-   */
-  #[Hook('field_info_alter')]
-  public function fieldInfoAlter(array &$info): void {
-    if (isset($info['block_field'])) {
-      $info['block_field']['tmgmt_field_processor'] = BlockFieldProcessor::class;
-    }
-
-    if (isset($info['iframe'])) {
-      $info['iframe']['tmgmt_field_processor'] = IframeFieldProcessor::class;
-    }
-
-    if (isset($info['social_media_links_field'])) {
-      $info['social_media_links_field']['tmgmt_field_processor'] = SocialMediaFieldProcessor::class;
-    }
   }
 
   /**
