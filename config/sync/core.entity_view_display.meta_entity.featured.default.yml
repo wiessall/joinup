@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.meta_entity.featured.featured
+    - field.field.meta_entity.featured.field_featured
     - meta_entity.type.featured
 id: meta_entity.featured.default
 targetEntityType: meta_entity
@@ -56,6 +57,16 @@ content:
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
+    weight: 23
+    region: content
+  field_featured:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: { }
     weight: 23
     region: content
   label:
