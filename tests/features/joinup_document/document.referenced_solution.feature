@@ -47,3 +47,10 @@ Feature: "Referenced solution(s)" field for documents of type "Solution use case
     When I press "Save as draft"
     Then I should see the heading "Legacy Case"
     And I should see the link "Published Showcase"
+
+    # Switching away from "Solution use cases" clears the referenced solution.
+    When I go to the "edit" form of the "Legacy Case" document
+    And I select "Document" from "Type"
+    And I press "Save as draft"
+    Then I should see the heading "Legacy Case"
+    And I should not see the link "Published Showcase"
