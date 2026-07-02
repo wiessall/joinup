@@ -9,7 +9,7 @@ dependencies:
     - field.field.node.document.field_document_logo
     - field.field.node.document.field_licence
     - field.field.node.document.field_paragraphs_body
-    - field.field.node.document.field_referenced_solution
+    - field.field.node.document.referenced_solution
     - field.field.node.document.field_short_title
     - field.field.node.document.field_site_featured
     - field.field.node.document.field_state
@@ -57,7 +57,7 @@ third_party_settings:
       label: Attachment
       parent_name: ''
       region: content
-      weight: 3
+      weight: 4
       format_type: html_element
       format_settings:
         classes: ''
@@ -78,7 +78,7 @@ content:
   anonymous_comment_links:
     settings: {  }
     third_party_settings: {  }
-    weight: 8
+    weight: 9
     region: content
   field_comments:
     type: comment_default
@@ -87,7 +87,7 @@ content:
       view_mode: default
       pager_id: 0
     third_party_settings: {  }
-    weight: 6
+    weight: 7
     region: content
   field_licence:
     type: entity_reference_label
@@ -116,16 +116,6 @@ content:
         template_suggestion: bare
     weight: 1
     region: content
-  field_referenced_solution:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: fieldset
-    weight: 12
-    region: content
   field_shared_in:
     type: entity_reference_entity_view
     label: above
@@ -135,7 +125,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: entity_reference__listing_tile
-    weight: 7
+    weight: 8
     region: content
   field_short_title:
     type: string
@@ -156,6 +146,16 @@ content:
         template_suggestion: fieldset
     weight: 10
     region: content
+  referenced_solution:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: fieldset
+    weight: 3
+    region: content
   report:
     type: link
     label: hidden
@@ -168,7 +168,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
-    weight: 5
+    weight: 6
     region: content
   resources:
     type: entity_reference_revisions_entity_view
@@ -182,7 +182,7 @@ content:
   share_link:
     settings: {  }
     third_party_settings: {  }
-    weight: 4
+    weight: 5
     region: content
 hidden:
   abstract: true
