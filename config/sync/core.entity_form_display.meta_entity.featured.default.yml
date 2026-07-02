@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.meta_entity.featured.field_featured
+    - field.field.meta_entity.featured.featured
     - meta_entity.type.featured
   module:
     - path
@@ -12,6 +12,13 @@ targetEntityType: meta_entity
 bundle: featured
 mode: default
 content:
+  featured:
+    type: boolean_checkbox
+    weight: 31
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
   label:
     type: string_textfield
     weight: -5
@@ -27,7 +34,6 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
-  field_featured: true
   langcode: true
   target: true
   uuid: true

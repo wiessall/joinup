@@ -1,0 +1,26 @@
+uuid: 718f9886-a7e3-42d6-b3b6-c9dc0499dbd0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.meta_entity.featured
+    - meta_entity.type.featured
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: meta_entity.featured.featured
+field_name: featured
+entity_type: meta_entity
+bundle: featured
+label: Featured
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean
