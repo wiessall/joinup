@@ -9,7 +9,6 @@ dependencies:
     - field.field.node.document.field_document_logo
     - field.field.node.document.field_licence
     - field.field.node.document.field_paragraphs_body
-    - field.field.node.document.referenced_solution
     - field.field.node.document.field_short_title
     - field.field.node.document.field_site_featured
     - field.field.node.document.field_state
@@ -17,15 +16,18 @@ dependencies:
     - field.field.node.document.field_type
     - field.field.node.document.keywords
     - field.field.node.document.og_audience
+    - field.field.node.document.referenced_solution
     - field.field.node.document.resources
     - field.field.node.document.spatial_coverage
     - node.type.document
   module:
     - comment
+    - entity_form_field_label
     - entity_reference_revisions
     - field_delimiter
     - field_formatter_range
     - field_group
+    - joinup_slick
     - layout_paragraphs
     - link
     - options
@@ -152,8 +154,20 @@ content:
     settings:
       link: true
     third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: false
       template_suggestion:
-        template_suggestion: fieldset
+        template_suggestion: ''
     weight: 3
     region: content
   report:
