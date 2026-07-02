@@ -25,9 +25,9 @@ class ReferencedSolutionConstraintValidator extends ConstraintValidator {
       return;
     }
 
-    if ($entity->get('field_referenced_solution')->isEmpty()) {
+    if ($entity->get('referenced_solution')->isEmpty()) {
       $this->context->buildViolation($constraint->message)
-        ->atPath('field_referenced_solution')
+        ->atPath('referenced_solution')
         ->addViolation();
     }
   }

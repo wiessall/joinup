@@ -4,8 +4,8 @@ status: true
 dependencies:
   module:
     - node
-id: node.field_referenced_solution
-field_name: field_referenced_solution
+id: node.referenced_solution
+field_name: referenced_solution
 entity_type: node
 type: entity_reference
 settings:

@@ -3,13 +3,13 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_referenced_solution
+    - field.storage.node.referenced_solution
     - node.type.document
     - node.type.solution
   module:
     - joinup_document
-id: node.document.field_referenced_solution
-field_name: field_referenced_solution
+id: node.document.referenced_solution
+field_name: referenced_solution
 entity_type: node
 bundle: document
 label: 'Referenced solution(s)'
