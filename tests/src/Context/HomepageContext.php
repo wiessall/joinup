@@ -9,6 +9,7 @@ use Behat\Hook\AfterScenario;
 use Behat\Mink\Element\NodeElement;
 use Behat\Step\Given;
 use Behat\Step\Then;
+use Drupal\Core\Entity\TranslatableInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\entityqueue\EntitySubqueueInterface;
 use Drupal\joinup\Traits\AssertTrait;
@@ -22,6 +23,163 @@ class HomepageContext extends RawDrupalContext {
 
   use AssertTrait;
   use EntityTrait;
+
+  /**
+   * Paragraph translations to revert when the scenario ends.
+   *
+   * Each item is an array describing one configurable listing translation added
+   * to a pre-existing topic:
+   * @code
+   * [
+   *   <topic ID>,
+   *   <topics_paragraph delta>,
+   *   <original target revision ID>,
+   *   <paragraph ID>,
+   *   <language code>,
+   * ]
+   * @endcode
+   */
+  protected array $translatedConfigurableListings = [];
+
+  /**
+   * Translates the configurable listing paragraph.
+   *
+   * Topic bodies reference their paragraphs through a non-translatable field,
+   * so the (shared) paragraph carries its own translations. This adds a
+   * translation to the configurable listing paragraph and points the parent at
+   * the resulting revision so the translation is rendered.
+   *
+   * @param string $langcode
+   *   The language code of the translation to set, e.g. 'el'.
+   * @param string $term
+   *   The label of the topic taxonomy term.
+   * @param \Behat\Gherkin\Node\TableNode $fields
+   *   The translatable fields to set, as "field"/"value" rows.
+   */
+  #[Given('the :langcode translation of the configurable listing in the :term topic has:')]
+  public function translateConfigurableListing(string $langcode, string $term, TableNode $fields): void {
+    $topic = $this->getEntityByLabel('taxonomy_term', $term, 'topic');
+
+    $delta = NULL;
+    $paragraph = NULL;
+    foreach ($topic->get('topics_paragraph') as $index => $item) {
+      if ($item->entity instanceof ParagraphInterface && $item->entity->bundle() === 'configurable_listing') {
+        $delta = $index;
+        $paragraph = $item->entity;
+        break;
+      }
+    }
+    if ($paragraph === NULL) {
+      throw new \RuntimeException(sprintf('No configurable listing paragraph found in the "%s" topic.', $term));
+    }
+
+    $original_target_revision_id = $topic->get('topics_paragraph')->get($delta)->target_revision_id;
+    $added_translation = !$paragraph->hasTranslation($langcode);
+    $translation = $paragraph->hasTranslation($langcode) ? $paragraph->getTranslation($langcode) : $paragraph->addTranslation($langcode, $paragraph->toArray());
+    foreach ($fields->getHash() as $row) {
+      $translation->set($row['field'], $row['value']);
+    }
+    $translation->save();
+
+    // The paragraph save created a new revision. Point the parent at it so the
+    // translation is rendered, then save the parent.
+    $topic->get('topics_paragraph')->get($delta)->set('target_revision_id', $paragraph->getRevisionId());
+    $topic->save();
+
+    if ($added_translation) {
+      $this->translatedConfigurableListings[] = [
+        $topic->id(),
+        $delta,
+        $original_target_revision_id,
+        $paragraph->id(),
+        $langcode,
+      ];
+    }
+  }
+
+  /**
+   * Reverts configurable listing translations added to topics.
+   */
+  #[AfterScenario]
+  public function cleanUpTranslatedConfigurableListings(): void {
+    if (empty($this->translatedConfigurableListings)) {
+      return;
+    }
+
+    $entity_type_manager = \Drupal::entityTypeManager();
+    $term_storage = $entity_type_manager->getStorage('taxonomy_term');
+    $paragraph_storage = $entity_type_manager->getStorage('paragraph');
+
+    foreach ($this->translatedConfigurableListings as $record) {
+      [$tid, $delta, $original_target_revision_id, $paragraph_id, $langcode] = $record;
+      $topic = $term_storage->load($tid);
+      if ($topic !== NULL) {
+        $item = $topic->get('topics_paragraph')->get($delta);
+        if ($item !== NULL) {
+          $item->set('target_revision_id', $original_target_revision_id);
+          $topic->save();
+        }
+      }
+
+      $paragraph = $paragraph_storage->load($paragraph_id);
+      if ($paragraph instanceof TranslatableInterface && $paragraph->hasTranslation($langcode)) {
+        $paragraph->removeTranslation($langcode);
+        $paragraph->save();
+      }
+    }
+    $this->translatedConfigurableListings = [];
+  }
+
+  /**
+   * Asserts the configurable listing of a topic has a given translation.
+   *
+   * @param string $term
+   *   The label of the topic taxonomy term.
+   * @param string $langcode
+   *   The language code of the expected translation, e.g. 'el'.
+   */
+  #[Then('the configurable listing of the :term topic should have a :langcode translation')]
+  public function assertConfigurableListingHasTranslation(string $term, string $langcode): void {
+    if (!$this->configurableListingHasTranslation($term, $langcode)) {
+      throw new \RuntimeException(sprintf('The configurable listing of the "%s" topic does not have a "%s" translation.', $term, $langcode));
+    }
+  }
+
+  /**
+   * Asserts the configurable listing of a topic has no given translation.
+   *
+   * @param string $term
+   *   The label of the topic taxonomy term.
+   * @param string $langcode
+   *   The language code of the unexpected translation, e.g. 'el'.
+   */
+  #[Then('the configurable listing of the :term topic should not have a :langcode translation')]
+  public function assertConfigurableListingHasNoTranslation(string $term, string $langcode): void {
+    if ($this->configurableListingHasTranslation($term, $langcode)) {
+      throw new \RuntimeException(sprintf('The configurable listing of the "%s" topic unexpectedly has a "%s" translation.', $term, $langcode));
+    }
+  }
+
+  /**
+   * Checks whether a topic's configurable listing paragraph is translated.
+   *
+   * @param string $term
+   *   The label of the topic taxonomy term.
+   * @param string $langcode
+   *   The language code of the translation to check.
+   *
+   * @return bool
+   *   If the configurable listing carries a translation in the given language.
+   */
+  protected function configurableListingHasTranslation(string $term, string $langcode): bool {
+    $topic = $this->getEntityByLabel('taxonomy_term', $term, 'topic');
+    foreach ($topic->get('topics_paragraph') as $item) {
+      if ($item->entity instanceof ParagraphInterface && $item->entity->bundle() === 'configurable_listing') {
+        return $item->entity->hasTranslation($langcode);
+      }
+    }
+    return FALSE;
+  }
 
   /**
    * Checks the contents of the "Explore" block.
@@ -102,50 +260,6 @@ class HomepageContext extends RawDrupalContext {
       $entity_queue->addItem($topic);
     }
     $entity_queue->save();
-  }
-
-  /**
-   * Translates the configurable listing paragraph of a topic taxonomy term.
-   *
-   * Topic bodies reference their paragraphs through a non-translatable field,
-   * so the (shared) paragraph carries its own translations. This adds a
-   * translation to the configurable listing paragraph and points the parent at
-   * the resulting revision so the translation is rendered.
-   *
-   * @param string $langcode
-   *   The language code of the translation to set, e.g. 'el'.
-   * @param string $term
-   *   The label of the topic taxonomy term.
-   * @param \Behat\Gherkin\Node\TableNode $fields
-   *   The translatable fields to set, as "field"/"value" rows.
-   */
-  #[Given('the :langcode translation of the configurable listing in the :term topic has:')]
-  public function translateConfigurableListing(string $langcode, string $term, TableNode $fields): void {
-    $topic = $this->getEntityByLabel('taxonomy_term', $term, 'topic');
-
-    $delta = NULL;
-    $paragraph = NULL;
-    foreach ($topic->get('topics_paragraph') as $index => $item) {
-      if ($item->entity instanceof ParagraphInterface && $item->entity->bundle() === 'configurable_listing') {
-        $delta = $index;
-        $paragraph = $item->entity;
-        break;
-      }
-    }
-    if ($paragraph === NULL) {
-      throw new \RuntimeException(sprintf('No configurable listing paragraph found in the "%s" topic.', $term));
-    }
-
-    $translation = $paragraph->hasTranslation($langcode) ? $paragraph->getTranslation($langcode) : $paragraph->addTranslation($langcode, $paragraph->toArray());
-    foreach ($fields->getHash() as $row) {
-      $translation->set($row['field'], $row['value']);
-    }
-    $translation->save();
-
-    // The paragraph save created a new revision. Point the parent at it so the
-    // translation is rendered, then save the parent.
-    $topic->get('topics_paragraph')->get($delta)->set('target_revision_id', $paragraph->getRevisionId());
-    $topic->save();
   }
 
   /**
