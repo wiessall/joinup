@@ -8,6 +8,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\KeyValueStore\KeyValueFactoryInterface;
 use Drush\Drush;
 
 /**
@@ -15,8 +16,7 @@ use Drush\Drush;
  *
  * Some values must never be translated: untranslatable field instances and
  * machine properties of translatable fields. tmgmt sent them for
- * translation anyway and wrote the mangled result back. Each is restored from
- * the nearest valid value in the paragraph's history.
+ * translation anyway and wrote the mangled result back.
  *
  * @see https://www.drupal.org/project/tmgmt/issues/3382356
  */
@@ -27,15 +27,24 @@ final class TmgmtDataRepair implements ContainerInjectionInterface {
   public function __construct(
     protected Connection $database,
     protected EntityTypeManagerInterface $entityTypeManager,
+    protected KeyValueFactoryInterface $keyValue,
   ) {}
 
   /**
    * Main entrypoint.
    */
   public function run(): void {
-    $this->repairWebform();
-    $this->repairJson();
-    $this->repairIframe();
+    $transaction = $this->database->startTransaction();
+    try {
+      $this->repairWebform();
+      $this->repairJson();
+      $this->repairIframe();
+      $this->repairSocialMedia();
+    }
+    catch (\Throwable $e) {
+      $transaction->rollBack();
+      throw $e;
+    }
   }
 
   /**
@@ -45,7 +54,7 @@ final class TmgmtDataRepair implements ContainerInjectionInterface {
     $ids = $this->entityTypeManager->getStorage('webform')->getQuery()->accessCheck(FALSE)->execute();
     $webform_ids = \array_flip($ids);
     $statuses = ['open' => TRUE, 'closed' => TRUE, 'scheduled' => TRUE];
-    $this->repair('paragraph_webform', [
+    $this->repairFromNearestValidValue('paragraph_webform', [
       'paragraph_webform_target_id' => fn (?string $value): bool => $value === NULL || $value === '' || isset($webform_ids[$value]),
       'paragraph_webform_status' => fn (?string $value): bool => $value === NULL || $value === '' || isset($statuses[$value]),
     ]);
@@ -55,7 +64,7 @@ final class TmgmtDataRepair implements ContainerInjectionInterface {
    * Repairs Webtools map JSON blobs translated into non-parsing prose.
    */
   protected function repairJson(): void {
-    $this->repair('field_json', [
+    $this->repairFromNearestValidValue('field_json', [
       'field_json_value' => fn (?string $value): bool => $value === NULL || trim($value) === '' || json_validate($value),
     ]);
   }
@@ -65,22 +74,51 @@ final class TmgmtDataRepair implements ContainerInjectionInterface {
    */
   public function repairIframe(): void {
     $modes = ['auto' => TRUE, 'yes' => TRUE, 'no' => TRUE];
-    $this->repair('field_iframe', [
+    $this->repairFromNearestValidValue('field_iframe', [
       'field_iframe_scrolling' => fn (?string $value): bool => $value === NULL || $value === '' || isset($modes[$value]),
     ]);
   }
 
   /**
-   * Restores corrupted columns of one paragraph field.
-   *
-   * @param string $field_name
-   *   The field machine name.
-   * @param array $validators
-   *   A value validator per column, keyed by column name.
+   * Repairs social-media platform keys and account handles.
    */
-  protected function repair(string $field_name, array $validators): void {
-    $revision_table = 'paragraph_revision__' . $field_name;
-    $current_table = 'paragraph__' . $field_name;
+  protected function repairSocialMedia(): void {
+    $field_name = 'field_paragraphs_social_media';
+    $platform = $field_name . '_platform';
+    $value = $field_name . '_value';
+
+    [$data_table, $revision_table] = $this->getFieldTables($field_name);
+
+    // Fix the revision history: force every translated row's machine values to
+    // match its English source row (same paragraph, revision and delta).
+    $sources = $this->database->select($revision_table, 't')
+      ->fields('t', ['entity_id', 'revision_id', 'delta', $platform, $value])
+      ->condition('langcode', 'en')
+      ->execute();
+    $repaired = 0;
+    foreach ($sources as $source) {
+      $repaired += $this->database->update($revision_table)
+        ->fields([
+          $platform => $source->{$platform},
+          $value => $source->{$value},
+        ])
+        ->condition('entity_id', $source->entity_id)
+        ->condition('revision_id', $source->revision_id)
+        ->condition('delta', $source->delta)
+        ->condition('langcode', 'en', '<>')
+        ->execute();
+    }
+    Drush::logger()->notice(sprintf('%s: repaired %d row(s) in the revision table.', $field_name, $repaired));
+
+    $synced = $this->syncDataFromRevision($data_table, $revision_table, [$platform, $value]);
+    Drush::logger()->notice(sprintf('%s: repaired %d row(s) in the data table.', $field_name, $synced));
+  }
+
+  /**
+   * Restores corrupted columns from the nearest valid value in history.
+   */
+  protected function repairFromNearestValidValue(string $field_name, array $validators): void {
+    [$data_table, $revision_table] = $this->getFieldTables($field_name);
     $columns = \array_keys($validators);
 
     $rows = $this->database->select($revision_table, 't')
@@ -88,104 +126,75 @@ final class TmgmtDataRepair implements ContainerInjectionInterface {
       ->orderBy('entity_id')
       ->orderBy('delta')
       ->orderBy('revision_id')
-      ->orderBy('langcode')
       ->execute()
       ->fetchAll();
 
-    // Group the history per paragraph and field delta. Translatable fields have
-    // one row per language, so a group can interleave languages by revision.
-    $groups = [];
+    // Only invalid values are written, so editor changes are never reverted.
+    $repaired = 0;
+    $last_valid = [];
     foreach ($rows as $row) {
-      $groups[$row->entity_id][$row->delta][] = $row;
-    }
-
-    // For each corrupted row, collect the columns to restore and the value each
-    // should take: the most recent valid value up to that revision, or the
-    // first valid one when the corruption predates any valid value. Keyed by
-    // "revision_id:delta:langcode" then by column.
-    $restore = [];
-    $paragraphs = [];
-    foreach ($groups as $entity_id => $deltas) {
-      foreach ($deltas as $items) {
-        $first_valid = $this->firstValidValues($items, $validators);
-        $last_valid = [];
-        foreach ($items as $item) {
-          $key = $item->revision_id . ':' . $item->delta . ':' . $item->langcode;
-          foreach ($validators as $column => $is_valid) {
-            if ($is_valid($item->{$column})) {
-              $last_valid[$column] = $item->{$column};
-              continue;
-            }
-            $value = $last_valid[$column] ?? $first_valid[$column] ?? NULL;
-            if ($value !== NULL) {
-              $restore[$key][$column] = $value;
-              $paragraphs[$entity_id] = TRUE;
-            }
-          }
+      $fields = [];
+      foreach ($validators as $column => $is_valid) {
+        if ($is_valid($row->{$column})) {
+          $last_valid[$row->entity_id][$row->delta][$column] = $row->{$column};
+          continue;
+        }
+        $value = $last_valid[$row->entity_id][$row->delta][$column] ?? NULL;
+        if ($value !== NULL) {
+          $fields[$column] = $value;
         }
       }
+
+      if ($fields) {
+        $repaired += $this->database->update($revision_table)
+          ->fields($fields)
+          ->condition('revision_id', $row->revision_id)
+          ->condition('delta', $row->delta)
+          ->condition('langcode', $row->langcode)
+          ->execute();
+      }
     }
+    Drush::logger()->notice(sprintf('%s: repaired %d row(s) in the revision table.', $field_name, $repaired));
 
-    // Apply to the history and to the default-revision rows that render.
-    $revisions = $this->applyRestore($revision_table, $restore);
-    $current = $this->applyRestore($current_table, $restore);
-
-    Drush::logger()->notice(sprintf(
-      '%s: repaired %d revision row(s) and %d current row(s) across %d paragraph(s).',
-      $field_name,
-      $revisions,
-      $current,
-      count($paragraphs),
-    ));
+    $synced = $this->syncDataFromRevision($data_table, $revision_table, $columns);
+    Drush::logger()->notice(sprintf('%s: repaired %d row(s) in the data table.', $field_name, $synced));
   }
 
   /**
-   * Returns the first valid value of each column in a paragraph's history.
+   * Copies the repaired columns from the revision table into the data table.
    *
-   * @param object[] $items
-   *   The field rows of one paragraph and delta, ordered by revision.
-   * @param array $validators
-   *   A value validator per column, keyed by column name.
-   *
-   * @return array
-   *   The first valid value found per column, keyed by column name.
+   * The data table holds the default-revision rows, a subset of the revision
+   * table, so once the history is fixed the data table is derived from it.
    */
-  protected function firstValidValues(array $items, array $validators): array {
-    $first_valid = [];
-    foreach ($validators as $column => $is_valid) {
-      foreach ($items as $item) {
-        if ($is_valid($item->{$column})) {
-          $first_valid[$column] = $item->{$column};
-          break;
-        }
-      }
+  protected function syncDataFromRevision(string $data_table, string $revision_table, array $columns): int {
+    $assignments = [];
+    $diverged = [];
+    foreach ($columns as $column) {
+      $assignments[] = "[d].[$column] = [r].[$column]";
+      // Compare bytes so case-only corruption is caught on CI collations.
+      $diverged[] = "NOT (CAST([d].[$column] AS BINARY) <=> CAST([r].[$column] AS BINARY))";
     }
-    return $first_valid;
+
+    $statement = $this->database->prepareStatement(
+      "UPDATE {" . $data_table . "} [d]
+       INNER JOIN {" . $revision_table . "} [r] ON [r].[entity_id] = [d].[entity_id]
+         AND [r].[revision_id] = [d].[revision_id]
+         AND [r].[delta] = [d].[delta]
+         AND [r].[langcode] = [d].[langcode]
+       SET " . implode(', ', $assignments) . "
+       WHERE " . implode(' OR ', $diverged),
+      [],
+      TRUE,
+    );
+    $statement->execute();
+    return $statement->rowCount();
   }
 
   /**
-   * Applies restore values to one field table.
-   *
-   * @param string $table
-   *   The field data or revision table to fix.
-   * @param array $restore
-   *   The values to restore, keyed by "revision_id:delta:langcode" then column.
-   *
-   * @return int
-   *   The number of rows updated.
+   * Returns the data and revision tables of a paragraph field.
    */
-  protected function applyRestore(string $table, array $restore): int {
-    $updated = 0;
-    foreach ($restore as $key => $fields) {
-      [$revision_id, $delta, $langcode] = explode(':', $key);
-      $updated += $this->database->update($table)
-        ->fields($fields)
-        ->condition('revision_id', $revision_id)
-        ->condition('delta', $delta)
-        ->condition('langcode', $langcode)
-        ->execute();
-    }
-    return $updated;
+  protected function getFieldTables(string $field_name): array {
+    return \array_keys($this->keyValue->get('entity.storage_schema.sql')->get('paragraph.field_schema_data.' . $field_name, []));
   }
 
 }
