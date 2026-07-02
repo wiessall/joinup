@@ -1,0 +1,21 @@
+uuid: 89ed32b6-bda4-470d-9c58-5a66d2c5547c
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: taxonomy_term.abstract
+field_name: abstract
+entity_type: taxonomy_term
+type: string
+settings:
+  max_length: 255
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
