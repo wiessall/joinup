@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains post updates for Consumers module.
+ * Deploy hooks for Joinup Featured module.
  */
 
 declare(strict_types=1);
@@ -12,26 +12,25 @@ use Drupal\Core\Entity\EntityStorageException;
 /**
  * Migrate cached computed field_featured to featured boolean field.
  */
-function joinup_featured_post_update_300001(&$sandbox): void {
+function joinup_featured_deploy_201501(): void {
   $storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
 
-  if (!isset($sandbox['total'])) {
-    $ids = $storage->getQuery()
-      ->accessCheck(FALSE)
-      ->condition('type', 'featured')
-      ->execute();
+  $ids = $storage->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('type', 'featured')
+    ->execute();
 
-    $sandbox['ids'] = array_values($ids);
-    $sandbox['total'] = count($sandbox['ids']);
-    $sandbox['current'] = 0;
+  if (empty($ids)) {
+    return;
   }
 
   $batch_size = 50;
-  $ids = array_slice($sandbox['ids'], $sandbox['current'], $batch_size);
+  $ids = array_values($ids);
+  $chunks = array_chunk($ids, $batch_size);
 
-  if ($ids) {
+  foreach ($chunks as $chunk) {
     /** @var \Drupal\Core\Entity\ContentEntityInterface[] $entities */
-    $entities = $storage->loadMultiple($ids);
+    $entities = $storage->loadMultiple($chunk);
 
     foreach ($entities as $entity) {
       if ($entity->get('field_featured')->isEmpty()) {
@@ -47,7 +46,7 @@ function joinup_featured_post_update_300001(&$sandbox): void {
         $entity->save();
       }
       catch (EntityStorageException $e) {
-        \Drupal::logger('my_module')->error(
+        \Drupal::logger('joinup_featured')->error(
           'Failed to migrate featured value for entity @id: @message',
           [
             '@id' => $entity->id(),
@@ -56,14 +55,5 @@ function joinup_featured_post_update_300001(&$sandbox): void {
         );
       }
     }
-
-    $sandbox['current'] += count($ids);
-  }
-
-  if ($sandbox['current'] < $sandbox['total']) {
-    $sandbox['#finished'] = $sandbox['current'] / $sandbox['total'];
-  }
-  else {
-    $sandbox['#finished'] = 1;
   }
 }
