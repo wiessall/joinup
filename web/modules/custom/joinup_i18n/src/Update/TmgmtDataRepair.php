@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_i18n\Update;
 
+use Drupal\Core\Block\BlockManagerInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
@@ -26,6 +27,7 @@ final class TmgmtDataRepair implements ContainerInjectionInterface {
 
   public function __construct(
     protected Connection $database,
+    protected BlockManagerInterface $blockManager,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected KeyValueFactoryInterface $keyValue,
   ) {}
@@ -40,6 +42,7 @@ final class TmgmtDataRepair implements ContainerInjectionInterface {
       $this->repairJson();
       $this->repairIframe();
       $this->repairSocialMedia();
+      $this->repairParagraphBlock();
     }
     catch (\Throwable $e) {
       $transaction->rollBack();
@@ -112,6 +115,17 @@ final class TmgmtDataRepair implements ContainerInjectionInterface {
 
     $synced = $this->syncDataFromRevision($data_table, $revision_table, [$platform, $value]);
     Drush::logger()->notice(sprintf('%s: repaired %d row(s) in the data table.', $field_name, $synced));
+  }
+
+  /**
+   * Repairs block plugin IDs translated away from their machine value.
+   */
+  protected function repairParagraphBlock(): void {
+    // e.g. "views_block:calendar-by_week" translated to
+    // "views_block: календар-by_week"; valid = a registered block plugin ID.
+    $this->repairFromNearestValidValue('paragraph_block', [
+      'paragraph_block_plugin_id' => fn (?string $value): bool => $value === NULL || $value === '' || $this->blockManager->hasDefinition($value),
+    ]);
   }
 
   /**
