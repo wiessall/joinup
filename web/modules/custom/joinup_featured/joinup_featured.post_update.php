@@ -1,11 +1,18 @@
 <?php
 
+/**
+ * @file
+ * Contains post updates for Consumers module.
+ */
+
+declare(strict_types=1);
+
 use Drupal\Core\Entity\EntityStorageException;
 
 /**
  * Migrate cached computed field_featured to featured boolean field.
  */
-function joinup_featured_post_update_migrate_featured_field(&$sandbox): void {
+function joinup_featured_post_update_300001(&$sandbox): void {
   $storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
 
   if (!isset($sandbox['total'])) {
