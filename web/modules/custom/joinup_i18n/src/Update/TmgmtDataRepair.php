@@ -35,6 +35,7 @@ final class TmgmtDataRepair implements ContainerInjectionInterface {
   public function run(): void {
     $this->repairWebform();
     $this->repairJson();
+    $this->repairIframe();
   }
 
   /**
@@ -56,6 +57,16 @@ final class TmgmtDataRepair implements ContainerInjectionInterface {
   protected function repairJson(): void {
     $this->repair('field_json', [
       'field_json_value' => fn (?string $value): bool => $value === NULL || trim($value) === '' || json_validate($value),
+    ]);
+  }
+
+  /**
+   * Repairs the iframe scrolling mode translated away from its machine value.
+   */
+  public function repairIframe(): void {
+    $modes = ['auto' => TRUE, 'yes' => TRUE, 'no' => TRUE];
+    $this->repair('field_iframe', [
+      'field_iframe_scrolling' => fn (?string $value): bool => $value === NULL || $value === '' || isset($modes[$value]),
     ]);
   }
 
