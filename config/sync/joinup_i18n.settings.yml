@@ -19,7 +19,6 @@ tmgmt_content:
     - owner
     - release
     - solution
-    - test_language_content_settings
   paragraph:
     - accordion
     - accordion_item
