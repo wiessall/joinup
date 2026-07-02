@@ -8,8 +8,9 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\Requirement\RequirementSeverity;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Url;
 use Drupal\rdf_sync\RdfSyncSynchronizer;
-use Joinup\EnvironmentDetector;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Requirements hook implementations for the Joinup RDF module.
@@ -18,12 +19,8 @@ final class JoinupRdfRequirementsHooks {
 
   use StringTranslationTrait;
 
-  /**
-   * Number of URIs verified per SPARQL query.
-   */
-  private const int BATCH_SIZE = 500;
-
   public function __construct(
+    #[Autowire(service: 'rdf_sync.synchronizer')]
     protected readonly RdfSyncSynchronizer $synchronizer,
     protected readonly ConfigFactoryInterface $configFactory,
   ) {}
@@ -33,10 +30,7 @@ final class JoinupRdfRequirementsHooks {
    */
   #[Hook('runtime_requirements')]
   public function runtimeRequirements(): array {
-    // These checks query the live triplestore, which only exists on
-    // production; elsewhere (local, CI, acceptance) the graph is expected to be
-    // out of sync.
-    if (!EnvironmentDetector::isProduction() || $this->synchronizer->isSynchronizationEnabled()) {
+    if ($this->synchronizer->isSynchronizationEnabled()) {
       return [];
     }
 
@@ -44,7 +38,9 @@ final class JoinupRdfRequirementsHooks {
       'joinup_rdf_synchronization' => [
         'title' => $this->t('RDF synchronization'),
         'value' => $this->t('Disabled'),
-        'description' => $this->t('Automatic synchronization to the SPARQL endpoint is turned off. Entity changes are not being exported to the triplestore. Re-enable it with <code>drush rdf_sync:enable</code>.'),
+        'description' => $this->t('Automatic synchronization to the SPARQL endpoint is turned off. Entity changes are not being exported to the triplestore. Re-enable it in <a href="@url">the settings</a>.', [
+          '@url' => Url::fromRoute('rdf_sync.synchronization')->toString(),
+        ]),
         'severity' => RequirementSeverity::Warning,
       ],
     ];

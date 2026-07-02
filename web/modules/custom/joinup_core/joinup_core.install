@@ -22,19 +22,6 @@ function joinup_core_requirements($phase): array {
         'value' => t('Database logging is enabled'),
       ];
     }
-
-    // Warn when the RDF synchronization to Virtuoso is switched off, as entity
-    // changes are then not propagated to the SPARQL endpoint and the two stores
-    // drift apart.
-    if (\Drupal::moduleHandler()->moduleExists('rdf_sync')
-      && !\Drupal::service('rdf_sync.synchronizer')->isSynchronizationEnabled()) {
-      $requirements['joinup_core_rdf_sync'] = [
-        'title' => t('RDF synchronization'),
-        'description' => t('Synchronization of entities to the Virtuoso RDF store is disabled. Changes are not being propagated to the SPARQL endpoint and the relational and triple stores will drift apart until it is re-enabled.'),
-        'severity' => REQUIREMENT_WARNING,
-        'value' => t('Disabled'),
-      ];
-    }
   }
 
   return $requirements;
