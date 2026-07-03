@@ -17,7 +17,7 @@ trait TopicReferencingEntityTrait {
   public function getTopics(): array {
     assert(method_exists($this, 'getReferencedEntities'), __TRAIT__ . ' depends on JoinupBundleClassFieldAccessTrait. Please include it in your class.');
     return array_filter($this->getReferencedEntities('field_topic'), function (EntityInterface $entity): bool {
-      return $entity instanceof TopicInterface;
+      return $entity instanceof TopicTermInterface;
     });
   }
 

@@ -12,7 +12,7 @@ interface TopicReferencingEntityInterface {
   /**
    * Returns the topics which are referenced by the entity.
    *
-   * @return \Drupal\topic\Entity\TopicInterface[]
+   * @return \Drupal\topic\Entity\TopicTermInterface[]
    *   The topics.
    */
   public function getTopics(): array;
