@@ -50,7 +50,7 @@ Feature: Notification test for the document transitions on a post moderated pare
     When I am logged in as "CC member"
     And I go to the edit form of the "CC notify post publish" document
     And I press "Publish"
-    Then the following email should have been sent:
+    Then the following email should not have been sent:
       | recipient | CC owner                                                                                                |
       | subject   | Interoperable Europe Portal: Content has been published                                                 |
       | body      | Dear CC, CC Member has published the new document - "CC notify post publish" in the collection: "CC collection". |

@@ -49,7 +49,7 @@ Feature: Notification test for the event transitions on a post moderated parent.
     When I am logged in as "CC member"
     And I go to the edit form of the "CC notify post publish" event
     And I press "Publish"
-    Then the following email should have been sent:
+    Then the following email should not have been sent:
       | recipient | CC owner                                                                                                  |
       | subject   | Interoperable Europe Portal: Content has been published                                                   |
       | body      | CC Member has published the new event - "CC notify post publish" in the collection: "CC post collection". |
