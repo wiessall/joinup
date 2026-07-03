@@ -136,9 +136,8 @@ function joinup_notification_mail_alter(array &$message): void {
     // sent to users of the platform, but to an automated helpdesk service. In
     // this case the message will be read by cold, soulless machines so we can
     // omit the formalities of attaching a warm greeting and signature to the
-    // email. Private messages have default greeting in message template,
-    // so we can also omit this to avoid double sign off.
-    if ($message['key'] !== 'announcement' && $message['key'] !== 'private_message_notification') {
+    // email.
+    if ($message['key'] !== 'announcement') {
       if (in_array($message['key'], [
         OgMembershipSubscriber::TEMPLATE_APPROVE_MEMBERSHIP,
         OgMembershipSubscriber::TEMPLATE_APPROVE_MEMBERSHIP_WITH_SUBSCRIPTION,
