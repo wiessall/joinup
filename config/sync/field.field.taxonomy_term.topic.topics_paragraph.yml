@@ -1,0 +1,138 @@
+uuid: 4754e0ba-3f18-4d36-9d54-bc3f5e93ec7d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.topics_paragraph
+    - paragraphs.paragraphs_type.call_to_action
+    - paragraphs.paragraphs_type.configurable_listing
+    - paragraphs.paragraphs_type.image
+    - paragraphs.paragraphs_type.json_map
+    - paragraphs.paragraphs_type.layout
+    - paragraphs.paragraphs_type.simple_paragraph
+    - paragraphs.paragraphs_type.testimony
+    - paragraphs.paragraphs_type.text
+    - paragraphs.paragraphs_type.video
+    - taxonomy.vocabulary.topic
+  module:
+    - entity_reference_revisions
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: taxonomy_term.topic.topics_paragraph
+field_name: topics_paragraph
+entity_type: taxonomy_term
+bundle: topic
+label: Body
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      text: text
+      image: image
+      call_to_action: call_to_action
+      configurable_listing: configurable_listing
+      json_map: json_map
+      simple_paragraph: simple_paragraph
+      testimony: testimony
+      video: video
+      layout: layout
+    negate: 0
+    target_bundles_drag_drop:
+      accordion:
+        weight: -59
+        enabled: false
+      accordion_item:
+        weight: -58
+        enabled: false
+      binding_requirement:
+        weight: -37
+        enabled: false
+      block:
+        weight: -47
+        enabled: false
+      call_to_action:
+        weight: -57
+        enabled: true
+      carousel:
+        weight: -56
+        enabled: false
+      configurable_listing:
+        weight: -55
+        enabled: true
+      content_listing:
+        weight: -54
+        enabled: false
+      entity_reference:
+        weight: -53
+        enabled: false
+      events_calendar:
+        weight: -35
+        enabled: false
+      github_feed:
+        weight: -50
+        enabled: false
+      heading:
+        weight: -46
+        enabled: false
+      iframe:
+        weight: -52
+        enabled: false
+      image:
+        weight: -60
+        enabled: true
+      image_gallery:
+        weight: -42
+        enabled: false
+      json_map:
+        weight: -51
+        enabled: true
+      layout:
+        weight: -44
+        enabled: true
+      poll:
+        weight: -41
+        enabled: false
+      quote:
+        weight: -43
+        enabled: false
+      resource_file:
+        weight: -34
+        enabled: false
+      resource_link:
+        weight: -33
+        enabled: false
+      simple_paragraph:
+        weight: -49
+        enabled: true
+      social_media:
+        weight: -40
+        enabled: false
+      table_of_contents:
+        weight: -32
+        enabled: false
+      testimony:
+        weight: -48
+        enabled: true
+      text:
+        weight: -61
+        enabled: true
+      tile:
+        weight: -39
+        enabled: false
+      tiles:
+        weight: -38
+        enabled: false
+      video:
+        weight: -45
+        enabled: true
+      webform:
+        weight: -36
+        enabled: false
+field_type: entity_reference_revisions

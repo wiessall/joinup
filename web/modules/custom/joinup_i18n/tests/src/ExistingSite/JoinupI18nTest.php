@@ -207,6 +207,16 @@ final class JoinupI18nTest extends JoinupExistingSiteTestBase {
       ->condition('item_id', $settings->id())
       ->execute();
     $this->assertEmpty($jobItemIds);
+
+    // A whitespace-only value has a word count of 0, same as an empty one.
+    $settings->set('label_join', ' ')->save();
+
+    $jobItemIds = \Drupal::entityQuery('tmgmt_job_item')->accessCheck(FALSE)
+      ->condition('plugin', 'content')
+      ->condition('item_type', 'meta_entity')
+      ->condition('item_id', $settings->id())
+      ->execute();
+    $this->assertEmpty($jobItemIds);
   }
 
   /**
