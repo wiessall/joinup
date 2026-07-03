@@ -1,0 +1,3 @@
+edit topic term description:
+  title: 'Edit topic term description, abstract and image'
+  description: 'Allows editing of description, abstract and image fields on topic taxonomy terms without granting access to term reordering.'

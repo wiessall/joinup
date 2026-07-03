@@ -1,0 +1,64 @@
+uuid: 80976d2a-507c-4245-8f85-3206dbf6809e
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.taxonomy_term.teaser
+    - field.field.taxonomy_term.topic.abstract
+    - field.field.taxonomy_term.topic.image
+    - field.field.taxonomy_term.topic.topics_paragraph
+    - taxonomy.vocabulary.topic
+  module:
+    - entity_form_field_label
+    - layout_builder
+    - svg_image
+    - template_suggestion
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: taxonomy_term.topic.teaser
+targetEntityType: taxonomy_term
+bundle: topic
+mode: teaser
+content:
+  abstract:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+      template_suggestion:
+        template_suggestion: bare
+    weight: 0
+    region: content
+  image:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+      template_suggestion:
+        template_suggestion: bare
+    weight: 1
+    region: content
+hidden:
+  description: true
+  langcode: true
+  search_api_excerpt: true
+  topic: true
+  topics_paragraph: true
+  uuid: true
