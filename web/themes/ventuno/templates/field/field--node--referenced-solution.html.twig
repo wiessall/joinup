@@ -4,10 +4,7 @@
  * Template for referenced_solution field.
  */
 #}
-{{ attach_library('ventuno/abstract') }}
-{% set list_tag = list_tag|default('div') %}
-{% set list_item_tag = list_item_tag|default('div') %}
-{% set field_item_classes = field_item_classes|default(['field__item']) %}
+{% set label_tag = 'h3' %}
 {%
   set classes = [
     'abstract',
@@ -20,21 +17,4 @@
     label_display == 'inline' ? 'd-flex',
   ]
 %}
-<div{{ attributes.addClass(classes) }}>
-  {% if not label_hidden %}
-    <h3>
-      {{ label }}{% if label_display == 'inline' %}<span class="me-1">:</span>{% endif %}
-    </h3>
-  {% endif %}
-  {% if multiple %}
-    <{{ list_tag }} class="field__items">
-  {% endif %}
-    {% for item in items %}
-      <{{ list_item_tag }}{{ item.attributes.addClass(field_item_classes) }}>
-        {{- item.content -}}
-      </{{ list_item_tag }}>
-    {% endfor %}
-  {% if multiple %}
-    </{{ list_tag }}>
-  {% endif %}
-</div>
+{% extends 'field.html.twig' %}
