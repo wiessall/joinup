@@ -160,7 +160,7 @@ class CommunityContentSubscriber extends NotificationSubscriberBase {
     $transitionId = $this->transition->getId();
 
     $config = $this->config[$workflowId][$transitionId] ?? [];
-    if (empty($config)) {
+    if (empty($config) || $transitionId === 'publish') {
       return;
     }
 
