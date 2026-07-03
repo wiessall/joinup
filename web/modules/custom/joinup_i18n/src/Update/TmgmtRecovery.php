@@ -8,20 +8,23 @@ use Drupal\Core\Block\BlockManagerInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\RevisionableStorageInterface;
 use Drupal\Core\KeyValueStore\KeyValueFactoryInterface;
+use Drupal\tmgmt\JobItemInterface;
 use Drush\Drush;
 
 /**
- * Repairs field values that tmgmt translated and mangled.
+ * Repairs and re-queues content mangled by TMGMT's machine-value translation.
  *
- * Some values must never be translated: untranslatable field instances and
- * machine properties of translatable fields. tmgmt sent them for
- * translation anyway and wrote the mangled result back.
- *
- * @see https://www.drupal.org/project/tmgmt/issues/3382356
+ * TMGMT translated machine field values and wrote the mangled result back onto
+ * the source content. This deploy-time recovery does two things:
+ * - repairData(): restore the corrupted field values across all revisions;
+ * - rescheduleJobItems(): abort the items its bad data left stuck in review and
+ *   re-queue the sources so they re-extract cleanly.
  */
-final class TmgmtDataRepair implements ContainerInjectionInterface {
+final class TmgmtRecovery implements ContainerInjectionInterface {
 
   use AutowireTrait;
 
@@ -36,6 +39,14 @@ final class TmgmtDataRepair implements ContainerInjectionInterface {
    * Main entrypoint.
    */
   public function run(): void {
+    $this->repairData();
+    $this->rescheduleJobItems();
+  }
+
+  /**
+   * Repairs every corrupted field value, in one transaction.
+   */
+  private function repairData(): void {
     $transaction = $this->database->startTransaction();
     try {
       $this->repairWebform();
@@ -48,6 +59,57 @@ final class TmgmtDataRepair implements ContainerInjectionInterface {
       $transaction->rollBack();
       throw $e;
     }
+  }
+
+  /**
+   * Reschedules the continuous job items left stuck in review.
+   *
+   * Stuck items hold the old corrupted data, so they are aborted rather than
+   * re-accepted (which would replay the corruption); their source is re-queued
+   * so a fresh extraction under the current code no longer includes the machine
+   * properties. Sources that cannot be translated now (deleted, or blocked by a
+   * pending revision) are only aborted.
+   */
+  private function rescheduleJobItems(): void {
+    $storage = $this->entityTypeManager->getStorage('tmgmt_job_item');
+    $ids = $storage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('plugin', 'content')
+      ->condition('state', JobItemInterface::STATE_REVIEW)
+      ->execute();
+
+    $aborted = 0;
+    $sources = [];
+    foreach ($storage->loadMultiple($ids) as $item) {
+      \assert($item instanceof JobItemInterface);
+      $aborted++;
+
+      $entity_storage = $this->entityTypeManager->getStorage($item->getItemType());
+      $entity = $entity_storage->load($item->getItemId());
+
+      // A deleted source has nothing left to re-schedule.
+      if (!$entity instanceof ContentEntityInterface) {
+        $item->setState(JobItemInterface::STATE_ABORTED, 'Aborted: the source entity no longer exists.');
+        continue;
+      }
+
+      // A pending forward revision blocks the accept while a draft exists
+      // (which is why it stuck); it re-queues on publish via
+      // tmgmt_content_entity_update(), so only abort it here.
+      if ($entity_storage instanceof RevisionableStorageInterface && (int) $entity_storage->getLatestRevisionId($entity->id()) !== (int) $entity->getRevisionId()) {
+        $item->setState(JobItemInterface::STATE_ABORTED, 'Aborted: the source entity has a pending draft revision; it re-queues on publish.');
+        continue;
+      }
+
+      $item->setState(JobItemInterface::STATE_ABORTED, 'Aborted: re-scheduled for re-translation after the TMGMT fixes.');
+      $sources[$item->getItemType() . ':' . $entity->id()] = $entity;
+    }
+
+    foreach ($sources as $entity) {
+      tmgmt_content_create_continuous_job_items($entity);
+    }
+
+    Drush::logger()->notice(sprintf('Rescheduled job items: aborted %d stuck items, re-queued %d source entities.', $aborted, count($sources)));
   }
 
   /**

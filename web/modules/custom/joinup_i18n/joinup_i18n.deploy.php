@@ -7,11 +7,11 @@
 
 declare(strict_types=1);
 
-use Drupal\joinup_i18n\Update\TmgmtDataRepair;
+use Drupal\joinup_i18n\Update\TmgmtRecovery;
 
 /**
  * Repairs field values that tmgmt translated and mangled.
  */
 function joinup_i18n_deploy_201501(): void {
-  \Drupal::classResolver(TmgmtDataRepair::class)->run();
+  \Drupal::classResolver(TmgmtRecovery::class)->run();
 }
