@@ -6,6 +6,12 @@
 #}
 {% set label_tag = 'h3' %}
 {%
+  set title_classes = [
+    'field__label',
+    label_display == 'visually_hidden' ? 'visually-hidden',
+  ]
+%}
+{%
   set classes = [
     'abstract',
     'bg-light',
