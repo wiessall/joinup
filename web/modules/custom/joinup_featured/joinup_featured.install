@@ -1,0 +1,94 @@
+<?php
+
+/**
+ * @file
+ * Deploy hooks for the Joinup core module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Entity\EntityStorageException;
+
+/**
+ * Adds the Featured field to the featured meta entity bundle.
+ */
+function joinup_featured_update_201500(): void {
+  $entityTypeManager = \Drupal::entityTypeManager();
+  $fieldStorageStorage = $entityTypeManager->getStorage('field_storage_config');
+  $fieldStorage = $fieldStorageStorage->load('meta_entity.featured');
+
+  if (!$fieldStorage) {
+    $fieldStorage = $fieldStorageStorage->create([
+      'uuid' => '698e4c75-efc1-4c69-b408-b9566f31e6cd',
+      'field_name' => 'featured',
+      'entity_type' => 'meta_entity',
+      'type' => 'boolean',
+      'settings' => [],
+      'cardinality' => 1,
+      'translatable' => TRUE,
+      'locked' => FALSE,
+      'persist_with_no_fields' => FALSE,
+      'custom_storage' => FALSE,
+    ]);
+    $fieldStorage->save();
+  }
+
+  $fieldConfigStorage = $entityTypeManager->getStorage('field_config');
+  $fieldConfig = $fieldConfigStorage->load('meta_entity.featured.featured');
+
+  if (!$fieldConfig) {
+    $fieldConfig = $fieldConfigStorage->create([
+      'uuid' => '718f9886-a7e3-42d6-b3b6-c9dc0499dbd0',
+      'field_name' => 'featured',
+      'entity_type' => 'meta_entity',
+      'bundle' => 'featured',
+      'label' => 'Featured',
+      'description' => '',
+      'required' => FALSE,
+      'translatable' => FALSE,
+      'default_value' => [],
+      'default_value_callback' => '',
+      'settings' => [
+        'on_label' => 'On',
+        'off_label' => 'Off',
+      ],
+    ]);
+    $fieldConfig->save();
+  }
+
+  $storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
+  $ids = $storage->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('type', 'featured')
+    ->execute();
+
+  if (empty($ids)) {
+    return;
+  }
+  $entities = $storage->loadMultiple($ids);
+  foreach ($entities as $entity) {
+    if ($entity->get('field_featured')->isEmpty()) {
+      continue;
+    }
+
+    $entity->set(
+      'featured',
+      (bool) $entity->get('field_featured')->value
+    );
+
+    $entity->set('field_featured', NULL);
+
+    try {
+      $entity->save();
+    }
+    catch (EntityStorageException $e) {
+      \Drupal::logger('joinup_featured')->error(
+        'Failed to migrate featured value for entity @id: @message',
+        [
+          '@id' => $entity->id(),
+          '@message' => $e->getMessage(),
+        ]
+      );
+    }
+  }
+}
