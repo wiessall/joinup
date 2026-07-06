@@ -524,7 +524,9 @@
             "drupal/tmgmt": {
                 "Filtering job items crashes @see https://www.drupal.org/i/3578626": "resources/patch/php/drupal/tmgmt/3578626.mr159.commit3ee8064a.diff",
                 "Data too long for column 'message' - https://www.drupal.org/i/3552683": "resources/patch/php/drupal/tmgmt/3552683.mr135.commit597ae8cd.diff",
-                "Add a configurable fallback for translations that exceed the target field length @see https://www.drupal.org/i/2960458 + Callers don't account the scenario in which JobItem::acceptTranslation() fails softly @see https://www.drupal.org/i/3580841": "resources/patch/php/drupal/tmgmt/2960458.mr170.commitfd3aec55-plus-3580841.mr161.commit7baf8367.diff"
+                "Add a configurable fallback for translations that exceed the target field length @see https://www.drupal.org/i/2960458 + Callers don't account the scenario in which JobItem::acceptTranslation() fails softly @see https://www.drupal.org/i/3580841": "resources/patch/php/drupal/tmgmt/2960458.mr170.commitfd3aec55-plus-3580841.mr161.commit7baf8367.diff",
+                "Non-translatable fields are exported when the bundle is not enabled for content translation @see https://www.drupal.org/i/3382356": "resources/patch/php/drupal/tmgmt/3382356.mr172.commitd2294f18.diff",
+                "Delete job item when corresponding entity is being deleted @see https://www.drupal.org/i/2998143": "resources/patch/php/drupal/tmgmt/2998143.mr35.commitdd0ee714.diff"
             },
             "drupal/token": {
                 "PHP 8.5 @see https://www.drupal.org/i/3581883": "resources/patch/php/drupal/token/3581883.mr123.commit-710b94c1.diff"
