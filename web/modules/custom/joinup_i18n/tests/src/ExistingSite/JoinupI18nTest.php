@@ -179,6 +179,39 @@ final class JoinupI18nTest extends JoinupExistingSiteTestBase {
   }
 
   /**
+   * Tests that a forward draft of published content is not scheduled.
+   *
+   * A draft on a published node is a non-default forward revision; tmgmt would
+   * translate it as unpublished content. Publishing the draft re-schedules it.
+   *
+   * @legacy-covers \Drupal\joinup_i18n\EventSubscriber\ScheduleJobItemSubscriber::scheduleJobItemCreation
+   */
+  public function testForwardDraftIsNotScheduled(): void {
+    $node = $this->createNode([
+      'type' => 'solution',
+      'og_audience' => \Drupal::service('entity.repository')->loadEntityByUuid('node', JoinupCollectionHelper::JOINUP_COLLECTION_UUID),
+      'title' => 'Forward draft scheduling',
+      'field_state' => 'proposed',
+    ]);
+
+    // Publishing schedules the content for translation.
+    $node->setNewRevision(TRUE);
+    $node->set('field_state', 'published')->save();
+    $this->assertJobItems(array_fill_keys(self::TARGET_LANGCODES, $node->id()));
+
+    // A draft on the published node is a forward revision, which must not be
+    // scheduled while the published revision remains the default.
+    $node->setNewRevision(TRUE);
+    $node->set('field_state', 'draft_after_published')->save();
+    $this->assertJobItems();
+
+    // Publishing the draft schedules it again, against the default revision.
+    $node->setNewRevision(TRUE);
+    $node->set('field_state', 'published')->save();
+    $this->assertJobItems(array_fill_keys(self::TARGET_LANGCODES, $node->id()));
+  }
+
+  /**
    * Tests that entities without translatable content are not scheduled.
    *
    * @legacy-covers \Drupal\joinup_i18n\EventSubscriber\ScheduleJobItemSubscriber::scheduleJobItemCreation

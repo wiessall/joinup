@@ -7,6 +7,7 @@ namespace Drupal\joinup_i18n\EventSubscriber;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\RevisionableStorageInterface;
 use Drupal\joinup_i18n\TranslationHelper;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\tmgmt\Events\ContinuousEvents;
@@ -83,6 +84,13 @@ final readonly class ScheduleJobItemSubscriber implements EventSubscriberInterfa
       ($entity instanceof EntityPublishedInterface && !$entity->isPublished())
       || ($entity instanceof ArchivableEntityInterface && $entity->isArchived())
     ) {
+      return FALSE;
+    }
+
+    // Skip pending forward revisions (drafts). tmgmt would translate the draft
+    // as unpublished content, then fail to accept it while the forward revision
+    // exists. Publishing the draft re-triggers scheduling on the default.
+    if ($storage instanceof RevisionableStorageInterface && (int) $storage->getLatestRevisionId($entity->id()) !== (int) $entity->getRevisionId()) {
       return FALSE;
     }
 
