@@ -258,4 +258,3 @@ permissions:
   - 'view paragraph content webform'
   - 'view published sitewide alert entities'
   - 'view solution_settings meta-entity'
-  - 'view topic meta-entity'

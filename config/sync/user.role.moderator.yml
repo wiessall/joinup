@@ -75,6 +75,7 @@ dependencies:
     - system
     - taxonomy
     - toolbar
+    - topic
     - view_unpublished
     - webform
 id: moderator
@@ -230,6 +231,7 @@ permissions:
   - 'edit sitewide alert entities'
   - 'edit terms in legal_type'
   - 'edit terms in tags'
+  - 'edit topic term description'
   - 'feature entity'
   - 'flag interoperability'
   - 'manage custom landing pages'
@@ -341,7 +343,6 @@ permissions:
   - 'update paragraph content webform'
   - 'update solution_settings meta-entity'
   - 'update spotlight entityqueue'
-  - 'update topic meta-entity'
   - 'use text format plain_text_glossary'
   - 'vbo joinup archive action'
   - 'vbo joinup change group action'
