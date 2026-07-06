@@ -87,9 +87,14 @@ final readonly class ScheduleJobItemSubscriber implements EventSubscriberInterfa
       return FALSE;
     }
 
-    // Skip pending forward revisions (drafts). tmgmt would translate the draft
-    // as unpublished content, then fail to accept it while the forward revision
-    // exists. Publishing the draft re-triggers scheduling on the default.
+    // Skip pending forward revisions (drafts). TMGMT translates the latest
+    // revision, so it would translate the draft as unpublished content;
+    // accepting that translation is then either refused while the pending
+    // revision exists (untranslatable composite fields) or saved into yet
+    // another forward revision. Publishing the draft re-triggers scheduling
+    // on the default.
+    /* @see \Drupal\tmgmt_content\Plugin\tmgmt\Source\ContentEntitySource::saveTranslation */
+    /* @see \Drupal\tmgmt_content\Plugin\tmgmt\Source\ContentEntitySource::getPendingRevisionWithCompositeReferenceField() */
     if ($storage instanceof RevisionableStorageInterface && (int) $storage->getLatestRevisionId($entity->id()) !== (int) $entity->getRevisionId()) {
       return FALSE;
     }

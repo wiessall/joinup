@@ -174,7 +174,7 @@ final class JoinupI18nHooks {
       || !$entity->isTranslatable()
       || $entity->getEntityType()->get('entity_revision_parent_type_field')
       // Abort only when the source (default) translation changed. Saving a
-      // target translation (e.g. tmgmt accepting one) also updates the entity
+      // target translation (e.g. TMGMT accepting one) also updates the entity
       // but does not outdate the other languages' open job items.
       || !$entity->getUntranslated()->hasTranslationChanges()
     ) {
