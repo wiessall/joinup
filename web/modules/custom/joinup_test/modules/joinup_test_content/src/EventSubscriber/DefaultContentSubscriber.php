@@ -9,6 +9,7 @@ use Drupal\cas_mock_server\UserManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\default_content\Event\DefaultContentEvents;
 use Drupal\default_content\Event\ImportEvent;
+use Drupal\joinup_test_content\DefaultContentManager;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -23,6 +24,7 @@ final class DefaultContentSubscriber implements EventSubscriberInterface {
     protected readonly UserManagerInterface $casMockUserManager,
     protected readonly CasUserManager $casUserManager,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly DefaultContentManager $defaultContentManager,
   ) {
   }
 
@@ -32,6 +34,7 @@ final class DefaultContentSubscriber implements EventSubscriberInterface {
   public function onDefaultContentImport(ImportEvent $event): void {
     if ($event->getModule() === 'joinup_test_content') {
       $this->ensureCasUserRegistration($event);
+      $this->defaultContentManager->updateHomepageTopicsQueue('7a30c7c1-a812-4b8a-8e41-300000000001', TRUE);
     }
     // Index imported items so they show up in Search API-driven listings
     // (e.g. configurable_listing paragraphs, sitewide views) without each

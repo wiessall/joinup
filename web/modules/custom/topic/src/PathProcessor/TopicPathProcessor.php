@@ -6,7 +6,8 @@ namespace Drupal\topic\PathProcessor;
 
 use Drupal\Core\PathProcessor\OutboundPathProcessorInterface;
 use Drupal\Core\Render\BubbleableMetadata;
-use Drupal\topic\Entity\TopicInterface;
+use Drupal\topic\Entity\TopicTermInterface;
+use Drupal\topic\Service\HomepageTopicsQueueService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Route;
 
@@ -23,6 +24,10 @@ class TopicPathProcessor implements OutboundPathProcessorInterface {
    */
   public const REDIRECT_TO_SEARCH_PAGE_OPTION = 'topic_redirect_to_search';
 
+  public function __construct(
+    private readonly HomepageTopicsQueueService $homepageTopicsQueue,
+  ) {}
+
   /**
    * {@inheritdoc}
    */
@@ -32,7 +37,8 @@ class TopicPathProcessor implements OutboundPathProcessorInterface {
     if (
       $route instanceof Route
       && $route->getOption(static::REDIRECT_TO_SEARCH_PAGE_OPTION)
-      && $topic instanceof TopicInterface
+      && $topic instanceof TopicTermInterface
+      && !$this->homepageTopicsQueue->isInQueue($topic)
     ) {
       $options['query'] = ['f' => ['topic:' . $topic->id()]];
       return '/search';
