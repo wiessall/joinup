@@ -1,5 +1,4 @@
 enabled_entity_types:
-  - meta_entity
   - user
 punctuation:
   hyphen: 1
