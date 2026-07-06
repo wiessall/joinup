@@ -42,7 +42,7 @@ class TableOfContents extends GroupMenuBlock {
     $root_link = array_pop($trail);
 
     // This block shows only links under the root custom page tree.
-    return $parameters->setRoot($root_link);
+    return $parameters->setRoot($root_link)->onlyEnabledLinks();
   }
 
   /**
