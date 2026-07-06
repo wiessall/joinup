@@ -146,7 +146,7 @@ class DashboardForm extends FormBase {
       ],
       [
         '#title' => $this->t('Topics'),
-        '#url' => Url::fromRoute('view.topic_meta_entity.page'),
+        '#url' => Url::fromRoute('view.topic_vocabulary.page'),
       ],
       [
         '#title' => $this->t('Files'),

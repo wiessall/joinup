@@ -1,0 +1,52 @@
+uuid: 042a505f-ff75-47ae-828b-81f57f7570bf
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.topic.abstract
+    - field.field.taxonomy_term.topic.image
+    - field.field.taxonomy_term.topic.topics_paragraph
+    - taxonomy.vocabulary.topic
+  module:
+    - entity_form_field_label
+    - field_delimiter
+    - field_formatter_range
+    - joinup_slick
+    - layout_paragraphs
+    - template_suggestion
+id: taxonomy_term.topic.default
+targetEntityType: taxonomy_term
+bundle: topic
+mode: default
+content:
+  topics_paragraph:
+    type: layout_paragraphs
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+      template_suggestion:
+        template_suggestion: ''
+    weight: 0
+    region: content
+hidden:
+  abstract: true
+  description: true
+  image: true
+  langcode: true
+  search_api_excerpt: true
+  topic: true
+  uuid: true
