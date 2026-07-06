@@ -1,12 +1,12 @@
 diff --git a/config/install/tmgmt.settings.yml b/config/install/tmgmt.settings.yml
-index c1a71e0a0a79331175cdbf822d8853cd27f8c2c2..a92d7efc3d7a589efe46dd0377fb2d88bb1f46df 100644
+index c1a71e0a0a79331175cdbf822d8853cd27f8c2c2..0dd1361dfb17b18c9d1130bc356c930e294eea59 100644
 --- a/config/install/tmgmt.settings.yml
 +++ b/config/install/tmgmt.settings.yml
 @@ -8,3 +8,4 @@ submit_job_item_on_cron: false
  job_items_cron_limit: 50
  allowed_formats: {}
  file_mimetypes: {}
-+purge_stale: false
++purge_stale: true
 diff --git a/config/schema/tmgmt.schema.yml b/config/schema/tmgmt.schema.yml
 index 0c66742f221d361df5e2d65594c4759913ea245f..e11ccebff26e44290f49b2b3bd4bde2be9b47493 100644
 --- a/config/schema/tmgmt.schema.yml
@@ -22,6 +22,82 @@ index 0c66742f221d361df5e2d65594c4759913ea245f..e11ccebff26e44290f49b2b3bd4bde2b
  tmgmt.translator.*:
    type: config_entity
    label: 'Provider'
+diff --git a/sources/content/tests/src/Functional/ContentTmgmtEntitySourceUiTest.php b/sources/content/tests/src/Functional/ContentTmgmtEntitySourceUiTest.php
+index a83e378316b3964964a98b283e817bb6a97a877c..18757f5ab7b8f6f46b146ad1fc334a7252c1c8dd 100644
+--- a/sources/content/tests/src/Functional/ContentTmgmtEntitySourceUiTest.php
++++ b/sources/content/tests/src/Functional/ContentTmgmtEntitySourceUiTest.php
+@@ -58,7 +58,7 @@ class ContentTmgmtEntitySourceUiTest extends TMGMTTestBase {
+    * Test the translate tab for a single checkout.
+    */
+   function testNodeTranslateTabSingleCheckout() {
+-    $this->loginAsTranslator(array('translate any entity', 'create content translations'));
++    $this->loginAsTranslator(array('translate any entity', 'create content translations', 'administer tmgmt'));
+ 
+     // Create an english source node.
+     $node = $this->createTranslatableNode('page', 'en');
+@@ -192,7 +192,35 @@ class ContentTmgmtEntitySourceUiTest extends TMGMTTestBase {
+     $this->assertNotEquals('a', $xpath_not_translated[0]->getTagName());
+     $this->assertStringContainsString('/de/node/1', $xpath_outdated[0]->getAttribute('href'));
+ 
+-    // Test that a job can not be accepted if the entity does not exist.
++    // With purging enabled (the default), deleting a source removes its job
++    // items and deletes the job once it is left empty.
++    $this->config('tmgmt.settings')->set('purge_stale', TRUE)->save();
++    $purged_node = $this->createTranslatableNode('page', 'en');
++    $this->drupalGet('node/' . $purged_node->id() . '/translations');
++    $this->submitForm(['languages[de]' => TRUE], 'Request translation');
++    $this->submitForm([], 'Submit to provider');
++
++    $item_storage = \Drupal::entityTypeManager()->getStorage('tmgmt_job_item');
++    $properties = ['item_type' => 'node', 'item_id' => $purged_node->id()];
++    $items = $item_storage->loadByProperties($properties);
++    $purged_job_id = reset($items)->getJobId();
++
++    // The job is listed on the jobs overview.
++    $this->drupalGet('admin/tmgmt/jobs');
++    $this->assertSession()->linkByHrefExists('admin/tmgmt/jobs/' . $purged_job_id);
++
++    // Deleting the source purges its job item and the now empty job.
++    $purged_node->delete();
++    $this->assertEmpty($item_storage->loadByProperties($properties));
++    $this->assertNull(Job::load($purged_job_id));
++
++    // The purged job is gone from the overview.
++    $this->drupalGet('admin/tmgmt/jobs');
++    $this->assertSession()->linkByHrefNotExists('admin/tmgmt/jobs/' . $purged_job_id);
++
++    // With purging disabled, a stale job item is kept when its source is
++    // deleted, so the job can not be accepted and reports the missing entity.
++    $this->config('tmgmt.settings')->set('purge_stale', FALSE)->save();
+     $deleted_node = $this->createTranslatableNode('page', 'en');
+     $second_node = $this->createTranslatableNode('page', 'en');
+     $this->drupalGet('node/' . $deleted_node->id() . '/translations');
+@@ -813,6 +841,10 @@ class ContentTmgmtEntitySourceUiTest extends TMGMTTestBase {
+     $this->clickLink('Preview');
+     $this->assertSession()->pageTextContains('Preview of de(de-ch): Custom Block for German');
+ 
++    // The preview guard for a missing source only applies when stale job items
++    // are kept, so opt out of purging for this scenario.
++    $this->config('tmgmt.settings')->set('purge_stale', FALSE)->save();
++
+     // Create a node and translation job.
+     $node = $this->createTranslatableNode('page', 'en');
+     $this->drupalGet('admin/tmgmt/sources');
+diff --git a/sources/tmgmt_config/tests/src/Functional/ConfigSourceUiTest.php b/sources/tmgmt_config/tests/src/Functional/ConfigSourceUiTest.php
+index 799902561fd43f44b5ab1d8f8f5d1852e5195065..c65c02e8a57362485636d699103885f4fe833fb7 100644
+--- a/sources/tmgmt_config/tests/src/Functional/ConfigSourceUiTest.php
++++ b/sources/tmgmt_config/tests/src/Functional/ConfigSourceUiTest.php
+@@ -263,7 +263,9 @@ class ConfigSourceUiTest extends TMGMTTestBase {
+     }
+     $this->assertEquals(2, $counter);
+ 
+-    // Test that a job can not be accepted if the entity does not exist.
++    // Test that a job can not be accepted if the entity does not exist. With
++    // purging disabled, the stale job item is kept when its source is deleted.
++    $this->config('tmgmt.settings')->set('purge_stale', FALSE)->save();
+     $this->clickLinkWithImageTitle('Needs review');
+ 
+     // Delete the view  and assert that the job can not be accepted.
 diff --git a/src/Form/SettingsForm.php b/src/Form/SettingsForm.php
 index 1712d5ca1b3e6ab46cd381ceca86273ac2f5d725..96f4df1c6c33904329ba2f6b4ede00c7fd72e282 100644
 --- a/src/Form/SettingsForm.php
@@ -151,17 +227,15 @@ index 0000000000000000000000000000000000000000..0786052982b290f8955c1f7c852d3da6
 +
 +}
 diff --git a/tmgmt.module b/tmgmt.module
-index 3cb0c5234367c4e3738e98b7a17e222acc3d76e9..293cc08d199537a3f2ad7fbc359c0cd2cea0dfd6 100644
+index 3cb0c5234367c4e3738e98b7a17e222acc3d76e9..40b2dcf137f82da61f73b157326a9772b7a70018 100644
 --- a/tmgmt.module
 +++ b/tmgmt.module
-@@ -7,5 +7,6 @@
- 
- use Drupal\Component\Utility\Unicode;
+@@ -9,3 +9,4 @@
 +use Drupal\Core\Entity\EntityInterface;
  use Drupal\Core\Render\Element;
  use Drupal\Core\Routing\RouteMatchInterface;
  use Drupal\tmgmt\ContinuousTranslatorInterface;
-@@ -129,6 +130,47 @@ function tmgmt_cron() {
+@@ -129,6 +130,48 @@ function tmgmt_cron() {
    }
  }
  
@@ -191,11 +265,12 @@ index 3cb0c5234367c4e3738e98b7a17e222acc3d76e9..293cc08d199537a3f2ad7fbc359c0cd2
 +  }
 +
 +  $job_ids = [];
-+  foreach ($storage->loadMultiple($job_item_ids) as $job_item) {
++  $job_items = $storage->loadMultiple($job_item_ids);
++  foreach ($job_items as $job_item) {
 +    \assert($job_item instanceof JobItemInterface);
 +    $job_ids[$job_item->getJobId()] = $job_item->getJobId();
-+    $job_item->delete();
 +  }
++  $storage->delete($job_items);
 +
 +  // Continuous jobs are persistent containers that keep collecting items, so
 +  // keep them even when empty.
