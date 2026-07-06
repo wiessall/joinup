@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Deploy hooks for the Joinup core module.
+ * Deploy hooks for the Joinup featured module.
  */
 
 declare(strict_types=1);
