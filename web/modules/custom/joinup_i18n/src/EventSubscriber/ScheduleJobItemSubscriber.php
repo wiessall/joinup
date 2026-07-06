@@ -44,28 +44,54 @@ final readonly class ScheduleJobItemSubscriber implements EventSubscriberInterfa
       return;
     }
 
+    if (!$this->shouldTranslate($event)) {
+      $event->setShouldCreateItem(FALSE);
+    }
+  }
+
+  /**
+   * Determines whether the event's source should be scheduled for translation.
+   *
+   * @param \Drupal\tmgmt\Events\ShouldCreateJobEvent $event
+   *   The event instance.
+   *
+   * @return bool
+   *   TRUE if a job item should be created for the source.
+   */
+  protected function shouldTranslate(ShouldCreateJobEvent $event): bool {
     $job = $event->getJob();
 
-    $shouldCreateItem =
-      // The source plugin is 'content'.
-      $event->getPlugin() === 'content'
-      // This is a continuous job.
-      && $job->isContinuous()
-      // The job is in continuous state.
-      && $job->getState() == JobInterface::STATE_CONTINUOUS
-      // The job is using the eTranslation translator.
-      && $job->getTranslator()->id() === ETranslationTranslator::ID
-      // The entity exists.
-      && ($entity = $this->entityTypeManager->getStorage($event->getItemType())->load($event->getItemId()))
-      // Only non-publishable or public entities are translated.
-      && (!($entity instanceof EntityPublishedInterface) || $entity->isPublished())
-      // Only non-archivable or non-archived entities are translated.
-      && (!($entity instanceof ArchivableEntityInterface) || !$entity->isArchived())
-      // The entity actually exposes translatable content.
-      && $entity instanceof ContentEntityInterface
-      && $this->translationHelper->hasTranslatableFields($entity);
+    // Only continuous content jobs handled by eTranslation are scheduled here.
+    if (
+      $event->getPlugin() !== 'content'
+      || !$job->isContinuous()
+      || $job->getState() != JobInterface::STATE_CONTINUOUS
+      || $job->getTranslator()->id() !== ETranslationTranslator::ID
+    ) {
+      return FALSE;
+    }
 
-    $event->setShouldCreateItem($shouldCreateItem);
+    // Load the default revision (published, for content with a live version).
+    $storage = $this->entityTypeManager->getStorage($event->getItemType());
+    $entity = $storage->load($event->getItemId());
+    if (!$entity instanceof ContentEntityInterface) {
+      return FALSE;
+    }
+
+    // Only published, non-archived content is translated.
+    if (
+      ($entity instanceof EntityPublishedInterface && !$entity->isPublished())
+      || ($entity instanceof ArchivableEntityInterface && $entity->isArchived())
+    ) {
+      return FALSE;
+    }
+
+    // The entity must expose translatable content.
+    if (!$this->translationHelper->hasTranslatableFields($entity)) {
+      return FALSE;
+    }
+
+    return TRUE;
   }
 
 }
