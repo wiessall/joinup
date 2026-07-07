@@ -119,7 +119,7 @@ class ModalRouteProcessor implements InboundPathProcessorInterface, OutboundPath
     // its canonical path.
     $entityCanonical = $this->entityTypeManager->getStorage($entityTypeId)
       ->load($entityId)
-      ->toUrl()
+      ->toUrl(options: array_intersect_key($options, ['language' => 1]))
       ->toString();
     $entityCanonicalWithoutBase = preg_replace(
       '#^' . preg_quote($request->getBasePath()) . '#',
