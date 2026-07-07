@@ -164,10 +164,6 @@ class CommunityContentSubscriber extends NotificationSubscriberBase {
       return;
     }
 
-    if ($entity->isPublished() && $transitionId === 'publish') {
-      return;
-    }
-
     // If we are sending notifications regarding the transition from published
     // to proposed, the users that need to receive the notifications depend on
     // who performed the transition:

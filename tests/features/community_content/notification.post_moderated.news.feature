@@ -49,7 +49,7 @@ Feature: Notification test for the news transitions on a post moderated parent.
     When I am logged in as "CC member"
     And I go to the edit form of the "CCN post publish" news
     And I press "Publish"
-    Then the following email should not have been sent:
+    Then the following email should have been sent:
       | recipient | CC owner                                                                                           |
       | subject   | Interoperable Europe Portal: Content has been published                                            |
       | body      | CC Member has published the new news - "CCN post publish" in the collection: "CC post collection". |

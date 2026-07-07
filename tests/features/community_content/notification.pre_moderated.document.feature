@@ -106,7 +106,7 @@ Feature: Notification test for the document transitions on a pre moderated paren
     When I am logged in as "CC facilitator"
     And I go to the edit form of the "CC notify pre publish" document
     And I press "Publish"
-    Then the following email should not have been sent:
+    Then the following email should have been sent:
       | recipient | CC owner                                                                                                        |
       | subject   | Interoperable Europe Portal: Content has been published                                                         |
       | body      | CC Facilitator has published the new document - "CC notify pre publish" in the collection: "CC pre collection". |
