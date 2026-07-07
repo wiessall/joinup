@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.solution.contact
     - field.field.node.solution.description
     - field.field.node.solution.domain
+    - field.field.node.solution.field_claims
     - field.field.node.solution.field_machine_record
     - field.field.node.solution.field_original_internal_id
     - field.field.node.solution.field_state
@@ -1347,6 +1348,15 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
+  field_claims:
+    type: entity_reference_revisions_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 101
+    region: main
   flag_interoperability:
     settings: {  }
     third_party_settings: {  }

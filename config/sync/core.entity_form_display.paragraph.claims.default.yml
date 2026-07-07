@@ -1,0 +1,65 @@
+uuid: a9b15e9f-7cf0-4722-9d47-e59adfa7db81
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.claims.field_claim_literal_value
+    - field.field.paragraph.claims.field_claim_property
+    - field.field.paragraph.claims.field_claim_ref_value
+    - field.field.paragraph.claims.field_claimed_at
+    - field.field.paragraph.claims.field_claimed_by
+    - paragraphs.paragraphs_type.claims
+id: paragraph.claims.default
+targetEntityType: paragraph
+bundle: claims
+mode: default
+content:
+  field_claim_literal_value:
+    type: string_textarea
+    weight: 2
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_claim_property:
+    type: entity_reference_autocomplete
+    weight: 4
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_claim_ref_value:
+    type: entity_reference_autocomplete
+    weight: 3
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_claimed_at:
+    type: datetime_timestamp
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_claimed_by:
+    type: entity_reference_autocomplete
+    weight: 0
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true
+  uri: true
+  uuid: true

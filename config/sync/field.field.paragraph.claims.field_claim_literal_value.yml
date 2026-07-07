@@ -1,0 +1,29 @@
+uuid: 4d22f7c6-2e52-4244-a46d-76413215ea08
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_claim_literal_value
+    - paragraphs.paragraphs_type.claims
+  module:
+    - rdf_sync
+    - tmgmt_content
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'https://sti-portal.fao.org/ontology#claimLiteralValue'
+      type: 'xsd:string'
+  tmgmt_content:
+    excluded: false
+id: paragraph.claims.field_claim_literal_value
+field_name: field_claim_literal_value
+entity_type: paragraph
+bundle: claims
+label: field_claim_literal_value
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

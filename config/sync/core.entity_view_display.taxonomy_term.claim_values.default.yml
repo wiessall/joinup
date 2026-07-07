@@ -1,0 +1,33 @@
+uuid: 75195901-20ae-4b6e-b945-6c059134a82c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.claim_values.value_uri
+    - taxonomy.vocabulary.claim_values
+  module:
+    - text
+id: taxonomy_term.claim_values.default
+targetEntityType: taxonomy_term
+bundle: claim_values
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  value_uri:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  claim_value_uri: true
+  langcode: true
+  search_api_excerpt: true
+  uuid: true

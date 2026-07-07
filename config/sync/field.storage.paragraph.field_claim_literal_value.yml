@@ -1,0 +1,19 @@
+uuid: 5825da65-8171-44a6-868c-30936d5efda7
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs
+id: paragraph.field_claim_literal_value
+field_name: field_claim_literal_value
+entity_type: paragraph
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -13,6 +13,7 @@ configuration:
   methods:
     - GET
   formats:
+    - json
     - jsonld
     - rdfxml
     - ntriples

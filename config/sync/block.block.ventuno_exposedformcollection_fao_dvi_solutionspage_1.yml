@@ -1,0 +1,28 @@
+uuid: aa42a2e2-5bac-44a4-8285-3d65c138ee58
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.collection_fao_dvi_solutions
+  module:
+    - system
+    - views
+  theme:
+    - ventuno
+id: ventuno_exposedformcollection_fao_dvi_solutionspage_1
+theme: ventuno
+region: content
+weight: 0
+provider: null
+plugin: 'views_exposed_filter_block:collection_fao_dvi_solutions-page_1'
+settings:
+  id: 'views_exposed_filter_block:collection_fao_dvi_solutions-page_1'
+  label: ''
+  label_display: visible
+  provider: views
+  views_label: ''
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /node/5538

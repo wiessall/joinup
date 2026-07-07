@@ -1,0 +1,133 @@
+uuid: 6cf900e6-ca94-43be-8116-d5b4f832ff12
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_claims
+    - node.type.solution
+    - paragraphs.paragraphs_type.claims
+  module:
+    - entity_reference_revisions
+    - rdf_sync
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+  rdf_sync:
+    target_id:
+      predicate: 'https://sti-portal.fao.org/ontology#hasFieldClaim'
+      type: resource
+id: node.solution.field_claims
+field_name: field_claims
+entity_type: node
+bundle: solution
+label: Claims
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      claims: claims
+    negate: 0
+    target_bundles_drag_drop:
+      accordion:
+        weight: 34
+        enabled: false
+      accordion_item:
+        weight: 35
+        enabled: false
+      binding_requirement:
+        weight: 36
+        enabled: false
+      block:
+        weight: 37
+        enabled: false
+      call_to_action:
+        weight: 38
+        enabled: false
+      carousel:
+        weight: 39
+        enabled: false
+      claims:
+        weight: 33
+        enabled: true
+      configurable_listing:
+        weight: 40
+        enabled: false
+      content_listing:
+        weight: 41
+        enabled: false
+      entity_reference:
+        weight: 42
+        enabled: false
+      events_calendar:
+        weight: 43
+        enabled: false
+      github_feed:
+        weight: 44
+        enabled: false
+      heading:
+        weight: 45
+        enabled: false
+      iframe:
+        weight: 46
+        enabled: false
+      image:
+        weight: 47
+        enabled: false
+      image_gallery:
+        weight: 48
+        enabled: false
+      json_map:
+        weight: 49
+        enabled: false
+      layout:
+        weight: 50
+        enabled: false
+      poll:
+        weight: 51
+        enabled: false
+      quality_check:
+        weight: 52
+        enabled: false
+      quote:
+        weight: 53
+        enabled: false
+      resource_file:
+        weight: 54
+        enabled: false
+      resource_link:
+        weight: 55
+        enabled: false
+      simple_paragraph:
+        weight: 56
+        enabled: false
+      social_media:
+        weight: 57
+        enabled: false
+      table_of_contents:
+        weight: 58
+        enabled: false
+      testimony:
+        weight: 59
+        enabled: false
+      text:
+        weight: 60
+        enabled: false
+      tile:
+        weight: 61
+        enabled: false
+      tiles:
+        weight: 62
+        enabled: false
+      video:
+        weight: 63
+        enabled: false
+      webform:
+        weight: 64
+        enabled: false
+field_type: entity_reference_revisions

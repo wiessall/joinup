@@ -20,7 +20,7 @@ source:
   data_fetcher_plugin: file
   data_parser_plugin: json
   urls:
-    - modules/custom/import_IRD_jsons/sources/stf_owners.json
+    - modules/custom/import_ird_jsons/sources/stf_owners.json
   constants:
     DEFAULT_STATE: published
   item_selector: records

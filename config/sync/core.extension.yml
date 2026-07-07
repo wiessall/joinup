@@ -106,7 +106,6 @@ module:
   image: 0
   image_library_widget: 0
   imagecache_external: 0
-  import_IRD_jsons: 0
   inline_entity_form: 0
   inline_form_errors: 0
   interoperable_europe: 0
@@ -174,6 +173,7 @@ module:
   jquery_ui_accordion: 0
   js_cookie: 0
   json_field: 0
+  jsonapi: 0
   l10n_pconfig: 0
   language: 0
   layout_builder: 0

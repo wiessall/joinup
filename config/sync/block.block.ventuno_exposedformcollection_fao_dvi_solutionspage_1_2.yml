@@ -1,0 +1,28 @@
+uuid: 81451cfa-ecd2-4982-be4c-186d006822b0
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.collection_fao_dvi_solutions
+  module:
+    - system
+    - views
+  theme:
+    - ventuno
+id: ventuno_exposedformcollection_fao_dvi_solutionspage_1_2
+theme: ventuno
+region: content
+weight: -13
+provider: null
+plugin: 'views_exposed_filter_block:collection_fao_dvi_solutions-page_1'
+settings:
+  id: 'views_exposed_filter_block:collection_fao_dvi_solutions-page_1'
+  label: ''
+  label_display: visible
+  provider: views
+  views_label: ''
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /node/5538
