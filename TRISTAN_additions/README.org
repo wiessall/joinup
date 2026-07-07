@@ -1,0 +1,686 @@
+#+Title: README
+
+This README describes the exploration of joinup and outlines a possible migration from the existing portal into a joinup-based distribution.
+
+Areas of exploration are
+1. RDF data modelling: How to design the knowledge graph, considering Valeria's needs
+2. Drupal data modelling: Creation of simpler core bundles; plan migration from old portal
+3. MVP: The ongoing development of a joinup-based system that solves our current use cases
+4. UI/UX: Joinup's paragraph system; groups; social features
+
+*Structure*
+#+begin_src
+python - addtions to the IRD python library; introduces support for standard json schema
+rdf - ttl and trig files designing the triplestore. Contains my assesments and Valeria's ideal and a python visualization tool
+drupal - the drupal-side data modelling: graphs and tables outlining current structure and possible migrations
+archive - things to delete
+#+end_src
+
+* RDF data modelling
+* Drupal Data modelling
+** Migration Maps                                         :joinup:rdf:andrea:
+These sketches are exported to csv and potentially visualized in figma/draw.io
+*** Organization -> Owner
+Owner is an existing node bundle in joinup. It seems a good match for the old portal's 'organization'
+| Old                     | Delete? | New - existing   | New - create     |
+|-------------------------+---------+------------------+------------------|
+| body                    |       0 | field_description |                  |
+| field_acronym            |       0 | acronym          |                  |
+| field_asti_agency         |       0 | field_claims      |                  |
+| field_asti_focal_point     |       0 | field_claims      |                  |
+| field_collection         |       0 | og_audience       |                  |
+| field_country            |       0 | country          |                  |
+| field_data_source         |       0 | og_audience       |                  |
+| field_duplicate          |       1 |                  |                  |
+| field_link               |       0 | link             |                  |
+| field_org_type_in_source    |       0 | field_claims      |                  |
+| field_organization_size   |       0 | field_claims      |                  |
+| field_organization_type   |       0 | owner_type        |                  |
+| field_quality            |         | field_state       |                  |
+| field_region             |       0 | field_claims      |                  |
+| field_related_innovations |       0 |                  | field_innovations |
+| field_sti_legacy_terms     |       0 | field_claims      |                  |
+|                         |         | related_content   |                  |
+*** STI Information Source -> Collection
+Collection exists in joinup. The old STI portal has 'collections', i.e. higher-level scopes of editorship. I propose to create 1 Collection per 'Data Source' that also automatically has a matching Organic Group. Joinup has Organic Groups built in -> does it make sense to handle this in a separate Open Social install instead?
+
+| Old                          | Delete? | New - existing      | New - create               |
+|------------------------------+---------+---------------------+----------------------------|
+| body                         |       0 | description         |                            |
+| field_ai_process_again          |       1 |                     | ai permissions paragraph?  |
+| field_allow_ai_fields_display    |       1 |                     |                            |
+| field_allow_ai_update           |       1 |                     |                            |
+| field_allow_ai_update_if_empty    |       1 |                     |                            |
+| field_allow_overwr_if_empty      |       1 |                     |                            |
+| field_allow_overwriting_by_origi |       1 |                     |                            |
+| field_atio_kb_source            |         |                     |                            |
+| field_collection              |       1 |                     |                            |
+| field_data_sharing_permissions  |         |                     | ip permissions paragraph?  |
+| field_data_source              |         |                     | absorbed into 'collection' |
+| field_digital_asset_type        |         |                     |                            |
+| field_image                   |         | logo                |                            |
+| field_languages               |         |                     |                            |
+| field_link                    |         | website_url          |                            |
+| field_notes_on_data_treatment    |         |                     | ip permissions paragraph?  |
+| field_owner                   |         | owner               |                            |
+| field_prospective_audience     |         |                     | field_claims                |
+| field_published_in_source       |         |                     | field_claims                |
+| field_region                  |         | spatial_coverage     |                            |
+| field_start_date               |         |                     | field_claims                |
+| field_sti_legacy_terms          |         |                     | field_claims                |
+| field_sti_portal_source         |         |                     | field_claims                |
+| field_type_of_information_manage |         | field_topic         |                            |
+|                              |         | abstract            |                            |
+|                              |         | closed_group         |                            |
+|                              |         | contact             |                            |
+|                              |         | field_state          |                            |
+|                              |         | keywords            |                            |
+|                              |         | last_content_deletion |                            |
+|                              |         | newsletter          |                            |
+|                              |         | short_id             |                            |
+|                              |         | site_featured        |                            |
+**  Field Modelling                                              :rdf:joinup:
+This is the lay of the land of what entities, bundles and fields exist on the different platforms
+*** Joinup
+**** Entities
+~ddev drush ev '$entities = \Drupal::entityTypeManager()->getDefinitions(); foreach ($entities as $id => $def) { print("| " . $id . " | " . $def->getLabel() . " |\n"); }'~
+| Machine Name                  | Entity                               | Type    | Investigate?       |
+|-------------------------------+--------------------------------------+---------+--------------------|
+| enhancement_profile            | Enhancement profile                  | joinup  |                    |
+| assessment                    | Assessment                           | joinup |                    |
+| assessment_statement           | Assessment statement                 | joinup |                    |
+| assessment_type                | Assessment type                      | joinup |                    |
+| block                         | Block                                | core  |                    |
+| comment_type                   | Comment type                         | content | do in open social? |
+| comment                       | Comment                              | content | do in open social? |
+| consumer                      | Consumer                             | ???     |                    |
+| editor                        | Text editor                          | admin   |                    |
+| email_confirmer_message         | Email message                        |         |                    |
+| email_confirmer_confirmation    | Email confirmation                   |         |                    |
+| entity_legal_document           | Legal document                       |         |                    |
+| entity_legal_document_acceptance | Legal document acceptance            |         |                    |
+| entity_legal_document_version    | Legal document version               |         |                    |
+| print_engine                   | Print Engine                         | backend |                    |
+| entity_queue                   | Entity queue                         | backend |                    |
+| entity_subqueue                | Entity subqueue                      | backend |                    |
+| hosting_platform               | Code hosting platform config         |         |                    |
+| facets_facet                   | Facet                                | admin   |                    |
+| facets_facet_source             | Facet source                         | admin   |                    |
+| facets_summary                 | Facet summary                        | admin   |                    |
+| field_config                   | Field                                | admin   |                    |
+| field_storage_config            | Field storage                        | backend |                    |
+| file                          | File                                 |         |                    |
+| filter_format                  | Text format                          |         |                    |
+| flag                          | Flag                                 | ???     |                    |
+| flagging                      | Flagging                             | ???     |                    |
+| geocoder_provider              | Geocoder provider                    | content |                    |
+| image_style                    | Image style                          | admin   |                    |
+| download_event                 | Download event                       | ???     |                    |
+| invitation                    | Invitation                           | ???     |                    |
+| invitation_type                | Invitation type                      | ???     |                    |
+| compatibility_document         | Compatibility document               | ???     |                    |
+| joinup_log                     | Joinup log                           | ???     |                    |
+| configurable_language          | Language                             | admin   |                    |
+| language_content_settings       | Content language settings            | admin   |                    |
+| linkit_profile                 | Linkit profile                       | ???     |                    |
+| media                         | Media                                | content |                    |
+| media_type                     | Media type                           | content |                    |
+| menu_link_content               | Custom menu link                     | admin   |                    |
+| message                       | Message                              | ???     |                    |
+| message_template               | Message template                     | ???     |                    |
+| message_digest_interval         | Message digest interval              |         |                    |
+| meta_entity                    | Meta entity                          |         |                    |
+| meta_entity_type                | Meta entity type                     |         |                    |
+| metatag_defaults               | Metatag defaults                     |         |                    |
+| migration                     | Migration                            | admin   |                    |
+| migration_group                | Migration Group                      | admin   |                    |
+| node                          | Content                              | content |                    |
+| node_type                      | Content type                         | content |                    |
+| oauth_client_request            | OAuth2 Client Request                | backend |                    |
+| oauth_client_request_type        | OAuth2 Client Request Type           | backend |                    |
+| og_membership_type              | OG membership type                   | content | yes                |
+| og_role                        | OG role                              | content | yes                |
+| og_membership                  | OG membership                        | content | yes                |
+| ogmenu                        | OG Menu                              | content | yes                |
+| ogmenu_instance                | OG Menu instance                     | content | yes                |
+| page                          | Page                                 | UI      |                    |
+| page_variant                   | Page Variant                         | UI      |                    |
+| path_alias                     | URL alias                            | UI      |                    |
+| poll                          | Poll                                 | ???     |                    |
+| poll_choice                    | Poll Choice                          | ???     |                    |
+| private_message                | Private Message                      | ???     |                    |
+| private_message_ban             | Private Message Ban                  | ???     |                    |
+| private_message_thread          | Private Message Thread               | ???     |                    |
+| behavior_settings              | Rabbit hole settings                 | ???     |                    |
+| redirect                      | Redirect                             | ???     |                    |
+| responsive_image_style          | Responsive image style               | ???     |                    |
+| rest_resource_config            | REST resource configuration          | ???     |                    |
+| search_api_index                | Search index                         | backend |                    |
+| search_api_server               | Search server                        | backend |                    |
+| search_api_task                 | Search task                          | backend |                    |
+| search_api_autocomplete_search   | Autocomplete search                  | backend |                    |
+| solr_cache                     | Solr Cache                           | backend |                    |
+| solr_field_type                 | Solr Field Type                      | backend |                    |
+| solr_request_dispatcher         | Solr Request Dispatcher              | backend |                    |
+| solr_request_handler            | Solr Request Handler                 | backend |                    |
+| oauth2_scope                   | scope                                | backend |                    |
+| oauth2_token                   | OAuth2 token                         | backend |                    |
+| oauth2_token_type               | OAuth2 Token Type                    | backend |                    |
+| simple_sitemap                 | Sitemap                              | ???     |                    |
+| simple_sitemap_type             | Simple XML sitemap type              | ???     |                    |
+| sitewide_alert                 | Sitewide Alert                       | ???     |                    |
+| slick                         | Slick optionset                      | ???     |                    |
+| annotation_value               | Annotation Value                     | content | yes                |
+| symfony_mailer_lite_transport    | Drupal Symfony Mailer Lite Transport | ???     |                    |
+| action                        | Action                               | ???     |                    |
+| menu                          | Menu                                 | UI      |                    |
+| taxonomy_term                  | Taxonomy term                        | content | yes                |
+| taxonomy_vocabulary            | Taxonomy vocabulary                  | content | yes                |
+| theme_rule                     | Theme rule                           | ???     |                    |
+| tmgmt_job                      | Translation Job                      | ???     |                    |
+| tmgmt_job_item                  | Translation Job Item                 | ???     |                    |
+| tmgmt_message                  | Translation Message                  | ???     |                    |
+| tmgmt_remote                   | Translation Remote Mapping           | ???     |                    |
+| tmgmt_translator               | Provider                             | ???     |                    |
+| tour                          | Tour                                 | ???     |                    |
+| track_usage_config              | Track configuration                  | ???     |                    |
+| user_role                      | Role                                 | backend |                    |
+| user                          | User                                 | content |                    |
+| webform                       | Webform                              | UI      |                    |
+| webform_options                | Webform options                      | UI      |                    |
+| webform_submission             | Webform submission                   | UI      |                    |
+| pathauto_pattern               | Pathauto pattern                     | ???     |                    |
+| view                          | View                                 | UI      |                    |
+| paragraphs_type                | Paragraphs type                      | content |                    |
+| paragraph                     | Paragraph                            | content | yes                |
+| date_format                    | Date format                          | ???     |                    |
+| entity_form_display             | Entity form display                  | ???     |                    |
+| entity_form_mode                | Form mode                            | ???     |                    |
+| entity_view_display             | Entity view display                  | ???     |                    |
+| entity_view_mode                | View mode                            | ???     |                    |
+| base_field_override             | Base field override                  | ???     |                    |
+**** Bundles
+***** Nodes
+~ddev drush ev '$entity_type = "node"; $bundle_info = \Drupal::service("entity_type.bundle.info")->getBundleInfo($entity_type); foreach ($bundle_info as $i) { print("| " . $i["label"] . "|\n"); }'\~
+
+| Bundle                          | Function | Keep? |
+|---------------------------------+----------+-------|
+| Agritech_observatory annotation  |          | no    |
+| Assessment report               |          |       |
+| Bp5 annotation                  |          | no    |
+| Collection                      |          | yes   |
+| Contact information             |          |       |
+| Core annotation                 |          | ???   |
+| Custom page                     |          |       |
+| DAH Annotation                  |          | no    |
+| Digital_green annotation         |          | no    |
+| Discussion                      |          |       |
+| Distribution                    |          |       |
+| Document                        |          |       |
+| Dv_solutions annotation          |          | no    |
+| Event                           |          |       |
+| Glossary term                   |          |       |
+| Licence                         |          |       |
+| News                            |          |       |
+| Open Source Software Contact    | ???      |       |
+| Open Source Software Contractor | ???      |       |
+| Open Source Software Solution   | ???      |       |
+| Owner                           |          | yes   |
+| Release                         |          | ???   |
+| Innovation                      |          | yes   |
+| Taat annotation                 |          | no    |
+****** Collection
+~ddev drush ev '$ids = \Drupal::entityQuery("node")->condition("type", "collection")->accessCheck(FALSE)->execute(); $node = \Drupal\node\Entity\Node::load(reset($ids)); foreach ($node->getFields() as $field_name => $field) { print("| " . $field_name . " | " . $field->getFieldDefinition()->getType() . " | " . $field->getFieldDefinition()->getLabel() . " |\n"); }'~
+| field                       | type                 | description                              | keep? |
+|-----------------------------+----------------------+------------------------------------------+-------|
+| nid                         | integer              | ID                                       |       |
+| uuid                        | uuid                 | UUID                                     |       |
+| vid                         | integer              | Revision ID                              |       |
+| langcode                    | language             | Language                                 |       |
+| type                        | entity_reference      | Content type                             |       |
+| revision_timestamp           | created              | Revision create time                     |       |
+| revision_uid                 | entity_reference      | Revision user                            |       |
+| revision_log                 | string_long           | Revision log message                     |       |
+| status                      | boolean              | Published                                |       |
+| uid                         | entity_reference      | Authored by                              |       |
+| title                       | string               | Title                                    |       |
+| created                     | created              | Authored on                              |       |
+| changed                     | changed              | Changed                                  |       |
+| promote                     | boolean              | Promoted to front page                   |       |
+| sticky                      | boolean              | Sticky at top of lists                   |       |
+| default_langcode             | boolean              | Default translation                      |       |
+| revision_default             | boolean              | Default revision                         |       |
+| revision_translation_affected | boolean              | Revision translation affected            |       |
+| report                      | report_link           | Report                                   |       |
+| current_workflow_state        | current_workflow_state | Current workflow state                   |       |
+| metatag                     | metatag_computed      | Metatags (Hidden field for JSON support) |       |
+| path                        | path                 | URL alias                                |       |
+| menu_link                    | entity_reference      | Menu link                                |       |
+| content_translation_source    | language             | Translation source                       |       |
+| content_translation_outdated  | boolean              | Translation outdated                     |       |
+| published_at                 | published_at          | Published on                             |       |
+| last_update                  | timestamp            | Last updated                             |       |
+| abstract                    | string               | Abstract                                 |       |
+| closed_group                 | boolean              | Closed                                   |       |
+| contact                     | entity_reference      | Contact information                      |       |
+| description                 | text_long             | Description                              |       |
+| field_state                  | state                | State                                    |       |
+| field_topic                  | entity_reference      | Topic                                    |       |
+| keywords                    | entity_reference      | Search keywords                          |       |
+| last_content_deletion         | timestamp            | Last content deletion                    |       |
+| logo                        | image                | Logo                                     |       |
+| newsletter                  | oe_newsroom_newsletter | Newsletter                               |       |
+| owner                       | entity_reference      | Owner                                    |       |
+| short_id                     | string               | Short ID                                 |       |
+| site_featured                | boolean              | Site featured                            |       |
+| spatial_coverage             | entity_reference      | Geographical coverage                    |       |
+| website_url                  | link                 | Access URL                               |       |
+| collection_settings          | entity_reference      | Collection settings reference            |       |
+| featured                    | entity_reference      | Featured site wide reference             |       |
+| og_group                     | og_group              | OG Group                                 |       |
+| uri                         | uri                  | URI                                      |       |
+| solutions                   | entity_reference      | Solutions                                |       |
+****** Innovation
+~ddev drush ev '$ids = \Drupal::entityQuery("node")->condition("type", "solution")->accessCheck(FALSE)->execute(); $node = \Drupal\node\Entity\Node::load(reset($ids)); foreach ($node->getFields() as $field_name => $field) { print("| " . $field_name . " | " . $field->getFieldDefinition()->getType() . " | " . $field->getFieldDefinition()->getLabel() . " |\n"); }'~
+
+| machine name                | type                              | description                              |
+|-----------------------------+-----------------------------------+------------------------------------------|
+| nid                         | integer                           | ID                                       |
+| uuid                        | uuid                              | UUID                                     |
+| vid                         | integer                           | Revision ID                              |
+| langcode                    | language                          | Language                                 |
+| type                        | entity_reference                   | Content type                             |
+| revision_timestamp           | created                           | Revision create time                     |
+| revision_uid                 | entity_reference                   | Revision user                            |
+| revision_log                 | string_long                        | Revision log message                     |
+| status                      | boolean                           | Published                                |
+| uid                         | entity_reference                   | Authored by                              |
+| title                       | string                            | Title                                    |
+| created                     | created                           | Authored on                              |
+| changed                     | changed                           | Changed                                  |
+| promote                     | boolean                           | Promoted to front page                   |
+| sticky                      | boolean                           | Sticky at top of lists                   |
+| default_langcode             | boolean                           | Default translation                      |
+| revision_default             | boolean                           | Default revision                         |
+| revision_translation_affected | boolean                           | Revision translation affected            |
+| report                      | report_link                        | Report                                   |
+| current_workflow_state        | current_workflow_state              | Current workflow state                   |
+| metatag                     | metatag_computed                   | Metatags (Hidden field for JSON support) |
+| path                        | path                              | URL alias                                |
+| menu_link                    | entity_reference                   | Menu link                                |
+| content_translation_source    | language                          | Translation source                       |
+| content_translation_outdated  | boolean                           | Translation outdated                     |
+| published_at                 | published_at                       | Published on                             |
+| abstract                    | string                            | Abstract                                 |
+| classification              | entity_reference                   | Solution classification                  |
+| contact                     | entity_reference                   | Contact information                      |
+| description                 | text_long                          | Description                              |
+| domain                      | entity_reference                   | Domain                                   |
+| field_machine_record          | string_long                        | Machine record                           |
+| field_original_internal_id     | string                            | Original internal ID                     |
+| field_state                  | state                             | State                                    |
+| field_topic                  | entity_reference                   | Topic                                    |
+| keywords                    | entity_reference                   | Search keywords                          |
+| landing_page                 | link                              | Relevant website                         |
+| language                    | entity_reference                   | Language availability                    |
+| logo                        | image                             | Logo                                     |
+| metrics_page                 | link                              | Metrics page                             |
+| og_audience                  | og_standard_reference               | Parent Entity                            |
+| owner                       | entity_reference                   | Owner                                    |
+| process_status               | entity_reference                   | Status                                   |
+| related_solutions            | entity_reference                   | Related solutions                        |
+| release_number               | string                            | Version                                  |
+| resources                   | entity_reference_revisions          | Related documents                        |
+| short_id                     | string                            | Custom URL Identifier                    |
+| site_featured                | boolean                           | Site featured                            |
+| solution_type                | entity_reference                   | Solution type                            |
+| translation                 | entity_reference                   | Translation                              |
+| distributions               | entity_reference                   | Distributions                            |
+| releases                    | entity_reference                   | Releases                                 |
+| eif_perspective              | entity_reference                   | EIF perspective reference                |
+| featured                    | entity_reference                   | Featured site wide reference             |
+| pinned_in                    | entity_reference                   | Pinned in reference                      |
+| shared_in                    | entity_reference                   | Shared in reference                      |
+| solution_settings            | entity_reference                   | Solution settings reference              |
+| og_group                     | og_group                           | OG Group                                 |
+| uri                         | uri                               | URI                                      |
+| field_shared_in               | joinup_group_reference_with_timestamp | Shared on                                |
+| releases_and_distributions    | entity_reference                   | Releases and standalone distributions    |
+| latest_release               | entity_reference                   | Latest release                           |
+****** Owner
+~ddev drush ev '$ids = \Drupal::entityQuery("node")->condition("type", "owner")->accessCheck(FALSE)->execute(); $node = \Drupal\node\Entity\Node::load(reset($ids)); foreach ($node->getFields() as $field_name => $field) { print("| " . $field_name . " | " . $field->getFieldDefinition()->getType() . " | " . $field->getFieldDefinition()->getLabel() . " |\n"); }'~
+
+| machine name                | type                 | description                              |
+|-----------------------------+----------------------+------------------------------------------|
+| nid                         | integer              | ID                                       |
+| uuid                        | uuid                 | UUID                                     |
+| vid                         | integer              | Revision ID                              |
+| langcode                    | language             | Language                                 |
+| type                        | entity_reference      | Content type                             |
+| revision_timestamp           | created              | Revision create time                     |
+| revision_uid                 | entity_reference      | Revision user                            |
+| revision_log                 | string_long           | Revision log message                     |
+| status                      | boolean              | Published                                |
+| uid                         | entity_reference      | Authored by                              |
+| title                       | string               | Name                                     |
+| created                     | created              | Authored on                              |
+| changed                     | changed              | Changed                                  |
+| promote                     | boolean              | Promoted to front page                   |
+| sticky                      | boolean              | Sticky at top of lists                   |
+| default_langcode             | boolean              | Default translation                      |
+| revision_default             | boolean              | Default revision                         |
+| revision_translation_affected | boolean              | Revision translation affected            |
+| report                      | report_link           | Report                                   |
+| current_workflow_state        | current_workflow_state | Current workflow state                   |
+| metatag                     | metatag_computed      | Metatags (Hidden field for JSON support) |
+| path                        | path                 | URL alias                                |
+| menu_link                    | entity_reference      | Menu link                                |
+| content_translation_source    | language             | Translation source                       |
+| content_translation_outdated  | boolean              | Translation outdated                     |
+| published_at                 | published_at          | Published on                             |
+| acronym                     | string               | Acronym                                  |
+| country                     | entity_reference      | Country                                  |
+| field_state                  | state                | State                                    |
+| link                        | link                 | Website                                  |
+| owner_type                   | entity_reference      | Type                                     |
+| related_content              | entity_reference      | Related content                          |
+| uri                         | uri                  | URI                                      |
+***** Taxonomies
+***** Paragraphs
+*** STI Portal
+**** Entities
+| id                          | label                       | provider                  | what to do? |
+|-----------------------------+-----------------------------+---------------------------+-------------|
+| ai_assistant                 | AI Assistant                | ai_assistant_api            | mig/atio    |
+| ai_automator                 | AI Automator                | ai_automators              | mig/atio    |
+| automator_chain              | Automator Chain             | ai_automators              | mig/atio    |
+| automator_chain_type          | Automator Chain type        | ai_automators              | mig/atio    |
+| automators_tool              | Automators Tool             | ai_automators              | mig/atio    |
+| ai_log                       | AI Log                      | ai_logging                 | mig/atio    |
+| ai_log_type                   | AI Log Type                 | ai_logging                 | mig/atio    |
+| block                       | Block                       | block                     | both        |
+| block_content                | Content block               | block_content              | remove?     |
+| block_content_type            | Block type                  | block_content              | remove?     |
+| corresponding_reference      | Corresponding reference     | cer                       | remove?     |
+| comment                     | Comment                     | comment                   | both        |
+| comment_type                 | Comment type                | comment                   | both        |
+| cm_document                  | Content Model Document      | content_model_documentation | atio        |
+| content_moderation_state      | Content moderation state    | content_moderation         | atio        |
+| eca                         | ECA                         | eca                       | mig/atio    |
+| eca_model                    | ECA Model                   | eca                       | mig/atio    |
+| editor                      | Text editor                 | editor                    | both        |
+| facets_facet                 | Facet                       | facets                    | both        |
+| facets_facet_source           | Facet source                | facets                    | both        |
+| facets_summary               | Facet summary               | facets_summary             | both        |
+| field_config                 | Field                       | field                     | both        |
+| field_storage_config          | Field storage               | field                     | both        |
+| file                        | File                        | file                      | both        |
+| filter_format                | Text format                 | filter                    | both        |
+| geocoder_provider            | Geocoder provider           | geocoder                  | both        |
+| image_style                  | Image style                 | image                     | both        |
+| key                         | Key                         | key                       | mig/atio    |
+| key_config_override           | Key Configuration Override  | key                       | mig/atio    |
+| configurable_language        | Language                    | language                  | both        |
+| language_content_settings     | Content language settings   | language                  | both        |
+| custom_language              | Custom language             | languagefield             | atio        |
+| linkit_profile               | Linkit profile              | linkit                    | both        |
+| media                       | Media                       | media                     | both        |
+| media_type                   | Media type                  | media                     | both        |
+| menu_link_content             | Custom menu link            | menu_link_content           | both        |
+| migration                   | Migration                   | migrate_plus               | mig/atio    |
+| migration_group              | Migration Group             | migrate_plus               | mig/atio    |
+| node                        | Content                     | node                      | both        |
+| node_type                    | Content type                | node                      | both        |
+| openid_connect_client         | OpenID Connect client       | openid_connect             | sti         |
+| path_alias                   | URL alias                   | path_alias                 | both        |
+| behavior_settings            | Rabbit hole settings        | rabbit_hole                | both        |
+| redirect                    | Redirect                    | redirect                  | both        |
+| rest_resource_config          | REST resource configuration | rest                      | both        |
+| search_api_index              | Search index                | search_api                 | both        |
+| search_api_server             | Search server               | search_api                 | both        |
+| search_api_task               | Search task                 | search_api                 | both        |
+| search_api_autocomplete_search | Autocomplete search         | search_api_autocomplete     | both        |
+| swiper_formatter             | Swiper                      | swiper_formatter           | atio        |
+| synonym                     | Synonym configuration       | synonyms                  | atio        |
+| action                      | Action                      | system                    | both        |
+| menu                        | Menu                        | system                    | both        |
+| taxonomy_term                | Taxonomy term               | taxonomy                  | both        |
+| taxonomy_vocabulary          | Taxonomy vocabulary         | taxonomy                  | both        |
+| texts                       | Texts                       | texts                     | atio        |
+| user_role                    | Role                        | user                      | both        |
+| user                        | User                        | user                      | both        |
+| webform                     | Webform                     | webform                   | both        |
+| webform_options              | Webform options             | webform                   | both        |
+| webform_submission           | Webform submission          | webform                   | both        |
+| access_scheme                | Access scheme               | workbench_access           | atio        |
+| section_association          | Section association         | workbench_access           | atio        |
+| workflow                    | Workflow                    | workflows                 | atio        |
+| pathauto_pattern             | Pathauto pattern            | pathauto                  | both        |
+| view                        | View                        | views                     | both        |
+| paragraph                   | Paragraph                   | paragraphs                | both        |
+| paragraphs_type              | Paragraphs type             | paragraphs                | both        |
+| date_format                  | Date format                 | core                      | both        |
+| entity_form_display           | Entity form display         | core                      | both        |
+| entity_form_mode              | Form mode                   | core                      | both        |
+| entity_view_display           | Entity view display         | core                      | both        |
+| entity_view_mode              | View mode                   | core                      | both        |
+| base_field_override           | Base field override         | core                      | both        |
+**** Bundles
+| Bundle                                    | what                                   |
+|-------------------------------------------+----------------------------------------|
+| Indicator data point                      | migrate? redesign?                    |
+| Definition                                |                                        |
+| STI information source                    | mapto Collection                       |
+| Extracted entity                          | remove                                 |
+| Initiative                                | mapto solution; create atio-initiative |
+| Innovation                                | mapto solution; create atio-innovation |
+| Innovation core                           | remove                                 |
+| Innovation extracted from original record | remove                                 |
+| Internal content                          |                                        |
+| [REMOVE] Learning resource                | remove                                 |
+| Organization                              | mapto owner                            |
+| Resource                                  |                                        |
+| Original record                           | mapto solution; mapto claims           |
+| Taxonomy description                      |                                        |
+| Video                                     | remove                                 |
+| Website section                           | remove                                 |
+| Web page                                  | remove                                 |
+
+*** Open Social
+*** Joinup - Theory
+**** Innovation
+***** Core
+
+| Current field            | drupal core?                                                         | RDF property        | Notes |
+|--------------------------+----------------------------------------------------------------------+---------------------+-------|
+| title                    | 1                                                                    | dct:title           |       |
+| field_body                | short description to narratives, want only one core text description | dct:description     |       |
+| field_country_origin       | URI to AGROVOC country                                               | dct:spatial         |       |
+| field_start_year           |                                                                      | dct:created         |       |
+| field_url_s                |                                                                      | schema:url          |       |
+| field_data_source          | ref to :SourceRecord                                                 | prov:wasDerivedFrom |       |
+| ???                      | :inCollection                                                        | :inCollection       |       |
+| field_owner (first value) | ref to :Organization                                                 | dct:creator         |       |
+| field_thematic_area        | URI to AGROVOC??? / use new taxonomy                                 | dcat:theme          |       |
+| moderation_state          | needed for adms-ap compliance; have it already                       | adms:status         |       |
+**** Organisation
+***** Core
+| Current field         | RDF property        | Notes                                                                                                                           |
+|-----------------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------|
+| title                 | foaf:name           |                                                                                                                                 |
+| field_acronym          | :acronym            |                                                                                                                                 |
+| field_country          | dct:spatial         | AGROVOC AGROVOC/FAO region; I want to use/create vocabulary that lists continent -> fao region -> country -> [local region (e.g state)]URI                                                                                                                     |k
+| field_link             | foaf:homepage       |                                                                                                                                 |
+| field_organization_type | :organizationType   | → SKOS taxonomy                                                                                                                 |
+| field_relatedcontent | prov:wasDerivedFrom | provenance (might be innovation or other content that lead to creation of this)                                                 |
+**** Annotation                                                    :obsolete:
+Annotation has been simplified into paragraphs ~field_claims~ on ~solution~
+****** Core
+| Field                         | Facet         | RDF property             | Notes                                | Demo  | Drop  |
+|-------------------------------+---------------+--------------------------+--------------------------------------+-------+-------|
+| field_innovation_stage          | taxonomy      | :innovationStage         | ★ pairs with readiness_level         | true  | false |
+| field_innovation_type           | taxonomy      | :innovationType          | ★ classic SKOS target               | true  | false |
+| field_readiness_level           | taxonomy      | :readinessLevel          | ★ TRL-style; pairs w/ stage         | true  | false |
+| field_use_cases                 | taxonomy      | :useCases                |                                      | true  | false |
+| field_actual_users              | relationships| :hasActualUser           |                                      | false | false |
+| field_adoption_level            | taxonomy      | :adoptionLevel           | SKOS                                 | false | false |
+| field_afs_stf_areas              | internal      | —                        | program-specific (afs/stf)           | false | true  |
+| field_areas_of_expertise         | narrative     | :areasOfExpertise        | could become taxonomy later          | false | false |
+| field_areas_of_need              | narrative     | :areasOfNeed             |                                      | false | false |
+| field_award_year                | internal      | :awardYear               | award-program specific               | false | false |
+| field_challenges_addressed      | evaluation    | :challengesAddressed     |                                      | false | false |
+| field_city                     | taxonomy      | dct:spatial              | fold into spatial hierarchy          | false | false |
+| field_country_text              | —             | —                        | free-text fallback, recovery only    | false | true  |
+| field_environmental_impact      | evaluation    | :environmentalImpact     |                                      | false | false |
+| field_generated_entities        | relationships | prov:generated           |                                      | false | false |
+| field_human_impact              | evaluation    | :humanImpact             |                                      | false | false |
+| field_impact_sdgs               | evaluation    | :impactSDG               | values from UN SDG vocab             | false | false |
+| field_inclusion_and_representati | evaluation    | :inclusionRepresentation | truncated field name                 | false | false |
+| field_information_resource_date  | internal      | dct:issued               |                                      | false | false |
+| field_innovation_domain         | taxonomy      | :innovationDomain        | SKOS; strong demo backup             | false | false |
+| field_innovation_identified     | evaluation    | :innovationIdentified    |                                      | false | false |
+| field_internal_service_field     | internal      | —                        | admin only                           | false | true  |
+| field_intro                    | narrative     | —                        | redundant w/ dct:description         | false | true  |
+| field_intro_related_original_rec  | narrative     | —                        | meta-narrative about source          | false | true  |
+| field_investment_type           | taxonomy      | :investmentType          | SKOS                                 | false | false |
+| field_languages                | taxonomy      | dct:language             | use BCP 47 / Lexvo URIs              | false | false |
+| field_link                     | —             | —                        | duplicate of core schema:url         | false | true  |
+| field_long_term_beneficiaries    | relationships | :longTermBeneficiary     |                                      | false | false |
+| field_prospective_users         | relationships | :prospectiveUser         |                                      | false | false |
+| field_publication_identified    | evaluation    | :publicationIdentified   |                                      | false | false |
+| field_record_long_metadata       | —             | —                        | source dump, belongs on SourceRecord | false | true  |
+| field_record_metadata           | —             | —                        | source dump, belongs on SourceRecord | false | true  |
+| field_region                   | taxonomy      | dct:spatial              | clarify subnational vs FAO region    | false | false |
+| field_scaling_level_idia         | taxonomy      | :scalingLevel            | IDIA framework; demo backup          | false | false |
+| field_shorter_description       | —             | —                        | redundant w/ dct:description         | false | true  |
+| field_sponsors                 | relationships | :hasSponsor              |                                      | false | false |
+| field_start_date                | —             | —                        | duplicate of core dct:created        | false | true  |
+| field_state                    | taxonomy      | dct:spatial              | subnational; fold into spatial       | false | false |
+| field_stop_generating_innovation | internal      | —                        | internal flag                        | false | true  |
+| field_thematic_area             | —             | —                        | duplicate of core dcat:theme         | false | true  |
+* MVP
+** First Principles of STI Portal re-design
+  1. Deliver what was promised: The sources of truth for design are the Capex proposal and the ATIO design doc. We need to first and foremost make sure that we deliver what's outlined there.
+  2. Engine & content moderation remain in Drupal
+     + Team is skilled for that; we have good pool of consultants; de-facto standard in public sector
+  3. True support of data federation and knowledge graphs
+     + use joinUp
+  4. Ensure the ability to collect data on Agricultural innovation from within and outside of FAO.
+     + This requires the semantic web principle "Anyone can say Anything about Anything (AAA)"
+  5. Modular design: Provide a stable core of data storage and management (see point 1). Connect chatbots etc through API. Separate AI-generated content into different areas of the data model & track the AI origin.
+*** Philosophy
+  - There is no such thing as 'innovation'. Taking ATIO's definition is presumptous. Rather: Anybody can say Anything about Anything: Let people keep their language and derive a consensus. It's not important what an 'Innovation' is it's important how people talk about it. Defining 'innovation could be outcome of 5. far future.
+*** Risks
+   - SKOS-mapping and pruning carries a lot of weight
+   - Can this be reflected in joinup?
+   - Is this store a rdf pattern that federates well?
+   - What if a source makees statements not only about innovations but also organizations?
+     + Write two different migrations? Split this in the json generation (but python script simple & dumb)?
+   - What about new content types? The design doc forsees 'Initiative', 'Innovation Family' etc
+     + I could keep slim core 'solution' from joinup and make innovation, initiative etc children
+     + But how to separate them semantically? I know AAA but at some point we will have to set boundaries as to which fields/statements are tied to which core classes, no?
+** Logical Flow
+  1. Standard json: Core fields and statements separated
+     + TEST: Parser works for csv; config simple?
+  2. Create Collection <col>
+     1. Drupal: Content of type "Collection"
+     2. Triplestore: Content graph gets new "Collection"
+        + TEST: Triplestore just updates content graph? Correct meta-information filled?
+  3. Drupal migration:
+     1. Create content (nodes) of type ~solution~ from json.
+        + TEST: Migration maps all fields? Standard json digest works?
+     2. Triplestore: Content graph gets new ~source_record~, ~organizations~ (through owner), all linked to ~collection~
+        + TEST: Check at this step: How to handle organization creation? Main issue: potential duplicates; orgs that we don't want
+     3. Drupal: ~import_IRD_jsons:annotate~ creates new ~field_claim~ paragraphs respective fields
+        + TEST: Check this is set up correctly Drupal-side (correct references to e.g. organizations etc?); how to set up rdf sync correctly?
+     4. Triplestore: New namespace ~collection~; derives all statements (claims) from the json section/the drupal content
+        + TEST: Check presence in triplestore
+  4. Cleanup & pruning
+     1. SKOS-mapping: Define similar statements between new collection and existing; especially the core 'atio' statements
+        + Core type: Federate definitions as much as possible from relevant sources (e.g. tachnology from agrovoc, countries from UN M48)
+        + TEST: Additional 'mapping graph'? Can the ttl output from the current interface be easily parsed back into the store?
+     2. If any exact matches: Drupal: Entity lookup/generate; Triplestore: 'exact match' (in both cases, copy/paste statements of that type
+     3. Else: AI-enhancement: Check all statements; take into consideration which 'atio' statments are 'close' or 'broad' or 'relative' and fill the atio statements accordingly
+        + Triplestore: rds-star 'ai-generated' for every statement derived this way
+        + TEST: rds-star supported by virtuoso? Can we simply do all this? (maybe postpone this)
+  5. Far future: Rosetta's stone between all dimensions that people in- and outside of FAO use to talk about 'Agricultural Innovation';
+** ADRs
+*** ADR #1: Standardized json schema for data import
+  - Python parser is more flexible/powerful
+  - Drupal migrate editing now done in 5 mins
+  - Version control & standard design of the original input data possible
+*** ADR #2: Clear core fields for 'innovation'
+  - Currently 80 fields, it's a pain to map & load any data
+  - Negative effects:
+    1. Data loading slow
+    2. Many fields are always ai-filled -> slop, no actual improvement of the data & usability
+*** ADR #3: Revised AI Enhancement
+  - Change from ECA-managed slow, linear flow to a parallel one
+    + Judge AI; automatic quality checking, reporting and good curation views
+  - Currently done in php/drupal; could use LangChain instead?
+*** ADR #4: Load data fully as-is
+  - Keep all the dimensions from the data providers
+  - Positive
+    + Full original record
+    + Gives them a space to view the data their own way
+    + Allows for semantic mapping/rosetta's stone later
+    + No struggle with initial import: Just take it all
+*** ADR #5: Adopt joinup sql/virtuoso dual-storage
+  - Allows us to actually reach all the expectations and aims of the design document
+*** ADR #6: Simplified data model
+**** Annotations
+  - Annotations (maybe rename to 'claims'): What is a data collection's viewpoint on the data?
+**** Innovation
+  - Factor out current 80 fields into drupal-only service fields (e.g. moderation status; ids; etc), core 'innovation fields' (aim for 10), and the core 'ATIO' claim
+**** Provenance
+  - Keep only data collection claims and final innovation and associated claims (extracted innovations don't go into the triplestore and will be refactored into ATIO claims)
+*** ADR #7: Adopt SKOS mapping interface
+  - either the html placeholder or vocbench
+** Milestones
+  1. Standard json format
+  2. Python script parsing into standard json
+  3. Claims (anyone can say anything about anything; rdf statements about content)
+  4. SKOS mapping
+  5. UI: Visualize claims by origin
+  6. UI: Filter by claims
+* Backlog [2/4]
+1. [X]  UI: Filter by claims
+2. [-] Map core data types: Drupal
+   1. [X] Owner
+   2. [ ] Solution
+   3. [ ] Collection
+   4. [X] Claims
+3. [-] Map core data types: RDF
+   1. [X] Owner
+   2. [ ] Solution
+   3. [ ] Collection
+   4. [X] Claims
+4. [X] Connect API to Open Social. Explore in how far the collection / ~og_audience~ duplet can be extended to open social. Organic groups (og) is a module that is used by both systems. Would we even need open social with good joinup adoption?
+   + implemented as view-only block. The block is tied to the groups new custom field ~field_joinup_collection_id~ that takes a string corresponding to the ~og_audience~ slug
+* Notes
+** UI: Filter by claim
+The basic idea of the re-design is that we keep the original dimensions (e.g. columns in an excel file) of assessment of an innovation of each collection. This ensures that we don't have to discard anything and it maps well to the AAA principle of the semantic web.
+
+So far we manage to create drupal paragraphs (referred to in a ~solution~ ~field_claim~ field) that contain: ~claimed_by~ ~claim_property~ and ~claim_value~. Drupal-side we automatically populate two taxonomy vocabularies: One for the collections 'properties' (the rdf term for 'keys') and one for it's 'values' (only if they are deemed categorical; otherwise values are stored as strings).
+
+If we manage to also index the claim paragraph fields, we can offer faceted search that uses this search-index representation in a search-index view. An alternative would be a traditional view that displays multi-select filters automatically, if the referenced data is in a taxonomy.
+
+2026-06-09: Implemented an automatic view builder. The resulting default/page/block view exposes all categorical (i.e. stored in taxonomy vocab) facets & tiles of the resulting solutions. Downside: 1 new view/block per collection. Alternative: 1 block that contains /all/ facets from /all/ collections & a hook that shows/hides them based on path.
+** Joinup & Open social integration
+This is a general question: Should this be done? Joinup uses an older model of groups, but allows for messaging, posting news/events etc already. Factoring this out & interfacing with open social's newer group model could introduce unneccesary complexity.
+
+High-level concept: Joinup keeps track of editing rights. Anyone in joinup ~col_A~ with role 'facilitator' gets mapped to 'group manager' in open social. Open social gets an api view into the corresponding collection's solutions.
+
+How would editing on open social happen? How much automisation is possible in creating open social groups based on joinup og-audiences?
+** Load testing
+On the question of how many items a taxonomy vocabulary can support; how many search-api facets a view can have and how quickly/slowly those can be hidden based on context I'm testing 200 Collections with ~1400 solutions each with 30 categorical and 1 non-categorical column
+  - Migration of 1429 solutions: 18 minutes
+    + [notice] Processed 1329 items (1277 created, 0 updated, 0 failed, 52 ignored) in 1046.6 seconds (76.2/min) - done with 'stf'
+    + annotate: ~1.5h
+    + ~drush search-api:index published~: [incredible slow-down after 2500]
+      - [notice] Message: Successfully indexed 3772 items.
+      - ddev drush search-api:index published  0.14s user 0.06s system 0% cpu 10:54.42 total
+    +
+*** Bugs
+  - python script auto-assigns categorical = true, should default to false when pressing enter
+  -

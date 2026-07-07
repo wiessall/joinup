@@ -11,7 +11,7 @@ dependencies:
 id: eirapropertiesblock
 theme: ventuno
 region: content
-weight: 5
+weight: 3
 provider: null
 plugin: eira_properties_block
 settings:

@@ -1,0 +1,39 @@
+uuid: c8f3c48f-1a24-49de-b618-6daf8c1bcc01
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_claimed_by
+    - node.type.collection
+    - paragraphs.paragraphs_type.claims
+  module:
+    - rdf_sync
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+  rdf_sync:
+    target_id:
+      predicate: 'https://sti-portal.fao.org/ontology#claimedBy'
+      type: resource
+id: paragraph.claims.field_claimed_by
+field_name: field_claimed_by
+entity_type: paragraph
+bundle: claims
+label: field_claimed_by
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      collection: collection
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -1,0 +1,39 @@
+uuid: ecaa83bc-e39a-44f0-835b-b4edb406fc38
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_claim_property
+    - paragraphs.paragraphs_type.claims
+    - taxonomy.vocabulary.claim_properties
+  module:
+    - rdf_sync
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+  rdf_sync:
+    target_id:
+      predicate: 'https://sti-portal.fao.org/ontology#claimProperty'
+      type: resource
+id: paragraph.claims.field_claim_property
+field_name: field_claim_property
+entity_type: paragraph
+bundle: claims
+label: field_claim_property
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      claim_properties: claim_properties
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

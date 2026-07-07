@@ -1,0 +1,315 @@
+# ===========================================================================
+#  LAYER 5 -- MULTI-SOURCE DIVERGENCE
+#  Field claims (different source records giving different values for the same
+#  field) and taxonomy mapping divergence across source vocabularies.
+#  Named graph: sti_atio:graph/provenance  (internal / partner)
+# ===========================================================================
+
+# ---------------------------------------------------------------------------
+#  L5.1  sti_atio:FieldClaim
+# ---------------------------------------------------------------------------
+
+sti_atio:FieldClaim
+    a owl:Class ;
+    rdfs:label "Field Claim"@en ;
+    rdfs:comment """A claim about the value of a specific field of an innovation,
+    attributed to a specific source record. Allows multiple, potentially divergent
+    claims on the same field of the same innovation from different source records
+    to coexist. The canonical (published) value on sti_atio:Innovation is the
+    curator-selected synthesis; sti_atio:FieldClaim preserves the full divergence
+    for auditability, research, and re-ingestion.
+    Semantically: a reified statement (cf. RDF reification / named graph pattern)."""@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:hasFieldClaim
+    a owl:ObjectProperty ;
+    rdfs:label "has field claim"@en ;
+    rdfs:domain sti_atio:InnovationRecord ;
+    rdfs:range sti_atio:FieldClaim ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:claimSubject
+    a owl:ObjectProperty ;
+    rdfs:label "claim subject"@en ;
+    rdfs:comment """The real-world sti_atio:Innovation that this FieldClaim
+    is about. Explicitly separates the semantic subject (Innovation) from
+    the record that carries the claim (InnovationRecord).
+
+    Both of the following hold simultaneously and serve different purposes:
+
+      sti_atio:InnovationRecord --hasFieldClaim--> sti_atio:FieldClaim
+        (grouping/container: which record is associated with this claim)
+
+      sti_atio:FieldClaim --claimSubject--> sti_atio:Innovation
+        (semantic: which real-world thing this claim is about)
+
+    FieldClaims are reified property assertions: they sit in the data/
+    provenance layer but their subject is a real-world entity. After
+    curator resolution the canonical value is asserted directly on
+    sti_atio:Innovation. The FieldClaim provides the evidence trail."""@en ;
+    rdfs:domain sti_atio:FieldClaim ;
+    rdfs:range  sti_atio:Innovation ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:claimField
+    a owl:DatatypeProperty ;
+    rdfs:label "claim field"@en ;
+    rdfs:comment "The field name to which this claim applies (e.g. 'readinessLevel', 'originCountry')."@en ;
+    rdfs:domain sti_atio:FieldClaim ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:claimLiteralValue
+    a owl:DatatypeProperty ;
+    rdfs:label "claim value (literal)"@en ;
+    rdfs:comment "The claimed field value when it is a literal (string, integer, date, etc.)."@en ;
+    rdfs:domain sti_atio:FieldClaim ;
+    rdfs:range rdfs:Literal ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:claimRefValue
+    a owl:ObjectProperty ;
+    rdfs:label "claim value (reference)"@en ;
+    rdfs:comment "The claimed field value when it is an entity or concept reference (URI)."@en ;
+    rdfs:domain sti_atio:FieldClaim ;
+    rdfs:range rdfs:Resource ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:claimedBy
+    a owl:ObjectProperty ;
+    rdfs:label "claimed by"@en ;
+    rdfs:comment "The source record that asserts this field value."@en ;
+    rdfs:domain sti_atio:FieldClaim ;
+    rdfs:range sti_atio:SourceRecord ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:claimedAt
+    a owl:DatatypeProperty ;
+    rdfs:label "claimed at"@en ;
+    rdfs:comment "Timestamp at which this claim was extracted from the source record."@en ;
+    rdfs:domain sti_atio:FieldClaim ;
+    rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:curatorResolution
+    a owl:ObjectProperty ;
+    rdfs:label "curator resolution"@en ;
+    rdfs:comment "How the curator resolved this claim relative to others for the same field."@en ;
+    rdfs:domain sti_atio:FieldClaim ;
+    rdfs:range sti_atio:ClaimResolution ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:ClaimResolution    a owl:Class ; rdfs:subClassOf skos:Concept ;
+    rdfs:label "Claim Resolution"@en ;
+    rdfs:comment "authoritative | supplementary | rejected | pending-review"@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:claimResolutionNote
+    a owl:DatatypeProperty ;
+    rdfs:label "resolution note"@en ;
+    rdfs:comment "Curator note explaining the resolution decision."@en ;
+    rdfs:domain sti_atio:FieldClaim ;
+    rdfs:range rdf:langString ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+
+sti_atio:claimProperty
+    a owl:ObjectProperty ;
+    rdfs:label "claim property (URI)"@en ;
+    rdfs:comment """The RDF property to which this claim applies, expressed as a URI.
+    Preferred over sti_atio:claimField (string) in v0.4 because it enables clean
+    SPARQL inference without string matching. Both may be present for
+    backward compatibility with v0.1-v0.3 data."""@en ;
+    rdfs:domain sti_atio:FieldClaim ;
+    rdfs:range  rdf:Property ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:inferredScheme
+    a owl:ObjectProperty ;
+    rdfs:label "inferred scheme"@en ;
+    rdfs:comment """The vocabulary scheme inferred for this FieldClaim, derived
+    by the SPARQL CONSTRUCT rule from the DataSource's FieldSchemeUsage
+    declaration. Not asserted manually — populated by inference.
+    Once inferred, used by SHACL to validate scheme membership without
+    requiring explicit skos:inScheme on the concept value."""@en ;
+    rdfs:domain sti_atio:FieldClaim ;
+    rdfs:range  skos:ConceptScheme ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+
+
+
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix dct:  <http://purl.org/dc/terms/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix sti:  <https://sti-portal.fao.org/ontology#> .
+@prefix :     <https://sti-portal.fao.org/instance#> .
+@prefix c:    <https://sti-portal.fao.org/claim/> .
+@prefix stf:  <http://data.fao.org/ird/stf#> .
+@prefix eca:  <http://data.fao.org/ird/eca#> .
+@prefix atio: <http://data.fao.org/ird/atio#> .
+
+# Design choices baked in here:
+# - InnovationRecord is a pure container: identity + hasFieldClaim, no content properties.
+# - All content lives on FieldClaims, one (property, value) pair per claim.
+# - Multi-valued original properties → multiple claims with the same claimProperty.
+# - claimProperty reuses the source-vocab predicates (stf:*, eca:*, atio:*) as rdf:Property values, preserving the source's own terms.
+# - claimSubject OMITTED: canonical Innovation will be derived on the ATIO side later.
+#   Navigation in this graph: innovation → hasFieldClaim → claim.
+# - Collection ownership of a claim is transient: claim → claimedBy → source_record → dct:isPartOf → collection.
+# - No curatorResolution. This is the preservation graph; resolution belongs to the (future) synthesis layer.
+
+GRAPH <http://data> {
+
+    # ── Collections ──────────────────────────────────────────────────
+    :seeding_the_future   a dcat:Catalog ; dct:identifier "COL-STF"      ; dct:title "Seeding the Future"@en .
+    :agritech_observatory a dcat:Catalog ; dct:identifier "COL-ECA"      ; dct:title "ECA Agritech Observatory"@en .
+    :ird_atio_dataset     a dcat:Catalog ; dct:identifier "COL-IRD-ATIO" ; dct:title "IRD ATIO derived outputs"@en .
+
+    # ── Agents ────────────────────────────────────────────────────────
+    :org_a          a foaf:Agent          ; dct:identifier "ORG-0001" .
+    :org_b          a foaf:Agent          ; dct:identifier "ORG-0004" .
+    :stf_foundation a foaf:Agent          ; dct:identifier "ORG-0002" .
+    :fao            a foaf:Agent          ; dct:identifier "ORG-0003" .
+    :ird_system     a prov:SoftwareAgent  ; dct:identifier "SYS-IRD"  . #! Why?
+
+    # ── InnovationRecords ─────────────────────────────────────────────
+    # Containers only. Everything is reached via hasFieldClaim.
+    :innovation_a a sti:SourceRecord ;
+        dct:isPartOf :seeding_the_future ; 
+        #! SourceRecord has the ~<10 required fields
+        #! How to handle source records about innovations, initiatives etc? I would like to not having to keep innovationrecord?
+        sti:hasFieldClaim
+            # STF claims
+            c:stf_001_identifier, c:stf_001_sourceOfEntry, c:stf_001_submittingOrganization,
+            c:stf_001_projectTitle, c:stf_001_organizationType, c:stf_001_organizationSize,
+            c:stf_001_website, c:stf_001_benefittingCountry, c:stf_001_country,
+            c:stf_001_executiveSummary, c:stf_001_innovationDescription,
+            c:stf_001_innovationDomainsAddressed,
+            c:stf_001_sdg_noPoverty, c:stf_001_sdg_zeroHunger, c:stf_001_sdg_genderEquality,
+            c:stf_001_areaOfNeed_ai, c:stf_001_areaOfNeed_solar,
+            c:stf_001_areaOfExpertise_sustainable, c:stf_001_areaOfExpertise_biobased,
+            c:stf_001_greenhouseGassesImpact, c:stf_001_waterUseImpact,
+            c:stf_001_landUseImpact, c:stf_001_biodiversityImpact,
+            c:stf_001_awardAppliedFor, c:stf_001_developmentStatus, c:stf_001_levelRecognized,
+            c:stf_001_awardYear, c:stf_001_latitude, c:stf_001_longitude,
+            c:stf_001_priorRecognitions, c:stf_001_contactEmail, c:stf_001_attestation,
+            # ATIO claims (sample — full set follows same pattern)
+            c:atio_001_nid, c:atio_001_uuid, c:atio_001_title, c:atio_001_body,
+            c:atio_001_field_shorter_description,
+            c:atio_001_field_readiness_level, c:atio_001_field_readiness_description,
+            c:atio_001_field_thematic_area_572, c:atio_001_field_thematic_area_574,
+            c:atio_001_field_thematic_area_575, c:atio_001_field_thematic_area_576,
+            c:atio_001_field_thematic_area_577,
+            c:atio_001_field_url_s, c:atio_001_field_ai_enriched_description .
+
+    :innovation_b a sti:SourceRecord ;
+        dct:isPartOf :agritech_observatory ;
+        sti:hasFieldClaim
+            c:eca_001_title, c:eca_001_shortDescription, c:eca_001_entryType,
+            c:eca_001_source, c:eca_001_organization, c:eca_001_organizationType,
+            c:eca_001_website, c:eca_001_countryOfOrigin,
+            c:eca_001_useCase_farmMgmt, c:eca_001_useCase_production,
+            c:eca_001_theme_ppp, c:eca_001_theme_soil,
+            c:eca_001_tech_gis, c:eca_001_tech_remoteSensing, c:eca_001_tech_bigData,
+            c:eca_001_tech_machineLearning, c:eca_001_tech_webApp, c:eca_001_tech_mobileApp,
+            c:eca_001_fourBetters_production, c:eca_001_fourBetters_environment,
+            c:eca_001_sdg_2, c:eca_001_sdg_9,
+            c:eca_001_description, c:eca_001_impact, c:eca_001_linkToTheObservatory .
+    # ─── STF claims about innovation_a ────────────────────────────────
+    c:stf_001_identifier              a sti:FieldClaim ; sti:claimProperty stf:identifier              ; sti:claimLiteralValue "STF-GERAD-LBR" ;                                       sti:claimedBy :sr_stf_001 .
+    c:stf_001_sourceOfEntry           a sti:FieldClaim ; sti:claimProperty stf:sourceOfEntry           ; sti:claimLiteralValue "STF" ;                                                 sti:claimedBy :sr_stf_001 .
+    c:stf_001_submittingOrganization  a sti:FieldClaim ; sti:claimProperty stf:submittingOrganization  ; sti:claimLiteralValue "Geo-Environmental Research Agency for Development" ;  sti:claimedBy :sr_stf_001 .
+    c:stf_001_projectTitle            a sti:FieldClaim ; sti:claimProperty stf:projectTitle            ; sti:claimLiteralValue "STRENGTHENING ACCESS TO SUSTAINABLE SEEDLING" ;       sti:claimedBy :sr_stf_001 .
+    c:stf_001_organizationType        a sti:FieldClaim ; sti:claimProperty stf:organizationType        ; sti:claimLiteralValue "Non-profit" ;                                          sti:claimedBy :sr_stf_001 .
+    c:stf_001_organizationSize        a sti:FieldClaim ; sti:claimProperty stf:organizationSize        ; sti:claimLiteralValue "1-10" ;                                                sti:claimedBy :sr_stf_001 .
+    c:stf_001_website                 a sti:FieldClaim ; sti:claimProperty stf:website                 ; sti:claimRefValue     <https://www.geradlib.org/> ;                           sti:claimedBy :sr_stf_001 .
+    c:stf_001_benefittingCountry      a sti:FieldClaim ; sti:claimProperty stf:benefittingCountry      ; sti:claimLiteralValue "Liberia" ;                                             sti:claimedBy :sr_stf_001 .
+    c:stf_001_country                 a sti:FieldClaim ; sti:claimProperty stf:country                 ; sti:claimLiteralValue "Liberia" ;                                             sti:claimedBy :sr_stf_001 .
+    c:stf_001_executiveSummary        a sti:FieldClaim ; sti:claimProperty stf:executiveSummary        ; sti:claimLiteralValue "This project seeks to empower smallholder farmers..." ; sti:claimedBy :sr_stf_001 .
+    c:stf_001_innovationDescription   a sti:FieldClaim ; sti:claimProperty stf:innovationDescription   ; sti:claimLiteralValue "Smallholder farmers in Nimba county, Liberia face..." ; sti:claimedBy :sr_stf_001 .
+    c:stf_001_innovationDomainsAddressed a sti:FieldClaim ; sti:claimProperty stf:innovationDomainsAddressed ; sti:claimLiteralValue "Enabling Safe and Nutritious Food Solutions" ;  sti:claimedBy :sr_stf_001 .
+
+    # Multi-valued original → one claim per value, same claimProperty
+    c:stf_001_sdg_noPoverty           a sti:FieldClaim ; sti:claimProperty stf:sdgAddressed            ; sti:claimLiteralValue "No Poverty" ;                                          sti:claimedBy :sr_stf_001 .
+    c:stf_001_sdg_zeroHunger          a sti:FieldClaim ; sti:claimProperty stf:sdgAddressed            ; sti:claimLiteralValue "Zero Hunger" ;                                         sti:claimedBy :sr_stf_001 .
+    c:stf_001_sdg_genderEquality      a sti:FieldClaim ; sti:claimProperty stf:sdgAddressed            ; sti:claimLiteralValue "Gender Equality" ;                                     sti:claimedBy :sr_stf_001 .
+    c:stf_001_areaOfNeed_ai           a sti:FieldClaim ; sti:claimProperty stf:areaOfNeed              ; sti:claimLiteralValue "AI Applications in Farming" ;                          sti:claimedBy :sr_stf_001 .
+    c:stf_001_areaOfNeed_solar        a sti:FieldClaim ; sti:claimProperty stf:areaOfNeed              ; sti:claimLiteralValue "Solar Applications" ;                                  sti:claimedBy :sr_stf_001 .
+    c:stf_001_areaOfExpertise_sustainable a sti:FieldClaim ; sti:claimProperty stf:areaOfExpertise    ; sti:claimLiteralValue "Sustainable Agriculture Practice" ;                    sti:claimedBy :sr_stf_001 .
+    c:stf_001_areaOfExpertise_biobased    a sti:FieldClaim ; sti:claimProperty stf:areaOfExpertise    ; sti:claimLiteralValue "Bio-based Farming" ;                                   sti:claimedBy :sr_stf_001 .
+
+    c:stf_001_greenhouseGassesImpact  a sti:FieldClaim ; sti:claimProperty stf:greenhouseGassesImpact ; sti:claimLiteralValue "Regional/National" ;                                  sti:claimedBy :sr_stf_001 .
+    c:stf_001_waterUseImpact          a sti:FieldClaim ; sti:claimProperty stf:waterUseImpact         ; sti:claimLiteralValue "Regional/National" ;                                  sti:claimedBy :sr_stf_001 .
+    c:stf_001_landUseImpact           a sti:FieldClaim ; sti:claimProperty stf:landUseImpact          ; sti:claimLiteralValue "Regional/National" ;                                  sti:claimedBy :sr_stf_001 .
+    c:stf_001_biodiversityImpact      a sti:FieldClaim ; sti:claimProperty stf:biodiversityImpact     ; sti:claimLiteralValue "Regional/National" ;                                  sti:claimedBy :sr_stf_001 .
+    c:stf_001_awardAppliedFor         a sti:FieldClaim ; sti:claimProperty stf:awardAppliedFor        ; sti:claimLiteralValue "Seeding The Future Grand Prize" ;                     sti:claimedBy :sr_stf_001 .
+    c:stf_001_developmentStatus       a sti:FieldClaim ; sti:claimProperty stf:developmentStatus      ; sti:claimLiteralValue "Scale-up Phase" ;                                     sti:claimedBy :sr_stf_001 .
+    c:stf_001_levelRecognized         a sti:FieldClaim ; sti:claimProperty stf:levelRecognized        ; sti:claimLiteralValue "STF Applicant with Prior Recognition" ;               sti:claimedBy :sr_stf_001 .
+    c:stf_001_awardYear               a sti:FieldClaim ; sti:claimProperty stf:awardYear              ; sti:claimLiteralValue "2025"^^xsd:integer ;                                  sti:claimedBy :sr_stf_001 .
+    c:stf_001_latitude                a sti:FieldClaim ; sti:claimProperty stf:latitude               ; sti:claimLiteralValue "6.5201"^^xsd:double ;                                 sti:claimedBy :sr_stf_001 .
+    c:stf_001_longitude               a sti:FieldClaim ; sti:claimProperty stf:longitude              ; sti:claimLiteralValue "-9.259"^^xsd:double ;                                 sti:claimedBy :sr_stf_001 .
+    c:stf_001_priorRecognitions       a sti:FieldClaim ; sti:claimProperty stf:priorRecognitions      ; sti:claimLiteralValue "Won a Grant with WFP-Liberia 2024-2026" ;             sti:claimedBy :sr_stf_001 .
+    c:stf_001_contactEmail            a sti:FieldClaim ; sti:claimProperty stf:contactEmail           ; sti:claimLiteralValue "geradliberia5@gmail.com" ;                            sti:claimedBy :sr_stf_001 .
+    c:stf_001_attestation             a sti:FieldClaim ; sti:claimProperty stf:attestation            ; sti:claimLiteralValue "true"^^xsd:boolean ;                                  sti:claimedBy :sr_stf_001 .
+
+    # ─── ECA claims about innovation_b ────────────────────────────────
+    c:eca_001_title                a sti:FieldClaim ; sti:claimProperty eca:title              ; sti:claimLiteralValue "Digital Platform on Precision Farming" ;                                  sti:claimedBy :sr_eca_001 .
+    c:eca_001_shortDescription     a sti:FieldClaim ; sti:claimProperty eca:shortDescription   ; sti:claimLiteralValue "National pilot under the state Digital Development of Belarus programme" ; sti:claimedBy :sr_eca_001 .
+    c:eca_001_entryType            a sti:FieldClaim ; sti:claimProperty eca:entryType          ; sti:claimLiteralValue "Project" ;                                                                sti:claimedBy :sr_eca_001 .
+    c:eca_001_source               a sti:FieldClaim ; sti:claimProperty eca:source             ; sti:claimLiteralValue "Desktop research" ;                                                       sti:claimedBy :sr_eca_001 .
+    c:eca_001_organization         a sti:FieldClaim ; sti:claimProperty eca:organization       ; sti:claimLiteralValue "Ministry of Agriculture and Food of the Republic of Belarus" ;            sti:claimedBy :sr_eca_001 .
+    c:eca_001_organizationType     a sti:FieldClaim ; sti:claimProperty eca:organizationType   ; sti:claimLiteralValue "Central government entity" ;                                              sti:claimedBy :sr_eca_001 .
+    c:eca_001_website              a sti:FieldClaim ; sti:claimProperty eca:website            ; sti:claimRefValue     <https://investinbelarus.by/upload/medialibrary/108/Agriculture-Belarus-2025.pdf> ; sti:claimedBy :sr_eca_001 .
+    c:eca_001_countryOfOrigin      a sti:FieldClaim ; sti:claimProperty eca:countryOfOrigin    ; sti:claimLiteralValue "Belarus" ;                                                                sti:claimedBy :sr_eca_001 .
+
+    c:eca_001_useCase_farmMgmt        a sti:FieldClaim ; sti:claimProperty eca:useCase           ; sti:claimLiteralValue "Farm management" ;                       sti:claimedBy :sr_eca_001 .
+    c:eca_001_useCase_production      a sti:FieldClaim ; sti:claimProperty eca:useCase           ; sti:claimLiteralValue "Production" ;                            sti:claimedBy :sr_eca_001 .
+    c:eca_001_theme_ppp               a sti:FieldClaim ; sti:claimProperty eca:theme             ; sti:claimLiteralValue "Plant production and protection" ;       sti:claimedBy :sr_eca_001 .
+    c:eca_001_theme_soil              a sti:FieldClaim ; sti:claimProperty eca:theme             ; sti:claimLiteralValue "Soil management" ;                       sti:claimedBy :sr_eca_001 .
+    c:eca_001_tech_gis                a sti:FieldClaim ; sti:claimProperty eca:technology        ; sti:claimLiteralValue "GIS" ;                                   sti:claimedBy :sr_eca_001 .
+    c:eca_001_tech_remoteSensing      a sti:FieldClaim ; sti:claimProperty eca:technology        ; sti:claimLiteralValue "Remote sensing" ;                        sti:claimedBy :sr_eca_001 .
+    c:eca_001_tech_bigData            a sti:FieldClaim ; sti:claimProperty eca:technology        ; sti:claimLiteralValue "Big data" ;                              sti:claimedBy :sr_eca_001 .
+    c:eca_001_tech_machineLearning    a sti:FieldClaim ; sti:claimProperty eca:technology        ; sti:claimLiteralValue "Machine learning" ;                      sti:claimedBy :sr_eca_001 .
+    c:eca_001_tech_webApp             a sti:FieldClaim ; sti:claimProperty eca:technology        ; sti:claimLiteralValue "Desktop/web-based application" ;         sti:claimedBy :sr_eca_001 .
+    c:eca_001_tech_mobileApp          a sti:FieldClaim ; sti:claimProperty eca:technology        ; sti:claimLiteralValue "Mobile app" ;                            sti:claimedBy :sr_eca_001 .
+    c:eca_001_fourBetters_production  a sti:FieldClaim ; sti:claimProperty eca:fourBetters       ; sti:claimLiteralValue "Better production" ;                     sti:claimedBy :sr_eca_001 .
+    c:eca_001_fourBetters_environment a sti:FieldClaim ; sti:claimProperty eca:fourBetters       ; sti:claimLiteralValue "Better environment" ;                    sti:claimedBy :sr_eca_001 .
+    c:eca_001_sdg_2                   a sti:FieldClaim ; sti:claimProperty eca:sdg               ; sti:claimLiteralValue "SDG 2: Zero hunger" ;                    sti:claimedBy :sr_eca_001 .
+    c:eca_001_sdg_9                   a sti:FieldClaim ; sti:claimProperty eca:sdg               ; sti:claimLiteralValue "SDG 9: Industry, innovation, and infrastructure" ; sti:claimedBy :sr_eca_001 .
+
+    c:eca_001_description          a sti:FieldClaim ; sti:claimProperty eca:description        ; sti:claimLiteralValue "The Digital Platform of Precision Farming is a national pilot project (2025-2026)..." ; sti:claimedBy :sr_eca_001 .
+    c:eca_001_impact               a sti:FieldClaim ; sti:claimProperty eca:impact             ; sti:claimLiteralValue "The platform can boost productivity and sustainability by enabling precision farming..." ; sti:claimedBy :sr_eca_001 .
+    c:eca_001_linkToTheObservatory a sti:FieldClaim ; sti:claimProperty eca:linkToTheObservatory ; sti:claimRefValue   <https://agritechobservatory.fao.org/digital-platform-on-precision-farming> ;          sti:claimedBy :sr_eca_001 .
+
+    # ─── ATIO claims about innovation_a (sample of ~30; rest follow same pattern) ───
+    # All ATIO claims share claimedBy :sr_atio_001 and claimedAt = AI run time.
+    c:atio_001_nid                              a sti:FieldClaim ; sti:claimProperty atio:nid                              ; sti:claimLiteralValue "56740" ;                                                                                              sti:claimedBy :sr_atio_001 ; sti:claimedAt "2026-05-13T00:00:00Z"^^xsd:dateTime .
+    c:atio_001_uuid                             a sti:FieldClaim ; sti:claimProperty atio:uuid                             ; sti:claimLiteralValue "9a826bf4-6813-4f34-8a24-e56fae8e8812" ;                                                              sti:claimedBy :sr_atio_001 ; sti:claimedAt "2026-05-13T00:00:00Z"^^xsd:dateTime .
+    c:atio_001_title                            a sti:FieldClaim ; sti:claimProperty dct:title                             ; sti:claimLiteralValue "STRENGHTENING ACCESS TO SUSTAINABLE SEEDLING, FOOD SYSTEM, AND LIVELIHOODS TO VULNERABLE HOUSEHOLDS IN LIBERIA" ; sti:claimedBy :sr_atio_001 ; sti:claimedAt "2026-05-13T00:00:00Z"^^xsd:dateTime .
+    c:atio_001_body                             a sti:FieldClaim ; sti:claimProperty atio:body                             ; sti:claimLiteralValue "Smallholder farmers in Nimba county, Liberia faces serious challenges..." ;                              sti:claimedBy :sr_atio_001 ; sti:claimedAt "2026-05-13T00:00:00Z"^^xsd:dateTime .
+    c:atio_001_field_shorter_description        a sti:FieldClaim ; sti:claimProperty atio:field_shorter_description        ; sti:claimLiteralValue "This project seeks to empower smallholder farmers cooperatives in Nimba County..." ;                   sti:claimedBy :sr_atio_001 ; sti:claimedAt "2026-05-13T00:00:00Z"^^xsd:dateTime .
+    c:atio_001_field_readiness_level            a sti:FieldClaim ; sti:claimProperty atio:field_readiness_level            ; sti:claimLiteralValue "93" ;                                                                                                 sti:claimedBy :sr_atio_001 ; sti:claimedAt "2026-05-13T00:00:00Z"^^xsd:dateTime .
+    c:atio_001_field_readiness_description      a sti:FieldClaim ; sti:claimProperty atio:field_readiness_description      ; sti:claimLiteralValue "The Formulating Working Model readiness level is indicated by the text. GENERATED BY AI - Gemini Flash 2.5 - 2026-05-13." ; sti:claimedBy :sr_atio_001 ; sti:claimedAt "2026-05-13T00:00:00Z"^^xsd:dateTime .
+
+    # Multi-valued thematic_area → 5 claims, all with claimProperty atio:field_thematic_area
+    c:atio_001_field_thematic_area_572          a sti:FieldClaim ; sti:claimProperty atio:field_thematic_area              ; sti:claimLiteralValue "572" ; sti:claimedBy :sr_atio_001 ; sti:claimedAt "2026-05-13T00:00:00Z"^^xsd:dateTime .
+    c:atio_001_field_thematic_area_574          a sti:FieldClaim ; sti:claimProperty atio:field_thematic_area              ; sti:claimLiteralValue "574" ; sti:claimedBy :sr_atio_001 ; sti:claimedAt "2026-05-13T00:00:00Z"^^xsd:dateTime .
+    c:atio_001_field_thematic_area_575          a sti:FieldClaim ; sti:claimProperty atio:field_thematic_area              ; sti:claimLiteralValue "575" ; sti:claimedBy :sr_atio_001 ; sti:claimedAt "2026-05-13T00:00:00Z"^^xsd:dateTime .
+    c:atio_001_field_thematic_area_576          a sti:FieldClaim ; sti:claimProperty atio:field_thematic_area              ; sti:claimLiteralValue "576" ; sti:claimedBy :sr_atio_001 ; sti:claimedAt "2026-05-13T00:00:00Z"^^xsd:dateTime .
+    c:atio_001_field_thematic_area_577          a sti:FieldClaim ; sti:claimProperty atio:field_thematic_area              ; sti:claimLiteralValue "577" ; sti:claimedBy :sr_atio_001 ; sti:claimedAt "2026-05-13T00:00:00Z"^^xsd:dateTime .
+
+    c:atio_001_field_url_s                      a sti:FieldClaim ; sti:claimProperty atio:field_url_s                      ; sti:claimRefValue     <https://www.geradlib.org/> ;                                                                          sti:claimedBy :sr_atio_001 ; sti:claimedAt "2026-05-13T00:00:00Z"^^xsd:dateTime .
+    c:atio_001_field_ai_enriched_description    a sti:FieldClaim ; sti:claimProperty atio:field_ai_enriched_description    ; sti:claimLiteralValue "The Strengthening Access to Sustainable Seedling, Food System, and Livelihoods..." ;                  sti:claimedBy :sr_atio_001 ; sti:claimedAt "2026-05-13T00:00:00Z"^^xsd:dateTime .
+
+    # Remaining ~20 atio:* fields (field_innovation_stage, field_record_status, field_country_origin,
+    # field_award_year, field_innovation_domain*, field_impact_sdgs*, field_use_cases*,
+    # field_adoption_level, field_adoption_description, field_data_source,
+    # field_stf_development_status, field_stf_level_of_recognition, field_stf_organization_size,
+    # field_stf_organization_type, field_adoptability_dimensions, field_use_cases_description)
+    # follow the same shape: claimProperty + claimLiteralValue/claimRefValue + claimedBy :sr_atio_001 + claimedAt.
+}

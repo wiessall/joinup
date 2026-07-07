@@ -1,6 +1,6 @@
-collection_id: dv_solutions
-collection_label: ''
-owner_id_prefix: dv_solutions
+collection_id: fao-dvi
+collection_label: Digital Village Solutions
+owner_id_prefix: fao-dvi
 required:
 - title
 core:
@@ -10,28 +10,81 @@ core:
     column: Name of Digital Solution (DS) - (Enter text - Mandatory)
   description:
     column: Brief Description
-  abstract: null
-  date: null
   url:
     column: Online resource links (Web-page links, links to videos, links to reports,
-      etc) (Category-Dropdown) - Mandatory
+      etc) (URL)(Enter URL) -Mandatory
     type: url
-  classification_name:
-    column: Type
-  domain_names:
-    column: List country
-    separator: '::'
-  topic_names:
-    column: Copyright text
-  language_names: null
   owner_name:
-    column: Type of entity (ICT developer-supplier) - Mandatory
+    column: Name of supplier/developer
   contact_name:
-    column: Value chain tags
-owner_fields:
-  owner_type:
+    column: Contact Info
+claims:
+  Unique ID:
+    column: Unique ID
+  Type:
+    column: Type
+    categorical: true
+  List country:
+    column: List country
+    categorical: true
+  Digital Solution Type (Category & sub-category):
+    column: Digital Solution Type (Category & sub-category)
+    categorical: true
+    separator: '::'
+  Digital Solution delivery format (Mandatory):
+    column: Digital Solution delivery format (Mandatory)
+    categorical: true
+  DS Supplier-User category:
+    column: DS Supplier-User category
+    categorical: true
+  Type of entity (ICT developer-supplier) - Mandatory:
     column: Type of entity (ICT developer-supplier) - Mandatory
-    as_list: true
-annotations:
+    categorical: true
+  Primary users:
+    column: Primary users
+    categorical: true
+  Digital Solution Development Stage:
+    column: Digital Solution Development Stage
+    categorical: true
+  Number of users or subscribers of the Digital Solution (DS).:
+    column: Number of users or subscribers of the Digital Solution (DS).
+  Measurable positive impact(s) by Digital Solution (DS) on target users and/or audience (Enter text).:
+    column: Measurable positive impact(s) by Digital Solution (DS) on target users
+      and/or audience (Enter text).
+  Digital Solution Geographic scope (Enter text).:
+    column: Digital Solution Geographic scope (Enter text).
   Name of Digital village(s), districts, communes where DS is used/ deployed (Enter text).:
+    column: Name of Digital village(s), districts, communes where DS is used/ deployed
+      (Enter text).
     separator: ','
+  Online resource links (Web-page links, links to videos, links to reports, etc) (Category-Dropdown) - Mandatory:
+    column: Online resource links (Web-page links, links to videos, links to reports,
+      etc) (Category-Dropdown) - Mandatory
+    categorical: true
+  Online resource links (Web-page links, links to videos, links to reports, etc) (Label):
+    column: Online resource links (Web-page links, links to videos, links to reports,
+      etc) (Label)
+  DS links to Government programmes, initiatives, and projects.:
+    column: DS links to Government programmes, initiatives, and projects.
+    categorical: true
+  DS Links to FAO, UN and other Development agencies projects, initiatives and programmes:
+    column: DS Links to FAO, UN and other Development agencies projects, initiatives
+      and programmes
+  Other relevant links and information sources on DS:
+    column: Other relevant links and information sources on DS
+  Link Digital Village:
+    column: Link Digital Village
+  Link Digital Initiative:
+    column: Link Digital Initiative
+  Upload image:
+    column: Upload image
+  Copyright text:
+    column: Copyright text
+  Keywords:
+    column: Keywords
+    categorical: true
+    separator: ','
+  Status:
+    column: Status
+  Value chain tags:
+    column: Value chain tags

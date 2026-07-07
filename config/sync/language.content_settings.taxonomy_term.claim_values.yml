@@ -1,0 +1,11 @@
+uuid: 1205fc79-1d1e-4491-83d4-00f9df79ef78
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.claim_values
+id: taxonomy_term.claim_values
+target_entity_type_id: taxonomy_term
+target_bundle: claim_values
+default_langcode: site_default
+language_alterable: false

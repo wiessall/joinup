@@ -1,0 +1,5609 @@
+{
+  "solutions": [
+    {
+      "datemodifiedowner": null,
+      "description": "<p>Agribusiness TV is the first web TV dedicated to African youth who innovate and succeed in agriculture. Through our video reports, we put in the limelight the success paths of young people (men and women) in agricultural entrepreneurship.</p>",
+      "id": 3,
+      "name": "Agribusiness TV app",
+      "organisationname": "Agribusiness TV",
+      "translations": [],
+      "url": "http://agribusinesstv.info/en/",
+      "descriptionshort": "Agribusiness TV is the first web TV dedicated to African youth who innovate and succeed in agriculture. Through our video reports, we put in the limelight the success paths of young people (men and women) in agricultural entrepreneurship.",
+      "launch": 2016,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "Agribusiness TV",
+        "description": "<p>The first Web TV on \"Youth in Agribusiness\"​ in Africa, Agribusiness TV aims at using video as a promotion tool to valorise successful youth ventures in agricultural entrepreneurship. Agribusiness TV is an initiative by MEDIAPROD and supported by the Technical Centre for Agricultural and Rural Cooperation (CTA), through its Agriculture, Rural Development and Youth in the Information Society (ARDYIS) Project.</p>",
+        "url": "http://agribusinesstv.info/en/",
+        "founded": 2016,
+        "organisationtype": {
+          "id": 1,
+          "description": "Agribusiness"
+        },
+        "hqcountry": {
+          "id": "BFA",
+          "description": "Burkina Faso",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 9,
+        "description": "Farm management & record keeping",
+        "usecase": {
+          "id": 2,
+          "description": "Farm management & Advisory"
+        }
+      },
+      "sectors": [
+        {
+          "id": 5,
+          "description": "Multi-sectoral or sector-independent"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 9,
+          "description": "Farm management & record keeping",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 1,
+          "description": "Business to consumer"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 10,
+          "description": "Mobile applications"
+        },
+        {
+          "id": 18,
+          "description": "Video"
+        },
+        {
+          "id": 19,
+          "description": "Web-based applications"
+        }
+      ],
+      "countries": [
+        {
+          "id": "BEN",
+          "description": "Benin"
+        },
+        {
+          "id": "BFA",
+          "description": "Burkina Faso"
+        },
+        {
+          "id": "CIV",
+          "description": "Côte d'Ivoire"
+        },
+        {
+          "id": "CMR",
+          "description": "Cameroon"
+        },
+        {
+          "id": "GHA",
+          "description": "Ghana"
+        },
+        {
+          "id": "MLI",
+          "description": "Mali"
+        },
+        {
+          "id": "MUS",
+          "description": "Mauritius"
+        },
+        {
+          "id": "SEN",
+          "description": "Senegal"
+        },
+        {
+          "id": "TON",
+          "description": "Tonga"
+        }
+      ],
+      "languages": [
+        {
+          "id": 8,
+          "description": "English"
+        },
+        {
+          "id": 11,
+          "description": "French"
+        }
+      ],
+      "technologies": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>TCS Connected Intelligence Platform™ (CIP) as a unified data analytics platform that enables business and technical stakeholders to harness multi-domain data from across the organization to gain a competitive advantage faster, and at a lower cost than other available approaches. Designed and built with modular components that ingest, analyze and gain insights from massive data repositories, CIP is a scalable platform that is pre-integrated with big-data management, real-time stream processing, a predictive scoring engine, AI/ML engines, and data visualization capabilities. CIP includes everything an organization needs to securely ingest and analyze data by combining data engineering and data science capabilities in a seamless low-code platform.</p>",
+      "id": 7,
+      "name": "Connected Intelligence Platform (CIP)",
+      "organisationname": "Tata Consultancy Services (TCS)",
+      "translations": [],
+      "url": "https://www.tcs.com/solutions-connected-intelligence-platform",
+      "descriptionshort": "TCS Connected Intelligence Platform™ (CIP) as a unified data analytics platform that enables business and technical stakeholders to harness multi-domain data from across the organization to gain a competitive advantage faster, and at a lower cost...",
+      "launch": 2017,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "Tata Consultancy Services (TCS)",
+        "description": "<p></p>",
+        "url": "https://www.tcs.com",
+        "founded": 2017,
+        "organisationtype": {
+          "id": 2,
+          "description": "Commercial enterprise"
+        },
+        "hqcountry": {
+          "id": "IND",
+          "description": "India",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 3,
+          "description": "Scaling"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 8,
+        "description": "No specification",
+        "usecase": {
+          "id": 2,
+          "description": "Farm management & Advisory"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 17,
+          "description": "No specification",
+          "usecase": {
+            "id": 4,
+            "description": "Supply Chain Management"
+          }
+        },
+        {
+          "id": 22,
+          "description": "No specification",
+          "usecase": {
+            "id": 5,
+            "description": "Ecosystem support"
+          }
+        },
+        {
+          "id": 23,
+          "description": "No specification",
+          "usecase": {
+            "id": 6,
+            "description": "Smart Farming"
+          }
+        },
+        {
+          "id": 8,
+          "description": "No specification",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        },
+        {
+          "id": 13,
+          "description": "No specification",
+          "usecase": {
+            "id": 3,
+            "description": "Market linkage"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 1,
+          "description": "Business to consumer"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 1,
+          "description": "Augmented/Virtual reality"
+        },
+        {
+          "id": 9,
+          "description": "Interactive Voice Response"
+        },
+        {
+          "id": 10,
+          "description": "Mobile applications"
+        },
+        {
+          "id": 14,
+          "description": "SMS"
+        }
+      ],
+      "countries": [
+        {
+          "id": "ZAF",
+          "description": "South Africa"
+        }
+      ],
+      "languages": [
+        {
+          "id": 8,
+          "description": "English"
+        },
+        {
+          "id": 14,
+          "description": "Hindi"
+        },
+        {
+          "id": 21,
+          "description": "Marathi"
+        },
+        {
+          "id": 43,
+          "description": "Tamil"
+        },
+        {
+          "id": 44,
+          "description": "Telugu"
+        }
+      ],
+      "technologies": [
+        {
+          "id": 1,
+          "description": "Artificial Intelligence (AI)"
+        },
+        {
+          "id": 3,
+          "description": "Machine Learning (ML)"
+        },
+        {
+          "id": 12,
+          "description": "Big Data"
+        },
+        {
+          "id": 13,
+          "description": "Cloud-based services"
+        },
+        {
+          "id": 19,
+          "description": "IoT devices + connectivity"
+        },
+        {
+          "id": 20,
+          "description": "Satellites (incl. mini satellites, CubeSats, nanosatellites)"
+        },
+        {
+          "id": 21,
+          "description": "Drones"
+        },
+        {
+          "id": 22,
+          "description": "Remote sensing"
+        },
+        {
+          "id": 23,
+          "description": "Visualization"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>ACRE Africa, the brand name of Agriculture and Climate Risk Enterprise Ltd. (ACRE) is a registered insurance surveyor in Kenya, an insurance agent in Rwanda and in Tanzania. It operates as a for profit company that evolved from the Kilimo Salama project (established 2009) that was funded through the Syngenta Foundation and the Global Index Insurance Facility (GIIF). ACRE Africa is not an insurance company, but rather a service provider working with local insurers and other stakeholders in the agricultural insurance value chain.</p>",
+      "id": 9,
+      "name": "Micro Insurance Products",
+      "organisationname": "Agriculture and Climate Risk Enterprise Ltd. (ACRE)",
+      "translations": [],
+      "url": "http://acreafrica.com/",
+      "descriptionshort": "ACRE Africa, the brand name of Agriculture and Climate Risk Enterprise Ltd. (ACRE) is a registered insurance surveyor in Kenya, an insurance agent in Rwanda and in Tanzania. It operates as a for profit company that evolved from the Kilimo Salama...",
+      "launch": 2009,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "Agriculture and Climate Risk Enterprise Ltd. (ACRE)",
+        "description": "<p>ACRE Africa, the brand name of Agriculture and Climate Risk Enterprise Ltd. (ACRE) is a registered insurance surveyor in Kenya, an insurance agent in Rwanda and in Tanzania. It operates as a for profit company that evolved from the Kilimo Salama project (established 2009) that was funded through the Syngenta Foundation and the Global Index Insurance Facility (GIIF). ACRE Africa is not an insurance company, but rather a service provider working with local insurers and other stakeholders in the agricultural insurance value chain.</p>",
+        "url": "http://acreafrica.com/",
+        "founded": 2009,
+        "organisationtype": {
+          "id": 2,
+          "description": "Commercial enterprise"
+        },
+        "hqcountry": {
+          "id": "KEN",
+          "description": "Kenya",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 5,
+        "description": "Insurance",
+        "usecase": {
+          "id": 1,
+          "description": "Finance"
+        }
+      },
+      "sectors": [
+        {
+          "id": 5,
+          "description": "Multi-sectoral or sector-independent"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 5,
+          "description": "Insurance",
+          "usecase": {
+            "id": 1,
+            "description": "Finance"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 2,
+          "description": "Business to business"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 2,
+          "description": "Call centre support"
+        },
+        {
+          "id": 6,
+          "description": "Email"
+        },
+        {
+          "id": 19,
+          "description": "Web-based applications"
+        }
+      ],
+      "countries": [
+        {
+          "id": "KEN",
+          "description": "Kenya"
+        },
+        {
+          "id": "NGA",
+          "description": "Nigeria"
+        },
+        {
+          "id": "RWA",
+          "description": "Rwanda"
+        },
+        {
+          "id": "TZA",
+          "description": "Tanzania"
+        },
+        {
+          "id": "ZMB",
+          "description": "Zambia"
+        }
+      ],
+      "languages": [
+        {
+          "id": 8,
+          "description": "English"
+        }
+      ],
+      "technologies": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>Bank of Kigali has collaborated with the government of Rwanda to create digital profiles of 1.5 million farmers in Rwanda as part of subsidy delivery scheme; the profiles will be used to deliver advisory servies to farmers (CSR) and then as a platform for credit and savings account extension.</p>",
+      "id": 10,
+      "name": "Bank of Kigali / Ethiopia Gov't",
+      "organisationname": "Bank of Kigali",
+      "translations": [],
+      "url": "https://bk.rw/personal/loans/agriculture-loan",
+      "descriptionshort": "Bank of Kigali has collaborated with the government of Rwanda to create digital profiles of 1.5 million farmers in Rwanda as part of subsidy delivery scheme; the profiles will be used to deliver advisory servies to farmers (CSR) and then as a...",
+      "launch": 2018,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "Bank of Kigali",
+        "description": "<p>Bank of Kigali has collaborated with the government of Rwanda to create digital profiles of 1.5 million farmers in Rwanda as part of subsidy delivery scheme; the profiles will be used to deliver advisory servies to farmers (CSR) and then as a platform for credit and savings account extension.</p>",
+        "url": "https://bk.rw/personal/loans/agriculture-loan",
+        "founded": 2018,
+        "organisationtype": {
+          "id": 3,
+          "description": "Government deployment"
+        },
+        "hqcountry": {
+          "id": "RWA",
+          "description": "Rwanda",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 1,
+        "description": "No specification",
+        "usecase": {
+          "id": 1,
+          "description": "Finance"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 1,
+          "description": "No specification",
+          "usecase": {
+            "id": 1,
+            "description": "Finance"
+          }
+        },
+        {
+          "id": 8,
+          "description": "No specification",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 1,
+          "description": "Business to consumer"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ],
+      "countries": [
+        {
+          "id": "RWA",
+          "description": "Rwanda"
+        }
+      ],
+      "languages": [],
+      "technologies": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>EcoCash Holdings Zimbabwe is a diversified technology group that leverages digital solutions to make a social and economic impact on the lives of all Zimbabweans.</p><p>Our Business portfolio consists of assets in FinTech, InsurTech, On-Demand Services, e-Commerce, Agritech, Healthtech and Edutech.</p><p>Through our platforms that drive inclusion and allow everyone to participate and benefit from the digital economy, we envision a future that leaves no Zimbabwean behind.</p>",
+      "id": 16,
+      "name": "Ecocash Holdings",
+      "organisationname": "EcoFarmer",
+      "translations": [],
+      "url": "https://www.ecocashholdings.co.zw/",
+      "descriptionshort": "EcoCash Holdings Zimbabwe is a diversified technology group that leverages digital solutions to make a social and economic impact on the lives of all Zimbabweans. Our Business portfolio consists of assets in FinTech, InsurTech, On-Demand Services,...",
+      "launch": 2022,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "EcoFarmer",
+        "description": "<p>EcoFarmer offers Farmers, Government, Contracting companies, NGOs, Farmer Unions etc. a wide range of digital solutions to ensure the highest level of productivity across the agriculture value chain. Launched in 2013 as a weather indexed insurance and micro insurance product with an SMS based advisory service has evolved to offering diversified services like Vaya Tractor, logistics, warehousing, cold chain, Hay Bailing, combine harvesting, soil testing and many more.</p>",
+        "url": "https://www.ecofarmer.co.zw/",
+        "founded": 2013,
+        "organisationtype": {
+          "id": 4,
+          "description": "MNO deployment"
+        },
+        "hqcountry": {
+          "id": "ZWE",
+          "description": "Zimbabwe",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 3,
+        "description": "Credits & loans",
+        "usecase": {
+          "id": 1,
+          "description": "Finance"
+        }
+      },
+      "sectors": [
+        {
+          "id": 5,
+          "description": "Multi-sectoral or sector-independent"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 2,
+          "description": "Credit scoring",
+          "usecase": {
+            "id": 1,
+            "description": "Finance"
+          }
+        },
+        {
+          "id": 3,
+          "description": "Credits & loans",
+          "usecase": {
+            "id": 1,
+            "description": "Finance"
+          }
+        },
+        {
+          "id": 5,
+          "description": "Insurance",
+          "usecase": {
+            "id": 1,
+            "description": "Finance"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 2,
+          "description": "Business to business"
+        },
+        {
+          "id": 1,
+          "description": "Business to consumer"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 6,
+          "description": "Email"
+        },
+        {
+          "id": 15,
+          "description": "Social Media"
+        },
+        {
+          "id": 19,
+          "description": "Web-based applications"
+        }
+      ],
+      "countries": [
+        {
+          "id": "ZWE",
+          "description": "Zimbabwe"
+        }
+      ],
+      "languages": [
+        {
+          "id": 8,
+          "description": "English"
+        }
+      ],
+      "technologies": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>Viamo [Airtel 3-2-1 (1-6-1) (Uganda)] connects individuals and organizations using digital technology to make better decisions. We envision a world where all people have access to the information they need to make decisions for healthy, prosperous lives, and have meaningful relationships with governments, civil society, and businesses.The 3‑2‑1 Service is a toll-free short-code (e.g. 321) and Which allow you to easily navigating a menu of topic options (for health press 1, for agriculture press 2, etc.). It is sustainable because it generates revenue for the telecom partners through customer loyalty, higher average revenues per user, and the positive image associated with the company. These benefits more than offset the ongoing operational costs.</p>",
+      "id": 17,
+      "name": "Airtel 3-2-1 (1-6-1) (Uganda)",
+      "organisationname": "Airtel / Viamo UGA",
+      "translations": [],
+      "url": "https://viamo.io/services/3-2-1/",
+      "descriptionshort": "Viamo [Airtel 3-2-1 (1-6-1) (Uganda)] connects individuals and organizations using digital technology to make better decisions. We envision a world where all people have access to the information they need to make decisions for healthy, prosperous...",
+      "launch": 2016,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "Airtel / Viamo UGA",
+        "description": "<p>Viamo [Airtel 3-2-1 (1-6-1) (Uganda)] connects individuals and organizations using digital technology to make better decisions. We envision a world where all people have access to the information they need to make decisions for healthy, prosperous lives, and have meaningful relationships with governments, civil society, and businesses.The 3‑2‑1 Service is a toll-free short-code (e.g. 321) and Which allow you to easily navigating a menu of topic options (for health press 1, for agriculture press 2, etc.). It is sustainable because it generates revenue for the telecom partners through customer loyalty, higher average revenues per user, and the positive image associated with the company. These benefits more than offset the ongoing operational costs.</p>",
+        "url": "https://viamo.io/services/3-2-1/",
+        "founded": 2016,
+        "organisationtype": {
+          "id": 4,
+          "description": "MNO deployment"
+        },
+        "hqcountry": {
+          "id": "UGA",
+          "description": "Uganda",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 8,
+        "description": "No specification",
+        "usecase": {
+          "id": 2,
+          "description": "Farm management & Advisory"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 8,
+          "description": "No specification",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 1,
+          "description": "Business to consumer"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 1,
+          "description": "Augmented/Virtual reality"
+        },
+        {
+          "id": 9,
+          "description": "Interactive Voice Response"
+        },
+        {
+          "id": 14,
+          "description": "SMS"
+        }
+      ],
+      "countries": [
+        {
+          "id": "UGA",
+          "description": "Uganda"
+        }
+      ],
+      "languages": [],
+      "technologies": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>DigiFarm is a free Safaricom service that offers farmers access to farm inputs at discounted prices, input loans, learning content on farming as well as access to market. Other services provided through DigiFarm include insurance yield cover and extension services through remote agronomists located at the DigiFarm call center or on ground DigiFarm Village Advisors (DVA).</p>",
+      "id": 18,
+      "name": "Safaricom Digifarm (Kenya)",
+      "organisationname": "Safaricom",
+      "translations": [],
+      "url": "https://www.safaricom.co.ke/faqs/faq/810",
+      "descriptionshort": "DigiFarm is a free Safaricom service that offers farmers access to farm inputs at discounted prices, input loans, learning content on farming as well as access to market. Other services provided through DigiFarm include insurance yield cover and...",
+      "launch": 2017,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "Safaricom",
+        "description": "<p>DigiFarm is a free Safaricom service that offers farmers access to farm inputs at discounted prices, input loans, learning content on farming as well as access to market. Other services provided through DigiFarm include insurance yield cover and extension services through remote agronomists located at the DigiFarm call center or on ground DigiFarm Village Advisors (DVA).</p>",
+        "url": "https://www.safaricom.co.ke/faqs/faq/810",
+        "founded": 2017,
+        "organisationtype": {
+          "id": 4,
+          "description": "MNO deployment"
+        },
+        "hqcountry": {
+          "id": "KEN",
+          "description": "Kenya",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 13,
+        "description": "No specification",
+        "usecase": {
+          "id": 3,
+          "description": "Market linkage"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 1,
+          "description": "No specification",
+          "usecase": {
+            "id": 1,
+            "description": "Finance"
+          }
+        },
+        {
+          "id": 8,
+          "description": "No specification",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        },
+        {
+          "id": 13,
+          "description": "No specification",
+          "usecase": {
+            "id": 3,
+            "description": "Market linkage"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 2,
+          "description": "Business to business"
+        },
+        {
+          "id": 1,
+          "description": "Business to consumer"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 10,
+          "description": "Mobile applications"
+        },
+        {
+          "id": 14,
+          "description": "SMS"
+        }
+      ],
+      "countries": [
+        {
+          "id": "KEN",
+          "description": "Kenya"
+        }
+      ],
+      "languages": [],
+      "technologies": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>Viamo [Airtel M’chikumbe (Malawi)] connects individuals and organizations using digital technology to make better decisions. We envision a world where all people have access to the information they need to make decisions for healthy, prosperous lives, and have meaningful relationships with governments, civil society, and businesses.The 3‑2‑1 Service is a toll-free short-code (e.g. 321) and Which allow you to easily navigating a menu of topic options (for health press 1, for agriculture press 2, etc.). It is sustainable because it generates revenue for the telecom partners through customer loyalty, higher average revenues per user, and the positive image associated with the company. These benefits more than offset the ongoing operational costs.</p>",
+      "id": 20,
+      "name": "Airtel M’chikumbe (Malawi)",
+      "organisationname": "Airtel / Viamo MWI",
+      "translations": [],
+      "url": "https://viamo.io/services/3-2-1/",
+      "descriptionshort": "Viamo [Airtel M’chikumbe (Malawi)] connects individuals and organizations using digital technology to make better decisions. We envision a world where all people have access to the information they need to make decisions for healthy, prosperous...",
+      "launch": 2015,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "Airtel / Viamo MWI",
+        "description": "<p>Viamo [Airtel M’chikumbe (Malawi)] connects individuals and organizations using digital technology to make better decisions. We envision a world where all people have access to the information they need to make decisions for healthy, prosperous lives, and have meaningful relationships with governments, civil society, and businesses.The 3‑2‑1 Service is a toll-free short-code (e.g. 321) and Which allow you to easily navigating a menu of topic options (for health press 1, for agriculture press 2, etc.). It is sustainable because it generates revenue for the telecom partners through customer loyalty, higher average revenues per user, and the positive image associated with the company. These benefits more than offset the ongoing operational costs.</p>",
+        "url": "https://viamo.io/services/3-2-1/",
+        "founded": 2015,
+        "organisationtype": {
+          "id": 4,
+          "description": "MNO deployment"
+        },
+        "hqcountry": {
+          "id": "MWI",
+          "description": "Malawi",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 8,
+        "description": "No specification",
+        "usecase": {
+          "id": 2,
+          "description": "Farm management & Advisory"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 8,
+          "description": "No specification",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 1,
+          "description": "Business to consumer"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 1,
+          "description": "Augmented/Virtual reality"
+        },
+        {
+          "id": 9,
+          "description": "Interactive Voice Response"
+        },
+        {
+          "id": 14,
+          "description": "SMS"
+        }
+      ],
+      "countries": [
+        {
+          "id": "MWI",
+          "description": "Malawi"
+        }
+      ],
+      "languages": [],
+      "technologies": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>Virtual City AgroForce solution creates an opportunity to determine, measure and track the true value due to a farmer and aggregation center by having visibility to its farm, crop, harvest, deliveries, quantity, payments and credit check off datasets in real time against preset KPIs. It provides the outputs in easy to understand real-time analytical dashboards creating visibility along the food value chain.</p>",
+      "id": 26,
+      "name": "AgroForce",
+      "organisationname": "Virtual City",
+      "translations": [],
+      "url": "https://www.virtualcity.co.ke/our-solutions/agroforce/",
+      "descriptionshort": "Virtual City AgroForce solution creates an opportunity to determine, measure and track the true value due to a farmer and aggregation center by having visibility to its farm, crop, harvest, deliveries, quantity, payments and credit check off...",
+      "launch": 2002,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "Virtual City",
+        "description": "<p>We are a technology firm that develops and delivers supply chain automation solutions in East Africa. We focus on end to end transformation of supply chains for meaningful impact. The value we bring to our customers is in providing efficiency, visibility and transparency along the supply value chain. Having a positive impact on business growth by enabling our clients to drive decision making and build on sales volumes and market share.</p><p>Virtual City has brought forth a paradigm shift in the way supply chain is managed through modernization and we are honored to have been recognized for this over the years through various awards and partnerships both local and international. Manufacturers & Distributors are looking for a seamless solution that automates all sales orders, inventory and payments from the warehouse to the retailer to end-consumer and manages productivity of all field force personnel and assets. That's where our products come in.</p>",
+        "url": "https://www.virtualcity.co.ke/",
+        "founded": 2002,
+        "organisationtype": {
+          "id": 2,
+          "description": "Commercial enterprise"
+        },
+        "hqcountry": {
+          "id": "KEN",
+          "description": "Kenya",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 17,
+        "description": "No specification",
+        "usecase": {
+          "id": 4,
+          "description": "Supply Chain Management"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 1,
+          "description": "No specification",
+          "usecase": {
+            "id": 1,
+            "description": "Finance"
+          }
+        },
+        {
+          "id": 17,
+          "description": "No specification",
+          "usecase": {
+            "id": 4,
+            "description": "Supply Chain Management"
+          }
+        },
+        {
+          "id": 13,
+          "description": "No specification",
+          "usecase": {
+            "id": 3,
+            "description": "Market linkage"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 2,
+          "description": "Business to business"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ],
+      "countries": [
+        {
+          "id": "KEN",
+          "description": "Kenya"
+        },
+        {
+          "id": "RWA",
+          "description": "Rwanda"
+        },
+        {
+          "id": "TZA",
+          "description": "Tanzania"
+        },
+        {
+          "id": "UGA",
+          "description": "Uganda"
+        }
+      ],
+      "languages": [],
+      "technologies": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>ignitia&rsquo;s Climate Intelligence solution can help achieve larger production volumes with higher quality and greater cost control by putting highly accurate forecasts directly in the hands of those in the field. Location-specific information on key weather parameters, such as rain, temperature, humidity, and wind, is sent by SMS and contains a forecast for the upcoming seven-day period with low data usage.</p><p>Anyone who works in the daily activities of rural property, regardless of connectivity, can have updated and highly reliable climate information every day to make important decisions about crop selection, soil preparation, sowing, weeding, application of inputs, etc.</p>",
+      "id": 27,
+      "name": "Ignitia Climate Inteligence Solutions",
+      "organisationname": "Ignitia",
+      "translations": [],
+      "url": "http://www.ignitia.se/",
+      "descriptionshort": "ignitia&rsquo;s Climate Intelligence solution can help achieve larger production volumes with higher quality and greater cost control by putting highly accurate forecasts directly in the hands of those in the field. Location-specific information on...",
+      "launch": 2013,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "Ignitia",
+        "description": "<p>Ignitia provides daily, monthly and seasonal weather forecasts that are tailored to the tropics through SMS texts disseminated directly to subscribed farmers. The forecasts also feature monthly and seasonal predictions and detail the likelihood, timing and intensity of the weather.</p>",
+        "url": "http://www.ignitia.se/",
+        "founded": 2013,
+        "organisationtype": {
+          "id": 6,
+          "description": "Agritech"
+        },
+        "hqcountry": {
+          "id": "SWE",
+          "description": "Sweden",
+          "lmic": false
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 10,
+        "description": "Farmer information services",
+        "usecase": {
+          "id": 2,
+          "description": "Farm management & Advisory"
+        }
+      },
+      "sectors": [
+        {
+          "id": 1,
+          "description": "Crop farming"
+        },
+        {
+          "id": 2,
+          "description": "Livestock"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 10,
+          "description": "Farmer information services",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        },
+        {
+          "id": 12,
+          "description": "Precision agriculture advisory",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 2,
+          "description": "Business to business"
+        },
+        {
+          "id": 1,
+          "description": "Business to consumer"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 14,
+          "description": "SMS"
+        },
+        {
+          "id": 15,
+          "description": "Social Media"
+        },
+        {
+          "id": 19,
+          "description": "Web-based applications"
+        }
+      ],
+      "countries": [
+        {
+          "id": "GHA",
+          "description": "Ghana"
+        },
+        {
+          "id": "MLI",
+          "description": "Mali"
+        },
+        {
+          "id": "NER",
+          "description": "Niger"
+        },
+        {
+          "id": "NGA",
+          "description": "Nigeria"
+        },
+        {
+          "id": "SEN",
+          "description": "Senegal"
+        }
+      ],
+      "languages": [
+        {
+          "id": 8,
+          "description": "English"
+        }
+      ],
+      "technologies": [
+        {
+          "id": 5,
+          "description": "Data analytics & Business Intelligence"
+        },
+        {
+          "id": 11,
+          "description": "Location based services"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>Supply chain software for agri product sourcing. It's a platform allowing agribusiness sourcing from small holder farmers to have 24/7 access to field data activities and partner farmers.</p>",
+      "id": 33,
+      "name": "mymetajua",
+      "organisationname": "Metajua (U) Ltd",
+      "translations": [],
+      "url": "https://www.metajua.com",
+      "descriptionshort": "Supply chain software for agri product sourcing. It's a platform allowing agribusiness sourcing from small holder farmers to have 24/7 access to field data activities and partner farmers.",
+      "launch": 2013,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "Metajua (U) Ltd",
+        "description": "<p>Supply chain software for agri product sourcing. It's a platform allowing agribusiness sourcing from small holder farmers to have 24/7 access to field data activities and partner farmers.</p>",
+        "url": "https://www.facebook.com/profile.php?id=100071384574825",
+        "founded": 2013,
+        "organisationtype": {
+          "id": 1,
+          "description": "Agribusiness"
+        },
+        "hqcountry": {
+          "id": "UGA",
+          "description": "Uganda",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 4,
+          "description": "Maintaining"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 17,
+        "description": "No specification",
+        "usecase": {
+          "id": 4,
+          "description": "Supply Chain Management"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 1,
+          "description": "No specification",
+          "usecase": {
+            "id": 1,
+            "description": "Finance"
+          }
+        },
+        {
+          "id": 17,
+          "description": "No specification",
+          "usecase": {
+            "id": 4,
+            "description": "Supply Chain Management"
+          }
+        },
+        {
+          "id": 22,
+          "description": "No specification",
+          "usecase": {
+            "id": 5,
+            "description": "Ecosystem support"
+          }
+        },
+        {
+          "id": 23,
+          "description": "No specification",
+          "usecase": {
+            "id": 6,
+            "description": "Smart Farming"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 2,
+          "description": "Business to business"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 10,
+          "description": "Mobile applications"
+        },
+        {
+          "id": 14,
+          "description": "SMS"
+        }
+      ],
+      "countries": [
+        {
+          "id": "BDI",
+          "description": "Burundi"
+        },
+        {
+          "id": "ETH",
+          "description": "Ethiopia"
+        },
+        {
+          "id": "MDG",
+          "description": "Madagascar"
+        },
+        {
+          "id": "RWA",
+          "description": "Rwanda"
+        },
+        {
+          "id": "TZA",
+          "description": "Tanzania"
+        },
+        {
+          "id": "UGA",
+          "description": "Uganda"
+        }
+      ],
+      "languages": [
+        {
+          "id": 2,
+          "description": "Amharic"
+        },
+        {
+          "id": 8,
+          "description": "English"
+        },
+        {
+          "id": 11,
+          "description": "French"
+        },
+        {
+          "id": 17,
+          "description": "Kinyarwanda"
+        },
+        {
+          "id": 40,
+          "description": "Swahili"
+        }
+      ],
+      "technologies": [
+        {
+          "id": 11,
+          "description": "Location based services"
+        },
+        {
+          "id": 12,
+          "description": "Big Data"
+        },
+        {
+          "id": 13,
+          "description": "Cloud-based services"
+        },
+        {
+          "id": 19,
+          "description": "IoT devices + connectivity"
+        },
+        {
+          "id": 20,
+          "description": "Satellites (incl. mini satellites, CubeSats, nanosatellites)"
+        },
+        {
+          "id": 22,
+          "description": "Remote sensing"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>Hello Tractor is an IoT platform that supports tractor contractors providing services to smallholder farmers.</p>",
+      "id": 36,
+      "name": "Hello Tractor",
+      "organisationname": "Hello Tractor",
+      "translations": [],
+      "url": "https://play.google.com/store/apps/details?id=com.hellotractor.android.code",
+      "descriptionshort": "Hello Tractor is an IoT platform that supports tractor contractors providing services to smallholder farmers.",
+      "launch": 2014,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "Hello Tractor",
+        "description": "<p>Hello Tractor is an IoT platform that supports tractor contractors providing services to smallholder farmers.</p>",
+        "url": "https://play.google.com/store/apps/details?id=com.hellotractor.android.code",
+        "founded": 2014,
+        "organisationtype": {
+          "id": 6,
+          "description": "Agritech"
+        },
+        "hqcountry": {
+          "id": "NGA",
+          "description": "Nigeria",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 2,
+          "description": "Startup"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 13,
+        "description": "No specification",
+        "usecase": {
+          "id": 3,
+          "description": "Market linkage"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 17,
+          "description": "No specification",
+          "usecase": {
+            "id": 4,
+            "description": "Supply Chain Management"
+          }
+        },
+        {
+          "id": 23,
+          "description": "No specification",
+          "usecase": {
+            "id": 6,
+            "description": "Smart Farming"
+          }
+        },
+        {
+          "id": 8,
+          "description": "No specification",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        },
+        {
+          "id": 13,
+          "description": "No specification",
+          "usecase": {
+            "id": 3,
+            "description": "Market linkage"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 2,
+          "description": "Business to business"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 10,
+          "description": "Mobile applications"
+        },
+        {
+          "id": 14,
+          "description": "SMS"
+        }
+      ],
+      "countries": [
+        {
+          "id": "GHA",
+          "description": "Ghana"
+        },
+        {
+          "id": "KEN",
+          "description": "Kenya"
+        },
+        {
+          "id": "MOZ",
+          "description": "Mozambique"
+        },
+        {
+          "id": "NER",
+          "description": "Niger"
+        },
+        {
+          "id": "NGA",
+          "description": "Nigeria"
+        },
+        {
+          "id": "SEN",
+          "description": "Senegal"
+        },
+        {
+          "id": "TZA",
+          "description": "Tanzania"
+        },
+        {
+          "id": "UGA",
+          "description": "Uganda"
+        }
+      ],
+      "languages": [
+        {
+          "id": 8,
+          "description": "English"
+        },
+        {
+          "id": 11,
+          "description": "French"
+        },
+        {
+          "id": 32,
+          "description": "Portuguese"
+        }
+      ],
+      "technologies": [
+        {
+          "id": 1,
+          "description": "Artificial Intelligence (AI)"
+        },
+        {
+          "id": 3,
+          "description": "Machine Learning (ML)"
+        },
+        {
+          "id": 9,
+          "description": "Blockchain"
+        },
+        {
+          "id": 11,
+          "description": "Location based services"
+        },
+        {
+          "id": 12,
+          "description": "Big Data"
+        },
+        {
+          "id": 13,
+          "description": "Cloud-based services"
+        },
+        {
+          "id": 19,
+          "description": "IoT devices + connectivity"
+        },
+        {
+          "id": 20,
+          "description": "Satellites (incl. mini satellites, CubeSats, nanosatellites)"
+        },
+        {
+          "id": 22,
+          "description": "Remote sensing"
+        },
+        {
+          "id": 23,
+          "description": "Visualization"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>Is a cloud-based platform that ensures Africa’s soil and landscape resources are described, understood and used effectively to raise agricultural productivity and lower ecological footprints.</p>",
+      "id": 37,
+      "name": "AfSIS",
+      "organisationname": "iSDA / Rothamsted Research",
+      "translations": [],
+      "url": "http://africasoils.net/",
+      "descriptionshort": "Is a cloud-based platform that ensures Africa’s soil and landscape resources are described, understood and used effectively to raise agricultural productivity and lower ecological footprints.",
+      "launch": 2014,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "iSDA / Rothamsted Research",
+        "description": "<p>Is a cloud-based platform that ensures Africa’s soil and landscape resources are described, understood and used effectively to raise agricultural productivity and lower ecological footprints.</p>",
+        "url": "http://africasoils.net/",
+        "founded": 2014,
+        "organisationtype": {
+          "id": 5,
+          "description": "NGO"
+        },
+        "hqcountry": {
+          "id": "TZA",
+          "description": "Tanzania",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 3,
+          "description": "Scaling"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 22,
+        "description": "No specification",
+        "usecase": {
+          "id": 5,
+          "description": "Ecosystem support"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 22,
+          "description": "No specification",
+          "usecase": {
+            "id": 5,
+            "description": "Ecosystem support"
+          }
+        },
+        {
+          "id": 23,
+          "description": "No specification",
+          "usecase": {
+            "id": 6,
+            "description": "Smart Farming"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 2,
+          "description": "Business to business"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ],
+      "countries": [
+        {
+          "id": "ETH",
+          "description": "Ethiopia"
+        },
+        {
+          "id": "GHA",
+          "description": "Ghana"
+        },
+        {
+          "id": "KEN",
+          "description": "Kenya"
+        },
+        {
+          "id": "MWI",
+          "description": "Malawi"
+        },
+        {
+          "id": "NER",
+          "description": "Niger"
+        },
+        {
+          "id": "NGA",
+          "description": "Nigeria"
+        },
+        {
+          "id": "TZA",
+          "description": "Tanzania"
+        },
+        {
+          "id": "UGA",
+          "description": "Uganda"
+        }
+      ],
+      "languages": [
+        {
+          "id": 8,
+          "description": "English"
+        }
+      ],
+      "technologies": [
+        {
+          "id": 3,
+          "description": "Machine Learning (ML)"
+        },
+        {
+          "id": 11,
+          "description": "Location based services"
+        },
+        {
+          "id": 12,
+          "description": "Big Data"
+        },
+        {
+          "id": 13,
+          "description": "Cloud-based services"
+        },
+        {
+          "id": 19,
+          "description": "IoT devices + connectivity"
+        },
+        {
+          "id": 20,
+          "description": "Satellites (incl. mini satellites, CubeSats, nanosatellites)"
+        },
+        {
+          "id": 21,
+          "description": "Drones"
+        },
+        {
+          "id": 22,
+          "description": "Remote sensing"
+        },
+        {
+          "id": 23,
+          "description": "Visualization"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>Designed for agribusiness companies. Based on the SAP Business Technology Platform, this supply chain management (SCM) software connects smallholder farmers to the agricultural value chain.</p>",
+      "id": 38,
+      "name": "SAP Rural Sourcing Management",
+      "organisationname": "SAP",
+      "translations": [],
+      "url": "https://www.sap.com/products/agriculture-supply-chain-mgmt.html",
+      "descriptionshort": "Designed for agribusiness companies. Based on the SAP Business Technology Platform, this supply chain management (SCM) software connects smallholder farmers to the agricultural value chain.",
+      "launch": 2017,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "SAP",
+        "description": "<p>Designed for agribusiness companies. Based on the SAP Business Technology Platform, this supply chain management (SCM) software connects smallholder farmers to the agricultural value chain.</p>",
+        "url": "https://www.sap.com/products/agriculture-supply-chain-mgmt.html",
+        "founded": 2017,
+        "organisationtype": {
+          "id": 2,
+          "description": "Commercial enterprise"
+        },
+        "hqcountry": {
+          "id": "DEU",
+          "description": "Germany",
+          "lmic": false
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 17,
+        "description": "No specification",
+        "usecase": {
+          "id": 4,
+          "description": "Supply Chain Management"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 17,
+          "description": "No specification",
+          "usecase": {
+            "id": 4,
+            "description": "Supply Chain Management"
+          }
+        },
+        {
+          "id": 22,
+          "description": "No specification",
+          "usecase": {
+            "id": 5,
+            "description": "Ecosystem support"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 2,
+          "description": "Business to business"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ],
+      "countries": [
+        {
+          "id": "CRI",
+          "description": "Costa Rica"
+        },
+        {
+          "id": "EGY",
+          "description": "Egypt"
+        },
+        {
+          "id": "IDN",
+          "description": "Indonesia"
+        },
+        {
+          "id": "IND",
+          "description": "India"
+        },
+        {
+          "id": "LBN",
+          "description": "Lebanon"
+        },
+        {
+          "id": "MYS",
+          "description": "Malaysia"
+        },
+        {
+          "id": "PAK",
+          "description": "Pakistan"
+        },
+        {
+          "id": "PER",
+          "description": "Peru"
+        },
+        {
+          "id": "VNM",
+          "description": "Viet Nam"
+        },
+        {
+          "id": "ZAF",
+          "description": "South Africa"
+        }
+      ],
+      "languages": [],
+      "technologies": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>The core of the platform is a farmer digital profiles platform to manage farmers and different modules on top it. Some modules are generic (surveys, alerts,&hellip;), and some are service specific (business matching module to manage selling and buying of commodities). Each module has an operator interface (web interface) and a customer interface. The customer interface implements different channels such as Web, mobile app, voice, SMS, WhatsApp, email or USSD interface. Existing modules include :</p><p>A Q&amp;A/Extension service Module: This module allows the management of support to farmers. Farmers can ask questions through different interfaces (web/SMS/IVR) and get answers. The answers are then stored and serve as a growing knowledge base, as well as a tool to detect specific trends, like the appearance of specific diseases. This module is deployed in Fiji</p><p><br>A Radio module: This module allows the integration of community radio on the platform. Lots of rural community radio stations today do not have internet connectivity or computers. This module allows the generation and transfer of radio broadcast containing specific farmer offer automatically to community radios that have only basic phones. These radio stations can then broadcast this information live, without the need to transfer a physical media (cd, mp3, tape) to the station. &nbsp;Associated to this module, we also offer a radio station selection tool that shows the geographical reach and population reach of each radio station based on the radio station equipment (size of the antenna, power of the equipment&hellip;). This module is deployed in Mali and Senegal.</p><p><br>A mobile payment module: To ensure sustainability, it is essential to enable payments of services. This module allows the management of mobile payments such as MPesa. this module is deployed in Kenya.<br>A market information module: This module allows the collection of market price information (using smartphone) and their dissemination to farmers. This module is deployed in Fiji and Bhutan.</p><p><br>A Poll module: This module allows the organisations of polls to query members of the CRM on specific questions. This module is deployed in Fiji using SMS.</p><p><br>An Alert module: This module allows the broadcast of messages to members of the CRM. This module is deployed in Fiji using SMS and in Mali using voices (Tabale).</p><p><br>A mapping module: This module allows the capture of gps coordinates (or the geocoding of address information) and the use of GIS system (google map, Open street map) to implement map-based application.</p><p><br>A traceability module: This module provide a centralized traceability platform that can be adapted to any value chain.</p>",
+      "id": 39,
+      "name": "SBC4D services for Agriculture Digital Transformation",
+      "organisationname": "SBC4D",
+      "translations": [],
+      "url": "http://www.sbc4d.com",
+      "descriptionshort": "The core of the platform is a farmer digital profiles platform to manage farmers and different modules on top it. Some modules are generic (surveys, alerts,&hellip;), and some are service specific (business matching module to manage selling and...",
+      "launch": 2011,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "SBC4D",
+        "description": "<p>SBC4D is specialized in ICT for Development and in particular the development and deployment of services that involves multiple stakeholders with different capacities and profiles. SBC4D has a specific experience and expertise related to involving people from under-privileged communities (people with low level of literacy and without experience with ICT) and/or people and organizations living in low-tech areas (rural areas) in Developing Countries.</p>",
+        "url": "http://www.sbc4d.com",
+        "founded": 2011,
+        "organisationtype": {
+          "id": 2,
+          "description": "Commercial enterprise"
+        },
+        "hqcountry": {
+          "id": "FRA",
+          "description": "France",
+          "lmic": false
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 3,
+          "description": "Scaling"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 8,
+        "description": "No specification",
+        "usecase": {
+          "id": 2,
+          "description": "Farm management & Advisory"
+        }
+      },
+      "sectors": [
+        {
+          "id": 1,
+          "description": "Crop farming"
+        },
+        {
+          "id": 2,
+          "description": "Livestock"
+        },
+        {
+          "id": 3,
+          "description": "Agroforestry"
+        },
+        {
+          "id": 4,
+          "description": "Aquaculture"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 17,
+          "description": "No specification",
+          "usecase": {
+            "id": 4,
+            "description": "Supply Chain Management"
+          }
+        },
+        {
+          "id": 22,
+          "description": "No specification",
+          "usecase": {
+            "id": 5,
+            "description": "Ecosystem support"
+          }
+        },
+        {
+          "id": 23,
+          "description": "No specification",
+          "usecase": {
+            "id": 6,
+            "description": "Smart Farming"
+          }
+        },
+        {
+          "id": 8,
+          "description": "No specification",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        },
+        {
+          "id": 13,
+          "description": "No specification",
+          "usecase": {
+            "id": 3,
+            "description": "Market linkage"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 2,
+          "description": "Business to business"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 1,
+          "description": "Augmented/Virtual reality"
+        },
+        {
+          "id": 9,
+          "description": "Interactive Voice Response"
+        },
+        {
+          "id": 10,
+          "description": "Mobile applications"
+        },
+        {
+          "id": 14,
+          "description": "SMS"
+        }
+      ],
+      "countries": [
+        {
+          "id": "COM",
+          "description": "Comoros"
+        },
+        {
+          "id": "FJI",
+          "description": "Fiji"
+        },
+        {
+          "id": "GMB",
+          "description": "Gambia"
+        },
+        {
+          "id": "KEN",
+          "description": "Kenya"
+        },
+        {
+          "id": "MLI",
+          "description": "Mali"
+        },
+        {
+          "id": "SEN",
+          "description": "Senegal"
+        }
+      ],
+      "languages": [
+        {
+          "id": 8,
+          "description": "English"
+        },
+        {
+          "id": 11,
+          "description": "French"
+        }
+      ],
+      "technologies": [
+        {
+          "id": 1,
+          "description": "Artificial Intelligence (AI)"
+        },
+        {
+          "id": 11,
+          "description": "Location based services"
+        },
+        {
+          "id": 13,
+          "description": "Cloud-based services"
+        },
+        {
+          "id": 19,
+          "description": "IoT devices + connectivity"
+        },
+        {
+          "id": 22,
+          "description": "Remote sensing"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>Mergdata offers agri traders & processors with traceability and farm identification tools to track and identify the sources of food commodities.</p>",
+      "id": 41,
+      "name": "Mergdata",
+      "organisationname": "Farmerline",
+      "translations": [],
+      "url": "https://mergdata.com/",
+      "descriptionshort": "Mergdata offers agri traders & processors with traceability and farm identification tools to track and identify the sources of food commodities.",
+      "launch": 2013,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "Farmerline",
+        "description": "<p>Farmerline provides improved information access, record keeping services and communication.</p>",
+        "url": "https://farmerline.co/",
+        "founded": 2012,
+        "organisationtype": {
+          "id": 6,
+          "description": "Agritech"
+        },
+        "hqcountry": {
+          "id": "GHA",
+          "description": "Ghana",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 2,
+          "description": "Seed"
+        },
+        "businessGrowthStage": {
+          "id": 2,
+          "description": "Startup"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 8,
+        "description": "No specification",
+        "usecase": {
+          "id": 2,
+          "description": "Farm management & Advisory"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 8,
+          "description": "No specification",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        },
+        {
+          "id": 13,
+          "description": "No specification",
+          "usecase": {
+            "id": 3,
+            "description": "Market linkage"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 1,
+          "description": "Business to consumer"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 10,
+          "description": "Mobile applications"
+        },
+        {
+          "id": 14,
+          "description": "SMS"
+        }
+      ],
+      "countries": [
+        {
+          "id": "GHA",
+          "description": "Ghana"
+        }
+      ],
+      "languages": [],
+      "technologies": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>Our website hosts training videos in support of sustainable agriculture in developing countries. If you are interested in this, we hope you will find videos that will be of use to you and your partners.</p><p>We have 14 Access Agriculture video categories under which you will find quality, scripted training videos. Any local language version available for a particular video is listed and can be downloaded. You can contact us for translations into other local languages that are not yet listed.&nbsp;</p><p>From the Access Agriculture categories you can find and download videos and audio files, and for most videos, related written material. Downloads are free, but you will have to register and provide your contact details.</p><p>You can access the videos available in a specific category by clicking on the coloured icon of that category, or by clicking on the category liston the right side of the page.</p>",
+      "id": 42,
+      "name": "Training videos in support of sustainable agriculture",
+      "organisationname": "Access Agriculture",
+      "translations": [],
+      "url": "https://www.accessagriculture.org/",
+      "descriptionshort": "Our website hosts training videos in support of sustainable agriculture in developing countries. If you are interested in this, we hope you will find videos that will be of use to you and your partners. We have 14 Access Agriculture video categories...",
+      "launch": 2013,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "Access Agriculture",
+        "description": "<p>Access Agriculture is an international NGO which showcases agricultural training videos in local languages. We promote agroecological principles and rural entrepreneurship through capacity development and South-South exchange of quality farmer-to-farmer training videos in local languages.</p>",
+        "url": "https://www.accessagriculture.org/",
+        "founded": 2013,
+        "organisationtype": {
+          "id": 5,
+          "description": "NGO"
+        },
+        "hqcountry": {
+          "id": "KEN",
+          "description": "Kenya",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 9,
+        "description": "Farm management & record keeping",
+        "usecase": {
+          "id": 2,
+          "description": "Farm management & Advisory"
+        }
+      },
+      "sectors": [
+        {
+          "id": 1,
+          "description": "Crop farming"
+        },
+        {
+          "id": 2,
+          "description": "Livestock"
+        },
+        {
+          "id": 3,
+          "description": "Agroforestry"
+        },
+        {
+          "id": 4,
+          "description": "Aquaculture"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 24,
+          "description": "Smart crop management",
+          "usecase": {
+            "id": 6,
+            "description": "Smart Farming"
+          }
+        },
+        {
+          "id": 9,
+          "description": "Farm management & record keeping",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        },
+        {
+          "id": 25,
+          "description": "Smart livestock management",
+          "usecase": {
+            "id": 6,
+            "description": "Smart Farming"
+          }
+        },
+        {
+          "id": 14,
+          "description": "Digitally-enabled value chain integration",
+          "usecase": {
+            "id": 3,
+            "description": "Market linkage"
+          }
+        },
+        {
+          "id": 16,
+          "description": "Mechanisation access services",
+          "usecase": {
+            "id": 3,
+            "description": "Market linkage"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 1,
+          "description": "Business to consumer"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 6,
+          "description": "Email"
+        },
+        {
+          "id": 18,
+          "description": "Video"
+        },
+        {
+          "id": 19,
+          "description": "Web-based applications"
+        }
+      ],
+      "countries": [
+        {
+          "id": "BEN",
+          "description": "Benin"
+        },
+        {
+          "id": "GIN",
+          "description": "Guinea"
+        },
+        {
+          "id": "IND",
+          "description": "India"
+        },
+        {
+          "id": "UGA",
+          "description": "Uganda"
+        }
+      ],
+      "languages": [
+        {
+          "id": 8,
+          "description": "English"
+        },
+        {
+          "id": 11,
+          "description": "French"
+        },
+        {
+          "id": 14,
+          "description": "Hindi"
+        },
+        {
+          "id": 32,
+          "description": "Portuguese"
+        },
+        {
+          "id": 39,
+          "description": "Spanish"
+        }
+      ],
+      "technologies": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>SmartMoney increases the ability of rural farmers to save money securely and conveniently on their mobile phones. SmartMoney allows rural farmers and households to pay for goods and services at local businesses with their mobile phone, thereby reducing the need to travel with cash to make payments. This reduces transportation costs allowing more money to be allocated to savings.</p>",
+      "id": 43,
+      "name": "SmartMoney",
+      "organisationname": "SmartMoney International",
+      "translations": [],
+      "url": "http://www.smartmoneyinternational.com/",
+      "descriptionshort": "SmartMoney increases the ability of rural farmers to save money securely and conveniently on their mobile phones. SmartMoney allows rural farmers and households to pay for goods and services at local businesses with their mobile phone, thereby...",
+      "launch": 2012,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "SmartMoney International",
+        "description": "<p>SmartMoney increases the ability of rural farmers to save money securely and conveniently on their mobile phones. SmartMoney allows rural farmers and households to pay for goods and services at local businesses with their mobile phone, thereby reducing the need to travel with cash to make payments. This reduces transportation costs allowing more money to be allocated to savings.</p>",
+        "url": "http://www.smartmoneyinternational.com/",
+        "founded": 2012,
+        "organisationtype": {
+          "id": 2,
+          "description": "Commercial enterprise"
+        },
+        "hqcountry": {
+          "id": "TZA",
+          "description": "Tanzania",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 1,
+        "description": "No specification",
+        "usecase": {
+          "id": 1,
+          "description": "Finance"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 1,
+          "description": "No specification",
+          "usecase": {
+            "id": 1,
+            "description": "Finance"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 2,
+          "description": "Business to business"
+        },
+        {
+          "id": 1,
+          "description": "Business to consumer"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ],
+      "countries": [
+        {
+          "id": "KEN",
+          "description": "Kenya"
+        },
+        {
+          "id": "TZA",
+          "description": "Tanzania"
+        },
+        {
+          "id": "UGA",
+          "description": "Uganda"
+        },
+        {
+          "id": "ZAF",
+          "description": "South Africa"
+        }
+      ],
+      "languages": [
+        {
+          "id": 8,
+          "description": "English"
+        }
+      ],
+      "technologies": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>Vodafone Farmers’ Club provide farmers the opportunity to receive relevant crop specific information and location specific information in their own language to help with farming activities while improving their livelihood.</p>",
+      "id": 45,
+      "name": "Vodafone Farmer's Club (Ghana)",
+      "organisationname": "Vodafone / Esoko",
+      "translations": [],
+      "url": "https://esoko.com/portfolio/improving-the-lives-of-farmers-with-vodafone/",
+      "descriptionshort": "Vodafone Farmers’ Club provide farmers the opportunity to receive relevant crop specific information and location specific information in their own language to help with farming activities while improving their livelihood.",
+      "launch": 2015,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "Vodafone / Esoko",
+        "description": "<p>Vodafone Farmers’ Club provide farmers the opportunity to receive relevant crop specific information and location specific information in their own language to help with farming activities while improving their livelihood.</p>",
+        "url": "https://esoko.com/portfolio/improving-the-lives-of-farmers-with-vodafone/",
+        "founded": 2015,
+        "organisationtype": {
+          "id": 4,
+          "description": "MNO deployment"
+        },
+        "hqcountry": {
+          "id": "GHA",
+          "description": "Ghana",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 8,
+        "description": "No specification",
+        "usecase": {
+          "id": 2,
+          "description": "Farm management & Advisory"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 8,
+          "description": "No specification",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        }
+      ],
+      "businessModels": [],
+      "regions": [],
+      "channels": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ],
+      "countries": [
+        {
+          "id": "GHA",
+          "description": "Ghana"
+        }
+      ],
+      "languages": [],
+      "technologies": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>Viamo [Airtel 3-2-1 (Madagascar)] connects individuals and organizations using digital technology to make better decisions. We envision a world where all people have access to the information they need to make decisions for healthy, prosperous lives, and have meaningful relationships with governments, civil society, and businesses.The 3‑2‑1 Service is a toll-free short-code (e.g. 321) and Which allow you to easily navigating a menu of topic options (for health press 1, for agriculture press 2, etc.). It is sustainable because it generates revenue for the telecom partners through customer loyalty, higher average revenues per user, and the positive image associated with the company. These benefits more than offset the ongoing operational costs.</p>",
+      "id": 47,
+      "name": "Airtel 3-2-1 (Madagascar)",
+      "organisationname": "Airtel / Viamo MDG",
+      "translations": [],
+      "url": "https://viamo.io/services/3-2-1/",
+      "descriptionshort": "Viamo [Airtel 3-2-1 (Madagascar)] connects individuals and organizations using digital technology to make better decisions. We envision a world where all people have access to the information they need to make decisions for healthy, prosperous...",
+      "launch": 2010,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "Airtel / Viamo MDG",
+        "description": "<p>Viamo [Airtel 3-2-1 (Madagascar)] connects individuals and organizations using digital technology to make better decisions. We envision a world where all people have access to the information they need to make decisions for healthy, prosperous lives, and have meaningful relationships with governments, civil society, and businesses.The 3‑2‑1 Service is a toll-free short-code (e.g. 321) and Which allow you to easily navigating a menu of topic options (for health press 1, for agriculture press 2, etc.). It is sustainable because it generates revenue for the telecom partners through customer loyalty, higher average revenues per user, and the positive image associated with the company. These benefits more than offset the ongoing operational costs.</p>",
+        "url": "https://viamo.io/services/3-2-1/",
+        "founded": 2010,
+        "organisationtype": {
+          "id": 4,
+          "description": "MNO deployment"
+        },
+        "hqcountry": {
+          "id": "MDG",
+          "description": "Madagascar",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 8,
+        "description": "No specification",
+        "usecase": {
+          "id": 2,
+          "description": "Farm management & Advisory"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 8,
+          "description": "No specification",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 1,
+          "description": "Business to consumer"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 1,
+          "description": "Augmented/Virtual reality"
+        },
+        {
+          "id": 9,
+          "description": "Interactive Voice Response"
+        },
+        {
+          "id": 14,
+          "description": "SMS"
+        }
+      ],
+      "countries": [
+        {
+          "id": "MDG",
+          "description": "Madagascar"
+        }
+      ],
+      "languages": [],
+      "technologies": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>SUM-Africa satellite-based information is used to provide low-cost drought insurance for smallholder farmers in Mali and Uganda. this insurance allows for rapid scaling up to corresponding economies, enabling affordable coverage for small scale farmers. With highly automated satellite data processing and index product design, the business becomes financially sustainable after the project comes to an end.</p>",
+      "id": 48,
+      "name": "SUMAfrica",
+      "organisationname": "EARS Earth Environment Monitoring BV & G4AW project",
+      "translations": [],
+      "url": "https://g4aw.spaceoffice.nl/en/g4aw-projects/g4aw-projects/16/sum-africa.html",
+      "descriptionshort": "SUM-Africa satellite-based information is used to provide low-cost drought insurance for smallholder farmers in Mali and Uganda. this insurance allows for rapid scaling up to corresponding economies, enabling affordable coverage for small scale...",
+      "launch": 2010,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "EARS Earth Environment Monitoring BV & G4AW project",
+        "description": "<p>SUM-Africa satellite-based information is used to provide low-cost drought insurance for smallholder farmers in Mali and Uganda. this insurance allows for rapid scaling up to corresponding economies, enabling affordable coverage for small scale farmers. With highly automated satellite data processing and index product design, the business becomes financially sustainable after the project comes to an end.</p>",
+        "url": "https://g4aw.spaceoffice.nl/en/",
+        "founded": 2010,
+        "organisationtype": {
+          "id": 3,
+          "description": "Government deployment"
+        },
+        "hqcountry": {
+          "id": "NLD",
+          "description": "Netherlands",
+          "lmic": false
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 3,
+          "description": "Scaling"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 1,
+        "description": "No specification",
+        "usecase": {
+          "id": 1,
+          "description": "Finance"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 1,
+          "description": "No specification",
+          "usecase": {
+            "id": 1,
+            "description": "Finance"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 2,
+          "description": "Business to business"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ],
+      "countries": [
+        {
+          "id": "BEN",
+          "description": "Benin"
+        },
+        {
+          "id": "BFA",
+          "description": "Burkina Faso"
+        },
+        {
+          "id": "CMR",
+          "description": "Cameroon"
+        },
+        {
+          "id": "MLI",
+          "description": "Mali"
+        },
+        {
+          "id": "SEN",
+          "description": "Senegal"
+        },
+        {
+          "id": "UGA",
+          "description": "Uganda"
+        }
+      ],
+      "languages": [
+        {
+          "id": 8,
+          "description": "English"
+        },
+        {
+          "id": 11,
+          "description": "French"
+        }
+      ],
+      "technologies": [
+        {
+          "id": 20,
+          "description": "Satellites (incl. mini satellites, CubeSats, nanosatellites)"
+        },
+        {
+          "id": 22,
+          "description": "Remote sensing"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>Mlimi Hotline is a multi-modal farmer Call Centre established to provide affordable, actionable and timely on-demand and supply driven extension and advisory services to farmers. The approach uses inbound and outbound calls, Interactive Voice Response (IVR), SMS services, and Internet messaging to deliver and receive information in diverse formats such as voice, texts, images and videos. The Call Centre works in sync with participatory radio where radio helps raise awareness and encourage farmers to use the service to acquire information and support on individual farming needs or specific geographical farming situations. The call centre captures user details for proper follow ups to create user maps and document cases of user support and satisfaction as part of monitoring and evaluation, knowledge management and learning processes.</p>",
+      "id": 51,
+      "name": "Mlimi Hotline (Farmer Call Centre)",
+      "organisationname": "Farm Radio Trust",
+      "translations": [],
+      "url": "https://www.farmradiomw.org",
+      "descriptionshort": "Mlimi Hotline is a multi-modal farmer Call Centre established to provide affordable, actionable and timely on-demand and supply driven extension and advisory services to farmers. The approach uses inbound and outbound calls, Interactive Voice...",
+      "launch": 2016,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "Farm Radio Trust",
+        "description": "<p>Mlimi Hotline is a multi-modal farmer Call Centre established to provide affordable, actionable and timely on-demand and supply driven extension and advisory services to farmers. The approach uses inbound and outbound calls, Interactive Voice Response (IVR), SMS services, and Internet messaging to deliver and receive information in diverse formats such as voice, texts, images and videos. The Call Centre works in sync with participatory radio where radio helps raise awareness and encourage farmers to use the service to acquire information and support on individual farming needs or specific geographical farming situations. The call centre captures user details for proper follow ups to create user maps and document cases of user support and satisfaction as part of monitoring and evaluation, knowledge management and learning processes.</p>",
+        "url": "https://www.farmradiomw.org",
+        "founded": 2016,
+        "organisationtype": {
+          "id": 5,
+          "description": "NGO"
+        },
+        "hqcountry": {
+          "id": "MWI",
+          "description": "Malawi",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 3,
+          "description": "Scaling"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 8,
+        "description": "No specification",
+        "usecase": {
+          "id": 2,
+          "description": "Farm management & Advisory"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 8,
+          "description": "No specification",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        },
+        {
+          "id": 13,
+          "description": "No specification",
+          "usecase": {
+            "id": 3,
+            "description": "Market linkage"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 1,
+          "description": "Business to consumer"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 1,
+          "description": "Augmented/Virtual reality"
+        },
+        {
+          "id": 9,
+          "description": "Interactive Voice Response"
+        },
+        {
+          "id": 14,
+          "description": "SMS"
+        }
+      ],
+      "countries": [
+        {
+          "id": "MWI",
+          "description": "Malawi"
+        }
+      ],
+      "languages": [
+        {
+          "id": 5,
+          "description": "Chichewa"
+        },
+        {
+          "id": 8,
+          "description": "English"
+        },
+        {
+          "id": 47,
+          "description": "Tumbuka"
+        },
+        {
+          "id": 52,
+          "description": "Yao"
+        }
+      ],
+      "technologies": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>The forecast, known as ISKA Weather, enables farmers to make informed decisions on when to carry out weather dependent activities, such as planting, fertilizing, chemical spraying, and harvesting.</p>",
+      "id": 53,
+      "name": "MTN Iska Weather (Ghana)",
+      "organisationname": "MTN",
+      "translations": [],
+      "url": "https://mtn.com.gh/business/service-solutions/",
+      "descriptionshort": "The forecast, known as ISKA Weather, enables farmers to make informed decisions on when to carry out weather dependent activities, such as planting, fertilizing, chemical spraying, and harvesting.",
+      "launch": 2018,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "MTN",
+        "description": "<p>The forecast, known as ISKA Weather, enables farmers to make informed decisions on when to carry out weather dependent activities, such as planting, fertilizing, chemical spraying, and harvesting.</p>",
+        "url": "https://mtn.com.gh/business/service-solutions/",
+        "founded": 2018,
+        "organisationtype": {
+          "id": 4,
+          "description": "MNO deployment"
+        },
+        "hqcountry": {
+          "id": "GHA",
+          "description": "Ghana",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 8,
+        "description": "No specification",
+        "usecase": {
+          "id": 2,
+          "description": "Farm management & Advisory"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 8,
+          "description": "No specification",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        }
+      ],
+      "businessModels": [],
+      "regions": [],
+      "channels": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ],
+      "countries": [
+        {
+          "id": "GHA",
+          "description": "Ghana"
+        }
+      ],
+      "languages": [],
+      "technologies": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>The Olam Farmer Information System, or \"OFIS,\" is a survey tool that bridges the gap between smalleholder farmers and online connectivity and digital tools. OFIS allows OLAM to collect data, record GPS data points for farms and social infrastructure, manage training activities, and track all \"first mile\" transactions including financing, input distribution, and crop purchases. This information explains what happens in the field, so that farmers and other participants in the supply chain can maximise their effectiveness. It also allows greater visibility and more accurate reporting on sustainability, social justice, and other good business indicators. It is a key input tool for AtSource, Olam's sustainability insights platform for agricultural supply chains. So far, over 550k farmers in over 30 countries have been registered in the system, and OLAM continues to rollout OFIS in 2021.</p>",
+      "id": 54,
+      "name": "Olam Farmer Information System (OFIS)",
+      "organisationname": "Olam",
+      "translations": [],
+      "url": "https://www.olamgroup.com/sustainability/innovation-technology/farmgate/olam-farmer-information-system.html",
+      "descriptionshort": "The Olam Farmer Information System, or \"OFIS,\" is a survey tool that bridges the gap between smalleholder farmers and online connectivity and digital tools. OFIS allows OLAM to collect data, record GPS data points for farms and social...",
+      "launch": 2014,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "Olam",
+        "description": "<p>The Olam Farmer Information System, or \"OFIS,\" is a survey tool that bridges the gap between smalleholder farmers and online connectivity and digital tools. OFIS allows OLAM to collect data, record GPS data points for farms and social infrastructure, manage training activities, and track all \"first mile\" transactions including financing, input distribution, and crop purchases. This information explains what happens in the field, so that farmers and other participants in the supply chain can maximise their effectiveness. It also allows greater visibility and more accurate reporting on sustainability, social justice, and other good business indicators. It is a key input tool for AtSource, Olam's sustainability insights platform for agricultural supply chains. So far, over 550k farmers in over 30 countries have been registered in the system, and OLAM continues to rollout OFIS in 2021.</p>",
+        "url": "https://www.olamgroup.com/",
+        "founded": 2014,
+        "organisationtype": {
+          "id": 1,
+          "description": "Agribusiness"
+        },
+        "hqcountry": {
+          "id": "SGP",
+          "description": "Singapore",
+          "lmic": false
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 17,
+        "description": "No specification",
+        "usecase": {
+          "id": 4,
+          "description": "Supply Chain Management"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 17,
+          "description": "No specification",
+          "usecase": {
+            "id": 4,
+            "description": "Supply Chain Management"
+          }
+        },
+        {
+          "id": 8,
+          "description": "No specification",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 1,
+          "description": "Business to consumer"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ],
+      "countries": [
+        {
+          "id": "NGA",
+          "description": "Nigeria"
+        }
+      ],
+      "languages": [],
+      "technologies": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>SmartFarm is an end-to-end farm data management solution that monitors all processes leading up to harvest. The solution leverages ground-truth data, weather advisory, and accurate insights based on satellite monitoring to enable data-driven farm and business operations. By tracking, managing and monitoring every step — from input to execution — all in one place, SmartFarm helps achieve efficiency, and improves traceability and output predictability. </p>",
+      "id": 55,
+      "name": "SmartFarm",
+      "organisationname": "Cropin Technology Solutions",
+      "translations": [],
+      "url": "https://www.cropin.com/smartfarm/",
+      "descriptionshort": "SmartFarm is an end-to-end farm data management solution that monitors all processes leading up to harvest. The solution leverages ground-truth data, weather advisory, and accurate insights based on satellite monitoring to enable data-driven farm...",
+      "launch": 2012,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "Cropin Technology Solutions",
+        "description": "<p>CropIn uses remote sensing, big data and machine learning to help customers analyze the fields at the plot-level. SmartRisk is a risk mitigation and forecasting intelligence solution. Key Features: Agri Alternate Data for accurate decision making; Reduced Cost of Operations; Lending: Effective Credit Risk Assessment; Plot level Monitoring System; Insurance; Crop Risk Assessment at Region Level; Risk Adjusted Variable Pricing</p>",
+        "url": "https://www.cropin.com",
+        "founded": 2011,
+        "organisationtype": {
+          "id": 6,
+          "description": "Agritech"
+        },
+        "hqcountry": {
+          "id": "IND",
+          "description": "India",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 2,
+          "description": "Karnataka",
+          "country": {
+            "id": "IND",
+            "description": "India",
+            "lmic": true
+          }
+        },
+        "businessFundingStage": {
+          "id": 5,
+          "description": "Series C"
+        },
+        "businessGrowthStage": {
+          "id": 3,
+          "description": "Scaling"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 8,
+        "description": "No specification",
+        "usecase": {
+          "id": 2,
+          "description": "Farm management & Advisory"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [
+        {
+          "id": 1,
+          "description": "DCAS"
+        }
+      ],
+      "subUseCases": [
+        {
+          "id": 1,
+          "description": "No specification",
+          "usecase": {
+            "id": 1,
+            "description": "Finance"
+          }
+        },
+        {
+          "id": 17,
+          "description": "No specification",
+          "usecase": {
+            "id": 4,
+            "description": "Supply Chain Management"
+          }
+        },
+        {
+          "id": 22,
+          "description": "No specification",
+          "usecase": {
+            "id": 5,
+            "description": "Ecosystem support"
+          }
+        },
+        {
+          "id": 23,
+          "description": "No specification",
+          "usecase": {
+            "id": 6,
+            "description": "Smart Farming"
+          }
+        },
+        {
+          "id": 8,
+          "description": "No specification",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 2,
+          "description": "Business to business"
+        },
+        {
+          "id": 3,
+          "description": "Business to government"
+        }
+      ],
+      "regions": [
+        {
+          "id": 1,
+          "description": "Maharashtra",
+          "country": {
+            "id": "IND",
+            "description": "India",
+            "lmic": true
+          }
+        },
+        {
+          "id": 2,
+          "description": "Karnataka",
+          "country": {
+            "id": "IND",
+            "description": "India",
+            "lmic": true
+          }
+        },
+        {
+          "id": 3,
+          "description": "New Delhi",
+          "country": {
+            "id": "IND",
+            "description": "India",
+            "lmic": true
+          }
+        },
+        {
+          "id": 4,
+          "description": "Telangana",
+          "country": {
+            "id": "IND",
+            "description": "India",
+            "lmic": true
+          }
+        },
+        {
+          "id": 5,
+          "description": "Punjab",
+          "country": {
+            "id": "IND",
+            "description": "India",
+            "lmic": true
+          }
+        },
+        {
+          "id": 6,
+          "description": "Tamil nadu",
+          "country": {
+            "id": "IND",
+            "description": "India",
+            "lmic": true
+          }
+        },
+        {
+          "id": 7,
+          "description": "Orissa",
+          "country": {
+            "id": "IND",
+            "description": "India",
+            "lmic": true
+          }
+        },
+        {
+          "id": 8,
+          "description": "Haryana",
+          "country": {
+            "id": "IND",
+            "description": "India",
+            "lmic": true
+          }
+        },
+        {
+          "id": 9,
+          "description": "Uttar Pradesh",
+          "country": {
+            "id": "IND",
+            "description": "India",
+            "lmic": true
+          }
+        }
+      ],
+      "channels": [
+        {
+          "id": 5,
+          "description": "E-learning "
+        },
+        {
+          "id": 6,
+          "description": "Email"
+        },
+        {
+          "id": 9,
+          "description": "Interactive Voice Response"
+        },
+        {
+          "id": 10,
+          "description": "Mobile applications"
+        },
+        {
+          "id": 14,
+          "description": "SMS"
+        },
+        {
+          "id": 18,
+          "description": "Video"
+        }
+      ],
+      "countries": [
+        {
+          "id": "ARG",
+          "description": "Argentina"
+        },
+        {
+          "id": "AUS",
+          "description": "Australia"
+        },
+        {
+          "id": "AUT",
+          "description": "Austria"
+        },
+        {
+          "id": "BDI",
+          "description": "Burundi"
+        },
+        {
+          "id": "BEL",
+          "description": "Belgium"
+        },
+        {
+          "id": "BFA",
+          "description": "Burkina Faso"
+        },
+        {
+          "id": "BGD",
+          "description": "Bangladesh"
+        },
+        {
+          "id": "BGR",
+          "description": "Bulgaria"
+        },
+        {
+          "id": "BLR",
+          "description": "Belarus"
+        },
+        {
+          "id": "BRA",
+          "description": "Brazil"
+        },
+        {
+          "id": "BWA",
+          "description": "Botswana"
+        },
+        {
+          "id": "CAN",
+          "description": "Canada"
+        },
+        {
+          "id": "CHE",
+          "description": "Switzerland"
+        },
+        {
+          "id": "CHL",
+          "description": "Chile"
+        },
+        {
+          "id": "CHN",
+          "description": "China"
+        },
+        {
+          "id": "COL",
+          "description": "Colombia"
+        },
+        {
+          "id": "CRI",
+          "description": "Costa Rica"
+        },
+        {
+          "id": "CUB",
+          "description": "Cuba"
+        },
+        {
+          "id": "CYP",
+          "description": "Cyprus"
+        },
+        {
+          "id": "CZE",
+          "description": "Czechia"
+        },
+        {
+          "id": "DEU",
+          "description": "Germany"
+        },
+        {
+          "id": "DNK",
+          "description": "Denmark"
+        },
+        {
+          "id": "ECU",
+          "description": "Ecuador"
+        },
+        {
+          "id": "EGY",
+          "description": "Egypt"
+        },
+        {
+          "id": "ESP",
+          "description": "Spain"
+        },
+        {
+          "id": "EST",
+          "description": "Estonia"
+        },
+        {
+          "id": "ETH",
+          "description": "Ethiopia"
+        },
+        {
+          "id": "FIN",
+          "description": "Finland"
+        },
+        {
+          "id": "FRA",
+          "description": "France"
+        },
+        {
+          "id": "GBR",
+          "description": "United Kingdom"
+        },
+        {
+          "id": "GEO",
+          "description": "Georgia"
+        },
+        {
+          "id": "GHA",
+          "description": "Ghana"
+        },
+        {
+          "id": "GRC",
+          "description": "Greece"
+        },
+        {
+          "id": "GTM",
+          "description": "Guatemala"
+        },
+        {
+          "id": "HND",
+          "description": "Honduras"
+        },
+        {
+          "id": "HRV",
+          "description": "Croatia"
+        },
+        {
+          "id": "HUN",
+          "description": "Hungary"
+        },
+        {
+          "id": "IDN",
+          "description": "Indonesia"
+        },
+        {
+          "id": "IND",
+          "description": "India"
+        },
+        {
+          "id": "IRL",
+          "description": "Ireland"
+        },
+        {
+          "id": "IRN",
+          "description": "Iran"
+        },
+        {
+          "id": "ISR",
+          "description": "Israel"
+        },
+        {
+          "id": "ITA",
+          "description": "Italy"
+        },
+        {
+          "id": "JOR",
+          "description": "Jordan"
+        },
+        {
+          "id": "JPN",
+          "description": "Japan"
+        },
+        {
+          "id": "KEN",
+          "description": "Kenya"
+        },
+        {
+          "id": "KHM",
+          "description": "Cambodia"
+        },
+        {
+          "id": "LTU",
+          "description": "Lithuania"
+        },
+        {
+          "id": "LUX",
+          "description": "Luxembourg"
+        },
+        {
+          "id": "LVA",
+          "description": "Latvia"
+        },
+        {
+          "id": "MAR",
+          "description": "Morocco"
+        },
+        {
+          "id": "MEX",
+          "description": "Mexico"
+        },
+        {
+          "id": "MLT",
+          "description": "Malta"
+        },
+        {
+          "id": "MMR",
+          "description": "Myanmar"
+        },
+        {
+          "id": "MNE",
+          "description": "Montenegro"
+        },
+        {
+          "id": "MOZ",
+          "description": "Mozambique"
+        },
+        {
+          "id": "NGA",
+          "description": "Nigeria"
+        },
+        {
+          "id": "NIC",
+          "description": "Nicaragua"
+        },
+        {
+          "id": "NLD",
+          "description": "Netherlands"
+        },
+        {
+          "id": "NOR",
+          "description": "Norway"
+        },
+        {
+          "id": "PAN",
+          "description": "Panama"
+        },
+        {
+          "id": "PER",
+          "description": "Peru"
+        },
+        {
+          "id": "PHL",
+          "description": "Philippines"
+        },
+        {
+          "id": "PNG",
+          "description": "Papua New Guinea"
+        },
+        {
+          "id": "POL",
+          "description": "Poland"
+        },
+        {
+          "id": "PRT",
+          "description": "Portugal"
+        },
+        {
+          "id": "ROU",
+          "description": "Romania"
+        },
+        {
+          "id": "RUS",
+          "description": "Russia"
+        },
+        {
+          "id": "RWA",
+          "description": "Rwanda"
+        },
+        {
+          "id": "SRB",
+          "description": "Serbia"
+        },
+        {
+          "id": "SVK",
+          "description": "Slovakia"
+        },
+        {
+          "id": "SVN",
+          "description": "Slovenia"
+        },
+        {
+          "id": "SWE",
+          "description": "Sweden"
+        },
+        {
+          "id": "TGO",
+          "description": "Togo"
+        },
+        {
+          "id": "THA",
+          "description": "Thailand"
+        },
+        {
+          "id": "TJK",
+          "description": "Tajikistan"
+        },
+        {
+          "id": "TUR",
+          "description": "Turkey"
+        },
+        {
+          "id": "TZA",
+          "description": "Tanzania"
+        },
+        {
+          "id": "UGA",
+          "description": "Uganda"
+        },
+        {
+          "id": "UKR",
+          "description": "Ukraine"
+        },
+        {
+          "id": "VNM",
+          "description": "Viet Nam"
+        },
+        {
+          "id": "ZAF",
+          "description": "South Africa"
+        },
+        {
+          "id": "ZMB",
+          "description": "Zambia"
+        }
+      ],
+      "languages": [
+        {
+          "id": 8,
+          "description": "English"
+        },
+        {
+          "id": 11,
+          "description": "French"
+        },
+        {
+          "id": 14,
+          "description": "Hindi"
+        },
+        {
+          "id": 17,
+          "description": "Kinyarwanda"
+        },
+        {
+          "id": 21,
+          "description": "Marathi"
+        },
+        {
+          "id": 32,
+          "description": "Portuguese"
+        },
+        {
+          "id": 39,
+          "description": "Spanish"
+        },
+        {
+          "id": 40,
+          "description": "Swahili"
+        },
+        {
+          "id": 43,
+          "description": "Tamil"
+        },
+        {
+          "id": 44,
+          "description": "Telugu"
+        },
+        {
+          "id": 55,
+          "description": "Russian"
+        },
+        {
+          "id": 57,
+          "description": "Thai"
+        },
+        {
+          "id": 59,
+          "description": "Gujarati"
+        },
+        {
+          "id": 60,
+          "description": "Kannada"
+        }
+      ],
+      "technologies": [
+        {
+          "id": 1,
+          "description": "Artificial Intelligence (AI)"
+        },
+        {
+          "id": 3,
+          "description": "Machine Learning (ML)"
+        },
+        {
+          "id": 4,
+          "description": "Predictive modelling & analytics"
+        },
+        {
+          "id": 5,
+          "description": "Data analytics & Business Intelligence"
+        },
+        {
+          "id": 10,
+          "description": "Geographic Information System (GIS)"
+        },
+        {
+          "id": 11,
+          "description": "Location based services"
+        },
+        {
+          "id": 13,
+          "description": "Cloud-based services"
+        },
+        {
+          "id": 17,
+          "description": "Field sensors and diagnostics equipment (e.g. farm field, livestock, agricultural machinery sensors, portable soil/crop testing tools)"
+        },
+        {
+          "id": 18,
+          "description": "Weather stations"
+        },
+        {
+          "id": 19,
+          "description": "IoT devices + connectivity"
+        },
+        {
+          "id": 20,
+          "description": "Satellites (incl. mini satellites, CubeSats, nanosatellites)"
+        },
+        {
+          "id": 22,
+          "description": "Remote sensing"
+        },
+        {
+          "id": 23,
+          "description": "Visualization"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>We are a technology company focused on solving market linkage and financial inclusion problems in the agricultural value chain. Cropchain is our platform for facilitating trade between smallholder farmers and consumers or buyers. Lendit is our financial inclusion platform targeted at smallholder farmers.</p>",
+      "id": 57,
+      "name": "Cropchain and LendIt",
+      "organisationname": "AgroCenta",
+      "translations": [],
+      "url": "https://agrocenta.com",
+      "descriptionshort": "We are a technology company focused on solving market linkage and financial inclusion problems in the agricultural value chain. Cropchain is our platform for facilitating trade between smallholder farmers and consumers or buyers. Lendit is our...",
+      "launch": 2016,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "AgroCenta",
+        "description": "<p>We are a technology company focused on solving market linkage and financial inclusion problems in the agricultural value chain. Cropchain is our platform for facilitating trade between smallholder farmers and consumers or buyers. Lendit is our financial inclusion platform targeted at smallholder farmers.</p>",
+        "url": "https://agrocenta.com",
+        "founded": 2016,
+        "organisationtype": {
+          "id": 6,
+          "description": "Agritech"
+        },
+        "hqcountry": {
+          "id": "GHA",
+          "description": "Ghana",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 4,
+          "description": "Maintaining"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 17,
+        "description": "No specification",
+        "usecase": {
+          "id": 4,
+          "description": "Supply Chain Management"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 1,
+          "description": "No specification",
+          "usecase": {
+            "id": 1,
+            "description": "Finance"
+          }
+        },
+        {
+          "id": 17,
+          "description": "No specification",
+          "usecase": {
+            "id": 4,
+            "description": "Supply Chain Management"
+          }
+        },
+        {
+          "id": 13,
+          "description": "No specification",
+          "usecase": {
+            "id": 3,
+            "description": "Market linkage"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 2,
+          "description": "Business to business"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 10,
+          "description": "Mobile applications"
+        },
+        {
+          "id": 14,
+          "description": "SMS"
+        }
+      ],
+      "countries": [
+        {
+          "id": "GHA",
+          "description": "Ghana"
+        }
+      ],
+      "languages": [
+        {
+          "id": 8,
+          "description": "English"
+        }
+      ],
+      "technologies": [
+        {
+          "id": 12,
+          "description": "Big Data"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>Jokalante is a company that uses traditional media like radio and basic cellphones, but also more modern ICT tools, to facilitate people's access to quality information that they need to make better desicions on their livelihoods, independent of their location, language or their education level.</p>",
+      "id": 59,
+      "name": "JOKALANTE platform",
+      "organisationname": "JOKALANTE",
+      "translations": [
+        {
+          "language": {
+            "id": 11,
+            "description": "French"
+          },
+          "translation": "<p>Jokalante est une entreprise qui utilise les médias traditionnels comme la radio et les téléphones portables basique, mais aussi des outils TIC plus modernes, pour faciliter aux utilisateurs l'accès à des informations de qualité dont ils ont besoin pour prendre de meilleures décisions sur leurs vie. N’importe où ils se trouvent, quelle langue ils parlent et quel est leur niveau d'éducation</p>"
+        }
+      ],
+      "url": "https://jokalante.com/",
+      "descriptionshort": "Jokalante is a company that uses traditional media like radio and basic cellphones, but also more modern ICT tools, to facilitate people's access to quality information that they need to make better desicions on their livelihoods, independent of...",
+      "launch": 2016,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "JOKALANTE",
+        "description": "<p>Jokalante is a company that uses traditional media like radio and basic cellphones, but also more modern ICT tools, to facilitate people's access to quality information that they need to make better desicions on their livelihoods, independent of their location, language or their education level.</p>",
+        "url": "https://www.facebook.com/jokalante/",
+        "founded": 2016,
+        "organisationtype": {
+          "id": 0,
+          "description": "Other"
+        },
+        "hqcountry": {
+          "id": "SEN",
+          "description": "Senegal",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 9,
+        "description": "Farm management & record keeping",
+        "usecase": {
+          "id": 2,
+          "description": "Farm management & Advisory"
+        }
+      },
+      "sectors": [
+        {
+          "id": 5,
+          "description": "Multi-sectoral or sector-independent"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 9,
+          "description": "Farm management & record keeping",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        },
+        {
+          "id": 14,
+          "description": "Digitally-enabled value chain integration",
+          "usecase": {
+            "id": 3,
+            "description": "Market linkage"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 2,
+          "description": "Business to business"
+        },
+        {
+          "id": 1,
+          "description": "Business to consumer"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 1,
+          "description": "Augmented/Virtual reality"
+        },
+        {
+          "id": 9,
+          "description": "Interactive Voice Response"
+        },
+        {
+          "id": 19,
+          "description": "Web-based applications"
+        }
+      ],
+      "countries": [
+        {
+          "id": "GMB",
+          "description": "Gambia"
+        },
+        {
+          "id": "SEN",
+          "description": "Senegal"
+        }
+      ],
+      "languages": [
+        {
+          "id": 6,
+          "description": "Diola"
+        },
+        {
+          "id": 8,
+          "description": "English"
+        },
+        {
+          "id": 11,
+          "description": "French"
+        },
+        {
+          "id": 18,
+          "description": "Madingue"
+        },
+        {
+          "id": 33,
+          "description": "Pulaar"
+        },
+        {
+          "id": 36,
+          "description": "Sérere"
+        },
+        {
+          "id": 49,
+          "description": "Wolof"
+        }
+      ],
+      "technologies": [
+        {
+          "id": 12,
+          "description": "Big Data"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>myAgro&rsquo;s unique mobile layaway platform allows farmers to use their mobile phones to purchase seeds and fertilizer in small increments.</p>",
+      "id": 60,
+      "name": "Mobile Layaway platform",
+      "organisationname": "myAgro",
+      "translations": [],
+      "url": "http://www.myagro.org/",
+      "descriptionshort": "myAgro&rsquo;s unique mobile layaway platform allows farmers to use their mobile phones to purchase seeds and fertilizer in small increments.",
+      "launch": 2011,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "myAgro",
+        "description": "<p>myAgro helps small-scale farmers in West Africa pay on layaway for fertilizer, seed and training packages using their mobile phone, similar to how people buy talk-time for their phone in developing countries. Registered farmers can save easily by continuously “topping up” their myAgro account in flexible amounts ($1 – $50) by buying additional cards. In most cases farmers are expected to buy seed and fertilizer with one large payment, and almost unachievable task. The Mobile Layaway plan makes saving for these larger purchases as easy as buying a bar of soap or cup of oil.</p>",
+        "url": "http://www.myagro.org/",
+        "founded": 2011,
+        "organisationtype": {
+          "id": 5,
+          "description": "NGO"
+        },
+        "hqcountry": {
+          "id": "SEN",
+          "description": "Senegal",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 14,
+        "description": "Digitally-enabled value chain integration",
+        "usecase": {
+          "id": 3,
+          "description": "Market linkage"
+        }
+      },
+      "sectors": [
+        {
+          "id": 1,
+          "description": "Crop farming"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 9,
+          "description": "Farm management & record keeping",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        },
+        {
+          "id": 10,
+          "description": "Farmer information services",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        },
+        {
+          "id": 14,
+          "description": "Digitally-enabled value chain integration",
+          "usecase": {
+            "id": 3,
+            "description": "Market linkage"
+          }
+        },
+        {
+          "id": 15,
+          "description": "E-commerce services",
+          "usecase": {
+            "id": 3,
+            "description": "Market linkage"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 1,
+          "description": "Business to consumer"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 6,
+          "description": "Email"
+        },
+        {
+          "id": 15,
+          "description": "Social Media"
+        },
+        {
+          "id": 19,
+          "description": "Web-based applications"
+        }
+      ],
+      "countries": [
+        {
+          "id": "MLI",
+          "description": "Mali"
+        },
+        {
+          "id": "SEN",
+          "description": "Senegal"
+        },
+        {
+          "id": "TZA",
+          "description": "Tanzania"
+        }
+      ],
+      "languages": [
+        {
+          "id": 8,
+          "description": "English"
+        },
+        {
+          "id": 11,
+          "description": "French"
+        }
+      ],
+      "technologies": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>NASFAM in partnership with CTA is implementing a project titled Scaling up Climate Resilient Solutions for smallholder farmers in Malawi (CRS). The project’s main goal is to contribute towards the enhancement of productivity and adaptation of agriculture for smallholder farmers in Malawi under a changing climate through using ICTs.</p>",
+      "id": 61,
+      "name": "NASFAM Malawi",
+      "organisationname": "NASFAM Malawi",
+      "translations": [],
+      "url": "https://www.nasfam.org/index.php/projects/cta-crs-project",
+      "descriptionshort": "NASFAM in partnership with CTA is implementing a project titled Scaling up Climate Resilient Solutions for smallholder farmers in Malawi (CRS). The project’s main goal is to contribute towards the enhancement of productivity and adaptation of...",
+      "launch": 2017,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "NASFAM Malawi",
+        "description": "<p>NASFAM in partnership with CTA is implementing a project titled Scaling up Climate Resilient Solutions for smallholder farmers in Malawi (CRS). The project’s main goal is to contribute towards the enhancement of productivity and adaptation of agriculture for smallholder farmers in Malawi under a changing climate through using ICTs.</p>",
+        "url": "https://www.nasfam.org/index.php/projects/cta-crs-project",
+        "founded": 2017,
+        "organisationtype": {
+          "id": 5,
+          "description": "NGO"
+        },
+        "hqcountry": {
+          "id": "MWI",
+          "description": "Malawi",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 1,
+        "description": "No specification",
+        "usecase": {
+          "id": 1,
+          "description": "Finance"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [
+        {
+          "id": 1,
+          "description": "DCAS"
+        }
+      ],
+      "subUseCases": [
+        {
+          "id": 1,
+          "description": "No specification",
+          "usecase": {
+            "id": 1,
+            "description": "Finance"
+          }
+        },
+        {
+          "id": 8,
+          "description": "No specification",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 1,
+          "description": "Business to consumer"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ],
+      "countries": [
+        {
+          "id": "MWI",
+          "description": "Malawi"
+        }
+      ],
+      "languages": [
+        {
+          "id": 11,
+          "description": "French"
+        }
+      ],
+      "technologies": [
+        {
+          "id": 18,
+          "description": "Weather stations"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>The Connected Farmer Alliance (CFA) is a public-private partnership that seeks to promote commercially sustainable mobile agriculture solutions and increase productivity and revenues for 500,000 smallholder farmers across Kenya, Tanzania and Mozambique. The program also aims to increase revenues for agribusinesses and agricultural value chain service providers. Also includes Vodafone Mezzanine, GIZ, etc.</p>",
+      "id": 63,
+      "name": "Connected Farmer Alliance",
+      "organisationname": "TechnoServe",
+      "translations": [],
+      "url": "http://www.technoserve.org/our-work/projects/connected-farmer-alliance",
+      "descriptionshort": "The Connected Farmer Alliance (CFA) is a public-private partnership that seeks to promote commercially sustainable mobile agriculture solutions and increase productivity and revenues for 500,000 smallholder farmers across Kenya, Tanzania and...",
+      "launch": 2012,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "TechnoServe",
+        "description": "<p>The Connected Farmer Alliance (CFA) is a public-private partnership that seeks to promote commercially sustainable mobile agriculture solutions and increase productivity and revenues for 500,000 smallholder farmers across Kenya, Tanzania and Mozambique. The program also aims to increase revenues for agribusinesses and agricultural value chain service providers. Also includes Vodafone Mezzanine, GIZ, etc.</p>",
+        "url": "http://www.technoserve.org/our-work/projects/connected-farmer-alliance",
+        "founded": 2012,
+        "organisationtype": {
+          "id": 5,
+          "description": "NGO"
+        },
+        "hqcountry": {
+          "id": "USA",
+          "description": "United States of America",
+          "lmic": false
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 13,
+        "description": "No specification",
+        "usecase": {
+          "id": 3,
+          "description": "Market linkage"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 1,
+          "description": "No specification",
+          "usecase": {
+            "id": 1,
+            "description": "Finance"
+          }
+        },
+        {
+          "id": 17,
+          "description": "No specification",
+          "usecase": {
+            "id": 4,
+            "description": "Supply Chain Management"
+          }
+        },
+        {
+          "id": 8,
+          "description": "No specification",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        },
+        {
+          "id": 13,
+          "description": "No specification",
+          "usecase": {
+            "id": 3,
+            "description": "Market linkage"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 2,
+          "description": "Business to business"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 10,
+          "description": "Mobile applications"
+        },
+        {
+          "id": 14,
+          "description": "SMS"
+        }
+      ],
+      "countries": [
+        {
+          "id": "KEN",
+          "description": "Kenya"
+        },
+        {
+          "id": "MOZ",
+          "description": "Mozambique"
+        },
+        {
+          "id": "TZA",
+          "description": "Tanzania"
+        }
+      ],
+      "languages": [],
+      "technologies": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>Vodafone Connected Farmer is a digital platform that provides thousands of farmers in Kenya, Tanzania, Zambia, South Africa, and elsewhere with instant access to local services such as credit providers, resellers and insurers. The platform runs on mobile GSM networks and conveniently connects farmers across widely dispersed geographic areas.</p>",
+      "id": 66,
+      "name": "Vodafone Connected Farmer",
+      "organisationname": "Mezzanine - Vodafone",
+      "translations": [],
+      "url": "https://mezzanineware.com/digital-productivity-technology/technology-solutions-for-agribusiness/smart-farming/",
+      "descriptionshort": "Vodafone Connected Farmer is a digital platform that provides thousands of farmers in Kenya, Tanzania, Zambia, South Africa, and elsewhere with instant access to local services such as credit providers, resellers and insurers. The platform runs on...",
+      "launch": 2017,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "Mezzanine - Vodafone",
+        "description": "<p>Vodafone Connected Farmer is a digital platform that provides thousands of farmers in Kenya, Tanzania, Zambia, South Africa, and elsewhere with instant access to local services such as credit providers, resellers and insurers. The platform runs on mobile GSM networks and conveniently connects farmers across widely dispersed geographic areas.</p>",
+        "url": "https://mezzanineware.com/digital-productivity-technology/technology-solutions-for-agribusiness/smart-farming/",
+        "founded": 2017,
+        "organisationtype": {
+          "id": 4,
+          "description": "MNO deployment"
+        },
+        "hqcountry": {
+          "id": "ZAF",
+          "description": "South Africa",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 17,
+        "description": "No specification",
+        "usecase": {
+          "id": 4,
+          "description": "Supply Chain Management"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 1,
+          "description": "No specification",
+          "usecase": {
+            "id": 1,
+            "description": "Finance"
+          }
+        },
+        {
+          "id": 17,
+          "description": "No specification",
+          "usecase": {
+            "id": 4,
+            "description": "Supply Chain Management"
+          }
+        },
+        {
+          "id": 8,
+          "description": "No specification",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        },
+        {
+          "id": 13,
+          "description": "No specification",
+          "usecase": {
+            "id": 3,
+            "description": "Market linkage"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 2,
+          "description": "Business to business"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ],
+      "countries": [
+        {
+          "id": "KEN",
+          "description": "Kenya"
+        },
+        {
+          "id": "MOZ",
+          "description": "Mozambique"
+        },
+        {
+          "id": "TZA",
+          "description": "Tanzania"
+        },
+        {
+          "id": "ZAF",
+          "description": "South Africa"
+        }
+      ],
+      "languages": [],
+      "technologies": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>With Viamo 3-2-1 you can make content available to everyone within a country, on-demand, and for free. Subscribers can access your information by dialing a toll-free short-code (e.g. 321) and then easily navigating a menu of topic options (for health press 1, for agriculture press 2, etc.). Content is validated by local experts, national governments and field tests. People hear your messages in local languages, recorded by native speakers. The messages are available to people with limited literacy and the most basic phones. The 3 2 1 Service is sustainable. Active in several countries in Africa and Asia.</p>",
+      "id": 67,
+      "name": "Orange 3-2-1",
+      "organisationname": "Orange / Viamo BFA",
+      "translations": [],
+      "url": "https://viamo.io/services/3-2-1/",
+      "descriptionshort": "With Viamo 3-2-1 you can make content available to everyone within a country, on-demand, and for free. Subscribers can access your information by dialing a toll-free short-code (e.g. 321) and then easily navigating a menu of topic options (for...",
+      "launch": 2017,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "Orange / Viamo BFA",
+        "description": "<p>With Viamo 3-2-1 you can make content available to everyone within a country, on-demand, and for free. Subscribers can access your information by dialing a toll-free short-code (e.g. 321) and then easily navigating a menu of topic options (for health press 1, for agriculture press 2, etc.). Content is validated by local experts, national governments and field tests. People hear your messages in local languages, recorded by native speakers. The messages are available to people with limited literacy and the most basic phones. The 3 2 1 Service is sustainable. Active in several countries in Africa and Asia.</p>",
+        "url": "https://viamo.io/services/3-2-1/",
+        "founded": 2017,
+        "organisationtype": {
+          "id": 4,
+          "description": "MNO deployment"
+        },
+        "hqcountry": {
+          "id": "BFA",
+          "description": "Burkina Faso",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 8,
+        "description": "No specification",
+        "usecase": {
+          "id": 2,
+          "description": "Farm management & Advisory"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 8,
+          "description": "No specification",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 1,
+          "description": "Business to consumer"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 1,
+          "description": "Augmented/Virtual reality"
+        },
+        {
+          "id": 9,
+          "description": "Interactive Voice Response"
+        },
+        {
+          "id": 14,
+          "description": "SMS"
+        }
+      ],
+      "countries": [
+        {
+          "id": "BFA",
+          "description": "Burkina Faso"
+        }
+      ],
+      "languages": [],
+      "technologies": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>AgCelerant encapsulates the concept of ‘phygital agriculture’, the combination of physical asset management with digital solutions to ensure trust and scalability of service. It unlocks primary bank and industrial investments for smallholder markets, ensuring final product quality, value and returns to SHFs and other agricultural stakeholders. AgCelerant is Manobi's service platform for agricultural business development including value chain digitalization, agronomy advisory, market linkage, and supply chain management.</p>",
+      "id": 68,
+      "name": "Agcelerant",
+      "organisationname": "Manobi",
+      "translations": [],
+      "url": "https://www.agcelerant.com/",
+      "descriptionshort": "AgCelerant encapsulates the concept of ‘phygital agriculture’, the combination of physical asset management with digital solutions to ensure trust and scalability of service. It unlocks primary bank and industrial investments for smallholder...",
+      "launch": 2001,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "Manobi",
+        "description": "<p>AgCelerant encapsulates the concept of ‘phygital agriculture’, the combination of physical asset management with digital solutions to ensure trust and scalability of service. It unlocks primary bank and industrial investments for smallholder markets, ensuring final product quality, value and returns to SHFs and other agricultural stakeholders. AgCelerant is Manobi's service platform for agricultural business development including value chain digitalization, agronomy advisory, market linkage, and supply chain management.</p>",
+        "url": "https://www.manobi.com",
+        "founded": 2003,
+        "organisationtype": {
+          "id": 1,
+          "description": "Agribusiness"
+        },
+        "hqcountry": {
+          "id": "MUS",
+          "description": "Mauritius",
+          "lmic": false
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 17,
+        "description": "No specification",
+        "usecase": {
+          "id": 4,
+          "description": "Supply Chain Management"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 17,
+          "description": "No specification",
+          "usecase": {
+            "id": 4,
+            "description": "Supply Chain Management"
+          }
+        },
+        {
+          "id": 22,
+          "description": "No specification",
+          "usecase": {
+            "id": 5,
+            "description": "Ecosystem support"
+          }
+        },
+        {
+          "id": 8,
+          "description": "No specification",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        },
+        {
+          "id": 13,
+          "description": "No specification",
+          "usecase": {
+            "id": 3,
+            "description": "Market linkage"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 2,
+          "description": "Business to business"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ],
+      "countries": [
+        {
+          "id": "BEN",
+          "description": "Benin"
+        },
+        {
+          "id": "BFA",
+          "description": "Burkina Faso"
+        },
+        {
+          "id": "MLI",
+          "description": "Mali"
+        },
+        {
+          "id": "NER",
+          "description": "Niger"
+        },
+        {
+          "id": "SEN",
+          "description": "Senegal"
+        }
+      ],
+      "languages": [],
+      "technologies": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>It is a Smart Mobile Phone enabled agricultural library providing information on policy as well as technical information on crops and animals.</p>",
+      "id": 71,
+      "name": "Kulima",
+      "organisationname": "Gutsinda Development Group",
+      "translations": [],
+      "url": "https://apkcombo.com/de/kulima/com.kulima.kulima_app/",
+      "descriptionshort": "It is a Smart Mobile Phone enabled agricultural library providing information on policy as well as technical information on crops and animals.",
+      "launch": 2014,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "Gutsinda Development Group",
+        "description": "<p>It is a Smart Mobile Phone enabled agricultural library providing information on policy as well as technical information on crops and animals.</p>",
+        "url": "https://gutsinda.org/",
+        "founded": 2014,
+        "organisationtype": {
+          "id": 6,
+          "description": "Agritech"
+        },
+        "hqcountry": {
+          "id": "UGA",
+          "description": "Uganda",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 2,
+          "description": "Startup"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 8,
+        "description": "No specification",
+        "usecase": {
+          "id": 2,
+          "description": "Farm management & Advisory"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 8,
+          "description": "No specification",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 2,
+          "description": "Business to business"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 10,
+          "description": "Mobile applications"
+        }
+      ],
+      "countries": [
+        {
+          "id": "TZA",
+          "description": "Tanzania"
+        },
+        {
+          "id": "UGA",
+          "description": "Uganda"
+        }
+      ],
+      "languages": [
+        {
+          "id": 8,
+          "description": "English"
+        },
+        {
+          "id": 40,
+          "description": "Swahili"
+        }
+      ],
+      "technologies": [
+        {
+          "id": 11,
+          "description": "Location based services"
+        },
+        {
+          "id": 13,
+          "description": "Cloud-based services"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>The Farm to Market Alliance helps smallholder farmers receive relevant information, investment and support from seed to market, so they can produce and sell marketable surplus and increase their income.</p>",
+      "id": 73,
+      "name": "FtMA App",
+      "organisationname": "Farm to Market Alliance / WFP",
+      "translations": [],
+      "url": "https://play.google.com/store/apps/details?id=com.kuza.ileap.ftma.app&hl=en&gl=us",
+      "descriptionshort": "The Farm to Market Alliance helps smallholder farmers receive relevant information, investment and support from seed to market, so they can produce and sell marketable surplus and increase their income.",
+      "launch": 2017,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "Farm to Market Alliance / WFP",
+        "description": "<p>The Farm to Market Alliance helps smallholder farmers receive relevant information, investment and support from seed to market, so they can produce and sell marketable surplus and increase their income.</p>",
+        "url": "https://play.google.com/store/apps/details?id=com.kuza.ileap.ftma.app&hl=en&gl=US",
+        "founded": 2017,
+        "organisationtype": {
+          "id": 5,
+          "description": "NGO"
+        },
+        "hqcountry": {
+          "id": "TZA",
+          "description": "Tanzania",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 17,
+        "description": "No specification",
+        "usecase": {
+          "id": 4,
+          "description": "Supply Chain Management"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 1,
+          "description": "No specification",
+          "usecase": {
+            "id": 1,
+            "description": "Finance"
+          }
+        },
+        {
+          "id": 17,
+          "description": "No specification",
+          "usecase": {
+            "id": 4,
+            "description": "Supply Chain Management"
+          }
+        },
+        {
+          "id": 13,
+          "description": "No specification",
+          "usecase": {
+            "id": 3,
+            "description": "Market linkage"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 2,
+          "description": "Business to business"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ],
+      "countries": [
+        {
+          "id": "KEN",
+          "description": "Kenya"
+        }
+      ],
+      "languages": [
+        {
+          "id": 8,
+          "description": "English"
+        },
+        {
+          "id": 40,
+          "description": "Swahili"
+        }
+      ],
+      "technologies": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>ICS-SP is a locally registrated NGO. ICS-SP implements our parenting program. Agrics and Geodatics are our two social agricultural businesses, they take care of the implementation of our agricultural activities. Agrics, our for-profit social enterprise in East Africa, is on its way to building a sustainable business by providing smallholder farmers access to farm inputs, capital, innovation, knowledge and markets.</p>",
+      "id": 74,
+      "name": "Agrics",
+      "organisationname": "Stichting ICS",
+      "translations": [],
+      "url": "https://www.ics.nl/en/about-ics/",
+      "descriptionshort": "ICS-SP is a locally registrated NGO. ICS-SP implements our parenting program. Agrics and Geodatics are our two social agricultural businesses, they take care of the implementation of our agricultural activities. Agrics, our for-profit social...",
+      "launch": 2012,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "Stichting ICS",
+        "description": "<p>ICS-SP is a locally registrated NGO. ICS-SP implements our parenting program. Agrics and Geodatics are our two social agricultural businesses, they take care of the implementation of our agricultural activities. Agrics, our for-profit social enterprise in East Africa, is on its way to building a sustainable business by providing smallholder farmers access to farm inputs, capital, innovation, knowledge and markets.</p>",
+        "url": "https://www.ics.nl/en/about-ics/",
+        "founded": 2012,
+        "organisationtype": {
+          "id": 5,
+          "description": "NGO"
+        },
+        "hqcountry": {
+          "id": "KEN",
+          "description": "Kenya",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 13,
+        "description": "No specification",
+        "usecase": {
+          "id": 3,
+          "description": "Market linkage"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 1,
+          "description": "No specification",
+          "usecase": {
+            "id": 1,
+            "description": "Finance"
+          }
+        },
+        {
+          "id": 8,
+          "description": "No specification",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        },
+        {
+          "id": 13,
+          "description": "No specification",
+          "usecase": {
+            "id": 3,
+            "description": "Market linkage"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 1,
+          "description": "Business to consumer"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ],
+      "countries": [
+        {
+          "id": "KEN",
+          "description": "Kenya"
+        },
+        {
+          "id": "TZA",
+          "description": "Tanzania"
+        }
+      ],
+      "languages": [],
+      "technologies": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>At Cowtribe, we provide simple but innovative solutions to help farmers fight diseases and promote optimal health in their animals. Cowtribe Technology Ltd is a pioneering cloud animal healthcare technology startup based in Ghana. Founded in 2016, our mission is to deliver last mile technology solutions that helps coordinate and improve access to better animal health care services for millions of smallholder farmers in Africa.</p>",
+      "id": 78,
+      "name": "CowTribe Africa",
+      "organisationname": "CowTribe Africa",
+      "translations": [],
+      "url": "https://www.cowtribe.com/",
+      "descriptionshort": "At Cowtribe, we provide simple but innovative solutions to help farmers fight diseases and promote optimal health in their animals. Cowtribe Technology Ltd is a pioneering cloud animal healthcare technology startup based in Ghana. Founded in 2016,...",
+      "launch": 2015,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "CowTribe Africa",
+        "description": "<p>At Cowtribe, we provide simple but innovative solutions to help farmers fight diseases and promote optimal health in their animals. Cowtribe Technology Ltd is a pioneering cloud animal healthcare technology startup based in Ghana. Founded in 2016, our mission is to deliver last mile technology solutions that helps coordinate and improve access to better animal health care services for millions of smallholder farmers in Africa.</p>",
+        "url": "https://www.cowtribe.com/",
+        "founded": 2015,
+        "organisationtype": {
+          "id": 6,
+          "description": "Agritech"
+        },
+        "hqcountry": {
+          "id": "GHA",
+          "description": "Ghana",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 2,
+          "description": "Startup"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 17,
+        "description": "No specification",
+        "usecase": {
+          "id": 4,
+          "description": "Supply Chain Management"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 17,
+          "description": "No specification",
+          "usecase": {
+            "id": 4,
+            "description": "Supply Chain Management"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 1,
+          "description": "Business to consumer"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ],
+      "countries": [
+        {
+          "id": "LBR",
+          "description": "Liberia"
+        },
+        {
+          "id": "SLE",
+          "description": "Sierra Leone"
+        }
+      ],
+      "languages": [],
+      "technologies": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>Agrikore is a blockchain based smart-contracting, payments and marketpace system that ensures that everyone in agriculture(Farmers, FMCGs, Agriculture inputs providers, produce aggregators, insurance companies, financial institutions, governments, development partners) can do business with each other in a trusted environment.</p>",
+      "id": 81,
+      "name": "Agrikore",
+      "organisationname": "Cellulant",
+      "translations": [],
+      "url": "https://play.google.com/store/apps/details?id=com.agrikore.agrikoreapp&hl=en&gl=us",
+      "descriptionshort": "Agrikore is a blockchain based smart-contracting, payments and marketpace system that ensures that everyone in agriculture(Farmers, FMCGs, Agriculture inputs providers, produce aggregators, insurance companies, financial institutions, governments,...",
+      "launch": 2017,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "Cellulant",
+        "description": "<p>Cellulant is a leading multinational payments company in Africa on a mission to digitise payments for Africa’s largest economies. The company operates a one-stop shop payment innovations that enables businesses and consumers to make and accept digital and mobile payments.</p>",
+        "url": "https://www.cellulant.com/",
+        "founded": 2004,
+        "organisationtype": {
+          "id": 2,
+          "description": "Commercial enterprise"
+        },
+        "hqcountry": {
+          "id": "KEN",
+          "description": "Kenya",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 5,
+          "description": "Series C"
+        },
+        "businessGrowthStage": {
+          "id": 3,
+          "description": "Scaling"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 13,
+        "description": "No specification",
+        "usecase": {
+          "id": 3,
+          "description": "Market linkage"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 1,
+          "description": "No specification",
+          "usecase": {
+            "id": 1,
+            "description": "Finance"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 1,
+          "description": "Business to consumer"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ],
+      "countries": [
+        {
+          "id": "KEN",
+          "description": "Kenya"
+        },
+        {
+          "id": "NER",
+          "description": "Niger"
+        },
+        {
+          "id": "NGA",
+          "description": "Nigeria"
+        }
+      ],
+      "languages": [
+        {
+          "id": 8,
+          "description": "English"
+        }
+      ],
+      "technologies": [
+        {
+          "id": 1,
+          "description": "Artificial Intelligence (AI)"
+        },
+        {
+          "id": 9,
+          "description": "Blockchain"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>From data-driven distribution to the last mile delivery, we provide complete procurement and distribution solution for farm supply to partners that want to streamline their distribution and improve efficiency and customer service.</p><p>Business Intelligence</p><p>Always know where your customers are, analyze your market share and real-time critical sales data, growing sales and product performance, saving time and cost through our business intelligence and analytic platform.</p><p>business_intelligence<br>dashboard</p><p>Retail Sector Services</p><p>Our extensive network of retailers allows you to reach customers in the most remote locations. Our alternative technology enabled supply chain allows you to monitor the price at which your products are sold anywhere in the country.</p><p>In addition to data driven smart distribution, iProcure enables you to provide direct after sales support to your customer base, as well as instantly launch robust loyalty programmes in a few clicks. A highly scalable, powerful and free platform at your finger tips.</p><p>Market Reach</p><p>Forget surveys, questionnaires and open ended questions, the only way to obtain real market intelligence is to know what consumers are buying. We give you the information you need, when you need it to make truly informed decisions.</p>",
+      "id": 85,
+      "name": "iProcure Supply Chain Services",
+      "organisationname": "iProcure",
+      "translations": [],
+      "url": "https://iprocu.re/",
+      "descriptionshort": "From data-driven distribution to the last mile delivery, we provide complete procurement and distribution solution for farm supply to partners that want to streamline their distribution and improve efficiency and customer service. Business...",
+      "launch": 2012,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "iProcure",
+        "description": "<p>iProcure is a supply chain platform that aids distribution of rural products in Africa through business intelligence and data-driven stock management.</p>",
+        "url": "https://iprocu.re/",
+        "founded": 2012,
+        "organisationtype": {
+          "id": 6,
+          "description": "Agritech"
+        },
+        "hqcountry": {
+          "id": "KEN",
+          "description": "Kenya",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 18,
+        "description": "Input quality assurance & anti-counterfeiting ",
+        "usecase": {
+          "id": 4,
+          "description": "Supply Chain Management"
+        }
+      },
+      "sectors": [
+        {
+          "id": 1,
+          "description": "Crop farming"
+        },
+        {
+          "id": 5,
+          "description": "Multi-sectoral or sector-independent"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 18,
+          "description": "Input quality assurance & anti-counterfeiting ",
+          "usecase": {
+            "id": 4,
+            "description": "Supply Chain Management"
+          }
+        },
+        {
+          "id": 19,
+          "description": "Logistics",
+          "usecase": {
+            "id": 4,
+            "description": "Supply Chain Management"
+          }
+        },
+        {
+          "id": 20,
+          "description": "Procurement",
+          "usecase": {
+            "id": 4,
+            "description": "Supply Chain Management"
+          }
+        },
+        {
+          "id": 14,
+          "description": "Digitally-enabled value chain integration",
+          "usecase": {
+            "id": 3,
+            "description": "Market linkage"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 2,
+          "description": "Business to business"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 4,
+          "description": "Desktop applications"
+        },
+        {
+          "id": 10,
+          "description": "Mobile applications"
+        },
+        {
+          "id": 19,
+          "description": "Web-based applications"
+        }
+      ],
+      "countries": [
+        {
+          "id": "KEN",
+          "description": "Kenya"
+        },
+        {
+          "id": "TZA",
+          "description": "Tanzania"
+        }
+      ],
+      "languages": [
+        {
+          "id": 8,
+          "description": "English"
+        }
+      ],
+      "technologies": [
+        {
+          "id": 5,
+          "description": "Data analytics & Business Intelligence"
+        },
+        {
+          "id": 12,
+          "description": "Big Data"
+        }
+      ]
+    },
+    {
+      "datemodifiedowner": null,
+      "description": "<p>Public-private service under partnership with SNV, NSO (Netherlands) and Orange Mali, was established by the Sustainable Technology Adaptation for Mali’s Pastoralists (STAMP) project in November of 2017. Garbal provides a tailor-made information service that improves pastoralists’ access to information and aids them in their decision making needs, giving them more control over the management of herd migration. The service may be accessed from a mobile phone, by simply placing a call to a centre managed by Orange Mali or sending a message to request for information on livestock and cereal prices from an Unstructured Supplementary Service Data (USSD).</p>",
+      "id": 86,
+      "name": "Garbal",
+      "organisationname": "NSO/SNV",
+      "translations": [],
+      "url": "https://www.snv.org/update/garbal-satellite-information-service-pastoralist-farmers-northern-mali",
+      "descriptionshort": "Public-private service under partnership with SNV, NSO (Netherlands) and Orange Mali, was established by the Sustainable Technology Adaptation for Mali’s Pastoralists (STAMP) project in November of 2017. Garbal provides a tailor-made information...",
+      "launch": 2017,
+      "organisation": {
+        "datemodifiedowner": null,
+        "name": "NSO/SNV",
+        "description": "<p>Public-private service under partnership with SNV, NSO (Netherlands) and Orange Mali, was established by the Sustainable Technology Adaptation for Mali’s Pastoralists (STAMP) project in November of 2017. Garbal provides a tailor-made information service that improves pastoralists’ access to information and aids them in their decision making needs, giving them more control over the management of herd migration. The service may be accessed from a mobile phone, by simply placing a call to a centre managed by Orange Mali or sending a message to request for information on livestock and cereal prices from an Unstructured Supplementary Service Data (USSD).</p>",
+        "url": "https://www.snv.org/",
+        "founded": 2017,
+        "organisationtype": {
+          "id": 4,
+          "description": "MNO deployment"
+        },
+        "hqcountry": {
+          "id": "MLI",
+          "description": "Mali",
+          "lmic": true
+        },
+        "hqregion": {
+          "id": 0,
+          "description": "Other",
+          "country": null
+        },
+        "businessFundingStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "businessGrowthStage": {
+          "id": 0,
+          "description": "No specification"
+        },
+        "translations": []
+      },
+      "primarysubusecase": {
+        "id": 8,
+        "description": "No specification",
+        "usecase": {
+          "id": 2,
+          "description": "Farm management & Advisory"
+        }
+      },
+      "sectors": [
+        {
+          "id": 0,
+          "description": "No specification"
+        }
+      ],
+      "tags": [],
+      "subUseCases": [
+        {
+          "id": 8,
+          "description": "No specification",
+          "usecase": {
+            "id": 2,
+            "description": "Farm management & Advisory"
+          }
+        }
+      ],
+      "businessModels": [
+        {
+          "id": 1,
+          "description": "Business to consumer"
+        }
+      ],
+      "regions": [],
+      "channels": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ],
+      "countries": [
+        {
+          "id": "MLI",
+          "description": "Mali"
+        }
+      ],
+      "languages": [
+        {
+          "id": 8,
+          "description": "English"
+        }
+      ],
+      "technologies": [
+        {
+          "id": 0,
+          "description": "Other"
+        }
+      ]
+    }
+  ]
+}
