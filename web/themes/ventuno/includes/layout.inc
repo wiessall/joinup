@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\block\Entity\Block;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Template\Attribute;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\TermInterface;
@@ -34,18 +35,18 @@ function ventuno_preprocess_page(array &$variables): void {
 
   /** @var \Drupal\joinup_menu\MenuHelperInterface $menu_helper */
   $menu_helper = \Drupal::service('joinup_menu.menu_helper');
-  $variables['landing_page_links'] = $menu_helper->getBclLandingPageLinks();
-
-  // Export the user account menu in the format expected by the header template.
-  $variables['profile_links'] = $menu_helper->getBclAccountMenu();
-
-  // Populate the links shown to anonymous users.
-  $variables['anonymous_links'] = $menu_helper->getBclAnonymousMenu();
-
-  // The "About us" link is only shown if the Joinup collection exists.
-  $variables['#cache']['tags'][] = 'joinup_collection:exists';
-  // Moderator can change navbar links.
-  $variables['#cache']['tags'][] = 'config:system.menu.navbar';
+  $variables['landing_page_links'] = [];
+  $variables['profile_links'] = [];
+  $variables['anonymous_links'] = [];
+  $cacheability = CacheableMetadata::createFromRenderArray($variables);
+  if ($current_user->isAuthenticated()) {
+    $variables['landing_page_links'] = $menu_helper->getBclLandingPageLinks($cacheability);
+    $variables['profile_links'] = $menu_helper->getBclAccountMenu($cacheability);
+  }
+  else {
+    $variables['anonymous_links'] = $menu_helper->getBclAnonymousMenu($cacheability);
+  }
+  $cacheability->applyTo($variables);
 
   $variables['hide_searchbar'] = FALSE;
   $route_match = \Drupal::routeMatch();

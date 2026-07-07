@@ -6,6 +6,8 @@ namespace Drupal\joinup_menu;
 
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Cache\VariationCacheFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Menu\MenuLinkTreeElement;
@@ -18,7 +20,7 @@ use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og_menu\OgMenuInstanceInterface;
 use Drupal\rdf_sync\RdfSyncMapperInterface;
-use Exception;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -36,42 +38,37 @@ class MenuHelper implements MenuHelperInterface {
     protected readonly RequestStack $requestStack,
     protected readonly PathMatcherInterface $pathMatcher,
     protected readonly RdfSyncMapperInterface $mapper,
+    #[Autowire(service: 'variation_cache_factory')]
+    protected readonly VariationCacheFactoryInterface $variationCacheFactory,
   ) {}
 
   /**
    * {@inheritdoc}
    */
-  public function getBclAccountMenu(): array {
-    $tree = $this->getMenuLinkElements('account');
-
-    return array_map(function (MenuLinkTreeElement $element): array {
-      return [
-        'link' => $element->link->getUrlObject(),
-        'label' => $element->link->getTitle(),
-        'in_active_trail' => $element->inActiveTrail,
-      ];
-    }, $tree);
+  public function getBclAccountMenu(CacheableMetadata $cacheability): array {
+    $cacheability->addCacheTags(['config:system.menu.account']);
+    $cacheability->addCacheContexts(['route.menu_active_trails:account']);
+    $links = [];
+    foreach ($this->getMenuLinkElements('account') as $element) {
+      $links[] = $this->buildBclLink($element);
+    }
+    return $links;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getBclAnonymousMenu(): array {
-    // Populate the links shown to anonymous users.
+  public function getBclAnonymousMenu(CacheableMetadata $cacheability): array {
     $anonymous_links = [];
 
-    // Add a link to the homepage, only to be shown in the hamburger menu.
     $anonymous_links[] = [
       'label' => $this->t('Home'),
       'link' => Url::fromRoute('<front>'),
       'hide_on_desktop' => TRUE,
     ];
 
-    // Include the links to the interoperability landing pages.
-    $anonymous_links = array_merge($anonymous_links, $this->getBclLandingPageLinks());
+    $anonymous_links = array_merge($anonymous_links, $this->getBclLandingPageLinks($cacheability));
 
-    // Generate a link to EU Login.
-    // Get return URL from current page.
     $cas_login_link = Url::fromRoute('cas.login', [], [
       'query' => $this->getDestinationArray(),
     ]);
@@ -82,7 +79,6 @@ class MenuHelper implements MenuHelperInterface {
       'attributes' => ['class' => ['sign-in-link']],
     ];
 
-    // Generate a link button that opens the "Get started" popover.
     $popover = [
       'cta' => [
         // Even though the link claims to lead to an account creation form, we
@@ -100,60 +96,61 @@ class MenuHelper implements MenuHelperInterface {
       'popover' => $popover,
     ];
 
-    // Generate a link to the Joinup collection, to show as the "About us" link
-    // in the hamburger menu for anonymous users.
-    try {
-      $joinup_collection = $this->mapper->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_URI);
-      if (!$joinup_collection instanceof CollectionInterface) {
-        throw new Exception();
-      }
-      $url = $joinup_collection->toUrl();
-      $anonymous_links[] = [
-        'label' => $this->t('About us'),
-        'link' => $url,
-        'hide_on_desktop' => TRUE,
-      ];
-    }
-    catch (Exception $e) {
-      // The Joinup collection could not be loaded or the link to the About page
-      // could not be generated. This should not crash the page since the
-      // collection is considered to be optional. It is for example possible for
-      // a project to reuse the Joinup open source code without hosting a
-      // "Joinup" collection.
-      // However, in scope of the Ventuno theme the About Us link is considered
-      // to be an important element, so we log a warning to alert the webmaster
-      // that corrective action is required.
-      $this->logger->get('joinup_menu')->warning('"About us" link could not be rendered because the Interoperable Europe Portal collection is not defined or doesn\'t have an About page.');
+    if ($about_us_link = $this->getBclAboutUsLink($cacheability)) {
+      $anonymous_links[] = $about_us_link;
     }
 
     return $anonymous_links;
   }
 
   /**
+   * Returns the "About us" link pointing to the Joinup collection landing page.
+   *
+   * @param \Drupal\Core\Cache\CacheableMetadata $cacheability
+   *   Collects cacheability for the "About us" link.
+   *
+   * @return array|null
+   *   The "About us" link in the BCL header template format, or NULL when the
+   *   Joinup collection does not exist.
+   */
+  protected function getBclAboutUsLink(CacheableMetadata $cacheability): ?array {
+    return $this->cachedBuild(['joinup_menu', 'about_us_link'], ['languages:language_interface'], $cacheability, function (CacheableMetadata $build_cacheability): ?array {
+      $build_cacheability->addCacheTags(['joinup_collection:exists']);
+      $joinup_collection = $this->mapper->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_URI);
+      if (!$joinup_collection instanceof CollectionInterface) {
+        $this->logger->get('joinup_menu')->warning('"About us" link could not be rendered because the Interoperable Europe Portal collection is not defined or doesn\'t have an About page.');
+        return NULL;
+      }
+      $build_cacheability->addCacheableDependency($joinup_collection);
+      return [
+        'label' => $this->t('About us'),
+        'link' => $joinup_collection->toUrl(),
+        'hide_on_desktop' => TRUE,
+      ];
+    });
+  }
+
+  /**
    * {@inheritdoc}
    */
-  public function getBclLandingPageLinks(): array {
-    $tree = $this->getMenuLinkElements('navbar');
-
-    return array_map(function (MenuLinkTreeElement $element): array {
-      $link = [
-        'link' => $element->link->getUrlObject()->setOption('set_active_class', TRUE),
-        'label' => $element->link->getTitle(),
-        'children' => [],
-        'in_active_trail' => $element->inActiveTrail,
-      ];
-      if ($element->hasChildren) {
+  public function getBclLandingPageLinks(CacheableMetadata $cacheability): array {
+    return $this->cachedBuild(['joinup_menu', 'landing_page_links'], [
+      'languages:language_interface',
+      'user.permissions',
+      'route.menu_active_trails:navbar',
+    ], $cacheability, function (CacheableMetadata $build_cacheability): array {
+      $build_cacheability->addCacheTags(['config:system.menu.navbar']);
+      $links = [];
+      foreach ($this->getMenuLinkElements('navbar') as $element) {
+        $link = $this->buildBclLink($element, TRUE);
+        $link['children'] = [];
         foreach ($element->subtree as $child) {
-          $link['children'][] = [
-            'link' => $child->link->getUrlObject()->setOption('set_active_class', TRUE),
-            'label' => $child->link->getTitle(),
-            'in_active_trail' => $child->inActiveTrail,
-          ];
+          $link['children'][] = $this->buildBclLink($child, TRUE);
         }
+        $links[] = $link;
       }
-
-      return $link;
-    }, $tree);
+      return $links;
+    });
   }
 
   /**
@@ -167,6 +164,63 @@ class MenuHelper implements MenuHelperInterface {
     ]);
 
     return $ogMenuInstances ? reset($ogMenuInstances) : NULL;
+  }
+
+  /**
+   * Returns a context-varied cached menu build, computing it on a cache miss.
+   *
+   * @param string[] $keys
+   *   The cache keys identifying the build.
+   * @param string[] $contexts
+   *   The cache context tokens the build varies by.
+   * @param \Drupal\Core\Cache\CacheableMetadata $cacheability
+   *   Collects cacheability for the build: the $contexts and whatever the
+   *   builder declares are added to it.
+   * @param callable $builder
+   *   A callback that receives a cache metadata object to populate and returns
+   *   the build result to cache.
+   *
+   * @return mixed
+   *   The cached, or freshly computed, build result.
+   */
+  protected function cachedBuild(array $keys, array $contexts, CacheableMetadata $cacheability, callable $builder): mixed {
+    $initial = (new CacheableMetadata())->setCacheContexts($contexts);
+    $cacheability->addCacheableDependency($initial);
+    $cache = $this->variationCacheFactory->get('default');
+    if ($cached = $cache->get($keys, $initial)) {
+      $cacheability->addCacheableDependency($cached->data['cacheability']);
+      return $cached->data['build'];
+    }
+
+    $build_cacheability = clone $initial;
+    $build = $builder($build_cacheability);
+    $data = ['build' => $build, 'cacheability' => $build_cacheability];
+    $cache->set($keys, $data, $build_cacheability, $initial);
+    $cacheability->addCacheableDependency($build_cacheability);
+    return $build;
+  }
+
+  /**
+   * Maps a menu tree element to the BCL header template link format.
+   *
+   * @param \Drupal\Core\Menu\MenuLinkTreeElement $element
+   *   The menu tree element to map.
+   * @param bool $set_active_class
+   *   Whether to let Drupal mark the link active on the matching path.
+   *
+   * @return array
+   *   The link in the BCL header template format.
+   */
+  protected function buildBclLink(MenuLinkTreeElement $element, bool $set_active_class = FALSE): array {
+    $url = $element->link->getUrlObject();
+    if ($set_active_class) {
+      $url->setOption('set_active_class', TRUE);
+    }
+    return [
+      'link' => $url,
+      'label' => $element->link->getTitle(),
+      'in_active_trail' => $element->inActiveTrail,
+    ];
   }
 
   /**
