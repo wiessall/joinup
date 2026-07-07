@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "20caec2d003534180ff4a946b26d6a5e",
+    "content-hash": "09e50e2cb5e6dcf40666dcccb3ff6678",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2550,17 +2550,17 @@
         },
         {
             "name": "drupal/colorbox",
-            "version": "2.2.0",
+            "version": "2.2.1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/colorbox.git",
-                "reference": "2.2.0"
+                "reference": "2.2.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/colorbox-2.2.0.zip",
-                "reference": "2.2.0",
-                "shasum": "b1f705535b85593e86819da548be0f2f8714d363"
+                "url": "https://ftp.drupal.org/files/projects/colorbox-2.2.1.zip",
+                "reference": "2.2.1",
+                "shasum": "73f339870ae48c40a0373708fd84bb5602f4b4ea"
             },
             "require": {
                 "drupal/core": "^10 || ^11"
@@ -2571,8 +2571,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.2.0",
-                    "datestamp": "1769451683",
+                    "version": "2.2.1",
+                    "datestamp": "1782926202",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -24036,16 +24036,16 @@
         },
         {
             "name": "drupaltest/behat-one-time-login",
-            "version": "dev-master",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/idimopoulos/behat-one-time-login.git",
-                "reference": "a2207ad56a0f49b26d4e31449aac74eb01a9894a"
+                "url": "https://github.com/drupaltest/behat-one-time-login.git",
+                "reference": "79c7c8c84657c9bbefe97c4e5908659dd7b82e1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/idimopoulos/behat-one-time-login/zipball/a2207ad56a0f49b26d4e31449aac74eb01a9894a",
-                "reference": "a2207ad56a0f49b26d4e31449aac74eb01a9894a",
+                "url": "https://api.github.com/repos/drupaltest/behat-one-time-login/zipball/79c7c8c84657c9bbefe97c4e5908659dd7b82e1f",
+                "reference": "79c7c8c84657c9bbefe97c4e5908659dd7b82e1f",
                 "shasum": ""
             },
             "require": {
@@ -24061,7 +24061,6 @@
                 "squizlabs/php_codesniffer": "~3.5",
                 "zaporylie/composer-drupal-optimizations": "~1.1"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "drupal-scaffold": {
@@ -24080,6 +24079,7 @@
                     "DrupalTest\\BehatOneTimeLogin\\": "src"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-2.0-or-later"
             ],
@@ -24092,9 +24092,10 @@
             "description": "Authenticates users through the Drupal one time login mechanism.",
             "homepage": "https://github.com/drupaltest/behat-one-time-login",
             "support": {
-                "source": "https://github.com/idimopoulos/behat-one-time-login/tree/master"
+                "issues": "https://github.com/drupaltest/behat-one-time-login/issues",
+                "source": "https://github.com/drupaltest/behat-one-time-login/tree/2.0.0"
             },
-            "time": "2026-05-05T20:26:30+00:00"
+            "time": "2026-05-06T15:54:50+00:00"
         },
         {
             "name": "ec-europa/toolkit",
@@ -28560,7 +28561,6 @@
         "drupal/private_message": 15,
         "drupal/private_message_flood": 15,
         "drupal/ultimate_cron": 10,
-        "drupaltest/behat-one-time-login": 20,
         "weitzman/drupal-test-traits": 20
     },
     "prefer-stable": true,

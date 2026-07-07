@@ -19,3 +19,5 @@ services:
   topic:
     class: Drupal\topic\Service\TopicService
     Drupal\topic\Service\TopicServiceInterface: '@topic'
+
+  Drupal\topic\Service\HomepageTopicsQueueService: { }

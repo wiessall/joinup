@@ -2930,38 +2930,6 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Cleans up the environment after a curated homepage topics scenarios.
-   *
-   * These scenarios are altering the topic term meta entities. We need to reset
-   * them after each run. Because we have a mechanism to delete new content, we
-   * are simply resetting the values instead.
-   */
-  #[AfterScenario('@topic&&@api')]
-  public function resetTopicMetaEntity(): void {
-    // Remove any entity queue related to homepage topics.
-    \Drupal::entityTypeManager()->getStorage('entity_subqueue')
-      ->load('homepage_topics')
-      ->clearItems()
-      ->save();
-
-    $meta_entity_storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
-    $ids = $meta_entity_storage->getQuery()
-      ->accessCheck(FALSE)
-      ->condition('type', 'topic')
-      ->execute();
-    if ($ids) {
-      foreach ($meta_entity_storage->loadMultiple($ids) as $meta_entity) {
-        $meta_entity
-          ->set('topics_paragraph', NULL)
-          ->set('published', FALSE)
-          ->set('image', NULL)
-          ->set('description', NULL)
-          ->save();
-      }
-    }
-  }
-
-  /**
    * Stores most recent IDs of entity types that should be cleaned up.
    *
    * @param \Behat\Behat\Hook\Scope\BeforeScenarioScope $scope

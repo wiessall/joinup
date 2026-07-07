@@ -1,0 +1,325 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the topic module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+
+/**
+ * Install new taxonomy_term.topic field configs and topic_vocabulary view.
+ */
+function topic_update_201500(): void {
+  $sync_storage = \Drupal::service('config.storage.sync');
+
+  $storage_configs = [
+    'field.storage.taxonomy_term.abstract',
+    'field.storage.taxonomy_term.image',
+    'field.storage.taxonomy_term.topics_paragraph',
+  ];
+
+  foreach ($storage_configs as $name) {
+    $config_data = $sync_storage->read($name);
+    if ($config_data && !FieldStorageConfig::load($config_data['id'])) {
+      FieldStorageConfig::create($config_data)->save();
+    }
+  }
+
+  $field_configs = [
+    'field.field.taxonomy_term.topic.abstract',
+    'field.field.taxonomy_term.topic.image',
+    'field.field.taxonomy_term.topic.topics_paragraph',
+  ];
+
+  foreach ($field_configs as $name) {
+    $config_data = $sync_storage->read($name);
+    if ($config_data && !FieldConfig::load($config_data['id'])) {
+      FieldConfig::create($config_data)->save();
+    }
+  }
+
+  $view_storage = \Drupal::entityTypeManager()->getStorage('view');
+  if (!$view_storage->load('topic_vocabulary')) {
+    $config_data = $sync_storage->read('views.view.topic_vocabulary');
+    if ($config_data) {
+      $view_storage->create($config_data)->save();
+    }
+  }
+}
+
+/**
+ * Add taxonomy_term.topic to all continuous TMGMT job settings.
+ */
+function topic_update_201501(): void {
+  /** @var \Drupal\tmgmt\JobInterface[] $jobs */
+  $jobs = \Drupal::entityTypeManager()
+    ->getStorage('tmgmt_job')
+    ->loadByProperties(['job_type' => 'continuous']);
+
+  foreach ($jobs as $job) {
+    $settings = $job->getContinuousSettings();
+    if (!isset($settings['content']['taxonomy_term'])) {
+      $settings['content']['taxonomy_term'] = [
+        'enabled' => TRUE,
+        'bundles' => ['topic' => TRUE],
+      ];
+      $job->set('continuous_settings', $settings);
+      $job->save();
+    }
+  }
+}
+
+/**
+ * Migrate topic meta entity data to taxonomy term fields.
+ */
+function topic_update_201502(array &$sandbox): string {
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $meta_entity_storage = $entity_type_manager->getStorage('meta_entity');
+  $logger = \Drupal::logger('topic');
+
+  $or = $meta_entity_storage->getQuery()->orConditionGroup()
+    ->condition('description.value', NULL, 'IS NOT NULL')
+    ->condition('image.target_id', NULL, 'IS NOT NULL')
+    ->condition('topics_paragraph.target_id', NULL, 'IS NOT NULL');
+
+  $ids = $meta_entity_storage->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('type', 'topic')
+    ->condition($or)
+    ->execute();
+
+  if (empty($ids)) {
+    return 'No topic meta entities found to migrate.';
+  }
+
+  $meta_entities = $meta_entity_storage->loadMultiple($ids);
+  $migrated = 0;
+  $skipped = 0;
+
+  foreach ($meta_entities as $meta_entity) {
+    $term = $meta_entity->getTargetEntity();
+
+    if (!$term) {
+      $logger->warning('Topic meta entity @id has no linked taxonomy term, skipping.', ['@id' => $meta_entity->id()]);
+      $skipped++;
+      continue;
+    }
+
+    $description_item = $meta_entity->get('description')->first();
+    if ($description_item && $term->get('description')->isEmpty()) {
+      $term->set('description', [
+        'value' => $description_item->value,
+        'format' => $description_item->format,
+      ]);
+    }
+
+    if ($description_item && !empty($description_item->summary) &&
+      $term->get('abstract')->isEmpty()) {
+      $term->set('abstract', $description_item->summary);
+    }
+
+    if (!$meta_entity->get('image')->isEmpty() &&
+      $term->get('image')->isEmpty()) {
+      $term->set('image', $meta_entity->get('image')->getValue());
+    }
+
+    if (!$meta_entity->get('topics_paragraph')->isEmpty() &&
+      $term->get('topics_paragraph')->isEmpty()) {
+      $cloned_paragraphs = [];
+      foreach ($meta_entity->get('topics_paragraph') as $paragraph_item) {
+        $paragraph = $paragraph_item->entity;
+        if ($paragraph) {
+          $clone = $paragraph->createDuplicate();
+          $clone->save();
+          $cloned_paragraphs[] = [
+            'target_id' => $clone->id(),
+            'target_revision_id' => $clone->getRevisionId(),
+          ];
+        }
+      }
+      if ($cloned_paragraphs) {
+        $term->set('topics_paragraph', $cloned_paragraphs);
+      }
+    }
+
+    foreach ($meta_entity->getTranslationLanguages(FALSE) as $langcode => $language) {
+      $meta_translation = $meta_entity->getTranslation($langcode);
+      $translated_description = $meta_translation->get('description')->first();
+
+      if (!$term->hasTranslation($langcode)) {
+        $term->addTranslation($langcode);
+      }
+      $term_translation = $term->getTranslation($langcode);
+
+      if ($translated_description && $term_translation->get('description')
+        ->isEmpty()) {
+        $term_translation->set('description', [
+          'value' => $translated_description->value,
+          'format' => $translated_description->format,
+        ]);
+      }
+
+      if ($translated_description && !empty($translated_description->summary) &&
+        $term_translation->get('abstract')->isEmpty()) {
+        $term_translation->set('abstract', $translated_description->summary);
+      }
+    }
+
+    $term->save();
+    $logger->info('Migrated topic meta entity @id to taxonomy term @tid.', [
+      '@id' => $meta_entity->id(),
+      '@tid' => $term->id(),
+    ]);
+    $migrated++;
+  }
+
+  return sprintf('Migrated %d topic meta entities (%d without linked term).', $migrated, $skipped);
+}
+
+/**
+ * Migrate homepage_topics entityqueue items from meta_entity to taxonomy_term.
+ */
+function topic_update_201503(): string {
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $subqueue = $entity_type_manager->getStorage('entity_subqueue')
+    ->load('homepage_topics');
+  if (!$subqueue) {
+    return 'Homepage topics subqueue not found.';
+  }
+
+  $meta_entity_storage = $entity_type_manager->getStorage('meta_entity');
+  $items = $subqueue->get('items');
+
+  if ($items->isEmpty()) {
+    return 'No items found in homepage_topics entityqueue.';
+  }
+
+  $term_ids = [];
+  foreach ($items as $item) {
+    $meta_entity = $meta_entity_storage->load($item->target_id);
+    if (!$meta_entity) {
+      continue;
+    }
+    $term = $meta_entity->getTargetEntity();
+    if (!$term) {
+      continue;
+    }
+    $term_ids[] = ['target_id' => $term->id()];
+  }
+
+  $subqueue->set('items', $term_ids);
+  $subqueue->save();
+
+  return sprintf('Migrated %d homepage_topics queue items.', count($term_ids));
+}
+
+/**
+ * Transfer URL aliases from meta_entity topics to taxonomy term topics.
+ */
+function topic_update_201504(): string {
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $meta_entity_storage = $entity_type_manager->getStorage('meta_entity');
+  $db = \Drupal::database();
+
+  $ids = $meta_entity_storage->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('type', 'topic')
+    ->execute();
+
+  if (empty($ids)) {
+    return 'No topic meta entities found.';
+  }
+
+  $updated = 0;
+
+  foreach ($meta_entity_storage->loadMultiple($ids) as $meta_entity) {
+    $term = $meta_entity->getTargetEntity();
+    if (!$term) {
+      continue;
+    }
+
+    $meta_entity_path = '/meta-entity/' . $meta_entity->id();
+    $term_path = '/taxonomy/term/' . $term->id();
+
+    $db->update('path_alias')
+      ->fields(['path' => $term_path])
+      ->condition('path', $meta_entity_path)
+      ->execute();
+
+    $db->update('path_alias_revision')
+      ->fields(['path' => $term_path])
+      ->condition('path', $meta_entity_path)
+      ->execute();
+
+    $updated++;
+  }
+
+  return sprintf('Updated URL aliases for %d topic taxonomy terms.', $updated);
+}
+
+/**
+ * Delete orphaned TMGMT job items for topic meta entities.
+ */
+function topic_update_201505(array &$sandbox): string {
+  if (!isset($sandbox['total'])) {
+    $sandbox['ids'] = \Drupal::entityTypeManager()
+      ->getStorage('meta_entity')
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', 'topic')
+      ->execute();
+    $sandbox['total'] = count($sandbox['ids']);
+    $sandbox['current'] = 0;
+  }
+
+  $items = array_slice($sandbox['ids'], $sandbox['current'], 50);
+
+  if ($items) {
+    \Drupal::database()->delete('tmgmt_job_item')
+      ->condition('item_type', 'meta_entity')
+      ->condition('item_id', $items, 'IN')
+      ->execute();
+    $sandbox['current'] += count($items);
+  }
+
+  $sandbox['#finished'] = ($sandbox['total'] == 0) ? 1 : ($sandbox['current'] / $sandbox['total']);
+
+  return (string) t('Processed @current of @total topic meta entities TMGMT job items.', [
+    '@current' => $sandbox['current'],
+    '@total' => $sandbox['total'],
+  ]);
+}
+
+/**
+ * Delete all topic meta entities.
+ */
+function topic_update_201506(array &$sandbox): string {
+  $storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
+
+  if (!isset($sandbox['total'])) {
+    $sandbox['ids'] = $storage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', 'topic')
+      ->execute();
+    $sandbox['total'] = count($sandbox['ids']);
+    $sandbox['current'] = 0;
+  }
+
+  $items = array_slice($sandbox['ids'], $sandbox['current'], 10);
+
+  if ($items) {
+    $storage->delete($storage->loadMultiple($items));
+    $sandbox['current'] += count($items);
+  }
+
+  $sandbox['#finished'] = ($sandbox['total'] == 0) ? 1 : ($sandbox['current'] / $sandbox['total']);
+
+  return (string) t('Deleted @current of @total topic meta entities.', [
+    '@current' => $sandbox['current'],
+    '@total' => $sandbox['total'],
+  ]);
+}
