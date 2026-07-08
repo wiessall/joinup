@@ -15,12 +15,12 @@ field_name: featured
 entity_type: meta_entity
 bundle: featured
 label: Featured
-description: ''
+description: 'Featured content will be shown at the top of lists and their tiles show an icon to indicate that their importance.'
 required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  on_label: 'On'
-  off_label: 'Off'
+  on_label: Featured
+  off_label: 'Not featured'
 field_type: boolean
