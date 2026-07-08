@@ -1,7 +1,3 @@
 # Ignore generated files.
 /web/themes/ventuno/assets/
 /web/themes/iop/assets/
-
-# Ignore publiccode.yml editor.
-/.ddev/publiccode/
-/web/publiccode-editor/
