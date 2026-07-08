@@ -13,7 +13,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_core\Logger\Handler\MailHandler;
-use Drupal\joinup_core\Logger\Handler\TelegramHandler;
 use Drupal\rdf_sync\RdfSyncConnectionInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
@@ -192,7 +191,6 @@ class DashboardForm extends FormBase {
   protected function getLogAlertsDefaultSettings(): array {
     return [
       'mail' => MailHandler::getDefaultSettings(),
-      'telegram' => TelegramHandler::getDefaultSettings(),
     ];
   }
 
