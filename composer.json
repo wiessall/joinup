@@ -470,7 +470,8 @@
                 "PHP Deprecated: Optional parameter declared before required parameter @see https://www.drupal.org/i/3511207": "resources/patch/php/drupal/message_digest/3511207.mr27.diff"
             },
             "drupal/meta_entity": {
-                "hook_entity_insert() auto-creates duplicate @see https://www.drupal.org/i/3583434": "resources/patch/php/drupal/meta_entity/3583434.mr20-commitf3ef1e53.diff"
+                "hook_entity_insert() auto-creates duplicate @see https://www.drupal.org/i/3583434": "resources/patch/php/drupal/meta_entity/3583434.mr20-commitf3ef1e53.diff",
+                "MetaEntity::loadOrCreateHelper hits DB every time. @see https://www.drupal.org/i/3594355": "resources/patch/php/drupal/meta_entity/3594355.mr21-commit33302c33.diff"
             },
             "drupal/metatag": {
                 "PHP 8.5 @see https://www.drupal.org/project/metatag/issues/3581128": "resources/patch/php/drupal/metatag/3581128.comment-2.diff"
