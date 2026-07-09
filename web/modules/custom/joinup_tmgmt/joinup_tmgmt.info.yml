@@ -1,0 +1,7 @@
+name: Joinup TMGMT
+description: Customizations for the Translation Management Tool (TMGMT).
+type: module
+package: Joinup
+core_version_requirement: "^10.4 || ^11"
+dependencies:
+  - tmgmt:tmgmt_content
