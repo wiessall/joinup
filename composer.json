@@ -500,6 +500,9 @@
                 "Drupal 11 deprecation: Renderer::render(NULL) @see https://www.drupal.org/i/3565601": "resources/patch/php/drupal/private_message/3565601.mr210-commit4be8b7a9.diff",
                 "Inbox thread ordering is non-deterministic when two threads share the same updated timestamp @see https://www.drupal.org/i/3593914": "resources/patch/php/drupal/private_message/3593914.mr212-commita1374a8a.diff"
             },
+            "drupal/rdf_sync": {
+                "TypeError: Drupal\\Component\\Utility\\Html::escape(): Argument #1 ($text) must be of type string, null given @see https://git.drupalcode.org/project/rdf_sync/-/work_items/3602349": "resources/patch/php/drupal/rdf_sync/3602349.diff"
+            },
             "drupal/search_api": {
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199-42e0e284.diff"
             },
