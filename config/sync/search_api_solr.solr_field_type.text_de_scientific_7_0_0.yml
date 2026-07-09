@@ -26,7 +26,7 @@ field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_de.txt
       tokenizer:
-        class: solr.WhitespaceTokenizerFactory
+        class: solr.StandardTokenizerFactory
       filters:
         -
           class: solr.LengthFilterFactory
@@ -58,7 +58,7 @@ field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_de.txt
       tokenizer:
-        class: solr.WhitespaceTokenizerFactory
+        class: solr.StandardTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterGraphFilterFactory
@@ -91,6 +91,7 @@ field_type:
           language: German2
         -
           class: solr.RemoveDuplicatesTokenFilterFactory
+  storeOffsetsWithPositions: true
 unstemmed_field_type: null
 spellcheck_field_type: null
 collated_field_type: null

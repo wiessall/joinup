@@ -25,7 +25,7 @@ field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_de.txt
       tokenizer:
-        class: solr.WhitespaceTokenizerFactory
+        class: solr.StandardTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterFilterFactory
@@ -69,7 +69,7 @@ field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_de.txt
       tokenizer:
-        class: solr.WhitespaceTokenizerFactory
+        class: solr.StandardTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterFilterFactory
@@ -102,6 +102,7 @@ field_type:
           language: German2
         -
           class: solr.RemoveDuplicatesTokenFilterFactory
+  storeOffsetsWithPositions: true
 unstemmed_field_type:
   name: text_unstemmed_de
   class: solr.TextField
@@ -114,7 +115,7 @@ unstemmed_field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_de.txt
       tokenizer:
-        class: solr.WhitespaceTokenizerFactory
+        class: solr.StandardTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterFilterFactory
@@ -154,7 +155,7 @@ unstemmed_field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_de.txt
       tokenizer:
-        class: solr.WhitespaceTokenizerFactory
+        class: solr.StandardTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterFilterFactory
@@ -183,6 +184,7 @@ unstemmed_field_type:
           words: stopwords_de.txt
         -
           class: solr.RemoveDuplicatesTokenFilterFactory
+  storeOffsetsWithPositions: true
 spellcheck_field_type: null
 collated_field_type:
   name: collated_de

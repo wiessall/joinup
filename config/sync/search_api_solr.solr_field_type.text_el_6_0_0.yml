@@ -22,7 +22,7 @@ field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_el.txt
       tokenizer:
-        class: solr.WhitespaceTokenizerFactory
+        class: solr.StandardTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterFilterFactory
@@ -51,7 +51,7 @@ field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_el.txt
       tokenizer:
-        class: solr.WhitespaceTokenizerFactory
+        class: solr.StandardTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterFilterFactory
@@ -78,6 +78,7 @@ field_type:
           class: solr.GreekStemFilterFactory
         -
           class: solr.RemoveDuplicatesTokenFilterFactory
+  storeOffsetsWithPositions: true
 unstemmed_field_type:
   name: text_unstemmed_el
   class: solr.TextField
@@ -90,7 +91,7 @@ unstemmed_field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_el.txt
       tokenizer:
-        class: solr.WhitespaceTokenizerFactory
+        class: solr.StandardTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterFilterFactory
@@ -117,7 +118,7 @@ unstemmed_field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_el.txt
       tokenizer:
-        class: solr.WhitespaceTokenizerFactory
+        class: solr.StandardTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterFilterFactory
@@ -142,6 +143,7 @@ unstemmed_field_type:
           words: stopwords_el.txt
         -
           class: solr.RemoveDuplicatesTokenFilterFactory
+  storeOffsetsWithPositions: true
 spellcheck_field_type: null
 collated_field_type:
   name: collated_el
