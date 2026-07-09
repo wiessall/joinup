@@ -1,0 +1,18 @@
+uuid: 698e4c75-efc1-4c69-b408-b9566f31e6cd
+langcode: en
+status: true
+dependencies:
+  module:
+    - meta_entity
+id: meta_entity.featured
+field_name: featured
+entity_type: meta_entity
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

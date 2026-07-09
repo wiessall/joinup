@@ -15,7 +15,6 @@ module:
   block: 0
   block_field: 0
   breakpoint: 0
-  cached_computed_field: 0
   calendar_view: 0
   cas: 0
   cas_attributes: 0
@@ -149,6 +148,7 @@ module:
   joinup_subscription: 0
   joinup_taxonomy: 0
   joinup_tiles: 0
+  joinup_tmgmt: 0
   joinup_tour: 0
   joinup_user: 0
   joinup_validation: 0
