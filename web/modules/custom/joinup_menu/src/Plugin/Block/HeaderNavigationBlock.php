@@ -76,7 +76,7 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
 
     if (!$logged_in) {
       $anonymous_links = $this->menuHelper->getBclAnonymousMenu($cacheability);
-      $cacheability->addCacheContexts(['url.path']);
+      $cacheability->addCacheContexts(['url.path', 'url.query_args']);
       $items[] = [
         'type' => 'mmenu',
         'breakpoint' => 'xl',
