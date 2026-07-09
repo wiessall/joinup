@@ -189,7 +189,7 @@ display:
           value:
             min: ''
             max: ''
-            value: '+7 day'
+            value: 'midnight +7 days'
             type: offset
           group: 1
           exposed: false
