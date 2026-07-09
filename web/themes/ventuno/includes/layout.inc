@@ -62,6 +62,14 @@ function ventuno_preprocess_menu__account(array &$variables): void {
 }
 
 /**
+ * Implements hook_preprocess_HOOK() for region--header-navigation.html.twig.
+ */
+function ventuno_preprocess_region__header_navigation(array &$variables): void {
+  $variables['is_front'] = \Drupal::service('path.matcher')->isFrontPage();
+  $variables['#cache']['contexts'][] = 'url.path.is_front';
+}
+
+/**
  * Implements hook_theme_suggestions_HOOK_alter() for container.html.twig.
  */
 function ventuno_theme_suggestions_container_alter(array &$suggestions, array $variables): void {
