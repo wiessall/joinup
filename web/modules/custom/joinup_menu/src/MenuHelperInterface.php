@@ -13,20 +13,6 @@ use Drupal\og_menu\OgMenuInstanceInterface;
 interface MenuHelperInterface {
 
   /**
-   * Returns the account menu in the format expected by the BCL header template.
-   *
-   * @param \Drupal\Core\Cache\CacheableMetadata $cacheability
-   *   Collects cacheability for the account menu.
-   *
-   * @return array[]
-   *   An array of menu links for the account menu in the BCL header template
-   *   format, which is an array of arrays with the following keys:
-   *   - link: The URL the link points to.
-   *   - label: The link label.
-   */
-  public function getBclAccountMenu(CacheableMetadata $cacheability): array;
-
-  /**
    * Returns the anonymous menu in the format used by the BCL header template.
    *
    * @param \Drupal\Core\Cache\CacheableMetadata $cacheability
@@ -39,24 +25,6 @@ interface MenuHelperInterface {
    *   - label: The link label.
    */
   public function getBclAnonymousMenu(CacheableMetadata $cacheability): array;
-
-  /**
-   * Returns landing page links in the format used by the BCL header template.
-   *
-   * The landing pages returned are:
-   *   - Interoperable Europe collection landing page.
-   *   - Joinup collection landing page.
-   *
-   * @param \Drupal\Core\Cache\CacheableMetadata $cacheability
-   *   Collects cacheability for the landing page links.
-   *
-   * @return array[]
-   *   An array of menu links for the anonymous menu in the BCL header template
-   *   format, which is an array of arrays with the following keys:
-   *   - link: The URL the link points to.
-   *   - label: The link label.
-   */
-  public function getBclLandingPageLinks(CacheableMetadata $cacheability): array;
 
   /**
    * Loads an OG menu instance for the given group.
