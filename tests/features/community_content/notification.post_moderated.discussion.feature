@@ -51,7 +51,11 @@ Feature: Notification test for the discussion transitions on a post moderated pa
       | body      | CC Member has published the new discussion - "CC notify post publish" in the collection: "CC post collection". |
 
     When I am logged in as "CC facilitator"
+    And I mark all emails as read
     And I go to the edit form of the "CC notify post request changes" discussion
+    And I press "Update"
+    Then 0 e-mail should have been sent
+    When I go to the edit form of the "CC notify post request changes" discussion
     And I press "Request changes"
     Then I should see the inline form error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Can you do some changes?"
