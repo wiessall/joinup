@@ -12,6 +12,7 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\Core\Url;
 use Drupal\views\Views;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -20,13 +21,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Provides controllers for Joinup glossary functionality.
  */
 class GlossaryController extends ControllerBase {
-
-  /**
-   * Static cache of glossary term first letters.
-   *
-   * @var string[]
-   */
-  protected array $letters;
 
   public function __construct(
     protected readonly EntityRepositoryInterface $entityRepository,
@@ -118,7 +112,7 @@ class GlossaryController extends ControllerBase {
    *   If the collection has glossary term entries.
    */
   protected function hasGlossaryTerms(CollectionInterface $node): bool {
-    return (bool) $this->getGlossaryTermLetters($node);
+    return (bool) $this->glossaryTermQuery($node)->range(0, 1)->execute();
   }
 
   /**
@@ -137,29 +131,38 @@ class GlossaryController extends ControllerBase {
    *   Thrown when the node entity type is not defined.
    */
   protected function getGlossaryTermLetters(CollectionInterface $node): array {
-    if (!isset($this->letters)) {
-      $this->letters = [];
-      $storage = $this->entityTypeManager()->getStorage('node');
-      $nids = $storage->getQuery()->accessCheck(FALSE)
-        ->condition('type', 'glossary')
-        ->condition('og_audience', $node->id())
-        ->condition('status', TRUE)
-        ->execute();
-      if ($nids) {
-        $this->letters = array_values(
-          array_unique(
-            array_map(
-              function (GlossaryTermInterface $term): string {
-                $term = $this->entityRepository->getTranslationFromContext($term);
-                return $term->getGlossaryLetter();
-              }, $storage->loadMultiple($nids)
-            )
-          )
-        );
-        sort($this->letters);
-      }
+    $nids = $this->glossaryTermQuery($node)->execute();
+    if (!$nids) {
+      return [];
     }
-    return $this->letters;
+
+    $letters = [];
+    foreach ($this->entityTypeManager()->getStorage('node')->loadMultiple($nids) as $term) {
+      \assert($term instanceof GlossaryTermInterface);
+      $translation = $this->entityRepository->getTranslationFromContext($term);
+      $letters[] = $translation->getGlossaryLetter();
+    }
+
+    $letters = array_unique($letters);
+    sort($letters);
+    return $letters;
+  }
+
+  /**
+   * Builds a query for the published glossary terms of a collection.
+   *
+   * @param \Drupal\collection\Entity\CollectionInterface $node
+   *   The collection entity.
+   *
+   * @return \Drupal\Core\Entity\Query\QueryInterface
+   *   The unexecuted entity query.
+   */
+  private function glossaryTermQuery(CollectionInterface $node): QueryInterface {
+    return $this->entityTypeManager()->getStorage('node')->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', 'glossary')
+      ->condition('og_audience', $node->id())
+      ->condition('status', TRUE);
   }
 
 }
