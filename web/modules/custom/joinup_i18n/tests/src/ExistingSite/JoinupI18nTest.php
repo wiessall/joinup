@@ -10,8 +10,10 @@ use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\language\Entity\ContentLanguageSettings;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\node\Entity\NodeType;
+use Drupal\node\NodeInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\tmgmt\JobInterface;
+use Drupal\tmgmt\JobItemInterface;
 use Drupal\tmgmt_ec_etranslation\Plugin\tmgmt\Translator\ETranslationTranslator;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
@@ -179,6 +181,131 @@ final class JoinupI18nTest extends JoinupExistingSiteTestBase {
   }
 
   /**
+   * Tests that a forward draft of published content is not scheduled.
+   *
+   * A draft on a published node is a non-default forward revision; TMGMT would
+   * translate it as unpublished content. Publishing the draft re-schedules it.
+   *
+   * @legacy-covers \Drupal\joinup_i18n\EventSubscriber\ScheduleJobItemSubscriber::scheduleJobItemCreation
+   */
+  public function testForwardDraftIsNotScheduled(): void {
+    $node = $this->createNode([
+      'type' => 'solution',
+      'og_audience' => \Drupal::service('entity.repository')->loadEntityByUuid('node', JoinupCollectionHelper::JOINUP_COLLECTION_UUID),
+      'title' => 'Forward draft scheduling',
+      'field_state' => 'proposed',
+    ]);
+
+    // Publishing schedules the content for translation.
+    $node->setNewRevision();
+    $node->set('field_state', 'published')->save();
+    $this->assertJobItems(array_fill_keys(self::TARGET_LANGCODES, $node->id()));
+
+    // A draft on the published node is a forward revision, which must not be
+    // scheduled while the published revision remains the default.
+    $node->setNewRevision();
+    $node->set('field_state', 'draft_after_published')->save();
+    $this->assertJobItems();
+
+    // Publishing the draft schedules it again, against the default revision.
+    $node->setNewRevision();
+    $node->set('field_state', 'published')->save();
+    $this->assertJobItems(array_fill_keys(self::TARGET_LANGCODES, $node->id()));
+  }
+
+  /**
+   * Tests that job items are aborted when their source content changes.
+   *
+   * Also checks the opposite: a save that leaves the source content unchanged
+   * (accepting a translation) must keep the other languages' items open.
+   *
+   * @legacy-covers \Drupal\joinup_i18n\Hook\JoinupI18nHooks::abortOutdatedJobItems
+   */
+  public function testOutdatedJobItemsAreAborted(): void {
+    $node = $this->createNode([
+      'type' => 'solution',
+      'og_audience' => \Drupal::service('entity.repository')->loadEntityByUuid('node', JoinupCollectionHelper::JOINUP_COLLECTION_UUID),
+      'title' => 'Outdated translation',
+      'field_state' => 'proposed',
+    ]);
+
+    // Publish: a first set of continuous job items is scheduled.
+    $node->setNewRevision();
+    $node->set('field_state', 'published')->save();
+    $firstItems = $this->jobItemIds($node);
+    $this->assertNotEmpty($firstItems);
+
+    // The items start inactive (submit-on-cron); submit one to eTranslation
+    // so both an inactive and an active item are covered.
+    $itemStorage = \Drupal::entityTypeManager()->getStorage('tmgmt_job_item');
+    $items = array_values($itemStorage->loadMultiple($firstItems));
+    $items[0]->setState(JobItemInterface::STATE_ACTIVE);
+
+    // Creating a draft adds a pending forward revision, so the open items (both
+    // inactive and active) are aborted and nothing is scheduled.
+    $node->setNewRevision();
+    $node->set('field_state', 'draft_after_published')->save();
+    $itemStorage->resetCache($firstItems);
+    foreach ($itemStorage->loadMultiple($firstItems) as $item) {
+      $this->assertTrue($item->isAborted());
+    }
+    $this->assertEmpty($this->jobItemIds($node, [JobItemInterface::STATE_INACTIVE, JobItemInterface::STATE_ACTIVE]));
+
+    // Publishing the draft schedules a fresh translation of the new content.
+    $node->setNewRevision();
+    $node->set('field_state', 'published')->save();
+    $freshItems = $this->jobItemIds($node, [JobItemInterface::STATE_INACTIVE, JobItemInterface::STATE_ACTIVE]);
+    $this->assertGreaterThan(1, count($freshItems));
+    $this->assertEmpty(array_intersect($firstItems, $freshItems));
+
+    // Accepting one language's translation re-saves the source node without
+    // changing the source content, so the other languages' items stay open.
+    $acceptedItem = $itemStorage->load(array_shift($freshItems));
+    $dataService = \Drupal::service('tmgmt.data');
+    $translation = [];
+    foreach ($dataService->filterTranslatable($acceptedItem->getData()) as $key => $data) {
+      $translation[$key]['#text'] = 'xx: ' . $data['#text'];
+    }
+    $acceptedItem->addTranslatedData($dataService->unflatten($translation));
+    $this->assertTrue($acceptedItem->isAccepted());
+
+    $itemStorage->resetCache($freshItems);
+    $otherItems = $itemStorage->loadMultiple($freshItems);
+    $this->assertCount(count($freshItems), $otherItems);
+    foreach ($otherItems as $item) {
+      $this->assertFalse($item->isAborted());
+    }
+
+    // Clean up the job items created for this node.
+    $itemStorage->delete($itemStorage->loadMultiple($this->jobItemIds($node)));
+  }
+
+  /**
+   * Returns the job item ids for a node, optionally filtered by state.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   The source node.
+   * @param int[]|null $states
+   *   The job item states to filter on, or NULL for any state.
+   *
+   * @return string[]
+   *   The matching job item ids, sorted.
+   */
+  private function jobItemIds(NodeInterface $node, ?array $states = NULL): array {
+    $query = \Drupal::entityTypeManager()->getStorage('tmgmt_job_item')->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('plugin', 'content')
+      ->condition('item_type', $node->getEntityTypeId())
+      ->condition('item_id', (string) $node->id());
+    if ($states !== NULL) {
+      $query->condition('state', $states, 'IN');
+    }
+    $ids = array_values($query->execute());
+    sort($ids);
+    return $ids;
+  }
+
+  /**
    * Tests that entities without translatable content are not scheduled.
    *
    * @legacy-covers \Drupal\joinup_i18n\EventSubscriber\ScheduleJobItemSubscriber::scheduleJobItemCreation
@@ -200,6 +327,16 @@ final class JoinupI18nTest extends JoinupExistingSiteTestBase {
     ]));
 
     $settings->set('overview_label', '')->save();
+
+    $jobItemIds = \Drupal::entityQuery('tmgmt_job_item')->accessCheck(FALSE)
+      ->condition('plugin', 'content')
+      ->condition('item_type', 'meta_entity')
+      ->condition('item_id', $settings->id())
+      ->execute();
+    $this->assertEmpty($jobItemIds);
+
+    // A whitespace-only value has a word count of 0, same as an empty one.
+    $settings->set('label_join', ' ')->save();
 
     $jobItemIds = \Drupal::entityQuery('tmgmt_job_item')->accessCheck(FALSE)
       ->condition('plugin', 'content')
