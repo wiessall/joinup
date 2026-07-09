@@ -7,8 +7,6 @@
 
 declare(strict_types=1);
 
-use Drupal\block\Entity\Block;
-use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Template\Attribute;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\TermInterface;
@@ -25,35 +23,8 @@ function ventuno_preprocess_page(array &$variables): void {
   $variables['version'] = $joinup_version->getVersion();
   $variables['version_url'] = $joinup_version->getUrl();
 
-  $current_user = \Drupal::currentUser();
-  // Export the username to display in the header.
-  $variables['user_name'] = $current_user->getDisplayName();
-
-  /** @var \Drupal\joinup_bookmark\JoinupBookmarkInterface $joinupBookmark */
-  $joinupBookmark = \Drupal::service('joinup_bookmark.bookmark');
-  $variables['bookmark_link'] = $joinupBookmark->getBookmarkLink();
-
-  /** @var \Drupal\joinup_menu\MenuHelperInterface $menu_helper */
-  $menu_helper = \Drupal::service('joinup_menu.menu_helper');
-  $variables['landing_page_links'] = [];
-  $variables['profile_links'] = [];
-  $variables['anonymous_links'] = [];
-  $cacheability = CacheableMetadata::createFromRenderArray($variables);
-  if ($current_user->isAuthenticated()) {
-    $variables['landing_page_links'] = $menu_helper->getBclLandingPageLinks($cacheability);
-    $variables['profile_links'] = $menu_helper->getBclAccountMenu($cacheability);
-  }
-  else {
-    $variables['anonymous_links'] = $menu_helper->getBclAnonymousMenu($cacheability);
-  }
-  $cacheability->applyTo($variables);
-
-  $variables['hide_searchbar'] = FALSE;
   $route_match = \Drupal::routeMatch();
   $route_name = $route_match->getRouteName();
-  if ($route_name == 'view.search.page_1') {
-    $variables['hide_searchbar'] = TRUE;
-  }
 
   $term = $route_match->getParameter('taxonomy_term');
   if ($route_name === 'entity.taxonomy_term.canonical' && $term instanceof TopicTermInterface) {
@@ -79,16 +50,15 @@ function ventuno_preprocess_page(array &$variables): void {
       $variables['#attached']['library'][] = "ventuno/page_manager.$pageManagerPageId";
     }
   }
+}
 
-  $block = Block::load('ventuno_privatemessagenotification');
-
-  if ($block && $current_user->isAuthenticated()) {
-    $block_content = \Drupal::entityTypeManager()
-      ->getViewBuilder('block')
-      ->view($block);
-
-    $variables['private_message'] = $block_content;
-  }
+/**
+ * Implements hook_preprocess_HOOK() for menu--account.html.twig.
+ */
+function ventuno_preprocess_menu__account(array &$variables): void {
+  $current_user = \Drupal::currentUser();
+  $variables['user_name'] = $current_user->getDisplayName();
+  $variables['#cache']['contexts'][] = 'user';
 }
 
 /**

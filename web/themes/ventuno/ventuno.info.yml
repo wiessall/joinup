@@ -70,6 +70,7 @@ libraries-override:
 regions:
   top_bar: 'Top bar'
   search_bar: 'Search bar'
+  header_navigation: 'Header navigation'
   header: 'Header'
   featured: 'Featured'
   messages: 'Messages'

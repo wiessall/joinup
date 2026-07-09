@@ -1,0 +1,83 @@
+{#
+/**
+ * @file
+ * Theme override for the navbar (landing pages) menu in the header.
+ *
+ * Renders the menu twice to match the BCL navbar: inline items for large
+ * screens and a mobile "mmenu" drawer for small screens.
+ *
+ * The oe_bootstrap_theme base theme preprocesses the menu items into the BCL
+ * navigation structure: items with children become
+ * {standalone, dropdown, link, trigger, items}, where "trigger" is the parent
+ * link and "items" are the children; every link exposes "label" and "path".
+ * @see \Drupal\oe_bootstrap_theme\MenuPreprocess::preprocessMenu()
+ *
+ * Available variables:
+ * - items: A nested list of menu items in the BCL navigation structure.
+ * - attributes: HTML attributes for the menu.
+ */
+#}
+{% for item in items %}
+  {% set item_id = 'navbar-item-' ~ loop.index %}
+  {% set is_dropdown = item.dropdown is defined and item.dropdown %}
+  {% set link = is_dropdown ? item.trigger : item %}
+  {% set children = is_dropdown ? item.items : [] %}
+  {% set desktop_li_classes = [
+    'nav-item',
+    'd-none',
+    'd-xl-inline-block',
+    is_dropdown ? 'dropdown',
+    link.in_active_trail ? 'is-active',
+  ] %}
+  <li{{ create_attribute({class: desktop_li_classes}) }}>
+    {% set link_classes = [
+      'nav-link',
+      'nav-link--underline',
+      is_dropdown ? 'dropdown-toggle',
+      link.in_active_trail ? 'is-active',
+    ] %}
+    {% set link_attributes = create_attribute() %}
+    {% if is_dropdown %}
+      {% set link_attributes = link_attributes.setAttribute('aria-expanded', 'false').setAttribute('id', item_id).setAttribute('role', 'button') %}
+    {% endif %}
+    <a href="{{ link.path }}"{{ link_attributes.addClass(link_classes) }}>{{ link.label }}</a>
+    {% if is_dropdown %}
+      <ul class="dropdown-menu dropdown-menu--sub" aria-labelledby="{{ item_id }}">
+        {% for child in children %}
+          <li>
+            <a href="{{ child.path }}" class="dropdown-item{{ child.in_active_trail ? ' is-active' }}">{{ child.label }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </li>
+{% endfor %}
+<li class="nav-item dropdown mmenu-nav d-xl-none">
+  <button id="landing-pages" class="nav-link mmenu-nav__toggle" type="button" aria-label="{{ 'Toggle menu'|t }}">
+    <span class="visually-hidden">{{ 'Toggle menu'|t }}</span>
+    <svg class="bi icon--s">
+      <use xlink:href="{{ bcl_icon_path }}#justify"></use>
+    </svg>
+  </button>
+  <div class="mmenu-nav__menu p-0 d-none" aria-labelledby="landing-pages">
+    <ul>
+      {% for item in items %}
+        {% set is_dropdown = item.dropdown is defined and item.dropdown %}
+        {% set link = is_dropdown ? item.trigger : item %}
+        {% set children = is_dropdown ? item.items : [] %}
+        <li{{ create_attribute({class: link.in_active_trail ? 'Selected'}) }}>
+          <a href="{{ link.path }}"{{ create_attribute().addClass(link.in_active_trail ? 'is-active') }}>{{ link.label }}</a>
+          {% if children %}
+            <ul>
+              {% for child in children %}
+                <li{{ create_attribute({class: child.in_active_trail ? 'Selected'}) }}>
+                  <a href="{{ child.path }}"{{ create_attribute().addClass(child.in_active_trail ? 'is-active') }}>{{ child.label }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</li>

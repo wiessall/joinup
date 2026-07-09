@@ -1,0 +1,17 @@
+{#
+/**
+ * @file
+ * Theme override for the header navigation block.
+ *
+ * The navbar uses position: sticky, which any wrapping element would constrain,
+ * so this block renders its content without an outer wrapper. The title_prefix
+ * and title_suffix are kept for contextual links and other module output.
+ *
+ * @see template_preprocess_block()
+ */
+#}
+{{ title_prefix }}
+{{ title_suffix }}
+{% block content %}
+  {{ content }}
+{% endblock %}

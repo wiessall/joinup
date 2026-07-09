@@ -1,0 +1,40 @@
+{#
+/**
+ * @file
+ * Theme override for the header navigation region.
+ *
+ * Wraps the header blocks placed in this region (the navbar and account menu
+ * blocks, the private message notification block and the header extras block)
+ * into the single BCL navbar. Each of those blocks emits the <li> items that
+ * make up the navbar list.
+ *
+ * Available variables:
+ * - content: The renderable content of the region (the placed blocks).
+ * - attributes: HTML attributes for the region wrapper.
+ */
+#}
+{% if content %}
+  {{ attach_library('ventuno/navbar') }}
+  {{ attach_library('ventuno/mmenu') }}
+  {{ attach_library('ventuno/navbar-search') }}
+  {% set nav_classes = [
+    'joinup-navbar',
+    'navbar',
+    'navbar-expand',
+    active_theme() == 'ventuno' ? 'navbar--sticky',
+  ] %}
+  <header{{ create_attribute({class: nav_classes}).setAttribute('aria-label', 'Main header'|t) }}>
+    <div class="container">
+      <div class="d-flex">
+        <a class="navbar-brand" href="{{ path('<front>') }}" title="{{ 'Interoperable Europe Portal'|t }}">
+          <img class="navbar-brand-image" src="{{ file_url('themes/ventuno/assets/images/logo-interoperable-europe.svg') }}" alt="{{ 'Interoperable Europe logo'|t }}" />
+        </a>
+      </div>
+      <nav id="main-navbar" aria-label="{{ 'Main navigation'|t }}">
+        <ul class="navbar-nav" id="main-navbar-list">
+          {{ content }}
+        </ul>
+      </nav>
+    </div>
+  </header>
+{% endif %}
