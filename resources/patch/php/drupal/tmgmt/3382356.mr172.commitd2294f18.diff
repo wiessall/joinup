@@ -1,0 +1,129 @@
+diff --git a/sources/content/src/Plugin/tmgmt/Source/ContentEntitySource.php b/sources/content/src/Plugin/tmgmt/Source/ContentEntitySource.php
+index 5af896d251f2c5bc2fb73dcb1066d3a09057f491..9a9555bc96fb1cce7930589f7616f5e676c23bf9 100644
+--- a/sources/content/src/Plugin/tmgmt/Source/ContentEntitySource.php
++++ b/sources/content/src/Plugin/tmgmt/Source/ContentEntitySource.php
+@@ -233,18 +233,11 @@ class ContentEntitySource extends SourcePluginBase implements SourcePreviewInter
+ 
+     /** @var \Drupal\content_translation\ContentTranslationManagerInterface $content_translation_manager */
+     $content_translation_manager = \Drupal::service('content_translation.manager');
+-    $is_bundle_translatable = $content_translation_manager->isEnabled($entity->getEntityTypeId(), $entity->bundle());
+ 
+     // Exclude field types from translation.
+-    $translatable_fields = array_filter($field_definitions, function (FieldDefinitionInterface $field_definition) use ($exclude_field_types, $exclude_field_names, $is_bundle_translatable) {
++    $translatable_fields = array_filter($field_definitions, function (FieldDefinitionInterface $field_definition) use ($exclude_field_types, $exclude_field_names) {
+ 
+-      if ($is_bundle_translatable) {
+-        // Field is not translatable.
+-        if (!$field_definition->isTranslatable()) {
+-          return FALSE;
+-        }
+-      }
+-      elseif (!$field_definition->getFieldStorageDefinition()->isTranslatable()) {
++      if (!$field_definition->isTranslatable()) {
+         return FALSE;
+       }
+ 
+diff --git a/sources/content/tests/src/Kernel/ContentEntitySourceUnitTest.php b/sources/content/tests/src/Kernel/ContentEntitySourceUnitTest.php
+index 808fe5178cf921d2208a6f625da3169ef97a77b3..9155689be7225edd216d78fdee5b4d171ed79539 100644
+--- a/sources/content/tests/src/Kernel/ContentEntitySourceUnitTest.php
++++ b/sources/content/tests/src/Kernel/ContentEntitySourceUnitTest.php
+@@ -128,6 +128,24 @@ class ContentEntitySourceUnitTest extends ContentEntityTestBase {
+     ))->setThirdPartySetting('tmgmt_content', 'excluded', TRUE)
+       ->save();
+ 
++    // Add a field with translatable storage but untranslatable instance; it
++    // must not be extracted.
++    $field_storage = FieldStorageConfig::create(array(
++      'field_name' => 'untranslatable_field',
++      'entity_type' => $this->entityTypeId,
++      'type' => 'text',
++      'cardinality' => 1,
++      'translatable' => TRUE,
++    ));
++    $field_storage->save();
++    FieldConfig::create(array(
++      'entity_type' => $this->entityTypeId,
++      'field_storage' => $field_storage,
++      'bundle' => $this->entityTypeId,
++      'label' => $this->randomMachineName(),
++      'translatable' => FALSE,
++    ))->save();
++
+     // Add a translatable text field that should be checked after the translated
+     // entity has been created.
+     $field_storage = FieldStorageConfig::create(array(
+@@ -188,6 +206,11 @@ class ContentEntitySourceUnitTest extends ContentEntityTestBase {
+       'format' => 'text_plain',
+     ]);
+ 
++    $entity_test->untranslatable_field->appendItem([
++      'value' => 'This field is not translatable at the instance level.',
++      'format' => 'text_plain',
++    ]);
++
+     $entity_test->save();
+ 
+     $job = tmgmt_job_create('en', 'de');
+@@ -264,6 +287,10 @@ class ContentEntitySourceUnitTest extends ContentEntityTestBase {
+     // Test the ignored field.
+     $this->assertFalse(isset($data['ignored_field']));
+ 
++    // On a translatable bundle, a field with translatable storage but
++    // untranslatable instance is not extracted.
++    $this->assertFalse(isset($data['untranslatable_field']));
++
+     // Now request a translation and save it back.
+     $job->requestTranslation();
+ 
+diff --git a/sources/content/tests/src/Kernel/ContentEntitySourceUntranslatableTargetsUnitTest.php b/sources/content/tests/src/Kernel/ContentEntitySourceUntranslatableTargetsUnitTest.php
+index 9e86cefcdb4ccbb981345684347eba8e5e4cfdac..5e7499de871395c9a2dd7b11273fe7d0ce32df0c 100644
+--- a/sources/content/tests/src/Kernel/ContentEntitySourceUntranslatableTargetsUnitTest.php
++++ b/sources/content/tests/src/Kernel/ContentEntitySourceUntranslatableTargetsUnitTest.php
+@@ -3,6 +3,7 @@
+ namespace Drupal\Tests\tmgmt_content\Kernel;
+ 
+ use Drupal\field\Entity\FieldConfig;
++use Drupal\field\Entity\FieldStorageConfig;
+ use Drupal\node\Entity\Node;
+ use Drupal\node\Entity\NodeType;
+ use Drupal\Tests\field\Traits\EntityReferenceFieldCreationTrait;
+@@ -57,6 +58,21 @@ class ContentEntitySourceUntranslatableTargetsUnitTest extends ContentEntityTest
+     // Create a nested untranslatable composite entity reference field.
+     $this->createEntityReferenceField('entity_test_composite', 'entity_test_composite', 't_nested', 't_nested', 'entity_test_composite');
+ 
++    // Add a field to the untranslatable composite, with translatable storage
++    // but untranslatable instance; it must not be extracted.
++    FieldStorageConfig::create([
++      'field_name' => 'untranslatable_field',
++      'entity_type' => 'entity_test_composite',
++      'type' => 'string',
++      'translatable' => TRUE,
++    ])->save();
++    FieldConfig::create([
++      'field_name' => 'untranslatable_field',
++      'entity_type' => 'entity_test_composite',
++      'bundle' => 'entity_test_composite',
++      'translatable' => FALSE,
++    ])->save();
++
+     // Enable "t_composite" to be embedded.
+     $this->config('tmgmt_content.settings')->set('embedded_fields.node.t_composite', TRUE)->save();
+ 
+@@ -72,6 +88,7 @@ class ContentEntitySourceUntranslatableTargetsUnitTest extends ContentEntityTest
+     }
+ 
+     $referenced_entities[2]->set('t_nested', $referenced_entities[1]);
++    $referenced_entities[2]->set('untranslatable_field', 'Do not translate me');
+     $referenced_entities[2]->save();
+ 
+     // Create a main entity.
+@@ -104,6 +121,9 @@ class ContentEntitySourceUntranslatableTargetsUnitTest extends ContentEntityTest
+     // Data from the composite reference of the untranslated composite target
+     // is embedded too.
+     $this->assertEquals('Referenced entity #1', $data['t_composite'][0]['entity']['t_nested'][0]['entity']['name'][0]['value']['#text']);
++    // On an untranslatable bundle, a field with
++    // translatable storage but untranslatable instance is not extracted.
++    $this->assertFalse(isset($data['t_composite'][0]['entity']['untranslatable_field']));
+ 
+     // Now request a translation.
+     $job->requestTranslation();

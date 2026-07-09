@@ -389,18 +389,10 @@ function joinup_solution_node_view(array &$build, NodeInterface $solution, Entit
  * @param \Drupal\Core\Entity\EntityInterface $entity
  *   The solution.
  *
- * @return array|int
- *   List of entity ids of related solutions.
+ * @return int[]
+ *   List of node ids of related solutions, keyed by node id.
  */
 function joinup_solution_get_related_solutions_ids(EntityInterface $entity): array {
-  $ids = [];
-  static $recurse = FALSE;
-  if ($recurse) {
-    // Don't collapse the universe.
-    return $ids;
-  }
-  $recurse = TRUE;
-
   $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
   $eira_ids = [];
   $meta_entity = \Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($entity, 'solution_settings');
@@ -417,6 +409,7 @@ function joinup_solution_get_related_solutions_ids(EntityInterface $entity): arr
         ->condition('nid', $entity->id(), '<>')
         ->range(0, 4);
       $eira_ids = $query->execute();
+      $eira_ids = array_combine($eira_ids, $eira_ids);
     }
   }
 
@@ -426,10 +419,8 @@ function joinup_solution_get_related_solutions_ids(EntityInterface $entity): arr
     $related_ids[$field['target_id']] = $field['target_id'];
   }
 
-  // Combine the two lists.
+  // Combine both lists (keyed by node ID) and exclude the current solution.
   $ids = $eira_ids + $related_ids;
-
-  // Exclude ourselves.
   unset($ids[$entity->id()]);
 
   return $ids;
