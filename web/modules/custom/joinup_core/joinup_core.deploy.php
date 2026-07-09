@@ -73,11 +73,21 @@ function joinup_core_deploy_201501(): string {
       AND table_name LIKE 'old\_%'
   ")->fetchCol();
 
+  if ($tables === []) {
+    return 'No old_* tables found.';
+  }
+
+  $deleted = [];
+
   foreach ($tables as $table) {
     if ($schema->tableExists($table)) {
       $schema->dropTable($table);
+      $deleted[] = $table;
     }
   }
 
-  return sprintf('Removed %d old_* table(s).', count($tables));
+  return sprintf(
+    'Removed old_* tables: %s.',
+    implode(', ', $deleted)
+  );
 }
