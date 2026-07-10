@@ -11,3 +11,4 @@ field_length_overflow_policy: truncate
 submit_job_item_on_cron: true
 job_items_cron_limit: 50
 file_mimetypes: {  }
+purge_stale: true
