@@ -277,6 +277,18 @@ class JoinupUserContext extends RawDrupalContext {
   }
 
   /**
+   * Navigates to the one-time login URL for a user.
+   *
+   * @param string $user
+   *   The username.
+   */
+  #[When('I visit the one-time login URL for :user')]
+  public function visitOneTimeLoginUrl(string $user): void {
+    $account = $this->getUserByName($user);
+    $this->visitPath($this->getOneTimeLoginUrl($account));
+  }
+
+  /**
    * Generates a unique URL for a user to log in and reset their password.
    *
    * @param \Drupal\user\UserInterface $account

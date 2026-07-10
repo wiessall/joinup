@@ -55,8 +55,10 @@
       <div class="row g-3 align-items-start">
         {% set hasHighlight = _highlighted.text is not empty %}
         {%- if hasHighlight -%}
-          <div class="event--highlighted-date col-4">
-            {{- _highlighted.text -}}
+          <div class="col-4">
+            <div class="event--highlighted-date">
+              {{- _highlighted.text -}}
+            </div>
           </div>
         {%- endif -%}
         <div class="{{ hasHighlight ? 'col-8' }}">

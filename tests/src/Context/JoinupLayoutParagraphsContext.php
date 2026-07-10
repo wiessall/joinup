@@ -35,7 +35,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    */
   const FIELD_MAP = [
     'Custom page body' => 'field-paragraphs-body',
-    'Topic meta entity body' => 'topics-paragraph',
+    'Topic term body' => 'topics-paragraph',
   ];
 
   /**

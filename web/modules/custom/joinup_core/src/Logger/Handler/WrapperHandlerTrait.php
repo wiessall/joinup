@@ -9,7 +9,7 @@ use Drupal\Core\State\StateInterface;
 use Monolog\Level;
 
 /**
- * Generic handler wrapping mail and Telegram Monolog handlers.
+ * Generic handler wrapping mail Monolog handlers.
  */
 trait WrapperHandlerTrait {
 
