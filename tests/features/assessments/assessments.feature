@@ -105,6 +105,23 @@ Feature: Assessment Report Entity Management
     And I attach the file "text.pdf" to "Add a new file"
     And I should see the text "Maximum 5 files. 10 MB limit. Allowed types: txt doc docx pdf ppt pptx zip rar xls xlsx." in the "Modal content" region
     Then I press "Save" in the "Modal buttons" region
+    And the modal should be closed
+
+    # A just-saved binding requirement must render each of its sub-entities by
+    # label, not the "Participation #<id>" entity-ID fallback (ISAICP-11250).
+    When I click on element ".js-lpb-component .lpb-edit"
+    Then a modal should open
+    When I click "Initiative" in the "Modal content" region
+    Then I should see the text "Digital Transformation Initiative" in the "Modal content" region
+    When I click "Concerned public services" in the "Modal content" region
+    Then I should see the text "eIDAS Authentication Service" in the "Modal content" region
+    When I click "Affected stakeholders" in the "Modal content" region
+    Then I should see the text "Local public sector body, Belgium" in the "Modal content" region
+    And I should not see the text "Participation #" in the "Modal content" region
+    When I click "Interoperability solution" in the "Modal content" region
+    Then I should see the text "Test solution" in the "Modal content" region
+    Then I press "Cancel" in the "Modal buttons" region
+    And the modal should be closed
 
     # Identified effects on cross-border interoperability
     When I click "Legal" in the "Content" region
@@ -530,36 +547,3 @@ Feature: Assessment Report Entity Management
     Then I should see "English Solution"
     And I should see "BG Solution"
     And I should not see "Bilingual Solution"
-
-  # Regression test for ISAICP-11250: a saved affected stakeholder must be
-  # displayed with its participant type name (the value chosen in the
-  # drop-down), not with the "Participation #<id>" entity-label fallback.
-  Scenario: Saved affected stakeholders keep their name instead of the entity ID fallback
-    Given I am logged in as a moderator
-    And I go to "/collection/assessments/report/create"
-
-    When I click "New binding requirement"
-    And a modal should open
-
-    When I click "Initiative" in the "Modal content" region
-    And I fill in "expression[0][inline_entity_form][initiative_name][0][value]" with "Affected Stakeholder Display Test" in the "Modal content" region
-    And I fill in "expression[0][inline_entity_form][description][0][value]" with "Some description" in the "Modal content" region
-
-    When I click "Concerned public services" in the "Modal content" region
-    And I fill in "affects[0][inline_entity_form][name][0][value]" with "Test Service" in the "Modal content" region
-
-    When I click "Requirements" in the "Modal content" region
-    And I fill in "description[0][value]" with "Binding requirement description" in the "Modal content" region
-
-    When I click "Affected stakeholders" in the "Modal content" region
-    And I select "Local public sector body" from "has_participation[0][inline_entity_form][participant_type][]" in the "Modal content" region
-    And I select "Belgium" from "has_participation[0][inline_entity_form][stakeholder_country][]" in the "Modal content" region
-
-    Then I press "Save" in the "Modal buttons" region
-    And the modal should be closed
-
-    When I click on element ".js-lpb-component .lpb-edit"
-    Then a modal should open
-    And I click "Affected stakeholders" in the "Modal content" region
-    Then I should see the text "Local public sector body, Belgium" in the "Modal content" region
-    And I should not see the text "Participation #" in the "Modal content" region
