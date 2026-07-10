@@ -18,6 +18,7 @@ use Drupal\assessments\Event\AssessmentReportEvent;
 use Drupal\assessments\NotificationEvents;
 use Drupal\assessments\Plugin\EntityBrowser\Widget\OgAwareEntityForm;
 use Drupal\assessments\Plugin\Field\FieldWidget\ProvidedByWidget;
+use Drupal\assessments\Render\LayoutParagraphsBuilderAlter;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
@@ -115,6 +116,19 @@ function assessments_form_layout_paragraphs_component_form_alter(array &$form, F
 }
 
 /**
+ * Implements hook_element_info_alter().
+ */
+function assessments_element_info_alter(array &$info): void {
+  if (isset($info['layout_paragraphs_builder'])) {
+    // Runs after the module's own pre-render callback has built the components.
+    $info['layout_paragraphs_builder']['#pre_render'][] = [
+      LayoutParagraphsBuilderAlter::class,
+      'removeRegionInsertButtons',
+    ];
+  }
+}
+
+/**
  * Implements hook_preprocess_HOOK().
  */
 function assessments_preprocess_layout_paragraphs_insert_component_btn(&$variables): void {
@@ -123,26 +137,8 @@ function assessments_preprocess_layout_paragraphs_insert_component_btn(&$variabl
     ->getWithStorageKey($url->getRouteParameters()['layout_paragraphs_layout']);
 
   $entity = $layoutParagraphsLayout?->getEntity();
-  if ($entity instanceof AssessmentReport) {
-    $fieldName = $layoutParagraphsLayout?->getFieldName();
-    if ($fieldName === 'binding_requirement') {
-      $variables['title'] = t('New binding requirement');
-
-      $routeParams = $url->getRouteParameters();
-      $queryParams = $url->getOption('query') ?: [];
-      // Hide component selection buttons inside layout regions for
-      // binding_requirement field. Only hide if this is inside a region
-      // (has parent_uuid AND region parameters). Keep the root-level
-      // "Add section" buttons visible.
-      if (
-        isset($routeParams['layout_paragraphs_layout']) &&
-        $url->getRouteName() === 'layout_paragraphs.builder.choose_component' &&
-        isset($queryParams['parent_uuid']) &&
-        isset($queryParams['region'])
-      ) {
-        $variables['attributes']['class'][] = 'visually-hidden';
-      }
-    }
+  if ($entity instanceof AssessmentReport && $layoutParagraphsLayout?->getFieldName() === 'binding_requirement') {
+    $variables['title'] = t('New binding requirement');
   }
 }
 
