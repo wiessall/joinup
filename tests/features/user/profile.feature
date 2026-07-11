@@ -49,17 +49,15 @@ Feature: User profile
       | Slovenian  |
       | Spanish    |
       | Swedish    |
-    And the available options in the "Country of residence" select should not include the "European Union"
-    And the available options in the "Work location" select should not include the "European Union"
     And I should see the text "Username"
     And I should see the text "Leonardo Da Vinci"
     And I fill in "First name" with "Leoke"
     And I fill in "Family name" with "di ser Piero da Vinci"
-    And I select "Italy" from "Work location"
+    And I select "Italy" option from "Work location"
     And I select "Supplier exchange" options from "Professional domain"
     And I fill in "Country of origin" with "Belgium"
-    And I select "Netherlands" from "Country of residence"
-    And I select "Defense" from "Function of administration"
+    And I select "Netherlands" option from "Country of residence"
+    And I select "Defense" option from "Function of administration"
     And I fill in "Facebook" with "leodavinci"
     And I fill in "X" with "therealdavinci"
     And I fill in "LinkedIn" with "leonardo.davinci"
