@@ -9,13 +9,15 @@
  */
 #}
 
-<span class="joinup-date-tile border rounded-bottom-1">
-  <span class="joinup-date-tile__month pt-2">{{ start_date|date('M') }}</span>
-  <span class="joinup-date-tile__day pb-2">
-    {{ start_date|date('d') }}
-    {% if end_date %}
-      <small class="fw-normal text-muted">-</small> {{ end_date|date('d') }}
-    {% endif %}
+<span class="joinup-date-tile">
+  <span class="d-flex flex-column">
+    <span class="joinup-date-tile__month pt-2">{{ start_date|date('M') }}</span>
+    <span class="joinup-date-tile__day pb-2">
+      {{ start_date|date('d') }}
+      {% if end_date %}
+        <small class="fw-normal text-muted">-</small> {{ end_date|date('d') }}
+      {% endif %}
+    </span>
+    <span class="joinup-date-tile__year py-1">{{ start_date|date('Y') }}</span>
   </span>
-  <span class="joinup-date-tile__year py-1">{{ start_date|date('Y') }}</span>
 </span>

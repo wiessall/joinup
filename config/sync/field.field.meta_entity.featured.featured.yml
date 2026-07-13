@@ -1,0 +1,26 @@
+uuid: 718f9886-a7e3-42d6-b3b6-c9dc0499dbd0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.meta_entity.featured
+    - meta_entity.type.featured
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: meta_entity.featured.featured
+field_name: featured
+entity_type: meta_entity
+bundle: featured
+label: Featured
+description: 'Featured content will be shown at the top of lists and their tiles show an icon to indicate that their importance.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: Featured
+  off_label: 'Not featured'
+field_type: boolean
