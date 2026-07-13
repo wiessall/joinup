@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b5369cd64be07aa8f941543788061882",
+    "content-hash": "230ef2bd6ceb9d058eb19a6866ab4297",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3165,83 +3165,6 @@
                 "source": "https://git.drupalcode.org/project/custom_markup_block",
                 "issues": "https://www.drupal.org/project/issues/custom_markup_block",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
-            }
-        },
-        {
-            "name": "drupal/default_content",
-            "version": "2.0.0-beta1",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/default_content.git",
-                "reference": "2.0.0-beta1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/default_content-2.0.0-beta1.zip",
-                "reference": "2.0.0-beta1",
-                "shasum": "c39aa30fa961854edbe318c0d43e2f3898658047"
-            },
-            "require": {
-                "drupal/core": "^9.1 || ^10 || ^11"
-            },
-            "require-dev": {
-                "drupal/hal": "^1 || ^2",
-                "drupal/paragraphs": "^1"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "2.0.0-beta1",
-                    "datestamp": "1768258043",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
-                    }
-                },
-                "drush": {
-                    "services": {
-                        "drush.services.yml": "^9 || ^10 || ^11 || ^12"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "andypost",
-                    "homepage": "https://www.drupal.org/user/118908"
-                },
-                {
-                    "name": "benjy",
-                    "homepage": "https://www.drupal.org/user/1852732"
-                },
-                {
-                    "name": "berdir",
-                    "homepage": "https://www.drupal.org/user/214652"
-                },
-                {
-                    "name": "dawehner",
-                    "homepage": "https://www.drupal.org/user/99340"
-                },
-                {
-                    "name": "jibran",
-                    "homepage": "https://www.drupal.org/user/1198144"
-                },
-                {
-                    "name": "larowlan",
-                    "homepage": "https://www.drupal.org/user/395439"
-                },
-                {
-                    "name": "sam152",
-                    "homepage": "https://www.drupal.org/user/1485048"
-                }
-            ],
-            "description": "Imports default content when a module is enabled",
-            "homepage": "https://www.drupal.org/project/default_content",
-            "support": {
-                "source": "https://git.drupalcode.org/project/default_content"
             }
         },
         {
@@ -8664,17 +8587,17 @@
         },
         {
             "name": "drupal/replicate_actions",
-            "version": "1.910.0",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/replicate_actions.git",
-                "reference": "8.x-1.910"
+                "reference": "2.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/replicate_actions-8.x-1.910.zip",
-                "reference": "8.x-1.910",
-                "shasum": "501fc40040cd407555a66f632d4f54603815227f"
+                "url": "https://ftp.drupal.org/files/projects/replicate_actions-2.0.0.zip",
+                "reference": "2.0.0",
+                "shasum": "f6dc23da406ed30e924b663012a1f42be04cc4cc"
             },
             "require": {
                 "drupal/core": "^10.1 || ^11 || ^12",
@@ -8684,8 +8607,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.910",
-                    "datestamp": "1782046979",
+                    "version": "2.0.0",
+                    "datestamp": "1782489963",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -23281,6 +23204,83 @@
             }
         },
         {
+            "name": "drupal/default_content",
+            "version": "2.0.0-beta1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/default_content.git",
+                "reference": "2.0.0-beta1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/default_content-2.0.0-beta1.zip",
+                "reference": "2.0.0-beta1",
+                "shasum": "c39aa30fa961854edbe318c0d43e2f3898658047"
+            },
+            "require": {
+                "drupal/core": "^9.1 || ^10 || ^11"
+            },
+            "require-dev": {
+                "drupal/hal": "^1 || ^2",
+                "drupal/paragraphs": "^1"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.0-beta1",
+                    "datestamp": "1768258043",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
+                    }
+                },
+                "drush": {
+                    "services": {
+                        "drush.services.yml": "^9 || ^10 || ^11 || ^12"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "andypost",
+                    "homepage": "https://www.drupal.org/user/118908"
+                },
+                {
+                    "name": "benjy",
+                    "homepage": "https://www.drupal.org/user/1852732"
+                },
+                {
+                    "name": "berdir",
+                    "homepage": "https://www.drupal.org/user/214652"
+                },
+                {
+                    "name": "dawehner",
+                    "homepage": "https://www.drupal.org/user/99340"
+                },
+                {
+                    "name": "jibran",
+                    "homepage": "https://www.drupal.org/user/1198144"
+                },
+                {
+                    "name": "larowlan",
+                    "homepage": "https://www.drupal.org/user/395439"
+                },
+                {
+                    "name": "sam152",
+                    "homepage": "https://www.drupal.org/user/1485048"
+                }
+            ],
+            "description": "Imports default content when a module is enabled",
+            "homepage": "https://www.drupal.org/project/default_content",
+            "support": {
+                "source": "https://git.drupalcode.org/project/default_content"
+            }
+        },
+        {
             "name": "drupal/devel",
             "version": "5.5.0",
             "source": {
@@ -24036,16 +24036,16 @@
         },
         {
             "name": "drupaltest/behat-one-time-login",
-            "version": "dev-master",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/idimopoulos/behat-one-time-login.git",
-                "reference": "a2207ad56a0f49b26d4e31449aac74eb01a9894a"
+                "url": "https://github.com/drupaltest/behat-one-time-login.git",
+                "reference": "79c7c8c84657c9bbefe97c4e5908659dd7b82e1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/idimopoulos/behat-one-time-login/zipball/a2207ad56a0f49b26d4e31449aac74eb01a9894a",
-                "reference": "a2207ad56a0f49b26d4e31449aac74eb01a9894a",
+                "url": "https://api.github.com/repos/drupaltest/behat-one-time-login/zipball/79c7c8c84657c9bbefe97c4e5908659dd7b82e1f",
+                "reference": "79c7c8c84657c9bbefe97c4e5908659dd7b82e1f",
                 "shasum": ""
             },
             "require": {
@@ -24061,7 +24061,6 @@
                 "squizlabs/php_codesniffer": "~3.5",
                 "zaporylie/composer-drupal-optimizations": "~1.1"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "drupal-scaffold": {
@@ -24080,6 +24079,7 @@
                     "DrupalTest\\BehatOneTimeLogin\\": "src"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-2.0-or-later"
             ],
@@ -24092,9 +24092,10 @@
             "description": "Authenticates users through the Drupal one time login mechanism.",
             "homepage": "https://github.com/drupaltest/behat-one-time-login",
             "support": {
-                "source": "https://github.com/idimopoulos/behat-one-time-login/tree/master"
+                "issues": "https://github.com/drupaltest/behat-one-time-login/issues",
+                "source": "https://github.com/drupaltest/behat-one-time-login/tree/2.0.0"
             },
-            "time": "2026-05-05T20:26:30+00:00"
+            "time": "2026-05-06T15:54:50+00:00"
         },
         {
             "name": "ec-europa/toolkit",
@@ -28560,7 +28561,6 @@
         "drupal/private_message": 15,
         "drupal/private_message_flood": 15,
         "drupal/ultimate_cron": 10,
-        "drupaltest/behat-one-time-login": 20,
         "weitzman/drupal-test-traits": 20
     },
     "prefer-stable": true,

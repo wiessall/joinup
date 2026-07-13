@@ -1,2 +1,1 @@
 .tile{height:100%;margin-bottom:2rem}.tile__img{aspect-ratio:2/1;background:#fff;border:2px solid #fff;overflow-y:hidden}.tile__img,.tile__img img{border-radius:1.5rem;width:100%}.tile__img img{height:auto}.tile__title{font-size:1rem;font-weight:700;margin:1rem 0;text-align:center}.tile__text{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:5;overflow:hidden}.tile .mark,.tile mark{background-color:unset;padding:unset}@media (min-width:768px){.tile{margin-bottom:0}}
-/*# sourceMappingURL=tile.min.css.map */
