@@ -5,13 +5,34 @@ declare(strict_types=1);
 namespace Drupal\contact_form\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Path\PathValidatorInterface;
 use Drupal\Core\Url;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Returns the response for the contact form route.
  */
 class ContactFormController extends ControllerBase {
+
+  /**
+   * Constructs a new ContactFormController object.
+   *
+   * @param \Drupal\Core\Path\PathValidatorInterface $pathValidator
+   *   The path validator.
+   */
+  public function __construct(
+    protected readonly PathValidatorInterface $pathValidator,
+  ) {}
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container): static {
+    return new static(
+      $container->get('path.validator'),
+    );
+  }
 
   /**
    * Shows the contact form page.
@@ -72,28 +93,22 @@ class ContactFormController extends ControllerBase {
   }
 
   /**
-   * Checks whether the given URI is valid for the contact form.
+   * Checks whether the given URI is a valid Joinup URL.
    *
-   * Invalid and external URIs are rejected.
+   * The URI must resolve to a routed, internal path on this site. External,
+   * unroutable and otherwise invalid URIs are rejected.
    *
    * @param string $uri
    *   The URI, e.g. '/node/1'.
    *
    * @return bool
-   *   TRUE if the URI is valid.
+   *   TRUE if the URI is a valid Joinup URL.
    */
-  protected function isValidUri($uri): bool {
-    try {
-      $url = Url::fromUri('internal:/' . $uri);
-      if (!$url->isExternal()) {
-        return TRUE;
-      }
-    }
-    catch (\InvalidArgumentException $e) {
-      // The URI is invalid.
-    }
+  protected function isValidUri(string $uri): bool {
+    $path = '/' . ltrim($uri, '/');
+    $url = $this->pathValidator->getUrlIfValidWithoutAccessCheck($path);
 
-    return FALSE;
+    return $url instanceof Url && !$url->isExternal();
   }
 
 }

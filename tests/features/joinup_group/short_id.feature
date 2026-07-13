@@ -88,7 +88,7 @@ Feature:
     And I press "Add new owner"
     And I fill in "Name" with "Organisation valid"
     And I select "Company" options from "Type"
-    And I select "Belgium" from "Country"
+    And I select "Belgium" option from "Country"
     And I press "Create owner"
     # Create contact information.
     And I fill in "Name" with "Contact Rapazoglou"

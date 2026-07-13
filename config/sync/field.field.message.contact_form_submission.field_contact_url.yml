@@ -7,6 +7,10 @@ dependencies:
     - message.template.contact_form_submission
   module:
     - link
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
 _core:
   default_config_hash: J8NHrcHZV4XTZAlXPTnWkdOwYk-RWCPl-nQLCOl8SMg
 id: message.contact_form_submission.field_contact_url
