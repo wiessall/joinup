@@ -63,6 +63,56 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   ];
 
   /**
+   * The buttons of the builder UI, as xpath relative to their container.
+   *
+   * The controls bar is prepended to the component it belongs to, and the
+   * insert buttons are prepended and appended to the component, or the region,
+   * they add into. The buttons are matched by class rather than by label
+   * because the labels are configurable.
+   *
+   * @var array
+   *
+   * @see \Drupal\layout_paragraphs\Element\LayoutParagraphsBuilder::buildComponent()
+   * @see \Drupal\layout_paragraphs\Element\LayoutParagraphsBuilder::addJsUiElement()
+   * @see layout_paragraphs.settings.yml
+   */
+  const BUTTONS = [
+    'edit' => self::CONTROLS_XPATH . '//*[contains(concat(" ", @class, " "), " lpb-edit ")]',
+    'delete' => self::CONTROLS_XPATH . '//*[contains(concat(" ", @class, " "), " lpb-delete ")]',
+    'duplicate' => self::CONTROLS_XPATH . '//*[contains(concat(" ", @class, " "), " lpb-duplicate ")]',
+    'move up' => self::CONTROLS_XPATH . '//*[contains(concat(" ", @class, " "), " lpb-up ")]',
+    'move down' => self::CONTROLS_XPATH . '//*[contains(concat(" ", @class, " "), " lpb-down ")]',
+    // The buttons that add a sibling before or after a given component.
+    'add before' => './a[contains(concat(" ", @class, " "), " lpb-btn--add ") and contains(concat(" ", @class, " "), " before ")]',
+    'add after' => './a[contains(concat(" ", @class, " "), " lpb-btn--add ") and contains(concat(" ", @class, " "), " after ")]',
+    // The centered button of an empty container: a region, or the builder root.
+    'add component' => './/a[contains(concat(" ", @class, " "), " lpb-btn--add ") and contains(concat(" ", @class, " "), " center ")]',
+  ];
+
+  /**
+   * The controls bar, a direct child of the component it belongs to.
+   *
+   * @var string
+   */
+  const CONTROLS_XPATH = './div[contains(concat(" ", @class, " "), " lpb-controls ")]';
+
+  /**
+   * The components of the builder root, i.e. the sections.
+   *
+   * @var string
+   */
+  const SECTION_XPATH = './/div[contains(concat(" ", @class, " "), " js-lpb-component ") and not(ancestor::div[contains(concat(" ", @class, " "), " js-lpb-component ")])]';
+
+  /**
+   * The components held by a region.
+   *
+   * Layouts cannot be nested, so every component in a region is a leaf.
+   *
+   * @var string
+   */
+  const REGION_COMPONENT_XPATH = './/div[contains(concat(" ", @class, " "), " js-lpb-component ")]';
+
+  /**
    * Reusable xpath pattern.
    *
    * @var string
@@ -87,11 +137,10 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   public function addLayoutParagraphInFormFieldOnTopLevel(string $field_alias, TableNode $layout_properties): void {
     $this->assertJavaScriptEnabledBrowser();
 
-    $field = $this->getParagraphsElement($field_alias);
-    $this->getLastAddLink($field, 'Add layout')->click();
-
-    // Wait for modal to be opened.
-    $this->waitForModalToOpen();
+    // Appending a section to the builder root opens the same modal as the
+    // centered button of an empty builder does.
+    $builder = $this->getBuilder($field_alias);
+    $this->clickAddButtonAtEndOf($builder, self::SECTION_XPATH, NULL);
 
     // Get the 'layout' property from the table.
     $layout = $layout_properties->getRowsHash()['layout'];
@@ -143,11 +192,11 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::FIELD_MAP.
    * @param \Behat\Gherkin\Node\TableNode $layout_properties
    *   The layout properties. Optionally include a layout position and region.
-   *   If a layout position is not provided, the last position is used and the
-   *   paragraph will be added without a parent layout paragraph. An example is
-   *   below. In the field value, you have to use the format "type: <field type>
-   *   - value: <field value>", where <field type> is the field type e.g. text,
-   *   select, etc. and <field value> is the value of the field.
+   *   If a layout position is not provided, the last region of the builder is
+   *   used. An example is below. In the field value, you have to use the format
+   *   "type: <field type> - value: <field value>", where <field type> is the
+   *   field type e.g. text, select, etc. and <field value> is the value of the
+   *   field.
    * @codingStandardsIgnoreStart
    * | layout position | 2                                           |
    * | region          | left                                        |
@@ -173,10 +222,9 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
       }
     }
 
-    // Click "Choose component" (opens the modal).
-    $this->getChooseComponentLink($field_alias, $layout_position, $region)->click();
-    $this->waitForAjax();
-    $this->waitForModalToOpen();
+    // Append the component to the region, which opens the modal.
+    $region_element = $this->getRegionToAddInto($field_alias, $layout_position, $region);
+    $this->clickAddButtonAtEndOf($region_element, self::REGION_COMPONENT_XPATH, $this->getOwnerComponent($region_element));
 
     // Select the paragraph type.
     $ui_dialog = $this->getSession()->getPage()->find('css', '.ui-dialog');
@@ -215,6 +263,80 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   }
 
   /**
+   * Clicks a button of a section.
+   *
+   * @param string $button
+   *   The button to click, as defined in
+   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::BUTTONS.
+   * @param string $position
+   *   The position of the section in the builder.
+   * @param string|null $field_alias
+   *   (optional) The field alias as defined in
+   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::FIELD_MAP. Defaults
+   *   to NULL, which uses the only builder in the page.
+   */
+  #[When('I click the :button button in section :position')]
+  #[When('I click the :button button in section :position of the :field_alias form field')]
+  public function clickButtonInSection(string $button, string $position, ?string $field_alias = NULL): void {
+    $this->assertJavaScriptEnabledBrowser();
+    $section = $this->getSection($position, $field_alias);
+
+    $this->clickBuilderButton($button, $section, $section);
+  }
+
+  /**
+   * Clicks a button of a paragraph inside a section.
+   *
+   * @param string $button
+   *   The button to click, as defined in
+   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::BUTTONS.
+   * @param string $paragraph_position
+   *   The position of the paragraph inside the section.
+   * @param string $position
+   *   The position of the section in the builder.
+   * @param string|null $field_alias
+   *   (optional) The field alias as defined in
+   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::FIELD_MAP. Defaults
+   *   to NULL, which uses the only builder in the page.
+   */
+  #[When('I click the :button button of paragraph :paragraph_position in section :position')]
+  #[When('I click the :button button of paragraph :paragraph_position in section :position of the :field_alias form field')]
+  public function clickButtonInParagraph(string $button, string $paragraph_position, string $position, ?string $field_alias = NULL): void {
+    $this->assertJavaScriptEnabledBrowser();
+    $section = $this->getSection($position, $field_alias);
+    $paragraphs = $this->getAllSubParagraphsForLayout($section);
+    $this->assertCondition(isset($paragraphs[$paragraph_position - 1]), "There is no paragraph in position $paragraph_position in section $position.");
+
+    $this->clickBuilderButton($button, $paragraphs[$paragraph_position - 1], $paragraphs[$paragraph_position - 1]);
+  }
+
+  /**
+   * Clicks a button of a region of a section.
+   *
+   * @param string $button
+   *   The button to click, as defined in
+   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::BUTTONS.
+   * @param string $region
+   *   The region of the section, e.g. 'first'.
+   * @param string $position
+   *   The position of the section in the builder.
+   * @param string|null $field_alias
+   *   (optional) The field alias as defined in
+   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::FIELD_MAP. Defaults
+   *   to NULL, which uses the only builder in the page.
+   */
+  #[When('I click the :button button in the :region region of section :position')]
+  #[When('I click the :button button in the :region region of section :position of the :field_alias form field')]
+  public function clickButtonInRegion(string $button, string $region, string $position, ?string $field_alias = NULL): void {
+    $this->assertJavaScriptEnabledBrowser();
+    $section = $this->getSection($position, $field_alias);
+
+    // The region belongs to its section, which is the component that has to be
+    // active for the region UI to be revealed.
+    $this->clickBuilderButton($button, $this->getSectionRegion($section, $region), $section);
+  }
+
+  /**
    * Performs an action on a layout paragraph in the given field.
    *
    * @param string $action
@@ -228,32 +350,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    */
   #[When('I :action from the :field_alias form field the layout paragraph in position :position')]
   public function actionOnTopLevelLayoutParagraph(string $action, string $field_alias, string $position): void {
-    $this->assertJavaScriptEnabledBrowser();
-    $layout = $this->getFormFieldLayoutParagraphs($field_alias)[$position - 1];
-
-    $this->performAction($layout, $action);
-  }
-
-  /**
-   * Performs an action on a component, wherever the builder holds it.
-   *
-   * Counts the components of the only builder on the page, whatever their
-   * bundle is, for forms that hold a single layout paragraphs field and whose
-   * components are not the layouts the steps above expect.
-   *
-   * @param string $action
-   *   The action to perform. Available actions are 'delete', 'edit', 'move up',
-   *   'move down', 'duplicate'.
-   * @param string $position
-   *   The position of the component in the builder.
-   */
-  #[When('I :action the layout paragraph in position :position')]
-  public function actionOnBuilderComponent(string $action, string $position): void {
-    $this->assertJavaScriptEnabledBrowser();
-    $components = $this->getSession()->getPage()->findAll('css', '.lp-builder .js-lpb-component');
-    $this->assertCondition(isset($components[$position - 1]), "There is no layout paragraph in position $position.");
-
-    $this->performAction($components[$position - 1], $action);
+    $this->clickButtonInSection($action, $position, $field_alias);
   }
 
   /**
@@ -271,43 +368,63 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    */
   #[When('I :action from the :fieldAlias field the child :pPosition paragraph of :lPosition layout')]
   public function actionOnChildLayoutParagraph(string $action, string $fieldAlias, string $pPosition, string $lPosition): void {
-    $this->assertJavaScriptEnabledBrowser();
-    $layoutParagraph = $this->getFormFieldLayoutParagraphs($fieldAlias)[$lPosition - 1];
-    $component = $this->getAllSubParagraphsForLayout($layoutParagraph)[$pPosition - 1];
-
-    $this->performAction($component, $action);
+    $this->clickButtonInParagraph($action, $pPosition, $lPosition, $fieldAlias);
   }
 
   /**
-   * Perform an action on a component.
+   * Clicks a button of the builder UI.
    *
-   * @param \Behat\Mink\Element\TraversableElement $component
-   *   The component to act upon.
-   * @param string $action
-   *   Action name.
+   * The builder reveals the UI of a single, "active" component at a time and
+   * keeps the controls bar and the insert buttons of every other component in
+   * the 'visually-hidden' class, so the component owning the button has to be
+   * activated before the button can be reached. Activating it is enough for the
+   * controls bar, which the stylesheet only asks to be active. An insert button
+   * is asked to be hovered on top of that, or focused, and focus, unlike a
+   * hover, survives the next move of the mouse.
+   *
+   * @param string $button
+   *   The button to click, as defined in
+   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::BUTTONS.
+   * @param \Behat\Mink\Element\TraversableElement $container
+   *   The element holding the button.
+   * @param \Behat\Mink\Element\TraversableElement|null $owner
+   *   The component that reveals the button when it is active, or NULL for the
+   *   buttons of the builder root, which are outside of any component.
+   *
+   * @see layout_paragraphs/css/builder.css
+   * @see layout_paragraphs/js/builder.js
    */
-  protected function performAction(TraversableElement $component, string $action): void {
-    $actions = ['delete', 'edit', 'move up', 'move down', 'duplicate'];
-    $this->assertCondition(in_array($action, $actions), "The action '$action' is not defined in the context. Available actions are " . implode(', ', $actions));
+  protected function clickBuilderButton(string $button, TraversableElement $container, ?TraversableElement $owner): void {
+    $this->assertCondition(isset(self::BUTTONS[$button]), "The button '$button' is not defined in the context. Available buttons are " . implode(', ', array_keys(self::BUTTONS)) . '.');
 
-    // The controls bar only becomes clickable once its component is active.
-    $this->activateComponent($component);
-    $controls = $component->find('xpath', "./div[contains(concat(' ', @class, ' '), ' lpb-controls ')]");
-    $this->assertCondition($controls !== NULL, "The component has no controls bar.");
+    if ($owner !== NULL) {
+      $this->activateComponent($owner);
+    }
 
-    $action_link = $controls->findLink(ucfirst($action));
-    $this->assertCondition($action_link !== NULL, "Action link '$action' not found.");
-    $action_link->click();
+    $link = $container->find('xpath', self::BUTTONS[$button]);
+    $this->assertCondition($link !== NULL, "The '$button' button was not found.");
+    $link->focus();
+    $link->click();
     $this->waitForAjax();
 
-    switch ($action) {
+    $this->waitForButtonResult($button);
+  }
+
+  /**
+   * Waits for the result of clicking a button of the builder UI.
+   *
+   * @param string $button
+   *   The button that was clicked.
+   */
+  protected function waitForButtonResult(string $button): void {
+    switch ($button) {
       case 'edit':
         $this->waitForElementVisible('css', '.ui-dialog-buttonpane button');
         break;
 
       case 'delete':
-        $btn = $this->waitForElementVisible('css', '.ui-dialog-buttonpane .lpb-btn--confirm-delete');
-        $btn->press();
+        $confirm = $this->waitForElementVisible('css', '.ui-dialog-buttonpane .lpb-btn--confirm-delete');
+        $confirm->press();
         $this->waitForAjax();
         $this->waitForNoElement('css', '.lpb-dialog');
         break;
@@ -318,7 +435,39 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
         // @see layout_paragraphs/js/builder.js move
         $this->waitForCssAnimations();
         break;
+
+      case 'add before':
+      case 'add after':
+      case 'add component':
+        $this->waitForModalToOpen();
+        break;
     }
+  }
+
+  /**
+   * Clicks the button that appends a new component to a container.
+   *
+   * A container offers its centered add button only while it is empty. Once it
+   * holds components, the buttons available are the ones each component keeps
+   * before and after itself, so appending to the container means adding after
+   * its last component.
+   *
+   * @param \Behat\Mink\Element\TraversableElement $container
+   *   The container to append to: a region, or the builder root.
+   * @param string $component_xpath
+   *   The xpath that lists the components of the container.
+   * @param \Behat\Mink\Element\TraversableElement|null $owner
+   *   The component owning the container, or NULL for the builder root.
+   */
+  protected function clickAddButtonAtEndOf(TraversableElement $container, string $component_xpath, ?TraversableElement $owner): void {
+    $components = $container->findAll('xpath', $component_xpath);
+    if (empty($components)) {
+      $this->clickBuilderButton('add component', $container, $owner);
+      return;
+    }
+
+    $last = end($components);
+    $this->clickBuilderButton('add after', $last, $last);
   }
 
   /**
@@ -441,6 +590,114 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   }
 
   /**
+   * Returns the layout paragraphs builder.
+   *
+   * @param string|null $field_alias
+   *   (optional) The field alias as defined in
+   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::FIELD_MAP. Defaults
+   *   to NULL, which returns the only builder in the page.
+   *
+   * @return \Behat\Mink\Element\TraversableElement
+   *   The builder element.
+   */
+  protected function getBuilder(?string $field_alias = NULL): TraversableElement {
+    $scope = $field_alias === NULL
+      ? $this->getSession()->getPage()
+      : $this->getParagraphsElement($field_alias);
+
+    $builder = $scope->find('css', '.lp-builder');
+    $this->assertCondition($builder !== NULL, 'No layout paragraphs builder was found' . ($field_alias === NULL ? ' in the page.' : " in the '$field_alias' form field."));
+
+    return $builder;
+  }
+
+  /**
+   * Returns a section of the builder.
+   *
+   * @param string $position
+   *   The position of the section in the builder.
+   * @param string|null $field_alias
+   *   (optional) The field alias as defined in
+   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::FIELD_MAP.
+   *
+   * @return \Behat\Mink\Element\TraversableElement
+   *   The section element.
+   */
+  protected function getSection(string $position, ?string $field_alias = NULL): TraversableElement {
+    $sections = $this->getBuilder($field_alias)->findAll('xpath', self::SECTION_XPATH);
+    $this->assertCondition(isset($sections[$position - 1]), "There is no section in position $position.");
+
+    return $sections[$position - 1];
+  }
+
+  /**
+   * Returns a region of a section.
+   *
+   * @param \Behat\Mink\Element\TraversableElement $section
+   *   The section holding the region.
+   * @param string|null $region
+   *   (optional) The name of the region, e.g. 'first'. Defaults to NULL, which
+   *   returns the only region of the section.
+   *
+   * @return \Behat\Mink\Element\TraversableElement
+   *   The region element.
+   */
+  protected function getSectionRegion(TraversableElement $section, ?string $region = NULL): TraversableElement {
+    if ($region !== NULL) {
+      $element = $section->find('css', '.layout__region--' . $region);
+      $this->assertCondition($element !== NULL, "The section has no '$region' region.");
+      return $element;
+    }
+
+    $regions = $section->findAll('css', '.js-lpb-region');
+    $this->assertCondition(count($regions) === 1, 'The section has ' . count($regions) . ' regions. Name the region to use.');
+
+    return reset($regions);
+  }
+
+  /**
+   * Returns the region a component should be added into.
+   *
+   * @param string $field_alias
+   *   The field alias as defined in
+   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::FIELD_MAP.
+   * @param string|null $section_position
+   *   (optional) The position of the section. Defaults to NULL, which uses the
+   *   last region of the builder.
+   * @param string|null $region
+   *   (optional) The name of the region. Defaults to NULL, which uses the only
+   *   region of the section.
+   *
+   * @return \Behat\Mink\Element\TraversableElement
+   *   The region element.
+   */
+  protected function getRegionToAddInto(string $field_alias, ?string $section_position = NULL, ?string $region = NULL): TraversableElement {
+    if ($section_position !== NULL) {
+      return $this->getSectionRegion($this->getSection($section_position, $field_alias), $region);
+    }
+
+    // Components can only be added into a region, so without a section the last
+    // region of the builder is the one meant.
+    $regions = $this->getBuilder($field_alias)->findAll('css', '.js-lpb-region');
+    $this->assertCondition(!empty($regions), 'The builder has no region to add a component into.');
+
+    return end($regions);
+  }
+
+  /**
+   * Returns the component an element belongs to.
+   *
+   * @param \Behat\Mink\Element\TraversableElement $element
+   *   The element to find the owner of.
+   *
+   * @return \Behat\Mink\Element\TraversableElement|null
+   *   The component, or NULL if the element is outside of any component.
+   */
+  protected function getOwnerComponent(TraversableElement $element): ?TraversableElement {
+    return $element->find('xpath', 'ancestor-or-self::div[contains(concat(" ", @class, " "), " js-lpb-component ")][1]');
+  }
+
+  /**
    * Returns a list of layout paragraphs elements.
    *
    * @param string $field_alias
@@ -472,93 +729,13 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   }
 
   /**
-   * Returns the add component button.
+   * Keeps the insert buttons reachable for steps outside of this context.
    *
-   * @param string $field_alias
-   *   The field designator as defined in
-   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::FIELD_MAP.
-   * @param string|null $parent_layout_position
-   *   (optional) The position of the parent layout. Defaults to NULL, which
-   *   means the that the button that adds a layout into root will be fetched.
-   * @param string|null $parent_layout_region
-   *   (optional) The region of the parent layout. If a layout position is
-   *   passed, then a region must be passed as well.
-   *
-   * @return \Behat\Mink\Element\TraversableElement
-   *   The add component button.
-   */
-  protected function getChooseComponentLink(string $field_alias, ?string $parent_layout_position = NULL, ?string $parent_layout_region = NULL): TraversableElement {
-    if ($parent_layout_position === NULL) {
-      $field = $this->getParagraphsElement($field_alias);
-    }
-    else {
-      $layout = $this->getFormFieldLayoutParagraphs($field_alias)[$parent_layout_position - 1];
-      // The centered add button of an empty region belongs to the layout, so
-      // the layout has to be active before the button reports its real
-      // geometry.
-      $this->activateComponent($layout);
-      $field = $layout->find('css', '.layout__region--' . $parent_layout_region);
-    }
-
-    return $this->getLastAddLink($field, 'Choose component');
-  }
-
-  /**
-   * Returns the last add button in a container, ready to be clicked.
-   *
-   * Add buttons come in two flavours. The centered one belongs to the container
-   * it adds into: the builder root, or a region of a layout. The "before" and
-   * "after" ones are prepended and appended to an existing component, and
-   * belong to that component. Either way the button is only revealed while the
-   * component owning it is the active one, so activate that component here.
-   *
-   * @param \Behat\Mink\Element\TraversableElement $container
-   *   The container holding the add buttons.
-   * @param string $label
-   *   The label of the add buttons to look for.
-   *
-   * @return \Behat\Mink\Element\TraversableElement
-   *   The add button.
-   *
-   * @see \Drupal\layout_paragraphs\Element\LayoutParagraphsBuilder::buildComponent()
-   */
-  protected function getLastAddLink(TraversableElement $container, string $label): TraversableElement {
-    $links = $container->findAll('named', ['link', $label]);
-    if (empty($links)) {
-      throw new \Exception("No '$label' links found.");
-    }
-
-    // Filter out invisible links (that have the style 'display: none'). This is
-    // because, when the layout region has at least one paragraph, then the
-    // central button that adds to the region is still in the HTML but hidden.
-    // The buttons available at that point, are the ones before and after each
-    // paragraph.
-    $links = array_filter($links, function (TraversableElement $link) {
-      $classes = explode(' ', $link->getAttribute('class') ?? '');
-      if (in_array('center', $classes, TRUE)) {
-        return $link->isVisible();
-      }
-      return TRUE;
-    });
-    $this->assertCondition(!empty($links), "No visible '$label' link found.");
-
-    $link = end($links);
-    $owner = $link->find('xpath', 'ancestor::div[contains(concat(" ", @class, " "), " js-lpb-component ")][1]');
-    if ($owner !== NULL) {
-      $this->activateComponent($owner);
-    }
-
-    return $link;
-  }
-
-  /**
-   * Keeps the builder in a state the driver can interact with.
-   *
-   * Two things need correcting on every step.
-   *
-   * Steps outside of this context click the add buttons by their link text,
-   * without selecting a component first, so the add buttons have to be
-   * reachable at all times. Reveals them.
+   * The generic 'I click "Choose component"' step clicks an insert button by
+   * its label, without selecting a component first, so the buttons it goes for
+   * have to be reachable at all times. The steps of this context select the
+   * component that owns the button they are about to click, and do not depend
+   * on this.
    *
    * The builder also binds Delete and Backspace on the document to deleting the
    * active component, without checking whether the keystroke was meant for an

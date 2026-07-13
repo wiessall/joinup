@@ -432,7 +432,7 @@ Feature: Assessment Report Entity Management
     And I should see the text "Asset that should remain"
 
     When I go to the edit form of the "Test Entity Browser Remove Asset" assessment
-    And I "edit" the layout paragraph in position 1
+    And I click the "edit" button in section 1
     And a modal should open
 
     When I click "Interoperability solution" in the "Modal content" region
@@ -499,11 +499,11 @@ Feature: Assessment Report Entity Management
     Then I press "Save" in the "Modal buttons" region
     And the modal should be closed
 
-    When I "duplicate" the layout paragraph in position 1
+    When I click the "duplicate" button in section 1
     And I wait for AJAX to finish
 
     # Edit the duplicated component.
-    When I "edit" the layout paragraph in position 2
+    When I click the "edit" button in section 2
     Then a modal should open
 
   Scenario: Entity browser shows only solutions in the current interface language
