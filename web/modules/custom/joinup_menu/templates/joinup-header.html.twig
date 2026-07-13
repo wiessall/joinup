@@ -4,8 +4,8 @@
  * Renders the non-menu header navigation items.
  *
  * Emits the navbar <li> elements for the items that are not menus (search,
- * bookmarks and the anonymous sign in / get started / about us items). The
- * navbar and account menus are rendered by their own menu blocks; the wrapping
+ * bookmarks and the anonymous sign in / get started items). The navbar and
+ * account menus are rendered by their own menu blocks; the wrapping
  * <header>/<ul> is provided by the header navigation region.
  *
  * Provided by \Drupal\joinup_menu\Plugin\Block\HeaderNavigationBlock.
@@ -65,37 +65,7 @@
     {% set _list_item_classes = _list_item_classes|merge(['d-' ~ item.breakpoint ~ '-none']) %}
   {% endif %}
   {% set list_item_attributes = list_item_attributes.addClass(_list_item_classes) %}
-  {% if item.type == 'mmenu' %}
-    <li {{ list_item_attributes.addClass('mmenu-nav') }}>
-      <button
-        id="{{ item.id }}"
-        class="nav-link mmenu-nav__toggle"
-        type="button"
-        aria-label="{{ item.label }}"
-      >
-        <span class="visually-hidden">{{ item.label }}</span>
-        {% if item.icon is not empty %}
-          <svg class="bi icon--s">
-            <use xlink:href="{{ bcl_icon_path }}#{{ item.icon.name }}"></use>
-          </svg>
-        {% endif %}
-      </button>
-      <div class="mmenu-nav__menu p-0 d-none" aria-labelledby="{{ item.id }}">
-        <ul>
-          {% for link in item.links %}
-            {% if link.link %}
-              <li {{ create_attribute({class: link.in_active_trail ? 'Selected'}) }}>
-                {% set attributes = create_attribute(link.attributes|default([])) %}
-                <a href="{{ link.link }}" {{ attributes.addClass(link.in_active_trail ? 'is-active') }}>
-                  {{ link.label }}
-                </a>
-              </li>
-            {% endif %}
-          {% endfor %}
-        </ul>
-      </div>
-    </li>
-  {% elseif item.type == 'search' %}
+  {% if item.type == 'search' %}
     <li {{ list_item_attributes }}>
       <button
         id="{{ item.id }}"

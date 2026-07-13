@@ -9,12 +9,13 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Routing\RedirectDestinationInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Theme\ThemeManagerInterface;
+use Drupal\Core\Url;
 use Drupal\joinup_bookmark\JoinupBookmarkInterface;
-use Drupal\joinup_menu\MenuHelperInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -22,9 +23,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * The navbar and account menus are provided by core menu blocks; this block
  * renders the remaining BCL navbar items that are not menus: the search box,
- * the bookmark link and, for anonymous users, the sign in / get started /
- * about us items. It emits the <li> elements that are composed into the navbar
- * by the header navigation region.
+ * the bookmark link and, for anonymous users, the sign in and get started
+ * items. It emits the <li> elements that are composed into the navbar by the
+ * header navigation region.
  */
 #[Block(
   id: 'joinup_header_navigation',
@@ -38,7 +39,7 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
     $plugin_id,
     $plugin_definition,
     protected readonly AccountProxyInterface $currentUser,
-    protected readonly MenuHelperInterface $menuHelper,
+    protected readonly RedirectDestinationInterface $redirectDestination,
     protected readonly JoinupBookmarkInterface $bookmark,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly RouteMatchInterface $routeMatch,
@@ -56,7 +57,7 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
       $plugin_id,
       $plugin_definition,
       $container->get('current_user'),
-      $container->get('joinup_menu.menu_helper'),
+      $container->get('redirect.destination'),
       $container->get('joinup_bookmark.bookmark'),
       $container->get('entity_type.manager'),
       $container->get('current_route_match'),
@@ -75,15 +76,14 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
     $items = [];
 
     if (!$logged_in) {
-      $anonymous_links = $this->menuHelper->getBclAnonymousMenu($cacheability);
-      $cacheability->addCacheContexts(['url.path', 'url.query_args']);
+      $anonymous_links = $this->getAnonymousActions($cacheability);
       $items[] = [
-        'type' => 'mmenu',
+        'breakpoint' => 'all',
+        'links' => [$anonymous_links['sign_in']],
+      ];
+      $items[] = [
         'breakpoint' => 'xl',
-        'id' => 'navbar-toggler',
-        'icon' => ['name' => 'justify'],
-        'label' => $this->t('Toggle menu'),
-        'links' => $anonymous_links,
+        'links' => [$anonymous_links['get_started']],
       ];
     }
 
@@ -118,6 +118,44 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
     ];
     $cacheability->applyTo($build);
     return $build;
+  }
+
+  /**
+   * Builds the anonymous header actions in the BCL header format.
+   *
+   * @param \Drupal\Core\Cache\CacheableMetadata $cacheability
+   *   Collects the cacheability of the anonymous actions.
+   *
+   * @return array
+   *   The header actions, keyed by 'sign_in' and 'get_started'.
+   */
+  protected function getAnonymousActions(CacheableMetadata $cacheability): array {
+    // Sign in and account creation both open EU Login and return the user to
+    // the page they started from, so these links vary per request URL.
+    $cacheability->addCacheContexts(['url.path', 'url.query_args']);
+    $cas_login_link = Url::fromRoute('cas.login', [], [
+      'query' => $this->redirectDestination->getAsArray(),
+    ]);
+
+    return [
+      'sign_in' => [
+        'label' => $this->t('Sign in'),
+        'link' => $cas_login_link,
+        'attributes' => ['class' => ['sign-in-link']],
+      ],
+      'get_started' => [
+        'id' => 'get-started',
+        'label' => $this->t('Get started'),
+        'popover' => [
+          'cta' => [
+            'link' => $cas_login_link,
+            'attributes' => 'tabindex="0"',
+            'text' => $this->t('Create an account'),
+          ],
+          'description' => $this->t('As a signed-in user you can create content, become a member of a community, receive notifications on your favourite solutions and topics, and access all other features available on the platform.'),
+        ],
+      ],
+    ];
   }
 
   /**
