@@ -432,7 +432,7 @@ Feature: Assessment Report Entity Management
     And I should see the text "Asset that should remain"
 
     When I go to the edit form of the "Test Entity Browser Remove Asset" assessment
-    And I click on element ".lpb-edit"
+    And I "edit" the layout paragraph in position 1
     And a modal should open
 
     When I click "Interoperability solution" in the "Modal content" region
@@ -499,12 +499,11 @@ Feature: Assessment Report Entity Management
     Then I press "Save" in the "Modal buttons" region
     And the modal should be closed
 
-    When I click on element ".lpb-duplicate"
+    When I "duplicate" the layout paragraph in position 1
     And I wait for AJAX to finish
 
-    # Click the second edit link by finding the first component and then
-    # getting the first sibling which is the duplicated component.
-    When I click on element ".js-lpb-component ~ .js-lpb-component .lpb-edit"
+    # Edit the duplicated component.
+    When I "edit" the layout paragraph in position 2
     Then a modal should open
 
   Scenario: Entity browser shows only solutions in the current interface language

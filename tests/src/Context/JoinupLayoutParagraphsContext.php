@@ -235,6 +235,28 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   }
 
   /**
+   * Performs an action on a component, wherever the builder holds it.
+   *
+   * Counts the components of the only builder on the page, whatever their
+   * bundle is, for forms that hold a single layout paragraphs field and whose
+   * components are not the layouts the steps above expect.
+   *
+   * @param string $action
+   *   The action to perform. Available actions are 'delete', 'edit', 'move up',
+   *   'move down', 'duplicate'.
+   * @param string $position
+   *   The position of the component in the builder.
+   */
+  #[When('I :action the layout paragraph in position :position')]
+  public function actionOnBuilderComponent(string $action, string $position): void {
+    $this->assertJavaScriptEnabledBrowser();
+    $components = $this->getSession()->getPage()->findAll('css', '.lp-builder .js-lpb-component');
+    $this->assertCondition(isset($components[$position - 1]), "There is no layout paragraph in position $position.");
+
+    $this->performAction($components[$position - 1], $action);
+  }
+
+  /**
    * Performs an action on the child paragraph in the given layout.
    *
    * @param string $action
