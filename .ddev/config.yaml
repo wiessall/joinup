@@ -33,7 +33,7 @@ composer_version: "2"
 web_environment:
     - DRUPAL_BASE_URL=https://${DDEV_SITENAME}.${DDEV_TLD}
 disable_settings_management: true
-nodejs_version: "20"
+nodejs_version: "24"
 # Affects only macOS developers.
 performance_mode: global
 

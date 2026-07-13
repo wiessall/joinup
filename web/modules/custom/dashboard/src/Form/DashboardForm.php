@@ -13,7 +13,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_core\Logger\Handler\MailHandler;
-use Drupal\joinup_core\Logger\Handler\TelegramHandler;
 use Drupal\rdf_sync\RdfSyncConnectionInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
@@ -70,21 +69,6 @@ class DashboardForm extends FormBase {
           '#default_value' => $log_alerts['mail']['to'] ?? '',
         ],
         'level' => $level('mail'),
-      ],
-      'telegram' => [
-        '#type' => 'details',
-        '#title' => $this->t('Telegram'),
-        'apiKey' => [
-          '#type' => 'textfield',
-          '#title' => $this->t('JoinupDevBot API key'),
-          '#default_value' => $log_alerts['telegram']['apiKey'] ?? '',
-        ],
-        'channel' => [
-          '#type' => 'textfield',
-          '#title' => $this->t('Chat ID'),
-          '#default_value' => $log_alerts['telegram']['channel'] ?? '',
-        ],
-        'level' => $level('telegram'),
       ],
     ];
 
@@ -192,7 +176,6 @@ class DashboardForm extends FormBase {
   protected function getLogAlertsDefaultSettings(): array {
     return [
       'mail' => MailHandler::getDefaultSettings(),
-      'telegram' => TelegramHandler::getDefaultSettings(),
     ];
   }
 

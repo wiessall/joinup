@@ -42,7 +42,8 @@ Feature: Embed of videos into the page.
     And the response should contain "https://webtools.europa.eu/crs/iframe/?oriurl=https%3A//player.vimeo.com/video/225133231&amp;lang=en"
     And the response should not contain "https://webtools.europa.eu/crs/iframe/?oriurl=https%3A//www.dailymotion.com/embed/video/x5vl5l0&amp;lang=en"
 
-  @javascript
+  # Disabled until ISAICP-11560
+  @wip @javascript
   Scenario Outline: A video embed button should be shown to community content editors.
     Given I am logged in as a "facilitator" of the "Beer brewing corporation" collection
     And I go to the homepage of the "Beer brewing corporation" collection
