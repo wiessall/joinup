@@ -34,14 +34,11 @@ final class DocumentHooks {
       return;
     }
 
-    $form['referenced_solution']['#states'] = [
-      'visible' => [
-        ':input[name="field_type"]' => ['value' => 'solution_use_cases'],
-      ],
-      'required' => [
-        ':input[name="field_type"]' => ['value' => 'solution_use_cases'],
-      ],
+    $condition = [
+      ':input[name="field_type"]' => ['value' => 'solution_use_cases'],
     ];
+    $form['referenced_solution']['#states']['visible'] = $condition;
+    $form['referenced_solution']['widget']['#states']['required'] = $condition;
   }
 
   /**
