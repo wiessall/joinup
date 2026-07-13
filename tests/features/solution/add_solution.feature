@@ -50,7 +50,7 @@ Feature: Test adding solutions.
     # Create owner. Validation errors must have activated the tab "Contact details".
     When I fill in "Name" with "Organisation valid"
     And I select "Company" options from "Type"
-    And I select "Belgium" from "Country"
+    And I select "Belgium" option from "Country"
     And I press "Create owner"
     # Create contact information.
     And I fill in "Name" with "Contact Rapazoglou"
@@ -269,7 +269,7 @@ Feature: Test adding solutions.
     And I press "Add new owner"
     And I fill in "Name" with "University of Basel"
     And I select "Company" options from "Type"
-    And I select "Belgium" from "Country"
+    And I select "Belgium" option from "Country"
     And I press "Create owner"
     # Create contact information.
     And I press "Create contact information"
@@ -401,5 +401,6 @@ Feature: Test adding solutions.
     And I click "Add solution"
     And I click "Contact details"
     And I press "Add new owner"
-    When I open the "Country" tagify dropdown
-    And I should not see the text "Niderlandy" in the "Content" region
+    And I select "Niderlandy" option from "Country"
+    And I wait for AJAX to finish
+    Then I should see "Niderlandy"

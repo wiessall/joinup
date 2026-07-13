@@ -302,7 +302,7 @@ Feature: Collection moderation
     And I press "Add new" at the "Owner" field
     And I fill in "Name" with "Mable Pelley"
     And I select "Company" options from "Type"
-    And I select "Belgium" from "Country"
+    And I select "Belgium" option from "Country"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
     And I fill in "Alternative text" with "Alternative logo text"

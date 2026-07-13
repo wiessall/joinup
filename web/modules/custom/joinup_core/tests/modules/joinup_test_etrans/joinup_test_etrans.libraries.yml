@@ -1,0 +1,9 @@
+etrans_debugger:
+  css:
+    theme:
+      assets/etrans-debugger.css: {  }
+  js:
+    assets/etrans-debugger.js: {  }
+  dependencies:
+    - core/drupal
+    - core/once
