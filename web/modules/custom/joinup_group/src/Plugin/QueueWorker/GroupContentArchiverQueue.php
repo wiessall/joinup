@@ -15,13 +15,9 @@ use Drupal\Core\Queue\QueueWorkerBase;
 use Drupal\Core\Session\AccountSwitcherInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\custom_page\Entity\CustomPageInterface;
-use Drupal\joinup_community_content\Entity\CommunityContentInterface;
-use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Transition;
 use Drupal\joinup_notification\NotificationEvents;
-use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\joinup_workflow\WorkflowHelperInterface;
 use Drupal\joinup_workflow\WorkflowStateChangeMessageTrait;
@@ -40,13 +36,6 @@ class GroupContentArchiverQueue extends QueueWorkerBase implements ContainerFact
 
   use StringTranslationTrait;
   use WorkflowStateChangeMessageTrait;
-
-  private const array ENTITY_CLASSES_TO_ARCHIVE = [
-    ReleaseInterface::class,
-    CustomPageInterface::class,
-    CommunityContentInterface::class,
-    DistributionInterface::class,
-  ];
 
   public function __construct(
     array $configuration,
@@ -98,7 +87,7 @@ class GroupContentArchiverQueue extends QueueWorkerBase implements ContainerFact
 
     $this->accountSwitcher->switchTo($actor);
     try {
-      $this->performOperation($group, $data['transition']);
+      $this->performOperation($group, $data['transition'], $data['motivation'] ?? NULL);
     }
     finally {
       $this->accountSwitcher->switchBack();
@@ -125,15 +114,15 @@ class GroupContentArchiverQueue extends QueueWorkerBase implements ContainerFact
       );
     }
 
-    // Sub-groups are never archived here; each group manages its own
-    // sub-content independently.
+    // Only (un)archive the content types managed by this group type. Anything
+    // else - including sub-groups such as a collection's solutions - is left
+    // untouched: each group (un)archives its own sub-content independently
+    // through its workflow transition events.
+    $classes = $group->getArchivableContentEntityClasses();
     return array_filter(
       $entities,
-      function (EntityInterface $entity): bool {
-        if ($entity instanceof GroupInterface) {
-          return FALSE;
-        }
-        foreach (static::ENTITY_CLASSES_TO_ARCHIVE as $class) {
+      function (EntityInterface $entity) use ($classes): bool {
+        foreach ($classes as $class) {
           if (is_a($entity, $class)) {
             return TRUE;
           }
@@ -150,12 +139,14 @@ class GroupContentArchiverQueue extends QueueWorkerBase implements ContainerFact
    *   The group whose sub-content should be (un)archived.
    * @param \Drupal\joinup_group\Transition $transition
    *   The transition to apply.
+   * @param string|null $motivation
+   *   The injected motivation if any.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  protected function performOperation(GroupInterface $group, Transition $transition): void {
+  protected function performOperation(GroupInterface $group, Transition $transition, ?string $motivation = NULL): void {
     foreach ($this->getGroupContent($group) as $entity) {
       if (!$entity instanceof ArchivableEntityInterface) {
         // Continue silently.
@@ -208,6 +199,8 @@ class GroupContentArchiverQueue extends QueueWorkerBase implements ContainerFact
     }
 
     if ($transition === Transition::Archive) {
+      // Motivation is lost after unserialize so re add it back.
+      $group->motivation = $motivation;
       joinup_notification_dispatch_notification('update', NotificationEvents::GROUP_ENTITY_ARCHIVE_COMPLETED, $group);
     }
   }
