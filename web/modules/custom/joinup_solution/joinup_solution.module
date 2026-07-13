@@ -377,7 +377,7 @@ function joinup_solution_node_view(array &$build, NodeInterface $solution, Entit
     $webform = \Drupal::entityTypeManager()->getStorage('webform')->load('submit_your_interoperability_sol');
     if ($webform !== NULL) {
       $url = Url::fromRoute('entity.webform.canonical', ['webform' => 'submit_your_interoperability_sol'], [
-        'query' => ['solution' => $solution->id()],
+        'query' => ['reuse_solution' => $solution->id()],
       ]);
       $build['solution_reuse_share'] = [
         '#type' => 'link',
