@@ -71,7 +71,7 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
   public function build(): array {
     $cacheability = new CacheableMetadata();
     $logged_in = $this->currentUser->isAuthenticated();
-    $cacheability->addCacheContexts(['route', 'user.roles']);
+    $cacheability->addCacheContexts(['route.name', 'user.roles:authenticated']);
 
     $items = [];
 
