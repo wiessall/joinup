@@ -88,8 +88,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
     $this->assertJavaScriptEnabledBrowser();
 
     $field = $this->getParagraphsElement($field_alias);
-    $links = $field->findAll('named', ['link', 'Add layout']);
-    end($links)->click();
+    $this->getLastAddLink($field, 'Add layout')->click();
 
     // Wait for modal to be opened.
     $this->waitForModalToOpen();
@@ -230,11 +229,9 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   #[When('I :action from the :field_alias form field the layout paragraph in position :position')]
   public function actionOnTopLevelLayoutParagraph(string $action, string $field_alias, string $position): void {
     $this->assertJavaScriptEnabledBrowser();
-    // The ".is-layout" class is the difference between the actions for layouts
-    // and the actions for paragraphs.
-    $link = $this->getFormFieldLayoutParagraphs($field_alias)[$position - 1]->find('css', '.lpb-controls.is-layout');
+    $layout = $this->getFormFieldLayoutParagraphs($field_alias)[$position - 1];
 
-    $this->performAction($link, $action);
+    $this->performAction($layout, $action);
   }
 
   /**
@@ -254,24 +251,29 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   public function actionOnChildLayoutParagraph(string $action, string $fieldAlias, string $pPosition, string $lPosition): void {
     $this->assertJavaScriptEnabledBrowser();
     $layoutParagraph = $this->getFormFieldLayoutParagraphs($fieldAlias)[$lPosition - 1];
-    $link = $this->getAllSubParagraphsForLayout($layoutParagraph)[$pPosition - 1]->find('css', '.lpb-controls');
+    $component = $this->getAllSubParagraphsForLayout($layoutParagraph)[$pPosition - 1];
 
-    $this->performAction($link, $action);
+    $this->performAction($component, $action);
   }
 
   /**
-   * Perform an action on link.
+   * Perform an action on a component.
    *
-   * @param \Behat\Mink\Element\TraversableElement $link
-   *   Link element.
+   * @param \Behat\Mink\Element\TraversableElement $component
+   *   The component to act upon.
    * @param string $action
    *   Action name.
    */
-  protected function performAction(TraversableElement $link, string $action): void {
+  protected function performAction(TraversableElement $component, string $action): void {
     $actions = ['delete', 'edit', 'move up', 'move down', 'duplicate'];
     $this->assertCondition(in_array($action, $actions), "The action '$action' is not defined in the context. Available actions are " . implode(', ', $actions));
 
-    $action_link = $link->findLink(ucfirst($action));
+    // The controls bar only becomes clickable once its component is active.
+    $this->activateComponent($component);
+    $controls = $component->find('xpath', "./div[contains(concat(' ', @class, ' '), ' lpb-controls ')]");
+    $this->assertCondition($controls !== NULL, "The component has no controls bar.");
+
+    $action_link = $controls->findLink(ucfirst($action));
     $this->assertCondition($action_link !== NULL, "Action link '$action' not found.");
     $action_link->click();
     $this->waitForAjax();
@@ -468,16 +470,40 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
       $field = $this->getParagraphsElement($field_alias);
     }
     else {
-      $field = $this->getFormFieldLayoutParagraphs($field_alias)[$parent_layout_position - 1];
-      $field = $field->find('css', '.layout__region--' . $parent_layout_region);
+      $layout = $this->getFormFieldLayoutParagraphs($field_alias)[$parent_layout_position - 1];
+      // The centered add button of an empty region belongs to the layout, so
+      // the layout has to be active before the button reports its real
+      // geometry.
+      $this->activateComponent($layout);
+      $field = $layout->find('css', '.layout__region--' . $parent_layout_region);
     }
 
-    $links = $field->findAll('named', [
-      'link',
-      'Choose component',
-    ]);
+    return $this->getLastAddLink($field, 'Choose component');
+  }
+
+  /**
+   * Returns the last add button in a container, ready to be clicked.
+   *
+   * Add buttons come in two flavours. The centered one belongs to the container
+   * it adds into: the builder root, or a region of a layout. The "before" and
+   * "after" ones are prepended and appended to an existing component, and
+   * belong to that component. Either way the button is only revealed while the
+   * component owning it is the active one, so activate that component here.
+   *
+   * @param \Behat\Mink\Element\TraversableElement $container
+   *   The container holding the add buttons.
+   * @param string $label
+   *   The label of the add buttons to look for.
+   *
+   * @return \Behat\Mink\Element\TraversableElement
+   *   The add button.
+   *
+   * @see \Drupal\layout_paragraphs\Element\LayoutParagraphsBuilder::buildComponent()
+   */
+  protected function getLastAddLink(TraversableElement $container, string $label): TraversableElement {
+    $links = $container->findAll('named', ['link', $label]);
     if (empty($links)) {
-      throw new \Exception('No choose component links found.');
+      throw new \Exception("No '$label' links found.");
     }
 
     // Filter out invisible links (that have the style 'display: none'). This is
@@ -492,39 +518,122 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
       }
       return TRUE;
     });
+    $this->assertCondition(!empty($links), "No visible '$label' link found.");
 
-    return end($links);
+    $link = end($links);
+    $owner = $link->find('xpath', 'ancestor::div[contains(concat(" ", @class, " "), " js-lpb-component ")][1]');
+    if ($owner !== NULL) {
+      $this->activateComponent($owner);
+    }
+
+    return $link;
   }
 
   /**
-   * Layout Paragraph buttons clickable.
+   * Keeps the builder in a state the driver can interact with.
+   *
+   * Two things need correcting on every step.
+   *
+   * Steps outside of this context click the add buttons by their link text,
+   * without selecting a component first, so the add buttons have to be
+   * reachable at all times. Reveals them.
+   *
+   * The builder also binds Delete and Backspace on the document to deleting the
+   * active component, without checking whether the keystroke was meant for an
+   * input. Typing into a dialog field therefore opens the delete confirmation
+   * of whatever component is still active behind the dialog, and Mink clears a
+   * field by sending backspaces. Unselect the component as soon as a dialog is
+   * open, when the builder UI is out of reach anyway. While no dialog is open
+   * the component stays active, so the UI a step is about to click keeps
+   * working.
+   *
+   * @see layout_paragraphs/js/builder.js
    */
   #[BeforeStep]
-  public function revealLayoutParagraphsButtons(BeforeStepScope $scope): void {
+  public function keepBuilderInteractive(BeforeStepScope $scope): void {
     if (!$this->hasJavascriptSupport() || !$this->getSession()->getDriver()->isStarted()) {
       return;
     }
     $this->getSession()->executeScript(<<<'JS'
-      if (!document.querySelector('.js-lpb-component')) {
+      if (!document.querySelector('.lp-builder')) {
         return;
       }
+      // Add buttons are only revealed while their component is hovered, a state
+      // the driver does not hold on to while it checks that a button is visible.
+      // An add button also straddles the edge of the component it belongs to, so
+      // a paragraph clipping its own overflow, as the iframe one does, cuts its
+      // button in half and the driver ends up clicking the component behind it.
       if (!document.getElementById('behat-lpb-visibility')) {
         const style = document.createElement('style');
         style.id = 'behat-lpb-visibility';
         style.textContent =
-          '.lp-builder .js-lpb-ui, .lp-builder .lpb-btn--add, .lp-builder .lpb-controls { opacity: 1 !important; }' +
-          '.lp-builder .lpb-btn--add { width: 24px !important; height: 24px !important; padding: 0 !important; }' +
-          '.lp-builder .lpb-btn--tooltip { display: none !important; }';
+          '.lp-builder .js-lpb-component > .lpb-btn--add,' +
+          '.lp-builder .js-lpb-region > .lpb-btn--add' +
+          '{ opacity: 1 !important; }' +
+          '.lp-builder .js-lpb-component { overflow: visible !important; }';
         document.head.appendChild(style);
       }
-      document.querySelectorAll('.js-lpb-component .js-lpb-ui.visually-hidden').forEach((b) => {
-        b.classList.remove('visually-hidden');
+      document.querySelectorAll('.lpb-btn--add.visually-hidden').forEach((button) => {
+        button.classList.remove('visually-hidden');
       });
-      if (document.querySelector('.lpb-dialog, .ui-dialog')) {
-        document.querySelectorAll('.js-lpb-component[data-active="true"]').forEach((c) => {
-          c.removeAttribute('data-active');
-        });
+      if (!document.querySelector('.js-lpb-component[data-active="true"]')) {
+        return;
       }
+      const dialogOpen = [...document.querySelectorAll('.lpb-dialog, .ui-dialog')]
+        .some((dialog) => dialog.getClientRects().length > 0);
+      if (!dialogOpen) {
+        return;
+      }
+      // A mouseup outside of any component is what unselects it in the builder.
+      document.body.dispatchEvent(
+        new MouseEvent('mouseup', { bubbles: true, cancelable: true, view: window })
+      );
+JS
+    );
+  }
+
+  /**
+   * Makes a component the active one, revealing its UI elements.
+   *
+   * Layout Paragraphs shows the UI of a single, "active" component at a time
+   * and keeps the controls bar and add buttons of every other component in the
+   * 'visually-hidden' class. That is load bearing rather than cosmetic: all
+   * controls bars and add buttons are absolutely positioned on the same
+   * horizontal center at the same stacking level, so revealing more than one of
+   * them at a time makes them overlap and steal each other's clicks.
+   *
+   * A component becomes active on mouseup, and the handler walks up to the
+   * top-most component that is not active yet, which makes selecting a nested
+   * component a drill-down: its parent has to be selected first. Replay that
+   * here by dispatching a mouseup on every component in the chain, from the
+   * outermost one down to the target. Driving the module's own handler keeps
+   * its internal state in sync, which setting the attributes would not.
+   *
+   * @param \Behat\Mink\Element\TraversableElement $component
+   *   The component to activate.
+   *
+   * @see layout_paragraphs/js/builder.js
+   */
+  protected function activateComponent(TraversableElement $component): void {
+    $uuid = $component->getAttribute('data-uuid');
+    $this->assertCondition(!empty($uuid), 'The component has no uuid to activate it by.');
+
+    $this->getSession()->executeScript(<<<JS
+      (function () {
+        const target = document.querySelector('.js-lpb-component[data-uuid="$uuid"]');
+        if (!target) {
+          return;
+        }
+        const chain = [];
+        for (let el = target; el; el = el.parentElement?.closest('.js-lpb-component')) {
+          chain.unshift(el);
+        }
+        chain.forEach((component) => {
+          component.dispatchEvent(
+            new MouseEvent('mouseup', { bubbles: true, cancelable: true, view: window })
+          );
+        });
+      })();
 JS
     );
   }
