@@ -13,6 +13,14 @@
 #}
 <div class="layout-container">
   {{ include('@ventuno/parts/header.html.twig') }}
+  {{ attach_library('ventuno/navbar') }}
+  <header class="joinup-navbar navbar navbar-expand" aria-label="{{ 'Main header'|t }}">
+    <div class="container">
+      <a class="navbar-brand" href="{{ path('<front>') }}" title="{{ 'Interoperable Europe Portal'|t }}">
+        <img class="navbar-brand-image" src="{{ file_url('themes/ventuno/assets/images/logo-interoperable-europe.svg') }}" alt="{{ 'Interoperable Europe logo'|t }}" />
+      </a>
+    </div>
+  </header>
   {% if page.header %}
     {{ page.header }}
   {% endif %}
