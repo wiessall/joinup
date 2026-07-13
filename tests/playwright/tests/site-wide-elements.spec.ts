@@ -10,6 +10,15 @@ import { projectConfig } from "../config/project.config";
 
 test.describe("Site-wide elements", () => {
   test("Homepage site-wide elements", async ({ page }) => {
+    // Test elements as anonymous.
+    await page.goto("/");
+    await pageUtils.prepareForScreenshot(page);
+
+    await expect(page.locator("header.joinup-navbar")).toHaveScreenshot(
+      "homepage-joinup-navbar-anonymous.png",
+    );
+
+    // Test elements as developer role.
     await authUtils.login(projectConfig.users.developer, page);
 
     await page.goto("/");
