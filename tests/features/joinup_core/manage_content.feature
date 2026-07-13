@@ -345,8 +345,8 @@ Feature:
       | title            |
       | Vintage Solution |
     And the following release content:
-      | title                      | is version of     | state    |
-      | Initially Archived Release | Vintage Solution  | archived |
+      | title                      | is version of    | state    |
+      | Initially Archived Release | Vintage Solution | archived |
 
     When I am logged in as a moderator
     And I go to the manage content page of "Vintage Solution"
@@ -355,3 +355,27 @@ Feature:
     And I press "Apply to selected items"
     And I wait for the batch process to finish
     Then I should see "Proceeded updates to 1 entity"
+
+  Scenario: Content management UI is properly filtered by language.
+
+    Given the following "collection" content:
+      | title       |
+      | Vintage Art |
+    And the following "document" content:
+      | title             | document type | collection  | state     |
+      | The Panama Papers | Document      | Vintage Art | published |
+    And fr translation for the node entity with label "The Panama Papers":
+      | field | value             |
+      | title | Les Panama Papers |
+
+    # Login as collection facilitator instead of moderator in
+    # Given I am logged in as a facilitator of the "Vintage Art" collection
+    Given I am logged in as a moderator
+
+    When I go to the homepage of the "Vintage Art" collection
+    And I click "Manage content"
+    Then I should see the link "The Panama Papers"
+    But I should not see the link "Les Panama Papers"
+    When I switch to the "fr" language
+    Then I should not see the link "The Panama Papers"
+    But I should see the link "Les Panama Papers"

@@ -209,9 +209,6 @@ drupal:
         // Expiration of cached forms is 1 hour.
         $settings['form_cache_expiration'] = 3600;
 
-        // State cache.
-        $settings['state_cache'] = TRUE;
-
         // Allow the sendmail command.
         $settings['mailer_sendmail_commands'][] = '/usr/sbin/sendmail -bs';
       Configuration: |

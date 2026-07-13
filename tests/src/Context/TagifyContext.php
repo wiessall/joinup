@@ -275,21 +275,6 @@ class TagifyContext extends RawDrupalContext {
   }
 
   /**
-   * Opens the tagify dropdown by clicking the input and waits for it to appear.
-   *
-   * @param string $fieldName
-   *   Field label.
-   *
-   * @throws \Exception
-   *   Thrown when the dropdown does not appear.
-   */
-  #[When('I open the :fieldName tagify dropdown')]
-  public function openTagifyDropdown(string $fieldName): void {
-    $this->getTagifyInput($fieldName)->click();
-    $this->waitForElement('css', '.tagify__dropdown');
-  }
-
-  /**
    * Gets tagify input element.
    *
    * @param string $fieldName

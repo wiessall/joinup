@@ -6,6 +6,8 @@ services:
 
   Drupal\joinup_i18n\EventSubscriber\ScheduleJobItemSubscriber: {}
 
+  Drupal\joinup_i18n\TranslationHelper: {}
+
   Drupal\joinup_i18n\TranslationScheduler: {}
 
   Drupal\joinup_i18n\EventSubscriber\ConfigSubscriber: {}

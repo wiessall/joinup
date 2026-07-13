@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies: {  }
 _core:
-  default_config_hash: qJhff8pEEWhByuO9T2VbbQ-Oyqwxew2TfEf82H45hzk
+  default_config_hash: dCoH-qdMIgVbYTYsOxAhebwOAMS76eSlZ8WT4ActioI
 id: text_und_7_0_0
 label: 'Language Undefined Text Field'
 minimum_solr_version: 7.0.0
@@ -14,6 +14,7 @@ field_type:
   name: text_und
   class: solr.TextField
   positionIncrementGap: 100
+  storeOffsetsWithPositions: true
   analyzers:
     -
       type: index
@@ -22,7 +23,7 @@ field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_und.txt
       tokenizer:
-        class: solr.WhitespaceTokenizerFactory
+        class: solr.StandardTokenizerFactory
       filters:
         -
           class: solr.StopFilterFactory
@@ -55,7 +56,7 @@ field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_und.txt
       tokenizer:
-        class: solr.WhitespaceTokenizerFactory
+        class: solr.StandardTokenizerFactory
       filters:
         -
           class: solr.SynonymGraphFilterFactory
@@ -89,13 +90,14 @@ spellcheck_field_type:
   name: text_spell_und
   class: solr.TextField
   positionIncrementGap: 100
+  storeOffsetsWithPositions: true
   analyzer:
     charFilters:
       -
         class: solr.MappingCharFilterFactory
         mapping: accents_und.txt
     tokenizer:
-      class: solr.WhitespaceTokenizerFactory
+      class: solr.StandardTokenizerFactory
     filters:
       -
         class: solr.LengthFilterFactory
@@ -108,7 +110,7 @@ spellcheck_field_type:
 collated_field_type:
   name: collated_und
   class: solr.ICUCollationField
-  locale: en
+  locale: null
   strength: primary
   caseLevel: false
 solr_configs:
@@ -167,6 +169,9 @@ solr_configs:
               name: name
               VALUE: und
             -
+              name: indexPath
+              VALUE: ./und
+            -
               name: lookupImpl
               VALUE: AnalyzingInfixLookupFactory
             -
@@ -187,12 +192,11 @@ solr_configs:
             -
               name: buildOnStartup
               VALUE: 'false'
-            -
-              name: indexPath
-              VALUE: ./und
 text_files:
-  stopwords: ''
-  protwords: ''
+  stopwords: |
+
+  protwords: |
+
   accents: |
     # À => A
     "\u00C0" => "A"

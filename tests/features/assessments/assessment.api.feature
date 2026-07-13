@@ -77,6 +77,10 @@ Feature: Assessments API
       total_items: 2
       total_pages: 1
     """
+    And the page should be cacheable
+    But the page should not be cached
+    When I go to "/api/assessments/v1/assessment"
+    Then the page should be cached
     # Adding a translation to the Luxembourg country term must not cause
     # duplicate rows in the API responses.
     Given pl translation for the taxonomy_term entity with label "Luxembourg":

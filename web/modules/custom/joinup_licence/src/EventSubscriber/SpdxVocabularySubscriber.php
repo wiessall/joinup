@@ -40,6 +40,8 @@ class SpdxVocabularySubscriber implements EventSubscriberInterface {
         if ($resource->isA('http://spdx.org/rdf/terms#ListedLicense')) {
           // Add a skos:inScheme triple to recognize this resource as a term.
           $event->getGraph()->addResource($resource, 'skos:inScheme', 'http://spdx.org/rdf/terms#License');
+          $id = substr($resource->getUri(), strlen('http://spdx.org/licenses/'));
+          $event->getGraph()->addLiteral($resource, 'http://spdx.org/rdf/terms#licenseId', $id);
           continue;
         }
         $event->getGraph()->deleteEntireResource($resource);

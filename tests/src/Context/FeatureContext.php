@@ -1484,6 +1484,12 @@ class FeatureContext extends RawDrupalContext {
     // Sample tests needing this:
     // - collection.subscribe-on-join.feature.
     \Drupal::getContainer()->get('cache.memory')->deleteAll();
+
+    // Sample tests needing this:
+    // - joinup_group/landing_page.feature.
+    foreach (\Drupal::getContainer()->getParameter('meta_entity.repositories') as $service_id) {
+      \Drupal::getContainer()->get("cache.$service_id.memory")->deleteAll();
+    }
   }
 
   /**

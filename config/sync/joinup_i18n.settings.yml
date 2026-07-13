@@ -1,9 +1,10 @@
 tmgmt_content:
+  entity_subqueue:
+    - homepage_topics
   meta_entity:
     - collection_settings
     - eif_perspective
     - solution_settings
-    - topic
   node:
     - collection
     - contact_information
@@ -43,3 +44,5 @@ tmgmt_content:
     - poll
   poll_choice:
     - poll_choice
+  taxonomy_term:
+    - topic

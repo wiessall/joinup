@@ -139,6 +139,26 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Checks that a heading with the given text appears a number of times.
+   *
+   * Useful to assert that an item rendered with a heading (such as a tile) is
+   * shown the expected number of times, without depending on secondary text
+   * nodes like visually-hidden labels that repeat the same text.
+   *
+   * @param string $heading
+   *   The heading text to match exactly.
+   * @param int $count
+   *   The expected number of matching headings.
+   */
+  #[Then('I (should )see the heading :heading :count time(s)')]
+  public function assertHeadingCount(string $heading, int $count): void {
+    $conditions = array_map(function (string $level) use ($heading): string {
+      return sprintf('//%s[normalize-space(string(.)) = "%s"]', $level, $heading);
+    }, ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']);
+    $this->assertSession()->elementsCount('xpath', implode(' | ', $conditions), $count);
+  }
+
+  /**
    * Creates and authenticates a user with the given og role(s).
    *
    * Multiple roles can be passed separated with comma.
@@ -1988,35 +2008,6 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that a certain link contains the URL of an entity.
-   *
-   * @param string $link
-   *   The link text.
-   * @param string $title
-   *   The entity title.
-   *
-   * @throws \Exception
-   *   Thrown when the link is not in the page.
-   */
-  #[Then('/^the share link "(?P<link>[^"]+)" should point to the "(?P<title>[^"]+)" content(?:| entity)$/')]
-  public function assertLinkContainsEntityUrl(string $link, string $title): void {
-    /** @var \Drupal\Core\Entity\EntityInterface $entity */
-    $entity = $this->getEntityByLabel('node', $title);
-    $link_element = $this->getSession()->getPage()->findLink($link);
-
-    if (!$link_element) {
-      throw new \Exception("Link '{$link}' was not found in the page.");
-    }
-
-    $entity_url = $entity->toUrl('canonical', [
-      'base_url' => rtrim($this->getMinkParameter('base_url') ?? '', '/'),
-    ])->setAbsolute()->toString();
-    $href = $link_element->getAttribute('href');
-
-    $this->assertCondition(str_contains($href, urlencode($entity_url)), 'The entity URL is not present in the link href.');
-  }
-
-  /**
    * Asserts that a certain link points to the given URL.
    *
    * @param string $title
@@ -2936,38 +2927,6 @@ class JoinupContext extends RawDrupalContext {
       throw new \Exception("Either the dialog is not available or the 'Close' button could not be located.");
     }
     $button->press();
-  }
-
-  /**
-   * Cleans up the environment after a curated homepage topics scenarios.
-   *
-   * These scenarios are altering the topic term meta entities. We need to reset
-   * them after each run. Because we have a mechanism to delete new content, we
-   * are simply resetting the values instead.
-   */
-  #[AfterScenario('@topic&&@api')]
-  public function resetTopicMetaEntity(): void {
-    // Remove any entity queue related to homepage topics.
-    \Drupal::entityTypeManager()->getStorage('entity_subqueue')
-      ->load('homepage_topics')
-      ->clearItems()
-      ->save();
-
-    $meta_entity_storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
-    $ids = $meta_entity_storage->getQuery()
-      ->accessCheck(FALSE)
-      ->condition('type', 'topic')
-      ->execute();
-    if ($ids) {
-      foreach ($meta_entity_storage->loadMultiple($ids) as $meta_entity) {
-        $meta_entity
-          ->set('topics_paragraph', NULL)
-          ->set('published', FALSE)
-          ->set('image', NULL)
-          ->set('description', NULL)
-          ->save();
-      }
-    }
   }
 
   /**
