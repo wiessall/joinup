@@ -35,7 +35,7 @@ function joinup_solution_deploy_201500(): void {
   ];
 
   // Prepend solution as the first field.
-  $elements = ['solution' => $solution_element] + $elements;
+  $elements = ['reuse_solution' => $solution_element] + $elements;
 
   $webform->setElements($elements);
 
