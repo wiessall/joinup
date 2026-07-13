@@ -63,28 +63,23 @@ class JoinupGroupQueueWorker extends QueueWorkerBase implements ContainerFactory
     }
 
     // Push group content entities into joinup_group:group_content_update queue.
-    $group_content_ids = $group->getGroupContentIds();
-    foreach ($group_content_ids as $entity_type_id => $bundles) {
+    foreach ($group->getGroupContentIds() as $entity_type_id => $bundles) {
       $bundle_info = $this->bundleInfo->getBundleInfo($entity_type_id);
+      $subgroups = $others = [];
       foreach ($bundles as $bundle => $entity_ids) {
         $bundle_class = $bundle_info[$bundle]['class'] ?? NULL;
-        // Group content that is also group itself has higher priority, because
-        // their group content aliases depend on the their alias. For example a
+        // Group content that is also a group itself has higher priority,
+        // because its group content aliases depend on its alias. For example a
         // solution event alias is prefixed by the solution alias, so the
         // solution alias must come first.
         if (is_subclass_of($bundle_class, GroupInterface::class)) {
-          $this->createQueueItems($data['entity_id'], $entity_type_id, $entity_ids);
-          // The subgroup is queued, remove it from the list.
-          $group_content_ids[$entity_type_id][$bundle];
+          $subgroups[$bundle] = $entity_ids;
+        }
+        else {
+          $others[$bundle] = $entity_ids;
         }
       }
-      // After removing subgroups, this entity type IDs list may became empty.
-      array_filter($group_content_ids[$entity_type_id]);
-    }
-
-    // Now that subgroups were queued, it's safe to queue the rest of content.
-    foreach ($group_content_ids as $entity_type_id => $bundles) {
-      foreach ($bundles as $bundle => $entity_ids) {
+      foreach ($subgroups + $others as $entity_ids) {
         $this->createQueueItems($data['entity_id'], $entity_type_id, $entity_ids);
       }
     }

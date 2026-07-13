@@ -17,7 +17,7 @@ Feature: Validation of owners created through UI
     And I fill in "Name" with "Leandro Keen"
     And I select "Company" options from "Type"
     And I select "Industry consortium" options from "Type"
-    And I select "Belgium" from "Country"
+    And I select "Belgium" option from "Country"
     And I press "Create owner"
     Then the "Owner IEF" table should contain the following columns:
       | Title        | Type                         | Country |

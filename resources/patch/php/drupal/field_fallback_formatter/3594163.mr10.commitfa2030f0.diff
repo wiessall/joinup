@@ -1,0 +1,38 @@
+
+diff --git a/src/EventSubscriber/LayoutBuilderBuildSubscriber.php b/src/EventSubscriber/LayoutBuilderBuildSubscriber.php
+index 219b8e43489a7d735cbd3f5c2a5b19f0ee6e44c9..aca248a9f7f250abbe1bca3ea49cfa651ef17c9c 100644
+--- a/src/EventSubscriber/LayoutBuilderBuildSubscriber.php
++++ b/src/EventSubscriber/LayoutBuilderBuildSubscriber.php
+@@ -74,17 +74,10 @@ class LayoutBuilderBuildSubscriber implements EventSubscriberInterface {
+       return;
+     }
+ 
+-    // If current user has access to the actual block plugin instance, no need
+-    // to do anything.
+-    if ($block->access($this->currentUser)) {
+-      return;
+-    }
+-
+-    $blockConfig = $block->getConfiguration();
+-    $fieldFormatterConfig = $blockConfig['formatter'] ?? [];
+-
+     // If the formatter ID config isn't set to "field_fallback_formatter",
+     // we don't touch the block instance.
++    $blockConfig = $block->getConfiguration();
++    $fieldFormatterConfig = $blockConfig['formatter'] ?? [];
+     if (
+       empty($fieldFormatterConfig['type']) ||
+       $fieldFormatterConfig['type'] !== 'field_fallback_formatter'
+@@ -97,6 +90,12 @@ class LayoutBuilderBuildSubscriber implements EventSubscriberInterface {
+       return;
+     }
+ 
++    // If current user has access to the actual block plugin instance, no need
++    // to do anything.
++    if ($block->access($this->currentUser)) {
++      return;
++    }
++
+     $blockReflection = new \ReflectionClass($block);
+     $fieldName = $blockReflection->getProperty('fieldName');
+     $fieldName->setValue($block, $fallbackField);

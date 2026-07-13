@@ -162,6 +162,28 @@ Feature: Tests the group landing page customization.
     When I go to the "Michigan" custom_page
     Then I should be on "/collection/united-states"
 
+  Scenario: The landing page item is not also active when visiting an inner group page
+    Given the following "collection" content:
+      | title       |
+      | Ocean Blues |
+    And the following "custom_page" content:
+      | title     | collection  |
+      | Deep Dive | Ocean Blues |
+    And the following "discussion" content:
+      | title      | collection  | state     |
+      | Tidal Chat | Ocean Blues | published |
+    Given I am logged in as a moderator
+    When I go to the homepage of the "Ocean Blues" collection
+    And I click "Settings"
+    And I select "Deep Dive" from "Landing page"
+    And I fill in "Overview label" with "Welcome"
+    And I press "Save"
+    Then "Welcome" should be the active item in the "Navigation menu" region
+    # The inner page marks its own list item, not the link, so this only checks
+    # that the landing page link is no longer active.
+    When I go to the discussions page of "Ocean Blues"
+    Then no items should be active in the "Navigation menu" region
+
   Scenario: Active navigation link is correct on flat group navigation when visiting a nested custom page
     Given the following "collection" content:
       | title         |
