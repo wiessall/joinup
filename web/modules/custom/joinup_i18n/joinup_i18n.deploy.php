@@ -7,10 +7,19 @@
 
 declare(strict_types=1);
 
+use Drupal\joinup_i18n\Update\TmgmtRecovery;
+
+/**
+ * Repairs field values that tmgmt translated and mangled.
+ */
+function joinup_i18n_deploy_201501(): void {
+  \Drupal::classResolver(TmgmtRecovery::class)->run();
+}
+
 /**
  * Schedule standalone custom pages for translation.
  */
-function joinup_i18n_deploy_201500(array &$sandbox): string {
+function joinup_i18n_deploy_201502(array &$sandbox): string {
   $storage = \Drupal::entityTypeManager()->getStorage('node');
   if (!isset($sandbox['nids'])) {
     $sandbox['nids'] = $storage->getQuery()->accessCheck(FALSE)

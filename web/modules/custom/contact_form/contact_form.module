@@ -172,8 +172,26 @@ function contact_form_form_message_contact_form_submission_submit(&$form, FormSt
  */
 function contact_form_validate_report_page_form_message_contact(array &$form, FormStateInterface $form_state): void {
   $values = $form_state->getValues();
-  if (!empty($values['field_contact_category']) && $values['field_contact_category'][0]['value'] === 'report' && empty($values['field_contact_url'][0]['uri'])) {
+  $uri = $values['field_contact_url'][0]['uri'] ?? '';
+
+  if (!empty($values['field_contact_category']) && $values['field_contact_category'][0]['value'] === 'report' && $uri === '') {
     $form_state->setErrorByName('field_contact_url', t('Page URL field is required.'));
+    return;
+  }
+
+  // The link widget accepts the link module's special "magic" routes
+  // (<front>, <none>, <nolink>, <button>) as valid internal links, but none of
+  // them point to an actual Portal page. Reject them explicitly.
+  if ($uri !== '') {
+    try {
+      $url = Url::fromUri($uri);
+      if ($url->isRouted() && in_array($url->getRouteName(), ['<front>', '<none>', '<nolink>', '<button>'], TRUE)) {
+        $form_state->setErrorByName('field_contact_url', t('Please enter a valid Portal page URL.'));
+      }
+    }
+    catch (\InvalidArgumentException) {
+      // Malformed URIs are already rejected by the link field constraints.
+    }
   }
 }
 
