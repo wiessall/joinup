@@ -36,7 +36,7 @@ class CollectionArchivePublishedSolutionsValidator extends ConstraintValidator {
       return;
     }
 
-    if ($value->getSolutions(TRUE, TRUE)) {
+    if ($value->getSolutions(FALSE, TRUE)) {
       $this->context->addViolation($constraint->message);
     }
   }
