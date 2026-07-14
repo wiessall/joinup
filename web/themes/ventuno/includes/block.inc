@@ -129,6 +129,14 @@ function ventuno_theme_suggestions_block_alter(array &$suggestions, array $varia
   ) {
     $suggestions[] = 'block__extra_field_block__read_more';
   }
+
+  $bare_plugins = [
+    'system_menu_block:navbar',
+    'system_menu_block:account',
+  ];
+  if (in_array($elements['#plugin_id'], $bare_plugins, TRUE)) {
+    $suggestions[] = 'block__bare';
+  }
 }
 
 /**
