@@ -69,6 +69,22 @@ class WebformContext extends RawDrupalContext {
   }
 
   /**
+   * Sets the status of an existing webform.
+   *
+   * @param string $webform_id
+   *   The webform machine name.
+   * @param string $status
+   *   Either 'open' or 'closed'.
+   */
+  #[Given('the webform :webform_id is :status')]
+  public function setWebformStatus(string $webform_id, string $status): void {
+    assert(in_array($status, ['open', 'closed'], TRUE), "Invalid webform status '$status'. Allowed values are 'open' or 'closed'.");
+    $webform = Webform::load($webform_id);
+    assert($webform instanceof WebformInterface, "The webform '$webform_id' does not exist.");
+    $webform->setStatus($status)->save();
+  }
+
+  /**
    * Cleans up webforms.
    *
    * @param \Behat\Behat\Hook\Scope\AfterScenarioScope $scope
