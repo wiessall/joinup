@@ -1,8 +1,0 @@
-uuid: 5862bb00-5e71-45d3-8f93-cf484765ec04
-langcode: en
-status: true
-dependencies: {  }
-id: navbar
-label: Navbar
-description: 'Navbar menu'
-locked: false

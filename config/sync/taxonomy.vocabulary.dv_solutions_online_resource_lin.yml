@@ -1,9 +1,0 @@
-uuid: 6b48bcf4-e658-45ba-9330-164b22a1f54c
-langcode: en
-status: true
-dependencies: {  }
-name: 'dv_solutions: Online resource links (Web-page links, links to videos, links to reports, etc) (URL)(Enter URL) -Mandatory'
-vid: dv_solutions_online_resource_lin
-description: null
-weight: 0
-new_revision: false

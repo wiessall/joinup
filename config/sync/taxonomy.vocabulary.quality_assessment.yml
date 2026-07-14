@@ -1,9 +1,0 @@
-uuid: bbb42253-5bdf-4173-bcf7-258511c8085a
-langcode: en
-status: true
-dependencies: {  }
-name: 'Quality assessment'
-vid: quality_assessment
-description: null
-weight: 0
-new_revision: false

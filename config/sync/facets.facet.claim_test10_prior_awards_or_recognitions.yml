@@ -1,0 +1,38 @@
+uuid: e4ba0994-514e-4a26-9fa6-94c059e01571
+langcode: en
+status: true
+dependencies:
+  config:
+    - search_api.index.published
+    - views.view.collection_solutions_central
+  module:
+    - search_api
+id: claim_test10_prior_awards_or_recognitions
+name: 'test10 / Prior Awards or Recognitions'
+weight: 2
+min_count: 1
+missing: false
+missing_label: others
+url_alias: claim_test10_prior_awards_or_recognitions
+facet_source_id: 'search_api:views_page__collection_solutions_central__page_1'
+field_identifier: claim_test10_prior_awards_or_recognitions
+query_operator: null
+hard_limit: null
+exclude: false
+use_hierarchy: false
+keep_hierarchy_parents_active: false
+hierarchy:
+  type: taxonomy
+  config: {  }
+expand_hierarchy: false
+enable_parent_when_child_gets_disabled: true
+widget:
+  type: dropdown
+  config:
+    show_numbers: true
+empty_behavior:
+  behavior: none
+only_visible_when_facet_source_is_visible: true
+show_only_one_result: false
+show_title: null
+processor_configs: {  }
