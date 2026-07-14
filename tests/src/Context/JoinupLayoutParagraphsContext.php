@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
-use Behat\Behat\Hook\Scope\BeforeStepScope;
 use Behat\Gherkin\Node\TableNode;
-use Behat\Hook\BeforeStep;
 use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Step\Given;
@@ -140,7 +138,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
     // Appending a section to the builder root opens the same modal as the
     // centered button of an empty builder does.
     $builder = $this->getBuilder($field_alias);
-    $this->clickAddButtonAtEndOf($builder, self::SECTION_XPATH, NULL);
+    $this->clickAddButtonAtEndOf($builder, self::SECTION_XPATH);
 
     // Get the 'layout' property from the table.
     $layout = $layout_properties->getRowsHash()['layout'];
@@ -224,7 +222,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
 
     // Append the component to the region, which opens the modal.
     $region_element = $this->getRegionToAddInto($field_alias, $layout_position, $region);
-    $this->clickAddButtonAtEndOf($region_element, self::REGION_COMPONENT_XPATH, $this->getOwnerComponent($region_element));
+    $this->clickAddButtonAtEndOf($region_element, self::REGION_COMPONENT_XPATH);
 
     // Select the paragraph type.
     $ui_dialog = $this->getSession()->getPage()->find('css', '.ui-dialog');
@@ -263,6 +261,45 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   }
 
   /**
+   * Opens the chooser that appends a section to the builder.
+   *
+   * @param string|null $field_alias
+   *   (optional) The field alias as defined in
+   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::FIELD_MAP. Defaults
+   *   to NULL, which uses the only builder in the page.
+   */
+  #[When('I add a section')]
+  #[When('I add a section to the :field_alias form field')]
+  public function addSection(?string $field_alias = NULL): void {
+    $this->assertJavaScriptEnabledBrowser();
+
+    $this->clickAddButtonAtEndOf($this->getBuilder($field_alias), self::SECTION_XPATH);
+  }
+
+  /**
+   * Opens the chooser that appends a component to a region of a section.
+   *
+   * @param string $position
+   *   The position of the section in the builder.
+   * @param string|null $region
+   *   (optional) The region of the section, e.g. 'first'. Defaults to NULL,
+   *   which uses the only region of the section.
+   * @param string|null $field_alias
+   *   (optional) The field alias as defined in
+   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::FIELD_MAP. Defaults
+   *   to NULL, which uses the only builder in the page.
+   */
+  #[When('I add a component to section :position')]
+  #[When('I add a component to the :region region of section :position')]
+  #[When('I add a component to the :region region of section :position of the :field_alias form field')]
+  public function addComponentToSection(string $position, ?string $region = NULL, ?string $field_alias = NULL): void {
+    $this->assertJavaScriptEnabledBrowser();
+    $section = $this->getSection($position, $field_alias);
+
+    $this->clickAddButtonAtEndOf($this->getSectionRegion($section, $region), self::REGION_COMPONENT_XPATH);
+  }
+
+  /**
    * Clicks a button of a section.
    *
    * @param string $button
@@ -279,61 +316,8 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   #[When('I click the :button button in section :position of the :field_alias form field')]
   public function clickButtonInSection(string $button, string $position, ?string $field_alias = NULL): void {
     $this->assertJavaScriptEnabledBrowser();
-    $section = $this->getSection($position, $field_alias);
 
-    $this->clickBuilderButton($button, $section, $section);
-  }
-
-  /**
-   * Clicks a button of a paragraph inside a section.
-   *
-   * @param string $button
-   *   The button to click, as defined in
-   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::BUTTONS.
-   * @param string $paragraph_position
-   *   The position of the paragraph inside the section.
-   * @param string $position
-   *   The position of the section in the builder.
-   * @param string|null $field_alias
-   *   (optional) The field alias as defined in
-   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::FIELD_MAP. Defaults
-   *   to NULL, which uses the only builder in the page.
-   */
-  #[When('I click the :button button of paragraph :paragraph_position in section :position')]
-  #[When('I click the :button button of paragraph :paragraph_position in section :position of the :field_alias form field')]
-  public function clickButtonInParagraph(string $button, string $paragraph_position, string $position, ?string $field_alias = NULL): void {
-    $this->assertJavaScriptEnabledBrowser();
-    $section = $this->getSection($position, $field_alias);
-    $paragraphs = $this->getAllSubParagraphsForLayout($section);
-    $this->assertCondition(isset($paragraphs[$paragraph_position - 1]), "There is no paragraph in position $paragraph_position in section $position.");
-
-    $this->clickBuilderButton($button, $paragraphs[$paragraph_position - 1], $paragraphs[$paragraph_position - 1]);
-  }
-
-  /**
-   * Clicks a button of a region of a section.
-   *
-   * @param string $button
-   *   The button to click, as defined in
-   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::BUTTONS.
-   * @param string $region
-   *   The region of the section, e.g. 'first'.
-   * @param string $position
-   *   The position of the section in the builder.
-   * @param string|null $field_alias
-   *   (optional) The field alias as defined in
-   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::FIELD_MAP. Defaults
-   *   to NULL, which uses the only builder in the page.
-   */
-  #[When('I click the :button button in the :region region of section :position')]
-  #[When('I click the :button button in the :region region of section :position of the :field_alias form field')]
-  public function clickButtonInRegion(string $button, string $region, string $position, ?string $field_alias = NULL): void {
-    $this->assertJavaScriptEnabledBrowser();
-    $section = $this->getSection($position, $field_alias);
-
-    // The region belongs to its section, which is the component that has to be
-    // active for the region UI to be revealed.
-    $this->clickBuilderButton($button, $this->getSectionRegion($section, $region), $section);
+    $this->clickBuilderButton($button, $this->getSection($position, $field_alias));
   }
 
   /**
@@ -368,7 +352,12 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    */
   #[When('I :action from the :fieldAlias field the child :pPosition paragraph of :lPosition layout')]
   public function actionOnChildLayoutParagraph(string $action, string $fieldAlias, string $pPosition, string $lPosition): void {
-    $this->clickButtonInParagraph($action, $pPosition, $lPosition, $fieldAlias);
+    $this->assertJavaScriptEnabledBrowser();
+    $section = $this->getSection($lPosition, $fieldAlias);
+    $paragraphs = $this->getAllSubParagraphsForLayout($section);
+    $this->assertCondition(isset($paragraphs[$pPosition - 1]), "There is no paragraph in position $pPosition in section $lPosition.");
+
+    $this->clickBuilderButton($action, $paragraphs[$pPosition - 1]);
   }
 
   /**
@@ -376,30 +365,29 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    *
    * The builder reveals the UI of a single, "active" component at a time and
    * keeps the controls bar and the insert buttons of every other component in
-   * the 'visually-hidden' class, so the component owning the button has to be
-   * activated before the button can be reached. Activating it is enough for the
-   * controls bar, which the stylesheet only asks to be active. An insert button
-   * is asked to be hovered on top of that, or focused, and focus, unlike a
-   * hover, survives the next move of the mouse.
+   * the 'visually-hidden' class. Focusing the button is what brings it within
+   * reach, and it does so on three counts. The builder selects the component
+   * owning a UI element that takes the focus, which reveals the element. The
+   * stylesheet asks an insert button to be focused, or hovered, and focus,
+   * unlike a hover, survives the next move of the mouse. And a focused button
+   * is lifted above the rest of the UI, which matters because every controls
+   * bar and insert button is absolutely positioned on the same horizontal
+   * center at the same stacking level, and so overlaps its neighbours.
+   *
+   * The driver focuses through a native focus() on the element, which a
+   * 'visually-hidden' button, clipped rather than hidden, still accepts.
    *
    * @param string $button
    *   The button to click, as defined in
    *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::BUTTONS.
    * @param \Behat\Mink\Element\TraversableElement $container
    *   The element holding the button.
-   * @param \Behat\Mink\Element\TraversableElement|null $owner
-   *   The component that reveals the button when it is active, or NULL for the
-   *   buttons of the builder root, which are outside of any component.
    *
    * @see layout_paragraphs/css/builder.css
    * @see layout_paragraphs/js/builder.js
    */
-  protected function clickBuilderButton(string $button, TraversableElement $container, ?TraversableElement $owner): void {
+  protected function clickBuilderButton(string $button, TraversableElement $container): void {
     $this->assertCondition(isset(self::BUTTONS[$button]), "The button '$button' is not defined in the context. Available buttons are " . implode(', ', array_keys(self::BUTTONS)) . '.');
-
-    if ($owner !== NULL) {
-      $this->activateComponent($owner);
-    }
 
     $link = $container->find('xpath', self::BUTTONS[$button]);
     $this->assertCondition($link !== NULL, "The '$button' button was not found.");
@@ -420,6 +408,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
     switch ($button) {
       case 'edit':
         $this->waitForElementVisible('css', '.ui-dialog-buttonpane button');
+        $this->unselectComponents();
         break;
 
       case 'delete':
@@ -440,8 +429,31 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
       case 'add after':
       case 'add component':
         $this->waitForModalToOpen();
+        $this->unselectComponents();
         break;
     }
+  }
+
+  /**
+   * Unselects the component the builder left active behind an open dialog.
+   *
+   * The builder binds Delete and Backspace on the document to deleting the
+   * active component, without checking whether the keystroke was meant for an
+   * input. Filling in a dialog field would therefore open the delete
+   * confirmation of the component behind the dialog, because Mink clears a
+   * field by sending backspaces. Unselecting the component defuses that, and
+   * costs nothing: with a dialog open, the builder UI is out of reach anyway.
+   *
+   * @see layout_paragraphs/js/builder.js
+   */
+  protected function unselectComponents(): void {
+    // A mouseup outside of any component is what unselects it in the builder.
+    $this->getSession()->executeScript(<<<'JS'
+      document.body.dispatchEvent(
+        new MouseEvent('mouseup', { bubbles: true, cancelable: true, view: window })
+      );
+JS
+    );
   }
 
   /**
@@ -456,18 +468,15 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    *   The container to append to: a region, or the builder root.
    * @param string $component_xpath
    *   The xpath that lists the components of the container.
-   * @param \Behat\Mink\Element\TraversableElement|null $owner
-   *   The component owning the container, or NULL for the builder root.
    */
-  protected function clickAddButtonAtEndOf(TraversableElement $container, string $component_xpath, ?TraversableElement $owner): void {
+  protected function clickAddButtonAtEndOf(TraversableElement $container, string $component_xpath): void {
     $components = $container->findAll('xpath', $component_xpath);
     if (empty($components)) {
-      $this->clickBuilderButton('add component', $container, $owner);
+      $this->clickBuilderButton('add component', $container);
       return;
     }
 
-    $last = end($components);
-    $this->clickBuilderButton('add after', $last, $last);
+    $this->clickBuilderButton('add after', end($components));
   }
 
   /**
@@ -685,19 +694,6 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   }
 
   /**
-   * Returns the component an element belongs to.
-   *
-   * @param \Behat\Mink\Element\TraversableElement $element
-   *   The element to find the owner of.
-   *
-   * @return \Behat\Mink\Element\TraversableElement|null
-   *   The component, or NULL if the element is outside of any component.
-   */
-  protected function getOwnerComponent(TraversableElement $element): ?TraversableElement {
-    return $element->find('xpath', 'ancestor-or-self::div[contains(concat(" ", @class, " "), " js-lpb-component ")][1]');
-  }
-
-  /**
    * Returns a list of layout paragraphs elements.
    *
    * @param string $field_alias
@@ -726,115 +722,6 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   protected function getAllSubParagraphsForLayout(TraversableElement $layout): array {
     $xpath = '//div[contains(concat(" ", @class, " "), " js-lpb-component ") and not (contains(concat(" ", @class, " "), " lpb-layout "))]';
     return $layout->findAll('xpath', $xpath) ?? [];
-  }
-
-  /**
-   * Keeps the insert buttons reachable for steps outside of this context.
-   *
-   * The generic 'I click "Choose component"' step clicks an insert button by
-   * its label, without selecting a component first, so the buttons it goes for
-   * have to be reachable at all times. The steps of this context select the
-   * component that owns the button they are about to click, and do not depend
-   * on this.
-   *
-   * The builder also binds Delete and Backspace on the document to deleting the
-   * active component, without checking whether the keystroke was meant for an
-   * input. Typing into a dialog field therefore opens the delete confirmation
-   * of whatever component is still active behind the dialog, and Mink clears a
-   * field by sending backspaces. Unselect the component as soon as a dialog is
-   * open, when the builder UI is out of reach anyway. While no dialog is open
-   * the component stays active, so the UI a step is about to click keeps
-   * working.
-   *
-   * @see layout_paragraphs/js/builder.js
-   */
-  #[BeforeStep]
-  public function keepBuilderInteractive(BeforeStepScope $scope): void {
-    if (!$this->hasJavascriptSupport() || !$this->getSession()->getDriver()->isStarted()) {
-      return;
-    }
-    $this->getSession()->executeScript(<<<'JS'
-      if (!document.querySelector('.lp-builder')) {
-        return;
-      }
-      // Add buttons are only revealed while their component is hovered, a state
-      // the driver does not hold on to while it checks that a button is visible.
-      // An add button also straddles the edge of the component it belongs to, so
-      // a paragraph clipping its own overflow, as the iframe one does, cuts its
-      // button in half and the driver ends up clicking the component behind it.
-      if (!document.getElementById('behat-lpb-visibility')) {
-        const style = document.createElement('style');
-        style.id = 'behat-lpb-visibility';
-        style.textContent =
-          '.lp-builder .js-lpb-component > .lpb-btn--add,' +
-          '.lp-builder .js-lpb-region > .lpb-btn--add' +
-          '{ opacity: 1 !important; }' +
-          '.lp-builder .js-lpb-component { overflow: visible !important; }';
-        document.head.appendChild(style);
-      }
-      document.querySelectorAll('.lpb-btn--add.visually-hidden').forEach((button) => {
-        button.classList.remove('visually-hidden');
-      });
-      if (!document.querySelector('.js-lpb-component[data-active="true"]')) {
-        return;
-      }
-      const dialogOpen = [...document.querySelectorAll('.lpb-dialog, .ui-dialog')]
-        .some((dialog) => dialog.getClientRects().length > 0);
-      if (!dialogOpen) {
-        return;
-      }
-      // A mouseup outside of any component is what unselects it in the builder.
-      document.body.dispatchEvent(
-        new MouseEvent('mouseup', { bubbles: true, cancelable: true, view: window })
-      );
-JS
-    );
-  }
-
-  /**
-   * Makes a component the active one, revealing its UI elements.
-   *
-   * Layout Paragraphs shows the UI of a single, "active" component at a time
-   * and keeps the controls bar and add buttons of every other component in the
-   * 'visually-hidden' class. That is load bearing rather than cosmetic: all
-   * controls bars and add buttons are absolutely positioned on the same
-   * horizontal center at the same stacking level, so revealing more than one of
-   * them at a time makes them overlap and steal each other's clicks.
-   *
-   * A component becomes active on mouseup, and the handler walks up to the
-   * top-most component that is not active yet, which makes selecting a nested
-   * component a drill-down: its parent has to be selected first. Replay that
-   * here by dispatching a mouseup on every component in the chain, from the
-   * outermost one down to the target. Driving the module's own handler keeps
-   * its internal state in sync, which setting the attributes would not.
-   *
-   * @param \Behat\Mink\Element\TraversableElement $component
-   *   The component to activate.
-   *
-   * @see layout_paragraphs/js/builder.js
-   */
-  protected function activateComponent(TraversableElement $component): void {
-    $uuid = $component->getAttribute('data-uuid');
-    $this->assertCondition(!empty($uuid), 'The component has no uuid to activate it by.');
-
-    $this->getSession()->executeScript(<<<JS
-      (function () {
-        const target = document.querySelector('.js-lpb-component[data-uuid="$uuid"]');
-        if (!target) {
-          return;
-        }
-        const chain = [];
-        for (let el = target; el; el = el.parentElement?.closest('.js-lpb-component')) {
-          chain.unshift(el);
-        }
-        chain.forEach((component) => {
-          component.dispatchEvent(
-            new MouseEvent('mouseup', { bubbles: true, cancelable: true, view: window })
-          );
-        });
-      })();
-JS
-    );
   }
 
 }

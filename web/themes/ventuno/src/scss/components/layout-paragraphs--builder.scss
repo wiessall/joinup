@@ -10,6 +10,10 @@ $wireframe-opacity: 0.5;
 
 .lp-builder {
   .js-lpb-component {
+    // The buttons that insert a component before or after this one straddle its
+    // edges, so a paragraph clipping its own overflow, as the iframe one does,
+    // cuts them in half and puts them out of reach.
+    overflow: visible;
     outline: $wireframe-width $wireframe-style
       rgba($wireframe-color, $wireframe-opacity);
   }

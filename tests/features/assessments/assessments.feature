@@ -32,7 +32,7 @@ Feature: Assessment Report Entity Management
     And I fill in "Reference of the linked assessment" with "https://interoperable-europe.ec.europa.eu/report"
 
     # Binding requirements
-    When I click "New binding requirement"
+    When I add a section
     And a modal should open
     And I should see the button "Cancel" in the "Modal buttons" region
     And I press "Save" in the "Modal buttons" region
@@ -214,7 +214,7 @@ Feature: Assessment Report Entity Management
     And I fill in "New organisation name" with "Test Organisation"
 
     # Binding requirements with a very long initiative name (256+ characters)
-    When I click "New binding requirement"
+    When I add a section
     And a modal should open
 
     When I click "Initiative" in the "Modal content" region
@@ -252,7 +252,7 @@ Feature: Assessment Report Entity Management
     And I fill in "New organisation name" with "Test Organisation"
 
     # Add binding requirement with required fields but WITHOUT filling "Affected stakeholders"
-    When I click "New binding requirement"
+    When I add a section
     And a modal should open
 
     When I click "Initiative" in the "Modal content" region
@@ -288,7 +288,7 @@ Feature: Assessment Report Entity Management
 
     Given I am logged in as an "authenticated user"
     And I go to "/collection/assessments/report/create"
-    And I click "New binding requirement"
+    And I add a section
     When I click "Interoperability solution" in the "Modal content" region
     And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
     Then I should not see the text "Interoperability Solutions Browser"
@@ -310,7 +310,7 @@ Feature: Assessment Report Entity Management
 
     Given I am logged in as an "authenticated user"
     And I go to "/collection/assessments/report/create"
-    And I click "New binding requirement"
+    And I add a section
     When I click "Interoperability solution" in the "Modal content" region
     And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
 
@@ -393,7 +393,7 @@ Feature: Assessment Report Entity Management
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "Test Organisation"
 
-    When I click "New binding requirement"
+    When I add a section
     And a modal should open
 
     When I click "Initiative" in the "Modal content" region
@@ -464,7 +464,7 @@ Feature: Assessment Report Entity Management
 
     Given I am logged in as an "authenticated user"
     And I go to "/collection/assessments/report/create"
-    And I click "New binding requirement"
+    And I add a section
     When I click "Interoperability solution" in the "Modal content" region
     And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
     # Solution with abstract: abstract is shown, description is not.
@@ -479,7 +479,7 @@ Feature: Assessment Report Entity Management
     Given I am logged in as a moderator
     And I go to "/collection/assessments/report/create"
 
-    When I click "New binding requirement"
+    When I add a section
     And a modal should open
 
     When I click "Initiative" in the "Modal content" region
@@ -515,7 +515,7 @@ Feature: Assessment Report Entity Management
 
     Given I am logged in as an "developer"
     And I go to "/collection/assessments/report/create"
-    And I click "New binding requirement"
+    And I add a section
     When I click "Interoperability solution" in the "Modal content" region
     And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
     Then I should see "English Solution"
@@ -523,7 +523,7 @@ Feature: Assessment Report Entity Management
     And I should not see "BG Solution"
 
     When I go to "/bg/collection/assessments/report/create"
-    And I click "New binding requirement"
+    And I add a section
     When I click "Interoperability solution" in the "Modal content" region
     And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
     Then I should see "English Solution"
