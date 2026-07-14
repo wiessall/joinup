@@ -34,6 +34,7 @@ class GroupArchiveEventSubscriber implements EventSubscriberInterface {
       'solution.archive.post_transition' => 'onGroupPostArchiveTransition',
       'solution.unarchive.post_transition' => 'onGroupPostUnarchiveTransition',
       'collection.archive.post_transition' => 'onGroupPostArchiveTransition',
+      'collection.unarchive.post_transition' => 'onGroupPostUnarchiveTransition',
     ];
   }
 
@@ -88,11 +89,15 @@ class GroupArchiveEventSubscriber implements EventSubscriberInterface {
   protected function queueGroupSubContentTransition(GroupInterface $group, Transition $transition): void {
     $queue = $this->queueFactory->get('group_archive_related_content');
     $queue->createQueue();
-    $queue->createItem([
+    $data = [
       'user' => $this->currentUser->id(),
       'group' => $group->id(),
       'transition' => $transition,
-    ]);
+    ];
+    if (!empty($group->motivation)) {
+      $data['motivation'] = $group->motivation;
+    }
+    $queue->createItem($data);
   }
 
 }

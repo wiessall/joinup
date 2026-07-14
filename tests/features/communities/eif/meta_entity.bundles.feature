@@ -21,3 +21,9 @@ Feature:
       | logged in as a facilitator of the "Some EIF solution" solution | not see        |
       | logged in as a owner of the "Some EIF solution" solution       | not see        |
       | logged in as a user with the moderator role                    | see            |
+
+  Scenario: EIF perspective link is not visible on an archived solution
+    Given the workflow state of the "Some EIF solution" "content" is changed to "archived"
+    And I am logged in as a user with the moderator role
+    When I go to the "Some EIF solution" solution
+    Then I should not see the link "EIF perspective" in the "Entity actions" region

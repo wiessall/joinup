@@ -1,0 +1,18 @@
+{#
+/**
+ * @file
+ * Default theme implementation of a solution's assessment count.
+ *
+ * Available variables:
+ * - count: the number of published assessment reports referencing the solution.
+ *
+ * @ingroup themeable
+ */
+#}
+<span>
+  {% trans %}
+    1 Assessment
+  {% plural count %}
+    {{ count }} Assessments
+  {% endtrans %}
+</span>

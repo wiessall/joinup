@@ -274,6 +274,15 @@ interface GroupInterface extends
   public function getDirectGroupContentIds(): array;
 
   /**
+   * Returns the sub-content entity classes that follow this group's transition.
+   *
+   * @return array<class-string>
+   *   A list of entity interface names whose instances should be (un)archived
+   *   together with the group.
+   */
+  public function getArchivableContentEntityClasses(): array;
+
+  /**
    * Returns the message to show to a new member when they join the group.
    *
    * @param \Drupal\og\OgMembershipInterface $membership
