@@ -6,14 +6,13 @@ namespace Drupal\ventuno_helper\Plugin\Block;
 
 use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Block\BlockManagerInterface;
 use Drupal\Core\Cache\CacheableMetadata;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RedirectDestinationInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_bookmark\JoinupBookmarkInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -41,9 +40,8 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
     protected readonly AccountProxyInterface $currentUser,
     protected readonly RedirectDestinationInterface $redirectDestination,
     protected readonly JoinupBookmarkInterface $bookmark,
-    protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly RouteMatchInterface $routeMatch,
-    protected readonly ThemeManagerInterface $themeManager,
+    protected readonly BlockManagerInterface $blockManager,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
@@ -59,9 +57,8 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
       $container->get('current_user'),
       $container->get('redirect.destination'),
       $container->get('joinup_bookmark.bookmark'),
-      $container->get('entity_type.manager'),
       $container->get('current_route_match'),
-      $container->get('theme.manager'),
+      $container->get('plugin.manager.block'),
     );
   }
 
@@ -158,25 +155,23 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
   }
 
   /**
-   * Renders the search block placed in the active theme's search bar region.
+   * Renders the search view's exposed form for the header search box.
    *
    * @param \Drupal\Core\Cache\CacheableMetadata $cacheability
-   *   Collects the cacheability of the rendered search block.
+   *   Collects the cacheability of the rendered search form.
    *
    * @return array
-   *   The search block render array, or an empty array when it is not placed.
+   *   The search form render array, or an empty array when the search view is
+   *   not available.
    */
   protected function buildSearch(CacheableMetadata $cacheability): array {
-    $blocks = $this->entityTypeManager->getStorage('block')->loadByProperties([
-      'theme' => $this->themeManager->getActiveTheme()->getName(),
-      'region' => 'search_bar',
-    ]);
-    if (!$blocks) {
+    $plugin_id = 'views_exposed_filter_block:search-page_1';
+    if (!$this->blockManager->hasDefinition($plugin_id)) {
       return [];
     }
-    $block = reset($blocks);
-    $cacheability->addCacheableDependency($block);
-    return $this->entityTypeManager->getViewBuilder('block')->view($block);
+    $build = $this->blockManager->createInstance($plugin_id)->build();
+    $cacheability->addCacheableDependency(CacheableMetadata::createFromRenderArray($build));
+    return $build;
   }
 
 }
