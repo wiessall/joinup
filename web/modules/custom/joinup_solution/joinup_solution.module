@@ -255,6 +255,11 @@ function joinup_solution_entity_extra_field_info(): array {
       'description' => t('Amount of members of the solution'),
       'visible' => FALSE,
     ];
+    $display['solution_assessment_count'] = [
+      'label' => t('Assessment count'),
+      'description' => t('Number of assessment reports referencing this solution.'),
+      'visible' => FALSE,
+    ];
     $form = &$fields['node'][$solution->id()]['form'];
     $form['node_preview'] = [
       'label' => t('Node preview'),
@@ -379,6 +384,20 @@ function joinup_solution_node_view(array &$build, NodeInterface $solution, Entit
       '#count' => $member_count,
       '#view_mode' => $view_mode,
       '#cache' => ['tags' => $tags],
+    ];
+  }
+
+  // Assessment count.
+  if ($display->getComponent('solution_assessment_count')) {
+    $build['solution_assessment_count'] = [
+      '#lazy_builder' => [
+        'joinup_solution.lazy_builders:renderAssessmentCount',
+        [$solution->id()],
+      ],
+      '#create_placeholder' => TRUE,
+      '#cache' => [
+        'keys' => ['joinup_solution.solution_assessment_count', $solution->id()],
+      ],
     ];
   }
 }
@@ -669,6 +688,11 @@ function joinup_solution_theme(array $existing, string $type, string $theme, str
       'variables' => [
         'count' => 0,
         'view_mode' => '',
+      ],
+    ],
+    'solution_assessment_count' => [
+      'variables' => [
+        'count' => 0,
       ],
     ],
     'more_description' => [

@@ -102,7 +102,7 @@
         "drupal/rabbit_hole": "^2.0",
         "drupal/rdf_sync": "^1.0",
         "drupal/redirect": "^1.6",
-        "drupal/replicate_actions": "^1.7",
+        "drupal/replicate_actions": "^2.0",
         "drupal/replicate_ui": "^1.1",
         "drupal/role_delegation": "^1.5",
         "drupal/schema_digital_document": "^1.1",
@@ -479,6 +479,9 @@
             "drupal/oauth_client": {
                 "Add post-update hook to install OAuth Client Minimal filter format. @see https://www.drupal.org/i/3555048": "resources/patch/php/drupal/oauth_client/3555048v2.diff",
                 "Notifications per request type. @see https://www.drupal.org/i/3567235": "resources/patch/php/drupal/oauth_client/3567235-c17f91608.diff"
+            },
+            "drupal/og": {
+                "Performance hit from OG permission compilation @see https://git.drupalcode.org/project/og/-/work_items/3594172": "resources/patch/php/drupal/og/3594172.mr75-commita75d7be4.diff"
             },
             "drupal/og_menu": {
                 "Fix fatal error in OgMenuInstanceForm @see https://www.drupal.org/i/3528599": "resources/patch/php/drupal/og_menu/3528599.diff"

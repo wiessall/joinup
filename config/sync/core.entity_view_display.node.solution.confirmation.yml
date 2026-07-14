@@ -343,6 +343,7 @@ hidden:
   share_link: true
   shared_in: true
   site_featured: true
+  solution_assessment_count: true
   solution_settings: true
   solution_subscribe: true
   uri: true

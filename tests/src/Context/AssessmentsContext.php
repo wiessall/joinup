@@ -185,12 +185,18 @@ class AssessmentsContext extends RawDrupalContext {
       ->create($values);
     $paragraph->save();
 
-    $report->set('binding_requirement', [
-      [
-        'target_id' => $paragraph->id(),
-        'target_revision_id' => $paragraph->getRevisionId(),
-      ],
-    ]);
+    $existing = [];
+    foreach ($report->get('binding_requirement') as $item) {
+      $existing[] = [
+        'target_id' => $item->target_id,
+        'target_revision_id' => $item->target_revision_id,
+      ];
+    }
+    $existing[] = [
+      'target_id' => $paragraph->id(),
+      'target_revision_id' => $paragraph->getRevisionId(),
+    ];
+    $report->set('binding_requirement', $existing);
     $report->save();
   }
 

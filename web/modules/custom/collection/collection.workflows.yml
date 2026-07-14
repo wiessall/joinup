@@ -43,3 +43,7 @@ collection_workflow:
       label: Archive
       from: [archival_request, published]
       to: archived
+    unarchive:
+      label: Unarchive
+      from: [archived]
+      to: published
