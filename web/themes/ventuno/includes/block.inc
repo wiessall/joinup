@@ -76,12 +76,6 @@ function ventuno_preprocess_block(array &$variables): void {
   // List of the blocks to render without contextual links.
   $no_contextual_links_blocks = [
     'add_content',
-    'navbar_menu',
-    'iop_navbar_menu',
-    'account_menu',
-    'iop_account_menu',
-    'joinup_header_navigation',
-    'iop_header_navigation',
     'ventuno_privatemessagenotification',
     'iop_privatemessagenotification',
   ];
