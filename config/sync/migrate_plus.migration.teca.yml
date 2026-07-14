@@ -21,7 +21,7 @@ source:
   data_fetcher_plugin: file
   data_parser_plugin: json
   urls:
-    - modules/custom/import_ird_jsons/sources/teca.json
+    - modules/custom/import_IRD_jsons/sources/teca.json
   constants:
     OG_AUDIENCE_NID: '847'
     OWNER_NID: 33

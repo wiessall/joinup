@@ -1,9 +1,0 @@
-uuid: 5bfb136c-b11d-49e3-8a5b-bcb89aa96d09
-langcode: en
-status: true
-dependencies: {  }
-name: 'dv_solutions: Digital Solution Type (Category & sub-category)'
-vid: dv_solutions_digital_solution_ty
-description: null
-weight: 0
-new_revision: false

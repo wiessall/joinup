@@ -1,9 +1,0 @@
-uuid: 4137a295-7fa8-4353-9c1a-6f4d3cf54617
-langcode: en
-status: true
-dependencies: {  }
-name: 'dv_solutions: Name of Digital village(s), districts, communes where DS is used/ deployed (Enter text).'
-vid: dv_solutions_name_of_digital_vil
-description: null
-weight: 0
-new_revision: false

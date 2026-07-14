@@ -1,0 +1,46 @@
+uuid: b9dfd2bf-c847-4ae7-991d-46cdd0c13c6a
+langcode: en
+status: true
+dependencies: {  }
+id: claim_fao_dvi_name_of_digital_village_s_districts_communes_where_ds_is_used_deployed_enter_text
+name: 'Fao Dvi Name Of Digital Village S Districts Communes Where Ds Is Used Deployed Enter Text'
+weight: 0
+min_count: 1
+missing: false
+missing_label: others
+url_alias: claim_fao_dvi_name_of_digital_village_s_districts_communes_where_ds_is_used_deployed_enter_text
+facet_source_id: 'search_api_field:meta_entity.collection_settings.listing_content'
+field_identifier: claim_fao_dvi_name_of_digital_village_s_districts_communes_where_ds_is_used_deployed_enter_text
+query_operator: or
+hard_limit: 0
+exclude: false
+use_hierarchy: false
+keep_hierarchy_parents_active: false
+hierarchy:
+  type: taxonomy
+  config: {  }
+expand_hierarchy: false
+enable_parent_when_child_gets_disabled: true
+widget:
+  type: dropdown
+  config:
+    show_numbers: true
+empty_behavior:
+  behavior: none
+only_visible_when_facet_source_is_visible: true
+show_only_one_result: false
+show_title: null
+processor_configs:
+  url_processor_handler:
+    processor_id: url_processor_handler
+    weights:
+      pre_query: 50
+      build: -3
+    settings: {  }
+  count_limit:
+    processor_id: count_limit
+    weights:
+      build: -4
+    settings:
+      minimum_items: 1
+      maximum_items: null

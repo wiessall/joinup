@@ -1,9 +1,0 @@
-uuid: dfb38d89-37bf-4d86-90cf-617b1a0e832b
-langcode: en
-status: true
-dependencies: {  }
-name: 'dv_solutions: DS Supplier-User category'
-vid: dv_solutions_ds_supplier_user_ca
-description: null
-weight: 0
-new_revision: false

@@ -1,9 +1,0 @@
-uuid: e9179034-ca5d-4325-8473-37aab0181684
-langcode: en
-status: true
-dependencies: {  }
-name: 'dv_solutions: Digital Solution delivery format (Mandatory)'
-vid: dv_solutions_digital_solution_de
-description: null
-weight: 0
-new_revision: false

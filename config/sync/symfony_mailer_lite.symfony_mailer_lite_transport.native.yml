@@ -1,8 +1,0 @@
-uuid: e6c961f0-7fc7-4d44-9744-a37d2843c8df
-langcode: en
-status: true
-dependencies: {  }
-id: native
-label: Native
-plugin: native
-configuration: {  }
