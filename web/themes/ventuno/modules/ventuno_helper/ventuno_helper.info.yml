@@ -2,3 +2,6 @@ type: module
 name: Ventuno Helper
 description: Provides backend support for Ventuno theme.
 core_version_requirement: "^10.4 || ^11"
+
+dependencies:
+  - joinup:joinup_bookmark

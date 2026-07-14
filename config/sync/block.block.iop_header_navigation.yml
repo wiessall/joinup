@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   module:
-    - joinup_menu
+    - ventuno_helper
   theme:
     - iop
 id: iop_header_navigation
@@ -16,5 +16,5 @@ settings:
   id: joinup_header_navigation
   label: 'Header navigation'
   label_display: '0'
-  provider: joinup_menu
+  provider: ventuno_helper
 visibility: {  }
