@@ -22,6 +22,11 @@ class VentunoHelperHooks {
           'data' => [],
         ],
       ],
+      'iop_footer' => [
+        'variables' => [
+          'items' => [],
+        ],
+      ],
     ];
   }
 
