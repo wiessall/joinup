@@ -84,7 +84,7 @@ class WebformContext extends RawDrupalContext {
 
     $originalStatuses = \Drupal::state()->get('behat_webform_original_status', []);
     if (!isset($originalStatuses[$webform_id])) {
-      $originalStatuses[$webform_id] = $webform->getStatus();
+      $originalStatuses[$webform_id] = (string) $webform->get('status');
       \Drupal::state()->set('behat_webform_original_status', $originalStatuses);
     }
 
