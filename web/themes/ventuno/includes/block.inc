@@ -116,6 +116,15 @@ function ventuno_preprocess_block__field_block__node__solution__resources(array 
 }
 
 /**
+ * Implements hook_preprocess_HOOK() for the header navigation block.
+ */
+function ventuno_preprocess_block__joinup_header_navigation(array &$variables): void {
+  $content = $variables['elements']['content'];
+  $variables['items'] = $content['#items'] ?? [];
+  $variables['search'] = $content['#search'] ?? [];
+}
+
+/**
  * Implements hook_theme_suggestions_HOOK_alter() for the block hook.
  */
 function ventuno_theme_suggestions_block_alter(array &$suggestions, array $variables): void {

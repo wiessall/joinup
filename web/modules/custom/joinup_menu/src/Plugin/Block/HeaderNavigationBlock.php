@@ -112,7 +112,6 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
     }
 
     $build = [
-      '#theme' => 'joinup_header',
       '#items' => $items,
       '#search' => $search,
     ];
