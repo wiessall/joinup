@@ -247,6 +247,7 @@ permissions:
   - 'perform collection_workflow workflow archive transition on any entity'
   - 'perform collection_workflow workflow draft transition on any entity'
   - 'perform collection_workflow workflow propose transition on any entity'
+  - 'perform collection_workflow workflow unarchive transition on any entity'
   - 'perform collection_workflow workflow update_published transition on any entity'
   - 'perform collection_workflow workflow validate transition on any entity'
   - 'perform contact_information_workflow workflow approve_changes transition on any entity'
