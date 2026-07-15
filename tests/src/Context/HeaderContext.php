@@ -110,8 +110,8 @@ class HeaderContext extends RawDrupalContext {
 
     $icon_uri = base_path() . \Drupal::service('extension.list.theme')->getPath('ventuno') . '/assets/icons/icons.svg#' . self::ICON_ALIASES[$icon];
     $icon_selector = '.joinup-navbar .nav-item svg > use';
-    foreach ($this->getSession()->getPage()->findAll('css', $icon_selector) as $icon) {
-      if ($icon->getAttribute('xlink:href') === $icon_uri) {
+    foreach ($this->getSession()->getPage()->findAll('css', $icon_selector) as $element) {
+      if ($element->getAttribute('xlink:href') === $icon_uri) {
         // We found the icon.
         return;
       }

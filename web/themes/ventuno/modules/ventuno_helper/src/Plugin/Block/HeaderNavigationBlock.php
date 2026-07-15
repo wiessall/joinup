@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\ventuno_helper\Plugin\Block;
 
+use Drupal\collection\Entity\CollectionInterface;
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Block\BlockManagerInterface;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RedirectDestinationInterface;
@@ -15,6 +18,8 @@ use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\joinup_bookmark\JoinupBookmarkInterface;
+use Drupal\joinup_collection\JoinupCollectionHelper;
+use Drupal\rdf_sync\RdfSyncMapperInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -42,6 +47,7 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
     protected readonly JoinupBookmarkInterface $bookmark,
     protected readonly RouteMatchInterface $routeMatch,
     protected readonly BlockManagerInterface $blockManager,
+    protected readonly RdfSyncMapperInterface $mapper,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
@@ -59,7 +65,19 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
       $container->get('joinup_bookmark.bookmark'),
       $container->get('current_route_match'),
       $container->get('plugin.manager.block'),
+      $container->get('rdf_sync.mapper'),
     );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheContexts(): array {
+    return Cache::mergeContexts(parent::getCacheContexts(), [
+      'route.name',
+      'user.roles:authenticated',
+      'url',
+    ]);
   }
 
   /**
@@ -68,12 +86,11 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
   public function build(): array {
     $cacheability = new CacheableMetadata();
     $logged_in = $this->currentUser->isAuthenticated();
-    $cacheability->addCacheContexts(['route.name', 'user.roles:authenticated']);
 
     $items = [];
 
     if (!$logged_in) {
-      $anonymous_links = $this->getAnonymousActions($cacheability);
+      $anonymous_links = $this->getAnonymousActions();
       $items[] = [
         'breakpoint' => 'all',
         'links' => [$anonymous_links['sign_in']],
@@ -81,6 +98,24 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
       $items[] = [
         'breakpoint' => 'xl',
         'links' => [$anonymous_links['get_started']],
+      ];
+
+      $mobile_links = [
+        [
+          'label' => $this->t('Home'),
+          'link' => Url::fromRoute('<front>'),
+        ],
+        $anonymous_links['sign_in'],
+      ];
+      if ($about_us_link = $this->getAboutUsLink($cacheability)) {
+        $mobile_links[] = $about_us_link;
+      }
+      $items[] = [
+        'type' => 'mmenu',
+        'id' => 'navbar-toggler',
+        'icon' => 'justify',
+        'label' => $this->t('Toggle menu'),
+        'links' => $mobile_links,
       ];
     }
 
@@ -119,16 +154,10 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
   /**
    * Builds the anonymous header actions in the BCL header format.
    *
-   * @param \Drupal\Core\Cache\CacheableMetadata $cacheability
-   *   Collects the cacheability of the anonymous actions.
-   *
    * @return array
    *   The header actions, keyed by 'sign_in' and 'get_started'.
    */
-  protected function getAnonymousActions(CacheableMetadata $cacheability): array {
-    // Sign in and account creation both open EU Login and return the user to
-    // the page they started from, so these links vary per request URL.
-    $cacheability->addCacheContexts(['url.path', 'url.query_args']);
+  protected function getAnonymousActions(): array {
     $cas_login_link = Url::fromRoute('cas.login', [], [
       'query' => $this->redirectDestination->getAsArray(),
     ]);
@@ -155,6 +184,29 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
   }
 
   /**
+   * Returns the "About us" link pointing to the Joinup collection landing page.
+   *
+   * @param \Drupal\Core\Cache\CacheableMetadata $cacheability
+   *   Collects the cacheability of the "About us" link.
+   *
+   * @return array|null
+   *   The "About us" link in the BCL header format, or NULL when the Joinup
+   *   collection does not exist.
+   */
+  protected function getAboutUsLink(CacheableMetadata $cacheability): ?array {
+    $cacheability->addCacheTags(['joinup_collection:exists']);
+    $joinup_collection = $this->mapper->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_URI);
+    if (!$joinup_collection instanceof CollectionInterface) {
+      return NULL;
+    }
+    $cacheability->addCacheableDependency($joinup_collection);
+    return [
+      'label' => $this->t('About us'),
+      'link' => $joinup_collection->toUrl(),
+    ];
+  }
+
+  /**
    * Renders the search view's exposed form for the header search box.
    *
    * @param \Drupal\Core\Cache\CacheableMetadata $cacheability
@@ -170,6 +222,9 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
       return [];
     }
     $build = $this->blockManager->createInstance($plugin_id)->build();
+    if (isset($build['keys'])) {
+      $build['keys']['#id'] = Html::getUniqueId('search-box');
+    }
     $cacheability->addCacheableDependency(CacheableMetadata::createFromRenderArray($build));
     return $build;
   }
