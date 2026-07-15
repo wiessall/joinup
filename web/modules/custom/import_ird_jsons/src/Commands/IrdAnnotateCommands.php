@@ -75,6 +75,8 @@ final class IrdAnnotateCommands extends DrushCommands {
   private const PARAGRAPH_BUNDLE  = 'claims';
   private const SOLUTION_BUNDLE   = 'solution';
   private const COLLECTION_BUNDLE = 'collection';
+  private const MAX_TERM_NAME = 255;
+
 
   /**
    * Field on vocabulary terms holding the canonical RDF URI.
@@ -91,7 +93,84 @@ final class IrdAnnotateCommands extends DrushCommands {
     parent::__construct();
   }
 
-  /**
+  // /**
+  //  * Import field claims for a collection from a normalized JSON.
+  //  *
+  //  * @command ird:annotate
+  //  *
+  //  * @param string $collection_id
+  //  *   Machine-name slug for the collection (e.g. "stf").
+  //  * @param string $json_path
+  //  *   Path to the normalized IRD JSON.
+  //  */
+  // public function annotate(string $collection_id, string $json_path): void {
+  //   $data = json_decode(file_get_contents($json_path), TRUE, 512, JSON_THROW_ON_ERROR);
+
+  //   $collection_nid = $this->loadCollectionNid($collection_id);
+  //   print("COLLECTION NID: " . $collection_nid);
+  //   $field_config   = $data['meta']['field_config'] ?? [];
+
+  //   $properties_parent = $this->ensureTerm(self::VOCAB_PROPERTIES, $collection_id);
+  //   $values_parent     = $this->ensureTerm(self::VOCAB_VALUES, $collection_id);
+
+  //   $created = $skipped = 0;
+
+  //   foreach ($data['records'] as $record) {
+  //     $raw_id       = $record['core_fields']['id'] ?? NULL;
+  //     $id           = is_numeric($raw_id) 
+  //                     ? (string) (int) (float) $raw_id
+  //                     : (string) $raw_id;
+
+  //     $solution = $id !== '' ? $this->loadSolution($id) : NULL;
+  //     if (!$solution) {
+  //       $this->logger()->warning("No solution for id={$id} — skipping.");
+  //       $skipped++;
+  //       continue;
+  //     }
+
+  //     $this->clearCollectionClaims($solution, $collection_nid);
+
+  //     foreach ($record['claims'] as $key => $claim) {
+  //       $meta           = $field_config[$key] ?? [];
+  //       $is_categorical = (bool) ($meta['categorical'] ?? FALSE);
+  //       $separator      = $meta['separator'] ?? NULL;
+  //       $property_term  = $this->ensureKeyTerm(self::VOCAB_PROPERTIES, $collection_id, $key, $properties_parent);
+
+  //       foreach ($this->normalizeValues($claim['value'], $separator) as $single) {
+  //         $paragraph = $is_categorical
+  //           ? $this->buildRefClaim($collection_id, $key, $single, $property_term, $values_parent, $collection_nid)
+  //           : $this->buildLiteralClaim($single, $property_term, $collection_nid);
+
+  //         $solution->get('field_claims')->appendItem([
+  //           'target_id'          => $paragraph->id(),
+  //           'target_revision_id' => $paragraph->getRevisionId(),
+  //         ]);
+  //         $created++;
+  //       }
+  //     }
+
+  //     $solution->save();
+
+
+  //   }
+  //   $this->syncClaimFieldsToIndex();
+
+  //   // 2. Derive view ID and ensure the collection view exists.
+  //   // $slug         = $this->slug($collection_id);
+  //   $view_id      = 'collection_solutions_central';
+  //   $facet_source = 'search_api:views_page__' . $view_id . '__page_1';
+  //   // $this->ensureCollectionView($collection_id, $view_id);
+
+  //   // 3. Create facets.facet.* for categorical fields.
+  //   // Field schema is already saved, so getField() checks will pass.
+  //   $this->syncFacetsForCollection($collection_id, $collection_nid, $facet_source);
+
+  //   // 4. Connect the facets to the view created at 2.
+  //   // $this->attachFacetsToView($collection_id, $view_id);
+
+  //   $this->logger()->success("$created claims created, $skipped records skipped.");
+  // }
+/**
    * Import field claims for a collection from a normalized JSON.
    *
    * @command ird:annotate
@@ -100,29 +179,63 @@ final class IrdAnnotateCommands extends DrushCommands {
    *   Machine-name slug for the collection (e.g. "stf").
    * @param string $json_path
    *   Path to the normalized IRD JSON.
+   * @option strategy
+   *   View strategy. 'central' (default) contributes facets to the single
+   *   shared view 'collection_solutions_central'. 'per-collection' creates a
+   *   dedicated view per collection from the 'test_search' template — the
+   *   pre-merge behaviour, kept available as a fallback.
    */
-  public function annotate(string $collection_id, string $json_path): void {
+  public function annotate(
+    string $collection_id,
+    string $json_path,
+    array $options = ['strategy' => 'central', 'skip-existing' => FALSE],
+  ): void {
+    $strategy = $options['strategy'];
+    if (!in_array($strategy, ['central', 'per-collection'], TRUE)) {
+      throw new \InvalidArgumentException(
+        "Unknown --strategy '$strategy'. Use 'central' or 'per-collection'."
+      );
+    }
+
     $data = json_decode(file_get_contents($json_path), TRUE, 512, JSON_THROW_ON_ERROR);
 
     $collection_nid = $this->loadCollectionNid($collection_id);
-    print("COLLECTION NID: " . $collection_nid);
+    $this->logger()->notice("Collection nid: $collection_nid  |  strategy: $strategy");
     $field_config   = $data['meta']['field_config'] ?? [];
 
     $properties_parent = $this->ensureTerm(self::VOCAB_PROPERTIES, $collection_id);
     $values_parent     = $this->ensureTerm(self::VOCAB_VALUES, $collection_id);
 
-    $created = $skipped = 0;
+    $created = $skipped = $skipped_claims = $failed_claims = $failed_records = 0;
 
+    $t_start = microtime(TRUE);
+    $t_last  = $t_start;
+    $claims_at_last = 0;  
+    $phase = ['clear' => 0.0, 'claims' => 0.0, 'save' => 0.0];
     foreach ($data['records'] as $record) {
-      $id       = $record['core_fields']['id'] ?? NULL;
-      $solution = $id ? $this->loadSolution($id) : NULL;
+
+
+      $raw_id = $record['core_fields']['id'] ?? NULL;
+      $id     = is_numeric($raw_id)
+        ? (string) (int) (float) $raw_id
+        : (string) $raw_id;
+
+      $solution = $id !== '' ? $this->loadSolution($id) : NULL;
       if (!$solution) {
         $this->logger()->warning("No solution for id={$id} — skipping.");
         $skipped++;
         continue;
       }
+      if ($options['skip-existing'] && $this->hasCollectionClaims($solution, $collection_nid)) {
+        $skipped++;
+        continue;
+      }
 
+      $t = microtime(TRUE);
       $this->clearCollectionClaims($solution, $collection_nid);
+      $phase['clear'] += microtime(TRUE) - $t;
+
+      $t = microtime(TRUE);
 
       foreach ($record['claims'] as $key => $claim) {
         $meta           = $field_config[$key] ?? [];
@@ -131,40 +244,105 @@ final class IrdAnnotateCommands extends DrushCommands {
         $property_term  = $this->ensureKeyTerm(self::VOCAB_PROPERTIES, $collection_id, $key, $properties_parent);
 
         foreach ($this->normalizeValues($claim['value'], $separator) as $single) {
-          $paragraph = $is_categorical
-            ? $this->buildRefClaim($collection_id, $key, $single, $property_term, $values_parent, $collection_nid)
-            : $this->buildLiteralClaim($single, $property_term, $collection_nid);
+          try {
+            // A categorical value becomes a term name (varchar 255). Anything longer
+            // is almost certainly misclassified free text — skip it rather than crash.
+            if ($is_categorical && mb_strlen($single) > self::MAX_TERM_NAME) {
+              $this->logger()->warning(sprintf(
+                "Skipping over-long categorical value (%d chars) key='%s' id=%s: %s…",
+                mb_strlen($single), $key, $id, mb_substr($single, 0, 60)
+              ));
+              $skipped_claims++;
+              continue;
+            }
 
-          $solution->get('field_claims')->appendItem([
-            'target_id'          => $paragraph->id(),
-            'target_revision_id' => $paragraph->getRevisionId(),
-          ]);
-          $created++;
+            $paragraph = $is_categorical
+              ? $this->buildRefClaim($collection_id, $key, $single, $property_term, $values_parent, $collection_nid)
+              : $this->buildLiteralClaim($single, $property_term, $collection_nid);
+
+            $solution->get('field_claims')->appendItem([
+              'target_id'          => $paragraph->id(),
+              'target_revision_id' => $paragraph->getRevisionId(),
+            ]);
+            $created++;
+          }
+          catch (\Throwable $e) {
+            $this->logger()->error(sprintf(
+              "Claim failed key='%s' id=%s: %s", $key, $id, $e->getMessage()
+            ));
+            $failed_claims++;
+          }
         }
       }
 
-      $solution->save();
+      $phase['claims'] += microtime(TRUE) - $t;
 
+      $t = microtime(TRUE);
+      try {
+        $solution->save();
+        $t_save = microtime(TRUE);
+        $phase['save'] += $t_save - $t;
+      }
+      catch (\Throwable $e) {
+        $this->logger()->error("Solution save failed id=$id: " . $e->getMessage());
+        $failed_records++;
+        continue;
+      }
+
+
+      // $this->logger()->notice(sprintf('save #%d: %.3fs', $created, $dt));
 
     }
+    $total = array_sum($phase);
+    $this->logger()->notice(sprintf(
+      'phase: clear=%.1fs (%.0f%%)  claims=%.1fs (%.0f%%)  save=%.1fs (%.0f%%)',
+      $phase['clear'], 100 * $phase['clear'] / $total,
+      $phase['claims'], 100 * $phase['claims'] / $total,
+      $phase['save'], 100 * $phase['save'] / $total
+    ));
     $this->syncClaimFieldsToIndex();
 
-    // 2. Derive view ID and ensure the collection view exists.
-    $slug         = $this->slug($collection_id);
-    $view_id      = 'collection_' . $slug . '_solutions';
+    // ---- View / facet wiring ----------------------------------------------
+    // Both strategies share syncFacetsForCollection + attachFacetsToView; only
+    // the target view (and whether we materialise it from a template) differ.
+    if ($strategy === 'central') {
+      $view_id = 'collection_solutions_central';
+      // The central view is built externally by the merge script — do NOT
+      // call ensureCollectionView; it would silently re-template from
+      // test_search if the central view were ever deleted.
+      if (!$this->viewExists($view_id)) {
+        $this->logger()->error(
+          "Central view '$view_id' not found. Run the central-view merge "
+          . "script first, or re-run with --strategy=per-collection."
+        );
+        return;
+      }
+    }
+    else {
+      // Per-collection: one view per collection, templated from test_search.
+      $slug    = $this->slug($collection_id);
+      $view_id = 'collection_' . $slug . '_solutions';
+      $this->ensureCollectionView($collection_id, $view_id);
+    }
+
     $facet_source = 'search_api:views_page__' . $view_id . '__page_1';
-    $this->ensureCollectionView($collection_id, $view_id);
-
-    // 3. Create facets.facet.* for categorical fields.
-    // Field schema is already saved, so getField() checks will pass.
     $this->syncFacetsForCollection($collection_id, $collection_nid, $facet_source);
-
-    // 4. Connect the facets to the view created at 2.
     $this->attachFacetsToView($collection_id, $view_id);
 
-    $this->logger()->success("$created claims created, $skipped records skipped.");
+    $this->logger()->success(sprintf(
+      "%d claims created, %d records skipped. Skipped claims: %d, failed claims: %d, failed records: %d.",
+      $created, $skipped, $skipped_claims, $failed_claims, $failed_records
+    ));
   }
 
+  /**
+   * Does a view config entity exist?
+   */
+  private function viewExists(string $view_id): bool {
+    return !\Drupal::configFactory()
+      ->getEditable('views.view.' . $view_id)
+      ->isNew();
+  }
   // ---------------------------------------------------------------------------
   // Claim construction
   // ---------------------------------------------------------------------------
@@ -189,6 +367,7 @@ final class IrdAnnotateCommands extends DrushCommands {
     int $collection_nid,
   ): ParagraphInterface {
     $key_term   = $this->ensureKeyTerm(self::VOCAB_VALUES, $collection_id, $key, $values_parent);
+    // error_log(microtime(TRUE)." ensure start\n");
     $value_term = $this->ensureTerm(
       self::VOCAB_VALUES, $value, (int) $key_term->id(), $this->valueUri($collection_id, $key, $value),
     );
@@ -287,6 +466,9 @@ final class IrdAnnotateCommands extends DrushCommands {
       $added = 0;
       foreach ($facet_storage->loadMultiple($facet_ids) as $facet) {
         $filter_id = 'facets_' . $facet->id();
+        if (isset($view['display']['default']['display_options']['filters'][$filter_id])) {
+            continue;
+        }
         $view['display']['default']['display_options']['filters'][$filter_id] = [
             'id'           => $filter_id,
             'table'        => 'search_api_index_published',
@@ -347,7 +529,7 @@ final class IrdAnnotateCommands extends DrushCommands {
         ];
         $added++;
       }
-      $view['display']['page_1']['display_options']['filter_groups'] ??= [
+      $view['display']['default']['display_options']['filter_groups'] ??= [
         'operator' => 'AND',
         'groups'   => [1 => 'AND'],
       ];
@@ -402,8 +584,9 @@ final class IrdAnnotateCommands extends DrushCommands {
 
       $weight = 0;
       foreach ($this->termStorage()->loadMultiple($property_tids) as $term) {
-          $key_slug = $this->slug($term->getName());
-          $field_id = 'claim_' . $key_slug;
+          $key_slug  = $this->slug($term->getName());
+          $coll_slug = $this->slug($collection_id);
+          $field_id  = 'claim_' . $coll_slug . '_' . $key_slug;
 
           if (!$index->getField($field_id)) {
               $this->logger()->warning("Field '$field_id' not in index — skipping facet.");
@@ -466,7 +649,7 @@ final class IrdAnnotateCommands extends DrushCommands {
   // Taxonomy helpers (idempotent)
   // ---------------------------------------------------------------------------
 
-  private function ensureKeyTerm(string $vid, string $collection_id, string $key, TermInterface $parent): TermInterface {
+  private function ensureKeyTerm(string $vid, string $collection_id, string|int $key, TermInterface $parent): TermInterface {
     $uri = $vid === self::VOCAB_PROPERTIES ? $this->propertyUri($collection_id, $key) : NULL;
     return $this->ensureTerm($vid, $key, (int) $parent->id(), $uri);
   }
@@ -488,15 +671,28 @@ final class IrdAnnotateCommands extends DrushCommands {
     return $term;
   }
 
+  // private function findTerm(string $vid, string $name, ?int $parent_tid = NULL): ?TermInterface {
+  //   $properties = ['vid' => $vid, 'name' => $name];
+  //   if ($parent_tid !== NULL) {
+  //     $properties['parent'] = $parent_tid;
+  //   }
+  //   $matches = $this->termStorage()->loadByProperties($properties);
+  //   return $matches ? reset($matches) : NULL;
+  // }
+  private array $termCache = [];
+
   private function findTerm(string $vid, string $name, ?int $parent_tid = NULL): ?TermInterface {
+    $ck = "$vid|$name|" . ($parent_tid ?? 'root');
+    if (array_key_exists($ck, $this->termCache)) {
+      return $this->termCache[$ck];
+    }
     $properties = ['vid' => $vid, 'name' => $name];
     if ($parent_tid !== NULL) {
       $properties['parent'] = $parent_tid;
     }
     $matches = $this->termStorage()->loadByProperties($properties);
-    return $matches ? reset($matches) : NULL;
+    return $this->termCache[$ck] = ($matches ? reset($matches) : NULL);
   }
-
   // ---------------------------------------------------------------------------
   // Source data helpers
   // ---------------------------------------------------------------------------
@@ -611,4 +807,14 @@ final class IrdAnnotateCommands extends DrushCommands {
   }
 
 
+  private function hasCollectionClaims(NodeInterface $solution, int $collection_nid): bool {
+    foreach ($solution->get('field_claims') as $item) {
+      $paragraph = $item->entity;
+      if ($paragraph instanceof ParagraphInterface
+          && (int) $paragraph->get('field_claimed_by')->target_id === $collection_nid) {
+        return TRUE;
+      }
+    }
+    return FALSE;
+  }
 }
