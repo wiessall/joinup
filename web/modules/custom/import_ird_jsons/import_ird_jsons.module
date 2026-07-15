@@ -1,6 +1,6 @@
 <?php
 
-function import_IRD_jsons_node_view(array &$build, $node, $display, $view_mode) {
+function import_ird_jsons_node_view(array &$build, $node, $display, $view_mode) {
   if ($node->bundle() !== 'solution' || $view_mode !== 'full') {
     return;
   }
@@ -75,7 +75,7 @@ function import_IRD_jsons_node_view(array &$build, $node, $display, $view_mode) 
  *
  * Both fixes are strictly additive (only fill in missing data).
  */
-function import_IRD_jsons_views_data_alter(array &$data): void {
+function import_ird_jsons_views_data_alter(array &$data): void {
 
   // ---- Fix 1: node_field_data entity type ---------------------------------
   // Standard Drupal always sets this, but joinup_rdf / sti_rdf may remove it
@@ -114,7 +114,7 @@ function import_IRD_jsons_views_data_alter(array &$data): void {
 * If no field_claimed_by is set, this will automatically look up the collection
 * of the selected taxonomy
 */
-function import_IRD_jsons_entity_presave(\Drupal\Core\Entity\EntityInterface $entity): void {
+function import_ird_jsons_entity_presave(\Drupal\Core\Entity\EntityInterface $entity): void {
   if ($entity->getEntityTypeId() !== 'paragraph' || $entity->bundle() !== 'claims') {
     return;
   }
@@ -136,3 +136,4 @@ function import_IRD_jsons_entity_presave(\Drupal\Core\Entity\EntityInterface $en
     $entity->set('field_claimed_by', $namespace_term->get('field_collection')->target_id);
   }
 }
+
