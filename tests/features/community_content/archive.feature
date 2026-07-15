@@ -66,24 +66,28 @@ Feature: Content archival.
       | event    | Event      |
       | news     | News       |
 
-  Scenario Outline: User should not be allowed unarchiving content of an archived solution.
-    Given the following "solution" content:
-      | title             | state    |
-      | Cartridge cleaner | archived |
+  Scenario Outline: User should not be allowed unarchiving content of an archived parent group.
+    Given the following "<group type>" content:
+      | title          | state    |
+      | Archived group | archived |
     Given the following "<type>" content:
-      | title                | state    | solution          |
-      | Test archived <type> | archived | Cartridge cleaner |
+      | title                | state    | <group type>   |
+      | Test archived <type> | archived | Archived group |
 
     When I am logged in as a moderator
     And I go to the edit form of the "Test archived <type>" <type>
     Then I should not see the button "Unarchive"
 
     Examples:
-      | type       |
-      | discussion |
-      | document   |
-      | event      |
-      | news       |
+      | group type | type       |
+      | collection | discussion |
+      | collection | document   |
+      | collection | event      |
+      | collection | news       |
+      | solution   | discussion |
+      | solution   | document   |
+      | solution   | event      |
+      | solution   | news       |
 
   Scenario Outline: Group facilitators can not unarchived community content
     Given the following "<group type>" content:

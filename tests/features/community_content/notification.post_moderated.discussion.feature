@@ -134,4 +134,7 @@ Feature: Notification test for the discussion transitions on a post moderated pa
       | recipient | Lindsey McCray                                                                                 |
       | subject   | Interoperable Europe Portal: Your collection has been deleted by the moderation team           |
       | body      | The Interoperable Europe Portal moderation team deleted the collection Event Horizon Telescope |
-    And 1 e-mail should have been sent
+      | recipient_mail | contact.email@example.com                                                                 |
+      | subject        | The collection Event Horizon Telescope was deleted.                                       |
+      | body           | The collection "Event Horizon Telescope", of which you are a member, has been deleted.    |
+    And 2 e-mail should have been sent

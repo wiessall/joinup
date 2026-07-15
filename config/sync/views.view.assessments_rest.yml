@@ -936,7 +936,7 @@ display:
             offset: false
             offset_label: Offset
       cache:
-        type: none
+        type: tag
         options: {  }
       sorts:
         name:
