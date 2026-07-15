@@ -179,8 +179,8 @@ Feature:
       | Administration 6 |
       | Administration 7 |
     And the following "oss_solution" content:
-      | title      | status    | oss_release_date | oss_available_languages                | oss_used_by                                                                                                            |
-      | With modal | published | 2014-11-19       | it,en,de,pt,eo,fr,he,ja,lt,pl,ro,gd,si | Administration 1,Administration 2,Administration 3,Administration 4,Administration 5,Administration 6,Administration 7 |
+      | title      | status    | oss_release_date | oss_available_languages                | oss_used_by                                                                                                            | langcode |
+      | With modal | published | 2014-11-19       | it,en,de,pt,eo,fr,he,ja,lt,pl,ro,gd,si | Administration 1,Administration 2,Administration 3,Administration 4,Administration 5,Administration 6,Administration 7 | it       |
     And the "With modal" oss_solution has the following validation issues:
       | key                | description         | line | column | type    |
       | validation_error   | There is an error   | 1    | 1      | error   |
