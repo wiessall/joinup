@@ -13,6 +13,7 @@ group_bundle: solution
 is_admin: null
 permissions:
   - 'access comments'
+  - 'perform node:post_moderated workflow update transition on own entity'
   - 'share discussion content'
   - 'share document content'
   - 'share event content'
