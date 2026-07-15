@@ -74,12 +74,17 @@ content:
   members:
     settings: {  }
     third_party_settings: {  }
-    weight: 2
+    weight: 3
     region: content
   solution_assessment_count:
     settings: {  }
     third_party_settings: {  }
     weight: 3
+    region: content
+  solution_reuse_share:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
     region: content
   solution_subscribe:
     settings: {  }

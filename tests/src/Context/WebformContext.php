@@ -69,7 +69,30 @@ class WebformContext extends RawDrupalContext {
   }
 
   /**
-   * Cleans up webforms.
+   * Sets the status of an existing webform.
+   *
+   * @param string $webform_id
+   *   The webform machine name.
+   * @param string $status
+   *   Either 'open' or 'closed'.
+   */
+  #[Given('the webform :webform_id is :status')]
+  public function setWebformStatus(string $webform_id, string $status): void {
+    assert(in_array($status, ['open', 'closed'], TRUE), "Invalid webform status '$status'. Allowed values are 'open' or 'closed'.");
+    $webform = Webform::load($webform_id);
+    assert($webform instanceof WebformInterface, "The webform '$webform_id' does not exist.");
+
+    $originalStatuses = \Drupal::state()->get('behat_webform_original_status', []);
+    if (!isset($originalStatuses[$webform_id])) {
+      $originalStatuses[$webform_id] = (string) $webform->get('status');
+      \Drupal::state()->set('behat_webform_original_status', $originalStatuses);
+    }
+
+    $webform->setStatus($status)->save();
+  }
+
+  /**
+   * Cleans up webforms created during the scenario.
    *
    * @param \Behat\Behat\Hook\Scope\AfterScenarioScope $scope
    *   The scenario scope.
@@ -89,6 +112,29 @@ class WebformContext extends RawDrupalContext {
       }
       $webform->delete();
     }
+  }
+
+  /**
+   * Restores the status of webforms changed via self::setWebformStatus().
+   *
+   * @param \Behat\Behat\Hook\Scope\AfterScenarioScope $scope
+   *   The scenario scope.
+   */
+  #[AfterScenario]
+  public function afterScenarioRestoreWebformStatus(AfterScenarioScope $scope): void {
+    $originalStatuses = \Drupal::state()->get('behat_webform_original_status', []);
+    if (!$originalStatuses) {
+      return;
+    }
+
+    $storage = \Drupal::entityTypeManager()->getStorage('webform');
+    foreach ($originalStatuses as $id => $status) {
+      $webform = $storage->load($id);
+      if ($webform instanceof WebformInterface) {
+        $webform->setStatus($status)->save();
+      }
+    }
+    \Drupal::state()->delete('behat_webform_original_status');
   }
 
 }
