@@ -501,8 +501,6 @@ class AssessmentsContext extends RawDrupalContext {
    *   Archive location.
    * @param int $count
    *   Files count in archive.
-   *
-   * @Then the ZIP archive :uri should contain at least :count file(s)
    */
   #[Then('the ZIP archive :uri should contain at least :count file(s)')]
   public function zipArchiveShouldContainAtLeastFiles(string $uri, int $count): void {
