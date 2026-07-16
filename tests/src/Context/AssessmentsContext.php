@@ -494,4 +494,41 @@ class AssessmentsContext extends RawDrupalContext {
     }
   }
 
+  /**
+   * Checks if zip archive contains some files count.
+   *
+   * @param string $uri
+   *   Archive location.
+   * @param int $count
+   *   Files count in archive.
+   *
+   * @Then the ZIP archive :uri should contain at least :count file(s)
+   */
+  #[Then('the ZIP archive :uri should contain at least :count file(s)')]
+  public function zipArchiveShouldContainAtLeastFiles(string $uri, int $count): void {
+    $fileSystem = \Drupal::service('file_system');
+    $path = $fileSystem->realpath($uri);
+
+    if (!$path || !file_exists($path)) {
+      throw new \RuntimeException(sprintf('ZIP archive "%s" does not exist.', $uri));
+    }
+
+    $zip = new \ZipArchive();
+
+    if ($zip->open($path) !== TRUE) {
+      throw new \RuntimeException(sprintf('Unable to open ZIP archive "%s".', $path));
+    }
+
+    $numFiles = $zip->numFiles;
+    $zip->close();
+
+    if ($numFiles < $count) {
+      throw new \RuntimeException(sprintf(
+        'Expected at least %d file(s) in the ZIP archive, found %d.',
+        $count,
+        $numFiles
+      ));
+    }
+  }
+
 }

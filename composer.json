@@ -153,7 +153,8 @@
         "psr/http-factory-implementation": "^1.0",
         "sweetrdf/easyrdf": "^1.9",
         "symfony/http-client": "^6.4",
-        "turbojettechnologies/colorbox": "^1.7.0"
+        "turbojettechnologies/colorbox": "^1.7.0",
+        "ext-zip": "*"
     },
     "require-dev": {
         "ext-fileinfo": "*",
