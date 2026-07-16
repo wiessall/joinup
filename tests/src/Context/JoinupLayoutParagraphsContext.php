@@ -80,10 +80,8 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
     'duplicate' => self::CONTROLS_XPATH . '//*[contains(concat(" ", @class, " "), " lpb-duplicate ")]',
     'move up' => self::CONTROLS_XPATH . '//*[contains(concat(" ", @class, " "), " lpb-up ")]',
     'move down' => self::CONTROLS_XPATH . '//*[contains(concat(" ", @class, " "), " lpb-down ")]',
-    // The buttons that add a sibling before or after a given component.
     'add before' => './a[contains(concat(" ", @class, " "), " lpb-btn--add ") and contains(concat(" ", @class, " "), " before ")]',
     'add after' => './a[contains(concat(" ", @class, " "), " lpb-btn--add ") and contains(concat(" ", @class, " "), " after ")]',
-    // The centered button of an empty container: a region, or the builder root.
     'add component' => './/a[contains(concat(" ", @class, " "), " lpb-btn--add ") and contains(concat(" ", @class, " "), " center ")]',
   ];
 
@@ -135,28 +133,22 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   public function addLayoutParagraphInFormFieldOnTopLevel(string $field_alias, TableNode $layout_properties): void {
     $this->assertJavaScriptEnabledBrowser();
 
-    // Appending a section to the builder root opens the same modal as the
-    // centered button of an empty builder does.
     $builder = $this->getBuilder($field_alias);
     $this->clickAddButtonAtEndOf($builder, self::SECTION_XPATH);
 
-    // Get the 'layout' property from the table.
     $layout = $layout_properties->getRowsHash()['layout'];
     $this->assertCondition(isset(self::LAYOUTS_MAP[$layout]), "The layout '$layout' is not defined in the context.");
     $layout = self::LAYOUTS_MAP[$layout];
 
     $modalContent = $this->getRegion('Modal content');
 
-    // Select the layout.
     $xpath = "//div[contains(concat(' ', @class, ' '), ' layout-select__item ')]/input[@value='$layout']";
     $modalContent->find('xpath', $xpath)->getParent()->click();
     $this->waitForAjax();
 
-    // Expand both the "Layout options" and "Settings" fieldsets.
     $modalContent->findButton('Layout Options')->click();
     $modalContent->findButton('Settings')->click();
 
-    // Fill in the available fields.
     foreach ($layout_properties->getRowsHash() as $property => $value) {
       if ($property === 'layout') {
         continue;
@@ -172,11 +164,9 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
       }
     }
 
-    // Finally, click the "Save" button to add the paragraph.
     $save = $this->waitForElementVisible('css', '.ui-dialog-buttonpane .lpb-btn--save');
     $save->press();
 
-    // Wait until the button pane is gone.
     $this->waitForModalToClose();
   }
 
@@ -204,7 +194,6 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   #[When('I add a :paragraph_type paragraph in the :field_alias form field:')]
   public function addParagraphInFormField(string $paragraph_type, string $field_alias, TableNode $layout_properties): void {
     $this->assertJavaScriptEnabledBrowser();
-    // Get the layout position and the region, if available.
     $layout_position = NULL;
     $region = NULL;
     $paragraph_fields = [];
@@ -220,18 +209,14 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
       }
     }
 
-    // Append the component to the region, which opens the modal.
     $region_element = $this->getRegionToAddInto($field_alias, $layout_position, $region);
     $this->clickAddButtonAtEndOf($region_element, self::REGION_COMPONENT_XPATH);
 
-    // Select the paragraph type.
     $ui_dialog = $this->getSession()->getPage()->find('css', '.ui-dialog');
     $ui_dialog->find('named', ['link', $paragraph_type])->click();
     $this->waitForAjax();
 
-    // Fill fields.
     foreach ($paragraph_fields as $property => $value) {
-      // Split the field value into the field type and the field value.
       $field_type = NULL;
       $field_value = NULL;
       preg_match('/type: ([a-z0-9_]+) - value: (.*)/', $value, $matches);
@@ -244,7 +229,6 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
       }
 
       if ($field_type === 'select') {
-        // Wait for the select field to load.
         $this->getSession()->getPage()->selectFieldOption($property, $field_value);
       }
       elseif ($field_type === 'ckeditor') {
@@ -255,7 +239,6 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
       }
     }
 
-    // Finally, click the "Save" button to add the paragraph.
     $this->getSession()->getPage()->find('css', '.ui-dialog-buttonpane')->pressButton('Save');
     $this->waitForModalToClose();
   }
@@ -552,10 +535,8 @@ JS
    */
   #[When('the layout in position :position from the :field_alias form field should have the following structure:')]
   public function assertLayoutParagraphStructure(string $position, string $field_alias, TableNode $structure): void {
-    $layout_paragraphs = $this->getFormFieldLayoutParagraphs($field_alias);
-    $layout_paragraph = $layout_paragraphs[$position - 1];
+    $layout_paragraph = $this->getSection($position, $field_alias);
     $actual = [];
-    /** @var \Behat\Mink\Element\NodeElement $layout_paragraph */
     foreach ($layout_paragraph->findAll('css', '.layout__region') as $region) {
       $data_region = $region->getAttribute('data-region');
       $actual[$data_region] = [];
@@ -633,7 +614,7 @@ JS
    *   The section element.
    */
   protected function getSection(string $position, ?string $field_alias = NULL): TraversableElement {
-    $sections = $this->getBuilder($field_alias)->findAll('xpath', self::SECTION_XPATH);
+    $sections = $this->getFormFieldLayoutParagraphs($field_alias);
     $this->assertCondition(isset($sections[$position - 1]), "There is no section in position $position.");
 
     return $sections[$position - 1];
@@ -685,8 +666,6 @@ JS
       return $this->getSectionRegion($this->getSection($section_position, $field_alias), $region);
     }
 
-    // Components can only be added into a region, so without a section the last
-    // region of the builder is the one meant.
     $regions = $this->getBuilder($field_alias)->findAll('css', '.js-lpb-region');
     $this->assertCondition(!empty($regions), 'The builder has no region to add a component into.');
 
@@ -694,20 +673,18 @@ JS
   }
 
   /**
-   * Returns a list of layout paragraphs elements.
+   * Returns the sections of the builder, i.e. its top level layout paragraphs.
    *
-   * @param string $field_alias
-   *   The field designator as defined in
-   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::FIELD_MAP.
+   * @param string|null $field_alias
+   *   (optional) The field alias as defined in
+   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::FIELD_MAP. Defaults
+   *   to NULL, which uses the only builder in the page.
    *
    * @return \Behat\Mink\Element\TraversableElement[]
-   *   The layout paragraphs elements.
+   *   The section elements, in document order.
    */
-  protected function getFormFieldLayoutParagraphs(string $field_alias): array {
-    $field = $this->getParagraphsElement($field_alias);
-    $xpath = '//div[contains(concat(" ", @class, " "), " lpb-layout ") and contains(concat(" ", @class, " "), " paragraph--layout ")]';
-    $elements = $field->findAll('xpath', $xpath);
-    return $elements ?? [];
+  protected function getFormFieldLayoutParagraphs(?string $field_alias = NULL): array {
+    return $this->getBuilder($field_alias)->findAll('xpath', self::SECTION_XPATH);
   }
 
   /**
