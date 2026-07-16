@@ -159,6 +159,12 @@ function ventuno_preprocess_node__solution__group_header(array &$variables): voi
       ],
     ];
   }
+  if (!empty($variables['content']['solution_reuse_share'])) {
+    $variables['content']['solution_reuse_share']['#attributes']['class'] = [
+      'btn',
+      'btn-primary',
+    ];
+  }
 }
 
 /**

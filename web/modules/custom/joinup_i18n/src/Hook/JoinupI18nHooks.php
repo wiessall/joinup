@@ -14,6 +14,7 @@ use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Hook\Order\OrderBefore;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Url;
 use Drupal\language\ConfigurableLanguageInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\tmgmt\JobInterface;
@@ -199,6 +200,22 @@ final class JoinupI18nHooks {
         $item->setState(JobItemInterface::STATE_ABORTED, 'Aborted because the source was updated.');
       }
     }
+  }
+
+  /**
+   * Implements hook_entity_operation().
+   */
+  #[Hook('entity_operation')]
+  public function entityOperation(EntityInterface $entity): array {
+    $operations = [];
+    if ($entity->getEntityTypeId() === 'tmgmt_job_item') {
+      $operations['job_item_messages'] = [
+        'title' => $this->t('Messages'),
+        'url' => Url::fromRoute('view.joinup_job_item_messages.page', ['tmgmt_job_item' => $entity->id()]),
+        'weight' => 50,
+      ];
+    }
+    return $operations;
   }
 
   /**

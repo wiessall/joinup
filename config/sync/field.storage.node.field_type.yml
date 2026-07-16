@@ -35,6 +35,9 @@ settings:
     -
       value: newsletter
       label: Newsletter
+    -
+      value: solution_use_cases
+      label: 'Solution use cases'
   allowed_values_function: ''
 module: options
 locked: false

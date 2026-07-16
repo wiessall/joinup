@@ -179,8 +179,8 @@ Feature:
       | Administration 6 |
       | Administration 7 |
     And the following "oss_solution" content:
-      | title      | status    | oss_release_date | oss_available_languages                | oss_used_by                                                                                                            |
-      | With modal | published | 2014-11-19       | it,en,de,pt,eo,fr,he,ja,lt,pl,ro,gd,si | Administration 1,Administration 2,Administration 3,Administration 4,Administration 5,Administration 6,Administration 7 |
+      | title      | status    | oss_release_date | oss_available_languages                | oss_used_by                                                                                                            | langcode |
+      | With modal | published | 2014-11-19       | it,en,de,pt,eo,fr,he,ja,lt,pl,ro,gd,si | Administration 1,Administration 2,Administration 3,Administration 4,Administration 5,Administration 6,Administration 7 | it       |
     And the "With modal" oss_solution has the following validation issues:
       | key                | description         | line | column | type    |
       | validation_error   | There is an error   | 1    | 1      | error   |
@@ -256,6 +256,37 @@ Feature:
     When I am logged in as an "authenticated user"
     And I visit the "oss_validation_issues" field modal for the "Warnings only" "oss_solution" "node" in the "modal" view mode
     Then the response status code should be 403
+
+  # Regression tests for the "more in modal" field route (ISAICP-11405).
+  Scenario: Modal field route enforces entity access, not only field access.
+    Given the following "oss_solution" content:
+      | title        | status    | oss_release_date | oss_archived |
+      | Archived OSS | published | 2014-11-19       | 1            |
+    And the "Archived OSS" oss_solution has the following validation issues:
+      | key            | description       | line | column | type  |
+      | validation_err | There is an error | 1    | 1      | error |
+    # Non-admins cannot view an archived solution, so its field must stay hidden
+    # here too, even though field-level access alone would allow it.
+    When I am logged in as an "authenticated user"
+    And I visit the "oss_validation_issues" field modal for the "Archived OSS" "oss_solution" "node" in the "modal" view mode
+    Then the response status code should be 403
+
+  Scenario: Modal field route rejects an unknown view mode.
+    Given the following "oss_solution" content:
+      | title      | status    | oss_release_date |
+      | Public OSS | published | 2014-11-19       |
+    And the "Public OSS" oss_solution has the following validation issues:
+      | key            | description       | line | column | type  |
+      | validation_err | There is an error | 1    | 1      | error |
+    # A non-existent view mode must 404, not fall back to the default and 200.
+    When I visit the "oss_validation_issues" field modal for the "Public OSS" "oss_solution" "node" in the "no_such_view_mode" view mode
+    Then the response status code should be 404
+
+  Scenario: Modal field route returns a 404 for an unresolvable host entity.
+    # An unresolvable host alias must 404, not leak an uncaught
+    # ResourceNotFoundException (500) from the path processor.
+    When I go to "/eu-oss-catalogue/solutions/no-such-solution/view-field/modal/oss_validation_issues"
+    Then I should get a 404 HTTP response
 
   @javascript
   Scenario: Screenshot carousel with 4 items works as expected.

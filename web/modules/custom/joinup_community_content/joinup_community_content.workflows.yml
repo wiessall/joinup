@@ -37,7 +37,11 @@ node:pre_moderated:
       to: proposed
     publish:
       label: 'Publish'
-      from: [draft, published]
+      from: [draft]
+      to: published
+    update:
+      label: 'Update'
+      from: [published]
       to: published
     approve_proposed:
       label: 'Publish'
@@ -106,7 +110,11 @@ node:post_moderated:
       to: proposed
     publish:
       label: 'Publish'
-      from: [draft, published]
+      from: [draft]
+      to: published
+    update:
+      label: 'Update'
+      from: [published]
       to: published
     approve_proposed:
       label: 'Publish'

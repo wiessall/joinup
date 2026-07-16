@@ -649,6 +649,7 @@ display:
     display_plugin: page
     position: 2
     display_options:
+      rendering_language: '***LANGUAGE_language_interface***'
       fields:
         views_bulk_operations_bulk_form:
           id: views_bulk_operations_bulk_form
