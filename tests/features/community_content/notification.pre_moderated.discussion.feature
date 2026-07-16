@@ -100,6 +100,10 @@ Feature: Notification test for the discussion transitions on a pre moderated par
       | recipient | CC owner                                                                                                          |
       | subject   | Interoperable Europe Portal: Content has been published                                                           |
       | body      | CC Facilitator has published the new discussion - "CC notify pre publish" in the collection: "CC pre collection". |
+    When I mark all emails as read
+    And I go to the edit form of the "CC notify pre publish" discussion
+    And I press "Update"
+    Then 0 e-mail should have been sent
 
     When I am logged in as "CC facilitator"
     And I go to the edit form of the "CC notify pre request changes" discussion

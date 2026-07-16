@@ -546,7 +546,8 @@ class JoinupContext extends RawDrupalContext {
     $entityType = $this->translateEntityTypeAlias($bundle);
     $bundle = $this->translateBundle($bundle);
     $entity = $this->getEntityByLabel($entityType, $title, $bundle);
-    $this->visitPath($entity->toUrl()->toString());
+    $url = $entity->toUrl(options: ['language' => \Drupal::languageManager()->getLanguage('en')]);
+    $this->visitPath($url->toString());
   }
 
   /**
