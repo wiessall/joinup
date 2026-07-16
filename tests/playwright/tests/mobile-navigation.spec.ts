@@ -43,6 +43,8 @@ test.describe("Mobile navigation", () => {
     await authUtils.login(projectConfig.users.user, page);
     await page.goto("/");
     const drawer = await openDrawer(page);
-    await expect(drawer).toHaveScreenshot("mobile-navigation-authenticated.png");
+    await expect(drawer).toHaveScreenshot(
+      "mobile-navigation-authenticated.png",
+    );
   });
 });
