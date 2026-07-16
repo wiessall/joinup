@@ -66,8 +66,8 @@ Feature: Assessment Report Entity Management
     When I click "Affected stakeholders" in the "Modal content" region
     Then I should see the text "Public and/or private stakeholders affected" in the "Modal content" region
     And the page should contain the html text 'aria-placeholder="Select or start typing..."'
-    When I fill in "has_participation[0][inline_entity_form][participant_type]" with "Local public sector body" in the "Modal content" region
-    And I fill in "has_participation[0][inline_entity_form][stakeholder_country]" with "Belgium" in the "Modal content" region
+    When I select "Local public sector body" option from "Participant type"
+    And I select "Belgium" option from "Stakeholder countries"
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
 
     When I click "Interoperability solution" in the "Modal content" region
@@ -95,11 +95,11 @@ Feature: Assessment Report Entity Management
 
     When I click "Affected stakeholders" in the "Modal content" region
     And I should see the text "Check this box to select all European Union countries" in the "Modal content" region
-    And I fill in "has_participation[0][inline_entity_form][participant_type]" with "Local public sector body" in the "Modal content" region
+    And I should see the text "Stakeholder’s countries" in the "Modal content" region
     And I check "Check this box to select all European Union countries"
-    Then I should not see the text "has_participation[0][inline_entity_form][stakeholder_country]" in the "Modal content" region
-    Then I uncheck "Check this box to select all European Union countries"
-    And I fill in "has_participation[0][inline_entity_form][stakeholder_country]" with "Belgium" in the "Modal content" region
+    Then I should not see the text "Stakeholder’s countries" in the "Modal content" region
+    And I uncheck "Check this box to select all European Union countries"
+    And I should see the text "Stakeholder’s countries" in the "Modal content" region
 
     When I click "Supporting document" in the "Modal content" region
     And I attach the file "text.pdf" to "Add a new file"
@@ -510,8 +510,8 @@ Feature: Assessment Report Entity Management
     And I fill in "description[0][value]" with "Test binding requirement description" in the "Modal content" region
 
     When I click "Affected stakeholders" in the "Modal content" region
-    And I fill in "has_participation[0][inline_entity_form][participant_type]" with "Local public sector body" in the "Modal content" region
-    And I fill in "has_participation[0][inline_entity_form][stakeholder_country]" with "Belgium" in the "Modal content" region
+    And I select "Local public sector body" option from "Participant type"
+    And I select "Belgium" option from "Stakeholder countries"
 
     Then I press "Save" in the "Modal buttons" region
     And the modal should be closed

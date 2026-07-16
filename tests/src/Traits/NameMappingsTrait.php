@@ -482,6 +482,8 @@ trait NameMappingsTrait {
       'Geographical coverage' => 'spatial_coverage',
       'Language availability' => 'language',
       'Licence legal type' => 'legal_type',
+      'Participant type' => 'participant_type',
+      'Stakeholder countries' => 'stakeholder_country',
       'Referenced solution(s)' => 'referenced_solution',
       'Related solutions' => 'related_solutions',
       'Scope' => 'field_scope',
