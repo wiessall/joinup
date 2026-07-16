@@ -300,7 +300,8 @@ class IopeuCommunityMonitoring extends BlockBase implements ContainerFactoryPlug
     $query->join('node__field_state', 's', 's.entity_id = nfd.nid');
     $query->condition('nfd.type', 'solution')
       ->condition('s.field_state_value', 'published')
-      ->condition('nfd.status', 1);
+      ->condition('nfd.status', 1)
+      ->condition('n.default_langcode', '1');
 
     $count = (int) $query->countQuery()->execute()->fetchField();
     $this->cacheSet(cid: $cid, data: $count, tags: static::INTEROPERABLE_SOLUTION_COUNT_TAGS);
