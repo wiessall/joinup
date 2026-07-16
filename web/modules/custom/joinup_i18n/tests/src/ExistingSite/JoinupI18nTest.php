@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_i18n\ExistingSite;
 
+use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_i18n\Hook\JoinupI18nHooks;
 use Drupal\language\Entity\ConfigurableLanguage;
@@ -15,6 +16,7 @@ use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\tmgmt\JobInterface;
 use Drupal\tmgmt\JobItemInterface;
 use Drupal\tmgmt_ec_etranslation\Plugin\tmgmt\Translator\ETranslationTranslator;
+use Drupal\views\Views;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
@@ -275,6 +277,42 @@ final class JoinupI18nTest extends JoinupExistingSiteTestBase {
     foreach ($otherItems as $item) {
       $this->assertFalse($item->isAborted());
     }
+
+    // Clean up the job items created for this node.
+    $itemStorage->delete($itemStorage->loadMultiple($this->jobItemIds($node)));
+  }
+
+  /**
+   * Tests the job item messages page and its operation link.
+   *
+   * @legacy-covers \Drupal\joinup_i18n\Hook\JoinupI18nHooks::entityOperation
+   */
+  public function testJobItemMessagesPage(): void {
+    $node = $this->createNode([
+      'type' => 'solution',
+      'og_audience' => \Drupal::service('entity.repository')->loadEntityByUuid('node', JoinupCollectionHelper::JOINUP_COLLECTION_UUID),
+      'title' => 'Job item messages',
+      'field_state' => 'proposed',
+    ]);
+    $node->setNewRevision();
+    $node->set('field_state', 'published')->save();
+
+    $itemStorage = \Drupal::entityTypeManager()->getStorage('tmgmt_job_item');
+    $itemId = $this->jobItemIds($node)[0];
+    $item = $itemStorage->load($itemId);
+    $item->addMessage('A message only on this job item.');
+
+    // The list builder links a "Messages" operation.
+    $operations = \Drupal::entityTypeManager()->getListBuilder('tmgmt_job_item')->getOperations($item);
+    $this->assertArrayHasKey('job_item_messages', $operations);
+    $url = $operations['job_item_messages']['url'];
+    $this->assertSame("/admin/tmgmt/items/$itemId/messages", $url->toString());
+    $this->assertFalse($url->access(new AnonymousUserSession()));
+
+    // The page lists the item's own messages.
+    $build = Views::getView('joinup_job_item_messages')->preview('page', [$itemId]);
+    $html = (string) \Drupal::service('renderer')->renderInIsolation($build);
+    $this->assertStringContainsString('A message only on this job item.', $html);
 
     // Clean up the job items created for this node.
     $itemStorage->delete($itemStorage->loadMultiple($this->jobItemIds($node)));

@@ -10,6 +10,7 @@ use Drupal\Core\PathProcessor\InboundPathProcessorInterface;
 use Drupal\Core\PathProcessor\OutboundPathProcessorInterface;
 use Drupal\Core\Render\BubbleableMetadata;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -65,7 +66,14 @@ class ModalRouteProcessor implements InboundPathProcessorInterface, OutboundPath
     // Get back raw entity_type_id and entity_id from the canonical path.
     // First, get the route object.
     $hostAliasWithBase = $request->getBasePath() . $hostAlias;
-    $matchedRoute = $this->getRouter()->match($hostAlias);
+    // Leave the path untouched when the host part does not resolve to a route,
+    // so the normal routing produces a 404 instead of a fatal error.
+    try {
+      $matchedRoute = $this->getRouter()->match($hostAlias);
+    }
+    catch (ResourceNotFoundException) {
+      return $path;
+    }
     $entityCandidates = array_filter(
       $matchedRoute,
       function ($default) use ($hostAliasWithBase) {
@@ -111,7 +119,7 @@ class ModalRouteProcessor implements InboundPathProcessorInterface, OutboundPath
     // its canonical path.
     $entityCanonical = $this->entityTypeManager->getStorage($entityTypeId)
       ->load($entityId)
-      ->toUrl()
+      ->toUrl(options: array_intersect_key($options, ['language' => 1]))
       ->toString();
     $entityCanonicalWithoutBase = preg_replace(
       '#^' . preg_quote($request->getBasePath()) . '#',

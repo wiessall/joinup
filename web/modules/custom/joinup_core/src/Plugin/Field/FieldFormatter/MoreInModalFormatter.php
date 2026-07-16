@@ -14,6 +14,7 @@ use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Field\FormatterInterface;
 use Drupal\Core\Field\FormatterPluginManager;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
@@ -38,6 +39,7 @@ class MoreInModalFormatter extends FormatterBase {
     array $third_party_settings,
     protected readonly EntityDisplayRepositoryInterface $displayRepository,
     protected readonly FormatterPluginManager $formatterManager,
+    protected readonly LanguageManagerInterface $languageManager,
   ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
   }
@@ -60,7 +62,8 @@ class MoreInModalFormatter extends FormatterBase {
       $configuration['view_mode'],
       $configuration['third_party_settings'],
       $container->get('entity_display.repository'),
-      $container->get('plugin.manager.field.formatter')
+      $container->get('plugin.manager.field.formatter'),
+      $container->get('language_manager'),
     );
   }
 
@@ -157,6 +160,7 @@ class MoreInModalFormatter extends FormatterBase {
           'viewMode' => $this->getSetting('modal_view_mode'),
           'field' => $items->getName(),
         ],
+        ['language' => $this->languageManager->getLanguage($langcode)]
       );
     $renderable['#more_link_title'] = $modalLinkLabel;
     $renderable['#more_link_url'] = $url;
