@@ -1,0 +1,23 @@
+{#
+/**
+ * @file
+ * Default theme implementation of a solution's assessment count.
+ *
+ * Available variables:
+ * - count: the number of published assessment reports referencing the solution.
+ *
+ * @ingroup themeable
+ */
+#}
+<li class="group-banner__li text-muted">
+  <svg class="bi icon--xs me-1">
+    <use xlink:href="{{ bcl_icon_path }}#file-earmark-check"></use>
+  </svg>
+  <span>
+    {% trans %}
+      1 Assessment
+    {% plural count %}
+      {{ count }} Assessments
+    {% endtrans %}
+  </span>
+</li>

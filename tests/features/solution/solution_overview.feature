@@ -129,7 +129,7 @@ Feature: Solutions Overview
     And I press "Add new owner"
     And I fill in "Name" with "Ambrosio Morison"
     And I select "Company" options from "Type"
-    And I select "Belgium" from "Country"
+    And I select "Belgium" option from "Country"
     # Create contact information.
     And I fill in "contact[form][0][title][0][value]" with "Ambrosio Morison"
     And I fill in "contact[form][0][email][value]" with "ambrosio.morison@example.com"

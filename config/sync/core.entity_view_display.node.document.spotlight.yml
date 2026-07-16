@@ -72,6 +72,7 @@ hidden:
   private_message_link: true
   published_at: true
   read_more: true
+  referenced_solution: true
   report: true
   resources: true
   search_api_excerpt: true

@@ -1,0 +1,3 @@
+entity_reference_selection.joinup_published_solution:
+  type: entity_reference_selection.default
+  label: 'Published solution selection handler settings'

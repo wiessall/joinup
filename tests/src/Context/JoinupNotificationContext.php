@@ -101,7 +101,7 @@ class JoinupNotificationContext extends RawDrupalContext {
       $recipient = $user->getEmail();
     }
 
-    $mails = $this->getEmailsBySubjectAndMail($subject, $recipient, FALSE, !empty($recipient_list_contains));
+    $mails = $this->getEmailsBySubjectAndMail($recipient, $subject, FALSE, !empty($recipient_list_contains));
     $mail_found = NULL;
     foreach ($mails as $mail) {
       // Check the sender email if it is set.
@@ -244,7 +244,7 @@ class JoinupNotificationContext extends RawDrupalContext {
    */
   #[Given('/^the email sent to "([^"]*)" with subject "([^"]*)" contains "([^"]*)" attachment$/')]
   public function theEmailSentToWithSubjectContainsAttachment(string $email, string $subject, string $file): void {
-    $mails = $this->getEmailsBySubjectAndMail($subject, $email);
+    $mails = $this->getEmailsBySubjectAndMail($email, $subject);
     foreach ($mails as $mail) {
       foreach ($mail['params']['attachments'] ?? [] as $attachment) {
         if ($attachment['filename'] === $file) {
@@ -273,7 +273,7 @@ class JoinupNotificationContext extends RawDrupalContext {
    */
   #[Given('/^the email sent to "([^"]*)" with subject "([^"]*)" contains header "([^"]*)" with value "([^"]*)"$/')]
   public function theEmailSentToWithSubjectContainsHeaderValue(string $email, string $subject, string $header_name, string $header_value): void {
-    $mails = $this->getEmailsBySubjectAndMail($subject, $email);
+    $mails = $this->getEmailsBySubjectAndMail($email, $subject);
     foreach ($mails as $mail) {
       if (isset($mail['headers'][$header_name]) && $mail['headers'][$header_name] === $header_value) {
         return;
@@ -328,7 +328,7 @@ class JoinupNotificationContext extends RawDrupalContext {
       throw new \InvalidArgumentException("'$username_or_email' is neither a valid username, nor a valid email.");
     }
 
-    $mails = $this->getEmailsBySubjectAndMail($subject, $recipient);
+    $mails = $this->getEmailsBySubjectAndMail($recipient, $subject);
     if ($match && empty($mails)) {
       throw new ExpectationException("No email with subject '$subject' was sent to '$recipient'.", $this->getSession()->getDriver());
     }
@@ -527,7 +527,7 @@ class JoinupNotificationContext extends RawDrupalContext {
    */
   #[When('I click the :link_text link in the email sent to :recipent having the subject :subject')]
   public function clickLinkInHtmlMail(string $link_text, string $recipient, string $subject): void {
-    $mail = $this->getEmailsBySubjectAndMail($subject, $recipient)[0];
+    $mail = $this->getEmailsBySubjectAndMail($recipient, $subject)[0];
     $body = (string) $mail['body'];
     $crawler = new Crawler($body);
     $link = $crawler->filterXPath('//a[text()="' . $link_text . '"]');
