@@ -89,6 +89,8 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
 
     $items = [];
 
+    $mobile_links = $this->getLandingPageLinks($cacheability);
+
     if (!$logged_in) {
       $anonymous_links = $this->getAnonymousActions();
       $items[] = [
@@ -100,16 +102,17 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
         'links' => [$anonymous_links['get_started']],
       ];
 
-      $mobile_links = [
-        [
-          'label' => $this->t('Home'),
-          'link' => Url::fromRoute('<front>'),
-        ],
-        $anonymous_links['sign_in'],
-      ];
+      array_unshift($mobile_links, [
+        'label' => $this->t('Home'),
+        'link' => Url::fromRoute('<front>'),
+      ]);
+      $mobile_links[] = $anonymous_links['sign_in'];
       if ($about_us_link = $this->getAboutUsLink($cacheability)) {
         $mobile_links[] = $about_us_link;
       }
+    }
+
+    if ($mobile_links) {
       $items[] = [
         'type' => 'mmenu',
         'id' => 'navbar-toggler',
@@ -204,6 +207,33 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
       'label' => $this->t('About us'),
       'link' => $joinup_collection->toUrl(),
     ];
+  }
+
+  /**
+   * Builds the navbar (landing pages) menu links for the mobile drawer.
+   *
+   * @param \Drupal\Core\Cache\CacheableMetadata $cacheability
+   *   Collects the cacheability of the navbar menu.
+   *
+   * @return array
+   *   The navbar menu links in the BCL header format.
+   */
+  protected function getLandingPageLinks(CacheableMetadata $cacheability): array {
+    $build = $this->blockManager->createInstance('system_menu_block:navbar')->build();
+    $cacheability->addCacheableDependency(CacheableMetadata::createFromRenderArray($build));
+
+    $links = [];
+    foreach ($build['#items'] ?? [] as $item) {
+      $link = [
+        'label' => $item['title'],
+        'link' => $item['url'],
+      ];
+      if (!empty($item['in_active_trail'])) {
+        $link['attributes'] = ['class' => ['is-active']];
+      }
+      $links[] = $link;
+    }
+    return $links;
   }
 
   /**

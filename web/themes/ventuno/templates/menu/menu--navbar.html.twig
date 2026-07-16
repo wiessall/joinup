@@ -3,8 +3,9 @@
  * @file
  * Theme override for the navbar (landing pages) menu in the header.
  *
- * Renders the menu twice to match the BCL navbar: inline items for large
- * screens and a mobile "mmenu" drawer for small screens.
+ * Renders the inline navbar items for large screens. The single mobile "mmenu"
+ * drawer is rendered by the header navigation block.
+ * @see \Drupal\ventuno_helper\Plugin\Block\HeaderNavigationBlock
  *
  * The oe_bootstrap_theme base theme preprocesses the menu items into the BCL
  * navigation structure: items with children become
@@ -52,32 +53,3 @@
     {% endif %}
   </li>
 {% endfor %}
-<li class="nav-item dropdown mmenu-nav d-xl-none order-1">
-  <button id="landing-pages" class="nav-link mmenu-nav__toggle" type="button" aria-label="{{ 'Toggle menu'|t }}">
-    <span class="visually-hidden">{{ 'Toggle menu'|t }}</span>
-    <svg class="bi icon--s">
-      <use xlink:href="{{ bcl_icon_path }}#justify"></use>
-    </svg>
-  </button>
-  <div class="mmenu-nav__menu p-0 d-none" aria-labelledby="landing-pages">
-    <ul>
-      {% for item in items %}
-        {% set is_dropdown = item.dropdown is defined and item.dropdown %}
-        {% set link = is_dropdown ? item.trigger : item %}
-        {% set children = is_dropdown ? item.items : [] %}
-        <li{{ create_attribute({class: link.in_active_trail ? 'Selected'}) }}>
-          <a href="{{ link.path }}"{{ create_attribute().addClass(link.in_active_trail ? 'is-active') }}>{{ link.label }}</a>
-          {% if children %}
-            <ul>
-              {% for child in children %}
-                <li{{ create_attribute({class: child.in_active_trail ? 'Selected'}) }}>
-                  <a href="{{ child.path }}"{{ create_attribute().addClass(child.in_active_trail ? 'is-active') }}>{{ child.label }}</a>
-                </li>
-              {% endfor %}
-            </ul>
-          {% endif %}
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
-</li>
