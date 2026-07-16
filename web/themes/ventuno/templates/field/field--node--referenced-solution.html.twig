@@ -1,0 +1,26 @@
+{#
+/**
+ * @file
+ * Template for referenced_solution field.
+ */
+#}
+{% set label_tag = 'h3' %}
+{%
+  set title_classes = [
+    'field__label',
+    label_display == 'visually_hidden' ? 'visually-hidden',
+  ]
+%}
+{%
+  set classes = [
+    'abstract',
+    'bg-light',
+    'p-4',
+    'mt-3',
+    'mb-4',
+    'field--name-' ~ field_name|clean_class,
+    bundle|clean_class ~ '__' ~ field_name_clean|clean_class,
+    label_display == 'inline' ? 'd-flex',
+  ]
+%}
+{% extends 'field.html.twig' %}

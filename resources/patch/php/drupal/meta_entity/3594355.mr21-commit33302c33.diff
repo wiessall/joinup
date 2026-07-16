@@ -1,0 +1,28 @@
+diff --git a/src/Entity/MetaEntity.php b/src/Entity/MetaEntity.php
+index b79b68b8fa2936ce6f8538c510ad4211095dffbd..f73d6549aa094db5e14a4dbafd1c681ce45d5493 100644
+--- a/src/Entity/MetaEntity.php
++++ b/src/Entity/MetaEntity.php
+@@ -163,20 +163,9 @@ class MetaEntity extends ContentEntityBase implements MetaEntityInterface {
+    *   A meta entity.
+    */
+   protected static function loadOrCreateHelper(string $meta_entity_type_id, string $meta_entity_bundle, ContentEntityInterface $target_entity): MetaEntityInterface {
+-    $storage = \Drupal::entityTypeManager()->getStorage($meta_entity_type_id);
+-    $ids = $storage->getQuery()
+-      ->accessCheck(FALSE)
+-      ->condition('type', $meta_entity_bundle)
+-      ->condition('target.target_type', $target_entity->getEntityTypeId())
+-      ->condition('target.target_id', $target_entity->id())
+-      ->execute();
+-
+-    if ($ids) {
+-      $id = reset($ids);
+-      $meta_entity = $storage->load($id);
+-    }
+-    else {
+-      $meta_entity = $storage->create([
++    $meta_entity = \Drupal::service('meta_entity.repository')->getMetaEntityForEntity($target_entity, $meta_entity_bundle);
++    if (!$meta_entity) {
++      $meta_entity = \Drupal::entityTypeManager()->getStorage($meta_entity_type_id)->create([
+         'type' => $meta_entity_bundle,
+         'target' => $target_entity,
+       ]);

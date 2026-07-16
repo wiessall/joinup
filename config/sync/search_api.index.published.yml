@@ -5,7 +5,7 @@ dependencies:
   config:
     - field.storage.assessment.binding_requirement
     - field.storage.assessment.thematic_area
-    - field.storage.meta_entity.field_featured
+    - field.storage.meta_entity.featured
     - field.storage.meta_entity.field_pinned_in
     - field.storage.meta_entity.field_shared_in
     - field.storage.node.abstract
@@ -571,11 +571,11 @@ field_settings:
   node_featured:
     label: 'Featured site-wide'
     datasource_id: 'entity:node'
-    property_path: 'featured:entity:field_featured'
+    property_path: 'featured:entity:featured'
     type: string
     dependencies:
       config:
-        - field.storage.meta_entity.field_featured
+        - field.storage.meta_entity.featured
       module:
         - meta_entity
   node_pinned_in:
@@ -735,11 +735,11 @@ field_settings:
   site_featured:
     label: Featured
     datasource_id: 'entity:node'
-    property_path: 'featured:entity:field_featured'
+    property_path: 'featured:entity:featured'
     type: boolean
     dependencies:
       config:
-        - field.storage.meta_entity.field_featured
+        - field.storage.meta_entity.featured
       module:
         - meta_entity
   solution_type:

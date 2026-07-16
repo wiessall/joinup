@@ -59,15 +59,15 @@ Feature: Assessment Report Entity Management
     And I should see the text "Specify the trans-European digital public service(s) concerned" in the "Modal content" region
     And I should see the text "Specify the concerned function(s) of trans-European digital public service(s)" in the "Modal content" region
     And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
-    And I select "General public services" from "affects[0][inline_entity_form][thematic_area][]" in the "Modal content" region
-    And I select "Luxembourg" from "affects[0][inline_entity_form][countries][]" in the "Modal content" region
+    And I fill in "affects[0][inline_entity_form][thematic_area]" with "General public services" in the "Modal content" region
+    And I fill in "affects[0][inline_entity_form][countries]" with "Luxembourg" in the "Modal content" region
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
 
     When I click "Affected stakeholders" in the "Modal content" region
     Then I should see the text "Public and/or private stakeholders affected" in the "Modal content" region
     And the page should contain the html text 'aria-placeholder="Select or start typing..."'
-    When I select "Local public sector body" from "has_participation[0][inline_entity_form][participant_type][]" in the "Modal content" region
-    And I select "Belgium" from "has_participation[0][inline_entity_form][stakeholder_country][]" in the "Modal content" region
+    When I fill in "has_participation[0][inline_entity_form][participant_type]" with "Local public sector body" in the "Modal content" region
+    And I fill in "has_participation[0][inline_entity_form][stakeholder_country]" with "Belgium" in the "Modal content" region
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
 
     When I click "Interoperability solution" in the "Modal content" region
@@ -91,15 +91,15 @@ Feature: Assessment Report Entity Management
 
     When I click "Concerned public services" in the "Modal content" region
     And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
-    And I select "General public services" from "affects[0][inline_entity_form][thematic_area][]" in the "Modal content" region
+    And I fill in "affects[0][inline_entity_form][thematic_area]" with "General public services" in the "Modal content" region
 
     When I click "Affected stakeholders" in the "Modal content" region
     And I should see the text "Check this box to select all European Union countries" in the "Modal content" region
-    And I select "Local public sector body" from "has_participation[0][inline_entity_form][participant_type][]" in the "Modal content" region
+    And I fill in "has_participation[0][inline_entity_form][participant_type]" with "Local public sector body" in the "Modal content" region
     And I check "Check this box to select all European Union countries"
-    Then I should not see the text "has_participation[0][inline_entity_form][stakeholder_country][]" in the "Modal content" region
+    Then I should not see the text "has_participation[0][inline_entity_form][stakeholder_country]" in the "Modal content" region
     Then I uncheck "Check this box to select all European Union countries"
-    And I select "Belgium" from "has_participation[0][inline_entity_form][stakeholder_country][]" in the "Modal content" region
+    And I fill in "has_participation[0][inline_entity_form][stakeholder_country]" with "Belgium" in the "Modal content" region
 
     When I click "Supporting document" in the "Modal content" region
     And I attach the file "text.pdf" to "Add a new file"
@@ -493,8 +493,8 @@ Feature: Assessment Report Entity Management
     And I fill in "description[0][value]" with "Test binding requirement description" in the "Modal content" region
 
     When I click "Affected stakeholders" in the "Modal content" region
-    And I select "Local public sector body" from "has_participation[0][inline_entity_form][participant_type][]" in the "Modal content" region
-    And I select "Belgium" from "has_participation[0][inline_entity_form][stakeholder_country][]" in the "Modal content" region
+    And I fill in "has_participation[0][inline_entity_form][participant_type]" with "Local public sector body" in the "Modal content" region
+    And I fill in "has_participation[0][inline_entity_form][stakeholder_country]" with "Belgium" in the "Modal content" region
 
     Then I press "Save" in the "Modal buttons" region
     And the modal should be closed

@@ -36,7 +36,7 @@ Feature: Contact Information entities don't cause exceptions because of their in
     And I press "Add new owner"
     And I fill in "Name" with "Ms. Jane Doe PHD"
     And I select "Company" options from "Type"
-    And I select "Belgium" from "Country"
+    And I select "Belgium" option from "Country"
     And I press "Create owner"
 
     # Add the contact information entity.

@@ -10,7 +10,10 @@ template: col_arc_del_no_request
 label: 'Collection archive/delete without request'
 description: 'Template id 13 - This will be sent in case the deletion/archival happened without request'
 text:
-  1:
+  -
+    value: '<p>The @entity:bundle @entity:title was @transition:request_action:past.</p>'
+    format: full_html
+  -
     value: '<p>Your @entity:bundle "@entity:title" has been @transition:request_action:past.</p>@transition:archive:extra:owner'
     format: full_html
 settings:
