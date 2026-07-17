@@ -6,7 +6,12 @@ dependencies:
     - field.storage.node.field_event_agenda
     - node.type.event
   module:
+    - linkchecker
     - text
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: html_link_extractor
 _core:
   default_config_hash: rk5U00a-oIG9zGqHky9432HZbDxuRQcfTZnnUppXWCQ
 id: node.event.field_event_agenda
