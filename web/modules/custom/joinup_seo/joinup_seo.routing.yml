@@ -1,0 +1,6 @@
+joinup_seo.adms_ap_context:
+  path: '/assets/adms-ap-2.01.jsonld'
+  defaults:
+    _controller: 'Drupal\joinup_seo\Controller\JoinupSeoContextController::admsApContext'
+  requirements:
+    _access: 'TRUE'
