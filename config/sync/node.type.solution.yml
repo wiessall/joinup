@@ -7,11 +7,11 @@ dependencies:
     - rdf_sync
 third_party_settings:
   menu_ui:
-    available_menus: {  }
+    available_menus: { }
     parent: ''
   rdf_sync:
     type: 'http://www.w3.org/ns/dcat#Dataset'
-    uri_plugin: null
+    uri_plugin: 'joinup_po_namespace:w21'
     fields:
       title:
         value:
@@ -25,6 +25,14 @@ third_party_settings:
         value:
           predicate: 'http://purl.org/dc/terms/issued'
           type: 'xsd:dateTime'
+      distributions:
+        target_id:
+          predicate: 'http://www.w3.org/ns/dcat#distribution'
+          type: resource
+      releases:
+        target_id:
+          predicate: 'http://purl.org/dc/terms/hasVersion'
+          type: resource
 label_singular: solution
 label_plural: solutions
 label_count:
