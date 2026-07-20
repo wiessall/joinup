@@ -11,6 +11,7 @@
         "ext-memcached": "*",
         "ext-pdo": "*",
         "ext-simplexml": "*",
+        "ext-zip": "*",
         "bitbucket/client": "^5.1",
         "cfpinto/graphql": "^2.0",
         "composer/installers": "^2",
@@ -153,8 +154,7 @@
         "psr/http-factory-implementation": "^1.0",
         "sweetrdf/easyrdf": "^1.9",
         "symfony/http-client": "^6.4",
-        "turbojettechnologies/colorbox": "^1.7.0",
-        "ext-zip": "*"
+        "turbojettechnologies/colorbox": "^1.7.0"
     },
     "require-dev": {
         "ext-fileinfo": "*",
