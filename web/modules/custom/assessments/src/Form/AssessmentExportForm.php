@@ -8,11 +8,9 @@ use Drupal\assessments\AssessmentExportBatch;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\StreamWrapper\PublicStream;
 
 /**
  * Form to export all reports PDF files in zip archive.
@@ -23,7 +21,6 @@ class AssessmentExportForm extends FormBase {
 
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
-    protected FileSystemInterface $fileSystem,
     protected FileUrlGeneratorInterface $fileUrlGenerator,
     protected DateFormatterInterface $dateFormatter,
   ) {}
@@ -66,14 +63,6 @@ class AssessmentExportForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    $directory = AssessmentExportBatch::getExportLocation();
-
-    if (is_dir($directory)) {
-      foreach ($this->fileSystem->scanDirectory($directory, '/.*/') as $file) {
-        $this->fileSystem->delete($file->uri);
-      }
-    }
-
     $storage = $this->entityTypeManager->getStorage('assessment');
 
     $ids = $storage->getQuery()
@@ -82,7 +71,7 @@ class AssessmentExportForm extends FormBase {
       ->accessCheck(FALSE)
       ->execute();
 
-    $operations = [];
+    $operations[] = [[AssessmentExportBatch::class, 'prepareExportDirectory']];
     foreach ($ids as $id) {
       $operations[] = [
         [AssessmentExportBatch::class, 'generatePdf'],

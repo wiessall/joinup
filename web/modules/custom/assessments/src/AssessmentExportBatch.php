@@ -17,6 +17,25 @@ final class AssessmentExportBatch {
   public const string FILE_NAME = 'assessments.zip';
 
   /**
+   * Prepares directory for reports files and archive.
+   */
+  public static function prepareExportDirectory(): void {
+    $fileSystem = \Drupal::service('file_system');
+
+    $directory = self::getExportLocation();
+    if (is_dir($directory)) {
+      foreach ($fileSystem->scanDirectory($directory, '/.*/') as $file) {
+        $fileSystem->delete($file->uri);
+      }
+    }
+
+    $fileSystem->prepareDirectory(
+      $directory,
+      FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS,
+    );
+  }
+
+  /**
    * Generates a PDF for a single assessment report.
    *
    * @param int $assessmentId
@@ -28,8 +47,6 @@ final class AssessmentExportBatch {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public static function generatePdf(int $assessmentId, array &$context): void {
-    self::prepareExportDirectory();
-
     $report = \Drupal::entityTypeManager()
       ->getStorage('assessment')
       ->load($assessmentId);
@@ -93,7 +110,7 @@ final class AssessmentExportBatch {
    */
   private static function createZip(array $files): void {
     $fileSystem = \Drupal::service('file_system');
-    self::prepareExportDirectory();
+
     $zipPath = self::getExportLocation(AssessmentExportBatch::FILE_NAME);
     $zip = new \ZipArchive();
 
@@ -110,18 +127,6 @@ final class AssessmentExportBatch {
 
       $zip->addFile($path, basename($path));
     }
-  }
-
-  /**
-   * Prepares directory for reports files and archive.
-   */
-  private static function prepareExportDirectory(): void {
-    $fileSystem = \Drupal::service('file_system');
-    $destination = static::getExportLocation();
-    $fileSystem->prepareDirectory(
-      $destination,
-      FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS,
-    );
   }
 
   /**
