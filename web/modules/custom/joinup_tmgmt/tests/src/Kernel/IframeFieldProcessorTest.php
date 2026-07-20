@@ -24,6 +24,10 @@ class IframeFieldProcessorTest extends ContentEntityTestBase {
   protected static $modules = [
     'joinup_tmgmt',
     'iframe',
+    'path',
+    'path_alias',
+    'token',
+    'pathauto',
   ];
 
   /**
@@ -31,6 +35,8 @@ class IframeFieldProcessorTest extends ContentEntityTestBase {
    */
   public function setUp(): void {
     parent::setUp();
+
+    $this->installEntitySchema('path_alias');
 
     $field_storage = FieldStorageConfig::create([
       'field_name' => 'field_iframe',
