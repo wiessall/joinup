@@ -9,7 +9,6 @@ dev:
     - config_update
     - devel
     - field_ui
-    - masquerade
     - og_ui
     - page_manager_ui
     - stage_file_proxy
