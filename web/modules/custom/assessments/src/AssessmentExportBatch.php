@@ -35,19 +35,19 @@ final class AssessmentExportBatch {
     if (!$report) {
       return;
     }
+    $print_builder = \Drupal::service('entity_print.print_builder');
+    $print_engine = \Drupal::service('plugin.manager.entity_print.print_engine')
+      ->createSelectedInstance('pdf');
 
-    foreach ($report->get('documents') as $document) {
-      $file = $document->entity;
+    $destination = PublicStream::basePath() . self::EXPORT_PATH  . $report->label() . '.pdf';
 
-      if (!$file instanceof FileInterface) {
-        continue;
-      }
+    $print_builder->savePrintable(
+      [$report],
+      $print_engine,
+      $destination,
+    );
 
-      $source = $file->getFileUri();
-      $destination = PublicStream::basePath() . AssessmentExportBatch::EXPORT_PATH . basename($source);
-      \Drupal::service('file_system')->copy($source, $destination);
-      $context['results'][] = $destination;
-    }
+    $context['results'][] = $destination;
   }
 
   /**
