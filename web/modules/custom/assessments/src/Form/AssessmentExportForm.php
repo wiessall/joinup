@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\assessments\Form;
 
 use Drupal\assessments\AssessmentExportBatch;
+use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileSystemInterface;
@@ -24,6 +25,7 @@ class AssessmentExportForm extends FormBase {
     protected EntityTypeManagerInterface $entityTypeManager,
     protected FileSystemInterface $fileSystem,
     protected FileUrlGeneratorInterface $fileUrlGenerator,
+    protected DateFormatterInterface $dateFormatter,
   ) {}
 
   /**
@@ -39,10 +41,16 @@ class AssessmentExportForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state): array {
     $zipUri = AssessmentExportBatch::getZipUri();
     if ($zipUri && file_exists($zipUri)) {
+      $creationTime = filectime($zipUri);
       $form['existing'] = [
         '#type' => 'link',
         '#title' => $this->t('Download assessments.zip'),
         '#url' => $this->fileUrlGenerator->generate($zipUri),
+        '#prefix' => '<div>',
+        '#suffix' => ' - ' . match(TRUE) {
+          $creationTime === FALSE => $this->t('cannot determine the file creation time'),
+          default => $this->dateFormatter->format($creationTime, 'custom', 'Y-m-d H:i'),
+        } . '</div>',
       ];
     }
 
