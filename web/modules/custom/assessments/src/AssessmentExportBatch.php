@@ -6,7 +6,6 @@ namespace Drupal\assessments;
 
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\StreamWrapper\PublicStream;
-use Drupal\file\FileInterface;
 
 /**
  * Batch process for export reports pdf as zip archive.
@@ -39,7 +38,7 @@ final class AssessmentExportBatch {
     $print_engine = \Drupal::service('plugin.manager.entity_print.print_engine')
       ->createSelectedInstance('pdf');
 
-    $destination = PublicStream::basePath() . self::EXPORT_PATH  . $report->label() . '.pdf';
+    $destination = PublicStream::basePath() . self::EXPORT_PATH . $report->label() . '.pdf';
 
     $print_builder->savePrintable(
       [$report],
