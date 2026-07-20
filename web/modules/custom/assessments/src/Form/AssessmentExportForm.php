@@ -39,13 +39,13 @@ class AssessmentExportForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
-    $zipUri = AssessmentExportBatch::getZipUri();
-    if ($zipUri && file_exists($zipUri)) {
-      $creationTime = filectime($zipUri);
+    $zipPath = AssessmentExportBatch::getExportLocation(AssessmentExportBatch::FILE_NAME);
+    if ($zipPath && file_exists($zipPath)) {
+      $creationTime = filectime($zipPath);
       $form['existing'] = [
         '#type' => 'link',
-        '#title' => $this->t('Download assessments.zip'),
-        '#url' => $this->fileUrlGenerator->generate($zipUri),
+        '#title' => $this->t('Download @file', ['@file' => AssessmentExportBatch::FILE_NAME]),
+        '#url' => $this->fileUrlGenerator->generate($zipPath),
         '#prefix' => '<div>',
         '#suffix' => ' - ' . match(TRUE) {
           $creationTime === FALSE => $this->t('cannot determine the file creation time'),
@@ -66,7 +66,7 @@ class AssessmentExportForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    $directory = PublicStream::basePath() . AssessmentExportBatch::EXPORT_PATH;
+    $directory = AssessmentExportBatch::getExportLocation();
 
     if (is_dir($directory)) {
       foreach ($this->fileSystem->scanDirectory($directory, '/.*/') as $file) {

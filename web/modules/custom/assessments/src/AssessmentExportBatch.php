@@ -12,7 +12,9 @@ use Drupal\Core\StreamWrapper\PublicStream;
  */
 final class AssessmentExportBatch {
 
-  const EXPORT_PATH = '/assessments/pdf/';
+  private const string EXPORT_PATH = 'assessments/pdf';
+
+  public const string FILE_NAME = 'assessments.zip';
 
   /**
    * Generates a PDF for a single assessment report.
@@ -27,6 +29,7 @@ final class AssessmentExportBatch {
    */
   public static function generatePdf(int $assessmentId, array &$context): void {
     self::prepareExportDirectory();
+
     $report = \Drupal::entityTypeManager()
       ->getStorage('assessment')
       ->load($assessmentId);
@@ -39,7 +42,7 @@ final class AssessmentExportBatch {
       ->createSelectedInstance('pdf');
 
     $filename = str_replace(['/', '\\'], '', $report->label()) . '.pdf';
-    $destination = self::EXPORT_PATH . $filename;
+    $destination = self::EXPORT_PATH . '/' . $filename;
 
     $printBuilder->savePrintable(
       [$report],
@@ -48,7 +51,7 @@ final class AssessmentExportBatch {
       $destination,
     );
 
-    $context['results'][] = PublicStream::basePath() . $destination;
+    $context['results'][] = self::getExportLocation($filename);
   }
 
   /**
@@ -91,11 +94,11 @@ final class AssessmentExportBatch {
   private static function createZip(array $files): void {
     $fileSystem = \Drupal::service('file_system');
     self::prepareExportDirectory();
-    $zipUri = self::getZipUri();
+    $zipPath = self::getExportLocation(AssessmentExportBatch::FILE_NAME);
     $zip = new \ZipArchive();
 
-    if ($zip->open($zipUri, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== TRUE) {
-      throw new \RuntimeException(sprintf('Unable to open ZIP archive "%s".', $zipUri));
+    if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== TRUE) {
+      throw new \RuntimeException(sprintf('Unable to open ZIP archive "%s".', $zipPath));
     }
 
     foreach ($files as $uri) {
@@ -114,7 +117,7 @@ final class AssessmentExportBatch {
    */
   private static function prepareExportDirectory(): void {
     $fileSystem = \Drupal::service('file_system');
-    $destination = PublicStream::basePath() . AssessmentExportBatch::EXPORT_PATH;
+    $destination = static::getExportLocation();
     $fileSystem->prepareDirectory(
       $destination,
       FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS,
@@ -122,13 +125,20 @@ final class AssessmentExportBatch {
   }
 
   /**
-   * Gets zip archive URI.
+   * Returns the location of the files.
+   *
+   * @param string|null $fileName
+   *   (optional) If omitted the directory is returned.
    *
    * @return string
-   *   Zip srchive URI.
+   *   A dorectory or a file path.
    */
-  public static function getZipUri(): string {
-    return PublicStream::basePath() . self::EXPORT_PATH . 'assessments.zip';
+  public static function getExportLocation(?string $fileName = NULL): string {
+    $location = PublicStream::basePath() . '/' . self::EXPORT_PATH;
+    if ($fileName) {
+      $location .= "/$fileName";
+    }
+    return $location;
   }
 
 }
