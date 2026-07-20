@@ -71,7 +71,7 @@ class AssessmentExportForm extends FormBase {
       ->accessCheck(FALSE)
       ->execute();
 
-    $operations[] = [[AssessmentExportBatch::class, 'prepareExportDirectory']];
+    $operations[] = [[AssessmentExportBatch::class, 'prepareExportDirectory'], []];
     foreach ($ids as $id) {
       $operations[] = [
         [AssessmentExportBatch::class, 'generatePdf'],

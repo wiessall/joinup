@@ -6,6 +6,7 @@ namespace Drupal\assessments;
 
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\StreamWrapper\PublicStream;
+use Drupal\Core\Utility\Error;
 
 /**
  * Batch process for export reports pdf as zip archive.
@@ -20,16 +21,10 @@ final class AssessmentExportBatch {
    * Prepares directory for reports files and archive.
    */
   public static function prepareExportDirectory(): void {
-    $fileSystem = \Drupal::service('file_system');
+    self::cleanupFiles();
 
-    $directory = self::getExportLocation();
-    if (is_dir($directory)) {
-      foreach ($fileSystem->scanDirectory($directory, '/.*/') as $file) {
-        $fileSystem->delete($file->uri);
-      }
-    }
-
-    $fileSystem->prepareDirectory(
+    $directory = AssessmentExportBatch::getExportLocation();
+    \Drupal::service('file_system')->prepareDirectory(
       $directory,
       FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS,
     );
@@ -42,9 +37,6 @@ final class AssessmentExportBatch {
    *   Assesment report ID.
    * @param array $context
    *   Batch context.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public static function generatePdf(int $assessmentId, array &$context): void {
     $report = \Drupal::entityTypeManager()
@@ -87,18 +79,12 @@ final class AssessmentExportBatch {
 
     try {
       self::createZip($results);
-      $fileSystem = \Drupal::service('file_system');
-      $directory = PublicStream::basePath() . AssessmentExportBatch::EXPORT_PATH;
-      foreach ($fileSystem->scanDirectory($directory, '/\.pdf$/i') as $file) {
-        $fileSystem->delete($file->uri);
-      }
-
-      \Drupal::messenger()
-        ->addStatus(t('Assessment ZIP package has been created.'));
+      self::cleanupFiles(TRUE);
+      \Drupal::messenger()->addStatus(t('Assessment ZIP package has been created.'));
     }
     catch (\Throwable $e) {
       \Drupal::messenger()->addError(t('Unable to create the ZIP archive.'));
-      \Drupal::logger('assessment_export')->error($e->getMessage());
+      Error::logException(\Drupal::logger('assessments'), $e);
     }
   }
 
@@ -144,6 +130,24 @@ final class AssessmentExportBatch {
       $location .= "/$fileName";
     }
     return $location;
+  }
+
+  /**
+   * Removes generated files.
+   *
+   * @param bool $pdfOnly
+   *   (optional) TRUE to remove only .pdf files. If omitted, all files are
+   *   removed.
+   */
+  private static function cleanupFiles(bool $pdfOnly = FALSE): void {
+    $fileSystem = \Drupal::service('file_system');
+    $directory = self::getExportLocation();
+    if (is_dir($directory)) {
+      $pattern = $pdfOnly ? '/\.pdf$/i' : '/.*/';
+      foreach ($fileSystem->scanDirectory($directory, $pattern) as $file) {
+        $fileSystem->delete($file->uri);
+      }
+    }
   }
 
 }
