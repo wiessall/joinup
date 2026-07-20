@@ -161,6 +161,33 @@ class OssSolutionListingPageTest extends FetchTestBase {
   }
 
   /**
+   * The administrative listing links to solutions in the interface language.
+   */
+  public function testAdministrativeListingLinksUseInterfaceLanguage(): void {
+    $storage = \Drupal::entityTypeManager()->getStorage('node');
+    $nodes = $storage->loadByProperties([
+      'type' => 'oss_solution',
+      'title' => 'Project 1.4',
+    ]);
+    $solution = reset($nodes);
+    $this->assertSame('de', $solution->language()->getId());
+
+    // Give it an English translation so an interface-language URL exists.
+    $solution->addTranslation('en', ['title' => $solution->getTitle()])->save();
+    $english_url = $storage->load($solution->id())->getTranslation('en')->toUrl()->toString();
+
+    $this->drupalLogin($this->drupalCreateUser(['administer eu oss catalogue']));
+    $this->drupalGet('/admin/content/eu-oss-catalogue/oss-solutions');
+    $assert_session = $this->assertSession();
+    $assert_session->statusCodeEquals(200);
+
+    // The title, unique to its row, links to the solution in the interface
+    // language, so its URL must be the English one, not the German default.
+    $link = $assert_session->elementExists('named', ['link', 'Project 1.4']);
+    $this->assertSame($english_url, $link->getAttribute('href'));
+  }
+
+  /**
    * Returns table cell's text content grouped per table row.
    *
    * @return string[][]

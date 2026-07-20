@@ -846,7 +846,6 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
         'published' => [
           'own' => [
             'draft',
-            'published',
           ],
           'any' => [
             'userModerator' => [
