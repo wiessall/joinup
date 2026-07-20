@@ -1,0 +1,31 @@
+diff --git a/src/ContinuousManager.php b/src/ContinuousManager.php
+index bcbc4ae413129f68fdc2889d97acd919f0a3974e..4832315165f1e46add25717f53e72c6bf3f36bbf 100644
+--- a/src/ContinuousManager.php
++++ b/src/ContinuousManager.php
+@@ -143,7 +143,6 @@ class ContinuousManager {
+       if ($most_recent_job_item) {
+         // If the most recent job item is active do nothing.
+         if (!$most_recent_job_item->isAborted() && !$most_recent_job_item->isAccepted()) {
+-          $most_recent_job_item->addMessage('Source was updated, changes were ignored as job item is still active.');
+           return NULL;
+         }
+       }
+diff --git a/tmgmt.post_update.php b/tmgmt.post_update.php
+index efd037a4a5f1f8da30e39729ee7c61cc42ddc7c7..1c5b51f6dc97997ed7cf5737f54ab27d1940a8ab 100644
+--- a/tmgmt.post_update.php
++++ b/tmgmt.post_update.php
+@@ -50,3 +50,14 @@ function tmgmt_post_update_json(&$sandbox = NULL) {
+     $sandbox['#finished'] = ($sandbox['total_count'] - $sandbox['current_count']) / $sandbox['total_count'];
+   }
+ }
++
++/**
++ * Deletes obsolete continuous job item messages.
++ */
++function tmgmt_post_update_delete_ignored_messages() {
++  $deleted = \Drupal::database()->delete('tmgmt_message')
++    ->condition('message', 'Source was updated, changes were ignored as job item is still active.')
++    ->execute();
++
++  return "Deleted $deleted obsolete tmgmt messages.";
++}
