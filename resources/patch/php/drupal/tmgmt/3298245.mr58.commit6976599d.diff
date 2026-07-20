@@ -1,0 +1,120 @@
+diff --git a/sources/content/src/Plugin/tmgmt/Source/ContentEntitySource.php b/sources/content/src/Plugin/tmgmt/Source/ContentEntitySource.php
+index 5af896d251f2c5bc2fb73dcb1066d3a09057f491..fe0bb34d445146f3ab1658a7b06b64c1d45384e8 100644
+--- a/sources/content/src/Plugin/tmgmt/Source/ContentEntitySource.php
++++ b/sources/content/src/Plugin/tmgmt/Source/ContentEntitySource.php
+@@ -10,8 +10,10 @@ use Drupal\Core\Entity\EntityTypeInterface;
+ use Drupal\Core\Entity\Plugin\DataType\EntityReference;
+ use Drupal\Core\Entity\RevisionLogInterface;
+ use Drupal\Core\Entity\TranslatableRevisionableStorageInterface;
++use Drupal\Core\Extension\ModuleHandlerInterface;
+ use Drupal\Core\Field\FieldDefinitionInterface;
+ use Drupal\Core\Field\FieldItemListInterface;
++use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+ use Drupal\Core\Session\AnonymousUserSession;
+ use Drupal\Core\StringTranslation\TranslatableMarkup;
+ use Drupal\Core\Url;
+@@ -26,6 +28,7 @@ use Drupal\Core\Render\Element;
+ use Drupal\Core\Form\FormStateInterface;
+ use Drupal\tmgmt\Entity\Job;
+ use Drupal\tmgmt_content\ContentEntitySourcePluginUi;
++use Symfony\Component\DependencyInjection\ContainerInterface;
+ 
+ /**
+  * Content entity source plugin controller.
+@@ -36,7 +39,44 @@ use Drupal\tmgmt_content\ContentEntitySourcePluginUi;
+   description: new TranslatableMarkup('Source handler for content entities.'),
+   ui: ContentEntitySourcePluginUi::class
+ )]
+-class ContentEntitySource extends SourcePluginBase implements SourcePreviewInterface, ContinuousSourceInterface {
++class ContentEntitySource extends SourcePluginBase implements ContainerFactoryPluginInterface, SourcePreviewInterface, ContinuousSourceInterface {
++
++
++  /**
++   * The module handler service.
++   *
++   * @var \Drupal\Core\Extension\ModuleHandlerInterface
++   */
++  protected $moduleHandler;
++
++  /**
++   * Construct an instance of the content entity source plugin.
++   *
++   * @param array $configuration
++   *   A configuration array containing information about the plugin instance.
++   * @param string $plugin_id
++   *   The plugin_id for the plugin instance.
++   * @param mixed $plugin_definition
++   *   The plugin implementation definition.
++   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
++   *   The module handler service.
++   */
++  public function __construct(array $configuration, $plugin_id, $plugin_definition, ModuleHandlerInterface $module_handler) {
++    parent::__construct($configuration, $plugin_id, $plugin_definition);
++    $this->moduleHandler = $module_handler;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
++    return new static(
++      $configuration,
++      $plugin_id,
++      $plugin_definition,
++      $container->get('module_handler')
++    );
++  }
+ 
+   /**
+    * Returns the entity for the given job item.
+@@ -625,6 +665,13 @@ class ContentEntitySource extends SourcePluginBase implements SourcePreviewInter
+       }
+     }
+ 
++    $this->moduleHandler->invokeAll('tmgmt_content_presave_translation', [
++      $translation,
++      $entity,
++      $data,
++      $item,
++    ]);
++
+     if ($save) {
+       $translation->save();
+     }
+diff --git a/sources/content/tmgmt_content.api.php b/sources/content/tmgmt_content.api.php
+index 73fcba89db52a47341dc47d1b92353ae3bffd7e6..efe6fb5b83f77daf5dd44ecdb99661bfa4974ea9 100644
+--- a/sources/content/tmgmt_content.api.php
++++ b/sources/content/tmgmt_content.api.php
+@@ -5,6 +5,9 @@
+  * Hooks provided by the content entity source module.
+  */
+ 
++use Drupal\Core\Entity\ContentEntityInterface;
++use Drupal\tmgmt\JobItemInterface;
++
+ /**
+  * @addtogroup tmgmt_source
+  * @{
+@@ -47,6 +50,22 @@ function hook_field_info_alter(&$info) {
+   $info['metatag']['tmgmt_field_processor_class'] = '\Drupal\Acme\MetatagFieldProcessor';
+ }
+ 
++/**
++ * Alter tmgmt translated entity.
++ *
++ * @param \Drupal\Core\Entity\ContentEntityInterface $translation
++ *   The entity being translated.
++ * @param \Drupal\Core\Entity\ContentEntityInterface $entity
++ *   Source entity.
++ * @param array $data
++ *   The translation data for the fields.
++ * @param \Drupal\tmgmt\JobItemInterface $job_item
++ *   The job item.
++ */
++function hook_tmgmt_content_presave_translation(ContentEntityInterface $translation, ContentEntityInterface $entity, array $data, JobItemInterface $job_item) {
++  $translation->set('title', 'New Value');
++}
++
+ /**
+  * @} End of "addtogroup tmgmt_source".
+  */
