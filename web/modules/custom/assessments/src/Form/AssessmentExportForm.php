@@ -5,35 +5,26 @@ declare(strict_types=1);
 namespace Drupal\assessments\Form;
 
 use Drupal\assessments\AssessmentExportBatch;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StreamWrapper\PublicStream;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Form to export all reports pdf files in zip archive.
  */
 class AssessmentExportForm extends FormBase {
 
+  use AutowireTrait;
+
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected FileSystemInterface $fileSystem,
     protected FileUrlGeneratorInterface $fileUrlGenerator,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): static {
-    return new static(
-      $container->get('entity_type.manager'),
-      $container->get('file_system'),
-      $container->get('file_url_generator'),
-    );
-  }
 
   /**
    * {@inheritdoc}
