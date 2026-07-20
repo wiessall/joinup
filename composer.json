@@ -482,7 +482,9 @@
             },
             "drupal/oauth_client": {
                 "Add post-update hook to install OAuth Client Minimal filter format. @see https://www.drupal.org/i/3555048": "resources/patch/php/drupal/oauth_client/3555048v2.diff",
-                "Notifications per request type. @see https://www.drupal.org/i/3567235": "resources/patch/php/drupal/oauth_client/3567235-c17f91608.diff"
+                "Notifications per request type. @see https://www.drupal.org/i/3567235": "resources/patch/php/drupal/oauth_client/3567235-c17f91608.diff",
+                "Fix errors revealed by PHPStan @see https://git.drupalcode.org/project/oauth_client/-/work_items/3601643": "resources/patch/php/drupal/oauth_client/3601643-mr32.diff",
+                "Notification refactor @see https://git.drupalcode.org/project/oauth_client/-/work_items/3601642": "resources/patch/php/drupal/oauth_client/3601642-mr31-1d8dc229af.diff"
             },
             "drupal/og": {
                 "Performance hit from OG permission compilation @see https://git.drupalcode.org/project/og/-/work_items/3594172": "resources/patch/php/drupal/og/3594172.mr75-commita75d7be4.diff"
