@@ -15,7 +15,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StreamWrapper\PublicStream;
 
 /**
- * Form to export all reports pdf files in zip archive.
+ * Form to export all reports PDF files in zip archive.
  */
 class AssessmentExportForm extends FormBase {
 
