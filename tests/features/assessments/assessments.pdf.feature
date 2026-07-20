@@ -93,8 +93,9 @@ Feature: Assessment report PDF download
 
   Scenario: User can download all pdf files from reports.
     Given report assessments:
-      | name            | state     | remaining_barriers                   | other_comment          | documents               | relevant_report             |
-      | PDF View Report | published | Some barriers remain to be addressed | This is a test comment | text.pdf, empty_pdf.pdf | https://example.com/related |
+      | name              | state     | remaining_barriers                   | other_comment          | documents | relevant_report             |
+      | PDF View Report   | published | Some barriers remain to be addressed | This is a test comment | text.pdf  | https://example.com/related |
+      | PDF View Report 2 | published | Some barriers remain to be addressed | This is a test comment | text.pdf  | https://example.com/related |
     Given I am logged in as a user with the "download assessment PDFs" permission
     When I go to "/dashboard/assessment/export"
     Then I should see the button "Generate ZIP"

@@ -38,15 +38,16 @@ final class AssessmentExportBatch {
     $print_engine = \Drupal::service('plugin.manager.entity_print.print_engine')
       ->createSelectedInstance('pdf');
 
-    $destination = PublicStream::basePath() . self::EXPORT_PATH . $report->label() . '.pdf';
+    $destination = self::EXPORT_PATH . $report->label() . '.pdf';
 
     $print_builder->savePrintable(
       [$report],
       $print_engine,
+      'public',
       $destination,
     );
 
-    $context['results'][] = $destination;
+    $context['results'][] = PublicStream::basePath() . $destination;
   }
 
   /**
