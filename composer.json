@@ -455,6 +455,7 @@
                 "Allow to drag and drop nested paragraphs @see https://www.drupal.org/project/layout_paragraphs/issues/3401176": "resources/patch/php/drupal/layout_paragraphs/3401176.patch",
                 "Integrity constraint violation @see https://www.drupal.org/project/layout_paragraphs/issues/3528058": "resources/patch/php/drupal/layout_paragraphs/3528058.patch",
                 "Prevent moving components on Translate edit page @see https://drupal.org/i/3540040": "resources/patch/php/drupal/layout_paragraphs/3540040-mr234-commit97ffc2d1.diff",
+                "Provide more info to component add buttons to help customization @see https://drupal.org/i/3611607": "resources/patch/php/drupal/layout_paragraphs/3611607-mr248-1356ffbb58--on-top-of-3540040.diff",
                 "Maximum call stack size reached in serialize() @see https://www.drupal.org/i/3599833": "resources/patch/php/drupal/layout_paragraphs/3599833.mr241.commitd4c9beff1108.diff"
             },
             "drupal/memcache": {
