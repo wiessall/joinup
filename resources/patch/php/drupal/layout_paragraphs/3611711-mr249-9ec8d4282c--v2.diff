@@ -1,5 +1,5 @@
 diff --git a/src/LayoutParagraphsLayout.php b/src/LayoutParagraphsLayout.php
-index 1c528773903ccb36f80f68fe5ad10e260020be6f..23f5cea38bb8f717e6bf021f78caa02a00fe4c8e 100644
+index 1c528773903ccb36f80f68fe5ad10e260020be6f..585511718ffcd09e90bf30d1dc9b7076519fd7fa 100644
 --- a/src/LayoutParagraphsLayout.php
 +++ b/src/LayoutParagraphsLayout.php
 @@ -33,6 +33,13 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
@@ -9,9 +9,9 @@ index 1c528773903ccb36f80f68fe5ad10e260020be6f..23f5cea38bb8f717e6bf021f78caa02a
 +  /**
 +   * Cached list of paragraphs found in the current field.
 +   *
-+   * @var \Drupal\paragraphs\ParagraphInterface[]|null
++   * @var array<string|int, \Drupal\paragraphs\ParagraphInterface>|null
 +   */
-+  protected $paragraphs = NULL;
++  protected ?array $paragraphs = NULL;
 +
    /**
     * Third party settings.
@@ -38,14 +38,15 @@ index 1c528773903ccb36f80f68fe5ad10e260020be6f..23f5cea38bb8f717e6bf021f78caa02a
    }
  
    /**
-@@ -275,17 +280,17 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
+@@ -275,17 +280,24 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
    /**
     * Returns a list of all paragraph entities associated with this collection.
     *
 -   * @return \Drupal\paragraphs\ParagraphInterface[]
 -   *   An array of paragraph entities.
-+   * @return array<string, \Drupal\paragraphs\ParagraphInterface>
-+   *   An array of paragraph entities, keyed by their UUID.
++   * @return array<string|int, \Drupal\paragraphs\ParagraphInterface>
++   *   An array of paragraph entities, keyed by their UUID (if any), ordered by
++   *   delta.
     */
    public function getEntities() {
 -    $items = [];
@@ -55,7 +56,13 @@ index 1c528773903ccb36f80f68fe5ad10e260020be6f..23f5cea38bb8f717e6bf021f78caa02a
 +    if (!isset($this->paragraphs)) {
 +      $this->paragraphs = [];
 +      foreach ($this->paragraphsReferenceField->referencedEntities() as $entity) {
-+        $this->paragraphs[$entity->uuid()] = $entity;
++        $key = $entity->uuid();
++        if ($key) {
++          $this->paragraphs[$key] = $entity;
++        }
++        else {
++          $this->paragraphs[] = $entity;
++        }
        }
      }
 -    return $items;
@@ -63,7 +70,7 @@ index 1c528773903ccb36f80f68fe5ad10e260020be6f..23f5cea38bb8f717e6bf021f78caa02a
    }
  
    /**
-@@ -340,6 +345,7 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
+@@ -329,6 +334,7 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
          $this->paragraphsReferenceField[] = $paragraph;
        }
      }
@@ -71,15 +78,7 @@ index 1c528773903ccb36f80f68fe5ad10e260020be6f..23f5cea38bb8f717e6bf021f78caa02a
      return $this;
    }
  
-@@ -354,7 +360,6 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
-    * @return $this
-    */
-   public function reorderComponents(array $ordered_items) {
--    $reordered_items = [];
-     foreach ($ordered_items as $ordered_item) {
-       if ($component = $this->getComponentByUuid($ordered_item['uuid'])) {
-         $component->setSettings([
-@@ -374,6 +379,7 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
+@@ -367,6 +374,7 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
        }
      }
      $this->paragraphsReferenceField->setValue($reordered_items);
@@ -87,7 +86,7 @@ index 1c528773903ccb36f80f68fe5ad10e260020be6f..23f5cea38bb8f717e6bf021f78caa02a
      return $this;
    }
  
-@@ -539,6 +545,7 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
+@@ -532,6 +540,7 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
    public function appendComponent(ParagraphInterface $new_paragraph) {
      $new_paragraph->setParentEntity($this->getEntity(), $this->getFieldName());
      $this->paragraphsReferenceField->appendItem(['entity' => $new_paragraph]);
@@ -95,7 +94,7 @@ index 1c528773903ccb36f80f68fe5ad10e260020be6f..23f5cea38bb8f717e6bf021f78caa02a
      return $this;
    }
  
-@@ -567,6 +574,7 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
+@@ -560,6 +569,7 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
      if (isset($this->paragraphsReferenceField[$delta])) {
        unset($this->paragraphsReferenceField[$delta]);
      }
@@ -103,7 +102,22 @@ index 1c528773903ccb36f80f68fe5ad10e260020be6f..23f5cea38bb8f717e6bf021f78caa02a
      return $this;
    }
  
-@@ -630,4 +638,11 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
+@@ -577,12 +583,8 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
+    *   The component's delta, or -1 if no match.
+    */
+   protected function getComponentDeltaByUuid(string $uuid) {
+-    foreach ($this->paragraphsReferenceField as $key => $item) {
+-      if (isset($item->entity) && $item->entity->uuid() == $uuid) {
+-        return $key;
+-      }
+-    }
+-    return -1;
++    $delta = array_search($uuid, array_keys($this->getEntities()), TRUE);
++    return $delta === FALSE ? -1 : $delta;
+   }
+ 
+   /**
+@@ -623,4 +629,11 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
      return array_keys($this->thirdPartySettings);
    }
  
