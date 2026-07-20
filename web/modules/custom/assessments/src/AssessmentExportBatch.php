@@ -112,7 +112,7 @@ final class AssessmentExportBatch {
   /**
    * Prepares directory for reports files and archive.
    */
-  public static function prepareExportDirectory(): void {
+  private static function prepareExportDirectory(): void {
     $fileSystem = \Drupal::service('file_system');
     $destination = PublicStream::basePath() . AssessmentExportBatch::EXPORT_PATH;
     $fileSystem->prepareDirectory(
