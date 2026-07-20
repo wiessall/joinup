@@ -96,7 +96,7 @@ Feature: Assessment report PDF download
       | name              | state     | remaining_barriers                   | other_comment          | documents | relevant_report             |
       | PDF View Report   | published | Some barriers remain to be addressed | This is a test comment | text.pdf  | https://example.com/related |
       | PDF View Report 2 | published | Some barriers remain to be addressed | This is a test comment | text.pdf  | https://example.com/related |
-    Given I am logged in as a user with the "download assessment PDFs" permission
+    Given I am logged in as a moderator
     When I go to "/dashboard/assessment/export"
     Then I should see the button "Generate ZIP"
     When I press "Generate ZIP"

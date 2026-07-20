@@ -34,15 +34,16 @@ final class AssessmentExportBatch {
     if (!$report) {
       return;
     }
-    $print_builder = \Drupal::service('entity_print.print_builder');
-    $print_engine = \Drupal::service('plugin.manager.entity_print.print_engine')
+    $printBuilder = \Drupal::service('entity_print.print_builder');
+    $printEngine = \Drupal::service('plugin.manager.entity_print.print_engine')
       ->createSelectedInstance('pdf');
 
-    $destination = self::EXPORT_PATH . $report->label() . '.pdf';
+    $filename = str_replace(['/', '\\'], '', $report->label()) . '.pdf';
+    $destination = self::EXPORT_PATH . $filename;
 
-    $print_builder->savePrintable(
+    $printBuilder->savePrintable(
       [$report],
-      $print_engine,
+      $printEngine,
       'public',
       $destination,
     );
@@ -66,6 +67,11 @@ final class AssessmentExportBatch {
 
     try {
       self::createZip($results);
+      $fileSystem = \Drupal::service('file_system');
+      $directory = PublicStream::basePath() . AssessmentExportBatch::EXPORT_PATH;
+      foreach ($fileSystem->scanDirectory($directory, '/\.pdf$/i') as $file) {
+        $fileSystem->delete($file->uri);
+      }
 
       \Drupal::messenger()
         ->addStatus(t('Assessment ZIP package has been created.'));
