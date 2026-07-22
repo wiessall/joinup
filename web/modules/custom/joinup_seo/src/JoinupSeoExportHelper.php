@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_seo;
 
-use Drupal\Core\Extension\ExtensionPathResolver;
 use Drupal\Core\Url;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -25,7 +24,8 @@ readonly class JoinupSeoExportHelper implements JoinupSeoExportHelperInterface {
   public function __construct(
     #[Autowire(service: 'serializer')]
     protected SerializerInterface $serializer,
-    protected ExtensionPathResolver $extensionPathResolver,
+    #[Autowire(param: 'app.root')]
+    protected string $appRoot,
   ) {}
 
   /**
@@ -46,7 +46,7 @@ readonly class JoinupSeoExportHelper implements JoinupSeoExportHelperInterface {
    *   The exported string.
    */
   protected function exportEntityJsonLd(RdfSyncEntityInterface $entity): string {
-    $context_path = $this->extensionPathResolver->getPath('module', 'joinup_seo') . '/assets/adms-ap-2.01.jsonld';
+    $context_path = $this->appRoot . '/assets/adms-ap-2.01.jsonld';
     $frame = json_decode(file_get_contents($context_path));
     $serialized = $this->serializer->serialize($entity, self::SERIALIZATION_FORMAT, ['frame' => $frame]);
 
@@ -56,7 +56,7 @@ readonly class JoinupSeoExportHelper implements JoinupSeoExportHelperInterface {
 
     return json_encode(
       [
-        '@context' => Url::fromRoute('joinup_seo.adms_ap_context', [], ['absolute' => TRUE])->toString(),
+        '@context' => Url::fromUri('base:/assets/adms-ap-2.01.jsonld', ['absolute' => TRUE])->toString(),
         '@graph' => $decodedSerialized,
       ],
       JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
