@@ -1,0 +1,30 @@
+_meta:
+  version: '1.0'
+  entity_type: menu_link_content
+  uuid: 7a30c7c1-a812-4b8a-8e41-400000000002
+  bundle: menu_link_content
+  default_langcode: en
+default:
+  enabled:
+    -
+      value: true
+  title:
+    -
+      value: About Joinup
+  menu_name:
+    -
+      value: navbar
+  parent:
+    -
+      value: 'menu_link_content:7a30c7c1-a812-4b8a-8e41-400000000001'
+  link:
+    -
+      uri: 'internal:/'
+      title: ''
+      options: {  }
+  weight:
+    -
+      value: 0
+  expanded:
+    -
+      value: false

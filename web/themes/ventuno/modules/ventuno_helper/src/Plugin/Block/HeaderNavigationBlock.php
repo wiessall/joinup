@@ -223,15 +223,32 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
   protected function getLandingPageLinks(CacheableMetadata $cacheability): array {
     $build = $this->blockManager->createInstance('system_menu_block:navbar')->build();
     $cacheability->addCacheableDependency(CacheableMetadata::createFromRenderArray($build));
+    return $this->buildMenuLinks($build['#items'] ?? []);
+  }
 
+  /**
+   * Converts a menu tree into nested BCL header links.
+   *
+   * @param array $items
+   *   The menu items as returned by the menu block, each with an optional
+   *   'below' array of child items.
+   *
+   * @return array
+   *   The links in the BCL header format, with child links nested under the
+   *   'links' key so the mobile drawer can render them as a second level.
+   */
+  protected function buildMenuLinks(array $items): array {
     $links = [];
-    foreach ($build['#items'] ?? [] as $item) {
+    foreach ($items as $item) {
       $link = [
         'label' => $item['title'],
         'link' => $item['url'],
       ];
       if (!empty($item['in_active_trail'])) {
         $link['attributes'] = ['class' => ['is-active']];
+      }
+      if (!empty($item['below'])) {
+        $link['links'] = $this->buildMenuLinks($item['below']);
       }
       $links[] = $link;
     }

@@ -24,4 +24,4 @@ default:
       value: 0
   expanded:
     -
-      value: false
+      value: true
