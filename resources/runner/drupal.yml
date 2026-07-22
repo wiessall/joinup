@@ -230,7 +230,6 @@ drupal:
           'joinup_cas_mock_server',
           'oe_authentication_eulogin_mock',
           'joinup_test',
-          'masquerade',
           'og_ui',
           'page_manager_ui',
           'slick_ui',

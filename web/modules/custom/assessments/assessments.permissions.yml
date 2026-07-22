@@ -31,3 +31,7 @@ administer assessment statements:
   title: 'Administer assessment statements'
   description: 'Maintain the types of assessment statement entity.'
   restrict access: true
+download assessment PDFs:
+  title: 'download assessment PDFs'
+  description: 'Download assessment reports documents'
+  restrict access: true
