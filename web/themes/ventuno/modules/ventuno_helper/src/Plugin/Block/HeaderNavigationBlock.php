@@ -76,7 +76,8 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
     return Cache::mergeContexts(parent::getCacheContexts(), [
       'route.name',
       'user.roles:authenticated',
-      'url',
+      'url.path',
+      'url.query_args',
     ]);
   }
 
