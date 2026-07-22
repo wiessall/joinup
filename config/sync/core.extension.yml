@@ -171,6 +171,7 @@ module:
   locale: 0
   mailsystem: 0
   markdown_easy: 0
+  masquerade: 0
   media: 0
   media_library: 0
   memcache: 0

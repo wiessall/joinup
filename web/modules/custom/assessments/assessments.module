@@ -118,31 +118,25 @@ function assessments_form_layout_paragraphs_component_form_alter(array &$form, F
  * Implements hook_preprocess_HOOK().
  */
 function assessments_preprocess_layout_paragraphs_insert_component_btn(&$variables): void {
-  $url = $variables['url'];
-  $layoutParagraphsLayout = \Drupal::service('layout_paragraphs.tempstore_repository')
-    ->getWithStorageKey($url->getRouteParameters()['layout_paragraphs_layout']);
+  if (
+    $variables['host_entity_type_id'] !== 'assessment' ||
+    $variables['host_entity_bundle'] !== 'report' ||
+    $variables['host_field_name'] !== 'binding_requirement'
+  ) {
+    return;
+  }
 
-  $entity = $layoutParagraphsLayout?->getEntity();
-  if ($entity instanceof AssessmentReport) {
-    $fieldName = $layoutParagraphsLayout?->getFieldName();
-    if ($fieldName === 'binding_requirement') {
-      $variables['title'] = t('New binding requirement');
-
-      $routeParams = $url->getRouteParameters();
-      $queryParams = $url->getOption('query') ?: [];
-      // Hide component selection buttons inside layout regions for
-      // binding_requirement field. Only hide if this is inside a region
-      // (has parent_uuid AND region parameters). Keep the root-level
-      // "Add section" buttons visible.
-      if (
-        isset($routeParams['layout_paragraphs_layout']) &&
-        $url->getRouteName() === 'layout_paragraphs.builder.choose_component' &&
-        isset($queryParams['parent_uuid']) &&
-        isset($queryParams['region'])
-      ) {
-        $variables['attributes']['class'][] = 'visually-hidden';
-      }
-    }
+  $variables['title'] = t('New binding requirement');
+  // Hide component selection buttons inside layout regions for
+  // binding_requirement field. Only hide if this is inside a region
+  // (has parent_uuid AND region parameters). Keep the root-level
+  // "Add section" buttons visible.
+  $queryParams = $variables['url']->getOption('query');
+  if (
+    isset($queryParams['parent_uuid']) &&
+    isset($queryParams['region'])
+  ) {
+    $variables['attributes']['class'][] = 'visually-hidden';
   }
 }
 
