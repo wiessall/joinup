@@ -67,3 +67,16 @@ index 8e92d4c3f498c41189eacf13f8af5f08935ebafc..891c8912512219bc00045fc3fe95019e
  
            $links += $this->extractFromField($translation->get($fieldDefinition->getName()));
          }
+diff --git a/config/schema/linkchecker.schema.yml b/config/schema/linkchecker.schema.yml
+--- a/config/schema/linkchecker.schema.yml
++++ b/config/schema/linkchecker.schema.yml
+@@ -19,6 +19,9 @@ linkchecker.settings:
+     search_published_contents_only:
+       type: boolean
+       label: 'Search published contents only'
++    published_moderation_state:
++      type: string
++      label: 'Moderation state to match'
+     extract:
+       type: mapping
+       label: 'Link extraction'
