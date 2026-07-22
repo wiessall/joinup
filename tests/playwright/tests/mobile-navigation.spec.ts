@@ -47,4 +47,30 @@ test.describe("Mobile navigation", () => {
       "mobile-navigation-authenticated.png",
     );
   });
+
+  test("Second-level navbar items are reachable in the drawer", async ({
+    page,
+  }) => {
+    // The "About" landing page and its "About Joinup" child come from the
+    // joinup_test_content default content installed by `ddev playwright setup`.
+    await page.goto("/");
+    const drawer = await openDrawer(page);
+
+    const parentRow = drawer
+      .getByRole("link", { name: "About", exact: true })
+      .locator("xpath=ancestor::li[1]");
+    await expect(parentRow).toBeVisible();
+
+    const childLink = drawer.getByRole("link", {
+      name: "About Joinup",
+      exact: true,
+    });
+    await expect(childLink).not.toBeInViewport();
+
+    // Dispatch the click on the row, not the link, to open the submenu panel.
+    await parentRow.dispatchEvent("click");
+    await expect(childLink).toBeInViewport();
+
+    await expect(drawer).toHaveScreenshot("mobile-navigation-second-level.png");
+  });
 });

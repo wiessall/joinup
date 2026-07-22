@@ -31,6 +31,11 @@ async function neutralizeOverlayElements(page: Page): Promise<void> {
           left: calc(100% - 3rem);
           bottom: 1.5rem;
         }
+        /* Hide the "for testing purposes only" notice that the Webtools banner
+           only shows off *.europa.eu and that shifts the whole page down. */
+        #globan .wt-globan--invalid-domain {
+          display: none !important;
+        }
       `,
     }),
   ]);

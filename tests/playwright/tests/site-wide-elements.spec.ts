@@ -41,6 +41,40 @@ test.describe("Site-wide elements", () => {
     );
   });
 
+  test("Navbar landing page dropdown", async ({ page, viewport }) => {
+    // The navbar dropdowns are only shown from the xl breakpoint.
+    test.skip(!viewport || viewport.width < 1200);
+
+    // The "About" landing page and its "About Joinup" child come from the
+    // joinup_test_content default content installed by `ddev playwright setup`.
+    await page.goto("/");
+    await pageUtils.prepareForScreenshot(page);
+
+    const navbar = page.locator("header.joinup-navbar");
+    const dropdown = page.locator(".dropdown-menu--sub");
+    const child = dropdown.getByRole("link", {
+      name: "About Joinup",
+      exact: true,
+    });
+    await expect(child).toBeHidden();
+
+    await page.getByRole("button", { name: "About", exact: true }).hover();
+    await expect(child).toBeVisible();
+
+    // The dropdown is absolutely positioned below the navbar, so clip from the
+    // navbar top to the dropdown bottom to capture both.
+    const navBox = (await navbar.boundingBox())!;
+    const dropdownBox = (await dropdown.boundingBox())!;
+    await expect(page).toHaveScreenshot("homepage-navbar-dropdown.png", {
+      clip: {
+        x: navBox.x,
+        y: navBox.y,
+        width: navBox.width,
+        height: dropdownBox.y + dropdownBox.height - navBox.y,
+      },
+    });
+  });
+
   test("BCL header on a custom page", async ({ page }) => {
     await authUtils.login(projectConfig.users.developer, page);
 
