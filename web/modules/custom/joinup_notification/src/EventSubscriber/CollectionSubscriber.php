@@ -24,7 +24,6 @@ class CollectionSubscriber extends NotificationSubscriberBase {
   const string TEMPLATE_ARCHIVE_DELETE_MEMBERS = 'col_arc_del_members';
   const string TEMPLATE_ARCHIVE_DELETE_NO_REQUEST = 'col_arc_del_no_request';
   const string TEMPLATE_ARCHIVE_DELETE_REJECT = 'col_arc_del_rej';
-  const string TEMPLATE_ARCHIVE_DELETE_SOLUTIONS_ORPHANED = 'col_arc_del_sol_no_affiliates';
   const string TEMPLATE_DELETION_BY_MODERATOR = 'col_deletion_by_moderator';
   const string TEMPLATE_PROPOSE_EDIT_MODERATORS = 'col_propose_edit_mod';
   const string TEMPLATE_PROPOSE_EDIT_OWNER = 'col_propose_edit_own';
@@ -72,6 +71,7 @@ class CollectionSubscriber extends NotificationSubscriberBase {
       NotificationEvents::NODE_UPDATE => ['onUpdate'],
       // Notification ID 9, 12, 13, 14.
       NotificationEvents::NODE_DELETE => ['onDelete'],
+      NotificationEvents::GROUP_ENTITY_ARCHIVE_COMPLETED => ['onCompleteArchival'],
     ];
   }
 
@@ -171,11 +171,6 @@ class CollectionSubscriber extends NotificationSubscriberBase {
       case 'request_archival':
         $this->notificationRequestArchivalDeletion();
         break;
-
-      case 'archive':
-        $this->notificationArchiveDelete();
-        break;
-
     }
   }
 
@@ -347,6 +342,9 @@ class CollectionSubscriber extends NotificationSubscriberBase {
    * Only one of both are sent depending on the current state of the collection.
    */
   protected function notificationArchiveDelete(): void {
+    // Avoid user ID duplication.
+    $uids_to_skip = [];
+
     // Template id 9. Notify the owner.
     $template_id = $this->isTransitionRequested() ? self::TEMPLATE_ARCHIVE_DELETE_APPROVE_OWNER : self::TEMPLATE_ARCHIVE_DELETE_NO_REQUEST;
 
@@ -367,21 +365,9 @@ class CollectionSubscriber extends NotificationSubscriberBase {
     ];
     $user_data = $this->getUsersMessages($user_data);
     $this->sendUserDataMessages($user_data);
+    $this->userIdsToSkip($user_data, $uids_to_skip);
 
-    // Next, notify all owners of affiliated solutions.
-    foreach ($this->entity->get('solutions')->referencedEntities() as $solution) {
-      if (!empty($solution)) {
-        $this->notifySolutionOwners($solution);
-      }
-    }
-
-    // Avoid sending again to the owner.
-    $uids_to_skip = [];
-    foreach ($user_data as $user_ids) {
-      $uids_to_skip += array_values($user_ids);
-    }
-
-    // Last, send an email to all members of the collection.
+    // Send notification to all members of the collection.
     $user_data = [
       'og_roles' => [
         'node-collection-member' => [
@@ -390,40 +376,123 @@ class CollectionSubscriber extends NotificationSubscriberBase {
       ],
     ];
     $user_data = $this->getUsersMessages($user_data);
+    $this->filterRecipients($user_data, $uids_to_skip);
+    $this->filterOutForAnnouncements($user_data);
+    $this->sendUserDataMessages($user_data);
+    $this->userIdsToSkip($user_data, $uids_to_skip);
+
+    // Send notification to moderators.
+    $user_data_array = [
+      'roles' => [
+        'moderator' => [
+          self::TEMPLATE_ARCHIVE_DELETE_NO_REQUEST,
+        ],
+      ],
+    ];
+    $user_data = $this->getUsersMessages($user_data_array);
+    $this->filterRecipients($user_data, $uids_to_skip);
+    $this->sendUserDataMessages($user_data);
+
+    // Send notifications to the contact email accounts.
+    /** @var \Drupal\Core\Field\EntityReferenceFieldItemList $contact_infos */
+    $contact_infos = $this->entity->get('contact')->getValue();
+    $contact_mails = [];
+
+    foreach ($contact_infos as $contact_info) {
+      $node = $this->entityTypeManager->getStorage('node')->load($contact_info['target_id']);
+      $contact_mails[] = $node->get('email')->value;
+    }
+
+    if (!empty($contact_mails)) {
+      $arguments = $this->generateArguments($this->entity);
+      // This is usually injected in joinup_notification_mail_alter() is a user
+      // account is set.
+      $arguments['@transition:archive:extra:members'] = $this->t('<p>Kind regards,</p><p>The Portal Support Team</p>');
+      $this->messageDelivery->sendMessageTemplateToEmailAddresses(self::TEMPLATE_ARCHIVE_DELETE_MEMBERS, $arguments, $contact_mails);
+    }
+  }
+
+  /**
+   * Notify of archival after the process completed.
+   *
+   * @param \Drupal\joinup_notification\Event\NotificationEvent $event
+   *   The event.
+   */
+  public function onCompleteArchival(NotificationEvent $event): void {
+    $this->entity = $event->getEntity();
+
+    if (!$this->appliesOnCollections()) {
+      return;
+    }
+
+    // Available data ex. getOriginal() is not available as for the other events
+    // so we have to make assumptions.
+    $this->event = $event;
+    $this->workflow = $this->entity->getWorkflow();
+    $this->fromState = 'archival_request';
+    $to_state = $this->entity->getWorkflowState();
+    $this->transition = $this->workflow->findTransition($this->fromState, $to_state);
+    $this->motivation = $this->entity->motivation;
+    $this->hasPublished = $this->entity->had_published_version ?? FALSE;
+    $this->operation = 'archive';
+
+    $this->notificationArchiveDelete();
+  }
+
+  /**
+   * Adds user IDs to a list.
+   *
+   * @param array $user_data
+   *   The user data.
+   * @param array $uids_to_skip
+   *   The list of IDs to skip.
+   */
+  protected function userIdsToSkip(array $user_data, array &$uids_to_skip): void {
+    foreach ($user_data as $user_ids) {
+      $uids_to_skip += array_values($user_ids);
+    }
+  }
+
+  /**
+   * Filters out recipients fron the user data.
+   *
+   * @param array $user_data
+   *   The user data.
+   * @param array $uids_to_skip
+   *   The list of IDs to skip.
+   */
+  protected function filterRecipients(array &$user_data, array $uids_to_skip): void {
     foreach ($uids_to_skip as $uid) {
       foreach ($user_data as $message_id => $user_ids) {
         unset($user_data[$message_id][$uid]);
       }
     }
-
-    $this->sendUserDataMessages($user_data);
   }
 
   /**
-   * Sends a notification to solution owners affiliated with the collection.
+   * Filters out recipients that do not want announcements.
    *
-   * Notification id 11.
-   *
-   * Notification 11 is sent to the solution owners in which the collection that
-   * is archived/deleted is the only affiliate, prompting them to take action.
-   *
-   * @param \Drupal\Core\Entity\EntityInterface $solution
-   *   The solution entity.
+   * @param array $user_data
+   *   The user data.
    */
-  protected function notifySolutionOwners(EntityInterface $solution): void {
-    $user_data = [
-      'og_roles' => [
-        'node-solution-administrator' => [
-          self::TEMPLATE_ARCHIVE_DELETE_SOLUTIONS_ORPHANED,
-        ],
-      ],
-    ];
-    $user_data = $this->getUsersMessages($user_data, $solution);
-    $arguments = [
-      '@affiliate:title' => $solution->label(),
-      '@affiliate:url' => $solution->toUrl('canonical', ['absolute' => TRUE])->toString(),
-    ];
-    $this->sendUserDataMessages($user_data, $arguments);
+  protected function filterOutForAnnouncements(array &$user_data): void {
+    if (isset($user_data[self::TEMPLATE_ARCHIVE_DELETE_MEMBERS])) {
+      foreach ($user_data[self::TEMPLATE_ARCHIVE_DELETE_MEMBERS] as $uid) {
+        $membership = $this->membershipManager->getMembership($this->entity, $uid);
+
+        if (!$membership) {
+          continue;
+        }
+
+        $announcements = (bool) $membership->get('announcements')->value;
+
+        if ($announcements) {
+          continue;
+        }
+
+        unset($user_data[self::TEMPLATE_ARCHIVE_DELETE_MEMBERS][$uid]);
+      }
+    }
   }
 
   /**

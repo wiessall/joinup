@@ -24,7 +24,7 @@ trait FeaturedContentTrait {
     }
 
     /** @var \Drupal\Core\Field\FieldItemListInterface $item_list */
-    $item_list = $meta_entity->get('field_featured');
+    $item_list = $meta_entity->get('featured');
 
     if ($item_list->isEmpty()) {
       return FALSE;
@@ -43,7 +43,7 @@ trait FeaturedContentTrait {
       if (empty($meta_entity)) {
         $meta_entity = $this->createMetaEntity('featured');
       }
-      $meta_entity->set('field_featured', TRUE)->save();
+      $meta_entity->set('featured', TRUE)->save();
     }
 
     return $this;

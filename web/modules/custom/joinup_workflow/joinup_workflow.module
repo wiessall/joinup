@@ -158,7 +158,7 @@ function joinup_workflow_motivation_form_validate(array &$form, FormStateInterfa
   // approve the changes (= 'Propose changes'). A motivation is only required in
   // the first case.
   if ($transition->getId() === 'propose_new_revision') {
-    $required = $entity->isTransitionAllowed('publish');
+    $required = $entity->isTransitionAllowed('update');
   }
 
   if ($required && empty($form_state->getValue('transition_motivation'))) {

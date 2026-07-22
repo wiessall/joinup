@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Database\Database;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 
 /**
@@ -56,4 +57,70 @@ function joinup_core_deploy_201500(array &$sandbox): string {
   }
 
   return sprintf('Removed %d non-English translation(s), regenerated aliases for %d homepage topic(s) and re-queued %d for translation.', $removed, $realiased, $requeued);
+}
+
+/**
+ * Drops legacy tables prefixed with old_.
+ */
+function joinup_core_deploy_201501(): string {
+  $connection = Database::getConnection();
+  $schema = $connection->schema();
+
+  $tables = $connection->query("
+    SELECT table_name
+    FROM information_schema.tables
+    WHERE table_schema = DATABASE()
+      AND table_name LIKE 'old\_%'
+  ")->fetchCol();
+
+  if ($tables === []) {
+    return 'No old_* tables found.';
+  }
+
+  $deleted = [];
+
+  foreach ($tables as $table) {
+    if ($schema->tableExists($table)) {
+      $schema->dropTable($table);
+      $deleted[] = $table;
+    }
+  }
+
+  return sprintf(
+    'Removed old_* tables: %s.',
+    implode(', ', $deleted)
+  );
+}
+
+/**
+ * Queues nodes with more than 30 revisions in a language for revision delete.
+ */
+function joinup_core_deploy_201502(): string {
+  $threshold = 30;
+
+  $connection = Database::getConnection();
+  $query = $connection->select('node_field_revision', 'nfr');
+  $query->addField('nfr', 'nid');
+  $query->addExpression('COUNT(nfr.vid)', 'revision_count');
+  $query->condition('nfr.revision_translation_affected', 1);
+  $query->groupBy('nfr.nid');
+  $query->groupBy('nfr.langcode');
+  $query->havingCondition('revision_count', $threshold, '>');
+  $nids = array_unique($query->execute()->fetchCol());
+
+  if (!$nids) {
+    return sprintf('No nodes found with more than %d revisions in a language.', $threshold);
+  }
+
+  /** @var \Drupal\node_revision_delete\NodeRevisionDeleteInterface $node_revision_delete */
+  $node_revision_delete = \Drupal::service('node_revision_delete');
+
+  $queued = 0;
+  foreach ($nids as $nid) {
+    if ($node_revision_delete->createQueueItem((int) $nid)->queued()) {
+      $queued++;
+    }
+  }
+
+  return sprintf('Queued %d out of %d node(s) with more than %d revisions in a language for revision deletion.', $queued, count($nids), $threshold);
 }

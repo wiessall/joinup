@@ -100,6 +100,14 @@ Feature: Collections/Solutions settings
     And I click "Settings" in the "Entity actions" region
     And the "Announcements enabled" checkbox should be checked
 
+  Scenario: Settings link is not visible on an archived solution
+    Given the following "solution" content:
+      | title             | state    |
+      | Archived solution | archived |
+    And I am logged in as a moderator
+    When I go to the homepage of the "Archived solution" solution
+    Then I should not see the link "Settings" in the "Entity actions" region
+
   Scenario Outline: Only moderators and owners have access to collection/solution meta entity canonical page
     Given the following users:
       | Username         | Roles     |

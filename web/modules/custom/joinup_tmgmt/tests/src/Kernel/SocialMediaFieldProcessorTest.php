@@ -24,6 +24,10 @@ class SocialMediaFieldProcessorTest extends ContentEntityTestBase {
   protected static $modules = [
     'joinup_tmgmt',
     'social_media_links_field',
+    'path',
+    'path_alias',
+    'token',
+    'pathauto',
   ];
 
   /**
@@ -31,6 +35,8 @@ class SocialMediaFieldProcessorTest extends ContentEntityTestBase {
    */
   public function setUp(): void {
     parent::setUp();
+
+    $this->installEntitySchema('path_alias');
 
     $field_storage = FieldStorageConfig::create([
       'field_name' => 'field_social',

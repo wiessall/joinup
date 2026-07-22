@@ -1207,7 +1207,7 @@ display:
         filters: true
         filter_groups: true
       display_description: ''
-      rendering_language: '***LANGUAGE_entity_translation***'
+      rendering_language: '***LANGUAGE_language_interface***'
       display_extenders:
         metatag_display_extender:
           metatags: {  }

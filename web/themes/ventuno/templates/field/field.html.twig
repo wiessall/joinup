@@ -7,6 +7,7 @@
 
 {% set list_tag = list_tag|default('div') %}
 {% set list_item_tag = list_item_tag|default('div') %}
+{% set label_tag = label_tag|default('div') %}
 {% set field_item_classes = field_item_classes|default(['field__item']) %}
 {%
   set classes = classes|default([
@@ -39,11 +40,11 @@
   {% endif %}
 {% else %}
   <div{{ attributes.addClass(classes) }}>
-    <div{{ title_attributes.addClass(title_classes) }}>
+    <{{ label_tag }}{{ title_attributes.addClass(title_classes) }}>
       {% block label -%}
         {{ label }}{% if label_display == 'inline' %}<span class="me-1">:</span>{% endif %}
       {%- endblock %}
-    </div>
+    </{{ label_tag }}>
     {% if multiple -%}
     <{{ list_tag }} class="field__items">
       {%- endif %}

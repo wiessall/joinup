@@ -90,3 +90,17 @@ Feature: Assessment report PDF download
       | Participant type        |
       | Stakeholder’s countries |
       | Name of the initiative  |
+
+  Scenario: User can download all pdf files from reports.
+    Given report assessments:
+      | name              | state     | remaining_barriers                   | other_comment          | documents | relevant_report             |
+      | PDF View Report   | published | Some barriers remain to be addressed | This is a test comment | text.pdf  | https://example.com/related |
+      | PDF View Report 2 | published | Some barriers remain to be addressed | This is a test comment | text.pdf  | https://example.com/related |
+    Given I am logged in as a moderator
+    When I go to "/dashboard/assessment/export"
+    Then I should see the button "Generate ZIP"
+    When I press "Generate ZIP"
+    And I wait for the batch process to finish
+    Then I should see the success message "Assessment ZIP package has been created."
+    Then I should see the link "Download assessments.zip"
+    Then the ZIP archive "public://assessments/pdf/assessments.zip" should contain at least 2 files

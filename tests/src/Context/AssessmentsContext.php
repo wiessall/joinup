@@ -185,12 +185,18 @@ class AssessmentsContext extends RawDrupalContext {
       ->create($values);
     $paragraph->save();
 
-    $report->set('binding_requirement', [
-      [
-        'target_id' => $paragraph->id(),
-        'target_revision_id' => $paragraph->getRevisionId(),
-      ],
-    ]);
+    $existing = [];
+    foreach ($report->get('binding_requirement') as $item) {
+      $existing[] = [
+        'target_id' => $item->target_id,
+        'target_revision_id' => $item->target_revision_id,
+      ];
+    }
+    $existing[] = [
+      'target_id' => $paragraph->id(),
+      'target_revision_id' => $paragraph->getRevisionId(),
+    ];
+    $report->set('binding_requirement', $existing);
     $report->save();
   }
 
@@ -485,6 +491,41 @@ class AssessmentsContext extends RawDrupalContext {
           count($participations)
         )
       );
+    }
+  }
+
+  /**
+   * Checks if zip archive contains some files count.
+   *
+   * @param string $uri
+   *   Archive location.
+   * @param int $count
+   *   Files count in archive.
+   */
+  #[Then('the ZIP archive :uri should contain at least :count file(s)')]
+  public function zipArchiveShouldContainAtLeastFiles(string $uri, int $count): void {
+    $fileSystem = \Drupal::service('file_system');
+    $path = $fileSystem->realpath($uri);
+
+    if (!$path || !file_exists($path)) {
+      throw new \RuntimeException(sprintf('ZIP archive "%s" does not exist.', $uri));
+    }
+
+    $zip = new \ZipArchive();
+
+    if ($zip->open($path) !== TRUE) {
+      throw new \RuntimeException(sprintf('Unable to open ZIP archive "%s".', $path));
+    }
+
+    $numFiles = $zip->numFiles;
+    $zip->close();
+
+    if ($numFiles < $count) {
+      throw new \RuntimeException(sprintf(
+        'Expected at least %d file(s) in the ZIP archive, found %d.',
+        $count,
+        $numFiles
+      ));
     }
   }
 
