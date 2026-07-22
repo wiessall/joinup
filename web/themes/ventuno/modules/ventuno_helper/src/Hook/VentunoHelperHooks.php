@@ -27,6 +27,12 @@ class VentunoHelperHooks {
           'items' => [],
         ],
       ],
+      'joinup_header_navigation' => [
+        'variables' => [
+          'items' => [],
+          'search' => [],
+        ],
+      ],
     ];
   }
 

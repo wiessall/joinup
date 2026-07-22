@@ -1,7 +1,7 @@
 {#
 /**
  * @file
- * Theme override for the header navigation block.
+ * Default theme implementation for the header navigation block.
  *
  * Renders the navbar list items that are not menus (search, bookmarks and the
  * anonymous sign in / get started items).
@@ -11,6 +11,20 @@
  * - search: The rendered search block, printed inside the search dropdown.
  */
 #}
+{% import _self as menu %}
+{% macro mmenu_links(links) %}
+  {% import _self as menu %}
+  <ul>
+    {% for link in links %}
+      <li>
+        <a href="{{ link.link }}"{{ create_attribute(link.attributes|default([])) }}>{{ link.label }}</a>
+        {% if link.links %}
+          {{ menu.mmenu_links(link.links) }}
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endmacro %}
 {% for item in items %}
   {% if item.breakpoint %}
     {% for link in item.links %}
@@ -90,13 +104,7 @@
         </svg>
       </button>
       <div class="mmenu-nav__menu p-0 d-none" aria-labelledby="{{ item.id }}">
-        <ul>
-          {% for link in item.links %}
-            <li>
-              <a href="{{ link.link }}"{{ create_attribute(link.attributes|default([])) }}>{{ link.label }}</a>
-            </li>
-          {% endfor %}
-        </ul>
+        {{ menu.mmenu_links(item.links) }}
       </div>
     </li>
   {% endif %}
