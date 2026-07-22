@@ -25,6 +25,10 @@ class BlockFieldProcessorTest extends ContentEntityTestBase {
     'joinup_tmgmt',
     'block',
     'block_field',
+    'path',
+    'path_alias',
+    'token',
+    'pathauto',
   ];
 
   /**
@@ -32,6 +36,8 @@ class BlockFieldProcessorTest extends ContentEntityTestBase {
    */
   public function setUp(): void {
     parent::setUp();
+
+    $this->installEntitySchema('path_alias');
 
     $field_storage = FieldStorageConfig::create([
       'field_name' => 'field_block',

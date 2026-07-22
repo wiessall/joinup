@@ -119,7 +119,7 @@ default:
       contexts: *contexts
       paths: *paths
       filters:
-        tags: '~@wip&&@group-clone'
+        tags: '~@wip&&@group-clone&&@clone-disabled'
   extensions:
     Drupal\MinkExtension:
       base_url: ${env.DRUPAL_BASE_URL}
