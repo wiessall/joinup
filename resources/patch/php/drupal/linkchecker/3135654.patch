@@ -1,0 +1,13 @@
+diff --git a/src/Plugin/views/field/LinkcheckerLinkPageEntityLabel.php b/src/Plugin/views/field/LinkcheckerLinkPageEntityLabel.php
+index d2fa1ed..b16edce 100644
+--- a/src/Plugin/views/field/LinkcheckerLinkPageEntityLabel.php
++++ b/src/Plugin/views/field/LinkcheckerLinkPageEntityLabel.php
+@@ -74,7 +74,7 @@ class LinkcheckerLinkPageEntityLabel extends FieldPluginBase {
+       return '';
+     }
+
+-    if ($linked_entity->getEntityTypeId() === 'paragraph' && $linked_entity->getParentEntity() !== NULL) {
++    while ($linked_entity->getEntityTypeId() === 'paragraph' && $linked_entity->getParentEntity() !== NULL) {
+       $linked_entity = $linked_entity->getParentEntity();
+     }
+
