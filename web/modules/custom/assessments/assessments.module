@@ -140,10 +140,7 @@ function assessments_preprocess_layout_paragraphs_insert_component_btn(&$variabl
     return;
   }
 
-  $entity = $layoutParagraphsLayout?->getEntity();
-  if ($entity instanceof AssessmentReport && $layoutParagraphsLayout?->getFieldName() === 'binding_requirement') {
-    $variables['title'] = t('New binding requirement');
-  }
+  $variables['title'] = t('New binding requirement');
 }
 
 /**
