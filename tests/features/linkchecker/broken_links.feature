@@ -29,3 +29,26 @@ Feature: Broken links report
     And I go to "admin/reports/linkchecker"
     Then I should see the link "Faulty text"
     And I should see the text "field_body"
+
+  @javascript
+  Scenario: A broken link in a paragraph nested inside an accordion is attributed to the node it belongs to.
+    Given I am logged in as a moderator
+    And I go to the "Broken links group" collection
+    And I open the plus button menu
+    And I click "Add custom page"
+    And I fill in "Title" with "Broken accordion page"
+    And I fill in "Abstract" with "Broken accordion abstract"
+    And I select "Demography" options from "Topic"
+    And I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout | one column |
+    And I click "Choose component"
+    And a modal should open
+    And I click "Accordion"
+    And I fill in the 1st "Item label" with "Broken section" in the "Accordion item" field
+    And I enter "<p><a href='/broken-accordion-paragraph'>Broken accordion link</a></p>" in the 1st "Body" wysiwyg editor in the "Accordion item" field
+    And I press "Save" in the "Modal buttons" region
+    And I press "Publish"
+    And I run the "linkchecker_cron" ultimate_cron job
+    When I go to "admin/reports/linkchecker"
+    Then I should see the link "Broken accordion page"
+    And I should see the text "field_body"
