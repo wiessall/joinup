@@ -10,7 +10,7 @@ extract:
   from_audio: false
   from_embed: false
   from_iframe: false
-  from_img: false
+  from_img: true
   from_object: false
   from_video: false
   filter_blacklist:
@@ -54,4 +54,3 @@ error:
   impersonate_account: admin
 logging:
   level: 6
-published_moderation_state: published
