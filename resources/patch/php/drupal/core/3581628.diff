@@ -1,0 +1,34 @@
+diff --git a/core/lib/Drupal/Component/Plugin/Discovery/DiscoveryTrait.php b/core/lib/Drupal/Component/Plugin/Discovery/DiscoveryTrait.php
+index fdaeda2decd1691dd20a28d4731756ac689fcaaf..9417ea376bcb778858d62802a92d658abcb8966f 100644
+--- a/core/lib/Drupal/Component/Plugin/Discovery/DiscoveryTrait.php
++++ b/core/lib/Drupal/Component/Plugin/Discovery/DiscoveryTrait.php
+@@ -42,7 +42,7 @@ public function getDefinition($plugin_id, $exception_on_invalid = TRUE) {
+    */
+   protected function doGetDefinition(array $definitions, $plugin_id, $exception_on_invalid) {
+     // Avoid using a ternary that would create a copy of the array.
+-    if (isset($definitions[$plugin_id])) {
++    if ($plugin_id !== NULL && isset($definitions[$plugin_id])) {
+       return $definitions[$plugin_id];
+     }
+     elseif (!$exception_on_invalid) {
+diff --git a/core/tests/Drupal/Tests/Component/Plugin/Discovery/DiscoveryTraitTest.php b/core/tests/Drupal/Tests/Component/Plugin/Discovery/DiscoveryTraitTest.php
+index 462415ed906f98d0fd6e540d9af6ae528c3fe539..8ea3ef76c0f67011b20adb39b115177ca2602afa 100644
+--- a/core/tests/Drupal/Tests/Component/Plugin/Discovery/DiscoveryTraitTest.php
++++ b/core/tests/Drupal/Tests/Component/Plugin/Discovery/DiscoveryTraitTest.php
+@@ -117,6 +117,16 @@ public function testGetDefinitionException(bool $expected, array $definitions, s
+     $trait->getDefinition($plugin_id, TRUE);
+   }
+ 
++  /**
++   * Tests getDefinition() with a null plugin ID.
++   */
++  public function testGetDefinitionNullPluginId(): void {
++    $trait = new DiscoveryTraitMockableClass();
++    $this->assertNull($trait->getDefinition(NULL, FALSE));
++    $this->expectException(PluginNotFoundException::class);
++    $trait->getDefinition(NULL, TRUE);
++  }
++
+   /**
+    * Data provider for testHasDefinition().
+    *

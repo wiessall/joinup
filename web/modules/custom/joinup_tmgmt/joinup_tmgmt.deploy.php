@@ -10,7 +10,7 @@ declare(strict_types=1);
 /**
  * Deletes obsolete continuous job item messages.
  */
-function joinup_tmgmt_deploy_201500(array &$sandbox): string {
+function joinup_tmgmt_deploy_201600(array &$sandbox): string {
   $connection = \Drupal::database();
   $message = 'Source was updated, changes were ignored as job item is still active.';
   $limit = 500000;

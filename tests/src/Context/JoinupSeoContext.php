@@ -119,6 +119,18 @@ class JoinupSeoContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts that the JSON-LD "@context" points to the dedicated context URL.
+   */
+  #[Given('the JSON-LD context should point to the ADMS-AP context URL')]
+  public function assertJsonLdContextUrl(): void {
+    $context = ($this->getMetatagsAsJson() ?? [])['@context'] ?? NULL;
+    $this->assertCondition(
+      is_string($context) && str_ends_with($context, '/assets/adms-ap-2.01.jsonld'),
+      sprintf("The @context should point to '/assets/adms-ap-2.01.jsonld', but '%s' was found.", var_export($context, TRUE)),
+    );
+  }
+
+  /**
    * Asserts that the schema.org metatags are attached in page.
    */
   #[Given('the metatag JSON should not be attached in the page')]

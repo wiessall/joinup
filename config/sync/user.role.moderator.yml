@@ -201,6 +201,7 @@ permissions:
   - 'delete private message thread for all'
   - 'delete sitewide alert entities'
   - 'delete terms in tags'
+  - 'download assessment PDFs'
   - 'download subscribers report'
   - 'edit any collection content'
   - 'edit any collection_logo media'
