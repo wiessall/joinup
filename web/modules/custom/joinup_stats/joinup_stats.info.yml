@@ -1,9 +1,0 @@
-name: Statistics
-description: 'Provide statistics for Joinup entities.'
-type: module
-package: Joinup
-core_version_requirement: "^10.4 || ^11"
-
-dependencies:
-  - 'joinup:joinup_bundle_class'
-  - 'meta_entity:meta_entity'
