@@ -449,9 +449,7 @@
                 "Add missing plural formulae @see https://www.drupal.org/i/3312406": "resources/patch/php/drupal/l10n_pconfig/3312406.mr4.commit1a0a53cb.diff"
             },
             "drupal/linkchecker": {
-                "Improve performance of LinkExtractorBatch & allow to skip unpublished moderated content @see https://www.drupal.org/i/3525930": "resources/patch/php/drupal/linkchecker/3525930-mr115.diff",
                 "Links never checked @see https://www.drupal.org/i/3469263": "resources/patch/php/drupal/linkchecker/3469263-mr133.diff",
-                "linkchecker_index table does not support entities with string IDs @see https://www.drupal.org/i/3567956": "resources/patch/php/drupal/linkchecker/3567956-mr134.diff",
                 "Page entity label does not resolve the topmost parent for nested paragraphs @see https://www.drupal.org/i/3135654": "resources/patch/php/drupal/linkchecker/3135654.patch"
             },
             "drupal/linkit": {
