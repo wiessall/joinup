@@ -10,7 +10,8 @@ Feature: SEO for RDF entities.
       | SEO entity |
 
     When I visit the "SEO entity" <type>
-    And the metatag graph of the item with "title" "SEO entity" should be present
+    And the metatag graph of the item with "http://purl.org/dc/terms/title" "SEO entity" should be present
+    And the JSON-LD context should point to the ADMS-AP context URL
     And 1 metatag graph of type "<graph type>" should exist in the page
     And the metatag graph of the item with "@type" "<graph type>" should have the following "http://purl.org/dc/terms/title" properties:
       | property  | value      |
@@ -18,7 +19,7 @@ Feature: SEO for RDF entities.
       | @value    | SEO entity |
 
     When I visit the <type> overview page
-    Then the metatag graph of the item with "title" "SEO entity" should not be present
+    Then the metatag graph of the item with "http://purl.org/dc/terms/title" "SEO entity" should not be present
 
     Examples:
       | type       | graph type                        |
@@ -37,10 +38,10 @@ Feature: SEO for RDF entities.
       | SEO distribution | SEO release |
 
     When I go to the "SEO release" release
-    Then the metatag graph of the item with title "SEO release" should be present
+    Then the metatag graph of the item with "http://purl.org/dc/terms/title" "SEO release" should be present
 
     When I go to the "SEO distribution" distribution
-    Then the metatag graph of the item with title "SEO distribution" should be present
+    Then the metatag graph of the item with "http://purl.org/dc/terms/title" "SEO distribution" should be present
 
   Scenario: Basic JSON meta information for licences.
     Given the following "licence" content:
@@ -59,15 +60,15 @@ Feature: SEO for RDF entities.
       | @type                                      | http://purl.org/dc/terms/LicenseDocument |
       | http://www.w3.org/2000/01/rdf-schema#label | SEO licence                              |
       | http://joinup.eu/licence/deprecated        | false                                    |
-      | description                                | Licence to perform SEO                   |
-      | type                                       | http://purl.org/adms/licence/PD          |
+      | http://purl.org/dc/terms/description       | Licence to perform SEO                   |
+      | http://purl.org/dc/terms/type              | http://purl.org/adms/licence/PD          |
 
   Scenario: Keywords are converted to literals in the normalization.
     Given the following "solution" content:
       | title        | keywords |
       | SEO solution | games    |
     When I go to the "SEO solution" solution
-    Then the metatag graph of the item with title "SEO solution" should be present
+    Then the metatag graph of the item with "http://purl.org/dc/terms/title" "SEO solution" should be present
     And the metatag graph of the item with "@type" "http://www.w3.org/ns/dcat#Dataset" should have the following properties:
       | property                          | value |
       | http://www.w3.org/ns/dcat#keyword | games |

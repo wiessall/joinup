@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_seo;
 
-use Drupal\Core\Extension\ExtensionPathResolver;
+use Drupal\Core\Url;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -24,7 +24,8 @@ readonly class JoinupSeoExportHelper implements JoinupSeoExportHelperInterface {
   public function __construct(
     #[Autowire(service: 'serializer')]
     protected SerializerInterface $serializer,
-    protected ExtensionPathResolver $extensionPathResolver,
+    #[Autowire(param: 'app.root')]
+    protected string $appRoot,
   ) {}
 
   /**
@@ -45,7 +46,9 @@ readonly class JoinupSeoExportHelper implements JoinupSeoExportHelperInterface {
    *   The exported string.
    */
   protected function exportEntityJsonLd(RdfSyncEntityInterface $entity): string {
-    $serialized = $this->serializer->serialize($entity, self::SERIALIZATION_FORMAT, $options = $this->getOptions());
+    $context_path = $this->appRoot . '/assets/adms-ap-2.01.jsonld';
+    $frame = json_decode(file_get_contents($context_path));
+    $serialized = $this->serializer->serialize($entity, self::SERIALIZATION_FORMAT, ['frame' => $frame]);
 
     if (!is_array($decodedSerialized = json_decode($serialized, TRUE))) {
       return '';
@@ -53,33 +56,11 @@ readonly class JoinupSeoExportHelper implements JoinupSeoExportHelperInterface {
 
     return json_encode(
       [
-        '@context' => $options['frame']->{'@context'},
+        '@context' => Url::fromUri('base:/assets/adms-ap-2.01.jsonld', ['absolute' => TRUE])->toString(),
         '@graph' => $decodedSerialized,
       ],
       JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
     );
-  }
-
-  /**
-   * Returns a static list of options for the serializer.
-   *
-   * @return array
-   *   An array of options for the JSON-LD serializer.
-   */
-  protected function getOptions(): array {
-    // The \EasyRdf\Serialiser\JsonLd uses the \ML\JsonLD class to generate the
-    // final output. The \ML\JsonLD has two ways of using the context. Either
-    // downloading it from a web source or by passing an object. For the web
-    // resource, the expected response has to be in the 'application/jsonld'
-    // format, something that we do not have. However, even for performance and
-    // availability purposes, a local file is used instead.
-    $context_path = $this->extensionPathResolver->getPath('module', 'joinup_seo') . '/assets/adms-ap-2.01.jsonld';
-    $content = file_get_contents($context_path);
-    $content = json_decode($content);
-    return [
-      // Frame contains the "@context" and passes this to the values.
-      'frame' => $content,
-    ];
   }
 
 }
