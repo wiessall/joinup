@@ -49,6 +49,7 @@ dependencies:
     - field_formatter_range
     - layout_builder
     - template_suggestion
+    - text
     - user
 third_party_settings:
   layout_builder:
@@ -91,7 +92,7 @@ content:
     weight: 7
     region: content
   oss_long_description:
-    type: basic_string
+    type: text_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
