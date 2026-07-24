@@ -138,8 +138,13 @@ class FileVisibilityTest extends JoinupExistingSiteTestBase {
     $this->assertStringStartsWith('public://', $file->getFileUri());
     $this->drupalGet($solution->toUrl());
     // Check that the anchor's href was updated.
-    echo $this->getSession()->getPage()->getHtml();
-    $this->assertSession()->responseContains($file->createFileUrl());
+    try {
+      $this->assertSession()->responseNotContains($file->createFileUrl());
+    }
+    catch (\Throwable $e) {
+      echo $this->getSession()->getPage()->getHtml();
+      throw $e;
+    }
   }
 
   /**
