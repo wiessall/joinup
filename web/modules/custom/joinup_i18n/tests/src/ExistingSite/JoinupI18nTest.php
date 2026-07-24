@@ -222,6 +222,7 @@ final class JoinupI18nTest extends JoinupExistingSiteTestBase {
    * (accepting a translation) must keep the other languages' items open.
    *
    * @legacy-covers \Drupal\joinup_i18n\Hook\JoinupI18nHooks::abortOutdatedJobItems
+   * @legacy-covers \joinup_group_node_presave
    */
   public function testOutdatedJobItemsAreAborted(): void {
     $node = $this->createNode([
@@ -260,9 +261,25 @@ final class JoinupI18nTest extends JoinupExistingSiteTestBase {
     $this->assertGreaterThan(1, count($freshItems));
     $this->assertEmpty(array_intersect($firstItems, $freshItems));
 
+    // Clearing the logo makes joinup_group_node_presave() assign a fresh
+    // fixture image.
+    $node->setNewRevision();
+    $node->set('logo', [])->save();
+    $logo = $node->get('logo')->first();
+    $this->assertNotEmpty($logo->target_id);
+
+    // The logo genuinely changed (a different file), so the previous items
+    // are correctly aborted and a newer set is scheduled.
+    $itemStorage->resetCache($freshItems);
+    foreach ($itemStorage->loadMultiple($freshItems) as $item) {
+      $this->assertTrue($item->isAborted());
+    }
+    $newestItems = $this->jobItemIds($node, [JobItemInterface::STATE_INACTIVE, JobItemInterface::STATE_ACTIVE]);
+    $this->assertGreaterThan(1, count($newestItems));
+
     // Accepting one language's translation re-saves the source node without
     // changing the source content, so the other languages' items stay open.
-    $acceptedItem = $itemStorage->load(array_shift($freshItems));
+    $acceptedItem = $itemStorage->load(array_shift($newestItems));
     $dataService = \Drupal::service('tmgmt.data');
     $translation = [];
     foreach ($dataService->filterTranslatable($acceptedItem->getData()) as $key => $data) {
@@ -271,9 +288,9 @@ final class JoinupI18nTest extends JoinupExistingSiteTestBase {
     $acceptedItem->addTranslatedData($dataService->unflatten($translation));
     $this->assertTrue($acceptedItem->isAccepted());
 
-    $itemStorage->resetCache($freshItems);
-    $otherItems = $itemStorage->loadMultiple($freshItems);
-    $this->assertCount(count($freshItems), $otherItems);
+    $itemStorage->resetCache($newestItems);
+    $otherItems = $itemStorage->loadMultiple($newestItems);
+    $this->assertCount(count($newestItems), $otherItems);
     foreach ($otherItems as $item) {
       $this->assertFalse($item->isAborted());
     }
