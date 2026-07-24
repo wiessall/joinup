@@ -1,0 +1,156 @@
+diff --git a/linkchecker.install b/linkchecker.install
+index 65c1a631cb4d1c1ab8f07d0f56903677b60f5112..1111bf47bf682692b8b0586f96d8e6e3a29b4ec1 100644
+--- a/linkchecker.install
++++ b/linkchecker.install
+@@ -31,7 +31,8 @@ function linkchecker_schema() {
+     'description' => 'Stores entities from which links where extracted.',
+     'fields' => [
+       'entity_id' => [
+-        'type' => 'int',
++        'type' => 'varchar',
++        'length' => 128,
+         'not null' => TRUE,
+         'description' => 'Entity ID.',
+       ],
+@@ -218,3 +219,25 @@ function linkchecker_update_8007(&$sandbox) {
+     return t('The entity_id field storage definition successfully uninstalled.');
+   }
+ }
++
++/**
++ * Change entity_id column to varchar to support string entity IDs.
++ */
++function linkchecker_update_8008() {
++  $database = \Drupal::database();
++  $schema = $database->schema();
++
++  // Drop the primary key first.
++  $schema->dropPrimaryKey('linkchecker_index');
++
++  // Change the column type from int to varchar.
++  $schema->changeField('linkchecker_index', 'entity_id', 'entity_id', [
++    'type' => 'varchar',
++    'length' => 128,
++    'not null' => TRUE,
++    'description' => 'Entity ID.',
++  ]);
++
++  // Recreate the primary key.
++  $schema->addPrimaryKey('linkchecker_index', ['entity_id', 'entity_type']);
++}
+diff --git a/tests/src/Kernel/LinkcheckerUpdateTest.php b/tests/src/Kernel/LinkcheckerUpdateTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..b3707533b1e7461bbaee74f55a43ee10b4e47193
+--- /dev/null
++++ b/tests/src/Kernel/LinkcheckerUpdateTest.php
+@@ -0,0 +1,110 @@
++<?php
++
++namespace Drupal\Tests\linkchecker\Kernel;
++
++use Drupal\KernelTests\KernelTestBase;
++
++/**
++ * Tests for linkchecker update hooks.
++ *
++ * @group linkchecker
++ */
++class LinkcheckerUpdateTest extends KernelTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = [
++    'system',
++    'linkchecker',
++    'user',
++  ];
++
++  /**
++   * The database connection.
++   *
++   * @var \Drupal\Core\Database\Connection
++   */
++  protected $database;
++
++  /**
++   * {@inheritdoc}
++   */
++  public function setUp(): void {
++    parent::setUp();
++    $this->installSchema('linkchecker', 'linkchecker_index');
++    $this->database = $this->container->get('database');
++  }
++
++  /**
++   * Tests linkchecker_update_8008 converts entity_id column to varchar.
++   *
++   * @covers ::linkchecker_update_8008
++   */
++  public function testUpdate8008EntityIdColumnTypeChange(): void {
++    $schema = $this->database->schema();
++
++    // Revert the schema to the old state with int entity_id column.
++    $schema->dropPrimaryKey('linkchecker_index');
++    $schema->changeField('linkchecker_index', 'entity_id', 'entity_id', [
++      'type' => 'int',
++      'not null' => TRUE,
++      'description' => 'Entity ID.',
++    ]);
++    $schema->addPrimaryKey('linkchecker_index', ['entity_id', 'entity_type']);
++
++    // Insert some test data with integer entity IDs.
++    $this->database->insert('linkchecker_index')
++      ->fields([
++        'entity_id' => 123,
++        'entity_type' => 'node',
++        'last_extracted_time' => 1234567890,
++      ])
++      ->execute();
++
++    $this->database->insert('linkchecker_index')
++      ->fields([
++        'entity_id' => 456,
++        'entity_type' => 'paragraph',
++        'last_extracted_time' => 1234567891,
++      ])
++      ->execute();
++
++    // Run the update function.
++    $module_path = \Drupal::service('extension.path.resolver')->getPath('module', 'linkchecker');
++    require_once $module_path . '/linkchecker.install';
++    linkchecker_update_8008();
++
++    // Verify the data is still intact.
++    $results = $this->database->select('linkchecker_index', 'li')
++      ->fields('li')
++      ->orderBy('entity_id')
++      ->execute()
++      ->fetchAll();
++
++    $this->assertCount(2, $results);
++    $this->assertEquals('123', $results[0]->entity_id);
++    $this->assertEquals('node', $results[0]->entity_type);
++    $this->assertEquals('456', $results[1]->entity_id);
++    $this->assertEquals('paragraph', $results[1]->entity_type);
++
++    // Verify that we can now insert string entity IDs.
++    $this->database->insert('linkchecker_index')
++      ->fields([
++        'entity_id' => 'string-entity-id-789',
++        'entity_type' => 'custom_entity',
++        'last_extracted_time' => 1234567892,
++      ])
++      ->execute();
++
++    $result = $this->database->select('linkchecker_index', 'li')
++      ->fields('li')
++      ->condition('entity_id', 'string-entity-id-789')
++      ->execute()
++      ->fetchObject();
++
++    $this->assertEquals('string-entity-id-789', $result->entity_id);
++    $this->assertEquals('custom_entity', $result->entity_type);
++  }
++
++}

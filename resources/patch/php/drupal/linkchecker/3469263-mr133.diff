@@ -1,0 +1,435 @@
+diff --git a/src/LinkCheckerService.php b/src/LinkCheckerService.php
+index ff47b9092131e713cae841c5b8d568db6f57ce30..c193d3aa72c754349728305a45b7ef82f4991b7e 100644
+--- a/src/LinkCheckerService.php
++++ b/src/LinkCheckerService.php
+@@ -14,7 +14,7 @@ use Drupal\linkchecker\Event\BuildHeader;
+ use Drupal\linkchecker\Event\LinkcheckerEvents;
+ use Drupal\linkchecker\Plugin\LinkStatusHandlerManager;
+ use GuzzleHttp\Client;
+-use GuzzleHttp\Exception\RequestException;
++use GuzzleHttp\Exception\TransferException;
+ use Psr\Http\Message\ResponseInterface;
+ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+ 
+@@ -201,7 +201,7 @@ class LinkCheckerService {
+         }
+         $this->statusHandling($response, $link);
+       },
+-      function (RequestException $e) use ($link) {
++      function (TransferException $e) use ($link) {
+         $this->exceptionHandling($e, $link);
+       }
+     );
+@@ -356,12 +356,12 @@ class LinkCheckerService {
+   /**
+    * Exception handling.
+    *
+-   * @param \GuzzleHttp\Exception\RequestException $e
++   * @param \GuzzleHttp\Exception\TransferException $e
+    *   An object containing the Exception.
+    * @param \Drupal\linkchecker\LinkCheckerLinkInterface $link
+    *   The link.
+    */
+-  protected function exceptionHandling(RequestException $e, LinkCheckerLinkInterface $link) {
++  public function exceptionHandling(TransferException $e, LinkCheckerLinkInterface $link) {
+     $link->setStatusCode('502');
+     $link->setErrorMessage($e->getMessage());
+     $link->setFailCount($link->getFailCount() + 1);
+diff --git a/tests/src/Functional/LinkCheckerBase.php b/tests/src/Functional/LinkCheckerBase.php
+index f8528cbcf27cbc1ee1932972e26243cb27bae332..daa3294d889408ca260205070f162f91723559a9 100644
+--- a/tests/src/Functional/LinkCheckerBase.php
++++ b/tests/src/Functional/LinkCheckerBase.php
+@@ -3,10 +3,11 @@
+ namespace Drupal\Tests\linkchecker\Functional;
+ 
+ use Drupal\Core\StringTranslation\StringTranslationTrait;
+-use Drupal\Tests\BrowserTestBase;
++use Drupal\field\Entity\FieldConfig;
+ use Drupal\filter\Entity\FilterFormat;
+ use Drupal\linkchecker\LinkCheckerLinkInterface;
+ use Drupal\node\Entity\NodeType;
++use Drupal\Tests\BrowserTestBase;
+ 
+ /**
+  * Base browser testcase for the Link checker module.
+@@ -73,7 +74,8 @@ abstract class LinkCheckerBase extends BrowserTestBase {
+     $article_node_type->save();
+ 
+     // Create a body field instance for the 'page' node type.
+-    $node_body_field = node_add_body_field($page_node_type);
++    $this->createBodyField('node', $page_node_type->id());
++    $node_body_field = FieldConfig::loadByName('node', $page_node_type->id(), 'body');
+     $node_body_field->setThirdPartySetting('linkchecker', 'scan', TRUE);
+     $node_body_field->setThirdPartySetting('linkchecker', 'extractor', 'html_link_extractor');
+     $node_body_field->save();
+diff --git a/tests/src/Functional/LinkCheckerEditFormTest.php b/tests/src/Functional/LinkCheckerEditFormTest.php
+index f4435684b2c28876466a95ad0b14d72932180c29..badf5b01cd99dfc7d3ee1e6dd08b3827092270a8 100644
+--- a/tests/src/Functional/LinkCheckerEditFormTest.php
++++ b/tests/src/Functional/LinkCheckerEditFormTest.php
+@@ -3,8 +3,9 @@
+ namespace Drupal\Tests\linkchecker\Functional;
+ 
+ use Drupal\Core\StringTranslation\StringTranslationTrait;
+-use Drupal\Tests\BrowserTestBase;
++use Drupal\field\Entity\FieldConfig;
+ use Drupal\node\Entity\NodeType;
++use Drupal\Tests\BrowserTestBase;
+ 
+ /**
+  * Test Link checker module edit form.
+@@ -52,7 +53,8 @@ class LinkCheckerEditFormTest extends BrowserTestBase {
+     $node_type->save();
+ 
+     // Create a body field instance for the 'page' node type.
+-    $node_body_field = node_add_body_field($node_type);
++    $this->createBodyField('node', $node_type->id());
++    $node_body_field = FieldConfig::loadByName('node', $node_type->id(), 'body');
+     $node_body_field->setThirdPartySetting('linkchecker', 'scan', TRUE);
+     $node_body_field->setThirdPartySetting('linkchecker', 'extractor', 'html_link_extractor');
+     $node_body_field->save();
+diff --git a/tests/src/Functional/LinkCheckerInterfaceTest.php b/tests/src/Functional/LinkCheckerInterfaceTest.php
+index 007302692a5f08df7497557d894bc03698644826..d95019cdcfdbcff24b447ef7b603791f4a9cb354 100644
+--- a/tests/src/Functional/LinkCheckerInterfaceTest.php
++++ b/tests/src/Functional/LinkCheckerInterfaceTest.php
+@@ -2,17 +2,18 @@
+ 
+ namespace Drupal\Tests\linkchecker\Functional;
+ 
++use Drupal\block_content\Entity\BlockContent;
++use Drupal\block_content\Entity\BlockContentType;
+ use Drupal\Component\Render\FormattableMarkup;
+ use Drupal\Component\Utility\Random;
+ use Drupal\Core\StringTranslation\StringTranslationTrait;
+ use Drupal\Core\Url;
+-use Drupal\Tests\BrowserTestBase;
+-use Drupal\block_content\Entity\BlockContent;
+-use Drupal\block_content\Entity\BlockContentType;
++use Drupal\field\Entity\FieldConfig;
+ use Drupal\filter\Entity\FilterFormat;
+ use Drupal\linkchecker\Entity\LinkCheckerLink;
+ use Drupal\linkchecker\LinkCheckerLinkInterface;
+ use Drupal\node\Entity\NodeType;
++use Drupal\Tests\BrowserTestBase;
+ use Drupal\user\Entity\User;
+ 
+ /**
+@@ -67,7 +68,8 @@ class LinkCheckerInterfaceTest extends BrowserTestBase {
+       'format' => 'full_html',
+     ]);
+     $node_type->save();
+-    $node_body_field = node_add_body_field($node_type);
++    $this->createBodyField('node', $node_type->id());
++    $node_body_field = FieldConfig::loadByName('node', $node_type->id(), 'body');
+     $node_body_field->setThirdPartySetting('linkchecker', 'scan', TRUE);
+     $node_body_field->setThirdPartySetting('linkchecker', 'extractor', 'html_link_extractor');
+     $node_body_field->save();
+@@ -77,7 +79,8 @@ class LinkCheckerInterfaceTest extends BrowserTestBase {
+       'label' => 'Basic block',
+     ]);
+     $block_type->save();
+-    $block_body_field = block_content_add_body_field($block_type->id());
++    $this->createBodyField('block_content', $block_type->id());
++    $block_body_field = FieldConfig::loadByName('block_content', $block_type->id(), 'body');
+     $block_body_field->setThirdPartySetting('linkchecker', 'scan', TRUE);
+     $block_body_field->setThirdPartySetting('linkchecker', 'extractor', 'html_link_extractor');
+     $block_body_field->save();
+diff --git a/tests/src/Kernel/LinkCheckerLinkAccessTest.php b/tests/src/Kernel/LinkCheckerLinkAccessTest.php
+index fb1c106ac6f1ca4c68ae15b92c712146102fc908..7b49f4c4f1210e67a20d61328595cabe39dccf25 100644
+--- a/tests/src/Kernel/LinkCheckerLinkAccessTest.php
++++ b/tests/src/Kernel/LinkCheckerLinkAccessTest.php
+@@ -79,6 +79,7 @@ class LinkCheckerLinkAccessTest extends KernelTestBase {
+     $this->installEntitySchema('node');
+     $this->installEntitySchema('path_alias');
+     $this->installEntitySchema('linkcheckerlink');
++    $this->installConfig('user');
+     $this->installConfig('node');
+     $this->installConfig('linkchecker');
+     /** @var \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager */
+diff --git a/tests/src/Kernel/LinkcheckerCleanUpTest.php b/tests/src/Kernel/LinkcheckerCleanUpTest.php
+index 6bcfa7ec49fc754259833b175a39b3db59985d89..5efc9ffa7b1d2952dd7658c34d621ba1bb2e769e 100644
+--- a/tests/src/Kernel/LinkcheckerCleanUpTest.php
++++ b/tests/src/Kernel/LinkcheckerCleanUpTest.php
+@@ -7,6 +7,7 @@ use Drupal\KernelTests\KernelTestBase;
+ use Drupal\linkchecker\Entity\LinkCheckerLink;
+ use Drupal\node\Entity\NodeType;
+ use Drupal\node\NodeInterface;
++use Drupal\Tests\field\Traits\BodyFieldCreationTrait;
+ use Drupal\Tests\node\Traits\NodeCreationTrait;
+ 
+ /**
+@@ -18,6 +19,7 @@ use Drupal\Tests\node\Traits\NodeCreationTrait;
+  */
+ class LinkcheckerCleanUpTest extends KernelTestBase {
+ 
++  use BodyFieldCreationTrait;
+   use NodeCreationTrait;
+ 
+   /**
+@@ -98,7 +100,7 @@ class LinkcheckerCleanUpTest extends KernelTestBase {
+       'type' => 'page',
+     ]);
+     $node_type->save();
+-    node_add_body_field($node_type);
++    $this->createBodyField('node', $node_type->id());
+     $node = $this->createNode([
+       'type' => 'page',
+       'body' => [
+@@ -159,7 +161,7 @@ class LinkcheckerCleanUpTest extends KernelTestBase {
+   public function testQueueCleanUp(): void {
+     $type = NodeType::create(['name' => 'Links', 'type' => 'links']);
+     $type->save();
+-    node_add_body_field($type);
++    $this->createBodyField('node', $type->id());
+ 
+     $node = $this->createNode([
+       'type' => 'links',
+diff --git a/tests/src/Kernel/LinkcheckerHtmlLinkExtractorTest.php b/tests/src/Kernel/LinkcheckerHtmlLinkExtractorTest.php
+index 8719b7795354bc786dc82b34a80ca98ad5c154b5..8d704607962e0c5a73c975a7c9d2ef6c02c23f7f 100644
+--- a/tests/src/Kernel/LinkcheckerHtmlLinkExtractorTest.php
++++ b/tests/src/Kernel/LinkcheckerHtmlLinkExtractorTest.php
+@@ -4,8 +4,9 @@ namespace Drupal\Tests\linkchecker\Kernel;
+ 
+ use Drupal\Component\Render\FormattableMarkup;
+ use Drupal\KernelTests\KernelTestBase;
+-use Drupal\Tests\node\Traits\NodeCreationTrait;
+ use Drupal\node\Entity\NodeType;
++use Drupal\Tests\field\Traits\BodyFieldCreationTrait;
++use Drupal\Tests\node\Traits\NodeCreationTrait;
+ 
+ /**
+  * Test html link extractor.
+@@ -14,6 +15,7 @@ use Drupal\node\Entity\NodeType;
+  */
+ class LinkcheckerHtmlLinkExtractorTest extends KernelTestBase {
+ 
++  use BodyFieldCreationTrait;
+   use NodeCreationTrait;
+ 
+   /**
+@@ -74,7 +76,7 @@ class LinkcheckerHtmlLinkExtractorTest extends KernelTestBase {
+   public function testHtmlExtractor() {
+     $type = NodeType::create(['name' => 'Links', 'type' => 'links']);
+     $type->save();
+-    node_add_body_field($type);
++    $this->createBodyField('node', $type->id());
+ 
+     $node = $this->createNode([
+       'type' => 'links',
+diff --git a/tests/src/Kernel/LinkcheckerJsonApiTest.php b/tests/src/Kernel/LinkcheckerJsonApiTest.php
+index 948711f06e256335e4fbead0d88ce081616a7b5b..80e74004d2fa4a5a1421cfe14f3f4c54aadf7c10 100644
+--- a/tests/src/Kernel/LinkcheckerJsonApiTest.php
++++ b/tests/src/Kernel/LinkcheckerJsonApiTest.php
+@@ -2,11 +2,12 @@
+ 
+ namespace Drupal\Tests\linkchecker\Kernel;
+ 
++use Drupal\jsonapi\ResourceResponse;
+ use Drupal\KernelTests\KernelTestBase;
++use Drupal\node\Entity\NodeType;
++use Drupal\Tests\field\Traits\BodyFieldCreationTrait;
+ use Drupal\Tests\node\Traits\NodeCreationTrait;
+ use Drupal\Tests\user\Traits\UserCreationTrait;
+-use Drupal\jsonapi\ResourceResponse;
+-use Drupal\node\Entity\NodeType;
+ use Symfony\Component\HttpFoundation\Request;
+ 
+ /**
+@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
+  */
+ class LinkcheckerJsonApiTest extends KernelTestBase {
+ 
++  use BodyFieldCreationTrait;
+   use NodeCreationTrait;
+   use UserCreationTrait;
+ 
+@@ -50,7 +52,7 @@ class LinkcheckerJsonApiTest extends KernelTestBase {
+     // Create node type with body field.
+     $type = NodeType::create(['name' => 'Article', 'type' => 'article']);
+     $type->save();
+-    node_add_body_field($type);
++    $this->createBodyField('node', $type->id());
+ 
+     // Prepare just 1 test node.
+     $node = $this->createNode([
+diff --git a/tests/src/Kernel/LinkcheckerLinkCheckerServiceTest.php b/tests/src/Kernel/LinkcheckerLinkCheckerServiceTest.php
+index 4be289dc02bea9852b325fa5036d096b03656bd3..e4cf97f382268f8c4d6252eac9159b0035f8aeb3 100644
+--- a/tests/src/Kernel/LinkcheckerLinkCheckerServiceTest.php
++++ b/tests/src/Kernel/LinkcheckerLinkCheckerServiceTest.php
+@@ -6,8 +6,10 @@ use Drupal\Component\Render\FormattableMarkup;
+ use Drupal\KernelTests\KernelTestBase;
+ use Drupal\linkchecker\Entity\LinkCheckerLink;
+ use GuzzleHttp\Client;
++use GuzzleHttp\Exception\ConnectException;
+ use GuzzleHttp\Handler\MockHandler;
+ use GuzzleHttp\HandlerStack;
++use GuzzleHttp\Psr7\Request;
+ use GuzzleHttp\Psr7\Response;
+ 
+ /**
+@@ -235,4 +237,23 @@ class LinkcheckerLinkCheckerServiceTest extends KernelTestBase {
+     return $link;
+   }
+ 
++  /**
++   * Tests that TransferException (e.g., ConnectException) is handled correctly.
++   *
++   * Verifies that the link status code is set to '502', the error message is
++   * populated, and the fail count is incremented when a Guzzle ConnectException
++   * is thrown during link checking.
++   */
++  public function testTransferExceptionHandling() {
++    $link = $this->createDummyLink('http://example.com');
++
++    $exception = new ConnectException('Connection refused', new Request('GET', 'http://example.com'));
++
++    $this->checkerService->exceptionHandling($exception, $link);
++
++    $this->assertEquals('502', $link->getStatusCode());
++    $this->assertStringContainsString('Connection refused', $link->getErrorMessage());
++    $this->assertEquals(1, $link->getFailCount());
++  }
++
+ }
+diff --git a/tests/src/Kernel/LinkcheckerLinkExtractorServiceTest.php b/tests/src/Kernel/LinkcheckerLinkExtractorServiceTest.php
+index e74adac3b18877b12d19e9b0acb30524144986f4..c9d45e9a6e591b5b807d73941d5f46187db9db30 100644
+--- a/tests/src/Kernel/LinkcheckerLinkExtractorServiceTest.php
++++ b/tests/src/Kernel/LinkcheckerLinkExtractorServiceTest.php
+@@ -5,10 +5,11 @@ namespace Drupal\Tests\linkchecker\Kernel;
+ use Drupal\Component\Render\FormattableMarkup;
+ use Drupal\Core\Queue\DatabaseQueue;
+ use Drupal\KernelTests\KernelTestBase;
+-use Drupal\Tests\node\Traits\NodeCreationTrait;
+ use Drupal\linkchecker\Entity\LinkCheckerLink;
+ use Drupal\linkchecker\LinkCheckerLinkInterface;
+ use Drupal\node\Entity\NodeType;
++use Drupal\Tests\field\Traits\BodyFieldCreationTrait;
++use Drupal\Tests\node\Traits\NodeCreationTrait;
+ 
+ /**
+  * Test link extractor service.
+@@ -17,6 +18,7 @@ use Drupal\node\Entity\NodeType;
+  */
+ class LinkcheckerLinkExtractorServiceTest extends KernelTestBase {
+ 
++  use BodyFieldCreationTrait;
+   use NodeCreationTrait;
+ 
+   /**
+@@ -223,7 +225,7 @@ class LinkcheckerLinkExtractorServiceTest extends KernelTestBase {
+   public function testIsExists() {
+     $type = NodeType::create(['name' => 'Links', 'type' => 'links']);
+     $type->save();
+-    node_add_body_field($type);
++    $this->createBodyField('node', $type->id());
+ 
+     $node = $this->createNode([
+       'type' => 'links',
+diff --git a/tests/src/Kernel/LinkcheckerRepair301Test.php b/tests/src/Kernel/LinkcheckerRepair301Test.php
+index eed0e686476a8b3049838c4709500861abf11324..b2706c0977444f85cac734e6b55700693fefc1ab 100644
+--- a/tests/src/Kernel/LinkcheckerRepair301Test.php
++++ b/tests/src/Kernel/LinkcheckerRepair301Test.php
+@@ -4,13 +4,14 @@ namespace Drupal\Tests\linkchecker\Kernel;
+ 
+ use Drupal\Core\Queue\DatabaseQueue;
+ use Drupal\KernelTests\KernelTestBase;
+-use Drupal\Tests\node\Traits\NodeCreationTrait;
+-use Drupal\Tests\user\Traits\UserCreationTrait;
+ use Drupal\linkchecker\Entity\LinkCheckerLink;
+ use Drupal\linkchecker\LinkCheckerLinkInterface;
+ use Drupal\node\Entity\Node;
+ use Drupal\node\Entity\NodeType;
+ use Drupal\node\NodeInterface;
++use Drupal\Tests\field\Traits\BodyFieldCreationTrait;
++use Drupal\Tests\node\Traits\NodeCreationTrait;
++use Drupal\Tests\user\Traits\UserCreationTrait;
+ use GuzzleHttp\Psr7\Response;
+ 
+ /**
+@@ -20,6 +21,7 @@ use GuzzleHttp\Psr7\Response;
+  */
+ class LinkcheckerRepair301Test extends KernelTestBase {
+ 
++  use BodyFieldCreationTrait;
+   use NodeCreationTrait;
+   use UserCreationTrait;
+ 
+@@ -149,7 +151,7 @@ class LinkcheckerRepair301Test extends KernelTestBase {
+ 
+     $type = NodeType::create(['name' => 'Links', 'type' => 'links']);
+     $type->save();
+-    node_add_body_field($type);
++    $this->createBodyField('node', $type->id());
+ 
+     $node = $this->createNode([
+       'type' => 'links',
+diff --git a/tests/src/Kernel/LinkcheckerUnpublish404Test.php b/tests/src/Kernel/LinkcheckerUnpublish404Test.php
+index ccbb995a17d00a4df2068c2ce2c2e2bab6104e26..dc53c0917269639acbd21d13507d35a1ca10529b 100644
+--- a/tests/src/Kernel/LinkcheckerUnpublish404Test.php
++++ b/tests/src/Kernel/LinkcheckerUnpublish404Test.php
+@@ -4,13 +4,14 @@ namespace Drupal\Tests\linkchecker\Kernel;
+ 
+ use Drupal\Core\Queue\DatabaseQueue;
+ use Drupal\KernelTests\KernelTestBase;
+-use Drupal\Tests\node\Traits\NodeCreationTrait;
+-use Drupal\Tests\user\Traits\UserCreationTrait;
+ use Drupal\linkchecker\Entity\LinkCheckerLink;
+ use Drupal\linkchecker\LinkCheckerLinkInterface;
+ use Drupal\node\Entity\Node;
+ use Drupal\node\Entity\NodeType;
+ use Drupal\node\NodeInterface;
++use Drupal\Tests\field\Traits\BodyFieldCreationTrait;
++use Drupal\Tests\node\Traits\NodeCreationTrait;
++use Drupal\Tests\user\Traits\UserCreationTrait;
+ use GuzzleHttp\Psr7\Response;
+ 
+ /**
+@@ -20,6 +21,7 @@ use GuzzleHttp\Psr7\Response;
+  */
+ class LinkcheckerUnpublish404Test extends KernelTestBase {
+ 
++  use BodyFieldCreationTrait;
+   use NodeCreationTrait;
+   use UserCreationTrait;
+ 
+@@ -117,7 +119,7 @@ class LinkcheckerUnpublish404Test extends KernelTestBase {
+ 
+     $type = NodeType::create(['name' => 'Links', 'type' => 'links']);
+     $type->save();
+-    node_add_body_field($type);
++    $this->createBodyField('node', $type->id());
+ 
+     $node = $this->createNode([
+       'type' => 'links',
+diff --git a/tests/src/Kernel/QueueLinksTest.php b/tests/src/Kernel/QueueLinksTest.php
+index b8a98341dda4dd1e530d0aebb09eaf61b3169ae1..d661ca9bac51a8d75c849791e66a5ebdd2f40cc2 100644
+--- a/tests/src/Kernel/QueueLinksTest.php
++++ b/tests/src/Kernel/QueueLinksTest.php
+@@ -3,9 +3,10 @@
+ namespace Drupal\Tests\linkchecker\Kernel;
+ 
+ use Drupal\KernelTests\KernelTestBase;
+-use Drupal\Tests\node\Traits\NodeCreationTrait;
+ use Drupal\linkchecker\Entity\LinkCheckerLink;
+ use Drupal\node\Entity\NodeType;
++use Drupal\Tests\field\Traits\BodyFieldCreationTrait;
++use Drupal\Tests\node\Traits\NodeCreationTrait;
+ 
+ /**
+  * Test for making sure queueing links gets us the number we expect.
+@@ -14,6 +15,7 @@ use Drupal\node\Entity\NodeType;
+  */
+ class QueueLinksTest extends KernelTestBase {
+ 
++  use BodyFieldCreationTrait;
+   use NodeCreationTrait;
+ 
+   /**
+@@ -96,7 +98,7 @@ class QueueLinksTest extends KernelTestBase {
+   public function testNumberOfItems() {
+     $type = NodeType::create(['name' => 'Links', 'type' => 'links']);
+     $type->save();
+-    node_add_body_field($type);
++    $this->createBodyField('node', $type->id());
+ 
+     $node = $this->createNode([
+       'type' => 'links',

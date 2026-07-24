@@ -7,7 +7,12 @@ dependencies:
     - filter.format.content_editor
     - paragraphs.paragraphs_type.simple_paragraph
   module:
+    - linkchecker
     - text
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: html_link_extractor
 id: paragraph.simple_paragraph.field_body
 field_name: field_body
 entity_type: paragraph

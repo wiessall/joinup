@@ -1,0 +1,17 @@
+uuid: 510230d2-dc09-42ae-9ffb-af93d78a3f33
+langcode: en
+status: true
+dependencies:
+  module:
+    - linkchecker
+title: 'Default cron handler'
+id: linkchecker_cron
+weight: 0
+module: linkchecker
+callback: 'linkchecker#cron'
+scheduler:
+  id: simple
+launcher:
+  id: serial
+logger:
+  id: database
