@@ -7,7 +7,6 @@ dependencies:
     - field.storage.node.oss_archived
     - field.storage.node.oss_categories
     - field.storage.node.oss_development_status
-    - field.storage.node.oss_features
     - field.storage.node.oss_git_description
     - field.storage.node.oss_release_date
     - field.storage.node.oss_scope
@@ -18,7 +17,6 @@ dependencies:
     - search_api.server.joinup
   module:
     - joinup_flag
-    - joinup_oss_catalogue
     - joinup_search
     - node
     - search_api_solr
@@ -130,14 +128,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.oss_development_status
-  oss_features:
-    label: Features
-    datasource_id: 'entity:node'
-    property_path: oss_features
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.oss_features
   oss_git_description:
     label: 'GIT Description'
     datasource_id: 'entity:node'
