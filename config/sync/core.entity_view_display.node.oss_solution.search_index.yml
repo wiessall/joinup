@@ -90,13 +90,6 @@ content:
         template_suggestion: ''
     weight: 7
     region: content
-  oss_git_description:
-    type: basic_string
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    weight: 0
-    region: content
   oss_long_description:
     type: basic_string
     label: hidden
@@ -206,6 +199,7 @@ hidden:
   oss_default_branch: true
   oss_development_status: true
   oss_documentation: true
+  oss_git_description: true
   oss_git_forks: true
   oss_git_open_issues: true
   oss_git_open_pull_requests: true
