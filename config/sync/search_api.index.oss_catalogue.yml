@@ -17,7 +17,6 @@ dependencies:
     - search_api.server.joinup
   module:
     - joinup_flag
-    - joinup_search
     - node
     - search_api_solr
     - taxonomy
@@ -245,9 +244,6 @@ datasource_settings:
 processor_settings:
   add_url: {  }
   aggregated_field: {  }
-  aggregated_topic_hierarchy:
-    weights:
-      preprocess_index: -50
   auto_aggregated_fulltext_field: {  }
   content_access:
     weights:
