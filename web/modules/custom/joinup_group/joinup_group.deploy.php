@@ -10,7 +10,7 @@ declare(strict_types=1);
 /**
  * Backfills missing width/height on collection and solution logos.
  */
-function joinup_group_deploy_10001(array &$sandbox): string {
+function joinup_group_deploy_201600(array &$sandbox): string {
   $database = \Drupal::database();
 
   if (!isset($sandbox['rows'])) {
