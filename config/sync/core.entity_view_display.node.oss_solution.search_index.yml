@@ -191,7 +191,6 @@ hidden:
   oss_default_branch: true
   oss_development_status: true
   oss_documentation: true
-  oss_short_description: true
   oss_git_description: true
   oss_git_forks: true
   oss_git_open_issues: true
@@ -210,6 +209,7 @@ hidden:
   oss_release_date: true
   oss_scope: true
   oss_screenshots: true
+  oss_short_description: true
   oss_software_version: true
   oss_source: true
   oss_source_hash: true
