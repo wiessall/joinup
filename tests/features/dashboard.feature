@@ -18,6 +18,7 @@ Feature: Dashboard
       | Files                    |
       | Manage webforms          |
       | OAuth2 Client Requests   |
+      | Broken links report      |
     And I should not see the button "Submit"
 
   Scenario Outline: Moderators should see proposed collections and solutions.
