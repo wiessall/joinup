@@ -17,6 +17,7 @@ dependencies:
     - search_api.server.joinup
   module:
     - joinup_flag
+    - joinup_oss_catalogue
     - node
     - search_api_solr
     - taxonomy
@@ -131,7 +132,7 @@ field_settings:
     label: 'GIT Description'
     datasource_id: 'entity:node'
     property_path: oss_git_description
-    type: 'solr_text_custom:ngram'
+    type: text
     dependencies:
       config:
         - field.storage.node.oss_git_description
@@ -269,6 +270,7 @@ processor_settings:
       strong: 2.0
   joinup_entity_bundle: {  }
   language_with_fallback: {  }
+  oss_solution_rendered_item: {  }
   rendered_item: {  }
   solr_date_range:
     weights:
