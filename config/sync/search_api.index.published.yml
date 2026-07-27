@@ -904,7 +904,9 @@ processor_settings:
   aggregated_topic_hierarchy:
     weights:
       preprocess_index: -50
-  assessment_processor: {  }
+  assessment_processor:
+    weights:
+      preprocess_index: 0
   auto_aggregated_fulltext_field: {  }
   custom_value: {  }
   entity_type: {  }
@@ -926,6 +928,8 @@ processor_settings:
       - description_processed_spellcheck
       - field_event_agenda
       - field_event_agenda_spellcheck
+      - processed
+      - processed_spellcheck
       - rendered_assessment
     title: true
     alt: true
