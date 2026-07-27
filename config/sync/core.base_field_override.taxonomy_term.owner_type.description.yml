@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - taxonomy.vocabulary.owner_type
+  module:
     - text
 id: taxonomy_term.owner_type.description
 field_name: description
