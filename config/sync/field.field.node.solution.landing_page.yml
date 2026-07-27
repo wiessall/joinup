@@ -7,8 +7,12 @@ dependencies:
     - node.type.solution
   module:
     - link
+    - linkchecker
     - tmgmt_content
 third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: link_link_extractor
   tmgmt_content:
     excluded: false
 id: node.solution.landing_page

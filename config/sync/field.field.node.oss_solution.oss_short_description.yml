@@ -7,8 +7,12 @@ dependencies:
     - filter.format.markdown
     - node.type.oss_solution
   module:
+    - linkchecker
     - text
 third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: link_link_extractor
   eu_oss_catalogue:
     publiccode_yml:
       resolvers:

@@ -6,6 +6,11 @@ dependencies:
     - node.type.oss_solution
   module:
     - link
+    - linkchecker
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: link_link_extractor
 id: node.oss_solution.oss_git_url
 field_name: oss_git_url
 entity_type: node

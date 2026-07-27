@@ -7,7 +7,12 @@ dependencies:
     - filter.format.glossary_html
     - node.type.glossary
   module:
+    - linkchecker
     - text
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: link_link_extractor
 id: node.glossary.field_glossary_definition
 field_name: field_glossary_definition
 entity_type: node

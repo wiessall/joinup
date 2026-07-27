@@ -7,9 +7,13 @@ dependencies:
     - filter.format.content_editor
     - node.type.release
   module:
+    - linkchecker
     - rdf_sync
     - text
 third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: link_link_extractor
   rdf_sync:
     value:
       predicate: 'http://www.w3.org/ns/adms#versionNotes'

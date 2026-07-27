@@ -4,6 +4,12 @@ status: true
 dependencies:
   config:
     - taxonomy.vocabulary.spdx_licence
+  module:
+    - linkchecker
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: link_link_extractor
 id: taxonomy_term.spdx_licence.description
 field_name: description
 entity_type: taxonomy_term

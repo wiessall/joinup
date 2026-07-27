@@ -7,8 +7,12 @@ dependencies:
     - paragraphs.paragraphs_type.binding_requirement
   module:
     - link
+    - linkchecker
     - tmgmt_content
 third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: link_link_extractor
   rdf_sync:
     uri:
       predicate: 'http://data.europa.eu/2sa/cav#documentedIn'

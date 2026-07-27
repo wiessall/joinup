@@ -7,9 +7,13 @@ dependencies:
     - filter.format.content_editor
     - node.type.distribution
   module:
+    - linkchecker
     - rdf_sync
     - text
 third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: link_link_extractor
   rdf_sync:
     processed:
       predicate: 'http://purl.org/dc/terms/description'

@@ -7,7 +7,11 @@ dependencies:
     - node.type.oss_solution
   module:
     - link
+    - linkchecker
 third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: link_link_extractor
   eu_oss_catalogue:
     publiccode_yml:
       override: resolved_not_empty

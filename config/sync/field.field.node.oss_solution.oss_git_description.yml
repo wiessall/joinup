@@ -7,7 +7,12 @@ dependencies:
     - filter.format.markdown
     - node.type.oss_solution
   module:
+    - linkchecker
     - text
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: link_link_extractor
 id: node.oss_solution.oss_git_description
 field_name: oss_git_description
 entity_type: node

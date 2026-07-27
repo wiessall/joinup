@@ -6,6 +6,11 @@ dependencies:
     - node.type.oss_contractor
   module:
     - link
+    - linkchecker
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: link_link_extractor
 id: node.oss_contractor.oss_contractor_website
 field_name: oss_contractor_website
 entity_type: node

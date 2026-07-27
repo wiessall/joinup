@@ -5,7 +5,12 @@ dependencies:
   config:
     - taxonomy.vocabulary.spatial
   module:
+    - linkchecker
     - text
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: link_link_extractor
 id: taxonomy_term.spatial.description
 field_name: description
 entity_type: taxonomy_term
