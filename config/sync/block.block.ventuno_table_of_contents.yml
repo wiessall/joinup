@@ -11,8 +11,8 @@ dependencies:
     - ventuno
 id: ventuno_table_of_contents
 theme: ventuno
-region: content
-weight: -1
+region: header
+weight: -25
 provider: null
 plugin: 'custom_page_toc:navigation'
 settings:
