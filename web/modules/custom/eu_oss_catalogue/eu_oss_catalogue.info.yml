@@ -12,3 +12,4 @@ dependencies:
   - drupal:taxonomy
   - multivalue_form_element:multivalue_form_element
   - pluginreference:pluginreference
+  - linkchecker:linkchecker

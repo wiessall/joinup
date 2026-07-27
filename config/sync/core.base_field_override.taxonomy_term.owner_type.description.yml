@@ -4,13 +4,7 @@ status: true
 dependencies:
   config:
     - taxonomy.vocabulary.owner_type
-  module:
-    - linkchecker
     - text
-third_party_settings:
-  linkchecker:
-    scan: true
-    extractor: link_link_extractor
 id: taxonomy_term.owner_type.description
 field_name: description
 entity_type: taxonomy_term
