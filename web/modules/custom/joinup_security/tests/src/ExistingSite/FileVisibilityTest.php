@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_security\ExistingSite;
 
+use Behat\Mink\Exception\ExpectationException;
 use Drupal\comment\Entity\Comment;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -138,7 +139,13 @@ class FileVisibilityTest extends JoinupExistingSiteTestBase {
     $this->assertStringStartsWith('public://', $file->getFileUri());
     $this->drupalGet($solution->toUrl());
     // Check that the anchor's href was updated.
-    $this->assertSession()->responseContains($file->createFileUrl());
+    try {
+      $this->assertSession()->responseContains($file->createFileUrl());
+    }
+    catch (ExpectationException $e) {
+      echo $file->createFileUrl() . ' - ' . $this->getSession()->getPage()->getHtml();
+      throw $e;
+    }
   }
 
   /**
