@@ -162,14 +162,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.body
-  body_spellcheck:
-    label: 'Body » Processed text - Spellcheck'
-    datasource_id: 'entity:node'
-    property_path: 'body:processed'
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.node.body
   classification:
     label: 'Solution classification'
     datasource_id: 'entity:node'
@@ -183,16 +175,6 @@ field_settings:
     datasource_id: 'entity:node'
     property_path: 'contact:entity:title'
     type: text
-    dependencies:
-      config:
-        - field.storage.node.contact
-      module:
-        - node
-  contact_title_spellcheck:
-    label: 'Related Contact » Title spellcheck'
-    datasource_id: 'entity:node'
-    property_path: 'contact:entity:title'
-    type: solr_text_spellcheck
     dependencies:
       config:
         - field.storage.node.contact
@@ -222,14 +204,6 @@ field_settings:
     datasource_id: 'entity:node'
     property_path: 'description:processed'
     type: text
-    dependencies:
-      config:
-        - field.storage.node.description
-  description_processed_spellcheck:
-    label: 'Description » Processed text - spellcheck'
-    datasource_id: 'entity:node'
-    property_path: 'description:processed'
-    type: solr_text_spellcheck
     dependencies:
       config:
         - field.storage.node.description
@@ -328,27 +302,11 @@ field_settings:
     dependencies:
       config:
         - field.storage.taxonomy_term.field_eif_related_term
-  field_eif_related_term_spellcheck:
-    label: 'Related term - Spellcheck'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: field_eif_related_term
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.taxonomy_term.field_eif_related_term
   field_event_agenda:
     label: 'Agenda » Processed text'
     datasource_id: 'entity:node'
     property_path: 'field_event_agenda:processed'
     type: text
-    dependencies:
-      config:
-        - field.storage.node.field_event_agenda
-  field_event_agenda_spellcheck:
-    label: 'Agenda » Processed text - Spellcheck'
-    datasource_id: 'entity:node'
-    property_path: 'field_event_agenda:processed'
-    type: solr_text_spellcheck
     dependencies:
       config:
         - field.storage.node.field_event_agenda
@@ -373,14 +331,6 @@ field_settings:
     datasource_id: 'entity:node'
     property_path: field_location
     type: text
-    dependencies:
-      config:
-        - field.storage.node.field_location
-  field_location_spellcheck:
-    label: 'Location - Spellcheck'
-    datasource_id: 'entity:node'
-    property_path: field_location
-    type: solr_text_spellcheck
     dependencies:
       config:
         - field.storage.node.field_location
@@ -410,27 +360,11 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_organisation
-  field_organisation_spellcheck:
-    label: 'Organisation - Spellcheck'
-    datasource_id: 'entity:node'
-    property_path: field_organisation
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.node.field_organisation
   field_scope:
     label: Scope
     datasource_id: 'entity:node'
     property_path: field_scope
     type: text
-    dependencies:
-      config:
-        - field.storage.node.field_scope
-  field_scope_spellcheck:
-    label: 'Scope - Spellcheck'
-    datasource_id: 'entity:node'
-    property_path: field_scope
-    type: solr_text_spellcheck
     dependencies:
       config:
         - field.storage.node.field_scope
@@ -466,14 +400,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.user.field_user_family_name
-  field_user_family_name_spellcheck:
-    label: 'Family name - Spellcheck'
-    datasource_id: 'entity:user'
-    property_path: field_user_family_name
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.user.field_user_family_name
   field_user_first_name:
     label: 'First name'
     datasource_id: 'entity:user'
@@ -482,27 +408,11 @@ field_settings:
     dependencies:
       config:
         - field.storage.user.field_user_first_name
-  field_user_first_name_spellcheck:
-    label: 'First name - Spellcheck'
-    datasource_id: 'entity:user'
-    property_path: field_user_first_name
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.user.field_user_first_name
   field_user_organisation:
     label: Organisation
     datasource_id: 'entity:user'
     property_path: field_user_organisation
     type: text
-    dependencies:
-      config:
-        - field.storage.user.field_user_organisation
-  field_user_organisation_spellcheck:
-    label: 'Organisation - Spellcheck'
-    datasource_id: 'entity:user'
-    property_path: field_user_organisation
-    type: solr_text_spellcheck
     dependencies:
       config:
         - field.storage.user.field_user_organisation
@@ -598,16 +508,6 @@ field_settings:
         - field.storage.node.owner
       module:
         - node
-  owner_title_spellcheck:
-    label: 'Related Owner » Title spellcheck'
-    datasource_id: 'entity:node'
-    property_path: 'owner:entity:title'
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.node.owner
-      module:
-        - node
   parent:
     label: 'Term Parents'
     datasource_id: 'entity:taxonomy_term'
@@ -632,17 +532,6 @@ field_settings:
     datasource_id: 'entity:node'
     property_path: 'field_paragraphs_body:entity:field_body:processed'
     type: text
-    dependencies:
-      config:
-        - field.storage.node.field_paragraphs_body
-        - field.storage.paragraph.field_body
-      module:
-        - paragraphs
-  processed_spellcheck:
-    label: 'Body » Paragraph » Body » Processed text - Spellcheck'
-    datasource_id: 'entity:node'
-    property_path: 'field_paragraphs_body:entity:field_body:processed'
-    type: solr_text_spellcheck
     dependencies:
       config:
         - field.storage.node.field_paragraphs_body
@@ -923,13 +812,9 @@ processor_settings:
     all_fields: false
     fields:
       - body
-      - body_spellcheck
       - description
-      - description_processed_spellcheck
       - field_event_agenda
-      - field_event_agenda_spellcheck
       - processed
-      - processed_spellcheck
       - rendered_assessment
     title: true
     alt: true
