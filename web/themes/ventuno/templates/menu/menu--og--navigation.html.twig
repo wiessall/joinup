@@ -1,37 +1,73 @@
 {#
 /**
  * @file
- * Template for a menu.
+ * Template override to display the OG menu.
  *
- * Available variables:
- * - items:  A nested list of menu items. Each menu item contains:
- *   - label: The menu link label.
- *   - path: The path corresponding to the menu item.
- *   - attributes: HTML attributes for the menu item.
+ * @see \Drupal\oe_bootstrap_theme\MenuPreprocess::preprocessMenu()
+ * @see \Drupal\joinup_group\Plugin\Block\GroupMenuBlock
+ * @see \Drupal\og_menu\Plugin\Block\OgMenuBlock
+ * @see \custom_page_preprocess_menu__og__navigation()
+ * @see \ventuno_preprocess_menu__og__navigation()
+ *
+ * @ingroup themeable
  */
 #}
+{% import _self as menus %}
+
 {{ attach_library('ventuno/menu--og--navigation') }}
 {{ attach_library('ventuno/duplicate-id-fixer') }}
 
-{% for item in items %}
-  {% set item %}
-    {%
-      set classes = [
-      item.in_active_trail ? 'is-active',
-    ]
-    %}
-    {{ item.attributes.addClass(classes) }}
-    {{ item.attributes.setAttribute('title', item.title) }}
-  {% endset %}
-{% endfor %}
+{{ menus.menu_links(items, attributes, 0) }}
 
-<div class="menu--og--navigation bg-light">
-  <div class="container">
-    <nav aria-label="{{ 'Secondary navigation'|t }}">
-      {{ pattern('navigation', {
-        variant: 'default',
-        items: items,
-      }) }}
-    </nav>
-  </div>
-</div>
+{% macro menu_links(items, attributes, menu_level) %}
+  {% import _self as menus %}
+
+  {%
+    set attributes = menu_level == 0
+    ? attributes.addClass('menu--og--navigation', 'bg-light')
+    : create_attribute()
+  %}
+  {%
+    set next_level_items = {}
+  %}
+
+  {% if items %}
+    {% if menu_level == 0 %}
+      <div{{ attributes }}>
+      <div class="container">
+      <nav aria-label="{{ 'Secondary navigation'|t }}">
+    {% endif %}
+
+    <ul class="nav">
+      {% for item in items %}
+        {%
+          set classes = [
+          'nav-link',
+          item.in_active_trail ? 'is-active',
+        ]
+        %}
+        <li class="nav-item">
+          <a{{ item.attributes|without(href).setAttribute('title', item.title).addClass(classes) }} href="{{ item.url }}">{{ item.title }}</a>
+          {% if item.trigger %}
+            {{ item.trigger.title }}
+          {% endif %}
+
+          {% if item.below %}
+            {% set next_level_items = next_level_items|merge([item.below]) %}
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+
+    {% for next_level in next_level_items %}
+      {{ menus.menu_links(next_level, attributes, menu_level + 1) }}
+    {% endfor %}
+
+    {% if menu_level == 0 %}
+      </nav>
+      </div>
+      </div>
+    {% endif %}
+
+  {% endif %}
+{% endmacro %}
