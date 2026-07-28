@@ -875,7 +875,6 @@ datasource_settings:
         - event
         - licence
         - news
-        - owner
         - release
         - solution
     languages:
