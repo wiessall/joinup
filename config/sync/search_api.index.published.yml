@@ -595,7 +595,7 @@ field_settings:
         - 'entity:node/abstract'
         - 'entity:node/field_news_headline'
         - 'entity:node/field_short_title'
-        - 'entity:node/keywords'
+        - 'entity:node/keywords:entity:name'
         - 'entity:taxonomy_term/field_eif_identifier'
         - 'entity:taxonomy_term/name'
   status:
