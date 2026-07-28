@@ -11,6 +11,7 @@
         "ext-memcached": "*",
         "ext-pdo": "*",
         "ext-simplexml": "*",
+        "ext-zip": "*",
         "bitbucket/client": "^5.1",
         "cfpinto/graphql": "^2.0",
         "composer/installers": "^2",
@@ -23,15 +24,14 @@
         "drupal/babel": "^1.0",
         "drupal/better_exposed_filters": "^7.0",
         "drupal/block_field": "^1.0@RC",
-        "drupal/cached_computed_field": "^1.0",
         "drupal/calendar_view": "^2.1",
         "drupal/cas": "^3.0",
         "drupal/cas_attributes": "^3.0",
         "drupal/changed_fields": "^3.2",
         "drupal/colorbox": "^2.0",
         "drupal/config_ignore": "^3.0",
-        "drupal/core": "^11.3.12",
-        "drupal/core-composer-scaffold": "^11.3.12",
+        "drupal/core": "~11.3.16",
+        "drupal/core-composer-scaffold": "~11.3.16",
         "drupal/custom_markup_block": "^1.2",
         "drupal/diff": "^2.0",
         "drupal/digital_size_formatter": "~2.0",
@@ -44,7 +44,7 @@
         "drupal/entity_form_field_label": "^2.1",
         "drupal/entity_legal": "^4.0",
         "drupal/entity_print": "^2.15",
-        "drupal/entityqueue": "^1.2",
+        "drupal/entityqueue": "1.10.0",
         "drupal/error_page": "^2.1@beta",
         "drupal/facets": "^3.0",
         "drupal/facets_block": "^2.0@beta",
@@ -71,6 +71,7 @@
         "drupal/layout_paragraphs": "^3.0",
         "drupal/linkit": "^7.0",
         "drupal/markdown_easy": "^2.0",
+        "drupal/masquerade": "^2.2",
         "drupal/memcache": "^2.5",
         "drupal/menu_admin_per_menu": "^1.3",
         "drupal/menu_link_destination": "^1.0",
@@ -171,7 +172,6 @@
         "drupal/drupal-extension": "^6",
         "drupal/filecache": "^1.1",
         "drupal/http_request_mock": "^1.1",
-        "drupal/masquerade": "^2.0@RC",
         "drupal/restui": "^1.22",
         "drupal/stage_file_proxy": "^3.1",
         "drupal/upgrade_status": "^4.0",
@@ -179,7 +179,7 @@
         "ec-europa/toolkit": "^10.5",
         "lovers-of-behat/table-extension": "^1.4",
         "lullabot/mink-selenium2-driver": "^1.7",
-        "mglaman/phpstan-drupal": "^2.0",
+        "mglaman/phpstan-drupal": "2.0.15",
         "mikey179/vfsstream": "~1.6",
         "nicwortel/behat-unused-step-definitions-extension": "^1.2",
         "phpro/grumphp-shim": "^2.19",
@@ -369,7 +369,8 @@
                 "Views QueryParameter should apply default value if any parameter key is missing @see https://drupal.org/i/3593838": "resources/patch/php/drupal/core/3593838.mr15996-commit511cb7d5.diff",
                 "[site:url] token omits trailing slash in other languages @see https://www.drupal.org/i/2163913": "resources/patch/php/drupal/core/2163913.mr15511.commit58a97130.diff",
                 "Fatal error when saving translation configuration @see https://www.drupal.org/i/3549469": "resources/patch/php/drupal/core/3549469.diff",
-                "Translations of nodes with comment settings field set to non-translatable returns EntityUntranslatableFieldsConstraint @see https://www.drupal.org/i/3015675": "resources/patch/php/drupal/core/3015675-83bb966c.diff"
+                "Translations of nodes with comment settings field set to non-translatable returns EntityUntranslatableFieldsConstraint @see https://www.drupal.org/i/3015675": "resources/patch/php/drupal/core/3015675-83bb966c.diff",
+                "Plugin manager with fallback when the plugin ID is null @see https://www.drupal.org/project/drupal/issues/3581628": "resources/patch/php/drupal/core/3581628.diff"
             },
             "drupal/csv_serialization": {
                 "Replace League\\Csv methods deprecated since league/csv 9.27.0 @see https://www.drupal.org/i/3562555": "resources/patch/php/drupal/csv_serialization/3562555.diff"
@@ -454,6 +455,8 @@
                 "Allow to drag and drop nested paragraphs @see https://www.drupal.org/project/layout_paragraphs/issues/3401176": "resources/patch/php/drupal/layout_paragraphs/3401176.patch",
                 "Integrity constraint violation @see https://www.drupal.org/project/layout_paragraphs/issues/3528058": "resources/patch/php/drupal/layout_paragraphs/3528058.patch",
                 "Prevent moving components on Translate edit page @see https://drupal.org/i/3540040": "resources/patch/php/drupal/layout_paragraphs/3540040.mr242.diff",
+                "Provide more info to component add buttons to help customization @see https://drupal.org/i/3611607": "resources/patch/php/drupal/layout_paragraphs/3611607-mr248-1356ffbb58--on-top-of-3540040.mr242.diff",
+                "Cache loaded paragraphs in LayoutParagraphsLayout @see https://drupal.org/i/3611711": "resources/patch/php/drupal/layout_paragraphs/3611711-mr249-9ec8d4282c--v2.diff",
                 "Maximum call stack size reached in serialize() @see https://www.drupal.org/i/3599833": "resources/patch/php/drupal/layout_paragraphs/3599833.mr241.commitd4c9beff1108.diff"
             },
             "drupal/memcache": {
@@ -533,7 +536,8 @@
                 "Data too long for column 'message' - https://www.drupal.org/i/3552683": "resources/patch/php/drupal/tmgmt/3552683.mr135.commit597ae8cd.diff",
                 "Add a configurable fallback for translations that exceed the target field length @see https://www.drupal.org/i/2960458 + Callers don't account the scenario in which JobItem::acceptTranslation() fails softly @see https://www.drupal.org/i/3580841": "resources/patch/php/drupal/tmgmt/2960458.mr170.commit4b643297-plus-3580841.mr161.commit7baf8367.diff",
                 "Non-translatable fields are exported when the bundle is not enabled for content translation @see https://www.drupal.org/i/3382356": "resources/patch/php/drupal/tmgmt/3382356.mr172.commitd2294f18.diff",
-                "Delete job item when corresponding entity is being deleted @see https://www.drupal.org/i/2998143": "resources/patch/php/drupal/tmgmt/2998143.mr35.commitdd0ee714.diff"
+                "Delete job item when corresponding entity is being deleted @see https://www.drupal.org/i/2998143": "resources/patch/php/drupal/tmgmt/2998143.mr35.commitdd0ee714.diff",
+                "Hook to allow modules to alter translation @see https://www.drupal.org/i/2998143": "resources/patch/php/drupal/tmgmt/3298245.mr58.commit6976599d.diff"
             },
             "drupal/token": {
                 "PHP 8.5 @see https://www.drupal.org/i/3581883": "resources/patch/php/drupal/token/3581883.mr123.commit-710b94c1.diff"
@@ -545,11 +549,7 @@
                 "PHP 8.4 @see https://www.drupal.org/i/3564894": "resources/patch/php/drupal/ui_patterns_settings/3564894.mr58.commit-17615e84.diff"
             },
             "drupal/views_block_area": {
-                "Render logic not working @see https://www.drupal.org/i/3499861": "resources/patch/php/drupal/views_block_area/3499861.patch",
-                "PHP 8.4 @see https://www.drupal.org/i/3541588": "resources/patch/php/drupal/views_block_area/3541588.mr13.commit-8108f239.diff"
-            },
-            "drupal/views_bulk_operations": {
-                "PHP 8.5 \"Using null as an array offset\" in viewsFormSubmit @see https://www.drupal.org/i/3589897": "resources/patch/php/drupal/views_bulk_operations/3589897-php8.5-fix-only-commit-0ca438ec.diff"
+                "Render logic not working @see https://www.drupal.org/i/3499861": "resources/patch/php/drupal/views_block_area/3499861.patch"
             },
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff",
@@ -567,9 +567,6 @@
             },
             "openeuropa/oe_webtools": {
                 "PHP 8.5 compatibility @see https://github.com/openeuropa/oe_webtools/pull/311": "resources/patch/php/openeuropa/oe_webtools/pr311.commit-d4a22bb.diff"
-            },
-            "solarium/solarium": {
-                "PHP 8.5 support @see https://github.com/solariumphp/solarium/pull/1178": "resources/patch/php/solarium/solarium/pr1178.commit-8f11b58.diff"
             },
             "sweetrdf/easyrdf": {
                 "Add a method to remove resources from graph @see https://github.com/sweetrdf/easyrdf/pull/44": "resources/patch/php/sweetrdf/easyrdf/44.diff"

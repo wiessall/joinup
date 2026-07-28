@@ -15,6 +15,24 @@ class AssessmentSubEntity extends Assessment {
   /**
    * {@inheritdoc}
    */
+  public function label(): string|\Stringable {
+    if ($this->bundle() === 'participation') {
+      $labels = [];
+      foreach (['participant_type', 'stakeholder_country'] as $fieldName) {
+        foreach ($this->get($fieldName)->referencedEntities() as $term) {
+          $labels[] = $term->label();
+        }
+      }
+      if ($labels) {
+        return implode(', ', $labels);
+      }
+    }
+    return parent::label();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getRelatedReport(): ?AssessmentReport {
     // Map entity bundles to paragraph field names.
     $fieldMap = [
