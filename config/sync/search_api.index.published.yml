@@ -33,8 +33,6 @@ dependencies:
     - field.storage.node.submission
     - field.storage.paragraph.affects
     - field.storage.paragraph.field_body
-    - field.storage.taxonomy_term.field_eif_identifier
-    - field.storage.taxonomy_term.field_eif_related_term
     - field.storage.user.field_user_family_name
     - field.storage.user.field_user_first_name
     - field.storage.user.field_user_organisation
@@ -304,38 +302,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_state
-  field_eif_identifier:
-    label: Identifier
-    datasource_id: 'entity:taxonomy_term'
-    property_path: field_eif_identifier
-    type: text
-    dependencies:
-      config:
-        - field.storage.taxonomy_term.field_eif_identifier
-  field_eif_identifier_spellcheck:
-    label: 'Identifier Spellcheck'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: field_eif_identifier
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.taxonomy_term.field_eif_identifier
-  field_eif_related_term:
-    label: 'Related term'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: field_eif_related_term
-    type: text
-    dependencies:
-      config:
-        - field.storage.taxonomy_term.field_eif_related_term
-  field_eif_related_term_spellcheck:
-    label: 'Related term - Spellcheck'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: field_eif_related_term
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.taxonomy_term.field_eif_related_term
   field_event_agenda:
     label: 'Agenda » Processed text'
     datasource_id: 'entity:node'
@@ -683,35 +649,10 @@ field_settings:
           solution: ':default'
         'entity:taxonomy_term':
           ':default': ''
-          eif_conceptual_model: ':default'
-          eif_interoperability_layer: ':default'
-          eif_principle: ':default'
-          eif_recommendation: ':default'
-          oss_category: ':default'
           topic: ':default'
         'entity:user':
           ':default': ''
           user: ':default'
-  reverse_eif_related_term_tid:
-    label: 'Reverse » Related term » Term ID'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: 'search_api_reverse_entity_references_taxonomy_term__field_eif_related_term:tid'
-    type: text
-  reverse_eif_related_term_tid_spellcheck:
-    label: 'Reverse » Related term » Term ID - Spellcheck'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: 'search_api_reverse_entity_references_taxonomy_term__field_eif_related_term:tid'
-    type: solr_text_spellcheck
-  reverse_field_eif_identifier:
-    label: 'Reverse » Related term » Identifier'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: 'search_api_reverse_entity_references_taxonomy_term__field_eif_related_term:field_eif_identifier'
-    type: text
-  reverse_field_eif_identifier_spellcheck:
-    label: 'Reverse » Related term » Identifier - Spellcheck'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: 'search_api_reverse_entity_references_taxonomy_term__field_eif_related_term:field_eif_identifier'
-    type: solr_text_spellcheck
   shared_in:
     label: 'Shared on'
     datasource_id: 'entity:node'
@@ -884,10 +825,6 @@ datasource_settings:
     bundles:
       default: false
       selected:
-        - eif_conceptual_model
-        - eif_interoperability_layer
-        - eif_principle
-        - eif_recommendation
         - topic
     languages:
       default: true
@@ -902,7 +839,9 @@ processor_settings:
   aggregated_topic_hierarchy:
     weights:
       preprocess_index: -50
-  assessment_processor: {  }
+  assessment_processor:
+    weights:
+      preprocess_index: 0
   auto_aggregated_fulltext_field: {  }
   custom_value: {  }
   entity_type: {  }
@@ -975,10 +914,6 @@ processor_settings:
       'entity:taxonomy_term':
         datasource_boost: 0.0
         bundle_boosts:
-          eif_conceptual_model: 0.0
-          eif_interoperability_layer: 0.0
-          eif_principle: 0.0
-          eif_recommendation: 0.0
           topic: 0.0
       'entity:user':
         datasource_boost: 0.0
