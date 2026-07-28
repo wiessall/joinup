@@ -99,12 +99,12 @@ third_party_settings:
       include_language_independent: true
       use_language_undefined_as_fallback_language: true
       specific_languages:
+        en: '0'
         bg: '0'
         hr: '0'
         cs: '0'
         da: '0'
         nl: '0'
-        en: '0'
         et: '0'
         fi: '0'
         fr: '0'
@@ -888,7 +888,6 @@ datasource_settings:
         - eif_interoperability_layer
         - eif_principle
         - eif_recommendation
-        - oss_category
         - topic
     languages:
       default: true
