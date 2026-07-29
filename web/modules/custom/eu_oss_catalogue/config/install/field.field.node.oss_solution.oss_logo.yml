@@ -6,6 +6,7 @@ dependencies:
     - node.type.oss_solution
   module:
     - link
+third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
       override: resolved_not_empty
