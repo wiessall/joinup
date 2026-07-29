@@ -222,6 +222,7 @@ default:
         My unpublished content area: '.block-user-unpublished'
         Navigation bar: '.joinup-navbar'
         Navigation menu: '#block-ventuno-navigation'
+        First level of the navigation menu: '#block-ventuno-navigation .nav--level-0'
         Second level navigation menu: '#block-ventuno-navigation .nav--level-1'
         Page title: '#block-ventuno-pagetitle'
         Pager: 'nav.pager'

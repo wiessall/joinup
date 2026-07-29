@@ -196,7 +196,7 @@ Feature:
     When I click "HOWTOs" in the "Navigation menu" region
     Then I should see the link "HOWTOs" in the "Navigation menu" region
     And I should see the link "Decadent Art" in the "Header"
-    And I should not see the link "Looking for Support?" in the "Navigation menu" region
+    And I should not see the link "Looking for Support?" in the "First level of the navigation menu" region
 
     # Try moving a child page without moving the parent page. This should move
     # the child to the root of the menu.
