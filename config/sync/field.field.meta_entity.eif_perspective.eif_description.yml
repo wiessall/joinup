@@ -7,9 +7,13 @@ dependencies:
     - filter.format.content_editor
     - meta_entity.type.eif_perspective
   module:
+    - linkchecker
     - text
     - tmgmt_content
 third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: html_link_extractor
   rdf_sync:
     processed:
       predicate: 'http://purl.org/dc/terms/description'

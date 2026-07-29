@@ -7,11 +7,19 @@ dependencies:
     - node.type.collection
   module:
     - link
+    - linkchecker
+    - rdf_sync
+    - tmgmt_content
 third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: link_link_extractor
   rdf_sync:
     uri:
       predicate: 'http://xmlns.com/foaf/0.1/homepage'
       type: 'xsd:anyURI'
+  tmgmt_content:
+    excluded: false
 id: node.collection.website_url
 field_name: website_url
 entity_type: node

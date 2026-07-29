@@ -7,6 +7,11 @@ dependencies:
     - paragraphs.paragraphs_type.carousel
   module:
     - link
+    - link
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: link_link_extractor
 id: paragraph.carousel.paragraph_carousel_action
 field_name: paragraph_carousel_action
 entity_type: paragraph
