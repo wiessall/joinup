@@ -4,12 +4,7 @@ dependencies:
   config:
     - field.storage.node.oss_short_description
     - node.type.oss_solution
-  module:
-    - linkchecker
 third_party_settings:
-  linkchecker:
-    scan: true
-    extractor: link_link_extractor
   eu_oss_catalogue:
     publiccode_yml:
       resolvers:
