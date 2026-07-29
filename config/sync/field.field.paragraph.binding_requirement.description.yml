@@ -13,7 +13,7 @@ dependencies:
 third_party_settings:
   linkchecker:
     scan: true
-    extractor: link_link_extractor
+    extractor: html_link_extractor
   rdf_sync:
     value:
       predicate: 'http://data.europa.eu/2sa/cav#valueDescription'

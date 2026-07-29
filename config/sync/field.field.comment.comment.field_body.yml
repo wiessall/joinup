@@ -13,7 +13,7 @@ dependencies:
 third_party_settings:
   linkchecker:
     scan: true
-    extractor: link_link_extractor
+    extractor: html_link_extractor
 _core:
   default_config_hash: XjinYVUnMIshdBycAetpscFS2ON6_ggwnH1m-FyU6oc
 id: comment.comment.field_body

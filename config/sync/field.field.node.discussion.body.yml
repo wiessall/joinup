@@ -12,7 +12,7 @@ dependencies:
 third_party_settings:
   linkchecker:
     scan: true
-    extractor: link_link_extractor
+    extractor: html_link_extractor
 _core:
   default_config_hash: HKEbvPv_WwMJJucpr0BLkIKxJD4l7faYhAJNuwQOsUA
 id: node.discussion.body

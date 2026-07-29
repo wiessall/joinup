@@ -11,7 +11,7 @@ dependencies:
 third_party_settings:
   linkchecker:
     scan: true
-    extractor: link_link_extractor
+    extractor: html_link_extractor
 id: entity_legal_document_version.legal_notice.entity_legal_document_text
 field_name: entity_legal_document_text
 entity_type: entity_legal_document_version
