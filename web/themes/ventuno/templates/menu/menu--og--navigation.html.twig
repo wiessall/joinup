@@ -38,7 +38,7 @@
       <nav aria-label="{{ 'Secondary navigation'|t }}">
     {% endif %}
 
-    <ul class="nav">
+    <ul class="nav nav--level-{{ menu_level }}">
       {% for item in items %}
         {%
           set classes = [
