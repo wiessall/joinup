@@ -325,6 +325,7 @@ processor_settings:
       - body
       - description
       - field_event_agenda
+      - processed
     title: true
     alt: true
     tags:
