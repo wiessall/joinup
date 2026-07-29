@@ -268,22 +268,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_state
-  field_eif_identifier:
-    label: Identifier
-    datasource_id: 'entity:taxonomy_term'
-    property_path: field_eif_identifier
-    type: text
-    dependencies:
-      config:
-        - field.storage.taxonomy_term.field_eif_identifier
-  field_eif_related_term:
-    label: 'Related term'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: field_eif_related_term
-    type: text
-    dependencies:
-      config:
-        - field.storage.taxonomy_term.field_eif_related_term
   field_event_agenda:
     label: 'Agenda » Processed text'
     datasource_id: 'entity:node'
@@ -400,14 +384,6 @@ field_settings:
     label: 'Language (with fallback)'
     property_path: language_with_fallback
     type: string
-  name:
-    label: Name
-    datasource_id: 'entity:taxonomy_term'
-    property_path: name
-    type: text
-    dependencies:
-      module:
-        - taxonomy
   nid:
     label: ID
     datasource_id: 'entity:node'
@@ -455,14 +431,6 @@ field_settings:
         - field.storage.node.owner
       module:
         - node
-  parent:
-    label: 'Term Parents'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: parent
-    type: string
-    dependencies:
-      module:
-        - taxonomy
   pinned_in:
     label: 'Pinned in'
     datasource_id: 'entity:node'
@@ -517,22 +485,9 @@ field_settings:
           news: ':default'
           release: ':default'
           solution: ':default'
-        'entity:taxonomy_term':
-          ':default': ''
-          topic: ':default'
         'entity:user':
           ':default': ''
           user: ':default'
-  reverse_eif_related_term_tid:
-    label: 'Reverse » Related term » Term ID'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: 'search_api_reverse_entity_references_taxonomy_term__field_eif_related_term:tid'
-    type: text
-  reverse_field_eif_identifier:
-    label: 'Reverse » Related term » Identifier'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: 'search_api_reverse_entity_references_taxonomy_term__field_eif_related_term:field_eif_identifier'
-    type: text
   shared_in:
     label: 'Shared on'
     datasource_id: 'entity:node'
@@ -589,8 +544,6 @@ field_settings:
         - 'entity:node/field_news_headline'
         - 'entity:node/field_short_title'
         - 'entity:node/keywords:entity:name'
-        - 'entity:taxonomy_term/field_eif_identifier'
-        - 'entity:taxonomy_term/name'
   status:
     label: Published
     datasource_id: 'entity:node'
@@ -707,11 +660,7 @@ processor_settings:
   custom_value: {  }
   entity_type: {  }
   exclude_assessment_solutions: {  }
-  hierarchy:
-    weights:
-      preprocess_index: -45
-    fields:
-      parent: taxonomy_term-parent
+  hierarchy: {  }
   html_filter:
     weights:
       preprocess_index: -43
@@ -770,10 +719,6 @@ processor_settings:
           news: 5.0
           release: 0.0
           solution: 13.0
-      'entity:taxonomy_term':
-        datasource_boost: 0.0
-        bundle_boosts:
-          topic: 0.0
       'entity:user':
         datasource_boost: 0.0
 tracker_settings:
