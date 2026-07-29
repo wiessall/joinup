@@ -660,7 +660,6 @@ processor_settings:
   custom_value: {  }
   entity_type: {  }
   exclude_assessment_solutions: {  }
-  hierarchy: {  }
   html_filter:
     weights:
       preprocess_index: -43
