@@ -221,7 +221,11 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
    *   The navbar menu links in the BCL header format.
    */
   protected function getLandingPageLinks(CacheableMetadata $cacheability): array {
-    $build = $this->blockManager->createInstance('system_menu_block:navbar')->build();
+    $build = $this->blockManager->createInstance('system_menu_block:navbar', [
+      'level' => 1,
+      'depth' => 2,
+      'expand_all_items' => TRUE,
+    ])->build();
     $cacheability->addCacheableDependency(CacheableMetadata::createFromRenderArray($build));
     return $this->buildMenuLinks($build['#items'] ?? []);
   }
