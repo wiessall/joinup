@@ -1,0 +1,173 @@
+diff --git a/.cspell-project-words.txt b/.cspell-project-words.txt
+index bb33814b4f4cb01ba106631c690c81037a88fbe8..55d0f533ae435dfed0ccf27627dcba816a08c78e 100644
+--- a/.cspell-project-words.txt
++++ b/.cspell-project-words.txt
+@@ -13,6 +13,7 @@ tmgmt
+ valuems
+ webform
+ webforms
++prova
+ 
+ # Organic Group Menu support
+ ogmenu
+diff --git a/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php b/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
+index 568d9be1ba001e091508fa2318285a58ea070d90..310d74f20367164834f1747d1b364014abfa5c1b 100644
+--- a/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
++++ b/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
+@@ -6,7 +6,6 @@ namespace Drupal\babel_tmgmt\Hook;
+ 
+ use Drupal\babel\BabelStringsRepositoryInterface;
+ use Drupal\babel_tmgmt\Plugin\QueueWorker\ContinuousJobItemCreationWorker;
+-use Drupal\Core\Database\Connection;
+ use Drupal\Core\Entity\EntityTypeManagerInterface;
+ use Drupal\Core\Form\ConfigTarget;
+ use Drupal\Core\Form\FormStateInterface;
+@@ -15,7 +14,6 @@ use Drupal\Core\Queue\QueueFactory;
+ use Drupal\Core\StringTranslation\StringTranslationTrait;
+ use Drupal\tmgmt\ContinuousManager;
+ use Drupal\tmgmt\JobInterface;
+-use Drupal\tmgmt\JobItemInterface;
+ use Drupal\tmgmt\TranslatorInterface;
+ use Symfony\Component\DependencyInjection\Attribute\Autowire;
+ 
+@@ -29,7 +27,6 @@ class BabelTmgmtHooks {
+   public function __construct(
+     protected EntityTypeManagerInterface $entityTypeManager,
+     protected QueueFactory $queueFactory,
+-    protected Connection $db,
+     #[Autowire(service: 'tmgmt.continuous')]
+     protected readonly ContinuousManager $continuousManager,
+     protected readonly BabelStringsRepositoryInterface $stringsRepository,
+@@ -116,7 +113,8 @@ class BabelTmgmtHooks {
+     foreach ($this->continuousManager->getContinuousJobs('en') as $job) {
+       assert($job instanceof JobInterface);
+ 
+-      // All untranslated, enabled and unlocked strings for the target langcode.
++      // Creation is driven by the sources still needing translation, never by
++      // existing job items, so a purged translation is not re-created.
+       $hashes = array_keys($this->stringsRepository->getStrings(
+         langcode: $job->getTargetLangcode(),
+         translationStatus: FALSE,
+@@ -124,20 +122,14 @@ class BabelTmgmtHooks {
+         lockStatus: FALSE,
+       ));
+ 
+-      // Remove existing job items in a dead-end state (aborted, in review).
+-      $jobItemsToDelete = $job->getItems([
+-        'plugin' => 'babel',
+-        'item_type' => 'default',
+-        'state' => [
+-          'value' => [JobItemInterface::STATE_ABORTED, JobItemInterface::STATE_REVIEW],
+-          'operator' => 'IN',
+-        ],
+-      ]);
+-      if ($jobItemsToDelete) {
+-        $storage->delete($jobItemsToDelete);
++      foreach ($hashes as $hash) {
++        $queue->createItem([
++          'operation' => 'create',
++          'hash' => $hash,
++          'job_id' => $job->id(),
++        ]);
+       }
+ 
+-      // Get hashes of already created job items.
+       $existing = array_column(
+         $storage->getAggregateQuery()
+           ->accessCheck(FALSE)
+@@ -145,15 +137,13 @@ class BabelTmgmtHooks {
+           ->condition('tjid', $job->id())
+           ->condition('plugin', 'babel')
+           ->condition('item_type', 'default')
+-          ->condition('state', JobItemInterface::STATE_INACTIVE)
+           ->execute(),
+         'item_id',
+       );
+ 
+-      // Schedule the creation of missing job items.
+-      foreach (array_diff($hashes, $existing) as $hash) {
++      foreach (array_diff($existing, $hashes) as $hash) {
+         $queue->createItem([
+-          'operation' => 'create',
++          'operation' => 'delete',
+           'hash' => $hash,
+           'job_id' => $job->id(),
+         ]);
+diff --git a/modules/babel_tmgmt/tests/src/Kernel/BabelTmgmtIntegrationTest.php b/modules/babel_tmgmt/tests/src/Kernel/BabelTmgmtIntegrationTest.php
+index 760de187a7d7402a4c4ce8dd0a8abac407bdab88..e22a08304d7c16a92c9e989866f3b81e0f2df07b 100644
+--- a/modules/babel_tmgmt/tests/src/Kernel/BabelTmgmtIntegrationTest.php
++++ b/modules/babel_tmgmt/tests/src/Kernel/BabelTmgmtIntegrationTest.php
+@@ -6,7 +6,9 @@ namespace Drupal\Tests\babel_tmgmt\Kernel;
+ 
+ use Drupal\babel\BabelLockServiceInterface;
+ use Drupal\babel\BabelStorageInterface;
++use Drupal\babel\BabelStringsRepositoryInterface;
+ use Drupal\babel\Model\Source;
++use Drupal\babel\StringsCollectorFactory;
+ use Drupal\babel_tmgmt\BabelTmgmtIntegration;
+ use Drupal\babel_tmgmt\Hook\BabelTmgmtHooks;
+ use Drupal\babel_tmgmt\Plugin\QueueWorker\ContinuousJobItemCreationWorker;
+@@ -161,6 +163,63 @@ class BabelTmgmtIntegrationTest extends KernelTestBase {
+     $this->assertNotEmpty($queriedJobItems);
+   }
+ 
++  /**
++   * Tests that cron does not re-create a purged, already-translated string.
++   *
++   * @legacy-covers \Drupal\babel_tmgmt\Hook\BabelTmgmtHooks::cron
++   */
++  public function testPurgedTranslatedStringIsNotRecreated(): void {
++    $translatorManager = $this->container->get('plugin.manager.tmgmt.translator');
++    $repository = $this->container->get(BabelStringsRepositoryInterface::class);
++    $collectorFactory = $this->container->get(StringsCollectorFactory::class);
++    $localeStorage = $this->container->get('locale.storage');
++    $jobItemStorage = $this->container->get('entity_type.manager')->getStorage('tmgmt_job_item');
++
++    ConfigurableLanguage::createFromLangcode('it')->save();
++    tmgmt_translator_auto_create($translatorManager->getDefinition('local'));
++    $job = tmgmt_job_create('en', 'it', 0, [
++      'label' => 'Testing continuous job',
++      'translator' => 'local',
++      'job_type' => JobInterface::TYPE_CONTINUOUS,
++      'state' => JobInterface::STATE_CONTINUOUS,
++    ]);
++    $job->save();
++
++    $testingHash = (new Source('Test', ''))->getHash();
++    $filter = [
++      'plugin' => 'babel',
++      'item_type' => 'default',
++      'item_id' => $testingHash,
++    ];
++
++    $this->populateAndConsumeQueue();
++    $this->assertNotEmpty($job->getItems($filter));
++
++    // Translate the string and refresh Babel's cache so it reflects the change.
++    $localeStorage->createTranslation([
++      'lid' => $localeStorage->findString(['source' => 'Test'])->lid,
++      'language' => 'it',
++      'translation' => 'Prova',
++    ])->save();
++    $collectorFactory->invalidateHashes([$testingHash], 'it');
++    $collectorFactory->destruct();
++
++    $this->assertArrayNotHasKey($testingHash, $repository->getStrings(
++      langcode: 'it',
++      translationStatus: FALSE,
++      sourceStatus: TRUE,
++      lockStatus: FALSE,
++    ));
++
++    // Simulate TMGMT job item purge removing the completed job item.
++    $jobItemStorage->delete($job->getItems($filter));
++    $this->assertEmpty($job->getItems($filter));
++
++    // Cron must not re-create the item for the now-translated string.
++    $this->populateAndConsumeQueue();
++    $this->assertEmpty($job->getItems($filter));
++  }
++
+   /**
+    * Run the relevant cron and queue.
+    */
