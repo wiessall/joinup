@@ -33,6 +33,11 @@ class VentunoHelperHooks {
           'search' => [],
         ],
       ],
+      'joinup_header_get_started_cta' => [
+        'variables' => [
+          'url' => NULL,
+        ],
+      ],
     ];
   }
 

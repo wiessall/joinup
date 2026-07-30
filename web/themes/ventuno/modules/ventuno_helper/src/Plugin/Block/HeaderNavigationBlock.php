@@ -12,7 +12,6 @@ use Drupal\Core\Block\BlockManagerInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Routing\RedirectDestinationInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -43,7 +42,6 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
     $plugin_id,
     $plugin_definition,
     protected readonly AccountProxyInterface $currentUser,
-    protected readonly RedirectDestinationInterface $redirectDestination,
     protected readonly JoinupBookmarkInterface $bookmark,
     protected readonly RouteMatchInterface $routeMatch,
     protected readonly BlockManagerInterface $blockManager,
@@ -61,7 +59,6 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
       $plugin_id,
       $plugin_definition,
       $container->get('current_user'),
-      $container->get('redirect.destination'),
       $container->get('joinup_bookmark.bookmark'),
       $container->get('current_route_match'),
       $container->get('plugin.manager.block'),
@@ -77,7 +74,6 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
       'route.name',
       'user.roles:authenticated',
       'url.path',
-      'url.query_args',
     ]);
   }
 
@@ -107,7 +103,10 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
         'label' => $this->t('Home'),
         'link' => Url::fromRoute('<front>'),
       ]);
-      $mobile_links[] = $anonymous_links['sign_in'];
+      $mobile_links[] = [
+        'label' => $this->t('Sign in'),
+        'element' => $this->signInLinkPlaceholder(''),
+      ];
       if ($about_us_link = $this->getAboutUsLink($cacheability)) {
         $mobile_links[] = $about_us_link;
       }
@@ -163,28 +162,39 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
    *   The header actions, keyed by 'sign_in' and 'get_started'.
    */
   protected function getAnonymousActions(): array {
-    $cas_login_link = Url::fromRoute('cas.login', [], [
-      'query' => $this->redirectDestination->getAsArray(),
-    ]);
-
     return [
       'sign_in' => [
-        'label' => $this->t('Sign in'),
-        'link' => $cas_login_link,
-        'attributes' => ['class' => ['sign-in-link']],
+        'element' => $this->signInLinkPlaceholder('nav-link nav-link--underline sign-in-link'),
       ],
       'get_started' => [
         'id' => 'get-started',
         'label' => $this->t('Get started'),
         'popover' => [
           'cta' => [
-            'link' => $cas_login_link,
-            'attributes' => 'tabindex="0"',
-            'text' => $this->t('Create an account'),
+            'element' => [
+              '#lazy_builder' => ['ventuno_helper.header_navigation_lazy_builders:renderGetStartedCta', []],
+              '#create_placeholder' => TRUE,
+            ],
           ],
           'description' => $this->t('As a signed-in user you can create content, become a member of a community, receive notifications on your favourite solutions and topics, and access all other features available on the platform.'),
         ],
       ],
+    ];
+  }
+
+  /**
+   * Builds a placeholdered "Sign in" link carrying the redirect destination.
+   *
+   * @param string $classes
+   *   A space separated list of classes for the anchor, or an empty string.
+   *
+   * @return array
+   *   The placeholder render array.
+   */
+  protected function signInLinkPlaceholder(string $classes): array {
+    return [
+      '#lazy_builder' => ['ventuno_helper.header_navigation_lazy_builders:renderSignInLink', [$classes]],
+      '#create_placeholder' => TRUE,
     ];
   }
 
