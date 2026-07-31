@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.assessment.search_index
     - field.storage.assessment.binding_requirement
     - field.storage.assessment.thematic_area
     - field.storage.meta_entity.featured
@@ -99,12 +100,12 @@ third_party_settings:
       include_language_independent: true
       use_language_undefined_as_fallback_language: true
       specific_languages:
+        en: '0'
         bg: '0'
         hr: '0'
         cs: '0'
         da: '0'
         nl: '0'
-        en: '0'
         et: '0'
         fi: '0'
         fr: '0'
@@ -504,7 +505,7 @@ field_settings:
         - anonymous
       view_mode:
         'entity:assessment':
-          ':default': default
+          ':default': search_index
           report: ':default'
         'entity:node':
           ':default': ''
@@ -825,6 +826,13 @@ processor_settings:
           topic: 0.0
       'entity:user':
         datasource_boost: 0.0
+  unique_filter:
+    weights:
+      preprocess_index: -15
+      preprocess_query: -15
+    all_fields: false
+    fields:
+      - thematic_area
 tracker_settings:
   default:
     indexing_order: fifo
