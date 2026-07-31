@@ -247,6 +247,7 @@ processor_settings:
     weights:
       preprocess_query: -30
   custom_value: {  }
+  entity_status: {  }
   entity_type: {  }
   html_filter:
     weights:
