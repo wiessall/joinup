@@ -238,7 +238,7 @@ index 1ce9b7b0805e833b60a7e8be1bc64455e0ff902d..3dd25f15cac3d8d54207bf2392362f1d
      }
      finally {
 diff --git a/tests/src/Kernel/TimeoutTest.php b/tests/src/Kernel/TimeoutTest.php
-index 01856407bc1ffd6a5b0e6e5a6417f1aa5df2b3ef..e1cdd6db4deb6e2c8b452a70276a788252874095 100644
+index 01856407bc1ffd6a5b0e6e5a6417f1aa5df2b3ef..a38de122d0f6a11753e7ea7be1185c2e75b46044 100644
 --- a/tests/src/Kernel/TimeoutTest.php
 +++ b/tests/src/Kernel/TimeoutTest.php
 @@ -4,6 +4,7 @@ declare(strict_types=1);
@@ -279,7 +279,7 @@ index 01856407bc1ffd6a5b0e6e5a6417f1aa5df2b3ef..e1cdd6db4deb6e2c8b452a70276a7882
      FieldStorageConfig::create([
        'entity_type' => 'node',
        'field_name' => 'body',
-@@ -70,55 +78,146 @@ class TimeoutTest extends KernelTestBase {
+@@ -70,55 +78,148 @@ class TimeoutTest extends KernelTestBase {
        'field_name' => 'body',
        'translatable' => TRUE,
      ])->save();
@@ -425,6 +425,8 @@ index 01856407bc1ffd6a5b0e6e5a6417f1aa5df2b3ef..e1cdd6db4deb6e2c8b452a70276a7882
 +   *   The expected attempt count.
 +   * @param string $expected_message
 +   *   The expected message.
++   * @param int $expected_state
++   *   The expected state.
 +   */
 +  protected function assertJobAttempt(int $expected_attempts, string $expected_message, int $expected_state = JobItemInterface::STATE_INACTIVE): void {
 +    $item = JobItem::load($this->itemId);
@@ -449,6 +451,19 @@ index 01856407bc1ffd6a5b0e6e5a6417f1aa5df2b3ef..e1cdd6db4deb6e2c8b452a70276a7882
    }
 
  }
+diff --git a/tests/src/Unit/TranslationQueueWorkerTest.php b/tests/src/Unit/TranslationQueueWorkerTest.php
+index 3a5e1967270291870a1e3adc3754bb3a5af9cea2..ce39702e6dbb2f47c9f5ffbc09bca636032a110f 100644
+--- a/tests/src/Unit/TranslationQueueWorkerTest.php
++++ b/tests/src/Unit/TranslationQueueWorkerTest.php
+@@ -115,7 +115,7 @@ class TranslationQueueWorkerTest extends TestCase {
+     $jobItem->expects($this->exactly(4))
+       ->method('id')
+       ->willReturn($jobItemId);
+-    $jobItem->expects($this->exactly(2))
++    $jobItem->expects($this->exactly(3))
+       ->method('getData')
+       ->willReturn([
+         'key' => ['#text' => '<p>HTML content</p>'],
 diff --git a/tmgmt_ec_etranslation.install b/tmgmt_ec_etranslation.install
 index 7eac20090b7d589925d9709e5bc2bbbf1a175773..ec1f93a604530101ed7cce32f2060519f2baaebb 100644
 --- a/tmgmt_ec_etranslation.install
