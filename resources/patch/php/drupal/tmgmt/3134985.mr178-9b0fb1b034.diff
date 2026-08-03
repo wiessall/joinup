@@ -1,0 +1,445 @@
+diff --git a/config/install/tmgmt.settings.yml b/config/install/tmgmt.settings.yml
+index c1a71e0a0a79331175cdbf822d8853cd27f8c2c2..2ec766c4ed89020eae175f1369b4cb07be03b710 100644
+--- a/config/install/tmgmt.settings.yml
++++ b/config/install/tmgmt.settings.yml
+@@ -1,5 +1,8 @@
+ quick_checkout: true
+ anonymous_access: true
++purge_continuous: _never
++purge_continuous_aborted: false
++purge_continuous_limit: 500
+ purge_finished: _never
+ word_count_exclude_tags: true
+ source_list_limit: 20
+diff --git a/config/schema/tmgmt.schema.yml b/config/schema/tmgmt.schema.yml
+index 0c66742f221d361df5e2d65594c4759913ea245f..af446a0d70d5d1a525e77e879f85b350b05d4880 100644
+--- a/config/schema/tmgmt.schema.yml
++++ b/config/schema/tmgmt.schema.yml
+@@ -11,6 +11,27 @@ tmgmt.settings:
+     purge_finished:
+       type: string
+       label: 'Purge finished jobs'
++    purge_continuous:
++      type: string
++      label: 'After how many seconds should approved and aborted continuous jobs be cleared'
++      constraints:
++        Choice:
++          choices:
++            - _never
++            - '0'
++            - '86400'
++            - '604800'
++            - '2592000'
++            - '31536000'
++    purge_continuous_aborted:
++      type: boolean
++      label: 'Whether aborted items of continuous jobs should be also purged along with approved'
++    purge_continuous_limit:
++      type: integer
++      label: 'How many item should be removed during a single cron run'
++      constraints:
++        Range:
++          min: 1
+     respect_text_format:
+       type: boolean
+       label: 'Respect text format'
+diff --git a/src/Form/SettingsForm.php b/src/Form/SettingsForm.php
+index 1712d5ca1b3e6ab46cd381ceca86273ac2f5d725..0cc63d7ce69ccecce5b00ed4fe3d50a421e0258b 100644
+--- a/src/Form/SettingsForm.php
++++ b/src/Form/SettingsForm.php
+@@ -45,20 +45,44 @@ class SettingsForm extends ConfigFormBase {
+       '#title' => t('Performance settings'),
+       '#open' => TRUE,
+     );
++    $purge_options = [
++      '_never' => $this->t('Never'),
++      '0' => $this->t('Immediately'),
++      '86400' => $this->t('After 24 hours'),
++      '604800' => $this->t('After 7 days'),
++      '2592000' => $this->t('After 30 days'),
++      '31536000' => $this->t('After 365 days'),
++    ];
+     $form['performance']['tmgmt_purge_finished'] = array(
+       '#type' => 'select',
+       '#title' => t('Purge finished jobs'),
+       '#description' => t('If configured, translation jobs that have been marked as finished will be purged after a given time. The translations itself will not be deleted.'),
+-      '#options' => [
+-        '_never' => t('Never'),
+-        '0' => t('Immediately'),
+-        '86400' => t('After 24 hours'),
+-        '604800' => t('After 7 days'),
+-        '2592000' => t('After 30 days'),
+-        '31536000' => t('After 365 days'),
+-      ],
++      '#options' => $purge_options,
+       '#default_value' => $config->get('purge_finished'),
+     );
++    $form['performance']['tmgmt_purge_continuous'] = [
++      '#type' => 'select',
++      '#title' => $this->t('Purge continuous jobs'),
++      '#description' => $this->t('If configured, continuous translation jobs item that have been marked as accepted will be purged after a given time. The translations will not be deleted.'),
++      '#options' => $purge_options,
++      '#config_target' => 'tmgmt.settings:purge_continuous',
++    ];
++    $form['performance']['tmgmt_purge_continuous_include_aborted'] = [
++      '#type' => 'checkbox',
++      '#title' => $this->t('Also purge aborted job items'),
++      '#config_target' => 'tmgmt.settings:purge_continuous_aborted',
++      '#states' => [
++        'visible' => [
++          ':input[name="tmgmt_purge_continuous"]' => ['!value' => '_never'],
++        ],
++      ],
++    ];
++    $form['performance']['tmgmt_purge_continuous_limit'] = [
++      '#type' => 'number',
++      '#title' => $this->t('Maximum of continuous job items to remove in a single cron run'),
++      '#min' => 1,
++      '#config_target' => 'tmgmt.settings:purge_continuous_limit',
++    ];
+     $form['security'] = array(
+       '#type' => 'details',
+       '#title' => t('Security settings'),
+diff --git a/src/Plugin/QueueWorker/JobItemCleanupWorker.php b/src/Plugin/QueueWorker/JobItemCleanupWorker.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..15d367793f8c1d0fca8d9b289212516de2ea1006
+--- /dev/null
++++ b/src/Plugin/QueueWorker/JobItemCleanupWorker.php
+@@ -0,0 +1,61 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\tmgmt\Plugin\QueueWorker;
++
++use Drupal\Core\Annotation\QueueWorker;
++use Drupal\Core\Entity\EntityTypeManagerInterface;
++use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
++use Drupal\Core\Queue\QueueWorkerBase;
++use Symfony\Component\DependencyInjection\ContainerInterface;
++
++/**
++ * Cleanup worker for continuous job's job items.
++ *
++ * @QueueWorker(
++ *   id = "tmgmt_job_item_cleanup",
++ *   title = @Translation("Performs job item cleanup tasks for TMGMT"),
++ *   cron = {"time" = 60}
++ * )
++ */
++class JobItemCleanupWorker extends QueueWorkerBase implements ContainerFactoryPluginInterface {
++
++  public function __construct(
++    array $configuration,
++    $plugin_id,
++    $plugin_definition,
++    protected readonly EntityTypeManagerInterface $entityTypeManager,
++  ) {
++    parent::__construct($configuration, $plugin_id, $plugin_definition);
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
++    return new static(
++      $configuration,
++      $plugin_id,
++      $plugin_definition,
++      $container->get('entity_type.manager')
++    );
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function processItem($data): void {
++    $entity_ids = $data;
++    if (!is_array($entity_ids)) {
++      return;
++    }
++    // Do not allow deleting all entities.
++    if (!$entity_ids) {
++      return;
++    }
++    $storage = $this->entityTypeManager->getStorage('tmgmt_job_item');
++    $storage->delete($storage->loadMultiple($entity_ids));
++  }
++
++}
+diff --git a/tests/src/Kernel/CronTest.php b/tests/src/Kernel/CronTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..cd534d0c72e03fe1db3c3d6bd123dc0137e22f5b
+--- /dev/null
++++ b/tests/src/Kernel/CronTest.php
+@@ -0,0 +1,163 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\tmgmt\Kernel;
++
++use Drupal\tmgmt\JobItemInterface;
++
++/**
++ * Tests cleanup functionality on cron run.
++ *
++ * @group tmgmt
++ */
++class CronTest extends TMGMTKernelTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = [
++    'filter',
++    'views',
++  ];
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
++
++    $this->installConfig('tmgmt');
++    $this->installEntitySchema('tmgmt_job');
++    $this->installEntitySchema('tmgmt_job_item');
++    $this->installEntitySchema('tmgmt_remote');
++    $this->installEntitySchema('tmgmt_message');
++  }
++
++  /**
++   * Tests cron.
++   *
++   * @dataProvider cronTestData
++   */
++  public function testCron(array $tmgmtSettings, int $elapsedTime, array $initialJobItems, array $expectedJobItems): void {
++    $continuousJob = $this->createJob('en', 'de', 0, [
++      'label' => $this->randomMachineName(),
++      'job_type' => 'continuous',
++      'continuous_settings' => [
++        'content' => [
++          'entity_test_mul' => [
++            'enabled' => TRUE,
++            'bundles' => ['entity_test_mul' => TRUE],
++          ],
++        ],
++      ],
++    ]);
++    $config = $this->config('tmgmt.settings');
++    foreach ($tmgmtSettings as $key => $value) {
++      $config->set($key, $value);
++    }
++    $config->save();
++    $requestTime = \Drupal::time()->getRequestTime();
++    $changed = $requestTime - $elapsedTime;
++
++    $jobItemStorage = \Drupal::entityTypeManager()->getStorage('tmgmt_job_item');
++    foreach ($initialJobItems as $id => $state) {
++      $item = $jobItemStorage->create([
++        'plugin' => 'test_source',
++        'tjid' => $continuousJob,
++        'item_type' => 'test',
++        'state' => $state,
++        'changed' => $changed,
++        'item_id' => $id,
++      ]);
++      $item->save();
++    }
++    $this->assertCount(count($initialJobItems), $jobItemStorage->loadMultiple());
++
++    $this->container->get('cron')->run();
++
++    $jobItemStorage->resetCache();
++    $jobItems = $jobItemStorage->loadMultiple();
++    $this->assertEquals(
++      $expectedJobItems,
++      array_map(
++        fn (JobItemInterface $job_item) => $job_item->getState(),
++        $jobItems,
++      )
++    );
++  }
++
++  /**
++   * Data provider for ::testCron
++   *
++   * @return array
++   *   The test cases.
++   */
++  public static function cronTestData(): array {
++    $initialJobItems = [
++      1 => JobItemInterface::STATE_INACTIVE,
++      2 => JobItemInterface::STATE_ACTIVE,
++      3 => JobItemInterface::STATE_REVIEW,
++      4 => JobItemInterface::STATE_ACCEPTED,
++      5 => JobItemInterface::STATE_ABORTED,
++    ];
++    $day = 60 * 60 * 24;
++
++    return [
++      'Not enough time elapsed' => [
++        [
++          'purge_continuous' => (string) (7 * $day),
++        ],
++        $day,
++        $initialJobItems,
++        $initialJobItems,
++      ],
++      'Purge active after a day' => [
++        [
++          'purge_continuous' => (string) $day,
++        ],
++        $day,
++        $initialJobItems,
++        [
++          1 => JobItemInterface::STATE_INACTIVE,
++          2 => JobItemInterface::STATE_ACTIVE,
++          3 => JobItemInterface::STATE_REVIEW,
++          5 => JobItemInterface::STATE_ABORTED,
++        ],
++      ],
++      'No purge' => [
++        [
++          'purge_continuous' => '_never',
++        ],
++        366 * $day,
++        $initialJobItems,
++        $initialJobItems,
++      ],
++      'Purge aborted' => [
++        [
++          'purge_continuous' => (string) $day,
++          'purge_continuous_aborted' => TRUE,
++        ],
++        2 * $day,
++        $initialJobItems,
++        [
++          1 => JobItemInterface::STATE_INACTIVE,
++          2 => JobItemInterface::STATE_ACTIVE,
++          3 => JobItemInterface::STATE_REVIEW,
++        ],
++      ],
++      'Purge limit' => [
++        [
++          'purge_continuous' => 0,
++          'purge_continuous_limit' => 5,
++        ],
++        0,
++        array_fill(1, 6, JobItemInterface::STATE_ACCEPTED),
++        [
++          6 => JobItemInterface::STATE_ACCEPTED,
++        ],
++      ],
++    ];
++  }
++
++}
+diff --git a/tests/src/Kernel/TMGMTKernelTestBase.php b/tests/src/Kernel/TMGMTKernelTestBase.php
+index 83f3b45d467a04dd74910b5607b548e60df7936e..80065862b842bc5f6524acf3a21a9c5c06001891 100644
+--- a/tests/src/Kernel/TMGMTKernelTestBase.php
++++ b/tests/src/Kernel/TMGMTKernelTestBase.php
+@@ -29,7 +29,7 @@ abstract class TMGMTKernelTestBase extends KernelTestBase {
+   /**
+    * {@inheritdoc}
+    */
+-  function setUp(): void {
++  protected function setUp(): void {
+     parent::setUp();
+ 
+     $this->installEntitySchema('user');
+diff --git a/tmgmt.install b/tmgmt.install
+index 6b926768749c6e08e91be4227db16a84123224ab..2f3935bbe00fd0db0be0ba52eb8aa85e85b08e0f 100644
+--- a/tmgmt.install
++++ b/tmgmt.install
+@@ -156,3 +156,25 @@ function tmgmt_update_8011() {
+     ->setInitialValue(0);
+   \Drupal::entityDefinitionUpdateManager()->installFieldStorageDefinition('file_count', 'tmgmt_job_item', 'tmgmt', $storage_definition);
+ }
++
++/**
++ * Add default values of new keys in TMGMT setting.
++ */
++function tmgmt_update_8012(): void {
++  $config = \Drupal::configFactory()->getEditable('tmgmt.settings');
++  if ($config->isNew()) {
++    return;
++  }
++
++  if (is_null($config->getOriginal('purge_continuous', FALSE))) {
++    $config->set('purge_continuous', '_never');
++  }
++  if (is_null($config->getOriginal('purge_continuous_aborted', FALSE))) {
++    $config->set('purge_continuous_aborted', FALSE);
++  }
++  if (is_null($config->getOriginal('purge_continuous_limit', FALSE))) {
++    $config->set('purge_continuous_limit', 500);
++  }
++
++  $config->save();
++}
+diff --git a/tmgmt.module b/tmgmt.module
+index 3cb0c5234367c4e3738e98b7a17e222acc3d76e9..db0dfc36201b563ff7bac6068fdfaec108ca74ff 100644
+--- a/tmgmt.module
++++ b/tmgmt.module
+@@ -72,14 +72,17 @@ function tmgmt_modules_installed($modules) {
+  * Implements hook_cron().
+  */
+ function tmgmt_cron() {
+-  $offset = \Drupal::config('tmgmt.settings')->get('purge_finished');
+-  if ($offset != '_never') {
++  $request_time = \Drupal::time()->getRequestTime();
++  $tmgmt_settings = \Drupal::config('tmgmt.settings');
++  $offset = $tmgmt_settings->get('purge_finished');
++  // Purge only if value is numeric.
++  if (ctype_digit($offset)) {
+     // Delete all finished translation jobs that haven't been changed for a
+     // time span longer than the given offset.
+     $ids = \Drupal::entityQuery('tmgmt_job')
+       ->accessCheck(TRUE)
+       ->condition('state', Job::STATE_FINISHED)
+-      ->condition('changed', \Drupal::time()->getRequestTime() - $offset, '<=')
++      ->condition('changed', $request_time - $offset, '<=')
+       ->execute();
+     if (!empty($ids)) {
+       $storage = \Drupal::entityTypeManager()->getStorage('tmgmt_job');
+@@ -88,8 +91,37 @@ function tmgmt_cron() {
+     }
+   }
+ 
++  $offset_continuous = $tmgmt_settings->get('purge_continuous') ?? '_never';
++  $cleanup_queue = \Drupal::queue('tmgmt_job_item_cleanup');
++  // Purge only if value is numeric.
++  if (ctype_digit($offset_continuous) && $cleanup_queue->numberOfItems() === 0) {
++    // Find continuous job id
++    $tjids = \Drupal::entityQuery('tmgmt_job')
++      ->accessCheck(FALSE)
++      ->condition('state', Job::STATE_CONTINUOUS)
++      ->execute();
++    if ($tjids) {
++      // Delete all accepted translation job item of continuous job that haven't
++      // been changed for a time span longer than the given offset.
++      $states = [JobItemInterface::STATE_ACCEPTED];
++      if ($tmgmt_settings->get('purge_continuous_aborted')) {
++        $states[] = JobItemInterface::STATE_ABORTED;
++      }
++      $limit = $tmgmt_settings->get('purge_continuous_limit') ?? 0;
++      $ids = \Drupal::entityQuery('tmgmt_job_item')
++        ->accessCheck(FALSE)
++        ->condition('state', $states, 'IN')
++        ->condition('changed', $request_time - $offset_continuous, '<=')
++        ->condition('tjid', $tjids, 'IN')
++        ->range(0, $limit)
++        ->execute();
++      while ($itemIds = array_splice($ids, 0, 25)) {
++        $cleanup_queue->createItem($itemIds);
++      }
++    }
++  }
++
+   // Submit continuous job items.
+-  $tmgmt_settings = \Drupal::config('tmgmt.settings');
+   if ($tmgmt_settings->get('submit_job_item_on_cron')) {
+ 
+     // Look for inactive job items of continuous jobs.
