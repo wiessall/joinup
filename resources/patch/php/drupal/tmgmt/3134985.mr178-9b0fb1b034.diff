@@ -97,9 +97,9 @@ index 1712d5ca1b3e6ab46cd381ceca86273ac2f5d725..0cc63d7ce69ccecce5b00ed4fe3d50a4
 +      '#min' => 1,
 +      '#config_target' => 'tmgmt.settings:purge_continuous_limit',
 +    ];
-     $form['security'] = array(
-       '#type' => 'details',
-       '#title' => t('Security settings'),
+     $form['performance']['purge_stale'] = [
+       '#type' => 'checkbox',
+       '#title' => $this->t('Purge stale job items and jobs'),
 diff --git a/src/Plugin/QueueWorker/JobItemCleanupWorker.php b/src/Plugin/QueueWorker/JobItemCleanupWorker.php
 new file mode 100644
 index 0000000000000000000000000000000000000000..15d367793f8c1d0fca8d9b289212516de2ea1006
