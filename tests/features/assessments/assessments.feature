@@ -295,13 +295,14 @@ Feature: Assessment Report Entity Management
 
   Scenario: User can browse only published solutions in binding requirement
     Given the following "solution" content:
-      | title                          | state       | interoperable |
-      | Test solution published        | published   |               |
-      | Test solution archived         | archived    |               |
-      | Test solution proposed         | proposed    |               |
-      | Test solution draft            | draft       |               |
-      | Test solution unpublished      | unpublished |               |
-      | Test interoperable solution    | published   | yes           |
+      | title                       | state       | interoperable | collection                           |
+      | Test solution published     | published   |               |                                      |
+      | Test solution archived      | archived    |               |                                      |
+      | Test solution proposed      | proposed    |               |                                      |
+      | Test solution draft         | draft       |               |                                      |
+      | Test solution unpublished   | unpublished |               |                                      |
+      | Test interoperable solution | published   | yes           |                                      |
+      | Test collector solution     | published   |               | Solutions mentioned in an assessment |
 
     Given I am logged in as an "authenticated user"
     And I go to "/collection/assessments/report/create"
@@ -315,6 +316,7 @@ Feature: Assessment Report Entity Management
     And I should not see the text "Test solution proposed"
     And I should not see the text "Test solution draft"
     And I should not see the text "Test solution unpublished"
+    And I should not see the text "Test collector solution"
 
   Scenario: Entity browser exposed filters: name, domain and interoperable filters
     Given the following "solution" content:
