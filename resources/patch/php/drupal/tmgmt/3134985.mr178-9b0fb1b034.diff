@@ -353,15 +353,14 @@ diff --git a/tmgmt.install b/tmgmt.install
 index 6b926768749c6e08e91be4227db16a84123224ab..2f3935bbe00fd0db0be0ba52eb8aa85e85b08e0f 100644
 --- a/tmgmt.install
 +++ b/tmgmt.install
-@@ -156,3 +156,25 @@ function tmgmt_update_8011() {
-     ->setInitialValue(0);
-   \Drupal::entityDefinitionUpdateManager()->installFieldStorageDefinition('file_count', 'tmgmt_job_item', 'tmgmt', $storage_definition);
+@@ -156,2 +156,24 @@ function tmgmt_update_8011() {
+   }
  }
 +
 +/**
 + * Add default values of new keys in TMGMT setting.
 + */
-+function tmgmt_update_8012(): void {
++function tmgmt_update_8014(): void {
 +  $config = \Drupal::configFactory()->getEditable('tmgmt.settings');
 +  if ($config->isNew()) {
 +    return;
