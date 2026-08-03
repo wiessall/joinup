@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.assessment.search_index
     - field.storage.assessment.binding_requirement
     - field.storage.assessment.thematic_area
     - field.storage.meta_entity.featured
@@ -135,6 +136,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.abstract
+  assessment_id:
+    label: ID
+    datasource_id: 'entity:assessment'
+    property_path: id
+    type: integer
+    dependencies:
+      module:
+        - assessments
   assessment_name:
     label: Name
     datasource_id: 'entity:assessment'
@@ -470,7 +479,7 @@ field_settings:
         - anonymous
       view_mode:
         'entity:assessment':
-          ':default': default
+          ':default': search_index
           report: ':default'
         'entity:node':
           ':default': ''
@@ -720,6 +729,13 @@ processor_settings:
           solution: 13.0
       'entity:user':
         datasource_boost: 0.0
+  unique_filter:
+    weights:
+      preprocess_index: -15
+      preprocess_query: -15
+    all_fields: false
+    fields:
+      - thematic_area
 tracker_settings:
   default:
     indexing_order: fifo
