@@ -1,0 +1,17 @@
+uuid: 835a3415-607e-4295-b01b-06ab642ef8c5
+langcode: en
+status: true
+dependencies:
+  module:
+    - linkchecker_summary_mail
+title: 'Default cron handler'
+id: linkchecker_summary_mail_cron
+weight: 0
+module: linkchecker_summary_mail
+callback: 'linkchecker_summary_mail#cron'
+scheduler:
+  id: simple
+launcher:
+  id: serial
+logger:
+  id: database

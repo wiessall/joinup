@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "459641ce3de6714d8ab9af32b96f519a",
+    "content-hash": "7d5c9123500f8bec40a649336f1a7bfc",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5953,6 +5953,55 @@
             "support": {
                 "source": "https://git.drupal.org/project/linkchecker.git",
                 "issues": "https://www.drupal.org/project/issues/linkchecker"
+            }
+        },
+        {
+            "name": "drupal/linkchecker_summary_mail",
+            "version": "2.0.0-beta4",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/linkchecker_summary_mail.git",
+                "reference": "2.0.0-beta4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/linkchecker_summary_mail-2.0.0-beta4.zip",
+                "reference": "2.0.0-beta4",
+                "shasum": "44399f9ad6775d391caf09c76805c23832ce3ff8"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10 || ^11",
+                "drupal/linkchecker": "^1.0@beta || ^2.0@alpha"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.0-beta4",
+                    "datestamp": "1726239396",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "JeroenT",
+                    "homepage": "https://www.drupal.org/user/2228934"
+                },
+                {
+                    "name": "eiriksm",
+                    "homepage": "https://www.drupal.org/user/1014468"
+                }
+            ],
+            "description": "Sends link checker summary mails in certain intervals.",
+            "homepage": "https://www.drupal.org/project/linkchecker_summary_mail",
+            "support": {
+                "source": "https://git.drupalcode.org/project/linkchecker_summary_mail"
             }
         },
         {
@@ -28479,6 +28528,7 @@
         "drupal/error_page": 10,
         "drupal/facets_block": 10,
         "drupal/facets_date_range": 10,
+        "drupal/linkchecker_summary_mail": 10,
         "drupal/openapi_ui": 5,
         "drupal/poll": 15,
         "drupal/private_message": 15,
