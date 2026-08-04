@@ -29,6 +29,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\search_api\Query\QueryInterface;
+use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_theme().
@@ -555,6 +556,11 @@ function assessments_query_explore_block_solution_alter(AlterableInterface $quer
  */
 function assessments_search_api_query_alter(QueryInterface $query): void {
   if ($query->getIndex()->id() !== 'published') {
+    return;
+  }
+
+  $view = $query->getOption('search_api_view');
+  if ($view instanceof ViewExecutable && $view->id() === 'assessment_solutions_browser') {
     return;
   }
 
