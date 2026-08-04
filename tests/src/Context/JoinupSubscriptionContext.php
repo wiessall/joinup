@@ -9,6 +9,7 @@ use Behat\Mink\Element\NodeElement;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
+use Drupal\assessments\AssessmentInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
@@ -334,6 +335,15 @@ class JoinupSubscriptionContext extends RawDrupalContext {
       $expected_options = $this->explodeDelimitedSeparatedStepArgument(strtolower($expected_options));
       $group = $this->getEntityByLabel('node', $group_label);
       $subscription_bundles = JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES[$group->bundle()];
+      // Remove the 'assessment_report' subscription for all collections,
+      // except the assessment collection.
+      if ($group->uuid() !== AssessmentInterface::GROUP_UUID) {
+        foreach ($subscription_bundles as $key => $bundles) {
+          $subscription_bundles[$key] = array_values(array_filter($bundles, function ($bundle) {
+            return $bundle !== 'assessment_report';
+          }));
+        }
+      }
       foreach ($subscription_bundles as $entity_type_id => $bundle_ids) {
         foreach ($bundle_ids as $bundle_id) {
           $key = implode('|', [$entity_type_id, $bundle_id]);
