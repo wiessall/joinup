@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_subscription\Form;
 
+use Drupal\assessments\AssessmentInterface;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
@@ -17,7 +18,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\SubformState;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
-use Drupal\assessments\AssessmentInterface;
 use Drupal\joinup_group\JoinupGroupManagerInterface;
 use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
 use Drupal\joinup_subscription\Plugin\Field\FieldType\EntityBundlePairItem;
