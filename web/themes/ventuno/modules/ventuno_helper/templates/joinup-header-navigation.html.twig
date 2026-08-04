@@ -17,11 +17,7 @@
   <ul>
     {% for link in links %}
       <li>
-        {% if link.element %}
-          {{ link.element }}
-        {% else %}
-          <a href="{{ link.link }}"{{ create_attribute(link.attributes|default([])) }}>{{ link.label }}</a>
-        {% endif %}
+        {{ link.element }}
         {% if link.links %}
           {{ menu.mmenu_links(link.links) }}
         {% endif %}

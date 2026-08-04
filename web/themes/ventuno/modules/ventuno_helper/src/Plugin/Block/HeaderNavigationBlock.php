@@ -100,11 +100,13 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
       ];
 
       array_unshift($mobile_links, [
-        'label' => $this->t('Home'),
-        'link' => Url::fromRoute('<front>'),
+        'element' => [
+          '#type' => 'link',
+          '#title' => $this->t('Home'),
+          '#url' => Url::fromRoute('<front>'),
+        ],
       ]);
       $mobile_links[] = [
-        'label' => $this->t('Sign in'),
         'element' => $this->signInLinkPlaceholder(''),
       ];
       if ($about_us_link = $this->getAboutUsLink($cacheability)) {
@@ -216,8 +218,11 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
     }
     $cacheability->addCacheableDependency($joinup_collection);
     return [
-      'label' => $this->t('About us'),
-      'link' => $joinup_collection->toUrl(),
+      'element' => [
+        '#type' => 'link',
+        '#title' => $this->t('About us'),
+        '#url' => $joinup_collection->toUrl(),
+      ],
     ];
   }
 
@@ -248,19 +253,22 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
    *   'below' array of child items.
    *
    * @return array
-   *   The links in the BCL header format, with child links nested under the
-   *   'links' key so the mobile drawer can render them as a second level.
+   *   The links in the BCL header format, each carrying its render array under
+   *   the 'element' key, with child links nested under the 'links' key so the
+   *   mobile drawer can render them as a second level.
    */
   protected function buildMenuLinks(array $items): array {
     $links = [];
     foreach ($items as $item) {
-      $link = [
-        'label' => $item['title'],
-        'link' => $item['url'],
+      $element = [
+        '#type' => 'link',
+        '#title' => $item['title'],
+        '#url' => $item['url'],
       ];
       if (!empty($item['in_active_trail'])) {
-        $link['attributes'] = ['class' => ['is-active']];
+        $element['#attributes']['class'][] = 'is-active';
       }
+      $link = ['element' => $element];
       if (!empty($item['below'])) {
         $link['links'] = $this->buildMenuLinks($item['below']);
       }
