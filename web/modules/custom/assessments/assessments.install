@@ -46,7 +46,7 @@ function assessments_schema(): array {
 /**
  * Deletes assessment_report content.
  */
-function assessments_update_201602(): void {
+function assessments_update_201601(): void {
   $storage = \Drupal::entityTypeManager()->getStorage('node');
 
   $nids = \Drupal::entityQuery('node')
@@ -60,5 +60,30 @@ function assessments_update_201602(): void {
     foreach ($nodes as $node) {
       $node->delete();
     }
+  }
+}
+
+/**
+ * Update config for online_form_for_assessments.
+ */
+function assessments_update_201602(): void {
+  $config = \Drupal::configFactory()
+    ->getEditable('webform.webform.online_form_for_assessments');
+
+  $dependencies = $config->get('dependencies');
+
+  if (!empty($dependencies['module'])) {
+    $dependencies['module'] = array_values(array_diff(
+      $dependencies['module'],
+      ['joinup_assessment']
+    ));
+
+    if (empty($dependencies['module'])) {
+      unset($dependencies['module']);
+    }
+
+    $config
+      ->set('dependencies', $dependencies)
+      ->save(TRUE);
   }
 }

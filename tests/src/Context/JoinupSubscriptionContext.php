@@ -22,7 +22,6 @@ use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
-use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_subscription\Entity\GroupContentSubscriptionMessageInterface;
