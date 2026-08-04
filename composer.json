@@ -24,15 +24,14 @@
         "drupal/babel": "^1.0",
         "drupal/better_exposed_filters": "^7.0",
         "drupal/block_field": "^1.0@RC",
-        "drupal/cached_computed_field": "^1.0",
         "drupal/calendar_view": "^2.1",
         "drupal/cas": "^3.0",
         "drupal/cas_attributes": "^3.0",
         "drupal/changed_fields": "^3.2",
         "drupal/colorbox": "^2.0",
         "drupal/config_ignore": "^3.0",
-        "drupal/core": "^11.3.12",
-        "drupal/core-composer-scaffold": "^11.3.12",
+        "drupal/core": "~11.3.16",
+        "drupal/core-composer-scaffold": "~11.3.16",
         "drupal/custom_markup_block": "^1.2",
         "drupal/diff": "^2.0",
         "drupal/digital_size_formatter": "~2.0",
@@ -45,7 +44,7 @@
         "drupal/entity_form_field_label": "^2.1",
         "drupal/entity_legal": "^4.0",
         "drupal/entity_print": "^2.15",
-        "drupal/entityqueue": "^1.2",
+        "drupal/entityqueue": "1.10.0",
         "drupal/error_page": "^2.1@beta",
         "drupal/facets": "^3.0",
         "drupal/facets_block": "^2.0@beta",
@@ -180,7 +179,7 @@
         "ec-europa/toolkit": "^10.5",
         "lovers-of-behat/table-extension": "^1.4",
         "lullabot/mink-selenium2-driver": "^1.7",
-        "mglaman/phpstan-drupal": "^2.0",
+        "mglaman/phpstan-drupal": "2.0.15",
         "mikey179/vfsstream": "~1.6",
         "nicwortel/behat-unused-step-definitions-extension": "^1.2",
         "phpro/grumphp-shim": "^2.19",
@@ -540,6 +539,7 @@
                 "Add a configurable fallback for translations that exceed the target field length @see https://www.drupal.org/i/2960458 + Callers don't account the scenario in which JobItem::acceptTranslation() fails softly @see https://www.drupal.org/i/3580841": "resources/patch/php/drupal/tmgmt/2960458.mr170.commit4b643297-plus-3580841.mr161.commit7baf8367.diff",
                 "Non-translatable fields are exported when the bundle is not enabled for content translation @see https://www.drupal.org/i/3382356": "resources/patch/php/drupal/tmgmt/3382356.mr172.commitd2294f18.diff",
                 "Delete job item when corresponding entity is being deleted @see https://www.drupal.org/i/2998143": "resources/patch/php/drupal/tmgmt/2998143.mr35.commitdd0ee714.diff",
+                "Messages flooded @see https://www.drupal.org/i/3611439": "resources/patch/php/drupal/tmgmt/3611439.mr175-commitfff006f2.diff",
                 "Hook to allow modules to alter translation @see https://www.drupal.org/i/2998143": "resources/patch/php/drupal/tmgmt/3298245.mr58.commit6976599d.diff"
             },
             "drupal/token": {
@@ -552,11 +552,7 @@
                 "PHP 8.4 @see https://www.drupal.org/i/3564894": "resources/patch/php/drupal/ui_patterns_settings/3564894.mr58.commit-17615e84.diff"
             },
             "drupal/views_block_area": {
-                "Render logic not working @see https://www.drupal.org/i/3499861": "resources/patch/php/drupal/views_block_area/3499861.patch",
-                "PHP 8.4 @see https://www.drupal.org/i/3541588": "resources/patch/php/drupal/views_block_area/3541588.mr13.commit-8108f239.diff"
-            },
-            "drupal/views_bulk_operations": {
-                "PHP 8.5 \"Using null as an array offset\" in viewsFormSubmit @see https://www.drupal.org/i/3589897": "resources/patch/php/drupal/views_bulk_operations/3589897-php8.5-fix-only-commit-0ca438ec.diff"
+                "Render logic not working @see https://www.drupal.org/i/3499861": "resources/patch/php/drupal/views_block_area/3499861.patch"
             },
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff",
@@ -574,9 +570,6 @@
             },
             "openeuropa/oe_webtools": {
                 "PHP 8.5 compatibility @see https://github.com/openeuropa/oe_webtools/pull/311": "resources/patch/php/openeuropa/oe_webtools/pr311.commit-d4a22bb.diff"
-            },
-            "solarium/solarium": {
-                "PHP 8.5 support @see https://github.com/solariumphp/solarium/pull/1178": "resources/patch/php/solarium/solarium/pr1178.commit-8f11b58.diff"
             },
             "sweetrdf/easyrdf": {
                 "Add a method to remove resources from graph @see https://github.com/sweetrdf/easyrdf/pull/44": "resources/patch/php/sweetrdf/easyrdf/44.diff"

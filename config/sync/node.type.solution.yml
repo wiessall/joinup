@@ -7,7 +7,7 @@ dependencies:
     - rdf_sync
 third_party_settings:
   menu_ui:
-    available_menus: { }
+    available_menus: {  }
     parent: ''
   rdf_sync:
     type: 'http://www.w3.org/ns/dcat#Dataset'

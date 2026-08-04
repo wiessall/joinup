@@ -247,6 +247,7 @@ processor_settings:
     weights:
       preprocess_query: -30
   custom_value: {  }
+  entity_status: {  }
   entity_type: {  }
   html_filter:
     weights:
@@ -267,6 +268,7 @@ processor_settings:
       strong: 2.0
   joinup_entity_bundle: {  }
   language_with_fallback: {  }
+  oss_archived: {  }
   oss_solution_rendered_item: {  }
   solr_date_range:
     weights:
