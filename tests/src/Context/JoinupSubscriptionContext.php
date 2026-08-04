@@ -406,6 +406,10 @@ class JoinupSubscriptionContext extends RawDrupalContext {
       return $item['bundle'];
     }, $membership->get('subscription_bundles')->getValue());
 
+    if ($group->uuid() !== AssessmentInterface::GROUP_UUID) {
+      $actualBundleIds = array_values(array_diff($actualBundleIds, ['assessment_report']));
+    }
+
     sort($expectedBundleIds);
     sort($actualBundleIds);
 
