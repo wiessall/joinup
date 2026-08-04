@@ -87,3 +87,24 @@ function assessments_update_201602(): void {
       ->save(TRUE);
   }
 }
+
+/**
+ * Remove joinup_assessment_routes from OG settings group resolvers.
+ */
+function assessments_update_201603(): void {
+  $config = \Drupal::configFactory()
+    ->getEditable('og.settings');
+
+  $group_resolvers = $config->get('group_resolvers');
+
+  if (!empty($group_resolvers)) {
+    $group_resolvers = array_values(array_diff(
+      $group_resolvers,
+      ['joinup_assessment_routes']
+    ));
+
+    $config
+      ->set('group_resolvers', $group_resolvers)
+      ->save(TRUE);
+  }
+}
