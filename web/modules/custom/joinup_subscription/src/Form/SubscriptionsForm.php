@@ -17,7 +17,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\SubformState;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
-use Drupal\joinup_assessment\AssessmentInterface;
+use Drupal\assessments\AssessmentInterface;
 use Drupal\joinup_group\JoinupGroupManagerInterface;
 use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
 use Drupal\joinup_subscription\Plugin\Field\FieldType\EntityBundlePairItem;
