@@ -401,16 +401,6 @@ field_settings:
     dependencies:
       module:
         - node
-  node_featured:
-    label: 'Featured site-wide'
-    datasource_id: 'entity:node'
-    property_path: 'featured:entity:featured'
-    type: string
-    dependencies:
-      config:
-        - field.storage.meta_entity.featured
-      module:
-        - meta_entity
   node_pinned_in:
     label: 'Pinned in'
     datasource_id: 'entity:node'
@@ -439,17 +429,6 @@ field_settings:
       config:
         - field.storage.node.owner
       module:
-        - node
-  pinned_in:
-    label: 'Pinned in'
-    datasource_id: 'entity:node'
-    property_path: 'pinned_in:entity:field_pinned_in:entity:nid'
-    type: string
-    dependencies:
-      config:
-        - field.storage.meta_entity.field_pinned_in
-      module:
-        - meta_entity
         - node
   processed:
     label: 'Body » Paragraph » Body » Processed text'
