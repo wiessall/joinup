@@ -1,0 +1,97 @@
+diff --git a/core/modules/content_translation/src/ContentTranslationHandler.php b/core/modules/content_translation/src/ContentTranslationHandler.php
+--- a/core/modules/content_translation/src/ContentTranslationHandler.php
++++ b/core/modules/content_translation/src/ContentTranslationHandler.php
+@@ -615,7 +615,7 @@
+ 
+     // Elements which can have a #title attribute according to FAPI Reference.
+     if (!isset($suffix)) {
+-      $suffix = ' <span class="translation-entity-all-languages">(' . $this->t('all languages') . ')</span>';
++      $suffix = ' (' . $this->t('all languages') . ')';
+       $fapi_title_elements = array_flip(['checkbox', 'checkboxes', 'date', 'details', 'fieldset', 'file', 'item', 'password', 'password_confirm', 'radio', 'radios', 'select', 'text_format', 'textarea', 'textfield', 'weight']);
+     }
+ 
+diff --git a/core/modules/content_translation/tests/src/Functional/ContentTestTranslationUITest.php b/core/modules/content_translation/tests/src/Functional/ContentTestTranslationUITest.php
+--- a/core/modules/content_translation/tests/src/Functional/ContentTestTranslationUITest.php
++++ b/core/modules/content_translation/tests/src/Functional/ContentTestTranslationUITest.php
+@@ -15,11 +15,6 @@
+ #[RunTestsInSeparateProcesses]
+ class ContentTestTranslationUITest extends ContentTranslationUITestBase {
+ 
+-  /**
+-   * {@inheritdoc}
+-   */
+-  protected $testHTMLEscapeForAllLanguages = TRUE;
+-
+   /**
+    * {@inheritdoc}
+    */
+diff --git a/core/modules/content_translation/tests/src/Functional/ContentTranslationUITestBase.php b/core/modules/content_translation/tests/src/Functional/ContentTranslationUITestBase.php
+--- a/core/modules/content_translation/tests/src/Functional/ContentTranslationUITestBase.php
++++ b/core/modules/content_translation/tests/src/Functional/ContentTranslationUITestBase.php
+@@ -35,13 +35,6 @@ abstract class ContentTranslationUITestBase extends ContentTranslationTestBase {
+    */
+   protected $testLanguageSelector = TRUE;
+ 
+-  /**
+-   * Flag to determine if "all languages" rendering is tested.
+-   *
+-   * @var bool
+-   */
+-  protected $testHTMLEscapeForAllLanguages = FALSE;
+-
+   /**
+    * Default cache contexts expected on a non-translated entity.
+    *
+@@ -120,12 +113,6 @@ protected function doTestBasicTranslation() {
+     $this->drupalGet($add_url);
+     $this->submitForm($this->getEditValues($values, $langcode), $this->getFormSubmitActionForNewTranslation($entity, $langcode));
+ 
+-    // Assert that HTML is not escaped unexpectedly.
+-    if ($this->testHTMLEscapeForAllLanguages) {
+-      $this->assertSession()->responseNotContains('&lt;span class=&quot;translation-entity-all-languages&quot;&gt;(all languages)&lt;/span&gt;');
+-      $this->assertSession()->responseContains('<span class="translation-entity-all-languages">(all languages)</span>');
+-    }
+-
+     // Ensure that the content language cache context is not yet added to the
+     // page.
+     $storage = $this->container->get('entity_type.manager')
+diff --git a/core/modules/content_translation/tests/src/Functional/ContentTranslationUntranslatableFieldsTest.php b/core/modules/content_translation/tests/src/Functional/ContentTranslationUntranslatableFieldsTest.php
+--- a/core/modules/content_translation/tests/src/Functional/ContentTranslationUntranslatableFieldsTest.php
++++ b/core/modules/content_translation/tests/src/Functional/ContentTranslationUntranslatableFieldsTest.php
+@@ -93,7 +93,7 @@ public function testHiddenWidgets(): void {
+     $this->drupalGet($en_edit_url);
+     $field_xpath = '//input[@name="' . $this->fieldName . '[0][value]"]';
+     $this->assertSession()->elementExists('xpath', $field_xpath);
+-    $clue_xpath = '//label[@for="edit-' . strtr($this->fieldName, '_', '-') . '-0-value"]/span[text()="(all languages)"]';
++    $clue_xpath = '//label[@for="edit-' . strtr($this->fieldName, '_', '-') . '-0-value"][contains(text(), "(all languages)")]';
+     $this->assertSession()->elementNotExists('xpath', $clue_xpath);
+     $this->assertSession()->pageTextContains('Untranslatable-but-visible test field');
+ 
+diff --git a/core/modules/content_translation/tests/src/Kernel/ContentTranslationHandlerTest.php b/core/modules/content_translation/tests/src/Kernel/ContentTranslationHandlerTest.php
+--- a/core/modules/content_translation/tests/src/Kernel/ContentTranslationHandlerTest.php
++++ b/core/modules/content_translation/tests/src/Kernel/ContentTranslationHandlerTest.php
+@@ -171,7 +171,7 @@ public static function providerTestEntityFormSharedElements() {
+     $tests['no-translatability-clue']['expected'] = $element;
+ 
+     $expected = $element;
+-    $expected['test']['#title'] .= ' <span class="translation-entity-all-languages">(all languages)</span>';
++    $expected['test']['#title'] .= ' (all languages)';
+     $tests['translatability-clue'] = $tests['no-translatability-clue'];
+     $tests['translatability-clue']['default_translation_affected'] = FALSE;
+     $tests['translatability-clue']['expected'] = $expected;
+diff --git a/core/modules/node/tests/src/Functional/NodeTranslationUITest.php b/core/modules/node/tests/src/Functional/NodeTranslationUITest.php
+--- a/core/modules/node/tests/src/Functional/NodeTranslationUITest.php
++++ b/core/modules/node/tests/src/Functional/NodeTranslationUITest.php
+@@ -594,10 +594,9 @@ public function testDetailsTitleIsNotEscaped(): void {
+     // Create a node.
+     $nid = $this->createEntity(['title' => 'Node with multi-value image field en title'], 'en');
+ 
+-    // Add a French translation and assert the title markup is not escaped.
++    // Add a French translation and assert the title contains the translatability clue.
+     $this->drupalGet("node/$nid/translations/add/en/fr");
+-    $markup = 'Image <span class="translation-entity-all-languages">(all languages)</span>';
+-    $this->assertSession()->assertNoEscaped($markup);
++    $markup = 'Image (all languages)';
+     $this->assertSession()->responseContains($markup);
+   }
+ 
