@@ -1,0 +1,217 @@
+diff --git a/config/install/linkchecker.settings.yml b/config/install/linkchecker.settings.yml
+index 7985a5072644766400b05f331ecbac3f0804ed32..402b3b8487fd6f7f570531680e508509779c1426 100644
+--- a/config/install/linkchecker.settings.yml
++++ b/config/install/linkchecker.settings.yml
+@@ -2,6 +2,7 @@
+ check_links_types: 1
+ default_url_scheme: 'http://'
+ base_path: ''
++check_translations: true
+ extract:
+   from_a: true
+   from_audio: false
+diff --git a/config/schema/linkchecker.schema.yml b/config/schema/linkchecker.schema.yml
+index 3dc25f5e3d576aeeee65ee9155df856d491b31c6..47a4d62a8a6ba99731751e03f629d315c85fda66 100644
+--- a/config/schema/linkchecker.schema.yml
++++ b/config/schema/linkchecker.schema.yml
+@@ -20,6 +20,9 @@ linkchecker.settings:
+     search_published_contents_only:
+       type: boolean
+       label: 'Search published contents only'
++    check_translations:
++      type: boolean
++      label: 'Whether translations also must be checked'
+     extract:
+       type: mapping
+       label: 'Link extraction'
+diff --git a/linkchecker.post_update.php b/linkchecker.post_update.php
+index 6ead5c774d99da9dbc6fa3362030c80c1eeca985..706d5c2ec7b881bce0349060bcc77eec588a22e0 100644
+--- a/linkchecker.post_update.php
++++ b/linkchecker.post_update.php
+@@ -81,6 +81,18 @@ function linkchecker_post_update_remove_orphaned_queue_data(&$sandbox): void {
+   }
+ }
+ 
++/**
++ * Add default setting for checking all entity translations.
++ */
++function linkchecker_post_update_add_default_check_translations_setting(): void {
++  $config = \Drupal::configFactory()->getEditable('linkchecker.settings');
++  if ($config->get('check_translations') !== NULL) {
++    return;
++  }
++
++  $config->set('check_translations', TRUE)->save();
++}
++
+ /**
+  * Trim whitespace from existing link URLs and rebuild their hashes.
+  */
+diff --git a/src/Form/LinkCheckerAdminSettingsForm.php b/src/Form/LinkCheckerAdminSettingsForm.php
+index 7b1cad90686b94ed407f70e0401fb5eb31c9206f..0c0166fc12be123e52001d6273829440982565ca 100644
+--- a/src/Form/LinkCheckerAdminSettingsForm.php
++++ b/src/Form/LinkCheckerAdminSettingsForm.php
+@@ -212,6 +212,13 @@ class LinkCheckerAdminSettingsForm extends ConfigFormBase {
+       '#title' => $this->t('Search published contents only'),
+       '#description' => $this->t('If selected, links in unpublished content will be ignored.'),
+     ];
++    $form['general']['check_translations'] = [
++      '#type' => 'checkbox',
++      '#title' => $this->t('Search in all translations'),
++      '#description' => $this->t('Links are extracted from entity translations as well, not just from the default, untranslated version.'),
++      '#config_target' => 'linkchecker.settings:check_translations',
++    ];
++
+     $form['tag'] = [
+       '#type' => 'details',
+       '#title' => $this->t('Link extraction'),
+diff --git a/src/LinkExtractorService.php b/src/LinkExtractorService.php
+index 3c382f67902541c4a6abb8c855cffc221d7a4608..e627436b720631095b15746df7227bce062797a0 100644
+--- a/src/LinkExtractorService.php
++++ b/src/LinkExtractorService.php
+@@ -94,8 +94,17 @@ class LinkExtractorService {
+   public function extractFromEntity(FieldableEntityInterface $entity) {
+     $links = [];
+     $this->pos = 0;
++    $checkTranslations = $this->linkcheckerSetting->get('check_translations') ?? TRUE;
++    // If the non-default translation was passed, and Link Checker is configured
++    // to check only the default translation, we load the default translation.
++    // We need to do this because there is a chance that a non-translatable
++    // field was also changed when the translation was saved.
++    // @todo This should be refined in https://drupal.org/i/3616460
++    if (!$checkTranslations && $entity instanceof TranslatableInterface && !$entity->isDefaultTranslation()) {
++      $entity = $entity->getUntranslated();
++    }
+     foreach ($entity->getFieldDefinitions() as $fieldDefinition) {
+-      if ($entity instanceof TranslatableInterface && $fieldDefinition->isTranslatable()) {
++      if ($checkTranslations && $entity instanceof TranslatableInterface && $fieldDefinition->isTranslatable()) {
+         foreach ($entity->getTranslationLanguages() as $language) {
+           $translation = $entity->getTranslation($language->getId());
+           $skip_unpublished = $this->linkcheckerSetting->get('search_published_contents_only');
+diff --git a/tests/src/Kernel/LinkcheckerLinkExtractorServiceTest.php b/tests/src/Kernel/LinkcheckerLinkExtractorServiceTest.php
+index 40cefec96b1b3f3a25414f6ae881e0a9372242a6..918c376bf4956f9de9cbe169024cd14e30d9fd1c 100644
+--- a/tests/src/Kernel/LinkcheckerLinkExtractorServiceTest.php
++++ b/tests/src/Kernel/LinkcheckerLinkExtractorServiceTest.php
+@@ -3,8 +3,11 @@
+ namespace Drupal\Tests\linkchecker\Kernel;
+ 
+ use Drupal\Component\Render\FormattableMarkup;
++use Drupal\Core\Extension\ModuleInstallerInterface;
+ use Drupal\Core\Queue\DatabaseQueue;
++use Drupal\field\Entity\FieldConfig;
+ use Drupal\KernelTests\KernelTestBase;
++use Drupal\language\Entity\ConfigurableLanguage;
+ use Drupal\Tests\field\Traits\BodyFieldCreationTrait;
+ use Drupal\Tests\node\Traits\NodeCreationTrait;
+ use Drupal\linkchecker\Entity\LinkCheckerLink;
+@@ -442,4 +445,110 @@ class LinkcheckerLinkExtractorServiceTest extends KernelTestBase {
+     return array_merge($this->getExternalUrls(), $this->getBlocklistUrls(), array_keys($this->getRelativeUrls()), $this->getUnsupportedUrls());
+   }
+ 
++  /**
++   * Tests how translations are parsed and extracted.
++   *
++   * @dataProvider providerTestTranslationExtraction
++   */
++  public function testTranslationExtraction(
++    array $linkCheckerConfig,
++    string $translationBody,
++    bool $saveTranslationSeparately,
++    array $expectedLinks,
++  ): void {
++    \Drupal::service(ModuleInstallerInterface::class)->install(['language']);
++    ConfigurableLanguage::createFromLangcode('hu')->save();
++    $config = $this->config('linkchecker.settings');
++    foreach ($linkCheckerConfig as $name => $value) {
++      $config->set($name, $value);
++    }
++    $config->save();
++    NodeType::create(['name' => 'Links', 'type' => 'links'])->save();
++    $this->createBodyField('node', 'links');
++    FieldConfig::load('node.links.body')
++      ->setThirdPartySetting('linkchecker', 'scan', TRUE)
++      ->setThirdPartySetting('linkchecker', 'extractor', 'html_link_extractor')
++      ->save();
++
++    $this->assertEmpty(LinkCheckerLink::loadMultiple());
++
++    $contentStorage = \Drupal::entityTypeManager()->getStorage('node');
++    $content = $contentStorage->create([
++      'title' => 'Test content',
++      'type' => 'links',
++      'body' => 'Some text, without any link.',
++    ]);
++    if ($saveTranslationSeparately) {
++      $content->save();
++      $content = $contentStorage->loadUnchanged($content->id());
++    }
++    $translation = $content->addTranslation('hu', [
++      'body' => $translationBody,
++    ] + $content->toArray());
++    if ($saveTranslationSeparately) {
++      $translation->save();
++    }
++    else {
++      $content->save();
++    }
++
++    $links = array_map(
++      fn (LinkCheckerLinkInterface $link) => $link->getUrl(),
++      LinkCheckerLink::loadMultiple(),
++    );
++    natsort($links);
++    $this->assertEquals($expectedLinks, array_values($links));
++  }
++
++  /**
++   * Data provider for ::testTranslationExtraction.
++   *
++   * @return array[]
++   *   The test cases.
++   */
++  public static function providerTestTranslationExtraction(): array {
++    return [
++      'Checking translation, multi step save' => [
++        'linkCheckerConfig' => [
++          'check_translations' => TRUE,
++          'check.disable_link_check_for_urls' => '',
++        ],
++        'translationBody' => '<a href="https://example.com">URL</a>',
++        'saveTranslationSeparately' => FALSE,
++        'expectedLinks' => [
++          'https://example.com',
++        ],
++      ],
++      'Only extract default, multi step save' => [
++        'linkCheckerConfig' => [
++          'check_translations' => FALSE,
++          'check.disable_link_check_for_urls' => '',
++        ],
++        'translationBody' => '<a href="https://example.com">URL</a>',
++        'saveTranslationSeparately' => FALSE,
++        'expectedLinks' => [],
++      ],
++      'Checking translation, single save' => [
++        'linkCheckerConfig' => [
++          'check_translations' => TRUE,
++          'check.disable_link_check_for_urls' => '',
++        ],
++        'translationBody' => '<a href="https://example.com">URL</a>',
++        'saveTranslationSeparately' => TRUE,
++        'expectedLinks' => [
++          'https://example.com',
++        ],
++      ],
++      'Only extract default, single save' => [
++        'linkCheckerConfig' => [
++          'check_translations' => FALSE,
++          'check.disable_link_check_for_urls' => '',
++        ],
++        'translationBody' => '<a href="https://example.com">URL</a>',
++        'saveTranslationSeparately' => TRUE,
++        'expectedLinks' => [],
++      ],
++    ];
++  }
++
+ }
