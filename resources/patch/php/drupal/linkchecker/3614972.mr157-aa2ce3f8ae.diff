@@ -101,9 +101,9 @@ index 40cefec96b1b3f3a25414f6ae881e0a9372242a6..918c376bf4956f9de9cbe169024cd14e
 +use Drupal\field\Entity\FieldConfig;
  use Drupal\KernelTests\KernelTestBase;
 +use Drupal\language\Entity\ConfigurableLanguage;
- use Drupal\Tests\field\Traits\BodyFieldCreationTrait;
- use Drupal\Tests\node\Traits\NodeCreationTrait;
  use Drupal\linkchecker\Entity\LinkCheckerLink;
+ use Drupal\linkchecker\LinkCheckerLinkInterface;
+ use Drupal\node\Entity\NodeType;
 @@ -442,4 +445,110 @@ class LinkcheckerLinkExtractorServiceTest extends KernelTestBase {
      return array_merge($this->getExternalUrls(), $this->getBlocklistUrls(), array_keys($this->getRelativeUrls()), $this->getUnsupportedUrls());
    }
