@@ -64,14 +64,15 @@ index 305ce59b5080ee2d0de6c1889fcc5e653a5b0ea0..26c62d64f01f295da0f0c25bb5422ae2
        '#type' => 'details',
        '#title' => $this->t('Non-translatable text parts'),
 diff --git a/src/Hook/ETranslationHooks.php b/src/Hook/ETranslationHooks.php
-index a73aca2a08ca0d9f66eb79415e7bc9fbd37cc791..299bf82cec3950b9c797b84a51494ac3758ea231 100644
+index a73aca2a08ca0d9f66eb79415e7bc9fbd37cc791..12e2bb0618d8541226b2819d5c232ec4d40d1dd4 100644
 --- a/src/Hook/ETranslationHooks.php
 +++ b/src/Hook/ETranslationHooks.php
-@@ -5,11 +5,13 @@ declare(strict_types=1);
+@@ -5,11 +5,14 @@ declare(strict_types=1);
  namespace Drupal\tmgmt_ec_etranslation\Hook;
 
  use Drupal\Component\Datetime\TimeInterface;
 +use Drupal\Core\Datetime\DateFormatterInterface;
++use Drupal\Core\Entity\EntityStorageInterface;
  use Drupal\Core\Entity\EntityTypeManagerInterface;
  use Drupal\Core\Hook\Attribute\Hook;
  use Drupal\tmgmt\ContinuousManager;
@@ -81,7 +82,7 @@ index a73aca2a08ca0d9f66eb79415e7bc9fbd37cc791..299bf82cec3950b9c797b84a51494ac3
  use Drupal\tmgmt_ec_etranslation\Plugin\tmgmt\Translator\ETranslationTranslator;
  use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-@@ -23,6 +25,7 @@ class ETranslationHooks {
+@@ -23,6 +26,7 @@ class ETranslationHooks {
      #[Autowire(service: 'tmgmt.continuous')]
      protected readonly ContinuousManager $continuousManager,
      protected readonly TimeInterface $time,
@@ -89,54 +90,29 @@ index a73aca2a08ca0d9f66eb79415e7bc9fbd37cc791..299bf82cec3950b9c797b84a51494ac3
    ) {}
 
    /**
-@@ -30,28 +33,82 @@ class ETranslationHooks {
+@@ -30,32 +34,118 @@ class ETranslationHooks {
     */
    #[Hook('cron')]
    public function cron(): void {
 -    $jobStorage = $this->entityTypeManager->getStorage('tmgmt_job');
 -    $jobItemStorage = $this->entityTypeManager->getStorage('tmgmt_job_item');
-+    $translators = $this->entityTypeManager->getStorage('tmgmt_translator')
-+      ->loadByProperties(['plugin' => ETranslationTranslator::ID]);
++    $translators = $this->getTranslatorsWithTimeoutSettings();
++    if (!$translators) {
++      return;
++    }
 
 -    $jobIds = $jobStorage->getQuery()->accessCheck(FALSE)
 -      ->condition('translator', ETranslationTranslator::ID)
 -      ->condition('job_type', JobInterface::TYPE_CONTINUOUS)
 -      ->condition('state', JobInterface::STATE_CONTINUOUS)
-+    // Filter out translators that have no aborted job items retrial attempts.
-+    $translators = array_filter(
-+      $translators,
-+      fn($translator) => $translator->getSetting(['retrials_after_timeout', 'max_attempts']) > 0,
-+    );
-+
-+    if (!$translators) {
-+      return;
-+    }
-+
+-      ->execute();
 +    $requestTime = $this->time->getRequestTime();
 +    $storage = $this->entityTypeManager->getStorage('tmgmt_job_item');
 +
-+    $jobItemIds = $storage->getQuery()->accessCheck(FALSE)
-+      ->condition('tjid.entity.translator', array_keys($translators), 'IN')
-+      ->condition('tjid.entity.job_type', JobInterface::TYPE_CONTINUOUS)
-+      ->condition('tjid.entity.state', JobInterface::STATE_CONTINUOUS)
-+      ->condition('state', [
-+        JobItemInterface::STATE_ACTIVE,
-+        JobItemInterface::STATE_INACTIVE,
-+      ], 'IN')
-+      ->condition('changed', $requestTime - ETranslationTranslator::MIN_RETRY_INTERVAL, '<')
-+      ->sort('changed')
-+      ->range(0, 50)
-       ->execute();
++    $jobItemIds = $this->getTimedOutJobItemIds($storage, $translators, $requestTime);
 +    if (!$jobItemIds) {
 +      return;
 +    }
-+
-+    foreach ($storage->loadMultiple($jobItemIds) as $jobItem) {
-+      $translator = $jobItem->getJob()->getTranslator();
-+      assert($translator instanceof TranslatorInterface);
-+
-+      /** @var array{max_attempts: int, interval: int} $settings */
-+      $settings = $translator->getSetting('retrials_after_timeout');
 
 -    // Mark as aborted the continuous job items sent to eTranslation service
 -    // more than 6 hours ago.
@@ -151,48 +127,112 @@ index a73aca2a08ca0d9f66eb79415e7bc9fbd37cc791..299bf82cec3950b9c797b84a51494ac3
 -        foreach ($jobItemStorage->loadMultiple($jobItemIds) as $jobItem) {
 -          $jobItem->setState(JobItemInterface::STATE_ABORTED);
 -          $jobItem->addMessage(message: "Aborted. No translation received after 6 hours", type: 'warning');
-+      if ($jobItem->getChangedTime() < $requestTime - $settings['interval']) {
-+        $data = $jobItem->getData();
-+        $attempted = $data['#tmgmt_ec_etranslation']['attempted'] ?? 0;
+-          $jobItem->save();
+-        }
++    foreach ($storage->loadMultiple($jobItemIds) as $jobItem) {
++      $translator = $jobItem->getJob()->getTranslator();
++      assert($translator instanceof TranslatorInterface);
 +
-+        if ($attempted >= $settings['max_attempts']) {
-+          $state = JobItemInterface::STATE_ABORTED;
-+          $message = 'Aborted: No translation received after @attempts attempts (interval @interval)';
-+          $severity = 'warning';
-+          $jobItem->updateData(
-+            ['#tmgmt_ec_etranslation'],
-+            [
-+              'attempted' => 0,
-+            ]
-+          );
-+        }
-+        else {
-+          $state = JobItemInterface::STATE_INACTIVE;
-+          $message = 'Rescheduled: attempt @attempts (interval @interval)';
-+          $severity = 'status';
-+          $jobItem->updateData(
-+            ['#tmgmt_ec_etranslation'],
-+            [
-+              'attempted' => ++$attempted,
-+            ]
-+          );
-+        }
++      /** @var array{max_attempts: int, interval: int} $settings */
++      $settings = $translator->getSetting('retrials_after_timeout');
 +
-+        $variables = [
-+          '@attempts' => $attempted,
-+          '@interval' => $this->dateFormatter->formatInterval($settings['interval']),
-+        ];
-+
-+        if ((int) $jobItem->getState() !== $state) {
-+          $jobItem->setState($state, $message, $variables, $severity);
-+        }
-+        else {
-+          $jobItem->addMessage($message, $variables, $severity);
-           $jobItem->save();
-         }
++      if ($jobItem->getChangedTime() >= $requestTime - $settings['interval']) {
++        return;
        }
++
++      $this->updateJobItemAttempts($settings, $jobItem);
++    }
++  }
++
++  /**
++   * Gets the translators with timeout settings.
++   *
++   * @return array
++   *   The translators.
++   */
++  protected function getTranslatorsWithTimeoutSettings(): array {
++    $translators = $this->entityTypeManager->getStorage('tmgmt_translator')
++      ->loadByProperties(['plugin' => ETranslationTranslator::ID]);
++
++    // Filter out translators that have no aborted job items retrial attempts.
++    $translators = array_filter(
++      $translators,
++      fn($translator) => $translator->getSetting(['retrials_after_timeout', 'max_attempts']) > 0,
++    );
++
++    return array_keys($translators);
++  }
++
++  /**
++   * Gets the timed out job item IDs.
++   *
++   * @param \Drupal\Core\Entity\EntityStorageInterface $storage
++   *   The storage.
++   * @param array $translators
++   *   The translators.
++   * @param int $requestTime
++   *   The request time.
++   *
++   * @return array
++   *   The job items.
++   */
++  protected function getTimedOutJobItemIds(EntityStorageInterface $storage, array $translators, int $requestTime): array {
++    return $storage->getQuery()->accessCheck(FALSE)
++      ->condition('tjid.entity.translator', $translators, 'IN')
++      ->condition('tjid.entity.job_type', JobInterface::TYPE_CONTINUOUS)
++      ->condition('tjid.entity.state', JobInterface::STATE_CONTINUOUS)
++      ->condition('state', [
++        JobItemInterface::STATE_ACTIVE,
++        JobItemInterface::STATE_INACTIVE,
++      ], 'IN')
++      ->condition('changed', $requestTime - ETranslationTranslator::MIN_RETRY_INTERVAL, '<')
++      ->sort('changed')
++      ->range(0, 50)
++      ->execute();
++  }
++
++  /**
++   * Updates the attempts for a job item.
++   *
++   * @param array $settings
++   *   Timeout settings.
++   * @param \Drupal\tmgmt\JobItemInterface $jobItem
++   *   The job item.
++   */
++  protected function updateJobItemAttempts(array $settings, JobItemInterface $jobItem): void {
++    $data = $jobItem->getData();
++    $attempted = $data['#tmgmt_ec_etranslation']['attempted'] ?? 0;
++
++    $jobItem->updateData(
++      ['#tmgmt_ec_etranslation'],
++      [
++        'attempted' => ++$attempted,
++      ]
++    );
++
++    $state = JobItemInterface::STATE_INACTIVE;
++    $message = 'Rescheduled: attempt @attempts (interval @interval)';
++    $severity = 'status';
++
++    if ($attempted >= $settings['max_attempts']) {
++      $state = JobItemInterface::STATE_ABORTED;
++      $message = 'Aborted: No translation received after @attempts attempts (interval @interval)';
++      $severity = 'warning';
+     }
++
++    $variables = [
++      '@attempts' => $attempted,
++      '@interval' => $this->dateFormatter->formatInterval($settings['interval']),
++    ];
++
++    $jobItem->setState($state);
++    $jobItem->addMessage($message, $variables, $severity);
++    $jobItem->save();
+   }
+
+ }
 diff --git a/src/Plugin/tmgmt/Translator/ETranslationTranslator.php b/src/Plugin/tmgmt/Translator/ETranslationTranslator.php
-index 680a79b6d4d8b5e6169f7ee7f19cbcbb07bdbb53..ff60c8b5c3e0c42a2e98f3fdf667d2155fb8de7c 100644
+index 680a79b6d4d8b5e6169f7ee7f19cbcbb07bdbb53..1c304674a712bb013f236fd80f735747b480c658 100644
 --- a/src/Plugin/tmgmt/Translator/ETranslationTranslator.php
 +++ b/src/Plugin/tmgmt/Translator/ETranslationTranslator.php
 @@ -45,6 +45,8 @@ class ETranslationTranslator extends TranslatorPluginBase implements ContainerFa
@@ -210,35 +250,14 @@ index 680a79b6d4d8b5e6169f7ee7f19cbcbb07bdbb53..ff60c8b5c3e0c42a2e98f3fdf667d215
        'use_queue' => FALSE,
 +      'retrials_after_timeout' => [
 +        'max_attempts' => 3,
-+        // 60 * 60 * 8 = 1 day.
-+        'interval' => 28800,
++        // 60 * 60 * 24 = 1 day.
++        'interval' => 86400,
 +      ],
        'non_translatable_parts' => ['patterns' => '', 'clean' => FALSE],
      ];
    }
-diff --git a/src/TranslationResponseProcessor.php b/src/TranslationResponseProcessor.php
-index 1ce9b7b0805e833b60a7e8be1bc64455e0ff902d..3dd25f15cac3d8d54207bf2392362f1d0cb4b403 100644
---- a/src/TranslationResponseProcessor.php
-+++ b/src/TranslationResponseProcessor.php
-@@ -103,6 +103,16 @@ class TranslationResponseProcessor implements TranslationResponseProcessorInterf
-       if ($refreshedJobItem) {
-         $refreshedJobItem->addTranslatedData($translation, $key);
-         $refreshedJobItem->addMessage('Translation received: @translation', ['@translation' => $translation['#text']]);
-+        $data = $refreshedJobItem->getData();
-+        if (($data['#tmgmt_ec_etranslation']['attempted'] ?? 0) > 0) {
-+          $refreshedJobItem->updateData(
-+            ['#tmgmt_ec_etranslation'],
-+            [
-+              'attempted' => 0,
-+            ]
-+          );
-+          $refreshedJobItem->save();
-+        }
-       }
-     }
-     finally {
 diff --git a/tests/src/Kernel/TimeoutTest.php b/tests/src/Kernel/TimeoutTest.php
-index 01856407bc1ffd6a5b0e6e5a6417f1aa5df2b3ef..a38de122d0f6a11753e7ea7be1185c2e75b46044 100644
+index 01856407bc1ffd6a5b0e6e5a6417f1aa5df2b3ef..b8444ad3bfeb69ee34fa30d19505b7b147f4c35c 100644
 --- a/tests/src/Kernel/TimeoutTest.php
 +++ b/tests/src/Kernel/TimeoutTest.php
 @@ -4,6 +4,7 @@ declare(strict_types=1);
@@ -279,7 +298,7 @@ index 01856407bc1ffd6a5b0e6e5a6417f1aa5df2b3ef..a38de122d0f6a11753e7ea7be1185c2e
      FieldStorageConfig::create([
        'entity_type' => 'node',
        'field_name' => 'body',
-@@ -70,55 +78,148 @@ class TimeoutTest extends KernelTestBase {
+@@ -70,55 +78,143 @@ class TimeoutTest extends KernelTestBase {
        'field_name' => 'body',
        'translatable' => TRUE,
      ])->save();
@@ -352,18 +371,13 @@ index 01856407bc1ffd6a5b0e6e5a6417f1aa5df2b3ef..a38de122d0f6a11753e7ea7be1185c2e
 +    $hooks->cron();
 +
 +    $this->assertJobAttempt(2, 'Rescheduled: attempt 2 (interval 4 hours)');
-+
-+    $hooks = $this->initTranslationHooks(is_future_time: TRUE);
-+    $hooks->cron();
 
 -    // Reload the job item.
 -    $item = JobItem::load($item->id());
-+    $this->assertJobAttempt(3, 'Rescheduled: attempt 3 (interval 4 hours)');
-+
 +    $hooks = $this->initTranslationHooks(is_future_time: TRUE);
 +    $hooks->cron();
 +
-+    $this->assertJobAttempt(0, 'Aborted: No translation received after 3 attempts (interval 4 hours)', JobItemInterface::STATE_ABORTED);
++    $this->assertJobAttempt(3, 'Aborted: No translation received after 3 attempts (interval 4 hours)', JobItemInterface::STATE_ABORTED);
 +  }
 +
 +  /**
@@ -385,7 +399,7 @@ index 01856407bc1ffd6a5b0e6e5a6417f1aa5df2b3ef..a38de122d0f6a11753e7ea7be1185c2e
 +
 +    $item = JobItem::load($this->itemId);
 +
-+    $this->assertSame(0, $item->getData()['#tmgmt_ec_etranslation']['attempted']);
++    $this->assertSame(2, $item->getData()['#tmgmt_ec_etranslation']['attempted']);
 +    $this->assertSame(JobItemInterface::STATE_ACTIVE, (int) $item->getState());
 +  }
 +
@@ -451,19 +465,6 @@ index 01856407bc1ffd6a5b0e6e5a6417f1aa5df2b3ef..a38de122d0f6a11753e7ea7be1185c2e
    }
 
  }
-diff --git a/tests/src/Unit/TranslationQueueWorkerTest.php b/tests/src/Unit/TranslationQueueWorkerTest.php
-index 3a5e1967270291870a1e3adc3754bb3a5af9cea2..ce39702e6dbb2f47c9f5ffbc09bca636032a110f 100644
---- a/tests/src/Unit/TranslationQueueWorkerTest.php
-+++ b/tests/src/Unit/TranslationQueueWorkerTest.php
-@@ -115,7 +115,7 @@ class TranslationQueueWorkerTest extends TestCase {
-     $jobItem->expects($this->exactly(4))
-       ->method('id')
-       ->willReturn($jobItemId);
--    $jobItem->expects($this->exactly(2))
-+    $jobItem->expects($this->exactly(3))
-       ->method('getData')
-       ->willReturn([
-         'key' => ['#text' => '<p>HTML content</p>'],
 diff --git a/tmgmt_ec_etranslation.install b/tmgmt_ec_etranslation.install
 index 7eac20090b7d589925d9709e5bc2bbbf1a175773..ec1f93a604530101ed7cce32f2060519f2baaebb 100644
 --- a/tmgmt_ec_etranslation.install
