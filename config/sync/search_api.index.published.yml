@@ -785,8 +785,7 @@ processor_settings:
   interoperable_flag: {  }
   joinup_entity_bundle: {  }
   joinup_entity_published_revision: {  }
-  joinup_entity_status:
-    inverse: false
+  joinup_entity_status: {  }
   language_with_fallback: {  }
   release_solution_data:
     weights:
