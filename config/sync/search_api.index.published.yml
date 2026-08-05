@@ -120,7 +120,7 @@ third_party_settings:
         sl: '0'
         es: '0'
         sv: '0'
-      use_universal_collation: false
+      use_universal_collation: true
 id: published
 name: 'Published entities index'
 description: ''
