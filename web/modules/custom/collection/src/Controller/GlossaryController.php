@@ -22,6 +22,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class GlossaryController extends ControllerBase {
 
+  /**
+   * Static cache of glossary-term existence, keyed by collection node ID.
+   *
+   * @var bool[]
+   */
+  protected static array $hasGlossaryTerms = [];
+
   public function __construct(
     protected readonly EntityRepositoryInterface $entityRepository,
   ) {}
@@ -112,7 +119,7 @@ class GlossaryController extends ControllerBase {
    *   If the collection has glossary term entries.
    */
   protected function hasGlossaryTerms(CollectionInterface $node): bool {
-    return (bool) $this->glossaryTermQuery($node)->range(0, 1)->execute();
+    return static::$hasGlossaryTerms[$node->id()] ??= (bool) $this->glossaryTermQuery($node)->range(0, 1)->execute();
   }
 
   /**
