@@ -39,20 +39,23 @@ index e8ee565715c7844504b6f87db136f85cca4ebf00..2946e941d2c8cdba6f534b7e06647565
  
      return $form;
 diff --git a/src/Plugin/search_api/datasource/ContentEntityTrackingManager.php b/src/Plugin/search_api/datasource/ContentEntityTrackingManager.php
-index 71e93000b8733c317153bc5e4923648b79b30cbe..2f7daeafa32bf00301f4c4b2ee713673ded1fe5f 100644
+index 71e93000b8733c317153bc5e4923648b79b30cbe..0322a9e17c15de0ca6a6e0dba6fdab572543effb 100644
 --- a/src/Plugin/search_api/datasource/ContentEntityTrackingManager.php
 +++ b/src/Plugin/search_api/datasource/ContentEntityTrackingManager.php
-@@ -162,6 +162,9 @@ class ContentEntityTrackingManager {
+@@ -162,7 +162,11 @@ class ContentEntityTrackingManager {
          }
        }
        if ($updated_ids) {
+-        $filtered_item_ids = static::filterValidItemIds($index, $datasource_id, $updated_ids);
++        $ids_to_update = $updated_ids;
 +        if ($this->shouldLimitToAffectedTranslations($entity, $index, $datasource_id)) {
-+          $updated_ids = $this->getAffectedTranslations($entity, $updated_ids, $inserted_ids);
++          $ids_to_update = $this->getAffectedTranslations($entity, $ids_to_update, $inserted_ids);
 +        }
-         $filtered_item_ids = static::filterValidItemIds($index, $datasource_id, $updated_ids);
++        $filtered_item_ids = static::filterValidItemIds($index, $datasource_id, $ids_to_update);
          if ($filtered_item_ids) {
            $index->trackItemsUpdated($datasource_id, $filtered_item_ids);
-@@ -176,6 +179,67 @@ class ContentEntityTrackingManager {
+         }
+@@ -176,6 +180,76 @@ class ContentEntityTrackingManager {
      }
    }
  
@@ -88,7 +91,16 @@ index 71e93000b8733c317153bc5e4923648b79b30cbe..2f7daeafa32bf00301f4c4b2ee713673
 +    // Untranslatable fields are indexed into every translation's item, but
 +    // for this setting they only mark the default translation as affected,
 +    // so an affected default translation is ambiguous.
-+    return !$entity->isDefaultTranslationAffectedOnly() || !$entity->getUntranslated()->hasTranslationChanges();
++    if (!$entity->isDefaultTranslationAffectedOnly()) {
++      return TRUE;
++    }
++    try {
++      return !$entity->getUntranslated()->hasTranslationChanges();
++    }
++    catch (\Throwable) {
++      // No "original" entity to compare against; re-index everything.
++      return FALSE;
++    }
 +  }
 +
 +  /**
@@ -121,7 +133,7 @@ index 71e93000b8733c317153bc5e4923648b79b30cbe..2f7daeafa32bf00301f4c4b2ee713673
     * Implements hook_entity_delete().
     *
 diff --git a/tests/src/Kernel/Datasource/NodeTrackingTest.php b/tests/src/Kernel/Datasource/NodeTrackingTest.php
-index ccdd8bbf5bc2d5ef744349961cedeb631a1c73c6..7f1e885d307b8a60ff78b340344e70611b245544 100644
+index ccdd8bbf5bc2d5ef744349961cedeb631a1c73c6..e80d776b899d56189a6a777d7a3b66d3154b6f5c 100644
 --- a/tests/src/Kernel/Datasource/NodeTrackingTest.php
 +++ b/tests/src/Kernel/Datasource/NodeTrackingTest.php
 @@ -154,4 +154,71 @@ class NodeTrackingTest extends KernelTestBase {
@@ -145,7 +157,7 @@ index ccdd8bbf5bc2d5ef744349961cedeb631a1c73c6..7f1e885d307b8a60ff78b340344e7061
 +    $entity->save();
 +    // All translations should be indexed.
 +    $this->assertEquals(
-+      ['entity:node/1:en', 'entity:node/1:l1',],
++      ['entity:node/1:en', 'entity:node/1:l1'],
 +      $this->index->getTrackerInstance()->getRemainingItems()
 +    );
 +
