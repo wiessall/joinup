@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.assessment.search_index
     - field.storage.assessment.binding_requirement
     - field.storage.assessment.thematic_area
     - field.storage.meta_entity.featured
@@ -33,8 +34,6 @@ dependencies:
     - field.storage.node.submission
     - field.storage.paragraph.affects
     - field.storage.paragraph.field_body
-    - field.storage.taxonomy_term.field_eif_identifier
-    - field.storage.taxonomy_term.field_eif_related_term
     - field.storage.user.field_user_family_name
     - field.storage.user.field_user_first_name
     - field.storage.user.field_user_organisation
@@ -99,12 +98,12 @@ third_party_settings:
       include_language_independent: true
       use_language_undefined_as_fallback_language: true
       specific_languages:
+        en: '0'
         bg: '0'
         hr: '0'
         cs: '0'
         da: '0'
         nl: '0'
-        en: '0'
         et: '0'
         fi: '0'
         fr: '0'
@@ -123,7 +122,7 @@ third_party_settings:
         sl: '0'
         es: '0'
         sv: '0'
-      use_universal_collation: false
+      use_universal_collation: true
 id: published
 name: 'Published entities index'
 description: ''
@@ -137,6 +136,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.abstract
+  assessment_id:
+    label: ID
+    datasource_id: 'entity:assessment'
+    property_path: id
+    type: integer
+    dependencies:
+      module:
+        - assessments
   assessment_name:
     label: Name
     datasource_id: 'entity:assessment'
@@ -270,22 +277,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_state
-  field_eif_identifier:
-    label: Identifier
-    datasource_id: 'entity:taxonomy_term'
-    property_path: field_eif_identifier
-    type: text
-    dependencies:
-      config:
-        - field.storage.taxonomy_term.field_eif_identifier
-  field_eif_related_term:
-    label: 'Related term'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: field_eif_related_term
-    type: text
-    dependencies:
-      config:
-        - field.storage.taxonomy_term.field_eif_related_term
   field_event_agenda:
     label: 'Agenda » Processed text'
     datasource_id: 'entity:node'
@@ -402,14 +393,6 @@ field_settings:
     label: 'Language (with fallback)'
     property_path: language_with_fallback
     type: string
-  name:
-    label: Name
-    datasource_id: 'entity:taxonomy_term'
-    property_path: name
-    type: text
-    dependencies:
-      module:
-        - taxonomy
   nid:
     label: ID
     datasource_id: 'entity:node'
@@ -457,14 +440,6 @@ field_settings:
         - field.storage.node.owner
       module:
         - node
-  parent:
-    label: 'Term Parents'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: parent
-    type: string
-    dependencies:
-      module:
-        - taxonomy
   pinned_in:
     label: 'Pinned in'
     datasource_id: 'entity:node'
@@ -504,7 +479,7 @@ field_settings:
         - anonymous
       view_mode:
         'entity:assessment':
-          ':default': default
+          ':default': search_index
           report: ':default'
         'entity:node':
           ':default': ''
@@ -519,27 +494,9 @@ field_settings:
           news: ':default'
           release: ':default'
           solution: ':default'
-        'entity:taxonomy_term':
-          ':default': ''
-          eif_conceptual_model: ':default'
-          eif_interoperability_layer: ':default'
-          eif_principle: ':default'
-          eif_recommendation: ':default'
-          oss_category: ':default'
-          topic: ':default'
         'entity:user':
           ':default': ''
           user: ':default'
-  reverse_eif_related_term_tid:
-    label: 'Reverse » Related term » Term ID'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: 'search_api_reverse_entity_references_taxonomy_term__field_eif_related_term:tid'
-    type: text
-  reverse_field_eif_identifier:
-    label: 'Reverse » Related term » Identifier'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: 'search_api_reverse_entity_references_taxonomy_term__field_eif_related_term:field_eif_identifier'
-    type: text
   shared_in:
     label: 'Shared on'
     datasource_id: 'entity:node'
@@ -596,8 +553,6 @@ field_settings:
         - 'entity:node/field_news_headline'
         - 'entity:node/field_short_title'
         - 'entity:node/keywords:entity:name'
-        - 'entity:taxonomy_term/field_eif_identifier'
-        - 'entity:taxonomy_term/name'
   status:
     label: Published
     datasource_id: 'entity:node'
@@ -635,14 +590,6 @@ field_settings:
       module:
         - assessments
         - paragraphs
-  tid:
-    label: 'Term ID'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: tid
-    type: string
-    dependencies:
-      module:
-        - taxonomy
   title:
     label: Title
     datasource_id: 'entity:node'
@@ -678,22 +625,6 @@ field_settings:
     dependencies:
       module:
         - user
-  vid:
-    label: Vocabulary
-    datasource_id: 'entity:taxonomy_term'
-    property_path: vid
-    type: string
-    dependencies:
-      module:
-        - taxonomy
-  weight:
-    label: Weight
-    datasource_id: 'entity:taxonomy_term'
-    property_path: weight
-    type: integer
-    dependencies:
-      module:
-        - taxonomy
 datasource_settings:
   'entity:assessment':
     bundles:
@@ -716,22 +647,8 @@ datasource_settings:
         - event
         - licence
         - news
-        - owner
         - release
         - solution
-    languages:
-      default: true
-      selected: {  }
-  'entity:taxonomy_term':
-    bundles:
-      default: false
-      selected:
-        - eif_conceptual_model
-        - eif_interoperability_layer
-        - eif_principle
-        - eif_recommendation
-        - oss_category
-        - topic
     languages:
       default: true
       selected: {  }
@@ -752,11 +669,6 @@ processor_settings:
   custom_value: {  }
   entity_type: {  }
   exclude_assessment_solutions: {  }
-  hierarchy:
-    weights:
-      preprocess_index: -45
-    fields:
-      parent: taxonomy_term-parent
   html_filter:
     weights:
       preprocess_index: -43
@@ -814,16 +726,15 @@ processor_settings:
           news: 5.0
           release: 0.0
           solution: 13.0
-      'entity:taxonomy_term':
-        datasource_boost: 0.0
-        bundle_boosts:
-          eif_conceptual_model: 0.0
-          eif_interoperability_layer: 0.0
-          eif_principle: 0.0
-          eif_recommendation: 0.0
-          topic: 0.0
       'entity:user':
         datasource_boost: 0.0
+  unique_filter:
+    weights:
+      preprocess_index: -15
+      preprocess_query: -15
+    all_fields: false
+    fields:
+      - thematic_area
 tracker_settings:
   default:
     indexing_order: fifo
