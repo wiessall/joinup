@@ -28,6 +28,8 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
+use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
+use Drupal\og\Og;
 
 /**
  * Implements hook_theme().
@@ -557,5 +559,33 @@ function assessments_ajax_render_alter(array &$commands): void {
     if ($command['command'] === 'openDialog' && !empty($command['dialogOptions']['modal']) && isset($command['dialogOptions']['classes']['ui-dialog']) && str_contains($command['dialogOptions']['classes']['ui-dialog'], 'entity-browser-modal')) {
       $command['dialogOptions']['draggable'] = FALSE;
     }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ *
+ * Override collection_node_insert.
+ */
+function assessments_node_insert(EntityInterface $entity): void {
+  if ($entity->bundle() !== 'collection') {
+    return;
+  }
+
+  // When a new collection is proposed, give the user the 'group owner' role.
+  // This will not occur if the user is the anonymous, i.e. the entity was
+  // created by some batch process or some importing.
+  if (!empty($entity->getOwner()) && !$entity->getOwner()->isAnonymous()) {
+    $subscription_bundles = JoinupSubscriptionsHelper::provideDataForField('collection');
+    // Remove the 'assessment_report' subscription for all collections,
+    // except the assessment collection.
+    if ($entity->uuid() !== AssessmentInterface::GROUP_UUID) {
+      $subscription_bundles = array_values(array_filter($subscription_bundles, function ($bundle) {
+        return $bundle['bundle'] !== 'assessment_report';
+      }));
+    }
+    Og::getMembership($entity, $entity->getOwner())
+      ->set('subscription_bundles', $subscription_bundles)
+      ->save();
   }
 }

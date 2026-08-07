@@ -177,9 +177,6 @@ class SubscriptionsForm extends FormBase {
 
         $subscription_status = [];
         $active_subscription_bundles = $membership->get('subscription_bundles')->getIterator()->getArrayCopy();
-        if ($group->uuid() !== AssessmentInterface::GROUP_UUID) {
-          $subscription_bundles['node'] = array_values(array_diff($subscription_bundles['node'], ['assessment_report']));
-        }
         foreach ($subscription_bundles as $entity_type_id => $bundle_ids) {
           foreach ($bundle_ids as $bundle_id) {
             $key = static::getSubscriptionKey($entity_type_id, $bundle_id);
