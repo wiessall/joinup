@@ -3,9 +3,11 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.storage.node.og_audience
     - system.menu.admin
   module:
     - linkchecker
+    - node
     - user
 _core:
   default_config_hash: G19NgTMdwaqUb6hm1fXazGVwr0N2GRkmKCiNhpTkB4o
@@ -767,6 +769,69 @@ display:
           empty_zero: false
           hide_alter_empty: true
           destination: false
+        og_audience:
+          id: og_audience
+          table: node__og_audience
+          field: og_audience
+          relationship: parent
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: 'Groups audience'
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: target_id
+          type: entity_reference_label
+          settings:
+            link: true
+          group_column: target_id
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
       pager:
         type: full
         options:
@@ -1018,6 +1083,50 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+        og_audience_target_id:
+          id: og_audience_target_id
+          table: node__og_audience
+          field: og_audience_target_id
+          relationship: parent
+          group_type: group
+          admin_label: ''
+          plugin_id: numeric
+          operator: '='
+          value:
+            min: ''
+            max: ''
+            value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: og_audience_target_id_op
+            label: Group
+            description: ''
+            use_operator: false
+            operator: og_audience_target_id_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: og_audience_target_id
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
       filter_groups:
         operator: AND
         groups:
@@ -1133,7 +1242,17 @@ display:
           distinct: false
           replica: false
           query_tags: {  }
-      relationships: {  }
+      relationships:
+        parent:
+          id: parent
+          table: linkchecker_link
+          field: parent
+          relationship: none
+          group_type: group
+          admin_label: nid
+          entity_type: linkcheckerlink
+          plugin_id: standard
+          required: false
       show_admin_links: true
       header: {  }
       footer:
@@ -1148,6 +1267,57 @@ display:
           empty: false
           content: 'Displaying @start - @end of @total'
       display_extenders: {  }
+      group_target_id:
+        id: group_target_id
+        table: message__group
+        field: group_target_id
+        relationship: none
+        group_type: group
+        admin_label: ''
+        plugin_id: entity_reference
+        operator: or
+        value: {  }
+        group: 1
+        exposed: true
+        expose:
+          operator_id: group_target_id_op
+          label: Group
+          description: ''
+          use_operator: false
+          operator: group_target_id_op
+          operator_limit_selection: false
+          operator_list: {  }
+          identifier: group
+          required: false
+          remember: false
+          multiple: false
+          remember_roles:
+            authenticated: authenticated
+          reduce: false
+        is_grouped: false
+        group_info:
+          label: ''
+          description: ''
+          identifier: ''
+          optional: true
+          widget: select
+          multiple: false
+          remember: false
+          default_group: All
+          default_group_multiple: {  }
+          group_items: {  }
+        reduce_duplicates: false
+        sub_handler: 'default:node'
+        widget: autocomplete
+        sub_handler_settings:
+          target_bundles:
+            collection: collection
+            solution: solution
+          sort:
+            field: title
+            direction: ASC
+          auto_create: false
+          auto_create_bundle: ''
     cache_metadata:
       max-age: -1
       contexts:
@@ -1156,7 +1326,8 @@ display:
         - url
         - url.query_args
         - user.permissions
-      tags: {  }
+      tags:
+        - 'config:field.storage.node.og_audience'
   page_1:
     id: page_1
     display_title: Page
@@ -1187,4 +1358,5 @@ display:
         - url
         - url.query_args
         - user.permissions
-      tags: {  }
+      tags:
+        - 'config:field.storage.node.og_audience'

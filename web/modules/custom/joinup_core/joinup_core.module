@@ -686,3 +686,55 @@ function joinup_core_pathauto_alias_alter(&$alias, array $context): void {
     }
   }
 }
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function joinup_core_views_data_alter(array &$data): void {
+  $data['linkchecker_link']['parent']['relationship'] = [
+    'title' => t('Source entity'),
+    'help' => t('Relates the broken link to the source entity.'),
+    'base' => 'node_field_data',
+    'base field' => 'nid',
+    'relationship field' => 'parent_entity_id',
+    'id' => 'standard',
+  ];
+}
+
+/**
+ * Implements hook_form_views_exposed_form_alter().
+ */
+function joinup_core_form_views_exposed_form_alter(array &$form, FormStateInterface $form_state): void {
+  $view = $form_state->get('view');
+
+  if (!$view || $view->id() !== 'broken_links_report') {
+    return;
+  }
+
+  if (isset($form['og_audience_target_id'])) {
+    $form['og_audience_target_id']['#type'] = 'entity_autocomplete';
+    $form['og_audience_target_id']['#target_type'] = 'node';
+    $form['og_audience_target_id']['#selection_handler'] = 'default';
+    $form['og_audience_target_id']['#tags'] = FALSE;
+    $form['og_audience_target_id']['#default_value'] = '';
+    $form['#validate'][] = 'joinup_core_views_group_filter_validate';
+  }
+}
+
+/**
+ * Convert autocomplete value to entity ID.
+ */
+function joinup_core_views_group_filter_validate(array &$form, FormStateInterface $form_state): void {
+  $value = $form_state->getValue('og_audience_target_id');
+
+  if (!$value) {
+    return;
+  }
+
+  if (is_string($value) && preg_match('/\((\d+)\)$/', $value, $matches)) {
+    $form_state->setValue(
+      'og_audience_target_id',
+      $matches[1]
+    );
+  }
+}
