@@ -586,6 +586,6 @@ function assessments_node_insert(EntityInterface $entity): void {
     }
     Og::getMembership($entity, $entity->getOwner())
       ?->set('subscription_bundles', $subscription_bundles)
-      ->save();
+        ->save();
   }
 }
