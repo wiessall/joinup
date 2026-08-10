@@ -8,26 +8,6 @@
 declare(strict_types=1);
 
 /**
- * Deletes all assessment report nodes.
- */
-function assessments_deploy_201600(): void {
-  $storage = \Drupal::entityTypeManager()->getStorage('node');
-
-  $nids = \Drupal::entityQuery('node')
-    ->condition('type', 'assessment_report')
-    ->accessCheck(FALSE)
-    ->execute();
-
-  if (!empty($nids)) {
-    $nodes = $storage->loadMultiple($nids);
-
-    foreach ($nodes as $node) {
-      $node->delete();
-    }
-  }
-}
-
-/**
  * Repoints assessment report subscriptions to the 'assessment' entity type.
  *
  * The legacy 'assessment_report' node bundle was replaced by the 'report'
