@@ -21,7 +21,7 @@ use Drupal\joinup_core\Update\InlineImageConverter;
  *
  * @see \Drupal\joinup_core\Update\InlineImageConverter
  */
-function joinup_core_deploy_201600(array &$sandbox): string {
+function joinup_core_deploy_201602(array &$sandbox): string {
   /** @var \Drupal\joinup_core\Update\InlineImageConverter $converter */
   $converter = \Drupal::classResolver(InlineImageConverter::class);
 
