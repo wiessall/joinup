@@ -541,7 +541,7 @@
                 "Hook to allow modules to alter translation @see https://www.drupal.org/i/2998143": "resources/patch/php/drupal/tmgmt/3298245.mr58.commit6976599d.diff"
             },
             "drupal/tmgmt_ec_etranslation": {
-                "Reschedule timeouted items few times @see https://www.drupal.org/i/3609037": "resources/patch/php/drupal/tmgmt_ec_etranslation/3609037.mr3609037-commit4cc62a9c.diff"
+                "Reschedule timeouted items few times @see https://www.drupal.org/i/3609037": "resources/patch/php/drupal/tmgmt_ec_etranslation/3609037.mr3609037-commit8efcfc76.diff"
             },
             "drupal/token": {
                 "PHP 8.5 @see https://www.drupal.org/i/3581883": "resources/patch/php/drupal/token/3581883.mr123.commit-710b94c1.diff"
