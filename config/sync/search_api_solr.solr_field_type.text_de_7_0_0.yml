@@ -17,6 +17,7 @@ field_type:
   name: text_de
   class: solr.TextField
   positionIncrementGap: 100
+  storeOffsetsWithPositions: true
   analyzers:
     -
       type: index
@@ -25,7 +26,7 @@ field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_de.txt
       tokenizer:
-        class: solr.WhitespaceTokenizerFactory
+        class: solr.StandardTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterGraphFilterFactory
@@ -71,7 +72,7 @@ field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_de.txt
       tokenizer:
-        class: solr.WhitespaceTokenizerFactory
+        class: solr.StandardTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterGraphFilterFactory
@@ -108,6 +109,7 @@ unstemmed_field_type:
   name: text_unstemmed_de
   class: solr.TextField
   positionIncrementGap: 100
+  storeOffsetsWithPositions: true
   analyzers:
     -
       type: index
@@ -116,7 +118,7 @@ unstemmed_field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_de.txt
       tokenizer:
-        class: solr.WhitespaceTokenizerFactory
+        class: solr.StandardTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterGraphFilterFactory
@@ -158,7 +160,7 @@ unstemmed_field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_de.txt
       tokenizer:
-        class: solr.WhitespaceTokenizerFactory
+        class: solr.StandardTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterGraphFilterFactory

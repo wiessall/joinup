@@ -1,0 +1,679 @@
+diff --git a/src/Event/PermissionEvent.php b/src/Event/PermissionEvent.php
+index 298d3ef54b3519b6a7b35c8604626290ade2fbe9..a67485c89463ba10173d40a767cff56925f68479 100644
+--- a/src/Event/PermissionEvent.php
++++ b/src/Event/PermissionEvent.php
+@@ -5,6 +5,7 @@ declare(strict_types=1);
+ namespace Drupal\og\Event;
+
+ use Drupal\og\GroupContentOperationPermission;
++use Drupal\og\PermissionCollection;
+ use Drupal\og\PermissionInterface;
+ use Symfony\Contracts\EventDispatcher\Event;
+
+@@ -20,11 +21,9 @@ use Symfony\Contracts\EventDispatcher\Event;
+ class PermissionEvent extends Event implements PermissionEventInterface {
+
+   /**
+-   * Associative array of permission arrays, keyed by permission name.
+-   *
+-   * @var array<array-key, \Drupal\og\PermissionInterface>
++   * The permissions collected during compilation.
+    */
+-  protected array $permissions = [];
++  private readonly PermissionCollection $permissions;
+
+   /**
+    * Constructs a PermissionEvent object.
+@@ -42,86 +41,42 @@ class PermissionEvent extends Event implements PermissionEventInterface {
+     protected readonly string $groupEntityTypeId,
+     protected readonly string $groupBundleId,
+     protected readonly array $groupContentBundleIds,
+-  ) {}
++  ) {
++    $this->permissions = new PermissionCollection();
++  }
+
+   /**
+    * {@inheritdoc}
+    */
+-  public function getPermission($name) {
+-    if (!isset($this->permissions[$name])) {
+-      throw new \InvalidArgumentException("The '$name' permission does not exist.");
+-    }
+-    return $this->permissions[$name];
++  public function getPermission($name): PermissionInterface {
++    return $this->permissions->get($name);
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+-  public function getGroupContentOperationPermission($entity_type_id, $bundle_id, $operation, $owner = FALSE) {
+-    foreach ($this->getPermissions() as $permission) {
+-      if (
+-        $permission instanceof GroupContentOperationPermission
+-        && $permission->getEntityType() === $entity_type_id
+-        && $permission->getBundle() === $bundle_id
+-        && $permission->getOperation() === $operation
+-        && $permission->getOwner() === $owner
+-      ) {
+-        return $permission;
+-      }
+-    }
+-
+-    throw new \InvalidArgumentException('The permission with the given properties does not exist.');
++  public function getGroupContentOperationPermission($entity_type_id, $bundle_id, $operation, $owner = FALSE): GroupContentOperationPermission {
++    return $this->permissions->getByOperation($entity_type_id, $bundle_id, $operation, $owner);
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+-  public function getPermissions() {
+-    return $this->permissions;
++  public function getPermissions(): array {
++    return $this->permissions->all();
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+-  public function setPermission(PermissionInterface $permission) {
+-    if (empty($permission->getName())) {
+-      throw new \InvalidArgumentException('Permission name is required.');
+-    }
+-    if (empty($permission->getTitle())) {
+-      throw new \InvalidArgumentException('The permission title is required.');
+-    }
+-
+-    if ($permission instanceof GroupContentOperationPermission) {
+-      // GroupContentOperationPermissions are uniquely identified by entity
+-      // type, bundle, operation and ownership. Check if these properties are
+-      // set.
+-      if (empty($permission->getEntityType())) {
+-        throw new \InvalidArgumentException('The entity type ID is required.');
+-      }
+-      if (empty($permission->getBundle())) {
+-        throw new \InvalidArgumentException('The bundle ID is required.');
+-      }
+-      if (empty($permission->getOperation())) {
+-        throw new \InvalidArgumentException('The operation is required.');
+-      }
+-
+-      // Check if this permission was already registered under another name, and
+-      // remove it so the new one replaces it.
+-      try {
+-        $this->deleteGroupContentOperationPermission($permission->getEntityType(), $permission->getBundle(), $permission->getOperation(), $permission->getOwner());
+-      }
+-      catch (\InvalidArgumentException $e) {
+-        // The permission wasn't set. There is nothing to delete.
+-      }
+-    }
+-
+-    $this->permissions[$permission->getName()] = $permission;
++  public function setPermission(PermissionInterface $permission): void {
++    $this->permissions->add($permission);
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+-  public function setPermissions(array $permissions) {
++  public function setPermissions(array $permissions): void {
+     foreach ($permissions as $permission) {
+       $this->setPermission($permission);
+     }
+@@ -130,67 +85,57 @@ class PermissionEvent extends Event implements PermissionEventInterface {
+   /**
+    * {@inheritdoc}
+    */
+-  public function deletePermission($name) {
+-    if ($this->hasPermission($name)) {
+-      unset($this->permissions[$name]);
+-    }
++  public function deletePermission($name): void {
++    $this->permissions->remove($name);
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+-  public function deleteGroupContentOperationPermission($entity_type_id, $bundle_id, $operation, $owner = 'any') {
+-    $permission = $this->getGroupContentOperationPermission($entity_type_id, $bundle_id, $operation, $owner);
+-    $this->deletePermission($permission->getName());
++  public function deleteGroupContentOperationPermission($entity_type_id, $bundle_id, $operation, $owner = FALSE): void {
++    $this->permissions->removeByOperation($entity_type_id, $bundle_id, $operation, $owner);
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+-  public function hasPermission($name) {
+-    return isset($this->permissions[$name]);
++  public function hasPermission($name): bool {
++    return $this->permissions->has($name);
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+-  public function hasGroupContentOperationPermission($entity_type_id, $bundle_id, $operation, $owner = FALSE) {
+-    try {
+-      $this->getGroupContentOperationPermission($entity_type_id, $bundle_id, $operation, $owner);
+-    }
+-    catch (\InvalidArgumentException $e) {
+-      return FALSE;
+-    }
+-    return TRUE;
++  public function hasGroupContentOperationPermission($entity_type_id, $bundle_id, $operation, $owner = FALSE): bool {
++    return $this->permissions->hasOperation($entity_type_id, $bundle_id, $operation, $owner);
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+-  public function getGroupEntityTypeId() {
++  public function getGroupEntityTypeId(): string {
+     return $this->groupEntityTypeId;
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+-  public function getGroupBundleId() {
++  public function getGroupBundleId(): string {
+     return $this->groupBundleId;
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+-  public function getGroupContentBundleIds() {
++  public function getGroupContentBundleIds(): array {
+     return $this->groupContentBundleIds;
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+-  #[\ReturnTypeWillChange]
+-  public function offsetGet($key) {
+-    return $this->getPermission($key);
++  public function offsetGet($key): PermissionInterface {
++    return $this->permissions->get($key);
+   }
+
+   /**
+@@ -203,30 +148,28 @@ class PermissionEvent extends Event implements PermissionEventInterface {
+     if ($value->getName() !== $key) {
+       throw new \InvalidArgumentException('The key and the permission name must be identical.');
+     }
+-    $this->setPermission($value);
++    $this->permissions->add($value);
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+   public function offsetUnset($key): void {
+-    if ($this->hasPermission($key)) {
+-      $this->deletePermission($key);
+-    }
++    $this->permissions->remove($key);
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+   public function offsetExists($key): bool {
+-    return $this->hasPermission($key);
++    return $this->permissions->has($key);
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+   public function getIterator(): \Traversable {
+-    return new \ArrayIterator($this->permissions);
++    return $this->permissions->getIterator();
+   }
+
+ }
+diff --git a/src/GroupContentOperationPermission.php b/src/GroupContentOperationPermission.php
+index d1a7bf1bda01d958ba8e63771f34db0c73ceadd9..b690f3451c95de58261b6407862be9a93f067120 100644
+--- a/src/GroupContentOperationPermission.php
++++ b/src/GroupContentOperationPermission.php
+@@ -48,7 +48,7 @@ class GroupContentOperationPermission extends Permission {
+    *   The group content entity type ID.
+    */
+   public function getEntityType() {
+-    return $this->get('entity type');
++    return $this->entityType;
+   }
+
+   /**
+@@ -60,7 +60,7 @@ class GroupContentOperationPermission extends Permission {
+    * @return $this
+    */
+   public function setEntityType($entity_type) {
+-    $this->set('entity type', $entity_type);
++    $this->entityType = $entity_type;
+     return $this;
+   }
+
+@@ -71,7 +71,7 @@ class GroupContentOperationPermission extends Permission {
+    *   The group content bundle ID.
+    */
+   public function getBundle() {
+-    return $this->get('bundle');
++    return $this->bundle;
+   }
+
+   /**
+@@ -83,7 +83,7 @@ class GroupContentOperationPermission extends Permission {
+    * @return $this
+    */
+   public function setBundle($bundle) {
+-    $this->set('bundle', $bundle);
++    $this->bundle = $bundle;
+     return $this;
+   }
+
+@@ -94,7 +94,7 @@ class GroupContentOperationPermission extends Permission {
+    *   The operation.
+    */
+   public function getOperation() {
+-    return $this->get('operation');
++    return $this->operation;
+   }
+
+   /**
+@@ -106,7 +106,7 @@ class GroupContentOperationPermission extends Permission {
+    * @return $this
+    */
+   public function setOperation($operation) {
+-    $this->set('operation', $operation);
++    $this->operation = $operation;
+     return $this;
+   }
+
+@@ -118,7 +118,7 @@ class GroupContentOperationPermission extends Permission {
+    *   to the entities owned by the user.
+    */
+   public function getOwner() {
+-    return $this->get('owner');
++    return $this->owner;
+   }
+
+   /**
+@@ -131,7 +131,7 @@ class GroupContentOperationPermission extends Permission {
+    * @return $this
+    */
+   public function setOwner($owner) {
+-    $this->set('owner', $owner);
++    $this->owner = $owner;
+     return $this;
+   }
+
+diff --git a/src/Permission.php b/src/Permission.php
+index ebab47f73100ed10461b37a168c569fc656b270b..586ffb300f116a17ff1576551edf5f7775f04712 100644
+--- a/src/Permission.php
++++ b/src/Permission.php
+@@ -82,14 +82,14 @@ abstract class Permission implements PermissionInterface {
+    * {@inheritdoc}
+    */
+   public function getName() {
+-    return $this->get('name');
++    return $this->name;
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+   public function setName($name) {
+-    $this->set('name', $name);
++    $this->name = $name;
+     return $this;
+   }
+
+@@ -97,14 +97,14 @@ abstract class Permission implements PermissionInterface {
+    * {@inheritdoc}
+    */
+   public function getTitle() {
+-    return $this->get('title');
++    return $this->title;
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+   public function setTitle($title) {
+-    $this->set('title', $title);
++    $this->title = $title;
+     return $this;
+   }
+
+@@ -112,14 +112,14 @@ abstract class Permission implements PermissionInterface {
+    * {@inheritdoc}
+    */
+   public function getDescription() {
+-    return $this->get('description');
++    return $this->description;
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+   public function setDescription($description) {
+-    $this->set('description', $description);
++    $this->description = $description;
+     return $this;
+   }
+
+@@ -127,14 +127,14 @@ abstract class Permission implements PermissionInterface {
+    * {@inheritdoc}
+    */
+   public function getDefaultRoles() {
+-    return $this->get('default roles');
++    return $this->defaultRoles;
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+   public function setDefaultRoles(array $default_roles) {
+-    $this->set('default roles', $default_roles);
++    $this->defaultRoles = $default_roles;
+     return $this;
+   }
+
+@@ -142,14 +142,17 @@ abstract class Permission implements PermissionInterface {
+    * {@inheritdoc}
+    */
+   public function getRestrictAccess() {
+-    return $this->get('restrict access');
++    return $this->restrictAccess;
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+   public function setRestrictAccess($access) {
+-    $this->set('restrict access', $access);
++    if (!is_bool($access)) {
++      throw new \InvalidArgumentException('The value for the "restrict access" property should be a boolean.');
++    }
++    $this->restrictAccess = $access;
+     return $this;
+   }
+
+@@ -157,14 +160,14 @@ abstract class Permission implements PermissionInterface {
+    * {@inheritdoc}
+    */
+   public function getProvider() {
+-    return $this->get('provider');
++    return $this->provider;
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+   public function setProvider($provider) {
+-    $this->set('provider', $provider);
++    $this->provider = $provider;
+     return $this;
+   }
+
+diff --git a/src/PermissionCollection.php b/src/PermissionCollection.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..be48a29348e67412686c94d3bc51041876ffc398
+--- /dev/null
++++ b/src/PermissionCollection.php
+@@ -0,0 +1,212 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\og;
++
++/**
++ * Holds a set of OG permissions while they are being compiled.
++ *
++ * In addition to the by-name storage, a secondary index keyed by the
++ * (entity type, bundle, operation, ownership) identity of group content
++ * operation permissions lets them be looked up and de-duplicated without
++ * scanning the whole set. This is an implementation detail of PermissionEvent.
++ *
++ * @internal
++ *
++ * @implements \IteratorAggregate<string, \Drupal\og\PermissionInterface>
++ */
++class PermissionCollection implements \IteratorAggregate {
++
++  /**
++   * The permissions, keyed by permission name.
++   *
++   * @var array<string, \Drupal\og\PermissionInterface>
++   */
++  private array $permissions = [];
++
++  /**
++   * Group content operation permission names, keyed by their identity.
++   *
++   * @var array<string, string>
++   */
++  private array $operationIndex = [];
++
++  /**
++   * Adds a permission, replacing any existing one with the same identity.
++   *
++   * @throws \InvalidArgumentException
++   *   Thrown when a required property is missing.
++   */
++  public function add(PermissionInterface $permission): void {
++    $this->validate($permission);
++
++    $name = $permission->getName();
++    if (isset($this->permissions[$name])) {
++      $this->unindex($this->permissions[$name]);
++    }
++    if ($permission instanceof GroupContentOperationPermission) {
++      $this->index($permission);
++    }
++    $this->permissions[$name] = $permission;
++  }
++
++  /**
++   * Returns the permission with the given name.
++   *
++   * @throws \InvalidArgumentException
++   *   Thrown when no permission with the given name exists.
++   */
++  public function get(string $name): PermissionInterface {
++    if (!isset($this->permissions[$name])) {
++      throw new \InvalidArgumentException("The '$name' permission does not exist.");
++    }
++    return $this->permissions[$name];
++  }
++
++  /**
++   * Returns whether a permission with the given name exists.
++   */
++  public function has(string $name): bool {
++    return isset($this->permissions[$name]);
++  }
++
++  /**
++   * Removes the permission with the given name, if it exists.
++   */
++  public function remove(string $name): void {
++    if (isset($this->permissions[$name])) {
++      $this->unindex($this->permissions[$name]);
++      unset($this->permissions[$name]);
++    }
++  }
++
++  /**
++   * Returns all permissions, keyed by permission name.
++   *
++   * @return array<string, \Drupal\og\PermissionInterface>
++   *   The permissions, keyed by permission name.
++   */
++  public function all(): array {
++    return $this->permissions;
++  }
++
++  /**
++   * Returns a group content operation permission by its identity.
++   *
++   * @throws \InvalidArgumentException
++   *   Thrown when no matching permission exists.
++   */
++  public function getByOperation(string $entity_type_id, string $bundle_id, string $operation, bool $owner = FALSE): GroupContentOperationPermission {
++    $permission = $this->findByOperation($entity_type_id, $bundle_id, $operation, $owner);
++    if ($permission === NULL) {
++      throw new \InvalidArgumentException('The permission with the given properties does not exist.');
++    }
++    return $permission;
++  }
++
++  /**
++   * Returns whether a group content operation permission exists.
++   */
++  public function hasOperation(string $entity_type_id, string $bundle_id, string $operation, bool $owner = FALSE): bool {
++    return $this->findByOperation($entity_type_id, $bundle_id, $operation, $owner) !== NULL;
++  }
++
++  /**
++   * Removes a group content operation permission by its identity.
++   *
++   * @throws \InvalidArgumentException
++   *   Thrown when no matching permission exists.
++   */
++  public function removeByOperation(string $entity_type_id, string $bundle_id, string $operation, bool $owner = FALSE): void {
++    $this->remove($this->getByOperation($entity_type_id, $bundle_id, $operation, $owner)->getName());
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getIterator(): \Traversable {
++    return new \ArrayIterator($this->permissions);
++  }
++
++  /**
++   * Returns the operation permission with the given identity, or NULL.
++   */
++  private function findByOperation(string $entity_type_id, string $bundle_id, string $operation, bool $owner): ?GroupContentOperationPermission {
++    $key = $this->operationKey($entity_type_id, $bundle_id, $operation, $owner);
++    if (!isset($this->operationIndex[$key])) {
++      return NULL;
++    }
++
++    $permission = $this->permissions[$this->operationIndex[$key]];
++    \assert($permission instanceof GroupContentOperationPermission);
++    return $permission;
++  }
++
++  /**
++   * Validates that a permission carries the properties required to store it.
++   *
++   * @throws \InvalidArgumentException
++   *   Thrown when a required property is missing.
++   */
++  private function validate(PermissionInterface $permission): void {
++    if (empty($permission->getName())) {
++      throw new \InvalidArgumentException('Permission name is required.');
++    }
++
++    if (empty($permission->getTitle())) {
++      throw new \InvalidArgumentException('The permission title is required.');
++    }
++
++    if ($permission instanceof GroupContentOperationPermission) {
++      if (empty($permission->getEntityType())) {
++        throw new \InvalidArgumentException('The entity type ID is required.');
++      }
++
++      if (empty($permission->getBundle())) {
++        throw new \InvalidArgumentException('The bundle ID is required.');
++      }
++
++      if (empty($permission->getOperation())) {
++        throw new \InvalidArgumentException('The operation is required.');
++      }
++    }
++  }
++
++  /**
++   * Indexes an operation permission, dropping any with the same identity.
++   */
++  private function index(GroupContentOperationPermission $permission): void {
++    $key = $this->operationKeyFor($permission);
++
++    if (isset($this->operationIndex[$key])) {
++      unset($this->permissions[$this->operationIndex[$key]]);
++    }
++
++    $this->operationIndex[$key] = $permission->getName();
++  }
++
++  /**
++   * Removes a permission from the operation index, if it is indexed.
++   */
++  private function unindex(PermissionInterface $permission): void {
++    if ($permission instanceof GroupContentOperationPermission) {
++      unset($this->operationIndex[$this->operationKeyFor($permission)]);
++    }
++  }
++
++  /**
++   * Builds the operation index key for a permission.
++   */
++  private function operationKeyFor(GroupContentOperationPermission $permission): string {
++    return $this->operationKey($permission->getEntityType(), $permission->getBundle(), $permission->getOperation(), $permission->getOwner());
++  }
++
++  /**
++   * Builds an operation index key from the identifying properties.
++   */
++  private function operationKey(string $entity_type_id, string $bundle_id, string $operation, bool $owner): string {
++    return implode(':', [$entity_type_id, $bundle_id, $operation, $owner ? '1' : '0']);
++  }
++
++}
+diff --git a/tests/src/Unit/PermissionEventTest.php b/tests/src/Unit/PermissionEventTest.php
+index 825dc4510a2b962966b7ab0c2a8d9eb3d788fa4d..0410685958ce65f89538feaf15e5a05a529abbe3 100644
+--- a/tests/src/Unit/PermissionEventTest.php
++++ b/tests/src/Unit/PermissionEventTest.php
+@@ -654,6 +654,30 @@ class PermissionEventTest extends UnitTestCase {
+     $this->assertEquals($altered_permission, $event->getGroupContentOperationPermission($entity_type_id, $bundle_id, $operation, $ownership));
+   }
+
++  /**
++   * Tests that deleting a permission also clears the operation lookup.
++   *
++   * @covers ::deletePermission
++   * @covers ::hasGroupContentOperationPermission
++   */
++  public function testDeleteClearsGroupContentOperationLookup(): void {
++    $event = new PermissionEvent($this->randomMachineName(), $this->randomMachineName(), []);
++    $permission = new GroupContentOperationPermission([
++      'name' => 'edit any article',
++      'title' => $this->t('Edit any article'),
++      'entity type' => 'node',
++      'bundle' => 'article',
++      'operation' => 'update',
++      'owner' => FALSE,
++    ]);
++
++    $event->setPermission($permission);
++    $this->assertTrue($event->hasGroupContentOperationPermission('node', 'article', 'update', FALSE));
++
++    $event->deletePermission('edit any article');
++    $this->assertFalse($event->hasGroupContentOperationPermission('node', 'article', 'update', FALSE));
++  }
++
+   /**
+    * Data provider to test permissions.
+    *

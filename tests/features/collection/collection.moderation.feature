@@ -88,7 +88,7 @@ Feature: Collection moderation
       | The Licking Silence | Lena Richardson | Propose, Save as draft, Publish                   |
       | Person of Wizards   | Lena Richardson | Publish, Save as draft, Propose, Archive          |
       | The Shard's Hunter  | Lena Richardson | Publish, Archive                                  |
-      | Luck in the Abyss   | Lena Richardson |                                                   |
+      | Luck in the Abyss   | Lena Richardson | Unarchive                                         |
 
     # The 'Delete' action is not a button but a link leading to a confirmation
     # page that is styled as a button. It should only be available to the owner
@@ -302,7 +302,7 @@ Feature: Collection moderation
     And I press "Add new" at the "Owner" field
     And I fill in "Name" with "Mable Pelley"
     And I select "Company" options from "Type"
-    And I select "Belgium" from "Country"
+    And I select "Belgium" option from "Country"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
     And I fill in "Alternative text" with "Alternative logo text"

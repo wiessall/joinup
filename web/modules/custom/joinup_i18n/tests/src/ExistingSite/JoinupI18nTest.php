@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_i18n\ExistingSite;
 
+use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_i18n\Hook\JoinupI18nHooks;
 use Drupal\language\Entity\ConfigurableLanguage;
@@ -15,6 +16,7 @@ use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\tmgmt\JobInterface;
 use Drupal\tmgmt\JobItemInterface;
 use Drupal\tmgmt_ec_etranslation\Plugin\tmgmt\Translator\ETranslationTranslator;
+use Drupal\views\Views;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
@@ -220,6 +222,7 @@ final class JoinupI18nTest extends JoinupExistingSiteTestBase {
    * (accepting a translation) must keep the other languages' items open.
    *
    * @legacy-covers \Drupal\joinup_i18n\Hook\JoinupI18nHooks::abortOutdatedJobItems
+   * @legacy-covers \joinup_group_node_presave
    */
   public function testOutdatedJobItemsAreAborted(): void {
     $node = $this->createNode([
@@ -258,9 +261,25 @@ final class JoinupI18nTest extends JoinupExistingSiteTestBase {
     $this->assertGreaterThan(1, count($freshItems));
     $this->assertEmpty(array_intersect($firstItems, $freshItems));
 
+    // Clearing the logo makes joinup_group_node_presave() assign a fresh
+    // fixture image.
+    $node->setNewRevision();
+    $node->set('logo', [])->save();
+    $logo = $node->get('logo')->first();
+    $this->assertNotEmpty($logo->target_id);
+
+    // The logo genuinely changed (a different file), so the previous items
+    // are correctly aborted and a newer set is scheduled.
+    $itemStorage->resetCache($freshItems);
+    foreach ($itemStorage->loadMultiple($freshItems) as $item) {
+      $this->assertTrue($item->isAborted());
+    }
+    $newestItems = $this->jobItemIds($node, [JobItemInterface::STATE_INACTIVE, JobItemInterface::STATE_ACTIVE]);
+    $this->assertGreaterThan(1, count($newestItems));
+
     // Accepting one language's translation re-saves the source node without
     // changing the source content, so the other languages' items stay open.
-    $acceptedItem = $itemStorage->load(array_shift($freshItems));
+    $acceptedItem = $itemStorage->load(array_shift($newestItems));
     $dataService = \Drupal::service('tmgmt.data');
     $translation = [];
     foreach ($dataService->filterTranslatable($acceptedItem->getData()) as $key => $data) {
@@ -269,12 +288,48 @@ final class JoinupI18nTest extends JoinupExistingSiteTestBase {
     $acceptedItem->addTranslatedData($dataService->unflatten($translation));
     $this->assertTrue($acceptedItem->isAccepted());
 
-    $itemStorage->resetCache($freshItems);
-    $otherItems = $itemStorage->loadMultiple($freshItems);
-    $this->assertCount(count($freshItems), $otherItems);
+    $itemStorage->resetCache($newestItems);
+    $otherItems = $itemStorage->loadMultiple($newestItems);
+    $this->assertCount(count($newestItems), $otherItems);
     foreach ($otherItems as $item) {
       $this->assertFalse($item->isAborted());
     }
+
+    // Clean up the job items created for this node.
+    $itemStorage->delete($itemStorage->loadMultiple($this->jobItemIds($node)));
+  }
+
+  /**
+   * Tests the job item messages page and its operation link.
+   *
+   * @legacy-covers \Drupal\joinup_i18n\Hook\JoinupI18nHooks::entityOperation
+   */
+  public function testJobItemMessagesPage(): void {
+    $node = $this->createNode([
+      'type' => 'solution',
+      'og_audience' => \Drupal::service('entity.repository')->loadEntityByUuid('node', JoinupCollectionHelper::JOINUP_COLLECTION_UUID),
+      'title' => 'Job item messages',
+      'field_state' => 'proposed',
+    ]);
+    $node->setNewRevision();
+    $node->set('field_state', 'published')->save();
+
+    $itemStorage = \Drupal::entityTypeManager()->getStorage('tmgmt_job_item');
+    $itemId = $this->jobItemIds($node)[0];
+    $item = $itemStorage->load($itemId);
+    $item->addMessage('A message only on this job item.');
+
+    // The list builder links a "Messages" operation.
+    $operations = \Drupal::entityTypeManager()->getListBuilder('tmgmt_job_item')->getOperations($item);
+    $this->assertArrayHasKey('job_item_messages', $operations);
+    $url = $operations['job_item_messages']['url'];
+    $this->assertSame("/admin/tmgmt/items/$itemId/messages", $url->toString());
+    $this->assertFalse($url->access(new AnonymousUserSession()));
+
+    // The page lists the item's own messages.
+    $build = Views::getView('joinup_job_item_messages')->preview('page', [$itemId]);
+    $html = (string) \Drupal::service('renderer')->renderInIsolation($build);
+    $this->assertStringContainsString('A message only on this job item.', $html);
 
     // Clean up the job items created for this node.
     $itemStorage->delete($itemStorage->loadMultiple($this->jobItemIds($node)));

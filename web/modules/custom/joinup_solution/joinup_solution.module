@@ -250,9 +250,19 @@ function joinup_solution_entity_extra_field_info(): array {
       'description' => t('Subscribes the user to the solution.'),
       'visible' => FALSE,
     ];
+    $display['solution_reuse_share'] = [
+      'label' => t('Share Solution reuse'),
+      'description' => t('Links to the interoperability solution submission form with the solution pre-filled.'),
+      'visible' => FALSE,
+    ];
     $display['members'] = [
       'label' => t('Amount of members'),
       'description' => t('Amount of members of the solution'),
+      'visible' => FALSE,
+    ];
+    $display['solution_assessment_count'] = [
+      'label' => t('Assessment count'),
+      'description' => t('Number of assessment reports referencing this solution.'),
       'visible' => FALSE,
     ];
     $form = &$fields['node'][$solution->id()]['form'];
@@ -368,6 +378,27 @@ function joinup_solution_node_view(array &$build, NodeInterface $solution, Entit
     ];
   }
 
+  if ($display->getComponent('solution_reuse_share')) {
+    $webform = \Drupal::entityTypeManager()
+      ->getStorage('webform')
+      ->load('submit_your_interoperability_sol');
+    $build['solution_reuse_share'] = [
+      '#cache' => [
+        'tags' => $webform?->getCacheTags() ?? [],
+      ],
+    ];
+    if ($webform?->isOpen()) {
+      $url = Url::fromRoute('entity.webform.canonical', ['webform' => 'submit_your_interoperability_sol'], [
+        'query' => ['reuse_solution' => $solution->id()],
+      ]);
+      $build['solution_reuse_share'] += [
+        '#type' => 'link',
+        '#title' => t('Share Solution reuse'),
+        '#url' => $url,
+      ];
+    }
+  }
+
   // Member count.
   if ($display->getComponent('members')) {
     $member_count = $solution->getActiveMemberCount();
@@ -379,6 +410,20 @@ function joinup_solution_node_view(array &$build, NodeInterface $solution, Entit
       '#count' => $member_count,
       '#view_mode' => $view_mode,
       '#cache' => ['tags' => $tags],
+    ];
+  }
+
+  // Assessment count.
+  if ($display->getComponent('solution_assessment_count')) {
+    $build['solution_assessment_count'] = [
+      '#lazy_builder' => [
+        'joinup_solution.lazy_builders:renderAssessmentCount',
+        [$solution->id()],
+      ],
+      '#create_placeholder' => TRUE,
+      '#cache' => [
+        'keys' => ['joinup_solution.solution_assessment_count', $solution->id()],
+      ],
     ];
   }
 }
@@ -669,6 +714,11 @@ function joinup_solution_theme(array $existing, string $type, string $theme, str
       'variables' => [
         'count' => 0,
         'view_mode' => '',
+      ],
+    ],
+    'solution_assessment_count' => [
+      'variables' => [
+        'count' => 0,
       ],
     ],
     'more_description' => [

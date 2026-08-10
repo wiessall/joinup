@@ -13,6 +13,7 @@ use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Controller of the route used by "joinup_core_more_in_modal" formatter.
@@ -68,6 +69,13 @@ readonly class ModalFormatterEntityViewController implements ContainerInjectionI
     string $viewMode,
     string $field,
   ): array {
+    // Only render known view modes; an unknown one must not silently fall back
+    // to the default view mode.
+    $validViewModes = $this->displayRepository->getViewModeOptions($entity->getEntityTypeId());
+    if ($viewMode !== 'default' && !isset($validViewModes[$viewMode])) {
+      throw new NotFoundHttpException();
+    }
+
     $build = $this->buildEntity($entity, $viewMode, $field);
 
     // Source entity view display entity must also be cached.
@@ -99,8 +107,11 @@ readonly class ModalFormatterEntityViewController implements ContainerInjectionI
       && $entity->hasField($field)
       && !$entity->get($field)->isEmpty()
     ) {
-      // Return field access result with proper cache metadata.
-      return $entity->get($field)->access('view', NULL, TRUE);
+      // Require access to the entity itself, not just to the field: field
+      // access alone would happily expose fields of entities the user cannot
+      // view (e.g. an unpublished node or a user entity).
+      return $entity->access('view', NULL, TRUE)
+        ->andIf($entity->get($field)->access('view', NULL, TRUE));
     }
 
     // Return forbidden with proper cache metadata.

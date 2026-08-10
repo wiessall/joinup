@@ -14,12 +14,18 @@
     'field_shared_in',
     'field_comments',
     'anonymous_comment_links',
-    'field_short_title'
+    'field_short_title',
+    'referenced_solution'
   ) }}
 </div>
 <div class="pb-5 border-bottom my-5">
   {{ content.group_categorisation }}
 </div>
+{% if content.referenced_solution %}
+  <div class="pb-5 border-bottom my-5">
+    {{ content.referenced_solution }}
+  </div>
+{% endif %}
 {% if content.group_attachment %}
   <div class="pb-5 border-bottom my-5">
     {{ content.group_attachment }}
