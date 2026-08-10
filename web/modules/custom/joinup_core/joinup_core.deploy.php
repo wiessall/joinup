@@ -14,7 +14,7 @@ use Drupal\menu_link_content\MenuLinkContentInterface;
  * Converts absolute internal menu link URLs into internal paths.
  */
 function joinup_core_deploy_201600(array &$sandbox): string {
-  if (!isset($sandbox['ids'])) {
+  if (!isset($sandbox['uris'])) {
     $query = \Drupal::database()->select('menu_link_content_data', 'md');
     $query->fields('md', ['id', 'link__uri']);
     // The 'link' field is not translatable, so the default translation carries
@@ -22,39 +22,46 @@ function joinup_core_deploy_201600(array &$sandbox): string {
     $query->condition('md.default_langcode', 1);
     $query->condition('md.link__uri', 'http%', 'LIKE');
 
-    $sandbox['ids'] = [];
+    // The converted URI is computed once, here, and kept for the processing
+    // phase, keyed by menu link ID. Links that need no conversion are dropped
+    // straight away rather than being loaded and inspected a second time.
+    $sandbox['uris'] = [];
     foreach ($query->execute() as $row) {
-      if (_joinup_core_get_internal_uri($row->link__uri) !== NULL) {
-        $sandbox['ids'][] = (int) $row->id;
+      $internalUri = _joinup_core_get_internal_uri($row->link__uri);
+      if ($internalUri !== NULL) {
+        $sandbox['uris'][(int) $row->id] = $internalUri;
       }
     }
-    $sandbox['total'] = count($sandbox['ids']);
+    $sandbox['total'] = count($sandbox['uris']);
     $sandbox['progress'] = 0;
   }
 
-  if (!$sandbox['ids']) {
+  if (!$sandbox['uris']) {
     $sandbox['#finished'] = 1;
     return 'No menu links with an absolute internal URL were found.';
   }
 
-  $id = array_shift($sandbox['ids']);
+  // Taking the key and unsetting it avoids the array_shift() reindexing of the
+  // whole remaining list on every iteration.
+  $id = array_key_first($sandbox['uris']);
+  $internalUri = $sandbox['uris'][$id];
+  unset($sandbox['uris'][$id]);
   $sandbox['progress']++;
-  $sandbox['#finished'] = (int) empty($sandbox['ids']);
+  $sandbox['#finished'] = (int) empty($sandbox['uris']);
 
   /** @var \Drupal\menu_link_content\MenuLinkContentInterface|null $link */
   $link = \Drupal::entityTypeManager()->getStorage('menu_link_content')->load($id);
-  $uri = $link instanceof MenuLinkContentInterface ? $link->link->uri : NULL;
-  $internalUri = $uri !== NULL ? _joinup_core_get_internal_uri($uri) : NULL;
 
-  if ($internalUri === NULL) {
+  if (!$link instanceof MenuLinkContentInterface) {
     return sprintf(
-      'Skipped menu link %d, it no longer holds an absolute internal URL, %d out of %d.',
+      'Skipped menu link %d, it no longer exists, %d out of %d.',
       $id,
       $sandbox['progress'],
       $sandbox['total']
     );
   }
 
+  $uri = $link->link->uri;
   $link->link->uri = $internalUri;
   // Let's not create unnecessary revisions.
   $link->setNewRevision(FALSE);
