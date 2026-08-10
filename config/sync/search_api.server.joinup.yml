@@ -76,7 +76,7 @@ backend_config:
     skip_schema_check: false
     solr_version: ''
     http_method: AUTO
-    commit_within: 5000
+    commit_within: 2000
     jmx: false
     jts: false
     solr_install_dir: ''
