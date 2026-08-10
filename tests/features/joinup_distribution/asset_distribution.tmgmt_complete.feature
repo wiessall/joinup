@@ -17,7 +17,6 @@ Feature: Completing translation jobs for distributions
     And a translation job in review to "bg" for the "Test distribution" distribution
 
     When I am logged in as a user with the "administer tmgmt" permission
-    And I accept the "Legal notice" agreement
     And I visit the translation review form of the "Test distribution" distribution
     And I press "Save as completed"
     Then I should not see the text "We cannot serve your request"
