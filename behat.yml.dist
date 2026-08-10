@@ -99,6 +99,7 @@
   - Drupal\joinup\Context\SolutionContext
   - Drupal\joinup\Context\SpdxContext
   - Drupal\joinup\Context\TagifyContext
+  - Drupal\joinup\Context\TmgmtContext
   - Drupal\joinup\Context\UpdateContext
   - Drupal\joinup\Context\WebformContext
   - Drupal\joinup\Context\WysiwygContext
