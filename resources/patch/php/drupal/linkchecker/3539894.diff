@@ -54,17 +54,3 @@ index 0b6f09a6f7e80733ec72099e83bbfd94234c2b71..9675f95fd5daf82079415c764da5666f
 +    ];
 +  }
  }
-diff --git a/src/LinkExtractorBatch.php b/src/LinkExtractorBatch.php
-index fdd354cf02a2fae33e2c442c1dcc579ce01cb7c2..042e6440911c4fc8ff24a9bd7cf2ada4c61226b7 100644
---- a/src/LinkExtractorBatch.php
-+++ b/src/LinkExtractorBatch.php
-@@ -282,6 +282,9 @@ class LinkExtractorBatch {
-     }
-
-     $query->orderBy('base.' . $entityType->getKey('id'));
-+
-+    $query->addTag('linkchecker_' . $entityType->getBundleEntityType() . '_' . $bundle);
-+
-     return $query;
-   }
-
