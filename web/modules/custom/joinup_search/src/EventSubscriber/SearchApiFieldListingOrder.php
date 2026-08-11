@@ -7,6 +7,7 @@ namespace Drupal\joinup_search\EventSubscriber;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\facets\Utility\FacetsDateHandler;
 use Drupal\joinup_group\Entity\GroupContentInterface;
+use Drupal\joinup_search\PinnedContentLookup;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\node\NodeInterface;
 use Drupal\paragraphs\ParagraphInterface;
@@ -25,6 +26,7 @@ readonly class SearchApiFieldListingOrder implements EventSubscriberInterface {
   public function __construct(
     #[Autowire(service: 'facets.utility.date_handler')]
     protected FacetsDateHandler $facetDateHandler,
+    protected PinnedContentLookup $pinnedContentLookup,
   ) {}
 
   /**
@@ -129,52 +131,24 @@ readonly class SearchApiFieldListingOrder implements EventSubscriberInterface {
   /**
    * Adds pinned sorting.
    *
+   * `termfreq()` always returns zero against `its_nid`: the `its_*` dynamic
+   * field is a `plong` point field, which carries no indexed terms. The `terms`
+   * query parser, in contrast, does operate on point fields and scores a
+   * constant per match.
+   *
    * @param \Solarium\Core\Query\QueryInterface $solariumApiQuery
    *   Solarium query.
    * @param \Drupal\node\NodeInterface $entity
    *   The related node entity of the query.
    */
   protected function addPinnedSorting(SolariumApiQueryInterface $solariumApiQuery, NodeInterface $entity): void {
-    // In order to sort by the pinned status of the entity, we need to create a
-    // sort function query. The values that are used for sort are evaluated at
-    // runtime instead of being retrieved from the index.
-    // An entity is pinned when:
-    // - for nodes, when they are belong to the current group and the sticky
-    //   field is set to true;
-    // - for solutions, when they are pinned inside the current collection.
-    // The query() Solr function query is a good candidate for doing custom
-    // sorts, but it will return the score of the subquery. The score can be
-    // different between single results and can range from a small fraction
-    // above zero to infinite.
-    // Example:
-    // @codingStandardsIgnoreStart
-    // "or(and(bs_sticky, query({!v='sm_entity_groups:<id>'},0)), query({!v='sm_node_pinned_in:<id>'},0))"
-    // "query({!v='(bs_sticky:true AND sm_entity_groups:<id>) OR (sm_node_pinned_in:<id>)'})"
-    // @codingStandardsIgnoreEnd
-    // The and() operator will return false when the subquery score is lower
-    // than 1, so both of the above will fail the sorting.
-    // Solr 6.x has the gt(x,y) function, that will return true if x is greater
-    // than y. By using gt(), any positive score can be transformed to true.
-    // Example:
-    // @codingStandardsIgnoreStart
-    // "or(and(bs_sticky, gt(query({!v='sm_entity_groups:<id>'},0),0)), gt(query({!v='sm_node_pinned_in:<id>'},0),0))"
-    // "gt(query({!v='(bs_sticky:true AND sm_entity_groups:<id>) OR (sm_node_pinned_in:<id>)'}),0)"
-    // @codingStandardsIgnoreEnd
-    // Unfortunately, Solr 5.x doesn't support the gt() function.
-    // Both Solr versions support the termfreq() function, which will return the
-    // number of occurrences of a term in a field of the document.
-    // Alternatively, also the exists() function could be used in conjunction
-    // with the query() function, but it looks more expensive.
-    // Example:
-    // @codingStandardsIgnoreLine
-    // "or(and(bs_sticky,exists(query({!v='sm_entity_groups:<id>'},0))),exists(query({!v='sm_node_pinned_in:<id>'},0)))"
-    // @see https://lucene.apache.org/solr/guide/6_6/function-queries.html#function-queries
-    // @see http://archive.apache.org/dist/lucene/solr/ref-guide/apache-solr-ref-guide-5.5.pdf
-    $computed_sort = sprintf(
-      "or(termfreq(sm_node_pinned_in,%1\$s))",
-      $solariumApiQuery->getHelper()->escapePhrase($entity->id())
-    );
-    $solariumApiQuery->addSort($computed_sort, Query::SORT_DESC);
+    $pinnedNodeIds = $this->pinnedContentLookup->getPinnedNodeIds($entity->id());
+    if (!$pinnedNodeIds) {
+      return;
+    }
+
+    $computedSort = sprintf('query({!terms f=its_nid v=%s},0)', implode(',', $pinnedNodeIds));
+    $solariumApiQuery->addSort($computedSort, Query::SORT_DESC);
   }
 
 }
