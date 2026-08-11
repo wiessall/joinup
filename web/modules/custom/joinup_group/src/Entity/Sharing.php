@@ -7,9 +7,9 @@ namespace Drupal\joinup_group\Entity;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\joinup_search\SearchIndexCommitter;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager;
-use Drupal\search_api\Utility\PostRequestIndexingInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -120,11 +120,7 @@ class Sharing extends MetaEntity implements SharingInterface {
   public function postSave(EntityStorageInterface $storage, $update = TRUE) {
     parent::postSave($storage, $update);
 
-    // Re-index changed entities.
-    $postRequestIndexer = \Drupal::getContainer()->get('search_api.post_request_indexing');
-    if ($postRequestIndexer instanceof PostRequestIndexingInterface) {
-      $postRequestIndexer->destruct();
-    }
+    \Drupal::service(SearchIndexCommitter::class)->commitPendingChanges();
   }
 
 }
