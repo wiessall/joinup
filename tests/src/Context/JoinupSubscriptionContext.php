@@ -335,14 +335,9 @@ class JoinupSubscriptionContext extends RawDrupalContext {
       $expected_options = $this->explodeDelimitedSeparatedStepArgument(strtolower($expected_options));
       $group = $this->getEntityByLabel('node', $group_label);
       $subscription_bundles = JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES[$group->bundle()];
-      // Remove the 'assessment_report' subscription for all collections,
-      // except the assessment collection.
+      // Assessment reports are only subscribable on the assessments group.
       if ($group->uuid() !== AssessmentInterface::GROUP_UUID) {
-        foreach ($subscription_bundles as $key => $bundles) {
-          $subscription_bundles[$key] = array_values(array_filter($bundles, function ($bundle) {
-            return $bundle !== 'assessment_report';
-          }));
-        }
+        unset($subscription_bundles['assessment']);
       }
       foreach ($subscription_bundles as $entity_type_id => $bundle_ids) {
         foreach ($bundle_ids as $bundle_id) {

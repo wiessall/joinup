@@ -355,12 +355,13 @@ class SubscribeGroupForm extends FormBase {
         $subscription_bundles[] = ['entity_type' => 'node', 'bundle' => $bundle];
       }
     }
-    // Remove the 'assessment_report' subscription for all collections,
-    // except the assessment collection.
+    // Remove the assessment report subscription for all collections, except
+    // the assessments group.
     if ($membership->getGroup()->uuid() !== AssessmentInterface::GROUP_UUID) {
-      $subscription_bundles = array_values(array_filter($subscription_bundles, function ($bundle) {
-        return $bundle['bundle'] !== 'assessment_report';
-      }));
+      $subscription_bundles = array_values(array_filter(
+        $subscription_bundles,
+        fn(array $bundle): bool => $bundle['entity_type'] !== 'assessment' || $bundle['bundle'] !== 'report',
+      ));
     }
     $membership->set('subscription_bundles', $subscription_bundles);
     $membership->save();

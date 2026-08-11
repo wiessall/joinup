@@ -11,6 +11,7 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\DependencyInjection\AutowireTrait;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
@@ -177,7 +178,7 @@ class SubscriptionsForm extends FormBase {
 
         $subscription_status = [];
         $active_subscription_bundles = $membership->get('subscription_bundles')->getIterator()->getArrayCopy();
-        foreach ($subscription_bundles as $entity_type_id => $bundle_ids) {
+        foreach (static::filterGroupSubscriptionBundles($subscription_bundles, $group) as $entity_type_id => $bundle_ids) {
           foreach ($bundle_ids as $bundle_id) {
             $key = static::getSubscriptionKey($entity_type_id, $bundle_id);
             $value = array_reduce($active_subscription_bundles, function (bool $carry, EntityBundlePairItem $entity_bundle_pair) use ($entity_type_id, $bundle_id): bool {
@@ -357,13 +358,7 @@ class SubscriptionsForm extends FormBase {
     $subscription_type = $form_state->getTriggeringElement()['#group_type'];
     $subscription_bundles = JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES[$subscription_type];
     $group = $this->entityTypeManager->getStorage('node')->load($submitted_group_id);
-    if ($group->uuid() !== AssessmentInterface::GROUP_UUID) {
-      $excluded_bundles = ['assessment_report'];
-      $subscription_bundles['node'] = array_values(array_filter($subscription_bundles['node'], function ($item) use ($excluded_bundles) {
-        return !in_array($item, $excluded_bundles, TRUE);
-      }));
-    }
-    foreach ($subscription_bundles as $entity_type_id => $bundle_ids) {
+    foreach (static::filterGroupSubscriptionBundles($subscription_bundles, $group) as $entity_type_id => $bundle_ids) {
       foreach ($bundle_ids as $bundle_id) {
         $key = static::getSubscriptionKey($entity_type_id, $bundle_id);
         $subscription_status[$key] = $form['groups'][$submitted_group_id]['options'][$key]['#checked'];
@@ -465,6 +460,27 @@ class SubscriptionsForm extends FormBase {
    */
   protected static function getSubscriptionKey(string $entity_type_id, string $bundle_id): string {
     return implode('|', [$entity_type_id, $bundle_id]);
+  }
+
+  /**
+   * Restricts the subscription bundles to those available for a given group.
+   *
+   * Assessment reports are only published in the assessments group, so the
+   * subscription is not offered on any other group.
+   *
+   * @param array $subscription_bundles
+   *   Bundle IDs, keyed by entity type ID.
+   * @param \Drupal\Core\Entity\EntityInterface $group
+   *   The group the subscriptions are shown for.
+   *
+   * @return array
+   *   The subscription bundles available for the given group.
+   */
+  protected static function filterGroupSubscriptionBundles(array $subscription_bundles, EntityInterface $group): array {
+    if ($group->uuid() !== AssessmentInterface::GROUP_UUID) {
+      unset($subscription_bundles['assessment']);
+    }
+    return $subscription_bundles;
   }
 
   /**

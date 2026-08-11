@@ -93,12 +93,13 @@ class InvitationSubscriber implements EventSubscriberInterface {
     if ($event->getSubscribe()) {
       $group = $invitation->getEntity();
       $subscriptionBundles = JoinupSubscriptionsHelper::provideDataForField($group->bundle());
-      // Remove the 'assessment_report' subscription for all collections,
-      // except the assessment collection.
+      // Remove the assessment report subscription for all collections, except
+      // the assessments group.
       if ($group->bundle() === 'collection' && $group->uuid() !== AssessmentInterface::GROUP_UUID) {
-        $subscriptionBundles = array_values(array_filter($subscriptionBundles, function ($bundle) {
-          return $bundle['bundle'] !== 'assessment_report';
-        }));
+        $subscriptionBundles = array_values(array_filter(
+          $subscriptionBundles,
+          fn(array $bundle): bool => $bundle['entity_type'] !== 'assessment' || $bundle['bundle'] !== 'report',
+        ));
       }
       $membership->set('announcements', TRUE);
       $membership->set('subscription_bundles', $subscriptionBundles)->save();
