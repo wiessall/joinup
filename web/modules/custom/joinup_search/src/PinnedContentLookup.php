@@ -25,26 +25,20 @@ class PinnedContentLookup {
    * @param string|int $groupId
    *   The ID of the group.
    *
-   * @return int[]
-   *   The node IDs, in no particular order.
+   * @return string[]
+   *   The IDs of the pinned nodes.
    */
   public function getPinnedNodeIds(string|int $groupId): array {
-    $storage = $this->entityTypeManager->getStorage('meta_entity');
-
-    $metaEntityIds = $storage->getQuery()
+    $result = $this->entityTypeManager->getStorage('meta_entity')
+      ->getAggregateQuery()
       ->accessCheck(FALSE)
       ->condition('type', 'pinned_in')
       ->condition('field_pinned_in', $groupId)
+      ->condition('target.target_type', 'node')
+      ->groupBy('target.target_id')
       ->execute();
 
-    $nodeIds = [];
-    foreach ($storage->loadMultiple($metaEntityIds) as $metaEntity) {
-      $target = $metaEntity->get('target')->first();
-      if ($target?->target_type === 'node') {
-        $nodeIds[] = (int) $target->target_id;
-      }
-    }
-    return $nodeIds;
+    return array_column($result, 'target__target_id');
   }
 
 }
