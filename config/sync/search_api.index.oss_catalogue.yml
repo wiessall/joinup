@@ -233,6 +233,7 @@ datasource_settings:
       default: false
       selected:
         - oss_solution
+    track_changes_only_affected_translations: true
     languages:
       default: true
       selected: {  }
