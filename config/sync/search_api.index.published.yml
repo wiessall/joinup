@@ -631,6 +631,7 @@ datasource_settings:
       default: false
       selected:
         - report
+    track_changes_only_affected_translations: false
     languages:
       default: true
       selected: {  }
@@ -649,10 +650,12 @@ datasource_settings:
         - news
         - release
         - solution
+    track_changes_only_affected_translations: true
     languages:
       default: true
       selected: {  }
   'entity:user':
+    track_changes_only_affected_translations: false
     languages:
       default: true
       selected: {  }
