@@ -2154,6 +2154,7 @@ display:
             event: event
             news: news
             release: release
+            solution: solution
           group: 1
           exposed: true
           expose:
