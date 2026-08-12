@@ -44,7 +44,7 @@ function joinup_core_deploy_201602(array &$sandbox): string {
 
   $stats = $sandbox['stats'];
   return sprintf(
-    'Inline images: %d converted on %d entities (%d media created, %d recovered from revisions). Skipped %d remote, %d base64, %d unrecoverable, %d missing file, %d without a group. Processed %d/%d entities.',
+    'Inline images: %d converted on %d entities (%d media created, %d recovered from revisions). Skipped %d remote, %d base64, %d unrecoverable, %d missing file. Processed %d/%d entities.',
     $stats['converted'],
     $stats['entities'],
     $stats['media_created'],
@@ -53,7 +53,6 @@ function joinup_core_deploy_201602(array &$sandbox): string {
     $stats['skipped_base64'],
     $stats['skipped_empty'],
     $stats['skipped_missing_file'],
-    $stats['skipped_no_group'],
     $sandbox['total'] - $remaining,
     $sandbox['total']
   );

@@ -47,10 +47,13 @@ use Drupal\user\EntityOwnerInterface;
  * genuinely remote images (many hosts are long dead) and base64 `data:` URIs,
  * which `filter_html` mangles beyond repair anyway.
  *
- * Saving is body-only: no workflow transition occurs, so notification
- * subscribers (which key on transitions) stay silent. Entities are flagged as
- * syncing and saved without a new revision, which keeps paragraph revision ids
- * valid for their parents.
+ * Saving is body-only and does not touch the state field. The notification
+ * subscribers do fire on every update, but they resolve a message from the
+ * workflow transition being made, and a save that transitions nothing matches
+ * no configured notification — so nothing is sent. Note it is that, and not
+ * `setSyncing()`, which keeps them quiet: `joinup_notification` never consults
+ * the syncing flag. Entities are also saved without a new revision, which keeps
+ * paragraph revision ids valid for their parents.
  */
 final class InlineImageConverter implements ContainerInjectionInterface {
 
@@ -68,7 +71,6 @@ final class InlineImageConverter implements ContainerInjectionInterface {
     'skipped_base64' => 0,
     'skipped_empty' => 0,
     'skipped_missing_file' => 0,
-    'skipped_no_group' => 0,
   ];
 
   /**
@@ -212,9 +214,10 @@ final class InlineImageConverter implements ContainerInjectionInterface {
       return $stats;
     }
 
-    // Every created media must belong to a group: `og_audience` is required on
-    // the image bundle. Without one there is nothing safe to create, so the
-    // markup is left untouched and reported.
+    // `og_audience` is required on the image bundle, but the constraint only
+    // fires when the field is on the form: media created programmatically, or
+    // embedded in an entity that has no group of its own, legitimately have
+    // none. A missing group is therefore not a reason to skip conversion.
     $group_id = $this->resolveGroupId($entity);
     $uid = $entity instanceof EntityOwnerInterface ? (int) $entity->getOwnerId() : 0;
 
@@ -231,22 +234,24 @@ final class InlineImageConverter implements ContainerInjectionInterface {
           }
           $value = (string) $item->value;
 
-          // Nothing left to point at? The revision history may still know.
-          if (!$this->hasRecoverableImage($value)) {
+          // Any image that lost its `src` may still be named by an older
+          // revision. Recovery is attempted whenever at least one is missing,
+          // not only when all of them are: a value that kept one working image
+          // can still have lost several others alongside it.
+          $missing = $this->countUnrecoverableImages($value);
+          if ($missing > 0) {
             $recovered = $this->recoverFromRevisions($entity, $field, $langcode, (int) $delta, $value);
-            if ($recovered === NULL) {
-              $stats['skipped_empty'] += $this->countImages($value);
-              continue;
+            if ($recovered !== NULL) {
+              $regained = $missing - $this->countUnrecoverableImages($recovered);
+              if ($regained > 0) {
+                $stats['recovered_from_revision'] += $regained;
+                $value = $recovered;
+              }
             }
-            $stats['recovered_from_revision'] += $this->countImages($recovered);
-            $value = $recovered;
           }
 
-          if ($group_id === NULL) {
-            $stats['skipped_no_group'] += $this->countImages($value);
-            continue;
-          }
-
+          // Images that are still sourceless are counted by ::convertValue(),
+          // which reports each one under the reason it could not be resolved.
           $new = $this->convertValue($value, $group_id, $uid, $stats);
           if ($new !== NULL) {
             $item->value = $new;
@@ -278,8 +283,8 @@ final class InlineImageConverter implements ContainerInjectionInterface {
    *
    * @param string $html
    *   The stored HTML.
-   * @param int|string $group_id
-   *   The group the created media must belong to.
+   * @param int|string|null $group_id
+   *   The group the created media should belong to, or NULL for none.
    * @param int $uid
    *   The owner to attribute created media to.
    * @param int[] $stats
@@ -288,7 +293,7 @@ final class InlineImageConverter implements ContainerInjectionInterface {
    * @return string|null
    *   The rewritten HTML, or NULL if nothing changed.
    */
-  protected function convertValue(string $html, int|string $group_id, int $uid, array &$stats): ?string {
+  protected function convertValue(string $html, int|string|NULL $group_id, int $uid, array &$stats): ?string {
     $document = Html::load($html);
     $changed = FALSE;
 
@@ -305,7 +310,8 @@ final class InlineImageConverter implements ContainerInjectionInterface {
           $stats['skipped_base64']++;
         }
         elseif ($this->localSrcToUri($src) !== NULL) {
-          // A local path that no file entity claims: the file is gone.
+          // A local path that no file entity claims. The bytes may well still
+          // be on disk; what is missing is the file entity to reference.
           $stats['skipped_missing_file']++;
         }
         else {
@@ -330,6 +336,7 @@ final class InlineImageConverter implements ContainerInjectionInterface {
       }
 
       $img->parentNode->replaceChild($embed, $img);
+      $this->liftFromParagraph($embed);
       $stats['converted']++;
       $changed = TRUE;
     }
@@ -338,12 +345,114 @@ final class InlineImageConverter implements ContainerInjectionInterface {
   }
 
   /**
+   * Moves a media embed out of the paragraph the original image sat in.
+   *
+   * `<drupal-media>` is replaced by block-level markup, which is not valid
+   * inside a `<p>`: the parser closes the paragraph before it, and the embed
+   * lands outside the flow it was written into. This is why a converted image
+   * can still fail to render. The paragraph is split around the embed, and
+   * dropped altogether when the image was all it held.
+   */
+  protected function liftFromParagraph(\DOMElement $embed): void {
+    $paragraph = $embed->parentNode;
+    while ($paragraph instanceof \DOMElement && strtolower($paragraph->nodeName) !== 'p') {
+      $paragraph = $paragraph->parentNode;
+    }
+    if (!$paragraph instanceof \DOMElement || $paragraph->parentNode === NULL) {
+      return;
+    }
+
+    // The direct child of the paragraph whose subtree holds the embed: the
+    // embed itself, unless the image sat inside further inline markup.
+    $branch = $embed;
+    while ($branch->parentNode !== $paragraph) {
+      $branch = $branch->parentNode;
+    }
+
+    $before = [];
+    $after = [];
+    $passed = FALSE;
+    foreach (iterator_to_array($paragraph->childNodes) as $child) {
+      if ($child === $branch) {
+        $passed = TRUE;
+        continue;
+      }
+      if ($passed) {
+        $after[] = $child;
+      }
+      else {
+        $before[] = $child;
+      }
+    }
+
+    // Detach the embed from whatever wrapped it. Emptied of the image, that
+    // wrapper may still hold text, which stays with the preceding paragraph.
+    $embed->parentNode->removeChild($embed);
+    if ($branch !== $embed && $this->hasContent($branch)) {
+      $before[] = $branch;
+    }
+
+    $parent = $paragraph->parentNode;
+    $this->insertSlice($before, $paragraph);
+    $parent->insertBefore($embed, $paragraph);
+    $this->insertSlice($after, $paragraph);
+    $parent->removeChild($paragraph);
+  }
+
+  /**
+   * Re-inserts one side of a split paragraph, unless it holds nothing.
+   *
+   * @param \DOMNode[] $nodes
+   *   The nodes belonging to this side of the split.
+   * @param \DOMElement $paragraph
+   *   The paragraph being split, used as both template and insert position.
+   */
+  protected function insertSlice(array $nodes, \DOMElement $paragraph): void {
+    if (!$nodes) {
+      return;
+    }
+    // A shallow clone keeps the original paragraph's attributes.
+    $slice = $paragraph->cloneNode(FALSE);
+    foreach ($nodes as $node) {
+      $slice->appendChild($node);
+    }
+    if ($this->hasContent($slice)) {
+      $paragraph->parentNode->insertBefore($slice, $paragraph);
+    }
+  }
+
+  /**
+   * Returns whether a node holds anything worth keeping.
+   */
+  protected function hasContent(\DOMNode $node): bool {
+    if (trim($node->textContent) !== '') {
+      return TRUE;
+    }
+    return $node instanceof \DOMElement && $node->getElementsByTagName('*')->length > 0;
+  }
+
+  /**
    * Restores lost `src` attributes from the entity's revision history.
    *
-   * Only an exact match is accepted: a revision whose image count equals the
-   * current one, so the markup is the same content rather than an unrelated
-   * older version. Attributes are transplanted positionally onto the current
-   * value, leaving the surrounding text as it is now.
+   * Only a revision whose image count equals the current one is considered, so
+   * the markup is the same content rather than an unrelated older version. Of
+   * those, the revision that still names the most images wins: sources are lost
+   * progressively, so the newest match is not necessarily the most complete.
+   *
+   * Attributes are transplanted positionally onto the current value, leaving
+   * the surrounding text as it is now, and only onto images that have nothing
+   * left of their own — a source that still works is never overwritten.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+   *   The entity whose revision history is searched.
+   * @param string $field
+   *   The field holding the markup.
+   * @param string $langcode
+   *   The translation being repaired.
+   * @param int $delta
+   *   The delta within the field being repaired.
+   * @param string $current
+   *   The markup as stored now, already missing the sources to restore.
    *
    * @return string|null
    *   The repaired HTML, or NULL when no revision can help.
@@ -355,6 +464,7 @@ final class InlineImageConverter implements ContainerInjectionInterface {
     }
     $storage = $this->entityTypeManager->getStorage($entity->getEntityTypeId());
     $expected = $this->countImages($current);
+    $missing = $this->countUnrecoverableImages($current);
 
     $vids = $storage->getQuery()
       ->accessCheck(FALSE)
@@ -364,6 +474,9 @@ final class InlineImageConverter implements ContainerInjectionInterface {
       ->range(0, self::MAX_REVISIONS)
       ->execute();
 
+    $best = NULL;
+    $best_vid = NULL;
+    $best_named = 0;
     foreach (array_keys($vids) as $vid) {
       $revision = $storage->loadRevision($vid);
       if (!$revision instanceof ContentEntityInterface || !$revision->hasTranslation($langcode)) {
@@ -374,35 +487,58 @@ final class InlineImageConverter implements ContainerInjectionInterface {
         continue;
       }
       $candidate = (string) $item->value;
-      if ($this->countImages($candidate) !== $expected || !$this->hasRecoverableImage($candidate)) {
+      if ($this->countImages($candidate) !== $expected) {
         continue;
       }
-
-      $old = Html::load($candidate);
-      $new = Html::load($current);
-      $old_images = iterator_to_array($old->getElementsByTagName('img'));
-      $new_images = iterator_to_array($new->getElementsByTagName('img'));
-      foreach ($new_images as $index => $image) {
-        if (!isset($old_images[$index])) {
-          continue;
-        }
-        foreach (self::RECOVERABLE_ATTRIBUTES as $attribute) {
-          if ($old_images[$index]->hasAttribute($attribute)) {
-            $image->setAttribute($attribute, $old_images[$index]->getAttribute($attribute));
-          }
-        }
+      $named = $expected - $this->countUnrecoverableImages($candidate);
+      if ($named <= $best_named) {
+        continue;
       }
-
-      $this->logger->notice('Recovered @count inline image source(s) for @type @id from revision @vid.', [
-        '@count' => $expected,
-        '@type' => $entity->getEntityTypeId(),
-        '@id' => $entity->id(),
-        '@vid' => $vid,
-      ]);
-      return Html::serialize($new);
+      $best = $candidate;
+      $best_vid = $vid;
+      $best_named = $named;
+      // No older revision can improve on one that still names every image.
+      if ($best_named === $expected) {
+        break;
+      }
     }
 
-    return NULL;
+    if ($best === NULL) {
+      return NULL;
+    }
+
+    $old = Html::load($best);
+    $new = Html::load($current);
+    $old_images = iterator_to_array($old->getElementsByTagName('img'));
+    $new_images = iterator_to_array($new->getElementsByTagName('img'));
+    $restored = 0;
+    foreach ($new_images as $index => $image) {
+      if (!isset($old_images[$index]) || $this->imageNamesSource($image)) {
+        continue;
+      }
+      if (!$this->imageNamesSource($old_images[$index])) {
+        continue;
+      }
+      foreach (self::RECOVERABLE_ATTRIBUTES as $attribute) {
+        if ($old_images[$index]->hasAttribute($attribute)) {
+          $image->setAttribute($attribute, $old_images[$index]->getAttribute($attribute));
+        }
+      }
+      $restored++;
+    }
+
+    if ($restored === 0) {
+      return NULL;
+    }
+
+    $this->logger->notice('Recovered @count of @missing lost inline image source(s) for @type @id from revision @vid.', [
+      '@count' => $restored,
+      '@missing' => $missing,
+      '@type' => $entity->getEntityTypeId(),
+      '@id' => $entity->id(),
+      '@vid' => $best_vid,
+    ]);
+    return Html::serialize($new);
   }
 
   /**
@@ -476,17 +612,24 @@ final class InlineImageConverter implements ContainerInjectionInterface {
    * Gets the `media:image` wrapping a file within a group, or creates it.
    *
    * The lookup is scoped to the group: media are group content, so reusing one
-   * from another group would leak it across group boundaries.
+   * from another group would leak it across group boundaries. Group-less media
+   * are likewise only ever reused by other group-less embeds, which is why the
+   * absence of a group has to be matched explicitly rather than ignored.
    */
-  protected function getOrCreateMedia(FileInterface $file, string $alt, int|string $group_id, int $uid, array &$stats): MediaInterface {
+  protected function getOrCreateMedia(FileInterface $file, string $alt, int|string|NULL $group_id, int $uid, array &$stats): MediaInterface {
     $storage = $this->entityTypeManager->getStorage('media');
-    $existing = $storage->getQuery()
+    $query = $storage->getQuery()
       ->accessCheck(FALSE)
       ->condition('bundle', 'image')
       ->condition('image.target_id', $file->id())
-      ->condition(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $group_id)
-      ->range(0, 1)
-      ->execute();
+      ->range(0, 1);
+    if ($group_id === NULL) {
+      $query->notExists(OgGroupAudienceHelperInterface::DEFAULT_FIELD);
+    }
+    else {
+      $query->condition(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $group_id);
+    }
+    $existing = $query->execute();
     if ($existing) {
       /** @var \Drupal\media\MediaInterface $media */
       $media = $storage->load(reset($existing));
@@ -500,8 +643,7 @@ final class InlineImageConverter implements ContainerInjectionInterface {
       $file->save();
     }
 
-    /** @var \Drupal\media\MediaInterface $media */
-    $media = $storage->create([
+    $values = [
       'bundle' => 'image',
       'name' => $file->getFilename(),
       'status' => 1,
@@ -510,8 +652,12 @@ final class InlineImageConverter implements ContainerInjectionInterface {
         'target_id' => $file->id(),
         'alt' => $alt !== '' ? $alt : $file->getFilename(),
       ],
-      OgGroupAudienceHelperInterface::DEFAULT_FIELD => $group_id,
-    ]);
+    ];
+    if ($group_id !== NULL) {
+      $values[OgGroupAudienceHelperInterface::DEFAULT_FIELD] = $group_id;
+    }
+    /** @var \Drupal\media\MediaInterface $media */
+    $media = $storage->create($values);
     if ($uid) {
       $media->setOwnerId($uid);
     }
@@ -583,20 +729,32 @@ final class InlineImageConverter implements ContainerInjectionInterface {
   }
 
   /**
-   * Returns whether any `<img>` still names something we could resolve.
+   * Counts the `<img>` tags that no longer name anything we could resolve.
+   *
+   * Counted per image rather than per value: markup that kept one working
+   * image can still have lost the source of every other image beside it.
    */
-  protected function hasRecoverableImage(string $html): bool {
+  protected function countUnrecoverableImages(string $html): int {
     if (!preg_match_all('/<img\b[^>]*>/i', $html, $matches)) {
-      return FALSE;
+      return 0;
     }
+    $count = 0;
     foreach ($matches[0] as $tag) {
       $has_src = preg_match('/\ssrc\s*=\s*(?:"([^"]*)"|\'([^\']*)\'|([^\s>]+))/i', $tag, $parts)
         && trim($parts[1] ?: ($parts[2] ?? '') ?: ($parts[3] ?? '')) !== '';
-      if ($has_src || preg_match('/data-entity-uuid\s*=\s*"[^"]+"/i', $tag)) {
-        return TRUE;
+      if (!$has_src && !preg_match('/data-entity-uuid\s*=\s*"[^"]+"/i', $tag)) {
+        $count++;
       }
     }
-    return FALSE;
+    return $count;
+  }
+
+  /**
+   * Returns whether a parsed `<img>` still names something we could resolve.
+   */
+  protected function imageNamesSource(\DOMElement $img): bool {
+    return trim($img->getAttribute('src')) !== ''
+      || $img->getAttribute('data-entity-uuid') !== '';
   }
 
 }
