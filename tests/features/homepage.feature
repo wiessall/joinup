@@ -246,6 +246,42 @@ Feature: Homepage
     Then I should see search bar in navbar
     And I should see the search bar in homepage's header
 
+  Scenario: The explore block lists the most recently commented content
+    Given the following "collection" content:
+      | title                   | state     |
+      | Commented content space | published |
+    And the following "news" content:
+      | title            | body            | collection              | state     |
+      | Interesting news | Some news body. | Commented content space | published |
+    And the following "document" content:
+      | title             | body                | collection              | state     |
+      | Reference manual  | Some document body. | Commented content space | published |
+    And the following "discussion" content:
+      | title              | body                  | collection              | state     |
+      | Ongoing discussion | Some discussion body. | Commented content space | published |
+    # A second, older comment on the news makes sure the newest one wins rather
+    # than simply the first or the last one found.
+    And the following comments:
+      | content            | created             | body                |
+      | Interesting news   | 2026-03-01T09:00:00 | An older remark.    |
+      | Interesting news   | 2026-03-02T10:00:00 | A newer remark.     |
+      | Reference manual   | 2026-03-03T11:00:00 | Useful, thanks.     |
+      | Ongoing discussion | 2026-03-04T12:00:00 | I would disagree.   |
+
+    When I am on the homepage
+    Then I should see the button "User Comments" in the "Explore block"
+    # Ordered by the newest comment on each item, most recent first. Three
+    # bundles appear, including the discussion which stores its comments in a
+    # field of its own.
+    And the user comments section should contain the following content:
+      | title              | date       |
+      | Ongoing discussion | 04/03/2026 |
+      | Reference manual   | 03/03/2026 |
+      | Interesting news   | 02/03/2026 |
+
+    # This tab continues into no listing, unlike the bundle specific ones.
+    But I should not see the link "See more user comments" in the "Explore block"
+
   @group-clone
   Scenario: The /events path redirects to upcoming events page.
     Given I am on the homepage
