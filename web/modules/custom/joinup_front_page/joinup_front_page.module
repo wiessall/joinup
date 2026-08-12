@@ -7,6 +7,8 @@
 
 declare(strict_types=1);
 
+use Drupal\comment\CommentInterface;
+
 /**
  * Implements hook_theme().
  */
@@ -18,4 +20,42 @@ function joinup_front_page_theme(): array {
       ],
     ],
   ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for node.
+ *
+ * Decorates the tiles of the explore block's "User Comments" tab with a link
+ * to the comment that put them there, plus the date it was posted.
+ *
+ * @see \Drupal\joinup_front_page\Plugin\Block\ExploreBlock::getRecentlyCommentedItems()
+ */
+function joinup_front_page_preprocess_node(array &$variables): void {
+  $comment = $variables['elements']['#joinup_latest_comment'] ?? NULL;
+  if (!$comment instanceof CommentInterface) {
+    return;
+  }
+
+  // Rendered in the tile body. permalink() resolves to the commented entity
+  // with a `#comment-<id>` fragment, so the visitor lands on the comment
+  // itself rather than at the top of a long page.
+  $variables['action'] = [
+    '#type' => 'link',
+    '#title' => t('See comment'),
+    '#url' => $comment->permalink(),
+    '#attributes' => [
+      'class' => ['btn', 'btn-outline-primary', 'btn-sm', 'explore-see-comment'],
+    ],
+  ];
+
+  // The tile pattern renders extra data at the bottom left of the footer.
+  // Prepended rather than appended because the theme's own tile preprocess
+  // appends to this array afterwards, and the date is the primary information
+  // of this tab. This hook runs before that one, so the key may not exist yet.
+  $variables['extra_data'] ??= [];
+  array_unshift($variables['extra_data'], [
+    'icon' => 'chat',
+    'label' => \Drupal::service('date.formatter')
+      ->format($comment->getCreatedTime(), 'date_only'),
+  ]);
 }

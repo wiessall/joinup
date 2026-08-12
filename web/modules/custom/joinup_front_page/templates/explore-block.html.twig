@@ -32,7 +32,10 @@
                 <button class="glide__arrow glide__arrow--left rounded-circle" data-glide-dir="<" title="{{ 'Previous item'|t }}"><span class="icon"></span></button>
                 <button class="glide__arrow glide__arrow--right rounded-circle" data-glide-dir=">" title="{{ 'Next item'|t }}"><span class="icon"></span></button>
               </div>
-              <a href="{{ tab.url }}" class="btn btn-secondary mb-2 explore-see-more">{{ 'See more @plural_type'|t({'@plural_type': tab.plural_type}) }}</a>
+              {# The recently commented tab has no listing to continue into. #}
+              {% if tab.url is not empty %}
+                <a href="{{ tab.url }}" class="btn btn-secondary mb-2 explore-see-more">{{ 'See more @plural_type'|t({'@plural_type': tab.plural_type}) }}</a>
+              {% endif %}
               <div class="explore-slider explore-slider-{{ key }} mt-3 glide__track" data-glide-el="track">
                 <div class="glide__slides">
                   {{ tab.data }}
