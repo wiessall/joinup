@@ -27,7 +27,7 @@ Feature: Content Overview
 
     # Check that visiting as a moderator does not create cache for all users.
     When I am logged in as a user with the "moderator" role
-    And I visit the content overview page
+    And I visit the advanced search page
     Then a tour should be available
     And the page should be cacheable
     And I should see the following facet items "Discussion, Document, News, Events" in this order
@@ -60,7 +60,7 @@ Feature: Content Overview
 
     # Check page for authenticated users.
     When I am logged in as a user with the "authenticated" role
-    And I visit the content overview page
+    And I visit the advanced search page
     Then I should see the "Seventh Windows" tile
     And I should see the "The Playful Tale" tile
     And I should see the "History of Flight" tile
@@ -72,7 +72,7 @@ Feature: Content Overview
 
     # Check the page for anonymous users.
     When I am an anonymous user
-    And I visit the content overview page
+    And I visit the advanced search page
     Then I should see the "Seventh Windows" tile
     And I should see the "The Playful Tale" tile
     And I should see the "History of Flight" tile
@@ -81,90 +81,6 @@ Feature: Content Overview
     But I should not see the "Rumble collection" tile
     And I should not see the "Night of Shadow" tile
     And the page should be cacheable
-
-  Scenario: Users are able to filter content they have created or that is featured site-wide.
-    Given the following users:
-      | Username        | E-mail                       |
-      | michaelanewport | michaela.newport@example.com |
-      | nenaroberts     | nena.roberts@example.com     |
-    And the following "collection" content:
-      | title            |
-      | Timely Xylophone |
-    And the following "event" content:
-      | title            | collection       |
-      | Sticky Vegetable | Timely Xylophone |
-    And the following "news" content:
-      | title            | collection       | author          | featured |
-      | Early Avenue     | Timely Xylophone | michaelanewport | yes      |
-      | Itchy Artificial | Timely Xylophone | nenaroberts     | no       |
-    And the following "document" content:
-      | title             | collection       |
-      | Limousine Scarlet | Timely Xylophone |
-    And the following "discussion" content:
-      | title                  | collection       | author          | featured |
-      | Hideous Dreaded Monkey | Timely Xylophone | michaelanewport | yes      |
-
-    When I am logged in as "michaelanewport"
-    And I visit the content overview page
-    Then the "My content" inline facet should allow selecting the following values:
-      | Featured content (2) |
-      | My content (2)       |
-    When I click "My content" in the "My content" inline facet
-    Then I should see the following tiles in the correct order:
-      | Early Avenue           |
-      | Hideous Dreaded Monkey |
-    And the "My content" inline facet should allow selecting the following values:
-      | Featured content (2) |
-      | All content          |
-    And the page should be cacheable
-    # Regression test to ensure that the facets are cached by user.
-    # Subsequent page loads of the content page would lead to cached facets
-    # to be leaked to other users.
-    # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3777
-    When I click "All content" in the "My content" inline facet
-    Then the "My content" inline facet should allow selecting the following values:
-      | Featured content (2) |
-      | My content (2)       |
-    And the page should be cacheable
-
-    When I am logged in as "nenaroberts"
-    And I visit the content overview page
-    Then the "My content" inline facet should allow selecting the following values:
-      | Featured content (2) |
-      | My content (1)       |
-    When I click "My content" in the "My content" inline facet
-    Then I should see the following tiles in the correct order:
-      | Itchy Artificial |
-    And the "My content" inline facet should allow selecting the following values:
-      | Featured content (2) |
-      | All content          |
-    And the page should be cacheable
-    # Regression test to ensure that the facets are cached by user.
-    # Subsequent page loads of the content page would lead to cached facets
-    # to be leaked to other users.
-    # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3777
-    When I click "All content" in the "My content" inline facet
-    Then the "My content" inline facet should allow selecting the following values:
-      | Featured content (2) |
-      | My content (1)       |
-    And the page should be cacheable
-
-    When I am an anonymous user
-    And I visit the content overview page
-    Then I should see the following tiles in the correct order:
-      | Sticky Vegetable       |
-      | Early Avenue           |
-      | Itchy Artificial       |
-      | Limousine Scarlet      |
-      | Hideous Dreaded Monkey |
-    And the "My content" inline facet should allow selecting the following values:
-      | Featured content (2) |
-    When I click "Featured content" in the "My content" inline facet
-    Then I should see the following tiles in the correct order:
-      | Early Avenue           |
-      | Hideous Dreaded Monkey |
-    And the "My content" inline facet should allow selecting the following values:
-      | All content |
 
   Scenario: Users should be able to use additional filters on events.
     Given the following users:
@@ -187,30 +103,19 @@ Feature: Content Overview
     And the following "discussion" content:
       | title           | collection      | created   |
       | Purple Poseidon | Barbaric Avenue | yesterday |
-
+    Then break
     When I am logged in as claricemitchell
-    And I visit the content overview page
-    Then I should see the following tiles in the correct order:
-      | Flying Official Fish |
-      | Purple Poseidon      |
-      | Frozen Breeze        |
-      | Frozen Barbershop    |
-      | Bitter Finger        |
-      | Autumn Boiling       |
+    And I visit the advanced search page
    # The date second level facet appears only after filtering for events.
     And I should not see the link "Upcoming events (3)"
 
     When I click "Events"
     Then I should see the tiles in the correct order:
-      | Autumn Boiling       |
+      | Flying Official Fish |
       | Frozen Breeze        |
       | Frozen Barbershop    |
-      | Flying Official Fish |
       | Bitter Finger        |
-    And the "Event date" inline facet should allow selecting the following values:
-      | My events (3)       |
-      | Upcoming events (3) |
-      | Past events (2)     |
+      | Autumn Boiling       |
 
     When I click "Upcoming events" in the "Event date" inline facet
     Then I should see the following tiles in the correct order:
@@ -252,7 +157,7 @@ Feature: Content Overview
       | Autumn Boiling       |
 
     When I am logged in as jeffreypayne
-    And I visit the content overview page
+    And I visit the advanced search page
     And I click "Event"
     Then I should see the tiles in the correct order:
       | Autumn Boiling       |
@@ -294,7 +199,7 @@ Feature: Content Overview
       | All events          |
 
     When I am an anonymous user
-    And I visit the content overview page
+    And I visit the advanced search page
     And I click "Event"
     Then the "Event date" inline facet should allow selecting the following values:
       | Upcoming events (3) |

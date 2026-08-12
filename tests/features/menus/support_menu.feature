@@ -70,7 +70,7 @@ Feature:
     And I press "Submit"
     Then I should be on "collections"
 
-    When I visit the content overview page
+    When I visit the advanced search page
     Then I should see the link "Take a tour"
     And I should see the link "Contact Portal Support"
     When I click "Contact Portal Support"

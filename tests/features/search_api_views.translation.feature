@@ -116,7 +116,7 @@ Feature: Search API views show translated content with english as fallback
       | Test news        | Test collection | en       | 1                    |
       | Bilingual news   | Test collection | en       | 1                    |
       | BG news          | ~~~             | bg       | 0                    |
-    Given I visit the content overview page
+    Given I visit the advanced search page
     Then I should see the following lines of text:
       | Test news       |
       | Bilingual news  |
