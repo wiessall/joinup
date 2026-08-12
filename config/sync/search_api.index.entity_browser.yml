@@ -190,11 +190,28 @@ processor_settings:
   auto_aggregated_fulltext_field: {  }
   custom_value: {  }
   entity_type: {  }
+  html_filter:
+    weights:
+      preprocess_index: -43
+      preprocess_query: -15
+    all_fields: false
+    fields:
+      - description
+    title: true
+    alt: true
+    tags:
+      b: 2.0
+      h1: 5.0
+      h2: 3.0
+      h3: 2.0
+      strong: 2.0
   interoperable_flag: {  }
   joinup_entity_bundle: {  }
   language_with_fallback: {  }
   rendered_item: {  }
-  solr_date_range: {  }
+  solr_date_range:
+    weights:
+      preprocess_index: 0
 tracker_settings:
   default:
     indexing_order: fifo

@@ -7,7 +7,6 @@ dependencies:
   module:
     - flag
     - joinup_flag
-    - search_api
     - search_api_solr
 third_party_settings:
   search_api_solr:
@@ -54,18 +53,31 @@ third_party_settings:
       include_language_independent: true
       use_language_undefined_as_fallback_language: false
       specific_languages:
+        en: '0'
+        bg: '0'
+        hr: '0'
         cs: '0'
         da: '0'
         nl: '0'
-        en: '0'
         et: '0'
+        fi: '0'
         fr: '0'
         de: '0'
         el: '0'
+        hu: '0'
+        ga: '0'
         it: '0'
+        lv: '0'
+        lt: '0'
+        mt: '0'
+        pl: '0'
+        pt: '0'
+        ro: '0'
+        sk: '0'
         sl: '0'
         es: '0'
-      use_universal_collation: false
+        sv: '0'
+      use_universal_collation: true
 id: bookmark
 name: Bookmark
 description: ''
@@ -129,6 +141,7 @@ processor_settings:
   entity_type: {  }
   joinup_entity_bundle: {  }
   language_with_fallback: {  }
+  rendered_item: {  }
   solr_date_range:
     weights:
       preprocess_index: 0
@@ -137,6 +150,7 @@ tracker_settings:
     indexing_order: fifo
 options:
   cron_limit: 50
+  delete_on_fail: true
   index_directly: true
   track_changes_in_references: true
 server: joinup
