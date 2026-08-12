@@ -5,31 +5,34 @@ declare(strict_types=1);
 namespace Drupal\joinup_core\Plugin\views\filter;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\views\Attribute\ViewsFilter;
 use Drupal\views\Plugin\views\filter\FilterPluginBase;
 
 /**
  * Filters by OG audience group using entity autocomplete.
- *
- * @ViewsFilter("og_audience_autocomplete")
  */
+#[ViewsFilter("og_audience_autocomplete")]
 class OgAudienceAutocomplete extends FilterPluginBase {
 
   /**
    * {@inheritdoc}
    */
-  public function canExpose() {
+  public function canExpose(): bool {
     return TRUE;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function valueForm(&$form, FormStateInterface $form_state) {
+  protected function valueForm(&$form, FormStateInterface $form_state): void {
     $form['value'] = [
       '#type' => 'entity_autocomplete',
       '#title' => $this->t('Group'),
       '#target_type' => 'node',
-      '#selection_handler' => 'default',
+      '#selection_handler' => 'default:node',
+      '#selection_settings' => [
+        'target_bundles' => ['collection', 'solution'],
+      ],
       '#placeholder' => $this->t('Search for a group'),
     ];
   }
@@ -37,7 +40,7 @@ class OgAudienceAutocomplete extends FilterPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function acceptExposedInput($input) {
+  public function acceptExposedInput($input): bool {
     $identifier = $this->options['expose']['identifier']
       ?? 'og_audience_target_id';
 
@@ -53,7 +56,7 @@ class OgAudienceAutocomplete extends FilterPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function query() {
+  public function query(): void {
     $this->ensureMyTable();
 
     if (empty($this->value)) {
@@ -61,10 +64,9 @@ class OgAudienceAutocomplete extends FilterPluginBase {
     }
 
     $this->query->addWhere(
-      0,
-      "{$this->table}.target_id",
-      $this->value,
-      '='
+      $this->options['group'],
+      "$this->tableAlias.og_audience_target_id",
+      $this->value, '='
     );
   }
 
