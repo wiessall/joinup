@@ -24,6 +24,28 @@ use Drupal\filter\Plugin\FilterInterface;
 class AccessibilityFilter extends FilterBase {
 
   /**
+   * Tags that render content of their own, without contributing any text.
+   *
+   * A paragraph holding one of these is not empty, even though `textContent`
+   * and `strip_tags()` both reduce it to nothing. `drupal-media` matters most:
+   * it is still a bare placeholder at this point, because `media_embed` runs
+   * later in the chain and only then expands it into an actual image.
+   */
+  private const array EMBEDDED_CONTENT_TAGS = [
+    'img',
+    'drupal-media',
+    'drupal-entity',
+    'iframe',
+    'video',
+    'audio',
+    'object',
+    'embed',
+    'picture',
+    'svg',
+    'canvas',
+  ];
+
+  /**
    * {@inheritdoc}
    */
   public function process($text, $langcode): FilterProcessResult {
@@ -64,6 +86,13 @@ class AccessibilityFilter extends FilterBase {
 
     if ($normalized !== '') {
       return FALSE;
+    }
+
+    // Embedded content carries no text but is very much visible.
+    foreach (self::EMBEDDED_CONTENT_TAGS as $tag) {
+      if ($element->getElementsByTagName($tag)->length > 0) {
+        return FALSE;
+      }
     }
 
     $inner_html = '';

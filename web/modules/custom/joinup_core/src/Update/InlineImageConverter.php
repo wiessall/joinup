@@ -52,8 +52,10 @@ use Drupal\user\EntityOwnerInterface;
  * workflow transition being made, and a save that transitions nothing matches
  * no configured notification — so nothing is sent. Note it is that, and not
  * `setSyncing()`, which keeps them quiet: `joinup_notification` never consults
- * the syncing flag. Entities are also saved without a new revision, which keeps
- * paragraph revision ids valid for their parents.
+ * the syncing flag. `skip_notification` is set anyway, so that a future
+ * notification keyed on something other than a transition cannot start mailing
+ * people about a data migration. Entities are also saved without a new
+ * revision, which keeps paragraph revision ids valid for their parents.
  */
 final class InlineImageConverter implements ContainerInjectionInterface {
 
@@ -214,10 +216,8 @@ final class InlineImageConverter implements ContainerInjectionInterface {
       return $stats;
     }
 
-    // `og_audience` is required on the image bundle, but the constraint only
-    // fires when the field is on the form: media created programmatically, or
-    // embedded in an entity that has no group of its own, legitimately have
-    // none. A missing group is therefore not a reason to skip conversion.
+    // The `og_audience` constraint only fires when the field is on the form,
+    // so group-less media are legitimate and not a reason to skip conversion.
     $group_id = $this->resolveGroupId($entity);
     $uid = $entity instanceof EntityOwnerInterface ? (int) $entity->getOwnerId() : 0;
 
@@ -234,10 +234,8 @@ final class InlineImageConverter implements ContainerInjectionInterface {
           }
           $value = (string) $item->value;
 
-          // Any image that lost its `src` may still be named by an older
-          // revision. Recovery is attempted whenever at least one is missing,
-          // not only when all of them are: a value that kept one working image
-          // can still have lost several others alongside it.
+          // Lost sources may still be named by an older revision. Recovery runs
+          // when any image is missing, since one survivor can mask the others.
           $missing = $this->countUnrecoverableImages($value);
           if ($missing > 0) {
             $recovered = $this->recoverFromRevisions($entity, $field, $langcode, (int) $delta, $value);
@@ -267,6 +265,9 @@ final class InlineImageConverter implements ContainerInjectionInterface {
       if ($entity->getEntityType()->isRevisionable()) {
         $entity->setNewRevision(FALSE);
       }
+      // Belt and braces: a body-only save transitions nothing, so nothing
+      // matches anyway. The flag makes that explicit rather than implicit.
+      $entity->skip_notification = TRUE;
       $entity->save();
       $this->logger->info('Inline images converted on @type @id: @stats', [
         '@type' => $entity_type_id,
