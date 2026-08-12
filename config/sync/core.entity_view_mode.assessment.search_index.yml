@@ -1,0 +1,11 @@
+uuid: d637eb89-6771-4ec3-b304-c643076144be
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+id: assessment.search_index
+label: 'Search index'
+description: null
+targetEntityType: assessment
+cache: true
