@@ -127,7 +127,7 @@ readonly class JoinupMessageDelivery implements JoinupMessageDeliveryInterface {
    *   The plugin ID.
    */
   protected function getNotifierId(UserInterface $account): string {
-    $frequency = $account->get('field_user_frequency')->value;
+    $frequency = $account->get('field_user_frequency')->value ?? '';
     if (array_key_exists($frequency, self::DIGEST_NOTIFIER_IDS)) {
       return self::DIGEST_NOTIFIER_IDS[$frequency];
     }
