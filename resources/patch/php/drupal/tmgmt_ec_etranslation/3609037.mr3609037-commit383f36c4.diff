@@ -1,3 +1,4 @@
+
 diff --git a/config/schema/tmgmt_ec_etranslation.schema.yml b/config/schema/tmgmt_ec_etranslation.schema.yml
 index 6d51cedb79ba60e2ce05f13caa770f3a0ad84399..9e2a6fb4274c9207b2c293bb0d2c361396d32ebe 100644
 --- a/config/schema/tmgmt_ec_etranslation.schema.yml
@@ -64,7 +65,7 @@ index 305ce59b5080ee2d0de6c1889fcc5e653a5b0ea0..26c62d64f01f295da0f0c25bb5422ae2
        '#type' => 'details',
        '#title' => $this->t('Non-translatable text parts'),
 diff --git a/src/Hook/ETranslationHooks.php b/src/Hook/ETranslationHooks.php
-index a73aca2a08ca0d9f66eb79415e7bc9fbd37cc791..ff12d930a8a74171db817d357d12911d805cc1d4 100644
+index a73aca2a08ca0d9f66eb79415e7bc9fbd37cc791..a5fb3fbc106c6bd998aa4cd1b0825eeaf6976981 100644
 --- a/src/Hook/ETranslationHooks.php
 +++ b/src/Hook/ETranslationHooks.php
 @@ -5,11 +5,14 @@ declare(strict_types=1);
@@ -90,7 +91,7 @@ index a73aca2a08ca0d9f66eb79415e7bc9fbd37cc791..ff12d930a8a74171db817d357d12911d
    ) {}
 
    /**
-@@ -30,32 +34,122 @@ class ETranslationHooks {
+@@ -30,32 +34,119 @@ class ETranslationHooks {
     */
    #[Hook('cron')]
    public function cron(): void {
@@ -148,10 +149,7 @@ index a73aca2a08ca0d9f66eb79415e7bc9fbd37cc791..ff12d930a8a74171db817d357d12911d
 +      ->condition('tjid.entity.translator', $translator->id())
 +      ->condition('tjid.entity.job_type', JobInterface::TYPE_CONTINUOUS)
 +      ->condition('tjid.entity.state', JobInterface::STATE_CONTINUOUS)
-+      ->condition('state', [
-+        JobItemInterface::STATE_ACTIVE,
-+        JobItemInterface::STATE_INACTIVE,
-+      ], 'IN')
++      ->condition('state', JobItemInterface::STATE_ACTIVE)
 +      ->condition('changed', $time, '<')
 +      ->sort('changed')
 +      ->range(0, 50)
@@ -215,12 +213,12 @@ index a73aca2a08ca0d9f66eb79415e7bc9fbd37cc791..ff12d930a8a74171db817d357d12911d
 +      ]
 +    );
 +
-+    $state = JobItemInterface::STATE_INACTIVE;
 +    $message = 'Rescheduled: attempt @attempts (interval @interval)';
 +    $severity = 'status';
 +
 +    if ($attempted >= $settings['max_attempts']) {
-+      $state = JobItemInterface::STATE_ABORTED;
++      $state = (string) JobItemInterface::STATE_ABORTED;
++      $jobItem->setState($state);
 +      $message = 'Aborted: No translation received after @attempts attempts (interval @interval)';
 +      $severity = 'warning';
      }
@@ -231,7 +229,7 @@ index a73aca2a08ca0d9f66eb79415e7bc9fbd37cc791..ff12d930a8a74171db817d357d12911d
 +    ];
 +
 +    $jobItem->addMessage($message, $variables, $severity);
-+    $jobItem->setState($state);
++    $jobItem->save();
    }
 
  }
@@ -260,7 +258,7 @@ index 680a79b6d4d8b5e6169f7ee7f19cbcbb07bdbb53..1baf302a9e23fa1dab53edd2dfb08edf
      ];
    }
 diff --git a/tests/src/Kernel/TimeoutTest.php b/tests/src/Kernel/TimeoutTest.php
-index 01856407bc1ffd6a5b0e6e5a6417f1aa5df2b3ef..0ed435203dff2dadeec71f2ebd4f18b21a027d88 100644
+index 01856407bc1ffd6a5b0e6e5a6417f1aa5df2b3ef..bca12abbe7c9fc8148029c8b09cb8cb3f28fabd9 100644
 --- a/tests/src/Kernel/TimeoutTest.php
 +++ b/tests/src/Kernel/TimeoutTest.php
 @@ -4,6 +4,7 @@ declare(strict_types=1);
@@ -496,7 +494,7 @@ index 01856407bc1ffd6a5b0e6e5a6417f1aa5df2b3ef..0ed435203dff2dadeec71f2ebd4f18b2
 +   * @param int $expected_state
 +   *   The expected state.
 +   */
-+  protected function assertJobItemAttempt(string $itemId, int $expected_attempts, string $expected_message, int $expected_state = JobItemInterface::STATE_INACTIVE): void {
++  protected function assertJobItemAttempt(string $itemId, int $expected_attempts, string $expected_message, int $expected_state = JobItemInterface::STATE_ACTIVE): void {
 +    $item = JobItem::load($itemId);
 +
 +    $this->assertSame($expected_state, (int) $item->getState());
