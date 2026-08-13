@@ -156,6 +156,10 @@ class DashboardForm extends FormBase {
         '#title' => $this->t('Schedule translation'),
         '#url' => Url::fromRoute('joinup_i18n.schedule_translation'),
       ],
+      [
+        '#title' => $this->t('Export assessment reports'),
+        '#url' => Url::fromRoute('assessments.export'),
+      ],
     ];
 
     $links = array_map(function (array $link): array {

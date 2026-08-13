@@ -6,6 +6,7 @@ dependencies:
     - entityqueue.entity_queue.homepage_topics
     - entityqueue.entity_queue.spotlight
     - filter.format.plain_text_glossary
+    - filter.format.webform_default
     - media.type.collection_logo
     - media.type.discussion_logo
     - media.type.event_logo
@@ -201,6 +202,7 @@ permissions:
   - 'delete private message thread for all'
   - 'delete sitewide alert entities'
   - 'delete terms in tags'
+  - 'download assessment PDFs'
   - 'download subscribers report'
   - 'edit any collection content'
   - 'edit any collection_logo media'
@@ -344,6 +346,7 @@ permissions:
   - 'update solution_settings meta-entity'
   - 'update spotlight entityqueue'
   - 'use text format plain_text_glossary'
+  - 'use text format webform_default'
   - 'vbo joinup archive action'
   - 'vbo joinup change group action'
   - 'vbo joinup unarchive action'

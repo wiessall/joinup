@@ -221,6 +221,10 @@ final class JsonLdObjectInspector {
       return $mappedProperty;
     }
 
+    if (str_contains($property, '://')) {
+      return $property;
+    }
+
     $baseUri = is_string($this->context ?? NULL)
         ? $this->context
         : NULL;
