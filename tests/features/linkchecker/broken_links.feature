@@ -15,6 +15,7 @@ Feature: Broken links report
     When I am logged in as a moderator
     And I go to "admin/reports/linkchecker"
     Then I should see the link "Faulty agenda"
+    And I should see the link "Broken links group"
     And I should see the text "field_event_agenda"
     But I should not see the link "Draft agenda"
 
