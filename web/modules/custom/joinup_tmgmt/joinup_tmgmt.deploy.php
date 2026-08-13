@@ -40,7 +40,7 @@ function joinup_tmgmt_deploy_201601(array &$sandbox): string {
   $connection = \Drupal::database();
   $storage = \Drupal::service('entity_type.manager')
     ->getStorage('tmgmt_job_item');
-  $batch_size = 250;
+  $batch_size = 100;
 
   if (!isset($sandbox['total'])) {
     $sandbox['total'] = (int) $connection->select('tmgmt_message', 'tm')
@@ -80,6 +80,7 @@ function joinup_tmgmt_deploy_201601(array &$sandbox): string {
     $sandbox['current']++;
   }
 
+  $storage->resetCache($items);
   $sandbox['#finished'] = empty($sandbox['total']) ? 1 : ($sandbox['current'] / $sandbox['total']);
 
   return sprintf('Processed %d of %d job items.', $sandbox['current'], $sandbox['total']);
