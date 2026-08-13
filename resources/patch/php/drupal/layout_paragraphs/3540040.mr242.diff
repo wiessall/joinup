@@ -1,52 +1,32 @@
 diff --git a/css/builder.css b/css/builder.css
-index e1f60b6ff0b8ddab0e899a6816a6613ccd25eff3..9ce7cdf0b3e787d3feeef29d9f96d9bae5e4ebbd 100644
+index 3739251fbe469001b8b2ed061ffc74b10d5e43e1..4a6c142f6460196486c7bd03ad33f0866dd7b748 100644
 --- a/css/builder.css
 +++ b/css/builder.css
-@@ -34,6 +34,7 @@
- }
+@@ -44,6 +44,7 @@
  .js-lpb-component {
    position: relative;
+   margin: 0 auto;
 +  user-select: none;
-   transition: all 0.15s linear;
-   outline: 1px solid blue;
-   outline-color: transparent;
-@@ -45,7 +46,7 @@
- .js-lpb-component.is-navigating {
-   outline: 3px solid blue;
  }
--.js-lpb-component {
-+.js-lpb-component--draggable {
-   cursor: grab;
- }
- .js-lpb-component:hover .js-lpb-region,
+ .lpb-hover-label {
+   z-index: 1000;
 diff --git a/js/builder.js b/js/builder.js
-index 440e9fe5b9a9d74ba1667658bb3fbd5374df913c..9d35ddb8b32d0eb1696ec3eebcafda908b26b905 100644
+index 3f28ec21fe3337eb9b96c67ed5b3681c130a365b..da422dd989bb24c96155bb7144a7c5080371beca 100644
 --- a/js/builder.js
 +++ b/js/builder.js
-@@ -426,6 +426,10 @@
-   }
- 
-   function initDragAndDrop($element, settings) {
-+    const layoutChangeAllowed = settings.layout_change_access ?? true;
+@@ -509,6 +509,10 @@
+    * @param {Object} settings The builder settings.
+    */
+   function initSortable(id, containers, settings) {
++    const layoutChangeAllowed = settings?.layout_change_access ?? true;
 +    if (!layoutChangeAllowed) {
-+      return null;
++      return;
 +    }
-     const containers = once(
-       'is-dragula-enabled',
-       '.js-lpb-component-list, .js-lpb-region',
-@@ -601,7 +605,9 @@
-       once('is-dragula-enabled', '.js-lpb-region').forEach((c) => {
-         const builderElement = c.closest('[data-lpb-id]');
-         const drake = $(builderElement).data('drake');
--        drake.containers.push(c);
-+        if (drake) {
-+          drake.containers.push(c);
-+        }
-       });
- 
-       // If UI elements have been attached to the DOM, we need to attach behaviors.
+     containers.forEach((container) => {
+       const layoutContainer = container.closest(`[${idAttr}]`);
+       Drupal.LPSortableInstances.add(
 diff --git a/layout_paragraphs.module b/layout_paragraphs.module
-index 0d2ae300f10667dc83e4146cbca0929537f79b99..9c9579448a3d312138108348fe11682d37a6a0f3 100644
+index 5a07fb1ba968af47ac5cc084abcf048f77f60b07..640d192aae66ffc32056b4dce15877fd1f3d747e 100644
 --- a/layout_paragraphs.module
 +++ b/layout_paragraphs.module
 @@ -72,6 +72,7 @@ function layout_paragraphs_theme() {
@@ -54,26 +34,18 @@ index 0d2ae300f10667dc83e4146cbca0929537f79b99..9c9579448a3d312138108348fe11682d
          'duplicate_access' => FALSE,
          'delete_access' => FALSE,
 +        'move_access' => FALSE,
+         'convert_access' => FALSE,
        ],
      ],
-     'layout_paragraphs_insert_component_btn' => [
-@@ -163,6 +164,7 @@ function layout_paragraphs_preprocess_layout_paragraphs_builder_controls(&$varia
+@@ -170,6 +171,7 @@ function layout_paragraphs_preprocess_layout_paragraphs_builder_controls(&$varia
          'aria-describedby' => $id . '--tip',
        ],
        '#weight' => 10,
 +      '#access' => $variables['move_access'],
      ],
-     'nav_tooltip' => [
-       '#type' => 'html_tag',
-@@ -175,6 +177,7 @@ function layout_paragraphs_preprocess_layout_paragraphs_builder_controls(&$varia
-       ],
-       '#value' => t('Drag or click and use arrow keys to move. <br />Press Return or Tab when finished.'),
-       '#weight' => 20,
-+      '#access' => $variables['move_access'],
-     ],
      'label' => [
        '#type' => 'html_tag',
-@@ -194,6 +197,7 @@ function layout_paragraphs_preprocess_layout_paragraphs_builder_controls(&$varia
+@@ -189,6 +191,7 @@ function layout_paragraphs_preprocess_layout_paragraphs_builder_controls(&$varia
          'title' => t('Move up'),
        ],
        '#weight' => 40,
@@ -81,7 +53,7 @@ index 0d2ae300f10667dc83e4146cbca0929537f79b99..9c9579448a3d312138108348fe11682d
      ],
      'move_down' => [
        '#type' => 'link',
-@@ -204,6 +208,7 @@ function layout_paragraphs_preprocess_layout_paragraphs_builder_controls(&$varia
+@@ -199,6 +202,7 @@ function layout_paragraphs_preprocess_layout_paragraphs_builder_controls(&$varia
          'title' => t('Move down'),
        ],
        '#weight' => 50,
@@ -105,12 +77,12 @@ index 4d64a92b854326bd954b63669347097ffdd7d000..e535bfc006c8231f881fe41dc155565e
    }
  
 diff --git a/src/Element/LayoutParagraphsBuilder.php b/src/Element/LayoutParagraphsBuilder.php
-index f18841a8287491b879ef4047b4a31eef909e009e..99768205c218f65e957267c8ae6d986a90b10490 100644
+index a782cbdfc54de1faf71cd5918311c46168536929..82573936f43e313c604749dddb5e84c9054ec939 100644
 --- a/src/Element/LayoutParagraphsBuilder.php
 +++ b/src/Element/LayoutParagraphsBuilder.php
-@@ -65,13 +65,6 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
+@@ -82,13 +82,6 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
     */
-   protected $entityTypeBundleInfo;
+   protected $eventDispatcher;
  
 -  /**
 -   * Indicates whether the element is in translation mode.
@@ -122,15 +94,15 @@ index f18841a8287491b879ef4047b4a31eef909e009e..99768205c218f65e957267c8ae6d986a
    /**
     * The layout paragraphs layout object.
     *
-@@ -144,7 +137,6 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
+@@ -173,7 +166,6 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
     */
    public function preRender($element) {
      $this->layoutParagraphsLayout = $this->tempstore->get($element['#layout_paragraphs_layout']);
 -    $this->isTranslating = $element['#is_translating'] ?? FALSE;
+     $this->buttonLabels = $this->layoutParagraphsLayout->getSetting('button_labels');
      $element_uuid = $element['#uuid'];
      $preview_view_mode = $this->layoutParagraphsLayout->getSetting('preview_view_mode', 'default');
- 
-@@ -197,7 +189,7 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
+@@ -227,7 +219,7 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
        'data-lpb-id' => $this->layoutParagraphsLayout->id(),
      ] + ($element['#attributes'] ?? []);
      $element['#attached']['library'] = ['layout_paragraphs/builder'];
@@ -139,7 +111,7 @@ index f18841a8287491b879ef4047b4a31eef909e009e..99768205c218f65e957267c8ae6d986a
      $element['#is_empty'] = $this->layoutParagraphsLayout->isEmpty();
      $element['#empty_message'] = $this->layoutParagraphsLayout->getSetting('empty_message', $this->t('Start adding content.'));
      $element['#root_components'] = [];
-@@ -251,6 +243,11 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
+@@ -272,6 +264,11 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
      $build['#attributes']['data-type'] = $entity->bundle();
      $build['#attributes']['data-lpb-ui-id'] = $entity->uuid() ?? 'new-' . $entity->bundle();
      $build['#attributes']['class'][] = 'js-lpb-component';
@@ -151,11 +123,12 @@ index f18841a8287491b879ef4047b4a31eef909e009e..99768205c218f65e957267c8ae6d986a
      $build['#layout_paragraphs_component'] = TRUE;
      if ($entity->isNew()) {
        $build['#attributes']['class'][] = 'is_new';
-@@ -281,8 +278,14 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
+@@ -302,9 +299,15 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
        '#edit_access' => $this->editAccess($entity),
        '#duplicate_access' => $this->duplicateAccess($entity) && $this->checkCardinality(),
        '#delete_access' => $this->deleteAccess($entity),
 +      '#move_access' => $layoutChangeIsAllowed,
+       '#convert_access' => $this->convertAccess($component, $entity),
      ];
      $build['#attached']['drupalSettings']['lpBuilder']['uiElements'][$entity->uuid()] = [];
 +    if ($component->isLayout()) {
@@ -166,7 +139,7 @@ index f18841a8287491b879ef4047b4a31eef909e009e..99768205c218f65e957267c8ae6d986a
      $this->addJsUiElement($build, $this->doRender($controls), 'controls', 'prepend');
  
      if ($this->createAccess() && $this->checkCardinality()) {
-@@ -422,6 +425,7 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
+@@ -431,6 +434,7 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
          ]),
        ],
        '#url' => Url::fromRoute('layout_paragraphs.builder.choose_component', $route_params, ['query' => $query_params]),
@@ -174,15 +147,7 @@ index f18841a8287491b879ef4047b4a31eef909e009e..99768205c218f65e957267c8ae6d986a
      ];
    }
  
-@@ -452,6 +456,7 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
-         'dialogClass' => 'lpb-dialog',
-       ],
-       '#url' => Url::fromRoute('layout_paragraphs.builder.choose_component', $route_params, ['query' => $query_params]),
-+      '#access' => $this->layoutParagraphsLayout->layoutChangeAccess(),
-     ];
-   }
- 
-@@ -472,14 +477,19 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
+@@ -480,14 +484,19 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
     *   The translation warning.
     */
    protected function translationWarning() {
@@ -209,7 +174,7 @@ index f18841a8287491b879ef4047b4a31eef909e009e..99768205c218f65e957267c8ae6d986a
    }
  
    /**
-@@ -564,7 +574,7 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
+@@ -652,7 +661,7 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
     *   TRUE if translating.
     */
    protected function isTranslating() {
@@ -218,7 +183,7 @@ index f18841a8287491b879ef4047b4a31eef909e009e..99768205c218f65e957267c8ae6d986a
    }
  
    /**
-@@ -578,7 +588,7 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
+@@ -666,7 +675,7 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
     *   True if asymmetric translation is supported.
     */
    protected function supportsAsymmetricTranslations() {
@@ -227,7 +192,7 @@ index f18841a8287491b879ef4047b4a31eef909e009e..99768205c218f65e957267c8ae6d986a
    }
  
    /**
-@@ -598,7 +608,7 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
+@@ -686,7 +695,7 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
     * @param string $method
     *   The javascript method to use to attach $element to its container.
     */
@@ -236,7 +201,7 @@ index f18841a8287491b879ef4047b4a31eef909e009e..99768205c218f65e957267c8ae6d986a
      $id = $build['#attributes']['data-lpb-ui-id'];
      $build['#attributes']['data-has-js-ui-element'] = TRUE;
      $build['#attached']['drupalSettings']['lpBuilder']['uiElements'][$id][$key] = [
-@@ -613,7 +623,7 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
+@@ -701,7 +710,7 @@ class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFact
     * @param array $render_array
     *   The render array to process.
     *
@@ -246,7 +211,7 @@ index f18841a8287491b879ef4047b4a31eef909e009e..99768205c218f65e957267c8ae6d986a
     */
    public function doRender(array $render_array) {
 diff --git a/src/LayoutParagraphsLayout.php b/src/LayoutParagraphsLayout.php
-index fdadf197e1c388d95d11eae697177c4ec7de5371..28163a4b809b4eeb00e66b5327b1aae1cdeebd63 100644
+index 1c528773903ccb36f80f68fe5ad10e260020be6f..2128232fa09168bc35c2f7ee1f30439c3d53596b 100644
 --- a/src/LayoutParagraphsLayout.php
 +++ b/src/LayoutParagraphsLayout.php
 @@ -2,10 +2,15 @@
@@ -363,18 +328,10 @@ index fdadf197e1c388d95d11eae697177c4ec7de5371..28163a4b809b4eeb00e66b5327b1aae1
     * Class constructor.
     *
 diff --git a/src/Plugin/Field/FieldWidget/LayoutParagraphsWidget.php b/src/Plugin/Field/FieldWidget/LayoutParagraphsWidget.php
-index 52b04f2b27ee2d91278a55b3caab3a0d8f27e234..1ce5c90c3144619ddd64f227470fd15587e13b92 100644
+index 853dcd2812af4beedd229aca3fc79f05e2de012c..ead2bc10644096acc94b698c571fc08fe18d3400 100644
 --- a/src/Plugin/Field/FieldWidget/LayoutParagraphsWidget.php
 +++ b/src/Plugin/Field/FieldWidget/LayoutParagraphsWidget.php
-@@ -190,7 +190,6 @@ class LayoutParagraphsWidget extends WidgetBase implements ContainerFactoryPlugi
-     // Paragraphs Layout instance, save it to tempstore, and store the key.
-     if (empty($layout_paragraphs_storage_key)) {
-       $this->layoutParagraphsLayout = new LayoutParagraphsLayout($items, $this->getSettings());
--      $this->tempstore->set($this->layoutParagraphsLayout);
-       $layout_paragraphs_storage_key = $this->tempstore->getStorageKey($this->layoutParagraphsLayout);
-     }
-     // On subsequent form renders, this loads the correct Layout Paragraphs
-@@ -216,6 +215,8 @@ class LayoutParagraphsWidget extends WidgetBase implements ContainerFactoryPlugi
+@@ -219,6 +219,8 @@ class LayoutParagraphsWidget extends WidgetBase implements ContainerFactoryPlugi
      if ($source = $form_state->get(['content_translation', 'source'])) {
        $element['layout_paragraphs_builder']['#source_langcode'] = $source->getId();
      }
@@ -383,8 +340,88 @@ index 52b04f2b27ee2d91278a55b3caab3a0d8f27e234..1ce5c90c3144619ddd64f227470fd155
      return $element;
    }
  
+@@ -360,33 +362,57 @@ class LayoutParagraphsWidget extends WidgetBase implements ContainerFactoryPlugi
+       $this->layoutParagraphsLayout = $this->tempstore->getWithStorageKey($layout_paragraphs_storage_key);
+       $values = [];
+       $seen_uuids = [];
+-      foreach ($this->layoutParagraphsLayout->getParagraphsReferenceField() as $item) {
+-        if ($item->entity) {
+-          $entity = $item->entity;
+-          // Skip duplicate paragraphs (same UUID) to prevent integrity
+-          // constraint violations during save.
+-          $uuid = $entity->uuid();
+-          if (isset($seen_uuids[$uuid])) {
+-            continue;
++      // When translating an untranslatable paragraphs field, the layout
++      // structure cannot be changed (see ::layoutChangeAccess()). Rebuild from
++      // the original components and order, reusing the edited paragraph values
++      // from the tempstore, so the untranslatable host field is left unchanged
++      // and EntityUntranslatableFieldsConstraint is not triggered on save.
++      $structure_locked = $this->isTranslating($form_state) && !$this->layoutParagraphsLayout->layoutChangeAccess(FALSE);
++      $components = [];
++      if ($structure_locked) {
++        $edited = [];
++        foreach ($this->layoutParagraphsLayout->getParagraphsReferenceField() as $item) {
++          if ($item->entity) {
++            $edited[$item->entity->uuid()] = $item->entity;
+           }
+-          $seen_uuids[$uuid] = TRUE;
+-          // Set each paragraph langcode if we are not translating.
+-          if (!$this->isTranslating($form_state)) {
+-            $langcode_key = $entity->getEntityType()->getKey('langcode');
+-            $entity->set($langcode_key, $items->getLangcode());
++        }
++        foreach ($items as $item) {
++          if ($item->entity) {
++            $components[] = $edited[$item->entity->uuid()] ?? $item->entity;
+           }
+-          // Ensure existing paragraphs are not treated as new during save.
+-          if ($entity->id()) {
+-            $entity->enforceIsNew(FALSE);
++        }
++      }
++      else {
++        foreach ($this->layoutParagraphsLayout->getParagraphsReferenceField() as $item) {
++          if ($item->entity) {
++            $components[] = $item->entity;
+           }
+-          $entity->setNeedsSave(TRUE);
+-          $values[] = [
+-            'entity' => $entity,
+-            'target_id' => $entity->id(),
+-            'target_revision_id' => $entity->getRevisionId(),
+-          ];
+         }
+       }
++      foreach ($components as $entity) {
++        // Skip duplicate paragraphs (same UUID) to prevent integrity
++        // constraint violations during save.
++        $uuid = $entity->uuid();
++        if (isset($seen_uuids[$uuid])) {
++          continue;
++        }
++        $seen_uuids[$uuid] = TRUE;
++        // Set each paragraph langcode if we are not translating.
++        if (!$this->isTranslating($form_state)) {
++          $langcode_key = $entity->getEntityType()->getKey('langcode');
++          $entity->set($langcode_key, $items->getLangcode());
++        }
++        // Ensure existing paragraphs are not treated as new during save.
++        if ($entity->id()) {
++          $entity->enforceIsNew(FALSE);
++        }
++        $entity->setNeedsSave(TRUE);
++        $values[] = [
++          'entity' => $entity,
++          'target_id' => $entity->id(),
++          'target_revision_id' => $entity->getRevisionId(),
++        ];
++      }
+       $form_state->setValue($path, $values);
+     }
+     return parent::extractFormValues($items, $form, $form_state);
 diff --git a/tests/src/FunctionalJavascript/BuilderTestBase.php b/tests/src/FunctionalJavascript/BuilderTestBase.php
-index 68f7487c6e9f6b5ffcf5f4511b234b344ab67a97..d491190d8613742a31358202dfc308ca602c1a9a 100644
+index 68e2cc5316508f9f5146a23711cc5d2c069ffe2f..5f60b74590c7f82106948d4f0fc4919cbb4fe038 100644
 --- a/tests/src/FunctionalJavascript/BuilderTestBase.php
 +++ b/tests/src/FunctionalJavascript/BuilderTestBase.php
 @@ -80,7 +80,7 @@ abstract class BuilderTestBase extends WebDriverTestBase {
