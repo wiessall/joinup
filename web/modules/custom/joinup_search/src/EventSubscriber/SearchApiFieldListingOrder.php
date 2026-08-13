@@ -7,9 +7,8 @@ namespace Drupal\joinup_search\EventSubscriber;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\facets\Utility\FacetsDateHandler;
 use Drupal\joinup_group\Entity\GroupContentInterface;
-use Drupal\joinup_search\PinnedContentLookup;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
-use Drupal\node\NodeInterface;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
 use Drupal\search_api_solr\Event\PreQueryEvent;
@@ -26,7 +25,6 @@ readonly class SearchApiFieldListingOrder implements EventSubscriberInterface {
   public function __construct(
     #[Autowire(service: 'facets.utility.date_handler')]
     protected FacetsDateHandler $facetDateHandler,
-    protected PinnedContentLookup $pinnedContentLookup,
   ) {}
 
   /**
@@ -53,9 +51,9 @@ readonly class SearchApiFieldListingOrder implements EventSubscriberInterface {
       return;
     }
 
-    $entity = $this->getEntityFromQuery($searchApiQuery);
-    if ($entity) {
-      $this->addPinnedSorting($solariumApiQuery, $entity);
+    $group = $this->getGroupFromQuery($searchApiQuery);
+    if ($group) {
+      $this->addPinnedSorting($solariumApiQuery, $group);
     }
 
     // Sort by score.
@@ -107,15 +105,15 @@ readonly class SearchApiFieldListingOrder implements EventSubscriberInterface {
   }
 
   /**
-   * Gets the RDF entity from query.
+   * Gets the group the query is running in.
    *
    * @param \Drupal\search_api\Query\QueryInterface $searchApiQuery
    *   Search API query.
    *
-   * @return \Drupal\node\NodeInterface|null
-   *   The related node entity of the query.
+   * @return \Drupal\joinup_group\Entity\GroupInterface|null
+   *   The listing's group, or NULL if there is no group.
    */
-  protected function getEntityFromQuery(SearchApiQueryInterface $searchApiQuery): ?NodeInterface {
+  protected function getGroupFromQuery(SearchApiQueryInterface $searchApiQuery): ?GroupInterface {
     $entity = $searchApiQuery->getOption('search_api_field entity');
     while ($entity instanceof ParagraphInterface) {
       $entity = $entity->getParentEntity();
@@ -125,24 +123,19 @@ readonly class SearchApiFieldListingOrder implements EventSubscriberInterface {
       $entity = $entity->getGroup();
     }
 
-    return $entity instanceof NodeInterface ? $entity : NULL;
+    return $entity instanceof GroupInterface ? $entity : NULL;
   }
 
   /**
    * Adds pinned sorting.
    *
-   * `termfreq()` always returns zero against `its_nid`: the `its_*` dynamic
-   * field is a `plong` point field, which carries no indexed terms. The `terms`
-   * query parser, in contrast, does operate on point fields and scores a
-   * constant per match.
-   *
    * @param \Solarium\Core\Query\QueryInterface $solariumApiQuery
    *   Solarium query.
-   * @param \Drupal\node\NodeInterface $entity
-   *   The related node entity of the query.
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
+   *   The group the listing belongs to.
    */
-  protected function addPinnedSorting(SolariumApiQueryInterface $solariumApiQuery, NodeInterface $entity): void {
-    $pinnedNodeIds = $this->pinnedContentLookup->getPinnedNodeIds($entity->id());
+  protected function addPinnedSorting(SolariumApiQueryInterface $solariumApiQuery, GroupInterface $group): void {
+    $pinnedNodeIds = $group->getPinnedContentIds();
     if (!$pinnedNodeIds) {
       return;
     }

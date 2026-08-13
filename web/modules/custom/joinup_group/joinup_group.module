@@ -37,6 +37,7 @@ use Drupal\joinup_group\Entity\Sharing;
 use Drupal\joinup_group\Form\GroupDeleteForm;
 use Drupal\joinup_group\Form\UserCancelForm;
 use Drupal\joinup_group\JoinupGroupHelper;
+use Drupal\joinup_group\Plugin\Field\PinnedContentIdsFieldItemList;
 use Drupal\joinup_group\Plugin\Field\SharedInFieldItemList;
 use Drupal\joinup_notification\MailContentTypeHeader;
 use Drupal\joinup_solution\Entity\SolutionInterface;
@@ -110,9 +111,19 @@ function joinup_group_entity_bundle_info_alter(array &$bundles): void {
  */
 function joinup_group_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entity_type, ?string $bundle): void {
   if ($entity_type->id() === 'node') {
-    if (in_array($bundle, JoinupGroupHelper::GROUP_BUNDLES) && !empty($fields['short_id'])) {
-      /** @var \Drupal\field\Entity\FieldConfig[] $fields */
-      $fields['short_id']->addConstraint('UniqueShortIdInsensitive');
+    if (in_array($bundle, JoinupGroupHelper::GROUP_BUNDLES, TRUE)) {
+      if (!empty($fields['short_id'])) {
+        /** @var \Drupal\field\Entity\FieldConfig[] $fields */
+        $fields['short_id']->addConstraint('UniqueShortIdInsensitive');
+      }
+
+      $fields['pinned_content_ids'] = BaseFieldDefinition::create('integer')
+        ->setLabel(t('Pinned content IDs'))
+        ->setName('pinned_content_ids')
+        ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+        ->setComputed(TRUE)
+        ->setTargetEntityTypeId('node')
+        ->setClass(PinnedContentIdsFieldItemList::class);
     }
 
     if (in_array($bundle, ShareableContentInterface::NODE_BUNDLES, TRUE)) {

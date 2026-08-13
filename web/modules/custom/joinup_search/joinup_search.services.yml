@@ -19,5 +19,3 @@ services:
   Drupal\joinup_search\EventSubscriber\JoinupGlobalSearchApiAlter: { }
 
   Drupal\joinup_search\SearchIndexCommitter: { }
-
-  Drupal\joinup_search\PinnedContentLookup: { }

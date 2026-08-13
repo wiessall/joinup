@@ -8,7 +8,6 @@ dependencies:
   - facets:facets
   - joinup:joinup_core
   - joinup:joinup_user
-  - meta_entity:meta_entity
   - drupal:node
   - search_api:search_api
   - joinup:search_api_field
