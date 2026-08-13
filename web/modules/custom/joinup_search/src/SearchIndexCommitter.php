@@ -38,9 +38,7 @@ class SearchIndexCommitter {
 
     foreach ($servers as $serverId => $server) {
       try {
-        /** @var \Drupal\search_api_solr\SolrBackendInterface $backend */
-        $backend = $server->getBackend();
-        $connector = $backend->getSolrConnector();
+        $connector = $server->getBackend()->getSolrConnector();
         $commit = $connector->getUpdateQuery();
         $commit->addCommit(softCommit: TRUE, waitSearcher: TRUE);
         $connector->update($commit);
