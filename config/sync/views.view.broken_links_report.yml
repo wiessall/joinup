@@ -556,7 +556,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: "<b>Entity:</b> {{ linkcheckerlink_page_entity_label }}<br />\r\n<b>Field:</b> {{ entity_field }}<br />\r\n<b>Language:</b> {{ entity_langcode }}"
+            text: "<b>Entity:</b> {{ linkcheckerlink_page_entity_label }}<br />\r\n<b>Language:</b> {{ entity_langcode }}"
             make_link: false
             path: ''
             absolute: false
