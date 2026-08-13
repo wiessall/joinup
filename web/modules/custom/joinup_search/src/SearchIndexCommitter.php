@@ -8,7 +8,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Utility\Error;
 use Drupal\search_api\Utility\PostRequestIndexing;
-use Drupal\search_api_solr\SolrBackendInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
@@ -32,15 +31,15 @@ class SearchIndexCommitter {
 
     $servers = $this->entityTypeManager
       ->getStorage('search_api_server')
-      ->loadByProperties(['status' => TRUE]);
+      ->loadByProperties([
+        'status' => TRUE,
+        'backend' => 'search_api_solr',
+      ]);
 
     foreach ($servers as $serverId => $server) {
-      $backend = $server->getBackend();
-      if (!$backend instanceof SolrBackendInterface) {
-        continue;
-      }
-
       try {
+        /** @var \Drupal\search_api_solr\SolrBackendInterface $backend */
+        $backend = $server->getBackend();
         $connector = $backend->getSolrConnector();
         $commit = $connector->getUpdateQuery();
         $commit->addCommit(softCommit: TRUE, waitSearcher: TRUE);
