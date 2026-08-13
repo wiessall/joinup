@@ -7,15 +7,113 @@ index bb33814b4f4cb01ba106631c690c81037a88fbe8..55d0f533ae435dfed0ccf27627dcba81
  webform
  webforms
 +prova
- 
+
  # Organic Group Menu support
  ogmenu
+diff --git a/modules/babel_tmgmt/src/BabelTmgmtIntegration.php b/modules/babel_tmgmt/src/BabelTmgmtIntegration.php
+index 73c1eae5d232535807908fb3789cb077581fe00d..8a901554ef04a762472500afb907501d0ac97ba5 100644
+--- a/modules/babel_tmgmt/src/BabelTmgmtIntegration.php
++++ b/modules/babel_tmgmt/src/BabelTmgmtIntegration.php
+@@ -6,7 +6,6 @@ namespace Drupal\babel_tmgmt;
+
+ use Drupal\babel\BabelStorageInterface;
+ use Drupal\babel\BabelStringsRepositoryInterface;
+-use Drupal\Core\Entity\ContentEntityStorageInterface;
+ use Drupal\Core\Entity\EntityTypeManagerInterface;
+ use Drupal\Core\Logger\LoggerChannelInterface;
+ use Drupal\tmgmt\ContinuousManager;
+@@ -20,11 +19,6 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
+  */
+ class BabelTmgmtIntegration {
+
+-  /**
+-   * Static cache of job item storage.
+-   */
+-  protected ContentEntityStorageInterface $jobItemStorage;
+-
+   public function __construct(
+     protected readonly EntityTypeManagerInterface $entityTypeManager,
+     protected readonly BabelStorageInterface $storage,
+@@ -44,7 +38,8 @@ class BabelTmgmtIntegration {
+    *   The source string hash.
+    *
+    * @return \Drupal\tmgmt\JobItemInterface|null
+-   *   The created job item or NULL if the job item could not be created.
++   *   The created job item or NULL if the job item could not be created or a
++   *   job item for this hash already exists.
+    */
+   public function createContinuousJobItemForJob(JobInterface $job, string $hash): ?JobItemInterface {
+     if (!$job->isContinuous()) {
+@@ -57,14 +52,18 @@ class BabelTmgmtIntegration {
+       return NULL;
+     }
+
+-    // Remove any existing job item for this hash.
+     $existingJobItems = $job->getItems([
+       'plugin' => 'babel',
+       'item_type' => 'default',
+       'item_id' => $hash,
+     ]);
++    foreach ($existingJobItems as $existingJobItem) {
++      if (!$existingJobItem->isAborted()) {
++        return NULL;
++      }
++    }
+     if ($existingJobItems) {
+-      $this->getJobItemStorage()->delete($existingJobItems);
++      $this->entityTypeManager->getStorage('tmgmt_job_item')->delete($existingJobItems);
+     }
+
+     try {
+@@ -85,10 +84,16 @@ class BabelTmgmtIntegration {
+    *
+    * @param string[] $hashes
+    *   The source strings hashes.
++   * @param string|null $langcode
++   *   (optional) Restrict the deletion to the continuous jobs translating into
++   *   this target language. Defaults to every target language.
+    */
+-  public function deleteContinuousJobItems(array $hashes): void {
++  public function deleteContinuousJobItems(array $hashes, ?string $langcode = NULL): void {
+     $jobItems = [];
+     foreach ($this->continuousManager->getContinuousJobs('en') as $job) {
++      if ($langcode !== NULL && $job->getTargetLangcode() !== $langcode) {
++        continue;
++      }
+       $jobItems += $job->getItems([
+         'plugin' => 'babel',
+         'item_type' => 'default',
+@@ -96,23 +101,8 @@ class BabelTmgmtIntegration {
+       ]);
+     }
+     if ($jobItems) {
+-      $this->getJobItemStorage()->delete($jobItems);
+-    }
+-  }
+-
+-  /**
+-   * Retrieves the entity storage of the translation job items.
+-   *
+-   * @return \Drupal\Core\Entity\ContentEntityStorageInterface
+-   *   The entity storage of the translation job items.
+-   */
+-  protected function getJobItemStorage(): ContentEntityStorageInterface {
+-    if (!isset($this->jobItemStorage)) {
+-      $storage = $this->entityTypeManager->getStorage('tmgmt_job_item');
+-      assert($storage instanceof ContentEntityStorageInterface);
+-      $this->jobItemStorage = $storage;
++      $this->entityTypeManager->getStorage('tmgmt_job_item')->delete($jobItems);
+     }
+-    return $this->jobItemStorage;
+   }
+
+ }
 diff --git a/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php b/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
-index 568d9be1ba001e091508fa2318285a58ea070d90..310d74f20367164834f1747d1b364014abfa5c1b 100644
+index 568d9be1ba001e091508fa2318285a58ea070d90..8eff80c8b8c49c56b68255c4129678c19918fb7a 100644
 --- a/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
 +++ b/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
 @@ -6,7 +6,6 @@ namespace Drupal\babel_tmgmt\Hook;
- 
+
  use Drupal\babel\BabelStringsRepositoryInterface;
  use Drupal\babel_tmgmt\Plugin\QueueWorker\ContinuousJobItemCreationWorker;
 -use Drupal\Core\Database\Connection;
@@ -29,7 +127,7 @@ index 568d9be1ba001e091508fa2318285a58ea070d90..310d74f20367164834f1747d1b364014
 -use Drupal\tmgmt\JobItemInterface;
  use Drupal\tmgmt\TranslatorInterface;
  use Symfony\Component\DependencyInjection\Attribute\Autowire;
- 
+
 @@ -29,7 +27,6 @@ class BabelTmgmtHooks {
    public function __construct(
      protected EntityTypeManagerInterface $entityTypeManager,
@@ -38,20 +136,23 @@ index 568d9be1ba001e091508fa2318285a58ea070d90..310d74f20367164834f1747d1b364014
      #[Autowire(service: 'tmgmt.continuous')]
      protected readonly ContinuousManager $continuousManager,
      protected readonly BabelStringsRepositoryInterface $stringsRepository,
-@@ -116,7 +113,8 @@ class BabelTmgmtHooks {
+@@ -111,12 +108,9 @@ class BabelTmgmtHooks {
+       return;
+     }
+
+-    $storage = $this->entityTypeManager->getStorage('tmgmt_job_item');
+-
      foreach ($this->continuousManager->getContinuousJobs('en') as $job) {
        assert($job instanceof JobInterface);
- 
+
 -      // All untranslated, enabled and unlocked strings for the target langcode.
-+      // Creation is driven by the sources still needing translation, never by
-+      // existing job items, so a purged translation is not re-created.
        $hashes = array_keys($this->stringsRepository->getStrings(
          langcode: $job->getTargetLangcode(),
          translationStatus: FALSE,
-@@ -124,20 +122,14 @@ class BabelTmgmtHooks {
+@@ -124,34 +118,7 @@ class BabelTmgmtHooks {
          lockStatus: FALSE,
        ));
- 
+
 -      // Remove existing job items in a dead-end state (aborted, in review).
 -      $jobItemsToDelete = $job->getItems([
 -        'plugin' => 'babel',
@@ -63,42 +164,50 @@ index 568d9be1ba001e091508fa2318285a58ea070d90..310d74f20367164834f1747d1b364014
 -      ]);
 -      if ($jobItemsToDelete) {
 -        $storage->delete($jobItemsToDelete);
-+      foreach ($hashes as $hash) {
-+        $queue->createItem([
-+          'operation' => 'create',
-+          'hash' => $hash,
-+          'job_id' => $job->id(),
-+        ]);
-       }
- 
+-      }
+-
 -      // Get hashes of already created job items.
-       $existing = array_column(
-         $storage->getAggregateQuery()
-           ->accessCheck(FALSE)
-@@ -145,15 +137,13 @@ class BabelTmgmtHooks {
-           ->condition('tjid', $job->id())
-           ->condition('plugin', 'babel')
-           ->condition('item_type', 'default')
+-      $existing = array_column(
+-        $storage->getAggregateQuery()
+-          ->accessCheck(FALSE)
+-          ->groupBy('item_id')
+-          ->condition('tjid', $job->id())
+-          ->condition('plugin', 'babel')
+-          ->condition('item_type', 'default')
 -          ->condition('state', JobItemInterface::STATE_INACTIVE)
-           ->execute(),
-         'item_id',
-       );
- 
+-          ->execute(),
+-        'item_id',
+-      );
+-
 -      // Schedule the creation of missing job items.
 -      foreach (array_diff($hashes, $existing) as $hash) {
-+      foreach (array_diff($existing, $hashes) as $hash) {
++      foreach ($hashes as $hash) {
          $queue->createItem([
--          'operation' => 'create',
-+          'operation' => 'delete',
+           'operation' => 'create',
            'hash' => $hash,
-           'job_id' => $job->id(),
-         ]);
+diff --git a/modules/babel_tmgmt/src/Plugin/QueueWorker/ContinuousJobItemCreationWorker.php b/modules/babel_tmgmt/src/Plugin/QueueWorker/ContinuousJobItemCreationWorker.php
+index 7bf23dbf93ead8521b257131ae678080beefb7dc..b418853fde4f446a14c885b03b53e6c093f04778 100644
+--- a/modules/babel_tmgmt/src/Plugin/QueueWorker/ContinuousJobItemCreationWorker.php
++++ b/modules/babel_tmgmt/src/Plugin/QueueWorker/ContinuousJobItemCreationWorker.php
+@@ -78,12 +78,6 @@ class ContinuousJobItemCreationWorker extends QueueWorkerBase implements Contain
+       return;
+     }
+
+-    $jobItem = $job->getMostRecentItem('babel', 'default', $data['hash']);
+-    if ($jobItem && $jobItem->isInactive()) {
+-      // A job item has been created in the meantime by another process.
+-      return;
+-    }
+-
+     $this->babelTmgmt->createContinuousJobItemForJob($job, $data['hash']);
+   }
+
 diff --git a/modules/babel_tmgmt/tests/src/Kernel/BabelTmgmtIntegrationTest.php b/modules/babel_tmgmt/tests/src/Kernel/BabelTmgmtIntegrationTest.php
-index 760de187a7d7402a4c4ce8dd0a8abac407bdab88..e22a08304d7c16a92c9e989866f3b81e0f2df07b 100644
+index 760de187a7d7402a4c4ce8dd0a8abac407bdab88..ece6d7e1872ec90e057bcfa921203990247e93f8 100644
 --- a/modules/babel_tmgmt/tests/src/Kernel/BabelTmgmtIntegrationTest.php
 +++ b/modules/babel_tmgmt/tests/src/Kernel/BabelTmgmtIntegrationTest.php
 @@ -6,7 +6,9 @@ namespace Drupal\Tests\babel_tmgmt\Kernel;
- 
+
  use Drupal\babel\BabelLockServiceInterface;
  use Drupal\babel\BabelStorageInterface;
 +use Drupal\babel\BabelStringsRepositoryInterface;
@@ -107,10 +216,18 @@ index 760de187a7d7402a4c4ce8dd0a8abac407bdab88..e22a08304d7c16a92c9e989866f3b81e
  use Drupal\babel_tmgmt\BabelTmgmtIntegration;
  use Drupal\babel_tmgmt\Hook\BabelTmgmtHooks;
  use Drupal\babel_tmgmt\Plugin\QueueWorker\ContinuousJobItemCreationWorker;
-@@ -161,6 +163,63 @@ class BabelTmgmtIntegrationTest extends KernelTestBase {
+@@ -15,6 +17,7 @@ use Drupal\language\Entity\ConfigurableLanguage;
+ use Drupal\Tests\babel\Traits\ModuleInstallHelperTrait;
+ use Drupal\Tests\user\Traits\UserCreationTrait;
+ use Drupal\tmgmt\JobInterface;
++use Drupal\tmgmt\JobItemInterface;
+ use PHPUnit\Framework\Attributes\Group;
+ use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+
+@@ -161,6 +164,151 @@ class BabelTmgmtIntegrationTest extends KernelTestBase {
      $this->assertNotEmpty($queriedJobItems);
    }
- 
+
 +  /**
 +   * Tests that cron does not re-create a purged, already-translated string.
 +   *
@@ -166,6 +283,94 @@ index 760de187a7d7402a4c4ce8dd0a8abac407bdab88..e22a08304d7c16a92c9e989866f3b81e
 +    // Cron must not re-create the item for the now-translated string.
 +    $this->populateAndConsumeQueue();
 +    $this->assertEmpty($job->getItems($filter));
++  }
++
++  /**
++   * Tests that job items representing work in progress are not replaced.
++   *
++   * @legacy-covers \Drupal\babel_tmgmt\BabelTmgmtIntegration::createContinuousJobItemForJob
++   */
++  public function testInProgressJobItemsAreNotReplaced(): void {
++    $translatorManager = $this->container->get('plugin.manager.tmgmt.translator');
++
++    ConfigurableLanguage::createFromLangcode('it')->save();
++    tmgmt_translator_auto_create($translatorManager->getDefinition('local'));
++    $job = tmgmt_job_create('en', 'it', 0, [
++      'label' => 'Testing continuous job',
++      'translator' => 'local',
++      'job_type' => JobInterface::TYPE_CONTINUOUS,
++      'state' => JobInterface::STATE_CONTINUOUS,
++    ]);
++    $job->save();
++
++    $testingHash = (new Source('Test', ''))->getHash();
++    $filter = [
++      'plugin' => 'babel',
++      'item_type' => 'default',
++      'item_id' => $testingHash,
++    ];
++
++    $this->populateAndConsumeQueue();
++    $jobItems = $job->getItems($filter);
++    $this->assertCount(1, $jobItems);
++    $jobItem = reset($jobItems);
++
++    // A request out at the provider or a translation waiting to be reviewed
++    // survives any number of cron runs.
++    foreach ([JobItemInterface::STATE_ACTIVE, JobItemInterface::STATE_REVIEW] as $state) {
++      $jobItem->setState($state);
++      $this->populateAndConsumeQueue();
++      $jobItems = $job->getItems($filter);
++      $this->assertCount(1, $jobItems);
++      $this->assertSame($jobItem->id(), reset($jobItems)->id());
++      $this->assertSame($state, (int) reset($jobItems)->getState());
++    }
++
++    // An aborted request is a dead end and is replaced by a fresh job item.
++    $jobItem->setState(JobItemInterface::STATE_ABORTED);
++    $this->populateAndConsumeQueue();
++    $jobItems = $job->getItems($filter);
++    $this->assertCount(1, $jobItems);
++    $this->assertNotSame($jobItem->id(), reset($jobItems)->id());
++    $this->assertNotSame(JobItemInterface::STATE_ABORTED, (int) reset($jobItems)->getState());
++  }
++
++  /**
++   * Tests that job item deletion can be limited to a single target language.
++   *
++   * @legacy-covers \Drupal\babel_tmgmt\BabelTmgmtIntegration::deleteContinuousJobItems
++   */
++  public function testDeleteContinuousJobItemsIsLanguageScoped(): void {
++    $service = $this->container->get(BabelTmgmtIntegration::class);
++    $translatorManager = $this->container->get('plugin.manager.tmgmt.translator');
++
++    tmgmt_translator_auto_create($translatorManager->getDefinition('local'));
++    $jobs = [];
++    foreach (['it', 'fr'] as $langcode) {
++      ConfigurableLanguage::createFromLangcode($langcode)->save();
++      $jobs[$langcode] = tmgmt_job_create('en', $langcode, 0, [
++        'label' => "Testing continuous job ($langcode)",
++        'translator' => 'local',
++        'job_type' => JobInterface::TYPE_CONTINUOUS,
++        'state' => JobInterface::STATE_CONTINUOUS,
++      ]);
++      $jobs[$langcode]->save();
++    }
++
++    $testingHash = (new Source('Test', ''))->getHash();
++    $filter = [
++      'plugin' => 'babel',
++      'item_type' => 'default',
++      'item_id' => $testingHash,
++    ];
++
++    $this->populateAndConsumeQueue();
++    $this->assertNotEmpty($jobs['it']->getItems($filter));
++    $this->assertNotEmpty($jobs['fr']->getItems($filter));
++
++    $service->deleteContinuousJobItems([$testingHash], 'it');
++    $this->assertEmpty($jobs['it']->getItems($filter));
++    $this->assertNotEmpty($jobs['fr']->getItems($filter));
 +  }
 +
    /**
