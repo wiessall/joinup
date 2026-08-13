@@ -40,7 +40,7 @@ function joinup_tmgmt_deploy_201601(array &$sandbox): string {
   $connection = \Drupal::database();
   $storage = \Drupal::service('entity_type.manager')
     ->getStorage('tmgmt_job_item');
-  $batch_size = 100;
+  $batch_size = 50;
 
   if (!isset($sandbox['total'])) {
     $sandbox['total'] = (int) $connection->select('tmgmt_message', 'tm')
