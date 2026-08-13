@@ -1151,6 +1151,57 @@ display:
           empty: false
           content: 'Displaying @start - @end of @total'
       display_extenders: {  }
+      group_target_id:
+        id: group_target_id
+        table: message__group
+        field: group_target_id
+        relationship: none
+        group_type: group
+        admin_label: ''
+        plugin_id: entity_reference
+        operator: or
+        value: {  }
+        group: 1
+        exposed: true
+        expose:
+          operator_id: group_target_id_op
+          label: Group
+          description: ''
+          use_operator: false
+          operator: group_target_id_op
+          operator_limit_selection: false
+          operator_list: {  }
+          identifier: group
+          required: false
+          remember: false
+          multiple: false
+          remember_roles:
+            authenticated: authenticated
+          reduce: false
+        is_grouped: false
+        group_info:
+          label: ''
+          description: ''
+          identifier: ''
+          optional: true
+          widget: select
+          multiple: false
+          remember: false
+          default_group: All
+          default_group_multiple: {  }
+          group_items: {  }
+        reduce_duplicates: false
+        sub_handler: 'default:node'
+        widget: autocomplete
+        sub_handler_settings:
+          target_bundles:
+            collection: collection
+            solution: solution
+          sort:
+            field: title
+            direction: ASC
+          auto_create: false
+          auto_create_bundle: ''
     cache_metadata:
       max-age: -1
       contexts:
@@ -2199,11 +2250,15 @@ display:
             label: Group
             description: ''
             use_operator: false
-            operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
             identifier: og_audience_target_id
             required: false
             remember: false
             multiple: false
+            remember_roles:
+              authenticated: authenticated
             placeholder: 'Search for a group'
           is_grouped: false
           group_info:
