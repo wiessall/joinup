@@ -392,7 +392,9 @@ function joinup_group_node_update(EntityInterface $entity): void {
     return;
   }
 
-  if ($entity->isPublished()) {
+  $original = $entity->getOriginal();
+
+  if (!$original->isPublished() && $entity->isPublished()) {
     /** @var \Drupal\og\MembershipManagerInterface $membership_manager */
     $membership_manager = \Drupal::service('og.membership_manager');
     $content_ids = $membership_manager->getGroupContentIds($entity, ['node']);
