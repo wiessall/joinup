@@ -46,7 +46,7 @@ class JoinupUserDeleted implements JoinupUserDeletedInterface {
    */
   public function getContentDeletedAuthor(EntityOwnerInterface $entity): ?int {
     return (int) $this->database->select(JoinupUserDeletedInterface::TABLE_USER_CONTENT)
-      ->fields(JoinupUserDeletedInterface::TABLE_USER_CONTENT)
+      ->fields(JoinupUserDeletedInterface::TABLE_USER_CONTENT, ['uid'])
       ->condition('entity_type', $entity->getEntityTypeId())
       ->condition('entity_id', $entity->id())
       ->execute()
