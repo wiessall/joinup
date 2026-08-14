@@ -63,7 +63,7 @@ Feature: Assessment report permissions and access control
     When I select "Test Organization" from "Select organisation"
 
     # Binding requirements
-    When I click "New binding requirement"
+    When I add a section
     And a modal should open
 
     When I click "Initiative" in the "Modal content" region

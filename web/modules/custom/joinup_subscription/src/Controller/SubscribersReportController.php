@@ -278,6 +278,7 @@ SQL;
 SELECT n.nid as entity_id, n.title as label
 FROM {node_field_data} n
 WHERE n.type = :bundle
+AND n.default_langcode = 1
 ORDER BY n.title ASC;
 SQL;
       $result = $this->sqlConnection->query($query, [':bundle' => $bundle]);

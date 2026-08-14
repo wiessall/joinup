@@ -27,5 +27,5 @@ Feature: Content Creation Permissions
     Given I am logged in as a member of the "NexaFix Innovations" solution
     And I go to the "NexaFix Innovations" solution
     When I click "Add news" in the plus button menu
-    And I click "Add layout"
+    And I add a section
     And a modal should open

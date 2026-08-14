@@ -145,7 +145,7 @@ Feature:
       | layout           | one column |
       | Background theme | light      |
       | Extra classes    | test-class |
-    And I click "Choose component"
+    And I add a component to section 1
     Then a modal should open
 
     When I click "Accordion"

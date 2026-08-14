@@ -50,7 +50,7 @@ Feature:
       | layout           | one column |
       | Background theme | light      |
       | Extra classes    | test-class |
-    And I click "Choose component"
+    And I add a component to section 1
     And a modal should open
     And I click "Carousel"
     And I select "Custom page" from "Available filters"
