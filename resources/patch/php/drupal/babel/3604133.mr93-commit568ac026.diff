@@ -11,7 +11,7 @@ index bb33814b4f4cb01ba106631c690c81037a88fbe8..55d0f533ae435dfed0ccf27627dcba81
  # Organic Group Menu support
  ogmenu
 diff --git a/modules/babel_tmgmt/src/BabelTmgmtIntegration.php b/modules/babel_tmgmt/src/BabelTmgmtIntegration.php
-index 73c1eae5d232535807908fb3789cb077581fe00d..8a901554ef04a762472500afb907501d0ac97ba5 100644
+index 73c1eae5d232535807908fb3789cb077581fe00d..c7e84d170c888a642e5a790dd6adef0186b34574 100644
 --- a/modules/babel_tmgmt/src/BabelTmgmtIntegration.php
 +++ b/modules/babel_tmgmt/src/BabelTmgmtIntegration.php
 @@ -6,7 +6,6 @@ namespace Drupal\babel_tmgmt;
@@ -34,56 +34,47 @@ index 73c1eae5d232535807908fb3789cb077581fe00d..8a901554ef04a762472500afb907501d
    public function __construct(
      protected readonly EntityTypeManagerInterface $entityTypeManager,
      protected readonly BabelStorageInterface $storage,
-@@ -44,7 +38,8 @@ class BabelTmgmtIntegration {
+@@ -44,27 +38,31 @@ class BabelTmgmtIntegration {
     *   The source string hash.
     *
     * @return \Drupal\tmgmt\JobItemInterface|null
 -   *   The created job item or NULL if the job item could not be created.
-+   *   The created job item or NULL if the job item could not be created or a
-+   *   job item for this hash already exists.
++   *   The created job item, or NULL if no item was needed or it could not be
++   *   created.
     */
    public function createContinuousJobItemForJob(JobInterface $job, string $hash): ?JobItemInterface {
      if (!$job->isContinuous()) {
-@@ -57,14 +52,18 @@ class BabelTmgmtIntegration {
+       throw new \InvalidArgumentException(__METHOD__ . '() handles only continuous jobs');
+     }
+
+-    // Skip strings that are either disabled or locked for translation.
+-    $translation = $this->stringsRepository->getStringTranslationByHash($job->getTargetLangcode(), $hash);
+-    if (!$translation || !$translation->source->getStatus() || $translation->isLocked()) {
++    // Skip strings that don't need translating. The queue is drained over
++    // several cron runs, so the translation status may have changed since.
++    $string = $this->stringsRepository->getStringTranslationByHash($job->getTargetLangcode(), $hash);
++    if (!$string || $string->isTranslated() || !$string->source->getStatus() || $string->isLocked()) {
        return NULL;
      }
 
 -    // Remove any existing job item for this hash.
-     $existingJobItems = $job->getItems([
+-    $existingJobItems = $job->getItems([
++    // Aborted items are a dead end. Items in any other state are left to the
++    // continuous manager, which skips creation while the last one is live.
++    $abortedJobItems = $job->getItems([
        'plugin' => 'babel',
        'item_type' => 'default',
        'item_id' => $hash,
++      'state' => JobItemInterface::STATE_ABORTED,
      ]);
-+    foreach ($existingJobItems as $existingJobItem) {
-+      if (!$existingJobItem->isAborted()) {
-+        return NULL;
-+      }
-+    }
-     if ($existingJobItems) {
+-    if ($existingJobItems) {
 -      $this->getJobItemStorage()->delete($existingJobItems);
-+      $this->entityTypeManager->getStorage('tmgmt_job_item')->delete($existingJobItems);
++    if ($abortedJobItems) {
++      $this->entityTypeManager->getStorage('tmgmt_job_item')->delete($abortedJobItems);
      }
 
      try {
-@@ -85,10 +84,16 @@ class BabelTmgmtIntegration {
-    *
-    * @param string[] $hashes
-    *   The source strings hashes.
-+   * @param string|null $langcode
-+   *   (optional) Restrict the deletion to the continuous jobs translating into
-+   *   this target language. Defaults to every target language.
-    */
--  public function deleteContinuousJobItems(array $hashes): void {
-+  public function deleteContinuousJobItems(array $hashes, ?string $langcode = NULL): void {
-     $jobItems = [];
-     foreach ($this->continuousManager->getContinuousJobs('en') as $job) {
-+      if ($langcode !== NULL && $job->getTargetLangcode() !== $langcode) {
-+        continue;
-+      }
-       $jobItems += $job->getItems([
-         'plugin' => 'babel',
-         'item_type' => 'default',
-@@ -96,23 +101,8 @@ class BabelTmgmtIntegration {
+@@ -96,23 +94,8 @@ class BabelTmgmtIntegration {
        ]);
      }
      if ($jobItems) {
@@ -203,7 +194,7 @@ index 7bf23dbf93ead8521b257131ae678080beefb7dc..b418853fde4f446a14c885b03b53e6c0
    }
 
 diff --git a/modules/babel_tmgmt/tests/src/Kernel/BabelTmgmtIntegrationTest.php b/modules/babel_tmgmt/tests/src/Kernel/BabelTmgmtIntegrationTest.php
-index 760de187a7d7402a4c4ce8dd0a8abac407bdab88..ece6d7e1872ec90e057bcfa921203990247e93f8 100644
+index 760de187a7d7402a4c4ce8dd0a8abac407bdab88..c0e87f2f5047190e30721508d553dc858850b1c7 100644
 --- a/modules/babel_tmgmt/tests/src/Kernel/BabelTmgmtIntegrationTest.php
 +++ b/modules/babel_tmgmt/tests/src/Kernel/BabelTmgmtIntegrationTest.php
 @@ -6,7 +6,9 @@ namespace Drupal\Tests\babel_tmgmt\Kernel;
@@ -224,14 +215,15 @@ index 760de187a7d7402a4c4ce8dd0a8abac407bdab88..ece6d7e1872ec90e057bcfa921203990
  use PHPUnit\Framework\Attributes\Group;
  use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
-@@ -161,6 +164,151 @@ class BabelTmgmtIntegrationTest extends KernelTestBase {
+@@ -161,6 +164,134 @@ class BabelTmgmtIntegrationTest extends KernelTestBase {
      $this->assertNotEmpty($queriedJobItems);
    }
 
 +  /**
-+   * Tests that cron does not re-create a purged, already-translated string.
++   * Tests that a purged, already-translated string is not re-created.
 +   *
 +   * @legacy-covers \Drupal\babel_tmgmt\Hook\BabelTmgmtHooks::cron
++   * @legacy-covers \Drupal\babel_tmgmt\BabelTmgmtIntegration::createContinuousJobItemForJob
 +   */
 +  public function testPurgedTranslatedStringIsNotRecreated(): void {
 +    $translatorManager = $this->container->get('plugin.manager.tmgmt.translator');
@@ -283,6 +275,11 @@ index 760de187a7d7402a4c4ce8dd0a8abac407bdab88..ece6d7e1872ec90e057bcfa921203990
 +    // Cron must not re-create the item for the now-translated string.
 +    $this->populateAndConsumeQueue();
 +    $this->assertEmpty($job->getItems($filter));
++
++    // Nor must the service: the queue is drained over several cron runs.
++    $service = $this->container->get(BabelTmgmtIntegration::class);
++    $this->assertNull($service->createContinuousJobItemForJob($job, $testingHash));
++    $this->assertEmpty($job->getItems($filter));
 +  }
 +
 +  /**
@@ -333,44 +330,21 @@ index 760de187a7d7402a4c4ce8dd0a8abac407bdab88..ece6d7e1872ec90e057bcfa921203990
 +    $this->assertCount(1, $jobItems);
 +    $this->assertNotSame($jobItem->id(), reset($jobItems)->id());
 +    $this->assertNotSame(JobItemInterface::STATE_ABORTED, (int) reset($jobItems)->getState());
-+  }
 +
-+  /**
-+   * Tests that job item deletion can be limited to a single target language.
-+   *
-+   * @legacy-covers \Drupal\babel_tmgmt\BabelTmgmtIntegration::deleteContinuousJobItems
-+   */
-+  public function testDeleteContinuousJobItemsIsLanguageScoped(): void {
-+    $service = $this->container->get(BabelTmgmtIntegration::class);
-+    $translatorManager = $this->container->get('plugin.manager.tmgmt.translator');
-+
-+    tmgmt_translator_auto_create($translatorManager->getDefinition('local'));
-+    $jobs = [];
-+    foreach (['it', 'fr'] as $langcode) {
-+      ConfigurableLanguage::createFromLangcode($langcode)->save();
-+      $jobs[$langcode] = tmgmt_job_create('en', $langcode, 0, [
-+        'label' => "Testing continuous job ($langcode)",
-+        'translator' => 'local',
-+        'job_type' => JobInterface::TYPE_CONTINUOUS,
-+        'state' => JobInterface::STATE_CONTINUOUS,
-+      ]);
-+      $jobs[$langcode]->save();
-+    }
-+
-+    $testingHash = (new Source('Test', ''))->getHash();
-+    $filter = [
-+      'plugin' => 'babel',
-+      'item_type' => 'default',
-+      'item_id' => $testingHash,
-+    ];
-+
++    // An accepted request no longer blocks a new one, but it is left in place
++    // for the site's purge policy to deal with.
++    $acceptedJobItem = reset($jobItems);
++    $acceptedJobItem->setState(JobItemInterface::STATE_ACCEPTED);
 +    $this->populateAndConsumeQueue();
-+    $this->assertNotEmpty($jobs['it']->getItems($filter));
-+    $this->assertNotEmpty($jobs['fr']->getItems($filter));
-+
-+    $service->deleteContinuousJobItems([$testingHash], 'it');
-+    $this->assertEmpty($jobs['it']->getItems($filter));
-+    $this->assertNotEmpty($jobs['fr']->getItems($filter));
++    $jobItems = $job->getItems($filter);
++    $this->assertCount(2, $jobItems);
++    $states = [];
++    foreach ($jobItems as $item) {
++      $states[$item->id()] = (int) $item->getState();
++    }
++    $this->assertSame(JobItemInterface::STATE_ACCEPTED, $states[$acceptedJobItem->id()]);
++    unset($states[$acceptedJobItem->id()]);
++    $this->assertNotSame(JobItemInterface::STATE_ACCEPTED, reset($states));
 +  }
 +
    /**
