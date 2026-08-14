@@ -1,21 +1,20 @@
 diff --git a/config/install/tmgmt.settings.yml b/config/install/tmgmt.settings.yml
-index c1a71e0a0a79331175cdbf822d8853cd27f8c2c2..2ec766c4ed89020eae175f1369b4cb07be03b710 100644
+index 0dd1361dfb17b18c9d1130bc356c930e294eea59..2c0f5926c3b0bdefc30111bc98da1ab197bb39ca 100644
 --- a/config/install/tmgmt.settings.yml
 +++ b/config/install/tmgmt.settings.yml
-@@ -1,5 +1,8 @@
+@@ -1,5 +1,7 @@
  quick_checkout: true
  anonymous_access: true
 +purge_continuous: _never
 +purge_continuous_aborted: false
-+purge_continuous_limit: 500
  purge_finished: _never
  word_count_exclude_tags: true
  source_list_limit: 20
 diff --git a/config/schema/tmgmt.schema.yml b/config/schema/tmgmt.schema.yml
-index 0c66742f221d361df5e2d65594c4759913ea245f..af446a0d70d5d1a525e77e879f85b350b05d4880 100644
+index e11ccebff26e44290f49b2b3bd4bde2be9b47493..d9d21577c5710396bcbac60dbbb16e9ee4b6c596 100644
 --- a/config/schema/tmgmt.schema.yml
 +++ b/config/schema/tmgmt.schema.yml
-@@ -11,6 +11,27 @@ tmgmt.settings:
+@@ -11,6 +11,21 @@ tmgmt.settings:
      purge_finished:
        type: string
        label: 'Purge finished jobs'
@@ -34,20 +33,14 @@ index 0c66742f221d361df5e2d65594c4759913ea245f..af446a0d70d5d1a525e77e879f85b350
 +    purge_continuous_aborted:
 +      type: boolean
 +      label: 'Whether aborted items of continuous jobs should be also purged along with approved'
-+    purge_continuous_limit:
-+      type: integer
-+      label: 'How many item should be removed during a single cron run'
-+      constraints:
-+        Range:
-+          min: 1
      respect_text_format:
        type: boolean
        label: 'Respect text format'
 diff --git a/src/Form/SettingsForm.php b/src/Form/SettingsForm.php
-index 1712d5ca1b3e6ab46cd381ceca86273ac2f5d725..0cc63d7ce69ccecce5b00ed4fe3d50a421e0258b 100644
+index 96f4df1c6c33904329ba2f6b4ede00c7fd72e282..196edd0a26e25af2cabef9f098e9a1c8dcc9a8cf 100644
 --- a/src/Form/SettingsForm.php
 +++ b/src/Form/SettingsForm.php
-@@ -45,20 +45,44 @@ class SettingsForm extends ConfigFormBase {
+@@ -45,20 +45,40 @@ class SettingsForm extends ConfigFormBase {
        '#title' => t('Performance settings'),
        '#open' => TRUE,
      );
@@ -76,14 +69,15 @@ index 1712d5ca1b3e6ab46cd381ceca86273ac2f5d725..0cc63d7ce69ccecce5b00ed4fe3d50a4
      );
 +    $form['performance']['tmgmt_purge_continuous'] = [
 +      '#type' => 'select',
-+      '#title' => $this->t('Purge continuous jobs'),
-+      '#description' => $this->t('If configured, continuous translation jobs item that have been marked as accepted will be purged after a given time. The translations will not be deleted.'),
++      '#title' => $this->t('Purge accepted job items of continuous jobs'),
++      '#description' => $this->t('If configured, continuous translation job items that have been marked as accepted will be purged after the given time. The translations will not be deleted.'),
 +      '#options' => $purge_options,
 +      '#config_target' => 'tmgmt.settings:purge_continuous',
 +    ];
 +    $form['performance']['tmgmt_purge_continuous_include_aborted'] = [
 +      '#type' => 'checkbox',
-+      '#title' => $this->t('Also purge aborted job items'),
++      '#title' => $this->t('Also purge aborted job items of continuous jobs'),
++      '#description' => $this->t('When checked, aborted job items of continuous translation jobs item will be cleaned up along with the accepted ones.'),
 +      '#config_target' => 'tmgmt.settings:purge_continuous_aborted',
 +      '#states' => [
 +        'visible' => [
@@ -91,18 +85,13 @@ index 1712d5ca1b3e6ab46cd381ceca86273ac2f5d725..0cc63d7ce69ccecce5b00ed4fe3d50a4
 +        ],
 +      ],
 +    ];
-+    $form['performance']['tmgmt_purge_continuous_limit'] = [
-+      '#type' => 'number',
-+      '#title' => $this->t('Maximum of continuous job items to remove in a single cron run'),
-+      '#min' => 1,
-+      '#config_target' => 'tmgmt.settings:purge_continuous_limit',
-+    ];
++
      $form['performance']['purge_stale'] = [
        '#type' => 'checkbox',
        '#title' => $this->t('Purge stale job items and jobs'),
 diff --git a/src/Plugin/QueueWorker/JobItemCleanupWorker.php b/src/Plugin/QueueWorker/JobItemCleanupWorker.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..15d367793f8c1d0fca8d9b289212516de2ea1006
+index 0000000000000000000000000000000000000000..aef52f9266db6bab67393bd8163390b1a7dd6ac6
 --- /dev/null
 +++ b/src/Plugin/QueueWorker/JobItemCleanupWorker.php
 @@ -0,0 +1,61 @@
@@ -133,7 +122,7 @@ index 0000000000000000000000000000000000000000..15d367793f8c1d0fca8d9b289212516d
 +    array $configuration,
 +    $plugin_id,
 +    $plugin_definition,
-+    protected readonly EntityTypeManagerInterface $entityTypeManager,
++    protected EntityTypeManagerInterface $entityTypeManager,
 +  ) {
 +    parent::__construct($configuration, $plugin_id, $plugin_definition);
 +  }
@@ -169,10 +158,10 @@ index 0000000000000000000000000000000000000000..15d367793f8c1d0fca8d9b289212516d
 +}
 diff --git a/tests/src/Kernel/CronTest.php b/tests/src/Kernel/CronTest.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..cd534d0c72e03fe1db3c3d6bd123dc0137e22f5b
+index 0000000000000000000000000000000000000000..4c1621797995ea2af3d2e12cba297c8108422b5b
 --- /dev/null
 +++ b/tests/src/Kernel/CronTest.php
-@@ -0,0 +1,163 @@
+@@ -0,0 +1,149 @@
 +<?php
 +
 +declare(strict_types=1);
@@ -203,10 +192,7 @@ index 0000000000000000000000000000000000000000..cd534d0c72e03fe1db3c3d6bd123dc01
 +    parent::setUp();
 +
 +    $this->installConfig('tmgmt');
-+    $this->installEntitySchema('tmgmt_job');
-+    $this->installEntitySchema('tmgmt_job_item');
 +    $this->installEntitySchema('tmgmt_remote');
-+    $this->installEntitySchema('tmgmt_message');
 +  }
 +
 +  /**
@@ -321,17 +307,6 @@ index 0000000000000000000000000000000000000000..cd534d0c72e03fe1db3c3d6bd123dc01
 +          3 => JobItemInterface::STATE_REVIEW,
 +        ],
 +      ],
-+      'Purge limit' => [
-+        [
-+          'purge_continuous' => 0,
-+          'purge_continuous_limit' => 5,
-+        ],
-+        0,
-+        array_fill(1, 6, JobItemInterface::STATE_ACCEPTED),
-+        [
-+          6 => JobItemInterface::STATE_ACCEPTED,
-+        ],
-+      ],
 +    ];
 +  }
 +
@@ -350,17 +325,21 @@ index 83f3b45d467a04dd74910b5607b548e60df7936e..80065862b842bc5f6524acf3a21a9c5c
  
      $this->installEntitySchema('user');
 diff --git a/tmgmt.install b/tmgmt.install
-index 6b926768749c6e08e91be4227db16a84123224ab..2f3935bbe00fd0db0be0ba52eb8aa85e85b08e0f 100644
+index 5e714376c9f88eae0294372d46cbbeb1f2b3a8f4..8f75c6e113170d2082be3f2de82d6f3843927d25 100644
 --- a/tmgmt.install
 +++ b/tmgmt.install
-@@ -156,2 +156,24 @@ function tmgmt_update_8011() {
+@@ -165,3 +165,25 @@ function tmgmt_update_8012(): void {
+     $config->set('purge_stale', FALSE)->save();
    }
  }
 +
 +/**
-+ * Add default values of new keys in TMGMT setting.
++ * Add default values of new continuous cleanup keys in TMGMT setting.
 + */
-+function tmgmt_update_8014(): void {
++function tmgmt_update_8013(): void {
++  // Install queue.
++  \Drupal::queue('tmgmt_job_item_cleanup')->createQueue();
++
 +  $config = \Drupal::configFactory()->getEditable('tmgmt.settings');
 +  if ($config->isNew()) {
 +    return;
@@ -372,17 +351,22 @@ index 6b926768749c6e08e91be4227db16a84123224ab..2f3935bbe00fd0db0be0ba52eb8aa85e
 +  if (is_null($config->getOriginal('purge_continuous_aborted', FALSE))) {
 +    $config->set('purge_continuous_aborted', FALSE);
 +  }
-+  if (is_null($config->getOriginal('purge_continuous_limit', FALSE))) {
-+    $config->set('purge_continuous_limit', 500);
-+  }
 +
 +  $config->save();
 +}
 diff --git a/tmgmt.module b/tmgmt.module
-index 3cb0c5234367c4e3738e98b7a17e222acc3d76e9..db0dfc36201b563ff7bac6068fdfaec108ca74ff 100644
+index 40b2dcf137f82da61f73b157326a9772b7a70018..7fcfc54efd2c2eecb2ba451ebeaa414792a62e4c 100644
 --- a/tmgmt.module
 +++ b/tmgmt.module
-@@ -72,14 +72,17 @@ function tmgmt_modules_installed($modules) {
+@@ -8,6 +8,7 @@
+ use Drupal\Core\Entity\EntityInterface;
+ use Drupal\Core\Render\Element;
+ use Drupal\Core\Routing\RouteMatchInterface;
++use Drupal\Core\Site\Settings;
+ use Drupal\tmgmt\ContinuousTranslatorInterface;
+ use Drupal\tmgmt\Entity\Job;
+ use Drupal\tmgmt\Entity\Message;
+@@ -73,14 +74,17 @@ function tmgmt_modules_installed($modules) {
   * Implements hook_cron().
   */
  function tmgmt_cron() {
@@ -403,7 +387,7 @@ index 3cb0c5234367c4e3738e98b7a17e222acc3d76e9..db0dfc36201b563ff7bac6068fdfaec1
        ->execute();
      if (!empty($ids)) {
        $storage = \Drupal::entityTypeManager()->getStorage('tmgmt_job');
-@@ -88,8 +91,37 @@ function tmgmt_cron() {
+@@ -89,8 +93,36 @@ function tmgmt_cron() {
      }
    }
  
@@ -423,16 +407,15 @@ index 3cb0c5234367c4e3738e98b7a17e222acc3d76e9..db0dfc36201b563ff7bac6068fdfaec1
 +      if ($tmgmt_settings->get('purge_continuous_aborted')) {
 +        $states[] = JobItemInterface::STATE_ABORTED;
 +      }
-+      $limit = $tmgmt_settings->get('purge_continuous_limit') ?? 0;
 +      $ids = \Drupal::entityQuery('tmgmt_job_item')
 +        ->accessCheck(FALSE)
 +        ->condition('state', $states, 'IN')
 +        ->condition('changed', $request_time - $offset_continuous, '<=')
 +        ->condition('tjid', $tjids, 'IN')
-+        ->range(0, $limit)
 +        ->execute();
-+      while ($itemIds = array_splice($ids, 0, 25)) {
-+        $cleanup_queue->createItem($itemIds);
++      $entity_update_batch_size = Settings::get('entity_update_batch_size', 50);
++      while ($item_ids = array_splice($ids, 0, (int) $entity_update_batch_size)) {
++        $cleanup_queue->createItem($item_ids);
 +      }
 +    }
 +  }
