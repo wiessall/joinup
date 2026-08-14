@@ -65,7 +65,7 @@ index 305ce59b5080ee2d0de6c1889fcc5e653a5b0ea0..26c62d64f01f295da0f0c25bb5422ae2
        '#type' => 'details',
        '#title' => $this->t('Non-translatable text parts'),
 diff --git a/src/Hook/ETranslationHooks.php b/src/Hook/ETranslationHooks.php
-index a73aca2a08ca0d9f66eb79415e7bc9fbd37cc791..a5fb3fbc106c6bd998aa4cd1b0825eeaf6976981 100644
+index a73aca2a08ca0d9f66eb79415e7bc9fbd37cc791..bd14f5ce3831c99a07087fe12b161ca53d97d7aa 100644
 --- a/src/Hook/ETranslationHooks.php
 +++ b/src/Hook/ETranslationHooks.php
 @@ -5,11 +5,14 @@ declare(strict_types=1);
@@ -91,7 +91,7 @@ index a73aca2a08ca0d9f66eb79415e7bc9fbd37cc791..a5fb3fbc106c6bd998aa4cd1b0825eea
    ) {}
 
    /**
-@@ -30,32 +34,119 @@ class ETranslationHooks {
+@@ -30,32 +34,126 @@ class ETranslationHooks {
     */
    #[Hook('cron')]
    public function cron(): void {
@@ -213,23 +213,30 @@ index a73aca2a08ca0d9f66eb79415e7bc9fbd37cc791..a5fb3fbc106c6bd998aa4cd1b0825eea
 +      ]
 +    );
 +
-+    $message = 'Rescheduled: attempt @attempts (interval @interval)';
-+    $severity = 'status';
-+
 +    if ($attempted >= $settings['max_attempts']) {
-+      $state = (string) JobItemInterface::STATE_ABORTED;
-+      $jobItem->setState($state);
++      $state = JobItemInterface::STATE_ABORTED;
 +      $message = 'Aborted: No translation received after @attempts attempts (interval @interval)';
 +      $severity = 'warning';
      }
++    else {
++      // TMGMT cron collects inactive job items and sends them to the translator
++      // for translation request, so we set the item to inactive for
++      // rescheduling.
++      $state = JobItemInterface::STATE_INACTIVE;
++      $message = 'Rescheduled: attempt @attempts (interval @interval)';
++      $severity = 'status';
++    }
 +
 +    $variables = [
 +      '@attempts' => $attempted,
 +      '@interval' => $this->dateFormatter->formatInterval($settings['interval']),
 +    ];
 +
-+    $jobItem->addMessage($message, $variables, $severity);
-+    $jobItem->save();
++    // Currently setState() saves the job item only if the state differs, but
++    // the eTrans translator sets the status to "active" every attempt, and here
++    // we change it to "aborted" or "inactive" every time, so it always differs.
++    // @see ETranslationTranslator::requestJobItemsTranslation()
++    $jobItem->setState($state, $message, $variables, $severity);
    }
 
  }
@@ -258,7 +265,7 @@ index 680a79b6d4d8b5e6169f7ee7f19cbcbb07bdbb53..1baf302a9e23fa1dab53edd2dfb08edf
      ];
    }
 diff --git a/tests/src/Kernel/TimeoutTest.php b/tests/src/Kernel/TimeoutTest.php
-index 01856407bc1ffd6a5b0e6e5a6417f1aa5df2b3ef..bca12abbe7c9fc8148029c8b09cb8cb3f28fabd9 100644
+index 01856407bc1ffd6a5b0e6e5a6417f1aa5df2b3ef..9af62d69b23bd61276bf98ca92f1f59e8737b231 100644
 --- a/tests/src/Kernel/TimeoutTest.php
 +++ b/tests/src/Kernel/TimeoutTest.php
 @@ -4,6 +4,7 @@ declare(strict_types=1);
@@ -304,7 +311,7 @@ index 01856407bc1ffd6a5b0e6e5a6417f1aa5df2b3ef..bca12abbe7c9fc8148029c8b09cb8cb3
      FieldStorageConfig::create([
        'entity_type' => 'node',
        'field_name' => 'body',
-@@ -70,55 +83,201 @@ class TimeoutTest extends KernelTestBase {
+@@ -70,55 +83,222 @@ class TimeoutTest extends KernelTestBase {
        'field_name' => 'body',
        'translatable' => TRUE,
      ])->save();
@@ -382,27 +389,27 @@ index 01856407bc1ffd6a5b0e6e5a6417f1aa5df2b3ef..bca12abbe7c9fc8148029c8b09cb8cb3
      $now = \Drupal::time()->getRequestTime();
 -    $six_hours_and_1_second_ago = $now - 60 * 60 * 6 - 1;
 +    $fiveHoursAgo = $now - 18000;
++
++    $item = tmgmt_job_item_create('content', 'node', $page1->id(), [
++      'tjid' => $job1->id(),
++      'state' => JobItemInterface::STATE_ACTIVE,
++      'changed' => $fiveHoursAgo,
++    ]);
++    $item->save();
++    $this->itemId = $item->id();
 
 -    $item = tmgmt_job_item_create('content', 'node', $page->id(), [
 -      'tjid' => $job->id(),
-+    $item = tmgmt_job_item_create('content', 'node', $page1->id(), [
-+      'tjid' => $job1->id(),
++    $item = tmgmt_job_item_create('content', 'node', $page2->id(), [
++      'tjid' => $job2->id(),
        'state' => JobItemInterface::STATE_ACTIVE,
 -      // Set the last changed time to 6 hours and 1 second ago for the sake of
 -      // testing.
 -      'changed' => $six_hours_and_1_second_ago,
-+      'changed' => $fiveHoursAgo,
++      'changed' => $fiveHoursAgo - 10,
      ]);
      $item->save();
 -    $this->assertSame($six_hours_and_1_second_ago, $item->getChangedTime());
-+    $this->itemId = $item->id();
-+
-+    $item = tmgmt_job_item_create('content', 'node', $page2->id(), [
-+      'tjid' => $job2->id(),
-+      'state' => JobItemInterface::STATE_ACTIVE,
-+      'changed' => $fiveHoursAgo - 10,
-+    ]);
-+    $item->save();
 +    $this->slowItemId = $item->id();
 +  }
 +
@@ -416,13 +423,19 @@ index 01856407bc1ffd6a5b0e6e5a6417f1aa5df2b3ef..bca12abbe7c9fc8148029c8b09cb8cb3
 +    $this->assertJobItemAttempt($this->itemId, 1, 'Rescheduled: attempt 1 (interval 4 hours)');
 +    // The item with bigger interval is skipped at first attempt.
 +    $this->assertJobItemHasNoAttempt($this->slowItemId);
-+
+
+-    // Run the cron job, but only the one that matters.
+-    $this->container->get(ETranslationHooks::class)->cron();
++    $this->mockTmgmtCron();
 +    $hooks = $this->initTranslationHooks(future_time: 14410);
 +    $hooks->cron();
-+
+
+-    // Reload the job item.
+-    $item = JobItem::load($item->id());
 +    $this->assertJobItemAttempt($this->itemId, 2, 'Rescheduled: attempt 2 (interval 4 hours)');
 +    $this->assertJobItemAttempt($this->slowItemId, 1, 'Rescheduled: attempt 1 (interval 8 hours)');
 +
++    $this->mockTmgmtCron();
 +    $hooks = $this->initTranslationHooks(future_time: 28810);
 +    $hooks->cron();
 +
@@ -452,9 +465,7 @@ index 01856407bc1ffd6a5b0e6e5a6417f1aa5df2b3ef..bca12abbe7c9fc8148029c8b09cb8cb3
 +    $this->assertSame(2, $item->getData()['#tmgmt_ec_etranslation']['attempted']);
 +    $this->assertSame(JobItemInterface::STATE_ACTIVE, (int) $item->getState());
 +  }
-
--    // Run the cron job, but only the one that matters.
--    $this->container->get(ETranslationHooks::class)->cron();
++
 +  /**
 +   * Initialize a ETranslationHooks class.
 +   *
@@ -494,7 +505,7 @@ index 01856407bc1ffd6a5b0e6e5a6417f1aa5df2b3ef..bca12abbe7c9fc8148029c8b09cb8cb3
 +   * @param int $expected_state
 +   *   The expected state.
 +   */
-+  protected function assertJobItemAttempt(string $itemId, int $expected_attempts, string $expected_message, int $expected_state = JobItemInterface::STATE_ACTIVE): void {
++  protected function assertJobItemAttempt(string $itemId, int $expected_attempts, string $expected_message, int $expected_state = JobItemInterface::STATE_INACTIVE): void {
 +    $item = JobItem::load($itemId);
 +
 +    $this->assertSame($expected_state, (int) $item->getState());
@@ -519,9 +530,7 @@ index 01856407bc1ffd6a5b0e6e5a6417f1aa5df2b3ef..bca12abbe7c9fc8148029c8b09cb8cb3
 +  protected function assertJobItemHasNoAttempt(string $itemId): void {
 +    $item = JobItem::load($itemId);
 +    $this->assertSame(1, (int) $item->getState());
-
--    // Reload the job item.
--    $item = JobItem::load($item->id());
++
 +    $data = $item->getData();
 +    $this->assertArrayNotHasKey('#tmgmt_ec_etranslation', $data);
 
@@ -533,6 +542,25 @@ index 01856407bc1ffd6a5b0e6e5a6417f1aa5df2b3ef..bca12abbe7c9fc8148029c8b09cb8cb3
 -    $this->assertEquals('Aborted. No translation received after 6 hours', $message->getMessage());
 -    $this->assertSame('warning', $message->getType());
 +    $this->assertEmpty($messages);
++  }
++
++  /**
++   * Mocks the tmgmt_cron().
++   */
++  protected function mockTmgmtCron(): void {
++    $ids = \Drupal::entityQuery('tmgmt_job_item')
++      ->accessCheck(TRUE)
++      ->condition('tjid.entity.job_type', JobInterface::TYPE_CONTINUOUS)
++      ->condition('state', JobItemInterface::STATE_INACTIVE)
++      ->range(0, 10)
++      ->sort('tjiid')
++      ->execute();
++
++    foreach (JobItem::loadMultiple($ids) as $item) {
++      // The translator sets the status to "active" during tmgmt_cron().
++      // @see ETranslationTranslator::requestJobItemsTranslation().
++      $item->active();
++    }
    }
 
  }
