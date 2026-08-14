@@ -274,14 +274,6 @@ interface GroupInterface extends
   public function getDirectGroupContentIds(): array;
 
   /**
-   * Returns the IDs of the nodes that are pinned in this group.
-   *
-   * @return int[]
-   *   The IDs of the pinned nodes.
-   */
-  public function getPinnedContentIds(): array;
-
-  /**
    * Returns the sub-content entity classes that follow this group's transition.
    *
    * @return array<class-string>

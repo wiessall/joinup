@@ -199,13 +199,6 @@ trait GroupTrait {
   /**
    * {@inheritdoc}
    */
-  public function getPinnedContentIds(): array {
-    return array_column($this->get('pinned_content_ids')->getValue(), 'value');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getGroupContentIds(): array {
     $group_content = $this->doGetGroupContentIds();
     // Ensure that the results are sorted.
