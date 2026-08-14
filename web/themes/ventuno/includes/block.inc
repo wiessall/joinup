@@ -25,10 +25,6 @@ function ventuno_preprocess_block(array &$variables): void {
     case 'local_actions_block':
       $variables['attributes']['class'][] = 'my-3';
       break;
-
-    case 'entity_unpublished':
-      $variables['attributes']['class'][] = 'my-5';
-      break;
   }
 
   // List of the "layout-blocks" (mainly in the Home page) that share common
