@@ -14,7 +14,6 @@ Feature: Broken links report
     And the following event entity translation:
       | source        | language | field_event_agenda                                  |
       | Faulty agenda | hu       | <p><a href="/hu/broken-event-agenda">Agenda</a></p> |
-    And I run the "linkchecker_cron" ultimate_cron job
     When I am logged in as a moderator
     And I go to "admin/reports/linkchecker"
     Then I should see the link "Faulty agenda"
@@ -27,7 +26,6 @@ Feature: Broken links report
       | Faulty text | Broken links group |
     And I append "text" to "field_paragraphs_body" field in "node" entity with following "Faulty text" title:
       | field_body | <p><a href="/broken-text-paragraph">Broken text link</a></p> |
-    And I run the "linkchecker_cron" ultimate_cron job
     When I am logged in as a moderator
     And I go to "admin/reports/linkchecker"
     Then I should see the link "Faulty text"
@@ -50,6 +48,5 @@ Feature: Broken links report
     And I enter "<p><a href='/broken-accordion-paragraph'>Broken accordion link</a></p>" in the 1st "Body" wysiwyg editor in the "Accordion item" field
     And I press "Save" in the "Modal buttons" region
     And I press "Publish"
-    And I run the "linkchecker_cron" ultimate_cron job
     When I go to "admin/reports/linkchecker"
     Then I should see the link "Broken accordion page"
