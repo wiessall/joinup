@@ -325,74 +325,18 @@ display:
           click_sort_column: value
           type: timestamp
           settings:
-            date_format: medium
+            date_format: html_date
             custom_date_format: ''
             timezone: ''
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-        method:
-          id: method
-          table: linkchecker_link
-          field: method
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: linkcheckerlink
-          entity_field: method
-          plugin_id: field
-          label: Method
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: string
-          settings:
-            link_to_entity: false
+            tooltip:
+              date_format: long
+              custom_date_format: ''
+            time_diff:
+              enabled: false
+              future_format: '@interval hence'
+              past_format: '@interval ago'
+              granularity: 2
+              refresh: 60
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -414,7 +358,7 @@ display:
           entity_field: code
           plugin_id: field
           label: 'Status code'
-          exclude: false
+          exclude: true
           alter:
             alter_text: false
             text: ''
@@ -482,8 +426,8 @@ display:
           label: Error
           exclude: false
           alter:
-            alter_text: false
-            text: ''
+            alter_text: true
+            text: '{{error}} {{code}}'
             make_link: false
             path: ''
             absolute: false
@@ -611,7 +555,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: "<b>Entity:</b> {{ linkcheckerlink_page_entity_label }}<br />\r\n<b>Field:</b> {{ entity_field }}<br />\r\n<b>Language:</b> {{ entity_langcode }}"
+            text: "<b>Entity:</b> {{ linkcheckerlink_page_entity_label }}<br />\r\n<b>Language:</b> {{ entity_langcode }}"
             make_link: false
             path: ''
             absolute: false
@@ -648,73 +592,6 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: false
-        status:
-          id: status
-          table: linkchecker_link
-          field: status
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: linkcheckerlink
-          entity_field: status
-          plugin_id: field
-          label: 'Test link'
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: nowrap
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: boolean
-          settings:
-            format: unicode-yes-no
-            format_custom_false: ''
-            format_custom_true: ''
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
         operations:
           id: operations
           table: linkchecker_link
@@ -838,174 +715,6 @@ display:
             remember_roles:
               authenticated: authenticated
             placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-        code_1:
-          id: code_1
-          table: linkchecker_link
-          field: code
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: linkcheckerlink
-          entity_field: code
-          plugin_id: numeric
-          operator: '='
-          value:
-            min: ''
-            max: ''
-            value: ''
-          group: 1
-          exposed: true
-          expose:
-            operator_id: code_1_op
-            label: 'Status code'
-            description: null
-            use_operator: false
-            operator: code_1_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: result
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            min_placeholder: null
-            max_placeholder: null
-            placeholder: null
-          is_grouped: true
-          group_info:
-            label: Result
-            description: ''
-            identifier: result
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items:
-              1:
-                title: Failed
-                operator: 'not between'
-                value:
-                  min: '200'
-                  max: '299'
-                  value: ''
-              2:
-                title: 'Success (2xx)'
-                operator: between
-                value:
-                  min: '200'
-                  max: '299'
-                  value: ''
-              3:
-                title: 'Redirect (3xx)'
-                operator: between
-                value:
-                  min: '300'
-                  max: '399'
-                  value: ''
-              4:
-                title: 'Client error (4xx)'
-                operator: between
-                value:
-                  min: '400'
-                  max: '499'
-                  value: ''
-              5:
-                title: 'Server error (5xx)'
-                operator: between
-                value:
-                  min: '500'
-                  max: '599'
-                  value: ''
-        code:
-          id: code
-          table: linkchecker_link
-          field: code
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: linkcheckerlink
-          entity_field: code
-          plugin_id: numeric
-          operator: '='
-          value:
-            min: ''
-            max: ''
-            value: ''
-          group: 1
-          exposed: true
-          expose:
-            operator_id: code_op
-            label: 'Status code'
-            description: ''
-            use_operator: false
-            operator: code_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: code
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            min_placeholder: ''
-            max_placeholder: ''
-            placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-        entity_langcode:
-          id: entity_langcode
-          table: linkchecker_link
-          field: entity_langcode
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: linkcheckerlink
-          entity_field: entity_langcode
-          plugin_id: language
-          operator: in
-          value: {  }
-          group: 1
-          exposed: true
-          expose:
-            operator_id: entity_langcode_op
-            label: 'Entity language'
-            description: ''
-            use_operator: false
-            operator: entity_langcode_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: entity_langcode
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            reduce: false
           is_grouped: false
           group_info:
             label: ''
