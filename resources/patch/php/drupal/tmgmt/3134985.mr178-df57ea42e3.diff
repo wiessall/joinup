@@ -336,7 +336,7 @@ index 5e714376c9f88eae0294372d46cbbeb1f2b3a8f4..8f75c6e113170d2082be3f2de82d6f38
 +/**
 + * Add default values of new continuous cleanup keys in TMGMT setting.
 + */
-+function tmgmt_update_8013(): void {
++function tmgmt_update_8014(): void {
 +  // Install queue.
 +  \Drupal::queue('tmgmt_job_item_cleanup')->createQueue();
 +
