@@ -39,10 +39,4 @@ class PinnedContentIdsFieldItemList extends FieldItemList {
     }
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function setValue($values, $notify = TRUE): void {
-  }
-
 }
