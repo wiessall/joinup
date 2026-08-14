@@ -1,0 +1,25 @@
+uuid: 73d0ecc7-e91c-451b-b589-6991f69153e8
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.navbar
+  module:
+    - system
+  theme:
+    - ventuno
+id: navbar_menu
+theme: ventuno
+region: header_navigation
+weight: -10
+provider: null
+plugin: 'system_menu_block:navbar'
+settings:
+  id: 'system_menu_block:navbar'
+  label: 'Navigation menu'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: null
+  expand_all_items: true
+visibility: {  }

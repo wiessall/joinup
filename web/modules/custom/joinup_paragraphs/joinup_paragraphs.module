@@ -15,7 +15,6 @@ use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\paragraphs\ParagraphInterface;
 
@@ -128,17 +127,6 @@ function joinup_paragraphs_preprocess_paragraph__image(array &$variables): void 
   // Copy link url to image formatter.
   $variables['content']['paragraph_action_link']['#access'] = FALSE;
   $variables['content']['paragraph_image'][0]['#url'] = $variables['content']['paragraph_action_link'][0]['#url'];
-}
-
-/**
- * Implements hook_preprocess_HOOK().
- */
-function joinup_paragraphs_preprocess_layout_paragraphs_insert_component_btn(&$variables): void {
-  if (isset($variables['title']) &&
-    $variables['title'] instanceof TranslatableMarkup &&
-    $variables['title']->getUntranslatedString() === 'Add section') {
-    $variables['title'] = t('Add layout');
-  }
 }
 
 /**

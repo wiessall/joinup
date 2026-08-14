@@ -1,0 +1,25 @@
+uuid: 6aa2f889-d06d-4c7c-941b-cccdbcf8b07b
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.navbar
+  module:
+    - system
+  theme:
+    - iop
+id: iop_navbar_menu
+theme: iop
+region: header_navigation
+weight: -10
+provider: null
+plugin: 'system_menu_block:navbar'
+settings:
+  id: 'system_menu_block:navbar'
+  label: 'Navigation menu'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: null
+  expand_all_items: true
+visibility: {  }
