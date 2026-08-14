@@ -284,7 +284,7 @@ Feature: Sharing content between collections
       | Title | News carousel |
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout | one column |
-    And I click "Choose component"
+    And I add a component to section 1
     And a modal should open
     And I click "Carousel"
     And I check "Global search"

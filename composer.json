@@ -68,7 +68,7 @@
         "drupal/l10n_pconfig": "^2.0",
         "drupal/layout_builder_component_attributes": "^2.1",
         "drupal/layout_custom_section_classes": "^2.0",
-        "drupal/layout_paragraphs": "^2.0",
+        "drupal/layout_paragraphs": "^3.0",
         "drupal/linkit": "^7.0",
         "drupal/markdown_easy": "^2.0",
         "drupal/masquerade": "^2.2",
@@ -370,7 +370,8 @@
                 "[site:url] token omits trailing slash in other languages @see https://www.drupal.org/i/2163913": "resources/patch/php/drupal/core/2163913.mr15511.commit58a97130.diff",
                 "Fatal error when saving translation configuration @see https://www.drupal.org/i/3549469": "resources/patch/php/drupal/core/3549469.diff",
                 "Translations of nodes with comment settings field set to non-translatable returns EntityUntranslatableFieldsConstraint @see https://www.drupal.org/i/3015675": "resources/patch/php/drupal/core/3015675-83bb966c.diff",
-                "Plugin manager with fallback when the plugin ID is null @see https://www.drupal.org/project/drupal/issues/3581628": "resources/patch/php/drupal/core/3581628.diff"
+                "Plugin manager with fallback when the plugin ID is null @see https://www.drupal.org/project/drupal/issues/3581628": "resources/patch/php/drupal/core/3581628.diff",
+                "HTML (all languages) appearing in error messages of multilingual sites @see https://www.drupal.org/i/3395366": "resources/patch/php/drupal/core/3395366.mr11035-commit83c08bfd.diff"
             },
             "drupal/csv_serialization": {
                 "Replace League\\Csv methods deprecated since league/csv 9.27.0 @see https://www.drupal.org/i/3562555": "resources/patch/php/drupal/csv_serialization/3562555.diff"
@@ -454,8 +455,8 @@
                 "Utilize layout preview mode https://drupal.org/i/3392735": "resources/patch/php/drupal/layout_paragraphs/layout_paragraphs-utilize_layout_preview-3392735-5--fix-only.patch",
                 "Allow to drag and drop nested paragraphs @see https://www.drupal.org/project/layout_paragraphs/issues/3401176": "resources/patch/php/drupal/layout_paragraphs/3401176.patch",
                 "Integrity constraint violation @see https://www.drupal.org/project/layout_paragraphs/issues/3528058": "resources/patch/php/drupal/layout_paragraphs/3528058.patch",
-                "Prevent moving components on Translate edit page @see https://drupal.org/i/3540040": "resources/patch/php/drupal/layout_paragraphs/3540040-mr234-commit97ffc2d1.diff",
-                "Provide more info to component add buttons to help customization @see https://drupal.org/i/3611607": "resources/patch/php/drupal/layout_paragraphs/3611607-mr248-1356ffbb58--on-top-of-3540040.diff",
+                "Prevent moving components on Translate edit page @see https://drupal.org/i/3540040": "resources/patch/php/drupal/layout_paragraphs/3540040.mr242.diff",
+                "Provide more info to component add buttons to help customization @see https://drupal.org/i/3611607": "resources/patch/php/drupal/layout_paragraphs/3611607-mr248-1356ffbb58--on-top-of-3540040.mr242.diff",
                 "Cache loaded paragraphs in LayoutParagraphsLayout @see https://drupal.org/i/3611711": "resources/patch/php/drupal/layout_paragraphs/3611711-mr249-9ec8d4282c--v2.diff",
                 "Maximum call stack size reached in serialize() @see https://www.drupal.org/i/3599833": "resources/patch/php/drupal/layout_paragraphs/3599833.mr241.commitd4c9beff1108.diff"
             },
@@ -510,7 +511,8 @@
                 "TypeError: Drupal\\Component\\Utility\\Html::escape(): Argument #1 ($text) must be of type string, null given @see https://git.drupalcode.org/project/rdf_sync/-/work_items/3602349": "resources/patch/php/drupal/rdf_sync/3602349.diff"
             },
             "drupal/search_api": {
-                "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199-42e0e284.diff"
+                "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199-42e0e284.diff",
+                "Consider to just re-index affected translations instead of all translations": "resources/patch/php/drupal/search_api/2832167.mr346-commit-26c2d2ae.diff"
             },
             "drupal/search_api_spellcheck": {
                 "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372": "resources/patch/php/drupal/search_api_spellcheck/3280372.patch"
