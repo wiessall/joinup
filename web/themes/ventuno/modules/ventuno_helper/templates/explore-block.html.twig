@@ -1,14 +1,11 @@
 {#
 /**
  * @file
- * Default theme implementation to display something.
+ * Theme override to display the front-page "Explore" block.
  *
  * Available variables:
- * - foo: Foo variable description.
- *
- * @see template_preprocess_explore_block()
- *
- * @ingroup themeable
+ * - data: Keyed list of content-type tabs; each tab has a label, plural_type,
+ *   url and a rendered list of items.
  */
 #}
 {{ attach_library('ventuno/explore-block') }}
