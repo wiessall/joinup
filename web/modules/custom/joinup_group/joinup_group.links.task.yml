@@ -14,9 +14,3 @@ joinup.moderate_content:
   title: 'Moderate content'
   base_route: entity.node.canonical
   weight: 199
-
-joinup_group.unpublished_content:
-  route_name: entity.node.unpublished_content
-  base_route: entity.node.canonical
-  title: 'Unpublished content'
-  weight: 220
